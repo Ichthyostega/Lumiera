@@ -49,6 +49,7 @@ namespace gui {
   
   namespace workspace {
   
+  class UiManager;
   
   
   /**
@@ -58,7 +59,7 @@ namespace gui {
     : public Gtk::Window
     {
     public:
-      WorkspaceWindow(gui::workspace::UiManager&);
+      WorkspaceWindow (UiManager&);
      ~WorkspaceWindow();
       
       PanelManager& getPanelManager();
@@ -77,12 +78,6 @@ namespace gui {
       //----- Status Bar -----//
       Gtk::Statusbar statusBar_;
       
-      
-      /**
-       * Helper to build the menu and for
-       * registering and handling of user action events
-       */
-      Actions actions_;
     };
   
   

@@ -23,11 +23,12 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/workspace-window.hpp"
 #include "gui/ui-bus.hpp"
 #include "lib/depend.hpp"
 
 #include "include/config-facade.h"
+
+#include <gdlmm.h>
 
 
 namespace gui {
@@ -72,17 +73,6 @@ namespace gui {
     workspace::UiManager uiManager(uiBus);
     uiManager.createApplicationWindow();
     kit.run(); // GTK event loop
-  }
-  
-  
-  workspace::WindowList&
-  GtkLumiera::windowManager() /////////////////////////////////////////TICKET #1048 : last Blocker is Actions::onMenu_window_new_window()
-  {
-    if (not windowManagerInstance_)
-      throw error::Logic ("GTK UI is not in running state"
-                         , error::LUMIERA_ERROR_LIFECYCLE);
-    
-    return *windowManagerInstance_;
   }
   
   

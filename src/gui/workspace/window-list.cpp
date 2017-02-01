@@ -66,6 +66,13 @@ namespace workspace {
   }
   
   
+  WorkspaceWindow&
+  WindowList::findActiveWindow()
+  {
+    UNIMPLEMENTED ("search the window list and return the currently active window");
+  }
+  
+  
   bool
   WindowList::on_window_closed (GdkEventAny* event)
   {

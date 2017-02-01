@@ -36,6 +36,8 @@
 #define GUI_WORKSPACE_UI_MANAGER_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/workspace/actions.hpp"
+#include "gui/workspace/window-list.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <cairomm/cairomm.h>
@@ -65,11 +67,13 @@ namespace workspace {
     : public Gtk::UIManager
     , boost::noncopyable
     {
-      string iconSearchPath_;
-      string resourceSerachPath_;
-      
       UiBus& uiBus_;
       
+      WindowList windowList_;
+      Actions actions_;
+      
+      string iconSearchPath_;
+      string resourceSerachPath_;
       
     public:
       
@@ -97,14 +101,15 @@ namespace workspace {
       UiManager (UiBus& bus);
       
       /**
-       * Initialise the window manager on application start.
-       * Register the icon configuration and sizes and lookup
-       * all the icons -- either from the default theme of via
-       * the given Lumiera icon search paths (see \c setup.ini ).
-       * @see lumiera::Config
+       * Set up the first top-level application window.
+       * This triggers the build-up of the user interface widgets.
        */
-      void init ();
+      void createApplicationWindow();
       
+      /** @todo find a solution how to enable/disable menu entries according to focus
+       *                                               /////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
+       */
+      void updateWindowFocusRelatedActions();
       
       /**
        * Sets the theme to use for the Lumiera GUI.
@@ -131,15 +136,9 @@ namespace workspace {
       void allowCloseWindow (bool yes);
       
     private:
+      void initGlobalUI ();
       
-      
-      /** Registers the custom icon sizes. */
       void registerAppIconSizes();
-      
-      /**
-       * Registers application stock items:
-       * icons and labels associated with IDs
-       */
       void registerStockItems();
       
       /**

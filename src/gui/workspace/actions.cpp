@@ -55,11 +55,10 @@ using std::vector;
 namespace gui {
 namespace workspace {
   
-  Actions::Actions (WorkspaceWindow& owner)
-    : workspaceWindow_(owner)
+  Actions::Actions (GetWindow how_to_access_current_window)
+    : getWorkspaceWindow(how_to_access_current_window)
     , is_updating_action_state(false)
     {
-      owner.signal_show ().connect_notify(mem_fun(this, &Actions::updateActionState));
     }
   
   
@@ -251,18 +250,20 @@ namespace workspace {
   void
   Actions::updateActionState()
   {
-    /*REQUIRE(workspaceWindow.assetsPanel != NULL);
-    REQUIRE(workspaceWindow.timelinePanel != NULL);
-    REQUIRE(workspaceWindow.viewerPanel != NULL); 
+       ///////////////////////////////////////////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
+    /*
+    WorkspaceWindow& currentWindow = getWorkspaceWindow();
+    
+    REQUIRE(currentWindow.assetsPanel != NULL);
+    REQUIRE(currentWindow.timelinePanel != NULL);
+    REQUIRE(currentWindow.viewerPanel != NULL); 
     
     is_updating_action_state = true;
-    assetsPanelAction->set_active(
-      workspaceWindow.assetsPanel->is_shown());
-    timelinePanelAction->set_active(
-      workspaceWindow.timelinePanel->is_shown());
-    viewerPanelAction->set_active(
-      workspaceWindow.viewerPanel->is_shown());
-    is_updating_action_state = false;*/
+    assetsPanelAction->set_active  (currentWindow.assetsPanel->is_shown());
+    timelinePanelAction->set_active(currentWindow.timelinePanel->is_shown());
+    viewerPanelAction->set_active  (currentWindow.viewerPanel->is_shown());
+    is_updating_action_state = false;
+    */
   }
   
   
@@ -285,7 +286,7 @@ namespace workspace {
   void
   Actions::onMenu_file_render()
   {
-    dialog::Render dialog(workspaceWindow_);         ////////////////////////////////////TICKET #1069 how to refer to the _current window_
+    dialog::Render dialog(getWorkspaceWindow());
     dialog.run();
   }
   
@@ -304,7 +305,7 @@ namespace workspace {
   void
   Actions::onMenu_edit_preferences()
   {
-    dialog::PreferencesDialog dialog(workspaceWindow_);  ////////////////////////////////TICKET #1069 how to refer to the _current window_
+    dialog::PreferencesDialog dialog(getWorkspaceWindow());
     dialog.run();
   }
   
@@ -326,7 +327,7 @@ namespace workspace {
   {
     /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
     //if(!is_updating_action_state)
-    //  workspaceWindow.timelinePanel->show(timelinePanelAction->get_active());
+    //  workspaceWindow.timelinePanel->show(timelinePanActionselAction->get_active());
   }
   
   
@@ -344,11 +345,11 @@ namespace workspace {
   void
   Actions::onMenu_sequence_add()
   {
-    dialog::NameChooser dialog(workspaceWindow_,     ////////////////////////////////////TICKET #1069 how to refer to the _current window_
+    dialog::NameChooser dialog(getWorkspaceWindow(),
       _("Add Sequence"), _("New Sequence"));
 /////////////////////////////////////////////////////////////////////////////////////////TICKET #1070 need a way how to issue session commands    
 //  if(dialog.run() == RESPONSE_OK)
-//    workspaceWindow_.getProject().add_new_sequence(dialog.getName());
+//    workspaceWindow().getProject().add_new_sequence(dialog.getName());
   }
   
   
@@ -366,14 +367,14 @@ namespace workspace {
   void
   Actions::onMenu_window_new_window()
   {
-    GtkLumiera::application().windowManager().newWindow(); 
+//  windowList_.newWindow();   //////////////////////////////////TODO move into UiManager 
   }
   
   
   void
   Actions::onMenu_window_close_window()
   {
-    workspaceWindow_.hide();
+    getWorkspaceWindow().hide();
     // delete &workspaceWindow;
   }
   
@@ -381,7 +382,7 @@ namespace workspace {
   void
   Actions::onMenu_show_panel(int panel_index)
   {
-    workspaceWindow_.getPanelManager().showPanel(panel_index);  /////////////////////////TICKET #1069 how to refer to the _current window_
+    getWorkspaceWindow().getPanelManager().showPanel(panel_index);
   }
   
   
@@ -409,7 +410,7 @@ namespace workspace {
     dialog.set_website(Config::get (KEY_WEBSITE));
     dialog.set_authors(authorsList);
     
-    dialog.set_transient_for(workspaceWindow_);
+    dialog.set_transient_for(getWorkspaceWindow());
     
     // Show the about dialog
     dialog.run();

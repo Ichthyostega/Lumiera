@@ -34,8 +34,12 @@
 
 #include "gui/gtk-lumiera.hpp"
 
+#include <functional>
+
 namespace gui {
 namespace workspace {
+  
+  using std::function;
   
   class WorkspaceWindow;
   
@@ -46,10 +50,12 @@ namespace workspace {
   class Actions
     {
       /**reference to the MainWindow which owns this helper */
-      WorkspaceWindow& workspaceWindow_;
+      using GetWindow = function<WorkspaceWindow&()>;
+      
+      GetWindow getWorkspaceWindow;
       
     public:
-      Actions (WorkspaceWindow& owner);
+      Actions (GetWindow how_to_access_current_window);
       
       /**
        * Populates a uiManager with the main set of actions.

@@ -44,7 +44,6 @@ namespace workspace {
   
   WorkspaceWindow::WorkspaceWindow (UiManager& uiManager)
     : panelManager_(*this)
-    , actions_(*this)
     {    
       createUI (uiManager);
     }
@@ -67,6 +66,9 @@ namespace workspace {
   void
   WorkspaceWindow::createUI (UiManager& uiManager)
   {
+    signal_show ().connect_notify(mem_fun(uiManager, &UiManager::updateWindowFocusRelatedActions));   ///////////////TICKET #1076  find out how to handle this properly
+    add_accel_group (uiManager.get_accel_group());
+    
     // RTL Test Code
     //set_default_direction (TEXT_DIR_RTL);
     
@@ -77,10 +79,7 @@ namespace workspace {
     //----- Set up the UI Manager -----//
     // The UI will be nested within a VBox
     add (baseContainer_);
-    
-    actions_.populateMainActions (uiManager);
-    add_accel_group (uiManager.get_accel_group());
-    
+
     //----- Set up the Menu Bar -----//
     Gtk::Widget* menu_bar = uiManager.get_widget ("/MenuBar");
     REQUIRE (menu_bar != NULL);

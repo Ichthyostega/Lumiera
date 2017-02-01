@@ -31,6 +31,7 @@
 #include "gui/config-keys.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/workspace/ui-manager.hpp"
+#include "gui/workspace/workspace-window.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
@@ -59,12 +60,22 @@ namespace workspace {
   UiManager::UiManager (UiBus& bus)
     : Gtk::UIManager()
     , uiBus_(bus)
+    , windowList_{*this}
+    , actions_{[this]() ->WorkspaceWindow& { return windowList_.findActiveWindow();}}
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
     { }
   
+  
+  /**
+   * Initialise the window manager on application start.
+   * Register the icon configuration and sizes and lookup
+   * all the icons -- either from the default theme of via
+   * the given Lumiera icon search paths (see \c setup.ini ).
+   * @see lumiera::Config
+   */
   void
-  UiManager::init ()
+  UiManager::initGlobalUI ()
   {
     Glib::set_application_name (Config::get (KEY_TITLE));
     
@@ -72,7 +83,28 @@ namespace workspace {
     registerStockItems();
     
     setTheme (Config::get (KEY_STYLESHEET));
+    
+    actions_.populateMainActions (*this);
   }
+  
+  
+  /** 
+   * @remarks this function is invoked once from the main application object,
+   *          immediately prior to starting the GTK event loop. */
+  void
+  UiManager::createApplicationWindow()
+  {
+    UNIMPLEMENTED ("create the first top-level window");
+  }
+  
+    
+  void
+  UiManager::updateWindowFocusRelatedActions()
+  {
+    UNIMPLEMENTED ("how to handle activation of menu entries depending on window focus"); ////////TICKET #1076  find out how to handle this properly
+    //////see Actions::updateActionState()
+  }
+
   
   
   void
@@ -137,6 +169,10 @@ namespace workspace {
   }
   
   
+  /**
+   * Registers application stock items:
+   * icons and labels associated with IDs
+   */
   void
   UiManager::registerStockItems()
   {

@@ -32,7 +32,8 @@
 
 namespace gui {
   namespace workspace {
-    class PanelManager;  
+    class PanelManager;
+    class WorkspaceWindow;
   }
   namespace panel {
   
