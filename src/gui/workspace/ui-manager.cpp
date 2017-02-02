@@ -64,11 +64,13 @@ namespace workspace {
     , actions_{[this]() ->WorkspaceWindow& { return windowList_.findActiveWindow();}}
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
-    { }
+    {
+      initGlobalUI();
+    }
   
   
   /**
-   * Initialise the window manager on application start.
+   * Initialise the interface manager on application start.
    * Register the icon configuration and sizes and lookup
    * all the icons -- either from the default theme of via
    * the given Lumiera icon search paths (see \c setup.ini ).
