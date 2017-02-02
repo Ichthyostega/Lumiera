@@ -22,10 +22,13 @@
 
 
 /** @file actions.hpp
- ** This file contains the definition of a helper class for the
- ** main workspace window object, which registers and handles
- ** user actions.
- ** @see mainwindow.hpp
+ ** Setup of global actions for the main menu.
+ ** The Actions helper defines the structure and contents of the workspace
+ ** window main menu. The individual menu options are bound to functors (closures),
+ ** which use a _global UI context_ to access the target objects or invoke the signals.
+ ** 
+ ** @see ui-manager.hpp
+ ** @see gtk-lumiera.cpp
  */
 
 
@@ -33,15 +36,42 @@
 #define GUI_WORKSPACE_ACTIONS_H
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/config-keys.hpp"
+#include "gui/workspace/workspace-window.hpp"
+#include "gui/workspace/ui-manager.hpp"
+#include "gui/dialog/render.hpp"
+#include "gui/dialog/preferences-dialog.hpp"
+#include "gui/dialog/name-chooser.hpp"
+#include "lib/format-string.hpp"
+#include "include/logging.h"
 
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <functional>
+#include <vector>
+
 
 namespace gui {
 namespace workspace {
   
   using std::function;
+  using boost::algorithm::is_any_of;
+  using boost::algorithm::split;
+  using Gtk::Action;
+  using Gtk::ActionGroup;
+  using Gtk::ToggleAction;
+  using Gtk::AboutDialog;
+  using Gtk::AccelKey;
+  using Gtk::StockID;
+  using Gtk::Main;       /////////////////////////////////////////////////////////////////////////////////////TICKET #1032 replace Main -> Application
+  using sigc::mem_fun;
+  using Glib::ustring;
+  using ::util::_Fmt;
+  using std::vector;
   
-  class WorkspaceWindow;
+  namespace Stock = Gtk::Stock;
+  
+  
   
   /**
   * A helper class which registers and handles
@@ -55,13 +85,171 @@ namespace workspace {
       GetWindow getWorkspaceWindow;
       
     public:
-      Actions (GetWindow how_to_access_current_window);
+      Actions (GetWindow how_to_access_current_window)
+        : getWorkspaceWindow(how_to_access_current_window)
+        , is_updating_action_state(false)
+        { }
+      
       
       /**
-       * Populates a uiManager with the main set of actions.
-       * @param uiManager A pointer to the uiManager to populate.
+       * Populates the uiManager with the main set of global actions.
        */
-      void populateMainActions (Gtk::UIManager& uiManager);
+      void
+      populateMainActions (Gtk::UIManager& uiManager)
+        {
+          //----- Create the Action Group -----//
+          actionGroup = ActionGroup::create();
+          
+          // File menu
+          actionGroup->add(Action::create("FileMenu", _("_File")));
+          actionGroup->add(Action::create("FileNewProject",   Stock::NEW, _("_New Project...")),
+            mem_fun(*this, &Actions::onMenu_file_new_project));
+          actionGroup->add(Action::create("FileOpenProject",  Stock::OPEN, _("_Open Project...")),
+            mem_fun(*this, &Actions::onMenu_file_open_project));
+          actionGroup->add(Action::create("FileSaveProject",  Stock::SAVE, _("_Save Project")),
+            mem_fun(*this, &Actions::onMenu_others));
+          actionGroup->add(Action::create("FileSaveProjectAs",Stock::SAVE_AS, _("_Save Project As...")),
+            mem_fun(*this, &Actions::onMenu_others));
+          actionGroup->add(Action::create("FileRender", _("_Render...")),
+            AccelKey("<shift>R"),
+            mem_fun(*this, &Actions::onMenu_file_render));
+          actionGroup->add(Action::create("FileQuit", Stock::QUIT),
+            mem_fun(*this, &Actions::onMenu_file_quit));
+          
+          // Edit menu
+          actionGroup->add(Action::create("EditMenu", _("_Edit")));
+          actionGroup->add(Action::create("EditUndo", Stock::UNDO),
+            mem_fun(*this, &Actions::onMenu_others));
+          actionGroup->add(Action::create("EditRedo", Stock::REDO),
+            mem_fun(*this, &Actions::onMenu_others));
+          actionGroup->add(Action::create("EditCut",  Stock::CUT),
+            mem_fun(*this, &Actions::onMenu_others));
+          actionGroup->add(Action::create("EditCopy", Stock::COPY),
+            mem_fun(*this, &Actions::onMenu_others));
+          actionGroup->add(Action::create("EditPaste",Stock::PASTE),
+            mem_fun(*this, &Actions::onMenu_others));
+          actionGroup->add(Action::create("EditPreferences", Stock::PREFERENCES),
+            mem_fun(*this, &Actions::onMenu_edit_preferences));
+          
+          // View Menu
+          actionGroup->add(Action::create("ViewMenu", _("_View")));
+          
+          assetsPanelAction = ToggleAction::create("ViewAssets",
+            StockID("panel_assets"));
+          assetsPanelAction->signal_toggled().connect(
+            mem_fun(*this, &Actions::onMenu_view_assets));
+          actionGroup->add(assetsPanelAction);
+          
+          timelinePanelAction = ToggleAction::create("ViewTimeline",
+            StockID("panel_timeline"));
+          timelinePanelAction->signal_toggled().connect(
+            mem_fun(*this, &Actions::onMenu_view_timeline));
+          actionGroup->add(timelinePanelAction);
+          
+          viewerPanelAction = ToggleAction::create("ViewViewer",
+            StockID("panel_viewer"));
+          viewerPanelAction->signal_toggled().connect(
+            mem_fun(*this, &Actions::onMenu_view_viewer));
+          actionGroup->add(viewerPanelAction);
+          
+          // Sequence Menu
+          actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
+          actionGroup->add(Action::create("SequenceAdd", _("_Add...")),
+            mem_fun(*this, &Actions::onMenu_sequence_add));
+          
+          // Track Menu
+          actionGroup->add(Action::create("TrackMenu", _("_Track")));
+          actionGroup->add(Action::create("TrackAdd", _("_Add...")),
+            mem_fun(*this, &Actions::onMenu_track_add));
+          
+          // Window Menu
+          actionGroup->add(Action::create("WindowMenu", _("_Window")));
+          actionGroup->add(Action::create("WindowNewWindow",
+            StockID("new_window")),
+            mem_fun(*this, &Actions::onMenu_window_new_window));
+          actionGroup->add(Action::create("WindowCloseWindow",
+            _("Close Window")),
+            mem_fun(*this, &Actions::onMenu_window_close_window));
+          actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
+          
+          // Help Menu
+          actionGroup->add(Action::create("HelpMenu", _("_Help")) );
+          actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
+            mem_fun(*this, &Actions::onMenu_help_about) );
+          
+          uiManager.insert_action_group(actionGroup);
+          
+          //----- Create the UI layout -----//
+          uString ui_info =
+              "<ui>"
+              "  <menubar name='MenuBar'>"
+              "    <menu action='FileMenu'>"
+              "      <menuitem action='FileNewProject'/>"
+              "      <menuitem action='FileOpenProject'/>"
+              "      <menuitem action='FileSaveProject'/>"
+              "      <menuitem action='FileSaveProjectAs'/>"
+              "      <separator/>"
+              "      <menuitem action='FileRender'/>"
+              "      <separator/>"
+              "      <menuitem action='FileQuit'/>"
+              "    </menu>"
+              "    <menu action='EditMenu'>"
+              "      <menuitem action='EditUndo'/>"
+              "      <menuitem action='EditRedo'/>"
+              "      <separator/>"
+              "      <menuitem action='EditCut'/>"
+              "      <menuitem action='EditCopy'/>"
+              "      <menuitem action='EditPaste'/>"
+              "      <separator/>"
+              "      <menuitem action='EditPreferences'/>"
+              "    </menu>"
+              "    <menu action='ViewMenu'>"
+              "      <menuitem action='ViewAssets'/>"
+              "      <menuitem action='ViewTimeline'/>"
+              "      <menuitem action='ViewViewer'/>"
+              "    </menu>"
+              "    <menu action='SequenceMenu'>"
+              "      <menuitem action='SequenceAdd'/>"
+              "    </menu>"
+              "    <menu action='TrackMenu'>"
+              "      <menuitem action='TrackAdd'/>"
+              "    </menu>"
+              "    <menu action='WindowMenu'>"
+              "      <menuitem action='WindowNewWindow'/>"
+              "      <menuitem action='WindowCloseWindow'/>"
+              "      <menu action='WindowShowPanel'/>"
+              "    </menu>"
+              "    <menu action='HelpMenu'>"
+              "      <menuitem action='HelpAbout'/>"
+              "    </menu>"
+              "  </menubar>"
+              "  <toolbar  name='ToolBar'>"
+              "    <toolitem action='FileNewProject'/>"
+              "    <toolitem action='FileOpenProject'/>"
+              "    <toolitem action='FileSaveProject'/>"
+              "    <separator/>"
+              "    <toolitem action='EditUndo'/>"
+              "    <toolitem action='EditRedo'/>"
+              "    <separator/>"
+              "    <toolitem action='EditCut'/>"
+              "    <toolitem action='EditCopy'/>"
+              "    <toolitem action='EditPaste'/>"
+              "  </toolbar>"
+              "</ui>";
+          
+          try
+            {
+              uiManager.add_ui_from_string (ui_info);
+            }
+          catch(const Glib::Error& ex)
+            {
+              ERROR (gui, "Building menus failed: %s", ex.what().data());
+              return;
+            }
+          
+          //----- Add Extra Actions -----//
+          populateShowPanelActions (uiManager);
+        }
       
       
       
@@ -70,39 +258,217 @@ namespace workspace {
       /**
        * Populates a uiManager with actions for the Show Panel menu.
        */
-      void populateShowPanelActions(Gtk::UIManager& uiManager);
+      void
+      populateShowPanelActions (Gtk::UIManager& uiManager)
+        {
+          const uint count = PanelManager::getPanelDescriptionCount();
+          
+          Glib::RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
+          for (uint i = 0; i < count; i++)
+            {
+              const gchar *stock_id = PanelManager::getPanelStockID(i);
+              cuString name = ustring::compose("Panel%1", i);
+              actionGroup->add(Action::create(name, StockID(stock_id)),
+                bind(mem_fun(*this, &Actions::onMenu_show_panel), i));
+            }
+          
+          uiManager.insert_action_group (actionGroup);
+          
+          for (uint i = 0; i < count; i++)
+            {
+              cuString name = ustring::compose("Panel%1", i);
+              uiManager.add_ui (uiManager.new_merge_id(),
+                                "/MenuBar/WindowMenu/WindowShowPanel",
+                                name, name);
+            }
+        }
+      
+      
       
       /**
        * Updates the state of the menu/toolbar actions
        * to reflect the current state of the workspace */
-      void updateActionState();
+      void
+      updateActionState()
+        {
+             ///////////////////////////////////////////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
+          /*
+          WorkspaceWindow& currentWindow = getWorkspaceWindow();
+          
+          REQUIRE(currentWindow.assetsPanel != NULL);
+          REQUIRE(currentWindow.timelinePanel != NULL);
+          REQUIRE(currentWindow.viewerPanel != NULL);
+          
+          is_updating_action_state = true;
+          assetsPanelAction->set_active  (currentWindow.assetsPanel->is_shown());
+          timelinePanelAction->set_active(currentWindow.timelinePanel->is_shown());
+          viewerPanelAction->set_active  (currentWindow.viewerPanel->is_shown());
+          is_updating_action_state = false;
+          */
+        }
       
       
-      /* ===== Event Handlers ===== */
-    private:
-      void onMenu_file_new_project();
-      void onMenu_file_open_project();
-      void onMenu_file_render();
-      void onMenu_file_quit();
       
-      void onMenu_edit_preferences();
       
-      void onMenu_view_assets();
-      void onMenu_view_timeline();
-      void onMenu_view_viewer();
       
-      void onMenu_sequence_add();
+    private: /* ===== Event Handlers ===== */
       
-      void onMenu_track_add();
+      /* ============ File Menu ========== */
       
-      void onMenu_window_new_window();
-      void onMenu_window_close_window();
-      void onMenu_show_panel(int panel_index);
+      void
+      onMenu_file_new_project()
+        {
+          g_message("A File|New menu item was selected.");
+        }
       
-      void onMenu_help_about();
+      void
+      onMenu_file_open_project()
+        {
+          g_message("A File|Open menu item was selected.");
+        }
+      
+      void
+      onMenu_file_render()
+        {
+          dialog::Render dialog(getWorkspaceWindow());
+          dialog.run();
+        }
+      
+      void
+      onMenu_file_quit()
+        {
+          Main *main = Main::instance();
+          REQUIRE(main);
+          main->quit();
+        }
+      
+      
+      
+      /* ============ Edit Menu ========== */
+      
+      void
+      onMenu_edit_preferences()
+        {
+          dialog::PreferencesDialog dialog(getWorkspaceWindow());
+          dialog.run();
+        }
+      
+      
+      
+      /* ============ View Menu ========== */
+      
+      void
+      onMenu_view_assets()
+        {
+          /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
+          //if(!is_updating_action_state)
+          //  workspaceWindow.assetsPanel->show(
+          //    assetsPanelAction->get_active());
+        }
+      
+      void
+      onMenu_view_timeline()
+        {
+          /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
+          //if(!is_updating_action_state)
+          //  workspaceWindow.timelinePanel->show(timelinePanActionselAction->get_active());
+        }
+      
+      void
+      onMenu_view_viewer()
+        {
+          /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
+          //if(!is_updating_action_state)
+          //  workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
+        }
+      
+      
+      
+      /* ============ Sequence Menu ====== */
+      
+      void
+      onMenu_sequence_add()
+        {
+          dialog::NameChooser dialog(getWorkspaceWindow(),
+            _("Add Sequence"), _("New Sequence"));
+///////////////////////////////////////////////////////////////////////////////////////////////TICKET #1070 need a way how to issue session commands    
+//        if(dialog.run() == RESPONSE_OK)
+//          workspaceWindow().getProject().add_new_sequence(dialog.getName());
+        }
+      
+      
+      
+      /* ============ Track Menu ========= */
+      
+      void
+      onMenu_track_add()
+        {
+          g_message("Hello");
+        }
+      
+      
+      
+      /* ============ Window Menu ======== */
+      
+      void
+      onMenu_window_new_window()
+        {
+//        windowList_.newWindow();   //////////////////////////////////TODO move into UiManager?? 
+        }
+      
+      void
+      onMenu_window_close_window()
+        {
+          getWorkspaceWindow().hide();
+          // delete &workspaceWindow;
+        }
+      
+      void
+      onMenu_show_panel(int panel_index)
+        {
+          getWorkspaceWindow().getPanelManager().showPanel (panel_index);
+        }
+      
+      
+      
+      /* ============ Help Menu ========== */
+      
+      void
+      onMenu_help_about()
+        {
+          // Configure the about dialog
+          AboutDialog dialog;
+          
+          cuString copyrightNotice {_Fmt(_("© %s the original Authors\n"
+                                           "-- Lumiera Team --\n"
+                                           "Lumiera is Free Software (GPL)"))
+                                           % Config::get (KEY_COPYRIGHT)};
+          
+          string authors = Config::get (KEY_AUTHORS);
+          vector<uString> authorsList;
+          split (authorsList, authors, is_any_of (",|"));
+          
+          
+          dialog.set_program_name(Config::get (KEY_TITLE));
+          dialog.set_version(Config::get (KEY_VERSION));
+          dialog.set_copyright(copyrightNotice);
+          dialog.set_website(Config::get (KEY_WEBSITE));
+          dialog.set_authors(authorsList);
+          
+          dialog.set_transient_for(getWorkspaceWindow());
+          
+          // Show the about dialog
+          dialog.run();
+        }
+      
+      
       
       // Temporary Junk
-      void onMenu_others();
+      void
+      onMenu_others()                                      /////////////////////////TICKET #1070 need a concept how to bind global actions
+        {
+          g_message("A menu item was selected.");
+        }
       
       
       
