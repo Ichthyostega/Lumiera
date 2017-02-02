@@ -32,22 +32,12 @@
 #define GUI_WORKSPACE_WORKSPACE_WINDOW_H
 
 
-#include "gui/workspace/actions.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/workspace/panel-manager.hpp"
 
-#include <gtkmm.h>
-
-using namespace gui::panel;       ///////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
-  namespace model {
-    class Project;
-  }
-  namespace controller {
-    class Controller;
-  }
-  
-  namespace workspace {
+namespace workspace {
   
   class UiManager;
   

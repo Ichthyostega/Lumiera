@@ -22,15 +22,11 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
-#include "gui/workspace/ui-manager.hpp"
 #include "workspace-window.hpp"
+#include "gui/workspace/ui-manager.hpp"
+#include "gui/workspace/panel-manager.hpp"
 #include "include/logging.h"
 
-#include <gtkmm/stock.h>
-
-#ifdef ENABLE_NLS
-#  include <libintl.h>
-#endif
 
 
 
