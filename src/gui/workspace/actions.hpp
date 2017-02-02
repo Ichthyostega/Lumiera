@@ -93,6 +93,11 @@ namespace workspace {
       
       /**
        * Populates the uiManager with the main set of global actions.
+       * @remarks we define the menu bindings with the help of stock language lambdas.
+       *          This does not make the resulting functors `sigc::trackable`, yet this
+       *          is not necessary either, since Actions, together with all the other
+       *          top level UI backbone entities, is created and maintained by GtkLumiera,
+       *          and thus ensured to exist as long as the GTK event loop is running.
        */
       void
       populateMainActions (Gtk::UIManager& uiManager)
@@ -102,80 +107,54 @@ namespace workspace {
           
           // File menu
           actionGroup->add(Action::create("FileMenu", _("_File")));
-          actionGroup->add(Action::create("FileNewProject",   Stock::NEW, _("_New Project...")),
-            mem_fun(*this, &Actions::onMenu_file_new_project));
-          actionGroup->add(Action::create("FileOpenProject",  Stock::OPEN, _("_Open Project...")),
-            mem_fun(*this, &Actions::onMenu_file_open_project));
-          actionGroup->add(Action::create("FileSaveProject",  Stock::SAVE, _("_Save Project")),
-            mem_fun(*this, &Actions::onMenu_others));
-          actionGroup->add(Action::create("FileSaveProjectAs",Stock::SAVE_AS, _("_Save Project As...")),
-            mem_fun(*this, &Actions::onMenu_others));
-          actionGroup->add(Action::create("FileRender", _("_Render...")),
-            AccelKey("<shift>R"),
-            mem_fun(*this, &Actions::onMenu_file_render));
-          actionGroup->add(Action::create("FileQuit", Stock::QUIT),
-            mem_fun(*this, &Actions::onMenu_file_quit));
+          actionGroup->add(Action::create("FileNewProject",   Stock::NEW, _("_New Project...")),   [&]() { onMenu_file_new_project(); });
+          actionGroup->add(Action::create("FileOpenProject",  Stock::OPEN, _("_Open Project...")), [&]() { onMenu_file_open_project(); });
+          actionGroup->add(Action::create("FileSaveProject",  Stock::SAVE, _("_Save Project")),    [&]() { onMenu_others(); });
+          actionGroup->add(Action::create("FileSaveProjectAs",Stock::SAVE_AS, _("_Save Project As...")), [&]() { onMenu_others(); });
+          actionGroup->add(Action::create("FileRender", _("_Render...")),    AccelKey("<shift>R"), [&]() { onMenu_file_render(); });
+          actionGroup->add(Action::create("FileQuit", Stock::QUIT),                                [&]() { onMenu_file_quit(); });
           
           // Edit menu
           actionGroup->add(Action::create("EditMenu", _("_Edit")));
-          actionGroup->add(Action::create("EditUndo", Stock::UNDO),
-            mem_fun(*this, &Actions::onMenu_others));
-          actionGroup->add(Action::create("EditRedo", Stock::REDO),
-            mem_fun(*this, &Actions::onMenu_others));
-          actionGroup->add(Action::create("EditCut",  Stock::CUT),
-            mem_fun(*this, &Actions::onMenu_others));
-          actionGroup->add(Action::create("EditCopy", Stock::COPY),
-            mem_fun(*this, &Actions::onMenu_others));
-          actionGroup->add(Action::create("EditPaste",Stock::PASTE),
-            mem_fun(*this, &Actions::onMenu_others));
-          actionGroup->add(Action::create("EditPreferences", Stock::PREFERENCES),
-            mem_fun(*this, &Actions::onMenu_edit_preferences));
+          actionGroup->add(Action::create("EditUndo", Stock::UNDO),                  [&]() { onMenu_others(); });
+          actionGroup->add(Action::create("EditRedo", Stock::REDO),                  [&]() { onMenu_others(); });
+          actionGroup->add(Action::create("EditCut",  Stock::CUT),                   [&]() { onMenu_others(); });
+          actionGroup->add(Action::create("EditCopy", Stock::COPY),                  [&]() { onMenu_others(); });
+          actionGroup->add(Action::create("EditPaste",Stock::PASTE),                 [&]() { onMenu_others(); });
+          actionGroup->add(Action::create("EditPreferences", Stock::PREFERENCES),    [&]() { onMenu_edit_preferences(); });
           
           // View Menu
           actionGroup->add(Action::create("ViewMenu", _("_View")));
           
-          assetsPanelAction = ToggleAction::create("ViewAssets",
-            StockID("panel_assets"));
-          assetsPanelAction->signal_toggled().connect(
-            mem_fun(*this, &Actions::onMenu_view_assets));
+          assetsPanelAction = ToggleAction::create("ViewAssets", StockID("panel_assets"));
+          assetsPanelAction->signal_toggled().connect (                              [&]() { onMenu_view_assets(); });
           actionGroup->add(assetsPanelAction);
           
-          timelinePanelAction = ToggleAction::create("ViewTimeline",
-            StockID("panel_timeline"));
-          timelinePanelAction->signal_toggled().connect(
-            mem_fun(*this, &Actions::onMenu_view_timeline));
+          timelinePanelAction = ToggleAction::create("ViewTimeline", StockID("panel_timeline"));
+          timelinePanelAction->signal_toggled().connect(                             [&]() { onMenu_view_timeline(); });
           actionGroup->add(timelinePanelAction);
           
-          viewerPanelAction = ToggleAction::create("ViewViewer",
-            StockID("panel_viewer"));
-          viewerPanelAction->signal_toggled().connect(
-            mem_fun(*this, &Actions::onMenu_view_viewer));
+          viewerPanelAction = ToggleAction::create("ViewViewer", StockID("panel_viewer"));
+          viewerPanelAction->signal_toggled().connect(                               [&]() { onMenu_view_viewer(); });
           actionGroup->add(viewerPanelAction);
           
           // Sequence Menu
           actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
-          actionGroup->add(Action::create("SequenceAdd", _("_Add...")),
-            mem_fun(*this, &Actions::onMenu_sequence_add));
+          actionGroup->add(Action::create("SequenceAdd", _("_Add...")),              [&]() { onMenu_sequence_add(); });
           
           // Track Menu
           actionGroup->add(Action::create("TrackMenu", _("_Track")));
-          actionGroup->add(Action::create("TrackAdd", _("_Add...")),
-            mem_fun(*this, &Actions::onMenu_track_add));
+          actionGroup->add(Action::create("TrackAdd", _("_Add...")),                 [&]() { onMenu_track_add(); });
           
           // Window Menu
           actionGroup->add(Action::create("WindowMenu", _("_Window")));
-          actionGroup->add(Action::create("WindowNewWindow",
-            StockID("new_window")),
-            mem_fun(*this, &Actions::onMenu_window_new_window));
-          actionGroup->add(Action::create("WindowCloseWindow",
-            _("Close Window")),
-            mem_fun(*this, &Actions::onMenu_window_close_window));
+          actionGroup->add(Action::create("WindowNewWindow", StockID("new_window")), [&]() { onMenu_window_new_window(); });
+          actionGroup->add(Action::create("WindowCloseWindow", _("Close Window")),   [&]() { onMenu_window_close_window(); });
           actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
           
           // Help Menu
           actionGroup->add(Action::create("HelpMenu", _("_Help")) );
-          actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
-            mem_fun(*this, &Actions::onMenu_help_about) );
+          actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),                [&]() { onMenu_help_about(); });
           
           uiManager.insert_action_group(actionGroup);
           
