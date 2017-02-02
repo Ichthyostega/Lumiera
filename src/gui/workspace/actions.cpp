@@ -42,18 +42,26 @@
 #include <vector>
 
 
-using namespace Gtk;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace Glib;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace sigc;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-
-using boost::algorithm::is_any_of;
-using boost::algorithm::split;
-using ::util::_Fmt;
-using std::vector;
 
 namespace gui {
 namespace workspace {
+  
+  using boost::algorithm::is_any_of;
+  using boost::algorithm::split;
+  using Gtk::Action;
+  using Gtk::ActionGroup;
+  using Gtk::ToggleAction;
+  using Gtk::AboutDialog;
+  using Gtk::AccelKey;
+  using Gtk::StockID;
+  using Gtk::Main;       /////////////////////////////////////////////////////////////////////////////////////TICKET #1032 replace Main -> Application
+  using sigc::mem_fun;
+  using Glib::ustring;
+  using ::util::_Fmt;
+  using std::vector;
+  
+  namespace Stock = Gtk::Stock;
+  
   
   Actions::Actions (GetWindow how_to_access_current_window)
     : getWorkspaceWindow(how_to_access_current_window)

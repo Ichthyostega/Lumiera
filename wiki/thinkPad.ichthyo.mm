@@ -1856,13 +1856,88 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1485917582383" HGAP="163" ID="ID_394170572" MODIFIED="1485917632918" TEXT="TODO" VSHIFT="-30">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1485917582383" HGAP="163" ID="ID_394170572" MODIFIED="1486063798743" TEXT="TODO: Struktur" VSHIFT="-30">
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485917587927" ID="ID_891876702" MODIFIED="1485917622265" TEXT="wohin kommen jetzt die Funktionen, die gebunden werden">
 <icon BUILTIN="help"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485917597429" ID="ID_713875638" MODIFIED="1485917626785" TEXT="auf welche Sub-Komponenten wird referenziert">
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1486063810921" ID="ID_719539281" MODIFIED="1486063815428" TEXT="Zweck">
+<node CREATED="1486063816320" ID="ID_151179000" MODIFIED="1486063819332" TEXT="ist ein Builder"/>
+<node CREATED="1486063819992" ID="ID_445639565" MODIFIED="1486063826794" TEXT="ist eine Closure"/>
+<node CREATED="1486063831790" ID="ID_328966967" MODIFIED="1486063840849" TEXT="mu&#xdf; blo&#xdf; am Leben bleiben"/>
+<node CREATED="1486063841293" ID="ID_1675242982" MODIFIED="1486063848831" TEXT="hat nach Init nichts mehr zu tun"/>
+</node>
+<node CREATED="1486063858283" ID="ID_130675776" MODIFIED="1486063883707" TEXT="ist Impl-Detail">
+<node CREATED="1486063886407" ID="ID_1294385692" MODIFIED="1486063896241" TEXT="sollte aus den weitverbreiteten Header-Includes raus"/>
+<node CREATED="1486063911188" ID="ID_1391435276" MODIFIED="1486063939019" TEXT="gegenw&#xe4;rtig Member im UiManager">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und der wird in der Tat an vielen Stellen includiert
+    </p>
+    <p>
+      und verwendet, und das ist auch gut so
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1486063950103" ID="ID_57649689" MODIFIED="1486063952666" TEXT="zwei Modelle">
+<node CREATED="1486063954062" ID="ID_1174765379" MODIFIED="1486064380449" TEXT="Actions wird insgesamt ein PImpl">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1486064137014" ID="ID_926465478" MODIFIED="1486064141569" TEXT="ist einfach umzusetzen"/>
+<node CREATED="1486064142037" ID="ID_836065841" MODIFIED="1486064154551" TEXT="f&#xfc;hrt zu einer doppelten Indirektion"/>
+<node CREATED="1486064289857" ID="ID_806073517" MODIFIED="1486064322201" TEXT="macht Registrierung der Aktionen einfach"/>
+<node CREATED="1486064322909" ID="ID_89838152" MODIFIED="1486064386561" TEXT="vermischt die Themen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1486064333076" ID="ID_622214749" MODIFIED="1486064336887" TEXT="Aufbauen des Men&#xfc;s"/>
+<node CREATED="1486064337363" ID="ID_551504727" MODIFIED="1486064345942" TEXT="Closure f&#xfc;r die Einzel-Aktionen"/>
+</node>
+<node CREATED="1486064454451" ID="ID_744832983" MODIFIED="1486064468525" TEXT="Aber genau diese Vermischun macht das Registrieren einfach"/>
+</node>
+<node CREATED="1486063968868" ID="ID_830826934" MODIFIED="1486064373506" TEXT="Actions hat einen ActionGroup-PImpl">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1486063991065" ID="ID_1575759747" MODIFIED="1486064393440" TEXT="man kann von ActionGroup erben">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1486064395051" ID="ID_1668165644" MODIFIED="1486064403278" TEXT="Risiko: Umstellung auf Gio::Action">
+<node CREATED="1486064404410" ID="ID_1844104863" MODIFIED="1486064408350" TEXT="zwingend erforderlich"/>
+<node CREATED="1486064408841" ID="ID_630946690" MODIFIED="1486064429511" TEXT="in GTK-4 gibt es keine Gtk::Action mehr">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1486063996776" ID="ID_784656430" MODIFIED="1486064003323" TEXT="ist zwar nicht vorgesehen...">
+<node CREATED="1486064082093" ID="ID_1957105401" MODIFIED="1486064085153" TEXT="das ist eindeutig"/>
+<node CREATED="1486064085605" ID="ID_614915424" MODIFIED="1486064092928" TEXT="es gibt eine statische create-Funktion"/>
+<node CREATED="1486064099915" ID="ID_247043577" MODIFIED="1486064107614" TEXT="und die macht einen Gtk::ref_ptr"/>
+<node CREATED="1486064111241" ID="ID_1562595756" MODIFIED="1486064121620" TEXT="AUTSCH: ich will einen unique_ptr"/>
+</node>
+<node CREATED="1486064004143" ID="ID_1825804537" MODIFIED="1486064187149" TEXT="....aber geht">
+<icon BUILTIN="help"/>
+<node CREATED="1486064188334" ID="ID_1128646481" MODIFIED="1486064191370" TEXT="theoretisch ja"/>
+<node CREATED="1486064209092" ID="ID_340165076" MODIFIED="1486064220982" TEXT="aber am Ende will der UiManager einen ref_ptr ActionGroup"/>
+<node CREATED="1486064221954" ID="ID_429209345" MODIFIED="1486064232226" TEXT="da sollte man sich besser raushalten">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1486064237832" ID="ID_529050138" MODIFIED="1486064253396" TEXT="w&#xe4;re sch&#xf6;n aber nicht ratsam">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node CREATED="1486064478968" ID="ID_1610028838" MODIFIED="1486064483792" TEXT="Umbau">
+<icon BUILTIN="pencil"/>
+<node CREATED="1486064487215" ID="ID_195778340" MODIFIED="1486064493007" TEXT="Actions wird PImpl"/>
+<node CREATED="1486064493614" ID="ID_566562539" MODIFIED="1486064499969" TEXT="Actions wird Header-only"/>
+<node CREATED="1486064503229" ID="ID_1200627448" MODIFIED="1486064513472" TEXT="alle wildcard-Includes weg"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485898796393" ID="ID_1217726538" MODIFIED="1485898814419" TEXT="#1069 how to refer to the current window">
