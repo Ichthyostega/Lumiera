@@ -31,6 +31,8 @@
 #include "gui/config-keys.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/workspace/ui-manager.hpp"
+#include "gui/workspace/actions.hpp"
+#include "gui/workspace/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
@@ -57,11 +59,16 @@ namespace workspace {
   IconSize UiManager::MenuIconSize = Gtk::ICON_SIZE_INVALID;
   
   
+  // dtors via smart-ptr invoked from here...
+  UiManager::~UiManager()
+    { }
+  
+  
   UiManager::UiManager (UiBus& bus)
     : Gtk::UIManager()
     , uiBus_(bus)
-    , windowList_{*this}
-    , actions_{[this]() ->WorkspaceWindow& { return windowList_.findActiveWindow();}}
+    , windowList_{new WindowList{*this}}
+    , actions_{new Actions{[this]() ->WorkspaceWindow& { return windowList_->findActiveWindow();}}}
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
     {
@@ -86,7 +93,7 @@ namespace workspace {
     
     setTheme (Config::get (KEY_STYLESHEET));
     
-    actions_.populateMainActions (*this);
+    actions_->populateMainActions (*this);
   }
   
   

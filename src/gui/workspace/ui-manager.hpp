@@ -36,8 +36,6 @@
 #define GUI_WORKSPACE_UI_MANAGER_H
 
 #include "gui/gtk-base.hpp"
-#include "gui/workspace/actions.hpp"
-#include "gui/workspace/window-list.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <cairomm/cairomm.h>
@@ -54,9 +52,11 @@ namespace gui {
 
 namespace workspace {
   
-  
-  using std::shared_ptr;
+  using std::unique_ptr;
   using std::string;
+  
+  class Actions;
+  class WindowList;
   
   
   
@@ -69,8 +69,8 @@ namespace workspace {
     {
       UiBus& uiBus_;
       
-      WindowList windowList_;
-      Actions actions_;
+      unique_ptr<WindowList> windowList_;
+      unique_ptr<Actions> actions_;
       
       string iconSearchPath_;
       string resourceSerachPath_;
@@ -99,6 +99,7 @@ namespace workspace {
        * Rather, supports the top-level windows for creating a consistent interface.
        */
       UiManager (UiBus& bus);
+     ~UiManager ();
       
       /**
        * Set up the first top-level application window.
