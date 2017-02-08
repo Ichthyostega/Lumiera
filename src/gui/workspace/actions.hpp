@@ -159,63 +159,63 @@ namespace workspace {
           uiManager.insert_action_group(actionGroup);
           
           //----- Create the UI layout -----//
-          uString ui_info =
-              "<ui>"
-              "  <menubar name='MenuBar'>"
-              "    <menu action='FileMenu'>"
-              "      <menuitem action='FileNewProject'/>"
-              "      <menuitem action='FileOpenProject'/>"
-              "      <menuitem action='FileSaveProject'/>"
-              "      <menuitem action='FileSaveProjectAs'/>"
-              "      <separator/>"
-              "      <menuitem action='FileRender'/>"
-              "      <separator/>"
-              "      <menuitem action='FileQuit'/>"
-              "    </menu>"
-              "    <menu action='EditMenu'>"
-              "      <menuitem action='EditUndo'/>"
-              "      <menuitem action='EditRedo'/>"
-              "      <separator/>"
-              "      <menuitem action='EditCut'/>"
-              "      <menuitem action='EditCopy'/>"
-              "      <menuitem action='EditPaste'/>"
-              "      <separator/>"
-              "      <menuitem action='EditPreferences'/>"
-              "    </menu>"
-              "    <menu action='ViewMenu'>"
-              "      <menuitem action='ViewAssets'/>"
-              "      <menuitem action='ViewTimeline'/>"
-              "      <menuitem action='ViewViewer'/>"
-              "    </menu>"
-              "    <menu action='SequenceMenu'>"
-              "      <menuitem action='SequenceAdd'/>"
-              "    </menu>"
-              "    <menu action='TrackMenu'>"
-              "      <menuitem action='TrackAdd'/>"
-              "    </menu>"
-              "    <menu action='WindowMenu'>"
-              "      <menuitem action='WindowNewWindow'/>"
-              "      <menuitem action='WindowCloseWindow'/>"
-              "      <menu action='WindowShowPanel'/>"
-              "    </menu>"
-              "    <menu action='HelpMenu'>"
-              "      <menuitem action='HelpAbout'/>"
-              "    </menu>"
-              "  </menubar>"
-              "  <toolbar  name='ToolBar'>"
-              "    <toolitem action='FileNewProject'/>"
-              "    <toolitem action='FileOpenProject'/>"
-              "    <toolitem action='FileSaveProject'/>"
-              "    <separator/>"
-              "    <toolitem action='EditUndo'/>"
-              "    <toolitem action='EditRedo'/>"
-              "    <separator/>"
-              "    <toolitem action='EditCut'/>"
-              "    <toolitem action='EditCopy'/>"
-              "    <toolitem action='EditPaste'/>"
-              "  </toolbar>"
-              "</ui>";
-          
+          string ui_info = R"(***
+              <ui>
+                <menubar name='MenuBar'>
+                  <menu action='FileMenu'>
+                    <menuitem action='FileNewProject'/>
+                    <menuitem action='FileOpenProject'/>
+                    <menuitem action='FileSaveProject'/>
+                    <menuitem action='FileSaveProjectAs'/>
+                    <separator/>
+                    <menuitem action='FileRender'/>
+                    <separator/>
+                    <menuitem action='FileQuit'/>
+                  </menu>
+                  <menu action='EditMenu'>
+                    <menuitem action='EditUndo'/>
+                    <menuitem action='EditRedo'/>
+                    <separator/>
+                    <menuitem action='EditCut'/>
+                    <menuitem action='EditCopy'/>
+                    <menuitem action='EditPaste'/>
+                    <separator/>
+                    <menuitem action='EditPreferences'/>
+                  </menu>
+                  <menu action='ViewMenu'>
+                    <menuitem action='ViewAssets'/>
+                    <menuitem action='ViewTimeline'/>
+                    <menuitem action='ViewViewer'/>
+                  </menu>
+                  <menu action='SequenceMenu'>
+                    <menuitem action='SequenceAdd'/>
+                  </menu>
+                  <menu action='TrackMenu'>
+                    <menuitem action='TrackAdd'/>
+                  </menu>
+                  <menu action='WindowMenu'>
+                    <menuitem action='WindowNewWindow'/>
+                    <menuitem action='WindowCloseWindow'/>
+                    <menu action='WindowShowPanel'/>
+                  </menu>
+                  <menu action='HelpMenu'>
+                    <menuitem action='HelpAbout'/>
+                  </menu>
+                </menubar>
+                <toolbar  name='ToolBar'>
+                  <toolitem action='FileNewProject'/>
+                  <toolitem action='FileOpenProject'/>
+                  <toolitem action='FileSaveProject'/>
+                  <separator/>
+                  <toolitem action='EditUndo'/>
+                  <toolitem action='EditRedo'/>
+                  <separator/>
+                  <toolitem action='EditCut'/>
+                  <toolitem action='EditCopy'/>
+                  <toolitem action='EditPaste'/>
+                </toolbar>
+              </ui>
+          ***)";
           try
             {
               uiManager.add_ui_from_string (ui_info);
