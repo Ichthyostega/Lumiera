@@ -71,6 +71,8 @@ namespace workspace {
     public:
       WindowList (UiManager&);
       
+      bool empty()  const;
+      
       void newWindow ();
       
       WorkspaceWindow& findActiveWindow();
@@ -96,6 +98,14 @@ namespace workspace {
     private:
       
     };
+  
+  
+  
+  inline bool
+  WindowList::empty()  const
+  {
+    return windowList_.empty();
+  }
   
   
   

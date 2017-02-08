@@ -46,6 +46,7 @@ using Gtk::IconSize;
 using Gtk::IconFactory;
 
 using util::cStr;
+using util::isnil;
 using std::list;
 using std::shared_ptr;
 
@@ -103,7 +104,8 @@ namespace workspace {
   void
   UiManager::createApplicationWindow()
   {
-    UNIMPLEMENTED ("create the first top-level window");
+    if (windowList_->empty())
+      windowList_->newWindow();
   }
   
     

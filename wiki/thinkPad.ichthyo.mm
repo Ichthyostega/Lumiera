@@ -1890,7 +1890,7 @@
 </richcontent>
 </node>
 <node CREATED="1486063950103" ID="ID_57649689" MODIFIED="1486063952666" TEXT="zwei Modelle">
-<node CREATED="1486063954062" ID="ID_1174765379" MODIFIED="1486064380449" TEXT="Actions wird insgesamt ein PImpl">
+<node CREATED="1486063954062" FOLDED="true" ID="ID_1174765379" MODIFIED="1486518487102" TEXT="Actions wird insgesamt ein PImpl">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1486064137014" ID="ID_926465478" MODIFIED="1486064141569" TEXT="ist einfach umzusetzen"/>
 <node CREATED="1486064142037" ID="ID_836065841" MODIFIED="1486064154551" TEXT="f&#xfc;hrt zu einer doppelten Indirektion"/>
@@ -1902,7 +1902,7 @@
 </node>
 <node CREATED="1486064454451" ID="ID_744832983" MODIFIED="1486064468525" TEXT="Aber genau diese Vermischun macht das Registrieren einfach"/>
 </node>
-<node CREATED="1486063968868" ID="ID_830826934" MODIFIED="1486064373506" TEXT="Actions hat einen ActionGroup-PImpl">
+<node CREATED="1486063968868" FOLDED="true" ID="ID_830826934" MODIFIED="1486518480088" TEXT="Actions hat einen ActionGroup-PImpl">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1486063991065" ID="ID_1575759747" MODIFIED="1486064393440" TEXT="man kann von ActionGroup erben">
 <icon BUILTIN="idea"/>
@@ -2041,6 +2041,47 @@
 </node>
 <node CREATED="1485556056206" ID="ID_509456873" MODIFIED="1485556067214" TEXT="...sonst mu&#xdf; der PanelManager helfen">
 <icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486520281897" ID="ID_827558797" MODIFIED="1486520324210" TEXT="Problem: zwei Inseln">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1486520289382" ID="ID_1944158920" MODIFIED="1486520302679" TEXT="CoreService + UI-Bus"/>
+<node CREATED="1486520303173" ID="ID_306583765" MODIFIED="1486520321580" TEXT="UiManager, Actions etc"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1486521232144" HGAP="40" ID="ID_1816242514" MODIFIED="1486521245172" TEXT="Fragen" VSHIFT="33">
+<icon BUILTIN="help"/>
+<node CREATED="1486521810252" ID="ID_728134375" MODIFIED="1486521858401" TEXT="wer verk&#xf6;rpert den Sesison-Root?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521250790" ID="ID_447470270" MODIFIED="1486521351988" TEXT="haben wir einen globalen Controller?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521269531" ID="ID_1633937799" MODIFIED="1486521348579" TEXT="was ist das Modell des globalen Controllers?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521285069" ID="ID_410780953" MODIFIED="1486521344837" TEXT="wie h&#xe4;ngt das mit persistentem UI-State zusammen?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521317725" ID="ID_1502356505" MODIFIED="1486521332943" TEXT="welche Aktionen l&#xf6;st der globale Controller aus?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521369166" ID="ID_1068454326" MODIFIED="1486521384972" TEXT="wie werden die mit dem Men&#xfc; verbunden?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521449835" ID="ID_236689642" MODIFIED="1486521473727" TEXT="wo h&#xe4;ngt der InvocationStateManager?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521478792" ID="ID_235720883" MODIFIED="1486521491244" TEXT="wie redet man mit dem InvocationStateManager?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521492102" ID="ID_339608490" MODIFIED="1486521506112" TEXT="kann man Fragen via Bus stellen?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521526105" ID="ID_1872187260" MODIFIED="1486521537413" TEXT="nutzen wir das Advice-System?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486521980109" ID="ID_1036025143" MODIFIED="1486521993495" TEXT="wer bendet das UI?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 </node>
