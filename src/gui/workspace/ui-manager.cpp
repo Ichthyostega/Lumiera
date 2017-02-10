@@ -38,6 +38,7 @@
 #include "gui/workspace/actions.hpp"
 #include "gui/workspace/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
+#include "gui/workspace/interaction-director.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
@@ -71,7 +72,8 @@ namespace workspace {
   
   UiManager::UiManager (UiBus& bus)
     : Gtk::UIManager()
-    , uiBus_(bus)
+    , uiBus_{bus}
+    , director_{new InteractionDirector{bus}}
     , windowList_{new WindowList{*this}}
     , actions_{new Actions{[this]() ->WorkspaceWindow& { return windowList_->findActiveWindow();}}}
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}

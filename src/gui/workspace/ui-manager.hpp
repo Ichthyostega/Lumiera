@@ -64,6 +64,7 @@ namespace workspace {
   
   class Actions;
   class WindowList;
+  class InteractionDirector;
   
   
   
@@ -79,8 +80,9 @@ namespace workspace {
     {
       UiBus& uiBus_;
       
-      unique_ptr<WindowList> windowList_;
-      unique_ptr<Actions> actions_;
+      unique_ptr<InteractionDirector> director_;
+      unique_ptr<WindowList>        windowList_;
+      unique_ptr<Actions>              actions_;
       
       string iconSearchPath_;
       string resourceSerachPath_;

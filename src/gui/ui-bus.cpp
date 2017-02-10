@@ -68,6 +68,14 @@ namespace controller {
   // emit administrative code here...
   UiBus::~UiBus() { }
   
+  
+  ctrl::BusTerm&
+  UiBus::getAccessPoint()
+  {
+    return *coreService_;
+  }
+
+  
 namespace ctrl {
     
     CoreService::~CoreService() { }

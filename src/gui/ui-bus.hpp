@@ -138,6 +138,7 @@ namespace gui {
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
   namespace ctrl {
     class CoreService;
+    class BusTerm;
   }
   
   
@@ -159,7 +160,8 @@ namespace gui {
     public:
       UiBus();
      ~UiBus();
-     
+      
+      ctrl::BusTerm& getAccessPoint();
     };
   
   

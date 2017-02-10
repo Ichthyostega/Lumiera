@@ -26,6 +26,7 @@
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
+#include "lib/idi/entry-id.hpp"
 
 
 namespace lumiera {
@@ -69,6 +70,8 @@ namespace session {
         
       public:
         Root (lumiera::query::DefsManager&);
+        
+        static lib::idi::EntryID<Root> getID();
         
         DEFINE_PROCESSABLE_BY (builder::BuilderTool);
         

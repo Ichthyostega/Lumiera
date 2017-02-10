@@ -25,6 +25,7 @@
 #include "common/query/defs-manager.hpp"
 
 using lumiera::query::DefsManager;
+using lib::idi::EntryID;
 
 namespace proc {
 namespace mobject {
@@ -37,6 +38,20 @@ namespace session {
       throwIfInvalid();
     }
   
+  
+  /** get an unique ID to identify "the model root".
+   *  Actually this ID is statically fixed and will be used by the UI
+   *  to connect to and talk to the session model at top-level
+   * @return an embedded LUID tagged with the type of the session::Root.
+   *         This ID is suitable to be used in model diff and as ID on
+   *         the UI-Bus to address the corresponding representations
+   *         in Proc-Layer and UI-Layer
+   */
+  lib::idi::EntryID<Root>
+  Root::getID()
+  {
+    return EntryID<Root>("session");
+  }
   
   
   /** @todo validity self-check of the model root

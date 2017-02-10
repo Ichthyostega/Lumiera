@@ -2,7 +2,6 @@
   INTERACTION-DIRECTOR.hpp  -  Global UI Manager
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
     2017,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
@@ -24,15 +23,27 @@
 
 /** @file interaction-director.hpp
  ** The top-level controller to connect model and user interaction state.
- ** The central UiManager instance is owned by the GtkLumiera object and initialised in GTK-main.
- ** It establishes and wires the top-level entities of the UI-Layer and thus, indirectly offers
- ** services to provide Icons and other resources, to open and manage workspace windows, to
- ** form and issue (global) actions and to delve into the UI representation of top-level parts
- ** of the session model. Notable connections established herein:
- ** - connection to the [UI-Bus](\ref ui-bus.hpp)
- ** - the global Actions available though the menu
- ** - the WindowList
- ** - the InteractionDirector (top-level controller)
+ ** Within the Lumiera UI, relevant entities from the session model are mapped onto and represented
+ ** by corresponding [UI-Elements](\ref model::Tangible). Consequently, there is a hierarchy of
+ ** interrelated UI elements mirroring the hierarchy within the session model. And, while in the
+ ** latter, there is a _conceptual root node_ to correspond to the session itself, within the UI
+ ** there is a top-level controller to mirror and represent that root element: The InteractionDirector.
+ ** 
+ ** For one, the InteractionDirector represents and exposes parts of the model as seen from top level.
+ ** Especially this means that, through the InteractionDirector, it is possible to open and enter the
+ ** UI to work with the timeline(s), with the assets and with the global session configuration.
+ ** Moreover, this top-level controller allows to issue likewise global actions regarding those
+ ** entities:
+ ** - create / modify / delete timeline(s)
+ ** - create / modify / sequences
+ ** - save, close, open and create a session
+ ** 
+ ** And, secondly, beyond those top-level model-related activities, the InteractionDirector serves
+ ** as link between model entities, actions to be performed onto them and the transient yet global
+ ** user interaction state. The latter means anything related to _the current window_,
+ ** _the current focus_, _the current work-site_, the current interface controller technology used etc.
+ ** Obviously, the InteractionDirector can not _handle_ all those heavyweight concerns; but it connects
+ ** the involved parts and (re)directs the information flow towards the proper recipient to handle it.
  ** 
  ** @see gtk-lumiera.hpp
  ** @see ui-bus.hpp
@@ -42,189 +53,47 @@
 #ifndef GUI_WORKSPACE_INTERACTION_DIRECTOR_H
 #define GUI_WORKSPACE_INTERACTION_DIRECTOR_H
 
-#include "gui/gtk-base.hpp"
+//#include "gui/gtk-base.hpp"
+#include "gui/model/controller.hpp"
 
-#include <boost/noncopyable.hpp>
-#include <cairomm/cairomm.h>
-#include <string>
+//#include <boost/noncopyable.hpp>
+//#include <cairomm/cairomm.h>
+//#include <string>
 #include <memory>
 
 
 namespace gui {
   
-  namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
-  namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
-
   class UiBus;
 
 namespace workspace {
   
-  using std::unique_ptr;
-  using std::string;
+//using std::string;
   
-  class Actions;
-  class WindowList;
+//class Actions;
+//class WindowList;
   
   
   
   /**
-   * Manage global concerns regarding a coherent user interface.
-   * Offers access to some global UI resources, and establishes
-   * further global services to create workspace windows, to bind
-   * menu / command actions and to enter the top-level model parts.
+   * Top-level controller to establish a link between the model
+   * and transient user interaction state (focus, current window)
    */
   class InteractionDirector
-    : public Gtk::UIManager
-    , boost::noncopyable
+    : public model::Controller
     {
-      UiBus& uiBus_;
       
-      unique_ptr<WindowList> windowList_;
-      unique_ptr<Actions> actions_;
+      ////TODO: what is the model equivalent represented here???
       
-      string iconSearchPath_;
-      string resourceSerachPath_;
+      /** set up a binding to allow some top-level UI state
+       *  to be treated as part of the session model
+       * @see tree-mutator.hpp 
+       */
+      void buildMutator (lib::diff::TreeMutator::Handle)  override;
       
     public:
-      
-      /** The registered icon size for giant 48x48 px icons.
-       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
-       *          until register_giant_icon_size is called.
-       */
-      static Gtk::IconSize GiantIconSize;
-      
-      /** The registered icon size for giant 16x16 px icons.
-       * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
-       *          until register_app_icon_sizes is called.
-       */
-      static Gtk::IconSize MenuIconSize;
-      
-      
-    public:
-      /**
-       * There is one global UiManager instance,
-       * which is created by [the Application](\ref GtkLumiera)
-       * and allows access to the UI-Bus backbone. The UiManager itself
-       * is _not a ctrl::Controller,_ and thus not directly connected to the Bus.
-       * Rather, supports the top-level windows for creating a consistent interface.
-       */
       InteractionDirector (UiBus& bus);
      ~InteractionDirector ();
-      
-      /**
-       * Set up the first top-level application window.
-       * This triggers the build-up of the user interface widgets.
-       */
-      void createApplicationWindow();
-      
-      /** @todo find a solution how to enable/disable menu entries according to focus
-       *                                               /////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
-       */
-      void updateWindowFocusRelatedActions();
-      
-      /**
-       * Sets the theme to use for the Lumiera GUI.
-       * @param stylesheetName GTK CSS stylesheet to load from the resourceSearchPath_
-       * @throw error::Config if this stylesheet can't be resolved on the searchpath
-       * @see #init
-       * @see lumiera::Config
-       */
-      void setTheme (string const& stylesheetName);
-      
-      /**
-       * A utility function which reads a colour style from the GTK Style.
-       * @param widget The widget to load the style out of.
-       * @param property_name The name of the style property to load.
-       * @param red The fallback red intensity.
-       * @param green The fallback green intensity.
-       * @param blue The fallback blue intensity.
-       * @return The loaded colour.
-       */
-      static Cairo::RefPtr<Cairo::SolidPattern>
-      readStyleColourProperty (Gtk::Widget &widget, const gchar *property_name,
-                               guint16 red, guint16 green, guint16 blue);
-      
-      void allowCloseWindow (bool yes);
-      
-    private:
-      void initGlobalUI ();
-      
-      void registerAppIconSizes();
-      void registerStockItems();
-      
-      /**
-       * Adds an icon (in different sizes) to the icon factory.
-       * @param factory The factory to add the icon to.
-       * @param icon_name The file name of the icon to add.
-       * @param id The id name of the icon.
-       * @param label The user readable icon name for this icon.
-       * @return \c true if the icon was successfully loaded,
-       *         returns \c false otherwise.
-       */
-      bool
-      addStockIconSet (Glib::RefPtr<Gtk::IconFactory> const& factory
-                      ,cuString& icon_name
-                      ,cuString& id
-                      ,cuString& label);
-      
-      /**
-       * Loads an icon, searching standard icon locations,
-       * and adds it to an icon set.
-       * @param icon_set The icon set to add the icon to.
-       * @param icon_name The file name of the icon to load.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                   ,cuString& icon_name
-                   ,Gtk::IconSize size
-                   ,bool wildcard);
-      
-      /**
-       * Loads an icon from a the icon theme
-       * @param icon_set The icon set to add the icon to.
-       * @param icon_name The name of the icon to load.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                         ,cuString& icon_name
-                         ,Gtk::IconSize size
-                         ,bool wildcard);
-      
-      /**
-       * Loads an icon from a non theme set.
-       * @param icon_set The icon set to add the icon to.
-       * @param base_dir The root icons directory to load from.
-       * @param icon_name The file name of the icon to load.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                            ,cuString& base_dir
-                            ,cuString& icon_name
-                            ,Gtk::IconSize size
-                            ,bool wildcard);
-      
-      /**
-       * Loads an icon from a specific path and adds it to an icon set.
-       * @param path The path to load from.
-       * @param icon_set The icon set to add the icon to.
-       * @param size The size of the icon to load.
-       * @param wildcard \c true if this icon is to be wildcarded.
-       * @return \c true if the icon was loaded successfully.
-       */
-      bool
-      addStockIconFromPath (string path
-                           ,Glib::RefPtr<Gtk::IconSet> const& icon_set
-                           ,Gtk::IconSize size
-                           ,bool wildcard);
       
       
     private:
