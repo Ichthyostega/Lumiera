@@ -2800,7 +2800,7 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201701261938" tags="GuiIntegration GuiPattern" changecount="1">
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201702101852" tags="GuiIntegration GuiPattern" changecount="4">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
 * main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
 * loading a GuiStarterPlugin actually
@@ -2812,13 +2812,13 @@ Based on these foundations, we shape and form the core part of the interface, wh
 
 !public services
 The GUI provides a small number of public services, callable through LayerSeparationInterfaces. Besides that, the main purpose of the GUI of course is user interaction. Effectively the behaviour of the whole system is driven by GUI events to a large extent. These events are executed within the event handling thread (~GTK-main-Thread) and may in turn invoke services of the lower layers, again through the respective LayerSeparationInterfaces.
-But the question of special interest here is how the //public services// of the GUI are implemented and made accessible for the lower Layers. Layer isolation is an issue here. If implemented in a rigorous manner, no facility within one layer may invoke implementation code of another layer directly. In practice, this tends to put quite some additional burden on the implementer, without and obvious benefit. Thus we decided to lower the barrier somewhat: while we still require that all service invoking calls are written against an public LayerSeparationInterface, actually the GUI (shared lib) is //linked// against the respective shared libs of the lower layers, thus especially enabling the exchange of iterators, closures and functor objects.
+But the question of special interest here is how the //public services// of the GUI are implemented and made accessible for the lower Layers. Layer isolation is an issue here. If implemented in a rigorous manner, no facility within one layer may invoke implementation code of another layer directly. In practice, this tends to put quite some additional burden on the implementer, without any obvious benefit. Thus we decided to lower the barrier somewhat: while we still require that all service invoking calls are written against a public LayerSeparationInterface, actually the GUI (shared lib) is //linked// against the respective shared libs of the lower layers, thus especially enabling the exchange of iterators, closures and functor objects.
 
 Note that we retain strict isolation in the other direction: no part of the lower layers is allowed to call directly into the GUI. Thus it's especially interesting how access to some GUI public service from the lower layers works in detail.
 * when the GUI plugin starts, instances of the Services implementing those public service interfaces are created.
 * these service objects in turn hold an ~InstanceHandle, which cares to register and open the corresponding C Language Interface
-* additionally this InstanceHandle is configured such as to create an &quot;facade proxy&quot; object, which is implemented within liblumieracommon.so
-Now, when invoking an operation on some public interface, the code in the lower layers actually executes an implementation of this operation //on the facade proxy,// which in turn forwards the call through the CL interface into the GUI, where it is actually implemented by the corresponding service object instance.
+* additionally this InstanceHandle is configured such as to create a &quot;facade proxy&quot; object, which is implemented within {{{liblumieracommon.so}}}
+Now, when invoking an operation on some public interface, the code in the lower layers actually executes an implementation of this operation //on the facade proxy,// which in turn forwards the call through the CL interface into the GUI, where functionality is actually implemented by the corresponding service object instance.
 
 !!!UI top level
 Regarding the internal organisation of Lumiera's ~UI-Layer, there is a [[top level structure|GuiTopLevel]] to manage application lifecycle
@@ -2922,7 +2922,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
-<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201701261950" tags="GuiPattern spec draft" changecount="4">
+<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201702102010" tags="GuiPattern spec draft" changecount="5">
 <pre>To a large extent, the Lumiera user interface is built around a //backbone structure,// known as the UI-Bus.
 But there are some dedicated top-level entities, collaborating to maintain a consistent application lifecycle
 ;Application
@@ -2934,8 +2934,11 @@ But there are some dedicated top-level entities, collaborating to maintain a con
 ;UI Manager
 :maintain a coherent global interface
 :responsible for all global framework concerns, resources and global application state
-;Window Manager
-:manage the top level workspace windows
+;Interaction Director
+:establish the connection between global interaction state and global session state
+:the [[InteractionDirector|UIInteractionDirector]] is the root controller and corresponds to the [[root object in session|ModelRootMO]].
+;Window List
+:organise and maintain the top level workspace windows
 ;Notification Façade
 :attachment point for lower layers and anyone in need to &quot;talk to the UI&quot;
 :the GuiNotificationFacade is a LayerSeparationInterface and integrated with Lumiera's interface system
@@ -3683,10 +3686,10 @@ This observation leads to the idea of using //model port references// as fronten
 A model port registry, maintained by the builder, is responsible for storing the discovered model ports within a model port table, which is then swapped in after completing the build process. The {{{builder::ModelPortRegistry}}} acts as management interface, while client code accesses just the {{{ModelPort}}} frontend. A link to the actual registry instance is hooked into that frontend when bringing up the builder subsystem.
 </pre>
 </div>
-<div title="ModelRootMO" modifier="Ichthyostega" created="200912080307" modified="201505310113" tags="def" changecount="1">
+<div title="ModelRootMO" modifier="Ichthyostega" created="200912080307" modified="201702101927" tags="def" changecount="4">
 <pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. forks, clips with effects,...)
 
-This special ''session root object'' provides a link between the model part and the &amp;raquo;bookkeeping&amp;laquo; part of the session, i.e. the [[assets|Asset]]. It is created and maintained by the session (implementation level) &amp;mdash; allowing to store and load the asset definitions as contents of the model root element.
+This special ''session root object'' provides a link between the model part and the &amp;raquo;bookkeeping&amp;laquo; part of the session, i.e. the [[assets|Asset]]. It is created and maintained by the session (implementation level) &amp;mdash; allowing to store and load the asset definitions as contents of the model root element. Beyond that, this //root scope representation// serves another, closely related purpose: conceptually, structures of the HighLevelModel are mapped into the UI, by virtue of the [[diff framework|TreeDiffModel]]. Corresponding to each relevant entity in the model, there is a widget or a controller in the UI to serve as [[tangible front-end|UI-Element]] to expose this entity. And in accordance to this regime, the session root object is mapped onto the [[InteractionDirector|UI-InteractionDirector]] (top-level controller), which, in conjunction with {{{UiManager}}} and UI-Bus, forms the leading structure of the UI-Layer.
 
 __Note__: nothing within the PlacementIndex requires the root object to be of a specific type; the index just assumes a {{{Placement&lt;MObject&gt;}}} (or subclass) to exist as root element. And indeed, for several unit tests we create an Index mock with a tree of dummy ~MObjects and temporarily shaddow the &quot;real&quot; PlacementIndex by this mock (&amp;rarr; see SessionServices for the API allowing to access this //mock index//- functionality)
 
@@ -5248,10 +5251,11 @@ So the challenge of any major undertaking in software construction is //not to b
 More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
 </pre>
 </div>
-<div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" tags="def">
-<pre>The current Lumiera architecture separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
+<div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" modified="201702101931" tags="def" changecount="1">
+<pre>The architecture of the Lumiera application separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
 
-While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.</pre>
+While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.
+&amp;rarr; UI-Layer</pre>
 </div>
 <div title="ProcAsset" modifier="Ichthyostega" created="200709221343" modified="201003140233" tags="def classes img">
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Lumiera Session.
@@ -9170,6 +9174,21 @@ It is clear by now (9/2016) how shape and content changes are to be represented 
 
 !!!Diff messages
 The dispatch of //diff messages// is directly integrated into the UI-Bus -- which is not just some abstract messaging system, but deliberately made to act as backbone for the kind of operations and collaborations detailed here. This seamless integration helps to overcome several technical (detail) problems. For one, the diff framework itself is //generic,// which allows to apply diff sequences to a wide variety of different target data structures. And, secondly, choose the whole approach of diff messages delivered over a bus system for a very specific, architectural reason: we want to decouple from internal structures, while still allowing low-level collaboration over this abstracted interconnection channel. On both counts, we are thus bound to encapsulate the actual diff at interface level. So the MutationMessage marks the purpose to alter the designated {{{Tangible}}}, while offering an embedded, generic implementation to apply the (hidden) diff message, relying in turn on the interface {{{DiffMutatble}}}, which -- surprise -- is offered by {{{Tangible}}}. Basically this means that each tangible interface element offers the ability to be reshaped, by creating a TreeMutator on demand, internally wired to effect the changes inscribed within the diff.
+</pre>
+</div>
+<div title="UI-Layer" creator="Ichthyostega" modifier="Ichthyostega" created="201702102005" tags="def" changecount="1">
+<pre>The architecture of the Lumiera application separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
+
+The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
+</div>
+<div title="UIInteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" tags="def draft" changecount="1">
+<pre>//the top-level controller within the UI.//
+In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
+
+And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, opening and closing of the session as a whole, and even shutdown of the application as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
+
+Why do we need a connection joint between those parts?
+Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">

@@ -1779,8 +1779,7 @@
       L&#246;sung: <i><font color="#27754d">schwebende Bindung</font></i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1485902684454" ID="ID_1435239012" MODIFIED="1485902691584" TEXT="Eventgetriebene Oberfl&#xe4;che"/>
 <node CREATED="1485902692556" ID="ID_1729615218" MODIFIED="1485902698503" TEXT="wird einmal Verdrahtet"/>
@@ -1794,8 +1793,7 @@
       arbeitet dann <i>freischwebend</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1485902750053" ID="ID_34756513" MODIFIED="1485902754440" TEXT="zentrales Bindeglied">
 <node CREATED="1485902762284" ID="ID_1542199290" MODIFIED="1485902773701" TEXT="kennt die Applikation"/>
@@ -1834,8 +1832,7 @@
       diesen &quot;aktuellen Kontext&quot; irgendwo <i>aufzufischen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1485903041262" ID="ID_997327941" MODIFIED="1485903044082" TEXT="Fokus"/>
 <node CREATED="1485903046613" ID="ID_1041890737" MODIFIED="1485917548794" TEXT="aktuelles Fenster">
 <linktarget COLOR="#375a84" DESTINATION="ID_1041890737" ENDARROW="Default" ENDINCLINATION="177;-181;" ID="Arrow_ID_373431525" SOURCE="ID_1089795419" STARTARROW="None" STARTINCLINATION="245;-68;"/>
@@ -1886,8 +1883,7 @@
       und verwendet, und das ist auch gut so
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1486063950103" ID="ID_57649689" MODIFIED="1486063952666" TEXT="zwei Modelle">
 <node CREATED="1486063954062" FOLDED="true" ID="ID_1174765379" MODIFIED="1486518487102" TEXT="Actions wird insgesamt ein PImpl">
@@ -1973,7 +1969,27 @@
 <node CREATED="1485454263876" ID="ID_543704434" MODIFIED="1485454270615" TEXT="globale Keybindings"/>
 </node>
 </node>
-<node CREATED="1485126466520" FOLDED="true" ID="ID_717310004" MODIFIED="1485548666258" TEXT="WindowManager">
+<node CREATED="1486763185746" HGAP="33" ID="ID_362749694" MODIFIED="1486763255758" TEXT="workspace::InteractionDirector" VSHIFT="21">
+<linktarget COLOR="#683c5b" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-394;0;" ID="Arrow_ID_1979576517" SOURCE="ID_113005643" STARTARROW="None" STARTINCLINATION="-24;-159;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1486763268223" ID="ID_199328732" MODIFIED="1486763277392" TEXT="nicht der Meister">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1486763278189" ID="ID_330558344" MODIFIED="1486763285944" TEXT="aber ein zentrales Bindeglied"/>
+<node CREATED="1486763287244" ID="ID_1712681910" MODIFIED="1486763291199" TEXT="zwei Welten">
+<node CREATED="1486763292028" ID="ID_1224392598" MODIFIED="1486763301742" TEXT="Modell-struktur == Hierarchie"/>
+<node CREATED="1486763303066" ID="ID_1274975607" MODIFIED="1486763317596" TEXT="Interaktion == Fokus und Kontext"/>
+</node>
+<node CREATED="1486763350764" ID="ID_1309124609" MODIFIED="1486763423979" TEXT="Aufgaben">
+<icon BUILTIN="yes"/>
+<node CREATED="1486763355739" ID="ID_745725927" MODIFIED="1486763370261" TEXT="Bindung f&#xfc;r Aktionen bereitstellen"/>
+<node CREATED="1486763376960" ID="ID_1618020758" MODIFIED="1486763385091" TEXT="Zugang zu den Timelines"/>
+<node CREATED="1486763385591" ID="ID_6651258" MODIFIED="1486763391202" TEXT="Zugang zum Asset-Management"/>
+<node CREATED="1486763391862" ID="ID_1568245541" MODIFIED="1486763397977" TEXT="Zugang zur Konfiguration"/>
+<node CREATED="1486763408780" ID="ID_520762274" MODIFIED="1486763417950" TEXT="Zugang zum persistenten Interface-State"/>
+</node>
+</node>
+<node CREATED="1485126466520" FOLDED="true" ID="ID_717310004" MODIFIED="1486763253254" TEXT="WindowManager" VSHIFT="34">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1485457325724" ID="ID_1954589768" MODIFIED="1485457325724" TEXT="nur f&#xfc;r die Hauptfenster zust&#xe4;ndig"/>
 <node CREATED="1485457328043" ID="ID_1787642462" MODIFIED="1485457367904" TEXT="wir haben kein ApplicationWindow">
@@ -2043,11 +2059,12 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486520281897" ID="ID_827558797" MODIFIED="1486520324210" TEXT="Problem: zwei Inseln">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486520281897" ID="ID_827558797" MODIFIED="1486751054587" TEXT="Problem: zwei Inseln">
+<arrowlink COLOR="#464b68" DESTINATION="ID_1847844548" ENDARROW="Default" ENDINCLINATION="35;-168;" ID="Arrow_ID_1483178089" STARTARROW="Default" STARTINCLINATION="-2;95;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1486520289382" ID="ID_1944158920" MODIFIED="1486520302679" TEXT="CoreService + UI-Bus"/>
 <node CREATED="1486520303173" ID="ID_306583765" MODIFIED="1486520321580" TEXT="UiManager, Actions etc"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1486521232144" HGAP="40" ID="ID_1816242514" MODIFIED="1486521245172" TEXT="Fragen" VSHIFT="33">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1486521232144" HGAP="44" ID="ID_1816242514" MODIFIED="1486751141053" TEXT="Fragen" VSHIFT="16">
 <icon BUILTIN="help"/>
 <node CREATED="1486521810252" ID="ID_728134375" MODIFIED="1486521858401" TEXT="wer verk&#xf6;rpert den Sesison-Root?">
 <icon BUILTIN="help"/>
@@ -2082,6 +2099,23 @@
 <node CREATED="1486521980109" ID="ID_1036025143" MODIFIED="1486521993495" TEXT="wer bendet das UI?">
 <icon BUILTIN="help"/>
 </node>
+</node>
+<node CREATED="1486751116251" HGAP="140" ID="ID_113005643" MODIFIED="1486763238179" VSHIFT="61">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Br&#252;cke: <i>gemeinsamer</i>&#160;Controller
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#683c5b" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-394;0;" ID="Arrow_ID_1979576517" STARTARROW="None" STARTINCLINATION="-24;-159;"/>
+<node CREATED="1486751221990" ID="ID_563286868" MODIFIED="1486751232207" TEXT="ist Bindeglied f&#xfc;r globale Aktionen"/>
+<node CREATED="1486751233315" ID="ID_1611855815" MODIFIED="1486751238982" TEXT="verk&#xf6;rpert den Model-Root"/>
+<node CREATED="1486751248097" ID="ID_1313868100" MODIFIED="1486751258147" TEXT="ist Vollmitglied am Bus"/>
 </node>
 </node>
 </node>
@@ -2132,8 +2166,30 @@
 </node>
 </node>
 <node CREATED="1480694854057" HGAP="32" ID="ID_577309407" MODIFIED="1480694877355" TEXT="TimelinePane" VSHIFT="7">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694860696" ID="ID_1847844548" MODIFIED="1480694886787" TEXT="entspricht dem Model-Root">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694860696" ID="ID_1847844548" MODIFIED="1486751054587" TEXT="entspricht dem Model-Root">
+<linktarget COLOR="#464b68" DESTINATION="ID_1847844548" ENDARROW="Default" ENDINCLINATION="35;-168;" ID="Arrow_ID_1483178089" SOURCE="ID_827558797" STARTARROW="Default" STARTINCLINATION="-2;95;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486750918553" ID="ID_723234072" MODIFIED="1486750929291" TEXT="wirklich??">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1486750933252" ID="ID_567923045" MODIFIED="1486750967485" TEXT="sollte doch ehr...">
+<icon BUILTIN="idea"/>
+<node CREATED="1486750939411" ID="ID_1566629434" MODIFIED="1486750945053" TEXT="ein globaler Controller sein"/>
+<node CREATED="1486750945521" ID="ID_759126310" MODIFIED="1486750975987">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der an <i>geeigneter</i>&#160;Stelle h&#228;ngt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1486750954906" ID="ID_113736248" MODIFIED="1486750962659" TEXT="und in die TimelinePane injiziert wird"/>
+</node>
 </node>
 <node CREATED="1480694897443" ID="ID_402490324" MODIFIED="1480694916396" TEXT="verwaltet die Timelines"/>
 <node CREATED="1480694918056" ID="ID_789731200" MODIFIED="1480694948954">

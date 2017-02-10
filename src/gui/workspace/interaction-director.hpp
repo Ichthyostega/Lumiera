@@ -1,5 +1,5 @@
 /*
-  UI-MANAGER.hpp  -  Global UI Manager
+  INTERACTION-DIRECTOR.hpp  -  Global UI Manager
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -22,8 +22,8 @@
 */
 
 
-/** @file ui-manager.hpp
- ** Manager for global user interface concerns and global state.
+/** @file interaction-director.hpp
+ ** The top-level controller to connect model and user interaction state.
  ** The central UiManager instance is owned by the GtkLumiera object and initialised in GTK-main.
  ** It establishes and wires the top-level entities of the UI-Layer and thus, indirectly offers
  ** services to provide Icons and other resources, to open and manage workspace windows, to
@@ -39,8 +39,8 @@
  */
 
 
-#ifndef GUI_WORKSPACE_UI_MANAGER_H
-#define GUI_WORKSPACE_UI_MANAGER_H
+#ifndef GUI_WORKSPACE_INTERACTION_DIRECTOR_H
+#define GUI_WORKSPACE_INTERACTION_DIRECTOR_H
 
 #include "gui/gtk-base.hpp"
 
@@ -73,7 +73,7 @@ namespace workspace {
    * further global services to create workspace windows, to bind
    * menu / command actions and to enter the top-level model parts.
    */
-  class UiManager
+  class InteractionDirector
     : public Gtk::UIManager
     , boost::noncopyable
     {
@@ -108,8 +108,8 @@ namespace workspace {
        * is _not a ctrl::Controller,_ and thus not directly connected to the Bus.
        * Rather, supports the top-level windows for creating a consistent interface.
        */
-      UiManager (UiBus& bus);
-     ~UiManager ();
+      InteractionDirector (UiBus& bus);
+     ~InteractionDirector ();
       
       /**
        * Set up the first top-level application window.
@@ -234,4 +234,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_UI_MANAGER_H*/
+#endif /*GUI_WORKSPACE_INTERACTION_DIRECTOR_H*/

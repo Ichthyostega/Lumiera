@@ -1,5 +1,5 @@
 /*
-  UiManager  -  Global UI Manager
+  interactionDirector  -  Global UI Manager
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -22,19 +22,15 @@
 * *****************************************************/
 
 
-/** @file ui-manager.cpp
- ** Implementation of global concerns regarding a coherent UI and global state.
- ** Especially, the wiring of top-level components is done here, as is the
- ** basic initialisation of the interface and global configuration on
- ** UI toolkit level.
- ** 
+/** @file interaction-director.cpp
+ ** Implementation parts of the top-level controller within the UI.
  */
 
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
 #include "gui/ui-bus.hpp"
-#include "gui/workspace/ui-manager.hpp"
+#include "gui/workspace/interaction-director.hpp"
 #include "gui/workspace/actions.hpp"
 #include "gui/workspace/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
@@ -65,11 +61,11 @@ namespace workspace {
   
   
   // dtors via smart-ptr invoked from here...
-  UiManager::~UiManager()
+  InteractionDirector::~InteractionDirector()
     { }
   
   
-  UiManager::UiManager (UiBus& bus)
+  InteractionDirector::InteractionDirector (UiBus& bus)
     : Gtk::UIManager()
     , uiBus_(bus)
     , windowList_{new WindowList{*this}}
