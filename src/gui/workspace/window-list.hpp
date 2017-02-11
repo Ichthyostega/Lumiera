@@ -76,6 +76,7 @@ namespace workspace {
       void newWindow ();
       
       WorkspaceWindow& findActiveWindow();
+      WorkspaceWindow& findFocusWindow();
       
       
     private:

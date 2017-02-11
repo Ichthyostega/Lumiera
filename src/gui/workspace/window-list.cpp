@@ -68,6 +68,13 @@ namespace workspace {
   }
   
   
+  /** find and retrieve a WorkspaceWindow (top-level window)
+   *  marked as 'active' by GTK.
+   * @return the first matching window, or the first window
+   *         in list, when no window is marked active
+   * @note never `NULL`, but assuming this function is only ever
+   *       called when there is at least one Lumiera window.
+   */
   WorkspaceWindow&
   WindowList::findActiveWindow()
   {
@@ -78,6 +85,24 @@ namespace workspace {
         return *pwin;
     
     // use the first window in list when none is active
+    return *windowList_.front();
+  }
+  
+  
+  /** similar to #findFocusWindow(), for the 'has_focus' property
+   * @note likewise we return the first window in list, in case no window
+   *       has keyboard focus. This may very well be the case.
+   */
+  WorkspaceWindow&
+  WindowList::findFocusWindow()
+  {
+    REQUIRE (not isnil (windowList_));
+    
+    for (auto pwin : windowList_)
+      if (pwin->has_focus())
+        return *pwin;
+    
+    // use the first window in list when none has focus
     return *windowList_.front();
   }
   
