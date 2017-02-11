@@ -36,6 +36,7 @@
 #include <list>
 
 using util::cStr;
+using util::isnil;
 using std::list;
 
 
@@ -70,7 +71,14 @@ namespace workspace {
   WorkspaceWindow&
   WindowList::findActiveWindow()
   {
-    UNIMPLEMENTED ("search the window list and return the currently active window");
+    REQUIRE (not isnil (windowList_));
+    
+    for (auto pwin : windowList_)
+      if (pwin->is_active())
+        return *pwin;
+    
+    // use the first window in list when none is active
+    return *windowList_.front();
   }
   
   
