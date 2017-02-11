@@ -49,7 +49,6 @@
 //--------------------tricky special Include sequence
 
 #include "lib/error.hpp"
-#include "lib/util.hpp"
 
 
 #ifdef ENABLE_NLS

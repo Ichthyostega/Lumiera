@@ -30,6 +30,7 @@
 #include "gui/workspace/ui-manager.hpp"
 #include "gui/workspace/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
+#include "lib/util.hpp"
 
 #include <memory>
 #include <list>

@@ -154,6 +154,7 @@
 
 #include "lib/error.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/util.hpp"
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/static_assert.hpp>
