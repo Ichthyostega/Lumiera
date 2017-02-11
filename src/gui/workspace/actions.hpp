@@ -103,7 +103,7 @@ namespace workspace {
       populateMainActions (Gtk::UIManager& uiManager)
         {
           //----- Create the Action Group -----//
-          actionGroup = ActionGroup::create();
+          actionGroup = ActionGroup::create();                     ////////////////////////////////////////////TICKET #1068 not clear if it is necessary to give a *name* to that action group
           
           // File menu
           actionGroup->add(Action::create("FileMenu", _("_File")));
@@ -159,7 +159,7 @@ namespace workspace {
           uiManager.insert_action_group(actionGroup);
           
           //----- Create the UI layout -----//
-          string ui_info = R"(***
+          string ui_info = R"***(
               <ui>
                 <menubar name='MenuBar'>
                   <menu action='FileMenu'>
@@ -215,7 +215,7 @@ namespace workspace {
                   <toolitem action='EditPaste'/>
                 </toolbar>
               </ui>
-          ***)";
+          )***";
           try
             {
               uiManager.add_ui_from_string (ui_info);
@@ -242,7 +242,7 @@ namespace workspace {
         {
           const uint count = PanelManager::getPanelDescriptionCount();
           
-          Glib::RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
+          Glib::RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();          ////////////////////////TICKET #1068 not clear if it is necessary to give a *name* to that action group
           for (uint i = 0; i < count; i++)
             {
               const gchar *stock_id = PanelManager::getPanelStockID(i);
