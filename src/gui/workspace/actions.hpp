@@ -290,32 +290,32 @@ namespace workspace {
       
       
       
-    private: /* ===== Event Handlers ===== */
+    private: /* ====== Actions =========== */
       
       /* ============ File Menu ========== */
       
       void
       onMenu_file_new_project()
         {
-          g_message("A File|New menu item was selected.");
+          g_message("A File|New menu item was selected.");                               //////global -> InteractionDirector
         }
       
       void
       onMenu_file_open_project()
         {
-          g_message("A File|Open menu item was selected.");
+          g_message("A File|Open menu item was selected.");                              //////global -> InteractionDirector
         }
       
       void
       onMenu_file_render()
         {
-          dialog::Render dialog(getWorkspaceWindow());
+          dialog::Render dialog(getWorkspaceWindow());                                   //////global -> InteractionDirector
           dialog.run();
         }
       
       void
       onMenu_file_quit()
-        {
+        {                                                                                //////global -> InteractionDirector
           Main *main = Main::instance();
           REQUIRE(main);
           main->quit();
@@ -328,7 +328,7 @@ namespace workspace {
       void
       onMenu_edit_preferences()
         {
-          dialog::PreferencesDialog dialog(getWorkspaceWindow());
+          dialog::PreferencesDialog dialog(getWorkspaceWindow());                        //////global -> InteractionDirector
           dialog.run();
         }
       
@@ -342,7 +342,7 @@ namespace workspace {
           /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
           //if(!is_updating_action_state)
           //  workspaceWindow.assetsPanel->show(
-          //    assetsPanelAction->get_active());
+          //    assetsPanelAction->get_active());                                        //////global -> InteractionDirector
         }
       
       void
@@ -358,7 +358,7 @@ namespace workspace {
         {
           /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
           //if(!is_updating_action_state)
-          //  workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
+          //  workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());        //////global -> InteractionDirector
         }
       
       
@@ -368,11 +368,12 @@ namespace workspace {
       void
       onMenu_sequence_add()
         {
+          ///////////////////////////////////////////////////////TODO this is bad user interaction design. Just create the sequence! The user is free to change the default name afterwards
           dialog::NameChooser dialog(getWorkspaceWindow(),
             _("Add Sequence"), _("New Sequence"));
 ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #1070 need a way how to issue session commands    
 //        if(dialog.run() == RESPONSE_OK)
-//          workspaceWindow().getProject().add_new_sequence(dialog.getName());
+//          workspaceWindow().getProject().add_new_sequence(dialog.getName());           //////global -> InteractionDirector
         }
       
       
@@ -382,7 +383,7 @@ namespace workspace {
       void
       onMenu_track_add()
         {
-          g_message("Hello");
+          g_message("Hello");                                                            //////TODO Problem is how to find the context!!!!
         }
       
       
