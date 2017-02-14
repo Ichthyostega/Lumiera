@@ -49,7 +49,7 @@ namespace gui {
   
 namespace workspace {
   
-  class UiManager;
+  class GlobalCtx;
   class WorkspaceWindow;
   
   using std::list;
@@ -64,12 +64,12 @@ namespace workspace {
     {
       using PWindow = std::shared_ptr<WorkspaceWindow>;
       
-      UiManager&    uiManager_;
+      GlobalCtx&    globalCtx_;
       list<PWindow> windowList_;
       
       
     public:
-      WindowList (UiManager&);
+      WindowList (GlobalCtx&);
       
       bool empty()  const;
       

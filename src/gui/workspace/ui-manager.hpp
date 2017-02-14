@@ -63,6 +63,7 @@ namespace workspace {
   using std::string;
   
   class GlobalCtx;
+  class Actions;
   
   
   
@@ -78,6 +79,7 @@ namespace workspace {
     {
       
       unique_ptr<GlobalCtx> globals_;
+      unique_ptr<Actions>   actions_;
       
       string iconSearchPath_;
       string resourceSerachPath_;

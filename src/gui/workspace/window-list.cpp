@@ -27,7 +27,7 @@
  */
 
 
-#include "gui/workspace/ui-manager.hpp"
+#include "gui/workspace/global-ctx.hpp"
 #include "gui/workspace/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/util.hpp"
@@ -45,8 +45,8 @@ namespace workspace {
   
   
   
-  WindowList::WindowList (UiManager& uiManager)
-    : uiManager_{uiManager}
+  WindowList::WindowList (GlobalCtx& globals)
+    : globalCtx_{globals}
     , windowList_{}
     { }
   
@@ -54,7 +54,7 @@ namespace workspace {
   void
   WindowList::newWindow ()
   { 
-    PWindow window (new WorkspaceWindow{uiManager_});
+    PWindow window (new WorkspaceWindow{globalCtx_.uiManager_});
     REQUIRE(window);
     
     window->signal_delete_event().connect(sigc::mem_fun(
@@ -149,7 +149,7 @@ namespace workspace {
   void
   WindowList::updateCloseWindowInMenus()
   {
-    uiManager_.allowCloseWindow ( 1 < windowList_.size());
+    globalCtx_.uiManager_.allowCloseWindow ( 1 < windowList_.size());
   }
   
   

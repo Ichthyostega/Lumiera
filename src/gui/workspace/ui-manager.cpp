@@ -35,6 +35,7 @@
 #include "gui/config-keys.hpp"
 #include "gui/workspace/ui-manager.hpp"
 #include "gui/workspace/global-ctx.hpp"
+#include "gui/workspace/actions.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
@@ -70,6 +71,7 @@ namespace workspace {
   UiManager::UiManager (UiBus& bus)
     : Gtk::UIManager()
     , globals_{new GlobalCtx{bus, *this}}
+    , actions_{new Actions{*globals_}}
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
     {
@@ -104,8 +106,8 @@ namespace workspace {
   void
   UiManager::createApplicationWindow()
   {
-    if (windowList_->empty())
-      windowList_->newWindow();
+    if (globals_->windowList_.empty())
+      globals_->windowList_.newWindow();
   }
   
     

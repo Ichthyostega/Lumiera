@@ -72,6 +72,7 @@ namespace workspace {
   
 //class Actions;
 //class WindowList;
+  class GlobalCtx;
   
   
   
@@ -83,6 +84,8 @@ namespace workspace {
     : public model::Controller
     {
       
+      GlobalCtx& globalCtx_;
+      
       ////TODO: what is the model equivalent represented here???
       
       /** set up a binding to allow some top-level UI state
@@ -92,7 +95,7 @@ namespace workspace {
       void buildMutator (lib::diff::TreeMutator::Handle)  override;
       
     public:
-      InteractionDirector (UiBus& bus);
+      InteractionDirector (GlobalCtx&);
      ~InteractionDirector ();
       
       

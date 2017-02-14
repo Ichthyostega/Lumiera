@@ -37,8 +37,8 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
+#include "gui/workspace/global-ctx.hpp"
 #include "gui/workspace/workspace-window.hpp"
-#include "gui/workspace/ui-manager.hpp"
 #include "gui/dialog/render.hpp"
 #include "gui/dialog/preferences-dialog.hpp"
 #include "gui/dialog/name-chooser.hpp"
@@ -47,6 +47,7 @@
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/noncopyable.hpp>
 #include <functional>
 #include <vector>
 
@@ -78,15 +79,13 @@ namespace workspace {
   * user action events.
   */
   class Actions
+    : boost::noncopyable
     {
-      /**reference to the MainWindow which owns this helper */
-      using GetWindow = function<WorkspaceWindow&()>;
-      
-      GetWindow getWorkspaceWindow;
+      GlobalCtx& globalCtx_;
       
     public:
-      Actions (GetWindow how_to_access_current_window)
-        : getWorkspaceWindow(how_to_access_current_window)
+      Actions (GlobalCtx& globals)
+        : globalCtx_{globals}
         , is_updating_action_state(false)
         { }
       
@@ -233,6 +232,12 @@ namespace workspace {
       
       
     private: /* ===== Internals ===== */
+      WorkspaceWindow&
+      getWorkspaceWindow()
+        {
+          return globalCtx_.windowList_.findActiveWindow();
+        }
+      
       
       /**
        * Populates a uiManager with actions for the Show Panel menu.

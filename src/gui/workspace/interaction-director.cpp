@@ -27,6 +27,7 @@
 
 
 #include "gui/gtk-base.hpp"
+#include "gui/workspace/global-ctx.hpp"
 #include "gui/workspace/interaction-director.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/ctrl/bus-term.hpp"
@@ -53,8 +54,9 @@ namespace workspace {
     { }
   
   
-  InteractionDirector::InteractionDirector (UiBus& bus)
-    : model::Controller(proc::mobject::session::Root::getID(), bus.getAccessPoint())
+  InteractionDirector::InteractionDirector (GlobalCtx& globals)
+    : model::Controller(proc::mobject::session::Root::getID(), globals.uiBus_.getAccessPoint())
+    , globalCtx_(globals)
     { }
   
   

@@ -54,10 +54,9 @@
 #ifndef GUI_WORKSPACE_GLOBAL_CTX_H
 #define GUI_WORKSPACE_GLOBAL_CTX_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/actions.hpp"
 #include "gui/workspace/window-list.hpp"
 #include "gui/workspace/interaction-director.hpp"
 
@@ -89,7 +88,6 @@ namespace workspace {
       
       InteractionDirector director_;
       WindowList          windowList_;
-      Actions             actions_;
       
       
     public:
@@ -101,7 +99,6 @@ namespace workspace {
         , uiManager_{manager}
         , director_{*this}
         , windowList_{*this}
-        , actions_{*this}
         { }
       
     private:
