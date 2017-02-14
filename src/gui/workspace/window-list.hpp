@@ -73,7 +73,8 @@ namespace workspace {
       
       bool empty()  const;
       
-      void newWindow ();
+      void newWindow();
+      void closeWindow();
       
       WorkspaceWindow& findActiveWindow();
       WorkspaceWindow& findFocusWindow();

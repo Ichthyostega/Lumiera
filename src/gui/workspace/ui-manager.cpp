@@ -110,7 +110,15 @@ namespace workspace {
       globals_->windowList_.newWindow();
   }
   
-    
+  
+  void
+  UiManager::terminateUI()
+  {
+      Gtk::Main *main = Gtk::Main::instance();               /////////////////////////////////////TICKET #1032 : use gtk::Application instead of gtk::Main
+      REQUIRE(main);
+      main->quit();
+  }
+  
   void
   UiManager::updateWindowFocusRelatedActions()
   {

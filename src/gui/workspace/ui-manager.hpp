@@ -116,6 +116,11 @@ namespace workspace {
        */
       void createApplicationWindow();
       
+      /**
+       * Cause the main event loop to terminate, so the application as a whole unwinds.
+       */
+      void terminateUI();
+      
       /** @todo find a solution how to enable/disable menu entries according to focus
        *                                               /////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
        */

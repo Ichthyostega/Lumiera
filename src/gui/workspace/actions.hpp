@@ -320,10 +320,8 @@ namespace workspace {
       
       void
       onMenu_file_quit()
-        {                                                                                //////global -> InteractionDirector
-          Main *main = Main::instance();
-          REQUIRE(main);
-          main->quit();
+        {
+          globalCtx_.uiManager_.terminateUI();
         }
       
       
@@ -398,14 +396,13 @@ namespace workspace {
       void
       onMenu_window_new_window()
         {
-//        windowList_.newWindow();   //////////////////////////////////TODO move into UiManager?? 
+          globalCtx_.windowList_.newWindow();
         }
       
       void
       onMenu_window_close_window()
         {
-          getWorkspaceWindow().hide();
-          // delete &workspaceWindow;
+          globalCtx_.windowList_.closeWindow();
         }
       
       void

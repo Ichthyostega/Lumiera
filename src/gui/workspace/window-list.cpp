@@ -68,6 +68,18 @@ namespace workspace {
   }
   
   
+  /** close (and thus destroy) the current active window.
+   * @note closing the last window terminates the application
+   * @warning when no window is currently active,
+   *          the fist one in list will be killed
+   */
+  void
+  WindowList::closeWindow()
+    {
+      findActiveWindow().hide();
+    }
+  
+  
   /** find and retrieve a WorkspaceWindow (top-level window)
    *  marked as 'active' by GTK.
    * @return the first matching window, or the first window
@@ -132,12 +144,8 @@ namespace workspace {
       }
     
     if (windowList_.empty())
-      {
-        // All windows have been closed - we should exit
-        Gtk::Main *main = Gtk::Main::instance();               ////////////////////////////////////////////////TICKET #1032 : use gtk::Application instead of gtk::Main
-        REQUIRE(main);
-        main->quit();
-      }
+      // All windows have been closed - we should exit
+      globalCtx_.uiManager_.terminateUI();
     
     updateCloseWindowInMenus();
     
