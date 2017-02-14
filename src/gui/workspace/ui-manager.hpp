@@ -62,9 +62,7 @@ namespace workspace {
   using std::unique_ptr;
   using std::string;
   
-  class Actions;
-  class WindowList;
-  class InteractionDirector;
+  class GlobalCtx;
   
   
   
@@ -78,11 +76,8 @@ namespace workspace {
     : public Gtk::UIManager
     , boost::noncopyable
     {
-      UiBus& uiBus_;
       
-      unique_ptr<InteractionDirector> director_;
-      unique_ptr<WindowList>        windowList_;
-      unique_ptr<Actions>              actions_;
+      unique_ptr<GlobalCtx> globals_;
       
       string iconSearchPath_;
       string resourceSerachPath_;

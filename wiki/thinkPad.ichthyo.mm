@@ -1954,11 +1954,13 @@
 </node>
 <node CREATED="1486942467620" HGAP="151" ID="ID_1761000392" MODIFIED="1486945029916" TEXT="Alternativen" VSHIFT="14">
 <icon BUILTIN="help"/>
-<node CREATED="1486942493208" ID="ID_805305597" MODIFIED="1486942503850" TEXT="alles via InteractionDirector">
+<node CREATED="1486942493208" ID="ID_805305597" MODIFIED="1487034053842" TEXT="alles via InteractionDirector">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1486944032334" ID="ID_1959218653" MODIFIED="1486944046824" TEXT="er macht ohnehin fast alles">
 <icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1486944056595" ID="ID_423413011" MODIFIED="1486944062637" TEXT="Actions wird eine leere H&#xfc;lle">
+<node CREATED="1486944056595" ID="ID_423413011" MODIFIED="1487034101279" TEXT="Actions wird eine leere H&#xfc;lle">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1486944064506" ID="ID_712470482" MODIFIED="1486944068493" TEXT="baut das Men&#xfc;"/>
 <node CREATED="1486944068985" ID="ID_1074291755" MODIFIED="1486944074916" TEXT="stellt die Closures bereit"/>
 <node CREATED="1486944075456" ID="ID_1851635277" MODIFIED="1486944079556" TEXT="k&#xf6;nnte Exceptions fangen"/>
@@ -1966,8 +1968,26 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
+<node CREATED="1487034056153" ID="ID_1455538166" MODIFIED="1487034104662" TEXT="Rein aus dem Bauch heraus....">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1487034063408" ID="ID_1251347399" MODIFIED="1487034078308">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das <i>verschiebt</i>&#160;das Problem nur
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1486942523724" ID="ID_843953045" MODIFIED="1486942532639" TEXT="globalen Kontext einf&#xfc;hren">
+<node CREATED="1487034078974" ID="ID_796487731" MODIFIED="1487034094280" TEXT="verletzt das single responsibility pattern"/>
+</node>
+</node>
+<node CREATED="1486942523724" ID="ID_843953045" MODIFIED="1487034136186" TEXT="globalen Kontext einf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1486942614400" ID="ID_872912875" MODIFIED="1486942627890" TEXT="Action-Definition &quot;wei&#xdf;&quot; wer das konkret machen kann"/>
 <node CREATED="1486943522965" ID="ID_244569580" MODIFIED="1486943527790" TEXT="konkret...">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -2021,9 +2041,14 @@
 <icon BUILTIN="idea"/>
 <node CREATED="1486945099213" ID="ID_1118933657" MODIFIED="1486945109359" TEXT="ob alles an ihn delegiert wird"/>
 <node CREATED="1486945110091" ID="ID_1820336322" MODIFIED="1486945124685" TEXT="oder ob es einen globalen Kontext gibt">
-<node CREATED="1486945126721" ID="ID_804526091" MODIFIED="1486945133572" TEXT="und da k&#xf6;nnte dann der UiManager sein"/>
+<node CREATED="1486945126721" ID="ID_804526091" MODIFIED="1487033614682" TEXT="und das k&#xf6;nnte dann der UiManager sein"/>
 </node>
 </node>
+</node>
+<node CREATED="1487034156380" ID="ID_1632778987" MODIFIED="1487034161495" TEXT="globaler Kontext">
+<node CREATED="1487034162275" ID="ID_28375182" MODIFIED="1487034171926" TEXT="wenige, eng zusammenarbeitende Objekte"/>
+<node CREATED="1487034172393" ID="ID_1167812745" MODIFIED="1487034180237" TEXT="...von denen doch jedes seine Aufgabe hat"/>
+<node CREATED="1487034180712" ID="ID_1371598611" MODIFIED="1487034193170" TEXT="und jedes genau wei&#xdf;, was die andern k&#xf6;nnen"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485898796393" ID="ID_1217726538" MODIFIED="1485898814419" TEXT="#1069 how to refer to the current window">

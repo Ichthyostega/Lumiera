@@ -2922,7 +2922,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
-<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201702102010" tags="GuiPattern spec draft" changecount="5">
+<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201702140201" tags="GuiPattern spec draft" changecount="6">
 <pre>To a large extent, the Lumiera user interface is built around a //backbone structure,// known as the UI-Bus.
 But there are some dedicated top-level entities, collaborating to maintain a consistent application lifecycle
 ;Application
@@ -2942,6 +2942,8 @@ But there are some dedicated top-level entities, collaborating to maintain a con
 ;Notification Façade
 :attachment point for lower layers and anyone in need to &quot;talk to the UI&quot;
 :the GuiNotificationFacade is a LayerSeparationInterface and integrated with Lumiera's interface system
+
+Together, these entities form a cohesive circle of collaborating global managers, known as ''global UI context''; the interplay of these facilities is essentially an implementation detail, insofar there is not much necessity (and only a narrow API) for the rest of the UI to address those directly. Rather, each member of this circle serves a dedicated purpose and is visible to the rest of the application through some kind of service abstraction. For example, the [[interactionDirector|UIInteractionDirector]] is mapped as a top-level model element into the logical model of the UI; typically, other parts of the application address this service through messages via the UI-Bus, while the Interaction Director itself is responsible to create a link between model and interaction state -- a service, which is fulfilled in a transparent way.
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">

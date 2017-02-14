@@ -33,12 +33,9 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
-#include "gui/ui-bus.hpp"
 #include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/actions.hpp"
-#include "gui/workspace/window-list.hpp"
+#include "gui/workspace/global-ctx.hpp"
 #include "gui/workspace/workspace-window.hpp"
-#include "gui/workspace/interaction-director.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
@@ -72,10 +69,7 @@ namespace workspace {
   
   UiManager::UiManager (UiBus& bus)
     : Gtk::UIManager()
-    , uiBus_{bus}
-    , director_{new InteractionDirector{bus}}
-    , windowList_{new WindowList{*this}}
-    , actions_{new Actions{[this]() ->WorkspaceWindow& { return windowList_->findActiveWindow();}}}
+    , globals_{new GlobalCtx{bus, *this}}
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
     {
