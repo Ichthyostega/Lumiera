@@ -1539,6 +1539,36 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
+<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201702150039" tags="draft impl GuiPattern example discuss" changecount="6">
+<pre>//This page is a scrapbook to collect observations about command invocation in the UI//
+{{red{2/2017}}} the goal is to shape some generic patterns of InteractionControl
+
+!Add Sequence
+The intention is to add a new sequence //to the current session.//
+As discussed in &amp;rarr; ModelDependencies, there is quite some degree of magic involved into such a simple activity, depending on the circumstances
+* a Session always has at least one Timeline; even a default-created Session has
+* when the Session is just //closed,// the UI becomes mostly disabled, with the exception of {{{Help}}}, {{{Quit}}} and {{{New Session}}}...
+* what this operation //actually means,// depends on the user's expectations. Here &quot;the user&quot; is an abstracted user we conceive, since there are no real-world users of Lumiera yet.
+** when just invokind &quot;add Sequence&quot;, the user wants a new playground
+** when, on the other hand, the user right-clicks a scope-fork (&quot;track&quot; or &quot;media bin&quot;), she wants a new sequence made out of the contents of this fork
+* in both cases, after creating the new Sequence, it should become visible in the UI -- &lt;br/&gt;which means we have to set up a new timeline too, taking a copy of the currently active timeline. (When the latter is just pristine, we want the new one to take its place)
+At this point, it seems adequate to limit &quot;add Sequence&quot; to the first use case, and name the second one as &quot;make Sequence&quot;.
+The latter will probably be used within a context menu, but don't forget that actions can be bound to keys...
+
+//add Sequence// thus means a global command, which can be issued against the current session with no further arguments...
+* it will fabricate a new fork (appearing as track in this context)
+* it will //root-attach// this fork, i.e. it will [[place|Placement]] it as child of the ModelRootMO scope, and this act automagically creates a new [[Sequence]] asset
+* it will fabricate a new BindingMO as a prototype copy from the currently active one, and likewise root-attach it, which automagically creates a new [[Timeline]] asset
+* it will create a new ''focus goal'' ({{red{TODO new term coined 2/2017}}}), which should lead to activating the corresponding tab in the timeline pane, once this exists...
+
+Now, while all of this means a lot of functionality and complexity down in Proc, regarding the UI this action is quite simple: it is offered as an operation on the InteractionDirector, which most conveniently also corresponds to &quot;the session as such&quot; and thus can fire off the corresponding command without much further ado. On a technical level we just somehow need to know the corresponding command ID in proc, which is not subject to configuration, but rather requires some kind of well behaved hard-wiring. And, additionally, we need to build something like the aforementioned //focus goal...// {{red{TODO}}}
+
+!Add Track
+Here the intention is to add a new scope //close to where we &quot;are&quot; currently.//
+If the currently active element is something within a scope, we want the new scope as a sibling, otherwise we want it as a child, but close at hand.
+So, for the purpose of this analysis, the &quot;add Track&quot; action serves as an example where we need to pick up the subject of the change from context...
+</pre>
+</div>
 <div title="CommandLifecycle" modifier="Ichthyostega" created="200907210135" modified="201601162035" tags="SessionLogic spec draft design img" changecount="1">
 <pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
 While generally the command framework was designed to be flexible and allow a lot of different use cases, employ different execution paths and to serve various goals, there is an ''intended lifecycle'' &amp;mdash; commands are expected to go through several distinct states.
@@ -3212,7 +3242,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201701082320" tags="design decision Concepts GuiPattern draft discuss" changecount="11">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201702142312" tags="design decision Concepts GuiPattern draft discuss" changecount="12">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
@@ -3225,14 +3255,18 @@ The interface programming allows us to react on events and trigger behaviour, an
 ;shift of perspective
 :and while we work, the focus moves along. Some things are closer, other things are remote and require us to move and re-orient and reshape our perspective, should we choose to turn towards them.
 ;the ability to arrange what is relevant
-:we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.</pre>
+:we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.
+
+&amp;rarr; detailed [[analysis how commands are to be invoked|CommandInvocationAnalysis]]
+</pre>
 </div>
-<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201701082324" tags="def design GuiIntegration draft" changecount="4">
+<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201702142312" tags="def design GuiIntegration draft" changecount="6">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
 In a more elaborate UI, as can be expected for such a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
 
-An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some //command invocation trail.// These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.
+An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some [[command invocation trail|InvocationTrail]]. These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.
 
+&amp;rarr; CommandInvocationAnalysis
 &amp;rarr; InteractionControl
 &amp;rarr; GuiCommandBinding
 &amp;rarr; CommandUsage</pre>
@@ -3269,9 +3303,12 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201609081519" tags="def GuiIntegration draft" changecount="3">
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201702142312" tags="def GuiIntegration draft" changecount="4">
 <pre>//A command in preparation of being issued from the UI.//
-The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].</pre>
+The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].
+
+&amp;rarr; CommandInvocationAnalysis
+</pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
 <pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. All these calculations together implement a [[stream of calculations|CalcStream]], as demanded and directed by the PlayProcess. During the preparation of playback, a ''node planning phase'' is performed, to arrange for [[dispatching|FrameDispatcher]] the individual calculations per frame.  The goal of these //preparations//&amp;nbsp; is to find out
@@ -3560,8 +3597,8 @@ For each meta asset instance, initially a //builder// is created for setting up 
 <div title="Model" modifier="Ichthyostega" created="201003210020" modified="201003210021" tags="overview">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201612030206" tags="SessionLogic Model operational spec draft img" changecount="4">
-<pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assessment is the fact that the session implementation is deliberately kept single-threaded. While this simplifies reasoning, we also lack one central place to handle this issue, ans so care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
+<div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201702142325" tags="SessionLogic Model operational spec draft img" changecount="6">
+<pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consistently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assessment is the fact that the session implementation is deliberately kept single-threaded. While this simplifies reasoning, we also lack one central place to handle this issue, and thus care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
 
 !known interdependencies
 [&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
@@ -3579,11 +3616,11 @@ While implemented as StructAsset, additionally we need to ensure every instance 
 
 ;Timeline
 :acts as facade and is implemented by an root-attached BindingMO. Can't exist in isolation.
-: __created__ &amp;rArr; create a dedicated new binding, either useing an existing sequence, or a newly created empty sequence
+: __created__ &amp;rArr; create a dedicated new binding, either using an existing sequence, or a newly created empty sequence
 : __destroy__ &amp;rArr; remove binding, while the previously bound sequence remains in model.
 ;root-placed Binding
 :while generally a Binding can just exist somewhere in the model, when attached to root, a Timeline will be created
-: __created__ &amp;rArr; an existing sequence might be given on creation, otherwhise a default configured sequence is created
+: __created__ &amp;rArr; an existing sequence might be given on creation, otherwise a default configured sequence is created
 : __destroy__ &amp;rArr; implemented by detaching from root (see below) prior to purging from the model.
 : __attached__ to root &amp;rArr; invoke Timeline creation
 : __detached__ from root &amp;rArr; will care to destroy the corresponding timeline

@@ -2086,7 +2086,14 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1486768073223" HGAP="38" ID="ID_1457876217" MODIFIED="1486768136745" TEXT="konkret" VSHIFT="16">
 <icon BUILTIN="flag-pink"/>
 <node CREATED="1486768080502" ID="ID_1759740464" MODIFIED="1487039233982" TEXT="Binde-Kontext f&#xfc;r globale Aktionen"/>
-<node CREATED="1486768086869" ID="ID_173538981" MODIFIED="1486768096616" TEXT="Idee/Konzept f&#xfc;r kontextabh&#xe4;ngige Aktionen"/>
+<node CREATED="1486768086869" ID="ID_173538981" MODIFIED="1486768096616" TEXT="Idee/Konzept f&#xfc;r kontextabh&#xe4;ngige Aktionen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1487119208622" ID="ID_728171298" MODIFIED="1487119223847" TEXT="Analyse anhand einiger Beispiele">
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1487119230659" ID="ID_651577067" MODIFIED="1487119250636" TEXT="Frage: wieviel Interaction Control m&#xfc;ssen wir sofrt jetzt implementieren">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1485126466520" FOLDED="true" ID="ID_717310004" MODIFIED="1486763253254" TEXT="WindowManager" VSHIFT="34">
