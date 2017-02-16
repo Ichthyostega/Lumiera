@@ -1539,7 +1539,7 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
-<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201702150039" tags="draft impl GuiPattern example discuss" changecount="6">
+<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201702160131" tags="draft impl GuiPattern example discuss" changecount="10">
 <pre>//This page is a scrapbook to collect observations about command invocation in the UI//
 {{red{2/2017}}} the goal is to shape some generic patterns of InteractionControl
 
@@ -2952,7 +2952,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
-<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201702140201" tags="GuiPattern spec draft" changecount="6">
+<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201702160132" tags="GuiPattern spec draft" changecount="9">
 <pre>To a large extent, the Lumiera user interface is built around a //backbone structure,// known as the UI-Bus.
 But there are some dedicated top-level entities, collaborating to maintain a consistent application lifecycle
 ;Application
@@ -2966,14 +2966,14 @@ But there are some dedicated top-level entities, collaborating to maintain a con
 :responsible for all global framework concerns, resources and global application state
 ;Interaction Director
 :establish the connection between global interaction state and global session state
-:the [[InteractionDirector|UIInteractionDirector]] is the root controller and corresponds to the [[root object in session|ModelRootMO]].
+:the InteractionDirector is the root controller and corresponds to the [[root object in session|ModelRootMO]].
 ;Window List
 :organise and maintain the top level workspace windows
 ;Notification Façade
 :attachment point for lower layers and anyone in need to &quot;talk to the UI&quot;
 :the GuiNotificationFacade is a LayerSeparationInterface and integrated with Lumiera's interface system
 
-Together, these entities form a cohesive circle of collaborating global managers, known as ''global UI context''; the interplay of these facilities is essentially an implementation detail, insofar there is not much necessity (and only a narrow API) for the rest of the UI to address those directly. Rather, each member of this circle serves a dedicated purpose and is visible to the rest of the application through some kind of service abstraction. For example, the [[interactionDirector|UIInteractionDirector]] is mapped as a top-level model element into the logical model of the UI; typically, other parts of the application address this service through messages via the UI-Bus, while the Interaction Director itself is responsible to create a link between model and interaction state -- a service, which is fulfilled in a transparent way.
+Together, these entities form a cohesive circle of collaborating global managers, known as ''global UI context''; the interplay of these facilities is essentially an implementation detail, insofar there is not much necessity (and only a narrow API) for the rest of the UI to address those directly. Rather, each member of this circle serves a dedicated purpose and is visible to the rest of the application through some kind of service abstraction. For example, the InteractionDirector is mapped as a top-level model element into the logical model of the UI; typically, other parts of the application address this service through messages via the UI-Bus, while the Interaction Director itself is responsible to create a link between model and interaction state -- a service, which is fulfilled in a transparent way.
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">
@@ -3258,6 +3258,16 @@ The interface programming allows us to react on events and trigger behaviour, an
 :we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.
 
 &amp;rarr; detailed [[analysis how commands are to be invoked|CommandInvocationAnalysis]]
+</pre>
+</div>
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201702160131" tags="def draft" changecount="3">
+<pre>//the top-level controller within the UI.//
+In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
+
+And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, opening and closing of the session as a whole, and even shutdown of the application as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
+
+Why do we need a connection joint between those parts?
+Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
 </pre>
 </div>
 <div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201702142312" tags="def design GuiIntegration draft" changecount="6">
@@ -9219,16 +9229,6 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 <pre>The architecture of the Lumiera application separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
-</div>
-<div title="UIInteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" tags="def draft" changecount="1">
-<pre>//the top-level controller within the UI.//
-In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
-
-And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, opening and closing of the session as a whole, and even shutdown of the application as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
-
-Why do we need a connection joint between those parts?
-Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
-</pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
 <pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).
