@@ -1539,9 +1539,9 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
-<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201702160131" tags="draft impl GuiPattern example discuss" changecount="10">
+<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201702160147" tags="draft impl GuiPattern example discuss" changecount="12">
 <pre>//This page is a scrapbook to collect observations about command invocation in the UI//
-{{red{2/2017}}} the goal is to shape some generic patterns of InteractionControl
+{{red{2/2017}}} the goal is to shape some generic patterns of InteractionControl (&amp;rarr; GuiCommandBinding)
 
 !Add Sequence
 The intention is to add a new sequence //to the current session.//
@@ -1567,6 +1567,9 @@ Now, while all of this means a lot of functionality and complexity down in Proc,
 Here the intention is to add a new scope //close to where we &quot;are&quot; currently.//
 If the currently active element is something within a scope, we want the new scope as a sibling, otherwise we want it as a child, but close at hand.
 So, for the purpose of this analysis, the &quot;add Track&quot; action serves as an example where we need to pick up the subject of the change from context...
+* the fact there is always a timeline and a sequence, also implies there is always a fork root (track)
+* so this operation basically adds to a //&quot;current scope&quot;// -- or next to it, as sibling
+* this means, the UI logic has to provide a //current model element,// while the details of actually selecting a parent are decided elsewhere (in Proc-Layer, in rules)
 </pre>
 </div>
 <div title="CommandLifecycle" modifier="Ichthyostega" created="200907210135" modified="201601162035" tags="SessionLogic spec draft design img" changecount="1">
@@ -3242,7 +3245,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201702142312" tags="design decision Concepts GuiPattern draft discuss" changecount="12">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201702160256" tags="design decision Concepts GuiPattern draft discuss" changecount="13">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
@@ -3251,16 +3254,41 @@ The interface programming allows us to react on events and trigger behaviour, an
 ;locality of work spaces
 :but the arrangement of the interface interactions is not amorphous, rather it is segregated into cohesive clusters of closely interrelated actions. We move between these clusters of activity the same way as we move between several well confined rooms within a building.
 ;context and focus of activity
-:most of what we could do //in therory,// is not relevant most of the time. But when the inner logic of what we're about to do coincides with the things at hand, then we feel enabled.
+:most of what we could do //in theory,// is not relevant most of the time. But when the inner logic of what we're about to do coincides with the things at hand, then we feel enabled.
 ;shift of perspective
 :and while we work, the focus moves along. Some things are closer, other things are remote and require us to move and re-orient and reshape our perspective, should we choose to turn towards them.
 ;the ability to arrange what is relevant
 :we do the same stuff again and again, and this makes us observe and gradually understand matters. As we reveal the inner nature of what we're doing, we desire to arrange close at hand what belongs together, and to expunge the superficial and distracting.
 
 &amp;rarr; detailed [[analysis how commands are to be invoked|CommandInvocationAnalysis]]
+
+!Foundation Concepts
+The primary insight is, that we build upon a spatial metaphor -- and thus we start out with defining various kinds of //locations.// We express interactions as //happening somewhere...//
+;work site
+:a distinct, coherent place where some ongoing work is done
+:the work site might move along with the work, but we also may leave it temporarily to visit some other work site
+;the spot
+:this is where we currently are -- taken both in the sense of a location and a spotlight
+:thus a spot is always at some work site, but it can be navigated to another one
+;focus
+:the concrete realisation of the spot within a given control system
+;control system
+:a practical technical realisation of an human-computer-interface, like keyboard input/navigation, mouse, pen, hardware controller, touch
+;UI frame
+:the overall interface is arranged into independent top-level segments of equal importance.
+:practically speaking, we may have multiple top-level windows residing on multiple desktops...
+;perspective
+:a set of concrete configuration parameters defining the contents of one UI frame
+:the perspective defines which views are opened and arranged at what position and within which docking panel
+;focus path
+:concrete coordinates to reach a specific work site
+:the focus path specifies the UI frame (top-level window), the perspective, and then some canonical path to navigate down a hierarchy to reach the anchor point of the work site
+;the spot locator
+:this is what can be navigated, in order to move the sport from work site to work site
+:the spot locator is relocated by loading a new focus path to another work site
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201702160131" tags="def draft" changecount="3">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201702160144" tags="def draft" changecount="6">
 <pre>//the top-level controller within the UI.//
 In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
 
@@ -3268,6 +3296,7 @@ And the counterpart of this root element within the UI is the {{{InteractionDire
 
 Why do we need a connection joint between those parts?
 Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
+&gt; to understand this, it is best &amp;rarr; to [[look at some examples|CommandInvocationAnalysis]]
 </pre>
 </div>
 <div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201702142312" tags="def design GuiIntegration draft" changecount="6">
