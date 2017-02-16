@@ -3245,7 +3245,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201702160256" tags="design decision Concepts GuiPattern draft discuss" changecount="13">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201702162049" tags="design decision Concepts GuiPattern draft discuss" changecount="14">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
@@ -3266,9 +3266,9 @@ The interface programming allows us to react on events and trigger behaviour, an
 The primary insight is, that we build upon a spatial metaphor -- and thus we start out with defining various kinds of //locations.// We express interactions as //happening somewhere...//
 ;work site
 :a distinct, coherent place where some ongoing work is done
-:the work site might move along with the work, but we also may leave it temporarily to visit some other work site
+:the WorkSite might move along with the work, but we also may leave it temporarily to visit some other work site
 ;the spot
-:this is where we currently are -- taken both in the sense of a location and a spotlight
+:the [[Spot]] is where we currently are -- taken both in the sense of a location and a spotlight
 :thus a spot is always at some work site, but it can be navigated to another one
 ;focus
 :the concrete realisation of the spot within a given control system
@@ -3284,11 +3284,11 @@ The primary insight is, that we build upon a spatial metaphor -- and thus we sta
 :concrete coordinates to reach a specific work site
 :the focus path specifies the UI frame (top-level window), the perspective, and then some canonical path to navigate down a hierarchy to reach the anchor point of the work site
 ;the spot locator
-:this is what can be navigated, in order to move the sport from work site to work site
-:the spot locator is relocated by loading a new focus path to another work site
+:navigating means to move the SpotLocator, in order to move the spot from work site to work site
+:the spot locator is relocated by loading a new focus path to another [[work site|WorkSite]]
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201702160144" tags="def draft" changecount="6">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201702162047" tags="def draft" changecount="8">
 <pre>//the top-level controller within the UI.//
 In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
 
@@ -3297,6 +3297,21 @@ And the counterpart of this root element within the UI is the {{{InteractionDire
 Why do we need a connection joint between those parts?
 Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
 &gt; to understand this, it is best &amp;rarr; to [[look at some examples|CommandInvocationAnalysis]]
+
+!Children
+The InteractionDirector is part of the model, and thus we have to distinguish between model children and other UI components held as children.
+;model
+:anything related to global structures falls into that category
+:* some parts might be related to ''Asset management''
+:* some concerns might touch questions of ''configuration''
+:* and interaction state is closely related to ''persistent UI state''
+;interaction control
+:anything related to forming and tracking of user interactions &amp;rarr; InteractionControl
+:* the SpotLocator is what is &quot;moved&quot; when the [[Spot]] of current activity moves
+:* the FocusTracker is responsible for //detecting changes in current selection and focus.//
+:* the [[Navigator]] is a special controller to handle moving the SpotLocator
+
+!Collaborations
 </pre>
 </div>
 <div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201702142312" tags="def design GuiIntegration draft" changecount="6">
