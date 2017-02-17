@@ -50,10 +50,11 @@
 #include <boost/noncopyable.hpp>
 #include <functional>
 #include <vector>
+#include <string>
 
 
 namespace gui {
-namespace workspace {
+namespace ctrl {
   
   using std::function;
   using boost::algorithm::is_any_of;
@@ -69,6 +70,7 @@ namespace workspace {
   using Glib::ustring;
   using ::util::_Fmt;
   using std::vector;
+  using std::string;
   
   namespace Stock = Gtk::Stock;
   
@@ -232,7 +234,7 @@ namespace workspace {
       
       
     private: /* ===== Internals ===== */
-      WorkspaceWindow&
+      workspace::WorkspaceWindow&
       getWorkspaceWindow()
         {
           return globalCtx_.windowList_.findActiveWindow();
@@ -245,12 +247,12 @@ namespace workspace {
       void
       populateShowPanelActions (Gtk::UIManager& uiManager)
         {
-          const uint count = PanelManager::getPanelDescriptionCount();
+          const uint count = workspace::PanelManager::getPanelDescriptionCount();
           
           Glib::RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();          ////////////////////////TICKET #1068 not clear if it is necessary to give a *name* to that action group
           for (uint i = 0; i < count; i++)
             {
-              const gchar *stock_id = PanelManager::getPanelStockID(i);
+              const gchar *stock_id = workspace::PanelManager::getPanelStockID(i);
               cuString name = ustring::compose("Panel%1", i);
               actionGroup->add(Action::create(name, StockID(stock_id)),
                 bind(mem_fun(*this, &Actions::onMenu_show_panel), i));
@@ -468,5 +470,5 @@ namespace workspace {
     };
   
   
-}}// namespace gui::workspace
+}}// namespace gui::ctrl
 #endif /*GUI_CTRL_ACTIONS_H*/

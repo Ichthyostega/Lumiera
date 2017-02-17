@@ -70,7 +70,7 @@ namespace gui {
     //////////////////////TICKET #959 : establish the new backbone here / replaces Project and Controller
     UiBus uiBus;
     
-    workspace::UiManager uiManager(uiBus);
+    ctrl::UiManager uiManager(uiBus);
     uiManager.createApplicationWindow();
     kit.run(); // GTK event loop
   }

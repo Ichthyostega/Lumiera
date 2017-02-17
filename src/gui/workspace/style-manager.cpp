@@ -31,27 +31,18 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
-#include "gui/config-keys.hpp"
 #include "gui/workspace/style-manager.hpp"
-#include "gui/ctrl/global-ctx.hpp"
-#include "gui/ctrl/actions.hpp"
-#include "gui/workspace/workspace-window.hpp"
+#include "gui/config-keys.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
 #include <gtkmm/stylecontext.h>
 #include <boost/filesystem.hpp>
-#include <memory>
-#include <list>
 
 using Gtk::IconSize;
 using Gtk::IconFactory;
 
 using util::cStr;
-using util::isnil;
-using std::list;
-using std::shared_ptr;
 
 
 namespace gui {
@@ -63,69 +54,29 @@ namespace workspace {
   IconSize StyleManager::MenuIconSize = Gtk::ICON_SIZE_INVALID;
   
   
-  // dtors via smart-ptr invoked from here...
-  StyleManager::~StyleManager()
-    { }
-  
-  
-  StyleManager::StyleManager (UiBus& bus)
-    : Gtk::UIManager()
-    , globals_{new GlobalCtx{bus, *this}}
-    , actions_{new Actions{*globals_}}
-    , iconSearchPath_{Config::get (KEY_ICON_PATH)}
-    , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
-    {
-      initGlobalUI();
-    }
   
   
   /**
-   * Initialise the interface manager on application start.
-   * Register the icon configuration and sizes and lookup
-   * all the icons -- either from the default theme of via
-   * the given Lumiera icon search paths (see \c setup.ini ).
+   * Initialise the theme and style related global properties of the UI.
+   * Register the icon configuration and sizes and lookup all standard icons --
+   * either from the default theme of via the given Lumiera icon search paths,
+   * typically from `setup.ini`.
+   * 
    * @see lumiera::Config
    */
-  void
-  StyleManager::initGlobalUI ()
-  {
-    Glib::set_application_name (Config::get (KEY_TITLE));
-    
-    registerAppIconSizes();
-    registerStockItems();
-    
-    setTheme (Config::get (KEY_STYLESHEET));
-    
-    actions_->populateMainActions (*this);
-  }
+  StyleManager::StyleManager()
+    : Gtk::UIManager()
+    , iconSearchPath_{Config::get (KEY_ICON_PATH)}
+    , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
+    {
+      Glib::set_application_name (Config::get (KEY_TITLE));
+      
+      registerAppIconSizes();
+      registerStockItems();
+      
+      setTheme (Config::get (KEY_STYLESHEET));
+    }
   
-  
-  /** 
-   * @remarks this function is invoked once from the main application object,
-   *          immediately prior to starting the GTK event loop. */
-  void
-  StyleManager::createApplicationWindow()
-  {
-    if (globals_->windowList_.empty())
-      globals_->windowList_.newWindow();
-  }
-  
-  
-  void
-  StyleManager::terminateUI()
-  {
-      Gtk::Main *main = Gtk::Main::instance();               /////////////////////////////////////TICKET #1032 : use gtk::Application instead of gtk::Main
-      REQUIRE(main);
-      main->quit();
-  }
-  
-  void
-  StyleManager::updateWindowFocusRelatedActions()
-  {
-    UNIMPLEMENTED ("how to handle activation of menu entries depending on window focus"); ////////TICKET #1076  find out how to handle this properly
-    //////see Actions::updateActionState()
-  }
-
   
   
   void
@@ -350,13 +301,6 @@ namespace workspace {
       }
   }
   
-  
-  void
-  StyleManager::allowCloseWindow (bool yes)
-  {
-    this->get_action("/MenuBar/WindowMenu/WindowCloseWindow")
-             ->set_sensitive (yes);
-  }
   
   
 }}// namespace gui::workspace

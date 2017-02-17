@@ -23,8 +23,8 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
 #include "gui/workspace/workspace-window.hpp"
-#include "gui/workspace/style-manager.hpp"
 #include "gui/workspace/panel-manager.hpp"
+#include "gui/ctrl/ui-manager.hpp"
 #include "include/logging.h"
 
 
@@ -33,10 +33,12 @@
 using namespace Gtk;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace Glib;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace gui::model;
-using namespace gui::controller;
 
 namespace gui {
 namespace workspace {
+  
+  using ctrl::UiManager;
+  
   
   WorkspaceWindow::WorkspaceWindow (UiManager& uiManager)
     : panelManager_(*this)

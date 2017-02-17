@@ -23,18 +23,12 @@
 
 
 /** @file style-manager.hpp
- ** Manager for global user interface concerns and global state.
- ** The central UiManager instance is owned by the GtkLumiera object and initialised in GTK-main.
- ** It establishes and wires the top-level entities of the UI-Layer and thus, indirectly offers
- ** services to provide Icons and other resources, to open and manage workspace windows, to
- ** form and issue (global) actions and to delve into the UI representation of top-level parts
- ** of the session model. Notable connections established herein:
- ** - connection to the [UI-Bus](\ref ui-bus.hpp)
- ** - the global Actions available though the menu
- ** - the WindowList
- ** - the InteractionDirector (top-level controller)
+ ** Service for global theming and style related concerns.
+ ** The central UiManager operates an instance of this service to set up and configure the UI
+ ** globally. Widgets and similar parts of the interface may use it, when taking decisions
+ ** regarding the look and layout details.
  ** 
- ** @see gtk-lumiera.hpp
+ ** @see ui-manager.hpp
  ** @see ui-bus.hpp
  */
 
@@ -47,7 +41,6 @@
 #include <boost/noncopyable.hpp>
 #include <cairomm/cairomm.h>
 #include <string>
-#include <memory>
 
 
 namespace gui {
@@ -59,11 +52,7 @@ namespace gui {
 
 namespace workspace {
   
-  using std::unique_ptr;
   using std::string;
-  
-  class GlobalCtx;
-  class Actions;
   
   
   
@@ -77,9 +66,6 @@ namespace workspace {
     : public Gtk::UIManager
     , boost::noncopyable
     {
-      
-      unique_ptr<GlobalCtx> globals_;
-      unique_ptr<Actions>   actions_;
       
       string iconSearchPath_;
       string resourceSerachPath_;
@@ -107,24 +93,7 @@ namespace workspace {
        * is _not a ctrl::Controller,_ and thus not directly connected to the Bus.
        * Rather, supports the top-level windows for creating a consistent interface.
        */
-      StyleManager (UiBus& bus);
-     ~StyleManager ();
-      
-      /**
-       * Set up the first top-level application window.
-       * This triggers the build-up of the user interface widgets.
-       */
-      void createApplicationWindow();
-      
-      /**
-       * Cause the main event loop to terminate, so the application as a whole unwinds.
-       */
-      void terminateUI();
-      
-      /** @todo find a solution how to enable/disable menu entries according to focus
-       *                                               /////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
-       */
-      void updateWindowFocusRelatedActions();
+      StyleManager ();
       
       /**
        * Sets the theme to use for the Lumiera GUI.
@@ -148,11 +117,7 @@ namespace workspace {
       readStyleColourProperty (Gtk::Widget &widget, const gchar *property_name,
                                guint16 red, guint16 green, guint16 blue);
       
-      void allowCloseWindow (bool yes);
-      
     private:
-      void initGlobalUI ();
-      
       void registerAppIconSizes();
       void registerStockItems();
       
@@ -229,9 +194,6 @@ namespace workspace {
                            ,Glib::RefPtr<Gtk::IconSet> const& icon_set
                            ,Gtk::IconSize size
                            ,bool wildcard);
-      
-      
-    private:
       
     };
   

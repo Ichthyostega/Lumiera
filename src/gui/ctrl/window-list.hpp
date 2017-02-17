@@ -47,10 +47,10 @@ namespace gui {
   namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   
+namespace workspace { class WorkspaceWindow; }
 namespace ctrl {
   
   class GlobalCtx;
-  class WorkspaceWindow;
   
   using std::list;
   
@@ -62,7 +62,7 @@ namespace ctrl {
   class WindowList
     : boost::noncopyable
     {
-      using PWindow = std::shared_ptr<WorkspaceWindow>;
+      using PWindow = std::shared_ptr<workspace::WorkspaceWindow>;
       
       GlobalCtx&    globalCtx_;
       list<PWindow> windowList_;
@@ -76,8 +76,8 @@ namespace ctrl {
       void newWindow();
       void closeWindow();
       
-      WorkspaceWindow& findActiveWindow();
-      WorkspaceWindow& findFocusWindow();
+      workspace::WorkspaceWindow& findActiveWindow();
+      workspace::WorkspaceWindow& findFocusWindow();
       
       
     private:

@@ -37,9 +37,10 @@
 
 
 namespace gui {
-namespace workspace {
-  
+namespace ctrl {
   class UiManager;
+}
+namespace workspace {
   
   
   /**
@@ -49,14 +50,14 @@ namespace workspace {
     : public Gtk::Window
     {
     public:
-      WorkspaceWindow (UiManager&);
+      WorkspaceWindow (ctrl::UiManager&);
      ~WorkspaceWindow();
       
       PanelManager& getPanelManager();
       
       
     private:
-      void createUI (UiManager& uiManager);
+      void createUI (ctrl::UiManager& uiManager);
       
       
       /* ===== UI ===== */

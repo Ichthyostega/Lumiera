@@ -43,6 +43,8 @@ using std::list;
 namespace gui {
 namespace ctrl {
   
+  using workspace::WorkspaceWindow;
+  
   
   
   WindowList::WindowList (GlobalCtx& globals)
