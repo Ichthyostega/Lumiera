@@ -30,10 +30,6 @@
 
 
 
-using namespace Gtk;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace Glib;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::model;
-
 namespace gui {
 namespace workspace {
   
@@ -87,12 +83,12 @@ namespace workspace {
     panelManager_.setupDock();
     dockContainer_.pack_start (panelManager_.getDockBar(), false,false,0);
     dockContainer_.pack_start (panelManager_.getDock(), true,true,0);
-    baseContainer_.pack_start (dockContainer_, PACK_EXPAND_WIDGET);
+    baseContainer_.pack_start (dockContainer_, Gtk::PACK_EXPAND_WIDGET);
     
     //----- Create the status bar -----//
     //statusBar.set_has_resize_grip();
     statusBar_.set_resize_mode (Gtk::RESIZE_PARENT);
-    baseContainer_.pack_start (statusBar_, PACK_SHRINK);
+    baseContainer_.pack_start (statusBar_, Gtk::PACK_SHRINK);
     
     show_all_children();
   }
