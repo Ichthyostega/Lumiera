@@ -50,8 +50,8 @@
  */
 
 
-#ifndef GUI_WORKSPACE_INTERACTION_DIRECTOR_H
-#define GUI_WORKSPACE_INTERACTION_DIRECTOR_H
+#ifndef GUI_INTERACT_INTERACTION_DIRECTOR_H
+#define GUI_INTERACT_INTERACTION_DIRECTOR_H
 
 //#include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
@@ -66,13 +66,15 @@ namespace gui {
   
   class UiBus;
 
-namespace workspace {
+namespace ctrl {
+  class GlobalCtx;
+}
+namespace interact {
   
 //using std::string;
   
 //class Actions;
 //class WindowList;
-  class GlobalCtx;
   
   
   
@@ -84,7 +86,7 @@ namespace workspace {
     : public model::Controller
     {
       
-      GlobalCtx& globalCtx_;
+      ctrl::GlobalCtx& globalCtx_;
       
       ////TODO: what is the model equivalent represented here???
       
@@ -95,7 +97,7 @@ namespace workspace {
       void buildMutator (lib::diff::TreeMutator::Handle)  override;
       
     public:
-      InteractionDirector (GlobalCtx&);
+      InteractionDirector (ctrl::GlobalCtx&);
      ~InteractionDirector ();
       
       
@@ -106,4 +108,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_INTERACTION_DIRECTOR_H*/
+#endif /*GUI_INTERACT_INTERACTION_DIRECTOR_H*/

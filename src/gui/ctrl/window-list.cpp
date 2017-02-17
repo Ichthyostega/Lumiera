@@ -27,8 +27,8 @@
  */
 
 
-#include "gui/workspace/global-ctx.hpp"
-#include "gui/workspace/window-list.hpp"
+#include "gui/ctrl/global-ctx.hpp"
+#include "gui/ctrl/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/util.hpp"
 
@@ -41,7 +41,7 @@ using std::list;
 
 
 namespace gui {
-namespace workspace {
+namespace ctrl {
   
   
   
@@ -163,4 +163,4 @@ namespace workspace {
   
   
   
-}}// namespace gui::workspace
+}}// namespace gui::ctrl

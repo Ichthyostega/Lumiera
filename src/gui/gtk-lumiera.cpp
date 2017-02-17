@@ -22,7 +22,7 @@
 
 
 #include "gui/gtk-lumiera.hpp"
-#include "gui/workspace/ui-manager.hpp"
+#include "gui/ctrl/ui-manager.hpp"
 #include "gui/ui-bus.hpp"
 #include "lib/depend.hpp"
 

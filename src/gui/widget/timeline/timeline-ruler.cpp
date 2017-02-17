@@ -23,7 +23,7 @@
 
 #include "gui/widget/timeline/timeline-ruler.hpp"
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/workspace/ui-manager.hpp"
+#include "gui/ctrl/ui-manager.hpp"
 #include "gui/util/cairo-util.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time.h"

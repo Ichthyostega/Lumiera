@@ -51,14 +51,14 @@
  */
 
 
-#ifndef GUI_WORKSPACE_GLOBAL_CTX_H
-#define GUI_WORKSPACE_GLOBAL_CTX_H
+#ifndef GUI_CTRL_GLOBAL_CTX_H
+#define GUI_CTRL_GLOBAL_CTX_H
 
 #include "gui/gtk-base.hpp"
 #include "gui/ui-bus.hpp"
-#include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/window-list.hpp"
-#include "gui/workspace/interaction-director.hpp"
+#include "gui/ctrl/ui-manager.hpp"
+#include "gui/ctrl/window-list.hpp"
+#include "gui/interact/interaction-director.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <string>
@@ -66,8 +66,9 @@
 
 
 namespace gui {
-namespace workspace {
+namespace ctrl {
   
+  using interact::InteractionDirector;
   
   
   /**
@@ -107,4 +108,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_GLOBAL_CTX_H*/
+#endif /*GUI_CTRL_GLOBAL_CTX_H*/

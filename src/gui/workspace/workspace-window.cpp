@@ -22,8 +22,8 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
-#include "workspace-window.hpp"
-#include "gui/workspace/ui-manager.hpp"
+#include "gui/workspace/workspace-window.hpp"
+#include "gui/workspace/style-manager.hpp"
 #include "gui/workspace/panel-manager.hpp"
 #include "include/logging.h"
 

@@ -1,5 +1,5 @@
 /*
-  UiManager  -  Global UI Manager
+  StyleManager  -  Global UI Manager
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -22,7 +22,7 @@
 * *****************************************************/
 
 
-/** @file ui-manager.cpp
+/** @file style-manager.cpp
  ** Implementation of global concerns regarding a coherent UI and global state.
  ** Especially, the wiring of top-level components is done here, as is the
  ** basic initialisation of the interface and global configuration on
@@ -33,9 +33,9 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
-#include "gui/workspace/ui-manager.hpp"
-#include "gui/workspace/global-ctx.hpp"
-#include "gui/workspace/actions.hpp"
+#include "gui/workspace/style-manager.hpp"
+#include "gui/ctrl/global-ctx.hpp"
+#include "gui/ctrl/actions.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
@@ -59,16 +59,16 @@ namespace workspace {
   
   namespace fsys = boost::filesystem;
   
-  IconSize UiManager::GiantIconSize = Gtk::ICON_SIZE_INVALID;
-  IconSize UiManager::MenuIconSize = Gtk::ICON_SIZE_INVALID;
+  IconSize StyleManager::GiantIconSize = Gtk::ICON_SIZE_INVALID;
+  IconSize StyleManager::MenuIconSize = Gtk::ICON_SIZE_INVALID;
   
   
   // dtors via smart-ptr invoked from here...
-  UiManager::~UiManager()
+  StyleManager::~StyleManager()
     { }
   
   
-  UiManager::UiManager (UiBus& bus)
+  StyleManager::StyleManager (UiBus& bus)
     : Gtk::UIManager()
     , globals_{new GlobalCtx{bus, *this}}
     , actions_{new Actions{*globals_}}
@@ -87,7 +87,7 @@ namespace workspace {
    * @see lumiera::Config
    */
   void
-  UiManager::initGlobalUI ()
+  StyleManager::initGlobalUI ()
   {
     Glib::set_application_name (Config::get (KEY_TITLE));
     
@@ -104,7 +104,7 @@ namespace workspace {
    * @remarks this function is invoked once from the main application object,
    *          immediately prior to starting the GTK event loop. */
   void
-  UiManager::createApplicationWindow()
+  StyleManager::createApplicationWindow()
   {
     if (globals_->windowList_.empty())
       globals_->windowList_.newWindow();
@@ -112,7 +112,7 @@ namespace workspace {
   
   
   void
-  UiManager::terminateUI()
+  StyleManager::terminateUI()
   {
       Gtk::Main *main = Gtk::Main::instance();               /////////////////////////////////////TICKET #1032 : use gtk::Application instead of gtk::Main
       REQUIRE(main);
@@ -120,7 +120,7 @@ namespace workspace {
   }
   
   void
-  UiManager::updateWindowFocusRelatedActions()
+  StyleManager::updateWindowFocusRelatedActions()
   {
     UNIMPLEMENTED ("how to handle activation of menu entries depending on window focus"); ////////TICKET #1076  find out how to handle this properly
     //////see Actions::updateActionState()
@@ -129,7 +129,7 @@ namespace workspace {
   
   
   void
-  UiManager::setTheme (string const& stylesheetName)
+  StyleManager::setTheme (string const& stylesheetName)
   {
     auto screen = Gdk::Screen::get_default();
     auto css_provider = Gtk::CssProvider::create();
@@ -151,9 +151,9 @@ namespace workspace {
   
   
   Cairo::RefPtr<Cairo::SolidPattern>
-  UiManager::readStyleColourProperty (Gtk::Widget& widget
-                                     ,const gchar * property_name
-                                     ,guint16 red, guint16 green, guint16 blue)
+  StyleManager::readStyleColourProperty (Gtk::Widget& widget
+                                        ,const gchar * property_name
+                                        ,guint16 red, guint16 green, guint16 blue)
   {
     REQUIRE (property_name);
     
@@ -181,7 +181,7 @@ namespace workspace {
   
   
   void
-  UiManager::registerAppIconSizes()
+  StyleManager::registerAppIconSizes()
   {
     if(GiantIconSize == Gtk::ICON_SIZE_INVALID)
       GiantIconSize = IconSize::register_new ("giant", 48, 48);
@@ -195,7 +195,7 @@ namespace workspace {
    * icons and labels associated with IDs
    */
   void
-  UiManager::registerStockItems()
+  StyleManager::registerStockItems()
   {
     Glib::RefPtr<IconFactory> factory = Gtk::IconFactory::create();
     
@@ -219,10 +219,10 @@ namespace workspace {
   
   
   bool
-  UiManager::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
-                             ,cuString& icon_name
-                             ,cuString& id
-                             ,cuString& label)
+  StyleManager::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
+                                ,cuString& icon_name
+                                ,cuString& id
+                                ,cuString& label)
   {
     Glib::RefPtr<Gtk::IconSet> icon_set = Gtk::IconSet::create();
     
@@ -255,10 +255,10 @@ namespace workspace {
   
   
   bool
-  UiManager::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                              ,cuString& icon_name
-                              ,Gtk::IconSize size
-                              ,bool wildcard)
+  StyleManager::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
+                             ,cuString& icon_name
+                             ,Gtk::IconSize size
+                             ,bool wildcard)
   {
     // Try the icon theme  
     if (addThemeIconSource(icon_set, icon_name, size, wildcard))
@@ -279,10 +279,10 @@ namespace workspace {
   
   
   bool
-  UiManager::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                ,cuString& icon_name
-                                ,Gtk::IconSize size
-                                ,bool wildcard)
+  StyleManager::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+                                   ,cuString& icon_name
+                                   ,Gtk::IconSize size
+                                   ,bool wildcard)
   {
     // Get the size
     int width = 0, height = 0;
@@ -305,11 +305,11 @@ namespace workspace {
   
   
   bool
-  UiManager::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                   ,cuString& base_dir
-                                   ,cuString& icon_name
-                                   ,Gtk::IconSize size
-                                   ,bool wildcard)
+  StyleManager::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+                                      ,cuString& base_dir
+                                      ,cuString& icon_name
+                                      ,Gtk::IconSize size
+                                      ,bool wildcard)
   {
     // Get the size
     int width = 0, height = 0;
@@ -325,10 +325,10 @@ namespace workspace {
   
   
   bool
-  UiManager::addStockIconFromPath (string path
-                                  ,Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                  ,Gtk::IconSize size
-                                  ,bool wildcard)
+  StyleManager::addStockIconFromPath (string path
+                                     ,Glib::RefPtr<Gtk::IconSet> const& icon_set
+                                     ,Gtk::IconSize size
+                                     ,bool wildcard)
   {
     if (!fsys::exists (path)) return false;
     
@@ -352,7 +352,7 @@ namespace workspace {
   
   
   void
-  UiManager::allowCloseWindow (bool yes)
+  StyleManager::allowCloseWindow (bool yes)
   {
     this->get_action("/MenuBar/WindowMenu/WindowCloseWindow")
              ->set_sensitive (yes);

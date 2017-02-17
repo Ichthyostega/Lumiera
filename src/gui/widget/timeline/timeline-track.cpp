@@ -23,7 +23,7 @@
 
 #include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/workspace/ui-manager.hpp"
+#include "gui/ctrl/ui-manager.hpp"
 #include "gui/dialog/name-chooser.hpp"
 #include "include/logging.h"
 

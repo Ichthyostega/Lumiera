@@ -32,12 +32,12 @@
  */
 
 
-#ifndef GUI_WORKSPACE_ACTIONS_H
-#define GUI_WORKSPACE_ACTIONS_H
+#ifndef GUI_CTRL_ACTIONS_H
+#define GUI_CTRL_ACTIONS_H
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
-#include "gui/workspace/global-ctx.hpp"
+#include "gui/ctrl/global-ctx.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/dialog/render.hpp"
 #include "gui/dialog/preferences-dialog.hpp"
@@ -469,4 +469,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_ACTIONS_H*/
+#endif /*GUI_CTRL_ACTIONS_H*/

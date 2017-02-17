@@ -27,8 +27,8 @@
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/workspace/global-ctx.hpp"
-#include "gui/workspace/interaction-director.hpp"
+#include "gui/ctrl/global-ctx.hpp"
+#include "gui/interact/interaction-director.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "proc/mobject/session/root.hpp"
@@ -46,7 +46,9 @@ using lib::diff::TreeMutator;
 
 
 namespace gui {
-namespace workspace {
+namespace interact {
+  
+  using ctrl::GlobalCtx;
   
   
   // emit VTables here...
@@ -73,4 +75,4 @@ namespace workspace {
   }
 
   
-}}// namespace gui::workspace
+}}// namespace gui::interact

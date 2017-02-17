@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_WINDOW_LIST_H
-#define GUI_WINDOW_LIST_H
+#ifndef GUI_CTRL_WINDOW_LIST_H
+#define GUI_CTRL_WINDOW_LIST_H
 
 #include "gui/gtk-base.hpp"
 
@@ -47,7 +47,7 @@ namespace gui {
   namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   
-namespace workspace {
+namespace ctrl {
   
   class GlobalCtx;
   class WorkspaceWindow;
@@ -111,5 +111,5 @@ namespace workspace {
   
   
   
-}}// namespace gui::workspace
-#endif /*GUI_WINDOW_LIST_H*/
+}}// namespace gui::ctrl
+#endif /*GUI_CTRL_WINDOW_LIST_H*/
