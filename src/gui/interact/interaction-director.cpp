@@ -27,10 +27,16 @@
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/ctrl/global-ctx.hpp"
-#include "gui/interact/interaction-director.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/ctrl/global-ctx.hpp"
+#include "gui/interact/interaction-director.hpp"
+#include "gui/interact/spot-locator.hpp"
+#include "gui/interact/navigator.hpp"
+#include "gui/interact/focus-tracker.hpp"
+#include "gui/ctrl/ui-state.hpp"
+#include "gui/setting/asset-controller.hpp"
+#include "gui/timeline/timeline-controller.hpp"
 #include "proc/mobject/session/root.hpp"
 #include "lib/diff/tree-mutator.hpp"
 //#include "gui/ui-bus.hpp"
@@ -48,18 +54,31 @@ using lib::diff::TreeMutator;
 namespace gui {
 namespace interact {
   
+  namespace session = proc::mobject::session;
+  
   using ctrl::GlobalCtx;
+  using ctrl::UiState;
+  using setting::AssetController;
+  using timeline::TimelineController;
   
   
-  // emit VTables here...
+  // emit dtors of children here...
   InteractionDirector::~InteractionDirector()
     { }
   
   
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
-    : model::Controller(proc::mobject::session::Root::getID(), globals.uiBus_.getAccessPoint())
+    : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
     , globalCtx_(globals)
-    { }
+    , spotLocator_{new SpotLocator}
+    , navigator_{new Navigator{*spotLocator_}}
+    , tracker_{new FocusTracker{*navigator_}}
+    , uiState_{new UiState{*tracker_}}
+    , assets_{new AssetController{session::Root::getAssetID(), this->uiBus_}}
+    , timelines_{}
+    {
+      
+    }
   
   
   void

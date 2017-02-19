@@ -62,6 +62,7 @@
 
 
 namespace gui {
+namespace interact { class FocusTracker; }
 namespace ctrl {
   
 //  using std::unique_ptr;
@@ -82,9 +83,10 @@ namespace ctrl {
   class UiState
     : boost::noncopyable
     {
+      interact::FocusTracker& tracker_;
       
     public:
-      UiState();
+      UiState (interact::FocusTracker&);
      ~UiState();
       
     private:

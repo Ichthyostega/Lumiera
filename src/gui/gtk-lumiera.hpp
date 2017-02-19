@@ -93,6 +93,9 @@ namespace gui {
    *         in the works, and it is clear by now that we won't use proxy objects,
    *         but rather a generic bus-like connection and symbolic IDs to designate
    *         the model elements
+   *  @todo: and as of 2/2017 the new structure is basically set, but we need actually
+   *         to implement a new timeline display in accordance to this reworked design.
+   *         After this is done, most of the model elements in this packare are obsolete.
    */
   namespace model {}
   
@@ -105,14 +108,17 @@ namespace gui {
   /** Docking panel classes. */
   namespace panel {}
   
-  /** Lumiera custom widgets. */
-  namespace widget {}
-  
-  /** The workspace window and it's helper classes. */
-  namespace workspace {}
+  /** The asset management, configuration and project settings. */
+  namespace setting {}
   
   /** The timeline display and editing operations. */
   namespace timeline {}
+  
+  /** The global workspace with top-level windows. */
+  namespace workspace {}
+  
+  /** Lumiera custom widgets. */
+  namespace widget {}
   
   /** GUI helpers, utility functions and classes. */
   namespace util {}

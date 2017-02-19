@@ -68,6 +68,7 @@ namespace interact {
 //  using std::string;
   
 //  class GlobalCtx;
+  class Navigator;
   
   
   
@@ -82,10 +83,11 @@ namespace interact {
   class FocusTracker
     : boost::noncopyable
     {
+      Navigator& navigator_;
       
     public:
-      FocusTracker();
-     ~FocusTracker();
+      FocusTracker (Navigator&);
+     ~FocusTracker ();
       
     private:
       

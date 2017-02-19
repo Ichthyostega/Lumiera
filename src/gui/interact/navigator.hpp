@@ -52,6 +52,7 @@ namespace interact {
 //  using std::string;
   
 //  class GlobalCtx;
+  class SpotLocator;
   
   
   
@@ -63,10 +64,11 @@ namespace interact {
   class Navigator
     : boost::noncopyable
     {
+      SpotLocator& spotLocator_;
       
     public:
-      Navigator();
-     ~Navigator();
+      Navigator (SpotLocator&);
+     ~Navigator ();
       
     private:
       

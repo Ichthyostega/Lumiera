@@ -74,7 +74,7 @@ namespace ctrl {
 namespace setting {
   class AssetController;
 }
-namespace timleine {
+namespace timeline {
   class TimelineController;
 }
 namespace interact {

@@ -31,6 +31,7 @@
 
 //#include "gui/gtk-lumiera.hpp"
 #include "gui/interact/focus-tracker.hpp"
+#include "gui/interact/navigator.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
 
@@ -48,7 +49,8 @@ namespace interact {
     { }
   
   
-  FocusTracker::FocusTracker()
+  FocusTracker::FocusTracker (Navigator& navigator)
+    : navigator_{navigator}
     { }
   
   

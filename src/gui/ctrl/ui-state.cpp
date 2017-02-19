@@ -29,6 +29,7 @@
 
 //#include "gui/gtk-lumiera.hpp"
 #include "gui/ctrl/ui-state.hpp"
+#include "gui/interact/focus-tracker.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
 
@@ -39,6 +40,7 @@
 namespace gui {
 namespace ctrl {
   
+  using interact::FocusTracker;
   
   
   // emit nested dtor code here...
@@ -47,10 +49,11 @@ namespace ctrl {
   
   
   /**
-   * Initialise the blah
+   * Initialise storage for global interface state
    * @see ctrl::CoreService
    */
-  UiState::UiState()
+  UiState::UiState (FocusTracker& focusTracker)
+    : tracker_{focusTracker}
     { }
   
   

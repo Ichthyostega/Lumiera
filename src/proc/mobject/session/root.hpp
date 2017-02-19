@@ -72,6 +72,8 @@ namespace session {
         Root (lumiera::query::DefsManager&);
         
         static lib::idi::EntryID<Root> getID();
+        static lib::idi::EntryID<Root> getAssetID();
+
         
         DEFINE_PROCESSABLE_BY (builder::BuilderTool);
         

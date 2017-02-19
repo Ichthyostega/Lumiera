@@ -54,6 +54,13 @@ namespace session {
   }
   
   
+  lib::idi::EntryID<Root>
+  Root::getAssetID()
+  {
+    return EntryID<Root>("assets");
+  }
+  
+  
   /** @todo validity self-check of the model root
    *        should do substantial checks; the idea is
    *        to perform a complete sanity check by delegating
