@@ -136,7 +136,9 @@ namespace gui {
   
 }// namespace gui::controller
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
+  
   namespace ctrl {
+    class StateManager;
     class CoreService;
     class BusTerm;
   }

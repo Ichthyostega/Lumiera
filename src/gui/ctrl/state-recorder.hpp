@@ -49,22 +49,22 @@
  */
 
 
-#ifndef GUI_INTERACT_STATE_RECORDER_H
-#define GUI_INTERACT_STATE_RECORDER_H
+#ifndef GUI_CTRL_STATE_RECORDER_H
+#define GUI_CTRL_STATE_RECORDER_H
 
 
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "gui/ctrl/bus-term.hpp"
-#include "gui/interact/presentation-state-manager.hpp"
-#include "gui/interact/state-map-grouping-storage.hpp"
+#include "gui/ctrl/state-manager.hpp"
+#include "gui/ctrl/state-map-grouping-storage.hpp"
 
 #include <string>
 
 
 namespace gui {
-namespace interact {
+namespace ctrl {
   
   using gui::ctrl::BusTerm;
   using lib::diff::GenNode;
@@ -89,7 +89,7 @@ namespace interact {
    * @see StateMapGroupingStorage storage implementation
    */
   class StateRecorder
-    : public PresentationStateManager
+    : public StateManager
     {
       using Storage = StateMapGroupingStorage;
       using Record  = Storage::Record const&;
@@ -198,5 +198,5 @@ namespace interact {
   
   
   
-}} // namespace gui::interact
-#endif /*GUI_INTERACT_STATE_RECORDER_H*/
+}} // namespace gui::ctrl
+#endif /*GUI_CTRL_STATE_RECORDER_H*/

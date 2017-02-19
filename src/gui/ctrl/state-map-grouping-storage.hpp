@@ -49,7 +49,7 @@
 
 
 namespace gui {
-namespace interact {
+namespace ctrl {
   
   using lib::idi::BareEntryID;
   using lib::diff::GenNode;
@@ -222,5 +222,5 @@ namespace interact {
   
   
   
-}} // namespace gui::interact
+}} // namespace gui::ctrl
 #endif /*GUI_INTERACT_STATE_MAP_GROUPING_STORAGE_H*/

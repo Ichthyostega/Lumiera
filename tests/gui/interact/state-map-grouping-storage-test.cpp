@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "gui/interact/state-map-grouping-storage.hpp"
+#include "gui/ctrl/state-map-grouping-storage.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
@@ -39,7 +39,7 @@ using util::isnil;
 
 
 namespace gui  {
-namespace interact{
+namespace ctrl {
 namespace test {
   
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;

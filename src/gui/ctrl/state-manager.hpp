@@ -1,5 +1,5 @@
 /*
-  PRESENTATION-STATE-MANAGER.hpp  -  maintaining persistent interface state
+  STATE-MANAGER.hpp  -  maintaining persistent interface state
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file presentation-state-manager.hpp
+/** @file state-manager.hpp
  ** Interface: a component to maintain persistent interface state.
  ** Here, "presentation state" is understood as state not rooted within the
  ** model and without effect on the final rendered result. Most of this state
@@ -49,8 +49,8 @@
  */
 
 
-#ifndef GUI_INTERACT_PRESENTATION_STATE_MANAGER_H
-#define GUI_INTERACT_PRESENTATION_STATE_MANAGER_H
+#ifndef GUI_CTRL_STATE_MANAGER_H
+#define GUI_CTRL_STATE_MANAGER_H
 
 
 #include "lib/idi/entry-id.hpp"
@@ -61,7 +61,7 @@
 
 
 namespace gui {
-namespace interact {
+namespace ctrl {
   
   using std::string;
   
@@ -76,11 +76,11 @@ namespace interact {
    * element, and recorded per distinct property within each
    * element.
    */
-  class PresentationStateManager
+  class StateManager
     : boost::noncopyable
     {
     protected:
-      virtual ~PresentationStateManager();    ///< this is an interface
+      virtual ~StateManager();    ///< this is an interface
       
       using ID = lib::idi::BareEntryID const&;
       using StateMark = lib::diff::GenNode const&;
@@ -109,5 +109,5 @@ namespace interact {
   
   
   
-}} // namespace gui::interact
-#endif /*GUI_INTERACT_PRESENTATION_STATE_MANAGER_H*/
+}} // namespace gui::ctrl
+#endif /*GUI_CTRL_STATE_MANAGER_H*/

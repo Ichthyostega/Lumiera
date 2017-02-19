@@ -24,7 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "gui/ctrl/bus-term.hpp"
-#include "gui/interact/presentation-state-manager.hpp"
+#include "gui/ctrl/state-manager.hpp"
 #include "test/test-nexus.hpp"
 #include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -38,7 +38,7 @@
 
 using lib::idi::EntryID;
 using lib::idi::BareEntryID;
-using gui::interact::PresentationStateManager;
+using gui::ctrl::StateManager;
 using gui::ctrl::BusTerm;
 using gui::test::MockElm;
 using lib::diff::GenNode;
@@ -244,7 +244,7 @@ namespace test {
         {
           MARK_TEST_FUN
           gui::test::Nexus::startNewLog();
-          PresentationStateManager& stateManager = gui::test::Nexus::useMockStateManager();
+          StateManager& stateManager = gui::test::Nexus::useMockStateManager();
           
           MockElm mockA("alpha");   BareEntryID alpha = mockA.getID();
           MockElm mockB("bravo");   BareEntryID bravo = mockB.getID();
@@ -287,7 +287,7 @@ namespace test {
       replayStateMark()
         {
           MARK_TEST_FUN
-          PresentationStateManager& stateManager = gui::test::Nexus::getMockStateManager();
+          StateManager& stateManager = gui::test::Nexus::getMockStateManager();
           
           MockElm mockA("alpha");
           // no "bravo" this time

@@ -50,7 +50,7 @@
 #include "lib/test/event-log.hpp"
 #include "gui/ctrl/nexus.hpp"
 #include "gui/ctrl/mutation-message.hpp"
-#include "gui/interact/state-recorder.hpp"
+#include "gui/ctrl/state-recorder.hpp"
 #include "proc/control/command.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -77,8 +77,8 @@ using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
 using gui::ctrl::MutationMessage;
-using gui::interact::PresentationStateManager;
-using gui::interact::StateRecorder;
+using gui::ctrl::StateManager;
+using gui::ctrl::StateRecorder;
 using proc::control::Command;
 using proc::control::CommandImpl;
 using proc::control::HandlingPattern;
@@ -609,7 +609,7 @@ namespace test{
           : StateRecorder{testNexus()}
           { }
         
-        using PresentationStateManager::clearState;
+        using StateManager::clearState;
       };
     
     lib::Depend<SimulatedStateManager> stateManager;
@@ -626,7 +626,7 @@ namespace test{
    * notification messages appearing after that point
    * at the test-UI-Bus will be accounted for.
    */
-  interact::PresentationStateManager&
+  ctrl::StateManager&
   Nexus::useMockStateManager()
   {
     // discard possible leftover
@@ -642,7 +642,7 @@ namespace test{
     return getMockStateManager();
   }
   
-  interact::PresentationStateManager&
+  ctrl::StateManager&
   Nexus::getMockStateManager()
   {
     return stateManager();

@@ -29,6 +29,7 @@
 
 //#include "gui/gtk-lumiera.hpp"
 #include "gui/ctrl/ui-state.hpp"
+#include "gui/ctrl/state-manager.hpp"
 #include "gui/interact/focus-tracker.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
@@ -42,6 +43,10 @@ namespace ctrl {
   
   using interact::FocusTracker;
   
+  
+  // emit VTable here...
+  StateManager::~StateManager()
+    { }
   
   // emit nested dtor code here...
   UiState::~UiState()
