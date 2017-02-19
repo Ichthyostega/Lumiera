@@ -53,7 +53,7 @@ public:
   /**
    * Gets a read-only reference to the the list of child tracks.
    */
-  const std::list<shared_ptr<Track>>&
+  const list<shared_ptr<Track>>&
     get_child_tracks() const;
 
   /**

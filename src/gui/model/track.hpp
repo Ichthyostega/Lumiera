@@ -27,11 +27,17 @@
 
 #include "gui/gtk-lumiera.hpp"
 
+#include <memory>
+#include <list>
+
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
 namespace gui {
 namespace model {
+  
+using std::shared_ptr;
+using std::list;
   
 class ParentTrack;
 
@@ -59,7 +65,7 @@ public:
   /**
    * Gets the list of child tracks.
    */
-  virtual const std::list<shared_ptr<Track> >&
+  virtual const list<shared_ptr<Track>>&
   get_child_tracks () const;
   
   /**

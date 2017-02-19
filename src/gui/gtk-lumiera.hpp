@@ -119,7 +119,6 @@ namespace gui {
   
   
   
-  using std::shared_ptr;
   
   
   

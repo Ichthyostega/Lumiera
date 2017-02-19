@@ -27,12 +27,15 @@
 
 #include "gui/gtk-lumiera.hpp"
 
+#include <memory>
+
 namespace gui {
 namespace widget {
   class TimelineWidget;
   
 namespace timeline {
   
+  using std::shared_ptr;
   
   class TimelineBody;
   class TimelineState;

@@ -30,6 +30,8 @@
 #include "lib/time/mutation.hpp"
 #include "lib/time/control.hpp"
 
+#include <memory>
+
 
 namespace gui {
   namespace model {
@@ -40,6 +42,8 @@ namespace gui {
   
   using lib::time::Control;
   using lib::time::Mutation;
+  
+  using std::shared_ptr;
   
   typedef Control<TimeSpan> SelectionControl;
   
