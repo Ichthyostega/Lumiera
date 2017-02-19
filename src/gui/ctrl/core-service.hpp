@@ -85,6 +85,7 @@
 #include "lib/idi/entry-id.hpp"
 #include "include/session-command-facade.h"
 #include "gui/notification-service.hpp"
+#include "gui/ctrl/state-recorder.hpp"
 #include "gui/ctrl/command-handler.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
@@ -109,6 +110,7 @@ namespace ctrl{
     {
       
       Nexus uiBusBackbone_;
+      StateRecorder stateRecorder_;
       NotificationService activateNotificationService_;
       
       
@@ -121,9 +123,9 @@ namespace ctrl{
       
       
       virtual void
-      note (ID subject, GenNode const& mark)  override
+      note (ID subject, GenNode const& stateMark)  override
         {
-          UNIMPLEMENTED ("receive and handle presentation state note messages.");
+          stateRecorder_.recordState (subject, stateMark);
         }
       
       
@@ -132,12 +134,20 @@ namespace ctrl{
       CoreService (ID identity =lib::idi::EntryID<CoreService>())
         : BusTerm(identity, uiBusBackbone_)
         , uiBusBackbone_{*this}
+        , stateRecorder_{*this}
         , activateNotificationService_(uiBusBackbone_)       // opens the GuiNotificationService instance
         {
           INFO (gui, "UI-Backbone operative.");
         }
       
      ~CoreService();
+      
+      
+      StateManager&
+      getStateManager()
+        {
+          return stateRecorder_;
+        }
     };
   
   

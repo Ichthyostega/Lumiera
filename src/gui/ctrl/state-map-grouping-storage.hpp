@@ -33,8 +33,8 @@
  */
 
 
-#ifndef GUI_INTERACT_STATE_MAP_GROUPING_STORAGE_H
-#define GUI_INTERACT_STATE_MAP_GROUPING_STORAGE_H
+#ifndef GUI_CTRL_STATE_MAP_GROUPING_STORAGE_H
+#define GUI_CTRL_STATE_MAP_GROUPING_STORAGE_H
 
 
 #include "lib/error.hpp"
@@ -54,7 +54,7 @@ namespace ctrl {
   using lib::idi::BareEntryID;
   using lib::diff::GenNode;
   using lib::diff::Ref;
-  using util::unConst;
+  using ::util::unConst;
   using std::string;
   
   
@@ -223,4 +223,4 @@ namespace ctrl {
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_INTERACT_STATE_MAP_GROUPING_STORAGE_H*/
+#endif /*GUI_CTRL_STATE_MAP_GROUPING_STORAGE_H*/

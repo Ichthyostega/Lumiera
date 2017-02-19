@@ -73,7 +73,7 @@ namespace interact {
     , spotLocator_{new SpotLocator}
     , navigator_{new Navigator{*spotLocator_}}
     , tracker_{new FocusTracker{*navigator_}}
-    , uiState_{new UiState{*tracker_}}
+    , uiState_{new UiState{globals.uiBus_.getStateManager(), *tracker_}}
     , assets_{new AssetController{session::Root::getAssetID(), this->uiBus_}}
     , timelines_{}
     {

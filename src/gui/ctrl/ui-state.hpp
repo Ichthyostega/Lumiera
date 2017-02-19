@@ -69,6 +69,7 @@ namespace ctrl {
 //  using std::string;
   
 //  class GlobalCtx;
+  class StateManager;
   
   
   
@@ -83,10 +84,11 @@ namespace ctrl {
   class UiState
     : boost::noncopyable
     {
+      StateManager& stateManager_;
       interact::FocusTracker& tracker_;
       
     public:
-      UiState (interact::FocusTracker&);
+      UiState (StateManager&, interact::FocusTracker&);
      ~UiState();
       
     private:

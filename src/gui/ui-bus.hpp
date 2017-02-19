@@ -163,7 +163,8 @@ namespace gui {
       UiBus();
      ~UiBus();
       
-      ctrl::BusTerm& getAccessPoint();
+      ctrl::BusTerm&      getAccessPoint();
+      ctrl::StateManager& getStateManager();
     };
   
   

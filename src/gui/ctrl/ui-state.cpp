@@ -57,8 +57,9 @@ namespace ctrl {
    * Initialise storage for global interface state
    * @see ctrl::CoreService
    */
-  UiState::UiState (FocusTracker& focusTracker)
-    : tracker_{focusTracker}
+  UiState::UiState (StateManager& stateManager, FocusTracker& focusTracker)
+    : stateManager_{stateManager}
+    , tracker_{focusTracker}
     { }
   
   

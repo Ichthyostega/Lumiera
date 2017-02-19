@@ -2178,9 +2178,75 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1487313454220" ID="ID_640048374" MODIFIED="1487313460055" TEXT="Abgriff in CoreServices">
-<node CREATED="1487313462963" ID="ID_342355040" MODIFIED="1487313471974" TEXT="injizieren"/>
-<node CREATED="1487313475593" ID="ID_951423078" MODIFIED="1487313479932" TEXT="&#xfc;ber Lifecycle nachdenken"/>
+<node CREATED="1487313454220" ID="ID_640048374" MODIFIED="1487475809793" TEXT="Abgriff in CoreServices">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1487313462963" ID="ID_342355040" MODIFIED="1487475672626" TEXT="injizieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1487313475593" ID="ID_951423078" MODIFIED="1487475676372" TEXT="&#xfc;ber Lifecycle nachdenken">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1487472682881" ID="ID_1575753680" MODIFIED="1487472687124" TEXT="UI-Bus zuerst"/>
+<node CREATED="1487472687641" ID="ID_731426548" MODIFIED="1487472699179" TEXT="dann Ui-Manager -&gt; InteractionDirector -&gt; Ui-State"/>
+<node CREATED="1487472711453" ID="ID_759583421" MODIFIED="1487472719128" TEXT="beim Zerst&#xf6;ren von GtkLumiera">
+<node CREATED="1487472720476" ID="ID_1676214656" MODIFIED="1487472730102" TEXT="sollte die Event-Loop bereits beendet sein"/>
+<node CREATED="1487472730667" ID="ID_1826692985" MODIFIED="1487472740645" TEXT="k&#xf6;nnen aber noch Fenster existieren"/>
+<node CREATED="1487472757439" ID="ID_977443666" MODIFIED="1487475766036">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wird der Link zwischen CoreService und UI-State <i>dangling</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#659ba4" DESTINATION="ID_977443666" ENDARROW="None" ENDINCLINATION="552;26;" ID="Arrow_ID_1335141107" SOURCE="ID_1261936534" STARTARROW="Default" STARTINCLINATION="462;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1487472781532" ID="ID_957134114" MODIFIED="1487472800205" TEXT="kurz darauf wird auch CoreService + Nexus zerst&#xf6;rt"/>
+</node>
+<node CREATED="1487472971330" ID="ID_81364279" MODIFIED="1487472986931" TEXT="grunds&#xe4;tzliches Shutdown-Problem">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1487472987984" ID="ID_1443542622" MODIFIED="1487473080769" TEXT="aber harmlos">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1487472993439" ID="ID_310404379" MODIFIED="1487473004097" TEXT="unter der Annahme, da&#xdf; das UI wirklich single-threaded l&#xe4;uft"/>
+<node CREATED="1487473004949" ID="ID_1092623141" MODIFIED="1487473018151" TEXT="wenn wir die Garantie haben, da&#xdf; die Event-Loop nichts mehr macht"/>
+<node CREATED="1487473038377" ID="ID_393673106" MODIFIED="1487473076368" TEXT="Policy: kein Tangible darf im dtor mit dem UI-Bus reden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...mit der Ausnahme des Automatismus,
+    </p>
+    <p>
+      der es selbst vom Bus abkoppelt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1487475679257" ID="ID_1700311138" MODIFIED="1487475708423" TEXT="wir injizieren anders herum">
+<icon BUILTIN="forward"/>
+<node CREATED="1487475695910" ID="ID_1341876014" MODIFIED="1487475704865" TEXT="StateManager als sub-Service"/>
+<node CREATED="1487475711092" ID="ID_838045301" MODIFIED="1487475719743" TEXT="geh&#xf6;rt CoreService"/>
+<node CREATED="1487475720363" ID="ID_693101732" MODIFIED="1487475723182" TEXT="l&#xe4;uft immer"/>
+<node CREATED="1487475723771" ID="ID_959927308" MODIFIED="1487475737732" TEXT="wird in UiState injiziert"/>
+<node CREATED="1487475738369" ID="ID_1261936534" MODIFIED="1487475782408" TEXT="harmloses Problem beseitigt">
+<arrowlink COLOR="#659ba4" DESTINATION="ID_977443666" ENDARROW="None" ENDINCLINATION="552;26;" ID="Arrow_ID_1335141107" STARTARROW="Default" STARTINCLINATION="462;0;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1487475796409" ID="ID_49608905" MODIFIED="1487475804801" TEXT="StateRecorder nun angeschlossen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1487313659680" ID="ID_1420397002" MODIFIED="1487313667475" TEXT="FocusTap">
 <node CREATED="1487313668423" ID="ID_1248049801" MODIFIED="1487313679321" TEXT="Signal in model::Tangible"/>

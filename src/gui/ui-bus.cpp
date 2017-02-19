@@ -74,7 +74,14 @@ namespace controller {
   {
     return *coreService_;
   }
-
+  
+  ctrl::StateManager&
+  UiBus::getStateManager()
+  {
+    return coreService_->getStateManager();
+  }
+  
+  
   
 namespace ctrl {
     
