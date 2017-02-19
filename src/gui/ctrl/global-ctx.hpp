@@ -87,8 +87,8 @@ namespace ctrl {
       UiBus&     uiBus_;
       UiManager& uiManager_;
       
-      InteractionDirector director_;
       WindowList          windowList_;
+      InteractionDirector director_;
       
       
     public:
@@ -98,8 +98,8 @@ namespace ctrl {
       GlobalCtx (UiBus& bus, UiManager& manager)
         : uiBus_{bus}
         , uiManager_{manager}
-        , director_{*this}
         , windowList_{*this}
+        , director_{*this}
         { }
       
     private:

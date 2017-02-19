@@ -2717,7 +2717,7 @@ More specifically, the integration is based on ''messaging''. To start with, the
 ----
 In a preliminary attempt to establish an integration between the GUI and the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget. This highlighted the problems we're about to encounter and made us think about the more radically decoupled approach we followed thereafter...</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201511202206" tags="GuiIntegration design draft" changecount="11">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201702190021" tags="GuiIntegration design draft" changecount="13">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
@@ -2726,6 +2726,9 @@ Within the Lumiera GTK UI, we use a proxying model as a mediating entity. It is 
 The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Proc-Layer is pushed upwards as a new structure and translated into a ''diff'' against the previous structure -- ready to be consumed by the GUI widgets; this diff can be broken down into parts and consumed recursively -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.
 &amp;rarr; [[Building blocks of the GUI model|GuiModelElements]]
 &amp;rarr; [[GUI update mechanics|GuiModelUpdate]]
+
+!{{red{WARNING 2/2017}}} more questionable than ever
+The whole Idea to have a &quot;UI model&quot; appears more questionable than ever. It leads to tight coupling with the session and a lot of thread synchronisation headaches, without any clear benefit -- beyond just being the obvious no-brainer solution. During the last months, step by step, several presentation related structures emerged, which //indeed are structured to parallel the outline of the session.// But those structures are widgets and controllers, and it might well be that we do not need a model, beyond the data already present within the widget implementation. Rather it seems we'll get a nested structure of //presenters,// which are linked to the session with the help of the UI-Bus and the [[diff framework|TreeDiffModel]].
 
 !synchronisation guarantees
 We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the responsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Proc-Layer, with the help of the ProcDispatcher.
@@ -9191,7 +9194,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :direct a MutationMessage towards the designated UI-Element, causing the latter to build a TreeMutator to receive the embedded [[diff-sequence|TreeDiffModel]]
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201610011935" tags="GuiPattern design draft decision" changecount="50">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201702190012" tags="GuiPattern design draft decision" changecount="51">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -9262,7 +9265,7 @@ A command's {{{InvocationTrail}}} is in fact just some tag object, wrapping the 
 It is clear by now (9/2016) how shape and content changes are to be represented as diff message. Moreover, we have an implementation framework to build the concrete TreeMutator, which allows to target diff messages towards a (otherwise undisclosed) opaque implementation data structure.
 !!!questions
 * how to integrate &quot;diff calls&quot; into UI-Bus and {{{Tangible}}}
-* how to ensure, diff processing happens within the event thread
+* how to ensure that diff processing happens within the event thread
 * what is the exact relation to the GuiModel -- this remained nebulous up to now
 
 !!!Diff messages

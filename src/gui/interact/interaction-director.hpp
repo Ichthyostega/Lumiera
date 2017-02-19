@@ -59,6 +59,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <cairomm/cairomm.h>
 //#include <string>
+#include <vector>
 #include <memory>
 
 
@@ -68,13 +69,23 @@ namespace gui {
 
 namespace ctrl {
   class GlobalCtx;
+  class UiState;
+}
+namespace setting {
+  class AssetController;
+}
+namespace timleine {
+  class TimelineController;
 }
 namespace interact {
   
 //using std::string;
+  using std::unique_ptr;
   
 //class Actions;
-//class WindowList;
+  class SpotLocator;
+  class Navigator;
+  class FocusTracker;
   
   
   
@@ -85,10 +96,21 @@ namespace interact {
   class InteractionDirector
     : public model::Controller
     {
-      
       ctrl::GlobalCtx& globalCtx_;
       
-      ////TODO: what is the model equivalent represented here???
+      // == global Services ==
+      unique_ptr<SpotLocator> spotLocator_;
+      unique_ptr<Navigator>    navigator_;
+      unique_ptr<FocusTracker>  tracker_;
+      
+      // == Model globals ==
+      using Timelines = std::vector<unique_ptr<timeline::TimelineController>>;
+      using Assets = unique_ptr<setting::AssetController>;
+      using State = unique_ptr<ctrl::UiState>;
+      
+      State     uiState_;
+      Assets    assets_;
+      Timelines timelines_;
       
       /** set up a binding to allow some top-level UI state
        *  to be treated as part of the session model
