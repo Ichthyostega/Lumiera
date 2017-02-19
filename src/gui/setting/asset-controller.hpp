@@ -51,9 +51,10 @@
 #ifndef GUI_SETTING_ASSET_CONTROLLER_H
 #define GUI_SETTING_ASSET_CONTROLLER_H
 
-#include "gui/gtk-base.hpp"
+//#include "gui/gtk-base.hpp"
+#include "gui/model/controller.hpp"
 
-#include <boost/noncopyable.hpp>
+//#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -74,11 +75,15 @@ namespace setting {
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
   class AssetController
-    : boost::noncopyable
+    : public model::Controller
     {
+      ///////TODO create UI representation for the asset subsections
       
+      /** content population and manipulation via UI-Bus */
+      void buildMutator (lib::diff::TreeMutator::Handle)  override;
+    
     public:
-      AssetController();
+      AssetController (ID identity, ctrl::BusTerm& nexus);
      ~AssetController();
       
     private:

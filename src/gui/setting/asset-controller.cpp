@@ -32,9 +32,11 @@
 //#include "gui/gtk-lumiera.hpp"
 #include "gui/setting/asset-controller.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
+#include "lib/diff/tree-mutator.hpp"
 //#include "lib/util.hpp"
 
 //using util::cStr;
+using lib::diff::TreeMutator;
 //using util::isnil;
 
 
@@ -49,10 +51,27 @@ namespace setting {
   
   
   /**
-   * Define a new coherent location within _"interface space"_ for future interaction.
+   * Establish the UI section to deal with _asset management_.
+   * AssetController is connected to the UI-Bus and will be populated
+   * with content from the session via _diff messages._
+   * @see tree-mutator.hpp
    */
-  AssetController::AssetController()
+  AssetController::AssetController (ID identity, ctrl::BusTerm& nexus)
+    : model::Controller{identity, nexus}
     { }
+  
+  
+  void
+  AssetController::buildMutator (TreeMutator::Handle buffer)
+  {
+//  using Attrib = std::pair<const string,string>;
+//  using lib::diff::collection;
+    
+    buffer.create (
+      TreeMutator::build()
+    );
+    UNIMPLEMENTED ("create a sensible binding between AssetManager in the section and AssetController in the UI");
+  }
   
   
   /** */
