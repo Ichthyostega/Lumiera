@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file generator-combinations-test.cpp
+ ** unit test §§TODO§§
  */
 
 

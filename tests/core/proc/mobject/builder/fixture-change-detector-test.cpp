@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file fixture-change-detector-test.cpp
+ ** unit test §§TODO§§
  */
 
 

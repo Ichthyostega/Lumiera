@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file node-source-test.cpp
+ ** unit test §§TODO§§
  */
 
 

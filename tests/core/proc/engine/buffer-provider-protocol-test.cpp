@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file buffer-provider-protocol-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file visitingtool-extended-test.cpp
+ ** unit test §§TODO§§
  */
 
 

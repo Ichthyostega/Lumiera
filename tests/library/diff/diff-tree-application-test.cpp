@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file diff-tree-application-test.cpp
+ ** unit test §§TODO§§
  */
 
 

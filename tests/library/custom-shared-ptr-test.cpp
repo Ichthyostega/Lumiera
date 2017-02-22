@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file custom-shared-ptr-test.cpp
+ ** unit test §§TODO§§
  */
 
 

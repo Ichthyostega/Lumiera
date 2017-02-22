@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file meta-utils-test.cpp
+ ** unit test §§TODO§§
  */
 
 

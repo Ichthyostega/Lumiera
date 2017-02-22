@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file iterable-classification-test.cpp
+ ** unit test §§TODO§§
  */
 
 

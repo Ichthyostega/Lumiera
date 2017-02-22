@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file verb-function-dispatch-test.cpp
+ ** unit test §§TODO§§
  */
 
 

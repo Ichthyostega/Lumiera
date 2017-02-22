@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file command-binding-test.cpp
+ ** unit test §§TODO§§
  */
 
 

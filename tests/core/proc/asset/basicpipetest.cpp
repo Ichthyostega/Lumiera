@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file basicpipetest.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file time-grid-basics-test.cpp
+ ** unit test §§TODO§§
  */
 
 

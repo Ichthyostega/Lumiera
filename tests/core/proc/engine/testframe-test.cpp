@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testframe-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file symbol-test.cpp
+ ** unit test §§TODO§§
  */
 
 

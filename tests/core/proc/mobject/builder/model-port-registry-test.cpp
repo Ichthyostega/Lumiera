@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file model-port-registry-test.cpp
+ ** unit test §§TODO§§
  */
 
 

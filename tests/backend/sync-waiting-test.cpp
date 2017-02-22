@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file sync-waiting-test.cpp
+ ** unit test §§TODO§§
  */
 
 

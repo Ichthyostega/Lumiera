@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file hash-indexed-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file dispatcher-interface-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file format-cout-test.cpp
+ ** unit test §§TODO§§
  */
 
 

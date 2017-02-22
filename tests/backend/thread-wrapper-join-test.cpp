@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file thread-wrapper-join-test.cpp
+ ** unit test §§TODO§§
  */
 
 

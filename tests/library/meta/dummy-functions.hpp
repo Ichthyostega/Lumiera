@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file dummy-functions.hpp
+ ** unit test §§TODO§§
  */
 
 

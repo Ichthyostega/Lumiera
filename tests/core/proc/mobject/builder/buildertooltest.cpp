@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file buildertooltest.cpp
+ ** unit test §§TODO§§
  */
 
 

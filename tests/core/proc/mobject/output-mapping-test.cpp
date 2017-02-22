@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file output-mapping-test.cpp
+ ** unit test §§TODO§§
  */
 
 

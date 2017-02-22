@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file placement-index-test.cpp
+ ** unit test §§TODO§§
  */
 
 

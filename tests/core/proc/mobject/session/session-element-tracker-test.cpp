@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file session-element-tracker-test.cpp
+ ** unit test §§TODO§§
  */
 
 

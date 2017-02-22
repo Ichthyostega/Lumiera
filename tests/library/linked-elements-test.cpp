@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file linked-elements-test.cpp
+ ** unit test §§TODO§§
  */
 
 

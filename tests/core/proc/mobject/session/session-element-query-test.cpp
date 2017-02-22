@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file session-element-query-test.cpp
+ ** unit test §§TODO§§
  */
 
 

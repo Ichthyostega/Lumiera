@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file hierarchy-orientation-indicator-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file function-erasure-test.cpp
+ ** unit test §§TODO§§
  */
 
 

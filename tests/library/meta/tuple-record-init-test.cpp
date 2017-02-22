@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file tuple-record-init-test.cpp
+ ** unit test §§TODO§§
  */
 ///@file
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file dependency-factory-test.cpp
+ ** unit test §§TODO§§
  */
 
 

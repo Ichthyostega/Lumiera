@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file typed-id-test.cpp
+ ** unit test §§TODO§§
  */
 
 

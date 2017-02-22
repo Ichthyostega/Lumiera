@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file util-foreach-test.cpp
+ ** unit test §§TODO§§
  */
 
 

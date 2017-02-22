@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file generic-id-function-test.cpp
+ ** unit test §§TODO§§
  */
 
 

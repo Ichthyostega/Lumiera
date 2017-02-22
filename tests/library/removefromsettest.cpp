@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file removefromsettest.cpp
+ ** unit test §§TODO§§
  */
 
 

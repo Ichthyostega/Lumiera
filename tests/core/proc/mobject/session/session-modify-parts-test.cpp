@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file session-modify-parts-test.cpp
+ ** unit test §§TODO§§
  */
 
 

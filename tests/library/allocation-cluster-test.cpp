@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file allocation-cluster-test.cpp
+ ** unit test §§TODO§§
  */
 
 

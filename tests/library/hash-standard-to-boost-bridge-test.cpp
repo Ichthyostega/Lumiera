@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file hash-standard-to-boost-bridge-test.cpp
+ ** unit test §§TODO§§
  */
 
 

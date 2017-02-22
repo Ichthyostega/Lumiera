@@ -20,8 +20,8 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file teststreamtypes.hpp
+ ** Unit test helper to create fake streamtype information
  */
 
 

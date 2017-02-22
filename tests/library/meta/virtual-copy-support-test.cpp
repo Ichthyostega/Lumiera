@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file virtual-copy-support-test.cpp
+ ** unit test §§TODO§§
  */
 
 

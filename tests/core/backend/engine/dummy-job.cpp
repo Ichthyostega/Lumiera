@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file dummy-job.cpp
+ ** unit test §§TODO§§
  */
 
 

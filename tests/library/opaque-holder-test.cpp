@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file opaque-holder-test.cpp
+ ** unit test §§TODO§§
  */
 
 

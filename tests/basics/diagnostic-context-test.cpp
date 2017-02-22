@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file diagnostic-context-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file placement-ref-test.cpp
+ ** unit test §§TODO§§
  */
 
 

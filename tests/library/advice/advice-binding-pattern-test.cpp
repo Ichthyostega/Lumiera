@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file advice-binding-pattern-test.cpp
+ ** unit test §§TODO§§
  */
 
 

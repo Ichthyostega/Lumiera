@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file time-quantisation-test.cpp
+ ** unit test §§TODO§§
  */
 
 

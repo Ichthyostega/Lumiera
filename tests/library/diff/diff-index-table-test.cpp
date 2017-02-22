@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file diff-index-table-test.cpp
+ ** unit test §§TODO§§
  */
 
 

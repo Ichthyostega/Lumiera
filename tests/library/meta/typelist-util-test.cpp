@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file typelist-util-test.cpp
+ ** unit test §§TODO§§
  */
 
 

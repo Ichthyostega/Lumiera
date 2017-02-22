@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file digxel-configurations-test.cpp
+ ** unit test §§TODO§§
  */
 
 

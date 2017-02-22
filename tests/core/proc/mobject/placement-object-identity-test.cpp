@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file placement-object-identity-test.cpp
+ ** unit test §§TODO§§
  */
 
 

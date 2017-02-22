@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file helloworldtest.cpp
+ ** unit test §§TODO§§
  */
 
 

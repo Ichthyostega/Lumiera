@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file optional-ref-test.cpp
+ ** unit test §§TODO§§
  */
 
 

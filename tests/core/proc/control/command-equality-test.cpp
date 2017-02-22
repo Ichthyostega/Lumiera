@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file command-equality-test.cpp
+ ** unit test §§TODO§§
  */
 
 

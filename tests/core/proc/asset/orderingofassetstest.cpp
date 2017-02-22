@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file orderingofassetstest.cpp
+ ** unit test §§TODO§§
  */
 
 

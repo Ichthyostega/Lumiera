@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file asset-category-test.cpp
+ ** unit test §§TODO§§
  */
 
 

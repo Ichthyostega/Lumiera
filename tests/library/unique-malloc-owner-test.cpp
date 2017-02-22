@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file unique-malloc-owner-test.cpp
+ ** unit test §§TODO§§
  */
 
 

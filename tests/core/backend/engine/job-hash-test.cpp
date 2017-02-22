@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file job-hash-test.cpp
+ ** unit test §§TODO§§
  */
 
 

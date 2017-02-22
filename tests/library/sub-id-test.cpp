@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file sub-id-test.cpp
+ ** unit test §§TODO§§
  */
 
 

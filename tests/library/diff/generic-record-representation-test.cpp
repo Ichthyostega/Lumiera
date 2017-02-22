@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file generic-record-representation-test.cpp
+ ** unit test §§TODO§§
  */
 
 

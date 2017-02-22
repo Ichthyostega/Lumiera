@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file buffer-metadata-key-test.cpp
+ ** unit test §§TODO§§
  */
 
 

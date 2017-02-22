@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file §§§
- ** unit test TODO §§§
+ ** unit test §§TODO§§
  */
 
 
@@ -32,7 +32,7 @@
 #include "common/config-interface.h"
 
 #include "lib/test/test.h"
-#include "interface/say_hello.h"
+#include "interface/say-hello.h"
 
 /*
   define 2 example interfaces

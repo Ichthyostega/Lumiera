@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file compoundmediatest.cpp
+ ** unit test §§TODO§§
  */
 
 

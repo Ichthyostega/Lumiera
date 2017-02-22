@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file bus-term-test.cpp
+ ** unit test §§TODO§§
  */
 
 

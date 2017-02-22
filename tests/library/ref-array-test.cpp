@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file ref-array-test.cpp
+ ** unit test §§TODO§§
  */
 
 

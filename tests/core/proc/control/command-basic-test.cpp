@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file command-basic-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file test-gui-test.cpp
+ ** unit test §§TODO§§
  */
 
 

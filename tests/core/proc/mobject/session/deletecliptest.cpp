@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file deletecliptest.cpp
+ ** unit test §§TODO§§
  */
 
 

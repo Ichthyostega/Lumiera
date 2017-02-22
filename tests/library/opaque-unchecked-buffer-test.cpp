@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file opaque-unchecked-buffer-test.cpp
+ ** unit test §§TODO§§
  */
 
 

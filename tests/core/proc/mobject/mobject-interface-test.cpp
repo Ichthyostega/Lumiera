@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file mobject-interface-test.cpp
+ ** unit test §§TODO§§
  */
 
 

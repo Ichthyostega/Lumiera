@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file iter-adapter-test.cpp
+ ** unit test §§TODO§§
  */
 
 

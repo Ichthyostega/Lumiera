@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file dependent-assets-test.cpp
+ ** unit test §§TODO§§
  */
 
 

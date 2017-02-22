@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file sessionmanagertest.cpp
+ ** unit test §§TODO§§
  */
 
 

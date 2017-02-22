@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file mobject-ref-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file quantiser-basics-test.cpp
+ ** unit test §§TODO§§
  */
 
 

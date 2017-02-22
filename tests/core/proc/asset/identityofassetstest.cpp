@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file identityofassetstest.cpp
+ ** unit test §§TODO§§
  */
 
 

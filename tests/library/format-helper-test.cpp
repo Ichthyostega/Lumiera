@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file format-helper-test.cpp
+ ** unit test §§TODO§§
  */
 
 

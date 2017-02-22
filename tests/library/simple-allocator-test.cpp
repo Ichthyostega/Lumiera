@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file simple-allocator-test.cpp
+ ** unit test §§TODO§§
  */
 
 

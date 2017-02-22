@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file defs-registry-impl-test.cpp
+ ** unit test §§TODO§§
  */
 
 

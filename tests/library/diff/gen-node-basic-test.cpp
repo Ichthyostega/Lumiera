@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file gen-node-basic-test.cpp
+ ** unit test §§TODO§§
  */
 
 

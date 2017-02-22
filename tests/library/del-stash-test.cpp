@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file del-stash-test.cpp
+ ** unit test §§TODO§§
  */
 
 

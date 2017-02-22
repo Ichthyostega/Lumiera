@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file makecliptest.cpp
+ ** unit test §§TODO§§
  */
 
 

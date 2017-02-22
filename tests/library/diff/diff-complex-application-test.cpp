@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file diff-complex-application-test.cpp
+ ** unit test §§TODO§§
  */
 
 

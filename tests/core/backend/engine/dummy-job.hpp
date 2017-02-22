@@ -20,8 +20,8 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file dummy-job.hpp
+ ** Unit test helper to generate dummy render jobs
  */
 
 

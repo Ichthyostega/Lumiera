@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file iter-queue-test.cpp
+ ** unit test §§TODO§§
  */
 
 

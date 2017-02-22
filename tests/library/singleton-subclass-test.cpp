@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file singleton-subclass-test.cpp
+ ** unit test §§TODO§§
  */
 
 

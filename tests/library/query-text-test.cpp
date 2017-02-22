@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file query-text-test.cpp
+ ** unit test §§TODO§§
  */
 
 

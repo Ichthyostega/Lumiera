@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file dummy-play-connection-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file buildsegmenttest.cpp
+ ** unit test §§TODO§§
  */
 
 

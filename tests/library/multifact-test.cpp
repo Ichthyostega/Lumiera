@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file multifact-test.cpp
+ ** unit test §§TODO§§
  */
 
 

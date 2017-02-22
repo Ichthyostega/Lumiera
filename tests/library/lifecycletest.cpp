@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file lifecycletest.cpp
+ ** unit test §§TODO§§
  */
 
 

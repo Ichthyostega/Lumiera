@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file handling-pattern-basics-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file vector-transfer-test.cpp
+ ** unit test §§TODO§§
  */
 
 

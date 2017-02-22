@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file cmdline-wrapper-test.cpp
+ ** unit test §§TODO§§
  */
 
 

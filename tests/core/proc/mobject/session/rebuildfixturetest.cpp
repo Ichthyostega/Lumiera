@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file rebuildfixturetest.cpp
+ ** unit test §§TODO§§
  */
 
 

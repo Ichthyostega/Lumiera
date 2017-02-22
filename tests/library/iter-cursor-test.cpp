@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file iter-cursor-test.cpp
+ ** unit test §§TODO§§
  */
 
 

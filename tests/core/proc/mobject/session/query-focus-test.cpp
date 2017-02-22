@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file query-focus-test.cpp
+ ** unit test §§TODO§§
  */
 
 

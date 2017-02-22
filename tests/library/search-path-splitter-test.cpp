@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file search-path-splitter-test.cpp
+ ** unit test §§TODO§§
  */
 
 

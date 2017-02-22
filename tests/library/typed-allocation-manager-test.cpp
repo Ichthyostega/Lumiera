@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file typed-allocation-manager-test.cpp
+ ** unit test §§TODO§§
  */
 
 

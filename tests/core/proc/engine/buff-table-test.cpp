@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file buff-table-test.cpp
+ ** unit test §§TODO§§
  */
 
 

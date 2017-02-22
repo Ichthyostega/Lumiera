@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file hash-generator-test.cpp
+ ** unit test §§TODO§§
  */
 
 

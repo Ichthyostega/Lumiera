@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file scope-path-test.cpp
+ ** unit test §§TODO§§
  */
 
 

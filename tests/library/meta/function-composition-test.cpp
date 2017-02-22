@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file function-composition-test.cpp
+ ** unit test §§TODO§§
  */
 
 

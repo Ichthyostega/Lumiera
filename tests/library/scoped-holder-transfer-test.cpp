@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file scoped-holder-transfer-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file memento-tie-test.cpp
+ ** unit test §§TODO§§
  */
 
 

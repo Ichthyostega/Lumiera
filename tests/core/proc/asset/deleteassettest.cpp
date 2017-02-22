@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file deleteassettest.cpp
+ ** unit test §§TODO§§
  */
 
 

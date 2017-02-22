@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file test-helper-variadic-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file hello-bug-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file bool-checkable-test.cpp
+ ** unit test §§TODO§§
  */
 
 

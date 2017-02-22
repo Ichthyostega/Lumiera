@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file test-option-test.cpp
+ ** unit test §§TODO§§
  */
 
 

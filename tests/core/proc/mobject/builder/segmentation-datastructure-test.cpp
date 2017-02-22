@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file segmentation-datastructure-test.cpp
+ ** unit test §§TODO§§
  */
 
 

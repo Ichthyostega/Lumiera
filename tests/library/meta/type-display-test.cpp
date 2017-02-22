@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file type-display-test.cpp
+ ** unit test §§TODO§§
  */
 
 

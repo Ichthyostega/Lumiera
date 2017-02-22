@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file mediastructurequerytest.cpp
+ ** unit test §§TODO§§
  */
 
 

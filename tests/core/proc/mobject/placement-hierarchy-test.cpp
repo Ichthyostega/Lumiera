@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file placement-hierarchy-test.cpp
+ ** unit test §§TODO§§
  */
 
 

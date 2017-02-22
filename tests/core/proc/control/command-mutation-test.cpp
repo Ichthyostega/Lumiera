@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file command-mutation-test.cpp
+ ** unit test §§TODO§§
  */
 
 

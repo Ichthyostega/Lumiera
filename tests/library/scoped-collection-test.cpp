@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file scoped-collection-test.cpp
+ ** unit test §§TODO§§
  */
 
 

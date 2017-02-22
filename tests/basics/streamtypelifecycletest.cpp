@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file streamtypelifecycletest.cpp
+ ** unit test §§TODO§§
  */
 
 

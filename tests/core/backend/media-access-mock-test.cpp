@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file media-access-mock-test.cpp
+ ** unit test §§TODO§§
  */
 
 

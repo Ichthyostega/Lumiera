@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file defs-manager-test.cpp
+ ** unit test §§TODO§§
  */
 
 

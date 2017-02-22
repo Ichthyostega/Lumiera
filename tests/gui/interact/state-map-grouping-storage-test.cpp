@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file state-map-grouping-storage-test.cpp
+ ** unit test §§TODO§§
  */
 
 

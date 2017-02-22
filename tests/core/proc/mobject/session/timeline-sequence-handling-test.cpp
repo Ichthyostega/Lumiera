@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file timeline-sequence-handling-test.cpp
+ ** unit test §§TODO§§
  */
 
 

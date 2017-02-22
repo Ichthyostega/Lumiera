@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file advice-configuration-test.cpp
+ ** unit test §§TODO§§
  */
 
 

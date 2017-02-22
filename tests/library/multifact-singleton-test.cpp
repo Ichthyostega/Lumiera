@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file multifact-singleton-test.cpp
+ ** unit test §§TODO§§
  */
 
 

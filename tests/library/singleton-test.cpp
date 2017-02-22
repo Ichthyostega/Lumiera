@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file singleton-test.cpp
+ ** unit test §§TODO§§
  */
 
 

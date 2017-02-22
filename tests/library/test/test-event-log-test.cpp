@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file test-event-log-test.cpp
+ ** unit test §§TODO§§
  */
 
 

@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file exceptionerrortest.cpp
+ ** unit test §§TODO§§
  */
 
 

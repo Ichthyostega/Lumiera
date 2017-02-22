@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file scope-query-test.cpp
+ ** unit test §§TODO§§
  */
 
 
