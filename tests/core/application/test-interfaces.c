@@ -20,8 +20,10 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-interfaces.c
+ ** C unit test to cover the basics of our interface and plugin-loading system
+ ** @see interface.h
+ ** @see interfaceregistry.h
  */
 
 

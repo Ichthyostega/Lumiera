@@ -20,8 +20,11 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-psplay.c
+ ** C unit test to cover a probabilistic splay tree library implementation.
+ ** These tree data structures are used as key-value store in several of the
+ ** management facilities of the backend
+ ** @see psplay.h
  */
 
 

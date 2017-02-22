@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-safeclib.c
+ ** C unit test to cover size checked C operations
+ ** @see safeclib.h
  */
 
 

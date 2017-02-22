@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-filehandles.c
+ ** C unit test to cover management for filehandles and the filehandle cache
+ ** @see filehandlecache.h
  */
 
 

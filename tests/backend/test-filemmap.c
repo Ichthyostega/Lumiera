@@ -1,5 +1,5 @@
 /*
-  TEST-FILEMAP  -  test file management
+  TEST-FILEMAP  -  test file memory mapping
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-filemmap.c
+ ** C unit test to cover memory mapping of file contents
+ ** @see mmapings.h
  */
 
 

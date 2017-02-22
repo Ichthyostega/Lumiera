@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-llist.c
+ ** C unit test to cover a linked list library implementation
+ ** @see llist.h
  */
 
 

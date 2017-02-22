@@ -20,8 +20,11 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-time.c
+ ** C unit test to cover the basic low-level time handling operations
+ ** @see time.h
+ ** @see timevalue.hpp
+ ** @see TimeValue_test high-level time entities
  */
 
 

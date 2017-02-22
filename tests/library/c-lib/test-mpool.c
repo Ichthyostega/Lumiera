@@ -20,8 +20,11 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-mpool.c
+ ** C unit test to cover a memory pool custom allocator
+ ** 
+ ** @warning unfinished implementation as of 2016
+ ** @see mpool.h
  */
 
 

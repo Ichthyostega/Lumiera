@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-slist.c
+ ** C unit test to cover a single linked list library implementation
  */
 
 

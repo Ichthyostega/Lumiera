@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-threadpool.c
+ ** C unit test to cover our threadpool implementation
  */
 
 

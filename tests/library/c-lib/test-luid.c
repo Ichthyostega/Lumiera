@@ -20,8 +20,10 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-luid.c
+ ** C unit test to cover generation of Lumiera Uniform Identifier hashes
+ ** @see luid.h
+ ** @see hash-indexed.hpp
  */
 
 

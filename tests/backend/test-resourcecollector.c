@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-resourcecollector.c
+ ** C unit test to cover management of low-level resources for the backend
+ ** @see resourcecollector.h
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file dummy-functions.hpp
- ** unit test §§TODO§§
+ ** dummy functions to support unit testing of function metaprogramming helpers
  */
 
 

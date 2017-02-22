@@ -21,8 +21,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-configloader.c
+ ** C unit test to cover a config system draft implementation
+ ** @deprecated as of 2017 it is very likely we'll use a different approach
  */
 
 

@@ -1,5 +1,5 @@
 /*
-  TEST-FILEDESCRIPTORS
+  TEST-FILEDESCRIPTORS  -  verify filedescriptor management
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-filedescriptors.c
+ ** C unit test to cover filedescriptor management
+ ** @see filedescriptor.h
  */
 
 

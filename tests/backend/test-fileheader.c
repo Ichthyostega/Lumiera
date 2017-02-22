@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-fileheader.c
+ ** C unit test to verify file identification functions
+ ** @see fileheader.h
  */
 
 

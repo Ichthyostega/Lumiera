@@ -20,8 +20,9 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test §§TODO§§
+/** @file test-priqueue.c
+ ** C unit test to cover a priority queue library implementation
+ ** @see priqueue.h
  */
 
 
