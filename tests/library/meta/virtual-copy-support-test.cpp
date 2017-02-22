@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file virtual-copy-support-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref VirtualCopySupport_test
  */
 
 

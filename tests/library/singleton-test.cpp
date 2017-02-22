@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file singleton-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref Singleton_test
  */
 
 

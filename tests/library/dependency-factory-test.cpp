@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file dependency-factory-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DependencyFactory_test
  */
 
 

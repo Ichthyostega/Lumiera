@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file command-equality-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CommandEquality_test
  */
 
 

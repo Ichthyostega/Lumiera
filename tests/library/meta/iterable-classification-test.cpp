@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file iterable-classification-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterableClassification_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file session-service-access-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SessionServiceAccess_test
  */
 
 

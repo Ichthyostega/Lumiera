@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file advice-multiplicity-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref AdviceMultiplicity_test
  */
 
 

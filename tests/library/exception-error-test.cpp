@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file exceptionerrortest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ExceptionError_test
  */
 
 

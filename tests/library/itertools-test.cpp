@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file itertools-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterTools_test
  */
 
 

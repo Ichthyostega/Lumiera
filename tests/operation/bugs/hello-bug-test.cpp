@@ -1,5 +1,5 @@
 /*
-  HelloBug(test)  -  placeholder for running bug regression tests
+  HelloBug(Test)  -  placeholder for running bug regression tests
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file hello-bug-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref HelloBug_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file fixture-change-detector-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FixtureChangeDetector_test
  */
 
 
@@ -87,7 +87,8 @@ namespace test  {
   
   
   /*****************************************************************************//**
-   * @test TODO blubb
+   * @test planned test for detecting changes in a given segmentation
+   * @todo just a placeholder, nothing done here thus far (2016)
    *       
    * @see  mobject::builder::FixtureChangeDetector
    */

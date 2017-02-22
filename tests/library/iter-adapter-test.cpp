@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file iter-adapter-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterAdapter_test
  */
 
 

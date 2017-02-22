@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file removefromsettest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref RemoveFromSet_test
  */
 
 

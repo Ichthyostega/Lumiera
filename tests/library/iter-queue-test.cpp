@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file iter-queue-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterQueue_test
  */
 
 

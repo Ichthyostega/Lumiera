@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file null-value-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref NullValue_test
  */
 
 

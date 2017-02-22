@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file buff-table-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref BuffTable_test
  */
 
 

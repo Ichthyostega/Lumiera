@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file opaque-unchecked-buffer-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref OpaqueUncheckedBuffer_test
  */
 
 

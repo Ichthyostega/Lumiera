@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file entry-id-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref EntryID_test
  */
 
 

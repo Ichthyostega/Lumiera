@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file deletecliptest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DeleteClip_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file compoundmediatest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CompoundMedia_test
  */
 
 

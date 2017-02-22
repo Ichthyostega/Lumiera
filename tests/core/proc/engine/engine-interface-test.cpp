@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file engine-interface-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref EngineInterface_test
  */
 
 

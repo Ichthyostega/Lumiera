@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file calc-stream-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CalcStream_test
  */
 
 

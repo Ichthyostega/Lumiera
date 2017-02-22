@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file subsystem-runner-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SubsystemRunner_test
  */
 
 

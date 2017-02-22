@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file unique-malloc-owner-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref UniqueMallocOwner_test
  */
 
 

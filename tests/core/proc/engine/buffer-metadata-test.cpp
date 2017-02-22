@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file buffer-metadata-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref BufferMetadata_test
  */
 
 

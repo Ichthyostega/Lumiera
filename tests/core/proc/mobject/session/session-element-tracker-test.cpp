@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file session-element-tracker-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SessionElementTracker_test
  */
 
 

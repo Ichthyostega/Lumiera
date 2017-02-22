@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file query-text-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref QueryText_test
  */
 
 

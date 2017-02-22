@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file del-stash-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DelStash_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file placement-basic-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref PlacementBasic_test
  */
 
 

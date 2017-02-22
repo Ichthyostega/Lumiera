@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file node-fabrication-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref NodeFabrication_test
  */
 
 

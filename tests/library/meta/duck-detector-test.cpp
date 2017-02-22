@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file duck-detector-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DuckDetector_test
  */
 
 

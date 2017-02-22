@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file advice-index-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref AdviceIndex_test
  */
 
 

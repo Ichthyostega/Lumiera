@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file node-basic-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref NodeBasic_test
  */
 
 

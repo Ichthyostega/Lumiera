@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file functor-util-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FunctorUtil_test
  */
 
 

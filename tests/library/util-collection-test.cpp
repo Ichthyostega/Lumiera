@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file util-collection-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref UtilCollection_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file time-quantisation-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimeQuantisation_test
  */
 
 

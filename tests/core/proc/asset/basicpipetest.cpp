@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file basicpipetest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref BasicPipe_test
  */
 
 

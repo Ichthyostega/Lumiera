@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file diff-tree-application-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DiffTreeApplication_test
  */
 
 

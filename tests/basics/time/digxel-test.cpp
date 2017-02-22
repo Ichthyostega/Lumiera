@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file digxel-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref Digxel_test
  */
 
 

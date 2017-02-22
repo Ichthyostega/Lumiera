@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file scoped-collection-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ScopedCollection_test
  */
 
 

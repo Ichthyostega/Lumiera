@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file dependent-assets-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DependentAssets_test
  */
 
 

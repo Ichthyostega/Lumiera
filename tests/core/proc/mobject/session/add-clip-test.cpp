@@ -1,5 +1,5 @@
 /*
-  BuildSegment(Test)  -  building the render-tree for a segment of the Timeline
+  AddClip(Test)  -  adding an Clip-MObject to the Model/Session
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,42 +20,55 @@
 
 * *****************************************************/
 
-/** @file buildsegmenttest.cpp
- ** unit test §§TODO§§
+/** @file addcliptest.cpp
+ ** unit test \ref AddClip_test
  */
 
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/testclip.hpp"
+#include "proc/mobject/placement.hpp"
+//#include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 
 
+using util::contains;
 //using std::string;
 
 
 namespace proc {
 namespace mobject {
-namespace builder {
+namespace session {
 namespace test {
   
   
   
   
   /***************************************************************//**
-   * @test the builder core functionality: create a render pipeline
-   *       for a given segment of the Session/Timeline.
+   * @test adding an test clip to the Model/Session.
+   * @see  mobject::session::Clip
+   * @see  mobject::Session
    */
-  class BuildSegment_test : public Test
+  class AddClip_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run (Arg) 
         {
-          UNIMPLEMENTED ("oh my");
+          PSess sess = Session::current;
+          PMO clip = TestClip::create();
+          sess->attach (clip);
+          
+///////////////////////////////////////////////////////////////////TICKET #499              
+//            CHECK (sess->currEDL().contains (clip));
+          // TODO: Clip-Asset and Placement magic??
         } 
     };
   
   
   /** Register this test class... */
-  LAUNCHER (BuildSegment_test, "function builder");
+  LAUNCHER (AddClip_test, "unit session");
   
   
   
-}}}} // namespace proc::mobject::builder::test
+}}}} // namespace proc::mobject::session::test

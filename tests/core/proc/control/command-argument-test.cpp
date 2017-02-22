@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file command-argument-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CommandArgument_test
  */
 
 

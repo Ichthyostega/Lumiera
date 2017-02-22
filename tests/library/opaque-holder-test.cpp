@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file opaque-holder-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref OpaqueHolder_test
  */
 
 

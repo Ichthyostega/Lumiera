@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file allocation-cluster-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref AllocationCluster_test
  */
 
 

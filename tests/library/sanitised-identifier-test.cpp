@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file sanitised-identifier-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SanitizedIdentifier_test
  */
 
 

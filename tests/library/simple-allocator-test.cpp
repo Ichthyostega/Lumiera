@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file simple-allocator-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SimpleAllocator_test
  */
 
 

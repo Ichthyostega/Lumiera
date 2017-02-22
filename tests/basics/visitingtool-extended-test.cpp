@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file visitingtool-extended-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref VisitingToolExtended_test
  */
 
 

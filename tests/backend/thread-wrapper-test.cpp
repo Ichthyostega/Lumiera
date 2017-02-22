@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file thread-wrapper-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ThreadWrapper_test
  */
 
 

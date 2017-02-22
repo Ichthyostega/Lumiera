@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file time-formats-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimeFormats_test
  */
 
 

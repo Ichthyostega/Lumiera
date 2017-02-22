@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file cmdline-wrapper-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CmdlineWrapper_test
  */
 
 

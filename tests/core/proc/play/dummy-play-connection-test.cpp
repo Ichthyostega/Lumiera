@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file dummy-play-connection-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DummyPlayConnection_test
  */
 
 

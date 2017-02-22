@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file placement-scope-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref PlacementScope_test
  */
 
 

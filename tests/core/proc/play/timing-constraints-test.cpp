@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file timing-constraints-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimingConstraints_test
  */
 
 

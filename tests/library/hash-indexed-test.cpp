@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file hash-indexed-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref HashIndexed_test
  */
 
 

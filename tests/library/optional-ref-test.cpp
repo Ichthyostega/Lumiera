@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file optional-ref-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref OptionalRef_test
  */
 
 

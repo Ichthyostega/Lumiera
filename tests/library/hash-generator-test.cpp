@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file hash-generator-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref HashGenerator_test
  */
 
 

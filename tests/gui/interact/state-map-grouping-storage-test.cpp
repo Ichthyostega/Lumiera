@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file state-map-grouping-storage-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref StateMapGroupingStorage_test
  */
 
 

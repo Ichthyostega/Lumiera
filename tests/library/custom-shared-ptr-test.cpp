@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file custom-shared-ptr-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CustomSharedPtr_test
  */
 
 

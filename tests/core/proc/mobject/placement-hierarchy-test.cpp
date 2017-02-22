@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file placement-hierarchy-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref PlacementHierarchy_test
  */
 
 

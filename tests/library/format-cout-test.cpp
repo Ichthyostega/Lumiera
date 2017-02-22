@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file format-cout-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FormatCOUT_test
  */
 
 

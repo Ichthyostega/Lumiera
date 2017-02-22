@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file helloworldtest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref HelloWorld_test
  */
 
 

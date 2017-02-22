@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file thread-local-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ThreadLocal_test
  */
 
 

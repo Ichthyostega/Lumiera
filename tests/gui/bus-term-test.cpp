@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file bus-term-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref BusTerm_test
  */
 
 

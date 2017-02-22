@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file test-event-log-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TestEventLog_test
  */
 
 

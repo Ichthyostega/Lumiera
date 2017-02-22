@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file model-port-registry-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ModelPortRegistry_test
  */
 
 

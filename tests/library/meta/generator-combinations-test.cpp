@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file generator-combinations-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref GeneratorCombinations_test
  */
 
 

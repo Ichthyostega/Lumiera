@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file node-operation-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref NodeOperation_test
  */
 
 

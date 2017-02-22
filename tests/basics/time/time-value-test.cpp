@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file time-value-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimeValue_test
  */
 
 

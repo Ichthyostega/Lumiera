@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file query-resolver-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref QueryResolver_test
  */
 
 

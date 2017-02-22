@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file mobject-interface-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MObjectInterface_test
  */
 
 

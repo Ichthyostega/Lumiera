@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file sessionmanagertest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SessionManager_test
  */
 
 

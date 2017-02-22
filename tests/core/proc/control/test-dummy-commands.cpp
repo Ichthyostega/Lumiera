@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file test-dummy-commands.cpp
- ** unit test §§TODO§§
+ ** Implementation of dummy command operations for unit tests
  */
 
 

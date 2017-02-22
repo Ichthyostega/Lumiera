@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file query-focus-stack-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref QueryFocusStack_test
  */
 
 

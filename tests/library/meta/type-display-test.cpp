@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file type-display-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TypeDisplay_test
  */
 
 

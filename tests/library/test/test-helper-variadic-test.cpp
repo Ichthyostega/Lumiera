@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file test-helper-variadic-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TestHelperVariadic_test
  */
 
 

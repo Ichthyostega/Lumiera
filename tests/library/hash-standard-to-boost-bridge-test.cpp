@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file hash-standard-to-boost-bridge-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref HashStandardToBoostBridge_test
  */
 
 

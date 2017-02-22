@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file defs-registry-impl-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DefsRegistryImpl_test
  */
 
 

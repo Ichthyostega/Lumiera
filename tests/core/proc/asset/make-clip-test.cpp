@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file makecliptest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MakeClip_test
  */
 
 

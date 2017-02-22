@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file diff-index-table-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DiffIndexTable_test
  */
 
 

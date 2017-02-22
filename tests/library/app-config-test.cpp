@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file app-config-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref Appconfig_test
  */
 
 

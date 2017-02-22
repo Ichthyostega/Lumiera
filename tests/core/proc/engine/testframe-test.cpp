@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file testframe-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TestFrame_test
  */
 
 

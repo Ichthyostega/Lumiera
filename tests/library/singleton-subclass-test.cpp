@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file singleton-subclass-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SingletonSubclass_test
  */
 
 

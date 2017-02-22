@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file variant-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref Variant_test
  */
 
 

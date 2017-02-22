@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file item-wrapper-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ItemWrapper_test
  */
 
 

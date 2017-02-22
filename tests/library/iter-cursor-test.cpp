@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file iter-cursor-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterCursor_test
  */
 
 

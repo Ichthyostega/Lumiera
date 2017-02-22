@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file output-slot-protocol-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref OutputSlotProtocol_test
  */
 
 

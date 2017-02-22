@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file dummy-job.cpp
- ** unit test §§TODO§§
+ ** Implementation of a dummy render job for unit tests
  */
 
 

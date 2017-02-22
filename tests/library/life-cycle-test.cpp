@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file lifecycletest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref LifeCycle_test
  */
 
 

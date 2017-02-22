@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file command-registry-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CommandRegistry_test
  */
 
 

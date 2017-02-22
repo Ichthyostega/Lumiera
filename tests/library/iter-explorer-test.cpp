@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file iter-explorer-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterExplorer_test
  */
 
 

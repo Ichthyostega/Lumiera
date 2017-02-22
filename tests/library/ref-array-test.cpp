@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file ref-array-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref RefArray_test
  */
 
 

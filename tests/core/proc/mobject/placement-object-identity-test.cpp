@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file placement-object-identity-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref PlacementObjectIdentity_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file command-binding-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CommandBinding_test
  */
 
 

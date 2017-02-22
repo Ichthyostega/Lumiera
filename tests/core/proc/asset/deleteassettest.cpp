@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file deleteassettest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DeleteAsset_test
  */
 
 

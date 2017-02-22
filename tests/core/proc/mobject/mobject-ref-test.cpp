@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file mobject-ref-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MObjectRef_test
  */
 
 

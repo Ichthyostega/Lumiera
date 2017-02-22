@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file generic-record-representation-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref GenericRecordRepresentation_test
  */
 
 

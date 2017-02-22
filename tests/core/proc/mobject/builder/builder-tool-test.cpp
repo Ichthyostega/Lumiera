@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file buildertooltest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref BuilderTool_test
  */
 
 

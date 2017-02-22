@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file query-utils-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref QueryUtils_test
  */
 
 

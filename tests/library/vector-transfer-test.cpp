@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file vector-transfer-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref VectorTransfer_test
  */
 
 

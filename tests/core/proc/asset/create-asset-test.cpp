@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file create-asset-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CreateAsset_test
  */
 
 

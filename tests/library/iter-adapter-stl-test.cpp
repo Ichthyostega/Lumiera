@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file iter-adapter-stl-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterAdapterSTL_test
  */
 
 

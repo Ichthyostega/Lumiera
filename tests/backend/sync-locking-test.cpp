@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file sync-locking-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SyncLocking_test
  */
 
 

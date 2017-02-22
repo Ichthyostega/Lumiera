@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file time-grid-basics-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimeGridBasics_test
  */
 
 

@@ -1,5 +1,5 @@
 /*
-  RenderSegment(Test)  -  Proc-Layer Integrationtest
+  BuildSegment(Test)  -  building the render-tree for a segment of the Timeline
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,47 +20,42 @@
 
 * *****************************************************/
 
-/** @file rendersegmenttest.cpp
- ** unit test §§TODO§§
+/** @file buildsegmenttest.cpp
+ ** unit test \ref BuildSegment_test
  */
 
 
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"
 
+
 //using std::string;
 
 
 namespace proc {
 namespace mobject {
-namespace controller {
+namespace builder {
 namespace test {
   
   
   
   
-  /****************************************************************//**
-   * @test create a render process from a given segment of the Session.
-   *       Basically this includes cooperation of all parts of the
-   *       Lumiera Proc Layer. For a prepared test-Session we invoke the
-   *       controller to create a render process. This includes building
-   *       the render pipeline. Finally, we analyze all the created 
-   *       Structures. 
-   * @note this test doesn't cover the actual rendering.
-   * @see  proc_interface::ControllerFacade
+  /***************************************************************//**
+   * @test the builder core functionality: create a render pipeline
+   *       for a given segment of the Session/Timeline.
    */
-  class RenderSegment_test : public Test
+  class BuildSegment_test : public Test
     {
-      virtual void run(Arg arg) 
+      virtual void run(Arg) 
         {
-          UNIMPLEMENTED ("complete render process for a given test segment of the Session");
+          UNIMPLEMENTED ("oh my");
         } 
     };
   
   
   /** Register this test class... */
-  LAUNCHER (RenderSegment_test, "function operate");
+  LAUNCHER (BuildSegment_test, "function builder");
   
   
   
-}}}} // namespace proc::mobject::controller::test
+}}}} // namespace proc::mobject::builder::test

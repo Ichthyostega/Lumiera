@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file function-composition-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FunctionComposition_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file sub-id-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SubID_test
  */
 
 

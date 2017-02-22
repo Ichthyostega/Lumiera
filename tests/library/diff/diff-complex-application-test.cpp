@@ -1,5 +1,5 @@
 /*
-  DiffVirtualisedApplication(Test)  -  apply structural changes to unspecific private data structures
+  DiffComplexApplication(Test)  -  apply structural changes to unspecific private data structures
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file diff-complex-application-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DiffComplexApplication_test
  */
 
 

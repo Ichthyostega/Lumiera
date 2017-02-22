@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file advice-situations-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref AdviceSituations_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file time-control-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimeControl_test
  */
 
 

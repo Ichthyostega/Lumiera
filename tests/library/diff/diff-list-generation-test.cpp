@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file diff-list-generation-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DiffListGeneration_test
  */
 
 

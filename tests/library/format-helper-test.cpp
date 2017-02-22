@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file format-helper-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FormatHelper_test
  */
 
 

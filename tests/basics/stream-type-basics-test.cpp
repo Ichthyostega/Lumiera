@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file streamtypebasicstest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref StreamTypeBasics_test
  */
 
 

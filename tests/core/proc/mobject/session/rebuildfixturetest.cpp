@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file rebuildfixturetest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref RebuildFixture_test
  */
 
 

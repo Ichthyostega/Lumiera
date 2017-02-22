@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file format-support-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FormatSupport_test
  */
 
 

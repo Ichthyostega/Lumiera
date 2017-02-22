@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file diagnostic-context-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DiagnosticContext_test
  */
 
 

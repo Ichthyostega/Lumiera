@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file quantiser-basics-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref QuantiserBasics_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file typed-id-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TypedID_test
  */
 
 

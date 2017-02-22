@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file defs-manager-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DefsManager_test
  */
 
 

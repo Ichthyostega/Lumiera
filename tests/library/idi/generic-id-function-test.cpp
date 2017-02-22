@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file generic-id-function-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref GenericIdFunction_test
  */
 
 

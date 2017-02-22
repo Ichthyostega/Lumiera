@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file gen-node-basic-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref GenNodeBasic_test
  */
 
 

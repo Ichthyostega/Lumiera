@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file advice-configuration-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref AdviceConfiguration_test
  */
 
 

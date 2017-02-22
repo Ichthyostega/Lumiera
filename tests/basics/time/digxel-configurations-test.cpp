@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file digxel-configurations-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DigxelConfigurations_test
  */
 
 

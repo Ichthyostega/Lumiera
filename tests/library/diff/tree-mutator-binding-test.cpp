@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file tree-mutator-binding-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TreeMutatorBinding_test
  */
 
 

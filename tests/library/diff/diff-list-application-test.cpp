@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file diff-list-application-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DiffListApplication_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file timeline-sequence-handling-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimelineSequenceHandling_test
  */
 
 

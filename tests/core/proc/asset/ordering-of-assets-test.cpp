@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file orderingofassetstest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref OrderingOfAssets_test
  */
 
 

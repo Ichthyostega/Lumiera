@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file util-foreach-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref UtilForeach_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file format-string-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FormatString_test
  */
 
 

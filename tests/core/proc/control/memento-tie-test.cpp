@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file memento-tie-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MementoTie_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file scope-path-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ScopePath_test
  */
 
 

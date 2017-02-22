@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file util-floorwrap-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref UtilFloorwrap_test
  */
 
 

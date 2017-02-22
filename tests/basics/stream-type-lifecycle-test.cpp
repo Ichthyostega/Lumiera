@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file streamtypelifecycletest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref StreamTypeLifecycle_test
  */
 
 

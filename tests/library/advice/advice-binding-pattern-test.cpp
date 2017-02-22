@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file advice-binding-pattern-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref AdviceBindingPattern_test
  */
 
 

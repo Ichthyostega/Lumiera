@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file command-mutation-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CommandMutation_test
  */
 
 

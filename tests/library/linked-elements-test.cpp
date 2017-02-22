@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file linked-elements-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref LinkedElements_test
  */
 
 

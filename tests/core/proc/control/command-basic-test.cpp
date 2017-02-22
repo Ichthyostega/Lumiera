@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file command-basic-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CommandBasic_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file session-modify-parts-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SessionModifyParts_test
  */
 
 

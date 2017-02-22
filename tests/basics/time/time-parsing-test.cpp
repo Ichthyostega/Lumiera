@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file time-parsing-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimeParsing_test
  */
 
 

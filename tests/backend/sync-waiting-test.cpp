@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file sync-waiting-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SyncWaiting_test
  */
 
 

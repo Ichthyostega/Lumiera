@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file meta-utils-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MetaUtils_test
  */
 
 

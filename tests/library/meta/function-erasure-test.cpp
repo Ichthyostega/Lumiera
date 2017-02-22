@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file function-erasure-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref FunctionErasure_test
  */
 
 

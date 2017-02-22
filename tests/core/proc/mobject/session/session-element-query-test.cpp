@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file session-element-query-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SessionElementQuery_test
  */
 
 

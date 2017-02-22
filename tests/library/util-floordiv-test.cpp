@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file util-floordiv-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref UtilFloordiv_test
  */
 
 

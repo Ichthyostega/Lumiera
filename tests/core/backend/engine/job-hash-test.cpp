@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file job-hash-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref JobHash_test
  */
 
 

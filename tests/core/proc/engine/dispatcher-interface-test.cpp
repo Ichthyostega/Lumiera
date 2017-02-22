@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file dispatcher-interface-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref DispatcherInterface_test
  */
 
 

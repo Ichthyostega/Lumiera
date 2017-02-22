@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file scoped-ptrvect-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ScopedPtrVect_test
  */
 
 

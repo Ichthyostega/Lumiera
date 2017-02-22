@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file placement-index-query-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref PlacementIndexQuery_test
  */
 
 

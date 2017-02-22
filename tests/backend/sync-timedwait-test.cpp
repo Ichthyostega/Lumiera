@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file sync-timedwait-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SyncTimedwait_test
  */
 
 

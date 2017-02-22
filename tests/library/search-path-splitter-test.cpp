@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file search-path-splitter-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SearchPathSplitter_test
  */
 
 

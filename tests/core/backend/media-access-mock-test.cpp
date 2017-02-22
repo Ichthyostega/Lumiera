@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file media-access-mock-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MediaAccessMock_test
  */
 
 

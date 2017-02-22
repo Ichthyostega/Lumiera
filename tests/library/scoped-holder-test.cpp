@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file scoped-holder-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ScopedHolder_test
  */
 
 

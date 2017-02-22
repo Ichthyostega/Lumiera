@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file time-mutation-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TimeMutation_test
  */
 
 

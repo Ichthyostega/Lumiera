@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file scope-query-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ScopeQuery_test
  */
 
 

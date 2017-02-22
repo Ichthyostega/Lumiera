@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file maybe-value-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MaybeValue_test
  */
 
 

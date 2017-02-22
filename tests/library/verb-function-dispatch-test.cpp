@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file verb-function-dispatch-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref VerbFunctionDispatch_test
  */
 
 

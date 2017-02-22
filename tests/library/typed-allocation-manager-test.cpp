@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file typed-allocation-manager-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TypedAllocationManager_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file buffer-provider-protocol-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref BufferProviderProtocol_test
  */
 
 

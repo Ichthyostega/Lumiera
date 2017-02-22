@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file handling-pattern-basics-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref HandlingPatternBasics_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file test-option-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TestOption_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file test-helper-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TestHelper_test
  */
 
 

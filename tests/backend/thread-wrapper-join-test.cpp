@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file thread-wrapper-join-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref ThreadWrapperJoin_test
  */
 
 

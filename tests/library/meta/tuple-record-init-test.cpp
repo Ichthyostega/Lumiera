@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file tuple-record-init-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TupleRecordInit_test
  */
 ///@file
 

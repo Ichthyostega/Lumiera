@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file output-mapping-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref OutputMapping_test
  */
 
 

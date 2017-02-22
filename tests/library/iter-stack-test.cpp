@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file iter-stack-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IterStack_test
  */
 
 

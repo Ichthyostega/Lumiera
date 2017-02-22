@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file symbol-hashtable-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SymbolHashtable_test
  */
 
 

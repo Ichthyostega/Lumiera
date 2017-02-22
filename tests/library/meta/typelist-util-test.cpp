@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file typelist-util-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref TypeListUtil_test
  */
 
 

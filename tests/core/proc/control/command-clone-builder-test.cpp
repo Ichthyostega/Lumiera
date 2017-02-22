@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file command-clone-builder-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref CommandCloneBuilder_test
  */
 
 

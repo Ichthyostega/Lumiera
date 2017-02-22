@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file hierarchy-orientation-indicator-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref HierarchyOrientationIndicator_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file session-structure-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref SessionStructure_test
  */
 
 

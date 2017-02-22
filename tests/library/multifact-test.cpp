@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file multifact-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref MultiFact_test
  */
 
 

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file placement-ref-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref PlacementRef_test
  */
 
 

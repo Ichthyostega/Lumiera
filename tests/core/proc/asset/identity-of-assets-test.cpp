@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file identityofassetstest.cpp
- ** unit test §§TODO§§
+ ** unit test \ref IdentityOfAssets_test
  */
 
 

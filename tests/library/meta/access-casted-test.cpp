@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file access-casted-test.cpp
- ** unit test §§TODO§§
+ ** unit test \ref AccessCasted_test
  */
 
 
