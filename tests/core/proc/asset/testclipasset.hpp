@@ -20,8 +20,8 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testclipasset.hpp
+ ** A placeholder Clip asset to support unit testing
  */
 
 

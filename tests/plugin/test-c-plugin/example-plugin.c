@@ -1,5 +1,5 @@
 /*
-  example_plugin  -  example plugin for testing the interface/plugin system
+  ExamplePlugin  -  example plugin for testing the interface/plugin system
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -20,8 +20,11 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file example-plugin.c
+ ** Dummy C plug-in to cover the plugin loader for unit test
+ ** This file defines a Lumiera plug-in written in plain C,
+ ** implementing the `lumieraorg_testhello` interface
+ ** @see test-interfaces.c
  */
 
 
@@ -30,7 +33,7 @@
 #include "common/interface-descriptor.h"
 #include "common/config-interface.h"
 
-#include "interface/say_hello.h"
+#include "interface/say-hello.h"
 
 
 LUMIERA_PLUGIN_INTERFACEHANDLE;

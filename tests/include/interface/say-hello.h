@@ -1,20 +1,20 @@
+/** @file say-hello.h
+ ** A mock interface to support testing of the interface system
+ */
+
+#ifndef TEST_INCLUDE_SAY_HELLO_H
+#define TEST_INCLUDE_SAY_HELLO_H
+
 #include "common/interface.h"
 
-/*
-  one interface which can greet in different languages
-*/
+/** mock interface which can greet in different languages */
 
-/** @file §§§
- ** unit test TODO §§§
- */
 LUMIERA_INTERFACE_DECLARE (lumieraorg_testhello, 0,
                            LUMIERA_INTERFACE_SLOT (void, hello, (void)),
                            LUMIERA_INTERFACE_SLOT (void, goodbye, (const char*)),
 );
 
-/*
-  and now one which will be used to test if interfaces can open and call each other
-*/
+/** mock interface to test opening and closing of dependent interfaces */
 LUMIERA_INTERFACE_DECLARE (lumieraorg_testtest, 0,
                            LUMIERA_INTERFACE_SLOT (void, testit, (void)),
 );

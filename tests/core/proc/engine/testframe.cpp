@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testframe.cpp
+ ** Implementation of fake data frames to support unit testing
  */
 
 

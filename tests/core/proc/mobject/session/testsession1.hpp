@@ -20,8 +20,11 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testsession1.hpp
+ ** Dummy session content prepared for unit test
+ ** @todo this is an idea from the early stages of the project and was never really implemented.
+ **       But it still seems like a good idea (as of 2016), while likely the implementation will be
+ **       completely different, based on JSON to be injected via the diff system
  */
 
 

@@ -20,8 +20,12 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file media-access-mock.hpp
+ ** Unit test helper to access an emulated media file.
+ ** This can be used to inject specific metadata or media properties,
+ ** or even to feed generated media content into the code to be tested.
+ ** 
+ ** @todo this facility was occasionally used until 2011, yet never really completed
  */
 
 

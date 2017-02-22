@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testasset.cpp
+ ** Implementation of a mocked Asset for unit tests
  */
 
 

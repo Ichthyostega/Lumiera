@@ -21,8 +21,11 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testrunner.cpp
+ ** Lumiera unit test suite
+ ** A simple test runner application.
+ ** The build system will link the individual shared libraries with the test code
+ ** together with this translation unit into the executable `target/test-suite`
  */
 
 #include "include/lifecycle.h"

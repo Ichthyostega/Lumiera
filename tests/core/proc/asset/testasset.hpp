@@ -20,8 +20,8 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testasset.hpp
+ ** A mock asset to support unit testing
  */
 
 

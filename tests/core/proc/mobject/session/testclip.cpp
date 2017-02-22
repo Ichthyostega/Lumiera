@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testclip.cpp
+ ** Implementation of a stubbed clip object to support unit testing
  */
 
 

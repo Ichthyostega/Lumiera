@@ -20,8 +20,8 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testclip.hpp
+ ** A stub implementation of the Clip interface for unit testing
  */
 
 

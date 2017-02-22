@@ -20,8 +20,10 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file test-target-obj.hpp
+ ** Dummy target object to be created by factory for unit tests
+ ** Used to verify sane memory management and instance lifecycle for such
+ ** objects generated as singleton or by factory
  */
 
 

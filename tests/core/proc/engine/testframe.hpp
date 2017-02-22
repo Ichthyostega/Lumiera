@@ -20,8 +20,8 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testframe.hpp
+ ** Unit test helper to generate fake test data frames
  */
 
 

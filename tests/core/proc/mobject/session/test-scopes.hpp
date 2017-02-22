@@ -20,8 +20,11 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file test-scopes.hpp
+ ** Unit test helper to generate a system of nested test scopes.
+ ** These can be used to verify session search and discovery functionality.
+ ** The build_testScopes() function generates a system of placements and MObjects
+ ** with a known, fixed layout.
  */
 
 

@@ -20,8 +20,10 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file testroot.hpp
+ ** Setup of a faked session root for unit testing.
+ ** This works together with some likewise manipulated mock rules to build content
+ ** with known layout to be scrutinised in test
  */
 
 

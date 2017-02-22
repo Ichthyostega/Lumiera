@@ -20,8 +20,9 @@
 
 */
 
-/** @file §§§
- ** unit test TODO §§§
+/** @file test-scope-invalid.hpp
+ ** Unit test helper to generate deliberately wrong placement scopes.
+ ** Usable to cover error handling related to QueryFocus and ScopePath
  */
 
 
