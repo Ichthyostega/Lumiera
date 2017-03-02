@@ -109,9 +109,9 @@ namespace ctrl {
           
           // File menu
           actionGroup->add(Action::create("FileMenu", _("_File")));
-          actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),    [&]() { onMenu_file_new_project(); });
+          actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),    [&]() { onMenu_file_newProject(); });
           actionGroup->add(Action::create("FileSave",   Stock::SAVE,    _("_Save Project")),      [&]() { onMenu_file_save();   });
-          actionGroup->add(Action::create("FileSaveAs", Stock::SAVE_AS, _("_Save Project As...")),[&]() { onMenu_file_save_as();});
+          actionGroup->add(Action::create("FileSaveAs", Stock::SAVE_AS, _("_Save Project As...")),[&]() { onMenu_file_saveAs(); });
           actionGroup->add(Action::create("FileOpen",   Stock::OPEN,    _("_Open...")),           [&]() { onMenu_file_open();   });
           actionGroup->add(Action::create("FileRender", _("_Render...")), AccelKey("<shift>R"),   [&]() { onMenu_file_render(); });
           actionGroup->add(Action::create("FileQuit", Stock::QUIT),                               [&]() { onMenu_file_quit();   });
@@ -303,27 +303,27 @@ namespace ctrl {
       /* ============ File Menu ========== */
       
       void
-      onMenu_file_new_project()
+      onMenu_file_newProject()
         {
-          g_message("A File|New menu item was selected.");                               //////global -> InteractionDirector
+          globalCtx_.director_.newProject();
         }
       
       void
       onMenu_file_save()
         {
-          g_message("A File|New menu item was selected.");                               //////global -> InteractionDirector
+          globalCtx_.director_.saveSnapshot();
         }
       
       void
-      onMenu_file_save_as()
+      onMenu_file_saveAs()
         {
-          g_message("A File|New menu item was selected.");                               //////global -> InteractionDirector
+          globalCtx_.director_.forkProject();
         }
       
       void
       onMenu_file_open()
         {
-          g_message("A File|Open menu item was selected.");                              //////global -> InteractionDirector
+          globalCtx_.director_.openFile();
         }
       
       void

@@ -122,6 +122,11 @@ namespace interact {
       InteractionDirector (ctrl::GlobalCtx&);
      ~InteractionDirector ();
       
+      // == Menu actions ==
+      void newProject();
+      void saveSnapshot();
+      void forkProject();
+      void openFile();
       
     private:
       
