@@ -23,9 +23,9 @@
 
 /** @file actions.hpp
  ** Setup of global actions for the main menu.
- ** The Actions helper defines the structure and contents of the workspace
- ** window main menu. The individual menu options are bound to functors (closures),
- ** which use a _global UI context_ to access the target objects or invoke the signals.
+ ** The Actions helper defines the structure and contents of the workspace window main menu.
+ ** The individual menu options are bound to functors (closures), which use a _global UI context_
+ ** to access the target objects or invoke the signals.
  ** 
  ** @see ui-manager.hpp
  ** @see gtk-lumiera.cpp

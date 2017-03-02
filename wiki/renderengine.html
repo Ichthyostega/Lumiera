@@ -2836,7 +2836,7 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201702101852" tags="GuiIntegration GuiPattern" changecount="4">
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201703021621" tags="GuiIntegration GuiPattern" changecount="5">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
 * main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
 * loading a GuiStarterPlugin actually
@@ -2857,14 +2857,15 @@ Note that we retain strict isolation in the other direction: no part of the lowe
 Now, when invoking an operation on some public interface, the code in the lower layers actually executes an implementation of this operation //on the facade proxy,// which in turn forwards the call through the CL interface into the GUI, where functionality is actually implemented by the corresponding service object instance.
 
 !!!UI top level
-Regarding the internal organisation of Lumiera's ~UI-Layer, there is a [[top level structure|GuiTopLevel]] to manage application lifecycle
+Regarding the internal organisation of Lumiera's ~UI-Layer, there is a [[top level structure|GuiTopLevel]] to manage application lifecycle.
+This top-level circle is established starting from the UI-Bus (''Nexus'') and the ''UI Manager'', which in turn creates the other dedicated control entities, especially the InteractionDirector. All these build-up steps are triggered right from the UI main() function, right before starting the ''UI event loop''. The remainder of the start-up process is driven by //contextual state,// as discovered by the top-level entities, delegating to the controllers and widgets.
 </pre>
 </div>
 <div title="GuiStarterPlugin" modifier="Ichthyostega" created="200902080716" tags="def GuiIntegration">
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201612032136" tags="GuiPattern design decision draft" changecount="47">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201703021627" tags="GuiPattern design decision draft" changecount="48">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -2898,7 +2899,7 @@ This collapsed, expanded and possibly nested workspace structure is always exact
 !!!lifecycle and instances
 A given instance of the {{{TimelineWidget}}} is always dedicated to render the contents of //one specific timeline.// We never switch the data model while retaining the UI entities. This also means, a given instance is tied to one conversation with the core; it is created when the core tells us about this timeline with an initial population diff, and it lives until either this timeline is discarded in the core model, or the whole session is shut down.
 
-The dockable ''timeline pannel'' manages the existing {{{TimelineWidget}}} instances, and this effectively put the former into the role of representing the [[model root|ModelRootMO]]. We might consider to transfer this role to the workspace manager eventually, but {{red{right now 12/2016}}} this doesn't feel like a problem, since the workspace manager has to care for global concerns of the UI, not the session. We can assume there also is an ''asset pannel'', allowing the timeline pannel to delegate anything related asset modelling.
+The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} instances, allowing to make one of them visible for interaction. Yet those instances are managed by the InteractionDirector, who incorporates the role of representing the [[model root|ModelRootMO]]. Aside of the timeline display, there is also an ''asset pannel''; display of and interaction with those asset views is handled by dedicated widgets, backed by the {{{AssetControler}}} -- which is also a child of and managed by the InteractionDirector, since assets are modelled as global part of the [[Session]].
 
 In case the UI starts with no session present in the core, an //empty timeline placeholder// will be displayed, which provides UI for creating a new session...
 
@@ -2958,7 +2959,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
-<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201702160132" tags="GuiPattern spec draft" changecount="9">
+<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201703021643" tags="GuiPattern spec draft" changecount="10">
 <pre>To a large extent, the Lumiera user interface is built around a //backbone structure,// known as the UI-Bus.
 But there are some dedicated top-level entities, collaborating to maintain a consistent application lifecycle
 ;Application
@@ -2980,6 +2981,9 @@ But there are some dedicated top-level entities, collaborating to maintain a con
 :the GuiNotificationFacade is a LayerSeparationInterface and integrated with Lumiera's interface system
 
 Together, these entities form a cohesive circle of collaborating global managers, known as ''global UI context''; the interplay of these facilities is essentially an implementation detail, insofar there is not much necessity (and only a narrow API) for the rest of the UI to address those directly. Rather, each member of this circle serves a dedicated purpose and is visible to the rest of the application through some kind of service abstraction. For example, the InteractionDirector is mapped as a top-level model element into the logical model of the UI; typically, other parts of the application address this service through messages via the UI-Bus, while the Interaction Director itself is responsible to create a link between model and interaction state -- a service, which is fulfilled in a transparent way.
+
+!Control structure
+Within the UI-Layer, we distinguish between //core concerns and UI concerns,// the latter encompassing anything related to UI mechanics, presentation state, interaction state and InteractionControl. Core concerns are delegated and handled by the lower layers of the architecture, while the UI plays a passive role. This is a fundamental decision and leads to a dichotomy, where -- depending on the context -- a given part might operate as a slave related to core concerns, while taking a leading or controlling position when it comes to UI concerns. Deliberately, both sides are bridged by being interwoven into the same entities, and any entity of relevance to core concerns is also attached to the UI-Bus. Regarding the build-up of the UI, parts and elements are made visible and accessible through widgets, but widgets are created, installed and operated by controllers. The top-level circle defines global actions, which are passed through the relevant controller to come into effect.
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">
@@ -3291,11 +3295,11 @@ The primary insight is, that we build upon a spatial metaphor -- and thus we sta
 :the spot locator is relocated by loading a new focus path to another [[work site|WorkSite]]
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201702162047" tags="def draft" changecount="8">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201703021658" tags="def draft" changecount="9">
 <pre>//the top-level controller within the UI.//
 In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
 
-And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, opening and closing of the session as a whole, and even shutdown of the application as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
+And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, opening and closing of the session as a whole, and even shutdown of the application as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and also what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
 
 Why do we need a connection joint between those parts?
 Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.

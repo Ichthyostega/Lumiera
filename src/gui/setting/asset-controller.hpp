@@ -70,7 +70,7 @@ namespace setting {
   
   
   /**
-   * Top level controller for the asset managment section in the UI.
+   * Top level controller for the asset management section in the UI.
    * 
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
