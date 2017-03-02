@@ -1,5 +1,5 @@
 /*
-  NAVIGATOR.hpp  -  controller for global navigation through interface space
+  WIZARD.hpp  -  controller user help and assistance
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,22 +21,26 @@
 */
 
 
-/** @file navigator.hpp
- ** Global interface navigation control.
- ** Beyond just clicking on some buttons or issuing menu / key commands,
- ** the Lumiera interface allows the user to _move_ through interface space,
- ** to leave one _"place"_ (WorkSite) and enter another. The interact::Navigator
- ** is a controller entity to implement the necessary mechanics for this navigation.
+/** @file wizard.hpp
+ ** Global help controller.
+ ** The Wizard is a global controller to handle launching the user help,
+ ** context sensitive help and further user assistance and support UI.
+ ** @remark User help is planned to rely on the [UserManual], possibly
+ **         using an embedded browser control or an installed local copy
+ **         of the manual.
+ ** @todo The infrastructure for context sensitive help needs to be defined
  ** 
- ** @todo WIP 2/2017 early draft / foundations of "interaction control"
+ ** [UserManual]: http://www.lumiera.org/documentation/user/manual.html "»User Manual«"
+ ** 
+ ** @todo WIP 3/2017 early draft of the UI top-level controllers
  ** 
  ** @see interaction-director.hpp
- ** @see ui-bus.hpp
+ ** @see actions.hpp
  */
 
 
-#ifndef GUI_INTERACT_NAVIGATOR_H
-#define GUI_INTERACT_NAVIGATOR_H
+#ifndef GUI_INTERACT_WIZARD_H
+#define GUI_INTERACT_WIZARD_H
 
 #include "gui/gtk-base.hpp"
 
@@ -46,13 +50,16 @@
 
 
 namespace gui {
+namespace ctrl {
+  class GlobalCtx;
+}
 namespace interact {
   
 //  using std::unique_ptr;
 //  using std::string;
   
 //  class GlobalCtx;
-  class SpotLocator;
+//  class SpotLocator;
   
   
   
@@ -61,14 +68,14 @@ namespace interact {
    * 
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
-  class Navigator
+  class Wizard
     : boost::noncopyable
     {
-      SpotLocator& spotLocator_;
-      
+      ctrl::GlobalCtx& globalCtx_;
+    
     public:
-      Navigator (SpotLocator&);
-     ~Navigator ();
+      Wizard (ctrl::GlobalCtx&);
+     ~Wizard ();
       
     private:
       
@@ -77,4 +84,4 @@ namespace interact {
   
   
 }}// namespace gui::interact
-#endif /*GUI_INTERACT_NAVIGATOR_H*/
+#endif /*GUI_INTERACT_WIZARD_H*/

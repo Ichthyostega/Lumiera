@@ -41,8 +41,7 @@
  ** - the UiManager
  ** - the InteractionDirector
  ** - the WindowList
- ** - the HelpController
- ** - the Wizzard
+ ** - the Wizard
  ** 
  ** @see gtk-lumiera.hpp
  ** @see ui-bus.hpp
@@ -58,6 +57,7 @@
 #include "gui/ui-bus.hpp"
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ctrl/window-list.hpp"
+#include "gui/interact/wizard.hpp"
 #include "gui/interact/interaction-director.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -89,6 +89,7 @@ namespace ctrl {
       
       WindowList          windowList_;
       InteractionDirector director_;
+      interact::Wizard    wizard_;
       
       
     public:
@@ -100,6 +101,7 @@ namespace ctrl {
         , uiManager_{manager}
         , windowList_{*this}
         , director_{*this}
+        , wizard_{*this}
         { }
       
     private:
