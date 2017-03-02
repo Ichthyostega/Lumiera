@@ -109,12 +109,12 @@ namespace ctrl {
           
           // File menu
           actionGroup->add(Action::create("FileMenu", _("_File")));
-          actionGroup->add(Action::create("FileNewProject",   Stock::NEW, _("_New Project...")),   [&]() { onMenu_file_new_project(); });
-          actionGroup->add(Action::create("FileOpenProject",  Stock::OPEN, _("_Open Project...")), [&]() { onMenu_file_open_project(); });
-          actionGroup->add(Action::create("FileSaveProject",  Stock::SAVE, _("_Save Project")),    [&]() { onMenu_others(); });
-          actionGroup->add(Action::create("FileSaveProjectAs",Stock::SAVE_AS, _("_Save Project As...")), [&]() { onMenu_others(); });
-          actionGroup->add(Action::create("FileRender", _("_Render...")),    AccelKey("<shift>R"), [&]() { onMenu_file_render(); });
-          actionGroup->add(Action::create("FileQuit", Stock::QUIT),                                [&]() { onMenu_file_quit(); });
+          actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),    [&]() { onMenu_file_new_project(); });
+          actionGroup->add(Action::create("FileSave",   Stock::SAVE,    _("_Save Project")),      [&]() { onMenu_file_save();   });
+          actionGroup->add(Action::create("FileSaveAs", Stock::SAVE_AS, _("_Save Project As...")),[&]() { onMenu_file_save_as();});
+          actionGroup->add(Action::create("FileOpen",   Stock::OPEN,    _("_Open...")),           [&]() { onMenu_file_open();   });
+          actionGroup->add(Action::create("FileRender", _("_Render...")), AccelKey("<shift>R"),   [&]() { onMenu_file_render(); });
+          actionGroup->add(Action::create("FileQuit", Stock::QUIT),                               [&]() { onMenu_file_quit();   });
           
           // Edit menu
           actionGroup->add(Action::create("EditMenu", _("_Edit")));
@@ -166,9 +166,9 @@ namespace ctrl {
                 <menubar name='MenuBar'>
                   <menu action='FileMenu'>
                     <menuitem action='FileNewProject'/>
-                    <menuitem action='FileOpenProject'/>
-                    <menuitem action='FileSaveProject'/>
-                    <menuitem action='FileSaveProjectAs'/>
+                    <menuitem action='FileSave'/>
+                    <menuitem action='FileSaveAs'/>
+                    <menuitem action='FileOpen'/>
                     <separator/>
                     <menuitem action='FileRender'/>
                     <separator/>
@@ -206,8 +206,8 @@ namespace ctrl {
                 </menubar>
                 <toolbar  name='ToolBar'>
                   <toolitem action='FileNewProject'/>
-                  <toolitem action='FileOpenProject'/>
-                  <toolitem action='FileSaveProject'/>
+                  <toolitem action='FileOpen'/>
+                  <toolitem action='FileSave'/>
                   <separator/>
                   <toolitem action='EditUndo'/>
                   <toolitem action='EditRedo'/>
@@ -309,7 +309,19 @@ namespace ctrl {
         }
       
       void
-      onMenu_file_open_project()
+      onMenu_file_save()
+        {
+          g_message("A File|New menu item was selected.");                               //////global -> InteractionDirector
+        }
+      
+      void
+      onMenu_file_save_as()
+        {
+          g_message("A File|New menu item was selected.");                               //////global -> InteractionDirector
+        }
+      
+      void
+      onMenu_file_open()
         {
           g_message("A File|Open menu item was selected.");                              //////global -> InteractionDirector
         }
