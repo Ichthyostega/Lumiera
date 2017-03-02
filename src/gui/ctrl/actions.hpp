@@ -55,6 +55,7 @@
 
 namespace gui {
 namespace ctrl {
+  namespace error = lumiera::error;
   
   using std::function;
   using boost::algorithm::is_any_of;
@@ -221,10 +222,10 @@ namespace ctrl {
             {
               uiManager.add_ui_from_string (ui_info);
             }
-          catch(const Glib::Error& ex)
+          catch(Glib::Error& ex)
             {
               ERROR (gui, "Building menus failed: %s", ex.what().data());
-              return;
+              throw error::Config(_Fmt("global menu definition rejected: %s") % ex.what());
             }
           
           //----- Add Extra Actions -----//
