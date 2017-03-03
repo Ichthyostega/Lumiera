@@ -1539,9 +1539,9 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
-<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201702160147" tags="draft impl GuiPattern example discuss" changecount="12">
+<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201703031814" tags="draft impl GuiPattern example discuss" changecount="13">
 <pre>//This page is a scrapbook to collect observations about command invocation in the UI//
-{{red{2/2017}}} the goal is to shape some generic patterns of InteractionControl (&amp;rarr; GuiCommandBinding)
+{{red{2/2017}}} the goal is to shape some generic patterns of InteractionControl (&amp;rarr; GuiCommandBinding, &amp;rarr; GuiCommandCycle)
 
 !Add Sequence
 The intention is to add a new sequence //to the current session.//
@@ -2542,8 +2542,10 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201609091641" tags="design decision operational GuiPattern GuiIntegration draft discuss" changecount="26">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201703031818" tags="design decision GuiPattern GuiIntegration discuss" changecount="30">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
+* actual design of command invocation in the UI &amp;rarr; GuiCommandCycle
+* study of pivotal action invocation situations &amp;rarr; CommandInvocationAnalysis
 
 !prerequisites for issuing a command
 Within the Lumiera architecture, with the very distinct separation between [[Session]] and interface view, several steps have to be met before we're able to operate on the model.
@@ -2577,9 +2579,18 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 * if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessing just any UI-Bus terminal at reach within that context
 
 ''Lumera decides to take the latter apptoch'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
+&amp;rarr; GuiCommandCycle
 </pre>
 </div>
-<div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201701140732" tags="GuiIntegration overview" changecount="8">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703031837" tags="design operational GuiPattern GuiIntegration draft discuss" changecount="3">
+<pre>//the process of issuing a session command from the UI//
+Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
+A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
+
+In a nutshell, we understand each such core command as a ''sentence'', with a //subject//, a //predication//, which is the command script in ~Proc-Layer and can be represented by an ID, and possibly additional arguments. And the key point to note is: //such an action sentence need to be formed, before it can be issued.//
+</pre>
+</div>
+<div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201703031816" tags="GuiIntegration overview" changecount="9">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
 
 !anatomy of the Proc/GUI interface
@@ -2592,7 +2603,7 @@ By all means, we want to avoid a common shared data structure as foundation for 
 
 The consequence is that both sides, &quot;the core&quot; and &quot;the UI&quot; remain autonomous within their realm. For some concerns, namely //the core concerns,// that is editing, arranging, processing, the core is in charge and has absolute authority. On the other hand, when it comes to user interaction, especially the //mechanics and materiality of interaction,// the UI is the authority; it is free to decide about what is exposed and in which way. The collaboration between both sides is based on a ''common structural understanding'', which is never fully, totally formed in concrete data structures.
 
-Rather, the core sends ''diff messages'' up to the UI, indicating how it sees this virtual structure to be changing. The UI reflects these changes into //its own understanding and representation,// that is here a structure of display widgets. When the user interacts with these structures of the presentation layer, ''command messages'' are generated, using the element ~IDs to designate the arguments of the intended operation. This again causes reaction and change in the core, which is reflected back in the form of further diff messages.
+Rather, the core sends ''diff messages'' up to the UI, indicating how it sees this virtual structure to be changing. The UI reflects these changes into //its own understanding and representation,// that is here a structure of display widgets. When the user interacts with these structures of the presentation layer, ''command messages'' are generated, using the element ~IDs to designate the arguments of the intended operation. This again causes reaction and change in the core, which is reflected back in the form of further diff messages. (&amp;rarr; GuiCommandCycle)
 </pre>
 </div>
 <div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611182349" tags="GuiPattern discuss decision draft" changecount="64">
@@ -3252,7 +3263,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201702162049" tags="design decision Concepts GuiPattern draft discuss" changecount="14">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201703031747" tags="design decision Concepts GuiPattern draft discuss" changecount="15">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
@@ -3270,13 +3281,13 @@ The interface programming allows us to react on events and trigger behaviour, an
 &amp;rarr; detailed [[analysis how commands are to be invoked|CommandInvocationAnalysis]]
 
 !Foundation Concepts
-The primary insight is, that we build upon a spatial metaphor -- and thus we start out with defining various kinds of //locations.// We express interactions as //happening somewhere...//
+The primary insight is  //that we build upon a spatial metaphor// -- and thus we start out with defining various kinds of //locations.// We express interactions as //happening somewhere...//
 ;work site
 :a distinct, coherent place where some ongoing work is done
 :the WorkSite might move along with the work, but we also may leave it temporarily to visit some other work site
 ;the spot
 :the [[Spot]] is where we currently are -- taken both in the sense of a location and a spotlight
-:thus a spot is always at some work site, but it can be navigated to another one
+:thus a spot is potentially at some work site, but it can be navigated to another one
 ;focus
 :the concrete realisation of the spot within a given control system
 ;control system
