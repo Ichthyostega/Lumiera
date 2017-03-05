@@ -2582,7 +2582,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 &amp;rarr; GuiCommandCycle
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703032258" tags="design operational GuiPattern GuiIntegration draft discuss" changecount="10">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703050151" tags="design operational GuiPattern GuiIntegration draft discuss" changecount="14">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2594,8 +2594,21 @@ In a nutshell, we understand each such core command as a ''sentence'', with a //
 To gain some understanding of the topic, we pose the question &quot;who has to deal with core commands&quot;?
 * the developer of ~Proc-Layer, obviously. The result of that development process is a set of [[command definitions|CommandHandling]], which get installed during start-up of the SessionSubsystem
 * global menu actions (and keybindings) want to issue a specific command, but possibly also need context information
-* a widget, button or context-menu binding typically want to trigger a command on some [[tangible element|UI-Element]] (widget or controller)
+* a widget, button or context-menu binding typically want to trigger a command on some [[tangible element|UI-Element]] (widget or controller), but also needs to prepare the arguments prior to invocation
 * some InteractionStateManager observes contextual change and needs to mark possible consequences for invoking a given command
+
+from these use cases, we can derive the //crucial activities for command handling...//
+;instance management
+:our commands are prototypes; we need to manage instances for binding concrete arguments
+:there is a delay between issuing a command in the UI and dispatching it into the session (and dispatch happens in another thread)
+:moreover, there is an &quot;air-gap&quot; when passing a command invocation via ~UI-Bus and Interface System
+;forming and enrichment of invocation state
+:interactions might happen in the form of ''gestures''
+:consequently, interaction state is picked up from context, during an extended time span prior to the invocation
+;access to the right ~InteractionStateManager
+:a widget just wants to invoke a command, yet it needs the help of &quot;some&quot; InteractionStateManager for
+:* creating the command instance, so arguments can be bound
+:* fill in missing values for the arguments, depending on context
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201703031816" tags="GuiIntegration overview" changecount="9">

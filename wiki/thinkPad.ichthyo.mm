@@ -2043,8 +2043,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485555902731" ID="ID_55451880" MODIFIED="1485555951678" TEXT="#1070 how to bind session commands into UI actions">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1488423636612" TEXT="globale Aktionen">
-<arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-678;-1180;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="670;252;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1488672334405" TEXT="globale Aktionen">
+<arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="870;255;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1488419973349" ID="ID_1855791702" MODIFIED="1488419978923" TEXT="brauche ein Konzept">
 <icon BUILTIN="yes"/>
@@ -2177,8 +2177,14 @@
 <node CREATED="1486763350764" ID="ID_1309124609" MODIFIED="1488420106546" TEXT="Aufgaben">
 <icon BUILTIN="yes"/>
 <node CREATED="1486763355739" ID="ID_745725927" MODIFIED="1486763370261" TEXT="Bindung f&#xfc;r Aktionen bereitstellen"/>
-<node CREATED="1488566356774" ID="ID_969011841" MODIFIED="1488566387030" TEXT="Ankerpunkt zum Bilden der Commands">
-<node CREATED="1488566405248" ID="ID_355508260" MODIFIED="1488566425745" TEXT="auffinden der Command-IDs"/>
+<node CREATED="1488566356774" ID="ID_969011841" MODIFIED="1488672817699" TEXT="Ankerpunkt zum Bilden der Commands">
+<arrowlink COLOR="#706a9a" DESTINATION="ID_1461875887" ENDARROW="Default" ENDINCLINATION="-923;-789;" ID="Arrow_ID_457540370" STARTARROW="None" STARTINCLINATION="806;300;"/>
+<node CREATED="1488566405248" ID="ID_355508260" MODIFIED="1488566425745" TEXT="auffinden der Command-IDs">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677809297" ID="ID_1520540731" MODIFIED="1488677835595" TEXT="Problem: Zugang / Wiring">
+<arrowlink DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="183;-575;" ID="Arrow_ID_1002016515" STARTARROW="None" STARTINCLINATION="341;286;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 <node CREATED="1488566427445" ID="ID_567418101" MODIFIED="1488566441831" TEXT="InteractionStateManager">
 <node CREATED="1488566447466" ID="ID_1978593319" MODIFIED="1488566452134" TEXT="h&#xe4;ngen darunter"/>
 <node CREATED="1488566452538" ID="ID_1569803797" MODIFIED="1488566471539" TEXT="werden transient gebilet"/>
@@ -2238,6 +2244,7 @@
 </node>
 </node>
 </node>
+<node CREATED="1488672665626" ID="ID_590886664" MODIFIED="1488672675810" TEXT="Grundlagen f&#xfc;r Command-handling"/>
 <node CREATED="1487313769425" FOLDED="true" ID="ID_728232011" MODIFIED="1488423342542" TEXT="Grundlagen f&#xfc;r InteractionControl">
 <node CREATED="1488419854029" ID="ID_932507511" MODIFIED="1488419868604" TEXT="erst mal: Konzept">
 <icon BUILTIN="help"/>
@@ -2479,12 +2486,33 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1486520281897" ID="ID_827558797" MODIFIED="1486768117891" TEXT="Problem: zwei Inseln">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1488677721565" ID="ID_850989325" MODIFIED="1488678049693" TEXT="Problem: Zugang">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="183;-575;" ID="Arrow_ID_1002016515" SOURCE="ID_1520540731" STARTARROW="None" STARTINCLINATION="341;286;"/>
+<linktarget COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" SOURCE="ID_827179653" STARTARROW="None" STARTINCLINATION="908;-975;"/>
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1488677729388" ID="ID_764102285" MODIFIED="1488677736385" TEXT="grunds&#xe4;tziches Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1488678069565" ID="ID_346104238" MODIFIED="1488678076272" TEXT="explizite Verdrahtung scheidet aus"/>
+<node CREATED="1488678077236" ID="ID_1536759032" MODIFIED="1488678099334" TEXT="klassisches Inversion-Of-Control">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1488678106024" ID="ID_1242521430" MODIFIED="1488678110761" TEXT="access by name">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1488677737419" ID="ID_1621219441" MODIFIED="1488677750577" TEXT="einfach gel&#xf6;st f&#xfc;r top-Level">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1488677751537" ID="ID_75445042" MODIFIED="1488677761574" TEXT="schwierig f&#xfc;r Widgets">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1486520281897" ID="ID_827558797" MODIFIED="1488677772308" TEXT="Problem: zwei Inseln" VSHIFT="16">
 <arrowlink COLOR="#464b68" DESTINATION="ID_1847844548" ENDARROW="Default" ENDINCLINATION="35;-168;" ID="Arrow_ID_1483178089" STARTARROW="Default" STARTINCLINATION="-2;95;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1486520289382" ID="ID_1944158920" MODIFIED="1486520302679" TEXT="CoreService + UI-Bus"/>
 <node CREATED="1486520303173" ID="ID_306583765" MODIFIED="1486520321580" TEXT="UiManager, Actions etc"/>
-<node CREATED="1486521232144" FOLDED="true" HGAP="44" ID="ID_1816242514" MODIFIED="1488423342660" TEXT="Fragen" VSHIFT="16">
+<node CREATED="1486521232144" FOLDED="true" HGAP="44" ID="ID_1816242514" MODIFIED="1488677784070" TEXT="Fragen" VSHIFT="16">
 <icon BUILTIN="help"/>
 <node CREATED="1486521810252" ID="ID_728134375" MODIFIED="1486521858401" TEXT="wer verk&#xf6;rpert den Sesison-Root?">
 <icon BUILTIN="help"/>
@@ -10476,7 +10504,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1434128067529" TEXT="Connect">
+<node CREATED="1434128059966" ID="ID_823283341" MODIFIED="1488672648352" TEXT="Connect">
 <node CREATED="1434128071126" ID="ID_1618124128" MODIFIED="1481413111360" TEXT="UI-Bus">
 <linktarget COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" SOURCE="ID_257833497" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
 <font NAME="SansSerif" SIZE="14"/>
@@ -10648,7 +10676,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548830035" HGAP="5" ID="ID_1295711115" MODIFIED="1485548844056" TEXT="Nutzen" VSHIFT="17">
 <icon BUILTIN="bell"/>
 <node CREATED="1485548856639" ID="ID_1677281474" MODIFIED="1485548861522" TEXT="spezifische Aktionen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" FOLDED="true" ID="ID_826011549" MODIFIED="1488423342668" TEXT="Problem: globale Aktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" FOLDED="true" ID="ID_826011549" MODIFIED="1488672334405" TEXT="Problem: globale Aktionen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -10673,7 +10701,7 @@
     </ul>
   </body>
 </html></richcontent>
-<linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-678;-1180;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="670;252;"/>
+<linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="870;255;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485555902731" FOLDED="true" ID="ID_1913236669" MODIFIED="1488423342549" TEXT="#1070 how to bind session commands into UI actions">
 <icon BUILTIN="flag-yellow"/>
@@ -10926,6 +10954,311 @@
 </node>
 </node>
 </node>
+</node>
+<node CREATED="1488672534372" HGAP="78" ID="ID_1920838120" MODIFIED="1488672850503" TEXT="core commands" VSHIFT="21">
+<icon BUILTIN="stop"/>
+<node CREATED="1488672580926" ID="ID_1920974710" MODIFIED="1488672584130" TEXT="konzeptionell">
+<node CREATED="1488672621585" ID="ID_1461875887" MODIFIED="1488672817699" TEXT="Command-cycle">
+<linktarget COLOR="#706a9a" DESTINATION="ID_1461875887" ENDARROW="Default" ENDINCLINATION="-923;-789;" ID="Arrow_ID_457540370" SOURCE="ID_969011841" STARTARROW="None" STARTINCLINATION="806;300;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1488672838499" ID="ID_1617972329" MODIFIED="1488672841439" TEXT="Interaktionen">
+<node CREATED="1488672913049" ID="ID_1455665748" MODIFIED="1488672923667" TEXT="brauche InvocationTrail">
+<node CREATED="1488675922636" ID="ID_951339978" MODIFIED="1488676038538" TEXT="kann man subsumieren">
+<arrowlink COLOR="#72a0f5" DESTINATION="ID_329010871" ENDARROW="Default" ENDINCLINATION="-16;-107;" ID="Arrow_ID_1387738585" STARTARROW="None" STARTINCLINATION="-50;-26;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1488675931163" ID="ID_1990262471" MODIFIED="1488675953207" TEXT="InteractionStateManager == Abstraktion">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1488672957922" ID="ID_329010871" MODIFIED="1488676593469" TEXT="brauche InteractionStateManager">
+<arrowlink COLOR="#5a80c1" DESTINATION="ID_121485208" ENDARROW="Default" ENDINCLINATION="9;-164;" ID="Arrow_ID_17404383" STARTARROW="None" STARTINCLINATION="1;52;"/>
+<linktarget COLOR="#72a0f5" DESTINATION="ID_329010871" ENDARROW="Default" ENDINCLINATION="-16;-107;" ID="Arrow_ID_1387738585" SOURCE="ID_951339978" STARTARROW="None" STARTINCLINATION="-50;-26;"/>
+<node CREATED="1488676089349" ID="ID_1584585045" MODIFIED="1488676118181" TEXT="Anfrage ...f&#xfc;r ein bestimmes Command"/>
+<node CREATED="1488676629451" ID="ID_989334768" MODIFIED="1488676647900" TEXT="Problem: wie findet man den Zust&#xe4;ndigen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1488676134951" ID="ID_1426727929" MODIFIED="1488676142770" TEXT="N : M">
+<node CREATED="1488676119929" ID="ID_70646733" MODIFIED="1488676172343">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      einer k&#246;nnte f&#252;r
+    </p>
+    <p>
+      mehrere Commands zust&#228;ndig sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1488676210948" ID="ID_1003704499" MODIFIED="1488676230046" TEXT="verschiedene Auspr&#xe4;gungen"/>
+<node CREATED="1488676230802" ID="ID_1711345566" MODIFIED="1488676234293" TEXT="generische Situation"/>
+</node>
+<node CREATED="1488676179840" ID="ID_1207866065" MODIFIED="1488676200726">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mehrere k&#246;nnten f&#252;r
+    </p>
+    <p>
+      ein Command zust&#228;ndig sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1488676238120" ID="ID_62079120" MODIFIED="1488676259969" TEXT="da an ein Control/Interface-System gebunden"/>
+<node CREATED="1488676280459" ID="ID_800780235" MODIFIED="1488676340897" TEXT="ist vermutlich keine gute Idee">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....denn wir wollen ja grade
+    </p>
+    <p>
+      den Widget-Code vom Control-System abstrahieren
+    </p>
+    <p>
+      und ebenso die Gesten abstrahieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1488676343170" ID="ID_1624806724" MODIFIED="1488676361392" TEXT="besser? InteractionStateManager == Geste">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1488674244218" ID="ID_121485208" MODIFIED="1488676593469" TEXT="Aktivit&#xe4;ten">
+<linktarget COLOR="#5a80c1" DESTINATION="ID_121485208" ENDARROW="Default" ENDINCLINATION="9;-164;" ID="Arrow_ID_17404383" SOURCE="ID_329010871" STARTARROW="None" STARTINCLINATION="1;52;"/>
+<node CREATED="1488674249665" ID="ID_1028887910" MODIFIED="1488674254196" TEXT="Command-Instanz">
+<node CREATED="1488674520524" ID="ID_895059689" MODIFIED="1488674526217" TEXT="Prototyp-Pattern">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1488674528035" ID="ID_1084922722" MODIFIED="1488674610778">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>mu&#223;</i>&#160;Instanzen einsetzen
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar zwingend, sobald
+    </p>
+    <ul>
+      <li>
+        das command Argument hat, die gebunden sein wollen
+      </li>
+      <li>
+        mehrere Invocations des gleichen Grund-Commands &quot;gleichzeitig&quot; unterwegs sein k&#246;nnten
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1488674659521" ID="ID_1283697108" MODIFIED="1488674673114" TEXT="Problem: Instanz-Management">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1488674675895" ID="ID_1414738474" MODIFIED="1488674746218" TEXT="benannt oder anonyom">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1488674682869" ID="ID_1865712804" MODIFIED="1488674755779" TEXT="anonym == ref counted">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1488674692293" ID="ID_1154381764" MODIFIED="1488674711644" TEXT="bindet uns an Proc">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1488674807716" ID="ID_1220416942" MODIFIED="1488674814949" TEXT="ist das ein Problem?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1488674815867" ID="ID_417989611" MODIFIED="1488674903230" TEXT="eigentlich nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...vom Linken her nicht, da wir Gui gegen Proc linken
+    </p>
+    <p>
+      vom Bauen auch nicht, und au&#223;erdem...
+    </p>
+    <p>
+      ...coden wir ja nicht gegen die Implementierung,
+    </p>
+    <p>
+      sondern gegen eine Abstraction (Command), die eigens daf&#252;r geschaffen wurde
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1488674905160" ID="ID_1688143285" MODIFIED="1488674916271" TEXT="ungutes Gef&#xfc;hl">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1488674941243" ID="ID_1628081916" MODIFIED="1488674949133" TEXT="unterl&#xe4;uft das Interface-System"/>
+<node CREATED="1488675139160" ID="ID_1466153465" MODIFIED="1488675146082" TEXT="unterl&#xe4;uft das Messaging / UI-Bus"/>
+</node>
+</node>
+<node CREATED="1488674721265" ID="ID_1409487095" MODIFIED="1488674735629" TEXT="aber: benannte Instanzen leben einfach weiter">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1488677059648" ID="ID_1869818470" MODIFIED="1488677072562" TEXT="war eigentlich nur f&#xfc;r &quot;Spezialisierungen&quot; gedacht"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675785223" ID="ID_134788782" MODIFIED="1488675850639" TEXT="Aufgaben">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675788278" ID="ID_241828684" MODIFIED="1488675873111" TEXT="wer erzeugt die Instanz?">
+<icon BUILTIN="help"/>
+<node CREATED="1488676735628" ID="ID_845338567" MODIFIED="1488676745534" TEXT="der InteractionStateManager">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1488676746667" ID="ID_1675443482" MODIFIED="1488676751306" TEXT="jemand in Proc">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675795485" ID="ID_560742641" MODIFIED="1488675865907" TEXT="wer benennt die Instanz?">
+<icon BUILTIN="help"/>
+<node CREATED="1488676790165" ID="ID_450420022" MODIFIED="1488676795858" TEXT="der der sie erzeugt">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1488676796892" ID="ID_399980219" MODIFIED="1488676813292" TEXT="ein Benennungs-Service in Proc">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1488676805491" ID="ID_1995019439" MODIFIED="1488676815444" TEXT="ein Instanz-Pool">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675800668" ID="ID_260870361" MODIFIED="1488675862145" TEXT="wer h&#xe4;lt die Instanz (am Leben)?">
+<icon BUILTIN="help"/>
+<node CREATED="1488676827432" ID="ID_1354771185" MODIFIED="1488676881245" TEXT="Problem: air-Gap">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wegen
+    </p>
+    <ul>
+      <li>
+        Command-Message via UI-Bus
+      </li>
+      <li>
+        Durchreichen durch das Interface-System
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1488677586744" ID="ID_1077384395" MODIFIED="1488677612409" TEXT="AUA: Zwang zum Benennen">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1488676941240" ID="ID_403164604" MODIFIED="1488676965416" TEXT="im Proc-Dispatcher kein Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da die DispatcherQueue direkt Command-Objekte (=frontend handle) speichert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1488677212907" ID="ID_1525612446" MODIFIED="1488677229204" TEXT="Idee: im InteractionStateManager">
+<node CREATED="1488677232640" ID="ID_1033002023" MODIFIED="1488677274454" TEXT="null oder maximal eine pro Command"/>
+<node CREATED="1488677258932" ID="ID_1695115228" MODIFIED="1488677268487" TEXT="andere Geste -&gt; andere Command-Instanz"/>
+<node COLOR="#c15a5d" CREATED="1488677333066" ID="ID_182292267" MODIFIED="1488677344667" TEXT="Aber">
+<node CREATED="1488677346473" ID="ID_712110821" MODIFIED="1488677350100" TEXT="air-Gap"/>
+<node CREATED="1488677350640" ID="ID_901346570" MODIFIED="1488677370377" TEXT="Ausf&#xfc;hrung im Dispatcher erst sp&#xe4;ter"/>
+<node COLOR="#338800" CREATED="1488677418087" ID="ID_644949863" MODIFIED="1488677499488" TEXT="ist doch kein Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn das GUI l&#228;uft ja synchron.
+    </p>
+    <p>
+      D.h. wir wissen, wenn wir das Air-Gap &#252;berstanden haben.
+    </p>
+    <p>
+      Ab diesem Punkt h&#228;lt der Eintrag in der DispatcherQueue das Command am Leben,
+    </p>
+    <p>
+      und wenn es stirbt, dann stirbt es halt...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677859619" ID="ID_827179653" MODIFIED="1488678049693" TEXT="Problem: Service-Zugang">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da dies ein pervasiv genutzter Service ist,
+    </p>
+    <p>
+      und wir nicht wollen, da&#223; jedes Widget
+    </p>
+    <p>
+      mit dem InteractionDirector verdrahtet sein mu&#223;!
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" STARTARROW="None" STARTINCLINATION="908;-975;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1488674268407" ID="ID_284516869" MODIFIED="1488674271114" TEXT="Parameter"/>
+</node>
+</node>
+<node CREATED="1488672976664" ID="ID_476262016" MODIFIED="1488672983866" TEXT="Rollen">
+<node CREATED="1488673008668" ID="ID_1231961413" MODIFIED="1488673044658" TEXT="InvocationTrail">
+<node CREATED="1488673045793" ID="ID_969627518" MODIFIED="1488673045793" TEXT="passiver Marker f&#xfc;r eine Instanz"/>
+</node>
+<node CREATED="1488673032384" ID="ID_1621941781" MODIFIED="1488673052737" TEXT="InteractionStateManager">
+<node CREATED="1488673053917" ID="ID_312201027" MODIFIED="1488673056808" TEXT="Vermittler"/>
+<node CREATED="1488673066524" ID="ID_1129594057" MODIFIED="1488673069415" TEXT="Bildung von S&#xe4;tzen"/>
+</node>
+</node>
+</node>
+<node CREATED="1488672585310" ID="ID_50525010" MODIFIED="1488672593368" TEXT="framework"/>
+<node CREATED="1488672593812" ID="ID_1454459609" MODIFIED="1488672598271" TEXT="konkret"/>
 </node>
 <node CREATED="1448063874479" HGAP="43" ID="ID_739054690" MODIFIED="1481413149364" TEXT="UI-Modell" VSHIFT="1">
 <icon BUILTIN="help"/>
