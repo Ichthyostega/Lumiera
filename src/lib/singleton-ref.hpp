@@ -76,7 +76,7 @@ namespace lib {
         close ()
           {
             ASSERT (obj_, "Lifecycle error");
-            obj_ = 0;
+            obj_ = nullptr;
           }
         
         TY* 

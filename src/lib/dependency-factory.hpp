@@ -52,7 +52,6 @@ namespace lib {
     {
     public:
       typedef void* (*InstanceConstructor)(void);
-      typedef void  (*KillFun)            (void*);
       
       /** ensure initialisation by installing a default constructor function,
        *  but don't change an explicitly installed different constructor function.

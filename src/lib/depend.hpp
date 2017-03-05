@@ -98,6 +98,7 @@ namespace lib {
    *   the singleton ctor to be flushed and visible to other threads when releasing the lock?
    *   To my understanding, the answer is yes. See
    *   [POSIX](http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap04.html#tag_04_10)
+   * @todo as of 2016, the design could still be improved     //////////////////////////////////////////TICKET #1086
    * @param SI the class of the Singleton instance
    */
   template<class SI>
@@ -148,8 +149,7 @@ namespace lib {
        * this configuration must be done \em prior to any use the dependency factory.
        * @param ctor a constructor function, which will be invoked on first usage.
        * @note basically a custom constructor function is responsible to manage any
-       *         created service instances. Optionally it may install a deleter function
-       *         via \c DependencyFactory::scheduleDestruction(void*,KillFun)
+       *         created service instances.
        * @remark typically the \c Depend<TY> factory will be placed into a static variable,
        *         embedded into another type or interface. In this case, actual storage for
        *         this static variable needs to be allocated within some translation unit.
