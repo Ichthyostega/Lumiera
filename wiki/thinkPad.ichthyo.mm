@@ -2486,9 +2486,9 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1488677721565" ID="ID_850989325" MODIFIED="1488678049693" TEXT="Problem: Zugang">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1488677721565" ID="ID_850989325" MODIFIED="1488940144847" TEXT="Problem: Zugang">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="183;-575;" ID="Arrow_ID_1002016515" SOURCE="ID_1520540731" STARTARROW="None" STARTINCLINATION="341;286;"/>
-<linktarget COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" SOURCE="ID_827179653" STARTARROW="None" STARTINCLINATION="908;-975;"/>
+<linktarget COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" SOURCE="ID_827179653" STARTARROW="None" STARTINCLINATION="912;-974;"/>
 <icon BUILTIN="flag-pink"/>
 <node CREATED="1488677729388" ID="ID_764102285" MODIFIED="1488677736385" TEXT="grunds&#xe4;tziches Problem">
 <icon BUILTIN="messagebox_warning"/>
@@ -11124,20 +11124,37 @@
 <node CREATED="1488674721265" ID="ID_1409487095" MODIFIED="1488674735629" TEXT="aber: benannte Instanzen leben einfach weiter">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1488677059648" ID="ID_1869818470" MODIFIED="1488677072562" TEXT="war eigentlich nur f&#xfc;r &quot;Spezialisierungen&quot; gedacht"/>
+<node CREATED="1488936223175" ID="ID_1105962999" MODIFIED="1488936233654" TEXT="zu pr&#xfc;fen: overhead">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1488936242413" ID="ID_1255236132" MODIFIED="1488936261039" TEXT="k&#xf6;nnte eigener, dritter Typus werden">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1488936634128" ID="ID_857930488" MODIFIED="1488936700939" TEXT="Konsequenz">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1488936638247" ID="ID_699367403" MODIFIED="1488936651353" TEXT="man sollte auf das Bauchgef&#xfc;hl h&#xf6;ren"/>
+<node CREATED="1488936653341" ID="ID_629143054" MODIFIED="1488936669310" TEXT="Design leitet in richtige Bahnen"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488936670970" ID="ID_697148715" MODIFIED="1488936742194" TEXT="die Trennung respektieren">
+<arrowlink COLOR="#79d29b" DESTINATION="ID_1131387570" ENDARROW="Default" ENDINCLINATION="-48;-109;" ID="Arrow_ID_1598234794" STARTARROW="None" STARTINCLINATION="-421;-27;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675785223" ID="ID_134788782" MODIFIED="1488675850639" TEXT="Aufgaben">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675788278" ID="ID_241828684" MODIFIED="1488675873111" TEXT="wer erzeugt die Instanz?">
-<icon BUILTIN="help"/>
-<node CREATED="1488676735628" ID="ID_845338567" MODIFIED="1488676745534" TEXT="der InteractionStateManager">
-<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1488675788278" ID="ID_241828684" MODIFIED="1488936420989" TEXT="wer erzeugt die Instanz?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1488676735628" ID="ID_845338567" MODIFIED="1488936413573" TEXT="der InteractionStateManager">
+<icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1488676746667" ID="ID_1675443482" MODIFIED="1488676751306" TEXT="jemand in Proc">
-<icon BUILTIN="help"/>
+<node CREATED="1488676746667" ID="ID_1675443482" MODIFIED="1488936417954" TEXT="jemand in Proc">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1488936425628" ID="ID_273815265" MODIFIED="1488936428431" TEXT="neue Entit&#xe4;t"/>
+<node CREATED="1488936429139" ID="ID_858892843" MODIFIED="1488936433830" TEXT="geh&#xf6;rt zum Command-System"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675795485" ID="ID_560742641" MODIFIED="1488675865907" TEXT="wer benennt die Instanz?">
+<node CREATED="1488675795485" ID="ID_560742641" MODIFIED="1488936760622" TEXT="wer benennt die Instanz?">
 <icon BUILTIN="help"/>
 <node CREATED="1488676790165" ID="ID_450420022" MODIFIED="1488676795858" TEXT="der der sie erzeugt">
 <icon BUILTIN="help"/>
@@ -11149,8 +11166,8 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488675800668" ID="ID_260870361" MODIFIED="1488675862145" TEXT="wer h&#xe4;lt die Instanz (am Leben)?">
-<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1488675800668" ID="ID_260870361" MODIFIED="1488936768854" TEXT="wer h&#xe4;lt die Instanz (am Leben)?">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1488676827432" ID="ID_1354771185" MODIFIED="1488676881245" TEXT="Problem: air-Gap">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -11189,7 +11206,8 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1488677212907" ID="ID_1525612446" MODIFIED="1488677229204" TEXT="Idee: im InteractionStateManager">
+<node CREATED="1488677212907" ID="ID_1525612446" MODIFIED="1488936784410" TEXT="Idee: im InteractionStateManager">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1488677232640" ID="ID_1033002023" MODIFIED="1488677274454" TEXT="null oder maximal eine pro Command"/>
 <node CREATED="1488677258932" ID="ID_1695115228" MODIFIED="1488677268487" TEXT="andere Geste -&gt; andere Command-Instanz"/>
 <node COLOR="#c15a5d" CREATED="1488677333066" ID="ID_182292267" MODIFIED="1488677344667" TEXT="Aber">
@@ -11220,8 +11238,81 @@
 </node>
 </node>
 </node>
+<node CREATED="1488936070394" ID="ID_1131387570" MODIFIED="1488936736607" TEXT="Schlu&#xdf;folgerung">
+<linktarget COLOR="#79d29b" DESTINATION="ID_1131387570" ENDARROW="Default" ENDINCLINATION="-48;-109;" ID="Arrow_ID_1598234794" SOURCE="ID_697148715" STARTARROW="None" STARTINCLINATION="-421;-27;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1488936102272" ID="ID_414025307" MODIFIED="1488936125740" TEXT="eigenes Instantiierungs-Protokoll">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677859619" ID="ID_827179653" MODIFIED="1488678049693" TEXT="Problem: Service-Zugang">
+<node CREATED="1488936115534" ID="ID_1508575123" MODIFIED="1488936128074" TEXT="explizit in Proc zu unterst&#xfc;tzen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1488936129180" ID="ID_62638556" MODIFIED="1488936137127" TEXT="hand-over">
+<node CREATED="1488936140275" ID="ID_61978297" MODIFIED="1488936152237" TEXT="entfernt Registrierung"/>
+<node CREATED="1488936152849" ID="ID_525023498" MODIFIED="1488936164963" TEXT="erzeugt anonyme Instanz"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1488936910756" HGAP="200" ID="ID_208733336" MODIFIED="1488936924589" TEXT="neues Design" VSHIFT="14">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1488937072267" ID="ID_1765750778" MODIFIED="1488937082039" TEXT="separation of concerns">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1488936925448" ID="ID_1949523361" MODIFIED="1488937085712" TEXT="zwei neue Entit&#xe4;ten">
+<icon BUILTIN="yes"/>
+<node CREATED="1488936938742" ID="ID_1388901840" MODIFIED="1488939645006">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      GUI: <b>CmdAccessor</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1488936962690" ID="ID_399848637" MODIFIED="1488936995228" TEXT="vermittelt InvocationStateManager"/>
+<node CREATED="1488937001406" ID="ID_1747520920" MODIFIED="1488937012304" TEXT="letzterer ist Interface f&#xfc;r UI-Entit&#xe4;ten"/>
+</node>
+<node CREATED="1488936942317" ID="ID_222608258" MODIFIED="1488939548823">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Proc: <b>CmdInstanceManager</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1488937028202" ID="ID_1121930542" MODIFIED="1488937033253" TEXT="erzeugt die Instanzen"/>
+<node CREATED="1488937033769" ID="ID_1795817178" MODIFIED="1488937045947" TEXT="verwaltet deren Lebenszyklus"/>
+<node CREATED="1488937046591" ID="ID_1911259949" MODIFIED="1488937055426" TEXT="vom UI allein per ID ansprechbar"/>
+</node>
+</node>
+<node CREATED="1488938186100" ID="ID_98580620" MODIFIED="1488938192567" TEXT="Command-Definition erweitern">
+<node CREATED="1488938195387" ID="ID_1831459518" MODIFIED="1488938202950" TEXT="M&#xf6;glichkeit, Regeln vorzugeben"/>
+<node CREATED="1488938222135" ID="ID_1365861102" MODIFIED="1488938232250" TEXT="werden fest mit dem Command zusammen konfiguriert"/>
+<node CREATED="1488938205266" ID="ID_1560120611" MODIFIED="1488938215411" TEXT="diese k&#xf6;nnen aus der Command-Def bezogen werden"/>
+</node>
+<node CREATED="1488939658004" ID="ID_726054321" MODIFIED="1488939668212" TEXT="Interaktionen">
+<icon BUILTIN="info"/>
+<node CREATED="1488939675705" ID="ID_1515081819" MODIFIED="1488939724134" TEXT="UI-Element fragt CmdAccessor nach InteractionStateManager"/>
+<node CREATED="1488939946828" ID="ID_1817986480" MODIFIED="1488940966027" TEXT="CmdAccessor speichert InteractionStateManager"/>
+<node CREATED="1488939748247" ID="ID_589914539" MODIFIED="1488940949864" TEXT="InteractionstateManager belegt beim CmdInstanceManager neue ID..."/>
+<node CREATED="1488940951052" ID="ID_1899882798" MODIFIED="1488940964629" TEXT="...und erzeugt daraus neuen InvocationTrail"/>
+<node CREATED="1488940222591" ID="ID_1071611814" MODIFIED="1488940241768" TEXT="UI-Element fragt InteractionStateManager: &quot;kann dieses Command ausgef&#xfc;hrt werden&quot;?"/>
+<node CREATED="1488940254106" ID="ID_1373320189" MODIFIED="1488940276539" TEXT="UI-Element bezieht vom InteractionStateManager einen InvocationTrail"/>
+<node CREATED="1488940300116" ID="ID_172216455" MODIFIED="1488940331244" TEXT="UI-Element registriert sich beim InteractionStateManager (als Observer)"/>
+<node CREATED="1488940435601" ID="ID_1906295137" MODIFIED="1488940468681" TEXT="UI-Element verwendet InvocationTrail, um Command zu triggern"/>
+<node CREATED="1488940469365" ID="ID_130562988" MODIFIED="1488940518450" TEXT="CmdInstanceManager &#xfc;bergibt (move) die Instanz an den ProcDispatcher"/>
+<node CREATED="1488940519518" ID="ID_1875791797" MODIFIED="1488940533992" TEXT="bei n&#xe4;chster Anfrage wird CmdInstanceManager daher neue Instanz anlegen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677859619" HGAP="-15" ID="ID_827179653" MODIFIED="1488940144847" TEXT="Problem: Service-Zugang" VSHIFT="24">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -11239,12 +11330,186 @@
   </body>
 </html>
 </richcontent>
-<arrowlink COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" STARTARROW="None" STARTINCLINATION="908;-975;"/>
+<arrowlink COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" STARTARROW="None" STARTINCLINATION="912;-974;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1488936835940" ID="ID_1322149090" MODIFIED="1488937388772" TEXT="separates Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hat &#252;berhaupt nichts mit dem Zugang zu Commands zu tun,
+    </p>
+    <p>
+      und auch nichts mit der Trennung zwischen Layern und Subsystemen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1488936840059" ID="ID_1305671938" MODIFIED="1488937417519" TEXT="generisches Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es geht um Service-Dependencies
+    </p>
+    <p>
+      aka DependencyInjection + Lifecycle Management
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1488937419308" ID="ID_994813744" MODIFIED="1488937424552" TEXT="lib::Depend ausbauen"/>
+<node CREATED="1488937436890" ID="ID_1184288068" MODIFIED="1488937442437" TEXT="kann auf sp&#xe4;ter vertagt werden"/>
+<node CREATED="1488937424996" ID="ID_1712367280" MODIFIED="1488937434311" TEXT="vorerst eigenes Front-End verwenden"/>
+<node CREATED="1488937449896" ID="ID_1352702920" MODIFIED="1488937496324" TEXT="Idee klar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        man hat ein statisches Front-End, d.h. by-name access
+      </li>
+      <li>
+        hinter dem liegt eine Factory
+      </li>
+      <li>
+        die Instanz kann von innen her wieder geschlossen werden
+      </li>
+      <li>
+        wenn geschlossen, dann Fehler werfen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1488674268407" ID="ID_284516869" MODIFIED="1488674271114" TEXT="Parameter">
+<node CREATED="1488937542963" ID="ID_853531623" MODIFIED="1488937550998" TEXT="passiert im InvocationStateManager"/>
+<node CREATED="1488937551514" ID="ID_1024843173" MODIFIED="1488937557157" TEXT="es k&#xf6;nnte Binde-Regeln geben"/>
+<node CREATED="1488937996901" ID="ID_1000532365" MODIFIED="1488940083440" TEXT="L&#xf6;sungsweg vom Command vorkonfiguriert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nicht klar, ob das notwendig (und gut) ist
+    </p>
+    <p>
+      es k&#246;nnte auch ausreichen, einfach die passende InteractionStateManager-Impl zu verwenden
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1488937565632" ID="ID_1990212985" MODIFIED="1488940116992" TEXT="dem User (UI-Element) ist das egal">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn InteractionStateManager ist ein <b>Interface</b>!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1488937651021" ID="ID_1956085726" MODIFIED="1488937977999" TEXT="Binde-Muster">
+<icon BUILTIN="idea"/>
+<node CREATED="1488937670778" ID="ID_696645875" MODIFIED="1488937783542" TEXT="fest hinterlegte Eintit&#xe4;t einsetzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das UI wei&#223;,
+    </p>
+    <p>
+      wer das konkret immer sein wird.
+    </p>
+    <p>
+      D.h. beim Start des UI wird eine Verbindung irgendwo hinterlegt
+    </p>
+    <p>
+      Das k&#246;nnte ein <i>Advice</i>&#160;sein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1488937682649" ID="ID_1090053275" MODIFIED="1488937855797" TEXT="aktuelles Element (mit Typ-Check)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vom Command her ist der Typ festgelegt
+    </p>
+    <p>
+      auf das &quot;aktuelle Element&quot; wir eine Art Typ-Match gemacht.
+    </p>
+    <p>
+      Wenn der pa&#223;t, kann das aktuelle Element verwendet werden.
+    </p>
+    <p>
+      In diesem Fall wird das Command <i>enabled</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1488937711053" ID="ID_586793367" MODIFIED="1488937890369" TEXT="partial application">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eine Argumentliste mit mehreren Parametern wir Schritt f&#252;r Schritt geschlossen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1488937724867" ID="ID_231519502" MODIFIED="1488937932885" TEXT="Ordnung nach Scope">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn mehrere Objekte als Argumente in Frage kommen,
+    </p>
+    <p>
+      wird das gem&#228;&#223; Scope &quot;n&#228;chstgelegne&quot; genommen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1488937933566" ID="ID_170827087" MODIFIED="1488937945712" TEXT="das sind komplexe Pl&#xe4;ne">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1488937947004" ID="ID_1297081811" MODIFIED="1488937965632" TEXT="Schlu&#xdf;folgerung: nur die Strategie vorsehen">
+<icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1488674268407" ID="ID_284516869" MODIFIED="1488674271114" TEXT="Parameter"/>
 </node>
 </node>
 <node CREATED="1488672976664" ID="ID_476262016" MODIFIED="1488672983866" TEXT="Rollen">
