@@ -155,5 +155,40 @@ namespace interact {
   }
   
   
+  /**
+   * Establish a pristine new sequence within the session.
+   * The goal is to create a new _playground_ for the user to add content.
+   * Actually, not only a new sequence is created, but also a new fork (track tree)
+   * and a new timeline to hold that sequence. And finally, this new timeline is opened for editing.
+   * This action invokes a command into the session, which in turn is responsible for figuring out
+   * all the contextual details sensibly.
+   */
+  void
+  InteractionDirector::newSequence()
+  {
+    UNIMPLEMENTED ("create new sequence and expose it as timeline");
+  }
+  
+  
+  /**
+   * Establish a empty new track close to the current scope.
+   * Like for #newSequence, the goal is to create a new empty workspace.
+   * But since a track can be attached anywhere within the fork (track tree), the currently active element
+   * is used to establish a current scope, which in turn is used as anchor to attach the new track in a
+   * sensible way, with a preference to add the new track as a sibling to the current scope. The actual
+   * details of this decision are delegated to the session, but the command invoked by this action does
+   * need a current element as argument, and this current element thus needs to be figured out from
+   * the context of invocation (current focus and possibly selection)
+   * @todo as of 3/2017 this is an initial draft: It is not clear yet, if this lookup of context
+   *       will always be treated implicitly, or if it is better to have a public _content discovery operation_
+   *       on InteractionDirector and pass the current element explicitly as argument
+   */
+  void
+  InteractionDirector::newTrack()
+  {
+    UNIMPLEMENTED ("create new track and attach it sensibly at the current scope");
+  }
+  
+  
   
 }}// namespace gui::interact

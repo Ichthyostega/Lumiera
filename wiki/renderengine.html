@@ -1539,7 +1539,7 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
-<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201703031814" tags="draft impl GuiPattern example discuss" changecount="13">
+<div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201703140129" tags="draft impl GuiPattern example discuss" changecount="14">
 <pre>//This page is a scrapbook to collect observations about command invocation in the UI//
 {{red{2/2017}}} the goal is to shape some generic patterns of InteractionControl (&amp;rarr; GuiCommandBinding, &amp;rarr; GuiCommandCycle)
 
@@ -1549,7 +1549,7 @@ As discussed in &amp;rarr; ModelDependencies, there is quite some degree of magi
 * a Session always has at least one Timeline; even a default-created Session has
 * when the Session is just //closed,// the UI becomes mostly disabled, with the exception of {{{Help}}}, {{{Quit}}} and {{{New Session}}}...
 * what this operation //actually means,// depends on the user's expectations. Here &quot;the user&quot; is an abstracted user we conceive, since there are no real-world users of Lumiera yet.
-** when just invokind &quot;add Sequence&quot;, the user wants a new playground
+** when just invoking &quot;add Sequence&quot;, the user wants a new playground
 ** when, on the other hand, the user right-clicks a scope-fork (&quot;track&quot; or &quot;media bin&quot;), she wants a new sequence made out of the contents of this fork
 * in both cases, after creating the new Sequence, it should become visible in the UI -- &lt;br/&gt;which means we have to set up a new timeline too, taking a copy of the currently active timeline. (When the latter is just pristine, we want the new one to take its place)
 At this point, it seems adequate to limit &quot;add Sequence&quot; to the first use case, and name the second one as &quot;make Sequence&quot;.
@@ -1558,7 +1558,7 @@ The latter will probably be used within a context menu, but don't forget that ac
 //add Sequence// thus means a global command, which can be issued against the current session with no further arguments...
 * it will fabricate a new fork (appearing as track in this context)
 * it will //root-attach// this fork, i.e. it will [[place|Placement]] it as child of the ModelRootMO scope, and this act automagically creates a new [[Sequence]] asset
-* it will fabricate a new BindingMO as a prototype copy from the currently active one, and likewise root-attach it, which automagically creates a new [[Timeline]] asset
+* it will fabricate a new BindingMO as a prototype copy from the currently active one, and likewise root-attach it, which magically creates a new [[Timeline]] asset
 * it will create a new ''focus goal'' ({{red{TODO new term coined 2/2017}}}), which should lead to activating the corresponding tab in the timeline pane, once this exists...
 
 Now, while all of this means a lot of functionality and complexity down in Proc, regarding the UI this action is quite simple: it is offered as an operation on the InteractionDirector, which most conveniently also corresponds to &quot;the session as such&quot; and thus can fire off the corresponding command without much further ado. On a technical level we just somehow need to know the corresponding command ID in proc, which is not subject to configuration, but rather requires some kind of well behaved hard-wiring. And, additionally, we need to build something like the aforementioned //focus goal...// {{red{TODO}}}
@@ -2582,7 +2582,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 &amp;rarr; GuiCommandCycle
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703110107" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="29">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703140110" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="31">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2621,8 +2621,8 @@ from these use cases, we can derive the //crucial activities for command handlin
 * when a command is completely parametrised, it can be invoked. The managing {{{InteractionStateManager}}} knows about this
 * on invocation, the ID of the instance is sent via UI-Bus to the {{{CmdInstanceManager}}}
 * which in turn removes the instance handle from its registration table and hands it over into the ProcDispatcher
+[&lt;img[Access to Session Commands from UI|uml/Command-ui-access.png]]
 Consequently this means that command instances will be formed //per {{{InteractionStateManager}}} instance.// Thus, each distinct kind of control system has its own instances, which are kept around, until they are ready for invocation. Each invocation &quot;burns&quot; an instance -- on next access, a new instance ID will be allocated, and the next command invocation cycle starts...
-[img[Access to Session Commands from UI|uml/Command-ui-access.png]]
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201703031816" tags="GuiIntegration overview" changecount="9">
@@ -3298,7 +3298,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201703031747" tags="design decision Concepts GuiPattern draft discuss" changecount="15">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201703140208" tags="design decision Concepts GuiPattern draft discuss" changecount="23">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
@@ -3321,12 +3321,14 @@ The primary insight is  //that we build upon a spatial metaphor// -- and thus we
 :a distinct, coherent place where some ongoing work is done
 :the WorkSite might move along with the work, but we also may leave it temporarily to visit some other work site
 ;the spot
-:the [[Spot]] is where we currently are -- taken both in the sense of a location and a spotlight
+:the [[Spot]] is //where we currently are// -- taken both in the sense of a location and a spotlight
 :thus a spot is potentially at some work site, but it can be navigated to another one
 ;focus
 :the concrete realisation of the spot within a given control system
 ;control system
 :a practical technical realisation of an human-computer-interface, like keyboard input/navigation, mouse, pen, hardware controller, touch
+;focus goal
+:an order or instruction to bring something //into focus,// which also means to move the spot to the designated location.
 ;UI frame
 :the overall interface is arranged into independent top-level segments of equal importance.
 :practically speaking, we may have multiple top-level windows residing on multiple desktops...
@@ -3339,6 +3341,8 @@ The primary insight is  //that we build upon a spatial metaphor// -- and thus we
 ;the spot locator
 :navigating means to move the SpotLocator, in order to move the spot from work site to work site
 :the spot locator is relocated by loading a new focus path to another [[work site|WorkSite]]
+
+The concept of a //focus goal// has several ramifications: for one it implies that there is something like //&quot;current cotrol system&quot;,// which also could be the //currently active control system(s).// Simply because focus, as the realisation of the abstract notion of the spot, is always tied to a control system able to implement it. And when we're able to define generic location coordinates and then //&quot;move there&quot;,// with the help of the spotLocator, we draw the conclusion that there must be a focus (implementation) be moving towards that location. Like e.g.  the desired entity gaining the keyboard focus. And the second thing we may conclude is that there is some degree of leeway in the way how such a focus goal is reached. Since the inner logic of control systems can be quite drastically different from each other, we need to leave it to the actual control system //how a focus goal is reached.// To point out an obvious example: it is not a good idea to move the mouse pointer forcibly onto a screen element. Rather, we must use the established mechanisms of switching, scrolling and unfolding to bring the desired target element into the visible area, leaving the last step to the user, which must actively move the mouse onto the target. And we must give good visual clues as to what happened, and what we expect from the user (namely to direct her attention onto the element brought into focus).
 </pre>
 </div>
 <div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201703021658" tags="def draft" changecount="9">

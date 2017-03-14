@@ -386,12 +386,8 @@ namespace ctrl {
       void
       onMenu_sequence_add()
         {
-          ///////////////////////////////////////////////////////TODO this is bad user interaction design. Just create the sequence! The user is free to change the default name afterwards
-          dialog::NameChooser dialog(getWorkspaceWindow(),
-            _("Add Sequence"), _("New Sequence"));
-///////////////////////////////////////////////////////////////////////////////////////////////TICKET #1070 need a way how to issue session commands    
-//        if(dialog.run() == RESPONSE_OK)
-//          workspaceWindow().getProject().add_new_sequence(dialog.getName());           //////global -> InteractionDirector
+          /////////////////////////////////////////////////////////////////////////////////////TODO consider to invoke those one-liners directly from the lambda!
+          globalCtx_.director_.newSequence();
         }
       
       
@@ -401,7 +397,7 @@ namespace ctrl {
       void
       onMenu_track_add()
         {
-          g_message("Hello");                                                            //////TODO Problem is how to find the context!!!!
+          globalCtx_.director_.newSequence();
         }
       
       

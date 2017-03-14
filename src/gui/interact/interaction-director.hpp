@@ -128,6 +128,9 @@ namespace interact {
       void forkProject();
       void openFile();
       
+      void newSequence();
+      void newTrack();
+      
     private:
       
     };
