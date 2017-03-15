@@ -2090,6 +2090,144 @@
 <node CREATED="1489461872367" ID="ID_1191906862" MODIFIED="1489461882010" TEXT="bedingt CmdAccessor"/>
 <node CREATED="1489461905083" ID="ID_1232900605" MODIFIED="1489461911390" TEXT="bedingt Service-Zugang"/>
 </node>
+<node CREATED="1489544225984" ID="ID_1436775081" MODIFIED="1489544240309" TEXT="Triggern">
+<icon BUILTIN="forward"/>
+<node CREATED="1489544261547" ID="ID_1624183619" MODIFIED="1489544266933" TEXT="wer">
+<icon BUILTIN="help"/>
+<node CREATED="1489544403984" ID="ID_1230750297" MODIFIED="1489544416135" TEXT="&quot;ein UI-Element&quot;">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1489544439187" ID="ID_1231587220" MODIFIED="1489544450590" TEXT="Beispiel: Toolbar-Button"/>
+<node CREATED="1489544452034" ID="ID_745673239" MODIFIED="1489544459404" TEXT="Beispiel: Kontextmen&#xfc;-Eintrag"/>
+<node CREATED="1489544513577" ID="ID_128032926" MODIFIED="1489544521044" TEXT="Beispiel: Aktion per Keybinding"/>
+<node CREATED="1489544524128" ID="ID_1668808893" MODIFIED="1489544534314" TEXT="Beispiel: Signal drag-n-drop"/>
+</node>
+<node CREATED="1489544268018" ID="ID_452323402" MODIFIED="1489544273089" TEXT="was">
+<icon BUILTIN="help"/>
+<node CREATED="1489544652414" ID="ID_1351449548" MODIFIED="1489544658199" TEXT="lokal bekannt"/>
+<node CREATED="1489544640288" ID="ID_1518540017" MODIFIED="1489544651898" TEXT="fest verdrahtet"/>
+<node CREATED="1489544659597" ID="ID_1444251202" MODIFIED="1489544666376" TEXT="ggfs. Auswahl aus kleiner Menge"/>
+</node>
+<node CREATED="1489544717333" ID="ID_1695877485" MODIFIED="1489544720305" TEXT="falls">
+<icon BUILTIN="help"/>
+<node CREATED="1489544722261" ID="ID_1263012116" MODIFIED="1489544725320" TEXT="ausf&#xfc;hrbar"/>
+<node CREATED="1489544725860" ID="ID_1167910092" MODIFIED="1489544728848" TEXT="d.h. aktiviert"/>
+<node CREATED="1489544826383" ID="ID_166753518" MODIFIED="1489544970504" TEXT="zwei verschiedene Effekte">
+<icon BUILTIN="idea"/>
+<node CREATED="1489544836757" ID="ID_1543872004" MODIFIED="1489544891968" TEXT="Ausf&#xfc;hrung abweisen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...stattdessen einen Fehler-Indikator ausl&#246;sen
+    </p>
+    <p>
+      (Beispiel &quot;in-point fehlt&quot;)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1489544910395" ID="ID_82086808" MODIFIED="1489544965386" TEXT="enable Action">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist eine Reaktion,
+    </p>
+    <p>
+      die von einem managing Ui-Element ausgef&#252;hrt wird,
+    </p>
+    <p>
+      aber von einem externen State-Change getriggert wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#252298" CREATED="1489546623162" HGAP="-17" ID="ID_1622574347" MODIFIED="1489546668633" TEXT="was wird gebraucht" VSHIFT="10">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="help"/>
+<node COLOR="#ff0000" CREATED="1489546678250" ID="ID_228157787" MODIFIED="1489547976088" TEXT="Vorsicht UI-Programmierung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1489546705798" ID="ID_43582318" MODIFIED="1489546746697" TEXT="keine neue Programmiersprache entwerfen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1489546724892" ID="ID_1763781107" MODIFIED="1489546749259" TEXT="mu&#xdf; letztlich explizit sein">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1489546837172" ID="ID_665817500" MODIFIED="1489546841173" TEXT="aber">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1489546843356" ID="ID_1556795494" MODIFIED="1489546854590" TEXT="ich will Gestaltbarkeit"/>
+<node CREATED="1489546855202" ID="ID_1824748232" MODIFIED="1489546862101" TEXT="ich will Konfigurierbarkeit"/>
+</node>
+<node CREATED="1489546994743" ID="ID_1851585461" MODIFIED="1489546998138" TEXT="im Einzelnen">
+<node CREATED="1489546998918" ID="ID_668687712" MODIFIED="1489547001785" TEXT="Aktivierung">
+<node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1489547015360" TEXT="Callback installieren"/>
+<node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1489547028606" TEXT="Anfrage: ist dies aktivierbar?"/>
+</node>
+<node CREATED="1489547086458" ID="ID_1858100202" MODIFIED="1489547091270" TEXT="Argumente">
+<node CREATED="1489547096857" ID="ID_184341736" MODIFIED="1489547103300" TEXT="&quot;gib mir die Argumente!&quot;">
+<node CREATED="1489547170463" ID="ID_1981926549" MODIFIED="1489547178266" TEXT="wirklich?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1489547179254" ID="ID_192306839" MODIFIED="1489547197378" TEXT="ist das der richtige Ansatz?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1489547208282" ID="ID_99440101" MODIFIED="1489547228707" TEXT="l&#xe4;&#xdf;t sich das &#xfc;berhaupt jeh realisieren?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1489547112255" ID="ID_270498008" MODIFIED="1489548210093" TEXT="generische Rollen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Idee ist hier,
+    </p>
+    <p>
+      da&#223; diese generischen Rollen bereits in der Einrichtung der Command-Definition verwendet werden.
+    </p>
+    <p>
+      Das hei&#223;t, f&#252;r einen bestimmten Invocation-Trail legt man fest,
+    </p>
+    <p>
+      da&#223; ein bestimmtes Argument an eine gewisse Rolle gebunden wird,
+    </p>
+    <p>
+      oder andernfalls einen bestimmten Namen bekommt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1489547124597" ID="ID_408090908" MODIFIED="1489547128224" TEXT="das Subjekt"/>
+<node CREATED="1489547128837" ID="ID_865724442" MODIFIED="1489547131120" TEXT="der Container"/>
+<node CREATED="1489547498122" ID="ID_1669169317" MODIFIED="1489547504003" TEXT="die Dauer"/>
+<node CREATED="1489547283807" ID="ID_559442696" MODIFIED="1489547286467" TEXT="der Wert"/>
+</node>
+<node CREATED="1489547506625" ID="ID_1063184971" MODIFIED="1489547632364" TEXT="konkret....">
+<node CREATED="1489547511224" ID="ID_954080965" MODIFIED="1489547530586" TEXT="das UI-Element wei&#xdf; explizit was gebraucht wird"/>
+<node CREATED="1489547542852" ID="ID_271774122" MODIFIED="1489547548943" TEXT="und stellt selber das Tupel zusammen"/>
+<node CREATED="1489547574504" ID="ID_49978062" MODIFIED="1489547582019" TEXT="oder ruft einen Funktor auf"/>
+<node CREATED="1489547588102" ID="ID_985840704" MODIFIED="1489547597465" TEXT="wodurch die Argument-Typen dokumentiert sind"/>
+</node>
+</node>
+<node CREATED="1489548252324" HGAP="78" ID="ID_1622068086" MODIFIED="1489548276247" TEXT="das k&#xf6;nnte der InvocationTrail sein" VSHIFT="20">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489461946997" HGAP="-10" ID="ID_1526466868" MODIFIED="1489462026528" TEXT="direkt von den Lambdas aus delegieren" VSHIFT="7">
