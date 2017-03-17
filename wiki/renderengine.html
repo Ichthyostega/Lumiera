@@ -1472,7 +1472,7 @@ Commands are //defined// using a [[fluent API|http://en.wikipedia.org/wiki/Fluen
 &amp;rarr; see CommandUsage
 </pre>
 </div>
-<div title="CommandDefinition" modifier="Ichthyostega" created="200906140124" modified="201112222243" tags="SessionLogic spec draft decision design">
+<div title="CommandDefinition" modifier="Ichthyostega" created="200906140124" modified="201703171930" tags="SessionLogic spec draft decision design" changecount="2">
 <pre>Commands can be identified and accessed //by name// &amp;mdash; consequently there needs to be an internal command registry, including a link to the actual implementing function, thus allowing to re-establish the connection between command and implementing functions when de-serialising a persisted command. To create a command, we need to provide the following information
 * operation function actually implementing the command
 * function to [[undo|UndoManager]] the effect of the command
@@ -1498,6 +1498,10 @@ While generally there is //no limitation// on the number and type of parameters,
 | undoOperation| void |(P1,..PN,MEM)|
 | bind| void |(P1,..PN)|
 Usually, parameters should be passed //by value// &amp;mdash; with the exception of target object(s), which are typically bound as MObjectRef, causing them to be resolved at commad execution time (late binding).
+
+!Actual command definition scripts
+The actual scripts bound as functors into the aforementioned command definitions are located in translation units in {{{proc/cmd}}}
+These definitions must be written in a way to ensure that just compiling those translation units causes registration of the corresponding command-~IDs
 </pre>
 </div>
 <div title="CommandHandling" modifier="Ichthyostega" created="200906072048" modified="201601162032" tags="SessionLogic spec draft decision design img" changecount="12">
@@ -1524,7 +1528,7 @@ By design, commands are single-serving value objects; executing an operation rep
 &amp;rarr; more details regarding [[command implementation|CommandImpl]]
 </pre>
 </div>
-<div title="CommandImpl" modifier="Ichthyostega" created="200909291424" modified="200909291434" tags="spec impl">
+<div title="CommandImpl" modifier="Ichthyostega" created="200909291424" modified="201703171927" tags="spec impl" changecount="2">
 <pre>Commands are separated in a handle (the {{{control::Command}}}-object), to be used by the client code, and an implementation level, which is managed transparently behind the stages. Client code is assumed to build a CommandDefinition at some point, and from then on to access the command ''by ID'', yielding the command handle.
 Binding of arguments, invocation and UNDO all are accessible through this frontend.
 
@@ -1537,6 +1541,13 @@ To support this handling scheme, some infrastructure is in place:
 ** a closure, implemented through an argument holder
 ** an undo state capturing mechanism, based on a capturing function provided on definition
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
+
+!Definition and usage
+In addition to the technical specification regarding the command, memento and undo functors, some additional conventions are established
+* Command scripts are defined in translation units in {{{proc/cmd}}}
+* these reside in the corresponding namespace, which is typically aliased as {{{cmd}}}
+* both command definition and usage include the common header {{{proc/cmd.hpp}}}
+* the basic command-~IDs defined therein need to be known by the UI elements using them
 </pre>
 </div>
 <div title="CommandInvocationAnalysis" creator="Ichthyostega" modifier="Ichthyostega" created="201702142329" modified="201703140129" tags="draft impl GuiPattern example discuss" changecount="14">
@@ -2582,7 +2593,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 &amp;rarr; GuiCommandCycle
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703170308" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="41">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703171922" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="52">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2624,7 +2635,13 @@ from these use cases, we can derive the //crucial activities for command handlin
 [&lt;img[Access to Session Commands from UI|uml/Command-ui-access.png]]
 An immediate consequence is that command instances will be formed //per instance// of InteractionStateManager. Each distinct kind of control system has its own instances, which are kept around, until they are ready for invocation. Each invocation &quot;burns&quot; an instance -- on next access, a new instance ID will be allocated, and the next command invocation cycle starts...
 
-Command instances are like prototypes -- thus each additional level of differentiation will create a clone copy and decorate the basic command ID. Yet this extension process is delegated into multiple stages. Already when a specific InvocationTrail is established, the bare command prototype is specialised, and additionally combined with specific context access rules and maybe even a accessor to retrieve some argument value. The {{{CmdInstanceManager}}} internally maintains and tracks a prepared command instance, supplying a distinct instance number to keep concurrently existing instances apart; instances might be around for an extended period, because commands are enqueued with the ProcDispatcher.</pre>
+Command instances are like prototypes -- thus each additional level of differentiation will create a clone copy and decorate the basic command ID. Yet this extension process is delegated into multiple stages. Already when a specific InvocationTrail is established, the bare command prototype is specialised, and additionally combined with specific context access rules and maybe even a accessor to retrieve some argument value. The {{{CmdInstanceManager}}} internally maintains and tracks a prepared command instance, supplying a distinct instance number to keep concurrently existing instances apart; instances might be around for an extended period, because commands are enqueued with the ProcDispatcher.
+
+''command definition'':
+&amp;rarr; Command scripts are defined in translation units in {{{proc/cmd}}}
+&amp;rarr; They reside in the corresponding namespace, which is typically aliased as {{{cmd}}}
+&amp;rarr; definitions and usage include the common header {{{proc/cmd.hpp}}}
+</pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201703031816" tags="GuiIntegration overview" changecount="9">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.

@@ -23,10 +23,10 @@
 
 /** @file sub-id.hpp
  ** Extensible symbolic ID type. 
- ** @todo (9/09) WIP-WIP-WIP just some vague emerging ideas here...
+ ** @remark this is a design sketch (from 9/2009) an not used anywhere as of 3/2017...
  ** 
  ** My observation is that, during design, I did run again and again into a specific
- ** situation, which I then needed to circumvent due to a lacking primary solution.
+ ** situation, which I then needed to circumvent in lack of a first class solution.
  ** Learning from that experiences, I start building this structured ID template.
  ** - it shall be an \em symbolic identifier, not an artificial ID
  ** - the basic value set should be limited and statically type safe.
@@ -38,6 +38,7 @@
  ** 
  ** @todo 1/2016 this idea seems very reasonable, and we should just make it
  **       robust and usable, along the lines pointed out by that draft
+ **       - use std::tuple as storage
  **       - remove the `format-util` dependency (!)           ////////////////////////////////TICKET #985
  **       - provide a hash implementation for real
  **       - extend to arbitrary number of sub-dimensions (variadic)

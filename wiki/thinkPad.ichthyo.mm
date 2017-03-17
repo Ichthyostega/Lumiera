@@ -605,8 +605,7 @@
       des Gui-top-Level nach sich
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#851358" DESTINATION="ID_548720270" ENDARROW="Default" ENDINCLINATION="-663;-614;" ID="Arrow_ID_325703166" STARTARROW="None" STARTINCLINATION="1209;488;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485118623744" FOLDED="true" ID="ID_392996871" MODIFIED="1488423308073" TEXT="#1032 use gtk::Application instead of gtk::Main">
@@ -2078,54 +2077,13 @@
       und den Teufelskreis zu durchbrechen!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1489461838228" ID="ID_283502486" MODIFIED="1489461843087" TEXT="im InteractionDirector"/>
 <node CREATED="1489461843747" ID="ID_1499714490" MODIFIED="1489461922546" TEXT="die Command-ID beziehen">
 <icon BUILTIN="forward"/>
-<node CREATED="1489461856042" ID="ID_1097689316" MODIFIED="1489461862061" TEXT="bedingt Command-ID">
-<node CREATED="1489715248861" ID="ID_999876408" MODIFIED="1489715252392" TEXT="brauche">
-<node CREATED="1489715276057" ID="ID_878658276" MODIFIED="1489715279093" TEXT="Basis-ID"/>
-<node CREATED="1489715297406" ID="ID_601143379" MODIFIED="1489715305201" TEXT="dekoriert durch Invocation-Trail"/>
-<node CREATED="1489715320435" ID="ID_1521007439" MODIFIED="1489715325174" TEXT="dekoriert durch laufende Nr"/>
-<node CREATED="1489715326210" ID="ID_1820734132" MODIFIED="1489715331310" TEXT="guten Hash von diesen"/>
-<node CREATED="1489715461992" ID="ID_115322523" MODIFIED="1489715479858" TEXT="&quot;leere&quot; Basis-ID ohne lfdNr"/>
-<node CREATED="1489715591582" ID="ID_256884690" MODIFIED="1489715597393" TEXT="inkrement der lfdNr"/>
-</node>
-<node CREATED="1489716825126" HGAP="38" ID="ID_969368347" MODIFIED="1489717783561" TEXT="Ans&#xe4;tze" VSHIFT="-1">
-<node CREATED="1489716845980" ID="ID_816994670" MODIFIED="1489718875217" TEXT="Command-ID-Token">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1489716859034" ID="ID_1342799459" MODIFIED="1489716867940" TEXT="SubID o.&#xe4;."/>
-<node CREATED="1489716870000" ID="ID_907818022" MODIFIED="1489716875547" TEXT="Wert-Semantik"/>
-<node CREATED="1489716876183" ID="ID_880911498" MODIFIED="1489716883650" TEXT="enth&#xe4;lt die lfdNr"/>
-</node>
-<node CREATED="1489717087626" ID="ID_1304379039" MODIFIED="1489718872841" TEXT="Registrierungs-Instanz">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1489717094881" ID="ID_890501908" MODIFIED="1489717104332" TEXT="Referenz-Semantik"/>
-<node CREATED="1489717108735" ID="ID_142693821" MODIFIED="1489717115730" TEXT="enth&#xe4;lt direkt den Z&#xe4;hler"/>
-<node CREATED="1489717116246" ID="ID_1967376157" MODIFIED="1489717129232" TEXT="brauche front-End-Token"/>
-</node>
-<node CREATED="1489717203882" ID="ID_199366549" MODIFIED="1489718870140" TEXT="eingebettete Information">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1489717237622" ID="ID_1384169115" MODIFIED="1489717301257" TEXT="Command + Z&#xe4;hler in Hashtable"/>
-<node CREATED="1489717304621" ID="ID_1984888825" MODIFIED="1489717311967" TEXT="CmdInstanceManager hat Hashtable"/>
-<node CREATED="1489717425684" ID="ID_205251145" MODIFIED="1489717436846" TEXT="Instance-Management komplett eingekapselt"/>
-<node CREATED="1489717312532" ID="ID_1911293548" MODIFIED="1489717329029" TEXT="key ist Basis-Cmd-ID + InvocationTrail-ID"/>
-<node CREATED="1489717395312" ID="ID_1098297494" MODIFIED="1489717405571" TEXT="InvocationTrail speichert nur diese ID"/>
-<node CREATED="1489717406447" ID="ID_1938762085" MODIFIED="1489717411690" TEXT="Bang sendet nur diese ID"/>
-</node>
-</node>
-<node CREATED="1489717768805" HGAP="79" ID="ID_119293304" MODIFIED="1489718863072" TEXT="Entscheidung" VSHIFT="4">
-<icon BUILTIN="yes"/>
-<node CREATED="1489717797353" ID="ID_899130819" MODIFIED="1489717807068" TEXT="die ersten beiden sind un&#xf6;tig generisch"/>
-<node CREATED="1489717807872" ID="ID_1209104496" MODIFIED="1489717818826" TEXT="wir bauen ohnehin den Command-Cycle fest ein"/>
-<node CREATED="1489717844003" ID="ID_97055123" MODIFIED="1489717853605" TEXT="letztgenannte L&#xf6;sung ist auf den Punkt"/>
-<node CREATED="1489717927279" ID="ID_845301501" MODIFIED="1489717959263" TEXT="Command-ID erf&#xfc;llt keine regulierende Funktion"/>
-<node CREATED="1489717960331" ID="ID_1849715968" MODIFIED="1489717991603" TEXT="viel wichtiger sind die Aktivierungs-Regeln"/>
-</node>
-</node>
+<node CREATED="1489461856042" ID="ID_1097689316" MODIFIED="1489461862061" TEXT="bedingt Command-ID"/>
 <node CREATED="1489461862937" ID="ID_1649764088" MODIFIED="1489461871843" TEXT="bedingt Command-Definition"/>
 <node CREATED="1489461872367" ID="ID_1191906862" MODIFIED="1489461882010" TEXT="bedingt CmdAccessor"/>
 <node CREATED="1489461905083" ID="ID_1232900605" MODIFIED="1489461911390" TEXT="bedingt Service-Zugang"/>
@@ -2167,8 +2125,7 @@
       (Beispiel &quot;in-point fehlt&quot;)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1489544910395" ID="ID_82086808" MODIFIED="1489544965386" TEXT="enable Action">
 <richcontent TYPE="NOTE"><html>
@@ -2186,97 +2143,7 @@
       aber von einem externen State-Change getriggert wird
     </p>
   </body>
-</html>
-</richcontent>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#252298" CREATED="1489546623162" HGAP="-17" ID="ID_1622574347" MODIFIED="1489546668633" TEXT="was wird gebraucht" VSHIFT="10">
-<font NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="help"/>
-<node COLOR="#ff0000" CREATED="1489546678250" ID="ID_228157787" MODIFIED="1489547976088" TEXT="Vorsicht UI-Programmierung">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1489546705798" ID="ID_43582318" MODIFIED="1489546746697" TEXT="keine neue Programmiersprache entwerfen">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1489546724892" ID="ID_1763781107" MODIFIED="1489546749259" TEXT="mu&#xdf; letztlich explizit sein">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-<node CREATED="1489546837172" ID="ID_665817500" MODIFIED="1489546841173" TEXT="aber">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1489546843356" ID="ID_1556795494" MODIFIED="1489546854590" TEXT="ich will Gestaltbarkeit"/>
-<node CREATED="1489546855202" ID="ID_1824748232" MODIFIED="1489546862101" TEXT="ich will Konfigurierbarkeit"/>
-</node>
-<node CREATED="1489546994743" ID="ID_1851585461" MODIFIED="1489546998138" TEXT="im Einzelnen">
-<node CREATED="1489546998918" ID="ID_668687712" MODIFIED="1489547001785" TEXT="Aktivierung">
-<node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1489547015360" TEXT="Callback installieren"/>
-<node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1489547028606" TEXT="Anfrage: ist dies aktivierbar?"/>
-</node>
-<node CREATED="1489547086458" ID="ID_1858100202" MODIFIED="1489547091270" TEXT="Argumente">
-<node CREATED="1489547096857" ID="ID_184341736" MODIFIED="1489547103300" TEXT="&quot;gib mir die Argumente!&quot;">
-<node CREATED="1489547170463" ID="ID_1981926549" MODIFIED="1489547178266" TEXT="wirklich?">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1489547179254" ID="ID_192306839" MODIFIED="1489547197378" TEXT="ist das der richtige Ansatz?">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1489547208282" ID="ID_99440101" MODIFIED="1489690731089" TEXT="l&#xe4;&#xdf;t sich das &#xfc;berhaupt je realisieren?">
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node CREATED="1489547112255" ID="ID_270498008" MODIFIED="1489548210093" TEXT="generische Rollen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      die Idee ist hier,
-    </p>
-    <p>
-      da&#223; diese generischen Rollen bereits in der Einrichtung der Command-Definition verwendet werden.
-    </p>
-    <p>
-      Das hei&#223;t, f&#252;r einen bestimmten Invocation-Trail legt man fest,
-    </p>
-    <p>
-      da&#223; ein bestimmtes Argument an eine gewisse Rolle gebunden wird,
-    </p>
-    <p>
-      oder andernfalls einen bestimmten Namen bekommt
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="idea"/>
-<node CREATED="1489547124597" ID="ID_408090908" MODIFIED="1489547128224" TEXT="das Subjekt"/>
-<node CREATED="1489547128837" ID="ID_865724442" MODIFIED="1489547131120" TEXT="der Container"/>
-<node CREATED="1489547498122" ID="ID_1669169317" MODIFIED="1489547504003" TEXT="die Dauer"/>
-<node CREATED="1489547283807" ID="ID_559442696" MODIFIED="1489547286467" TEXT="der Wert"/>
-</node>
-<node CREATED="1489547506625" ID="ID_1063184971" MODIFIED="1489719071018" TEXT="konkret....">
-<arrowlink COLOR="#4d2a67" DESTINATION="ID_1622068086" ENDARROW="Default" ENDINCLINATION="-9;-36;" ID="Arrow_ID_717312728" STARTARROW="None" STARTINCLINATION="15;49;"/>
-<node CREATED="1489547511224" ID="ID_954080965" MODIFIED="1489547530586" TEXT="das UI-Element wei&#xdf; explizit was gebraucht wird"/>
-<node CREATED="1489547542852" ID="ID_271774122" MODIFIED="1489547548943" TEXT="und stellt selber das Tupel zusammen"/>
-<node CREATED="1489547574504" ID="ID_49978062" MODIFIED="1489547582019" TEXT="oder ruft einen Funktor auf"/>
-<node CREATED="1489547588102" ID="ID_985840704" MODIFIED="1489547597465" TEXT="wodurch die Argument-Typen dokumentiert sind"/>
-</node>
-</node>
-<node CREATED="1489548252324" HGAP="78" ID="ID_1622068086" MODIFIED="1489719025991" TEXT="das k&#xf6;nnte der InvocationTrail sein" VSHIFT="20">
-<linktarget COLOR="#4d2a67" DESTINATION="ID_1622068086" ENDARROW="Default" ENDINCLINATION="-9;-36;" ID="Arrow_ID_717312728" SOURCE="ID_1063184971" STARTARROW="None" STARTINCLINATION="15;49;"/>
-<icon BUILTIN="idea"/>
-<node CREATED="1489719178053" ID="ID_1509284806" MODIFIED="1489719184696" TEXT="hat Cmd-ID + eigene ID"/>
-<node CREATED="1489719186276" ID="ID_929080602" MODIFIED="1489719196230" TEXT="kann entscheiden ob ausf&#xfc;hrbar"/>
-<node CREATED="1489719200330" ID="ID_840062807" MODIFIED="1489719208197" TEXT="hat Argument-Accessor"/>
-<node COLOR="#5e427f" CREATED="1489719212976" HGAP="-52" ID="ID_949699860" MODIFIED="1489719253576" TEXT="noch offen" VSHIFT="45">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1489719257426" ID="ID_1618753270" MODIFIED="1489719266032" TEXT="wer erzeugt den InvocationTrail"/>
-<node CREATED="1489719267537" ID="ID_963145148" MODIFIED="1489719291065" TEXT="was ist bereits vom Command her definiert"/>
-<node CREATED="1489719292181" ID="ID_804928267" MODIFIED="1489719304359" TEXT="kann es mehrere konkurrierende Auslegungen geben?"/>
-<node CREATED="1489719311347" ID="ID_1220954776" MODIFIED="1489719322437" TEXT="oder ist eine Zugriffsstrategie = ein InvocationTrail"/>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -2296,8 +2163,7 @@
       da es nur darum geht, via globalCtx auf den passenden Controller zuzugreifen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -2426,12 +2292,27 @@
 <node CREATED="1487034180712" ID="ID_1371598611" MODIFIED="1487034193170" TEXT="und jedes genau wei&#xdf;, was die andern k&#xf6;nnen"/>
 </node>
 </node>
+<node CREATED="1489777673022" HGAP="-43" ID="ID_873069403" MODIFIED="1489777689569" TEXT="Zugang zu Proc-Commands" VSHIFT="34">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489777702971" HGAP="125" ID="ID_1780068142" MODIFIED="1489777822408" TEXT="Framework mu&#xdf; geschaffen werden" VSHIFT="-42">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1489777783120" ID="ID_1439783231" MODIFIED="1489777791514" TEXT="Protokoll f&#xfc;r den Zugang">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1489777837120" ID="ID_466927949" MODIFIED="1489777843659" TEXT="Ort f&#xfc;r Command-Definitionen"/>
+<node CREATED="1489777846095" ID="ID_1401258681" MODIFIED="1489778075369" TEXT="Design Proc-Command-Framework vorantreiben">
+<arrowlink COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="39;-3322;" ID="Arrow_ID_1512127407" STARTARROW="None" STARTINCLINATION="2000;0;"/>
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+<node CREATED="1489777738462" ID="ID_733673713" MODIFIED="1489777747448" TEXT="angebunden an den InteractionDirector"/>
+<node CREATED="1489777748748" ID="ID_1098831130" MODIFIED="1489777760070" TEXT="statisches Front-End: CmdAccessor"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486763185746" HGAP="33" ID="ID_362749694" MODIFIED="1489460786881" TEXT="InteractionDirector" VSHIFT="21">
-<linktarget COLOR="#683c5b" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-394;0;" ID="Arrow_ID_1979576517" SOURCE="ID_113005643" STARTARROW="None" STARTINCLINATION="-24;-159;"/>
-<linktarget COLOR="#1b3863" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-518;1012;" ID="Arrow_ID_959577029" SOURCE="ID_735655054" STARTARROW="Default" STARTINCLINATION="-376;-568;"/>
 <linktarget COLOR="#798eba" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-218;-590;" ID="Arrow_ID_757867749" SOURCE="ID_1440190469" STARTARROW="None" STARTINCLINATION="15;121;"/>
 <linktarget COLOR="#5e4463" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-57;-739;" ID="Arrow_ID_1847127764" SOURCE="ID_474441211" STARTARROW="None" STARTINCLINATION="32;89;"/>
+<linktarget COLOR="#683c5b" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-394;0;" ID="Arrow_ID_1979576517" SOURCE="ID_113005643" STARTARROW="None" STARTINCLINATION="-24;-159;"/>
+<linktarget COLOR="#1b3863" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-518;1012;" ID="Arrow_ID_959577029" SOURCE="ID_735655054" STARTARROW="Default" STARTINCLINATION="-376;-568;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1486763268223" ID="ID_199328732" MODIFIED="1486763277392" TEXT="nicht der Meister">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -11262,8 +11143,7 @@
       mehrere Commands zust&#228;ndig sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1488676210948" ID="ID_1003704499" MODIFIED="1488676230046" TEXT="verschiedene Auspr&#xe4;gungen"/>
 <node CREATED="1488676230802" ID="ID_1711345566" MODIFIED="1488676234293" TEXT="generische Situation"/>
 </node>
@@ -11280,8 +11160,7 @@
       ein Command zust&#228;ndig sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1488676238120" ID="ID_62079120" MODIFIED="1488676259969" TEXT="da an ein Control/Interface-System gebunden"/>
 <node CREATED="1488676280459" ID="ID_800780235" MODIFIED="1488676340897" TEXT="ist vermutlich keine gute Idee">
 <richcontent TYPE="NOTE"><html>
@@ -11299,8 +11178,7 @@
       und ebenso die Gesten abstrahieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1488676343170" ID="ID_1624806724" MODIFIED="1488676361392" TEXT="besser? InteractionStateManager == Geste">
@@ -11326,8 +11204,7 @@
       <i>mu&#223;</i>&#160;Instanzen einsetzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -11345,8 +11222,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488674659521" ID="ID_1283697108" MODIFIED="1488674673114" TEXT="Problem: Instanz-Management">
 <icon BUILTIN="messagebox_warning"/>
@@ -11380,8 +11256,7 @@
       sondern gegen eine Abstraction (Command), die eigens daf&#252;r geschaffen wurde
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1488674905160" ID="ID_1688143285" MODIFIED="1488674916271" TEXT="ungutes Gef&#xfc;hl">
@@ -11456,8 +11331,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1488677586744" ID="ID_1077384395" MODIFIED="1488677612409" TEXT="AUA: Zwang zum Benennen">
 <icon BUILTIN="stop-sign"/>
@@ -11473,8 +11347,7 @@
       ...da die DispatcherQueue direkt Command-Objekte (=frontend handle) speichert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488677212907" ID="ID_1525612446" MODIFIED="1488936784410" TEXT="Idee: im InteractionStateManager">
 <icon BUILTIN="button_cancel"/>
@@ -11502,8 +11375,7 @@
       und wenn es stirbt, dann stirbt es halt...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -11541,8 +11413,7 @@
       GUI: <b>CmdAccessor</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1488936962690" ID="ID_399848637" MODIFIED="1488936995228" TEXT="vermittelt InvocationStateManager"/>
 <node CREATED="1488937001406" ID="ID_1747520920" MODIFIED="1488937012304" TEXT="letzterer ist Interface f&#xfc;r UI-Entit&#xe4;ten"/>
 </node>
@@ -11556,8 +11427,7 @@
       Proc: <b>CmdInstanceManager</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1488937028202" ID="ID_1121930542" MODIFIED="1488937033253" TEXT="erzeugt die Instanzen"/>
 <node CREATED="1488937033769" ID="ID_1795817178" MODIFIED="1488937045947" TEXT="verwaltet deren Lebenszyklus"/>
 <node CREATED="1488937046591" ID="ID_1911259949" MODIFIED="1488937055426" TEXT="vom UI allein per ID ansprechbar"/>
@@ -11599,8 +11469,7 @@
       mit dem InteractionDirector verdrahtet sein mu&#223;!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" STARTARROW="None" STARTINCLINATION="912;-974;"/>
 <linktarget COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" SOURCE="ID_1621107057" STARTARROW="None" STARTINCLINATION="550;-93;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -11617,8 +11486,7 @@
       und auch nichts mit der Trennung zwischen Layern und Subsystemen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488936840059" ID="ID_1305671938" MODIFIED="1488937417519" TEXT="generisches Problem">
 <richcontent TYPE="NOTE"><html>
@@ -11633,8 +11501,7 @@
       aka DependencyInjection + Lifecycle Management
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1488937419308" ID="ID_994813744" MODIFIED="1488937424552" TEXT="lib::Depend ausbauen"/>
 <node CREATED="1488937436890" ID="ID_1184288068" MODIFIED="1488937442437" TEXT="kann auf sp&#xe4;ter vertagt werden"/>
 <node CREATED="1488937424996" ID="ID_1712367280" MODIFIED="1488937434311" TEXT="vorerst eigenes Front-End verwenden"/>
@@ -11659,8 +11526,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -11682,8 +11548,7 @@
       es k&#246;nnte auch ausreichen, einfach die passende InteractionStateManager-Impl zu verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1488937565632" ID="ID_1990212985" MODIFIED="1488940116992" TEXT="dem User (UI-Element) ist das egal">
@@ -11696,8 +11561,7 @@
       denn InteractionStateManager ist ein <b>Interface</b>!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937651021" ID="ID_1956085726" MODIFIED="1488937977999" TEXT="Binde-Muster">
 <icon BUILTIN="idea"/>
@@ -11720,8 +11584,7 @@
       Das k&#246;nnte ein <i>Advice</i>&#160;sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937682649" ID="ID_1090053275" MODIFIED="1488937855797" TEXT="aktuelles Element (mit Typ-Check)">
 <richcontent TYPE="NOTE"><html>
@@ -11742,8 +11605,7 @@
       In diesem Fall wird das Command <i>enabled</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937711053" ID="ID_586793367" MODIFIED="1488937890369" TEXT="partial application">
 <richcontent TYPE="NOTE"><html>
@@ -11755,8 +11617,7 @@
       eine Argumentliste mit mehreren Parametern wir Schritt f&#252;r Schritt geschlossen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937724867" ID="ID_231519502" MODIFIED="1488937932885" TEXT="Ordnung nach Scope">
 <richcontent TYPE="NOTE"><html>
@@ -11771,8 +11632,7 @@
       wird das gem&#228;&#223; Scope &quot;n&#228;chstgelegne&quot; genommen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1488937933566" ID="ID_170827087" MODIFIED="1488937945712" TEXT="das sind komplexe Pl&#xe4;ne">
@@ -11803,7 +11663,7 @@
 </node>
 <node CREATED="1489191112026" ID="ID_1805268724" MODIFIED="1489191116245" TEXT="Implementierung">
 <node CREATED="1489191118705" ID="ID_1501573546" MODIFIED="1489191120741" TEXT="Aufbau">
-<node CREATED="1489191126256" ID="ID_127004361" MODIFIED="1489191132263" TEXT="Tickets">
+<node CREATED="1489191126256" HGAP="24" ID="ID_127004361" MODIFIED="1489777546596" TEXT="Tickets" VSHIFT="26">
 <icon BUILTIN="info"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489191161395" ID="ID_346158251" MODIFIED="1489191839053" TEXT="#1087 GUI/Session command handling">
 <linktarget COLOR="#606d94" DESTINATION="ID_346158251" ENDARROW="Default" ENDINCLINATION="842;21;" ID="Arrow_ID_726918944" SOURCE="ID_898481930" STARTARROW="None" STARTINCLINATION="1012;0;"/>
@@ -11828,6 +11688,207 @@
 <node CREATED="1489196605530" ID="ID_1235925214" MODIFIED="1489196611189" TEXT="anschauen">
 <node CREATED="1489196613065" ID="ID_1738286518" MODIFIED="1489196617396" TEXT="Proxy-Instanz"/>
 <node CREATED="1489196617873" ID="ID_1676140831" MODIFIED="1489196620860" TEXT="Session Services"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1489777406155" HGAP="74" ID="ID_1319269544" MODIFIED="1489777541271" TEXT="Grundstrukturen" VSHIFT="25">
+<node CREATED="1489777414729" ID="ID_464574092" MODIFIED="1489777420276" TEXT="CommandID"/>
+<node CREATED="1489777420817" ID="ID_1146990209" MODIFIED="1489777427435" TEXT="Command access"/>
+<node CREATED="1489777429111" ID="ID_148471534" MODIFIED="1489777436010" TEXT="InvocationTrail"/>
+<node CREATED="1489777438663" ID="ID_729917092" MODIFIED="1489777452519" TEXT="InteractionState"/>
+<node CREATED="1489777502366" ID="ID_1798143241" MODIFIED="1489777514432" TEXT="Command-Definitionen"/>
+<node CREATED="1489777517315" ID="ID_922436346" MODIFIED="1489777522606" TEXT="instance management"/>
+<node CREATED="1489777523266" ID="ID_136474944" MODIFIED="1489777532037" TEXT="trigger Invocation"/>
+</node>
+<node CREATED="1489778159357" HGAP="105" ID="ID_1046149430" MODIFIED="1489778168498" TEXT="Command-Zyklus" VSHIFT="36">
+<node CREATED="1489544225984" ID="ID_695057205" MODIFIED="1489544240309" TEXT="Triggern">
+<icon BUILTIN="forward"/>
+<node CREATED="1489544261547" ID="ID_782648362" MODIFIED="1489544266933" TEXT="wer">
+<icon BUILTIN="help"/>
+<node CREATED="1489544403984" ID="ID_382753424" MODIFIED="1489544416135" TEXT="&quot;ein UI-Element&quot;">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1489544439187" ID="ID_278628492" MODIFIED="1489544450590" TEXT="Beispiel: Toolbar-Button"/>
+<node CREATED="1489544452034" ID="ID_1252070479" MODIFIED="1489544459404" TEXT="Beispiel: Kontextmen&#xfc;-Eintrag"/>
+<node CREATED="1489544513577" ID="ID_1918576059" MODIFIED="1489544521044" TEXT="Beispiel: Aktion per Keybinding"/>
+<node CREATED="1489544524128" ID="ID_620530211" MODIFIED="1489544534314" TEXT="Beispiel: Signal drag-n-drop"/>
+</node>
+<node CREATED="1489544268018" ID="ID_317151852" MODIFIED="1489544273089" TEXT="was">
+<icon BUILTIN="help"/>
+<node CREATED="1489544652414" ID="ID_61156502" MODIFIED="1489544658199" TEXT="lokal bekannt"/>
+<node CREATED="1489544640288" ID="ID_1660798945" MODIFIED="1489544651898" TEXT="fest verdrahtet"/>
+<node CREATED="1489544659597" ID="ID_519858607" MODIFIED="1489544666376" TEXT="ggfs. Auswahl aus kleiner Menge"/>
+</node>
+<node CREATED="1489544717333" ID="ID_154924026" MODIFIED="1489544720305" TEXT="falls">
+<icon BUILTIN="help"/>
+<node CREATED="1489544722261" ID="ID_1252784107" MODIFIED="1489544725320" TEXT="ausf&#xfc;hrbar"/>
+<node CREATED="1489544725860" ID="ID_1860103561" MODIFIED="1489544728848" TEXT="d.h. aktiviert"/>
+<node CREATED="1489544826383" ID="ID_1190793385" MODIFIED="1489544970504" TEXT="zwei verschiedene Effekte">
+<icon BUILTIN="idea"/>
+<node CREATED="1489544836757" ID="ID_1364306635" MODIFIED="1489544891968" TEXT="Ausf&#xfc;hrung abweisen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...stattdessen einen Fehler-Indikator ausl&#246;sen
+    </p>
+    <p>
+      (Beispiel &quot;in-point fehlt&quot;)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1489544910395" ID="ID_909938815" MODIFIED="1489544965386" TEXT="enable Action">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist eine Reaktion,
+    </p>
+    <p>
+      die von einem managing Ui-Element ausgef&#252;hrt wird,
+    </p>
+    <p>
+      aber von einem externen State-Change getriggert wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#252298" CREATED="1489546623162" HGAP="-24" ID="ID_1622574347" MODIFIED="1489778039083" TEXT="was wird gebraucht" VSHIFT="21">
+<linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="39;-3322;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="2000;0;"/>
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="help"/>
+<node COLOR="#ff0000" CREATED="1489546678250" ID="ID_228157787" MODIFIED="1489547976088" TEXT="Vorsicht UI-Programmierung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1489546705798" ID="ID_43582318" MODIFIED="1489546746697" TEXT="keine neue Programmiersprache entwerfen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1489546724892" ID="ID_1763781107" MODIFIED="1489546749259" TEXT="mu&#xdf; letztlich explizit sein">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1489546837172" ID="ID_665817500" MODIFIED="1489546841173" TEXT="aber">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1489546843356" ID="ID_1556795494" MODIFIED="1489546854590" TEXT="ich will Gestaltbarkeit"/>
+<node CREATED="1489546855202" ID="ID_1824748232" MODIFIED="1489546862101" TEXT="ich will Konfigurierbarkeit"/>
+</node>
+<node CREATED="1489546994743" ID="ID_1851585461" MODIFIED="1489546998138" TEXT="im Einzelnen">
+<node CREATED="1489777326111" ID="ID_497480483" MODIFIED="1489777329632" TEXT="CommandID">
+<node CREATED="1489715248861" ID="ID_999876408" MODIFIED="1489715252392" TEXT="brauche">
+<node CREATED="1489715276057" ID="ID_878658276" MODIFIED="1489715279093" TEXT="Basis-ID"/>
+<node CREATED="1489715297406" ID="ID_601143379" MODIFIED="1489715305201" TEXT="dekoriert durch Invocation-Trail"/>
+<node CREATED="1489715320435" ID="ID_1521007439" MODIFIED="1489715325174" TEXT="dekoriert durch laufende Nr"/>
+<node CREATED="1489715326210" ID="ID_1820734132" MODIFIED="1489715331310" TEXT="guten Hash von diesen"/>
+<node CREATED="1489715461992" ID="ID_115322523" MODIFIED="1489715479858" TEXT="&quot;leere&quot; Basis-ID ohne lfdNr"/>
+<node CREATED="1489715591582" ID="ID_256884690" MODIFIED="1489715597393" TEXT="inkrement der lfdNr"/>
+</node>
+<node CREATED="1489716825126" HGAP="38" ID="ID_969368347" MODIFIED="1489717783561" TEXT="Ans&#xe4;tze" VSHIFT="-1">
+<node CREATED="1489716845980" ID="ID_816994670" MODIFIED="1489718875217" TEXT="Command-ID-Token">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1489716859034" ID="ID_1342799459" MODIFIED="1489716867940" TEXT="SubID o.&#xe4;."/>
+<node CREATED="1489716870000" ID="ID_907818022" MODIFIED="1489716875547" TEXT="Wert-Semantik"/>
+<node CREATED="1489716876183" ID="ID_880911498" MODIFIED="1489716883650" TEXT="enth&#xe4;lt die lfdNr"/>
+</node>
+<node CREATED="1489717087626" ID="ID_1304379039" MODIFIED="1489718872841" TEXT="Registrierungs-Instanz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1489717094881" ID="ID_890501908" MODIFIED="1489717104332" TEXT="Referenz-Semantik"/>
+<node CREATED="1489717108735" ID="ID_142693821" MODIFIED="1489717115730" TEXT="enth&#xe4;lt direkt den Z&#xe4;hler"/>
+<node CREATED="1489717116246" ID="ID_1967376157" MODIFIED="1489717129232" TEXT="brauche front-End-Token"/>
+</node>
+<node CREATED="1489717203882" ID="ID_199366549" MODIFIED="1489718870140" TEXT="eingebettete Information">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1489717237622" ID="ID_1384169115" MODIFIED="1489717301257" TEXT="Command + Z&#xe4;hler in Hashtable"/>
+<node CREATED="1489717304621" ID="ID_1984888825" MODIFIED="1489717311967" TEXT="CmdInstanceManager hat Hashtable"/>
+<node CREATED="1489717425684" ID="ID_205251145" MODIFIED="1489717436846" TEXT="Instance-Management komplett eingekapselt"/>
+<node CREATED="1489717312532" ID="ID_1911293548" MODIFIED="1489717329029" TEXT="key ist Basis-Cmd-ID + InvocationTrail-ID"/>
+<node CREATED="1489717395312" ID="ID_1098297494" MODIFIED="1489717405571" TEXT="InvocationTrail speichert nur diese ID"/>
+<node CREATED="1489717406447" ID="ID_1938762085" MODIFIED="1489717411690" TEXT="Bang sendet nur diese ID"/>
+</node>
+</node>
+<node CREATED="1489717768805" HGAP="79" ID="ID_119293304" MODIFIED="1489718863072" TEXT="Entscheidung" VSHIFT="4">
+<icon BUILTIN="yes"/>
+<node CREATED="1489717797353" ID="ID_899130819" MODIFIED="1489717807068" TEXT="die ersten beiden sind un&#xf6;tig generisch"/>
+<node CREATED="1489717807872" ID="ID_1209104496" MODIFIED="1489717818826" TEXT="wir bauen ohnehin den Command-Cycle fest ein"/>
+<node CREATED="1489717844003" ID="ID_97055123" MODIFIED="1489717853605" TEXT="letztgenannte L&#xf6;sung ist auf den Punkt"/>
+<node CREATED="1489717927279" ID="ID_845301501" MODIFIED="1489717959263" TEXT="Command-ID erf&#xfc;llt keine regulierende Funktion"/>
+<node CREATED="1489717960331" ID="ID_1849715968" MODIFIED="1489717991603" TEXT="viel wichtiger sind die Aktivierungs-Regeln"/>
+</node>
+</node>
+<node CREATED="1489546998918" ID="ID_668687712" MODIFIED="1489547001785" TEXT="Aktivierung">
+<node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1489547015360" TEXT="Callback installieren"/>
+<node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1489547028606" TEXT="Anfrage: ist dies aktivierbar?"/>
+</node>
+<node CREATED="1489547086458" ID="ID_1858100202" MODIFIED="1489547091270" TEXT="Argumente">
+<node CREATED="1489547096857" ID="ID_184341736" MODIFIED="1489547103300" TEXT="&quot;gib mir die Argumente!&quot;">
+<node CREATED="1489547170463" ID="ID_1981926549" MODIFIED="1489547178266" TEXT="wirklich?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1489547179254" ID="ID_192306839" MODIFIED="1489547197378" TEXT="ist das der richtige Ansatz?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1489547208282" ID="ID_99440101" MODIFIED="1489690731089" TEXT="l&#xe4;&#xdf;t sich das &#xfc;berhaupt je realisieren?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1489547112255" ID="ID_270498008" MODIFIED="1489548210093" TEXT="generische Rollen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Idee ist hier,
+    </p>
+    <p>
+      da&#223; diese generischen Rollen bereits in der Einrichtung der Command-Definition verwendet werden.
+    </p>
+    <p>
+      Das hei&#223;t, f&#252;r einen bestimmten Invocation-Trail legt man fest,
+    </p>
+    <p>
+      da&#223; ein bestimmtes Argument an eine gewisse Rolle gebunden wird,
+    </p>
+    <p>
+      oder andernfalls einen bestimmten Namen bekommt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1489547124597" ID="ID_408090908" MODIFIED="1489547128224" TEXT="das Subjekt"/>
+<node CREATED="1489547128837" ID="ID_865724442" MODIFIED="1489547131120" TEXT="der Container"/>
+<node CREATED="1489547498122" ID="ID_1669169317" MODIFIED="1489547504003" TEXT="die Dauer"/>
+<node CREATED="1489547283807" ID="ID_559442696" MODIFIED="1489547286467" TEXT="der Wert"/>
+</node>
+<node CREATED="1489547506625" ID="ID_1063184971" MODIFIED="1489719071018" TEXT="konkret....">
+<arrowlink COLOR="#4d2a67" DESTINATION="ID_1622068086" ENDARROW="Default" ENDINCLINATION="-9;-36;" ID="Arrow_ID_717312728" STARTARROW="None" STARTINCLINATION="15;49;"/>
+<node CREATED="1489547511224" ID="ID_954080965" MODIFIED="1489547530586" TEXT="das UI-Element wei&#xdf; explizit was gebraucht wird"/>
+<node CREATED="1489547542852" ID="ID_271774122" MODIFIED="1489547548943" TEXT="und stellt selber das Tupel zusammen"/>
+<node CREATED="1489547574504" ID="ID_49978062" MODIFIED="1489547582019" TEXT="oder ruft einen Funktor auf"/>
+<node CREATED="1489547588102" ID="ID_985840704" MODIFIED="1489547597465" TEXT="wodurch die Argument-Typen dokumentiert sind"/>
+</node>
+</node>
+<node CREATED="1489548252324" HGAP="78" ID="ID_1622068086" MODIFIED="1489719025991" TEXT="das k&#xf6;nnte der InvocationTrail sein" VSHIFT="20">
+<linktarget COLOR="#4d2a67" DESTINATION="ID_1622068086" ENDARROW="Default" ENDINCLINATION="-9;-36;" ID="Arrow_ID_717312728" SOURCE="ID_1063184971" STARTARROW="None" STARTINCLINATION="15;49;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1489719178053" ID="ID_1509284806" MODIFIED="1489719184696" TEXT="hat Cmd-ID + eigene ID"/>
+<node CREATED="1489719186276" ID="ID_929080602" MODIFIED="1489719196230" TEXT="kann entscheiden ob ausf&#xfc;hrbar"/>
+<node CREATED="1489719200330" ID="ID_840062807" MODIFIED="1489719208197" TEXT="hat Argument-Accessor"/>
+<node COLOR="#5e427f" CREATED="1489719212976" HGAP="-52" ID="ID_949699860" MODIFIED="1489719253576" TEXT="noch offen" VSHIFT="45">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1489719257426" ID="ID_1618753270" MODIFIED="1489719266032" TEXT="wer erzeugt den InvocationTrail"/>
+<node CREATED="1489719267537" ID="ID_963145148" MODIFIED="1489719291065" TEXT="was ist bereits vom Command her definiert"/>
+<node CREATED="1489719292181" ID="ID_804928267" MODIFIED="1489719304359" TEXT="kann es mehrere konkurrierende Auslegungen geben?"/>
+<node CREATED="1489719311347" ID="ID_1220954776" MODIFIED="1489719322437" TEXT="oder ist eine Zugriffsstrategie = ein InvocationTrail"/>
 </node>
 </node>
 </node>
