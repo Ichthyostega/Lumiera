@@ -2582,7 +2582,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 &amp;rarr; GuiCommandCycle
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703150206" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="33">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703170308" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="41">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2622,8 +2622,9 @@ from these use cases, we can derive the //crucial activities for command handlin
 * on invocation, the ID of the instance is sent via UI-Bus to the {{{CmdInstanceManager}}}
 * which in turn removes the instance handle from its registration table and hands it over into the ProcDispatcher
 [&lt;img[Access to Session Commands from UI|uml/Command-ui-access.png]]
-Consequently this means that command instances will be formed //per instance// of InteractionStateManager. Thus, each distinct kind of control system has its own instances, which are kept around, until they are ready for invocation. Each invocation &quot;burns&quot; an instance -- on next access, a new instance ID will be allocated, and the next command invocation cycle starts...
-</pre>
+An immediate consequence is that command instances will be formed //per instance// of InteractionStateManager. Each distinct kind of control system has its own instances, which are kept around, until they are ready for invocation. Each invocation &quot;burns&quot; an instance -- on next access, a new instance ID will be allocated, and the next command invocation cycle starts...
+
+Command instances are like prototypes -- thus each additional level of differentiation will create a clone copy and decorate the basic command ID. Yet this extension process is delegated into multiple stages. Already when a specific InvocationTrail is established, the bare command prototype is specialised, and additionally combined with specific context access rules and maybe even a accessor to retrieve some argument value. The {{{CmdInstanceManager}}} internally maintains and tracks a prepared command instance, supplying a distinct instance number to keep concurrently existing instances apart; instances might be around for an extended period, because commands are enqueued with the ProcDispatcher.</pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201703031816" tags="GuiIntegration overview" changecount="9">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
@@ -2782,7 +2783,7 @@ We acknowledge that the gui model is typically used from within the GUI event di
 The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
 </pre>
 </div>
-<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201511210301" tags="GuiIntegration design draft img" changecount="46">
+<div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201703170201" tags="GuiIntegration design draft img" changecount="47">
 <pre>''Building Blocks for the User Interface Model and Control structure''
 The fundamental pattern for building graphical user interfaces is to segregate into the roles of __M__odel, __V__iew and __C__controler ([[MVC|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]). This approach is so succesful, that it turned into a de-facto standard in commen UI toolkit sets. But larger, more elaborate and specialised applications introduce several cross cutting concerns, which create a tension within this MVC solution pattern.
 [&lt;img[UI-Bus and GUI model elements|uml/fig158213.png]]
@@ -3414,13 +3415,13 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201703150336" tags="def GuiIntegration draft" changecount="5">
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201703161928" tags="def GuiIntegration draft" changecount="7">
 <pre>//A command in preparation of being issued from the UI.//
 The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].
 
 &amp;rarr; CommandInvocationAnalysis
 
-An invocation trail represents one specific path leading to the invocation of a command. It is a value object (handle), and it serves as the interface used by the UI-Element to retrieve or supply the arguments and finally to prepare the invocation message(s). But while the invocation trail is generic to some degree, the entity to trigger the command invocation needs explicit and concrete knowledge about the circumstances involved into this invocation. Simply, because in some cases, very specific information need to be provided as argument. For example, a widget just needs to know that the setting of a specific slider will be what becomes a likewise specific argument.
+An invocation trail represents one specific path leading to the invocation of a command. It is a value object (handle), and it serves as the interface used by the UI-Element to retrieve or supply the arguments and finally to prepare the invocation message(s). But while the invocation trail is generic to some degree, the entity to trigger the command invocation needs explicit and concrete knowledge about the circumstances involved into this invocation. Simply, because in some cases, very specific information needs to be provided as argument. For example, a widget just happens to know that the setting of a specific slider will be what becomes a likewise specific argument.
 </pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
