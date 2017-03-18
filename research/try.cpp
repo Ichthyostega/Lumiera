@@ -63,24 +63,18 @@ using std::tuple;
 namespace lib {
 namespace meta {
 
-  template< typename RET, class CLASS
-          , typename...ARGS
-          >
-  struct _Fun<RET (CLASS::*) (ARGS...)  const>
+  template<class C, typename RET, typename...ARGS>
+  struct _Fun<RET (C::*) (ARGS...)>
     {
-      typedef RET Ret;
-      typedef Types<CLASS* const, ARGS...> Args;
-      typedef RET Sig(CLASS* const, ARGS...);
+      using Ret  = RET;
+      using Args = Types<ARGS...>;
+      using Sig  = RET(ARGS...);
     };
-  template< typename RET, class CLASS
-          , typename...ARGS
-          >
-  struct _Fun<RET (CLASS::*) (ARGS...)  >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, ARGS...> Args;
-      typedef RET Sig(CLASS* const, ARGS...);
-    };
+  
+  template<class C, typename RET, typename...ARGS>
+  struct _Fun<RET (C::*) (ARGS...)  const>
+    : _Fun<RET (C::*) (ARGS...)>
+    { };
   
 }}//namespace lib::meta
 ////////////////############# Investigation of implementation variants
