@@ -68,7 +68,7 @@
  ** while some producer threads are still alive -- because in this case the main thread might
  ** verify the checksum before all command instances have been triggered. To avoid this
  ** situation, make sure the delay between actions in the threads is not too long and
- ** start a sufficiently high nubmer of producer threads.
+ ** start a sufficiently high number of producer threads.
  ** 
  */
 

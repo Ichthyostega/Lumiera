@@ -39,8 +39,7 @@
 #ifndef PROC_CMD_H
 #define PROC_CMD_H
 
-#include "lib/error.hpp"
-#include "proc/control/command.hpp"
+#include "proc/control/command-setup.hpp"
 //#include "lib/symbol.hpp"
 //#include "proc/common.hpp"
 

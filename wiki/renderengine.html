@@ -1472,7 +1472,7 @@ Commands are //defined// using a [[fluent API|http://en.wikipedia.org/wiki/Fluen
 &amp;rarr; see CommandUsage
 </pre>
 </div>
-<div title="CommandDefinition" modifier="Ichthyostega" created="200906140124" modified="201703171930" tags="SessionLogic spec draft decision design" changecount="2">
+<div title="CommandDefinition" modifier="Ichthyostega" created="200906140124" modified="201703180036" tags="SessionLogic spec draft decision design" changecount="3">
 <pre>Commands can be identified and accessed //by name// &amp;mdash; consequently there needs to be an internal command registry, including a link to the actual implementing function, thus allowing to re-establish the connection between command and implementing functions when de-serialising a persisted command. To create a command, we need to provide the following information
 * operation function actually implementing the command
 * function to [[undo|UndoManager]] the effect of the command
@@ -1502,6 +1502,7 @@ Usually, parameters should be passed //by value// &amp;mdash; with the exception
 !Actual command definition scripts
 The actual scripts bound as functors into the aforementioned command definitions are located in translation units in {{{proc/cmd}}}
 These definitions must be written in a way to ensure that just compiling those translation units causes registration of the corresponding command-~IDs
+This is achieved by placing a series of CommandSetup helper instances into those command defining translation units.
 </pre>
 </div>
 <div title="CommandHandling" modifier="Ichthyostega" created="200906072048" modified="201601162032" tags="SessionLogic spec draft decision design img" changecount="12">
@@ -1602,6 +1603,15 @@ When a command has been executed (and maybe undone), it's best to leave it alone
 * when, in addition to the above, the command arguments are bound, it becomes //executable.//
 * after the (fist) execution, the command gets also //undo-able.//
 State predicates are accessible through the Command (frontend); additionally there are static query functions in class {{{Command}}}
+</pre>
+</div>
+<div title="CommandSetup" creator="Ichthyostega" modifier="Ichthyostega" created="201703180038" modified="201703180047" tags="SessionLogic spec draft impl" changecount="4">
+<pre>//Helper facility to ease the creation of actual command definitions.//
+A [[Proc-Layer command|CommandHandling]] is a functor, which can be parametrised with actual arguments. It needs to be [defined](command-def.hpp) beforehand, which means to establish an unique name and to supply three functions, one for the actual command operation, one to capture state and one to [[UNDO]] the effect of the command invocation. 
+
+The helper class {{{CommandSetup}}} allows to create series of such definitions with minimal effort. Since any access and mutation from the UI into the Session data must be performed by invoking such commands, a huge amount of individual command definitions need to be written eventually. These are organised into a series of implementation translation units with location {{{poc/cmd/*-cmd.cpp}}}.
+
+Each of these files is specialised to defining a set of thematically related command, supplying the code for the actual command scripts. Each definition is introduced by a single line with the macro {{{COMMAND_DEFINITION(name)}}}, followed by a code block, which actually ends up as the body of a lambda function, and receives the bare [[CommandDef|CommandDefinition]] as single argument with name {{{cmd}}}. The {{{name}}} argument of the macro ends up both stringified as the value of the command-~ID, and as an identifier holding a new {{{CommandSetup}}} instance. It is assumed that a header with //corresponding declarations// (the header {{{cmd.hpp}}}) is included by all UI elements actually to use, handle and invoke commands towards the SessionSubsystem
 </pre>
 </div>
 <div title="CommandUsage" modifier="Ichthyostega" created="200907212338" modified="201701090011" tags="SessionLogic draft operational" changecount="8">
@@ -2553,7 +2563,7 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201703031818" tags="design decision GuiPattern GuiIntegration discuss" changecount="30">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201703180038" tags="design decision GuiPattern GuiIntegration discuss" changecount="31">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 * actual design of command invocation in the UI &amp;rarr; GuiCommandCycle
 * study of pivotal action invocation situations &amp;rarr; CommandInvocationAnalysis
@@ -2591,9 +2601,10 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 
 ''Lumera decides to take the latter apptoch'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
 &amp;rarr; GuiCommandCycle
+&amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703171922" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="52">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703180039" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="53">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2641,6 +2652,7 @@ Command instances are like prototypes -- thus each additional level of different
 &amp;rarr; Command scripts are defined in translation units in {{{proc/cmd}}}
 &amp;rarr; They reside in the corresponding namespace, which is typically aliased as {{{cmd}}}
 &amp;rarr; definitions and usage include the common header {{{proc/cmd.hpp}}}
+see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201703031816" tags="GuiIntegration overview" changecount="9">

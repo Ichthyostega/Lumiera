@@ -1,5 +1,5 @@
 /*
-  COMMAND-INSTANCE-MANAGER.hpp  -  Key abstraction for proc/edit operations and UNDO management
+  COMMAND-INSTANCE-MANAGER.hpp  -  Service to manage command instances for actual invocation
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -38,8 +38,10 @@
  ** about to happen, a corresponding registration handle is transfered to the ProcDispatcher, where
  ** it is enqueued for execution.  
  ** 
- ** @see command-def.hpp
+ ** @see command-setup.cpp service implementation
  ** @see command.hpp
+ ** @see command-def.hpp
+ ** @see command-setup.hpp
  ** @see command-accessor.hpp
  ** @see TODO_CommandInstanceManager_test
  **

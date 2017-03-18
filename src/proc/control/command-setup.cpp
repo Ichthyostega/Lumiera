@@ -1,5 +1,5 @@
 /*
-  CommandInstanceManager  -  Key abstraction for proc/edit operations and UNDO management
+  CommandSetup  -  Implementation of command registration and instance management
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,12 +21,14 @@
 * *****************************************************/
 
 
-/** @file command-instance-manager.cpp
+/** @file command-setup.cpp
  ** Implementation details of instance management for command invocation by the GUI.
  ** 
+ ** @see command-setup.hpp
+ ** @see command-instance-manager.hpp
+ ** @see TODO_CommandInstanceManager_test
  ** @see command.hpp
  ** @see command-registry.hpp
- ** @see TODO_CommandInstanceManager_test
  **
  */
 
@@ -60,6 +62,7 @@ namespace control {
   
   // emit dtors of embedded objects here....
   CommandInstanceManager::~CommandInstanceManager() { }
+  CommandSetup::~CommandSetup()                     { }
   
   CommandInstanceManager::CommandInstanceManager() { }
   

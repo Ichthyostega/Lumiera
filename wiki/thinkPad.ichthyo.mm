@@ -11823,11 +11823,11 @@
 <node CREATED="1489717960331" ID="ID_1849715968" MODIFIED="1489717991603" TEXT="viel wichtiger sind die Aktivierungs-Regeln"/>
 </node>
 </node>
-<node CREATED="1489546998918" ID="ID_668687712" MODIFIED="1489547001785" TEXT="Aktivierung">
+<node CREATED="1489546998918" HGAP="43" ID="ID_668687712" MODIFIED="1489781267877" TEXT="Aktivierung">
 <node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1489547015360" TEXT="Callback installieren"/>
 <node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1489547028606" TEXT="Anfrage: ist dies aktivierbar?"/>
 </node>
-<node CREATED="1489547086458" ID="ID_1858100202" MODIFIED="1489547091270" TEXT="Argumente">
+<node CREATED="1489547086458" HGAP="48" ID="ID_1858100202" MODIFIED="1489781264701" TEXT="Argumente" VSHIFT="-1">
 <node CREATED="1489547096857" ID="ID_184341736" MODIFIED="1489547103300" TEXT="&quot;gib mir die Argumente!&quot;">
 <node CREATED="1489547170463" ID="ID_1981926549" MODIFIED="1489547178266" TEXT="wirklich?">
 <icon BUILTIN="help"/>
@@ -11876,7 +11876,7 @@
 <node CREATED="1489547588102" ID="ID_985840704" MODIFIED="1489547597465" TEXT="wodurch die Argument-Typen dokumentiert sind"/>
 </node>
 </node>
-<node CREATED="1489548252324" HGAP="78" ID="ID_1622068086" MODIFIED="1489719025991" TEXT="das k&#xf6;nnte der InvocationTrail sein" VSHIFT="20">
+<node CREATED="1489548252324" HGAP="40" ID="ID_1622068086" MODIFIED="1489781254726" TEXT="das k&#xf6;nnte der InvocationTrail sein" VSHIFT="26">
 <linktarget COLOR="#4d2a67" DESTINATION="ID_1622068086" ENDARROW="Default" ENDINCLINATION="-9;-36;" ID="Arrow_ID_717312728" SOURCE="ID_1063184971" STARTARROW="None" STARTINCLINATION="15;49;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1489719178053" ID="ID_1509284806" MODIFIED="1489719184696" TEXT="hat Cmd-ID + eigene ID"/>
@@ -11889,6 +11889,118 @@
 <node CREATED="1489719267537" ID="ID_963145148" MODIFIED="1489719291065" TEXT="was ist bereits vom Command her definiert"/>
 <node CREATED="1489719292181" ID="ID_804928267" MODIFIED="1489719304359" TEXT="kann es mehrere konkurrierende Auslegungen geben?"/>
 <node CREATED="1489719311347" ID="ID_1220954776" MODIFIED="1489719322437" TEXT="oder ist eine Zugriffsstrategie = ein InvocationTrail"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1489781392694" ID="ID_1312397991" MODIFIED="1489781396114" TEXT="Festlegungen">
+<node CREATED="1489781404925" ID="ID_1918933171" MODIFIED="1489781408881" TEXT="Command-ID">
+<node CREATED="1489781409876" ID="ID_1973020417" MODIFIED="1489781419119" TEXT="Bais-ID ist ein string"/>
+</node>
+<node CREATED="1489781426978" ID="ID_1543445405" MODIFIED="1489781434517" TEXT="konkrete Definition">
+<node CREATED="1489781443184" ID="ID_966382785" MODIFIED="1489781445387" TEXT="Ort">
+<node CREATED="1489781447639" ID="ID_588776773" MODIFIED="1489781474176" TEXT="proc/cmd/*-cmd.cpp"/>
+<node CREATED="1489781476355" ID="ID_1953562265" MODIFIED="1489781480998" TEXT="Namespace proc::cmd"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489781611257" ID="ID_179887792" MODIFIED="1489781650026" TEXT="brauche">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1489781616257" ID="ID_1645536558" MODIFIED="1489781625283" TEXT="Schema f&#xfc;r ID-Konstanten"/>
+<node CREATED="1489781628743" ID="ID_1733247268" MODIFIED="1489781635194" TEXT="Mechanismus, der die Definition treibt"/>
+<node CREATED="1489781758389" ID="ID_1124650374" MODIFIED="1489781765521" TEXT="gew&#xfc;nscht">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1489781775443" ID="ID_379002135" MODIFIED="1489785133742" TEXT="Name und Definition nahe zusammen"/>
+<node CREATED="1489781769500" ID="ID_998243238" MODIFIED="1489781774456" TEXT="keine Redundanz"/>
+<node CREATED="1489781902770" ID="ID_1568226956" MODIFIED="1489781907366" TEXT="gut lesbar"/>
+<node CREATED="1489781907906" ID="ID_1206063892" MODIFIED="1489781915492" TEXT="debuggbar"/>
+<node CREATED="1489781923640" ID="ID_241861600" MODIFIED="1489781930043" TEXT="kommentierbar (Doxygen)"/>
+<node CREATED="1489785114574" ID="ID_241665479" MODIFIED="1489785123487" TEXT="nur unsichtbare Magie"/>
+</node>
+<node CREATED="1489785137083" ID="ID_1466955376" MODIFIED="1489785144694" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1489785163216" ID="ID_1992894903" MODIFIED="1489785168547" TEXT="zu Fu&#xdf;...">
+<node CREATED="1489785199131" ID="ID_111396262" MODIFIED="1489785207662" TEXT="ID-Konstanten im Header deklarieren"/>
+<node CREATED="1489785208298" ID="ID_315886293" MODIFIED="1489785222188" TEXT="ID-Konstanten in der jeweiligen translation-Unit definieren"/>
+<node CREATED="1489785250500" ID="ID_464247309" MODIFIED="1489785259671" TEXT="Lifecycle-Hook installieren..."/>
+<node CREATED="1489785260523" ID="ID_1306260885" MODIFIED="1489785270590" TEXT="..der eine Registrierungs-Funktion aufruft"/>
+<node CREATED="1489785276137" ID="ID_1526475921" MODIFIED="1489785285307" TEXT="in dieser die CommandDef absetzen"/>
+<node CREATED="1489785285872" ID="ID_1304462599" MODIFIED="1489785296938" TEXT="und als Command-ID die definierte Konstante verwenden"/>
+</node>
+<node CREATED="1489786040203" ID="ID_1417335273" MODIFIED="1489786045870" TEXT="Vereinfachungen">
+<node CREATED="1489786055057" ID="ID_565306146" MODIFIED="1489786059852" TEXT="decl/def">
+<node CREATED="1489786238273" ID="ID_1957761383" MODIFIED="1489786331600" TEXT="marker-Makro"/>
+<node CREATED="1489786245024" ID="ID_430222749" MODIFIED="1489786255810" TEXT="alle Definitionen in Makros einwickeln"/>
+<node CREATED="1489786393908" ID="ID_1345826013" MODIFIED="1489786660959" TEXT="spezielle Inclusion-Rituale">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vermutlich l&#228;uft es immer darauf hinaus
+    </p>
+    <ul>
+      <li>
+        da&#223; cmd.hpp die Implementierungs-Einheiten includiert
+      </li>
+      <li>
+        oder da&#223; in einer ausgezeichneten Impl-Einheit das marker-Makro gesetzt wird und dann cmd.hpp includiert wird
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1489789880260" ID="ID_768121026" MODIFIED="1489789887822" TEXT="Template-Spezialisierung?">
+<node CREATED="1489790030727" ID="ID_1780788892" MODIFIED="1489790046961" TEXT="k&#xf6;nnte const char* nehmen"/>
+<node CREATED="1489790053044" ID="ID_1594786428" MODIFIED="1489790070534" TEXT="k&#xf6;nnte dann nach Literal konvertibel sein"/>
+<node CREATED="1489790158335" ID="ID_1828195626" MODIFIED="1489790166017" TEXT="Template k&#xf6;nnte in Header definiert sein"/>
+<node CREATED="1489790167669" ID="ID_156312862" MODIFIED="1489790182247" TEXT="und nur die explizite Spezialisierung generiert Code"/>
+</node>
+<node CREATED="1489790425251" ID="ID_1099709668" MODIFIED="1489790430606" TEXT="auto-Registrierung">
+<node CREATED="1489790431810" ID="ID_1253214974" MODIFIED="1489790442380" TEXT="variable statisch initialisieren"/>
+<node CREATED="1489790522958" ID="ID_1454213723" MODIFIED="1489790532345" TEXT="Lambda an Basis-Ctor geben"/>
+</node>
+<node CREATED="1489790555393" ID="ID_1281815871" MODIFIED="1489790574611" TEXT="DSL wie boost-test">
+<node CREATED="1489790576831" ID="ID_84712572" MODIFIED="1489790584658" TEXT="definiert Klasse o.&#xe4;"/>
+<node CREATED="1489790588749" ID="ID_1302974476" MODIFIED="1489790599656" TEXT="User schreibt direkt dahinter einen Codeblock"/>
+<node CREATED="1489790689536" ID="ID_605065689" MODIFIED="1489790702050" TEXT="tats&#xe4;chlich wird das eine out-of-class definierte Methode"/>
+<node CREATED="1489791695217" ID="ID_1529943414" MODIFIED="1489791705036" TEXT="...und kann sogar per Doxygen kommentiert werden"/>
+</node>
+<node CREATED="1489791741539" ID="ID_175521756" MODIFIED="1489791746686" TEXT="im Build-Proze&#xdf; parsen">
+<node CREATED="1489791753074" ID="ID_1141751955" MODIFIED="1489791761893" TEXT="und z.B. den Header daraus generieren"/>
+<node CREATED="1489791763313" ID="ID_1622970394" MODIFIED="1489791766588" TEXT="warum nicht...?"/>
+<node CREATED="1489791777102" ID="ID_102161218" MODIFIED="1489791786937" TEXT="empfinde ich besser als komplex verschachtelte Makros"/>
+</node>
+</node>
+</node>
+<node CREATED="1489791729957" ID="ID_1986771449" MODIFIED="1489791734248" TEXT="kombinierte Magie">
+<node CREATED="1489791798116" ID="ID_197500257" MODIFIED="1489791804727" TEXT="Definitions-Klasse">
+<node CREATED="1489791805675" ID="ID_1517636242" MODIFIED="1489791817237" TEXT="ist konvertierbar nach Literal"/>
+<node CREATED="1489791817873" ID="ID_361574240" MODIFIED="1489791838610" TEXT="nimmt Lambda als Konstruktor-Argument"/>
+<node CREATED="1489791849245" ID="ID_262482724" MODIFIED="1489791860879" TEXT="bietet interne DSL"/>
+<node CREATED="1489795277835" ID="ID_663997649" MODIFIED="1489795286417" TEXT="Name gesucht...?">
+<icon BUILTIN="help"/>
+<node CREATED="1489795288354" ID="ID_960791386" MODIFIED="1489795346577" TEXT="CommandInstance">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1489795292689" ID="ID_1059834523" MODIFIED="1489795346578" TEXT="CommandDefinition">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1489795318614" ID="ID_437740295" MODIFIED="1489795346578" TEXT="CommandName">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1489795321669" ID="ID_115829263" MODIFIED="1489795346579" TEXT="CommandItem">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1489795298832" ID="ID_1272194079" MODIFIED="1489795342763" TEXT="CommandSetup">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1489791864787" ID="ID_891631217" MODIFIED="1489791877373" TEXT="in den Impl-Einheiten eine Folge von Definitionen"/>
+<node CREATED="1489791877913" ID="ID_387208356" MODIFIED="1489793604385" TEXT="zugh&#xf6;rigen Header proc/cmd.hpp im Build-Proze&#xdf; regenerieren">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
