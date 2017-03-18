@@ -55,6 +55,7 @@ namespace cmd {
 //  using std::string;
 //  using lib::Symbol;
   using control::Command;
+  using control::CommandDef;
   using control::CommandSetup;
   //using std::shared_ptr;
   

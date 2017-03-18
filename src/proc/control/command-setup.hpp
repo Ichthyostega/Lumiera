@@ -58,7 +58,7 @@
 #include "lib/symbol.hpp"
 //#include "proc/common.hpp"
 
-#include <boost/noncopyable.hpp>
+#include <functional>
 #include <string>
 
 
@@ -72,6 +72,8 @@ namespace control {
   using lib::Literal;
   //using std::shared_ptr;
   
+  class CommandDef;
+  
   
   
   /**
@@ -84,7 +86,7 @@ namespace control {
     public:
      ~CommandSetup();
       CommandSetup (Literal cmdID);
-      CommandSetup (CommandSetup const&)  = delete;
+      CommandSetup (CommandSetup const&)  = default;
       CommandSetup (CommandSetup &&)      = default;
       CommandSetup& operator= (CommandSetup const&) = delete;
       
@@ -97,6 +99,11 @@ namespace control {
           return string{cmdID_};
         }
       
+      /** core functionality: provide a command definition block. */
+      CommandSetup& operator= (std::function<void(CommandDef&)>);
+      
+      /** diagnostics / test */
+      static size_t pendingCnt();
       
       friend bool
       operator== (CommandSetup const& left, CommandSetup const& right)

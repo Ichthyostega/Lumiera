@@ -42,6 +42,7 @@
 //#include <string>
 
 //using std::string;
+using std::function;
 //using util::cStr;
 //using util::_Fmt;
 
@@ -66,7 +67,21 @@ namespace control {
   CommandSetup::CommandSetup(Literal cmdID)
     : cmdID_(cmdID)
     { }
-
+  
+  
+  CommandSetup&
+  CommandSetup::operator= (function<void(CommandDef&)> definitionBlock)
+  {
+    UNIMPLEMENTED ("definition queue");
+  }
+  
+  
+  size_t
+  CommandSetup::pendingCnt()
+  {
+    UNIMPLEMENTED ("definition queue");
+  }
+  
   
   // emit dtors of embedded objects here....
   CommandInstanceManager::~CommandInstanceManager() { }

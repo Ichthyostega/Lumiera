@@ -27,6 +27,8 @@
 
 #include "lib/test/run.hpp"
 #include "proc/cmd.hpp"
+#include "proc/control/command-def.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/p.hpp"
 
@@ -53,6 +55,17 @@ namespace test {
   
   namespace  { // Test fixture....
     
+    /** will be manipulated by the commands we define */
+    string testString;
+    
+    
+    void
+    do_something_pointless (CommandDef&)
+    {
+      cout << "before-->" << testString << endl;
+      testString = "Ichthyostega wuz here";
+      cout << "after--->" << testString << endl;
+    }
   }
   
   
@@ -101,12 +114,16 @@ namespace test {
           CHECK (def_empty != CommandSetup("to pee or not to pee"));
           
           
+          // add actual definition closures... 
           CommandSetup def_0{"test.CommandSetup.def_0"};
+          CHECK (CommandSetup::pendingCnt() == 0);
+          
+          def_0 = do_something_pointless;
+          
           CommandSetup def_1{"test.CommandSetup.def_1"};
           CommandSetup def_2{"test.CommandSetup.def_2"};
           
-//////////// does not compile -- copy is prohibited...
-//        CommandSetup empty2{def_empty};
+//////////// does not compile -- copy assignment prohibited...
 //        def_empty = def_1;
         }
       
