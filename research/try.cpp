@@ -59,6 +59,46 @@ using std::bind;
 using std::string;
 using std::tuple;
 
+////////////////############# Investigation of implementation variants
+namespace lib {
+namespace meta {
+
+  template< typename RET, class CLASS
+          , typename A1
+          >
+  struct _Fun<RET (CLASS::*) (A1) >
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1> Args;
+      typedef RET Sig(CLASS* const, A1);
+    };
+
+  template< typename RET, class CLASS
+          , typename A1
+          >
+  struct _Fun<RET (CLASS::*) (A1)   const>
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1> Args;
+      typedef RET Sig(CLASS* const, A1);
+    };
+
+  template< typename RET, class CLASS
+          , typename A1
+          , typename A2
+          >
+  struct _Fun<RET (CLASS::*) (A1,A2)   const>
+    {
+      typedef RET Ret;
+      typedef Types<CLASS* const, A1,A2> Args;
+      typedef RET Sig(CLASS* const, A1,A2);
+    };
+  
+}}//namespace lib::meta
+////////////////############# Investigation of implementation variants
+
+
+
 int
 funny (uint i)
 {
@@ -128,12 +168,19 @@ main (int, char**)
     
     Fun f6{bind (f5, funk, _1)};
     
+    auto lambda = [&](uint ii) { return funk.fun(ii); };
     
     showType (funny);
     showType (&funny);
     showType (Funky::notfunny);
     
     showType (memfunP);
+    showType (lambda);
+    
+    cout << "\n\n-------\n";
+    
+    SHOW_TYPE (decltype(&Funky::operator()));
+    SHOW_TYPE (decltype(lambda));
     
     cout <<  "\n.gulp.\n";
     

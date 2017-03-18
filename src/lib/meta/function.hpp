@@ -262,7 +262,7 @@ namespace meta{
     };
   
   /** Specialisations for member function pointers */
-  template<typename RET, class CLASS>
+/*  template<typename RET, class CLASS>
   struct _Fun<RET (CLASS::*) (void) >
     {
       typedef RET Ret;
@@ -376,7 +376,7 @@ namespace meta{
       typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8> Args;
       typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8);
     };
-  
+*/
   
   
   template<typename FUN>
