@@ -134,7 +134,11 @@ namespace test {
       void
       verify_DefinitionRegistration()
         {
-          UNIMPLEMENTED("trigger the collected lambdas");
+          size_t cnt = CommandSetup::invokeDefinitionClosures();
+          CHECK (CommandSetup::pendingCnt() == 0);
+          CHECK (cnt == 1);
+          CHECK (testString == "Ichthyostega wuz here");
+          TODO ("verify the command definitions happened");
         }
       
       

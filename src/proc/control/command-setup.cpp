@@ -35,9 +35,12 @@
 
 #include "lib/error.hpp"
 //#include "lib/symbol.hpp"
+#include "include/logging.h"
 //#include "lib/format-string.hpp"
 #include "proc/control/command-setup.hpp"
 #include "proc/control/command-instance-manager.hpp"
+#include "proc/control/command-def.hpp"
+//#include "lib/util.hpp"
 
 
 //#include <string>
@@ -46,8 +49,10 @@
 
 //using std::string;
 using std::tuple;
+using std::get;
 using std::function;
 using std::move;
+using lib::Symbol;
 //using util::cStr;
 //using util::_Fmt;
 
@@ -59,7 +64,7 @@ namespace control {
   
   namespace { // implementation details of command setup...
     
-    using CmdDefEntry = std::tuple<Literal, DefinitionClosure>;
+    using CmdDefEntry = std::tuple<Symbol, DefinitionClosure>;
     
     std::deque<CmdDefEntry> pendingCmdDefinitions;
     
@@ -108,11 +113,30 @@ namespace control {
       throw error::Invalid ("unbound function/closure provided for CommandSetup"
                            , error::LUMIERA_ERROR_BOTTOM_VALUE);
     
-    pendingCmdDefinitions.emplace_front (cmdID_, move(definitionBlock));
+    pendingCmdDefinitions.emplace_front (Symbol(cmdID_), move(definitionBlock));
     return *this;
   }
   
   
+  size_t
+  CommandSetup::invokeDefinitionClosures()
+  {
+    size_t cnt=0;
+    while (not pendingCmdDefinitions.empty())
+      {
+        CmdDefEntry& entry = pendingCmdDefinitions.back();
+        Symbol& cmdID{get<Symbol>(entry)};
+        DefinitionClosure& buildDefinition{get<DefinitionClosure> (entry)};
+        
+        INFO (command, "defining Command(%s)...", cmdID.c());
+        CommandDef def(cmdID);
+        buildDefinition(def);
+        ++cnt;
+        pendingCmdDefinitions.pop_back();
+      }
+    return cnt;
+  }
+
   size_t
   CommandSetup::pendingCnt()
   {

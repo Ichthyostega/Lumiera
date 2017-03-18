@@ -104,6 +104,9 @@ namespace control {
       /** core functionality: provide a command definition block. */
       CommandSetup& operator= (DefinitionClosure);
       
+      /** @internal empty the definition queue and invoke definitions */
+      static size_t invokeDefinitionClosures();
+      
       /** diagnostics / test */
       static size_t pendingCnt();
       
