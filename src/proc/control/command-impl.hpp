@@ -168,13 +168,13 @@ namespace control {
       
       void
       setArguments (Arguments& args)
-        {
+        {                                                              //////////////////////////////////////TICKET #1095 : explicit argument arity check here
           pClo_->bindArguments (args);
         }
       
       void
       setArguments (lib::diff::Rec const& paramData)
-        {
+        {                                                              //////////////////////////////////////TICKET #1095 : explicit argument arity check here
           pClo_->bindArguments (paramData);
         }
       

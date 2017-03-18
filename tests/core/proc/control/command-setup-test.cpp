@@ -34,6 +34,8 @@
 
 //#include <cstdlib>
 #include <string>
+#include <regex>
+
 
 //using std::rand;
 
@@ -48,6 +50,8 @@ namespace test {
 //using lib::time::Offset;
   using lib::Literal;
   using std::string;
+  using std::regex;
+  using std::regex_replace;
   
   
   
@@ -65,6 +69,25 @@ namespace test {
       cout << "before-->" << testString << endl;
       testString = "Ichthyostega wuz here";
       cout << "after--->" << testString << endl;
+    }
+    
+    
+    void
+    operate (string search, string replace)
+    {
+      testString = regex_replace (testString, regex(search), replace);
+    }
+    
+    string
+    capture (string, string)
+    {
+      return testString;
+    }
+    
+    void
+    undoIt (string, string, string oldVal)
+    {
+      testString = oldVal;
     }
   }
   
@@ -122,7 +145,14 @@ namespace test {
           CHECK (CommandSetup::pendingCnt() == 1);
           
           
-          CommandSetup def_1{"test.CommandSetup.def_1"};
+          CommandSetup def_1 = CommandSetup{"test.CommandSetup.def_1"}
+                               = [](CommandDef def)
+                                   {
+                                     def.operation (operate)
+                                        .captureUndo (capture)
+                                        .undoOperation (undoIt);
+                                   };
+          
           CommandSetup def_2{"test.CommandSetup.def_2"};
           
 //////////// does not compile -- copy assignment prohibited...
@@ -136,7 +166,7 @@ namespace test {
         {
           size_t cnt = CommandSetup::invokeDefinitionClosures();
           CHECK (CommandSetup::pendingCnt() == 0);
-          CHECK (cnt == 1);
+          CHECK (cnt == 2);
           CHECK (testString == "Ichthyostega wuz here");
           TODO ("verify the command definitions happened");
         }
