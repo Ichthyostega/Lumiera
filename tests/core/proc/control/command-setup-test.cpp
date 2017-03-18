@@ -119,6 +119,8 @@ namespace test {
           CHECK (CommandSetup::pendingCnt() == 0);
           
           def_0 = do_something_pointless;
+          CHECK (CommandSetup::pendingCnt() == 1);
+          
           
           CommandSetup def_1{"test.CommandSetup.def_1"};
           CommandSetup def_2{"test.CommandSetup.def_2"};

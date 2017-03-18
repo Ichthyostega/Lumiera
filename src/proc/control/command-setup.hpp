@@ -74,6 +74,8 @@ namespace control {
   
   class CommandDef;
   
+  using DefinitionClosure = std::function<void(CommandDef&)>;
+  
   
   
   /**
@@ -100,7 +102,7 @@ namespace control {
         }
       
       /** core functionality: provide a command definition block. */
-      CommandSetup& operator= (std::function<void(CommandDef&)>);
+      CommandSetup& operator= (DefinitionClosure);
       
       /** diagnostics / test */
       static size_t pendingCnt();
