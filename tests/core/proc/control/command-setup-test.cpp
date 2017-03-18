@@ -28,6 +28,7 @@
 #include "lib/test/run.hpp"
 #include "proc/cmd.hpp"
 #include "proc/control/command-def.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/p.hpp"
@@ -52,6 +53,7 @@ namespace test {
   using std::string;
   using std::regex;
   using std::regex_replace;
+  using util::_Fmt;
   
   
   
@@ -136,6 +138,9 @@ namespace test {
           CHECK (def_empty == CommandSetup("to be or not to be"));
           CHECK (def_empty != CommandSetup("to pee or not to pee"));
           
+//////////// does not compile -- copy assignment prohibited...
+//        def_empty = def_1;
+          
           
           // add actual definition closures... 
           CommandSetup def_0{"test.CommandSetup.def_0"};
@@ -153,11 +158,24 @@ namespace test {
                                         .undoOperation (undoIt);
                                    };
           
-          CommandSetup def_2{"test.CommandSetup.def_2"};
-          
-//////////// does not compile -- copy assignment prohibited...
-//        def_empty = def_1;
+          CommandSetup def_2 = CommandSetup{"test.CommandSetup.def_2"}
+                               = [&](CommandDef def)                                            // NOTE: we capture context by reference
+                                    {
+                                      def.operation ([&](uint cnt)
+                                                        {
+                                                          testString += pattern % cnt;          // NOTE: capture the field 'pattern' of the enclosing class
+                                                        })
+                                         .captureUndo ([](uint) -> string
+                                                        {
+                                                          return testString;
+                                                        })
+                                         .undoOperation ([](uint, string oldVal)
+                                                        {
+                                                          testString = oldVal;
+                                                        });
+                                    };
         }
+      _Fmt pattern{" %d times."};
       
       
       /** @test actually issue the definitions captured as side-effect of the preceding test. */
