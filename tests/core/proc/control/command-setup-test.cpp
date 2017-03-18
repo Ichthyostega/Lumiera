@@ -31,6 +31,7 @@
 //#include "lib/p.hpp"
 
 //#include <cstdlib>
+#include <string>
 
 //using std::rand;
 
@@ -43,6 +44,8 @@ namespace test {
 //using lib::time::TimeVar;
 //using lib::time::TimeValue;
 //using lib::time::Offset;
+  using lib::Literal;
+  using std::string;
   
   
   
@@ -78,7 +81,33 @@ namespace test {
       void
       verify_DefinitionSetup()
         {
-          UNIMPLEMENTED("create CommandSetup instances");
+          // can be created from arbitrary character literal
+          CommandSetup def_empty{"to be or not to be"};
+          
+          // at runtime it is nothing but a dressed-up C-string
+          Literal empty_text = def_empty;
+          CHECK (empty_text == "to be or not to be");
+          CHECK (sizeof(def_empty) == sizeof(Literal));
+          CHECK (sizeof(def_empty) == sizeof(char*));
+          
+          const char* actualContent = reinterpret_cast<char*&>(def_empty);
+          CHECK (actualContent == empty_text);
+          
+          // for convenience a string conversion is provided...
+          CHECK (string(def_empty) == string(empty_text));
+          
+          // can be equality compared based on sting (ID) content
+          CHECK (def_empty == CommandSetup("to be or not to be"));
+          CHECK (def_empty != CommandSetup("to pee or not to pee"));
+          
+          
+          CommandSetup def_0{"test.CommandSetup.def_0"};
+          CommandSetup def_1{"test.CommandSetup.def_1"};
+          CommandSetup def_2{"test.CommandSetup.def_2"};
+          
+//////////// does not compile -- copy is prohibited...
+//        CommandSetup empty2{def_empty};
+//        def_empty = def_1;
         }
       
       

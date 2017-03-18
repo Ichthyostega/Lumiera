@@ -55,11 +55,11 @@
 
 #include "lib/error.hpp"
 #include "proc/control/command.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 //#include "proc/common.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <string>
+#include <string>
 
 
 
@@ -67,8 +67,9 @@
 namespace proc {
 namespace control {
   
-//  using std::string;
+  using std::string;
 //  using lib::Symbol;
+  using lib::Literal;
   //using std::shared_ptr;
   
   
@@ -77,15 +78,36 @@ namespace control {
    * @todo write type comment
    */
   class CommandSetup
-    : boost::noncopyable
     {
+      Literal cmdID_;
       
     public:
-      
      ~CommandSetup();
+      CommandSetup (Literal cmdID);
+      CommandSetup (CommandSetup const&)  = delete;
+      CommandSetup (CommandSetup &&)      = default;
+      CommandSetup& operator= (CommandSetup const&) = delete;
+      
+      operator Literal const&()  const
+        {
+          return cmdID_;
+        }
+      operator string()  const
+        {
+          return string{cmdID_};
+        }
       
       
-    private:
+      friend bool
+      operator== (CommandSetup const& left, CommandSetup const& right)
+      {
+        return left.cmdID_ == right.cmdID_;
+      }
+      friend bool
+      operator!= (CommandSetup const& left, CommandSetup const& right)
+      {
+        return left.cmdID_ != right.cmdID_;
+      }
     };
   
   

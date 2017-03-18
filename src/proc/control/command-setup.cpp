@@ -36,6 +36,7 @@
 #include "lib/error.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/format-string.hpp"
+#include "proc/control/command-setup.hpp"
 #include "proc/control/command-instance-manager.hpp"
 
 //#include <string>
@@ -60,9 +61,15 @@ namespace control {
   /** storage for.... */
   
   
+  CommandSetup::~CommandSetup() { }
+  
+  CommandSetup::CommandSetup(Literal cmdID)
+    : cmdID_(cmdID)
+    { }
+
+  
   // emit dtors of embedded objects here....
   CommandInstanceManager::~CommandInstanceManager() { }
-  CommandSetup::~CommandSetup()                     { }
   
   CommandInstanceManager::CommandInstanceManager() { }
   
