@@ -223,12 +223,18 @@ namespace meta{
    *       pick up the signature through `decltype`, which also
    *       works with lambdas. See (\ref _ClosureType)                  //////////////////////////////////////TICKET #994
    */
-  template<typename SIG>
+  template<typename FUN>
   struct _Fun
+    : _Fun<decltype(&FUN::operator())>
+    { };
+  
+  /** Specialisation for a bare function signature */
+  template<typename RET, typename...ARGS>
+  struct _Fun<RET(ARGS...)>
     {
-      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
-      typedef typename FunctionSignature<function<SIG>>::Args Args;
-      typedef                                            SIG  Sig;
+      using Ret  = typename FunctionSignature<function<RET(ARGS...)>>::Ret ;
+      using Args = typename FunctionSignature<function<RET(ARGS...)>>::Args;
+      using Sig  = RET(ARGS...);
     };
   /** Specialisation for using a function pointer */
   template<typename SIG>
