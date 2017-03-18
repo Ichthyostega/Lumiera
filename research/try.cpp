@@ -64,34 +64,22 @@ namespace lib {
 namespace meta {
 
   template< typename RET, class CLASS
-          , typename A1
+          , typename...ARGS
           >
-  struct _Fun<RET (CLASS::*) (A1) >
+  struct _Fun<RET (CLASS::*) (ARGS...)  const>
     {
       typedef RET Ret;
-      typedef Types<CLASS* const, A1> Args;
-      typedef RET Sig(CLASS* const, A1);
+      typedef Types<CLASS* const, ARGS...> Args;
+      typedef RET Sig(CLASS* const, ARGS...);
     };
-
   template< typename RET, class CLASS
-          , typename A1
+          , typename...ARGS
           >
-  struct _Fun<RET (CLASS::*) (A1)   const>
+  struct _Fun<RET (CLASS::*) (ARGS...)  >
     {
       typedef RET Ret;
-      typedef Types<CLASS* const, A1> Args;
-      typedef RET Sig(CLASS* const, A1);
-    };
-
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2)   const>
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2> Args;
-      typedef RET Sig(CLASS* const, A1,A2);
+      typedef Types<CLASS* const, ARGS...> Args;
+      typedef RET Sig(CLASS* const, ARGS...);
     };
   
 }}//namespace lib::meta
@@ -170,12 +158,15 @@ main (int, char**)
     
     auto lambda = [&](uint ii) { return funk.fun(ii); };
     
+    Fun f7{lambda};
+    
     showType (funny);
     showType (&funny);
     showType (Funky::notfunny);
     
     showType (memfunP);
     showType (lambda);
+    showType (f7);
     
     cout << "\n\n-------\n";
     
