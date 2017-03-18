@@ -31,47 +31,62 @@
 // 8/15  - generalising the Variant::Visitor
 // 1/16  - generic to-string conversion for ostream
 // 1/16  - build tuple from runtime-typed variant container
+// 3/17  - generic function signature traits, including support for Lambdas
 
 
 /** @file try.cpp
- ** Metaprogramming: how to unload the contents of a runtime typed variant sequence
- ** into ctor arguments of a (compile time typed) tuple. This involves two problems
- ** - how to combine iteration, compile-time indexing and run-time access.
- ** - how to overcome the runtime-to-compiletime barrier, using a pre-generated
- **   double-dispatch (visitor).
+ ** Metaprogramming: unified treatment of functors, function references and lambdas.
  ** 
- ** The concrete problem prompting this research is the necessity to receive
- ** a command invocation parameter tuple from a Record<GenNode>
+ ** This investigation is a partial step towards #994 and became necessary to support
+ ** Command definition by Lambda
  ** 
  */
 
 typedef unsigned int uint;
 
-#include "lib/symbol.hpp"
-#include "lib/time/timevalue.hpp"
-#include "lib/meta/tuple-record-init.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
+#include "lib/meta/function.hpp"
 
-#include <boost/noncopyable.hpp>
+#include <functional>
 #include <string>
 
-using lib::Literal;
-using lib::Variant;
-using lib::idi::EntryID;
-using lib::diff::Rec;
-using lib::diff::MakeRec;
-using lib::diff::GenNode;
-using lib::meta::Types;
-using lib::meta::Tuple;
-using lib::meta::buildTuple;
-using lib::time::TimeVar;
-using lib::time::Time;
+using lib::meta::_Fun;
 
+using std::function;
+using std::placeholders::_1;
+using std::bind;
 using std::string;
 using std::tuple;
 
+int
+funny (uint i)
+{
+  return -i+1;
+}
 
+struct Funky
+  {
+    int ii = 2;
+    
+    int
+    fun (uint i2)
+      {
+        return ii + funny(i2);
+      }
+    
+    int
+    operator() (uint i2)
+      {
+        return 2*ii - fun(i2);
+      }
+    
+    static int
+    notfunny (uint i)
+      {
+        return 2*funny (i);
+      }
+  };
 
 
 
@@ -81,55 +96,44 @@ using std::tuple;
 #define EVAL_PREDICATE(_PRED_) \
     cout << STRINGIFY(_PRED_) << "\t : " << _PRED_ <<endl;
 
+
+template<typename F>
 void
-verifyConversions()
+showType (F)
   {
-    using lib::meta::GenNodeAccessor;
-    using std::is_arithmetic;
-    using std::is_floating_point;
-    using lib::meta::is_nonFloat;
-    using lib::hash::LuidH;
+    using Sig = typename _Fun<F>::Sig;
     
-    
-    EVAL_PREDICATE(is_arithmetic<int>       ::value)
-    EVAL_PREDICATE(is_arithmetic<size_t>    ::value)
-    EVAL_PREDICATE(is_floating_point<size_t>::value)
-    EVAL_PREDICATE(is_nonFloat<size_t>      ::value)
-    
-    EVAL_PREDICATE(GenNodeAccessor<int>  ::allow_Conversion<size_t>    ::value)
-    EVAL_PREDICATE(GenNodeAccessor<int64_t>::allow_Conversion<long int>::value)
-    EVAL_PREDICATE(GenNodeAccessor<double>::allow_Conversion<int64_t>::value)
-    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<int64_t> ::value)
-    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<int16_t> ::value)
-    EVAL_PREDICATE(GenNodeAccessor<LuidH>::allow_Conversion<uint16_t>::value)
-    EVAL_PREDICATE(GenNodeAccessor<LuidH> ::allow_Conversion<LuidH>  ::value)
-    EVAL_PREDICATE(GenNodeAccessor<int64_t> ::allow_Conversion<LuidH>::value)
-    EVAL_PREDICATE(GenNodeAccessor<uint64_t>::allow_Conversion<LuidH>::value)
-    EVAL_PREDICATE(GenNodeAccessor<uint32_t>::allow_Conversion<LuidH>::value)
-    EVAL_PREDICATE(GenNodeAccessor<int32_t> ::allow_Conversion<LuidH>::value)
-    
-    cout <<endl<<endl;
+    SHOW_TYPE (F);
+    SHOW_TYPE (Sig);
   }
 
 
+using Fun = function<int(uint)>;
+using Fuk = function<int(Funky&, uint)>;
 
 int
 main (int, char**)
   {
-    verifyConversions();
+    Fun f1{funny};
+    Fun f2{&funny};
     
-    using NiceTypes = Types<string, int>;
-    using UgglyTypes = Types<EntryID<long>, string, int, int64_t, double, TimeVar>;
+    Fun f3{Funky::notfunny};
+    Fun f4{&Funky::notfunny};
     
-    Rec args = MakeRec().scope("lalü", 42);
-    Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
+    auto memfunP = &Funky::fun;
     
-    cout << args <<endl;
-    cout << urgs <<endl;
+    Fuk f5{memfunP};
     
-    cout << buildTuple<NiceTypes> (args) <<endl;
-    cout << buildTuple<UgglyTypes> (urgs) <<endl;
+    Funky funk;
     
+    Fun f6{bind (f5, funk, _1)};
+    
+    
+    showType (funny);
+    showType (&funny);
+    showType (Funky::notfunny);
+    
+    showType (memfunP);
     
     cout <<  "\n.gulp.\n";
     
