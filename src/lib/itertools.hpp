@@ -629,28 +629,6 @@ namespace lib {
   
   
   
-  namespace { // Helper to pick up the produced value type automatically
-    
-    using lib::meta::FunctionSignature;
-    
-    template<typename SIG>
-    struct _ProducedOutput
-      {
-        typedef typename FunctionSignature<function<SIG>>::Ret Type;
-      };
-    
-    template<typename SIG>
-    struct _ProducedOutput<function<SIG>>
-      {
-        typedef typename FunctionSignature<function<SIG>>::Ret Type;
-      };
-    
-    template<typename FUN>
-    struct _ProducedOutput<FUN*>
-      {
-        typedef typename FunctionSignature<function<FUN>>::Ret Type;
-      };
-  }
   
   
   /** Build a TransformIter: convenience free function shortcut,
@@ -659,10 +637,10 @@ namespace lib {
    *  @return Iterator processing the source feed
    */
   template<class IT, typename FUN>
-  inline TransformIter<IT, typename _ProducedOutput<FUN>::Type>
+  inline auto
   transformIterator (IT const& src, FUN processingFunc)
   {
-    typedef typename _ProducedOutput<FUN>::Type OutVal;
+    using OutVal = typename lib::meta::_Fun<FUN>::Ret;
     return TransformIter<IT,OutVal>(src,processingFunc);
   }
   

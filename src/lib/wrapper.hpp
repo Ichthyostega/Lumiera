@@ -56,7 +56,7 @@ namespace wrapper {
   
   using util::unConst;
   using util::isSameObject;
-  using lib::meta::FunctionSignature;
+  using lib::meta::_Fun;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   using std::function;
@@ -346,7 +346,7 @@ namespace wrapper {
     : public function<SIG>
     , boost::noncopyable
     {
-      using Res = typename FunctionSignature<function<SIG>>::Ret;
+      using Res = typename _Fun<SIG>::Ret;
       using ResWrapper = ItemWrapper<Res>;
       
       ResWrapper lastResult_;

@@ -282,7 +282,7 @@ namespace lib {
       template<class IT, class FUN>
       struct _TransformIterT
         {
-          typedef typename _ProducedOutput<FUN>::Type ResVal;          
+          typedef typename lib::meta::_Fun<FUN>::Ret  ResVal;
           typedef TransformIter<IT,ResVal>         TransIter;
           typedef typename IterSource<ResVal>::iterator Iter;
         };

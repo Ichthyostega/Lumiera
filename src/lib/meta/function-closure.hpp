@@ -476,8 +476,8 @@ namespace func{
   template<typename SIG>
   class TupleApplicator
     {
-      using Args = typename FunctionSignature< function<SIG>>::Args;
-      using Ret  = typename FunctionSignature< function<SIG>>::Ret;
+      using Args = typename _Fun<SIG>::Args;
+      using Ret  = typename _Fun<SIG>::Ret;
       
       using BoundFunc = function<Ret()>;
       

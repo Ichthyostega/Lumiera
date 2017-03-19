@@ -58,7 +58,7 @@
 namespace proc {
 namespace control {
   
-  using lib::meta::FunctionSignature;
+  using lib::meta::_Fun;
   using lib::meta::Tuple;
   using lib::meta::BuildTupleAccessor;
   using lib::meta::func::TupleApplicator;
@@ -153,10 +153,10 @@ namespace control {
   template<typename SIG>
   class OpClosure
     {
-      using Args = typename FunctionSignature< function<SIG>>::Args;
+      using Args    = typename _Fun<SIG>::Args;
       using Builder = BuildTupleAccessor<ParamAccessor, Args>;
       
-      using ParamStorageTuple =typename Builder::Product;
+      using ParamStorageTuple = typename Builder::Product;
       
       ParamStorageTuple params_;
       bool activated_;

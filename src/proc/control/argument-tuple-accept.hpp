@@ -591,13 +591,14 @@ namespace control {
     
     
     using lib::meta::Tuple;
+    using lib::meta::_Fun;
     
     
     template<typename SIG>
     struct _Type
       {
-        using Args = typename FunctionSignature< function<SIG>>::Args;
-        using Ret  = typename FunctionSignature< function<SIG>>::Ret;
+        using Args = typename _Fun<SIG>::Args;
+        using Ret  = typename _Fun<SIG>::Ret;
         using Sig  = SIG;
         using ArgTuple = Tuple<Args>;
       };

@@ -41,7 +41,7 @@ namespace test    {
   
   using lib::time::TimeVar;
   using std::function;
-  using lib::meta::FunctionSignature;
+  using lib::meta::_Fun;
   using lib::meta::Tuple;
   
   
@@ -54,9 +54,9 @@ namespace test    {
     template<typename SIG>
     struct _Tup
       {
-        typedef typename FunctionSignature< function<SIG>>::Args Args;
-        typedef typename FunctionSignature< function<SIG>>::Ret  Ret;
-        typedef Tuple<Args> Ty;
+        using Args = typename _Fun<SIG>::Args;
+        using Ret = typename _Fun<SIG>::Ret;
+        using Ty = Tuple<Args>;
       };
     
     
@@ -67,8 +67,8 @@ namespace test    {
                                     , typename _Tup<SIG>::Ty  // base class to inherit from
                                     >
       {
-        typedef typename _Tup<SIG>::Ty  ATuple;
-        typedef typename _Tup<SIG>::Ret RetType;
+        using ATuple  = typename _Tup<SIG>::Ty;
+        using RetType = typename _Tup<SIG>::Ret;
         
       public:
         

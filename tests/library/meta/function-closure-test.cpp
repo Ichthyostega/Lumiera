@@ -142,8 +142,8 @@ namespace test {
       check_signatureTypeManip ()
         {
           typedef int someFunc(Num<5>,Num<9>);
-          typedef FunctionSignature<function<someFunc>>::Ret RetType;  // should be int
-          typedef FunctionSignature<function<someFunc>>::Args Args;
+          typedef _Fun<someFunc>::Ret RetType;  // should be int
+          typedef _Fun<someFunc>::Args Args;
           DISPLAY (Args);
           
           typedef Prepend<Num<1>, Args>::Seq NewArgs;               // manipulate the argument type(s)
