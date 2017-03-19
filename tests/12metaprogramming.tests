@@ -164,6 +164,11 @@ return: 0
 END
 
 
+TEST "function signature trait" FunctionSignature_test <<END
+return: 0
+END
+
+
 TEST "metaprogramming helpers" MetaUtils_test  <<END
 return: 0
 END
