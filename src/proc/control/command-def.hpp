@@ -71,6 +71,7 @@
 
 #include <memory>
 #include <functional>
+#include <boost/noncopyable.hpp>
 
 
 
@@ -276,7 +277,8 @@ namespace control {
    * 
    */
   class CommandDef
-    : public lib::BoolCheckable<CommandDef>
+    : public lib::BoolCheckable<CommandDef
+    , boost::noncopyable       >
     {
       Symbol id_;
       Command prototype_;
