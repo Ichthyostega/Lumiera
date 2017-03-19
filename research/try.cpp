@@ -57,6 +57,7 @@ using std::placeholders::_1;
 using std::bind;
 using std::string;
 using std::tuple;
+using std::move;
 
 ////////////////############# Investigation of implementation variants
 namespace lib {
@@ -84,6 +85,12 @@ namespace meta {
   /** Specialisation when using a function reference */
   template<typename SIG>
   struct _FuZ<SIG&>
+    : _FuZ<SIG>
+    { };
+  
+  /** Specialisation for passing a rvalue reference */
+  template<typename SIG>
+  struct _FuZ<SIG&&>
     : _FuZ<SIG>
     { };
   
@@ -157,6 +164,36 @@ showType (F)
     SHOW_TYPE (Sig);
   }
 
+template<typename F>
+void
+showRef (F&)
+  {
+    using Sig = typename _FuZ<F>::Sig;
+    
+    SHOW_TYPE (F);
+    SHOW_TYPE (Sig);
+  }
+
+template<typename F>
+void
+showCRef (F&)
+  {
+    using Sig = typename _FuZ<F>::Sig;
+    
+    SHOW_TYPE (F);
+    SHOW_TYPE (Sig);
+  }
+
+template<typename F>
+void
+showRRef (F&&)
+  {
+    using Sig = typename _FuZ<F>::Sig;
+    
+    SHOW_TYPE (F);
+    SHOW_TYPE (Sig);
+  }
+
 
 using Fun = function<int(uint)>;
 using Fuk = function<int(Funky&, uint)>;
@@ -192,10 +229,47 @@ main (int, char**)
     
     cout << "\n\n-------\n";
     
+    showRef (funny);
+    showRef (lambda);
+    showRef (f7);
+    
+    showCRef (funny);
+    showCRef (lambda);
+    showCRef (f7);
+    
+    showRRef (move(lambda));
+    showRRef (move(f7));
+    
+    showType (move(&funny));
+    showType (move(lambda));
+    showType (move(f7));
+    
+    Fun& funRef = f1;
+    Funky& funkyRef = funk;
+    Fun const& funCRef = f1;
+    Funky const& funkyCRef = funk;
+    showType (funRef);
+    showType (funkyRef);
+    showType (funCRef);
+    showType (funkyCRef);
+    
+    cout << "\n\n-------\n";
+    
     SHOW_TYPE (decltype(&Funky::operator()));
     SHOW_TYPE (decltype(lambda));
     
     SHOW_TYPE (_FuZ<int(uint)>::Sig);
+    SHOW_TYPE (_FuZ<Fun&>::Sig);
+    SHOW_TYPE (_FuZ<Fun&&>::Sig);
+    SHOW_TYPE (_FuZ<Fun const&>::Sig);
+    SHOW_TYPE (_FuZ<Funky&>::Sig);
+    SHOW_TYPE (_FuZ<Funky&&>::Sig);
+    SHOW_TYPE (_FuZ<Funky const&>::Sig);
+    
+    using Siggy = _FuZ<Fun>::Sig;
+    SHOW_TYPE (_FuZ<Siggy&>::Sig);
+    SHOW_TYPE (_FuZ<Siggy&&>::Sig);
+    SHOW_TYPE (_FuZ<Siggy const&>::Sig);
     
     cout <<  "\n.gulp.\n";
     
