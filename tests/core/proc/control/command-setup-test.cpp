@@ -30,6 +30,7 @@
 #include "proc/control/command-def.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/p.hpp"
 
@@ -53,6 +54,7 @@ namespace test {
   using std::string;
   using std::regex;
   using std::regex_replace;
+  using util::isnil;
   using util::_Fmt;
   
   
@@ -151,7 +153,7 @@ namespace test {
           
           
           CommandSetup def_1 = CommandSetup{"test.CommandSetup.def_1"}
-                               = [](CommandDef def)
+                               = [](CommandDef& def)
                                    {
                                      def.operation (operate)
                                         .captureUndo (capture)
@@ -159,7 +161,7 @@ namespace test {
                                    };
           
           CommandSetup def_2 = CommandSetup{"test.CommandSetup.def_2"}
-                               = [&](CommandDef def)                                            // NOTE: we capture context by reference
+                               = [&](CommandDef& def)                                           // NOTE: we capture context by reference
                                     {
                                       def.operation ([&](uint cnt)
                                                         {
@@ -182,11 +184,20 @@ namespace test {
       void
       verify_DefinitionRegistration()
         {
+          CHECK (isnil (testString));
+          
           size_t cnt = CommandSetup::invokeDefinitionClosures();
           CHECK (CommandSetup::pendingCnt() == 0);
           CHECK (cnt == 3);
           CHECK (testString == "Ichthyostega wuz here");
-          TODO ("verify the command definitions happened");
+          
+          // the closure for the first entry did "something pointless",
+          // but it actually did not define a command entry, thus...
+          CHECK (not Command::defined("test.CommandSetup.def_0"));
+
+          // but the other two entries did indeed define commands
+          CHECK (Command::defined("test.CommandSetup.def_1"));
+          CHECK (Command::defined("test.CommandSetup.def_2"));
         }
       
       
