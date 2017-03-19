@@ -51,6 +51,7 @@ typedef unsigned int uint;
 #include <functional>
 #include <string>
 
+using lib::meta::_Fun;
 
 using std::function;
 using std::placeholders::_1;
@@ -59,60 +60,6 @@ using std::string;
 using std::tuple;
 using std::move;
 
-////////////////############# Investigation of implementation variants
-namespace lib {
-namespace meta {
-  
-  template<typename FUN>
-  struct _FuZ
-    : _FuZ<decltype(&FUN::operator())>
-    { };
-  
-  /** Specialisation for a bare function signature */
-  template<typename RET, typename...ARGS>
-  struct _FuZ<RET(ARGS...)>
-    {
-      using Ret  = RET;
-      using Args = Types<ARGS...>;
-      using Sig  = RET(ARGS...);
-    };
-  /** Specialisation for using a function pointer */
-  template<typename SIG>
-  struct _FuZ<SIG*>
-    : _FuZ<SIG>
-    { };
-  
-  /** Specialisation when using a function reference */
-  template<typename SIG>
-  struct _FuZ<SIG&>
-    : _FuZ<SIG>
-    { };
-  
-  /** Specialisation for passing a rvalue reference */
-  template<typename SIG>
-  struct _FuZ<SIG&&>
-    : _FuZ<SIG>
-    { };
-  
-  /** Specialisation to deal with member pointer to function */
-  template<class C, typename RET, typename...ARGS>
-  struct _FuZ<RET (C::*) (ARGS...)>
-    : _FuZ<RET(ARGS...)>
-    { };
-  
-  /** Specialisation to handle member pointer to const function;
-   *  indirectly this specialisation also handles lambdas,
-   *  as redirected by the main template (via `decltype`) */
-  template<class C, typename RET, typename...ARGS>
-  struct _FuZ<RET (C::*) (ARGS...)  const>
-    : _FuZ<RET(ARGS...)>
-    { };
-  
-}}//namespace lib::meta
-
-using lib::meta::_FuZ;
-
-////////////////############# Investigation of implementation variants
 
 
 
@@ -158,7 +105,7 @@ template<typename F>
 void
 showType (F)
   {
-    using Sig = typename _FuZ<F>::Sig;
+    using Sig = typename _Fun<F>::Sig;
     
     SHOW_TYPE (F);
     SHOW_TYPE (Sig);
@@ -168,7 +115,7 @@ template<typename F>
 void
 showRef (F&)
   {
-    using Sig = typename _FuZ<F>::Sig;
+    using Sig = typename _Fun<F>::Sig;
     
     SHOW_TYPE (F);
     SHOW_TYPE (Sig);
@@ -178,7 +125,7 @@ template<typename F>
 void
 showCRef (F&)
   {
-    using Sig = typename _FuZ<F>::Sig;
+    using Sig = typename _Fun<F>::Sig;
     
     SHOW_TYPE (F);
     SHOW_TYPE (Sig);
@@ -188,7 +135,7 @@ template<typename F>
 void
 showRRef (F&&)
   {
-    using Sig = typename _FuZ<F>::Sig;
+    using Sig = typename _Fun<F>::Sig;
     
     SHOW_TYPE (F);
     SHOW_TYPE (Sig);
@@ -258,18 +205,18 @@ main (int, char**)
     SHOW_TYPE (decltype(&Funky::operator()));
     SHOW_TYPE (decltype(lambda));
     
-    SHOW_TYPE (_FuZ<int(uint)>::Sig);
-    SHOW_TYPE (_FuZ<Fun&>::Sig);
-    SHOW_TYPE (_FuZ<Fun&&>::Sig);
-    SHOW_TYPE (_FuZ<Fun const&>::Sig);
-    SHOW_TYPE (_FuZ<Funky&>::Sig);
-    SHOW_TYPE (_FuZ<Funky&&>::Sig);
-    SHOW_TYPE (_FuZ<Funky const&>::Sig);
+    SHOW_TYPE (_Fun<int(uint)>::Sig);
+    SHOW_TYPE (_Fun<Fun&>::Sig);
+    SHOW_TYPE (_Fun<Fun&&>::Sig);
+    SHOW_TYPE (_Fun<Fun const&>::Sig);
+    SHOW_TYPE (_Fun<Funky&>::Sig);
+    SHOW_TYPE (_Fun<Funky&&>::Sig);
+    SHOW_TYPE (_Fun<Funky const&>::Sig);
     
-    using Siggy = _FuZ<Fun>::Sig;
-    SHOW_TYPE (_FuZ<Siggy&>::Sig);
-    SHOW_TYPE (_FuZ<Siggy&&>::Sig);
-    SHOW_TYPE (_FuZ<Siggy const&>::Sig);
+    using Siggy = _Fun<Fun>::Sig;
+    SHOW_TYPE (_Fun<Siggy&>::Sig);
+    SHOW_TYPE (_Fun<Siggy&&>::Sig);
+    SHOW_TYPE (_Fun<Siggy const&>::Sig);
     
     cout <<  "\n.gulp.\n";
     

@@ -236,7 +236,7 @@ namespace diff{
     class ChangeOperation
       : public AttributeBindingBase<PAR>
       {
-        using CloArgs = typename _ClosureType<CLO>::Args;
+        using CloArgs = typename lib::meta::_Fun<CLO>::Args;
         using ValueType = typename lib::meta::Pick<CloArgs, 0>::Type;
         using ID = idi::EntryID<ValueType>;
         

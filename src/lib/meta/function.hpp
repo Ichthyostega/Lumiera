@@ -26,7 +26,7 @@
  ** Sometimes it is necessary to build and remould a function signature, e.g. for
  ** creating a functor or a closure based on an existing function of function pointer.
  ** This is a core task of functional programming, but sadly C++ in its current shape
- ** is still lacking in this area. (C++0X will significantly improve this situation).
+ ** is still lacking in this area. (C++11 significantly improved this situation).
  ** As an \em pragmatic fix, we define here a collection of templates, specialising
  ** them in a very repetitive way for up to 9 function arguments. Doing so enables
  ** us to capture a function, access the return type and argument types as a typelist,
@@ -36,7 +36,8 @@
  ** If the following code makes you feel like vomiting, please look away,
  ** and rest assured: you aren't alone.
  ** 
- ** @todo rework to use variadic templates and integrage support for lambdas   //////////////////////////////////////TICKET #994
+ ** @todo get rid of the repetitive specialisations
+ **       and use variadic templates to represent the arguments             /////////////////////////////////TICKET #994
  ** 
  ** 
  ** @see control::CommandDef usage example
@@ -215,13 +216,23 @@ namespace meta{
   
   
   /**
-   * Helper to dissect an arbitrary function signature,
-   * irrespective if the parameter is given as function reference,
-   * function pointer, member function pointer or functor object.
-   * The base case assumes a (language) function reference.
-   * @todo the base case should be a _generic functor_ where we
-   *       pick up the signature through `decltype`, which also
-   *       works with lambdas. See (\ref _ClosureType)                  //////////////////////////////////////TICKET #994
+   * Helper for uniform access to function signature types.
+   * Extract the type information contained in a function or functor type,
+   * so it can be manipulated by metaprogramming. The embedded typedefs
+   * allow to pick up the return type, the sequence of argument types
+   * and the bare function signature type. This template works on
+   * anything _function like_, irrespective if the parameter is given
+   * as function reference, function pointer, member function pointer,
+   * functor object, `std::function` or lambda.
+   * 
+   * The base case assumes a functor object, i.e. anything with an `operator()`.
+   * The following explicit specialisations handle the other cases, which are
+   * not objects, but primitive types (function (member) pointers and references).
+   * @remarks The key trick of this solution is to rely on `decltype` of `operator()`
+   *          and was proposed 10/2011 by user "[kennytm]" in this [stackoverflow].
+   * 
+   * [kennytm]: http://stackoverflow.com/users/224671/kennytm
+   * [stackoverflow] : http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765 "answer on stackoverflow"
    */
   template<typename FUN>
   struct _Fun
@@ -232,151 +243,42 @@ namespace meta{
   template<typename RET, typename...ARGS>
   struct _Fun<RET(ARGS...)>
     {
-      using Ret  = typename FunctionSignature<function<RET(ARGS...)>>::Ret ;
-      using Args = typename FunctionSignature<function<RET(ARGS...)>>::Args;
+      using Ret  = RET;
+      using Args = Types<ARGS...>;
       using Sig  = RET(ARGS...);
     };
   /** Specialisation for using a function pointer */
   template<typename SIG>
   struct _Fun<SIG*>
-    {
-      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
-      typedef typename FunctionSignature<function<SIG>>::Args Args;
-      typedef                                            SIG  Sig;
-    };
+    : _Fun<SIG>
+    { };
+  
   /** Specialisation when using a function reference */
   template<typename SIG>
   struct _Fun<SIG&>
-    {
-      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
-      typedef typename FunctionSignature<function<SIG>>::Args Args;
-      typedef                                            SIG  Sig;
-    };
-  /** Specialisation for passing a functor */
+    : _Fun<SIG>
+    { };
+  
+  /** Specialisation for passing a rvalue reference */
   template<typename SIG>
-  struct _Fun<function<SIG>>
-    {
-      typedef typename FunctionSignature<function<SIG>>::Ret  Ret;
-      typedef typename FunctionSignature<function<SIG>>::Args Args;
-      typedef                                            SIG  Sig;
-    };
+  struct _Fun<SIG&&>
+    : _Fun<SIG>
+    { };
   
-  /** Specialisations for member function pointers */
-/*  template<typename RET, class CLASS>
-  struct _Fun<RET (CLASS::*) (void) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const> Args;
-      typedef RET Sig(CLASS* const);
-    };
+  /** Specialisation to deal with member pointer to function */
+  template<class C, typename RET, typename...ARGS>
+  struct _Fun<RET (C::*) (ARGS...)>
+    : _Fun<RET(ARGS...)>
+    { };
   
-  template< typename RET, class CLASS
-          , typename A1
-          >
-  struct _Fun<RET (CLASS::*) (A1) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1> Args;
-    };
+  /** Specialisation to handle member pointer to const function;
+   *  indirectly this specialisation also handles lambdas,
+   *  as redirected by the main template (via `decltype`) */
+  template<class C, typename RET, typename...ARGS>
+  struct _Fun<RET (C::*) (ARGS...)  const>
+    : _Fun<RET(ARGS...)>
+    { };
   
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2> Args;
-      typedef RET Sig(CLASS* const, A1,A2);
-    };
-  
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          , typename A3
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2,A3) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2,A3> Args;
-      typedef RET Sig(CLASS* const, A1,A2,A3);
-    };
-  
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2,A3,A4> Args;
-      typedef RET Sig(CLASS* const, A1,A2,A3,A4);
-    };
-  
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2,A3,A4,A5> Args;
-      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5);
-    };
-  
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          , typename A6
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6> Args;
-      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5,A6);
-    };
-  
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          , typename A6
-          , typename A7
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6,A7) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7> Args;
-      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5,A6,A7);
-    };
-  
-  template< typename RET, class CLASS
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          , typename A6
-          , typename A7
-          , typename A8
-          >
-  struct _Fun<RET (CLASS::*) (A1,A2,A3,A4,A5,A6,A7,A8) >
-    {
-      typedef RET Ret;
-      typedef Types<CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8> Args;
-      typedef RET Sig(CLASS* const, A1,A2,A3,A4,A5,A6,A7,A8);
-    };
-*/
   
   
   template<typename FUN>

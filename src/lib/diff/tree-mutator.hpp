@@ -284,44 +284,14 @@ namespace diff{
   
   namespace { // Mutator-Builder decorator components...
     
-    using lib::meta::Strip;
-    using lib::meta::Types;
+    using lib::meta::_Fun;
     using std::forward;
     using std::move;
-    
-    /**
-     * Type rebinding helper to pick up the actual argument type.
-     * Works both for functors and for lambda expressions
-     * @remarks Solution proposed 10/2011 by \link http://stackoverflow.com/users/224671/kennytm user "kennytm" \endlink
-     *          in this \link http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765
-     *          answer on stackoverflow \endlink
-     * @todo this should be integrated into (\ref _Fun)                  //////////////////////////////////////TICKET #994
-     */
-    template<typename FUN>
-    struct _ClosureType
-      : _ClosureType<decltype(&FUN::operator())>
-      { };
-    
-    template<class C, class RET, typename...ARGS>
-    struct _ClosureType<RET (C::*)(ARGS...)  const>
-      {
-        using Args = typename Types<ARGS...>::Seq;
-        using Ret  = RET;
-        using Sig  = RET(ARGS...);
-      };
-    
-    template<class RET, typename...ARGS>
-    struct _ClosureType<RET (*)(ARGS...)>
-      {
-        using Args = typename Types<ARGS...>::Seq;
-        using Ret  = RET;
-        using Sig  = RET(ARGS...);
-      };
     
     
     template<typename FUN, typename SIG>
     struct has_Sig
-      : std::is_same<SIG, typename _ClosureType<FUN>::Sig>
+      : std::is_same<SIG, typename _Fun<FUN>::Sig>
       { };
     
     /** verify the installed functors or lambdas expose the expected signature */
