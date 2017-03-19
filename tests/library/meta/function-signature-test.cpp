@@ -33,7 +33,6 @@
 #include <functional>
 #include <string>
 
-using lib::meta::_Fun;
 
 using std::function;
 using std::placeholders::_1;
@@ -46,91 +45,78 @@ using std::move;
 namespace lib  {
 namespace meta {
 namespace test {
-    
-    
-    namespace { // test subjects
-int
-funny (uint i)
-{
-  return -i+1;
-}
-
-struct Funky
-  {
-    int ii = 2;
+  
+  using lib::meta::_Fun;
+  using lib::meta::typeStr;
+  
+  
+  namespace { // test subjects
     
     int
-    fun (uint i2)
+    freeFun (uint i)
+    {
+      return -i+1;
+    }
+    
+    struct Functor
       {
-        return ii + funny(i2);
-      }
+        int ii = 2;
+        
+        int
+        fun (uint i2)
+          {
+            return ii + freeFun(i2);
+          }
+        
+        int
+        operator() (uint i2)
+          {
+            return 2*ii - fun(i2);
+          }
+        
+        static int
+        staticFun (uint i)
+          {
+            return 2*freeFun (i);
+          }
+      };
     
-    int
-    operator() (uint i2)
-      {
-        return 2*ii - fun(i2);
-      }
     
-    static int
-    notfunny (uint i)
-      {
-        return 2*funny (i);
-      }
-  };
-
-
-
-#define SHOW_TYPE(_TY_) \
-    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
-
-#define EVAL_PREDICATE(_PRED_) \
-    cout << STRINGIFY(_PRED_) << "\t : " << _PRED_ <<endl;
-
-
-template<typename F>
-void
-showType (F)
-  {
-    using Sig = typename _Fun<F>::Sig;
+    /* ===== diagnostics helper ===== */
     
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showRef (F&)
-  {
-    using Sig = typename _Fun<F>::Sig;
+    template<typename F>
+    string
+    showSig (F)
+    {
+      return typeStr<typename _Fun<F>::Sig>();
+    }
     
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showCRef (F&)
-  {
-    using Sig = typename _Fun<F>::Sig;
+    template<typename F>
+    string
+    showSigRef (F&)
+    {
+      return typeStr<typename _Fun<F>::Sig>();
+    }
     
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showRRef (F&&)
-  {
-    using Sig = typename _Fun<F>::Sig;
+    template<typename F>
+    string
+    showSigCRef (F&)
+    {
+      return typeStr<typename _Fun<F>::Sig>();
+    }
     
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-    } // (End) test subjects
-
-
-using Fun = function<int(uint)>;
-using Fuk = function<int(Funky&, uint)>;
+    template<typename F>
+    string
+    showSigRRef (F&&)
+    {
+      return typeStr<typename _Fun<F>::Sig>();
+    }
+    
+  } // (End) test subjects
+  
+  
+  using Func = function<int(uint)>;
+  using FuncF = function<int(Functor&, uint)>;
   
   
   
@@ -153,77 +139,80 @@ using Fuk = function<int(Funky&, uint)>;
       virtual void
       run (Arg) 
         {
-    Fun f1{funny};
-    Fun f2{&funny};
-    
-    Fun f3{Funky::notfunny};
-    Fun f4{&Funky::notfunny};
-    
-    auto memfunP = &Funky::fun;
-    
-    Fuk f5{memfunP};
-    
-    Funky funk;
-    
-    Fun f6{bind (f5, funk, _1)};
-    
-    auto lambda = [&](uint ii) { return funk.fun(ii); };
-    
-    Fun f7{lambda};
-    
-    showType (funny);
-    showType (&funny);
-    showType (Funky::notfunny);
-    
-    showType (memfunP);
-    showType (lambda);
-    showType (f7);
-    
-    cout << "\n\n-------\n";
-    
-    showRef (funny);
-    showRef (lambda);
-    showRef (f7);
-    
-    showCRef (funny);
-    showCRef (lambda);
-    showCRef (f7);
-    
-    showRRef (move(lambda));
-    showRRef (move(f7));
-    
-    showType (move(&funny));
-    showType (move(lambda));
-    showType (move(f7));
-    
-    Fun& funRef = f1;
-    Funky& funkyRef = funk;
-    Fun const& funCRef = f1;
-    Funky const& funkyCRef = funk;
-    showType (funRef);
-    showType (funkyRef);
-    showType (funCRef);
-    showType (funkyCRef);
-    
-    cout << "\n\n-------\n";
-    
-    SHOW_TYPE (decltype(&Funky::operator()));
-    SHOW_TYPE (decltype(lambda));
-    
-    SHOW_TYPE (_Fun<int(uint)>::Sig);
-    SHOW_TYPE (_Fun<Fun&>::Sig);
-    SHOW_TYPE (_Fun<Fun&&>::Sig);
-    SHOW_TYPE (_Fun<Fun const&>::Sig);
-    SHOW_TYPE (_Fun<Funky&>::Sig);
-    SHOW_TYPE (_Fun<Funky&&>::Sig);
-    SHOW_TYPE (_Fun<Funky const&>::Sig);
-    
-    using Siggy = _Fun<Fun>::Sig;
-    SHOW_TYPE (_Fun<Siggy&>::Sig);
-    SHOW_TYPE (_Fun<Siggy&&>::Sig);
-    SHOW_TYPE (_Fun<Siggy const&>::Sig);
-    
-    cout <<  "\n.gulp.\n";
+          // this is how the key trick of the _Fun traits template works:
+          // for anything "function like" we retrieve a member-pointer to the function call operator
+          // which we then pass on to the dedicated overload for member pointers
+          CHECK ("int (Functor::*)(unsigned int)" == typeStr<decltype(&Functor::operator())>());
+          
+          
+          Func f1{freeFun};
+          Func f2{&freeFun};
+          
+          Func f3{Functor::staticFun};
+          Func f4{&Functor::staticFun};
+          
+          
+          Functor funk;
+          
+          
+          auto lambda = [&](uint ii) { return funk.fun(ii); };
+          
+          Func f5{lambda};
+          
+          CHECK ("int (unsigned int)" == showSig (freeFun));
+          CHECK ("int (unsigned int)" == showSig (&freeFun));
+          CHECK ("int (unsigned int)" == showSig (Functor::staticFun));
+          CHECK ("int (unsigned int)" == showSig (lambda));
+          CHECK ("int (unsigned int)" == showSig (f5));
+          
+          
+          CHECK ("int (unsigned int)" == showSigRef (freeFun));
+          CHECK ("int (unsigned int)" == showSigRef (lambda));
+          CHECK ("int (unsigned int)" == showSigRef (f5));
+          
+          CHECK ("int (unsigned int)" == showSigCRef (freeFun));
+          CHECK ("int (unsigned int)" == showSigCRef (lambda));
+          CHECK ("int (unsigned int)" == showSigCRef (f5));
+          
+          CHECK ("int (unsigned int)" == showSigRRef (move(lambda)));
+          CHECK ("int (unsigned int)" == showSigRRef (move(f5)));
+          
+          CHECK ("int (unsigned int)" == showSig (move(&freeFun)));
+          CHECK ("int (unsigned int)" == showSig (move(lambda)));
+          CHECK ("int (unsigned int)" == showSig (move(f5)));
+
+          
+          Func& funRef = f1;
+          Functor& funkyRef = funk;
+          Func const& funCRef = f1;
+          Functor const& funkyCRef = funk;
+          CHECK ("int (unsigned int)" == showSig (funRef));
+          CHECK ("int (unsigned int)" == showSig (funkyRef));
+          CHECK ("int (unsigned int)" == showSig (funCRef));
+          CHECK ("int (unsigned int)" == showSig (funkyCRef));
+          
+          
+          CHECK ("int (unsigned int)" == typeStr<_Fun<int(uint)>::Sig     >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Func&>::Sig         >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Func&&>::Sig        >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Func const&>::Sig   >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Functor&>::Sig      >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Functor&&>::Sig     >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Functor const&>::Sig>());
+          
+          using Siggy = _Fun<Func>::Sig;
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Siggy&>::Sig        >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Siggy&&>::Sig       >());
+          CHECK ("int (unsigned int)" == typeStr<_Fun<Siggy const&>::Sig  >());
+          
+          
+          auto memfunP = &Functor::fun;
+          FuncF fM{memfunP};
+          Func fMF{bind (fM, funk, _1)};
+          
+          CHECK ("int (unsigned int)"           == typeStr<_Fun<decltype(memfunP)>::Sig>());
+          CHECK ("int (Functor&, unsigned int)" == typeStr<_Fun<decltype(fM)>::Sig     >());
+          CHECK ("int (unsigned int)"           == typeStr<_Fun<decltype(fMF)>::Sig    >());
         }
     };
   
