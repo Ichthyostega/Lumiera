@@ -86,8 +86,7 @@ namespace control {
   using lib::Symbol;
   using util::cStr;
   
-  using lib::meta::FunctionSignature;
-  using lib::meta::FunctionTypedef;
+  using lib::meta::_Fun;
   using lib::meta::NullType;
   using lib::meta::Types;
   using lib::meta::TySeq;
@@ -112,7 +111,7 @@ namespace control {
       {
         Command& prototype_;
         
-        typedef typename FunctionSignature< function<SIG>>::Args CmdArgs;
+        using CmdArgs = typename _Fun<SIG>::Args;
         
         CompletedDefinition (Command& definedCommand)
           : prototype_(definedCommand)
@@ -200,7 +199,7 @@ namespace control {
         
         
         CompletedDefinition<SIG>
-        undoOperation (UndoOperationSig& how_to_Undo)
+        undoOperation (UndoOperationSig how_to_Undo)
           {
             undoFunctor_ = UndoFunc (how_to_Undo);
             REQUIRE (operFunctor_);
@@ -223,7 +222,7 @@ namespace control {
     template<typename U_SIG>
     struct BuildUndoDefType
       {
-        typedef UndoDefinition<typename U_SIG::OperateSig, typename U_SIG::Memento> Type;
+        using Type = UndoDefinition<typename U_SIG::OperateSig, typename U_SIG::Memento>;
       };
     
     
@@ -243,12 +242,13 @@ namespace control {
           { }
         
         
-        template<typename SIG2>
-        typename BuildUndoDefType<UndoSignature<SIG2>>::Type
-        captureUndo (SIG2& how_to_capture_UndoState)
+        template<typename FUN2>
+        auto
+        captureUndo (FUN2 how_to_capture_UndoState)
           {
-            typedef typename UndoSignature<SIG2>::CaptureSig UndoCapSig;
-            typedef typename BuildUndoDefType<UndoSignature<SIG2>>::Type SpecificUndoDefinition;
+            using Sig2                   = typename _Fun<FUN2>::Sig;
+            using UndoCapSig             = typename UndoSignature<Sig2>::CaptureSig;
+            using SpecificUndoDefinition = typename BuildUndoDefType<UndoSignature<Sig2>>::Type;
             
             function<UndoCapSig> captureOperation (how_to_capture_UndoState);
             return SpecificUndoDefinition (callback_, operation_, captureOperation);
@@ -281,8 +281,8 @@ namespace control {
       Symbol id_;
       Command prototype_;
       
-      typedef stage::ImplInstance PImpl;
-      typedef stage::Activation Activation;
+      using PImpl      = stage::ImplInstance;
+      using Activation = stage::Activation;
       
     public:
       CommandDef (Symbol cmdID)
@@ -296,14 +296,16 @@ namespace control {
       
       
       
-      template<typename SIG>
-      stage::BasicDefinition<SIG>
-      operation (SIG& operation_to_define)
+      template<typename FUN>
+      auto
+      operation (FUN operation_to_define)
         {
-          function<SIG> opera1 (operation_to_define);
+          using Sig = typename _Fun<FUN>::Sig;
+          
+          function<Sig> opera1 (operation_to_define);
           Activation callback_when_defined = bind (&CommandDef::activate, this, _1);
           
-          return stage::BasicDefinition<SIG>(callback_when_defined, opera1);
+          return stage::BasicDefinition<Sig>(callback_when_defined, opera1);
         }
       
       

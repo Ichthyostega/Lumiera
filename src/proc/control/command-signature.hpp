@@ -61,8 +61,8 @@ namespace control {
   
   using std::function;
   
-  using lib::meta::FunctionSignature;
   using lib::meta::FunctionTypedef;
+  using lib::meta::_Fun;
   using lib::meta::Types;
   using lib::meta::Append;
   using lib::meta::SplitLast;
@@ -78,18 +78,17 @@ namespace control {
   template<typename SIG, typename MEM>
   class CommandSignature
     {
-      typedef typename FunctionSignature< function<SIG>>::Args Args;
-      
-      typedef typename Args::List ArgList;
-      typedef typename Append<ArgList, MEM>::List ExtendedArglist;
-      typedef typename Types<ExtendedArglist>::Seq ExtendedArgs;
+      using Args            = typename _Fun<SIG>::Args;
+      using ArgList         = typename Args::List;
+      using ExtendedArglist = typename Append<ArgList, MEM>::List;
+      using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
       
     public:
-      typedef typename FunctionTypedef<void, Args>::Sig          OperateSig;
-      typedef typename FunctionTypedef<MEM,  Args>::Sig          CaptureSig;
-      typedef typename FunctionTypedef<void, ExtendedArgs>::Sig  UndoOp_Sig;
-      typedef Args                                               CmdArgs;
-      typedef MEM                                                Memento;
+      using OperateSig = typename FunctionTypedef<void, Args>::Sig;
+      using CaptureSig = typename FunctionTypedef<MEM,  Args>::Sig;
+      using UndoOp_Sig = typename FunctionTypedef<void, ExtendedArgs>::Sig;
+      using CmdArgs    = Args;
+      using Memento    = MEM;
     };
   
   
@@ -113,41 +112,42 @@ namespace control {
   class UndoSignature
     {
       // preparation:  dissect the function signature into arguments and result
-      typedef typename FunctionSignature< function<SIG>>::Args Args;
-      typedef typename FunctionSignature< function<SIG>>::Ret  Ret;
+      using Args = typename _Fun<SIG>::Args;
+      using Ret  = typename _Fun<SIG>::Ret;
       
       /** Case1: defining the Undo-Capture function */
       template<typename RET, typename ARG>
       struct Case
         {
-          typedef RET Memento;
-          typedef typename Append<ARG, Memento>::List ExtendedArglist;
-          typedef typename Types<ExtendedArglist>::Seq ExtendedArgs;
+          using Memento = RET;
           
-          typedef typename FunctionTypedef<void, ARG>::Sig           OperateSig;
-          typedef typename FunctionTypedef<Ret,ARG>::Sig             CaptureSig;
-          typedef typename FunctionTypedef<void, ExtendedArgs>::Sig  UndoOp_Sig;
+          using ExtendedArglist = typename Append<ARG, Memento>::List;
+          using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
+          
+          using OperateSig = typename FunctionTypedef<void, ARG>::Sig;
+          using CaptureSig = typename FunctionTypedef<Ret,ARG>::Sig;
+          using UndoOp_Sig = typename FunctionTypedef<void, ExtendedArgs>::Sig;
         };
       /** Case2: defining the actual Undo function */
       template<typename ARG>
       struct Case<void,ARG>
         {
-          typedef typename ARG::List Args;
+          using Args = typename ARG::List;
           
-          typedef typename SplitLast<Args>::Type Memento;
-          typedef typename SplitLast<Args>::List OperationArglist;
-          typedef typename Types<OperationArglist>::Seq OperationArgs;
+          using Memento          = typename SplitLast<Args>::Type;
+          using OperationArglist = typename SplitLast<Args>::List;
+          using OperationArgs    = typename Types<OperationArglist>::Seq;
           
-          typedef typename FunctionTypedef<void, OperationArgs>::Sig OperateSig;
-          typedef typename FunctionTypedef<Ret,OperationArgs>::Sig   CaptureSig;
-          typedef typename FunctionTypedef<void, ARG>::Sig           UndoOp_Sig;
+          using OperateSig = typename FunctionTypedef<void, OperationArgs>::Sig;
+          using CaptureSig = typename FunctionTypedef<Ret,OperationArgs>::Sig;
+          using UndoOp_Sig = typename FunctionTypedef<void, ARG>::Sig;
         };
       
     public:
-      typedef typename Case<Ret,Args>::CaptureSig CaptureSig;
-      typedef typename Case<Ret,Args>::UndoOp_Sig UndoOp_Sig;
-      typedef typename Case<Ret,Args>::OperateSig OperateSig;
-      typedef typename Case<Ret,Args>::Memento    Memento;
+      using CaptureSig = typename Case<Ret,Args>::CaptureSig;
+      using UndoOp_Sig = typename Case<Ret,Args>::UndoOp_Sig;
+      using OperateSig = typename Case<Ret,Args>::OperateSig;
+      using Memento    = typename Case<Ret,Args>::Memento;
     };
   
   

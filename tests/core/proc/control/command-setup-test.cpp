@@ -184,7 +184,7 @@ namespace test {
         {
           size_t cnt = CommandSetup::invokeDefinitionClosures();
           CHECK (CommandSetup::pendingCnt() == 0);
-          CHECK (cnt == 2);
+          CHECK (cnt == 3);
           CHECK (testString == "Ichthyostega wuz here");
           TODO ("verify the command definitions happened");
         }

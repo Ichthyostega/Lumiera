@@ -180,7 +180,7 @@ namespace test {
           CHECK ("int (unsigned int)" == showSig (move(&freeFun)));
           CHECK ("int (unsigned int)" == showSig (move(lambda)));
           CHECK ("int (unsigned int)" == showSig (move(f5)));
-
+          
           
           Func& funRef = f1;
           Functor& funkyRef = funk;
