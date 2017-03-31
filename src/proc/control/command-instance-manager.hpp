@@ -87,6 +87,7 @@ namespace control {
      ~CommandInstanceManager();
       
       Symbol newInstance (Symbol prototypeID, string invocationID);
+      Command& getInstance(Symbol instanceID);
       void dispatch (Symbol instanceID);
       
       bool contains (Symbol instanceID)  const;

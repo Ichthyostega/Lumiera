@@ -54,6 +54,7 @@ using lib::Symbol;
 using lumiera::LifecycleHook;
 using lumiera::ON_GLOBAL_INIT;
 using std::string;
+using util::unConst;
 using util::_Fmt;
 
 
@@ -175,6 +176,18 @@ namespace control {
   }
   
   
+  Command&
+  CommandInstanceManager::getInstance (Symbol instanceID)
+  {
+    Command& instance = table_[instanceID];
+    if (not instance)
+      throw error::Invalid (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
+                                % instanceID
+                           , LUMIERA_ERROR_INVALID_COMMAND);
+    return instance;
+  }
+  
+  
   /** */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)
@@ -184,7 +197,7 @@ namespace control {
       throw error::Logic (_Fmt{"attempt to dispatch command instance '%s' "
                                "without creating a new instance from prototype beforehand"}
                               % instanceID
-                         , LUMIERA_ERROR_INVALID_COMMAND);
+                         , error::LUMIERA_ERROR_LIFECYCLE);
     if (not instance.canExec())
       throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
                                "without binding all arguments properly beforehand"}
@@ -193,14 +206,15 @@ namespace control {
     
     REQUIRE (instance and instance.canExec());
     dispatcher_.enqueue(move (instance));
-    ENSURE (not instance);
+    instance.close();
   }
   
   
   bool
   CommandInstanceManager::contains (Symbol instanceID)  const
   {
-    return util::contains (table_, instanceID);
+    return util::contains (table_, instanceID)
+       and unConst(this)->table_[instanceID].isValid();
   }
   
   

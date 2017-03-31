@@ -11714,6 +11714,46 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
+<node CREATED="1491008040105" ID="ID_662216926" MODIFIED="1491008043901" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1491008045936" ID="ID_1071153669" MODIFIED="1491008146180" TEXT="CommandInstanceManager_test">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1491008059366" ID="ID_1809405076" MODIFIED="1491008147195" TEXT="CommandInstanceManager">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1491008067046" ID="ID_1905446877" MODIFIED="1491008148076" TEXT="einfache Map-Impl">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1491008073989" ID="ID_1954195404" MODIFIED="1491008148995" TEXT="Symbol-Tabelle">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1491008079676" ID="ID_1262786130" MODIFIED="1491008142008" TEXT="Test">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008088699" ID="ID_1501876595" MODIFIED="1491008114361" TEXT="Basisfall l&#xe4;uft noch nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Instanz kommt nicht in der Fixture-Queue an
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008118695" ID="ID_1595821007" MODIFIED="1491008138125" TEXT="Invocation abdecken">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008124550" ID="ID_249252999" MODIFIED="1491008138788" TEXT="Duplikate abdecken">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008129165" ID="ID_118623494" MODIFIED="1491008139405" TEXT="Lebenszyklus-Fehler">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489191252503" ID="ID_1621107057" MODIFIED="1489191308469" TEXT="#1090 Command access for UI-Elements">
 <arrowlink COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" STARTARROW="None" STARTINCLINATION="550;-93;"/>

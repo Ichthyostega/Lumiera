@@ -119,19 +119,18 @@ namespace test {
           Fixture fixture;
           CommandInstanceManager iManager{fixture};
           Symbol instanceID = iManager.newInstance(COMMAND_PROTOTYPE, INVOCATION_ID);
-          CHECK (Command::defined(instanceID));
-          CHECK (not Command::canExec(instanceID));
           
-          Command cmd{instanceID};
+          Command cmd = iManager.getInstance(instanceID);
+          CHECK (cmd);
+          CHECK (not cmd.canExec());
+          
           cmd.bind(42);
-          CHECK (Command::canExec(instanceID));
+          CHECK (cmd.canExec());
           
           iManager.dispatch (instanceID);
           CHECK (not iManager.contains (instanceID));
           CHECK (fixture.contains (instanceID));
-          CHECK (Command::canExec(instanceID));
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1089
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1089
+          VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
         }
     };
   
