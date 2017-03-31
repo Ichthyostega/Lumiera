@@ -43,7 +43,7 @@
  ** @see command-def.hpp
  ** @see command-setup.hpp
  ** @see command-accessor.hpp
- ** @see TODO_CommandInstanceManager_test
+ ** @see CommandInstanceManager_test
  **
  */
 
@@ -53,11 +53,12 @@
 #define CONTROL_COMMAND_INSTANCE_MANAGER_H
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
+#include "proc/control/command-dispatch.hpp"
+#include "lib/symbol.hpp"
 //#include "proc/common.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <string>
+#include <string>
 
 
 
@@ -65,8 +66,8 @@
 namespace proc {
 namespace control {
   
-//  using std::string;
-//  using lib::Symbol;
+  using std::string;
+  using lib::Symbol;
   //using std::shared_ptr;
   
   
@@ -77,12 +78,16 @@ namespace control {
   class CommandInstanceManager
     : boost::noncopyable
     {
+      CommandDispatch& dispatcher_;
       
     public:
-      
-      CommandInstanceManager();
+      CommandInstanceManager (CommandDispatch&);
      ~CommandInstanceManager();
       
+      Symbol newInstance (Symbol prototypeID, string invocationID);
+      void dispatch (Symbol instanceID);
+      
+      bool contains (Symbol instanceID)  const;
       
     private:
     };

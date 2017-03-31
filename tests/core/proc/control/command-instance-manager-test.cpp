@@ -26,8 +26,8 @@
 
 
 #include "lib/test/run.hpp"
+#include "proc/control/test-dummy-commands.hpp"
 #include "proc/control/command-instance-manager.hpp"
-#include "proc/control/command-dispatch.hpp"
 //#include "proc/control/command-def.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -54,8 +54,11 @@ namespace test {
   
   namespace  { // Test fixture....
     
-    struct Fixture
-      : CommandDispatch
+    const Symbol COMMAND_PROTOTYPE  = test_Dummy_command1;
+    const string INVOCATION_ID = "CommandInstanceManager_test";
+    
+    class Fixture
+      : public CommandDispatch
       {
         bool has_commands_in_queue = false;
         
@@ -72,6 +75,13 @@ namespace test {
         enqueue (Command)  override
           {
             UNIMPLEMENTED("DummyDispatch-Interface: enqueue");
+          }
+        
+      public:
+        bool
+        contains (Symbol instanceID)
+          {
+            UNIMPLEMENTED("contains");
           }
       };
     
@@ -102,8 +112,6 @@ namespace test {
       void
       verify_standardUsage()
         {
-          UNIMPLEMENTED("standard usage cycle");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1089
           Fixture fixture;
           CommandInstanceManager iManager{fixture};
           Symbol instanceID = iManager.newInstance(COMMAND_PROTOTYPE, INVOCATION_ID);
@@ -118,6 +126,7 @@ namespace test {
           CHECK (not iManager.contains (instanceID));
           CHECK (fixture.contains (instanceID));
           CHECK (Command::canExec(instanceID));
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1089
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1089
         }
     };

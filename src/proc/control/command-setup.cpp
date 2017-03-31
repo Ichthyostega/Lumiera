@@ -155,12 +155,29 @@ namespace control {
   // emit dtors of embedded objects here....
   CommandInstanceManager::~CommandInstanceManager() { }
   
-  CommandInstanceManager::CommandInstanceManager() { }
-  
-  
+  CommandInstanceManager::CommandInstanceManager (CommandDispatch& dispatcher)
+    : dispatcher_{dispatcher}
+    { }
   
   
   /* more to come here...*/
+  Symbol
+  CommandInstanceManager::newInstance (Symbol prototypeID, string invocationID)
+  {
+    UNIMPLEMENTED ("CommandInstanceManager::newInstance");
+  }
+  
+  void
+  CommandInstanceManager::dispatch (Symbol instanceID)
+  {
+    UNIMPLEMENTED ("CommandInstanceManager::dispatch");
+  }
+  
+  bool
+  CommandInstanceManager::contains (Symbol instanceID)  const
+  {
+    UNIMPLEMENTED ("CommandInstanceManager::contains");
+  }
   
   
   
