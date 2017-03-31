@@ -28,13 +28,15 @@
 #include "lib/test/run.hpp"
 #include "proc/control/test-dummy-commands.hpp"
 #include "proc/control/command-instance-manager.hpp"
-//#include "proc/control/command-def.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/iter-stack.hpp"
 #include "lib/util.hpp"
 
+#include <algorithm>
+#include <utility>
 #include <string>
-#include <regex>
+#include <deque>
 
 
 namespace proc {
@@ -43,10 +45,8 @@ namespace test {
   
   using lib::Literal;
   using std::string;
-  using std::regex;
-  using std::regex_replace;
-  using util::isnil;
   using util::_Fmt;
+  using std::move;
   
   
   
@@ -60,7 +60,7 @@ namespace test {
     class Fixture
       : public CommandDispatch
       {
-        bool has_commands_in_queue = false;
+        std::deque<Command> queue_;
         
         
         /* == Interface: CommandDispatch == */
@@ -68,23 +68,27 @@ namespace test {
         void
         clear()  override
           {
-            UNIMPLEMENTED("DummyDispatch-Interface: clear");
+            queue_.clear();
           }
         
         void
-        enqueue (Command)  override
+        enqueue (Command cmd)  override
           {
-            UNIMPLEMENTED("DummyDispatch-Interface: enqueue");
+            queue_.emplace_front(move (cmd));
           }
         
       public:
         bool
         contains (Symbol instanceID)
           {
-            UNIMPLEMENTED("contains");
+            return queue_.end()!= std::find_if (queue_.begin()
+                                               ,queue_.end()
+                                               ,[=](Command const& elm)
+                                                    {
+                                                      return instanceID == elm.getID();
+                                                    });
           }
       };
-    
   }
   
   
@@ -119,7 +123,7 @@ namespace test {
           CHECK (not Command::canExec(instanceID));
           
           Command cmd{instanceID};
-          ///TODO bind arguments
+          cmd.bind(42);
           CHECK (Command::canExec(instanceID));
           
           iManager.dispatch (instanceID);
