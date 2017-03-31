@@ -36,6 +36,7 @@
 #include "lib/error.hpp"
 //#include "lib/symbol.hpp"
 #include "include/logging.h"
+#include "include/lifecycle.h"
 //#include "lib/format-string.hpp"
 #include "proc/control/command-setup.hpp"
 #include "proc/control/command-instance-manager.hpp"
@@ -53,6 +54,8 @@ using std::get;
 using std::function;
 using std::move;
 using lib::Symbol;
+using lumiera::LifecycleHook;
+using lumiera::ON_GLOBAL_INIT;
 //using util::cStr;
 //using util::_Fmt;
 
@@ -117,11 +120,16 @@ namespace control {
     return *this;
   }
   
-  
+
   size_t
+  CommandSetup::pendingCnt()
+  {
+    return pendingCmdDefinitions.size();
+  }
+  
+  void
   CommandSetup::invokeDefinitionClosures()
   {
-    size_t cnt=0;
     while (not pendingCmdDefinitions.empty())
       {
         CmdDefEntry& entry = pendingCmdDefinitions.back();
@@ -131,16 +139,13 @@ namespace control {
         INFO (command, "defining Command(%s)...", cmdID.c());
         CommandDef def(cmdID);
         buildDefinition(def);
-        ++cnt;
         pendingCmdDefinitions.pop_back();
       }
-    return cnt;
   }
-
-  size_t
-  CommandSetup::pendingCnt()
-  {
-    return pendingCmdDefinitions.size();
+  
+  namespace { // automatically invoke static command definitions
+    
+    LifecycleHook schedule_ (ON_GLOBAL_INIT, &CommandSetup::invokeDefinitionClosures);
   }
   
   

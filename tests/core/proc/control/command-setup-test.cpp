@@ -194,9 +194,8 @@ namespace test {
         {
           CHECK (isnil (testString));
           
-          size_t cnt = CommandSetup::invokeDefinitionClosures();
+          CommandSetup::invokeDefinitionClosures();
           CHECK (CommandSetup::pendingCnt() == 0);
-          CHECK (cnt == 3);
           CHECK (testString == "Ichthyostega wuz here");
           
           // the closure for the first entry did "something pointless",

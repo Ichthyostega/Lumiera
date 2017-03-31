@@ -105,7 +105,7 @@ namespace control {
       CommandSetup& operator= (DefinitionClosure);
       
       /** @internal empty the definition queue and invoke definitions */
-      static size_t invokeDefinitionClosures();
+      static void invokeDefinitionClosures();
       
       /** diagnostics / test */
       static size_t pendingCnt();
