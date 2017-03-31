@@ -22,6 +22,7 @@
 
 
 #include "proc/control/test-dummy-commands.hpp"
+#include "proc/control/command-def.hpp"
 
 
 
@@ -46,6 +47,39 @@ namespace test    {
   namespace command3 {
     ulong check_;
   }
+  
+  
+  /* ==== global static prototype definitions for these commands ==== */
+  
+  /**
+   * @remark The following definition(s) will be evaluated automatically ON_GLOBAL_INIT
+   *      They result in "prototype" definitions of these dummy commands to be
+   *      registered under the names as used here in the macro invocation.
+   *      Thus `test_Dummy_command1` will invoke command1::operate(int) etc.
+   * @see CommandSetup_test
+   */
+  
+  COMMAND_DEFINITION (test_Dummy_command1)
+    {
+      def.operation(command1::operate)
+         .captureUndo(command1::capture)
+         .undoOperation(command1::undoIt);
+    };
+  
+  COMMAND_DEFINITION (test_Dummy_command2)
+    {
+      def.operation(command2::operate)
+         .captureUndo(command2::capture)
+         .undoOperation(command2::undoIt);
+    };
+  
+  COMMAND_DEFINITION (test_Dummy_command3)
+    {
+      def.operation(command3::operate)
+         .captureUndo(command3::capture)
+         .undoOperation(command3::undoIt);
+    };
+  
   
   
 }}} // namespace proc::control::test

@@ -40,6 +40,7 @@
 
 #include "lib/error.hpp"
 #include "lib/test/test-helper.hpp"
+#include "proc/control/command-setup.hpp"
 
 #include <functional>
 #include <sstream>
@@ -149,6 +150,19 @@ namespace test    {
     }
   
   }
+  
+  
+  /* ==== global static prototype definitions for these commands ==== */
+  
+  /** test dummy command to add the argument to a global variable */
+  extern CommandSetup test_Dummy_command1;
+  
+  /** test dummy command to invoke the given functor and
+   *  append the result onto a global log string buffer */
+  extern CommandSetup test_Dummy_command2;
+  
+  /** test dummy command to increment a global variable; no arguments */
+  extern CommandSetup test_Dummy_command3;
   
   
 }}} // namespace proc::control::test
