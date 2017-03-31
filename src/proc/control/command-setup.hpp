@@ -69,7 +69,7 @@ namespace control {
   
   using std::string;
 //  using lib::Symbol;
-  using lib::Literal;
+  using lib::Symbol;
   //using std::shared_ptr;
   
   class CommandDef;
@@ -83,16 +83,16 @@ namespace control {
    */
   class CommandSetup
     {
-      Literal cmdID_;
+      Symbol cmdID_;
       
     public:
      ~CommandSetup();
-      CommandSetup (Literal cmdID);
+      CommandSetup (Symbol cmdID);
       CommandSetup (CommandSetup const&)  = default;
       CommandSetup (CommandSetup &&)      = default;
       CommandSetup& operator= (CommandSetup const&) = delete;
       
-      operator Literal const&()  const
+      operator Symbol const&()  const
         {
           return cmdID_;
         }
@@ -125,8 +125,13 @@ namespace control {
   
   
   
-  /** */
-  
+  /**
+   * Macro to write command definitions in a compact form.
+   * On expansion, a variable of type CommandSetup will be defined in the current scope,
+   * and immediately be assigned by a lambda, whose body is what follows the macro invocation
+   */
+  #define COMMAND_DEFINITION(_NAME_) \
+    CommandSetup _NAME_ = CommandSetup{STRINGIFY(_NAME_)}  = [&](CommandDef& def) 
   
   
   

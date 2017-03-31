@@ -80,7 +80,7 @@ namespace control {
   CommandSetup::~CommandSetup() { }
   
   /** Start a command setup for defining a Proc-Layer command with the given cmdID */
-  CommandSetup::CommandSetup(Literal cmdID)
+  CommandSetup::CommandSetup(Symbol cmdID)
     : cmdID_(cmdID)
     { }
   

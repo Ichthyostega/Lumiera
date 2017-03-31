@@ -91,6 +91,16 @@ namespace test {
     {
       testString = oldVal;
     }
+    
+    
+    /* ==== prepare a dummy command definition ==== */
+    
+    COMMAND_DEFINITION (test_CommandSetup_test)
+      {
+        def.operation(operate)
+           .captureUndo(capture)
+           .undoOperation(undoIt);
+      };
   }
   
   
@@ -234,7 +244,43 @@ namespace test {
       void
       verify_standardUsage()
         {
-          UNIMPLEMENTED ("cover standard usage of command definitions");
+          Command{test_CommandSetup_test}
+            .storeDef("c1")
+            .storeDef("c2");
+          
+          Command c1{"c1"}, c2{"c2"};
+          CHECK (not c1.canExec());
+          CHECK (not c2.canExec());
+          
+          c1.bind (string{"wuz.*"}, string{"the Devonian"});
+          c2.bind (string{"\\s*\\w+$"}, string{""});
+          CHECK (c1.canExec());
+          CHECK (c2.canExec());
+          CHECK (not Command::canExec(test_CommandSetup_test));
+          
+          CHECK (testString == "Ichthyostega wuz here");
+          
+          c1();
+          CHECK (testString == "Ichthyostega the Devonian");
+          
+          c2();
+          CHECK (testString == "Ichthyostega the");
+          
+          c2();
+          CHECK (testString == "Ichthyostega");
+          
+          c2();
+          CHECK (testString == "");
+          
+          c1.undo();
+          CHECK (testString == "Ichthyostega wuz here");
+          
+          Command::remove("c1");
+          Command::remove("c2");
+          
+          CHECK (not Command::defined("c1"));
+          CHECK (not Command::defined("c2"));
+          CHECK (Command::defined(test_CommandSetup_test));
         }
     };
   
