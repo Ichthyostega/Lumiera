@@ -31,25 +31,15 @@
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/p.hpp"
 
-//#include <cstdlib>
 #include <string>
 #include <regex>
-
-
-//using std::rand;
 
 
 namespace proc {
 namespace cmd  {
 namespace test {
   
-//using lib::time::Time;
-//using lib::time::TimeVar;
-//using lib::time::TimeValue;
-//using lib::time::Offset;
   using lib::Literal;
   using std::string;
   using std::regex;
@@ -188,6 +178,7 @@ namespace test {
       _Fmt pattern{" %d times."};
       
       
+      
       /** @test actually issue the definitions captured as side-effect of the preceding test. */
       void
       verify_DefinitionRegistration()
@@ -213,6 +204,7 @@ namespace test {
           com1.bind (string{"^(\\w+)"}, string{"No $1"});
           com2.bind (uint(42));
           
+          CHECK (testString == "Ichthyostega wuz here");
           com1();
           CHECK (testString == "No Ichthyostega wuz here");
           

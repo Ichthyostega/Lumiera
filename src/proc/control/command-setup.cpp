@@ -34,21 +34,18 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "include/lifecycle.h"
-//#include "lib/format-string.hpp"
 #include "proc/control/command-setup.hpp"
 #include "proc/control/command-instance-manager.hpp"
 #include "proc/control/command-def.hpp"
+//#include "lib/format-string.hpp"
 //#include "lib/util.hpp"
 
 
-//#include <string>
 #include <tuple>
 #include <utility>
 
-//using std::string;
 using std::tuple;
 using std::get;
 using std::function;
@@ -56,6 +53,7 @@ using std::move;
 using lib::Symbol;
 using lumiera::LifecycleHook;
 using lumiera::ON_GLOBAL_INIT;
+//using std::string;
 //using util::cStr;
 //using util::_Fmt;
 
@@ -64,25 +62,27 @@ namespace proc {
 namespace control {
   namespace error = lumiera::error;
   
-  
-  namespace { // implementation details of command setup...
+  namespace { // implementation details: storage for pending static command definitions...
     
     using CmdDefEntry = std::tuple<Symbol, DefinitionClosure>;
     
     std::deque<CmdDefEntry> pendingCmdDefinitions;
-    
     
   }//(End) implementation details
   
   
   
   
-  /** storage for.... */
   
   
   CommandSetup::~CommandSetup() { }
   
-  /** Start a command setup for defining a Proc-Layer command with the given cmdID */
+  /** Start a command setup for defining a Proc-Layer command with the given cmdID
+   * @param cmdID the ID under with the new command will be registered
+   * @note after defining a static variable of type CommandSetup,
+   *       a functor or lambda should be assigned, which then
+   *       provides the actual setup of the CommandDef
+   */
   CommandSetup::CommandSetup(Symbol cmdID)
     : cmdID_(cmdID)
     { }
@@ -107,7 +107,7 @@ namespace control {
    *          reason for this is the fact that CommandDef rejects duplicate command definitions.
    *          Moreover, please note that invoking this operation at any point _after_ the
    *          lifecycle event ON_BASIC_INIT will likely have no effect at all, since the
-   *          given closure will then just sit in the static queue and never be invoked.   
+   *          given closure will then just sit in the static queue and never be invoked.
    */
   CommandSetup&
   CommandSetup::operator= (DefinitionClosure definitionBlock)
@@ -116,11 +116,11 @@ namespace control {
       throw error::Invalid ("unbound function/closure provided for CommandSetup"
                            , error::LUMIERA_ERROR_BOTTOM_VALUE);
     
-    pendingCmdDefinitions.emplace_front (Symbol(cmdID_), move(definitionBlock));
+    pendingCmdDefinitions.emplace_front (cmdID_, move(definitionBlock));
     return *this;
   }
   
-
+  
   size_t
   CommandSetup::pendingCnt()
   {
@@ -149,6 +149,9 @@ namespace control {
   }
   
   
+  
+  
+  
   // emit dtors of embedded objects here....
   CommandInstanceManager::~CommandInstanceManager() { }
   
@@ -157,7 +160,7 @@ namespace control {
   
   
   
-  /** more to come here...*/
+  /* more to come here...*/
   
   
   

@@ -31,15 +31,13 @@
  ** the Session data must be performed by invoking such commands, a huge amount of individual command
  ** definitions need to be written eventually.
  ** 
- ** The macro COMMAND_DEFINITION(name) allows to introduce a new definition with a single line,
+ ** The macro COMMAND_DEFINITION(_NAME_) allows to introduce a new definition with a single line,
  ** followed by a code block, which actually ends up as the body of a lambda function, and receives
- ** the bare CommandDef as single argument with name `cmd`. The `name` argument of the macro ends up
- ** both stringified as the value of the command-ID, and as an identifier holding a new CommandSetup
+ ** the bare CommandDef as single argument with name `cmd`. The `_NAME_` argument of the macro ends up
+ ** both stringified as the value of the command-ID, and as an variable holding a new CommandSetup
  ** instance. It is assumed that a header with corresponding _declarations_ (the header \ref cmd.hpp)
  ** is included by all UI elements actually to use, handle and invoke commands towards the
  ** session-command-facade.h
- ** 
- ** @todo WIP-WIP 3/2017 initial draft
  ** 
  ** @see command-def.hpp
  ** @see command.hpp
@@ -56,7 +54,6 @@
 #include "lib/error.hpp"
 #include "proc/control/command.hpp"
 #include "lib/symbol.hpp"
-//#include "proc/common.hpp"
 
 #include <functional>
 #include <string>
@@ -68,9 +65,7 @@ namespace proc {
 namespace control {
   
   using std::string;
-//  using lib::Symbol;
   using lib::Symbol;
-  //using std::shared_ptr;
   
   class CommandDef;
   
@@ -79,7 +74,23 @@ namespace control {
   
   
   /**
-   * @todo write type comment
+   * Marker and Helper for writing Proc-Layer Command definitions.
+   * Together with the Macro #COMMAND_DEFINITION, such definitions
+   * may be written statically, in DSL-style:
+   * - statically define a variable of type CommandSetup,
+   *   with external linkage
+   * - the ctor argument is what will be used as command-ID
+   * - assign a functor, function or lambda to this variable,
+   *   with the signature `void(CommandDef&)`
+   * - the argument passed to this functor will be the CommandDef
+   *   about to be configured and registered. Thus, the body of the
+   *   functor should use the member functions of CommandDef to setup
+   *   the command's operation, state capturing and undo functions.
+   * - behind the scenes, a lumiera::LifecycleHook is scheduled
+   *   to run ON_GLOBAL_INIT. When this hook is activated, all the
+   *   lambdas assigned to all CommandSetup instances thus far will
+   *   be invoked one by one. Which causes all those commands actually
+   *   to be defined and configured for use with the session subsystem.
    */
   class CommandSetup
     {
@@ -131,7 +142,7 @@ namespace control {
    * and immediately be assigned by a lambda, whose body is what follows the macro invocation
    */
   #define COMMAND_DEFINITION(_NAME_) \
-    CommandSetup _NAME_ = CommandSetup{STRINGIFY(_NAME_)}  = [&](CommandDef& def) 
+    CommandSetup _NAME_ = CommandSetup{STRINGIFY(_NAME_)}  = [&](CommandDef& def)
   
   
   
