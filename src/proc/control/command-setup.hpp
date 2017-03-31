@@ -44,7 +44,7 @@
  ** @see command-def.hpp
  ** @see command.hpp
  ** @see command-accessor.hpp
- ** @see TODO_CommandSetup_test
+ ** @see CommandSetup_test
  **
  */
 

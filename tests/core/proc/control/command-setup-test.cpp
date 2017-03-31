@@ -70,9 +70,7 @@ namespace test {
     void
     do_something_pointless (CommandDef&)
     {
-      cout << "before-->" << testString << endl;
       testString = "Ichthyostega wuz here";
-      cout << "after--->" << testString << endl;
     }
     
     
@@ -98,8 +96,8 @@ namespace test {
   
   
   /***********************************************************************//**
-   * @test cover the behaviour of the CommandSetup helper for inserting
-   *       actual command definitions into the Session.
+   * @test cover the behaviour of the CommandSetup helper intended for
+   *       inserting actual command definitions into the Session.
    * 
    * @see cmd.hpp
    * @see session-cmd.cpp actual usage example
@@ -141,7 +139,7 @@ namespace test {
           CHECK (def_empty != CommandSetup("to pee or not to pee"));
           
 //////////// does not compile -- copy assignment prohibited...
-//        def_empty = def_1;
+//        def_empty = CommandSetup{"to peel whatever"};
           
           
           // add actual definition closures... 
@@ -198,6 +196,22 @@ namespace test {
           // but the other two entries did indeed define commands
           CHECK (Command::defined("test.CommandSetup.def_1"));
           CHECK (Command::defined("test.CommandSetup.def_2"));
+          
+          // ...and they defined the commands as specified
+          Command com1{"test.CommandSetup.def_1"};
+          Command com2{"test.CommandSetup.def_2"};
+          
+          com1.bind (string{"^(\\w+)"}, string{"No $1"});
+          com2.bind (uint(42));
+          
+          com1();
+          CHECK (testString == "No Ichthyostega wuz here");
+          
+          com2();
+          CHECK (testString == "No Ichthyostega wuz here 42 times.");
+          
+          com1.undo();
+          CHECK (testString == "Ichthyostega wuz here");
         }
       
       
