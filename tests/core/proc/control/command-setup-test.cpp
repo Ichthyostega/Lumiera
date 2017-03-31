@@ -280,4 +280,4 @@ namespace test {
   LAUNCHER (CommandSetup_test, "unit controller");
   
   
-}}} // namespace proc::control::test
+}}} // namespace proc::cmd::test

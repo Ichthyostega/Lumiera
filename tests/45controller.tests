@@ -122,6 +122,11 @@ return: 0
 END
 
 
+PLANNED "Command instance management" CommandInstanceManager_test <<END
+return: 0
+END
+
+
 TEST "Dispatcher loop control logic" DispatcherLooper_test <<END
 return: 0
 END

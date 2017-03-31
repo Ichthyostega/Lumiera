@@ -28,7 +28,7 @@
  ** This creates the specific twist that possible command instances for invocation can and will
  ** be formed during an extended time period, non-deterministically -- since the actual context
  ** depends on the user interactions. Within the UI, there is a dedicated mechanism to form such
- ** command invocation similar to forming sentences of a language (with subject, predication and
+ ** command invocations similar to forming sentences of a language (with subject, predication and
  ** possibly some further objects). The UI manages several InteractionStateManager instances to
  ** observe and pick up contextual state, finally leading to a complete parametrisation of a command.
  ** The CommandInstanceManager is a service to support this process; it prepares command instances
