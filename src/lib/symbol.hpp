@@ -167,7 +167,19 @@ namespace lib {
     const char* symP (sym);
     return symP + str;
   }
-
+  
+  /* ===== temporary symbol table workaround ===== */
+  
+  /** place the string persistently in memory.
+   * @todo temporary workaround, shall be replaced by lib::Symbol implementation ///////////////TICKET #157  maintain symbol table for interned strings
+   * @return a C-String marked as lib::Symbol, pointing
+   *      to the permanent location in heap memory.
+   * @warning eternally growing, please look away...
+   * @see symbol-impl.cpp implementation
+   */
+  Symbol internedString (std::string&& idString);
+  
+  
 } // namespace lib
 
 #endif

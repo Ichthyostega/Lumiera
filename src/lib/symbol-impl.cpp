@@ -42,8 +42,12 @@ extern "C" {
 
 #include <boost/functional/hash.hpp>
 #include <cstddef>
+#include <utility>
+#include <string>
+#include <deque>
 
 using std::size_t;
+using std::string;
 using boost::hash_combine;
 
 
@@ -82,6 +86,23 @@ namespace lib {
     
     return hash;
   }
+  
+  
+  
+  namespace { // quick-n-dirty symbol table implementation
+    
+    /** @warning grows eternally, never shrinks */
+    std::deque<string> idStringBuffer;                  ////////////////////////////////TICKET #158 replace by symbol table
+  }
+  
+  /** @internal quick-n-dirty hack, used as workaround for creating command-IDs on the fly */
+  Symbol
+  internedString (string&& idString)
+  {
+    idStringBuffer.emplace_back (std::forward<string> (idString));
+    return Symbol (idStringBuffer.back().c_str());
+  }
+  /////////////////////////////////////(End)symbol-table hack
   
   
   

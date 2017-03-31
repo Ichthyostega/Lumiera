@@ -62,15 +62,6 @@ namespace test{
   using lib::Symbol;
   
     
-  /** place the string persistently in memory.
-   * @internal used as workaround for creating command-IDs on the fly
-   * @todo temporary workaround, shall be replaced by lib::Symbol implementation ///////////////TICKET #157  maintain symbol table for interned strings
-   * @return a C-String marked as lib::Literal, pointing
-   *      to the permanent location in heap memory.
-   * @see \ref test-nexus.cpp implementation
-   */
-  Symbol internedString (string&& idString);
-  
   
   
   /**
@@ -130,7 +121,7 @@ namespace test{
       fabricateNewInstance (lib::test::EventLog const& invocationLog)
         {
           log_ = invocationLog;
-          return proc::control::CommandDef(internedString (uniqueTypeInstance()))
+          return proc::control::CommandDef(lib::internedString (uniqueTypeInstance()))
                                  .operation(PlaceholderCommand::operate)
                                  .captureUndo(PlaceholderCommand::capture)
                                  .undoOperation(PlaceholderCommand::undo);

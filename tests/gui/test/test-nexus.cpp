@@ -89,22 +89,6 @@ using util::_Fmt;
 namespace gui {
 namespace test{
   
-  namespace { // quick-n-dirty symbol table implementation
-    
-    /** @warning grows eternally, never shrinks */
-    std::deque<string> idStringBuffer;                  ////////////////////////////////TICKET #158 replace by symbol table
-  }
-  
-  Symbol
-  internedString (string&& idString)
-  {
-    idStringBuffer.emplace_back (std::forward<string> (idString));
-    return Symbol (idStringBuffer.back().c_str());
-  }
-  ////////////////////////(End)symbol-table hack
-  
-  
-  
   
   namespace { // internal details
     
