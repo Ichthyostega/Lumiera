@@ -96,7 +96,7 @@ namespace lib {
                               + (searchPath.empty()? ".":" in search path: "+searchPath));
       }
     
-    INFO (config, "found module %s", modulePathName.string().c_str());
+    TRACE (config, "found module %s", modulePathName.string().c_str());
     return modulePathName.string();                                       ///////////TICKET #896
   }
   

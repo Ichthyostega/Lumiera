@@ -31,27 +31,28 @@
  ** are free to define and use additional flags for local use. Typically,
  ** this header will be included via some of the basic headers like error.hpp,
  ** which in turn gets included e.g. by proc/common.hpp
- **
+ ** 
  ** This header can thus be assumed to be effectively global. It should contain
  ** only declarations of global relevance, as any change causes the whole project
  ** to be rebuilt. All flags defined here are initialised automatically.
- **
+ ** 
  ** We use the 'NOBUG_DECLARATIONS_ONLY' magic to generate declarations and
  ** definitions only out of this header.
- **
- ** @par Logging configuration
+ ** 
+ ** # Logging configuration
+ ** 
  ** By default, logging is configured such as to emit a small number of informative
  ** messages on the starting terminal and to report fatal errors. But besides the
  ** usual fine-grained tracing messages, we define a small number of distinct
  ** thematic <b>Logging Channels</b> providing a consistent high-level view of
  ** what is going on with regards to a specific aspect of the application
- ** - \c progress documents a high-level overall view of what the application \em does
- ** - \c render focuses on the working of the render engine (without logging each frame)
- ** - \c config shows anything of relevance regarding the configured state of App and session
- ** - \c memory allows to diagnose a high-level view of memory management
- **
+ ** - `progress` documents a high-level overall view of what the application _does_
+ ** - `render` focuses on the working of the render engine (without logging each frame)
+ ** - `config` shows anything of relevance regarding the configured state of App and session
+ ** - `memory` allows to diagnose a high-level view of memory management
+ ** 
  ** Any log level can be overridden by an environment variable, for example
- ** \code NOBUG_LOG='progress:INFO' ./lumiera \endcode
+ ** `NOBUG_LOG='progress:INFO' ./lumiera`
  **
  ** @todo logging to files?    NOBUG_LOG='progress:INFO@file(name=filename)' api to set this statically up by the program will follow  --cehteh
  */
@@ -187,7 +188,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    builder_mem,               proc_mem);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    asset_mem,                 proc_mem);
 
 
-/** event which drive the application are separately logged to reconstruct what happend/yielded to a problem */
+/** event which drive the application are separately logged to reconstruct what happened/yielded to a problem */
 NOBUG_CPP_DEFINE_FLAG_PARENT    ( events,                       all);
 /** caveat joel, you need to implement this */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  gui_event,                   all);

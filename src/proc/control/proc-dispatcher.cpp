@@ -299,7 +299,7 @@ namespace control {
               INFO (command, "+++ dispatch %s", util::cStr(cmd));
               
               //////////////////////////////////////////////////////TODO : magic to invoke commands from unit tests
-              if (util::startsWith (string(cmd.getID()), "test."))
+              if (util::startsWith (string(cmd.getID()), "test"))
                 {
                   INFO (command, "+++ -------->>> bang!");
                   cmd();

@@ -136,7 +136,7 @@ namespace control {
         Symbol& cmdID{get<Symbol>(entry)};
         DefinitionClosure& buildDefinition{get<DefinitionClosure> (entry)};
         
-        INFO (command, "defining Command(%s)...", cmdID.c());
+        TRACE (command, "defining Command(%s)...", cmdID.c());
         CommandDef def(cmdID);
         buildDefinition(def);
         pendingCmdDefinitions.pop_back();

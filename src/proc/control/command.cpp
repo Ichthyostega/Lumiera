@@ -169,7 +169,7 @@ namespace control {
     if (cmdID)
       CommandRegistry::instance().track (cmdID, *this);
     
-    INFO (command, "%s defined OK", cStr(*this));
+    TRACE (command, "%s defined OK", cStr(*this));
   }
   
   
