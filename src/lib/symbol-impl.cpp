@@ -41,10 +41,10 @@ extern "C" {
 }
 
 #include <boost/functional/hash.hpp>
+#include <unordered_set>
 #include <cstddef>
 #include <utility>
 #include <string>
-#include <deque>
 
 using std::size_t;
 using std::string;
@@ -92,15 +92,15 @@ namespace lib {
   namespace { // quick-n-dirty symbol table implementation
     
     /** @warning grows eternally, never shrinks */
-    std::deque<string> idStringBuffer;                  ////////////////////////////////TICKET #158 replace by symbol table
+    std::unordered_set<string> symbolTable;                  ////////////////////////////////TICKET #158 replace by symbol table
   }
   
   /** @internal quick-n-dirty hack, used as workaround for creating command-IDs on the fly */
   Symbol
-  internedString (string&& idString)
+  internedString (string&& symbolString)
   {
-    idStringBuffer.emplace_back (std::forward<string> (idString));
-    return Symbol (idStringBuffer.back().c_str());
+    auto res = symbolTable.insert (std::forward<string> (symbolString));
+    return Symbol (res.first->c_str());
   }
   /////////////////////////////////////(End)symbol-table hack
   
