@@ -11706,6 +11706,14 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491005426763" ID="ID_1575553505" MODIFIED="1491005475262" TEXT="zu kl&#xe4;ren: duplikate Instanz">
+<arrowlink COLOR="#ca978d" DESTINATION="ID_1805144008" ENDARROW="Default" ENDINCLINATION="594;0;" ID="Arrow_ID_191915626" STARTARROW="None" STARTINCLINATION="594;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1491005509448" ID="ID_709599195" MODIFIED="1491005512147" TEXT="Fehler?"/>
+<node CREATED="1491005514015" ID="ID_66770459" MODIFIED="1491005526578" TEXT="bestehende Instanz &#xfc;berb&#xfc;geln">
+<icon BUILTIN="forward"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489191252503" ID="ID_1621107057" MODIFIED="1489191308469" TEXT="#1090 Command access for UI-Elements">
 <arrowlink COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" STARTARROW="None" STARTINCLINATION="550;-93;"/>
@@ -11788,6 +11796,23 @@
 </node>
 </node>
 </node>
+<node CREATED="1491005020528" ID="ID_1665806173" MODIFIED="1491005024747" TEXT="zu kl&#xe4;ren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491005025928" ID="ID_1805144008" MODIFIED="1491005470990" STYLE="fork" TEXT="duplikate Instanzen">
+<linktarget COLOR="#ca978d" DESTINATION="ID_1805144008" ENDARROW="Default" ENDINCLINATION="594;0;" ID="Arrow_ID_191915626" SOURCE="ID_1575553505" STARTARROW="None" STARTINCLINATION="594;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1491005039414" ID="ID_378645276" MODIFIED="1491005470990" TEXT="mehrfach newInstance() mit gleicher ID"/>
+<node CREATED="1491005054595" ID="ID_1987692266" MODIFIED="1491005470990" TEXT="zwei M&#xf6;glichkeiten">
+<icon BUILTIN="info"/>
+<node CREATED="1491005058931" ID="ID_1108733153" MODIFIED="1491005470990" TEXT="mit neuem Klon &#xfc;berschreiben"/>
+<node CREATED="1491005066706" ID="ID_1990482123" MODIFIED="1491005470990" TEXT="Fehler ausl&#xf6;sen"/>
+</node>
+<node CREATED="1491005071634" ID="ID_178338289" MODIFIED="1491005470990" TEXT="zur Kl&#xe4;rung">
+<icon BUILTIN="bell"/>
+<node CREATED="1491005078409" ID="ID_1515823316" MODIFIED="1491005470990" TEXT="...mu&#xdf; ich wissen, wie newInstance verwendet wird"/>
+<node CREATED="1491005491226" ID="ID_1986906306" MODIFIED="1491005499069" TEXT="und das h&#xe4;ngt von InvocationTrail ab"/>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#252298" CREATED="1489546623162" HGAP="-24" ID="ID_1622574347" MODIFIED="1489778039083" TEXT="was wird gebraucht" VSHIFT="21">
 <linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="39;-3322;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="2000;0;"/>
@@ -11812,10 +11837,16 @@
 <node CREATED="1489715248861" ID="ID_999876408" MODIFIED="1489715252392" TEXT="brauche">
 <node CREATED="1489715276057" ID="ID_878658276" MODIFIED="1489715279093" TEXT="Basis-ID"/>
 <node CREATED="1489715297406" ID="ID_601143379" MODIFIED="1489715305201" TEXT="dekoriert durch Invocation-Trail"/>
-<node CREATED="1489715320435" ID="ID_1521007439" MODIFIED="1489715325174" TEXT="dekoriert durch laufende Nr"/>
+<node CREATED="1489715320435" ID="ID_1521007439" MODIFIED="1491003112168" TEXT="dekoriert durch laufende Nr">
+<icon BUILTIN="button_cancel"/>
+</node>
 <node CREATED="1489715326210" ID="ID_1820734132" MODIFIED="1489715331310" TEXT="guten Hash von diesen"/>
-<node CREATED="1489715461992" ID="ID_115322523" MODIFIED="1489715479858" TEXT="&quot;leere&quot; Basis-ID ohne lfdNr"/>
-<node CREATED="1489715591582" ID="ID_256884690" MODIFIED="1489715597393" TEXT="inkrement der lfdNr"/>
+<node CREATED="1489715461992" ID="ID_115322523" MODIFIED="1491003142993" TEXT="&quot;leere&quot; Basis-ID ohne lfdNr">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1489715591582" ID="ID_256884690" MODIFIED="1491003145193" TEXT="inkrement der lfdNr">
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 <node CREATED="1489716825126" HGAP="38" ID="ID_969368347" MODIFIED="1489717783561" TEXT="Ans&#xe4;tze" VSHIFT="-1">
 <node CREATED="1489716845980" ID="ID_816994670" MODIFIED="1489718875217" TEXT="Command-ID-Token">
@@ -11847,6 +11878,25 @@
 <node CREATED="1489717807872" ID="ID_1209104496" MODIFIED="1489717818826" TEXT="wir bauen ohnehin den Command-Cycle fest ein"/>
 <node CREATED="1489717844003" ID="ID_97055123" MODIFIED="1489717853605" TEXT="letztgenannte L&#xf6;sung ist auf den Punkt"/>
 <node CREATED="1489717927279" ID="ID_845301501" MODIFIED="1489717959263" TEXT="Command-ID erf&#xfc;llt keine regulierende Funktion"/>
+<node CREATED="1491003369611" ID="ID_854080320" MODIFIED="1491003437055" TEXT="Instanz-Management funktioniert anonym">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil es zu jedem InvocationPath
+    </p>
+    <p>
+      zu jeder Zeit nur eine &quot;offene&quot; Instanz gibt.
+    </p>
+    <p>
+      Also gen&#252;gt es, einen anonymen Klon dieser Instanz zu halten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1489717960331" ID="ID_1849715968" MODIFIED="1489717991603" TEXT="viel wichtiger sind die Aktivierungs-Regeln"/>
 </node>
 </node>
@@ -11923,7 +11973,12 @@
 </node>
 <node CREATED="1489781392694" ID="ID_1312397991" MODIFIED="1489781396114" TEXT="Festlegungen">
 <node CREATED="1489781404925" ID="ID_1918933171" MODIFIED="1489781408881" TEXT="Command-ID">
-<node CREATED="1489781409876" ID="ID_1973020417" MODIFIED="1489781419119" TEXT="Bais-ID ist ein string"/>
+<node CREATED="1489781409876" ID="ID_1973020417" MODIFIED="1491003215267" TEXT="Basis-ID ist ein Symbol"/>
+<node CREATED="1491003215783" ID="ID_1537560721" MODIFIED="1491003227609" TEXT="es wird mit einer Invocation-ID dekoriert"/>
+<node CREATED="1491003228101" ID="ID_661472357" MODIFIED="1491003254161" TEXT="wir brauchen keine laufende Nummer">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1491003237108" ID="ID_1167308664" MODIFIED="1491003252150" TEXT="Instance-Management funktioniert anonym"/>
 </node>
 <node CREATED="1489781426978" ID="ID_1543445405" MODIFIED="1490985671060" TEXT="konkrete Definition">
 <icon BUILTIN="button_ok"/>
@@ -12057,7 +12112,8 @@
 <node CREATED="1490985710963" ID="ID_447657694" MODIFIED="1490985717974" TEXT="keinerlei Lifecycle-Magie"/>
 <node CREATED="1490985720722" ID="ID_1386937508" MODIFIED="1490985736292" TEXT="ist nur eine Registry mit etwas Funktionalit&#xe4;t">
 <node CREATED="1490986294710" ID="ID_558020871" MODIFIED="1490986301601" TEXT="Comand-IDs dekorieren"/>
-<node CREATED="1490986302197" ID="ID_1305641719" MODIFIED="1490986308216" TEXT="fortlaufenden Z&#xe4;hler verwalten">
+<node CREATED="1490986302197" ID="ID_1305641719" MODIFIED="1491004967731" TEXT="fortlaufenden Z&#xe4;hler verwalten">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1490986345879" ID="ID_1736956933" MODIFIED="1490986393723" TEXT="denn: Dispatch bedeutet Verz&#xf6;gerung">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -12092,9 +12148,27 @@
 </richcontent>
 </node>
 </node>
+<node CREATED="1491004971039" ID="ID_329531567" MODIFIED="1491004978482" TEXT="anonyme Instanz verwalten">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1491004982341" ID="ID_1956457610" MODIFIED="1491005001237" TEXT="offene Frage: Duplikat &#xfc;berschreiben?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1491005133794" ID="ID_1003096513" MODIFIED="1491005393601" TEXT="vorl&#xe4;ufig &#xfc;berschreibe ich stillschweigend">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 <node CREATED="1490986309084" ID="ID_1432845924" MODIFIED="1490986319583" TEXT="sicher &#xdc;bergabe an Dispatch">
 <node CREATED="1490986320434" ID="ID_1807848022" MODIFIED="1490986324558" TEXT="Dispatch als Closure"/>
 <node CREATED="1490986325626" ID="ID_167499115" MODIFIED="1490986333421" TEXT="Exception-Safety!"/>
+</node>
+</node>
+<node CREATED="1491003278638" ID="ID_516679033" MODIFIED="1491003300696" TEXT="Instanz-Management">
+<node CREATED="1491003301379" ID="ID_997022970" MODIFIED="1491003305671" TEXT="funktioniert fast von selbst"/>
+<node CREATED="1491003306451" ID="ID_1812101347" MODIFIED="1491003314278" TEXT="Command == smart-Handle"/>
+<node CREATED="1491003314746" ID="ID_850841535" MODIFIED="1491003350337" TEXT="instanz kann anonym bleiben">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1491003323585" ID="ID_719524765" MODIFIED="1491003347758" TEXT="die lokale Registry h&#xe4;llt sie am Leben">
+<icon BUILTIN="info"/>
 </node>
 </node>
 <node CREATED="1490985696821" ID="ID_564026288" MODIFIED="1490985706464" TEXT="wird vom SessionCommandService betrieben"/>

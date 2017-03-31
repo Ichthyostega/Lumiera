@@ -39,9 +39,9 @@
 #include "proc/control/command-setup.hpp"
 #include "proc/control/command-instance-manager.hpp"
 #include "proc/control/command-def.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/util.hpp"
-
+#include "lib/symbol.hpp"
+#include "lib/format-string.hpp"
+#include "lib/util.hpp"
 
 #include <tuple>
 #include <utility>
@@ -53,9 +53,8 @@ using std::move;
 using lib::Symbol;
 using lumiera::LifecycleHook;
 using lumiera::ON_GLOBAL_INIT;
-//using std::string;
-//using util::cStr;
-//using util::_Fmt;
+using std::string;
+using util::_Fmt;
 
 
 namespace proc {
@@ -157,26 +156,51 @@ namespace control {
   
   CommandInstanceManager::CommandInstanceManager (CommandDispatch& dispatcher)
     : dispatcher_{dispatcher}
+    , table_{2 * Command::definition_count()}
     { }
   
   
-  /* more to come here...*/
+  /** @todo more to come here...*/
   Symbol
   CommandInstanceManager::newInstance (Symbol prototypeID, string invocationID)
   {
-    UNIMPLEMENTED ("CommandInstanceManager::newInstance");
+    Symbol instanceID{lib::internedString (string{prototypeID}+"."+invocationID)};
+    Command& instance = table_[instanceID];
+    if (not instance)
+      { // create new clone from the prototype
+        table_[instanceID] = move (Command::get(prototypeID).newInstance());
+        ENSURE (instance, "cloning of command prototype failed");
+      }
+    return instanceID;
   }
   
+  
+  /** */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)
   {
-    UNIMPLEMENTED ("CommandInstanceManager::dispatch");
+    Command& instance = table_[instanceID];
+    if (not instance)
+      throw error::Logic (_Fmt{"attempt to dispatch command instance '%s' "
+                               "without creating a new instance from prototype beforehand"}
+                              % instanceID
+                         , LUMIERA_ERROR_INVALID_COMMAND);
+    if (not instance.canExec())
+      throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
+                               "without binding all arguments properly beforehand"}
+                              % instanceID
+                         , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    
+    REQUIRE (instance and instance.canExec());
+    dispatcher_.enqueue(move (instance));
+    ENSURE (not instance);
   }
+  
   
   bool
   CommandInstanceManager::contains (Symbol instanceID)  const
   {
-    UNIMPLEMENTED ("CommandInstanceManager::contains");
+    return util::contains (table_, instanceID);
   }
   
   

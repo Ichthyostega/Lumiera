@@ -144,7 +144,9 @@ namespace control {
       
       
       /** register a command (Frontend) under the given ID.
-       *  Any previously existing registration is detached from the index
+       * @throw error::Logic when a registration already exists,
+       *        either under this ID or for the same concrete implementation
+       *        record but with a different ID.
        */ 
       void
       track (Symbol cmdID, Command const& commandHandle)

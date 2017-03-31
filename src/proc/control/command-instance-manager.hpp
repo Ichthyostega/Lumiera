@@ -58,6 +58,7 @@
 //#include "proc/common.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <unordered_map>
 #include <string>
 
 
@@ -79,6 +80,7 @@ namespace control {
     : boost::noncopyable
     {
       CommandDispatch& dispatcher_;
+      std::unordered_map<Symbol,Command> table_;
       
     public:
       CommandInstanceManager (CommandDispatch&);

@@ -154,7 +154,7 @@ namespace control {
   
   /** @internal make a command ready for use. Typically to be invoked
    *  through CommandDef during the definition stage, but also used
-   *  for activating clone instances.
+   *  for activating (anonymous) clone instances.
    *  @param cmdID new ID for creating a separate command registration when provided
    *  @throw error::Logic when \c this is already activated. */
   void
@@ -191,7 +191,7 @@ namespace control {
   }
   
   
-  /** create independent clone copy of this command */
+  /** create independent (anonymous) clone copy of this command */
   Command
   Command::newInstance ()  const
   {
