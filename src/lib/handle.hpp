@@ -127,6 +127,13 @@ namespace lib {
           return *this;
         }
       
+      Handle&
+      activate(shared_ptr<IMP> && impl)
+        {
+          smPtr_ = move (impl);
+          return *this;
+        }
+      
       /** deactivate this handle, so it isn't tied any longer
        *  to the associated implementation or service object.
        *  When all handles have either been deactivated or

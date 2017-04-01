@@ -206,7 +206,7 @@ namespace control {
     
     REQUIRE (instance and instance.canExec());
     dispatcher_.enqueue(move (instance));
-    instance.close();
+    ENSURE (not instance);
   }
   
   

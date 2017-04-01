@@ -50,11 +50,13 @@
 #include "proc/control/command-impl-clone-builder.hpp"
 #include "proc/control/handling-pattern.hpp"
 
+#include <utility>
 #include <sstream>
 #include <string>
 
 using std::ostringstream;
 using std::string;
+using std::move;
 using util::cStr;
 using util::_Fmt;
 
@@ -158,14 +160,14 @@ namespace control {
    *  @param cmdID new ID for creating a separate command registration when provided
    *  @throw error::Logic when \c this is already activated. */
   void
-  Command::activate (shared_ptr<CommandImpl> const& implFrame, Symbol cmdID)
+  Command::activate (shared_ptr<CommandImpl> && implFrame, Symbol cmdID)
   {
     REQUIRE (implFrame);
     
     if (this->isValid())
       duplicate_detected (cmdID);
     
-    _Handle::activate (implFrame);
+    _Handle::activate (move (implFrame));
     if (cmdID)
       CommandRegistry::instance().track (cmdID, *this);
     
@@ -185,7 +187,7 @@ namespace control {
       duplicate_detected (newCmdID);
     
     Command cloneDefinition;
-    cloneDefinition.activate (registry.createCloneImpl(this->impl()), newCmdID);
+    cloneDefinition.activate (move (registry.createCloneImpl(this->impl())), newCmdID);
     ENSURE (cloneDefinition);
     return cloneDefinition; 
   }
@@ -200,7 +202,7 @@ namespace control {
     shared_ptr<CommandImpl> cloneImpl = registry.createCloneImpl(this->impl());
     
     Command clone;
-    clone.activate (cloneImpl);
+    clone.activate (move (cloneImpl));
     ENSURE (clone);
     return clone; 
   }

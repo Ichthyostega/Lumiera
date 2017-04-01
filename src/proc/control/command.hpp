@@ -130,6 +130,10 @@ namespace control {
      ~Command();
       
       // default copy acceptable
+      Command (Command &&)  = default;
+      Command (Command const&) = default;
+      Command& operator= (Command &&) = default;
+      Command& operator= (Command const&) = default;
       
       
       
@@ -192,7 +196,7 @@ namespace control {
       
     protected:
       static Command fetchDef (Symbol cmdID);
-      void activate (shared_ptr<CommandImpl> const&, Symbol cmdID =0);
+      void activate (shared_ptr<CommandImpl> &&, Symbol cmdID =0);
       
       friend class CommandDef; //...invoking those two functions during definition stage
       

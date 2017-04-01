@@ -99,7 +99,7 @@ namespace control {
   namespace stage { ///< helpers for building up a command definition
     
     using ImplInstance = shared_ptr<CommandImpl>;
-    using Activation   = function<Command&(ImplInstance const&)>;
+    using Activation   = function<Command&(ImplInstance &&)>;
     
     
     
@@ -211,7 +211,7 @@ namespace control {
             ImplInstance completedDef = registry.newCommandImpl(operFunctor_
                                                                ,captFunctor_
                                                                ,undoFunctor_);
-            return CompletedDefinition<SIG> (activatePrototype_(completedDef));
+            return CompletedDefinition<SIG> {activatePrototype_(move (completedDef))};
           }
       };
     
@@ -318,9 +318,9 @@ namespace control {
       /** callback from completed command definition stage:
        *  "arm up" the command handle object and register it
        *  with the CommandRegistry.  */ 
-      Command& activate (PImpl const& completedDef)
+      Command& activate (PImpl && completedDef)
         {
-          prototype_.activate (completedDef, id_);
+          prototype_.activate (move (completedDef), id_);
           ENSURE (prototype_);
           return prototype_;
         }
