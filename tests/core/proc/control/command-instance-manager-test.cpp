@@ -79,13 +79,13 @@ namespace test {
         
       public:
         bool
-        contains (Symbol instanceID)
+        contains (Command const& ref)
           {
             return queue_.end()!= std::find_if (queue_.begin()
                                                ,queue_.end()
                                                ,[=](Command const& elm)
                                                     {
-                                                      return instanceID == elm.getID();
+                                                      return elm == ref;
                                                     });
           }
       };
@@ -128,8 +128,8 @@ namespace test {
           CHECK (cmd.canExec());
           
           iManager.dispatch (instanceID);
+          CHECK (fixture.contains (cmd));
           CHECK (not iManager.contains (instanceID));
-          CHECK (fixture.contains (instanceID));
           VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
         }
     };
