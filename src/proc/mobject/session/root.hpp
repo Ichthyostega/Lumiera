@@ -21,6 +21,19 @@
 */
 
 
+/** @file root.hpp
+ ** MObject within the session to represent "the session itself".
+ ** The root object is used as anchor point when it comes to building, accessing
+ ** or displaying the whole session. Moreover, the placement used to attach the
+ ** Root MObejct into the session effectively represents the "global scope" -- any
+ ** constraint attached to this placement possibly effects any other object placed
+ ** anywhere within this global scope...
+ ** 
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_ROOT_H
 #define PROC_MOBJECT_SESSION_ROOT_H
 

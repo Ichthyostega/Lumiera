@@ -3,6 +3,11 @@
  *           integrated into the SCons based build system of Lumiera
  */
 
+
+/** @file hello.c
+ ** Example file to demonstrate integration of stand-alone tools into the build process
+ */
+
 #include <stdio.h>
 
 int

@@ -1,5 +1,5 @@
 /*
-  APPSTATE.hpp  -  application initialisation and behaviour 
+  APPSTATE.hpp  -  application initialisation and behaviour
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

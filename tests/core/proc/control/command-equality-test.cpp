@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-equality-test.cpp
+ ** unit test \ref CommandEquality_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

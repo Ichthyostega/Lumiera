@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file node-basic-test.cpp
+ ** unit test \ref NodeBasic_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/engine/nodefactory.hpp"

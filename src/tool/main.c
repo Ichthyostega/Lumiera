@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file main.c
+ ** A stand alone application to test integration with output frameworks
+ ** @remarks the plan was to evolve this into a command line tool eventually,
+ **          which would use Lumiera's backend functionality to setup and probe
+ **          the operation environment for diagnostic purpose
+ */
+
+
 #include "alsa.h"
 
 #include <unistd.h>

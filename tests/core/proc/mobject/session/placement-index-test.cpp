@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file placement-index-test.cpp
+ ** unit test \ref PlacementIndex_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

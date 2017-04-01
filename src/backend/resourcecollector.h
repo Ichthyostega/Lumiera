@@ -21,6 +21,12 @@
 */
 
 
+/** @file resourcecollector.h
+ ** A global manager for scarce system resources
+ ** @todo this was a plan from 2008 and never got beyond an initial concept stage
+ */
+
+
 #ifndef BACKEND_RESOURCECOLLECTOR_H
 #define BACKEND_RESOURCECOLLECTOR_H
 

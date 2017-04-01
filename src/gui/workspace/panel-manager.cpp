@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file panel-manager.cpp
+ ** Implementation of dockable UI panels, implemented with the
+ ** help of lib GDL (»Gnome Docking Libraray«, formerly aka »Gnome Design Library«)
+ */
+
+
 #include "gui/workspace/panel-manager.hpp"
 
 #include "gui/panel/assets-panel.hpp"

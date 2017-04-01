@@ -21,6 +21,17 @@
 * *****************************************************/
 
 
+/** @file enginefacade.cpp
+ ** Subsystem descriptor and configuration for the render engine.
+ ** This is the implementation part to manage render engine lifecycle
+ ** as a Subsystem of the whole application.
+ ** 
+ ** @todo placeholder/draft as of 1/2017
+ ** @see main.cpp
+ ** 
+ */
+
+
 #include "backend/enginefacade.hpp"
 #include "lib/depend.hpp"
 

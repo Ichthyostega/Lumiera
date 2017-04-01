@@ -20,6 +20,14 @@
 
 * *****************************************************/
 
+/** @file test-locking.c
+ ** C unit test to cover convenience setup for POSIX locking primitives
+ ** These convenience macros are intended for use in low-level C code,
+ ** where minimal and precise locking is relevant for performance reasons.
+ ** @see mutex.h
+ ** @see condition.h
+ */
+
 
 #include "lib/test/test.h"
 #include "lib/mutex.h"

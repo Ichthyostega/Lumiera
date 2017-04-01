@@ -21,6 +21,36 @@
 */
 
 
+/** @file fork.hpp
+ ** Organisational grouping device within the Session model ("Track" / "Media Bin").
+ ** Within Lumiera, Tracks bear no direct relation to the rendering or calculation process;
+ ** rather they are just conceived as a space for the user to arrange the parts included
+ ** into the edit.
+ ** 
+ ** A Fork is a nested tree-shaped structure. When integrated into a sequence, it will be
+ ** rendered in the familiar way, as tracks with media clips. But at the same time, when
+ ** accessed through the _Asset management view_ ("bookkeeping view"), a fork appears as
+ ** nested folder structure to hold media clips.
+ ** 
+ ** Most importantly, a Fork defines a _system of nested scopes._ When discovering details
+ ** of the wiring, setup and configuration, the Build process will look into the enclosing
+ ** scope to fill in any part not defined locally at a given media object. Go give a typical
+ ** example, the _volume for sound playback_ can be defined in some root scope, causing all
+ ** sound objects to _inherit_ that volume setting -- unless shadowed by a more specialised
+ ** setting closer in scope to the sound object in question. This allows to set up global
+ ** properties and then to override them locally, for a group of objects located in some
+ ** sub-fork.
+ ** 
+ ** @note to stress this point: in Lumiera we do _not conceive tracks as some kind of
+ **       channel, with media data flowing through the tracks._ Also, _tracks are not layers._
+ **       This also means, there is _no distinction in audio and video tracks._
+ **       We leave it at the user's discretion how she wants to organise the edit.
+ ** 
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef MOBJECT_SESSION_FORK_H
 #define MOBJECT_SESSION_FORK_H
 

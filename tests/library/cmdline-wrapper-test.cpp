@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file cmdline-wrapper-test.cpp
+ ** unit test \ref CmdlineWrapper_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/cmdline.hpp"

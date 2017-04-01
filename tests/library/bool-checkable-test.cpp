@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file bool-checkable-test.cpp
+ ** unit test \ref BoolCheckable_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/bool-checkable.hpp"

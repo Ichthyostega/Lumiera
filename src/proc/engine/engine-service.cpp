@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file engine-service.cpp
+ ** Implementation parts related to the engine service abstraction
+ */
+
+
 #include "proc/engine/engine-service.hpp"
 #include "lib/itertools.hpp"
 

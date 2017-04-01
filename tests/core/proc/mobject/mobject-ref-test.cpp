@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file mobject-ref-test.cpp
+ ** unit test \ref MObjectRef_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/asset/media.hpp"

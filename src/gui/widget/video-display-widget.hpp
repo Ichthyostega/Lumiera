@@ -21,6 +21,11 @@
 */
 
 
+/** @file video-display-widget.hpp
+ ** Widget to create a video display embedded into the UI
+ */
+
+
 
 
 #ifndef GUI_WIDGET_VIDEO_DISPLAY_WIDGET_H

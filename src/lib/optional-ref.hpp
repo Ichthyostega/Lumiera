@@ -21,6 +21,13 @@
 */
 
 
+/** @file optional-ref.hpp
+ ** a checked, switchable reference.
+ ** Offers semantics similar to a pointer, but throws (not segfaults)
+ ** on invalid dereferentiation
+ */
+
+
 #ifndef LIB_OPTIONAL_REF_H
 #define LIB_OPTIONAL_REF_H
 

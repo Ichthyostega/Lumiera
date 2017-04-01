@@ -21,6 +21,13 @@
 */
 
 
+/** @file meta.hpp
+ ** Intermediate Asset interface: metadata and processing instructions
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_META_H
 #define PROC_MOBJECT_SESSION_META_H
 

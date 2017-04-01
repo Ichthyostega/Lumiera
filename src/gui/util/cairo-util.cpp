@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file cairo-util.cpp
+ ** Implementation of helper functions to support working with lib Cairo
+ */
+
+
 #include "gui/util/cairo-util.hpp"
 
 namespace gui {

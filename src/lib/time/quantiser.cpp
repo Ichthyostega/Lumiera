@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file quantiser.cpp
+ ** Implementation of support functions to create grid-aligned time and timecode values
+ */
+
+
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"

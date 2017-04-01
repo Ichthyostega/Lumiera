@@ -116,7 +116,7 @@ namespace gui {
    * the Lumiera Interface/Plugin system and creates
    * a forwarding proxy within the application core to
    * route calls through this interface.
-   * \par
+   * 
    * In addition to the Display interface, this class 
    * implements an additional service for the GUI, 
    * allowing actually to set up display slots, which

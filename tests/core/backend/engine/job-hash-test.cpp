@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file job-hash-test.cpp
+ ** unit test \ref JobHash_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

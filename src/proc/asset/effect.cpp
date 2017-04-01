@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file effect.cpp
+ ** Implementation level functionality regarding the Asset representation of effects
+ ** @todo still unimplemented and stalled work as of 2016
+ */
+
+
 #include "proc/asset/effect.hpp"
 
 namespace proc {

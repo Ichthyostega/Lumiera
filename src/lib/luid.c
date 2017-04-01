@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file luid.c
+ ** Implementation functions for Lumiera's unique object identifier (LUID).
+ */
+
+
 #include "lib/luid.h"
 
 #include <sys/stat.h>

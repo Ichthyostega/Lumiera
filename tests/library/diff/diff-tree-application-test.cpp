@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file diff-tree-application-test.cpp
+ ** unit test \ref DiffTreeApplication_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"

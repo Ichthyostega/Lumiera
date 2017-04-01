@@ -21,6 +21,24 @@
 * *****************************************************/
 
 
+/** @file configfacade.cpp
+ ** Draft for a facade to access and retrieve configuration values
+ ** This was created as part of a first draft towards an application
+ ** wide configuration system. Later (around 2012) it became clear that
+ ** we can not judge the requirements for such a system yet, so we deferred
+ ** the topic altogether. Meanwhile, this facade is sporadically used to
+ ** mark the necessity to retrieve some "parametrisation values".
+ ** 
+ ** A preliminary implementation is backed by a `setup.ini` file,
+ ** located relative to the application binary.
+ ** 
+ ** @todo as of 2016, this seems not to be used much, if at all.
+ **       The GTK-UI, which in itself is very preliminary, retrieves
+ **       some values from configuration, most notably the name of
+ **       the GTK stylesheet (`gtk-lumiera.css` is the default)
+ */
+
+
 #include "include/logging.h"
 #include "include/lifecycle.h"
 #include "include/config-facade.h"

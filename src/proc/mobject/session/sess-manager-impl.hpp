@@ -21,6 +21,22 @@
 */
 
 
+/** @file sess-manager-impl.hpp
+ ** Implementation facility for session management.
+ ** Users are assumed to access the session itself through a smart-ptr, which happens
+ ** to be the SessManager. Thus, accessing this front-end directly allows to invoke the
+ ** typical lifecycle and management operations (open, close, save, load). Since the
+ ** Session plays such a central role, we obviously want to expose just an interface
+ ** to client code, both regarding the Session itself, and the session manager.
+ ** 
+ ** The SessManagerImpl involves the LifecylceAdvisor, which holds all the logic to
+ ** manage start-up and shutdown of the session, including starting of the core services
+ ** and opening of the external facade interfaces.
+ ** 
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef MOBJECT_SESSION_SESS_MANAGER_IMPL_H
 #define MOBJECT_SESSION_SESS_MANAGER_IMPL_H
 

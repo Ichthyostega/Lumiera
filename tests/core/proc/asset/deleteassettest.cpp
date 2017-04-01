@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file deleteassettest.cpp
+ ** unit test \ref DeleteAsset_test
+ */
+
 
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"

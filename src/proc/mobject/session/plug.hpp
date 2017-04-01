@@ -21,6 +21,11 @@
 */
 
 
+/** @file plug.hpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
+ */
+
+
 #ifndef MOBJECT_SESSION_PLUG_H
 #define MOBJECT_SESSION_PLUG_H
 
@@ -40,7 +45,7 @@ namespace session {
   class Plug : public Wish
     {
     protected:
-      /** the Pipe this MObject wants to be conected to */
+      /** the Pipe this MObject wants to be connected to */
       asset::Pipe* outPipe;   ////////////////////////////////TODO: shared_ptr
       
     };

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file rectangle.hpp
+ ** Helper functions to work with rectangular screen ranges
+ */
+
+
 #ifndef GUI_UTIL_RECTANGLE_H
 #define GUI_UTIL_RECTANGLE_H
 

@@ -30,12 +30,12 @@
  ** of the High-Level-Model). These model ports are the (side effect) result of a
  ** build process performed on the High-Level-Model, causing all nominal output
  ** designations within the model to be resolved as far as possible. Additionally,
- ** for \em playback, the global level of the model (the global pipes of a timeline)
+ ** for _playback,_ the global level of the model (the global pipes of a timeline)
  ** need to be connected to a viewer component. This results in a further resolution
  ** step, mapping the output designations to the concrete output possibilities of
  ** the running Lumiera instance. This mapping information is kept embedded within
  ** an OutputManager instance, passed as parameter when invoking the player service.
- ** Alternatively, for \em rendering, a similar kind of output mapping information
+ ** Alternatively, for _rendering,_ a similar kind of output mapping information
  ** needs to be provided, again embedded within an OutputManager instance, this
  ** time leading to an output file to be rendered.
  ** 
@@ -46,7 +46,8 @@
  ** the scenes the corresponding PlayProcess gets terminated and prepared for cleanup. 
  ** 
  ** @see engine::EngineService
- ** @todo WIP-WIP-WIP as of Nov.2011
+ ** @todo started as draft in 11/2011
+ ** @todo as of 2016 development in this area is stalled, but the design done thus far valid
  ** 
  */
 

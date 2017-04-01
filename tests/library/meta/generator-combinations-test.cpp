@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file generator-combinations-test.cpp
+ ** unit test \ref GeneratorCombinations_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/meta/generator.hpp"

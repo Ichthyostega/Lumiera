@@ -30,7 +30,7 @@
  ** versioned to provide forward and backward compatibility for both source and
  ** binary deployment of modules.
  **
- ** \par Overview
+ ** # Overview
  **
  ** To make an interface available to code so that the code can use the
  ** interface, the interface needs to be declared and then defined. We provide a
@@ -72,7 +72,7 @@
  **                 ) // Exporting from an interface
  ** \endcode
  **
- ** \par Naming and Versioning
+ ** # Naming and Versioning
  **
  ** Interfaces have unique names and a major and minor version. The name and the major version
  ** is used to construct a C identifier for the interface, the minor version is implicitly defined

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file node-source-test.cpp
+ ** unit test \ref NodeSource_test
+ */
+
 
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"

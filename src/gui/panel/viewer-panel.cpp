@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+
+/** @file viewer-panel.cpp
+ ** Implementation of a dockable panel to hold the video viewers
+ */
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/panel/viewer-panel.hpp"
 

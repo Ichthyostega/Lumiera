@@ -22,7 +22,7 @@
 
 
 /** @file genfunc.hpp
- ** Generic function to build identification schemes.
+ ** Generic functions to build identification schemes.
  ** These template functions are meant as common extension point.
  ** The purpose is to streamline and disentangle the various identification schemes
  ** in use at various places within Lumiera. We strive to cover all the common basic

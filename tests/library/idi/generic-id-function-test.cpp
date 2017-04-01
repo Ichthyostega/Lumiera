@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file generic-id-function-test.cpp
+ ** unit test \ref GenericIdFunction_test
+ */
+
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iter-adapter-stl-test.cpp
+ ** unit test \ref IterAdapterSTL_test
+ */
+
 
 
 #include "lib/test/run.hpp"

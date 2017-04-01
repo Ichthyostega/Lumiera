@@ -21,6 +21,14 @@
 */
 
 
+/** @file preferences-dialog.hpp
+ ** Dialog to manage application preferences.
+ ** @todo as of 2016, this is more of a place-holder, since we also
+ **       do not have decided on the implementation approach for
+ **       application preferences in general.
+ */
+
+
 #ifndef GUI_DIALOG_PREFERENCES_DIALOG_H
 #define GUI_DIALOG_PREFERENCES_DIALOG_H
 

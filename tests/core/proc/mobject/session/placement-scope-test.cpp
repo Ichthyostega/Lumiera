@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file placement-scope-test.cpp
+ ** unit test \ref PlacementScope_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

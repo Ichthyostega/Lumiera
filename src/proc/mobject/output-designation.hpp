@@ -21,6 +21,22 @@
 */
 
 
+/** @file output-designation.hpp
+ ** Core abstraction: symbolic representation of some output target.
+ ** An OutputDesignation represents something you might want to connect to
+ ** or towards which you'd like to direct output. It might be _absolute,_ in
+ ** which case it represents an actual output device attached to the system,
+ ** or it might be relative, as a placeholder for further wiring and output routing.
+ ** An example for the latter would be the "master bus".
+ ** 
+ ** The concept of an OutputDesignation plays a crucial role to allow flexible connection
+ ** and rearrangement of media content. It allows to build partial structures, which can
+ ** be connected automatically to a suitable output when placed into the appropriate context.
+ ** In the end, the Builder will resolve all output designations, finally leading to a fixed
+ ** set of exit nodes, which can be pulled to deliver content.
+ */
+
+
 #ifndef PROC_MOBJECT_OUTPUT_DESIGNATION_H
 #define PROC_MOBJECT_OUTPUT_DESIGNATION_H
 
@@ -49,7 +65,7 @@ namespace mobject {
    * OutputDesignation is always an internal and relative specification
    * and boils down to referring an asset::Pipe by ID. In order to become
    * actually effective, some object within the model additionally
-   * needs to \em claim this pipe-ID, meaning that this object
+   * needs to _claim_ this pipe-ID, meaning that this object
    * states to root and represent this pipe. When the builder
    * encounters a pair of (OutputDesignation, OutputClaim),
    * an actual stream connection will be wired in the
@@ -118,4 +134,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif
+#endif /*PROC_MOBJECT_OUTPUT_DESIGNATION_H*/

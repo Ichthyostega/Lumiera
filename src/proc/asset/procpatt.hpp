@@ -21,6 +21,14 @@
 */
 
 
+/** @file procpatt.hpp
+ ** Definition of a [structural asset](\ref struct.hpp) to express patterns of wiring or processing
+ ** Processing patterns can be seen as some kind of "micro code" (or macro code, if you prefer this
+ ** view angle), which will be executed within the machinery to wire and configure the render nodes
+ ** network, based on the objects in the Session model.
+ */
+
+
 #ifndef ASSET_PROCPATT_H
 #define ASSET_PROCPATT_H
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-argument-test.cpp
+ ** unit test \ref CommandArgument_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

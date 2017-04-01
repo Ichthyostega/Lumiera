@@ -21,6 +21,13 @@
 */
 
 
+/** @file codec.hpp
+ ** Definition of a Codec Asset
+ ** @deprecated as of 2016 it seems questionable we'll have to deal with such assets,
+ **   since coding/decoding will always be delegated to widely available libraries.
+ */
+
+
 #ifndef ASSET_CODEC_H
 #define ASSET_CODEC_H
 

@@ -20,6 +20,10 @@
 
 */
 
+/** @file testframe.hpp
+ ** Unit test helper to generate fake test data frames
+ */
+
 
 #ifndef PROC_ENGINE_TESTFRAME_H
 #define PROC_ENGINE_TESTFRAME_H

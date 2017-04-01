@@ -19,6 +19,15 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+/** @file vgsuppression.c
+ ** dummy executable to generate _valgrind suppressions_.
+ ** When running code under `valgrind` to detect memory leaks, typically a well known set
+ ** of false alarms will be reported. The reason is that some facilities, either implemented
+ ** by our own or from third party libraries, just choose never to free some working buffers.
+ ** To deal with this well known issue, `valgrind` allows to be "primed" with a specifically
+ ** crafted executable, which deliberately triggers just these false memory leak alarms.
+ */
+
 /*
   just place any problematic calls where valgrind whines about in main (with comments please)
 */

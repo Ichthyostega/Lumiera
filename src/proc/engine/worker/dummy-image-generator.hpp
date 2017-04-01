@@ -29,6 +29,7 @@
  ** by Joel within PlaybackController, then factored out into a separate
  ** dummy playback service.
  ** 
+ ** @todo obsolete since 2010, can be removed once we have a real player in the UI
  ** @see gui::controller::PlaybackController
  ** @see proc::play::DummyPlayerService
  **  

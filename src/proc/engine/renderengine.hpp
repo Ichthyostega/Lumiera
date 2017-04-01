@@ -21,15 +21,20 @@
 */
 
 
-#ifndef ENGINE_RENDERENGINE_H
-#define ENGINE_RENDERENGINE_H
+/** @file renderengine.hpp
+ ** (Planned) access point to the render engine as service.
+ ** @deprecated a pile of crap, leftovers and started drafts, stalled since 2011 -- but maybe here to stay...
+ */
 
-#include <list>
+
+#ifndef PROC_ENGINE_RENDERENGINE_H
+#define PROC_ENGINE_RENDERENGINE_H
 
 #include "proc/engine/rendergraph.hpp"
 
+#include <list>
 
-using std::list;
+
 
 /////////////////////////////TODO 7/11 this is a piece of debris, left over from the first attempt to complete the render nodes network.
 /////////////////////////////TODO Meanwhile the intention is to treat the render nodes network more like a data structure,
@@ -40,20 +45,23 @@ using std::list;
 namespace proc {
 namespace engine {
   
+  using std::list;
   
   /**
-   * @todo this is planned to become the frontend
+   * @todo this was planned to become the frontend
    * to the render node network, which can be considered
    * at the lower end of the middle layer; the actual 
    * render operations are mostly implemented by the backend
    * ////////TODO WIP as of 12/2010
    */
-  class RenderEngine : public RenderGraph
+  class RenderEngine
+    : public RenderGraph
     {
     public:
        ///// TODO: find out about the public operations
        // note: the play controller lives in the proc-layer,
-       //       but is a subsystem separate of the sesison.
+       //       but is a subsystem separate of the session.
+      RenderEngine();
       
     private:
       list<RenderGraph> renderSegments;
@@ -61,4 +69,4 @@ namespace engine {
     };
 
 }} // namespace proc::engine
-#endif
+#endif /*PROC_ENGINE_RENDERENGINE_H*/

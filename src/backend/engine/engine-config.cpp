@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file engine-config.cpp
+ ** implementation of engine configuration and parametrisation
+ */
+
+
 #include "backend/engine/engine-config.h"
 #include "lib/time/timevalue.hpp"
 

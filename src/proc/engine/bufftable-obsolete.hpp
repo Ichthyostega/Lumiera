@@ -21,6 +21,12 @@
 */
 
 
+/** @file bufftable-obsolete.hpp
+ ** @deprecated obsolete since 2009, left in tree to keep some likewise unfinished code alive.
+ ** @see nodeinvocation.hpp
+ */
+
+
 #ifndef ENGINE_BUFFHTABLE_OBSOLETE_H
 #define ENGINE_BUFFHTABLE_OBSOLETE_H
 

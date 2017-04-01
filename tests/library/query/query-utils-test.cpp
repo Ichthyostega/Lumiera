@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file query-utils-test.cpp
+ ** unit test \ref QueryUtils_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

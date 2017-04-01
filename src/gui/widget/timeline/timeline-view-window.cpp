@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file timeline-view-window.cpp
+ ** Implementation of the timeline window, which holds the main timeline display.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-view-window.hpp"
 #include "gui/widget/timeline-widget.hpp"
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file opaque-unchecked-buffer-test.cpp
+ ** unit test \ref OpaqueUncheckedBuffer_test
+ */
+
 
 
 #include "lib/test/run.hpp"

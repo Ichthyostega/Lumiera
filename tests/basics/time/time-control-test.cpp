@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file time-control-test.cpp
+ ** unit test \ref TimeControl_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

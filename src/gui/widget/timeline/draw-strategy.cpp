@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file draw-strategy.cpp
+ ** @deprecated very likely to be completely rewritten.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/basic-draw-strategy.hpp"
 
 namespace gui {

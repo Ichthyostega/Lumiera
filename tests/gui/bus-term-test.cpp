@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file bus-term-test.cpp
+ ** unit test \ref BusTerm_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

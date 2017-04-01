@@ -21,6 +21,11 @@
 */
 
 
+/** @file button-bar.hpp
+ ** A toolbar widget for use in dialogs.
+ */
+
+
 #ifndef GUI_WIDGET_BUTTON_BAR_H
 #define GUI_WIDGET_BUTTON_BAR_H
 

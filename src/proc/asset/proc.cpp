@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file proc.cpp
+ ** Implementation details regarding the Asset representation of a media processing facility
+ */
+
+
 #include "proc/assetmanager.hpp"
 #include "proc/asset/proc.hpp"
 #include "lib/util.hpp"

@@ -21,6 +21,12 @@
 */
 
 
+/** @file common.hpp
+ ** @todo initially generated code of unclear relevance
+ ** @deprecated 2016 is a common inclusion file really such a good idea?
+ */
+
+
 #ifndef MOBJECT_BUILDER_COMMON_H
 #define MOBJECT_BUILDER_COMMON_H
 

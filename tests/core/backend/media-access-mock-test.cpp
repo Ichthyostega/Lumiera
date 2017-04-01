@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file media-access-mock-test.cpp
+ ** unit test \ref MediaAccessMock_test
+ */
+
 
 #include "backend/media-access-facade.hpp"
 #include "backend/media-access-mock.hpp"

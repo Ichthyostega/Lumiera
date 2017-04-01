@@ -21,6 +21,11 @@
 */
 
 
+/** @file buffer-local-key.hpp
+ ** A marker data type used in metadata / buffer management of the render engine.
+ */
+
+
 #ifndef PROC_ENGINE_BUFFR_LOCAL_KEY_H
 #define PROC_ENGINE_BUFFR_LOCAL_KEY_H
 

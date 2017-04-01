@@ -20,6 +20,12 @@
 
 * *****************************************************/
 
+/** @file test-scopes.cpp
+ ** Implementation of nested test scopes to cover the placement index.
+ ** This translation unit builds mock "session content" with a fixed, known layout,
+ ** which can be used to verify the behaviour of session query and content discovery
+ */
+
 
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/session-service-mock-index.hpp"

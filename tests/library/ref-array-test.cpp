@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file ref-array-test.cpp
+ ** unit test \ref RefArray_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

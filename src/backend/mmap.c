@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file mmap.c
+ ** Implementation of management for memory mapped file regions
+ ** @todo development in this area is stalled since 2010
+ */
+
+
 #include "include/logging.h"
 #include "lib/safeclib.h"
 

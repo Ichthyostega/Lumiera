@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file handling-pattern.cpp
+ ** Implementation of pre-defined command handling patterns
+ ** @internal detail of the Proc-Layer command handling framework.
+ */
+
+
 
 #include "lib/error.hpp"
 #include "proc/control/handling-pattern.hpp"

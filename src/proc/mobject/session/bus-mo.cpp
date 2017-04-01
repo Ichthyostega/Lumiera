@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file bus-mo.cpp
+ ** Implementation details for a _processing pipe_ representation in the Session model
+ ** @todo stalled effort towards a session implementation from 2010
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #include "proc/mobject/session/bus-mo.hpp"
 
 namespace proc {

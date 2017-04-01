@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file video-display-widget.cpp
+ ** Implementation of video display, embedded into the UI.
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/xvdisplayer.hpp"
 #include "gui/output/gdkdisplayer.hpp"

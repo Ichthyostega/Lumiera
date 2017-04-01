@@ -21,6 +21,14 @@
 */
 
 
+/** @file element-query.hpp
+ ** Search and query services to discover contents of the session
+ ** 
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_ELEMENT_QUERY_H
 #define PROC_MOBJECT_SESSION_ELEMENT_QUERY_H
 

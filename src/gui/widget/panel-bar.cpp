@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file panel-bar.cpp
+ ** Implementation of a custom container widget to place toolbar buttons
+ ** into the active docking header area of GDL docking panels.
+ */
+
+
 #include "gui/widget/panel-bar.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/workspace/panel-manager.hpp"

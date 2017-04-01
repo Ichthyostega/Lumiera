@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file app-config-test.cpp
+ ** unit test \ref Appconfig_test
+ */
+
 
 
 #include "lib/test/run.hpp"

@@ -20,6 +20,11 @@
 
 */
 
+/** @file test-scope-invalid.hpp
+ ** Unit test helper to generate deliberately wrong placement scopes.
+ ** Usable to cover error handling related to QueryFocus and ScopePath
+ */
+
 
 #ifndef MOBJECT_SESSION_TEST_SCOPE_INVALID_H
 #define MOBJECT_SESSION_TEST_SCOPE_INVALID_H

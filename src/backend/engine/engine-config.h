@@ -21,6 +21,11 @@
 */
 
 
+/** @file engine-config.h
+ ** access point to configuration of engine parameters
+ */
+
+
 #ifndef BACKEND_ENGINE_ENGINE_CONFIG_H
 #define BACKEND_ENGINE_ENGINE_CONFIG_H
 

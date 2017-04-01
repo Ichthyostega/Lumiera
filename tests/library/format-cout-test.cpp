@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file format-cout-test.cpp
+ ** unit test \ref FormatCOUT_test
+ */
+
 
 #include "lib/test/run.hpp"
 

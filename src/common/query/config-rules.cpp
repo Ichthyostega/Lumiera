@@ -22,6 +22,12 @@
 * *****************************************************/
 
 
+/** @file config-rules.cpp
+ ** Implementation backend part for a configuration rules / query system.
+ ** @todo placeholder and mostly not implemented as of 11/2016
+ */
+
+
 #include "lib/error.hpp"
 #include "common/query.hpp"
 #include "common/config-rules.hpp"

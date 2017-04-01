@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file toolfactory.cpp
+ ** Implementation of factory functions for the tools used within the Builder
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
+ */
+
+
 #include "proc/mobject/builder/toolfactory.hpp"
 #include "lib/util.hpp"
 

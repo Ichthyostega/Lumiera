@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file duck-detector-test.cpp
+ ** unit test \ref DuckDetector_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/meta/duck-detector.hpp"

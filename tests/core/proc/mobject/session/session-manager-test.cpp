@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file sessionmanagertest.cpp
+ ** unit test \ref SessionManager_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"

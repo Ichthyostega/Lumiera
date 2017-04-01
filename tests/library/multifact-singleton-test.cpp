@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file multifact-singleton-test.cpp
+ ** unit test \ref MultiFactSingleton_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file advice-basics-test.cpp
+ ** unit test \ref AdviceBasics_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "common/advice.hpp"

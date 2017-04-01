@@ -21,6 +21,13 @@
 */
 
 
+/** @file clip.hpp
+ ** MObject in the Session to represent a clip on the timeline
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_CLIP_H
 #define PROC_MOBJECT_SESSION_CLIP_H
 

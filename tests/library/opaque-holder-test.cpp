@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file opaque-holder-test.cpp
+ ** unit test \ref OpaqueHolder_test
+ */
+
 
 
 #include "lib/test/run.hpp"

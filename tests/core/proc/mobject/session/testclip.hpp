@@ -20,6 +20,10 @@
 
 */
 
+/** @file testclip.hpp
+ ** A stub implementation of the Clip interface for unit testing
+ */
+
 
 #ifndef MOBJECT_SESSION_TESTCLIP_H
 #define MOBJECT_SESSION_TESTCLIP_H

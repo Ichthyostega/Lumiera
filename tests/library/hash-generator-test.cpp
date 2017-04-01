@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file hash-generator-test.cpp
+ ** unit test \ref HashGenerator_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

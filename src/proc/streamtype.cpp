@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file streamtype.cpp
+ ** Implementation of a _stream type_ framework
+ */
+
+
 #include "proc/streamtype.hpp"
 
 

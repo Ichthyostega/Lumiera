@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file advice-index-test.cpp
+ ** unit test \ref AdviceIndex_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/hash-value.h"

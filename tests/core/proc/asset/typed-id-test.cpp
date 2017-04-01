@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file typed-id-test.cpp
+ ** unit test \ref TypedID_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

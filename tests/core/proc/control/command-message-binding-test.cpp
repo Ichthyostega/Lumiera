@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-message-binding-test.cpp
+ ** unit test \ref CommandMessageBinding_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

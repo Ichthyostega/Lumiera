@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file allocation-cluster.cpp
+ ** Implementation of [memory management helper functions](\ref allocation-cluster.hpp)
+ ** for the render engine model. Here, in the actual translation unit, the generic part
+ ** of these functions is emitted, while the corresponding header provides a strictly
+ ** typed front-end, based on templates, which forward to the implementation eventually.
+ */
+
+
 #include "lib/allocation-cluster.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"

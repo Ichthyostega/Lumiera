@@ -21,6 +21,16 @@
 */
 
 
+/** @file specific-contents-query.hpp
+ ** Implementation facility to query and retrieve session context with filtering conditions.
+ ** Client code is assumed to use the QueryResolver front-end and the SessionServiceExploreScope
+ ** as access point.
+ ** 
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef MOBJECT_SESSION_SPECIFIC_CONTENTS_QUERY_H
 #define MOBJECT_SESSION_SPECIFIC_CONTENTS_QUERY_H
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file defs-manager-test.cpp
+ ** unit test \ref DefsManager_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/symbol.hpp"

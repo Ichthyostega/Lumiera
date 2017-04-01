@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file diff-list-generation-test.cpp
+ ** unit test \ref DiffListGeneration_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/diff/list-diff-detector.hpp"

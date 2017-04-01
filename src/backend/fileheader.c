@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file fileheader.c
+ ** Implementation of a common header format for working data files created
+ ** by the lumiera backend.
+ ** @todo development in this area is stalled since 2010
+ */
+
+
 #include "lib/tmpbuf.h"
 
 #include "backend/fileheader.h"

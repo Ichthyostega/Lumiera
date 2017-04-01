@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file stypemanager.cpp
+ ** Implementation functions of the stream type system
+ */
+
+
 #include "proc/common.hpp"
 #include "proc/control/stypemanager.hpp"
 #include "proc/control/styperegistry.hpp"

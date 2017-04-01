@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file generator-mo.cpp
+ ** @todo WIP implementation of player subsystem from 2011
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #include "proc/mobject/session/generator-mo.hpp"
 //#include "proc/assetmanager.hpp"
 //#include "proc/asset/media.hpp"

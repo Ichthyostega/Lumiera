@@ -21,6 +21,11 @@
 */
 
 
+/** @file auto.hpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_AUTO_H
 #define PROC_MOBJECT_SESSION_AUTO_H
 

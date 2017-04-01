@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file dummy-play-connection-test.cpp
+ ** unit test \ref DummyPlayConnection_test
+ */
+
 
 #include "lib/test/run.hpp"
 

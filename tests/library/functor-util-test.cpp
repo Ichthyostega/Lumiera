@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file functor-util-test.cpp
+ ** unit test \ref FunctorUtil_test
+ */
+
 
 
 #include "lib/test/run.hpp"

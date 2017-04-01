@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file scoped-collection-test.cpp
+ ** unit test \ref ScopedCollection_test
+ */
+
 
 
 #include "lib/test/run.hpp"

@@ -22,6 +22,12 @@
 * *****************************************************/
 
 
+/** @file dummy-image-generator.cpp
+ ** Implementation of a generator for dummy video frames for a mockup
+ ** @todo obsolete since 2010, can be removed once we have a real player in the UI
+ */
+
+
 #include "proc/engine/worker/dummy-image-generator.hpp"
 
 

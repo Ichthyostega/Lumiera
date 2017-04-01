@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file scoped-ptrvect-test.cpp
+ ** unit test \ref ScopedPtrVect_test
+ */
+
 
 
 #include "lib/test/run.hpp"

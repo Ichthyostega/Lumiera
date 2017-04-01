@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file optional-ref-test.cpp
+ ** unit test \ref OptionalRef_test
+ */
+
 
 
 #include "lib/test/run.hpp"

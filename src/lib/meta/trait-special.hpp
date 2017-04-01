@@ -21,6 +21,19 @@
 */
 
 
+/** @file trait-special.hpp
+ ** Rarely used specialisations of otherwise heavily used generic code.
+ ** Over time, we've established a set of tiny (meta)programming helpers, used
+ ** pervasively all over the code base. Such widely used (header) includes incur
+ ** the danger to increase compilation time and code size, and thus we spent some
+ ** effort on optimising the dependencies of these headers. Typically, such
+ ** analyse reveals some obscure and rare extension, which, while used occasionally,
+ ** maybe even only once, would cause some increase in the "include size profile".
+ ** 
+ ** The obvious remedy is to move those into a separate header.
+ */
+
+
 #ifndef LIB_META_TRAIT_SPECIAL_H
 #define LIB_META_TRAIT_SPECIAL_H
 

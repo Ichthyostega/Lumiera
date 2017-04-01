@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file tree-mutator-binding-test.cpp
+ ** unit test \ref TreeMutatorBinding_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"

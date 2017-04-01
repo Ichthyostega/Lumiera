@@ -21,6 +21,13 @@
 */
 
 
+/** @file scoped-holder-transfer.hpp
+ ** A mechanism to take ownership without allowing copy.
+ ** @deprecated obsolete concept, superseded by C++11 rvalue references
+ ** @todo expunge this!
+ */
+
+
 
 #ifndef LIB_SCOPEDHOLDER_TRANSFER_H
 #define LIB_SCOPEDHOLDER_TRANSFER_H

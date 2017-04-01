@@ -22,7 +22,10 @@
 
 
 /** @file config-lookup.c
+ ** Implementation draft for a configuration system (2008).
  ** Implementation of the lookup of configuration keys
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
  */
 
 

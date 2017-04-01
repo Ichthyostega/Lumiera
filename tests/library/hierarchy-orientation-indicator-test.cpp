@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file hierarchy-orientation-indicator-test.cpp
+ ** unit test \ref HierarchyOrientationIndicator_test
+ */
+
 
 #include "lib/test/run.hpp"
 

@@ -29,6 +29,11 @@
  ** 
  */
 
+/** @file notification-service.cpp
+ ** @todo write documentation for the notification service
+ */
+
+
 #include "gui/notification-service.hpp"
 #include "include/logging.h"
 #include "lib/depend.hpp"

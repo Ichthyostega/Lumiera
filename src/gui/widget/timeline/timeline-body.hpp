@@ -22,6 +22,7 @@
 
 /** @file timeline-body.hpp
  ** This file contains the definition of timeline body widget
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 #ifndef GUI_WIDGET_TIMELINE_BODY_H

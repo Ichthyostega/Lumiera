@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file segmentation-datastructure-test.cpp
+ ** unit test \ref SegmentationDatastructure_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

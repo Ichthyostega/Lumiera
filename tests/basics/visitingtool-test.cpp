@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file visitingtool-test.cpp
+ ** unit test \ref VisitingTool_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/visitor.hpp"

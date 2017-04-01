@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file button-bar.cpp
+ ** Implementation of a toolbar with buttons for use in dialogs.
+ */
+
+
 #include "gui/widget/button-bar.hpp"
 #include "include/logging.h"
 

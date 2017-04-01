@@ -21,6 +21,12 @@
 */
 
 
+/** @file timeline-view-window.hpp
+ ** Helper to manage the timeline window, which holds the main timeline display.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 
 #ifndef GUI_WIDGET_TIMELINE_VIEW_WINDOW_H
 #define GUI_WIDGET_TIMELINE_VIEW_WINDOW_H

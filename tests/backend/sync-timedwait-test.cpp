@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file sync-timedwait-test.cpp
+ ** unit test \ref SyncTimedwait_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

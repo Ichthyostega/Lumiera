@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file time-grid-basics-test.cpp
+ ** unit test \ref TimeGridBasics_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

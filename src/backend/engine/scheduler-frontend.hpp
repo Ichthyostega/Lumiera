@@ -21,6 +21,12 @@
 */
 
 
+/** @file scheduler-frontend.hpp
+ ** Scheduler service access point for higher layers.
+ ** @todo WIP unfinished since 9/2013
+ */
+
+
 #ifndef BACKEND_ENGINE_SCHEDULER_FRONTEND_H
 #define BACKEND_ENGINE_SCHEDULER_FRONTEND_H
 

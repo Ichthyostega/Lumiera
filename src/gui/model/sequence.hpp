@@ -21,10 +21,12 @@
 */
 
 /** @file sequence.hpp
- ** The GUI-Model representation of an editable sequence.
- ** @todo Currently (1/2014) this is a dummy placeholder, but later on
- **       the GUI-Model entities will be connected to the Session model
- **       through the use of PlacementRef
+ ** Preliminary UI-model: representation of an editable sequence.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
+ ** 
+ ** @todo Currently (1/2014) this is a dummy placeholder, intention is
+ **       to connect GUI-Model entities to the Session model eventually.
  */
 
 

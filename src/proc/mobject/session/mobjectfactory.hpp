@@ -21,6 +21,14 @@
 */
 
 
+/** @file mobjectfactory.hpp
+ ** Core factory to generate media objects for use in the Session model.
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework.
+ **       In fact I am quite unhappy with the shape of this code
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
 #define PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
 

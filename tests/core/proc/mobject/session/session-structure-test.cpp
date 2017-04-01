@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file session-structure-test.cpp
+ ** unit test \ref SessionStructure_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"

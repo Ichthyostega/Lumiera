@@ -21,6 +21,15 @@
 */
 
 
+/** @file renderstate.hpp
+ ** Build and prepare the render state abstraction.
+ ** The intention was to rely later, during the actual rendering, on the
+ ** setup prepared here
+ ** @deprecated stalled design draft from 2008 -- especially the part regarding RenderSate
+ **             will likely be implemented in a different way
+ */
+
+
 #ifndef MOBJECT_BUILDER_RENDERSTATE_H
 #define MOBJECT_BUILDER_RENDERSTATE_H
 
@@ -37,7 +46,7 @@ namespace builder {
   
   /**
    * Encapsulates the logic used to get a "render process".
-   * The provided StateProxy serves to hold any mutalbe state used
+   * The provided StateProxy serves to hold any mutable state used
    * in the render process, so the rest of the render engine 
    * can be stateless.
    * @todo probably the state management will work different (6/08)
@@ -51,4 +60,4 @@ namespace builder {
   
   
 }}} // namespace proc::mobject::session
-#endif
+#endif /*MOBJECT_BUILDER_RENDERSTATE_H*/

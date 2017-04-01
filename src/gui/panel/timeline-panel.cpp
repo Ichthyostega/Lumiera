@@ -22,7 +22,7 @@
 
 
 /** @file timeline-panel.cpp
- ** Implementation of dockable timeline container.
+ ** Implementation of the dockable panel to hold the main timeline display.
  ** 
  ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
  ** @todo build a new timeline widget, connected to the UI-Bus

@@ -28,6 +28,9 @@
  ** planned in 2008).
  ** 
  ** @note this is unfinished work, development in this area stalled in 2008
+ ** @warning since 2012 it is not clear if we retain this kind of configuration system.
+ ** @todo as of 2016, the code is still there in same unfinished shape and basically unused
+ ** 
  ** @see config.h
  */
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file query-text-test.cpp
+ ** unit test \ref QueryText_test
+ */
+
 
 
 #include "lib/test/run.hpp"

@@ -30,7 +30,7 @@
  ** each specifying a binding, they can be paired up if any condition included into the binding
  ** holds true for both sides.
  ** 
- ** Typically, a binding includes a \em type-guard predicate \c advice.type.xx where \c xx is an 
+ ** Typically, a binding includes a _type-guard predicate_ `advice.type.xx` where `xx` is an
  ** identifier denoting a type used within an instantiation of the Advice collaboration, i.e. a type
  ** used as advice value in a instantiation of the PointOfAdvice<AD> template. Besides the type guard,
  ** a binding may narrow down the topic of the advice by providing further predicates. This allows for
@@ -41,7 +41,7 @@
  ** the advice type, and another client entity (the advised entity) could pick up this value
  ** without the need to now anything about the advisor.
  ** 
- ** \par implementation notes
+ ** # implementation notes
  ** Any binding will be normalised prior to further processing. This normalisation is based
  ** on ordering by predicate symbol and arity. Patterns just comprised of constant symbols
  ** (nullary atoms) can even be condensed into a single hash value, which allows for fast
@@ -56,7 +56,7 @@
  ** functor, the full pattern definition can be discarded.
  ** 
  ** @remarks while binding is defined in the context of the advice system for now,
- **       obviously this is the foundation of a more generic system to deal with predicate terms. 
+ **       obviously this is the foundation of a more generic system to deal with predicate terms.
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
  **       at various places within proc-layer.

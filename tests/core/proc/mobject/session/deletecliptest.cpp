@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file deletecliptest.cpp
+ ** unit test \ref DeleteClip_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/assetmanager.hpp"

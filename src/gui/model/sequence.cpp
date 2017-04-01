@@ -20,6 +20,13 @@
 
 * *****************************************************/
 
+
+/** @file sequence.cpp
+ ** Preliminary UI-model: implementation of an editable sequence.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
+ */
+
 #include "gui/model/sequence.hpp"
 #include "include/logging.h"
 

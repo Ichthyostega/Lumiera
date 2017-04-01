@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file configentry.c
+ ** Draft for a configuration system (2008).
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
+ */
+
+
 #include "lib/safeclib.h"
 #include "common/configentry.h"
 

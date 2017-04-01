@@ -21,6 +21,15 @@
 * *****************************************************/
 
 
+/** @file locatingpin.cpp
+ ** Implementation of the query resolving mechanics within a Placement.
+ ** All MObject entities within the session are attached via Placement,
+ ** and each such Placement holds a list of _constraints,_ represented as LocatingPin.
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/locatingpin.hpp"

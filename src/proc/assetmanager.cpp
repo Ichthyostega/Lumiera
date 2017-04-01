@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file assetmanager.cpp
+ ** Implementation of Asset lookup and organisation functions
+ */
+
+
 #include "proc/assetmanager.hpp"
 #include "proc/asset/db.hpp"
 

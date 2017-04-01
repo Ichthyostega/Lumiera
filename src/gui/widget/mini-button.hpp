@@ -21,6 +21,11 @@
 */
 
 
+/** @file mini-button.hpp
+ ** Adapter to wrap button widgets intended to serve as tool buttons
+ */
+
+
 
 #ifndef GUI_WIDGET_MINI_BUTTON_H
 #define GUI_WIDGET_MINI_BUTTON_H

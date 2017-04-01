@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file calc-plan-continuation.cpp
+ ** Implementation elements of render process planning.
+ ** @todo a draft created in 2013 and then stalled. This is not obsolete.
+ */
+
+
 #include "proc/engine/calc-plan-continuation.hpp"
 #include "proc/engine/frame-coord.hpp"
 #include "proc/engine/job-ticket.hpp"

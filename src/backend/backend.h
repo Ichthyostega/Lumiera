@@ -21,6 +21,11 @@
 */
 
 
+/** @file backend.h
+ ** Lumiera Backend: global initialisation and definitions.
+ */
+
+
 #ifndef BACKEND_BACKEND_H
 #define BACKEND_BACKEND_H
 

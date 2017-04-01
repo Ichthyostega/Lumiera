@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file memento-tie-test.cpp
+ ** unit test \ref MementoTie_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

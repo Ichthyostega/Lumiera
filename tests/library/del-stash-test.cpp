@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file del-stash-test.cpp
+ ** unit test \ref DelStash_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/del-stash.hpp"

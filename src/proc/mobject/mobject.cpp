@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file mobject.cpp
+ ** Top level implementation functions globally relevant to the session model
+ */
+
+
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
 #include "lib/time/timevalue.hpp"

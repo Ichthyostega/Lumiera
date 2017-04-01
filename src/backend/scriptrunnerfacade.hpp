@@ -21,6 +21,14 @@
 */
 
 
+/** @file scriptrunnerfacade.hpp
+ ** Global control interface for script driven operation of Lumiera.
+ ** 
+ ** @todo this just documents a vague plan. We won't be able to implement
+ **       anything of that kind for the foreseeable future as of 1/2017
+ */
+
+
 #ifndef BACKEND_INTERFACE_SCRIPTRUNNERFACADE_H
 #define BACKEND_INTERFACE_SCRIPTRUNNERFACADE_H
 

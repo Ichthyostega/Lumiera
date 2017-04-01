@@ -21,15 +21,29 @@
 */
 
 
-#ifndef MOBJECT_BUILDERFACADE_H
-#define MOBJECT_BUILDERFACADE_H
+/** @file builderfacade.hpp
+ ** Proc-Layer Facade: access to the Builder.
+ ** The Builder walks the Session model to compile a corresponding render node network.
+ ** 
+ ** @todo as of 2016 the builder, as the most crucial component within the architecture,
+ **       still remains to be addressed. While we'd hoped to get ahead faster, it is considered
+ **       a good idea not to decide upon the implementation based on assumptions.
+ **       We will start building the builder "when it is ready"
+ */
 
+
+#ifndef PROC_MOBJECT_BUILDERFACADE_H
+#define PROC_MOBJECT_BUILDERFACADE_H
+
+#include "lib/error.hpp"
 #include "proc/mobject/builder/common.hpp"
-#include "proc/engine/renderengine.hpp"
 
 
 namespace proc {
 namespace mobject {
+  namespace session {
+    class Fixture;
+  }
   
   LUMIERA_ERROR_DECLARE (BUILDER_LIFECYCLE);  ///< Builder activated while in non operational state
   
@@ -42,17 +56,10 @@ namespace mobject {
   class BuilderFacade
     {
     public:
-      /**
-       * Main Operation of the Builder:
-       * create a render engine for a given part of the timeline
-       * @deprecated thats a placeholder! the real invocation is now
-       *             in the course of being worked out ////////////TODO 12/2010
-       */
-      engine::RenderEngine & buildEngine () ;
-      // TODO: allocation, GC??????
+      session::Fixture & rebuildFixture ();
     };
   
   
   
 }} // namespace proc::mobject
-#endif
+#endif /*PROC_MOBJECT_BUILDERFACADE_H*/

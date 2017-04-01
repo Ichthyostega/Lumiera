@@ -21,6 +21,11 @@
 */
 
 
+/** @file maybe-compare.hpp
+ ** helpers for fail-safe invocation of comparison operations from generic code.
+ */
+
+
 #ifndef LIB_META_MAYBE_COMPARE_H
 #define LIB_META_MAYBE_COMPARE_H
 

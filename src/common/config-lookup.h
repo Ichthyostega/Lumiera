@@ -21,6 +21,19 @@
 */
 
 
+/** @file config-lookup.h
+ ** Lookup of configuration keys in a low-level configuration system.
+ ** Configuration keys are dynamically stored in a splay tree.
+ ** This happens for defaults, loaded config files and entries which are set explicitly.
+ ** The system maintains no central registry of all possible keys.
+ ** We store here the full keys of config entries as well as the keys of section prefixes.
+ ** Section prefixes are stored with a trailing dot to disambiguate them from entry keys.
+ ** 
+ ** @warning since 2012 it is not clear if we retain this kind of configuration system.
+ ** @todo as of 2016, the code is still there but remains mostly unused
+ */
+
+
 #ifndef COMMON_CONFIG_LOOKUP_H
 #define COMMON_CONFIG_LOOKUP_H
 
@@ -37,21 +50,11 @@ typedef lumiera_config_lookupentry* LumieraConfigLookupentry;
 
 #include "common/configitem.h"
 
-
 #include <nobug.h>
 
 
-/**
- * @file
- * Lookup of configuration keys. Configuration keys are dynamically stored in a splay tree.
- * This happens for defaults, loaded config files and entries which are set explicitly.
- * The system maintains no central registry of all possible keys.
- * We store here the full keys of config entries as well as the keys of section prefixes.
- * Section prefixes are stored with a trailing dot to disambiguate them from entry keys.
- */
-
-
 LUMIERA_ERROR_DECLARE (CONFIG_LOOKUP);
+
 
 /**
  * Just contains a hashtable to give sufficient abstraction.

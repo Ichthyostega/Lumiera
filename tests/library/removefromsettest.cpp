@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file removefromsettest.cpp
+ ** unit test \ref RemoveFromSet_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util-foreach.hpp"

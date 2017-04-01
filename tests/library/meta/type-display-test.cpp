@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file type-display-test.cpp
+ ** unit test \ref TypeDisplay_test
+ */
+
 
 #include "lib/test/run.hpp"
 

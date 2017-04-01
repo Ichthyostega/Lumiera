@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file digxel-configurations-test.cpp
+ ** unit test \ref DigxelConfigurations_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

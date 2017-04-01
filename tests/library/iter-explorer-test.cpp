@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iter-explorer-test.cpp
+ ** unit test \ref IterExplorer_test
+ */
+
 
 
 #include "lib/test/run.hpp"

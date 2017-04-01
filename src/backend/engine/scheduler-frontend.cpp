@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file scheduler-frontend.cpp
+ ** Scheduler service implementation
+ */
+
+
 #include "lib/error.h"
 #include "backend/engine/scheduler-frontend.hpp"
 

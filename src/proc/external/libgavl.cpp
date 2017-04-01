@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file libgavl.cpp
+ ** Implementation details of using the GAVL library for processing
+ ** @todo 2016 evaluate if libGAVL is still active and maintained
+ */
+
+
 #include "proc/common.hpp"
 #include "proc/external/libgavl.hpp"
 #include "proc/control/stypemanager.hpp"
@@ -52,9 +58,9 @@ namespace external {
   
   /** 
    * Use an type information struct, which actually has to be 
-   * a GAVL frametype (TODO), to wire up an ImplFacade such 
+   * a GAVL frame type (TODO), to wire up an ImplFacade such
    * as to deal with GAVL data frames of this type.
-   * @todo fill in the acutal GAVL frame type 
+   * @todo fill in the actual GAVL frame type
    * @todo how to distinguish the audio and the video case?
    */
   ImplFacadeGAVL const&

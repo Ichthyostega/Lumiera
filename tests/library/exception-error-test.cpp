@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file exceptionerrortest.cpp
+ ** unit test \ref ExceptionError_test
+ */
+
 
 
 #include "lib/error.h"

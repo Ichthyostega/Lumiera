@@ -20,6 +20,10 @@
 
 */
 
+/** @file dummy-job.hpp
+ ** Unit test helper to generate dummy render jobs
+ */
+
 
 #ifndef BACKEND_ENGINE_DUMMY_JOB_H
 #define BACKEND_ENGINE_DUMMY_JOB_H

@@ -19,6 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file lockerror.h
+ ** definitions and declarations for error-handling on low-level locking
+ */
+
 #ifndef LUMIERA_LOCKERRORS_H
 #define LUMIERA_LOCKERRORS_H
 

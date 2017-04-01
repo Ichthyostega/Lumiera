@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file timeline-ruler.cpp
+ ** The ruler at the top of the timeline display to represent the time axis.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-ruler.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/workspace/style-manager.hpp"

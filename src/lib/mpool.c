@@ -19,6 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file mpool.c
+ ** Implementation of pooling memory allocation functions for constant sized objects.
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>

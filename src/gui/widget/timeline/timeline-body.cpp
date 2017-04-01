@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file timeline-body.cpp
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-body.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/workspace/style-manager.hpp"

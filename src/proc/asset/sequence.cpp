@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file sequence.cpp
+ ** Implementation parts of the Sequence entity within the Session model
+ */
+
+
 #include "proc/asset/sequence.hpp"
 //#include "proc/mobject/session/fork.hpp"
 #include "proc/assetmanager.hpp"

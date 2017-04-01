@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file query-resolver-test.cpp
+ ** unit test \ref QueryResolver_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

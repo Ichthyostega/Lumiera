@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file genfunc.cpp
+ ** Implementation of generic functions to build identification schemes.
+ */
+
+
 #include "lib/idi/genfunc.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"

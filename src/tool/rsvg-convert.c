@@ -24,6 +24,14 @@
 * *****************************************************/
 
 
+/** @file rsvg-convert.c
+ ** Invoke the rSVG library to render SVG vector graphics with the help of Cairo.
+ ** @note This tool is tightly integrated into the Lumiera build process in order
+ **       to render icons and UI decorations designed as vector graphics, for those
+ **       cases where it is beneficial to use bitmap graphics within the UI toolkit.
+ */
+
+
 #ifndef N_
 #define N_(X) X
 #endif

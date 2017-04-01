@@ -20,6 +20,12 @@
 
 * *****************************************************/
 
+/** @file test-interfaces.c
+ ** C unit test to cover the basics of our interface and plugin-loading system
+ ** @see interface.h
+ ** @see interfaceregistry.h
+ */
+
 
 #include "common/interface.h"
 #include "common/interfaceregistry.h"
@@ -28,7 +34,7 @@
 #include "common/config-interface.h"
 
 #include "lib/test/test.h"
-#include "interface/say_hello.h"
+#include "interface/say-hello.h"
 
 /*
   define 2 example interfaces

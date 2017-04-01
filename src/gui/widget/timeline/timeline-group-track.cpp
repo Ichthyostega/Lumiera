@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file timeline-group-track.cpp
+ ** @deprecated to be replaced by a different implementation approach
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-group-track.hpp"
 #include "gui/widget/timeline-widget.hpp"
 

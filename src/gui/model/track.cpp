@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file track.cpp
+ ** Preliminary UI-model: Implementation for the track timeline objects.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
+ ** @deprecated the existing timeline implementation will be completely rewritten
+ */
+
+
 #include "gui/model/track.hpp"
 #include "gui/model/parent-track.hpp"
 

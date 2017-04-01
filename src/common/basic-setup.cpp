@@ -21,6 +21,18 @@
 * *****************************************************/
 
 
+/** @file basic-setup.cpp
+ ** Implementation of self-configuration and bootstrap functionality.
+ ** This allows the application to "find its parts" at startup.
+ ** @note as of 2016, BasicSetup::BasicSetup(string) also reads
+ **       and evaluates a simple `*.ini` file to provide a
+ **       preliminary mechanism for application configuration.
+ **       This implementation is based on Boost program options
+ ** 
+ ** @see searchpath.hpp
+ */
+
+
 #include "common/basic-setup.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/error.hpp"

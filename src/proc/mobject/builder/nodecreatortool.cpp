@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file nodecreatortool.cpp
+ ** Implementation of visitor logic to actually build the render node network
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
+ */
+
+
+#include "lib/error.hpp"
 #include "proc/mobject/builder/nodecreatortool.hpp"
 
 
@@ -43,24 +50,28 @@ namespace builder {
   void
   NodeCreatorTool::treat (Buildable& something)
   {
+    UNIMPLEMENTED ("the builder tool...");
   }
 
 
   void
   NodeCreatorTool::treat (Clip& clip)
   {
+    UNIMPLEMENTED ("the builder tool...");
   }
 
 
   void
   NodeCreatorTool::treat (Effect& effect)
   {
+    UNIMPLEMENTED ("the builder tool...");
   }
 
 
   void
   NodeCreatorTool::treat (Auto<double>& automation)
   {
+    UNIMPLEMENTED ("the builder tool...");
   }
   
   

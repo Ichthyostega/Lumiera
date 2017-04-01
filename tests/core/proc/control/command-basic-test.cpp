@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-basic-test.cpp
+ ** unit test \ref CommandBasic_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/control/command-def.hpp"

@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file timeline-layout-helper.cpp
+ ** Preliminary implementation of Timeline presentation, layout helper.
+ ** @deprecated as of 2016 this class will become obsolete and replaced by a different implementation approach
+ */
+
+
 #include "gui/widget/timeline/timeline-layout-helper.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/model/sequence.hpp"

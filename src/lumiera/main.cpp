@@ -22,6 +22,11 @@
 */
 
 
+/** @file main.cpp
+ ** Lumiera application main function
+ */
+
+
 #include "include/logging.h"
 #include "lib/error.hpp"
 #include "common/appstate.hpp"

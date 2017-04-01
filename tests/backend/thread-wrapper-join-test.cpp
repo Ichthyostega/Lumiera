@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file thread-wrapper-join-test.cpp
+ ** unit test \ref ThreadWrapperJoin_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

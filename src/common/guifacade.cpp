@@ -21,6 +21,16 @@
 * *****************************************************/
 
 
+/** @file guifacade.cpp
+ ** Implementation of the GUI loader. Code generated from this
+ ** translation unit is linked into the core application, where it implements
+ ** the [Subsystem descriptor](subsys.hpp) for the _UI Subsystem._ When main()
+ ** activates and starts this subsystem, an instance of gui::GuiRunner will be
+ ** created, which causes the Lumiera UI plug-in to be loaded and a new thread
+ ** to be spawned, which launches the UI and performs the event loop.
+ */
+
+
 #include "gui/guifacade.hpp"
 #include "include/gui-notification-facade.h"
 #include "lib/sync.hpp"

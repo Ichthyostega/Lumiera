@@ -21,6 +21,13 @@
 */
 
 
+/** @file db.hpp
+ ** Implementation of the _Asset database_.
+ ** Simplistic hash based lookup-table.
+ ** @internal implementation details of the AssetManager
+ */
+
+
 #ifndef ASSET_DB_H
 #define ASSET_DB_H
 

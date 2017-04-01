@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file placement.cpp
+ ** Implementation functions belonging to the Placement entity
+ */
+
+
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/mobject.hpp"

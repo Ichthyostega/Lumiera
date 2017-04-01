@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file testasset.cpp
+ ** Implementation of a mocked Asset for unit tests
+ */
+
 
 #include "proc/asset/testasset.hpp"
 #include "proc/assetmanager.hpp"

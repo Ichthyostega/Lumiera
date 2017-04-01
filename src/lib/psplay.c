@@ -21,6 +21,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file psplay.c
+ ** Probabilistic splay tree implementation
+ */
+
 #include "include/logging.h"
 #include "lib/psplay.h"
 

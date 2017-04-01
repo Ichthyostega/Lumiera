@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file diff-list-application-test.cpp
+ ** unit test \ref DiffListApplication_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/diff/list-diff-application.hpp"

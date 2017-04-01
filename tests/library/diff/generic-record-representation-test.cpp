@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file generic-record-representation-test.cpp
+ ** unit test \ref GenericRecordRepresentation_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file name-chooser.cpp
+ ** Implementation details of NameChooser,
+ ** a dialog to enter a name string.
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/dialog/name-chooser.hpp"
 #include "gui/dialog/dialog.hpp"

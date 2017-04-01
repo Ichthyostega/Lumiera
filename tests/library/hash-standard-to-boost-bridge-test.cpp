@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file hash-standard-to-boost-bridge-test.cpp
+ ** unit test \ref HashStandardToBoostBridge_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/hash-standard.hpp"

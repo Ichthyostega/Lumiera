@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file timeline-track.cpp
+ ** A group track in the first draft version of the timeline display.
+ ** @todo as of 2016 this is about to be replaced by a new implementation approach
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/workspace/style-manager.hpp"

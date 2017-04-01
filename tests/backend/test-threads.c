@@ -20,6 +20,14 @@
 
 * *****************************************************/
 
+/** @file test-threads.c
+ ** C unit test to cover thread handling helpers
+ ** Especially, we rely on a specific setup for threads, which allows
+ ** to manage worker threads in a threadpool
+ ** @see threads.h
+ ** @see test-threadpool.c
+ */
+
 
 //#include <stdio.h>
 //#include <string.h>

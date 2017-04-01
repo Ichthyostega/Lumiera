@@ -21,6 +21,13 @@
 */
 
 
+/** @file query-focus-stack.hpp
+ ** Implementation facility to work with and navigate nested scopes
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 #define MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 
@@ -47,7 +54,7 @@ namespace session {
    * a boost::intrusive_ptr, which stores the ref-count within
    * the mentioned ScopePath frames located in the stack.
    * 
-   * \par automatic cleanup of unused frames
+   * ## automatic cleanup of unused frames
    * 
    * The stack is aware of this ref-counting mechanism and will --
    * on each access -- automatically clean up any unused frames starting
@@ -194,4 +201,4 @@ namespace session {
   
   
 }}} // namespace mobject::session
-#endif
+#endif /*MOBJECT_SESSION_QUERY_FOCUS_STACK_H*/

@@ -21,7 +21,7 @@
 */
 
 /** @file render-configurator.hpp
- ** Strategy holding all the detail knowledge necessary to establish
+ ** Strategy to hold all the detail knowledge necessary to establish
  ** a running render CalculationStream. 
  ** 
  ** @see engine::EngineService

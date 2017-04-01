@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file play-process.cpp
+ ** Implementation to organise an ongoing playback/rendering process
+ */
+
+
 #include "proc/play/play-process.hpp"
 #include "proc/play/play-service.hpp"
 #include "proc/play/render-configurator.hpp"

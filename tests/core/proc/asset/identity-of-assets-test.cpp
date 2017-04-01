@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file identityofassetstest.cpp
+ ** unit test \ref IdentityOfAssets_test
+ */
+
 
 #include "include/logging.h"
 #include "lib/test/run.hpp"

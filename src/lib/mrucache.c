@@ -19,6 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file mrucache.c
+ ** Implementation of a caching by most recent use.
+ */
+
 #include "lib/safeclib.h"
 #include "lib/mrucache.h"
 

@@ -21,23 +21,34 @@
 */
 
 
-#ifndef ENGINE_MASK_H
-#define ENGINE_MASK_H
+/** @file mask.hpp
+ ** Specialised render node for generating mask (alpha channel) data.
+ ** @todo this file is there since the very first code generation steps at start
+ **       of the Lumiera project. It never became clear if a mask generator would
+ **       need to be a dedicated ProcNode subclass; but in fact the project did
+ **       not reach the point of implementing anything regarding that topic.
+ */
+
+
+#ifndef PROC_ENGINE_MASK_H
+#define PROC_ENGINE_MASK_H
 
 #include "proc/engine/procnode.hpp"
 
 
 
 namespace proc {
-namespace engine
-  {
-
-
-  class Mask : public ProcNode
-    {};
-
-
-
-
+namespace engine{
+  
+  
+  class Mask
+    : public ProcNode
+    {
+    public:
+      Mask (WiringDescriptor const&);
+    };
+  
+  
+  
 }} // namespace proc::engine
-#endif
+#endif /*PROC_ENGINE_MASK_H*/

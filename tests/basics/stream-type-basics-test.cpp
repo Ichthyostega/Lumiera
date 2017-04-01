@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file streamtypebasicstest.cpp
+ ** unit test \ref StreamTypeBasics_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

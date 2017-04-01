@@ -21,6 +21,12 @@
 */
 
 
+/** @file allocation.hpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet...
+ ** @deprecated WTF? looks like a leftover of some early brainstorming...
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_ALLOCATION_H
 #define PROC_MOBJECT_SESSION_ALLOCATION_H
 

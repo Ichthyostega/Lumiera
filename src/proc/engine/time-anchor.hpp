@@ -21,6 +21,18 @@
 */
 
 
+/** @file time-anchor.hpp
+ ** Representation of a _continuation point_ for planning the render process.
+ ** In the Lumiera engine, render and playback processes are modelled as infinite streams,
+ ** which are evaluated chunk wise. The TimeAnchor is used to mark a point, where the
+ ** _planning_ of further render jobs will be picked up and continued later on
+ ** 
+ ** @todo this is part of an implementation draft from 2013,
+ **       to create a complete outline of player and render job generation.
+ ** @todo as of 2016 this effort is stalled, but remains valid
+ */
+
+
 #ifndef PROC_ENGINE_TIME_ANCHOR_H
 #define PROC_ENGINE_TIME_ANCHOR_H
 
@@ -57,7 +69,7 @@ namespace engine {
    * the TimeAnchor closure is the definitive binding between the abstract logical time of the
    * session timeline, and the real wall-clock time forming the deadline for rendering.
    * 
-   * \par internals
+   * ## internals
    * The time anchor associates a nominal time, defined on the implicit time grid
    * of some given Timings, with an actual wall clock time. Due to the usage situation,
    * the TimeAnchor takes on the secondary meaning of a breaking point; everything \em before

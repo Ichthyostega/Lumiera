@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file verb-function-dispatch-test.cpp
+ ** unit test \ref VerbFunctionDispatch_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/verb-token.hpp"

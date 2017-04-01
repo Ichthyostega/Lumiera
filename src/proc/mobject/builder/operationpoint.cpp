@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file operationpoint.cpp
+ ** Implementation of primitive builder operations on at the _current point of operation_.
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
+ */
+
+
 #include "proc/mobject/builder/operationpoint.hpp"
 #include "proc/engine/procnode.hpp"
 #include "proc/asset/media.hpp"

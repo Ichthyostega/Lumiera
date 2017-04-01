@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file calc-stream-test.cpp
+ ** unit test \ref CalcStream_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

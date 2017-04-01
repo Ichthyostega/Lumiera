@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file typed-lookup.cpp
+ ** Implementation backend for a registration service to associate IDs, types and object instances
+ ** @todo this is placeholder code for an important facility, required once we engage into
+ **       predicate rules based configuration. For now (as of 2016), efforts towards this important
+ **       goal have been postponed, because we have to focus on a working engine first
+ */
+
+
 #include "proc/asset/typed-id.hpp"
 
 

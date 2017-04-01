@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file test-dummy-commands.cpp
+ ** Implementation of dummy command operations for unit tests
+ */
+
 
 #include "proc/control/test-dummy-commands.hpp"
 #include "proc/control/command-def.hpp"

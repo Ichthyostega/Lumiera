@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file preview.cpp
+ ** Implementation details regarding a placeholder / "Proxy" / preview media asset
+ */
+
+
 #include "proc/asset/preview.hpp"
 
 namespace proc {

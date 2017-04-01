@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-mutation-test.cpp
+ ** unit test \ref CommandMutation_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

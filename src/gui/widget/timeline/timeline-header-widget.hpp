@@ -21,6 +21,12 @@
 */
 
 
+/** @file timeline-header-widget.hpp
+ ** Widget to generate the timeline header
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #ifndef GUI_WIDGET_HEADER_WIDGET_H
 #define GUI_WIDGET_HEADER_WIDGET_H
 

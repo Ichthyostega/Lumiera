@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file singleton-testmock-test.cpp
+ ** unit test \ref SingletonTestMock_test
+ */
+
 
 
 #include "lib/test/run.hpp"

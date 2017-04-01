@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file hash-indexed-test.cpp
+ ** unit test \ref HashIndexed_test
+ */
+
 
 #include "lib/test/run.hpp"
 

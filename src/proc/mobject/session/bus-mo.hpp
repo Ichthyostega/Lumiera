@@ -21,6 +21,16 @@
 */
 
 
+/** @file bus-mo.hpp
+ ** MObject in the Session to represent a processing pipe.
+ ** Within the Session model, Pipes are conceptual entities, which do not correspond
+ ** 1:1 to some render nodes, but rather help the _user_ to organise the processing steps
+ ** required to get some piece of the film into desired shape
+ ** @todo stalled effort towards a session implementation from 2010
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_BUS_MO_H
 #define PROC_MOBJECT_SESSION_BUS_MO_H
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-binding-test.cpp
+ ** unit test \ref CommandBinding_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/control/command-def.hpp"

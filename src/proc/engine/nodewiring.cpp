@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file nodewiring.cpp
+ ** Implementation of node wiring to build a render node network
+ ** @todo unfinished draft from 2009 regarding the render process
+ */
+
+
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/nodeoperation.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iter-source-test.cpp
+ ** unit test \ref IterSource_test
+ */
+
 
 
 #include "lib/test/run.hpp"

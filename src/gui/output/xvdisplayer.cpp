@@ -23,6 +23,16 @@
 * *****************************************************/
 
 
+/** @file xvdisplayer.cpp
+ ** Implementation of video output via XVideo
+ ** @warning as of 2016 it is not clear, if this code will be
+ **          evolved into the actual display facility, or be
+ **          replaced and rewritten, when we're about to 
+ **          create a functional video display connected
+ **          to the render engine. 
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/xvdisplayer.hpp"
 #include "include/logging.h"

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file asset.cpp
+ ** Default implementation of the [Asset abstraction](\ref asset.hpp)
+ */
+
+
 #include "proc/asset.hpp"
 #include "proc/assetmanager.hpp"
 #include "lib/format-string.hpp"

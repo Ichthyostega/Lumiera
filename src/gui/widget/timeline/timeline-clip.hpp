@@ -22,6 +22,7 @@
 
 /** @file timeline-clip.hpp
  ** Representation of a clip on the timeline
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 #ifndef GUI_WIDGET_TIMELINE_CLIP_H

@@ -21,6 +21,13 @@
 */
 
 
+/** @file binding.hpp
+ ** MObject in session to represent the top-level binding of a sequence
+ ** @todo stalled effort towards a session implementation from 2010
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_BINDING_H
 #define PROC_MOBJECT_SESSION_BINDING_H
 

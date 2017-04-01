@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file buff-table-test.cpp
+ ** unit test \ref BuffTable_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

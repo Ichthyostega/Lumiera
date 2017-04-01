@@ -22,7 +22,7 @@
 
 /** @file interfaceproxy.hpp
  ** Facade Interfaces Lifecycle. Communication between the Layers within Lumiera
- ** usually is routed through <b>Layer Separation Interfaces</b>. These are comprised
+ ** usually is routed through *Layer Separation Interfaces*. These are comprised
  ** of a Facade interface and a equivalent rendering as C Language interface defined
  ** with the help of the Interface/Plugin system. But in order to be able to actually
  ** access a service via this Facade, you need an instance of the interface.
@@ -33,12 +33,12 @@
  ** Typically there is another subclass of the Facade interfaces sitting "on the other side"
  ** of the interface barrier and actually implementing the functionality. The template
  ** facade::Accessor can be thought of as a factory creating such a proxy instance of the
- ** facade interface for the client code to use. Typically, an instance of the \em factory
+ ** facade interface for the client code to use. Typically, an instance of the _factory_
  ** is embedded (as a static functor member object) right within the otherwise abstract 
- ** facade interface, this way allowing the client code to write e.g. \c XYZInterface::facade()
- ** to yield a reference to a proxy object implementing \c XYZInterface.
+ ** facade interface, this way allowing the client code to write e.g. `XYZInterface::facade()`
+ ** to yield a reference to a proxy object implementing `XYZInterface`.
  ** 
- ** Interface Lifecycle
+ ** # Interface Lifecycle
  ** 
  ** Instances of an Interface are either directly provided by some facility within the core,
  ** or they are loaded from a shared module (plugin). In either case this means the interface
@@ -63,8 +63,8 @@
  ** While client code just includes the interface header (including interfaceproxy.hpp
  ** in turn), there needs to be an actual implementation of each proxy object located in
  ** some translation unit. The usual place is interfaceproxy.cpp, which gets linked into 
- ** \c liblumieracommon.so and contains actual specialisations and literal forwarding
- ** code <i>for each individual facade.</i>
+ ** `liblumieracommon.so` and contains actual specialisations and literal forwarding
+ ** code _for each individual facade._
  **
  ** @see interface.h
  ** @see plugin.h

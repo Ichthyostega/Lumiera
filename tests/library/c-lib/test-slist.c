@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file test-slist.c
+ ** C unit test to cover a single linked list library implementation
+ */
+
 
 #include "lib/slist.h"
 #include "lib/test/test.h"

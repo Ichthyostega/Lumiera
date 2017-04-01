@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file symbol-hashtable-test.cpp
+ ** unit test \ref SymbolHashtable_test
+ */
+
 
 
 #include "lib/test/run.hpp"

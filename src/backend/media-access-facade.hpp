@@ -21,6 +21,17 @@
 */
 
 
+/** @file media-access-facade.hpp
+ ** Abstraction interface to query for a media file.
+ ** The corresponding service allows to discover some properties like
+ ** the kind and number of channels for a given file (name) ID, without
+ ** touching any of the technical details related to file handling.
+ ** 
+ ** @todo this was added as a draft and mock implementation in 2008
+ **       and is only used sporadic for unit tests.
+ */
+
+
 #ifndef BACKEND_INTERFACE_MEDIA_ACCESS_FACADE_H
 #define BACKEND_INTERFACE_MEDIA_ACCESS_FACADE_H
 

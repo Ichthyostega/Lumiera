@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file buffer-provider-protocol-test.cpp
+ ** unit test \ref BufferProviderProtocol_test
+ */
+
 
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"

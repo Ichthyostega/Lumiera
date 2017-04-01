@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file test-threadpool.c
+ ** C unit test to cover our threadpool implementation
+ */
+
 
 #include "lib/test/test.h"
 

@@ -21,6 +21,12 @@
 */
 
 
+/** @file visitor-dispatcher.hpp
+ ** Helper for a trampoline table based implementation of the visitor pattern.
+ ** @internal implementation part, clients should include visitor.hpp
+ */
+
+
 
 #ifndef LUMIERA_VISITOR_DISPATCHER_H
 #define LUMIERA_VISITOR_DISPATCHER_H

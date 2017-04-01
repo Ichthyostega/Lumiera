@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file defs-manager-impl-test.cpp
+ ** unit test \ref DefsManagerImpl_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

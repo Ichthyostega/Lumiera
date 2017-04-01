@@ -20,6 +20,10 @@
 
 */
 
+/** @file teststreamtypes.hpp
+ ** Unit test helper to create fake streamtype information
+ */
+
 
 #ifndef LUMIERA_TEST_TESTSTREAMTYPES_H
 #define LUMIERA_TEST_TESTSTREAMTYPES_H

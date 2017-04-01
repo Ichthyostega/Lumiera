@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file rendergraph.cpp
+ ** @deprecated a pile of crap, leftovers and started drafts, stalled since 2011 -- but maybe here to stay...
+ */
+
+
 #include "proc/engine/rendergraph.hpp"
 #include "lib/frameid.hpp"
 #include "proc/state.hpp"

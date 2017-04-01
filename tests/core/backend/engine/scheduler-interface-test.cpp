@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file scheduler-interface-test.cpp
+ ** unit test \ref SchedulerInterface_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

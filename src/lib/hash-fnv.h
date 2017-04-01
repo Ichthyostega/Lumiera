@@ -22,10 +22,9 @@
 */
 
 
-/**
- * @file hash-fnv.h
- * Fowler-Noll-Vo Hashes.
- * is a non-cryptographic hash function created by Glenn Fowler, Landon Curt Noll, and Phong Vo.
+/** @file hash-fnv.h
+ ** Fowler-Noll-Vo Hashes.
+ ** FNV is a non-cryptographic hash function created by Glenn Fowler, Landon Curt Noll, and Phong Vo.
  */
 
 

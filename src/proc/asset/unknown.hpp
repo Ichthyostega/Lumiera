@@ -21,6 +21,14 @@
 */
 
 
+/** @file unknown.hpp
+ ** Marker Asset to indicate an unknown media source.
+ ** Elements marked as Unknown are retained in disabled state within the model.
+ ** This allows to open and work on a session file, without having all of the
+ ** data, setup or environment available
+ */
+
+
 #ifndef ASSET_UNKNOWN_H
 #define ASSET_UNKNOWN_H
 

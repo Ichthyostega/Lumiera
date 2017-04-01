@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file advice-situations-test.cpp
+ ** unit test \ref AdviceSituations_test
+ */
+
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"

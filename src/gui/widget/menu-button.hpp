@@ -21,6 +21,11 @@
 */
 
 
+/** @file menu-button.hpp
+ ** A button widget that displays a menu when clicked.
+ */
+
+
 #ifndef GUI_WIDGET_MENU_BUTTON_H
 #define GUI_WIDGET_MENU_BUTTON_H
 

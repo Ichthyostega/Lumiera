@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file test-helper-variadic-test.cpp
+ ** unit test \ref TestHelperVariadic_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

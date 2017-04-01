@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file file-handling.c
+ ** Implementation of file management functions
+ */
+
+
 #include "include/logging.h"
 #include "lib/mutex.h"
 #include "lib/safeclib.h"

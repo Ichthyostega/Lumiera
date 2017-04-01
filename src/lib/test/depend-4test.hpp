@@ -22,6 +22,11 @@
 */
 
 
+/** @file depend-4test.hpp
+ ** test support code to inject mock variants of depencencies
+ */
+
+
 
 #ifndef LIB_TEST_DEPEND_4TEST_H
 #define LIB_TEST_DEPEND_4TEST_H

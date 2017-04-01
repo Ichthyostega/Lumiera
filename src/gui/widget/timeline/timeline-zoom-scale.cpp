@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file timeline-zoom-scale.cpp
+ ** Widget to control timeline zoom scale
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/widget/timeline/timeline-zoom-scale.hpp"
 

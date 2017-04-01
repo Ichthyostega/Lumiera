@@ -23,6 +23,7 @@
 
 /** @file timeline-ibeam-tool.hpp
  ** A tool to select ranges in the timeline
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
 #ifndef GUI_WIDGET_TIMELINE_IBEAM_TOOL_H

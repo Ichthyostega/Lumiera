@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file jack-output.cpp
+ ** 
+ ** @todo empty placeholder: yes we will support Jack Audio!
+ ** 
+ */
+
+
 #include "proc/play/sound/jack-output.hpp"
   
 namespace proc {

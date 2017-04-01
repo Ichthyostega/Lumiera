@@ -24,6 +24,12 @@
 * *****************************************************/
 
 
+/** @file timecode-widget.cpp
+ ** Widget for timecode display and input.
+ ** Ported and adapted from the Ardour DAW
+ */
+
+
 #include "gui/widget/timecode-widget.hpp"
 
 #include "lib/time/diagnostics.hpp"  ////////////TODO: temporary solution to get H:M:S components. Use TimeCode instead!

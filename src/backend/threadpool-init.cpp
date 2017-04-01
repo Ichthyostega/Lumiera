@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file threadpool-init.cpp
+ ** Implementation of automatic initialisation of the low-level thread handling framework.
+ */
+
+
 #include "backend/threadpool-init.hpp"
 
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file scoped-holder-transfer-test.cpp
+ ** unit test \ref ScopedHolderTransfer_test
+ */
+
 
 
 #include "lib/test/run.hpp"

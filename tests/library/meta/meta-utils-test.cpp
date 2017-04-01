@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file meta-utils-test.cpp
+ ** unit test \ref MetaUtils_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/meta/util.hpp"

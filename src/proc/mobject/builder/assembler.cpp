@@ -21,19 +21,25 @@
 * *****************************************************/
 
 
+/** @file assembler.cpp
+ ** @todo initially generated code of unclear relevance
+ */
+
+
+#include "lib/error.hpp"
 #include "proc/mobject/builder/assembler.hpp"
 
 namespace proc {
 namespace mobject {
 namespace builder {
-
-
-
+  
+  
   engine::RenderEngine &
   Assembler::build ()
   {
+    UNIMPLEMENTED ("the builder...");
   }
-
-
-
+  
+  
+  
 }}} // namespace proc::mobject::builder

@@ -21,6 +21,18 @@
 */
 
 
+/** @file calc-plan-continuation.hpp
+ ** A specialised render job to care for the planning of the calculation process itself.
+ ** Rendering is seen as an open-ended, ongoing process, and thus the management and planning
+ ** of the render process itself is performed chunk wise and embedded into the other rendering
+ ** calculations. The _"rendering-as-it-is-planned-right-now"_ can be represented as a closure
+ ** to the jobs, which perform and update this plan on the go. And in fact, the head of the
+ ** calculation process, the CalcStream, holds onto such a closure to access current planning.
+ ** 
+ ** @todo a draft created in 2013 and then stalled. This is not obsolete.
+ */
+
+
 #ifndef PROC_ENGINE_CALC_PLAN_CONTINUATION_H
 #define PROC_ENGINE_CALC_PLAN_CONTINUATION_H
 

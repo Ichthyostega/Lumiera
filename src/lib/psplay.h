@@ -21,22 +21,24 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef PSPLAY_H
-#define PSPLAY_H
+
+/** @file psplay.h
+ ** Probabilistic splay tree.
+ ** A splay trees is self-optimising (in contrast to self-balancing) datastructure.
+ ** We introduce here a probabilistic bottom up approach which reduces the splay costs.
+ ** Without affecting the performance. The randomisation gives also some insurance that
+ ** worst case situations are extremely unlikely.
+ ** 
+ ** Tree nodes are very small (just 2 pointers) and are intrusively placed into the users
+ ** datastructure.
+ */
+
+
+#ifndef LIB_PSPLAY_H
+#define LIB_PSPLAY_H
 
 #include <stdint.h>
 #include <stdio.h>
-
-/**
- * @file
- * Probabilistic splay trees
- * A splay trees is self-optimizing (in contrast to self-balancing) datastructure.
- * We introduce here a probabilistic bottom up approach which reduces the splay costs.
- * Without affecting the performance. The randomization gives also some insurance that
- * worst case situations are extremely unlikely.
- * Tree nodes are very small (just 2 pointers) and are intrusively placed into the users
- * datastructure.
- */
 
 
 /**
@@ -283,11 +285,4 @@ psplay_walk (PSplay self, PSplaynode node, psplay_action_fn action, int level, v
 void
 psplay_dump (PSplay self, FILE* dest);
 
-#endif
-/*
-//      Local Variables:
-//      mode: C
-//      c-file-style: "gnu"
-//      indent-tabs-mode: nil
-//      End:
-*/
+#endif /*LIB_PSPLAY_H*/

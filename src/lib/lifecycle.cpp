@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file lifecycle.cpp
+ ** Implementation of installable callbacks for lifecycle events.
+ */
+
+
 #include "lib/error.hpp"
 #include "include/lifecycle.h"
 #include "lib/lifecycleregistry.hpp"

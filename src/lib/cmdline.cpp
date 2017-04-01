@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file cmdline.cpp
+ ** Implementation of a wrapper / marker to handle "commandline arguments".
+ */
+
+
 
 #include "lib/util.hpp"
 #include "include/logging.h"

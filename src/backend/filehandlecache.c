@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file filehandlecache.c
+ ** Implementation of caching for filehandle representation data
+ ** @todo development in this area is stalled since 2010
+ */
+
+
 #include "include/logging.h"
 #include "lib/safeclib.h"
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file test-event-log-test.cpp
+ ** unit test \ref TestEventLog_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"

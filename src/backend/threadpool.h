@@ -21,6 +21,11 @@
 */
 
 
+/** @file threadpool.h
+ ** @todo development in this area is stalled since 2010
+ */
+
+
 #ifndef BACKEND_THREADPOOL_H
 #define BACKEND_THREADPOOL_H
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file session-element-tracker-test.cpp
+ ** unit test \ref SessionElementTracker_test
+ */
+
 
 #include "lib/test/run.hpp"
 

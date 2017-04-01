@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+
+/** @file rectangle.cpp
+ ** Implementation of functions to work with rectangular screen ranges
+ */
+
 #include "gui/util/rectangle.hpp"
 #include <algorithm>
 

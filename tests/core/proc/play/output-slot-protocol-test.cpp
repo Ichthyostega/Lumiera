@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file output-slot-protocol-test.cpp
+ ** unit test \ref OutputSlotProtocol_test
+ */
+
 
 #include "lib/test/run.hpp"
 

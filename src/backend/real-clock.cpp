@@ -1,5 +1,5 @@
 /*
-  Timings  -  timing specifications for a frame quantised data stream
+  RealClock  -  convenience front-end to access the system clock
 
   Copyright (C)         Lumiera.org
     2012,               Hermann Vosseler <Ichthyostega@web.de>
@@ -19,6 +19,16 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+
+/** @file real-clock.cpp
+ ** Implementation of simplified access to the current wall clock time.
+ ** 
+ ** @todo just a rough draft as of 2012 / 2017
+ ** @todo the idea was that the backend has elaborate knowledge about
+ **       timings and time progression; upper layers should thus be able
+ **       to fulfil their timing needs by querying the backend
+ */
 
 
 #include "backend/real-clock.hpp"

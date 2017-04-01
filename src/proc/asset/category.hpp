@@ -21,6 +21,11 @@
 */
 
 
+/** @file category.hpp
+ ** Definition of Asset categorisation
+ */
+
+
 #ifndef PROC_ASSET_CATEGORY_H
 #define PROC_ASSET_CATEGORY_H
 

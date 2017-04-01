@@ -21,8 +21,15 @@
 */
 
 
-#ifndef PROC_MOBJECT_PARAMETER_H
-#define PROC_MOBJECT_PARAMETER_H
+/** @file parameter.hpp
+ ** Core abstraction: parameter to be controlled and possibly automated.
+ ** 
+ ** @todo as of 2016, we still need to work out our parameter/automation concept.
+ */
+
+
+#ifndef PROC_PROC_MOBJECT_PARAMETER_H
+#define PROC_PROC_MOBJECT_PARAMETER_H
 
 
 
@@ -52,4 +59,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif
+#endif /*PROC_PROC_MOBJECT_PARAMETER_H*/

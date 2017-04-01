@@ -21,9 +21,10 @@
 */
 
 /**
- * @file model/clip-track.hpp
- * This file contains the definition of timeline track objects which
- * contain clips.
+ ** @file model/clip-track.hpp
+ ** Preliminary UI-model: Definition of timeline track objects which contain clips.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
  */
 
 

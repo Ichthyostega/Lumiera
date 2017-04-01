@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file asset-category-test.cpp
+ ** unit test \ref AssetCategory_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-cout.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file compoundmediatest.cpp
+ ** unit test \ref CompoundMedia_test
+ */
+
 
 #include "include/logging.h"
 #include "lib/test/run.hpp"

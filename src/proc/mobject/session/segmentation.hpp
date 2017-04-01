@@ -21,6 +21,18 @@
 */
 
 
+/** @file segmentation.hpp
+ ** A segment of the effective timeline, part of the low-level model backbone.
+ ** Within the Fixture, a Segment of the timeline is used as attachment point for all the
+ ** render nodes relevant for rendering this segment. Thus, the Segmentation defines the
+ ** index and access datastructure to get at any point of the render node network.
+ ** Moreover, the segments are used as foundation for render node memory management
+ ** 
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #ifndef MOBJECT_SESSION_SEGMENTATION_H
 #define MOBJECT_SESSION_SEGMENTATION_H
 

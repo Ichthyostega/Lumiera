@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file sync-classlock-test.cpp
+ ** unit test \ref SyncClasslock_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

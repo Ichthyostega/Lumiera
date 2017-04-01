@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file rebuildfixturetest.cpp
+ ** unit test \ref RebuildFixture_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"

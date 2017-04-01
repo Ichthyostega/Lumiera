@@ -21,6 +21,11 @@
 */
 
 
+/** @file panel.hpp
+ ** Base class and interface for all dockable panels
+ */
+
+
 
 #ifndef GUI_PANEL_PANEL_H
 #define GUI_PANEL_PANEL_H

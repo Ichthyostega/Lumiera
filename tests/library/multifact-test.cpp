@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file multifact-test.cpp
+ ** unit test \ref MultiFact_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

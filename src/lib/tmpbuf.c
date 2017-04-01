@@ -1,5 +1,5 @@
 /*
-  tmpbuf.c      -  Round Robin Temporary buffers
+  Tmpbuf  -  Round Robin Temporary buffers
 
   Copyright (C)                         Lumiera.org
     2008, 2010                          Christian Thaeter <ct@pipapo.org>
@@ -17,7 +17,18 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
+
+/** @file tmpbuf.c
+ ** Implementation of temporary buffers with round-robin usage pattern.
+ ** 
+ ** @warning this is the restored old version from  bc989dab7a97fc69c (July 2010)
+ **         (the improved version is still buggy as of 5/2011)
+ */
+
+
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h"
 
@@ -29,11 +40,6 @@
 #include <nobug.h>
 
 
-/*!! WARNING
- *!!
- *!! this is the restored old version from  bc989dab7a97fc69c (July 2010)
- *!! (the improved version is still buggy as of 5/2011)
- */
 
 struct lumiera_tmpbuf_struct
 {

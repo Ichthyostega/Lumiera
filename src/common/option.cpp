@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file option.cpp
+ ** Implementation of commandline argument handling,
+ ** based on lib Boost »program options«
+ */
+
+
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "common/option.hpp"

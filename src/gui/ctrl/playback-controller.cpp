@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file playback-controller.cpp
+ ** Implementation parts of PlaybackController.
+ ** @warning this is preliminary code and will be reworked, once
+ **          we're able to connect to actual playback processes
+ **          performed by the render engine.
+ */
+
+
 #include "gui/ctrl/playback-controller.hpp"
 #include "gui/display-service.hpp"
 #include "lib/error.hpp"

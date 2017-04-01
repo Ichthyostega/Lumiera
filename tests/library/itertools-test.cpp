@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file itertools-test.cpp
+ ** unit test \ref IterTools_test
+ */
+
 
 
 #include "lib/test/run.hpp"

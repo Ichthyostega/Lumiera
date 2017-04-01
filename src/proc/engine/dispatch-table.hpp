@@ -21,6 +21,12 @@
 */
 
 
+/** @file dispatch-table.hpp
+ ** Implementation details of render job generation.
+ ** @todo draft from 2011, stalled, relevance not yet clear
+ */
+
+
 #ifndef PROC_ENGINE_DISPATCH_TABLE_H
 #define PROC_ENGINE_DISPATCH_TABLE_H
 

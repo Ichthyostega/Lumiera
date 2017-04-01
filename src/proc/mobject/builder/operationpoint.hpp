@@ -21,6 +21,18 @@
 */
 
 
+/** @file operationpoint.hpp
+ ** Abstraction to represent the current point of operation within the builder.
+ ** The Builder walks the tree of the high-level-model (session model) to generate
+ ** a (low-level) render node network. The current point of operation within this tree walk
+ ** is abstracted, to allow the use of some _building primitives._ A meta description of
+ ** *processing patterns* can be used then to control the actual build process, without
+ ** the need of hard wiring the individual builder steps.
+ ** 
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
+ */
+
+
 #ifndef MOBJECT_BUILDER_OPERATIONPOINT_H
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
@@ -80,4 +92,4 @@ namespace builder {
   
   
 }}} // namespace proc::mobject::builder
-#endif
+#endif /*MOBJECT_BUILDER_OPERATIONPOINT_H*/

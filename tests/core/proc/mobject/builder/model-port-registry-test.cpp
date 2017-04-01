@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file model-port-registry-test.cpp
+ ** unit test \ref ModelPortRegistry_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

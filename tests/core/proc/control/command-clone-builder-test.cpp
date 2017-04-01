@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-clone-builder-test.cpp
+ ** unit test \ref CommandCloneBuilder_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/control/command-impl.hpp"

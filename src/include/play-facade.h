@@ -21,6 +21,11 @@
 */
 
 
+/** @file play-facade.h
+ ** Public access point to the _playback service_ provided by the »play-out subsystem«
+ */
+
+
 #ifndef PROC_INTERFACE_PLAY_H
 #define PROC_INTERFACE_PLAY_H
 

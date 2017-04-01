@@ -22,7 +22,7 @@
 
 /** @file diagnostic-buffer-provider.hpp
  ** A facility for writing unit-tests targeting the BufferProvider interface.
- **
+ ** 
  ** @see buffer-provider-protocol-test.cpp
  */
 

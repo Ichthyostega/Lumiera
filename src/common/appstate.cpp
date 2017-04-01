@@ -1,5 +1,5 @@
 /*
-  AppState  -  application initialisation and behaviour 
+  AppState  -  application initialisation and behaviour
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -19,6 +19,17 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+
+/** @file appstate.cpp
+ ** Implementation of the _main application object_ of Lumiera.
+ ** This is a service to manage some _really global_ state and to
+ ** organise, start and stop the ["Subsystems"](\ref subsys.hpp).
+ ** The AppState object provides the building blocks for the
+ ** `main()` function to control the global lifecycle.
+ ** 
+ ** @see main.cpp
+ */
 
 
 #include "lib/error.hpp"

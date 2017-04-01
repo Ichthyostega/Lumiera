@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file format-support-test.cpp
+ ** unit test \ref FormatSupport_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/time/formats.hpp"

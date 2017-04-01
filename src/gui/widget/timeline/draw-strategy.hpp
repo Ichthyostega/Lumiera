@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file draw-strategy.hpp
+ ** Strategy interface for drawing timeline entities. This is part of the
+ ** first implementation draft of the timeline display.
+ ** @deprecated very likely to be completely rewritten.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 
 #ifndef GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
 #define GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP

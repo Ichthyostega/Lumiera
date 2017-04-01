@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file streamtypelifecycletest.cpp
+ ** unit test \ref StreamTypeLifecycle_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

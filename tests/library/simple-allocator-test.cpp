@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file simple-allocator-test.cpp
+ ** unit test \ref SimpleAllocator_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/simple-allocator.hpp"

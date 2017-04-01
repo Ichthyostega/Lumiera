@@ -21,6 +21,14 @@
 */
 
 
+/** @file timeline-header-container.hpp
+ ** A container to hold the header area of the timeline display.
+ ** Most notably this was used to create a first version of the patchbay
+ ** and control areas for the tracks. Very likely to be completely rewritten. 
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #ifndef GUI_WIDGET_TIMELINE_HEADER_CONTAINER_H
 #define GUI_WIDGET_TIMELINE_HEADER_CONTAINER_H
 

@@ -21,6 +21,11 @@
 */
 
 
+/** @file query-util.hpp
+ ** Utilities to support working with predicate queries
+ */
+
+
 #ifndef LIB_QUERY_UTIL_H
 #define LIB_QUERY_UTIL_H
 

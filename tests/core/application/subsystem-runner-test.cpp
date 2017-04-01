@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file subsystem-runner-test.cpp
+ ** unit test \ref SubsystemRunner_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

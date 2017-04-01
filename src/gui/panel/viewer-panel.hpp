@@ -21,7 +21,7 @@
 */
 
 /** @file viewer-panel.hpp
- ** This file contains the definition of the viewer panel
+ ** Definition of a dockable panel to hold the video viewers
  */
 
 

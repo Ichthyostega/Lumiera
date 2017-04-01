@@ -21,6 +21,12 @@
 */
 
 
+/** @file nodewiring.hpp
+ ** Mechanism to wire ProcNode instances for a render network
+ ** @todo unfinished draft from 2009 regarding the render process
+ */
+
+
 #ifndef ENGINE_NODEWIRING_H
 #define ENGINE_NODEWIRING_H
 

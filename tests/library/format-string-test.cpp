@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file format-string-test.cpp
+ ** unit test \ref FormatString_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

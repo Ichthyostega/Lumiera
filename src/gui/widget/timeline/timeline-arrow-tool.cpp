@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file timeline-arrow-tool.cpp
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-arrow-tool.hpp"
 
 namespace gui {

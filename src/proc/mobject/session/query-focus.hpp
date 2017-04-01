@@ -21,6 +21,29 @@
 */
 
 
+/** @file query-focus.hpp
+ ** Representation of the _current scope_ when navigating the session model.
+ ** Session contents may be discovered by query, and a _current location_ plays a crucial
+ ** role to fill in any missing details for resolving such a query. Thus, any code in need
+ ** to query contents or otherwise discover settings currently in effect within a given scope,
+ ** need to manage the position, where the query resolution is assumed to happen. The query focus
+ ** acts as an abstracted representation of such a location, and provides means for relative navigation.
+ ** The implementation involves a hidden service to record a movement trail, which allows to consider
+ ** the way how a some deeply nested scope was accessed. This information might be of relevance, due
+ ** to the ability to use _virtual clips_ recursively as part of the edit. Effectively, such means to
+ ** refer to some edit defined elsewhere in the session, and thus this feature turns the tree of nested
+ ** scopes into a *DAG* (directed acyclic graph). Such a structure can still be handled as if it was
+ ** a tree, but we need to take the access path into consideration: placing a given edit as virtual
+ ** clip into another scope will cause some properties not defined locally to be resolved in a
+ ** different way, depending on the context in which we encounter this virtual clip. To give an
+ ** example, the edited media might contain "sound", which needs to be panned and routed differently,
+ ** depending on the context the clip is placed into.
+ ** 
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef MOBJECT_SESSION_QUERY_FOCUS_H
 #define MOBJECT_SESSION_QUERY_FOCUS_H
 
@@ -46,7 +69,7 @@ namespace session {
    * focus path locations. The intention is for this current location
    * to follow the ongoing query/discovery operations mostly automatically.
    * 
-   * \par usage
+   * # usage
    * 
    * A QueryFocus (frontend handle) can be default constructed, in which
    * case it will automatically connect to what is currently the focus

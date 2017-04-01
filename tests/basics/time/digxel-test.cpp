@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file digxel-test.cpp
+ ** unit test \ref Digxel_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-cout.hpp"

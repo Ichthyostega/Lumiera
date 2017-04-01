@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file lockerror.c
+ ** implementation and definitions for error-handling on low-level locking
+ */
+
+
 #include "lib/lockerror.h"
 
 #include <errno.h>

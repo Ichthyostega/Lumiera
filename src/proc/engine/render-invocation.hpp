@@ -23,7 +23,9 @@
 /** @file render-invocation.hpp
  ** Initiate a single calculation unit within the renderengine.
  ** Usually, this will cause the rendering of a single frame or sub-frame.
- **
+ ** 
+ ** @todo unfinished draft from 2009 regarding the render process
+ ** 
  ** @see engine::ProcNode
  ** @see State
  ** @see node-basic-test.cpp
@@ -47,7 +49,7 @@ namespace engine {
   
   
   /**
-   * TODO: type comment
+   * @todo write type comment
    */
   class RenderInvocation
     {

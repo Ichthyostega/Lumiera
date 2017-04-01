@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file quantiser-basics-test.cpp
+ ** unit test \ref QuantiserBasics_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

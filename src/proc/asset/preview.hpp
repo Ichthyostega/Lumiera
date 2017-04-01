@@ -21,6 +21,11 @@
 */
 
 
+/** @file preview.hpp
+ ** Placeholder "proxy" Asset
+ */
+
+
 #ifndef ASSET_PREVIEW_H
 #define ASSET_PREVIEW_H
 

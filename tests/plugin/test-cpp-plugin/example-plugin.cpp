@@ -21,6 +21,13 @@
 
 * *****************************************************/
 
+/** @file example-plugin.cpp
+ ** Dummy C++ plug-in to cover the plugin loader for unit test
+ ** This file defines a Lumiera plug-in written in C++,
+ ** implementing the `lumieraorg_testhello` interface
+ ** @see test-interfaces.c
+ */
+
 
 
 #include "common/interface-descriptor.h"
@@ -31,7 +38,7 @@ extern "C" {
 #include "common/interface.h"
 #include "common/interface-descriptor.h"
 
-#include "interface/say_hello.h"
+#include "interface/say-hello.h"
 }
 
 #include <iostream>

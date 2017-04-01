@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file sync-locking-test.cpp
+ ** unit test \ref SyncLocking_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

@@ -1,5 +1,5 @@
 /*
-  RenderSegment(Test)  -  Proc-Layer Integrationtest
+  AddClip(Test)  -  adding an Clip-MObject to the Model/Session
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,43 +20,55 @@
 
 * *****************************************************/
 
+/** @file addcliptest.cpp
+ ** unit test \ref AddClip_test
+ */
+
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/testclip.hpp"
+#include "proc/mobject/placement.hpp"
+//#include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 
+
+using util::contains;
 //using std::string;
 
 
 namespace proc {
 namespace mobject {
-namespace controller {
+namespace session {
 namespace test {
   
   
   
   
-  /****************************************************************//**
-   * @test create a render process from a given segment of the Session.
-   *       Basically this includes cooperation of all parts of the
-   *       Lumiera Proc Layer. For a prepared test-Session we invoke the
-   *       controller to create a render process. This includes building
-   *       the render pipeline. Finally, we analyze all the created 
-   *       Structures. 
-   * @note this test doesn't cover the actual rendering.
-   * @see  proc_interface::ControllerFacade
+  /***************************************************************//**
+   * @test adding an test clip to the Model/Session.
+   * @see  mobject::session::Clip
+   * @see  mobject::Session
    */
-  class RenderSegment_test : public Test
+  class AddClip_test : public Test
     {
-      virtual void run(Arg arg) 
+      virtual void
+      run (Arg) 
         {
-          UNIMPLEMENTED ("complete render process for a given test segment of the Session");
+          PSess sess = Session::current;
+          PMO clip = TestClip::create();
+          sess->attach (clip);
+          
+///////////////////////////////////////////////////////////////////TICKET #499              
+//            CHECK (sess->currEDL().contains (clip));
+          // TODO: Clip-Asset and Placement magic??
         } 
     };
   
   
   /** Register this test class... */
-  LAUNCHER (RenderSegment_test, "function operate");
+  LAUNCHER (AddClip_test, "unit session");
   
   
   
-}}}} // namespace proc::mobject::controller::test
+}}}} // namespace proc::mobject::session::test

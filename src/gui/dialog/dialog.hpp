@@ -21,6 +21,11 @@
 */
 
 
+/** @file dialog.hpp
+ ** Global constants and definitions for dialogs.
+ */
+
+
 #ifndef GUI_DIALOG_DIALOG_H
 #define GUI_DIALOG_DIALOG_H
 

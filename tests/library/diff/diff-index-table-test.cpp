@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file diff-index-table-test.cpp
+ ** unit test \ref DiffIndexTable_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

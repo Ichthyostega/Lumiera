@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file output-slot.cpp
+ ** Generic implementation functionality common to all output connections.
+ */
+
+
 #include "lib/error.hpp"
 #include "proc/play/output-slot.hpp"
 #include "proc/play/output-slot-connection.hpp"

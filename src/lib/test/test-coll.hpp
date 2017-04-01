@@ -21,27 +21,24 @@
 */
 
 
+/** @file test-coll.hpp
+ ** some bits of unit test helper code to fabricate collections with test data
+ */
+
+
 #ifndef LIB_TEST_TEST_COLL_H
 #define LIB_TEST_TEST_COLL_H
 
 
-//#include "lib/symbol.hpp"
-
-//#include <typeinfo>
-//#include <cstdlib>
 #include <unordered_map>
 #include <iostream>
 #include <vector>
 #include <map>
-//#include <string>
 
 
 namespace lib {
 namespace test{
   
-//  using lib::Literal;
-//  using std::string;
-//  using std::rand;
   
   typedef std::vector<int> VecI;
   
@@ -100,14 +97,4 @@ namespace test{
   
   
 }} // namespace lib::test
-
-
-
-/* === test helper macros === */
-
-/**
- * Macro to transmogrify...
- */
-//#define MAGIC
-
-#endif
+#endif /*LIB_TEST_TEST_COLL_H*/

@@ -21,6 +21,11 @@
 */
 
 
+/** @file state.hpp
+ ** Access point to an ongoing render's processing state.
+ */
+
+
 #ifndef PROC_INTERFACE_STATE_H
 #define PROC_INTERFACE_STATE_H
 
@@ -43,10 +48,10 @@ namespace engine {
   
   
   /**
-   * Abstraction denoting the state of a currently ongoing render/calculation
-   * process, as it is tied to the supporting facilities of the backend.
-   * An State (subclass) instance is the sole connection for the render node
-   * to invoke services of the backend needed to carry out the calculations.
+   * Abstraction to access the state of a currently ongoing render/calculation process,
+   * as it is tied to the supporting facilities of the backend. An State (subclass) instance
+   * is the sole connection for the render node to invoke services of the backend needed
+   * to carry out the calculations.
    * 
    * @see engine::RenderInvocation top-level entrance point
    * @see nodeinvocation.hpp impl. used from \em within the nodes

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file testoption.cpp
+ ** Implementation of commandline parsing for the unittest test-suite.
+ */
+
+
 #include "lib/error.hpp"
 #include "lib/test/testoption.hpp"
 #include "lib/test/suite.hpp"

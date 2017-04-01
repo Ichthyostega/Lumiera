@@ -22,6 +22,12 @@
 * *****************************************************/
 
 
+/** @file hash-fnv.c
+ ** Implementation of FNV ("Fowler-Noll-Vo") hashing functions.
+ ** @remarks code for this implementation is public domain
+ */
+
+
 #include "lib/hash-fnv.h"
 
 #include <nobug.h>

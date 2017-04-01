@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file mmapcache.c
+ ** Implementation of caching for currently unused memory mapped file regions
+ ** @todo development in this area is stalled since 2010
+ */
+
+
 #include "include/logging.h"
 #include "lib/safeclib.h"
 

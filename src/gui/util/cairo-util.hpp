@@ -20,6 +20,12 @@
 
 * *****************************************************/
 
+
+/** @file cairo-util.hpp
+ ** Utility functions for working with elements from the Cairo
+ ** vector drawing library.
+ */
+
 #include <cairomm/cairomm.h>
 
 #ifndef GUI_UTIL_CAIRO_H

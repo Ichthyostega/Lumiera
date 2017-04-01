@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file pipe.cpp
+ ** Implementation details regarding the Asset representation of a processing Pipe
+ */
+
+
 #include "proc/asset/pipe.hpp"
 #include "proc/assetmanager.hpp"
 #include "lib/util.hpp"

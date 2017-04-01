@@ -1,5 +1,5 @@
 /*
-  Codec(Asset)  -  description of some media data decoder or encoder facility
+  BuildSegment(Test)  -  building the render-tree for a segment of the Timeline
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,12 +20,42 @@
 
 * *****************************************************/
 
+/** @file buildsegmenttest.cpp
+ ** unit test \ref BuildSegment_test
+ */
 
-#include "proc/asset/codec.hpp"
+
+#include "lib/test/run.hpp"
+//#include "lib/util.hpp"
+
+
+//using std::string;
+
 
 namespace proc {
-namespace asset {
-
-
-
-}} // namespace proc::asset
+namespace mobject {
+namespace builder {
+namespace test {
+  
+  
+  
+  
+  /***************************************************************//**
+   * @test the builder core functionality: create a render pipeline
+   *       for a given segment of the Session/Timeline.
+   */
+  class BuildSegment_test : public Test
+    {
+      virtual void run(Arg) 
+        {
+          UNIMPLEMENTED ("oh my");
+        } 
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (BuildSegment_test, "function builder");
+  
+  
+  
+}}}} // namespace proc::mobject::builder::test

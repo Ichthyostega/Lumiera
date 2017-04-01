@@ -21,6 +21,20 @@
 */
 
 
+/** @file timequant.hpp
+ ** Support library to represent grid-aligned time specifications
+ ** This is part of Lumiera's time and time code handling framework.
+ ** The QuTime entity represents the link between the internal precise
+ ** time specifications and external representation formatted according
+ ** to some well established time code format: QuTime both holds a precise
+ ** internal time::TimeValue entry, plus a reference to the _time grid_ to
+ ** be used, when it comes to _quantising_ (grid-aligning) those  values.
+ ** And it offers a dedicated API to "materialise" this (still complete and
+ ** precise) time value into an external representation.
+ ** 
+ */
+
+
 #ifndef LIB_TIME_TIMEQUANT_H
 #define LIB_TIME_TIMEQUANT_H
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file placement-basic-test.cpp
+ ** unit test \ref PlacementBasic_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/asset/media.hpp"

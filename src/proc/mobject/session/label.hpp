@@ -21,6 +21,18 @@
 */
 
 
+/** @file label.hpp
+ ** A marker or reference point in the Session.
+ ** Label MObjects can be [placed](\ref Placement) at various locations and scopes,
+ ** e.g. on the timeline, or relative to the media data of a clip. They can be used to give
+ ** a visual clue for the user's orientation within the edit, or for navigation on the timeline,
+ ** but also as an anchor point to place other elements with relative offset.
+ ** 
+ ** @todo result of the very first code generation from UML in 2008.
+ ** @todo this is expected to become a very important facility eventually, so expec a lot of rework here... 
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_LABEL_H
 #define PROC_MOBJECT_SESSION_LABEL_H
 

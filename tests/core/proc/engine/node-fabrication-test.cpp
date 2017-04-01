@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file node-fabrication-test.cpp
+ ** unit test \ref NodeFabrication_test
+ */
+
 
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"

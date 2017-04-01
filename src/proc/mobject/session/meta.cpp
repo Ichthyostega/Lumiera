@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file meta.cpp
+ ** implementation details regarding the Meta asset abstraction
+ ** 
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 not sure if we really need a separate translation unit for this?
+ */
+
+
 #include "proc/mobject/session/meta.hpp"
 
 namespace proc {

@@ -21,6 +21,13 @@
 */
 
 
+/** @file timeline-track.hpp
+ ** A group track in the first draft version of the timeline display.
+ ** @todo as of 2016 this is about to be replaced by a new implementation approach
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 
 #ifndef GUI_WIDGET_TIMELINE_TRACK_H
 #define GUI_WIDGET_TIMELINE_TRACK_H

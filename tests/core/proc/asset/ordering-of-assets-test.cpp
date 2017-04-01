@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file orderingofassetstest.cpp
+ ** unit test \ref OrderingOfAssets_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

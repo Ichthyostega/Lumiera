@@ -21,6 +21,13 @@
 */
 
 
+/** @file grid.hpp
+ ** definition of a time grid abstraction for time and timecode handling.
+ ** This interface is the foundation to deal with _quantised_ (grid aligned)
+ ** time values, as is essential for handling of timecode data.
+ */
+
+
 #ifndef LIB_TIME_GRID_H
 #define LIB_TIME_GRID_H
 

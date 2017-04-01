@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file item-wrapper-test.cpp
+ ** unit test \ref ItemWrapper_test
+ */
+
 
 
 #include "lib/test/run.hpp"

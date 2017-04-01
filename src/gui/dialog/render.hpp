@@ -21,7 +21,7 @@
 */
 
 /** @file render.hpp
- ** definition of the render output dialog
+ ** Dialog to set up a renter process and define output name and format.
  **
  */
 

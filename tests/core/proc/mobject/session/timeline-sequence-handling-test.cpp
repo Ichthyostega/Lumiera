@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file timeline-sequence-handling-test.cpp
+ ** unit test \ref TimelineSequenceHandling_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"

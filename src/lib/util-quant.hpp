@@ -21,6 +21,11 @@
 */
 
 
+/** @file util-quant.hpp
+ ** Utilities for quantisation (grid alignment) and comparisons.
+ */
+
+
 #ifndef LIB_UTIL_QUANT_H
 #define LIB_UTIL_QUANT_H
 

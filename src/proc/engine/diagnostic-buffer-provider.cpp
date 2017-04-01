@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file diagnostic-buffer-provider.cpp
+ ** Implementation details of unit test support regarding internals of the render engine.
+ ** 
+ ** @todo WIP from 2013, half finished, stalled
+ ** @see buffer-provider-protocol-test.cpp
+ */
+
+
 #include "lib/error.hpp"
 #include "lib/meta/function.hpp"
 

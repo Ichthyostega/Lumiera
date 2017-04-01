@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file scoped-holder-test.cpp
+ ** unit test \ref ScopedHolder_test
+ */
+
 
 
 #include "lib/test/run.hpp"

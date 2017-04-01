@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file linked-elements-test.cpp
+ ** unit test \ref LinkedElements_test
+ */
+
 
 
 #include "lib/test/run.hpp"

@@ -1,5 +1,5 @@
 /*
-  MediaStructureQuery(Test)  -  check functionallity used for creating media assets
+  MediaStructureQuery(Test)  -  check functionality used for creating media assets
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -19,6 +19,10 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+/** @file mediastructurequerytest.cpp
+ ** unit test \ref MediaStructureQuery_test
+ */
 
 
 #include "lib/test/run.hpp"

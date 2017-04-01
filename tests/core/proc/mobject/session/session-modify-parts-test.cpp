@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file session-modify-parts-test.cpp
+ ** unit test \ref SessionModifyParts_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"

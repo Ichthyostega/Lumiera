@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file allocation-cluster-test.cpp
+ ** unit test \ref AllocationCluster_test
+ */
+
 
 
 #include "lib/test/run.hpp"

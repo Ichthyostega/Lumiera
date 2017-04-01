@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file suite.cpp
+ ** Implementation of a simple test runner / test suite framework for unit testing.
+ */
+
+
 
 #include "include/logging.h"
 #include "lib/hash-standard.hpp"

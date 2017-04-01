@@ -21,6 +21,12 @@
 */
 
 
+/** @file argument-erasure.hpp
+ ** Implementation helper to bind Proc-Layer commands with arbitrary argument tuples
+ ** @internal details of the [command handling framework](\ref command.hpp).
+ */
+
+
 
 #ifndef CONTROL_ARGUMENT_ERASURE_H
 #define CONTROL_ARGUMENT_ERASURE_H

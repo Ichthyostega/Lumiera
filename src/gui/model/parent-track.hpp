@@ -20,9 +20,12 @@
 
 */
 /** @file parent-track.hpp
- ** This file contains the definition of ParentTrack, a class which
+ ** Preliminary UI-model: Definition of ParentTrack, a class which
  ** represents a base functionality for tracks and sequences which
- ** are also track parents. This class wraps proc layer data
+ ** are also track parents. This class was intended to wraps proc layer data.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
+ ** @deprecated the existing timeline implementation will be completely rewritten
  */
 
 #ifndef PARENT_TRACK_HPP
@@ -35,8 +38,8 @@ namespace gui {
 namespace model {
 
 /**
- * ParentTrack is the abstract base class of all tracks that can parent
- * children.
+ * ParentTrack is the abstract base class of all tracks that can parent children.
+ * @deprecated the existing timeline implementation will be rewritten
  */
 class ParentTrack :
   public Track,

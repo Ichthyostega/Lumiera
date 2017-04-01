@@ -21,8 +21,23 @@
 */
 
 
-#ifndef MOBJECT_MOBJECT_H
-#define MOBJECT_MOBJECT_H
+/** @file mobject.hpp
+ ** Core abstraction of the Session model: a media object.
+ ** The contents of the edit and thus of the session are modelled as a collection
+ ** of MObject entities, each attached by a Placement. Together these form what can
+ ** be conceived as an _instance_ of the object. The Placement constitutes the relative
+ ** and contextual information, while the MObject provides the identity and the link
+ ** to actual media content or plug-in implementations.
+ ** 
+ ** @todo as of 2016, this core part of the model still needs to be actually implemented.
+ **       Most of the code in this hierarchy is preliminary or placeholder code, since we
+ **       prefer to build the system from ground up, not top-down. It is very likely, that
+ **       MObject will be just a data tuple in the end.
+ */
+
+
+#ifndef PROC_MOBJECT_MOBJECT_H
+#define PROC_MOBJECT_MOBJECT_H
 
 #include "proc/common.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
@@ -108,4 +123,4 @@ namespace mobject {
 
 
 }} // namespace proc::mobject
-#endif
+#endif /*PROC_MOBJECT_MOBJECT_H*/

@@ -20,6 +20,14 @@
 
 * *****************************************************/
 
+
+/** @file parent-track.cpp
+ ** Preliminary UI-model: Implementation of ParentTrack.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
+ ** @deprecated the existing timeline implementation will be completely rewritten
+ */
+
 #include "parent-track.hpp"
 #include <boost/foreach.hpp>
 

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file searchpath.cpp
+ ** Implementation of helpers to handle directory search paths.
+ */
+
+
 #include "lib/error.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/symbol.hpp"

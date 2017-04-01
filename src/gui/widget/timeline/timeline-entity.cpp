@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file timeline-entity.cpp
+ ** Implementation of a generic element to be placed onto the timeline
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/widget/timeline/timeline-entity.hpp"
 #include "gui/widget/timeline/draw-strategy.hpp"

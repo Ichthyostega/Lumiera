@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-registry-test.cpp
+ ** unit test \ref CommandRegistry_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file clip.cpp
+ ** Clip Asset implementation
+ */
+
+
 #include "proc/asset/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 

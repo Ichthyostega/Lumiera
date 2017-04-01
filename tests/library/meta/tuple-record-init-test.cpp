@@ -19,6 +19,10 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+/** @file tuple-record-init-test.cpp
+ ** unit test \ref TupleRecordInit_test
+ */
 ///@file
 
 

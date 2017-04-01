@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file session-service-access-test.cpp
+ ** unit test \ref SessionServiceAccess_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"

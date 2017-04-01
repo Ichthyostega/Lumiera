@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file category.cpp
+ ** Implementation parts regarding Asset categorisation
+ */
+
+
 #include "proc/asset/category.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file plug.cpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
+ */
+
+
 #include "proc/mobject/session/plug.hpp"
 #include "proc/asset/pipe.hpp"
 

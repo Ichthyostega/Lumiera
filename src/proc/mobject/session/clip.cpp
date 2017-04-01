@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file clip.cpp
+ ** Implementation details regarding a media clip as integrated into the edit / session model.
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #include "proc/mobject/session/clip.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
@@ -38,18 +45,18 @@ namespace session {
   /** new clip-MO linked with the given asset::Clip.
    *  Initially, this clip will cover the whole source media length.
    */
-  Clip::Clip (const asset::Clip& clipDef, const Media& mediaDef)
+  Clip::Clip (asset::Clip const& clipDef, Media const& mediaDef)
     : mediaDef_(mediaDef)
     , clipDef_(clipDef)
-  {
-    setupLength();
-    throwIfInvalid();
-  }
+    {
+      setupLength();
+      throwIfInvalid();
+    }
   
   
   
   /** implementing the common MObject self test.
-   *  Length definition is consitent, underlying
+   *  Length definition is consistent, underlying
    *  media def is accessible etc. */
   bool
   Clip::isValid ()  const

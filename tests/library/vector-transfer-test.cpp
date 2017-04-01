@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file vector-transfer-test.cpp
+ ** unit test \ref VectorTransfer_test
+ */
+
 
 
 #include "lib/test/run.hpp"

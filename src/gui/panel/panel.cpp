@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file panel.cpp
+ ** Implementation base for all dockable panels
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/panel/panel.hpp"
 #include "gui/workspace/panel-manager.hpp"

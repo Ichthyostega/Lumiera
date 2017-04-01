@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file render-invocation.cpp
+ ** Implementation details regarding the invocation of a single render node
+ ** @deprecated very likely to happen in a different way, while the concept remains valid
+ ** @todo unfinished draft from 2009 regarding the render process
+ */
+
+
 #include "proc/engine/render-invocation.hpp"
 #include "proc/engine/stateproxy.hpp"
 

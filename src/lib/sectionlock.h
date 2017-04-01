@@ -19,6 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file sectionlock.h
+ ** Mutex state handle for locked code sections
+ */
+
 #ifndef LUMIERA_SECTIONLOCK_H
 #define LUMIERA_SECTIONLOCK_H
 

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file procpatt.cpp
+ ** Implementation details related to "processing pattern" assets.
+ */
+
+
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/proc.hpp"
 #include "proc/assetmanager.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file scope-query-test.cpp
+ ** unit test \ref ScopeQuery_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session/scope-query.hpp"

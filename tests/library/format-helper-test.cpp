@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file format-helper-test.cpp
+ ** unit test \ref FormatHelper_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"

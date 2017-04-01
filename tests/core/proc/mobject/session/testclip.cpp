@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file testclip.cpp
+ ** Implementation of a stubbed clip object to support unit testing
+ */
+
 
 #include "proc/mobject/session/testclip.hpp"
 #include "backend/media-access-facade.hpp"

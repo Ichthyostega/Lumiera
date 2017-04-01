@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file buildertooltest.cpp
+ ** unit test \ref BuilderTool_test
+ */
+
 
 #include "lib/test/run.hpp"
 

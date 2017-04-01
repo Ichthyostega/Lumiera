@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file query-util.cpp
+ ** Implementation of helpers for working with predicate queries.
+ */
+
+
 #include "lib/error.hpp"
 #include "lib/query-util.hpp"
 #include "lib/util.hpp"

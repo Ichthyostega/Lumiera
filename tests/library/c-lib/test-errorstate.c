@@ -20,6 +20,12 @@
 
 * *****************************************************/
 
+/** @file test-errorstate.c
+ ** C unit test to cover basic error handling in C code
+ ** We manage an _errorstate variable_ in thread local storage,
+ ** which allows to set an global error state per thread.
+ */
+
 
 #include <stdio.h>
 #include <string.h>

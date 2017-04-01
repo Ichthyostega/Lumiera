@@ -1,5 +1,5 @@
 /*
-  NodeFactory  -  Interface for creating processing nodes of various kinds
+  NodeFactory  -  Service for creating processing nodes of various kinds
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -19,6 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+
+/** @file nodefactory.cpp
+ ** Implementation of render node setup and wiring
+ ** @todo draft from the early days of the Lumiera project, reworked in 2009
+ **       Development activity in that area as stalled ever since. In the end,
+ **       it is highly likely we'll _indeed need_ a node factory though...
+ */
 
 
 #include "proc/engine/nodefactory.hpp"
@@ -41,7 +49,10 @@ namespace engine {
   using mobject::session::Effect;
   
   
-  /** create a processing node able to render an effect */
+  /** create a processing node able to render an effect
+   * @todo as of 2016 this is the only (placeholder) implementation
+   *       to indicate how building and wiring of nodes was meant to happen
+   */
   PNode
   NodeFactory::operator() (Placement<Effect> const& effect, WiringSituation& intendedWiring)
   {

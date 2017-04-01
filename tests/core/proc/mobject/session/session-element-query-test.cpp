@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file session-element-query-test.cpp
+ ** unit test \ref SessionElementQuery_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session/test-scopes.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file node-operation-test.cpp
+ ** unit test \ref NodeOperation_test
+ */
+
 
 #include "lib/test/run.hpp"
 //#include "lib/util.hpp"

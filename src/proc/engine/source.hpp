@@ -21,6 +21,18 @@
 */
 
 
+/** @file source.hpp
+ ** Processing node to read media data.
+ ** The render engine node network is activated by _"pulling"_ from the _exit nodes._
+ ** Recursively, any rendering calculations will eventually hit a engine::Source node,
+ ** to retrieve existing (raw) media data
+ ** @todo this file is there since the very first code generation steps at start
+ **       of the Lumiera project. It is not yet clear if those source reading nodes
+ **       will indeed be ProcNode subclasses, or rather specifically configured
+ **       processing nodes...
+ */
+
+
 #ifndef ENGINE_SOURCE_H
 #define ENGINE_SOURCE_H
 
@@ -41,9 +53,7 @@ namespace engine
    */
   class Source : public ProcNode
     {
-      Source (WiringDescriptor const& wd)
-        : ProcNode(wd)
-        { }
+      Source (WiringDescriptor const&);
     };
 
 

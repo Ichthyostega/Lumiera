@@ -21,6 +21,19 @@
 */
 
 
+/** @file util.hpp
+ ** Tiny helper functions and shortcuts to be used _everywhere_
+ ** Consider this header to be effectively included in almost every translation unit.
+ ** @remark The motivation of using these helpers is conciseness and uniformity of expression.
+ **         There are several extensions and not-so-frequently used supplements packaged into
+ **         separate headers.
+ ** @warning be sure to understand the ramifications of including _anything_ here...
+ ** @see util-coll.hpp
+ ** @see uitl-foreach.hpp
+ ** @see util-quant.hpp
+ */
+
+
 #ifndef LIB_UTIL_H
 #define LIB_UTIL_H
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file sync-waiting-test.cpp
+ ** unit test \ref SyncWaiting_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file state-map-grouping-storage-test.cpp
+ ** unit test \ref StateMapGroupingStorage_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

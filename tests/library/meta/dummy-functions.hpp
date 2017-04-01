@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file dummy-functions.hpp
+ ** dummy functions to support unit testing of function metaprogramming helpers
+ */
+
 
 #ifndef LIB_META_DUMMY_FUNCTIONS_H
 #define LIB_META_DUMMY_FUNCTIONS_H

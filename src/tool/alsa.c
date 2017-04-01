@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file alsa.c
+ ** Example implementation how to access the ALSA sound backend
+ */
+
+
 #include "alsa.h"
 
 #include <alsa/asoundlib.h>

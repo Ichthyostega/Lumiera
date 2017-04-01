@@ -21,7 +21,7 @@
 */
 
 /** @file dummy-play-connection.hpp
- ** Dummy and test setup of playback and rendering, \em omitting most of the Lumiera engine.
+ ** Dummy and test setup of playback and rendering, _omitting most_ of the Lumiera engine.
  ** Building this dummy configuration was driven by the need to test and verify the design
  ** in the course of building the foundations of the render engine. The design of Lumiera's
  ** engine is elaborate, and thus -- for a long time -- we have to live with a not-yet
@@ -32,7 +32,7 @@
  ** these placeholders are connected, allowing to produce specific test situations and then
  ** verify the results after the test run.
  ** 
- ** \par Use cases
+ ** # Use cases
  ** This dummy setup can be used in various circumstances
  ** - for unit tests we want to produce artificial test media frames: each TestFrame is
  **   produced with a reproducible pseudo-random sequence and can be verified to the last bit.
@@ -44,16 +44,16 @@
  **   to verify a more complicated wiring setup. Thus, the DummyPlayConnection is there to stay!
  ** 
  ** Because these are somewhat similar usage scenarios, where this and that part is to be exchanged
- ** for some, we prefer a <i>policy based design</i> here: The DummyPlayConnection is templated
- ** to use a \em strategy, filling in the variable parts.  
+ ** for some, we prefer a _policy based design_ here: The DummyPlayConnection is templated
+ ** to use _a strategy,_ filling in the variable parts.
  ** 
- ** \par provided test services
+ ** # provided test services
  ** By using different strategy template parameters, we create different flavours of the dummy;
  ** each one counting as a separate setup (not related to each other, that is). The actual instance
  ** then can just be default created; it should be placed into an scope enduring the whole usage
  ** cycle. Repeated re-initialisation or re-loading is outside the intended usage scope here.
  ** 
- ** The <b>core interface</b> allows to retrieve dummy implementations of
+ ** The *core interface* allows to retrieve dummy implementations of
  ** - a session model exposing exit node(s)
  ** - generator object(s) to live within this session model
  ** - corresponding generator nodes to serve as implementation of the former
@@ -61,7 +61,7 @@
  ** - OutputSlot implementations to serve as pseudo- or demo output facilities
  ** - an OutputManager exposing those output facilities.
  ** 
- ** The <b>test support interface</b> provides a test driver for performing a controlled 
+ ** The *test support interface* provides a test driver for performing a controlled
  ** playback or rendering for some time. Thus, a test routine may lock into a blocking wait,
  ** to investigate results after the planned test sequence was performed.
  ** 
@@ -132,10 +132,10 @@ namespace play {
 //  using lib::ScopedCollection;
 //  using lib::Literal;
     using lib::eachEntry;
-  
+    
     typedef asset::ID<Pipe> PID;
     typedef asset::ID<Struct> TID;
-      
+    
 //  typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
     
     
@@ -156,7 +156,7 @@ namespace play {
     const string namePortB("bus-B");
     
     /** 
-     * helper for dummy render engine: 
+     * helper for dummy render engine:
      * Simulate the result of a build process,
      * without actually running the builder.
      * Produces some mock pipes, model ports etc.
@@ -211,7 +211,7 @@ namespace play {
           }
       };
   }
-
+  
   
   /****************************************************************//**
    * Framework for dummy playback and rendering.
@@ -279,4 +279,4 @@ namespace play {
   
   
 }} // namespace proc::play
-#endif
+#endif /*PROC_PLAY_DUMMY_PLAY_CONNECTION_H*/

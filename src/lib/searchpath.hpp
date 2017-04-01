@@ -21,6 +21,15 @@
 */
 
 
+/** @file searchpath.hpp
+ ** Helpers to handle directory search paths.
+ ** The SerachPathSplitter allows to evaluate a "path" like specification
+ ** with colon separated components. It is complemented by some magic convenience
+ ** functions to self-discover the currently running executable and to resolve
+ ** the `$ORIGIN` pattern similar to what is known from linker `rpath` / `runpath`
+ */
+
+
 #ifndef COMMON_SEARCHPATH_H
 #define COMMON_SEARCHPATH_H
 

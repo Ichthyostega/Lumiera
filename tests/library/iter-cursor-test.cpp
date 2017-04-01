@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iter-cursor-test.cpp
+ ** unit test \ref IterCursor_test
+ */
+
 
 
 #include "lib/test/run.hpp"

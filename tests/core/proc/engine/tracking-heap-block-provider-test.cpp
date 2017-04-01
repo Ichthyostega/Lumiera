@@ -1,4 +1,4 @@
-/*u4
+/*
   TrackingHeapBlockProvider(Test)  -  verify a support facility for diagnostic/test purposes
 
   Copyright (C)         Lumiera.org
@@ -19,6 +19,10 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+/** @file tracking-heap-block-provider-test.cpp
+ ** unit test \ref TrackingHeapBlockProvider_test
+ */
 
 
 #include "lib/error.hpp"

@@ -24,7 +24,11 @@
 
 /** @file displayer.hpp
  ** The Displayer serves as base of all video display implementations
- ** 
+ ** @warning as of 2016 it is not clear, if this code will be
+ **          evolved into the actual display facility, or be
+ **          replaced and rewritten, when we're about to 
+ **          create a functional video display connected
+ **          to the render engine. 
  */
 
 

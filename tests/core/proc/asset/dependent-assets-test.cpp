@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file dependent-assets-test.cpp
+ ** unit test \ref DependentAssets_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/asset/testasset.hpp"

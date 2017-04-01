@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file util-floordiv-test.cpp
+ ** unit test \ref UtilFloordiv_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util-quant.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iterable-classification-test.cpp
+ ** unit test \ref IterableClassification_test
+ */
+
 
 #include "lib/test/run.hpp"
 

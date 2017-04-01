@@ -21,6 +21,11 @@
 */
 
 
+/** @file assembler.hpp
+ ** @todo initially generated code of unclear relevance
+ */
+
+
 #ifndef MOBJECT_BUILDER_ASSEMBLER_H
 #define MOBJECT_BUILDER_ASSEMBLER_H
 
@@ -40,7 +45,8 @@ namespace builder {
   class Assembler
     {
     public:
-      engine::RenderEngine & build () ;
+      engine::RenderEngine&
+      build ();
       // TODO: allocation, GC???
     };
   

@@ -21,6 +21,76 @@
 */
 
 
+/** @file defs-manager.hpp
+ ** Management of defaults and default rules.
+ ** It is one of the central ideas to shape the behaviour of Lumiera
+ ** not through hard wired procedures, but rather by the combination of
+ ** pattern elements driven by rules. A key element within this approach
+ ** is the notion of an *default*: Whenever some concrete calculation or
+ ** behaviour needs an additional element as missing link, in order to
+ ** reach its intrinsic goals, we (the developers) ask ourselves if the
+ ** for of this additional element can be derived from first principles
+ ** or if it is already determined by the input set driving the operation.
+ ** If this is _not_ the case (and the expectation is that most elements
+ ** are not fully determined), then we _query for an default._ This pattern
+ ** creates a lot of implicit extension points, which are safe to use, since
+ ** they are defined on a logical level. We ask for something to fulfil a
+ ** given contract.
+ ** 
+ ** Contrast this to a system, which just has arbitrarily built-in flexibility
+ ** by parametrisation variables: such systems are known to be brittle, since
+ ** the _parameter values_ are implicitly tied to the behaviour of the operation
+ ** through _shared knowledge_ of implementation details. It requires both
+ ** "Druid knowledge" and an overall focus on the implementation mechanics to
+ ** adjust such parameters. In this respect, a logical query for defaults is
+ ** quite different, insofar it forces the implementation to respect abstractions
+ ** on a very fine grained level, and it allows to express the actual defaults
+ ** by rules which talk the language of the usage context, not the implementation
+ ** context. The user shall be able to define generic (logical) rules how the
+ ** Session should behave for the given editing project. And by combination
+ ** with an additional set of logical consistency rules, a resolution engine
+ ** can figure out what would be the right _default element_ to use at a
+ ** given point in the implementation.
+ ** 
+ ** @note as of 2017, we are far from such a system, but it is of uttermost
+ **       importance that we build our implementations with this goal in mind
+ ** 
+ ** # Configuration Query Interface
+ ** The [Defaults Manager](\ref DefsManager) exposes an interface similar to
+ ** a database. The intended audience of this interface is the writer of
+ ** low-level implementation code. This facade interface is meant to create
+ ** a more familiar front-end to an essentially logic and rules driven
+ ** configuration system. And, as an additional benefit, it can be implemented
+ ** just by a glorified table lookup. Which indeed is what we do until the more
+ ** elaborate rules based system is in place.
+ ** 
+ ** An implementation process in need for some missing link typically knows the
+ ** _type of that missing element._ Which means, this type is possibly an abstract
+ ** type and defines the contract any solution has to fulfil. Thus, the usage context
+ ** can just demand "give me a suitable XYZ!". In practice, there are several flavours
+ ** to this interaction, each of which is expressed by a dedicated method on the
+ ** DefsManager facade interface:
+ ** - we can just *retrieve* a suitable solution element, no questions asked.
+ ** - we can *query* for a suitable solution, while limiting the search to what
+ **   is already known and defined. This entails the possibility that there is
+ **   no known solution yet.
+ ** - we can *demand to fabricate* a suitable solution element. Such a call might
+ **   still deliver something already fabricated, but the emphasis is on the
+ **   "make it so" demand.
+ ** - we can *provide and associate* a solution element we created ourselves,
+ **   to be available from now on, and associated with a given query. Even
+ **   this call implicates the necessity for the query to be fulfilled by
+ **   the given element, which, as a consequence includes the possibility
+ **   of failure.
+ ** - for sake of completeness, we can also require a specific element to
+ **   be purged from knowledge
+ ** 
+ ** @see DefsManager_test
+ ** @see DefsManagerImpl_test
+ ** 
+ */
+
+
 #ifndef LUMIERA_QUERY_DEFS_MANAGER_H
 #define LUMIERA_QUERY_DEFS_MANAGER_H
 

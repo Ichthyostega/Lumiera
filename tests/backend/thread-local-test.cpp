@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file thread-local-test.cpp
+ ** unit test \ref ThreadLocal_test
+ */
+
 
 #include "lib/test/run.hpp"
 

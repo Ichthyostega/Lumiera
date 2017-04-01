@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file meta.cpp
+ ** Implementation details regarding the Meta Asset category
+ */
+
+
 #include "proc/assetmanager.hpp"
 #include "proc/asset/meta.hpp"
 #include "lib/util.hpp"

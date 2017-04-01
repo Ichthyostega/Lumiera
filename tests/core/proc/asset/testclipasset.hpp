@@ -20,6 +20,10 @@
 
 */
 
+/** @file testclipasset.hpp
+ ** A placeholder Clip asset to support unit testing
+ */
+
 
 #ifndef ASSET_TESTCLIPASSET_H
 #define ASSET_TESTCLIPASSET_H

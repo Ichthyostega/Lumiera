@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file access-casted-test.cpp
+ ** unit test \ref AccessCasted_test
+ */
+
 
 
 #include "lib/test/run.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file type-demangling-test.cpp
+ ** unit test \ref TypeDemangling_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/meta/util.hpp"

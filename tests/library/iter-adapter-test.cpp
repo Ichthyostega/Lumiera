@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iter-adapter-test.cpp
+ ** unit test \ref IterAdapter_test
+ */
+
 
 
 #include "lib/test/run.hpp"

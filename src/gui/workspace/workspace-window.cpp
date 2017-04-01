@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+
+/** @file workspace-window.cpp
+ ** Implementation of base functionality for workspace windows.
+ */
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/config-keys.hpp"
 #include "gui/workspace/workspace-window.hpp"

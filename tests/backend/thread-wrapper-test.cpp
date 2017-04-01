@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file thread-wrapper-test.cpp
+ ** unit test \ref ThreadWrapper_test
+ */
+
 
 #include "lib/test/run.hpp"
 

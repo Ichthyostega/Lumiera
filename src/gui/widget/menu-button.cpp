@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file menu-button.cpp
+ ** Implementation of the MenuButton widget, to display a menu when clicked.
+ */
+
+
 #include "gui/widget/menu-button.hpp"
 
 

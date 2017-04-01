@@ -22,7 +22,7 @@
 
 
 /** @file advice.cpp 
- ** Implementation the AdviceSystem, to support the advice collaboration.
+ ** Implementation of the AdviceSystem, to support the advice collaboration.
  ** The AdviceSystem is implemented as singleton, but is never accessed directly
  ** by clients participating in an advice collaboration. Rather, they use the
  ** advice::Request and advice::Provision value classes as a frontend. While
@@ -32,7 +32,7 @@
  ** implemented in this compilation unit and access the AdviceSystem singleton
  ** defined here locally.
  ** 
- ** \par memory management
+ ** ## memory management
  ** Advice data, when added by an advice::Provision, is copied into a ActiveProvision,
  ** which acts as a value holding buffer. This way, the provided advice data is copied
  ** into storage managed by the AdviceSystem, allowing to access the data even after the
@@ -53,7 +53,7 @@
  ** @note when a Provision is copied, this hidden link is not shared with the copy, which
  ** therefore behaves as if newly created with the same binding, but without providing Advice.
  ** 
- ** \par implementing the allocations
+ ** ## implementing the allocations
  ** The problem with copying and incorporating the ActiveProvision objects is the undetermined
  ** size of these value holders, because the frontend objects are templated on the advice type,
  ** while the AdviceSystem doesn't have any knowledge of the specific advice type. This advice
@@ -73,7 +73,7 @@
  ** 
  ** @todo rewrite the allocation to use Lumiera's MPool instead of heap allocations    //////TICKET #609
  ** 
- ** \par synchronisation
+ ** ## synchronisation
  ** While the frontend objects are deliberately \em not threadsafe, the lookup implementation
  ** within the AdviceSystem uses a system wide advice::Index table and thus needs locking.
  ** Besides the protection against corrupting the index, this also serves as memory barrier,

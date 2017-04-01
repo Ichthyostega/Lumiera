@@ -21,6 +21,14 @@
 */
 
 
+/** @file threads.h
+ ** Lumiera low-level thread handling framework.
+ ** Exposed a limited set of operations to deal with parallelism,
+ ** while threads and thread creation is managed by a threadpool.
+ ** @todo development in this area is stalled since 2010
+ */
+
+
 #ifndef BACKEND_THREADS_H
 #define BACKEND_THREADS_H
 

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file diff-complex-application-test.cpp
+ ** unit test \ref DiffComplexApplication_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"

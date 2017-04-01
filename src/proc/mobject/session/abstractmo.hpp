@@ -21,6 +21,11 @@
 */
 
 
+/** @file abstractmo.hpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
+ */
+
+
 #ifndef MOBJECT_SESSION_ABSTRACTMO_H
 #define MOBJECT_SESSION_ABSTRACTMO_H
 

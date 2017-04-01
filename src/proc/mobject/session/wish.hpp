@@ -21,6 +21,12 @@
 */
 
 
+/** @file wish.hpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet...
+ ** @deprecated WTF?
+ */
+
+
 #ifndef MOBJECT_SESSION_WISH_H
 #define MOBJECT_SESSION_WISH_H
 

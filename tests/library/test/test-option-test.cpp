@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file test-option-test.cpp
+ ** unit test \ref TestOption_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/testoption.hpp"

@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file dispatch-table.cpp
+ ** Implementation details of render job generation.
+ ** @todo draft from 2011, stalled, relevance not yet clear
+ */
+
+
 #include "proc/engine/dispatch-table.hpp"
 //#include "lib/frameid.hpp"
 //#include "proc/state.hpp"

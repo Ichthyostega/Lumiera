@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file dependency-factory-test.cpp
+ ** unit test \ref DependencyFactory_test
+ */
+
 
 
 #include "lib/test/run.hpp"

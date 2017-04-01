@@ -21,6 +21,13 @@
 */
 
 
+/** @file inventory.hpp
+ ** Exposing an ID registration cluster as a Meta Asset
+ ** @todo implementation draft from 2010, stalled as of 2016,
+ **       but likely to be of relevance eventually...
+ */
+
+
 #ifndef ASSET_INVENTORY_H
 #define ASSET_INVENTORY_H
 

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file unknown.cpp
+ ** Implementation functions regarding a marker asset for unknown media.
+ */
+
+
 #include "proc/asset/unknown.hpp"
 #include "lib/format-string.hpp"
 

@@ -21,19 +21,22 @@
 */
 
 
-/** @file placement.hpp 
- ** Placements are at the very core of all editing operations,
- ** because they act as handles to access the media objects to be manipulated. 
- ** Moreover, Placements are the actual "content" of the Session and Fixture and thus
- ** are small handle like objects. Many editing tasks include locating some Placement
- ** within the Session or directly take a ref to a Placement.
+/** @file placement.hpp
+ ** Core abstraction: placement of a media object into session context.
+ ** Placements are at the very core of all editing operations, because they act
+ ** as handles to access the media objects to be manipulated.
+ ** Moreover, Placements are the actual "content" stored within the the Session and Fixture
+ ** data structure and thus are small handle like objects, which can be processed efficiently.
+ ** Many editing tasks include locating some Placement within the Session or directly take
+ ** a reference to a Placement. A Placement represents a _specific way to attach content._
+ ** They may refer to contextual information and relate themselves to other placements.
  ** 
- ** Placements are <b>refcounting smart pointers</b>: By acting on the Placement object,
- ** we can change parameters of the way the media object is placed (e.g. adjust an offset), 
- ** while by dereferencing the Placement object, we access the "real" media object.
- ** Usually, any MObject is created by a factory and immediately wrapped into a Placement,
+ ** On the implementation level, placements are *refcounting smart pointers*: By acting
+ ** on the Placement object, we can change parameters of the way the media object is placed
+ ** (e.g. adjust an offset), while by dereferencing the Placement object, we access the media
+ ** object itself. Usually, any MObject is created by a factory and immediately wrapped into a Placement,
  ** which takes ownership of the MObject.
- **
+ ** 
  ** Besides being a handle, Placements define the logical position where some MObject is
  ** supposed to be located within the Session or Fixture. The way in which this placing happens
  ** is controlled and parametrised by a collection (chain) of LocatingPin objects. By adding
@@ -42,21 +45,21 @@
  ** absolute position (time, output).
  ** 
  ** Together, this yields semantics somewhere in between value semantics and reference semantics.
- ** As any smart-ptr, placements are copyable, but each such copy takes on a <i>distinct identity.</i>
- ** Moreover, when added to the Session, a placement acts as if it was an \em instance of the object
+ ** As any smart-ptr, placements are copyable, but each such copy takes on a _distinct identity._
+ ** Moreover, when added to the Session, a placement acts as if it was an _instance_ of the object
  ** it points at, with the purpose to bind this instance into the Session with specific placement
- ** properties. Thus, such a placement-within-session \em is an distinguishable entity, because
- ** the settings on the contained LocatingPin chain \em do constitute the relation properties
+ ** properties. Thus, such a placement-within-session _is_ a distinguishable entity, because
+ ** the settings on the contained LocatingPin chain _do constitute_ the relation properties
  ** of the MObject "placed" by this placement. To support this rather ref-like semantics, any
- ** placement has an embedded ID (identity). Building on this ID, it is possible to create a
- ** smart-ptr like PlacementRef to denote a specific placement found within the Session.
+ ** placement has an embedded ID (identity). Building on this ID, it is possible in turn to
+ ** create a smart-ptr like PlacementRef to denote a specific placement found within the Session.
  ** 
  ** Placements are templated on the type of the actual MObject they refer to, so, sometimes
  ** e.g. we rather use a Placement<Clip> to be able to use the more specific methods of the
- ** session::Clip interface. But <i>please note the following detail:</i> this type
- ** labelling and downcasting is the <i>only</i> difference between these subclasses, 
- ** besides that, they can be replaced literally by one another (slicing is accepted).
- **
+ ** session::Clip interface. But _please note the following detail:_ this type labelling
+ ** and downcasting is the _only_ difference between these subclasses, besides that,
+ ** they can be replaced literally by one another (slicing acceptable).
+ ** 
  ** @see ExplicitPlacement
  ** @see LocatingPin interface for controlling the positioning parameters
  **

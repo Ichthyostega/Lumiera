@@ -20,6 +20,10 @@
 
 */
 
+/** @file testasset.hpp
+ ** A mock asset to support unit testing
+ */
+
 
 #ifndef ASSET_TESTASSET_H
 #define ASSET_TESTASSET_H

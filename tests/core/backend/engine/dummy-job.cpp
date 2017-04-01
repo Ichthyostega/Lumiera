@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file dummy-job.cpp
+ ** Implementation of a dummy render job for unit tests
+ */
+
 
 #include "backend/engine/dummy-job.hpp"
 

@@ -21,6 +21,13 @@
 */
 
 
+/** @file ref-array.hpp
+ ** Abstraction interface: array-like access by subscript
+ ** @todo as of 2016, this concept seems very questionable: do we _really_ want
+ **       to abstract over random access, or do we _actually_ want for-iteration??
+ */
+
+
 #ifndef LIB_REF_ARRAY_H
 #define LIB_REF_ARRAY_H
 
@@ -38,12 +45,14 @@ namespace lib {
    * @todo ouch -- a collection that isn't iterable...  ///////////////////////TICKET #1040
    */
   template<class T>
-  struct RefArray : boost::noncopyable
+  class RefArray
+    : boost::noncopyable
     {
+    public:
+      virtual ~RefArray() {}  ///< this is an interface
+      
       virtual T const& operator[] (size_t i)  const =0;
       virtual size_t size()                   const =0;
-      
-      virtual ~RefArray() {}
     };
   
   

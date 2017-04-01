@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file backend.c
+ ** Lumiera Backend: implementation of global initialisation and services.
+ */
+
+
 #include "include/logging.h"
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h"

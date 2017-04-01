@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file symbol-test.cpp
+ ** unit test \ref Symbol_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

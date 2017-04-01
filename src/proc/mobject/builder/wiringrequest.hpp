@@ -21,6 +21,16 @@
 */
 
 
+/** @file wiringrequest.hpp
+ ** Symbolic representation of a goal for node wiring.
+ ** A WiringRequest is discovered while walking the Session model, and will be resolved
+ ** later, when the target for the desired connection is available. When all wiring requests
+ ** are resolved, the build process finishes. Thus, creating and resolving of such requests
+ ** is the "fuel" actually to drive the Builder.
+ ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
+ */
+
+
 #ifndef MOBJECT_BUILDER_WIRINGREQUEST_H
 #define MOBJECT_BUILDER_WIRINGREQUEST_H
 

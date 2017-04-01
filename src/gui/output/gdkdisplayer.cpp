@@ -23,6 +23,13 @@
 * *****************************************************/
 
 
+/** @file gdkdisplayer.cpp
+ ** Dysfunctional implementation code, formerly used to
+ ** create a video display based on GDK
+ ** @deprecated obsolete since GTK-3
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/gdkdisplayer.hpp"
 

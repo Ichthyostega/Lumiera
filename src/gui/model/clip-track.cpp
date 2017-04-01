@@ -20,6 +20,13 @@
 
 * *****************************************************/
 
+
+/** @file clip-track.cpp
+ ** Preliminary UI-model: Implementation of timeline track model object.
+ ** @warning as of 2016 this UI model is known to be a temporary workaround
+ **          and will be replaced in entirety by UI-Bus and diff framework.
+ */
+
 #include "clip-track.hpp"
 
 #include "clip.hpp"

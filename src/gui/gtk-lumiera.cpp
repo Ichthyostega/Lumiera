@@ -21,6 +21,10 @@
 * *****************************************************/
 
 
+/** @file gtk-lumiera.cpp
+ */
+
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ui-bus.hpp"

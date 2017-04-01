@@ -21,27 +21,20 @@
 * *****************************************************/
 
 
-//#include "lib/util.hpp"
-//#include "lib/symbol.hpp"
-//#include "include/logging.h"
+/** @file query-text.cpp
+ ** Implementation bits regarding a syntactical standard representation of predicate queries
+ */
+
+
 #include "lib/query-text.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <boost/functional/hash.hpp>
 #include <string>
-//#include <map>
 
-//using std::map;
 using std::string;
 
-//using util::contains;
-//using util::isnil;
 
 namespace lib {
-  
-  namespace { // internal details
-  
-  } // internal details
   
   
   /** Parse, verify and normalise the raw query definition

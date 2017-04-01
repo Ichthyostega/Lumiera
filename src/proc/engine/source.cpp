@@ -21,15 +21,22 @@
 * *****************************************************/
 
 
+/** @file source.cpp
+ ** Implementation of a source media reading render node.
+ */
+
+
 #include "proc/engine/source.hpp"
 
 namespace proc {
-namespace engine
-  {
-
+namespace engine {
+  
+  Source::Source (WiringDescriptor const& wd)
+    : ProcNode(wd)
+    { }
+  
   /** */
-
-
-
-
+  
+  
+  
 }} // namespace engine

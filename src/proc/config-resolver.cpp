@@ -1,4 +1,3 @@
-
 /*
   ConfigResolver  -  concrete setup for rule based configuration
 
@@ -20,6 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+
+/** @file config-resolver.cpp
+ ** Implementation of bindings between Proc-Layer objects and rules-based configuration.
+ ** @todo draft from the early design phase of the Lumiera application. As of 2016, nothing
+ **       was done on behalf of rules-based configuration, other then preparing the whole architecture
+ **       for this capability. So this remains one of the most relevant goals of the Project.
+ */
 
 
 #include "lib/error.hpp"

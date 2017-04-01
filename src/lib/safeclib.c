@@ -17,7 +17,15 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+
+* *****************************************************/
+
+
+/** @file safeclib.c
+ ** Implementation of error-safe wrappers for some notorious C-Lib functions.
+ */
+
+
 #include "lib/error.h"
 #include "lib/safeclib.h"
 

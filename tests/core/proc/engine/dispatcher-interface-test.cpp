@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file dispatcher-interface-test.cpp
+ ** unit test \ref DispatcherInterface_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

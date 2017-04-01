@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file util-collection-test.cpp
+ ** unit test \ref UtilCollection_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/itertools.hpp"

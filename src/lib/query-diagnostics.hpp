@@ -21,6 +21,11 @@
 */
 
 
+/** @file query-diagnostics.hpp
+ ** diagnostic helpers to support test related to predicate queries
+ */
+
+
 #ifndef LIB_QUERY_DIAGNOSTICS_H
 #define LIB_QUERY_DIAGNOSTICS_H
 

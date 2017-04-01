@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file buffer-metadata-test.cpp
+ ** unit test \ref BufferMetadata_test
+ */
+
 
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file virtual-copy-support-test.cpp
+ ** unit test \ref VirtualCopySupport_test
+ */
+
 
 
 #include "lib/test/run.hpp"

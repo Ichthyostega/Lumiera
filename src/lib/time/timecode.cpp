@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file timecode.cpp
+ ** Implementation parts of the timecode handling library.
+ ** @todo a started implementation exists since 2010,
+ **       yet crucial parts still need to be filled in as of 2016
+ */
+
+
 #include "lib/time/timecode.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"

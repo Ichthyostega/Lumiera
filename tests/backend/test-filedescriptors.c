@@ -1,5 +1,5 @@
 /*
-  TEST-FILEDESCRIPTORS
+  TEST-FILEDESCRIPTORS  -  verify filedescriptor management
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -19,6 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+/** @file test-filedescriptors.c
+ ** C unit test to cover filedescriptor management
+ ** @see filedescriptor.h
+ */
 
 
 #include "lib/safeclib.h"

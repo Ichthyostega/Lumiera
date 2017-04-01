@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file buffer-provider.cpp
+ ** Implementation details related to buffer lifecycle management in the render engine.
+ */
+
+
 #include "lib/error.hpp"
 #include "proc/engine/buffer-provider.hpp"
 #include "proc/engine/buffer-metadata.hpp"

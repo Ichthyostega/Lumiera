@@ -21,6 +21,14 @@
 */
 
 
+/** @file generator-mo.hpp
+ ** A data generator media object.
+ ** Can be used as placeholder, or as testing device
+ ** @todo WIP implementation of player subsystem from 2011
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_GENERATOR_MO_H
 #define PROC_MOBJECT_SESSION_GENERATOR_MO_H
 

@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file media.cpp
+ ** Implementation regarding the Media Asset abstraction
+ */
+
+
 #include "lib/error.hpp"
 #include "proc/common.hpp"
 #include "proc/assetmanager.hpp"

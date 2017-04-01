@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+/** @file test-filehandles.c
+ ** C unit test to cover management for filehandles and the filehandle cache
+ ** @see filehandlecache.h
+ */
+
 
 #include "lib/llist.h"
 #include "lib/tmpbuf.h"

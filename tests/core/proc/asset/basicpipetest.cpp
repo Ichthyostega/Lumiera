@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file basicpipetest.cpp
+ ** unit test \ref BasicPipe_test
+ */
+
 
 #include "include/logging.h"
 #include "lib/test/run.hpp"

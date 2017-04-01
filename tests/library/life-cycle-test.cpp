@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file lifecycletest.cpp
+ ** unit test \ref LifeCycle_test
+ */
+
 
 
 #include "lib/test/run.hpp"

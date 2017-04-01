@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file sanitised-identifier-test.cpp
+ ** unit test \ref SanitizedIdentifier_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file handling-pattern-basics-test.cpp
+ ** unit test \ref HandlingPatternBasics_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/control/command.hpp"

@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file fixture.cpp
+ ** Implementation of the Fixture datastructure
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #include "proc/mobject/session/fixture.hpp"
 #include "include/logging.h"
 

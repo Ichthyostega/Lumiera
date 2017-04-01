@@ -40,6 +40,7 @@
 /* ==================== gui::Display ====================================== */
 
 #include "include/display-facade.h"
+#include "include/interfaceproxy.hpp"
 
 namespace lumiera {
   

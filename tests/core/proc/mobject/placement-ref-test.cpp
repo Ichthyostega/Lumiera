@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file placement-ref-test.cpp
+ ** unit test \ref PlacementRef_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

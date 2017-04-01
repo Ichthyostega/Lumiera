@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file parameter.cpp
+ ** Implementation functions of the Parameter abstraction.
+ ** 
+ ** @todo as of 2016, we still need to work out our parameter/automation concept.
+ */
+
+
 #include "lib/error.hpp"
 #include "proc/mobject/parameter.hpp"
 #include "proc/mobject/paramprovider.hpp"

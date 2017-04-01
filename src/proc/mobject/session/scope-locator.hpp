@@ -21,6 +21,13 @@
 */
 
 
+/** @file scope-locator.hpp
+ ** Service to build the notion of a _current location_ within the Sesison model
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #ifndef PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
 #define PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
 
@@ -45,7 +52,7 @@ namespace session {
   /**
    * Singleton service establishing a link to relate
    * any compound of nested placement scopes to the current session
-   * and the \em current focus for querying and exploring this structure.
+   * and the _current focus_ for querying and exploring this structure.
    * While it is OK to use this service directly, clients usually would
    * prefer to use QueryFocus as a frontend.
    * 

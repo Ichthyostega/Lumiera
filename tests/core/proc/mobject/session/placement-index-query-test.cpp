@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file placement-index-query-test.cpp
+ ** unit test \ref PlacementIndexQuery_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session/scope-query.hpp"

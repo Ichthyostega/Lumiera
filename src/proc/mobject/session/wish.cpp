@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file wish.cpp
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
+ */
+
+
 #include "proc/mobject/session/wish.hpp"
 
 namespace proc {

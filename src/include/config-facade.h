@@ -26,9 +26,17 @@
  ** as early as possible. Later, on application main initialisation, the global
  ** config interface is opened and wrapped for convenient access from C++ code.
  ** 
+ ** @note This was created as part of a first draft towards an application
+ **       wide configuration system. Later (around 2012) it became clear that
+ **       we can not judge the requirements for such a system yet, so we deferred
+ **       the topic altogether. Meanwhile, this facade is sporadically used to
+ **       mark the necessity to retrieve some "parametrisation values".
+ ** @warning as a preliminary solution, the original configuration system draft
+ **       was detached and replaced by an _ini file solution_ based on lib Boost.
+ ** 
  ** @todo there ought to be an external Interface for the Config subsystem.
  **       But the full-blown Config system isn't implemented yet anyway
- **
+ ** 
  ** @see config.h
  ** @see lumiera::AppState
  ** @see main.cpp

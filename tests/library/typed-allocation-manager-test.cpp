@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file typed-allocation-manager-test.cpp
+ ** unit test \ref TypedAllocationManager_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/typed-allocation-manager.hpp"

@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file threads.c
+ ** Implementation of Lumiera's low-level thread handling framework
+ ** @todo development in this area is stalled since 2010
+ */
+
+
 #include "include/logging.h"
 #include "lib/safeclib.h"
 #include "backend/threads.h"

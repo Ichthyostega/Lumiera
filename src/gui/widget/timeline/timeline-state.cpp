@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file timeline-state.cpp
+ ** Implementation of presentation state for the first draft of the timeline display.
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-state.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/mutation.hpp"

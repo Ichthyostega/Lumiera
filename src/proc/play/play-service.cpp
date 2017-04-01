@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file play-service.cpp
+ ** Implementation of core parts of the Player subsystem
+ */
+
+
 #include "lib/error.hpp"
 #include "include/play-facade.h"
 #include "proc/play/play-service.hpp"

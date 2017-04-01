@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file placement-object-identity-test.cpp
+ ** unit test \ref PlacementObjectIdentity_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/asset/media.hpp"

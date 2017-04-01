@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file scope-path.cpp
+ ** @todo WIP implementation of session core from 2010
+ ** @todo as of 2016, this effort is considered stalled but basically valid
+ */
+
+
 #include "include/logging.h"
 #include "proc/mobject/session/scope-path.hpp"
 #include "proc/mobject/session/scope-locator.hpp"

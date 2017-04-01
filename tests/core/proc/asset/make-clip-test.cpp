@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file makecliptest.cpp
+ ** unit test \ref MakeClip_test
+ */
+
 
 #include "include/logging.h"
 #include "lib/test/run.hpp"

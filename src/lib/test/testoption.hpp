@@ -21,6 +21,11 @@
 */
 
 
+/** @file testoption.hpp
+ ** Commandline options for our unittest test-suite executable.
+ */
+
+
 #ifndef TESTHELPER_TESTOPTION_H
 #define TESTHELPER_TESTOPTION_H
 

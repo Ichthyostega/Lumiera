@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file defs-registry-impl-test.cpp
+ ** unit test \ref DefsRegistryImpl_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

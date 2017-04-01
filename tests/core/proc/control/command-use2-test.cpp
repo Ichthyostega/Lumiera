@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file command-use2-test.cpp
+ ** unit test \ref CommandUse2_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

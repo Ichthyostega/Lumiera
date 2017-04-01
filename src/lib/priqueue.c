@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file priqueue.c
+ ** a simple "text book" implementation of a priority queue, based on a binary heap
+ */
+
+
 #include "lib/priqueue.h"
 #include "include/logging.h"
 

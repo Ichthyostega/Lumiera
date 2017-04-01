@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file advice-configuration-test.cpp
+ ** unit test \ref AdviceConfiguration_test
+ */
+
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"

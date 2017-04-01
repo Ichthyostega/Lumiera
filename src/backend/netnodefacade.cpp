@@ -21,6 +21,14 @@
 * *****************************************************/
 
 
+/** @file netnodefacade.cpp
+ ** Subsystem descriptor and configuration for a renderfarm node.
+ ** 
+ ** @todo this just documents a vague plan. We won't be able to implement
+ **       anything of that kind for the foreseeable future as of 1/2017
+ */
+
+
 #include "backend/netnodefacade.hpp"
 #include "lib/depend.hpp"
 

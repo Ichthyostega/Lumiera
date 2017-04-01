@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file query-focus-test.cpp
+ ** unit test \ref QueryFocus_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session/test-scopes.hpp"

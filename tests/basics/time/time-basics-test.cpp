@@ -1,5 +1,5 @@
 /*
-  LumiBasics(Test)  -  working with Lumiera's internal Time values
+  TimeBasics(Test)  -  working with Lumiera's internal Time values
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -19,6 +19,10 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
+/** @file time-basics-test.cpp
+ ** unit test \ref TimeBasics_test
+ */
 
 
 #include "lib/test/run.hpp"

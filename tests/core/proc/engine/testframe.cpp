@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file testframe.cpp
+ ** Implementation of fake data frames to support unit testing
+ */
+
 
 #include "proc/engine/testframe.hpp"
 #include "lib/error.hpp"

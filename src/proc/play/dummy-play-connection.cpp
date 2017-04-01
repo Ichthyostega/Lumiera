@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file dummy-play-connection.cpp
+ ** Implementation of a service for mock render playback to support testing.
+ */
+
+
 #include "proc/play/dummy-play-connection.hpp"
 //#include "proc/play/dummy-image-generator.hpp"
 //#include "proc/play/tick-service.hpp"

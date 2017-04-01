@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iter-stack-test.cpp
+ ** unit test \ref IterStack_test
+ */
+
 
 
 #include "lib/test/run.hpp"

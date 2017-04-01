@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file iter-queue-test.cpp
+ ** unit test \ref IterQueue_test
+ */
+
 
 
 #include "lib/test/run.hpp"

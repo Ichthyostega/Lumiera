@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file unique-malloc-owner-test.cpp
+ ** unit test \ref UniqueMallocOwner_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

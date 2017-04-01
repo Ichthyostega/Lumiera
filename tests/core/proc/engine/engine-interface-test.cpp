@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file engine-interface-test.cpp
+ ** unit test \ref EngineInterface_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"

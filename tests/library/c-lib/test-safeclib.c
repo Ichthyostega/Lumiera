@@ -20,6 +20,11 @@
 
 * *****************************************************/
 
+/** @file test-safeclib.c
+ ** C unit test to cover size checked C operations
+ ** @see safeclib.h
+ */
+
 
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h" /* not factored out yet */

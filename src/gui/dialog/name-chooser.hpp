@@ -21,6 +21,11 @@
 */
 
 
+/** @file name-chooser.hpp
+ ** Dialog to enter a string name.
+ */
+
+
 #ifndef GUI_DIALOG_NAME_CHOOSER_H
 #define GUI_DIALOG_NAME_CHOOSER_H
 

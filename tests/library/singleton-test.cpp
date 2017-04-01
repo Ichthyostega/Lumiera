@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file singleton-test.cpp
+ ** unit test \ref Singleton_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/format-string.hpp"

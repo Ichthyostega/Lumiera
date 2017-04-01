@@ -21,6 +21,17 @@
 */
 
 
+/** @file assets-panel.hpp
+ ** A (dockable) panel to organise the assets of a project.
+ ** Assets are descriptor objects maintained within the Session model.
+ ** They are used to represent
+ ** - media and clips
+ ** - processors, effects etc.
+ ** - structural elements like timeline, tracks, sequences etc.
+ ** - metadata descriptors
+ */
+
+
 
 #ifndef GUI_PANEL_ASSETS_PANEL_H
 #define GUI_PANEL_ASSETS_PANEL_H

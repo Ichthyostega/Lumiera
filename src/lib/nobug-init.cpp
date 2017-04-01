@@ -21,7 +21,13 @@
 * *****************************************************/
 
 
-#include "lib/nobug-init.hpp"
+/** @file nobug-init.cpp
+ ** Implementation function for automatic trigger of NoBug initialisation
+ ** @note `#include` nobug-init.hpp to use this initialisation automatically
+ */
+
+
+#include <nobug.h>
 
 /// magic to generate NoBug logging definitions
 #define LUMIERA_NOBUG_INIT_CPP

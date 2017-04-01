@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file sub-id-test.cpp
+ ** unit test \ref SubID_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file render-configurator.cpp
+ ** Implementation functionality to bridge between engine::PlayService and engine::EngineService.
+ ** The former allows to start playback (or rendering) as a high-level activity, while the latter
+ ** can manage and perform [calculation streams](\ref CalcStream)
+ */
+
+
 #include "lib/error.hpp"
 #include "proc/play/render-configurator.hpp"
 #include "proc/play/output-manager.hpp"

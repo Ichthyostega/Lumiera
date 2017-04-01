@@ -21,6 +21,12 @@
 * *****************************************************/
 
 
+/** @file engine-service-mock.cpp
+ ** Implementation translation unit for a mock render engine for unit testing.
+ ** @todo draft from 2012, and, while stalled, still relevant as of 2016
+ */
+
+
 #include "proc/engine/engine-service-mock.hpp"
 #include "proc/engine/worker/dummy-tick.hpp"
 

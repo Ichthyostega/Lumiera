@@ -21,6 +21,13 @@
 * *****************************************************/
 
 
+/** @file relativelocation.cpp
+ ** LocatingPin (constraint) to attach media objects relative to each other
+ ** @todo stalled effort towards a session implementation from 2008
+ ** @todo 2016 likely to stay, but expect some extensive rework
+ */
+
+
 #include "proc/mobject/session/relativelocation.hpp"
 #include "proc/mobject/mobject.hpp"
 

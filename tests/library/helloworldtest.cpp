@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file helloworldtest.cpp
+ ** unit test \ref HelloWorld_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"

@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file test-gui-test.cpp
+ ** unit test \ref TestGui_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
@@ -30,9 +34,13 @@
 namespace gui {
 namespace test{
   
-  /**************************************//**
-   * Hellooooooo the world is just a test
-   * @test demo of using the test framework
+  /************************************************************************************//**
+   * @test demo of writing a unit-test to execute code _implemented within the UI layer_.
+   * @note the point in question here is the build system and how library dependencies
+   *       are handled. Typically such unit-tests will rather cover framework aspects
+   *       of the UI, not perform a remote controlled execution of the UI. Thus we
+   *       still create a commandline executable, but for this code to work, it
+   *       needs to be _linked against the GUI plugin_ (which is in fact a shared library)
    */
   class TestGui_test : public Test
     {
@@ -45,16 +53,7 @@ namespace test{
   
   
   
-  
-  
-  /** Register this test class to be invoked in some test groups (suites) 
-   * @remarks this macro \c LUNCHER is defined in run.hpp to simplify
-   *          the registration of test classes. It expands to the
-   *          following static variable definition
-   *          \code
-   *          Launch<HelloWorld_test> run_HelloWorld_test("HelloWorld_test","unit common");
-   *          \endcode
-   */
+  /** Register this test class to be invoked in some test groups */
   LAUNCHER (TestGui_test, "unit gui");
   
   

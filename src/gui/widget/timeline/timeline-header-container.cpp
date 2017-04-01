@@ -21,6 +21,11 @@
 * *****************************************************/
 
 
+/** @file timeline-header-container.cpp
+ ** @warning as of 2016 the entire timeline display is planned to be reworked
+ */
+
+
 #include "gui/widget/timeline/timeline-header-container.hpp"
 #include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/widget/timeline-widget.hpp"
