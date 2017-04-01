@@ -35,7 +35,7 @@
  ** of the implementation class the handle points at is necessary only in the
  ** translation unit implementing such an extended handle.
  **
- ** @see proc::DummyPlayer::Process usage example
+ ** @see proc::control::Command usage example
  ** 
  */
 
@@ -44,15 +44,17 @@
 #define LIB_HANDLE_H
 
 #include "lib/nobug-init.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <memory>
+#include <utility>
 
 
 namespace lib {
   
   using std::shared_ptr;
+  using std::unique_ptr;
   using std::weak_ptr;
+  using std::move;
   
   
   
@@ -68,7 +70,6 @@ namespace lib {
    */
   template<class IMP>
   class Handle 
-    : public lib::BoolCheckable<Handle<IMP>>
     {
     protected:
       typedef std::shared_ptr<IMP> SmPtr;
@@ -85,14 +86,23 @@ namespace lib {
       : smPtr_()
       { }
       
-                                 Handle (Handle const& r)          : smPtr_(r.smPtr_)   { }
-      template<class Y> explicit Handle (shared_ptr<Y> const& r)   : smPtr_(r)          { }
-      template<class Y> explicit Handle (weak_ptr<Y> const& wr)    : smPtr_(wr)         { }
-      template<class Y> explicit Handle (std::auto_ptr<Y> & ar)    : smPtr_(ar)         { }
+                                 Handle (Handle const& r)          = default;
+                                 Handle (Handle && rr)             = default;
+      template<class Y> explicit Handle (shared_ptr<Y> const& r)   : smPtr_{r}         { }
+      template<class Y> explicit Handle (shared_ptr<Y> && srr)     : smPtr_{move(srr)} { }
+      template<class Y> explicit Handle (weak_ptr<Y> const& wr)    : smPtr_{wr}        { }
+      template<class Y> explicit Handle (unique_ptr<Y> && urr)     : smPtr_{move(urr)} { }
       
-                        Handle& operator=(Handle const& r)         { smPtr_ = r.smPtr_; return *this; }
-      template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { smPtr_ = sr;       return *this; }
-      template<class Y> Handle& operator=(std::auto_ptr<Y> & ar)   { smPtr_ = ar;       return *this; }
+                        Handle& operator=(Handle const& r)         = default;
+                        Handle& operator=(Handle && rr)            = default;
+      template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { smPtr_ = sr;        return *this; }
+      template<class Y> Handle& operator=(shared_ptr<Y> && srr)    { smPtr_ = move(srr); return *this; }
+      template<class Y> Handle& operator=(unique_ptr<Y> && urr)    { smPtr_ = move(urr); return *this; }
+      
+      
+      explicit operator bool()  const { return bool(smPtr_); }
+      bool isValid()            const { return bool(smPtr_); }
+      
       
       
       /** Activation of the handle by the managing service.
@@ -124,11 +134,6 @@ namespace lib {
        *  reaches end-of-life.
        */
       void close ()  { smPtr_.reset(); }
-      
-      
-      /** implicit conversion to bool (BoolCheckable) */
-      bool isValid()  const { return bool(smPtr_);}
-      
       
       
       
