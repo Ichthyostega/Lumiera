@@ -109,31 +109,32 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             NULL, NULL, NULL,
                             LUMIERA_INTERFACE_INLINE (name,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "LumieraTest";}
+                                                      {(void)iface; return "LumieraTest";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (brief,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "Lumiera Test suite examples";}
+                                                      {(void)iface; return "Lumiera Test suite examples";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (homepage,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "http://www.lumiera.org/develompent.html";}
+                                                      {(void)iface; return "http://www.lumiera.org/develompent.html";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (version,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "No Version";}
+                                                      {(void)iface; return "No Version";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (author,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "Christian Thaeter";}
+                                                      {(void)iface; return "Christian Thaeter";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (email,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "ct@pipapo.org";}
+                                                      {(void)iface; return "ct@pipapo.org";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (copyright,
                                                       const char*, (LumieraInterface iface),
                                                       {
+                                                        (void)iface;
                                                         return
                                                           "Copyright (C)        Lumiera.org\n"
                                                           "  2008               Christian Thaeter <ct@pipapo.org>";
@@ -142,6 +143,7 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             LUMIERA_INTERFACE_INLINE (license,
                                                       const char*, (LumieraInterface iface),
                                                       {
+                                                        (void)iface; 
                                                         return
                                                           "This program is free software; you can redistribute it and/or modify\n"
                                                           "it under the terms of the GNU General Public License as published by\n"
@@ -161,12 +163,12 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
 
                             LUMIERA_INTERFACE_INLINE (state,
                                                       int, (LumieraInterface iface),
-                                                      {return LUMIERA_INTERFACE_EXPERIMENTAL;}
+                                                      {(void)iface; return LUMIERA_INTERFACE_EXPERIMENTAL;}
                                                       ),
 
                             LUMIERA_INTERFACE_INLINE (versioncmp,
                                                       int, (const char* a, const char* b),
-                                                      {return 0;}
+                                                      {(void)a;(void)b;  return 0;}
                                                       )
                             );
 

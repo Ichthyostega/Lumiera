@@ -150,7 +150,7 @@ namespace control {
                                                           )
                                , LUMIERA_INTERFACE_INLINE (versioncmp,
                                                            int, (const char* a, const char* b),
-                                                             {return 0;}  ////////////////////////////////////////////TODO define version ordering
+                                                             {(void)a;(void)b;  return 0;}  ////////////////////////////////////////////TODO define version ordering
                                                           )
                                );
     
