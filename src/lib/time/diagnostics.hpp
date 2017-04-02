@@ -21,7 +21,7 @@
 */
 
 
-/** @file diagnostics.hpp
+/** @file time/diagnostics.hpp
  ** Extension to the lib::time::Time wrapper, adding output and further
  ** diagnostic aids. This shouldn't be confused with formatting into
  ** distinctive \em Timecode formats. There is an elaborate framework

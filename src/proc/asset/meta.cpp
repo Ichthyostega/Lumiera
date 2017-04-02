@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file meta.cpp
+/** @file asset/meta.cpp
  ** Implementation details regarding the Meta Asset category
  */
 

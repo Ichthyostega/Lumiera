@@ -49,9 +49,9 @@
  ** @note this trick was proposed by user "enobayram" on Stackoverflow at Oct 5, 2012
  ** http://stackoverflow.com/questions/12753997/check-if-type-is-hashable
  ** 
- ** @warning this header <b>includes and manipulates</b> the standard header \c <functional>. Please
- **       ensure it is always included \em before the latter. Failing to do so will result in
- **       mysterious failures.
+ ** @warning this header <b>includes and manipulates</b> the standard header `<functional>`.
+ **       Please ensure it is always included _before_ the latter. Failing to do so will result
+ **       in mysterious failures.
  ** 
  ** @todo 4/2014 doesn't work as expected. My suspicion is that in the actual use case (PlacementIndex),
  **       the type providing the hasher is mixed in through inheritance, and the template specialisation

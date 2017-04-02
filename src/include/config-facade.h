@@ -20,7 +20,7 @@
 
 */
 
-/** @file configfacade.h
+/** @file config-facade.h
  ** The lumiera::Config wrapper class addresses two issues.
  ** First, it registers startup and shutdown hooks to bring up the config system
  ** as early as possible. Later, on application main initialisation, the global

@@ -51,22 +51,22 @@
  ** coded explicitly as ProvisionCluster and RequestCluster -- both based on a vector of entries.
  ** In case of the provisions, there is a stack-like order, inasmuch additions happen at the back
  ** and solutions are always searched starting from the end. Because of the basic structure of
- ** a binding match, solutions are possible \only between provision/request - clusters with the
+ ** a binding match, solutions are possible _only_ between provision/request - clusters with the
  ** same hash value (which is based on the predicate symbols within the patterns to match). Thus,
  ** in case of changing an existing request or solution, the internal handling is different,
  ** depending on the new value to belong or don't belong to the same cluster (hash code).
  ** It's possible (for patterns including variables) that an entry leading to a solution with
  ** the old provision doesn't match a new provision (and vice versa); thus we'll have to traverse
  ** the contents of the whole cluster, find all old solutions, match against the new counterpart
- ** and treating those entries \em not matching with the new value as if they where completely
+ ** and treating those entries _not matching_ with the new value as if they where completely
  ** newly added entries. In case we don't find any solution, the entries are supposed to be
  ** implemented such as to fall back to an default solution automatically (when receiving
- ** a \c NULL solution)
+ ** a `NULL` solution)
  ** 
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
  **       later at various places within proc-layer.
- ** @note for now, \em only the case of a completely constant (ground) pattern is implemented.
+ ** @note for now, _only_ the case of a completely constant (ground) pattern is implemented.
  **       Later we may consider to extend the binding patterns to allow variables. The mechanics
  **       of the index are designed right from start to support this case (and indeed the index
  **       could be much simpler if it wasn't to deal with this foreseeable additional complexity:

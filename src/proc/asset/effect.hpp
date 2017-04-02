@@ -21,7 +21,7 @@
 */
 
 
-/** @file effect.hpp
+/** @file asset/effect.hpp
  ** Definition of an Asset representation for any kind of _effect_ or media processor.
  */
 

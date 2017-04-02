@@ -21,7 +21,7 @@
 */
 
 
-/** @file controller/playback-controller.hpp
+/** @file playback-controller.hpp
  ** This file contains the definition of the playback controller object.
  ** 
  ** @deprecated this represents an early design of playback and will be reworked

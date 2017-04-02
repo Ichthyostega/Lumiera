@@ -25,10 +25,10 @@
  ** Metaprogramming helpers to check for specific properties of a type in question.
  ** Building upon the "SFINAE" principle, it is possible to create \em metafunction templates,
  ** which answer some questions about a given type at compile time. A lot of generic predicates of
- ** this kind can be found in the \c <type_traits> library (standard since C++11). At times though,
+ ** this kind can be found in the `<type_traits>` library (standard since C++11). At times though,
  ** you want to ask more specific questions, like e.g. "does this type provide an operation quack() "?
- ** Because, if we can get a \c bool answer to such a question <i>at compile time,</i> we can use
- ** \c boost::enable_if to pick a special implementation based on the test result. Together, these
+ ** Because, if we can get a `bool` answer to such a question _at compile time,_ we can use
+ ** `std::enable_if` to pick a special implementation based on the test result. Together, these
  ** techniques allow to adopt a duck-typed programming style, where an arbitrary object is allowed
  ** to enter a given API function, provided this object supports some specific operations.
  ** 
@@ -37,7 +37,7 @@
  ** static type safety, which is compelling. (The downside is the danger of code bloat, as is with all
  ** template based techniques).
  ** 
- ** \par how the implementation works
+ ** # how the implementation works
  ** 
  ** Most of these trait templates rely on a creative use of function overloading. The C++ standard
  ** requires the compiler <i>silently to drop</i> any candidate of overload resolution which has
@@ -47,26 +47,26 @@
  ** out the overload actually picked by the compiler.
  ** 
  ** This header provides some pre-configured tests, available as macros. Each of them contains
- ** a template based on the described setup, containing a \em probe type expression at some point.
+ ** a template based on the described setup, containing a _probe type expression_ at some point.
  ** The key is to build this probe expression in a way that it is valid if and only if the
  ** type in question exhibits a specific property.
  ** 
  ** - if the type should contain a nested type or typedef with a specific name, we simply use
  **   this nested type in the signature of the overloaded function
- ** - if the type should contain a \em member with a specific name, we initialise a member pointer
+ ** - if the type should contain a _member_ with a specific name, we initialise a member pointer
  **   within a probe template with this member (if there isn't such a member, the probe template
  **   initialisation fails and the other function overload gets picked)
  ** - as an extension to this approach, we can even declare a member function pointer with a
  **   specific function signature and then try to assign the named member. This allows even
  **   to determine if a member function of a type in question has the desired signature.
  ** 
- ** All these detection building blocks are written such as to provide a bool member \c ::value,
+ ** All these detection building blocks are written such as to provide a bool member `::value`,
  ** which is in accordance to the conventions of boost metaprogramming. I.e. you can immediately
- ** use them within \c boost::enable_if
+ ** use them within `std::enable_if`
  ** 
- ** \par some pitfalls to consider
+ ** # some pitfalls to consider
  ** 
- ** @warning The generated metafunctions all yield the \c false value by default.
+ ** @warning The generated metafunctions all yield the `false` value by default.
  **          Effectively this means that an error in the test expression might go unnoticed;
  **          you'd be better off explicitly checking the detection result by an unit test.
  ** 

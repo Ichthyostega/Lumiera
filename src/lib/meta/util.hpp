@@ -21,7 +21,7 @@
 */
 
 
-/** @file util.hpp
+/** @file meta/util.hpp
  ** Simple and lightweight helpers for metaprogramming and type detection.
  ** This header is a collection of very basic type detection and metaprogramming utilities.
  ** @warning indirectly, this header gets included into the majority of compilation units.

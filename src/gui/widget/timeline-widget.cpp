@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file timeline-widget.cpp
+/** @file widget/timeline-widget.cpp
  ** 
  ** @deprecated as of 11/2016, a complete rework of the timeline display is underway
  ** @see gui::timeline::TimelineWidget new timeline display

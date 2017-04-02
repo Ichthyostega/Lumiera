@@ -22,7 +22,14 @@
 
 
 /** @file segmentation.hpp
- ** A segment of the effective timeline, part of the low-level model backbone.
+ ** Part of the Fixture datastructure to manage time segments of constant structure.
+ ** The Fixture is result of the build process and separation between high-level and
+ ** low-level model. It's kind of an effective resulting timeline, and split into segments
+ ** of constant wiring structure: whenever the processing nodes need to be wired differently
+ ** for some timespan, we start a new segment of the timeline. This might be for the duration
+ ** of a clip, or just for the duration of a transition, when the pipes of both clips need to
+ ** be wired up in parallel.
+ ** 
  ** Within the Fixture, a Segment of the timeline is used as attachment point for all the
  ** render nodes relevant for rendering this segment. Thus, the Segmentation defines the
  ** index and access datastructure to get at any point of the render node network.
@@ -30,6 +37,9 @@
  ** 
  ** @todo stalled effort towards a session implementation from 2008
  ** @todo 2016 likely to stay, but expect some extensive rework
+ ** 
+ ** @see Fixture
+ ** @see ModelPort
  */
 
 

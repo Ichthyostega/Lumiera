@@ -21,7 +21,7 @@
 */
 
 
-/** @file clip.hpp
+/** @file asset/clip.hpp
  ** Definition of Asset representation for a media clip
  */
 

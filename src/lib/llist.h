@@ -40,8 +40,8 @@
  *
  * This header can be used in 2 different ways:
  * 1) (preferred) just including it provides all functions as static inlined functions. This is the default
- * 2) #define LLIST_INTERFACE before including this header gives only the declarations
- *    #define LLIST_IMPLEMENTATION before including this header yields in definitions
+ * 2) `#define LLIST_INTERFACE` before including this header gives only the declarations
+ *    `#define LLIST_IMPLEMENTATION` before including this header yields in definitions
  *    this can be used to generate a library. This is currently untested and not recommended.
  * The rationale for using inlined functions is that most functions are very small and likely to be used in performance critical parts.
  * Inlining can give a huge performance and optimisation improvement here.

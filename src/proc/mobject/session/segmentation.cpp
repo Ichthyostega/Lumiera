@@ -26,7 +26,9 @@
  ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
+#include "lib/error.hpp"
 #include "proc/mobject/session/segmentation.hpp"
+#include "proc/mobject/builder/fixture-change-detector.hpp"
 
 
 
@@ -34,7 +36,44 @@ namespace proc {
 namespace mobject {
 namespace session {
   
+  namespace error = lumiera::error;
+  
+  
+//  typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
+  
+  
+  /** storage for the link to the global
+      Registry instance currently in charge  */
+//  lib::OptionalRef<ModelPortRegistry> ModelPortRegistry::theGlobalRegistry;
+  
+  
+  /** access the globally valid registry instance.
+   *  @throw error::State if this global registry is
+   *         already closed or not yet initialised. */
+//ModelPortRegistry&
+//ModelPortRegistry::globalInstance()
+//{
+//  LockRegistry global_lock;
+//  if (theGlobalRegistry.isValid())
+//    return theGlobalRegistry();
+//  
+//  throw error::State ("global model port registry is not accessible"
+//                     , LUMIERA_ERROR_BUILDER_LIFECYCLE); 
+//}
+  
+  
+  
   /** */
+//  bool
+//  ModelPortRegistry::contains (ID<Pipe> key)  const
+//  {
+//    return bool(key)
+//        && util::contains (transaction_, key); 
+//  }
+  
+  
+  
+//LUMIERA_ERROR_DEFINE (DUPLICATE_MODEL_PORT, "Attempt to define a new model port with an pipe-ID already denoting an existing port");
   
   
   

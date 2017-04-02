@@ -53,7 +53,7 @@ hash_fnv64a_buf (const void *buf, size_t len, uint64_t hval);
 
 /**
  * FNV-1a 64 bit hash over a zero terminated string.
- * @param buf start of the buffer
+ * @param str start of the buffer
  * @param len maximum size to be processed
  * @param hval previous hash value when incremental hashing or HASH_FNV64_BASE when starting a new hash
  * @return new hash value
@@ -75,7 +75,7 @@ hash_fnv32a_buf (const void *buf, size_t len, uint32_t hval);
 
 /**
  * FNV-1a 32 bit hash over a zero terminated string.
- * @param buf start of the buffer
+ * @param str start of the buffer
  * @param len maximum size to be processed
  * @param hval previous hash value when incremental hashing or HASH_FNV32_BASE when starting a new hash
  * @return new hash value

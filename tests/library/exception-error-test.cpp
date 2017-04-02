@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file exceptionerrortest.cpp
+/** @file exception-error-test.cpp
  ** unit test \ref ExceptionError_test
  */
 

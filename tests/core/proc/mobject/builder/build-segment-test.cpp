@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file buildsegmenttest.cpp
+/** @file build-segment-test.cpp
  ** unit test \ref BuildSegment_test
  */
 

@@ -35,9 +35,9 @@
  ** CoreService is a PImpl to manage all the technical parts of actual
  ** service provision. When it goes down, all services are decommissioned.
  ** A part of these lifecycle technicalities is to manage the setup of the
- ** [UI-Bus main hub](\ref ctrl::Nexus), which requires some trickery, since
- ** both CoreService and Nexus are mutually interdependent from an operational
- ** perspective, since they exchange messages in both directions.
+ ** [UI-Bus main hub](\ref gui::ctrl::Nexus), which requires some trickery,
+ ** since both CoreService and Nexus are mutually interdependent from an
+ ** operational perspective, since they exchange messages in both directions.
  ** 
  ** ## Bus connection and topology
  ** The CoreService plays a central role within the UI, since it represents

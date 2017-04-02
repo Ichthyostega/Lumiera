@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file sessionmanagertest.cpp
+/** @file session-manager-test.cpp
  ** unit test \ref SessionManager_test
  */
 

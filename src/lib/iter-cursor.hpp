@@ -27,7 +27,7 @@
  ** to work in both directions, similar to std::reverse_iterator.
  ** Yet it is a single, self-contained element and in compliance to the
  ** ["Lumiera Forward Iterator"](iter-adapter.hpp) concept. But it has
- ** the additional ability to [switch the working direction](\ref IterCursor::switchDir).
+ ** the additional ability to [switch the working direction](\ref IterCursor<IT>::switchDir).
  ** 
  ** @see IterCursor_test
  ** @see iter-adapter.hpp

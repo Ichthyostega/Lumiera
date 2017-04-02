@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file streamtypelifecycletest.cpp
+/** @file stream-type-lifecycle-test.cpp
  ** unit test \ref StreamTypeLifecycle_test
  */
 

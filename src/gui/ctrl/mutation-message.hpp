@@ -22,7 +22,7 @@
 
 
 /** @file mutation-message.hpp
- ** Message on the UI-Bus to cause changes on the targeted [UI-Element](\ref Tangible).
+ ** Message on the UI-Bus to cause changes on the targeted [UI-Element](\ref model::Tangible).
  ** The UI-Bus offers a dedicated API to direct MutationMessages towards Tangible elements,
  ** as designated by the given ID. Actually, such messages serve as capsule to transport a
  ** diff-sequence -- since a diff sequence as such is always concrete and tied to a specific context,

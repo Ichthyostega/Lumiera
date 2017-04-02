@@ -102,10 +102,10 @@ namespace lumiera {
        *  When this subsystem ceases to work, it must ensure to activate
        *  the given callback signal.
        *  @param options may be influencing the operation mode 
-       *  @param termination to be signalled by the subsystem.
+       *  @param SigTerm to be signalled by the subsystem.
        *  @warning termination must be signalled reliably.  
-       *  @return \c true if actually started. */
-      virtual bool start (lumiera::Option&, SigTerm)  =0;
+       *  @return `true` if actually started. */
+      virtual bool start (lumiera::Option& options, SigTerm)  =0;
       
       
       /** initiate termination of this subsystem.

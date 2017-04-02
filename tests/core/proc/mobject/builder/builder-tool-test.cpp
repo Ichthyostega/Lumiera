@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file buildertooltest.cpp
+/** @file builder-tool-test.cpp
  ** unit test \ref BuilderTool_test
  */
 

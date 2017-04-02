@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file binding.cpp
+/** @file advice/binding.cpp
  ** Implementation of a binding record to represent a match between two patterns.
  ** This is used for the Advice System, to record existing connections between
  ** advice providers and consumers. But as such, Binding is a generic mechanism

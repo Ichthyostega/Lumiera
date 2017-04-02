@@ -1,5 +1,5 @@
 /*
-  RenderSegment(Test)  -  Proc-Layer Integrationtest
+  RenderSegment(Test)  -  Proc-Layer integration test
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file rendersegmenttest.cpp
+/** @file render-segment-test.cpp
  ** unit test \ref RenderSegment_test
  */
 

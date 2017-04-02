@@ -21,7 +21,7 @@
 */
 
 
-/** @file timeline-widget.hpp
+/** @file timeline/timeline-widget.hpp
  ** This file defines the core component of the Lumiera GUI.
  ** Timelines are the top level elements within Lumiera's high-level-model ("the session").
  ** In the UI workspace, there is a timeline pane with several tabs, each of which holds an

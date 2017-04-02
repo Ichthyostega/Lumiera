@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file orderingofassetstest.cpp
+/** @file ordering-of-assets-test.cpp
  ** unit test \ref OrderingOfAssets_test
  */
 

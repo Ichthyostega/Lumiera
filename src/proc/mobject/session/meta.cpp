@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file meta.cpp
+/** @file session/meta.cpp
  ** implementation details regarding the Meta asset abstraction
  ** 
  ** @todo stalled effort towards a session implementation from 2008

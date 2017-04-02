@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file identityofassetstest.cpp
+/** @file identity-of-assets-test.cpp
  ** unit test \ref IdentityOfAssets_test
  */
 

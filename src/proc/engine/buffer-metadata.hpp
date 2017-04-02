@@ -20,7 +20,7 @@
 
 */
 
-/** @file buffer-metadate.hpp
+/** @file buffer-metadata.hpp
  ** Metadata for managing and accessing buffers. The Lumiera Engine uses the
  ** Abstraction of an BufferProvider to handle various kinds of buffer organisation
  ** and access in a uniform way. Actually, buffers can be exposed and provided by several

@@ -55,7 +55,7 @@ namespace test {
    *       done with the same orientation, irrespective of the zero point
    *       on the given scale. Contrast this to the built-in integer
    *       division and modulo operators working symmetrical to zero.
-   * @see util.hpp
+   * @see lib/util.hpp
    * @see TimeFormats_test
    */
   class UtilFloorwrap_test : public Test

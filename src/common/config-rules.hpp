@@ -25,9 +25,9 @@
  ** Interface for accessing rule based configuration.
  ** By using the Query template, you can pose a query in prolog syntax and get some
  ** existing or newly created object fulfilling the requested predicates. The actual 
- ** implementation is hidden behind the #instance (Singleton factory). As of 1/2008, 
+ ** implementation will be hidden behind a `instance` (Singleton factory). As of 1/2008,
  ** it is _planned_ to use an embedded YAP Prolog system at some point in the future,
- ** for now we use a [mock implementation](\ref MockConfigRules) based on lookup in
+ ** for now we use a [mock implementation](\ref fake-configrules.hpp) based on lookup in
  ** a hard-wired, preconfigured Map.
  ** 
  ** Fully implementing this facility would require the participating objects to register capabilities
@@ -37,7 +37,7 @@
  ** \par relation to Query and QueryResolver
  ** The ConfigRules resolver is just a special kind of QueryResolver, able to handle specific kinds
  ** of queries. Clients using the ConfigRules directly get a more easy to use point-and-shot style
- ** interface, allowing just to retrieve some \em suitable solution, instead of having to iterate
+ ** interface, allowing just to retrieve some _suitable solution_, instead of having to iterate
  ** through a result set.
  ** 
  ** @todo right now (12/2012) the above paragraph is a lie.

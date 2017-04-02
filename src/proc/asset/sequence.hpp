@@ -21,7 +21,7 @@
 */
 
 
-/** @file sequence.hpp
+/** @file asset/sequence.hpp
  ** Structural building block of the session: a sequence of clips.
  ** A Sequence is both a structural element of the session and part of the
  ** public session API exposed to clients for discovering the session contents

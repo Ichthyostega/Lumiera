@@ -146,7 +146,7 @@ lumiera_fileheader_create (LumieraFile file, char* fourcc, int version, size_t s
  * @param fourcc pointer to a string of length 4 with the expected identifier for the file
  * @param size The actual size of all header data, including following format specific data
  * @param flags_expected expect this flags being set
- * @param flags_remov remove this flags when opening
+ * @param flags_remove remove this flags when opening
  * @return A lumiera_fileheader object by value, .header and .map are set to NULL on error.
  */
 lumiera_fileheader

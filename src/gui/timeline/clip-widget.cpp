@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file v.cpp
+/** @file clip-widget.cpp
  ** Implementation details of _clip display_ within the Lumiera UI.
  ** 
  ** @note a "clip" can be a media clip proper, or just some part

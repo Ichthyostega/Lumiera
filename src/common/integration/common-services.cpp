@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file common-serivces.cpp 
+/** @file common-services.cpp
  ** Wire library facilities directly into application core services 
  ** This translation unit serves to complete the definition of some parts of the Lumiera library.
  ** While library facilities usually are written to be self-contained, at places we want "magic"

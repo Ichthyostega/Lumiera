@@ -26,7 +26,8 @@
  ** This is a generic foundation for any elements of more than local relevance
  ** within the Lumiera UI.<br/> Any such element is connected to the [UI-Bus](ui-bus.hpp).
  ** 
- ** \par rationale
+ ** ## rationale
+ ** 
  ** Simple user interfaces can be built by wiring up the actions right within the
  ** code processing the trigger of actions. This leads to core functionality littered
  ** and tangled with presentation code. The next step towards a more sane architecture
@@ -52,7 +53,8 @@
  ** `Tangible::uiBus_`
  ** can be used for interaction with core services.
  ** 
- ** \par the generic interface element API
+ ** ## the generic interface element API
+ ** 
  ** The _generic interface element_ based on [Tangible](\ref model::Tangible) covers a set of behaviour
  ** common to  all elements of the interface. This behaviour is targeted towards the _integration_
  ** with the core application. Beyond that, there are still several concerns regarding presentation,
@@ -96,7 +98,8 @@
  ** These are sent as notifications just to some relevant top level element, expecting this element
  ** to request a [diff](tree-diff.hpp) and to mutate contents into shape recursively.
  ** 
- ** \par Interactions
+ ** ## Interactions
+ ** 
  ** - **lifecycle**: connect to an existing term, supply the [EntryID](\ref Tangible::ID) of the new element.
  **   This interaction also implies, that the element automatically detaches itself at end of life.
  ** - **act**: send a \ref GenNode representing the action

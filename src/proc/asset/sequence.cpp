@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file sequence.cpp
+/** @file asset/sequence.cpp
  ** Implementation parts of the Sequence entity within the Session model
  */
 

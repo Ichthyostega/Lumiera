@@ -96,7 +96,6 @@ namespace engine{
    * responsible for creating the right job entries in the
    * correct order and to enqueue these into the scheduler.
    * @ingroup engine
-   * @ingroup player
    */
   class EngineService
     : boost::noncopyable

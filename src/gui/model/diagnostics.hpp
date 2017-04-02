@@ -21,7 +21,7 @@
 */
 
 
-/** @file diagnostics.hpp
+/** @file gui/model/diagnostics.hpp
  ** Service for diagnostics.
  ** This header defines the basics of...
  ** 

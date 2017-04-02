@@ -97,7 +97,7 @@ namespace lumiera {
   /**
    * Interface: a facility for resolving (some kind of) queries
    * A concrete subclass has the ability to create Resolution instances
-   * in response to specific queries of some kind, \link #canHandle if applicable \endlink.
+   * in response to specific queries of some kind, [if applicable](QueryResolver::canHandle).
    * Every resolution mechanism is expected to enrol by calling #installResolutionCase.
    * Such a registration is considered permanent; a factory function gets stored,
    * assuming that the entity to implement this function remains available
@@ -158,7 +158,7 @@ namespace lumiera {
   
   
   /** notational convenience shortcut,
-   *  synonymous to #resolveBy */
+   *  synonymous to Query<RES>::resolveBy() */
   template<typename RES>
   inline typename Query<RES>::iterator
   Query<RES>::operator() (QueryResolver const& resolver)  const

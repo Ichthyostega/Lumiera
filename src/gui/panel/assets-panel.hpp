@@ -47,8 +47,8 @@ namespace panel{
     {
     public:
       /** Build a new Asset-Panel
-       * @param panel_manager The owner panel manager widget.
-       * @param dock_item The GdlDockItem that will host this panel.
+       * @param PanelManager The owner panel manager widget.
+       * @param DockItem The GdlDockItem that will host this panel.
        */
       AssetsPanel (workspace::PanelManager&, Gdl::DockItem&);
       

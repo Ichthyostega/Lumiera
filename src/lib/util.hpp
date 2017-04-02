@@ -21,7 +21,7 @@
 */
 
 
-/** @file util.hpp
+/** @file lib/util.hpp
  ** Tiny helper functions and shortcuts to be used _everywhere_
  ** Consider this header to be effectively included in almost every translation unit.
  ** @remark The motivation of using these helpers is conciseness and uniformity of expression.

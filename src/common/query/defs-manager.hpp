@@ -56,9 +56,9 @@
  **       importance that we build our implementations with this goal in mind
  ** 
  ** # Configuration Query Interface
- ** The [Defaults Manager](\ref DefsManager) exposes an interface similar to
- ** a database. The intended audience of this interface is the writer of
- ** low-level implementation code. This facade interface is meant to create
+ ** The [Defaults Manager](\ref lumiera::query::DefsManager) exposes an interface
+ ** similar to a database. The intended audience of this interface is the writer
+ ** of low-level implementation code. This facade interface is meant to create
  ** a more familiar front-end to an essentially logic and rules driven
  ** configuration system. And, as an additional benefit, it can be implemented
  ** just by a glorified table lookup. Which indeed is what we do until the more

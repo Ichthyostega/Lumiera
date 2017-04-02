@@ -22,7 +22,7 @@
 
 
 /** @file styperegistry.hpp
- ** This is part of the \i implementation of the stream type manager (include).
+ ** This is part of the _implementation_ of the stream type manager (include).
  ** Only used in stypemanager.cpp and accompanying unit tests.
  ** 
  ** @see control::STypeManager

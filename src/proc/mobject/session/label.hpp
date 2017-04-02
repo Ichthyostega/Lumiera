@@ -23,7 +23,7 @@
 
 /** @file label.hpp
  ** A marker or reference point in the Session.
- ** Label MObjects can be [placed](\ref Placement) at various locations and scopes,
+ ** Label MObjects can be [placed](\ref placement.hpp) at various locations and scopes,
  ** e.g. on the timeline, or relative to the media data of a clip. They can be used to give
  ** a visual clue for the user's orientation within the edit, or for navigation on the timeline,
  ** but also as an anchor point to place other elements with relative offset.

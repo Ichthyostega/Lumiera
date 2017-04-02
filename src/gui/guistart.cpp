@@ -36,7 +36,7 @@
  ** body, while the interface is opened via an InstanceHandle member. The `launchUI()` call
  ** starts a new thread, which then becomes the UI event thread and remains blocked within
  ** the main GTK event loop. Before entering this loop, the CoreService of the GUI and
- ** especially the [UI-Bus](\ref ui-bus.hpp) is started see \ref GtkLumiera::run.
+ ** especially the [UI-Bus](\ref ui-bus.hpp) is started see \ref GtkLumiera::main().
  ** This entails also to open the primary "business" interface(s) of the GUI
  ** (currently as of 1/16 this is the interface gui::GuiNotification.)
  ** 

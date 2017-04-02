@@ -89,7 +89,6 @@ lumiera_filehandlecache_checkout (LumieraFilehandle handle);
 /**
  * Put a filehandle into the cache
  * Filehandles which are checked in are subject of cache aging and might get destroyed and reused.
- * @param self the filehandlecache
  * @param handle the filehandle to be checked in
  */
 void

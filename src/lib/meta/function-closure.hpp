@@ -611,7 +611,7 @@ namespace func{
       typedef function<typename FunctionTypedef<Ret,ArgsR>::Sig> RightReducedFunc;
       
       
-      /** do a partial function application, closing the first arguments</br>
+      /** do a partial function application, closing the first arguments<br/>
        *  `f(a,b,c)->res  +  (a,b)`  yields  `f(c)->res`
        *  
        *  @param f   function, function pointer or functor

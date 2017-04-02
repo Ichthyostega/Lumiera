@@ -25,9 +25,9 @@
  ** Apply a "list diff" to a concrete sequence of elements in a container.
  ** This header provides specialisation(s) of the DiffApplicationStrategy to
  ** actual containers, choosing an implementation approach suitable for this
- ** specific kind of container. Together with a #DiffApplicator, this allows
- ** to receive the description of changes (as a linearised sequence of
- ** DiffStep tokens) and apply them to a given concrete sequence of data
+ ** specific kind of container. Together with a lib::diff::DiffApplicator,
+ ** this allows to receive the description of changes (as a linearised sequence
+ ** of DiffStep tokens) and apply them to a given concrete sequence of data
  ** elements, thereby transforming the contents of this target sequence.
  ** 
  ** @see diff-list-application-test.cpp

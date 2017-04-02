@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file clip.cpp
+/** @file session/clip.cpp
  ** Implementation details regarding a media clip as integrated into the edit / session model.
  ** @todo stalled effort towards a session implementation from 2008
  ** @todo 2016 likely to stay, but expect some extensive rework

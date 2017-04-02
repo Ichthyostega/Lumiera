@@ -20,7 +20,7 @@
 
 */
 
-/** @file timeline-widget.hpp
+/** @file widget/timeline-widget.hpp
  ** This file defines the core component of the Lumiera GUI
  ** 
  ** @deprecated broken since transition to GTK-3

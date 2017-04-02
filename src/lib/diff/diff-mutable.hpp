@@ -81,9 +81,9 @@ namespace diff{
        *  suitably wired to cause appropriate changes to the opaque
        *  data structure, in accordance to the semantics of the
        *  tree diff language.
-       * @param a buffer handle, which can be used to placement-construct
+       * @param buffer a buffer handle, which can be used to placement-construct
        */
-      virtual void buildMutator (TreeMutator::Handle)    =0;
+      virtual void buildMutator (TreeMutator::Handle buffer)    =0;
     };
   
   

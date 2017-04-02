@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file addcliptest.cpp
+/** @file add-clip-test.cpp
  ** unit test \ref AddClip_test
  */
 

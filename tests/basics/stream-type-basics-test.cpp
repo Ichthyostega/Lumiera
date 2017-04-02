@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file streamtypebasicstest.cpp
+/** @file stream-type-basics-test.cpp
  ** unit test \ref StreamTypeBasics_test
  */
 

@@ -164,7 +164,7 @@ typedef lumiera_condition* LumieraCondition;
 
 
 /**
- * Initialize a condition variable
+ * Initialise a condition variable
  * @param self is a pointer to the condition variable to be initialised
  * @return self as given
  */

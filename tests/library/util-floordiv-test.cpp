@@ -107,7 +107,7 @@ namespace test {
    * @note if invoked with an non empty parameter, this test performs
    *       some interesting timing comparisons, which initially were
    *       used to tweak the implementation a bit.
-   * @see util.hpp
+   * @see lib/util.hpp
    * @see QuantiserBasics_test
    */
   class UtilFloordiv_test : public Test

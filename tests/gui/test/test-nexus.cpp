@@ -455,7 +455,7 @@ namespace test{
   }
   
   /**
-   * similar to the [custom command handler](::setCommandHandler)
+   * similar to the [custom command handler](Nexus::setCommandHandler)
    * this hook allows to install a closure to intercept any
    * "state mark" messages passed over the test-UI-Bus
    */

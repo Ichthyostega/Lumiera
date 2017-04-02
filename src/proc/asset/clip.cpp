@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file clip.cpp
+/** @file asset/clip.cpp
  ** Clip Asset implementation
  */
 

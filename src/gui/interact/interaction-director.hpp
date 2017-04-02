@@ -24,7 +24,7 @@
 /** @file interaction-director.hpp
  ** The top-level controller to connect model and user interaction state.
  ** Within the Lumiera UI, relevant entities from the session model are mapped onto and represented
- ** by corresponding [UI-Elements](\ref model::Tangible). Consequently, there is a hierarchy of
+ ** by corresponding [UI-Elements](\ref Tangible). Consequently, there is a hierarchy of
  ** interrelated UI elements mirroring the hierarchy within the session model. And, while in the
  ** latter, there is a _conceptual root node_ to correspond to the session itself, within the UI
  ** there is a top-level controller to mirror and represent that root element: The InteractionDirector.

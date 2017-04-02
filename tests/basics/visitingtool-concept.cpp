@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file visitingtool-conept.cpp
+/** @file visitingtool-concept.cpp
  ** While laying the foundations for Session and Builder, Ichthyo came across
  ** the necessity to create a custom implementation of the Visitor Pattern
  ** optimally suited for Lumiera's needs. This implementation file was used

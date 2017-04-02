@@ -23,12 +23,12 @@
 
 /** @file header-pane-widget.hpp
  ** Widget to show an always visible track header area within the timeline UI.
- ** [The fork](\ref session::Fork), a recursively nested system of scopes, is rendered within
+ ** [The fork](\ref Fork), a recursively nested system of scopes, is rendered within
  ** the timeline display as a system of nested tracks. Each of these tracks possibly holds some
  ** child tracks plus some actual media clips, which all inherit parameters of placement from
  ** this fork ("track"). These parameters address various aspects of how content is attached
  ** ("placed") into the model at large. So, for each track, we create a
- ** ["patchbay" area](\ref timeline::PatchbayWidget) to manage those placement parameters.
+ ** ["patchbay" area](\ref PatchbayWidget) to manage those placement parameters.
  ** 
  ** The HeaderPaneWidget aggregates those patchbay elements into a nested, collapsable tree
  ** structure in accordance with the nesting of scopes. For the actual layout, it has to collaborate

@@ -387,7 +387,7 @@ namespace session {
       
       
       /** Helper for building a scope exploring iterator
-       *  for PlacementIndex: our "reverse index" (#scopeTab_)
+       *  for PlacementIndex: our "reverse index" (`scopeTab_`)
        *  tracks the contents of each scope as pairs (scopeID,elementID).
        *  After fetching the range of matching entries, whenever the client
        *  dereferences the iterator, we have to pick up the second ID and

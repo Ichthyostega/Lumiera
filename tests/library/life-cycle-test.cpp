@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file lifecycletest.cpp
+/** @file life-cycle-test.cpp
  ** unit test \ref LifeCycle_test
  */
 

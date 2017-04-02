@@ -15620,6 +15620,118 @@
 </node>
 </node>
 </node>
+<node CREATED="1491098340549" ID="ID_938211341" MODIFIED="1491098343944" TEXT="Toolchain">
+<node CREATED="1491098346053" ID="ID_1333373693" MODIFIED="1491098349439" TEXT="Doxygen">
+<node CREATED="1491098370281" ID="ID_1904535196" MODIFIED="1491098373325" TEXT="Konfig"/>
+<node CREATED="1491098373816" ID="ID_1022990703" MODIFIED="1491098376332" TEXT="Fallen">
+<node CREATED="1491099064125" ID="ID_651937703" MODIFIED="1491099078088" TEXT="Dateien ohne @file werden nicht dokumentiert"/>
+<node CREATED="1491099088362" ID="ID_1507484869" MODIFIED="1491099207627" TEXT="Template-Parameter in Klassennamen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn eine getemplatete Klasse zum Qualifizieren eines Feldes verwendet wird,
+    </p>
+    <p>
+      dann m&#252;ssen die formalen Template-Parameter in spitzen Klammern mit angegeben werden.
+    </p>
+    <p>
+      D.h. Doxygen ist hier genauso penibel wie C++ selber
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Beispiel
+    </p>
+    <p>
+      Query&lt;RES&gt;::resolveBy
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1491099311253" ID="ID_307124479" MODIFIED="1491099409234">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      @param hat <b>stets</b>&#160;einen Parameternamen als Argument
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...der ist <i>nicht</i>&#160;optional
+    </p>
+    <p>
+      vielmehr wird blindlings immer das erste Wort genommen.
+    </p>
+    <p>
+      Wenn der Parameter selber nicht benannt ist (z.B. pure virtual function),
+    </p>
+    <p>
+      kann man ersatzweise einfach einen Typnamen angeben.
+    </p>
+    <p>
+      Sofern alle Parameter dokumentiert sind, klappt das.
+    </p>
+    <p>
+      sonst kommt Doxygen durcheinander
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1491098382888" ID="ID_1568153886" MODIFIED="1491098384859" TEXT="Probleme">
+<node CREATED="1491098385823" ID="ID_801230289" MODIFIED="1491098392530" TEXT="Auto-Links">
+<node CREATED="1491098393405" ID="ID_1408589913" MODIFIED="1491098400681" TEXT="funktionieren in vielen F&#xe4;llen nicht"/>
+<node CREATED="1491098402197" ID="ID_1572559975" MODIFIED="1491098411983" TEXT="Verdacht: mu&#xdf; Namespaces qualifizieren?"/>
+<node CREATED="1491098427785" ID="ID_719835617" MODIFIED="1491098484327" TEXT="Beispiel: alle Unit-Tests">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....haben in ihrem @file-Kommentar
+    </p>
+    <p>
+      einen Verweis \ref DieserUnit_test
+    </p>
+    <p>
+      Und obwohl das der exakte Klassennahme ist,
+    </p>
+    <p>
+      und obwohl genau diese Klasse im Klassenindex zu finden ist
+    </p>
+    <p>
+      wird hier kein Link erzeugt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1491098487889" ID="ID_1401713015" MODIFIED="1491098493701" TEXT="Sqlite-Support">
+<node CREATED="1491098494497" ID="ID_1565133197" MODIFIED="1491098499291" TEXT="ist wohl noch sehr vorl&#xe4;ufig"/>
+<node CREATED="1491098499712" ID="ID_1643743799" MODIFIED="1491098515234" TEXT="wenn eine Sqlite-DB gefunden wird...."/>
+<node CREATED="1491098515845" ID="ID_1313255620" MODIFIED="1491098524850" TEXT="produziert er jede Menge Constraint-Verletzungen"/>
+<node CREATED="1491098525396" ID="ID_1962242264" MODIFIED="1491098532791" TEXT="Tip: Sqlite-DB wegl&#xf6;schen!!!"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1437693678626" ID="ID_1536988357" MODIFIED="1488423307352" POSITION="left" TEXT="Doku">
 <node CREATED="1437693687650" ID="ID_1484874437" MODIFIED="1437693692821" TEXT="Sound-Systeme">

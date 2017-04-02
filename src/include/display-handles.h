@@ -20,7 +20,7 @@
 
 */
 
-/** @file display-handles.hpp
+/** @file display-handles.h
  ** Opaque handles and similar typedefs used to communicate via the
  ** lumiera::Display and lumiera::DummyPlayer facade interfaces.
  **

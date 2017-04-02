@@ -134,7 +134,7 @@ lumiera_priqueue_insert (LumieraPriQueue self, void* element);
 
 
 /**
- * @return pointer to the topmost element, \NULL on empty queue
+ * @return pointer to the topmost element, `NULL` on empty queue
  * @note returned pointer is only valid as long
  *       as no insert or remove is called
  */

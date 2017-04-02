@@ -28,8 +28,8 @@
  ** 
  ** \par unwrapping
  ** Strip away all kinds of type adornments, like const, reference, pointer, smart-ptr.
- ** The accompanying \ref unwrap() function can be used to accept "stuff packaged
- ** in various forms". The \ref Strip template packages this ability in various
+ ** The accompanying \ref lib::meta::unwrap() function can be used to accept "stuff
+ ** packaged in various forms". The \ref Strip template packages this ability in various
  ** degrees for metaprogramming
  ** @warning these helpers can be quite dangerous, as they silently break
  **          any protective barriers (including lifecycle managing smart-ptrs)
@@ -47,8 +47,8 @@
  ** concept from the standard library (`begin()` and `end()`)
  ** 
  ** @see MetaUtils_test
- ** @see \rem format-obj.hpp string representation for _anything_
- ** @see \ref lib/meta/utils.hpp very basic metaprogramming helpers
+ ** @see format-obj.hpp string representation for _anything_
+ ** @see meta/util.hpp very basic metaprogramming helpers
  ** @see typelist.hpp
  ** 
  */

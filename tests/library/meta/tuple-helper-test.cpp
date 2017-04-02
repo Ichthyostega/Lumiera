@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file tuple-helpers-test.cpp
+/** @file tuple-helper-test.cpp
  ** Interplay of typelists, type tuples and std::tuple.
  ** 
  ** @see tuple-helper.hpp

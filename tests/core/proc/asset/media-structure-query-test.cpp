@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file mediastructurequerytest.cpp
+/** @file media-structure-query-test.cpp
  ** unit test \ref MediaStructureQuery_test
  */
 

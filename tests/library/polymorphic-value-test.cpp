@@ -286,12 +286,12 @@ namespace test{
         }
       
       
-      /** @Test internally, PolymorphicValue uses some metafunctions
+      /** @test internally, PolymorphicValue uses some metafunctions
        * to pick a suitable code path, based on the presence of helper functions
        * on the API of the embedded objects. Default is no support by these objects,
        * which then requires to use a more expensive implementation. Sometimes it's
-       * desirable to support \em cloning only (copy ctor), but no assignment after
-       * the fact. In this special case, a support API with only a \cloneInto member
+       * desirable to support _cloning only_ (copy ctor), but no assignment after
+       * the fact. In this special case, a support API with only a `cloneInto()` member
        * can be implemented, causing the PolymorphicValue container to raise an 
        * exception in case the copy operator is invoked.
        */

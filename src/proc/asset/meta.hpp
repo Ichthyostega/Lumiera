@@ -21,11 +21,11 @@
 */
 
 
-/** @file meta.hpp
+/** @file asset/meta.hpp
  ** Internal and organisational metadata. Some internally created data elements
  ** rather serve the purpose of controlling the way the application behaves, as
- ** opposed to organising the \link struct.hpp structure \endlink of the data the
- ** user works with. Lumiera exposes this self-referential control and customisation
+ ** opposed to organising the [structure](\ref struct.hpp) of the data the user
+ ** works with. Lumiera exposes this self-referential control and customisation
  ** aspects as a special kind of Asset. Examples being types, scales and quantisation
  ** grids, decision rules, control data stores (automation data), annotations attached
  ** to labels, inventory entities etc. 
