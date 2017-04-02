@@ -68,7 +68,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/access-casted.hpp"
 #include "lib/util.hpp"
 
@@ -192,7 +191,6 @@ namespace lib {
                            ///< how to access the contents via a common interface?
     >
   class InPlaceAnyHolder
-    : public BoolCheckable<InPlaceAnyHolder<siz, AccessPolicy>>
     {
       typedef typename AccessPolicy::Base * BaseP;
       
@@ -474,6 +472,12 @@ namespace lib {
       isValid() const
         {
           return buff().isValid();
+        }
+      
+      explicit
+      operator bool() const
+        {
+          return isValid();
         }
     };
   

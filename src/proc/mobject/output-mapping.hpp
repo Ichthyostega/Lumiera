@@ -56,7 +56,6 @@
 #include "lib/util.hpp"
 #include "lib/hash-value.h"
 #include "proc/asset/pipe.hpp"
-#include "lib/bool-checkable.hpp"
 #include "common/query.hpp"
 
 #include <boost/operators.hpp>
@@ -159,10 +158,8 @@ namespace mobject {
        * @note depends on the template parameter of the enclosing OutputMapping type!
        */
       class Resolver
-        : public lib::BoolCheckable<Resolver              // bool conversion to signal "unconnected"...
-        , boost::equality_comparable<Resolver, Target,   //  final mapping result can be compared to Target...
-          boost::equality_comparable<Resolver>          //   mapping values can be compared.
-                                  > >                  //    
+        : public boost::equality_comparable<Resolver, Target   //  final mapping result can be compared to Target...
+        , boost::equality_comparable<Resolver>>               //   mapping values can be compared.
         {
           OutputMapping& thisMapping_;
           HashVal& pID_;
@@ -228,6 +225,12 @@ namespace mobject {
           isValid()  const    ///< is this a valid \em connected mapping?
             {
               return bool(pID_);
+            }
+          
+          explicit
+          operator bool()  const
+            {
+              return isValid();
             }
           
           

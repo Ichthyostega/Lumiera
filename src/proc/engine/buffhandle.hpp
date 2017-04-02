@@ -54,7 +54,6 @@
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
 #include "proc/streamtype.hpp"
-#include "lib/bool-checkable.hpp"
 
 
 namespace proc {
@@ -110,7 +109,6 @@ namespace engine {
    * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
    */
   class BuffHandle
-    : public lib::BoolCheckable<BuffHandle>
     {
       typedef StreamType::ImplFacade::DataBuffer Buff;
       
@@ -130,6 +128,7 @@ namespace engine {
       
       // using standard copy operations
       
+      explicit operator bool()  const { return isValid(); }
       
       
       void emit();

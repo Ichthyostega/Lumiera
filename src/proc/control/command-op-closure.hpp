@@ -36,7 +36,6 @@
 #ifndef CONTROL_COMMAND_OP_CLOSURE_H
 #define CONTROL_COMMAND_OP_CLOSURE_H
 
-#include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/tuple-helper.hpp"

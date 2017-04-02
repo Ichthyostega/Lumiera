@@ -62,7 +62,6 @@
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"
@@ -260,7 +259,7 @@ namespace control {
   
   
   /**
-   * Helper class used solely for \em defining a Command-Object.
+   * Helper class used solely for _defining_ a Command-Object.
    * This technique is known as "fluent API", see http://en.wikipedia.org/wiki/Fluent_interface
    * The basic idea is for the user to create a disposable instance of this definition helper,
    * only for calling a chain of definition functions, which internally build the actual Command object.
@@ -277,8 +276,7 @@ namespace control {
    * 
    */
   class CommandDef
-    : public lib::BoolCheckable<CommandDef
-    , boost::noncopyable       >
+    : boost::noncopyable
     {
       Symbol id_;
       Command prototype_;
@@ -310,6 +308,8 @@ namespace control {
           return stage::BasicDefinition<Sig>(callback_when_defined, opera1);
         }
       
+      
+      explicit operator bool()  const { return isValid(); }
       
       bool isValid()  const;
       

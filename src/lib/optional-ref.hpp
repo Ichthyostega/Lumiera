@@ -32,7 +32,6 @@
 #define LIB_OPTIONAL_REF_H
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 
 
 namespace lib {
@@ -60,7 +59,6 @@ namespace lib {
    */
   template<typename T>
   class OptionalRef
-    : public lib::BoolCheckable<OptionalRef<T>>
     {
       T* ref_;
       
@@ -81,6 +79,9 @@ namespace lib {
       OptionalRef(T& target)     ///< ...\em not allowing implicit conversion from T&
         : ref_(&target)
         { }
+      
+      explicit operator bool() const { return isValid(); }
+      
       
       T&
       operator() ()  const

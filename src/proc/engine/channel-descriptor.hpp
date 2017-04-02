@@ -39,7 +39,6 @@
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
 #include "proc/streamtype.hpp"
-#include "lib/bool-checkable.hpp"
 
 
 namespace proc {

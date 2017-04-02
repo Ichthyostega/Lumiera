@@ -66,7 +66,6 @@
 #define MOBJECT_PLACEMENT_REF_H
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"  /////////////TODO this is ugly! Why can't placement::resolve() return a reference??
 #include "proc/mobject/session/session-service-fetch.hpp"
@@ -98,7 +97,6 @@ namespace proc {
    */
   template<class MX =MObject>
   class PlacementRef
-    : public lib::BoolCheckable<PlacementRef<MX>>
     {
       typedef Placement<MX>      PlacementMX;
       typedef Placement<MObject>::ID     _ID;
@@ -205,6 +203,12 @@ namespace proc {
       
       
       /* == forwarding part of the Placement-API == */
+      
+      explicit
+      operator bool()  const
+        {
+          return isValid();
+        }
       
       bool isValid()  const
         { 

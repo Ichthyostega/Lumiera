@@ -42,7 +42,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -57,8 +56,7 @@ namespace lib {
      */
     template<class TY>
     class AccessAsReference
-      : public lib::BoolCheckable<AccessAsReference<TY>
-             , boost::noncopyable>
+      : boost::noncopyable
       {
         TY* obj_;
         
@@ -87,8 +85,8 @@ namespace lib {
             return obj_;
           }
         
-        
-        bool isValid()  const { return obj_; }
+        explicit operator bool() const { return obj_; }
+        bool isValid()           const { return obj_; }
       };
     
   } // namespace Singleton

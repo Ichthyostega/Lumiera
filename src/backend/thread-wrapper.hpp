@@ -42,7 +42,6 @@
 
 #include "lib/error.hpp"
 #include "include/logging.h"
-#include "lib/bool-checkable.hpp"
 #include "lib/result.hpp"
 
 extern "C" {
@@ -257,8 +256,7 @@ namespace backend {
    * to join on the termination of this thread.
    */
   class ThreadJoinable
-    : public lib::BoolCheckable<ThreadJoinable
-    ,Thread>                  // baseclass
+    : public Thread
     {
     public:
       ThreadJoinable (Literal purpose, Operation const& operation,

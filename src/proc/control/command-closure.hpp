@@ -68,7 +68,6 @@
 #ifndef CONTROL_COMMAND_CLOSURE_H
 #define CONTROL_COMMAND_CLOSURE_H
 
-#include "lib/bool-checkable.hpp"
 #include "lib/meta/function-erasure.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "lib/diff/gen-node.hpp"
@@ -105,10 +104,10 @@ namespace control {
   
   /** Interface */
   class CmdClosure
-    : public lib::BoolCheckable<CmdClosure>
     {
     public:
       virtual ~CmdClosure() {}
+      explicit operator bool()  const { return isValid(); }
       
       virtual operator string() const                      =0;
       virtual bool isValid ()   const                      =0;    ///< does this closure hold a valid argument tuple?

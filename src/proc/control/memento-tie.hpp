@@ -40,7 +40,6 @@
 #ifndef CONTROL_MEMENTO_TIE_H
 #define CONTROL_MEMENTO_TIE_H
 
-#include "lib/bool-checkable.hpp"
 #include "lib/meta/maybe-compare.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
@@ -89,9 +88,7 @@ namespace control {
    */
   template<typename SIG, typename MEM>
   class MementoTie
-    : public lib::BoolCheckable<MementoTie<SIG,MEM>,
-             equality_comparable<MementoTie<SIG,MEM> 
-                               > >
+    : public equality_comparable<MementoTie<SIG,MEM>>
     {
       typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
       typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
@@ -180,6 +177,12 @@ namespace control {
        *  if all functions are usable and 
        *  memento state has been captured
        */
+      explicit
+      operator bool()  const
+        {
+          return isValid();
+        }
+      
       bool
       isValid ()  const
         {

@@ -67,7 +67,6 @@
 #define LIB_ITERTOOLS_H
 
 
-#include "lib/bool-checkable.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
@@ -147,7 +146,6 @@ namespace lib {
    */
   template<class CORE>
   class IterTool
-    : public lib::BoolCheckable<IterTool<CORE>>
     {
       
     protected: /* == iteration control == */
@@ -167,7 +165,8 @@ namespace lib {
           
           do core_.advance();
           while (core_.pipe() && !core_.evaluate());
-          return core_.pipe();
+          
+          return bool{core_.pipe()};
         }
       
       void
@@ -190,6 +189,8 @@ namespace lib {
         {
           hasData();
         }
+      
+      operator bool() const { return isValid(); }
       
       
       

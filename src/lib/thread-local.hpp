@@ -36,7 +36,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <pthread.h>
@@ -55,8 +54,7 @@ namespace lib {
    */
   template<typename TAR>
   class ThreadLocalPtr
-    : public BoolCheckable< ThreadLocalPtr<TAR>
-    , boost::noncopyable  >
+    : boost::noncopyable
     {
       pthread_key_t key_;
       
@@ -71,6 +69,8 @@ namespace lib {
         {
           WARN_IF (pthread_key_delete (key_), sync, "failure to drop thread-local data key");
         }
+      
+      explicit operator bool()  const { return isValid(); }
       
       
       bool isValid()    const { return get(); }

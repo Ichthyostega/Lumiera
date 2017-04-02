@@ -85,7 +85,6 @@ namespace lib {
    */
   template<class IT>
   class PtrDerefIter
-    : public lib::BoolCheckable<PtrDerefIter<IT>>
     {
       IT i_;  ///< nested source iterator
       
@@ -141,6 +140,9 @@ namespace lib {
           i_ = reinterpret_cast<IT const&> (ref.getBase());
           return *this;
         }
+      
+      operator bool() const { return isValid(); }
+      
       
       
       /** explicit builder to allow creating a const variant from the basic srcIter type. 
@@ -230,7 +232,6 @@ namespace lib {
    */
   template<class IT>
   class AddressExposingIter
-    : public lib::BoolCheckable<AddressExposingIter<IT>>
     {
       typedef typename IT::pointer _Ptr;
       
@@ -265,6 +266,7 @@ namespace lib {
           takeAddress();
         }
       
+      operator bool() const { return isValid(); }
       
       
       

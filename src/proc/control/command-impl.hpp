@@ -45,7 +45,6 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/command-mutation.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/format-string.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -78,9 +77,7 @@ namespace control {
    * @see Mutation
    */
   class CommandImpl
-    : public lib::BoolCheckable<CommandImpl
-           , boost::noncopyable
-           >
+    : boost::noncopyable
     {
       Mutation do_;
       UndoMutation undo_;
@@ -145,6 +142,8 @@ namespace control {
         , pClo_(newClosure)
         , defaultPatt_(orig.defaultPatt_)
         { }
+      
+      explicit operator bool()  const { return isValid(); }
       
       
       /** assist with building a clone copy of this CommandImpl.

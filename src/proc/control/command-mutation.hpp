@@ -46,7 +46,6 @@
 #define CONTROL_COMMAND_MUTATION_H
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 

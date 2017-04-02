@@ -46,7 +46,6 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <string>
 
@@ -70,13 +69,13 @@ namespace control {
    * @todo couldn't that be replaced by a lib::Result<void> instance??
    */
   class ExecResult
-    : public lib::BoolCheckable<ExecResult>
     {
       const string log_;
       
     public:
       bool isValid() const;
       void maybeThrow() const;
+      operator bool() const { return isValid(); }
       
     protected:
       ExecResult () { }                   ///< default: command executed successfully
@@ -95,7 +94,6 @@ namespace control {
    * asynchronously in a background thread.
    */
   class HandlingPattern
-    : public lib::BoolCheckable<HandlingPattern>
     {
     public:
       virtual ~HandlingPattern() {}   ///< this is an interface
@@ -125,8 +123,8 @@ namespace control {
       /** likewise invoke the configured UNDO operation */
       ExecResult undo (CommandImpl& command, string)  const;
       
-      
-      virtual bool isValid()  const  =0;
+      explicit operator bool()  const { return isValid(); }
+      virtual bool isValid()    const                         =0;
       
     protected:
       

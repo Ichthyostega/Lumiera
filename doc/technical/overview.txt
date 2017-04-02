@@ -1043,7 +1043,6 @@ Items not used propagate towards the tail where they will be reused.
 //access-casted.hpp
 //advice.hpp symbol-impl.cpp
 //allocationcluster.cpp symbol.hpp
-//bool-checkable.hpp
 //cmdline.cpp
 //cmdline.hpp
 //del-stash.hpp

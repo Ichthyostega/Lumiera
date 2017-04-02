@@ -99,7 +99,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/iter-type-binding.hpp"
 
 
@@ -157,7 +156,6 @@ namespace lib {
    */
   template<class POS, class CON>
   class IterAdapter
-    : public lib::BoolCheckable<IterAdapter<POS,CON>>
     {
       CON source_;
       mutable POS pos_;
@@ -178,6 +176,8 @@ namespace lib {
         : source_()
         , pos_()
         { }
+      
+      operator bool() const { return isValid(); }
       
       
       /* === lumiera forward iterator concept === */
@@ -298,7 +298,6 @@ namespace lib {
    */
   template<typename T, class ST =T>
   class IterStateWrapper
-    : public lib::BoolCheckable<IterStateWrapper<T,ST>>
     {
       ST core_;
       
@@ -322,6 +321,8 @@ namespace lib {
       IterStateWrapper ()
         : core_()
         { }
+      
+      operator bool() const { return isValid(); }
       
       
       /* === lumiera forward iterator concept === */
@@ -422,7 +423,6 @@ namespace lib {
    */
   template<class IT>
   class RangeIter
-    : public lib::BoolCheckable<RangeIter<IT>>
     {
       IT p_;
       IT e_;
@@ -451,6 +451,8 @@ namespace lib {
         : p_(oIter.getPos())
         , e_(oIter.getEnd())
         { }
+      
+      operator bool() const { return isValid(); }
       
       
       /* === lumiera forward iterator concept === */
@@ -531,7 +533,6 @@ namespace lib {
    */
   template<typename INT>
   class NumIter
-    : public lib::BoolCheckable<NumIter<INT>>
     {
       INT i_;
       INT e_;
@@ -558,6 +559,8 @@ namespace lib {
         { }
       
       // standard copy operations acceptable
+      
+      operator bool() const { return isValid(); }
       
       
       
@@ -677,7 +680,6 @@ namespace lib {
   /** wrapper to declare exposed values const */
   template<class IT>
   class ConstIter
-    : public lib::BoolCheckable<ConstIter<IT>>
     {
       IT i_;  ///< nested source iterator
       
@@ -691,6 +693,7 @@ namespace lib {
         : i_(srcIter)
         { }
       
+      operator bool() const { return isValid(); }
       
       
       

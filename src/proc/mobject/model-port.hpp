@@ -67,7 +67,6 @@
 #define PROC_MOBJECT_MODEL_PORT_H
 
 #include "proc/asset/pipe.hpp"
-#include "lib/bool-checkable.hpp"
 #include "proc/streamtype.hpp"
 
 namespace proc {
@@ -103,7 +102,6 @@ namespace mobject {
    * @see ModelPortRegistry_test abstract usage example
    */
   class ModelPort
-    : public lib::BoolCheckable<ModelPort>
     {
       ID<asset::Pipe> id_;
       
@@ -127,6 +125,12 @@ namespace mobject {
       isValid()  const
         {
           return exists (this->id_);
+        }
+      
+      explicit
+      operator bool()  const
+        {
+          return isValid();
         }
       
       

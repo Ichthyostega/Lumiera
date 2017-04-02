@@ -59,7 +59,6 @@
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "lib/meta/tuple-helper.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/handle.hpp"
 

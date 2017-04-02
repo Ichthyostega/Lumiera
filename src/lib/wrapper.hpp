@@ -41,7 +41,6 @@
 #define LIB_WRAPPER_H
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/util.hpp"
@@ -139,7 +138,6 @@ namespace wrapper {
    */
   template<typename TY>
   class ItemWrapper
-    : public BoolCheckable<ItemWrapper<TY>>
     {
       
       using TY_unconst = typename meta::UnConst<TY>::Type ;
@@ -227,6 +225,11 @@ namespace wrapper {
           return *this;
         }
       
+      operator bool()  const
+        {
+          return isValid();
+        }
+      
       
       /* == value access == */
       TY&
@@ -259,7 +262,6 @@ namespace wrapper {
    */
   template<typename TY>
   class ItemWrapper<TY &>
-    : public BoolCheckable<ItemWrapper<TY &> >
     {
       
       TY * content_;
@@ -275,10 +277,12 @@ namespace wrapper {
         : content_( &o )
         { }
       
+      // using default copy and assignment
       
-       /* using default copy and assignment */
+      operator bool()  const { return isValid(); }
       
-      /** allowing to re-bind the reference */
+      
+      /** allow to re-bind the reference */
       ItemWrapper&
       operator= (TY& otherRef)
         {

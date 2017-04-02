@@ -29,7 +29,6 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 //#include "lib/meta/function.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/util-foreach.hpp"
@@ -106,7 +105,6 @@ namespace engine {
      * later investigation and diagnostics.
      */
     class BlockPool
-      : public lib::BoolCheckable<BlockPool>
       {
         uint maxAllocCount_;
         size_t memBlockSize_;
@@ -180,7 +178,13 @@ namespace engine {
         bool
         isValid()  const
           {
-            return blockList_;
+            return bool(blockList_);
+          }
+      
+        explicit
+        operator bool()  const
+          {
+            return isValid();
           }
         
       private:

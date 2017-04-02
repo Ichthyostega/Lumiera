@@ -30,9 +30,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
-
 #include "lib/opaque-holder.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <iostream>
 #include <vector>
@@ -81,7 +79,6 @@ namespace test{
     
     struct Special
       : DD<7>
-      , BoolCheckable<Special>
       {
         ulong myVal_;
         
@@ -89,8 +86,8 @@ namespace test{
           : myVal_(val)
           { }
         
-        bool
-        isValid ()  const ///< custom boolean "validity" check
+        explicit
+        operator bool()  const  ///< custom boolean "validity" check
           {
             return myVal_ % 2;
           }

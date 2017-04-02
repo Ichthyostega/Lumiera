@@ -57,7 +57,6 @@
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/opaque-holder.hpp"
 #include "lib/functor-util.hpp"
 
@@ -199,7 +198,6 @@ namespace meta{
    * and to retrieve it without overhead, but also without safety.
    */
   class StoreUncheckedFunPtr
-    : public lib::BoolCheckable<StoreUncheckedFunPtr>
     {
       void *funP_;
       
@@ -223,11 +221,8 @@ namespace meta{
         }
       
       
-      bool
-      isValid()  const
-        {
-          return funP_;
-        }
+      explicit operator bool() const { return funP_; }
+      bool isValid()           const { return funP_; }
       
       friend bool
       operator== (StoreUncheckedFunPtr const& o1,

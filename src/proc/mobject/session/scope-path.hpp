@@ -88,7 +88,6 @@
 #define PROC_MOBJECT_SESSION_SCOPE_PATH_H
 
 #include "proc/mobject/session/scope.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
 
@@ -137,7 +136,6 @@ namespace session {
    * and QueryFocus to establish the \em current focus (path).
    */
   class ScopePath
-    : public lib::BoolCheckable<ScopePath>
     {
       size_t refcount_;
       std::vector<Scope> path_;
@@ -156,6 +154,8 @@ namespace session {
       operator= (ScopePath const&);
       
       static const ScopePath INVALID;
+      
+      explicit operator bool()  const { return isValid(); }
       
       
       /* == state diagnostics == */

@@ -146,10 +146,9 @@ namespace lib {
       char content_[sizeof(TY)];
       char created_;
       
-      typedef ScopedHolder<TY> _ThisType;   ////TODO can get rid of this typedef, after using BoolCheckable
       
-      
-      static char must_be_empty (_ThisType const& ref)
+      static char
+      must_be_empty (ScopedHolder<TY> const& ref)
       {
         if (ref)
           throw lumiera::error::Logic("ScopedHolder protocol violation: "
@@ -225,16 +224,9 @@ namespace lib {
         }
       
       
-      typedef char _ThisType::*unspecified_bool_type;
       
-                                                           //////////////////////////////////TICKET #178
-      /** implicit conversion to "bool" */
-      operator unspecified_bool_type()  const // never throws
-        {
-          return created_?  &_ThisType::created_ : 0;
-        }
-      
-      bool operator! ()  const { return not created_; }
+      explicit operator bool() const { return created_; }
+      bool operator! ()        const { return not created_; }
       
       
       friend void

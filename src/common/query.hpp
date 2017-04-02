@@ -75,7 +75,6 @@
 #define LUMIERA_QUERY_H
 
 
-#include "lib/bool-checkable.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/query-text.hpp"
@@ -162,7 +161,6 @@ namespace lumiera {
        * @see Resolution
        */
       class Result
-        : public lib::BoolCheckable<Result>
         {
           void* cur_;
           
@@ -178,7 +176,8 @@ namespace lumiera {
             }
           
         public:
-          bool isValid()  const { return bool(cur_); }
+          explicit operator bool()  const { return isValid(); }
+          bool isValid()            const { return bool(cur_); }
           
           Result() : cur_(0)  { } ///< create an NIL result
         };

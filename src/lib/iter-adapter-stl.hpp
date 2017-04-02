@@ -55,7 +55,6 @@ namespace iter_stl {
    */
   template<typename IT>
   class DistinctIter
-    : public lib::BoolCheckable<DistinctIter<IT>>
     {
     public:
       typedef typename IT::value_type value_type;
@@ -72,9 +71,11 @@ namespace iter_stl {
       DistinctIter()            : i_(), prev_() { }
       DistinctIter(IT const& i) : i_(i),prev_() { memorise(); }
       
-      pointer   operator->() const  { return i_;  }
-      reference operator*()  const  { return *i_; }
-      bool      isValid()    const  { return i_;  }
+      pointer   operator->() const { return i_; }
+      reference operator*()  const { return *i_;}
+      bool      isValid()    const { return i_; }
+      
+      operator bool()        const { return i_; }
       
       
       DistinctIter&
@@ -415,7 +416,6 @@ namespace iter_stl {
    */
   template<typename VAL>
   class IterSnapshot
-    : public lib::BoolCheckable<IterSnapshot<VAL>>
     {
       typedef std::vector<VAL> Sequence;
       
@@ -455,6 +455,8 @@ namespace iter_stl {
           for (IT p(begin); p!=end; ++p)
             buffer_.push_back(*p);
         }
+      
+      operator bool() const { return isValid(); }
       
       
       

@@ -34,7 +34,6 @@
 #define COMMON_SEARCHPATH_H
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/filesystem.hpp>
@@ -75,8 +74,7 @@ namespace lib {
    * @note #next picks the current component and advances the iteration. 
    */
   class SearchPathSplitter
-    : public BoolCheckable<SearchPathSplitter
-    , boost::noncopyable>
+    : boost::noncopyable
     {
       string pathSpec_;
       sregex_iterator pos_,
@@ -90,6 +88,8 @@ namespace lib {
         , pos_(pathSpec_.begin(),pathSpec_.end(), EXTRACT_PATHSPEC)
         , end_()
         { }
+      
+      explicit operator bool() const { return isValid(); }
       
       bool
       isValid()  const
