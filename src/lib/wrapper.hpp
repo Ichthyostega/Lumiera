@@ -395,8 +395,8 @@ namespace wrapper {
       Res& operator*() const { return *lastResult_; }
       bool isValid ()  const { return lastResult_.isValid(); }
      
+      explicit
       operator bool()  const { return isValid(); }
-                      // can't use lib::BoolCheckable, because tr1::function implements safe-bool too
     };
   
   

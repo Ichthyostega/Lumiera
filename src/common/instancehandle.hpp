@@ -180,8 +180,6 @@ namespace lumiera {
       I*                instance_;
       facade::Link<I,FA> facadeLink_;
       
-      typedef InstanceHandle<I,FA> _ThisType;
-      
     public:
       /** Set up an InstanceHandle representing a plugin.
        *  Should be placed at the client side.
@@ -231,13 +229,8 @@ namespace lumiera {
       
       
       
-      typedef I* _ThisType::*unspecified_bool_type;
-      
-      /** implicit conversion to "bool" */
-      operator unspecified_bool_type()  const // never throws
-        { return isValid()?  &_ThisType::instance_ : 0; }
-      
-      bool operator! ()  const { return not isValid();  }
+      explicit operator bool() const { return isValid(); }
+      bool operator! ()        const { return not isValid();}
       
       
     private:
