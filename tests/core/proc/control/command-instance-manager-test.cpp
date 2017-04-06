@@ -34,6 +34,7 @@
 #include "lib/util.hpp"
 
 #include <algorithm>
+#include <cstdlib>
 #include <utility>
 #include <string>
 #include <deque>
@@ -47,6 +48,7 @@ namespace test {
   using std::string;
   using util::_Fmt;
   using std::move;
+  using std::rand;
   
   
   
@@ -108,19 +110,21 @@ namespace test {
       run (Arg) 
         {
           verify_standardUsage();
+          verify_instanceIdentity();
+          verify_duplicates();
+          verify_lifecycle();
         }
       
       
-      /** @test demonstrate the standard usage pattern of...
-       */
+      /** @test demonstrate the command instance standard usage pattern.*/
       void
       verify_standardUsage()
         {
           Fixture fixture;
           CommandInstanceManager iManager{fixture};
-          Symbol instanceID = iManager.newInstance(COMMAND_PROTOTYPE, INVOCATION_ID);
+          Symbol instanceID = iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID);
           
-          Command cmd = iManager.getInstance(instanceID);
+          Command cmd = iManager.getInstance (instanceID);
           CHECK (cmd);
           CHECK (not cmd.canExec());
           
@@ -131,6 +135,134 @@ namespace test {
           CHECK (fixture.contains (cmd));
           CHECK (not iManager.contains (instanceID));
           VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
+        }
+      
+      
+      /** @test relation of command, instanceID and concrete instance
+       * The CommandInstanceManager provides the notion of a _current instance,_
+       * which can then be used to bind arguments. When done, it will be _dispatched,_
+       * and then go through the ProcDispatcher's CommandQueue (in this test, we use
+       * just a dummy Fixture, which only enqueues the dispatched commands.
+       * 
+       * The following notions need to be kept apart
+       * - a *command* is the operation _definition_. It is registered with a commandID.
+       * - the *instance ID* is a decorated commandID and serves to keep different
+       *   usage contexts of the same command (prototype) apart. For each instanceID
+       *   there is at any given time maximally _one_ concrete instance "opened"
+       * - the *concrete command instance* is what can be bound and executed.
+       *   It retains it's own identity, even after being handed over for dispatch.
+       * Consequently, a given instance can sit in the dispatcher queue to await
+       * invocation, while the next instance for the _same instance ID_ is already
+       * opened in the CommandInstanceManager for binding arguments.
+       */
+      void
+      verify_instanceIdentity()
+        {
+          Fixture fixture;
+          CommandInstanceManager iManager{fixture};
+          Symbol i1 = iManager.newInstance (COMMAND_PROTOTYPE, "i1");
+          Symbol i2 = iManager.newInstance (COMMAND_PROTOTYPE, "i2");
+          
+          Command c11 = iManager.getInstance (i1);
+          Command c12 = iManager.getInstance (i1);
+          CHECK (c11 == c12);
+          CHECK (c11.isValid());
+          CHECK (not c11.canExec());
+          
+          int r1{rand()}, r2{rand()}, r3{rand()};
+          command1::check_ = 0; // commands will add to this on invocation
+          
+          c11.bind (r1);
+          CHECK (c12.canExec());
+          CHECK (c11.canExec());
+          
+          Command c2 = iManager.getInstance (i2);
+          CHECK (c2 != c11);
+          CHECK (c2 != c12);
+          c2.bind (r2);
+          
+          CHECK (iManager.contains (i1));
+          CHECK (iManager.contains (i2));
+          CHECK (not fixture.contains (c11));
+          CHECK (not fixture.contains (c12));
+          CHECK (not fixture.contains (c2));
+          
+          iManager.dispatch (i1);
+          CHECK (not iManager.contains (i1));
+          CHECK (    iManager.contains (i2));
+          CHECK (    fixture.contains (c11));
+          CHECK (    fixture.contains (c12));
+          CHECK (not fixture.contains (c2));
+          
+          CHECK (command1::check_ == 0);
+          
+          Symbol i11 = iManager.newInstance (COMMAND_PROTOTYPE, "i1");
+          CHECK (i11 == i1);
+          CHECK ((const char*)i11 == (const char*) i1);
+          
+          // but the instances themselves are disjoint
+          Command c13 = iManager.getInstance (i1);
+          CHECK (c13 != c11);
+          CHECK (c13 != c12);
+          CHECK (c11.canExec());
+          CHECK (not c13.canExec());
+          
+          c13.bind (r3);
+          CHECK (c13.canExec());
+          
+          CHECK (command1::check_ == 0);
+          c12();
+          CHECK (command1::check_ == 0+r1);
+          
+          // even a command still in instance manager can be invoked
+          c2();
+          CHECK (command1::check_ == 0+r1+r2);
+          
+          CHECK (    iManager.contains (i1));
+          CHECK (    iManager.contains (i2));
+          CHECK (    fixture.contains (c11));
+          CHECK (    fixture.contains (c12));
+          CHECK (not fixture.contains (c2));
+          
+          iManager.dispatch (i2);
+          iManager.dispatch (i11);
+          CHECK (not iManager.contains (i1));
+          CHECK (not iManager.contains (i2));
+          CHECK (    fixture.contains (c11));
+          CHECK (    fixture.contains (c12));
+          CHECK (    fixture.contains (c13));
+          CHECK (    fixture.contains (c2));
+          
+          // if we continue to hold onto an instance,
+          // we can do anything with it. Like re-binding arguments.
+          c2.bind (47);
+          c2();
+          c13();
+          c13();
+          CHECK (command1::check_ == 0+r1+r2+47+r3+r3);
+          
+          c11.undo();
+          CHECK (command1::check_ == 0);
+          c2.undo();
+          CHECK (command1::check_ == 0+r1);
+          c11.undo();
+          CHECK (command1::check_ == 0);
+        }
+      
+      
+      /** @test */
+      void
+      verify_duplicates()
+        {
+          UNIMPLEMENTED ("reject duplicates");
+        }
+      
+      
+      /** @test */
+      void
+      verify_lifecycle()
+        {
+          UNIMPLEMENTED ("lifecycle sanity");
         }
     };
   

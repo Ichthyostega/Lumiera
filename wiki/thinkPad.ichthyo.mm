@@ -11744,8 +11744,43 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008118695" ID="ID_1595821007" MODIFIED="1491008138125" TEXT="Invocation abdecken">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008118695" ID="ID_1595821007" MODIFIED="1491498915313" STYLE="fork" TEXT="Invocation abdecken">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1491498978878" ID="ID_1001760576" MODIFIED="1491499003761" TEXT="nicht direkt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Umstand, da&#223; Commands auch ausgef&#252;hrt werdern k&#246;nnen,
+    </p>
+    <p>
+      geh&#246;rt nicht zum Thema &quot;Instanz-Management&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1491499005954" ID="ID_1944400975" MODIFIED="1491499049847" TEXT="aber im Hinblick auf den Lebenszyklus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn ein Command geht dann in die Queue
+    </p>
+    <p>
+      und kann noch ausgef&#252;hrt werden, w&#228;hrend ein weiteres
+    </p>
+    <p>
+      schon &quot;in der Mache ist&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008124550" ID="ID_249252999" MODIFIED="1491008138788" TEXT="Duplikate abdecken">
 <icon BUILTIN="flag-yellow"/>
