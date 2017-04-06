@@ -42,6 +42,7 @@
 #define LIB_SYMBOL_H
 
 #include "lib/hash-standard.hpp"
+#include "include/logging.h" /////////////TODO only temporarily
 
 #include <string>
 #include <cstring>
@@ -100,6 +101,25 @@ namespace lib {
        Symbol (Symbol const& o)
          : Literal(o)
          { }
+      
+       Symbol (Literal const& base, std::string ext)
+         : Literal(NULL)
+         {
+           UNIMPLEMENTED ("symbol table");
+         }
+      
+       Symbol (Literal const& base, Literal ext)
+         : Literal(NULL)
+         {
+           UNIMPLEMENTED ("symbol table");
+         }
+      
+       explicit
+       Symbol (std::string definition)
+         : Literal(NULL)
+         {
+           UNIMPLEMENTED ("symbol table");
+         }
        
        Symbol&
        operator= (Literal const& otherSym)

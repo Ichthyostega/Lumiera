@@ -50,6 +50,7 @@ namespace test {
   using std::move;
   using std::rand;
   
+  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
   
   
   
@@ -279,11 +280,41 @@ namespace test {
         }
       
       
-      /** @test */
+      /** @test verify sane command lifecycle is enforced
+       *        - instance need to be opened (created) prior to access
+       *        - can not dispatch an instance not yet created
+       *        - can not create new instance before dispatching the existing one
+       *        - can not dispatch an instance before binding its arguments
+       *        - can not access an instance already dispatched
+       */
       void
       verify_lifecycle()
         {
-          UNIMPLEMENTED ("lifecycle sanity");
+          Fixture fixture;
+          CommandInstanceManager iManager{fixture};
+          
+          Symbol instanceID{COMMAND_PROTOTYPE, INVOCATION_ID};
+          VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
+          VERIFY_ERROR (LIFECYCLE,       iManager.dispatch (instanceID));
+          
+          Symbol i2 = iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID);
+          CHECK (i2 == instanceID);
+          CHECK (iManager.getInstance (instanceID));
+          
+          Command cmd = iManager.getInstance (instanceID);
+          CHECK (cmd);
+          CHECK (not cmd.canExec());
+          
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, iManager.dispatch (instanceID));
+          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID));
+          
+          cmd.bind(23);
+          CHECK (cmd.canExec());
+          iManager.dispatch (instanceID);
+          
+          CHECK (not iManager.contains (instanceID));
+          VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
+          CHECK (instanceID == iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID));
         }
     };
   
