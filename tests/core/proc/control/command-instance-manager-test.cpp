@@ -250,11 +250,32 @@ namespace test {
         }
       
       
-      /** @test */
+      /** @test there can be only one active "opened" instance
+       * The CommandInstanceManager opens (creates) a new instance by cloning from the prototype.
+       * Unless this instance is dispatched, it does not allow to open a further instance
+       * (for the same instanceID). But of course it allows to open a different instance from
+       * the same prototype, but with a different invocationID and hence a different instanceID
+       */
       void
       verify_duplicates()
         {
-          UNIMPLEMENTED ("reject duplicates");
+          Fixture fixture;
+          CommandInstanceManager iManager{fixture};
+          Symbol i1 = iManager.newInstance (COMMAND_PROTOTYPE, "i1");
+          Symbol i2 = iManager.newInstance (COMMAND_PROTOTYPE, "i2");
+          
+          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i1"));
+          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i2"));
+          
+          Command c11 = iManager.getInstance (i1);
+          c11.bind(-1);
+          iManager.dispatch (i1);
+
+          iManager.newInstance (COMMAND_PROTOTYPE, "i1");
+          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i2"));
+          
+          CHECK (iManager.getInstance (i1));
+          CHECK (iManager.getInstance (i2));
         }
       
       
