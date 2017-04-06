@@ -167,11 +167,17 @@ namespace control {
   {
     Symbol instanceID{lib::internedString (string{prototypeID}+"."+invocationID)};
     Command& instance = table_[instanceID];
-    if (not instance)
-      { // create new clone from the prototype
-        table_[instanceID] = move (Command::get(prototypeID).newInstance());
-        ENSURE (instance, "cloning of command prototype failed");
-      }
+    if (instance)
+      throw new error::Logic (_Fmt{"Attempt to create a new Command instance '%s', "
+                                   "while an instance for this invocationID %s "
+                                   "is currently open for parametrisation and "
+                                   "not yet dispatched for execution."}
+                                  % instanceID % invocationID
+                             , LUMIERA_ERROR_DUPLICATE_COMMAND
+                             );
+    // create new clone from the prototype
+    table_[instanceID] = move (Command::get(prototypeID).newInstance());
+    ENSURE (instance, "cloning of command prototype failed");
     return instanceID;
   }
   

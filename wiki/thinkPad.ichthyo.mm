@@ -11710,7 +11710,9 @@
 <arrowlink COLOR="#ca978d" DESTINATION="ID_1805144008" ENDARROW="Default" ENDINCLINATION="594;0;" ID="Arrow_ID_191915626" STARTARROW="None" STARTINCLINATION="594;0;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1491005509448" ID="ID_709599195" MODIFIED="1491005512147" TEXT="Fehler?"/>
-<node CREATED="1491005514015" ID="ID_66770459" MODIFIED="1491005526578" TEXT="bestehende Instanz &#xfc;berb&#xfc;geln">
+<node CREATED="1491005514015" ID="ID_66770459" MODIFIED="1491495268579" TEXT="bestehende Instanz &#xfc;berb&#xfc;geln"/>
+<node CREATED="1491495244653" ID="ID_1710448495" MODIFIED="1491495254015" TEXT="stillschweigend die bestehende Instanz verwenden"/>
+<node CREATED="1491495254699" ID="ID_1848409976" MODIFIED="1491495265858" TEXT="per Fehler abweisen">
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -11729,7 +11731,7 @@
 </node>
 <node CREATED="1491008079676" ID="ID_1262786130" MODIFIED="1491008142008" TEXT="Test">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008088699" ID="ID_1501876595" MODIFIED="1491008114361" TEXT="Basisfall l&#xe4;uft noch nicht">
+<node COLOR="#338800" CREATED="1491008088699" ID="ID_1501876595" MODIFIED="1491109806224" TEXT="Basisfall l&#xe4;uft noch nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -11739,9 +11741,8 @@
       die Instanz kommt nicht in der Fixture-Queue an
     </p>
   </body>
-</html>
-</richcontent>
-<icon BUILTIN="flag-yellow"/>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008118695" ID="ID_1595821007" MODIFIED="1491008138125" TEXT="Invocation abdecken">
 <icon BUILTIN="flag-yellow"/>
@@ -11841,15 +11842,65 @@
 <linktarget COLOR="#ca978d" DESTINATION="ID_1805144008" ENDARROW="Default" ENDINCLINATION="594;0;" ID="Arrow_ID_191915626" SOURCE="ID_1575553505" STARTARROW="None" STARTINCLINATION="594;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1491005039414" ID="ID_378645276" MODIFIED="1491005470990" TEXT="mehrfach newInstance() mit gleicher ID"/>
-<node CREATED="1491005054595" ID="ID_1987692266" MODIFIED="1491005470990" TEXT="zwei M&#xf6;glichkeiten">
+<node CREATED="1491005054595" ID="ID_1987692266" MODIFIED="1491495289915" TEXT="drei M&#xf6;glichkeiten">
 <icon BUILTIN="info"/>
 <node CREATED="1491005058931" ID="ID_1108733153" MODIFIED="1491005470990" TEXT="mit neuem Klon &#xfc;berschreiben"/>
-<node CREATED="1491005066706" ID="ID_1990482123" MODIFIED="1491005470990" TEXT="Fehler ausl&#xf6;sen"/>
+<node CREATED="1491495291966" ID="ID_703254591" MODIFIED="1491495302281" TEXT="stillschweigend bestehende Instanz ausgeben"/>
+<node CREATED="1491005066706" ID="ID_1990482123" MODIFIED="1491495433236" TEXT="Fehler ausl&#xf6;sen">
+<icon BUILTIN="forward"/>
+<node CREATED="1491495356533" ID="ID_1948190107" MODIFIED="1491495397512" TEXT="einzig sichere Variante">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1491495398895" ID="ID_1958544932" MODIFIED="1491495404395" TEXT="es gibt jetzt auch getInstance"/>
+<node CREATED="1491495405151" ID="ID_988620199" MODIFIED="1491495425552" TEXT="der Client mu&#xdf; geht von Exclusivit&#xe4;t aus"/>
+</node>
 </node>
 <node CREATED="1491005071634" ID="ID_178338289" MODIFIED="1491005470990" TEXT="zur Kl&#xe4;rung">
 <icon BUILTIN="bell"/>
 <node CREATED="1491005078409" ID="ID_1515823316" MODIFIED="1491005470990" TEXT="...mu&#xdf; ich wissen, wie newInstance verwendet wird"/>
 <node CREATED="1491005491226" ID="ID_1986906306" MODIFIED="1491005499069" TEXT="und das h&#xe4;ngt von InvocationTrail ab"/>
+</node>
+</node>
+<node CREATED="1491494748185" ID="ID_1589354901" MODIFIED="1491494763342" TEXT="Instanzen registrieren">
+<icon BUILTIN="help"/>
+<node CREATED="1491494779796" ID="ID_1437580350" MODIFIED="1491494872286" TEXT="oder nur Prototypen?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, es geht um die Haupt-Registry f&#252;r Commands.
+    </p>
+    <p>
+      Wenn wir eine Instanz machen, um Parameter zu binden und sie dann schlie&#223;lich auszuf&#252;hren,
+    </p>
+    <p>
+      k&#246;nnte man dieser Instanz einen Namen geben, und sie in die Haupt-Registry eintragen..
+    </p>
+    <p>
+      Oder man k&#246;nnte sie anonym verarbeiten, weil Command selber ein smart-Handle ist.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1491494889781" ID="ID_737410509" MODIFIED="1491495069450" TEXT="Analyse">
+<icon BUILTIN="idea"/>
+<node CREATED="1491494903779" ID="ID_1388732102" MODIFIED="1491495065587" TEXT="ja">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1491494912266" ID="ID_32553701" MODIFIED="1491494926628" TEXT="Vorteil: Zugriff per-Name"/>
+<node CREATED="1491494928040" ID="ID_76613856" MODIFIED="1491494938066" TEXT="Nachteil: Druck auf die Registry"/>
+<node CREATED="1491494938614" ID="ID_189174601" MODIFIED="1491494953016" TEXT="Nachteil: IDs m&#xfc;ssen verwaltet werden"/>
+</node>
+<node CREATED="1491494957020" ID="ID_266987025" MODIFIED="1491495063214" TEXT="nein">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1491494972658" ID="ID_1987998531" MODIFIED="1491494987067" TEXT="Vorteil: spart jede Menge Infrastruktur"/>
+<node CREATED="1491494989215" ID="ID_1302849116" MODIFIED="1491495018271" TEXT="Nachteil: Aufruf-Protokol sehr festgelegt"/>
+</node>
+</node>
+<node CREATED="1491495071460" ID="ID_597368143" MODIFIED="1491495081513" TEXT="wir registrieren nicht">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -11934,13 +11985,35 @@
       Also gen&#252;gt es, einen anonymen Klon dieser Instanz zu halten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1489717960331" ID="ID_1849715968" MODIFIED="1489717991603" TEXT="viel wichtiger sind die Aktivierungs-Regeln"/>
 </node>
 </node>
-<node CREATED="1489546998918" HGAP="43" ID="ID_668687712" MODIFIED="1489781267877" TEXT="Aktivierung">
+<node CREATED="1489546998918" HGAP="43" ID="ID_668687712" MODIFIED="1491495585626" TEXT="Aktivierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint ist:
+    </p>
+    <p>
+      Ein UI-Control wird <i>aktivierbar,</i>&#160;weil das zugrundeliegende Command
+    </p>
+    <p>
+      alle seine Argumente aus dem aktuellen Kontext befriedigen kann
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Beispiel: Men&#252;-Eintrag &quot;create duplicate&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
 <node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1489547015360" TEXT="Callback installieren"/>
 <node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1489547028606" TEXT="Anfrage: ist dies aktivierbar?"/>
 </node>
@@ -12167,8 +12240,7 @@
       w&#228;hrend bereits die n&#228;chste Instanz f&#252;r das GUI ausgegeben wurde.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1490986395088" ID="ID_52247198" MODIFIED="1490986412151" TEXT="Stets nur eine Instanz im Instance-manager">
@@ -12184,13 +12256,15 @@
       ...damit die Nummer erhalten bleibt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1491004971039" ID="ID_329531567" MODIFIED="1491004978482" TEXT="anonyme Instanz verwalten">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1491004982341" ID="ID_1956457610" MODIFIED="1491005001237" TEXT="offene Frage: Duplikat &#xfc;berschreiben?">
+<node CREATED="1491004982341" ID="ID_1956457610" MODIFIED="1491495639478" TEXT="Frage: Duplikat &#xfc;berschreiben?">
 <icon BUILTIN="help"/>
+<node CREATED="1491495641174" ID="ID_1196432780" MODIFIED="1491495651041" TEXT="antwort (vorerst): nein"/>
+<node CREATED="1491495651932" ID="ID_1393507104" MODIFIED="1491495656080" TEXT="w&#xe4;re gef&#xe4;hrlich"/>
+<node CREATED="1491495656604" ID="ID_1592570029" MODIFIED="1491495669470" TEXT="weist auf Logik-Fehler hin"/>
 </node>
 <node CREATED="1491005133794" ID="ID_1003096513" MODIFIED="1491005393601" TEXT="vorl&#xe4;ufig &#xfc;berschreibe ich stillschweigend">
 <icon BUILTIN="messagebox_warning"/>
@@ -15625,7 +15699,7 @@
 <node CREATED="1491098370281" ID="ID_1904535196" MODIFIED="1491098373325" TEXT="Konfig"/>
 <node CREATED="1491098373816" ID="ID_1022990703" MODIFIED="1491098376332" TEXT="Fallen">
 <node CREATED="1491099064125" ID="ID_651937703" MODIFIED="1491099078088" TEXT="Dateien ohne @file werden nicht dokumentiert"/>
-<node CREATED="1491099088362" ID="ID_1507484869" MODIFIED="1491099207627" TEXT="Template-Parameter in Klassennamen">
+<node CREATED="1491099088362" ID="ID_1507484869" MODIFIED="1491109777999" TEXT="Template-Parameter in Klassennamen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15650,8 +15724,7 @@
       Query&lt;RES&gt;::resolveBy
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491099311253" ID="ID_307124479" MODIFIED="1491099409234">
 <richcontent TYPE="NODE"><html>
@@ -15663,8 +15736,7 @@
       @param hat <b>stets</b>&#160;einen Parameternamen als Argument
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15689,8 +15761,7 @@
       sonst kommt Doxygen durcheinander
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1491098382888" ID="ID_1568153886" MODIFIED="1491098384859" TEXT="Probleme">
@@ -15719,8 +15790,7 @@
       wird hier kein Link erzeugt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1491098487889" ID="ID_1401713015" MODIFIED="1491098493701" TEXT="Sqlite-Support">
