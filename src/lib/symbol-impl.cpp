@@ -95,24 +95,31 @@ namespace lib {
   }
   
   
-  /** generating a hash value, e.g. for hashtables.
-      This function is intended to be picked up by ADL,
-      and should be usable both with  \c std::tr1 and 
-      \c <boost/functional/hash.hpp> . It is implemented
-      similar as the boost::hash specialisation for std::string */
+  /** generate hash value based on the Literal's contents.
+   *  This function is intended to be picked up by ADL, and should be usable
+   *  both with  `std::hash` and `<boost/functional/hash.hpp>`. It is implemented
+   *  similar as the boost::hash specialisation for std::string */
   size_t
-  hash_value (Literal sym)
+  hash_value (Literal literal)
   {
     size_t hash=0;
-    if (sym)
+    if (literal)
       {
-        const char *pos = sym;
+        const char *pos = literal;
         size_t maxpos = STRING_MAX_RELEVANT;
         for ( ; *pos && --maxpos; ++pos)
           hash_combine(hash, *pos);
       }
     
     return hash;
+  }
+  
+  /** hash value for Symbols is directly based on the symbol table entry */
+  size_t
+  hash_value (Symbol sym)
+  {
+    return sym? boost::hash_value (sym.c())
+              : 0;
   }
   
   
