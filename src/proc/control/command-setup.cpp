@@ -165,7 +165,7 @@ namespace control {
   Symbol
   CommandInstanceManager::newInstance (Symbol prototypeID, string invocationID)
   {
-    Symbol instanceID{lib::internedString (string{prototypeID}+"."+invocationID)};
+    Symbol instanceID{prototypeID, invocationID};
     Command& instance = table_[instanceID];
     if (instance)
       throw new error::Logic (_Fmt{"Attempt to create a new Command instance '%s', "

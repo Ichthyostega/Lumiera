@@ -121,7 +121,7 @@ namespace test{
       fabricateNewInstance (lib::test::EventLog const& invocationLog)
         {
           log_ = invocationLog;
-          return proc::control::CommandDef(lib::internedString (uniqueTypeInstance()))
+          return proc::control::CommandDef{Symbol{uniqueTypeInstance()}}
                                  .operation(PlaceholderCommand::operate)
                                  .captureUndo(PlaceholderCommand::capture)
                                  .undoOperation(PlaceholderCommand::undo);

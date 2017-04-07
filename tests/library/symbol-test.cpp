@@ -111,18 +111,25 @@ namespace test{
           Symbol sy2(l1);
           
           CHECK (sy1 == sy2);
-          CHECK (!isSameObject (l1,sy1));
-          CHECK (!isSameObject (sy1,sy2));
+          CHECK (not isSameObject (l1,sy1));
+          CHECK (not isSameObject (sy1,sy2));
+          CHECK (l1.c() == sy1.c());
+          CHECK (sy1.c() == sy2.c());
           
           Symbol sy3;
           CHECK (isnil(sy3));
           CHECK (sy1 != sy3);
           
-          sy3 = l1;
+          sy3 = Symbol{l1};
           CHECK (!isnil(sy3));
           CHECK (sy1 == sy3);
           
-          TODO ("real functionality of Symbol data type");
+          Symbol sy4{sy3, "11"};
+          CHECK (sy4 == "1.11");
+          CHECK (not isSameObject(sy4.c(), "1.11"));
+          CHECK (sy4.c() == Symbol{"1.11"}.c());
+          CHECK (sy4.c() == (const char*)sy4);
+          CHECK (hash_value(sy4) == hash_value(Symbol{"1.11"}));
         }
     };
   

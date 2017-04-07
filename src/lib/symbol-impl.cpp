@@ -48,6 +48,7 @@ extern "C" {
 
 using std::size_t;
 using std::string;
+using std::forward;
 using boost::hash_combine;
 
 
@@ -92,17 +93,16 @@ namespace lib {
   namespace { // quick-n-dirty symbol table implementation
     
     /** @warning grows eternally, never shrinks */
-    std::unordered_set<string> symbolTable;                  ////////////////////////////////TICKET #158 replace by symbol table
+    std::unordered_set<string> symbolTable;                  ////////////////////////////////TICKET #158 replace by symbol table class
   }
   
-  /** @internal quick-n-dirty hack, used as workaround for creating command-IDs on the fly */
-  Symbol
-  internedString (string&& symbolString)
-  {
-    auto res = symbolTable.insert (std::forward<string> (symbolString));
-    return Symbol (res.first->c_str());
-  }
-  /////////////////////////////////////(End)symbol-table hack
+  /** create Symbol by symbol table lookup.
+   * @note identical strings will be mapped to
+   *       the same Literal (embedded pointer)
+   */
+  Symbol::Symbol (string&& definition)
+   : Literal{symbolTable.insert(forward<string> (definition)).first->c_str()}
+   { }
   
   
   

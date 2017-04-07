@@ -88,45 +88,36 @@ namespace lib {
   
   
   /** Token or Atom with distinct identity
-   * @todo define a real Symbol class, i.e. same literal string==same pointer,
+   * @note same literal string==same pointer representation
    */
   class Symbol
     : public Literal
     {
     public:
-       Symbol (const char* lit =0)
-         : Literal(lit)
+       explicit
+       Symbol (std::string&& definition);
+       
+       Symbol()
+         : Symbol{""}
          { }
-      
-       Symbol (Symbol const& o)
-         : Literal(o)
+       
+       Symbol (const char* lit)
+         : Symbol{std::string(lit)}
          { }
       
        Symbol (Literal const& base, std::string ext)
-         : Literal(NULL)
-         {
-           UNIMPLEMENTED ("symbol table");
-         }
+         : Symbol{std::string(base)+"."+ext}
+         { }
       
-       Symbol (Literal const& base, Literal ext)
-         : Literal(NULL)
-         {
-           UNIMPLEMENTED ("symbol table");
-         }
+       Symbol (Literal const& base, const char* ext)
+         : Symbol{base, std::string(ext)}
+         { }
       
-       explicit
-       Symbol (std::string definition)
-         : Literal(NULL)
-         {
-           UNIMPLEMENTED ("symbol table");
-         }
+       Symbol (Symbol const&) = default;
+       Symbol (Symbol &&)     = default;
        
-       Symbol&
-       operator= (Literal const& otherSym)
-         {
-           Literal::operator= (otherSym);
-           return *this;
-         }
+       Symbol& operator= (Symbol const&) = default;
+       Symbol& operator= (Symbol &&)     = default;
     };
   
   
@@ -145,32 +136,98 @@ namespace lib {
   inline bool
   operator!= (Literal sy1, Literal sy2)
   {
-    return ! (sy1 == sy2); 
+    return not (sy1 == sy2); 
   }
+  
+  /** @note two symbols are equal iff
+   *        they use the same symbol table entry
+   */
+  inline bool
+  operator== (Symbol sy1, Symbol sy2)
+  {
+    return sy1.c() == sy2.c(); 
+  }
+  
+  inline bool
+  operator!= (Symbol sy1, Symbol sy2)
+  {
+    return not (sy1 == sy2); 
+  }
+  
+  
+  /// mixed comparison based on string equality
+  inline bool
+  operator== (Symbol sy1, Literal sy2)
+  {
+    return Literal(sy1) == sy2;
+  }
+  
+  inline bool
+  operator== (Literal sy1, Symbol sy2)
+  {
+    return sy1 == Literal(sy2);
+  }
+  
+  inline bool
+  operator!= (Symbol sy1, Literal sy2)
+  {
+    return not (sy1 == sy2);
+  }
+  
+  inline bool
+  operator!= (Literal sy1, Symbol sy2)
+  {
+    return not (sy1 == sy2);
+  }
+  
   
   /// comparison with c-strings                     //////TICKET #417
   inline bool
-  operator== (Literal sy1, const char* const sy2)
+  operator== (Literal sy1, const char* sy2)
   {
-    return   (sy1 == Literal(sy2)); 
+    return   (sy1 == Literal(sy2));
   }
   
   inline bool
-  operator== (const char* const sy1, Literal sy2)
+  operator== (const char* sy1, Literal sy2)
   {
-    return   (Literal(sy1) == sy2); 
+    return   (Literal(sy1) == sy2);
   }
   
   inline bool
-  operator!= (Literal sy1, const char* const sy2)
+  operator!= (Literal sy1, const char* sy2)
   {
-    return ! (sy1 == Literal(sy2)); 
+    return ! (sy1 == Literal(sy2));
   }
   
   inline bool
-  operator!= (const char* const sy1, Literal sy2)
+  operator!= (const char* sy1, Literal sy2)
   {
-    return ! (Literal(sy1) == sy2); 
+    return ! (Literal(sy1) == sy2);
+  }
+  
+  inline bool
+  operator== (Symbol sy1, const char* sy2)
+  {
+    return   (Literal(sy1) == Literal(sy2));
+  }
+  
+  inline bool
+  operator== (const char* sy1, Symbol sy2)
+  {
+    return   (Literal(sy1) == Literal(sy2));
+  }
+  
+  inline bool
+  operator!= (Symbol sy1, const char* sy2)
+  {
+    return ! (Literal(sy1) == Literal(sy2));
+  }
+  
+  inline bool
+  operator!= (const char* sy1, Symbol sy2)
+  {
+    return ! (Literal(sy1) == Literal(sy2));
   }
   
   /// string concatenation
@@ -188,18 +245,7 @@ namespace lib {
     return symP + str;
   }
   
-  /* ===== temporary symbol table workaround ===== */
-  
-  /** place the string persistently in memory.
-   * @todo temporary workaround, shall be replaced by lib::Symbol implementation ///////////////TICKET #157  maintain symbol table for interned strings
-   * @return a C-String marked as lib::Symbol, pointing
-   *      to the permanent location in heap memory.
-   * @warning eternally growing, please look away...
-   * @see symbol-impl.cpp implementation
-   */
-  Symbol internedString (std::string&& idString);
   
   
 } // namespace lib
-
-#endif
+#endif /*LIB_SYMBOL_H*/
