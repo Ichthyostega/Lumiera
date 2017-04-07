@@ -42,7 +42,6 @@
 #define LIB_SYMBOL_H
 
 #include "lib/hash-standard.hpp"
-#include "include/logging.h" /////////////TODO only temporarily
 
 #include <string>
 #include <cstring>
@@ -51,9 +50,7 @@
 namespace lib {
   
   /** inline string literal
-   *  @todo improve interaction with Symbol
-   *  @todo make it non-nullable 
-   *  @todo maybe use boost/operators  Ticket #417
+   *  This is a marker type to handle literally given C-Strings.
    */
   class Literal
     {
@@ -126,6 +123,12 @@ namespace lib {
        
        explicit operator bool()  const { return not empty(); }
        bool empty()              const { return *this == BOTTOM; }
+       
+       size_t
+       length()  const
+         {
+           return std::strlen(c());
+         }
     };
   
   

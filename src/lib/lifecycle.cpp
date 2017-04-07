@@ -53,7 +53,7 @@ namespace lumiera {
   {
     bool isNew = LifecycleRegistry::instance().enrol (eventLabel,callbackFun);
     
-    if (isNew && !strcmp(ON_BASIC_INIT, eventLabel))
+    if (isNew and eventLabel == ON_BASIC_INIT)
       callbackFun();  // when this code executes,
                      //  then per definition we are already post "basic init"
                     //   (which happens in the AppState ctor); thus fire it immediately

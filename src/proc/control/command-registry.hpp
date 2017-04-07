@@ -205,7 +205,7 @@ namespace control {
       findDefinition (Command const& cmdInstance)  const
         {
           Lock sync(this);
-          return getValue_or_default (ridx_, &cmdInstance, 0 );
+          return getValue_or_default (ridx_, &cmdInstance, Symbol::BOTTOM );
         }                                   //used as Key
       
       

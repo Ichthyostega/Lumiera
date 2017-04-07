@@ -101,7 +101,7 @@
 
 #include <boost/noncopyable.hpp>
 
-using lib::Symbol;
+using lib::Literal;
 using lib::DelStash;
 using util::unConst;
 
@@ -216,7 +216,7 @@ namespace advice {
             
             catch(...)
               {
-                Symbol errID = lumiera_error();
+                Literal errID = lumiera_error();
                 WARN (library, "Problems on deregistration of advice request: %s", errID.c());
               }
           }

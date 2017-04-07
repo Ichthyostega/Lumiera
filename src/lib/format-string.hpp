@@ -409,8 +409,13 @@ namespace util {
   
   template<>
   struct _Fmt::Converter<lib::Symbol>
-    : _Fmt::Converter<lib::Literal>
-    { };
+    {
+      static void
+      dump (lib::Symbol const& symbol, Implementation& impl)
+        {
+          format (symbol.c(), impl);
+        }
+    };
   
   /** some custom types explicitly provide a string representation */
   template<typename VAL>

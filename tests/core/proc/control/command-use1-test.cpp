@@ -221,6 +221,7 @@ namespace test    {
           CHECK (c2);
           CHECK (c2.canExec());
           CHECK (!c2.canUndo());
+          CHECK (c2.isAnonymous());
           
           CHECK (c1 == c2);
           CHECK (!isSameObject(c1, c2));
@@ -267,6 +268,8 @@ namespace test    {
           CHECK (c4);
           CHECK (c4.canExec());
           CHECK (c4.canUndo());
+          CHECK (not c4.isAnonymous());
+          CHECK (    c2.isAnonymous());
           CHECK (c4 == c2);
           CHECK (c4 != c1);
           c4();

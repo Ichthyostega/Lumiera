@@ -107,7 +107,7 @@
 namespace lumiera{
 namespace advice {
   
-  using lib::Symbol;
+  using lib::Literal;
   using util::isSameObject;
   
   
@@ -358,7 +358,7 @@ namespace advice {
       }
     catch(...)
       {
-        Symbol errID = lumiera_error();
+        Literal errID = lumiera_error();
         releaseBuffer (storage, sizeof(Holder));
         throw lumiera::error::Fatal ("Failure to store advice data", errID);
       }
