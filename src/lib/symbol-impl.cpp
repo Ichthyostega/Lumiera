@@ -59,12 +59,12 @@ namespace lib {
   const size_t STRING_MAX_RELEVANT = LUMIERA_IDSTRING_MAX_RELEVANT;
   
   
-  /** equality on Symbol values is defined
+  /** equality on Literal and Symbol values is defined
    *  based on the content, not the address. */
   bool
-  operator== (Literal sy1, Literal sy2)
+  Literal::operator== (const char* cString)  const
   {
-    return !lumiera_strncmp (sy1,sy2, STRING_MAX_RELEVANT); 
+    return !lumiera_strncmp (this->str_, cString, STRING_MAX_RELEVANT);
   }
   
   
@@ -98,7 +98,7 @@ namespace lib {
   
   /** create Symbol by symbol table lookup.
    * @note identical strings will be mapped to
-   *       the same Literal (embedded pointer)
+   *       the same Symbol (embedded pointer)
    */
   Symbol::Symbol (string&& definition)
    : Literal{symbolTable.insert(forward<string> (definition)).first->c_str()}

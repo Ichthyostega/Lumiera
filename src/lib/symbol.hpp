@@ -77,6 +77,8 @@ namespace lib {
            return !str_ || 0 == std::strlen(str_);
          }
        
+       bool operator== (const char* cString)  const;
+
     protected:
        /** Assignment prohibited */
        Literal& operator= (const char* newStr)
@@ -131,104 +133,40 @@ namespace lib {
   
   size_t hash_value (Literal);
   
-  bool operator== (Literal sy1, Literal sy2);
+
+  /* === equality comparisons === */
+
+  inline bool operator== (Literal const& s1, Literal const& s2) { return s1.operator== (s2.c()); }
+  inline bool operator== (Symbol const& s1,  Symbol const& s2)  { return s1.c() == s2.c(); } ///< @note comparison of symbol table entries
   
-  inline bool
-  operator!= (Literal sy1, Literal sy2)
-  {
-    return not (sy1 == sy2); 
-  }
+  /* === mixed comparisons === */
   
-  /** @note two symbols are equal iff
-   *        they use the same symbol table entry
-   */
-  inline bool
-  operator== (Symbol sy1, Symbol sy2)
-  {
-    return sy1.c() == sy2.c(); 
-  }
+  inline bool operator== (const char* s1,    Literal s2)        { return s2.operator== (s1); }
+  inline bool operator== (Symbol s1,         const char* s2)    { return s1.operator== (s2); }
+  inline bool operator== (const char* s1,    Symbol      s2)    { return s2.operator== (s1); }
+  inline bool operator== (Literal s1,        Symbol  s2)        { return s1.operator== (s2.c()); }
+  inline bool operator== (Symbol s1,         Literal s2)        { return s2.operator== (s1.c()); }
+  inline bool operator== (Literal s1,        std::string s2)    { return s1.operator== (s2.c_str()); }
+  inline bool operator== (std::string s1,    Literal     s2)    { return s2.operator== (s1.c_str()); }
+  inline bool operator== (Symbol s1,         std::string s2)    { return s1.operator== (s2.c_str()); }
+  inline bool operator== (std::string s1,    Symbol      s2)    { return s2.operator== (s1.c_str()); }
   
-  inline bool
-  operator!= (Symbol sy1, Symbol sy2)
-  {
-    return not (sy1 == sy2); 
-  }
+  /* === negations === */
   
-  
-  /// mixed comparison based on string equality
-  inline bool
-  operator== (Symbol sy1, Literal sy2)
-  {
-    return Literal(sy1) == sy2;
-  }
-  
-  inline bool
-  operator== (Literal sy1, Symbol sy2)
-  {
-    return sy1 == Literal(sy2);
-  }
-  
-  inline bool
-  operator!= (Symbol sy1, Literal sy2)
-  {
-    return not (sy1 == sy2);
-  }
-  
-  inline bool
-  operator!= (Literal sy1, Symbol sy2)
-  {
-    return not (sy1 == sy2);
-  }
+  inline bool operator!= (Literal const& s1, Literal const& s2) { return not s1.operator== (s2.c()); }
+  inline bool operator!= (Symbol const& s1,  Symbol const& s2)  { return not (s1.c() == s2.c()); }
+  inline bool operator!= (Literal s1,        const char* s2)    { return not s1.operator== (s2); }
+  inline bool operator!= (const char* s1,    Literal s2)        { return not s2.operator== (s1); }
+  inline bool operator!= (Symbol s1,         const char* s2)    { return not s1.operator== (s2); }
+  inline bool operator!= (const char* s1,    Symbol      s2)    { return not s2.operator== (s1); }
+  inline bool operator!= (Literal s1,        Symbol  s2)        { return not s1.operator== (s2.c()); }
+  inline bool operator!= (Symbol s1,         Literal s2)        { return not s2.operator== (s1.c()); }
+  inline bool operator!= (Literal s1,        std::string s2)    { return not s1.operator== (s2.c_str()); }
+  inline bool operator!= (std::string s1,    Literal     s2)    { return not s2.operator== (s1.c_str()); }
+  inline bool operator!= (Symbol s1,         std::string s2)    { return not s1.operator== (s2.c_str()); }
+  inline bool operator!= (std::string s1,    Symbol      s2)    { return not s2.operator== (s1.c_str()); }
   
   
-  /// comparison with c-strings                     //////TICKET #417
-  inline bool
-  operator== (Literal sy1, const char* sy2)
-  {
-    return   (sy1 == Literal(sy2));
-  }
-  
-  inline bool
-  operator== (const char* sy1, Literal sy2)
-  {
-    return   (Literal(sy1) == sy2);
-  }
-  
-  inline bool
-  operator!= (Literal sy1, const char* sy2)
-  {
-    return ! (sy1 == Literal(sy2));
-  }
-  
-  inline bool
-  operator!= (const char* sy1, Literal sy2)
-  {
-    return ! (Literal(sy1) == sy2);
-  }
-  
-  inline bool
-  operator== (Symbol sy1, const char* sy2)
-  {
-    return   (Literal(sy1) == Literal(sy2));
-  }
-  
-  inline bool
-  operator== (const char* sy1, Symbol sy2)
-  {
-    return   (Literal(sy1) == Literal(sy2));
-  }
-  
-  inline bool
-  operator!= (Symbol sy1, const char* sy2)
-  {
-    return ! (Literal(sy1) == Literal(sy2));
-  }
-  
-  inline bool
-  operator!= (const char* sy1, Symbol sy2)
-  {
-    return ! (Literal(sy1) == Literal(sy2));
-  }
   
   /// string concatenation
   inline std::string
