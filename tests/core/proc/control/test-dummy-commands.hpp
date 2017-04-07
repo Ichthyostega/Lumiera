@@ -60,7 +60,7 @@ namespace test    {
   
   namespace command1 { ///< test command just adding a given value
     
-    extern long check_;
+    extern int64_t check_;
     
     
     inline void
@@ -69,14 +69,14 @@ namespace test    {
       check_ += someVal;
     }
     
-    inline long
+    inline int64_t
     capture (int)
     {
       return check_;
     }
     
     inline void
-    undoIt (int, long oldVal)
+    undoIt (int, int64_t oldVal)
     {
       check_ = oldVal;
     }

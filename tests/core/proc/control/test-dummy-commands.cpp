@@ -37,7 +37,7 @@ namespace test    {
   
   
   namespace command1 {
-    long check_ = 0;
+    int64_t check_ = 0;
   }
   
   

@@ -170,7 +170,7 @@ namespace test {
           CHECK (c11.isValid());
           CHECK (not c11.canExec());
           
-          int r1{rand()}, r2{rand()}, r3{rand()};
+          int r1{rand()%100}, r2{rand()%200}, r3{rand()%300};
           command1::check_ = 0; // commands will add to this on invocation
           
           c11.bind (r1);
@@ -245,8 +245,8 @@ namespace test {
           c11.undo();
           CHECK (command1::check_ == 0);
           c2.undo();
-          CHECK (command1::check_ == 0+r1);
-          c11.undo();
+          CHECK (command1::check_ == 0+r1+r2);       // undo() restores the value captured before second invocation of c2()
+          c12.undo();                                // c11 and c12 refer to the same instance, which was invoked first
           CHECK (command1::check_ == 0);
         }
       
