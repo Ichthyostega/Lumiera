@@ -59,6 +59,33 @@ namespace lib {
   const size_t STRING_MAX_RELEVANT = LUMIERA_IDSTRING_MAX_RELEVANT;
   
   
+  namespace { // symbol table implementation
+    
+    /** @warning grows eternally, never shrinks */
+    std::unordered_set<string> symbolTable;
+  }
+  
+  
+  /**
+   * create Symbol by symbol table lookup.
+   * @note identical strings will be mapped to
+   *       the same Symbol (embedded pointer)
+   */
+  Symbol::Symbol (string&& definition)
+    : Literal{symbolTable.insert(forward<string> (definition)).first->c_str()}
+    { }
+  
+  
+  /* == predefined marker Symbols == */
+  Symbol Symbol::BOTTOM  = "⟂";
+  Symbol Symbol::FAILURE = "↯";
+  
+  // see also: lib/format-obj.cpp
+  // We can not share these definitions due to undefined static init order
+  
+  
+  
+  
   /** equality on Literal and Symbol values is defined
    *  based on the content, not the address. */
   bool
@@ -87,22 +114,6 @@ namespace lib {
     
     return hash;
   }
-  
-  
-  
-  namespace { // quick-n-dirty symbol table implementation
-    
-    /** @warning grows eternally, never shrinks */
-    std::unordered_set<string> symbolTable;                  ////////////////////////////////TICKET #158 replace by symbol table class
-  }
-  
-  /** create Symbol by symbol table lookup.
-   * @note identical strings will be mapped to
-   *       the same Symbol (embedded pointer)
-   */
-  Symbol::Symbol (string&& definition)
-   : Literal{symbolTable.insert(forward<string> (definition)).first->c_str()}
-   { }
   
   
   

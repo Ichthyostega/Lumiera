@@ -113,7 +113,7 @@ namespace test{
           CHECK (sy1 == sy2);
           CHECK (not isSameObject (l1,sy1));
           CHECK (not isSameObject (sy1,sy2));
-          CHECK (l1.c() == sy1.c());
+          CHECK (l1.c() != sy1.c());
           CHECK (sy1.c() == sy2.c());
           
           Symbol sy3;

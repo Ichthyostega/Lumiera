@@ -96,25 +96,28 @@ namespace lib {
     : public Literal
     {
     public:
-       explicit
-       Symbol (std::string&& definition);
+      static Symbol BOTTOM;
+      static Symbol FAILURE;
+      
+      Symbol (const char* lit =NULL)
+        : Symbol{std::string(lit? lit : BOTTOM.c())}
+        { }
+      
+      explicit
+      Symbol (std::string&& definition);
+      
+      Symbol (std::string const& str)
+        : Symbol{std::string(str)}
+        { }
+      
+      Symbol (Literal const& base, std::string ext)
+        : Symbol{std::string(base)+"."+ext}
+        { }
+      
+      Symbol (Literal const& base, const char* ext)
+        : Symbol{base, std::string(ext)}
+        { }
        
-       Symbol()
-         : Symbol{""}
-         { }
-       
-       Symbol (const char* lit)
-         : Symbol{std::string(lit)}
-         { }
-      
-       Symbol (Literal const& base, std::string ext)
-         : Symbol{std::string(base)+"."+ext}
-         { }
-      
-       Symbol (Literal const& base, const char* ext)
-         : Symbol{base, std::string(ext)}
-         { }
-      
        Symbol (Symbol const&) = default;
        Symbol (Symbol &&)     = default;
        
