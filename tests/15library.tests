@@ -540,8 +540,8 @@ END
 TEST "Symbol_test" Symbol_test  <<END
 out: one
 out: sizeof. Literal.+  =   (4|8)
-out-lit: string
-out-lit: string
+out-lit: onenight
+out-lit: minus one
 out-lit: one....one
 return: 0
 END

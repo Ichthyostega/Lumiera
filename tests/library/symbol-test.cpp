@@ -80,8 +80,10 @@ namespace test{
           CHECK (li2 != li3);
           CHECK (li3 != li2);
           
-          cout << typeStr (li1 + string("ce"))         << endl;
-          cout << typeStr (string("minus " +li1))      << endl;
+          CHECK ("string" == typeStr (li1 + string{"night"}));
+          CHECK ("string" == typeStr (string{"minus " +li1}));
+          cout << li1 + string{"night"} << endl;
+          cout << string{"minus " +li1} << endl;
           cout << li2+string("..") << string("..")+li2 << endl;
           
           CHECK (hash_value(li1) == hash_value(li2));
@@ -117,9 +119,17 @@ namespace test{
           CHECK (sy1.c() == sy2.c());
           
           Symbol sy3;
+          CHECK (not sy3);
+          CHECK (sy3 == "⟂");
           CHECK (isnil(sy3));
           CHECK (sy1 != sy3);
           
+          CHECK (not Symbol{"⟂"});
+          CHECK (sy3 == Symbol{"⟂"});
+          CHECK (sy3.c() == Symbol{"⟂"}.c());
+          CHECK (Symbol{}.c() == Symbol{"⟂"}.c());
+          
+          // re-assignment
           sy3 = Symbol{l1};
           CHECK (!isnil(sy3));
           CHECK (sy1 == sy3);

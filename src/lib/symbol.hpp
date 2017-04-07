@@ -123,6 +123,9 @@ namespace lib {
        
        Symbol& operator= (Symbol const&) = default;
        Symbol& operator= (Symbol &&)     = default;
+       
+       explicit operator bool()  const { return not empty(); }
+       bool empty()              const { return *this == BOTTOM; }
     };
   
   
