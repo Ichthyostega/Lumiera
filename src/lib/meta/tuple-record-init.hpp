@@ -27,7 +27,7 @@
  ** passed in our "External Tree Description" form. This is relevant for structural
  ** diff and the invocation of actions driven by messages via the UI-Bus.
  ** 
- ** In those cases, a sequence of arguments will be passed in a run-time sequential
+ ** In those cases, a sequence of arguments will be passed within a run-time sequential
  ** container, as a sequence of GenNode entries. The latter are variant records,
  ** which means they can hold any of a small collection of basic types, like
  ** numbers, strings, time values etc. So we have to face two challenges here.

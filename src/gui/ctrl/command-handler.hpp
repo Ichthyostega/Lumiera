@@ -87,6 +87,7 @@ namespace ctrl{
        *        the GenNode::ID of the commandMsg (see CommandHandler(GenNode)),
        *        extended by the subID and some random digits.
        * @throw error::Logic always, not yet implemented        ///////////////////////////////////////////////////TICKET #1058 consider extension of UI-Bus protocol
+       * @deprecated as of 4/2017 it rather does not look like wer're going this path
        */
       bool
       handle (string const& subID) override                ///< the "bang!" message (command invocation)

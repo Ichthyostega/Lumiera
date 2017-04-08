@@ -23,8 +23,6 @@
 /** @file tuple-record-init-test.cpp
  ** unit test \ref TupleRecordInit_test
  */
-///@file
-
 
 
 #include "lib/test/run.hpp"
@@ -37,7 +35,7 @@
 #include <boost/noncopyable.hpp>
 #include <string>
 
-using lib::Literal;
+using lib::Symbol;
 using lib::Variant;
 using lib::idi::EntryID;
 using lib::diff::Rec;
@@ -96,7 +94,7 @@ namespace test {
       show_simpleUsage()
         {
           using NiceTypes = Types<string, int>;
-          using UgglyTypes = Types<EntryID<long>, string, int, int64_t, double, Duration>; // various conversions and an immutable type (Duration)
+          using UgglyTypes = Types<EntryID<long>, Symbol, int, int64_t, double, Duration>; // various conversions and an immutable type (Duration)
           
           Rec args = MakeRec().scope("lalü", 42);
           Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));

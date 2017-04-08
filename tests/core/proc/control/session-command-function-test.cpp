@@ -287,7 +287,7 @@ namespace test    {
        *        when handling command messages from the UI-Bus
        *        - use the help of an InvocationTrail, similar to what the
        *          [generic UI element](\ref gui::model::Tangible) does
-       *        - generate a argument binding message
+       *        - generate an argument binding message
        *        - generate a "bang!" message
        */
       void

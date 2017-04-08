@@ -3402,7 +3402,7 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 !Collaborations
 </pre>
 </div>
-<div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201702142312" tags="def design GuiIntegration draft" changecount="6">
+<div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704082328" tags="def design GuiIntegration draft" changecount="8">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
 In a more elaborate UI, as can be expected for such a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
 
@@ -3411,7 +3411,13 @@ An InteractionState is a global component, but often not addressed directly. To 
 &amp;rarr; CommandInvocationAnalysis
 &amp;rarr; InteractionControl
 &amp;rarr; GuiCommandBinding
-&amp;rarr; CommandUsage</pre>
+&amp;rarr; CommandUsage
+
+! interaction state and the actual widgets
+InteractionControl is conceived as an additional intermediary layer, distinct from the actual widgets. The whole idea is that we //do not want// intricate state managing logic to be scattered all over the concrete UI widget code -- doing so would defeat any higher level structuring and turn the UI code into highly tangled very technical implementation logic; ideally, UI code should mostly be specification, setup and wiring, yet void of procedural logic.
+
+For this reason, we decided against handling all of the GuiCommandCycle over the UI-Bus -- only the final stages are sent as messages, and they can be sent from //anywhere.//
+</pre>
 </div>
 <div title="InterfaceNamespaces" modifier="Ichthyostega" created="200708080338" modified="201003160209" tags="impl decision draft">
 <pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.

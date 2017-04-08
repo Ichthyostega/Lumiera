@@ -11793,10 +11793,154 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491656361886" ID="ID_1269299900" MODIFIED="1491656365558" TEXT="Einbindung">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1491659172438" ID="ID_1103739498" MODIFIED="1491659177297" TEXT="in SessionCommandService">
+<node CREATED="1491659172438" ID="ID_1103739498" MODIFIED="1491694399272" TEXT="in SessionCommandService">
+<icon BUILTIN="pencil"/>
 <node CREATED="1491659191155" ID="ID_586991718" MODIFIED="1491659216131" TEXT="Nutzung des Instance-Managers ist optional"/>
 <node CREATED="1491659194283" ID="ID_1169808852" MODIFIED="1491659203949" TEXT="direkter Zugriff auf Commands bleibt offen"/>
 <node CREATED="1491659224630" ID="ID_837055372" MODIFIED="1491659238608" TEXT="Entscheidung anhand der Command-ID"/>
+<node CREATED="1491659382161" ID="ID_948768193" MODIFIED="1491659462652" TEXT="Performance: maybeGet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da dieser Zugriff wirklich f&#252;r jedes Command passiert,
+    </p>
+    <p>
+      m&#246;chte ich mit dem Minimum an Hashtable-Zugriffen auskommen.
+    </p>
+    <p>
+      Daher pr&#252;fen wir als erstes den CommandInstanceManager,
+    </p>
+    <p>
+      da dies der Regelfall ist. Wenn dies scheitert, suchen wir noch
+    </p>
+    <p>
+      in der globalen Registry
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1491694300867" ID="ID_1838809343" MODIFIED="1491694391567" TEXT="Festlegung: CommandID wird als Symbol entgegengenommen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....k&#252;nftige Weiterung:
+    </p>
+    <p>
+      auch in EntryID k&#246;nnte ein Symbol-Stecken,
+    </p>
+    <p>
+      mithin in der GenNode::ID
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1491692398913" ID="ID_1349137025" MODIFIED="1491692404050" TEXT="in UI-Bus">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491692419958" ID="ID_411638678" MODIFIED="1491692425573" TEXT="#1058 consider expanding UI-Bus protocol for command cloning">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1491692431021" ID="ID_1526880552" MODIFIED="1491692436375" TEXT="wollen wir das?"/>
+<node CREATED="1491692438907" ID="ID_1137204114" MODIFIED="1491692452509" TEXT="oder nur f&#xfc;r explizite Spezialisierungen?"/>
+<node CREATED="1491692779933" ID="ID_184706664" MODIFIED="1491692783680" TEXT="Abw&#xe4;gung">
+<node CREATED="1491692784692" ID="ID_875264954" MODIFIED="1491693521708" TEXT="pro">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1491692786876" ID="ID_1725123375" MODIFIED="1491692800733" TEXT="Einheitliches Interface"/>
+<node CREATED="1491692887517" ID="ID_832151078" MODIFIED="1491692894912" TEXT="Bus k&#xf6;nnte weitere Trennschicht werden"/>
+<node CREATED="1491692922625" ID="ID_1378937117" MODIFIED="1491692927444" TEXT="Bus ist gut unit-testbar"/>
+</node>
+<node CREATED="1491692931040" ID="ID_1678638713" MODIFIED="1491693518988" TEXT="con">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1491692990840" ID="ID_1200979620" MODIFIED="1491692995939" TEXT="ziemlich indirekt"/>
+<node CREATED="1491692996639" ID="ID_1249742943" MODIFIED="1491693005081" TEXT="double-dispatch"/>
+<node CREATED="1491693382706" ID="ID_1886288474" MODIFIED="1491693419959" TEXT="CommandHandler hat keinen R&#xfc;ckgabewert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. wir m&#252;&#223;ten dann auch noch das Interface brechen
+    </p>
+    <p>
+      und die Form der ID-Dokoration zur Konvention machen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1491693197435" ID="ID_1151359036" MODIFIED="1491693375452" TEXT="InteractionState ist kein Tangible">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, f&#252;r das ganze Thema InteractionControl
+    </p>
+    <p>
+      schwebt mir eine Zwischenschicht unabh&#228;ngig von den Widgets vor
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wenn nun aber das Anfordern einer neuen Instanz &#252;ber den Bus laufen soll,
+    </p>
+    <p>
+      dann w&#252;rde es wohl ehr direkt von den Tangibles (Widget / Controller) ausgehen.
+    </p>
+    <p>
+      Das wollte ich <i>genau nicht</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1491693246284" ID="ID_553376017" MODIFIED="1491693514745">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Tangible sollte InteractionState <i>verwenden</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....und demnach sollte InteractionState eben grade nicht von Tangible wissen
+    </p>
+    <p>
+      Demnach m&#252;&#223;te sich InteractionState irgendwo &quot;hinten rum&quot; an den Bus ranmachen,
+    </p>
+    <p>
+      z.B. &#252;ber den InteractionDirector. Das ist aber nun wirklich absurrd,
+    </p>
+    <p>
+      da es letztlich nur darum geht ein <i>ohnehin &#246;ffentliches</i>&#160; Interface aufzurufen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1491659180516" ID="ID_655217923" MODIFIED="1491659189047" TEXT="in CmdAccess"/>
 </node>
@@ -12336,6 +12480,26 @@
 <node CREATED="1490985756381" ID="ID_1346029720" MODIFIED="1490985767448" TEXT="wird durch ID-Dekoration getrieben"/>
 <node CREATED="1491656301121" ID="ID_566719122" MODIFIED="1491656320281" TEXT="es ist stets nur eine Instanz offen"/>
 <node CREATED="1491656321252" ID="ID_1903067692" MODIFIED="1491656336277" TEXT="Widerspr&#xfc;che sind Hiweis auf Fehlfunktion"/>
+<node CREATED="1491694174845" ID="ID_344801148" MODIFIED="1491694242610" TEXT="Instanzbildung geh&#xf6;rt nicht in das Tangible">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist ein grundlegender Beschlu&#223;.
+    </p>
+    <p>
+      InteractionControl ist eine eigene Schicht;
+    </p>
+    <p>
+      deshalb ist auch der UI-Bus nicht <i>das </i>Universal-Interface schlechthin
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
