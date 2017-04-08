@@ -35,15 +35,14 @@
 
 
 #include "lib/symbol.hpp"
+#include "lib/symbol-table.hpp"
 #include "include/limits.h"
 extern "C" {
 #include "lib/safeclib.h"
 }
 
 #include <boost/functional/hash.hpp>
-#include <unordered_set>
 #include <cstddef>
-#include <utility>
 #include <string>
 
 using std::size_t;
@@ -59,20 +58,19 @@ namespace lib {
   const size_t STRING_MAX_RELEVANT = LUMIERA_IDSTRING_MAX_RELEVANT;
   
   
-  namespace { // symbol table implementation
+  namespace { // global symbol table
     
-    /** @warning grows eternally, never shrinks */
-    std::unordered_set<string> symbolTable;
+    SymbolTable symbolTable;
   }
   
   
   /**
    * create Symbol by symbol table lookup.
-   * @note identical strings will be mapped to
-   *       the same Symbol (embedded pointer)
+   * @note identical strings will be mapped to the same Symbol (embedded pointer)
+   * @warning potential lock contention, since each ctor call needs to do a lookup
    */
   Symbol::Symbol (string&& definition)
-    : Literal{symbolTable.insert(forward<string> (definition)).first->c_str()}
+    : Literal{symbolTable.internedString (forward<string> (definition))}
     { }
   
   
