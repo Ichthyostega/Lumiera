@@ -1,5 +1,5 @@
 /*
-  InteractionStateManager  -  facility to watch and guide one aspect of UI interaction
+  InteractionState  -  facility to watch and guide one aspect of UI interaction
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file interaction-state-manager.cpp
+/** @file interaction-state.cpp
  ** Common base implementation for UI state tracking components.
  ** 
  ** @see TODO___abstract-tangible-test.cpp
@@ -32,7 +32,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/interact/interaction-state-manager.hpp"
+#include "gui/interact/interaction-state.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>

@@ -1652,7 +1652,7 @@ Each of these files is specialised to defining a set of thematically related com
 
 !command &amp;harr; interaction
 The User Interface does not just trigger commands -- rather it performs //user interactions.//
-An interaction is formed like a sentence of spoken language, which means, there is a process of forming such a sentence, giving rise to [[interaction state|InteractionStateManager]]. In many cases, the actual arguments of a command invocation are to be drawn from the current context. Thus, GuiCommandBinding is a way more elaborate topic, while it builds upon the fundamentals defined here...
+An interaction is formed like a sentence of spoken language, which means, there is a process of forming such a sentence, giving rise to [[interaction state|InteractionState]]. In many cases, the actual arguments of a command invocation are to be drawn from the current context. Thus, GuiCommandBinding is a way more elaborate topic, while it builds upon the fundamentals defined here...
 </pre>
 </div>
 <div title="ConManager" modifier="Ichthyostega" created="200806050208" modified="200810060300" tags="def Builder">
@@ -2593,9 +2593,9 @@ The consequence of this approach is that the relations and whereabouts of entiti
 !!!Abstracted binding definitions
 This contrastive approach attempts to keep knowledge and definition clustered in a way according to the commands and actions to be performed -- even at the price of some abstractions and indirections. There is no natural and obvious place where to collect those information, and thus we need to create such a location deliberately. This new entity or location to be conceived will serve as a link between user interface and session elements, and it tends to rely on definitions from both realms.
 * in addition to the command script, here we build a parameter accessor, which is some kind of functor or closure.
-* we need to introduce a new abstraction, termed InteractionStateManager. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
+* we need to introduce a new abstraction, termed InteractionState. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
 * from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
-* the InteractionStateManager, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
+* the InteractionState, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
 * he sends the //enablement of a command invocation trail// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns &amp;rarr; InvocationTrail
 * if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessing just any UI-Bus terminal at reach within that context
 
@@ -2617,7 +2617,7 @@ To gain some understanding of the topic, we pose the question &quot;who has to d
 * the developer of ~Proc-Layer, obviously. The result of that development process is a set of [[command definitions|CommandHandling]], which get installed during start-up of the SessionSubsystem
 * global menu actions (and keybindings) want to issue a specific command, but possibly also need context information
 * a widget, button or context-menu binding typically want to trigger a command on some [[tangible element|UI-Element]] (widget or controller), but also needs to prepare the arguments prior to invocation
-* some InteractionStateManager observes contextual change and needs to mark possible consequences for invoking a given command
+* some [[interaction state manager|InteractionState]] observes contextual change and needs to mark possible consequences for invoking a given command
 
 from these use cases, we can derive the //crucial activities for command handling...//
 ;instance management
@@ -2627,25 +2627,25 @@ from these use cases, we can derive the //crucial activities for command handlin
 ;forming and enrichment of invocation state
 :interactions might happen in the form of ''gestures''
 :consequently, interaction state is picked up from context, during an extended time span prior to the invocation
-;access to the right ~InteractionStateManager
-:a widget just wants to invoke a command, yet it needs the help of &quot;some&quot; InteractionStateManager for
+;access to the right ~InteractionState
+:a widget just wants to invoke a command, yet it needs the help of &quot;some&quot; InteractionState for
 :* creating the command instance, so arguments can be bound
 :* fill in missing values for the arguments, depending on context
 
 !command invocation protocol
 * at start-up, command definitions are created in Proc, hard wired
 * ~UI-Elements know the basic ~Command-IDs relevant to their functionality. These are defined in some central header
-* when command usage is indicated, some part in the UI queries the {{{CmdAccessor}}} for an InteractionStateManager
+* when command usage is indicated, some part in the UI queries the {{{CmdAccess}}} for an InteractionState
 * the latter in turn retrieves a new command instance ID from the {{{CmdInstanceManager}}} in Proc
 * and the latter keeps a smart-ptr corresponding to this instance in its internal registration table
-* within the UI, a command instance corresponds to a specific invocation trail, and is thus stored within the managing {{{InteractionStateManager}}}
-* ~UI-Elements use the services of the InteractionStateManager, either to get arguments directly, or to act as observer of state changes
-* when a command is completely parametrised, it can be invoked. The managing {{{InteractionStateManager}}} knows about this
+* within the UI, a command instance corresponds to a specific invocation trail, and is thus stored within the managing {{{InteractionState}}}
+* ~UI-Elements use the services of {{{CmdAccess}}}, either to get arguments directly, or to act as observer of state changes
+* when a command is completely parametrised, it can be invoked. The managing {{{InteractionState}}} knows about this
 * on invocation, the ID of the instance is sent via UI-Bus to the {{{CmdInstanceManager}}}
 * which in turn removes the instance handle from its registration table and hands it over into the ProcDispatcher
 * only the {{{CmdInstanceManager}}} need to know about this actual command instance; there is no global registration
 [&lt;img[Access to Session Commands from UI|uml/Command-ui-access.png]]
-An immediate consequence is that command instances will be formed //per instance// of InteractionStateManager. Each distinct kind of control system has its own instances, which are kept around, until they are ready for invocation. Each invocation &quot;burns&quot; an instance -- on next access, a new instance ID will be allocated, and the next command invocation cycle starts...
+An immediate consequence is that command instances will be formed //per instance// of InteractionState. Each distinct kind of control system has its own instances, which are kept around, until they are ready for invocation. Each invocation &quot;burns&quot; an instance -- on next access, a new instance ID will be allocated, and the next command invocation cycle starts...
 
 Command instances are like prototypes -- thus each additional level of differentiation will create a clone copy and decorate the basic command ID. Yet this extension process is delegated into multiple stages. Already when a specific InvocationTrail is established, the bare command prototype is specialised, and additionally combined with specific context access rules and maybe even a accessor to retrieve some argument value. The {{{CmdInstanceManager}}} internally maintains and tracks a prepared anonymous command instance within a local registration table. The //smart-handle//-nature of command instance is enough to keep concurrently existing instances apart; instances might be around for an extended period, because commands are enqueued with the ProcDispatcher.
 
@@ -3402,11 +3402,11 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 !Collaborations
 </pre>
 </div>
-<div title="InteractionStateManager" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201702142312" tags="def design GuiIntegration draft" changecount="6">
+<div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201702142312" tags="def design GuiIntegration draft" changecount="6">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
 In a more elaborate UI, as can be expected for such a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
 
-An InteractionStateManager is a global component, but rarely addressed directly. Rather this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some [[command invocation trail|InvocationTrail]]. These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.
+An InteractionState is a global component, but often not addressed directly. To deal with context dependent activation, this tracking component attaches and taps into various information sources to observe some aspects of global state. Moreover, it is outfitted with a set of rules, leading to enablement of some [[command invocation trail|InvocationTrail]]. These enablements or disablements are forwarded to the actual trigger points, which are those UI elements to witness the completion of a gesture.
 
 &amp;rarr; CommandInvocationAnalysis
 &amp;rarr; InteractionControl

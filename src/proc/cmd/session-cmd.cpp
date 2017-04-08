@@ -28,7 +28,7 @@
  ** @see cmd.hpp
  ** @see command.hpp
  ** @see command-def.hpp
- ** @see command-accessor.hpp
+ ** @see cmd-access.hpp
  ** @see TODO_CommandGuiUsage_test
  **
  */

@@ -41,7 +41,7 @@
  ** 
  ** @see command-def.hpp
  ** @see command.hpp
- ** @see command-accessor.hpp
+ ** @see cmd-access.hpp
  ** @see CommandSetup_test
  **
  */

@@ -68,9 +68,10 @@ namespace interact {
    * This value object is a tracking handle used within the UI to deal with establishing
    * a command context, maybe to present the command within a menu or to picking up
    * actual invocation parameters from the context.
-   * @remarks typically you don't create an InvocationTrail from scratch; rather
-   *          you'll find it embedded into rules placed into a [InteractionStateManager].
-   *          The intention is to define it alongside with the command prototype.
+   * @remarks typically you don't create an InvocationTrail from scratch; rather you'll
+   *          retrieve it through \ref CmdAccess, which basically involves a specific
+   *          ["interaction state manager"](\ref InteractionState) to conduct the invocation.
+   * @todo as of 4/2017 the concept and usage pattern is not entirely worked out and clear
    */
   class InvocationTrail
     {

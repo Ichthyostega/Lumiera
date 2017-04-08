@@ -29,7 +29,7 @@
  ** be formed during an extended time period, non-deterministically -- since the actual context
  ** depends on the user interactions. Within the UI, there is a dedicated mechanism to form such
  ** command invocations similar to forming sentences of a language (with subject, predication and
- ** possibly some further objects). The UI manages several InteractionStateManager instances to observe
+ ** possibly some further objects). The UI manages several InteractionState instances to observe
  ** and pick up contextual state, finally leading to a complete parametrisation of a command.
  ** The CommandInstanceManager is a service to support this process; it prepares command instances
  ** and provides dedicated instance IDs, which can be stored in the UI and later used to retrieve
@@ -47,7 +47,7 @@
  ** @see command.hpp
  ** @see command-def.hpp
  ** @see command-setup.hpp
- ** @see command-accessor.hpp
+ ** @see cmd-access.hpp
  ** @see CommandInstanceManager_test
  **
  */

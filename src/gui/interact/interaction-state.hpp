@@ -1,5 +1,5 @@
 /*
-  INTERACTION-STATE-MANAGER.hpp  -  facility to watch and guide one aspect of UI interaction
+  INTERACTION-STATE.hpp  -  facility to watch and guide one aspect of UI interaction
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file interaction-state-manager.hpp
+/** @file interaction-state.hpp
  ** Abstraction: a component to watch, maintain and guide UI state.
  ** Typically, each such component is focused on one specific aspect
  ** of complex interface interactions. An example would be a component
@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_INTERACT_INTERACTION_STATE_MANAGER_H
-#define GUI_INTERACT_INTERACTION_STATE_MANAGER_H
+#ifndef GUI_INTERACT_INTERACTION_STATE_H
+#define GUI_INTERACT_INTERACTION_STATE_H
 
 
 #include "lib/error.hpp"
@@ -60,7 +60,7 @@ namespace interact {
    * Abstract foundation of UI state tracking components.
    * @todo write type comment...
    */
-  class InteractionStateManager
+  class InteractionState
     : boost::noncopyable
     {
     protected:
@@ -73,4 +73,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_INTERACTION_STATE_MANAGER_H*/
+#endif /*GUI_INTERACT_INTERACTION_STATE_H*/

@@ -228,7 +228,8 @@ namespace test    {
       
       /** @test start the session loop thread,
        *        similar to what the »session subsystem« does
-       *  @note we are _not_ actually starting the subsystem
+       *  @note we are _not_ actually starting the subsystem itself,
+       *        but we indeed start the _»session loop thread«_
        *  @see facade.cpp
        */
       void

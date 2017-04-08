@@ -21,10 +21,10 @@
 * *****************************************************/
 
 
-/** @file cmd-accessor.cpp
+/** @file cmd-access.cpp
  ** Implementation details of command invocation services for the UI.
  ** 
- ** @see TODO___cmd-accessor-test.cpp
+ ** @see TODO___cmd-access-test.cpp
  ** 
  */
 
@@ -32,7 +32,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/interact/cmd-accessor.hpp"
+#include "gui/interact/cmd-access.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -53,7 +53,7 @@ namespace interact {
   
   
   
-  CmdAccessor::~CmdAccessor() { }  // Emit dtors of embedded objects here...
+  CmdAccess::~CmdAccess() { }  // Emit dtors of embedded objects here...
   
   
   

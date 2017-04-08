@@ -21,31 +21,31 @@
 */
 
 
-/** @file cmd-accessor.hpp
+/** @file cmd-access.hpp
  ** Abstraction: access to command invocation for UI-Elements.
- ** The interact::CmdAccessor front-end is used by any UI element about to invoke and dispatch
+ ** The interact::CmdAccess front-end is used by any UI element about to invoke and dispatch
  ** commands into the session via ProcDispatcher. To invoke a command, typically it is necessary
  ** to prepare a _command instance_ and to pick up and bind _command arguments._ This can be achieved
- ** with the help of an intermediary, known as InteractionStateManager. Thus, CmdAccessor allows to
- ** discover a specific InteractionStateManager instance, which
+ ** with the help of an intermediary, known as ["interaction state manager"](\ref InteractionState).
+ ** Thus, the command accessor allows to discover a specific InteractionState instance, which
  ** - is responsible for the specific command to be invoked
  ** - can handle context information related to a specific _control system_ (e.g mouse, keyboard,
  **   hardware controller, pen)
  ** - might handle changing contextual state and thus decide if a command can be invoked
- ** From the InteractionStateManager, it is possible to retrieve a concrete InvocationTrail for
+ ** From the InteractionState instance, it is possible to retrieve a concrete InvocationTrail for
  ** this specific command instance about to be invoked. This InvocationTrail is an embedded command ID
  ** and can be used, to bind arguments and finally trigger the command invocation.
  ** 
  ** @todo as of 3/2017 this is a early design draft and WIP-WIP-WIP
  ** 
- ** @see TODO___cmd-accessor-test.cpp
+ ** @see TODO___cmd-access-test.cpp
  ** @see ////TODO_test usage example
  ** 
  */
 
 
-#ifndef GUI_INTERACT_CMD_ACCESSOR_H
-#define GUI_INTERACT_CMD_ACCESSOR_H
+#ifndef GUI_INTERACT_CMD_ACCESS_H
+#define GUI_INTERACT_CMD_ACCESS_H
 
 
 #include "lib/error.hpp"
@@ -70,12 +70,12 @@ namespace interact {
    * Abstract foundation of UI state tracking components.
    * @todo write type comment...
    */
-  class CmdAccessor
+  class CmdAccess
     : boost::noncopyable
     {
       
     public:
-      ~CmdAccessor();  ///< @todo do we need a VTable / virtual dtor?
+      ~CmdAccess();  ///< @todo do we need a VTable / virtual dtor?
       
     private:
     };
@@ -83,4 +83,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_CMD_ACCESSOR_H*/
+#endif /*GUI_INTERACT_CMD_ACCESS_H*/
