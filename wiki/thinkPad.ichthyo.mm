@@ -11706,9 +11706,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491005426763" ID="ID_1575553505" MODIFIED="1491005475262" TEXT="zu kl&#xe4;ren: duplikate Instanz">
+<node CREATED="1491005426763" ID="ID_1575553505" MODIFIED="1491618872104" TEXT="zu kl&#xe4;ren: duplikate Instanz">
 <arrowlink COLOR="#ca978d" DESTINATION="ID_1805144008" ENDARROW="Default" ENDINCLINATION="594;0;" ID="Arrow_ID_191915626" STARTARROW="None" STARTINCLINATION="594;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1491005509448" ID="ID_709599195" MODIFIED="1491005512147" TEXT="Fehler?"/>
 <node CREATED="1491005514015" ID="ID_66770459" MODIFIED="1491495268579" TEXT="bestehende Instanz &#xfc;berb&#xfc;geln"/>
 <node CREATED="1491495244653" ID="ID_1710448495" MODIFIED="1491495254015" TEXT="stillschweigend die bestehende Instanz verwenden"/>
@@ -11716,7 +11716,8 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node CREATED="1491008040105" ID="ID_662216926" MODIFIED="1491008043901" TEXT="Implementierung">
+<node CREATED="1491008040105" ID="ID_662216926" MODIFIED="1491618848217" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1491008045936" ID="ID_1071153669" MODIFIED="1491008146180" TEXT="CommandInstanceManager_test">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -11729,8 +11730,8 @@
 <node COLOR="#338800" CREATED="1491008073989" ID="ID_1954195404" MODIFIED="1491008148995" TEXT="Symbol-Tabelle">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1491008079676" ID="ID_1262786130" MODIFIED="1491008142008" TEXT="Test">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1491008079676" ID="ID_1262786130" MODIFIED="1491618841600" TEXT="Test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1491008088699" ID="ID_1501876595" MODIFIED="1491109806224" TEXT="Basisfall l&#xe4;uft noch nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -11744,9 +11745,9 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008118695" ID="ID_1595821007" MODIFIED="1491498915313" STYLE="fork" TEXT="Invocation abdecken">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1491498978878" ID="ID_1001760576" MODIFIED="1491499003761" TEXT="nicht direkt">
+<node COLOR="#338800" CREATED="1491008118695" ID="ID_1595821007" MODIFIED="1491618830886" TEXT="Invocation abdecken">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1491498978878" ID="ID_1001760576" MODIFIED="1491618830202" TEXT="nicht direkt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -11762,7 +11763,7 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1491499005954" ID="ID_1944400975" MODIFIED="1491499049847" TEXT="aber im Hinblick auf den Lebenszyklus">
+<node CREATED="1491499005954" ID="ID_1944400975" MODIFIED="1491618830202" TEXT="aber im Hinblick auf den Lebenszyklus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -11782,13 +11783,16 @@
 </richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008124550" ID="ID_249252999" MODIFIED="1491008138788" TEXT="Duplikate abdecken">
+<node COLOR="#338800" CREATED="1491008124550" ID="ID_249252999" MODIFIED="1491618833169" TEXT="Duplikate abdecken">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1491008129165" ID="ID_118623494" MODIFIED="1491618835441" TEXT="Lebenszyklus-Fehler">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491656361886" ID="ID_1269299900" MODIFIED="1491656365558" TEXT="Einbindung">
 <icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491008129165" ID="ID_118623494" MODIFIED="1491008139405" TEXT="Lebenszyklus-Fehler">
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489191252503" ID="ID_1621107057" MODIFIED="1489191308469" TEXT="#1090 Command access for UI-Elements">
@@ -12324,6 +12328,8 @@
 </node>
 <node CREATED="1490985748207" ID="ID_1314513556" MODIFIED="1490985751457" TEXT="Instanzbildung">
 <node CREATED="1490985756381" ID="ID_1346029720" MODIFIED="1490985767448" TEXT="wird durch ID-Dekoration getrieben"/>
+<node CREATED="1491656301121" ID="ID_566719122" MODIFIED="1491656320281" TEXT="es ist stets nur eine Instanz offen"/>
+<node CREATED="1491656321252" ID="ID_1903067692" MODIFIED="1491656336277" TEXT="Widerspr&#xfc;che sind Hiweis auf Fehlfunktion"/>
 </node>
 </node>
 </node>

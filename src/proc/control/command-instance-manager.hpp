@@ -29,14 +29,19 @@
  ** be formed during an extended time period, non-deterministically -- since the actual context
  ** depends on the user interactions. Within the UI, there is a dedicated mechanism to form such
  ** command invocations similar to forming sentences of a language (with subject, predication and
- ** possibly some further objects). The UI manages several InteractionStateManager instances to
- ** observe and pick up contextual state, finally leading to a complete parametrisation of a command.
+ ** possibly some further objects). The UI manages several InteractionStateManager instances to observe
+ ** and pick up contextual state, finally leading to a complete parametrisation of a command.
  ** The CommandInstanceManager is a service to support this process; it prepares command instances
  ** and provides dedicated instance IDs, which can be stored in the UI and later used to retrieve
  ** those instances for invocation. These IDs are created by decorating a base command ID, allowing
  ** for several competing invocations to exist at the same time. When finally a given invocation is
  ** about to happen, a corresponding registration handle is transfered to the ProcDispatcher, where
- ** it is enqueued for execution.  
+ ** it is enqueued for execution.
+ ** \par lifecycle
+ ** There CommandInstanceManager is maintained by the SessionCommandService, which in turn is
+ ** installed and removed by the implementation within ProcDispatcher. Its lifecycle is thus tied
+ ** to the opening / closing of the Proc-Layer interface, as dictated by the Session lifecycle.
+ ** When the current session is closed, all command instances "underway" will thus be discarded.
  ** 
  ** @see command-setup.cpp service implementation
  ** @see command.hpp
@@ -55,12 +60,10 @@
 #include "lib/error.hpp"
 #include "proc/control/command-dispatch.hpp"
 #include "lib/symbol.hpp"
-//#include "proc/common.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <string>
-
 
 
 
@@ -69,12 +72,25 @@ namespace control {
   
   using std::string;
   using lib::Symbol;
-  //using std::shared_ptr;
-  
   
   
   /**
-   * @todo write type comment
+   * Maintain a _current command instance_ for parametrisation.
+   * The definition of a *Proc-Layer command* is used like a prototype.
+   * For invocation, an anonymous clone copy is created from the definition
+   * by calling #newInstance. Several competing usages of the same command can be
+   * kept apart with the help of the `invocationID`, which is used to decorate the basic
+   * command-ID to form a distinct _`instanceID`_. After #newInstance has "opened" an instance
+   * this way and returned the instanceID, the actual \ref Command handle can be retrieved with
+   * #getInstance. It represents an _anonymous instance_ kept alive solely by the CommandInstanceManager
+   * (i.e. there is no registration of a command under that instanceID in the global CommandRegistry).
+   * When done with the parametrisation, by calling #dispatch, this anonymous instance will be handed
+   * over to the [Dispatcher](CommandDispatch) (installed on construction). Typically, this will in fact
+   * be the proc::control::ProcDispatcher, which runs in a dedicated thread ("session loop thread") and
+   * maintains a queue of commands to be dispatched towards the current session. Since Command is a smart
+   * handle, the enqueued instance will stay alive until execution and then go out of scope. But, after
+   * #dispatch, it is no longer accessible from the CommandInstanceManger, and while it is still waiting
+   * in the execution queue, the next instance for the same invocationID might already be opened.
    */
   class CommandInstanceManager
     : boost::noncopyable
@@ -91,15 +107,7 @@ namespace control {
       void dispatch (Symbol instanceID);
       
       bool contains (Symbol instanceID)  const;
-      
-    private:
     };
-  
-  
-  
-  
-  /** */
-  
   
   
   

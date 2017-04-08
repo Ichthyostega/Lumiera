@@ -23,10 +23,12 @@
 
 /** @file command-setup.cpp
  ** Implementation details of instance management for command invocation by the GUI.
+ ** This translation unit combines the implementation code of several facilities
+ ** related to definition and instantiation of concrete command instances.
  ** 
  ** @see command-setup.hpp
  ** @see command-instance-manager.hpp
- ** @see TODO_CommandInstanceManager_test
+ ** @see CommandInstanceManager_test
  ** @see command.hpp
  ** @see command-registry.hpp
  **
@@ -155,13 +157,21 @@ namespace control {
   // emit dtors of embedded objects here....
   CommandInstanceManager::~CommandInstanceManager() { }
   
+  /** create a CommandInstanceManager and wire it with the given CommandDispatch implementation.
+   * Typically, this is done in SessionCommandService. The embedded hash table for pending
+   * command instances is sized in relation to the number of registered global Command definitions.
+   */
   CommandInstanceManager::CommandInstanceManager (CommandDispatch& dispatcher)
     : dispatcher_{dispatcher}
     , table_{2 * Command::definition_count()}
     { }
   
   
-  /** @todo more to come here...*/
+  /** Create and thus "open" a new anonymous command instance.
+   * @param prototypeID the underlying Command definition to create a clone copy
+   * @param invocationID used to decorate the prototypeID to from an unique instanceID
+   * @throws error::Logic in case an instance is for this ID combination is already "open"
+   */
   Symbol
   CommandInstanceManager::newInstance (Symbol prototypeID, string invocationID)
   {
@@ -182,6 +192,7 @@ namespace control {
   }
   
   
+  /** @return handle to the currently "opened" instance with the given ID */
   Command&
   CommandInstanceManager::getInstance (Symbol instanceID)
   {
@@ -194,7 +205,7 @@ namespace control {
   }
   
   
-  /** */
+  /** hand over the designated command instance to the dispatcher installed on construction */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)
   {
