@@ -60,6 +60,7 @@ namespace test{
         {
           checkLiteral();
           checkSymbolCreation();
+          checkComparisons();
         }
       
       
@@ -140,6 +141,60 @@ namespace test{
           CHECK (sy4.c() == Symbol{"1.11"}.c());
           CHECK (sy4.c() == (const char*)sy4);
           CHECK (hash_value(sy4) == hash_value(Symbol{"1.11"}));
+        }
+      
+      
+      void
+      checkComparisons()
+        {
+          const char* s1 = "1";
+          const char* s3 = "11";
+          const char* s2 = s3+1;
+          
+          CHECK (s1 != s2);
+          CHECK (s1 != s3);
+          CHECK (s2 != s3);
+          
+          Literal l1(s1);
+          Literal l2(s2);
+          Literal l3(s3);
+          
+          CHECK (l1 == l2);
+          CHECK (l1 != l3);
+          CHECK (l3 != l1);
+          CHECK (l2 != l3);
+          CHECK (l3 != l2);
+          
+          CHECK (l1 == s1);
+          CHECK (s1 == l1);
+          CHECK (l1 == s2);
+          CHECK (s2 == l1);
+          CHECK (l1 != s3);
+          CHECK (s3 != l1);
+          CHECK (not isSameObject(l1, l2));
+          CHECK (not isSameObject(l1.c(), l2.c()));
+          
+          Symbol y1{s1};
+          Symbol y2{l2};
+          Symbol y3{"11"};
+          
+          CHECK (y1 == y2);
+          CHECK (y1.c() == y2.c());
+          CHECK (not isSameObject (y1.c(), y2.c()));
+          CHECK (    isSameObject (*y1.c(), *y2.c()));
+          CHECK (y1 != y3);
+          CHECK (y3 != y1);
+          CHECK (y2 != y3);
+          CHECK (y3 != y2);
+          
+          CHECK (y1 == l1);  CHECK (l1 == y1);
+          CHECK (y1 == s1);  CHECK (s1 == y1);
+          CHECK (y1 == l2);  CHECK (l2 == y1);
+          CHECK (y1 == s2);  CHECK (s2 == y1);
+          CHECK (y3 != l1);  CHECK (l1 != y3);
+          CHECK (y3 != s1);  CHECK (s1 != y3);
+          CHECK (y3 != l2);  CHECK (l2 != y3);
+          CHECK (y3 != s2);  CHECK (s2 != y3);
         }
     };
   
