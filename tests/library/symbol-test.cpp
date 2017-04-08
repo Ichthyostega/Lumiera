@@ -33,11 +33,13 @@
 #include "lib/symbol.hpp"
 
 #include <string>
+#include <map>
 
 using util::typeStr;
 using util::isSameObject;
 using util::isnil;
 using std::string;
+using std::map;
 
 
 
@@ -61,6 +63,7 @@ namespace test{
           checkLiteral();
           checkSymbolCreation();
           checkComparisons();
+          use_as_map_key();
         }
       
       
@@ -195,6 +198,46 @@ namespace test{
           CHECK (y3 != s1);  CHECK (s1 != y3);
           CHECK (y3 != l2);  CHECK (l2 != y3);
           CHECK (y3 != s2);  CHECK (s2 != y3);
+        }
+      
+      
+      /** @test use Literal and Symbol as keys in a tree map.
+       *  @note neither Literal, nor Symbol defines an `operator<`
+       *        so the map specialisation has to fall back on const char*,
+       *        which are compared based on pointer identity. Contrast this
+       *        with std::string, which does define its own ordering.
+       */
+      void
+      use_as_map_key()
+        {
+          map<Literal, int> mli;
+          map<Symbol, int>  myi;
+          map<string, int>  msi;
+          
+          Literal l1{"1"}, l2{"2"};
+          Symbol  y1{l1}, y2{l2};
+          string  s1{y1}, s2{"2"};
+          
+          mli[l1] = 1;  myi[y1] = 1;  msi[s1] = 1;
+          mli[l2] = 2;  myi[y2] = 2;  msi[s2] = 2;
+          
+          CHECK (mli[l1] == 1);
+          CHECK (mli[l2] == 2);
+          CHECK (myi[y1] == 1);
+          CHECK (myi[y2] == 2);
+          CHECK (msi[s1] == 1);
+          CHECK (msi[s2] == 2);
+          
+          const char* x = "11";
+          ++x;
+          CHECK (x != l1.c());
+          CHECK (x == l1);
+          CHECK (x == y1);
+          CHECK (x == s1);
+          
+          CHECK (mli[x] == 0);  // Note: not found, since it is a different pointer
+          CHECK (myi[x] == 1);  // Note: same string mapped to same ptr in Symbol
+          CHECK (msi[x] == 1);
         }
     };
   
