@@ -43,6 +43,7 @@
 
 #include "include/session-command-facade.h"
 #include "proc/control/command-dispatch.hpp"
+#include "proc/control/command-instance-manager.hpp"
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 #include "lib/diff/gen-node.hpp"
@@ -75,6 +76,9 @@ namespace control {
     , boost::noncopyable
     {
       CommandDispatch& dispatcher_;
+      CommandInstanceManager instanceManager_;
+      
+      Command retrieveCommand (Symbol);
       
       
       /* === Implementation of the Facade Interface === */

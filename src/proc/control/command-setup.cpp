@@ -205,6 +205,22 @@ namespace control {
   }
   
   
+  /** try to retrieve an currently active instance, but tolerate unknown IDs */
+  Command&
+  CommandInstanceManager::maybeGetInstance (Symbol instanceID)
+  {
+    static Command NOT_FOUND;
+    auto entry = table_.find(instanceID);
+    if (entry == table_.end())
+      return NOT_FOUND;
+    if (not entry->second)
+      throw error::Invalid (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
+                                % instanceID
+                           , LUMIERA_ERROR_INVALID_COMMAND);
+    return entry->second;
+  }
+  
+  
   /** hand over the designated command instance to the dispatcher installed on construction */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)

@@ -104,6 +104,7 @@ namespace control {
       
       Symbol newInstance (Symbol prototypeID, string const& invocationID);
       Command& getInstance(Symbol instanceID);
+      Command& maybeGetInstance (Symbol instanceID);
       void dispatch (Symbol instanceID);
       
       bool contains (Symbol instanceID)  const;

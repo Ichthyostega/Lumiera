@@ -54,14 +54,22 @@ namespace control {
   using std::string;
   using util::cStr;
   
-  namespace {
-    
-    /** @throw error::Invalid when no suitable command definition exists */
-    Command
-    retrieveCommand (Symbol cmdID)
-    {
-      return Command::get (cmdID);
-    }
+   
+  /**
+   * @internal access the command instance for further processing.
+   * The standard use case is to get an anonymous command instance,
+   * which was previously opened within the CommandInstanceManager.
+   * But for exceptional cases, we also allow to access a global
+   * command instance by name.
+   * @param cmdID either the instanceID or the global cmdID
+   * @throw error::Invalid when no suitable command definition exists
+   */
+  Command
+  SessionCommandService::retrieveCommand (Symbol cmdID)
+  {
+    Command cmdFound = instanceManager_.maybeGetInstance (cmdID);
+    return cmdFound? cmdFound
+                   : Command::get(cmdID);
   }
   
   
@@ -69,7 +77,7 @@ namespace control {
   Symbol
   SessionCommandService::cycle (Symbol cmdID, string const& invocationID)
   {
-    UNIMPLEMENTED ("Command instance management");
+    return instanceManager_.newInstance(cmdID, invocationID);
   }
   
   
@@ -83,7 +91,10 @@ namespace control {
   void
   SessionCommandService::invoke (Symbol cmdID)
   {
-    dispatcher_.enqueue (retrieveCommand(cmdID));
+    if (instanceManager_.contains (cmdID))
+      instanceManager_.dispatch(cmdID);
+    else
+      dispatcher_.enqueue (Command::get(cmdID));
   }
   
   
@@ -210,6 +221,7 @@ namespace control {
   
   SessionCommandService::SessionCommandService  (CommandDispatch& dispatcherLoopInterface)
     : dispatcher_{dispatcherLoopInterface}
+    , instanceManager_{dispatcher_}
     , implInstance_{this,_instance}
     , serviceInstance_{ LUMIERA_INTERFACE_REF (lumieraorg_SessionCommand, 0, lumieraorg_SessionCommandService)}
   {

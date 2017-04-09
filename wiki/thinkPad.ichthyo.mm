@@ -11798,7 +11798,26 @@
 <node CREATED="1491659191155" ID="ID_586991718" MODIFIED="1491659216131" TEXT="Nutzung des Instance-Managers ist optional"/>
 <node CREATED="1491659194283" ID="ID_1169808852" MODIFIED="1491659203949" TEXT="direkter Zugriff auf Commands bleibt offen"/>
 <node CREATED="1491659224630" ID="ID_837055372" MODIFIED="1491659238608" TEXT="Entscheidung anhand der Command-ID"/>
-<node CREATED="1491659382161" ID="ID_948768193" MODIFIED="1491659462652" TEXT="Performance: maybeGet">
+<node CREATED="1491694300867" ID="ID_1838809343" MODIFIED="1491702954154" TEXT="Festlegung: CommandID wird als Symbol entgegengenommen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....k&#252;nftige Weiterung:
+    </p>
+    <p>
+      auch in EntryID k&#246;nnte ein Symbol-Stecken,
+    </p>
+    <p>
+      mithin in der GenNode::ID
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1491659382161" ID="ID_948768193" MODIFIED="1491702871022" TEXT="Performance: maybeGet">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -11823,25 +11842,22 @@
 </html>
 </richcontent>
 <icon BUILTIN="idea"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1491702872058" ID="ID_487194706" MODIFIED="1491702875613" TEXT="keine gute Idee"/>
+<node CREATED="1491702876137" ID="ID_141674543" MODIFIED="1491702880476" TEXT="doppelt das Interface"/>
+<node CREATED="1491702881160" ID="ID_1657270200" MODIFIED="1491702949548" TEXT="Taschenspielerei">
+<arrowlink COLOR="#a71f6e" DESTINATION="ID_1776414678" ENDARROW="Default" ENDINCLINATION="-59;-44;" ID="Arrow_ID_559634306" STARTARROW="None" STARTINCLINATION="126;32;"/>
+<icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1491694300867" ID="ID_1838809343" MODIFIED="1491694391567" TEXT="Festlegung: CommandID wird als Symbol entgegengenommen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....k&#252;nftige Weiterung:
-    </p>
-    <p>
-      auch in EntryID k&#246;nnte ein Symbol-Stecken,
-    </p>
-    <p>
-      mithin in der GenNode::ID
-    </p>
-  </body>
-</html>
-</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491702805203" HGAP="26" ID="ID_1776414678" MODIFIED="1491702949548" TEXT="Performance / Standard-Fall" VSHIFT="22">
+<linktarget COLOR="#a71f6e" DESTINATION="ID_1776414678" ENDARROW="Default" ENDINCLINATION="-59;-44;" ID="Arrow_ID_559634306" SOURCE="ID_1657270200" STARTARROW="None" STARTINCLINATION="126;32;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1491702822568" ID="ID_1028353876" MODIFIED="1491702830531" TEXT="wir suchen stets zuerst eine Instanz"/>
+<node CREATED="1491702831023" ID="ID_184396015" MODIFIED="1491702840810" TEXT="wir fallen auf die globale Registry zur&#xfc;ck"/>
+<node CREATED="1491702841453" ID="ID_1707474386" MODIFIED="1491702856185" TEXT="das kann der InstanceManager am Besten selber!">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node CREATED="1491692398913" ID="ID_1349137025" MODIFIED="1491692404050" TEXT="in UI-Bus">
