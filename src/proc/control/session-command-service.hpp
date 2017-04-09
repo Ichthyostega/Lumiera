@@ -46,6 +46,7 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -78,8 +79,9 @@ namespace control {
       
       /* === Implementation of the Facade Interface === */
       
-      void bindArg (string const& cmdID, Rec const& args) override;
-      void invoke (string const& cmdID)                   override;
+      Symbol cycle (Symbol cmdID, string const& invocationID) override;
+      void bindArg (Symbol cmdID, Rec const& args)            override;
+      void invoke  (Symbol cmdID)                             override;
       
       
       /* === Interface Lifecycle === */

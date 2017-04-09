@@ -102,7 +102,7 @@ namespace control {
       CommandInstanceManager (CommandDispatch&);
      ~CommandInstanceManager();
       
-      Symbol newInstance (Symbol prototypeID, string invocationID);
+      Symbol newInstance (Symbol prototypeID, string const& invocationID);
       Command& getInstance(Symbol instanceID);
       void dispatch (Symbol instanceID);
       

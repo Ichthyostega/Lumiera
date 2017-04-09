@@ -53,6 +53,7 @@
 
 #include "include/interfaceproxy.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/symbol.hpp"
 
 #include <string>
 
@@ -60,6 +61,7 @@
 namespace proc {
 namespace control {
   
+  using lib::Symbol;
   using std::string;
   
   
@@ -82,11 +84,14 @@ namespace control {
     public:
       static lumiera::facade::Accessor<SessionCommand> facade;
       
+      /** start next command cycle and "open" a new anonymous command instance */
+      virtual Symbol cycle (Symbol cmdID, string const& invocationID) =0;
+      
       /** prepare command invocation: bind the command's arguments */
-      virtual void bindArg (string const& cmdID, lib::diff::Rec const& args) =0;
+      virtual void bindArg (Symbol cmdID, lib::diff::Rec const& args) =0;
       
       /** trigger invocation of a prepared command */
-      virtual void invoke (string const& cmdID)                              =0;
+      virtual void invoke (Symbol cmdID)                              =0;
       
       
     protected:
@@ -105,8 +110,9 @@ extern "C" {
 #include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_SessionCommand, 0,
-                           LUMIERA_INTERFACE_SLOT (void, bindArg, (const char*, const void*)),
-                           LUMIERA_INTERFACE_SLOT (void, invoke,  (const char*)),
+                           LUMIERA_INTERFACE_SLOT (const char*, cycle, (const char*, const char*)),
+                           LUMIERA_INTERFACE_SLOT (void,      bindArg, (const char*, const void*)),
+                           LUMIERA_INTERFACE_SLOT (void,       invoke, (const char*)),
 );
 
 

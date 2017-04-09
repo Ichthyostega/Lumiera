@@ -173,7 +173,7 @@ namespace control {
    * @throws error::Logic in case an instance is for this ID combination is already "open"
    */
   Symbol
-  CommandInstanceManager::newInstance (Symbol prototypeID, string invocationID)
+  CommandInstanceManager::newInstance (Symbol prototypeID, string const& invocationID)
   {
     Symbol instanceID{prototypeID, invocationID};
     Command& instance = table_[instanceID];

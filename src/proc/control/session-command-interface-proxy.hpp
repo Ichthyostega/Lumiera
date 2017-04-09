@@ -65,8 +65,9 @@ namespace facade {
     {
       //----Proxy-Implementation-of-SessionCommand--------
       
-      void bindArg (string const& cmdID, lib::diff::Rec const& args)  override { _i_.bindArg (cStr(cmdID), &args); }
-      void invoke (string const& cmdID)                               override { _i_.invoke  (cStr(cmdID));        }
+      Symbol cycle (Symbol cmdID, string const& invocID)      override { return _i_.cycle (cmdID, cStr(invocID));}
+      void bindArg (Symbol cmdID, lib::diff::Rec const& args) override { _i_.bindArg (cmdID, &args); }
+      void invoke  (Symbol cmdID)                             override { _i_.invoke  (cmdID);        }
       
       
     public:

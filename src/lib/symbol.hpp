@@ -107,7 +107,7 @@ namespace lib {
         : Symbol{std::string(str)}
         { }
       
-      Symbol (Literal const& base, std::string ext)
+      Symbol (Literal const& base, std::string const& ext)
         : Symbol{std::string(base)+"."+ext}
         { }
       

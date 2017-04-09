@@ -56,28 +56,32 @@ namespace control {
   
   namespace {
     
-    /** @todo workaround until we're able to retrieve a Symbol by string    ////////////////////////TICKET #158 : symbol table to get a Symbol from string representation
-     * @throw error::Invalid when no suitable command definition exists
-     */
+    /** @throw error::Invalid when no suitable command definition exists */
     Command
-    retrieveCommand (string const& cmdID)
+    retrieveCommand (Symbol cmdID)
     {
-      Symbol cmdSym {cmdID.c_str()};
-      return Command::get (cmdSym);
+      return Command::get (cmdID);
     }
   }
   
   
   
+  Symbol
+  SessionCommandService::cycle (Symbol cmdID, string const& invocationID)
+  {
+    UNIMPLEMENTED ("Command instance management");
+  }
+  
+  
   void 
-  SessionCommandService::bindArg (string const& cmdID, Rec const& argSeq)
+  SessionCommandService::bindArg (Symbol cmdID, Rec const& argSeq)
   {
     retrieveCommand(cmdID).bindArg(argSeq);
   }
   
   
   void
-  SessionCommandService::invoke (string const& cmdID)
+  SessionCommandService::invoke (Symbol cmdID)
   {
     dispatcher_.enqueue (retrieveCommand(cmdID));
   }
@@ -170,6 +174,15 @@ namespace control {
                                , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_SessionCommandFacade_descriptor)
                                , NULL /* on  open  */
                                , NULL /* on  close */
+                               , LUMIERA_INTERFACE_INLINE (cycle,
+                                                           const char*, (const char* cmdID, const char* invocationID),
+                                                             { 
+                                                               if (!_instance) 
+                                                                 return lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               else
+                                                                 return _instance->cycle(cmdID, invocationID);
+                                                             }
+                                                          )
                                , LUMIERA_INTERFACE_INLINE (bindArg,
                                                            void, (const char* cmdID, const void* args),
                                                              { 
