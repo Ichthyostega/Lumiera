@@ -11791,10 +11791,76 @@
 </node>
 </node>
 </node>
+<node CREATED="1491753027936" HGAP="35" ID="ID_118278209" MODIFIED="1491757400403" TEXT="Refactoring" VSHIFT="2">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1491753036895" ID="ID_1029946389" MODIFIED="1491753047201" TEXT="fall-back auf Command integrieren"/>
+<node CREATED="1491753645531" ID="ID_597184850" MODIFIED="1491753650607" TEXT="maybeGet entfernen"/>
+<node CREATED="1491753047981" ID="ID_1220888974" MODIFIED="1491753330643" TEXT="Referenz rausgeben">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1491753058620" ID="ID_1772710050" MODIFIED="1491753078866" TEXT="nicht thradsafe">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1491753170924" ID="ID_1947747818" MODIFIED="1491753316996" TEXT="Command-Zugriff ist by value">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...aus gutem Grund
+    </p>
+    <p>
+      (kann mich erinnern, da&#223; ich mir das &#252;berlegt hatte).
+    </p>
+    <p>
+      Sofern Definitionen wirklich concurrent ge&#228;ndert oder gel&#246;scht werden,
+    </p>
+    <p>
+      k&#246;nnte es sein, da&#223; jemand auf einer stale reference arbeitet,
+    </p>
+    <p>
+      denn das Lock sch&#252;tzt nur den Aufruf innerhalb der CommandRegistry.
+    </p>
+    <p>
+      Sicher ist der Zugriff nur, wenn im Schutzbereich dieses Locks ein
+    </p>
+    <p>
+      neues Command-Objekt kopiert wird. Was allerdings den RefCount erh&#246;ht.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1491753132377" ID="ID_1441469124" MODIFIED="1491753156451" TEXT="m&#xfc;&#xdf;te daf&#xfc;r direkt auf die CommandRegistry zugreifen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1491753332318" ID="ID_889636506" MODIFIED="1491757384745" TEXT="nein: Wert rausgeben">
+<linktarget COLOR="#3e657d" DESTINATION="ID_889636506" ENDARROW="Default" ENDINCLINATION="21;223;" ID="Arrow_ID_1428975472" SOURCE="ID_1707474386" STARTARROW="None" STARTINCLINATION="-541;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1491753337438" ID="ID_1228083262" MODIFIED="1491753342636" TEXT="KISS">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1491753354116" ID="ID_1070880433" MODIFIED="1491753389816" TEXT="Bus + CommandHandler + GenNode">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber sich mit einem Refcount verr&#252;ckt machen.....
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491656361886" ID="ID_1269299900" MODIFIED="1491656365558" TEXT="Einbindung">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1491659172438" ID="ID_1103739498" MODIFIED="1491694399272" TEXT="in SessionCommandService">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1491659172438" HGAP="34" ID="ID_1103739498" MODIFIED="1491757376165" TEXT="in SessionCommandService" VSHIFT="-3">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1491659191155" ID="ID_586991718" MODIFIED="1491659216131" TEXT="Nutzung des Instance-Managers ist optional"/>
 <node CREATED="1491659194283" ID="ID_1169808852" MODIFIED="1491659203949" TEXT="direkter Zugriff auf Commands bleibt offen"/>
 <node CREATED="1491659224630" ID="ID_837055372" MODIFIED="1491659238608" TEXT="Entscheidung anhand der Command-ID"/>
@@ -11845,24 +11911,25 @@
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1491702872058" ID="ID_487194706" MODIFIED="1491702875613" TEXT="keine gute Idee"/>
 <node CREATED="1491702876137" ID="ID_141674543" MODIFIED="1491702880476" TEXT="doppelt das Interface"/>
-<node CREATED="1491702881160" ID="ID_1657270200" MODIFIED="1491702949548" TEXT="Taschenspielerei">
-<arrowlink COLOR="#a71f6e" DESTINATION="ID_1776414678" ENDARROW="Default" ENDINCLINATION="-59;-44;" ID="Arrow_ID_559634306" STARTARROW="None" STARTINCLINATION="126;32;"/>
+<node CREATED="1491702881160" ID="ID_1657270200" MODIFIED="1491753472968" TEXT="Taschenspielerei">
+<arrowlink COLOR="#a71f6e" DESTINATION="ID_1776414678" ENDARROW="Default" ENDINCLINATION="-8;-62;" ID="Arrow_ID_559634306" STARTARROW="None" STARTINCLINATION="-86;2;"/>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491702805203" HGAP="26" ID="ID_1776414678" MODIFIED="1491702949548" TEXT="Performance / Standard-Fall" VSHIFT="22">
-<linktarget COLOR="#a71f6e" DESTINATION="ID_1776414678" ENDARROW="Default" ENDINCLINATION="-59;-44;" ID="Arrow_ID_559634306" SOURCE="ID_1657270200" STARTARROW="None" STARTINCLINATION="126;32;"/>
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1491702805203" HGAP="26" ID="ID_1776414678" MODIFIED="1491757370278" TEXT="Performance / Standard-Fall" VSHIFT="22">
+<linktarget COLOR="#a71f6e" DESTINATION="ID_1776414678" ENDARROW="Default" ENDINCLINATION="-8;-62;" ID="Arrow_ID_559634306" SOURCE="ID_1657270200" STARTARROW="None" STARTINCLINATION="-86;2;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1491702822568" ID="ID_1028353876" MODIFIED="1491702830531" TEXT="wir suchen stets zuerst eine Instanz"/>
 <node CREATED="1491702831023" ID="ID_184396015" MODIFIED="1491702840810" TEXT="wir fallen auf die globale Registry zur&#xfc;ck"/>
-<node CREATED="1491702841453" ID="ID_1707474386" MODIFIED="1491702856185" TEXT="das kann der InstanceManager am Besten selber!">
+<node CREATED="1491702841453" ID="ID_1707474386" MODIFIED="1491757384744" TEXT="das kann der InstanceManager am Besten selber!">
+<arrowlink COLOR="#3e657d" DESTINATION="ID_889636506" ENDARROW="Default" ENDINCLINATION="21;223;" ID="Arrow_ID_1428975472" STARTARROW="None" STARTINCLINATION="-541;0;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
-<node CREATED="1491692398913" ID="ID_1349137025" MODIFIED="1491692404050" TEXT="in UI-Bus">
+<node CREATED="1491692398913" HGAP="27" ID="ID_1349137025" MODIFIED="1491753610374" TEXT="in UI-Bus" VSHIFT="6">
 <icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491692419958" ID="ID_411638678" MODIFIED="1491692425573" TEXT="#1058 consider expanding UI-Bus protocol for command cloning">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491692419958" ID="ID_411638678" MODIFIED="1491753600586" TEXT="#1058 consider expanding UI-Bus protocol for command cloning">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1491692431021" ID="ID_1526880552" MODIFIED="1491692436375" TEXT="wollen wir das?"/>

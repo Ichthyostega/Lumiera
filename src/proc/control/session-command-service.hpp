@@ -31,7 +31,8 @@
  ** This service is the implementation of a layer separation facade interface. Clients should use
  ** proc::control::SessionCommand::facade to access this service. This header defines the interface
  ** used to _provide_ this service, not to access it.
- **
+ ** 
+ ** @see session-command-facade.h
  ** @see facade.hpp subsystems for the Proc-Layer
  ** @see guifacade.cpp starting this service 
  */
@@ -69,6 +70,11 @@ namespace control {
    * 
    * This service is backed by implementation facilities embedded within
    * the ProcDispatcher, exposed through the CommandDispatch interface.
+   * Additionally, it operates a CommandInstanceManager to allow the
+   * creation of local instances "opened" for argument binding.
+   * In fact, this is the standard "command cycle" and the
+   * intended usage pattern.
+   * @warning local command instances are not threadsafe
    * @see DispatcherLoop
    */
   class SessionCommandService
@@ -77,8 +83,6 @@ namespace control {
     {
       CommandDispatch& dispatcher_;
       CommandInstanceManager instanceManager_;
-      
-      Command retrieveCommand (Symbol);
       
       
       /* === Implementation of the Facade Interface === */

@@ -55,25 +55,6 @@ namespace control {
   using util::cStr;
   
    
-  /**
-   * @internal access the command instance for further processing.
-   * The standard use case is to get an anonymous command instance,
-   * which was previously opened within the CommandInstanceManager.
-   * But for exceptional cases, we also allow to access a global
-   * command instance by name.
-   * @param cmdID either the instanceID or the global cmdID
-   * @throw error::Invalid when no suitable command definition exists
-   */
-  Command
-  SessionCommandService::retrieveCommand (Symbol cmdID)
-  {
-    Command cmdFound = instanceManager_.maybeGetInstance (cmdID);
-    return cmdFound? cmdFound
-                   : Command::get(cmdID);
-  }
-  
-  
-  
   Symbol
   SessionCommandService::cycle (Symbol cmdID, string const& invocationID)
   {
@@ -81,20 +62,35 @@ namespace control {
   }
   
   
+  /**
+   * @param cmdID either the instanceID or the global cmdID
+   * @throw error::Invalid when no suitable command definition exists
+   * @throw error::Logic when the instance is already dispatched
+   * @note this function automatically _falls back_ on a global
+   *       Command definition, in case the given ID is not known
+   *       as a local command instance. This allows to use the
+   *       SessionCommand service without explicit instantiation
+   */
   void 
   SessionCommandService::bindArg (Symbol cmdID, Rec const& argSeq)
   {
-    retrieveCommand(cmdID).bindArg(argSeq);
+    instanceManager_.getInstance(cmdID)
+                    .bindArg(argSeq);
   }
   
   
+  /**
+   * @param cmdID either the instanceID or the global cmdID
+   * @throw error::Invalid when no suitable command definition exists
+   * @throw error::State when the command's arguments are not bound
+   * @throw error::Logic when the instance is already dispatched
+   * @note similar to #bindArg, this function _falls back_ on a global
+   *       Command definition, in case the given ID is not known locally.
+   */
   void
   SessionCommandService::invoke (Symbol cmdID)
   {
-    if (instanceManager_.contains (cmdID))
-      instanceManager_.dispatch(cmdID);
-    else
-      dispatcher_.enqueue (Command::get(cmdID));
+    instanceManager_.dispatch(cmdID);
   }
   
   

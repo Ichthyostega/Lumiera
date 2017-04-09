@@ -38,6 +38,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "include/lifecycle.h"
+#include "proc/control/command.hpp"
 #include "proc/control/command-setup.hpp"
 #include "proc/control/command-instance-manager.hpp"
 #include "proc/control/command-def.hpp"
@@ -192,40 +193,48 @@ namespace control {
   }
   
   
-  /** @return handle to the currently "opened" instance with the given ID */
-  Command&
+  /** access the currently "opened" instance with the given instanceID
+   * @param instanceID ID as returned from #newInstance, or a global commandID
+   * @return instance handle of handle of a global command as fallback
+   * @note when given a commandID, which is not known as (decorated) instanceID
+   *       within our local registration table, just the globally registered
+   *       Command instance is returned.
+   * @remark deliberately this function returns by-value. Returning a reference
+   *       into the global command registry would be dangerous under concurrency.
+   * @throw error::Invalid when the given cmdID unknown both locally and globally.
+   * @throw error::Logic when accessing an instance that _was_ known but is
+   *       currently no longer "open" (already dispatched command instance)
+   */
+  Command
   CommandInstanceManager::getInstance (Symbol instanceID)
   {
-    Command& instance = table_[instanceID];
-    if (not instance)
-      throw error::Invalid (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
-                                % instanceID
-                           , LUMIERA_ERROR_INVALID_COMMAND);
-    return instance;
-  }
-  
-  
-  /** try to retrieve an currently active instance, but tolerate unknown IDs */
-  Command&
-  CommandInstanceManager::maybeGetInstance (Symbol instanceID)
-  {
-    static Command NOT_FOUND;
     auto entry = table_.find(instanceID);
     if (entry == table_.end())
-      return NOT_FOUND;
+      return Command::get(instanceID);
     if (not entry->second)
-      throw error::Invalid (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
-                                % instanceID
-                           , LUMIERA_ERROR_INVALID_COMMAND);
+      throw error::Logic (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
+                              % instanceID
+                         , error::LUMIERA_ERROR_LIFECYCLE);
     return entry->second;
   }
   
   
-  /** hand over the designated command instance to the dispatcher installed on construction */
+  /** hand over the designated command instance to the dispatcher installed
+   * on construction. Either the given ID corresponds to a previously "opened"
+   * local instance (known only to this instance manager). In this case, the
+   * instance will really be _moved_ over into the dispatcher, which also means
+   * this instance is no longer "open" for parametrisation. In the other case
+   * we try to retrieve the given ID from the global CommandRegistry and
+   * dispatch it, _without removing_ it from the global registry of course.
+   */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)
   {
-    Command& instance = table_[instanceID];
+    auto entry = table_.find(instanceID);
+    Command fallback;
+    Command& instance{entry == table_.end()? fallback = Command::get(instanceID)
+                                           : entry->second
+                     };
     if (not instance)
       throw error::Logic (_Fmt{"attempt to dispatch command instance '%s' "
                                "without creating a new instance from prototype beforehand"}

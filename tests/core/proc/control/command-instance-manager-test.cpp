@@ -114,6 +114,7 @@ namespace test {
           verify_instanceIdentity();
           verify_duplicates();
           verify_lifecycle();
+          verify_fallback();
         }
       
       
@@ -135,7 +136,7 @@ namespace test {
           iManager.dispatch (instanceID);
           CHECK (fixture.contains (cmd));
           CHECK (not iManager.contains (instanceID));
-          VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
+          VERIFY_ERROR (LIFECYCLE, iManager.getInstance (instanceID));
         }
       
       
@@ -293,9 +294,10 @@ namespace test {
           Fixture fixture;
           CommandInstanceManager iManager{fixture};
           
+          // a manually constructed ID is unknown of course
           Symbol instanceID{COMMAND_PROTOTYPE, INVOCATION_ID};
           VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
-          VERIFY_ERROR (LIFECYCLE,       iManager.dispatch (instanceID));
+          VERIFY_ERROR (INVALID_COMMAND, iManager.dispatch (instanceID));
           
           Symbol i2 = iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID);
           CHECK (i2 == instanceID);
@@ -313,8 +315,34 @@ namespace test {
           iManager.dispatch (instanceID);
           
           CHECK (not iManager.contains (instanceID));
-          VERIFY_ERROR (INVALID_COMMAND, iManager.getInstance (instanceID));
+          VERIFY_ERROR (LIFECYCLE, iManager.getInstance (instanceID));
+          VERIFY_ERROR (LIFECYCLE, iManager.dispatch (instanceID));
           CHECK (instanceID == iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID));
+        }
+      
+      
+      /** @test the instance manager automatically falls back on globally registered commands,
+       *        when the given ID is not and was not known locally */
+      void
+      verify_fallback()
+        {
+          Fixture fixture;
+          CommandInstanceManager iManager{fixture};
+          
+          CHECK (not iManager.contains (COMMAND_PROTOTYPE));
+          Command cmd = iManager.getInstance (COMMAND_PROTOTYPE);
+          
+          CHECK (cmd.isValid());
+          CHECK (not cmd.isAnonymous());
+          CHECK (cmd == Command::get(COMMAND_PROTOTYPE));
+          CHECK (cmd == Command{COMMAND_PROTOTYPE});
+          
+          cmd.bind(-12);
+          CHECK (cmd.canExec());
+          CHECK (not fixture.contains(cmd));
+          
+          iManager.dispatch (COMMAND_PROTOTYPE);
+          CHECK (fixture.contains(cmd));
         }
     };
   

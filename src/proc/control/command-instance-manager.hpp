@@ -58,6 +58,7 @@
 #define CONTROL_COMMAND_INSTANCE_MANAGER_H
 
 #include "lib/error.hpp"
+#include "proc/control/command.hpp"
 #include "proc/control/command-dispatch.hpp"
 #include "lib/symbol.hpp"
 
@@ -91,6 +92,7 @@ namespace control {
    * handle, the enqueued instance will stay alive until execution and then go out of scope. But, after
    * #dispatch, it is no longer accessible from the CommandInstanceManger, and while it is still waiting
    * in the execution queue, the next instance for the same invocationID might already be opened.
+   * @warning CommandInstanceManager is *not threadsafe*
    */
   class CommandInstanceManager
     : boost::noncopyable
@@ -103,8 +105,7 @@ namespace control {
      ~CommandInstanceManager();
       
       Symbol newInstance (Symbol prototypeID, string const& invocationID);
-      Command& getInstance(Symbol instanceID);
-      Command& maybeGetInstance (Symbol instanceID);
+      Command getInstance(Symbol instanceID);
       void dispatch (Symbol instanceID);
       
       bool contains (Symbol instanceID)  const;

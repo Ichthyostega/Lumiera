@@ -188,7 +188,12 @@ namespace control {
       
       /** query the command index by ID
        *  @return the registered command,
-       *          or an "invalid" token */
+       *          or an "invalid" token
+       *  @remark this function deliberately returns by-value.
+       *         Returning a reference into the global CommandRegistry
+       *         would be dangerous under concurrent access, since the
+       *         lock is only acquired within this function's body.
+       */
       Command
       queryIndex (Symbol cmdID)
         {

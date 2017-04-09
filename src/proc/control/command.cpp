@@ -119,6 +119,9 @@ namespace control {
   /** Access existing command for use.
    *  @throw error::Invalid if command not 
    *         registered or incompletely defined.
+   *  @remark this function deliberately returns by-value.
+   *         Returning a reference into the global CommandRegistry
+   *         would be dangerous under concurrent access.
    */
   Command
   Command::get (Symbol cmdID)

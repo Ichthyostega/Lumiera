@@ -560,7 +560,7 @@ TEST "tuple initialisation from GenNode" TupleRecordInit_test <<END
 out: Rec...GenNode.+DataCap.«string».lalü, GenNode.+DataCap.«int».42
 out: Rec...GenNode.+DataCap.«string».lalü, GenNode.+DataCap.«string».lala, GenNode.+DataCap.«int».12, GenNode.+DataCap.«int».34, GenNode.+DataCap.«double».5.6, GenNode.+DataCap.«Time».0:09:08.007
 out-lit: «tuple<string, int>»──(lalü,42)
-out-lit: «tuple<idi::EntryID<long>, string, int, long, double, Duration>»──(ID<long>-lal,lala,12,34,5.6,≺548s7ms≻)
+out-lit: «tuple<idi::EntryID<long>, Symbol, int, long, double, Duration>»──(ID<long>-lal,lala,12,34,5.6,≺548s7ms≻)
 return: 0
 END
 

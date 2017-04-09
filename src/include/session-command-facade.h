@@ -73,11 +73,22 @@ namespace control {
    * qualify and elaborate the action, before it can be actually triggered.
    * Commands then go through a queue to be invoked one by one.
    * 
-   * This is a layer separation facade interface. Clients should use
-   * the embedded #facade factory, which yields a proxy to route any
+   * The service exposed through this facade offers dedicated support for
+   * the _standard command cycle_, as is typically performed from the UI.
+   * Such a usage cycle starts with ["opening"](#cycle) a local anonymous
+   * clone copy from the global command definition, which is then used
+   * in further calls to be outfitted with actual arguments and finally
+   * to be handed over to the dispatcher for execution.
+   * @warning this standard command cycle is intended for single-threaded
+   *          use from the UI. It is not threadsafe. To the contrary, all
+   *          operations with globally registered commands are threadsafe.
+   * 
+   * @remark This is a layer separation facade interface. Clients should
+   * use the embedded #facade factory, which yields a proxy to route any
    * calls through the lumieraorg_SessionCommand interface
    * @throws lumiera::error::State when interface is not opened
    * @see [Command system](command.hpp)
+   * @see SessionCommandFunction_test
    */
   class SessionCommand
     {
