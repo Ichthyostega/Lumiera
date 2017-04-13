@@ -2563,6 +2563,30 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
+<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704131653" tags="spec draft GuiPattern GuiIntegration" changecount="5">
+<pre>//how to access proc layer commands from the UI and to talk to the command framework//
+
+!Command access DSL
+{{red{WIP 4/2017}}} first rough draft of a framework for dealing with proc layer commands from within UI code
+{{{
+Symbol ADD_CLIP = CmdAccess::for (cmd::scope_addClip, INTO_FORK);
+cmdAccess(ADD_CLIP).bind (scope(HERE), element(RECENT))
+issueCommand (cmdAccess(ADD_CLIP).execute());
+}}}
+Notable details
+* we use some standardised context designators
+*;~INTO_PROJECT
+*;~INTO_FORK
+*;~INTO_BIN
+* we rely on a naming scheme for the command definitions
+* access to commands is prepared by defining an instanceID as a local Symbol
+* we use some standardised ''roles'' for the command arguments
+* the binding involves //argument resolver expressions//
+*;scope(HERE)
+*;element(RECENT)
+* moreover, we rely on generation of messages for use on the UI-Bus. Somethimes, these are even issued implicitly
+</pre>
+</div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201703180038" tags="design decision GuiPattern GuiIntegration discuss" changecount="31">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 * actual design of command invocation in the UI &amp;rarr; GuiCommandCycle
@@ -2604,7 +2628,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201703312352" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="54">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201704131647" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="55">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2639,7 +2663,7 @@ from these use cases, we can derive the //crucial activities for command handlin
 * the latter in turn retrieves a new command instance ID from the {{{CmdInstanceManager}}} in Proc
 * and the latter keeps a smart-ptr corresponding to this instance in its internal registration table
 * within the UI, a command instance corresponds to a specific invocation trail, and is thus stored within the managing {{{InteractionState}}}
-* ~UI-Elements use the services of {{{CmdAccess}}}, either to get arguments directly, or to act as observer of state changes
+* ~UI-Elements use the services of {{{CmdAccess}}}, either to get arguments directly, or to act as observer of state changes &amp;rarr; GuiCommandAccess
 * when a command is completely parametrised, it can be invoked. The managing {{{InteractionState}}} knows about this
 * on invocation, the ID of the instance is sent via UI-Bus to the {{{CmdInstanceManager}}}
 * which in turn removes the instance handle from its registration table and hands it over into the ProcDispatcher

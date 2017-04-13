@@ -11685,8 +11685,8 @@
 <node CREATED="1489196578470" ID="ID_1460242316" MODIFIED="1490976980566" TEXT="extensible ID anschauen">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1490976981548" ID="ID_319912426" MODIFIED="1490977023076" TEXT="nein: es gen&#xfc;gen rein textuelle IDs">
-<arrowlink DESTINATION="ID_119293304" ENDARROW="Default" ENDINCLINATION="183;-268;" ID="Arrow_ID_1691148413" STARTARROW="None" STARTINCLINATION="363;0;"/>
+<node CREATED="1490976981548" ID="ID_319912426" MODIFIED="1492095319340" TEXT="nein: es gen&#xfc;gen rein textuelle IDs">
+<arrowlink DESTINATION="ID_119293304" ENDARROW="Default" ENDINCLINATION="146;-259;" ID="Arrow_ID_1691148413" STARTARROW="None" STARTINCLINATION="326;0;"/>
 </node>
 </node>
 <node CREATED="1490985775995" ID="ID_1920622498" MODIFIED="1490985782446" TEXT="Instance-Manager">
@@ -12032,9 +12032,157 @@
 <arrowlink COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" STARTARROW="None" STARTINCLINATION="550;-93;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1489196597635" ID="ID_850892898" MODIFIED="1489196604278" TEXT="Access-Front-End">
-<node CREATED="1489196605530" ID="ID_1235925214" MODIFIED="1489196611189" TEXT="anschauen">
+<node CREATED="1492095519827" HGAP="16" ID="ID_983435641" MODIFIED="1492095548376" TEXT="Grundprinzip" VSHIFT="-5">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1492095551151" ID="ID_1172833434" MODIFIED="1492095589981" TEXT="verweist auf andere Komponente"/>
+<node CREATED="1492095590481" ID="ID_842137243" MODIFIED="1492095600151">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      managed diese Komponente <i>nicht</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1492095612678" ID="ID_836842226" MODIFIED="1492095621089" TEXT="open/closed state"/>
+<node CREATED="1492095627868" ID="ID_463853539" MODIFIED="1492095634455" TEXT="Exception when closed"/>
+</node>
+<node CREATED="1489196605530" HGAP="104" ID="ID_1235925214" MODIFIED="1492095546225" TEXT="anschauen" VSHIFT="1">
+<font NAME="SansSerif" SIZE="12"/>
 <node CREATED="1489196613065" ID="ID_1738286518" MODIFIED="1489196617396" TEXT="Proxy-Instanz"/>
 <node CREATED="1489196617873" ID="ID_1676140831" MODIFIED="1489196620860" TEXT="Session Services"/>
+</node>
+<node CREATED="1492094142303" ID="ID_12953370" MODIFIED="1492094146995" TEXT="Zukunft / Plan">
+<node CREATED="1492094148054" ID="ID_988050021" MODIFIED="1492094152138" TEXT="lib::Depend"/>
+<node CREATED="1492094154237" ID="ID_1058052889" MODIFIED="1492094160809" TEXT="m&#xfc;&#xdf;te generalisiert werden"/>
+<node CREATED="1492094161724" ID="ID_657768231" MODIFIED="1492094170895" TEXT="Refactoring notwendig">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492094235291" HGAP="36" ID="ID_451964727" MODIFIED="1492095322875" TEXT="#1086 unify Depend singleton and instance management" VSHIFT="-20">
+<linktarget COLOR="#8697be" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="-206;147;" ID="Arrow_ID_1211717131" SOURCE="ID_1032947061" STARTARROW="None" STARTINCLINATION="43;-228;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1492094294218" ID="ID_531986736" MODIFIED="1492094303413" TEXT="Komplexit&#xe4;t wirklich notwendig?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1492094305497" ID="ID_1689865131" MODIFIED="1492094314971" TEXT="Zweifel wegen double checked locking"/>
+<node CREATED="1492094321039" ID="ID_1545149473" MODIFIED="1492094329902">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aufwendiges <i>Nebenthema</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1492094512876" HGAP="32" ID="ID_953384901" MODIFIED="1492095418446" TEXT="vorl&#xe4;ufig eigenst&#xe4;ndig" VSHIFT="4">
+<node CREATED="1492094528370" ID="ID_1032947061" MODIFIED="1492095331453" TEXT="sp&#xe4;ter mal integrieren">
+<arrowlink COLOR="#8697be" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="-206;147;" ID="Arrow_ID_1211717131" STARTARROW="None" STARTINCLINATION="43;-228;"/>
+</node>
+<node CREATED="1492095379262" ID="ID_16023242" MODIFIED="1492095385569" TEXT="einfache Implementierung"/>
+<node CREATED="1492096252231" ID="ID_1892095908" MODIFIED="1492096256378" TEXT="Problem">
+<node CREATED="1492096257182" ID="ID_682054688" MODIFIED="1492096269176" TEXT="externe Kompnente mu&#xdf; kooperieren"/>
+<node CREATED="1492096285706" ID="ID_1257721538" MODIFIED="1492096301772" TEXT="oder externe Kompnente mu&#xdf; einen Adapter installieren"/>
+<node CREATED="1492096269716" ID="ID_527173807" MODIFIED="1492096283102" TEXT="oder externe Komponente mu&#xdf; das Front-end betreiben"/>
+</node>
+</node>
+</node>
+<node CREATED="1492095433567" ID="ID_1208499974" MODIFIED="1492095436170" TEXT="Syntax">
+<node CREATED="1492095437190" ID="ID_491978759" MODIFIED="1492095481564" TEXT="Wunsch: access(ID).&lt;operation&gt;(args)"/>
+<node CREATED="1492096317382" ID="ID_554292510" MODIFIED="1492096319497" TEXT="m&#xf6;glich">
+<node CREATED="1492096321341" ID="ID_543087109" MODIFIED="1492096656547" TEXT="CmdAccess::for(id).&lt;operation&gt;(args)"/>
+<node CREATED="1492096678244" ID="ID_1032312440" MODIFIED="1492096690927" TEXT="cmdAccess(id).&lt;operation&gt;(args)"/>
+</node>
+<node CREATED="1492096751315" ID="ID_537448890" MODIFIED="1492096762621" TEXT="Frage: was ist ID ?">
+<icon BUILTIN="help"/>
+<node CREATED="1492096881433" ID="ID_446570438" MODIFIED="1492098926420" TEXT="frei w&#xe4;hlbare Kontext-ID">
+<icon BUILTIN="idea"/>
+<node CREATED="1492096925259" ID="ID_1180559929" MODIFIED="1492096943012" TEXT="m&#xfc;&#xdf;te ID-Konvention verwenden"/>
+<node CREATED="1492096965205" ID="ID_1565773206" MODIFIED="1492096975304" TEXT="manuelle Administration"/>
+<node CREATED="1492096958310" ID="ID_55881971" MODIFIED="1492096962961" TEXT="fehleranf&#xe4;llig"/>
+</node>
+<node CREATED="1492096850229" ID="ID_1267775472" MODIFIED="1492096880653" TEXT="instanceID">
+<icon BUILTIN="idea"/>
+<node CREATED="1492098995736" ID="ID_70721654" MODIFIED="1492099021254" TEXT="per Builder erzeugt"/>
+<node CREATED="1492098935224" ID="ID_1545341249" MODIFIED="1492098943667" TEXT="erfordert DSL-Kontext"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492098973515" HGAP="42" ID="ID_449212028" MODIFIED="1492099454918" TEXT="Entwurf" VSHIFT="18">
+<icon BUILTIN="idea"/>
+<node CREATED="1492096992098" ID="ID_495973760" MODIFIED="1492099423206">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Symbol ADD_CLIP = CmdAccess::for (cmd::scope_addClip, INTO_FORK);
+    </p>
+    <p>
+      cmdAccess(ADD_CLIP).bind (scope(HERE), element(RECENT))
+    </p>
+    <p>
+      issueCommand (cmdAccess(ADD_CLIP).execute());
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1492098948782" ID="ID_176273356" MODIFIED="1492098957764" TEXT="einigerma&#xdf;en komplex">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1492099069702" ID="ID_1623888568" MODIFIED="1492099073097" TEXT="Bestandteile">
+<node CREATED="1492099077900" ID="ID_489218136" MODIFIED="1492099086127" TEXT="Standard-Kontexte">
+<node CREATED="1492099101785" ID="ID_1493219189" MODIFIED="1492099107713" TEXT="INTO_PROJECT"/>
+<node CREATED="1492099089419" ID="ID_1867923525" MODIFIED="1492099092055" TEXT="INTO_FORK"/>
+<node CREATED="1492099093187" ID="ID_999642842" MODIFIED="1492099097382" TEXT="INTO_BIN"/>
+</node>
+<node CREATED="1492099122230" ID="ID_1025497514" MODIFIED="1492099129057" TEXT="Benennungs-Schema f&#xfc;r Command-Defs"/>
+<node CREATED="1492099134053" ID="ID_358523293" MODIFIED="1492099143703" TEXT="lokal definierte Instanz-Symbole"/>
+<node CREATED="1492099185350" ID="ID_209679519" MODIFIED="1492099189905" TEXT="Standard-Argument-Rollen"/>
+<node CREATED="1492099167960" ID="ID_52357728" MODIFIED="1492099171844" TEXT="Argument-Resolver">
+<node CREATED="1492099172695" ID="ID_1174757682" MODIFIED="1492099177035" TEXT="scope(HERE)"/>
+<node CREATED="1492099177863" ID="ID_1060789301" MODIFIED="1492099182250" TEXT="element(RECENT)"/>
+</node>
+<node CREATED="1492099211058" ID="ID_518845722" MODIFIED="1492099413746" TEXT="(automatische) Nachrichten-Erzeugung"/>
+</node>
+</node>
+<node CREATED="1492099456649" HGAP="39" ID="ID_1984335926" MODIFIED="1492099477994" TEXT="Konsequenzen" VSHIFT="10">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1492099466079" ID="ID_1013112793" MODIFIED="1492099546779" TEXT="gentle degradation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die DSL mu&#223; so konstruiert werden,
+    </p>
+    <p>
+      da&#223; die Syntax-Elemente nahtlos simplifiziert werden k&#246;nnen,
+    </p>
+    <p>
+      in eine Form, die sich unmittelbar jetzt implementieren l&#228;&#223;t
+    </p>
+    <p>
+      und mit einfachen, direkt gegebenen Objekten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1492099579824" ID="ID_727878406" MODIFIED="1492099585163" TEXT="CommandDef-DSL erweitern">
+<node CREATED="1492099587359" ID="ID_453414313" MODIFIED="1492099599513" TEXT="mu&#xdf; Argument-Rollen auszeichnen k&#xf6;nnen"/>
+<node CREATED="1492099622066" ID="ID_1927536817" MODIFIED="1492099630669" TEXT="erweiterbar auf binding rules"/>
+</node>
 </node>
 </node>
 </node>
@@ -12234,8 +12382,8 @@
 <node CREATED="1489717406447" ID="ID_1938762085" MODIFIED="1489717411690" TEXT="Bang sendet nur diese ID"/>
 </node>
 </node>
-<node CREATED="1489717768805" HGAP="79" ID="ID_119293304" MODIFIED="1490977023076" TEXT="Entscheidung" VSHIFT="4">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_119293304" ENDARROW="Default" ENDINCLINATION="183;-268;" ID="Arrow_ID_1691148413" SOURCE="ID_319912426" STARTARROW="None" STARTINCLINATION="363;0;"/>
+<node CREATED="1489717768805" HGAP="79" ID="ID_119293304" MODIFIED="1492095319340" TEXT="Entscheidung" VSHIFT="4">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_119293304" ENDARROW="Default" ENDINCLINATION="146;-259;" ID="Arrow_ID_1691148413" SOURCE="ID_319912426" STARTARROW="None" STARTINCLINATION="326;0;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1489717797353" ID="ID_899130819" MODIFIED="1489717807068" TEXT="die ersten beiden sind un&#xf6;tig generisch"/>
 <node CREATED="1489717807872" ID="ID_1209104496" MODIFIED="1489717818826" TEXT="wir bauen ohnehin den Command-Cycle fest ein"/>
