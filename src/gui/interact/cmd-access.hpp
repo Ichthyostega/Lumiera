@@ -49,9 +49,10 @@
 
 
 #include "lib/error.hpp"
+#include "gui/interact/invocation-trail.hpp"
 //#include "gui/ctrl/bus-term.hpp"
 //#include "lib/idi/entry-id.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -62,6 +63,7 @@ namespace gui {
 namespace interact {
   
 //  using lib::HashVal;
+  using lib::Symbol;
 //  using util::isnil;
   using std::string;
   
@@ -75,8 +77,22 @@ namespace interact {
     {
       
     public:
-      ~CmdAccess();  ///< @todo do we need a VTable / virtual dtor?
+     ~CmdAccess();  ///< @todo do we need a VTable / virtual dtor?
       
+      template<typename...ARGS>
+      InvocationTrail bind(ARGS...args); /////////////////////TODO half baked idea, can not work this way
+      
+      InvocationTrail execute();
+      
+      /* === access front-end === */
+      static Symbol to (Symbol cmdID, string ctxID);
+      
+      friend CmdAccess&
+      cmdAccess (Symbol instanceID)
+      {
+        UNIMPLEMENTED ("cmd access front-end");
+      }
+    protected:
     private:
     };
   

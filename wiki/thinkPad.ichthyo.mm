@@ -12117,17 +12117,17 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492098973515" HGAP="42" ID="ID_449212028" MODIFIED="1492099454918" TEXT="Entwurf" VSHIFT="18">
 <icon BUILTIN="idea"/>
-<node CREATED="1492096992098" ID="ID_495973760" MODIFIED="1492099423206">
+<node CREATED="1492096992098" ID="ID_495973760" MODIFIED="1492132247519">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Symbol ADD_CLIP = CmdAccess::for (cmd::scope_addClip, INTO_FORK);
+      Symbol ADD_CLIP = CmdAccess::to (cmd::scope_addClip, INTO_FORK);
     </p>
     <p>
-      cmdAccess(ADD_CLIP).bind (scope(HERE), element(RECENT))
+      prepareCommand (cmdAccess(ADD_CLIP).bind (scope(HERE), element(RECENT)))
     </p>
     <p>
       issueCommand (cmdAccess(ADD_CLIP).execute());

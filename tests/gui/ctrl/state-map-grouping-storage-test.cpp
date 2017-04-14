@@ -162,4 +162,4 @@ namespace test {
   LAUNCHER (StateMapGroupingStorage_test, "unit gui");
   
   
-}}} // namespace gui::model::test
+}}} // namespace gui::ctrl::test

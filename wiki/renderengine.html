@@ -2563,31 +2563,55 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
-<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704131653" tags="spec draft GuiPattern GuiIntegration" changecount="5">
+<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704140110" tags="spec draft GuiPattern GuiIntegration" changecount="13">
 <pre>//how to access proc layer commands from the UI and to talk to the command framework//
 
 !Command access DSL
 {{red{WIP 4/2017}}} first rough draft of a framework for dealing with proc layer commands from within UI code
 {{{
-Symbol ADD_CLIP = CmdAccess::for (cmd::scope_addClip, INTO_FORK);
-cmdAccess(ADD_CLIP).bind (scope(HERE), element(RECENT))
+Symbol ADD_CLIP = CmdAccess::to (cmd::scope_addClip, INTO_FORK);
+prepareCommand (cmdAccess(ADD_CLIP).bind (scope(HERE), element(RECENT)))
 issueCommand (cmdAccess(ADD_CLIP).execute());
 }}}
-Notable details
-* we use some standardised context designators
-*;~INTO_PROJECT
-*;~INTO_FORK
-*;~INTO_BIN
-* we rely on a naming scheme for the command definitions
 * access to commands is prepared by defining an instanceID as a local Symbol
-* we use some standardised ''roles'' for the command arguments
-* the binding involves //argument resolver expressions//
-*;scope(HERE)
-*;element(RECENT)
-* moreover, we rely on generation of messages for use on the UI-Bus. Somethimes, these are even issued implicitly
+** here »instance« means a command instance, and the ID is formed by decorating the ID of the command definition
+** such an instance is visible and accessible from within a context, which is indicated by the second part of the ID
+** we use some standardised context designators
+**;~INTO_PROJECT
+**:operations working on the project, the project setup or configuration
+**;~INTO_SCOPE
+**:operations working on or adding something into whatever container is currently in focus
+**;~INTO_FORK
+**:operations especially working on tracks or media bins
+**;~INTO_BIN
+**:operations limited to asset management
+** beyond that, individual UI elements are always free to add their own, local context symbols&lt;br/&gt;the result of such is a command instance known and accessibly only to the element defining this context
+** we rely on a naming scheme for the command definitions.&lt;br/&gt;the expectation is for commands to be rather generic and adapt to the usage scope
+* the task of supplying or binding the command arguments can be automated to some degree
+** we use several standardised ''roles'' for the command arguments, 
+** so instead of explicit parameters, the binding can indicate //argument resolver expressions//
+**;scope(HERE)
+**:will be resolved to the scope right at or encompassing the [[Spot]] (&amp;rarr; InteractionControl)
+**;element(RECENT)
+**:the most recently touched object which is applicable for this argument
+**:* in the example this might be the last clip or media selected in the asset section
+**:* but another clip, which was copied to clipboard more recently will take precedence
+**:* but if the last action was a drag-n-drop, the binding will try to use the dropped element first
+* overall, these invocations generate messages for use on the UI-Bus. It is up to the client to issue them through some {{{BusTerm}}}&lt;br/&gt;in the example given, the code obviously is within the scope of a {{{model::Tangible}}}, allowing to use the  API {{{Tangible::prepareCommand()}}} and {{{Tangible::issueCommand()}}}
 </pre>
 </div>
-<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201703180038" tags="design decision GuiPattern GuiIntegration discuss" changecount="31">
+<div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201704140008" modified="201704140029" tags="design GuiPattern GuiIntegration discuss" changecount="8">
+<pre>The topic of command binding addresses the way to access, parametrise and issue [[»Proc-Layer Commands«|CommandHandling]] from within the UI structures.
+Basically, commands are addressed by-name -- yet the fact that there is a huge number of commands, which moreover need to be provided with actual arguments, which are to be picked up from some kind of //current context// -- this all together turns this seemingly simply function invocation into a challenging task.
+The organisation of the Lumiera UI calls for a separation between immediate low-level UI element reactions, and anything related to the user's actions when working with the elements in the [[Session]] or project. The immediate low-level UI mechanics is implemented directly within the widget code, whereas to //&quot;work on elements in the session&quot;,// we'd need a collaboration spanning UI-Layer and Proc-Layer. Reactions within the UI mechanics (like e.g. dragging a clip) need to be interconnected and translated into &quot;sentences of operation&quot;, which can be sent in the form of a fully parametrised command instance towards the ProcDispatcher
+* questions of architecture related to command binding &amp;rarr; GuiCommandBindingConcept
+* study of pivotal action invocation situations &amp;rarr; CommandInvocationAnalysis
+* actual design of command invocation in the UI &amp;rarr; GuiCommandCycle
+* the way to set up the actual command definitions &amp;rarr; CommandSetup
+* access and use commands from UI code &amp;rarr; GuiCommandAccess
+</pre>
+</div>
+<div title="GuiCommandBindingConcept" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201704140026" tags="design decision GuiPattern GuiIntegration discuss" changecount="34">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 * actual design of command invocation in the UI &amp;rarr; GuiCommandCycle
 * study of pivotal action invocation situations &amp;rarr; CommandInvocationAnalysis
@@ -2623,7 +2647,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 * he sends the //enablement of a command invocation trail// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns &amp;rarr; InvocationTrail
 * if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessing just any UI-Bus terminal at reach within that context
 
-''Lumera decides to take the latter apptoch'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance for the behaviour of the UI. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the behaviour of the UI, you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
+''Lumera decides to take the latter approach'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance to the workings of the application as a whole. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the //behaviour of the UI,// you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
 &amp;rarr; GuiCommandCycle
 &amp;rarr; CommandSetup
 </pre>
@@ -2966,7 +2990,7 @@ This top-level circle is established starting from the UI-Bus (''Nexus'') and th
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201703021627" tags="GuiPattern design decision draft" changecount="48">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201704140022" tags="GuiPattern design decision draft img" changecount="49">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
