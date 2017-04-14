@@ -98,6 +98,9 @@ namespace control {
       /** start next command cycle and "open" a new anonymous command instance */
       virtual Symbol cycle (Symbol cmdID, string const& invocationID) =0;
       
+      /** bind the command's arguments and trigger command invocation immediately */
+      virtual void trigger (Symbol cmdID, lib::diff::Rec const& args) =0;
+      
       /** prepare command invocation: bind the command's arguments */
       virtual void bindArg (Symbol cmdID, lib::diff::Rec const& args) =0;
       
@@ -122,6 +125,7 @@ extern "C" {
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_SessionCommand, 0,
                            LUMIERA_INTERFACE_SLOT (const char*, cycle, (const char*, const char*)),
+                           LUMIERA_INTERFACE_SLOT (void,      trigger, (const char*, const void*)),
                            LUMIERA_INTERFACE_SLOT (void,      bindArg, (const char*, const void*)),
                            LUMIERA_INTERFACE_SLOT (void,       invoke, (const char*)),
 );

@@ -197,27 +197,21 @@ namespace test {
           TimeSpan clip (Time(1,2,3), lib::test::randTime());
           LuidH luid;
           
-          // we cannot invoke commands prior to binding arguments
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.issueCommand(cmd) );
+          // we cannot invoke commands without binding all arguments
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.invoke(cmd) );
           
           // proper argument typing is ensured while dispatching the bind message. 
-          VERIFY_ERROR (WRONG_TYPE, mock.prepareCommand(cmd, Rec({"lalala"})) );
+          VERIFY_ERROR (WRONG_TYPE, mock.invoke(cmd, Rec({"lalala"})) );
           
           // command can't be issued, since it's still unbound
           CHECK (not cmd.canExec());
           
           
-          mock.prepareCommand (cmd, text, clip, luid);
+          mock.invoke (cmd, text, clip, luid);
           
           CHECK (cmd.canExec());
           CHECK (gui::test::Nexus::wasBound(cmd, text, clip, luid));
-          CHECK (not gui::test::Nexus::wasInvoked(cmd));
-          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
           CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
-          
-          
-          mock.issueCommand(cmd);
-          
           CHECK (gui::test::Nexus::wasInvoked(cmd));
           CHECK (gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
           CHECK (not gui::test::Nexus::wasInvoked(cmd, " huh ", clip, luid));

@@ -83,10 +83,10 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "lib/idi/entry-id.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "include/session-command-facade.h"
 #include "gui/notification-service.hpp"
 #include "gui/ctrl/state-recorder.hpp"
-#include "gui/ctrl/command-handler.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
 
@@ -95,6 +95,9 @@
 
 namespace gui {
 namespace ctrl{
+  
+  using proc::control::SessionCommand;
+  using lib::diff::Rec;
   
   
   /**
@@ -117,8 +120,7 @@ namespace ctrl{
       virtual void
       act (GenNode const& command)  override
         {
-          CommandHandler handler{command};
-          command.data.accept (handler);
+          SessionCommand::facade().trigger (command.idi.getSym(), command.data.get<Rec>());
         }
       
       

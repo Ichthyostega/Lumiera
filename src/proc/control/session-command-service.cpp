@@ -65,6 +65,25 @@ namespace control {
   /**
    * @param cmdID either the instanceID or the global cmdID
    * @throw error::Invalid when no suitable command definition exists
+   * @throw error::State when the command's arguments are not suitably bound
+   * @throw error::Logic when the instance is already dispatched
+   * @note this function automatically _falls back_ on a global
+   *       Command definition, in case the given ID is not known
+   *       as a local command instance. This allows to use the
+   *       SessionCommand service without explicit instantiation
+   */
+  void
+  SessionCommandService::trigger (Symbol cmdID, Rec const& argSeq)
+  {
+    instanceManager_.getInstance(cmdID)
+                    .bindArg(argSeq);
+    instanceManager_.dispatch(cmdID);
+  }
+  
+  
+  /**
+   * @param cmdID either the instanceID or the global cmdID
+   * @throw error::Invalid when no suitable command definition exists
    * @throw error::Logic when the instance is already dispatched
    * @note this function automatically _falls back_ on a global
    *       Command definition, in case the given ID is not known
@@ -183,24 +202,32 @@ namespace control {
                                , NULL /* on  close */
                                , LUMIERA_INTERFACE_INLINE (cycle,
                                                            const char*, (const char* cmdID, const char* invocationID),
-                                                             { 
+                                                             {
                                                                if (!_instance) 
                                                                  return lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
                                                                else
                                                                  return _instance->cycle(cmdID, invocationID);
                                                              }
                                                           )
+                               , LUMIERA_INTERFACE_INLINE (trigger,
+                                                           void, (const char* cmdID, const void* args),
+                                                             {
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               else
+                                                                 _instance->trigger(cmdID, *static_cast<Rec const *> (args));
+                                                             }
+                                                          )
                                , LUMIERA_INTERFACE_INLINE (bindArg,
                                                            void, (const char* cmdID, const void* args),
-                                                             { 
+                                                             {
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
                                                                else
                                                                  _instance->bindArg(cmdID, *static_cast<Rec const *> (args));
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (blubb_TODO,
+                               , LUMIERA_INTERFACE_INLINE (invoke,
                                                            void, (const char* cmdID),
-                                                             { 
+                                                             {
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
                                                                else
                                                                  _instance->invoke(cmdID);

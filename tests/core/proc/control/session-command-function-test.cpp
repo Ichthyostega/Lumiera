@@ -81,7 +81,7 @@ extern "C" {
 
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/control/command-def.hpp"
-#include "gui/ctrl/command-handler.hpp"
+#include "include/session-command-facade.h"
 #include "gui/interact/invocation-trail.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/typed-counter.hpp"
@@ -102,7 +102,7 @@ namespace test    {
   using boost::lexical_cast;
   using lib::test::randTime;
   using gui::interact::InvocationTrail;
-  using gui::ctrl::CommandHandler;
+  using proc::control::SessionCommand;
   using lib::diff::GenNode;
   using lib::diff::Rec;
   using lib::time::Time;
@@ -297,23 +297,13 @@ namespace test    {
           InvocationTrail invoTrail{Command(COMMAND_I2)};
           
           // this happens within some tangible UI element (widget / controller)
-          GenNode argumentBindingMessage = invoTrail.bindMsg (Rec {Duration(25,10), Time(500,0), -2});
-          GenNode commandTriggerMessage  = invoTrail.bangMsg ();
-          CHECK (argumentBindingMessage.idi.getSym() == string{COMMAND_I2});
-          CHECK (commandTriggerMessage.idi.getSym() == string{COMMAND_I2});
+          GenNode commandMsg = invoTrail.triggerMsg (Rec {Duration(25,10), Time(500,0), -2});
+          CHECK (commandMsg.idi.getSym() == string{COMMAND_I2});
           CHECK (not Command::canExec(COMMAND_I2));
-          
-          // this happens, when CoreService receives command messages from UI-Bus
-          CommandHandler handler1{argumentBindingMessage};
-          argumentBindingMessage.data.accept(handler1);                 // handler is a visitor for the message payload
-          
-          CHECK (Command::canExec(COMMAND_I2));
-          CHECK (not Command::canUndo(COMMAND_I2));
           Time prevState = testCommandState;
           
-          // now handling the message to trigger execution
-          CommandHandler handler2{commandTriggerMessage};
-          commandTriggerMessage.data.accept(handler2);
+          // this happens, when CoreService receives command messages from UI-Bus
+          SessionCommand::facade().trigger (commandMsg.idi.getSym(), commandMsg.data.get<Rec>());
           
           __DELAY__
           CHECK (Command::canUndo(COMMAND_I2));
@@ -378,18 +368,14 @@ namespace test    {
                       InvocationTrail invoTrail{cmd};
                       
                       __randomDelay();
-                      sendCommandMessage (invoTrail.bindMsg (Rec {Duration(7*id_, 2), Time(500,0), -int(j)}));
-                      
-                      __randomDelay();
-                      sendCommandMessage (invoTrail.bangMsg());
+                      sendCommandMessage (invoTrail.triggerMsg (Rec {Duration(7*id_, 2), Time(500,0), -int(j)}));
                     }
                 }
               
               static void
               sendCommandMessage(GenNode msg)
                 {
-                  CommandHandler handler{msg};
-                  msg.data.accept(handler);
+                  SessionCommand::facade().trigger (msg.idi.getSym(), msg.data.get<Rec>());
                 }
               
               static void

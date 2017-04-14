@@ -58,7 +58,6 @@
 #include "lib/depend.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
-//#include "lib/util.hpp"
 
 #include <string>
 #include <deque>
@@ -66,13 +65,11 @@
 using std::string;
 
 using lib::Symbol;
-using lib::Variant;
 using lib::append_all;
 using lib::transformIterator;
 using lib::diff::Rec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
-using lib::diff::DataValues;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
@@ -83,8 +80,6 @@ using proc::control::Command;
 using proc::control::CommandImpl;
 using proc::control::HandlingPattern;
 using util::_Fmt;
-//using util::contains;
-//using util::isnil;
 
 namespace gui {
 namespace test{
@@ -93,42 +88,6 @@ namespace test{
   namespace { // internal details
     
     using BusHub = gui::ctrl::Nexus;
-    
-    
-    /** helper to figure out if a command message
-     *  is a binding or invocation message.
-     * @remarks from a design standpoint, this is ugly,
-     *          since we're basically switching on type.
-     *          Well -- we do it just for diagnostics here,
-     *          so _look away please..._
-     */
-    inline bool
-    isCommandBinding (GenNode const& msg)
-    {
-      class CommandBindingDetector
-        : public Variant<DataValues>::Predicate
-        {
-          bool handle  (Rec const&) override { return true; }
-        }
-        detector;
-      
-      return msg.data.accept (detector);
-    }
-    
-    inline string
-    invocationStage (GenNode const& msg)
-    {
-      return isCommandBinding(msg)? string("binding for")
-                                  : string("invoke");
-    }
-    
-    inline string
-    renderBindingArgs (GenNode const& msg)
-    {
-      return isCommandBinding(msg)? "| " + string(msg.data.get<Rec>())
-                                  : "";
-    }
-    
     
     /**
      * @internal fake interface backbone and unit test rig
@@ -157,10 +116,9 @@ namespace test{
           {
             log_.call (this, "act", command);
             commandHandler_(command);
-            log_.event("TestNexus", _Fmt("%s command \"%s\"%s")
-                                        % invocationStage(command)
+            log_.event("TestNexus", _Fmt("bind and trigger command \"%s\"%s")
                                         % command.idi.getSym()
-                                        % renderBindingArgs(command));
+                                        % command.data.get<Rec>());
           }
         
         virtual void
@@ -471,14 +429,12 @@ namespace test{
     /**
      * Compact diagnostic dummy command handler.
      * Used as disposable one-way off object.
-     * Is both a lib::Variant visitor (to receive the
-     * contents of the "`act`" message, and implements
-     * the HandlingPattern interface to receive and
+     * Is handles the "`act`" to bind arguments and trigger execution,
+     * and it implements the HandlingPattern interface to receive and
      * invoke the prepared command closure.
      */
     class SimulatedCommandHandler
-      : public Variant<DataValues>::Predicate
-      , public HandlingPattern
+      : public HandlingPattern
       {
         mutable EventLog log_;
         Command command_;
@@ -509,27 +465,25 @@ namespace test{
           }
         
         
-        /* ==== CommandHandler / Visitor ==== */
-        
-        /** Case-1: the message provides parameter data to bind to the command */
-        bool
-        handle (Rec const& argData) override
+      public:
+        SimulatedCommandHandler (GenNode const& cmdMsg)
+          : log_(Nexus::getLog())
+          , command_(retrieveCommand(cmdMsg))
           {
-            command_.bindArg (argData);
+            log_.event("TestNexus", "HANDLING Command-Message for "+string(command_));
+            
+            Rec const& argData{cmdMsg.data.get<Rec>()};
             log_.call ("TestNexus", "bind-command", enumerate(argData));
-            return true;
-          }
-        
-        /** Case-2: the message triggers execution of a prepared command */
-        bool
-        handle (int const&) override
-          {
+            command_.bindArg (argData);
+            
             log_.call ("TestNexus", "exec-command", command_);
-            return command_.exec (*this);
+            if (command_.exec (*this))
+              log_.event("TestNexus", "SUCCESS handling "+command_.getID());
+            else
+              log_.warn(_Fmt("FAILED to handle command-message %s in test-mode") % cmdMsg);
           }
         
-        
-        
+      private:
         EventLog::ArgSeq
         enumerate (Rec const& argData)
           {
@@ -546,19 +500,6 @@ namespace test{
           {
             Symbol cmdID {cmdMsg.idi.getSym().c_str()};
             return Command::get (cmdID);
-          }
-        
-      public:
-        SimulatedCommandHandler (GenNode const& cmdMsg)
-          : log_(Nexus::getLog())
-          , command_(retrieveCommand(cmdMsg))
-          {
-            log_.event("TestNexus", "HANDLING Command-Message for "+string(command_));
-            
-            if (cmdMsg.data.accept (*this))
-              log_.event("TestNexus", "SUCCESS handling "+command_.getID());
-            else
-              log_.warn(_Fmt("FAILED to handle command-message %s in test-mode") % cmdMsg);
           }
       };
 

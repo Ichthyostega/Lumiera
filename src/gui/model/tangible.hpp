@@ -189,9 +189,8 @@ namespace model {
       void clearErr();
       
       template<typename...ARGS>
-      void prepareCommand (Cmd const& prototype, ARGS&&...);
-      void prepareCommand (Cmd const& prototype, Rec&& arguments);
-      void issueCommand (Cmd const& preparedAction);
+      void invoke (Cmd const& prototype, ARGS&&...);
+      void invoke (Cmd const& prototype, Rec&& arguments);
       
       void slotExpand();
       void slotCollapse();
@@ -236,14 +235,14 @@ namespace model {
   /** convenience shortcut to issue a command with several arguments */
   template<typename...ARGS>
   inline void
-  Tangible::prepareCommand (Cmd const& prototype, ARGS&&... args)
+  Tangible::invoke (Cmd const& prototype, ARGS&&... args)
   {
     using GenNodeIL = std::initializer_list<GenNode>;
     
-    prepareCommand (prototype,
-                    Rec (Rec::TYPE_NIL_SYM, GenNodeIL{}
-                        ,GenNodeIL {std::forward<ARGS> (args)...}));
-  }                   // not typed, no attributes, all arguments as children
+    invoke (prototype,
+            Rec (Rec::TYPE_NIL_SYM, GenNodeIL{}
+                ,GenNodeIL {std::forward<ARGS> (args)...}));
+  }           // not typed, no attributes, all arguments as children
   
   
   

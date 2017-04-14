@@ -121,20 +121,19 @@ namespace ctrl {
     
     /** prepare or trigger invocation of a command.
      * @param command a GenNode either holding command parameters
-     *        or an int to signal actual command invocation
      * @remarks some commands can simply be invoked right away, but
-     *          in the general case, command preparation and invocation
-     *          is a multi-step process. The gui::interact::InvocationTrail
+     *          in the general case, a command needs to be prepared with
+     *          suitable arguments prior to being invoked, which can be
+     *          a multi-step process. The gui::interact::InteractionState
      *          is used to conduct this argument binding process from within
      *          the UI. Here, at the UI-Bus interface, we're just interested
-     *          in the fact _that_ some command is to be bound or invoked.
+     *          in the fact _that_ some command is to be bound and invoked.
      *          This information is forwarded to the command receiver service,
      *          which in turn talks to the proc dispatcher.
      * @note no information regarding the _origin_ of this command invocation
      *          is captured. If a command needs a _subject_, this has to be
      *          bound as an command argument beforehand.
      * @see gui::interact::InvocationTrail
-     * @see gui::model::Tangible::prepareCommand()
      * @see gui::model::Tangible::issueCommand()
      */
     void

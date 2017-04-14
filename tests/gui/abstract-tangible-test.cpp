@@ -121,8 +121,7 @@ namespace test {
     /**
      * dummy Command handler,
      * which can be hooked up to the TestNexus
-     * and causes a real command invocation
-     * when receiving invocation messages
+     * and causes a real command invocation on invocation message
      * @warning all hard wired -- works only for this command
      */
     void
@@ -130,31 +129,10 @@ namespace test {
     {
       REQUIRE (string{DUMMY_CMD_ID} == commandMsg.idi.getSym());
       
-      class CommandBindingDetector
-        : public DataCap::Predicate
-        {
-          bool
-          handle (Rec const& binding) override             ///< the argument binding message
-            {
-              auto cmd = Command::get (DUMMY_CMD_ID);
-              auto arg = binding.scope()->data.get<int>();
-              
-              cmd.bind (arg);
-              return true;
-            }
-          
-          bool
-          handle (int const&) override                     ///< the "bang!" message (command invocation)
-            {
-              auto cmd = Command::get (DUMMY_CMD_ID);
-              
-              cmd();
-              return true;
-            }
-        }
-        commandInvoker;
-      
-      commandMsg.data.accept (commandInvoker);
+      auto cmd = Command::get (DUMMY_CMD_ID);
+      auto arg = commandMsg.data.get<Rec>().scope()->data.get<int>();
+      cmd.bind (arg);
+      cmd();
     }
     
     
@@ -361,24 +339,11 @@ namespace test {
           CHECK (nexusLog.ensureNot(string(DUMMY_CMD_ID)));
           
           
-          // now the ongoing interaction picks up parameter data
-          mock.prepareCommand (invoTrail, lib::diff::Rec({concreteParam}));
-          CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
-                         .beforeEvent("binding for command \""+DUMMY_CMD_ID));
-          
-          CHECK (dummyState == prevState);  // command was not yet invoked
-          CHECK (nexusLog.ensureNot("invoke command \""+DUMMY_CMD_ID));
-          
-          
-          // finally the command gets triggered
-          mock.issueCommand (invoTrail);
-          
+          // message to bind parameter data and finally trigger the command
+          mock.invoke (invoTrail, lib::diff::Rec({concreteParam}));
           CHECK (dummyState == concreteParam);  // command was indeed invoked
           CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
-                         .beforeCall("act").arg("DataCap|«int»|" +toString(int(InvocationTrail::DO_IT))));
-          CHECK (nexusLog.verifyEvent("binding for command \""+DUMMY_CMD_ID)
-                         .beforeEvent("invoke command \""+DUMMY_CMD_ID));
-          
+                         .beforeEvent("bind and trigger command \""+DUMMY_CMD_ID));
           
           // verify proper binding, including UNDO state capture
           Command::get (DUMMY_CMD_ID).undo();

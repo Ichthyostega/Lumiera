@@ -88,6 +88,7 @@ namespace control {
       /* === Implementation of the Facade Interface === */
       
       Symbol cycle (Symbol cmdID, string const& invocationID) override;
+      void trigger (Symbol cmdID, Rec const& args)            override;
       void bindArg (Symbol cmdID, Rec const& args)            override;
       void invoke  (Symbol cmdID)                             override;
       

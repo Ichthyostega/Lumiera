@@ -188,28 +188,16 @@ namespace model {
   
   
   /**
-   * Prepare a command or action for actual invocation, once the execution context
-   * has been established. The action is not executed right away, but it is now ready
-   * and bound to the concrete arguments supplied with the [record](\ref lib::diff::Rec).
-   * @param prototype handle to a command instantiation, to be readied for invocation
+   * Perform a command or action, once the execution context has been established.
+   * After binding (and recording) the command arguments, as  supplied with the
+   * [record](\ref lib::diff::Rec), the command action is executed right away.
+   * @param instance handle to a command instantiation, to be readied for invocation
    * @param arguments suitable tuple of values, to be used to outfit the prototype
    */
   void
-  Tangible::prepareCommand (Cmd const& prototype, Rec&& arguments)
+  Tangible::invoke (Cmd const& instance, Rec&& arguments)
   {
-    uiBus_.act (prototype.bindMsg (std::forward<Rec>(arguments)));
-  }
-  
-  
-  /**
-   * Actually trigger execution of an action or command.
-   * @param preparedAction handle pointing to a command definition,
-   *        which needs to be outfitted with arguments and ready for invocation.
-   */
-  void
-  Tangible::issueCommand (Cmd const& preparedAction)
-  {
-    uiBus_.act (preparedAction.bangMsg());
+    uiBus_.act (instance.triggerMsg (std::forward<Rec>(arguments)));
   }
   
   
