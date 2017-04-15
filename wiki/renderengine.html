@@ -2563,7 +2563,7 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
-<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704140110" tags="spec draft GuiPattern GuiIntegration" changecount="13">
+<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704152147" tags="spec draft GuiPattern GuiIntegration" changecount="16">
 <pre>//how to access proc layer commands from the UI and to talk to the command framework//
 
 !Command access DSL
@@ -2598,6 +2598,22 @@ issueCommand (cmdAccess(ADD_CLIP).execute());
 **:* but another clip, which was copied to clipboard more recently will take precedence
 **:* but if the last action was a drag-n-drop, the binding will try to use the dropped element first
 * overall, these invocations generate messages for use on the UI-Bus. It is up to the client to issue them through some {{{BusTerm}}}&lt;br/&gt;in the example given, the code obviously is within the scope of a {{{model::Tangible}}}, allowing to use the  API {{{Tangible::prepareCommand()}}} and {{{Tangible::issueCommand()}}}
+
+!Design Critique
+The above design for command access looked as a good idea -- at first sight. Yet on further investigation, it seems to miss the most common use case. Basically, we can identify three styles of usage for command bindings
+;fire and forget
+:trigger some action, maybe with well determined additional arguments, and not in any further relation to the context.
+:just do it and be done with it -- no framework whatever is required beyond the basic command ID
+;widget-local
+:some action is bound to incoming signals; everything of relevant is confined within that widget
+:while the arguments are in this case picked up from widget fields or sub widgets, again no further framework is necessary
+;context bound
+:this is the //sole case// where all the above mentioned complexities might make sense.
+:we should not dismiss this case, since in fact most known existing applications fall short in that very area
+
+Another point of contention is the duality between a command access framework and the UI-Bus. It turns out this is rooted in a fundamental conflict. The command system and by extension also a command access framework represents the classic »command and control« style API (to use a term coined by Martin Fowler). This kind of interface shines when used on top of a shared data or object model. Which is exactly the kind of architecture we shun, on a global level. It is fine when //confined within some subsystem,// yet creates a corroding tendency towards high coupling, when used on a global scale. For this reason, we introduced a message driven connection, and for the same reason, we should refrain from using the command and control structure as a second channel, bypassing the bus. //This is entirely an architectural decision// -- on the level of tracing actual calls, any message based connection looks overengineered, when compared to &quot;just invoke the f**cking function&quot;
+
+The ''conclusions'' drawn from this critique is to forego using the InvocationTrail, in favour of a plain command ID, and to simplify and mostly automate the command instance management (&amp;rarr; CommandCycle)
 </pre>
 </div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201704140008" modified="201704140029" tags="design GuiPattern GuiIntegration discuss" changecount="8">
@@ -3499,13 +3515,15 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201703161928" tags="def GuiIntegration draft" changecount="7">
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201704152148" tags="def GuiIntegration draft" changecount="9">
 <pre>//A command in preparation of being issued from the UI.//
 The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].
 
 &amp;rarr; CommandInvocationAnalysis
 
 An invocation trail represents one specific path leading to the invocation of a command. It is a value object (handle), and it serves as the interface used by the UI-Element to retrieve or supply the arguments and finally to prepare the invocation message(s). But while the invocation trail is generic to some degree, the entity to trigger the command invocation needs explicit and concrete knowledge about the circumstances involved into this invocation. Simply, because in some cases, very specific information needs to be provided as argument. For example, a widget just happens to know that the setting of a specific slider will be what becomes a likewise specific argument.
+
+{{red{deprecated 4/2017}}} -- likely to be removed from the design
 </pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
