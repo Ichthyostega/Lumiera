@@ -118,11 +118,14 @@ namespace control {
       /* === command registry === */
       static Command get (Symbol cmdID);
       static Command get (FuncPtr func);
-      static bool remove (Symbol cmdID); 
+      static bool remove (Symbol cmdID);
       
       /** create a clone definition */
       Command storeDef (Symbol newCmdID)  const;
       Command newInstance ()  const;
+      
+      static Command maybeGetNewInstance (Symbol cmdID);
+      
       
       Command (Symbol cmdID) { *this = get (cmdID); }
       Command() { }          ///< undefined command

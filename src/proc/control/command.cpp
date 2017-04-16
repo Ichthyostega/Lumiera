@@ -149,6 +149,22 @@ namespace control {
   }
   
   
+  /** try to access an existing command definition and immediately
+   *  create a new clone copy by calling #newInstance()
+   * @return when search for this ID was successful, a new anonymous
+   *         command instance based on the same definition, but not registered
+   *         in the global CommandRegistry. Otherwise, when search fails,
+   *         an empty Command instance (as can be tested with `bool` conversion
+   */
+  Command
+  Command::maybeGetNewInstance (Symbol cmdID)
+  {
+    Command cmd = CommandRegistry::instance().queryIndex (cmdID);
+    return cmd? cmd.newInstance()
+              : Command{};
+  }
+  
+  
   /** @internal just query an existing instance, if any. */
   Command
   Command::fetchDef (Symbol cmdID)

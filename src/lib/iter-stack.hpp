@@ -62,6 +62,7 @@
 #include "lib/util.hpp"
 
 #include <deque>
+#include <utility>
 
 
 namespace lib {
@@ -131,9 +132,9 @@ namespace lib {
         }
       
       IterStack&
-      push (TY&& movedElm)
+      push (TY&& elm)
         {
-          this->stateCore().emplace_back (movedElm);
+          this->stateCore().emplace_back (std::move (elm));
           return *this;
         }
       
@@ -185,9 +186,9 @@ namespace lib {
         }
       
       IterQueue&
-      feed (TY&& movedElm)
+      feed (TY&& elm)
         {
-          this->stateCore().emplace_front (movedElm);
+          this->stateCore().emplace_front (std::move (elm));
           return *this;
         }
       

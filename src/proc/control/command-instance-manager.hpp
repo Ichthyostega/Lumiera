@@ -112,6 +112,10 @@ namespace control {
       void bindAndDispatch (Symbol instanceID, Rec const& argSeq);
       
       bool contains (Symbol instanceID)  const;
+      
+    private:
+      Command getCloneOrInstance (Symbol);
+      void handOver (Command&&, Symbol);
     };
   
   

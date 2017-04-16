@@ -12129,7 +12129,7 @@
 </node>
 </node>
 <node CREATED="1492294356319" ID="ID_1877638479" MODIFIED="1492294363265" TEXT="Semantik-&#xc4;nderung">
-<node CREATED="1492294454001" ID="ID_356186975" MODIFIED="1492294483149">
+<node CREATED="1492294454001" ID="ID_356186975" MODIFIED="1492359481843">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -12141,6 +12141,7 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1492295091826" ID="ID_96156600" MODIFIED="1492295093557" TEXT="bisher">
 <node CREATED="1492295094337" ID="ID_420834348" MODIFIED="1492295103364" TEXT="Instanz nur wenn vorher angelegt"/>
 <node CREATED="1492295104096" ID="ID_104008616" MODIFIED="1492295116282" TEXT="Sonst wird einfach globales Command genomen"/>
@@ -12150,9 +12151,10 @@
 <node CREATED="1492295137387" ID="ID_1142805823" MODIFIED="1492295146318" TEXT="offene Instanz wird genommen"/>
 <node CREATED="1492295146794" ID="ID_715268835" MODIFIED="1492295159372" TEXT="Sonst wird anonyme Instanz gebildet"/>
 <node CREATED="1492295160320" ID="ID_289465814" MODIFIED="1492295164348" TEXT="gebunden und gefeuert"/>
+<node CREATED="1492350125119" ID="ID_1349289727" MODIFIED="1492350141681" TEXT="Suche zuerst in der globalen Registry"/>
 </node>
 </node>
-<node CREATED="1492294454001" ID="ID_1498558942" MODIFIED="1492295827074">
+<node CREATED="1492294454001" ID="ID_1498558942" MODIFIED="1492359486258">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -12164,9 +12166,10 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="info"/>
 <node CREATED="1492295834844" ID="ID_1373400691" MODIFIED="1492295839063" TEXT="Semantik nicht ge&#xe4;ndert"/>
 </node>
-<node CREATED="1492294454001" ID="ID_48228210" MODIFIED="1492295872142">
+<node CREATED="1492294454001" ID="ID_48228210" MODIFIED="1492359489563">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -12178,15 +12181,19 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1492295834844" ID="ID_1465048391" MODIFIED="1492295855364" TEXT="bisher">
 <node CREATED="1492295891844" ID="ID_219295848" MODIFIED="1492295983675" TEXT="offene Instanz wird zum Dispatcher verschoben"/>
 <node CREATED="1492295914304" ID="ID_196991118" MODIFIED="1492295939921" TEXT="globales Command wird direkt an den Dispatcher &#xfc;bergeben"/>
 </node>
 <node CREATED="1492295855881" ID="ID_1570343929" MODIFIED="1492295857092" TEXT="jetzt">
+<node CREATED="1492295965170" ID="ID_647547612" MODIFIED="1492350377230" TEXT="globales Command wird geklont"/>
 <node CREATED="1492295941981" ID="ID_265372200" MODIFIED="1492295962382" TEXT="offene Instanz wird verschoben (unver&#xe4;ndert)"/>
-<node CREATED="1492295965170" ID="ID_647547612" MODIFIED="1492295973020" TEXT="globales Command wird geklont"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492359501220" ID="ID_1889001956" MODIFIED="1492359517024" TEXT="Test anpassen">
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 </node>
@@ -12370,8 +12377,8 @@
 <node CREATED="1492281599624" HGAP="22" ID="ID_1089419591" MODIFIED="1492281870856" TEXT="einfache L&#xf6;sung" VSHIFT="10">
 <linktarget COLOR="#5f758e" DESTINATION="ID_1089419591" ENDARROW="Default" ENDINCLINATION="40;300;" ID="Arrow_ID_1986823533" SOURCE="ID_813754826" STARTARROW="None" STARTINCLINATION="1031;0;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492281610286" ID="ID_1217333147" MODIFIED="1492281872795" TEXT="automatische Instanz-Erzeugung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1492281610286" ID="ID_1217333147" MODIFIED="1492359761121" TEXT="automatische Instanz-Erzeugung">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492281619901" ID="ID_887103826" MODIFIED="1492281874171" TEXT="direkter Aufruf mit CommandDef-ID">
 <icon BUILTIN="flag-yellow"/>
@@ -13047,7 +13054,9 @@
 <node CREATED="1492281599624" ID="ID_813754826" MODIFIED="1492281859482" TEXT="einfache L&#xf6;sung">
 <arrowlink COLOR="#5f758e" DESTINATION="ID_1089419591" ENDARROW="Default" ENDINCLINATION="40;300;" ID="Arrow_ID_1986823533" STARTARROW="None" STARTINCLINATION="1031;0;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1492281610286" ID="ID_1542647024" MODIFIED="1492281619169" TEXT="automatische Instanz-Erzeugung"/>
+<node COLOR="#338800" CREATED="1492281610286" ID="ID_1542647024" MODIFIED="1492359767992" TEXT="automatische Instanz-Erzeugung">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1492281619901" ID="ID_423372741" MODIFIED="1492281631495" TEXT="direkter Aufruf mit CommandDef-ID"/>
 <node CREATED="1492281659520" ID="ID_1742758477" MODIFIED="1492281669306" TEXT="Argument-Resolver f&#xfc;r Kontext-Zugriff"/>
 <node CREATED="1492281675557" ID="ID_1809773326" MODIFIED="1492281681224" TEXT="InvocationState mit Callbacks"/>
@@ -13263,7 +13272,28 @@
 <node CREATED="1490985748207" ID="ID_1314513556" MODIFIED="1490985751457" TEXT="Instanzbildung">
 <node CREATED="1490985756381" ID="ID_1346029720" MODIFIED="1490985767448" TEXT="wird durch ID-Dekoration getrieben"/>
 <node CREATED="1491656301121" ID="ID_566719122" MODIFIED="1491656320281" TEXT="es ist stets nur eine Instanz offen"/>
-<node CREATED="1491656321252" ID="ID_1903067692" MODIFIED="1491656336277" TEXT="Widerspr&#xfc;che sind Hiweis auf Fehlfunktion"/>
+<node CREATED="1492359658654" ID="ID_712987844" MODIFIED="1492359667329" TEXT="erfolgt weitgehend automatisch/transparent">
+<node CREATED="1492359686938" ID="ID_1447317770" MODIFIED="1492359700986" TEXT="anonyme Klon-Kopie von CommandDef">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1492359678835" ID="ID_608610767" MODIFIED="1492359736655" TEXT="explizite Instanzbildung ist optional">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...implementiert &quot;f&#252;r die Zukunft&quot;,
+    </p>
+    <p>
+      wenn wir context-bound -Commands verwenden
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
 <node CREATED="1491694174845" ID="ID_344801148" MODIFIED="1491694242610" TEXT="Instanzbildung geh&#xf6;rt nicht in das Tangible">
 <richcontent TYPE="NOTE"><html>
   <head>

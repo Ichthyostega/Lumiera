@@ -219,36 +219,64 @@ namespace control {
   }
   
   
+  /** @internal retrieve either global or local command instance
+   * When matching a globally defined command, an anonymous clone instance
+   * will be created. Otherwise a lookup in the local instance table is performed
+   * and a matching entry is _moved out of the table_.
+   */
+  Command
+  CommandInstanceManager::getCloneOrInstance (Symbol instanceID)
+  {
+    Command instance = Command::maybeGetNewInstance (instanceID);
+    if (not instance)
+      { // second attempt: search of a locally "opened" instance
+        auto entry = table_.find(instanceID);
+        if (entry == table_.end())
+          throw error::Invalid(_Fmt("Command-ID \"%s\" refers neither to a "
+                                    "globally registered command definition, "
+                                    "nor to an previously opened command instance")
+                                   % instanceID
+                              , LUMIERA_ERROR_INVALID_COMMAND);
+        instance = move(entry->second);
+      }
+    ENSURE (instance);
+    return instance;
+  }
+  
+  
+  /** @internal hand a command over to the dispatcher */
+  void
+  CommandInstanceManager::handOver (Command&& toDispatch, Symbol cmdID)
+  {
+    if (not toDispatch)
+      throw error::Logic (_Fmt{"attempt to dispatch command instance '%s' "
+                               "without creating a new instance from prototype beforehand"}
+                              % cmdID
+                         , error::LUMIERA_ERROR_LIFECYCLE);
+    if (not toDispatch.canExec())
+      throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
+                               "without binding all arguments properly beforehand"}
+                              % cmdID
+                         , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    
+    REQUIRE (toDispatch and toDispatch.canExec());
+    dispatcher_.enqueue(move (toDispatch));
+    ENSURE (not toDispatch);
+  }
+  
+  
   /** hand over the designated command instance to the dispatcher installed
-   * on construction. Either the given ID corresponds to a previously "opened"
-   * local instance (known only to this instance manager). In this case, the
-   * instance will really be _moved_ over into the dispatcher, which also means
-   * this instance is no longer "open" for parametrisation. In the other case
-   * we try to retrieve the given ID from the global CommandRegistry and
-   * dispatch it, _without removing_ it from the global registry of course.
+   * on construction. Either the given ID corresponds to a global command definition,
+   * in which case an anonymous clone copy is created from this command. Alternatively
+   * the given ID matches a previously "opened" local instance (known only to this
+   * instance manager). In this case, the instance will really be _moved_ over into
+   * the dispatcher, which also means this instance is no longer "open" for
+   * parametrisation.
    */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)
   {
-    auto entry = table_.find(instanceID);
-    Command fallback;
-    Command& instance{entry == table_.end()? fallback = Command::get(instanceID)
-                                           : entry->second
-                     };
-    if (not instance)
-      throw error::Logic (_Fmt{"attempt to dispatch command instance '%s' "
-                               "without creating a new instance from prototype beforehand"}
-                              % instanceID
-                         , error::LUMIERA_ERROR_LIFECYCLE);
-    if (not instance.canExec())
-      throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
-                               "without binding all arguments properly beforehand"}
-                              % instanceID
-                         , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
-    
-    REQUIRE (instance and instance.canExec());
-    dispatcher_.enqueue(move (instance));
-    ENSURE (not instance);
+    handOver (getCloneOrInstance (instanceID), instanceID);
   }
   
   
@@ -266,7 +294,11 @@ namespace control {
   void
   CommandInstanceManager::bindAndDispatch (Symbol instanceID, Rec const& argSeq)
   {
-    UNIMPLEMENTED ("fire and forget anonymous instance");
+    Command instance{getCloneOrInstance (instanceID)};
+    REQUIRE (instance);
+    instance.bindArg (argSeq);
+    ENSURE (instance.canExec());
+    handOver (move (instance), instanceID);
   }
   
   

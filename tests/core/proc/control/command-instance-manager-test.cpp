@@ -77,7 +77,7 @@ namespace test {
         void
         enqueue (Command&& cmd)  override
           {
-            queue_.emplace_front (cmd);
+            queue_.emplace_front (move (cmd));
           }
         
       public:
@@ -147,7 +147,7 @@ namespace test {
           int r1{rand()%1000}, r2{rand()%2000};
           command1::check_ = 0; // commands will add to this on invocation
           
-          iManager.bindAndDispatch (COMMAND_PROTOTYPE, {23});
+          iManager.bindAndDispatch (COMMAND_PROTOTYPE, Rec{r1});
           CHECK (not iManager.contains (COMMAND_PROTOTYPE));
           
           Command com{COMMAND_PROTOTYPE};
@@ -174,6 +174,7 @@ namespace test {
           Fixture fixture;
           CommandInstanceManager iManager{fixture};
           Symbol instanceID = iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID);
+          CHECK (iManager.contains (instanceID));
           
           Command cmd = iManager.getInstance (instanceID);
           CHECK (cmd);
@@ -323,7 +324,7 @@ namespace test {
           VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i1"));
           VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i2"));
           
-          iManager.bindAndDispatch (i1, Rec{-1}); // bind and dispatch i1, thus i1 is ready for new cycle
+          iManager.bindAndDispatch (i1, {-1}); // bind and dispatch i1, thus i1 is ready for new cycle
 
           iManager.newInstance (COMMAND_PROTOTYPE, "i1"); // open new cycle for i1
           VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i2"));
