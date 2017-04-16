@@ -114,8 +114,8 @@ namespace control {
       bool contains (Symbol instanceID)  const;
       
     private:
-      Command getCloneOrInstance (Symbol);
-      void handOver (Command&&, Symbol);
+      Command getCloneOrInstance (Symbol, bool);
+      void handOver (Command&&);
     };
   
   

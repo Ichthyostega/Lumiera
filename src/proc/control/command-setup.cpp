@@ -225,7 +225,7 @@ namespace control {
    * and a matching entry is _moved out of the table_.
    */
   Command
-  CommandInstanceManager::getCloneOrInstance (Symbol instanceID)
+  CommandInstanceManager::getCloneOrInstance (Symbol instanceID, bool must_be_bound)
   {
     Command instance = Command::maybeGetNewInstance (instanceID);
     if (not instance)
@@ -241,23 +241,25 @@ namespace control {
           throw error::Logic (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
                                   % instanceID
                              , error::LUMIERA_ERROR_LIFECYCLE);
-        instance = move(entry->second);
+        if (not must_be_bound or entry->second.canExec())
+          instance = move(entry->second);
       }
-    ENSURE (instance);
+    if (must_be_bound and not instance.canExec())
+      throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
+                               "without binding all arguments properly beforehand"}
+                              % instanceID
+                         , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    
+    ENSURE (instance.isValid() and
+           (instance.canExec() or not must_be_bound));
     return instance;
   }
   
   
   /** @internal hand a command over to the dispatcher */
   void
-  CommandInstanceManager::handOver (Command&& toDispatch, Symbol cmdID)
+  CommandInstanceManager::handOver (Command&& toDispatch)
   {
-    if (not toDispatch.canExec())
-      throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
-                               "without binding all arguments properly beforehand"}
-                              % cmdID
-                         , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
-    
     REQUIRE (toDispatch and toDispatch.canExec());
     dispatcher_.enqueue(move (toDispatch));
     ENSURE (not toDispatch);
@@ -272,13 +274,11 @@ namespace control {
    * the dispatcher, which also means this instance is no longer "open" for
    * parametrisation.
    * @throw error::Logic when the command's arguments aren't bound
-   * @warning invoking #dispatch() on an unbound local instance has the nasty
-   *        side-effect of invalidating the instance. Just don't do that!
    */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)
   {
-    handOver (getCloneOrInstance (instanceID), instanceID);
+    handOver (getCloneOrInstance (instanceID, true));
   }
   
   
@@ -296,11 +296,11 @@ namespace control {
   void
   CommandInstanceManager::bindAndDispatch (Symbol instanceID, Rec const& argSeq)
   {
-    Command instance{getCloneOrInstance (instanceID)};
+    Command instance{getCloneOrInstance (instanceID, false)};
     REQUIRE (instance);
     instance.bindArg (argSeq);
     ENSURE (instance.canExec());
-    handOver (move (instance), instanceID);
+    handOver (move (instance));
   }
   
   

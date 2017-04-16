@@ -359,18 +359,14 @@ namespace test {
           CHECK (i2 == instanceID);
           CHECK (iManager.getInstance (instanceID));
           
-          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID));
           
           Command cmd = iManager.getInstance (instanceID);
           CHECK (cmd);
           CHECK (not cmd.canExec());
           
           VERIFY_ERROR (UNBOUND_ARGUMENTS, iManager.dispatch (instanceID));
-          // NOTE: this error has killed the instance....
-          VERIFY_ERROR (LIFECYCLE, iManager.getInstance (instanceID))
-          //       ... we need to re-open it to repair the situation
-          iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID);
-          cmd = iManager.getInstance (instanceID);
+          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID));
+          CHECK (iManager.contains (instanceID)); // errors have not messed up anything
           
           cmd.bind(23);
           CHECK (cmd.canExec());
