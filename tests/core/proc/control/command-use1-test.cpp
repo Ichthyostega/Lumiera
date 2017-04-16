@@ -192,6 +192,11 @@ namespace test    {
           CHECK ( Command::defined("test.command1.2"));
           CHECK ( Command::canExec("test.command1.2"));
           CHECK ( Command::canUndo("test.command1.2"));
+          
+          com.unbind(); // revert to pristine state
+          CHECK ( Command::defined("test.command1.2"));
+          CHECK (!Command::canExec("test.command1.2"));
+          CHECK (!Command::canUndo("test.command1.2"));
         }
       
       
@@ -283,6 +288,13 @@ namespace test    {
           CHECK (23 == command1::check_);
           c2.undo();
           CHECK (0 == command1::check_);
+          
+          // remove argument bindings per instance and return to pristine state
+          c4.unbind();
+          CHECK (c2.canExec());
+          CHECK (c2.canUndo());
+          CHECK (not c4.canExec());
+          CHECK (not c4.canUndo());
         }
       
       

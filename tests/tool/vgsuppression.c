@@ -44,6 +44,9 @@ lumiera_error_get (void);
 lumiera_err
 lumiera_error_set (lumiera_err, const char*);
 
+lumiera_err
+lumiera_error (void);
+
 
 int
 main ()
@@ -58,6 +61,7 @@ main ()
   /* lumiera_error_get() mallocs a LumieraErrorcontext for each thread */
   lumiera_error_get();
   lumiera_error_set("dummy","dummy");
+  lumiera_error();
 
   return 0;
 }
