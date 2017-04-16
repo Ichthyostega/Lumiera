@@ -131,6 +131,13 @@ namespace control {
           storeTuple (buildTuple<Args> (paramData));
         }
       
+      /** discard any argument data and return to _empty_ state */
+      virtual void
+      unbindArguments()  override
+        {
+          clearStorage();
+        }
+      
       
       virtual void
       invoke (CmdFunctor const& func)  override
@@ -206,6 +213,13 @@ namespace control {
       storeTuple (ArgTuple const& argTup)
         {
           arguments_.template create<ArgHolder> (argTup);
+        }
+      
+      void
+      clearStorage ()
+        {
+          arguments_.template create<ArgHolder>();
+          memento_->clear();
         }
       
       

@@ -35,7 +35,7 @@
  ** actual command operation function), which implements the invocation of the
  ** operation function with the stored argument tuple.
  ** 
- ** \par Command Closure and Lifecycle
+ ** ## Command Closure and Lifecycle
  ** When defining a command, Mutation objects are to be created based on a concrete function.
  ** These are stored embedded into a type erasure container, thus disposing the specific type
  ** information of the function and function arguments. Each command needs an Mutation object
@@ -50,7 +50,7 @@
  ** has to keep track of the actual types, thus allowing to re-construct the concrete
  ** function signature when closing the Mutation.
  ** 
- ** Finally, when invoking the command, it passes a \c CmdClosure& to the Mutation object,
+ ** Finally, when invoking the command, it passes a `CmdClosure&` to the Mutation object,
  ** which allows the embedded function to be called with the concrete arguments. Besides
  ** just invoking it, a command can also be used like a prototype object. To support this
  ** use case it is possible to re-bind to a new set of command arguments, and to create
@@ -115,6 +115,7 @@ namespace control {
       virtual bool equals (CmdClosure const&)  const       =0;    ///< is equivalent to the given other closure?
       virtual void bindArguments (Arguments&)              =0;    ///< store a set of parameter values within this closure
       virtual void bindArguments (lib::diff::Rec const&)   =0;    ///< store a set of parameter values, passed as GenNode sequence
+      virtual void unbindArguments()                       =0;    ///< discard any parameters and return to _unbound state_        
       virtual void invoke (CmdFunctor const&)              =0;    ///< invoke functor using the stored parameter values
       virtual void accept (CommandImplCloneBuilder&) const =0;    ///< assist with creating clone closure without disclosing concrete type
     };

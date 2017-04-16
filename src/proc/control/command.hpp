@@ -36,7 +36,23 @@
  ** Command object used by client code is a small, copyable and ref-counting handle to this 
  ** stored definition backend.
  ** 
- ** //TODO maybe summarise how UNDO works?  
+ ** # Command definition, argument types and UNDO operation
+ ** For a command to be usable at all, a concrete [command definition](command-def.hpp) need to be supplied
+ ** somewhere in the code base. Typically this is done through static [command-setup bindings](command-setup.hpp).
+ ** Such a command definition links three functions with the name-ID of the command
+ ** - the actual command operation
+ ** - a function to capture state
+ ** - a function to undo the effect of the operation
+ ** These functions may take arbitrary arguments, but the signature of this operation is captured at
+ ** compile time and embedded as invisible type information within the implementation storage. While this
+ ** allows to verify the type of the actual command arguments, this type sanity check can happen only late,
+ ** at invocation time (and result in raising an exception). In a similar vein, the state capturing and
+ ** the undo function must match with the signature of the main operation, since these functions are
+ ** provided with the same arguments as presented to the command function. The UNDO functionality
+ ** in Lumiera is based on capturing a _state memento_, not on applying a reverse function.
+ ** So it is the responsibility of the capture function to take a suitable state snapshot,
+ ** such as to be able to revert to the situation before activating this command, but
+ ** only as far as the effect of the actual command function is concerned.
  ** 
  ** @see command-def.hpp
  ** @see command-use1-test.cpp
@@ -145,6 +161,8 @@ namespace control {
       Command& bindArg (std::tuple<TYPES...> const&);
       
       Command& bindArg (lib::diff::Rec const&);
+      
+      Command& unbind();
       
       
       ExecResult operator() () ;

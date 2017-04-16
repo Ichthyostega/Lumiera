@@ -113,6 +113,13 @@ namespace wrapper {
           return *this;
         }
       
+      ReplaceableItem&
+      clear()  noexcept
+        {
+          reAssign (NullValue<X>::get());
+          return *this;
+        }
+      
       operator X&()             { return access();                }
       operator X const&() const { return unConst(this)->access(); }
       
@@ -174,8 +181,9 @@ namespace wrapper {
       ReplaceableItem(X const& val) : val_(val)             { }
       ReplaceableItem(X &&     val) : val_(forward<X>(val)) { }
       
-      ReplaceableItem& operator= (X const& val) { val_=val;             return *this; }
-      ReplaceableItem& operator= (X &&     val) { val_=forward<X>(val); return *this; }
+      ReplaceableItem& operator= (X const& val) { val_=val;                 return *this; }
+      ReplaceableItem& operator= (X &&     val) { val_=forward<X>(val);     return *this; }
+      ReplaceableItem& clear()  noexcept        { val_=NullValue<X>::get(); return *this; }
       
       operator X&()             { return val_; }
       operator X const&() const { return val_; }

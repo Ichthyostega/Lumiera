@@ -128,6 +128,16 @@ namespace control {
         { }
       
       
+      /** reverses the effect of capturing state
+       *  and returns this memento holder into pristine state
+       */
+      void
+      clear()
+        {
+          isCaptured_ = false;
+          memento_.clear();
+        }
+      
       /** bind the undo function to the internal memento store within this object.
        *  @return a functor, which, when invoked with the remaining arguments, will
        *        automatically call #getState() to retrieve the current memento value.

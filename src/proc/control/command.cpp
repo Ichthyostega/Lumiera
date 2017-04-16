@@ -285,6 +285,22 @@ namespace control {
   }
   
   
+  /** discard any argument data previously bound.
+   * @remarks this returns the command into pristine state,
+   *          just holding the definition but not any further
+   *          argument data or UNDO state. Contrast this to an
+   *          defalut constructed Command, which is inactive
+   *          and not bound to any definition at all.
+   */
+  Command&
+  Command::unbind()
+  {
+    ___check_notBottom (this, "Un-binding arguments of");
+    _Handle::impl().discardArguments();
+    return *this;
+  }
+  
+  
   /** @return the number of command \em definitions currently registered */
   size_t
   Command::definition_count()

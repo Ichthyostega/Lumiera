@@ -177,6 +177,12 @@ namespace control {
           pClo_->bindArguments (paramData);
         }
       
+      void
+      discardArguments()
+        {
+          pClo_->unbindArguments();
+        }
+      
       void invokeOperation() { do_(*pClo_); }
       void invokeCapture()   { undo_.captureState(*pClo_); }
       void invokeUndo()      { undo_(*pClo_); }
