@@ -75,9 +75,9 @@ namespace test {
           }
         
         void
-        enqueue (Command cmd)  override
+        enqueue (Command&& cmd)  override
           {
-            queue_.emplace_front(move (cmd));
+            queue_.emplace_front (cmd);
           }
         
       public:

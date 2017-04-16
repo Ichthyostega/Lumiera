@@ -72,7 +72,7 @@ namespace control {
       
       
       CommandQueue&
-      feed (Command const& cmd)
+      feed (Command&& cmd)
         {
           if (not cmd.canExec())
             throw error::Logic(_Fmt("Reject '%s'. Not suitably prepared for invocation: %s")

@@ -131,6 +131,13 @@ namespace lib {
         }
       
       IterStack&
+      push (TY&& movedElm)
+        {
+          this->stateCore().emplace_back (movedElm);
+          return *this;
+        }
+      
+      IterStack&
       insert (TY const& elm)
         {
           return push(elm);
@@ -174,6 +181,13 @@ namespace lib {
       feed (TY const& elm)
         {
           this->stateCore().push_front (elm);
+          return *this;
+        }
+      
+      IterQueue&
+      feed (TY&& movedElm)
+        {
+          this->stateCore().emplace_front (movedElm);
           return *this;
         }
       

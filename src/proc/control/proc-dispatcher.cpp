@@ -204,10 +204,10 @@ namespace control {
       /* === CommandDispatch interface === */
       
       void
-      enqueue (Command cmd)  override
+      enqueue (Command&& cmd)  override
         {
           Lock sync(this);
-          queue_.feed (cmd);
+          queue_.feed (move (cmd));
           sync.notifyAll();
         }
       

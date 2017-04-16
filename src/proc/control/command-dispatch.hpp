@@ -57,8 +57,8 @@ namespace control {
     public:
       virtual ~CommandDispatch() { }  ///< this is an interface
       
-      virtual void clear()            =0;  /////TODO do we actually need that operation?
-      virtual void enqueue (Command)  =0;
+      virtual void clear()              =0;  /////TODO do we actually need that operation?
+      virtual void enqueue (Command&&)  =0;
     };
   
   

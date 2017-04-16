@@ -116,8 +116,8 @@ namespace test    {
           CommandQueue queue;
           CHECK (isnil(queue));
           
-          queue.feed (com11);
-          queue.feed (com12);
+          queue.feed (Command{com11});
+          queue.feed (Command{com12});
           
           CHECK (2 == queue.size());
           
@@ -141,10 +141,10 @@ namespace test    {
           // NOT binding the second command...
           
           CommandQueue queue;
-          queue.feed (com11);
+          queue.feed (Command{com11});
           CHECK (1 == queue.size());
           
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, queue.feed (com12));
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, queue.feed (Command{com12}));
           CHECK (1 == queue.size());
           
           queue.pop().execSync();
