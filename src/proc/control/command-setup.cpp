@@ -237,6 +237,10 @@ namespace control {
                                     "nor to an previously opened command instance")
                                    % instanceID
                               , LUMIERA_ERROR_INVALID_COMMAND);
+        if (not entry->second.isValid())
+          throw error::Logic (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
+                                  % instanceID
+                             , error::LUMIERA_ERROR_LIFECYCLE);
         instance = move(entry->second);
       }
     ENSURE (instance);
@@ -248,11 +252,6 @@ namespace control {
   void
   CommandInstanceManager::handOver (Command&& toDispatch, Symbol cmdID)
   {
-    if (not toDispatch)
-      throw error::Logic (_Fmt{"attempt to dispatch command instance '%s' "
-                               "without creating a new instance from prototype beforehand"}
-                              % cmdID
-                         , error::LUMIERA_ERROR_LIFECYCLE);
     if (not toDispatch.canExec())
       throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
                                "without binding all arguments properly beforehand"}
@@ -272,6 +271,9 @@ namespace control {
    * instance manager). In this case, the instance will really be _moved_ over into
    * the dispatcher, which also means this instance is no longer "open" for
    * parametrisation.
+   * @throw error::Logic when the command's arguments aren't bound
+   * @warning invoking #dispatch() on an unbound local instance has the nasty
+   *        side-effect of invalidating the instance. Just don't do that!
    */
   void
   CommandInstanceManager::dispatch (Symbol instanceID)

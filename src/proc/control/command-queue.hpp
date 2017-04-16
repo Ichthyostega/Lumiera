@@ -79,7 +79,7 @@ namespace control {
                                    % cmd.getID() % cmd
                               , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          lib::IterQueue<Command>::feed(cmd);
+          lib::IterQueue<Command>::feed (move (cmd));
           return *this;
         }
       

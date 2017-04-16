@@ -164,6 +164,9 @@ namespace test {
           CHECK (command1::check_ == 0);       // nothing invoked yet
           fixture.invokeAll();
           CHECK (command1::check_ == r1 + r2); // both instances were invoked with their specific arguments
+          
+          // clean-up: we have bound arguments on the global prototype
+          com.unbind();
         }
       
       
@@ -356,12 +359,18 @@ namespace test {
           CHECK (i2 == instanceID);
           CHECK (iManager.getInstance (instanceID));
           
+          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID));
+          
           Command cmd = iManager.getInstance (instanceID);
           CHECK (cmd);
           CHECK (not cmd.canExec());
           
           VERIFY_ERROR (UNBOUND_ARGUMENTS, iManager.dispatch (instanceID));
-          VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID));
+          // NOTE: this error has killed the instance....
+          VERIFY_ERROR (LIFECYCLE, iManager.getInstance (instanceID))
+          //       ... we need to re-open it to repair the situation
+          iManager.newInstance (COMMAND_PROTOTYPE, INVOCATION_ID);
+          cmd = iManager.getInstance (instanceID);
           
           cmd.bind(23);
           CHECK (cmd.canExec());
@@ -395,11 +404,14 @@ namespace test {
           CHECK (not fixture.contains(cmd));
           
           iManager.dispatch (COMMAND_PROTOTYPE);
-          CHECK (not fixture.contains(cmd));  // because a clone copy was dispatched
+          CHECK (fixture.contains(cmd));   // an equivalent clone was enqueued
           
           command1::check_ = 0;
           fixture.invokeAll();
           CHECK (command1::check_ == -12); // the clone copy was executed
+          
+          // clean-up: we have bound arguments on the global prototype
+          cmd.unbind();
         }
     };
   
