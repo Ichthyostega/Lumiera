@@ -2319,8 +2319,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1489777837120" ID="ID_466927949" MODIFIED="1489777843659" TEXT="Ort f&#xfc;r Command-Definitionen"/>
-<node CREATED="1489777846095" ID="ID_1401258681" MODIFIED="1489778075369" TEXT="Design Proc-Command-Framework vorantreiben">
-<arrowlink COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="39;-3322;" ID="Arrow_ID_1512127407" STARTARROW="None" STARTINCLINATION="2000;0;"/>
+<node CREATED="1489777846095" ID="ID_1401258681" MODIFIED="1492294315650" TEXT="Design Proc-Command-Framework vorantreiben">
+<arrowlink COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" STARTARROW="None" STARTINCLINATION="1932;0;"/>
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
@@ -11478,7 +11478,7 @@
 <node CREATED="1488940519518" ID="ID_1875791797" MODIFIED="1488940533992" TEXT="bei n&#xe4;chster Anfrage wird CmdInstanceManager daher neue Instanz anlegen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677859619" HGAP="-15" ID="ID_827179653" MODIFIED="1489191299696" TEXT="Problem: Service-Zugang" VSHIFT="24">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677859619" HGAP="-15" ID="ID_827179653" MODIFIED="1492293466151" TEXT="Problem: Service-Zugang" VSHIFT="24">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -11496,7 +11496,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" STARTARROW="None" STARTINCLINATION="912;-974;"/>
-<linktarget COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" SOURCE="ID_1621107057" STARTARROW="None" STARTINCLINATION="550;-93;"/>
+<linktarget COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" SOURCE="ID_1621107057" STARTARROW="None" STARTINCLINATION="384;-135;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1488936835940" ID="ID_1322149090" MODIFIED="1488937388772" TEXT="separates Problem">
 <richcontent TYPE="NOTE"><html>
@@ -11883,7 +11883,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491656361886" ID="ID_1269299900" MODIFIED="1491656365558" TEXT="Einbindung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491656361886" HGAP="62" ID="ID_1269299900" MODIFIED="1492293109808" TEXT="Einbindung" VSHIFT="12">
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1491659172438" HGAP="34" ID="ID_1103739498" MODIFIED="1491757376165" TEXT="in SessionCommandService" VSHIFT="-3">
 <icon BUILTIN="button_ok"/>
@@ -12053,9 +12053,145 @@
 </node>
 <node CREATED="1491659180516" ID="ID_655217923" MODIFIED="1491659189047" TEXT="in CmdAccess"/>
 </node>
+<node CREATED="1492293088861" HGAP="28" ID="ID_1660020661" MODIFIED="1492293257532" TEXT="&#xdc;berarbeitung" VSHIFT="14">
+<linktarget COLOR="#626a9e" DESTINATION="ID_1660020661" ENDARROW="Default" ENDINCLINATION="-324;0;" ID="Arrow_ID_876356993" SOURCE="ID_220910293" STARTARROW="None" STARTINCLINATION="-687;0;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1492293139398" ID="ID_1274577545" MODIFIED="1492293146721" TEXT="als Folge der Design-Kritik"/>
+<node CREATED="1492293282803" ID="ID_1858980532" MODIFIED="1492293285150" TEXT="Ziel">
+<node CREATED="1492293286802" ID="ID_980352671" MODIFIED="1492293292141" TEXT="weitgehend automatisch"/>
+<node CREATED="1492293292801" ID="ID_556604895" MODIFIED="1492293305099" TEXT="Zyklus mu&#xdf; nicht explizit er&#xf6;ffnet werden"/>
+<node CREATED="1492293307511" ID="ID_582978700" MODIFIED="1492293317442" TEXT="Instanzen selbst f&#xfc;r globale Commands"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489191252503" ID="ID_1621107057" MODIFIED="1489191308469" TEXT="#1090 Command access for UI-Elements">
-<arrowlink COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" STARTARROW="None" STARTINCLINATION="550;-93;"/>
+<node CREATED="1492293359944" ID="ID_1367582526" MODIFIED="1492293429410" TEXT="Konsequenzen">
+<node CREATED="1492293430689" ID="ID_1472205001" MODIFIED="1492293430689" TEXT="weitgehender Verzicht auf Konsistenzpr&#xfc;fungen"/>
+<node CREATED="1492293588400" ID="ID_1878334690" MODIFIED="1492293883630" TEXT="Binden und Dispatch m&#xfc;ssen kombiniert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst wird die ganze Sache absurd
+    </p>
+    <p>
+      und unsinnigerweise aufwendig
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1492293433222" ID="ID_1665333497" MODIFIED="1492293442272" TEXT="Registry k&#xf6;nnte l&#xe4;ngerfristig wegfallen"/>
+</node>
+<node CREATED="1492293450067" ID="ID_1626482891" MODIFIED="1492293452767" TEXT="F&#xe4;lle">
+<node CREATED="1492293499701" ID="ID_1165417078" MODIFIED="1492293504344" TEXT="voller Zyklus">
+<node CREATED="1492293540943" ID="ID_432796112" MODIFIED="1492293561513">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Instanz <i>&#246;ffnen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1492293553405" ID="ID_1787045274" MODIFIED="1492293557912" TEXT="Instanz herausgeben"/>
+<node CREATED="1492293563028" ID="ID_713648189" MODIFIED="1492293583853" TEXT="Binden und Feuern"/>
+</node>
+<node CREATED="1492293984170" ID="ID_1495091918" MODIFIED="1492293990949" TEXT="fire-and-forget">
+<node CREATED="1492294004119" ID="ID_1322819026" MODIFIED="1492294029307">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      CommandID <i>und</i>&#160;Argumente gegeben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1492294031035" ID="ID_521535374" MODIFIED="1492294048357" TEXT="anonyme Instanz erzeugen, aber nicht speichern"/>
+<node CREATED="1492294049089" ID="ID_631979849" MODIFIED="1492294052148" TEXT="Argumente binden"/>
+<node CREATED="1492294052616" ID="ID_1477708688" MODIFIED="1492294062235" TEXT="direkt an Dispatcher &#xfc;bergeben"/>
+<node CREATED="1492294063183" ID="ID_1341000232" MODIFIED="1492294094983" TEXT="hinterl&#xe4;&#xdf;t sonst keine Spur">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1492294104665" ID="ID_433710721" MODIFIED="1492294116796" TEXT="globales Command">
+<node CREATED="1492294207251" ID="ID_1653497945" MODIFIED="1492294212303" TEXT="wenn ID nicht lokal bekannt"/>
+<node CREATED="1492294212795" ID="ID_82885635" MODIFIED="1492294242178" TEXT="aber globales Command bereits ausf&#xfc;hrbar"/>
+<node CREATED="1492294242862" ID="ID_1583400472" MODIFIED="1492294253689" TEXT="anonyme Instanz klonen"/>
+<node CREATED="1492294254277" ID="ID_57256331" MODIFIED="1492294260560" TEXT="und an Dispatcher &#xfc;bergeben"/>
+</node>
+</node>
+<node CREATED="1492294356319" ID="ID_1877638479" MODIFIED="1492294363265" TEXT="Semantik-&#xc4;nderung">
+<node CREATED="1492294454001" ID="ID_356186975" MODIFIED="1492294483149">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      SessionCommandService::<b>trigger</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1492295091826" ID="ID_96156600" MODIFIED="1492295093557" TEXT="bisher">
+<node CREATED="1492295094337" ID="ID_420834348" MODIFIED="1492295103364" TEXT="Instanz nur wenn vorher angelegt"/>
+<node CREATED="1492295104096" ID="ID_104008616" MODIFIED="1492295116282" TEXT="Sonst wird einfach globales Command genomen"/>
+<node CREATED="1492295116894" ID="ID_930409268" MODIFIED="1492295120945" TEXT="gebunden und gefeuert"/>
+</node>
+<node CREATED="1492295122765" ID="ID_1120774629" MODIFIED="1492295124521" TEXT="jetzt">
+<node CREATED="1492295137387" ID="ID_1142805823" MODIFIED="1492295146318" TEXT="offene Instanz wird genommen"/>
+<node CREATED="1492295146794" ID="ID_715268835" MODIFIED="1492295159372" TEXT="Sonst wird anonyme Instanz gebildet"/>
+<node CREATED="1492295160320" ID="ID_289465814" MODIFIED="1492295164348" TEXT="gebunden und gefeuert"/>
+</node>
+</node>
+<node CREATED="1492294454001" ID="ID_1498558942" MODIFIED="1492295827074">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      SessionCommandService::<b>bindArg</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1492295834844" ID="ID_1373400691" MODIFIED="1492295839063" TEXT="Semantik nicht ge&#xe4;ndert"/>
+</node>
+<node CREATED="1492294454001" ID="ID_48228210" MODIFIED="1492295872142">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      SessionCommandService::<b>invoke</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1492295834844" ID="ID_1465048391" MODIFIED="1492295855364" TEXT="bisher">
+<node CREATED="1492295891844" ID="ID_219295848" MODIFIED="1492295983675" TEXT="offene Instanz wird zum Dispatcher verschoben"/>
+<node CREATED="1492295914304" ID="ID_196991118" MODIFIED="1492295939921" TEXT="globales Command wird direkt an den Dispatcher &#xfc;bergeben"/>
+</node>
+<node CREATED="1492295855881" ID="ID_1570343929" MODIFIED="1492295857092" TEXT="jetzt">
+<node CREATED="1492295941981" ID="ID_265372200" MODIFIED="1492295962382" TEXT="offene Instanz wird verschoben (unver&#xe4;ndert)"/>
+<node CREATED="1492295965170" ID="ID_647547612" MODIFIED="1492295973020" TEXT="globales Command wird geklont"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489191252503" ID="ID_1621107057" MODIFIED="1492293466151" TEXT="#1090 Command access for UI-Elements">
+<arrowlink COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" STARTARROW="None" STARTINCLINATION="384;-135;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1489196597635" ID="ID_850892898" MODIFIED="1489196604278" TEXT="Access-Front-End">
 <node CREATED="1492095519827" HGAP="16" ID="ID_983435641" MODIFIED="1492095548376" TEXT="Grundprinzip" VSHIFT="-5">
@@ -12699,7 +12835,9 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1492281320758" ID="ID_1465764553" MODIFIED="1492281326521" TEXT="InvocationTrail f&#xe4;llt weg"/>
 <node CREATED="1492281327277" ID="ID_1090150746" MODIFIED="1492281338008" TEXT="Aufruf erfolgt mit reiner Command-ID"/>
-<node CREATED="1492281338555" ID="ID_220910293" MODIFIED="1492281348366" TEXT="Instanzen werden automatisch generiert"/>
+<node CREATED="1492281338555" ID="ID_220910293" MODIFIED="1492293273810" TEXT="Instanzen werden automatisch generiert">
+<arrowlink COLOR="#626a9e" DESTINATION="ID_1660020661" ENDARROW="Default" ENDINCLINATION="-324;0;" ID="Arrow_ID_876356993" STARTARROW="None" STARTINCLINATION="-687;0;"/>
+</node>
 <node CREATED="1492281383613" ID="ID_143339688" MODIFIED="1492281399943" TEXT="CmdAccess wird f&#xfc;r den komplexen Fall umgewidmet">
 <node CREATED="1492281402666" ID="ID_1263822028" MODIFIED="1492281416173" TEXT="es bleibt ein Access-front-End"/>
 <node CREATED="1492281417025" ID="ID_1229681605" MODIFIED="1492281424772" TEXT="der Name wird angepa&#xdf;t"/>
@@ -12711,8 +12849,8 @@
 </node>
 </node>
 </node>
-<node COLOR="#252298" CREATED="1489546623162" HGAP="-24" ID="ID_1622574347" MODIFIED="1489778039083" TEXT="was wird gebraucht" VSHIFT="21">
-<linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="39;-3322;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="2000;0;"/>
+<node COLOR="#252298" CREATED="1489546623162" HGAP="-24" ID="ID_1622574347" MODIFIED="1492294315650" TEXT="was wird gebraucht" VSHIFT="21">
+<linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="1932;0;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="help"/>
 <node COLOR="#f10a1a" CREATED="1489546678250" ID="ID_228157787" MODIFIED="1492168992958" TEXT="Vorsicht UI-Programmierung">

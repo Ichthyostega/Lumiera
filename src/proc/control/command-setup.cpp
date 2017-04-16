@@ -252,6 +252,24 @@ namespace control {
   }
   
   
+  /** fire and forget anonymous command instance.
+   * This is a simplified interface, allowing to create a clone instance
+   * from a global command definition (prototype), bind the arguments and
+   * pass this instance to the dispatcher in one shot. To integrate with the
+   * extended usage cycle, as a variation the given ID may indicate a previously
+   * opened instance, which will then be bound and dispatched likewise.
+   * @param instanceID global commandID or previously opened local instanceID
+   * @param argSeq command argument tuple packaged as Record<GenNode>, which
+   *               is the standard format [sent](BusTerm::act(GenNode)) for
+   *               command execution via [UI-bus](ui-bus.hpp)
+   */
+  void
+  CommandInstanceManager::bindAndDispatch (Symbol instanceID, Rec const& argSeq)
+  {
+    UNIMPLEMENTED ("fire and forget anonymous instance");
+  }
+  
+  
   bool
   CommandInstanceManager::contains (Symbol instanceID)  const
   {

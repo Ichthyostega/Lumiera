@@ -306,7 +306,6 @@ namespace test    {
           SessionCommand::facade().trigger (commandMsg.idi.getSym(), commandMsg.data.get<Rec>());
           
           __DELAY__
-          CHECK (Command::canUndo(COMMAND_I2));
           CHECK (testCommandState - prevState == Time(FSecs(3,2)));     // execution added 2500ms -2*500ms == 1.5sec
         }
       

@@ -60,6 +60,7 @@
 #include "lib/error.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-dispatch.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -73,6 +74,7 @@ namespace control {
   
   using std::string;
   using lib::Symbol;
+  using lib::diff::Rec;
   
   
   /**
@@ -107,6 +109,7 @@ namespace control {
       Symbol newInstance (Symbol prototypeID, string const& invocationID);
       Command getInstance(Symbol instanceID);
       void dispatch (Symbol instanceID);
+      void bindAndDispatch (Symbol instanceID, Rec const& argSeq);
       
       bool contains (Symbol instanceID)  const;
     };

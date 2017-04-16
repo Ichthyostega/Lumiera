@@ -91,6 +91,14 @@ namespace test {
                                                       return elm == ref;
                                                     });
           }
+        
+        void
+        invokeAll()
+          {
+            for (Command& cmd : queue_)
+              cmd();
+            clear();
+          }
       };
   }
   
@@ -108,9 +116,10 @@ namespace test {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
-          verify_standardUsage();
+          verify_simpleUsage();
+          verify_extendedUsage();
           verify_instanceIdentity();
           verify_duplicates();
           verify_lifecycle();
@@ -118,9 +127,49 @@ namespace test {
         }
       
       
-      /** @test demonstrate the command instance standard usage pattern.*/
+      /** @test demonstrate the transparent instance generation (»fire and forget«)
+       *        - when just specifying a global commandID and arguments, an anonymous
+       *          instance will be created on-the-fly, bound and dispatched, without
+       *          leaving any traces in the global or local registry
+       *        - when dispatching a global commandID, where the corresponding
+       *          prototype entry is already fully bound and ready for execution,
+       *          likewise an anonymous clone copy is created and dispatched.
+       *  @remarks these simplified use cases cover a large fraction of all usages,
+       *          and most notably, the internal registry embedded within the
+       *          CommandInstanceManager won't be used at all. */
       void
-      verify_standardUsage()
+      verify_simpleUsage()
+        {
+          Fixture fixture;
+          CommandInstanceManager iManager{fixture};
+          CHECK (not iManager.contains (COMMAND_PROTOTYPE));
+          
+          int r1{rand()%1000}, r2{rand()%2000};
+          command1::check_ = 0; // commands will add to this on invocation
+          
+          iManager.bindAndDispatch (COMMAND_PROTOTYPE, {23});
+          CHECK (not iManager.contains (COMMAND_PROTOTYPE));
+          
+          Command com{COMMAND_PROTOTYPE};
+          com.bind(r2);
+          CHECK (com.canExec());
+          
+          iManager.dispatch (COMMAND_PROTOTYPE);
+          CHECK (not iManager.contains (COMMAND_PROTOTYPE));
+          
+          // an anonymous clone instance was dispatched,
+          // thus re-binding the arguments won't interfere with execution
+          com.bind(-1);
+          
+          CHECK (command1::check_ == 0);       // nothing invoked yet
+          fixture.invokeAll();
+          CHECK (command1::check_ == r1 + r2); // both instances were invoked with their specific arguments
+        }
+      
+      
+      /** @test demonstrate the complete command instance usage pattern.*/
+      void
+      verify_extendedUsage()
         {
           Fixture fixture;
           CommandInstanceManager iManager{fixture};
@@ -137,7 +186,12 @@ namespace test {
           CHECK (fixture.contains (cmd));
           CHECK (not iManager.contains (instanceID));
           VERIFY_ERROR (LIFECYCLE, iManager.getInstance (instanceID));
+          
+          command1::check_ = 0;
+          fixture.invokeAll();
+          CHECK (command1::check_ == 42); // the dispatched instance was executed
         }
+      
       
       
       /** @test relation of command, instanceID and concrete instance
@@ -269,11 +323,9 @@ namespace test {
           VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i1"));
           VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i2"));
           
-          Command c11 = iManager.getInstance (i1);
-          c11.bind(-1);
-          iManager.dispatch (i1);
+          iManager.bindAndDispatch (i1, Rec{-1}); // bind and dispatch i1, thus i1 is ready for new cycle
 
-          iManager.newInstance (COMMAND_PROTOTYPE, "i1");
+          iManager.newInstance (COMMAND_PROTOTYPE, "i1"); // open new cycle for i1
           VERIFY_ERROR (DUPLICATE_COMMAND, iManager.newInstance (COMMAND_PROTOTYPE, "i2"));
           
           CHECK (iManager.getInstance (i1));
@@ -342,7 +394,11 @@ namespace test {
           CHECK (not fixture.contains(cmd));
           
           iManager.dispatch (COMMAND_PROTOTYPE);
-          CHECK (fixture.contains(cmd));
+          CHECK (not fixture.contains(cmd));  // because a clone copy was dispatched
+          
+          command1::check_ = 0;
+          fixture.invokeAll();
+          CHECK (command1::check_ == -12); // the clone copy was executed
         }
     };
   
