@@ -2569,7 +2569,7 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
-<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704152147" tags="spec draft GuiPattern GuiIntegration" changecount="16">
+<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704171623" tags="spec draft GuiPattern GuiIntegration" changecount="18">
 <pre>//how to access proc layer commands from the UI and to talk to the command framework//
 
 !Command access DSL
@@ -2619,7 +2619,7 @@ The above design for command access looked as a good idea -- at first sight. Yet
 
 Another point of contention is the duality between a command access framework and the UI-Bus. It turns out this is rooted in a fundamental conflict. The command system and by extension also a command access framework represents the classic »command and control« style API (to use a term coined by Martin Fowler). This kind of interface shines when used on top of a shared data or object model. Which is exactly the kind of architecture we shun, on a global level. It is fine when //confined within some subsystem,// yet creates a corroding tendency towards high coupling, when used on a global scale. For this reason, we introduced a message driven connection, and for the same reason, we should refrain from using the command and control structure as a second channel, bypassing the bus. //This is entirely an architectural decision// -- on the level of tracing actual calls, any message based connection looks overengineered, when compared to &quot;just invoke the f**cking function&quot;
 
-The ''conclusions'' drawn from this critique is to forego using the InvocationTrail, in favour of a plain command ID, and to simplify and mostly automate the command instance management (&amp;rarr; CommandCycle)
+The ''conclusions'' drawn from this critique is to forego using the InvocationTrail, in favour of a plain command ID, and to simplify and automate the command instance management (&amp;rarr; GuiCommandCycle)
 </pre>
 </div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201704140008" modified="201704140029" tags="design GuiPattern GuiIntegration discuss" changecount="8">
@@ -2674,7 +2674,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201704160028" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="60">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201704171730" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="61">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2714,11 +2714,11 @@ from these use cases, we can derive the //crucial activities for command handlin
 *;context bound
 *:invocation of a command is formed within a context, typically through a //interaction gesture.//
 *:most, if not all arguments of the command are picked up from the context, based on the current [[Spot]]
-*:* on setup of such an invocation context, the responsible part in the UI queries the {{{CmdAccess}}} for an InteractionState
+*:* on setup of such an invocation context, the responsible part in the UI queries the {{{CmdContext}}} for an InteractionState
 *:* the latter in turn retrieves a new command instance ID from the {{{CmdInstanceManager}}} in Proc
 *:* and the latter keeps a smart-ptr corresponding to this instance in its internal registration table
 *:* within the UI, the InteractionState instance responsible for this context tracks state changes and keeps track of all command instances bound to this context
-*:* ~UI-Elements use the services of {{{CmdAccess}}} to act as observer of state changes &amp;rarr; GuiCommandAccess
+*:* ~UI-Elements use the services of {{{CmdContext}}} to act as observer of state changes &amp;rarr; GuiCommandAccess
 *:* when a command is completely parametrised, it can be invoked. The managing {{{InteractionState}}} knows about this
 *:* on invocation, the ID of the instance and the fully resolved arguments are sent via UI-Bus to the {{{CmdInstanceManager}}}
 *:* which in turn removes the instance handle from its registration table and hands it over into the ProcDispatcher

@@ -1,5 +1,5 @@
 /*
-  CMD-ACCESSOR.hpp  -  interface to access command invocation services within the UI
+  CMD-CONTEXT.hpp  -  interface to access command context binding services within the UI
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,13 +21,19 @@
 */
 
 
-/** @file cmd-access.hpp
- ** Abstraction: access to command invocation for UI-Elements.
- ** The interact::CmdAccess front-end is used by any UI element about to invoke and dispatch
- ** commands into the session via ProcDispatcher. To invoke a command, typically it is necessary
- ** to prepare a _command instance_ and to pick up and bind _command arguments._ This can be achieved
+/** @file cmd-context.hpp
+ ** Abstraction: support for binding command invocation into an UI context.
+ ** The interact::CmdContext front-end is used when commands need to be bound to a whole context
+ ** of UI elements rather than to a specific widget -- especially for picking up command arguments
+ ** from interaction state found within that context. To invoke a command, typically it is necessary
+ ** to prepare a _command instance_ and to pick up and bind _command arguments._ In most cases, this
+ ** can be done directly, using a fixed command-ID and locally known argument values. But in the
+ ** aforementioned special situation, we have to deal with ongoing user interactions, which might
+ ** span several widgets, where some interaction events just happen to make invocation of a specific
+ ** command viable. The prototypical example is when some element is dragged around, and, depending
+ ** on the vicinity, might cause quite different actions when dropped. Such behaviour can be achieved
  ** with the help of an intermediary, known as ["interaction state manager"](\ref InteractionState).
- ** Thus, the command accessor allows to discover a specific InteractionState instance, which
+ ** The command context accessor allows to discover a specific InteractionState instance, which
  ** - is responsible for the specific command to be invoked
  ** - can handle context information related to a specific _control system_ (e.g mouse, keyboard,
  **   hardware controller, pen)
@@ -37,14 +43,14 @@
  ** 
  ** @todo as of 3/2017 this is a early design draft and WIP-WIP-WIP
  ** 
- ** @see TODO___cmd-access-test.cpp
+ ** @see CmdContext_test
  ** @see ////TODO_test usage example
  ** 
  */
 
 
-#ifndef GUI_INTERACT_CMD_ACCESS_H
-#define GUI_INTERACT_CMD_ACCESS_H
+#ifndef GUI_INTERACT_CMD_CONTEXT_H
+#define GUI_INTERACT_CMD_CONTEXT_H
 
 
 #include "lib/error.hpp"
@@ -70,18 +76,18 @@ namespace interact {
    * Abstract foundation of UI state tracking components.
    * @todo write type comment...
    */
-  class CmdAccess
+  class CmdContext
     : boost::noncopyable
     {
       
     public:
-     ~CmdAccess();  ///< @todo do we need a VTable / virtual dtor?
+     ~CmdContext();  ///< @todo do we need a VTable / virtual dtor?
       
       /* === access front-end === */
       static Symbol to (Symbol cmdID, string ctxID);
       
-      friend CmdAccess&
-      cmdAccess (Symbol instanceID)
+      friend CmdContext&
+      cmdContext (Symbol instanceID)
       {
         UNIMPLEMENTED ("cmd access front-end");
       }
@@ -92,4 +98,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_CMD_ACCESS_H*/
+#endif /*GUI_INTERACT_CMD_CONTEXT_H*/

@@ -47,7 +47,7 @@
  ** @see command.hpp
  ** @see command-def.hpp
  ** @see command-setup.hpp
- ** @see cmd-access.hpp
+ ** @see session-command-service.hpp
  ** @see CommandInstanceManager_test
  **
  */

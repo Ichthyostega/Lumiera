@@ -1,5 +1,5 @@
 /*
-  CmdAccess(Test)  -  verify access to command invocation state
+  CmdContext(Test)  -  verify access to command invocation state
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,14 +20,14 @@
 
 * *****************************************************/
 
-/** @file cmd-access-test.cpp
- ** unit test \ref CmdAccess_test
+/** @file cmd-context-test.cpp
+ ** unit test \ref CmdContext_test
  */
 
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
-#include "gui/interact/cmd-access.hpp"
+#include "gui/interact/cmd-context.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
@@ -49,26 +49,27 @@ namespace test {
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
   
-  /**************************************************************************//**
-   * @test verify the front-end to access commands, command argument binding
+  /******************************************************************************//**
+   * @test verify the front-end for context bound commands, command argument binding
    *       and invocation state from within the UI structures.
    * 
    * @see CmdAccess
    * @see CommandSetup_test
    * @see SessionCommandFunction_test
    */
-  class CmdAccess_test : public Test
+  class CmdContext_test : public Test
     {
       
       virtual void
       run (Arg)
         {
+          UNIMPLEMENTED ("context bound commands");
         }
     };
   
   
   /** Register this test class... */
-  LAUNCHER (CmdAccess_test, "unit gui");
+  LAUNCHER (CmdContext_test, "unit gui");
   
   
 }}} // namespace gui::interact::test

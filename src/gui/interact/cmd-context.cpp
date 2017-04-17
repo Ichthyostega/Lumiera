@@ -1,5 +1,5 @@
 /*
-  CmdAccessor  -  interface to access command invocation services within the UI
+  CmdContext  -  interface to access command context binding services within the UI
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file cmd-access.cpp
- ** Implementation details of command invocation services for the UI.
+/** @file cmd-context.cpp
+ ** Implementation details of support for context-bound commands.
  ** 
  ** @see TODO___cmd-access-test.cpp
  ** 
@@ -32,7 +32,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/interact/cmd-access.hpp"
+#include "gui/interact/cmd-context.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -53,7 +53,7 @@ namespace interact {
   
   
   
-  CmdAccess::~CmdAccess() { }  // Emit dtors of embedded objects here...
+  CmdContext::~CmdContext() { }  // Emit dtors of embedded objects here...
   
   
   
