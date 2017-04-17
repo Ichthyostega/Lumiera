@@ -1,5 +1,5 @@
 /*
-  SessionCmd  -  actual proc command scripts for session-global actions
+  SequenceCmd  -  actual proc command scripts for actions operating within a sequence
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,9 +21,10 @@
 * *****************************************************/
 
 
-/** @file session-cmd.cpp
- ** Actual definition of Proc-Layer command scripts for session-global actions.
- ** @todo WIP 3/2017 early draft
+/** @file sequence-cmd.cpp
+ ** Actual definition of Proc-Layer command scripts for actions within a sequence.
+ ** Especially all those actions working within the track tree go into this file
+ ** @todo WIP 4/2017 early draft
  ** 
  ** @see cmd.hpp
  ** @see command.hpp
@@ -36,7 +37,7 @@
 
 #include "proc/cmd.hpp"
 #include "proc/control/command-def.hpp"
-#include "proc/mobject/session.hpp"
+//#include "proc/mobject/session.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/format-string.hpp"
@@ -53,7 +54,7 @@ namespace proc {
 namespace cmd {
   namespace error = lumiera::error;
   
-  using mobject::Session;
+  //using mobject::Session;
   
   namespace { // implementation helper...
   }//(End) implementation helper
@@ -61,44 +62,24 @@ namespace cmd {
   
   
   
-  /** store a snapshot of current session actions and state and UI state.
-   * @param snapshotID a marker to tag the snapshot
+  /** add a new track within the fork, anchored at the given context.
+   * @param context an object to use as anchor to relate the new track container to
+   * @param newID identity of the new track to create
    */
-  COMMAND_DEFINITION (session_saveSnapshot)
-    {
-      def.operation ([](string snapshotID)
-                        {
-                          Session::current.save (snapshotID);
-                        })
-         .captureUndo ([](string snapshotID) -> string
-                        {
-                          return snapshotID;
-                        })
-         .undoOperation ([](string, string oldSnapshot)
-                        {
-                          UNIMPLEMENTED ("how to remove a snapshot from session history");
-                        });
-    };
-  
-  
-  /** add a new sequence, anchored at the given context.
-   * @param context an object to use as anchor to relate the new sequence to
-   * @param newID identity of the new sequence to create
-   */
-  COMMAND_DEFINITION (session_newSequence)
+  COMMAND_DEFINITION (sequence_newTrack)
     {
       def.operation ([](LuidH context, LuidH newID)
                         {
-                          UNIMPLEMENTED ("add a new Sequence into the given context scope within the Session");
+                          UNIMPLEMENTED ("add a new Track into the given context scope within the Session");
                         })
-         .captureUndo ([](LuidH, LuidH addedSeq) -> LuidH
+         .captureUndo ([](LuidH, LuidH addedTrack) -> LuidH
                         {
-                          return addedSeq;
+                          return addedTrack;
                         })
-         .undoOperation ([](LuidH context, LuidH addedSeq, LuidH newID)
+         .undoOperation ([](LuidH context, LuidH addedTrack, LuidH newID)
                         {
-                          REQUIRE (addedSeq == newID);
-                          UNIMPLEMENTED ("how to remove a sub-sequence from the given context");
+                          REQUIRE (addedTrack == newID);
+                          UNIMPLEMENTED ("how to remove a sub-track from the given context");
                         });
     };
   

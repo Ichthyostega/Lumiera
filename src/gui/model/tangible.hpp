@@ -168,6 +168,7 @@ namespace model {
     {
     public:
       using ID = ctrl::BusTerm::ID;
+      using LuidH = lib::hash::LuidH;
     protected:
       using Rec     = lib::diff::Rec;
       using GenNode = lib::diff::GenNode;
@@ -182,7 +183,8 @@ namespace model {
     public:
       virtual ~Tangible();  ///< this is an interface
       
-      operator ID()  const { return uiBus_.getID();}
+      operator ID()    const { return uiBus_.getID();}
+      operator LuidH() const { return uiBus_.getID().getHash(); }
       
       void reset();
       void clearMsg();

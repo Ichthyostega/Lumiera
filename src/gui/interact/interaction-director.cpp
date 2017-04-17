@@ -38,6 +38,8 @@
 #include "gui/setting/asset-controller.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "proc/mobject/session/root.hpp"
+#include "proc/asset/sequence.hpp"                ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
+#include "proc/mobject/session/fork.hpp"          ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
 #include "proc/cmd.hpp"
 #include "backend/real-clock.hpp"
 #include "lib/diff/tree-mutator.hpp"
@@ -51,6 +53,8 @@
 //using util::isnil;
 //using std::list;
 //using std::shared_ptr;
+using lib::idi::EntryID;
+using lib::hash::LuidH;
 using lib::diff::TreeMutator;
 using util::toString;
 
@@ -168,11 +172,15 @@ namespace interact {
    * and a new timeline to hold that sequence. And finally, this new timeline is opened for editing.
    * This action invokes a command into the session, which in turn is responsible for figuring out
    * all the contextual details sensibly.
+   * @todo 4/2017 using the session-root (=this) as anchor for the moment,
+   *       but should actually figure out the current context dynamically...   //////////////////////////////TICKET #1082 : actually access the interaction state to get "current scope"
    */
   void
   InteractionDirector::newSequence()
   {
-    UNIMPLEMENTED ("create new sequence and expose it as timeline");
+    LuidH anchor{*this};                    /////////////////////////////////////////////////////////////////TICKET #1082 : actually access the interaction state to get "current scope"
+    LuidH newSeqID{EntryID<proc::asset::Sequence>().getHash()};  ////////////////////////////////////////////TICKET #1096 : a better Idea what to send over the wire?
+    invoke (cmd::session_newSequence, anchor, newSeqID);
   }
   
   
@@ -188,11 +196,15 @@ namespace interact {
    * @todo as of 3/2017 this is an initial draft: It is not clear yet, if this lookup of context
    *       will always be treated implicitly, or if it is better to have a public _content discovery operation_
    *       on InteractionDirector and pass the current element explicitly as argument
+   * @todo 4/2017 using the session-root (=this) as anchor for the moment,
+   *       but should actually figure out the current context dynamically...   //////////////////////////////TICKET #1082 : actually access the interaction state to get "current scope"
    */
   void
   InteractionDirector::newTrack()
   {
-    UNIMPLEMENTED ("create new track and attach it sensibly at the current scope");
+    LuidH anchor{*this};                    /////////////////////////////////////////////////////////////////TICKET #1082 : actually access the interaction state to get "current scope"
+    LuidH newTrackID{EntryID<proc::mobject::session::Fork>().getHash()};  ///////////////////////////////////TICKET #1096 : a better Idea what to send over the wire?
+    invoke (cmd::sequence_newTrack, anchor, newTrackID);
   }
   
   

@@ -62,11 +62,13 @@ namespace cmd {
   /* ========= global actions ========= */
   
   extern CommandSetup session_saveSnapshot;
+  extern CommandSetup session_newSequence;
   
   
   
-  /** */
+  /* ========= sequence actions ======= */
   
+  extern CommandSetup sequence_newTrack;
   
   
   

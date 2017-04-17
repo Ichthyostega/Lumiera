@@ -1564,8 +1564,7 @@
       und die Argumente von links her zu schlie&#223;en (currying)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -1606,8 +1605,7 @@
       wenn in der UI ein InvocationTrail angelegt wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1482466104359" ID="ID_235553653" MODIFIED="1482466115902" TEXT="speichert aber eigentlich nur die Cmd-ID">
 <icon BUILTIN="idea"/>
@@ -2074,8 +2072,7 @@
       InvocationTrail ist tot
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488566247742" ID="ID_254774965" MODIFIED="1488566261845" TEXT="mu&#xdf; doch die Architktur kl&#xe4;ren">
@@ -2120,13 +2117,17 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1489461838228" ID="ID_283502486" MODIFIED="1489461843087" TEXT="im InteractionDirector"/>
+<node CREATED="1489461838228" ID="ID_283502486" MODIFIED="1492460899707" TEXT="im InteractionDirector">
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1489461843747" ID="ID_1499714490" MODIFIED="1489461922546" TEXT="die Command-ID beziehen">
 <icon BUILTIN="forward"/>
-<node CREATED="1489461856042" ID="ID_1097689316" MODIFIED="1489461862061" TEXT="bedingt Command-ID"/>
-<node CREATED="1489461862937" ID="ID_1649764088" MODIFIED="1489461871843" TEXT="bedingt Command-Definition"/>
-<node CREATED="1489461872367" ID="ID_1191906862" MODIFIED="1489461882010" TEXT="bedingt CmdAccessor"/>
-<node CREATED="1489461905083" ID="ID_1232900605" MODIFIED="1489461911390" TEXT="bedingt Service-Zugang"/>
+<node CREATED="1489461856042" ID="ID_1097689316" MODIFIED="1492460871258" TEXT="bedingt Command-ID">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1489461862937" ID="ID_1649764088" MODIFIED="1492460873579" TEXT="bedingt Command-Definition">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1489544225984" ID="ID_1436775081" MODIFIED="1489544240309" TEXT="Triggern">
 <icon BUILTIN="forward"/>
@@ -2188,6 +2189,39 @@
 </node>
 </node>
 </node>
+<node CREATED="1492461164005" ID="ID_301986256" MODIFIED="1492461167913" TEXT="Argumente">
+<node CREATED="1492461170141" ID="ID_740147771" MODIFIED="1492461177863" TEXT="der Anker"/>
+<node CREATED="1492461179404" ID="ID_1843144262" MODIFIED="1492461184998" TEXT="die neue Sequenz">
+<node CREATED="1492461186562" ID="ID_357158955" MODIFIED="1492461257245" TEXT="ID mu&#xdf; gesendet werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      damit UNDO funktionieren kann,
+    </p>
+    <p>
+      m&#252;ssen wir schon beim capture wissen,
+    </p>
+    <p>
+      welches Objekt (ID) hinzugef&#252;gt werden wird.
+    </p>
+    <p>
+      Denn sonst m&#252;&#223;ten wir uns den gegenw&#228;rtigen Inhalt speichern
+    </p>
+    <p>
+      und das w&#228;re unsinnig.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492461260360" ID="ID_118202238" MODIFIED="1492461276776" TEXT="EntryID">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489461946997" HGAP="-10" ID="ID_1526466868" MODIFIED="1489462026528" TEXT="direkt von den Lambdas aus delegieren" VSHIFT="7">
@@ -2220,6 +2254,16 @@
 <arrowlink COLOR="#606d94" DESTINATION="ID_346158251" ENDARROW="Default" ENDINCLINATION="842;21;" ID="Arrow_ID_726918944" STARTARROW="None" STARTINCLINATION="1012;0;"/>
 <icon BUILTIN="yes"/>
 </node>
+<node CREATED="1492461289101" ID="ID_1507239589" MODIFIED="1492463546644" TEXT="Frage: Objekt-Referenzen">
+<arrowlink COLOR="#8e2a4d" DESTINATION="ID_1909730752" ENDARROW="Default" ENDINCLINATION="190;-96;" ID="Arrow_ID_1543429248" STARTARROW="None" STARTINCLINATION="-103;109;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1492461304231" ID="ID_1680959339" MODIFIED="1492461306350" TEXT="LuidH"/>
+<node CREATED="1492461306898" ID="ID_94770054" MODIFIED="1492461308654" TEXT="EntryID"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492463479663" ID="ID_1909730752" MODIFIED="1492463513912" TEXT="#1096 passing object IDs">
+<linktarget COLOR="#8e2a4d" DESTINATION="ID_1909730752" ENDARROW="Default" ENDINCLINATION="190;-96;" ID="Arrow_ID_1543429248" SOURCE="ID_1507239589" STARTARROW="None" STARTINCLINATION="-103;109;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1488672334405" TEXT="globale Aktionen">
 <arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="870;255;"/>
@@ -10196,8 +10240,7 @@
       Idee: <b>context-bound</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#81759f" DESTINATION="ID_1679641405" ENDARROW="Default" ENDINCLINATION="604;-108;" ID="Arrow_ID_1210299906" STARTARROW="None" STARTINCLINATION="702;0;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -10325,8 +10368,7 @@
       das reicht f&#252;r die erste Integrationsrunde v&#246;llig aus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -10342,8 +10384,7 @@
       Instanz-Management ist automatisch
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492443693582" ID="ID_1398931015" MODIFIED="1492443713695" TEXT="Argumente direkt in diff::Record einpacken"/>
 <node CREATED="1492443715587" ID="ID_1695168160" MODIFIED="1492443719574" TEXT="dieser wird durchgereicht"/>
@@ -11413,8 +11454,7 @@
       aufruf direkt mit Command-ID -&gt; erzeugt automatisch eine Klon-Kopie
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1488936129180" ID="ID_62638556" MODIFIED="1488936137127" TEXT="hand-over">
@@ -11493,8 +11533,7 @@
       automatisch die Kontext-Accessor-Ausdr&#252;cke ausgewertet werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1488940519518" ID="ID_1875791797" MODIFIED="1488940533992" TEXT="bei n&#xe4;chster Anfrage wird CmdInstanceManager daher neue Instanz anlegen"/>
@@ -11812,8 +11851,7 @@
       geh&#246;rt nicht zum Thema &quot;Instanz-Management&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491499005954" ID="ID_1944400975" MODIFIED="1491618830202" TEXT="aber im Hinblick auf den Lebenszyklus">
 <richcontent TYPE="NOTE"><html>
@@ -11831,8 +11869,7 @@
       schon &quot;in der Mache ist&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1491008124550" ID="ID_249252999" MODIFIED="1491618833169" TEXT="Duplikate abdecken">
@@ -11880,8 +11917,7 @@
       neues Command-Objekt kopiert wird. Was allerdings den RefCount erh&#246;ht.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491753132377" ID="ID_1441469124" MODIFIED="1491753156451" TEXT="m&#xfc;&#xdf;te daf&#xfc;r direkt auf die CommandRegistry zugreifen">
 <icon BUILTIN="idea"/>
@@ -11903,8 +11939,7 @@
       aber sich mit einem Refcount verr&#252;ckt machen.....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
@@ -11932,8 +11967,7 @@
       mithin in der GenNode::ID
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491659382161" ID="ID_948768193" MODIFIED="1491702871022" TEXT="Performance: maybeGet">
 <richcontent TYPE="NOTE"><html>
@@ -11957,8 +11991,7 @@
       in der globalen Registry
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1491702872058" ID="ID_487194706" MODIFIED="1491702875613" TEXT="keine gute Idee"/>
@@ -12010,8 +12043,7 @@
       und die Form der ID-Dokoration zur Konvention machen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491693197435" ID="ID_1151359036" MODIFIED="1491693375452" TEXT="InteractionState ist kein Tangible">
 <richcontent TYPE="NOTE"><html>
@@ -12038,8 +12070,7 @@
       Das wollte ich <i>genau nicht</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491693246284" ID="ID_553376017" MODIFIED="1491693514745">
 <richcontent TYPE="NODE"><html>
@@ -12051,8 +12082,7 @@
       Tangible sollte InteractionState <i>verwenden</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12071,8 +12101,7 @@
       da es letztlich nur darum geht ein <i>ohnehin &#246;ffentliches</i>&#160; Interface aufzurufen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -12107,8 +12136,7 @@
       und unsinnigerweise aufwendig
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492293433222" ID="ID_1665333497" MODIFIED="1492293442272" TEXT="Registry k&#xf6;nnte l&#xe4;ngerfristig wegfallen"/>
 </node>
@@ -12124,8 +12152,7 @@
       Instanz <i>&#246;ffnen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492293553405" ID="ID_1787045274" MODIFIED="1492293557912" TEXT="Instanz herausgeben"/>
 <node CREATED="1492293563028" ID="ID_713648189" MODIFIED="1492293583853" TEXT="Binden und Feuern"/>
@@ -12141,8 +12168,7 @@
       CommandID <i>und</i>&#160;Argumente gegeben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492294031035" ID="ID_521535374" MODIFIED="1492294048357" TEXT="anonyme Instanz erzeugen, aber nicht speichern"/>
 <node CREATED="1492294049089" ID="ID_631979849" MODIFIED="1492294052148" TEXT="Argumente binden"/>
@@ -12169,8 +12195,7 @@
       SessionCommandService::<b>trigger</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1492295091826" ID="ID_96156600" MODIFIED="1492295093557" TEXT="bisher">
 <node CREATED="1492295094337" ID="ID_420834348" MODIFIED="1492295103364" TEXT="Instanz nur wenn vorher angelegt"/>
@@ -12194,8 +12219,7 @@
       SessionCommandService::<b>bindArg</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 <node CREATED="1492295834844" ID="ID_1373400691" MODIFIED="1492295839063" TEXT="Semantik nicht ge&#xe4;ndert"/>
 </node>
@@ -12209,8 +12233,7 @@
       SessionCommandService::<b>invoke</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1492295834844" ID="ID_1465048391" MODIFIED="1492295855364" TEXT="bisher">
 <node CREATED="1492295891844" ID="ID_219295848" MODIFIED="1492295983675" TEXT="offene Instanz wird zum Dispatcher verschoben"/>
@@ -12244,8 +12267,7 @@
       managed diese Komponente <i>nicht</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492095612678" ID="ID_836842226" MODIFIED="1492095621089" TEXT="open/closed state"/>
 <node CREATED="1492095627868" ID="ID_463853539" MODIFIED="1492095634455" TEXT="Exception when closed"/>
@@ -12277,8 +12299,7 @@
       aufwendiges <i>Nebenthema</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -12312,8 +12333,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1492095437190" ID="ID_491978759" MODIFIED="1492095481564" TEXT="Wunsch: access(ID).&lt;operation&gt;(args)"/>
 <node CREATED="1492096317382" ID="ID_554292510" MODIFIED="1492096319497" TEXT="m&#xf6;glich">
@@ -12352,8 +12372,7 @@
       issueCommand (cmdAccess(ADD_CLIP).execute());
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492098948782" ID="ID_176273356" MODIFIED="1492098957764" TEXT="einigerma&#xdf;en komplex">
 <icon BUILTIN="smiley-neutral"/>
@@ -12395,8 +12414,7 @@
       und mit einfachen, direkt gegebenen Objekten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492099579824" ID="ID_727878406" MODIFIED="1492099585163" TEXT="CommandDef-DSL erweitern">
 <node CREATED="1492099587359" ID="ID_453414313" MODIFIED="1492099599513" TEXT="mu&#xdf; Argument-Rollen auszeichnen k&#xf6;nnen"/>
@@ -12420,6 +12438,9 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492463479663" ID="ID_1449859033" MODIFIED="1492463546644" TEXT="#1096 passing object IDs">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node CREATED="1489777406155" HGAP="74" ID="ID_1319269544" MODIFIED="1489777541271" TEXT="Grundstrukturen" VSHIFT="25">
@@ -12538,8 +12559,7 @@
       Insofern l&#246;st sich dieser Knoten langsam
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1492391213458" ID="ID_1535150206" MODIFIED="1492391288793" TEXT="Differenzierung">
@@ -12561,8 +12581,7 @@
       bleibt es bei der stringenten Fehlerbehandlung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -12588,8 +12607,7 @@
       Oder man k&#246;nnte sie anonym verarbeiten, weil Command selber ein smart-Handle ist.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491494889781" ID="ID_737410509" MODIFIED="1491495069450" TEXT="Analyse">
 <icon BUILTIN="idea"/>
@@ -12625,8 +12643,7 @@
       CommandID.KontextID == Instanz
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1492168186700" FOLDED="true" ID="ID_501823967" MODIFIED="1492443107671" TEXT="InvocationTrail">
 <icon BUILTIN="button_cancel"/>
@@ -12721,8 +12738,7 @@
       Nebenl&#228;ufigkeit ist kein Argument (da das UI single-threaded l&#228;uft)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1492174006016" ID="ID_1942935948" MODIFIED="1492174016504" TEXT="wozu getrennter Parametrisierungs-Call">
@@ -12749,8 +12765,7 @@
       aber: Parametrisierung <i>k&#246;nnte</i>&#160;partiell sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1492174268716" ID="ID_995073060" MODIFIED="1492174273527" TEXT="not yet implemented"/>
 <node CREATED="1492174274067" ID="ID_1334398441" MODIFIED="1492174279407" TEXT="YAGNI"/>
@@ -12800,8 +12815,7 @@
       sie wird nicht zum <i>Parameter-Sammeln</i>&#160;verwendet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492269433415" ID="ID_55077056" MODIFIED="1492269446161" TEXT="es w&#xfc;rde gen&#xfc;gen, sie beim Einf&#xfc;gen transparent zu erzeugen"/>
 <node CREATED="1492269567485" ID="ID_661748666" MODIFIED="1492269585470" TEXT="Ausnahme: context-bound">
@@ -12827,8 +12841,7 @@
       oder ein Command an den Dispatcher &#252;bergeben...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1492270021119" ID="ID_1461150467" MODIFIED="1492270028429" TEXT="praktikabel?">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -12892,8 +12905,7 @@
       und Messaging
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -12917,8 +12929,7 @@
       Den kann man aber mit geeigneter Syntax auch direkt angeben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1492281124705" ID="ID_256590492" MODIFIED="1492281214808" TEXT="context-bound: different structure needed">
 <richcontent TYPE="NOTE"><html>
@@ -12933,8 +12944,7 @@
       allein <i>daf&#252;r</i>&#160;gen&#252;gt eine GenNode
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -13088,8 +13098,7 @@
       Beispiel: Men&#252;-Eintrag &quot;create duplicate&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1489547015360" TEXT="Callback installieren"/>
 <node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1489547028606" TEXT="Anfrage: ist dies aktivierbar?"/>
 </node>
@@ -13171,8 +13180,7 @@
       wieder komplett zur&#252;ckgebaut habe
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1489719267537" ID="ID_963145148" MODIFIED="1489719291065" TEXT="was ist bereits vom Command her definiert"/>
@@ -13420,8 +13428,7 @@
       wenn wir context-bound -Commands verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -13441,8 +13448,7 @@
       deshalb ist auch der UI-Bus nicht <i>das </i>Universal-Interface schlechthin
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -13453,6 +13459,24 @@
 <node CREATED="1492444220086" ID="ID_1379993947" MODIFIED="1492444226369" TEXT="rein die Command-ID gen&#xfc;gt"/>
 <node CREATED="1492444235604" ID="ID_821909125" MODIFIED="1492444242935" TEXT="diese ist per proc/cmd.hpp festgelegt"/>
 <node CREATED="1492444226909" ID="ID_1827091909" MODIFIED="1492444231680" TEXT="Instanzen werden automatisch erzeugt"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492461052551" ID="ID_1120178298" MODIFIED="1492461061655" TEXT="Objekt-IDs">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1492461062788" ID="ID_685772910" MODIFIED="1492461075325" TEXT="was wird verwendet, um auf Objekte zu verweisen"/>
+<node CREATED="1492461075842" ID="ID_1775175141" MODIFIED="1492461081172" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1492461081978" ID="ID_1041621476" MODIFIED="1492461083733" TEXT="LuidH">
+<node CREATED="1492461102167" ID="ID_541671903" MODIFIED="1492461108473" TEXT="schon unterst&#xfc;tzt"/>
+</node>
+<node CREATED="1492461084232" ID="ID_1450157918" MODIFIED="1492461140885" TEXT="EntryID">
+<icon BUILTIN="pencil"/>
+<node CREATED="1492461110341" ID="ID_1884085083" MODIFIED="1492461120786" TEXT="m&#xfc;&#xdf;te in GenNode transportiert werden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1492461121691" ID="ID_1456848003" MODIFIED="1492461131233" TEXT="GenNode-Datentypen erweitern">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
