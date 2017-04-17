@@ -38,7 +38,10 @@
 #include "gui/setting/asset-controller.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "proc/mobject/session/root.hpp"
+#include "proc/cmd.hpp"
+#include "backend/real-clock.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/format-obj.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/util.hpp"
 
@@ -49,12 +52,14 @@
 //using std::list;
 //using std::shared_ptr;
 using lib::diff::TreeMutator;
+using util::toString;
 
 
 namespace gui {
 namespace interact {
   
   namespace session = proc::mobject::session;
+  namespace cmd = proc::cmd;
   
   using ctrl::GlobalCtx;
   using ctrl::UiState;
@@ -118,7 +123,8 @@ namespace interact {
   void
   InteractionDirector::saveSnapshot()
   {
-    UNIMPLEMENTED ("issue save snapshot command towards current session");
+    string snapshotID{"snap-" + toString(backend::RealClock::now())};
+    invoke (cmd::session_saveSnapshot, snapshotID);
   }
   
   

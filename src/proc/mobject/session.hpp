@@ -189,9 +189,10 @@ namespace mobject {
 
         /** create a complete, serialised representation
          *  of the current session config and contents.
-         *  @todo how to serialise, parameters, return value?
+         * @todo 2017 how actually to serialise, parameters, return value?
+         * @param snapshotID marker to tag the snapshot, like e.g. a timestamp
          */
-        virtual void save ()  =0;
+        virtual void save (string snapshotID)  =0;
         
         /** access to the current session object instance.
          *  This is the sole access path available for clients.

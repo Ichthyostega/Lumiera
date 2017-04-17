@@ -71,13 +71,13 @@ namespace session {
      ~SessManagerImpl() ;
       
       /* ==== SessManager API ==== */
-      virtual void clear()  override;
-      virtual void close()  override;
-      virtual void reset()  override;
-      virtual void load ()  override;
-      virtual void save ()  override;
+      virtual void clear()        override;
+      virtual void close()        override;
+      virtual void reset()        override;
+      virtual void load ()        override;
+      virtual void save (string)  override;
       
-      virtual bool isUp ()  override;
+      virtual bool isUp ()        override;
       
       
     public:

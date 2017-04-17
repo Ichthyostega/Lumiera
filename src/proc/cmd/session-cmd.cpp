@@ -36,6 +36,7 @@
 
 #include "proc/cmd.hpp"
 #include "proc/control/command-def.hpp"
+#include "proc/mobject/session.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/format-string.hpp"
 
@@ -50,6 +51,7 @@ namespace proc {
 namespace cmd {
   namespace error = lumiera::error;
   
+  using mobject::Session;
   
   namespace { // implementation helper...
   }//(End) implementation helper
@@ -57,7 +59,24 @@ namespace cmd {
   
   
   
-  /** storage for.... */
+  /** store a snapshot of current session actions and state and UI state.
+   * @param snapshotID a marker to tag the snapshot
+   */
+  COMMAND_DEFINITION (session_saveSnapshot)
+    {
+      def.operation ([](string snapshotID)
+                        {
+                          Session::current.save (snapshotID);
+                        })
+         .captureUndo ([](string snapshotID) -> string
+                        {
+                          return snapshotID;
+                        })
+         .undoOperation ([](string, string oldSnapshot)
+                        {
+                          UNIMPLEMENTED ("how to remove a snapshot from session history");
+                        });
+    };
   
   
   

@@ -295,7 +295,7 @@ namespace session {
    *  to several files (master file and edl files)
    */
   void
-  SessManagerImpl::save()
+  SessManagerImpl::save (string stnapshotID)
   {
     UNIMPLEMENTED ("save session (serialised)");
     /////////////////////////////////////////////////TODO: need lock?

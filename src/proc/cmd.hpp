@@ -59,11 +59,9 @@ namespace cmd {
   //using std::shared_ptr;
   
   
+  /* ========= global actions ========= */
   
-  /**
-   * @todo wtf
-   */
-  
+  extern CommandSetup session_saveSnapshot;
   
   
   
