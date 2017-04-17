@@ -1529,7 +1529,7 @@ By design, commands are single-serving value objects; executing an operation rep
 &amp;rarr; more details regarding [[command implementation|CommandImpl]]
 </pre>
 </div>
-<div title="CommandImpl" modifier="Ichthyostega" created="200909291424" modified="201703171927" tags="spec impl" changecount="2">
+<div title="CommandImpl" modifier="Ichthyostega" created="200909291424" modified="201704170059" tags="spec impl" changecount="4">
 <pre>Commands are separated in a handle (the {{{control::Command}}}-object), to be used by the client code, and an implementation level, which is managed transparently behind the stages. Client code is assumed to build a CommandDefinition at some point, and from then on to access the command ''by ID'', yielding the command handle.
 Binding of arguments, invocation and UNDO all are accessible through this frontend.
 
@@ -1542,6 +1542,12 @@ To support this handling scheme, some infrastructure is in place:
 ** a closure, implemented through an argument holder
 ** an undo state capturing mechanism, based on a capturing function provided on definition
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
+;~Command-ID
+:this ID is the primary access key for stored command definitions within the registry. When a command is //activated,// the command implementation record is also tagged with that ID; this is done for diagnostic purposes, e.g. to find out what commands in the command log of the session can be undone.
+;prototypes
+:while, technically, any command record in the registry can be outfitted with arguments and executed right away, the standard usage pattern is to treat the //globally known, named entries// in this registry as prototype objects, from which the actual //instances for execution// are created by cloning. This is done to circumvent concurrency problems with argument binding.
+;named and anonymous instances
+:any command entry in the registry can be clone-copied. There are two flavours of this functionality: either, the new entry can be stored under a different name in the global registry, or alternatively just an unnamed copy can be created and returned. Since such an anonymous copy is not tracked in the registry, its lifetime is controlled solely by the ref-count of the handle returned from this {{{Command::newInstance()}}} call. Please note that the {{{CommandImpl}}} record managed by this handle still bears a copy of the original ~Command-ID, which helps with diagnostics when invoking such an instance. But the presence of this ID in the implementation record does not mean the command is known to the registry; to find out about that, use the {{{Command::isAnonymous()}}} predicate.
 
 !Definition and usage
 In addition to the technical specification regarding the command, memento and undo functors, some additional conventions are established

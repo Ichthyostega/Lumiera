@@ -89,20 +89,20 @@ END
 
 
 TEST "Command argument binding" CommandBinding_test <<END
-out: Command\("test.command3.2"\) \{exec\}
+out-lit: Command("test.command3.2") {exec}
 return: 0
 END
 
 
 TEST "Command usage aspects I"  CommandUse1_test <<END
-out: Command\("test.command1.1"\) \{undo\}
-out: Command\("test.command1.2"\) \{undo\}
-out: Command\("test.command1.3"\) \{undo\}
-out: Command\("test.command1.4"\) \{undo\}
-out: Command\("_anonymous_"\) NIL
-out: Command\("test.command1.5"\) \{def\}
-out: Command\("test.command1.5"\) \{exec\}
-out: Command\("test.command1.5"\) \{undo\}
+out-lit: Command("test.command1.1") {undo}
+out-lit: Command("test.command1.2") {def}
+out-lit: Command("test.command1.3") {undo}
+out-lit: Command("test.command1.4") {def}
+out-lit: Command("↯") NIL
+out-lit: Command("test.command1.5") {def}
+out-lit: Command("test.command1.5") {exec}
+out-lit: Command("test.command1.5") {undo}
 return: 0
 END
 

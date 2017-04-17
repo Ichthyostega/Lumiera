@@ -188,7 +188,10 @@ namespace control {
     
     _Handle::activate (move (implFrame));
     if (cmdID)
-      CommandRegistry::instance().track (cmdID, *this);
+      {
+        CommandRegistry::instance().track (cmdID, *this);
+        impl().cmdID = cmdID;
+      }
     
     TRACE (command, "%s defined OK", cStr(*this));
   }
@@ -386,17 +389,11 @@ namespace control {
   }
   
   
-  namespace {
-    const Symbol ANONYMOUS_CMD_SYMBOL("_anonymous_");
-  }
-  
   Symbol
-  Command::getID()  const
+  Command::getID()  const noexcept
   {
-    ////////////////////////////////////////////////////////////////////TODO do we need no-throw guarantee here?
-    Symbol id = CommandRegistry::instance().findDefinition (*this);
-    return id? id
-             : ANONYMOUS_CMD_SYMBOL;
+    return isValid()? impl().cmdID
+                    : Symbol::FAILURE;
   }
   
   

@@ -31,7 +31,8 @@
  **   to the TypedAllocationManager
  ** - maintaining an index to find pre-built command definitions (prototypes)
  ** 
- ** \par Services during command lifecycle
+ ** ## Services during command lifecycle
+ ** 
  ** Each command starts out as command definition, accessed by client code through CommandDef.
  ** While collecting the necessary parts of such a definition, there is just an empty (pending)
  ** Command (smart-ptr frontend), which is not yet usable, being held within the CommandDef. 
@@ -167,7 +168,7 @@ namespace control {
       
       
       /** remove the given command registration. 
-       *  @return \c true if actually removed an entry
+       *  @return `true` if actually removed an entry
        *  @note existing command instances remain valid;
        *        storage will be freed at zero use-count */
       bool

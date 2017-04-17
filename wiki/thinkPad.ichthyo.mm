@@ -11742,7 +11742,7 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node CREATED="1491008040105" ID="ID_662216926" MODIFIED="1491618848217" TEXT="Implementierung">
+<node CREATED="1491008040105" FOLDED="true" ID="ID_662216926" MODIFIED="1492391159562" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1491008045936" ID="ID_1071153669" MODIFIED="1491008146180" TEXT="CommandInstanceManager_test">
 <icon BUILTIN="button_ok"/>
@@ -11817,7 +11817,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1491753027936" HGAP="35" ID="ID_118278209" MODIFIED="1491757400403" TEXT="Refactoring" VSHIFT="2">
+<node CREATED="1491753027936" FOLDED="true" HGAP="35" ID="ID_118278209" MODIFIED="1492391157505" TEXT="Refactoring" VSHIFT="2">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1491753036895" ID="ID_1029946389" MODIFIED="1491753047201" TEXT="fall-back auf Command integrieren"/>
 <node CREATED="1491753645531" ID="ID_597184850" MODIFIED="1491753650607" TEXT="maybeGet entfernen"/>
@@ -11883,8 +11883,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491656361886" HGAP="62" ID="ID_1269299900" MODIFIED="1492293109808" TEXT="Einbindung" VSHIFT="12">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1491656361886" FOLDED="true" HGAP="62" ID="ID_1269299900" MODIFIED="1492391155180" TEXT="Einbindung" VSHIFT="12">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1491659172438" HGAP="34" ID="ID_1103739498" MODIFIED="1491757376165" TEXT="in SessionCommandService" VSHIFT="-3">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1491659191155" ID="ID_586991718" MODIFIED="1491659216131" TEXT="Nutzung des Instance-Managers ist optional"/>
@@ -11955,8 +11955,8 @@
 </node>
 <node CREATED="1491692398913" HGAP="27" ID="ID_1349137025" MODIFIED="1491753610374" TEXT="in UI-Bus" VSHIFT="6">
 <icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491692419958" ID="ID_411638678" MODIFIED="1491753600586" TEXT="#1058 consider expanding UI-Bus protocol for command cloning">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491692419958" ID="ID_411638678" MODIFIED="1492391112135" TEXT="#1058 consider expanding UI-Bus protocol for command cloning">
+<icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1491692431021" ID="ID_1526880552" MODIFIED="1491692436375" TEXT="wollen wir das?"/>
 <node CREATED="1491692438907" ID="ID_1137204114" MODIFIED="1491692452509" TEXT="oder nur f&#xfc;r explizite Spezialisierungen?"/>
@@ -12051,11 +12051,15 @@
 </node>
 </node>
 </node>
-<node CREATED="1491659180516" ID="ID_655217923" MODIFIED="1491659189047" TEXT="in CmdAccess"/>
+<node CREATED="1491659180516" ID="ID_655217923" MODIFIED="1492391121444" TEXT="in CmdAccess">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1492391124070" ID="ID_1515597578" MODIFIED="1492391129921" TEXT="nicht mehr notwendig"/>
+<node CREATED="1492391131173" ID="ID_1089257513" MODIFIED="1492391139944" TEXT="CmdAccess wird komplett on top arbeiten"/>
 </node>
-<node CREATED="1492293088861" HGAP="28" ID="ID_1660020661" MODIFIED="1492293257532" TEXT="&#xdc;berarbeitung" VSHIFT="14">
+</node>
+<node CREATED="1492293088861" FOLDED="true" HGAP="28" ID="ID_1660020661" MODIFIED="1492391152645" TEXT="&#xdc;berarbeitung" VSHIFT="14">
 <linktarget COLOR="#626a9e" DESTINATION="ID_1660020661" ENDARROW="Default" ENDINCLINATION="-324;0;" ID="Arrow_ID_876356993" SOURCE="ID_220910293" STARTARROW="None" STARTINCLINATION="-687;0;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1492293139398" ID="ID_1274577545" MODIFIED="1492293146721" TEXT="als Folge der Design-Kritik"/>
 <node CREATED="1492293282803" ID="ID_1858980532" MODIFIED="1492293285150" TEXT="Ziel">
 <node CREATED="1492293286802" ID="ID_980352671" MODIFIED="1492293292141" TEXT="weitgehend automatisch"/>
@@ -12192,8 +12196,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492359501220" ID="ID_1889001956" MODIFIED="1492359517024" TEXT="Test anpassen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1492359501220" ID="ID_1889001956" MODIFIED="1492391055336" TEXT="Test anpassen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -12264,7 +12268,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1492095433567" HGAP="69" ID="ID_1208499974" MODIFIED="1492281782930" TEXT="DSL schaffen" VSHIFT="1">
+<node CREATED="1492095433567" FOLDED="true" HGAP="69" ID="ID_1208499974" MODIFIED="1492391333882" TEXT="DSL schaffen" VSHIFT="1">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12463,27 +12467,50 @@
 </node>
 </node>
 <node CREATED="1491005020528" ID="ID_1665806173" MODIFIED="1491005024747" TEXT="zu kl&#xe4;ren">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1491005025928" FOLDED="true" ID="ID_1805144008" MODIFIED="1492167945765" STYLE="fork" TEXT="duplikate Instanzen">
+<node CREATED="1491005025928" FOLDED="true" ID="ID_1805144008" MODIFIED="1492391293816" TEXT="duplikate Instanzen">
 <linktarget COLOR="#ca978d" DESTINATION="ID_1805144008" ENDARROW="Default" ENDINCLINATION="594;0;" ID="Arrow_ID_191915626" SOURCE="ID_1575553505" STARTARROW="None" STARTINCLINATION="594;0;"/>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1491005039414" ID="ID_378645276" MODIFIED="1491005470990" TEXT="mehrfach newInstance() mit gleicher ID"/>
-<node CREATED="1491005054595" ID="ID_1987692266" MODIFIED="1491495289915" TEXT="drei M&#xf6;glichkeiten">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1491005039414" ID="ID_378645276" MODIFIED="1492391288793" TEXT="mehrfach newInstance() mit gleicher ID"/>
+<node CREATED="1491005054595" ID="ID_1987692266" MODIFIED="1492391288793" TEXT="drei M&#xf6;glichkeiten">
 <icon BUILTIN="info"/>
-<node CREATED="1491005058931" ID="ID_1108733153" MODIFIED="1491005470990" TEXT="mit neuem Klon &#xfc;berschreiben"/>
-<node CREATED="1491495291966" ID="ID_703254591" MODIFIED="1491495302281" TEXT="stillschweigend bestehende Instanz ausgeben"/>
-<node CREATED="1491005066706" ID="ID_1990482123" MODIFIED="1491495433236" TEXT="Fehler ausl&#xf6;sen">
+<node CREATED="1491005058931" ID="ID_1108733153" MODIFIED="1492391288793" TEXT="mit neuem Klon &#xfc;berschreiben"/>
+<node CREATED="1491495291966" ID="ID_703254591" MODIFIED="1492391288793" TEXT="stillschweigend bestehende Instanz ausgeben"/>
+<node CREATED="1491005066706" ID="ID_1990482123" MODIFIED="1492391288793" TEXT="Fehler ausl&#xf6;sen">
 <icon BUILTIN="forward"/>
-<node CREATED="1491495356533" ID="ID_1948190107" MODIFIED="1491495397512" TEXT="einzig sichere Variante">
+<node CREATED="1491495356533" ID="ID_1948190107" MODIFIED="1492391288793" TEXT="einzig sichere Variante">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1491495398895" ID="ID_1958544932" MODIFIED="1491495404395" TEXT="es gibt jetzt auch getInstance"/>
-<node CREATED="1491495405151" ID="ID_988620199" MODIFIED="1491495425552" TEXT="der Client mu&#xdf; geht von Exclusivit&#xe4;t aus"/>
+<node CREATED="1491495398895" ID="ID_1958544932" MODIFIED="1492391288793" TEXT="es gibt jetzt auch getInstance"/>
+<node CREATED="1491495405151" ID="ID_988620199" MODIFIED="1492391288793" TEXT="der Client mu&#xdf; geht von Exclusivit&#xe4;t aus"/>
 </node>
 </node>
-<node CREATED="1491005071634" ID="ID_178338289" MODIFIED="1491005470990" TEXT="zur Kl&#xe4;rung">
+<node CREATED="1491005071634" ID="ID_178338289" MODIFIED="1492391288793" TEXT="zur Kl&#xe4;rung">
 <icon BUILTIN="bell"/>
-<node CREATED="1491005078409" ID="ID_1515823316" MODIFIED="1491005470990" TEXT="...mu&#xdf; ich wissen, wie newInstance verwendet wird"/>
-<node CREATED="1491005491226" ID="ID_1986906306" MODIFIED="1491005499069" TEXT="und das h&#xe4;ngt von InvocationTrail ab"/>
+<node CREATED="1491005078409" ID="ID_1515823316" MODIFIED="1492391288793" TEXT="...mu&#xdf; ich wissen, wie newInstance verwendet wird"/>
+<node CREATED="1491005491226" ID="ID_1986906306" MODIFIED="1492391288793" TEXT="und das h&#xe4;ngt von InvocationTrail ab"/>
+<node CREATED="1492391213458" ID="ID_1535150206" MODIFIED="1492391288793" TEXT="Differenzierung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1492391217961" ID="ID_1152426430" MODIFIED="1492391288793" TEXT="wir erzeugen nun Instanzen transparent">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1492391227720" ID="ID_475537616" MODIFIED="1492391288793" TEXT="d.h. eine reine Command-ID wird stillschweigend geklont"/>
+<node CREATED="1492391240086" ID="ID_687060412" MODIFIED="1492391288793">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      allerdings, wenn man eine <b>explizite</b>&#160;Instanz-ID angibt,
+    </p>
+    <p>
+      bleibt es bei der stringenten Fehlerbehandlung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1491494748185" FOLDED="true" ID="ID_1589354901" MODIFIED="1492167953036" TEXT="Instanzen registrieren">

@@ -206,7 +206,7 @@ namespace control {
       
       void duplicate_detected (Symbol)  const;
       
-      Symbol getID() const;
+      Symbol getID() const noexcept;
       bool isAnonymous() const;
       
       operator string() const;

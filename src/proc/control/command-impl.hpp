@@ -137,13 +137,20 @@ namespace control {
       CommandImpl (CommandImpl const& orig
                   ,UndoMutation const& newUndo
                   ,shared_ptr<CmdClosure> const& newClosure)
-        : do_(orig.do_)
-        , undo_(newUndo)
-        , pClo_(newClosure)
-        , defaultPatt_(orig.defaultPatt_)
+        : do_{orig.do_}
+        , undo_{newUndo}
+        , pClo_{newClosure}
+        , defaultPatt_{orig.defaultPatt_}
+        , cmdID{orig.cmdID}
         { }
       
       explicit operator bool()  const { return isValid(); }
+      
+      
+      /** human-readable marker for diagnostics,
+       *  will be (re)assigned when activating this CommandImpl
+       */
+      Symbol cmdID;
       
       
       /** assist with building a clone copy of this CommandImpl.
