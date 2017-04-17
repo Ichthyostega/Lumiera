@@ -334,7 +334,7 @@ namespace test {
           
           
           // message to bind parameter data and finally trigger the command
-          mock.invoke (DUMMY_CMD_ID, lib::diff::Rec({concreteParam}));
+          mock.invoke (DUMMY_CMD_ID, concreteParam);
           CHECK (dummyState == concreteParam);  // command was indeed invoked
           CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
                          .beforeEvent("bind and trigger command \""+DUMMY_CMD_ID));

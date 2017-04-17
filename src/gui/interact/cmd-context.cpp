@@ -56,6 +56,27 @@ namespace interact {
   CmdContext::~CmdContext() { }  // Emit dtors of embedded objects here...
   
   
+  /** global static service accessor function.
+   * @remarks the implementation of this function taps into the UI-Backbone
+   *          to access the InteractionDirector for the context interaction state
+   */
+  CmdContext&
+  CmdContext::of (Symbol cmdID, string ctxID)
+  {
+    UNIMPLEMENTED ("context-bound commands: tap into the InteractionDirector to access the interaction state");
+  }
+  
+  
+  /**
+   * @remarks this service is used to resolve command arguments
+   *  based on the current state of UI interaction. This can be used
+   *  to get e.g. the scope enclosing the element currently in focus
+   */
+  CmdContext::Resolver::operator LuidH ()
+  {
+    REQUIRE (this->spec > 0); //note we can access the spec embedded in the Resolver struct
+    UNIMPLEMENTED ("forward the resolution operation, probably to InteractionDirector or similar...");
+  }
   
   
   /** nonsense */

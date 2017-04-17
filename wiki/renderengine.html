@@ -2569,7 +2569,7 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
-<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704171623" tags="spec draft GuiPattern GuiIntegration" changecount="18">
+<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704171822" tags="spec draft GuiPattern GuiIntegration" changecount="22">
 <pre>//how to access proc layer commands from the UI and to talk to the command framework//
 
 !Command access DSL
@@ -2620,6 +2620,18 @@ The above design for command access looked as a good idea -- at first sight. Yet
 Another point of contention is the duality between a command access framework and the UI-Bus. It turns out this is rooted in a fundamental conflict. The command system and by extension also a command access framework represents the classic »command and control« style API (to use a term coined by Martin Fowler). This kind of interface shines when used on top of a shared data or object model. Which is exactly the kind of architecture we shun, on a global level. It is fine when //confined within some subsystem,// yet creates a corroding tendency towards high coupling, when used on a global scale. For this reason, we introduced a message driven connection, and for the same reason, we should refrain from using the command and control structure as a second channel, bypassing the bus. //This is entirely an architectural decision// -- on the level of tracing actual calls, any message based connection looks overengineered, when compared to &quot;just invoke the f**cking function&quot;
 
 The ''conclusions'' drawn from this critique is to forego using the InvocationTrail, in favour of a plain command ID, and to simplify and automate the command instance management (&amp;rarr; GuiCommandCycle)
+
+!reworked DSL draft
+{{red{WIP 4/2017 unimplemented for the time being}}}
+{{{
+CmdContext::of (cmd::scope_addClip, INTO_FORK)
+          .activate ([&amp;](yes) { addClip.enabled (yes); });
+...
+this-&gt;invoke (cmd::scope_addClip, scope(HERE), element(RECENT))
+}}}
+* define a callback when the command becomes executable
+* {{red{TODO 4/2017}}} not clear how the InteractionState is able to figure out this is the case.&lt;br/&gt;probably need either binding rules or need to pre-bind the arguments
+* when actual invocation shall be triggered, use the //argument resolvers// to fill in the arguments&lt;br/&gt;these yield intermediary objects, which can be converted to LUID
 </pre>
 </div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201704140008" modified="201704140029" tags="design GuiPattern GuiIntegration discuss" changecount="8">
@@ -3481,7 +3493,7 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 !Collaborations
 </pre>
 </div>
-<div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704082328" tags="def design GuiIntegration draft" changecount="8">
+<div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704171824" tags="def design GuiIntegration draft" changecount="9">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
 In a more elaborate UI, as can be expected for such a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
 
@@ -3495,7 +3507,7 @@ An InteractionState is a global component, but often not addressed directly. To 
 ! interaction state and the actual widgets
 InteractionControl is conceived as an additional intermediary layer, distinct from the actual widgets. The whole idea is that we //do not want// intricate state managing logic to be scattered all over the concrete UI widget code -- doing so would defeat any higher level structuring and turn the UI code into highly tangled very technical implementation logic; ideally, UI code should mostly be specification, setup and wiring, yet void of procedural logic.
 
-For this reason, we decided against handling all of the GuiCommandCycle over the UI-Bus -- only the final stages are sent as messages, and they can be sent from //anywhere.//
+The actual widgets rely {{red{planned 4/2017}}} on the {{{CmdContext}}} to be notified when a specific command becomes executable &amp;rarr; GuiCommandAccess.
 </pre>
 </div>
 <div title="InterfaceNamespaces" modifier="Ichthyostega" created="200708080338" modified="201003160209" tags="impl decision draft">

@@ -56,6 +56,7 @@
 #include "lib/error.hpp"
 //#include "gui/ctrl/bus-term.hpp"
 //#include "lib/idi/entry-id.hpp"
+#include "lib/hash-indexed.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -67,9 +68,11 @@ namespace gui {
 namespace interact {
   
 //  using lib::HashVal;
+  using lib::hash::LuidH;
   using lib::Symbol;
 //  using util::isnil;
   using std::string;
+  
   
   
   /**
@@ -84,17 +87,53 @@ namespace interact {
      ~CmdContext();  ///< @todo do we need a VTable / virtual dtor?
       
       /* === access front-end === */
-      static Symbol to (Symbol cmdID, string ctxID);
+      static CmdContext& of (Symbol cmdID, string ctxID);
       
-      friend CmdContext&
-      cmdContext (Symbol instanceID)
-      {
-        UNIMPLEMENTED ("cmd access front-end");
-      }
+      struct Resolver;
+      
     protected:
     private:
     };
   
+  
+  /**
+   * Helper for dynamic command argument resolution.
+   */
+  struct CmdContext::Resolver
+    {
+      
+      /** query current interaction state to resolve the element in question
+       * @return hash-ID to indicate the element or scope
+       */
+      operator LuidH ();
+      
+      
+      enum Spec {
+        HERE,
+        RECENT
+      };
+      
+      
+      friend Resolver
+      scope (Spec scopeSpec)
+      {
+        return Resolver{scopeSpec};
+      }
+      
+      
+      friend Resolver
+      element (Spec elementSpec)
+      {
+        return Resolver{elementSpec};
+      }
+      
+    private:
+      const Spec spec = HERE;
+      
+      Resolver(Spec s)
+        : spec(s)
+        { }
+    };
   
   
 }} // namespace gui::interact
