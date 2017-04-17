@@ -2633,7 +2633,7 @@ The organisation of the Lumiera UI calls for a separation between immediate low-
 * access and use commands from UI code &amp;rarr; GuiCommandAccess
 </pre>
 </div>
-<div title="GuiCommandBindingConcept" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201704140026" tags="design decision GuiPattern GuiIntegration discuss" changecount="34">
+<div title="GuiCommandBindingConcept" creator="Ichthyostega" modifier="Ichthyostega" created="201511272246" modified="201704171600" tags="design decision GuiPattern GuiIntegration discuss" changecount="35">
 <pre>The question //how to connect the notion of an ''interface action'' to the notion of a ''command'' issued towards the [[session model|HighLevelModel]].//
 * actual design of command invocation in the UI &amp;rarr; GuiCommandCycle
 * study of pivotal action invocation situations &amp;rarr; CommandInvocationAnalysis
@@ -2666,8 +2666,8 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 * we need to introduce a new abstraction, termed InteractionState. This is deliberately not a single entity, rather some distinct facility in charge for one specific kind of interaction, like gestures being formed by mouse, touch or pen input.
 * from the command definition site, we need to send a combination of //rules// and parameter accessors, which together define an invocation path for one specific flavour of a command
 * the InteractionState, driven by the state changes he observes, will evaluate those rules and determine the feasibility of specific command invocation paths
-* he sends the //enablement of a command invocation trail// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to install actual reaction patterns &amp;rarr; InvocationTrail
-* if finally some button is hit, the local event binding can issue the command right away, as preconfigured in this //enablement binding,// by accessing just any UI-Bus terminal at reach within that context
+* he sends the //enablement of a command invocation trail// as a preconfigured binding to the actual //trigger sites,// which in turn allows them to react to local user interactions properly
+* if finally some button is hit, the local event binding can issue the command right away, by accessing just any UI-Bus terminal at reach within that context
 
 ''Lumera decides to take the latter approach'' -- resulting in a separation between immediate low-level UI element reactions, and anything of relevance to the workings of the application as a whole. The widget code embodies the low-level UI element reactions and as such becomes more or less meaningless beyond local concerns of layout and presentation. If you want to find out about the //behaviour of the UI,// you need to know where to look, and you need to know how to read and understand those enablement rules. Another consequence is the build-up of dedicated yet rather abstract state tracking facilities, hooking like an octopus into various widgets and controllers, which might work counter to the intentions behind the design of common UI toolkit sets.
 &amp;rarr; GuiCommandCycle
@@ -3530,15 +3530,13 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201704152148" tags="def GuiIntegration draft" changecount="9">
-<pre>//A command in preparation of being issued from the UI.//
-The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, and the process of preparing and outfitting a generic command with these actual values is tracked by an ''InvocationTrail handle''. When ready, finally this handle can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].
-
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201704171619" tags="def GuiIntegration draft" changecount="13">
+<pre>//one specific way to prepare and issue a ~Proc-Layer-Command from the UI.//
+The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, sometimes even from the context of the triggering event. When all arguments are known, finally the command -- as identified by a command-ID -- can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].
 &amp;rarr; CommandInvocationAnalysis
 
-An invocation trail represents one specific path leading to the invocation of a command. It is a value object (handle), and it serves as the interface used by the UI-Element to retrieve or supply the arguments and finally to prepare the invocation message(s). But while the invocation trail is generic to some degree, the entity to trigger the command invocation needs explicit and concrete knowledge about the circumstances involved into this invocation. Simply, because in some cases, very specific information needs to be provided as argument. For example, a widget just happens to know that the setting of a specific slider will be what becomes a likewise specific argument.
-
-{{red{deprecated 4/2017}}} -- likely to be removed from the design
+Thus an invocation trail represents one specific path leading to the invocation of a command. In the current state of the design, this is a concept; initially it was meant to exist as object, but this approach turned out to be unnecessarily complex. We can foresee that there will be the somewhat tricky situation, where a command is ''context-bound''. In those cases, we rely on the InteractionState helper, which is to track {{red{planned 4/2017}}} an enablement entry for each possible invocation trail. Basically this means that some commands need to be prepared and bound explicitly into some context (e.g. the tracks within a sequence), while enabling and parameter binding happens automatically, driven by interaction events.
+&amp;rarr; InteractionControl
 </pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
@@ -9333,7 +9331,7 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201704142121" tags="GuiPattern Concepts def design draft" changecount="21">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201704171603" tags="GuiPattern Concepts def design draft" changecount="22">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
@@ -9357,7 +9355,7 @@ As far as the UI is concerned, »the application core« appears just as a node s
 The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub, which maintains a routing table. Attachment and detachment of elements can be managed automatically, since all of the UI-Bus operations perform within the UI event thread. We distinguish between up-link messages, directed towards some central service (presentation state management or command invocation) and down-link messages, directed towards individual elements. The interactions at the bus are closely interrelated with the elementary UI-Element operations.
 ;act
 :send a GenNode representing the action
-:* a command prototype corresponding to the message's ID is outfitted with actual parameter values &amp;rarr; InvocationTrail
+:* a command prototype corresponding to the message's ID is cloned and outfitted with actual parameter values
 :* the resulting command instance is handed over to the ProcDispatcher for execution
 ;note
 :send a GenNode representing the //state mark//
@@ -9368,7 +9366,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :direct a MutationMessage towards the designated UI-Element, causing the latter to build a TreeMutator to receive the embedded [[diff-sequence|TreeDiffModel]]
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201704142130" tags="GuiPattern design draft decision" changecount="53">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201704171607" tags="GuiPattern design draft decision" changecount="54">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -9433,8 +9431,8 @@ While the above definitions might seem more or less obvious and reasonable, ther
 &amp;rarr; [[Command handling (Proc-Layer)|CommandHandling]]
 
 !!!actual implementation of command invocation
-A command's {{{InvocationTrail}}} is in fact just some tag object, wrapping the command instance ID. In simple cases, this is just a command ID and the command can be triggered right away. But there are more complicated cases, where invoking the command happens as a result of user interaction, and some of the actual arguments need to be picked up from the current context by suitable match. To deal with such cases, the InteractionState helper is used to pick up this contextual data. Anyway, at the end we send a message over the UI-Bus, indicating the command instance through the GenNode ID and providing the command arguments in the payload as {{{diff::Record&lt;GenNode&gt;}}}.
-{{red{warning 4/2017 mostly just a concept draft}}}
+In the simple standard case, an UI event (like pressing a button) leads directly to invocation of a known command with locally known arguments. In such cases, the command can be triggered right away, using the nearest UI-Bus connection available. But there are more complicated cases, where invoking the command happens as a result of user interaction, and some of the actual arguments need to be picked up from the current context by suitable match. To deal with such cases, the InteractionState helper is used to pick up this contextual data.
+Anyway, at the end we send a message over the UI-Bus, indicating the command instance through the GenNode ID and providing the command arguments in the payload as {{{diff::Record&lt;GenNode&gt;}}}.
 
 !Essential update {{red{WIP 9/2016}}}
 It is clear by now (9/2016) how shape and content changes are to be represented as diff message. Moreover, we have an implementation framework to build the concrete TreeMutator, which allows to target diff messages towards a (otherwise undisclosed) opaque implementation data structure.

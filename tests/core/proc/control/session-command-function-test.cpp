@@ -82,7 +82,6 @@ extern "C" {
 #include "proc/control/proc-dispatcher.hpp"
 #include "proc/control/command-def.hpp"
 #include "include/session-command-facade.h"
-#include "gui/interact/invocation-trail.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/format-string.hpp"

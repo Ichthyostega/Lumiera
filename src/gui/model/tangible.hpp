@@ -132,7 +132,6 @@
 
 #include "lib/error.hpp"
 #include "gui/ctrl/bus-term.hpp"
-#include "gui/interact/invocation-trail.hpp"
 #include "lib/diff/diff-mutable.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"
@@ -170,9 +169,8 @@ namespace model {
     public:
       using ID = ctrl::BusTerm::ID;
     protected:
+      using Rec     = lib::diff::Rec;
       using GenNode = lib::diff::GenNode;
-      using Cmd = interact::InvocationTrail;
-      using Rec = lib::diff::Rec;
       
       ctrl::BusTerm uiBus_;
       
@@ -193,9 +191,6 @@ namespace model {
       template<typename...ARGS>
       void invoke (Symbol cmdID, ARGS&&...);
       void invoke (Symbol cmdID, Rec&& arguments);
-      template<typename...ARGS>
-      void invoke (Cmd const& prototype, ARGS&&...);
-      void invoke (Cmd const& prototype, Rec&& arguments);
       
       void slotExpand();
       void slotCollapse();
@@ -249,18 +244,6 @@ namespace model {
                ,GenNodeIL{}
                ,GenNodeIL {std::forward<ARGS> (args)...}));
   }           // not typed, no attributes, all arguments as children
-  /** @deprecated */
-  template<typename...ARGS>
-  inline void
-  Tangible::invoke (Cmd const& prototype, ARGS&&... args)
-  {
-    using GenNodeIL = std::initializer_list<GenNode>;
-    
-    invoke (prototype,
-            Rec (Rec::TYPE_NIL_SYM, GenNodeIL{}
-                ,GenNodeIL {std::forward<ARGS> (args)...}));
-  }           // not typed, no attributes, all arguments as children
-  
   
   
   

@@ -200,12 +200,6 @@ namespace model {
   {
     uiBus_.act (GenNode{string{cmdID}, std::forward<Rec>(arguments)});
   }
-  /** @deprecated */
-  void
-  Tangible::invoke (Cmd const& instance, Rec&& arguments)
-  {
-    uiBus_.act (instance.triggerMsg (std::forward<Rec>(arguments)));
-  }
   
   
   

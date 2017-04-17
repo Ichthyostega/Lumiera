@@ -67,9 +67,11 @@
  ** with the [elementary UI-Element operations](tangible.hpp).
  ** 
  ** - *act*: send a [GenNode] representing the action
- **   - in a first step, a command prototype is [outfitted](\ref InvocationTrail::bind()) with actual
- **     parameter values. -> see [InvocationTrail]
- **   - the actual command invocation is triggered by a ["bang" message](\ref InvocationTrail::bang())
+ **   - the ID is either a globally registered command-ID or an explicitly
+ **     ["opened"](proc::control::SessionCommand::cycle(Symbol,string)) command instance ID.
+ **   - the payload is a Record<GenNode> holding the actual command arguments
+ **   - on reception, an _instance_ (anonymous clone copy) of the command is created, bound
+ **     with the arguments and handed over to the ProcDispatcher to be enqueued for execution.
  ** - *note*: send a [GenNode] representing the _state mark;_
  **   some (abstracted) presentation state manager is expected to listen to these messages,
  **   possibly recording state to be restored later. The contents of the _state mark_ message

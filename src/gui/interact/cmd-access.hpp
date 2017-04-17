@@ -32,9 +32,8 @@
  ** - can handle context information related to a specific _control system_ (e.g mouse, keyboard,
  **   hardware controller, pen)
  ** - might handle changing contextual state and thus decide if a command can be invoked
- ** From the InteractionState instance, it is possible to retrieve a concrete InvocationTrail for
- ** this specific command instance about to be invoked. This InvocationTrail is an embedded command ID
- ** and can be used, to bind arguments and finally trigger the command invocation.
+ ** From the InteractionState instance, it is possible to retrieve a notification when a specific,
+ ** context-bound command becomes executable by picking up suitable parameter values from this context.
  ** 
  ** @todo as of 3/2017 this is a early design draft and WIP-WIP-WIP
  ** 
@@ -49,7 +48,6 @@
 
 
 #include "lib/error.hpp"
-#include "gui/interact/invocation-trail.hpp"
 //#include "gui/ctrl/bus-term.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"
@@ -78,11 +76,6 @@ namespace interact {
       
     public:
      ~CmdAccess();  ///< @todo do we need a VTable / virtual dtor?
-      
-      template<typename...ARGS>
-      InvocationTrail bind(ARGS...args); /////////////////////TODO half baked idea, can not work this way
-      
-      InvocationTrail execute();
       
       /* === access front-end === */
       static Symbol to (Symbol cmdID, string ctxID);
