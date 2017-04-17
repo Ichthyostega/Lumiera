@@ -189,11 +189,18 @@ namespace model {
   
   /**
    * Perform a command or action, once the execution context has been established.
-   * After binding (and recording) the command arguments, as  supplied with the
+   * After binding (and recording) the command arguments, as supplied with the
    * [record](\ref lib::diff::Rec), the command action is executed right away.
-   * @param instance handle to a command instantiation, to be readied for invocation
+   * @param cmdID indicates the global command definition to be invoked
    * @param arguments suitable tuple of values, to be used to outfit the prototype
+   * @remark may use a previously "opened" instanceID, instead of a global commandID
    */
+  void
+  Tangible::invoke (Symbol cmdID, Rec&& arguments)
+  {
+    uiBus_.act (GenNode{string{cmdID}, std::forward<Rec>(arguments)});
+  }
+  /** @deprecated */
   void
   Tangible::invoke (Cmd const& instance, Rec&& arguments)
   {

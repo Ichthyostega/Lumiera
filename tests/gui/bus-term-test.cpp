@@ -29,6 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/state-manager.hpp"
+#include "proc/control/command.hpp"
 #include "test/test-nexus.hpp"
 #include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -62,9 +63,7 @@ namespace test {
   using proc::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
-  namespace { // test fixture...
-    
-  }//(End) test fixture
+  using proc::control::Command;
   
   
   
@@ -104,8 +103,7 @@ namespace test {
           replayStateMark();
           verifyNotifications();
           clearStates();
-          pushDiff();
-          destroy();
+//        pushDiff();             ///////////////////////////////////////////////////////////////////////////TICKET #1066
         }
       
       
@@ -188,7 +186,7 @@ namespace test {
         {
           MARK_TEST_FUN
           gui::test::Nexus::startNewLog();
-          auto cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, LuidH>();
+          Symbol cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, LuidH>();
           
           MockElm mock("uiElm");
           
@@ -197,19 +195,19 @@ namespace test {
           TimeSpan clip (Time(1,2,3), lib::test::randTime());
           LuidH luid;
           
-          // we cannot invoke commands without binding all arguments
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, mock.invoke(cmd) );
+          // we cannot invoke commands without binding required arguments
+          VERIFY_ERROR (WRONG_TYPE, mock.invoke(cmd) );
           
           // proper argument typing is ensured while dispatching the bind message. 
           VERIFY_ERROR (WRONG_TYPE, mock.invoke(cmd, Rec({"lalala"})) );
           
           // command can't be issued, since it's still unbound
-          CHECK (not cmd.canExec());
+          CHECK (not Command::canExec(cmd));
           
           
           mock.invoke (cmd, text, clip, luid);
           
-          CHECK (cmd.canExec());
+          CHECK (Command::canExec(cmd));
           CHECK (gui::test::Nexus::wasBound(cmd, text, clip, luid));
           CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
           CHECK (gui::test::Nexus::wasInvoked(cmd));
@@ -220,8 +218,8 @@ namespace test {
           // Mock commands are automatically unique
           auto cmdX = gui::test::Nexus::prepareMockCmd<>();
           auto cmdY = gui::test::Nexus::prepareMockCmd<>();
-          CHECK (cmd.getID() != cmdX.getID());
-          CHECK (cmd.getID() != cmdY.getID());
+          CHECK (cmd != cmdX);
+          CHECK (cmd != cmdY);
           
           CHECK (not gui::test::Nexus::wasInvoked(cmdX));
           CHECK (not gui::test::Nexus::wasInvoked(cmdY));
@@ -507,13 +505,6 @@ namespace test {
       pushDiff()
         {
           UNIMPLEMENTED ("push a mutation diff towards an interface element");
-        }
-      
-      
-      void
-      destroy()
-        {
-          UNIMPLEMENTED ("detach and destroy the test BusTerm");
         }
     };
   

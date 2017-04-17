@@ -135,6 +135,7 @@
 #include "gui/interact/invocation-trail.hpp"
 #include "lib/diff/diff-mutable.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "lib/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <sigc++/trackable.h>
@@ -146,6 +147,7 @@ namespace gui {
 namespace model {
   
   using std::string;
+  using lib::Symbol;
   
   
   /**
@@ -188,6 +190,9 @@ namespace model {
       void clearMsg();
       void clearErr();
       
+      template<typename...ARGS>
+      void invoke (Symbol cmdID, ARGS&&...);
+      void invoke (Symbol cmdID, Rec&& arguments);
       template<typename...ARGS>
       void invoke (Cmd const& prototype, ARGS&&...);
       void invoke (Cmd const& prototype, Rec&& arguments);
@@ -233,6 +238,18 @@ namespace model {
   
   
   /** convenience shortcut to issue a command with several arguments */
+  template<typename...ARGS>
+  inline void
+  Tangible::invoke (Symbol cmdID, ARGS&&... args)
+  {
+    using GenNodeIL = std::initializer_list<GenNode>;
+    
+    invoke (cmdID,
+            Rec(Rec::TYPE_NIL_SYM
+               ,GenNodeIL{}
+               ,GenNodeIL {std::forward<ARGS> (args)...}));
+  }           // not typed, no attributes, all arguments as children
+  /** @deprecated */
   template<typename...ARGS>
   inline void
   Tangible::invoke (Cmd const& prototype, ARGS&&... args)

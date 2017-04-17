@@ -77,7 +77,6 @@ using lib::diff::GenNode;
 using lib::diff::DataCap;
 using proc::control::Command;
 using proc::control::CommandDef;
-using gui::interact::InvocationTrail;
 using gui::ctrl::MutationMessage;
 
 
@@ -324,12 +323,7 @@ namespace test {
           
           gui::test::Nexus::setCommandHandler (&processCommandInvocation);
           
-          // Usually it's the InvocationStateManager's job to
-          // prepare an "InvocationTrail", which is a prospective
-          // Command invocation about to happen soon.
-          InvocationTrail invoTrail (Command::get (DUMMY_CMD_ID));
-          
-          // the UI element relevant for this command invocation
+          // the UI element to trigger this command invocation
           MockElm mock("uiElm");
           
           int prevState = dummyState;
@@ -340,7 +334,7 @@ namespace test {
           
           
           // message to bind parameter data and finally trigger the command
-          mock.invoke (invoTrail, lib::diff::Rec({concreteParam}));
+          mock.invoke (DUMMY_CMD_ID, lib::diff::Rec({concreteParam}));
           CHECK (dummyState == concreteParam);  // command was indeed invoked
           CHECK (nexusLog.verifyCall("act").arg("«int»|" +toString(concreteParam))
                          .beforeEvent("bind and trigger command \""+DUMMY_CMD_ID));

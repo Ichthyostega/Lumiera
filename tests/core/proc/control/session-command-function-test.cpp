@@ -101,7 +101,6 @@ namespace test    {
   
   using boost::lexical_cast;
   using lib::test::randTime;
-  using gui::interact::InvocationTrail;
   using proc::control::SessionCommand;
   using lib::diff::GenNode;
   using lib::diff::Rec;
@@ -285,19 +284,16 @@ namespace test    {
       
       /** @test invoke a command in the same way as CoreService does
        *        when handling command messages from the UI-Bus
-       *        - use the help of an InvocationTrail, similar to what the
+       *        - build a command message, similar to what the
        *          [generic UI element](\ref gui::model::Tangible) does
-       *        - generate an argument binding message
-       *        - generate a "bang!" message
+       *        - use the contents of this message at the SessionCommand
+       *          facade, similar to what CoreService does
        */
       void
       perform_messageInvocation()
         {
-          // this happens "somewhere" in the UI interaction control framework
-          InvocationTrail invoTrail{Command(COMMAND_I2)};
-          
           // this happens within some tangible UI element (widget / controller)
-          GenNode commandMsg = invoTrail.triggerMsg (Rec {Duration(25,10), Time(500,0), -2});
+          GenNode commandMsg{string(COMMAND_I2), Rec{Duration(25,10), Time(500,0), -2}};
           CHECK (commandMsg.idi.getSym() == string{COMMAND_I2});
           CHECK (not Command::canExec(COMMAND_I2));
           Time prevState = testCommandState;
@@ -364,10 +360,9 @@ namespace test    {
                   for (uint j=0; j<NUM_INVOC_PER_THRED; ++j)
                     {
                       auto cmd = Command(COMMAND_ID).storeDef(cmdID(j));
-                      InvocationTrail invoTrail{cmd};
                       
                       __randomDelay();
-                      sendCommandMessage (invoTrail.triggerMsg (Rec {Duration(7*id_, 2), Time(500,0), -int(j)}));
+                      sendCommandMessage (GenNode{string{cmd.getID()}, Rec{Duration(7*id_, 2), Time(500,0), -int(j)}});
                     }
                 }
               

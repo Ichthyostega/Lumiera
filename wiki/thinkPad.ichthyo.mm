@@ -12384,8 +12384,8 @@
 <node COLOR="#338800" CREATED="1492281610286" ID="ID_1217333147" MODIFIED="1492359761121" TEXT="automatische Instanz-Erzeugung">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492281619901" ID="ID_887103826" MODIFIED="1492281874171" TEXT="direkter Aufruf mit CommandDef-ID">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1492281619901" ID="ID_887103826" MODIFIED="1492440987297" TEXT="direkter Aufruf mit CommandDef-ID">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492281659520" ID="ID_488879231" MODIFIED="1492281875331" TEXT="Argument-Resolver f&#xfc;r Kontext-Zugriff">
 <icon BUILTIN="flag-yellow"/>
@@ -13084,7 +13084,9 @@
 <node COLOR="#338800" CREATED="1492281610286" ID="ID_1542647024" MODIFIED="1492359767992" TEXT="automatische Instanz-Erzeugung">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1492281619901" ID="ID_423372741" MODIFIED="1492281631495" TEXT="direkter Aufruf mit CommandDef-ID"/>
+<node COLOR="#338800" CREATED="1492281619901" ID="ID_423372741" MODIFIED="1492440997416" TEXT="direkter Aufruf mit CommandDef-ID">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1492281659520" ID="ID_1742758477" MODIFIED="1492281669306" TEXT="Argument-Resolver f&#xfc;r Kontext-Zugriff"/>
 <node CREATED="1492281675557" ID="ID_1809773326" MODIFIED="1492281681224" TEXT="InvocationState mit Callbacks"/>
 </node>

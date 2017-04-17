@@ -133,8 +133,8 @@ namespace ctrl {
      * @note no information regarding the _origin_ of this command invocation
      *          is captured. If a command needs a _subject_, this has to be
      *          bound as an command argument beforehand.
-     * @see gui::interact::InvocationTrail
      * @see gui::model::Tangible::issueCommand()
+     * @see proc::control::SessionCommand
      */
     void
     BusTerm::act (GenNode const& command)

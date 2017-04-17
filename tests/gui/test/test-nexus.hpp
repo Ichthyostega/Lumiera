@@ -101,18 +101,16 @@ namespace test{
       static ctrl::StateManager& getMockStateManager();
       
       
-      using Cmd = interact::InvocationTrail;
+      template<typename...ARGS>
+      static Symbol prepareMockCmd();
+      
+      static bool wasInvoked (Symbol);
       
       template<typename...ARGS>
-      static Cmd prepareMockCmd();
-      
-      static bool wasInvoked (Cmd);
+      static bool wasBound (Symbol, ARGS const& ...args);
       
       template<typename...ARGS>
-      static bool wasBound (Cmd, ARGS const& ...args);
-      
-      template<typename...ARGS>
-      static bool wasInvoked (Cmd, ARGS const& ...args);
+      static bool wasInvoked (Symbol, ARGS const& ...args);
       
     private:
       static void prepareDiagnosticCommandHandler();
@@ -125,19 +123,18 @@ namespace test{
    * which accepts arguments with the denoted types.
    * @note this call installs the command mock into the Proc-Layer
    *       command registry, where it remains in place until shutdown.
-   *       The command uses a synthetic command ID, which is available
-   *       through the returned InvocationTrail. Besides, this call
-   *       also installs a command handler into the Test-Nexus,
+   *       The can be accessed through the generated command ID. Besides,
+   *       this call also installs a command handler into the Test-Nexus,
    *       causing "`act`" messages to be processed and logged.
-   * @return InvocationTrail, the UI-representation of a Proc-Layer command.
-   *         This can be used to trigger command actions on any model::Tangible.
+   * @return the ID of the generated mock command.
    */
   template<typename...ARGS>
-  inline interact::InvocationTrail
+  inline Symbol
   Nexus::prepareMockCmd()
   {
     prepareDiagnosticCommandHandler();
-    return Cmd {PlaceholderCommand<ARGS...>::fabricateNewInstance(getLog())};
+    return PlaceholderCommand<ARGS...>::fabricateNewInstance(getLog())
+                                       .getID();
   }
   
   
@@ -157,12 +154,12 @@ namespace test{
    */
   template<typename...ARGS>
   inline bool
-  Nexus::wasBound (Cmd cmd, ARGS const& ...args)
+  Nexus::wasBound (Symbol cmd, ARGS const& ...args)
   {
     using lib::diff::DataCap;
     
     return getLog()
-            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd.getID())
+            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd)
             .beforeCall("bind-command").on("TestNexus")
                                        .arg(string(DataCap(args))...);
   }
@@ -180,14 +177,14 @@ namespace test{
    */
   template<typename...ARGS>
   inline bool
-  Nexus::wasInvoked (Cmd cmd, ARGS const& ...args)
+  Nexus::wasInvoked (Symbol cmd, ARGS const& ...args)
   {
     return getLog()
-            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd.getID())
-            .beforeCall("exec-command").on("TestNexus").arg(cmd.getID())
+            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd)
+            .beforeCall("exec-command").on("TestNexus").arg(cmd)
             .beforeCall("exec").on("MockHandlingPattern")
             .beforeCall("operate").arg(util::toString(args)...)
-            .beforeEvent("TestNexus", "SUCCESS handling "+cmd.getID());
+            .beforeEvent("TestNexus", "SUCCESS handling "+cmd);
   }
   
   /**
@@ -195,13 +192,13 @@ namespace test{
    * without matching any concrete arguments
    */
   inline bool
-  Nexus::wasInvoked (Cmd cmd)
+  Nexus::wasInvoked (Symbol cmd)
   {
     return getLog()
-            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd.getID())
-            .beforeCall("exec-command").on("TestNexus").arg(cmd.getID())
+            .verifyMatch("TestNexus.+HANDLING Command-Message for .+" +cmd)
+            .beforeCall("exec-command").on("TestNexus").arg(cmd)
             .beforeCall("operate")
-            .beforeEvent("TestNexus", "SUCCESS handling "+cmd.getID());
+            .beforeEvent("TestNexus", "SUCCESS handling "+cmd);
   }
   
   
