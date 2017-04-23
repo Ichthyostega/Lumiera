@@ -106,27 +106,29 @@ namespace ctrl {
         {
           //----- Create the Action Group -----//
           actionGroup = ActionGroup::create();                     ////////////////////////////////////////////TICKET #1068 not clear if it is necessary to give a *name* to that action group
+          auto menu  = [&](auto id, auto menuName)     {actionGroup->add (Action::create(id, menuName)); };
+          auto entry = [&](auto closure, auto ...args) {actionGroup->add (Action::create(args...), closure);};
           
-          // File menu
-          actionGroup->add(Action::create("FileMenu", _("_File")));
-          actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),    [&]() { onMenu_file_newProject(); });
-          actionGroup->add(Action::create("FileSave",   Stock::SAVE,    _("_Save Project")),      [&]() { onMenu_file_save();   });
-          actionGroup->add(Action::create("FileSaveAs", Stock::SAVE_AS, _("_Save Project As...")),[&]() { onMenu_file_saveAs(); });
-          actionGroup->add(Action::create("FileOpen",   Stock::OPEN,    _("_Open...")),           [&]() { onMenu_file_open();   });
-          actionGroup->add(Action::create("FileRender", _("_Render...")), AccelKey("<shift>R"),   [&]() { onMenu_file_render(); });
-          actionGroup->add(Action::create("FileQuit", Stock::QUIT),                               [&]() { onMenu_file_quit();   });
           
-          // Edit menu
-          actionGroup->add(Action::create("EditMenu", _("_Edit")));
-          actionGroup->add(Action::create("EditUndo", Stock::UNDO),                  [&]() { onMenu_others(); });
-          actionGroup->add(Action::create("EditRedo", Stock::REDO),                  [&]() { onMenu_others(); });
-          actionGroup->add(Action::create("EditCut",  Stock::CUT),                   [&]() { onMenu_others(); });
-          actionGroup->add(Action::create("EditCopy", Stock::COPY),                  [&]() { onMenu_others(); });
-          actionGroup->add(Action::create("EditPaste",Stock::PASTE),                 [&]() { onMenu_others(); });
-          actionGroup->add(Action::create("EditPreferences", Stock::PREFERENCES),    [&]() { onMenu_edit_preferences(); });
+          menu("FileMenu", _("_File"));
+          entry ([&]() { onMenu_file_newProject(); }   , "FileNewProject", Stock::NEW,     _("_New Project..."));
+          entry ([&]() { onMenu_file_save();   }       , "FileSave",       Stock::SAVE,    _("_Save Project"));
+          entry ([&]() { onMenu_file_saveAs(); }       , "FileSaveAs",     Stock::SAVE_AS, _("_Save Project As..."));
+          entry ([&]() { onMenu_file_open();   }       , "FileOpen",       Stock::OPEN,    _("_Open..."));
+          entry ([&]() { onMenu_file_render(); }       , "FileRender", _("_Render...")), AccelKey("<shift>R");
+          entry ([&]() { onMenu_file_quit();   }       , "FileQuit",       Stock::QUIT);
+
           
-          // View Menu
-          actionGroup->add(Action::create("ViewMenu", _("_View")));
+          menu("EditMenu", _("_Edit"));
+          entry ([&]() { onMenu_others(); }            , "EditUndo", Stock::UNDO);
+          entry ([&]() { onMenu_others(); }            , "EditRedo", Stock::REDO);
+          entry ([&]() { onMenu_others(); }            , "EditCut",  Stock::CUT);
+          entry ([&]() { onMenu_others(); }            , "EditCopy", Stock::COPY);
+          entry ([&]() { onMenu_others(); }            , "EditPaste",Stock::PASTE);
+          entry ([&]() { onMenu_edit_preferences(); }  , "EditPreferences", Stock::PREFERENCES);
+          
+          
+          menu("ViewMenu", _("_View"));
           
           assetsPanelAction = ToggleAction::create("ViewAssets", StockID("panel_assets"));
           assetsPanelAction->signal_toggled().connect (                              [&]() { onMenu_view_assets(); });
@@ -140,25 +142,26 @@ namespace ctrl {
           viewerPanelAction->signal_toggled().connect(                               [&]() { onMenu_view_viewer(); });
           actionGroup->add(viewerPanelAction);
           
-          // Sequence Menu
-          actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
-          actionGroup->add(Action::create("SequenceAdd", _("_Add...")),              [&]() { onMenu_sequence_add(); });
           
-          // Track Menu
-          actionGroup->add(Action::create("TrackMenu", _("_Track")));
-          actionGroup->add(Action::create("TrackAdd", _("_Add...")),                 [&]() { onMenu_track_add(); });
+          menu("SequenceMenu", _("_Sequence"));
+          entry ([&]() { onMenu_sequence_add(); }      , "SequenceAdd", _("_Add..."));
           
-          // Window Menu
-          actionGroup->add(Action::create("WindowMenu", _("_Window")));
-          actionGroup->add(Action::create("WindowNewWindow", StockID("new_window")), [&]() { onMenu_window_new_window(); });
-          actionGroup->add(Action::create("WindowCloseWindow", _("Close Window")),   [&]() { onMenu_window_close_window(); });
+          
+          menu("TrackMenu", _("_Track"));
+          entry ([&]() { onMenu_track_add(); }         , "TrackAdd", _("_Add..."));
+          
+          
+          menu("WindowMenu", _("_Window"));
+          entry ([&]() { onMenu_window_new_window(); } , "WindowNewWindow", StockID("new_window"));
+          entry ([&]() { onMenu_window_close_window();}, "WindowCloseWindow", _("Close Window"));
           actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
           
-          // Help Menu
-          actionGroup->add(Action::create("HelpMenu", _("_Help")) );
-          actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),                [&]() { onMenu_help_about(); });
+          
+          menu("HelpMenu", _("_Help"));
+          entry ([&]() { onMenu_help_about(); }        , "HelpAbout", Stock::ABOUT);
           
           uiManager.insert_action_group(actionGroup);
+          
           
           //----- Create the UI layout -----//
           string ui_info = R"***(
