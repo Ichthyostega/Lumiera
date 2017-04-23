@@ -35,21 +35,14 @@
 #ifndef GUI_CTRL_ACTIONS_H
 #define GUI_CTRL_ACTIONS_H
 
-#include "gui/gtk-lumiera.hpp"
-#include "gui/config-keys.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/ctrl/global-ctx.hpp"
+#include "gui/ctrl/window-list.hpp"
 #include "gui/workspace/workspace-window.hpp"
-#include "gui/dialog/render.hpp"
-#include "gui/dialog/preferences-dialog.hpp"
-#include "gui/dialog/name-chooser.hpp"
+#include "gui/workspace/panel-manager.hpp"
 #include "lib/format-string.hpp"
-#include "include/logging.h"
 
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
 #include <boost/noncopyable.hpp>
-#include <functional>
-#include <vector>
 #include <string>
 
 
@@ -57,20 +50,14 @@ namespace gui {
 namespace ctrl {
   namespace error = lumiera::error;
   
-  using std::function;
-  using boost::algorithm::is_any_of;
-  using boost::algorithm::split;
   using Gtk::Action;
   using Gtk::ActionGroup;
   using Gtk::ToggleAction;
-  using Gtk::AboutDialog;
   using Gtk::AccelKey;
   using Gtk::StockID;
   using Gtk::Main;       /////////////////////////////////////////////////////////////////////////////////////TICKET #1032 replace Main -> Application
-  using sigc::mem_fun;
   using Glib::ustring;
   using ::util::_Fmt;
-  using std::vector;
   using std::string;
   
   namespace Stock = Gtk::Stock;
@@ -115,7 +102,7 @@ namespace ctrl {
           entry ([&]() { globalCtx_.director_.saveSnapshot(); } , "FileSave",        Stock::SAVE,    _("_Save Project"));
           entry ([&]() { globalCtx_.director_.forkProject();  } , "FileSaveAs",      Stock::SAVE_AS, _("_Save Project As..."));
           entry ([&]() { globalCtx_.director_.openFile();     } , "FileOpen",        Stock::OPEN,    _("_Open..."));
-          entry ([&]() { onMenu_file_render();                } , "FileRender",                      _("_Render...")),  AccelKey("<shift>R");
+          entry ([&]() { globalCtx_.director_.render();       } , "FileRender",                      _("_Render...")),  AccelKey("<shift>R");
           entry ([&]() { globalCtx_.uiManager_.terminateUI(); } , "FileQuit",        Stock::QUIT);
           
           
@@ -125,7 +112,7 @@ namespace ctrl {
           entry ([&]() { onMenu_others();                     } , "EditCut",         Stock::CUT);
           entry ([&]() { onMenu_others();                     } , "EditCopy",        Stock::COPY);
           entry ([&]() { onMenu_others();                     } , "EditPaste",       Stock::PASTE);
-          entry ([&]() { onMenu_edit_preferences();           } , "EditPreferences", Stock::PREFERENCES);
+          entry ([&]() { globalCtx_.director_.editSetup();    } , "EditPreferences", Stock::PREFERENCES);
           
           
           menu("SequenceMenu", _("_Sequence"));
@@ -137,7 +124,7 @@ namespace ctrl {
           
           
           menu("HelpMenu", _("_Help"));
-          entry ([&]() { onMenu_help_about();                 } , "HelpAbout", Stock::ABOUT);
+          entry ([&]() { globalCtx_.wizard_.show_HelpAbout(); } , "HelpAbout", Stock::ABOUT);
           
           
           menu("WindowMenu", _("_Window"));
@@ -238,15 +225,16 @@ namespace ctrl {
       
       
     private: /* ===== Internals ===== */
-      workspace::WorkspaceWindow&
-      getWorkspaceWindow()
-        {
-          return globalCtx_.windowList_.findActiveWindow();
-        }
       
       
       /**
-       * Populates a uiManager with actions for the Show Panel menu.
+       * Populates the menu entries to show specific panels
+       * within the current window.
+       * @todo 4/2017 this can only be a preliminary solution.
+       *       What we actually want is perspectives, and we want
+       *       a specific UI to be anchored somewhere in UI space,
+       *       so we'll be rather be navigating _towards it_, instead
+       *       of "showing it here".
        */
       void
       populateShowPanelActions (Gtk::UIManager& uiManager)
@@ -257,9 +245,13 @@ namespace ctrl {
           for (uint i = 0; i < count; i++)
             {
               const gchar *stock_id = workspace::PanelManager::getPanelStockID(i);
-              cuString name = ustring::compose("Panel%1", i);
-              actionGroup->add(Action::create(name, StockID(stock_id)),
-                bind(mem_fun(*this, &Actions::onMenu_show_panel), i));
+              cuString panelName = ustring::compose("Panel%1", i);
+              actionGroup->add(Action::create(panelName, StockID(stock_id)),
+                               [i,this]() {
+                                            globalCtx_.windowList_.findActiveWindow()
+                                                                  .getPanelManager()
+                                                                  .showPanel (i);
+                                          });
             }
           
           uiManager.insert_action_group (actionGroup);
@@ -301,31 +293,10 @@ namespace ctrl {
       
       
       
-    private: /* ====== Actions =========== */
-      
-      /* ============ File Menu ========== */
-      
-      void
-      onMenu_file_render()
-        {
-          dialog::Render dialog(getWorkspaceWindow());                                   //////global -> InteractionDirector
-          dialog.run();
-        }
+    private:
       
       
-      
-      /* ============ Edit Menu ========== */
-      
-      void
-      onMenu_edit_preferences()
-        {
-          dialog::PreferencesDialog dialog(getWorkspaceWindow());                        //////global -> InteractionDirector
-          dialog.run();
-        }
-      
-      
-      
-      /* ============ View Menu ========== */
+      /* ============ View Actions ========== */
       
       void
       onMenu_view_assets()
@@ -351,45 +322,6 @@ namespace ctrl {
           //if(!is_updating_action_state)
           //  workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());        //////global -> InteractionDirector
         }
-      
-      
-      
-      
-      void
-      onMenu_show_panel(int panel_index)
-        {
-          getWorkspaceWindow().getPanelManager().showPanel (panel_index);
-        }
-      
-      
-      void
-      onMenu_help_about()
-        {
-          // Configure the about dialog
-          AboutDialog dialog;
-          
-          cuString copyrightNotice {_Fmt(_("© %s the original Authors\n"
-                                           "-- Lumiera Team --\n"
-                                           "Lumiera is Free Software (GPL)"))
-                                           % Config::get (KEY_COPYRIGHT)};
-          
-          string authors = Config::get (KEY_AUTHORS);
-          vector<uString> authorsList;
-          split (authorsList, authors, is_any_of (",|"));
-          
-          
-          dialog.set_program_name(Config::get (KEY_TITLE));
-          dialog.set_version(Config::get (KEY_VERSION));
-          dialog.set_copyright(copyrightNotice);
-          dialog.set_website(Config::get (KEY_WEBSITE));
-          dialog.set_authors(authorsList);
-          
-          dialog.set_transient_for(getWorkspaceWindow());
-          
-          // Show the about dialog
-          dialog.run();
-        }
-      
       
       
       // Temporary Junk

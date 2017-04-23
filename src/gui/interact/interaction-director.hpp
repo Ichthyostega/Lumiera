@@ -77,6 +77,9 @@ namespace setting {
 namespace timeline {
   class TimelineController;
 }
+namespace workspace {
+  class WorkspaceWindow;
+}
 namespace interact {
   
 //using std::string;
@@ -126,13 +129,15 @@ namespace interact {
       void newProject();
       void saveSnapshot();
       void forkProject();
+      void editSetup();
       void openFile();
+      void render();
       
       void newSequence();
       void newTrack();
       
     private:
-      
+      workspace::WorkspaceWindow& getWorkspaceWindow();
     };
   
   

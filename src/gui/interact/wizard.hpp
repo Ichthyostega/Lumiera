@@ -77,6 +77,7 @@ namespace interact {
       Wizard (ctrl::GlobalCtx&);
      ~Wizard ();
       
+      void show_HelpAbout();
     private:
       
     };

@@ -34,6 +34,9 @@
 #include "gui/interact/spot-locator.hpp"
 #include "gui/interact/navigator.hpp"
 #include "gui/interact/focus-tracker.hpp"
+#include "gui/dialog/preferences-dialog.hpp"
+#include "gui/dialog/render.hpp"
+#include "gui/workspace/workspace-window.hpp"
 #include "gui/ctrl/ui-state.hpp"
 #include "gui/setting/asset-controller.hpp"
 #include "gui/timeline/timeline-controller.hpp"
@@ -152,6 +155,25 @@ namespace interact {
   
   
   /**
+   * Edit global configuration and setup.
+   * This action will launch the project setup UI, which allows to adjust configuration
+   * - for this installation of Lumiera
+   * - for the current project
+   * - for this user's session in this project
+   * @todo 4/2017 not yet implemented, delegate to the AssetControler, which represents
+   *       all global aspects of the application, session and project
+   */
+  void
+  InteractionDirector::editSetup()
+  {
+    dialog::PreferencesDialog dialog(getWorkspaceWindow());
+    dialog.run();
+    
+    UNIMPLEMENTED ("edit global configuration");
+  }
+  
+  
+  /**
    * Select and open a file to perform a suitable operation.
    * This action will launch the fileOpen UI. Depending on the selected file's meaning,
    * the actual operation will be either to integrate the data somehow into the current
@@ -162,6 +184,24 @@ namespace interact {
   InteractionDirector::openFile()
   {
     UNIMPLEMENTED ("open file");
+  }
+  
+  
+  /**
+   * Start a render process. This action will launch the render setup UI.
+   * Depending on the current Spot, a suitable object to render will be preselected,
+   * typically the current timeline.
+   * @todo 4/2017 not yet implemented, and it is not clear how to access the functionality.
+   *       Do we send a command? Or do we access the Play-Out subsystem directly, to create
+   *       some kind of dedicated player instance?
+   */
+  void
+  InteractionDirector::render()
+  {
+    dialog::Render dialog(getWorkspaceWindow());                                   //////global -> InteractionDirector
+    dialog.run();
+    
+    UNIMPLEMENTED ("start render");
   }
   
   
@@ -207,6 +247,13 @@ namespace interact {
     invoke (cmd::sequence_newTrack, anchor, newTrackID);
   }
   
+  
+  workspace::WorkspaceWindow&
+  InteractionDirector::getWorkspaceWindow()
+  {
+    return globalCtx_.windowList_.findActiveWindow();
+  }
+
   
   
 }}// namespace gui::interact

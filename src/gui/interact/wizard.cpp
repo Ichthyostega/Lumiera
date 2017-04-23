@@ -28,20 +28,35 @@
  */
 
 
-//#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
+#include "gui/config-keys.hpp"
 #include "gui/interact/wizard.hpp"
 #include "gui/interact/spot-locator.hpp"
+#include "gui/workspace/workspace-window.hpp"
 #include "gui/ctrl/global-ctx.hpp"
+#include "lib/format-string.hpp"
 //#include "lib/util.hpp"
+
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <vector>
+#include <string>
 
 //using util::cStr;
 //using util::isnil;
+using ::util::_Fmt;
+using std::vector;
+using std::string;
 
 
 namespace gui {
 namespace interact {
   
+  using boost::algorithm::is_any_of;
+  using boost::algorithm::split;
+  using workspace::WorkspaceWindow;
   using ctrl::GlobalCtx;
+  using Gtk::AboutDialog;
   
   
   // dtors via smart-ptr invoked from here... (TODO any to come here?)
@@ -54,8 +69,39 @@ namespace interact {
     { }
   
   
-  /** */
   
+  /**
+   * show the notorious "about Lumiera" dialog.
+   * Something every application has and no user really cares about.
+   */
+  void
+  Wizard::show_HelpAbout()
+  {
+    // Configure the about dialog
+    AboutDialog dialog;
+    
+    cuString copyrightNotice {_Fmt(_("© %s the original Authors\n"
+                                     "-- Lumiera Team --\n"
+                                     "Lumiera is Free Software (GPL)"))
+                                     % Config::get (KEY_COPYRIGHT)};
+    
+    string authors = Config::get (KEY_AUTHORS);
+    vector<uString> authorsList;
+    split (authorsList, authors, is_any_of (",|"));
+    
+    
+    dialog.set_program_name(Config::get (KEY_TITLE));
+    dialog.set_version(Config::get (KEY_VERSION));
+    dialog.set_copyright(copyrightNotice);
+    dialog.set_website(Config::get (KEY_WEBSITE));
+    dialog.set_authors(authorsList);
+    
+    WorkspaceWindow& currentWindow = globalCtx_.windowList_.findActiveWindow();
+    dialog.set_transient_for (currentWindow);
+    
+    // Show the about dialog
+    dialog.run();
+  }
   
   
 }}// namespace gui::interact
