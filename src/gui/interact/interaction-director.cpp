@@ -93,6 +93,16 @@ namespace interact {
     }
   
   
+  namespace { // Temporary Junk
+    inline void
+    unimplemented (const char* todo)
+    {
+      WARN (gui, "%s is not yet implemented. So sorry.", todo);
+    }
+  }
+  
+  
+  
   void
   InteractionDirector::buildMutator (TreeMutator::Handle buffer)
   {
@@ -102,7 +112,7 @@ namespace interact {
     buffer.create (
       TreeMutator::build()
     );
-    UNIMPLEMENTED ("create a sensible binding between root-controller and root-model element");
+    unimplemented ("create a sensible binding between root-controller and root-model element");
   }
   
   
@@ -117,7 +127,7 @@ namespace interact {
   void
   InteractionDirector::newProject()
   {
-    UNIMPLEMENTED ("launch project setup UI");
+    unimplemented ("launch project setup UI");
   }
   
   
@@ -150,7 +160,7 @@ namespace interact {
   void
   InteractionDirector::forkProject()
   {
-    UNIMPLEMENTED ("launch project setup UI to create a fork of the project under new name");
+    unimplemented ("launch project setup UI to create a fork of the project under new name");
   }
   
   
@@ -169,7 +179,7 @@ namespace interact {
     dialog::PreferencesDialog dialog(getWorkspaceWindow());
     dialog.run();
     
-    UNIMPLEMENTED ("edit global configuration");
+    unimplemented ("edit global configuration");
   }
   
   
@@ -183,7 +193,7 @@ namespace interact {
   void
   InteractionDirector::openFile()
   {
-    UNIMPLEMENTED ("open file");
+    unimplemented ("open file");
   }
   
   
@@ -201,7 +211,7 @@ namespace interact {
     dialog::Render dialog(getWorkspaceWindow());                                   //////global -> InteractionDirector
     dialog.run();
     
-    UNIMPLEMENTED ("start render");
+    unimplemented ("start render");
   }
   
   

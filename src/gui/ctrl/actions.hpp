@@ -107,11 +107,11 @@ namespace ctrl {
           
           
           menu("EditMenu", _("_Edit"));
-          entry ([&]() { onMenu_others();                     } , "EditUndo",        Stock::UNDO);
-          entry ([&]() { onMenu_others();                     } , "EditRedo",        Stock::REDO);
-          entry ([&]() { onMenu_others();                     } , "EditCut",         Stock::CUT);
-          entry ([&]() { onMenu_others();                     } , "EditCopy",        Stock::COPY);
-          entry ([&]() { onMenu_others();                     } , "EditPaste",       Stock::PASTE);
+          entry ([&]() { unimplemented ("Edit/Undo");         } , "EditUndo",        Stock::UNDO);
+          entry ([&]() { unimplemented ("Edit/Redo");         } , "EditRedo",        Stock::REDO);
+          entry ([&]() { unimplemented ("Edit/Cut");          } , "EditCut",         Stock::CUT);
+          entry ([&]() { unimplemented ("Edit/Copy");         } , "EditCopy",        Stock::COPY);
+          entry ([&]() { unimplemented ("Edit/Pasta");        } , "EditPaste",       Stock::PASTE);
           entry ([&]() { globalCtx_.director_.editSetup();    } , "EditPreferences", Stock::PREFERENCES);
           
           
@@ -326,9 +326,9 @@ namespace ctrl {
       
       // Temporary Junk
       void
-      onMenu_others()                                      /////////////////////////TICKET #1070 need a concept how to bind global actions
+      unimplemented (const char* todo)
         {
-          g_message("A menu item was selected.");
+          WARN (gui, "%s is not yet implemented. So sorry.", todo);
         }
       
       
