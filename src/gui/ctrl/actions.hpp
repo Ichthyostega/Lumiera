@@ -111,25 +111,42 @@ namespace ctrl {
           
           
           menu("FileMenu", _("_File"));
-          entry ([&]() { onMenu_file_newProject(); }   , "FileNewProject", Stock::NEW,     _("_New Project..."));
-          entry ([&]() { onMenu_file_save();   }       , "FileSave",       Stock::SAVE,    _("_Save Project"));
-          entry ([&]() { onMenu_file_saveAs(); }       , "FileSaveAs",     Stock::SAVE_AS, _("_Save Project As..."));
-          entry ([&]() { onMenu_file_open();   }       , "FileOpen",       Stock::OPEN,    _("_Open..."));
-          entry ([&]() { onMenu_file_render(); }       , "FileRender", _("_Render...")), AccelKey("<shift>R");
-          entry ([&]() { onMenu_file_quit();   }       , "FileQuit",       Stock::QUIT);
-
+          entry ([&]() { globalCtx_.director_.newProject();   } , "FileNewProject",  Stock::NEW,     _("_New Project..."));
+          entry ([&]() { globalCtx_.director_.saveSnapshot(); } , "FileSave",        Stock::SAVE,    _("_Save Project"));
+          entry ([&]() { globalCtx_.director_.forkProject();  } , "FileSaveAs",      Stock::SAVE_AS, _("_Save Project As..."));
+          entry ([&]() { globalCtx_.director_.openFile();     } , "FileOpen",        Stock::OPEN,    _("_Open..."));
+          entry ([&]() { onMenu_file_render();                } , "FileRender",                      _("_Render...")),  AccelKey("<shift>R");
+          entry ([&]() { globalCtx_.uiManager_.terminateUI(); } , "FileQuit",        Stock::QUIT);
+          
           
           menu("EditMenu", _("_Edit"));
-          entry ([&]() { onMenu_others(); }            , "EditUndo", Stock::UNDO);
-          entry ([&]() { onMenu_others(); }            , "EditRedo", Stock::REDO);
-          entry ([&]() { onMenu_others(); }            , "EditCut",  Stock::CUT);
-          entry ([&]() { onMenu_others(); }            , "EditCopy", Stock::COPY);
-          entry ([&]() { onMenu_others(); }            , "EditPaste",Stock::PASTE);
-          entry ([&]() { onMenu_edit_preferences(); }  , "EditPreferences", Stock::PREFERENCES);
+          entry ([&]() { onMenu_others();                     } , "EditUndo",        Stock::UNDO);
+          entry ([&]() { onMenu_others();                     } , "EditRedo",        Stock::REDO);
+          entry ([&]() { onMenu_others();                     } , "EditCut",         Stock::CUT);
+          entry ([&]() { onMenu_others();                     } , "EditCopy",        Stock::COPY);
+          entry ([&]() { onMenu_others();                     } , "EditPaste",       Stock::PASTE);
+          entry ([&]() { onMenu_edit_preferences();           } , "EditPreferences", Stock::PREFERENCES);
           
+          
+          menu("SequenceMenu", _("_Sequence"));
+          entry ([&]() { globalCtx_.director_.newSequence();  } , "SequenceAdd", _("_Add..."));
+          
+          
+          menu("TrackMenu", _("_Track"));
+          entry ([&]() { globalCtx_.director_.newTrack();     } , "TrackAdd", _("_Add..."));
+          
+          
+          menu("HelpMenu", _("_Help"));
+          entry ([&]() { onMenu_help_about();                 } , "HelpAbout", Stock::ABOUT);
+          
+          
+          menu("WindowMenu", _("_Window"));
+          entry ([&]() { globalCtx_.windowList_.newWindow(); } , "WindowNewWindow", StockID("new_window"));
+          entry ([&]() { globalCtx_.windowList_.closeWindow();}, "WindowCloseWindow", _("Close Window"));
+          actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
+
           
           menu("ViewMenu", _("_View"));
-          
           assetsPanelAction = ToggleAction::create("ViewAssets", StockID("panel_assets"));
           assetsPanelAction->signal_toggled().connect (                              [&]() { onMenu_view_assets(); });
           actionGroup->add(assetsPanelAction);
@@ -142,25 +159,8 @@ namespace ctrl {
           viewerPanelAction->signal_toggled().connect(                               [&]() { onMenu_view_viewer(); });
           actionGroup->add(viewerPanelAction);
           
-          
-          menu("SequenceMenu", _("_Sequence"));
-          entry ([&]() { onMenu_sequence_add(); }      , "SequenceAdd", _("_Add..."));
-          
-          
-          menu("TrackMenu", _("_Track"));
-          entry ([&]() { onMenu_track_add(); }         , "TrackAdd", _("_Add..."));
-          
-          
-          menu("WindowMenu", _("_Window"));
-          entry ([&]() { onMenu_window_new_window(); } , "WindowNewWindow", StockID("new_window"));
-          entry ([&]() { onMenu_window_close_window();}, "WindowCloseWindow", _("Close Window"));
-          actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
-          
-          
-          menu("HelpMenu", _("_Help"));
-          entry ([&]() { onMenu_help_about(); }        , "HelpAbout", Stock::ABOUT);
-          
           uiManager.insert_action_group(actionGroup);
+          
           
           
           //----- Create the UI layout -----//
@@ -306,40 +306,10 @@ namespace ctrl {
       /* ============ File Menu ========== */
       
       void
-      onMenu_file_newProject()
-        {
-          globalCtx_.director_.newProject();
-        }
-      
-      void
-      onMenu_file_save()
-        {
-          globalCtx_.director_.saveSnapshot();
-        }
-      
-      void
-      onMenu_file_saveAs()
-        {
-          globalCtx_.director_.forkProject();
-        }
-      
-      void
-      onMenu_file_open()
-        {
-          globalCtx_.director_.openFile();
-        }
-      
-      void
       onMenu_file_render()
         {
           dialog::Render dialog(getWorkspaceWindow());                                   //////global -> InteractionDirector
           dialog.run();
-        }
-      
-      void
-      onMenu_file_quit()
-        {
-          globalCtx_.uiManager_.terminateUI();
         }
       
       
@@ -384,40 +354,6 @@ namespace ctrl {
       
       
       
-      /* ============ Sequence Menu ====== */
-      
-      void
-      onMenu_sequence_add()
-        {
-          /////////////////////////////////////////////////////////////////////////////////////TODO consider to invoke those one-liners directly from the lambda!
-          globalCtx_.director_.newSequence();
-        }
-      
-      
-      
-      /* ============ Track Menu ========= */
-      
-      void
-      onMenu_track_add()
-        {
-          globalCtx_.director_.newSequence();
-        }
-      
-      
-      
-      /* ============ Window Menu ======== */
-      
-      void
-      onMenu_window_new_window()
-        {
-          globalCtx_.windowList_.newWindow();
-        }
-      
-      void
-      onMenu_window_close_window()
-        {
-          globalCtx_.windowList_.closeWindow();
-        }
       
       void
       onMenu_show_panel(int panel_index)
@@ -425,9 +361,6 @@ namespace ctrl {
           getWorkspaceWindow().getPanelManager().showPanel (panel_index);
         }
       
-      
-      
-      /* ============ Help Menu ========== */
       
       void
       onMenu_help_about()
