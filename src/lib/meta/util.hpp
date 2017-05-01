@@ -39,20 +39,9 @@
 
 
 #include <typeinfo>
+#include <string>
 
-namespace std { // forward declaration for std::string...
-  
-  template<typename C>
-  struct char_traits;
-  
-  template<typename T>
-  class allocator;
-
-  template<typename c, class TRAIT, class _ALLO>
-  class basic_string;
-  
-  using string = basic_string<char, char_traits<char>, allocator<char>>;
-  
+namespace std {
   
   // forward declarations for common smart ptrs
   template<typename T>
