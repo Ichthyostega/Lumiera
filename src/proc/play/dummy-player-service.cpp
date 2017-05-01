@@ -46,7 +46,7 @@ namespace proc  {
   
     using std::string;
     using lumiera::Subsys;
-    using std::auto_ptr;
+    using std::unique_ptr;
     using std::bind;
     
     
@@ -263,7 +263,7 @@ namespace proc  {
     ProcessImpl*
     DummyPlayerService::start (LumieraDisplaySlot viewerHandle)
       {
-        auto_ptr<ProcessImpl> newProcess (new ProcessImpl (viewerHandle));
+        unique_ptr<ProcessImpl> newProcess (new ProcessImpl (viewerHandle));
 
         REQUIRE (!newProcess->isActive());
         newProcess->setRate(25);

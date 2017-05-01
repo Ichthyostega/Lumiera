@@ -98,8 +98,8 @@ namespace lib {
         { }
       
       template<class SU>
-      explicit ScopedPtrHolder (std::auto_ptr<SU> p)  // never throws
-        : _Parent(p.release())
+      explicit ScopedPtrHolder (std::unique_ptr<SU> pu)  // never throws
+        : _Parent(pu.release())
         { }
       
       ScopedPtrHolder (ScopedPtrHolder const& ref)

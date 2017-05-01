@@ -170,27 +170,14 @@ namespace test{
       void
       check_ownership_transfer ()
         {
-          std::auto_ptr<X> au (new X(23));
-          CHECK (au.get());
+          std::unique_ptr<X> up (new X(23));
+          CHECK (up.get());
           
-          P<X> pX (std::move(au));
-          CHECK (!au.get());
+          P<X> pX (std::move(up));
+          CHECK (!up.get());
           CHECK (pX);
           CHECK (1 == pX.use_count());
           CHECK (23 == pX->x_);
-          
-          au.reset (new X(21));
-          CHECK (au.get());
-          
-          pX.reset();
-          CHECK (!pX);
-          CHECK (0 == pX.use_count());
-          
-          pX = std::move(au);
-          CHECK (!au.get());
-          CHECK (pX);
-          CHECK (1 == pX.use_count());
-          CHECK (21 == pX->x_);
         }
       
       

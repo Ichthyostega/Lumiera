@@ -38,7 +38,6 @@ namespace mobject {
 namespace builder {
   
   using util::isnil;
-  using std::auto_ptr;
   using std::unique_ptr;
   
   
@@ -46,7 +45,7 @@ namespace builder {
     {
       
       session::Fixture & fixedTimeline_;
-      auto_ptr<engine::RenderGraph> procSegment_;
+      unique_ptr<engine::RenderGraph> procSegment_;
       
       unique_ptr<SegmentationTool> segmentation_;
       unique_ptr<NodeCreatorTool> fabrication_;
@@ -59,8 +58,8 @@ namespace builder {
       
     };
   
-  ToolFactory::ToolFactory (session::Fixture& theTimeline)
-    : state_(new BuildProcessState (theTimeline))
+  ToolFactory::ToolFactory (session::Fixture& theFixture)
+    : state_(new BuildProcessState (theFixture))
   {
     ENSURE (state_->fixedTimeline_.isValid());
     ENSURE (state_->procSegment_.get());
@@ -89,13 +88,13 @@ namespace builder {
   }
   
   
-                   //////////////////////////////////////////TODO: a better idea than using auto_ptr?
-  auto_ptr<engine::RenderGraph>
+  engine::RenderGraph&
   ToolFactory::getProduct ()
   {
     state_->segmentation_.reset(0);
     state_->fabrication_.reset(0);
-    return state_->procSegment_;
+    UNIMPLEMENTED ("anything regarding the fixture and build process....");
+    return *state_->procSegment_;
   }
   
   

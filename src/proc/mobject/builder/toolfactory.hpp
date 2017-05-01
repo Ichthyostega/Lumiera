@@ -73,9 +73,9 @@ namespace builder {
       
       /** receive the finished product of the build process; effectively
        *  releases any other builder tool object
-       *                                   //////////////////////////////////////////TODO a better idea than using auto_ptr?
+       * @todo unclear what to do and to return here
        */
-      std::auto_ptr<engine::RenderGraph> getProduct ();
+      engine::RenderGraph& getProduct ();
     };
   
   

@@ -70,6 +70,7 @@ namespace lib {
    *   std::unique_ptr or even the behaviour of a plain
    *   old raw pointer, which is equivalent to \c true
    *   when the pointer isn'T \c NULL
+   * @deprecated obsoleted by C++11 rvalue references
    * 
    */
   template<class TY, class PAR = std::allocator<TY>>
