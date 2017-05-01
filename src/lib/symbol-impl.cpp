@@ -60,7 +60,12 @@ namespace lib {
   
   namespace { // global symbol table
     
-    SymbolTable symbolTable;
+    SymbolTable&
+    symbolTable()
+    {
+      static SymbolTable theSymbolTable;
+      return theSymbolTable;  // Meyer's Singleton
+    }
   }
   
   
@@ -68,9 +73,11 @@ namespace lib {
    * create Symbol by symbol table lookup.
    * @note identical strings will be mapped to the same Symbol (embedded pointer)
    * @warning potential lock contention, since each ctor call needs to do a lookup
+   * @remark since lumiera::LifecycleHook entries use a Symbol, the symbol table is
+   *         implemented as Meyer's singleton and pulled up early, way before main()
    */
   Symbol::Symbol (string&& definition)
-    : Literal{symbolTable.internedString (forward<string> (definition))}
+    : Literal{symbolTable().internedString (forward<string> (definition))}
     { }
   
   

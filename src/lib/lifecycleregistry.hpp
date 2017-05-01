@@ -43,7 +43,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <functional>
-#include <memory>
 #include <string>
 #include <set>
 #include <map>
@@ -53,7 +52,6 @@ namespace lumiera {
   
   using boost::noncopyable;
   using util::contains;
-  using std::unique_ptr;
   using std::function;
   using std::string;
 
@@ -94,12 +92,7 @@ namespace lumiera {
       
       /** get the (single) LifecycleRegistry instance. 
        *  @warning don't use it after the end of main()! */
-      static LifecycleRegistry& instance()   // Meyer's singleton
-        {
-          static unique_ptr<LifecycleRegistry> theRegistry_;
-          if (!theRegistry_) theRegistry_.reset (new LifecycleRegistry ());
-          return *theRegistry_;
-        }
+      static LifecycleRegistry& instance();
       
       
     private:
@@ -110,7 +103,6 @@ namespace lumiera {
       }
       
      ~LifecycleRegistry () { }
-      friend class std::default_delete<LifecycleRegistry>;
       
     };
 

@@ -69,7 +69,12 @@ namespace control {
     
     using CmdDefEntry = std::tuple<Symbol, DefinitionClosure>;
     
-    std::deque<CmdDefEntry> pendingCmdDefinitions;
+    std::deque<CmdDefEntry>&
+    pendingCmdDefinitions()
+    {
+      static std::deque<CmdDefEntry> definitionQueue;
+      return definitionQueue;
+    }
     
   }//(End) implementation details
   
@@ -119,7 +124,7 @@ namespace control {
       throw error::Invalid ("unbound function/closure provided for CommandSetup"
                            , error::LUMIERA_ERROR_BOTTOM_VALUE);
     
-    pendingCmdDefinitions.emplace_front (cmdID_, move(definitionBlock));
+    pendingCmdDefinitions().emplace_front (cmdID_, move(definitionBlock));
     return *this;
   }
   
@@ -127,22 +132,22 @@ namespace control {
   size_t
   CommandSetup::pendingCnt()
   {
-    return pendingCmdDefinitions.size();
+    return pendingCmdDefinitions().size();
   }
   
   void
   CommandSetup::invokeDefinitionClosures()
   {
-    while (not pendingCmdDefinitions.empty())
+    while (not pendingCmdDefinitions().empty())
       {
-        CmdDefEntry& entry = pendingCmdDefinitions.back();
+        CmdDefEntry& entry = pendingCmdDefinitions().back();
         Symbol& cmdID{get<Symbol>(entry)};
         DefinitionClosure& buildDefinition{get<DefinitionClosure> (entry)};
         
         TRACE (command, "defining Command(%s)...", cmdID.c());
         CommandDef def(cmdID);
         buildDefinition(def);
-        pendingCmdDefinitions.pop_back();
+        pendingCmdDefinitions().pop_back();
       }
   }
   

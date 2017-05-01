@@ -37,6 +37,19 @@ using util::cStr;
 
 namespace lumiera {
   
+  // ==== implementation Lifecycle Registry =======
+  
+  /** @remark since the LifecycleRegistry is used to implement
+   * the most basic initialisation, we need to ensure it is fully
+   * initialised and gets up on demand as early as possible. */
+  LifecycleRegistry&
+  LifecycleRegistry::instance()
+  {
+    static LifecycleRegistry theRegistry;
+    return theRegistry;   // Meyer's singleton
+  }
+
+  
   
   // ==== implementation LifecycleHook class =======
   
