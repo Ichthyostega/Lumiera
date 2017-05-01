@@ -76,9 +76,9 @@ namespace std {
   
   
   /** generic overload to use custom string conversions in output */
-  template<typename X, typename =    enable_StringConversion<X>>
-  ostream&
-  operator<< (ostream& os, X const& obj)
+  template<typename _CharT, typename _Traits, typename X, typename =    enable_StringConversion<X>>
+  inline basic_ostream<_CharT, _Traits>&
+  operator<< (basic_ostream<_CharT, _Traits>& os, X const& obj)
   {
     return os << util::StringConv<X>::invoke (obj);
   }
@@ -88,9 +88,9 @@ namespace std {
    * @note possibly also invokes custom string conversion,
    *       in case the pointee defines one
    */
-  template<typename X, typename =    enable_StringConversion<X>>
-  ostream&
-  operator<< (ostream& os, X const* ptr)
+  template<typename _CharT, typename _Traits, typename X, typename =    enable_StringConversion<X>>
+  inline basic_ostream<_CharT, _Traits>&
+  operator<< (basic_ostream<_CharT, _Traits>& os, X const* ptr)
   {
     if (ptr)
       return util::showAddr(os, ptr) << " ↗" << util::StringConv<X>::invoke (*ptr);
