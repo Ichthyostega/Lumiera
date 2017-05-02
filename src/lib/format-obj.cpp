@@ -198,14 +198,13 @@ apologies for that."
                                 "|lib::diff::"
                                 "|lib::"
                                 "|util::"
-                                "|proc::"
-                                "|proc::asset::"
-                                "|proc::mobject::"
-                                "|proc::mobject::session::"
-                                "|proc::play::"
+                                "|proc::(asset::|mobject::(session::)?|play::)?"
                                 "|gui::model"
                                 "|gui::ctrl"
                                 "|lumiera::"
+                                , regex::ECMAScript | regex::optimize};
+    
+    static regex stdString {"(__cxx11::)?basic_string<char, char_traits<char>, allocator<char>\\s*>\\s*"
                                 , regex::ECMAScript | regex::optimize};
     
     static regex stdAllocator {"(\\w+<(" TYP_EXP ")), allocator<\\2>\\s*"
@@ -225,6 +224,7 @@ apologies for that."
     auto end = typeName.end();
     
     end = regex_replace(pos, pos, end, commonPrefixes, "");
+    end = regex_replace(pos, pos, end, stdString, "string");
     end = regex_replace(pos, pos, end, stdAllocator, "$1");
     end = regex_replace(pos, pos, end, mapAllocator, "$1");
     end = regex_replace(pos, pos, end, uniquePtr, "unique_ptr<$1");
