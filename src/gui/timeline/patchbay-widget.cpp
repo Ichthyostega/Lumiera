@@ -30,7 +30,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/timeline/patchbay-widget.hpp"
 
 //#include "gui/ui-bus.hpp"

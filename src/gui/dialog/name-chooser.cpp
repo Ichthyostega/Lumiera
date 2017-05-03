@@ -27,7 +27,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/dialog/name-chooser.hpp"
 #include "gui/dialog/dialog.hpp"
 

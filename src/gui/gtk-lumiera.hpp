@@ -56,74 +56,7 @@
 #include <boost/noncopyable.hpp>
 
 
-
-
-/* ======= Namespace Definitions ======= */
-
-/** Lumiera GTK UI implementation root. */
 namespace gui {
-  
-
-  /** Backbone of the Lumiera GTK UI.
-   *  All interface elements and controllers of global relevance
-   *  are connected to a communication structure known as UI-Bus.
-   *  This structure allows to address interface elements by ID
-   *  and to process command invocations with asynchronous feedback
-   *  in a uniform way.
-   */
-  namespace ctrl {}
-  
-  /** UI interaction control.
-   *  Any overarching concerns of interaction patterns,
-   *  selecting the subject, forming and binding of commands,
-   *  management of focus and perspective, keybindings and gestures.
-   */
-  namespace interact {}
-  
-  /** The Lumiera GTK-GUI uses a thin proxy layer data model
-   *  on top of the actual "high-level-model", which lives in the
-   *  Proc-Layer below. GUI operations interact with these proxy model
-   *  entities, which in turn forward the calls to the actual objects
-   *  in the Proc-Layer, through the Command system (which enables UNDO).
-   *  
-   *  @todo: as of 1/2011 this connection between the GUI proxy model and
-   *         the Proc-Layer model needs to be set up. Currently, the GUI model
-   *         entities are just created standalone and thus dysfunctional.
-   *  @todo: as of 11/2015 this connection between UI and Proc-Layer is actually
-   *         in the works, and it is clear by now that we won't use proxy objects,
-   *         but rather a generic bus-like connection and symbolic IDs to designate
-   *         the model elements
-   *  @todo: and as of 2/2017 the new structure is basically set, but we need actually
-   *         to implement a new timeline display in accordance to this reworked design.
-   *         After this is done, most of the model elements in this packare are obsolete.
-   */
-  namespace model {}
-  
-  /** Video output implementation. */
-  namespace output {}
-
-  /** Dialog box classes. */
-  namespace dialog {}
-  
-  /** Docking panel classes. */
-  namespace panel {}
-  
-  /** The asset management, configuration and project settings. */
-  namespace setting {}
-  
-  /** The timeline display and editing operations. */
-  namespace timeline {}
-  
-  /** The global workspace with top-level windows. */
-  namespace workspace {}
-  
-  /** Lumiera custom widgets. */
-  namespace widget {}
-  
-  /** GUI helpers, utility functions and classes. */
-  namespace util {}
-  
-  
   
   
   

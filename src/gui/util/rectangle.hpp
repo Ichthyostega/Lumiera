@@ -29,7 +29,7 @@
 #ifndef GUI_UTIL_RECTANGLE_H
 #define GUI_UTIL_RECTANGLE_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 
 namespace gui {
 namespace util {

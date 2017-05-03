@@ -27,7 +27,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/widget/timeline/timeline-entity.hpp"
 #include "gui/widget/timeline/draw-strategy.hpp"
 

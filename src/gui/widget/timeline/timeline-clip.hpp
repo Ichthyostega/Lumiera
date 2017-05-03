@@ -28,7 +28,7 @@
 #ifndef GUI_WIDGET_TIMELINE_CLIP_H
 #define GUI_WIDGET_TIMELINE_CLIP_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/model/clip.hpp"
 #include "include/logging.h"
 #include "lib/time/timevalue.hpp"

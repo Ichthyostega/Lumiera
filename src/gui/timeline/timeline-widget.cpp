@@ -30,7 +30,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/timeline/timeline-widget.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"

@@ -35,7 +35,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/output/displayer.hpp"
 #include "gui/output/xvdisplayer.hpp"
 #include "gui/output/gdkdisplayer.hpp"

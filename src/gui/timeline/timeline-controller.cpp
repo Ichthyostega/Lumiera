@@ -38,7 +38,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "gui/timeline/track-presenter.hpp"
 #include "gui/timeline/marker-widget.hpp"

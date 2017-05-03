@@ -25,7 +25,7 @@
  ** Implementation of base functionality for workspace windows.
  */
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/config-keys.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/workspace/panel-manager.hpp"

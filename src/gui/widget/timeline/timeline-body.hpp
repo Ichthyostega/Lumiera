@@ -28,7 +28,7 @@
 #ifndef GUI_WIDGET_TIMELINE_BODY_H
 #define GUI_WIDGET_TIMELINE_BODY_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/widget/timeline/timeline-tool.hpp"
 #include "lib/time/timevalue.hpp"
 

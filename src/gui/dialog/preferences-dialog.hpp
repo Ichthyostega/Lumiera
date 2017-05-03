@@ -33,7 +33,7 @@
 #define GUI_DIALOG_PREFERENCES_DIALOG_H
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/dialog/dialog.hpp"
 
 namespace gui {

@@ -30,7 +30,7 @@
 #ifndef GUI_WIDGET_HEADER_WIDGET_H
 #define GUI_WIDGET_HEADER_WIDGET_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 
 namespace gui {  
 namespace widget {

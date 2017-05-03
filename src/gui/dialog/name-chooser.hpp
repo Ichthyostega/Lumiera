@@ -29,7 +29,7 @@
 #ifndef GUI_DIALOG_NAME_CHOOSER_H
 #define GUI_DIALOG_NAME_CHOOSER_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 
 
 namespace gui {

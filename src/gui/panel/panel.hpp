@@ -30,7 +30,7 @@
 #ifndef GUI_PANEL_PANEL_H
 #define GUI_PANEL_PANEL_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/widget/panel-bar.hpp"
 
 #include <gdlmm.h>

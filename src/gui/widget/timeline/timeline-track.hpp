@@ -33,7 +33,7 @@
 #define GUI_WIDGET_TIMELINE_TRACK_H
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/model/track.hpp"
 #include "gui/widget/menu-button.hpp"
 #include "gui/widget/mini-button.hpp"

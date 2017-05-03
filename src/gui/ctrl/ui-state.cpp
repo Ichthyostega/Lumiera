@@ -27,7 +27,6 @@
  */
 
 
-//#include "gui/gtk-lumiera.hpp"
 #include "gui/ctrl/ui-state.hpp"
 #include "gui/ctrl/state-manager.hpp"
 #include "gui/interact/focus-tracker.hpp"

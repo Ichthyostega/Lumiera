@@ -103,7 +103,7 @@
 #define GUI_UI_BUS_H
 
 
-#include "gui/gtk-lumiera.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
+#include "gui/gtk-base.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
 #include "gui/ctrl/playback-controller.hpp"
 
 #include <boost/noncopyable.hpp>

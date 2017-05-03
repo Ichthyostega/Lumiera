@@ -29,7 +29,6 @@
  */
 
 
-//#include "gui/gtk-lumiera.hpp"
 #include "gui/setting/asset-controller.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
 #include "lib/diff/tree-mutator.hpp"

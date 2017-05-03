@@ -31,7 +31,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/config-keys.hpp"
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ctrl/global-ctx.hpp"
@@ -104,9 +104,7 @@ namespace ctrl {
   void
   UiManager::terminateUI()
   {
-      Gtk::Main *main = Gtk::Main::instance();               /////////////////////////////////////TICKET #1032 : use gtk::Application instead of gtk::Main
-      REQUIRE(main);
-      main->quit();
+    gtkMain_.quit();
   }
   
   void

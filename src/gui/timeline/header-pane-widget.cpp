@@ -29,7 +29,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/timeline/header-pane-widget.hpp"
 
 //#include "gui/ui-bus.hpp"

@@ -30,7 +30,7 @@
 #ifndef GUI_MODEL_CLIP_H
 #define GUI_MODEL_CLIP_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <string>

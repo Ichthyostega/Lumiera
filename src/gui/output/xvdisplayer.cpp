@@ -33,7 +33,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/output/xvdisplayer.hpp"
 #include "include/logging.h"
 

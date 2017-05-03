@@ -32,7 +32,7 @@
 #ifndef GUI_WIDGET_TIMELINE_HEADER_CONTAINER_H
 #define GUI_WIDGET_TIMELINE_HEADER_CONTAINER_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "timeline-layout-helper.hpp"
 
 namespace gui {

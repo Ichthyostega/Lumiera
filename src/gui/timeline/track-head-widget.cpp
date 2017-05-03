@@ -30,7 +30,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/timeline/track-head-widget.hpp"
 
 //#include "gui/ui-bus.hpp"

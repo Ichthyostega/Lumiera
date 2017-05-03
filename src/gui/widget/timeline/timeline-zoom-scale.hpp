@@ -31,7 +31,7 @@
 #ifndef GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
 #define GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/widget/mini-button.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/widget/timeline/timeline-state.hpp"

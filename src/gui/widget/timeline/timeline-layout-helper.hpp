@@ -29,7 +29,7 @@
 #ifndef GUI_WIDGET_TIMELINE_LAYOUT_HELPER_H
 #define GUI_WIDGET_TIMELINE_LAYOUT_HELPER_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "lib/util-coll.hpp"
 #include "lib/tree.hpp"
 

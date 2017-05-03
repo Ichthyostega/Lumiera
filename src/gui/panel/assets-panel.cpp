@@ -25,7 +25,7 @@
  ** Implementation of a (dockable) panel to organise the assets of a project.
  */
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/panel/assets-panel.hpp"
 
 namespace gui  {

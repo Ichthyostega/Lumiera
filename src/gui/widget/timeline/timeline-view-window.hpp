@@ -31,7 +31,7 @@
 #ifndef GUI_WIDGET_TIMELINE_VIEW_WINDOW_H
 #define GUI_WIDGET_TIMELINE_VIEW_WINDOW_H
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
 
 namespace gui {

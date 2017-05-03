@@ -28,7 +28,6 @@
  */
 
 
-//#include "gui/gtk-lumiera.hpp"
 #include "gui/interact/navigator.hpp"
 #include "gui/interact/spot-locator.hpp"
 //#include "gui/ctrl/global-ctx.hpp"

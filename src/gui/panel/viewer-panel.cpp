@@ -25,7 +25,7 @@
  ** Implementation of a dockable panel to hold the video viewers
  */
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/panel/viewer-panel.hpp"
 
 #include "gui/workspace/workspace-window.hpp"

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/panel/timeline-panel-obsolete.hpp"
 #include "gui/widget/timeline/timeline-zoom-scale.hpp"
 #include "gui/workspace/workspace-window.hpp"

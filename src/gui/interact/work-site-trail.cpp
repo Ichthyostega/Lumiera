@@ -28,7 +28,6 @@
  */
 
 
-//#include "gui/gtk-lumiera.hpp"
 #include "gui/interact/work-site-trail.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
