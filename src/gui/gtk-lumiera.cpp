@@ -25,7 +25,7 @@
  */
 
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-base.hpp"
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ui-bus.hpp"
 #include "lib/depend.hpp"
@@ -65,18 +65,14 @@ namespace gui {
   
   /** @remarks this function blocks until shutdown of the UI */
   void
-  GtkLumiera::main (int argc, char *argv[])
+  GtkLumiera::run()
   {
-    Gtk::Main kit(argc, argv);
-    Glib::thread_init();
-    Gdl::init();
-    
     //////////////////////TICKET #959 : establish the new backbone here / replaces Project and Controller
     UiBus uiBus;
     
     ctrl::UiManager uiManager(uiBus);
     uiManager.createApplicationWindow();
-    kit.run(); // GTK event loop
+    uiManager.performMainLoop();
   }
   
   

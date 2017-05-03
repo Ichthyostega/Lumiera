@@ -102,11 +102,8 @@ namespace gui {
             string errorMsgBuff;
             try
               {
-                int argc =0;
-                char *argv[] = {};                     // dummy command line for GTK
-                
                 // execute the GTK Event Loop____________
-                GtkLumiera::application().main(argc, argv);          /////////////TICKET #1048 : do not access GtkLumiera as singleton, rather just place it as local variable on the stack here 
+                GtkLumiera::application().run();       /////////////TICKET #1048 : do not access GtkLumiera as singleton, rather just place it as local variable on the stack here 
               }                                        // all went well, regular shutdown
             
             catch (lumiera::Error& problem)

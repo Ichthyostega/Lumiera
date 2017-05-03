@@ -147,7 +147,7 @@ namespace gui {
       
       
       /** start up the GUI and run the event thread */
-      void main(int argc, char *argv[]);
+      void run();
       
     };
   

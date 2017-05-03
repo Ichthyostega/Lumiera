@@ -52,6 +52,10 @@ namespace ctrl {
   
   using workspace::StyleManager;
   
+  namespace { // dummy command line for GTK
+    int argc =0;
+  }
+  
   
   
   // dtors via smart-ptr invoked from here...
@@ -70,7 +74,11 @@ namespace ctrl {
     , globals_{new GlobalCtx{bus, *this}}
     , actions_{new Actions{*globals_}}
     , styleManager_{new StyleManager{}}
+    , gtkMain_(&argc, nullptr)
     {
+      Glib::thread_init();
+      Gdl::init();
+      
       actions_->populateMainActions (*this);
     }
   
@@ -83,6 +91,13 @@ namespace ctrl {
   {
     if (globals_->windowList_.empty())
       globals_->windowList_.newWindow();
+  }
+  
+
+  void
+  UiManager::performMainLoop()
+  {
+    gtkMain_.run(); // GTK event loop
   }
   
   

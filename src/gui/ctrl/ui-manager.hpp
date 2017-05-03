@@ -81,6 +81,8 @@ namespace ctrl {
       
       unique_ptr<workspace::StyleManager> styleManager_;
       
+      Gtk::Main gtkMain_;
+      
     public:
       /**
        * There is one global UiManager instance,
@@ -97,6 +99,12 @@ namespace ctrl {
        * This triggers the build-up of the user interface widgets.
        */
       void createApplicationWindow();
+      
+      /**
+       * start the GTK Main loop and thus activate the UI.
+       * @note this function does not return until UI shutdown.
+       */
+      void performMainLoop();
       
       /**
        * Cause the main event loop to terminate, so the application as a whole unwinds.
