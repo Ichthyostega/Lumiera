@@ -1783,8 +1783,9 @@
 <node CREATED="1485126410424" ID="ID_1158773288" MODIFIED="1485549693700" TEXT="wir haben mehrere Fenster">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1485126418431" ID="ID_1145950660" MODIFIED="1485550989113" TEXT="GtkLumiera sollte kein Singleton sein">
-<arrowlink COLOR="#80b3ef" DESTINATION="ID_164246989" ENDARROW="Default" ENDINCLINATION="-42;-74;" ID="Arrow_ID_401425747" STARTARROW="None" STARTINCLINATION="348;19;"/>
+<node CREATED="1485126418431" ID="ID_1145950660" MODIFIED="1493846257532" TEXT="GtkLumiera sollte kein Singleton sein">
+<arrowlink COLOR="#80b3ef" DESTINATION="ID_164246989" ENDARROW="Default" ENDINCLINATION="-42;-74;" ID="Arrow_ID_401425747" STARTARROW="None" STARTINCLINATION="387;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1485549610040" ID="ID_699947133" MODIFIED="1485549690035" TEXT="Aktionen f&#xfc;r jedes top-level Window repliziert">
 <icon BUILTIN="pencil"/>
@@ -1801,17 +1802,17 @@
 <linktarget COLOR="#ae1856" DESTINATION="ID_206480879" ENDARROW="Default" ENDINCLINATION="715;0;" ID="Arrow_ID_926482654" SOURCE="ID_392996871" STARTARROW="Default" STARTINCLINATION="134;383;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node COLOR="#338800" CREATED="1485126609878" FOLDED="true" ID="ID_815018040" MODIFIED="1493752914183" TEXT="#1064 investigate WindowManager lifecycle">
+<node COLOR="#338800" CREATED="1485126609878" FOLDED="true" ID="ID_815018040" MODIFIED="1493846218724" TEXT="#1064 investigate WindowManager lifecycle">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1493752896125" ID="ID_1471478347" MODIFIED="1493752898687" TEXT="erledigt"/>
 <node CREATED="1493752899224" ID="ID_83018735" MODIFIED="1493752906171" TEXT="WindowManager war gar nicht so wichtig"/>
 <node CREATED="1493752906736" ID="ID_1191055389" MODIFIED="1493752913019" TEXT="er ist jetzt nur noch eine WindowList"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485550950793" ID="ID_50100583" MODIFIED="1493752801215" TEXT="#1048 rectify UI Lifecycle">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1485550968230" FOLDED="true" ID="ID_164246989" MODIFIED="1493752805598" TEXT="GtkLumiera darf kein Singleton mehr sein">
-<linktarget COLOR="#80b3ef" DESTINATION="ID_164246989" ENDARROW="Default" ENDINCLINATION="-42;-74;" ID="Arrow_ID_401425747" SOURCE="ID_1145950660" STARTARROW="None" STARTINCLINATION="348;19;"/>
-<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485550950793" FOLDED="true" ID="ID_50100583" MODIFIED="1493853661580" TEXT="#1048 rectify UI Lifecycle">
+<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1485550968230" ID="ID_164246989" MODIFIED="1493846257532" TEXT="GtkLumiera darf kein Singleton mehr sein">
+<linktarget COLOR="#80b3ef" DESTINATION="ID_164246989" ENDARROW="Default" ENDINCLINATION="-42;-74;" ID="Arrow_ID_401425747" SOURCE="ID_1145950660" STARTARROW="None" STARTINCLINATION="387;0;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1485561982971" ID="ID_287757293" MODIFIED="1485917472736" TEXT="Blocker entfernen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -1819,14 +1820,56 @@
 <arrowlink COLOR="#a9b4c1" DESTINATION="ID_530209145" ENDARROW="Default" ENDINCLINATION="-17;-195;" ID="Arrow_ID_626063593" STARTARROW="None" STARTINCLINATION="9;270;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node COLOR="#338800" CREATED="1493846161963" ID="ID_358400969" MODIFIED="1493846190200" TEXT="durch fortgesetztes Refactoring gel&#xf6;st">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1485550992299" FOLDED="true" ID="ID_1685125156" MODIFIED="1493752789466" TEXT="es blocken">
+</node>
+<node CREATED="1485550992299" ID="ID_1685125156" MODIFIED="1493846205911" TEXT="es blocken">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1485550999762" ID="ID_249139218" MODIFIED="1485917500008" TEXT="WindowList">
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1485551007297" ID="ID_1398242341" MODIFIED="1485917502909" TEXT="Project &amp; Controller">
 <icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493853541747" ID="ID_689819683" MODIFIED="1493853547124" TEXT="TODO">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1493853548739" ID="ID_949985796" MODIFIED="1493853586818" TEXT="Project &amp; Controller restlos entfernen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wartet noch darauf,
+    </p>
+    <p>
+      da&#223; die alte, obsolete Timeline zur&#252;ckgebaut ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1493853590149" ID="ID_1075149702" MODIFIED="1493853655203" TEXT="Race beim triggerShutdown">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      siehe guifacade.cpp
+    </p>
+    <p>
+      Problem ist: wenn das triggerShutdown kommt,
+    </p>
+    <p>
+      bevor die Notification-Facade ge&#246;ffnet werden konnte
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -1855,17 +1898,16 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1485126441508" ID="ID_1227132808" MODIFIED="1485454325864" TEXT="GtkLumiera">
+<node COLOR="#338800" CREATED="1485126441508" HGAP="32" ID="ID_1227132808" MODIFIED="1493852139145" TEXT="GtkLumiera" VSHIFT="-26">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1485454326827" ID="ID_1493501410" MODIFIED="1485454331748" TEXT="Applikation == Lebenszyklus">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1485463515929" ID="ID_785456397" MODIFIED="1485463523940" TEXT="f&#xfc;r die Verdrahtung zust&#xe4;ndig"/>
 <node CREATED="1485463525736" ID="ID_1608786246" MODIFIED="1485463536587" TEXT="h&#xe4;lt alle zentralen Komponenten"/>
+<node CREATED="1493846135327" ID="ID_832439809" MODIFIED="1493846145618" TEXT="initialisiert und startet Backbone"/>
 <node CREATED="1485463537111" ID="ID_929585985" MODIFIED="1485463543226" TEXT="wird nie selber direkt angesprochen"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1485917690936" HGAP="93" ID="ID_939419460" MODIFIED="1485917706156" TEXT="im Moment komplett kaputt" VSHIFT="57">
-<icon BUILTIN="messagebox_warning"/>
-</node>
 </node>
 <node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1489460543116" TEXT="ctrl::UiManager">
 <linktarget COLOR="#667b93" DESTINATION="ID_1698853761" ENDARROW="Default" ENDINCLINATION="19;-86;" ID="Arrow_ID_1952755524" SOURCE="ID_40172420" STARTARROW="None" STARTINCLINATION="-290;0;"/>
@@ -2367,15 +2409,21 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485898796393" ID="ID_1217726538" MODIFIED="1485898814419" TEXT="#1069 how to refer to the current window">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1492965823743" ID="ID_729520839" MODIFIED="1492965829769" TEXT="grunds&#xe4;tzlich gel&#xf6;st"/>
-<node CREATED="1492965830381" ID="ID_1556963629" MODIFIED="1492965844407" TEXT="globalCtx -&gt; find active window"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1492965845115" ID="ID_1375700494" MODIFIED="1492965909373" TEXT="TODO Panel-Aktionen">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1485898796393" FOLDED="true" ID="ID_1217726538" MODIFIED="1493853319444" TEXT="#1069 how to refer to the current window">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1492965823743" ID="ID_729520839" MODIFIED="1493852096079" TEXT="grunds&#xe4;tzlich gel&#xf6;st">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1492965830381" ID="ID_1556963629" MODIFIED="1493852099751" TEXT="globalCtx -&gt; find active window">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#990000" CREATED="1492965845115" FOLDED="true" ID="ID_1375700494" MODIFIED="1493852949884" TEXT="TODO Panel-Aktionen">
+<arrowlink DESTINATION="ID_1176492517" ENDARROW="Default" ENDINCLINATION="14;-313;" ID="Arrow_ID_1083220093" STARTARROW="None" STARTINCLINATION="632;-20;"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1492965914018" ID="ID_1134955241" MODIFIED="1492965917669" TEXT="UNIMPLEMENTED"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1492965918377" ID="ID_673471196" MODIFIED="1492965927247" TEXT="blockt noch das ganze UI">
-<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1493852058451" ID="ID_1074189286" MODIFIED="1493852066342" TEXT="war schon seit 2009 deaktiviert"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1493852066930" ID="ID_715367457" MODIFIED="1493852080868" TEXT="das ganze Konzept mu&#xdf; &#xfc;berarbeitet werden">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -2613,13 +2661,17 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493852906845" HGAP="24" ID="ID_1176492517" MODIFIED="1493852949884" TEXT="siehe auch #1097 clarify the role of the panels in the UI" VSHIFT="9">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1176492517" ENDARROW="Default" ENDINCLINATION="14;-313;" ID="Arrow_ID_1083220093" SOURCE="ID_1375700494" STARTARROW="None" STARTINCLINATION="632;-20;"/>
+<icon BUILTIN="forward"/>
+</node>
 </node>
 <node CREATED="1488672665626" ID="ID_590886664" MODIFIED="1488672675810" TEXT="Grundlagen f&#xfc;r Command-handling"/>
-<node CREATED="1487313769425" FOLDED="true" ID="ID_728232011" MODIFIED="1488423342542" TEXT="Grundlagen f&#xfc;r InteractionControl">
+<node CREATED="1487313769425" ID="ID_728232011" MODIFIED="1493847644509" TEXT="Grundlagen f&#xfc;r InteractionControl">
 <node CREATED="1488419854029" ID="ID_932507511" MODIFIED="1488419868604" TEXT="erst mal: Konzept">
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1487313191100" FOLDED="true" ID="ID_1619021408" MODIFIED="1488423308109" TEXT="Fazit(TODO)">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1487313191100" ID="ID_1619021408" MODIFIED="1493847646952" TEXT="Fazit(TODO)">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1487313203254" FOLDED="true" ID="ID_573801539" MODIFIED="1488423308094" TEXT="Klassen anlegen">
 <icon BUILTIN="button_ok"/>
@@ -2642,16 +2694,16 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1487313454220" FOLDED="true" ID="ID_640048374" MODIFIED="1488423308095" TEXT="Abgriff in CoreServices">
+<node CREATED="1487313454220" FOLDED="true" ID="ID_640048374" MODIFIED="1493847715324" TEXT="Abgriff in CoreServices">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1487313462963" ID="ID_342355040" MODIFIED="1487475672626" TEXT="injizieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1487313475593" FOLDED="true" ID="ID_951423078" MODIFIED="1488423308076" TEXT="&#xfc;ber Lifecycle nachdenken">
+<node CREATED="1487313475593" FOLDED="true" ID="ID_951423078" MODIFIED="1493847702078" TEXT="&#xfc;ber Lifecycle nachdenken">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1487472682881" ID="ID_1575753680" MODIFIED="1487472687124" TEXT="UI-Bus zuerst"/>
 <node CREATED="1487472687641" ID="ID_731426548" MODIFIED="1487472699179" TEXT="dann Ui-Manager -&gt; InteractionDirector -&gt; Ui-State"/>
-<node CREATED="1487472711453" FOLDED="true" ID="ID_759583421" MODIFIED="1488423308055" TEXT="beim Zerst&#xf6;ren von GtkLumiera">
+<node CREATED="1487472711453" FOLDED="true" ID="ID_759583421" MODIFIED="1493847694759" TEXT="beim Zerst&#xf6;ren von GtkLumiera">
 <node CREATED="1487472720476" ID="ID_1676214656" MODIFIED="1487472730102" TEXT="sollte die Event-Loop bereits beendet sein"/>
 <node CREATED="1487472730667" ID="ID_1826692985" MODIFIED="1487472740645" TEXT="k&#xf6;nnen aber noch Fenster existieren"/>
 <node CREATED="1487472757439" ID="ID_977443666" MODIFIED="1487475766036">
@@ -2673,7 +2725,7 @@
 <node CREATED="1487472971330" ID="ID_81364279" MODIFIED="1487472986931" TEXT="grunds&#xe4;tzliches Shutdown-Problem">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1487472987984" FOLDED="true" ID="ID_1443542622" MODIFIED="1488423308055" TEXT="aber harmlos">
+<node CREATED="1487472987984" FOLDED="true" ID="ID_1443542622" MODIFIED="1493847700253" TEXT="aber harmlos">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1487472993439" ID="ID_310404379" MODIFIED="1487473004097" TEXT="unter der Annahme, da&#xdf; das UI wirklich single-threaded l&#xe4;uft"/>
 <node CREATED="1487473004949" ID="ID_1092623141" MODIFIED="1487473018151" TEXT="wenn wir die Garantie haben, da&#xdf; die Event-Loop nichts mehr macht"/>
@@ -2695,7 +2747,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1487475679257" FOLDED="true" ID="ID_1700311138" MODIFIED="1488423308077" TEXT="wir injizieren anders herum">
+<node CREATED="1487475679257" FOLDED="true" ID="ID_1700311138" MODIFIED="1493847709045" TEXT="wir injizieren anders herum">
 <icon BUILTIN="forward"/>
 <node CREATED="1487475695910" ID="ID_1341876014" MODIFIED="1487475704865" TEXT="StateManager als sub-Service"/>
 <node CREATED="1487475711092" ID="ID_838045301" MODIFIED="1487475719743" TEXT="geh&#xf6;rt CoreService"/>
@@ -2710,13 +2762,13 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1487313659680" FOLDED="true" ID="ID_1420397002" MODIFIED="1488423308095" TEXT="FocusTap">
+<node CREATED="1487313659680" ID="ID_1420397002" MODIFIED="1493847725843" TEXT="FocusTap">
 <node CREATED="1487313668423" ID="ID_1248049801" MODIFIED="1487313679321" TEXT="Signal in model::Tangible"/>
 <node CREATED="1487313680053" ID="ID_1563882406" MODIFIED="1487313691288" TEXT="Methode zum Installieren"/>
 <node CREATED="1487313691644" ID="ID_1797207964" MODIFIED="1487313704558" TEXT="Verbindung zum FocusTracker herstellen (automatisch)"/>
 <node CREATED="1487313717368" ID="ID_1638145586" MODIFIED="1487313725195" TEXT="entsprechend auch in WorkplaceWindow"/>
 </node>
-<node CREATED="1487313566901" FOLDED="true" ID="ID_268630370" MODIFIED="1488423308095" TEXT="Methoden">
+<node CREATED="1487313566901" FOLDED="true" ID="ID_268630370" MODIFIED="1493847747167" TEXT="Methoden">
 <node CREATED="1487313570932" ID="ID_1733821258" MODIFIED="1487313578015" TEXT="getCurrentWorkSite"/>
 <node CREATED="1487313578555" FOLDED="true" ID="ID_671600782" MODIFIED="1488423308077" TEXT="getCurrentMO">
 <node CREATED="1487313612063" ID="ID_1795028934" MODIFIED="1487313618034" TEXT="ggfs.sinnvollen Dummy hier"/>
@@ -2749,7 +2801,7 @@
 <arrowlink DESTINATION="ID_816848691" ENDARROW="Default" ENDINCLINATION="111;0;" ID="Arrow_ID_792016162" STARTARROW="None" STARTINCLINATION="111;0;"/>
 </node>
 </node>
-<node CREATED="1487461476736" FOLDED="true" ID="ID_912393863" MODIFIED="1488566326476" TEXT="Actions">
+<node CREATED="1487461476736" FOLDED="true" ID="ID_912393863" MODIFIED="1493847773819" TEXT="Actions">
 <node CREATED="1487461484935" ID="ID_951148221" MODIFIED="1487461491098" TEXT="Kontext f&#xfc;r globale Aktionen"/>
 </node>
 </node>

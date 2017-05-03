@@ -121,8 +121,8 @@ namespace ctrl {
   void
   UiManager::updateWindowFocusRelatedActions()
   {
-    UNIMPLEMENTED ("how to handle activation of menu entries depending on window focus"); ////////TICKET #1076  find out how to handle this properly
-    //////see Actions::updateActionState()
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
+    actions_->updateActionState (globals_->windowList_.findActiveWindow());
   }
 
   

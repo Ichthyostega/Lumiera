@@ -224,6 +224,35 @@ namespace ctrl {
       
       
       
+      /**
+       * Updates the state of the menu/toolbar actions
+       * to reflect the current state of the workspace
+       * @note the actual functionality was disabled by Joel with changeset 6151415 (from 4.4.2009),
+       *       which introduced a PanelManager. This whole concept was seemingly never finished.
+       * @todo as of 2017, the relation of panels to top level windows is unclear and likely
+       *       needs to be replaced by a focus + perspective concept (--> see topic "Interaction Control")
+       */
+      void
+      updateActionState (workspace::WorkspaceWindow& currentWindow)
+        {
+             ///////////////////////////////////////////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
+             ///////////////////////////////////////////////////////////////////////////////////////TICKET #1097  clarify the role and behaviour of Panels
+          /* unfinished, disabled by Joel with changeset 6151415 (from 4.4.2009)
+           * 
+          REQUIRE(currentWindow.assetsPanel != NULL);
+          REQUIRE(currentWindow.timelinePanel != NULL);
+          REQUIRE(currentWindow.viewerPanel != NULL);
+          
+//        is_updating_action_state = true;
+          assetsPanelAction->set_active  (currentWindow.assetsPanel->is_shown());
+          timelinePanelAction->set_active(currentWindow.timelinePanel->is_shown());
+          viewerPanelAction->set_active  (currentWindow.viewerPanel->is_shown());
+//        is_updating_action_state = false;
+          */
+        }
+      
+      
+      
     private: /* ===== Internals ===== */
       
       
@@ -267,34 +296,6 @@ namespace ctrl {
       
       
       
-      /**
-       * Updates the state of the menu/toolbar actions
-       * to reflect the current state of the workspace */
-      void
-      updateActionState()
-        {
-             ///////////////////////////////////////////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
-          /*
-          WorkspaceWindow& currentWindow = getWorkspaceWindow();
-          
-          REQUIRE(currentWindow.assetsPanel != NULL);
-          REQUIRE(currentWindow.timelinePanel != NULL);
-          REQUIRE(currentWindow.viewerPanel != NULL);
-          
-          is_updating_action_state = true;
-          assetsPanelAction->set_active  (currentWindow.assetsPanel->is_shown());
-          timelinePanelAction->set_active(currentWindow.timelinePanel->is_shown());
-          viewerPanelAction->set_active  (currentWindow.viewerPanel->is_shown());
-          is_updating_action_state = false;
-          */
-        }
-      
-      
-      
-      
-      
-    private:
-      
       
       /* ============ View Actions ========== */
       
@@ -305,6 +306,7 @@ namespace ctrl {
           //if(!is_updating_action_state)
           //  workspaceWindow.assetsPanel->show(
           //    assetsPanelAction->get_active());                                        //////global -> InteractionDirector
+          unimplemented ("view assets");
         }
       
       void
@@ -313,6 +315,7 @@ namespace ctrl {
           /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
           //if(!is_updating_action_state)
           //  workspaceWindow.timelinePanel->show(timelinePanActionselAction->get_active());
+          unimplemented ("view timeline");
         }
       
       void
@@ -321,6 +324,7 @@ namespace ctrl {
           /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
           //if(!is_updating_action_state)
           //  workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());        //////global -> InteractionDirector
+          unimplemented ("view viewer");
         }
       
       

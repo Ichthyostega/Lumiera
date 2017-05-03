@@ -24,6 +24,9 @@
 /** @file panel-manager.hpp
  ** Management of dockable panels.
  ** 
+ ** @todo 2017 need to clarify the intended behaviour of panels
+ **                               ///////////////////////////////////////////////////////////////////////////TICKET #1097  clarify the role and behaviour of Panels
+ ** 
  ** @see actions.hpp
  */
 
