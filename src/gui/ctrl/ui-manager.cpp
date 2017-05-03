@@ -40,9 +40,8 @@
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
-using Gtk::IconSize;
-using Gtk::IconFactory;
-
+#include <gdlmm.h>
+  
 using util::cStr;
 using util::isnil;
 
@@ -50,7 +49,11 @@ using util::isnil;
 namespace gui {
 namespace ctrl {
   
+  using Gtk::IconSize;
+  using Gtk::IconFactory;
+  
   using workspace::StyleManager;
+  
   
   namespace { // dummy command line for GTK
     int argc =0;

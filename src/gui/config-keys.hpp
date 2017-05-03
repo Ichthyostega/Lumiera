@@ -34,7 +34,7 @@
  ** to refer to the installation directory of the currently executing program.
  ** This allows for a relocatable Lumiera installation bundle.
  ** 
- ** @see guistart.cpp the plugin to pull up this GUI
+ ** @see gtk-lumiera.cpp the plugin to pull up this GUI
  ** @see lumiera::BasicSetup definition of the acceptable configuration values
  ** @see lumiera::AppState general Lumiera application main
  ** @see lumiera::Config

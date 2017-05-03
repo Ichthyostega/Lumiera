@@ -69,7 +69,7 @@ namespace gui {
    * somewhat special, as its sole purpose is to expose the subsystem
    * descriptor, which, when started, loads the GUI as a plugin and
    * invokes `launchUI(term)` there. For the implementation see
-   * gui::GuiRunner (guifacade.cpp) and guistart.cpp (the plugin).
+   * gui::GuiRunner (guifacade.cpp) and gtk-lumiera.cpp (the plugin).
    * 
    * @note this facade is intended to be used by Lumiera main solely.
    *       client code should always use the "business" interface(s).

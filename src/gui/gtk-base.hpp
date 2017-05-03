@@ -45,7 +45,7 @@
  ** @warning include here only what is absolutely necessary,
  **          for sake of compilation times and (debug) executable size.
  ** 
- ** @see guistart.cpp the plugin to pull up this GUI
+ ** @see gtk-lumiera.cpp the plugin to pull up this GUI
  ** @see gui::GuiFacade access point for starting the GUI
  ** @see gui::GuiNotification interface for communication with the gui from the lower layers
  ** @see lumiera::Config
