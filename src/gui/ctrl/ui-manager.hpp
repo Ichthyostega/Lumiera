@@ -64,6 +64,16 @@ namespace ctrl {
   class Actions;
   
   
+  /** Framework initialisation base */
+  class ApplicationBase
+    : public Gtk::UIManager
+    , boost::noncopyable
+    {
+    protected:
+      Gtk::Main gtkMain_;
+      ApplicationBase();
+    };
+  
   
   /**
    * Manage global concerns regarding a coherent user interface.
@@ -72,16 +82,12 @@ namespace ctrl {
    * menu / command actions and to enter the top-level model parts.
    */
   class UiManager
-    : public Gtk::UIManager
-    , boost::noncopyable
+    : public ApplicationBase
     {
-      
       unique_ptr<GlobalCtx> globals_;
       unique_ptr<Actions>   actions_;
       
       unique_ptr<workspace::StyleManager> styleManager_;
-      
-      Gtk::Main gtkMain_;
       
     public:
       /**

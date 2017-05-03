@@ -67,21 +67,29 @@ namespace ctrl {
   
   
   /**
+   * Initialise the GTK framework libraries
+   */
+  ApplicationBase::ApplicationBase()
+    : Gtk::UIManager()
+    , gtkMain_(&argc, nullptr)
+    {
+      Glib::thread_init();
+      Gdl::init();
+    }
+  
+  
+  /**
    * Initialise the interface globally on application start.
    * Setup the main application menu and bind the corresponding actions.
    * Register the icon configuration and sizes and lookup all the icons.
    * @see lumiera::Config
    */
   UiManager::UiManager (UiBus& bus)
-    : Gtk::UIManager()
+    : ApplicationBase()
     , globals_{new GlobalCtx{bus, *this}}
     , actions_{new Actions{*globals_}}
     , styleManager_{new StyleManager{}}
-    , gtkMain_(&argc, nullptr)
     {
-      Glib::thread_init();
-      Gdl::init();
-      
       actions_->populateMainActions (*this);
     }
   

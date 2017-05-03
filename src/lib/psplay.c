@@ -290,7 +290,8 @@ psplay_insert (PSplay self, PSplaynode node, int splayfactor)
             }
           else
             {
-              TODO ("policy for multiple entered items (before, after, fail, replace)");
+              WARN (psplay_dbg, "dropping duplicate entry for psplay");
+              ///////////////////////////TODO policy for multiple entered items (before, after, fail, replace)
               return NULL;
             }
         }
