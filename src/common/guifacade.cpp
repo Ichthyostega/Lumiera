@@ -71,7 +71,7 @@ namespace gui {
           bool res = this->launchUI (terminationHandle);
           
           if (!res || lumiera_error_peek())
-            throw lumiera::error::Fatal("failed to bring up GUI",lumiera_error());
+            throw lumiera::error::Fatal{"failed to bring up the GUI", lumiera_error()};
         }
       
       
@@ -93,7 +93,7 @@ namespace gui {
       : public lumiera::Subsys,
         public Sync<RecursiveLock_NoWait>
       {
-        operator string ()  const { return "Lumiera GTK GUI"; }
+        operator string()  const { return "Lumiera GTK GUI"; }
         
         bool 
         shouldStart (lumiera::Option& opts)  override
@@ -114,10 +114,10 @@ namespace gui {
             if (facade)
               return false;    // already started
             
-            facade.reset (   // trigger loading of the GuiStarterPlugin...
+            facade.reset (   //  trigger loading of the GuiStarterPlugin...
               new GuiRunner (
                     [=] (string* problemMessage)
-                        { //    will be invoked when the UI thread exits
+                        { //     will be invoked when the UI thread exits
                           closeGuiModule();
                           termNotification(problemMessage);
                         }));
@@ -159,7 +159,7 @@ namespace gui {
                                  "Probably this is due to some broken startup logic and should be fixed.");
               }
             else
-              facade.reset (0);
+              facade.reset (nullptr);
           }
         
         

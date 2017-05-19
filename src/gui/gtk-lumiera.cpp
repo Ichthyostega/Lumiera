@@ -78,6 +78,9 @@ namespace gui {
   
   namespace { // implementation details
     
+    using ctrl::UiManager;
+    
+    
     /**************************************************************************//**
      * Implement the necessary steps for actually making the Lumiera Gui available.
      * Establish the UI backbone services and start up the GTK GUI main event loop.
@@ -88,11 +91,15 @@ namespace gui {
     class GtkLumiera
       : boost::noncopyable
       {
+        UiBus uiBus_;
+        UiManager uiManager_;
         DisplayService activateDisplayService_;        ///////////////////////////TICKET #82 will go away once we have a real OutputSlot offered by the UI
         
       public:
         GtkLumiera ()
-          : activateDisplayService_()                  ///////////////////////////TICKET #82 obsolete (and incurs a race)
+          : uiBus_{}
+          , uiManager_{uiBus_}
+          , activateDisplayService_()                  ///////////////////////////TICKET #82 obsolete (and incurs a race)
           { }
         
         
@@ -102,12 +109,9 @@ namespace gui {
             string errorMsgBuff;
             try
               {
-                UiBus uiBus;
-                ctrl::UiManager uiManager(uiBus);
-                
                 // execute the GTK Event Loop____________
-                uiManager.createApplicationWindow();
-                uiManager.performMainLoop();
+                uiManager_.createApplicationWindow();
+                uiManager_.performMainLoop();
               }                                        // all went well, regular shutdown
             
             catch (lumiera::Error& problem)

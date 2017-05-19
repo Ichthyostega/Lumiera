@@ -31,9 +31,9 @@
  ** of the session model. Notable connections established herein:
  ** - connection to the [UI-Bus](\ref ui-bus.hpp)
  ** - the global Actions available though the menu
- ** - the WindowList
  ** - the InteractionDirector (top-level controller)
  ** - the StyleManager
+ ** - the WindowList
  ** 
  ** @see gtk-lumiera.hpp
  ** @see ui-bus.hpp
@@ -62,6 +62,7 @@ namespace ctrl {
   
   class GlobalCtx;
   class Actions;
+  
   
   
   /** Framework initialisation base */
