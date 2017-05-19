@@ -27,6 +27,12 @@
  ** The individual menu options are bound to functors (closures), which use a _global UI context_
  ** to access the target objects or invoke the signals.
  ** 
+ ** @todo the old `Gtk::Action` and `Gtk::ActionGroup` are planned to be deprecated.
+ **       Recommendation is to rely on `Gtk::Builder` and `Gtk::SimpleAction` instead.
+ **       As of 5/2017, it is not clear to what extent this might force us into additional
+ **       "desktop integration" we do not need nor want (like automatically connecting to
+ **       D-Bus). For that reason, we'll postpone this transition for the time being    /////////////////////TICKET #1068 
+ ** 
  ** @see ui-manager.hpp
  ** @see gtk-lumiera.cpp
  */
@@ -55,7 +61,6 @@ namespace ctrl {
   using Gtk::ToggleAction;
   using Gtk::AccelKey;
   using Gtk::StockID;
-  using Gtk::Main;       /////////////////////////////////////////////////////////////////////////////////////TICKET #1032 replace Main -> Application
   using Glib::ustring;
   using ::util::_Fmt;
   using std::string;

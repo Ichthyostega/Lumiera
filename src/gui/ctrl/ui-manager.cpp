@@ -55,37 +55,50 @@ namespace ctrl {
   using workspace::StyleManager;
   
   
-  namespace { // dummy command line for GTK
-    int argc =0;
-  }
-  
   
   
   // dtors via smart-ptr invoked from here...
-  UiManager::~UiManager()
-    { }
+  UiManager::~UiManager() { }
   
   
   /**
-   * Initialise the GTK framework libraries
+   * Initialise the GTK framework libraries.
+   * @remark in 5/2017 we abandoned the (deprecated) `Gtk::Main`,
+   *         but we did not switch to `Gtk::Application`, rather we just
+   *         incorporated the framework initialisation code directly into
+   *         our own code base. This allows us to ignore all the shiny new
+   *         D-Bus and desktop integration stuff.
    */
   ApplicationBase::ApplicationBase()
-    : Gtk::UIManager()
-    , gtkMain_(&argc, nullptr)
     {
       Glib::thread_init();
+      //---------------------------------------------copied from Gtk::Main
+      gtk_init (nullptr, nullptr);
+      Gtk::Main::init_gtkmm_internals();
+      //---------------------------------------------copied from Gtk::Main
       Gdl::init();
+    }
+  
+  ApplicationBase::~ApplicationBase()
+    {
+      //---------------------------------------------copied from Gtk::Main
+      // Release the gtkmm type registration tables,
+      // allowing Main to be instantiated again:
+      Glib::wrap_register_cleanup();
+      Glib::Error::register_cleanup();
+      //---------------------------------------------copied from Gtk::Main
     }
   
   
   /**
-   * Initialise the interface globally on application start.
-   * Setup the main application menu and bind the corresponding actions.
-   * Register the icon configuration and sizes and lookup all the icons.
-   * @see lumiera::Config
+   * @remark Creating the UiManager initialises the interface globally on application start.
+   *         It wires the global services and attaches to the UI-Bus, defines the main
+   *         application menu and binds the corresponding actions. Moreover, the StyleManager
+   *         register the icon configuration and sizes and loads the icon definitions.
    */
   UiManager::UiManager (UiBus& bus)
     : ApplicationBase()
+    , Gtk::UIManager()
     , globals_{new GlobalCtx{bus, *this}}
     , actions_{new Actions{*globals_}}
     , styleManager_{new StyleManager{}}
@@ -96,7 +109,8 @@ namespace ctrl {
   
   /** 
    * @remarks this function is invoked once from the main application object,
-   *          immediately prior to starting the GTK event loop. */
+   *          immediately prior to starting the GTK event loop.
+   */
   void
   UiManager::createApplicationWindow()
   {
@@ -105,17 +119,33 @@ namespace ctrl {
   }
   
 
+  /**
+   * Run the GTK UI.
+   * @remarks this function is equivalent to calling Gtk::Main::run()
+   *          In GTK-3.0.3, the implementation is already based on libGIO;
+   *          after possibly handling command line arguments (which does not apply
+   *          in our case), it invokes `g_main_loop_run()`, which in turn ends up
+   *          polling the main context via `g_main_context_iterate()`, until the
+   *          use count drops to zero. This is the "event loop".
+   */
   void
   UiManager::performMainLoop()
   {
-    gtkMain_.run(); // GTK event loop
+    gtk_main(); // GTK event loop
   }
   
   
+  /**
+   * @note this function can be invoked from an UI event, since it just
+   *       signals shutdown to the GTK event loop by invoking `gtk_main_quit()`.
+   *       The latter will finish processing of the current event and then return
+   *       from the UiManager::performmainLoop() call, which eventually causes the
+   *       UI subsystem to signal termination to the Lumiera application as a whole.
+   */
   void
   UiManager::terminateUI()
   {
-    gtkMain_.quit();
+    gtk_main_quit();
   }
   
   void

@@ -635,9 +635,9 @@
 </html></richcontent>
 <arrowlink COLOR="#851358" DESTINATION="ID_548720270" ENDARROW="Default" ENDINCLINATION="-663;-614;" ID="Arrow_ID_325703166" STARTARROW="None" STARTINCLINATION="1209;488;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485118623744" ID="ID_392996871" MODIFIED="1493753784816" TEXT="#1032 use gtk::Application instead of gtk::Main">
+<node COLOR="#338800" CREATED="1485118623744" ID="ID_392996871" MODIFIED="1495233785382" TEXT="#1032 use gtk::Application instead of gtk::Main">
 <arrowlink COLOR="#ae1856" DESTINATION="ID_206480879" ENDARROW="Default" ENDINCLINATION="715;0;" ID="Arrow_ID_926482654" STARTARROW="Default" STARTINCLINATION="134;383;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1485118668802" ID="ID_575152579" MODIFIED="1485118676149" TEXT="WindowManager verwendet gtk::Main"/>
 <node CREATED="1485118677425" ID="ID_1952311126" MODIFIED="1485118685915" TEXT="genau, um die Applikation runterzufahren"/>
 <node CREATED="1485124031945" ID="ID_329247026" MODIFIED="1493753799315" TEXT="Gtk::Application">
@@ -730,7 +730,7 @@
 <node CREATED="1493759581123" ID="ID_1296466414" MODIFIED="1493759591685" TEXT="ich traue den Gnome-Leuten nicht &#xfc;ber den Weg"/>
 </node>
 </node>
-<node CREATED="1493754820476" ID="ID_608560419" MODIFIED="1493754831023" TEXT="brauche ich &#xfc;berhaupt eine gtk::Application">
+<node CREATED="1493754820476" ID="ID_608560419" MODIFIED="1495218626709" TEXT="brauche ich &#xfc;berhaupt eine Gtk::Application">
 <icon BUILTIN="help"/>
 <node CREATED="1493756483852" ID="ID_1428028027" MODIFIED="1493756499302" TEXT="naja, man kann GTK zu Fu&#xdf; verwenden"/>
 <node CREATED="1493756499745" ID="ID_633405815" MODIFIED="1493756518682" TEXT="aber gtk::Application zeigt, wie"/>
@@ -743,6 +743,40 @@
 </node>
 <node CREATED="1493759747148" ID="ID_1721295375" MODIFIED="1493760546219" TEXT="das kann ich doch zu Fu&#xdf; auch machen">
 <icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1495215099003" ID="ID_1971256545" MODIFIED="1495218634172" TEXT="brauche ich &#xfc;berhaupt eine Gio::Application">
+<icon BUILTIN="help"/>
+<node CREATED="1495215111775" ID="ID_1003964020" MODIFIED="1495215119282" TEXT="initialisiert das Framework"/>
+<node CREATED="1495215119685" ID="ID_1761204495" MODIFIED="1495215128480" TEXT="stellt eine dBus-Verbindung her"/>
+<node CREATED="1495215129564" ID="ID_973272722" MODIFIED="1495215147125" TEXT="ist eine gio::ActionGroup">
+<node CREATED="1495215149281" ID="ID_1774523135" MODIFIED="1495215163883" TEXT="man kann Aktionen hinzuf&#xfc;gen"/>
+<node CREATED="1495215164279" ID="ID_1315941470" MODIFIED="1495215177034" TEXT="diese Arbeitet mit einem ApplicationWindow zusammen"/>
+<node CREATED="1495215177478" ID="ID_250116811" MODIFIED="1495215190439" TEXT="beachte: nicht GtkWindow, sondern ApplicationWindow (Subclass)"/>
+</node>
+<node CREATED="1495215193500" ID="ID_503299515" MODIFIED="1495215207982" TEXT="Zweck (Vermutung)">
+<node CREATED="1495215209066" ID="ID_1153171656" MODIFIED="1495215214357" TEXT="Desktop-Integration"/>
+<node CREATED="1495215214824" ID="ID_1385031644" MODIFIED="1495215221132" TEXT="Grenzen der Applikation aufweichen"/>
+<node CREATED="1495215221624" ID="ID_297065945" MODIFIED="1495215231226" TEXT="Aktionen direkt in den Desktiop integrieren"/>
+</node>
+<node CREATED="1495215237213" ID="ID_745229887" MODIFIED="1495215259353" TEXT="nichts von dem ist f&#xfc;r uns relevant, manches davon st&#xf6;rt">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1495218672747" HGAP="-13" ID="ID_1786316132" MODIFIED="1495218683283" TEXT="Beschlu&#xdf;" VSHIFT="15">
+<icon BUILTIN="yes"/>
+<node COLOR="#2f1d56" CREATED="1495218684994" ID="ID_101574501" MODIFIED="1495218819229" TEXT="vorerst defensiv vorgehen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1495218699712" ID="ID_1332523704" MODIFIED="1495233774800" TEXT="den Code aus Gtk::Main in unsere Codebasis &#xfc;bernehmen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1495218714230" ID="ID_1371091843" MODIFIED="1495218730415" TEXT="Vorsicht mit Action / ActionGroup">
+<node CREATED="1495218731435" ID="ID_1744881610" MODIFIED="1495218744350" TEXT="noch nicht deprecated"/>
+<node CREATED="1495218744961" ID="ID_97034293" MODIFIED="1495218759875" TEXT="aber Abl&#xf6;sung durch Gio::SimpleAction geplant"/>
+<node CREATED="1495218770694" ID="ID_644528853" MODIFIED="1495218798054" TEXT="Warnung: mit dem neuen Gtk::ApplicationWindow verkoppelt">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -759,7 +793,11 @@
 <node CREATED="1485452536138" ID="ID_599315721" MODIFIED="1493762462420" TEXT="wird daf&#xfc;r zust&#xe4;ndig">
 <icon BUILTIN="pencil"/>
 <node CREATED="1493762472175" ID="ID_964179569" MODIFIED="1493762489856" TEXT="verwendet Fenster-Liste"/>
-<node CREATED="1493762490205" ID="ID_869056268" MODIFIED="1493762497768" TEXT="alle noch offenen Fenster verbergen"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493762490205" ID="ID_869056268" MODIFIED="1495234845817" TEXT="alle noch offenen Fenster verbergen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1495234856782" ID="ID_888480230" MODIFIED="1495234864912" TEXT="machen wir bisher nicht"/>
+<node CREATED="1495234865717" ID="ID_221447493" MODIFIED="1495234889293" TEXT="ist das notwendig?"/>
+</node>
 <node CREATED="1493762498476" ID="ID_1290148687" MODIFIED="1493762526412" TEXT="direkt gtk_main_quit aufrufen">
 <icon BUILTIN="idea"/>
 </node>
@@ -779,26 +817,32 @@
 <node CREATED="1493763393720" ID="ID_112295077" MODIFIED="1493763393720" TEXT="wohin entwickelt sich GTK?"/>
 </node>
 <node CREATED="1493768460811" ID="ID_1862271811" MODIFIED="1493768464414" TEXT="Alternativen">
-<node CREATED="1493768465482" ID="ID_1159523698" MODIFIED="1493768483420" TEXT="gtk_main aufrufen"/>
-<node CREATED="1493768484007" ID="ID_384827553" MODIFIED="1493768826414" TEXT="von einem Gio::Application ableiten">
+<node CREATED="1493768465482" ID="ID_1159523698" MODIFIED="1495234928963" TEXT="gtk_main aufrufen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1493768484007" ID="ID_384827553" MODIFIED="1495234932771" TEXT="von einem Gio::Application ableiten">
 <arrowlink COLOR="#6d7495" DESTINATION="ID_1476863246" ENDARROW="Default" ENDINCLINATION="1126;-247;" ID="Arrow_ID_1941890495" STARTARROW="None" STARTINCLINATION="-231;14;"/>
+<icon BUILTIN="button_cancel"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493770418552" HGAP="68" ID="ID_346412093" MODIFIED="1493770533278" TEXT="Schritte" VSHIFT="37">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493770418552" HGAP="68" ID="ID_346412093" MODIFIED="1495234945038" TEXT="Schritte" VSHIFT="37">
 <linktarget COLOR="#8091a3" DESTINATION="ID_346412093" ENDARROW="Default" ENDINCLINATION="-205;193;" ID="Arrow_ID_824195065" SOURCE="ID_1810145809" STARTARROW="None" STARTINCLINATION="430;0;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="idea"/>
 <node CREATED="1493770423008" ID="ID_124348052" MODIFIED="1493770490126" TEXT="erst mal Gtk::Main hierher schieben">
 <icon BUILTIN="full-1"/>
 </node>
-<node CREATED="1493770431607" ID="ID_117937910" MODIFIED="1493770494191" TEXT="dann durch Gio::Application ersetzen">
+<node CREATED="1495215269657" ID="ID_850682198" MODIFIED="1495215315827" TEXT="Implementierung aus Gtk::Main &#xfc;bernemen">
 <icon BUILTIN="full-2"/>
 </node>
+<node CREATED="1493770431607" ID="ID_117937910" MODIFIED="1495215311571" TEXT="(bei Bedarf) sp&#xe4;ter dann durch Gio::Application ersetzen">
+<icon BUILTIN="full-3"/>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" FOLDED="true" ID="ID_389264738" MODIFIED="1493753050837" TEXT="weitere Funktionen">
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" FOLDED="true" ID="ID_389264738" MODIFIED="1495234958874" TEXT="weitere Funktionen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1484797813373" ID="ID_536855363" MODIFIED="1484797818072" TEXT="generische Nachricht"/>
 <node CREATED="1484797818780" FOLDED="true" ID="ID_354397333" MODIFIED="1488423308092" TEXT="state mark">
@@ -1800,9 +1844,10 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126506699" ID="ID_1776936645" MODIFIED="1485126569343" TEXT="#1067 rearrange GUI Application top-level">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126573818" ID="ID_206480879" MODIFIED="1485126655278" TEXT="#1032 use gtk::Application instead of gtk::Main">
+<node COLOR="#338800" CREATED="1485126573818" ID="ID_206480879" MODIFIED="1495233795213" TEXT="#1032 use gtk::Application instead of gtk::Main">
+<arrowlink COLOR="#ae182e" DESTINATION="ID_1476863246" ENDARROW="Default" ENDINCLINATION="283;-164;" ID="Arrow_ID_1851148216" STARTARROW="Default" STARTINCLINATION="481;0;"/>
 <linktarget COLOR="#ae1856" DESTINATION="ID_206480879" ENDARROW="Default" ENDINCLINATION="715;0;" ID="Arrow_ID_926482654" SOURCE="ID_392996871" STARTARROW="Default" STARTINCLINATION="134;383;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1485126609878" FOLDED="true" ID="ID_815018040" MODIFIED="1493846218724" TEXT="#1064 investigate WindowManager lifecycle">
 <icon BUILTIN="button_ok"/>
@@ -1909,9 +1954,8 @@
 <node CREATED="1493846135327" ID="ID_832439809" MODIFIED="1493846145618" TEXT="initialisiert und startet Backbone"/>
 <node CREATED="1485463537111" ID="ID_929585985" MODIFIED="1485463543226" TEXT="wird nie selber direkt angesprochen"/>
 </node>
-<node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1489460543116" TEXT="ctrl::UiManager">
+<node CREATED="1485126457025" ID="ID_1698853761" MODIFIED="1495234793368" TEXT="ctrl::UiManager">
 <linktarget COLOR="#667b93" DESTINATION="ID_1698853761" ENDARROW="Default" ENDINCLINATION="19;-86;" ID="Arrow_ID_1952755524" SOURCE="ID_40172420" STARTARROW="None" STARTINCLINATION="-290;0;"/>
-<icon BUILTIN="pencil"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1485454242368" ID="ID_482639947" MODIFIED="1485454312303" TEXT="Hub f&#xfc;r Framework">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -1924,12 +1968,46 @@
 <node CREATED="1485454375917" ID="ID_1935695209" MODIFIED="1485457020772" TEXT="erbt von Gtk::UiManager">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485457021805" ID="ID_1476863246" MODIFIED="1493768813976" TEXT="Gtk::UiManager ist deprecated">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485457021805" ID="ID_1476863246" MODIFIED="1495218593390" TEXT="Gtk::UiManager ist deprecated">
 <linktarget COLOR="#6d7495" DESTINATION="ID_1476863246" ENDARROW="Default" ENDINCLINATION="1126;-247;" ID="Arrow_ID_1941890495" SOURCE="ID_384827553" STARTARROW="None" STARTINCLINATION="-231;14;"/>
+<linktarget COLOR="#ae182e" DESTINATION="ID_1476863246" ENDARROW="Default" ENDINCLINATION="283;-164;" ID="Arrow_ID_1851148216" SOURCE="ID_206480879" STARTARROW="Default" STARTINCLINATION="481;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1493768617653" ID="ID_292624709" MODIFIED="1493768624808" TEXT="f&#xe4;llt anscheinend ersatzlos weg"/>
 <node CREATED="1493768625564" ID="ID_1620270152" MODIFIED="1493768636606" TEXT="Verdacht: stattdessen Gtk::Application"/>
-<node CREATED="1485457105010" HGAP="49" ID="ID_202831328" MODIFIED="1493768935758" TEXT="neuer Weg" VSHIFT="21">
+<node CREATED="1495218227391" ID="ID_1156276489" MODIFIED="1495218527285" TEXT="Beschlu&#xdf;: vorerst Gtk::Action / ActionGroup weiter verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Begr&#252;ndung</u>:
+    </p>
+    <p>
+      Das neue System ist anscheinend fest integriert in Gio::Application.
+    </p>
+    <p>
+      Mir ist nicht klar, wieso ein Fenster/Widget das Interface Gio::Actionable implementieren mu&#223;.
+    </p>
+    <p>
+      Ich werde den Verdacht nicht los, da&#223; hier das Ziel verfolgt wird, eine &quot;Action&quot; von den
+    </p>
+    <p>
+      Grenzen der Applikation zu befreien und direkt in den Desktop zu integrieren.
+    </p>
+    <p>
+      Mit Desktop ist nat&#252;rlich der Gnome-Desktop gemeint. Was diesen Verdacht best&#228;rkt,
+    </p>
+    <p>
+      ist, da&#223; Gio::Application sofort auch gleich eine dBus-Verbindung hochf&#228;hrt.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1485457105010" HGAP="49" ID="ID_202831328" MODIFIED="1495218206128" TEXT="neuer Weg" VSHIFT="21">
+<icon BUILTIN="info"/>
 <node CREATED="1485457108425" ID="ID_152284167" MODIFIED="1485457124586" TEXT="man erzeugt Gio::SimpleActionGroup"/>
 <node CREATED="1485457141853" ID="ID_1841602685" MODIFIED="1485457147592" TEXT="man f&#xfc;gt diese dem Fenster hinzu"/>
 </node>
@@ -1941,16 +2019,19 @@
 <node CREATED="1485454263876" ID="ID_543704434" MODIFIED="1485454270615" TEXT="globale Keybindings"/>
 </node>
 <node CREATED="1493768943479" ID="ID_374108201" MODIFIED="1493768945355" TEXT="Plan">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493768946415" ID="ID_880915214" MODIFIED="1493769045194" TEXT="k&#xf6;nnte die UI-Main-Klasse werden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493768946415" ID="ID_880915214" MODIFIED="1495234777012" TEXT="das ist die UI-Main-Klasse">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1493768959324" ID="ID_873679558" MODIFIED="1493768964160" TEXT="sollte dann...">
 <node CREATED="1493768965036" ID="ID_1457175098" MODIFIED="1493768972215" TEXT="das erste Fenster &#xf6;ffnen"/>
-<node CREATED="1493768972691" ID="ID_1810145809" MODIFIED="1493770540743" TEXT="die GTK-Loop starten">
+<node CREATED="1493768972691" ID="ID_1810145809" MODIFIED="1495234763048" TEXT="die GTK-Loop starten">
 <arrowlink COLOR="#8091a3" DESTINATION="ID_346412093" ENDARROW="Default" ENDINCLINATION="-205;193;" ID="Arrow_ID_824195065" STARTARROW="None" STARTINCLINATION="430;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1493768980361" ID="ID_1478388503" MODIFIED="1493768995060" TEXT="das UI herunnterfahren"/>
+<node CREATED="1493768980361" ID="ID_1478388503" MODIFIED="1495234766050" TEXT="das UI herunnterfahren">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -16619,7 +16700,7 @@
 </node>
 <node CREATED="1477523710854" ID="ID_1520577996" MODIFIED="1477523711882" TEXT="Grid"/>
 </node>
-<node CREATED="1477523714526" ID="ID_654535915" MODIFIED="1487275491415" TEXT="Application verwenden">
+<node CREATED="1477523714526" ID="ID_654535915" MODIFIED="1495221457073" TEXT="Application verwenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16628,8 +16709,141 @@
     <p>
       ...nicht mehr das <i>klassische</i>&#160;gtk::Main
     </p>
+    <p>
+      
+    </p>
+    <p>
+      Wozu das?
+    </p>
+    <ul>
+      <li>
+        Design: Main war ein Singleton; aber sein dtor hat auch Plattform-Aufr&#228;um-Arbeiten gemacht
+      </li>
+      <li>
+        Framework: anscheinend ist hier eine Tendenz in Richtung auf ein integriertes Framework im Gange; im Besonderen will man &quot;Aktionen&quot; direkt aus dem Desktop aufrufen k&#246;nnen<br />
+      </li>
+    </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1495221220040" HGAP="43" ID="ID_782313223" MODIFIED="1495224771516" TEXT="Framework" VSHIFT="-20">
+<node CREATED="1495221242285" ID="ID_185528211" MODIFIED="1495221245344" TEXT="Applikation">
+<node CREATED="1495221272545" ID="ID_624250153" MODIFIED="1495221279676" TEXT="Gtk::Application">
+<node CREATED="1495222327564" ID="ID_175461027" MODIFIED="1495222335031" TEXT="initialisiert Gio::Application"/>
+<node CREATED="1495222337235" ID="ID_348472460" MODIFIED="1495222345078" TEXT="setzt ggfs. die Applikations-ID"/>
+<node CREATED="1495223436241" ID="ID_1015366549" MODIFIED="1495223444611" TEXT="Application::run">
+<node CREATED="1495223445527" ID="ID_1531454773" MODIFIED="1495223451122" TEXT="optional mit Window">
+<node CREATED="1495223506111" ID="ID_992095337" MODIFIED="1495223512914" TEXT="macht aber nur window-&gt;show"/>
+<node CREATED="1495223513438" ID="ID_1178606368" MODIFIED="1495223596131" TEXT="allerdings im activate-Callback">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      warum?
+    </p>
+    <p>
+      nur wegen ApplictationWindow!
+    </p>
+    <p>
+      Denn dieses setzte eine &quot;Registrierung&quot; voraus.
+    </p>
+    <p>
+      Alles in ein Framework zwingen. Alternativlos, capisce?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1495223451598" ID="ID_1042773331" MODIFIED="1495223458873" TEXT="startet Gio::Application::run"/>
+</node>
+</node>
+<node CREATED="1495221280336" ID="ID_1925569425" MODIFIED="1495221287043" TEXT="Gio::Application">
+<node CREATED="1495221530614" ID="ID_1085605910" MODIFIED="1495221536730" TEXT="initialisiert das Framework"/>
+<node CREATED="1495221537366" ID="ID_381245884" MODIFIED="1495221545280" TEXT="stellt eine dBus-Verbindung bereit"/>
+<node CREATED="1495221546252" ID="ID_771692992" MODIFIED="1495221585963" TEXT="erbt von Gio::ActionGroup und ActionMap"/>
+<node CREATED="1495223467588" ID="ID_666842762" MODIFIED="1495223470456" TEXT="run">
+<node CREATED="1495223902619" ID="ID_11620264" MODIFIED="1495223911861" TEXT="behandelt Argumente"/>
+<node CREATED="1495223912401" ID="ID_1575164060" MODIFIED="1495223926363" TEXT="falls Service: wartet auf Nachricht vom dBus"/>
+<node CREATED="1495224012668" ID="ID_566886010" MODIFIED="1495224030469" TEXT="Event-Loop">
+<node CREATED="1495224031057" ID="ID_1352224458" MODIFIED="1495224034093" TEXT="use-count"/>
+<node CREATED="1495224034585" ID="ID_1852291898" MODIFIED="1495224040084" TEXT="bestimmt, ob die Loop weiter l&#xe4;uft"/>
+<node CREATED="1495224111895" ID="ID_1808871678" MODIFIED="1495224970269" TEXT="g_main_context_iteration">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1495224682595" HGAP="35" ID="ID_1221113124" MODIFIED="1495224749447" TEXT="g_main_context_iterate" VSHIFT="7">
+<linktarget COLOR="#4da894" DESTINATION="ID_1221113124" ENDARROW="Default" ENDINCLINATION="-37;92;" ID="Arrow_ID_603815905" SOURCE="ID_355427981" STARTARROW="None" STARTINCLINATION="17;-42;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1495224577105" HGAP="33" ID="ID_1924897671" MODIFIED="1495224986880" TEXT="Gtk::Main" VSHIFT="10">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1495224595638" ID="ID_1774384379" MODIFIED="1495224606876" TEXT="@deprecated">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1495224609188" ID="ID_1615155508" MODIFIED="1495224916588">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      initialisiert das
+    </p>
+    <p>
+      Framework
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1495224862227" ID="ID_762530588" MODIFIED="1495224863391" TEXT="init_gtkmm_internals"/>
+<node CREATED="1495224890119" ID="ID_137730290" MODIFIED="1495224898674" TEXT="statische funktion"/>
+</node>
+<node CREATED="1495224625466" ID="ID_668309036" MODIFIED="1495224626870" TEXT="run">
+<node CREATED="1495224647071" ID="ID_660577000" MODIFIED="1495224959968" TEXT="gtk_main">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1495224927362" ID="ID_904812640" MODIFIED="1495224934333" TEXT="Kommandozeile"/>
+</node>
+<node CREATED="1495224649943" ID="ID_1753452940" MODIFIED="1495224673144" TEXT="g_main_loop_run">
+<node CREATED="1495224690714" ID="ID_355427981" MODIFIED="1495224759310" TEXT="g_main_context_iterate">
+<arrowlink COLOR="#4da894" DESTINATION="ID_1221113124" ENDARROW="Default" ENDINCLINATION="-37;92;" ID="Arrow_ID_603815905" STARTARROW="None" STARTINCLINATION="17;-42;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1495224989674" HGAP="18" ID="ID_381583771" MODIFIED="1495225134340" TEXT="Verh&#xe4;ltnis beider" VSHIFT="9">
+<icon BUILTIN="idea"/>
+<node CREATED="1495225019502" ID="ID_1829681403" MODIFIED="1495225041024" TEXT="beide machen in etwas das Gleiche"/>
+<node CREATED="1495225006920" ID="ID_1631847350" MODIFIED="1495225014650" TEXT="Application ist generischer"/>
+<node CREATED="1495226503104" ID="ID_1991720691" MODIFIED="1495226552821" TEXT="es geht dabei um Desktop-Integration"/>
+<node CREATED="1495225050138" ID="ID_1077152710" MODIFIED="1495225130015" TEXT="gtk_main beruht heute auf Gio">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, es wurde &quot;retrofitted&quot;.
+    </p>
+    <p>
+      die Lib Gio bietet ein generisches &quot;Main-Loop-Framework&quot;,
+    </p>
+    <p>
+      in dem ein Main-Context gepollt wird, solange, bis ein use-count auf Null geht.
+    </p>
+    <p>
+      Gtk-Main verwendet inzwischen den gleichen Mechanismus
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1477785704584" ID="ID_528329491" MODIFIED="1477785711408" TEXT="event handling">

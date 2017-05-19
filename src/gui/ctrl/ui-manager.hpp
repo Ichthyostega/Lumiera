@@ -23,12 +23,16 @@
 
 
 /** @file ui-manager.hpp
- ** Manager for global user interface concerns and global state.
- ** The central UiManager instance is owned by the GtkLumiera object and initialised in GTK-main.
- ** It establishes and wires the top-level entities of the UI-Layer and thus, indirectly offers
- ** services to provide Icons and other resources, to open and manage workspace windows, to
- ** form and issue (global) actions and to delve into the UI representation of top-level parts
- ** of the session model. Notable connections established herein:
+ ** Manager for global user interface concerns, framework integration and global state.
+ ** The central UiManager instance is owned by the GtkLumiera (plug-in) object and has the
+ ** responsibility to operate the _UI framework_. It establishes and wires the top-level entities
+ ** of the UI-Layer and thus, indirectly offers services to provide Icons and other resources, to
+ ** open and manage workspace windows, to form and issue (global) actions and to delve into the
+ ** UI representation of top-level parts of the session model. And, last but not least, it
+ ** exposes the functions to start and stop the GTK event loop.
+ ** 
+ ** The initialisation and shutdown of the framework is handled by the ApplicationBase parent,
+ ** while the constituents of the Lumiera UI backbone are allocated as member fields:
  ** - connection to the [UI-Bus](\ref ui-bus.hpp)
  ** - the global Actions available though the menu
  ** - the InteractionDirector (top-level controller)
@@ -67,23 +71,28 @@ namespace ctrl {
   
   /** Framework initialisation base */
   class ApplicationBase
-    : public Gtk::UIManager
-    , boost::noncopyable
+    : boost::noncopyable
     {
     protected:
-      Gtk::Main gtkMain_;
       ApplicationBase();
+     ~ApplicationBase();
     };
   
   
   /**
-   * Manage global concerns regarding a coherent user interface.
-   * Offers access to some global UI resources, and establishes
-   * further global services to create workspace windows, to bind
-   * menu / command actions and to enter the top-level model parts.
+   * The Lumiera UI framework and backbone object.
+   * Initialises the GTK and GLib framework, starts and stops the
+   * GTK event loop, and manages global concerns regarding a coherent user interface.
+   * Offers access to some global UI resources, and establishes further global services
+   * to create workspace windows, to bind menu / command actions and to create interface
+   * widgets for working with the the top-level model parts.
+   * @note UiManager itself is _not a model::Controller,_ and thus not directly connected
+   *       as a first-class entity to the Bus, but it operates the GlobalCtx, and thus in
+   *       turn holds the interact::InteractionDirector, which corresponds to the model root.
    */
   class UiManager
     : public ApplicationBase
+    , public Gtk::UIManager
     {
       unique_ptr<GlobalCtx> globals_;
       unique_ptr<Actions>   actions_;
@@ -92,11 +101,10 @@ namespace ctrl {
       
     public:
       /**
-       * There is one global UiManager instance,
-       * which is created by [the Application](\ref GtkLumiera)
-       * and allows access to the UI-Bus backbone. The UiManager itself
-       * is _not a model::Controller,_ and thus not directly connected to the Bus.
-       * Rather, supports the top-level windows for creating a consistent interface.
+       * Initialise the GTK framework and the Lumiera UI backbone.
+       * There is one global UiManager instance, which is created by
+       * [the Application](\ref GtkLumiera).
+       * @see #performMainLoop
        */
       UiManager (UiBus& bus);
      ~UiManager ();
