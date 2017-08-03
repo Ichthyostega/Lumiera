@@ -114,7 +114,7 @@ namespace ctrl{
       
       Nexus uiBusBackbone_;
       StateRecorder stateRecorder_;
-      NotificationService activateNotificationService_;
+      NotificationService notificationService_;
       
       
       virtual void
@@ -137,7 +137,7 @@ namespace ctrl{
         : BusTerm(identity, uiBusBackbone_)
         , uiBusBackbone_{*this}
         , stateRecorder_{*this}
-        , activateNotificationService_(uiBusBackbone_)       // opens the GuiNotificationService instance
+        , notificationService_(uiBusBackbone_)       // opens the GuiNotificationService instance
         {
           INFO (gui, "UI-Backbone operative.");
         }

@@ -95,8 +95,11 @@ namespace gui {
       virtual void mutate (ID uiElement, DiffMessage&)           =0;      /////////////////////////////////////TICKET #1066 : how to pass a diff message
       
       /** causes the GUI to shut down unconditionally
-       *  @param cause user visible explanation of the
-       *         reason causing this shutdown      */
+       * @param cause user visible explanation of the
+       *        reason causing this shutdown
+       * @warning since the UI is a subsystem, this call
+       *        eventually terminates the whole application.
+       */
       virtual void triggerGuiShutdown (string const& cause)      =0;
       
       
