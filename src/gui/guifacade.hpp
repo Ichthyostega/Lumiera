@@ -64,15 +64,16 @@ namespace gui {
    * and wired internally such as to allow transparent access from
    * within the core.
    * 
-   * \par implementation notes
-   * This is an facade interface to the GUI subsystem, but it is setup
-   * somewhat special, as its sole purpose is to expose the subsystem
+   * ## intended usage
+   * This is an facade interface to the GUI subsystem, but it's setup
+   * is somewhat special, as its sole purpose is to expose the subsystem
    * descriptor, which, when started, loads the GUI as a plugin and
    * invokes `launchUI(term)` there. For the implementation see
    * gui::GuiRunner (guifacade.cpp) and gtk-lumiera.cpp (the plugin).
    * 
    * @note this facade is intended to be used by Lumiera main solely.
-   *       client code should always use the "business" interface(s).
+   *       client code should always use the "business" interface(s):
+   *       - gui::GuiNotification
    * 
    */
   class GuiFacade
@@ -90,20 +91,8 @@ namespace gui {
       static bool isUp();
       
       
-      /*  ===== control interface for the GuiStarterPlugin ======= */
-      
-      /** start the actual GUI thread(s), after successfully loading
-       *  the GuiStarterPlugin, that is. The implementation of this function
-       *  must ensure to invoke the given termination signal reliably after
-       *  shutting down the GUI, otherwise the application will hang on exit.
-       *  @internal this function is invoked automatically during the GUI
-       *            loading and startup process. Don't call it manually.
-       */
-      virtual bool launchUI (lumiera::Subsys::SigTerm&)  =0;
-      
-      
     protected:
-      virtual ~GuiFacade() {}
+      GuiFacade()  = delete;
     };
     
   /** interface of the GuiStarterPlugin */

@@ -57,7 +57,7 @@ namespace gui {
   
   /** load and start the GUI as a plugin */
   struct GuiRunner
-    : public GuiFacade
+    : boost::noncopyable
     {
       typedef InstanceHandle<LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1)> GuiHandle;
       
@@ -75,7 +75,16 @@ namespace gui {
         }
       
       
-      bool launchUI (Subsys::SigTerm& terminationHandle)  override
+      /*  ===== control interface for the GuiStarterPlugin ======= */
+      
+      /** start the actual GUI thread(s), after successfully loading
+       *  the GuiStarterPlugin, that is. The implementation of this function
+       *  must ensure to invoke the given termination signal reliably after
+       *  shutting down the GUI, otherwise the application will hang on exit.
+       *  @internal this function is invoked automatically during the GUI
+       *            loading and startup process. Don't call it manually.
+       */
+      bool launchUI (Subsys::SigTerm& terminationHandle)
         { 
           return theGUI_->launchUI (reinterpret_cast<void*> (&terminationHandle));
         }
