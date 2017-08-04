@@ -36,6 +36,7 @@
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ctrl/global-ctx.hpp"
 #include "gui/ctrl/actions.hpp"
+#include "gui/ctrl/facade.hpp"
 #include "gui/workspace/style-manager.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
@@ -101,6 +102,7 @@ namespace ctrl {
     , Gtk::UIManager()
     , globals_{new GlobalCtx{bus, *this}}
     , actions_{new Actions{*globals_}}
+    , facade_{} // note: not activated yet
     , styleManager_{new StyleManager{}}
     {
       actions_->populateMainActions (*this);
@@ -120,7 +122,7 @@ namespace ctrl {
   
 
   /**
-   * Run the GTK UI.
+   * Run the GTK UI. Also _activate_ the UI the external interfaces.
    * @remarks this function is equivalent to calling Gtk::Main::run()
    *          In GTK-3.0.3, the implementation is already based on libGIO;
    *          after possibly handling command line arguments (which does not apply
@@ -131,7 +133,11 @@ namespace ctrl {
   void
   UiManager::performMainLoop()
   {
+    facade_.reset (new Facade{globals_->uiBus_, *this});
+    
     gtk_main(); // GTK event loop
+    
+    facade_.reset (nullptr);
   }
   
   

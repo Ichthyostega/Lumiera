@@ -81,11 +81,9 @@
 
 
 #include "lib/error.hpp"
-#include "include/logging.h"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "include/session-command-facade.h"
-#include "gui/notification-service.hpp"
 #include "gui/ctrl/state-recorder.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
@@ -114,7 +112,6 @@ namespace ctrl{
       
       Nexus uiBusBackbone_;
       StateRecorder stateRecorder_;
-      NotificationService notificationService_;
       
       
       virtual void
@@ -137,7 +134,6 @@ namespace ctrl{
         : BusTerm(identity, uiBusBackbone_)
         , uiBusBackbone_{*this}
         , stateRecorder_{*this}
-        , notificationService_(uiBusBackbone_)       // opens the GuiNotificationService instance
         {
           INFO (gui, "UI-Backbone operative.");
         }

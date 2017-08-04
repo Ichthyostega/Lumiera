@@ -29,10 +29,11 @@
  ** In the Dummy-Player design study, the lumiera::Display interface serves
  ** to hand over calculated frames to the GUI for displaying them in a viewer.
  ** 
- ** This is a first draft as of 1/2009, and likely to be superseded by a
- ** better design, where rather the \em provider of an output facility
- ** registers with the OutputManager in the core.
+ ** @deprecated This is a first draft as of 1/2009, and likely to be superseded
+ **  by a better design, where rather the \em provider of an output facility
+ **  registers with the OutputManager in the core.
  ** 
+ ** @see [corresponding implementation](display-service.hpp)
  ** @see gui::GuiFacade
  ** @see dummy-player-facade.h
  ** 

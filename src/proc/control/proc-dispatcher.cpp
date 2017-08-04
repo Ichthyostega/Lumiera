@@ -37,9 +37,9 @@
  ** to manage this process is the concern of the »Session Subsystem«.
  ** 
  ** Closing a session blocks further command processing, while the lifecycle of the _Session Subsystem_ is
- ** actually linked to _running the \ref DispatcherLoop_ -- implementation logic defined in this translation
- ** unit here. This loop implementation is performed in a dedicated thread, _the Session Loop Thread._ And
- ** this also entails opening the public SessionCommandService interface.
+ ** actually linked to _running the \ref DispatcherLoop_ -- implementation logic defined within this
+ ** translation unit. This loop implementation is performed in a dedicated thread, _the Session Loop Thread._
+ ** And this also entails opening the public SessionCommandService interface.
  ** 
  ** ## Loop operation control
  ** The loop starts with a blocking wait state, bound to the condition Looper::requireAction. Here, Looper

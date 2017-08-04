@@ -66,6 +66,7 @@ namespace ctrl {
   
   class GlobalCtx;
   class Actions;
+  class Facade;
   
   
   
@@ -96,6 +97,7 @@ namespace ctrl {
     {
       unique_ptr<GlobalCtx> globals_;
       unique_ptr<Actions>   actions_;
+      unique_ptr<Facade>    facade_;
       
       unique_ptr<workspace::StyleManager> styleManager_;
       

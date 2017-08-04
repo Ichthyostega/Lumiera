@@ -29,14 +29,11 @@
  ** 
  */
 
-/** @file notification-service.cpp
- ** @todo write documentation for the notification service
- */
 
 
+#include "gui/ctrl/ui-manager.hpp"
 #include "gui/notification-service.hpp"
 #include "include/logging.h"
-#include "lib/depend.hpp"
 #include "lib/util.hpp"
 
 extern "C" {
@@ -46,21 +43,20 @@ extern "C" {
 #include <string>
 
 
+using lib::diff::TreeMutator;
+using gui::ctrl::BusTerm;
+using std::string;
+using util::cStr;
 
 
 namespace gui {
-  
-  using lib::diff::TreeMutator;
-  using gui::ctrl::BusTerm;
-  using std::string;
-  using util::cStr;
   
   
   void 
   NotificationService::displayInfo (string const& text)
   {
     INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
-    ////////////////////////TODO actually push the information to the GUI
+    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
   }
   
   
@@ -68,7 +64,7 @@ namespace gui {
   NotificationService::markError (ID uiElement, string const& text)
   {
     UNIMPLEMENTED ("send a error mark message via UI-Bus");
-    ////////////////////////TODO actually push the information to the GUI
+    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
   }
   
   
@@ -76,7 +72,7 @@ namespace gui {
   NotificationService::markNote  (ID uiElement, string const& text)
   {
     UNIMPLEMENTED ("send a info/warning message via UI-Bus");
-    ////////////////////////TODO actually push the information to the GUI
+    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
   }
   
   
@@ -84,7 +80,7 @@ namespace gui {
   NotificationService::mutate (ID uiElement, DiffMessage&)    /////////////////////////////////////////////////TICKET #1066 : how to pass a diff message
   {
     UNIMPLEMENTED ("actually produce a MutationMessage on the UI-Bus");     ///////////////////////////////////TICKET #1066 : how to build and pass a MutationMessage
-    ////////////////////////TODO actually push the information to the GUI
+    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
   }
   
   
@@ -92,7 +88,9 @@ namespace gui {
   NotificationService::triggerGuiShutdown (string const& cause)
   {
     NOTICE (gui, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
-    TODO ("actually request a shutdown from the GUI");
+    TODO ("actually request a shutdown from the GUI");                      ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
+    // NOTE basically this means to issue the call...
+    // uiManager_.terminateUI();
   }
   
   
@@ -240,8 +238,9 @@ namespace gui {
    * Yet this simple connection is sufficient to implement this service by talking
    * to other facilities within the UI layer.
    */
-  NotificationService::NotificationService (ctrl::BusTerm& upLink)
+  NotificationService::NotificationService (ctrl::BusTerm& upLink, ctrl::UiManager& uiManager)
     : BusTerm{lib::idi::EntryID<NotificationService>{}, upLink}
+    , uiManager_{uiManager}
     , implInstance_(this,_instance)
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
   {

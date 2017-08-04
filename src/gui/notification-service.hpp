@@ -48,6 +48,10 @@
 
 namespace gui {
   
+  namespace ctrl {
+    class UiManager;
+  }
+  
   
   
   /**************************************************//**
@@ -82,6 +86,7 @@ namespace gui {
       using ServiceInstanceHandle = lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                                                            , GuiNotification
                                                            > ;
+      ctrl::UiManager& uiManager_;
       
       lib::SingletonRef<GuiNotification> implInstance_;
       ServiceInstanceHandle serviceInstance_;
@@ -89,7 +94,7 @@ namespace gui {
       
       
     public:
-      NotificationService (ctrl::BusTerm& upLink);
+      NotificationService (ctrl::BusTerm& upLink, ctrl::UiManager& uiManager);
       
     };
     

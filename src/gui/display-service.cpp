@@ -25,6 +25,10 @@
  ** Implementation of _Displayer Service,_ exposed as a public interface.
  ** This service allows to set up _display slots,_ which can be handed over
  ** to client code in the course of the play process for outputting frames.
+ ** 
+ ** @deprecated This is a first draft as of 1/2009, and likely to be superseded
+ **  by a better design, where rather the \em provider of an output facility
+ **  registers with the OutputManager in the core.
  */
 
 

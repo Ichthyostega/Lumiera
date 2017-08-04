@@ -35,6 +35,10 @@
  ** LumieraDisplaySlot passed as parameter when initiating a playback process from the GUI. Using
  ** this LumieraDisplaySlot handle, clients should then use  lumiera::DummyPlayer#facade to access
  ** an implementation instance of this service in order to push actual frames up.
+ ** 
+ ** @deprecated This is a first draft as of 1/2009, and likely to be superseded
+ **  by a better design, where rather the \em provider of an output facility
+ **  registers with the OutputManager in the core.
  **
  ** @see lumiera::Display
  ** @see lumiera::DummyPlayer

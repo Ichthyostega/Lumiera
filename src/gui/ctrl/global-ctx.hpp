@@ -109,5 +109,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::workspace
+}}// namespace gui::ctrl
 #endif /*GUI_CTRL_GLOBAL_CTX_H*/
