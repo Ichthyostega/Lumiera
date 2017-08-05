@@ -67,8 +67,9 @@
 
 namespace lib {
   
+  using util::unConst;
+  
   namespace iter {
-    using util::unConst;
     
     /**
      * Wrapper to mark a std::deque instance for use
@@ -153,6 +154,21 @@ namespace lib {
           this->stateCore().pop_back();
           return topElement;
         }
+      
+      
+      /* == diagnostics == */
+      
+      size_t
+      size()  const
+        {
+          return unConst(this)->stateCore().size();
+        }
+      
+      bool
+      empty() const
+        {
+          return 0 == size();
+        }
     };
   
   
@@ -205,6 +221,21 @@ namespace lib {
           TY firstElement (this->stateCore().back());
           this->stateCore().pop_back();
           return firstElement;
+        }
+      
+      
+      /* == diagnostics == */
+      
+      size_t
+      size()  const
+        {
+          return unConst(this)->stateCore().size();
+        }
+      
+      bool
+      empty() const
+        {
+          return 0 == size();
         }
       
       

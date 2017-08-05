@@ -87,21 +87,6 @@ namespace control {
         {
           this->stateCore().clear();
         }
-      
-      
-      /* == diagnostics == */
-      
-      size_t
-      size() const
-        {
-          return unConst(this)->stateCore().size();
-        }
-      
-      bool
-      empty()  const
-        {
-          return 0 == size();
-        }
     };
   
   
