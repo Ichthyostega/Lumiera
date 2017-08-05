@@ -38,6 +38,8 @@
 
 
 #include "lib/error.hpp"
+#include "lib/sync.hpp"
+#include "lib/iter-stack.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <functional>
@@ -53,13 +55,19 @@ namespace lib {
    * Typically used to dispatch function invocations together with
    * their concrete parameters into another thread for invocation.
    */
-  struct CallQueue
+  class CallQueue
     : boost::noncopyable
+    , public Sync<>
     {
+    public:
+      using Operation = std::function<void(void)>;
+      
+    private:
+      lib::IterQueue<Operation> queue_;
+      
     public:
       CallQueue() { }
       
-      using Operation = std::function<void(void)>;
       
       CallQueue&
       feed (Operation&& op)
@@ -67,21 +75,28 @@ namespace lib {
           if (not op)
             throw error::Logic( "Unbound Functor fed to dispatcher CallQueue"
                               , error::LUMIERA_ERROR_BOTTOM_VALUE);
-          
-//        lib::IterQueue<Command>::feed (move(cmd));
+          {
+            Lock sync(this);
+            queue_.feed (move(op));
+          }
           return *this;
         }
       
-      void
+      CallQueue&
       invoke()
         {
-          UNIMPLEMENTED ("pop operation");
-        }
-      
-      void
-      clear()
-        {
-//        this->stateCore().clear();
+          if (not empty())
+            {
+              Operation operate;
+              {
+                Lock sync(this);
+                operate = move (*queue_);
+                ++queue_;
+              }
+              ASSERT (operate);
+              operate();
+            }
+          return *this;
         }
       
       
@@ -90,7 +105,8 @@ namespace lib {
       size_t
       size()  const
         {
-//        return unConst(this)->stateCore().size();
+          Lock sync(this);
+          return queue_.size();
         }
       
       bool
@@ -98,7 +114,6 @@ namespace lib {
         {
           return 0 == size();
         }
-      
     };
   
   
