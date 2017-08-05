@@ -56,9 +56,9 @@
  ** ## the generic interface element API
  ** 
  ** The _generic interface element_ based on [Tangible](\ref model::Tangible) covers a set of behaviour
- ** common to  all elements of the interface. This behaviour is targeted towards the _integration_
+ ** common to all elements of the interface. This behaviour is targeted towards the _integration_
  ** with the core application. Beyond that, there are still several concerns regarding presentation,
- ** like a common styling. These are addressed the conventional way, through a common \ref UiManager.
+ ** like a common styling. These are addressed the conventional way, through a common \ref StyleManager.
  ** The following discussion focuses on the aspects of integration with the core.
  ** 
  ** For one reason or another, any element in the UI can appear and go away.
@@ -67,9 +67,9 @@
  ** In regular, operative state, an interface element may initiate _actions_, which translate
  ** into _commands_ at the session interface. To complicate matters, there might be higher-level,
  ** cooperative _gestures_ implemented within the interface, leading to actions being formed
- ** similar to sentences of spoken language, with the help of a FocusConcept -- this means,
- ** in the end, there is a _subject_ and a _predicate_. These need to be bound in order to
- ** form an _action_. And some interface element takes on or relates to the role of the
+ ** similar to sentences of spoken language, with the help of a _focus concept_ -- anyway, this
+ ** means, in the end, there is a _subject_ and a _predicate_. These need to be bound in order
+ ** to form an _action_. And some interface element takes on or relates to the role of the
  ** underlying, the subject, the **tangible element**.
  ** 
  ** @todo Some actions are very common and can be represented by a shorthand.
@@ -82,10 +82,10 @@
  ** expanding and collapsing, moving by focus or manipulation of a similar presentation control.
  ** These manipulations in itself do not constitute an action. But there typically is some widget
  ** or controller, which is responsible for the touched presentation state. If this entity judges
- ** the state change to be relevant and persistent, it may [send](\ref BusTerm::note()) a **state mark**
- ** into the UI-Bus -- expecting this marked state to be remembered.
- ** In turn this means the bus terminal might feed a state mark back into the tangible element,
- ** expecting this state to be restored.
+ ** the state change to be relevant and persistent, it may [send](\ref BusTerm::note()) a
+ ** **state mark** into the UI-Bus -- expecting this marked state to be remembered.
+ ** In turn this means the bus terminal might feed a state mark back into the
+ ** tangible element, expecting this state to be restored.
  ** 
  ** A special case of state marking is the presentation of _transient feedback._
  ** Such feedback is pushed from "somewhere" towards given elements, which react through an
