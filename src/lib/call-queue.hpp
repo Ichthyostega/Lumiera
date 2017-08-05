@@ -40,9 +40,11 @@
 #include "lib/error.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <functional>
 
 
 namespace lib {
+  namespace error = lumiera::error;
   
   
   
@@ -54,6 +56,48 @@ namespace lib {
   struct CallQueue
     : boost::noncopyable
     {
+    public:
+      CallQueue() { }
+      
+      using Operation = std::function<void(void)>;
+      
+      CallQueue&
+      feed (Operation&& op)
+        {
+          if (not op)
+            throw error::Logic( "Unbound Functor fed to dispatcher CallQueue"
+                              , error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+//        lib::IterQueue<Command>::feed (move(cmd));
+          return *this;
+        }
+      
+      void
+      invoke()
+        {
+          UNIMPLEMENTED ("pop operation");
+        }
+      
+      void
+      clear()
+        {
+//        this->stateCore().clear();
+        }
+      
+      
+      /* == diagnostics == */
+      
+      size_t
+      size()  const
+        {
+//        return unConst(this)->stateCore().size();
+        }
+      
+      bool
+      empty() const
+        {
+          return 0 == size();
+        }
       
     };
   

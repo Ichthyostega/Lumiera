@@ -40,7 +40,7 @@
 namespace lib {
 namespace test{
   
-  using util::cStr;
+  using util::isnil;
   using std::bind;
   using std::string;
   
@@ -77,7 +77,20 @@ namespace test{
       void
       verify_SimpleUse ()
         {
-          UNIMPLEMENTED("verify_SimpleUse");
+          CallQueue queue;
+          CHECK (isnil (queue));
+          
+          int val = 2;
+          queue.feed ([&]() { val = -1; });
+          CHECK (1 == queue.size());
+          CHECK (val == 2);
+          
+          queue.invoke();
+          CHECK (val == -1);
+          CHECK (0 == queue.size());
+          
+          queue.invoke();
+          CHECK (0 == queue.size());
         }
       
       
