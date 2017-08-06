@@ -182,6 +182,21 @@ namespace test{
               }
             
             
+            // Test c++11 foreach iteration
+            check = 0;
+            for (auto& entry : coll)
+              {
+                CHECK (check == entry.getVal());
+                ++check;
+              }
+            check = 0;
+            for (auto const& entry : const_coll)
+              {
+                CHECK (check == entry.getVal());
+                ++check;
+              }
+            
+            
             // Verify correct behaviour of iteration end
             CHECK (! (coll.end()));
             CHECK (isnil (coll.end()));

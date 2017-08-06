@@ -78,7 +78,6 @@ namespace test{
         iterator       end()         { return       iterator();                          }
         const_iterator begin() const { return const_iterator(data_.begin(),data_.end()); }
         const_iterator end()   const { return const_iterator();                          }
-        
       };
     
     
@@ -129,6 +128,8 @@ namespace test{
         
         iterator       end ()             { return iterator();       }
         const_iterator end ()       const { return const_iterator(); }
+        
+        size_t         size()  const { return numberz_.size(); }
         
         
         
@@ -351,6 +352,36 @@ namespace test{
               
              // *iter = i+1;   ///////////TODO this should be const, but it isn't
             }
+          
+          
+          //---- verify support for C++11 element iteration
+          i = 0;
+          for (auto& elm : elms) // NOTE: TestContainer exposes pointers
+            {
+              ++elm; // can indeed modify contents
+              --elm;
+              CHECK (*elm == i);
+              ++i;
+            }
+          CHECK (size_t(i) == elms.size());
+          
+          i = 0;
+          for (auto const& elm : elms)
+            {
+              CHECK (*elm == i);
+              // ++elm; // can not modify contents
+              ++i;
+            }
+          CHECK (size_t(i) == elms.size());
+          
+          i = 0;
+          for (auto const& elm : const_elms)
+            {
+              CHECK (*elm == i);
+              // ++elm; // can not modify contents
+              ++i;
+            }
+          CHECK (size_t(i) == elms.size());
         }
       
       

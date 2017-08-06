@@ -470,8 +470,8 @@ namespace lib {
       
       
       
-      typedef IterAdapter<      I *, const ScopedCollection *> iterator;
-      typedef IterAdapter<const I *, const ScopedCollection *> const_iterator;
+      using iterator       = IterAdapter<      I *, const ScopedCollection *>;
+      using const_iterator = IterAdapter<const I *, const ScopedCollection *>;
       
       
       iterator       begin()       { return iterator       (this, _access_begin()); }
