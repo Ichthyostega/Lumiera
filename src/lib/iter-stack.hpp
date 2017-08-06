@@ -150,7 +150,7 @@ namespace lib {
       pop()
         {
           this->__throw_if_empty();
-          TY topElement (this->stateCore().back());
+          TY topElement (std::move (this->stateCore().back()));
           this->stateCore().pop_back();
           return topElement;
         }
@@ -218,7 +218,7 @@ namespace lib {
       pop()
         {
           this->__throw_if_empty();
-          TY firstElement (this->stateCore().back());
+          TY firstElement (std::move (this->stateCore().back()));
           this->stateCore().pop_back();
           return firstElement;
         }
