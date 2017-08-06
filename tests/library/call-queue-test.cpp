@@ -28,6 +28,9 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/scoped-collection.hpp"
+#include "backend/thread-wrapper.hpp"
+#include "lib/sync.hpp"
 
 #include "lib/call-queue.hpp"
 
@@ -39,13 +42,25 @@
 namespace lib {
 namespace test{
   
+  using lib::Sync;
+  using backend::Thread;
+  using backend::ThreadJoinable;
+  
   using util::isnil;
-  using std::bind;
   using std::string;
+  using std::bind;
   
   
   
   namespace { // test fixture
+    
+    // --------random-stress-test------
+    uint const NUM_OF_THREADS = 50;
+    uint const MAX_RAND_INCMT = 200;
+    uint const MAX_RAND_STEPS = 500;
+    uint const MAX_RAND_DELAY = 10000;
+    // --------random-stress-test------
+
     
     uint calc_sum = 0;
     uint ctor_sum = 0;
@@ -166,10 +181,63 @@ namespace test{
         }
       
       
+      
+      using Step = std::function<uint()>;
+      
+      struct Worker
+        : ThreadJoinable
+        {
+          uint64_t localSum = 0;
+          
+          Worker(uint cnt, Step workStep)
+            : ThreadJoinable{"CallQueue_test: concurrent dispatch"
+                            , [&]() {
+                                for (uint i=0; i<cnt; ++i)
+                                  localSum += workStep();
+                            }}
+            { }
+        };
+      
+      using Workers = lib::ScopedCollection<Worker>;
+      
+      
       void
       verify_ThreadSafety()
         {
-          UNIMPLEMENTED("verify_ThreadSafety");
+          CallQueue queue;
+          uint64_t globalSum = 0;
+          uint64_t checkSum  = 0;
+          
+          Step step =[&]() -> uint
+                        {
+                          uint increment = rand() % MAX_RAND_INCMT;
+                          uint delay     = rand() % MAX_RAND_DELAY;
+                          
+                          queue.feed ([&]() { globalSum += increment; });
+                          usleep (delay);
+                          queue.invoke();  // NOTE: typically this dequeues some other entry added during our sleep
+                          return increment;
+                        };
+          
+          uint const cntSteps = rand() % MAX_RAND_STEPS;
+          
+          // Start a bunch of threads with random access pattern
+          Workers workers{NUM_OF_THREADS,
+                          [&](Workers::ElementHolder& storage)
+                            {
+                              storage.create<Worker>(cntSteps, step);
+                            }
+                         };
+          
+          // collect the results of all worker threads
+          for (auto& worker : workers)
+            {
+              worker.join();
+              checkSum += worker.localSum;
+            }
+          
+          // VERIFY: locally recorded partial sums match total sum
+          CHECK (globalSum == checkSum);
         }
     };
   
