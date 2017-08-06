@@ -157,7 +157,7 @@ namespace test{
           {
             CollD coll(50);
             for (uint i=0; i<coll.capacity(); ++i)
-              coll.appendNew<Dummy>(i);
+              coll.emplace<Dummy>(i);
             
             int check=0;
             CollD::iterator ii = coll.begin();
@@ -235,28 +235,28 @@ namespace test{
             CHECK (0 == coll.size());
             CHECK (0 == Dummy::checksum());
             
-            Dummy& d0 = coll.appendNewElement();
+            Dummy& d0 = coll.emplaceElement();
             CHECK (1 == coll.size());
             
-            Dummy& d1 = coll.appendNew<Dummy> (rr);
+            Dummy& d1 = coll.emplace<Dummy> (rr);
             CHECK (2 == coll.size());
             
             int sum = Dummy::checksum();
             
             // trigger the bomb
-            VERIFY_ERROR (SUBVERSIVE, coll.appendNew<SubDummy>(rr,rr) );
+            VERIFY_ERROR (SUBVERSIVE, coll.emplace<SubDummy>(rr,rr) );
             
             CHECK (  2 == coll.size()); // the other objects survived
             CHECK (sum == Dummy::checksum());
             
-            Dummy& d2 = coll.appendNew<SubDummy> (rr, rr+1);
+            Dummy& d2 = coll.emplace<SubDummy> (rr, rr+1);
             CHECK (3 == coll.size());
             
             CHECK (sum + rr == Dummy::checksum());
             
-            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
-            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
-            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
+            VERIFY_ERROR (CAPACITY, coll.emplaceElement());
+            VERIFY_ERROR (CAPACITY, coll.emplaceElement());
+            VERIFY_ERROR (CAPACITY, coll.emplaceElement());
             
             CHECK (3 == coll.size());
             CHECK (sum + rr == Dummy::checksum());
@@ -269,7 +269,7 @@ namespace test{
                                                    //  returns the trigger value, when the argument is zero
             
             coll.clear();
-            coll.appendNew<SubDummy> (11,22);
+            coll.emplace<SubDummy> (11,22);
             
             CHECK ( 1 == coll.size());
             CHECK (11 == Dummy::checksum());
@@ -426,7 +426,7 @@ namespace test{
           
           CollI source (25);
           for (uint i=0; i < source.capacity(); ++i)
-            source.appendNew<uint>(i);           // holding the numbers 0..24
+            source.emplace<uint>(i);           // holding the numbers 0..24
           
           CollI coll (20, CollI::pull(source.begin()));
                                               // this immediately pulls in the first 20 elements 

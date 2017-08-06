@@ -42,8 +42,8 @@
  **   ctor just to specify the maximum size). The storage to hold up to this
  **   number of objects is (heap) allocated right away, but no objects are
  **   created. Later on, individual objects are "pushed" into the collection
- **   by invoking #appendNewElement() to create a new element of the default
- **   type `I`) or #appendNew<Type>(args) to create some subtype. This way,
+ **   by invoking #emplaceElement() to create a new element of the default
+ **   type `I`) or #emplace<Type>(args) to create some subtype. This way,
  **   the container is being filled successively.
  ** - the "RAII style" usage strives to create all of the content objects
  **   right away, immediately after the memory allocation. This usage pattern
@@ -73,10 +73,7 @@
 #include "lib/iter-adapter.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_array.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_base_of.hpp>
+#include <type_traits>
 
 
 namespace lib {
@@ -134,83 +131,18 @@ namespace lib {
           
           
           
-#define TYPE_AND_STORAGE_SANITY_CHECK \
-              BOOST_STATIC_ASSERT (((boost::is_same<I,TY>::value   \
-                                   ||boost::is_base_of<I,TY>::value)\
-                                   && sizeof(TY) <= siz))
-          
-          /** Abbreviation for placement new */
-#define EMBEDDED_ELEMENT_CTOR(_CTOR_CALL_)    \
-              TYPE_AND_STORAGE_SANITY_CHECK;   \
-              return *new(&buf_) _CTOR_CALL_;   \
-          
-          
-          template<class TY>
+          /** place object of type TY, forwarding ctor arguments */
+          template<class TY, typename...ARGS>
           TY&
-          create ()
+          create (ARGS&& ...args)
             {
-              EMBEDDED_ELEMENT_CTOR ( TY() )
+              static_assert ( (std::is_same<I,TY>::value
+                             ||std::is_base_of<I,TY>::value)
+                             && sizeof(TY) <= siz,
+                             "ElementHolder buffer to small");
+              
+              return *new(&buf_) TY (std::forward<ARGS> (args)...);
             }
-          
-          
-          template<class TY, typename A1>
-          TY&                                               //___________________________________________
-          create (A1 a1)                                   ///< place object of type TY, using 1-arg ctor
-            {
-              EMBEDDED_ELEMENT_CTOR ( TY(a1) )
-            }
-          
-          
-          template< class TY
-                  , typename A1
-                  , typename A2
-                  >
-          TY&                                               //___________________________________________
-          create (A1 a1, A2 a2)                            ///< place object of type TY, using 2-arg ctor
-            {
-              EMBEDDED_ELEMENT_CTOR ( TY(a1,a2) )
-            }
-          
-          
-          template< class TY
-                  , typename A1
-                  , typename A2
-                  , typename A3
-                  >
-          TY&                                               //___________________________________________
-          create (A1 a1, A2 a2, A3 a3)                     ///< place object of type TY, using 3-arg ctor
-            {
-              EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3) )
-            }
-          
-          
-          template< class TY
-                  , typename A1
-                  , typename A2
-                  , typename A3
-                  , typename A4
-                  >
-          TY&                                               //___________________________________________
-          create (A1 a1, A2 a2, A3 a3, A4 a4)              ///< place object of type TY, using 4-arg ctor
-            {
-              EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3,a4) )
-            }
-          
-          
-          template< class TY
-                  , typename A1
-                  , typename A2
-                  , typename A3
-                  , typename A4
-                  , typename A5
-                  >
-          TY&                                               //___________________________________________
-          create (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)       ///< place object of type TY, using 5-arg ctor
-            {
-              EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3,a4,a5) )
-            }
-#undef TYPE_AND_STORAGE_SANITY_CHECK
-#undef EMBEDDED_ELEMENT_CTOR
         };
       
       
@@ -362,94 +294,26 @@ namespace lib {
       
       
       
-                                                 ///////////////////////////////////////////////////////TICKET #967 : the following can be written better now. Also should be named 'emplace'
       /** push a new element of default type
        *  to the end of this container
        * @note EX_STRONG */
-      I& appendNewElement() { return appendNew<I>(); }
-      
-      
-      template< class TY >
-      TY&                                                  //_________________________________________
-      appendNew ()                                        ///< add object of type TY, using 0-arg ctor
+      I&
+      emplaceElement()
         {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>();
-          ++level_;
-          return newElm;
+          return emplace<I>();
         }
       
       
-      template< class TY
-              , typename A1
-              >
-      TY&                                                  //_________________________________________
-      appendNew (A1 a1)                                   ///< add object of type TY, using 1-arg ctor
+      /**
+       * push new entry at the end of this container
+       * and build object of type TY in place there
+       */
+      template<class TY, typename...ARGS>
+      TY&
+      emplace (ARGS&& ...args)
         {
           __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1);
-          ++level_;
-          return newElm;
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              >
-      TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2)                            ///< add object of type TY, using 2-arg ctor
-        {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2);
-          ++level_;
-          return newElm;
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              >
-      TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2, A3 a3)                     ///< add object of type TY, using 3-arg ctor
-        {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3);
-          ++level_;
-          return newElm;
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              >
-      TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2, A3 a3, A4 a4)              ///< add object of type TY, using 4-arg ctor
-        {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4);
-          ++level_;
-          return newElm;
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              , typename A5
-              >
-      TY&                                                  //_________________________________________
-      appendNew (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)       ///< add object of type TY, using 5-arg ctor
-        {
-          __ensureSufficientCapacity();
-          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4,a5);
+          TY& newElm = elements_[level_].template create<TY>(std::forward<ARGS> (args)...);
           ++level_;
           return newElm;
         }
@@ -489,7 +353,7 @@ namespace lib {
     private:
       /* ==== Storage: heap allocated array of element buffers ==== */
       
-      typedef boost::scoped_array<ElementHolder> ElementStorage;
+      typedef std::unique_ptr<ElementHolder[]> ElementStorage;
       
       size_t level_;
       size_t capacity_;
