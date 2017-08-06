@@ -26,11 +26,10 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/util.hpp"
-#include "lib/format-cout.hpp"
 #include "lib/scoped-collection.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/sync.hpp"
+#include "lib/util.hpp"
 
 #include "lib/call-queue.hpp"
 
@@ -43,7 +42,6 @@ namespace lib {
 namespace test{
   
   using lib::Sync;
-  using backend::Thread;
   using backend::ThreadJoinable;
   
   using util::isnil;
@@ -58,9 +56,9 @@ namespace test{
     uint const NUM_OF_THREADS = 50;
     uint const MAX_RAND_INCMT = 200;
     uint const MAX_RAND_STEPS = 500;
-    uint const MAX_RAND_DELAY = 10000;
+    uint const MAX_RAND_DELAY = 1000;
     // --------random-stress-test------
-
+    
     
     uint calc_sum = 0;
     uint ctor_sum = 0;
@@ -109,7 +107,7 @@ namespace test{
    *       
    * @see lib::CallQueue
    * @see gui::NotificationService usage example
-   * @see [DemoGuiRoundtrip]: http://issues.lumiera.org/ticket/1099 "Ticket #1099"
+   * @see [DemoGuiRoundtrip](http://issues.lumiera.org/ticket/1099 "Ticket #1099")
    */
   class CallQueue_test : public Test
     {
@@ -182,18 +180,34 @@ namespace test{
       
       
       
-      using Step = std::function<uint()>;
-      
       struct Worker
         : ThreadJoinable
+        , Sync<>
         {
-          uint64_t localSum = 0;
+          uint64_t producerSum = 0;
+          uint64_t consumerSum = 0;
           
-          Worker(uint cnt, Step workStep)
+          void
+          countConsumerCall (uint increment)
+            {
+              Lock sync(this);          // NOTE: will be invoked from some random other thread
+              consumerSum += increment;
+            }
+          
+          Worker(CallQueue& queue)
             : ThreadJoinable{"CallQueue_test: concurrent dispatch"
                             , [&]() {
+                                uint cnt    = rand() % MAX_RAND_STEPS;
+                                uint delay  = rand() % MAX_RAND_DELAY;
+                                
                                 for (uint i=0; i<cnt; ++i)
-                                  localSum += workStep();
+                                  {
+                                    uint increment = rand() % MAX_RAND_INCMT;
+                                    queue.feed ([=]() { countConsumerCall(increment); });
+                                    producerSum += increment;
+                                    usleep (delay);
+                                    queue.invoke();  // NOTE: dequeue one functor added during our sleep
+                                  }                 //        and thus belonging to some random other thread
                             }}
             { }
         };
@@ -201,43 +215,40 @@ namespace test{
       using Workers = lib::ScopedCollection<Worker>;
       
       
+      /**
+       * @test torture the CallQueue by massively multithreaded dispatch
+       *       - start #NUM_OF_THREADS (e.g. 50) threads in parallel
+       *       - each of those has a randomised execution pattern to
+       *         add new functors and dispatch other thread's functors
+       */
       void
       verify_ThreadSafety()
         {
           CallQueue queue;
-          uint64_t globalSum = 0;
-          uint64_t checkSum  = 0;
-          
-          Step step =[&]() -> uint
-                        {
-                          uint increment = rand() % MAX_RAND_INCMT;
-                          uint delay     = rand() % MAX_RAND_DELAY;
-                          
-                          queue.feed ([&]() { globalSum += increment; });
-                          usleep (delay);
-                          queue.invoke();  // NOTE: typically this dequeues some other entry added during our sleep
-                          return increment;
-                        };
-          
-          uint const cntSteps = rand() % MAX_RAND_STEPS;
           
           // Start a bunch of threads with random access pattern
           Workers workers{NUM_OF_THREADS,
                           [&](Workers::ElementHolder& storage)
                             {
-                              storage.create<Worker>(cntSteps, step);
+                              storage.create<Worker>(queue);
                             }
                          };
           
+          // wait for termination of all threads
+          for (auto& worker : workers)
+            worker.join();
+          
           // collect the results of all worker threads
+          uint64_t globalProducerSum = 0;
+          uint64_t globalConsumerSum = 0;
           for (auto& worker : workers)
             {
-              worker.join();
-              checkSum += worker.localSum;
+              globalProducerSum += worker.producerSum;
+              globalConsumerSum += worker.consumerSum;
             }
           
           // VERIFY: locally recorded partial sums match total sum
-          CHECK (globalSum == checkSum);
+          CHECK (globalProducerSum == globalConsumerSum);
         }
     };
   
