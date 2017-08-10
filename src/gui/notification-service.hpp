@@ -48,6 +48,9 @@
 
 
 
+namespace lib {
+  namespace diff { class GenNode; }
+}
 namespace gui {
   
   namespace ctrl {
@@ -86,6 +89,8 @@ namespace gui {
     private:
       std::unique_ptr<ctrl::UiDispatcher> dispatch_;
       ctrl::UiManager& uiManager_;
+      
+      void dispatchMsg(ID, lib::diff::GenNode&&);
       
       
       /* === Interface Lifecycle === */

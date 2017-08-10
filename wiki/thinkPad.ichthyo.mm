@@ -1042,6 +1042,36 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501939174506" ID="ID_504999068" MODIFIED="1501939191040" TEXT="in NotificationService integrieren">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1502375098210" ID="ID_581509556" MODIFIED="1502375109992" STYLE="fork" TEXT="als PImpl">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1502375146395" ID="ID_144811928" MODIFIED="1502378036357" TEXT="CallQueue einrichten">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1502375120551" ID="ID_1281399419" MODIFIED="1502375131121" TEXT="Glib::Dispatcher verwenden"/>
+<node CREATED="1502375134501" ID="ID_1011463592" MODIFIED="1502375142424" TEXT="Aufrufe in Lamdas verpacken"/>
+</node>
+<node CREATED="1502375294344" ID="ID_640199096" MODIFIED="1502375310242" TEXT="Spezialbehandlung f&#xfc;r Shutdown">
+<node CREATED="1502375312469" ID="ID_1075926054" MODIFIED="1502375369364" TEXT="ironischerweise...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ist es nicht sinnvoll,
+    </p>
+    <p>
+      speziell den UI-Shutdown-Trigger &#252;ber den neuen Mechanismus laufen zu lassen,
+    </p>
+    <p>
+      obwohl jener doch genau der Anla&#223; war, diesen neuen Mechanismus zu bauen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1502375371230" ID="ID_259224346" MODIFIED="1502375379121" TEXT="eigene Dispatcher-Instanz"/>
 </node>
 <node CREATED="1501939160907" ID="ID_188350210" MODIFIED="1502371616753" TEXT="Convenience-Wrapper">
 <icon BUILTIN="help"/>
@@ -1071,7 +1101,26 @@
 </node>
 </node>
 </node>
-<node CREATED="1501804850624" ID="ID_1451522246" MODIFIED="1501804855579" TEXT="Zugang zum UiManager"/>
+<node COLOR="#338800" CREATED="1501804850624" ID="ID_1451522246" MODIFIED="1502375273163" TEXT="Zugang zum UiManager">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1502375214162" ID="ID_267170664" MODIFIED="1502375240978" TEXT="durch direkte Verdrahtung">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1502375221129" ID="ID_368784036" MODIFIED="1502375270932" TEXT="dies m&#xf6;glich machen...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...indem der NotificatonService nun vom UI-Manager gemanaged wird :)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488419591265" HGAP="75" ID="ID_471609909" MODIFIED="1501804660879" VSHIFT="14">
 <richcontent TYPE="NODE"><html>
@@ -1298,7 +1347,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" FOLDED="true" ID="ID_389264738" MODIFIED="1501854204609" TEXT="weitere Funktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" FOLDED="true" ID="ID_389264738" MODIFIED="1502375198382" TEXT="weitere Funktionen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1501854084264" HGAP="71" ID="ID_1333991907" MODIFIED="1501854132464" TEXT="allgemein...." VSHIFT="-43">
 <icon BUILTIN="messagebox_warning"/>

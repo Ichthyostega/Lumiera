@@ -34,6 +34,7 @@
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ctrl/ui-dispatcher.hpp"
 #include "gui/notification-service.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
 
@@ -44,6 +45,7 @@ extern "C" {
 #include <string>
 
 
+using lib::diff::GenNode;
 using lib::diff::TreeMutator;
 using gui::ctrl::UiDispatcher;
 using gui::ctrl::BusTerm;
@@ -52,6 +54,20 @@ using util::cStr;
 
 
 namespace gui {
+  
+  
+  /** @internal helper to _move_ a given UI-Bus message (GenNode)
+   *   into the closure of an event-lambda, which then is handed over
+   *   to the UI event thread through the dispatcher queue.
+   */
+  void
+  NotificationService::dispatchMsg (ID uiElement, lib::diff::GenNode&& uiMessage)
+  {
+    dispatch_->event ([=]()
+                      {
+                        this->mark (uiElement, uiMessage);
+                      });
+  }
   
   
   void 
@@ -65,16 +81,14 @@ namespace gui {
   void
   NotificationService::markError (ID uiElement, string const& text)
   {
-    UNIMPLEMENTED ("send a error mark message via UI-Bus");
-    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
+    dispatchMsg (uiElement, GenNode{"Error", text});
   }
   
   
   void
   NotificationService::markNote  (ID uiElement, string const& text)
   {
-    UNIMPLEMENTED ("send a info/warning message via UI-Bus");
-    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
+    dispatchMsg (uiElement, GenNode{"Message", text});
   }
   
   

@@ -49,12 +49,14 @@
 
 #include <boost/noncopyable.hpp>
 //#include <string>
+#include <utility>
 
 
 namespace gui {
 namespace ctrl {
   
 //  using std::string;
+  using std::move;
 //  class GlobalCtx;
   
   
@@ -66,10 +68,22 @@ namespace ctrl {
   class UiDispatcher
     : boost::noncopyable
     {
+      lib::CallQueue queue_;
+      
+      using Operation = lib::CallQueue::Operation;
       
     public:
       UiDispatcher()
+        : queue_{}
       { }
+      
+      
+      void
+      event (Operation&& op)
+        {
+          queue_.feed (move(op));
+          //////////////////////////TODO trigger Glib::Dispatcher!!!!!
+        }
       
     private:
     };
