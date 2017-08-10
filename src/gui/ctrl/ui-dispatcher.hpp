@@ -36,6 +36,37 @@
  **          subsystems is not deterministic, this rules out passing references to anything tied to some
  **          subsystem lifecycle. Referring to a static singleton is acceptable though.
  ** 
+ ** # implementation considerations
+ ** 
+ ** Basically the implementation relies on the [standard mechanism][Gtkmm-tutorial] for multithreaded
+ ** UI applications. But on top we use our own [dispatcher queue](\ref lib::CallQueue) to allow passing
+ ** arbitrary argument data, based on the argument storage of `std::function`. Which in the end effectively
+ ** involves two disjoint thread collaboration mechanisms:
+ ** - the caller creates a closure of the operation to be invoked, binding all arguments by value
+ ** - this closure is wrapped into a `std::function` instance
+ ** - which in turn is added into the dispatcher queue. Depending on the implementation,
+ **   this might incur explicit locking
+ ** - after successfully enqueuing the closure, the GTK event thread is signalled through
+ **   the [Glib-Dispatcher], which actually messages through an OS-pipe (kernel based IO)
+ ** - the Dispatcher need to be created within the UI event thread (which is the case, since
+ **   all of Lumiera's UI top-level context is created in the thread dedicated to run GTK)
+ ** - relying on internal GLib / GIO ``magic'', the dispatcher hooks into the respective GLib
+ **   ``main context'' to ensure this signalling is picked up from the event thread, which...
+ ** - ...finally leads to invocation of the Dispatcher's signal from within the event loop
+ ** 
+ ** This hybrid approach is rather simple to establish, but creates additional complexities at runtime.
+ ** More specifically, we have to pay the penalty of chaining the overhead and the inherent limitations
+ ** of two thread signalling mechanisms (in our dispatcher queue and within kernel based IO).
+ ** It would be conceivable to implement all of the hand-over mechanism solely within our framework,
+ ** yet unfortunately there seems to be no easily accessible and thus ``official'' way to hook into
+ ** the event processing, at least without digging deep into GLib internals.
+ ** 
+ ** @note as detailed in the documentation for [Glib-Dispatcher], all instances built within a
+ **       given receiver thread (here the UI event loop thread) will _share a single pipe for signalling._
+ **       Under heavy load this queue might fill up and block the sender on dispatch.
+ ** 
+ ** [Glib-Dispatcher]: https://developer.gnome.org/glibmm/2.42/classGlib_1_1Dispatcher.html
+ ** [GTKmm-tutorial]:  https://developer.gnome.org/gtkmm-tutorial/3.12/sec-using-glib-dispatcher.html.en
  ** @see NotificationService
  ** @see CallQueue_test
  */
@@ -48,22 +79,21 @@
 #include "lib/call-queue.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <string>
 #include <utility>
 
 
 namespace gui {
 namespace ctrl {
   
-//  using std::string;
   using std::move;
-//  class GlobalCtx;
   
   
   
   /**
    * Helper to dispatch code blocks into the UI event thread for execution.
    * Implementation of the actual dispatch is based on `Glib::Dispatcher`
+   * @warning any UiDispatcher instance must be created such as to ensure
+   *          it outlives the GTK event loop
    */
   class UiDispatcher
     : boost::noncopyable

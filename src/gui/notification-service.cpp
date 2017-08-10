@@ -24,8 +24,24 @@
  ** Implementation of notifications and updates within the GUI.
  ** This is the actual service implementation and runs within the GUI plugin.
  ** 
- ** @todo 1/2017 actually forward invocations on the UI-Bus
+ ** Since GTK is _not threadsafe by design,_ any external invocation passed through
+ ** this facade service will be dispatched explicitly into the GTK event loop thread.
+ ** The implementation of this dispatch is based upon `Glib::Dispatcher` and thus
+ ** requires this service instance to be created from within the thread performing
+ ** the GTK event loop. Moreover, to avoid segmentation faults on shutdown, the
+ ** lifespan of this service instance must exceed the running of the event loop,
+ ** since otherwise the event loop might invoke a lambda bound to the `this`
+ ** pointer of a NotificationService already decommissioned. The setup of the
+ ** standard Lumiera UI top-level context ensures this is the case, since the
+ ** UiManager::performMainLoop() maintains the NotificationService instance
+ ** and also performs the blocking `gtk_main()` call. Consequently, any
+ ** invocation added from other threads after leaving the GTK main loop
+ ** but before closing the GuiNotification facade will just be enqueued,
+ ** but then dropped on destruction of the UiDispatcher PImpl.
+ ** 
  ** @todo 1/2017 find a solution for passing diff messages    /////////////////////////////////////////////////TICKET #1066
+ ** 
+ ** @see ui-dispatcher.hpp
  ** 
  */
 
@@ -73,7 +89,7 @@ namespace gui {
   void 
   NotificationService::displayInfo (string const& text)
   {
-    INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
+    INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));  ///////////////////////////////////TICKET #1102 : build a message display box in the UI
     ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
   }
   
