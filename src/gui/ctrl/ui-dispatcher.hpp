@@ -69,23 +69,34 @@ namespace ctrl {
     : boost::noncopyable
     {
       lib::CallQueue queue_;
+      Glib::Dispatcher dispatcher_;
       
       using Operation = lib::CallQueue::Operation;
       
     public:
       UiDispatcher()
         : queue_{}
-      { }
+        , dispatcher_{}
+        {
+          dispatcher_.connect(
+                      [this]() {
+                                 queue_.invoke();
+                               });
+        }
       
-      
+      /**
+       * move the given operation into our private dispatcher queue and
+       * then schedule dequeuing and invocation into the UI event thread.
+       * @param op a completely closed lambda or functor
+       * @warning closure need to be by value or equivalent, since
+       *        the operation will be executed in another call stack
+       */
       void
       event (Operation&& op)
         {
           queue_.feed (move(op));
-          //////////////////////////TODO trigger Glib::Dispatcher!!!!!
+          dispatcher_.emit();
         }
-      
-    private:
     };
   
   
