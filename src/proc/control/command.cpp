@@ -136,19 +136,6 @@ namespace control {
   }
   
   
-  /** @todo this is a "nice-to-have"; it would allow to call a function as a command,
-   *        almost as if it was a normal function. But this function needs to be defined
-   *        as a command previously, together with a suitable UNDO function. Moreover
-   *        this would probably require to build an additional index; 
-   *        thus this feature is unimplemented for the time being.
-   */
-  Command
-  Command::get (FuncPtr)
-  {
-    UNIMPLEMENTED ("find a command definition which was based on the given function (ptr)");
-  }
-  
-  
   /** try to access an existing command definition and immediately
    *  create a new clone copy by calling #newInstance()
    * @return when search for this ID was successful, a new anonymous

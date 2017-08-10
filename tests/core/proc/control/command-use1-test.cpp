@@ -139,10 +139,6 @@ namespace test    {
           invoke ("test.command1.2") (1234);
           CHECK ( 1234 == command1::check_);
           
-          // another shortcut, with static type check:
-//        invoke (command1::operate) (5678);                                  //////////////////TICKET #291  : unimplemented for now (9/09)
-//        CHECK ( 1234+5678 == command1::check_);
-          
           com.undo();
           CHECK ( 0 == command1::check_);
         }

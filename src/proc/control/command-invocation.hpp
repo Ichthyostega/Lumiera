@@ -105,6 +105,9 @@ namespace control {
      *            In this case, we allow any invocation call to compile,
      *            but the command will reject unsuitable signatures
      *            at runtime, when fetching the operation functor.
+     *  @remarks  actually this kind of invocation is the default case,
+     *            since commands are defined statically at application start-up
+     *            and invoked via the UI-Bus by command-ID
      */
     struct RuntimeCheckedCommandInvoker
       {
@@ -190,17 +193,6 @@ namespace control {
       };
   }
   
-  
-  
-  template<typename SIG>
-  inline
-  com::CommandInvoker<SIG>
-  invoke (SIG& operation_func)
-  {
-    Command command = Command::get ((FuncPtr)&operation_func);
-    ASSERT (command);
-    return com::CommandInvoker<SIG> (command);
-  }
   
   
   inline

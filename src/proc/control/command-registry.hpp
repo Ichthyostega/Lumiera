@@ -206,7 +206,7 @@ namespace control {
       /** search the command index for a definition
        *  @param cmdInstance using the definition to look up
        *  @return the ID used to register this definition 
-       *          or \c NULL in case of an "anonymous" command */
+       *          or `NULL` in case of an "anonymous" command */
       Symbol
       findDefinition (Command const& cmdInstance)  const
         {

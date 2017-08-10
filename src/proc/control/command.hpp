@@ -133,7 +133,6 @@ namespace control {
     public:
       /* === command registry === */
       static Command get (Symbol cmdID);
-      static Command get (FuncPtr func);
       static bool remove (Symbol cmdID);
       
       /** create a clone definition */
