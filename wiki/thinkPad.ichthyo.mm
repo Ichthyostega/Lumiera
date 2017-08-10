@@ -1059,15 +1059,16 @@
 </node>
 <node CREATED="1502375134501" ID="ID_1011463592" MODIFIED="1502375142424" TEXT="Aufrufe in Lamdas verpacken"/>
 </node>
-<node CREATED="1502375294344" ID="ID_640199096" MODIFIED="1502375310242" TEXT="Spezialbehandlung f&#xfc;r Shutdown">
-<node CREATED="1502375312469" ID="ID_1075926054" MODIFIED="1502375369364" TEXT="ironischerweise...">
+<node COLOR="#338800" CREATED="1502375294344" FOLDED="true" ID="ID_640199096" MODIFIED="1502390909880" TEXT="Spezialbehandlung f&#xfc;r Shutdown">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1502375312469" ID="ID_1075926054" MODIFIED="1502390553943" TEXT="ironischerweise...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      ...ist es nicht sinnvoll,
+      ...k&#246;nnte das am Ende nicht sinnvoll sein,
     </p>
     <p>
       speziell den UI-Shutdown-Trigger &#252;ber den neuen Mechanismus laufen zu lassen,
@@ -1079,7 +1080,62 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1502375371230" ID="ID_259224346" MODIFIED="1502375379121" TEXT="eigene Dispatcher-Instanz"/>
+<node CREATED="1502390322659" ID="ID_194166182" MODIFIED="1502390333142" TEXT="den neuen Dispatcher nutzen?">
+<icon BUILTIN="help"/>
+<node CREATED="1502390340193" ID="ID_1491902996" MODIFIED="1502390520900" TEXT="Con">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1502390353887" ID="ID_1015749080" MODIFIED="1502390399552">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn die Queue voll ist
+    </p>
+    <p>
+      wird erst alles Andere abgearbeitet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1502390402273" ID="ID_929098721" MODIFIED="1502390450088">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn UI-Thread blockt/verhungert,
+    </p>
+    <p>
+      kommt der rettende Shutdown <i>gar nicht</i>&#160;durch
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1502390334890" ID="ID_1454460947" MODIFIED="1502390517936" TEXT="Pro">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1502390463664" ID="ID_1786963429" MODIFIED="1502390472955" TEXT="einfach zu implementieren"/>
+<node CREATED="1502390473567" ID="ID_1776620772" MODIFIED="1502390484658" TEXT="alle Glib::Dispatcher nutzen die gleiche Pipe"/>
+<node CREATED="1502390485294" ID="ID_146294589" MODIFIED="1502390506006" TEXT="...d.h. echte Alternative m&#xfc;&#xdf;te aufwendig zu Fu&#xdf; programmiert werden"/>
+</node>
+</node>
+<node CREATED="1502390572106" ID="ID_1872668444" MODIFIED="1502390580973" TEXT="zus&#xe4;tzlich noch eine Benachrichtigung">
+<node CREATED="1502390583289" ID="ID_741614829" MODIFIED="1502390877875" TEXT="an die UI-Nachrichtenbox">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1502390886681" ID="ID_985994192" MODIFIED="1502390895409" TEXT="f&#xfc;hre Benachrichtiguns-Level ein">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502390603674" ID="ID_125356908" MODIFIED="1502390862378" TEXT="#1102 : build a message display box in the UI">
+<arrowlink COLOR="#8c8bae" DESTINATION="ID_1926586811" ENDARROW="Default" ENDINCLINATION="1456;47;" ID="Arrow_ID_1593124756" STARTARROW="None" STARTINCLINATION="-839;779;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 </node>
 <node CREATED="1501939193031" HGAP="3" ID="ID_1045913810" MODIFIED="1501939200829" TEXT="Test" VSHIFT="20">
 <icon BUILTIN="pencil"/>
@@ -5076,6 +5132,10 @@
 </node>
 </node>
 <node CREATED="1477522287316" ID="ID_1942021610" MODIFIED="1477522290919" TEXT="TimelinePanel"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502390603674" ID="ID_1926586811" MODIFIED="1502390862378" TEXT="#1102 : build a message display box in the UI">
+<linktarget COLOR="#8c8bae" DESTINATION="ID_1926586811" ENDARROW="Default" ENDINCLINATION="1456;47;" ID="Arrow_ID_1593124756" SOURCE="ID_125356908" STARTARROW="None" STARTINCLINATION="-839;779;"/>
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 </node>
 </node>

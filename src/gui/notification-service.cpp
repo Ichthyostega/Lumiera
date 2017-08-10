@@ -120,9 +120,11 @@ namespace gui {
   NotificationService::triggerGuiShutdown (string const& cause)
   {
     NOTICE (gui, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
-    TODO ("actually request a shutdown from the GUI");                      ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
-    // NOTE basically this means to issue the call...
-    // uiManager_.terminateUI();
+    displayInfo (NOTE_ERROR, cause);
+    dispatch_->event ([=]()
+                      {
+                        uiManager_.terminateUI();
+                      });
   }
   
   

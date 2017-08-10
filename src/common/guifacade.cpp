@@ -141,7 +141,6 @@ namespace gui {
          *  starts to execute (and picks up the arguments), prior to returning from the thread starting
          *  function. For this reason, it is rather unlikely this race actually happens in practice,
          *  since opening the GuiNotification interface is done early, while starting the UI-Bus.
-         * @todo                                      ////////////////////////////////////////////////////////TICKET #1048 : maybe use Thread.sync (barrier) to work around this?
          */
         void
         triggerShutdown ()  noexcept override
