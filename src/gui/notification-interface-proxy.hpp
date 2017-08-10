@@ -65,14 +65,15 @@ namespace facade {
   class Proxy<IHandle_GuiNotification>
     : public Holder<IHandle_GuiNotification>
     {
+      using Level = gui::NotifyLevel;
       
       //----Proxy-Implementation-of-GuiNotification--------
       
-      void displayInfo (string const& text)             override  { _i_.displayInfo (cStr(text));                         }
-      void markError (ID uiElement, string const& text) override  { _i_.markError(uiElement.getHash().get(), cStr(text)); }
-      void markNote  (ID uiElement, string const& text) override  { _i_.markNote (uiElement.getHash().get(), cStr(text)); }
-      void mutate (ID uiElement, DiffMessage& diff)     override  { _i_.mutate   (uiElement.getHash().get(), &diff);      }
-      void triggerGuiShutdown (string const& cause)     override  { _i_.triggerGuiShutdown (cStr(cause));                 }
+      void displayInfo (Level level, string const& text) override  { _i_.displayInfo (level, cStr(text));                  }
+      void markError (ID uiElement, string const& text)  override  { _i_.markError(uiElement.getHash().get(), cStr(text)); }
+      void markNote  (ID uiElement, string const& text)  override  { _i_.markNote (uiElement.getHash().get(), cStr(text)); }
+      void mutate (ID uiElement, DiffMessage& diff)      override  { _i_.mutate   (uiElement.getHash().get(), &diff);      }
+      void triggerGuiShutdown (string const& cause)      override  { _i_.triggerGuiShutdown (cStr(cause));                 }
       
       
     public:

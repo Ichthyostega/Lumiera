@@ -87,7 +87,7 @@ namespace gui {
   
   
   void 
-  NotificationService::displayInfo (string const& text)
+  NotificationService::displayInfo (NotifyLevel severity, string const& text)
   {
     INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));  ///////////////////////////////////TICKET #1102 : build a message display box in the UI
     ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
@@ -215,11 +215,11 @@ namespace gui {
                                , NULL /* on  open  */
                                , NULL /* on  close */
                                , LUMIERA_INTERFACE_INLINE (displayInfo,
-                                                           void, (const char* text),
+                                                           void, (uint severity, const char* text),
                                                              {
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
                                                                else
-                                                                 _instance->displayInfo (text);
+                                                                 _instance->displayInfo (NotifyLevel(severity), text);
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (markError,

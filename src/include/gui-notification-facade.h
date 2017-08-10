@@ -57,6 +57,12 @@ namespace gui {
   
   using ID = lib::idi::BareEntryID const&;
   
+  enum NotifyLevel {
+      NOTE_INFO,   ///< possibly interesting info that can be safely ignored
+      NOTE_WARN,   ///< something to be aware of, to be indicated unobtrusively
+      NOTE_ERROR   ///< severe condition to be indicated prominently
+  };
+  
   
   /*****************************************************************//**
    * Global access point to push state update and notification of events
@@ -75,7 +81,7 @@ namespace gui {
       
       
       /** push a user visible notification text */
-      virtual void displayInfo (string const& text)              =0;
+      virtual void displayInfo (NotifyLevel, string const& text) =0;
       
       /** highlight an element in the UI as problem location */
       virtual void markError (ID uiElement, string const& text)  =0;
@@ -121,7 +127,7 @@ extern "C" {
 
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
-                           LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, displayInfo,        (uint, const char*)),
                            LUMIERA_INTERFACE_SLOT (void, markError,          (LumieraUid, const char*)),
                            LUMIERA_INTERFACE_SLOT (void, markNote,           (LumieraUid, const char*)),
                            LUMIERA_INTERFACE_SLOT (void, mutate,             (LumieraUid, void*)),
