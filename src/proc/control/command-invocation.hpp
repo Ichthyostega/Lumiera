@@ -50,6 +50,7 @@
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 
+#include <utility>
 
 
 
@@ -118,76 +119,14 @@ namespace control {
           { }
         
         
-        template< typename T1>
-        ExecResult                                                                        //_________________________________
-        operator() (T1 a1)                                                               ///< Invoke command with 1 Argument.
+        /** invoke command with arbitrary arguments
+         * @warning argument types will be checked at runtime only
+         */
+        template<typename...ARGS>
+        ExecResult
+        operator() (ARGS&& ...args)
           {
-            com_.bind(a1);
-            return com_();
-          }
-        
-        
-        template< typename T1
-                , typename T2
-                >
-        ExecResult                                                                        //_________________________________
-        operator() (T1 a1, T2 a2)                                                        ///< Invoke command with 2 Arguments
-          {
-            com_.bind(a1,a2);
-            return com_();
-          }
-        
-        
-        template< typename T1
-                , typename T2
-                , typename T3
-                >
-        ExecResult                                                                        //_________________________________
-        operator() (T1 a1, T2 a2, T3 a3)                                                 ///< Invoke command with 3 Arguments
-          {
-            com_.bind(a1,a2,a3);
-            return com_();
-          }
-        
-        
-        template< typename T1
-                , typename T2
-                , typename T3
-                , typename T4
-                >
-        ExecResult                                                                        //_________________________________
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4)                                          ///< Invoke command with 4 Arguments
-          {
-            com_.bind(a1,a2,a3,a4);
-            return com_();
-          }
-        
-        
-        template< typename T1
-                , typename T2
-                , typename T3
-                , typename T4
-                , typename T5
-                >
-        ExecResult                                                                        //_________________________________
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)                                   ///< Invoke command with 5 Arguments
-          {
-            com_.bind(a1,a2,a3,a4,a5);
-            return com_();
-          }
-        
-        
-        template< typename T1
-                , typename T2
-                , typename T3
-                , typename T4
-                , typename T5
-                , typename T6
-                >
-        ExecResult                                                                        //_________________________________
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)                            ///< Invoke command with 6 Arguments
-          {
-            com_.bind(a1,a2,a3,a4,a5,a6);
+            com_.bind (std::forward<ARGS> (args)...);
             return com_();
           }
       };
