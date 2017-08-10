@@ -141,5 +141,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::workspace
+}}// namespace gui::ctrl
 #endif /*GUI_CTRL_UI_MANAGER_H*/

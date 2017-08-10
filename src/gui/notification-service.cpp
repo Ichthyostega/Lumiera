@@ -32,6 +32,7 @@
 
 
 #include "gui/ctrl/ui-manager.hpp"
+#include "gui/ctrl/ui-dispatcher.hpp"
 #include "gui/notification-service.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
@@ -44,6 +45,7 @@ extern "C" {
 
 
 using lib::diff::TreeMutator;
+using gui::ctrl::UiDispatcher;
 using gui::ctrl::BusTerm;
 using std::string;
 using util::cStr;
@@ -240,12 +242,16 @@ namespace gui {
    */
   NotificationService::NotificationService (ctrl::BusTerm& upLink, ctrl::UiManager& uiManager)
     : BusTerm{lib::idi::EntryID<NotificationService>{}, upLink}
+    , dispatch_{new UiDispatcher{}}
     , uiManager_{uiManager}
     , implInstance_(this,_instance)
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
   {
     INFO (gui, "GuiNotification Facade opened.");
   }
+  
+  
+  NotificationService::~NotificationService() { } // emit dtors of embedded objects here...
   
   
 } // namespace gui

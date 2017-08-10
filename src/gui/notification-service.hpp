@@ -44,12 +44,15 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "lib/singleton-ref.hpp"
 
+#include <memory>
+
 
 
 namespace gui {
   
   namespace ctrl {
     class UiManager;
+    class UiDispatcher;
   }
   
   
@@ -80,20 +83,23 @@ namespace gui {
       void mutate (ID uiElement, DiffMessage&)          override;      ////////////////////////////////////////TICKET #1066 : how to pass a diff message
       void triggerGuiShutdown (string const& cause)     override;
       
+    private:
+      std::unique_ptr<ctrl::UiDispatcher> dispatch_;
+      ctrl::UiManager& uiManager_;
+      
       
       /* === Interface Lifecycle === */
       
       using ServiceInstanceHandle = lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                                                            , GuiNotification
                                                            > ;
-      ctrl::UiManager& uiManager_;
-      
       lib::SingletonRef<GuiNotification> implInstance_;
       ServiceInstanceHandle serviceInstance_;
       
       
       
     public:
+     ~NotificationService();
       NotificationService (ctrl::BusTerm& upLink, ctrl::UiManager& uiManager);
       
     };
