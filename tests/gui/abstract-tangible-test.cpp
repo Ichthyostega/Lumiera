@@ -554,17 +554,15 @@ namespace test {
        * handled and applied to the receiver by Lumiera's diff framework.
        * 
        * This test uses the MockElem to simulate real UI elements;
-       * to be able to verify the diff application, MockElm is already
-       * preconfigured with a _diff binding_, and it exposes a set of
-       * attributes and a collection of child mock elements. Basically,
-       * the diff mechanism allows to effect structural changes within
-       * an otherwise opaque implementation data structure. For this
-       * to work, the receiver needs to create a custom _diff binding_.
-       * Thus, each subclass of Tangible has to implement the virtual
-       * function Tangible::buildMutator() and hook up those internal
-       * structures, which are exposed to changes via diff message.
-       * Note especially how child UI elements are added this way,
-       * to populate the contents of the UI.
+       * to be able to verify the diff application, MockElm is already preconfigured
+       * with a _diff binding_, and it exposes a set of attributes and a collection
+       * of child mock elements. Basically, the diff mechanism allows to effect
+       * structural changes within an otherwise opaque implementation data structure.
+       * For this to work, the receiver needs to create a custom _diff binding_.
+       * Thus, each subclass of Tangible has to implement the virtual function
+       * Tangible::buildMutator() and hook up those internal structures, which
+       * are exposed to changes via diff message. Note especially how child
+       * UI elements are added this way, to populate the contents of the UI.
        * 
        * The diff itself is an iterable sequence of _diff verbs_.
        * Typically, such a diff is generated as the result of some operation

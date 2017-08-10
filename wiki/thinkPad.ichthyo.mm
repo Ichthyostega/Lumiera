@@ -1045,6 +1045,9 @@
 <node CREATED="1501939149837" ID="ID_1733976265" MODIFIED="1502385820938" TEXT="diese an Glib::Dispatcher binden">
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502404797300" ID="ID_1177399909" MODIFIED="1502404802532" TEXT="Exceptions fangen">
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501939174506" ID="ID_504999068" MODIFIED="1501939191040" TEXT="in NotificationService integrieren">
 <icon BUILTIN="flag-yellow"/>
@@ -1408,26 +1411,155 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" FOLDED="true" ID="ID_389264738" MODIFIED="1502375198382" TEXT="weitere Funktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" ID="ID_389264738" MODIFIED="1502403197769" STYLE="fork" TEXT="weitere Funktionen">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1501854084264" HGAP="71" ID="ID_1333991907" MODIFIED="1501854132464" TEXT="allgemein...." VSHIFT="-43">
+<node CREATED="1501854084264" HGAP="71" ID="ID_1333991907" MODIFIED="1502403195803" TEXT="allgemein...." VSHIFT="-43">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1501854094710" ID="ID_1146157818" MODIFIED="1501854193839" TEXT="Synchronisation">
+<node CREATED="1501854094710" ID="ID_1146157818" MODIFIED="1502403195803" TEXT="Synchronisation">
 <arrowlink COLOR="#a75677" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="-117;347;" ID="Arrow_ID_274836249" STARTARROW="None" STARTINCLINATION="-501;-573;"/>
 </node>
-<node CREATED="1501854114284" ID="ID_168912186" MODIFIED="1501854127526" TEXT="Lebenszyklus"/>
+<node CREATED="1501854114284" ID="ID_168912186" MODIFIED="1502403195803" TEXT="Lebenszyklus"/>
 </node>
-<node CREATED="1484797813373" ID="ID_536855363" MODIFIED="1484797818072" TEXT="generische Nachricht"/>
-<node CREATED="1484797818780" FOLDED="true" ID="ID_354397333" MODIFIED="1488423308092" TEXT="state mark">
-<node CREATED="1484877574046" ID="ID_251939815" MODIFIED="1484877577130" TEXT="Error"/>
-<node CREATED="1484877577550" ID="ID_258243919" MODIFIED="1484877578530" TEXT="Note"/>
+<node CREATED="1484797813373" ID="ID_536855363" MODIFIED="1502403195803" TEXT="generische Nachricht"/>
+<node CREATED="1484797818780" ID="ID_354397333" MODIFIED="1502403195803" TEXT="state mark">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1484877574046" ID="ID_251939815" MODIFIED="1502403195803" TEXT="Error">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1484797822403" FOLDED="true" ID="ID_364545191" MODIFIED="1488423308092" TEXT="Diff">
-<node CREATED="1484799660822" ID="ID_1288003894" MODIFIED="1484799667505" TEXT="TreeMutator binden"/>
-<node CREATED="1484877585605" ID="ID_101718446" MODIFIED="1484877768706" TEXT="verwende MutationMessage">
+<node COLOR="#338800" CREATED="1484877577550" ID="ID_258243919" MODIFIED="1502403195803" TEXT="Note">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1484797822403" ID="ID_364545191" MODIFIED="1502403195803" TEXT="Diff">
+<node CREATED="1484799660822" ID="ID_1288003894" MODIFIED="1502403195803" TEXT="TreeMutator binden"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502401930856" ID="ID_634125084" MODIFIED="1502403195803" TEXT="#1066 concept how to hand over diff messages">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1484877585605" ID="ID_101718446" MODIFIED="1502403195803" TEXT="verwende MutationMessage">
 <icon BUILTIN="yes"/>
+<node CREATED="1502401956093" ID="ID_322700967" MODIFIED="1502403195803" TEXT="MutationMessage von DiffMessage erzeugen"/>
+<node CREATED="1502401987033" ID="ID_1584846573" MODIFIED="1502403195803" TEXT="erfordert Festlegung der Natur der DiffMessage">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1502402004383" ID="ID_1491065212" MODIFIED="1502403195803" TEXT="generisch bleiben?">
+<icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1484877590492" ID="ID_1552177670" MODIFIED="1487275489371" TEXT="k&#xf6;nnte sich sp&#xe4;ter noch &#xc4;ndern">
+<node CREATED="1502402012558" ID="ID_1846096533" MODIFIED="1502403214052" TEXT="IterSource verwenden">
+<linktarget COLOR="#2579a2" DESTINATION="ID_1846096533" ENDARROW="Default" ENDINCLINATION="-5;149;" ID="Arrow_ID_896931950" SOURCE="ID_636092614" STARTARROW="None" STARTINCLINATION="158;5;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1502402691844" ID="ID_286774751" MODIFIED="1502403195804" TEXT="Diskussion">
+<node CREATED="1502402022580" ID="ID_1661331763" MODIFIED="1502403195804" TEXT="Pro">
+<node CREATED="1502402025820" ID="ID_1076820802" MODIFIED="1502403195804" TEXT="bestehende Framework"/>
+<node CREATED="1502402031275" ID="ID_104571481" MODIFIED="1502403195804" TEXT="ownership management"/>
+<node CREATED="1502402038690" ID="ID_921191865" MODIFIED="1502403195804" TEXT="schlankes Interface"/>
+<node CREATED="1502402049305" ID="ID_20073652" MODIFIED="1502403195804" TEXT="eigentliche Diff-Erzeugung bleibt offen"/>
+</node>
+<node CREATED="1502402071222" ID="ID_905919540" MODIFIED="1502403195804" TEXT="Con">
+<node CREATED="1502402075413" ID="ID_913770531" MODIFIED="1502403195804" TEXT="Komplexit&#xe4;t"/>
+<node CREATED="1502402086268" ID="ID_380041258" MODIFIED="1502403195804" TEXT="zus&#xe4;tzliche Indirektion">
+<node CREATED="1502402254582" ID="ID_218820320" MODIFIED="1502403195804" TEXT="DiffMutable beim Empf&#xe4;nger"/>
+<node CREATED="1502402499053" ID="ID_587801464" MODIFIED="1502403195804" TEXT="TreeMutator beim Empf&#xe4;nger"/>
+<node CREATED="1502402266284" ID="ID_1573858698" MODIFIED="1502403195804" TEXT="IterSource&lt;DiffStep&gt; beim Generator"/>
+<node CREATED="1502402516275" ID="ID_334129744" MODIFIED="1502403195804">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ist schon <i>schlimm </i>genug....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1502402213139" ID="ID_1233670694" MODIFIED="1502403195804" TEXT="nicht C-kompatibel">
+<node CREATED="1502402286425" ID="ID_683015958" MODIFIED="1502403195804" TEXT="ja mei...">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1502402291209" ID="ID_1962599608" MODIFIED="1502403195804" TEXT="aber k&#xf6;nnte SWIG-kompatibel sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn eigentlich geht es nur um ein einfaches Producer-Interface,
+    </p>
+    <p>
+      das einen Element-Pointer durchreicht. Das einzige Problem, das ich sehe,
+    </p>
+    <p>
+      ist, da&#223; hier <i>ownership </i>&#252;bertragen wird.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1502402370534" ID="ID_1923477219" MODIFIED="1502403195804" TEXT="es geht hier um C++ (Proc) &lt;-&gt; C++ (GUI)"/>
+</node>
+</node>
+</node>
+<node CREATED="1502402701106" ID="ID_510901772" MODIFIED="1502403195804" TEXT="Abw&#xe4;gung">
+<icon BUILTIN="yes"/>
+<node CREATED="1502402718496" ID="ID_1641881714" MODIFIED="1502403195804" TEXT="mir gef&#xe4;llt die L&#xf6;sung zum ownerhsip management"/>
+<node CREATED="1502402735558" ID="ID_1883129099" MODIFIED="1502403195804" TEXT="halte das f&#xfc;r eine gute Implementierungs-Struktur..."/>
+<node CREATED="1502402757163" ID="ID_1525377159" MODIFIED="1502403195805" TEXT="denn der Client ist quasi gezwungen, den Erzeugungs-Kontext herauszuabstrahieren"/>
+<node CREATED="1502402778960" ID="ID_577811618" MODIFIED="1502403195805" TEXT="Indirektion/Komplexit&#xe4;t">
+<node CREATED="1502402798909" ID="ID_813337624" MODIFIED="1502403195805" TEXT="z&#xe4;hlt nicht wirklich, denn.."/>
+<node CREATED="1502402810620" ID="ID_439896117" MODIFIED="1502403195805" TEXT="mit dem Diff-Konzept habe ich das bereits akzeptiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich
+    </p>
+    <ul>
+      <li>
+        ein sehr theoretisches und anspruchsvolles Konzept
+      </li>
+      <li>
+        der Zwang, das auf jedem Empf&#228;nger umzusetzen
+      </li>
+      <li>
+        die hablseidene Trickserei mit der konkreten Puffergr&#246;&#223;e
+      </li>
+      <li>
+        den double-dispatch im Diff-Framework selber
+      </li>
+      <li>
+        das Variant-basierte GenNode-Framework
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1502402998859" ID="ID_1462873166" MODIFIED="1502403195805">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das wird <i>sowiso</i>&#160;ein Desaster
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node CREATED="1502402830713" ID="ID_1666981219" MODIFIED="1502403195805" TEXT="was z&#xe4;hlt, ist die Entkoppelung"/>
+</node>
+</node>
+</node>
+<node CREATED="1502403145431" ID="ID_636092614" MODIFIED="1502403225069" TEXT="DiffMessage ist selber der Iterator">
+<arrowlink COLOR="#2579a2" DESTINATION="ID_1846096533" ENDARROW="Default" ENDINCLINATION="-5;149;" ID="Arrow_ID_896931950" STARTARROW="None" STARTINCLINATION="158;5;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1484877590492" ID="ID_1552177670" MODIFIED="1502403195805" TEXT="k&#xf6;nnte sich sp&#xe4;ter noch &#xc4;ndern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1443,9 +1575,10 @@
       und man damit jedes diff-iterable einbetten kann.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1484877658891" FOLDED="true" ID="ID_1855662071" MODIFIED="1488423308073" TEXT="Vorsicht: Storage / GUI-Thread">
+<node CREATED="1484877658891" FOLDED="true" ID="ID_1855662071" MODIFIED="1502403195805" TEXT="Vorsicht: Storage / GUI-Thread">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1484877696486" ID="ID_476867583" MODIFIED="1484877708576" TEXT="wir m&#xfc;ssen jede Aktion in den Event-Thread &#xfc;bergeben"/>
 <node CREATED="1484877711388" ID="ID_407918505" MODIFIED="1484877730584">

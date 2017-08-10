@@ -33,8 +33,10 @@
  ** be a callback actually to retrieve the diff content.
  ** 
  ** @todo as of 1/2017 this is placeholder code and we need a concept //////////////////////////////////////////TICKET #1066 : how to pass diff messages
+ ** @todo as of 8/2017 I am still rather clueless regarding the concrete situation to generate DiffMessage,
+ **       and as a move into the dark I'll just define it to be based on IterSource...
  ** 
- ** @see [AbstractTangible_test]
+ ** @see AbstractTangible_test
  ** @see mutation-message.hpp
  ** 
  */
@@ -45,8 +47,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/iter-source.hpp"
+#include "lib/diff/tree-diff.hpp"
+#include "lib/diff/gen-node.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -55,23 +59,40 @@ namespace diff{
   
   using std::string;
   
- 
+  using DiffStep = TreeDiffLanguage::DiffStep;
+  using DiffSource = IterSource<DiffStep>;
   
   
   
   /**
-   * @todo placeholder
+   * Opaque message to effect a structural change on a target, which is
+   * likewise only known in an abstract way, as being specifically structured.
+   * Sending such messages typically allows some _implemention defined_ part within
+   * the Session to communicate structure and content to some other _implementation defined_
+   * part within the UI-Layer, without the necessity of both partners to be tightly coupled on
+   * implementation level or even know much about the other's implementation details. As motivation,
+   * contrast this to a naive UI implementation, which directly accesses some backend data structure;
+   * any change to the backend implementation typically affects the UI implementation on a detail level.
+   *  
+   * @todo WIP 8/2017 -- as a bold step towards the solution yet to be discovered,
+   *       I now define DiffMessage to be based on IterSource<DiffStep>, which means
+   *       to add yet another abstraction barrier, so the implementation of diff generation
+   *       remains confined within the producer of DiffMessages.
+   * @warning yet still the fundamental problem remains: the production context of such
+   *       diff messages need to be conserved beyond the producer's thread context, because
+   *       it will be pulled asynchronous from within the UI event thread!
    */
   class DiffMessage
-    : boost::noncopyable
+    : public DiffSource::iterator
     {
-    public:
-      
-      void
-      magically_extract_MutationMessage()
-        {
-          UNIMPLEMENTED ("miracle No #1066");                         //////////////////////////////////////////TICKET #1066 : how to pass diff messages
-        }
+      /**
+       * DiffMessage builder:
+       * take ownership of an opaque heap allocated context
+       * from which the concrete diff can be pulled on demand 
+       */
+      DiffMessage(DiffSource* diffGenerationContext)
+        : DiffSource::iterator{DiffSource::build (diffGenerationContext)}
+        { }
     };
   
   
