@@ -124,8 +124,8 @@ namespace test{
       run (Arg)
         {
           demonstrate_standardUsage();
-          verify_diagnostics();
           verify_builder();
+          verify_diagnostics();
           demonstrate_treeApplication();
         }
       
@@ -226,16 +226,70 @@ namespace test{
       
       
       void
-      verify_diagnostics()
+      verify_builder()
         {
-          UNIMPLEMENTED("add toString decorator");
+          DiffMessage diffMsg{ins(TYPE_X)
+                             ,set(ATTRIB1)
+                             ,del(CHILD_T)};
+
+          CHECK (!isnil (diffMsg));
+          CHECK (ins(TYPE_X)  == *diffMsg);
+          CHECK (set(ATTRIB1) == *++diffMsg);
+          CHECK (del(CHILD_T) == *++diffMsg);
+          CHECK (isnil (++diffMsg));
+          VERIFY_ERROR(ITER_EXHAUST, *diffMsg);
+          
+          
+          
+          // likewise works with a std::initializer_list
+          diffMsg = DiffMessage{{ins(TYPE_X)
+                                ,set(ATTRIB1)
+                                ,del(CHILD_T)}
+                               };
+          
+          CHECK (!isnil (diffMsg));
+          CHECK (ins(TYPE_X)  == *diffMsg);
+          CHECK (set(ATTRIB1) == *++diffMsg);
+          CHECK (del(CHILD_T) == *++diffMsg);
+          CHECK (isnil (++diffMsg));
+          
+          
+          
+          // even passing any suitable iterable works
+          diffMsg = DiffMessage{snapshot({ins(TYPE_X)
+                                         ,set(ATTRIB1)
+                                         ,del(CHILD_T)})
+                               };
+          
+          CHECK (!isnil (diffMsg));
+          CHECK (ins(TYPE_X)  == *diffMsg);
+          CHECK (set(ATTRIB1) == *++diffMsg);
+          CHECK (del(CHILD_T) == *++diffMsg);
+          CHECK (isnil (++diffMsg));
+          
+          
+          
+          // really anything iterable...
+          std::vector<DiffStep> steps;
+          CHECK (isnil (steps));
+          append_all(snapshot({ins(TYPE_X)
+                              ,set(ATTRIB1)
+                              ,del(CHILD_T)}), steps);
+          
+          diffMsg = DiffMessage{steps};
+          
+          CHECK (!isnil (diffMsg));
+          CHECK (ins(TYPE_X)  == *diffMsg);
+          CHECK (set(ATTRIB1) == *++diffMsg);
+          CHECK (del(CHILD_T) == *++diffMsg);
+          CHECK (isnil (++diffMsg));
         }
       
       
       void
-      verify_builder()
+      verify_diagnostics()
         {
-          UNIMPLEMENTED("a builder function to simplify tests");
+          UNIMPLEMENTED("add toString decorator");
         }
       
       
