@@ -43,14 +43,12 @@
 #include "lib/util.hpp"
 #include "lib/meta/trait.hpp"
 
-#include <boost/utility/enable_if.hpp>
-
 
 
 namespace util {
   
-  using boost::enable_if;
-  using boost::disable_if;
+  using lib::meta::enable_if;
+  using lib::meta::disable_if;
   
   namespace { // predicates to pick the right implementation
     
@@ -104,8 +102,8 @@ namespace util {
    *        the \c const is \em stripped before access.
    */
   template <typename COLL>
-  inline                    typename enable_if< treat_as_STL_Container<COLL>,
-  typename COLL::reference  >::type
+  inline                    enable_if< treat_as_STL_Container<COLL>,
+  typename COLL::reference  >
   first (COLL const& coll)
   {
     using lib::meta::unwrap;
@@ -120,8 +118,8 @@ namespace util {
    *        the \c const is \em stripped before access.
    */
   template <typename COLL>
-  inline                    typename enable_if< can_direct_access_Last<COLL>,
-  typename COLL::reference  >::type
+  inline                    enable_if< can_direct_access_Last<COLL>,
+  typename COLL::reference  >
   last (COLL const& coll)
   {
     using lib::meta::unwrap;
@@ -136,8 +134,8 @@ namespace util {
    * @warning the iterator is modified.
    */
   template <typename IT>
-  inline                 typename enable_if< treat_as_LumieraIterator<IT>,
-  typename IT::reference >::type
+  inline                    enable_if< treat_as_LumieraIterator<IT>,
+  typename IT::reference    >
   first (IT ii)
   {
     __ensure_nonempty(ii);
@@ -152,8 +150,8 @@ namespace util {
    * @note only available when including itertools.hpp beforehand
    */
   template <typename IT>
-  inline                  typename enable_if< treat_as_LumieraIterator<IT>,
-  typename IT::value_type >::type
+  inline                    enable_if< treat_as_LumieraIterator<IT>,
+  typename IT::value_type   >
   last (IT ii)
   {
     __ensure_nonempty(ii);

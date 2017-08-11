@@ -54,7 +54,6 @@
 #include "lib/util.hpp"
 #include "lib/meta/trait.hpp"
 
-#include <boost/utility/enable_if.hpp>
 #include <functional>
 #include <algorithm>
 
@@ -62,8 +61,8 @@
 
 namespace util {
   
-  using boost::enable_if;
-  using boost::disable_if;
+  using lib::meta::enable_if;
+  using lib::meta::disable_if;
   
   using lib::meta::can_STL_ForEach;
   using lib::meta::can_IterForEach;
@@ -118,8 +117,8 @@ namespace util {
   template <typename Container
            ,typename FUN
            >
-  inline   typename disable_if< can_IterForEach<Container>,
-  FUN      >::type
+  inline                                   disable_if< can_IterForEach<Container>,
+  FUN                                      >
   for_each (Container const& coll, FUN doIt)
   {
     using lib::meta::unwrap;
@@ -134,8 +133,8 @@ namespace util {
   template <typename IT
            ,typename FUN
            >
-  inline   typename enable_if< can_IterForEach<IT>,
-  FUN      >::type
+  inline   enable_if< can_IterForEach<IT>,
+  FUN      >
   for_each (IT const& ii, FUN doIt)
   {
     return std::for_each (ii, IT(), doIt);
@@ -147,8 +146,8 @@ namespace util {
   template <typename Container
            ,typename FUN
            >
-  inline   typename enable_if< can_STL_ForEach<Container>,
-  bool     >::type
+  inline   enable_if< can_STL_ForEach<Container>,
+  bool     >
   and_all (Container const& coll, FUN predicate)
   {
     using lib::meta::unwrap;
@@ -162,8 +161,8 @@ namespace util {
   template <typename IT
            ,typename FUN
            >
-  inline   typename enable_if< can_IterForEach<IT>,
-  bool     >::type
+  inline   enable_if< can_IterForEach<IT>,
+  bool     >
   and_all (IT const& ii, FUN predicate)
   {
     return and_all (ii, IT(), predicate);
@@ -174,8 +173,8 @@ namespace util {
   template <typename Container
            ,typename FUN
            >
-  inline   typename enable_if< can_STL_ForEach<Container>,
-  bool     >::type
+  inline   enable_if< can_STL_ForEach<Container>,
+  bool     >
   has_any (Container const& coll, FUN predicate)
   {
     using lib::meta::unwrap;
@@ -189,8 +188,8 @@ namespace util {
   template <typename IT
            ,typename FUN
            >
-  inline   typename enable_if< can_IterForEach<IT>,
-  bool     >::type
+  inline   enable_if< can_IterForEach<IT>,
+  bool     >
   has_any (IT const& ii, FUN predicate)
   {
     return has_any (ii, IT(), predicate);
