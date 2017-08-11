@@ -26,7 +26,7 @@
  ** The UI-Bus offers a dedicated API to direct MutationMessages towards Tangible elements,
  ** as designated by the given ID. Actually, such messages serve as capsule to transport a
  ** diff-sequence -- since a diff sequence as such is always concrete and tied to a specific context,
- ** we can not represent it directly as an abstract type on interface level. The receiver of a diff
+ ** we can not represent it easily as an abstract type on interface level. The receiver of a diff
  ** sequence must offer the ability to be reshaped through diff messages, which is expressed through
  ** the interface DiffMutable. In the case at question here, gui::model::Tangible offers this interface
  ** and thus the ability to construct a concrete lib::diff::TreeMutator, which in turn is bound to the
@@ -42,9 +42,9 @@
  ** 
  ** @todo as of 1/2017 there is an unsolved problem how such messages can be passed from lower layers.
  **       A direct symptom is the dependency of this header on model::Tangible, which in turn requires
- **       sigc::Trackable. This is a challenging topic, since we need to hand over to the UI-Event Thread  /////////////////////////////////#1066 : Concept for passing Diff Messages
+ **       `sigc::Trackable`. This is a challenging topic, since we need to hand over to the UI-Event Thread  /////////////////////////////////TICKET #1066 : Concept for passing Diff Messages
  ** 
- ** @see [AbstractTangible_test]
+ ** @see AbstractTangible_test
  ** 
  */
 

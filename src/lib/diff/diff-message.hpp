@@ -82,14 +82,17 @@ namespace diff{
    *       diff messages need to be conserved beyond the producer's thread context, because
    *       it will be pulled asynchronous from within the UI event thread!
    */
-  class DiffMessage
-    : public DiffSource::iterator
+  struct DiffMessage
+    : DiffSource::iterator
     {
+      DiffMessage() = default;
+      
       /**
        * DiffMessage builder:
        * take ownership of an opaque heap allocated context
        * from which the concrete diff can be pulled on demand 
        */
+      explicit
       DiffMessage(DiffSource* diffGenerationContext)
         : DiffSource::iterator{DiffSource::build (diffGenerationContext)}
         { }

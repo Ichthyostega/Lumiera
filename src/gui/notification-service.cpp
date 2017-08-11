@@ -49,6 +49,7 @@
 
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ctrl/ui-dispatcher.hpp"
+#include "gui/ctrl/mutation-message.hpp"
 #include "gui/notification-service.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "include/logging.h"
@@ -63,6 +64,7 @@ extern "C" {
 
 using lib::diff::GenNode;
 using lib::diff::TreeMutator;
+using gui::ctrl::MutationMessage;
 using gui::ctrl::UiDispatcher;
 using gui::ctrl::BusTerm;
 using std::string;
@@ -109,10 +111,13 @@ namespace gui {
   
   
   void
-  NotificationService::mutate (ID uiElement, DiffMessage&)    /////////////////////////////////////////////////TICKET #1066 : how to pass a diff message
+  NotificationService::mutate (ID uiElement, DiffMessage&& diff)
   {
-    UNIMPLEMENTED ("actually produce a MutationMessage on the UI-Bus");     ///////////////////////////////////TICKET #1066 : how to build and pass a MutationMessage
-    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
+    dispatch_->event ([=]()
+                      {
+                        MutationMessage diffHolder{DiffMessage(diff)};       //////////////////////////////////TICKET #1066 : unnecessary repackaging; could get rid of MutationMessage altogether
+                        this->change (uiElement, diffHolder);
+                      });
   }
   
   
@@ -245,7 +250,7 @@ namespace gui {
                                                              {
                                                                if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, "passing diff message");
                                                                else
-                                                                 _instance->mutate (reinterpret_cast<ID> (*element), *reinterpret_cast<DiffMessage*> (diff));
+                                                                 _instance->mutate (reinterpret_cast<ID> (*element), move(*reinterpret_cast<DiffMessage*> (diff)));
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown,

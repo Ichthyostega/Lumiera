@@ -198,7 +198,8 @@ namespace ctrl {
     
     /** alter and reshape the designated subject by applying the given diff message.
      * @param diff encapsulated representation of a concrete diff sequence for the target.
-     * @return if the target was known and the diff was applied without accident
+     * @return `true` if the target was known and the diff was applied without accident,
+     *         `false` if no diff was applied because the desired target is unconnected.
      * @throws lumiera::error::State when diff application fails due to the target's shape
      *         or state being different than implicitly assumed by the given diff.
      * @remark each tangible offers to build a custom TreeMutator, which is appropriately
