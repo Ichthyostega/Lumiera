@@ -224,8 +224,8 @@ namespace lib {
     : public IterSource<typename IT::value_type>
     , boost::noncopyable
     {
-      typedef IterSource<typename IT::value_type> _Base;
-      typedef typename _Base::Pos Pos;
+      using _Base = IterSource<typename IT::value_type>;
+      using   Pos = typename _Base::Pos;
       
       IT src_;
       

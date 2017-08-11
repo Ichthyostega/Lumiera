@@ -27,6 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/format-util.hpp"
+#include "lib/diff/diff-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
@@ -36,6 +37,7 @@
 #include <string>
 #include <vector>
 
+using lib::iter_stl::IterSnapshot;
 using lib::iter_stl::snapshot;
 using util::isnil;
 using util::join;
@@ -65,6 +67,9 @@ namespace test{
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
                   CHILD_NODE = SUB_NODE;                   // yet another child node, same ID as SUB_NODE (!)
     
+    
+    int instances = 0; ///< verify instance management
+
   }//(End)Test fixture
   
   
@@ -122,11 +127,47 @@ namespace test{
           demonstrate_treeApplication();
         }
       
-      
+
+      /** @test demonstrate the intended usage pattern
+       *        - a diff generation context is allocated
+       *        - the MutationMessage takes ownership
+       *        - and exposes the generated diff sequence
+       *        - which is pulled during iteration
+       */
       void
       demonstrate_simpleUsage()
         {
-          UNIMPLEMENTED("generate and iterate, everything right here");
+          using Source = WrappedLumieraIter<IterSnapshot<DiffStep>>;
+          
+          /* opaque generation context */
+          struct Generator
+            : TreeDiffLanguage
+            , Source
+            {
+              Generator()
+                : Source{snapshot({ins(TYPE_X)
+                                  ,set(ATTRIB1)
+                                  ,del(CHILD_T)})}
+                {
+                  ++instances;
+                }
+              
+             ~Generator()
+                {
+                  --instances;
+                }
+            };
+          
+          
+          CHECK (0 == instances);
+          {
+            DiffMessage diffMsg{new Generator};
+            CHECK (!isnil (diffMsg));
+            CHECK (1 == instances);
+            
+            CHECK ("ins" == string(diffMsg->verb()));
+          }
+          CHECK (0 == instances);
         }
       
       

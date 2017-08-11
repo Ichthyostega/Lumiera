@@ -411,7 +411,7 @@ namespace iter_stl {
    * materialised iterator contents.
    * At construction, the given source iterator
    * is immediately discharged into an internal buffer (vector).
-   * This captured value sequence can be retrieved once as
+   * This captured value sequence can then be retrieved _once_ as
    * Lumiera Forward Iterator
    */
   template<typename VAL>
