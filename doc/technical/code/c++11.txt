@@ -12,7 +12,7 @@ language and compiler support wasn't ready for what we consider _state of the cr
 amended deficiencies by rolling our own helper facilities, with a little help from Boost.
 Thus there was no urge for us to adopt the new language standard; we could simply wait for
 the compiler support to mature. In spring 2014, finally, we were able to switch our codebase
-to C++11 with minimal effort.footnote[since 8/2015 -- after the switch to Debian/Jessie
+to C++11 with minimal effort.footnote:[since 8/2015 -- after the switch to Debian/Jessie
 as a »reference platform«, we even compile with `-std=gnu++14`]
 Following this switch, we're now able to reap the benefits of
 this approach; we may now gradually replace our sometimes clunky helpers and workarounds
@@ -112,7 +112,9 @@ were thinking since ages; it is more like an official affirmation of that style 
 ********************************************************************************************
 The core idea is that at times you need to 'move' a value due to a change of ownership. Now,
 the explicit support for 'move semantics' allows to decouple this 'conceptual move' from actually
-moving memory contents on the raw implementation level. The whole idea behind C++ seems to be
+moving memory contents on the raw implementation level. If we use a _rvalue reference on a signature,_
+we express that an entiy is or can be  moved on a conceptual level; typically the actual implementation
+of this moving is _delegated_ and done by ``someone else''. The whole idea behind C++ seems to be
 allowing people to think on a conceptual level, while 'retaining' awareness of the gory details
 below the hood. Such is achieved by 'removing' the need to worry about details, confident that
 there is a way to deal with those concerns in an orthogonal fashion.
@@ -137,6 +139,40 @@ CAUTION: as soon as there is an explicitly defined copy operation, or even just 
          compromise decision of the C++ committee -- instead of either breaking no code at all or
          boldly breaking code, they settled upon ``somewhat'' breaking existing code...
 
+Perfect forwarding
+^^^^^^^^^^^^^^^^^^
+The ``perfect forwarding'' technique is how we actually pass on and delegate move semantics.
+In conjunction with variadic templates, this technique promises to obsolete a lot of template trickery
+when it comes to implementing custom containers, allocators or similar kinds of managing wrappers.
+
+.a typical example
+[source,c]
+--------------------------------------------------------------------------
+  template<class TY, typename...ARGS>
+  TY&
+  create (ARGS&& ...args)
+    {
+      return *new(&buf_) TY {std::forward<ARGS> (args)...};
+    }
+--------------------------------------------------------------------------
+The result is a `create()` function with the ability to _forward_ an arbitrary number of arguments
+of arbitrary type to the constructor of type `TY`. Note the following details
+
+- the template parameter `ARGS&&` leads to deducing the actual parameters _sans_ rvalue reference
+- we pass each argument through `std::forward<ARGS>`. This is necessary to overcome the basic limitation
+  that a rvalue reference can only bind to _something unnamed_. This is a safety feature; moving destroys
+  the contents at the source location. Thus if we really want to move something known by name (like e.g.
+  the function arguments in this example), we need to indicate so by an explicit call.
+- `std::forward` needs an explicit type parameter to be able to deduce the right target type in any case
+- note how we're allowed to ``wrap'' a function call around the unpacking of the _argument pack_ (`args`):
+  the three dots `...` are _outside_ the parenthesis, and thus the `std::forward` is applied to each of
+  the arguments individually
+
+NOTE: forwarding calls can be chained, but at some point you get to acutally _consuming_ the value passed through.
+      To support the maximum flexibility at this point, you typically need to write two flavours of the receiving
+      function or constructor: one version taking a rvalue reference, and one version taking `const&`. Moving is
+      _destructive_, while the `const&` variant deals with all those cases where we copy without affecting the
+      source object.
 
 
 
@@ -159,13 +195,11 @@ September 2014::
     requirement level_ soon.
 August 2015::
   our »reference system« (platform) is Debian/Jessie from now on.
-  We have switched to **C++14** and use (even require) GCC-4.9 or CLang 3.5 -- we can expect solid support
-  for all C++11 features and most C++14 features.
+  We have switched to **C\+\+14** and use (even require) GCC-4.9 or CLang 3.5 -- we can expect solid support
+  for all C\+\+11 features and most C++14 features.
 
 Perfect forwarding
 ~~~~~~~~~~~~~~~~~~
-The ``perfect forwarding'' technique in conjunction with variadic templates promises to obsolete a lot of
-template trickery when it comes to implementing custom containers, allocators or similar kinds of managing wrappers.
 Unfortunately, we ran into nasty problems with both GCC-4.7 and CLang 3.0 here, when chaining several forwarding calls.
 
 - the new _reference collapsing rules_ seem to be unreliably still. Note that even the standard library uses an

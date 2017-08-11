@@ -74,11 +74,13 @@
 #include "lib/util.hpp"
 
 #include <functional>
+#include <utility>
 
 
 
 namespace lib {
   
+  using std::forward;
   using std::function;
   using util::unConst;
   
@@ -102,8 +104,11 @@ namespace lib {
     {
       IT source_;
       
+      IdentityCore (IT&& orig)
+        : source_{forward<IT>(orig)}
+        { }
       IdentityCore (IT const& orig)
-        : source_(orig)
+        : source_{orig}
         { }
       
       IT&
@@ -184,8 +189,8 @@ namespace lib {
       typedef typename CORE::value_type value_type;
       
       
-      IterTool (CORE const& setup)
-        : core_(setup)
+      IterTool (CORE&& setup)
+        : core_{std::move(setup)}
         {
           hasData();
         }
@@ -268,8 +273,8 @@ namespace lib {
   struct FilterCore
     : IdentityCore<IT>
     {
-      typedef IdentityCore<IT> Raw;
-      typedef typename IT::reference Val;
+      using Raw = IdentityCore<IT>;
+      using Val = typename IT::reference;
       
       
       function<bool(Val)> predicate_;
@@ -302,11 +307,19 @@ namespace lib {
       
       
       template<typename PRED>
-      FilterCore (IT const& source, PRED prediDef)
-        : Raw(source)
+      FilterCore (IT&& source, PRED prediDef)
+        : Raw{forward<IT>(source)}
         , predicate_(prediDef) // induces a signature check
         , cached_(false)      //  not yet cached
         , isOK_()            //   some value
+        { }
+      
+      template<typename PRED>
+      FilterCore (IT const& source, PRED prediDef)
+        : Raw{source}
+        , predicate_(prediDef)
+        , cached_(false)
+        , isOK_()
         { }
     };
   
@@ -326,12 +339,17 @@ namespace lib {
       
       
       FilterIter ()
-        : _Impl(FilterCore<IT>(IT(), acceptAll))
+        : _Impl{FilterCore<IT>(IT(), acceptAll)}
         { }
       
       template<typename PRED>
       FilterIter (IT const& src, PRED filterPredicate)
-        : _Impl(_Filter(src,filterPredicate))
+        : _Impl{_Filter(src, filterPredicate)}
+        { }
+      
+      template<typename PRED>
+      FilterIter (IT&& src, PRED filterPredicate)
+        : _Impl{_Filter(forward<IT>(src), filterPredicate)}
         { }
       
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (FilterIter)
@@ -344,10 +362,18 @@ namespace lib {
    *  @return Iterator filtering contents of the source
    */
   template<class IT, typename PRED>
-  inline FilterIter<IT>
+  inline auto
   filterIterator (IT const& src, PRED filterPredicate)
   {
-    return FilterIter<IT>(src,filterPredicate);
+    return FilterIter<IT>{src, filterPredicate};
+  }
+  
+  template<class IT, typename PRED>
+  inline auto
+  filterIterator (IT&& src, PRED filterPredicate)
+  {
+    using SrcIT  = typename std::remove_reference<IT>::type;
+    return FilterIter<SrcIT>{forward<SrcIT>(src), filterPredicate};
   }
   
   
@@ -378,8 +404,8 @@ namespace lib {
   class ExtensibleFilterIter
     : public FilterIter<IT>
     {
-      typedef FilterCore<IT> _Filter;
-      typedef typename _Filter::Val Val;
+      using _Filter = FilterCore<IT>;
+      using     Val = typename _Filter::Val;
       
       void
       reEvaluate()
@@ -392,12 +418,16 @@ namespace lib {
       ExtensibleFilterIter() { }
       
       template<typename PRED>
+      ExtensibleFilterIter (IT&& src, PRED initialFilterPredicate)
+        : FilterIter<IT>{forward<IT>(src), initialFilterPredicate}
+        { }
+      template<typename PRED>
       ExtensibleFilterIter (IT const& src, PRED initialFilterPredicate)
-        : FilterIter<IT>(src, initialFilterPredicate)
+        : FilterIter<IT>{src, initialFilterPredicate}
         { }
       
-      ExtensibleFilterIter (IT const& src)
-        : ExtensibleFilterIter(src, FilterIter<IT>::acceptAll)
+      ExtensibleFilterIter (IT&& src)
+        : ExtensibleFilterIter{forward<IT>(src), FilterIter<IT>::acceptAll}
         { }
       
       // standard copy operations acceptable
@@ -571,6 +601,14 @@ namespace lib {
         { }
       
       template<typename FUN>
+      TransformingCore (IT&& orig, FUN processor)
+        : trafo_(processor) // induces a signature check
+        , source_(forward<IT> (orig))
+        {
+          processItem();
+        }
+      
+      template<typename FUN>
       TransformingCore (IT const& orig, FUN processor)
         : trafo_(processor) // induces a signature check
         , source_(orig)
@@ -612,8 +650,8 @@ namespace lib {
   class TransformIter
     : public IterTool<TransformingCore<IT,VAL>>
     {
-      typedef TransformingCore<IT,VAL> _Trafo;
-      typedef IterTool<_Trafo> _IteratorImpl;
+      using _Trafo = TransformingCore<IT,VAL>;
+      using _IteratorImpl = IterTool<_Trafo> ;
       
     public:
       TransformIter ()
@@ -621,8 +659,12 @@ namespace lib {
         { }
       
       template<typename FUN>
+      TransformIter (IT&& src, FUN trafoFunc)
+        : _IteratorImpl{_Trafo(forward<IT>(src), trafoFunc)}
+        { }
+      template<typename FUN>
       TransformIter (IT const& src, FUN trafoFunc)
-        : _IteratorImpl(_Trafo(src,trafoFunc))
+        : _IteratorImpl{_Trafo(src, trafoFunc)}
         { }
       
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (TransformIter)
@@ -642,7 +684,16 @@ namespace lib {
   transformIterator (IT const& src, FUN processingFunc)
   {
     using OutVal = typename lib::meta::_Fun<FUN>::Ret;
-    return TransformIter<IT,OutVal>(src,processingFunc);
+    return TransformIter<IT,OutVal>{src,processingFunc};
+  }
+  
+  template<class IT, typename FUN>
+  inline auto
+  transformIterator (IT&& src, FUN processingFunc)
+  {
+    using SrcIT  = typename std::remove_reference<IT>::type;
+    using OutVal = typename lib::meta::_Fun<FUN>::Ret;
+    return TransformIter<SrcIT,OutVal>{forward<SrcIT>(src), processingFunc};
   }
   
   
@@ -687,11 +738,20 @@ namespace lib {
   /** filters away repeated values
    *  emitted by source iterator */
   template<class IT>
-  inline FilterIter<IT>
+  inline auto
   filterRepetitions (IT const& source)
   {
-    typedef typename IT::value_type Val;
-    return filterIterator(source, SkipRepetition<Val>() );
+    using Val   = typename IT::value_type;
+    return filterIterator (source, SkipRepetition<Val>());
+  }
+  
+  template<class IT>
+  inline auto
+  filterRepetitions (IT&& source)
+  {
+    using SrcIT = typename std::remove_reference<IT>::type;
+    using Val   = typename SrcIT::value_type;
+    return filterIterator (forward<SrcIT>(source), SkipRepetition<Val>() );
   }
   
   

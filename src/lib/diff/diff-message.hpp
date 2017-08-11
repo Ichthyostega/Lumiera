@@ -97,6 +97,7 @@ namespace diff{
       
       
       DiffMessage() = default;
+      // default copy operations acceptable
       
       /**
        * DiffMessage builder:
@@ -132,8 +133,8 @@ namespace diff{
        * @note source iterator is copied into a heap allocated IterSource
        */
       template<class IT>
-      DiffMessage(IT ii,                      enable_if< can_IterForEach<IT>, void*> =nullptr)
-        : _FrontEnd{iter_source::wrapIter(ii)}
+      DiffMessage(IT&& ii,                            enable_if< can_IterForEach<IT>, void*> =nullptr)
+        : _FrontEnd{iter_source::wrapIter (std::forward<IT>(ii))}
         { }
       
       /**
@@ -142,8 +143,8 @@ namespace diff{
        * @warning like with any classical iterators, the container must stay alive and accessible 
        */
       template<class CON>
-      DiffMessage(CON& container,             enable_if< __and_< can_STL_ForEach<CON>
-                                                               ,__not_<can_IterForEach<CON>>>, void*> =nullptr)
+      DiffMessage(CON& container,                     enable_if< __and_< can_STL_ForEach<CON>
+                                                                       ,__not_<can_IterForEach<CON>>>, void*> =nullptr)
         : _FrontEnd{iter_source::eachEntry(container)}
         { }
     };

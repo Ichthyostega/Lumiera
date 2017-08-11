@@ -381,9 +381,9 @@ namespace diff{
       }
       
       friend ChildDataIter
-      childData (Rec::scopeIter const& scopeIter)
+      childData (Rec::scopeIter&& scopeIter)
       {
-        return ChildDataIter{ scopeIter
+        return ChildDataIter{ std::forward<Rec::scopeIter>(scopeIter)
                             , [](GenNode const& child) ->DataCap const&
                                 {
                                   return child.data;

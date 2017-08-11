@@ -55,6 +55,7 @@ namespace util {
   
   using lib::meta::can_IterForEach;
   using std::string;
+  using std::forward;
   using std::move;
   
   
@@ -127,12 +128,12 @@ namespace util {
    * @see FormatHelper_test::checkStringify()
    */
   template<class IT>
-  inline lib::TransformIter<IT, string>
-  stringify (IT const& src)
+  inline auto
+  stringify (IT&& src)
   {
-    using Val =  typename IT::value_type;
+    using Val = typename std::remove_reference<IT>::type::value_type;
     
-    return lib::transformIterator(src, util::toString<Val>);
+    return lib::transformIterator(forward<IT>(src), util::toString<Val>);
   }
   
   
