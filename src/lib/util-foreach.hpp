@@ -201,149 +201,40 @@ namespace util {
   /* === allow creating argument binders on-the-fly === */
   
   
-  template < typename CON, typename FUN
-           , typename P1
-           >
-  inline void                                                                            //________________________________
-  for_each (CON const& elements, FUN function, P1 bind1)                                ///< Accept binding for 1 Argument 
+  /** Accept binding for arbitrary function arguments
+   * @note obviously one of those arguments must be a placeholder */
+  template <typename CON, typename FUN, typename P1, typename...ARGS>
+  inline void
+  for_each (CON const& elements, FUN function, P1&& bind1, ARGS&& ...args) 
   {
-    for_each (elements, std::bind (function, bind1));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           >
-  inline void                                                                            //________________________________
-  for_each (CON const& elements, FUN function, P1 bind1, P2 bind2)                      ///< Accept binding for 2 Arguments
-  {
-    for_each (elements, std::bind (function, bind1, bind2));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           , typename P3
-           >
-  inline void                                                                            //________________________________
-  for_each (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)            ///< Accept binding for 3 Arguments
-  {
-    for_each (elements, std::bind (function, bind1, bind2, bind3));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           , typename P3
-           , typename P4
-           >
-  inline void                                                                            //________________________________
-  for_each (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)  ///< Accept binding for 4 Arguments
-  {
-    for_each (elements, std::bind (function, bind1, bind2, bind3, bind4));
+    for_each (elements, std::bind (function, std::forward<P1>(bind1), std::forward<ARGS> (args)...));
   }
   
   
   
   
   
-  template < typename CON, typename FUN
-           , typename P1
-           >
-  inline bool                                                                            //________________________________
-  and_all (CON const& elements, FUN function, P1 bind1)                                 ///< Accept binding for 1 Argument 
+  /** Accept binding for arbitrary function arguments
+   * @note obviously one of those arguments must be a placeholder */
+  template <typename CON, typename FUN, typename P1, typename...ARGS>
+  inline bool
+  and_all (CON const& elements, FUN function, P1&& bind1, ARGS&& ...args)
   {
-    return and_all (elements, std::bind<bool> (function, bind1));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           >
-  inline bool                                                                            //________________________________
-  and_all (CON const& elements, FUN function, P1 bind1, P2 bind2)                       ///< Accept binding for 2 Arguments
-  {
-    return and_all (elements, std::bind<bool> (function, bind1, bind2));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           , typename P3
-           >
-  inline bool                                                                            //________________________________
-  and_all (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)             ///< Accept binding for 3 Arguments
-  {
-    return and_all (elements, std::bind<bool> (function, bind1, bind2, bind3));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           , typename P3
-           , typename P4
-           >
-  inline bool                                                                            //________________________________
-  and_all (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)   ///< Accept binding for 4 Arguments
-  {
-    return and_all (elements, std::bind<bool> (function, bind1, bind2, bind3, bind4));
+    return and_all (elements, std::bind<bool> (function, std::forward<P1>(bind1), std::forward<ARGS> (args)...));
   }
   
   
   
   
   
-  template < typename CON, typename FUN
-           , typename P1
-           >
-  inline bool                                                                            //________________________________
-  has_any (CON const& elements, FUN function, P1 bind1)                                 ///< Accept binding for 1 Argument 
+  /** Accept binding for arbitrary function arguments
+   * @note obviously one of those arguments must be a placeholder */
+  template <typename CON, typename FUN, typename P1, typename...ARGS>
+  inline bool
+  has_any (CON const& elements, FUN function, P1&& bind1, ARGS&& ...args)
   {
-    return has_any (elements, std::bind<bool> (function, bind1));
+    return has_any (elements, std::bind<bool> (function, std::forward<P1>(bind1), std::forward<ARGS> (args)...));
   }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           >
-  inline bool                                                                            //________________________________
-  has_any (CON const& elements, FUN function, P1 bind1, P2 bind2)                       ///< Accept binding for 2 Arguments
-  {
-    return has_any (elements, std::bind<bool> (function, bind1, bind2));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           , typename P3
-           >
-  inline bool                                                                            //________________________________
-  has_any (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)             ///< Accept binding for 3 Arguments
-  {
-    return has_any (elements, std::bind<bool> (function, bind1, bind2, bind3));
-  }
-  
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           , typename P3
-           , typename P4
-           >
-  inline bool                                                                            //________________________________
-  has_any (CON const& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)   ///< Accept binding for 4 Arguments
-  {
-    return has_any (elements, std::bind<bool> (function, bind1, bind2, bind3, bind4));
-  }
-  
   
   
   
