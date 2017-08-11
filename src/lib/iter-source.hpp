@@ -48,6 +48,7 @@
 #define LIB_ITER_SOURCE_H
 
 
+#include "lib/meta/util.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
 
@@ -114,7 +115,7 @@ namespace lib {
       virtual
       operator string()  const    ///< subclasses may offer diagnostics
         {
-          return "IterSource(opaque)";
+          return "IterSource<" + lib::meta::typeStr<TY>()+ ">";
         }
       
       
