@@ -118,6 +118,16 @@ namespace diff{
         { }
       
       /**
+       * Convenience builder to take an arbitrary number of DiffStep arguments
+       * @note like for the initializer_list, arguments will be copied into
+       *       a _heap allocated snapshot_
+       */
+      template<typename...ARGS>
+      DiffMessage(ARGS&& ...args)
+        : DiffMessage{ {std::forward<ARGS>(args)...} }
+        { }
+      
+      /**
        * Convenience builder to piggyback any Lumiera Forward Iterator
        * @note source iterator is copied into a heap allocated IterSource
        */
