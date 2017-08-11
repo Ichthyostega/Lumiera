@@ -26,6 +26,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/diff-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
@@ -37,6 +38,7 @@
 #include <string>
 #include <vector>
 
+using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
 using lib::iter_stl::IterSnapshot;
 using lib::iter_stl::snapshot;
 using util::isnil;
@@ -121,7 +123,7 @@ namespace test{
       virtual void
       run (Arg)
         {
-          demonstrate_simpleUsage();
+          demonstrate_standardUsage();
           verify_diagnostics();
           verify_builder();
           demonstrate_treeApplication();
@@ -135,7 +137,7 @@ namespace test{
        *        - which is pulled during iteration
        */
       void
-      demonstrate_simpleUsage()
+      demonstrate_standardUsage()
         {
           using Source = WrappedLumieraIter<IterSnapshot<DiffStep>>;
           
@@ -165,8 +167,60 @@ namespace test{
             CHECK (!isnil (diffMsg));
             CHECK (1 == instances);
             
-            CHECK ("ins" == string(diffMsg->verb()));
-          }
+            CHECK (diffMsg);
+            CHECK (ins(TYPE_X) == *diffMsg);
+            
+            // and this effectively means....
+            CHECK ("ins"  == string(diffMsg->verb()));
+            CHECK ("type" == diffMsg->elm().idi.getSym());
+            CHECK ("X"    == diffMsg->elm().data.get<string>());
+            
+            // now iterate one step
+            ++diffMsg;
+            CHECK (diffMsg);
+            CHECK (set(ATTRIB1) == *diffMsg);
+            CHECK ("set"  == string(diffMsg->verb()));
+            CHECK ("α"    == diffMsg->elm().idi.getSym());
+            CHECK ( 1     == diffMsg->elm().data.get<int>());
+            
+            // cloning is allowed, yet implementation defined
+            // in the actual case the underlying generator is based on a vector + a pointer
+            // and thus the full state can be cloned into an independent instance
+            DiffMessage clone{diffMsg};
+            CHECK (clone == diffMsg);
+            CHECK (set(ATTRIB1) == *clone);
+            
+            CHECK (1 == instances); // the iterator front-end was cloned, not the generator
+            
+            ++clone;
+            CHECK (del(CHILD_T) == *clone);
+            CHECK (set(ATTRIB1) == *diffMsg);
+            CHECK (clone != diffMsg);
+            
+            ++clone;
+            CHECK (not clone);
+            CHECK (isnil (clone));
+            VERIFY_ERROR(ITER_EXHAUST, *clone);
+            
+            // note the weird behaviour:
+            // both instances share a common backend and thus state get mixed up.
+            // The diffMsg front-End still points at a state already obsoleted
+            CHECK (set(ATTRIB1) == *diffMsg);
+            ++diffMsg;
+            // So better don't do this at home...
+            VERIFY_ERROR(ITER_EXHAUST, *diffMsg);
+            
+            clone = DiffMessage{new Generator};
+            CHECK (2 == instances); // now we got two independent generator instances
+            CHECK (clone);
+            CHECK (ins(TYPE_X) == *clone);
+            ++clone;
+            CHECK (set(ATTRIB1) == *clone);
+            
+            // first instance unaffected as before
+            CHECK (isnil (diffMsg));
+            
+          }// NOTE: automatic clean-up when leaving the scope
           CHECK (0 == instances);
         }
       
