@@ -49,6 +49,7 @@
 
 #include "lib/error.hpp"
 #include "lib/iter-source.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/diff/tree-diff.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/meta/util.hpp"
@@ -107,9 +108,33 @@ namespace diff{
         : _FrontEnd{DiffSource::build (diffGenerationContext)}
         { }
       
+      /**
+       * Convenience builder for consuming an brace enclosed initializer_list
+       * @note initialiser elements will be _copied_ into a _heap alloacated_
+       *       snapshot (vector), which is then managed by `shared_ptr`
+       */
+      DiffMessage(std::initializer_list<DiffStep> const&& ili)
+        : DiffMessage{iter_stl::snapshot (move(ili))}
+        { }
+      
+      /**
+       * Convenience builder to piggyback any Lumiera Forward Iterator
+       * @note source iterator is copied into a heap allocated IterSource
+       */
       template<class IT>
       DiffMessage(IT ii,                      enable_if< can_IterForEach<IT>, void*> =nullptr)
         : _FrontEnd{iter_source::wrapIter(ii)}
+        { }
+      
+      /**
+       * Convenience builder to use elements form any STL-like container
+       * @note creating heap allocated IterSource, which _refers_ to the original container
+       * @warning like with any classical iterators, the container must stay alive and accessible 
+       */
+      template<class CON>
+      DiffMessage(CON& container,             enable_if< __and_< can_STL_ForEach<CON>
+                                                               ,__not_<can_IterForEach<CON>>>, void*> =nullptr)
+        : _FrontEnd{iter_source::eachEntry(container)}
         { }
     };
   
