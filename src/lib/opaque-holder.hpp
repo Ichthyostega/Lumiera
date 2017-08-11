@@ -69,6 +69,7 @@
 
 #include "lib/error.hpp"
 #include "lib/access-casted.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -86,21 +87,21 @@ namespace lib {
   
   namespace { // implementation helpers...
     
-    using boost::enable_if;
-    using boost::disable_if;
+    using lib::meta::enable_if;
+    using lib::meta::disable_if;
     using std::is_constructible;
     
     template<typename X>
-         typename enable_if< is_constructible<bool,X>,
-    bool >::type
+                       enable_if< is_constructible<bool,X>,
+    bool              >
     validitySelfCheck (X const& boolConvertible)
       {
         return bool(boolConvertible);
       }
     
     template<typename X>
-         typename disable_if< is_constructible<bool,X>,
-    bool >::type
+                       disable_if< is_constructible<bool,X>,
+    bool              >
     validitySelfCheck (X const&)
       {
         return true; // just pass if this type doesn't provide a validity check...

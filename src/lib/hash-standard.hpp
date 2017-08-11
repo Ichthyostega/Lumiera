@@ -73,7 +73,6 @@
 
 #include <cstddef>
 #include <utility>
-#include <boost/utility/enable_if.hpp>
 
 
 namespace lib {
@@ -124,7 +123,7 @@ namespace std {
    * Specialisation: Bridge from std::hash to boost::hash
    */
   template<typename TY>
-  struct _HashImplementationSelector<TY,   typename boost::enable_if< lib::meta::provides_BoostHashFunction<TY> >::type >
+  struct _HashImplementationSelector<TY,   std::enable_if_t< lib::meta::provides_BoostHashFunction<TY>::value >>
     : public __hash_base<size_t, TY>
     {
       size_t

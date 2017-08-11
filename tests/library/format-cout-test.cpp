@@ -116,7 +116,7 @@ namespace test {
    *   I decided to allow `<typeinfo>` in this category, which allows us
    *   at least to show a type name as fallback
    * - distill an essential version of `enable_if`, which can be inlined.
-   *   This allows us to get rid of `boost::enable_if` finally.
+   *   This allowed us to get rid of `boost::enable_if` finally.
    * - build a sensible `operator string()` for our `lib::P` based on this
    * - and _finally_, to come up with a templated version of the `ostream`
    *   inserter `operator<<`, which does not cause too much havoc when

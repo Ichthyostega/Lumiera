@@ -260,8 +260,8 @@ namespace lib {
   namespace iter_explorer { ///< predefined "exploration strategies", policies and configurations
     
     using util::unConst;
-    using boost::enable_if;
-    using boost::disable_if;
+    using lib::meta::enable_if;
+    using lib::meta::disable_if;
     using std::function;
     using meta::_Fun;
 
@@ -450,7 +450,7 @@ namespace lib {
     class ChainedIters;
     
     template<class ITI>
-    class ChainedIters<ITI,     typename enable_if< _is_iterator_of_iterators<ITI>>::type
+    class ChainedIters<ITI,     enable_if< _is_iterator_of_iterators<ITI>>
                       >
       : public IterStateWrapper<typename ITI::value_type::value_type 
                                ,ChainedIteratorImpl<ITI, typename ITI::value_type>
@@ -471,7 +471,7 @@ namespace lib {
      *       of the given iterator is itself an iterator
      */ 
     template<class SEQ>
-    class ChainedIters<SEQ,     typename disable_if< _is_iterator_of_iterators<SEQ>>::type
+    class ChainedIters<SEQ,     disable_if< _is_iterator_of_iterators<SEQ>>
                       > 
       : public IterStateWrapper<typename SEQ::value_type
                                ,ChainedIteratorImpl<IterStack<SEQ>, SEQ>

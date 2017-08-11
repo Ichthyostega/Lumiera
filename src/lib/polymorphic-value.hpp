@@ -156,17 +156,13 @@
 #include "lib/meta/duck-detector.hpp"
 #include "lib/util.hpp"
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/static_assert.hpp>
-
 
 namespace lib {
-  
   
   namespace polyvalue { // implementation details...
     
     namespace error = lumiera::error;
-    using boost::enable_if;
+    using lib::meta::enable_if;
     using lib::meta::Yes_t;
     using lib::meta::No_t;
     
@@ -270,7 +266,7 @@ namespace lib {
      * to the container will raise an exception
      */
     template<class API>
-    struct AssignmentPolicy<API, typename enable_if< allow_Clone_but_no_Copy<API> >::type>
+    struct AssignmentPolicy<API,      enable_if< allow_Clone_but_no_Copy<API> >>
       {
         template<class IMP>
         static void 
@@ -316,7 +312,7 @@ namespace lib {
      * simple \c static_cast without runtime overhead.
      */
     template <class TY>
-    struct Trait<TY, typename enable_if< exposes_CloneFunction<TY> >::type>
+    struct Trait<TY,      enable_if< exposes_CloneFunction<TY> >>
       {
         typedef TY CopyAPI;
         enum{   ADMIN_OVERHEAD = 1 * sizeof(void*) };
@@ -396,7 +392,7 @@ namespace lib {
       template<class IMP>
       PolymorphicValue (IMP*)
         {
-          BOOST_STATIC_ASSERT (siz >= sizeof(IMP));
+          static_assert (siz >= sizeof(IMP), "insufficient inline buffer size");
           
           new(&buf_) IMP();
         }

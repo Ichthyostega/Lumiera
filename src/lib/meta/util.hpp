@@ -161,8 +161,9 @@ namespace meta {
   
   
   /** Trait template for detecting a typelist type.
-   *  For example, this allows to write specialisations with the help of
-   *  boost::enable_if
+   *  For example, this allows to write specialisations
+   *  with the help of lib::meta::enable_if
+   *  (or the equivalent std::enable_if)
    */
   template<typename TY>
   class is_Typelist

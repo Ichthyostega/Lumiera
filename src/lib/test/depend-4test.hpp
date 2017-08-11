@@ -36,7 +36,6 @@
 #include "lib/meta/duck-detector.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <memory>
 
 
@@ -45,7 +44,7 @@ namespace test{
   
   namespace { ///< details: inject a mock automatically in place of a singleton
     
-    using boost::enable_if;
+    using lib::meta::enable_if;
     using lib::meta::Yes_t;
     using lib::meta::No_t;
     
@@ -79,7 +78,7 @@ namespace test{
     
     
     template<class MOCK>
-    struct ServiceInterface<MOCK, typename enable_if< defines_ServiceInterface<MOCK>>::type>
+    struct ServiceInterface<MOCK,   enable_if< defines_ServiceInterface<MOCK> >>
       {
         typedef typename MOCK::ServiceInterface Type;
       };
