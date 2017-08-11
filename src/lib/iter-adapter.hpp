@@ -245,6 +245,18 @@ namespace lib {
             //  for comparison with IterAdapter{}
       
       
+      
+    protected:
+      using ConRef = typename iter::TypeBinding<CON>::reference;
+      
+      /** allow derived classes to
+       *  access backing container */
+      ConRef
+      source()
+        {
+          return source_;
+        }
+      
     private:
       void
       _maybe_throw()  const

@@ -32,7 +32,7 @@
  ** \par Standard Adapters
  ** As a complement, this header contains a generic implementation
  ** of the IterSource interface by wrapping an existing Lumiera Forward Iterator.
- ** Using this WrappedLumieraIterator, the details of this wrapped source iterator
+ ** Using this WrappedLumieraIter, the details of this wrapped source iterator
  ** remain opaque. To ease the use of this adapter, a selection of free functions
  ** is provided, allowing to build opaque "all elements" or "all keys" iterators
  ** for various STL containers. 
@@ -53,6 +53,7 @@
 
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/noncopyable.hpp>
+#include <string>
 #include <memory>
 
 
@@ -60,6 +61,7 @@
 
 namespace lib {
   
+  using std::string;
   using std::shared_ptr;
   
   
@@ -107,7 +109,14 @@ namespace lib {
       
       
     public:
-      virtual ~IterSource() { }; ///< is ABC
+      virtual ~IterSource() { };  ///< is ABC
+      
+      virtual
+      operator string()  const    ///< subclasses may offer diagnostics
+        {
+          return "IterSource(opaque)";
+        }
+      
       
       /* == Iteration control API for IterAdapter frontend == */
       
@@ -127,7 +136,14 @@ namespace lib {
       
       /* == public builder API to create instances == */
       
-      typedef IterAdapter<Pos, DataHandle> iterator;
+      struct iterator
+        : IterAdapter<Pos, DataHandle>
+        {
+          using _I = IterAdapter<Pos, DataHandle>
+          ;
+          using _I::IterAdapter;
+          operator string()  const {return _I::source()? string(*_I::source()) : "⟂"; }
+        };
       
       /** build an iterator frontend for the given source,
        *  @note the source is allocated separately and
@@ -203,7 +219,7 @@ namespace lib {
    * erasing the specific type information of the template parameter IT
    */
   template<class IT>
-  class WrappedLumieraIterator
+  class WrappedLumieraIter
     : public IterSource<typename IT::value_type>
     , boost::noncopyable
     {
@@ -235,7 +251,7 @@ namespace lib {
       
       
     public:
-      WrappedLumieraIterator (IT const& orig)
+      WrappedLumieraIter (IT const& orig)
         : src_(orig)
         { }
     };
@@ -333,7 +349,7 @@ namespace lib {
     {
       typedef typename _IterT<IT>::Val ValType;
       
-      return IterSource<ValType>::build (new WrappedLumieraIterator<IT> (source));
+      return IterSource<ValType>::build (new WrappedLumieraIter<IT> (source));
     }
     
     
@@ -354,7 +370,7 @@ namespace lib {
       typedef typename _TransformIterT<IT,FUN>::TransIter TransIT;
       
       return IterSource<ValType>::build (
-          new WrappedLumieraIterator<TransIT> (
+          new WrappedLumieraIter<TransIT> (
               transformIterator (source, processingFunc)));
     }
     
@@ -434,7 +450,7 @@ namespace lib {
       typedef RangeIter<typename CON::iterator> Range;
       
       Range contents (container.begin(), container.end());
-      return IterSource<ValType>::build (new WrappedLumieraIterator<Range>(contents)); 
+      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents)); 
     }
     
 
@@ -449,7 +465,7 @@ namespace lib {
       typedef RangeIter<IT> Range;
 
       Range contents (begin, end);
-      return IterSource<ValType>::build (new WrappedLumieraIterator<Range>(contents));
+      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
 
   }

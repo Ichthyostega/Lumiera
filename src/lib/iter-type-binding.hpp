@@ -43,6 +43,11 @@
 
 
 
+namespace std {
+  template<typename _Tp>
+  class shared_ptr;
+}
+
 namespace lib {
 namespace iter {
   
@@ -72,6 +77,30 @@ namespace iter {
   
   template<typename TY>
   struct TypeBinding<const TY *>
+    {
+      typedef TY value_type;
+      typedef const TY& reference;
+      typedef const TY* pointer;
+    };
+  
+  template<typename TY>
+  struct TypeBinding<TY &>
+    {
+      typedef TY value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
+    };
+  
+  template<typename TY>
+  struct TypeBinding<TY const&>
+    {
+      typedef TY value_type;
+      typedef const TY& reference;
+      typedef const TY* pointer;
+    };
+  
+  template<typename TY>
+  struct TypeBinding<std::shared_ptr<TY>>
     {
       typedef TY value_type;
       typedef const TY& reference;
