@@ -21,7 +21,11 @@
 * *****************************************************/
 
 /** @file diff-complex-application-test.cpp
- ** unit test \ref DiffComplexApplication_test
+ ** unit test \ref DiffComplexApplication_test.
+ ** Demonstrates the concept of tree mutation by diff messages.
+ ** This is an elaborate demonstration setup to highlight some
+ ** of the more intricate, the flexibility and support for
+ ** and complex opaque implementation variations.
  */
 
 
@@ -173,11 +177,13 @@ namespace test{
          *  This function builds a TreeMutator implementation into the given buffer space
          * @note some crucial details for this binding to work properly...
          *       - we define several "onion layers" of binding to deal with various scopes.
-         *       - the priority of these bindings is ordered from lowest to highest
+         *       - the priority of these bindings is layered backwards from lowest to highest,
+         *         i.e. the resulting mutator will fist check for attribute δ and then work
+         *         its way down do the `collection(nestedData_)`
          *       - actually this is a quite complicated setup, including object fields
-         *         to represent attributes, where one special attribute which actually holds
-         *         a nested object, then both a collection of child objects and a collection
-         *         of data values
+         *         to represent attributes, where only one specific attribute actually holds
+         *         a nested object and thus needs special treatment; beyond that we have both
+         *         a collection of child objects and a collection of child data values
          *       - the selector predicate (`isApplicableIf`) actually decides if a binding layer
          *         becomes responsible for a given diff verb. Here, this decision is based on
          *         the classification of the verb or spec to be handled, either being an
@@ -251,8 +257,8 @@ namespace test{
                     })
                 .mutateAttrib("δ", [&](TreeMutator::Handle buff)
                     {
-                      if (not delta_)                     // note: object managed automatically,
-                        delta_.reset (new Opaque("δ"));  //        no INS-implementation necessary
+                      if (not delta_)                     // note: object is managed automatically,
+                        delta_.reset (new Opaque("δ"));  //        thus no INS-implementation necessary
                       REQUIRE (delta_);
                       
                       delta_->buildMutator(buff);
@@ -281,7 +287,7 @@ namespace test{
   /***********************************************************************//**
    * @test Demonstration: apply a structural change to unspecified private
    *       data structures, with the help of an [dynamic adapter](\ref TreeMutator)
-   *       - we use private data classes, defined here in the test fixture
+   *       - we use private data classes, defined right here in the test fixture
    *         to represent "just some" pre-existing data structure.
    *       - we re-assign some attribute values
    *       - we add, re-order and delete child "elements", without knowing

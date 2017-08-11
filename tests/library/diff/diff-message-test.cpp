@@ -1,8 +1,8 @@
 /*
-  DiffTreeApplication(Test)  -  demonstrate the basics of tree diff representation
+  DiffMessage(Test)  -  demonstrate the basics of tree diff representation
 
   Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+    2017,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,10 +20,8 @@
 
 * *****************************************************/
 
-/** @file diff-tree-application-test.cpp
- ** unit test \ref DiffTreeApplication_test.
- ** Demonstrates the basic concept of reshaping structured data
- ** through a tree-diff sequence.
+/** @file diff-message-test.cpp
+ ** unit test \ref DiffMessage_test
  */
 
 
@@ -78,7 +76,12 @@ namespace test{
   
   
   /***********************************************************************//**
-   * @test Demonstration/Concept: a description language for tree differences.
+   * @test properties of a container to transport a diff from an abstracted
+   *       source generator to an abstracted consumer.
+   *       - this covers a standard usage scenario within Lumiera, where some
+   *         producer in the Session core detects changes in session structure
+   *         and sends a message to make the UI conform to the new structure
+   *       - #########TODO
    *       The representation is given as a linearised sequence of verb tokens.
    *       In addition to the verbs used for list diffing, here we additionally
    *       have to deal with nested scopes, which can be entered thorough a
@@ -96,14 +99,14 @@ namespace test{
    *      the \link diff::GenNode variant data node \endlink. The key point
    *      to note is the usage of Record elements as payload within GenNode,
    *      which allows to represent tree shaped object like data structures.
+   * @see AbstractTangible_test::mutate() concrete usage scenario for UI-elements
+   * @see DiffTreeApplication_test change a tree-like data structure by diff
    * @see DiffComplexApplication_test handling arbitrary data structures
-   * @see GenericRecordRepresentation_test
-   * @see GenNodeBasic_test
    * @see DiffListApplication_test
-   * @see diff-tree-application.hpp
-   * @see tree-diff.hpp
+   * @see DiffMessage
+   * @see ui-bus.hpp
    */
-  class DiffTreeApplication_test
+  class DiffMessage_test
     : public Test
     , TreeDiffLanguage
     {
@@ -215,7 +218,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (DiffTreeApplication_test, "unit common");
+  LAUNCHER (DiffMessage_test, "unit common");
   
   
   

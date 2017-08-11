@@ -36,8 +36,9 @@
  ** @todo as of 8/2017 I am still rather clueless regarding the concrete situation to generate DiffMessage,
  **       and as a move into the dark I'll just define it to be based on IterSource...
  ** 
+ ** @see DiffMessage_test
  ** @see AbstractTangible_test
- ** @see mutation-message.hpp
+ ** @see BusTerm::change()
  ** 
  */
 

@@ -571,6 +571,8 @@ namespace test {
        * 
        * Here in this test case, we use a hard wired diff sequence,
        * so we can check the expected structural changes actually took place.
+       * 
+       * @see DiffMessage_test
        */
       void
       mutate ()
