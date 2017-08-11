@@ -1042,25 +1042,6 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1484877590492" ID="ID_1552177670" MODIFIED="1502403195805" TEXT="k&#xf6;nnte sich sp&#xe4;ter noch &#xc4;ndern">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....aber im Moment sieht das ad&#228;quat aus,
-    </p>
-    <p>
-      da ja der Konstruktor von MutationMessage generisch (Template) ist,
-    </p>
-    <p>
-      und man damit jedes diff-iterable einbetten kann.
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
 <node CREATED="1484877658891" FOLDED="true" ID="ID_1855662071" MODIFIED="1502403195805" TEXT="Vorsicht: Storage / GUI-Thread">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1484877696486" ID="ID_476867583" MODIFIED="1484877708576" TEXT="wir m&#xfc;ssen jede Aktion in den Event-Thread &#xfc;bergeben"/>
@@ -1099,6 +1080,19 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502459141531" ID="ID_301431029" MODIFIED="1502459212307" TEXT="Refactoring">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1502459182214" ID="ID_1601884743" MODIFIED="1502459221104" TEXT="MutationMessage wird &#xfc;berfl&#xfc;ssig">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1502459190477" ID="ID_102437369" MODIFIED="1502459223854" TEXT="DiffMessage &#xfc;bernimmt deren Rolle">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502459198611" ID="ID_1739527989" MODIFIED="1502459229225" TEXT="aber DiffMessage wird umbenannt in MutationMessage">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -11279,6 +11273,12 @@
 <node CREATED="1502453280050" ID="ID_60387485" MODIFIED="1502454672712" TEXT="DiffMessage_test">
 <linktarget COLOR="#71e5ac" DESTINATION="ID_60387485" ENDARROW="Default" ENDINCLINATION="50;-12;" ID="Arrow_ID_1384671312" SOURCE="ID_667427572" STARTARROW="None" STARTINCLINATION="12;195;"/>
 <icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502459245238" ID="ID_1193318639" MODIFIED="1502459280642" TEXT="Basisfall: Producer / Consumer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1502459259123" ID="ID_372973959" MODIFIED="1502459264007" TEXT="Diagnose-Dekorator"/>
+<node CREATED="1502459264523" ID="ID_640036069" MODIFIED="1502459265854" TEXT="Builder"/>
+<node CREATED="1502459266371" ID="ID_883276790" MODIFIED="1502459273222" TEXT="Integrationstest"/>
 </node>
 </node>
 </node>

@@ -81,24 +81,26 @@ namespace test{
    *       - this covers a standard usage scenario within Lumiera, where some
    *         producer in the Session core detects changes in session structure
    *         and sends a message to make the UI conform to the new structure
-   *       - #########TODO
-   *       The representation is given as a linearised sequence of verb tokens.
-   *       In addition to the verbs used for list diffing, here we additionally
-   *       have to deal with nested scopes, which can be entered thorough a
-   *       bracketing construct \c mut(ID)...emu(ID).
-   *       This test demonstrates the application of such diff sequences
-   *       - in the first step, an empty root #Record<GenNode> is populated
-   *         with a type-ID, three named attribute values, three child values
-   *         and a nested child-Record.
-   *       - the second step demonstrates various diff language constructs
-   *         to alter, reshape and mutate this data structure
-   *       After applying those two diff sequences, we verify the data
-   *       is indeed in the expected shape.
-   * @remarks to follow this test, you should be familiar both with our
-   *      \link diff::Record generic data record \endlink, as well as with
-   *      the \link diff::GenNode variant data node \endlink. The key point
-   *      to note is the usage of Record elements as payload within GenNode,
-   *      which allows to represent tree shaped object like data structures.
+   *       - diff messages are hard to debug and test, since they are designed
+   *         as opaque sequences to be consumed only once. Thus for we provide
+   *         a snapshot decorator to offer diagnostic facilities
+   *       - moreover we provide a simplified builder function to create
+   *         hard wired diff messages in a concise way
+   *       - and finally this test repeats the scenario of DiffTreeApplication_test,
+   *         but this time the diff sequences are encapsulated as DiffMessage.
+   * @remarks like all the other _diff related_ tests, this code might be hard
+   *  to follow, unless you're familiar with the underlying concepts. Basically,
+   *  a _Diff_ is represented as _a linearised sequence of verb tokens_. Together
+   *  these tokens form a _diff language_. The semantics of that language are
+   *  oriented towards application of this diff onto a target structure. The
+   *  goal is to represent structure changes without being bound to a specific
+   *  data structure implementation. Yet there is one _meta_ data representation
+   *  used within the diff itself, as well as for various test and demonstration
+   *  examples: the [generic data record](\ref diff::Record) together with its
+   *  [variant node element](\ref diff::GenNode). The key point to note is the
+   *  (recursive) usage of Record elements as payload within GenNode, which
+   *  allows to represent tree shaped object like data structures.
+   * 
    * @see AbstractTangible_test::mutate() concrete usage scenario for UI-elements
    * @see DiffTreeApplication_test change a tree-like data structure by diff
    * @see DiffComplexApplication_test handling arbitrary data structures
@@ -110,6 +112,40 @@ namespace test{
     : public Test
     , TreeDiffLanguage
     {
+      
+      virtual void
+      run (Arg)
+        {
+          demonstrate_simpleUsage();
+          verify_diagnostics();
+          verify_builder();
+          demonstrate_treeApplication();
+        }
+      
+      
+      void
+      demonstrate_simpleUsage()
+        {
+          UNIMPLEMENTED("generate and iterate, everything right here");
+        }
+      
+      
+      void
+      verify_diagnostics()
+        {
+          UNIMPLEMENTED("add toString decorator");
+        }
+      
+      
+      void
+      verify_builder()
+        {
+          UNIMPLEMENTED("a builder function to simplify tests");
+        }
+      
+      
+      
+      
       using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
       
       DiffSeq
@@ -167,9 +203,10 @@ namespace test{
         }
       
       
-      virtual void
-      run (Arg)
+      void
+      demonstrate_treeApplication()
         {
+          UNIMPLEMENTED("redo the tree-diff example, but now with diff messages");
           Rec::Mutator target;
           Rec& subject = target;
           DiffApplicator<Rec::Mutator> application(target);
