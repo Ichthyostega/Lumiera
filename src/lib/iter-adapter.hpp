@@ -249,13 +249,9 @@ namespace lib {
     protected:
       using ConRef = typename iter::TypeBinding<CON>::reference;
       
-      /** allow derived classes to
-       *  access backing container */
-      ConRef
-      source()
-        {
-          return source_;
-        }
+      /** allow derived classes to access backing container */
+      ConRef       source()       { return                source_; }
+      const ConRef source() const { return unConst(this)->source_; }
       
     private:
       void

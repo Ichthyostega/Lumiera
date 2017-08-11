@@ -51,6 +51,7 @@
 #include "lib/iter-source.hpp"
 #include "lib/diff/tree-diff.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/meta/util.hpp"
 
 #include <string>
 
@@ -59,6 +60,11 @@ namespace lib {
 namespace diff{
   
   using std::string;
+  using std::__and_;
+  using std::__not_;
+  using lib::meta::enable_if;
+  using lib::meta::can_IterForEach;
+  using lib::meta::can_STL_ForEach;
   
   using DiffStep = TreeDiffLanguage::DiffStep;
   using DiffSource = IterSource<DiffStep>;
@@ -86,6 +92,9 @@ namespace diff{
   struct DiffMessage
     : DiffSource::iterator
     {
+      using _FrontEnd = DiffSource::iterator;
+      
+      
       DiffMessage() = default;
       
       /**
@@ -95,7 +104,12 @@ namespace diff{
        */
       explicit
       DiffMessage(DiffSource* diffGenerationContext)
-        : DiffSource::iterator{DiffSource::build (diffGenerationContext)}
+        : _FrontEnd{DiffSource::build (diffGenerationContext)}
+        { }
+      
+      template<class IT>
+      DiffMessage(IT ii,                      enable_if< can_IterForEach<IT>, void*> =nullptr)
+        : _FrontEnd{iter_source::wrapIter(ii)}
         { }
     };
   

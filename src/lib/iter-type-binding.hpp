@@ -102,9 +102,9 @@ namespace iter {
   template<typename TY>
   struct TypeBinding<std::shared_ptr<TY>>
     {
-      typedef TY value_type;
-      typedef const TY& reference;
-      typedef const TY* pointer;
+      typedef std::shared_ptr<TY> value_type;
+      typedef std::shared_ptr<TY>& reference;
+      typedef std::shared_ptr<TY>* pointer;
     };
   
   
