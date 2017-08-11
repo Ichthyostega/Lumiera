@@ -266,6 +266,11 @@
 </richcontent>
 </node>
 </node>
+<node CREATED="1484877839299" HGAP="23" ID="ID_957622878" MODIFIED="1502410631316" TEXT="Asynchrones Protokoll" VSHIFT="1">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1484877856640" ID="ID_1256835676" MODIFIED="1484877867427" TEXT="bedenke: alle Aktionen m&#xfc;ssen in den Event-Thread"/>
+<node CREATED="1484877868015" ID="ID_1612427727" MODIFIED="1484877878730" TEXT="&#xfc;ber die Rolle des GUI-Modells nachdenken!"/>
+</node>
 <node CREATED="1481502320065" ID="ID_1298358905" MODIFIED="1501854313563" TEXT="macht bisher der GuiRunner" VSHIFT="17">
 <icon BUILTIN="info"/>
 <node CREATED="1481502327528" ID="ID_75293128" MODIFIED="1487275489277" TEXT="das ist ohnehin schlecht">
@@ -513,7 +518,7 @@
 <node CREATED="1501866591164" ID="ID_751026549" MODIFIED="1501866609933" TEXT="&#xf6;ffnet/schlie&#xdf;t die &#xf6;ffentlichen Interfaces"/>
 </node>
 </node>
-<node CREATED="1481502251450" FOLDED="true" HGAP="96" ID="ID_1125529151" MODIFIED="1501867204524" TEXT="m&#xf6;glicher Race" VSHIFT="16">
+<node CREATED="1481502251450" HGAP="96" ID="ID_1125529151" MODIFIED="1502410647990" TEXT="m&#xf6;glicher Race" VSHIFT="16">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1484797174890" ID="ID_986391148" MODIFIED="1501866950169" TEXT="triggerShutdown() kommt bevor GuiNotification offen ist">
 <icon BUILTIN="info"/>
@@ -828,597 +833,28 @@
 </node>
 </node>
 </node>
-<node CREATED="1484797684438" ID="ID_932852399" MODIFIED="1493752929697" TEXT="GUI-Shutdown implementieren">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      bisher k&#246;nnen wir das GUI nur <i>aktiv intern</i>&#160;schlie&#223;en,
-    </p>
-    <p>
-      indem wir ein GTK-Signal erzeugen, das das Hauptfenster schlie&#223;t
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1485116867963" FOLDED="true" ID="ID_1146024699" MODIFIED="1501804646768" TEXT="bisher kann man nur das Fenster schlie&#xdf;en">
-<icon BUILTIN="info"/>
-<node CREATED="1485116884925" ID="ID_296160451" MODIFIED="1485116898396" TEXT="wie funktioniert das?">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1485116901507" ID="ID_1272809751" MODIFIED="1501781674936" TEXT="WindowManager">
-<node COLOR="#338800" CREATED="1485126609878" ID="ID_649614174" MODIFIED="1501781754252" TEXT="#1064 investigate WindowManager lifecycle">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1485116921072" ID="ID_1191743111" MODIFIED="1485116925722" TEXT="close Action"/>
-</node>
-<node CREATED="1484797749237" ID="ID_1654016697" MODIFIED="1501804599526" TEXT="wie kann man GTK-UI explizit schlie&#xdf;en?">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1501777017858" ID="ID_842367237" MODIFIED="1501804594790" TEXT="wer macht das in unserem GUI?">
-<arrowlink DESTINATION="ID_599315721" ENDARROW="Default" ENDINCLINATION="-137;-12;" ID="Arrow_ID_1743989671" STARTARROW="None" STARTINCLINATION="-18;215;"/>
-<icon BUILTIN="help"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797766035" ID="ID_1740926324" MODIFIED="1484797792293" TEXT="wie signalisieren wir das">
-<icon BUILTIN="help"/>
-<node CREATED="1501781461059" ID="ID_1041497316" MODIFIED="1501781480827" TEXT="wie den UiManager erreichen?">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1501781776041" ID="ID_1345710498" MODIFIED="1501804609188" TEXT="magische Nachricht?">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1501782361331" ID="ID_1281813611" MODIFIED="1501782375842" TEXT="an wen addressieren?">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1501782381185" ID="ID_427836826" MODIFIED="1501782397203" TEXT="mu&#xdf; sinnvoll sein">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1501782399454" ID="ID_1238852873" MODIFIED="1501782403225" TEXT="InteractionDirector"/>
-<node CREATED="1501784310336" ID="ID_455705917" MODIFIED="1501784323253" TEXT="was f&#xfc;r eine Nachricht?">
-<icon BUILTIN="help"/>
-<node CREATED="1501784324670" ID="ID_202531654" MODIFIED="1501784331185" TEXT="mu&#xdf; in das Protokoll passen"/>
-<node CREATED="1501784333946" ID="ID_238263434" MODIFIED="1501784338936" TEXT="sollte nicht willk&#xfc;rlich sein"/>
-<node CREATED="1501804506790" ID="ID_985808643" MODIFIED="1501804512731" TEXT="gibts nicht">
-<icon BUILTIN="stop-sign"/>
-</node>
-</node>
-</node>
-<node CREATED="1501781769834" ID="ID_1836544616" MODIFIED="1501866470036" TEXT="direktes Wiring?">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1501866473852" ID="ID_1346430403" MODIFIED="1501866480351" TEXT="direkt den UiManager aufrufen"/>
-<node CREATED="1501866480963" ID="ID_361033579" MODIFIED="1501866493949" TEXT="dazu die NotificationFacade verschoben"/>
-<node CREATED="1501866494441" ID="ID_540781053" MODIFIED="1501866503828" TEXT="wird jetzt vom UiManager gemanaged"/>
-</node>
-</node>
-<node CREATED="1501792024717" ID="ID_1914400893" MODIFIED="1501792029128" TEXT="wer ist &quot;wir&quot;?">
-<node CREATED="1501792033763" ID="ID_1293774586" MODIFIED="1501792040334" TEXT="der Subsystem-Lebenszyklus"/>
-<node CREATED="1501792041586" ID="ID_1326580750" MODIFIED="1501792051136" TEXT="sonst geht das Niemanden was an!">
-<icon BUILTIN="yes"/>
-<node CREATED="1501792062904" ID="ID_181717876" MODIFIED="1501792067954" TEXT="Subsysteme sind autark"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501792086244" ID="ID_233471026" MODIFIED="1501804923768" TEXT="wir wollen keine globale Ebene">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das war genau der Kern der &quot;Plugin-Debatte&quot;.
-    </p>
-    <p>
-      Eine solche globale, flache, dynamisch gebundene Ebene
-    </p>
-    <p>
-      klingt nach <i>wahnsinnigen M&#246;glichkeiten</i>, aber nur solange, bis man sich
-    </p>
-    <p>
-      eine einzige Funktion konkret durchdenkt: es l&#228;uft auf Spaghetti-Code hinaus
-    </p>
-  </body>
-</html>
-</richcontent>
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1501804804734" HGAP="33" ID="ID_1925973923" MODIFIED="1501804831617" TEXT="Mechanismus zum Schlie&#xdf;en" VSHIFT="6">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484797911392" ID="ID_286857196" MODIFIED="1501804881314" TEXT="mu&#xdf; ich definieren">
-<linktarget COLOR="#872666" DESTINATION="ID_286857196" ENDARROW="Default" ENDINCLINATION="-584;-56;" ID="Arrow_ID_1606936924" SOURCE="ID_405470138" STARTARROW="Default" STARTINCLINATION="1461;0;"/>
-<icon BUILTIN="flag-pink"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493753249399" ID="ID_1023343635" MODIFIED="1502371638606" TEXT="#1098 hand-over in UI-Thread">
-<linktarget COLOR="#a75677" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="-117;347;" ID="Arrow_ID_274836249" SOURCE="ID_1146157818" STARTARROW="None" STARTINCLINATION="-501;-573;"/>
-<icon BUILTIN="pencil"/>
-<node CREATED="1501804992301" ID="ID_1647263044" MODIFIED="1501804997702" TEXT="schedule event"/>
-<node CREATED="1501804985286" ID="ID_320977714" MODIFIED="1501804991521" TEXT="GTK-Mechanismus">
-<node CREATED="1501850591393" ID="ID_1831316800" MODIFIED="1501850596037" TEXT="Glib::Dispatcher"/>
-<node CREATED="1501850603736" ID="ID_1030340631" MODIFIED="1501850612690" TEXT="im UI-Thread erzeugen und binden"/>
-<node CREATED="1501850614630" ID="ID_196299293" MODIFIED="1501850630152" TEXT="emit() -&gt; event im UI-Thread"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501850632636" ID="ID_431682708" MODIFIED="1501850676730" TEXT="technische Probleme">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1501850684373" ID="ID_1688212376" MODIFIED="1501850862662" TEXT="ein Dispatcher pro Call">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      jede Facade-Funktion brauch einen Dispatcher
-    </p>
-    <p>
-      Das wird eine ganze Me
-    </p>
-  </body>
-</html>
-</richcontent>
-<node CREATED="1501850754827" ID="ID_314216229" MODIFIED="1501850773035" TEXT="jede Facade-Funktion brauch einen Dispatcher">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1501850863525" ID="ID_1439490807" MODIFIED="1501850866985" TEXT="das wird eine Menge"/>
-<node CREATED="1501850867597" ID="ID_141225152" MODIFIED="1501850875439" TEXT="alle Dispatcher haben eine gemeinsame Queue"/>
-<node CREATED="1501850880179" ID="ID_745997733" MODIFIED="1501850886414" TEXT="m&#xf6;gliche contention-Probleme"/>
-</node>
-<node CREATED="1501850690748" ID="ID_1995715844" MODIFIED="1501850702335" TEXT="Erzeugen der Dispatcher">
-<node CREATED="1501850920950" ID="ID_1529426036" MODIFIED="1501850931016" TEXT="mu&#xdf; im UI-Thread erfolgen"/>
-<node CREATED="1501850933596" ID="ID_620574396" MODIFIED="1501850943056">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <i>bevor</i>&#160;die Facade ge&#246;ffnet wir
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-</node>
-<node CREATED="1501850677790" ID="ID_1195250454" MODIFIED="1501850958231" TEXT="Argument&#xfc;bergabe">
-<node CREATED="1501850716049" ID="ID_104637334" MODIFIED="1501850724155" TEXT="emit() ist void(void)"/>
-<node CREATED="1501850734414" ID="ID_994424125" MODIFIED="1501850745786">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      und arbeitet <i>asynchron</i>
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-<node CREATED="1501850967855" ID="ID_859055846" MODIFIED="1501850982429">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Argument-Storage
-    </p>
-    <p>
-      organisieren
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-</node>
-<node CREATED="1501867225983" ID="ID_1121867075" MODIFIED="1501867252021">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      brauche dedizierten <b>Dispatcher</b>
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1501938738836" ID="ID_1257499857" MODIFIED="1501951450697" TEXT="Helper: CallQueue">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1501938715247" ID="ID_1286525769" MODIFIED="1501938725574" TEXT="simplistic">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1501938699841" ID="ID_1077640328" MODIFIED="1501938704702" TEXT="std::function"/>
-<node CREATED="1501938690626" ID="ID_353231581" MODIFIED="1501938729247" TEXT="thread safe queue"/>
-<node CREATED="1501938705321" ID="ID_1924064403" MODIFIED="1501938711076" TEXT="lambdas f&#xfc;r Argument-binding"/>
-</node>
-<node COLOR="#338800" CREATED="1501938776839" ID="ID_1031878628" MODIFIED="1502385810866" TEXT="Convenience-Wrapper">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1501939110138" ID="ID_203135379" MODIFIED="1502385815083" TEXT="Lambda konstruieren">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1501939132431" ID="ID_1400757157" MODIFIED="1502385817834" TEXT="Funktion zum Triggern">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1501939149837" ID="ID_1733976265" MODIFIED="1502385820938" TEXT="diese an Glib::Dispatcher binden">
-<icon BUILTIN="button_ok"/>
-</node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502404797300" ID="ID_1177399909" MODIFIED="1502404802532" TEXT="Exceptions fangen">
-<icon BUILTIN="flag-pink"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501939174506" ID="ID_504999068" MODIFIED="1501939191040" TEXT="in NotificationService integrieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" HGAP="31" ID="ID_389264738" MODIFIED="1502410520715" STYLE="fork" TEXT="Notification-Funktionen" VSHIFT="11">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1502375098210" ID="ID_581509556" MODIFIED="1502375109992" STYLE="fork" TEXT="als PImpl">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1502375146395" ID="ID_144811928" MODIFIED="1502378036357" TEXT="CallQueue einrichten">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1502375120551" ID="ID_1281399419" MODIFIED="1502385766022" TEXT="Glib::Dispatcher verwenden">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1502375134501" ID="ID_1011463592" MODIFIED="1502375142424" TEXT="Aufrufe in Lamdas verpacken"/>
-</node>
-<node COLOR="#338800" CREATED="1502375294344" FOLDED="true" ID="ID_640199096" MODIFIED="1502390909880" TEXT="Spezialbehandlung f&#xfc;r Shutdown">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1502375312469" ID="ID_1075926054" MODIFIED="1502390553943" TEXT="ironischerweise...">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...k&#246;nnte das am Ende nicht sinnvoll sein,
-    </p>
-    <p>
-      speziell den UI-Shutdown-Trigger &#252;ber den neuen Mechanismus laufen zu lassen,
-    </p>
-    <p>
-      obwohl jener doch genau der Anla&#223; war, diesen neuen Mechanismus zu bauen.
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-<node CREATED="1502390322659" ID="ID_194166182" MODIFIED="1502390333142" TEXT="den neuen Dispatcher nutzen?">
-<icon BUILTIN="help"/>
-<node CREATED="1502390340193" ID="ID_1491902996" MODIFIED="1502390520900" TEXT="Con">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1502390353887" ID="ID_1015749080" MODIFIED="1502390399552">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      wenn die Queue voll ist
-    </p>
-    <p>
-      wird erst alles Andere abgearbeitet
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-<node CREATED="1502390402273" ID="ID_929098721" MODIFIED="1502390450088">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      wenn UI-Thread blockt/verhungert,
-    </p>
-    <p>
-      kommt der rettende Shutdown <i>gar nicht</i>&#160;durch
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-</node>
-<node CREATED="1502390334890" ID="ID_1454460947" MODIFIED="1502390517936" TEXT="Pro">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1502390463664" ID="ID_1786963429" MODIFIED="1502390472955" TEXT="einfach zu implementieren"/>
-<node CREATED="1502390473567" ID="ID_1776620772" MODIFIED="1502390484658" TEXT="alle Glib::Dispatcher nutzen die gleiche Pipe"/>
-<node CREATED="1502390485294" ID="ID_146294589" MODIFIED="1502390506006" TEXT="...d.h. echte Alternative m&#xfc;&#xdf;te aufwendig zu Fu&#xdf; programmiert werden"/>
-</node>
-</node>
-<node CREATED="1502390572106" ID="ID_1872668444" MODIFIED="1502390580973" TEXT="zus&#xe4;tzlich noch eine Benachrichtigung">
-<node CREATED="1502390583289" ID="ID_741614829" MODIFIED="1502390877875" TEXT="an die UI-Nachrichtenbox">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1502390886681" ID="ID_985994192" MODIFIED="1502390895409" TEXT="f&#xfc;hre Benachrichtiguns-Level ein">
-<icon BUILTIN="button_ok"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502390603674" ID="ID_125356908" MODIFIED="1502390862378" TEXT="#1102 : build a message display box in the UI">
-<arrowlink COLOR="#8c8bae" DESTINATION="ID_1926586811" ENDARROW="Default" ENDINCLINATION="1456;47;" ID="Arrow_ID_1593124756" STARTARROW="None" STARTINCLINATION="-839;779;"/>
-<icon BUILTIN="hourglass"/>
-</node>
-</node>
-</node>
-<node CREATED="1501939193031" HGAP="3" ID="ID_1045913810" MODIFIED="1501939200829" TEXT="Test" VSHIFT="20">
-<icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1501939204166" ID="ID_383444966" MODIFIED="1502075950777" TEXT="CallQueue_test">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1501946847700" ID="ID_1917302142" MODIFIED="1501951434466" TEXT="basic">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1501946852555" ID="ID_1617455971" MODIFIED="1501951436667" TEXT="mehrere">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1501946856587" ID="ID_1780067399" MODIFIED="1502075941722" TEXT="Stre&#xdf;">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501939212693" ID="ID_1007296291" MODIFIED="1502075967876" TEXT="#1099 DemoGuiRoundtrip">
-<linktarget COLOR="#e5e53f" DESTINATION="ID_1007296291" ENDARROW="Default" ENDINCLINATION="-931;34;" ID="Arrow_ID_1440938291" SOURCE="ID_1925240675" STARTARROW="None" STARTINCLINATION="-51;592;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1501939235834" ID="ID_1160414548" MODIFIED="1501939239653" TEXT="Men&#xfc;-Eintrag"/>
-<node CREATED="1501939240217" ID="ID_325602880" MODIFIED="1501939252187" TEXT="triggert Proc-Command"/>
-<node CREATED="1501939252991" ID="ID_31140909" MODIFIED="1501939261802" TEXT="dieses sendet Mark zur&#xfc;ck"/>
-<node CREATED="1501939263030" ID="ID_381890207" MODIFIED="1501939271161" TEXT="ein Widget im UI reagiert"/>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1501804850624" ID="ID_1451522246" MODIFIED="1502375273163" TEXT="Zugang zum UiManager">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1502375214162" ID="ID_267170664" MODIFIED="1502375240978" TEXT="durch direkte Verdrahtung">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1502375221129" ID="ID_368784036" MODIFIED="1502375270932" TEXT="dies m&#xf6;glich machen...">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...indem der NotificatonService nun vom UI-Manager gemanaged wird :)
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488419591265" HGAP="75" ID="ID_471609909" MODIFIED="1501804660879" VSHIFT="14">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      zieht komplett-Umbau
-    </p>
-    <p>
-      des Gui-top-Level nach sich
-    </p>
-  </body>
-</html></richcontent>
-<arrowlink COLOR="#851358" DESTINATION="ID_548720270" ENDARROW="Default" ENDINCLINATION="-663;-614;" ID="Arrow_ID_325703166" STARTARROW="None" STARTINCLINATION="1209;488;"/>
+<node CREATED="1501854084264" HGAP="-42" ID="ID_1333991907" MODIFIED="1502410699395" TEXT="allgemein...." VSHIFT="-60">
 <icon BUILTIN="messagebox_warning"/>
-<node COLOR="#338800" CREATED="1485118623744" FOLDED="true" HGAP="23" ID="ID_392996871" MODIFIED="1501776670790" TEXT="#1032 use gtk::Application instead of gtk::Main" VSHIFT="11">
-<arrowlink COLOR="#ae1856" DESTINATION="ID_206480879" ENDARROW="Default" ENDINCLINATION="715;0;" ID="Arrow_ID_926482654" STARTARROW="Default" STARTINCLINATION="134;383;"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1485118668802" ID="ID_575152579" MODIFIED="1485118676149" TEXT="WindowManager verwendet gtk::Main"/>
-<node CREATED="1485118677425" ID="ID_1952311126" MODIFIED="1485118685915" TEXT="genau, um die Applikation runterzufahren"/>
-<node CREATED="1485124031945" ID="ID_329247026" MODIFIED="1493753799315" TEXT="Gtk::Application">
-<node CREATED="1485124038768" ID="ID_764043255" MODIFIED="1485124045970" TEXT="ist kein Singleton"/>
-<node CREATED="1485124046775" ID="ID_505212945" MODIFIED="1485124051706" TEXT="hat keinen public ctor"/>
-<node CREATED="1485124052149" ID="ID_799710500" MODIFIED="1485124060680" TEXT="mit create erstellt -&gt; smart ptr"/>
-<node CREATED="1485124063732" ID="ID_1584553859" MODIFIED="1493753804619" TEXT="erbt von Gio::Application">
-<node CREATED="1485124070131" ID="ID_1720443251" MODIFIED="1485124077430" TEXT="wrappt g_application"/>
-</node>
-</node>
-<node CREATED="1485124084465" ID="ID_660066920" MODIFIED="1493753807869" TEXT="how-to">
-<icon BUILTIN="help"/>
-<node CREATED="1485124094936" ID="ID_1446212765" MODIFIED="1493753811609" TEXT="offiziell">
-<node CREATED="1485124098920" ID="ID_1783958965" MODIFIED="1485124109274" TEXT="auto app = Application::create"/>
-<node CREATED="1485124111806" ID="ID_231977368" MODIFIED="1485124114842" TEXT="app-&gt;run"/>
-</node>
-<node CREATED="1485124120220" ID="ID_1639025787" MODIFIED="1493753819786" TEXT="von Application erben">
-<icon BUILTIN="help"/>
-<node CREATED="1485124129436" ID="ID_1540860407" MODIFIED="1485124141373" TEXT="laut Quellcode spricht nichts dagegen"/>
-<node CREATED="1485124142178" ID="ID_1048261084" MODIFIED="1487275489352" TEXT="man sollte aber keine Methoden &#xfc;berschreiben">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...nur eine <i>heuristische </i>Vermutung von mir
-    </p>
-    <p>
-      st&#252;tzt sich auf folgenden Quellcode
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Application::Application(const Glib::ustring&amp; application_id, Gio::ApplicationFlags flags)
-    </p>
-    <p>
-      :
-    </p>
-    <p>
-      &#160;&#160;// Mark this class as non-derived to allow C++ vfuncs to be skipped.
-    </p>
-    <p>
-      &#160;&#160;//Note that GApplication complains about &quot;&quot; but allows NULL (0), so we avoid passing &quot;&quot;.
-    </p>
-    <p>
-      &#160;&#160;Glib::ObjectBase(0),
-    </p>
-    <p>
-      &#160;&#160;Gio::Application(Glib::ConstructParams(custom_class_init(), &quot;application_id&quot;, (application_id.empty() ? 0 : application_id.c_str()), &quot;flags&quot;, GApplicationFlags(flags), static_cast&lt;char*&gt;(0))),
-    </p>
-    <p>
-      &#160;&#160;m_argc(0),
-    </p>
-    <p>
-      &#160;&#160;m_argv(0)
-    </p>
-    <p>
-      {
-    </p>
-    <p>
-      &#160;&#160;gtk_init(0, 0);
-    </p>
-    <p>
-      }
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-</node>
-</node>
-<node CREATED="1485124284856" ID="ID_473768869" MODIFIED="1493754788426" TEXT="Windows selber managen">
-<icon BUILTIN="help"/>
-<node CREATED="1485124296582" ID="ID_628648705" MODIFIED="1485124304593" TEXT="gtk::Application verwaltet Fensterliste"/>
-<node CREATED="1485124305157" ID="ID_1632068669" MODIFIED="1485124313311" TEXT="schlie&#xdf;t sich automatisch, wenn das letzte Fenster zu ist"/>
-<node CREATED="1485124315795" ID="ID_178656069" MODIFIED="1485124323478" TEXT="unser WindowManager macht das Gleiche"/>
-</node>
-<node CREATED="1493754789137" ID="ID_1903744710" MODIFIED="1493754798120" TEXT="kommt mir komisch vor">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1493754799439" ID="ID_288205807" MODIFIED="1493754807738" TEXT="das &quot;riecht&quot; nach Framework"/>
-<node CREATED="1493754808373" ID="ID_998804989" MODIFIED="1493754817376" TEXT="&quot;wir machen bequem alles f&#xfc;r Sie&quot;">
-<node CREATED="1493759500422" ID="ID_378870766" MODIFIED="1493759546709" TEXT="macht mir Angst">
-<icon BUILTIN="smily_bad"/>
-</node>
-<node CREATED="1493759504742" ID="ID_1800184805" MODIFIED="1493759508010" TEXT="Kontrollverlust">
-<node CREATED="1493759564302" ID="ID_409429771" MODIFIED="1493759571785" TEXT="undurchsichtig"/>
-<node CREATED="1493759572261" ID="ID_1741586689" MODIFIED="1493759580624" TEXT="mehrere Ebenen von Frameworks &#xfc;bereinander"/>
-<node CREATED="1493759581123" ID="ID_1296466414" MODIFIED="1493759591685" TEXT="ich traue den Gnome-Leuten nicht &#xfc;ber den Weg"/>
-</node>
-</node>
-<node CREATED="1493754820476" ID="ID_608560419" MODIFIED="1495218626709" TEXT="brauche ich &#xfc;berhaupt eine Gtk::Application">
-<icon BUILTIN="help"/>
-<node CREATED="1493756483852" ID="ID_1428028027" MODIFIED="1493756499302" TEXT="naja, man kann GTK zu Fu&#xdf; verwenden"/>
-<node CREATED="1493756499745" ID="ID_633405815" MODIFIED="1493756518682" TEXT="aber gtk::Application zeigt, wie"/>
-<node CREATED="1493759629357" ID="ID_1297670007" MODIFIED="1493759644070" TEXT="gtk::Application">
-<node CREATED="1493759644755" ID="ID_224674022" MODIFIED="1493759648790" TEXT="ist eine Window-Liste"/>
-<node CREATED="1493759717704" ID="ID_697856504" MODIFIED="1493759739640" TEXT="initialisiert GTK, GLib, GIO"/>
-<node CREATED="1493759649754" ID="ID_898599245" MODIFIED="1493759656269" TEXT="schlie&#xdf;t, wenn letztes Fenster zu"/>
-<node CREATED="1493759699387" ID="ID_1249589577" MODIFIED="1493759741629" TEXT="single application Instance"/>
-<node CREATED="1493759656913" ID="ID_658938675" MODIFIED="1493759696623" TEXT="Desktop-Integration"/>
-</node>
-<node CREATED="1493759747148" ID="ID_1721295375" MODIFIED="1493760546219" TEXT="das kann ich doch zu Fu&#xdf; auch machen">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-<node CREATED="1495215099003" ID="ID_1971256545" MODIFIED="1495218634172" TEXT="brauche ich &#xfc;berhaupt eine Gio::Application">
-<icon BUILTIN="help"/>
-<node CREATED="1495215111775" ID="ID_1003964020" MODIFIED="1495215119282" TEXT="initialisiert das Framework"/>
-<node CREATED="1495215119685" ID="ID_1761204495" MODIFIED="1495215128480" TEXT="stellt eine dBus-Verbindung her"/>
-<node CREATED="1495215129564" ID="ID_973272722" MODIFIED="1495215147125" TEXT="ist eine gio::ActionGroup">
-<node CREATED="1495215149281" ID="ID_1774523135" MODIFIED="1495215163883" TEXT="man kann Aktionen hinzuf&#xfc;gen"/>
-<node CREATED="1495215164279" ID="ID_1315941470" MODIFIED="1495215177034" TEXT="diese Arbeitet mit einem ApplicationWindow zusammen"/>
-<node CREATED="1495215177478" ID="ID_250116811" MODIFIED="1495215190439" TEXT="beachte: nicht GtkWindow, sondern ApplicationWindow (Subclass)"/>
-</node>
-<node CREATED="1495215193500" ID="ID_503299515" MODIFIED="1495215207982" TEXT="Zweck (Vermutung)">
-<node CREATED="1495215209066" ID="ID_1153171656" MODIFIED="1495215214357" TEXT="Desktop-Integration"/>
-<node CREATED="1495215214824" ID="ID_1385031644" MODIFIED="1495215221132" TEXT="Grenzen der Applikation aufweichen"/>
-<node CREATED="1495215221624" ID="ID_297065945" MODIFIED="1495215231226" TEXT="Aktionen direkt in den Desktiop integrieren"/>
-</node>
-<node CREATED="1495215237213" ID="ID_745229887" MODIFIED="1495215259353" TEXT="nichts von dem ist f&#xfc;r uns relevant, manches davon st&#xf6;rt">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1495218672747" HGAP="-13" ID="ID_1786316132" MODIFIED="1495218683283" TEXT="Beschlu&#xdf;" VSHIFT="15">
-<icon BUILTIN="yes"/>
-<node COLOR="#2f1d56" CREATED="1495218684994" ID="ID_101574501" MODIFIED="1495218819229" TEXT="vorerst defensiv vorgehen">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-</node>
-<node CREATED="1495218699712" ID="ID_1332523704" MODIFIED="1495233774800" TEXT="den Code aus Gtk::Main in unsere Codebasis &#xfc;bernehmen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1495218714230" ID="ID_1371091843" MODIFIED="1495218730415" TEXT="Vorsicht mit Action / ActionGroup">
-<node CREATED="1495218731435" ID="ID_1744881610" MODIFIED="1495218744350" TEXT="noch nicht deprecated"/>
-<node CREATED="1495218744961" ID="ID_97034293" MODIFIED="1495218759875" TEXT="aber Abl&#xf6;sung durch Gio::SimpleAction geplant"/>
-<node CREATED="1495218770694" ID="ID_644528853" MODIFIED="1495218798054" TEXT="Warnung: mit dem neuen Gtk::ApplicationWindow verkoppelt">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485130302095" HGAP="28" ID="ID_506541774" MODIFIED="1493752954436" TEXT="neuer UiManager" VSHIFT="14">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1485452508180" ID="ID_549617075" MODIFIED="1493762452014" TEXT="ist front-end daf&#xfc;r">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1485130321924" ID="ID_46787934" MODIFIED="1485130327728" TEXT="Funktion umziehen"/>
-<node CREATED="1485130328324" ID="ID_874057448" MODIFIED="1485130334983" TEXT="umschreiben auf gtk::Application"/>
-<node CREATED="1485130336235" ID="ID_125642886" MODIFIED="1485130353981" TEXT="Application-Objekt durchgeben"/>
-<node CREATED="1485130355377" ID="ID_175334188" MODIFIED="1485130395487" TEXT="Zugriff f&#xfc;r NotificationFacade erm&#xf6;glichen"/>
-</node>
-<node CREATED="1485452536138" ID="ID_599315721" MODIFIED="1501792862651" TEXT="wird daf&#xfc;r zust&#xe4;ndig">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_599315721" ENDARROW="Default" ENDINCLINATION="-137;-12;" ID="Arrow_ID_1743989671" SOURCE="ID_842367237" STARTARROW="None" STARTINCLINATION="-18;215;"/>
-<linktarget COLOR="#667e90" DESTINATION="ID_599315721" ENDARROW="None" ENDINCLINATION="41;328;" ID="Arrow_ID_1963473410" SOURCE="ID_1478388503" STARTARROW="Default" STARTINCLINATION="943;-58;"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1493762472175" ID="ID_964179569" MODIFIED="1493762489856" TEXT="verwendet Fenster-Liste"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493762490205" ID="ID_869056268" MODIFIED="1495234845817" TEXT="alle noch offenen Fenster verbergen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1495234856782" ID="ID_888480230" MODIFIED="1495234864912" TEXT="machen wir bisher nicht"/>
-<node CREATED="1495234865717" ID="ID_221447493" MODIFIED="1495234889293" TEXT="ist das notwendig?"/>
-</node>
-<node CREATED="1493762498476" ID="ID_1290148687" MODIFIED="1493762526412" TEXT="direkt gtk_main_quit aufrufen">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1493762556755" HGAP="34" ID="ID_651403872" MODIFIED="1493768592310" TEXT="siehe" VSHIFT="16">
-<node CREATED="1493762559339" ID="ID_742529116" MODIFIED="1493762565286" TEXT="altes Gtk::Main::quit"/>
-<node CREATED="1493762568266" ID="ID_902609710" MODIFIED="1493762714257" TEXT="Gio::Application::quit"/>
-</node>
-</node>
-<node CREATED="1493762951293" HGAP="69" ID="ID_1772990353" MODIFIED="1493770485773" TEXT="Entscheidung">
-<node CREATED="1493762968018" ID="ID_1056007574" MODIFIED="1493762986624" TEXT="brauchen wir ein Application GObject?">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1493762987751" ID="ID_236361713" MODIFIED="1493762997090" TEXT="Gtk::Main funktioniert ohne"/>
-<node CREATED="1493763356907" ID="ID_981398529" MODIFIED="1493763414605" TEXT="aber">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1493763398798" ID="ID_760049978" MODIFIED="1493768456359" TEXT="Gtk::Main ist deprecated"/>
-<node CREATED="1493763393720" ID="ID_112295077" MODIFIED="1493763393720" TEXT="wohin entwickelt sich GTK?"/>
-</node>
-<node CREATED="1493768460811" ID="ID_1862271811" MODIFIED="1493768464414" TEXT="Alternativen">
-<node CREATED="1493768465482" ID="ID_1159523698" MODIFIED="1495234928963" TEXT="gtk_main aufrufen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1493768484007" ID="ID_384827553" MODIFIED="1495234932771" TEXT="von einem Gio::Application ableiten">
-<arrowlink COLOR="#6d7495" DESTINATION="ID_1476863246" ENDARROW="Default" ENDINCLINATION="1126;-247;" ID="Arrow_ID_1941890495" STARTARROW="None" STARTINCLINATION="-231;14;"/>
-<icon BUILTIN="button_cancel"/>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493770418552" HGAP="68" ID="ID_346412093" MODIFIED="1495234945038" TEXT="Schritte" VSHIFT="37">
-<linktarget COLOR="#8091a3" DESTINATION="ID_346412093" ENDARROW="Default" ENDINCLINATION="-205;193;" ID="Arrow_ID_824195065" SOURCE="ID_1810145809" STARTARROW="None" STARTINCLINATION="430;0;"/>
-<icon BUILTIN="idea"/>
-<node CREATED="1493770423008" ID="ID_124348052" MODIFIED="1493770490126" TEXT="erst mal Gtk::Main hierher schieben">
-<icon BUILTIN="full-1"/>
-</node>
-<node CREATED="1495215269657" ID="ID_850682198" MODIFIED="1495215315827" TEXT="Implementierung aus Gtk::Main &#xfc;bernemen">
-<icon BUILTIN="full-2"/>
-</node>
-<node CREATED="1493770431607" ID="ID_117937910" MODIFIED="1495215311571" TEXT="(bei Bedarf) sp&#xe4;ter dann durch Gio::Application ersetzen">
-<icon BUILTIN="full-3"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1484797808349" ID="ID_389264738" MODIFIED="1502403197769" STYLE="fork" TEXT="weitere Funktionen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1501854084264" HGAP="71" ID="ID_1333991907" MODIFIED="1502403195803" TEXT="allgemein...." VSHIFT="-43">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1501854094710" ID="ID_1146157818" MODIFIED="1502403195803" TEXT="Synchronisation">
-<arrowlink COLOR="#a75677" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="-117;347;" ID="Arrow_ID_274836249" STARTARROW="None" STARTINCLINATION="-501;-573;"/>
+<node CREATED="1501854094710" ID="ID_1146157818" MODIFIED="1502410495975" TEXT="Synchronisation">
+<arrowlink COLOR="#a75677" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="-317;-24;" ID="Arrow_ID_274836249" STARTARROW="None" STARTINCLINATION="-647;-66;"/>
 </node>
 <node CREATED="1501854114284" ID="ID_168912186" MODIFIED="1502403195803" TEXT="Lebenszyklus"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502411488645" ID="ID_1875294174" MODIFIED="1502411550530" TEXT="Fehler">
+<linktarget COLOR="#9c7088" DESTINATION="ID_1875294174" ENDARROW="Default" ENDINCLINATION="1264;-185;" ID="Arrow_ID_245240331" SOURCE="ID_1177399909" STARTARROW="None" STARTINCLINATION="285;0;"/>
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1502411559060" ID="ID_1282973269" MODIFIED="1502411569102" TEXT="GTK nicht exception-safe">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1502411571690" ID="ID_878676751" MODIFIED="1502411590626" TEXT="aber was tun wenn....">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1502411595263" ID="ID_58102462" MODIFIED="1502411601354" TEXT="Fallunterscheidung">
+<node CREATED="1502411604054" ID="ID_1705249614" MODIFIED="1502411612160" TEXT="Notify harmlos"/>
+<node CREATED="1502411612700" ID="ID_1951009863" MODIFIED="1502411616783" TEXT="Diff darf nicht scheitern"/>
+</node>
+</node>
 </node>
 <node CREATED="1484797813373" ID="ID_536855363" MODIFIED="1502403195803" TEXT="generische Nachricht"/>
 <node CREATED="1484797818780" ID="ID_354397333" MODIFIED="1502403195803" TEXT="state mark">
@@ -1431,9 +867,50 @@
 </node>
 </node>
 <node CREATED="1484797822403" ID="ID_364545191" MODIFIED="1502403195803" TEXT="Diff">
-<node CREATED="1484799660822" ID="ID_1288003894" MODIFIED="1502403195803" TEXT="TreeMutator binden"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502401930856" ID="ID_634125084" MODIFIED="1502403195803" TEXT="#1066 concept how to hand over diff messages">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502401930856" ID="ID_634125084" MODIFIED="1502411444653" TEXT="#1066 concept how to hand over diff messages">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502410099141" ID="ID_1388523431" MODIFIED="1502410145757" TEXT="unn&#xf6;tig: zwei Abstraktions-Typen">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1502410126058" ID="ID_30550435" MODIFIED="1502410130301" TEXT="MutationMessage"/>
+<node CREATED="1502410130889" ID="ID_1402431306" MODIFIED="1502410134844" TEXT="DiffMessage"/>
+</node>
+<node CREATED="1502410149463" ID="ID_1909971032" MODIFIED="1502410164196" TEXT="Entscheidung f&#xfc;r DiffMessage">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502410165980" ID="ID_1450795292" MODIFIED="1502410361731" TEXT="MutationMessage entfernen">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1502410176619" ID="ID_1188430411" MODIFIED="1502410189933" TEXT="AbstractTangible_test umschreiben"/>
+<node CREATED="1502410190737" ID="ID_1036564813" MODIFIED="1502410317567" TEXT="operator string() in DiffMessage &#xfc;bernehmen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist n&#252;tzlich zur Diagnose,
+    </p>
+    <ul>
+      <li>
+        aber l&#228;&#223;t sich das &#252;berhaupt auf IterSource &#252;bertragen?
+      </li>
+      <li>
+        war es &#252;berhaupt je gerechtferigt? zu starke Annahme &#252;ber den Diff-Erzeuger!
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1502410328279" ID="ID_1577461232" MODIFIED="1502410347776" TEXT="Tree-Diff-Aplikator direkt in Nexus verschieben"/>
+<node CREATED="1502410351284" ID="ID_845679527" MODIFIED="1502410355455" TEXT="BusTerm-API &#xe4;ndern"/>
+</node>
+</node>
+<node CREATED="1484799660822" ID="ID_1288003894" MODIFIED="1502410724019" TEXT="TreeMutator binden">
+<node CREATED="1502410730274" ID="ID_1631270974" MODIFIED="1502410738148" TEXT="passiert bisher in MutationMessage"/>
+<node CREATED="1502410738992" ID="ID_1626925051" MODIFIED="1502410751111" TEXT="direkt in den Nexus verschieben">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1484877585605" ID="ID_101718446" MODIFIED="1502403195803" TEXT="verwende MutationMessage">
 <icon BUILTIN="yes"/>
@@ -1619,12 +1096,590 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493753249399" HGAP="75" ID="ID_1023343635" MODIFIED="1502411050829" TEXT="#1098 hand-over in UI-Thread" VSHIFT="61">
+<linktarget COLOR="#a75677" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="-317;-24;" ID="Arrow_ID_274836249" SOURCE="ID_1146157818" STARTARROW="None" STARTINCLINATION="-647;-66;"/>
+<linktarget COLOR="#b27176" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="21;233;" ID="Arrow_ID_1372135725" SOURCE="ID_995145542" STARTARROW="None" STARTINCLINATION="237;0;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1501804992301" ID="ID_1647263044" MODIFIED="1501804997702" TEXT="schedule event"/>
+<node CREATED="1501804985286" ID="ID_320977714" MODIFIED="1501804991521" TEXT="GTK-Mechanismus">
+<node CREATED="1501850591393" ID="ID_1831316800" MODIFIED="1501850596037" TEXT="Glib::Dispatcher"/>
+<node CREATED="1501850603736" ID="ID_1030340631" MODIFIED="1501850612690" TEXT="im UI-Thread erzeugen und binden"/>
+<node CREATED="1501850614630" ID="ID_196299293" MODIFIED="1501850630152" TEXT="emit() -&gt; event im UI-Thread"/>
 </node>
-</node>
-<node CREATED="1484877839299" FOLDED="true" HGAP="26" ID="ID_957622878" MODIFIED="1488423342540" TEXT="Asynchrones Protokoll" VSHIFT="1">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501850632636" ID="ID_431682708" MODIFIED="1501850676730" TEXT="technische Probleme">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1484877856640" ID="ID_1256835676" MODIFIED="1484877867427" TEXT="bedenke: alle Aktionen m&#xfc;ssen in den Event-Thread"/>
-<node CREATED="1484877868015" ID="ID_1612427727" MODIFIED="1484877878730" TEXT="&#xfc;ber die Rolle des GUI-Modells nachdenken!"/>
+<node CREATED="1501850684373" ID="ID_1688212376" MODIFIED="1501850862662" TEXT="ein Dispatcher pro Call">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      jede Facade-Funktion brauch einen Dispatcher
+    </p>
+    <p>
+      Das wird eine ganze Me
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1501850754827" ID="ID_314216229" MODIFIED="1501850773035" TEXT="jede Facade-Funktion brauch einen Dispatcher">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1501850863525" ID="ID_1439490807" MODIFIED="1501850866985" TEXT="das wird eine Menge"/>
+<node CREATED="1501850867597" ID="ID_141225152" MODIFIED="1501850875439" TEXT="alle Dispatcher haben eine gemeinsame Queue"/>
+<node CREATED="1501850880179" ID="ID_745997733" MODIFIED="1501850886414" TEXT="m&#xf6;gliche contention-Probleme"/>
+</node>
+<node CREATED="1501850690748" ID="ID_1995715844" MODIFIED="1501850702335" TEXT="Erzeugen der Dispatcher">
+<node CREATED="1501850920950" ID="ID_1529426036" MODIFIED="1501850931016" TEXT="mu&#xdf; im UI-Thread erfolgen"/>
+<node CREATED="1501850933596" ID="ID_620574396" MODIFIED="1501850943056">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>bevor</i>&#160;die Facade ge&#246;ffnet wir
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1501850677790" ID="ID_1195250454" MODIFIED="1501850958231" TEXT="Argument&#xfc;bergabe">
+<node CREATED="1501850716049" ID="ID_104637334" MODIFIED="1501850724155" TEXT="emit() ist void(void)"/>
+<node CREATED="1501850734414" ID="ID_994424125" MODIFIED="1501850745786">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und arbeitet <i>asynchron</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1501850967855" ID="ID_859055846" MODIFIED="1501850982429">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Argument-Storage
+    </p>
+    <p>
+      organisieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1501867225983" ID="ID_1121867075" MODIFIED="1501867252021">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      brauche dedizierten <b>Dispatcher</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1501938738836" ID="ID_1257499857" MODIFIED="1501951450697" TEXT="Helper: CallQueue">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1501938715247" ID="ID_1286525769" MODIFIED="1501938725574" TEXT="simplistic">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1501938699841" ID="ID_1077640328" MODIFIED="1501938704702" TEXT="std::function"/>
+<node CREATED="1501938690626" ID="ID_353231581" MODIFIED="1501938729247" TEXT="thread safe queue"/>
+<node CREATED="1501938705321" ID="ID_1924064403" MODIFIED="1501938711076" TEXT="lambdas f&#xfc;r Argument-binding"/>
+</node>
+<node COLOR="#338800" CREATED="1501938776839" ID="ID_1031878628" MODIFIED="1502385810866" TEXT="Convenience-Wrapper">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1501939110138" ID="ID_203135379" MODIFIED="1502385815083" TEXT="Lambda konstruieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1501939132431" ID="ID_1400757157" MODIFIED="1502385817834" TEXT="Funktion zum Triggern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1501939149837" ID="ID_1733976265" MODIFIED="1502385820938" TEXT="diese an Glib::Dispatcher binden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502404797300" ID="ID_1177399909" MODIFIED="1502411550530" TEXT="Exceptions fangen">
+<arrowlink COLOR="#9c7088" DESTINATION="ID_1875294174" ENDARROW="Default" ENDINCLINATION="1264;-185;" ID="Arrow_ID_245240331" STARTARROW="None" STARTINCLINATION="285;0;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501939174506" ID="ID_504999068" MODIFIED="1501939191040" TEXT="in NotificationService integrieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1502375098210" ID="ID_581509556" MODIFIED="1502375109992" STYLE="fork" TEXT="als PImpl">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1502375146395" ID="ID_144811928" MODIFIED="1502378036357" TEXT="CallQueue einrichten">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1502375120551" ID="ID_1281399419" MODIFIED="1502385766022" TEXT="Glib::Dispatcher verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1502375134501" ID="ID_1011463592" MODIFIED="1502375142424" TEXT="Aufrufe in Lamdas verpacken"/>
+</node>
+<node COLOR="#338800" CREATED="1502375294344" FOLDED="true" ID="ID_640199096" MODIFIED="1502390909880" TEXT="Spezialbehandlung f&#xfc;r Shutdown">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1502375312469" ID="ID_1075926054" MODIFIED="1502390553943" TEXT="ironischerweise...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...k&#246;nnte das am Ende nicht sinnvoll sein,
+    </p>
+    <p>
+      speziell den UI-Shutdown-Trigger &#252;ber den neuen Mechanismus laufen zu lassen,
+    </p>
+    <p>
+      obwohl jener doch genau der Anla&#223; war, diesen neuen Mechanismus zu bauen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1502390322659" ID="ID_194166182" MODIFIED="1502390333142" TEXT="den neuen Dispatcher nutzen?">
+<icon BUILTIN="help"/>
+<node CREATED="1502390340193" ID="ID_1491902996" MODIFIED="1502390520900" TEXT="Con">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1502390353887" ID="ID_1015749080" MODIFIED="1502390399552">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn die Queue voll ist
+    </p>
+    <p>
+      wird erst alles Andere abgearbeitet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1502390402273" ID="ID_929098721" MODIFIED="1502390450088">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn UI-Thread blockt/verhungert,
+    </p>
+    <p>
+      kommt der rettende Shutdown <i>gar nicht</i>&#160;durch
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1502390334890" ID="ID_1454460947" MODIFIED="1502390517936" TEXT="Pro">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1502390463664" ID="ID_1786963429" MODIFIED="1502390472955" TEXT="einfach zu implementieren"/>
+<node CREATED="1502390473567" ID="ID_1776620772" MODIFIED="1502390484658" TEXT="alle Glib::Dispatcher nutzen die gleiche Pipe"/>
+<node CREATED="1502390485294" ID="ID_146294589" MODIFIED="1502390506006" TEXT="...d.h. echte Alternative m&#xfc;&#xdf;te aufwendig zu Fu&#xdf; programmiert werden"/>
+</node>
+</node>
+<node CREATED="1502390572106" ID="ID_1872668444" MODIFIED="1502390580973" TEXT="zus&#xe4;tzlich noch eine Benachrichtigung">
+<node CREATED="1502390583289" ID="ID_741614829" MODIFIED="1502390877875" TEXT="an die UI-Nachrichtenbox">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1502390886681" ID="ID_985994192" MODIFIED="1502390895409" TEXT="f&#xfc;hre Benachrichtiguns-Level ein">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1502390603674" ID="ID_125356908" MODIFIED="1502390862378" TEXT="#1102 : build a message display box in the UI">
+<arrowlink COLOR="#8c8bae" DESTINATION="ID_1926586811" ENDARROW="Default" ENDINCLINATION="1456;47;" ID="Arrow_ID_1593124756" STARTARROW="None" STARTINCLINATION="-839;779;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node CREATED="1501939193031" HGAP="3" ID="ID_1045913810" MODIFIED="1501939200829" TEXT="Test" VSHIFT="20">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1501939204166" ID="ID_383444966" MODIFIED="1502075950777" TEXT="CallQueue_test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1501946847700" ID="ID_1917302142" MODIFIED="1501951434466" TEXT="basic">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1501946852555" ID="ID_1617455971" MODIFIED="1501951436667" TEXT="mehrere">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1501946856587" ID="ID_1780067399" MODIFIED="1502075941722" TEXT="Stre&#xdf;">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501939212693" ID="ID_1007296291" MODIFIED="1502075967876" TEXT="#1099 DemoGuiRoundtrip">
+<linktarget COLOR="#e5e53f" DESTINATION="ID_1007296291" ENDARROW="Default" ENDINCLINATION="-931;34;" ID="Arrow_ID_1440938291" SOURCE="ID_1925240675" STARTARROW="None" STARTINCLINATION="-51;592;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1501939235834" ID="ID_1160414548" MODIFIED="1501939239653" TEXT="Men&#xfc;-Eintrag"/>
+<node CREATED="1501939240217" ID="ID_325602880" MODIFIED="1501939252187" TEXT="triggert Proc-Command"/>
+<node CREATED="1501939252991" ID="ID_31140909" MODIFIED="1501939261802" TEXT="dieses sendet Mark zur&#xfc;ck"/>
+<node CREATED="1501939263030" ID="ID_381890207" MODIFIED="1501939271161" TEXT="ein Widget im UI reagiert"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1484797684438" HGAP="21" ID="ID_932852399" MODIFIED="1502410529490" TEXT="GUI-Shutdown implementieren" VSHIFT="13">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bisher k&#246;nnen wir das GUI nur <i>aktiv intern</i>&#160;schlie&#223;en,
+    </p>
+    <p>
+      indem wir ein GTK-Signal erzeugen, das das Hauptfenster schlie&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1485116867963" FOLDED="true" ID="ID_1146024699" MODIFIED="1501804646768" TEXT="bisher kann man nur das Fenster schlie&#xdf;en">
+<icon BUILTIN="info"/>
+<node CREATED="1485116884925" ID="ID_296160451" MODIFIED="1485116898396" TEXT="wie funktioniert das?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1485116901507" ID="ID_1272809751" MODIFIED="1501781674936" TEXT="WindowManager">
+<node COLOR="#338800" CREATED="1485126609878" ID="ID_649614174" MODIFIED="1501781754252" TEXT="#1064 investigate WindowManager lifecycle">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1485116921072" ID="ID_1191743111" MODIFIED="1485116925722" TEXT="close Action"/>
+</node>
+<node CREATED="1484797749237" ID="ID_1654016697" MODIFIED="1501804599526" TEXT="wie kann man GTK-UI explizit schlie&#xdf;en?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1501777017858" ID="ID_842367237" MODIFIED="1501804594790" TEXT="wer macht das in unserem GUI?">
+<arrowlink DESTINATION="ID_599315721" ENDARROW="Default" ENDINCLINATION="-137;-12;" ID="Arrow_ID_1743989671" STARTARROW="None" STARTINCLINATION="-18;215;"/>
+<icon BUILTIN="help"/>
+</node>
+<node COLOR="#763434" CREATED="1484797766035" FOLDED="true" ID="ID_1740926324" MODIFIED="1502411131287" TEXT="wie signalisieren wir das">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1501781461059" ID="ID_1041497316" MODIFIED="1501781480827" TEXT="wie den UiManager erreichen?">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1501781776041" ID="ID_1345710498" MODIFIED="1501804609188" TEXT="magische Nachricht?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1501782361331" ID="ID_1281813611" MODIFIED="1501782375842" TEXT="an wen addressieren?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1501782381185" ID="ID_427836826" MODIFIED="1501782397203" TEXT="mu&#xdf; sinnvoll sein">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1501782399454" ID="ID_1238852873" MODIFIED="1501782403225" TEXT="InteractionDirector"/>
+<node CREATED="1501784310336" ID="ID_455705917" MODIFIED="1501784323253" TEXT="was f&#xfc;r eine Nachricht?">
+<icon BUILTIN="help"/>
+<node CREATED="1501784324670" ID="ID_202531654" MODIFIED="1501784331185" TEXT="mu&#xdf; in das Protokoll passen"/>
+<node CREATED="1501784333946" ID="ID_238263434" MODIFIED="1501784338936" TEXT="sollte nicht willk&#xfc;rlich sein"/>
+<node CREATED="1501804506790" ID="ID_985808643" MODIFIED="1501804512731" TEXT="gibts nicht">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1501781769834" ID="ID_1836544616" MODIFIED="1501866470036" TEXT="direktes Wiring?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1501866473852" ID="ID_1346430403" MODIFIED="1501866480351" TEXT="direkt den UiManager aufrufen"/>
+<node CREATED="1501866480963" ID="ID_361033579" MODIFIED="1501866493949" TEXT="dazu die NotificationFacade verschoben"/>
+<node CREATED="1501866494441" ID="ID_540781053" MODIFIED="1501866503828" TEXT="wird jetzt vom UiManager gemanaged"/>
+</node>
+</node>
+<node CREATED="1501792024717" ID="ID_1914400893" MODIFIED="1501792029128" TEXT="wer ist &quot;wir&quot;?">
+<node CREATED="1501792033763" ID="ID_1293774586" MODIFIED="1501792040334" TEXT="der Subsystem-Lebenszyklus"/>
+<node CREATED="1501792041586" ID="ID_1326580750" MODIFIED="1501792051136" TEXT="sonst geht das Niemanden was an!">
+<icon BUILTIN="yes"/>
+<node CREATED="1501792062904" ID="ID_181717876" MODIFIED="1501792067954" TEXT="Subsysteme sind autark"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501792086244" ID="ID_233471026" MODIFIED="1501804923768" TEXT="wir wollen keine globale Ebene">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das war genau der Kern der &quot;Plugin-Debatte&quot;.
+    </p>
+    <p>
+      Eine solche globale, flache, dynamisch gebundene Ebene
+    </p>
+    <p>
+      klingt nach <i>wahnsinnigen M&#246;glichkeiten</i>, aber nur solange, bis man sich
+    </p>
+    <p>
+      eine einzige Funktion konkret durchdenkt: es l&#228;uft auf Spaghetti-Code hinaus
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1501804804734" HGAP="33" ID="ID_1925973923" MODIFIED="1502411078588" TEXT="Mechanismus zum Schlie&#xdf;en" VSHIFT="6">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1484797911392" ID="ID_286857196" MODIFIED="1502411023176" TEXT="geeigneten Mechanisums definieren">
+<linktarget COLOR="#872666" DESTINATION="ID_286857196" ENDARROW="Default" ENDINCLINATION="-684;0;" ID="Arrow_ID_1606936924" SOURCE="ID_405470138" STARTARROW="Default" STARTINCLINATION="1461;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1502410904331" ID="ID_995145542" MODIFIED="1502411058612" TEXT="brauche Dispatch in UI event-Thread">
+<arrowlink COLOR="#b27176" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="21;233;" ID="Arrow_ID_1372135725" STARTARROW="None" STARTINCLINATION="237;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1501804850624" ID="ID_1451522246" MODIFIED="1502375273163" TEXT="Zugang zum UiManager">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1502375214162" ID="ID_267170664" MODIFIED="1502375240978" TEXT="durch direkte Verdrahtung">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1502375221129" ID="ID_368784036" MODIFIED="1502375270932" TEXT="dies m&#xf6;glich machen...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...indem der NotificatonService nun vom UI-Manager gemanaged wird :)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488419591265" HGAP="75" ID="ID_471609909" MODIFIED="1502411222558" VSHIFT="14">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zieht komplett-Umbau
+    </p>
+    <p>
+      des Gui-top-Level nach sich
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#851358" DESTINATION="ID_548720270" ENDARROW="Default" ENDINCLINATION="-663;-614;" ID="Arrow_ID_325703166" STARTARROW="None" STARTINCLINATION="1110;608;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1485118623744" FOLDED="true" HGAP="23" ID="ID_392996871" MODIFIED="1501776670790" TEXT="#1032 use gtk::Application instead of gtk::Main" VSHIFT="11">
+<arrowlink COLOR="#ae1856" DESTINATION="ID_206480879" ENDARROW="Default" ENDINCLINATION="715;0;" ID="Arrow_ID_926482654" STARTARROW="Default" STARTINCLINATION="134;383;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1485118668802" ID="ID_575152579" MODIFIED="1485118676149" TEXT="WindowManager verwendet gtk::Main"/>
+<node CREATED="1485118677425" ID="ID_1952311126" MODIFIED="1485118685915" TEXT="genau, um die Applikation runterzufahren"/>
+<node CREATED="1485124031945" ID="ID_329247026" MODIFIED="1493753799315" TEXT="Gtk::Application">
+<node CREATED="1485124038768" ID="ID_764043255" MODIFIED="1485124045970" TEXT="ist kein Singleton"/>
+<node CREATED="1485124046775" ID="ID_505212945" MODIFIED="1485124051706" TEXT="hat keinen public ctor"/>
+<node CREATED="1485124052149" ID="ID_799710500" MODIFIED="1485124060680" TEXT="mit create erstellt -&gt; smart ptr"/>
+<node CREATED="1485124063732" ID="ID_1584553859" MODIFIED="1493753804619" TEXT="erbt von Gio::Application">
+<node CREATED="1485124070131" ID="ID_1720443251" MODIFIED="1485124077430" TEXT="wrappt g_application"/>
+</node>
+</node>
+<node CREATED="1485124084465" ID="ID_660066920" MODIFIED="1493753807869" TEXT="how-to">
+<icon BUILTIN="help"/>
+<node CREATED="1485124094936" ID="ID_1446212765" MODIFIED="1493753811609" TEXT="offiziell">
+<node CREATED="1485124098920" ID="ID_1783958965" MODIFIED="1485124109274" TEXT="auto app = Application::create"/>
+<node CREATED="1485124111806" ID="ID_231977368" MODIFIED="1485124114842" TEXT="app-&gt;run"/>
+</node>
+<node CREATED="1485124120220" ID="ID_1639025787" MODIFIED="1493753819786" TEXT="von Application erben">
+<icon BUILTIN="help"/>
+<node CREATED="1485124129436" ID="ID_1540860407" MODIFIED="1485124141373" TEXT="laut Quellcode spricht nichts dagegen"/>
+<node CREATED="1485124142178" ID="ID_1048261084" MODIFIED="1487275489352" TEXT="man sollte aber keine Methoden &#xfc;berschreiben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nur eine <i>heuristische </i>Vermutung von mir
+    </p>
+    <p>
+      st&#252;tzt sich auf folgenden Quellcode
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Application::Application(const Glib::ustring&amp; application_id, Gio::ApplicationFlags flags)
+    </p>
+    <p>
+      :
+    </p>
+    <p>
+      &#160;&#160;// Mark this class as non-derived to allow C++ vfuncs to be skipped.
+    </p>
+    <p>
+      &#160;&#160;//Note that GApplication complains about &quot;&quot; but allows NULL (0), so we avoid passing &quot;&quot;.
+    </p>
+    <p>
+      &#160;&#160;Glib::ObjectBase(0),
+    </p>
+    <p>
+      &#160;&#160;Gio::Application(Glib::ConstructParams(custom_class_init(), &quot;application_id&quot;, (application_id.empty() ? 0 : application_id.c_str()), &quot;flags&quot;, GApplicationFlags(flags), static_cast&lt;char*&gt;(0))),
+    </p>
+    <p>
+      &#160;&#160;m_argc(0),
+    </p>
+    <p>
+      &#160;&#160;m_argv(0)
+    </p>
+    <p>
+      {
+    </p>
+    <p>
+      &#160;&#160;gtk_init(0, 0);
+    </p>
+    <p>
+      }
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1485124284856" ID="ID_473768869" MODIFIED="1493754788426" TEXT="Windows selber managen">
+<icon BUILTIN="help"/>
+<node CREATED="1485124296582" ID="ID_628648705" MODIFIED="1485124304593" TEXT="gtk::Application verwaltet Fensterliste"/>
+<node CREATED="1485124305157" ID="ID_1632068669" MODIFIED="1485124313311" TEXT="schlie&#xdf;t sich automatisch, wenn das letzte Fenster zu ist"/>
+<node CREATED="1485124315795" ID="ID_178656069" MODIFIED="1485124323478" TEXT="unser WindowManager macht das Gleiche"/>
+</node>
+<node CREATED="1493754789137" ID="ID_1903744710" MODIFIED="1493754798120" TEXT="kommt mir komisch vor">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1493754799439" ID="ID_288205807" MODIFIED="1493754807738" TEXT="das &quot;riecht&quot; nach Framework"/>
+<node CREATED="1493754808373" ID="ID_998804989" MODIFIED="1493754817376" TEXT="&quot;wir machen bequem alles f&#xfc;r Sie&quot;">
+<node CREATED="1493759500422" ID="ID_378870766" MODIFIED="1493759546709" TEXT="macht mir Angst">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1493759504742" ID="ID_1800184805" MODIFIED="1493759508010" TEXT="Kontrollverlust">
+<node CREATED="1493759564302" ID="ID_409429771" MODIFIED="1493759571785" TEXT="undurchsichtig"/>
+<node CREATED="1493759572261" ID="ID_1741586689" MODIFIED="1493759580624" TEXT="mehrere Ebenen von Frameworks &#xfc;bereinander"/>
+<node CREATED="1493759581123" ID="ID_1296466414" MODIFIED="1493759591685" TEXT="ich traue den Gnome-Leuten nicht &#xfc;ber den Weg"/>
+</node>
+</node>
+<node CREATED="1493754820476" ID="ID_608560419" MODIFIED="1495218626709" TEXT="brauche ich &#xfc;berhaupt eine Gtk::Application">
+<icon BUILTIN="help"/>
+<node CREATED="1493756483852" ID="ID_1428028027" MODIFIED="1493756499302" TEXT="naja, man kann GTK zu Fu&#xdf; verwenden"/>
+<node CREATED="1493756499745" ID="ID_633405815" MODIFIED="1493756518682" TEXT="aber gtk::Application zeigt, wie"/>
+<node CREATED="1493759629357" ID="ID_1297670007" MODIFIED="1493759644070" TEXT="gtk::Application">
+<node CREATED="1493759644755" ID="ID_224674022" MODIFIED="1493759648790" TEXT="ist eine Window-Liste"/>
+<node CREATED="1493759717704" ID="ID_697856504" MODIFIED="1493759739640" TEXT="initialisiert GTK, GLib, GIO"/>
+<node CREATED="1493759649754" ID="ID_898599245" MODIFIED="1493759656269" TEXT="schlie&#xdf;t, wenn letztes Fenster zu"/>
+<node CREATED="1493759699387" ID="ID_1249589577" MODIFIED="1493759741629" TEXT="single application Instance"/>
+<node CREATED="1493759656913" ID="ID_658938675" MODIFIED="1493759696623" TEXT="Desktop-Integration"/>
+</node>
+<node CREATED="1493759747148" ID="ID_1721295375" MODIFIED="1493760546219" TEXT="das kann ich doch zu Fu&#xdf; auch machen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1495215099003" ID="ID_1971256545" MODIFIED="1495218634172" TEXT="brauche ich &#xfc;berhaupt eine Gio::Application">
+<icon BUILTIN="help"/>
+<node CREATED="1495215111775" ID="ID_1003964020" MODIFIED="1495215119282" TEXT="initialisiert das Framework"/>
+<node CREATED="1495215119685" ID="ID_1761204495" MODIFIED="1495215128480" TEXT="stellt eine dBus-Verbindung her"/>
+<node CREATED="1495215129564" ID="ID_973272722" MODIFIED="1495215147125" TEXT="ist eine gio::ActionGroup">
+<node CREATED="1495215149281" ID="ID_1774523135" MODIFIED="1495215163883" TEXT="man kann Aktionen hinzuf&#xfc;gen"/>
+<node CREATED="1495215164279" ID="ID_1315941470" MODIFIED="1495215177034" TEXT="diese Arbeitet mit einem ApplicationWindow zusammen"/>
+<node CREATED="1495215177478" ID="ID_250116811" MODIFIED="1495215190439" TEXT="beachte: nicht GtkWindow, sondern ApplicationWindow (Subclass)"/>
+</node>
+<node CREATED="1495215193500" ID="ID_503299515" MODIFIED="1495215207982" TEXT="Zweck (Vermutung)">
+<node CREATED="1495215209066" ID="ID_1153171656" MODIFIED="1495215214357" TEXT="Desktop-Integration"/>
+<node CREATED="1495215214824" ID="ID_1385031644" MODIFIED="1495215221132" TEXT="Grenzen der Applikation aufweichen"/>
+<node CREATED="1495215221624" ID="ID_297065945" MODIFIED="1495215231226" TEXT="Aktionen direkt in den Desktiop integrieren"/>
+</node>
+<node CREATED="1495215237213" ID="ID_745229887" MODIFIED="1495215259353" TEXT="nichts von dem ist f&#xfc;r uns relevant, manches davon st&#xf6;rt">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1495218672747" HGAP="-13" ID="ID_1786316132" MODIFIED="1495218683283" TEXT="Beschlu&#xdf;" VSHIFT="15">
+<icon BUILTIN="yes"/>
+<node COLOR="#2f1d56" CREATED="1495218684994" ID="ID_101574501" MODIFIED="1495218819229" TEXT="vorerst defensiv vorgehen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1495218699712" ID="ID_1332523704" MODIFIED="1495233774800" TEXT="den Code aus Gtk::Main in unsere Codebasis &#xfc;bernehmen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1495218714230" ID="ID_1371091843" MODIFIED="1495218730415" TEXT="Vorsicht mit Action / ActionGroup">
+<node CREATED="1495218731435" ID="ID_1744881610" MODIFIED="1495218744350" TEXT="noch nicht deprecated"/>
+<node CREATED="1495218744961" ID="ID_97034293" MODIFIED="1495218759875" TEXT="aber Abl&#xf6;sung durch Gio::SimpleAction geplant"/>
+<node CREATED="1495218770694" ID="ID_644528853" MODIFIED="1495218798054" TEXT="Warnung: mit dem neuen Gtk::ApplicationWindow verkoppelt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1485130302095" HGAP="28" ID="ID_506541774" MODIFIED="1502411399197" TEXT="neuer UiManager" VSHIFT="14">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1485452508180" ID="ID_549617075" MODIFIED="1493762452014" TEXT="ist front-end daf&#xfc;r">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1485130321924" ID="ID_46787934" MODIFIED="1485130327728" TEXT="Funktion umziehen"/>
+<node CREATED="1485130328324" ID="ID_874057448" MODIFIED="1485130334983" TEXT="umschreiben auf gtk::Application"/>
+<node CREATED="1485130336235" ID="ID_125642886" MODIFIED="1485130353981" TEXT="Application-Objekt durchgeben"/>
+<node CREATED="1485130355377" ID="ID_175334188" MODIFIED="1485130395487" TEXT="Zugriff f&#xfc;r NotificationFacade erm&#xf6;glichen"/>
+</node>
+<node CREATED="1485452536138" FOLDED="true" ID="ID_599315721" MODIFIED="1502411392379" TEXT="wird daf&#xfc;r zust&#xe4;ndig">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_599315721" ENDARROW="Default" ENDINCLINATION="-137;-12;" ID="Arrow_ID_1743989671" SOURCE="ID_842367237" STARTARROW="None" STARTINCLINATION="-18;215;"/>
+<linktarget COLOR="#667e90" DESTINATION="ID_599315721" ENDARROW="None" ENDINCLINATION="41;328;" ID="Arrow_ID_1963473410" SOURCE="ID_1478388503" STARTARROW="Default" STARTINCLINATION="943;-58;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1493762472175" ID="ID_964179569" MODIFIED="1493762489856" TEXT="verwendet Fenster-Liste"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493762490205" ID="ID_869056268" MODIFIED="1502411381881" TEXT="alle noch offenen Fenster verbergen">
+<arrowlink COLOR="#543c6f" DESTINATION="ID_159568066" ENDARROW="Default" ENDINCLINATION="489;-554;" ID="Arrow_ID_373486067" STARTARROW="None" STARTINCLINATION="-762;-46;"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1493762498476" ID="ID_1290148687" MODIFIED="1493762526412" TEXT="direkt gtk_main_quit aufrufen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1493762556755" HGAP="34" ID="ID_651403872" MODIFIED="1493768592310" TEXT="siehe" VSHIFT="16">
+<node CREATED="1493762559339" ID="ID_742529116" MODIFIED="1493762565286" TEXT="altes Gtk::Main::quit"/>
+<node CREATED="1493762568266" ID="ID_902609710" MODIFIED="1493762714257" TEXT="Gio::Application::quit"/>
+</node>
+</node>
+<node CREATED="1493762951293" HGAP="69" ID="ID_1772990353" MODIFIED="1493770485773" TEXT="Entscheidung">
+<node CREATED="1493762968018" ID="ID_1056007574" MODIFIED="1493762986624" TEXT="brauchen wir ein Application GObject?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1493762987751" ID="ID_236361713" MODIFIED="1493762997090" TEXT="Gtk::Main funktioniert ohne"/>
+<node CREATED="1493763356907" ID="ID_981398529" MODIFIED="1493763414605" TEXT="aber">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1493763398798" ID="ID_760049978" MODIFIED="1493768456359" TEXT="Gtk::Main ist deprecated"/>
+<node CREATED="1493763393720" ID="ID_112295077" MODIFIED="1493763393720" TEXT="wohin entwickelt sich GTK?"/>
+</node>
+<node CREATED="1493768460811" ID="ID_1862271811" MODIFIED="1493768464414" TEXT="Alternativen">
+<node CREATED="1493768465482" ID="ID_1159523698" MODIFIED="1495234928963" TEXT="gtk_main aufrufen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1493768484007" ID="ID_384827553" MODIFIED="1495234932771" TEXT="von einem Gio::Application ableiten">
+<arrowlink COLOR="#6d7495" DESTINATION="ID_1476863246" ENDARROW="Default" ENDINCLINATION="1126;-247;" ID="Arrow_ID_1941890495" STARTARROW="None" STARTINCLINATION="-231;14;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493770418552" HGAP="68" ID="ID_346412093" MODIFIED="1495234945038" TEXT="Schritte" VSHIFT="37">
+<linktarget COLOR="#8091a3" DESTINATION="ID_346412093" ENDARROW="Default" ENDINCLINATION="-205;193;" ID="Arrow_ID_824195065" SOURCE="ID_1810145809" STARTARROW="None" STARTINCLINATION="430;0;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1493770423008" ID="ID_124348052" MODIFIED="1493770490126" TEXT="erst mal Gtk::Main hierher schieben">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1495215269657" ID="ID_850682198" MODIFIED="1495215315827" TEXT="Implementierung aus Gtk::Main &#xfc;bernemen">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1493770431607" ID="ID_117937910" MODIFIED="1495215311571" TEXT="(bei Bedarf) sp&#xe4;ter dann durch Gio::Application ersetzen">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1481320772830" FOLDED="true" HGAP="21" ID="ID_1607125695" MODIFIED="1492443541125" VSHIFT="11">
@@ -2527,8 +2582,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1485126385235" HGAP="38" ID="ID_548720270" MODIFIED="1488419809961" TEXT="top-Level" VSHIFT="11">
-<linktarget COLOR="#851358" DESTINATION="ID_548720270" ENDARROW="Default" ENDINCLINATION="-663;-614;" ID="Arrow_ID_325703166" SOURCE="ID_471609909" STARTARROW="None" STARTINCLINATION="1209;488;"/>
+<node CREATED="1485126385235" HGAP="38" ID="ID_548720270" MODIFIED="1502411222558" TEXT="top-Level" VSHIFT="11">
+<linktarget COLOR="#851358" DESTINATION="ID_548720270" ENDARROW="Default" ENDINCLINATION="-663;-614;" ID="Arrow_ID_325703166" SOURCE="ID_471609909" STARTARROW="None" STARTINCLINATION="1110;608;"/>
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485126400233" ID="ID_885004423" MODIFIED="1485126409402" TEXT="unsauberes Design">
 <icon BUILTIN="flag-yellow"/>
@@ -2640,8 +2695,17 @@
 <node CREATED="1485551096445" ID="ID_258972556" MODIFIED="1485551103416" TEXT="dann Parameter entfernen"/>
 </node>
 </node>
-<node COLOR="#ae1856" CREATED="1485126686643" ID="ID_405470138" MODIFIED="1501804881314" TEXT="sauberer Shutdown">
-<arrowlink COLOR="#872666" DESTINATION="ID_286857196" ENDARROW="Default" ENDINCLINATION="-584;-56;" ID="Arrow_ID_1606936924" STARTARROW="Default" STARTINCLINATION="1461;0;"/>
+<node COLOR="#ae1856" CREATED="1485126686643" ID="ID_405470138" MODIFIED="1502411023176" TEXT="sauberer Shutdown">
+<arrowlink COLOR="#872666" DESTINATION="ID_286857196" ENDARROW="Default" ENDINCLINATION="-684;0;" ID="Arrow_ID_1606936924" STARTARROW="Default" STARTINCLINATION="1461;0;"/>
+<node CREATED="1502411273154" HGAP="57" ID="ID_1087419686" MODIFIED="1502411289845" TEXT="komplett?" VSHIFT="39">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493762490205" ID="ID_159568066" MODIFIED="1502411361835" TEXT="alle noch offenen Fenster verbergen">
+<linktarget COLOR="#543c6f" DESTINATION="ID_159568066" ENDARROW="Default" ENDINCLINATION="489;-554;" ID="Arrow_ID_373486067" SOURCE="ID_869056268" STARTARROW="None" STARTINCLINATION="-762;-46;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1495234856782" ID="ID_1605922951" MODIFIED="1495234864912" TEXT="machen wir bisher nicht"/>
+<node CREATED="1495234865717" ID="ID_1261122199" MODIFIED="1495234889293" TEXT="ist das notwendig?"/>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1485463620403" ID="ID_40172420" MODIFIED="1485463647941" TEXT="zentralen UiManager einf&#xfc;hren">

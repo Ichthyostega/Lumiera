@@ -110,7 +110,7 @@ namespace ctrl {
         {
           dispatcher_.connect(
                       [this]() {
-                                 queue_.invoke();
+                                 queue_.invoke();    /////////////////////TICKET #1098 : ensure no exception escapes from here!!
                                });
         }
       

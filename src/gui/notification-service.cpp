@@ -113,7 +113,7 @@ namespace gui {
   void
   NotificationService::mutate (ID uiElement, DiffMessage&& diff)
   {
-    dispatch_->event ([=]()
+    dispatch_->event ([=]()                                                  //////////////////////////////////TODO care for error handling!!!
                       {
                         MutationMessage diffHolder{DiffMessage(diff)};       //////////////////////////////////TICKET #1066 : unnecessary repackaging; could get rid of MutationMessage altogether
                         this->change (uiElement, diffHolder);
