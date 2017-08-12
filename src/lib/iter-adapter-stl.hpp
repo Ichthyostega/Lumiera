@@ -421,39 +421,49 @@ namespace iter_stl {
       
       mutable
       Sequence buffer_;
-      size_t   pos_;
+      size_t   pos_ = 0;
       
       
     public:
       /** create empty snapshot */
-      IterSnapshot()
-        : buffer_()
-        , pos_(0)
-        { }
+      IterSnapshot() { }
       
-      /** take snapshot by discharging a copy
-       *  of the given Lumiera Forward iterator
-       *  @warning depending on the implementation
-       *           backing the source iterator, this
-       *           might or might not yield side-effects.
+      /** take snapshot by discharging the given Lumiera Forward iterator
+       *  @warning depending on the implementation backing the source iterator,
+       *           this might or might not yield side-effects.
+       */
+      template<class IT>
+      IterSnapshot (IT& src)
+        {
+          for ( ; src; ++src)
+            buffer_.push_back(*src);
+        }
+      
+      /** build snapshot from a copy of the Lumiera Iterator
+       *  @warning depending on the implementation backing the source iterator,
+       *           this might or might not yield side-effects.
        */
       template<class IT>
       IterSnapshot (IT const& src)
-        : buffer_()
-        , pos_(0)
         {
-          for (IT copy(src); copy; ++copy)
+          for (IT copy{src}; copy; ++copy)
             buffer_.push_back(*copy);
+        }
+      
+      /** take snapshot by consuming a STL iterator */
+      template<class IT>
+      IterSnapshot (IT& pos, IT const& end)
+        {
+          for ( ; pos!=end; ++pos)
+            buffer_.push_back(*pos);
         }
       
       /** take snapshot from STL iterator */
       template<class IT>
       IterSnapshot (IT const& begin, IT const& end)
-        : buffer_()
-        , pos_(0)
         {
-          for (IT p(begin); p!=end; ++p)
-            buffer_.push_back(*p);
+          for (IT pos{begin}; pos!=end; ++pos)
+            buffer_.push_back(*pos);
         }
       
       IterSnapshot(IterSnapshot &&)                 = default;
@@ -552,9 +562,19 @@ namespace iter_stl {
   template<class CON>
   inline ContentSnapshot<CON>
   snapshot(CON const& con)
-    {
-      return ContentSnapshot<CON>(begin(con), end(con));
-    }
+  {
+    return ContentSnapshot<CON>{begin(con), end(con)};
+  }
+
+  /** Take a snapshot of the given LumieraIterator, which is thereby consumed
+   * @return Lumiera Forward Iterator to yield each Element from this snapshot
+   */
+  template<class IT>
+  inline ContentSnapshot<IT>
+  dischargeToSnapshot(IT& ii)
+  {
+    return ContentSnapshot<IT>{ii};
+  }
   
   /** Take a snapshot of the given \c std::initializer_list
    * @return Lumiera Forward Iterator to yield each Element from this snapshot
@@ -568,10 +588,10 @@ namespace iter_stl {
   template<class VAL>
   inline iter_stl::IterSnapshot<VAL>
   snapshot(std::initializer_list<VAL> const&& ili)
-    {
-      using OnceIter = iter_stl::IterSnapshot<VAL>;
-      return OnceIter(begin(ili), end(ili));
-    }  
+  {
+    using OnceIter = iter_stl::IterSnapshot<VAL>;
+    return OnceIter(begin(ili), end(ili));
+  }
   
   
 }} // namespace lib::iter_stl

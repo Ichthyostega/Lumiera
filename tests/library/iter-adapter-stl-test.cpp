@@ -177,9 +177,9 @@ namespace test{
           Snapshot capture1 (vec.begin(), vec.end());
           
           Range range_of_all (vec.begin(), vec.end());
-          Snapshot capture2 (range_of_all);
-          CHECK (range_of_all);                       // snapshot doesn't affect given source iterator pos
-          CHECK (capture2);
+          Snapshot capture2 = iter::snapshot(range_of_all); // NOTE: when specifically taken this way,
+          CHECK (range_of_all);                            //  snapshot doesn't affect given source iterator pos
+          CHECK (capture2);                               //   (but WARNING, the IterSnapshot ctor itself is destructive)
           
           CHECK (vec.begin() == range_of_all.getPos());
           CHECK (vec.end()   == range_of_all.getEnd());
@@ -220,9 +220,9 @@ namespace test{
           CHECK (!capture1);
           CHECK (!capture2);
           CHECK (!capture3);
-          CHECK (capture1 == capture2);
-          CHECK (capture3 != capture1);               // all exhausted, but the difference in contents remains
-          CHECK (capture3 != capture2);
+          CHECK (capture1 == capture2);               // all exhausted iterators count as "equal"
+          CHECK (capture3 == capture1);               // this ensures the idiom while(pos != end) works
+          CHECK (capture3 == capture2);
         }
       
       template<class IT>
