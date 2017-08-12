@@ -155,8 +155,8 @@ namespace lib {
       static iterator
       build (IterSource& sourceImpl)
         {
-          DataHandle sourceHandle (&sourceImpl, &detach_without_destroy);
-          return startIteration(sourceHandle);
+          return std::move(
+              startIteration (DataHandle{&sourceImpl, &detach_without_destroy}));
         }
       
       /** build an iterator frontend, thereby managing
@@ -168,8 +168,8 @@ namespace lib {
       static iterator
       build (IterSource* sourceImplObject)
         {
-          DataHandle sourceHandle (sourceImplObject, &destroy_managed_source);
-          return startIteration(sourceHandle);
+          return std::move(
+              startIteration (DataHandle{sourceImplObject, &destroy_managed_source}));
         }
       
       static iterator EMPTY_SOURCE;
@@ -182,7 +182,7 @@ namespace lib {
         {
           REQUIRE (sourceHandle);
           Pos first = sourceHandle->firstResult();
-          return iterator (sourceHandle, first);
+          return {move(sourceHandle), first};
         }
       
       
