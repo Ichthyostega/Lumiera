@@ -52,6 +52,7 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/diff/tree-diff.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/format-util.hpp"
 #include "lib/meta/util.hpp"
 
 #include <string>
@@ -147,7 +148,58 @@ namespace diff{
                                                                        ,__not_<can_IterForEach<CON>>>, void*> =nullptr)
         : _FrontEnd{iter_source::eachEntry(container)}
         { }
+      
+      
+      /**
+       * enable support to show content of the message.
+       * After calling this function, operator string() renders all DiffSteps
+       * @warning since by design a DiffMessage can only be ``pulled'' once,
+       *          this operation needs to impose a _side effect:_ it materialises
+       *          the complete diff sequence at once into a heap allocated buffer.
+       */
+      DiffMessage& withDiagnostics();
     };
+  
+  namespace {
+    
+    struct DiffSnapshot
+      : std::vector<DiffStep>
+      {
+        DiffSnapshot(DiffMessage& srcMsg)
+          {
+            for ( ; srcMsg; ++srcMsg )
+              push_back (*srcMsg);
+          }
+      };
+    
+    using _VecIter = DiffSnapshot::iterator;
+    using _RangeIT = RangeIter<_VecIter>;
+    using _Wrapped = WrappedLumieraIter<_RangeIT>;
+    
+    class MaterialisedDiffMessageBuffer
+      : private DiffSnapshot
+      , public _Wrapped
+      {
+      public:
+        MaterialisedDiffMessageBuffer(DiffMessage& srcMsg)
+          : DiffSnapshot{srcMsg}
+          , _Wrapped{_RangeIT{DiffSnapshot::begin(), DiffSnapshot::end()}}
+          { }
+        
+        virtual
+        operator string()  const override
+          {
+            return "Diff--{"+util::join (static_cast<DiffSnapshot> (*this))+"}";
+          }
+      };
+  }
+  
+  inline DiffMessage&
+  DiffMessage::withDiagnostics()
+  {
+    return *this = DiffMessage{new MaterialisedDiffMessageBuffer(*this)};
+  }
+
   
   
   

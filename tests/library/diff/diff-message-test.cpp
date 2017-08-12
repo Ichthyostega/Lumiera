@@ -33,6 +33,7 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-util.hpp"
+#include "lib/format-cout.hpp" ///////////////TODO remove when done
 #include "lib/util.hpp"
 
 #include <string>
@@ -289,7 +290,20 @@ namespace test{
       void
       verify_diagnostics()
         {
-          UNIMPLEMENTED("add toString decorator");
+          DiffMessage diffMsg{ins(TYPE_X)
+                             ,set(ATTRIB1)
+                             ,del(CHILD_T)};
+          
+          cout << diffMsg <<endl;
+          
+          diffMsg.withDiagnostics();
+          cout << diffMsg <<endl;
+          
+          CHECK (!isnil (diffMsg));
+          CHECK (ins(TYPE_X)  == *diffMsg);
+          CHECK (set(ATTRIB1) == *++diffMsg);
+          CHECK (del(CHILD_T) == *++diffMsg);
+          CHECK (isnil (++diffMsg));
         }
       
       
