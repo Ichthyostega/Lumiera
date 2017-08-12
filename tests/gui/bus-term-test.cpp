@@ -27,6 +27,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/sync.hpp"
+#include "backend/thread-wrapper.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/state-manager.hpp"
 #include "proc/control/command.hpp"
@@ -34,6 +36,8 @@
 #include "test/mock-elm.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/iter-stack.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/luid.h"
@@ -41,6 +45,8 @@
 
 
 
+using lib::Sync;
+using backend::ThreadJoinable;
 using lib::idi::EntryID;
 using lib::idi::BareEntryID;
 using gui::ctrl::StateManager;
@@ -49,9 +55,13 @@ using gui::test::MockElm;
 using lib::diff::GenNode;
 using lib::diff::Rec;
 using lib::diff::Ref;
+using lib::diff::DiffSource;
+using lib::diff::DiffMessage;
 using lib::time::Time;
 using lib::time::TimeSpan;
 using lib::hash::LuidH;
+using lib::iter_stl::snapshot;
+using lib::IterStack;
 using lib::HashVal;
 using util::isnil;
 
@@ -64,6 +74,15 @@ namespace test {
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
   using proc::control::Command;
+  
+  namespace {// test data...
+    
+    // --------random-dispatch-test------
+    uint const MAX_RAND_NUMBS = 200;
+    uint const MAX_RAND_BORGS = 500;
+    uint const MAX_RAND_DELAY = 1000;
+    // --------random-dispatch-test------
+  }
   
   
   
@@ -501,10 +520,133 @@ namespace test {
         }
       
       
+      /** @test integration test of mutation by diff message
+       *  Since this test focuses on the bus side of standard interactions,
+       *  it seems indicated to emulate the complete invocation situation,
+       *  which involves passing thread boundraries. The main thread running
+       *  this test shall enact the role of the UI event thread (since the
+       *  UI-Bus in the real application is confined to this UI thread).
+       *  Thus we'll start another thread to enact the role of the Session,
+       *  to produce a diff message and "cast" it towards the UI.
+       * @note a defining property of this whole interaction is the fact that
+       *  the diff is _pulled asynchronously,_ which means the actual diff
+       *  generation happens on callback from the UI. Access to any "session"
+       *  data needs to be protected by lock in such a situation.
+       */
       void
       pushDiff()
         {
-          UNIMPLEMENTED ("push a mutation diff towards an interface element");
+          MARK_TEST_FUN
+          
+          struct SessionThread
+            : Sync<>
+            , ThreadJoinable
+            {
+              // shared data
+              IterStack<uint> sessionBorgs_;
+              
+              // access to shared session data
+              void
+              scheduleBorg (uint id)
+                {
+                  Lock sync(this);
+                  sessionBorgs_.feed(id);
+                }
+              
+              auto
+              dispatchBorgs()
+                {
+                  Lock sync(this);
+                  return snapshot(sessionBorgs_);
+                }
+              
+              /**
+               * Independent heap allocated diff generator.
+               * Implements the IterSource<DiffStep> interface
+               * and will be pulled from the GUI-Thread for actually
+               * generating the diff. At this point, it needs to access
+               * the shared session data with proper locking, and derive
+               * a representation of the "changes" in diff format
+               */
+              struct DiffGenerator
+                : boost::noncopyable
+                , DiffSource
+                {
+                  using Iter = decltype(SessionThread::dispatchBorgs());
+                  using Pos  = typename Iter::pointer;
+                  
+                  
+                  SessionThread ctx_;
+                  Iter src_;
+                  
+                  DiffGenerator (SessionThread& motherShip)
+                    : ctx_{motherShip}
+                    , src_{}
+                    { }
+                  
+                  /* == Interface IterSource<DiffStep> == */
+                  Pos
+                  firstResult ()
+                    {
+                      REQUIRE (not src_);
+                      src_ = ctx_.dispatchBorgs();
+                      return & *src_;
+                    }
+                  
+                  void
+                  nextResult (Pos& pos)
+                    {
+                      if (!pos) return;
+                      if (src_) ++src_;
+                      if (src_)
+                        pos = & *src_;
+                      else
+                        pos = 0;
+                    }
+                };
+              
+                
+              using UiBus = gui::ctrl::Nexus;
+                
+              /**
+               * The final part in the puzzle is to dispatch the diff messages into the UI
+               * In the real application, this operation is provided by the NotificationService.
+               * It has access to the UI-Bus, but has to ensure all bus operations are actually
+               * performed on the UI event thread.
+               */
+              void
+              notifyGUI (UiBus& uiBus, DiffSource* diffGenerator)
+                {
+                  ///TODO create diff message
+                  ///TODO use a CallQueue
+                  ///TODO dispatch application of the diff message via UiBus
+                }
+          
+              SessionThread(UiBus& uiBus)
+                : ThreadJoinable{"BusTerm_test: asynchronous diff mutation"
+                                , [&, uiBus]() {
+                                    uint cnt       = rand() % MAX_RAND_BORGS;
+                                    for (uint i=0; i<cnt; ++i)
+                                      {
+                                        uint delay = rand() % MAX_RAND_DELAY;
+                                        usleep (delay);
+                                        uint id    = rand() % MAX_RAND_NUMBS;
+                                        scheduleBorg (id);
+                                        notifyGUI (uiBus, new DiffGenerator{*this});
+                                      }
+                                }}
+                { }
+            };
+          
+          
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          
+          MockElm rootMock("alpha zero");
+          ID rootID = rootMock.getID();
+          
+          rootMock.attrib["α"] = "Centauri";
+          CHECK ("Centauri" == rootMock.attrib["α"]);
+          CHECK (isnil (rootMock.scope));
         }
     };
   
