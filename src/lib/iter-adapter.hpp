@@ -404,8 +404,8 @@ namespace lib {
   inline bool
   operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
   {
-    return (il.empty() && ir.empty())
-        || (il.isValid() && ir.isValid() && il.core_ == ir.core_);
+    return (il.empty()   and ir.empty())
+        or (il.isValid() and ir.isValid() and il.core_ == ir.core_);
   }
   
   template<class T1, class T2, class ST>

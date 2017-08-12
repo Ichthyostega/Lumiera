@@ -456,6 +456,11 @@ namespace iter_stl {
             buffer_.push_back(*p);
         }
       
+      IterSnapshot(IterSnapshot &&)                 = default;
+      IterSnapshot(IterSnapshot const&)             = default;
+      IterSnapshot& operator= (IterSnapshot const&) = default;
+      IterSnapshot& operator= (IterSnapshot &&)     = default;
+      
       operator bool() const { return isValid(); }
       size_t size()   const { return buffer_.size(); }
       
@@ -504,13 +509,16 @@ namespace iter_stl {
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterSnapshot)
 
       
-      /** equality is based both on the actual contents of the snapshots
-       *  and the current iterator position */
+      /** equality is based first on the _valid state_ (to support `pos != end`)
+       *  and then on the actual position and contents of the snapshots */
       friend bool
-      operator== (IterSnapshot const& snap1, IterSnapshot const& snap2)
+      operator== (IterSnapshot const& s1, IterSnapshot const& s2)
       {
-        return snap1.buffer_ == snap2.buffer_
-               && snap1.pos_ == snap2.pos_ ;
+        return (s1.empty()   and  s2.empty())
+            or (s1.isValid() and  s2.isValid()
+                and s1.pos_    == s2.pos_
+                and s1.buffer_ == s2.buffer_
+               );
       }
       
       friend bool
