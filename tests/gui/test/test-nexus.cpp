@@ -158,7 +158,7 @@ namespace test{
         virtual bool
         change (ID subject, DiffMessage&& diff)  override
           {
-            string diffSeqLog{diff};
+            string diffSeqLog = diff.updateDiagnostics();   // snapshot of generated diff sequence
             log_.call (this, "change", subject, diffSeqLog);
             if (BusHub::change (subject, move(diff)))
               {

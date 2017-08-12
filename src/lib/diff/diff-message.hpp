@@ -96,9 +96,13 @@ namespace diff{
     {
       using _FrontEnd = DiffSource::iterator;
       
-      
-      DiffMessage() = default;
-      // default copy operations acceptable
+      DiffMessage()                               = default;
+      DiffMessage(DiffMessage&&)                  = default;
+      DiffMessage(DiffMessage const&)             = default;
+      DiffMessage(DiffMessage& o)  : DiffMessage((DiffMessage const&)o) { }
+      DiffMessage& operator= (DiffMessage const&) = default;
+      DiffMessage& operator= (DiffMessage &&)     = default;
+                                                    ////////////////////////TICKET #963  Forwarding shadows copy operations
       
       /**
        * DiffMessage builder:

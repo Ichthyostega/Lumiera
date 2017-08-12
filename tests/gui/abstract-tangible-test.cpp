@@ -608,8 +608,7 @@ namespace test {
                                       , mut(CHILD_2)          // open nested scope of child "b" for recursive mutation
                                         , ins(ATTRIB_PI)      // ..within nested scope, add a new attribute "π" := 3.14159265
                                       , emu(CHILD_2)          // leave nested scope
-                                      }
-                                      .updateDiagnostics();   // make operator string() show the whole generated diff sequence
+                                      };
                   }
               }
               diffSrc;
