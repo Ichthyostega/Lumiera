@@ -27,7 +27,6 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/format-util.hpp"
 #include "lib/diff/diff-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
@@ -41,12 +40,12 @@
 using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
 using lib::iter_stl::IterSnapshot;
 using lib::iter_stl::snapshot;
+using lib::time::Time;
 using util::contains;
 using util::isnil;
 using util::join;
 using std::string;
 using std::vector;
-using lib::time::Time;
 
 
 namespace lib {
@@ -54,6 +53,9 @@ namespace diff{
 namespace test{
   
   namespace {//Test fixture....
+    
+    int instances = 0; ///< verify instance management
+
     
     // define some GenNode elements
     // to act as templates within the concrete diff
@@ -70,9 +72,6 @@ namespace test{
                   ATTRIB_NODE = MakeRec().genNode("δ"),    // empty named node to be attached as attribute δ
                   CHILD_NODE = SUB_NODE;                   // yet another child node, same ID as SUB_NODE (!)
     
-    
-    int instances = 0; ///< verify instance management
-
   }//(End)Test fixture
   
   
@@ -328,73 +327,72 @@ namespace test{
       
       
       
-      using DiffSeq = iter_stl::IterSnapshot<DiffStep>;
       
-      DiffSeq
+      DiffMessage
       populationDiff()
         {
-          return snapshot({ins(TYPE_X)
-                         , ins(ATTRIB1)
-                         , ins(ATTRIB2)
-                         , ins(ATTRIB3)
-                         , ins(CHILD_A)
-                         , ins(CHILD_T)
-                         , ins(CHILD_T)
-                         , ins(SUB_NODE)
-                         , mut(SUB_NODE)
-                           , ins(CHILD_B)
-                           , ins(CHILD_A)
-                         , emu(SUB_NODE)
-                         });
+          return { ins(TYPE_X)
+                 , ins(ATTRIB1)
+                 , ins(ATTRIB2)
+                 , ins(ATTRIB3)
+                 , ins(CHILD_A)
+                 , ins(CHILD_T)
+                 , ins(CHILD_T)
+                 , ins(SUB_NODE)
+                 , mut(SUB_NODE)
+                   , ins(CHILD_B)
+                   , ins(CHILD_A)
+                 , emu(SUB_NODE)
+                 };
         }
         
         
-      DiffSeq
+      DiffMessage
       mutationDiff()
         {
           // prepare for direct assignment of new value
           // NOTE: the target ID will be reconstructed, including hash
           GenNode childA_upper(CHILD_A.idi.getSym(), "A");
           
-          return snapshot({after(Ref::ATTRIBS)      // fast forward to the first child
-                         , find(CHILD_T)
-                         , pick(CHILD_A)
-                         , skip(CHILD_T)
-                         , del(CHILD_T)
-                         , after(Ref::END)          // accept anything beyond as-is
-                         , mut(SUB_NODE)
-                           , ins(ATTRIB3)
-                           , ins(ATTRIB_NODE)       // attributes can also be nested objects
-                           , find(CHILD_A)
-                           , del(CHILD_B)
-                           , ins(CHILD_NODE)
-                           , ins(CHILD_T)
-                           , skip(CHILD_A)
-                           , mut(CHILD_NODE)
-                             , ins(TYPE_Y)
-                             , ins(ATTRIB2)
-                           , emu(CHILD_NODE)
-                           , set(childA_upper)      // direct assignment, target found by ID (out of order)
-                           , mut(ATTRIB_NODE)       // mutation can be out-of order, target found by ID
-                             , ins(CHILD_A)
-                             , ins(CHILD_A)
-                             , ins(CHILD_A)
-                           , emu(ATTRIB_NODE)
-                         , emu(SUB_NODE)
-                         });
+          return { after(Ref::ATTRIBS)      // fast forward to the first child
+                 , find(CHILD_T)
+                 , pick(CHILD_A)
+                 , skip(CHILD_T)
+                 , del(CHILD_T)
+                 , after(Ref::END)          // accept anything beyond as-is
+                 , mut(SUB_NODE)
+                   , ins(ATTRIB3)
+                   , ins(ATTRIB_NODE)       // attributes can also be nested objects
+                   , find(CHILD_A)
+                   , del(CHILD_B)
+                   , ins(CHILD_NODE)
+                   , ins(CHILD_T)
+                   , skip(CHILD_A)
+                   , mut(CHILD_NODE)
+                     , ins(TYPE_Y)
+                     , ins(ATTRIB2)
+                   , emu(CHILD_NODE)
+                   , set(childA_upper)      // direct assignment, target found by ID (out of order)
+                   , mut(ATTRIB_NODE)       // mutation can be out-of order, target found by ID
+                     , ins(CHILD_A)
+                     , ins(CHILD_A)
+                     , ins(CHILD_A)
+                   , emu(ATTRIB_NODE)
+                 , emu(SUB_NODE)
+                 };
         }
       
-      
+      /** @test use DiffMessage to transport and apply changes to target data
+       * @remarks this almost literally repeats the DiffTreeApplication_test */
       void
       demonstrate_treeApplication()
         {
-          UNIMPLEMENTED("redo the tree-diff example, but now with diff messages");
           Rec::Mutator target;
           Rec& subject = target;
           DiffApplicator<Rec::Mutator> application(target);
           
           // Part I : apply diff to populate
-          application.consume(populationDiff());
+          application.consume (populationDiff());
           
           CHECK (!isnil (subject));                                    // nonempty -- content has been added
           CHECK ("X" == subject.getType());                            // type was set to "X"
@@ -411,7 +409,7 @@ namespace test{
           CHECK (isnil(++scope));                                      // thats all -- no more children
           
           // Part II : apply the second diff
-          application.consume(mutationDiff());
+          application.consume (mutationDiff());
           CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered 
           scope = subject.scope();                                     // but the scope was reordered
           CHECK (  *scope == CHILD_T);                                 //   CHILD_T
@@ -423,7 +421,7 @@ namespace test{
                                                .appendChild(CHILD_A)   // 
                                        .genNode("δ"));                 // 
             auto subScope = nested.scope();                            //       and within the nested sub-scope we find
-            CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assigment
+            CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assignment
             CHECK (CHILD_A.idi == subScope->idi);                      //           ...: same ID as CHILD_A
             CHECK ("A" == subScope->data.get<string>());               //           ...: but mutated payload
             CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"

@@ -92,10 +92,13 @@ namespace test{
    *       After applying those two diff sequences, we verify the data
    *       is indeed in the expected shape.
    * @remarks to follow this test, you should be familiar both with our
-   *      \link diff::Record generic data record \endlink, as well as with
-   *      the \link diff::GenNode variant data node \endlink. The key point
-   *      to note is the usage of Record elements as payload within GenNode,
-   *      which allows to represent tree shaped object like data structures.
+   *       [generic data record](\ref diff::Record), as well as with the
+   *       [variant data node](\ref diff::GenNode). The key point to note
+   *       is the usage of Record elements as payload within GenNode, which
+   *       allows to represent tree shaped object like data structures.
+   * @note literally the same test case is repeated in DiffMessage_test,
+   *       just there the diff is transported in a DiffMessage capsule,
+   *       as is the case in the real application as well.
    * @see DiffComplexApplication_test handling arbitrary data structures
    * @see GenericRecordRepresentation_test
    * @see GenNodeBasic_test
@@ -172,7 +175,7 @@ namespace test{
           DiffApplicator<Rec::Mutator> application(target);
           
           // Part I : apply diff to populate
-          application.consume(populationDiff());
+          application.consume (populationDiff());
           
           CHECK (!isnil (subject));                                    // nonempty -- content has been added
           CHECK ("X" == subject.getType());                            // type was set to "X"
@@ -189,7 +192,7 @@ namespace test{
           CHECK (isnil(++scope));                                      // thats all -- no more children
           
           // Part II : apply the second diff
-          application.consume(mutationDiff());
+          application.consume (mutationDiff());
           CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered 
           scope = subject.scope();                                     // but the scope was reordered
           CHECK (  *scope == CHILD_T);                                 //   CHILD_T
@@ -201,7 +204,7 @@ namespace test{
                                                .appendChild(CHILD_A)   // 
                                        .genNode("δ"));                 // 
             auto subScope = nested.scope();                            //       and within the nested sub-scope we find
-            CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assigment
+            CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assignment
             CHECK (CHILD_A.idi == subScope->idi);                      //           ...: same ID as CHILD_A
             CHECK ("A" == subScope->data.get<string>());               //           ...: but mutated payload
             CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"
