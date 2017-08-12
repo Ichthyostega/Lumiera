@@ -157,11 +157,14 @@ namespace diff{
        *          this operation needs to impose a _side effect:_ it materialises
        *          the complete diff sequence at once into a heap allocated buffer.
        */
-      DiffMessage& withDiagnostics();
+      DiffMessage& updateDiagnostics();
     };
   
-  namespace {
+  
+  
+  namespace { // Implementation: take snapshot to enable diagnostics
     
+    /** "materialised view" of the diff sequence */
     struct DiffSnapshot
       : std::vector<DiffStep>
       {
@@ -176,6 +179,15 @@ namespace diff{
     using _RangeIT = RangeIter<_VecIter>;
     using _Wrapped = WrappedLumieraIter<_RangeIT>;
     
+    /**
+     * Decorator to be layered transparently on top of DiffMessage.
+     * Actually, what we do is to discharge the diff generator into
+     * the DiffSnapshot buffer and then replace the link to the original
+     * generator to this decorator, which, when iterated, yields the
+     * contents of the DiffSnapshot one by one. But since all DiffSteps
+     * are now stored into that DiffSnapshot _buffer we control,_ we're
+     * able to produce a diagnostic listing of the complete sequence.
+     */
     class MaterialisedDiffMessageBuffer
       : private DiffSnapshot
       , public _Wrapped
@@ -194,8 +206,18 @@ namespace diff{
       };
   }
   
+  /** @par operational semantics
+   * Since the underlying generator of the DiffStep sequence is an iterator,
+   * the "materialised view" can only capture what's left at the point when
+   * updateDiagnostics() is invoked. The captured rest sequence seamlessly
+   * becomes the new generator and the old generator object is released,
+   * since the assignment of the new backend typically removes the last
+   * reference in the smart-ptr managing the generation backend. This
+   * process can be repeated and then the [diagnostics](operator string())
+   * will show the remainder of the sequence _left at that point._
+   */
   inline DiffMessage&
-  DiffMessage::withDiagnostics()
+  DiffMessage::updateDiagnostics()
   {
     return *this = DiffMessage{new MaterialisedDiffMessageBuffer(*this)};
   }

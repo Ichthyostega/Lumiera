@@ -33,7 +33,6 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-util.hpp"
-#include "lib/format-cout.hpp" ///////////////TODO remove when done
 #include "lib/util.hpp"
 
 #include <string>
@@ -42,6 +41,7 @@
 using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
 using lib::iter_stl::IterSnapshot;
 using lib::iter_stl::snapshot;
+using util::contains;
 using util::isnil;
 using util::join;
 using std::string;
@@ -294,16 +294,35 @@ namespace test{
                              ,set(ATTRIB1)
                              ,del(CHILD_T)};
           
-          cout << diffMsg <<endl;
+          // initially only the default diagnostics of IterSource is shown (rendering the element type)
+          CHECK (string(diffMsg) == "IterSource<DiffLanguage<TreeDiffInterpreter, GenNode>::DiffStep>");
           
-          diffMsg.withDiagnostics();
-          cout << diffMsg <<endl;
+          // transparently take a snapshot
+          diffMsg.updateDiagnostics();
           
+          // now the whole sequence is rendered explicitly
+          string expectedRendering = join ({ins(TYPE_X), set(ATTRIB1), del(CHILD_T)});
+          CHECK (contains (string(diffMsg), expectedRendering));
+          
+          CHECK (string(set(ATTRIB1)) == "set(GenNode-ID(\"α\")-DataCap|«int»|1)");
+          
+          // and we can still iterate...
           CHECK (!isnil (diffMsg));
           CHECK (ins(TYPE_X)  == *diffMsg);
           CHECK (set(ATTRIB1) == *++diffMsg);
+          
+          // NOTE: in fact only the remainder of the sequence is captured...
+          diffMsg.updateDiagnostics();
+          CHECK (not contains (string(diffMsg), string(ins(TYPE_X))));
+          CHECK (    contains (string(diffMsg), string(set(ATTRIB1))));
+          CHECK (    contains (string(diffMsg), string(del(CHILD_T))));
+          
+          // and we can still continue to iterate...
           CHECK (del(CHILD_T) == *++diffMsg);
           CHECK (isnil (++diffMsg));
+          
+          diffMsg.updateDiagnostics();
+          CHECK (string(diffMsg) == "Diff--{}");
         }
       
       

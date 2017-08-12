@@ -205,6 +205,13 @@ namespace util {
     return buffer.str().substr(0, len - delim.length());
   }
   
+  template<class X>
+  inline string
+  join (std::initializer_list<X> const&& ili, string const& delim =", ")
+  {
+    return join (ili, delim);
+  }
+  
   
 } // namespace util
 #endif /*LIB_FORMAT_UTIL_H*/
