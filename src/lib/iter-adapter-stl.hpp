@@ -457,6 +457,7 @@ namespace iter_stl {
         }
       
       operator bool() const { return isValid(); }
+      size_t size()   const { return buffer_.size(); }
       
       
       
@@ -500,6 +501,8 @@ namespace iter_stl {
           return not isValid();
         }
       
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterSnapshot)
+
       
       /** equality is based both on the actual contents of the snapshots
        *  and the current iterator position */

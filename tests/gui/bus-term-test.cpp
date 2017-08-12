@@ -34,46 +34,58 @@
 #include "proc/control/command.hpp"
 #include "test/test-nexus.hpp"
 #include "test/mock-elm.hpp"
-#include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/diff/diff-message.hpp"
+#include "lib/idi/entry-id.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-stack.hpp"
+#include "lib/call-queue.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/luid.h"
 #include "lib/util.hpp"
 
 
-
 using lib::Sync;
 using backend::ThreadJoinable;
-using lib::idi::EntryID;
-using lib::idi::BareEntryID;
-using gui::ctrl::StateManager;
-using gui::ctrl::BusTerm;
-using gui::test::MockElm;
-using lib::diff::GenNode;
-using lib::diff::Rec;
-using lib::diff::Ref;
-using lib::diff::DiffSource;
-using lib::diff::DiffMessage;
-using lib::time::Time;
-using lib::time::TimeSpan;
-using lib::hash::LuidH;
 using lib::iter_stl::snapshot;
+using lib::IterQueue;
 using lib::IterStack;
-using lib::HashVal;
+using std::function;
 using util::isnil;
+using util::_Fmt;
 
 
 namespace gui  {
 namespace model{
 namespace test {
   
+  using lib::idi::EntryID;
+  using lib::idi::BareEntryID;
+  using proc::control::Command;
+  using gui::ctrl::StateManager;
+  using gui::ctrl::BusTerm;
+  using gui::test::MockElm;
+  using lib::diff::DiffMessage;
+  using lib::diff::TreeDiffLanguage;
+  using lib::diff::DiffSource;
+  using lib::diff::DiffStep;
+  using lib::diff::GenNode;
+  using lib::diff::MakeRec;
+  using lib::diff::Rec;
+  using lib::diff::Ref;
+  using lib::time::Time;
+  using lib::time::TimeSpan;
+  using lib::hash::LuidH;
+  using lib::test::EventLog;
+  using lib::CallQueue;
+  
   using proc::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
-  using proc::control::Command;
+  using ID = lib::idi::BareEntryID const&;
+  
   
   namespace {// test data...
     
@@ -550,7 +562,7 @@ namespace test {
               scheduleBorg (uint id)
                 {
                   Lock sync(this);
-                  sessionBorgs_.feed(id);
+                  sessionBorgs_.push(id);
                 }
               
               auto
@@ -568,63 +580,60 @@ namespace test {
                * the shared session data with proper locking, and derive
                * a representation of the "changes" in diff format
                */
-              struct DiffGenerator
+              struct BorgGenerator
                 : boost::noncopyable
+                , TreeDiffLanguage
                 , DiffSource
                 {
-                  using Iter = decltype(SessionThread::dispatchBorgs());
-                  using Pos  = typename Iter::pointer;
+                  SessionThread& theCube_;
+                  IterQueue<DiffStep> steps_;
                   
-                  
-                  SessionThread ctx_;
-                  Iter src_;
-                  
-                  DiffGenerator (SessionThread& motherShip)
-                    : ctx_{motherShip}
-                    , src_{}
+                  BorgGenerator (SessionThread& motherShip)
+                    : theCube_{motherShip}
                     { }
+                    
                   
                   /* == Interface IterSource<DiffStep> == */
-                  Pos
-                  firstResult ()
+                  
+                  virtual DiffStep*
+                  firstResult ()  override
                     {
-                      REQUIRE (not src_);
-                      src_ = ctx_.dispatchBorgs();
-                      return & *src_;
+                      REQUIRE (not steps_);
+                      auto plannedBorgs = theCube_.dispatchBorgs();
+                      uint max = plannedBorgs.size();
+                      uint cur = 0;
+                      _Fmt borgName{"%d of %d"};
+                      
+                      steps_.feed(after(Ref::ATTRIBS));
+                      for (uint id : plannedBorgs)
+                        {
+                          GenNode borg = MakeRec().genNode(borgName % ++cur % max);
+                          steps_.feed(ins(borg));
+                          steps_.feed(mut(borg));
+                          steps_.feed(  ins(GenNode{"borgID", int(id)}));
+                          steps_.feed(emu(borg));
+                        }
+                      steps_.feed(after(Ref::END));
+                      
+                      return & *steps_;
                     }
                   
-                  void
-                  nextResult (Pos& pos)
+                  virtual void
+                  nextResult (DiffStep*& pos)  override
                     {
                       if (!pos) return;
-                      if (src_) ++src_;
-                      if (src_)
-                        pos = & *src_;
+                      if (steps_) ++steps_;
+                      if (steps_)
+                        pos = & *steps_;
                       else
                         pos = 0;
                     }
                 };
               
-                
-              using UiBus = gui::ctrl::Nexus;
-                
-              /**
-               * The final part in the puzzle is to dispatch the diff messages into the UI
-               * In the real application, this operation is provided by the NotificationService.
-               * It has access to the UI-Bus, but has to ensure all bus operations are actually
-               * performed on the UI event thread.
-               */
-              void
-              notifyGUI (UiBus& uiBus, DiffSource* diffGenerator)
-                {
-                  ///TODO create diff message
-                  ///TODO use a CallQueue
-                  ///TODO dispatch application of the diff message via UiBus
-                }
-          
-              SessionThread(UiBus& uiBus)
+              /** launch the session thread and start injecting Borg */
+              SessionThread(function<void(DiffMessage&&)> notifyGUI)
                 : ThreadJoinable{"BusTerm_test: asynchronous diff mutation"
-                                , [&, uiBus]() {
+                                , [&]() {
                                     uint cnt       = rand() % MAX_RAND_BORGS;
                                     for (uint i=0; i<cnt; ++i)
                                       {
@@ -632,7 +641,7 @@ namespace test {
                                         usleep (delay);
                                         uint id    = rand() % MAX_RAND_NUMBS;
                                         scheduleBorg (id);
-                                        notifyGUI (uiBus, new DiffGenerator{*this});
+                                        notifyGUI (DiffMessage {new BorgGenerator{*this}});
                                       }
                                 }}
                 { }
@@ -644,9 +653,50 @@ namespace test {
           MockElm rootMock("alpha zero");
           ID rootID = rootMock.getID();
           
-          rootMock.attrib["α"] = "Centauri";
+          rootMock.attrib["α"] = "Quadrant";
           CHECK ("Centauri" == rootMock.attrib["α"]);
           CHECK (isnil (rootMock.scope));
+          
+          
+          // The final part in the puzzle is to dispatch the diff messages into the UI
+          // In the real application, this operation is provided by the NotificationService.
+          // It has access to the UI-Bus, but has to ensure all bus operations are actually
+          // performed on the UI event thread.
+          auto& uiBus = gui::test::Nexus::testUI();
+          CallQueue uiDispatcher;
+          auto notifyGUI = [&](DiffMessage&& diff)
+                              {
+                                uiDispatcher.feed ([&, diff]()
+                                                    {
+                                                      // apply and consume diff message stored within closure
+                                                      uiBus.change (rootID, move(unConst(diff)));
+                                                    });
+                              };
+          
+          
+          
+          //----start-multithreaded-mutation---
+          SessionThread session{notifyGUI};
+          do{
+              usleep(MAX_RAND_DELAY);
+              uiDispatcher.invoke();
+            }
+          while (not isnil(uiDispatcher));
+          session.join();
+          //------end-multithreaded-mutation---
+          
+          
+          cout << "____Event-Log_________________\n"
+               << util::join(rootMock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(nexusLog, "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "Attrib: "  + util::join(rootMock.attrib)
+               << "\nChildz: "+ util::join(rootMock.scope)
+               << ".!.";
         }
     };
   
