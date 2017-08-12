@@ -48,10 +48,10 @@
 #include "lib/itertools.hpp"
 #include "test/test-nexus.hpp"
 #include "lib/test/event-log.hpp"
-#include "gui/ctrl/nexus.hpp"
-#include "gui/ctrl/mutation-message.hpp"
-#include "gui/ctrl/state-recorder.hpp"
 #include "proc/control/command.hpp"
+#include "gui/ctrl/nexus.hpp"
+#include "gui/ctrl/state-recorder.hpp"
+#include "lib/diff/diff-message.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/idi/genfunc.hpp"
@@ -70,10 +70,10 @@ using lib::transformIterator;
 using lib::diff::Rec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
+using lib::diff::DiffMessage;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
-using gui::ctrl::MutationMessage;
 using gui::ctrl::StateManager;
 using gui::ctrl::StateRecorder;
 using proc::control::Command;
@@ -156,17 +156,18 @@ namespace test{
           }
         
         virtual bool
-        change (ID subject, MutationMessage& diff)  override
+        change (ID subject, DiffMessage&& diff)  override
           {
-            log_.call (this, "change", subject, diff);
-            if (BusHub::change (subject, diff))
+            string diffSeqLog{diff};
+            log_.call (this, "change", subject, diffSeqLog);
+            if (BusHub::change (subject, move(diff)))
               {
-                log_.event ("TestNexus", _Fmt("applied diff to %s |%s") % subject % diff);
+                log_.event ("TestNexus", _Fmt("applied diff to %s |%s") % subject % diffSeqLog);
                 return true;
               }
             else
               {
-                log_.warn (_Fmt("disregarding change/diff to unknown %s |%s") % subject % diff);
+                log_.warn (_Fmt("disregarding change/diff to unknown %s |%s") % subject % diffSeqLog);
                 return false;
               }
           }
@@ -306,7 +307,7 @@ namespace test{
           }
         
         virtual bool
-        change (ID subject, MutationMessage& diff)  override
+        change (ID subject, DiffMessage&& diff)  override
           {
             log().call(this, "change", subject, diff);
             log().error ("request to apply a diff message via ZombieNexus");

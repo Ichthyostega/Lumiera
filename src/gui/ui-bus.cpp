@@ -95,7 +95,6 @@ namespace ctrl {
     }
     
     
-    diff_msg::Holder::~Holder() { }
     
     
     
@@ -209,9 +208,9 @@ namespace ctrl {
      *         which consequently will reshape and remould itself accordingly.
      */
     bool
-    BusTerm::change (ID subject, MutationMessage& diff)
+    BusTerm::change (ID subject, DiffMessage&& diff)
     {
-      return theBus_.change(subject, diff);
+      return theBus_.change(subject, move(diff));
     }
     
     

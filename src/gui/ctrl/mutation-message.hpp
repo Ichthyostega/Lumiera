@@ -77,7 +77,7 @@ namespace ctrl{
     class Holder
       {
       public:
-        virtual ~Holder(); ///< this is an interface
+        virtual ~Holder() {}; ///< this is an interface
         virtual void applyTo (Tangible&)   =0;
         virtual string describe()  const   =0;
       };

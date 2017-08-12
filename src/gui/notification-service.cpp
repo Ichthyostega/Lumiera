@@ -49,8 +49,8 @@
 
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ctrl/ui-dispatcher.hpp"
-#include "gui/ctrl/mutation-message.hpp"
 #include "gui/notification-service.hpp"
+#include "lib/diff/diff-message.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
@@ -64,7 +64,7 @@ extern "C" {
 
 using lib::diff::GenNode;
 using lib::diff::TreeMutator;
-using gui::ctrl::MutationMessage;
+using lib::diff::DiffMessage;
 using gui::ctrl::UiDispatcher;
 using gui::ctrl::BusTerm;
 using std::string;
@@ -115,8 +115,8 @@ namespace gui {
   {
     dispatch_->event ([=]()                                                  //////////////////////////////////TODO care for error handling!!!
                       {
-                        MutationMessage diffHolder{DiffMessage(diff)};       //////////////////////////////////TICKET #1066 : unnecessary repackaging; could get rid of MutationMessage altogether
-                        this->change (uiElement, diffHolder);
+                        // apply and consume diff message stored within closure
+                        this->change (uiElement, move(unConst(diff)));
                       });
   }
   

@@ -41,29 +41,20 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/idi/entry-id.hpp"
 #include "lib/idi/genfunc.hpp"
+#include "lib/diff/diff-message.hpp"
+#include "lib/diff/tree-diff-application.hpp"
 #include "gui/ctrl/bus-term.hpp"
-#include "gui/ctrl/mutation-message.hpp"
 #include "gui/model/tangible.hpp"
-//#include "lib/util.hpp"
-//#include "gui/model/tangible.hpp"
-//#include "lib/diff/record.hpp"
 #include "lib/idi/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <string>
 #include <unordered_map>
 
 
 namespace gui {
 namespace ctrl{
   
-//  using lib::HashVal;
-//  using util::isnil;
-//  using lib::idi::EntryID;
-//  using lib::diff::Record;
-//  using std::string;
   
   
   /**
@@ -131,14 +122,16 @@ namespace ctrl{
        *         subject to this change
        */
       virtual bool
-      change (ID subject, MutationMessage& diff)  override
+      change (ID subject, DiffMessage&& diff)  override
         {
           auto entry = routingTable_.find (subject);
           if (entry == routingTable_.end())
             return false;
           else
             {
-              diff.applyTo (*entry->second);
+              Tangible& target = *entry->second;
+              lib::diff::DiffApplicator<Tangible> applicator{target};
+              applicator.consume (move(diff));
               return true;
             }
         }

@@ -68,16 +68,18 @@
 #include <string>
 
 
+namespace lib {
+  namespace diff { class DiffMessage; }
+}
 namespace gui {
 namespace model {
   class Tangible;
 }
 namespace ctrl{
   
-  class MutationMessage;
-  
   using lib::idi::EntryID;
   using lib::diff::GenNode;
+  using lib::diff::DiffMessage;
   using std::string;
   
   
@@ -119,7 +121,7 @@ namespace ctrl{
       virtual bool mark (ID subject, GenNode const& mark);
       
       virtual size_t markAll (GenNode const& mark);
-      virtual bool change (ID subject, MutationMessage& diff);
+      virtual bool change (ID subject, DiffMessage&& diff);
       
       virtual operator string()  const;
       

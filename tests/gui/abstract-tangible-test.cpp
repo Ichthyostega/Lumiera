@@ -52,8 +52,7 @@
 #include "lib/idi/genfunc.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "proc/control/command-def.hpp"
-#include "gui/ctrl/mutation-message.hpp"
-#include "lib/iter-adapter-stl.hpp"
+#include "lib/diff/diff-message.hpp"
 #include "lib/diff/tree-diff.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
@@ -75,9 +74,9 @@ using lib::diff::Rec;
 using lib::diff::MakeRec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
+using lib::diff::DiffMessage;
 using proc::control::Command;
 using proc::control::CommandDef;
-using gui::ctrl::MutationMessage;
 
 
 
@@ -601,16 +600,16 @@ namespace test {
                 generateDiff()
                   {
                     using lib::diff::Ref;
-                    using lib::iter_stl::snapshot;
                     
-                    return snapshot({after(Ref::ATTRIBS)   // start after the existing attributes (of root)
-                                   , ins(CHILD_1)          // insert first child (with name "a")
-                                   , ins(CHILD_2)          // insert second child (with name "b")
-                                   , set(ATTRIB_AL)        // assign a new value to attribute "α" <- "quadrant"
-                                   , mut(CHILD_2)          // open nested scope of child "b" for recursive mutation
-                                     , ins(ATTRIB_PI)      // ..within nested scope, add a new attribute "π" := 3.14159265
-                                   , emu(CHILD_2)          // leave nested scope
-                                   });
+                    return DiffMessage{ after(Ref::ATTRIBS)   // start after the existing attributes (of root)
+                                      , ins(CHILD_1)          // insert first child (with name "a")
+                                      , ins(CHILD_2)          // insert second child (with name "b")
+                                      , set(ATTRIB_AL)        // assign a new value to attribute "α" <- "quadrant"
+                                      , mut(CHILD_2)          // open nested scope of child "b" for recursive mutation
+                                        , ins(ATTRIB_PI)      // ..within nested scope, add a new attribute "π" := 3.14159265
+                                      , emu(CHILD_2)          // leave nested scope
+                                      }
+                                      .updateDiagnostics();   // make operator string() show the whole generated diff sequence
                   }
               }
               diffSrc;
@@ -620,8 +619,7 @@ namespace test {
           
           
           // send a Diff message via UI-Bus to the rootMock
-          MutationMessage mutabor{diffSrc.generateDiff()};
-          uiBus.change(rootID, mutabor);
+          uiBus.change(rootID, diffSrc.generateDiff());
           
           
           // Verify the rootMock has been properly altered....
