@@ -21,23 +21,67 @@
 */
 
 
-/** @file diff-message.hpp
+/** @file mutation-message.hpp
  ** Generic Message with an embedded diff, to describe changes to model elements.
- ** The ability to create and apply such messages to describe and effect changes,
- ** without actually knowing much about the target to receive the diff, relies on the
- ** [diff framework](\ref diff-language.hpp).
+ ** The ability to create and apply such messages relies on the [diff framework](\ref diff-language.hpp).
+ ** Using diff messages allows to describe and effect changes, without actually knowing much about the target.
+ ** Sender and receiver just need to share some common assumptions about the abstract structure of the data.
  ** 
- ** The challenging part with this task is the fact that we need to pass such messages
- ** over abstraction barriers and even schedule them into another thread (the UI event thread),
- ** but diff application actually is a _pull operation_ and thus indicates that there must
- ** be a callback actually to retrieve the diff content.
+ ** The challenging part with this task is the fact that we need to pass such messages over abstraction barriers
+ ** and even schedule them into another thread (the UI event thread). Yet diff application actually is a _pull operation,_
+ ** which means there must be a callback actually to retrieve the diff content, and this callback will happen from
+ ** the context of the receiver.
  ** 
- ** @todo as of 1/2017 this is placeholder code and we need a concept //////////////////////////////////////////TICKET #1066 : how to pass diff messages
- ** @todo as of 8/2017 I am still rather clueless regarding the concrete situation to generate DiffMessage,
- **       and as a move into the dark I'll just define it to be based on IterSource...
+ ** # Mutation messages on the UI-Bus
  ** 
- ** @see DiffMessage_test
+ ** The UI-Bus offers a dedicated API to direct MutationMessages towards [UI-Elements](\ref model::Tangible).
+ ** Each _tangible element in the UI,_ be it Widget or Controller, is designated by an unique ID. Sending a
+ ** Mutation message causes the target to alter and reshape itself, to comply to the _diff sequence_ indicated
+ ** and transported through the message -- since a diff sequence as such is always concrete and relates to a
+ ** a specific context, we can not represent it directly as a type on interface level. Rather, the receiver
+ ** of a diff sequence must offer the ability to be reshaped through diff messages, which is expressed through
+ ** the interface DiffMutable. In the case at question here, gui::model::Tangible offers this interface and thus
+ ** the ability to construct a concrete lib::diff::TreeMutator, which in turn is bound to the internals of the
+ ** actual UI-Element. In this framework, a diff is actually represented as a sequence of _diff verbs,_ which
+ ** can be ``pulled'' one by one from the MutationMessage, and then applied to the target data structure
+ ** with the help of a `DiffApplicator<DiffMutable>`, based on the TreeMutator exposed.
+ ** 
+ ** # Mutation messages sent from the Session into the UI
+ ** 
+ ** While components in the UI generate commands to work on the session, the effect of performing those commands
+ ** is reflected back asynchronously into the GUI through MutationMessages. All _visible content in the UI_ is
+ ** controlled by such messages. Initially the UI is a blank slate, and will be populated with content to reflect
+ ** the content and structure of the session. Whenever the session changes, an incremental update is pushed into
+ ** the UI as a diff.
+ ** 
+ ** Hand-over and application of mutations is actually a process in two steps. The necessity to change something
+ ** is indicated (or ``triggered'') by passing a MutationMessage through the GuiNotification::facade. We should
+ ** note at this point that Session and UI perform each within a dedicated single thread (contrast this to the
+ ** player and render engine, which are inherently multithreaded). The UI is loaded as plug-in and opens the
+ ** GuiNotification::facade when the event loop is started. Thus _initiating_ the mutation process is a simple
+ ** invocation from the session thread, which enqueues the MutationMessage and schedules the trigger over into
+ ** the UI event thread. This starts the second stage of diff application: when the UI is about to process
+ ** this event, the MutationMessage (which was passed through a dispatcher queue) will be forwarded over the
+ ** UI-Bus to reach the designated target object. On reception, the receiving UI-Element builds and exposes
+ ** its TreeMutator and the starts to _pull_ the individual DiffStep entries from the MutationMessage.
+ ** But in fact those entries aren't stored within the message, rather a callback is invoked. When initially
+ ** creating the message, an _opaque generation context_ was established, which now receives those callbacks
+ ** and generates the actual sequence of diff verbs, which are immediately passed on to through the DiffApplicator
+ ** and the TreeMutator to effect the corresponding changes in the target data structure within the UI. Care has
+ ** to be taken when referring to session data at that point, since the pull happens from within the UI thread;
+ ** yet in the end this remains an opaque implementation detail within the session.
+ ** 
+ ** ## Creation of mutation messages
+ ** 
+ ** The standard case is to build a MutationMessage by passing a heap allocated generator object. This DiffSource
+ ** object needs to implement the interface lib::IterSource<DiffStep>, with callbacks to generate the initial
+ ** step and further steps. Incidentally, the MutationMessage takes ownership and manages the DiffSource generator.
+ ** Beyond this standard case, MutationMessage offers several convenience constructors to produce simple diff
+ ** messages with a predetermined fixes sequence of DiffStep entries.
+ ** 
+ ** @see MutationMessage_test
  ** @see AbstractTangible_test
+ ** @see BustTerm_test::pushDiff()
  ** @see BusTerm::change()
  ** 
  */
@@ -82,14 +126,9 @@ namespace diff{
    * implementation level or even know much about the other's implementation details. As motivation,
    * contrast this to a naive UI implementation, which directly accesses some backend data structure;
    * any change to the backend implementation typically affects the UI implementation on a detail level.
-   *  
-   * @todo WIP 8/2017 -- as a bold step towards the solution yet to be discovered,
-   *       I now define DiffMessage to be based on IterSource<DiffStep>, which means
-   *       to add yet another abstraction barrier, so the implementation of diff generation
-   *       remains confined within the producer of DiffMessages.
-   * @warning yet still the fundamental problem remains: the production context of such
-   *       diff messages need to be conserved beyond the producer's thread context, because
-   *       it will be pulled asynchronous from within the UI event thread!
+   * @warning be sure to understand the fundamental problem of diff generation and application:
+   *       the production context of diff messages need to be conserved beyond the producer's
+   *       thread context, because it will be pulled asynchronous from within the UI event thread!
    */
   struct DiffMessage
     : DiffSource::iterator
