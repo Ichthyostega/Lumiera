@@ -49,7 +49,7 @@
 
 using lib::Sync;
 using backend::ThreadJoinable;
-using lib::iter_stl::snapshot;
+using lib::iter_stl::dischargeToSnapshot;
 using lib::IterQueue;
 using lib::IterStack;
 using std::function;
@@ -134,7 +134,7 @@ namespace test {
           replayStateMark();
           verifyNotifications();
           clearStates();
-//        pushDiff();             ///////////////////////////////////////////////////////////////////////////TICKET #1066
+          pushDiff();             ///////////////////////////////////////////////////////////////////////////TICKET #1066
         }
       
       
@@ -563,13 +563,15 @@ namespace test {
                 {
                   Lock sync(this);
                   sessionBorgs_.push(id);
+                  cout << "Sess: scheduledBorgs... "<<util::join(sessionBorgs_)<<"\n";
                 }
               
               auto
               dispatchBorgs()
                 {
                   Lock sync(this);
-                  return snapshot(sessionBorgs_);
+                  cout << "Sess: discharge "<<sessionBorgs_.size()<<" Borgs... \n";
+                  return dischargeToSnapshot (sessionBorgs_);
                 }
               
               /**
@@ -585,11 +587,13 @@ namespace test {
                 , TreeDiffLanguage
                 , DiffSource
                 {
+                  uint id_;
                   SessionThread& theCube_;
                   IterQueue<DiffStep> steps_;
                   
-                  BorgGenerator (SessionThread& motherShip)
-                    : theCube_{motherShip}
+                  BorgGenerator (SessionThread& motherShip, uint id)
+                    : id_{id}
+                    , theCube_{motherShip}
                     { }
                     
                   
@@ -599,21 +603,24 @@ namespace test {
                   firstResult ()  override
                     {
                       REQUIRE (not steps_);
+                      cout << "Gen-"<<id_<<": makeDiff...\n";
                       auto plannedBorgs = theCube_.dispatchBorgs();
                       uint max = plannedBorgs.size();
                       uint cur = 0;
-                      _Fmt borgName{"%d of %d"};
+                      _Fmt borgName{"%d of %d |%03d|"};
+                      cout << "Gen-"<<id_<<": make......."<<max<<" Borg!\n";
                       
                       steps_.feed(after(Ref::ATTRIBS));
                       for (uint id : plannedBorgs)
                         {
-                          GenNode borg = MakeRec().genNode(borgName % ++cur % max);
+                          GenNode borg = MakeRec().genNode(borgName % ++cur % max % id);
                           steps_.feed(ins(borg));
                           steps_.feed(mut(borg));
                           steps_.feed(  ins(GenNode{"borgID", int(id)}));
                           steps_.feed(emu(borg));
                         }
                       steps_.feed(after(Ref::END));
+                      cout << "Gen-"<<id_<<": made.......diff|||\n";
                       
                       return & *steps_;
                     }
@@ -627,21 +634,24 @@ namespace test {
                         pos = & *steps_;
                       else
                         pos = 0;
+                      cout << "Gen-"<<id_<<": iter......."<<pos<<"\n";
                     }
                 };
               
               /** launch the session thread and start injecting Borg */
               SessionThread(function<void(DiffMessage&&)> notifyGUI)
                 : ThreadJoinable{"BusTerm_test: asynchronous diff mutation"
-                                , [&]() {
+                                , [=]() {
                                     uint cnt       = rand() % MAX_RAND_BORGS;
+                                    cout << "Sess: produce "<<cnt<<" Borg...\n";
                                     for (uint i=0; i<cnt; ++i)
                                       {
                                         uint delay = rand() % MAX_RAND_DELAY;
+                                        cout << "Sess: delay... "<<delay<<"...\n";
                                         usleep (delay);
                                         uint id    = rand() % MAX_RAND_NUMBS;
                                         scheduleBorg (id);
-                                        notifyGUI (DiffMessage {new BorgGenerator{*this}});
+                                        notifyGUI (DiffMessage {new BorgGenerator{*this, i}});
                                       }
                                 }}
                 { }
@@ -654,7 +664,7 @@ namespace test {
           ID rootID = rootMock.getID();
           
           rootMock.attrib["α"] = "Quadrant";
-          CHECK ("Centauri" == rootMock.attrib["α"]);
+          CHECK ("Quadrant" == rootMock.attrib["α"]);
           CHECK (isnil (rootMock.scope));
           
           
@@ -666,9 +676,11 @@ namespace test {
           CallQueue uiDispatcher;
           auto notifyGUI = [&](DiffMessage&& diff)
                               {
+                                cout << "Sess: notifyUI\n";
                                 uiDispatcher.feed ([&, diff]()
                                                     {
                                                       // apply and consume diff message stored within closure
+                                                      cout << "GUI : apply Diff\n";
                                                       uiBus.change (rootID, move(unConst(diff)));
                                                     });
                               };
@@ -677,11 +689,17 @@ namespace test {
           
           //----start-multithreaded-mutation---
           SessionThread session{notifyGUI};
-          do{
-              usleep(MAX_RAND_DELAY);
+          usleep (2 * MAX_RAND_DELAY);
+          cout << "GUI : while...remaining "<<uiDispatcher.size()<<"\n";
+          while (not isnil(uiDispatcher))
+            {
+              cout << "GUI : do...delay="<<MAX_RAND_DELAY<<"\n";
+              usleep (MAX_RAND_DELAY);
+              cout << "GUI : do...dispatch\n";
               uiDispatcher.invoke();
+              cout << "GUI : do...remaining "<<uiDispatcher.size()<<"\n";
             }
-          while (not isnil(uiDispatcher));
+          cout << "TEST: Joint.......\n";
           session.join();
           //------end-multithreaded-mutation---
           
@@ -696,7 +714,7 @@ namespace test {
           
           cout << "Attrib: "  + util::join(rootMock.attrib)
                << "\nChildz: "+ util::join(rootMock.scope)
-               << ".!.";
+               << ".!.\n";
         }
     };
   
