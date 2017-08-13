@@ -389,6 +389,12 @@ namespace test{
     return testNexus().getLog().clear();
   }
   
+  size_t
+  Nexus::size()
+  {
+    return testNexus().size();
+  }
+  
   
   /**
    * install a closure (custom handler function)

@@ -87,6 +87,8 @@ namespace test{
       static lib::test::EventLog const& getLog();
       static lib::test::EventLog const& startNewLog();
       
+      static size_t size();
+      
       
       /* == allow to set custom handlers for commands and state changes == */
       

@@ -28,6 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/sync.hpp"
+#include "lib/sync-classlock.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/state-manager.hpp"
@@ -46,13 +47,18 @@
 #include "lib/luid.h"
 #include "lib/util.hpp"
 
+#include <boost/lexical_cast.hpp>
+
+using boost::lexical_cast;
 
 using lib::Sync;
+using lib::ClassLock;
 using backend::ThreadJoinable;
 using lib::iter_stl::dischargeToSnapshot;
 using lib::IterQueue;
 using lib::IterStack;
 using std::function;
+using util::contains;
 using util::isnil;
 using util::_Fmt;
 
@@ -89,11 +95,13 @@ namespace test {
   
   namespace {// test data...
     
-    // --------random-dispatch-test------
-    uint const MAX_RAND_NUMBS = 200;
-    uint const MAX_RAND_BORGS = 500;
-    uint const MAX_RAND_DELAY = 1000;
-    // --------random-dispatch-test------
+    // --------random-diff-test------
+    uint const MAX_RAND_BORGS = 100;        // stay below 400, verification export grows quadratic
+    uint const MAX_RAND_NUMBS = 500;
+    uint const MAX_RAND_DELAY = 5000;       // throttle generation, since diff application is slower
+    // --------random-diff-test------
+    
+    int generator_instances = 0;
   }
   
   
@@ -110,13 +118,14 @@ namespace test {
    * This test enacts the fundamental generic communication patterns
    * to verify the messaging behaviour
    * - attaching a \ref BusTerm
-   * - generating a command invocation
+   * - detaching on element destruction
+   * - generate a command invocation
    * - argument passing
    * - capture a _state mark_
    * - replay a _state mark_
    * - cast messages and error states downstream
    * - generic operating of interface states
-   * - detaching on element destruction
+   * - multithreaded integration test of diff mutation
    * 
    * @see AbstractTangible_test
    * @see gui::model::Tangible
@@ -134,7 +143,7 @@ namespace test {
           replayStateMark();
           verifyNotifications();
           clearStates();
-          pushDiff();             ///////////////////////////////////////////////////////////////////////////TICKET #1066
+          pushDiff();
         }
       
       
@@ -532,18 +541,22 @@ namespace test {
         }
       
       
-      /** @test integration test of mutation by diff message
+      
+      
+      
+      /**
+       * @test integration test of mutation by diff message
        *  Since this test focuses on the bus side of standard interactions,
        *  it seems indicated to emulate the complete invocation situation,
        *  which involves passing thread boundraries. The main thread running
        *  this test shall enact the role of the UI event thread (since the
        *  UI-Bus in the real application is confined to this UI thread).
        *  Thus we'll start another thread to enact the role of the Session,
-       *  to produce a diff message and "cast" it towards the UI.
+       *  to produce diff messages and "cast" them towards the UI.
        * @note a defining property of this whole interaction is the fact that
-       *  the diff is _pulled asynchronously,_ which means the actual diff
-       *  generation happens on callback from the UI. Access to any "session"
-       *  data needs to be protected by lock in such a situation.
+       *       the diff is _pulled asynchronously,_ which means the actual diff
+       *       generation happens on callback from the UI. Access to any "session"
+       *       data needs to be protected by lock in such a situation.
        */
       void
       pushDiff()
@@ -555,6 +568,7 @@ namespace test {
             , ThreadJoinable
             {
               // shared data
+              uint64_t borgChecksum_ = 0;
               IterStack<uint> sessionBorgs_;
               
               // access to shared session data
@@ -562,17 +576,18 @@ namespace test {
               scheduleBorg (uint id)
                 {
                   Lock sync(this);
+                  borgChecksum_ += id;
                   sessionBorgs_.push(id);
-                  cout << "Sess: scheduledBorgs... "<<util::join(sessionBorgs_)<<"\n";
                 }
               
               auto
               dispatchBorgs()
                 {
                   Lock sync(this);
-                  cout << "Sess: discharge "<<sessionBorgs_.size()<<" Borgs... \n";
                   return dischargeToSnapshot (sessionBorgs_);
                 }
+              
+              
               
               /**
                * Independent heap allocated diff generator.
@@ -587,14 +602,22 @@ namespace test {
                 , TreeDiffLanguage
                 , DiffSource
                 {
-                  uint id_;
+                  uint generatorID_;
                   SessionThread& theCube_;
                   IterQueue<DiffStep> steps_;
                   
                   BorgGenerator (SessionThread& motherShip, uint id)
-                    : id_{id}
+                    : generatorID_{id}
                     , theCube_{motherShip}
-                    { }
+                    {
+                      ClassLock<BorgGenerator> sync;
+                      ++generator_instances;
+                    }
+                 ~BorgGenerator()
+                    {
+                      ClassLock<BorgGenerator> sync;
+                      --generator_instances;
+                    }
                     
                   
                   /* == Interface IterSource<DiffStep> == */
@@ -603,27 +626,27 @@ namespace test {
                   firstResult ()  override
                     {
                       REQUIRE (not steps_);
-                      cout << "Gen-"<<id_<<": makeDiff...\n";
                       auto plannedBorgs = theCube_.dispatchBorgs();
                       uint max = plannedBorgs.size();
                       uint cur = 0;
-                      _Fmt borgName{"%d of %d |%03d|"};
-                      cout << "Gen-"<<id_<<": make......."<<max<<" Borg!\n";
                       
-                      steps_.feed(after(Ref::ATTRIBS));
-                      for (uint id : plannedBorgs)
+                      _Fmt borgName{"%d of %d ≺%03d.gen%03d≻"};
+                      
+                      
+                      steps_.feed (after(Ref::ATTRIBS));  // important: retain all existing attributes
+                      for (uint id : plannedBorgs)        // Generate diff to inject a flock of Borg
                         {
-                          GenNode borg = MakeRec().genNode(borgName % ++cur % max % id);
-                          steps_.feed(ins(borg));
-                          steps_.feed(mut(borg));
-                          steps_.feed(  ins(GenNode{"borgID", int(id)}));
-                          steps_.feed(emu(borg));
+                          GenNode borg = MakeRec().genNode(borgName % ++cur % max % id % generatorID_);
+                          steps_.feed (ins(borg));
+                          steps_.feed (mut(borg));        // open nested scope for this Borg
+                          steps_.feed (  ins(GenNode{"borgID", int(id)}));
+                          steps_.feed (emu(borg));        // close nested scope
                         }
-                      steps_.feed(after(Ref::END));
-                      cout << "Gen-"<<id_<<": made.......diff|||\n";
+                      steps_.feed (after(Ref::END));      // important: fast-forward and accept already existing Borgs
                       
-                      return & *steps_;
+                      return & *steps_;  // the IterSource protocol requires us to return a ptr to current element
                     }
+                  
                   
                   virtual void
                   nextResult (DiffStep*& pos)  override
@@ -631,31 +654,32 @@ namespace test {
                       if (!pos) return;
                       if (steps_) ++steps_;
                       if (steps_)
-                        pos = & *steps_;
+                        pos = & *steps_; // pointer to current element
                       else
-                        pos = 0;
-                      cout << "Gen-"<<id_<<": iter......."<<pos<<"\n";
+                        pos = NULL;      // signal iteration end
                     }
                 };
               
-              /** launch the session thread and start injecting Borg */
-              SessionThread(function<void(DiffMessage&&)> notifyGUI)
+                
+              /**
+               * launch the Session Thread and start injecting Borg
+               */
+              SessionThread(function<void(DiffSource*)> notifyGUI)
                 : ThreadJoinable{"BusTerm_test: asynchronous diff mutation"
                                 , [=]() {
                                     uint cnt       = rand() % MAX_RAND_BORGS;
-                                    cout << "Sess: produce "<<cnt<<" Borg...\n";
                                     for (uint i=0; i<cnt; ++i)
                                       {
                                         uint delay = rand() % MAX_RAND_DELAY;
-                                        cout << "Sess: delay... "<<delay<<"...\n";
-                                        usleep (delay);
                                         uint id    = rand() % MAX_RAND_NUMBS;
+                                        usleep (delay);
                                         scheduleBorg (id);
-                                        notifyGUI (DiffMessage {new BorgGenerator{*this, i}});
+                                        notifyGUI (new BorgGenerator{*this, i});
                                       }
                                 }}
                 { }
             };
+          
           
           
           EventLog nexusLog = gui::test::Nexus::startNewLog();
@@ -667,6 +691,8 @@ namespace test {
           CHECK ("Quadrant" == rootMock.attrib["α"]);
           CHECK (isnil (rootMock.scope));
           
+          CHECK (0 == generator_instances);
+          
           
           // The final part in the puzzle is to dispatch the diff messages into the UI
           // In the real application, this operation is provided by the NotificationService.
@@ -674,14 +700,12 @@ namespace test {
           // performed on the UI event thread.
           auto& uiBus = gui::test::Nexus::testUI();
           CallQueue uiDispatcher;
-          auto notifyGUI = [&](DiffMessage&& diff)
+          auto notifyGUI = [&](DiffSource* diffGenerator)
                               {
-                                cout << "Sess: notifyUI\n";
-                                uiDispatcher.feed ([&, diff]()
+                                uiDispatcher.feed ([&, diffGenerator]()
                                                     {
                                                       // apply and consume diff message stored within closure
-                                                      cout << "GUI : apply Diff\n";
-                                                      uiBus.change (rootID, move(unConst(diff)));
+                                                      uiBus.change (rootID, DiffMessage{diffGenerator});
                                                     });
                               };
           
@@ -690,18 +714,51 @@ namespace test {
           //----start-multithreaded-mutation---
           SessionThread session{notifyGUI};
           usleep (2 * MAX_RAND_DELAY);
-          cout << "GUI : while...remaining "<<uiDispatcher.size()<<"\n";
           while (not isnil(uiDispatcher))
             {
-              cout << "GUI : do...delay="<<MAX_RAND_DELAY<<"\n";
-              usleep (MAX_RAND_DELAY);
-              cout << "GUI : do...dispatch\n";
+              usleep (100);
               uiDispatcher.invoke();
-              cout << "GUI : do...remaining "<<uiDispatcher.size()<<"\n";
             }
-          cout << "TEST: Joint.......\n";
           session.join();
           //------end-multithreaded-mutation---
+          
+          
+          // now verify rootMock has been properly assimilated...
+          uint generatedBorgs = rootMock.scope.size();
+          
+          // root and all Borg child nodes are connected to the UI-Bus
+          CHECK (1 + generatedBorgs == gui::test::Nexus::size());
+          
+          uint64_t borgChecksum = 0;
+          for (uint i=0; i<generatedBorgs; ++i)
+            {
+              MockElm& borg = *rootMock.scope[i];
+              CHECK (contains (borg.attrib, "borgID"));
+              string borgID = borg.attrib["borgID"];
+              borgChecksum += lexical_cast<int> (borgID);
+              string childID = borg.getID().getSym();
+              CHECK (contains (childID, borgID));
+              CHECK (contains (childID, " of ")); // e.g. "3 of 5"
+              
+              CHECK (nexusLog.verifyCall("routeAdd").arg(rootMock.getID(), memLocation(rootMock))      // rootMock was attached to Nexus
+                             .beforeCall("change")  .argMatch(rootMock.getID(),                        // diff message sent via UI-Bus
+                                                              "after.+_ATTRIBS_.+"                     // verify diff pattern generated for each Borg
+                                                              "ins.+"+childID+".+"
+                                                              "mut.+"+childID+".+"
+                                                              "ins.+borgID.+"+borgID+".+"
+                                                              "emu.+"+childID)
+                             .beforeCall("routeAdd").arg(borg.getID(), memLocation(borg))              // Borg was inserted as child and attached to Nexus
+                             .beforeEvent("applied diff to "+string(rootMock.getID()))
+                             );
+            }
+          
+          CHECK (rootMock.attrib["α"] == "Quadrant");     // attribute alpha was preserved while injecting all those Borg
+          
+          
+          // sanity checks
+          CHECK (borgChecksum == session.borgChecksum_);  // no Borgs got lost
+          CHECK (0 == generator_instances);               // no generator instance leaks
+          
           
           
           cout << "____Event-Log_________________\n"
@@ -711,10 +768,13 @@ namespace test {
           cout << "____Nexus-Log_________________\n"
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
-          
-          cout << "Attrib: "  + util::join(rootMock.attrib)
-               << "\nChildz: "+ util::join(rootMock.scope)
-               << ".!.\n";
+        }
+      
+      
+      static string
+      memLocation (Tangible& uiElm)
+        {
+          return lib::idi::instanceTypeID (&uiElm);
         }
     };
   
