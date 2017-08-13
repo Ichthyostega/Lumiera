@@ -42,7 +42,7 @@
 
 #include "lib/error.hpp"
 #include "lib/idi/genfunc.hpp"
-#include "lib/diff/diff-message.hpp"
+#include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/model/tangible.hpp"
@@ -122,7 +122,7 @@ namespace ctrl{
        *         subject to this change
        */
       virtual bool
-      change (ID subject, DiffMessage&& diff)  override
+      change (ID subject, MutationMessage&& diff)  override
         {
           auto entry = routingTable_.find (subject);
           if (entry == routingTable_.end())

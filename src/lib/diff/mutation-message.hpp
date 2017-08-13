@@ -1,5 +1,5 @@
 /*
-  DIFF-MESSAGE.hpp  -  message to cause changes to generic model elements
+  MUTATION-MESSAGE.hpp  -  message to cause changes to generic model elements
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -87,8 +87,8 @@
  */
 
 
-#ifndef LIB_DIFF_DIFF_MESSAGE_H
-#define LIB_DIFF_DIFF_MESSAGE_H
+#ifndef LIB_DIFF_MUTATION_MESSAGE_H
+#define LIB_DIFF_MUTATION_MESSAGE_H
 
 
 #include "lib/error.hpp"
@@ -130,26 +130,26 @@ namespace diff{
    *       the production context of diff messages need to be conserved beyond the producer's
    *       thread context, because it will be pulled asynchronous from within the UI event thread!
    */
-  struct DiffMessage
+  struct MutationMessage
     : DiffSource::iterator
     {
       using _FrontEnd = DiffSource::iterator;
       
-      DiffMessage()                               = default;
-      DiffMessage(DiffMessage&&)                  = default;
-      DiffMessage(DiffMessage const&)             = default;
-      DiffMessage(DiffMessage& o)  : DiffMessage((DiffMessage const&)o) { }
-      DiffMessage& operator= (DiffMessage const&) = default;
-      DiffMessage& operator= (DiffMessage &&)     = default;
-                                                    ////////////////////////TICKET #963  Forwarding shadows copy operations
+      MutationMessage()                                   = default;
+      MutationMessage(MutationMessage&&)                  = default;
+      MutationMessage(MutationMessage const&)             = default;
+      MutationMessage(MutationMessage& o)  : MutationMessage((MutationMessage const&)o) { }
+      MutationMessage& operator= (MutationMessage const&) = default;
+      MutationMessage& operator= (MutationMessage &&)     = default;
+                                                            ////////////////////////TICKET #963  Forwarding shadows copy operations
       
       /**
-       * DiffMessage builder:
+       * MutationMessage builder:
        * take ownership of an opaque heap allocated context
        * from which the concrete diff can be pulled on demand 
        */
       explicit
-      DiffMessage(DiffSource* diffGenerationContext)
+      MutationMessage(DiffSource* diffGenerationContext)
         : _FrontEnd{DiffSource::build (diffGenerationContext)}
         { }
       
@@ -158,8 +158,8 @@ namespace diff{
        * @note initialiser elements will be _copied_ into a _heap alloacated_
        *       snapshot (vector), which is then managed by `shared_ptr`
        */
-      DiffMessage(std::initializer_list<DiffStep> const&& ili)
-        : DiffMessage{iter_stl::snapshot (move(ili))}
+      MutationMessage(std::initializer_list<DiffStep> const&& ili)
+        : MutationMessage{iter_stl::snapshot (move(ili))}
         { }
       
       /**
@@ -168,8 +168,8 @@ namespace diff{
        *       a _heap allocated snapshot_
        */
       template<typename...ARGS>
-      DiffMessage(ARGS&& ...args)
-        : DiffMessage{ {std::forward<ARGS>(args)...} }
+      MutationMessage(ARGS&& ...args)
+        : MutationMessage{ {std::forward<ARGS>(args)...} }
         { }
       
       /**
@@ -177,7 +177,7 @@ namespace diff{
        * @note source iterator is copied into a heap allocated IterSource
        */
       template<class IT>
-      DiffMessage(IT&& ii,                            enable_if< can_IterForEach<IT>, void*> =nullptr)
+      MutationMessage(IT&& ii,                        enable_if< can_IterForEach<IT>, void*> =nullptr)
         : _FrontEnd{iter_source::wrapIter (std::forward<IT>(ii))}
         { }
       
@@ -187,7 +187,7 @@ namespace diff{
        * @warning like with any classical iterators, the container must stay alive and accessible 
        */
       template<class CON>
-      DiffMessage(CON& container,                     enable_if< __and_< can_STL_ForEach<CON>
+      MutationMessage(CON& container,                 enable_if< __and_< can_STL_ForEach<CON>
                                                                        ,__not_<can_IterForEach<CON>>>, void*> =nullptr)
         : _FrontEnd{iter_source::eachEntry(container)}
         { }
@@ -196,11 +196,11 @@ namespace diff{
       /**
        * enable support to show content of the message.
        * After calling this function, operator string() renders all DiffSteps
-       * @warning since by design a DiffMessage can only be ``pulled'' once,
+       * @warning since by design a MutationMessage can only be ``pulled'' once,
        *          this operation needs to impose a _side effect:_ it materialises
        *          the complete diff sequence at once into a heap allocated buffer.
        */
-      DiffMessage& updateDiagnostics();
+      MutationMessage& updateDiagnostics();
     };
   
   
@@ -211,7 +211,7 @@ namespace diff{
     struct DiffSnapshot
       : std::vector<DiffStep>
       {
-        DiffSnapshot(DiffMessage& srcMsg)
+        DiffSnapshot(MutationMessage& srcMsg)
           {
             for ( ; srcMsg; ++srcMsg )
               push_back (*srcMsg);
@@ -223,7 +223,7 @@ namespace diff{
     using _Wrapped = WrappedLumieraIter<_RangeIT>;
     
     /**
-     * Decorator to be layered transparently on top of DiffMessage.
+     * Decorator to be layered transparently on top of MutationMessage.
      * Actually, what we do is to discharge the diff generator into
      * the DiffSnapshot buffer and then replace the link to the original
      * generator to this decorator, which, when iterated, yields the
@@ -231,12 +231,12 @@ namespace diff{
      * are now stored into that DiffSnapshot _buffer we control,_ we're
      * able to produce a diagnostic listing of the complete sequence.
      */
-    class MaterialisedDiffMessageBuffer
+    class MaterialisedDiffBuffer
       : private DiffSnapshot
       , public _Wrapped
       {
       public:
-        MaterialisedDiffMessageBuffer(DiffMessage& srcMsg)
+        MaterialisedDiffBuffer(MutationMessage& srcMsg)
           : DiffSnapshot{srcMsg}
           , _Wrapped{_RangeIT{DiffSnapshot::begin(), DiffSnapshot::end()}}
           { }
@@ -259,10 +259,10 @@ namespace diff{
    * process can be repeated and then the [diagnostics](operator string())
    * will show the remainder of the sequence _left at that point._
    */
-  inline DiffMessage&
-  DiffMessage::updateDiagnostics()
+  inline MutationMessage&
+  MutationMessage::updateDiagnostics()
   {
-    return *this = DiffMessage{new MaterialisedDiffMessageBuffer(*this)};
+    return *this = MutationMessage{new MaterialisedDiffBuffer(*this)};
   }
 
   
@@ -270,4 +270,4 @@ namespace diff{
   
   
 }} // namespace lib::diff
-#endif /*LIB_DIFF_DIFF_MESSAGE_H*/
+#endif /*LIB_DIFF_MUTATION_MESSAGE_H*/

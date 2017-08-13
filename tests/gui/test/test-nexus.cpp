@@ -51,7 +51,7 @@
 #include "proc/control/command.hpp"
 #include "gui/ctrl/nexus.hpp"
 #include "gui/ctrl/state-recorder.hpp"
-#include "lib/diff/diff-message.hpp"
+#include "lib/diff/mutation-message.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/idi/genfunc.hpp"
@@ -70,7 +70,7 @@ using lib::transformIterator;
 using lib::diff::Rec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
-using lib::diff::DiffMessage;
+using lib::diff::MutationMessage;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
 using gui::ctrl::BusTerm;
@@ -156,7 +156,7 @@ namespace test{
           }
         
         virtual bool
-        change (ID subject, DiffMessage&& diff)  override
+        change (ID subject, MutationMessage&& diff)  override
           {
             string diffSeqLog = diff.updateDiagnostics();   // snapshot of generated diff sequence
             log_.call (this, "change", subject, diffSeqLog);
@@ -307,7 +307,7 @@ namespace test{
           }
         
         virtual bool
-        change (ID subject, DiffMessage&& diff)  override
+        change (ID subject, MutationMessage&& diff)  override
           {
             log().call(this, "change", subject, diff);
             log().error ("request to apply a diff message via ZombieNexus");

@@ -1,5 +1,5 @@
 /*
-  DiffMessage(Test)  -  demonstrate the basics of tree diff representation
+  MutationMessage(Test)  -  demonstrate the basics of tree diff representation
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,14 +20,14 @@
 
 * *****************************************************/
 
-/** @file diff-message-test.cpp
- ** unit test \ref DiffMessage_test
+/** @file mutation-message-test.cpp
+ ** unit test \ref MutationMessage_test
  */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/diff/diff-message.hpp"
+#include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
@@ -94,7 +94,7 @@ namespace test{
    *       - moreover we provide a simplified builder function to create
    *         hard wired diff messages in a concise way
    *       - and finally this test repeats the scenario of DiffTreeApplication_test,
-   *         but this time the diff sequences are encapsulated as DiffMessage.
+   *         but this time the diff sequences are encapsulated as MutationMessage.
    * @remarks like all the other _diff related_ tests, this code might be hard
    *  to follow, unless you're familiar with the underlying concepts. Basically,
    *  a _Diff_ is represented as _a linearised sequence of verb tokens_. Together
@@ -112,10 +112,10 @@ namespace test{
    * @see DiffTreeApplication_test change a tree-like data structure by diff
    * @see DiffComplexApplication_test handling arbitrary data structures
    * @see DiffListApplication_test
-   * @see DiffMessage
+   * @see MutationMessage
    * @see ui-bus.hpp
    */
-  class DiffMessage_test
+  class MutationMessage_test
     : public Test
     , TreeDiffLanguage
     {
@@ -163,7 +163,7 @@ namespace test{
           
           CHECK (0 == instances);
           {
-            DiffMessage diffMsg{new Generator};
+            MutationMessage diffMsg{new Generator};
             CHECK (!isnil (diffMsg));
             CHECK (1 == instances);
             
@@ -186,7 +186,7 @@ namespace test{
             // cloning is allowed, yet implementation defined
             // in the actual case the underlying generator is based on a vector + a pointer
             // and thus the full state can be cloned into an independent instance
-            DiffMessage clone{diffMsg};
+            MutationMessage clone{diffMsg};
             CHECK (clone == diffMsg);
             CHECK (set(ATTRIB1) == *clone);
             
@@ -210,7 +210,7 @@ namespace test{
             // So better don't do this at home...
             VERIFY_ERROR(ITER_EXHAUST, *diffMsg);
             
-            clone = DiffMessage{new Generator};
+            clone = MutationMessage{new Generator};
             CHECK (2 == instances); // now we got two independent generator instances
             CHECK (clone);
             CHECK (ins(TYPE_X) == *clone);
@@ -228,9 +228,9 @@ namespace test{
       void
       verify_builder()
         {
-          DiffMessage diffMsg{ins(TYPE_X)
-                             ,set(ATTRIB1)
-                             ,del(CHILD_T)};
+          MutationMessage diffMsg{ins(TYPE_X)
+                                 ,set(ATTRIB1)
+                                 ,del(CHILD_T)};
 
           CHECK (!isnil (diffMsg));
           CHECK (ins(TYPE_X)  == *diffMsg);
@@ -242,10 +242,10 @@ namespace test{
           
           
           // likewise works with a std::initializer_list
-          diffMsg = DiffMessage{{ins(TYPE_X)
-                                ,set(ATTRIB1)
-                                ,del(CHILD_T)}
-                               };
+          diffMsg = MutationMessage{{ins(TYPE_X)
+                                    ,set(ATTRIB1)
+                                    ,del(CHILD_T)}
+                                   };
           
           CHECK (!isnil (diffMsg));
           CHECK (ins(TYPE_X)  == *diffMsg);
@@ -256,10 +256,10 @@ namespace test{
           
           
           // even passing any suitable iterable works
-          diffMsg = DiffMessage{snapshot({ins(TYPE_X)
-                                         ,set(ATTRIB1)
-                                         ,del(CHILD_T)})
-                               };
+          diffMsg = MutationMessage{snapshot({ins(TYPE_X)
+                                             ,set(ATTRIB1)
+                                             ,del(CHILD_T)})
+                                   };
           
           CHECK (!isnil (diffMsg));
           CHECK (ins(TYPE_X)  == *diffMsg);
@@ -276,7 +276,7 @@ namespace test{
                               ,set(ATTRIB1)
                               ,del(CHILD_T)}), steps);
           
-          diffMsg = DiffMessage{steps};
+          diffMsg = MutationMessage{steps};
           
           CHECK (!isnil (diffMsg));
           CHECK (ins(TYPE_X)  == *diffMsg);
@@ -289,9 +289,9 @@ namespace test{
       void
       verify_diagnostics()
         {
-          DiffMessage diffMsg{ins(TYPE_X)
-                             ,set(ATTRIB1)
-                             ,del(CHILD_T)};
+          MutationMessage diffMsg{ins(TYPE_X)
+                                 ,set(ATTRIB1)
+                                 ,del(CHILD_T)};
           
           // initially only the default diagnostics of IterSource is shown (rendering the element type)
           CHECK (string(diffMsg) == "IterSource<DiffLanguage<TreeDiffInterpreter, GenNode>::DiffStep>");
@@ -328,7 +328,7 @@ namespace test{
       
       
       
-      DiffMessage
+      MutationMessage
       populationDiff()
         {
           return { ins(TYPE_X)
@@ -347,7 +347,7 @@ namespace test{
         }
         
         
-      DiffMessage
+      MutationMessage
       mutationDiff()
         {
           // prepare for direct assignment of new value
@@ -382,7 +382,7 @@ namespace test{
                  };
         }
       
-      /** @test use DiffMessage to transport and apply changes to target data
+      /** @test use MutationMessage to transport and apply changes to target data
        * @remarks this almost literally repeats the DiffTreeApplication_test */
       void
       demonstrate_treeApplication()
@@ -435,7 +435,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (DiffMessage_test, "unit common");
+  LAUNCHER (MutationMessage_test, "unit common");
   
   
   

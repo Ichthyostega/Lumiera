@@ -208,7 +208,7 @@ namespace ctrl {
      *         which consequently will reshape and remould itself accordingly.
      */
     bool
-    BusTerm::change (ID subject, DiffMessage&& diff)
+    BusTerm::change (ID subject, MutationMessage&& diff)
     {
       return theBus_.change(subject, move(diff));
     }

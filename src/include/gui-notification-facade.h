@@ -44,7 +44,7 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "include/interfaceproxy.hpp"
-#include "lib/diff/diff-message.hpp"                ///////////////////////////////////////////////////////////STICKET #1066 : placeholder
+#include "lib/diff/mutation-message.hpp"
 #include "lib/idi/entry-id.hpp"
 
 #include <string>
@@ -53,7 +53,7 @@
 namespace gui {
   
   using std::string;
-  using lib::diff::DiffMessage;
+  using lib::diff::MutationMessage;
   
   using ID = lib::idi::BareEntryID const&;
   
@@ -98,7 +98,7 @@ namespace gui {
        *  the UI model elements subject to this change.
        * @see diff-language.hpp
        */
-      virtual void mutate (ID uiElement, DiffMessage&&)          =0;      /////////////////////////////////////TICKET #1066 : how to pass a diff message
+      virtual void mutate (ID uiElement, MutationMessage&&)      =0;
       
       /** causes the GUI to shut down unconditionally
        * @param cause user visible explanation of the

@@ -96,8 +96,8 @@ namespace test{
    *       [variant data node](\ref diff::GenNode). The key point to note
    *       is the usage of Record elements as payload within GenNode, which
    *       allows to represent tree shaped object like data structures.
-   * @note literally the same test case is repeated in DiffMessage_test,
-   *       just there the diff is transported in a DiffMessage capsule,
+   * @note literally the same test case is repeated in MutationMessage_test,
+   *       just there the diff is transported in a MutationMessage capsule,
    *       as is the case in the real application as well.
    * @see DiffComplexApplication_test handling arbitrary data structures
    * @see GenericRecordRepresentation_test

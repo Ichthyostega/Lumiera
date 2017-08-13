@@ -52,7 +52,7 @@
 #include "lib/idi/genfunc.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "proc/control/command-def.hpp"
-#include "lib/diff/diff-message.hpp"
+#include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
@@ -74,7 +74,7 @@ using lib::diff::Rec;
 using lib::diff::MakeRec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
-using lib::diff::DiffMessage;
+using lib::diff::MutationMessage;
 using proc::control::Command;
 using proc::control::CommandDef;
 
@@ -151,7 +151,7 @@ namespace test {
    *       - state mark replay
    *       - message casting
    *       - error state indication
-   *       - structural changes by diff message
+   *       - structural changes by MutationMessage
    * 
    * This test documents a generic interaction protocol supported by all
    * "tangible" elements of the Lumiera GTK UI. This works by connecting any
@@ -549,7 +549,7 @@ namespace test {
       /** @test mutate the mock element through diff messages
        * This test performs the basic mechanism used to populate the UI
        * or to change structure or settings within individual elements.
-       * This is done by sending a »Diff Message« via UI-Bus, which is
+       * This is done by sending a MutationMessage via UI-Bus, which is
        * handled and applied to the receiver by Lumiera's diff framework.
        * 
        * This test uses the MockElem to simulate real UI elements;
@@ -571,7 +571,7 @@ namespace test {
        * Here in this test case, we use a hard wired diff sequence,
        * so we can check the expected structural changes actually took place.
        * 
-       * @see DiffMessage_test
+       * @see MutationMessage_test
        */
       void
       mutate ()
@@ -601,14 +601,14 @@ namespace test {
                   {
                     using lib::diff::Ref;
                     
-                    return DiffMessage{ after(Ref::ATTRIBS)   // start after the existing attributes (of root)
-                                      , ins(CHILD_1)          // insert first child (with name "a")
-                                      , ins(CHILD_2)          // insert second child (with name "b")
-                                      , set(ATTRIB_AL)        // assign a new value to attribute "α" <- "quadrant"
-                                      , mut(CHILD_2)          // open nested scope of child "b" for recursive mutation
-                                        , ins(ATTRIB_PI)      // ..within nested scope, add a new attribute "π" := 3.14159265
-                                      , emu(CHILD_2)          // leave nested scope
-                                      };
+                    return MutationMessage{ after(Ref::ATTRIBS)   // start after the existing attributes (of root)
+                                          , ins(CHILD_1)          // insert first child (with name "a")
+                                          , ins(CHILD_2)          // insert second child (with name "b")
+                                          , set(ATTRIB_AL)        // assign a new value to attribute "α" <- "quadrant"
+                                          , mut(CHILD_2)          // open nested scope of child "b" for recursive mutation
+                                            , ins(ATTRIB_PI)      // ..within nested scope, add a new attribute "π" := 3.14159265
+                                          , emu(CHILD_2)          // leave nested scope
+                                          };
                   }
               }
               diffSrc;

@@ -25,8 +25,3 @@ END
 PLANNED "Concept demonstration: retrieve session contents" SessionStructureMapping_test <<END
 return: 0
 END
-
-
-PLANNED "Concept demonstration: update hierarchical elements" TangibleUpdate_test <<END
-return: 0
-END

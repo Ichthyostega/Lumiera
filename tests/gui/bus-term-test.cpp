@@ -36,7 +36,7 @@
 #include "test/test-nexus.hpp"
 #include "test/mock-elm.hpp"
 #include "lib/diff/gen-node.hpp"
-#include "lib/diff/diff-message.hpp"
+#include "lib/diff/mutation-message.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-stack.hpp"
@@ -73,7 +73,7 @@ namespace test {
   using gui::ctrl::StateManager;
   using gui::ctrl::BusTerm;
   using gui::test::MockElm;
-  using lib::diff::DiffMessage;
+  using lib::diff::MutationMessage;
   using lib::diff::TreeDiffLanguage;
   using lib::diff::DiffSource;
   using lib::diff::DiffStep;
@@ -705,7 +705,7 @@ namespace test {
                                 uiDispatcher.feed ([&, diffGenerator]()
                                                     {
                                                       // apply and consume diff message stored within closure
-                                                      uiBus.change (rootID, DiffMessage{diffGenerator});
+                                                      uiBus.change (rootID, MutationMessage{diffGenerator});
                                                     });
                               };
           

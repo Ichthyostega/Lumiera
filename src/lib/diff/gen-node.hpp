@@ -25,14 +25,14 @@
  ** Generic building block for tree shaped (meta)data structures.
  ** A representation built from GenNode elements is intended to support
  ** (limited) introspection of data structures and exchange of mutations
- ** in the form of \link diff-language.hpp diff messages. \endlink
+ ** in the form of [diff messages](\ref diff-language.hpp).
  ** 
  ** Despite of the name, GenNode is \em not meant to be an universal
  ** data representation; rather it is limited to embody a fixed hard
  ** wired set of data types, able to stand-in for attributes
  ** and sub scope contents of the lumiera high-level data model.
  ** 
- ** \par Anatomy of a GenNode
+ ** # Anatomy of a GenNode
  ** 
  ** GenNode is a polymorphic value with well defined identity and type.
  ** Each element is conceived to be »unique within context« -- as defined
@@ -52,7 +52,7 @@
  ** addressable by-name and an (ordered) collection of elements treated
  ** as children within the scope of the given record.
  ** 
- ** \par Requirements
+ ** # Requirements
  ** 
  ** GenNode elements are to be used in the diff detection and implementation.
  ** This implies some requirements for the (opaque) elements used in diff:
@@ -68,7 +68,7 @@
  ** - finally, the handling of changes prompts us to support installation
  **   of a specifically typed <i>change handling closure</i>.
  ** 
- ** \par monadic nature?
+ ** ## monadic nature?
  ** 
  ** As suggested by the usage for representation of tree shaped data, we acknowledge
  ** that GenNode could be a Monad. We support the basic operation \em construction,

@@ -69,7 +69,7 @@
  ** it depends on the concrete setup of the data binding (TreeMutator), if some
  ** expression in diff language will be deemed incompatible -- which happens when
  ** in the end no "onion layer" of the concrete binding was able to absorb and
- ** comply to the diff message.
+ ** comply to the MutationMessage.
  ** 
  ** Another architectural consideration is relevant to the way attribute bindings are
  ** constructed: we rather construct a separate binding for each individual attribute,

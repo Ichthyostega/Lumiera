@@ -54,7 +54,7 @@ namespace gui {
 namespace lumiera {
 namespace facade {
   using gui::ID;
-  using lib::diff::DiffMessage;
+  using lib::diff::MutationMessage;
   
   typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                         , gui::GuiNotification
@@ -70,9 +70,9 @@ namespace facade {
       //----Proxy-Implementation-of-GuiNotification--------
       
       void displayInfo (Level level, string const& text) override  { _i_.displayInfo (level, cStr(text));                  }
-      void markError (ID uiElement, string const& text)  override  { _i_.markError(uiElement.getHash().get(), cStr(text)); }
-      void markNote  (ID uiElement, string const& text)  override  { _i_.markNote (uiElement.getHash().get(), cStr(text)); }
-      void mutate (ID uiElement, DiffMessage&& diff)     override  { _i_.mutate   (uiElement.getHash().get(), &diff);      }
+      void markError (ID uiElement,  string const& text) override  { _i_.markError(uiElement.getHash().get(), cStr(text)); }
+      void markNote  (ID uiElement,  string const& text) override  { _i_.markNote (uiElement.getHash().get(), cStr(text)); }
+      void mutate (ID uiElement, MutationMessage&& diff) override  { _i_.mutate   (uiElement.getHash().get(), &diff);      }
       void triggerGuiShutdown (string const& cause)      override  { _i_.triggerGuiShutdown (cStr(cause));                 }
       
       

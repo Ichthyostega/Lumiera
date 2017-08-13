@@ -66,11 +66,11 @@
  ** just supporting move construction, as will happen when using the DSL functions on
  ** the builder. This is also the only supported usage pattern: you create an anonymous
  ** TreeMutator sub type by using the Builder functions right within the scope about to
- ** consume one strike of diff messages. These messages should cover anything to confirm
- ** or reshape _all of the target's contents_. After that, you must not refer to the
- ** exhausted TreeMutator anymore, just let it fall out of scope. Incidentally, this
- ** also means that _any failure or exception encountered_ while applying a diff will
- ** leave a **corrupted target data structure**. The basic assumption is that
+ ** consume one strike of DiffStep entries from a MutationMessage. These diff steps
+ ** should cover anything to confirm or reshape _all of the target's contents_. After that,
+ ** you must not refer to the exhausted TreeMutator anymore, just let it fall out of scope.
+ ** Incidentally, this also means that _any failure or exception encountered_ while applying
+ ** a diff will leave a **corrupted target data structure**. The basic assumption is that
  ** - the target data structure will actually be built through diff messages solely
  ** - and that all received diff messages are sane, as being drawn from a
  **   semantically and structurally equivalent source structure
@@ -426,7 +426,7 @@ namespace diff{
         /** set up binding to a GenNode tree: Special setup to build a concrete `TreeMutator`.
          *  This decorator is already outfitted with the necessary closures to work on a
          *  diff::Record<GenNode> -- which is typically used as "meta representation" of
-         *  object-like structures. Thus this binding allows to apply a diff message onto
+         *  object-like structures. Thus this binding allows to apply a MutationMessage onto
          *  such a given »External Tree Description«, mutating it into new shape.
          * @remarks our meta representation of "objects" is based on Record<GenNode>, which
          *          is implemented through two STL collections, one for the attributes and

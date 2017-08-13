@@ -48,6 +48,12 @@ diff application::
   _target_ of diff application. Typically we want to apply a diff to a data sequence, to mutate it
   into a new shape, conforming with the shape of the diff's ``target sequence''
 
+tree mutator::
+  a customisable intermediary, allowing to apply a diff sequence against an opaque data structure.
+  For the purpose of diff application, the TreeMutator serves as target object, while in fact it is itself
+  attached by a _binding_ to the actual target data structure, which remains a hidden implementation detail.
+  This allows to manipulate the target data structure without knowing its concrete representation. 
+
 diff generator::
   a facility producing a diff, which is a sequence of diff verbs.
   Typically, a diff generator works lazily, demand driven.

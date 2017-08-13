@@ -26,13 +26,12 @@
  ** To be used in a context where introspection, open, extensible definitions
  ** and loose coupling of data representation matters. Typically, structures
  ** defined in terms of Record elements are linked to the actual \em core
- ** representation of the same entities relying on
- ** \link diff-language.hpp diff messages. \endlink
+ ** representation of the same entities relying on [diff messages](\ref diff-language.hpp).
  ** Record is one of the supported flavours within the DataCap of GenNode elements,
  ** which in turn serve as the standard handle to refer to other elements, entities,
  ** attributes or references within the "backbone" of the Lumiera GUI.
  ** 
- ** \par design decisions
+ ** ## design decisions
  ** The Record type is shaped from its intended use: It serves to symbolically represent
  ** \em objects in the "external tree description". Here, \em objects means objects for
  ** real, i.e. with types, fields and an enclosed scope. But \em external means that we
