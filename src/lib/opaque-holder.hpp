@@ -75,6 +75,7 @@
 #include <utility>
 #include <type_traits>
 #include <boost/noncopyable.hpp>
+#include <boost/lexical_cast.hpp>
 
 
 namespace lib {
@@ -730,7 +731,9 @@ namespace lib {
         {
           if (sizeof(SUB) > maxSiz_)
             throw error::Fatal("Unable to implant implementation object of size "
-                               "exceeding the pre-established storage buffer capacity."
+                               "exceeding the pre-established storage buffer capacity. "
+                               +boost::lexical_cast<std::string>(sizeof(SUB)) + " > "
+                               +boost::lexical_cast<std::string>(maxSiz_)
                               ,error::LUMIERA_ERROR_CAPACITY);
           
           using Holder = InPlaceBuffer<BA, sizeof(SUB)>;

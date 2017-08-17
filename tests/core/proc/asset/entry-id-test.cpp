@@ -175,8 +175,11 @@ namespace test{
           
           cout << showSizeof<ForkID>() << endl;
           cout << showSizeof<BareEntryID>() << endl;
+          cout << showSizeof<lumiera_uid>() << endl;
+          cout << showSizeof<string>() << endl;
+          cout << showSizeof<void*>() << endl;
           CHECK (sizeof(ForkID) == sizeof(BareEntryID));
-          CHECK (sizeof(ForkID) == sizeof(lumiera_uid) + sizeof(void*));
+          CHECK (sizeof(ForkID) == sizeof(lumiera_uid) + sizeof(string));
         }
       
       

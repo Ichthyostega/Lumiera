@@ -272,7 +272,7 @@ namespace test{
         friend constexpr size_t
         treeMutatorSize (const Opaque*)
         {
-          return 350;
+          return 430;
         }
       };
     
