@@ -320,11 +320,11 @@ out-lit: --spam--
 out: GenNode.+"baked beans".+Rec...hasSpam = DataCap.«bool».true.+«char».+«string».*«double».+GenNode.+"spam".+«Record<GenNode>».+«string».eggs.+«string».spam.+«string».spam
 out: GenNode.+"hasSpam".+«bool».true
 out: GenNode.+_CHILD_char.+«char».\*
-out: GenNode.+_CHILD_string.+«string».★
+out: GenNode.+_CHILD_(basic_)?string.+«string».★
 out: GenNode.+_CHILD_double.+«double».3.1415927
 out: GenNode.+"spam".+«Record<GenNode>».Rec.ham.+eggs.+spam.+spam
-out: GenNode.+_CHILD_string.+«string».eggs
-out: GenNode.+_CHILD_string.+«string».spam
+out: GenNode.+_CHILD_(basic_)?string.+«string».eggs
+out: GenNode.+_CHILD_(basic_)?string.+«string».spam
 out: GenNode.+_CHILD_TimeSpan.+«TimeSpan»|0:00:00.000≺920ms≻
 out: GenNode.+_CHILD_long.+«long.+42
 return: 0
@@ -400,7 +400,7 @@ END
 
 
 TEST "inline val/ref wrapper" ItemWrapper_test <<END
-out: ItemWrapper: sizeof\( wrapper::ItemWrapper<.+ =   .
+out: ItemWrapper: sizeof\( wrapper::ItemWrapper<.+ =  .
 return: 0
 END
 
