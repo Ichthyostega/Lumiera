@@ -122,12 +122,14 @@ namespace wrapper {
   
   
   /**
-   * Universal value/ref wrapper behaving like a pointer.
-   * A copyable, assignable value object, not managing ownership.
-   * It can be default constructed and \c bool evaluated to detect
-   * an empty holder. The value is retrieved pointer-like, by
-   * explicit dereferentiation. (Contrast this to std::ref,
-   * where the original reference is retrieved by conversion)
+   * Universal value/ref wrapper accessible similar to a pointer.
+   * A copyable, assignable value object to hold a given value within
+   * an embedded inline buffer. It can be default constructed and `bool`
+   * evaluated to detect an empty holder. The value is retrieved through
+   * a pointer-like interface, by  explicit dereferentiation. (Contrast this
+   * to std::ref, where the original reference is retrieved by conversion).
+   * @note when the embedded value is a pointer, ItemWrapper does _not_ take
+   *       ownership of and manage data the pointer is pointing to.
    * 
    * The purpose of this template is to be able to remember
    * pretty much any kind of value or pointer or reference,
@@ -150,7 +152,14 @@ namespace wrapper {
       void
       build (TY const& ref)
         {
-          new(&content_) TY(ref);
+          new(&content_) TY{ref};
+          created_ = true;
+        }
+      
+      void
+      build (TY&& rref)
+        {
+          new(&content_) TY{std::forward<TY> (rref)};
           created_ = true;
         }
       
@@ -184,6 +193,12 @@ namespace wrapper {
           build (o);
         }
       
+      explicit
+      ItemWrapper(TY&& rref)
+        {
+          build (std::forward<TY> (rref));
+        }
+      
      ~ItemWrapper()
         {
           discard();
@@ -198,6 +213,12 @@ namespace wrapper {
           if (ref.isValid())
             build (*ref);
         }
+      ItemWrapper (ItemWrapper&& rref)
+        : created_(false)
+        {
+          if (rref.isValid())
+            build (std::forward<TY> (*rref));
+        }
       
       ItemWrapper&
       operator= (ItemWrapper const& ref)
@@ -206,6 +227,17 @@ namespace wrapper {
             discard();
           else
             this->operator= (*ref);
+          
+          return *this;
+        }
+      
+      ItemWrapper&
+      operator= (ItemWrapper&& rref)
+        {
+          if (!rref.isValid())
+            discard();
+          else
+            this->operator= (std::forward<TY> (*rref));
           
           return *this;
         }
@@ -220,6 +252,21 @@ namespace wrapper {
                 access() = something;
               else
                 build (something);
+            }
+          
+          return *this;
+        }
+      
+      template<typename X>
+      ItemWrapper&
+      operator= (X&& something) ///< move in anything assignable to TY
+        {
+          if (!isSameObject (something, access() ))
+            {
+              if (created_)
+                access() = std::forward<X> (something);
+              else
+                build (std::forward<X> (something));
             }
           
           return *this;
