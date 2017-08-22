@@ -298,7 +298,8 @@ namespace lib {
           void
           operator= (TY && rob)
             {
-              this->access() = move(rob);
+              if (&rob != Buffer::ptr())
+                this->access() = move(rob);
             }
           
           

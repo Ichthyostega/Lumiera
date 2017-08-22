@@ -244,22 +244,7 @@ namespace wrapper {
       
       template<typename X>
       ItemWrapper&
-      operator= (X const& something) ///< accept anything assignable to TY
-        {
-          if (!isSameObject (something, access() ))
-            {
-              if (created_)
-                access() = something;
-              else
-                build (something);
-            }
-          
-          return *this;
-        }
-      
-      template<typename X>
-      ItemWrapper&
-      operator= (X&& something) ///< move in anything assignable to TY
+      operator= (X something) ///< move in anything assignable to TY
         {
           if (!isSameObject (something, access() ))
             {
