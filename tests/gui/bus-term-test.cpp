@@ -722,6 +722,13 @@ namespace test {
           session.join();
           //------end-multithreaded-mutation---
           
+          // on rare occasions we (consumer thread)
+          // prematurely empty the queue...
+          while (not isnil(uiDispatcher))
+            {
+            uiDispatcher.invoke();
+            }
+          
           
           // now verify rootMock has been properly assimilated...
           uint generatedBorgs = rootMock.scope.size();
