@@ -85,6 +85,12 @@ namespace gui {
                       });
   }
   
+  void
+  NotificationService::showErrorUI (string errorMsg)
+  {
+    UNIMPLEMENTED ("forward error message to the error log");
+  }
+  
   
   void 
   NotificationService::displayInfo (NotifyLevel severity, string const& text)
@@ -277,7 +283,7 @@ namespace gui {
    */
   NotificationService::NotificationService (ctrl::BusTerm& upLink, ctrl::UiManager& uiManager)
     : BusTerm{lib::idi::EntryID<NotificationService>{}, upLink}
-    , dispatch_{new UiDispatcher{}}
+    , dispatch_{new UiDispatcher{[this](string msg){ showErrorUI(msg); }}}
     , uiManager_{uiManager}
     , implInstance_(this,_instance)
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))

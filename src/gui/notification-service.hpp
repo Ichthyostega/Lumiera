@@ -90,7 +90,8 @@ namespace gui {
       std::unique_ptr<ctrl::UiDispatcher> dispatch_;
       ctrl::UiManager& uiManager_;
       
-      void dispatchMsg(ID, lib::diff::GenNode&&);
+      void dispatchMsg (ID, lib::diff::GenNode&&);
+      void showErrorUI (string errorMsg);
       
       
       /* === Interface Lifecycle === */

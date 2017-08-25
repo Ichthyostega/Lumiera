@@ -77,6 +77,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "lib/call-queue.hpp"
+#include "lib/format-string.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <utility>
@@ -86,7 +87,19 @@ namespace gui {
 namespace ctrl {
   
   using std::move;
+  using ::util::_Fmt;
   
+  namespace {
+    /** @note reads and clears the lumiera error flag */
+    inline string
+    generateErrorResponse (const char* problem = "unexpected problem")
+    {
+      static _Fmt messageTemplate{"asynchronous UI response failed: %s (error flag was: %s)"};
+      string response{messageTemplate % problem % lumiera_error()};
+      WARN (gui, "%s", response.c_str());
+      return response;
+    }
+  }
   
   
   /**
@@ -104,13 +117,23 @@ namespace ctrl {
       using Operation = lib::CallQueue::Operation;
       
     public:
-      UiDispatcher()
+      template<class FUN>
+      UiDispatcher(FUN notification)
         : queue_{}
         , dispatcher_{}
         {
           dispatcher_.connect(
-                      [this]() {
-                                 queue_.invoke();    /////////////////////TICKET #1098 : ensure no exception escapes from here!!
+                         [=]() {try {
+                                      queue_.invoke();
+                                    }
+                                  catch (std::exception& problem)
+                                    {
+                                      notification (generateErrorResponse(problem.what()));
+                                    }
+                                  catch (...)
+                                    {
+                                      notification (generateErrorResponse());
+                                    }
                                });
         }
       

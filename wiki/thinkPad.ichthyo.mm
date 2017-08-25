@@ -262,8 +262,7 @@
       Sicht <i>&quot;von unten&quot;</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1484877839299" HGAP="23" ID="ID_957622878" MODIFIED="1502410631316" TEXT="Asynchrones Protokoll" VSHIFT="1">
@@ -447,8 +446,7 @@
       GtkLumiera <i>in Konstruktion</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1501857681920" ID="ID_473453255" MODIFIED="1501857695053">
 <richcontent TYPE="NODE"><html>
@@ -460,8 +458,7 @@
       NotificationFacade <b>noch nicht offen</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1501857705277" ID="ID_1642619932" MODIFIED="1501857738707" TEXT="zuverl&#xe4;ssig">
 <icon BUILTIN="idea"/>
@@ -490,8 +487,7 @@
       m&#252;ssen <b>eigens</b>&#160;aktiviert werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#5365b7" DESTINATION="ID_749414376" ENDARROW="Default" ENDINCLINATION="-480;-31;" ID="Arrow_ID_1567070366" SOURCE="ID_99706930" STARTARROW="None" STARTINCLINATION="295;-51;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1501859757091" ID="ID_1507399957" MODIFIED="1501859761974" TEXT="eigenen Callback schaffen"/>
@@ -567,8 +563,7 @@
       dann kann der Shutdown-Proze&#223; den Start des GUI &#252;berholen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1484797646771" HGAP="44" ID="ID_1605520996" MODIFIED="1493752929690" TEXT="Ausgestaltung" VSHIFT="10">
@@ -824,8 +819,7 @@
       mu&#223; eigens <b>aktiviert</b>&#160;werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#5365b7" DESTINATION="ID_749414376" ENDARROW="Default" ENDINCLINATION="-480;-31;" ID="Arrow_ID_1567070366" STARTARROW="None" STARTINCLINATION="295;-51;"/>
 <node CREATED="1501859557934" ID="ID_764787705" MODIFIED="1501859565584" TEXT="nach Start der UI-Loop"/>
 <node CREATED="1501859566837" ID="ID_984712012" MODIFIED="1501859722645" TEXT="Verbindung zum CoreCtx">
@@ -841,18 +835,42 @@
 <arrowlink COLOR="#a75677" DESTINATION="ID_1023343635" ENDARROW="Default" ENDINCLINATION="-317;-24;" ID="Arrow_ID_274836249" STARTARROW="None" STARTINCLINATION="-647;-66;"/>
 </node>
 <node CREATED="1501854114284" ID="ID_168912186" MODIFIED="1502403195803" TEXT="Lebenszyklus"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502411488645" ID="ID_1875294174" MODIFIED="1502411550530" TEXT="Fehler">
-<linktarget COLOR="#9c7088" DESTINATION="ID_1875294174" ENDARROW="Default" ENDINCLINATION="1264;-185;" ID="Arrow_ID_245240331" SOURCE="ID_1177399909" STARTARROW="None" STARTINCLINATION="285;0;"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502411488645" ID="ID_1875294174" MODIFIED="1503670612731" TEXT="Fehler">
+<linktarget COLOR="#9c7088" DESTINATION="ID_1875294174" ENDARROW="Default" ENDINCLINATION="1260;-183;" ID="Arrow_ID_245240331" SOURCE="ID_1177399909" STARTARROW="None" STARTINCLINATION="285;0;"/>
 <icon BUILTIN="flag-pink"/>
 <node CREATED="1502411559060" ID="ID_1282973269" MODIFIED="1502411569102" TEXT="GTK nicht exception-safe">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1502411571690" ID="ID_878676751" MODIFIED="1502411590626" TEXT="aber was tun wenn....">
 <icon BUILTIN="help"/>
+<node CREATED="1503444108091" ID="ID_725326352" MODIFIED="1503444143873" TEXT="loggen und weitermachen"/>
+<node CREATED="1503444117593" ID="ID_1115027114" MODIFIED="1503444138305" TEXT="loggen, Fehlerlog-Widget, weitermachen"/>
+<node CREATED="1503444163706" ID="ID_577766875" MODIFIED="1503444173189" TEXT="UI-Reset"/>
+<node CREATED="1503444173752" ID="ID_65458957" MODIFIED="1503444180979" TEXT="(emergency)-shutdown"/>
 </node>
 <node CREATED="1502411595263" ID="ID_58102462" MODIFIED="1502411601354" TEXT="Fallunterscheidung">
 <node CREATED="1502411604054" ID="ID_1705249614" MODIFIED="1502411612160" TEXT="Notify harmlos"/>
-<node CREATED="1502411612700" ID="ID_1951009863" MODIFIED="1502411616783" TEXT="Diff darf nicht scheitern"/>
+<node CREATED="1502411612700" ID="ID_1951009863" MODIFIED="1502411616783" TEXT="Diff darf nicht scheitern">
+<node CREATED="1503670572980" ID="ID_599888416" MODIFIED="1503670583376" TEXT="einzige Ausnahme">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1503670585794" ID="ID_1806860698" MODIFIED="1503670628324" TEXT="speziellen Hanlder verwenden">
+<arrowlink COLOR="#6d8097" DESTINATION="ID_376091136" ENDARROW="Default" ENDINCLINATION="129;8;" ID="Arrow_ID_206696117" STARTARROW="None" STARTINCLINATION="147;13;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1503443968096" ID="ID_986919353" MODIFIED="1503443976682" TEXT="Implementierungs-Muster">
+<node CREATED="1503443979619" ID="ID_1673104600" MODIFIED="1503670547573" TEXT="jedes einzelne Lambda in Fehlerhandler wrappen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1503443999616" ID="ID_601042478" MODIFIED="1503670545265" TEXT="generischer Fehlerhandler im Invocation-Lambda">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1503670528386" ID="ID_376091136" MODIFIED="1503670621187" TEXT="generischer Chain-Fehlerhandler">
+<linktarget COLOR="#6d8097" DESTINATION="ID_376091136" ENDARROW="Default" ENDINCLINATION="129;8;" ID="Arrow_ID_206696117" SOURCE="ID_1806860698" STARTARROW="None" STARTINCLINATION="147;13;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -906,8 +924,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1502410328279" ID="ID_1577461232" MODIFIED="1502600145767" TEXT="Tree-Diff-Aplikator direkt in Nexus verschieben"/>
@@ -1023,8 +1040,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1502402998859" ID="ID_1462873166" MODIFIED="1502403195805">
 <richcontent TYPE="NODE"><html>
@@ -1036,8 +1052,7 @@
       das wird <i>sowiso</i>&#160;ein Desaster
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
@@ -1217,8 +1232,8 @@
 <node CREATED="1501939149837" ID="ID_1733976265" MODIFIED="1502385820938" TEXT="diese an Glib::Dispatcher binden">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502404797300" ID="ID_1177399909" MODIFIED="1502411550530" TEXT="Exceptions fangen">
-<arrowlink COLOR="#9c7088" DESTINATION="ID_1875294174" ENDARROW="Default" ENDINCLINATION="1264;-185;" ID="Arrow_ID_245240331" STARTARROW="None" STARTINCLINATION="285;0;"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1502404797300" ID="ID_1177399909" MODIFIED="1503670612731" TEXT="Exceptions fangen">
+<arrowlink COLOR="#9c7088" DESTINATION="ID_1875294174" ENDARROW="Default" ENDINCLINATION="1260;-183;" ID="Arrow_ID_245240331" STARTARROW="None" STARTINCLINATION="285;0;"/>
 <icon BUILTIN="flag-pink"/>
 </node>
 </node>
@@ -1349,8 +1364,7 @@
       indem wir ein GTK-Signal erzeugen, das das Hauptfenster schlie&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1485116867963" FOLDED="true" ID="ID_1146024699" MODIFIED="1501804646768" TEXT="bisher kann man nur das Fenster schlie&#xdf;en">
 <icon BUILTIN="info"/>
 <node CREATED="1485116884925" ID="ID_296160451" MODIFIED="1485116898396" TEXT="wie funktioniert das?">
@@ -1425,8 +1439,7 @@
       eine einzige Funktion konkret durchdenkt: es l&#228;uft auf Spaghetti-Code hinaus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -1458,8 +1471,7 @@
       ...indem der NotificatonService nun vom UI-Manager gemanaged wird :)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -3727,8 +3739,8 @@
 <node CREATED="1485555999110" ID="ID_376092703" MODIFIED="1485556008921" TEXT="top-level macht GtkLumiera im ctor"/>
 <node CREATED="1485556011260" ID="ID_1618308499" MODIFIED="1485556026758" TEXT="backlink zum Manager"/>
 <node CREATED="1486943522965" ID="ID_36527267" MODIFIED="1501859722646" TEXT="top-level-Kontext">
-<linktarget COLOR="#8c95b2" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="129;-562;" ID="Arrow_ID_1284182756" SOURCE="ID_576215675" STARTARROW="None" STARTINCLINATION="948;154;"/>
 <linktarget COLOR="#4f547b" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="-424;-2038;" ID="Arrow_ID_134552555" SOURCE="ID_984712012" STARTARROW="None" STARTINCLINATION="2623;0;"/>
+<linktarget COLOR="#8c95b2" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="129;-562;" ID="Arrow_ID_1284182756" SOURCE="ID_576215675" STARTARROW="None" STARTINCLINATION="948;154;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1488494592496" ID="ID_1586259377" MODIFIED="1488494596905" TEXT="UI-Bus"/>
 <node CREATED="1488494579346" ID="ID_1182508289" MODIFIED="1488494603368" TEXT="UiManager"/>
@@ -11065,8 +11077,7 @@
       nach beiden Setien
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1502454089783" ID="ID_104095093" MODIFIED="1502454093290" TEXT="zum Erzeuger"/>
 <node CREATED="1502454093814" ID="ID_1063793799" MODIFIED="1502454099337" TEXT="zum Empf&#xe4;nger"/>
 </node>
@@ -12419,8 +12430,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488674659521" FOLDED="true" ID="ID_1283697108" MODIFIED="1492444005324" TEXT="Problem: Instanz-Management">
 <icon BUILTIN="messagebox_warning"/>
@@ -16779,8 +16789,7 @@
       Pa&#223;t hier, da IterSource genau dieses Vorgehen nahelegt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1502550828691" ID="ID_382976334" MODIFIED="1502550873649" TEXT="fest eingebaut">
 <richcontent TYPE="NOTE"><html>
@@ -16792,8 +16801,7 @@
       MutationMessage::updateDiagnostics()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1502550853144" ID="ID_1494004239" MODIFIED="1502550857267" TEXT="Snapshot"/>
@@ -16812,8 +16820,7 @@
       ...diejenige, die zum Zeitpunkt des updateDiagnostics() noch anstand
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -17860,8 +17867,7 @@
       Das ist eine subtile Falle.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1501848728354" ID="ID_1420494100" MODIFIED="1501848749638">
@@ -17874,8 +17880,7 @@
       alles was von sigc::<b>trackable</b>&#160;erbt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -17891,8 +17896,7 @@
       f&#252;r <b>alles</b>&#160;aus GTKmm zu verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17905,8 +17909,7 @@
       alles das nicht aus dem GUI-Thread heraus geschieht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1501848836523" ID="ID_649355856" MODIFIED="1501848856842" TEXT="Dispatcher im GUI-Thread erzeugen">
