@@ -31,6 +31,7 @@
 
 #include "gui/panel/assets-panel.hpp"
 #include "gui/panel/viewer-panel.hpp"
+#include "gui/panel/infobox-panel.hpp"
 #include "gui/panel/timeline-panel.hpp"
 #include "gui/panel/timeline-panel-obsolete.hpp"
 
@@ -47,6 +48,7 @@ namespace workspace {
     PanelManager::panelDescriptionList[] = {
       PanelManager::Panel<TimelinePanel>(),
       PanelManager::Panel<TimelinePanelObsolete>(),
+      PanelManager::Panel<InfoBoxPanel>(),
       PanelManager::Panel<ViewerPanel>(),
       PanelManager::Panel<AssetsPanel>()
     };
@@ -236,7 +238,7 @@ namespace workspace {
   {
                                                             ///////////////////////////////TICKET #1026 : code smell, use types directly instead          
     panel::Panel* assetsPanel =   createPanel_by_name("AssetsPanel");
-    panel::Panel* viewerPanel =   createPanel_by_name("ViewerPanel");
+    panel::Panel* viewerPanel =   createPanel_by_name("InfoBoxPanel");
     panel::Panel* timelinePanel = createPanel_by_name("TimelinePanel");
     
     dock_.add_item(assetsPanel->getDockItem(),Gdl::DOCK_LEFT);

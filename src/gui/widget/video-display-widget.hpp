@@ -23,6 +23,7 @@
 
 /** @file video-display-widget.hpp
  ** Widget to create a video display embedded into the UI
+ ** @deprecated defunct since the transition to GTK-3
  */
 
 
@@ -39,7 +40,13 @@ using namespace gui::output;  //////////////////////////////////////////////////
 
 namespace gui {
 namespace widget {
-  
+
+  /**
+   * @todo the first UI draft included a video displayer widget library implementation,
+   *       Unfortunately, this became defunct with the switch to GTK-3. And a fun fact is,
+   *       even while Lumiera is a video editing application, we did not yet reach the state
+   *       as to care for video display ourselves. Someone (TM) need to care for this!
+   */
   class VideoDisplayWidget
     : public Gtk::DrawingArea
     {

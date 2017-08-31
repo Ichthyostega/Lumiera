@@ -143,6 +143,10 @@ namespace ctrl {
           assetsPanelAction->signal_toggled().connect (                              [&]() { onMenu_view_assets(); });
           actionGroup->add(assetsPanelAction);
           
+          infoboxPanelAction = ToggleAction::create("ViewInfoBox", StockID("panel_infobox"));
+          infoboxPanelAction->signal_toggled().connect (                             [&]() { onMenu_view_infobox(); });
+          actionGroup->add(infoboxPanelAction);
+          
           timelinePanelAction = ToggleAction::create("ViewTimeline", StockID("panel_timeline"));
           timelinePanelAction->signal_toggled().connect(                             [&]() { onMenu_view_timeline(); });
           actionGroup->add(timelinePanelAction);
@@ -181,6 +185,7 @@ namespace ctrl {
                   </menu>
                   <menu action='ViewMenu'>
                     <menuitem action='ViewAssets'/>
+                    <menuitem action='ViewInfoBox'/>
                     <menuitem action='ViewTimeline'/>
                     <menuitem action='ViewViewer'/>
                   </menu>
@@ -315,6 +320,16 @@ namespace ctrl {
         }
       
       void
+      onMenu_view_infobox()
+        {
+          /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
+          //if(!is_updating_action_state)
+          //  workspaceWindow.infoboxPanel->show(
+          //    infoboxPanelAction->get_active());                                        //////global -> InteractionDirector
+          unimplemented ("view infobox");
+        }
+      
+      void
       onMenu_view_timeline()
         {
           /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
@@ -347,6 +362,7 @@ namespace ctrl {
       Glib::RefPtr<Gtk::ActionGroup> actionGroup;
       
       Glib::RefPtr<Gtk::ToggleAction> assetsPanelAction;
+      Glib::RefPtr<Gtk::ToggleAction> infoboxPanelAction;
       Glib::RefPtr<Gtk::ToggleAction> timelinePanelAction;
       Glib::RefPtr<Gtk::ToggleAction> viewerPanelAction;
       

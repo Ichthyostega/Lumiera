@@ -2522,7 +2522,7 @@ we need a test setup for this investigation.
 * realistic: shall reflect the situation in our actual UI
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201612012311" tags="GuiPattern design draft" changecount="22">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201708311414" tags="GuiPattern design draft" changecount="25">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels)
@@ -2535,7 +2535,7 @@ To start with, a clip can be rendered in ''abridged form'', which means that the
 
 The next step in a series of progressively more detailed clip representations is the ''compact form'', which still focuses on handling the clip as an unit, while at least indicating some of the inherent structuring. Essentially, the clip here is represented as a //strip of rendered preview content,// decorated with some overlays. One of these overlays is the //ID pane,// which resembles the arrangement known from the abridged form: The icon here is always the [[Placement]] icon, followed by the expand widget and the ID label. Again, this pane is aligned such as to remain in sight. Then, there is a pair of overlays, termed the //boundary panes,// which indicate the begin and the end of the clip respectively. Graphically, these overlays should be rendered in a more subtle way, just enough to be recognisable. The boundary panes are the attachment areas for //trimming gestures,// as opposed to moving and dragging the whole clip or shuffle editing of the content. Moreover, these boundary panes compensate for the alignment of the ID pane, which mostly keeps the latter in sight. As this might counterfeit the visual perception of scrolling, the boundary panes serve to give a clear visual clue when reaching the boundary of an extended clip. Optionally, another overlay is rendered at the upper side of the clip's area, to indicate attached effect(s). It is quite possible for these effect decorations not to cover the whole temporal span of the clip.
 
-A yet more detailed display of the clip's internals is exposed in the ''expanded form.'' Here, the clip is displayed as an window pane holding nested clip displays, which in turn might again be abridged, compact or ({{red{maybe 11/16}}}) even expanded. This enclosing clip window pane should be rendered semi transparent, just to indicate the enclosing whole. The individual clip displays embedded therein serve to represent individual media parts or channels, or individual attached effects. Due to the recursive nature of Lumiera's HighLevelModel, each of these parts exposes essentially the same controls, allowing to control the respective aspects of the part in question. We may even consider {{red{unclear as of 11/16}}} to allow accessing the parts of a VirtualClip, this way turning the enclosing clip into a lightweight container ({{red{11/2016 give proper credit for this concept! Who proposed this initially in 2008? was this Thosten Wilms?}}}
+A yet more detailed display of the clip's internals is exposed in the ''expanded form.'' Here, the clip is displayed as a window pane holding nested clip displays, which in turn might again be abridged, compact or ({{red{maybe 11/16}}}) even expanded. This enclosing clip window pane should be rendered semi transparent, just to indicate the enclosing whole. The individual clip displays embedded therein serve to represent individual media parts or channels, or individual attached effects. Due to the recursive nature of Lumiera's HighLevelModel, each of these parts exposes essentially the same controls, allowing to control the respective aspects of the part in question. We may even consider ({{red{unclear as of 11/16}}}) to allow accessing the parts of a VirtualClip, this way turning the enclosing clip into a lightweight container ({{red{11/2016 give proper credit for this concept! Who proposed this initially in 2008? was this Thosten Wilms?}}}
 
 Finally, there can be a situation where it is just not possible to render any of the aforementioned display styles properly, due to size constraints. Especially, this happens when zooming out such as to show a whole sequence or even timeline in overview. We need to come up with a scheme of ''graceful display degradation'' to deal with this situation -- just naively attempting to render any form might easily send our UI thread into a minute long blocking render state, for no good reason. Instead, in such cases display should fall back to a ''degraded form''
 * showing just a placeholder rectangle, when the clip (or any other media element) will cover a temporal span relating to at least 1 pixel width (configurable trigger condition)
@@ -2561,7 +2561,7 @@ A prime consideration regarding this whole clip presentation strategy is the per
 !clip content rendering
 In a typical editing application, the user can expect to get some visual clue regarding the media content of a clip. For example, sound clips can be visualised as waveform, while movie clips might feature a sequence of images taken from the video. Our intention is to ''use our own rendering engine'' to produce these thumbnails. In fact, our engine is perfectly suited for this task: it has precisely the necessary media decoding and rendering abilities, plus it offers an elaborate system of priorities and deadlines, allowing to throttle the load produced by thumbnail generation. In addition to all those qualities, our engine is planned to be complemented by an &quot;intelligent&quot; frame cache, which, given proper parametrisation, ensures the frequently requested thumbnails will be available for quick display. For this approach to work, we need to provide some infrastructure
 * we need to configure and maintain a //preview rendering strategy.//
-* the request for rendering has to be cast &quot;just somewhere&quot; as message, obviously via the UI-Bus
+* the request for rendering has to be cast &quot;just somewhere&quot; as message, possibly via the UI-Bus
 * actually rendered content will likewise arrive asynchronously as message via UI-Bus.
 * we still need to work out how buffer management for this task will be handled; it should be a derivative of typical buffer management for display rendering.
 * the clip widget needs to provide a simple placeholder drawing to mark the respective space in the interface, until the actual preview arrives.
@@ -2873,6 +2873,20 @@ In order to build a sensible plan for our timeline structure, we need to investi
 }}}
 </pre>
 </div>
+<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201708311619" changecount="2">
+<pre>//Management of dockable content panes//
+Within each top level application window, the usable screen real estate can be split and arranged into a number of standard view building blocks. Each of this //panels// follows a specific preconfigured basic layout -- these are hard coded, yet customisable in detail. There is a finite list of such panel types available:
+* the [[timeline display|GuiTimelineView]]
+* the media viewer
+* asset management
+* information box
+
+!Instantiation
+!Placing and addressing of embedded contents
+A specific problem arises insofar other parts of the UI need to create, address and control some UI entities, which at the same time exist as part of a docking panel. This is a problem of crosscutting concerns: UI control and interaction structure should not be mingled with the generic concern to maintain a component as part of a screen layout. Unfortunately, standard UI toolkit sets are designed incredibly naive ways when it comes to interaction design, and the only available alternative is to rely on a framework, which come with a hard-wired philosophy.
+As a result, we're forced to build our UI from components lacking the decision between //ownership and control.//
+</pre>
+</div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">
 <pre>special LayerSeparationInterface which serves the main purpose to load the GuiStarterPlugin, thus bringing up the Lumiera GTK UI at application start.
 
@@ -3133,7 +3147,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
-<div title="GuiTopLevel" creator="Ichthyostega" modifier="YourName" created="201701261944" modified="201705192326" tags="GuiPattern spec draft" changecount="11">
+<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201708311555" tags="GuiPattern spec draft" changecount="12">
 <pre>To a large extent, the Lumiera user interface is built around a //backbone structure,// known as the UI-Bus.
 But there are some dedicated top-level entities, collaborating to maintain a consistent application lifecycle
 ;Application
@@ -3150,6 +3164,7 @@ But there are some dedicated top-level entities, collaborating to maintain a con
 :the InteractionDirector is the root controller and corresponds to the [[root object in session|ModelRootMO]].
 ;Window List
 :organise and maintain the top level workspace windows
+:which involves the interplay with [[docking panels|GuiDockingPanel]]
 ;Notification Façade
 :attachment point for lower layers and anyone in need to &quot;talk to the UI&quot;
 :the GuiNotificationFacade is a LayerSeparationInterface and integrated with Lumiera's interface system
@@ -3476,20 +3491,20 @@ The concept of a //focus goal// has several ramifications: for one it implies th
 To create such a system is an ambitious goal. We can not reach it in a single step, since it entails the formation of a whole intermediary layer, on top of the //usual UI mechanics,// yet below the concrete UI interactions. Especially, we'd need to clarify the meaning of //perspective,// we need to decide on the relation of top level frame, individual view, layout, focus and //current location within the UI.// On a second thought, building such a system implies we'll have to live with an intermediary state of evolution, where parts of the new framework are already in place without interfering with common conventional usage of the interface as-is.
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201703021658" tags="def draft" changecount="9">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201708311600" tags="def draft" changecount="21">
 <pre>//the top-level controller within the UI.//
-In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
+In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within this model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, together with the asset management and defaults and rules configuration within the session.
 
-And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, opening and closing of the session as a whole, and even shutdown of the application as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and also what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
+And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, the request for help, and actions like saving, opening and closing of the session as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this topic relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and also what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
 
 Why do we need a connection joint between those parts?
-Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
+Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we strive at building a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
 &gt; to understand this, it is best &amp;rarr; to [[look at some examples|CommandInvocationAnalysis]]
 
 !Children
 The InteractionDirector is part of the model, and thus we have to distinguish between model children and other UI components held as children.
 ;model
-:anything related to global structures falls into that category
+:anything related to //core concerns// and session global structures falls into that category
 :* some parts might be related to ''Asset management''
 :* some concerns might touch questions of ''configuration''
 :* and interaction state is closely related to ''persistent UI state''
@@ -3500,6 +3515,8 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 :* the [[Navigator]] is a special controller to handle moving the SpotLocator
 
 !Collaborations
+* several global actions are exposed here, like opening the session and creating a new timeline.&lt;br/&gt;Such operations are typically bound into menu and action buttons, and in turn invoke [[commands|CommandHandling]] into the Session
+* some further actions involve the interplay with the [[docking panel manager|GuiDockingPanel]], like e.g. instantiating a new [[timeline display|GuiTimelineView]] into a timeline pane.
 </pre>
 </div>
 <div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704171824" tags="def design GuiIntegration draft" changecount="9">
