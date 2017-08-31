@@ -85,12 +85,6 @@ namespace gui {
                       });
   }
   
-  void
-  NotificationService::showErrorUI (string errorMsg)
-  {
-    UNIMPLEMENTED ("forward error message to the error log");
-  }
-  
   
   void 
   NotificationService::displayInfo (NotifyLevel severity, string const& text)
@@ -130,7 +124,7 @@ namespace gui {
   {
     NOTICE (gui, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
     displayInfo (NOTE_ERROR, cause);
-    dispatch_->event ([=]()
+    dispatch_->event ([this]()
                       {
                         uiManager_.terminateUI();
                       });
@@ -275,15 +269,16 @@ namespace gui {
   
   
   /**
-   * When started, NotificationService connects to the [UI-Bus](ui-bus.hpp) via
-   * the provided connection. This is a simple, unidirectional up-link connection,
-   * without actively adding NotificationService into the routing tables in [Nexus].
-   * Yet this simple connection is sufficient to implement this service by talking
-   * to other facilities within the UI layer.
+   * When started, NotificationService connects to the [UI-Bus](ui-bus.hpp) via the provided connection.
+   * This is a simple, unidirectional up-link connection, without actively adding NotificationService
+   * into the routing tables in [Nexus]. Yet this simple connection is sufficient to implement this
+   * service by talking to other facilities within the UI layer.
+   * @remark internally this service relies on a UiDispatcher queue to hand over any invocations
+   *         into the GTK event loop thread.
    */
   NotificationService::NotificationService (ctrl::BusTerm& upLink, ctrl::UiManager& uiManager)
     : BusTerm{lib::idi::EntryID<NotificationService>{}, upLink}
-    , dispatch_{new UiDispatcher{[this](string msg){ showErrorUI(msg); }}}
+    , dispatch_{new UiDispatcher{[this](string msg){ displayInfo (NOTE_ERROR, msg); }}}
     , uiManager_{uiManager}
     , implInstance_(this,_instance)
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))

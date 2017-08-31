@@ -91,7 +91,6 @@ namespace gui {
       ctrl::UiManager& uiManager_;
       
       void dispatchMsg (ID, lib::diff::GenNode&&);
-      void showErrorUI (string errorMsg);
       
       
       /* === Interface Lifecycle === */
