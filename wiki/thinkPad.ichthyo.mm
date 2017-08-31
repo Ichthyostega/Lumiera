@@ -1391,7 +1391,17 @@
 <node CREATED="1504203746239" ID="ID_697660682" MODIFIED="1504203776630" TEXT="Scroll-Pane">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1504203749815" ID="ID_1057483680" MODIFIED="1504203782093" STYLE="fork" TEXT="Textanzeige-Box"/>
+<node CREATED="1504203749815" ID="ID_1057483680" MODIFIED="1504203782093" STYLE="fork" TEXT="Textanzeige-Box">
+<node CREATED="1504215911647" ID="ID_1066629131" MODIFIED="1504215914707" TEXT="GtkTextView"/>
+<node CREATED="1504215958961" ID="ID_55797578" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-formatting" MODIFIED="1504215966443" TEXT="Formattierung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1504216221389" ID="ID_355253225" MODIFIED="1504216223713" TEXT="Marks">
+<node CREATED="1504216224349" ID="ID_1372118244" MODIFIED="1504216245727" TEXT="was ist die &quot;insert&quot;-Mark?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 <node CREATED="1504203754175" ID="ID_580465154" MODIFIED="1504203763065" TEXT="Fehler-Level erkennen"/>
 <node CREATED="1504203763606" ID="ID_877984616" MODIFIED="1504203769745" TEXT="in ein Widget verpacken"/>
 </node>
@@ -2648,8 +2658,8 @@
 </node>
 <node CREATED="1477784829157" ID="ID_1998357180" MODIFIED="1477784838700" TEXT="Icon-Laden modernisieren"/>
 <node CREATED="1477784821925" ID="ID_1871474250" MODIFIED="1488423306858" TEXT="Styling aufr&#xe4;umen">
-<node CREATED="1477784846162" ID="ID_1164942946" MODIFIED="1477784889994" TEXT="siehe Info zum CssProvider">
-<arrowlink DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1846;-61;" ID="Arrow_ID_1610122569" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
+<node CREATED="1477784846162" ID="ID_1164942946" MODIFIED="1504215608190" TEXT="siehe Info zum CssProvider">
+<arrowlink COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1600;-25;" ID="Arrow_ID_1610122569" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
 </node>
 </node>
 </node>
@@ -18111,6 +18121,7 @@
 </node>
 <node CREATED="1477785856731" ID="ID_63204089" MODIFIED="1477785865998" TEXT="R&#xfc;ckgabewert: true == fertig behandelt"/>
 </node>
+<node CREATED="1504215708147" ID="ID_975007807" MODIFIED="1504215714526" TEXT="Widget">
 <node CREATED="1477526858307" ID="ID_676269117" MODIFIED="1477526862502" TEXT="custom widget">
 <node COLOR="#ca1b00" CREATED="1477526864162" ID="ID_1385929770" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477788908756" TEXT="Beispiel">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" SOURCE="ID_426069181" STARTARROW="None" STARTINCLINATION="1055;0;"/>
@@ -18133,30 +18144,7 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node CREATED="1446515847047" ID="ID_290915762" MODIFIED="1488423307345" TEXT="GtkCssProvider">
-<node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1446515869624" TEXT="parsing errors"/>
-<node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477784889994" TEXT="Beispiel im GTKmm-Guide (custom widget)">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      in der Implementierung, mywidget.cc
-    </p>
-    <p>
-      ist eine komplette Sequenz, wie man einen CSS-StyleProvider setzt
-    </p>
-    <p>
-      und auch ein Signal f&#252;r Parse-Fehler anschlie&#223;t
-    </p>
-  </body>
-</html></richcontent>
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1846;-61;" ID="Arrow_ID_1610122569" SOURCE="ID_1164942946" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
-<icon BUILTIN="info"/>
-</node>
-</node>
-<node CREATED="1476375676818" ID="ID_1029920942" MODIFIED="1476375683685" TEXT="Canvas">
+<node CREATED="1476375676818" ID="ID_1029920942" MODIFIED="1504215692514" TEXT="Canvas">
 <node CREATED="1476375696215" ID="ID_1397403295" MODIFIED="1476375700698" TEXT="GtkDrawingArea">
 <node CREATED="1476375709157" ID="ID_981405457" MODIFIED="1476375712568" TEXT="custom drawing"/>
 </node>
@@ -18224,7 +18212,7 @@
 <arrowlink DESTINATION="ID_1600280983" ENDARROW="Default" ENDINCLINATION="893;0;" ID="Arrow_ID_1707544457" STARTARROW="None" STARTINCLINATION="893;0;"/>
 </node>
 <node CREATED="1477788855234" ID="ID_426069181" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1477788908756" TEXT="read the example code of a custom widget">
-<arrowlink DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" STARTARROW="None" STARTINCLINATION="1055;0;"/>
+<arrowlink COLOR="#a9b4c1" DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" STARTARROW="None" STARTINCLINATION="1055;0;"/>
 </node>
 <node CREATED="1477789514451" ID="ID_84890591" LINK="https://www.cairographics.org/documentation/cairomm/reference/" MODIFIED="1477789523593" TEXT="Cairomm API-doc"/>
 </node>
@@ -18495,6 +18483,69 @@
 <icon BUILTIN="full-1"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1504215729848" ID="ID_518260540" MODIFIED="1504215733451" TEXT="howto">
+<node CREATED="1446515847047" FOLDED="true" ID="ID_290915762" MODIFIED="1504215748214" TEXT="GtkCssProvider">
+<node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1446515869624" TEXT="parsing errors"/>
+<node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1504215608190" TEXT="Beispiel im GTKmm-Guide (custom widget)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in der Implementierung, mywidget.cc
+    </p>
+    <p>
+      ist eine komplette Sequenz, wie man einen CSS-StyleProvider setzt
+    </p>
+    <p>
+      und auch ein Signal f&#252;r Parse-Fehler anschlie&#223;t
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1600;-25;" ID="Arrow_ID_1610122569" SOURCE="ID_1164942946" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1504215750653" ID="ID_110831069" MODIFIED="1504215754256" TEXT="Textanzeige">
+<node CREATED="1504215755484" ID="ID_1858414199" MODIFIED="1504215760087" TEXT="TextView widget"/>
+<node CREATED="1504215761547" ID="ID_925639969" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-examples.html.en" MODIFIED="1504215815883">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel im <font color="#d4020a">Guide</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1504215825762" ID="ID_429138159" MODIFIED="1504215831637" TEXT="zur letzten Zeile scrollen">
+<node CREATED="1504215849336" ID="ID_832996389" MODIFIED="1504215853816" TEXT="Marker setzen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1504215832746" ID="ID_751207346" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-multithread-example.html.en" MODIFIED="1504215873156">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Multithreded-Beispiel
+    </p>
+    <p>
+      im Guide demonstriert das
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>

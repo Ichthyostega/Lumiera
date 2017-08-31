@@ -27,40 +27,50 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/panel/infobox-panel.hpp"
+#include "lib/format-string.hpp"
+
+using util::_Fmt;
+using Glib::ustring;
 
 namespace gui  {
 namespace panel{
   
   InfoBoxPanel::InfoBoxPanel (workspace::PanelManager& panelManager, Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
-    , twoParts_(Gtk::ORIENTATION_VERTICAL)
-    , buttons_()
-    , frame_("UI Integration Experiments")
-    , scroller_()
+    , twoParts_{Gtk::ORIENTATION_VERTICAL}
+    , buttons_{}
+    , frame_{"UI Integration Experiments"}
+    , scroller_{}
+    , textLog_{}
     {
       twoParts_.pack_start(frame_);
       twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
       
-      buttons_.set_layout(Gtk::BUTTONBOX_START);
+      buttons_.set_layout (Gtk::BUTTONBOX_START);
       
       // buttons to trigger experiments
-      button_1_.set_label("_bang");
+      button_1_.set_label ("_bang");
       button_1_.set_use_underline();
-      button_1_.set_tooltip_markup("<b>Experiment 1</b>:\ntrigger Proc-GUI roundtrip");
+      button_1_.set_tooltip_markup ("<b>Experiment 1</b>:\ntrigger Proc-GUI roundtrip");
       button_1_.signal_clicked().connect(
                   mem_fun(*this, &InfoBoxPanel::experiment_1));
-      buttons_.add(button_1_);
+      buttons_.add (button_1_);
       //(End)buttons...
       
-      frame_.add(scroller_);
-      frame_.set_border_width(5);
+      frame_.add (scroller_);
+      frame_.set_border_width (5);
       
-      scroller_.set_shadow_type(Gtk::SHADOW_NONE);
-      scroller_.set_border_width(10);
-//    scroller_.add(canvas_);///////////////////////////TODO add text display box here...
+      scroller_.set_shadow_type (Gtk::SHADOW_NONE);
+      scroller_.set_border_width (10);
+      
+      scroller_.add (textLog_);
+      // the vertical scrollbar will always be necessary....
+      scroller_.set_policy (Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
+      
+      textLog_.set_editable (false);
       
       // show everything....
-      this->add(twoParts_);
+      this->add (twoParts_);
       this->show_all();
     }
   
@@ -82,6 +92,12 @@ namespace panel{
   InfoBoxPanel::experiment_1()
   {
     frame_.set_label("Experiment 1... BANG");
+    
+    static uint bangNo{0};
+    static _Fmt msgTemplate{"Bang #%d\n"};
+    auto buff = textLog_.get_buffer();
+    auto pos = buff->insert (buff->end(), ustring{msgTemplate % ++bangNo});
+    textLog_.scroll_to (pos);
   }
   
   

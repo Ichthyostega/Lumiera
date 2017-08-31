@@ -62,7 +62,7 @@ namespace panel{
       Gtk::Button button_1_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
-      ////////////////////////////////////////////////TICKET #1047 : as a temporary solution, host the error log here 
+      Gtk::TextView textLog_;             ////////////TICKET #1047 : as a temporary solution, host the error log here 
       ////////////////////////////////////////////////TICKET #1102 : build a message display box widget
       
       void experiment_1();
