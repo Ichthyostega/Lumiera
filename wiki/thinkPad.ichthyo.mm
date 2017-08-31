@@ -1391,14 +1391,28 @@
 <node CREATED="1504203746239" ID="ID_697660682" MODIFIED="1504203776630" TEXT="Scroll-Pane">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1504203749815" ID="ID_1057483680" MODIFIED="1504203782093" STYLE="fork" TEXT="Textanzeige-Box">
+<node CREATED="1504203749815" ID="ID_1057483680" MODIFIED="1504220218336" STYLE="fork" TEXT="Textanzeige-Box">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1504215911647" ID="ID_1066629131" MODIFIED="1504215914707" TEXT="GtkTextView"/>
 <node CREATED="1504215958961" ID="ID_55797578" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-formatting" MODIFIED="1504215966443" TEXT="Formattierung">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1504219859389" ID="ID_653669269" MODIFIED="1504220132294" TEXT="Scrollen zum zuletzt eingef&#xfc;gten Text">
+<arrowlink COLOR="#9bbabd" DESTINATION="ID_429138159" ENDARROW="Default" ENDINCLINATION="-1413;0;" ID="Arrow_ID_1025095859" STARTARROW="None" STARTINCLINATION="-1151;202;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1504220139416" ID="ID_1997485219" MODIFIED="1504220211965" TEXT="scroll_to(iterator) funktioniert nicht">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1504220198880" ID="ID_1877499848" MODIFIED="1504220208979" TEXT="mu&#xdf; Marke verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 <node CREATED="1504216221389" ID="ID_355253225" MODIFIED="1504216223713" TEXT="Marks">
 <node CREATED="1504216224349" ID="ID_1372118244" MODIFIED="1504216245727" TEXT="was ist die &quot;insert&quot;-Mark?">
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1504219835536" ID="ID_1720205947" MODIFIED="1504219841735" TEXT="der Text-Cursor">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -18527,9 +18541,35 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1504215825762" ID="ID_429138159" MODIFIED="1504215831637" TEXT="zur letzten Zeile scrollen">
+<node CREATED="1504215825762" ID="ID_429138159" MODIFIED="1504220029652" TEXT="zur letzten Zeile scrollen">
+<linktarget COLOR="#9bbabd" DESTINATION="ID_429138159" ENDARROW="Default" ENDINCLINATION="-1413;0;" ID="Arrow_ID_1025095859" SOURCE="ID_653669269" STARTARROW="None" STARTINCLINATION="-1151;202;"/>
+<node CREATED="1504220167228" ID="ID_622474093" MODIFIED="1504220186708" TEXT="scroll_to(iterator) ist ungenau">
+<icon BUILTIN="broken-line"/>
+</node>
 <node CREATED="1504215849336" ID="ID_832996389" MODIFIED="1504215853816" TEXT="Marker setzen">
 <icon BUILTIN="idea"/>
+<node CREATED="1504220053691" ID="ID_905781900" MODIFIED="1504220060382" TEXT="benannt oder anonym"/>
+<node CREATED="1504220061178" ID="ID_474843943" MODIFIED="1504220121853" TEXT="&quot;Gravity&quot; beachten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        left gravity: Marker bleibt beim Einf&#252;gen an dieser Stelle links von der Einf&#252;gung stehen
+      </li>
+      <li>
+        right gravity: Marker wird durch Einf&#252;gen an dieser Stelle nach rechts geschoben
+      </li>
+    </ul>
+    <p>
+      Beachte: der Text-Cursor (Marker &quot;insert&quot;) hat right gravity
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1504215832746" ID="ID_751207346" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-multithread-example.html.en" MODIFIED="1504215873156">
 <richcontent TYPE="NODE"><html>
@@ -18546,6 +18586,9 @@
   </body>
 </html>
 </richcontent>
+</node>
+<node CREATED="1504219929260" ID="ID_1037649590" MODIFIED="1504219963912" TEXT="Trick: Cursor ist ein Marker namens &quot;insert&quot;">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
