@@ -36,6 +36,7 @@
 
 
 #include "gui/panel/panel.hpp"
+#include "gui/widget/error-log-widget.hpp"
 
 namespace gui  {
 namespace panel{
@@ -61,9 +62,7 @@ namespace panel{
       Gtk::ButtonBox buttons_;
       Gtk::Button button_1_;
       Gtk::Frame frame_;
-      Gtk::ScrolledWindow scroller_;
-      Gtk::TextView textLog_;             ////////////TICKET #1047 : as a temporary solution, host the error log here 
-      ////////////////////////////////////////////////TICKET #1102 : build a message display box widget
+      widget::ErrorLogWidget errorLog_;
       
       void experiment_1();
     };

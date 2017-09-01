@@ -1416,8 +1416,10 @@
 </node>
 </node>
 </node>
+<node CREATED="1504203763606" ID="ID_877984616" MODIFIED="1504306254735" TEXT="in ein Widget verpacken">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1504203754175" ID="ID_580465154" MODIFIED="1504203763065" TEXT="Fehler-Level erkennen"/>
-<node CREATED="1504203763606" ID="ID_877984616" MODIFIED="1504203769745" TEXT="in ein Widget verpacken"/>
 </node>
 </node>
 </node>

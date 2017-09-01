@@ -40,8 +40,7 @@ namespace panel{
     , twoParts_{Gtk::ORIENTATION_VERTICAL}
     , buttons_{}
     , frame_{"UI Integration Experiments"}
-    , scroller_{}
-    , textLog_{}
+    , errorLog_{}
     {
       twoParts_.pack_start(frame_);
       twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
@@ -57,17 +56,8 @@ namespace panel{
       buttons_.add (button_1_);
       //(End)buttons...
       
-      frame_.add (scroller_);
       frame_.set_border_width (5);
-      
-      scroller_.set_shadow_type (Gtk::SHADOW_NONE);
-      scroller_.set_border_width (10);
-      
-      // the vertical scrollbar will always be necessary....
-      scroller_.set_policy (Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
-      scroller_.add (textLog_);
-      
-      textLog_.set_editable (false);
+      frame_.add (errorLog_);
       
       // show everything....
       this->add (twoParts_);
@@ -96,15 +86,7 @@ namespace panel{
     static uint bangNo{0};
     static _Fmt msgTemplate{"Bang #%d\n"};
     
-    // According to the Gtkmm tutorial, TextView::scroll_to(iter) is not reliable;
-    // rather we need to use a text mark and set that text mark to the insert position.
-    // Actually, there is always one predefined text mark called "insert", which corresponds
-    // to the text cursor. Thus it suffices to navigate to text end, insert and scroll into view.
-    auto buff = textLog_.get_buffer();
-    auto cursor = buff->get_insert();
-    buff->move_mark (cursor, buff->end());
-    buff->insert (buff->end(), ustring{msgTemplate % ++bangNo});
-    textLog_.scroll_to (cursor);
+    errorLog_.showMsg(NOTE_WARN, msgTemplate % ++bangNo);
   }
   
   
