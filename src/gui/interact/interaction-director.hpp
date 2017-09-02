@@ -89,6 +89,7 @@ namespace interact {
   class SpotLocator;
   class Navigator;
   class FocusTracker;
+  class ViewLocator;
   
   
   
@@ -102,6 +103,7 @@ namespace interact {
       ctrl::GlobalCtx& globalCtx_;
       
       // == global Services ==
+      unique_ptr<ViewLocator> viewLocator_;
       unique_ptr<SpotLocator> spotLocator_;
       unique_ptr<Navigator>    navigator_;
       unique_ptr<FocusTracker>  tracker_;

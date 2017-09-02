@@ -31,6 +31,7 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/global-ctx.hpp"
 #include "gui/interact/interaction-director.hpp"
+#include "gui/interact/view-locator.hpp"
 #include "gui/interact/spot-locator.hpp"
 #include "gui/interact/navigator.hpp"
 #include "gui/interact/focus-tracker.hpp"
@@ -82,6 +83,7 @@ namespace interact {
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
     : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
     , globalCtx_(globals)
+    , viewLocator_{new ViewLocator{globals.windowLoc_.locatePanel()}}
     , spotLocator_{new SpotLocator}
     , navigator_{new Navigator{*spotLocator_}}
     , tracker_{new FocusTracker{*navigator_}}

@@ -81,6 +81,8 @@ namespace ctrl {
       workspace::WorkspaceWindow& findActiveWindow();
       workspace::WorkspaceWindow& findFocusWindow();
       
+      PanelLocator& locatePanel() { return panelLoc_; }
+      
       
     private:
       
