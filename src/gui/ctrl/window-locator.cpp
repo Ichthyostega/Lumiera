@@ -22,12 +22,13 @@
 
 
 /** @file window-locator.cpp
- ** Implementation details of management and access to all top level windows.
+ ** Implementation details of management and access to all top level windows and docking panels.
  ** @see ui-manager.hpp
  */
 
 
 #include "gui/ctrl/global-ctx.hpp"
+#include "gui/ctrl/panel-locator.hpp"
 #include "gui/ctrl/window-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/util.hpp"
@@ -47,9 +48,16 @@ namespace ctrl {
   
   
   
+  PanelLocator::PanelLocator (WindowList& all_top_level_wndows)
+    : windowList_{all_top_level_wndows}
+    { }
+  
+  
+  
   WindowLocator::WindowLocator (GlobalCtx& globals)
     : globalCtx_{globals}
     , windowList_{}
+    , panelLoc_{windowList_}
     { }
   
   

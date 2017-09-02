@@ -36,6 +36,7 @@
 #define GUI_CTRL_WINDOW_LOCATOR_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/ctrl/panel-locator.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <memory>
@@ -66,6 +67,7 @@ namespace ctrl {
       
       GlobalCtx&    globalCtx_;
       list<PWindow> windowList_;
+      PanelLocator  panelLoc_;
       
       
     public:
