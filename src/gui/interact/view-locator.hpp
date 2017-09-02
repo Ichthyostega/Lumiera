@@ -44,6 +44,7 @@
 #define GUI_INTERACT_VIEW_LOCATOR_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/id-scheme.hpp"
 #include "gui/ctrl/panel-locator.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -64,7 +65,7 @@ namespace interact {
   /**
    * Access or allocate a UI component view
    * 
-   * @todo initial draft as of 9/2017 -- actual implementation has to be filled in
+   * @todo initial draft as of 9/2017 -- actual implementation need to be filled in
    */
   class ViewLocator
     : boost::noncopyable
@@ -75,10 +76,25 @@ namespace interact {
       ViewLocator (ctrl::PanelLocator&);
      ~ViewLocator();
       
+      
+      /**
+       * Access and possibly create _just some_ component view of the desired type
+       */
+      template<class V>
+      V& get();
+      
     private:
       
     };
   
+  
+  
+  template<class V>
+  inline V&
+  ViewLocator::get()
+  {
+    UNIMPLEMENTED ("what is the *generic way* to access such a component? does it always involve the PanelLocator? Is there a generic Panel-API?");
+  }
   
   
 }}// namespace gui::interact

@@ -2747,7 +2747,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709021557" tags="def GuiPattern design" changecount="5">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709022147" tags="def GuiPattern design" changecount="11">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2764,7 +2764,14 @@ Here, //Allocation// means
 * to determine the hosting location
 * possibly to instantiate and register a new instance
 * and finally to configure that instance for the desired role
-The classical example to verify this definition is the //allocation of viewers:// when starting playback of a new media item, we &quot;need a viewer&quot; to show it. But we can not just create yet another viewer window -- rather we need to allocate one of the possible &quot;viewer slots&quot;. In fact this is a configurable property of the UI layout employed; sometimes some people need the limitation to one single viewer entity (which might even be external, routed to a beamer or monitor), while other ones request the classical editor layout with two viewer windows side by side, while yet different working styles might exploit a limited set of viewers allocated in stack- or round-robin style.</pre>
+The classical example to verify this definition is the //allocation of viewers:// when starting playback of a new media item, we &quot;need a viewer&quot; to show it. But we can not just create yet another viewer window -- rather we need to allocate one of the possible &quot;viewer slots&quot;. In fact this is a configurable property of the UI layout employed; sometimes some people need the limitation to one single viewer entity (which might even be external, routed to a beamer or monitor), while other ones request the classical editor layout with two viewer windows side by side, while yet different working styles might exploit a limited set of viewers allocated in stack- or round-robin style.
+
+!View access
+The global access point to component views is the {{{ViewLocator}}} within InteractionDirector, which exposes a generic access- and management API to
+* get (possibly create) some view of given type
+* get (possibly create) a view with specific identity
+* destroy a specific view
+While these operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases it is sufficient to address a component view just via the UI-Bus. This is possible since component ~IDs are formed systematically and thus always predictable: it is the same ID as used within Proc-Layer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].</pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.

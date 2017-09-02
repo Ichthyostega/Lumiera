@@ -152,6 +152,11 @@ namespace gui {
   /** GUI helpers, utility functions and classes. */
   namespace util {}
   
+  /** generic definitions for element ID and access.
+   * @see id-scheme.hpp
+   */
+  namespace idi {}
+  
   
 }// namespace gui
 #endif /*GUI_GTK_BASE_H*/
