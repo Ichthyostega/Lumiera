@@ -116,8 +116,8 @@ namespace ctrl {
   void
   UiManager::createApplicationWindow()
   {
-    if (globals_->windowList_.empty())
-      globals_->windowList_.newWindow();
+    if (globals_->windowLoc_.empty())
+      globals_->windowLoc_.newWindow();
   }
   
 
@@ -158,7 +158,7 @@ namespace ctrl {
   UiManager::updateWindowFocusRelatedActions()
   {
           ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
-    actions_->updateActionState (globals_->windowList_.findActiveWindow());
+    actions_->updateActionState (globals_->windowLoc_.findActiveWindow());
   }
 
   

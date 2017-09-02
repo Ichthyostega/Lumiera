@@ -1,5 +1,5 @@
 /*
-  WINDOW-LIST.hpp  -  manage all top level windows
+  WINDOW-LOCATOR.hpp  -  manage all top level windows
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,10 +21,10 @@
 */
 
 
-/** @file window-list.hpp
+/** @file window-locator.hpp
  ** Manager for all top level application windows.
- ** The central WindowList instance is owned by the GtkLumiera object and
- ** initialised in GTK-main. The WindowList allows to create new windows
+ ** The central WindowLocator is part of the [UI global context](\ref GlobalCtx) and thus
+ ** initialised on startup of the UI. The WindowLocator allows to create new windows
  ** integrated with the application framework.
  ** 
  ** @see gtk-lumiera.hpp
@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_CTRL_WINDOW_LIST_H
-#define GUI_CTRL_WINDOW_LIST_H
+#ifndef GUI_CTRL_WINDOW_LOCATOR_H
+#define GUI_CTRL_WINDOW_LOCATOR_H
 
 #include "gui/gtk-base.hpp"
 
@@ -59,7 +59,7 @@ namespace ctrl {
   /**
    * A centralised manager of all top level application windows.
    */
-  class WindowList
+  class WindowLocator
     : boost::noncopyable
     {
       using PWindow = std::shared_ptr<workspace::WorkspaceWindow>;
@@ -69,7 +69,7 @@ namespace ctrl {
       
       
     public:
-      WindowList (GlobalCtx&);
+      WindowLocator (GlobalCtx&);
       
       bool empty()  const;
       
@@ -104,7 +104,7 @@ namespace ctrl {
   
   
   inline bool
-  WindowList::empty()  const
+  WindowLocator::empty()  const
   {
     return windowList_.empty();
   }
@@ -112,4 +112,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_WINDOW_LIST_H*/
+#endif /*GUI_CTRL_WINDOW_LOCATOR_H*/

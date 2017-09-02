@@ -2747,6 +2747,25 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709021557" tags="def GuiPattern design" changecount="5">
+<pre>//A view within the UI, featuring some component of relevance to »the model«.//
+While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
+Such UI component views exhibit some substantial traits
+* they conform to a built-in fixed list of view types, each of which is unique and dedicated to a very specific purpose: //''Timeline'', ''Viewer'', (Asset)''Bin'', ''Infobox'', ''Playcontrol'',...//
+* each component view has a distinguishable identity and is connected to and addressable through the UI-Bus
+* it can be hosted only at a dedicated location within one or several specific [[docking panels|GuiDockingPanel]].
+* multiplicity (one, one per window, many) depends on the type of view and needs to be managed.
+* such a view is not just //created// -- rather it needs to be //allocated//
+
+!Allocation of UI component views
+Here, //Allocation// means
+* to constitute the desired element's identity
+* to consider multiplicity and possibly retrieve an existing instance
+* to determine the hosting location
+* possibly to instantiate and register a new instance
+* and finally to configure that instance for the desired role
+The classical example to verify this definition is the //allocation of viewers:// when starting playback of a new media item, we &quot;need a viewer&quot; to show it. But we can not just create yet another viewer window -- rather we need to allocate one of the possible &quot;viewer slots&quot;. In fact this is a configurable property of the UI layout employed; sometimes some people need the limitation to one single viewer entity (which might even be external, routed to a beamer or monitor), while other ones request the classical editor layout with two viewer windows side by side, while yet different working styles might exploit a limited set of viewers allocated in stack- or round-robin style.</pre>
+</div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
 
@@ -2873,18 +2892,20 @@ In order to build a sensible plan for our timeline structure, we need to investi
 }}}
 </pre>
 </div>
-<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201708311619" changecount="2">
+<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201709021604" tags="design GuiPattern draft" changecount="8">
 <pre>//Management of dockable content panes//
 Within each top level application window, the usable screen real estate can be split and arranged into a number of standard view building blocks. Each of this //panels// follows a specific preconfigured basic layout -- these are hard coded, yet customisable in detail. There is a finite list of such panel types available:
 * the [[timeline display|GuiTimelineView]]
 * the media viewer
 * asset management
 * information box
+Within the preconfigured layout it is a panel's role to host and incorporate GuiComponentView elements.
+Please note the distinction between UI component view and panel; in many cases there is one of each for a given kind, and these need to be distinguished: e.g. there is the [[timeline view|GuiTimelineView]] and there is the timeline panel, which houses several timelines (as tabs). Or there is the viewer component, which is located within a dedicated viewer panel each.
 
 !Instantiation
 !Placing and addressing of embedded contents
-A specific problem arises insofar other parts of the UI need to create, address and control some UI entities, which at the same time exist as part of a docking panel. This is a problem of crosscutting concerns: UI control and interaction structure should not be mingled with the generic concern to maintain a component as part of a screen layout. Unfortunately, standard UI toolkit sets are designed incredibly naive ways when it comes to interaction design, and the only available alternative is to rely on a framework, which come with a hard-wired philosophy.
-As a result, we're forced to build our UI from components lacking the decision between //ownership and control.//
+A specific problem arises insofar other parts of the UI need to create, address and control some UI entities, which at the same time exist as part of a docking panel. This is a problem of crosscutting concerns: UI control and interaction structure should not be mingled with the generic concern to maintain a component as part of a screen layout. Unfortunately, the design of standard UI toolkit sets is incredibly naive when it comes to interaction design, and the only available alternative is to rely on frameworks, which come with a hard-wired philosophy.
+As a result, we're forced to build our UI from components which fall short on the distinction between //ownership and control.//
 </pre>
 </div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">
@@ -3491,7 +3512,7 @@ The concept of a //focus goal// has several ramifications: for one it implies th
 To create such a system is an ambitious goal. We can not reach it in a single step, since it entails the formation of a whole intermediary layer, on top of the //usual UI mechanics,// yet below the concrete UI interactions. Especially, we'd need to clarify the meaning of //perspective,// we need to decide on the relation of top level frame, individual view, layout, focus and //current location within the UI.// On a second thought, building such a system implies we'll have to live with an intermediary state of evolution, where parts of the new framework are already in place without interfering with common conventional usage of the interface as-is.
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201708311600" tags="def draft" changecount="21">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201709021522" tags="def design GuiPattern" changecount="25">
 <pre>//the top-level controller within the UI.//
 In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within this model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, together with the asset management and defaults and rules configuration within the session.
 
@@ -3516,7 +3537,12 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 
 !Collaborations
 * several global actions are exposed here, like opening the session and creating a new timeline.&lt;br/&gt;Such operations are typically bound into menu and action buttons, and in turn invoke [[commands|CommandHandling]] into the Session
-* some further actions involve the interplay with the [[docking panel manager|GuiDockingPanel]], like e.g. instantiating a new [[timeline display|GuiTimelineView]] into a timeline pane.
+* some further actions involve [[management of docking panels|GuiDockingPanel]], like e.g. instantiating a new [[timeline display|GuiTimelineView]] into a timeline pane.
+* in fact it is the InteractionDirector's job to keep track of [[component views|GuiComponentView]], some of which
+** can exist only once
+** or can exist only once per top level window
+** some might even be required once per window
+** while others may be duplicated locally or globally
 </pre>
 </div>
 <div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704171824" tags="def design GuiIntegration draft" changecount="9">

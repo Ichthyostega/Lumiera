@@ -1,5 +1,5 @@
 /*
-  WindowList  -  manage all top level windows
+  WindowLocator  -  manage all top level windows
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,14 +21,14 @@
 * *****************************************************/
 
 
-/** @file window-list.cpp
- ** Implementation parts of the list to manage all top level windows.
+/** @file window-locator.cpp
+ ** Implementation details of management and access to all top level windows.
  ** @see ui-manager.hpp
  */
 
 
 #include "gui/ctrl/global-ctx.hpp"
-#include "gui/ctrl/window-list.hpp"
+#include "gui/ctrl/window-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/util.hpp"
 
@@ -47,20 +47,20 @@ namespace ctrl {
   
   
   
-  WindowList::WindowList (GlobalCtx& globals)
+  WindowLocator::WindowLocator (GlobalCtx& globals)
     : globalCtx_{globals}
     , windowList_{}
     { }
   
   
   void
-  WindowList::newWindow ()
+  WindowLocator::newWindow ()
   { 
     PWindow window (new WorkspaceWindow{globalCtx_.uiManager_});
     REQUIRE(window);
     
     window->signal_delete_event().connect(sigc::mem_fun(
-      this, &WindowList::on_window_closed));
+      this, &WindowLocator::on_window_closed));
     
     windowList_.push_back(window);
     
@@ -76,7 +76,7 @@ namespace ctrl {
    *          the fist one in list will be killed
    */
   void
-  WindowList::closeWindow()
+  WindowLocator::closeWindow()
     {
       findActiveWindow().hide();
     }
@@ -90,7 +90,7 @@ namespace ctrl {
    *       called when there is at least one Lumiera window.
    */
   WorkspaceWindow&
-  WindowList::findActiveWindow()
+  WindowLocator::findActiveWindow()
   {
     REQUIRE (not isnil (windowList_));
     
@@ -108,7 +108,7 @@ namespace ctrl {
    *       has keyboard focus. This may very well be the case.
    */
   WorkspaceWindow&
-  WindowList::findFocusWindow()
+  WindowLocator::findFocusWindow()
   {
     REQUIRE (not isnil (windowList_));
     
@@ -122,7 +122,7 @@ namespace ctrl {
   
   
   bool
-  WindowList::on_window_closed (GdkEventAny* event)
+  WindowLocator::on_window_closed (GdkEventAny* event)
   {
     REQUIRE(event);
     REQUIRE(event->window);
@@ -157,7 +157,7 @@ namespace ctrl {
   
   
   void
-  WindowList::updateCloseWindowInMenus()
+  WindowLocator::updateCloseWindowInMenus()
   {
     globalCtx_.uiManager_.allowCloseWindow ( 1 < windowList_.size());
   }

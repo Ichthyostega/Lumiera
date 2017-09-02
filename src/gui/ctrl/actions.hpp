@@ -43,7 +43,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/ctrl/global-ctx.hpp"
-#include "gui/ctrl/window-list.hpp"
+#include "gui/ctrl/window-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/workspace/panel-manager.hpp"
 #include "lib/format-string.hpp"
@@ -133,8 +133,8 @@ namespace ctrl {
           
           
           menu("WindowMenu", _("_Window"));
-          entry ([&]() { globalCtx_.windowList_.newWindow(); } , "WindowNewWindow", StockID("new_window"));
-          entry ([&]() { globalCtx_.windowList_.closeWindow();}, "WindowCloseWindow", _("Close Window"));
+          entry ([&]() { globalCtx_.windowLoc_.newWindow(); }   , "WindowNewWindow", StockID("new_window"));
+          entry ([&]() { globalCtx_.windowLoc_.closeWindow();}  , "WindowCloseWindow", _("Close Window"));
           actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
 
           
@@ -287,9 +287,9 @@ namespace ctrl {
               cuString panelName = ustring::compose("Panel%1", i);
               actionGroup->add(Action::create(panelName, StockID(stock_id)),
                                [i,this]() {
-                                            globalCtx_.windowList_.findActiveWindow()
-                                                                  .getPanelManager()
-                                                                  .showPanel (i);
+                                            globalCtx_.windowLoc_.findActiveWindow()
+                                                                 .getPanelManager()
+                                                                 .showPanel (i);
                                           });
             }
           

@@ -261,7 +261,7 @@ namespace interact {
   workspace::WorkspaceWindow&
   InteractionDirector::getWorkspaceWindow()
   {
-    return globalCtx_.windowList_.findActiveWindow();
+    return globalCtx_.windowLoc_.findActiveWindow();
   }
 
   

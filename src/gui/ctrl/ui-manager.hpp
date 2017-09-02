@@ -37,7 +37,7 @@
  ** - the global Actions available though the menu
  ** - the InteractionDirector (top-level controller)
  ** - the StyleManager
- ** - the WindowList
+ ** - the WindowLocator
  ** 
  ** @see gtk-lumiera.hpp
  ** @see ui-bus.hpp
