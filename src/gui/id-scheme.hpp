@@ -109,6 +109,11 @@ namespace gui {
     struct Descriptor<ErrorLogView>
       {
         ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : need a model placeholder to represent UI specific global entities
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : consider use of a DSL to configure component view access 
+        //
+        // count = onePerWindow
+        // locate = within(InfoBoxPanel)
       };
     
     
