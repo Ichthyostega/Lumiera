@@ -3727,7 +3727,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504479933641" ID="ID_686917529" MODIFIED="1504834120416" TEXT="Idee: DSL">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504479933641" ID="ID_686917529" MODIFIED="1504884753616" TEXT="Idee: DSL">
+<cloud COLOR="#dac6a1"/>
 <linktarget COLOR="#5e819b" DESTINATION="ID_686917529" ENDARROW="Default" ENDINCLINATION="-89;-122;" ID="Arrow_ID_1067086551" SOURCE="ID_1397553997" STARTARROW="None" STARTINCLINATION="-322;62;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1504479939664" ID="ID_1158508729" MODIFIED="1504479950115" TEXT="Term-Schreibweise"/>
@@ -3750,19 +3751,164 @@
 </node>
 </node>
 <node CREATED="1504832752113" ID="ID_1801527547" MODIFIED="1504832757116" TEXT="Sprachdesign?">
-<node CREATED="1504832762680" ID="ID_879982156" MODIFIED="1504832813133" TEXT="Primitive">
+<node CREATED="1504832762680" ID="ID_879982156" MODIFIED="1504885000748" TEXT="Primitive">
+<cloud COLOR="#ebd5a6"/>
 <linktarget COLOR="#b16174" DESTINATION="ID_879982156" ENDARROW="Default" ENDINCLINATION="347;-150;" ID="Arrow_ID_1853267431" SOURCE="ID_673872785" STARTARROW="None" STARTINCLINATION="7;150;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1504884422206" ID="ID_1738943559" MODIFIED="1504884428417" TEXT="Machbarkeit...">
+<node CREATED="1504884432700" ID="ID_1124930479" MODIFIED="1504884436400" TEXT="wir brauchen">
+<node CREATED="1504884465448" ID="ID_158939863" MODIFIED="1504884480114" TEXT="schlie&#xdf;lich.... Aufruf an den PanelManager"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504884487533" ID="ID_1578364370" MODIFIED="1504885601314" TEXT="Art des Aufrufes">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1504885358585" ID="ID_1662504157" MODIFIED="1504885433339" TEXT="erzeuge neu in Panel(coord)"/>
+<node CREATED="1504885435351" ID="ID_1583789854" MODIFIED="1504885477437" TEXT="ersetze in Panel(coord)"/>
+<node CREATED="1504885503118" ID="ID_883040433" MODIFIED="1504885538829" TEXT="entferne view(ID) aus Panel(coord)"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504885554399" ID="ID_1868485493" MODIFIED="1504885587997">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Allokator</i>&#160;pro Typ
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1504885680095" ID="ID_1828531407" MODIFIED="1504885683602" TEXT="sicherstellen">
+<node CREATED="1504885686470" ID="ID_450596618" MODIFIED="1504885691569" TEXT="-- nix --"/>
+<node CREATED="1504885692389" ID="ID_735840491" MODIFIED="1504885706727" TEXT="global einer"/>
+<node CREATED="1504885708291" ID="ID_304260062" MODIFIED="1504885724876" TEXT="limit pro Fenster"/>
+</node>
+<node CREATED="1504886385928" ID="ID_894995512" MODIFIED="1504886409515" TEXT="Koordinaten finden...">
+<arrowlink COLOR="#21428c" DESTINATION="ID_660502374" ENDARROW="Default" ENDINCLINATION="30;-48;" ID="Arrow_ID_900798705" STARTARROW="None" STARTINCLINATION="158;0;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504886036743" ID="ID_1013293844" MODIFIED="1504886046671" TEXT="UI-Koordinaten">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1504886051389" ID="ID_1177567162" MODIFIED="1504886080749" TEXT="Tupel {Fenster, Perspektive, Panel, Gruppe, Pfad}"/>
+<node CREATED="1504886084393" ID="ID_28488269" MODIFIED="1504886117595" TEXT="optionale Komponenten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wir brauchen eine Repr&#228;sentation,
+    </p>
+    <p>
+      um auszudr&#252;cken, da&#223; gewissen Angaben ausgelassen wurden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1504886119604" ID="ID_206635297" MODIFIED="1504886127928" TEXT="komplexes Thema">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1504885799423" ID="ID_660502374" MODIFIED="1504886401988" TEXT="coordinate resolver">
+<linktarget COLOR="#21428c" DESTINATION="ID_660502374" ENDARROW="Default" ENDINCLINATION="30;-48;" ID="Arrow_ID_900798705" SOURCE="ID_894995512" STARTARROW="None" STARTINCLINATION="158;0;"/>
+<node CREATED="1504885810485" ID="ID_822801746" MODIFIED="1504885848044" TEXT="Fenster">
+<node CREATED="1504885841193" ID="ID_202708982" MODIFIED="1504885845268" TEXT="by ID"/>
+<node CREATED="1504885820724" ID="ID_1450511748" MODIFIED="1504885839941" TEXT="erstes"/>
+<node CREATED="1504885827803" ID="ID_1198849275" MODIFIED="1504885835797" TEXT="aktuelles"/>
+</node>
+<node CREATED="1504885855551" ID="ID_812520157" MODIFIED="1504885860746" TEXT="match Perspektive"/>
+<node CREATED="1504885875884" ID="ID_1808427553" MODIFIED="1504885878680" TEXT="Panel">
+<node CREATED="1504885879652" ID="ID_1434158169" MODIFIED="1504885886359" TEXT="hasPanel(Window)"/>
+<node CREATED="1504885976847" ID="ID_290757972" MODIFIED="1504885982466" TEXT="createPanel"/>
+</node>
+<node CREATED="1504886006459" ID="ID_1307875760" MODIFIED="1504886009686" TEXT="group">
+<node CREATED="1504886010442" ID="ID_1660557914" MODIFIED="1504886017533" TEXT="panel has group"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1504886210096" ID="ID_1980896942" MODIFIED="1504886216139" TEXT="locate -&gt;">
+<node CREATED="1504886227678" ID="ID_1936525982" MODIFIED="1504886237440" TEXT="existiert | machbar | unm&#xf6;glich"/>
+</node>
+</node>
 </node>
 <node CREATED="1504833110793" ID="ID_10881417" MODIFIED="1504833114828" TEXT="Ausdr&#xfc;cke">
-<node CREATED="1504833126079" ID="ID_286801467" MODIFIED="1504834719008" TEXT="konkret">
+<node CREATED="1504833126079" ID="ID_286801467" MODIFIED="1504884923889" TEXT="konkret">
+<cloud COLOR="#e6d0a4"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1504833146196" ID="ID_278904211" MODIFIED="1504833149680" TEXT="Timeline">
 <node CREATED="1504833174961" ID="ID_1294462811" MODIFIED="1504833187018" TEXT="im Timeline-Panel der Gruppe hinzuf&#xfc;gen"/>
+<node CREATED="1504882791007" ID="ID_1520721786" MODIFIED="1504883085368">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      count = unlimited
+    </p>
+    <p>
+      locate = panel(timeline)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1504833569692" ID="ID_1069272084" MODIFIED="1504833620713" TEXT="Viewer">
 <node CREATED="1504834559240" ID="ID_423545167" MODIFIED="1504834569219" TEXT="nur ein einziger(global)"/>
-<node CREATED="1504834569831" ID="ID_1909335075" MODIFIED="1504834594807" TEXT="maximal N Viewer Panel"/>
+<node CREATED="1504883102734" ID="ID_81147050" MODIFIED="1504883517558">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      count = onlyOne
+    </p>
+    <p>
+      locate = external(beamer)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or perspective(mediaView), panel(viewer)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or existingPanel(viewer)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow, panel(viewer)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1504834569831" ID="ID_1909335075" MODIFIED="1504883625292" TEXT="maximal 2 Viewer Panel"/>
+<node CREATED="1504883107916" ID="ID_1351734300" MODIFIED="1504883958167">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      count = limitPerWindow(2)
+    </p>
+    <p>
+      locate = perspective(edit), existingPanel(viewer)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow, existingPanel(viewer)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or existingPanel(viewer)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or panel(viewer)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1504833572687" ID="ID_715257949" MODIFIED="1504833615690" TEXT="(Asset)Bin">
 <node CREATED="1504834228100" ID="ID_189081279" MODIFIED="1504834278285">
@@ -3778,11 +3924,117 @@
 </html>
 </richcontent>
 </node>
+<node CREATED="1504883110076" ID="ID_199732103" MODIFIED="1504884259907">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      count = unlimited
+    </p>
+    <p>
+      locate = currentWindow, perspective(edit), existingPanel(asset), existingGroup
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or perspective(asset), panel(asset)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow, panel(asset)
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1504833574246" ID="ID_1680764695" MODIFIED="1504833610906" TEXT="Infobox">
+</node>
+<node CREATED="1504833574246" ID="ID_1680764695" MODIFIED="1504876896530" TEXT="FehlerLog">
 <node CREATED="1504834859584" ID="ID_693499241" MODIFIED="1504834866267" TEXT="im aktuellen Infobox-Panel"/>
+<node CREATED="1504883112068" ID="ID_308640581" MODIFIED="1504884348903">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      count = limitPerWindow(1)
+    </p>
+    <p>
+      locate = currentWindow, existingPanel(infobox)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow, panel(infobox)
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1504833575700" ID="ID_1341951504" MODIFIED="1504833606683" TEXT="Playcontrol"/>
+</node>
+<node CREATED="1504833575700" ID="ID_1341951504" MODIFIED="1504833606683" TEXT="Playcontrol">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504883115283" ID="ID_236325043" MODIFIED="1504883140030" TEXT="?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1504880643748" ID="ID_1148134938" MODIFIED="1504880646456" TEXT="Design">
+<node CREATED="1504880653395" ID="ID_110525549" MODIFIED="1504880660030" TEXT="Regel-artig"/>
+<node CREATED="1504880660666" ID="ID_959703053" MODIFIED="1504880668797" TEXT="mit Pr&#xe4;zedenz">
+<node CREATED="1504880672873" ID="ID_355744291" MODIFIED="1504880685267" TEXT="Liste von Definitionen"/>
+<node CREATED="1504880685783" ID="ID_1363213536" MODIFIED="1504880701665" TEXT="vom Speziellsten zum Allgemeinen"/>
+<node CREATED="1504880722394" ID="ID_1620814124" MODIFIED="1504880738895">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Voraussetzung: <i>Anwendbarkeit</i>&#160;erkennen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1504881079778" ID="ID_1944767932" MODIFIED="1504881083973" TEXT="Form">
+<node CREATED="1504881091345" ID="ID_453622973" MODIFIED="1504881104355" TEXT="Menge von Spezifikationen"/>
+<node CREATED="1504881104919" ID="ID_1302649814" MODIFIED="1504881111442" TEXT="diese sind inh&#xe4;rent getypt"/>
+<node CREATED="1504881124612" ID="ID_41842721" MODIFIED="1504881139230" TEXT="Spezifikation per Zuweisung"/>
+<node CREATED="1504881139794" ID="ID_1982949721" MODIFIED="1504881148853" TEXT="zugewiesener Ausdruck ist passend getypt"/>
+<node CREATED="1504881149417" ID="ID_178442113" MODIFIED="1504881192191" TEXT="Alternativen">
+<node CREATED="1504881193043" ID="ID_1759689335" MODIFIED="1504882609481" TEXT="Komma-Operator">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1504881756073" ID="ID_1341009121" MODIFIED="1504882753976" TEXT="niedrigere Pr&#xe4;zedenz als ="/>
+<node CREATED="1504882453091" ID="ID_870917199" MODIFIED="1504882607308" TEXT="damit sehr einfach zu implementieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1504882554718" ID="ID_744764331" MODIFIED="1504882559553" TEXT="weil auf dem DSL-Proxy"/>
+<node CREATED="1504882560202" ID="ID_1190541919" MODIFIED="1504882574911" TEXT="egal, wenn beide Seiten der Zuweisung DSL sind"/>
+<node CREATED="1504882584218" ID="ID_790570102" MODIFIED="1504882601506" TEXT="was hier der Fall ist">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1504882467714" ID="ID_759428035" MODIFIED="1504882597098" TEXT="bedeutet &quot;and then&quot; in Logik-Programmierung">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1504881197490" ID="ID_1696182789" MODIFIED="1504882612659" TEXT="Oder-Operator">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1504882423975" ID="ID_884614259" MODIFIED="1504882432386" TEXT="h&#xf6;here Pr&#xe4;zedenz als ="/>
+<node CREATED="1504882434846" ID="ID_1018309959" MODIFIED="1504882711791" TEXT="zwei Alternativen">
+<arrowlink COLOR="#1f6dc8" DESTINATION="ID_986692736" ENDARROW="Default" ENDINCLINATION="-13;-31;" ID="Arrow_ID_1057642367" STARTARROW="None" STARTINCLINATION="88;6;"/>
+<node CREATED="1504882621302" ID="ID_1942501913" MODIFIED="1504882632608" TEXT="or"/>
+<node CREATED="1504882633268" ID="ID_1285507370" MODIFIED="1504882635735" TEXT="|"/>
+</node>
+<node CREATED="1504882529890" ID="ID_233096485" MODIFIED="1504882617371" TEXT="semantisch klar">
+<icon BUILTIN="yes"/>
+<node CREATED="1504882657576" ID="ID_986692736" MODIFIED="1504882711791" TEXT="beide Alternativen bieten">
+<linktarget COLOR="#1f6dc8" DESTINATION="ID_986692736" ENDARROW="Default" ENDINCLINATION="-13;-31;" ID="Arrow_ID_1057642367" SOURCE="ID_1018309959" STARTARROW="None" STARTINCLINATION="88;6;"/>
+</node>
+<node CREATED="1504882665519" ID="ID_590443599" MODIFIED="1504882684431" TEXT="numerische Auswertung auszuschlie&#xdf;en">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

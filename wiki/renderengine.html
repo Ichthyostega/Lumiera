@@ -2747,7 +2747,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709031638" tags="def GuiPattern design" changecount="12">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709081647" tags="def GuiPattern design" changecount="23">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2771,7 +2771,59 @@ The global access point to component views is the {{{ViewLocator}}} within Inter
 * get (possibly create) some view of given type
 * get (possibly create) a view with specific identity
 * destroy a specific view
-While these operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases it is sufficient to address a component view just via the UI-Bus. This is possible since component ~IDs are formed systematically and thus always predictable: it is the same ID as used within Proc-Layer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].</pre>
+While these operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases it is sufficient to address a component view just via the UI-Bus. This is possible since component ~IDs are formed systematically and thus always predictable: it is the same ID as used within Proc-Layer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].
+
+!!!Configuration of view allocation
+Since view allocation offers a choice amongst several complex patterns of behaviour, it seems adequate to offer at least some central configuration site with a DSL for readability. That being said -- it is conceivable that we'll have to open this topic altogether for general configuration by the user. For this reason, the configuration site and DSL are designed in a way to foster further evolution of possibilites...
+* at definition site {{{id-scheme.hpp}}}, explicit specialisations are given for the relevant types of component view
+* each of those general //view configurations//
+** defines the multiplicity allowed for this kind of view
+** defines how to locate this view
+* and that //location definition// is given as a list of //alternatives in order of precedence.// That is, the system tries each pattern of location and uses the first one applicable
+
+!!Standard examples
+;Timeline
+:add to group of timelines within the timelinePanel
+{{{
+count = unlimited
+locate = panel(timeline)
+}}}
+;Viewer
+:here multiple alternatives are conceivable
+:* allow only a single view instance in the whole application
+{{{
+count = onlyOne
+locate = external(beamer)
+                or perspective(mediaView), panel(viewer)
+                or existingPanel(viewer)
+                or firstWindow, panel(viewer)
+}}}
+:* allow two viewer panels (the standard layout of editing applications)
+{{{
+count = limitPerWindow(2)
+locate = perspective(edit), existingPanel(viewer)
+                or currentWindow, existingPanel(viewer)
+                or existingPanel(viewer)
+                or panel(viewer)
+}}}
+;(Asset)Bin
+:within the dedicated asset panel, add to the appropriate group for the kind of asset
+{{{
+count = unlimited
+locate = currentWindow, perspective(edit), existingPanel(asset), existingGroup
+                or perspective(asset), panel(asset)
+                or firstWindow, panel(asset)
+}}}
+;~Error-Log
+:use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
+{{{
+count = limitPerWindow(1)
+locate = currentWindow, existingPanel(infobox)
+                or firstWindow, panel(infobox)
+}}}
+;Playcontrol
+://not determined yet what we'll need here....//
+</pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
