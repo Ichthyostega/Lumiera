@@ -1,5 +1,5 @@
 /*
-  ViewSpecDSL(Test)  -  verify mechanics of a DSL to configure view allocation
+  UICoord(Test)  -  properties of topological UI coordinate specifications
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,14 +20,14 @@
 
 * *****************************************************/
 
-/** @file view-spec-dsl-test.cpp
- ** unit test \ref ViewSpecDSL_test
+/** @file ui-coord-test.cpp
+ ** unit test \ref UICoord_test
  */
 
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
+#include "gui/interact/ui-coord.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
@@ -61,42 +61,34 @@ namespace test {
    * @see ViewLocator
    * @see UICoord_test
    */
-  class ViewSpecDSL_test : public Test
+  class UICoord_test : public Test
     {
       
       virtual void
       run (Arg)
         {
           verify_basicProperties();
-          verify_standardUsage();
-          verify_alternatives();
+          verify_queryFunctions();
         }
       
       
       void
       verify_basicProperties()
         {
-          UNIMPLEMENTED ("basic properties of the view spec DSL");
+          UNIMPLEMENTED ("define basic properties of UI coordinates");
         }
       
       
       void
-      verify_standardUsage()
+      verify_queryFunctions()
         {
-          UNIMPLEMENTED ("demonstrate the standard usage pattern");
-        }
-      
-      
-      void
-      verify_alternatives()
-        {
-          UNIMPLEMENTED ("querying and selection of location alternatives");
+          UNIMPLEMENTED ("query components and parts of the path");
         }
     };
   
   
   /** Register this test class... */
-  LAUNCHER (ViewSpecDSL_test, "unit gui");
+  LAUNCHER (UICoord_test, "unit gui");
   
   
 }}} // namespace gui::interact::test
