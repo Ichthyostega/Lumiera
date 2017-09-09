@@ -1,0 +1,17 @@
+TESTING "Component Test Suite: GUI Control Facilities" ./test-suite --group=gui
+
+
+
+PLANNED "Context bound command invocation" CmdContext_test <<END
+return: 0
+END
+
+
+PLANNED "configuration DSL for view access" ViewSpecDSL_test <<END
+return: 0
+END
+
+
+PLANNED "generic UI coordinates" UICoord_test <<END
+return: 0
+END
