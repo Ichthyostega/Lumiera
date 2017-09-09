@@ -2747,7 +2747,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709081647" tags="def GuiPattern design" changecount="23">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709091319" tags="def GuiPattern design" changecount="28">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2823,6 +2823,30 @@ locate = currentWindow, existingPanel(infobox)
 }}}
 ;Playcontrol
 ://not determined yet what we'll need here....//
+
+!!DSL structure
+* the DSL assigns tokens to some expected Specs
+* the tokens themselves are provided as constants
+* in fact those tokens are functors
+* and are opaquely bound into {{{ViewLocator}}}'s implementation
+__Signatures__:
+;locate
+:is run first and determines the UICoord of the target view
+;count
+:is run on those coordinates and actually //allocates// the view
+:returns coordinates of an (now) existing view
+__Tokens__:
+;locate
+:firstWindow
+: currentWindow
+: perspective(id)
+: panel(id)
+: existingPanel(id)
+: existingGroup {{red{WIP 9/17 not clear if possible}}}
+;count
+: unlimited
+: onlyOne
+: limitPerWindow(cnt)
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">
@@ -3521,7 +3545,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201709032319" tags="design decision Concepts GuiPattern draft discuss" changecount="26">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201709091320" tags="design decision Concepts GuiPattern draft discuss" changecount="27">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
@@ -3571,7 +3595,7 @@ The concept of a //focus goal// has several ramifications: for one it implies th
 To create such a system is an ambitious goal. We can not reach it in a single step, since it entails the formation of a whole intermediary layer, on top of the //usual UI mechanics,// yet below the concrete UI interactions. Especially, we'd need to clarify the meaning of //perspective,// we need to decide on the relation of top level frame, individual view, layout, focus and //current location within the UI.// On a second thought, building such a system implies we'll have to live with an intermediary state of evolution, where parts of the new framework are already in place without interfering with common conventional usage of the interface as-is.
 
 !!!UI coordinates
-Especially the focus navigation entails the use of some kind of ubiquitous coordinate system within the user interface. In fact this is more of a topological navigation, since these coordinates describe the decisions and forks taken on navigation down the //focus path.//
+Especially the focus navigation entails the use of some kind of ubiquitous [[coordinate system within the user interface|UICoord]]. In fact this is more of a topological navigation, since these coordinates describe the decisions and forks taken on navigation down the //focus path.//
 * [optional] top-level Window (UI frame)
 * [optional] Perspective
 * Panel
