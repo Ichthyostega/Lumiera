@@ -28,6 +28,7 @@
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
 #include "gui/interact/view-spec-dsl.hpp"
+#include "gui/interact/ui-coord.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
@@ -83,6 +84,30 @@ namespace test {
       void
       verify_standardUsage()
         {
+          using LocSpec = Spec<UICoord()>;
+          using CntSpec = Spec<UICoord(UICoord)>;
+          
+          uint allocCounter = 0;
+          
+          LocSpec::Builder<string> locationToken =[&](string pathElm)
+                                                    {
+                                                      return [pathElm]()
+                                                                      {
+                                                                        return UICoord::currentWindow().view(pathElm);
+                                                                      };
+                                                    };
+          
+          CntSpec::Builder<uint> allocationToken =[&](uint limit)
+                                                    {
+                                                      return [&,limit](UICoord target)
+                                                                      {
+                                                                        if (allocCounter < target)
+                                                                          return UICoord::currentWindow().view(pathElm).elm(++allocCounter);
+                                                                        else
+                                                                          return UICoord::currentWindow().view(pathElm).elm(limit);
+                                                                      };
+                                                    };
+              
           UNIMPLEMENTED ("demonstrate the standard usage pattern");
         }
       
