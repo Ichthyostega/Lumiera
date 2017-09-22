@@ -2747,7 +2747,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709091319" tags="def GuiPattern design" changecount="28">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709222301" tags="def GuiPattern design" changecount="33">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2785,41 +2785,41 @@ Since view allocation offers a choice amongst several complex patterns of behavi
 ;Timeline
 :add to group of timelines within the timelinePanel
 {{{
-count = unlimited
+alloc = unlimited
 locate = panel(timeline)
 }}}
 ;Viewer
 :here multiple alternatives are conceivable
 :* allow only a single view instance in the whole application
 {{{
-count = onlyOne
+alloc = onlyOne
 locate = external(beamer)
-                or perspective(mediaView), panel(viewer)
+                or perspective(mediaView).panel(viewer)
                 or existingPanel(viewer)
-                or firstWindow, panel(viewer)
+                or firstWindow().panel(viewer)
 }}}
 :* allow two viewer panels (the standard layout of editing applications)
 {{{
-count = limitPerWindow(2)
-locate = perspective(edit), existingPanel(viewer)
-                or currentWindow, existingPanel(viewer)
+alloc = limitPerWindow(2)
+locate = perspective(edit).existingPanel(viewer)
+                or currentWindow().existingPanel(viewer)
                 or existingPanel(viewer)
                 or panel(viewer)
 }}}
 ;(Asset)Bin
 :within the dedicated asset panel, add to the appropriate group for the kind of asset
 {{{
-count = unlimited
-locate = currentWindow, perspective(edit), existingPanel(asset), existingGroup
-                or perspective(asset), panel(asset)
-                or firstWindow, panel(asset)
+alloc = unlimited
+locate = currentWindow().perspective(edit).existingPanel(asset).existingGroup()
+                or perspective(asset).panel(asset)
+                or firstWindow().panel(asset)
 }}}
 ;~Error-Log
 :use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
 {{{
-count = limitPerWindow(1)
-locate = currentWindow, existingPanel(infobox)
-                or firstWindow, panel(infobox)
+alloc = limitPerWindow(1)
+locate = currentWindow().existingPanel(infobox)
+                or firstWindow().panel(infobox)
 }}}
 ;Playcontrol
 ://not determined yet what we'll need here....//
@@ -2829,13 +2829,19 @@ locate = currentWindow, existingPanel(infobox)
 * the tokens themselves are provided as constants
 * in fact those tokens are functors
 * and are opaquely bound into {{{ViewLocator}}}'s implementation
-__Signatures__:
+
+!!!Signatures
 ;locate
-:is run first and determines the UICoord of the target view
-;count
-:is run on those coordinates and actually //allocates// the view
+:is evaluated first and determines the UICoord of the target view
+:is a disjunction of alternative specs, which are resolved to use the first applicable one
+;alloc
+:the //Allocator// is run on those coordinates and actually //allocates// the view
 :returns coordinates of an (now) existing view
-__Tokens__:
+;allocator specs
+:these are //builder functions// to yield a specifically parametrised allocator
+:typical example is an allocator to create only a limited number of view instances per window
+:the actual builder tokens are synthesised by partial function application on the given lambda
+!!!Spec Tokens
 ;locate
 :firstWindow
 : currentWindow
@@ -2843,7 +2849,7 @@ __Tokens__:
 : panel(id)
 : existingPanel(id)
 : existingGroup {{red{WIP 9/17 not clear if possible}}}
-;count
+;alloc
 : unlimited
 : onlyOne
 : limitPerWindow(cnt)
@@ -9608,6 +9614,22 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 <pre>The architecture of the Lumiera application separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
+</div>
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" tags="def draft spec GuiPattern" changecount="1">
+<pre>//A topological addressing scheme to designate structural locations within the UI.//
+Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
+* to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    
+* to remember and return to such a location
+* to move a [[work focus (»Spot«)|Spot]] structurally within the UI
+* to describe and configure the pattern view access and arrangement
+
+As starting point for the design of such a framework, we'll pick the notion of an access path within a hierarchical structure    
+* the top-level window
+* the perspective used within that window
+* the panel within this window
+* a view group within the panel
+* plus a locally defined access path further down to the actual UI element
+</pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
 <pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).

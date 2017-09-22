@@ -3856,13 +3856,13 @@
 <node CREATED="1504886227678" ID="ID_1936525982" MODIFIED="1504886237440" TEXT="existiert | machbar | unm&#xf6;glich"/>
 <node CREATED="1504959598053" ID="ID_952692651" MODIFIED="1504959601728" TEXT="Zielkoordinaten"/>
 </node>
-<node CREATED="1504959603212" ID="ID_627664382" MODIFIED="1504959626084" TEXT="count -&gt;">
+<node CREATED="1504959603212" ID="ID_627664382" MODIFIED="1506120296338" TEXT="alloc -&gt;">
 <node CREATED="1504959659068" ID="ID_389794808" MODIFIED="1504959776009" TEXT="allocator(Zielkoordinaten, managementScope, limit)"/>
 <node CREATED="1504959829510" ID="ID_570145960" MODIFIED="1504959849583" TEXT="POST: neuer / alter View unter Zielkoordinaten erreichbar"/>
 <node CREATED="1504959871472" ID="ID_864423184" MODIFIED="1504959912350" TEXT="ggfs rekonfigurieren..."/>
 </node>
 <node CREATED="1504961752279" ID="ID_361507996" MODIFIED="1504961755930" TEXT="Signaturen">
-<node CREATED="1504961759077" ID="ID_627682268" MODIFIED="1504961783294" TEXT="locate: UICoord()"/>
+<node CREATED="1504961759077" ID="ID_627682268" MODIFIED="1506120318232" TEXT="locate: UICoord"/>
 <node CREATED="1504961784098" ID="ID_268457753" MODIFIED="1504961799644" TEXT="count: UICoord(UICoord)"/>
 </node>
 </node>
@@ -3878,11 +3878,25 @@
 <node CREATED="1504962671884" ID="ID_583107872" MODIFIED="1504962679447" TEXT="braucht verdeckten Parameter"/>
 </node>
 </node>
-<node CREATED="1504962013068" ID="ID_1352068125" MODIFIED="1504962127304" TEXT="Spec.count">
+<node CREATED="1504962013068" ID="ID_1352068125" MODIFIED="1506120263447" TEXT="Spec.alloc">
 <node CREATED="1504962685443" ID="ID_663273997" MODIFIED="1504962691725" TEXT="unlimited"/>
 <node CREATED="1504962692881" ID="ID_261391829" MODIFIED="1504962697437" TEXT="onlyOne"/>
 <node CREATED="1504962700536" ID="ID_1061344108" MODIFIED="1504962713898" TEXT="limitPerWindow(cnt)"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1506034501537" ID="ID_262802757" MODIFIED="1506034504945" TEXT="TODO">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1506034518068" ID="ID_1413583873" MODIFIED="1506034529021" TEXT="ViewSpecDSL wird f&#xfc;r Location Spec zust&#xe4;ndig"/>
+<node CREATED="1506034529729" ID="ID_1906856590" MODIFIED="1506034536316" TEXT="Keine Generics mehr notwendig"/>
+<node CREATED="1506034536976" ID="ID_760545085" MODIFIED="1506034547716" TEXT="locationSpec ist direkt eine UICoord">
+<node CREATED="1506114845775" ID="ID_98017975" MODIFIED="1506114856697" TEXT="mu&#xdf; DSL-Elemente unterst&#xfc;tzen"/>
+<node CREATED="1506034566805" ID="ID_726919191" MODIFIED="1506034578279" TEXT="ODER-Behandlung wandert in UICoord"/>
+<node CREATED="1506114863020" ID="ID_1749053457" MODIFIED="1506114874020" TEXT="Problem: existingPanel(id)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1506120453114" ID="ID_1626834388" MODIFIED="1506120467404" TEXT="abgek&#xfc;rzte Schreibweise f&#xfc;r Allocator-Spec"/>
+<node CREATED="1506034548376" ID="ID_36109866" MODIFIED="1506034558754" TEXT="count -&gt; umbenennen in alloc"/>
 </node>
 <node CREATED="1504833110793" ID="ID_10881417" MODIFIED="1504833114828" TEXT="Ausdr&#xfc;cke">
 <node CREATED="1504833126079" ID="ID_286801467" MODIFIED="1504884923889" TEXT="konkret">
@@ -3891,14 +3905,14 @@
 <icon BUILTIN="pencil"/>
 <node CREATED="1504833146196" ID="ID_278904211" MODIFIED="1504833149680" TEXT="Timeline">
 <node CREATED="1504833174961" ID="ID_1294462811" MODIFIED="1504833187018" TEXT="im Timeline-Panel der Gruppe hinzuf&#xfc;gen"/>
-<node CREATED="1504882791007" ID="ID_1520721786" MODIFIED="1504883085368">
+<node CREATED="1504882791007" ID="ID_1520721786" MODIFIED="1506121426383">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      count = unlimited
+      alloc = unlimited
     </p>
     <p>
       locate = panel(timeline)
@@ -3910,46 +3924,46 @@
 </node>
 <node CREATED="1504833569692" ID="ID_1069272084" MODIFIED="1504833620713" TEXT="Viewer">
 <node CREATED="1504834559240" ID="ID_423545167" MODIFIED="1504834569219" TEXT="nur ein einziger(global)"/>
-<node CREATED="1504883102734" ID="ID_81147050" MODIFIED="1504883517558">
+<node CREATED="1504883102734" ID="ID_81147050" MODIFIED="1506121418376">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      count = onlyOne
+      alloc = onlyOne
     </p>
     <p>
       locate = external(beamer)
     </p>
     <p>
-      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or perspective(mediaView), panel(viewer)
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or perspective(mediaView).panel(viewer)
     </p>
     <p>
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or existingPanel(viewer)
     </p>
     <p>
-      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow, panel(viewer)
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow().panel(viewer)
     </p>
   </body>
 </html>
 </richcontent>
 </node>
 <node CREATED="1504834569831" ID="ID_1909335075" MODIFIED="1504883625292" TEXT="maximal 2 Viewer Panel"/>
-<node CREATED="1504883107916" ID="ID_1351734300" MODIFIED="1504883958167">
+<node CREATED="1504883107916" ID="ID_1351734300" MODIFIED="1506121412122">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      count = limitPerWindow(2)
+      alloc = limitPerWindow(2)
     </p>
     <p>
-      locate = perspective(edit), existingPanel(viewer)
+      locate = perspective(edit).existingPanel(viewer)
     </p>
     <p>
-      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow, existingPanel(viewer)
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow().existingPanel(viewer)
     </p>
     <p>
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or existingPanel(viewer)
@@ -3976,23 +3990,23 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1504883110076" ID="ID_199732103" MODIFIED="1504884259907">
+<node CREATED="1504883110076" ID="ID_199732103" MODIFIED="1506121405019">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      count = unlimited
+      alloc = unlimited
     </p>
     <p>
-      locate = currentWindow, perspective(edit), existingPanel(asset), existingGroup
+      locate = currentWindow().perspective(edit).existingPanel(asset).existingGroup()
     </p>
     <p>
-      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or perspective(asset), panel(asset)
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or perspective(asset)panel(asset)
     </p>
     <p>
-      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow, panel(asset)
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow().panel(asset)
     </p>
   </body>
 </html>
@@ -4001,20 +4015,20 @@
 </node>
 <node CREATED="1504833574246" ID="ID_1680764695" MODIFIED="1504876896530" TEXT="FehlerLog">
 <node CREATED="1504834859584" ID="ID_693499241" MODIFIED="1504834866267" TEXT="im aktuellen Infobox-Panel"/>
-<node CREATED="1504883112068" ID="ID_308640581" MODIFIED="1504884348903">
+<node CREATED="1504883112068" ID="ID_308640581" MODIFIED="1506121397123">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      count = limitPerWindow(1)
+      alloc = limitPerWindow(1)
     </p>
     <p>
-      locate = currentWindow, existingPanel(infobox)
+      locate = currentWindow().existingPanel(infobox)
     </p>
     <p>
-      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow, panel(infobox)
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow().panel(infobox)
     </p>
   </body>
 </html>
@@ -4052,7 +4066,23 @@
 <node CREATED="1504881091345" ID="ID_453622973" MODIFIED="1504881104355" TEXT="Menge von Spezifikationen"/>
 <node CREATED="1504881104919" ID="ID_1302649814" MODIFIED="1504881111442" TEXT="diese sind inh&#xe4;rent getypt"/>
 <node CREATED="1504881124612" ID="ID_41842721" MODIFIED="1504881139230" TEXT="Spezifikation per Zuweisung"/>
-<node CREATED="1504881139794" ID="ID_1982949721" MODIFIED="1504881148853" TEXT="zugewiesener Ausdruck ist passend getypt"/>
+<node CREATED="1504881139794" ID="ID_1982949721" MODIFIED="1504881148853" TEXT="zugewiesener Ausdruck ist passend getypt">
+<node CREATED="1506120341257" ID="ID_1629432417" MODIFIED="1506120348204" TEXT="Loaction-Spec">
+<node CREATED="1506120349336" ID="ID_1516960868" MODIFIED="1506120360234" TEXT="Menge von UI-Koordinaten"/>
+<node CREATED="1506120361846" ID="ID_1024931059" MODIFIED="1506120367057" TEXT="unterst&#xfc;tzt Alternativen"/>
+<node CREATED="1506120367605" ID="ID_1489367458" MODIFIED="1506120372537" TEXT="w&#xe4;hlt den ersten anwendbaren"/>
+</node>
+<node CREATED="1506120374116" ID="ID_1552148308" MODIFIED="1506120378224" TEXT="Allocator-Def">
+<node CREATED="1506120380940" ID="ID_1553891423" MODIFIED="1506120390942" TEXT="ein Funktor UICorrd(UIcoord)"/>
+<node CREATED="1506120391506" ID="ID_1217740236" MODIFIED="1506120406556" TEXT="Semantik: nimmt Spec und erzeugt konkretes Ziel"/>
+<node CREATED="1506120410863" ID="ID_1205747223" MODIFIED="1506120419162" TEXT="Allocaotor-Specs">
+<node CREATED="1506120420910" ID="ID_6299376" MODIFIED="1506120425113" TEXT="Hilfs-Tokens"/>
+<node CREATED="1506120425773" ID="ID_195710124" MODIFIED="1506120434234" TEXT="partielle Funktionsanwendung">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1504881149417" ID="ID_178442113" MODIFIED="1504881192191" TEXT="Alternativen">
 <node CREATED="1504881193043" ID="ID_1759689335" MODIFIED="1504882609481" TEXT="Komma-Operator">
 <icon BUILTIN="button_cancel"/>

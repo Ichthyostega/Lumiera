@@ -26,9 +26,10 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
+#include "lib/test/test-helper.hpp"
 #include "gui/interact/view-spec-dsl.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
@@ -48,6 +49,7 @@ namespace interact {
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+  using lib::test::showSizeof;
   
   namespace { //Test fixture...
     
@@ -84,31 +86,41 @@ namespace test {
       void
       verify_standardUsage()
         {
-          using LocSpec = Spec<UICoord()>;
-          using CntSpec = Spec<UICoord(UICoord)>;
-          
           uint allocCounter = 0;
           
-          LocSpec::Builder<string> locationToken =[&](string pathElm)
-                                                    {
-                                                      return [pathElm]()
-                                                                      {
-                                                                        return UICoord::currentWindow().view(pathElm);
-                                                                      };
-                                                    };
+          // Simulation/Example for an allocator-builder
+          AllocSpec<uint> limitAllocation =[&](UICoord target, uint limit)
+                                              {
+                                                if (allocCounter < limit)
+                                                  return target.tab(++allocCounter);
+                                                else
+                                                  return target.tab(limit);
+                                              };
+          /////////TODO verify this...
+          cout << showSizeof(limitAllocation) <<endl;
           
-          CntSpec::Builder<uint> allocationToken =[&](uint limit)
-                                                    {
-                                                      return [&,limit](UICoord target)
-                                                                      {
-                                                                        if (allocCounter < target)
-                                                                          return UICoord::currentWindow().view(pathElm).elm(++allocCounter);
-                                                                        else
-                                                                          return UICoord::currentWindow().view(pathElm).elm(limit);
-                                                                      };
-                                                    };
-              
-          UNIMPLEMENTED ("demonstrate the standard usage pattern");
+          // the actual View Specification would then be written as...
+          ViewSpec locate = UICoord::currentWindow().view("viewID");
+          Allocator alloc = limitAllocation(3);
+          
+          // ...and it would be evaluated as follows
+          UICoord targetLocation = locate;
+          UICoord realView1 = alloc(targetLocation);
+          CHECK (1 == allocCounter);
+          CHECK (realView1 == UICoord::currentWindow().view("viewID").tab("1"));
+          
+          UICoord realView2 = alloc(targetLocation);
+          CHECK (2 == allocCounter);
+          CHECK (realView2 == UICoord::currentWindow().view("viewID").tab("2"));
+          CHECK (realView2 != realView);
+          
+          UICoord realView3 = alloc(targetLocation);
+          CHECK (3 == allocCounter);
+          CHECK (realView3 == UICoord::currentWindow().view("viewID").tab("3"));
+          
+          UICoord realView3b = alloc(targetLocation);
+          CHECK (3 == allocCounter);
+          CHECK (realView3b == realView3);
         }
       
       
