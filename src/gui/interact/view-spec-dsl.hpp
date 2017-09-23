@@ -95,8 +95,10 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "gui/interact/ui-coord.hpp"
 
 //#include <boost/noncopyable.hpp>
+#include <functional>
 //#include <string>
 //#include <memory>
 
@@ -112,20 +114,53 @@ namespace interact {
   
   
   /**
-   * A specification to describe the desired location of a
-   * component view within the Lumiera UI.
+   * A specification to describe the desired location of a component view within the Lumiera UI.
+   * ViewSpec is basically a set of [UI coordinates](\ref UICoord), with the additional possibility
+   * of specifying several alternatives, with the intention to pick the first applicable one.
    * 
    * @todo initial draft as of 9/2017
    */
-  class LocationSpec
+  class ViewSpec
     {
       
     public:
+      ViewSpec(UICoord coordinates)
+        {
+          UNIMPLEMENTED ("build a view spec from explicitly given UI coordinates");
+        }
       
+      operator UICoord()
+        {
+          UNIMPLEMENTED ("resolve a view spec to yield explicit UI coordinates");
+        }
     private:
       
     };
   
+  
+  /**
+   * Allocator is a functor to resolve a given, desired location of a view within the UI, resulting
+   * in creation or allocation of the view. The result of this invocation are the UI coordinates
+   * of an existing or newly created view.
+   */
+  class Allocator
+    : public std::function<UICoord(UICoord)>
+    {
+      
+    };
+  
+  
+  template<typename PAR>
+  class AllocSpec
+    : public std::function<Allocator(PAR)>
+    {
+    public:
+      template<class FUN>
+      AllocSpec(FUN fun)
+        {
+          UNIMPLEMENTED ("generate an allocator builder functor by partial function application");
+        }
+    };
   
 }}// namespace gui::interact
 #endif /*GUI_INTERACT_VIEW_SPEC_DSL_H*/

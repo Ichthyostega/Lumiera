@@ -112,7 +112,7 @@ namespace test {
           UICoord realView2 = alloc(targetLocation);
           CHECK (2 == allocCounter);
           CHECK (realView2 == UICoord::currentWindow().view("viewID").tab("2"));
-          CHECK (realView2 != realView);
+          CHECK (realView2 != realView1);
           
           UICoord realView3 = alloc(targetLocation);
           CHECK (3 == allocCounter);

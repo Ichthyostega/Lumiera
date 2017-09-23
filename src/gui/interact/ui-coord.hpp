@@ -62,6 +62,7 @@ namespace interact {
   
 //  using std::unique_ptr;
 //  using std::string;
+  using lib::Literal;
   
 //  class GlobalCtx;
   
@@ -78,9 +79,44 @@ namespace interact {
     {
       
     public:
+      static UICoord
+      currentWindow()
+        {
+          UNIMPLEMENTED ("UI coordinate builder function to indicate coordinates rooted within the current window");
+        }
+      
+      UICoord
+      view (Literal viewID)  const
+        {
+          UNIMPLEMENTED ("augment UI coordinates to indicate a specific view to be used");
+        }
+      
+      UICoord
+      tab (Literal tabID)  const
+        {
+          UNIMPLEMENTED ("augment UI coordinates to indicate a specific tab within the view");
+        }
+      
+      UICoord
+      tab (uint tabIdx)  const
+        {
+          UNIMPLEMENTED ("augment UI coordinates to indicate a tab specified by index number");
+        }
       
     private:
       
+    public:
+      friend bool
+      operator== (UICoord const& l, UICoord const& r)
+      {
+        UNIMPLEMENTED ("equality of UI coordinates");
+      }
+      
+      friend bool
+      operator!= (UICoord const& l, UICoord const& r)
+      {
+        return not (l == r);
+      }
     };
   
   
