@@ -67,22 +67,78 @@ namespace test {
       virtual void
       run (Arg)
         {
-          verify_basicProperties();
-          verify_queryFunctions();
+          verify_basics();
+          verify_builder();
+          verify_comparisons();
+          verify_queryAnchor();
+          verify_queryCoverage();
+          verify_mutateAnchor();
+          verify_mutateCover();
+          verify_mutateExtend();
+          verify_mutateCreate();
         }
       
       
       void
-      verify_basicProperties()
+      verify_basics()
         {
           UNIMPLEMENTED ("define basic properties of UI coordinates");
         }
       
       
       void
-      verify_queryFunctions()
+      verify_builder()
         {
-          UNIMPLEMENTED ("query components and parts of the path");
+          UNIMPLEMENTED ("verify the UI coordinate builder DSL");
+        }
+      
+      
+      void
+      verify_comparisons()
+        {
+          UNIMPLEMENTED ("verify comparison of UI coordinates");
+        }
+      
+      
+      void
+      verify_queryAnchor()
+        {
+          UNIMPLEMENTED ("query anchorage of given UI coordinates");
+        }
+      
+      
+      void
+      verify_queryCoverage()
+        {
+          UNIMPLEMENTED ("query coverage of given UI coordinates with respect to actual UI");
+        }
+      
+      
+      void
+      verify_mutateAnchor()
+        {
+          UNIMPLEMENTED ("mutate given UI coordinates by anchoring them");
+        }
+      
+      
+      void
+      verify_mutateCover()
+        {
+          UNIMPLEMENTED ("mutate given UI coordinates by reducing to covered part");
+        }
+      
+      
+      void
+      verify_mutateExtend()
+        {
+          UNIMPLEMENTED ("mutate given UI coordinates by uncovered extension");
+        }
+      
+      
+      void
+      verify_mutateCreate()
+        {
+          UNIMPLEMENTED ("mutate given UI coordinates by creating new components");
         }
     };
   
