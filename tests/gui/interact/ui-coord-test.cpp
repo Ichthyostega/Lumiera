@@ -34,10 +34,10 @@
 //#include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
-//#include <string>
+#include <string>
 
 
-//using std::string;
+using std::string;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
 //using util::isSameObject;

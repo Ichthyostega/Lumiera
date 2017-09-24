@@ -53,7 +53,7 @@
 #include "lib/symbol.hpp"
 
 //#include <boost/noncopyable.hpp>
-//#include <string>
+#include <string>
 //#include <memory>
 
 
@@ -61,11 +61,66 @@ namespace gui {
 namespace interact {
   
 //  using std::unique_ptr;
-//  using std::string;
+  using std::string;
   using lib::Literal;
   
 //  class GlobalCtx;
   
+  
+  
+  /**
+   * @internal Base abstraction for path-like topological coordinates.
+   */
+  class PathArray
+    {
+    public:
+      template<typename...ARGS>
+      explicit
+      PathArray (ARGS&& ...args)
+        {
+          UNIMPLEMENTED ("initialise path array components");
+        }
+      
+      // standard copy operations acceptable
+      
+      
+      size_t
+      size()  const
+        {
+          UNIMPLEMENTED ("path implementation storage");
+        }
+      
+      bool
+      empty()  const
+        {
+          UNIMPLEMENTED ("path implementation storage");
+        }
+      
+      
+      Literal
+      operator[] (size_t idx)
+        {
+          UNIMPLEMENTED ("path implementation storage");
+        }
+      
+      using iterator = const char*; /////////////TODO placeholder
+      
+      iterator begin()  const { UNIMPLEMENTED ("content iteration"); }
+      iterator end()    const { UNIMPLEMENTED ("content iteration"); }
+      
+      friend iterator begin(PathArray const& pa) { return pa.begin();}
+      friend iterator end  (PathArray const& pa) { return pa.end();  }
+    };
+  
+  enum UIPathElm
+    {
+      UIC_WINDOW,
+      UIC_PERSP,
+      UIC_PANEL,
+      UIC_VIEW,
+      UIC_TAB,
+      UIC_PART
+    };
   
   
   /**
@@ -76,13 +131,36 @@ namespace interact {
    * @todo initial draft as of 9/2017
    */
   class UICoord
+    : public PathArray
     {
       
     public:
+      using PathArray::PathArray;
+      
+      /* === Builder API === */
+      
       static UICoord
       currentWindow()
         {
           UNIMPLEMENTED ("UI coordinate builder function to indicate coordinates rooted within the current window");
+        }
+      
+      static UICoord
+      window (Literal windowID)
+        {
+          UNIMPLEMENTED ("UI coordinate builder function to indicate coordinates rooted within a specific window");
+        }
+      
+      static UICoord
+      view (Literal viewID)
+        {
+          UNIMPLEMENTED ("UI coordinate builder function to start a partially defined coordinate path");
+        }
+      
+      UICoord
+      persp (Literal perspectiveID)  const
+        {
+          UNIMPLEMENTED ("augment UI coordinates to mandate a specific perspective to be active within the window");
         }
       
       UICoord
@@ -102,6 +180,72 @@ namespace interact {
         {
           UNIMPLEMENTED ("augment UI coordinates to indicate a tab specified by index number");
         }
+      
+      UICoord
+      append (Literal elmID)  const
+        {
+          UNIMPLEMENTED ("augment UI coordinates by appending a further component at the end");
+        }
+      
+      UICoord
+      prepend (Literal elmID)  const
+        {
+          UNIMPLEMENTED ("augment partially defined UI coordinates by extending them towards the root");
+        }
+      
+      
+      /* === named component access === */
+      
+      Literal
+      getWindow()  const
+        {
+          UNIMPLEMENTED ("UI coordinate component access");
+        }
+      
+      Literal
+      getPersp()  const
+        {
+          UNIMPLEMENTED ("UI coordinate component access");
+        }
+      
+      Literal
+      getPanel()  const
+        {
+          UNIMPLEMENTED ("UI coordinate component access");
+        }
+      
+      Literal
+      getView()  const
+        {
+          UNIMPLEMENTED ("UI coordinate component access");
+        }
+      
+      Literal
+      getTab()  const
+        {
+          UNIMPLEMENTED ("UI coordinate component access");
+        }
+      
+      
+      /* === String representation === */
+      
+      operator string()  const
+        {
+          UNIMPLEMENTED ("string representation of UI coordinates");
+        }
+      
+      string
+      getComp()  const
+        {
+          UNIMPLEMENTED ("string representation of UI coordinates: component section");
+        }
+      
+      string
+      getPath()  const
+        {
+          UNIMPLEMENTED ("string representation of UI coordinates: path extension");
+        }
+      
       
     private:
       
