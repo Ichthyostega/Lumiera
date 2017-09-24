@@ -39,6 +39,8 @@
  ** 
  ** @todo WIP 9/2017 first draft ////////////////////////////////////////////////////////////////////////////TICKET #1106 generic UI coordinate system
  ** 
+ ** @note UICoord is designed with immutability in mind; possibly we may decide to disallow assignment.
+ ** 
  ** @see UICoord_test
  ** @see id-scheme.hpp
  ** @see view-spec-dsl.hpp
@@ -51,11 +53,10 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "lib/iter-adapter.hpp"
+#include "lib/path-array.hpp"
 
 //#include <boost/noncopyable.hpp>
 #include <string>
-#include <limits>
 //#include <memory>
 
 
@@ -66,86 +67,7 @@ namespace interact {
   using std::string;
   using lib::Literal;
   
-//  class GlobalCtx;
   
-  
-  
-  /**
-   * @internal Base abstraction for path-like topological coordinates.
-   */
-  class PathArray
-    {
-    public:
-      template<typename...ARGS>
-      explicit
-      PathArray (ARGS&& ...args)
-        {
-          UNIMPLEMENTED ("initialise path array components");
-        }
-      
-      // standard copy operations acceptable
-      
-      
-      size_t
-      size()  const
-        {
-          UNIMPLEMENTED ("path implementation storage");
-        }
-      
-      bool
-      empty()  const
-        {
-          UNIMPLEMENTED ("path implementation storage");
-        }
-      
-      
-      Literal
-      operator[] (size_t idx)
-        {
-          UNIMPLEMENTED ("path implementation storage");
-        }
-      
-      
-    protected:  /* ==== Iteration control API for IterAdapter ==== */
-      
-      /** Implementation of Iteration-logic: pull next element. */
-      friend void
-      iterNext (const PathArray* src, Literal* pos)
-        {
-          ++pos;
-          checkPoint (src,pos);
-        }
-      
-      /** Implementation of Iteration-logic: detect iteration end. */
-      friend bool
-      checkPoint (const PathArray* src, Literal* pos)
-        {
-          REQUIRE (src);
-          if ((pos != nullptr) && (pos != src->storage_end()))
-            return true;
-          else
-            {
-              pos = nullptr;
-              return false;
-        }   }
-      
-    public:
-      using iterator = lib::IterAdapter<Literal*, PathArray*>;
-      using const_iterator = iterator;
-      
-      iterator begin()  const { UNIMPLEMENTED ("content iteration"); }
-      iterator end()    const { UNIMPLEMENTED ("content iteration"); }
-      
-      friend iterator begin(PathArray const& pa) { return pa.begin();}
-      friend iterator end  (PathArray const& pa) { return pa.end();  }
-      
-    private:
-      Literal*
-      storage_end()  const
-        {
-          UNIMPLEMENTED ("path implementation storage");
-        }
-    };
   
   enum UIPathElm
     {
@@ -166,7 +88,7 @@ namespace interact {
    * @todo initial draft as of 9/2017
    */
   class UICoord
-    : public PathArray
+    : public lib::PathArray
     {
       
     public:
