@@ -140,7 +140,7 @@ namespace test {
       void
       verify_builder()
         {
-          UICoord uic1 = UICoord::window("window");
+          UICoord uic1 = UICoord().window("window");
           UICoord uic2 = uic2.view("view");
           CHECK ("UI:window" == string(uic1));
           CHECK ("UI:window[*]-*.view" == string(uic2));
@@ -166,7 +166,7 @@ namespace test {
           VERIFY_ERROR (INDEX_BOUNDS, uic1[UIC_PERSP]);
           VERIFY_ERROR (INDEX_BOUNDS, uic2[UIC_TAB]);
           
-          UICoord uic3 = UICoord::view("view");
+          UICoord uic3 = UICoord().view("view");
           CHECK (4 == uic3.size());
           CHECK ("UI:?.view" == string(uic3));
           CHECK (""     == uic3.getWindow());

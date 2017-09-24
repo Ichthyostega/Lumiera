@@ -51,9 +51,11 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/iter-adapter.hpp"
 
 //#include <boost/noncopyable.hpp>
 #include <string>
+#include <limits>
 //#include <memory>
 
 
@@ -103,13 +105,46 @@ namespace interact {
           UNIMPLEMENTED ("path implementation storage");
         }
       
-      using iterator = const char*; /////////////TODO placeholder
+      
+    protected:  /* ==== Iteration control API for IterAdapter ==== */
+      
+      /** Implementation of Iteration-logic: pull next element. */
+      friend void
+      iterNext (const PathArray* src, Literal* pos)
+        {
+          ++pos;
+          checkPoint (src,pos);
+        }
+      
+      /** Implementation of Iteration-logic: detect iteration end. */
+      friend bool
+      checkPoint (const PathArray* src, Literal* pos)
+        {
+          REQUIRE (src);
+          if ((pos != nullptr) && (pos != src->storage_end()))
+            return true;
+          else
+            {
+              pos = nullptr;
+              return false;
+        }   }
+      
+    public:
+      using iterator = lib::IterAdapter<Literal*, PathArray*>;
+      using const_iterator = iterator;
       
       iterator begin()  const { UNIMPLEMENTED ("content iteration"); }
       iterator end()    const { UNIMPLEMENTED ("content iteration"); }
       
       friend iterator begin(PathArray const& pa) { return pa.begin();}
       friend iterator end  (PathArray const& pa) { return pa.end();  }
+      
+    private:
+      Literal*
+      storage_end()  const
+        {
+          UNIMPLEMENTED ("path implementation storage");
+        }
     };
   
   enum UIPathElm
@@ -151,11 +186,6 @@ namespace interact {
           UNIMPLEMENTED ("UI coordinate builder function to indicate coordinates rooted within a specific window");
         }
       
-      static UICoord
-      view (Literal viewID)
-        {
-          UNIMPLEMENTED ("UI coordinate builder function to start a partially defined coordinate path");
-        }
       
       UICoord
       persp (Literal perspectiveID)  const

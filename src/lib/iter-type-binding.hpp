@@ -107,6 +107,14 @@ namespace iter {
       typedef std::shared_ptr<TY>* pointer;
     };
   
+  template<>
+  struct TypeBinding<size_t>
+    {
+      typedef size_t value_type;
+      typedef size_t& reference;
+      typedef size_t* pointer;
+    };
+  
   
   
 }} // namespace lib
