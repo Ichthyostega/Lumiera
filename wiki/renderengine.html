@@ -2747,7 +2747,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709222301" tags="def GuiPattern design" changecount="33">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709232234" tags="def GuiPattern design" changecount="36">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2794,32 +2794,32 @@ locate = panel(timeline)
 {{{
 alloc = onlyOne
 locate = external(beamer)
-                or perspective(mediaView).panel(viewer)
-                or existingPanel(viewer)
-                or firstWindow().panel(viewer)
+          or perspective(mediaView).panel(viewer)
+          or existingPanel(viewer)
+          or firstWindow().panel(viewer)
 }}}
 :* allow two viewer panels (the standard layout of editing applications)
 {{{
 alloc = limitPerWindow(2)
 locate = perspective(edit).existingPanel(viewer)
-                or currentWindow().existingPanel(viewer)
-                or existingPanel(viewer)
-                or panel(viewer)
+          or currentWindow().existingPanel(viewer)
+          or existingPanel(viewer)
+          or panel(viewer)
 }}}
 ;(Asset)Bin
 :within the dedicated asset panel, add to the appropriate group for the kind of asset
 {{{
 alloc = unlimited
 locate = currentWindow().perspective(edit).existingPanel(asset).existingGroup()
-                or perspective(asset).panel(asset)
-                or firstWindow().panel(asset)
+          or perspective(asset).panel(asset)
+          or firstWindow().panel(asset)
 }}}
 ;~Error-Log
 :use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
 {{{
 alloc = limitPerWindow(1)
 locate = currentWindow().existingPanel(infobox)
-                or firstWindow().panel(infobox)
+          or firstWindow().panel(infobox)
 }}}
 ;Playcontrol
 ://not determined yet what we'll need here....//
