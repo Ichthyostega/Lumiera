@@ -57,6 +57,8 @@ namespace test {
     
   }//(End)Test fixture
   
+  using ParrT = lib::PathArray<5>;
+  
   
   /******************************************************************************//**
    * @test verify abstraction wrapper to handle some char pointers in the way of a
@@ -81,10 +83,10 @@ namespace test {
       void
       verify_basics()
         {
-          PathArray undef;
+          ParrT undef;
           CHECK (isnil (undef));
           
-          PathArray parr{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
+          ParrT parr{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
           CHECK (not isnil (parr));
           CHECK (8 == parr.size());
           
@@ -104,7 +106,7 @@ namespace test {
           CHECK ("Γ/Δ/Θ/Ξ/Σ/Ψ/Φ/Ω" == string(parr));
           
           // new value can be assigned, but not altered in place
-          parr = PathArray{nullptr,nullptr,"Θ",nullptr,nullptr,nullptr,"Φ"};
+          parr = ParrT{nullptr,nullptr,"Θ",nullptr,nullptr,nullptr,"Φ"};
           CHECK (7 == parr.size());
           
           // representation is trimmed and filled
@@ -124,33 +126,33 @@ namespace test {
       void
       verify_iteration()
         {
-          PathArray parr;
+          ParrT parr;
           CHECK (isnil (parr));
           // path is iterable
           CHECK ("" == join(parr));
           
-          parr = PathArray{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
           CHECK (8 == parr.size());
           // path is iterable
           CHECK ("ΓΔΘΞΣΨΦΩ" == join(parr,""));
           
           // iteration matches index order
           uint i=0;
-          for (PathArray::iterator ii = parr.begin(); ii; ++ii, ++i)
+          for (ParrT::iterator ii = parr.begin(); ii; ++ii, ++i)
             CHECK (parr[i] == *ii);
           CHECK (8 == i);
           
           
           // path information is automatically trimmed and filled
-          parr = PathArray{nullptr,nullptr,"Θ",nullptr,nullptr,nullptr,"Φ"};
+          parr = ParrT{nullptr,nullptr,"Θ",nullptr,nullptr,nullptr,"Φ"};
           CHECK (7 == parr.size());
           CHECK ("Θ***Φ" == join(parr,""));
           
-          parr = PathArray{nullptr,"Δ",nullptr,"Ξ",nullptr,nullptr,"Φ"};
+          parr = ParrT{nullptr,"Δ",nullptr,"Ξ",nullptr,nullptr,"Φ"};
           CHECK (4 == parr.size());
           CHECK ("Δ*Ξ" == join(parr,""));
           
-          parr = PathArray{nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,"Ω",nullptr};
+          parr = ParrT{nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,"Ω",nullptr};
           CHECK (16 == parr.size());
           CHECK ("Ω" == join(parr,""));
           

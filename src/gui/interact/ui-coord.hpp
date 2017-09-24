@@ -67,6 +67,9 @@ namespace interact {
   using std::string;
   using lib::Literal;
   
+  enum {
+    UIC_INLINE_SIZE = 8
+  };
   
   
   enum UIPathElm
@@ -88,11 +91,12 @@ namespace interact {
    * @todo initial draft as of 9/2017
    */
   class UICoord
-    : public lib::PathArray
+    : public lib::PathArray<UIC_INLINE_SIZE>
     {
+      using PArr = lib::PathArray<UIC_INLINE_SIZE>;
       
     public:
-      using PathArray::PathArray;
+      using PArr::PathArray;
       
       /* === Builder API === */
       

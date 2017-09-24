@@ -30,6 +30,10 @@
  ** It offers range checks, standard iteration and array-like indexed component access; as a whole
  ** it is copyable, while actual components are immutable after construction.
  ** 
+ ** @remark the choice of implementation layout is arbitrary and not based on evidence.
+ **         A recursive structure with fixed inline storage looked like an interesting programming challenge.
+ **         Using just a heap based array storage would have been viable likewise.
+ ** @todo when UICoord is in widespread use, collect performance statistics and revisit this design.
  ** @todo WIP 9/2017 first draft ////////////////////////////////////////////////////////////////////////////TICKET #1106 generic UI coordinate system
  ** 
  ** @see PathArray_test
@@ -48,7 +52,8 @@
 
 //#include <boost/noncopyable.hpp>
 #include <string>
-//#include <memory>
+#include <memory>
+#include <array>
 
 
 namespace lib {
@@ -62,10 +67,17 @@ namespace lib {
   
   
   /**
-   * @internal Base abstraction for path-like topological coordinates.
+   * Abstraction for path-like topological coordinates.
+   * A sequence of Literal strings, with array-like access and
+   * standard iteration. Implemented as fixed size inline tuple
+   * with heap allocated unlimited extension space.
    */
+  template<size_t chunk_size>
   class PathArray
     {
+      std::array<const char*, chunk_size> elms_;
+      std::unique_ptr<PathArray> tail_;
+      
     public:
       template<typename...ARGS>
       explicit
@@ -74,7 +86,16 @@ namespace lib {
           UNIMPLEMENTED ("initialise path array components");
         }
       
-      // standard copy operations acceptable
+      PathArray (PathArray const& o)
+        {
+          UNIMPLEMENTED ("copy construct path array components");
+        }
+      
+      PathArray&
+      operator= (PathArray const& r)
+        {
+          UNIMPLEMENTED ("path array copy assignment");
+        }
       
       
       size_t
@@ -141,8 +162,9 @@ namespace lib {
     };
   
   
+  template<size_t chunk_size>
   inline
-  PathArray::operator string()  const
+  PathArray<chunk_size>::operator string()  const
   {
     if (this->empty()) return "";
     
