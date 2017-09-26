@@ -86,41 +86,73 @@ fun2 (int const& i, int const& j, int const& k)
   }
 
 
-template<size_t...idx>
-struct Idx
-  { };
+  /** Hold a sequence of index numbers as template parameters */
+  template<size_t...idx>
+  struct IndexSeq
+    {
+      template<size_t i>
+      using AppendElm = IndexSeq<idx..., i>;
+    };
+  
+  /** build an `IndexSeq<0, 1, 2, ..., n-1>` */
+  template<size_t n>
+  struct BuildIndexSeq
+    {
+      using Ascending = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
+      
+      template<size_t i>
+      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<i>::template AppendElm<i>;
+    };
+  
+  template<>
+  struct BuildIndexSeq<0>
+    {
+      using Ascending = IndexSeq<>;
+      
+      template<size_t>
+      using FilledWith = IndexSeq<>;;
+    };
 
-template<typename...ARGS>
-struct IdxSeq
-  {
-    template<size_t>
-    struct First
+
+template<size_t i, typename...ARGS>
+struct Pick;
+
+template<size_t i, typename ARG, typename...ARGS>
+struct Pick<i, ARG,ARGS...>
+  : Pick<i-1, ARGS...>
+  { 
+    static auto
+    get (ARG, ARGS ...args)
       {
-        
-      };
+        return Pick<i-1, ARGS...>::get (args...);
+      }
   };
 
-template<size_t...idx>
-struct Pick
-  {
-    template<typename...ARGS>
-    Pick (ARGS... args)
-    { }
+template<typename ARG, typename...ARGS>
+struct Pick<0, ARG,ARGS...>
+  { 
+    static ARG
+    get (ARG a, ARGS...)
+      {
+        return a;
+      }
   };
 
 template<size_t...idx, typename...ARGS>
 void
-dispatch (Idx<idx...>, ARGS...args)
+dispatch_ (IndexSeq<idx...>, ARGS...args)
   {
     
-    fun1 (Pick<idx>{args...} ...);
+    fun1 (Pick<idx,ARGS...>::get(args...) ...);
   }
 
 template<typename...ARGS>
 void
 dispatch (ARGS...args)
   {
-    using First = typename IdxSeq<ARGS...>::template First<3>;
+    enum {SIZ = sizeof...(args)};
+    
+    using First = typename BuildIndexSeq<3>::Ascending;
     
     dispatch_ (First{}, args...);
   }
@@ -132,7 +164,7 @@ main (int, char**)
     fun1 (1,2,3);
     fun2 (4,5,6);
     
-//  dispatch (2,3,4,5,6,7,8);
+    dispatch (2,3,4,5,6,7,8);
     
     cout <<  "\n.gulp.\n";
     
