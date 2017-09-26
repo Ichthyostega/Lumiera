@@ -34,9 +34,9 @@
  ** @see typeseq-manip-test.cpp
  ** @see typelist.hpp
  ** @see typelist-util.hpp
+ ** @see tuple-helper.hpp
  ** @see function.hpp
  ** @see generator.hpp
- ** @see tuple.hpp
  ** 
  */
 

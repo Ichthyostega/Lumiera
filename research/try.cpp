@@ -32,15 +32,19 @@
 // 1/16  - generic to-string conversion for ostream
 // 1/16  - build tuple from runtime-typed variant container
 // 3/17  - generic function signature traits, including support for Lambdas
+// 9/17  - manipulate variadic templates to treat varargs in several chunks
 
 
 /** @file try.cpp
- ** Metaprogramming: unified treatment of functors, function references and lambdas.
- ** Rework our existing function signature trait to also support lambdas, which forces us
- ** to investigate and in the end to change the handling of function member pointers.
+ ** Metaprogramming: manipulations on variadic template argument packs.
+ ** Investigation how to transform a parameter pack such as to forward a fixed chunk
+ ** to one sub-ctor and delegate the rest to a tail recursive call.
  ** 
- ** This investigation is a partial step towards #994 and became necessary to support
- ** Command definition by Lambda
+ ** This investigation was spurred by an attempt to create an inline storage layout
+ ** with possible heap-based extension. Being able to build such an object layout
+ ** would enable several possibly interesting optimisations when most usage scenarios
+ ** of a class will only use a small element count, while some usages still require
+ ** an essentially unlimited open number of elements.
  ** 
  */
 
@@ -56,169 +60,21 @@ typedef unsigned int uint;
 using lib::meta::_Fun;
 
 using std::function;
-using std::placeholders::_1;
-using std::bind;
 using std::string;
-using std::tuple;
 using std::move;
 
-
-
-
-int
-funny (uint i)
-{
-  return -i+1;
-}
-
-struct Funky
-  {
-    int ii = 2;
-    
-    int
-    fun (uint i2)
-      {
-        return ii + funny(i2);
-      }
-    
-    int
-    operator() (uint i2)
-      {
-        return 2*ii - fun(i2);
-      }
-    
-    static int
-    notfunny (uint i)
-      {
-        return 2*funny (i);
-      }
-  };
 
 
 
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 
-#define EVAL_PREDICATE(_PRED_) \
-    cout << STRINGIFY(_PRED_) << "\t : " << _PRED_ <<endl;
 
 
-template<typename F>
-void
-showType (F)
-  {
-    using Sig = typename _Fun<F>::Sig;
-    
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showRef (F&)
-  {
-    using Sig = typename _Fun<F>::Sig;
-    
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showCRef (F&)
-  {
-    using Sig = typename _Fun<F>::Sig;
-    
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showRRef (F&&)
-  {
-    using Sig = typename _Fun<F>::Sig;
-    
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-
-using Fun = function<int(uint)>;
-using Fuk = function<int(Funky&, uint)>;
 
 int
 main (int, char**)
   {
-    Fun f1{funny};
-    Fun f2{&funny};
-    
-    Fun f3{Funky::notfunny};
-    Fun f4{&Funky::notfunny};
-    
-    auto memfunP = &Funky::fun;
-    
-    Fuk f5{memfunP};
-    
-    Funky funk;
-    
-    Fun f6{bind (f5, funk, _1)};
-    
-    auto lambda = [&](uint ii) { return funk.fun(ii); };
-    
-    Fun f7{lambda};
-    
-    showType (funny);
-    showType (&funny);
-    showType (Funky::notfunny);
-    
-    showType (memfunP);
-    showType (lambda);
-    showType (f7);
-    
-    cout << "\n\n-------\n";
-    
-    showRef (funny);
-    showRef (lambda);
-    showRef (f7);
-    
-    showCRef (funny);
-    showCRef (lambda);
-    showCRef (f7);
-    
-    showRRef (move(lambda));
-    showRRef (move(f7));
-    
-    showType (move(&funny));
-    showType (move(lambda));
-    showType (move(f7));
-    
-    Fun& funRef = f1;
-    Funky& funkyRef = funk;
-    Fun const& funCRef = f1;
-    Funky const& funkyCRef = funk;
-    showType (funRef);
-    showType (funkyRef);
-    showType (funCRef);
-    showType (funkyCRef);
-    
-    cout << "\n\n-------\n";
-    
-    SHOW_TYPE (decltype(&Funky::operator()));
-    SHOW_TYPE (decltype(lambda));
-    
-    SHOW_TYPE (_Fun<int(uint)>::Sig);
-    SHOW_TYPE (_Fun<Fun&>::Sig);
-    SHOW_TYPE (_Fun<Fun&&>::Sig);
-    SHOW_TYPE (_Fun<Fun const&>::Sig);
-    SHOW_TYPE (_Fun<Funky&>::Sig);
-    SHOW_TYPE (_Fun<Funky&&>::Sig);
-    SHOW_TYPE (_Fun<Funky const&>::Sig);
-    
-    using Siggy = _Fun<Fun>::Sig;
-    SHOW_TYPE (_Fun<Siggy&>::Sig);
-    SHOW_TYPE (_Fun<Siggy&&>::Sig);
-    SHOW_TYPE (_Fun<Siggy const&>::Sig);
     
     cout <<  "\n.gulp.\n";
     

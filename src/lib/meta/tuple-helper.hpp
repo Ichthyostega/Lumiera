@@ -249,27 +249,25 @@ namespace meta {
   
   
   /**
-   * Extensible Adapter to construct a distinct tuple
-   * from some arbitrary source type. This includes the
-   * possibility to re-map elements or element positions.
+   * Extensible Adapter to construct a distinct tuple from some arbitrary source type.
+   * This includes the possibility to re-map elements or element positions.
    * @tparam TYPES sequence of types to use for the tuple
    * @tparam _ElmMapper_ a _template_ to extract each
    *         constructor argument from the source value.
-   *         On invocation, we'll pick up the source type from the
-   *         actual ctor argument, and then invoke this helper template
-   *         iteratively for each component of the tuple, with arguments
+   *         On invocation, we'll pick up the source type from the actual ctor argument,
+   *         and then invoke this helper template iteratively for each component of the
+   *         tuple, passing as template arguments
    *         - the source type, as picked up from the constructor
    *         - the target tuple type, i.e. `Tuple<TYPES>`
    *         - the actual index position of the tuple element
    *           to be initialised through this concrete instantiation.
-   * @remarks this design has several extension points. Pretty much
-   *    any conceivable initialisation logic can be embodied in the
-   *    `_ElmMapper_` template. The sole requirement is that the
-   *    concrete instance is _assignable_ by the source type and
-   *    _convertible_ to the individual member type of the target
-   *    tuple it is invoked for. Moreover, it is possible to build
-   *    a generic _element extractor_, which will be specialised
-   *    on base of the source type accepted. See \ref ExtractArg
+   * @remarks this design has several extension points. Pretty much any conceivable
+   *    initialisation logic can be embodied in the `_ElmMapper_` template. The sole
+   *    requirement is that the concrete instance is _assignable_ by the source type
+   *    and _convertible_ to the individual member type of the target tuple it is
+   *    invoked for. Moreover, it is possible to build a generic _element extractor_,
+   *    which will be specialised on base of the source type accepted.
+   * @see ExtractArg
    */
   template< typename TYPES
           , template<class,class, size_t> class _ElmMapper_

@@ -63,6 +63,9 @@ namespace lib {
   using lib::Literal;
   
 //  class GlobalCtx;
+  namespace { // Implementation helper: variadic init
+    
+  }//(End)Implementation helper
   
   
   
@@ -82,11 +85,13 @@ namespace lib {
       template<typename...ARGS>
       explicit
       PathArray (ARGS&& ...args)
+        : elms_{}
         {
           UNIMPLEMENTED ("initialise path array components");
         }
       
       PathArray (PathArray const& o)
+        : elms_(o.elms_)
         {
           UNIMPLEMENTED ("copy construct path array components");
         }
