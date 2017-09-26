@@ -214,6 +214,9 @@ namespace meta {
     {
       using Ascending = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
       
+      template<size_t d>
+      using OffsetBy  = typename BuildIndexSeq<n-1>::template OffsetBy<d>::template AppendElm<n-1+d>;
+      
       template<size_t i>
       using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<i>::template AppendElm<i>;
     };
@@ -223,8 +226,11 @@ namespace meta {
     {
       using Ascending = IndexSeq<>;
       
+      template<size_t d>
+      using OffsetBy  = IndexSeq<>;
+      
       template<size_t>
-      using FilledWith = IndexSeq<>;;
+      using FilledWith = IndexSeq<>;
     };
   
   

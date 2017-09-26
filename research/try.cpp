@@ -86,51 +86,25 @@ fun2 (int const& i, int const& j, int const& k)
   }
 
 
-  /** Hold a sequence of index numbers as template parameters */
-  template<size_t...idx>
-  struct IndexSeq
-    {
-      template<size_t i>
-      using AppendElm = IndexSeq<idx..., i>;
-    };
-  
-  /** build an `IndexSeq<0, 1, 2, ..., n-1>` */
-  template<size_t n>
-  struct BuildIndexSeq
-    {
-      using Ascending = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
-      
-      template<size_t i>
-      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<i>::template AppendElm<i>;
-    };
-  
-  template<>
-  struct BuildIndexSeq<0>
-    {
-      using Ascending = IndexSeq<>;
-      
-      template<size_t>
-      using FilledWith = IndexSeq<>;;
-    };
+using lib::meta::IndexSeq;
+using lib::meta::BuildIndexSeq;
 
 
-template<size_t i, typename...ARGS>
-struct Pick;
-
-template<size_t i, typename ARG, typename...ARGS>
-struct Pick<i, ARG,ARGS...>
-  : Pick<i-1, ARGS...>
+template<size_t i>
+struct Pick
   { 
+    template<typename ARG, typename...ARGS>
     static auto
     get (ARG, ARGS ...args)
       {
-        return Pick<i-1, ARGS...>::get (args...);
+        return Pick<i-1>::get (args...);
       }
   };
 
-template<typename ARG, typename...ARGS>
-struct Pick<0, ARG,ARGS...>
+template<>
+struct Pick<0>
   { 
+    template<typename ARG, typename...ARGS>
     static ARG
     get (ARG a, ARGS...)
       {
@@ -143,7 +117,7 @@ void
 dispatch_ (IndexSeq<idx...>, ARGS...args)
   {
     
-    fun1 (Pick<idx,ARGS...>::get(args...) ...);
+    fun2 (Pick<idx>::get(args...) ...);
   }
 
 template<typename...ARGS>
@@ -153,8 +127,10 @@ dispatch (ARGS...args)
     enum {SIZ = sizeof...(args)};
     
     using First = typename BuildIndexSeq<3>::Ascending;
+    using Next  = typename BuildIndexSeq<3>::OffsetBy<3>;
     
-    dispatch_ (First{}, args...);
+    dispatch_ (First(), args...);
+    dispatch_ (Next(), args...);
   }
 
 
