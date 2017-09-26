@@ -52,16 +52,19 @@ typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-#include "lib/meta/function.hpp"
+//#include "lib/meta/function.hpp"
+#include "lib/meta/tuple-helper.hpp"
 
 #include <functional>
+#include <utility>
 #include <string>
 
 using lib::meta::_Fun;
 
 using std::function;
-using std::string;
+using std::forward;
 using std::move;
+using std::string;
 
 
 
@@ -70,11 +73,66 @@ using std::move;
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 
 
+void
+fun1 (int i, int j, int k)
+  {
+    cout << "FUN-1: "<<i<<" "<<j<<" "<<k<<" " <<endl;
+  }
+
+void
+fun2 (int const& i, int const& j, int const& k)
+  {
+    cout << "FUN-2: "<<i<<" "<<j<<" "<<k<<" " <<endl;
+  }
+
+
+template<size_t...idx>
+struct Idx
+  { };
+
+template<typename...ARGS>
+struct IdxSeq
+  {
+    template<size_t>
+    struct First
+      {
+        
+      };
+  };
+
+template<size_t...idx>
+struct Pick
+  {
+    template<typename...ARGS>
+    Pick (ARGS... args)
+    { }
+  };
+
+template<size_t...idx, typename...ARGS>
+void
+dispatch (Idx<idx...>, ARGS...args)
+  {
+    
+    fun1 (Pick<idx>{args...} ...);
+  }
+
+template<typename...ARGS>
+void
+dispatch (ARGS...args)
+  {
+    using First = typename IdxSeq<ARGS...>::template First<3>;
+    
+    dispatch_ (First{}, args...);
+  }
 
 
 int
 main (int, char**)
   {
+    fun1 (1,2,3);
+    fun2 (4,5,6);
+    
+//  dispatch (2,3,4,5,6,7,8);
     
     cout <<  "\n.gulp.\n";
     
