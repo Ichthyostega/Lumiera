@@ -102,6 +102,8 @@ struct Pick
       {
         return Pick<i-1>::get (args...);
       }
+    
+    static auto get() { return nullptr; }
   };
 
 template<>
@@ -113,18 +115,22 @@ struct Pick<0>
       {
         return a;
       }
+    
+    static auto get() { return nullptr; }
   };
+
 
 
 using Arr = std::array<int, 3>;
 
 
-template<size_t...idx, typename...ARGS>
-void
-dispatch_ (IndexSeq<idx...>, ARGS...args)
+template<size_t...idx1, size_t...idx2, typename...ARGS>
+Arr
+dispatch_ (IndexSeq<idx1...>,IndexSeq<idx2...>, ARGS...args)
   {
-    
-    fun2 (Pick<idx>::get(args...) ...);
+    Arr arr{Pick<idx1>::get(args...) ...};
+    fun2 (Pick<idx2>::get(args...) ...);
+    return arr;
   }
 
 template<typename...ARGS>
@@ -136,10 +142,7 @@ dispatch (ARGS...args)
     using First = typename BuildIndexSeq<3>::Ascending;
     using Next  = typename BuildIndexSeq<3>::OffsetBy<3>;
     
-    dispatch_ (First(), args...);
-    dispatch_ (Next(), args...);
-    Arr arr{9,8,7};
-    return arr;
+    return dispatch_ (First(),Next(), args...);
   }
 
 
