@@ -54,12 +54,15 @@ typedef unsigned int uint;
 #include "lib/format-util.hpp"
 //#include "lib/meta/function.hpp"
 #include "lib/meta/tuple-helper.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include <functional>
 #include <utility>
 #include <string>
+#include <array>
 
 using lib::meta::_Fun;
+using lib::test::showSizeof;
 
 using std::function;
 using std::forward;
@@ -112,6 +115,10 @@ struct Pick<0>
       }
   };
 
+
+using Arr = std::array<int, 3>;
+
+
 template<size_t...idx, typename...ARGS>
 void
 dispatch_ (IndexSeq<idx...>, ARGS...args)
@@ -121,7 +128,7 @@ dispatch_ (IndexSeq<idx...>, ARGS...args)
   }
 
 template<typename...ARGS>
-void
+Arr
 dispatch (ARGS...args)
   {
     enum {SIZ = sizeof...(args)};
@@ -131,6 +138,8 @@ dispatch (ARGS...args)
     
     dispatch_ (First(), args...);
     dispatch_ (Next(), args...);
+    Arr arr{9,8,7};
+    return arr;
   }
 
 
@@ -140,7 +149,8 @@ main (int, char**)
     fun1 (1,2,3);
     fun2 (4,5,6);
     
-    dispatch (2,3,4,5,6,7,8);
+    auto arr = dispatch (2,3,4,5,6,7,8);
+    cout << util::join(arr) << "| " << showSizeof(arr) <<endl;
     
     cout <<  "\n.gulp.\n";
     
