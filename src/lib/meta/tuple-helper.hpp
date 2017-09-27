@@ -53,6 +53,7 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/typeseq-util.hpp"
+#include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/util.hpp"
 
 #include <tuple>
@@ -68,67 +69,6 @@ namespace util { // forward declaration
 
 namespace lib {
 namespace meta {
-  
-  /**
-   * temporary workaround:
-   * alternative definition of "type sequence",
-   * already using variadic template parameters.
-   * @remarks the problem with our existing type sequence type
-   *    is that it fills the end of each sequence with NullType,
-   *    which was the only way to get a flexible type sequence
-   *    prior to C++11. Unfortunately these trailing NullType
-   *    entries do not play well with other variadic defs.
-   * @deprecated when we switch our primary type sequence type
-   *    to variadic parameters, this type will be obsoleted.
-   */
-  template<typename...TYPES>
-  struct TySeq
-    {
-      using Seq = TySeq;
-      using List = typename Types<TYPES...>::List;
-    };
-  
-  
-  /**
-   * temporary workaround: additional specialisation for the template
-   * `Prepend` to work also with the (alternative) variadic TySeq.
-   * @see typeseq-util.hpp
-   */
-  template<typename T, typename...TYPES>
-  struct Prepend<T, TySeq<TYPES...>>
-  {
-    using Seq  = TySeq<T, TYPES...>;
-    using List = typename Types<T, TYPES...>::List;
-  };
-  
-  
-  /**
-   * temporary workaround: strip trailing NullType entries from a
-   * type sequence, to make it compatible with new-style variadic
-   * template definitions.
-   * @note the result type is a TySec, to keep it apart from our
-   *    legacy (non-variadic) lib::meta::Types
-   * @deprecated necessary for the transition to variadic sequences
-   */
-  template<typename SEQ>
-  struct StripNullType;
-  
-  template<typename T, typename...TYPES>
-  struct StripNullType<Types<T,TYPES...>>
-    {
-      using TailSeq = typename StripNullType<Types<TYPES...>>::Seq;
-      
-      using Seq = typename Prepend<T, TailSeq>::Seq;
-    };
-  
-  template<typename...TYPES>
-  struct StripNullType<Types<NullType, TYPES...>>
-    {
-      using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
-    };
-  
-  
-  
   
   namespace { // rebinding helper to create std::tuple from a type sequence
     
@@ -206,59 +146,6 @@ namespace meta {
   struct is_Tuple<std::tuple<TYPES...>>
     : std::true_type
     { };
-  
-  
-  
-  
-  
-  /** Hold a sequence of index numbers as template parameters */
-  template<size_t...idx>
-  struct IndexSeq
-    {
-      template<size_t i>
-      using AppendElm = IndexSeq<idx..., i>;
-    };
-  
-  /** build an `IndexSeq<0, 1, 2, ..., n-1>` */
-  template<size_t n>
-  struct BuildIndexSeq
-    {
-      using Ascending = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
-      
-      template<size_t d>
-      using OffsetBy  = typename BuildIndexSeq<n-1>::template OffsetBy<d>::template AppendElm<n-1+d>;
-      
-      template<size_t i>
-      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<i>::template AppendElm<i>;
-    };
-  
-  template<>
-  struct BuildIndexSeq<0>
-    {
-      using Ascending = IndexSeq<>;
-      
-      template<size_t d>
-      using OffsetBy  = IndexSeq<>;
-      
-      template<size_t>
-      using FilledWith = IndexSeq<>;
-    };
-  
-  
-  
-  /** build an index number sequence from a structured reference type */
-  template<class REF>
-  struct IndexIter;
-  
-  /** build an index number sequence from a type sequence */
-  template<typename...TYPES>
-  struct IndexIter<Types<TYPES...>>
-    {
-      /////TODO as long as Types is not variadic (#987), we need to strip NullType here (instead of just using sizeof...(TYPES)
-      enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
-      
-      using Seq = typename BuildIndexSeq<SIZ>::Ascending;
-    };
   
   
   
