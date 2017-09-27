@@ -76,21 +76,23 @@ using std::string;
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 
 
+template<typename...ARGS>
 void
-fun1 (int i, int j, int k)
+fun2 (ARGS... is)
   {
-    cout << "FUN-1: "<<i<<" "<<j<<" "<<k<<" " <<endl;
+    cout << "FUN-"<<sizeof...(is)<<": "<<util::join({is...}, " ") <<endl;
   }
 
 void
-fun2 (int const& i, int const& j, int const& k)
+fun2 ()
   {
-    cout << "FUN-2: "<<i<<" "<<j<<" "<<k<<" " <<endl;
+    cout << "NO FUN" <<endl;
   }
 
 
 using lib::meta::IndexSeq;
 using lib::meta::BuildIndexSeq;
+using lib::meta::BuildIdxIter;
 
 
 template<size_t i>
@@ -140,7 +142,7 @@ dispatch (ARGS...args)
     enum {SIZ = sizeof...(args)};
     
     using First = typename BuildIndexSeq<3>::Ascending;
-    using Next  = typename BuildIndexSeq<3>::OffsetBy<3>;
+    using Next  = typename BuildIdxIter<ARGS...>::template After<3>;
     
     return dispatch_ (First(),Next(), args...);
   }
@@ -149,8 +151,9 @@ dispatch (ARGS...args)
 int
 main (int, char**)
   {
-    fun1 (1,2,3);
-    fun2 (4,5,6);
+    fun2 (1,2,3,4);
+    fun2 (5,6);
+    fun2 ();
     
     auto arr = dispatch (2,3,4,5,6,7,8);
     cout << util::join(arr) << "| " << showSizeof(arr) <<endl;

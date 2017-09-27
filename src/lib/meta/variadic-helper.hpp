@@ -57,7 +57,6 @@
 #include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/util.hpp"
 
-
 namespace lib {
 namespace meta {
   
@@ -124,6 +123,27 @@ namespace meta {
   
   
   
+//////////////////////////TICKET #943 : temporary workaround until full C++14 compliance (need constexpr)
+  template<typename X>
+  constexpr inline X const&
+  max (X const& a, X const& b)
+    {
+      return a < b? b : a;
+    }
+  
+  template<typename X>
+  constexpr inline X const&
+  min (X const& a, X const& b)
+    {
+      return b < a? b : a;
+    }
+//////////////////////////TICKET #943 : temporary workaround until full C++14 compliance (need constexpr)
+  
+  
+  
+  
+  
+  
   /** Hold a sequence of index numbers as template parameters */
   template<size_t...idx>
   struct IndexSeq
@@ -132,7 +152,10 @@ namespace meta {
       using AppendElm = IndexSeq<idx..., i>;
     };
   
-  /** build an `IndexSeq<0, 1, 2, ..., n-1>` */
+  /**
+   * build regular sequences of index number
+   * e.g. `IndexSeq<0, 1, 2, ..., n-1>`
+   */
   template<size_t n>
   struct BuildIndexSeq
     {
@@ -141,36 +164,83 @@ namespace meta {
       template<size_t d>
       using OffsetBy  = typename BuildIndexSeq<n-1>::template OffsetBy<d>::template AppendElm<n-1+d>;
       
-      template<size_t i>
-      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<i>::template AppendElm<i>;
+      template<size_t x>
+      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<x>::template AppendElm<x>;
+      
+      template<size_t c>
+      using First = typename BuildIndexSeq<min(c,n)>::Ascending;
+      
+      template<size_t c>
+      using After = typename BuildIndexSeq<max(size_t(0),n-c)>::template OffsetBy<c>;
     };
   
   template<>
   struct BuildIndexSeq<0>
     {
-      using Ascending = IndexSeq<>;
+      using Empty = IndexSeq<>;
       
-      template<size_t d>
-      using OffsetBy  = IndexSeq<>;
+      using Ascending = Empty;
       
       template<size_t>
-      using FilledWith = IndexSeq<>;
+      using OffsetBy  = Empty;
+      
+      template<size_t>
+      using FilledWith = Empty;
+      
+      template<size_t>
+      using First = Empty;
+      
+      template<size_t>
+      using After = Empty;
     };
   
   
   
-  /** build an index number sequence from a structured reference type */
-  template<class REF>
-  struct IndexIter;
-  
+  /**
+   * build a sequence of index numbers based on a type sequence
+   */
+  template<typename...TYPES>
+  struct BuildIdxIter
+    {
+      enum {SIZ = sizeof...(TYPES) };
+      using Builder = BuildIndexSeq<SIZ>;
+      
+      using Ascending = typename Builder::Ascending;
+      
+      template<size_t d>
+      using OffsetBy = typename Builder::template OffsetBy<d>;
+      
+      template<size_t x>
+      using FilledWith = typename Builder::template FilledWith<x>;
+      
+      template<size_t c>
+      using First = typename Builder::template First<c>;
+      
+      template<size_t c>
+      using After = typename Builder::template After<c>;
+    };
+
   /** build an index number sequence from a type sequence */
   template<typename...TYPES>
-  struct IndexIter<Types<TYPES...>>
+  struct BuildIdxIter<Types<TYPES...>>
     {
       /////TODO as long as Types is not variadic (#987), we need to strip NullType here (instead of just using sizeof...(TYPES)
       enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
+      using Builder = BuildIndexSeq<SIZ>;
       
-      using Seq = typename BuildIndexSeq<SIZ>::Ascending;
+      using Ascending = typename Builder::Ascending;
+      
+      template<size_t d>
+      using OffsetBy = typename Builder::template OffsetBy<d>;
+      
+      template<size_t x>
+      using FilledWith = typename Builder::template FilledWith<x>;
+      
+      template<size_t c>
+      using First = typename Builder::template First<c>;
+      
+      template<size_t c>
+      using After = typename Builder::template After<c>;
     };
   
   

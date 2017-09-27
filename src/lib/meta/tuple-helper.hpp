@@ -179,11 +179,12 @@ namespace meta {
   struct TupleConstructor
     : Tuple<TYPES>
     {
-      using TypeIdxIterator = typename IndexIter<TYPES>::Seq;
+      /** meta-sequence to drive instantiation of the ElmMapper */
+      using SequenceIterator = typename BuildIdxIter<TYPES>::Ascending;
       
     protected:
       template<class SRC, size_t...idx>
-      TupleConstructor (SRC values, IndexSeq<idx...>*)
+      TupleConstructor (SRC values, IndexSeq<idx...>)
         : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{values}...)
         { }
       
@@ -191,7 +192,7 @@ namespace meta {
     public:
       template<class SRC>
       TupleConstructor (SRC values)
-        : TupleConstructor (values, (TypeIdxIterator*)nullptr)
+        : TupleConstructor (values, SequenceIterator())
         { }
     };
   
