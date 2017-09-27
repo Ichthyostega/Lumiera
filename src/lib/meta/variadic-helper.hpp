@@ -1,5 +1,5 @@
 /*
-  TUPLE-HELPER.hpp  -  metaprogramming utilities for type and data tuples
+  VARIADIC-HELPER.hpp  -  metaprogramming utilities for parameter- and type sequences
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,11 +21,13 @@
 */
 
 
-/** @file tuple-helper.hpp
- ** Metaprogramming with tuples-of-types and the `std::tuple` record.
- ** The metaprogramming part of this header complements typelist.hpp and allows
- ** some additional manipulations on type sequences, especially to integrate
- ** with the Tuples provided by the standard library.
+/** @file variadic-helper.hpp
+ ** Metaprogramming with type sequences based on variadic template parameters.
+ ** The type rebinding- and helper templates in this header allow to perform
+ ** simple sequence manipulations on sequences of template parameters extracted
+ ** from variadic parameter packs. The goal is to (pre)process flexible argument
+ ** lists _at compile time,_ driven by template instantiation, allowing to specialise
+ ** and react specifically on some concrete pattern of argument types.
  ** 
  ** @warning the metaprogramming part of Lumiera to deal with type sequences is in a
  **          state of transition, since C++11 now offers direct language support for
@@ -47,8 +49,8 @@
  */
 
 
-#ifndef LIB_META_TUPLE_HELPER_H
-#define LIB_META_TUPLE_HELPER_H
+#ifndef LIB_META_VARIADIC_HELPER_H
+#define LIB_META_VARIADIC_HELPER_H
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
@@ -490,4 +492,4 @@ namespace util {
   
   
 } // namespace util
-#endif /*LIB_META_TUPLE_HELPER_H*/
+#endif /*LIB_META_VARIADIC_HELPER_H*/

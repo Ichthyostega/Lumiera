@@ -55,6 +55,17 @@ This code is heavily inspired by
  ** effectively this is a flavour of functional programming. Just the
  ** "execution environment" is the compiler, during compilation.
  ** 
+ ** @warning the metaprogramming part of Lumiera to deal with type sequences is in a
+ **          state of transition, since C++11 now offers direct language support for
+ **          processing of flexible template parameter sequences ("parameter packs").
+ **          It is planned to regroup and simplify our homemade type sequence framework
+ **          to rely on variadic templates and integrate better with std::tuple.
+ **          It is clear that we will _retain some parts_ of our own framework,
+ **          since programming with _Loki-style typelists_ is way more obvious
+ **          and straight forward than handling of template parameter packs,
+ **          since the latter can only be rebound through pattern matching.
+ ** @todo transition lib::meta::Types to variadic parameters  /////////////////////////////////TICKET #987
+ ** 
  ** @see lib::visitor::Applicable usage example
  ** @see control::CommandSignature more elaborate usage example (dissecting a functor signature)
  ** @see TypeList_test
