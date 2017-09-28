@@ -95,21 +95,21 @@ using lib::meta::BuildIndexSeq;
 using lib::meta::BuildIdxIter;
 
 
-template<size_t i>
-struct Pick
+template<size_t i, typename INIT=void>
+struct SelectVararg
   { 
     template<typename ARG, typename...ARGS>
     static auto
     get (ARG, ARGS ...args)
       {
-        return Pick<i-1>::get (args...);
+        return SelectVararg<i-1,INIT>::get (args...);
       }
     
-    static auto get() { return nullptr; }
+    static INIT get() { return INIT{}; }
   };
 
-template<>
-struct Pick<0>
+template<typename INIT>
+struct SelectVararg<0, INIT>
   { 
     template<typename ARG, typename...ARGS>
     static ARG
@@ -118,8 +118,22 @@ struct Pick<0>
         return a;
       }
     
-    static auto get() { return nullptr; }
+    static INIT get() { return INIT{}; }
   };
+
+template<size_t idx, typename...ARGS>
+constexpr inline auto
+pickArg (ARGS... args)
+  {
+    return SelectVararg<idx>::get (args...);
+  }
+
+template<size_t idx, typename INIT, typename...ARGS>
+constexpr inline auto
+pickInit (ARGS... args)
+  {
+    return SelectVararg<idx, INIT>::get (args...);
+  }
 
 
 
@@ -130,8 +144,8 @@ template<size_t...idx1, size_t...idx2, typename...ARGS>
 Arr
 dispatch_ (IndexSeq<idx1...>,IndexSeq<idx2...>, ARGS...args)
   {
-    Arr arr{Pick<idx1>::get(args...) ...};
-    fun2 (Pick<idx2>::get(args...) ...);
+    Arr arr{pickInit<idx1,int> (args...) ...};
+    fun2 (pickArg<idx2> (args...) ...);
     return arr;
   }
 
@@ -157,6 +171,9 @@ main (int, char**)
     
     auto arr = dispatch (2,3,4,5,6,7,8);
     cout << util::join(arr) << "| " << showSizeof(arr) <<endl;
+    
+    arr = dispatch (7,8);
+    cout << util::join(arr);
     
     cout <<  "\n.gulp.\n";
     

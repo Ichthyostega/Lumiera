@@ -171,7 +171,7 @@ namespace meta {
       using First = typename BuildIndexSeq<min(c,n)>::Ascending;
       
       template<size_t c>
-      using After = typename BuildIndexSeq<max(size_t(0),n-c)>::template OffsetBy<c>;
+      using After = typename BuildIndexSeq< (n>c)? n-c : 0>::template OffsetBy<c>;
     };
   
   template<>
