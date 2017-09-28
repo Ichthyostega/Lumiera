@@ -93,81 +93,8 @@ fun2 ()
 using lib::meta::IndexSeq;
 using lib::meta::BuildIndexSeq;
 using lib::meta::BuildIdxIter;
-
-
-namespace {
-/**
- * @internal pick a single argument from a variadic parameter pack
- * @tparam i the index number (zero based) of the argument to select
- * @warning i must be smaller than the number of arguments available
- */
-template<size_t i>
-struct SelectVararg
-  { 
-    template<typename ARG, typename...ARGS>
-    static auto
-    get (ARG, ARGS&& ...args)
-      {
-        return SelectVararg<i-1>::get (std::forward<ARGS> (args)...);
-      }
-  };
-
-template<>
-struct SelectVararg<0>
-  { 
-    template<typename ARG, typename...ARGS>
-    static auto
-    get (ARG&& a, ARGS...)
-      {
-        return std::forward<ARG>(a);
-      }
-  };
-}
-
-
-/**
- * Helper to single out one argument from a variadic argument pack.
- * @tparam idx the index number (zero based) of the argument to select
- * @remark typically this function is used "driven" by an likewise variadic index sequence,
- *         where the index sequence itself is picked up by a pattern match; this usage pattern
- *         allows arbitrarily to handle some of the arguments of a variable argument list,
- *         as determined by the index sequence passed in.
- */
-template<size_t idx, typename...ARGS>
-constexpr inline auto
-pickArg (ARGS&&... args)
-  {
-    static_assert (idx < sizeof...(args), "insufficient number of arguments");
-    
-    return SelectVararg<idx>::get (std::forward<ARGS> (args)...);
-  }
-
-/**
- * Helper to pick one initialisation argument from a variadic argument pack,
- * falling back to a default constructed element of type `DEFAULT` in case of
- * insufficient number of variadic arguments.
- * @tparam idx the index number (zero based) of the argument to select
- * @tparam DEFALUT type of the default element to construct as fallback
- */
-template<size_t idx, typename DEFAULT, typename...ARGS>
-constexpr inline auto
-pickInit (ARGS&&... args)
-  {
-    enum{
-      SIZ = sizeof...(args),
-      IDX = idx < SIZ? idx : 0
-    };
-    
-    return (idx < SIZ)? SelectVararg<IDX>::get (std::forward<ARGS> (args)...)
-                      : DEFAULT{};
-  }
-
-template<size_t, typename DEFAULT>
-constexpr inline DEFAULT
-pickInit ()
-  {
-    return DEFAULT{};
-  }
+using lib::meta::pickArg;
+using lib::meta::pickInit;
 
 
 using Arr = std::array<int, 3>;

@@ -182,8 +182,9 @@ namespace test {
           CHECK (n1 == pickArg<0> (n1,n2,n3));
           CHECK (n2 == pickArg<1> (n1,n2,n3));
           CHECK (n3 == pickArg<2> (n1,n2,n3));
-          
-          pickArg<3> (n1,n2,n3);
+
+          // does not compile...
+//        pickArg<3> (n1,n2,n3);
         }
       
       
