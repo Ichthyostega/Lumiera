@@ -95,46 +95,79 @@ using lib::meta::BuildIndexSeq;
 using lib::meta::BuildIdxIter;
 
 
-template<size_t i, typename INIT=void>
+namespace {
+/**
+ * @internal pick a single argument from a variadic parameter pack
+ * @tparam i the index number (zero based) of the argument to select
+ * @warning i must be smaller than the number of arguments available
+ */
+template<size_t i>
 struct SelectVararg
   { 
     template<typename ARG, typename...ARGS>
     static auto
-    get (ARG, ARGS ...args)
+    get (ARG, ARGS&& ...args)
       {
-        return SelectVararg<i-1,INIT>::get (args...);
+        return SelectVararg<i-1>::get (std::forward<ARGS> (args)...);
       }
-    
-    static INIT get() { return INIT{}; }
   };
 
-template<typename INIT>
-struct SelectVararg<0, INIT>
+template<>
+struct SelectVararg<0>
   { 
     template<typename ARG, typename...ARGS>
-    static ARG
-    get (ARG a, ARGS...)
+    static auto
+    get (ARG&& a, ARGS...)
       {
-        return a;
+        return std::forward<ARG>(a);
       }
-    
-    static INIT get() { return INIT{}; }
   };
+}
 
+
+/**
+ * Helper to single out one argument from a variadic argument pack.
+ * @tparam idx the index number (zero based) of the argument to select
+ * @remark typically this function is used "driven" by an likewise variadic index sequence,
+ *         where the index sequence itself is picked up by a pattern match; this usage pattern
+ *         allows arbitrarily to handle some of the arguments of a variable argument list,
+ *         as determined by the index sequence passed in.
+ */
 template<size_t idx, typename...ARGS>
 constexpr inline auto
-pickArg (ARGS... args)
+pickArg (ARGS&&... args)
   {
-    return SelectVararg<idx>::get (args...);
+    static_assert (idx < sizeof...(args), "insufficient number of arguments");
+    
+    return SelectVararg<idx>::get (std::forward<ARGS> (args)...);
   }
 
-template<size_t idx, typename INIT, typename...ARGS>
+/**
+ * Helper to pick one initialisation argument from a variadic argument pack,
+ * falling back to a default constructed element of type `DEFAULT` in case of
+ * insufficient number of variadic arguments.
+ * @tparam idx the index number (zero based) of the argument to select
+ * @tparam DEFALUT type of the default element to construct as fallback
+ */
+template<size_t idx, typename DEFAULT, typename...ARGS>
 constexpr inline auto
-pickInit (ARGS... args)
+pickInit (ARGS&&... args)
   {
-    return SelectVararg<idx, INIT>::get (args...);
+    enum{
+      SIZ = sizeof...(args),
+      IDX = idx < SIZ? idx : 0
+    };
+    
+    return (idx < SIZ)? SelectVararg<IDX>::get (std::forward<ARGS> (args)...)
+                      : DEFAULT{};
   }
 
+template<size_t, typename DEFAULT>
+constexpr inline DEFAULT
+pickInit ()
+  {
+    return DEFAULT{};
+  }
 
 
 using Arr = std::array<int, 3>;
@@ -172,8 +205,17 @@ main (int, char**)
     auto arr = dispatch (2,3,4,5,6,7,8);
     cout << util::join(arr) << "| " << showSizeof(arr) <<endl;
     
+    arr = dispatch (5,6,7,8);
+    cout << util::join(arr) <<endl;
+    
+    arr = dispatch (6,7,8);
+    cout << util::join(arr) <<endl;
+    
     arr = dispatch (7,8);
-    cout << util::join(arr);
+    cout << util::join(arr) <<endl;
+    
+    arr = dispatch ();
+    cout << util::join(arr) <<endl;
     
     cout <<  "\n.gulp.\n";
     
