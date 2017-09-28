@@ -42,6 +42,7 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/meta/util.hpp"
 
 #include <string>
