@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file typeseq-manip-test.cpp
+/** @file variadic-argument-picker-test.cpp
  ** verify metaprogramming manipulation on a variadic parameter pack.
  ** The unittest VariadicArgumentPicker_test calls a variadic function with different
  ** number of arguments and it employs variadic-helper.hpp to alter the order of passed arguments.
@@ -44,7 +44,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"/////////////
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -55,7 +54,6 @@
 using util::_Fmt;
 using util::join;
 using util::toString;
-using std::move;
 using std::forward;
 using std::string;
 
@@ -87,9 +85,13 @@ namespace test {
           {
             ++instanceCnt;
           }
+        N (N&& rr)
+          {
+            std::swap (i_, rr.i_);
+            ++instanceCnt;
+          }
         
         // instanceCnt remains same...  
-        N (N&& rr)              = default;
         N& operator= (N const&) = default;
         N& operator= (N&&)      = default;
         
@@ -157,12 +159,13 @@ namespace test {
             N<1> n1;
             N<2> n2;
             N<3> n3;
-            cout << fun (n1,n2,n3) << endl;
+            N<3> nn{n3};
+            cout << fun (n1,n2,n3,nn) << endl;
             
             CHECK (0 == N<0>::instanceCnt);
             CHECK (1 == N<1>::instanceCnt);
             CHECK (1 == N<2>::instanceCnt);
-            CHECK (1 == N<3>::instanceCnt);
+            CHECK (2 == N<3>::instanceCnt);
 
           }
           CHECK (0 == N<0>::instanceCnt);
@@ -186,8 +189,8 @@ namespace test {
           // does not compile...
 //        pickArg<3> (n1,n2,n3);
           
-          N<0> n0;
-          CHECK (n0 != pickArg<0> (N<0>{}));
+          N<0> n0{42};
+          CHECK (n0 != pickArg<0> (N<0>{23}));
           CHECK (n0 == pickArg<0> (N<0>{n0}));
         }
       
@@ -205,15 +208,31 @@ namespace test {
           
           CHECK (n1 == (pickInit<0,N0> (n1,n2) ));
           CHECK (n2 == (pickInit<1,N0> (n1,n2) ));
-          N0 n0      =  pickInit<3,N0> (n1,n2);
-          CHECK (n0 != (pickInit<3,N0> (n1,n2) ));  // same type (N<0>) but different new instance
           
-          CHECK ("N<0>" == typeStr(pickInit<2,N0> (n1,n2)));
-          CHECK ("N<0>" == typeStr(pickInit<2,N0> (1,"2")));
-          CHECK ("N<0>" == typeStr(pickInit<2,N0> ()));
+          CHECK ("N<0>" == typeStr(pickInit<3,N0> (n1,n2)));
+          CHECK ("N<0>" == typeStr(pickInit<3,N0> (1,"2")));
+          CHECK ("N<0>" == typeStr(pickInit<3,N0> ()));
         }
       
       
+      
+      /**
+       * Demonstration of argument manipulation through metaprogramming.
+       * This function invokes the ubiquitous `fun` test function with arbitrary arguments,
+       * but it re-orders and even prunes arguments as dictated by the Index sequence parameter.
+       * @remarks Note some fine points:
+       *          - the value of the parameter `IndexSeq<idx...>` is irrelevant
+       *          - rather, its sole purpose is to _pattern match_ against the type
+       *          - we use `IndexSeq` just as an container to hold the sequence `idx...`
+       *          - the expression within the function argument list expands the argument packs
+       *          - and both of them are treated separately
+       *          - the actual arguments are wrapped into a `std::forward` for _perfect forwarding_
+       *          - but the key trick of the whole operation lies in the expansion of the `idx...` pack
+       *          - note that `idx` without the `...` sits within the template list of `pickArg<idx>`
+       *          - while the corresponding expansion operator is outmost and thus works on the whole expression
+       *          - and thus it is the `idx...` pack which actually drives the generation of several `pickArg` instantiations
+       *          - in the end the net effect is that the _Index sequence_ absolutely dictates which arguments are picked 
+       */
       template<class...ARGS, size_t...idx>
       static auto
       call_with_reversed_arguments (IndexSeq<idx...>, ARGS&& ...args)
@@ -221,6 +240,7 @@ namespace test {
           return fun (pickArg<idx> (forward<ARGS>(args)...) ...);
         }
       
+      /** @test demonstrate reordering of arguments */
       void
       check_reorderedArguments ()
         {
@@ -231,13 +251,13 @@ namespace test {
           
           cout << fun (n0,n1,n2,n3) << endl;
           
-          using Backwards = typename BuildIndexSeq<4>::Descending;
-          using Back2     = typename BuildIndexSeq<2>::Descending;
-          using After2    = typename BuildIndexSeq<4>::After<2>;
+          using Backwards = typename BuildIndexSeq<4>::Descending;    // 3,2,1,0
+          using Back2     = typename BuildIndexSeq<2>::Descending;    // 1,0
+          using After2    = typename BuildIndexSeq<4>::After<2>;      // 2,3
           
-          cout << call_with_reversed_arguments (Backwards(), n0,n1,n2,n3);
-          cout << call_with_reversed_arguments (Back2()    , n0,n1,n2,n3);
-          cout << call_with_reversed_arguments (After2()   , n0,n1,n2,n3);
+          cout << call_with_reversed_arguments (Backwards(), n0,n1,n2,n3)  <<endl;
+          cout << call_with_reversed_arguments (Back2()    , n0,n1,n2,n3)  <<endl;
+          cout << call_with_reversed_arguments (After2()   , n0,n1,n2,n3)  <<endl;
         }
     };
   
