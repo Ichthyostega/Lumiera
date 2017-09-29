@@ -3837,11 +3837,13 @@
 </node>
 <node CREATED="1506301421612" ID="ID_572376877" MODIFIED="1506301426568" TEXT="Meta-Problem">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1506301428698" ID="ID_1290675306" MODIFIED="1506301433910" TEXT="Parameter-Pack zerlegen">
+<node CREATED="1506301428698" ID="ID_1290675306" MODIFIED="1506723726199" TEXT="Parameter-Pack zerlegen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1506301435826" ID="ID_1852582857" MODIFIED="1506301447508" TEXT="ersten Teil in ein std::array"/>
 <node CREATED="1506301448288" ID="ID_1083459556" MODIFIED="1506301457058" TEXT="zweiten Teil rekursiv..."/>
 </node>
-<node CREATED="1506301468830" ID="ID_291609200" MODIFIED="1506301471937" TEXT="L&#xf6;sungen">
+<node CREATED="1506301468830" FOLDED="true" ID="ID_291609200" MODIFIED="1506723813858" TEXT="L&#xf6;sungen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1506301476836" ID="ID_1339982909" MODIFIED="1506302323712" TEXT="Stackoverflow">
 <icon BUILTIN="idea"/>
 <node CREATED="1506301629128" ID="ID_1265747852" LINK="https://stackoverflow.com/questions/14261183/how-to-make-generic-computations-over-heterogeneous-argument-packs-of-a-variadic" MODIFIED="1506301640408" TEXT="Param-Pack-Library"/>
@@ -3870,7 +3872,32 @@
 <node CREATED="1506301797721" ID="ID_1580459971" MODIFIED="1506301801941" TEXT="generell undurchsichtig"/>
 <node CREATED="1506301802865" ID="ID_1127036077" MODIFIED="1506301816915" TEXT="erfordert hohes Abstraktionsniveau"/>
 </node>
-<node CREATED="1506301834493" ID="ID_52512330" MODIFIED="1506301846055" TEXT="selber schreiben anhand Beispiel"/>
+<node COLOR="#338800" CREATED="1506301834493" ID="ID_52512330" MODIFIED="1506723706338" TEXT="selber schreiben anhand Beispiel">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1506723689710" ID="ID_454128552" MODIFIED="1506723762301" TEXT="Mini-Framework">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1506723694704" ID="ID_649123940" MODIFIED="1506723759877" TEXT="meta::pickArg">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1506723699774" ID="ID_748812841" MODIFIED="1506723757331" TEXT="meta::pickInit">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1506723746120" ID="ID_154958112" MODIFIED="1506723790105" TEXT="unit-test dazu">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      VariadicArgumentPicker_test
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 </node>
 </node>

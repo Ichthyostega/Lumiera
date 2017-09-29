@@ -49,10 +49,12 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/meta/variadic-helper.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
 #include <algorithm>
+#include <utility>
 #include <string>
 #include <memory>
 #include <array>
@@ -61,6 +63,7 @@
 namespace lib {
   
 //  using std::unique_ptr;
+  using std::forward;
   using std::string;
   using lib::Literal;
   using util::unConst;
@@ -88,6 +91,7 @@ namespace lib {
             return reinterpret_cast<size_t&> (p[0]);
           }
         
+        
       public:
         Extension()
           : storage_{nullptr}
@@ -99,7 +103,8 @@ namespace lib {
           : storage_{new const char* [1 + sizeof...(ELMS)]}
           {
             size(storage_) = sizeof...(ELMS);
-            storage_[1] = {elms...};
+            std::initializer_list<const char*> lit{elms...};
+            std::copy (begin(lit),end(lit), storage_+1);
           }
           
        ~Extension()
@@ -161,6 +166,10 @@ namespace lib {
   
   
   
+  using meta::pickArg;
+  using meta::pickInit;
+  using meta::IndexSeq;
+  
   /**
    * Abstraction for path-like topological coordinates.
    * A sequence of Literal strings, with array-like access and
@@ -170,31 +179,59 @@ namespace lib {
   template<size_t chunk_size>
   class PathArray
     {
-      using LiteralArray = std::array<const char*, chunk_size>;
+      using Lit = const char*;
+      using LiteralArray = std::array<Lit, chunk_size>;
       
       LiteralArray elms_;
       con::Extension tail_;
       
+      /**
+       * @internal delegate ctor to place the initialiser arguments appropriately
+       * @remarks the two index sequences passed by pattern match determine which
+       *  arguments go to the inline array, and which go to heap allocated extension.
+       *  The inline array has fixed size an is thus filled with trailing `NULL` ptrs,
+       *  which is achieved with the help of meta::pickInit(). The con::Extension
+       *  is an embedded smart-ptr, which, when receiving additional tail arguments,
+       *  will place and manage them within a heap allocated array.
+       */
+      template<size_t...prefix, size_t...rest, typename...ARGS>
+      PathArray (IndexSeq<prefix...>
+                ,IndexSeq<rest...>
+                ,ARGS&& ...args)
+        : elms_{pickInit<prefix,Lit> (forward<ARGS>(args)...) ...}
+        , tail_{pickArg<rest>        (forward<ARGS>(args)...) ...}
+        {
+          this->normalise();
+        }
+      
+      /**
+       * @internal rebinding helper for building sequences of index numbers,
+       *  to route the initialiser arguments into the corresponding storage
+       *  - the leading (`chunk_size`) arguments go into the LiteralArray inline
+       *  - all the remaining arguments go into heap allocated extension storage
+       */
+      template<typename...ARGS>
+      struct Split
+        {
+          using Prefix = typename meta::BuildIndexSeq<chunk_size>::Ascending;
+          using Rest   = typename meta::BuildIdxIter<ARGS...>::template After<chunk_size>;
+        };
+        
     public:
       template<typename...ARGS>
       explicit
       PathArray (ARGS&& ...args)
-        : elms_{}
-        {
-          UNIMPLEMENTED ("initialise path array components");
-        }
+        : PathArray(typename Split<ARGS...>::Prefix()
+                   ,typename Split<ARGS...>::Rest()
+                   ,forward<ARGS> (args)...)
+        { }
       
-      PathArray (PathArray const& o)
-        : elms_(o.elms_)
-        {
-          UNIMPLEMENTED ("copy construct path array components");
-        }
-      
-      PathArray&
-      operator= (PathArray const& r)
-        {
-          UNIMPLEMENTED ("path array copy assignment");
-        }
+      PathArray(PathArray&&)                  = default;
+      PathArray(PathArray const&)             = default;
+      PathArray(PathArray& o)  : PathArray((PathArray const&)o) { }
+      PathArray& operator= (PathArray const&) = default;
+      PathArray& operator= (PathArray &&)     = default;
+                                               ////////////////////////TICKET #963  Forwarding shadows copy operations
       
       
       size_t
@@ -257,6 +294,12 @@ namespace lib {
       storage_end()  const
         {
           UNIMPLEMENTED ("path implementation storage");
+        }
+      
+      void
+      normalise()
+        {
+          UNIMPLEMENTED ("establish invariant");
         }
     };
   
