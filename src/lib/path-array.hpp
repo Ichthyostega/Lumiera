@@ -155,6 +155,9 @@ namespace lib {
         
         
         
+        operator bool() const { return not empty(); }
+        bool empty()    const { return not storage_;}
+        
         size_t
         size()  const
           {
@@ -179,6 +182,8 @@ namespace lib {
   template<size_t chunk_size>
   class PathArray
     {
+      static_assert (0 < chunk_size, "PathArray chunk_size must be nonempty");
+      
       using Lit = const char*;
       using LiteralArray = std::array<Lit, chunk_size>;
       
@@ -237,7 +242,8 @@ namespace lib {
       size_t
       size()  const
         {
-          UNIMPLEMENTED ("path implementation storage");
+          return tail_? chunk_size + tail_.size()
+                      : findInlineEnd() - elms_.begin();
         }
       
       bool
@@ -290,6 +296,19 @@ namespace lib {
       friend iterator end  (PathArray const& pa) { return pa.end();  }
       
     private:
+      /** find _effective end_ of data in the inline array,
+       *  i.e. the position _behind_ the last usable content
+       */
+      Lit const*
+      findInlineEnd() const
+        {
+          Lit const* lastPos = elms_.begin() + chunk_size-1;
+          Lit const* beforeStart = elms_.begin() - 1;
+          while (lastPos != beforeStart and not *lastPos)
+            --lastPos;
+          return ++lastPos; // at start if empty, else one behind the last
+        }
+      
       Literal*
       storage_end()  const
         {
