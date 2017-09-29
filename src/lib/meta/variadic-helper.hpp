@@ -150,6 +150,9 @@ namespace meta {
     {
       template<size_t i>
       using AppendElm = IndexSeq<idx..., i>;
+      
+      template<size_t i>
+      using PrependElm = IndexSeq<i, idx...>;
     };
   
   /**
@@ -159,10 +162,11 @@ namespace meta {
   template<size_t n>
   struct BuildIndexSeq
     {
-      using Ascending = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
+      using Ascending  = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
+      using Descending = typename BuildIndexSeq<n-1>::Descending::template PrependElm<n-1>;
       
       template<size_t d>
-      using OffsetBy  = typename BuildIndexSeq<n-1>::template OffsetBy<d>::template AppendElm<n-1+d>;
+      using OffsetBy   = typename BuildIndexSeq<n-1>::template OffsetBy<d>::template AppendElm<n-1+d>;
       
       template<size_t x>
       using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<x>::template AppendElm<x>;
@@ -179,10 +183,11 @@ namespace meta {
     {
       using Empty = IndexSeq<>;
       
-      using Ascending = Empty;
+      using Ascending  = Empty;
+      using Descending = Empty;
       
       template<size_t>
-      using OffsetBy  = Empty;
+      using OffsetBy   = Empty;
       
       template<size_t>
       using FilledWith = Empty;
@@ -205,10 +210,11 @@ namespace meta {
       enum {SIZ = sizeof...(TYPES) };
       using Builder = BuildIndexSeq<SIZ>;
       
-      using Ascending = typename Builder::Ascending;
+      using Ascending  = typename Builder::Ascending;
+      using Descending = typename Builder::Descending;
       
       template<size_t d>
-      using OffsetBy = typename Builder::template OffsetBy<d>;
+      using OffsetBy   = typename Builder::template OffsetBy<d>;
       
       template<size_t x>
       using FilledWith = typename Builder::template FilledWith<x>;
@@ -228,10 +234,11 @@ namespace meta {
       enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
       using Builder = BuildIndexSeq<SIZ>;
       
-      using Ascending = typename Builder::Ascending;
+      using Ascending  = typename Builder::Ascending;
+      using Descending = typename Builder::Descending;
       
       template<size_t d>
-      using OffsetBy = typename Builder::template OffsetBy<d>;
+      using OffsetBy   = typename Builder::template OffsetBy<d>;
       
       template<size_t x>
       using FilledWith = typename Builder::template FilledWith<x>;
@@ -242,6 +249,9 @@ namespace meta {
       template<size_t c>
       using After = typename Builder::template After<c>;
     };
+  
+  
+  
   
   
   
@@ -272,6 +282,27 @@ namespace meta {
         get (ARG&& a, ARGS...)
           {
             return std::forward<ARG>(a);
+          }
+      };
+    
+    /**
+     * @internal helper to decide if SelectVararg shall be applied.
+     * When the boolean condition does not hold, then, instead of selecting
+     * from the argument list, an element of type DEFAULT is created as fallback.
+     */
+    template<bool, typename, size_t idx>
+    struct SelectOrInit
+      : SelectVararg<idx>
+      { };
+    
+    template<typename DEFAULT, size_t idx>
+    struct SelectOrInit<false, DEFAULT, idx>
+      {
+        template<typename...ARGS>
+        static DEFAULT
+        get (ARGS&&...)
+          {
+            return DEFAULT{};
           }
       };
   }//(End)Implementation
@@ -305,20 +336,7 @@ namespace meta {
   constexpr inline auto
   pickInit (ARGS&&... args)
     {
-      enum{
-        SIZ = sizeof...(args),
-        IDX = idx < SIZ? idx : 0
-      };
-      
-      return (idx < SIZ)? SelectVararg<IDX>::get (std::forward<ARGS> (args)...)
-                        : DEFAULT{};
-    }
-  
-  template<size_t, typename DEFAULT>
-  constexpr inline DEFAULT
-  pickInit ()
-    {
-      return DEFAULT{};
+      return SelectOrInit<(idx < sizeof...(args)), DEFAULT, idx>::get (std::forward<ARGS> (args)...);
     }
   
   

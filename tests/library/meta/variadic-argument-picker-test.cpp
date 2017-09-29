@@ -185,23 +185,60 @@ namespace test {
 
           // does not compile...
 //        pickArg<3> (n1,n2,n3);
+          
+          N<0> n0;
+          CHECK (n0 != pickArg<0> (N<0>{}));
+          CHECK (n0 == pickArg<0> (N<0>{n0}));
         }
       
       
       void
       check_pickInit ()
         {
-          UNIMPLEMENTED ("pick or init");
+          N<1> n1;
+          N<2> n2;
+          using N0 = N<0>;
+          
+          CHECK (1 == (pickInit<0,int> (1,2) ));
+          CHECK (2 == (pickInit<1,int> (1,2) ));
+          CHECK (0 == (pickInit<2,int> (1,2) ));
+          
+          CHECK (n1 == (pickInit<0,N0> (n1,n2) ));
+          CHECK (n2 == (pickInit<1,N0> (n1,n2) ));
+          N0 n0      =  pickInit<3,N0> (n1,n2);
+          CHECK (n0 != (pickInit<3,N0> (n1,n2) ));  // same type (N<0>) but different new instance
+          
+          CHECK ("N<0>" == typeStr(pickInit<2,N0> (n1,n2)));
+          CHECK ("N<0>" == typeStr(pickInit<2,N0> (1,"2")));
+          CHECK ("N<0>" == typeStr(pickInit<2,N0> ()));
         }
       
+      
+      template<class...ARGS, size_t...idx>
+      static auto
+      call_with_reversed_arguments (IndexSeq<idx...>, ARGS&& ...args)
+        {
+          return fun (pickArg<idx> (forward<ARGS>(args)...) ...);
+        }
       
       void
       check_reorderedArguments ()
         {
-          UNIMPLEMENTED ("reorder arguments of function call");
+          N<0> n0;
+          N<1> n1;
+          N<2> n2;
+          N<3> n3;
+          
+          cout << fun (n0,n1,n2,n3) << endl;
+          
+          using Backwards = typename BuildIndexSeq<4>::Descending;
+          using Back2     = typename BuildIndexSeq<2>::Descending;
+          using After2    = typename BuildIndexSeq<4>::After<2>;
+          
+          cout << call_with_reversed_arguments (Backwards(), n0,n1,n2,n3);
+          cout << call_with_reversed_arguments (Back2()    , n0,n1,n2,n3);
+          cout << call_with_reversed_arguments (After2()   , n0,n1,n2,n3);
         }
-      
-      
     };
   
   
