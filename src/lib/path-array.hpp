@@ -49,8 +49,10 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
+#include <algorithm>
 #include <string>
 #include <memory>
 #include <array>
@@ -61,8 +63,9 @@ namespace lib {
 //  using std::unique_ptr;
   using std::string;
   using lib::Literal;
+  using util::unConst;
   
-  namespace { // Implementation helper: flexible heap based extension storage....
+  namespace con { // Implementation helper: flexible heap based extension storage....
     
     /**
      * Heap-allocated extension storage for an immutable sequence of literal strings.
@@ -98,10 +101,60 @@ namespace lib {
             size(storage_) = sizeof...(ELMS);
             storage_[1] = {elms...};
           }
+          
        ~Extension()
           {
             if (storage_)
               delete[] storage_;
+          }
+        
+        Extension (Extension const& r)
+          : storage_{r.storage_? new const char* [1 + r.size()] : nullptr}
+          {
+            if (r.storage_)
+              std::copy (r.storage_, r.storage_+(1+r.size()), this->storage_);
+          }
+        
+        Extension (Extension&& rr)
+          : storage_{nullptr}
+          {
+            if (rr.storage_)
+              std::swap (storage_, rr.storage_);
+          }
+        
+        Extension& operator= (Extension const& o)
+          {
+            if (this != &o)
+              {
+                std::unique_ptr<const char*[]> cp;
+                if (o.storage_)
+                  {
+                    cp.reset (new const char* [1 + o.size()]);
+                    std::copy (o.storage_, o.storage_+(1+o.size()), cp.get());
+                  }
+                if (storage_)
+                  delete[] storage_;
+                storage_ = cp.release();
+              }
+            return *this;
+          }
+        
+        Extension& operator= (Extension&& rr)
+          {
+            if (this != &rr)
+              {
+                std::swap (storage_, rr.storage_);
+              }
+            return *this;
+          }
+        
+        
+        
+        size_t
+        size()  const
+          {
+            return storage_? size(unConst(this)->storage_)
+                           : 0;
           }
       };
   }//(End)Implementation helper
@@ -117,10 +170,10 @@ namespace lib {
   template<size_t chunk_size>
   class PathArray
     {
-      using LitArray = std::array<const char*, chunk_size>;
+      using LiteralArray = std::array<const char*, chunk_size>;
       
-      LitArray elms_;
-      Extension tail_;
+      LiteralArray elms_;
+      con::Extension tail_;
       
     public:
       template<typename...ARGS>
