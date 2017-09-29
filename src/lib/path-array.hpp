@@ -62,9 +62,48 @@ namespace lib {
   using std::string;
   using lib::Literal;
   
-//  class GlobalCtx;
-  namespace { // Implementation helper: variadic init
+  namespace { // Implementation helper: flexible heap based extension storage....
     
+    /**
+     * Heap-allocated extension storage for an immutable sequence of literal strings.
+     * The size of the allocation is determined and fixed once, at construction time,
+     * derived from the number of initialisers. The first slot within the allocation
+     * stores this length. Extension can be _empty_ (default constructed),
+     * in which case no heap allocation is performed.
+     */
+    class Extension
+      {
+        using PStorage = const char**;
+        
+        PStorage storage_;
+        
+        
+        static size_t&
+        size (PStorage& p)
+          {
+            REQUIRE (p);
+            return reinterpret_cast<size_t&> (p[0]);
+          }
+        
+      public:
+        Extension()
+          : storage_{nullptr}
+          { }
+        
+        template<typename...ELMS>
+        explicit
+        Extension (ELMS ...elms)
+          : storage_{new const char* [1 + sizeof...(ELMS)]}
+          {
+            size(storage_) = sizeof...(ELMS);
+            storage_[1] = {elms...};
+          }
+       ~Extension()
+          {
+            if (storage_)
+              delete[] storage_;
+          }
+      };
   }//(End)Implementation helper
   
   
@@ -78,8 +117,10 @@ namespace lib {
   template<size_t chunk_size>
   class PathArray
     {
-      std::array<const char*, chunk_size> elms_;
-      std::unique_ptr<PathArray> tail_;
+      using LitArray = std::array<const char*, chunk_size>;
+      
+      LitArray elms_;
+      Extension tail_;
       
     public:
       template<typename...ARGS>
