@@ -179,6 +179,15 @@ namespace lib {
             REQUIRE (storage_ and idx < size());
             return storage_[1+idx];
           }
+        
+        
+        bool
+        isValid (Literal const* pos)  const
+          {
+            return storage_
+               and storage_ < pos
+               and pos < storage_ + (1 + size (unConst(this)->storage_));
+          }
       };
   }//(End)Implementation helper
   
@@ -292,31 +301,36 @@ namespace lib {
       
       /** Implementation of Iteration-logic: pull next element. */
       friend void
-      iterNext (const PathArray* src, Literal* pos)
-        {
-          ++pos;
-          checkPoint (src,pos);
-        }
+      iterNext (const PathArray* src, const Literal*& pos)
+      {
+        ++pos;
+        checkPoint (src,pos);
+      }
       
       /** Implementation of Iteration-logic: detect iteration end. */
       friend bool
-      checkPoint (const PathArray* src, Literal* pos)
-        {
-          REQUIRE (src);
-          if ((pos != nullptr) && (pos != src->storage_end()))
-            return true;
-          else
-            {
-              pos = nullptr;
-              return false;
-        }   }
+      checkPoint (const PathArray* src, const Literal*& pos)
+      {
+        REQUIRE (src);
+        if (pos >= src->elms_.end() and src->tail_)
+          pos = &src->tail_[0];
+        else
+        if (not src->isValid (pos))
+          {
+            pos = nullptr;
+            return false;
+          }
+        ENSURE (  (src->elms_.begin() <= pos and pos < src->elms_.end())
+                or src->tail_.isValid(pos));
+        return true;
+      }
       
     public:
-      using iterator = lib::IterAdapter<Literal*, PathArray*>;
-      using const_iterator = iterator;
+      using const_iterator = lib::IterAdapter<Literal const*, PathArray const*>;
+      using iterator = const_iterator;
       
-      iterator begin()  const { UNIMPLEMENTED ("content iteration"); }
-      iterator end()    const { UNIMPLEMENTED ("content iteration"); }
+      iterator begin()  const { return iterator{this, elms_.begin()}; }
+      iterator end()    const { return iterator{}; }
       
       friend iterator begin(PathArray const& pa) { return pa.begin();}
       friend iterator end  (PathArray const& pa) { return pa.end();  }
@@ -335,10 +349,12 @@ namespace lib {
           return ++lastPos; // at start if empty, else one behind the last
         }
       
-      Literal const*
-      storage_end()  const
+      bool
+      isValid (Literal const* pos)  const
         {
-          UNIMPLEMENTED ("path implementation storage");
+          return pos
+             and (tail_.isValid(pos)
+                  or (pos < elms_.end() and *pos));
         }
       
       void
