@@ -122,7 +122,7 @@ namespace test {
           CHECK ("Ψ/Φ/Ω" == uic.getPath());
           
           // new value can be assigned, but not altered in place
-          uic = UICoord{nullptr,nullptr,"Θ",nullptr,nullptr,nullptr,"Φ"};
+          uic = UICoord{nullptr,nullptr,"Θ",nullptr,"Σ",nullptr,"Φ"};
           CHECK (7 == uic.size());
           
           // representation is trimmed and filled
@@ -131,7 +131,7 @@ namespace test {
           CHECK (Symbol::EMPTY == uic[UIC_PERSP]);
           CHECK ("Θ" == uic[UIC_PANEL]);
           CHECK ("*" == uic[UIC_VIEW]);
-          CHECK ("*" == uic[UIC_TAB]);
+          CHECK ("Σ" == uic[UIC_TAB]);
           CHECK ("*" == uic[UIC_PART]);
           CHECK ("Φ" == uic[UIC_PART+1]);
           VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PART+2]);

@@ -69,6 +69,7 @@ namespace lib {
   using std::string;
   using lib::Literal;
   using util::unConst;
+  using util::isnil;
   
   namespace con { // Implementation helper: flexible heap based extension storage....
     
@@ -188,6 +189,21 @@ namespace lib {
                and storage_ < pos
                and pos < storage_ + (1 + size (unConst(this)->storage_));
           }
+        
+        void
+        trimTo (size_t cnt)
+          {
+            REQUIRE (cnt <= size());
+            if (cnt == 0 and storage_)
+              {
+                delete[] storage_;
+                storage_ = nullptr;
+              }
+            else
+              size(storage_) = cnt;
+              // excess elements now unreachable
+              // note: delete[] knows original size
+          }
       };
   }//(End)Implementation helper
   
@@ -282,13 +298,7 @@ namespace lib {
       Literal const&
       operator[] (size_t idx)  const
         {
-          Literal const* elm =nullptr;
-          if (idx < chunk_size)
-            elm = &elms_[idx];
-          else
-          if (idx-chunk_size < tail_.size())
-            elm = &tail_[idx-chunk_size];
-          
+          Literal* elm = unConst(this)->getPosition (idx);
           if (not elm)
             throw error::Invalid ("Accessing index "+util::toString(idx)
                                  +" on PathArray of size "+ util::toString(size())
@@ -335,7 +345,17 @@ namespace lib {
       friend iterator begin(PathArray const& pa) { return pa.begin();}
       friend iterator end  (PathArray const& pa) { return pa.end();  }
       
-    private:
+      
+    private: /* ===== implementation details ===== */
+      
+      bool
+      isValid (Literal const* pos)  const
+        {
+          return pos
+             and (tail_.isValid(pos)
+                  or (pos < elms_.end() and *pos));
+        }
+      
       /** find _effective end_ of data in the inline array,
        *  i.e. the position _behind_ the last usable content
        */
@@ -349,20 +369,72 @@ namespace lib {
           return ++lastPos; // at start if empty, else one behind the last
         }
       
-      bool
-      isValid (Literal const* pos)  const
+      /**
+       * @internal access content element by index
+       * @return pointer to storage, `null` if out of bounds
+       */
+      Literal*
+      getPosition (size_t idx)
         {
-          return pos
-             and (tail_.isValid(pos)
-                  or (pos < elms_.end() and *pos));
+          Literal const* elm =nullptr;
+          if (idx < chunk_size)
+            elm = &elms_[idx];
+          else
+          if (idx-chunk_size < tail_.size())
+            elm = &tail_[idx-chunk_size];
+          
+          return const_cast<Literal*> (elm);
         }
       
+      /** @internal force new content into the given entry */
+      void
+      setContent (Literal* pos, const char* val)
+        {
+          REQUIRE (pos);
+          *reinterpret_cast<const char**> (pos) = val;
+        }
+      
+      /**
+       * establish the _contract_ of PathArray
+       * - no null pointer within the valid storage range
+       * - storage is precisely trimmed at the end
+       * - missing leading elements are filled with Symbol::EMPTY
+       * - missing inner elements are interpolated as "*"
+       */
       void
       normalise()
         {
-          UNIMPLEMENTED ("establish invariant");
+          static Symbol ANY("*");
+          const char* fill = Symbol::EMPTY;
+          
+          Literal* end = elms_.end();
+          Literal* seg = elms_.begin();
+          for (Literal* pos = elms_.begin(); pos!=end; ++pos)
+            if (isnil (*pos))
+              setContent (pos, fill);
+            else
+              if (fill==Symbol::EMPTY)
+                fill = ANY;
+          if (not tail_) return;
+          seg = const_cast<Literal*> (&tail_[0]);
+          end = seg + tail_.size();
+          for (Literal* pos = seg; pos!=end; ++pos)
+            if (isnil (*pos))
+              setContent (pos, fill);
+            else
+              if (fill==Symbol::EMPTY)
+                fill = ANY;
+          
+          size_t idx = size();
+          while (idx and ANY == (*this)[--idx])
+            setContent (getPosition(idx), nullptr);
+          
+          if (idx >= chunk_size-1)
+            tail_.trimTo (idx - chunk_size);
         }
     };
+  
+  
   
   
   template<size_t chunk_size>
@@ -373,7 +445,7 @@ namespace lib {
     
     string buff;
     size_t expectedLen = this->size() * 10;
-    buff.reserve (expectedLen);
+    buff.reserve (expectedLen); // heuristic
     for (Literal elm : *this)
       buff += elm + "/";
     
