@@ -270,21 +270,21 @@ namespace lib {
       operator string()  const;
       
       
-      Literal
-      operator[] (size_t idx)
+      Literal const&
+      operator[] (size_t idx)  const
         {
-          const char* elm =nullptr;
+          Literal const* elm =nullptr;
           if (idx < chunk_size)
-            elm = elms_[idx];
+            elm = &elms_[idx];
           else
           if (idx-chunk_size < tail_.size())
-            elm = tail_[idx-chunk_size];
+            elm = &tail_[idx-chunk_size];
           
           if (not elm)
             throw error::Invalid ("Accessing index "+util::toString(idx)
                                  +" on PathArray of size "+ util::toString(size())
                                  ,error::LUMIERA_ERROR_INDEX_BOUNDS);
-          return elm;
+          return *elm;
         }
       
       
