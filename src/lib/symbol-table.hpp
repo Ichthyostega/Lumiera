@@ -25,8 +25,8 @@
  ** The implementation of the lib::Symbol token relies on unique string pointers,
  ** such as to create one distinct identity for each distinct "symbol string". The idea
  ** is to generate unique and distinct numeric token IDs, while still holding onto a human readable
- ** string. Which in turn requires us to manage a registry of already known symbol strings; when
- ** a Symbol object with such an already known string is created, it will thus connect internally
+ ** string. Which in turn requires us to manage a registry of already known symbol strings; when a
+ ** Symbol object with such an already known string is created, it will thus connect internally
  ** to the known token ID.
  ** 
  ** @todo as of this writing (4/2017), it is neither clear if we really need such a facility, nor
