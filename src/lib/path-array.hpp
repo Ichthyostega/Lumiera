@@ -93,8 +93,27 @@ namespace lib {
             return reinterpret_cast<size_t&> (p[0]);
           }
         
+        /** allocate a copy.
+         * @note caller has to manage the allocated memory
+         * @warning call to Literal's ctor deliberately elided
+         */
+        PStorage
+        newCopy()  const
+          {
+            size_t siz = size (unConst(this)->storage_);
+            const char** alloc = new const char*[siz];
+            std::copy (storage_, storage_+siz, alloc);
+            return reinterpret_cast<PStorage> (alloc);
+          }
+        
         
       public:
+       ~Extension()
+          {
+            if (storage_)
+              delete[] storage_;
+          }
+        
         Extension()
           : storage_{nullptr}
           { }
@@ -107,19 +126,10 @@ namespace lib {
             size(storage_) = sizeof...(ELMS);
             new(storage_+1) Literal[sizeof...(ELMS)] {forward<ELMS>(elms)...};
           }
-          
-       ~Extension()
-          {
-            if (storage_)
-              delete[] storage_;
-          }
         
         Extension (Extension const& r)
-          : storage_{r.storage_? new Literal[1 + r.size()] : nullptr}
-          {
-            if (r.storage_)
-              std::copy (r.storage_, r.storage_+(1+r.size()), this->storage_);
-          }
+          : storage_{r.storage_? r.newCopy() : nullptr}
+          { }
         
         Extension (Extension&& rr)
           : storage_{nullptr}
@@ -134,10 +144,7 @@ namespace lib {
               {
                 std::unique_ptr<Literal[]> cp;
                 if (o.storage_)
-                  {
-                    cp.reset (new Literal[1 + o.size()]);
-                    std::copy (o.storage_, o.storage_+(1+o.size()), cp.get());
-                  }
+                  cp.reset (o.newCopy());
                 if (storage_)
                   delete[] storage_;
                 storage_ = cp.release();
