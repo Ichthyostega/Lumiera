@@ -81,7 +81,7 @@ namespace lib {
      */
     class Extension
       {
-        using PStorage = const char**;
+        using PStorage = Literal*;
         
         PStorage storage_;
         
@@ -101,12 +101,11 @@ namespace lib {
         
         template<typename...ELMS>
         explicit
-        Extension (ELMS ...elms)
-          : storage_{new const char* [1 + sizeof...(ELMS)]}
+        Extension (ELMS&& ...elms)
+          : storage_{new Literal[1 + sizeof...(ELMS)]}
           {
             size(storage_) = sizeof...(ELMS);
-            std::initializer_list<const char*> lit{elms...};
-            std::copy (begin(lit),end(lit), storage_+1);
+            new(storage_+1) Literal[sizeof...(ELMS)] {forward<ELMS>(elms)...};
           }
           
        ~Extension()
@@ -116,7 +115,7 @@ namespace lib {
           }
         
         Extension (Extension const& r)
-          : storage_{r.storage_? new const char* [1 + r.size()] : nullptr}
+          : storage_{r.storage_? new Literal[1 + r.size()] : nullptr}
           {
             if (r.storage_)
               std::copy (r.storage_, r.storage_+(1+r.size()), this->storage_);
@@ -133,10 +132,10 @@ namespace lib {
           {
             if (this != &o)
               {
-                std::unique_ptr<const char*[]> cp;
+                std::unique_ptr<Literal[]> cp;
                 if (o.storage_)
                   {
-                    cp.reset (new const char* [1 + o.size()]);
+                    cp.reset (new Literal[1 + o.size()]);
                     std::copy (o.storage_, o.storage_+(1+o.size()), cp.get());
                   }
                 if (storage_)
@@ -167,7 +166,7 @@ namespace lib {
                            : 0;
           }
         
-        const char*
+        Literal const&
         operator[] (size_t idx)  const
           {
             REQUIRE (storage_ and idx < size());
@@ -192,9 +191,9 @@ namespace lib {
   class PathArray
     {
       static_assert (0 < chunk_size, "PathArray chunk_size must be nonempty");
-      
-      using Lit = const char*;
-      using LiteralArray = std::array<Lit, chunk_size>;
+
+      using CcP          = const char*;
+      using LiteralArray = std::array<Literal, chunk_size>;
       
       LiteralArray elms_;
       con::Extension tail_;
@@ -212,7 +211,7 @@ namespace lib {
       PathArray (IndexSeq<prefix...>
                 ,IndexSeq<rest...>
                 ,ARGS&& ...args)
-        : elms_{pickInit<prefix,Lit> (forward<ARGS>(args)...) ...}
+        : elms_{pickInit<prefix,CcP> (forward<ARGS>(args)...) ...}
         , tail_{pickArg<rest>        (forward<ARGS>(args)...) ...}
         {
           this->normalise();
@@ -258,7 +257,7 @@ namespace lib {
       bool
       empty()  const
         {
-          return not elms_[0]; // normalise() ensures this holds only for empty paths
+          return not elms_[0]; // normalise() ensures nonnull unless completely empty
         }
       
       operator string()  const;
@@ -267,7 +266,7 @@ namespace lib {
       Literal
       operator[] (size_t idx)
         {
-          Lit elm{0};
+          const char* elm =nullptr;
           if (idx < chunk_size)
             elm = elms_[idx];
           else
@@ -319,17 +318,17 @@ namespace lib {
       /** find _effective end_ of data in the inline array,
        *  i.e. the position _behind_ the last usable content
        */
-      Lit const*
+      Literal const*
       findInlineEnd() const
         {
-          Lit const* lastPos = elms_.begin() + chunk_size-1;
-          Lit const* beforeStart = elms_.begin() - 1;
+          Literal const* lastPos = elms_.begin() + chunk_size-1;
+          Literal const* beforeStart = elms_.begin() - 1;
           while (lastPos != beforeStart and not *lastPos)
             --lastPos;
           return ++lastPos; // at start if empty, else one behind the last
         }
       
-      Literal*
+      Literal const*
       storage_end()  const
         {
           UNIMPLEMENTED ("path implementation storage");
