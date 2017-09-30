@@ -93,6 +93,7 @@ namespace lib {
     : public Literal
     {
     public:
+      static Symbol EMPTY;
       static Symbol BOTTOM;
       static Symbol FAILURE;
       

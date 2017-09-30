@@ -82,6 +82,7 @@ namespace lib {
   
   
   /* == predefined marker Symbols == */
+  Symbol Symbol::EMPTY   = "";
   Symbol Symbol::BOTTOM  = "⟂";
   Symbol Symbol::FAILURE = "↯";
   

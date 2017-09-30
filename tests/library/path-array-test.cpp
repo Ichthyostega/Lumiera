@@ -41,6 +41,7 @@ using std::string;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
 //using util::isSameObject;
+using lib::Symbol;
 using util::isnil;
 using util::join;
 
@@ -111,8 +112,8 @@ namespace test {
           
           // representation is trimmed and filled
           CHECK ("Θ/*/*/*/Φ" == string(parr));
-          CHECK (NULL == parr[0]);
-          CHECK (NULL == parr[1]);
+          CHECK (Symbol::EMPTY == parr[0]);
+          CHECK (Symbol::EMPTY == parr[1]);
           CHECK ("Θ" ==  parr[2]);
           CHECK ("*" ==  parr[3]);
           CHECK ("*" ==  parr[4]);
@@ -158,8 +159,10 @@ namespace test {
           
           // index numbering starts at absolute root
           CHECK ("Ω" == *parr.begin());
-          CHECK (nullptr == parr[0]);
-          CHECK ("Ω"     == parr[15]);
+          CHECK (Symbol::EMPTY == parr[0]);
+          CHECK (Symbol::EMPTY == parr[1]);
+          CHECK (Symbol::EMPTY == parr[2]);
+          CHECK ("Ω"           == parr[15]);
           VERIFY_ERROR (INDEX_BOUNDS, parr[16]);
         }
       

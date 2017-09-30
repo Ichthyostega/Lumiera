@@ -41,6 +41,7 @@ using std::string;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
 //using util::isSameObject;
+using lib::Symbol;
 using util::isnil;
 using util::join;
 
@@ -126,8 +127,8 @@ namespace test {
           
           // representation is trimmed and filled
           CHECK ("UI:Θ.*.*/*/Φ" == string(uic));
-          CHECK (NULL == uic[UIC_WINDOW]);
-          CHECK (NULL == uic[UIC_PERSP]);
+          CHECK (Symbol::EMPTY == uic[UIC_WINDOW]);
+          CHECK (Symbol::EMPTY == uic[UIC_PERSP]);
           CHECK ("Θ" == uic[UIC_PANEL]);
           CHECK ("*" == uic[UIC_VIEW]);
           CHECK ("*" == uic[UIC_TAB]);

@@ -50,6 +50,7 @@
 #include "lib/symbol.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/meta/variadic-helper.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
@@ -61,6 +62,7 @@
 
 
 namespace lib {
+  namespace error = lumiera::error;
   
 //  using std::unique_ptr;
   using std::forward;
@@ -164,6 +166,13 @@ namespace lib {
             return storage_? size(unConst(this)->storage_)
                            : 0;
           }
+        
+        const char*
+        operator[] (size_t idx)  const
+          {
+            REQUIRE (storage_ and idx < size());
+            return storage_[1+idx];
+          }
       };
   }//(End)Implementation helper
   
@@ -249,7 +258,7 @@ namespace lib {
       bool
       empty()  const
         {
-          UNIMPLEMENTED ("path implementation storage");
+          return not elms_[0]; // normalise() ensures this holds only for empty paths
         }
       
       operator string()  const;
@@ -258,7 +267,18 @@ namespace lib {
       Literal
       operator[] (size_t idx)
         {
-          UNIMPLEMENTED ("path implementation storage");
+          Lit elm{0};
+          if (idx < chunk_size)
+            elm = elms_[idx];
+          else
+          if (idx-chunk_size < tail_.size())
+            elm = tail_[idx-chunk_size];
+          
+          if (not elm)
+            throw error::Invalid ("Accessing index "+util::toString(idx)
+                                 +" on PathArray of size "+ util::toString(size())
+                                 ,error::LUMIERA_ERROR_INDEX_BOUNDS);
+          return elm;
         }
       
       
