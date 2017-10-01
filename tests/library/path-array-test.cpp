@@ -45,7 +45,7 @@ namespace lib  {
 namespace test {
   
   using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
-  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   using ParrT = lib::PathArray<5>;
   
@@ -158,6 +158,21 @@ namespace test {
           CHECK (Symbol::EMPTY == parr[2]);
           CHECK ("Ω"           == parr[15]);
           VERIFY_ERROR (INDEX_BOUNDS, parr[16]);
+          
+          // but iteration starts with actual content
+          parr = ParrT{nullptr,nullptr,"Θ","Ξ","Σ","Ψ","Φ","Ω"};
+          CHECK ("Θ" == *parr.begin());
+          CHECK ( 2  == parr.indexOf (*parr.begin()));
+          CHECK ("Θ" == parr[2]);
+          
+          parr = ParrT{nullptr,nullptr,nullptr,nullptr,"Σ","Ψ","Φ","Ω"};
+          CHECK ("Σ" == *parr.begin());
+          CHECK ( 5  == parr.indexOf (*parr.begin()));
+          CHECK ( 6  == parr.indexOf (*++parr.begin()));
+          CHECK ( 7  == parr.indexOf (*++++parr.begin()));
+          
+          Literal some{"muck"};
+          VERIFY_ERROR (INVALID, parr.indexOf (some));
         }
       
       

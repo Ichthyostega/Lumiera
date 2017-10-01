@@ -137,6 +137,17 @@ namespace interact {
           UNIMPLEMENTED ("augment UI coordinates to indicate a tab specified by index number");
         }
       
+      /**
+       * convenience builder function so set a full path definition
+       * @note the given path string will be split at `'/'` and the
+       *       resulting components will be stored/retrieved as Symbol
+       */
+      UICoord
+      path (string pathDefinition)  const
+        {
+          UNIMPLEMENTED ("augment UI coordinates to append a full local path");
+        }
+      
       UICoord
       append (Literal elmID)  const
         {

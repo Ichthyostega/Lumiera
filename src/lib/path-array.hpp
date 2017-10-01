@@ -318,6 +318,17 @@ namespace lib {
           return *elm;
         }
       
+      /** reverse lookup of actual path content
+       * @param content reference to actual content _residing within the path_
+       * @return index position of the content within the path
+       * @throws error::Invalid when the given storage location
+       *         is outside the data content storage of this path
+       */
+      size_t
+      indexOf (Literal const& content)  const
+        {
+          UNIMPLEMENTED ("reverse lookup");
+        }
       
       
     protected:  /* ==== Iteration control API for IterAdapter ==== */
