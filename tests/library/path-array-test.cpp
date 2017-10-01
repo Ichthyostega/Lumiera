@@ -167,9 +167,9 @@ namespace test {
           
           parr = ParrT{nullptr,nullptr,nullptr,nullptr,"Σ","Ψ","Φ","Ω"};
           CHECK ("Σ" == *parr.begin());
-          CHECK ( 5  == parr.indexOf (*parr.begin()));
-          CHECK ( 6  == parr.indexOf (*++parr.begin()));
-          CHECK ( 7  == parr.indexOf (*++++parr.begin()));
+          CHECK ( 4  == parr.indexOf (*parr.begin()));
+          CHECK ( 5  == parr.indexOf (*++parr.begin()));
+          CHECK ( 6  == parr.indexOf (*++++parr.begin()));
           
           Literal some{"muck"};
           VERIFY_ERROR (INVALID, parr.indexOf (some));

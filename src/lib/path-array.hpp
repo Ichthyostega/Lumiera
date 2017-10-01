@@ -181,6 +181,13 @@ namespace lib {
             return storage_[1+idx];
           }
         
+        size_t
+        indexOf (Literal const* pos)  const
+          {
+            REQUIRE (isValid (pos));
+            return pos - (storage_+1);
+          }
+        
         
         bool
         isValid (Literal const* pos)  const
@@ -327,7 +334,14 @@ namespace lib {
       size_t
       indexOf (Literal const& content)  const
         {
-          UNIMPLEMENTED ("reverse lookup");
+          if (elms_.begin() <= &content and &content < elms_.end())
+            return &content - elms_.begin();
+          if (tail_.isValid (&content))
+            return chunk_size + tail_.indexOf (&content);
+          
+          throw error::Invalid ("Referred content "+util::toString(&content)
+                               +" is not located within the storage of PathArray "
+                               +string(*this));
         }
       
       
