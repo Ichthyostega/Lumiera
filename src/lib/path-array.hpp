@@ -419,6 +419,7 @@ namespace lib {
           return ++lastPos; // at start if empty, else one behind the last
         }
       
+    protected:
       /**
        * @internal access content element by index
        * @return pointer to storage, `null` if out of bounds

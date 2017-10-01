@@ -54,6 +54,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/path-array.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
 #include <string>
@@ -66,6 +67,9 @@ namespace interact {
 //  using std::unique_ptr;
   using std::string;
   using lib::Literal;
+  using util::unConst;
+  using util::isnil;
+  using util::min;
   
   enum {
     UIC_INLINE_SIZE = 8
@@ -198,19 +202,86 @@ namespace interact {
       
       operator string()  const
         {
-          UNIMPLEMENTED ("string representation of UI coordinates");
+          if (isnil (*this))
+            return "UI:?";
+          
+          string component = getComp();
+          string path = getPath();
+          
+          if (isnil (component))
+            return "UI:?/" + path;
+          
+          if (isnil (path))
+            return "UI:" + component;
+          else
+            return "UI:" + component + "/" + path;
         }
       
       string
       getComp()  const
         {
-          UNIMPLEMENTED ("string representation of UI coordinates: component section");
+          if (empty()) return "";
+          
+          size_t end = min (size(), UIC_PART);
+          size_t pos = indexOf(*begin());
+          
+          if (pos >= end)
+            return ""; // empty or path information only
+          
+          string buff;
+          buff.reserve(80);
+          
+          if (0 < pos) // incomplete UI-Coordinates (not anchored)
+            buff += "?";
+          
+          for ( ; pos<end; ++pos)
+            switch (pos) {
+              case UIC_WINDOW:
+                buff += getWindow();
+                break;
+              case UIC_PERSP:
+                buff += "["+getWindow()+"]";
+                break;
+              case UIC_PANEL:
+                buff += "-"+getPanel();
+                break;
+              case UIC_VIEW:
+                buff += "."+getView();
+                break;
+              case UIC_TAB:
+                buff += "."+getTab();
+                break;
+              default:
+                NOTREACHED ("component index numbering broken");
+            }
+          return buff;
         }
       
       string
       getPath()  const
         {
-          UNIMPLEMENTED ("string representation of UI coordinates: path extension");
+          size_t siz = size();
+          if (siz <= UIC_PART)
+            return "";   // no path information
+          
+          string buff; // heuristic pre-allocation
+          buff.reserve (10 * (siz - UIC_PART));
+          
+          iterator elm{this, unConst(this)->getPosition(UIC_PART)};
+          if (isnil (*elm))
+            { // irregular case : only a path fragment
+              elm = this->begin();
+              buff += "?/";
+            }
+          
+          for ( ; elm; ++elm)
+            buff += *elm + "/";
+          
+          // chop off last delimiter
+          size_t len = buff.length();
+          ASSERT (len >= 1);
+          buff.resize(len-1);
+          return buff;
         }
       
       
