@@ -423,15 +423,13 @@ namespace lib {
       /**
        * @internal access content element by index
        * @return pointer to storage, `null` if out of bounds
-       * @warning in case of size() < chunk_size the pointed-to storage
-       *          might hold an invalid (NULL) Literal.
        */
       Literal*
       getPosition (size_t idx)
         {
           Literal const* elm =nullptr;
           if (idx < chunk_size)
-            elm = &elms_[idx];
+            elm = elms_[idx]? &elms_[idx] : nullptr;
           else
           if (idx-chunk_size < tail_.size())
             elm = &tail_[idx-chunk_size];

@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "gui/interact/ui-coord.hpp"
-#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"/////////////////////////TODO RLY?
 #include "lib/format-util.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
@@ -127,7 +127,7 @@ namespace test {
           CHECK (7 == uic.size());
           
           // representation is trimmed and filled
-          CHECK ("UI:Θ.*.Σ/*/Φ" == string(uic));
+          CHECK ("UI:?-Θ.*.Σ/*/Φ" == string(uic));
           CHECK (Symbol::EMPTY == uic[UIC_WINDOW]);
           CHECK (Symbol::EMPTY == uic[UIC_PERSP]);
           CHECK ("Θ" == uic[UIC_PANEL]);
@@ -142,7 +142,7 @@ namespace test {
       void
       verify_builder()
         {
-          UICoord uic1 = UICoord().window("window");
+          UICoord uic1 = UICoord::window("window");
           UICoord uic2 = uic2.view("view");
           CHECK ("UI:window" == string(uic1));
           CHECK ("UI:window[*]-*.view" == string(uic2));

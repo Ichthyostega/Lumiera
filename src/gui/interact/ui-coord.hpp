@@ -218,7 +218,7 @@ namespace interact {
                 buff += getWindow();
                 break;
               case UIC_PERSP:
-                buff += "["+getWindow()+"]";
+                buff += "["+getPersp()+"]";
                 break;
               case UIC_PANEL:
                 buff += "-"+getPanel();
@@ -267,8 +267,8 @@ namespace interact {
       Literal
       accesComponent (UIPathElm idx)  const
         {
-          Literal* elm = unConst(this)->getPosition(UIC_WINDOW);
-          return (elm and *elm)? *elm : Symbol::EMPTY;
+          Literal* elm = unConst(this)->getPosition(idx);
+          return elm? *elm : Symbol::EMPTY;
         }
       
       
