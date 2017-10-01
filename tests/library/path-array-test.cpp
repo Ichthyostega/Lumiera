@@ -28,19 +28,13 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/path-array.hpp"
-//#include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 
 
 using std::string;
-//using lib::idi::EntryID;
-//using lib::diff::GenNode;
-//using util::isSameObject;
 using lib::Symbol;
 using util::isnil;
 using util::join;
@@ -50,13 +44,8 @@ using util::join;
 namespace lib  {
 namespace test {
   
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
   using lumiera::error::LUMIERA_ERROR_LOGIC;
-  
-  namespace { //Test fixture...
-    
-  }//(End)Test fixture
   
   using ParrT = lib::PathArray<5>;
   
@@ -77,6 +66,7 @@ namespace test {
         {
           verify_basics();
           verify_iteration();
+          verify_boundaries();
           verify_comparisons();
         }
       
@@ -168,6 +158,260 @@ namespace test {
           CHECK (Symbol::EMPTY == parr[2]);
           CHECK ("Ω"           == parr[15]);
           VERIFY_ERROR (INDEX_BOUNDS, parr[16]);
+        }
+      
+      
+      /** @test cover some tricky corner cases of
+       *   the bound checks and normalisation routine.
+       * @remark the container used for this test has an
+       *   inline chunk size of 5, which means any further
+       *   elements are in heap allocated extension storage.
+       *   Normalisation seamlessly surpasses that boundary.
+       */
+      void
+      verify_boundaries()
+        {
+          ParrT parr;
+          CHECK ("" == join(parr));
+          CHECK (0 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
+          CHECK ("ΓΔΘΞΣΨΦΩ" == join(parr,""));
+          CHECK (8 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ",""};
+          CHECK ("ΓΔΘΞΣΨΦ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ",nullptr};
+          CHECK ("ΓΔΘΞΣΨΦ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ","Ψ",nullptr,""};
+          CHECK ("ΓΔΘΞΣΨ" == join(parr,""));
+          CHECK (6 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ","",nullptr,""};
+          CHECK ("ΓΔΘΞΣ" == join(parr,""));
+          CHECK (5 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ",nullptr,"",nullptr};
+          CHECK ("ΓΔΘΞΣ" == join(parr,""));
+          CHECK (5 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ",nullptr,nullptr,nullptr};
+          CHECK ("ΓΔΘΞΣ" == join(parr,""));
+          CHECK (5 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ",nullptr,nullptr,nullptr,""};
+          CHECK ("ΓΔΘΞΣ" == join(parr,""));
+          CHECK (5 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","Σ","","",""};
+          CHECK ("ΓΔΘΞΣ" == join(parr,""));
+          CHECK (5 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","","","Φ",""};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ",nullptr,"","Φ",""};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","",nullptr,"Φ",""};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ",nullptr,nullptr,"Φ",""};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","","","Φ",nullptr};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","","","Φ",nullptr,""};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","","","Φ",nullptr,"",nullptr};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","","","Φ",nullptr,"",nullptr,""};
+          CHECK ("ΓΔΘΞ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ","",nullptr,"",nullptr,"",nullptr,""};
+          CHECK ("ΓΔΘΞ" == join(parr,""));
+          CHECK (4 == parr.size());
+          
+          parr = ParrT{"Γ","Δ","Θ","Ξ",nullptr,"",nullptr,"",nullptr,"",nullptr};
+          CHECK ("ΓΔΘΞ" == join(parr,""));
+          CHECK (4 == parr.size());
+          
+          parr = ParrT{"","Δ","Θ","Ξ","","",""};
+          CHECK ("ΔΘΞ" == join(parr,""));
+          CHECK (4 == parr.size());
+          CHECK ("" == parr[0]);
+          
+          parr = ParrT{nullptr,"Δ","Θ","Ξ","","",""};
+          CHECK ("ΔΘΞ" == join(parr,""));
+          CHECK (4 == parr.size());
+          CHECK ("" == parr[0]);
+          
+          parr = ParrT{nullptr,"Δ",nullptr,"Ξ","","",""};
+          CHECK ("Δ*Ξ" == join(parr,""));
+          CHECK (4 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("Δ" == parr[1]);
+          CHECK ("*" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          
+          parr = ParrT{nullptr,"",nullptr,"Ξ","","",""};
+          CHECK ("Ξ" == join(parr,""));
+          CHECK (4 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          
+          parr = ParrT{nullptr,"",nullptr,"Ξ","","Ψ",""};
+          CHECK ("Ξ*Ψ" == join(parr,""));
+          CHECK (6 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          CHECK ("*" == parr[4]);
+          CHECK ("Ψ" == parr[5]);
+          
+          parr = ParrT{nullptr,"",nullptr,"Ξ",nullptr,"Ψ",""};
+          CHECK ("Ξ*Ψ" == join(parr,""));
+          CHECK (6 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          CHECK ("*" == parr[4]);
+          CHECK ("Ψ" == parr[5]);
+          
+          parr = ParrT{nullptr,"",nullptr,"Ξ",nullptr,nullptr,"Φ",""};
+          CHECK ("Ξ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          CHECK ("*" == parr[4]);
+          CHECK ("*" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          
+          parr = ParrT{nullptr,"",nullptr,"Ξ","",nullptr,"Φ",""};
+          CHECK ("Ξ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          CHECK ("*" == parr[4]);
+          CHECK ("*" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          
+          parr = ParrT{nullptr,"",nullptr,"Ξ",nullptr,"","Φ",""};
+          CHECK ("Ξ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          CHECK ("*" == parr[4]);
+          CHECK ("*" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          
+          parr = ParrT{nullptr,"",nullptr,"Ξ","","","Φ",""};
+          CHECK ("Ξ**Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("Ξ" == parr[3]);
+          CHECK ("*" == parr[4]);
+          CHECK ("*" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          
+          parr = ParrT{"",nullptr,"",nullptr,"Σ","","Φ",""};
+          CHECK ("Σ*Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("Σ" == parr[4]);
+          CHECK ("*" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          
+          parr = ParrT{"",nullptr,"",nullptr,"Σ",nullptr,"Φ",""};
+          CHECK ("Σ*Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("Σ" == parr[4]);
+          CHECK ("*" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          
+          parr = ParrT{"",nullptr,"",nullptr,"","Ψ",nullptr,"Ω",""};
+          CHECK ("Ψ*Ω" == join(parr,""));
+          CHECK (8 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("" == parr[4]);
+          CHECK ("Ψ" == parr[5]);
+          CHECK ("*" == parr[6]);
+          CHECK ("Ω" == parr[7]);
+          
+          parr = ParrT{nullptr,"",nullptr,"",nullptr,"Ψ",nullptr,"Ω",""};
+          CHECK ("Ψ*Ω" == join(parr,""));
+          CHECK (8 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("" == parr[4]);
+          CHECK ("Ψ" == parr[5]);
+          CHECK ("*" == parr[6]);
+          CHECK ("Ω" == parr[7]);
+          
+          parr = ParrT{nullptr,"",nullptr,"",nullptr,"","Φ",nullptr,"ω",""};
+          CHECK ("Φ*ω" == join(parr,""));
+          CHECK (9 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("" == parr[4]);
+          CHECK ("" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          CHECK ("*" == parr[7]);
+          CHECK ("ω" == parr[8]);
+          
+          parr = ParrT{"",nullptr,"",nullptr,"",nullptr,"Φ",nullptr,"ω",""};
+          CHECK ("Φ*ω" == join(parr,""));
+          CHECK (9 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("" == parr[4]);
+          CHECK ("" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          CHECK ("*" == parr[7]);
+          CHECK ("ω" == parr[8]);
         }
       
       
