@@ -423,6 +423,8 @@ namespace lib {
       /**
        * @internal access content element by index
        * @return pointer to storage, `null` if out of bounds
+       * @warning in case of size() < chunk_size the pointed-to storage
+       *          might hold an invalid (NULL) Literal.
        */
       Literal*
       getPosition (size_t idx)

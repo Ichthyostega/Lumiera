@@ -67,6 +67,7 @@ namespace interact {
 //  using std::unique_ptr;
   using std::string;
   using lib::Literal;
+  using lib::Symbol;
   using util::unConst;
   using util::isnil;
   using util::min;
@@ -97,10 +98,10 @@ namespace interact {
   class UICoord
     : public lib::PathArray<UIC_INLINE_SIZE>
     {
-      using PArr = lib::PathArray<UIC_INLINE_SIZE>;
+      using PathAry = lib::PathArray<UIC_INLINE_SIZE>;
       
     public:
-      using PArr::PathArray;
+      using PathAry::PathArray;
       
       /* === Builder API === */
       
@@ -167,35 +168,12 @@ namespace interact {
       
       /* === named component access === */
       
-      Literal
-      getWindow()  const
-        {
-          UNIMPLEMENTED ("UI coordinate component access");
-        }
+      Literal getWindow() const { return accesComponent (UIC_WINDOW);}
+      Literal getPersp()  const { return accesComponent (UIC_PERSP); }
+      Literal getPanel()  const { return accesComponent (UIC_PANEL); }
+      Literal getView()   const { return accesComponent (UIC_VIEW);  }
+      Literal getTab()    const { return accesComponent (UIC_TAB);   }
       
-      Literal
-      getPersp()  const
-        {
-          UNIMPLEMENTED ("UI coordinate component access");
-        }
-      
-      Literal
-      getPanel()  const
-        {
-          UNIMPLEMENTED ("UI coordinate component access");
-        }
-      
-      Literal
-      getView()  const
-        {
-          UNIMPLEMENTED ("UI coordinate component access");
-        }
-      
-      Literal
-      getTab()  const
-        {
-          UNIMPLEMENTED ("UI coordinate component access");
-        }
       
       
       /* === String representation === */
@@ -286,6 +264,13 @@ namespace interact {
       
       
     private:
+      Literal
+      accesComponent (UIPathElm idx)  const
+        {
+          Literal* elm = unConst(this)->getPosition(UIC_WINDOW);
+          return (elm and *elm)? *elm : Symbol::EMPTY;
+        }
+      
       
     public:
       friend bool
