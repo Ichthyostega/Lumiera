@@ -79,13 +79,16 @@
  ** a functor, which provides the desired behaviour pattern
  ** - the *locate* spec is evaluated to yield [user interface coordinates](\ref UICoord) representing the
  **   desired location of the view
- ** - the *count* spec is then evaluated as a second step, while providing the coordinates from first step.
+ ** - the *allocate* spec is then evaluated as a second step, while providing the coordinates from first step.
  **   This results in calling a dedicated _view allocator_ to create a new view or re-use an existing one
  **   as appropriate.
+ ** 
+ ** @note the actual binding for the DSL tokens can be found in the [ViewLocator implementation](view-locator.cpp)
  ** 
  ** @see ViewSpecDSL_test
  ** @see id-scheme.hpp
  ** @see view-locator.hpp
+ ** @see view-locator.cpp
  ** @see interaction-director.hpp
  */
 
@@ -101,6 +104,7 @@
 #include <functional>
 //#include <string>
 //#include <memory>
+#include <utility>
 
 
 namespace gui {
@@ -128,6 +132,11 @@ namespace interact {
         {
           UNIMPLEMENTED ("build a view spec from explicitly given UI coordinates");
         }
+      
+      /** shortcut to allow initialisation from UI-Coordintate builder expressiong */
+      ViewSpec(UICoord::Builder&& coordinates)
+        : ViewSpec{UICoord(std::move (coordinates))}
+        { }
       
       operator UICoord()
         {

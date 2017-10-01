@@ -58,6 +58,7 @@
 
 //#include <boost/noncopyable.hpp>
 #include <string>
+#include <utility>
 //#include <memory>
 
 
@@ -76,6 +77,7 @@ namespace interact {
     UIC_INLINE_SIZE = 8
   };
   
+  /* === predefined DSL symbols === */
   
   enum UIPathElm
     {
@@ -86,6 +88,10 @@ namespace interact {
       UIC_TAB,
       UIC_PART
     };
+  
+  
+  extern Symbol UIC_CURRENT_WINDOW; // see view-locator.cpp
+
   
   
   /**
@@ -103,67 +109,33 @@ namespace interact {
     public:
       using PathAry::PathArray;
       
+      
       /* === Builder API === */
       
-      static UICoord
-      currentWindow()
-        {
-          UNIMPLEMENTED ("UI coordinate builder function to indicate coordinates rooted within the current window");
-        }
+      class Builder;
       
-      static UICoord
-      window (Literal windowID)
-        {
-          UNIMPLEMENTED ("UI coordinate builder function to indicate coordinates rooted within a specific window");
-        }
+      /** shortcut to allow init from builder expression */
+      UICoord (Builder&& builder);
       
+      /** Builder: start definition of UI-Coordinates rooted in the `currentWindow` */
+      static Builder currentWindow();
       
-      UICoord
-      persp (Literal perspectiveID)  const
-        {
-          UNIMPLEMENTED ("augment UI coordinates to mandate a specific perspective to be active within the window");
-        }
+      /** Builder: start definition of UI-Coordinates rooted in given window */
+      static Builder window (Literal windowID);
       
-      UICoord
-      view (Literal viewID)  const
-        {
-          UNIMPLEMENTED ("augment UI coordinates to indicate a specific view to be used");
-        }
+      // convenience shortcuts to start a copy-builder....
       
-      UICoord
-      tab (Literal tabID)  const
-        {
-          UNIMPLEMENTED ("augment UI coordinates to indicate a specific tab within the view");
-        }
+      Builder persp (Literal perspectiveID)  const;
+      Builder view  (Literal viewID) const;
+      Builder tab   (Literal tabID)  const;
+      Builder tab   (uint tabIdx)    const;
       
-      UICoord
-      tab (uint tabIdx)  const
-        {
-          UNIMPLEMENTED ("augment UI coordinates to indicate a tab specified by index number");
-        }
+      // convenience shortcuts to start mutation on a copy...
       
-      /**
-       * convenience builder function so set a full path definition
-       * @note the given path string will be split at `'/'` and the
-       *       resulting components will be stored/retrieved as Symbol
-       */
-      UICoord
-      path (string pathDefinition)  const
-        {
-          UNIMPLEMENTED ("augment UI coordinates to append a full local path");
-        }
+      Builder path (string pathDefinition) const;
+      Builder append  (Literal elmID) const;
+      Builder prepend (Literal elmID) const;
       
-      UICoord
-      append (Literal elmID)  const
-        {
-          UNIMPLEMENTED ("augment UI coordinates by appending a further component at the end");
-        }
-      
-      UICoord
-      prepend (Literal elmID)  const
-        {
-          UNIMPLEMENTED ("augment partially defined UI coordinates by extending them towards the root");
-        }
       
       
       /* === named component access === */
@@ -285,6 +257,160 @@ namespace interact {
         return not (l == r);
       }
     };
+  
+  
+  
+  /* === Builder API === */
+  
+  class UICoord::Builder
+    {
+      UICoord uic_;
+
+      friend class UICoord;
+      
+      template<typename...ARGS>
+      explicit
+      Builder (ARGS&& ...args)      : uic_{std::forward<ARGS> (args)...} { }
+      
+//    Builder()                     = default;
+      Builder (UICoord const& base) : uic_{base} { }
+      
+    public:
+      Builder (Builder &&)          = default;
+      Builder (UICoord && anonRef)  : uic_{std::move(anonRef)} { }
+      
+      Builder (Builder const&)            = delete;
+      Builder& operator= (Builder const&) = delete;
+      Builder& operator= (Builder &&)     = delete;
+      
+      
+//      operator UICoord&()
+//        {
+//          return static_cast<UICoord&> (uic_);
+//        }
+      
+      /* == Builder functions == */
+      
+      Builder
+      window (Literal windowID)
+        {
+          UNIMPLEMENTED ("set window");
+        }
+      
+      Builder
+      persp (Literal perspectiveID)
+        {
+          UNIMPLEMENTED ("set perspective");
+        }
+      
+      Builder
+      view (Literal viewID)
+        {
+          UNIMPLEMENTED ("set view");
+        }
+      
+      Builder
+      tab (Literal tabID)
+        {
+          UNIMPLEMENTED ("set tab");
+        }
+      
+      Builder
+      tab (uint tabIdx)
+        {
+          UNIMPLEMENTED ("set tab");
+        }
+      
+      
+      Builder
+      path (string pathDefinition)
+        {
+          UNIMPLEMENTED ("set path");
+        }
+      
+      Builder
+      append (Literal elmID)
+        {
+          UNIMPLEMENTED ("mutate: append");
+        }
+      
+      Builder
+      prepend (Literal elmID)
+        {
+          UNIMPLEMENTED ("mutate: preprend");
+        }
+    };
+  
+  
+  
+  inline
+  UICoord::UICoord (Builder&& builder)
+    : UICoord{std::move (builder.uic_)}
+    { }
+  
+  
+  /** Builder: start definition of UI-Coordinates rooted in the `currentWindow` */
+  inline UICoord::Builder
+  UICoord::currentWindow()
+    {
+      return window (UIC_CURRENT_WINDOW);
+    }
+  
+  /** Builder: start definition of UI-Coordinates rooted in given window */
+  inline UICoord::Builder
+  UICoord::window (Literal windowID)
+    {
+      return Builder{windowID};
+    }
+  
+  
+  inline UICoord::Builder
+  UICoord::persp (Literal perspectiveID)  const
+    {
+      UNIMPLEMENTED ("augment UI coordinates to mandate a specific perspective to be active within the window");
+    }
+  
+  inline UICoord::Builder
+  UICoord::view (Literal viewID)  const
+    {
+      UNIMPLEMENTED ("augment UI coordinates to indicate a specific view to be used");
+    }
+  
+  inline UICoord::Builder
+  UICoord::tab (Literal tabID)  const
+    {
+      UNIMPLEMENTED ("augment UI coordinates to indicate a specific tab within the view");
+    }
+  
+  inline UICoord::Builder
+  UICoord::tab (uint tabIdx)  const
+    {
+      UNIMPLEMENTED ("augment UI coordinates to indicate a tab specified by index number");
+    }
+  
+  /**
+   * convenience builder function so set a full path definition
+   * @note the given path string will be split at `'/'` and the
+   *       resulting components will be stored/retrieved as Symbol
+   */
+  inline UICoord::Builder
+  UICoord::path (string pathDefinition)  const
+    {
+      UNIMPLEMENTED ("augment UI coordinates to append a full local path");
+    }
+  
+  inline UICoord::Builder
+  UICoord::append (Literal elmID)  const
+    {
+      UNIMPLEMENTED ("augment UI coordinates by appending a further component at the end");
+    }
+  
+  inline UICoord::Builder
+  UICoord::prepend (Literal elmID)  const
+    {
+      UNIMPLEMENTED ("augment partially defined UI coordinates by extending them towards the root");
+    }
+  
   
   
 }}// namespace gui::interact

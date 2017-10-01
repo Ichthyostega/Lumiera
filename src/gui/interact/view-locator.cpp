@@ -30,15 +30,20 @@
 
 #include "gui/interact/view-locator.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
+#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
 //using util::cStr;
 //using util::isnil;
+using lib::Symbol;
 
 
 namespace gui {
 namespace interact {
   
+  /* ==== definitions and concrete bindings for the View-Spec-DSL ==== */
+  
+  Symbol UIC_CURRENT_WINDOW{"currentWindow"};
   
   
   // dtors via smart-ptr invoked from here...
