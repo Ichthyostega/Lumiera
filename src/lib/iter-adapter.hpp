@@ -238,8 +238,7 @@ namespace lib {
       void
       iterate()
         {
-          if (check())
-            iterNext (source_,pos_);                             // extension point: free function iterNext(...)
+          iterNext (source_,pos_);                               // extension point: free function iterNext(...)
           check();
         }    // checkPoint() might mark end condition
             //  for comparison with IterAdapter{}

@@ -312,10 +312,9 @@ namespace diff{
       
       /** Implementation of Iteration-logic: pull next element. */
       friend void
-      iterNext (const Record* src, ElmIter& pos)
+      iterNext (const Record*, ElmIter& pos)
         {
           ++pos;
-          checkPoint (src,pos);
         }
       
       /** Implementation of Iteration-logic: detect iteration end.

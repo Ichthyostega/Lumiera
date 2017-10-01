@@ -311,10 +311,9 @@ namespace lib {
       
       /** Implementation of Iteration-logic: pull next element. */
       friend void
-      iterNext (const PathArray* src, const Literal*& pos)
+      iterNext (const PathArray*, const Literal*& pos)
       {
         ++pos;
-        checkPoint (src,pos);
       }
       
       /** Implementation of Iteration-logic: detect iteration end. */

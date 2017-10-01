@@ -96,7 +96,7 @@ namespace lib {
       virtual Pos firstResult ()         =0;
       
       /** iteration step: switch on to the next element.
-       *  The pos pointer may be set to NULL to report
+       *  The pos pointer should be set to NULL to report
        *  iteration end
        */
       virtual void nextResult(Pos& pos)  =0;
