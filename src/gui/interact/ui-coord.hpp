@@ -236,11 +236,20 @@ namespace interact {
       
       
     private:
+      /** @note Builder allowed to manipulate stored data */
+      friend class Builder;
+      
       Literal
       accesComponent (UIPathElm idx)  const
         {
           Literal* elm = unConst(this)->getPosition(idx);
           return elm? *elm : Symbol::EMPTY;
+        }
+      
+      void
+      setComponent (UIPathElm idx, Literal newContent)
+        {
+          UNIMPLEMENTED ("forcibly change data, maybe extend storage");
         }
       
       
@@ -265,76 +274,83 @@ namespace interact {
   class UICoord::Builder
     {
       UICoord uic_;
-
+      
+      /** builder instances created by UICoord solely */
       friend class UICoord;
       
       template<typename...ARGS>
       explicit
       Builder (ARGS&& ...args)      : uic_{std::forward<ARGS> (args)...} { }
-      
-//    Builder()                     = default;
-      Builder (UICoord const& base) : uic_{base} { }
-      
-    public:
-      Builder (Builder &&)          = default;
       Builder (UICoord && anonRef)  : uic_{std::move(anonRef)} { }
+      Builder (UICoord const& base) : uic_{base} { }
       
       Builder (Builder const&)            = delete;
       Builder& operator= (Builder const&) = delete;
       Builder& operator= (Builder &&)     = delete;
       
+    public:
+      /** @remark moving a builder instance is allowed */
+      Builder (Builder &&)  = default;
       
-//      operator UICoord&()
-//        {
-//          return static_cast<UICoord&> (uic_);
-//        }
       
       /* == Builder functions == */
       
-      Builder
+      Builder&&
       window (Literal windowID)
         {
-          UNIMPLEMENTED ("set window");
+          uic_.setComponent (UIC_WINDOW, windowID);
+          return std::move (*this);
         }
       
-      Builder
+      /** augment UI coordinates to mandate a specific perspective to be active within the window */
+      Builder&&
       persp (Literal perspectiveID)
         {
-          UNIMPLEMENTED ("set perspective");
+          uic_.setComponent (UIC_PART, perspectiveID);
+          return std::move (*this);
         }
       
-      Builder
+      /** augment UI coordinates to indicate a specific view to be used */
+      Builder&&
       view (Literal viewID)
         {
-          UNIMPLEMENTED ("set view");
+          uic_.setComponent (UIC_VIEW, viewID);
+          return std::move (*this);
         }
       
-      Builder
+      /** augment UI coordinates to indicate a specific tab within the view" */
+      Builder&&
       tab (Literal tabID)
         {
-          UNIMPLEMENTED ("set tab");
+          uic_.setComponent (UIC_TAB, tabID);
+          return std::move (*this);
         }
       
-      Builder
+      /** augment UI coordinates to indicate a tab specified by index number */
+      Builder&&
       tab (uint tabIdx)
         {
-          UNIMPLEMENTED ("set tab");
+          uic_.setComponent (UIC_TAB, Symbol{"#"+util::toString (tabIdx)});
+          return std::move (*this);
         }
       
       
-      Builder
+      /** augment UI coordinates to define a complete local path */
+      Builder&&
       path (string pathDefinition)
         {
           UNIMPLEMENTED ("set path");
         }
       
-      Builder
+      /** augment UI coordinates by appending a further component at the end */
+      Builder&&
       append (Literal elmID)
         {
           UNIMPLEMENTED ("mutate: append");
         }
       
-      Builder
+      /** augment partially defined UI coordinates by extending them towards the root */
+      Builder&&
       prepend (Literal elmID)
         {
           UNIMPLEMENTED ("mutate: preprend");
@@ -343,10 +359,16 @@ namespace interact {
   
   
   
+  /**
+   * @note this ctor is used to "fix" and normalise
+   *  the contents established in the Builder thus far.
+   */
   inline
   UICoord::UICoord (Builder&& builder)
     : UICoord{std::move (builder.uic_)}
-    { }
+    {
+      PathAry::normalise();
+    }
   
   
   /** Builder: start definition of UI-Coordinates rooted in the `currentWindow` */
@@ -367,25 +389,25 @@ namespace interact {
   inline UICoord::Builder
   UICoord::persp (Literal perspectiveID)  const
     {
-      UNIMPLEMENTED ("augment UI coordinates to mandate a specific perspective to be active within the window");
+      return Builder(*this).persp (perspectiveID);
     }
   
   inline UICoord::Builder
   UICoord::view (Literal viewID)  const
     {
-      UNIMPLEMENTED ("augment UI coordinates to indicate a specific view to be used");
+      return Builder(*this).view (viewID);
     }
   
   inline UICoord::Builder
   UICoord::tab (Literal tabID)  const
     {
-      UNIMPLEMENTED ("augment UI coordinates to indicate a specific tab within the view");
+      return Builder(*this).tab (tabID);
     }
   
   inline UICoord::Builder
   UICoord::tab (uint tabIdx)  const
     {
-      UNIMPLEMENTED ("augment UI coordinates to indicate a tab specified by index number");
+      return Builder(*this).tab (tabIdx);
     }
   
   /**
@@ -396,19 +418,19 @@ namespace interact {
   inline UICoord::Builder
   UICoord::path (string pathDefinition)  const
     {
-      UNIMPLEMENTED ("augment UI coordinates to append a full local path");
+      return Builder(*this).path (pathDefinition);
     }
   
   inline UICoord::Builder
   UICoord::append (Literal elmID)  const
     {
-      UNIMPLEMENTED ("augment UI coordinates by appending a further component at the end");
+      return Builder(*this).append (elmID);
     }
   
   inline UICoord::Builder
   UICoord::prepend (Literal elmID)  const
     {
-      UNIMPLEMENTED ("augment partially defined UI coordinates by extending them towards the root");
+      return Builder(*this).prepend (elmID);
     }
   
   
