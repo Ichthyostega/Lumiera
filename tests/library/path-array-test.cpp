@@ -149,9 +149,13 @@ namespace test {
           CHECK (7 == parr.size());
           CHECK ("Θ***Φ" == join(parr,""));
           
-          parr = ParrT{nullptr,"Δ",nullptr,"Ξ",nullptr,nullptr,"Φ"};
+          parr = ParrT{nullptr,"Δ",nullptr,"Ξ",nullptr,nullptr,nullptr};
           CHECK (4 == parr.size());
           CHECK ("Δ*Ξ" == join(parr,""));
+          
+          parr = ParrT{nullptr,"Δ",nullptr,"Ξ",nullptr,nullptr,"Φ"};
+          CHECK (7 == parr.size());
+          CHECK ("Δ*Ξ**Φ" == join(parr,""));
           
           parr = ParrT{nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,"Ω",nullptr};
           CHECK (16 == parr.size());

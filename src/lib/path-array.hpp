@@ -194,7 +194,8 @@ namespace lib {
         trimTo (size_t cnt)
           {
             REQUIRE (cnt <= size());
-            if (cnt == 0 and storage_)
+            if (not storage_) return;
+            if (cnt == 0)
               {
                 delete[] storage_;
                 storage_ = nullptr;
@@ -321,7 +322,7 @@ namespace lib {
       checkPoint (const PathArray* src, const Literal*& pos)
       {
         REQUIRE (src);
-        if (pos >= src->elms_.end() and src->tail_)
+        if (pos == src->elms_.end() and src->tail_)
           pos = &src->tail_[0];
         else
         if (not src->isValid (pos))
@@ -338,7 +339,8 @@ namespace lib {
       using const_iterator = lib::IterAdapter<Literal const*, PathArray const*>;
       using iterator = const_iterator;
       
-      iterator begin()  const { return iterator{this, elms_.begin()}; }
+      /** @remark iteration is defined to begin with real content */
+      iterator begin()  const { return firstNonempty(); }
       iterator end()    const { return iterator{}; }
       
       friend iterator begin(PathArray const& pa) { return pa.begin();}
@@ -352,7 +354,17 @@ namespace lib {
         {
           return pos
              and (tail_.isValid(pos)
-                  or (pos < elms_.end() and *pos));
+                  or (elms_.begin() <= pos and pos < elms_.end()
+                      and *pos));
+        }
+      
+      iterator
+      firstNonempty ()  const
+        {
+          iterator startPos{this, elms_.begin()};
+          while (startPos && isnil (*startPos))
+            ++startPos;
+          return startPos;
         }
       
       /** find _effective end_ of data in the inline array,
@@ -403,33 +415,41 @@ namespace lib {
       void
       normalise()
         {
+          if (size() == 0) return;
           static Symbol ANY("*");
           const char* fill = Symbol::EMPTY;
           
           Literal* end = elms_.end();
-          Literal* seg = elms_.begin();
-          for (Literal* pos = elms_.begin(); pos!=end; ++pos)
-            if (isnil (*pos))
-              setContent (pos, fill);
-            else
-              if (fill==Symbol::EMPTY)
-                fill = ANY;
-          if (not tail_) return;
-          seg = const_cast<Literal*> (&tail_[0]);
-          end = seg + tail_.size();
-          for (Literal* pos = seg; pos!=end; ++pos)
+          Literal* pos = elms_.begin();
+          for ( ; pos!=end; ++pos)
             if (isnil (*pos))
               setContent (pos, fill);
             else
               if (fill==Symbol::EMPTY)
                 fill = ANY;
           
+          if (tail_)
+            {
+              // normalise data in extension storage
+              pos = getPosition (chunk_size);
+              end = pos + tail_.size();
+              for ( ; pos!=end; ++pos)
+                if (isnil (*pos))
+                  setContent (pos, fill);
+                else
+                  if (fill==Symbol::EMPTY)
+                    fill = ANY;
+            }
+          
           size_t idx = size();
-          while (idx and ANY == (*this)[--idx])
+          // trim trailing fill
+          while (idx and fill == *getPosition (--idx))
             setContent (getPosition(idx), nullptr);
           
           if (idx >= chunk_size-1)
-            tail_.trimTo (idx - chunk_size);
+            tail_.trimTo (idx+1 - chunk_size);
+          else
+            tail_.trimTo (0);
         }
     };
   
