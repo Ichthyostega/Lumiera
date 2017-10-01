@@ -25,16 +25,18 @@
  ** Foundation abstraction to implement path-like component sequences.
  ** This library class can be used to build a path abstraction for data structure access
  ** or some similar topological coordinate system, like e.g. [UI coordinates](\ref ui-coord.hpp)
- ** A PathArray is an iterable sequence of literal component IDs, implemented as tuple of `Literal*`
+ ** A PathArray is an iterable sequence of literal component IDs, implemented as tuple of lib::Literal
  ** held in fixed inline storage with possible heap allocated (and thus unlimited) extension storage.
  ** It offers range checks, standard iteration and array-like indexed component access; as a whole
- ** it is copyable, while actual components are immutable after construction.
+ ** it is copyable, while actual components are immutable after construction. PathArray can be
+ ** bulk initialised from an explicit sequence of literals; it is normalised on construction
+ ** to trim and fill interspersed missing elements. Iteration and equality comparison are
+ ** built on top of the normalisation; iteration starts with the first nonempty element.
  ** 
  ** @remark the choice of implementation layout is arbitrary and not based on evidence.
- **         A recursive structure with fixed inline storage looked like an interesting programming challenge.
+ **         A delegate structure with fixed inline storage looked like an interesting programming challenge.
  **         Using just a heap based array storage would have been viable likewise.
  ** @todo when UICoord is in widespread use, collect performance statistics and revisit this design.
- ** @todo WIP 9/2017 first draft ////////////////////////////////////////////////////////////////////////////TICKET #1106 generic UI coordinate system
  ** 
  ** @see PathArray_test
  ** @see UICoord_test
@@ -53,7 +55,6 @@
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <algorithm>
 #include <utility>
 #include <string>
@@ -64,9 +65,8 @@
 namespace lib {
   namespace error = lumiera::error;
   
-//  using std::unique_ptr;
-  using std::forward;
   using std::string;
+  using std::forward;
   using lib::Literal;
   using util::unConst;
   using util::isnil;
@@ -219,12 +219,16 @@ namespace lib {
    * A sequence of Literal strings, with array-like access and
    * standard iteration. Implemented as fixed size inline tuple
    * with heap allocated unlimited extension space.
+   * @note contents are normalised on initialisation
+   *       - leading empty elements are filled with Symbol::EMPTY
+   *       - empty elements in the middle are replaced by "*"
+   *       - trailing empty elements and "*" are trimmed
    */
   template<size_t chunk_size>
   class PathArray
     {
       static_assert (0 < chunk_size, "PathArray chunk_size must be nonempty");
-
+      
       using CcP          = const char*;
       using LiteralArray = std::array<Literal, chunk_size>;
       
@@ -262,7 +266,7 @@ namespace lib {
           using Prefix = typename meta::BuildIndexSeq<chunk_size>::Ascending;
           using Rest   = typename meta::BuildIdxIter<ARGS...>::template After<chunk_size>;
         };
-        
+      
     public:
       template<typename...ARGS>
       explicit
@@ -293,9 +297,16 @@ namespace lib {
           return not elms_[0]; // normalise() ensures nonnull unless completely empty
         }
       
+      /** joins nonempty content, separated by slash */
       operator string()  const;
       
       
+      /** Array style indexed access.
+       * @throws error::Invalid on bound violation
+       * @return reference to the normalised content
+       * @note returns Symbol::EMPTY for leading empty elements,
+       *       even while iteration will skip such entries.
+       */
       Literal const&
       operator[] (size_t idx)  const
         {
@@ -306,6 +317,7 @@ namespace lib {
                                  ,error::LUMIERA_ERROR_INDEX_BOUNDS);
           return *elm;
         }
+      
       
       
     protected:  /* ==== Iteration control API for IterAdapter ==== */
@@ -347,6 +359,7 @@ namespace lib {
       friend iterator end  (PathArray const& pa) { return pa.end();  }
       
       
+      
     private: /* ===== implementation details ===== */
       
       bool
@@ -367,8 +380,9 @@ namespace lib {
           return startPos;
         }
       
-      /** find _effective end_ of data in the inline array,
-       *  i.e. the position _behind_ the last usable content
+      /**
+       * find _effective end_ of data in the inline array,
+       * i.e. the position _behind_ the last usable content
        */
       Literal const*
       findInlineEnd() const
@@ -473,6 +487,35 @@ namespace lib {
     ASSERT (len >= 1);
     buff.resize(len-1);
     return buff;
+  }
+  
+  
+  
+  /**
+   * Equality comparison of arbitrary PathArray objects
+   */
+  template<size_t cl, size_t cr>
+  bool
+  operator== (PathArray<cl> const& l, PathArray<cr> const& r)
+  {
+    if (l.size() != r.size()) return false;
+    
+    typename PathArray<cl>::iterator lp = l.begin();
+    typename PathArray<cl>::iterator rp = r.begin();
+    while (lp and rp)
+      {
+        if (*lp != *rp) return false;
+        ++lp;
+        ++rp;
+      }
+    return isnil(lp) and isnil(rp);
+  }
+  
+  template<size_t cl, size_t cr>
+  bool
+  operator!= (PathArray<cl> const& l, PathArray<cr> const& r)
+  {
+    return not (l == r);
   }
   
   

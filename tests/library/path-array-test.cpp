@@ -412,13 +412,60 @@ namespace test {
           CHECK ("Φ" == parr[6]);
           CHECK ("*" == parr[7]);
           CHECK ("ω" == parr[8]);
+          
+          parr = ParrT{"",nullptr,"",nullptr,"",nullptr,"Φ",nullptr,"ω","*"};
+          CHECK ("Φ*ω" == join(parr,""));
+          CHECK (9 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("" == parr[4]);
+          CHECK ("" == parr[5]);
+          CHECK ("Φ" == parr[6]);
+          CHECK ("*" == parr[7]);
+          CHECK ("ω" == parr[8]);
+          
+          parr = ParrT{"",nullptr,"",nullptr,"",nullptr,"Φ",nullptr,"*",""};
+          CHECK ("Φ" == join(parr,""));
+          CHECK (7 == parr.size());
+          CHECK ("" == parr[0]);
+          CHECK ("" == parr[1]);
+          CHECK ("" == parr[2]);
+          CHECK ("" == parr[3]);
+          CHECK ("" == parr[4]);
+          CHECK ("" == parr[5]);
+          CHECK ("Φ" == parr[6]);
         }
       
       
+      /** @test verify equality comparison
+       * Equality of PathArray is based on overall size, position and _normalised_ content.
+       * @note especially how `"*"` might match "" or `nullptr` at corresponding positions.
+       */
       void
       verify_comparisons()
         {
-          UNIMPLEMENTED ("verify comparison of UI coordinates");
+          CHECK (ParrT("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω") == ParrT("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"));
+          CHECK (ParrT("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω") != ParrT("Γ","Δ","Θ","Σ","Ξ","Ψ","Φ","Ω"));
+          CHECK (ParrT("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω") != ParrT("Γ","Δ","Θ","Ξ","Ξ","Ψ","Φ","Ω"));
+          CHECK (ParrT("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω") != ParrT("" ,"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ"));
+          CHECK (ParrT("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","" ) != ParrT("" ,"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ"));
+          CHECK (ParrT("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","" ) != ParrT("" ,"Γ","Δ","Θ","Ξ","Σ","Ψ","" ));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","" ) != ParrT("*","Δ","Θ","Ξ","Σ","Ψ","Φ","" ));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","" ) != ParrT("" ,"Δ","Θ","Ξ","" ,"Σ","Ψ","Φ"));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","" ) != ParrT("" ,"Δ","Θ","Ξ","Σ***Ψ","Φ","" ));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","" ,"Φ","" ) != ParrT("" ,"Δ","Θ","Ξ","*","Ψ","Φ","" ));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","" ,"Φ","" ) != ParrT("" ,"Δ","Θ","Ξ","Σ","* ","Φ",""));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","" ,"Φ","" ) != ParrT("" ,"Δ","Θ","Ξ","Σ","**","Φ",""));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","*"));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","", "Φ","" ) == ParrT("" ,"Δ","Θ","Ξ","Σ","*","Φ","" ));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","" ) == ParrT(nullptr,"Δ","Θ","Ξ","Σ","Ψ","Φ"));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ",nullptr));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ","Σ","Ψ","Φ"));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","" ,"Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ",nullptr,"Ψ","Φ"));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","*","Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ",nullptr,"Ψ","Φ"));
+          CHECK (ParrT("" ,"Δ","Θ","Ξ","*","Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ","", "Ψ","Φ"));
         }
     };
   
