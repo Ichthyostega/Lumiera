@@ -488,7 +488,6 @@ namespace lib {
       normalise()
         {
           if (size() == 0) return;
-          static Symbol ANY("*");
           const char* fill = Symbol::EMPTY;
           
           Literal* end = elms_.end();
@@ -498,7 +497,7 @@ namespace lib {
               setContent (pos, fill);
             else
               if (fill==Symbol::EMPTY)
-                fill = ANY;
+                fill = Symbol::ANY;
           
           if (tail_)
             {
@@ -510,7 +509,7 @@ namespace lib {
                   setContent (pos, fill);
                 else
                   if (fill==Symbol::EMPTY)
-                    fill = ANY;
+                    fill = Symbol::ANY;
             }
           
           size_t idx = size();

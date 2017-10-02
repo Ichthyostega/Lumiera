@@ -116,6 +116,7 @@ namespace lib {
     : public Literal
     {
     public:
+      static Symbol ANY;
       static Symbol EMPTY;
       static Symbol BOTTOM;
       static Symbol FAILURE;

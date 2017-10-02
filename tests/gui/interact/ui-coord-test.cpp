@@ -380,6 +380,9 @@ namespace test {
           CHECK (not (u1  < u1 ));
           CHECK (not (u1  < u2 ));
           CHECK (not (u11 < u2 ));
+          
+          // expansion of jokers from parent path is tolerated
+          CHECK (u11 < u1.view("*").window(NULL));
         }
       
       

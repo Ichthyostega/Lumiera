@@ -187,6 +187,38 @@ namespace interact {
         }
       
       
+      /**
+       * Check if this coordinate spec can be seen as an extension
+       * of the given parent coordinates and thus reaches further down
+       * towards specific UI elements in comparison to the parent path
+       * This constitutes a _partial order_, since some paths might
+       * just be totally unrelated to each other not comparable.
+       * @note we tolerate (but not demand) expansion/interpolation
+       *       of the given parent, i.e. parent may be incomplete
+       *       or contain `'*'` placeholders.
+       * @todo 10/2017 have to verify suitability of this definition
+       */
+      bool
+      isExtendedBelow (UICoord const& parent)  const
+        {
+          size_t subSiz = this->size(),
+                 parSiz = parent.size(),
+                 idx    = 0;
+          
+          if (parSiz >= subSiz)
+            return false;
+          
+          while (idx < parSiz
+                 and (   (*this)[idx]== parent[idx]
+                      or Symbol::ANY == parent[idx]
+                      or isnil (parent[idx])))
+              ++idx;
+          
+          ENSURE (idx < subSiz);
+          return idx == parSiz;
+        } // meaning: this goes further down
+      
+      
       
       /* === String representation === */
       
@@ -366,12 +398,12 @@ namespace interact {
       friend bool
       operator== (UICoord const& l, UICoord const& r)
       {
-        return false;//static_cast<PathAry const&> (l) == static_cast<PathAry const&> (r);
+        return static_cast<PathAry const&> (l) == static_cast<PathAry const&> (r);
       }
       friend bool
       operator<  (UICoord const& l, UICoord const& r)
       {
-        UNIMPLEMENTED ("equality of UI coordinates");
+        return l.isExtendedBelow (r);
       }
       
       friend bool operator>  (UICoord const& l, UICoord const& r) { return (r < l);             }
