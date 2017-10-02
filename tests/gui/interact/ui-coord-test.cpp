@@ -28,19 +28,13 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "gui/interact/ui-coord.hpp"
-#include "lib/format-cout.hpp"/////////////////////////TODO RLY?
 #include "lib/format-util.hpp"
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 
 
 using std::string;
-//using lib::idi::EntryID;
-//using lib::diff::GenNode;
-//using util::isSameObject;
 using lib::Symbol;
 using util::isnil;
 using util::join;
@@ -51,23 +45,21 @@ namespace gui  {
 namespace interact {
 namespace test {
   
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
   using lumiera::error::LUMIERA_ERROR_LOGIC;
   
-  namespace { //Test fixture...
-    
-  }//(End)Test fixture
+  
   
   
   /******************************************************************************//**
    * @test verify the basic properties of topological UI coordinate specifications.
-   *       - created as path-like sequence of components
+   *       - created as path-like sequence of \ref Literal components
    *       - provides a builder API for definition and mutation
    *       - Normalisation and handling of missing parts
    *       - access to UI coordinate components
    *       - string representation
    *       - comparisons
+   *       - predicates
    * 
    * @see ui-coord.hpp
    * @see path-array.hpp
@@ -98,7 +90,7 @@ namespace test {
           UICoord uic{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
           CHECK (not isnil (uic));
           CHECK (8 == uic.size());
-          // path is iterable
+          // coordinate sequence is iterable
           CHECK ("Γ-Δ-Θ-Ξ-Σ-Ψ-Φ-Ω" == join(uic,"-"));
           
           // indexed access
@@ -111,7 +103,11 @@ namespace test {
           CHECK ("Φ" == uic[UIC_PATH+1]);    // ...descending through local widgets
           CHECK ("Ω" == uic[UIC_PATH+2]);
           
-          // iteration of complete path matches index order
+          // sequential access to the path part
+          CHECK ("Ψ-Φ-Ω" == join(uic.pathSeq(),"-"));
+          CHECK ("Ψ/Φ/Ω" == uic.getPath());
+          
+          // iteration of complete coordinates matches index order
           uint i=0;
           for (UICoord::iterator ii = uic.begin(); ii; ++ii, ++i)
             CHECK (uic[i] == *ii);
@@ -182,7 +178,7 @@ namespace test {
           UICoord uic4 = uic3.persp("perspective");
           CHECK (4 == uic4.size());
           CHECK ("UI:?[perspective]-*.view" == string(uic4));
-
+          
           uic4 = uic3.append("tab");
           CHECK (5 == uic4.size());
           CHECK ("UI:?.view.tab" == string(uic4));
@@ -228,7 +224,7 @@ namespace test {
           CHECK ("UI:?/α/β/γ/δ/ε/λ/ον" == string(uic));
           CHECK ("" == uic.getComp());
           CHECK ("α/β/γ/δ/ε/λ/ον" == uic.getPath());
-
+          
           // note: we built a partially empty path array...
           CHECK (12 == uic.size());
           CHECK (Symbol::EMPTY == uic.getView());
@@ -371,6 +367,7 @@ namespace test {
           CHECK (UICoord("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ",nullptr) == UICoord("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ"));
           
           CHECK (u11 == u1.path("Ψ/Φ/Ω//"));
+          CHECK (u11 != u1.path("//Ψ/Φ/Ω"));
           
           CHECK (u1  > u11);
           CHECK (u11 < u1 );
@@ -407,6 +404,38 @@ namespace test {
           CHECK (not nil.isExplicit());
           CHECK (not nil.isComplete());
           CHECK (not nil.isIncomplete());  // note fine point
+          
+          CHECK (not u1.isPresent(UIC_WINDOW));
+          CHECK (not u1.isPresent(UIC_PERSP));
+          CHECK (not u1.isPresent(UIC_PANEL));
+          CHECK (    u1.isPresent(UIC_VIEW));
+          CHECK (    u1.isPresent(UIC_TAB));
+          CHECK (not u1.isPresent(UIC_PATH));
+          CHECK (not u1.isPresent(UIC_PATH+1));
+          
+          CHECK (    u2.isPresent(UIC_WINDOW));
+          CHECK (not u2.isPresent(UIC_PERSP));
+          CHECK (    u2.isPresent(UIC_PANEL));
+          CHECK (    u2.isPresent(UIC_VIEW));
+          CHECK (    u2.isPresent(UIC_TAB));
+          CHECK (not u2.isPresent(UIC_PATH));
+          CHECK (not u2.isPresent(UIC_PATH+1));
+          
+          CHECK (    u3.isPresent(UIC_WINDOW));
+          CHECK (    u3.isPresent(UIC_PERSP));
+          CHECK (    u3.isPresent(UIC_PANEL));
+          CHECK (    u3.isPresent(UIC_VIEW));
+          CHECK (    u3.isPresent(UIC_TAB));
+          CHECK (not u3.isPresent(UIC_PATH));
+          CHECK (not u3.isPresent(UIC_PATH+1));
+          
+          CHECK (not u2.isWildcard(UIC_WINDOW));
+          CHECK (    u2.isWildcard(UIC_PERSP));
+          CHECK (not u2.isWildcard(UIC_PANEL));
+          CHECK (not u2.isWildcard(UIC_VIEW));
+          CHECK (not u2.isWildcard(UIC_TAB));
+          CHECK (not u2.isWildcard(UIC_PATH));
+          CHECK (not u2.isWildcard(UIC_PATH+1));
         }
     };
   

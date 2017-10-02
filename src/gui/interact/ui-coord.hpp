@@ -60,7 +60,6 @@
 #include <string>
 #include <vector>
 #include <utility>
-//#include <memory>
 
 
 namespace gui {
@@ -68,7 +67,6 @@ namespace interact {
   
   namespace error = lumiera::error;
   
-//  using std::unique_ptr;
   using std::string;
   using lib::Literal;
   using lib::Symbol;
@@ -95,28 +93,26 @@ namespace interact {
   
   extern Symbol UIC_CURRENT_WINDOW; ///< window spec to refer to the _current window_ @see view-locator.cpp
   extern Symbol UIC_ELIDED;         ///< indicate that a component is elided or irrelevant here
-
+  
   
   
   /**
    * Describe a location within the UI through structural/topological coordinates.
    * A UICoord specification is a sequence of Literal tokens, elaborating a path descending
    * through the hierarchy of UI elements down to the specific UI element to refer.
-   * 
-   * @todo initial draft as of 9/2017
+   * @see UICoord_test
    */
   class UICoord
     : public lib::PathArray<UIC_INLINE_SIZE>
     {
-      using PathAry = lib::PathArray<UIC_INLINE_SIZE>;
       
     public:
       /**
        * UI-Coordinates can be created explicitly by specifying a sequence of Literal tokens,
        * which will be used to initialise and then normalise the underlying PathArray.
        * @warning Literal means _"literal"_ with guaranteed storage during the whole execution.
-       * @remarks - in case you need to construct some part, then use Symbol to _intern_ the
-       *            resulting string into the global static SymbolTable.
+       * @remarks - in case you need to construct some part, then use \ref Symbol to _intern_
+       *            the resulting string into the global static SymbolTable.
        *          - usually the Builder API leads to more readable definitions,
        *            explicitly indicating the meaning of the coordinate's parts.
        */
@@ -124,8 +120,8 @@ namespace interact {
       explicit
       UICoord (ARGS&& ...args) : PathArray(std::forward<ARGS> (args)...) { }
       
-      UICoord (UICoord&&)                  = default;
-      UICoord (UICoord const&)             = default;
+      UICoord (UICoord&&)                 = default;
+      UICoord (UICoord const&)            = default;
       UICoord (UICoord& o)     : UICoord((UICoord const&)o) { }
       
       UICoord& operator= (UICoord const&) = default;
@@ -146,16 +142,14 @@ namespace interact {
       /** Builder: start definition of UI-Coordinates rooted in given window */
       static Builder window (Literal windowID);
       
-      // convenience shortcuts to start a copy-builder....
-      
+      //----- convenience shortcuts to start a copy-builder....
       Builder persp (Literal perspectiveID)  const;
       Builder view  (Literal viewID) const;
       Builder tab   (Literal tabID)  const;
       Builder tab   (uint tabIdx)    const;
       Builder noTab ()               const;
       
-      // convenience shortcuts to start mutation on a copy...
-      
+      //----- convenience shortcuts to start mutation on a copy...
       Builder path (Literal pathDefinition) const;
       Builder append  (Literal elmID) const;
       Builder prepend (Literal elmID) const;
@@ -206,6 +200,24 @@ namespace interact {
         }
       
       
+      bool
+      isPresent (size_t idx)  const
+        {
+          Literal* elm = unConst(this)->getPosition(idx);
+          return not isnil(elm)
+             and *elm != Symbol::ANY;
+        }
+      
+      
+      bool
+      isWildcard (size_t idx)  const
+        {
+          Literal* elm = unConst(this)->getPosition(idx);
+          return elm
+             and *elm == Symbol::ANY;
+        }
+      
+      
       /**
        * Check if this coordinate spec can be seen as an extension
        * of the given parent coordinates and thus reaches further down
@@ -231,7 +243,7 @@ namespace interact {
                  and (   (*this)[idx]== parent[idx]
                       or Symbol::ANY == parent[idx]
                       or isnil (parent[idx])))
-              ++idx;
+            ++idx;
           
           ENSURE (idx < subSiz);
           return idx == parSiz;
@@ -264,7 +276,7 @@ namespace interact {
           if (empty()) return "";
           
           size_t end = min (size(), UIC_PATH);
-          size_t pos = indexOf(*begin());
+          size_t pos = indexOf (*begin());
           
           if (pos >= end)
             return ""; // empty or path information only
@@ -275,7 +287,7 @@ namespace interact {
           if (0 < pos) // incomplete UI-Coordinates (not anchored)
             buff += "?";
           
-          for ( ; pos<end; ++pos)
+          for ( ; pos<end; ++pos )
             switch (pos) {
               case UIC_WINDOW:
                 buff += getWindow();
@@ -309,14 +321,14 @@ namespace interact {
           string buff; // heuristic pre-allocation
           buff.reserve (10 * (siz - UIC_PATH));
           
-          iterator elm{this, unConst(this)->getPosition(UIC_PATH)};
+          iterator elm = pathSeq();
           if (isnil (*elm))
-            { // irregular case : only a path fragment
+            {  // irregular case : only a path fragment
               elm = this->begin();
               buff += "?/";
             }
           
-          for ( ; elm; ++elm)
+          for ( ; elm; ++elm )
             buff += *elm + "/";
           
           // chop off last delimiter
@@ -324,6 +336,14 @@ namespace interact {
           ASSERT (len >= 1);
           buff.resize(len-1);
           return buff;
+        }
+      
+      /** iterative access to the path sequence section */
+      iterator
+      pathSeq()  const
+        {
+          return size()<= UIC_PATH? end()
+                                  : iterator{this, unConst(this)->getPosition(UIC_PATH)};
         }
       
       
@@ -382,7 +402,7 @@ namespace interact {
                   while (string::npos != (last = sequence.find ('/', pos)))
                     {
                       elms.emplace_back (Symbol{sequence.substr(pos, last - pos)});
-                      pos = last + 1;
+                      pos = last + 1;                         // delimiter stripped
                     }
                   sequence = sequence.substr(pos);
                   if (not isnil (sequence))
@@ -391,7 +411,7 @@ namespace interact {
           
           setTailSequence (idx, elms);
         }
-          
+      
       /** replace the existing path information with the given elements
        * @note - storage will possibly be expanded to accommodate
        *       - the individual path elements will be _interned_ as Symbol
@@ -404,7 +424,7 @@ namespace interact {
       setTailSequence (size_t idx, std::vector<Literal>& pathElms)
         {
           size_t cnt = pathElms.size();
-          expandPosition (idx + cnt);
+          expandPosition (idx + cnt); // preallocate
           for (size_t i=0 ; i < cnt; ++i)
             setContent (expandPosition(idx + i), pathElms[i]);
           size_t end = size();
@@ -413,12 +433,14 @@ namespace interact {
         }
       
       
-    public:
+    public: /* ===== relational operators : equality and partial order ===== */
+      
       friend bool
       operator== (UICoord const& l, UICoord const& r)
       {
-        return static_cast<PathAry const&> (l) == static_cast<PathAry const&> (r);
+        return static_cast<PathArray const&> (l) == static_cast<PathArray const&> (r);
       }
+      
       friend bool
       operator<  (UICoord const& l, UICoord const& r)
       {
@@ -430,6 +452,8 @@ namespace interact {
       friend bool operator>= (UICoord const& l, UICoord const& r) { return (r < l) or (l == r); }
       friend bool operator!= (UICoord const& l, UICoord const& r) { return not (l == r);        }
     };
+  
+  
   
   
   
@@ -453,12 +477,14 @@ namespace interact {
       Builder& operator= (Builder &&)     = delete;
       
     public:
-      /** @remark moving a builder instance is allowed */
+      /** @remark moving a builder instance is acceptable */
       Builder (Builder &&)  = default;
       
       
       /* == Builder functions == */
       
+      /** change UI coordinate spec to define it to be rooted within the given window
+       * @note this function allows to _undefine_ the window, thus creating an incomplete spec */
       Builder
       window (Literal windowID)
         {
@@ -555,18 +581,21 @@ namespace interact {
   UICoord::UICoord (Builder&& builder)
     : UICoord{std::move (builder.uic_)}
     {
-      PathAry::normalise();
+      PathArray::normalise();
     }
   
   
-  /** Builder: start definition of UI-Coordinates rooted in the `currentWindow` */
+  /** @return an empty Builder allowing to define further parts;
+   *          to finish the definition, cast / store it into
+   *          UICoord, which itself is immutable.
+   */
   inline UICoord::Builder
   UICoord::currentWindow()
     {
       return window (UIC_CURRENT_WINDOW);
     }
   
-  /** Builder: start definition of UI-Coordinates rooted in given window */
+  /** @return aBuilder with just the windowID defined */
   inline UICoord::Builder
   UICoord::window (Literal windowID)
     {
@@ -574,6 +603,12 @@ namespace interact {
     }
   
   
+  /** @return a Builder holding a clone copy of the original UICoord,
+   *          with the perspective information set to a new value.
+   * @remarks This Builder can then be used do set further parts
+   *          independently of the original. When done, store it
+   *          as new UICoord object. To achieve real mutation,
+   *          assign it to the original variable. */
   inline UICoord::Builder
   UICoord::persp (Literal perspectiveID)  const
     {
