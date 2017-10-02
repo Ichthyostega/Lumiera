@@ -57,7 +57,9 @@
 #include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
+#include <cstring>
 #include <string>
+#include <vector>
 #include <utility>
 //#include <memory>
 
@@ -134,7 +136,7 @@ namespace interact {
       
       // convenience shortcuts to start mutation on a copy...
       
-      Builder path (string pathDefinition) const;
+      Builder path (Literal pathDefinition) const;
       Builder append  (Literal elmID) const;
       Builder prepend (Literal elmID) const;
       
@@ -257,6 +259,13 @@ namespace interact {
       /** @note Builder allowed to manipulate stored data */
       friend class Builder;
       
+      size_t
+      findStartIdx()  const
+        {
+          REQUIRE (not empty());
+          return indexOf (*begin());
+        }
+      
       Literal
       accesComponent (UIPathElm idx)  const
         {
@@ -267,15 +276,68 @@ namespace interact {
       void
       setComponent (size_t idx, Literal newContent)
         {
-          Literal* storage = maybeExpandTo (idx);
+          Literal* storage = expandPosition (idx);
           setContent (storage, newContent);
         }
       
-      size_t
-      findStartIdx()  const
+      
+      /** replace / overwrite existing content starting at given index.
+       * @param idx where to start adding content; storage will be expanded to accommodate
+       * @param newContent either a single element, or several elements delimited by `'/'`
+       * @note - a path sequence will be split at `'/'` and the components _interned_
+       *       - any excess elements will be cleared
+       * @warning need to invoke PathArray::normalise() afterwards
+       */
+      void
+      setTailSequence (size_t idx, Literal newContent)
         {
-          REQUIRE (not empty());
-          return indexOf (*begin());
+          std::vector<Literal> elms;
+          if (not isnil (newContent))
+            {
+              if (not std::strchr (newContent, '/'))
+                {
+                  // single element: just place it as-is
+                  // and remove any further content behind
+                  elms.emplace_back (newContent);
+                }
+              else
+                { // it is actually a sequence of elements,
+                  // which need to be split first, and then
+                  // interned into the global symbol table
+                  string sequence{newContent};
+                  size_t pos = 0;
+                  size_t last = 0;
+                  while (string::npos != (last = sequence.find ('/', pos)))
+                    {
+                      elms.emplace_back (Symbol{sequence.substr(pos, last - pos)});
+                      pos = last + 1;
+                    }
+                  sequence = sequence.substr(pos);
+                  if (not isnil (sequence))
+                    elms.emplace_back (Symbol{sequence});
+            }   }
+          
+          setTailSequence (idx, elms);
+        }
+          
+      /** replace the existing path information with the given elements
+       * @note - storage will possibly be expanded to accommodate
+       *       - the individual path elements will be _interned_ as Symbol
+       *       - any excess elements will be cleared
+       *       - the pathElms can be _empty_ in which case just
+       *         any content starting from `idx` will be cleared
+       * @warning need to invoke PathArray::normalise() afterwards
+       */
+      void
+      setTailSequence (size_t idx, std::vector<Literal>& pathElms)
+        {
+          size_t cnt = pathElms.size();
+          expandPosition (idx + cnt);
+          for (size_t i=0 ; i < cnt; ++i)
+            setContent (expandPosition(idx + i), pathElms[i]);
+          size_t end = size();
+          for (size_t i = idx+cnt; i<end; ++i)
+            setContent (expandPosition(i), nullptr);
         }
       
       
@@ -361,11 +423,15 @@ namespace interact {
         }
       
       
-      /** augment UI coordinates by appending a further component at the end */
+      /** augment UI coordinates by appending a further component at the end.
+       * @note the element might define a sequence of components separated by `'/'`,
+       *       in which case several elements will be appended.
+       */
       Builder
-      append (Literal elmID)
+      append (Literal elm)
         {
-          uic_.setComponent (uic_.size(), elmID);
+          if (not isnil(elm))
+            uic_.setTailSequence (uic_.size(), elm);
           return std::move (*this);
         }
       
@@ -381,11 +447,16 @@ namespace interact {
           return std::move (*this);
         }
       
-      /** augment UI coordinates to define a complete local path */
+      /**
+       * augment UI coordinates to define a complete local path
+       * @param pathDef a path, possibly with multiple components separated by `'/'`
+       * @note any existing path definition is completely replaced by the new path
+       */
       Builder
-      path (string pathDefinition)
+      path (Literal pathDef)
         {
-          UNIMPLEMENTED ("set path");
+          uic_.setTailSequence (UIC_PART, pathDef);
+          return std::move (*this);
         }
     };
   
@@ -448,7 +519,7 @@ namespace interact {
    *       resulting components will be stored/retrieved as Symbol
    */
   inline UICoord::Builder
-  UICoord::path (string pathDefinition)  const
+  UICoord::path (Literal pathDefinition)  const
     {
       return Builder(*this).path (pathDefinition);
     }

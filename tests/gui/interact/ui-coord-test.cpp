@@ -275,23 +275,23 @@ namespace test {
           CHECK ("α/β/γ/δ/ε/λ/ον" == uic.getPath());
           
           uic = uic.prepend("perspective");
-          CHECK ("UI:UI:?[perspective]-panel.*. /α/β/γ/δ/ε/λ/ον" == string(uic));
+          CHECK ("UI:?[perspective]-panel.*. /α/β/γ/δ/ε/λ/ον" == string(uic));
           CHECK ("?[perspective]-panel.*. " == uic.getComp());
           CHECK ("α/β/γ/δ/ε/λ/ον" == uic.getPath());
           
           uic = uic.prepend("win");
-          CHECK ("UI:UI:win[perspective]-panel.*. /α/β/γ/δ/ε/λ/ον" == string(uic));
+          CHECK ("UI:win[perspective]-panel.*. /α/β/γ/δ/ε/λ/ον" == string(uic));
           CHECK ("win[perspective]-panel.*. " == uic.getComp());
           CHECK ("α/β/γ/δ/ε/λ/ον" == uic.getPath());
           
           uic = uic.persp("");
-          CHECK ("UI:UI:win[*]-panel.*. /α/β/γ/δ/ε/λ/ον" == string(uic));
+          CHECK ("UI:win[*]-panel.*. /α/β/γ/δ/ε/λ/ον" == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK ("α/β/γ/δ/ε/λ/ον" == uic.getPath());
           CHECK (12 == uic.size());
           
           uic = uic.path(" ");
-          CHECK ("UI:UI:win[*]-panel.*. / " == string(uic));
+          CHECK ("UI:win[*]-panel.*. / " == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK (" " == uic.getPath());
           CHECK (6 == uic.size());
@@ -299,39 +299,39 @@ namespace test {
           VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PART+1]);
           
           uic = uic.path(nullptr);
-          CHECK ("UI:UI:win[*]-panel.*. " == string(uic));
+          CHECK ("UI:win[*]-panel.*. " == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK ("" == uic.getPath());
           CHECK (5 == uic.size());
           VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PART]);
           
           uic = uic.append(nullptr);
-          CHECK ("UI:UI:win[*]-panel.*. " == string(uic));
+          CHECK ("UI:win[*]-panel.*. " == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK ("" == uic.getPath());
           CHECK (5 == uic.size());
           
           uic = uic.append("*");
-          CHECK ("UI:UI:win[*]-panel.*. " == string(uic));
+          CHECK ("UI:win[*]-panel.*. " == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK ("" == uic.getPath());
           CHECK (5 == uic.size());
           
           uic = uic.append("**");
-          CHECK ("UI:UI:win[*]-panel.*. /**" == string(uic));
+          CHECK ("UI:win[*]-panel.*. /**" == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK ("**" == uic.getPath());
           CHECK ("**" == uic[UIC_PART]);
           CHECK (6 == uic.size());
           
           uic = uic.tab("");
-          CHECK ("UI:UI:win[*]-panel.*.*/**" == string(uic));
+          CHECK ("UI:win[*]-panel.*.*/**" == string(uic));
           CHECK ("win[*]-panel.*.*" == uic.getComp());
           CHECK ("**" == uic.getPath());
           CHECK (6 == uic.size());
           
           uic = uic.path("");
-          CHECK ("UI:UI:win[*]-panel" == string(uic));
+          CHECK ("UI:win[*]-panel" == string(uic));
           CHECK ("win[*]-panel" == uic.getComp());
           CHECK ("" == uic.getPath());
           CHECK (3 == uic.size());

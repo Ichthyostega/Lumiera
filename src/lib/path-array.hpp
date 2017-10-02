@@ -201,14 +201,19 @@ namespace lib {
         resizeTo (size_t cnt)
           {
             if (cnt > size())
-              { // copy to expanded storage
-                auto target = new const char* [cnt+1];
-                auto pos = std::copy (storage_, storage_+1+size(), target);
-                for ( ; pos < target+1+cnt; ++pos)
-                  *pos = nullptr;
+              { // need more storage
                 if (storage_)
-                  delete[] storage_;
-                storage_ = reinterpret_cast<PStorage> (target);
+                  { // copy content to new expanded storage
+                    auto target = new const char* [cnt+1];
+                    auto pos = std::copy (storage_, storage_+1+size(), target);
+                    for ( ; pos < target+1+cnt; ++pos)
+                      *pos = nullptr;
+                    delete[] storage_;
+                    storage_ = reinterpret_cast<PStorage> (target);
+                  }
+                else // allocate and init empty
+                  storage_ = new Literal [cnt+1];
+                
                 size (storage_) = cnt;
                 return;
               }
@@ -453,7 +458,7 @@ namespace lib {
        * @return pointer to the storage, either existing or reallocated
        */
       Literal*
-      maybeExpandTo (size_t idx)
+      expandPosition (size_t idx)
         {
           if (chunk_size <= idx and size() <= idx)
             tail_.resizeTo(idx+1 - chunk_size);
