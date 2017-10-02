@@ -360,6 +360,26 @@ namespace test {
           
           UICoord u1c{u1};
           
+          CHECK (u1  == u1 );
+          CHECK (u1  != u11);
+          CHECK (u2  != u1 );
+          CHECK (u2  != u11);
+          
+          CHECK (u1  == u1c);
+          CHECK (u1  == UICoord("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ"    ));
+          CHECK (u1  == UICoord("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","" ));
+          CHECK (UICoord("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ",nullptr) == UICoord("Γ","Δ","Θ","Ξ","Σ","Ψ","Φ"));
+          
+          CHECK (u11 == u1.path("Ψ/Φ/Ω//"));
+          
+          CHECK (u1  > u11);
+          CHECK (u11 < u1 );
+          CHECK (u1 >= u1 );
+          CHECK (u1 >= u11);
+          CHECK (not (u1  < u11));
+          CHECK (not (u1  < u1 ));
+          CHECK (not (u1  < u2 ));
+          CHECK (not (u11 < u2 ));
         }
       
       

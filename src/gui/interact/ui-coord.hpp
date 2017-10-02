@@ -56,7 +56,6 @@
 #include "lib/path-array.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <cstring>
 #include <string>
 #include <vector>
@@ -367,14 +366,18 @@ namespace interact {
       friend bool
       operator== (UICoord const& l, UICoord const& r)
       {
+        return false;//static_cast<PathAry const&> (l) == static_cast<PathAry const&> (r);
+      }
+      friend bool
+      operator<  (UICoord const& l, UICoord const& r)
+      {
         UNIMPLEMENTED ("equality of UI coordinates");
       }
       
-      friend bool
-      operator!= (UICoord const& l, UICoord const& r)
-      {
-        return not (l == r);
-      }
+      friend bool operator>  (UICoord const& l, UICoord const& r) { return (r < l);             }
+      friend bool operator<= (UICoord const& l, UICoord const& r) { return (l < r) or (l == r); }
+      friend bool operator>= (UICoord const& l, UICoord const& r) { return (r < l) or (l == r); }
+      friend bool operator!= (UICoord const& l, UICoord const& r) { return not (l == r);        }
     };
   
   
