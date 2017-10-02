@@ -105,9 +105,9 @@ namespace test {
           CHECK ("Θ" == uic[UIC_PANEL]);
           CHECK ("Ξ" == uic[UIC_VIEW]);
           CHECK ("Σ" == uic[UIC_TAB]);
-          CHECK ("Ψ" == uic[UIC_PART]);
-          CHECK ("Φ" == uic[UIC_PART+1]);
-          CHECK ("Ω" == uic[UIC_PART+2]);
+          CHECK ("Ψ" == uic[UIC_PATH]);
+          CHECK ("Φ" == uic[UIC_PATH+1]);
+          CHECK ("Ω" == uic[UIC_PATH+2]);
           
           // iteration matches index order
           uint i=0;
@@ -133,9 +133,9 @@ namespace test {
           CHECK ("Θ" == uic[UIC_PANEL]);
           CHECK ("*" == uic[UIC_VIEW]);
           CHECK ("Σ" == uic[UIC_TAB]);
-          CHECK ("*" == uic[UIC_PART]);
-          CHECK ("Φ" == uic[UIC_PART+1]);
-          VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PART+2]);
+          CHECK ("*" == uic[UIC_PATH]);
+          CHECK ("Φ" == uic[UIC_PATH+1]);
+          VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PATH+2]);
         }
       
       
@@ -235,13 +235,13 @@ namespace test {
           CHECK (Symbol::EMPTY == uic[UIC_PANEL]);
           CHECK (Symbol::EMPTY == uic[UIC_VIEW]);
           CHECK (Symbol::EMPTY == uic[UIC_TAB]);
-          CHECK ("α"  == uic[UIC_PART]);
-          CHECK ("β"  == uic[UIC_PART+1]);
-          CHECK ("γ"  == uic[UIC_PART+2]);
-          CHECK ("δ"  == uic[UIC_PART+3]);
-          CHECK ("ε"  == uic[UIC_PART+4]);
-          CHECK ("λ"  == uic[UIC_PART+5]);
-          CHECK ("ον" == uic[UIC_PART+6]);
+          CHECK ("α"  == uic[UIC_PATH]);
+          CHECK ("β"  == uic[UIC_PATH+1]);
+          CHECK ("γ"  == uic[UIC_PATH+2]);
+          CHECK ("δ"  == uic[UIC_PATH+3]);
+          CHECK ("ε"  == uic[UIC_PATH+4]);
+          CHECK ("λ"  == uic[UIC_PATH+5]);
+          CHECK ("ον" == uic[UIC_PATH+6]);
           
           uic = uic.prepend("ειδος");
           CHECK ("UI:?.ειδος/α/β/γ/δ/ε/λ/ον" == string(uic));
@@ -295,15 +295,15 @@ namespace test {
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK (" " == uic.getPath());
           CHECK (6 == uic.size());
-          CHECK (" " == uic[UIC_PART]);
-          VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PART+1]);
+          CHECK (" " == uic[UIC_PATH]);
+          VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PATH+1]);
           
           uic = uic.path(nullptr);
           CHECK ("UI:win[*]-panel.*. " == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK ("" == uic.getPath());
           CHECK (5 == uic.size());
-          VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PART]);
+          VERIFY_ERROR (INDEX_BOUNDS, uic[UIC_PATH]);
           
           uic = uic.append(nullptr);
           CHECK ("UI:win[*]-panel.*. " == string(uic));
@@ -321,7 +321,7 @@ namespace test {
           CHECK ("UI:win[*]-panel.*. /**" == string(uic));
           CHECK ("win[*]-panel.*. " == uic.getComp());
           CHECK ("**" == uic.getPath());
-          CHECK ("**" == uic[UIC_PART]);
+          CHECK ("**" == uic[UIC_PATH]);
           CHECK (6 == uic.size());
           
           uic = uic.tab("");

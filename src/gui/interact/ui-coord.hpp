@@ -90,7 +90,7 @@ namespace interact {
       UIC_PANEL,
       UIC_VIEW,
       UIC_TAB,
-      UIC_PART
+      UIC_PATH
     };
   
   
@@ -192,7 +192,7 @@ namespace interact {
         {
           if (empty()) return "";
           
-          size_t end = min (size(), UIC_PART);
+          size_t end = min (size(), UIC_PATH);
           size_t pos = indexOf(*begin());
           
           if (pos >= end)
@@ -231,13 +231,13 @@ namespace interact {
       getPath()  const
         {
           size_t siz = size();
-          if (siz <= UIC_PART)
+          if (siz <= UIC_PATH)
             return "";   // no path information
           
           string buff; // heuristic pre-allocation
-          buff.reserve (10 * (siz - UIC_PART));
+          buff.reserve (10 * (siz - UIC_PATH));
           
-          iterator elm{this, unConst(this)->getPosition(UIC_PART)};
+          iterator elm{this, unConst(this)->getPosition(UIC_PATH)};
           if (isnil (*elm))
             { // irregular case : only a path fragment
               elm = this->begin();
@@ -455,7 +455,7 @@ namespace interact {
       Builder
       path (Literal pathDef)
         {
-          uic_.setTailSequence (UIC_PART, pathDef);
+          uic_.setTailSequence (UIC_PATH, pathDef);
           return std::move (*this);
         }
     };
