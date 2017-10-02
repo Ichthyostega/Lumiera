@@ -186,9 +186,10 @@ namespace test {
           uic4 = uic3.prepend("panel");
           CHECK (4 == uic4.size());
           CHECK ("UI:?-panel.view" == string(uic4));
+          uic4 = uic4.tab(555);
+          CHECK (5 == uic4.size());
+          CHECK ("UI:?-panel.view.#555" == string(uic4));
           VERIFY_ERROR(LOGIC, uic1.prepend("root"));
-          
-          UNIMPLEMENTED ("verify the UI coordinate builder DSL");
         }
       
       

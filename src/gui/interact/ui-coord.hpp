@@ -65,6 +65,8 @@
 namespace gui {
 namespace interact {
   
+  namespace error = lumiera::error;
+  
 //  using std::unique_ptr;
   using std::string;
   using lib::Literal;
@@ -145,6 +147,22 @@ namespace interact {
       Literal getPanel()  const { return accesComponent (UIC_PANEL); }
       Literal getView()   const { return accesComponent (UIC_VIEW);  }
       Literal getTab()    const { return accesComponent (UIC_TAB);   }
+      
+      
+      
+      /* === query functions === */
+      
+      /**
+       * @remark _incomplete_ UI-Coordinates has some fragment of the path
+       *         defined, but lacks the definition of an anchor point,
+       *         i.e. it has no window ID
+       */
+      bool
+      isIncomplete()  const
+        {
+          return not empty()
+             and isnil (getWindow());
+        }
       
       
       
@@ -247,10 +265,17 @@ namespace interact {
         }
       
       void
-      setComponent (UIPathElm idx, Literal newContent)
+      setComponent (size_t idx, Literal newContent)
         {
           Literal* storage = maybeExpandTo (idx);
           setContent (storage, newContent);
+        }
+      
+      size_t
+      findStartIdx()  const
+        {
+          REQUIRE (not empty());
+          return indexOf (*begin());
         }
       
       
@@ -336,25 +361,31 @@ namespace interact {
         }
       
       
-      /** augment UI coordinates to define a complete local path */
-      Builder
-      path (string pathDefinition)
-        {
-          UNIMPLEMENTED ("set path");
-        }
-      
       /** augment UI coordinates by appending a further component at the end */
       Builder
       append (Literal elmID)
         {
-          UNIMPLEMENTED ("mutate: append");
+          uic_.setComponent (uic_.size(), elmID);
+          return std::move (*this);
         }
       
       /** augment partially defined UI coordinates by extending them towards the root */
       Builder
       prepend (Literal elmID)
         {
-          UNIMPLEMENTED ("mutate: preprend");
+          if (not uic_.isIncomplete())
+            throw error::Logic ("Attempt to prepend "+elmID
+                               +" to the complete rooted path "+string(uic_));
+          
+          uic_.setComponent (uic_.findStartIdx() - 1, elmID);
+          return std::move (*this);
+        }
+      
+      /** augment UI coordinates to define a complete local path */
+      Builder
+      path (string pathDefinition)
+        {
+          UNIMPLEMENTED ("set path");
         }
     };
   
