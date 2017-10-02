@@ -354,7 +354,12 @@ namespace test {
       void
       verify_comparisons()
         {
-          UNIMPLEMENTED ("verify comparison of UI coordinates");
+          UICoord u1 {"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ"    };
+          UICoord u11{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
+          UICoord u2 {"Γ","Δ","Θ","Σ","Ξ","Ψ","Φ","Ω"};
+          
+          UICoord u1c{u1};
+          
         }
       
       

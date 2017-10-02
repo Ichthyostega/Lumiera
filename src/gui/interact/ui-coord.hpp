@@ -101,8 +101,8 @@ namespace interact {
   
   /**
    * Describe a location within the UI through structural/topological coordinates.
-   * A UICoord specification is a tuple, elaborating a path through the hierarchy
-   * of UI elements down to the specific element referred.
+   * A UICoord specification is a sequence of Literal tokens, elaborating a path descending
+   * through the hierarchy of UI elements down to the specific UI element to refer.
    * 
    * @todo initial draft as of 9/2017
    */
@@ -112,7 +112,26 @@ namespace interact {
       using PathAry = lib::PathArray<UIC_INLINE_SIZE>;
       
     public:
-      using PathAry::PathArray;
+      /**
+       * UI-Coordinates can be created explicitly by specifying a sequence of Literal tokens,
+       * which will be used to initialise and then normalise the underlying PathArray.
+       * @warning Literal means _"literal"_ with guaranteed storage during the whole execution.
+       * @remarks - in case you need to construct some part, then use Symbol to _intern_ the
+       *            resulting string into the global static SymbolTable.
+       *          - usually the Builder API leads to more readable definitions,
+       *            explicitly indicating the meaning of the coordinate's parts.
+       */
+      template<typename...ARGS>
+      explicit
+      UICoord (ARGS&& ...args) : PathArray(std::forward<ARGS> (args)...) { }
+      
+      UICoord (UICoord&&)                  = default;
+      UICoord (UICoord const&)             = default;
+      UICoord (UICoord& o)     : UICoord((UICoord const&)o) { }
+      
+      UICoord& operator= (UICoord const&) = default;
+      UICoord& operator= (UICoord &&)     = default;
+      
       
       
       /* === Builder API === */
