@@ -85,12 +85,7 @@ namespace test {
           verify_builder();
           verify_stringRepr();
           verify_comparisons();
-          verify_queryAnchor();
-          verify_queryCoverage();
-          verify_mutateAnchor();
-          verify_mutateCover();
-          verify_mutateExtend();
-          verify_mutateCreate();
+          verify_localPredicates();
         }
       
       
@@ -279,7 +274,12 @@ namespace test {
           
           uic = uic.tab(8);
           CHECK ("UI:?-panel.*.#8/α/β/γ/δ/ε/λ/ον" == string(uic));
-          CHECK ("?-panel.*. " == uic.getComp());
+          CHECK ("?-panel.*.#8" == uic.getComp());
+          CHECK ("α/β/γ/δ/ε/λ/ον" == uic.getPath());
+          
+          uic = uic.noTab();
+          CHECK ("UI:?-panel.*/α/β/γ/δ/ε/λ/ον" == string(uic));
+          CHECK ("?-panel.*" == uic.getComp());
           CHECK ("α/β/γ/δ/ε/λ/ον" == uic.getPath());
           
           uic = uic.tab(" ");
@@ -359,44 +359,9 @@ namespace test {
       
       
       void
-      verify_queryAnchor()
+      verify_localPredicates()
         {
-          UNIMPLEMENTED ("query anchorage of given UI coordinates");
-        }
-      
-      
-      void
-      verify_queryCoverage()
-        {
-          UNIMPLEMENTED ("query coverage of given UI coordinates with respect to actual UI");
-        }
-      
-      
-      void
-      verify_mutateAnchor()
-        {
-          UNIMPLEMENTED ("mutate given UI coordinates by anchoring them");
-        }
-      
-      
-      void
-      verify_mutateCover()
-        {
-          UNIMPLEMENTED ("mutate given UI coordinates by reducing to covered part");
-        }
-      
-      
-      void
-      verify_mutateExtend()
-        {
-          UNIMPLEMENTED ("mutate given UI coordinates by uncovered extension");
-        }
-      
-      
-      void
-      verify_mutateCreate()
-        {
-          UNIMPLEMENTED ("mutate given UI coordinates by creating new components");
+          UNIMPLEMENTED ("predicates locally decidable based only on the coordinate data");
         }
     };
   

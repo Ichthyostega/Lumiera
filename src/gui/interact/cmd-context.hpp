@@ -42,6 +42,7 @@
  ** context-bound command becomes executable by picking up suitable parameter values from this context.
  ** 
  ** @todo as of 3/2017 this is a early design draft and WIP-WIP-WIP
+ ** @todo after initial design draft, postponed as of 10/2017
  ** 
  ** @see CmdContext_test
  ** @see ////TODO_test usage example

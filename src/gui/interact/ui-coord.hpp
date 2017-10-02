@@ -94,7 +94,8 @@ namespace interact {
     };
   
   
-  extern Symbol UIC_CURRENT_WINDOW; // see view-locator.cpp
+  extern Symbol UIC_CURRENT_WINDOW; ///< window spec to refer to the _current window_ @see view-locator.cpp
+  extern Symbol UIC_ELIDED;         ///< indicate that a component is elided or irrelevant here
 
   
   
@@ -133,6 +134,7 @@ namespace interact {
       Builder view  (Literal viewID) const;
       Builder tab   (Literal tabID)  const;
       Builder tab   (uint tabIdx)    const;
+      Builder noTab ()               const;
       
       // convenience shortcuts to start mutation on a copy...
       
@@ -219,7 +221,8 @@ namespace interact {
                 buff += "."+getView();
                 break;
               case UIC_TAB:
-                buff += "."+getTab();
+                if (UIC_ELIDED != getTab())
+                  buff += "."+getTab();
                 break;
               default:
                 NOTREACHED ("component index numbering broken");
@@ -422,6 +425,15 @@ namespace interact {
           return std::move (*this);
         }
       
+      /** augment UI coordinates to indicate that no tab specification is necessary
+       * @remarks typically this happens when a panel just holds a simple view */
+      Builder
+      noTab()
+        {
+          uic_.setComponent (UIC_TAB, UIC_ELIDED);
+          return std::move (*this);
+        }
+      
       
       /** augment UI coordinates by appending a further component at the end.
        * @note the element might define a sequence of components separated by `'/'`,
@@ -511,6 +523,12 @@ namespace interact {
   UICoord::tab (uint tabIdx)  const
     {
       return Builder(*this).tab (tabIdx);
+    }
+  
+  inline UICoord::Builder
+  UICoord::noTab ()  const
+    {
+      return Builder(*this).noTab();
     }
   
   /**

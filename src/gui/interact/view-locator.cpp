@@ -44,6 +44,7 @@ namespace interact {
   /* ==== definitions and concrete bindings for the View-Spec-DSL ==== */
   
   Symbol UIC_CURRENT_WINDOW{"currentWindow"};
+  Symbol UIC_ELIDED        {"."};
   
   
   // dtors via smart-ptr invoked from here...
