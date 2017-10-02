@@ -249,7 +249,8 @@ namespace interact {
       void
       setComponent (UIPathElm idx, Literal newContent)
         {
-          UNIMPLEMENTED ("forcibly change data, maybe extend storage");
+          Literal* storage = maybeExpandTo (idx);
+          setContent (storage, newContent);
         }
       
       
@@ -295,7 +296,7 @@ namespace interact {
       
       /* == Builder functions == */
       
-      Builder&&
+      Builder
       window (Literal windowID)
         {
           uic_.setComponent (UIC_WINDOW, windowID);
@@ -303,15 +304,15 @@ namespace interact {
         }
       
       /** augment UI coordinates to mandate a specific perspective to be active within the window */
-      Builder&&
+      Builder
       persp (Literal perspectiveID)
         {
-          uic_.setComponent (UIC_PART, perspectiveID);
+          uic_.setComponent (UIC_PERSP, perspectiveID);
           return std::move (*this);
         }
       
       /** augment UI coordinates to indicate a specific view to be used */
-      Builder&&
+      Builder
       view (Literal viewID)
         {
           uic_.setComponent (UIC_VIEW, viewID);
@@ -319,7 +320,7 @@ namespace interact {
         }
       
       /** augment UI coordinates to indicate a specific tab within the view" */
-      Builder&&
+      Builder
       tab (Literal tabID)
         {
           uic_.setComponent (UIC_TAB, tabID);
@@ -327,7 +328,7 @@ namespace interact {
         }
       
       /** augment UI coordinates to indicate a tab specified by index number */
-      Builder&&
+      Builder
       tab (uint tabIdx)
         {
           uic_.setComponent (UIC_TAB, Symbol{"#"+util::toString (tabIdx)});
@@ -336,21 +337,21 @@ namespace interact {
       
       
       /** augment UI coordinates to define a complete local path */
-      Builder&&
+      Builder
       path (string pathDefinition)
         {
           UNIMPLEMENTED ("set path");
         }
       
       /** augment UI coordinates by appending a further component at the end */
-      Builder&&
+      Builder
       append (Literal elmID)
         {
           UNIMPLEMENTED ("mutate: append");
         }
       
       /** augment partially defined UI coordinates by extending them towards the root */
-      Builder&&
+      Builder
       prepend (Literal elmID)
         {
           UNIMPLEMENTED ("mutate: preprend");

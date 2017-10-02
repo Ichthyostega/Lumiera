@@ -481,6 +481,16 @@ namespace test {
           CHECK (ParrT("" ,"Δ","Θ","Ξ","" ,"Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ",nullptr,"Ψ","Φ"));
           CHECK (ParrT("" ,"Δ","Θ","Ξ","*","Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ",nullptr,"Ψ","Φ"));
           CHECK (ParrT("" ,"Δ","Θ","Ξ","*","Ψ","Φ","" ) == ParrT("" ,"Δ","Θ","Ξ","", "Ψ","Φ"));
+          
+          ParrT src{"Γ","Δ","Θ","Ξ","Σ","Ψ","Φ","Ω"};
+          ParrT copy{src};
+          CHECK (not isnil(copy));
+          CHECK (src == copy);
+          
+          ParrT target {std::move (copy)};
+          CHECK (src == target);
+          CHECK (copy != target);
+          CHECK (copy != src);
         }
     };
   

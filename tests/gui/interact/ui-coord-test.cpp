@@ -143,7 +143,7 @@ namespace test {
       verify_builder()
         {
           UICoord uic1 = UICoord::window("window");
-          UICoord uic2 = uic2.view("view");
+          UICoord uic2 = uic1.view("view");
           CHECK ("UI:window" == string(uic1));
           CHECK ("UI:window[*]-*.view" == string(uic2));
           CHECK (1 == uic1.size());

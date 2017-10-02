@@ -101,7 +101,7 @@ namespace lib {
         PStorage
         newCopy()  const
           {
-            size_t siz = size (unConst(this)->storage_);
+            size_t siz = 1 + size (unConst(this)->storage_);
             const char** alloc = new const char*[siz];
             std::copy (storage_, storage_+siz, alloc);
             return reinterpret_cast<PStorage> (alloc);
@@ -198,9 +198,20 @@ namespace lib {
           }
         
         void
-        trimTo (size_t cnt)
+        resizeTo (size_t cnt)
           {
-            REQUIRE (cnt <= size());
+            if (cnt > size())
+              { // copy to expanded storage
+                auto target = new const char* [cnt+1];
+                auto pos = std::copy (storage_, storage_+1+size(), target);
+                for ( ; pos < target+1+cnt; ++pos)
+                  *pos = nullptr;
+                if (storage_)
+                  delete[] storage_;
+                storage_ = reinterpret_cast<PStorage> (target);
+                size (storage_) = cnt;
+                return;
+              }
             if (not storage_) return;
             if (cnt == 0)
               {
@@ -437,6 +448,22 @@ namespace lib {
           return const_cast<Literal*> (elm);
         }
       
+      /**
+       * @internal ensure storage for the indicated position exists
+       * @return pointer to the storage, either existing or reallocated
+       */
+      Literal*
+      maybeExpandTo (size_t idx)
+        {
+          if (chunk_size <= idx and size() <= idx)
+            tail_.resizeTo(idx+1 - chunk_size);
+          if (idx < chunk_size)
+            return elms_.begin() + idx;
+          
+          ENSURE (idx-chunk_size < tail_.size());
+          return const_cast<Literal*> (&tail_[idx-chunk_size]);
+        }
+      
       /** @internal force new content into the given entry */
       void
       setContent (Literal* pos, const char* val)
@@ -487,9 +514,9 @@ namespace lib {
             setContent (getPosition(idx), nullptr);
           
           if (idx >= chunk_size-1)
-            tail_.trimTo (idx+1 - chunk_size);
+            tail_.resizeTo (idx+1 - chunk_size);
           else
-            tail_.trimTo (0);
+            tail_.resizeTo (0);
         }
     };
   
