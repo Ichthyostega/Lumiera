@@ -9615,7 +9615,7 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
-<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201710011858" tags="def draft spec GuiPattern" changecount="6">
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201710021428" tags="def draft spec GuiPattern" changecount="11">
 <pre>//A topological addressing scheme to designate structural locations within the UI.//
 Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
 * to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    
@@ -9652,13 +9652,13 @@ Internally the coordinate resolver in turn relies on a context query interface, 
 In addition to the //locally decidable properties// of a coordinate spec, which are the explicitness and the presence of some component, several contextual predications may be queried 
 ;anchorage
 :the way the given coordinate spec is or can be anchored
-:* it is already //explicitly anchored// and this anchorage can be covered and backed by the currently existing UI configuration
+:* it is already //explicitly anchored// by referring either to a specific window or by generic specification
 :* it //can be a anchored// by interpolation of some wildcards
 :* it is //incomplete// and need to be extended to allow anchoring
 :* it is //impossible to anchor// in the current UI configuration
 ;coverage
 :the extent to which a given coordinate spec is backed by the actual UI configuration
-:please note: to determine the coverage, the spec need to anchored (either explicitly, or by interpolation, or by extension of an incomplete spec)
+:please note: to determine the coverage, the spec needs to be anchored (either explicitly, or by interpolation, or by extension of an incomplete spec)
 :* it is //completely covered//
 :* it is //partially covered// with an remaining, uncovered extension part
 :* it is //possible to cover completely//
@@ -9666,11 +9666,11 @@ In addition to the //locally decidable properties// of a coordinate spec, which 
 !!!Mutations
 In addition to querying the interpretation of a given coordinate spec with respect to the current UI environment, it is also possible to rewrite or extend the spec based on this environment
 ;anchoring
-:in correspondence to the possible states of anchorage, we may derived an explicitly anchored spec
+:in correspondence to the possible states of anchorage, we may derive an explicitly anchored spec
 :*by interpolating the given spec
-:*by interpolation and extension of the given spec
+:*by interpretation and extension of the given spec
 ;covering
-:we may construct the covered part of a given spec, including automatic anchoring.
+:we may construct the covered part of a given spec, which includes automatic anchoring.
 ;navigating
 :we may rewrite a given spec by navigating within the existing UI environment
 :as starting point, the coordinate spec need to be anchored and completely covered
