@@ -175,7 +175,7 @@ namespace interact {
       /* === query functions === */
       
       /**
-       * @remark _incomplete_ UI-Coordinates has some fragment of the path
+       * @remark _incomplete_ UI-Coordinates have some fragment of the path
        *         defined, but lacks the definition of an anchor point,
        *         i.e. it has no window ID
        */
@@ -184,6 +184,25 @@ namespace interact {
         {
           return not empty()
              and isnil (getWindow());
+        }
+      
+      bool
+      isComplete()  const
+        {
+          return not empty()
+             and not isnil (getWindow());
+        }
+      
+      
+      /**
+       * @remark an _explicit_ coordinate spec does nut use wildcards
+       *         and is anchored in a window spec
+       */
+      bool
+      isExplicit()  const
+        {
+          return isComplete()
+             and not util::contains (*this, Symbol::ANY);
         }
       
       

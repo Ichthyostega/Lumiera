@@ -389,7 +389,24 @@ namespace test {
       void
       verify_localPredicates()
         {
-          UNIMPLEMENTED ("predicates locally decidable based only on the coordinate data");
+          UICoord nil;
+          UICoord u1 { "", "", "","Ξ","Σ"};
+          UICoord u2 {"Γ","*","Θ","Ξ","Σ"};
+          UICoord u3 {"Γ","Δ","Θ","Ξ","Σ"};
+          
+          CHECK (not u1.isComplete());
+          CHECK (not u1.isExplicit());
+          
+          CHECK (    u2.isComplete());
+          CHECK (not u2.isExplicit());
+          
+          CHECK (    u3.isComplete());
+          CHECK (    u3.isExplicit());
+          
+          CHECK (u1.isIncomplete());
+          CHECK (not nil.isExplicit());
+          CHECK (not nil.isComplete());
+          CHECK (not nil.isIncomplete());  // note fine point
         }
     };
   
