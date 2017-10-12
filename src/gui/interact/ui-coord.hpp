@@ -591,16 +591,16 @@ namespace interact {
    */
   inline UICoord::Builder
   UICoord::currentWindow()
-    {
-      return window (UIC_CURRENT_WINDOW);
-    }
+  {
+    return window (UIC_CURRENT_WINDOW);
+  }
   
   /** @return aBuilder with just the windowID defined */
   inline UICoord::Builder
   UICoord::window (Literal windowID)
-    {
-      return Builder{windowID};
-    }
+  {
+    return Builder{windowID};
+  }
   
   
   /** @return a Builder holding a clone copy of the original UICoord,
@@ -611,33 +611,33 @@ namespace interact {
    *          assign it to the original variable. */
   inline UICoord::Builder
   UICoord::persp (Literal perspectiveID)  const
-    {
-      return Builder(*this).persp (perspectiveID);
-    }
+  {
+    return Builder(*this).persp (perspectiveID);
+  }
   
   inline UICoord::Builder
   UICoord::view (Literal viewID)  const
-    {
-      return Builder(*this).view (viewID);
-    }
+  {
+    return Builder(*this).view (viewID);
+  }
   
   inline UICoord::Builder
   UICoord::tab (Literal tabID)  const
-    {
-      return Builder(*this).tab (tabID);
-    }
+  {
+    return Builder(*this).tab (tabID);
+  }
   
   inline UICoord::Builder
   UICoord::tab (uint tabIdx)  const
-    {
-      return Builder(*this).tab (tabIdx);
-    }
+  {
+    return Builder(*this).tab (tabIdx);
+  }
   
   inline UICoord::Builder
   UICoord::noTab ()  const
-    {
-      return Builder(*this).noTab();
-    }
+  {
+    return Builder(*this).noTab();
+  }
   
   /**
    * convenience builder function so set a full path definition
@@ -646,21 +646,21 @@ namespace interact {
    */
   inline UICoord::Builder
   UICoord::path (Literal pathDefinition)  const
-    {
-      return Builder(*this).path (pathDefinition);
-    }
+  {
+    return Builder(*this).path (pathDefinition);
+  }
   
   inline UICoord::Builder
   UICoord::append (Literal elmID)  const
-    {
-      return Builder(*this).append (elmID);
-    }
+  {
+    return Builder(*this).append (elmID);
+  }
   
   inline UICoord::Builder
   UICoord::prepend (Literal elmID)  const
-    {
-      return Builder(*this).prepend (elmID);
-    }
+  {
+    return Builder(*this).prepend (elmID);
+  }
   
   
   
