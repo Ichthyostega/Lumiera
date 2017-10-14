@@ -4167,7 +4167,7 @@ The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangibl
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
 </div>
-<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201710140008" tags="spec decision draft GuiPattern" changecount="5">
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201710142254" tags="spec decision draft GuiPattern" changecount="13">
 <pre>//Service to navigate through the UI as generic structure.//
 The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
 
@@ -4181,8 +4181,23 @@ In order to build a navigation facility, we need to...
 * follow a path
 ** which means to constitute a location
 ** and to discover child nodes at that location
-* and we want to extend (maybe also prune) the collection of children
+* and we might want to extend (maybe also prune) the collection of children
 
+!!!Use cases
+In the current situation ({{red{10/2017}}}), before engaging into the actual implementation, we're able to identify two distinct use cases
+;View [[specification|GuiComponentView]]
+:locate a view based on a preconfigured placement
+:* either to allocate a new view instance
+:* or to get //just some instance// of a view identified by type
+;WorkSite navication
+:move the Spot to some other place in the UI known by its [[UI-Coordinates|UICoord]]
+
+!!!Requirements clarified
+From these use cases we conclude that the actual requirements for a Navigator component are less than one might expect.
+In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on UI coordinates solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
+
+!Challenges of the implementation
+Some tricky problems remain to be solved though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose
 </pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="200909041807" tags="spec Builder Rendering">

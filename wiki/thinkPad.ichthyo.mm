@@ -3849,9 +3849,14 @@
 <icon BUILTIN="help"/>
 <node CREATED="1507939956606" ID="ID_406843936" MODIFIED="1507939968593" TEXT="was ist gegeben?">
 <icon BUILTIN="help"/>
+<node CREATED="1508017024459" ID="ID_604601896" MODIFIED="1508017036024" TEXT="stets ein kompletter Zugangs-Pfad">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1507939970349" ID="ID_714349147" MODIFIED="1507939978746" TEXT="in welcher Form ist es gegeben?">
 <icon BUILTIN="help"/>
+<node CREATED="1508016915761" ID="ID_1202508530" MODIFIED="1508016919437" TEXT="konkretes Objekt"/>
+<node CREATED="1508016919857" ID="ID_437710115" MODIFIED="1508016928292" TEXT="UI-Koordinaten per Lookup"/>
 </node>
 </node>
 <node CREATED="1507939869906" ID="ID_223198097" MODIFIED="1507939888652" STYLE="fork" TEXT="wo bin &quot;ich&quot;?">
@@ -3868,6 +3873,46 @@
   </body>
 </html>
 </richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508016549578" ID="ID_526260275" MODIFIED="1508017005843">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>zentrales</b>&#160;Problem
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1508016569551" ID="ID_250033067" MODIFIED="1508016574411" TEXT="zwei L&#xf6;sungsans&#xe4;tze">
+<node CREATED="1508016575359" ID="ID_1494737189" MODIFIED="1508016601871" TEXT="Ort ist bekannt">
+<node CREATED="1508016623480" ID="ID_66450805" MODIFIED="1508016640730" TEXT="Element speichert seine UICoord"/>
+<node CREATED="1508016658684" ID="ID_116864327" MODIFIED="1508016688708" TEXT="globaler Index beim Erstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...der beim Erstellen des Elements
+    </p>
+    <p>
+      mit den zu diesem Zeitpunkt bekannten UI-Korrdinaten best&#252;ckt wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1508016602867" ID="ID_1861393889" MODIFIED="1508016607918" TEXT="Ort kann entdeckt werden">
+<node CREATED="1508016710621" ID="ID_194767769" MODIFIED="1508016717920" TEXT="Element kennt seinen Vater"/>
+<node CREATED="1508016741377" ID="ID_1796475231" MODIFIED="1508016761498" TEXT="(GObject) Introspektion"/>
+</node>
 </node>
 </node>
 <node CREATED="1507939914076" ID="ID_109277608" MODIFIED="1507939926147" TEXT="was gilt als &quot;Kind&quot;?">
@@ -3888,6 +3933,32 @@
 </html>
 </richcontent>
 <icon BUILTIN="help"/>
+<node CREATED="1508017106368" ID="ID_896661508" MODIFIED="1508017117534" TEXT="UI-Element">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1508017111959" ID="ID_484448099" MODIFIED="1508017113603" TEXT="nein"/>
+<node CREATED="1508017121582" ID="ID_1052512660" MODIFIED="1508017127865" TEXT="denn: Fenster, Panels,..."/>
+</node>
+<node CREATED="1508017134709" ID="ID_881948528" MODIFIED="1508017144639" TEXT="Navigierbarkeit">
+<node CREATED="1508017225544" ID="ID_1003735159" MODIFIED="1508017238894" TEXT="abstrakt">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1508017228080" ID="ID_1185322365" MODIFIED="1508017236030" TEXT="per Interface">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1508017200476" ID="ID_1519289713" MODIFIED="1508017202519" TEXT="gar keine">
+<node CREATED="1508017203419" ID="ID_1168589916" MODIFIED="1508017213820" TEXT="generische Programmierung!">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1508017409096" ID="ID_1088456751" MODIFIED="1508017422144" TEXT="was ist hier ein &quot;Element&quot;?">
+<icon BUILTIN="help"/>
+<node CREATED="1508017614565" ID="ID_825986555" MODIFIED="1508017620208" TEXT="bleibt abstrakt">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1508017621148" ID="ID_945496558" MODIFIED="1508017637174" TEXT="man kann etwas damit machen"/>
 </node>
 </node>
 <node CREATED="1507939927035" ID="ID_461225915" MODIFIED="1507940093229">
@@ -3909,6 +3980,65 @@
 <node CREATED="1507940112890" ID="ID_1195951242" MODIFIED="1507940119572" TEXT="der Bedarf??"/>
 <node CREATED="1507940120425" ID="ID_338582582" MODIFIED="1507940126540" TEXT="der Erzeuger??"/>
 </node>
+</node>
+<node CREATED="1508016417180" ID="ID_1611707918" MODIFIED="1508016419840" TEXT="use cases">
+<node CREATED="1508016430306" ID="ID_192114274" MODIFIED="1508016433389" TEXT="ViewSpec">
+<node CREATED="1508018634766" ID="ID_749934346" MODIFIED="1508018639769" TEXT="View allozieren"/>
+<node CREATED="1508018640309" ID="ID_1078510800" MODIFIED="1508018649815" TEXT="View-Instanz per Gattung"/>
+</node>
+<node CREATED="1508016469685" ID="ID_115506070" MODIFIED="1508016486222" TEXT="change WorkSite">
+<node CREATED="1508018713267" ID="ID_778872885" MODIFIED="1508018720046" TEXT="WorkSite verlagern / mitf&#xfc;hren"/>
+<node CREATED="1508018720562" ID="ID_187314256" MODIFIED="1508018725326" TEXT="zu anderer WorkSite gehen"/>
+</node>
+</node>
+</node>
+<node CREATED="1508020233586" HGAP="41" ID="ID_1791370781" MODIFIED="1508020245493" TEXT="Fazit" VSHIFT="16">
+<node CREATED="1508020253223" ID="ID_1259200744" MODIFIED="1508020256499" TEXT="Problem zerlegen">
+<node CREATED="1508020258670" ID="ID_95147852" MODIFIED="1508020269833" TEXT="reverse resolution"/>
+<node CREATED="1508020270709" ID="ID_1200125105" MODIFIED="1508020279736" TEXT="Kinder finden">
+<node CREATED="1508020280683" ID="ID_646056653" MODIFIED="1508020285758" TEXT="fest verdrahtet f&#xfc;r top-level"/>
+<node CREATED="1508020286443" ID="ID_515525549" MODIFIED="1508020292366" TEXT="Interface f&#xfc;r lokal"/>
+</node>
+</node>
+<node CREATED="1508020411538" ID="ID_544888156" MODIFIED="1508020416805" TEXT="Navigation">
+<node CREATED="1508020417633" ID="ID_1963411977" MODIFIED="1508020424764" TEXT="arbeitet nur auf UI-Koordinaten"/>
+<node CREATED="1508020433719" ID="ID_1645971492" MODIFIED="1508020445946" TEXT="die dahinterliegenden Strukturen bleiben opaque"/>
+<node CREATED="1508020450445" ID="ID_1822545447" MODIFIED="1508020464519" TEXT="mit dem Ergebnis">
+<node CREATED="1508020465443" ID="ID_1921466133" MODIFIED="1508020488852" TEXT="kann man dann einen View erzeugen"/>
+<node CREATED="1508020489583" ID="ID_1140824323" MODIFIED="1508020497739" TEXT="oder ein Element (bekannten Typs) bekommen"/>
+<node CREATED="1508020551095" ID="ID_798942495" MODIFIED="1508020561924">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      oder den <b>Spot</b>&#160;verschieben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508020731399" HGAP="9" ID="ID_1043748115" MODIFIED="1508020753594" VSHIFT="49">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      verbleibende
+    </p>
+    <p>
+      Probleme
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1508020782977" ID="ID_825574354" MODIFIED="1508020790107" TEXT="konkretes Element -&gt; WorkSite"/>
+<node CREATED="1508020790888" ID="ID_774784602" MODIFIED="1508020801882" TEXT="&#xbb;reveal yourself&#xab;"/>
 </node>
 </node>
 </node>
