@@ -4167,6 +4167,24 @@ The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangibl
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
 </div>
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201710140008" tags="spec decision draft GuiPattern" changecount="5">
+<pre>//Service to navigate through the UI as generic structure.//
+The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
+
+!The problem of abstraction
+This goal initially poses some challenge, since it aims beyond the conventional notion of UI programming, where it is sufficient just to wire some widgets and manipulate the receiver of an event notification. The usual UI widgets are just not meant to be treated in a more systematic, generic way -- and indeed, in most cases and for most purposes it is not a good idea to approach UI programming in a to much schematic way. User interfaces need to be tangible, something concrete, with lots of specifics and local traits. Yet this very nature of UI programming tends to turn some //cross-cutting concerns// into serious liabilities. So the deliberate ''decision to introduce a Navigator'' in avoidance of these future burdens and liabilities is a decision of priorities when it comes to shaping the Lumiera UI.
+
+Which leaves us with the quest of mapping a generic location scheme onto a load of implementation defined structures not exposing any kind of genericness, and to accomplish this within an environment lacking meta information and support for self discovery beyond the most basic abstraction level. As a first step towards bridging this gap, we'll have to identify the actual //command-and-query operations// required to treat UI elements as a topological structure.
+
+!!!Analysis of expected functionality
+In order to build a navigation facility, we need to...
+* follow a path
+** which means to constitute a location
+** and to discover child nodes at that location
+* and we want to extend (maybe also prune) the collection of children
+
+</pre>
+</div>
 <div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="200909041807" tags="spec Builder Rendering">
 <pre>Various aspects of the individual [[render node|ProcNode]] are subject to configuration and may influence the output quality or the behaviour of the render process.
 * the selection //what// actual implementation (plugin) to used for a formally defined &amp;raquo;[[Effect|EffectHandling]]&amp;laquo;

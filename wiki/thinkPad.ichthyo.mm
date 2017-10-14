@@ -910,8 +910,7 @@
       Fehlerlog-Anzeige <i>vorl&#228;ufig irgendwo....</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#7893b2" DESTINATION="ID_1745777873" ENDARROW="Default" ENDINCLINATION="-499;-464;" ID="Arrow_ID_1590510093" STARTARROW="None" STARTINCLINATION="808;0;"/>
 </node>
 </node>
@@ -2962,7 +2961,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1485902750053" FOLDED="true" ID="ID_34756513" MODIFIED="1488423342541" TEXT="zentrales Bindeglied">
+<node CREATED="1485902750053" ID="ID_34756513" MODIFIED="1507923991375" TEXT="zentrales Bindeglied">
 <node CREATED="1485902762284" ID="ID_1542199290" MODIFIED="1485902773701" TEXT="kennt die Applikation"/>
 <node CREATED="1485902774201" ID="ID_354078562" MODIFIED="1485902778964" TEXT="kennt den Windowmanager"/>
 <node CREATED="1485902783201" ID="ID_609776597" MODIFIED="1485902793986" TEXT="kennt einen Operations-Controller"/>
@@ -3407,14 +3406,14 @@
 <linktarget COLOR="#8e2a4d" DESTINATION="ID_1909730752" ENDARROW="Default" ENDINCLINATION="190;-96;" ID="Arrow_ID_1543429248" SOURCE="ID_1507239589" STARTARROW="None" STARTINCLINATION="-103;109;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1506174809702" TEXT="globale Aktionen">
-<arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="873;259;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1507924044355" TEXT="globale Aktionen">
+<arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="877;262;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1488419973349" ID="ID_1855791702" MODIFIED="1488419978923" TEXT="brauche ein Konzept">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1488419979868" ID="ID_474441211" MODIFIED="1488423639484" TEXT="InteractionDirector">
-<arrowlink COLOR="#5e4463" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-57;-739;" ID="Arrow_ID_1847127764" STARTARROW="None" STARTINCLINATION="32;89;"/>
+<node CREATED="1488419979868" ID="ID_474441211" MODIFIED="1507924048883" TEXT="InteractionDirector">
+<arrowlink COLOR="#5e4463" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-57;-739;" ID="Arrow_ID_1847127764" STARTARROW="None" STARTINCLINATION="73;95;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1488419993090" ID="ID_1039124749" MODIFIED="1488420026690" TEXT="wird Dreh- und Angelpunkt">
@@ -3429,8 +3428,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1485909456513" HGAP="55" ID="ID_576215675" MODIFIED="1504193318475" TEXT="top-level-Verdrahtung" VSHIFT="1">
-<arrowlink COLOR="#8c95b2" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="129;-562;" ID="Arrow_ID_1284182756" STARTARROW="None" STARTINCLINATION="883;143;"/>
+<node CREATED="1485909456513" HGAP="55" ID="ID_576215675" MODIFIED="1507935589919" TEXT="top-level-Verdrahtung" VSHIFT="1">
+<arrowlink COLOR="#8c95b2" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="138;-548;" ID="Arrow_ID_1284182756" STARTARROW="None" STARTINCLINATION="883;143;"/>
 <node CREATED="1485909560027" ID="ID_1949656657" MODIFIED="1487039010986" TEXT="baut den UI-Rahen auf"/>
 <node CREATED="1485909491412" ID="ID_1205077540" MODIFIED="1487039041806" TEXT="macht die Applikation betriebsbereit">
 <icon BUILTIN="messagebox_warning"/>
@@ -3729,8 +3728,7 @@
       sind denkbar und m&#252;ssen in der Strategy konfigurierbar sein?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1504458488876" ID="ID_800753364" MODIFIED="1504458493831" TEXT="Ort">
 <node CREATED="1504458802042" ID="ID_300193794" MODIFIED="1504458808613" TEXT="expliziter Ort (global)"/>
@@ -3767,8 +3765,7 @@
       Komponenten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1504462874221" ID="ID_437025243" MODIFIED="1504463223186" TEXT="[optional] top-level Fenster"/>
 <node CREATED="1504462888107" ID="ID_121049221" MODIFIED="1504463167809" TEXT="[optional] Perspektive"/>
 <node CREATED="1504462891394" ID="ID_1138854843" MODIFIED="1504462902036" TEXT="Panel"/>
@@ -3822,6 +3819,97 @@
 <node CREATED="1506263465075" ID="ID_1873282209" MODIFIED="1506263471030" TEXT="Problem: Kontext">
 <node CREATED="1506263472658" ID="ID_557885064" MODIFIED="1506263485412" TEXT="Navigation ist nicht beliebig"/>
 <node CREATED="1506263486160" ID="ID_643453258" MODIFIED="1506263494650" TEXT="mu&#xdf; f&#xfc;r jeden Schritt Kontext abfragen"/>
+<node CREATED="1507923810917" ID="ID_1300680611" MODIFIED="1507923819807" TEXT="Delegations-API">
+<node CREATED="1507923825938" ID="ID_248121468" MODIFIED="1507923831965" TEXT="Kontext-Anfragen"/>
+<node CREATED="1507923832289" ID="ID_1141152218" MODIFIED="1507923844571" TEXT="vom konkreten UI implementiert"/>
+</node>
+</node>
+</node>
+<node CREATED="1507939232775" ID="ID_314635923" MODIFIED="1507939264576" TEXT="Problem: Binden auf den Kontext">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1507939270618" ID="ID_1505797299" MODIFIED="1507939279052" TEXT="abstrakte Struktur -&gt; konkrete Widgets"/>
+<node CREATED="1507939279761" ID="ID_250590373" MODIFIED="1507939289099" TEXT="keine nat&#xfc;rliche Introspektion gegeben"/>
+<node CREATED="1507939312860" HGAP="78" ID="ID_444535530" MODIFIED="1507939559791" TEXT="Analyse" VSHIFT="7">
+<icon BUILTIN="pencil"/>
+<node CREATED="1507939326250" ID="ID_1890759249" MODIFIED="1507939328862" TEXT="Aufgaben">
+<node CREATED="1507939400248" ID="ID_1464418318" MODIFIED="1507939528176" TEXT="einem Pfad folgen">
+<arrowlink COLOR="#7d375a" DESTINATION="ID_721718509" ENDARROW="Default" ENDINCLINATION="166;0;" ID="Arrow_ID_1170204247" STARTARROW="None" STARTINCLINATION="96;-13;"/>
+<arrowlink COLOR="#7d375a" DESTINATION="ID_235303811" ENDARROW="Default" ENDINCLINATION="155;0;" ID="Arrow_ID_1900802893" STARTARROW="None" STARTINCLINATION="155;0;"/>
+</node>
+<node CREATED="1507939407943" ID="ID_721718509" MODIFIED="1507939487954" TEXT="eine Position konstituieren">
+<linktarget COLOR="#7d375a" DESTINATION="ID_721718509" ENDARROW="Default" ENDINCLINATION="166;0;" ID="Arrow_ID_1170204247" SOURCE="ID_1464418318" STARTARROW="None" STARTINCLINATION="96;-13;"/>
+</node>
+<node CREATED="1507939427445" ID="ID_235303811" MODIFIED="1507939491154" TEXT="Kinder finden">
+<linktarget COLOR="#7d375a" DESTINATION="ID_235303811" ENDARROW="Default" ENDINCLINATION="155;0;" ID="Arrow_ID_1900802893" SOURCE="ID_1464418318" STARTARROW="None" STARTINCLINATION="155;0;"/>
+</node>
+<node CREATED="1507939433916" ID="ID_1018540556" MODIFIED="1507939444438" TEXT="Kinder erzeugen"/>
+</node>
+<node CREATED="1507939846405" ID="ID_789410975" MODIFIED="1507939850432" TEXT="konkrete Probleme">
+<node CREATED="1507939859100" ID="ID_860523933" MODIFIED="1507939893095" TEXT="wer bin &quot;ich&quot;?">
+<icon BUILTIN="help"/>
+<node CREATED="1507939956606" ID="ID_406843936" MODIFIED="1507939968593" TEXT="was ist gegeben?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1507939970349" ID="ID_714349147" MODIFIED="1507939978746" TEXT="in welcher Form ist es gegeben?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1507939869906" ID="ID_223198097" MODIFIED="1507939888652" STYLE="fork" TEXT="wo bin &quot;ich&quot;?">
+<icon BUILTIN="help"/>
+<node CREATED="1507940000057" ID="ID_1526112208" MODIFIED="1507940011464">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eine <i>reverse resolution</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1507939914076" ID="ID_109277608" MODIFIED="1507939926147" TEXT="was gilt als &quot;Kind&quot;?">
+<icon BUILTIN="help"/>
+<node CREATED="1507940046234" ID="ID_577613088" MODIFIED="1507940079989">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auf welche Eigenschaften
+    </p>
+    <p>
+      st&#252;tzen wir uns?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1507939927035" ID="ID_461225915" MODIFIED="1507940093229">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wer bestimmt,
+    </p>
+    <p>
+      was &quot;Kind&quot; ist?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1507940112890" ID="ID_1195951242" MODIFIED="1507940119572" TEXT="der Bedarf??"/>
+<node CREATED="1507940120425" ID="ID_338582582" MODIFIED="1507940126540" TEXT="der Erzeuger??"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -3896,8 +3984,7 @@
       VariadicArgumentPicker_test
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -3968,8 +4055,7 @@
       Resolver / Navigator
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#3f4b87" DESTINATION="ID_848105210" ENDARROW="Default" ENDINCLINATION="-1260;542;" ID="Arrow_ID_1760927309" SOURCE="ID_1256149179" STARTARROW="None" STARTINCLINATION="1244;-591;"/>
 <icon BUILTIN="help"/>
 </node>
@@ -4078,8 +4164,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#8e79a4" DESTINATION="ID_1229791291" ENDARROW="Default" ENDINCLINATION="16;-93;" ID="Arrow_ID_277133142" STARTARROW="None" STARTINCLINATION="133;0;"/>
 </node>
 </node>
@@ -4227,8 +4312,7 @@
       <i>Allokator</i>&#160;pro Typ
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1504885680095" ID="ID_1828531407" MODIFIED="1504885683602" TEXT="sicherstellen">
 <node CREATED="1504885686470" ID="ID_450596618" MODIFIED="1504885691569" TEXT="-- nix --"/>
@@ -4256,8 +4340,7 @@
       um auszudr&#252;cken, da&#223; gewissen Angaben ausgelassen wurden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504886119604" ID="ID_206635297" MODIFIED="1504886127928" TEXT="komplexes Thema">
 <icon BUILTIN="messagebox_warning"/>
@@ -4349,8 +4432,7 @@
       locate = panel(timeline)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1504833569692" ID="ID_1069272084" MODIFIED="1504833620713" TEXT="Viewer">
@@ -4377,8 +4459,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow().panel(viewer)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504834569831" ID="ID_1909335075" MODIFIED="1504883625292" TEXT="maximal 2 Viewer Panel"/>
 <node CREATED="1504883107916" ID="ID_1351734300" MODIFIED="1506121412122">
@@ -4403,8 +4484,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or panel(viewer)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1504833572687" ID="ID_715257949" MODIFIED="1504833615690" TEXT="(Asset)Bin">
@@ -4418,8 +4498,7 @@
       im Asset-Panel der <i>jeweiligen</i>&#160;Gruppe hinzuf&#252;gen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504883110076" ID="ID_199732103" MODIFIED="1506121405019">
 <richcontent TYPE="NODE"><html>
@@ -4440,8 +4519,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow().panel(asset)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1504833574246" ID="ID_1680764695" MODIFIED="1504876896530" TEXT="FehlerLog">
@@ -4462,8 +4540,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or firstWindow().panel(infobox)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1504833575700" ID="ID_1341951504" MODIFIED="1504833606683" TEXT="Playcontrol">
@@ -4487,8 +4564,7 @@
       Voraussetzung: <i>Anwendbarkeit</i>&#160;erkennen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -4581,10 +4657,10 @@
 <node CREATED="1489777748748" ID="ID_1098831130" MODIFIED="1489777760070" TEXT="statisches Front-End: CmdAccessor"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486763185746" HGAP="33" ID="ID_362749694" MODIFIED="1504478467098" TEXT="InteractionDirector" VSHIFT="21">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486763185746" HGAP="33" ID="ID_362749694" MODIFIED="1507924048883" TEXT="InteractionDirector" VSHIFT="21">
 <arrowlink COLOR="#3b4877" DESTINATION="ID_700485676" ENDARROW="Default" ENDINCLINATION="430;-874;" ID="Arrow_ID_454081114" STARTARROW="Default" STARTINCLINATION="-170;534;"/>
 <linktarget COLOR="#798eba" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-218;-590;" ID="Arrow_ID_757867749" SOURCE="ID_1440190469" STARTARROW="None" STARTINCLINATION="15;121;"/>
-<linktarget COLOR="#5e4463" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-57;-739;" ID="Arrow_ID_1847127764" SOURCE="ID_474441211" STARTARROW="None" STARTINCLINATION="32;89;"/>
+<linktarget COLOR="#5e4463" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-57;-739;" ID="Arrow_ID_1847127764" SOURCE="ID_474441211" STARTARROW="None" STARTINCLINATION="73;95;"/>
 <linktarget COLOR="#683c5b" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-394;0;" ID="Arrow_ID_1979576517" SOURCE="ID_113005643" STARTARROW="None" STARTINCLINATION="-24;-159;"/>
 <linktarget COLOR="#1b3863" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-518;1012;" ID="Arrow_ID_959577029" SOURCE="ID_735655054" STARTARROW="Default" STARTINCLINATION="-376;-568;"/>
 <icon BUILTIN="pencil"/>
@@ -4688,10 +4764,9 @@
       mit docking panels
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504193163264" ID="ID_1943521361" MODIFIED="1504200729866" TEXT="#1104 how to instruct actions through panels">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504193163264" ID="ID_1943521361" MODIFIED="1507935709930" TEXT="#1104 how to instruct actions through panels">
 <arrowlink COLOR="#806893" DESTINATION="ID_1020871440" ENDARROW="Default" ENDINCLINATION="-3;460;" ID="Arrow_ID_412107208" STARTARROW="Default" STARTINCLINATION="-618;-18;"/>
 <arrowlink COLOR="#b37033" DESTINATION="ID_945788817" ENDARROW="None" ENDINCLINATION="-67;-71;" ID="Arrow_ID_61914" STARTARROW="Default" STARTINCLINATION="-618;-18;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -4718,8 +4793,7 @@
       Grundlagen f&#252;r <b>InteractionControl</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1488419854029" ID="ID_932507511" MODIFIED="1504459942376" TEXT="erst mal: Konzept">
 <arrowlink COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" STARTARROW="None" STARTINCLINATION="1555;-260;"/>
 <icon BUILTIN="help"/>
@@ -4834,8 +4908,9 @@
 <node CREATED="1487461242609" ID="ID_164538059" MODIFIED="1487461245308" TEXT="Struktur">
 <node CREATED="1487461304560" ID="ID_349728972" MODIFIED="1488492188626" TEXT="betreibt">
 <node CREATED="1487273437019" ID="ID_1653934212" MODIFIED="1506956689947" TEXT="Navigator">
-<node CREATED="1506957512565" ID="ID_1256149179" MODIFIED="1506957613469" TEXT="betreibt Resolver">
+<node CREATED="1506957512565" ID="ID_1256149179" MODIFIED="1507935759248" TEXT="dient als Resolver">
 <arrowlink COLOR="#3f4b87" DESTINATION="ID_848105210" ENDARROW="Default" ENDINCLINATION="-1260;542;" ID="Arrow_ID_1760927309" STARTARROW="None" STARTINCLINATION="1244;-591;"/>
+<linktarget COLOR="#5068a8" DESTINATION="ID_1256149179" ENDARROW="Default" ENDINCLINATION="-87;78;" ID="Arrow_ID_1490250373" SOURCE="ID_650732591" STARTARROW="None" STARTINCLINATION="225;-6;"/>
 </node>
 </node>
 <node CREATED="1487270206369" ID="ID_1888334597" MODIFIED="1487461321289" TEXT="SpotLocator"/>
@@ -4871,19 +4946,42 @@
 </node>
 </node>
 <node CREATED="1506956798915" HGAP="-73" ID="ID_1897228503" MODIFIED="1506956825070" TEXT="Services" VSHIFT="32">
-<node CREATED="1506956866802" ID="ID_652269096" MODIFIED="1506956900479" TEXT="Navigator"/>
-<node CREATED="1504368969990" ID="ID_344392695" MODIFIED="1506957099012" TEXT="ViewLocator">
-<linktarget COLOR="#7f97bd" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="-977;81;" ID="Arrow_ID_1627222173" SOURCE="ID_1747666798" STARTARROW="None" STARTINCLINATION="1159;303;"/>
-<linktarget COLOR="#7c8aa8" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="-676;143;" ID="Arrow_ID_1224269755" SOURCE="ID_869653682" STARTARROW="None" STARTINCLINATION="641;-106;"/>
+<node CREATED="1506956866802" ID="ID_652269096" MODIFIED="1506956900479" TEXT="Navigator">
+<node CREATED="1507935433543" ID="ID_239254800" MODIFIED="1507935454878">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in <i>generischer UI-Struktur</i>&#160;bewegen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1507935461787" ID="ID_1244300168" MODIFIED="1507935472477" TEXT="bietet command-and-query-Interface"/>
+<node CREATED="1507935474273" ID="ID_650732591" MODIFIED="1507935737076" TEXT="dient als (Pfad-)Resolver f&#xfc;r UI-Coord">
+<arrowlink COLOR="#5068a8" DESTINATION="ID_1256149179" ENDARROW="Default" ENDINCLINATION="-87;78;" ID="Arrow_ID_1490250373" STARTARROW="None" STARTINCLINATION="225;-6;"/>
+</node>
+<node CREATED="1507935538409" ID="ID_1407528424" MODIFIED="1507935647550" TEXT="st&#xfc;tzt sich auf ViewLocator ab">
+<arrowlink COLOR="#89919c" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="90;-49;" ID="Arrow_ID_1845784021" STARTARROW="None" STARTINCLINATION="-18;26;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1504368969990" ID="ID_344392695" MODIFIED="1507935619563" TEXT="ViewLocator">
 <linktarget COLOR="#9da9b7" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="-96;-128;" ID="Arrow_ID_17315740" SOURCE="ID_948587913" STARTARROW="None" STARTINCLINATION="-94;5;"/>
+<linktarget COLOR="#7c8aa8" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="-676;143;" ID="Arrow_ID_1224269755" SOURCE="ID_869653682" STARTARROW="None" STARTINCLINATION="641;-106;"/>
+<linktarget COLOR="#7f97bd" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="-977;81;" ID="Arrow_ID_1627222173" SOURCE="ID_1747666798" STARTARROW="None" STARTINCLINATION="1159;303;"/>
+<linktarget COLOR="#89919c" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="90;-49;" ID="Arrow_ID_1845784021" SOURCE="ID_1407528424" STARTARROW="None" STARTINCLINATION="-18;26;"/>
 <node CREATED="1504387078950" ID="ID_1433555277" MODIFIED="1504387097144" TEXT="bietet Komponenten-Management">
 <node CREATED="1504387105363" ID="ID_631730744" MODIFIED="1504387110342" TEXT="neue Komponente"/>
 <node CREATED="1504387110866" ID="ID_879632055" MODIFIED="1504387115157" TEXT="Komponente l&#xf6;schen"/>
 <node CREATED="1504387189744" ID="ID_934669703" MODIFIED="1504387202285" TEXT="notwendig f&#xfc;r Kind-Mutation">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1504368969990" ID="ID_1346454848" MODIFIED="1504387179279" TEXT="impl delegiert an den PanelLocator">
-<linktarget COLOR="#7c8aa8" DESTINATION="ID_1346454848" ENDARROW="None" ENDINCLINATION="139;18;" ID="Arrow_ID_1776804306" SOURCE="ID_1606296935" STARTARROW="Default" STARTINCLINATION="425;-69;"/>
+<node CREATED="1504368969990" ID="ID_1346454848" MODIFIED="1507935336871" TEXT="impl delegiert an den PanelLocator">
+<linktarget COLOR="#7c8aa8" DESTINATION="ID_1346454848" ENDARROW="Default" ENDINCLINATION="22;11;" ID="Arrow_ID_1776804306" SOURCE="ID_1606296935" STARTARROW="Default" STARTINCLINATION="313;-14;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -4952,8 +5050,8 @@
 <node CREATED="1504193340786" ID="ID_751993082" MODIFIED="1504386807170" TEXT="PanelLocator hier integrieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1504370542909" ID="ID_1318769916" MODIFIED="1504370549093" TEXT="Query-Front-end"/>
-<node CREATED="1504371342426" ID="ID_1606296935" MODIFIED="1504387179279" TEXT="wird ben&#xf6;tigt vom ViewLocator (InteractionDirector)">
-<arrowlink COLOR="#7c8aa8" DESTINATION="ID_1346454848" ENDARROW="None" ENDINCLINATION="139;18;" ID="Arrow_ID_1776804306" STARTARROW="Default" STARTINCLINATION="425;-69;"/>
+<node CREATED="1504371342426" ID="ID_1606296935" MODIFIED="1507935336871" TEXT="wird ben&#xf6;tigt vom ViewLocator (InteractionDirector)">
+<arrowlink COLOR="#7c8aa8" DESTINATION="ID_1346454848" ENDARROW="Default" ENDINCLINATION="22;11;" ID="Arrow_ID_1776804306" STARTARROW="Default" STARTINCLINATION="313;-14;"/>
 </node>
 <node CREATED="1504370524687" ID="ID_816760158" MODIFIED="1504370535145" TEXT="PanelManager in den einzelnen Fenstern"/>
 </node>
@@ -4967,10 +5065,9 @@
       <b>Abstraktion</b>&#160;zur Steuerung schaffen
     </p>
   </body>
-</html>
-</richcontent>
-<linktarget COLOR="#4f6595" DESTINATION="ID_385011645" ENDARROW="Default" ENDINCLINATION="377;-49;" ID="Arrow_ID_1185839720" SOURCE="ID_1002171467" STARTARROW="None" STARTINCLINATION="-267;66;"/>
+</html></richcontent>
 <linktarget COLOR="#524f7b" DESTINATION="ID_385011645" ENDARROW="Default" ENDINCLINATION="353;-22;" ID="Arrow_ID_186523581" SOURCE="ID_65709251" STARTARROW="None" STARTINCLINATION="1270;350;"/>
+<linktarget COLOR="#4f6595" DESTINATION="ID_385011645" ENDARROW="Default" ENDINCLINATION="377;-49;" ID="Arrow_ID_1185839720" SOURCE="ID_1002171467" STARTARROW="None" STARTINCLINATION="-267;66;"/>
 <node CREATED="1504307876270" HGAP="80" ID="ID_714147133" MODIFIED="1504307886419" TEXT="Anforderungen" VSHIFT="-7">
 <node CREATED="1504307921993" ID="ID_774956517" MODIFIED="1504307928324" TEXT="bestimmtes Element...">
 <node CREATED="1504307933535" ID="ID_220451742" MODIFIED="1504308006278" TEXT="ansprechen">
@@ -4990,8 +5087,7 @@
       wie <i>bestimmt?</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1504308038873" ID="ID_1384201938" MODIFIED="1504308043380" TEXT="es gibt nur eines"/>
 <node CREATED="1504308044016" ID="ID_1655384159" MODIFIED="1504308051227" TEXT="von bestimmter Art"/>
@@ -5024,9 +5120,9 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1485555999110" ID="ID_376092703" MODIFIED="1485556008921" TEXT="top-level macht GtkLumiera im ctor"/>
 <node CREATED="1485556011260" ID="ID_1618308499" MODIFIED="1485556026758" TEXT="backlink zum Manager"/>
-<node CREATED="1486943522965" ID="ID_36527267" MODIFIED="1504193318475" TEXT="top-level-Kontext">
+<node CREATED="1486943522965" ID="ID_36527267" MODIFIED="1507935589920" TEXT="top-level-Kontext">
 <linktarget COLOR="#4f547b" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="-424;-2038;" ID="Arrow_ID_134552555" SOURCE="ID_984712012" STARTARROW="None" STARTINCLINATION="2623;0;"/>
-<linktarget COLOR="#8c95b2" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="129;-562;" ID="Arrow_ID_1284182756" SOURCE="ID_576215675" STARTARROW="None" STARTINCLINATION="883;143;"/>
+<linktarget COLOR="#8c95b2" DESTINATION="ID_36527267" ENDARROW="Default" ENDINCLINATION="138;-548;" ID="Arrow_ID_1284182756" SOURCE="ID_576215675" STARTARROW="None" STARTINCLINATION="883;143;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1488494592496" ID="ID_1586259377" MODIFIED="1488494596905" TEXT="UI-Bus"/>
 <node CREATED="1488494579346" ID="ID_1182508289" MODIFIED="1488494603368" TEXT="UiManager"/>
@@ -5080,8 +5176,7 @@
       das Diff wird auf den Platzhalter angewendet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504386636074" ID="ID_1996752633" MODIFIED="1504386680134" TEXT="automatisches Management von&#xf6;ten">
 <richcontent TYPE="NOTE"><html>
@@ -5096,8 +5191,7 @@
       dann mu&#223; dieses automatisch deregistriert werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504371342426" ID="ID_869653682" MODIFIED="1506957062518">
 <richcontent TYPE="NODE"><html>
@@ -5109,8 +5203,7 @@
       vermittelt &#252;ber den <b>ViewLocator</b>&#160;(InteractionDirector)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#7c8aa8" DESTINATION="ID_344392695" ENDARROW="Default" ENDINCLINATION="-676;143;" ID="Arrow_ID_1224269755" STARTARROW="None" STARTINCLINATION="641;-106;"/>
 </node>
 </node>
@@ -5268,8 +5361,7 @@
       Verwaltung <i>autmatisch</i>&#160;via ViewLocator -&gt; PanelLocator
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1480694897443" ID="ID_402490324" MODIFIED="1480694916396" TEXT="verwaltet die Timelines"/>
@@ -6508,7 +6600,7 @@
 <node CREATED="1476376927660" HGAP="35" ID="ID_688318446" MODIFIED="1479434903774" TEXT="Docks" VSHIFT="12">
 <node CREATED="1504200504235" ID="ID_125942292" MODIFIED="1504200942450" TEXT="PanelManager mu&#xdf; umgebaut werden">
 <arrowlink COLOR="#e1a169" DESTINATION="ID_1249897876" ENDARROW="Default" ENDINCLINATION="-636;0;" ID="Arrow_ID_446871395" STARTARROW="None" STARTINCLINATION="-311;562;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504193029907" ID="ID_945788817" MODIFIED="1504200718235" TEXT="#1104 how to instruct actions through panels">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504193029907" ID="ID_945788817" MODIFIED="1507935709930" TEXT="#1104 how to instruct actions through panels">
 <linktarget COLOR="#b37033" DESTINATION="ID_945788817" ENDARROW="None" ENDINCLINATION="-67;-71;" ID="Arrow_ID_61914" SOURCE="ID_1943521361" STARTARROW="Default" STARTINCLINATION="-618;-18;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -6539,8 +6631,7 @@
       ...um mal was im UI anzeigen zu k&#246;nnen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1504200907356" ID="ID_1939871955" MODIFIED="1504201013274" TEXT="neues Dock">
@@ -6569,8 +6660,7 @@
       Die Icon-Gr&#246;&#223;en ergeben sich aus den Boxes auf 'plate'
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504201055449" ID="ID_1652674635" MODIFIED="1504201072930" TEXT="braucht &apos;artwork:&apos;-Layer"/>
 <node CREATED="1504201074566" ID="ID_1803123712" MODIFIED="1504201083665" TEXT="braucht Sub-Layer &apos;plate&apos;">
@@ -6594,8 +6684,7 @@
       Docks enthalten <b>Component Views</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#929fdf" DESTINATION="ID_1717772756" ENDARROW="Default" ENDINCLINATION="-34;-71;" ID="Arrow_ID_1343685046" STARTARROW="None" STARTINCLINATION="-79;76;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -13007,8 +13096,8 @@
 </node>
 <node CREATED="1448669332204" HGAP="76" ID="ID_329609486" MODIFIED="1504459942376" TEXT="InteractionControl">
 <arrowlink COLOR="#b694bf" DESTINATION="ID_430949603" ENDARROW="Default" ENDINCLINATION="178;425;" ID="Arrow_ID_1062305149" STARTARROW="Default" STARTINCLINATION="-629;-2354;"/>
-<linktarget COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" SOURCE="ID_1009169288" STARTARROW="None" STARTINCLINATION="-315;0;"/>
 <linktarget COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" SOURCE="ID_932507511" STARTARROW="None" STARTINCLINATION="1555;-260;"/>
+<linktarget COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" SOURCE="ID_1009169288" STARTARROW="None" STARTINCLINATION="-315;0;"/>
 <font NAME="SansSerif" SIZE="15"/>
 <node CREATED="1448669439582" HGAP="41" ID="ID_307071507" MODIFIED="1488423307196" TEXT="ad-hoc oder systematisch" VSHIFT="-2">
 <icon BUILTIN="help"/>
@@ -13498,7 +13587,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548830035" HGAP="5" ID="ID_1295711115" MODIFIED="1485548844056" TEXT="Nutzen" VSHIFT="17">
 <icon BUILTIN="bell"/>
 <node CREATED="1485548856639" ID="ID_1677281474" MODIFIED="1485548861522" TEXT="spezifische Aktionen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" FOLDED="true" ID="ID_826011549" MODIFIED="1506174809702" TEXT="Problem: globale Aktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" FOLDED="true" ID="ID_826011549" MODIFIED="1507924044355" TEXT="Problem: globale Aktionen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -13523,7 +13612,7 @@
     </ul>
   </body>
 </html></richcontent>
-<linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="873;259;"/>
+<linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="877;262;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#338800" CREATED="1485555902731" FOLDED="true" ID="ID_1913236669" MODIFIED="1492444338102" TEXT="#1070 how to bind session commands into UI actions">
 <icon BUILTIN="button_ok"/>
@@ -19840,8 +19929,7 @@
       Beispiel im <font color="#d4020a">Guide</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504215825762" ID="ID_429138159" MODIFIED="1504220029652" TEXT="zur letzten Zeile scrollen">
 <linktarget COLOR="#9bbabd" DESTINATION="ID_429138159" ENDARROW="Default" ENDINCLINATION="-1413;0;" ID="Arrow_ID_1025095859" SOURCE="ID_653669269" STARTARROW="None" STARTINCLINATION="-1151;202;"/>
@@ -19869,8 +19957,7 @@
       Beachte: der Text-Cursor (Marker &quot;insert&quot;) hat right gravity
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1504215832746" ID="ID_751207346" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-multithread-example.html.en" MODIFIED="1504215873156">
@@ -19886,8 +19973,7 @@
       im Guide demonstriert das
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504219929260" ID="ID_1037649590" MODIFIED="1504219963912" TEXT="Trick: Cursor ist ein Marker namens &quot;insert&quot;">
 <icon BUILTIN="idea"/>
