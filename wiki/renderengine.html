@@ -4167,7 +4167,7 @@ The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangibl
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
 </div>
-<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201710142254" tags="spec decision draft GuiPattern" changecount="13">
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201710152058" tags="spec decision draft GuiPattern" changecount="14">
 <pre>//Service to navigate through the UI as generic structure.//
 The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
 
@@ -4197,7 +4197,7 @@ From these use cases we conclude that the actual requirements for a Navigator co
 In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on UI coordinates solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
 
 !Challenges of the implementation
-Some tricky problems remain to be solved though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose
+Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose
 </pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="200909041807" tags="spec Builder Rendering">
@@ -9648,7 +9648,7 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
-<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201710021428" tags="def draft spec GuiPattern" changecount="11">
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201710152313" tags="def draft spec GuiPattern" changecount="12">
 <pre>//A topological addressing scheme to designate structural locations within the UI.//
 Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
 * to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    
@@ -9711,7 +9711,7 @@ In addition to querying the interpretation of a given coordinate spec with respe
 :*ascend
 :*descend to an existing child by matching name or index
 :*extend the path by an uncovered extension sequence
-:*extend the path by creating suitable child components
+//In theory,// it would even be possible to extend the path by creating suitable child components; but actually this would require all &quot;elements&quot; to implement a suitable mutation interface -- which in the case of //generic elements// might be far beyond the common ground. For this reason, we keep mutation of the backing environment outside of a path mutator's scope and rather keep mutation limited to the path itself.
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">

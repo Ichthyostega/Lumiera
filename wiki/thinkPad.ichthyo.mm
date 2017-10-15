@@ -3696,7 +3696,32 @@
 <node CREATED="1506180752104" MODIFIED="1506180752104" TEXT="by index number"/>
 </node>
 <node CREATED="1506180752104" MODIFIED="1506180752104" TEXT="extend the path by  ...creates uncovered extension sequence"/>
-<node CREATED="1506180752104" MODIFIED="1506180752104" TEXT="create suitable children"/>
+<node CREATED="1506180752104" ID="ID_552405160" MODIFIED="1508109396389" TEXT="create suitable children">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...halten wir besser raus aus diesem Design.
+    </p>
+    <p>
+      Denn es w&#252;rde st&#228;rkere Annahmen &#252;ber die &quot;Zielelemente&quot; erforderlich machen,
+    </p>
+    <p>
+      und diese dann doch wieder in ein Korsett zw&#228;ngen. Im Moment (10/17) habe ich
+    </p>
+    <p>
+      stark den Verdacht, da&#223; wir das nur in wenigen Spezialf&#228;llen brauchen werden,
+    </p>
+    <p>
+      und dann kann man es auch extern belassen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 </node>
 </node>
@@ -3842,7 +3867,24 @@
 <node CREATED="1507939427445" ID="ID_235303811" MODIFIED="1507939491154" TEXT="Kinder finden">
 <linktarget COLOR="#7d375a" DESTINATION="ID_235303811" ENDARROW="Default" ENDINCLINATION="155;0;" ID="Arrow_ID_1900802893" SOURCE="ID_1464418318" STARTARROW="None" STARTINCLINATION="155;0;"/>
 </node>
-<node CREATED="1507939433916" ID="ID_1018540556" MODIFIED="1507939444438" TEXT="Kinder erzeugen"/>
+<node CREATED="1507939433916" ID="ID_1018540556" MODIFIED="1508109227085" TEXT="Kinder erzeugen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1508109233808" ID="ID_816587529" MODIFIED="1508109251986" TEXT="erfordert gemeinsames Interface"/>
+<node CREATED="1508109252574" ID="ID_1185099286" MODIFIED="1508109268257">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      betrachte ich als <i>ungesund</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
 </node>
 <node CREATED="1507939846405" ID="ID_789410975" MODIFIED="1507939850432" TEXT="konkrete Probleme">
 <node CREATED="1507939859100" ID="ID_860523933" MODIFIED="1507939893095" TEXT="wer bin &quot;ich&quot;?">

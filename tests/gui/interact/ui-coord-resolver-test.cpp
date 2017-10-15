@@ -29,6 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/format-cout.hpp"/////////////////////////TODO RLY?
 #include "lib/format-util.hpp"
 //#include "lib/idi/entry-id.hpp"
@@ -40,7 +41,8 @@
 
 using std::string;
 //using lib::idi::EntryID;
-//using lib::diff::GenNode;
+using lib::diff::MakeRec;
+using lib::diff::Rec;
 //using util::isSameObject;
 using lib::Symbol;
 using util::isnil;
@@ -82,14 +84,27 @@ namespace test {
           verify_mutateAnchor();
           verify_mutateCovered();
           verify_mutateExtend();
-          verify_mutateCreate();
         }
       
       
+      /** @test introduction to UI coordinate resolution
+       *        - use a backing "real" (dummy) data structure to resolve against
+       *        - establish a suitable implementation of the LocationQuery interface
+       *        - attach a resolver
+       *        - have fun
+       */
       void
       verify_simpleUsage()
         {
-          UNIMPLEMENTED ("introduction to UI coordinate resolution");
+          Rec dummyUiStrcture = MakeRec().scope(
+                                    MakeRec().type("perspective-A")
+                                    .genNode("window-1"),
+                                    MakeRec().type("perspective-B")
+                                    .scope(
+                                        MakeRec().genNode("panelX")
+                                    ).genNode("window-2")
+                                );
+
         }
       
       
@@ -132,13 +147,6 @@ namespace test {
       verify_mutateExtend()
         {
           UNIMPLEMENTED ("mutate given UI coordinates by uncovered extension");
-        }
-      
-      
-      void
-      verify_mutateCreate()
-        {
-          UNIMPLEMENTED ("mutate given UI coordinates by creating new components");
         }
     };
   
