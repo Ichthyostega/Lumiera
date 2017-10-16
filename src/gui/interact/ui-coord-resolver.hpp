@@ -46,14 +46,14 @@
 #define GUI_INTERACT_UI_COORD_RESOLVER_H
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "gui/interact/ui-coord.hpp"
 //#include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-//#include <utility>
+#include <utility>
 //#include <memory>
 
 
@@ -65,7 +65,7 @@ namespace interact {
 //  using std::unique_ptr;
 //  using std::string;
 //  using lib::Literal;
-//  using lib::Symbol;
+  using lib::Symbol;
 //  using util::unConst;
 //  using util::isnil;
 //  using util::min;
@@ -74,27 +74,73 @@ namespace interact {
   
   
   /**
+   * Interface to discover a backing structure for the purpose of
+   * path navigation and resolution.
+   */
+  class LocationQuery
+    {
+    public:
+      virtual ~LocationQuery() { }  ///< this is an interface
+      
+      /** */
+    };
+  
+  
+  
+  
+  /**
    * Query and mutate UICoord specifications in relation to actual UI topology.
    * 
    * @todo initial draft as of 10/2017
    */
   class UICoordResolver
+    : public UICoord::Builder
     {
       
     public:
-      
-      
-      
-      /* === named component access === */
-      
-      /** */
-      
+      UICoordResolver (UICoord const& uic, LocationQuery& queryAPI)
+        : Builder{uic}
+      { }
       
       
       /* === query functions === */
       
+      /** */
+      bool
+      isCovered()  const
+        {
+          UNIMPLEMENTED ("path coverage check");
+        }
+      
+      /** */
+      bool
+      canCover()  const
+        {
+          UNIMPLEMENTED ("determine if a mutation is possible to get the path covered");
+        }
+      
+      
+      
+      /* === mutation functions === */
+      
       /**
        */
+      UICoordResolver
+      cover()
+        {
+          UNIMPLEMENTED ("mutate the path to get it covered");
+          return std::move (*this);
+        }
+      
+      
+      /**
+       */
+      UICoordResolver
+      extend (Literal pathExtension)
+        {
+          UNIMPLEMENTED ("mutate the path to extend it while keeping it partially covered");
+          return std::move (*this);
+        }
       
       
     private:

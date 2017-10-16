@@ -463,9 +463,10 @@ namespace interact {
     {
       UICoord uic_;
       
-      /** builder instances created by UICoord solely */
+      /** builder instances created by UICoord */
       friend class UICoord;
       
+    protected:
       template<typename...ARGS>
       explicit
       Builder (ARGS&& ...args)      : uic_{std::forward<ARGS> (args)...} { }

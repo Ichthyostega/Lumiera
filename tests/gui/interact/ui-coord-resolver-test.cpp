@@ -29,6 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
+#include "gui/interact/gen-node-location-query.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-cout.hpp"/////////////////////////TODO RLY?
 #include "lib/format-util.hpp"
@@ -96,15 +97,29 @@ namespace test {
       void
       verify_simpleUsage()
         {
-          Rec dummyUiStrcture = MakeRec().scope(
+          // a Test dummy placeholder for the real UI structure
+          Rec dummyUiStructure = MakeRec().scope(
                                     MakeRec().type("perspective-A")
                                     .genNode("window-1"),
                                     MakeRec().type("perspective-B")
                                     .scope(
                                         MakeRec().genNode("panelX")
                                     ).genNode("window-2")
-                                );
+                                 );
 
+          // helper to answer "location queries" backed by this structure
+          GenNodeLocationQuery locationQuery{dummyUiStructure};
+
+          UICoord uic{"window-1","*","panelX","someView"};
+          UICoordResolver resolver{uic, locationQuery};
+
+          CHECK (not resolver.isCovered());
+          CHECK (not resolver.canCover());
+
+          UICoord uic2 = resolver.cover()
+                                 .extend("otherView");
+
+          CHECK ("UI:window-2[perspective-B]-panelX.otherView" == string(uic2));
         }
       
       
