@@ -107,6 +107,20 @@ namespace interact {
       
       /** */
       bool
+      isAnchored()  const
+        {
+          UNIMPLEMENTED ("path anchorage check");
+        }
+
+      /** */
+      bool
+      canAnchor()  const
+        {
+          UNIMPLEMENTED ("determine if a mutation is possible to anchor the path explicitly");
+        }
+
+      /** */
+      bool
       isCovered()  const
         {
           UNIMPLEMENTED ("path coverage check");

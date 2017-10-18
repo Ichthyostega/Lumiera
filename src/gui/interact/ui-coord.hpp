@@ -92,6 +92,7 @@ namespace interact {
   
   
   extern Symbol UIC_CURRENT_WINDOW; ///< window spec to refer to the _current window_ @see view-locator.cpp
+  extern Symbol UIC_FIRST_WINDOW;   ///< window spec to refer to the _first window_ of the application
   extern Symbol UIC_ELIDED;         ///< indicate that a component is elided or irrelevant here
   
   
@@ -136,6 +137,9 @@ namespace interact {
       /** shortcut to allow init from builder expression */
       UICoord (Builder&& builder);
       
+      /** Builder: start definition of UI-Coordinates rooted in the `firstWindow` */
+      static Builder firstWindow();
+
       /** Builder: start definition of UI-Coordinates rooted in the `currentWindow` */
       static Builder currentWindow();
       
@@ -144,6 +148,7 @@ namespace interact {
       
       //----- convenience shortcuts to start a copy-builder....
       Builder persp (Literal perspectiveID)  const;
+      Builder panel (Literal panelID)const;
       Builder view  (Literal viewID) const;
       Builder tab   (Literal tabID)  const;
       Builder tab   (uint tabIdx)    const;
@@ -503,6 +508,14 @@ namespace interact {
       
       /** augment UI coordinates to indicate a specific view to be used */
       Builder
+      panel (Literal panelID)
+        {
+          uic_.setComponent (UIC_PANEL, panelID);
+          return std::move (*this);
+        }
+
+      /** augment UI coordinates to indicate a specific view to be used */
+      Builder
       view (Literal viewID)
         {
           uic_.setComponent (UIC_VIEW, viewID);
@@ -586,9 +599,8 @@ namespace interact {
     }
   
   
-  /** @return an empty Builder allowing to define further parts;
-   *          to finish the definition, cast / store it into
-   *          UICoord, which itself is immutable.
+  /** @return a minimally defined Builder, allowing to define further parts;
+   *   to finish the definition, cast / store it into UICoord, which itself is immutable.
    */
   inline UICoord::Builder
   UICoord::currentWindow()
@@ -596,6 +608,12 @@ namespace interact {
     return window (UIC_CURRENT_WINDOW);
   }
   
+  inline UICoord::Builder
+  UICoord::firstWindow()
+  {
+    return window (UIC_CURRENT_WINDOW);
+  }
+
   /** @return aBuilder with just the windowID defined */
   inline UICoord::Builder
   UICoord::window (Literal windowID)
@@ -616,6 +634,12 @@ namespace interact {
     return Builder(*this).persp (perspectiveID);
   }
   
+  inline UICoord::Builder
+  UICoord::panel (Literal panelID)  const
+  {
+    return Builder(*this).panel (panelID);
+  }
+
   inline UICoord::Builder
   UICoord::view (Literal viewID)  const
   {

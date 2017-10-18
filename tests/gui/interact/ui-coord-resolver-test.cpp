@@ -130,10 +130,51 @@ namespace test {
         }
       
       
+      /** @test query anchorage of given UI coordinates.
+       *        - an anchored UI coordinate spec explicitly rooted within a top level window.
+       */
       void
       verify_queryAnchor()
         {
-          UNIMPLEMENTED ("query anchorage of given UI coordinates");
+          GenNodeLocationQuery loQu{MakeRec().scope(
+                                       MakeRec().type("perspective-A")
+                                       .genNode("window-1"),
+                                       MakeRec().type("perspective-B")
+                                       .scope(
+                                           MakeRec()
+                                           .scope(
+                                               MakeRec()
+                                               .genNode("someView")
+                                           ).genNode("panelX")
+                                       ).genNode("window-2")
+                                   )};
+          UICoord uic1 = UICoord::window("window-1").persp("perspective-A");
+          UICoord uic2 = UICoord::window("windows");
+          UICoord uic3 = UICoord::firstWindow();
+          UICoord uic4 = UICoord::currentWindow().persp("perspective-B");
+          UICoord uic5 = UICoord::currentWindow().panel("panelY");
+          UICoord uic6 = UICoord().view("someView").path("α/β/γ");
+
+          UICoordResolver r1{uic1, loQu};
+          UICoordResolver r2{uic2, loQu};
+          UICoordResolver r3{uic3, loQu};
+          UICoordResolver r4{uic4, loQu};
+          UICoordResolver r5{uic5, loQu};
+          UICoordResolver r6{uic6, loQu};
+
+          CHECK (    r1.isAnchored());
+          CHECK (not r2.isAnchored());
+          CHECK (    r3.isAnchored());
+          CHECK (    r4.isAnchored());
+          CHECK (not r5.isAnchored());
+          CHECK (not r6.isAnchored());
+
+          CHECK (    r1.canAnchor());
+          CHECK (not r2.canAnchor());
+          CHECK (    r3.canAnchor());
+          CHECK (    r4.canAnchor());
+          CHECK (not r5.canAnchor());
+          CHECK (    r6.canAnchor());
         }
       
       
