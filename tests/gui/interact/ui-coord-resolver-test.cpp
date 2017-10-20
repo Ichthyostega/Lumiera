@@ -114,7 +114,7 @@ namespace test {
           UICoordResolver resolver{uic, locationQuery};
 
           CHECK (not resolver.isCovered());
-          CHECK (not resolver.canCover());
+          CHECK (    resolver.canCover());
 
           UICoord uic2 = resolver.cover()
                                  .extend("otherView");

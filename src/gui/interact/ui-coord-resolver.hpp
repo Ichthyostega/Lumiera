@@ -48,13 +48,15 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "lib/iter-source.hpp"
+#include "lib/iter-stack.hpp"
 //#include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
 #include <utility>
-//#include <memory>
+#include <memory>
 
 
 namespace gui {
@@ -64,8 +66,8 @@ namespace interact {
   
 //  using std::unique_ptr;
 //  using std::string;
-//  using lib::Literal;
-  using lib::Symbol;
+  using lib::Literal;
+//  using lib::Symbol;
 //  using util::unConst;
 //  using util::isnil;
 //  using util::min;
@@ -82,12 +84,36 @@ namespace interact {
     public:
       virtual ~LocationQuery() { }  ///< this is an interface
       
+      using ChildIter = lib::IterSource<Literal>;
+
       /** */
     };
   
   
   
   
+  namespace path { ///< @internal implementation details of UICoord resolution against actual UI
+
+    struct Resolution
+      {
+        const char* anchor = nullptr;
+        size_t depth       = 0;
+        std::unique_ptr<UICoord> covfefe;
+        bool isComplete    = false;
+      };
+
+    struct ResolutionState
+      {
+        using ChildIter = LocationQuery::ChildIter;
+
+        lib::IterStack<ChildIter> backlog;
+        lib::IterQueue<Resolution> solutions;
+      };
+
+  }//(End) implementation details
+
+
+
   /**
    * Query and mutate UICoord specifications in relation to actual UI topology.
    * 
@@ -96,11 +122,17 @@ namespace interact {
   class UICoordResolver
     : public UICoord::Builder
     {
+      LocationQuery& query_;
+      path::Resolution res_;
       
     public:
       UICoordResolver (UICoord const& uic, LocationQuery& queryAPI)
         : Builder{uic}
-      { }
+        , query_{queryAPI}
+        , res_{}
+        {
+          attempt_trivialResolution();
+        }
       
       
       /* === query functions === */
@@ -158,6 +190,14 @@ namespace interact {
       
       
     private:
+      void
+      attempt_trivialResolution()
+        {
+          UNIMPLEMENTED ("if possible, establish a trivial anchorage and coverage right away");
+        }
+
+      /** @internal algorithm to resolve this UICoord path against the actual UI topology */
+      bool pathResolution();
     };
   
   
