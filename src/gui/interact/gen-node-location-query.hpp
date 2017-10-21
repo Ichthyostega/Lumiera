@@ -73,8 +73,9 @@ namespace interact {
   
   
   /**
-   * Query and mutate UICoord specifications in relation to actual UI topology.
-   * 
+   * Test/Diagnostics: implementation of the LocationQuery-API
+   * based on a abstract topological structure given as Record<GenNode> ("GenNode tree").
+   * @remark intended for verifying path resolution and navigation through unit tests
    * @todo initial draft as of 10/2017
    */
   class GenNodeLocationQuery
@@ -88,7 +89,29 @@ namespace interact {
       
       /* === LocationQuery interface === */
       
-      /** */
+      /** resolve Anchor against GenNode tree */
+      virtual Literal
+      determineAnchor (UICoord const& path)
+        {
+          UNIMPLEMENTED ("resolve Anchor against GenNode tree");
+        }
+
+
+      /** evaluate to what extent a UIcoord spec matches the structure given as GenNode tree
+       */
+      virtual size_t
+      determineCoverage (UICoord const& path)
+        {
+          UNIMPLEMENTED ("resolve explicitly given coordinates against GenNode tree");
+        }
+
+      /** get the sequence child IDs at a designated position in the backing GenNode tree
+       */
+      virtual ChildIter
+      getChildren (UICoord const& path, size_t pos)
+        {
+          UNIMPLEMENTED ("child iterator to navigate a GenNode tree structure");
+        }
       
     private:
     };

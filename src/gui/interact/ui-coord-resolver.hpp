@@ -76,17 +76,56 @@ namespace interact {
   
   
   /**
-   * Interface to discover a backing structure for the purpose of
-   * path navigation and resolution.
+   * Interface to discover a backing structure for the purpose of path navigation and resolution.
+   * UICoord are meant to designate a position within the logical structure of an UI -- yet in fact
+   * they may be resolved against any tree-like topological structure, which can be queried through
+   * this interface.
+   * @see Navigator the implementation used in the Lumiera UI, as backed by actual GUI components
    */
   class LocationQuery
     {
     public:
       virtual ~LocationQuery() { }  ///< this is an interface
       
-      using ChildIter = lib::IterSource<Literal>;
+      using ChildIter = lib::IterSource<Literal>::iterator;
 
-      /** */
+
+      /** make the real anchor point explicit.
+       * @param path an explicit UICoord spec to be anchored in the actual UI
+       * @return _explicit_ literal window name, where the path can be anchored
+       *         Symbol::BOTTOM in case the given path can not be anchored currently.
+       * @remark here "to anchor" means to match and thus "attach" the starting point
+       *         of the UIcoord path, i.e. the window spec, with an actual top-level
+       *         window existing in the current UI configuration and state. This operation
+       *         either confirms existence of a window given by explicit ID, or it supplies
+       *         the current meaning of the meta specs `currentWindow` and `firstWindow`,
+       *         again in the form of an explicit window name
+       */
+      virtual Literal determineAnchor (UICoord const& path)           =0;
+
+
+      /** evaluate to what extent a UIcoord spec matches the actual UI
+       * @return the depth to which the given spec is _"covered"_ by the actual UI
+       *         Can be zero, in which case the given coordinates can not be resolved
+       *         and addressed within the currently existing windows, panes and views.
+       * @note this operation does not perform any _resolution_ or interpolation of wildcards,
+       *         it just matches explicit UI component names.
+       * @see UICoordResolver for a facility to perform such a resolution and to navigate paths.
+       */
+      virtual size_t  determineCoverage (UICoord const& path)         =0;
+
+      /** get the sequence of child components at a designated position in the actual UI
+       * @param path an explicit UIcoord spec, expected to be anchored and at least partially
+       *         covered within the current configuration and state of the UI
+       * @param pos depth where the given path shall be evaluated, starting with 0 at window level
+       * @return an iterator to enumerate all child components actually existing in the current
+       *         UI below the location designated by path and pos.
+       * @remark the path is only evaluated up to (not including) the given depth. Especially
+       *         when `pos == 0`, then the path is not evaluated and matched at all, rather
+       *         just the current list of top-level windows is returned.
+       * @throw  error::State when navigating the given path touches a non-existing element
+       */
+      virtual ChildIter getChildren (UICoord const& path, size_t pos) =0;
     };
   
   
