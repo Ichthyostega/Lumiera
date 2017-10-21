@@ -466,12 +466,9 @@ namespace interact {
   
   class UICoord::Builder
     {
+    protected:
       UICoord uic_;
       
-      /** builder instances created by UICoord */
-      friend class UICoord;
-      
-    protected:
       template<typename...ARGS>
       explicit
       Builder (ARGS&& ...args)      : uic_{std::forward<ARGS> (args)...} { }
@@ -482,6 +479,9 @@ namespace interact {
       Builder& operator= (Builder const&) = delete;
       Builder& operator= (Builder &&)     = delete;
       
+      /** builder instances created by UICoord */
+      friend class UICoord;
+
     public:
       /** @remark moving a builder instance is acceptable */
       Builder (Builder &&)  = default;

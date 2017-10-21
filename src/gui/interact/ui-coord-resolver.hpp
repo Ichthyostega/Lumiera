@@ -138,7 +138,7 @@ namespace interact {
         const char* anchor = nullptr;
         size_t depth       = 0;
         std::unique_ptr<UICoord> covfefe;
-        bool isComplete    = false;
+        bool isResolved    = false;
       };
 
     struct ResolutionState
@@ -229,10 +229,18 @@ namespace interact {
       
       
     private:
+      /** establish a trivial anchorage and coverage, if possible.
+       * @note when the UICoord contains wildcards or is incomplete,
+       *       a full resolution with backtracking is necessary to
+       *       determine anchorage and coverage
+       */
       void
       attempt_trivialResolution()
         {
-          UNIMPLEMENTED ("if possible, establish a trivial anchorage and coverage right away");
+          if (not uic_.isExplicit()) return;
+          res_.anchor = query_.determineAnchor  (this->uic_);
+          res_.depth  = query_.determineCoverage(this->uic_);
+          res_.isResolved = true;
         }
 
       /** @internal algorithm to resolve this UICoord path against the actual UI topology */

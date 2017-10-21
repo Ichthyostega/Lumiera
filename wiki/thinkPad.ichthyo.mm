@@ -4480,6 +4480,23 @@
 </node>
 <node CREATED="1508539089208" ID="ID_1071949477" MODIFIED="1508539131769" TEXT="Query">
 <icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508619321957" ID="ID_1269390045" MODIFIED="1508619327957" TEXT="anchor">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1508619329420" ID="ID_360997488" MODIFIED="1508619334447" TEXT="in: expliziter Pfad"/>
+<node CREATED="1508619335131" ID="ID_327874233" MODIFIED="1508619413280" TEXT="out: Anker-Literal">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zweck ist vor allem, meta-Specs wie firstWindow, currentWindow aufzul&#246;sen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539108398" ID="ID_681619275" MODIFIED="1508539127755" TEXT="coverage">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1508539968020" ID="ID_64225559" MODIFIED="1508539972951" TEXT="in: expliziter Pfad"/>
