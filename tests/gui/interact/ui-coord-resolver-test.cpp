@@ -56,8 +56,9 @@ namespace interact {
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-  using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
-  using lumiera::error::LUMIERA_ERROR_LOGIC;
+//  using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using lumiera::error::LUMIERA_ERROR_STATE;
+//  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   namespace { //Test fixture...
     
@@ -123,10 +124,105 @@ namespace test {
         }
       
       
+      /** @test verify the command-and-query interface backing the resolver.
+       * This test actually uses a dummy implementation of the interface, which,
+       * instead of navigating an actual UI topology, just uses a `Record<GenNode>`
+       * (a "GenNode tree") to emulate the hierarchical structure of UI components.
+       * @remarks note some twists how the GenNode tree is used here to represent
+       *          an imaginary UI structure:
+       *          - we use the special _type_ attribute to represent the _perspective_
+       *            within each window; deliberately, we'll use this twisted structure
+       *            here to highlight the fact that the backing structure need not be
+       *            homogeneous; rather, it may require explicit branching
+       *          - we use the _attributes_ within the GenNode "object" representation,
+       *            since these are named nested elements, and the whole notion of an
+       *            UI coordinate path is based on named child components
+       *          - we use the _object builder_ helper to define the whole structure
+       *            as nested inline tree; this leads to a somewhat confusing notation,
+       *            where the names of the child nodes are spelled of at the closing
+       *            bracket of each construct.
+       *          - there is a special convention _for this test setup solely_ to
+       *            set the `currentWindow` to be the last one in list -- in a real
+       *            UI this would not of course not be a configurable property of
+       *            the LocationQuery, but rather just reflect the transient window
+       *            state and return the currently activated window
+       */
       void
       verify_backingQuery()
         {
-          UNIMPLEMENTED ("verify the command-and-query interface backing the resolver");
+          GenNodeLocationQuery queryAPI{MakeRec().scope(
+                                           MakeRec()
+                                           .type("perspective-A")
+                                           .scope(
+                                               MakeRec()
+                                               .scope(
+                                                   MakeRec()
+                                                   .genNode("firstView"),
+                                                   MakeRec()
+                                                   .genNode("secondView")
+                                               ).genNode("panelX")
+                                           ).genNode("window-1"),
+                                           MakeRec()
+                                           .type("perspective-B")
+                                           .scope(
+                                               MakeRec()
+                                               .genNode("panelY")
+                                           ).genNode("window-2"),
+                                           MakeRec()
+                                           .type("perspective-C")
+                                           .scope(
+                                               MakeRec()
+                                               .scope(
+                                                   MakeRec()
+                                                   .genNode("thirdView")
+                                               ).genNode("panelZ"),
+                                               MakeRec()
+                                               .genNode("panelZZ")
+                                           ).genNode("window-3")
+                                       )};
+
+          // the LocationQuery API works by matching a UICoord spec against the "real" structure
+          UICoord uic1 = UICoord::window("window-2").persp("perspective-B");
+          UICoord uic2 = UICoord::window("windows");
+          UICoord uic3 = UICoord::firstWindow().persp("perspective-A").panel("panelX").view("secondView");
+          UICoord uic4 = UICoord::currentWindow().persp("perspective-B");
+          UICoord uic5 = UICoord::currentWindow().persp("perspective-C").panel("panelZ").view("someOtherView");
+
+          CHECK ("window-2"     == queryAPI.determineAnchor(uic1));
+          CHECK (Symbol::BOTTOM == queryAPI.determineAnchor(uic2));
+          CHECK ("window-1"     == queryAPI.determineAnchor(uic3));
+          CHECK ("window-3"     == queryAPI.determineAnchor(uic4));
+          CHECK ("window-3"     == queryAPI.determineAnchor(uic5));
+
+          CHECK (2 == queryAPI.determineCoverage(uic1));
+          CHECK (0 == queryAPI.determineCoverage(uic2));
+          CHECK (4 == queryAPI.determineCoverage(uic3));
+          CHECK (1 == queryAPI.determineCoverage(uic4));
+          CHECK (3 == queryAPI.determineCoverage(uic5));
+
+          LocationQuery::ChildIter cii = queryAPI.getChildren(uic3, 3);
+          CHECK (not isnil(cii));
+          CHECK ("firstView" == *cii);
+          ++cii;
+          CHECK ("secondView" == *cii);
+          CHECK (not isnil(cii));
+          ++cii;
+          CHECK (isnil(cii));
+
+          CHECK ("window-1, window-2, window-3" == join (queryAPI.getChildren (uic3, 0)));
+          CHECK ("perspective-A"                == join (queryAPI.getChildren (uic3, 1)));
+          CHECK ("panelX"                       == join (queryAPI.getChildren (uic3, 2)));
+          CHECK ("firstView, secondView"        == join (queryAPI.getChildren (uic3, 3)));
+          CHECK (isnil (                                 queryAPI.getChildren (uic3, 4))); // "firstView" has no children
+
+          CHECK ("window-1, window-2, window-3" == join (queryAPI.getChildren (uic2, 0)));
+          VERIFY_ERROR (STATE,                           queryAPI.getChildren (uic2, 1) ); // "windows" at pos==0 is not covered by real UI
+
+          CHECK ("window-1, window-2, window-3" == join (queryAPI.getChildren (uic5, 0)));
+          CHECK ("perspective-C"                == join (queryAPI.getChildren (uic5, 1)));
+          CHECK ("panelZ, panelZZ"              == join (queryAPI.getChildren (uic5, 2)));
+          CHECK ("thirdView"                    == join (queryAPI.getChildren (uic5, 3)));
+          VERIFY_ERROR (STATE,                           queryAPI.getChildren (uic5, 4) ); // "someOtherView" at level 4 does not exist
         }
       
       
