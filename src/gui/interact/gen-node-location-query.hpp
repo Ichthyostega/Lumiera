@@ -29,6 +29,24 @@
  ** by navigating real UI structures, the implementation given here instead uses a generic tree structure
  ** given as `Record<GenNode>`.
  ** 
+ ** # Representing UI structure as GenNode tree
+ **
+ ** While basically the interface LocationQuery abstracts and reduces the structure of an UI into
+ ** just some hierarchically arranged and nested IDs, we should note some specific twists how a GenNode
+ ** tree is used here to represent the structure elements as defined through [UI coordinates](\ref UICoord):
+ ** - we use the special _type_ attribute to represent the _perspective_ within each window;
+ **   deliberately, we'll use this twisted structure here to highlight the fact that the
+ **   backing structure need not be homogeneous; rather, it may require explicit branching
+ ** - we use the _attributes_ within the GenNode "object" representation, since these are _named_
+ **   nested elements, and the whole notion of an UI coordinate path is based on named child components
+ ** - relying upon the [object builder notation](\ref Record::Mutator), it is possible to define a whole
+ **   structure as nested inline tree; this leads to a somewhat confusing notation, where the names of
+ **   the child nodes are spelled of at the closing bracket of each construct.
+ ** - since GenNodeLocationQuery is conceived for writing test and verification code, there is a
+ **   special convention to set the `currentWindow` to be the last one in list -- in a real UI
+ **   this would not of course not be a configurable property of the LocationQuery, and rather
+ **   just reflect the transient window state and return the currently activated window
+ **
  ** @todo WIP 10/2017 started in the effort of shaping the LoactionQuery interface, and used
  **       to support writing unit tests, to verify the UiCoordResolver. It remains to be seen
  **       if this implementation can be used beyond this limited purpose
@@ -46,7 +64,8 @@
 //#include "lib/symbol.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
 #include "lib/diff/gen-node.hpp"
-//#include "lib/util.hpp"
+#include "lib/itertools.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -81,10 +100,12 @@ namespace interact {
   class GenNodeLocationQuery
     : public LocationQuery
     {
+      Rec const& tree_;
       
     public:
       GenNodeLocationQuery(Rec const& backingStructure)
-      { }
+        : tree_(backingStructure)
+        { }
       
       
       /* === LocationQuery interface === */
@@ -93,7 +114,13 @@ namespace interact {
       virtual Literal
       determineAnchor (UICoord const& path)
         {
-          UNIMPLEMENTED ("resolve Anchor against GenNode tree");
+          if (isnil(tree_) or not path.isPresent(UIC_WINDOW))
+            return Symbol::BOTTOM;
+          if (UIC_FIRST_WINDOW == path.getWindow())
+            return getFirstWindow();
+          if (UIC_CURRENT_WINDOW == path.getWindow())
+            return getCurrentWindow();
+          return path.getWindow();
         }
 
 
@@ -114,6 +141,16 @@ namespace interact {
         }
       
     private:
+      Literal
+      getFirstWindow()
+        {
+          return Symbol{*tree_.keys()};                        //////////////////////////////////////////////TICKET #1113 : warning use of Symbol table becomes obsolete when EntryID relies on Literal
+        }
+      Literal
+      getCurrentWindow()
+        {
+          return Symbol{lib::pull_last (tree_.keys())};        //////////////////////////////////////////////TICKET #1113 : warning use of Symbol table becomes obsolete when EntryID relies on Literal
+        }
     };
   
   
