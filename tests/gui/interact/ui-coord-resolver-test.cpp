@@ -79,7 +79,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-          verify_simpleUsage();
+//        verify_simpleUsage();
           verify_backingQuery();
           verify_queryAnchor();
           verify_queryCoverage();

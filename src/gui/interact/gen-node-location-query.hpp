@@ -64,6 +64,7 @@
 //#include "lib/symbol.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/format-string.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
@@ -84,6 +85,7 @@ namespace interact {
 //  using lib::Literal;
 //  using lib::Symbol;
   using lib::diff::Rec;
+  using util::_Fmt;
 //  using util::unConst;
 //  using util::isnil;
 //  using util::min;
@@ -120,6 +122,8 @@ namespace interact {
             return getFirstWindow();
           if (UIC_CURRENT_WINDOW == path.getWindow())
             return getCurrentWindow();
+          if (not tree_.hasAttribute(string{path.getWindow()}))         /////////////////////////////////////TICKET #1113 : unnecessary repackaging of a Literal into string when GenNode ID is based on Literal
+            return Symbol::BOTTOM;
           return path.getWindow();
         }
 
@@ -129,14 +133,7 @@ namespace interact {
       determineCoverage (UICoord const& path)
         {
           size_t depth = 0;
-          const Rec* pos = &tree_;
-          const char* pathElm;
-          while (path.isPresent(depth) and
-                 pos->hasAttribute(pathElm = path[depth]))
-            {
-              ++depth;
-              pos = &pos->get(pathElm).data.get<Rec>();
-            }
+          drillDown (tree_, path, path.size(), depth);
           return depth;
         }
 
@@ -144,7 +141,18 @@ namespace interact {
       virtual ChildIter
       getChildren (UICoord const& path, size_t pos)
         {
-          UNIMPLEMENTED ("child iterator to navigate a GenNode tree structure");
+          size_t depth = 0;
+          Rec const& node = drillDown (tree_, path, pos, depth);
+          if (pos != depth-1)
+            throw error::State(_Fmt{"unable to drill down to depth %d: "
+                                    "element %s at pos %d in path %s is in "
+                                    "contradiction to actual UI structure"}
+                                   % pos
+                                   % (depth<path.size()? path[depth] : Symbol::BOTTOM)
+                                   % depth
+                                   % path
+                              );
+          return childSequence(node);
         }
       
     private:
@@ -157,6 +165,17 @@ namespace interact {
       getCurrentWindow()
         {
           return Symbol{lib::pull_last (tree_.keys())};        //////////////////////////////////////////////TICKET #1113 : warning use of Symbol table becomes obsolete when EntryID relies on Literal
+        }
+      
+      static ChildIter
+      childSequence (Rec const& node)
+        {
+          auto internedString = [](string const& id) -> Literal
+                                  {
+                                    return Symbol{id};
+                                  };
+                                              ///////////////////////////////////////////////////////////////TICKET #1113 : could just use lib::wrapIter when GenNode exposes Literal as ID
+          return lib::transform (node.keys(), internedString);
         }
       
       static Rec const&
