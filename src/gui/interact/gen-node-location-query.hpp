@@ -151,6 +151,18 @@ namespace interact {
         {
           return Symbol{lib::pull_last (tree_.keys())};        //////////////////////////////////////////////TICKET #1113 : warning use of Symbol table becomes obsolete when EntryID relies on Literal
         }
+      
+      static Rec const&
+      drillDown (Rec const& tree, UICoord const& path, size_t maxDepth, size_t& depth)
+        {
+          if (depth<maxDepth and path.isPresent(depth))
+            {
+              const char* pathElm = path[depth];
+              if (tree.hasAttribute(pathElm))
+                return drillDown (tree.get(pathElm).data.get<Rec>(), path, maxDepth, ++depth);
+            }
+          return tree;
+        }
     };
   
   
