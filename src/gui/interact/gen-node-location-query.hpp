@@ -124,16 +124,23 @@ namespace interact {
         }
 
 
-      /** evaluate to what extent a UIcoord spec matches the structure given as GenNode tree
-       */
+      /** evaluate to what extent a UIcoord spec matches the structure given as GenNode tree */
       virtual size_t
       determineCoverage (UICoord const& path)
         {
-          UNIMPLEMENTED ("resolve explicitly given coordinates against GenNode tree");
+          size_t depth = 0;
+          const Rec* pos = &tree_;
+          const char* pathElm;
+          while (path.isPresent(depth) and
+                 pos->hasAttribute(pathElm = path[depth]))
+            {
+              ++depth;
+              pos = &pos->get(pathElm).data.get<Rec>();
+            }
+          return depth;
         }
 
-      /** get the sequence child IDs at a designated position in the backing GenNode tree
-       */
+      /** get the sequence of child IDs at a designated position in the backing GenNode tree */
       virtual ChildIter
       getChildren (UICoord const& path, size_t pos)
         {
