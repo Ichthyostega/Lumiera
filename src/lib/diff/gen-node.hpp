@@ -844,7 +844,7 @@ namespace diff{
   inline GenNode
   Rec::buildAttribute (string const& key, X&& payload)
   {
-    return GenNode(key, payload);
+    return GenNode(key, std::forward<X>(payload));
   }
   
   
