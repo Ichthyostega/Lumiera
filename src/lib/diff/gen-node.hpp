@@ -849,5 +849,21 @@ namespace diff{
   
   
   
-}} // namespace lib::diff
+}// namespace lib::diff
+
+namespace variant {
+    using diff::Rec;
+    
+    /**
+     * specialisation allowing to build a GenNode with a
+     * nested record from a Record::Mutator (aka `MakeRec`)
+     */
+    template<typename TYPES>
+    struct CanBuildFrom<diff::MakeRec, Node<Rec, TYPES>>
+      : std::true_type
+      {
+        using Type = Rec;
+      };
+
+}} // namespace lib::variant
 #endif /*LIB_DIFF_GEN_NODE_H*/
