@@ -179,16 +179,41 @@ namespace interact {
           return lib::transform (node.keys(), internedString);
         }
       
+      
       static Rec const&
       drillDown (Rec const& tree, UICoord const& path, size_t maxDepth, size_t& depth)
         {
           if (depth<maxDepth and path.isPresent(depth))
             {
               const char* pathElm = path[depth];
-              if (tree.hasAttribute(pathElm))
-                return drillDown (tree.get(pathElm).data.get<Rec>(), path, maxDepth, ++depth);
+              if (hasNode(tree, pathElm, depth))
+                {
+                  ++depth;
+                  return drillDown (descendInto(tree,pathElm,depth), path, maxDepth, depth);
+                }
             }
           return tree;
+        }
+      
+      /** does the guiding tree contain the element as requested by the UICoord path?
+       * @remark this function abstracts a special asymmetry of the tree representation:
+       *  at `level==UIC_PERSP` (level 2), the perspective info is packed into the type
+       *  meta attribute. This was done on purpose, to verify our design is able to
+       *  handle such implementation intricacies, which we expect to encounter
+       *  when navigating the widgets of a real-world UI toolkit set
+       */
+      static bool
+      hasNode (Rec const& tree, const char* pathElm, size_t depth)
+        {
+          return depth==UIC_PERSP? pathElm == tree.getType()
+                                 : tree.hasAttribute(pathElm);
+        }
+      
+      static Rec const&
+      descendInto (Rec const& tree, const char* pathElm, size_t depth)
+        {
+          return depth==UIC_PERSP? tree // perspective info is attached as type at the parent node
+                                 : tree.get(pathElm).data.get<Rec>();
         }
     };
   

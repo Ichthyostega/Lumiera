@@ -105,7 +105,7 @@ namespace interact {
 
 
       /** evaluate to what extent a UIcoord spec matches the actual UI
-       * @return the depth to which the given spec is _"covered"_ by the actual UI
+       * @return the depth to which the given spec is _"covered"_ by the actual UI.
        *         Can be zero, in which case the given coordinates can not be resolved
        *         and addressed within the currently existing windows, panes and views.
        * @note this operation does not perform any _resolution_ or interpolation of wildcards,

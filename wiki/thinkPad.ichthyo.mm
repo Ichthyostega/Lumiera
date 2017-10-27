@@ -4577,7 +4577,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645747" ID="ID_517262443" MODIFIED="1508625810426" TEXT="verify_backingQuery">
 <icon BUILTIN="pencil"/>
-<node CREATED="1508809610790" ID="ID_1860790851" MODIFIED="1509142631190" TEXT="Builder-Syntax war falsch">
+<node CREATED="1508809610790" FOLDED="true" ID="ID_1860790851" MODIFIED="1509145537374" TEXT="Builder-Syntax war falsch">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1508809620762" ID="ID_236111511" MODIFIED="1508809630860" TEXT="mu&#xdf; die Attribute-Collection nutzen"/>
 <node CREATED="1508809631448" ID="ID_956153388" MODIFIED="1508809644482" TEXT="Builder wohl noch nie f&#xfc;r diesen Fall verwendet"/>
@@ -4617,7 +4617,74 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node CREATED="1509142651113" ID="ID_99734013" MODIFIED="1509142657805" TEXT="Spezialbehandlung Perspektive"/>
+<node CREATED="1509142651113" ID="ID_99734013" MODIFIED="1509145529638">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Spezialbehandlung
+    </p>
+    <p>
+      Perspektive
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1509143055036" ID="ID_810015478" MODIFIED="1509143099748" TEXT="absichtlich unorthogonal repr&#xe4;sentiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...um zu pr&#252;fen, ob das allgemeine Design
+    </p>
+    <p>
+      mit solchen Asymetrien umgehen kann,
+    </p>
+    <p>
+      welche ziemlich sicher noch viel mehr
+    </p>
+    <p>
+      bei der Navigation in einem realen GUI auftreten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1509143404342" ID="ID_708195081" MODIFIED="1509143411493" TEXT="drillDown aufbohren">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1509143431491" ID="ID_1535839304" MODIFIED="1509143436685" TEXT="Pfad normal weiterverarbeiten"/>
+<node CREATED="1509143437202" ID="ID_1489524396" MODIFIED="1509143442917" TEXT="aber Abstieg im Baum manipulieren"/>
+</node>
+<node CREATED="1509143453151" ID="ID_373632759" MODIFIED="1509143457604" TEXT="speziell...">
+<node CREATED="1509143459519" ID="ID_1727095948" MODIFIED="1509143468809" TEXT="existenz-Check l&#xe4;uft anders">
+<node CREATED="1509143492194" ID="ID_835507213" MODIFIED="1509143513852" TEXT="getType und stringvergleich"/>
+<node CREATED="1509143514352" ID="ID_730111393" MODIFIED="1509143519963" TEXT="statt hasAttribute"/>
+</node>
+<node CREATED="1509143469429" ID="ID_1414723485" MODIFIED="1509143481984" TEXT="keinen Abstiegs-Schritt machen"/>
+</node>
+<node CREATED="1509143542611" ID="ID_114168871" MODIFIED="1509143583963" TEXT="Schwein gehabt, rekursiv programmiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und ich hab mir letzte Woche noch solche Vorw&#252;rfe gemacht,
+    </p>
+    <p>
+      da&#223; ich mich wieder mal &quot;akademisch&quot; verspielt habe.... :-P
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645748" ID="ID_1254044275" MODIFIED="1506984664457" TEXT="verify_queryAnchor">
 <icon BUILTIN="flag-yellow"/>
