@@ -611,7 +611,7 @@ namespace interact {
   inline UICoord::Builder
   UICoord::firstWindow()
   {
-    return window (UIC_CURRENT_WINDOW);
+    return window (UIC_FIRST_WINDOW);
   }
 
   /** @return aBuilder with just the windowID defined */

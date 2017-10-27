@@ -40,8 +40,8 @@
  ** - we use the _attributes_ within the GenNode "object" representation, since these are _named_
  **   nested elements, and the whole notion of an UI coordinate path is based on named child components
  ** - relying upon the [object builder notation](\ref Record::Mutator), it is possible to define a whole
- **   structure as nested inline tree; this leads to a somewhat confusing notation, where the names of
- **   the child nodes are spelled of at the closing bracket of each construct.
+ **   structure as nested inline tree; named nested elements can be added with the `set(key, val)`
+ **   builder function, and for each nested scope, we start a new nested builder with `MakeRec()`.
  ** - since GenNodeLocationQuery is conceived for writing test and verification code, there is a
  **   special convention to set the `currentWindow` to be the last one in list -- in a real UI
  **   this would not of course not be a configurable property of the LocationQuery, and rather

@@ -99,14 +99,17 @@ namespace test {
       verify_simpleUsage()
         {
           // a Test dummy placeholder for the real UI structure
-          Rec dummyUiStructure = MakeRec().scope(
-                                    MakeRec().type("perspective-A")
-                                    .genNode("window-1"),
-                                    MakeRec().type("perspective-B")
-                                    .scope(
-                                        MakeRec().genNode("panelX")
-                                    ).genNode("window-2")
-                                 );
+          Rec dummyUiStructure = MakeRec()
+                                   .set("window-1"
+                                       , MakeRec()
+                                           .type("perspective-A")
+                                       )
+                                   .set("window-2"
+                                       , MakeRec()
+                                           .type("perspective-B")
+                                           .set("panelX", MakeRec())
+                                           .set("panelXX", MakeRec())
+                                       );
 
           // helper to answer "location queries" backed by this structure
           GenNodeLocationQuery locationQuery{dummyUiStructure};
@@ -138,9 +141,9 @@ namespace test {
        *            since these are named nested elements, and the whole notion of an
        *            UI coordinate path is based on named child components
        *          - we use the _object builder_ helper to define the whole structure
-       *            as nested inline tree; this leads to a somewhat confusing notation,
-       *            where the names of the child nodes are spelled of at the closing
-       *            bracket of each construct.
+       *            as nested inline tree; named nested elements ("attributes") are
+       *            added with the `set(key, val)` builder function, and for each
+       *            nested scope, we start a new nested builder with `MakeRec()`.
        *          - there is a special convention _for this test setup solely_ to
        *            set the `currentWindow` to be the last one in list -- in a real
        *            UI this would not of course not be a configurable property of
@@ -150,36 +153,31 @@ namespace test {
       void
       verify_backingQuery()
         {
-          GenNodeLocationQuery queryAPI{MakeRec().scope(
-                                           MakeRec()
-                                           .type("perspective-A")
-                                           .scope(
-                                               MakeRec()
-                                               .scope(
-                                                   MakeRec()
-                                                   .genNode("firstView"),
-                                                   MakeRec()
-                                                   .genNode("secondView")
-                                               ).genNode("panelX")
-                                           ).genNode("window-1"),
-                                           MakeRec()
-                                           .type("perspective-B")
-                                           .scope(
-                                               MakeRec()
-                                               .genNode("panelY")
-                                           ).genNode("window-2"),
-                                           MakeRec()
-                                           .type("perspective-C")
-                                           .scope(
-                                               MakeRec()
-                                               .scope(
-                                                   MakeRec()
-                                                   .genNode("thirdView")
-                                               ).genNode("panelZ"),
-                                               MakeRec()
-                                               .genNode("panelZZ")
-                                           ).genNode("window-3")
-                                       )};
+          GenNodeLocationQuery queryAPI{MakeRec()
+                                          .set("window-1"
+                                              , MakeRec()
+                                                  .type("perspective-A")
+                                                  .set("panelX"
+                                                      , MakeRec()
+                                                          .set("firstView", MakeRec())
+                                                          .set("secondView", MakeRec())
+                                                      )
+                                              )
+                                          .set("window-2"
+                                              , MakeRec()
+                                                  .type("perspective-B")
+                                                  .set("panelY", MakeRec())
+                                              )
+                                          .set("window-3"
+                                              , MakeRec()
+                                                  .type("perspective-C")
+                                                  .set("panelZ"
+                                                      , MakeRec()
+                                                          .set("thirdView", MakeRec())
+                                                      )
+                                                  .set("panelZZ", MakeRec())
+                                              )
+                                       };
 
           // the LocationQuery API works by matching a UICoord spec against the "real" structure
           UICoord uic1 = UICoord::window("window-2").persp("perspective-B");
@@ -232,18 +230,20 @@ namespace test {
       void
       verify_queryAnchor()
         {
-          GenNodeLocationQuery loQu{MakeRec().scope(
-                                       MakeRec().type("perspective-A")
-                                       .genNode("window-1"),
-                                       MakeRec().type("perspective-B")
-                                       .scope(
-                                           MakeRec()
-                                           .scope(
-                                               MakeRec()
-                                               .genNode("someView")
-                                           ).genNode("panelX")
-                                       ).genNode("window-2")
-                                   )};
+          GenNodeLocationQuery loQu{MakeRec()
+                                      .set("window-1"
+                                          , MakeRec()
+                                              .type("perspective-A")
+                                          )
+                                      .set("window-2"
+                                          , MakeRec()
+                                              .type("perspective-B")
+                                              .set("panelX"
+                                                  , MakeRec()
+                                                      .set("someView", MakeRec())
+                                                  )
+                                          )
+                                   };
           UICoord uic1 = UICoord::window("window-1").persp("perspective-A");
           UICoord uic2 = UICoord::window("windows");
           UICoord uic3 = UICoord::firstWindow();
