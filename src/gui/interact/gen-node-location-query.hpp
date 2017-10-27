@@ -71,7 +71,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-//#include <utility>
+#include <utility>
 //#include <memory>
 
 
@@ -102,11 +102,12 @@ namespace interact {
   class GenNodeLocationQuery
     : public LocationQuery
     {
-      Rec const& tree_;
+      Rec tree_;
       
     public:
-      GenNodeLocationQuery(Rec const& backingStructure)
-        : tree_(backingStructure)
+      template<class REC>
+      GenNodeLocationQuery(REC&& backingStructure)
+        : tree_(std::forward<REC>(backingStructure))
         { }
       
       

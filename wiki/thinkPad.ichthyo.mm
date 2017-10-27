@@ -4577,6 +4577,43 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645747" ID="ID_517262443" MODIFIED="1508625810426" TEXT="verify_backingQuery">
 <icon BUILTIN="pencil"/>
+<node CREATED="1508809610790" ID="ID_1860790851" MODIFIED="1508809620175" TEXT="Builder-Syntax war falsch"/>
+<node CREATED="1508809620762" ID="ID_236111511" MODIFIED="1508809630860" TEXT="mu&#xdf; die Attribute-Collection nutzen"/>
+<node CREATED="1508809631448" ID="ID_956153388" MODIFIED="1508809644482" TEXT="Builder wohl noch nie f&#xfc;r diesen Fall verwendet"/>
+<node CREATED="1508809645470" ID="ID_1846245702" MODIFIED="1508809656617" TEXT="erlaube Move-Initialisierung"/>
+<node CREATED="1508809657253" ID="ID_108704029" MODIFIED="1508809659905" TEXT="Segfault">
+<node CREATED="1508809662036" ID="ID_1522595538" MODIFIED="1508809674479" TEXT="sehe zwar die drei Window-Elemente"/>
+<node CREATED="1508809674994" ID="ID_1781272984" MODIFIED="1508809683317" TEXT="aber die ID-Strings sind komisch">
+<node CREATED="1508809684338" ID="ID_1268163778" MODIFIED="1508809688341" TEXT="erster String ist &quot;&quot;"/>
+<node CREATED="1508809688881" ID="ID_1836564528" MODIFIED="1508809700115" TEXT="zweiter String hat richtigen Anfang..."/>
+<node CREATED="1508809700919" ID="ID_733585050" MODIFIED="1508809716393" TEXT="aber wird mit nachfolgendem M&#xfc;ll angezeigt"/>
+<node CREATED="1508809719165" ID="ID_1506398379" MODIFIED="1509064569893" TEXT="Segfault beim Initialisieren des Ergebnisses f&#xfc;r extractKey"/>
+</node>
+<node CREATED="1508809741418" ID="ID_1013369537" MODIFIED="1509070755705" TEXT="Verdacht: irgendwo move mit dangling storage?"/>
+<node CREATED="1509070756935" ID="ID_1331980374" MODIFIED="1509070861495" TEXT="nein! Nur eine Referenz vom Temporary">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...merke
+    </p>
+    <p>
+      die Spezialbehandlung f&#252;r const&amp; gilt nur, wenn wir direkt auch diesen Typ nehmen.
+    </p>
+    <p>
+      Im vorliegenden fall wird aber der conversion-Operator aufgerufen, um den Initializser zu erzeugen.
+    </p>
+    <p>
+      Daher denkt der Compiler, er kann das Ursprungsobjekt jezt wergwerfen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645748" ID="ID_1254044275" MODIFIED="1506984664457" TEXT="verify_queryAnchor">
 <icon BUILTIN="flag-yellow"/>
