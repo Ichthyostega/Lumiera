@@ -144,11 +144,11 @@ namespace interact {
         {
           size_t depth = 0;
           Rec const& node = drillDown (tree_, path, pos, depth);
-          if (pos != depth-1)
+          if (depth != pos)
             throw error::State(_Fmt{"unable to drill down to depth %d: "
                                     "element %s at pos %d in path %s is in "
                                     "contradiction to actual UI structure"}
-                                   % pos
+                                   % (pos+1)
                                    % (depth<path.size()? path[depth] : Symbol::BOTTOM)
                                    % depth
                                    % path
@@ -168,6 +168,14 @@ namespace interact {
           return Symbol{lib::pull_last (tree_.keys())};        //////////////////////////////////////////////TICKET #1113 : warning use of Symbol table becomes obsolete when EntryID relies on Literal
         }
       
+      Literal
+      resolveElm (UICoord const& path, size_t depth)
+        {
+          REQUIRE (path.isPresent(depth));
+          return depth==UIC_WINDOW? GenNodeLocationQuery::determineAnchor(path)
+                                  : path[depth];
+        }
+      
       static ChildIter
       childSequence (Rec const& node)
         {
@@ -180,16 +188,16 @@ namespace interact {
         }
       
       
-      static Rec const&
+      Rec const&
       drillDown (Rec const& tree, UICoord const& path, size_t maxDepth, size_t& depth)
         {
           if (depth<maxDepth and path.isPresent(depth))
             {
-              const char* pathElm = path[depth];
-              if (hasNode(tree, pathElm, depth))
+              const char* pathElm = resolveElm (path, depth);
+              if (hasNode (tree, pathElm, depth))
                 {
                   ++depth;
-                  return drillDown (descendInto(tree,pathElm,depth), path, maxDepth, depth);
+                  return drillDown (descendInto(tree,pathElm,depth-1), path, maxDepth, depth);
                 }
             }
           return tree;
@@ -197,9 +205,9 @@ namespace interact {
       
       /** does the guiding tree contain the element as requested by the UICoord path?
        * @remark this function abstracts a special asymmetry of the tree representation:
-       *  at `level==UIC_PERSP` (level 2), the perspective info is packed into the type
-       *  meta attribute. This was done on purpose, to verify our design is able to
-       *  handle such implementation intricacies, which we expect to encounter
+       *  at `level==UIC_PERSP` (the second level), the perspective info is packed into
+       *  the type meta attribute. This was done on purpose, to verify our design is able
+       *  to handle such implementation intricacies, which we expect to encounter
        *  when navigating the widgets of a real-world UI toolkit set
        */
       static bool
