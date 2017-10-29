@@ -148,12 +148,12 @@ namespace interact {
             throw error::State(_Fmt{"unable to drill down to depth %d: "
                                     "element %s at pos %d in path %s is in "
                                     "contradiction to actual UI structure"}
-                                   % (pos+1)
+                                   % pos
                                    % (depth<path.size()? path[depth] : Symbol::BOTTOM)
                                    % depth
                                    % path
                               );
-          return childSequence(node);
+          return childSequence(node, depth);
         }
       
     private:
@@ -177,14 +177,15 @@ namespace interact {
         }
       
       static ChildIter
-      childSequence (Rec const& node)
+      childSequence (Rec const& node, size_t& depth)
         {
           auto internedString = [](string const& id) -> Literal
                                   {
                                     return Symbol{id};
                                   };
-                                              ///////////////////////////////////////////////////////////////TICKET #1113 : could just use lib::wrapIter when GenNode exposes Literal as ID
-          return lib::transform (node.keys(), internedString);
+          return depth==UIC_PERSP? lib::singleVal (internedString (node.getType()))
+                                 : lib::transform (node.keys(), internedString);
+                                        /////////////////////////////////////////////////////////////////////TICKET #1113 : could just use lib::wrapIter when GenNode exposes Literal as ID
         }
       
       

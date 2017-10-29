@@ -4575,8 +4575,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645745" ID="ID_244163155" MODIFIED="1506984665826" TEXT="verify_simpleUsage">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645747" ID="ID_517262443" MODIFIED="1508625810426" TEXT="verify_backingQuery">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1506984645747" ID="ID_517262443" MODIFIED="1509288984297" TEXT="verify_backingQuery">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1508809610790" FOLDED="true" ID="ID_1860790851" MODIFIED="1509145537374" TEXT="Builder-Syntax war falsch">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1508809620762" ID="ID_236111511" MODIFIED="1508809630860" TEXT="mu&#xdf; die Attribute-Collection nutzen"/>
@@ -4683,10 +4683,14 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node CREATED="1509151268071" ID="ID_38582779" MODIFIED="1509151422017" TEXT="getChildren aufbohren">
-<icon BUILTIN="pencil"/>
+<node CREATED="1509151268071" ID="ID_38582779" MODIFIED="1509288960092" TEXT="getChildren aufbohren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1509151285749" ID="ID_1826645914" MODIFIED="1509287428715" TEXT="eigentlich einfach">
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1509287527705" ID="ID_1588631568" MODIFIED="1509287562960" TEXT="mu&#xdf; blo&#xdf; in einem Fall explizit was anderes liefern..."/>
+<node CREATED="1509287541919" ID="ID_58868223" MODIFIED="1509287552668" TEXT="Aua! Iterator ist im weg">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#338800" CREATED="1509151289637" FOLDED="true" ID="ID_892381116" MODIFIED="1509287431815" TEXT="brauche singletonIter">
 <icon BUILTIN="button_ok"/>
