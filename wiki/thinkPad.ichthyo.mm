@@ -4685,11 +4685,15 @@
 </node>
 <node CREATED="1509151268071" ID="ID_38582779" MODIFIED="1509151422017" TEXT="getChildren aufbohren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1509151285749" ID="ID_1826645914" MODIFIED="1509151289049" TEXT="eigentlich einfach"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1509151289637" ID="ID_892381116" MODIFIED="1509151414927" TEXT="brauche singletonIter">
-<icon BUILTIN="pencil"/>
+<node CREATED="1509151285749" ID="ID_1826645914" MODIFIED="1509287428715" TEXT="eigentlich einfach">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1509151289637" FOLDED="true" ID="ID_892381116" MODIFIED="1509287431815" TEXT="brauche singletonIter">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1509151296292" ID="ID_1050274308" MODIFIED="1509151411655" TEXT="liefert ein einziges Element"/>
-<node CREATED="1509151305602" ID="ID_452317335" MODIFIED="1509151411655" TEXT="als IterSource verpackt"/>
+<node CREATED="1509151305602" ID="ID_452317335" MODIFIED="1509287419861" TEXT="als IterSource verpackt">
+<icon BUILTIN="idea"/>
+</node>
 <node CREATED="1509151309866" ID="ID_1109789284" MODIFIED="1509151411655" TEXT="sollte es als als Basis iter implementieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -4707,8 +4711,11 @@
 </richcontent>
 </node>
 <node CREATED="1509151381113" ID="ID_779657015" MODIFIED="1509151411655" TEXT="brauche ItemWrapper f&#xfc;r beliebiges Element"/>
-<node CREATED="1509151390495" ID="ID_947844248" MODIFIED="1509151411655" TEXT="Idee: TransformIter aufbohren">
-<icon BUILTIN="help"/>
+<node CREATED="1509151390495" ID="ID_947844248" MODIFIED="1509285129251" TEXT="Idee: TransformIter aufbohren">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1509285130478" ID="ID_1391664155" MODIFIED="1509285142156" TEXT="direkt coden ist am klarsten">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

@@ -59,6 +59,8 @@ namespace test{
   using std::list;
   using std::rand;
   
+  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  
   
   
   namespace { // Subject of test
@@ -132,6 +134,16 @@ namespace test{
         
       };
     
+    
+    /** diagnostics helper */
+    template<class IT>
+    inline void
+    pullOut (IT& iter)
+    {
+      for ( ; iter; ++iter )
+        cout << "::" << *iter;
+      cout << endl;
+    }
   } // (END) impl test dummy containers
   
   
@@ -207,11 +219,25 @@ namespace test{
         }
       
       
+      /** @test verify transforming an embedded iterator
+       * This test not only wraps a source iterator and packages it behind the
+       * abstracting interface IterSource, but in addition also applies a function
+       * to each element yielded by the source iterator. As demo transformation
+       * we use the values from our custom container (\ref WrappedList) to build
+       * a time value in quarter seconds
+       *
+       */
       void
       verify_transformIter()
         {
           WrappedList customList(NUM_ELMS);
-          WrappedList::iterator sourceValues = customList.begin(); 
+          WrappedList::iterator sourceValues = customList.begin();
+
+          // transformation function
+          auto makeTime = [](int input_sec) -> TimeVar
+                            {
+                              return time::Time (time::FSecs (input_sec, 4));
+                            };
           
           TimeIter tIt (transform (sourceValues, makeTime));
           CHECK (!isnil (tIt));
@@ -219,25 +245,37 @@ namespace test{
           CHECK (!tIt);
         }
       
-      /** transformation function, to be applied for each element:
-       *  just build a time value, using the input as 1/4 seconds
-       */
-      static TimeVar
-      makeTime (int input_sec)
-        {
-          return time::Time (time::FSecs (input_sec, 4));
-        }
       
-      
-      
-      template<class IT>
+      /** @test an IterSouce which returns just a single value once */
       void
-      pullOut (IT& iter)
+      verify_singleValIter()
         {
-          for ( ; iter; ++iter )
-            cout << "::" << *iter;
-          cout << endl;
+          int i{-9};
+
+          IntIter ii = singleVal(12);
+          CHECK (not isnil(ii));
+          CHECK (12 == *ii);
+
+          ++ii;
+          CHECK (isnil (ii));
+          VERIFY_ERROR (ITER_EXHAUST, *ii );
+
+          // IterSource is an abstracting interface,
+          // thus we're able to reassign an embedded iterator
+          // with a different value type (int& instead of int)
+          ii = singleVal(i);
+
+          CHECK (not isnil(ii));
+          CHECK (-9 == *ii);
+
+          // NOTE: since we passed a reference, a reference got wrapped
+          i = 23;
+          CHECK (23 == *ii);
+          ++ii;
+          CHECK (isnil (ii));
         }
+      
+      
       
       
       template<class MAP>

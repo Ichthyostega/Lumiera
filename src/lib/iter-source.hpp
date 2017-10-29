@@ -364,6 +364,22 @@ namespace lib {
     }
     
     
+    /** an IterSource frontend to return just a single value once.
+     * @warning behind the scenes, a heap allocation is managed by shared_ptr,
+     *          to maintain a copy of the wrapped element. When passing a reference,
+     *          only a reference will be wrapped, but a heap allocation happens nontheless
+     */
+    template<typename VAL>
+    auto
+    singleVal (VAL&& something)
+    {
+      using Src = decltype(singleValIterator (forward<VAL>(something)));
+      using Val = typename _IterT<Src>::Val;
+
+      return IterSource<Val>::build (new WrappedLumieraIter<Src>{singleValIterator (forward<VAL>(something))});
+    }
+    
+    
     /** pipes a given Lumiera Forward Iterator through
      *  a transformation function and wraps the resulting
      *  transforming Iterator, exposing just an IterSource.
@@ -461,11 +477,11 @@ namespace lib {
       using Range   = RangeIter<typename CON::iterator>;
       
       Range contents (container.begin(), container.end());
-      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents)); 
+      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
     
-
-    /** @return a Lumiera Forward Iterator yielding all values
+    
+    /** @return a Lumiera Forward Iterator to yield all values
      *          defined by a classical Iterator range.
      */
     template<class IT>
@@ -478,9 +494,9 @@ namespace lib {
       Range contents (begin, end);
       return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
-
   }
   using iter_source::wrapIter;
+  using iter_source::singleVal;
   using iter_source::transform;
   using iter_source::eachMapKey;
   using iter_source::eachDistinctKey;
