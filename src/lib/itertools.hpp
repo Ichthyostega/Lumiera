@@ -575,6 +575,102 @@ namespace lib {
   
   
   
+  /**
+   * Implementation of a _singleton value_ holder,
+   * which discards the contained value once "iterated"
+   */
+  template<typename VAL>
+  class SingleValCore
+    {
+      typedef wrapper::ItemWrapper<VAL> Item;
+      
+      Item theValue_;
+      
+    public:
+      SingleValCore() { } ///< passive and empty
+      
+      SingleValCore (VAL&& something)
+        : theValue_{forward<VAL> (something)}
+        { }
+      
+      Item const&
+      pipe ()  const
+        {
+          return theValue_;
+        }
+      
+      void
+      advance ()
+        {
+          theValue_.reset();
+        }
+      
+      bool
+      evaluate () const
+        {
+          return theValue_.isValid();
+        }
+      
+      typedef typename std::remove_reference<VAL>::type * pointer;
+      typedef typename std::remove_reference<VAL>::type & reference;
+      typedef typename std::remove_reference<VAL>::type   value_type;
+    };
+  
+  
+  /**
+   * Pseudo-Iterator to yield just a single value.
+   * When incremented, the value is destroyed and
+   * the Iterator transitions to _exhausted state_.
+   * @remark as such might look nonsensical, but proves
+   *   useful when a function yields an iterator, while
+   *   producing an explicit value in some special case.
+   * @tparam VAL anything, value or reference to store
+   */
+  template<class VAL>
+  class SingleValIter
+    : public IterTool<SingleValCore<VAL>>
+    {
+      using _ValHolder = SingleValCore<VAL>;
+      using _IteratorImpl = IterTool<_ValHolder> ;
+      
+    public:
+      SingleValIter ()
+        : _IteratorImpl{_ValHolder{}}
+        { }
+      
+      SingleValIter (VAL&& something)
+        : _IteratorImpl{_ValHolder{forward<VAL>(something)}}
+        { }
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (SingleValIter)
+    };
+  
+  
+  
+  /** Build a SingleValIter: convenience free function shortcut,
+   *  to pick up just any value and wrap it as Lumiera Forward Iterator.
+   *  @return Iterator to yield the value once
+   *  @warning be sure to understand that we literally pick up and wrap anything
+   *           provided as argument. If you pass a reference, we wrap a reference.
+   *           If you want to wrap a copy, you have to do the copy yourself inline
+   */
+  template<class VAL>
+  inline auto
+  singleValIterator (VAL&& something)
+  {
+    return SingleValIter<VAL>{forward<VAL>(something)};
+  }
+  
+  template<class VAL>
+  inline auto
+  singleValIterator (VAL const& ref)
+  {
+    return SingleValIter<VAL>{ref};
+  }
+  
+
+  
+  
   
   /**
    * Implementation of custom processing logic.

@@ -4659,7 +4659,6 @@
 <icon BUILTIN="ksmiletris"/>
 <node CREATED="1509143431491" ID="ID_1535839304" MODIFIED="1509143436685" TEXT="Pfad normal weiterverarbeiten"/>
 <node CREATED="1509143437202" ID="ID_1489524396" MODIFIED="1509143442917" TEXT="aber Abstieg im Baum manipulieren"/>
-</node>
 <node CREATED="1509143453151" ID="ID_373632759" MODIFIED="1509143457604" TEXT="speziell...">
 <node CREATED="1509143459519" ID="ID_1727095948" MODIFIED="1509143468809" TEXT="existenz-Check l&#xe4;uft anders">
 <node CREATED="1509143492194" ID="ID_835507213" MODIFIED="1509143513852" TEXT="getType und stringvergleich"/>
@@ -4680,9 +4679,38 @@
       da&#223; ich mich wieder mal &quot;akademisch&quot; verspielt habe.... :-P
     </p>
   </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1509151268071" ID="ID_38582779" MODIFIED="1509151422017" TEXT="getChildren aufbohren">
+<icon BUILTIN="pencil"/>
+<node CREATED="1509151285749" ID="ID_1826645914" MODIFIED="1509151289049" TEXT="eigentlich einfach"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1509151289637" ID="ID_892381116" MODIFIED="1509151414927" TEXT="brauche singletonIter">
+<icon BUILTIN="pencil"/>
+<node CREATED="1509151296292" ID="ID_1050274308" MODIFIED="1509151411655" TEXT="liefert ein einziges Element"/>
+<node CREATED="1509151305602" ID="ID_452317335" MODIFIED="1509151411655" TEXT="als IterSource verpackt"/>
+<node CREATED="1509151309866" ID="ID_1109789284" MODIFIED="1509151411655" TEXT="sollte es als als Basis iter implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und die IterSource dann nur &#252;ber WrapIter definieren.
+    </p>
+    <p>
+      Schichten-Prinzip...
+    </p>
+  </body>
 </html>
 </richcontent>
-<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1509151381113" ID="ID_779657015" MODIFIED="1509151411655" TEXT="brauche ItemWrapper f&#xfc;r beliebiges Element"/>
+<node CREATED="1509151390495" ID="ID_947844248" MODIFIED="1509151411655" TEXT="Idee: TransformIter aufbohren">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 </node>
