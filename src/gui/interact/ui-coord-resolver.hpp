@@ -50,7 +50,7 @@
 #include "gui/interact/ui-coord.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/iter-stack.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <string>
@@ -68,7 +68,7 @@ namespace interact {
 //  using std::string;
   using lib::Literal;
 //  using lib::Symbol;
-//  using util::unConst;
+  using util::unConst;
 //  using util::isnil;
 //  using util::min;
   
@@ -198,7 +198,7 @@ namespace interact {
         {
           return isAnchored()
               or (res_.isResolved and res_.covfefe)
-              or pathResolution()
+              or unConst(this)->pathResolution()
               or isAnchored(); // resolution failed, but computed at least an anchor
         }
 
@@ -215,6 +215,14 @@ namespace interact {
              and res_.depth > 0;
         }
       
+      /** there is no extraneous uncovered suffix in this path spec */
+      bool
+      isTotallyCovered()  const
+        {
+          return res_.isResolved
+             and res_.depth == this->uic_.size();
+        }
+
       /** determine if a mutation is possible to get the path (partially) covered.
        * @remarks in order to be successful, a path resolution must interpolate any gaps in the
        *       path spec _and_ reach a point behind / below the gap (wildcards), where an existing
@@ -229,29 +237,51 @@ namespace interact {
         {
           return isCovered()
               or (res_.isResolved and res_.covfefe)
-              or pathResolution();
+              or unConst(this)->pathResolution();
         }
       
       
       
       /* === mutation functions === */
       
-      /**
+      /** mutate the path to get it totally covered
        */
       UICoordResolver
       cover()
         {
-          UNIMPLEMENTED ("mutate the path to get it covered");
+          if (isCovered())
+            truncateTo (res_.depth);
+          else if (canCover())
+            {
+              ASSERT (res_.isResolved);
+              REQUIRE (res_.covfefe);
+              res_.depth = res_.covfefe->size();
+              std::swap (this->uic_, *res_.covfefe);
+              res_.covfefe.reset();
+              ENSURE (isTotallyCovered());
+            }
+          else
+            {
+              ASSERT (res_.isResolved);
+              REQUIRE (res_.depth == 0);
+              REQUIRE (not res_.covfefe);
+              truncateTo (0);
+            }
           return std::move (*this);
         }
       
       
-      /**
+      /** mutate the path to extend it while keeping it partially covered
        */
       UICoordResolver
       extend (Literal pathExtension)
         {
-          UNIMPLEMENTED ("mutate the path to extend it while keeping it partially covered");
+          if (not isTotallyCovered())
+            cover();
+          ENSURE (isTotallyCovered());
+          append (pathExtension);
+          res_.depth = query_.determineCoverage (this->uic_); // coverage may grow
+          ENSURE (isCovered());
           return std::move (*this);
         }
       
