@@ -4266,6 +4266,86 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node CREATED="1509323422183" ID="ID_1262448971" MODIFIED="1509323429562" TEXT="feine Punkte...">
+<icon BUILTIN="yes"/>
+<node CREATED="1509323432989" ID="ID_1373680102" MODIFIED="1509323467821" TEXT="per default nur bei expliziten Pfaden">
+<node CREATED="1509323478248" ID="ID_101102957" MODIFIED="1509323487630" TEXT="vollst&#xe4;ndig (f&#xe4;ngt mit Window an)"/>
+<node CREATED="1509323473576" ID="ID_193021518" MODIFIED="1509323477588" TEXT="keine Wildcards"/>
+<node CREATED="1509323560821" ID="ID_294426477" MODIFIED="1509323871911" TEXT="in dem Fall ist anchern und covern &#xe4;quivalent">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1509323573047" ID="ID_263907664" MODIFIED="1509323580255" TEXT="covern: meint partiell"/>
+</node>
+<node CREATED="1509323496205" ID="ID_231710474" MODIFIED="1509323516558" TEXT="m&#xf6;glich">
+<node CREATED="1509323517362" ID="ID_1758863955" MODIFIED="1509323518982" TEXT="ankern"/>
+<node CREATED="1509323520018" ID="ID_895622034" MODIFIED="1509323522485" TEXT="covern"/>
+<node CREATED="1509323523193" ID="ID_1088301010" MODIFIED="1509323862956" TEXT="ist nicht das gleiche">
+<icon BUILTIN="idea"/>
+<node CREATED="1509323532816" ID="ID_1206148872" MODIFIED="1509323697998" TEXT="covern kann scheitern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir verlangen, da&#223; wir nach dem Interpolieren &#252;ber eine L&#252;cke
+    </p>
+    <p>
+      immer noch <i>mindestens ein explizt gegebenes</i>&#160;Element im Pfad haben,
+    </p>
+    <p>
+      welches auch von der UI-Topologie best&#228;tigt wird.
+    </p>
+    <p>
+      Grund: wir wollen vermeiden, abschlie&#223;ende Wildcards <i>blo&#223; irgendwie</i>&#160;zu binden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1509323537479" ID="ID_1638614197" MODIFIED="1509323754716" TEXT="und trotzedm einen Anker finden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich wenn der Pfad mit einem explizit gegebenen Pr&#228;fix anf&#228;ngt,
+    </p>
+    <p>
+      dann aber Wildcards enth&#228;lt, die nicht nach den versch&#228;rften Bedingungen gecovert werden k&#246;nnen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1509323760466" ID="ID_446881733" MODIFIED="1509323858164" TEXT="oder eben doch komplett im Widerspruch zum UI stehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beispielsweise
+    </p>
+    <ul>
+      <li>
+        wenn schon das Pr&#228;fix nicht pa&#223;t
+      </li>
+      <li>
+        wenn das erste Element nach dem Gap nirgends im realen UI in der tiefe existiert
+      </li>
+      <li>
+        wenn mehr Wildcards da sind, als restliche Tiefe zum Matchen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508537087378" ID="ID_548549576" MODIFIED="1508537098305" TEXT="Wildcards interpolieren">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -4373,7 +4453,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539152568" ID="ID_153711822" MODIFIED="1508539175926" TEXT="Beschreibung">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1508539226014" ID="ID_1714773115" MODIFIED="1508539921109" TEXT="informell...">
+<node CREATED="1508539226014" ID="ID_1714773115" MODIFIED="1509320125060" TEXT="informell...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4383,7 +4463,7 @@
       Tiefensuche &#252;ber die reale UI-Topologie
     </p>
     <p>
-      Ziel ist den Pfad <i>bestm&#246;glich</i>&#160;zu covern
+      Ziel ist, den Pfad <i>bestm&#246;glich</i>&#160;zu covern
     </p>
     <p>
       Es gilt die erste maximal abdeckende L&#246;sung
@@ -4468,8 +4548,8 @@
 <node CREATED="1508540835505" ID="ID_191493714" MODIFIED="1508540848899" TEXT="swap(*this, Coverage)"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508538883715" ID="ID_506584428" MODIFIED="1508538968865" TEXT="Basis: LocationQuery">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1508538883715" ID="ID_506584428" MODIFIED="1509319976183" TEXT="Basis: LocationQuery">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1508538979935" ID="ID_1139910958" MODIFIED="1508539033702" TEXT="immer explizit">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -4503,18 +4583,33 @@
 </richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539108398" ID="ID_681619275" MODIFIED="1508539127755" TEXT="coverage">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1508539108398" ID="ID_681619275" MODIFIED="1509319949242" TEXT="coverage">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1508539968020" ID="ID_64225559" MODIFIED="1508539972951" TEXT="in: expliziter Pfad"/>
 <node CREATED="1508539973587" ID="ID_822140715" MODIFIED="1508539984350" TEXT="out: Tiefe(Zahl)"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539115533" ID="ID_1048456515" MODIFIED="1508539126245" TEXT="child Iteration">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1508539115533" ID="ID_1048456515" MODIFIED="1509319964032" TEXT="child Iteration">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1508539986290" ID="ID_821465952" MODIFIED="1508539992221" TEXT="in: expliziter Pfad"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539992944" ID="ID_1384353532" MODIFIED="1508540003849" TEXT="out: IterSource&lt;Literal&gt;">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1508539992944" ID="ID_1384353532" MODIFIED="1509319961089" TEXT="out: IterSource&lt;Literal&gt;"/>
 </node>
 </node>
+<node CREATED="1509319992204" HGAP="60" ID="ID_258976142" MODIFIED="1509320035975" TEXT="prototypische Implementierung...." VSHIFT="21">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...verwendet einen GenNode-Tree
+    </p>
+    <p>
+      als Repr&#228;sentation des real-existierenden UI
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1506957414370" ID="ID_848105210" MODIFIED="1506957613469">
@@ -4617,7 +4712,7 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node CREATED="1509142651113" ID="ID_99734013" MODIFIED="1509145529638">
+<node CREATED="1509142651113" FOLDED="true" ID="ID_99734013" MODIFIED="1509319931404">
 <richcontent TYPE="NODE"><html>
   <head>
     

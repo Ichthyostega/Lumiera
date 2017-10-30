@@ -79,7 +79,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-//        verify_simpleUsage();
+          verify_simpleUsage();
           verify_backingQuery();
           verify_queryAnchor();
           verify_queryCoverage();
@@ -114,7 +114,7 @@ namespace test {
           // helper to answer "location queries" backed by this structure
           GenNodeLocationQuery locationQuery{dummyUiStructure};
 
-          UICoord uic{"window-1","*","panelX","someView"};
+          UICoord uic{"window-2","*","panelX","someView"};
           UICoordResolver resolver{uic, locationQuery};
 
           CHECK (not resolver.isCovered());

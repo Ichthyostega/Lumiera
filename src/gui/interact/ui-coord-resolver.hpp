@@ -176,32 +176,60 @@ namespace interact {
       
       /* === query functions === */
       
-      /** */
+      /** is this path explicitly anchored at an existing window?
+       * @remarks this also implies the path is complete and explicit (no wildcards).
+       */
       bool
       isAnchored()  const
         {
-          UNIMPLEMENTED ("path anchorage check");
+          return res_.isResolved
+             and res_.anchor and res_.anchor != Symbol::BOTTOM;
         }
 
-      /** */
+      /** determine if a mutation is possible to anchor the path explicitly
+       * @remarks basically this either means the path isAnchored(), or we're able
+       *          to calculate a path resolution, interpolating any wildcards.
+       *          And while the path resolution as such might fail, it was at least
+       *          successful to determine an anchor point. The existence of such an
+       *          anchor point implies the path is not totally in contradiction to the
+       *          existing UI*/
       bool
       canAnchor()  const
         {
-          UNIMPLEMENTED ("determine if a mutation is possible to anchor the path explicitly");
+          return isAnchored()
+              or (res_.isResolved and res_.covfefe)
+              or pathResolution()
+              or isAnchored(); // resolution failed, but computed at least an anchor
         }
 
-      /** */
+      /** is this path at least _partially_ covered?
+       *  A covered path describes an access path through widgets actually existing in the UI.
+       * @remarks this also implies the path is anchored, complete and explicit.
+       * @note this predicate tests for _partial_ coverage, which means, there might
+       *       be some extraneous suffix in this path descending beyond existing UI
+       */
       bool
       isCovered()  const
         {
-          UNIMPLEMENTED ("path coverage check");
+          return res_.isResolved
+             and res_.depth > 0;
         }
       
-      /** */
+      /** determine if a mutation is possible to get the path (partially) covered.
+       * @remarks in order to be successful, a path resolution must interpolate any gaps in the
+       *       path spec _and_ reach a point behind / below the gap (wildcards), where an existing
+       *       explicitly stated component in the path can be confirmed (covered) by the existing UI.
+       *       The idea behind this definition is that we do not want just some interpolated wildcards,
+       *       rather we really want to _confirm_ the essence of the path specification. Yet we accept
+       *       an extraneous suffix _in the explicitly given part_ of the path spec to extend beyond or
+       *       below what exists currently within the UI.
+       */
       bool
       canCover()  const
         {
-          UNIMPLEMENTED ("determine if a mutation is possible to get the path covered");
+          return isCovered()
+              or (res_.isResolved and res_.covfefe)
+              or pathResolution();
         }
       
       

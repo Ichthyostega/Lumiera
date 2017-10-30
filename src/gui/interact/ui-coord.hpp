@@ -194,7 +194,7 @@ namespace interact {
       
       
       /**
-       * @remark an _explicit_ coordinate spec does nut use wildcards
+       * @remark an _explicit_ coordinate spec does not use wildcards
        *         and is anchored in a window spec
        */
       bool
