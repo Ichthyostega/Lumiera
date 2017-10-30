@@ -189,6 +189,17 @@ namespace test {
           CHECK (5 == uic4.size());
           CHECK ("UI:?-panel.view.#555" == string(uic4));
           VERIFY_ERROR(LOGIC, uic1.prepend("root"));
+          
+          // the builder may shorten/truncate the path
+          uic4 = uic4.append("α/β/γ/δ/ε/λ").truncateTo(9);
+          CHECK (9 == uic4.size());
+          CHECK ("UI:?-panel.view.#555/α/β/γ/δ" == string(uic4));
+          uic4 = uic4.path("ε/ε/ε/ε/ε").truncateTo(3);
+          CHECK (3 == uic4.size());
+          CHECK ("UI:?-panel" == string(uic4));
+          uic4 = uic4.append("something").truncateTo(2);
+          CHECK (0 == uic4.size());    // NOTE: normalisation detected absence of any remaining content
+          CHECK ("UI:?" == string(uic4));
         }
       
       

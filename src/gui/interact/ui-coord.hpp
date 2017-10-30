@@ -583,6 +583,14 @@ namespace interact {
           uic_.setTailSequence (UIC_PATH, pathDef);
           return std::move (*this);
         }
+
+      /** possibly shorten this path specification to a limited depth */
+      Builder
+      truncateTo (size_t depth)
+        {
+          uic_.truncateTo (depth);
+          return std::move (*this);
+        }
     };
   
   

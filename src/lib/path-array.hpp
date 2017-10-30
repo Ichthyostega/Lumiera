@@ -477,6 +477,23 @@ namespace lib {
           *reinterpret_cast<const char**> (pos) = val;
         }
       
+      void
+      truncateTo (size_t newSize)
+        {
+          if (newSize < chunk_size)
+            {
+              Literal* end = elms_.end();
+              Literal* pos = getPosition(newSize);
+              for ( ; pos!=end; ++pos)
+                setContent (pos, nullptr);
+              tail_.resizeTo (0);
+            }
+          else
+            if (newSize-chunk_size < tail_.size())
+              tail_.resizeTo (newSize - chunk_size);
+            // otherwise: keep current size, don't grow
+        }
+      
       /**
        * establish the _contract_ of PathArray
        * - no null pointer within the valid storage range

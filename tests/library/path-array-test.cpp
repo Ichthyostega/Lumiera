@@ -451,6 +451,10 @@ namespace test {
           CHECK ("" == parr[4]);
           CHECK ("" == parr[5]);
           CHECK ("Φ" == parr[6]);
+          
+          parr = ParrT{"",nullptr,"",nullptr,"",nullptr,""};
+          CHECK ("" == join(parr,""));
+          CHECK (0 == parr.size());
         }
       
       
