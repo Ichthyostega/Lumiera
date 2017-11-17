@@ -41,11 +41,35 @@ using lib::Symbol;
 namespace gui {
 namespace interact {
   
-  /** */
+  /** @internal working data for path resolution */
+  struct UICoordResolver::ResolutionState
+    {
+      using ChildIter = LocationQuery::ChildIter;
+
+      lib::IterStack<ChildIter> backlog;
+      lib::IterQueue<Resolution> solutions;
+    };
+  
+  namespace { //
+
+
+  }//(End) implementation details
+  
+  
+  
+  /**
+   * Since UICoord path specifications may contain gaps and wildcards, we may attempt
+   * to fill in these missing parts by matching against the topological structure of an actual UI.
+   * In the general case, finding a solution requires a depth-first exponential brute-force search
+   * over the whole structure tree, since we have to try every possible branch until we can disprove
+   * the possibility of a match. Implemented as depth-first search with backtracking, this scanning
+   * pass produces a list of possible matches, from which we pick the first one with maximum
+   * coverage, to produce a single solution.
+   */
   bool
   UICoordResolver::pathResolution()
   {
-    UNIMPLEMENTED ("backtracking reolution of path wildcards");
+    
   }
   
   

@@ -1,8 +1,8 @@
 /*
-  IterExplorer(Test)  -  verify evaluation patterns built using iterators
+  IterTreeExplorer(Test)  -  verify tree expanding and backtracking iterator
 
   Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+    2017,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,24 +20,26 @@
 
 * *****************************************************/
 
-/** @file iter-explorer-test.cpp
- ** The \ref IterExplorer_test covers and demonstrates several usage scenarios and
- ** extensions built on top of the \ref lib::IterExplorer template. These introduce some
- ** elements from Functional Programming, especially the _Monad Pattern_ to encapsulate
- ** and isolate intricacies of evolving embedded state. At usage site, only a _state
- ** transition function_ need to be provided, thereby focusing at the problem domain
- ** and thus reducing complexity.
+/** @file iter-tree-explorer-test.cpp
+ ** The \ref IterTreeExplorer_test covers and demonstrates a generic mechanism
+ ** to expand and evaluate tree like structures. In its current shape (as of 2017),
+ ** it can be seen as an preliminary step towards retrofitting IterExplorer into
+ ** a framework of building blocks for tree expanding and backtracking evaluations.
+ ** Due to the nature of Lumiera's design, we repeatedly encounter this kind of
+ ** algorithms, when it comes to matching configuration and parametrisation against
+ ** a likewise hierarchical and rules based model. To keep the code base maintainable,
+ ** we deem it crucial to reduce the inherent complexity in such algorithms by clearly
+ ** separate the _mechanics of evaluation_ from the actual logic of the target domain.
  ** 
- ** The setup for this test relies on a demonstration example of encapsulated state:
- ** a counter with start and end value, embedded into an iterator. Basically, this
- ** running counter, when iterated, generates a sequence of numbers start ... end.
+ ** Similar to IterExplorer_test, the his test relies on a demonstration setup featuring
+ ** a custom encapsulated state type: we rely on a counter with start and end value,
+ ** embedded into an iterator. Basically, this running counter, when iterated, generates
+ ** a sequence of numbers start ... end.
  ** So -- conceptually -- this counting iterator can be thought to represent this
  ** sequence of numbers. Note that this is a kind of abstract or conceptual
  ** representation, not a factual representation of the sequence in memory.
  ** The whole point is _not to represent_ this sequence in runtime state at once,
- ** rather to pull and expand it on demand. Thus, all the examples demonstrate in
- ** this case "build" on this sequence, they expand it into various tree-like
- ** structures, without actually performing these structural operations in memory.
+ ** rather to pull and expand it on demand.
  ** 
  ** All these tests work by first defining these _functional structures_, which just
  ** yields an iterator entity. We get the whole structure it conceptually defines
@@ -47,8 +49,6 @@
  ** Often, the very reason we're using such a setup is the ability to represent
  ** infinite structures. Like e.g. the evaluation graph of video passed through
  ** a complex processing pipeline.
- ** 
- ** @todo as of 2017, this framework is deemed incomplete and requires more design work. ////////////////////TICKET #1116
  */
 
 
@@ -60,7 +60,7 @@
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
-#include "lib/iter-explorer.hpp"
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/meta/trait.hpp"
 
 #include <utility>
@@ -164,23 +164,6 @@ namespace test{
     typedef IterQueue<int> NumberSeries;
     
     
-    /**
-     * _"exploration function"_ to generate a functional datastructure.
-     * Divide the given number by 5, 3 and 2, if possible. Repeatedly
-     * applying this function yields a tree of decimation sequences,
-     * each leading down to 1
-     */
-    inline NumberSeries
-    exploreChildren (uint node)
-    {
-      NumberSeries results;
-      if (0 == node % 5 && node/5 > 0) results.feed (node/5);
-      if (0 == node % 3 && node/3 > 0) results.feed (node/3);
-      if (0 == node % 2 && node/2 > 0) results.feed (node/2);
-      return results;
-    }
-    
-    
     /** Diagnostic helper: "squeeze out" the given iterator
      * and join all the elements yielded into a string
      */
@@ -249,10 +232,10 @@ namespace test{
    * processing of a variably sized data set without
    * using heap memory for intermediary results.
    * 
-   * @see IterExplorer
+   * @see TreeExplorer
    * @see IterAdapter
    */
-  class IterExplorer_test : public Test
+  class IterTreeExplorer_test : public Test
     {
       
       virtual void
@@ -574,7 +557,7 @@ namespace test{
   
   
   
-  LAUNCHER (IterExplorer_test, "unit common");
+  LAUNCHER (IterTreeExplorer_test, "unit common");
   
   
 }} // namespace lib::test

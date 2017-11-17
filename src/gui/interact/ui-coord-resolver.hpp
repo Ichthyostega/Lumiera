@@ -131,28 +131,8 @@ namespace interact {
   
   
   
-  namespace path { ///< @internal implementation details of UICoord resolution against actual UI
-
-    struct Resolution
-      {
-        const char* anchor = nullptr;
-        size_t depth       = 0;
-        std::unique_ptr<UICoord> covfefe;
-        bool isResolved    = false;
-      };
-
-    struct ResolutionState
-      {
-        using ChildIter = LocationQuery::ChildIter;
-
-        lib::IterStack<ChildIter> backlog;
-        lib::IterQueue<Resolution> solutions;
-      };
-
-  }//(End) implementation details
-
-
-
+  
+  
   /**
    * Query and mutate UICoord specifications in relation to actual UI topology.
    * 
@@ -161,8 +141,19 @@ namespace interact {
   class UICoordResolver
     : public UICoord::Builder
     {
+
+      struct Resolution
+        {
+          const char* anchor = nullptr;
+          size_t depth       = 0;
+          std::unique_ptr<UICoord> covfefe;
+          bool isResolved    = false;
+        };
+    
       LocationQuery& query_;
-      path::Resolution res_;
+      Resolution res_;
+      
+      struct ResolutionState;
       
     public:
       UICoordResolver (UICoord const& uic, LocationQuery& queryAPI)
@@ -301,7 +292,7 @@ namespace interact {
           res_.isResolved = true;
         }
 
-      /** @internal algorithm to resolve this UICoord path against the actual UI topology */
+      /** @internal algorithm to resolve this UICoord path against the actual UI topology. */
       bool pathResolution();
     };
   
