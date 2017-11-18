@@ -45,14 +45,15 @@ typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-//#include "lib/meta/function.hpp"
+#include "lib/meta/duck-detector.hpp"
 #include "lib/test/test-helper.hpp"
 
 #include <functional>
 #include <utility>
 #include <string>
 
-//using lib::meta::_Fun;
+using lib::meta::No_t;
+using lib::meta::Yes_t;
 using lib::test::showSizeof;
 
 using std::function;
@@ -65,38 +66,81 @@ using std::string;
 
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
+#define SHOW_EXPR(_XX_) \
+    cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
-int
+void
 fun1 (long)
   {
     cout << "long FUN" <<endl;
+  }
+
+int
+fun1 (string, long)
+  {
+    cout << "string FUN" <<endl;
     return 12;
   }
 
 void
-fun2 ()
+fun1 ()
   {
     cout << "NO FUN" <<endl;
   }
 
 
-template<typename X, typename SEL =decltype(fun(std::declval<X>()))>
-struct Probe
+class Cheesy
   { };
 
+class Fishy
+  {
+    friend void fun1 (Fishy&);
+  };
+
+#define META_DETECT_EXTENSION_POINT(_FUN_)                 \
+    template<typename TY>                                   \
+    class HasExtensionPoint_##_FUN_                          \
+      {                                                       \
+        template<typename X,                                   \
+                 typename SEL = decltype( _FUN_(std::declval<X>()))>\
+        struct Probe                                             \
+          { };                                                    \
+                                                                   \
+        template<class X>                                           \
+        static Yes_t check(Probe<X> * );                             \
+        template<class>                                               \
+        static No_t  check(...);                                       \
+                                                                        \
+      public:                                                            \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
+      };
+
+
+META_DETECT_EXTENSION_POINT (fun)
+META_DETECT_EXTENSION_POINT (fun1)
 
 int
 main (int, char**)
   {
     fun1 (23);
-    fun2 ();
+    fun1 ();
     
-    using Ty1 = decltype (fun1(12));
-    using Ty2 = decltype (fun2());
+    SHOW_EXPR ( HasExtensionPoint_fun<long>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<long>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<long&>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<long&&>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<char>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<char&>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<char&&>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<string>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<void>::value );
     
-    cout << "siz-1="<< sizeof(Ty1)<<endl;
-    cout << "siz-2="<< sizeof(Ty2)<<endl;
+    SHOW_EXPR ( HasExtensionPoint_fun1<Cheesy>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy&>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy&&>::value );
+    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy const&>::value );
     
     cout <<  "\n.gulp.\n";
     
