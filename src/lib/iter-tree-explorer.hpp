@@ -72,7 +72,8 @@
 
 
 #include "lib/error.hpp"
-#include "lib/meta/function.hpp"
+#include "lib/meta/trait.hpp"
+//#include "lib/meta/function.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/meta/trait.hpp" ////////////////TODO
@@ -157,10 +158,48 @@ namespace lib {
   }//(End) namespace iter_explorer : predefined policies and configurations
   namespace {
     
+    using meta::enable_if;
+    using std::__and_;
+    using std::__not_;
+    using std::is_constructible;
+    using meta::can_IterForEach;
+    using meta::can_STL_ForEach;
+    
+    template<class SRC>
+    struct is_StateCore
+      : is_constructible<lib::IterStateWrapper<typename SRC::value_type, SRC>, SRC>
+      { };
+    
+    template<class SRC>
+    struct shall_wrap_STL_Iter
+      : __and_<can_STL_ForEach<SRC>
+              ,__not_<can_IterForEach<SRC>>
+              >
+      { };
+    
+    
     template<class SRC, typename SEL=void>
     struct _TreeExplorerTraits
       {
-        
+        static_assert (!sizeof(SRC), "Can not build TreeExplorer: Unable to figure out how to iterate the given SRC type.");
+      };
+    
+    template<class SRC>
+    struct _TreeExplorerTraits<SRC,   enable_if<is_StateCore<SRC>>>
+      {
+        static_assert (!sizeof(SRC), "PLING: StateCore");
+      };
+    
+    template<class SRC>
+    struct _TreeExplorerTraits<SRC,   enable_if<can_IterForEach<SRC>>>
+      {
+        static_assert (!sizeof(SRC), "PLING: Lumi Iter");
+      };
+    
+    template<class SRC>
+    struct _TreeExplorerTraits<SRC,   enable_if<shall_wrap_STL_Iter<SRC>>>
+      {
+        static_assert (!sizeof(SRC), "PLING: STL Iter");
       };
     
   }//(End) TreeExplorer traits
@@ -174,6 +213,8 @@ namespace lib {
   inline auto
   treeExplore (IT&& srcSeq)
   {
+    using SrcIter = typename _TreeExplorerTraits<IT>::SrcIter;
+    
     return TreeExplorer<SrcIter> {std::forward<IT>(srcSeq)};
   }
   
