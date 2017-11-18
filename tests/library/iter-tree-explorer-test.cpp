@@ -248,6 +248,7 @@ namespace test{
       void
       verify_wrappedState()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
           auto ii = treeExplore (State{1,5});
           CHECK (!isnil (ii));
           CHECK (1 == *ii);
@@ -267,6 +268,7 @@ namespace test{
           ii = treeExplore (State{1,0});
           CHECK ( isnil (ii));
           CHECK (!ii);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
         }
       
       
@@ -274,6 +276,7 @@ namespace test{
       void
       verify_wrappedIterator()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
           vector<int> numz{1,-2,3,-5,8,-13};
           auto ii = eachElm(numz);
           CHECK (!isnil (ii));
@@ -292,6 +295,7 @@ namespace test{
 
           CHECK (materialise(ii) == "-2-3--5-8--13");
           CHECK (materialise(jj) ==   "-3--5-8--13");
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
         }
       
       
@@ -302,6 +306,8 @@ namespace test{
       verify_mapOperation()
         {
           UNIMPLEMENTED("map function onto the results");
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
         }
       
       

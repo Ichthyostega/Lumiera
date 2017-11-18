@@ -33,18 +33,11 @@
 // 1/16  - build tuple from runtime-typed variant container
 // 3/17  - generic function signature traits, including support for Lambdas
 // 9/17  - manipulate variadic templates to treat varargs in several chunks
+// 11/17 - metaprogramming to detect the presence of extension points
 
 
 /** @file try.cpp
- ** Metaprogramming: manipulations on variadic template argument packs.
- ** Investigation how to transform a parameter pack such as to forward a fixed chunk
- ** to one sub-ctor and delegate the rest to a tail recursive call.
- ** 
- ** This investigation was spurred by an attempt to create an inline storage layout
- ** with possible heap-based extension. Being able to build such an object layout
- ** would enable several possibly interesting optimisations when most usage scenarios
- ** of a class will only use a small element count, while some usages still require
- ** an essentially unlimited open number of elements.
+ ** Metaprogramming: how to detect that a type in question exposes a free function extension point.
  ** 
  */
 
@@ -53,15 +46,13 @@ typedef unsigned int uint;
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 //#include "lib/meta/function.hpp"
-#include "lib/meta/variadic-helper.hpp"
 #include "lib/test/test-helper.hpp"
 
 #include <functional>
 #include <utility>
 #include <string>
-#include <array>
 
-using lib::meta::_Fun;
+//using lib::meta::_Fun;
 using lib::test::showSizeof;
 
 using std::function;
@@ -76,11 +67,11 @@ using std::string;
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 
 
-template<typename...ARGS>
-void
-fun2 (ARGS... is)
+int
+fun1 (long)
   {
-    cout << "FUN-"<<sizeof...(is)<<": "<<util::join({is...}, " ") <<endl;
+    cout << "long FUN" <<endl;
+    return 12;
   }
 
 void
@@ -90,59 +81,22 @@ fun2 ()
   }
 
 
-using lib::meta::IndexSeq;
-using lib::meta::BuildIndexSeq;
-using lib::meta::BuildIdxIter;
-using lib::meta::pickArg;
-using lib::meta::pickInit;
-
-
-using Arr = std::array<int, 3>;
-
-
-template<size_t...idx1, size_t...idx2, typename...ARGS>
-Arr
-dispatch_ (IndexSeq<idx1...>,IndexSeq<idx2...>, ARGS...args)
-  {
-    Arr arr{pickInit<idx1,int> (args...) ...};
-    fun2 (pickArg<idx2> (args...) ...);
-    return arr;
-  }
-
-template<typename...ARGS>
-Arr
-dispatch (ARGS...args)
-  {
-    enum {SIZ = sizeof...(args)};
-    
-    using First = typename BuildIndexSeq<3>::Ascending;
-    using Next  = typename BuildIdxIter<ARGS...>::template After<3>;
-    
-    return dispatch_ (First(),Next(), args...);
-  }
+template<typename X, typename SEL =decltype(fun(std::declval<X>()))>
+struct Probe
+  { };
 
 
 int
 main (int, char**)
   {
-    fun2 (1,2,3,4);
-    fun2 (5,6);
+    fun1 (23);
     fun2 ();
     
-    auto arr = dispatch (2,3,4,5,6,7,8);
-    cout << util::join(arr) << "| " << showSizeof(arr) <<endl;
+    using Ty1 = decltype (fun1(12));
+    using Ty2 = decltype (fun2());
     
-    arr = dispatch (5,6,7,8);
-    cout << util::join(arr) <<endl;
-    
-    arr = dispatch (6,7,8);
-    cout << util::join(arr) <<endl;
-    
-    arr = dispatch (7,8);
-    cout << util::join(arr) <<endl;
-    
-    arr = dispatch ();
-    cout << util::join(arr) <<endl;
+    cout << "siz-1="<< sizeof(Ty1)<<endl;
+    cout << "siz-2="<< sizeof(Ty2)<<endl;
     
     cout <<  "\n.gulp.\n";
     
