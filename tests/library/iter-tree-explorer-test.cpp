@@ -76,6 +76,7 @@ namespace test{
   using util::isSameObject;
   using lib::iter_stl::eachElm;
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using std::vector;
   using std::string;
   
   
@@ -228,6 +229,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          verify_wrappedState();
           verify_wrappedIterator();
           
           verify_mapOperation();
@@ -244,13 +246,13 @@ namespace test{
        *        TreeExplorer just wraps an iterable state.
        */
       void
-      verify_wrappedIterator()
+      verify_wrappedState()
         {
-          NumberSequence ii = seq(9);
+          auto ii = treeExplore (State{1,5});
           CHECK (!isnil (ii));
-          CHECK (0 == *ii);
-          ++ii;
           CHECK (1 == *ii);
+          ++ii;
+          CHECK (2 == *ii);
           pullOut(ii);
           CHECK ( isnil (ii));
           CHECK (!ii);
@@ -258,14 +260,38 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
-          ii = seq(5);
-          CHECK (materialise(ii) == "0-1-2-3-4");
-          ii = seq(5,8);
+          ii = treeExplore (State{0,5});
+          CHECK (materialise(ii) == "0-1-2-3-4-5");
+          ii = treeExplore (State{5,7});
           CHECK (materialise(ii) == "5-6-7");
-          
-          ii = NIL_Sequence;
+          ii = treeExplore (State{1,0});
           CHECK ( isnil (ii));
           CHECK (!ii);
+        }
+      
+      
+      /** @test TreeExplorer is able to wrap any _Lumiera Forward Iterator_ */
+      void
+      verify_wrappedIterator()
+        {
+          vector<int> numz{1,-2,3,-5,8,-13};
+          auto ii = eachElm(numz);
+          CHECK (!isnil (ii));
+          CHECK (1 == *ii);
+          ++ii;
+          CHECK (-2 == *ii);
+          
+          auto jj = treeExplore(ii);
+          CHECK (!isnil (jj));
+          CHECK (-2 == *jj);
+          ++jj;
+          CHECK (3 == *jj);
+          
+          // we passed a LValue-Ref, thus a copy was made
+          CHECK (-2 == *ii);
+
+          CHECK (materialise(ii) == "-2-3--5-8--13");
+          CHECK (materialise(jj) ==   "-3--5-8--13");
         }
       
       

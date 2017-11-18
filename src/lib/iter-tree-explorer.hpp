@@ -79,8 +79,9 @@
 #include "lib/null-value.hpp" ////////////////TODO
 #include "lib/util.hpp"
 
-#include <boost/utility/enable_if.hpp>  ////////////////TODO
+//#include <boost/utility/enable_if.hpp>  //////////////TODO
 #include <stack>                        ////////////////TODO
+#include <utility>
 
 
 namespace lib {
@@ -102,8 +103,9 @@ namespace lib {
    */
   template<class SRC
           >
-  class IterTreeExplorer
-    : public IterStateWrapper<typename SRC::value_type, SRC>
+  class TreeExplorer
+//  : public IterStateWrapper<typename SRC::value_type, SRC>
+    : public SRC
     {
       
       
@@ -114,7 +116,7 @@ namespace lib {
       
       
       /** by default create an empty iterator */
-      IterTreeExplorer() { }
+      TreeExplorer() { }
       
       
       /** wrap an iterator-like state representation
@@ -123,8 +125,8 @@ namespace lib {
        *  by the core, and it provides the (monad) bind operator.
        */
       explicit
-      IterTreeExplorer (SRC const& iterStateCore)
-        : IterStateWrapper<value_type, SRC> (iterStateCore)
+      TreeExplorer (SRC iterStateCore)
+        : SRC{std::move (iterStateCore)}
         { }
       
       
@@ -150,22 +152,33 @@ namespace lib {
     using std::function;
     using meta::_Fun;
     
+    
+    
   }//(End) namespace iter_explorer : predefined policies and configurations
+  namespace {
+    
+    template<class SRC, typename SEL=void>
+    struct _TreeExplorerTraits
+      {
+        
+      };
+    
+  }//(End) TreeExplorer traits
   
   
   
   
   /* ==== convenient builder free functions ==== */
 
-/*
   template<class IT>
-  inline IterExplorer<iter_explorer::WrappedSequence<IT>>
-  exploreIter (IT const& srcSeq)
+  inline auto
+  treeExplore (IT&& srcSeq)
   {
-    return IterExplorer<iter_explorer::WrappedSequence<IT>> (srcSeq);
+    return TreeExplorer<SrcIter> {std::forward<IT>(srcSeq)};
   }
   
   
+/*
   template<class IT>
   inline iter_explorer::DepthFirst<IT>
   depthFirst (IT const& srcSeq)
