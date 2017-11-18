@@ -4721,8 +4721,7 @@
       <i>echte</i>&#160;Expand-Funktion notwendig
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1510340942183" ID="ID_1468499222" MODIFIED="1510340946922" TEXT="tree expansion"/>
@@ -4757,8 +4756,7 @@
       also mehr als blo&#223; parametrisierte Typen (Templates)!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1510341461168" ID="ID_862729714" MODIFIED="1510341472426" TEXT="Insofern Iterator == Monade"/>
 <node CREATED="1510342283759" ID="ID_196604339" MODIFIED="1510342289707" TEXT="als Pipeline realisieren?">
@@ -4782,8 +4780,7 @@
       alles mit <i>einer</i>&#160;Form des IterExplorer machbar ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4802,8 +4799,7 @@
       ...was nicht grade zur Verst&#228;ndlichkeit des Ganzen beitr&#228;gt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1510342763622" ID="ID_1851343313" MODIFIED="1510357653178">
 <richcontent TYPE="NODE"><html>
@@ -4815,8 +4811,7 @@
       das <i>Fortschreiten der Berechnung</i>&#160;dargestellt werden kann
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1510357676862" ID="ID_1057287927" MODIFIED="1510357682690" TEXT="das hei&#xdf;t...">
 <node CREATED="1510357692028" ID="ID_42511341" MODIFIED="1510357698567" TEXT="wie werden aus einem a mehrere b?"/>
@@ -4839,8 +4834,7 @@
       Problem: Layer sind <i>verkoppelt</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -4856,8 +4850,7 @@
       dann aber als <b>State Monad</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1510365950652" ID="ID_978128618" MODIFIED="1510365959420" TEXT="State Monad">
 <icon BUILTIN="info"/>
@@ -4875,8 +4868,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;in (f x) s
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1510366044023" ID="ID_72536689" MODIFIED="1510366073855" TEXT="Argument: ein State r"/>
 <node CREATED="1510366074110" ID="ID_689602412" MODIFIED="1510366201735" TEXT="wende Basis-Monade auf r an">
 <icon BUILTIN="full-1"/>
@@ -4897,8 +4889,7 @@
       auf den Zwischenzustand x aus (1) an
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-3"/>
 </node>
 </node>
@@ -4926,8 +4917,7 @@
       wirklich hilfreich?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1510446351987" ID="ID_1280916101" MODIFIED="1510446355022" TEXT="steile These">
 <node CREATED="1510446304314" ID="ID_628535706" MODIFIED="1510446320689" TEXT="Zustand ist ein Ph&#xe4;nomen der wirklichen Welt"/>
@@ -4972,7 +4962,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540265979" ID="ID_1160853986" MODIFIED="1510940473230">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540265979" HGAP="17" ID="ID_1160853986" MODIFIED="1510970236631" VSHIFT="26">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -4985,8 +4975,7 @@
       brauche...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540282280" ID="ID_304955672" MODIFIED="1510940463183" TEXT="Baum-Explorer">
 <icon BUILTIN="flag-yellow"/>
@@ -5008,8 +4997,7 @@
       das impliziert <i>grunds&#228;tzlich</i>&#160;einen <b>Stack</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -5021,7 +5009,8 @@
 </node>
 <node CREATED="1510939495862" ID="ID_1918069733" MODIFIED="1510939511038" TEXT="Monade?">
 <icon BUILTIN="help"/>
-<node CREATED="1510939532689" ID="ID_608280633" MODIFIED="1510939562048" TEXT="konventionelle L&#xf6;sung">
+<node CREATED="1510939532689" ID="ID_608280633" MODIFIED="1510970210061" TEXT="konventionelle L&#xf6;sung">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1510939567867" ID="ID_1799788775" MODIFIED="1510939832540" TEXT="expand: S -&gt; S"/>
 <node CREATED="1510939642250" ID="ID_456598029" MODIFIED="1510939827820" TEXT="S = opaque state"/>
 <node CREATED="1510939675821" ID="ID_71307720" MODIFIED="1510939825173" TEXT="eigentliche Erweiterung ist in S implementiert"/>
@@ -5030,7 +5019,8 @@
 <node CREATED="1510939778231" ID="ID_763925317" MODIFIED="1510939816118" TEXT="S mu&#xdf; auf die Verwendung im Baum-Explorer vorbereitet sein"/>
 <node CREATED="1510940187687" ID="ID_349334428" MODIFIED="1510940196762" TEXT="triviale Implementierung kan sehr effizient sein"/>
 </node>
-<node CREATED="1510939552942" ID="ID_510344823" MODIFIED="1510939566616" TEXT="modadische L&#xf6;sung">
+<node CREATED="1510939552942" ID="ID_510344823" MODIFIED="1510970213063" TEXT="modadische L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1510939598175" ID="ID_1272498716" MODIFIED="1510939839411" TEXT="expand: S -&gt; BaumExplorer&lt;S&gt;"/>
 <node CREATED="1510939845662" ID="ID_581825327" MODIFIED="1510939852465" TEXT="S = opaque State"/>
 <node CREATED="1510939856845" ID="ID_1492383135" MODIFIED="1510939877062" TEXT="Erweiterungs-Mechanismus im Baum-Explorer implementiert"/>
@@ -5047,8 +5037,7 @@
       &#160;f&#252;r diesen Expand-Mechanismus auf
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1510940053626" ID="ID_865181855" MODIFIED="1510940069076" TEXT="S kann Wertsemantik (aber auch Referenz-Semantik) haben"/>
 <node CREATED="1510940088149" ID="ID_791410014" MODIFIED="1510940110614" TEXT="S mu&#xdf; nicht speziell vorbereitet sein (nur konstruierbar)"/>
@@ -5074,8 +5063,7 @@
       indem man einen speziellen <i>Inline-Stack mit Heap-Overflow</i>&#160;nutzt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510939517499" ID="ID_1100296394" MODIFIED="1510940150893" TEXT="das ist eine Weichenstellung">
@@ -5086,6 +5074,10 @@
 </node>
 <node CREATED="1510540333481" ID="ID_1605100271" MODIFIED="1510540361801" TEXT="Rekursive Zustandsauswertung">
 <node CREATED="1510541206810" ID="ID_1795866831" MODIFIED="1510541211885" TEXT="bindet Schritt-Funktion"/>
+<node CREATED="1510970252162" ID="ID_1591961626" MODIFIED="1510970261786" TEXT="Layered Iterator Evaluation"/>
+<node CREATED="1510970268485" ID="ID_1500401518" MODIFIED="1510970288103" TEXT="m&#xf6;glicherweise fest vorkonfigurierbarer Builder hierf&#xfc;r">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1510540399304" ID="ID_300971395" MODIFIED="1510540401532" TEXT="Filter">
 <node CREATED="1510541335201" ID="ID_1717169058" MODIFIED="1510541339780" TEXT="fischt nach L&#xf6;sungen"/>
@@ -5108,6 +5100,24 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1510941523722" TEXT="TreeExplorer_test">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031378" ID="ID_1678287752" MODIFIED="1510969040176" TEXT="verify_wrappedIterator();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1510969041003" TEXT="verify_mapOperation();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1298407683" MODIFIED="1510969041717" TEXT="verify_expandOperation();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1510969042406" TEXT="verify_expandMapCombination();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1510969042972" TEXT="verify_depthFirstExploration();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_842384656" MODIFIED="1510969043561" TEXT="demonstrate_LayeredEvaluation();">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
