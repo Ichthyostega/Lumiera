@@ -292,6 +292,12 @@ namespace test{
 
           CHECK (materialise(ii) == "-2-3--5-8--13");
           CHECK (materialise(jj) ==    "3--5-8--13");
+          
+          // can adapt STL container automatically
+          auto kk = treeExplore(numz);
+          CHECK (!isnil (kk));
+          CHECK (1 == *kk);
+          CHECK (materialise(kk) == "1--2-3--5-8--13");
         }
       
       

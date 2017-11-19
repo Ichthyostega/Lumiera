@@ -147,16 +147,42 @@ namespace lib {
     
     /////TODO RLY?
     
-    using util::unConst;
-    using lib::meta::enable_if;
-    using lib::meta::disable_if;
-    using std::function;
-    using meta::_Fun;
+//  using util::unConst;
+//  using lib::meta::enable_if;
+//  using lib::meta::disable_if;
+//  using std::function;
+//  using meta::_Fun;
     
+    template<class CON>
+    using iterator = typename meta::Strip<CON>::TypeReferred::iterator;
+    template<class CON>
+    using const_iterator = typename meta::Strip<CON>::TypeReferred::const_iterator;
     
+    template<class CON>
+    struct StlRange
+      : RangeIter<iterator<CON>>
+      {
+        StlRange() =default;
+        StlRange (CON& container)
+          : RangeIter<iterator<CON>> {begin(container), end(container)}
+          { }
+       // standard copy operations acceptable
+      };
+    
+    template<class CON>
+    struct StlRange<const CON>
+      : RangeIter<const_iterator<CON>>
+      {
+        StlRange() =default;
+        StlRange (CON const& container)
+          : RangeIter<const_iterator<CON>> {begin(container), end(container)}
+          { }
+       // standard copy operations acceptable
+      };
     
   }//(End) namespace iter_explorer : predefined policies and configurations
-  namespace {
+  
+  namespace { // TreeExplorer traits
     
     using meta::enable_if;
     using meta::Yes_t;
@@ -209,7 +235,9 @@ namespace lib {
     template<class SRC>
     struct _TreeExplorerTraits<SRC,   enable_if<shall_wrap_STL_Iter<SRC>>>
       {
-        static_assert (!sizeof(SRC), "PLING: STL Iter");
+        static_assert (not std::is_rvalue_reference<SRC>::value,
+                       "container needs to exist elsewhere during the lifetime of the iteration");
+        using SrcIter = iter_explorer::StlRange<SRC>;
       };
     
   }//(End) TreeExplorer traits
