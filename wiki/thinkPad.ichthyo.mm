@@ -5094,6 +5094,9 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941455667" ID="ID_1945607867" MODIFIED="1510941522371" TEXT="Builder">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1511054840038" ID="ID_18464349" MODIFIED="1511054851543" TEXT="brauch ich am Ende &#xfc;berhaupt einen builder">
+<icon BUILTIN="help"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1510941523082" TEXT="TreeExplorer">
 <icon BUILTIN="flag-yellow"/>
@@ -5102,6 +5105,24 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031378" ID="ID_1678287752" MODIFIED="1510969040176" TEXT="verify_wrappedIterator();">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1511054727547" ID="ID_328168347" MODIFIED="1511054858441" TEXT="Problem: mu&#xdf; Iterator-Arten unterscheiden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1511054740579" ID="ID_776471136" MODIFIED="1511054761188" TEXT="StateCore direkt verwenden">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1511054762608" ID="ID_1129026084" MODIFIED="1511054793514" TEXT="mu&#xdf; IterStateWrapper unterst&#xfc;tzen">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1511054775616" ID="ID_1071927856" MODIFIED="1511054795068" TEXT="Metafuntkion um Erweiterungspunkte zu erkennen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1511054800851" ID="ID_186154206" MODIFIED="1511054827673" TEXT="Lumiera-Iterator verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511054810307" ID="ID_418847335" MODIFIED="1511054825261" TEXT="Range-iter um STL -iterable legen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1510969041003" TEXT="verify_mapOperation();">
 <icon BUILTIN="flag-yellow"/>

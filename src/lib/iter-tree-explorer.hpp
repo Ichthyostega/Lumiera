@@ -73,7 +73,7 @@
 
 #include "lib/error.hpp"
 #include "lib/meta/trait.hpp"
-//#include "lib/meta/function.hpp"
+#include "lib/meta/duck-detector.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/meta/trait.hpp" ////////////////TODO
@@ -159,15 +159,24 @@ namespace lib {
   namespace {
     
     using meta::enable_if;
+    using meta::Yes_t;
+    using meta::No_t;
     using std::__and_;
     using std::__not_;
     using std::is_constructible;
     using meta::can_IterForEach;
     using meta::can_STL_ForEach;
     
+    META_DETECT_EXTENSION_POINT(checkPoint);
+    META_DETECT_EXTENSION_POINT(iterNext);
+    META_DETECT_EXTENSION_POINT(yield);
+    
     template<class SRC>
     struct is_StateCore
-      : is_constructible<lib::IterStateWrapper<typename SRC::value_type, SRC>, SRC>
+      : __and_< HasExtensionPoint_checkPoint<SRC const&>
+              , HasExtensionPoint_iterNext<SRC &>
+              , HasExtensionPoint_yield<SRC const&>
+              >
       { };
     
     template<class SRC>
@@ -187,13 +196,14 @@ namespace lib {
     template<class SRC>
     struct _TreeExplorerTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
-        static_assert (!sizeof(SRC), "PLING: StateCore");
+        using SrcVal  = typename std::remove_reference<decltype(yield (std::declval<SRC>()))>::type;
+        using SrcIter = IterStateWrapper<SrcVal, SRC>;
       };
     
     template<class SRC>
     struct _TreeExplorerTraits<SRC,   enable_if<can_IterForEach<SRC>>>
       {
-        static_assert (!sizeof(SRC), "PLING: Lumi Iter");
+        using SrcIter = typename std::remove_reference<SRC>::type;
       };
     
     template<class SRC>

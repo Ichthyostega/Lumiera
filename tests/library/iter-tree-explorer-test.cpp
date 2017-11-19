@@ -91,7 +91,7 @@ namespace test{
         uint p,e;
         
       public:
-        State(uint start, uint end)
+        State(uint start =0, uint end =0)
           : p(start)
           , e(end)
           { }
@@ -99,7 +99,7 @@ namespace test{
         friend bool
         checkPoint (State const& st)
         {
-          return st.p < st.e;
+          return st.p > st.e;
         }
         
         friend uint&
@@ -111,8 +111,8 @@ namespace test{
         friend void
         iterNext (State & st)
         {
-          if (!checkPoint(st)) return;
-          ++st.p;
+          if (not checkPoint(st)) return;
+          --st.p;
         }
       };
     
@@ -248,12 +248,11 @@ namespace test{
       void
       verify_wrappedState()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
-          auto ii = treeExplore (State{1,5});
+          auto ii = treeExplore (State{5,0});
           CHECK (!isnil (ii));
-          CHECK (1 == *ii);
+          CHECK (5 == *ii);
           ++ii;
-          CHECK (2 == *ii);
+          CHECK (4 == *ii);
           pullOut(ii);
           CHECK ( isnil (ii));
           CHECK (!ii);
@@ -261,14 +260,13 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
-          ii = treeExplore (State{0,5});
-          CHECK (materialise(ii) == "0-1-2-3-4-5");
-          ii = treeExplore (State{5,7});
-          CHECK (materialise(ii) == "5-6-7");
-          ii = treeExplore (State{1,0});
+          ii = treeExplore (State{5});
+          CHECK (materialise(ii) == "5-4-3-2-1");
+          ii = treeExplore (State{7,4});
+          CHECK (materialise(ii) == "7-6-5");
+          ii = treeExplore (State{});
           CHECK ( isnil (ii));
           CHECK (!ii);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
         }
       
       
@@ -276,7 +274,6 @@ namespace test{
       void
       verify_wrappedIterator()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
           vector<int> numz{1,-2,3,-5,8,-13};
           auto ii = eachElm(numz);
           CHECK (!isnil (ii));
@@ -294,8 +291,7 @@ namespace test{
           CHECK (-2 == *ii);
 
           CHECK (materialise(ii) == "-2-3--5-8--13");
-          CHECK (materialise(jj) ==   "-3--5-8--13");
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
+          CHECK (materialise(jj) ==    "3--5-8--13");
         }
       
       
@@ -306,8 +302,6 @@ namespace test{
       verify_mapOperation()
         {
           UNIMPLEMENTED("map function onto the results");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
         }
       
       
