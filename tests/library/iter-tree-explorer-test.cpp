@@ -86,30 +86,30 @@ namespace test{
      * This iteration _"state core" type_ describes
      * a sequence of numbers yet to be delivered.
      */
-    class State
+    class CountDown
       {
         uint p,e;
         
       public:
-        State(uint start =0, uint end =0)
+        CountDown(uint start =0, uint end =0)
           : p(start)
           , e(end)
           { }
         
         friend bool
-        checkPoint (State const& st)
+        checkPoint (CountDown const& st)
         {
           return st.p > st.e;
         }
         
         friend uint&
-        yield (State const& st)
+        yield (CountDown const& st)
         {
           return util::unConst(checkPoint(st)? st.p : st.e);
         }
         
         friend void
-        iterNext (State & st)
+        iterNext (CountDown & st)
         {
           if (not checkPoint(st)) return;
           --st.p;
@@ -123,32 +123,18 @@ namespace test{
      * The tests will dress up this source sequence in various ways.
      */
     class NumberSequence
-      : public IterStateWrapper<uint, State>
+      : public IterStateWrapper<uint, CountDown>
       {
           
         public:
           explicit
           NumberSequence(uint end = 0)
-            : IterStateWrapper<uint,State> (State(0,end))
+            : IterStateWrapper<uint,CountDown> (CountDown(0,end))
             { }
           NumberSequence(uint start, uint end)
-            : IterStateWrapper<uint,State> (State(start,end))
+            : IterStateWrapper<uint,CountDown> (CountDown(start,end))
             { }
       };
-    
-    inline NumberSequence
-    seq (uint end)
-    {
-      return NumberSequence(end);
-    }
-    
-    inline NumberSequence
-    seq (uint start, uint end)
-    {
-      return NumberSequence(start, end);
-    }
-    
-    NumberSequence NIL_Sequence;
     
     
     
@@ -232,9 +218,9 @@ namespace test{
           verify_wrappedState();
           verify_wrappedIterator();
           
-          verify_mapOperation();
           verify_expandOperation();
-          verify_expandMapCombination();
+          verify_transformOperation();
+          verify_combinedExpandTransform();
           
           verify_depthFirstExploration();
           demonstrate_LayeredEvaluation();
@@ -248,7 +234,7 @@ namespace test{
       void
       verify_wrappedState()
         {
-          auto ii = treeExplore (State{5,0});
+          auto ii = treeExplore (CountDown{5,0});
           CHECK (!isnil (ii));
           CHECK (5 == *ii);
           ++ii;
@@ -260,11 +246,11 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
-          ii = treeExplore (State{5});
+          ii = treeExplore (CountDown{5});
           CHECK (materialise(ii) == "5-4-3-2-1");
-          ii = treeExplore (State{7,4});
+          ii = treeExplore (CountDown{7,4});
           CHECK (materialise(ii) == "7-6-5");
-          ii = treeExplore (State{});
+          ii = treeExplore (CountDown{});
           CHECK ( isnil (ii));
           CHECK (!ii);
         }
@@ -302,19 +288,70 @@ namespace test{
       
       
       
-      /** @test pipe each result through a transformation function
-       */
-      void
-      verify_mapOperation()
-        {
-          UNIMPLEMENTED("map function onto the results");
-        }
-      
-      
       /** @test use a preconfigured "expand" functor to recurse into children
+       * The `expand()` builder function predefines a way how to _expand_ the current
+       * head element of the iteration. However, expansion does not happen automatically,
+       * rather, it needs to be invoked by the client, similar to increment of the iterator.
+       * When expanding, the current head element is consumed and fed into the expand functor;
+       * the result of this functor invocation is injected instead into the result sequence,
+       * and consequently this result needs to be again an iterable with compatible value type.
+       * Conceptually, the evaluation _forks into the children of the expanded element_, before
+       * continuing with the successor of the expansion point. Obviously, expansion can be applied
+       * again on the result of the expansion, possibly leading to a tree of side evaluations.   
        */
       void
       verify_expandOperation()
+        {
+          auto ii = treeExplore(CountDown{5})
+                      .expand([](uint j){ return CountDown{j-1}; })
+                      ;
+          
+          CHECK (!isnil (ii));
+          CHECK (5 == *ii);
+          ++ii;
+          CHECK (4 == *ii);
+          
+          CHECK (0 == ii.depth());
+          ii.expand();
+          CHECK (3 == *ii);
+          CHECK (1 == ii.depth());
+          ++ii;
+          CHECK (2 == *ii);
+          CHECK (1 == ii.depth());
+          ii.expand();
+          CHECK (1 == *ii);
+          CHECK (2 == ii.depth());
+          ++ii;
+          CHECK (1 == *ii);
+          CHECK (1 == ii.depth());
+          ++ii;
+          CHECK (3 == *ii);
+          CHECK (0 == ii.depth());
+          CHECK (materialise(ii) == "3-2-1");
+          ii.expand();
+          CHECK (1 == ii.depth());
+          CHECK (materialise(ii) == "2-1-2-1");
+          ++++ii;
+          CHECK (0 == ii.depth());
+          CHECK (materialise(ii) == "2-1");
+          ii.expand();
+          CHECK (1 == ii.depth());
+          CHECK (materialise(ii) == "1-1");
+          ++ii;
+          CHECK (0 == ii.depth());
+          CHECK (1 == *ii);
+          CHECK (materialise(ii) == "1");
+          ii.expand();
+          CHECK (isnil (ii));
+          VERIFY_ERROR (ITER_EXHAUST, *ii );
+          VERIFY_ERROR (ITER_EXHAUST, ++ii );
+        }
+      
+      
+      /** @test pipe each result through a transformation function
+       */
+      void
+      verify_transformOperation()
         {
           UNIMPLEMENTED("expand children");
         }
@@ -323,7 +360,7 @@ namespace test{
       /** @test combie the recursion into children with a tail mapping operation
        */
       void
-      verify_expandMapCombination()
+      verify_combinedExpandTransform()
         {
           UNIMPLEMENTED("combine child expansion and result mapping");
         }

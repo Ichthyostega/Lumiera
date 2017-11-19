@@ -74,6 +74,7 @@
 #include "lib/error.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/meta/trait.hpp" ////////////////TODO
@@ -83,75 +84,16 @@
 //#include <boost/utility/enable_if.hpp>  //////////////TODO
 #include <stack>                        ////////////////TODO
 #include <utility>
+#include <functional>
 
 
 namespace lib {
   
-  namespace iter_explorer {
-    
-    ////////////TODO
-  }
-  
-  
-  
-  /**
-   * Adapter to build a demand-driven tree expanding and exploring computation
-   * based on a custom opaque _state core_. TreeExploer adheres to the _Monad_
-   * pattern known from functional programming, insofar the _expansion step_ is
-   * tied into the basic template by means of a function provided at usage site.
-   * 
-   * @todo WIP -- preliminary draft as of 11/2017
-   */
-  template<class SRC
-          >
-  class TreeExplorer
-//  : public IterStateWrapper<typename SRC::value_type, SRC>
-    : public SRC
-    {
-      
-      
-    public:
-      typedef typename SRC::value_type value_type;
-      typedef typename SRC::reference reference;
-      typedef typename SRC::pointer  pointer;
-      
-      
-      /** by default create an empty iterator */
-      TreeExplorer() { }
-      
-      
-      /** wrap an iterator-like state representation
-       *  to build it into a monad. The resulting entity
-       *  is both an iterator yielding the elements generated
-       *  by the core, and it provides the (monad) bind operator.
-       */
-      explicit
-      TreeExplorer (SRC iterStateCore)
-        : SRC{std::move (iterStateCore)}
-        { }
-      
-      
-    private:
-    };
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  using std::move;
+  using std::forward;
+  using std::function;
   
   namespace iter_explorer {
-    
-    /////TODO RLY?
-    
-//  using util::unConst;
-//  using lib::meta::enable_if;
-//  using lib::meta::disable_if;
-//  using std::function;
-//  using meta::_Fun;
     
     template<class CON>
     using iterator = typename meta::Strip<CON>::TypeReferred::iterator;
@@ -181,6 +123,7 @@ namespace lib {
       };
     
   }//(End) namespace iter_explorer : predefined policies and configurations
+  
   
   namespace { // TreeExplorer traits
     
@@ -242,6 +185,117 @@ namespace lib {
     
   }//(End) TreeExplorer traits
   
+  
+  
+  namespace iter_source {
+    
+    template<class EXP, class SIG, class SEL =void>
+    class Expander
+      : public EXP
+      {
+        function<SIG> expandChildren_;
+        
+      public:
+        Expander() =default;
+        // inherited default copy operations
+        
+        template<typename FUN>
+        Expander (EXP&& parentExplorer, FUN&& expandFunctor)
+          : EXP{move (parentExplorer)}
+          , expandChildren_{forward<FUN> (expandFunctor)}
+          { }
+        
+        
+        /** core operation: expand current head element */
+        Expander&
+        expand()
+          {
+            UNIMPLEMENTED ("expand-children core operation");
+          }
+        
+        /** diagnostics: current level of nested child expansion */
+        size_t
+        depth()  const
+          {
+            UNIMPLEMENTED ("implementation of the expand mechanics");
+          }
+      };
+  }
+  
+  
+  
+  
+  /**
+   * Adapter to build a demand-driven tree expanding and exploring computation
+   * based on a custom opaque _state core_. TreeExploer adheres to the _Monad_
+   * pattern known from functional programming, insofar the _expansion step_ is
+   * tied into the basic template by means of a function provided at usage site.
+   * 
+   * @todo WIP -- preliminary draft as of 11/2017
+   */
+  template<class SRC
+          >
+  class TreeExplorer
+    : public SRC
+    {
+      
+      
+    public:
+      typedef typename SRC::value_type value_type;
+      typedef typename SRC::reference reference;
+      typedef typename SRC::pointer  pointer;
+      
+      
+      /** by default create an empty iterator */
+      TreeExplorer() { }
+      
+      // default copy acceptable (unless prohibited by nested state core)
+      
+      
+      /** wrap an iterator-like state representation
+       *  to build it into a monad. The resulting entity
+       *  is both an iterator yielding the elements generated
+       *  by the core, and it provides the (monad) bind operator.
+       */
+      explicit
+      TreeExplorer (SRC iterStateCore)
+        : SRC{std::move (iterStateCore)}
+        { }
+      
+      
+      /* ==== Builder functions ==== */
+      
+      template<class FUN>
+      auto
+      expand (FUN&& expandFunctor)
+        {
+          using FunSig = typename meta::_Fun<FUN>::Sig;
+          using This   = typename meta::Strip<decltype(*this)>::TypeReferred;
+          
+          return iter_source::Expander<This, FunSig> {move(*this), forward<FUN>(expandFunctor)};
+        }
+    private:
+    };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  namespace iter_explorer {
+    
+    /////TODO RLY?
+    
+//  using util::unConst;
+//  using lib::meta::enable_if;
+//  using lib::meta::disable_if;
+//  using std::function;
+//  using meta::_Fun;
+  }  
   
   
   
