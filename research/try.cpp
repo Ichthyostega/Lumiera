@@ -38,7 +38,17 @@
 
 /** @file try.cpp
  ** Metaprogramming: how to detect that a type in question exposes a free function extension point.
+ ** Since such an extension point is typically injected alongside with the type exposing the extension
+ ** point and intended to be picked up by ADL, all we have to check is if it is valid to invoke the
+ ** extension point function with an instance of the target type.
  ** 
+ ** There are two difficulties to overcome, though
+ ** - a function might return void. And while we may indeed pick up `void` from `decltype(expr)`,
+ **   there is not much we can do with a void type. The remedy is just to use this type as template
+ **   parameter on another template instantiation, which fails if this type can not legally be formed.
+ ** - we do not know how to get a value of the type to probe, in order to feed it into the extension
+ **   point function. Fortunately, the `std::declval<TYPE>()` function was included into the C++ language
+ **   for this very purpose.
  */
 
 typedef unsigned int uint;

@@ -168,6 +168,35 @@
 
 
 
+/** Detector for support of a free-function extension point.
+ *  Defines a metafunction (template), allowing to probe if the type
+ *  in question supports a specific extension point function. Typically
+ *  such functions are injected by some type in a way to be picked up by ADL.
+ *  The detection test works by forming an expression to invoke the extension point,
+ *  passing the type given as template parameter as function argument. If this expression
+ *  type checks, the extension point is assumed to be supported.
+ * @warning beware of implicit type conversions
+ */
+#define META_DETECT_EXTENSION_POINT(_FUN_)                 \
+    template<typename TY>                                   \
+    class HasExtensionPoint_##_FUN_                          \
+      {                                                       \
+        template<typename X,                                   \
+                 typename SEL = decltype( _FUN_(std::declval<X>()))>\
+        struct Probe                                             \
+          { };                                                    \
+                                                                   \
+        template<class X>                                           \
+        static Yes_t check(Probe<X> * );                             \
+        template<class>                                               \
+        static No_t  check(...);                                       \
+                                                                        \
+      public:                                                            \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
+      };
+
+
+
 /** Detector for a dereferentiation operator. Works like member detection */
 #define META_DETECT_OPERATOR_DEREF()                       \
     template<typename TY>                                   \
