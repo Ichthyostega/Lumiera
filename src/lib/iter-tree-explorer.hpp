@@ -93,7 +93,7 @@ namespace lib {
   using std::forward;
   using std::function;
   
-  namespace iter_explorer {
+  namespace iter_source {
     
     template<class CON>
     using iterator = typename meta::Strip<CON>::TypeReferred::iterator;
@@ -122,6 +122,107 @@ namespace lib {
        // standard copy operations acceptable
       };
     
+    
+    /**
+     * Decorate a state or logic core to treat it as Lumiera Forward Iterator.
+     * This Adapter does essentially the same as \ref IterStateWrapper, but here
+     * the state core is not encapsulated opaque, but rather inherited, and thus
+     * the full interface of the core remains publicly accessible.
+     */
+    template<typename T, class COR>
+    class IterableDecorator
+      : public COR
+      {
+        COR &      _core()       { return static_cast<COR&>       (*this); }
+        COR const& _core() const { return static_cast<COR const&> (*this); }
+        
+        void
+        __throw_if_empty()  const
+          {
+            if (not isValid())
+              throw lumiera::error::Invalid ("Can't iterate further",
+                    lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+          }
+        
+        
+      public:
+        typedef T* pointer;
+        typedef T& reference;
+        typedef T  value_type;
+        
+        template<typename...ARGS>
+        IterableDecorator (ARGS&& ...init)
+          : COR(std::forward<ARGS>(init)...)
+          { }
+        
+        IterableDecorator()                                     =default;
+        IterableDecorator (IterableDecorator&&)                 =default;
+        IterableDecorator (IterableDecorator const&)            =default;
+        IterableDecorator& operator= (IterableDecorator&&)      =default;
+        IterableDecorator& operator= (IterableDecorator const&) =default;
+        
+        operator bool() const { return isValid(); }
+        
+        
+        /* === lumiera forward iterator concept === */
+        
+        reference
+        operator*() const
+          {
+            __throw_if_empty();
+            return yield (_core());     // extension point: yield
+          }
+        
+        pointer
+        operator->() const
+          {
+            __throw_if_empty();
+            return & yield(_core());    // extension point: yield
+          }
+        
+        IterableDecorator&
+        operator++()
+          {
+            __throw_if_empty();
+            iterNext (_core());         // extension point: iterNext
+            return *this;
+          }
+        
+        bool
+        isValid ()  const
+          {
+            return checkPoint(_core()); // extension point: checkPoint
+          }
+        
+        bool
+        empty ()    const
+          {
+            return not isValid();
+          }
+        
+        
+        
+        ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterableDecorator);
+        
+        
+        /// Supporting equality comparisons of equivalent iterators (same state core)...
+        template<class T1, class T2>
+        friend bool
+        operator== (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
+        {
+          return (il.empty()   and ir.empty())
+              or (il.isValid() and ir.isValid() and il._core() == ir._core());
+        }
+        
+        template<class T1, class T2>
+        friend bool
+        operator!= (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
+        {
+          return not (il == ir);
+        }
+      };
+    
+    
   }//(End) namespace iter_explorer : predefined policies and configurations
   
   
@@ -130,6 +231,7 @@ namespace lib {
     using meta::enable_if;
     using meta::Yes_t;
     using meta::No_t;
+    using meta::_Fun;
     using std::__and_;
     using std::__not_;
     using std::is_constructible;
@@ -180,7 +282,16 @@ namespace lib {
       {
         static_assert (not std::is_rvalue_reference<SRC>::value,
                        "container needs to exist elsewhere during the lifetime of the iteration");
-        using SrcIter = iter_explorer::StlRange<SRC>;
+        using SrcIter = iter_source::StlRange<SRC>;
+      };
+    
+    
+    template<class SIG>
+    struct _ExpansionTraits
+      {
+        using ExpandedChildren = typename _Fun<SIG>::Ret;
+        
+        using Core = typename _TreeExplorerTraits<ExpandedChildren>::SrcIter;
       };
     
   }//(End) TreeExplorer traits
@@ -189,20 +300,29 @@ namespace lib {
   
   namespace iter_source {
     
-    template<class EXP, class SIG, class SEL =void>
+    template<class SRC, class SIG>
     class Expander
-      : public EXP
+      : public SRC
       {
+        using Core = typename _ExpansionTraits<SIG>::Core;
+        
+        static_assert (std::is_convertible<typename SRC::value_type, typename Core::value_type>::value,
+                       "the iterator from the expansion must yield compatible values");
+        static_assert (std::is_convertible<typename _Fun<SIG>::Args::List::Head, typename SRC::value_type>::value,
+                       "the expansion functor must accept a parameter compatible to the source iterator value type");
+        
         function<SIG> expandChildren_;
+        IterStack<Core> expansions_;
         
       public:
         Expander() =default;
         // inherited default copy operations
         
         template<typename FUN>
-        Expander (EXP&& parentExplorer, FUN&& expandFunctor)
-          : EXP{move (parentExplorer)}
+        Expander (SRC&& parentExplorer, FUN&& expandFunctor)
+          : SRC{move (parentExplorer)}
           , expandChildren_{forward<FUN> (expandFunctor)}
+          , expansions_{}
           { }
         
         
@@ -210,15 +330,52 @@ namespace lib {
         Expander&
         expand()
           {
-            UNIMPLEMENTED ("expand-children core operation");
+            REQUIRE (checkPoint(*this), "attempt to expand an empty explorer");
+            
+            Core expanded = expandChildren_ (yield(*this));
+            iterNext (*this);   // consume current head element
+            if (expanded.isValid())
+              expansions_.push (move(expanded));
+            
+            return *this;
           }
         
         /** diagnostics: current level of nested child expansion */
         size_t
         depth()  const
           {
-            UNIMPLEMENTED ("implementation of the expand mechanics");
+            return expansions_.size();
           }
+        
+        
+      protected: /* === Iteration control API for IterableDecorator === */
+        
+        friend bool
+        checkPoint (Expander const& tx)
+        {
+          return 0 < tx.depth()
+              or tx.isValid();
+        }
+        
+        friend typename SRC::reference
+        yield (Expander const& tx)
+        {
+          return 0 < tx.depth()? **tx.expansions_
+                               : *tx;
+        }
+        
+        friend void
+        iterNext (Expander & tx)
+        {
+          if (0 < tx.depth())
+            {
+              ++(*tx.expansions_);
+              while (0 < tx.depth() and not *tx.expansions_)
+                ++tx.expansions_;
+            }
+          else
+            ++tx;
+        }
       };
   }
   
@@ -241,9 +398,9 @@ namespace lib {
       
       
     public:
-      typedef typename SRC::value_type value_type;
-      typedef typename SRC::reference reference;
-      typedef typename SRC::pointer  pointer;
+      using value_type = typename SRC::value_type;
+      using reference  = typename SRC::reference;
+      using pointer    = typename SRC::pointer;
       
       
       /** by default create an empty iterator */
@@ -271,8 +428,12 @@ namespace lib {
         {
           using FunSig = typename meta::_Fun<FUN>::Sig;
           using This   = typename meta::Strip<decltype(*this)>::TypeReferred;
+          using Value  = typename This::value_type;
+          using Core   = iter_source::Expander<This, FunSig>;
           
-          return iter_source::Expander<This, FunSig> {move(*this), forward<FUN>(expandFunctor)};
+          using ExpandableExplorer = iter_source::IterableDecorator<Value, Core>;
+          
+          return ExpandableExplorer{move(*this), forward<FUN>(expandFunctor)};
         }
     private:
     };
@@ -295,7 +456,7 @@ namespace lib {
 //  using lib::meta::disable_if;
 //  using std::function;
 //  using meta::_Fun;
-  }  
+  }
   
   
   

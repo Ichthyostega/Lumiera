@@ -125,15 +125,15 @@ namespace test{
     class NumberSequence
       : public IterStateWrapper<uint, CountDown>
       {
-          
-        public:
-          explicit
-          NumberSequence(uint end = 0)
-            : IterStateWrapper<uint,CountDown> (CountDown(0,end))
-            { }
-          NumberSequence(uint start, uint end)
-            : IterStateWrapper<uint,CountDown> (CountDown(start,end))
-            { }
+        
+      public:
+        explicit
+        NumberSequence(uint end = 0)
+          : IterStateWrapper<uint,CountDown> (CountDown(0,end))
+          { }
+        NumberSequence(uint start, uint end)
+          : IterStateWrapper<uint,CountDown> (CountDown(start,end))
+          { }
       };
     
     
@@ -297,7 +297,7 @@ namespace test{
        * and consequently this result needs to be again an iterable with compatible value type.
        * Conceptually, the evaluation _forks into the children of the expanded element_, before
        * continuing with the successor of the expansion point. Obviously, expansion can be applied
-       * again on the result of the expansion, possibly leading to a tree of side evaluations.   
+       * again on the result of the expansion, possibly leading to a tree of side evaluations.
        */
       void
       verify_expandOperation()
