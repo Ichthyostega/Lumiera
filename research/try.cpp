@@ -34,31 +34,21 @@
 // 3/17  - generic function signature traits, including support for Lambdas
 // 9/17  - manipulate variadic templates to treat varargs in several chunks
 // 11/17 - metaprogramming to detect the presence of extension points
+// 11/17 - detect generic lambda
 
 
 /** @file try.cpp
- ** Metaprogramming: how to detect that a type in question exposes a free function extension point.
- ** Since such an extension point is typically injected alongside with the type exposing the extension
- ** point and intended to be picked up by ADL, all we have to check is if it is valid to invoke the
- ** extension point function with an instance of the target type.
- ** 
- ** There are two difficulties to overcome, though
- ** - a function might return void. And while we may indeed pick up `void` from `decltype(expr)`,
- **   there is not much we can do with a void type. The remedy is just to use this type as template
- **   parameter on another template instantiation, which fails if this type can not legally be formed.
- ** - we do not know how to get a value of the type to probe, in order to feed it into the extension
- **   point function. Fortunately, the `std::declval<TYPE>()` function was included into the C++ language
- **   for this very purpose.
+ ** Metaprogramming: is it possible to distinguish a generic lambda from something not a function at all?
  */
 
 typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-#include "lib/meta/duck-detector.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include <functional>
+//#include <functional>
 #include <utility>
 #include <string>
 
@@ -108,49 +98,15 @@ class Fishy
     friend void fun1 (Fishy&);
   };
 
-#define META_DETECT_EXTENSION_POINT(_FUN_)                 \
-    template<typename TY>                                   \
-    class HasExtensionPoint_##_FUN_                          \
-      {                                                       \
-        template<typename X,                                   \
-                 typename SEL = decltype( _FUN_(std::declval<X>()))>\
-        struct Probe                                             \
-          { };                                                    \
-                                                                   \
-        template<class X>                                           \
-        static Yes_t check(Probe<X> * );                             \
-        template<class>                                               \
-        static No_t  check(...);                                       \
-                                                                        \
-      public:                                                            \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
-      };
-
-
-META_DETECT_EXTENSION_POINT (fun)
-META_DETECT_EXTENSION_POINT (fun1)
 
 int
 main (int, char**)
   {
-    fun1 (23);
-    fun1 ();
+    auto lamb1 = [](int i)  { return double(i) / (i*i); };
+    auto lamb2 = [](auto i) { return double(i) / (i*i); };
     
-    SHOW_EXPR ( HasExtensionPoint_fun<long>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<long>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<long&>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<long&&>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<char>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<char&>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<char&&>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<string>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<void>::value );
-    
-    SHOW_EXPR ( HasExtensionPoint_fun1<Cheesy>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy&>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy&&>::value );
-    SHOW_EXPR ( HasExtensionPoint_fun1<Fishy const&>::value );
+    SHOW_TYPE (decltype(lamb1));
+    SHOW_TYPE (decltype(lamb2));
     
     cout <<  "\n.gulp.\n";
     

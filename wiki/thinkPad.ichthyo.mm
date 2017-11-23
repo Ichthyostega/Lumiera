@@ -5188,6 +5188,68 @@
 <node CREATED="1511402855174" ID="ID_386377958" MODIFIED="1511402861001" TEXT="beides k&#xf6;nnen unterschiedliche Typen sein"/>
 <node CREATED="1511402861613" ID="ID_1536434222" MODIFIED="1511402872072" TEXT="solange der expandFunktor beide akzeptiert...."/>
 </node>
+<node CREATED="1511455454190" ID="ID_1384978479" MODIFIED="1511455481991" TEXT="Problem: kein generischer Expand-Functor">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1511455484027" ID="ID_548359395" MODIFIED="1511455605340" TEXT="unmittelbare Folge davon, da&#xdf; wir den Typ des Expand-Funktors analysieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      _fun&lt;FUN&gt;::Sig scheitert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1511455502648" ID="ID_1704619802" MODIFIED="1511455566686">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist aber <i>unpraktisch</i>....
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1511455513119" ID="ID_128446946" MODIFIED="1511455554663" TEXT="denn grade Iterator-Typen kennt der Benutzer typischerweise nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....also ist es gradezu nat&#252;rlich,
+    </p>
+    <p>
+      einen Expand-Funktor als generisches Lambda zu schreiben!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511455607914" HGAP="56" ID="ID_1866082603" MODIFIED="1511455626668" TEXT="Untersuchung" VSHIFT="39">
+<icon BUILTIN="pencil"/>
+<node CREATED="1511455644829" ID="ID_1545300823" MODIFIED="1511455655796" TEXT="ist generisches Labmda detektierbar?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1511455664043" ID="ID_1966980711" MODIFIED="1511455676078" TEXT="kann man Fallback-Mechanismus bauen?">
+<icon BUILTIN="help"/>
+<node CREATED="1511455698398" ID="ID_91244603" MODIFIED="1511455735493" TEXT="wenn generisch...">
+<icon BUILTIN="idea"/>
+<node CREATED="1511455705149" ID="ID_1094783485" MODIFIED="1511455710889" TEXT="dann versuche"/>
+<node CREATED="1511455711525" ID="ID_1584168712" MODIFIED="1511455721127" TEXT="(a) mit dem Value-Type ins Argument"/>
+<node CREATED="1511455721907" ID="ID_312038081" MODIFIED="1511455730558" TEXT="(b) mit dem Iterator-Typ ins Argument"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1511227807158" TEXT="verify_transformOperation();">
