@@ -5120,17 +5120,72 @@
 <node COLOR="#338800" CREATED="1511054800851" ID="ID_186154206" MODIFIED="1511054827673" TEXT="Lumiera-Iterator verwenden">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511054810307" ID="ID_418847335" MODIFIED="1511054825261" TEXT="Range-iter um STL -iterable legen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1511054810307" ID="ID_418847335" MODIFIED="1511227734539" TEXT="Range-iter um STL -iterable legen">
+<icon BUILTIN="button_ok"/>
 </node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1510969041003" TEXT="verify_mapOperation();">
-<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1298407683" MODIFIED="1510969041717" TEXT="verify_expandOperation();">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1511227813712" ID="ID_942570698" MODIFIED="1511228177906" TEXT="Fall-1">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1511227821087" ID="ID_1644135845" MODIFIED="1511227823932" TEXT="monadisch"/>
+<node CREATED="1511227824495" ID="ID_1299746114" MODIFIED="1511227836441" TEXT="Val -&gt; Iter(Val)"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1510969042406" TEXT="verify_expandMapCombination();">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511227861867" ID="ID_1821706302" MODIFIED="1511228200056" TEXT="Fall-2 ">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1511227870346" ID="ID_797579225" MODIFIED="1511228200055" TEXT="verzahnte Implementierung"/>
+<node CREATED="1511227975028" ID="ID_1769405758" MODIFIED="1511228200056" TEXT="Sub-F&#xe4;lle">
+<node CREATED="1511227902005" ID="ID_1992381343" MODIFIED="1511228200056" TEXT="Core -&gt; Iter(Val)"/>
+<node CREATED="1511227917971" ID="ID_200983707" MODIFIED="1511228200056" TEXT="Core -&gt; Core"/>
+<node CREATED="1511227925202" ID="ID_290152631" MODIFIED="1511228200056" TEXT="Iter(Val) -&gt; Iter(Val)"/>
+<node CREATED="1511227944392" ID="ID_881609766" MODIFIED="1511228200056" TEXT="Iter(Val) -&gt; Core"/>
+</node>
+<node CREATED="1511227985314" ID="ID_692238081" MODIFIED="1511228200056" TEXT="Problem">
+<node CREATED="1511227994153" ID="ID_160800694" MODIFIED="1511228200056" TEXT="nicht jede Kombi ist valide"/>
+<node CREATED="1511228014599" ID="ID_836777999" MODIFIED="1511228200056" TEXT="&quot;Zugriff auf Core&quot; kann nicht abstrahiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil...
+    </p>
+    <ul>
+      <li>
+        sich zwar die Logik syntaktisch anschreiben l&#228;&#223;t
+      </li>
+      <li>
+        aber beide Zweige u.U nicht auf den gleichen Typ hinauslaufen
+      </li>
+      <li>
+        und erst in der Anwendung dieses Ausdruckes werden die Typen gleichgestellt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511228184223" ID="ID_1701796180" MODIFIED="1511228192928" TEXT="Vereinigung">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1511228210268" ID="ID_268486334" MODIFIED="1511228224230" TEXT="im Fall-1 m&#xfc;ssen wir operator* anwenden"/>
+<node CREATED="1511228226946" ID="ID_1853550246" MODIFIED="1511228237684" TEXT="im Fall-2 m&#xfc;ssen wir einen Core-Typ konstruieren">
+<node CREATED="1511228291778" ID="ID_1396258052" MODIFIED="1511228302748" TEXT="und zwar einen, den die Funktion nehmen kann"/>
+<node CREATED="1511228303552" ID="ID_833606136" MODIFIED="1511228313746" TEXT="Vorsicht, kann auch eine Referenz sein!">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511228361960" ID="ID_757059750" MODIFIED="1511228379781" TEXT="wie bringt man das syntaktisch auf eine einzige Linie??">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1511227807158" TEXT="verify_transformOperation();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1511227804622" TEXT="verify_combinedExpandTransform();">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1510969042972" TEXT="verify_depthFirstExploration();">

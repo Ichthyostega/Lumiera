@@ -286,12 +286,47 @@ namespace lib {
       };
     
     
+    template<class SIG, class ARG, class SEL =void>
+    struct ArgAccessor
+      {
+        using FunArg = typename _Fun<SIG>::Args::List::Head;
+        static_assert (std::is_convertible<FunArg, ARG>::value,
+                       "the expansion functor must accept the source iterator or state core as parameter");
+
+        static auto accessor() { return [](auto arg) { return arg; }; }
+      };
+    
+    template<class SIG, class IT>
+    struct ArgAccessor<SIG, IT,   enable_if<std::is_convertible<typename _Fun<SIG>::Args::List::Head, typename IT::value_type>>>
+      {
+        static auto accessor() { return [](auto iter) { return *iter; }; }
+      };
+    
     template<class SIG>
+    struct ExpaFunc
+      {
+        function<SIG> expandFun;
+        
+        template<typename ARG>
+        auto
+        operator() (ARG arg)
+          {
+            auto accessArg = ArgAccessor<SIG,ARG>::accessor();
+            
+            return expandFun (accessArg(arg));
+          }
+      };
+    
+    template<class SIG, typename VAL>
     struct _ExpansionTraits
       {
         using ExpandedChildren = typename _Fun<SIG>::Ret;
         
         using Core = typename _TreeExplorerTraits<ExpandedChildren>::SrcIter;
+        
+        using Arg = typename _Fun<SIG>::Args::List::Head;
+        
+        using Functor = ExpaFunc<SIG>;
       };
     
   }//(End) TreeExplorer traits
@@ -304,14 +339,14 @@ namespace lib {
     class Expander
       : public SRC
       {
-        using Core = typename _ExpansionTraits<SIG>::Core;
+        using _Config = _ExpansionTraits<SIG, typename SRC::value_type>;
+        using Core = typename _Config::Core;
+        using ExpandFunctor = typename _Config::Functor;
         
         static_assert (std::is_convertible<typename SRC::value_type, typename Core::value_type>::value,
                        "the iterator from the expansion must yield compatible values");
-        static_assert (std::is_convertible<typename _Fun<SIG>::Args::List::Head, typename SRC::value_type>::value,
-                       "the expansion functor must accept a parameter compatible to the source iterator value type");
         
-        function<SIG> expandChildren_;
+        ExpandFunctor expandChildren_;
         IterStack<Core> expansions_;
         
       public:
@@ -332,7 +367,8 @@ namespace lib {
           {
             REQUIRE (checkPoint(*this), "attempt to expand an empty explorer");
             
-            Core expanded = expandChildren_ (yield(*this));
+            Core expanded = 0 < depth()? expandChildren_(*expansions_)
+                                       : expandChildren_(*this);
             iterNext (*this);   // consume current head element
             if (expanded.isValid())
               expansions_.push (move(expanded));
@@ -346,7 +382,6 @@ namespace lib {
           {
             return expansions_.size();
           }
-        
         
       protected: /* === Iteration control API for IterableDecorator === */
         
