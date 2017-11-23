@@ -268,7 +268,7 @@ namespace lib {
     struct _TreeExplorerTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
         using SrcVal  = typename std::remove_reference<decltype(yield (std::declval<SRC>()))>::type;
-        using SrcIter = IterStateWrapper<SrcVal, SRC>;
+        using SrcIter = iter_source::IterableDecorator<SrcVal, SRC>;
       };
     
     template<class SRC>
@@ -290,7 +290,7 @@ namespace lib {
     struct ArgAccessor
       {
         using FunArg = typename _Fun<SIG>::Args::List::Head;
-        static_assert (std::is_convertible<FunArg, ARG>::value,
+        static_assert (std::is_convertible<ARG, FunArg>::value,
                        "the expansion functor must accept the source iterator or state core as parameter");
 
         static auto accessor() { return [](auto arg) { return arg; }; }

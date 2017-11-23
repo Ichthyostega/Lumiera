@@ -302,10 +302,22 @@ namespace test{
       void
       verify_expandOperation()
         {
-          auto ii = treeExplore(CountDown{5})
+          verify_treeExpandingIterator(
+                    treeExplore(CountDown{5})
                       .expand([](uint j){ return CountDown{j-1}; })
-                      ;
+                      );
           
+          verify_treeExpandingIterator(
+                    treeExplore(CountDown{5})
+                      .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })
+                      );
+        }
+      
+      
+      template<class EXP>
+      void
+      verify_treeExpandingIterator(EXP ii)
+        {
           CHECK (!isnil (ii));
           CHECK (5 == *ii);
           ++ii;

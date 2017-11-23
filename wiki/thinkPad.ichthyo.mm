@@ -5131,8 +5131,8 @@
 <node CREATED="1511227821087" ID="ID_1644135845" MODIFIED="1511227823932" TEXT="monadisch"/>
 <node CREATED="1511227824495" ID="ID_1299746114" MODIFIED="1511227836441" TEXT="Val -&gt; Iter(Val)"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511227861867" ID="ID_1821706302" MODIFIED="1511228200056" TEXT="Fall-2 ">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1511227861867" ID="ID_1821706302" MODIFIED="1511404000144" TEXT="Fall-2 ">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1511227870346" ID="ID_797579225" MODIFIED="1511228200055" TEXT="verzahnte Implementierung"/>
 <node CREATED="1511227975028" ID="ID_1769405758" MODIFIED="1511228200056" TEXT="Sub-F&#xe4;lle">
 <node CREATED="1511227902005" ID="ID_1992381343" MODIFIED="1511228200056" TEXT="Core -&gt; Iter(Val)"/>
@@ -5168,8 +5168,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511228184223" ID="ID_1701796180" MODIFIED="1511228192928" TEXT="Vereinigung">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511228184223" HGAP="26" ID="ID_1701796180" MODIFIED="1511404034527" TEXT="Vereinigung" VSHIFT="23">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1511228210268" ID="ID_268486334" MODIFIED="1511228224230" TEXT="im Fall-1 m&#xfc;ssen wir operator* anwenden"/>
 <node CREATED="1511228226946" ID="ID_1853550246" MODIFIED="1511228237684" TEXT="im Fall-2 m&#xfc;ssen wir einen Core-Typ konstruieren">
 <node CREATED="1511228291778" ID="ID_1396258052" MODIFIED="1511228302748" TEXT="und zwar einen, den die Funktion nehmen kann"/>
@@ -5177,8 +5177,16 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511228361960" ID="ID_757059750" MODIFIED="1511228379781" TEXT="wie bringt man das syntaktisch auf eine einzige Linie??">
+<node CREATED="1511228361960" ID="ID_757059750" MODIFIED="1511402807191" TEXT="wie bringt man das syntaktisch auf eine einzige Linie??">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1511402785895" ID="ID_1409331699" MODIFIED="1511402797347" TEXT="L&#xf6;sungsidee: generisches Lambda">
+<icon BUILTIN="idea"/>
+<node CREATED="1511402832809" ID="ID_844588469" MODIFIED="1511402843611" TEXT="wird einmal auf der initialen Quelle aufgerufen"/>
+<node CREATED="1511402844151" ID="ID_504070749" MODIFIED="1511402854442" TEXT="oder dann auf einem der Sub-Iteratoren auf dem Stack"/>
+<node CREATED="1511402855174" ID="ID_386377958" MODIFIED="1511402861001" TEXT="beides k&#xf6;nnen unterschiedliche Typen sein"/>
+<node CREATED="1511402861613" ID="ID_1536434222" MODIFIED="1511402872072" TEXT="solange der expandFunktor beide akzeptiert...."/>
 </node>
 </node>
 </node>
