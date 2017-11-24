@@ -93,7 +93,7 @@ namespace lib {
   using std::forward;
   using std::function;
   
-  namespace iter_source {
+  namespace iter_explorer {
     
     template<class CON>
     using iterator = typename meta::Strip<CON>::TypeReferred::iterator;
@@ -229,6 +229,7 @@ namespace lib {
   namespace { // TreeExplorer traits
     
     using meta::enable_if;
+    using meta::disable_if;
     using meta::Yes_t;
     using meta::No_t;
     using meta::_Fun;
@@ -268,7 +269,7 @@ namespace lib {
     struct _TreeExplorerTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
         using SrcVal  = typename std::remove_reference<decltype(yield (std::declval<SRC>()))>::type;
-        using SrcIter = iter_source::IterableDecorator<SrcVal, SRC>;
+        using SrcIter = iter_explorer::IterableDecorator<SrcVal, SRC>;
       };
     
     template<class SRC>
@@ -282,7 +283,7 @@ namespace lib {
       {
         static_assert (not std::is_rvalue_reference<SRC>::value,
                        "container needs to exist elsewhere during the lifetime of the iteration");
-        using SrcIter = iter_source::StlRange<SRC>;
+        using SrcIter = iter_explorer::StlRange<SRC>;
       };
     
     
@@ -317,29 +318,44 @@ namespace lib {
           }
       };
     
-    template<class SIG, typename VAL>
+    template<class FUN, typename IT>
     struct _ExpansionTraits
       {
-        using ExpandedChildren = typename _Fun<SIG>::Ret;
+        template<typename F, typename SEL =void>
+        struct FunDetector
+          {
+            using Sig = typename _Fun<F>::Sig;
+          };
+        
+        template<typename F>
+        struct FunDetector<F,  disable_if<_Fun<F>> >
+          {
+            using Ret = decltype(std::declval<F>() (std::declval<IT>()));
+            using Sig = Ret(IT);
+          };
+        
+        using Sig = typename FunDetector<FUN>::Sig;
+        
+        using ExpandedChildren = typename _Fun<Sig>::Ret;
         
         using Core = typename _TreeExplorerTraits<ExpandedChildren>::SrcIter;
         
-        using Arg = typename _Fun<SIG>::Args::List::Head;
+        using Arg = typename _Fun<Sig>::Args::List::Head;
         
-        using Functor = ExpaFunc<SIG>;
+        using Functor = ExpaFunc<Sig>;
       };
     
   }//(End) TreeExplorer traits
   
   
   
-  namespace iter_source {
+  namespace iter_explorer {
     
-    template<class SRC, class SIG>
+    template<class SRC, class FUN>
     class Expander
       : public SRC
       {
-        using _Config = _ExpansionTraits<SIG, typename SRC::value_type>;
+        using _Config = _ExpansionTraits<FUN,SRC>;
         using Core = typename _Config::Core;
         using ExpandFunctor = typename _Config::Functor;
         
@@ -353,7 +369,6 @@ namespace lib {
         Expander() =default;
         // inherited default copy operations
         
-        template<typename FUN>
         Expander (SRC&& parentExplorer, FUN&& expandFunctor)
           : SRC{move (parentExplorer)}
           , expandChildren_{forward<FUN> (expandFunctor)}
@@ -461,12 +476,11 @@ namespace lib {
       auto
       expand (FUN&& expandFunctor)
         {
-          using FunSig = typename meta::_Fun<FUN>::Sig;
           using This   = typename meta::Strip<decltype(*this)>::TypeReferred;
           using Value  = typename This::value_type;
-          using Core   = iter_source::Expander<This, FunSig>;
+          using Core   = iter_explorer::Expander<This, FUN>;
           
-          using ExpandableExplorer = iter_source::IterableDecorator<Value, Core>;
+          using ExpandableExplorer = iter_explorer::IterableDecorator<Value, Core>;
           
           return ExpandableExplorer{move(*this), forward<FUN>(expandFunctor)};
         }
