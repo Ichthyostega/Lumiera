@@ -25,7 +25,7 @@
  ** Simple and lightweight helpers for metaprogramming and type detection.
  ** This header is a collection of very basic type detection and metaprogramming utilities.
  ** @warning indirectly, this header gets included into the majority of compilation units.
- **          Avoid anything here which increases compilation times or adds much debugging info. 
+ **          Avoid anything here which increases compilation times or adds much debugging info.
  ** 
  ** @see MetaUtils_test
  ** @see trait.hpp
@@ -173,9 +173,32 @@ namespace meta {
       template<class>
       static No_t  check(...);
       
-    public: 
+    public:
       static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
     };
+  
+  
+  /** Trait template to detect presence of a simple function call operator
+   * @note this metafunction fails to detect an overloaded or templated `operator()`
+   */
+  template<typename FUN>
+  class has_FunctionOperator
+    {
+      template<typename FF,
+               typename SEL = decltype(&FF::operator())>
+      struct Probe
+        { };
+      
+      template<class X>
+      static Yes_t check(Probe<X> * );
+      template<class>
+      static No_t  check(...);
+      
+    public:
+      static const bool value = (sizeof(Yes_t)==sizeof(check<FUN>(0)));
+    };
+  
+  
   
   
   
