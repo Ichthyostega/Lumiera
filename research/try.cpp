@@ -78,11 +78,11 @@ namespace meta{
       using Sig  = Ret(ARGS...);
     };
   
-  template<typename FUN, typename...ARGS>
+  template<typename FUN>
   class can_Invoke
     {
       template<typename FF,
-               typename SEL = decltype(std::declval<FF>() (std::declval<ARGS>()...))>
+               typename SEL = decltype(&FF::operator())>
       struct Probe
         { };
       
@@ -96,28 +96,62 @@ namespace meta{
     };
   
   
-  template<class FUN, typename TYPES, typename SEL =void>
-  struct ProbeFunctionArgument
-    {
-      static_assert(not sizeof(FUN), "Tilt");
-    };
-  
-  template<class FUN, typename T, typename TYPES>
-  struct ProbeFunctionArgument<FUN, Node<T,TYPES>, enable_if<can_Invoke<FUN,T>> >
-    : ProbeFunctionInvocation<FUN,T>
+  template<typename FUN, typename SEL =void>
+  struct _FunT
+    : std::false_type
     { };
   
-  template<class FUN, typename T, typename TYPES>
-  struct ProbeFunctionArgument<FUN, Node<T,TYPES>, disable_if<can_Invoke<FUN,T>> >
-    : ProbeFunctionArgument<FUN, TYPES>
+  template<typename FUN>
+  struct _FunT<FUN,  enable_if<can_Invoke<FUN>> >
+    : _FunT<decltype(&FUN::operator())>
+    { };
+  
+  /** Specialisation for a bare function signature */
+  template<typename RET, typename...ARGS>
+  struct _FunT<RET(ARGS...)>
+    : std::true_type
     {
-      
+      using Ret  = RET;
+      using Args = Types<ARGS...>;
+      using Sig  = RET(ARGS...);
     };
+  /** Specialisation for using a function pointer */
+  template<typename SIG>
+  struct _FunT<SIG*>
+    : _FunT<SIG>
+    { };
+  
+  /** Specialisation when using a function reference */
+  template<typename SIG>
+  struct _FunT<SIG&>
+    : _FunT<SIG>
+    { };
+  
+  /** Specialisation for passing a rvalue reference */
+  template<typename SIG>
+  struct _FunT<SIG&&>
+    : _FunT<SIG>
+    { };
+  
+  /** Specialisation to deal with member pointer to function */
+  template<class C, typename RET, typename...ARGS>
+  struct _FunT<RET (C::*) (ARGS...)>
+    : _FunT<RET(ARGS...)>
+    { };
+  
+  /** Specialisation to handle member pointer to const function;
+   *  indirectly this specialisation also handles lambdas,
+   *  as redirected by the main template (via `decltype`) */
+  template<class C, typename RET, typename...ARGS>
+  struct _FunT<RET (C::*) (ARGS...)  const>
+    : _FunT<RET(ARGS...)>
+    { };
+  
 }}
 
 using lib::meta::Types;
-using lib::meta::can_Invoke;
-using lib::meta::ProbeFunctionArgument;
+using lib::meta::_FunT;
+using lib::meta::enable_if;
 
 
 #define SHOW_TYPE(_TY_) \
@@ -126,6 +160,26 @@ using lib::meta::ProbeFunctionArgument;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
+long
+funny(int i)
+  {
+    return i+1;
+  }
+
+
+template<typename FUN, typename SEL =void>
+struct FunTrait
+  {
+    using XXX = decltype(std::declval<FUN>() (0));
+    
+    static string doIt() { return "Uh OH:" + lib::meta::typeStr<XXX>(); }
+  };
+
+template<typename FUN>
+struct FunTrait<FUN,  enable_if<_FunT<FUN>> >
+  {
+    static string doIt() { return "Yeah FUN:" + lib::meta::typeStr<typename _FunT<FUN>::Sig>(); }
+  };
 
 int
 main (int, char**)
@@ -136,13 +190,18 @@ main (int, char**)
     SHOW_TYPE (decltype(lamb1));
     SHOW_TYPE (decltype(lamb2));
     
-    SHOW_EXPR ((can_Invoke<decltype(lamb1), string>::value));
-    SHOW_EXPR ((can_Invoke<decltype(lamb2), int>::value   ));
+    SHOW_EXPR ((_FunT<decltype(lamb1)>::value));
+    SHOW_EXPR ((_FunT<decltype(lamb2)>::value));
+    SHOW_EXPR ((_FunT<decltype(funny)>::value));
+    SHOW_EXPR ((_FunT<decltype(&funny)>::value));
     
-    using InferredSIG = typename ProbeFunctionArgument<decltype(lamb1), typename Types<string,long,int>::List>::Sig;
-    //NOTE does not work with the generic lamb2, because instantiating lab2(string) would be a *compile* error, not a substitution failure
+    auto funky = function<double(float)> (lamb2);
+    SHOW_EXPR ((_FunT<decltype(funky)>::value));
     
-    SHOW_TYPE (InferredSIG);
+    cout << FunTrait<decltype(lamb1)>::doIt() <<endl;
+    cout << FunTrait<decltype(lamb2)>::doIt() <<endl;
+    cout << FunTrait<decltype(funny)>::doIt() <<endl;
+    cout << FunTrait<decltype(funky)>::doIt() <<endl;
     
     cout <<  "\n.gulp.\n";
     
