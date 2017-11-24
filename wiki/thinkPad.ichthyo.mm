@@ -5238,6 +5238,9 @@
 <icon BUILTIN="pencil"/>
 <node CREATED="1511455644829" ID="ID_1545300823" MODIFIED="1511455655796" TEXT="ist generisches Labmda detektierbar?">
 <icon BUILTIN="help"/>
+<node CREATED="1511482195487" ID="ID_954120351" MODIFIED="1511482198474" TEXT="jein"/>
+<node CREATED="1511482200510" ID="ID_714363558" MODIFIED="1511482216359" TEXT="man kann nur einen Funktionsoperator erkennen"/>
+<node CREATED="1511482216971" ID="ID_1806534330" MODIFIED="1511482240548" TEXT="nicht aber, wenn ein Solcher mehrere Overloads hat oder ein Template ist"/>
 </node>
 <node CREATED="1511455664043" ID="ID_1966980711" MODIFIED="1511455676078" TEXT="kann man Fallback-Mechanismus bauen?">
 <icon BUILTIN="help"/>
@@ -5247,6 +5250,72 @@
 <node CREATED="1511455711525" ID="ID_1584168712" MODIFIED="1511455721127" TEXT="(a) mit dem Value-Type ins Argument"/>
 <node CREATED="1511455721907" ID="ID_312038081" MODIFIED="1511455730558" TEXT="(b) mit dem Iterator-Typ ins Argument"/>
 </node>
+<node CREATED="1511482247535" ID="ID_487969118" MODIFIED="1511482309885" TEXT="geht nicht">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1511482254927" ID="ID_1687625403" MODIFIED="1511482263673" TEXT="zwar funktionieren die Positiv-F&#xe4;lle"/>
+<node CREATED="1511482264405" ID="ID_1003171577" MODIFIED="1511482304307">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber eine falsche Template-Instantiierung
+    </p>
+    <p>
+      ist ein <i>Compile</i>-Fehler, kein <i>Substitutions</i>-Fehler
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511482367184" ID="ID_1569720883" MODIFIED="1511482519599" TEXT="bleibt nur...">
+<icon BUILTIN="pencil"/>
+<node CREATED="1511482374415" ID="ID_554184880" MODIFIED="1511482441927" TEXT="maximal ein Versuch">
+<icon BUILTIN="yes"/>
+<node CREATED="1511482446317" ID="ID_951810826" MODIFIED="1511482457247" TEXT="entweder der Typ der Funktion ist bestimmbar"/>
+<node CREATED="1511482457978" ID="ID_564239157" MODIFIED="1511482493455">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      oder man f&#228;llt auf <i>eine</i>&#160;m&#246;gliche Substitution zur&#252;ck
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1511482495719" ID="ID_327135583" MODIFIED="1511482510962">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und wenn die Scheitert, ist das ein <b>compile</b>-Fehler
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1511482393172" ID="ID_1538766965" MODIFIED="1511482428415" TEXT="das w&#xe4;re dann: den Iterator zu verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn das ist der sinnvollste Fall f&#252;r ein generisches Lambda
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>

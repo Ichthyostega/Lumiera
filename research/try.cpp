@@ -39,6 +39,9 @@
 
 /** @file try.cpp
  ** Metaprogramming: is it possible to distinguish a generic lambda from something not a function at all?
+ ** Answer: not really. We can only ever check for the function call operator.
+ ** Even worse: if we instantiate a templated function call operator with unsuitable parameter types,
+ ** the compilation as such fails. Whereas SFINAE is only limited to substituting a type signature.  
  */
 
 typedef unsigned int uint;
@@ -54,6 +57,7 @@ typedef unsigned int uint;
 
 using lib::meta::No_t;
 using lib::meta::Yes_t;
+using lib::meta::_Fun;
 using lib::test::showSizeof;
 
 using std::function;
@@ -62,6 +66,58 @@ using std::move;
 using std::string;
 
 
+namespace lib {
+namespace meta{
+  
+  
+  template<class FUN, typename...ARGS>
+  struct ProbeFunctionInvocation
+    {
+      using Ret  = decltype(std::declval<FUN>() (std::declval<ARGS>()...));
+      using Args = Types<ARGS...>;
+      using Sig  = Ret(ARGS...);
+    };
+  
+  template<typename FUN, typename...ARGS>
+  class can_Invoke
+    {
+      template<typename FF,
+               typename SEL = decltype(std::declval<FF>() (std::declval<ARGS>()...))>
+      struct Probe
+        { };
+      
+      template<class X>
+      static Yes_t check(Probe<X> * );
+      template<class>
+      static No_t  check(...);
+      
+    public:
+      static const bool value = (sizeof(Yes_t)==sizeof(check<FUN>(0)));
+    };
+  
+  
+  template<class FUN, typename TYPES, typename SEL =void>
+  struct ProbeFunctionArgument
+    {
+      static_assert(not sizeof(FUN), "Tilt");
+    };
+  
+  template<class FUN, typename T, typename TYPES>
+  struct ProbeFunctionArgument<FUN, Node<T,TYPES>, enable_if<can_Invoke<FUN,T>> >
+    : ProbeFunctionInvocation<FUN,T>
+    { };
+  
+  template<class FUN, typename T, typename TYPES>
+  struct ProbeFunctionArgument<FUN, Node<T,TYPES>, disable_if<can_Invoke<FUN,T>> >
+    : ProbeFunctionArgument<FUN, TYPES>
+    {
+      
+    };
+}}
+
+using lib::meta::Types;
+using lib::meta::can_Invoke;
+using lib::meta::ProbeFunctionArgument;
 
 
 #define SHOW_TYPE(_TY_) \
@@ -69,34 +125,6 @@ using std::string;
 #define SHOW_EXPR(_XX_) \
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
-
-void
-fun1 (long)
-  {
-    cout << "long FUN" <<endl;
-  }
-
-int
-fun1 (string, long)
-  {
-    cout << "string FUN" <<endl;
-    return 12;
-  }
-
-void
-fun1 ()
-  {
-    cout << "NO FUN" <<endl;
-  }
-
-
-class Cheesy
-  { };
-
-class Fishy
-  {
-    friend void fun1 (Fishy&);
-  };
 
 
 int
@@ -107,6 +135,14 @@ main (int, char**)
     
     SHOW_TYPE (decltype(lamb1));
     SHOW_TYPE (decltype(lamb2));
+    
+    SHOW_EXPR ((can_Invoke<decltype(lamb1), string>::value));
+    SHOW_EXPR ((can_Invoke<decltype(lamb2), int>::value   ));
+    
+    using InferredSIG = typename ProbeFunctionArgument<decltype(lamb1), typename Types<string,long,int>::List>::Sig;
+    //NOTE does not work with the generic lamb2, because instantiating lab2(string) would be a *compile* error, not a substitution failure
+    
+    SHOW_TYPE (InferredSIG);
     
     cout <<  "\n.gulp.\n";
     
