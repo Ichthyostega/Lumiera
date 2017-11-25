@@ -290,15 +290,16 @@ namespace lib {
     template<class SIG, class ARG, class SEL =void>
     struct ArgAccessor
       {
-        using FunArg = typename _Fun<SIG>::Args::List::Head;
+        using FunArg = typename std::remove_reference<
+                       typename _Fun<SIG>::Args::List::Head>::type;
         static_assert (std::is_convertible<ARG, FunArg>::value,
                        "the expansion functor must accept the source iterator or state core as parameter");
 
-        static auto accessor() { return [](auto arg) { return arg; }; }
+        static auto accessor() { return [](ARG& arg) -> ARG& { return arg; }; }
       };
     
     template<class SIG, class IT>
-    struct ArgAccessor<SIG, IT,   enable_if<std::is_convertible<typename _Fun<SIG>::Args::List::Head, typename IT::value_type>>>
+    struct ArgAccessor<SIG, IT,   enable_if<std::is_convertible<typename IT::value_type, typename _Fun<SIG>::Args::List::Head>>>
       {
         static auto accessor() { return [](auto iter) { return *iter; }; }
       };
@@ -310,15 +311,15 @@ namespace lib {
         
         template<typename ARG>
         auto
-        operator() (ARG arg)
+        operator() (ARG& arg)
           {
             auto accessArg = ArgAccessor<SIG,ARG>::accessor();
             
-            return expandFun (accessArg(arg));
+            return expandFun (accessArg (arg));
           }
       };
     
-    template<class FUN, typename IT>
+    template<class FUN, typename SRC>
     struct _ExpansionTraits
       {
         template<typename F, typename SEL =void>
@@ -330,8 +331,9 @@ namespace lib {
         template<typename F>
         struct FunDetector<F,  disable_if<_Fun<F>> >
           {
-            using Ret = decltype(std::declval<F>() (std::declval<IT>()));
-            using Sig = Ret(IT);
+            using Arg = typename std::add_lvalue_reference<SRC>::type;
+            using Ret = decltype(std::declval<F>() (std::declval<Arg>()));
+            using Sig = Ret(Arg);
           };
         
         using Sig = typename FunDetector<FUN>::Sig;
@@ -340,7 +342,10 @@ namespace lib {
         
         using Core = typename _TreeExplorerTraits<ExpandedChildren>::SrcIter;
         
-        using Arg = typename _Fun<Sig>::Args::List::Head;
+        static_assert (std::is_convertible<typename Core::value_type, typename SRC::value_type>::value,
+                       "the iterator from the expansion must yield compatible values");
+        
+//      using Arg = typename _Fun<Sig>::Args::List::Head;
         
         using Functor = ExpaFunc<Sig>;
       };
@@ -355,12 +360,10 @@ namespace lib {
     class Expander
       : public SRC
       {
-        using _Config = _ExpansionTraits<FUN,SRC>;
+        using SrcIter = typename SRC::SrcIter;
+        using _Config = _ExpansionTraits<FUN,SrcIter>;
         using Core = typename _Config::Core;
         using ExpandFunctor = typename _Config::Functor;
-        
-        static_assert (std::is_convertible<typename SRC::value_type, typename Core::value_type>::value,
-                       "the iterator from the expansion must yield compatible values");
         
         ExpandFunctor expandChildren_;
         IterStack<Core> expansions_;
@@ -448,9 +451,10 @@ namespace lib {
       
       
     public:
-      using value_type = typename SRC::value_type;
-      using reference  = typename SRC::reference;
-      using pointer    = typename SRC::pointer;
+      using SrcIter    = SRC;
+      using value_type = typename SrcIter::value_type;
+      using reference  = typename SrcIter::reference;
+      using pointer    = typename SrcIter::pointer;
       
       
       /** by default create an empty iterator */

@@ -312,12 +312,10 @@ namespace test{
                       .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })
                       );
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](auto & it){ return CountDown{ *it - 1}; })
                       );
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1117
         }
       
       
