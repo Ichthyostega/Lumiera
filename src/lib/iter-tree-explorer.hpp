@@ -289,15 +289,37 @@ namespace lib {
     
     
     
+    /**
+     * @internal technical details of adapting an _"expansion functor"_ to allow
+     * expanding a given element from the TreeExploer (iterator) into a sequence of child elements.
+     * The TreeExplorer::expand() operation accepts various flavours of functors, and depending on
+     * the signature of such a functor, an appropriate adapter will be constructed here, allowing
+     * to write a generic Expander::expand() operation. The following details are handled here
+     * - detect if the passed functor is generic, or a regular "function-like" entity.
+     * - in case it is generic (generic lambda), we assume it actually accepts a reference to
+     *   the source iterator type `SRC`. Thus we instantiate a templated functor with this
+     *   argument type to find out about its result type (and this instantiation may fail)
+     * - moreover, we try to determine, if an explicitly typed functor accepts a value of the
+     *   embedded source iterator (this is the "monadic" usage pattern), or if it rather accepts
+     *   the iterator or state core itself (the"opaque state manipulation" usage pattern).
+     * - we generate a suitable argument accessor function and build the function composition
+     *   of this accessor and the provided _expansion functor_.
+     * - the resulting, combined functor is stored into a std::function, but wired in a way to
+     *   keep the argument-accepting front-end still generic (templated `operator()`). This
+     *   special adapter supports the case when the _expansion functor_ yields a child sequence
+     *   type different but compatible to the original source sequence embedded in TreeExplorer.
+     */
     template<class FUN, typename SRC>
     struct _ExpansionTraits
       {
+        /** handle all regular "function-like" entities */
         template<typename F, typename SEL =void>
         struct FunDetector
           {
             using Sig = typename _Fun<F>::Sig;
           };
         
+        /** handle a generic lambda, accepting a reference to the `SRC` iterator */
         template<typename F>
         struct FunDetector<F,  disable_if<_Fun<F>> >
           {
@@ -305,6 +327,7 @@ namespace lib {
             using Ret = decltype(std::declval<F>() (std::declval<Arg>()));
             using Sig = Ret(Arg);
           };
+        
         
         using Sig = typename FunDetector<FUN>::Sig;
         using Arg = typename _Fun<Sig>::Args::List::Head;
@@ -315,6 +338,8 @@ namespace lib {
         static_assert (std::is_convertible<typename ResultIter::value_type, typename SRC::value_type>::value,
                        "the iterator from the expansion must yield compatible values");
         
+        
+        /** adapt to a functor, which accesses the source iterator or embedded "state core" */
         template<class ARG, class SEL =void>
         struct ArgAccessor
           {
@@ -325,12 +350,15 @@ namespace lib {
             static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
           };
         
+        /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
         template<class IT>
         struct ArgAccessor<IT,   enable_if<std::is_convertible<typename IT::value_type, Arg>>>
           {
             static auto build() { return [](auto iter) { return *iter; }; }
           };
         
+        
+        /** holder for the suitably adapted _expansion functor_ */
         struct Functor
           {
             function<Sig> expandFun;
@@ -352,6 +380,28 @@ namespace lib {
   
   namespace iter_explorer {
     
+    /**
+     * @internal Decorator for TreeExplorer adding the ability to "expand children".
+     * The expand() operation is the key element of a depth-first evaluation: it consumes
+     * one element and performs a preconfigured _expansion functor_ on that element to yield
+     * its "children". These are given in the form of another iterator, which needs to be
+     * compatible to the source iterator ("compatibility" boils down to both iterators
+     * yielding a compatible value type). Now, this _sequence of children_ effectively
+     * replaces the expanded source element in the overall resulting sequence; which
+     * means, the nested sequence was _flattened_ into the results. Since this expand()
+     * operation can again invoked on the results, the implementation of such an evaluation
+     * requires a stack datastructure, so the nested iterator from each expand() invocation
+     * can be pushed to become the new active source for iteration. Thus the primary purpose
+     * of this Expander (decorator) is to integrate those "nested child iterators" seamlessly
+     * into the overall iteration process; once a child iterator is exhausted, it will be
+     * popped and iteration continues with the previous child iterator or finally with
+     * the source iterator wrapped by this decorator.
+     * @remark since we allow a lot of leeway regarding the actual form and definition of the
+     *         _expansion functor_, there is a lot of minute technical details, mostly confined
+     *         within the _ExpansionTraits.
+     * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
+     * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
+     */
     template<class SRC, class FUN>
     class Expander
       : public SRC
@@ -396,6 +446,7 @@ namespace lib {
           {
             return expansions_.size();
           }
+        
         
       protected: /* === Iteration control API for IterableDecorator === */
         
@@ -469,8 +520,42 @@ namespace lib {
         { }
       
       
+      
       /* ==== Builder functions ==== */
       
+      /** preconfigure this TreeExplorer to allow for _"expansion of children"_.
+       * The resulting iterator exposes an `expand()` function, which consumes
+       * the current head element of this iterator and feeds it through the
+       * _expansion functor_, which was provided to this builder function here.
+       * The _expansion functor_ is expected to yield a sequence of "child" elements,
+       * which will be integrated into the overall result sequence instead of the
+       * consumed source element. Thus, repeatedly invoking `expand()` until exhaustion
+       * generates a _depth-first evaluation_, since every child will be expanded until
+       * reaching the leaf nodes of a tree like structure.
+       * 
+       * @param expandFunctor a "function-like" entity to perform the actual "expansion".
+       *        There are two distinct usage patterns, as determined by the signature
+       *        of the provided function or functor:
+       *        - _"monad style"_: the functor takes a _value_ from the sequence and
+       *          produces a new sequence, iterator or collection of compatible values
+       *        - _"opaque state manipulation"_: the functor accepts the concrete source
+       *          iterator type, or even a "state core" type embedded therein. It yields
+       *          a new sequence, state core or collection representing the "children".
+       *          Obviously, the intention here is to allow hidden collaboration between
+       *          the expansion functor and the embedded opaque "data source". For that
+       *          reason, the functor may take its argument by reference, and a produced
+       *          new "child state core" may likewise collaborate with that original
+       *          data source or state core behind the scenes; the latter is guaranteed
+       *          to exist during the whole lifetime of this TreeExplorer.
+       * @note there is limited support for generic lambdas, but only for the second case.
+       *       The reason is, we can not "probe" a template or generic lambda for possible
+       *       argument and result types. Thus, if you provide a generic lambda, TreeExplorer
+       *       tries to pass it a `SrcIter &` (reference to the embedded original iterator).
+       *       For any other cases, please provide a lambda or functor with a single, explicitly
+       *       typed argument. Obviously, argument and result type should also make sense for
+       *       the desired evaluation pattern, otherwise you'll get all kinds of nasty
+       *       template compilation failures (have fun!)
+       */
       template<class FUN>
       auto
       expand (FUN&& expandFunctor)
