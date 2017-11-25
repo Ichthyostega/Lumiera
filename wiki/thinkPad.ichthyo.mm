@@ -5348,6 +5348,16 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="clanbomber"/>
 </node>
+<node COLOR="#338800" CREATED="1511578305427" ID="ID_1738957205" MODIFIED="1511578318339" TEXT="alle technischen Details in die Traits">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511578319810" ID="ID_1918720180" MODIFIED="1511578346703" TEXT="unterst&#xfc;tzte Varianten dokumentieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511578330448" ID="ID_1808038526" MODIFIED="1511578396263" TEXT="alle unterst&#xfc;tzten Varianten im Test abdecken">
+<arrowlink COLOR="#b65d79" DESTINATION="ID_1298407683" ENDARROW="Default" ENDINCLINATION="-33;-51;" ID="Arrow_ID_1214344498" STARTARROW="None" STARTINCLINATION="-292;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -5374,7 +5384,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1298407683" MODIFIED="1510969041717" TEXT="verify_expandOperation();">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1298407683" MODIFIED="1511578384759" TEXT="verify_expandOperation();">
+<linktarget COLOR="#b65d79" DESTINATION="ID_1298407683" ENDARROW="Default" ENDINCLINATION="-33;-51;" ID="Arrow_ID_1214344498" SOURCE="ID_1808038526" STARTARROW="None" STARTINCLINATION="-292;0;"/>
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1511227813712" ID="ID_942570698" MODIFIED="1511228177906" TEXT="Fall-1">
 <icon BUILTIN="button_ok"/>

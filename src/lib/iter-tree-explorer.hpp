@@ -92,6 +92,7 @@ namespace lib {
   using std::move;
   using std::forward;
   using std::function;
+  using util::isnil;
   
   namespace iter_explorer {
     
@@ -235,7 +236,6 @@ namespace lib {
     using meta::_Fun;
     using std::__and_;
     using std::__not_;
-    using std::is_constructible;
     using meta::can_IterForEach;
     using meta::can_STL_ForEach;
     
@@ -287,37 +287,7 @@ namespace lib {
       };
     
     
-    template<class SIG, class ARG, class SEL =void>
-    struct ArgAccessor
-      {
-        using FunArg = typename std::remove_reference<
-                       typename _Fun<SIG>::Args::List::Head>::type;
-        static_assert (std::is_convertible<ARG, FunArg>::value,
-                       "the expansion functor must accept the source iterator or state core as parameter");
-
-        static auto accessor() { return [](ARG& arg) -> ARG& { return arg; }; }
-      };
     
-    template<class SIG, class IT>
-    struct ArgAccessor<SIG, IT,   enable_if<std::is_convertible<typename IT::value_type, typename _Fun<SIG>::Args::List::Head>>>
-      {
-        static auto accessor() { return [](auto iter) { return *iter; }; }
-      };
-    
-    template<class SIG>
-    struct ExpaFunc
-      {
-        function<SIG> expandFun;
-        
-        template<typename ARG>
-        auto
-        operator() (ARG& arg)
-          {
-            auto accessArg = ArgAccessor<SIG,ARG>::accessor();
-            
-            return expandFun (accessArg (arg));
-          }
-      };
     
     template<class FUN, typename SRC>
     struct _ExpansionTraits
@@ -337,17 +307,43 @@ namespace lib {
           };
         
         using Sig = typename FunDetector<FUN>::Sig;
+        using Arg = typename _Fun<Sig>::Args::List::Head;
+        using Res = typename _Fun<Sig>::Ret;
         
-        using ExpandedChildren = typename _Fun<Sig>::Ret;
+        using ResultIter = typename _TreeExplorerTraits<Res>::SrcIter;
         
-        using Core = typename _TreeExplorerTraits<ExpandedChildren>::SrcIter;
-        
-        static_assert (std::is_convertible<typename Core::value_type, typename SRC::value_type>::value,
+        static_assert (std::is_convertible<typename ResultIter::value_type, typename SRC::value_type>::value,
                        "the iterator from the expansion must yield compatible values");
         
-//      using Arg = typename _Fun<Sig>::Args::List::Head;
+        template<class ARG, class SEL =void>
+        struct ArgAccessor
+          {
+            using FunArgType = typename std::remove_reference<Arg>::type;
+            static_assert (std::is_convertible<ARG, FunArgType>::value,
+                           "the expansion functor must accept the source iterator or state core as parameter");
+            
+            static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
+          };
         
-        using Functor = ExpaFunc<Sig>;
+        template<class IT>
+        struct ArgAccessor<IT,   enable_if<std::is_convertible<typename IT::value_type, Arg>>>
+          {
+            static auto build() { return [](auto iter) { return *iter; }; }
+          };
+        
+        struct Functor
+          {
+            function<Sig> expandFun;
+            
+            template<typename ARG>
+            auto
+            operator() (ARG& arg)
+              {
+                auto accessArg = ArgAccessor<ARG>::build();
+                
+                return expandFun (accessArg (arg));
+              }
+          };
       };
     
   }//(End) TreeExplorer traits
@@ -361,12 +357,12 @@ namespace lib {
       : public SRC
       {
         using SrcIter = typename SRC::SrcIter;
-        using _Config = _ExpansionTraits<FUN,SrcIter>;
-        using Core = typename _Config::Core;
-        using ExpandFunctor = typename _Config::Functor;
+        using _Traits = _ExpansionTraits<FUN,SrcIter>;
+        using ResIter = typename _Traits::ResultIter;
+        using ExpandFunctor = typename _Traits::Functor;
         
         ExpandFunctor expandChildren_;
-        IterStack<Core> expansions_;
+        IterStack<ResIter> expansions_;
         
       public:
         Expander() =default;
@@ -385,10 +381,10 @@ namespace lib {
           {
             REQUIRE (checkPoint(*this), "attempt to expand an empty explorer");
             
-            Core expanded = 0 < depth()? expandChildren_(*expansions_)
-                                       : expandChildren_(*this);
+            ResIter expanded = 0 < depth()? expandChildren_(*expansions_)
+                                          : expandChildren_(*this);
             iterNext (*this);   // consume current head element
-            if (expanded.isValid())
+            if (not isnil(expanded))
               expansions_.push (move(expanded));
             
             return *this;
@@ -443,8 +439,7 @@ namespace lib {
    * 
    * @todo WIP -- preliminary draft as of 11/2017
    */
-  template<class SRC
-          >
+  template<class SRC>
   class TreeExplorer
     : public SRC
     {
@@ -488,6 +483,7 @@ namespace lib {
           
           return ExpandableExplorer{move(*this), forward<FUN>(expandFunctor)};
         }
+      
     private:
     };
   
