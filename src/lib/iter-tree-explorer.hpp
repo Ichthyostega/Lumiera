@@ -354,7 +354,7 @@ namespace lib {
         template<class IT>
         struct ArgAccessor<IT,   enable_if<std::is_convertible<typename IT::value_type, Arg>>>
           {
-            static auto build() { return [](auto iter) { return *iter; }; }
+            static auto build() { return [](auto& iter) { return *iter; }; }
           };
         
         
