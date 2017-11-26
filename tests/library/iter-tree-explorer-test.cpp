@@ -128,8 +128,8 @@ namespace test{
         
       public:
         explicit
-        NumberSequence(uint end = 0)
-          : IterStateWrapper<uint,CountDown> (CountDown(0,end))
+        NumberSequence(uint start = 0)
+          : IterStateWrapper<uint,CountDown> (CountDown{start})
           { }
         NumberSequence(uint start, uint end)
           : IterStateWrapper<uint,CountDown> (CountDown(start,end))
@@ -309,9 +309,17 @@ namespace test{
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
+                      .expand([](uint j){ return NumberSequence{j-1}; })
+                      );
+          
+          verify_treeExpandingIterator(
+                    treeExplore(CountDown{5})
                       .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })
                       );
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
+          /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : Generated code works just fine and passes Test though
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](auto & it){ return CountDown{ *it - 1}; })

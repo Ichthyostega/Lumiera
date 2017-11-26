@@ -233,8 +233,7 @@
       aber nur via einfacher &quot;uplink&quot;-Verbindung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493753215852" ID="ID_1971120" MODIFIED="1493753233570" TEXT="offen: wie kann man Shutdown implementieren">
@@ -292,8 +291,7 @@
       Term-Signal nicht ausgesendet w&#252;rde.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1481502335583" ID="ID_1245191241" MODIFIED="1481502372882" TEXT="Felder im GuiRunner sollten noexcept sein">
@@ -377,8 +375,7 @@
       Anmerkung: ein &quot;frestehendes&quot; BusTerm ist valide und zugelassen, es hat halt nur eine uplink-Connection.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484871556194" ID="ID_1978811406" MODIFIED="1511572071022" TEXT="macht Sinn so">
 <richcontent TYPE="NOTE"><html>
@@ -393,8 +390,7 @@
       es mu&#223; dazu auch jede Menge Methoden implementieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1484797584483" ID="ID_1316050570" MODIFIED="1501854459432" TEXT="dieser hat Member ">
 <node CREATED="1484797623574" ID="ID_1754670675" MODIFIED="1484797625783" TEXT="Nexus"/>
@@ -567,8 +563,7 @@
       dann kann der Shutdown-Proze&#223; den Start des GUI &#252;berholen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1484797646771" HGAP="44" ID="ID_1605520996" MODIFIED="1493752929690" TEXT="Ausgestaltung" VSHIFT="10">
@@ -808,8 +803,7 @@
       und ihre <i>&quot;Methoden&quot;</i>&#160;sind Commands auf der Session!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -1182,8 +1176,7 @@
       Das wird eine ganze Me
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1501850754827" ID="ID_314216229" MODIFIED="1501850773035" TEXT="jede Facade-Funktion brauch einen Dispatcher">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -1447,8 +1440,7 @@
       indem wir ein GTK-Signal erzeugen, das das Hauptfenster schlie&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1485116867963" FOLDED="true" ID="ID_1146024699" MODIFIED="1501804646768" TEXT="bisher kann man nur das Fenster schlie&#xdf;en">
 <icon BUILTIN="info"/>
 <node CREATED="1485116884925" ID="ID_296160451" MODIFIED="1485116898396" TEXT="wie funktioniert das?">
@@ -1555,8 +1547,7 @@
       ...indem der NotificatonService nun vom UI-Manager gemanaged wird :)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -2762,8 +2753,7 @@
       da&#223; die alte, obsolete Timeline zur&#252;ckgebaut ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="hourglass"/>
 </node>
 <node CREATED="1493853590149" ID="ID_1075149702" MODIFIED="1511572071311" TEXT="Race beim triggerShutdown">
@@ -2782,8 +2772,7 @@
       bevor die Notification-Facade ge&#246;ffnet werden konnte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -2888,8 +2877,7 @@
       ist, da&#223; Gio::Application sofort auch gleich eine dBus-Verbindung hochf&#228;hrt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1485457105010" HGAP="49" ID="ID_202831328" MODIFIED="1495218206128" TEXT="neuer Weg" VSHIFT="21">
@@ -3010,8 +2998,7 @@
       diesen &quot;aktuellen Kontext&quot; irgendwo <i>aufzufischen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1485903041262" ID="ID_997327941" MODIFIED="1485903044082" TEXT="Fokus"/>
 <node COLOR="#338800" CREATED="1485903046613" ID="ID_1041890737" MODIFIED="1504368672760" TEXT="aktuelles Fenster">
 <linktarget COLOR="#375a84" DESTINATION="ID_1041890737" ENDARROW="Default" ENDINCLINATION="177;-181;" ID="Arrow_ID_373431525" SOURCE="ID_1089795419" STARTARROW="None" STARTINCLINATION="245;-68;"/>
@@ -3193,8 +3180,7 @@
       InvocationTrail ist tot
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node COLOR="#338800" CREATED="1488566247742" ID="ID_254774965" MODIFIED="1492965755135" TEXT="mu&#xdf; doch die Architktur kl&#xe4;ren">
@@ -3376,8 +3362,7 @@
       da es nur darum geht, via globalCtx auf den passenden Controller zuzugreifen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -3620,8 +3605,7 @@
       ...and this anchorage can be covered and backed by the currently existing UI configuration
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1506180752098" ID="ID_1971122985" MODIFIED="1511572071594" TEXT="can be a anchored">
 <richcontent TYPE="NOTE"><html>
@@ -3633,8 +3617,7 @@
       ...by interpolation of some wildcards
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1506180752099" ID="ID_1588059901" MODIFIED="1511572071600" TEXT="incomplete">
 <richcontent TYPE="NOTE"><html>
@@ -3646,8 +3629,7 @@
       ...need to be extended to allow anchoring
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1506180752099" ID="ID_1331064451" MODIFIED="1506180752099" TEXT="impossible to anchor"/>
 </node>
@@ -3685,8 +3667,7 @@
       we may construct the covered part of a given spec, including automatic anchoring.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1506180752102" ID="ID_1444275949" MODIFIED="1506180752102" TEXT="navigating">
 <node CREATED="1506180752102" ID="ID_1839478635" MODIFIED="1506181147267" TEXT="Prereq">
@@ -3708,8 +3689,7 @@
       designated by the given coordinate spec
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1506180752103" ID="ID_1926205805" MODIFIED="1506180752103" TEXT="ascend"/>
 <node CREATED="1506180752103" ID="ID_1087218713" MODIFIED="1506180752103" TEXT="descend to an existing child">
 <node CREATED="1506180752103" ID="ID_908880124" MODIFIED="1506180752103" TEXT="by matching name"/>
@@ -3738,8 +3718,7 @@
       und dann kann man es auch extern belassen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
@@ -3773,8 +3752,7 @@
       sind denkbar und m&#252;ssen in der Strategy konfigurierbar sein?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1504458488876" ID="ID_800753364" MODIFIED="1504458493831" TEXT="Ort">
 <node CREATED="1504458802042" ID="ID_300193794" MODIFIED="1504458808613" TEXT="expliziter Ort (global)"/>
@@ -3965,8 +3943,7 @@
       mit den zu diesem Zeitpunkt bekannten UI-Korrdinaten best&#252;ckt wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1508016602867" ID="ID_1861393889" MODIFIED="1508016607918" TEXT="Ort kann entdeckt werden">
@@ -4293,8 +4270,7 @@
       Grund: wir wollen vermeiden, abschlie&#223;ende Wildcards <i>blo&#223; irgendwie</i>&#160;zu binden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1509323537479" ID="ID_1638614197" MODIFIED="1511572071995" TEXT="und trotzedm einen Anker finden">
 <richcontent TYPE="NOTE"><html>
@@ -4309,8 +4285,7 @@
       dann aber Wildcards enth&#228;lt, die nicht nach den versch&#228;rften Bedingungen gecovert werden k&#246;nnen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1509323760466" ID="ID_446881733" MODIFIED="1511572072002" TEXT="oder eben doch komplett im Widerspruch zum UI stehen">
 <richcontent TYPE="NOTE"><html>
@@ -4333,8 +4308,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -4370,8 +4344,7 @@
       denn eine Verletzung kann weithin unbemerkt bleiben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -4397,8 +4370,7 @@
       daraus resultierenden Pfad zugreift
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -4418,8 +4390,7 @@
       Hierbei ist <i>aktive Lebensdauer</i>&#160;wie bei einem Iterator zu verstehen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -4436,8 +4407,7 @@
       wenn die Auswertung aufgrund einer gebrochenen Konvention entgleist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -4462,8 +4432,7 @@
       Es gilt die erste maximal abdeckende L&#246;sung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1508539330312" ID="ID_67492497" MODIFIED="1508539911843" TEXT="bewegt nur Suchmarken">
@@ -4487,8 +4456,7 @@
       Sofern der Pfad bereits explizit ist, gen&#252;gt diese Info allein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539644775" ID="ID_186144507" MODIFIED="1511572072121" TEXT="[optional] explizite Coverage">
@@ -4509,8 +4477,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -4789,8 +4756,7 @@
       also mehr als blo&#223; parametrisierte Typen (Templates)!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1510341461168" ID="ID_862729714" MODIFIED="1510341472426" TEXT="Insofern Iterator == Monade"/>
 <node CREATED="1510342283759" ID="ID_196604339" MODIFIED="1510342289707" TEXT="als Pipeline realisieren?">
@@ -4833,8 +4799,7 @@
       ...was nicht grade zur Verst&#228;ndlichkeit des Ganzen beitr&#228;gt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1510342763622" ID="ID_1851343313" MODIFIED="1510357653178">
 <richcontent TYPE="NODE"><html>
@@ -5098,8 +5063,7 @@
       indem man einen speziellen <i>Inline-Stack mit Heap-Overflow</i>&#160;nutzt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510939517499" ID="ID_1100296394" MODIFIED="1510940150893" TEXT="das ist eine Weichenstellung">
@@ -5175,8 +5139,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -5212,8 +5175,7 @@
       _fun&lt;FUN&gt;::Sig scheitert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1511455502648" ID="ID_1704619802" MODIFIED="1511455566686">
@@ -5242,8 +5204,7 @@
       einen Expand-Funktor als generisches Lambda zu schreiben!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1511455607914" HGAP="56" ID="ID_1866082603" MODIFIED="1511486111045" TEXT="Untersuchung" VSHIFT="39">
 <icon BUILTIN="button_cancel"/>
@@ -5322,8 +5283,7 @@
       denn das ist der sinnvollste Fall f&#252;r ein generisches Lambda
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -5343,8 +5303,7 @@
       denn Debugging ist mindestens doppelt so schwer...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="clanbomber"/>
 </node>
@@ -5395,7 +5354,9 @@
 <node COLOR="#338800" CREATED="1511571810531" ID="ID_84419798" MODIFIED="1511571819891" TEXT="Val -&gt; Core">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1511227824495" ID="ID_1299746114" MODIFIED="1511571852065" TEXT="Val -&gt; Iter&lt;Val&gt;"/>
+<node COLOR="#338800" CREATED="1511227824495" ID="ID_1299746114" MODIFIED="1511731959295" TEXT="Val -&gt; Iter&lt;Val&gt;">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1511571834032" ID="ID_1315469399" MODIFIED="1511571846898" TEXT="Val -&gt; collection&lt;Val&gt;"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511227861867" ID="ID_1821706302" MODIFIED="1511571641506" TEXT="Fall-2 ">
@@ -5465,8 +5426,7 @@
       ...das hei&#223;t: keine Wildcards, keine pseudo-Specs (currentWindow)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1508539089208" ID="ID_1071949477" MODIFIED="1508539131769" TEXT="Query">
@@ -5484,8 +5444,7 @@
       Zweck ist vor allem, meta-Specs wie firstWindow, currentWindow aufzul&#246;sen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1508539108398" ID="ID_681619275" MODIFIED="1509319949242" TEXT="coverage">
@@ -5512,8 +5471,7 @@
       als Repr&#228;sentation des real-existierenden UI
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -5783,8 +5741,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#8e79a4" DESTINATION="ID_1229791291" ENDARROW="Default" ENDINCLINATION="16;-93;" ID="Arrow_ID_277133142" STARTARROW="None" STARTINCLINATION="133;0;"/>
 </node>
 </node>
@@ -5863,8 +5820,7 @@
       bewirkt nur eine Entkoppelung vom Implementierungs-Kontext
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1504832266793" ID="ID_1279692021" MODIFIED="1504962157456" TEXT="einfache Funktoren?">
@@ -5898,8 +5854,7 @@
       sondern interpretieren jeweils nur eine einzige feste Konfiguration
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504832476365" ID="ID_799285654" MODIFIED="1504832493759" TEXT="mit der Implementierungsfunktion initialisiert"/>
 <node CREATED="1504832511688" ID="ID_673872785" MODIFIED="1504962292468" TEXT="Voraussetzung: sinnvolle Primitive">
@@ -5962,8 +5917,7 @@
       um auszudr&#252;cken, da&#223; gewissen Angaben ausgelassen wurden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504886119604" ID="ID_206635297" MODIFIED="1504886127928" TEXT="komplexes Thema">
 <icon BUILTIN="messagebox_warning"/>
@@ -6625,8 +6579,7 @@
       ...denn das ist das vereinfachte Setup f&#252;r &quot;einfache&quot; Applikationen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1485457370310" ID="ID_1931452525" MODIFIED="1485457379864" TEXT="GtkWindow sind v&#xf6;llig ausreichend"/>
@@ -6799,8 +6752,7 @@
       das Diff wird auf den Platzhalter angewendet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504386636074" ID="ID_1996752633" MODIFIED="1511572074274" TEXT="automatisches Management von&#xf6;ten">
 <richcontent TYPE="NOTE"><html>
@@ -6815,8 +6767,7 @@
       dann mu&#223; dieses automatisch deregistriert werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504371342426" ID="ID_869653682" MODIFIED="1506957062518">
 <richcontent TYPE="NODE"><html>
@@ -7097,8 +7048,7 @@
       Details im&#160;&#160;TiddlyWiki....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1479678634213" ID="ID_432405176" MODIFIED="1479678650821" TEXT="rekursive Struktur schaffen">
@@ -7611,8 +7561,7 @@
       ...abstraktes Interface
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1480725680713" ID="ID_448125852" MODIFIED="1480725692188" TEXT="Delegate for Notification">
 <icon BUILTIN="help"/>
@@ -7655,8 +7604,7 @@
       oder eine Sequenz ohne root-Fork zulassen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1480776052551" FOLDED="true" ID="ID_431920594" MODIFIED="1488423342544" TEXT="warum">
 <node CREATED="1480742420383" ID="ID_19092812" MODIFIED="1480742430313" TEXT="kann ihn nicht gleich im ctor erzeugen"/>
@@ -8098,8 +8046,7 @@
       Verwende das als Leitgedanke, um das Layout zu entwickeln
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1479434831825" FOLDED="true" ID="ID_975727645" MODIFIED="1488423342663" TEXT="abridged form">
 <node CREATED="1479434845992" ID="ID_609815513" MODIFIED="1479434860330" TEXT="media bin, collapsed fork"/>
@@ -8260,8 +8207,7 @@
       ...um mal was im UI anzeigen zu k&#246;nnen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1504200907356" ID="ID_1939871955" MODIFIED="1504201013274" TEXT="neues Dock">
@@ -8290,8 +8236,7 @@
       Die Icon-Gr&#246;&#223;en ergeben sich aus den Boxes auf 'plate'
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1504201055449" ID="ID_1652674635" MODIFIED="1504201072930" TEXT="braucht &apos;artwork:&apos;-Layer"/>
 <node CREATED="1504201074566" ID="ID_1803123712" MODIFIED="1504201083665" TEXT="braucht Sub-Layer &apos;plate&apos;">
@@ -8339,8 +8284,7 @@
       mehr als ein top-level Fenster offen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1477342868574" ID="ID_679226593" MODIFIED="1477342875681" TEXT="WorkspaceWindow">
@@ -8501,8 +8445,7 @@
       aber es kann davon mehrere geben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1477343152288" ID="ID_1267678981" MODIFIED="1477343164378" TEXT="Vermengung von Fenster und Workspace"/>
 </node>
@@ -8793,8 +8736,7 @@
       was haben alle UI-Elemente wirklich gemeinsam?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448658692023" FOLDED="true" ID="ID_888978058" MODIFIED="1511572075500" TEXT="generische Commands">
 <richcontent TYPE="NOTE"><html>
@@ -8812,8 +8754,7 @@
       oder handelt es sich nur um ein Implementierungsdetail der UI-Bus-Anbindung?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448659456882" ID="ID_946761955" MODIFIED="1448659469420" TEXT="Notwendig: Command-Name + Varargs"/>
 <node CREATED="1451093919426" ID="ID_56876272" MODIFIED="1451093932614" TEXT="generisch impliziert auch zentrale Definition">
@@ -15215,8 +15156,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -15247,8 +15187,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="877;262;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#338800" CREATED="1485555902731" FOLDED="true" ID="ID_1913236669" MODIFIED="1492444338102" TEXT="#1070 how to bind session commands into UI actions">
@@ -15295,8 +15234,7 @@
       Implementierung der real-world-Variante fehlt!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-197;638;" ID="Arrow_ID_1686519160" STARTARROW="Default" STARTINCLINATION="-83;-1020;"/>
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="prepare"/>
@@ -15316,8 +15254,7 @@
       wie Session- und State-Managment, Commands etc.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1453545968166" FOLDED="true" ID="ID_399884859" MODIFIED="1492205829885" TEXT="Command-Handler">
 <icon BUILTIN="button_ok"/>
@@ -15610,8 +15547,7 @@
       und ebenso die Gesten abstrahieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1488676343170" ID="ID_1624806724" MODIFIED="1488676361392" TEXT="besser? InteractionStateManager == Geste">
@@ -15656,8 +15592,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488674659521" FOLDED="true" ID="ID_1283697108" MODIFIED="1492444005324" TEXT="Problem: Instanz-Management">
 <icon BUILTIN="messagebox_warning"/>
@@ -15941,8 +15876,7 @@
       mit dem InteractionDirector verdrahtet sein mu&#223;!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" STARTARROW="None" STARTINCLINATION="912;-974;"/>
 <linktarget COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" SOURCE="ID_1621107057" STARTARROW="None" STARTINCLINATION="384;-135;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -15959,8 +15893,7 @@
       und auch nichts mit der Trennung zwischen Layern und Subsystemen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488936840059" ID="ID_1305671938" MODIFIED="1511572076475" TEXT="generisches Problem">
 <richcontent TYPE="NOTE"><html>
@@ -15975,8 +15908,7 @@
       aka DependencyInjection + Lifecycle Management
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1488937419308" ID="ID_994813744" MODIFIED="1488937424552" TEXT="lib::Depend ausbauen"/>
 <node CREATED="1488937436890" ID="ID_1184288068" MODIFIED="1488937442437" TEXT="kann auf sp&#xe4;ter vertagt werden"/>
 <node CREATED="1488937424996" ID="ID_1712367280" MODIFIED="1488937434311" TEXT="vorerst eigenes Front-End verwenden"/>
@@ -16001,8 +15933,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -16024,8 +15955,7 @@
       es k&#246;nnte auch ausreichen, einfach die passende InteractionStateManager-Impl zu verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1488937565632" ID="ID_1990212985" MODIFIED="1511572076530" TEXT="dem User (UI-Element) ist das egal">
@@ -16038,8 +15968,7 @@
       denn InteractionStateManager ist ein <b>Interface</b>!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937651021" ID="ID_1956085726" MODIFIED="1488937977999" TEXT="Binde-Muster">
 <icon BUILTIN="idea"/>
@@ -16062,8 +15991,7 @@
       Das k&#246;nnte ein <i>Advice</i>&#160;sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937682649" ID="ID_1090053275" MODIFIED="1511572076553" TEXT="aktuelles Element (mit Typ-Check)">
 <richcontent TYPE="NOTE"><html>
@@ -16084,8 +16012,7 @@
       In diesem Fall wird das Command <i>enabled</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937711053" ID="ID_586793367" MODIFIED="1511572076561" TEXT="partial application">
 <richcontent TYPE="NOTE"><html>
@@ -16097,8 +16024,7 @@
       eine Argumentliste mit mehreren Parametern wir Schritt f&#252;r Schritt geschlossen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1488937724867" ID="ID_231519502" MODIFIED="1511572076569" TEXT="Ordnung nach Scope">
 <richcontent TYPE="NOTE"><html>
@@ -16113,8 +16039,7 @@
       wird das gem&#228;&#223; Scope &quot;n&#228;chstgelegne&quot; genommen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1488937933566" ID="ID_170827087" MODIFIED="1488937945712" TEXT="das sind komplexe Pl&#xe4;ne">
@@ -16729,8 +16654,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1492095437190" ID="ID_491978759" MODIFIED="1492095481564" TEXT="Wunsch: access(ID).&lt;operation&gt;(args)"/>
 <node CREATED="1492096317382" ID="ID_554292510" MODIFIED="1492096319497" TEXT="m&#xf6;glich">
@@ -16899,8 +16823,7 @@
       (Beispiel &quot;in-point fehlt&quot;)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1489544910395" ID="ID_909938815" MODIFIED="1511572077080" TEXT="enable Action">
 <richcontent TYPE="NOTE"><html>
@@ -16918,8 +16841,7 @@
       aber von einem externen State-Change getriggert wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -17042,8 +16964,7 @@
       CommandID.KontextID == Instanz
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1492168186700" FOLDED="true" ID="ID_501823967" MODIFIED="1492443107671" TEXT="InvocationTrail">
 <icon BUILTIN="button_cancel"/>
@@ -17471,8 +17392,7 @@
       Also gen&#252;gt es, einen anonymen Klon dieser Instanz zu halten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1489717960331" ID="ID_1849715968" MODIFIED="1489717991603" TEXT="viel wichtiger sind die Aktivierungs-Regeln"/>
 </node>
@@ -17499,8 +17419,7 @@
       Beispiel: Men&#252;-Eintrag &quot;create duplicate&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1489547015360" TEXT="Callback installieren"/>
 <node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1489547028606" TEXT="Anfrage: ist dies aktivierbar?"/>
 </node>
@@ -17539,8 +17458,7 @@
       oder andernfalls einen bestimmten Namen bekommt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1489547124597" ID="ID_408090908" MODIFIED="1489547128224" TEXT="das Subjekt"/>
 <node CREATED="1489547128837" ID="ID_865724442" MODIFIED="1489547131120" TEXT="der Container"/>
@@ -17583,8 +17501,7 @@
       wieder komplett zur&#252;ckgebaut habe
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1489719267537" ID="ID_963145148" MODIFIED="1489719291065" TEXT="was ist bereits vom Command her definiert"/>
@@ -20329,8 +20246,7 @@
       nach dem Umzug auf Github hei&#223;t es gason
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1448319925356" ID="ID_1589130421" MODIFIED="1448320242925" TEXT="angeblich ziemlich schnell">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -20516,8 +20432,7 @@
       we need to wait for the current command or builder run to be completed
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -20531,8 +20446,7 @@
       ...noch nicht implementiert 1/17
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 <node CREATED="1481827558336" ID="ID_1026688096" MODIFIED="1481827646856" TEXT="match current session"/>
 <node CREATED="1481827647491" ID="ID_1849886325" MODIFIED="1481827652111" TEXT="aggregate similar"/>
@@ -20561,8 +20475,7 @@
       Guard beim Zugang &#252;ber das Interface
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1481918074269" ID="ID_1984339005" MODIFIED="1481918091136">
 <richcontent TYPE="NODE"><html>
@@ -20681,8 +20594,7 @@
       OO rocks!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -20767,8 +20679,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -20969,8 +20880,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1495221220040" HGAP="43" ID="ID_782313223" MODIFIED="1495224771516" TEXT="Framework" VSHIFT="-20">
@@ -21000,8 +20910,7 @@
       Alles in ein Framework zwingen. Alternativlos, capisce?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -21085,8 +20994,7 @@
       Gtk-Main verwendet inzwischen den gleichen Mechanismus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -21121,8 +21029,7 @@
       Das ist eine subtile Falle.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1501848728354" ID="ID_1420494100" MODIFIED="1501848749638">
@@ -21164,8 +21071,7 @@
       alles das nicht aus dem GUI-Thread heraus geschieht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1501848836523" ID="ID_649355856" MODIFIED="1501848856842" TEXT="Dispatcher im GUI-Thread erzeugen">
@@ -21215,8 +21121,7 @@
       Siehe Beschreibung im Beispiel/Tutorial
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -21628,8 +21533,7 @@
       Beachte: der Text-Cursor (Marker &quot;insert&quot;) hat right gravity
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1504215832746" ID="ID_751207346" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-multithread-example.html.en" MODIFIED="1504215873156">
@@ -21716,8 +21620,7 @@
       Query&lt;RES&gt;::resolveBy
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1491099311253" ID="ID_307124479" MODIFIED="1511572079622">
 <richcontent TYPE="NODE"><html>
@@ -21754,8 +21657,7 @@
       sonst kommt Doxygen durcheinander
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1491098382888" ID="ID_1568153886" MODIFIED="1491098384859" TEXT="Probleme">
@@ -21784,8 +21686,7 @@
       wird hier kein Link erzeugt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1491098487889" ID="ID_1401713015" MODIFIED="1491098493701" TEXT="Sqlite-Support">
@@ -21810,8 +21711,7 @@
       ...im Besonderen die guten Diagramme f&#252;r Pulse, ALSA und Jack
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -21870,8 +21770,7 @@
       &quot;-Wl,-rpath-link=target/modules&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1439176912636" ID="ID_584884488" MODIFIED="1511572079768" TEXT="failed tests">
@@ -21884,8 +21783,7 @@
       laufen wieder alle
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439176982698" HGAP="59" ID="ID_1330966528" MODIFIED="1439593733607" TEXT="Beobachtung: Meldungen im journal" VSHIFT="2"/>
 <node CREATED="1439176948063" HGAP="54" ID="ID_1726494484" MODIFIED="1439609524714" TEXT="5 Thread/Parallel" VSHIFT="1">
@@ -21902,8 +21800,7 @@
       test.sh Zeile 138
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439566868460" FOLDED="true" ID="ID_620984495" MODIFIED="1488423342671" TEXT="Untersuchung">
 <node CREATED="1439566872203" FOLDED="true" ID="ID_1734454643" MODIFIED="1488423342553" TEXT="ulimit -T funktioniert nicht">
@@ -21972,8 +21869,7 @@
       ist klar, hab ich gebrochen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439608908133" ID="ID_1023076054" MODIFIED="1439608916216" TEXT="Problem mit der Hash-Funktion"/>
 <node CREATED="1439609043316" ID="ID_1585741290" MODIFIED="1439609051775" TEXT="hatte ich schon mal untersucht"/>
@@ -22002,8 +21898,7 @@
       Vorher hatte ich erste Kollisionen nach 25000 Nummern
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1439609098853" ID="ID_1076015737" MODIFIED="1439609125633">
 <richcontent TYPE="NODE"><html>
@@ -22055,8 +21950,7 @@
       Aug 10 04:51:39 flaucher kernel: traps: test-suite[8249] trap int3 ip:7ffff7deb241 sp:7fffffffe5c8 error:0
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439477348298" ID="ID_1975408018" MODIFIED="1439514690123" TEXT="heruntergedampft auf einen Aufruf">
@@ -22213,8 +22107,7 @@
       und tats&#228;chlich: das <i>ist</i>&#160;daneben, GCC hat Recht!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1439644339480" ID="ID_239239923" MODIFIED="1511572079915" TEXT="Lumiera DEB">
@@ -22227,8 +22120,7 @@
       aktualisieren und neu bauen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1439644368572" ID="ID_106785551" MODIFIED="1447996291004" TEXT="Doku: Referenz-System">
@@ -22258,8 +22150,7 @@
       w&#228;hle Kompatibilt&#228;t genau so, da&#223; Ubuntu-Trusty noch unterst&#252;tzt wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1446516746079" TEXT="gtkmm-3.0 3.10">
 <icon BUILTIN="button_ok"/>
@@ -22306,8 +22197,7 @@
       Ich meine also: zu Beginn vom Build sollte das Buildsystem einmal eine Infozeile ausgeben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1447566892253" ID="ID_64485556" MODIFIED="1511572080066" TEXT="clean soll .sconf_temp und *.pyc mit wegr&#xe4;umen">
 <richcontent TYPE="NOTE"><html>
@@ -22319,8 +22209,7 @@
       ...denn die st&#246;ren jeweils beim erzeugen eines Hotfix/Patch im Paketbau per dpkg --commit
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -22377,8 +22266,7 @@
       Doku durchk&#228;mmen nach M&#252;ll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="button_ok"/>
@@ -22395,8 +22283,7 @@
       <font color="#d40222">WICHTIG</font>: keine vorgreifende Infor publizieren!!!!!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1511572080144" TEXT="Build-Tutorial">
@@ -22415,8 +22302,7 @@
       insgesamt sorgf&#228;ltig durchlesen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446489425420" ID="ID_1155768637" MODIFIED="1446489430943" TEXT="building from source"/>
 <node CREATED="1446489431443" ID="ID_1672115205" MODIFIED="1446489435759" TEXT="building the debian way"/>
@@ -22436,8 +22322,7 @@
       knappe Kennzeichnung des Releases in den Kommentar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-2"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1446480798862" TEXT="admin/scons/Setup.py"/>
@@ -22464,8 +22349,7 @@
       denn wir wollen keine DEB-Info im Master haben!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-3"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1447567060657" TEXT="Release-Zweig">
@@ -22491,8 +22375,7 @@
       die unmittelbaren Release-Dokumente durchgehen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-4"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1446481126435" TEXT="README"/>
@@ -22519,8 +22402,7 @@
       Sollte konfliktfrei sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-5"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -22553,8 +22435,7 @@
       ...das hei&#223;t bauen und hochladen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-7"/>
 <node CREATED="1447566826434" HGAP="0" ID="ID_808634666" MODIFIED="1447990847522" TEXT="Bugfix-Release 0.pre.03-2" VSHIFT="-1">
 <icon BUILTIN="idea"/>
@@ -22621,8 +22502,7 @@
       unter Debian/Jessie wird das ignoriert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1447972547396" ID="ID_1950291699" MODIFIED="1511572080432">
 <richcontent TYPE="NODE"><html>
@@ -22650,8 +22530,7 @@
       Die Wahrscheinlichkeit, da&#223; <i>irgend jemand</i>&#160;Lumiera unter Ubuntu/Trusty <i>installieren </i>m&#246;chte, erscheint mir akademisch
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 </node>
 </node>
@@ -22687,8 +22566,7 @@
       in lib/hash-standard.hpp
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1447990722939" ID="ID_1163368707" MODIFIED="1447990755430">
 <richcontent TYPE="NODE"><html>
@@ -22723,8 +22601,7 @@
       es gibt Probleme beim Linken mit den Boost-Libraries, die auf Ubuntu/wily mit gcc-5 gebaut sind.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1447990802803" ID="ID_1667893677" MODIFIED="1447990809916" TEXT="ABBRUCH"/>
@@ -22742,8 +22619,7 @@
       Wichtig: hier nur was wirklich gebaut ist und funktioniert!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1488423307382" TEXT="alte Repos wegwerfen">
@@ -22783,8 +22659,7 @@
       bestehen, aber irgendwann m&#252;ssen wir das schon glattziehen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1446505367113" ID="ID_1119934206" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1446505429946">
@@ -22832,8 +22707,7 @@
       seit gcc-4.8 ist kein static_assert mehr in der STDlib
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1447985591922" ID="ID_800130211" MODIFIED="1447985636328" TEXT="Frage: wie kann ich ein SFINAE-Br&#xfc;cke bauen"/>
 <node CREATED="1447985637132" ID="ID_1680970111" MODIFIED="1447985646206" TEXT="Problem: wir haben nur einen Typparameter"/>
