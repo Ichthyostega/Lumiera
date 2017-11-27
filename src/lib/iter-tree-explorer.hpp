@@ -431,8 +431,8 @@ namespace lib {
           {
             REQUIRE (checkPoint(*this), "attempt to expand an empty explorer");
             
-            ResIter expanded = 0 < depth()? expandChildren_(*expansions_)
-                                          : expandChildren_(*this);
+            ResIter expanded{ 0 < depth()? expandChildren_(*expansions_)
+                                         : expandChildren_(*this)};
             iterNext (*this);   // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));

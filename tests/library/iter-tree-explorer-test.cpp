@@ -288,7 +288,7 @@ namespace test{
       
       
       
-      /** @test use a preconfigured "expand" functor to recurse into children
+      /** @test use a preconfigured "expand" functor to recurse into children.
        * The `expand()` builder function predefines a way how to _expand_ the current
        * head element of the iteration. However, expansion does not happen automatically,
        * rather, it needs to be invoked by the client, similar to increment of the iterator.
@@ -298,6 +298,29 @@ namespace test{
        * Conceptually, the evaluation _forks into the children of the expanded element_, before
        * continuing with the successor of the expansion point. Obviously, expansion can be applied
        * again on the result of the expansion, possibly leading to a tree of side evaluations.
+       * 
+       * The expansion functor may be defined in various ways and will be adapted appropriately
+       * - it may follow the classical "monadic pattern", i.e. take individual _values_ and return
+       *   a _"child monad"_, which is then "flat mapped" (integrated) into the resulting iteration
+       * - the resulting child collection may be returned as yet another iterator, which is then
+       *   moved by the implementation into the stack of child sequences currently in evaluation
+       * - or alternatively the resulting child collection may be returned just as a "state core",
+       *   which can be adapted into a _iterable state_ (see lib::IterStateWrapper).
+       * - or it may even return the reference to a STL collection existing elsewhere,
+       *   which will then be iterated to yield the child elements
+       * - and, quite distinct to the aforementioned "monadic" usage, the expansion functor
+       *   may alternatively be written in a way as to collaborate with the "state core" used
+       *   when building the TreeExplorer. In this case, the functor typically takes a _reference_
+       *   to this underlying state core or iterator. The purpose for this definition variant is
+       *   to allow exploring a tree-like evaluation, without the need to disclose anything about
+       *   the backing implementation; the expansion functor just happens to know the implementation
+       *   type of the "state core" and manipulate it through its API to create a "derived core"
+       *   representing a _child evaluation state_.
+       * - and finally, there is limited support for _generic lambdas._ In this case, the implementation
+       *   will try to instantiate the passed lambda by using the concrete source iterator type as argument.
+       * 
+       * @note expansion functor may use side-effects and indeed return something entirely different
+       *       than the original sequence, as long as it is iterable and yields compatible values.  
        */
       void
       verify_expandOperation()
@@ -311,6 +334,25 @@ namespace test{
                     treeExplore(CountDown{5})
                       .expand([](uint j){ return NumberSequence{j-1}; })
                       );
+          
+          // lambda with side-effect and a different return type
+          vector<vector<uint>> childBuffer;
+          auto expandIntoChildBuffer = [&](uint j) -> vector<uint>&
+                                          {
+                                            childBuffer.emplace_back();
+                                            vector<uint>& childNumbz = childBuffer.back();
+                                            for (size_t i=0; i<j-1; ++i)
+                                              childNumbz.push_back(j-1 - i);
+                                            return childNumbz;
+                                          };
+          
+          verify_treeExpandingIterator(
+                    treeExplore(CountDown{5})
+                      .expand(expandIntoChildBuffer)
+                      );
+          
+          // test routine called the expansion functor five times
+          CHECK (5 == childBuffer.size());
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
