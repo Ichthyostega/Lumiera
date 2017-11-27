@@ -221,3 +221,27 @@ Thus -- as of 9/2014 -- the _rules of the game_ are as folows
   to variadic templates and `std::tuple`
 
 
+
+Type inference
+~~~~~~~~~~~~~~
+Generally speaking, the use of `auto` and type inference has the potential to significantly improve readability of
+the code. Indeed, this new language feature is what removed most of the clumsiness regarding use of the Lumiera
+Forward Iterator concept. There are some notable pitfalls to consider, though
+
+- the `decltype(...)` operator is kind-of ``overloaded'', insofar it supports two distinct usages
+
+  * to find out the type of a given _name_
+  * to deduce the type of a given _expression_
+
+- and the `auto` type inference does not just pick up what `decltype` would see -- rather, it applies its own
+  preferences and transformations (which does make much sense from a pragmatic perspective)
+
+  * a definition with `auto` type specification always prefers to create an object or data element. This is very much
+    in contrast to the usual behaviour of the C++ language, which by default prefers a reference as result type of
+    expression evaluation.
+  * return type deduction always _decays_ the inferred type (similar as `std::decay<T>::type` does). Which means,
+    functions and arrays become pointers, and a _reference_ becomes a _value_. Given the danger of returning a
+    dangling reference to local storage, the latter is a sensible default, but certainly not what you'd expect
+    when just passing the result from a delegate function (or lambda!).
+
+

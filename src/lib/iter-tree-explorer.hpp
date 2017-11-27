@@ -364,7 +364,7 @@ namespace lib {
             function<Sig> expandFun;
             
             template<typename ARG>
-            auto
+            Res
             operator() (ARG& arg)
               {
                 auto accessArg = ArgAccessor<ARG>::build();
