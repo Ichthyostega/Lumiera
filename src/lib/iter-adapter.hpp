@@ -295,12 +295,12 @@ namespace lib {
    *   -# \c checkPoint establishes if the given state element represents a valid state
    *   -# \c iterNext evolves this state by one step (sideeffect)
    *   -# \c yield realises the given state, yielding an element of result type T
-   * @param T nominal result type (maybe const, but without reference).
-   *        The resulting iterator will yield a reference to this type T
-   * @param ST type of the "state core", defaults to T.
-   *        The resulting iterator will hold an instance of ST, which thus
-   *        needs to be copyable and default constructible to the extent
-   *        this is required for the iterator as such.
+   * @tparam T nominal result type (maybe const, but without reference).
+   *         The resulting iterator will yield a reference to this type T
+   * @tparam ST type of the "state core", defaults to T.
+   *         The resulting iterator will hold an instance of ST, which thus
+   *         needs to be copyable and default constructible to the extent
+   *         this is required for the iterator as such.
    * @see IterExplorer an iterator monad built on top of IterStateWrapper
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
@@ -317,15 +317,11 @@ namespace lib {
       
       IterStateWrapper (ST&& initialState)
         : core_(std::forward<ST>(initialState))
-        {
-          checkPoint (core_);       // extension point: checkPoint
-        }
+        { }
       
       IterStateWrapper (ST const& initialState)
         : core_(initialState)
-        {
-          checkPoint (core_);       // extension point: checkPoint
-        }
+        { }
       
       IterStateWrapper ()
         : core_()
