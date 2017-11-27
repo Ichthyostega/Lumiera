@@ -34,7 +34,7 @@
  ** Similar to IterExplorer_test, the his test relies on a demonstration setup featuring
  ** a custom encapsulated state type: we rely on a counter with start and end value,
  ** embedded into an iterator. Basically, this running counter, when iterated, generates
- ** a sequence of numbers start ... end.
+ ** a descending sequence of numbers start ... end.
  ** So -- conceptually -- this counting iterator can be thought to represent this
  ** sequence of numbers. Note that this is a kind of abstract or conceptual
  ** representation, not a factual representation of the sequence in memory.
@@ -84,7 +84,7 @@ namespace test{
     
     /**
      * This iteration _"state core" type_ describes
-     * a sequence of numbers yet to be delivered.
+     * a descending sequence of numbers yet to be delivered.
      */
     class CountDown
       {
@@ -119,8 +119,9 @@ namespace test{
     
     
     /**
-     * A straight ascending number sequence as basic test iterator.
-     * The tests will dress up this source sequence in various ways.
+     * A straight descending number sequence as basic test iterator.
+     * It is built wrapping an opaque "state core" (of type CountDown).
+     * @note the "state core" is not accessible from the outside
      */
     class NumberSequence
       : public IterStateWrapper<uint, CountDown>
@@ -138,9 +139,7 @@ namespace test{
     
     
     
-    /** Diagnostic helper: "squeeze out" the given iterator
-     * and join all the elements yielded into a string
-     */
+    /** Diagnostic helper: join all the elements from a _copy_ of the iterator */
     template<class II>
     inline string
     materialise (II&& ii)
@@ -148,6 +147,7 @@ namespace test{
       return util::join (std::forward<II> (ii), "-");
     }
     
+    /** Diagnostic helper: "squeeze out" the given iterator until exhaustion */
     template<class II>
     inline void
     pullOut (II & ii)
@@ -183,17 +183,18 @@ namespace test{
    * ## Explanation
    * 
    * Both this test and the IterExplorer template might be bewildering
-   * and cryptic, unless you know the *Monad design pattern*. Monads are
-   * heavily used in functional programming, actually they originate
-   * from Category Theory. Basically, Monad is a pattern where we
-   * combine several computation steps in a specific way; but instead
-   * of intermingling the individual computation steps and their
-   * combination, the goal is to isolate and separate the _mechanics
-   * of combination_, so we can focus on the actual _computation steps:_
-   * The mechanics of combination are embedded into the Monad type,
-   * which acts as a kind of container, holding some entities
-   * to be processed. The actual processing steps are then
-   * fed to the monad as "function object" parameters.
+   * and cryptic, unless you know the *Monad design pattern*. »Monads«
+   * are heavily used in functional programming, actually they originate
+   * from Category Theory. Basically, Monad is a pattern where we combine
+   * several computation steps in a specific way; but instead of intermingling
+   * the individual computation steps and their combination, the goal is to
+   * isolate and separate the _mechanics of combination_, so we can focus on
+   * the actual _computation steps:_ The mechanics of combination are embedded
+   * into the Monad type, which acts as a kind of container, holding some entities
+   * to be processed. The actual processing steps are then attached to the monad as
+   * "function object" parameters. It is up to the monad to decide if, and when
+   * those processing steps are applied to the embedded values and how to combine
+   * the results into a new monad.
    * 
    * Using the monad pattern is well suited when both the mechanics of
    * combination and the individual computation steps tend to be complex.
@@ -279,7 +280,7 @@ namespace test{
           CHECK (materialise(ii) == "-2-3--5-8--13");
           CHECK (materialise(jj) ==    "3--5-8--13");
           
-          // can adapt STL container automatically
+          // can even adapt STL container automatically
           auto kk = treeExplore(numz);
           CHECK (!isnil (kk));
           CHECK (1 == *kk);
@@ -325,17 +326,19 @@ namespace test{
       void
       verify_expandOperation()
         {
+          /* == "monadic flatMap" == */
+          
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](uint j){ return CountDown{j-1}; })
+                      .expand([](uint j){ return CountDown{j-1}; })                                   // expand-functor: Val > StateCore
                       );
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](uint j){ return NumberSequence{j-1}; })
+                      .expand([](uint j){ return NumberSequence{j-1}; })                              // expand-functor: Val > Iter
                       );
           
-          // lambda with side-effect and a different return type
+          // lambda with side-effect and return type different from source iter
           vector<vector<uint>> childBuffer;
           auto expandIntoChildBuffer = [&](uint j) -> vector<uint>&
                                           {
@@ -348,35 +351,38 @@ namespace test{
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand(expandIntoChildBuffer)
+                      .expand(expandIntoChildBuffer)                                                  // expand-functor: Val > STL-container&
                       );
           
           // test routine called the expansion functor five times
           CHECK (5 == childBuffer.size());
           
           
+          
+          /* == "state manipulation" use cases == */
+          
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })
+                      .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })       // expand-functor: StateCore const& -> StateCore
                       );
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](CountDown const& core){ return NumberSequence{ yield(core) - 1}; })
+                      .expand([](CountDown core){ return NumberSequence{ yield(core) - 1}; })         // expand-functor: StateCore -> Iter
                       );
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : Generated code works just fine and passes Test though
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](auto & it){ return CountDown{ *it - 1}; })
+                      .expand([](auto & it){ return CountDown{ *it - 1}; })                           // generic Lambda: Iter& -> StateCore
                       );
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](auto it){ return decltype(it){ *it - 1}; })
+                      .expand([](auto it){ return decltype(it){ *it - 1}; })                          // generic Lambda: Iter -> Iter
                       );
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
         }
       
       

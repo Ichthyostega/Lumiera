@@ -266,6 +266,7 @@ namespace lib {
       { };
     
     
+    /** decide how to adapt and embed the source sequence into the resulting TreeExplorer */
     template<class SRC, typename SEL=void>
     struct _TreeExplorerTraits
       {
@@ -602,7 +603,12 @@ namespace lib {
   
   
   /* ==== convenient builder free functions ==== */
-
+  
+  /** start building a TreeExplorer
+   * by suitably wrapping the given iterable source.
+   * @return a TreeEplorer, which is an Iterator to yield all the source elements,
+   *         but may also be used to build an processing pipeline.
+   */
   template<class IT>
   inline auto
   treeExplore (IT&& srcSeq)

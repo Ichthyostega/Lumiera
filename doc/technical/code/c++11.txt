@@ -222,6 +222,33 @@ Thus -- as of 9/2014 -- the _rules of the game_ are as folows
 
 
 
+New Capabilities
+----------------
+As the support for the new language standard matures, we're able to extend our capabilities to write code
+more succinctly and clearer to read. Sometimes we have to be careful in order to use these new powers the right way...
+
+Variadic Templates
+~~~~~~~~~~~~~~~~~~
+Programming with variadic template arguments can be surprisingly tricky and the resulting code design tends to be confusing.
+This is caused by the fact that a _»variadic argument pack«_ is not a type proper. Rather, it is a syntactic (not lexical)
+macro. It is thus not possible to ``grab'' the type from variadic arguments and pass it directly to some metaprogramming
+helper or metafunction. The only way to dissect and evaluate such types is kind of _going backwards_: pass them to some
+helper function or template with explicit specialisations, thereby performing a pattern match.
+
+A typical example: Let's assume we're about to write a function or constructor to accept flexible arguments, but we
+want to ensure those arguments to conform to some standards. Maybe we can handle only a small selection of types
+sensibly within the given context -- and thus we want to check and produce a compilation failure otherwise.
+
+Unfortunately, this is not possible, at least not directly. If we want to get at the argument types one by one, we need
+to fabricate some variadic template helper type, and then add an explicit specialisation to it, for the sole purpose of
+writing a pattern match `<Arg a, Args...>`. Another common technique is to fabricate a `std::tuple<ARGS...>` and then
+to use the `std::get<i> (std::tuple<ARGS...>)` to grab individual types. Such might be bewildering for the casual
+reader, since we never intend to create a storage tuple anywhere.
+
+NOTE: we might consider to reshape our typelist to be a real `lib::meta::Types<TYPES...>` and outfit it with some
+      of the most frequently needed accessors. At least the name ``Types'' is somewhat more indicative than ``tuple''.
+
+
 Type inference
 ~~~~~~~~~~~~~~
 Generally speaking, the use of `auto` and type inference has the potential to significantly improve readability of
@@ -244,4 +271,20 @@ Forward Iterator concept. There are some notable pitfalls to consider, though
     dangling reference to local storage, the latter is a sensible default, but certainly not what you'd expect
     when just passing the result from a delegate function (or lambda!).
 
+
+Generic Lambdas
+~~~~~~~~~~~~~~~
+A generic lambda (i.e. using `auto` on some argument) produces _a template_, not a regular `operator()` function.
+Whenever such a lambda is invoked, this template is instantiated. This has several ramifications. For one, the
+notorious techniques for detecting a function work well on conventional lambdas, but _fail on generic lambdas_.
+And it is not possible to ``probe'' a template with SFINAE: If you instantiate a template, and the result is not
+valid, you've produced a _compilation failure_, not a _substitution failure._ Which means, the compilation aborts,
+instead of just trying the next argument substitution (as you'd might expect). Another consequence is that you
+can not _just accept a generic lambda as argument and put it into a `std::function` (which otherwise is the
+idiomatic way of ``just accepting anything function-like''). In order to place a generic lambda into a `std::function`,
+you must decide upon the concrete argument and return type(s) and thus instantiate the template at that point.
+
+The only remedy to get around these serious limitations will be when C++ starts to support *Concepts* -- which
+can be expected to replace the usage of unbounded type inference in many situations: for example, it would then
+be possible to accept just ``an Iterator'' or ``a STL container''...
 
