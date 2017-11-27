@@ -354,9 +354,15 @@ namespace test{
           // test routine called the expansion functor five times
           CHECK (5 == childBuffer.size());
           
+          
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })
+                      );
+          
+          verify_treeExpandingIterator(
+                    treeExplore(CountDown{5})
+                      .expand([](CountDown const& core){ return NumberSequence{ yield(core) - 1}; })
                       );
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
@@ -365,6 +371,11 @@ namespace test{
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](auto & it){ return CountDown{ *it - 1}; })
+                      );
+          
+          verify_treeExpandingIterator(
+                    treeExplore(CountDown{5})
+                      .expand([](auto it){ return decltype(it){ *it - 1}; })
                       );
         }
       

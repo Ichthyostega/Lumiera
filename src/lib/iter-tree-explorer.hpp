@@ -258,6 +258,13 @@ namespace lib {
               >
       { };
     
+    template<class SRC>
+    struct shall_use_Lumiera_Iter
+      : __and_<can_IterForEach<SRC>
+              ,__not_<is_StateCore<SRC>>
+              >
+      { };
+    
     
     template<class SRC, typename SEL=void>
     struct _TreeExplorerTraits
@@ -273,7 +280,7 @@ namespace lib {
       };
     
     template<class SRC>
-    struct _TreeExplorerTraits<SRC,   enable_if<can_IterForEach<SRC>>>
+    struct _TreeExplorerTraits<SRC,   enable_if<shall_use_Lumiera_Iter<SRC>>>
       {
         using SrcIter = typename std::remove_reference<SRC>::type;
       };

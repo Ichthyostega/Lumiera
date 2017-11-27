@@ -5361,9 +5361,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511227861867" ID="ID_1821706302" MODIFIED="1511571641506" TEXT="Fall-2 ">
-<icon BUILTIN="flag-yellow"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1511227861867" ID="ID_1821706302" MODIFIED="1511755074830" TEXT="Fall-2 ">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1511227870346" ID="ID_797579225" MODIFIED="1511571541045" TEXT="verzahnte Implementierung">
 <icon BUILTIN="info"/>
 </node>
@@ -5371,12 +5370,17 @@
 <node COLOR="#338800" CREATED="1511227917971" ID="ID_200983707" MODIFIED="1511571722416" TEXT="Core&amp; -&gt; Core">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1511227902005" ID="ID_1992381343" MODIFIED="1511571866703" TEXT="Core -&gt; Iter&lt;Val&gt;"/>
-<node CREATED="1511571746395" ID="ID_1199592659" MODIFIED="1511571759405" TEXT="generisches Lambda">
+<node COLOR="#338800" CREATED="1511227902005" ID="ID_1992381343" MODIFIED="1511754553025" TEXT="Core -&gt; Iter&lt;Val&gt;">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1511571746395" ID="ID_1199592659" MODIFIED="1511755064482" TEXT="generisches Lambda">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1511227944392" ID="ID_881609766" MODIFIED="1511571897315" TEXT="Iter&lt;Val&gt;&amp; -&gt; Core">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1511227925202" ID="ID_290152631" MODIFIED="1511571917720" TEXT="Iter&lt;Val&gt; -&gt; Iter&lt;Val&gt;"/>
+<node COLOR="#338800" CREATED="1511227925202" ID="ID_290152631" MODIFIED="1511755056399" TEXT="Iter&lt;Val&gt; -&gt; Iter&lt;Val&gt;">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
