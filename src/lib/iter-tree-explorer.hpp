@@ -577,6 +577,17 @@ namespace lib {
           return ExpandableExplorer{move(*this), forward<FUN>(expandFunctor)};
         }
       
+      
+      /** @todo WIP 11/17 implement the transforming decorator and apply it here
+       */
+      template<class FUN>
+      auto
+      transform (FUN&& transformFunctor)
+        {
+          TODO ("make the world a better place....(WIP)");
+          return *this; // LoLoLoL
+        }
+      
     private:
     };
   

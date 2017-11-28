@@ -5100,7 +5100,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1510941523082" TEXT="TreeExplorer">
 <icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1511571446467" ID="ID_1778455053" MODIFIED="1511757459789" TEXT="expand-Operation">
+<node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1511827102192" TEXT="expand-Operation">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1511227813712" ID="ID_1961708112" MODIFIED="1511228177906" TEXT="Fall-1">
 <icon BUILTIN="button_ok"/>
@@ -5140,6 +5140,9 @@
     </ul>
   </body>
 </html></richcontent>
+</node>
+<node CREATED="1511827033449" ID="ID_1528489344" MODIFIED="1511827073310" TEXT="L&#xf6;sung: Funktions-Komposition mit getemplatetem operator()">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -5319,6 +5322,51 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511827103749" ID="ID_1699316886" MODIFIED="1511837183001" TEXT="transform-Operation">
+<icon BUILTIN="pencil"/>
+<node CREATED="1511827249561" ID="ID_794510302" MODIFIED="1511827265634" TEXT="strikt nach Dekorator-Pattern"/>
+<node CREATED="1511827337686" ID="ID_1214119488" MODIFIED="1511827345695" TEXT="bestehendern TransformIter verwenden?">
+<node CREATED="1511827584523" ID="ID_1921395634" MODIFIED="1511827600541" TEXT="nein: wir m&#xfc;ssen von der Core erben">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1511827606968" ID="ID_732051224" MODIFIED="1511827652784" TEXT="aber das Konzept mit dem Result-Holder wiederverwenden">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1511827717353" ID="ID_244629150" MODIFIED="1511831314036" TEXT="Frage: kann man mit ADL &#xfc;berlagern?">
+<icon BUILTIN="help"/>
+<node CREATED="1511827732399" ID="ID_1358685038" MODIFIED="1511827746408" TEXT="wenn ja: dann m&#xfc;&#xdf;te man nur yield neu implementieren"/>
+<node CREATED="1511831100013" ID="ID_446486349" MODIFIED="1511831676760" TEXT="ich denke ja...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1511831114987" ID="ID_371812401" LINK="http://en.cppreference.com/w/cpp/language/adl" MODIFIED="1511831149604" TEXT="ADL findet diverse Kandidaten"/>
+<node CREATED="1511831122138" ID="ID_237063151" LINK="http://en.cppreference.com/w/cpp/language/overload_resolution" MODIFIED="1511831139496" TEXT="die Kandidaten werden geRANKt, u.A. nach Vererbung"/>
+</node>
+</node>
+<node CREATED="1511831658137" ID="ID_295934398" MODIFIED="1511831665696" TEXT="Dekorator-Ansatz">
+<icon BUILTIN="forward"/>
+<node CREATED="1511831681334" ID="ID_1182010965" MODIFIED="1511831699199" TEXT="Unterscheidung nach Parent (per Trait)"/>
+<node CREATED="1511831718105" ID="ID_758057732" MODIFIED="1511831729507" TEXT="Parent == state-core">
+<node CREATED="1511831731159" ID="ID_1581545445" MODIFIED="1511831735258" TEXT="direkt verwenden"/>
+<node CREATED="1511831735870" ID="ID_461566244" MODIFIED="1511831743057" TEXT="bietet bereits die Extension points"/>
+</node>
+<node CREATED="1511831745237" ID="ID_1286724784" MODIFIED="1511831772533" TEXT="Parent == IterableDecorator&lt;Core&gt;">
+<node CREATED="1511831773833" ID="ID_1367782989" MODIFIED="1511831783948" TEXT="IterableDecorator wegstrippen"/>
+<node CREATED="1511831784823" ID="ID_764863277" MODIFIED="1511831794354" TEXT="Core direkt verwenden (slicing move)"/>
+</node>
+<node CREATED="1511831840336" ID="ID_1853594905" MODIFIED="1511831848587" TEXT="Pareint == Lumiera Iterator ">
+<node CREATED="1511831893369" ID="ID_1403568713" MODIFIED="1511837159071" TEXT="WrappedIteratorCore dazwischenschieben"/>
+</node>
+<node CREATED="1511831940346" ID="ID_441709942" MODIFIED="1511831960963" TEXT="Resultat: Parent ist stets state-core"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837027405" ID="ID_233806852" MODIFIED="1511837172811" TEXT="Argument-Detektor-Magie">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1511837039180" ID="ID_1296099637" MODIFIED="1511837047198" TEXT="ganz analog zur expand-Operation"/>
+<node CREATED="1511837047810" ID="ID_684902103" MODIFIED="1511837057125" TEXT="kann man die Traits wiederverwenden?"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511837060201" ID="ID_88038793" MODIFIED="1511837165852" TEXT="brauche WrappedIteratorCore">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1510941523722" TEXT="TreeExplorer_test">
 <icon BUILTIN="flag-yellow"/>
@@ -5385,8 +5433,32 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1511227807158" TEXT="verify_transformOperation();">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1511835528239" TEXT="verify_transformOperation();">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835550655" ID="ID_1305788204" MODIFIED="1511835762571" TEXT="Transformer(Iter&lt;Core&gt;)">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835603751" ID="ID_6147833" MODIFIED="1511835760603" TEXT="Transformer(Iter&lt;Val&gt;)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835572331" ID="ID_90684440" MODIFIED="1511835751909" TEXT="Transformer(Core)">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1511835638915" ID="ID_678182318" MODIFIED="1511835751909" TEXT="geht nicht direkt auf TreeExplorer"/>
+<node CREATED="1511835650761" ID="ID_1585618081" MODIFIED="1511835751909" TEXT="aber chained Transform sollte so funktionieren"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511835667743" ID="ID_1089942674" MODIFIED="1511835751909" TEXT="Typ verifizieren!">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835716176" ID="ID_1407397782" MODIFIED="1511835898309" TEXT="Transformer mit Seiteneffekt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1511835736414" TEXT="Transform: generic Lambda">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835901999" ID="ID_1717235881" MODIFIED="1511836238870" TEXT="Transform: Core&amp; -&gt; irgendwas">
+<icon BUILTIN="help"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1511227804622" TEXT="verify_combinedExpandTransform();">
 <icon BUILTIN="flag-yellow"/>

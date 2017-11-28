@@ -56,6 +56,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
@@ -72,6 +73,7 @@ namespace lib {
 namespace test{
   
   using ::Test;
+  using util::_Fmt;
   using util::isnil;
   using util::isSameObject;
   using lib::iter_stl::eachElm;
@@ -432,12 +434,90 @@ namespace test{
         }
       
       
-      /** @test pipe each result through a transformation function
+      /** @test pipe each result through a transformation function.
+       * The _transforming iterator_ is added as a decorator, wrapping the original iterator,
+       * TreeEplorer or state core. As you'd expect, the given functor is required to accept
+       * compatible argument types, and a generic lambda is instantiated to take a reference
+       * to the embedded iterator's value type. Several transformation steps can be chained,
+       * and the resulting entity is again a Lumiera Forward Iterator with suitable value type.
+       * The transformation function is invoked only once per step and the result produced by
+       * this invocation is placed into a holder buffer embedded within the iterator.
        */
       void
       verify_transformOperation()
         {
-          UNIMPLEMENTED("expand children");
+          auto multiply  = [](int v){ return 2*v; };
+          
+          _Fmt embrace{"≺%s≻"};
+          auto formatify = [&](auto it){ return embrace % *it; };
+          
+          
+          auto ii = treeExplore (CountDown{7,4})
+                      .transform(multiply)
+                      ;
+          
+          CHECK (14 == *ii);
+          ++ii;
+          CHECK (12 == *ii);
+          ++ii;
+          CHECK (10 == *ii);
+          ++ii;
+          CHECK (isnil (ii));
+          VERIFY_ERROR (ITER_EXHAUST, *ii );
+          VERIFY_ERROR (ITER_EXHAUST, ++ii );
+          
+          
+          vector<int64_t> numz{1,-2,3,-5,8,-13};
+          
+          cout << materialise (treeExplore(numz)
+                                 .transform(formatify));
+          
+          cout << materialise (treeExplore(numz)
+                                 .transform(multiply)
+                                 .transform(formatify));
+          
+          cout << materialise (treeExplore(numz)
+                                 .transform(multiply)
+                                 .transform(multiply)
+                                 .transform(formatify)
+                                 .transform(formatify));
+          
+          
+          // demonstrate the functor is evaluated only once per step
+          int fact = 3;
+          
+          auto jj = treeExplore (CountDown{4})
+                      .transform([&](int v)
+                                    {
+                                      v *=fact;
+                                      fact *= -2;
+                                      return v;
+                                    });
+          CHECK (3*4 == *jj);
+          CHECK (fact == -2*3);
+          
+          CHECK (3*4 == *jj);
+          CHECK (3*4 == *jj);
+          
+          ++jj;
+          CHECK (-2*3*3 == *jj);
+          CHECK (-2*3*3 == *jj);
+          CHECK (fact == 2*2*3);
+          
+          ++jj;
+          CHECK (fact == -2*2*2*3);
+          CHECK (2*2*3*2 == *jj);
+          
+          fact = -23;
+          CHECK (2*2*3*2 == *jj);
+          
+          ++jj;
+          CHECK (fact == 2*23);
+          CHECK (-23*1 == *jj);
+          
+          ++jj;
+          CHECK (fact == 2*23);
+          CHECK (isnil (jj));
         }
       
       
