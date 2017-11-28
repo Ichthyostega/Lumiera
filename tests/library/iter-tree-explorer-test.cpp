@@ -224,6 +224,8 @@ namespace test{
           verify_expandOperation();
           verify_transformOperation();
           verify_combinedExpandTransform();
+          verify_FilterIterator();
+          verify_asIterSource();
           
           verify_depthFirstExploration();
           demonstrate_LayeredEvaluation();
@@ -527,6 +529,25 @@ namespace test{
       verify_combinedExpandTransform()
         {
           UNIMPLEMENTED("combine child expansion and result mapping");
+        }
+      
+      
+      /** @test add a filtering predicate into the pipeline
+       */
+      void
+      verify_FilterIterator()
+        {
+          UNIMPLEMENTED("preconfigured repeated depth-first expansion");
+        }
+      
+      
+      /** @test package the resulting Iterator as automatically managed,
+       *        polymorphic opaque implementing the IterSource interface.
+       */
+      void
+      verify_asIterSource()
+        {
+          UNIMPLEMENTED("preconfigured repeated depth-first expansion");
         }
       
       

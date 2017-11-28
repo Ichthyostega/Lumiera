@@ -5367,6 +5367,26 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837279715" ID="ID_1694539348" MODIFIED="1511837456610" TEXT="filter-Operation">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1511837285306" ID="ID_928417859" MODIFIED="1511837293629" TEXT="der Vollst&#xe4;ndigkeit halber">
+<node CREATED="1511837296921" ID="ID_151298846" MODIFIED="1511837304547" TEXT="ist zwar redundant zu den Itertools"/>
+<node CREATED="1511837305410" ID="ID_1979322634" MODIFIED="1511837324464" TEXT="treeExplorer k&#xf6;nnte Itertools abl&#xf6;sen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1511837329140" ID="ID_1963360740" MODIFIED="1511837374658" TEXT="sollte billig zu implementieren sein">
+<node CREATED="1511837338643" ID="ID_1734683995" MODIFIED="1511837344590" TEXT="bestehende Dekorator-Technik"/>
+<node CREATED="1511837345226" ID="ID_991593174" MODIFIED="1511837351797" TEXT="bestehende Funktor-Argument-Traits"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1511837465023" TEXT="asIterSource">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1511837396075" ID="ID_1916743569" MODIFIED="1511837401078" TEXT="abschlie&#xdf;ender Dekorator"/>
+<node CREATED="1511837401738" ID="ID_289320579" MODIFIED="1511837414204" TEXT="verpackt hinter OO-Interface mit virtuellen Funktionen"/>
+<node CREATED="1511837421967" ID="ID_906113750" MODIFIED="1511837433914" TEXT="automatische Heap-Storage"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1510941523722" TEXT="TreeExplorer_test">
 <icon BUILTIN="flag-yellow"/>
@@ -5461,6 +5481,12 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1511227804622" TEXT="verify_combinedExpandTransform();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836579562" ID="ID_1718741335" MODIFIED="1511836583779" TEXT="verify_FilterIterator();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836589393" ID="ID_54165230" MODIFIED="1511836592073" TEXT="verify_asIterSource();">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1510969042972" TEXT="verify_depthFirstExploration();">
