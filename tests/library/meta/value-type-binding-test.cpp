@@ -26,20 +26,20 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/meta/value-type-binding.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/meta/util.hpp" ///////TODO RLY?
+#include "lib/meta/util.hpp"
 
-#include <string>
 #include <memory>
-
-
-using std::string;/////////////TODO
 
 
 namespace lib {
 namespace meta{
 namespace test{
+  
+  using lib::test::showType;
+  
 
   namespace { // test fixture
     
@@ -57,95 +57,6 @@ namespace test{
       };
     
     struct Space { };
-    
-    template<typename X>
-    struct Bugg
-      {
-        static_assert (not sizeof(X), "guggi");
-      };
-
-    template<typename X>
-    struct TypeDiagnostics
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = "";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = "&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X&&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " &&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X const&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " const&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X const&&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "const ";
-        static constexpr auto postfix = " &&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X *>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " *";
-      };
-    template<typename X>
-    struct TypeDiagnostics<const X *>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "const ";
-        static constexpr auto postfix = " *";
-      };
-    template<typename X>
-    struct TypeDiagnostics<const X * const>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "const ";
-        static constexpr auto postfix = " * const";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X * const>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " * const";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X * const *>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " * const *";
-      };
-    
-    template<typename X>
-    inline string
-    showType()
-    {
-      using Case = TypeDiagnostics<X>;
-      using Type = typename Case::Type;
-      
-      return Case::prefix
-           + humanReadableTypeID (typeid(Type).name())
-           + Case::postfix;
-    }
     
   }//(end)fixture
   
