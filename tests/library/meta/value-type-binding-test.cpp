@@ -200,6 +200,12 @@ namespace test{
           cout << showType<TypeBinding<Join&>::reference>() <<endl;
           cout << showType<TypeBinding<Join&>::pointer>() <<endl;
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          cout << showType<TypeBinding<Join&&>::value_type>() <<endl;
+          cout << showType<TypeBinding<Join&&>::reference>() <<endl;
+          cout << showType<TypeBinding<Join&&>::pointer>() <<endl;
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          
           cout << showType<TypeBinding<Join const&>::value_type>() <<endl;
           cout << showType<TypeBinding<Join const&>::reference>() <<endl;
           cout << showType<TypeBinding<Join const&>::pointer>() <<endl;
