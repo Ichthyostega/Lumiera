@@ -45,10 +45,6 @@
 
 
 
-namespace std {
-  template<typename _Tp>
-  class shared_ptr;
-}
 
 namespace lib {
 namespace meta {
@@ -75,52 +71,12 @@ namespace meta {
       };
   }
   
-  /** 
-   * Type re-binding helper template for creating nested typedefs
-   * for use by IterAdapter or similar "Lumiera Forward Iterators".
-   * This trait provides a value-, reference- and pointer type,
-   * similar to what the STL does.
-   * @note client code might define specialisations
-   *       to handle tricky situations (like const_reverse_iter)
-   */
   template<typename TY, typename SEL =void>
-  struct TypeBinding
+  struct ValueTypeBinding
     {
       typedef TY value_type;
       typedef TY& reference;
       typedef TY* pointer;
-    };
-  
-  template<typename TY>
-  struct TypeBinding<TY *>
-    {
-      typedef TY value_type;
-      typedef TY& reference;
-      typedef TY* pointer;
-    };
-  
-  template<typename TY>
-  struct TypeBinding<const TY *>
-    {
-      typedef TY value_type;
-      typedef const TY& reference;
-      typedef const TY* pointer;
-    };
-  
-  template<typename TY>
-  struct TypeBinding<TY &>
-    {
-      typedef TY value_type;
-      typedef TY& reference;
-      typedef TY* pointer;
-    };
-  
-  template<typename TY>
-  struct TypeBinding<TY const&>
-    {
-      typedef TY value_type;
-      typedef const TY& reference;
-      typedef const TY* pointer;
     };
   
   /**
@@ -128,12 +84,36 @@ namespace meta {
    * STL style type binding definitions themselves
    */
   template<typename TY>
-  struct TypeBinding<TY,           enable_if<has_nested_ValueTypeBindings<TY>> >
+  struct ValueTypeBinding<TY,      enable_if<has_nested_ValueTypeBindings<TY>> >
     {
-      typedef typename TY::pointer pointer;
-      typedef typename TY::reference reference;
       typedef typename TY::value_type value_type;
+      typedef typename TY::reference reference;
+      typedef typename TY::pointer pointer;
     };
+  
+  
+  /**
+   * Type re-binding helper template for creating nested typedefs
+   * for use by IterAdapter or similar "Lumiera Forward Iterators".
+   * This trait provides a value-, reference- and pointer type,
+   * similar to what the STL does.
+   * @note client code might define specialisations
+   *       to handle tricky situations (like const_reverse_iter)
+   */
+  template<typename TY>
+  struct TypeBinding
+    : ValueTypeBinding<TY>
+    { };
+  
+  template<typename TY>
+  struct TypeBinding<TY &>
+    : TypeBinding<TY>
+    { };
+  
+  template<typename TY>
+  struct TypeBinding<TY &&>
+    : TypeBinding<TY>
+    { };
   
   
   

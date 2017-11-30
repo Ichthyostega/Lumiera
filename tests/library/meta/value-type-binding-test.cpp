@@ -52,8 +52,8 @@ namespace test{
           };
         
         typedef T value_type;
-        typedef Inner const& reference;
-        typedef std::shared_ptr<Inner> pointer;
+        typedef Inner & reference;
+        typedef std::shared_ptr<T> pointer;
       };
     
     struct Space { };
@@ -69,43 +69,71 @@ namespace test{
     struct TypeDiagnostics
       {
         using Type = X;
+        static constexpr auto prefix  = "";
         static constexpr auto postfix = "";
       };
     template<typename X>
     struct TypeDiagnostics<X&>
       {
         using Type = X;
+        static constexpr auto prefix  = "";
         static constexpr auto postfix = "&";
       };
     template<typename X>
     struct TypeDiagnostics<X&&>
       {
         using Type = X;
+        static constexpr auto prefix  = "";
         static constexpr auto postfix = " &&";
       };
     template<typename X>
     struct TypeDiagnostics<X const&>
       {
         using Type = X;
+        static constexpr auto prefix  = "";
         static constexpr auto postfix = " const&";
       };
     template<typename X>
     struct TypeDiagnostics<X const&&>
       {
         using Type = X;
-        static constexpr auto postfix = " const &&";
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " &&";
       };
     template<typename X>
     struct TypeDiagnostics<X *>
       {
         using Type = X;
+        static constexpr auto prefix  = "";
         static constexpr auto postfix = " *";
+      };
+    template<typename X>
+    struct TypeDiagnostics<const X *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " *";
+      };
+    template<typename X>
+    struct TypeDiagnostics<const X * const>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " * const";
       };
     template<typename X>
     struct TypeDiagnostics<X * const>
       {
         using Type = X;
+        static constexpr auto prefix  = "";
         static constexpr auto postfix = " * const";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X * const *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " * const *";
       };
     
     template<typename X>
@@ -115,7 +143,8 @@ namespace test{
       using Case = TypeDiagnostics<X>;
       using Type = typename Case::Type;
       
-      return humanReadableTypeID (typeid(Type).name())
+      return Case::prefix
+           + humanReadableTypeID (typeid(Type).name())
            + Case::postfix;
     }
     
@@ -166,11 +195,9 @@ namespace test{
           cout << showType<TypeBinding<OuterSpace&>::reference>() <<endl;
           cout << showType<TypeBinding<OuterSpace&>::pointer>() <<endl;
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           cout << showType<TypeBinding<OuterSpace&&>::value_type>() <<endl;
           cout << showType<TypeBinding<OuterSpace&&>::reference>() <<endl;
           cout << showType<TypeBinding<OuterSpace&&>::pointer>() <<endl;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           
           cout << showType<TypeBinding<OuterSpace const&>::value_type>() <<endl;
           cout << showType<TypeBinding<OuterSpace const&>::reference>() <<endl;
@@ -200,11 +227,9 @@ namespace test{
           cout << showType<TypeBinding<Join&>::reference>() <<endl;
           cout << showType<TypeBinding<Join&>::pointer>() <<endl;
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           cout << showType<TypeBinding<Join&&>::value_type>() <<endl;
           cout << showType<TypeBinding<Join&&>::reference>() <<endl;
           cout << showType<TypeBinding<Join&&>::pointer>() <<endl;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           
           cout << showType<TypeBinding<Join const&>::value_type>() <<endl;
           cout << showType<TypeBinding<Join const&>::reference>() <<endl;
@@ -231,8 +256,10 @@ namespace test{
           cout << showType<int&&>() <<endl;
           cout << showType<int const&>() <<endl;
           cout << showType<int const&&>() <<endl;
+          cout << showType<int       *>() <<endl;
           cout << showType<int const *>() <<endl;
           cout << showType<int const * const>() <<endl;
+          cout << showType<int const *      &>() <<endl;
           cout << showType<int const * const&>() <<endl;
         }
     };
