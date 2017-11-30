@@ -60,10 +60,63 @@ namespace test{
     using Join = ulong;
     
     template<typename X>
+    struct Bugg
+      {
+        static_assert (not sizeof(X), "guggi");
+      };
+
+    template<typename X>
+    struct TypeDiagnostics
+      {
+        using Type = X;
+        static constexpr auto postfix = "";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X&>
+      {
+        using Type = X;
+        static constexpr auto postfix = "&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X&&>
+      {
+        using Type = X;
+        static constexpr auto postfix = " &&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X const&>
+      {
+        using Type = X;
+        static constexpr auto postfix = " const&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X const&&>
+      {
+        using Type = X;
+        static constexpr auto postfix = " const &&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X *>
+      {
+        using Type = X;
+        static constexpr auto postfix = " *";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X * const>
+      {
+        using Type = X;
+        static constexpr auto postfix = " * const";
+      };
+    
+    template<typename X>
     inline string
     showType()
     {
-      return humanReadableTypeID (typeid(X).name());
+      using Case = TypeDiagnostics<X>;
+      using Type = typename Case::Type;
+      
+      return humanReadableTypeID (typeid(Type).name())
+           + Case::postfix;
     }
     
   }//(end)fixture
@@ -166,6 +219,15 @@ namespace test{
           cout << showType<TypeBinding<Join * const>::value_type>() <<endl;
           cout << showType<TypeBinding<Join * const>::reference>() <<endl;
           cout << showType<TypeBinding<Join * const>::pointer>() <<endl;
+          
+          cout << showType<int>() <<endl;
+          cout << showType<int&>() <<endl;
+          cout << showType<int&&>() <<endl;
+          cout << showType<int const&>() <<endl;
+          cout << showType<int const&&>() <<endl;
+          cout << showType<int const *>() <<endl;
+          cout << showType<int const * const>() <<endl;
+          cout << showType<int const * const&>() <<endl;
         }
     };
   
