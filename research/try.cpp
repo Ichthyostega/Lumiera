@@ -35,52 +35,29 @@
 // 9/17  - manipulate variadic templates to treat varargs in several chunks
 // 11/17 - metaprogramming to detect the presence of extension points
 // 11/17 - detect generic lambda
+// 12/17 - investigate SFINAE failure
 
 
 /** @file try.cpp
- ** Metaprogramming: is it possible to distinguish a generic lambda from something not a function at all?
- ** Answer: not really. We can only ever check for the function call operator.
- ** Even worse: if we instantiate a templated function call operator with unsuitable parameter types,
- ** the compilation as such fails. Whereas SFINAE is only limited to substituting a type signature.  
+ ** Bug hunting: a typedef detecting metafunction fails under circumstances yet to be investigated.  
  */
 
 typedef unsigned int uint;
 
+#include "lib/meta/value-type-binding.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/format-util.hpp"
-#include "lib/meta/function.hpp"
-#include "lib/test/test-helper.hpp"
-
-//#include <functional>
-#include <utility>
-#include <string>
-
-using lib::meta::No_t;
-using lib::meta::Yes_t;
-using lib::meta::_Fun;
-using lib::test::showSizeof;
-
-using std::function;
-using std::forward;
-using std::move;
-using std::string;
 
 
 namespace lib {
 namespace meta{
   
-  
-  template<class FUN, typename...ARGS>
-  struct ProbeFunctionInvocation
-    {
-      using Ret  = decltype(std::declval<FUN>() (std::declval<ARGS>()...));
-      using Args = Types<ARGS...>;
-      using Sig  = Ret(ARGS...);
-    };
-  
 }}
 
-using lib::meta::enable_if;
+//using lib::meta::enable_if;
+
+using ElmIter = lib::diff::RecordSetup<lib::diff::GenNode>::ElmIter;
+using RecIter = lib::diff::Rec::iterator;
 
 
 #define SHOW_TYPE(_TY_) \
@@ -89,48 +66,14 @@ using lib::meta::enable_if;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
-long
-funny(int i)
-  {
-    return i+1;
-  }
-
-
-template<typename FUN, typename SEL =void>
-struct FunTrait
-  {
-    using XXX = decltype(std::declval<FUN>() (0));
-    
-    static string doIt() { return "Uh OH:" + lib::meta::typeStr<XXX>(); }
-  };
-
-template<typename FUN>
-struct FunTrait<FUN,  enable_if<_Fun<FUN>> >
-  {
-    static string doIt() { return "Yeah FUN:" + lib::meta::typeStr<typename _Fun<FUN>::Sig>(); }
-  };
 
 int
 main (int, char**)
   {
-    auto lamb1 = [](int i)  { return double(i) / (i*i); };
-    auto lamb2 = [](auto i) { return double(i) / (i*i); };
+    SHOW_TYPE (ElmIter);
+    SHOW_TYPE (RecIter);
     
-    SHOW_TYPE (decltype(lamb1));
-    SHOW_TYPE (decltype(lamb2));
-    
-    SHOW_EXPR ((_Fun<decltype(lamb1)>::value));
-    SHOW_EXPR ((_Fun<decltype(lamb2)>::value));
-    SHOW_EXPR ((_Fun<decltype(funny)>::value));
-    SHOW_EXPR ((_Fun<decltype(&funny)>::value));
-    
-    auto funky = function<double(float)> (lamb2);
-    SHOW_EXPR ((_Fun<decltype(funky)>::value));
-    
-    cout << FunTrait<decltype(lamb1)>::doIt() <<endl;
-    cout << FunTrait<decltype(lamb2)>::doIt() <<endl;
-    cout << FunTrait<decltype(funny)>::doIt() <<endl;
-    cout << FunTrait<decltype(funky)>::doIt() <<endl;
+    SHOW_TYPE (lib::meta::TypeBinding<ElmIter>::pointer);
     
     cout <<  "\n.gulp.\n";
     
