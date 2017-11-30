@@ -40,7 +40,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/meta/duck-detector.hpp"  ////////TODO
+//#include "lib/meta/duck-detector.hpp"  ////////TODO
 #include "lib/meta/util.hpp"           ////////TODO
 
 
@@ -53,7 +53,27 @@ namespace std {
 namespace lib {
 namespace meta {
   
-  META_DETECT_NESTED (value_type);
+  namespace {
+    
+    template<typename TY>
+    class has_nested_ValueTypeBindings
+      {
+        template<typename X, int i = sizeof(typename X::value_type)
+                           , int j = sizeof(typename X::reference)
+                           , int k = sizeof(typename X::pointer)
+                >
+        struct Probe
+          { };
+        
+        template<class X>
+        static Yes_t check(Probe<X> * );
+        template<class>
+        static No_t  check(...);
+        
+      public:
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+      };
+  }
   
   /** 
    * Type re-binding helper template for creating nested typedefs
@@ -108,7 +128,7 @@ namespace meta {
    * STL style type binding definitions themselves
    */
   template<typename TY>
-  struct TypeBinding<TY,                enable_if<HasNested_value_type<TY>> >
+  struct TypeBinding<TY,           enable_if<has_nested_ValueTypeBindings<TY>> >
     {
       typedef typename TY::pointer pointer;
       typedef typename TY::reference reference;
