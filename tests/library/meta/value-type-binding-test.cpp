@@ -1,5 +1,5 @@
 /*
-  ValueTypeBinding(Test)  -  human readable simplified display of C++ types
+  ValueTypeBinding(Test)  -  verify handling of value_type definitions on custom containers
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -47,7 +47,7 @@ namespace test{
     struct Outer
       {
         struct Inner
-          { 
+          {
             T val;
           };
         
@@ -57,7 +57,6 @@ namespace test{
       };
     
     struct Space { };
-    using Join = ulong;
     
     template<typename X>
     struct Bugg
@@ -161,7 +160,7 @@ namespace test{
    *  to indicate those types. The meta::TypeBinding helper allows to pick up such
    *  definitions, and additionally it levels and unifies access for various combinations
    *  of primitive types, references and pointers. The purpose of this test is to verify
-   *  and document this behaviour. 
+   *  and document this behaviour.
    * 
    * @see value-type-binding.hpp
    * @see lib::RangeIter
@@ -173,94 +172,104 @@ namespace test{
       void
       run (Arg)
         {
+          // verify the type diagnostics helper...
+          CHECK ("int"               == showType<int               >() );
+          CHECK ("int&"              == showType<int&              >() );
+          CHECK ("int &&"            == showType<int&&             >() );
+          CHECK ("int const&"        == showType<int const&        >() );
+          CHECK ("const int &&"      == showType<int const&&       >() );
+          CHECK ("int *"             == showType<int       *       >() );
+          CHECK ("const int *"       == showType<int const *       >() );
+          CHECK ("const int * const" == showType<int const * const >() );
+          CHECK ("int const*&"       == showType<int const *      &>() );
+          CHECK ("int const* const&" == showType<int const * const&>() );
+          
+          
+          // Test fixture: the template Outer<T> provides nested value type bindings
           using OuterSpace = Outer<Space>;
+          using Join = ulong;
           
-          cout << showType<OuterSpace::value_type>() <<endl;
-          cout << showType<OuterSpace::reference>() <<endl;
-          cout << showType<OuterSpace::pointer>() <<endl;
+          CHECK ("Space"                == showType<OuterSpace::value_type>() );
+          CHECK ("Outer<Space>::Inner&" == showType<OuterSpace::reference>() );
+          CHECK ("shared_ptr<Space>"    == showType<OuterSpace::pointer>() );
           
-          cout << showType<TypeBinding<OuterSpace>::value_type>() <<endl;
-          cout << showType<TypeBinding<OuterSpace>::reference>() <<endl;
-          cout << showType<TypeBinding<OuterSpace>::pointer>() <<endl;
+          // ...such nested type bindings will be picked up
+          CHECK ("Space"                == showType<TypeBinding<OuterSpace>::value_type>() );
+          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace>::reference>() );
+          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace>::pointer>() );
           
-          cout << showType<TypeBinding<Outer<Join>>::value_type>() <<endl;
-          cout << showType<TypeBinding<Outer<Join>>::reference>() <<endl;
-          cout << showType<TypeBinding<Outer<Join>>::pointer>() <<endl;
+          CHECK ("unsigned long"                == showType<TypeBinding<Outer<Join>>::value_type>() );
+          CHECK ("Outer<unsigned long>::Inner&" == showType<TypeBinding<Outer<Join>>::reference>() );
+          CHECK ("shared_ptr<unsigned long>"    == showType<TypeBinding<Outer<Join>>::pointer>() );
           
-          cout << showType<TypeBinding<Space>::value_type>() <<endl;
-          cout << showType<TypeBinding<Space>::reference>() <<endl;
-          cout << showType<TypeBinding<Space>::pointer>() <<endl;
+          // contrast this to a type without such nested bindings
+          CHECK ("Space"   == showType<TypeBinding<Space>::value_type>() );
+          CHECK ("Space&"  == showType<TypeBinding<Space>::reference>()  );
+          CHECK ("Space *" == showType<TypeBinding<Space>::pointer>()    );
           
-          cout << showType<TypeBinding<OuterSpace&>::value_type>() <<endl;
-          cout << showType<TypeBinding<OuterSpace&>::reference>() <<endl;
-          cout << showType<TypeBinding<OuterSpace&>::pointer>() <<endl;
+          // reference types will be levelled (reference stripped)
+          CHECK ("Space"                == showType<TypeBinding<OuterSpace&>::value_type>() );
+          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace&>::reference>()  );
+          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace&>::pointer>()    );
           
-          cout << showType<TypeBinding<OuterSpace&&>::value_type>() <<endl;
-          cout << showType<TypeBinding<OuterSpace&&>::reference>() <<endl;
-          cout << showType<TypeBinding<OuterSpace&&>::pointer>() <<endl;
+          CHECK ("Space"                == showType<TypeBinding<OuterSpace&&>::value_type>() );
+          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace&&>::reference>()  );
+          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace&&>::pointer>()    );
           
-          cout << showType<TypeBinding<OuterSpace const&>::value_type>() <<endl;
-          cout << showType<TypeBinding<OuterSpace const&>::reference>() <<endl;
-          cout << showType<TypeBinding<OuterSpace const&>::pointer>() <<endl;
+          CHECK ("Space"                == showType<TypeBinding<OuterSpace const&>::value_type>() );
+          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace const&>::reference>()  );
+          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace const&>::pointer>()    );
           
-          cout << showType<TypeBinding<OuterSpace*>::value_type>() <<endl;
-          cout << showType<TypeBinding<OuterSpace*>::reference>() <<endl;
-          cout << showType<TypeBinding<OuterSpace*>::pointer>() <<endl;
+          // but a pointer counts as a different, primitive type. No magic here
+          CHECK ("Outer<Space> *"  == showType<TypeBinding<OuterSpace*>::value_type>() );
+          CHECK ("Outer<Space>*&"  == showType<TypeBinding<OuterSpace*>::reference>()  );
+          CHECK ("Outer<Space>* *" == showType<TypeBinding<OuterSpace*>::pointer>()    );
           
-          cout << showType<TypeBinding<const OuterSpace*>::value_type>() <<endl;
-          cout << showType<TypeBinding<const OuterSpace*>::reference>() <<endl;
-          cout << showType<TypeBinding<const OuterSpace*>::pointer>() <<endl;
+          CHECK ("const Outer<Space> *"  == showType<TypeBinding<const OuterSpace*>::value_type>() );
+          CHECK ("Outer<Space> const*&"  == showType<TypeBinding<const OuterSpace*>::reference>()  );
+          CHECK ("Outer<Space> const* *" == showType<TypeBinding<const OuterSpace*>::pointer>()    );
           
-          cout << showType<TypeBinding<const OuterSpace * const>::value_type>() <<endl;
-          cout << showType<TypeBinding<const OuterSpace * const>::reference>() <<endl;
-          cout << showType<TypeBinding<const OuterSpace * const>::pointer>() <<endl;
+          CHECK ("const Outer<Space> * const" == showType<TypeBinding<const OuterSpace * const>::value_type>() );
+          CHECK ("Outer<Space> const* const&" == showType<TypeBinding<const OuterSpace * const>::reference>()  );
+          CHECK ("Outer<Space> * const *"     == showType<TypeBinding<const OuterSpace * const>::pointer>()    );
           
-          cout << showType<TypeBinding<OuterSpace * const>::value_type>() <<endl;
-          cout << showType<TypeBinding<OuterSpace * const>::reference>() <<endl;
-          cout << showType<TypeBinding<OuterSpace * const>::pointer>() <<endl;
+          CHECK ("Outer<Space> * const"   == showType<TypeBinding<OuterSpace * const>::value_type>() );
+          CHECK ("Outer<Space>* const&"   == showType<TypeBinding<OuterSpace * const>::reference>()  );
+          CHECK ("Outer<Space> * const *" == showType<TypeBinding<OuterSpace * const>::pointer>()    );
           
-          cout << showType<TypeBinding<Join>::value_type>() <<endl;
-          cout << showType<TypeBinding<Join>::reference>() <<endl;
-          cout << showType<TypeBinding<Join>::pointer>() <<endl;
+          // similar for a type without nested type bindings: references are levelled
+          CHECK ("unsigned long"   == showType<TypeBinding<Join>::value_type>() );
+          CHECK ("unsigned long&"  == showType<TypeBinding<Join>::reference>()  );
+          CHECK ("unsigned long *" == showType<TypeBinding<Join>::pointer>()    );
           
-          cout << showType<TypeBinding<Join&>::value_type>() <<endl;
-          cout << showType<TypeBinding<Join&>::reference>() <<endl;
-          cout << showType<TypeBinding<Join&>::pointer>() <<endl;
+          CHECK ("unsigned long"   == showType<TypeBinding<Join&>::value_type>() );
+          CHECK ("unsigned long&"  == showType<TypeBinding<Join&>::reference>()  );
+          CHECK ("unsigned long *" == showType<TypeBinding<Join&>::pointer>()    );
           
-          cout << showType<TypeBinding<Join&&>::value_type>() <<endl;
-          cout << showType<TypeBinding<Join&&>::reference>() <<endl;
-          cout << showType<TypeBinding<Join&&>::pointer>() <<endl;
+          CHECK ("unsigned long"   == showType<TypeBinding<Join&&>::value_type>() );
+          CHECK ("unsigned long&"  == showType<TypeBinding<Join&&>::reference>()  );
+          CHECK ("unsigned long *" == showType<TypeBinding<Join&&>::pointer>()    );
           
-          cout << showType<TypeBinding<Join const&>::value_type>() <<endl;
-          cout << showType<TypeBinding<Join const&>::reference>() <<endl;
-          cout << showType<TypeBinding<Join const&>::pointer>() <<endl;
+          CHECK ("unsigned long"         == showType<TypeBinding<Join const&>::value_type>() );
+          CHECK ("unsigned long const&"  == showType<TypeBinding<Join const&>::reference>()  );
+          CHECK ("const unsigned long *" == showType<TypeBinding<Join const&>::pointer>()    );
           
-          cout << showType<TypeBinding<Join *>::value_type>() <<endl;
-          cout << showType<TypeBinding<Join *>::reference>() <<endl;
-          cout << showType<TypeBinding<Join *>::pointer>() <<endl;
+          //... but pointer types are not treated special in any way
+          CHECK ("unsigned long *"  == showType<TypeBinding<Join *>::value_type>() );
+          CHECK ("unsigned long*&"  == showType<TypeBinding<Join *>::reference>()  );
+          CHECK ("unsigned long* *" == showType<TypeBinding<Join *>::pointer>()    );
           
-          cout << showType<TypeBinding<const Join *>::value_type>() <<endl;
-          cout << showType<TypeBinding<const Join *>::reference>() <<endl;
-          cout << showType<TypeBinding<const Join *>::pointer>() <<endl;
+          CHECK ("const unsigned long *"  == showType<TypeBinding<const Join *>::value_type>() );
+          CHECK ("unsigned long const*&"  == showType<TypeBinding<const Join *>::reference>()  );
+          CHECK ("unsigned long const* *" == showType<TypeBinding<const Join *>::pointer>()    );
           
-          cout << showType<TypeBinding<const Join * const>::value_type>() <<endl;
-          cout << showType<TypeBinding<const Join * const>::reference>() <<endl;
-          cout << showType<TypeBinding<const Join * const>::pointer>() <<endl;
+          CHECK ("const unsigned long * const" == showType<TypeBinding<const Join * const>::value_type>() );
+          CHECK ("unsigned long const* const&" == showType<TypeBinding<const Join * const>::reference>()  );
+          CHECK ("unsigned long * const *"     == showType<TypeBinding<const Join * const>::pointer>()    );
           
-          cout << showType<TypeBinding<Join * const>::value_type>() <<endl;
-          cout << showType<TypeBinding<Join * const>::reference>() <<endl;
-          cout << showType<TypeBinding<Join * const>::pointer>() <<endl;
-          
-          cout << showType<int>() <<endl;
-          cout << showType<int&>() <<endl;
-          cout << showType<int&&>() <<endl;
-          cout << showType<int const&>() <<endl;
-          cout << showType<int const&&>() <<endl;
-          cout << showType<int       *>() <<endl;
-          cout << showType<int const *>() <<endl;
-          cout << showType<int const * const>() <<endl;
-          cout << showType<int const *      &>() <<endl;
-          cout << showType<int const * const&>() <<endl;
+          CHECK ("unsigned long * const"   == showType<TypeBinding<Join * const>::value_type>() );
+          CHECK ("unsigned long* const&"   == showType<TypeBinding<Join * const>::reference>()  );
+          CHECK ("unsigned long * const *" == showType<TypeBinding<Join * const>::pointer>()    );
         }
     };
   

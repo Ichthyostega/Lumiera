@@ -1,5 +1,5 @@
 /*
-  VALUE-TYPE-BINDING.hpp  -  control type variations for IterAdapter
+  VALUE-TYPE-BINDING.hpp  -  control type variations for custom containers
 
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,14 +21,31 @@
 */
 
 /** @file value-type-binding.hpp
- ** Type re-binding helper template for IterAdapter and friends.
+ ** Type re-binding helper template for custom containers and adapters.
  ** This header defines a trait template which is used by the Iterator
- ** adapters to figure out the value-, pointer- and reference types
- ** when wrapping iterators or containers. For extending the use of
- ** Iterator adapters and Iter-tools to situations involving const
- ** iterators or custom containers, explicit specialisations
- ** might be injected prior to instantiating the Iterator adapter
- ** template.
+ ** adapters and similar custom containers to figure out the value-,
+ ** pointer- and reference types when wrapping iterators or containers.
+ ** 
+ ** When writing a generic container or adapter, there is typically some point
+ ** where you'd need some variation of the payload type: you may want to expose
+ ** a reference, or you might need a pointer to the type, to implement a forwarding
+ ** `operator->()`. On a technical level, this turns out surprisingly tricky, since
+ ** we often don't know the exact "incantation" of the payload type and might thus
+ ** end up forming a pointer to a rvalue reference or likewise illegal constructs.
+ ** 
+ ** Within the STL, there is a convention to provide nested typedefs to indicate
+ ** type variations in relation to the basic payload type of the container. We
+ ** follow this convention and support especially the
+ ** - `value_type`
+ ** - a simple (LValue) reference to the payload
+ ** - a pointer at the payload.
+ ** 
+ ** A custom container should likewise provide such type definitions, and the
+ ** type rebinding helper template defined in this header makes it easy to
+ ** provide such nested type definitions in a flexible way. This usage also
+ ** creates an *Extension Point*: when some payload type requires special
+ ** treatment, an explicit specialisation to this rebinding trait may be
+ ** injected alongside with the definition of the payload type.
  ** 
  ** @see iter-adapter.hpp
  ** @see scope-path.hpp usage example (explicit specialisation)
@@ -40,8 +57,7 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/meta/duck-detector.hpp"  ////////TODO
-#include "lib/meta/util.hpp"           ////////TODO
+#include "lib/meta/util.hpp"
 
 
 
@@ -49,7 +65,7 @@
 namespace lib {
 namespace meta {
   
-  namespace {
+  namespace { // Helper trait to detect nested value_type binding definitions
     
     template<typename TY>
     class has_nested_ValueTypeBindings
@@ -71,6 +87,10 @@ namespace meta {
       };
   }
   
+  
+  /**
+   * @internal helper template to pick up nested value type definitions
+   */
   template<typename TY, typename SEL =void>
   struct ValueTypeBinding
     {
@@ -79,10 +99,7 @@ namespace meta {
       typedef TY* pointer;
     };
   
-  /**
-   * specialisation for classes providing
-   * STL style type binding definitions themselves
-   */
+  /** specialisation for classes providing STL style type binding definitions */
   template<typename TY>
   struct ValueTypeBinding<TY,      enable_if<has_nested_ValueTypeBindings<TY>> >
     {
@@ -92,13 +109,17 @@ namespace meta {
     };
   
   
+  
   /**
    * Type re-binding helper template for creating nested typedefs
-   * for use by IterAdapter or similar "Lumiera Forward Iterators".
-   * This trait provides a value-, reference- and pointer type,
-   * similar to what the STL does.
+   * for use by custom containers and iterator adapters or similar.
+   * - this trait provides a value-, reference- and pointer type,
+   *   similar to what the STL does.
+   * - references are stripped, otherwise the base type is passed through
+   * - _but_ when the base type in turn provides such nested typedefs,
+   *   they are picked up and retrieved as result.
    * @note client code might define specialisations
-   *       to handle tricky situations (like const_reverse_iter)
+   *       to handle tricky situations (like e.g. const_reverse_iter)
    */
   template<typename TY>
   struct TypeBinding
