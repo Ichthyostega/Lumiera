@@ -454,6 +454,7 @@ namespace test{
           auto formatify = [&](auto it){ return embrace % *it; };
           
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           auto ii = treeExplore (CountDown{7,4})
                       .transform(multiply)
                       ;
@@ -520,6 +521,7 @@ namespace test{
           ++jj;
           CHECK (fact == 2*23);
           CHECK (isnil (jj));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
         }
       
       
