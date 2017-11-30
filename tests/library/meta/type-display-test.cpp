@@ -26,21 +26,13 @@
 
 
 #include "lib/test/run.hpp"
-
-//#include "lib/p.hpp"
-//#include "lib/diff/gen-node.hpp"
-
 #include "lib/meta/util.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>       //////////TODO
 #include <string>
 
-//using lib::P;
-//using lib::diff::GenNode;
 
 using std::string;
-using std::cout;       /////////////TODO
-using std::endl;       /////////////TODO
 
 
 namespace lib {

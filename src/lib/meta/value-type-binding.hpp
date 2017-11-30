@@ -1,5 +1,5 @@
 /*
-  ITER-TYPE-BINDING.hpp  -  control type variations for IterAdapter
+  VALUE-TYPE-BINDING.hpp  -  control type variations for IterAdapter
 
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 */
 
-/** @file iter-type-binding.hpp
+/** @file value-type-binding.hpp
  ** Type re-binding helper template for IterAdapter and friends.
  ** This header defines a trait template which is used by the Iterator
  ** adapters to figure out the value-, pointer- and reference types
@@ -29,15 +29,14 @@
  ** iterators or custom containers, explicit specialisations
  ** might be injected prior to instantiating the Iterator adapter
  ** template.
- ** @deprecated rework into a generic meta helper 11/2017
  ** 
  ** @see iter-adapter.hpp
  ** @see scope-path.hpp usage example (explicit specialisation)
  */
 
 
-#ifndef LIB_ITER_TYPE_BINDING_H
-#define LIB_ITER_TYPE_BINDING_H
+#ifndef LIB_META_VALUE_TYPE_BINDING_H
+#define LIB_META_VALUE_TYPE_BINDING_H
 
 
 #include "lib/error.hpp"
@@ -50,7 +49,7 @@ namespace std {
 }
 
 namespace lib {
-namespace iter {
+namespace meta {
   
   /** 
    * Type re-binding helper template for creating nested typedefs
@@ -63,9 +62,9 @@ namespace iter {
   template<typename TY, typename SEL =void>
   struct TypeBinding
     {
-      typedef typename TY::pointer pointer;
-      typedef typename TY::reference reference;
-      typedef typename TY::value_type value_type;
+      typedef TY value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
     };
   
   template<typename TY>
@@ -100,22 +99,6 @@ namespace iter {
       typedef const TY* pointer;
     };
   
-  template<typename TY>
-  struct TypeBinding<std::shared_ptr<TY>>
-    {
-      typedef std::shared_ptr<TY> value_type;
-      typedef std::shared_ptr<TY>& reference;
-      typedef std::shared_ptr<TY>* pointer;
-    };
-  
-  template<>
-  struct TypeBinding<size_t>
-    {
-      typedef size_t value_type;
-      typedef size_t& reference;
-      typedef size_t* pointer;
-    };
-  
   /**
    * specialisation for classes providing
    * STL style type binding definitions themselves
@@ -130,5 +113,5 @@ namespace iter {
   
   
   
-}} // namespace lib
-#endif
+}} // namespace lib::meta
+#endif /*LIB_META_VALUE_TYPE_BINDING_H*/
