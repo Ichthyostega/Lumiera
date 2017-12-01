@@ -21692,6 +21692,99 @@
 </html></richcontent>
 </node>
 </node>
+<node CREATED="1512178947582" ID="ID_1778761323" MODIFIED="1512178958161">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Lessons
+    </p>
+    <p>
+      learned
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1512178960281" FOLDED="true" ID="ID_1847018554" MODIFIED="1512179228013" TEXT="SFINAE">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512178984189" ID="ID_226963358" MODIFIED="1512179008554" TEXT="Fehler im Check scheitern stillschweigend">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1512179012761" ID="ID_1425607905" MODIFIED="1512179029688">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auf <i>incomplete type</i>&#160;achten
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1512179030982" ID="ID_895612426" MODIFIED="1512179034418" TEXT="sizeof()"/>
+<node CREATED="1512179035013" ID="ID_1663591306" MODIFIED="1512179038425" TEXT="member-pointer"/>
+<node CREATED="1512179039109" ID="ID_746391928" MODIFIED="1512179057691">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Vorsicht bei
+    </p>
+    <p>
+      mutually dependent templates
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1512179063250" ID="ID_933791979" MODIFIED="1512179132703" TEXT="w&#xe4;hrend der Instantiierung....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann eines der Templates im Zyklus vorr&#252;bergehend als &quot;incomplete&quot; gelten.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512179134400" ID="ID_1738202679" MODIFIED="1512179201014" TEXT="....kann die Metafunktion scheitern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn man dummerweise auf verschlungenen Pfaden
+    </p>
+    <p>
+      genau in dieser Phase die Metafunktion anfragt,
+    </p>
+    <p>
+      kann der betreffende Check stillschweigend scheitern.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Konsequenz: man w&#228;hlt dann z.B. eine subtil falsche Spezialisierung.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512179201831" ID="ID_1577563892" MODIFIED="1512179219196" TEXT="t&#xfc;ckischer Fehler">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1450488895106" ID="ID_1586185818" MODIFIED="1488423307351" TEXT="Threading">
 <node CREATED="1450488902049" ID="ID_1126260262" MODIFIED="1450488906100" TEXT="static init">

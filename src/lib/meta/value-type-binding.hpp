@@ -70,9 +70,9 @@ namespace meta {
     template<typename TY>
     class has_nested_ValueTypeBindings
       {
-        template<typename X, int i = sizeof(typename X::value_type)
-                           , int j = sizeof(typename X::reference)
-                           , int k = sizeof(typename X::pointer)
+        template<typename X, typename XX = typename X::value_type
+                           , typename XY = typename X::reference
+                           , typename XZ = typename X::pointer
                 >
         struct Probe
           { };

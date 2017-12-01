@@ -10,7 +10,7 @@
 // 4/08  - comparison operators on shared_ptr<Asset>
 // 4/08  - conversions on the value_type used for boost::any
 // 5/08  - how to guard a downcasting access, so it is compiled in only if the involved types are convertible
-// 7/08  - combining partial specialisation and subclasses 
+// 7/08  - combining partial specialisation and subclasses
 // 10/8  - abusing the STL containers to hold noncopyable values
 // 6/09  - investigating how to build a mixin template providing an operator bool()
 // 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
@@ -35,29 +35,68 @@
 // 9/17  - manipulate variadic templates to treat varargs in several chunks
 // 11/17 - metaprogramming to detect the presence of extension points
 // 11/17 - detect generic lambda
-// 12/17 - investigate SFINAE failure
+// 12/17 - investigate SFINAE failure. Reason was indirect use while in template instantiation
 
 
 /** @file try.cpp
- ** Bug hunting: a typedef detecting metafunction fails under circumstances yet to be investigated.  
+ ** Bug hunt: a typedef detecting metafunction failed mysteriously.
+ ** As it turned out, the implemented check required a _complete definition_, since it applied `sizeof()`.
+ ** But the Detection was invoked indirectly from a template while this was still in instantiation.
+ ** This explains why the metafunction worked in a clean test setup, but failed when integrated
+ ** in the actual code base. The tricky and insidious part of this story is the fact, that
+ ** in a regular definition, this would cause a compilation failure. But since our detector
+ ** relies on SFINAE, just the detection went wrong, and consequently an improper template
+ ** specialisation was picked. These are the perils of metaprogramming with a language
+ ** never really made for functional programming...
+ ** 
+ ** The solution or workaround is simple: use a detection technique able to work with incomplete types.
+ ** 
+ ** For context: lib::diff::Record defines various Iterators. And lib::dif::GenNode is a _recursive datatype_,
+ ** which means, already the definition of GenNode requires the instantiation of `Record<GenNode>`. Now we added
+ ** some detector magic to our Iterator Adapters, and this magic failed on the Iterators defined by `Record,`
+ ** because `Record<GenNode>` was not fully instantiated at that point.
  */
 
 typedef unsigned int uint;
 
-#include "lib/meta/value-type-binding.hpp"
-#include "lib/diff/gen-node.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/meta/util.hpp"
+#include "lib/util.hpp"
+
+#include <vector>
 
 
-namespace lib {
-namespace meta{
+  template<typename X, typename XX = typename X::value_type>
+  struct Test_Incomplete
+    { };
   
-}}
+  template<typename X, int s = sizeof(typename X::value_type)>
+  struct Test_Complete
+    { };
 
-//using lib::meta::enable_if;
 
-using ElmIter = lib::diff::RecordSetup<lib::diff::GenNode>::ElmIter;
-using RecIter = lib::diff::Rec::iterator;
+using lib::meta::Yes_t;
+using lib::meta::No_t;
+  
+  template<class X>
+  static Yes_t detectComplete(Test_Complete<X> * );
+  template<class>
+  static No_t detectComplete(...);
+  
+  template<class X>
+  static Yes_t detectIncomplete(Test_Incomplete<X> * );
+  template<class>
+  static No_t detectIncomplete(...);
+
+
+
+  struct InStatuNascendi
+    {
+      using Iter = std::vector<InStatuNascendi>::iterator;
+      
+      static const auto detectedComplete   = (sizeof(Yes_t) == sizeof(detectComplete<Iter>(0)));    // will produce No, erroneously
+      static const auto detectedIncomplete = (sizeof(Yes_t) == sizeof(detectIncomplete<Iter>(0)));  // will produce Yes
+    };
 
 
 #define SHOW_TYPE(_TY_) \
@@ -70,10 +109,8 @@ using RecIter = lib::diff::Rec::iterator;
 int
 main (int, char**)
   {
-    SHOW_TYPE (ElmIter);
-    SHOW_TYPE (RecIter);
-    
-    SHOW_TYPE (lib::meta::TypeBinding<ElmIter>::pointer);
+    SHOW_EXPR (InStatuNascendi::detectedComplete);
+    SHOW_EXPR (InStatuNascendi::detectedIncomplete);
     
     cout <<  "\n.gulp.\n";
     

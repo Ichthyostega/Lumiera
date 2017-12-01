@@ -70,11 +70,19 @@
  **          Effectively this means that an error in the test expression might go unnoticed;
  **          you'd be better off explicitly checking the detection result by an unit test.
  ** 
- ** There are several typical problems to care about
+ ** There are several *typical problems* to care about
  ** - a member can be both a variable or a function of that name
  ** - function signatures need to match precisely, including const modifiers
  ** - the generated metafunction (template) uses a type parameter 'TY', which could
  **   shadow or conflict with an type parameter in the enclosing scope
+ ** - some of the detectors _require a complete type_ to work properly. They create a
+ **   pointer-to-member or invoke `sizeof()`. In regular code, doing such on an incomplete
+ **   type would provoke a _compilation failure_ -- however, here this code gets evaluated
+ **   in a SFINAE context, which means, it will fail silently and thus produce a wrong
+ **   detection result. This can be quite *insidious* when relying on the proper detection
+ **   to pick the right implementation/specialisation; especially when instantiating
+ **   _mutually dependent_ templates, the distinction between "complete" and "incomplete"
+ **   can be rather arbitrary while in the process of instantiation.
  ** - the member and function checks rely on member pointers, which generally refer to
  **   the explicit static type. These checks won't see any inherited members / functions.
  ** - obviously, all those checks are never able to detect anything depending on runtime
