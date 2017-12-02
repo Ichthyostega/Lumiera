@@ -88,7 +88,7 @@ namespace test {
       typedef OutputMapping<DummyDef> Mapping;
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           map_and_retrieve();
           instance_copy();

@@ -122,8 +122,8 @@ namespace test{
           CHECK (typeStr(&magic)    == "Space const* (*)(Outer<Space>::Inner&&)");
           CHECK (typeSymbol(&magic) == "Function");
           
-          CHECK (typeStr   <Outer<typeof(this)>::Inner>()    == "Outer<test::TypeDisplay_test*>::Inner");
-          CHECK (typeSymbol<Outer<typeof(this)>::Inner>()    == "Inner"      );
+          CHECK (typeStr   <Outer<decltype(this)>::Inner>()  == "Outer<test::TypeDisplay_test*>::Inner");
+          CHECK (typeSymbol<Outer<decltype(this)>::Inner>()  == "Inner"      );
           
           CHECK (primaryTypeComponent("")                    == "void"       );
           CHECK (primaryTypeComponent("Sym&")                == "Sym"        );

@@ -40,7 +40,7 @@
  ** values, which typically are interpreted as asset::ID<Pipe>.
  ** But the actual mapping result is retrieved on each access
  ** by invoking a functor on the stored hash value,
- ** thus the final resolution is done \em late.
+ ** thus the final resolution is done _late_.
  ** 
  ** @see OutputDesignation
  ** @see OutputMapping_test
@@ -68,7 +68,7 @@ namespace mobject {
   
   namespace { // Helper to extract and rebind definition types
     
-    /** 
+    /**
      * @internal used by OutputMapping
      * to figure out the mapping target type
      */
@@ -86,11 +86,11 @@ namespace mobject {
             typedef RET Res;
           };
         
-        typedef typeof(&DEF::output) OutputMappingMemberFunc;        // GCC extension: "typeof"
-        typedef Rebind<OutputMappingMemberFunc> Rebinder;
+        using OutputMappingMemberFunc = decltype(&DEF::output) ;
+        using Rebinder = Rebind<OutputMappingMemberFunc>;
         
       public:
-        typedef typename Rebinder::Res Target;
+        using Target = typename Rebinder::Res;
         
       };
   }//(End) type rebinding helper
@@ -111,7 +111,7 @@ namespace mobject {
    * may be derived by querying the OutputMapping. Here, the kind of
    * the target specification is defined through the type parameter.
    * 
-   * \par definition of specific mapping behaviour
+   * ## definition of specific mapping behaviour
    * 
    * This is an generic map-like container, acting as Interface to be used
    * in the signature of API functions either providing or requiring a Mapping.
@@ -119,11 +119,12 @@ namespace mobject {
    * be created, providing a <i>definition context</i> as template parameter.
    * Instances of this concrete mapping type may then be default constructed
    * and copied freely. The definition context is supposed to provide
-   * - a functor \c DEF::output usable as function pipe-ID --> Target
+   * - a functor `DEF::output` usable as function pipe-ID --> Target
    * - the concrete output-functor also defines the concrete Target type,
    *   which will be returned when accessing the OutputMapping
-   * - a function \c DEF::buildQuery(sourcePipeID,seqNr) yielding a (defaults)
+   * - a function `DEF::buildQuery (sourcePipeID,seqNr)` yielding a (defaults)
    *   query to be issued in case of accessing a non existent mapping
+   * @tparam DEF static (compile-time) definition/configuration context
    */
   template<class DEF>
   class OutputMapping
@@ -131,14 +132,14 @@ namespace mobject {
     {
       typedef _def<DEF> Setup;
       
-      typedef asset::ID<asset::Pipe> PId;
-      typedef asset::PPipe         PPipe;
+      using PId   = asset::ID<asset::Pipe>;
+      using PPipe = asset::PPipe;
       
       /* == mapping table storage == */
       std::map<HashVal,HashVal> table_;
       
     public:
-      typedef typename Setup::Target Target;
+      using Target = typename Setup::Target;
       
       // using default ctor and copy operations
       
@@ -153,7 +154,7 @@ namespace mobject {
        * It is created on the stack by the OutputMapping container and internally wired
        * back to the container and the actually stored value (pipe-ID-hash) in the table.
        * Actually retrieving the result value by the client code triggers invocation
-       * of the specific resolution functor, embedded in the definition context DEF,
+       * of the specific resolution functor, embedded in the definition context `DEF`,
        * which was given when instantiating the OutputMapping template.
        * @note depends on the template parameter of the enclosing OutputMapping type!
        */
@@ -186,7 +187,7 @@ namespace mobject {
         public:
           /** explicitly define a new target ID for this individual mapping
            * @note the actually returned result depends on what the configured
-           *       \c DEF::output functor will yield when invoked on this ID
+           *       `DEF::output` functor will yield when invoked on this ID
            */
           void
           operator= (PId newId2map)
@@ -209,13 +210,13 @@ namespace mobject {
           
           /** actually retrieve the target object of the mapping.
            *  This operation is invoked when client code accesses
-           *  the result of an OutputMapping query. 
-           * @return result of invoking the configured \c DEF::output functor
-           * @throw  error::Logic when resolving an \em unconnected mapping
+           *  the result of an OutputMapping query.
+           * @return result of invoking the configured `DEF::output` functor
+           * @throw  error::Logic when resolving an _unconnected_ mapping
            */
           operator Target()
             {
-              if (!isValid())
+              if (not isValid())
                 throw error::Logic ("attempt to resolve an unconnected output mapping"
                                    , error::LUMIERA_ERROR_UNCONNECTED);
               return resolve();
@@ -239,13 +240,13 @@ namespace mobject {
           friend bool
           operator== (Resolver const& a, Resolver const& b)
           {
-            return a.pID_ == b.pID_; 
+            return a.pID_ == b.pID_;
           }                 // note: Resolver depends on template parameter DEF
                            //        All instances of DEF are considered equivalent!
           friend bool
           operator== (Resolver const& rr, Target const& tval)
           {
-            return rr.resolve() == tval; 
+            return rr.resolve() == tval;
           }
         };
       
@@ -267,7 +268,7 @@ namespace mobject {
       contains (PPipe sourcePipe)
         {
           return !sourcePipe
-              || this->contains (sourcePipe->getID());
+              or this->contains (sourcePipe->getID());
         }
       
       
@@ -327,7 +328,7 @@ namespace mobject {
   inline typename OutputMapping<DEF>::Resolver
   OutputMapping<DEF>::operator[] (PId sourcePipeID)
   {
-    if (!contains (sourcePipeID))
+    if (not contains (sourcePipeID))
       {
         // issue a defaults query to resolve this mapping first
         Query<asset::Pipe> query4pipe = DEF::buildQuery (sourcePipeID);
@@ -352,29 +353,29 @@ namespace mobject {
    *  instead of just picking a mapped pipe (which is the default usage).
    *  Accessing the OutputMapping this way by query enables all kinds of
    *  extended usages: It suffices that the given query somehow yields a Pipe,
-   *  which then is considered the mapped result and handed over to the \c DEF::output
+   *  which then is considered the mapped result and handed over to the `DEF::output`
    *  functor for resolution to a result object to be returned.
    *  
-   *  \par Query for the Nth default instance
+   *  ## Query for the Nth default instance
    *  OutputMapping provides a special behaviour for retrieving "the Nth default pipe".
    *  The rationale being the request for connection to the Nth bus of a given kind, like
    *  e.g. the 3rd audio subgroup or the 2nd video master. This special behaviour is triggered
-   *  by the predicate "ord(##)" in the query. The \em remainder of the query is supposed to
-   *  designate a \em default in this case, rather then querying directly for the result of
-   *  the mapping. Thus this remainder of the query is used to retrieve a \em source pipe,
+   *  by the predicate "ord(##)" in the query. The _remainder of the query_ is supposed to
+   *  designate a _default_ in this case, rather then querying directly for the result of
+   *  the mapping. Thus this remainder of the query is used to retrieve a _source pipe_,
    *  which then is treated as if accessing a non-existent mapping: a suitable default
    *  solution for this mapping is retrieved, but in this special case, we append the
    *  given sequence number to the ID of the retrieved pipe, i.e. we get the Nth
-   *  (identical) solution to the aforementioned query for a default pipe. 
+   *  (identical) solution to the aforementioned query for a default pipe.
    *  
    *  @note the mapped result is remembered within this mapping. Further invocations
-   *        with the \em same query will just fetch this stored pipe-ID and hand it
+   *        with the _same query_ will just fetch this stored pipe-ID and hand it
    *        to the functor, without resolving the query again. You might want to
-   *        \link Resolver::disconnect remove \endlink this specific mapping 
-   *        in order to force re-evaluation of the query.  
+   *        [remove](\ref Resolver::disconnect) this specific mapping
+   *        in order to force re-evaluation of the query.
    * @param Query for a pipe, which is handed over as-is to the rules engine.
    * @warning depending on the actual query, there might be no solution,
-   *        in which case an \em unconnected marker is retrieved and
+   *        in which case an _unconnected marker_ is retrieved and
    *        stored. Thus the yielded Resolver should be checked,
    *        if in doubt.
    */
@@ -383,12 +384,12 @@ namespace mobject {
   OutputMapping<DEF>::operator[] (Query<asset::Pipe> query4pipe)
   {
     HashVal hash4query = _mapping::slot (query4pipe);
-    if (!contains (hash4query))
+    if (not contains (hash4query))
       {
         if (uint seqNr = _mapping::is_defaults_query_with_channel (query4pipe))
           {
             // treat the special case
-            // when actually requesting the "Nth default of this kind" 
+            // when actually requesting the "Nth default of this kind"
             PPipe corresponding_sourcePipe
               = asset::Struct::retrieve (
                   _mapping::build_corresponding_sourceQuery (query4pipe));
