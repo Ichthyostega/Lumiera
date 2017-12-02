@@ -462,7 +462,7 @@ namespace lib {
     {
       IT iter_;
       
-      typedef typename iter::TypeBinding<IT>::value_type ElementType;
+      typedef typename meta::TypeBinding<IT>::value_type ElementType;
       
     public:
       PullFrom (IT source)

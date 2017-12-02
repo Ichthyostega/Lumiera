@@ -26,8 +26,8 @@
  ** adapters and similar custom containers to figure out the value-,
  ** pointer- and reference types when wrapping iterators or containers.
  ** 
- ** When writing a generic container or adapter, there is typically some point
- ** where you'd need some variation of the payload type: you may want to expose
+ ** When writing a generic container or adapter, there is typically a point
+ ** where you'll need some variation of the payload type: you may want to expose
  ** a reference, or you might need a pointer to the type, to implement a forwarding
  ** `operator->()`. On a technical level, this turns out surprisingly tricky, since
  ** we often don't know the exact "incantation" of the payload type and might thus
@@ -57,7 +57,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/meta/util.hpp"
+#include "lib/meta/trait.hpp"
 
 
 
@@ -85,6 +85,14 @@ namespace meta {
       public:
         static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
       };
+    
+    template<class X>
+    struct use_ValueTypebindings
+      : __and_<has_nested_ValueTypeBindings<X>
+              ,__not_<is_StringLike<X>
+                     >
+              >
+      { };
   }
   
   
@@ -101,7 +109,7 @@ namespace meta {
   
   /** specialisation for classes providing STL style type binding definitions */
   template<typename TY>
-  struct ValueTypeBinding<TY,      enable_if<has_nested_ValueTypeBindings<TY>> >
+  struct ValueTypeBinding<TY,      enable_if<use_ValueTypebindings<TY>> >
     {
       typedef typename TY::value_type value_type;
       typedef typename TY::reference reference;

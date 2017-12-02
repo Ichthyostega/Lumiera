@@ -557,8 +557,8 @@ namespace lib {
         TransformedItem treated_;
         
       public:
-        using value_type = typename iter::TypeBinding<Res>::value_type;
-        using reference  = typename iter::TypeBinding<Res>::reference;
+        using value_type = typename meta::TypeBinding<Res>::value_type;
+        using reference  = typename meta::TypeBinding<Res>::reference;
         
         
         Transformer() =default;

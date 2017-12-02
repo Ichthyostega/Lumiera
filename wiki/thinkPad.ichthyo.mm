@@ -5361,20 +5361,63 @@
 <node CREATED="1511918986936" ID="ID_667088953" MODIFIED="1511918989357" TEXT="Konstrukt">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511919003054" ID="ID_1728459315" MODIFIED="1511919013829" TEXT="Aufsetz-Punkt">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1511919032171" ID="ID_737737817" MODIFIED="1511919043219" TEXT="Problem Parent::Iterator">
-<node CREATED="1511919050960" ID="ID_1621131204" MODIFIED="1511919070801" TEXT="grunds&#xe4;tzliches Problem jedes Dekorators"/>
-<node CREATED="1511920447698" ID="ID_1780310210" MODIFIED="1511920468027" TEXT="gesucht: der Iterator, von dem wir Werte beziehen"/>
+<node COLOR="#338800" CREATED="1511919032171" ID="ID_737737817" MODIFIED="1512010665827" TEXT="Problem Parent::Iterator">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1511919050960" ID="ID_1621131204" MODIFIED="1512010660190" TEXT="grunds&#xe4;tzliches Problem jedes Dekorators">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir haben bisher viel zu naiv angenommen,
+    </p>
+    <p>
+      da&#223; der parent-Iterator immer auch ein TreeExploer ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dem ist nicht so, ab dem Moment, wo wir mehrere Decorator-Layer haben!!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511837060201" ID="ID_88038793" MODIFIED="1511837165852" TEXT="brauche WrappedIteratorCore">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1511920447698" ID="ID_1780310210" MODIFIED="1511920468027" TEXT="gesucht: der Iterator, von dem wir Werte beziehen"/>
+<node CREATED="1512010545747" ID="ID_1907550" MODIFIED="1512010612995" TEXT="Idee: das ist genau das, was _TreeExplorerTraits leistet">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1512010566105" ID="ID_1750414732" MODIFIED="1512010610681" TEXT="Umbenennung: _DecoratorTraits">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1512010575367" ID="ID_736035875" MODIFIED="1512010607511" TEXT="soll k&#xfc;nftig zwei F&#xe4;lle unterst&#xfc;tzen">
+<icon BUILTIN="yes"/>
+<node CREATED="1512010586173" ID="ID_1016627565" MODIFIED="1512010597616" TEXT="Finde parent-Iterator"/>
+<node CREATED="1512010598540" ID="ID_771604715" MODIFIED="1512010603735" TEXT="Finde parent-Core"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1511837060201" ID="ID_88038793" MODIFIED="1512010385590" TEXT="brauche WrappedIteratorCore">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512010365276" ID="ID_956716570" MODIFIED="1512010370631" TEXT="verpackt einen Iterator"/>
+<node CREATED="1512010371291" ID="ID_563900951" MODIFIED="1512010383805" TEXT="bietet die ExtensionPoints einer State-Core"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837027405" ID="ID_233806852" MODIFIED="1511837172811" TEXT="Argument-Detektor-Magie">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1511837039180" ID="ID_1296099637" MODIFIED="1511837047198" TEXT="ganz analog zur expand-Operation"/>
 <node CREATED="1511837047810" ID="ID_684902103" MODIFIED="1511837057125" TEXT="kann man die Traits wiederverwenden?"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512007357412" ID="ID_1659237225" MODIFIED="1512007370940" TEXT="was bedeutet ein generisches Lambda?">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512007357412" ID="ID_1659237225" MODIFIED="1512010428392" TEXT="was bedeutet ein generisches Lambda?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
+<node CREATED="1512010394800" ID="ID_930446802" MODIFIED="1512010402763" TEXT="analog zu expand handhaben">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1512010405199" ID="ID_810102842" MODIFIED="1512010424574" TEXT="Konsequenz: auch Transform kann auf Iteratoren arbeiten">
+<icon BUILTIN="forward"/>
+</node>
 </node>
 </node>
 </node>

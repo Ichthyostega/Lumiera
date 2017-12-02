@@ -65,8 +65,8 @@ namespace lib {
         
         
       public:
-        typedef typename iter::TypeBinding<IT>::pointer pointer;
-        typedef typename iter::TypeBinding<IT>::reference reference;
+        typedef typename meta::TypeBinding<IT>::pointer pointer;
+        typedef typename meta::TypeBinding<IT>::reference reference;
         typedef typename std::remove_reference<reference>::type value_type; ///< @note will be const for const iterators
         
         

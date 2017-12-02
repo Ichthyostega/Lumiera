@@ -96,7 +96,7 @@
 
 
 namespace lib {
-namespace iter{
+namespace meta{
 
   using proc::mobject::session::Scope;
 
@@ -105,7 +105,7 @@ namespace iter{
    * to yield const Scope elements, based on the const_reverse_iterator
    * used internally within ScopePath. This specialisation needs to be
    * injected prior to actually building the iterator type of ScopePath
-   * @see iter-type-binding.hpp
+   * @see value-type-binding.hpp
    * @see iter-adapter.hpp
    */
   template<>
