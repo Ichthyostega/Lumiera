@@ -5419,6 +5419,22 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1512179383254" FOLDED="true" ID="ID_1554412479" MODIFIED="1512326315343" TEXT="mu&#xdf; value_type from Funktor gewinnen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512181398331" ID="ID_1715550480" MODIFIED="1512181407142" TEXT="value_type rebinden"/>
+<node CREATED="1512181407778" ID="ID_782984508" MODIFIED="1512181425706" TEXT="generischen Helper von IterAdapter">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1512181416881" ID="ID_229445720" MODIFIED="1512181423185" TEXT="verallgemeinern, rund machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1512183524170" ID="ID_1697656461" MODIFIED="1512326304993" TEXT="TODO: isStringLike in meta/traits.hpp">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512183546319" ID="ID_1699019563" MODIFIED="1512183561888" TEXT="warum geht &quot;basically&quot; bis auf den Pointer?"/>
+<node CREATED="1512183562621" ID="ID_57742709" MODIFIED="1512183571160" TEXT="logisch w&#xe4;re nur bis zur Referenz"/>
+<node CREATED="1512183572244" ID="ID_1399145205" MODIFIED="1512183587645" TEXT="denn: string* ist nix String-artiges!!!"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -5530,6 +5546,78 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1511835736414" TEXT="Transform: generic Lambda">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512181480616" FOLDED="true" ID="ID_1099744034" MODIFIED="1512349511547" TEXT="Beobachtung: move in join">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512181493551" ID="ID_1834475937" MODIFIED="1512181507297" TEXT="Bei &#xdc;bergabe in stringify() fehlt std::forward"/>
+<node CREATED="1512181508053" ID="ID_1058623354" MODIFIED="1512181516343" TEXT="transformIterator strippt die Referenz"/>
+<node CREATED="1512181517955" ID="ID_517823516" MODIFIED="1512181526366" TEXT="aus LValue wird RValue"/>
+<node CREATED="1512181527834" ID="ID_1446020077" MODIFIED="1512181535898" TEXT="Peng">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1512181547263" ID="ID_1700050621" MODIFIED="1512349487204" TEXT="Aufkl&#xe4;ren: warum wird Referenz gestrippt">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512349360360" ID="ID_1400970540" MODIFIED="1512349365789" TEXT="vmtl Programmierfehler"/>
+<node CREATED="1512349367230" ID="ID_1844975610" MODIFIED="1512349379887" TEXT="IterTool braucht den Typ des Basis-Iterators"/>
+<node CREATED="1512349380643" ID="ID_1515581078" MODIFIED="1512349403999">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      versehentlich wurde <i>auch der</i>&#160;an std::forward gegeben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512349405280" ID="ID_1121668073" MODIFIED="1512349446256" TEXT="war nachweislich eine echte Fehlfunktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      habs mit FormatUtils_test bewiesen
+    </p>
+    <p>
+      Dazu in NumIter einen explizit tracenden move-ctor eingebaut
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1512181592137" ID="ID_1472433606" MODIFIED="1512181641886" TEXT="im Ergebnis folgenlos, aber gef&#xe4;hrlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil der Aufruf von join(&amp;&amp;) selber wasserdicht ist
+    </p>
+    <p>
+      D.h. er frisst keine Werte.
+    </p>
+    <p>
+      Deshalb f&#228;llt dieses doppelte Problem nicht auf
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1512349447978" ID="ID_1467669966" MODIFIED="1512349453141" TEXT="und zwar wegen util::join"/>
+<node CREATED="1512349454562" ID="ID_1337232290" MODIFIED="1512349470555" TEXT="dieses hat --versehentlich-- eine Kopie zu viel gemacht"/>
+<node CREATED="1512349471143" ID="ID_540600531" MODIFIED="1512349476953" TEXT="Hurrgha!!!!!">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1512349501091" ID="ID_1425293642" MODIFIED="1512349506090" TEXT="beide defekte gefixt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835901999" ID="ID_1717235881" MODIFIED="1511836238870" TEXT="Transform: Core&amp; -&gt; irgendwas">
 <icon BUILTIN="help"/>

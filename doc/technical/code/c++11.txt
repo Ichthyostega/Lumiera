@@ -163,7 +163,11 @@ of arbitrary type to the constructor of type `TY`. Note the following details
   that a rvalue reference can only bind to _something unnamed_. This is a safety feature; moving destroys
   the contents at the source location. Thus if we really want to move something known by name (like e.g.
   the function arguments in this example), we need to indicate so by an explicit call.
-- `std::forward` needs an explicit type parameter to be able to deduce the right target type in any case
+- `std::forward` needs an explicit type parameter to be able to deduce the right target type in any case.
+  It is _crucial to pass this type parameter in the correct way,_ as demonstrated above. Because, if we
+  invoke this function for _copying_ (i.e. with a lvalue reference), this type parameter will _carry on_
+  this refrerence. Only a rvalue reference is stripped. This is the only way ``downstream'' receivers can
+  tell the copy or move case apart.
 - note how we're allowed to ``wrap'' a function call around the unpacking of the _argument pack_ (`args`):
   the three dots `...` are _outside_ the parenthesis, and thus the `std::forward` is applied to each of
   the arguments individually

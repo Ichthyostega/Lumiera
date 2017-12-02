@@ -383,7 +383,7 @@ namespace lib {
   filterIterator (IT&& src, PRED filterPredicate)
   {
     using SrcIT  = typename std::remove_reference<IT>::type;
-    return FilterIter<SrcIT>{forward<SrcIT>(src), filterPredicate};
+    return FilterIter<SrcIT>{forward<IT>(src), filterPredicate};
   }
   
   
@@ -799,7 +799,7 @@ namespace lib {
   {
     using SrcIT  = typename std::remove_reference<IT>::type;
     using OutVal = typename lib::meta::_Fun<FUN>::Ret;
-    return TransformIter<SrcIT,OutVal>{forward<SrcIT>(src), processingFunc};
+    return TransformIter<SrcIT,OutVal>{forward<IT>(src), processingFunc};
   }
   
   
@@ -857,7 +857,7 @@ namespace lib {
   {
     using SrcIT = typename std::remove_reference<IT>::type;
     using Val   = typename SrcIT::value_type;
-    return filterIterator (forward<SrcIT>(source), SkipRepetition<Val>() );
+    return filterIterator (forward<IT>(source), SkipRepetition<Val>() );
   }
   
   
