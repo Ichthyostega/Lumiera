@@ -61,11 +61,11 @@ namespace wrapper {
   using std::function;
   
   
-  /** 
-   * Extension to std::reference_wrapper: 
+  /**
+   * Extension to std::reference_wrapper:
    * Allows additionally to re-bind to another reference,
    * almost like a pointer. Helpful for building templates.
-   * @warning potentially dangerous 
+   * @warning potentially dangerous
    */
   template<typename TY>
   class AssignableRefWrapper
@@ -95,7 +95,7 @@ namespace wrapper {
   
   
   
-  /** 
+  /**
    * Reference wrapper implemented as constant function,
    * returning the (fixed) reference on invocation
    */
@@ -124,7 +124,7 @@ namespace wrapper {
   /**
    * Universal value/ref wrapper behaving like a pointer.
    * A copyable, assignable value object, not managing ownership.
-   * It can be default constructed and \c bool evaluated to detect
+   * It can be default constructed and `bool` evaluated to detect
    * an empty holder. The value is retrieved pointer-like, by
    * explicit dereferentiation. (Contrast this to std::ref,
    * where the original reference is retrieved by conversion)
@@ -143,14 +143,15 @@ namespace wrapper {
       using TY_unconst = typename meta::UnConst<TY>::Type ;
       
       
-      mutable 
+      mutable
       char content_[sizeof(TY)];
       bool created_;
       
+      template<typename REF>
       void
-      build (TY const& ref)
+      build (REF&& ref)
         {
-          new(&content_) TY(ref);
+          new(&content_) TY{std::forward<REF> (ref)};
           created_ = true;
         }
       
@@ -170,7 +171,7 @@ namespace wrapper {
       TY_unconst&
       access_unconst()  const  ///< used to assign new buffer contents
         {
-          return const_cast<TY_unconst&> (access()); 
+          return const_cast<TY_unconst&> (access());
         }
       
     public:
@@ -183,6 +184,11 @@ namespace wrapper {
         {
           build (o);
         }
+      explicit
+      ItemWrapper(TY && ro)
+        {
+          build (std::move(ro));
+        }
       
      ~ItemWrapper()
         {
@@ -191,35 +197,62 @@ namespace wrapper {
       
       
       /* == copy and assignment == */
-     
+      
       ItemWrapper (ItemWrapper const& ref)
         : created_(false)
         {
           if (ref.isValid())
             build (*ref);
         }
+      ItemWrapper (ItemWrapper && rref)
+        : created_(false)
+        {
+          if (rref.isValid())
+            {
+              build (std::move (*rref));
+              rref.discard();
+            }
+        }
       
       ItemWrapper&
-      operator= (ItemWrapper const& ref)
+      operator= (ItemWrapper const& cref)
         {
-          if (!ref.isValid())
+          if (!cref.isValid())
             discard();
           else
-            this->operator= (*ref);
+            this->operator= (*cref);
+          
+          return *this;
+        }
+      ItemWrapper&
+      operator= (ItemWrapper & ref)
+        {
+          return *this = (ItemWrapper const&)ref;
+        }
+      ItemWrapper&
+      operator= (ItemWrapper && rref)
+        {
+          if (!rref.isValid())
+            discard();
+          else
+            {
+              this->operator= (std::move(*rref));
+              rref.discard();
+            }
           
           return *this;
         }
       
       template<typename X>
       ItemWrapper&
-      operator= (X const& something) ///< accept anything assignable to TY
+      operator= (X&& something) ///< accept anything assignable to TY
         {
           if (!isSameObject (something, access() ))
             {
               if (created_)
-                access() = something;
+                access() = std::forward<X>(something);
               else
-                build (something);
+                build (std::forward<X>(something));
             }
           
           return *this;
@@ -241,10 +274,16 @@ namespace wrapper {
           return access();
         }
       
+      TY*
+      operator-> ()  const
+        {
+          return & **this;
+        }
+      
       bool
       isValid ()  const
         {
-          return created_;   
+          return created_;
         }
       
       void
@@ -253,12 +292,12 @@ namespace wrapper {
           discard();
         }
     };
-  
+    
     
   /**
    * Specialisation of the ItemWrapper to deal with references,
    * as if they were pointer values. Allows the reference value
-   * to be default constructed to \c NULL and to be re-assigned.
+   * to be default constructed to `NULL` and to be re-assigned.
    */
   template<typename TY>
   class ItemWrapper<TY &>
@@ -305,7 +344,7 @@ namespace wrapper {
       bool
       isValid ()  const
         {
-          return bool(content_);   
+          return bool(content_);
         }
       
       void
@@ -334,12 +373,13 @@ namespace wrapper {
   
   
   
-  /** 
+  
+  /**
    * Extension of ItemWrapper: a function remembering
    * the result of the last invocation. Initially, the "value"
-   * is bottom (undefined, NIL), until the function is invoked 
-   * for the first time. After that, the result of the last 
-   * invocation can be accessed by \c  operator*()
+   * is bottom (undefined, NIL), until the function is invoked
+   * for the first time. After that, the result of the last
+   * invocation can be accessed by `operator* ()`
    * 
    * @note non-copyable. (removing this limitation would
    *       require a much more expensive implementation,
@@ -370,7 +410,7 @@ namespace wrapper {
       
       /** Create result-remembering functor
        *  by binding the given function. Explanation:
-       *  - *this is a \em function
+       *  - `*this` is a _function_
        *  - initially it is defined as invalid
        *  - then we build the function composition of
        *    the target function, and a function storing
@@ -386,7 +426,7 @@ namespace wrapper {
           using lib::meta::func::chained;
                                                       // note: binding "this" mandates noncopyable
           function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );
-          function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult); 
+          function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult);
           
           function<SIG>::operator= (chainedWithResCapture); // define the function (baseclass)
         }

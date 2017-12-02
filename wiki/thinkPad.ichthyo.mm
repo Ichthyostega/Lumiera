@@ -5546,7 +5546,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1511835736414" TEXT="Transform: generic Lambda">
 <icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1512181480616" FOLDED="true" ID="ID_1099744034" MODIFIED="1512349511547" TEXT="Beobachtung: move in join">
+<node COLOR="#338800" CREATED="1512181480616" FOLDED="true" ID="ID_1099744034" MODIFIED="1512355551250" TEXT="Beobachtung: move in join">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512181493551" ID="ID_1834475937" MODIFIED="1512181507297" TEXT="Bei &#xdc;bergabe in stringify() fehlt std::forward"/>
 <node CREATED="1512181508053" ID="ID_1058623354" MODIFIED="1512181516343" TEXT="transformIterator strippt die Referenz"/>
@@ -5617,6 +5617,9 @@
 <node COLOR="#338800" CREATED="1512349501091" ID="ID_1425293642" MODIFIED="1512349506090" TEXT="beide defekte gefixt">
 <icon BUILTIN="button_ok"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1512355552695" ID="ID_1326048469" MODIFIED="1512355578832" TEXT="Beobachtung: ItemWrapper unterst&#xfc;tzt kein move">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835901999" ID="ID_1717235881" MODIFIED="1511836238870" TEXT="Transform: Core&amp; -&gt; irgendwas">
