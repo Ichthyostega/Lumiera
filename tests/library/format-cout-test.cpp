@@ -84,13 +84,23 @@ namespace test {
       {
         using CharLit = decltype("literal");
         using CharPtr = const char*;
-        using StrCRef = string const&;
-        using GenNodePtr = GenNode*;
-        using GenNodeRef = GenNode&;
+        using StringPtr = string *;
+        using StringRef = string &;
+        using StringRRef = string &&;
+        using StrConstRef = string const&;
+        using GenNodePtr  = GenNode*;
+        using GenNodeRef  = GenNode&;
+        using GenNodeRRef = GenNode&&;
         
+        ANALYSE (int);
+        ANALYSE (char);
         ANALYSE (double);
+        ANALYSE (int64_t);
         ANALYSE (string);
-        ANALYSE (StrCRef);
+        ANALYSE (StringPtr);
+        ANALYSE (StringRef);
+        ANALYSE (StringRRef);
+        ANALYSE (StrConstRef);
         ANALYSE (CharLit);
         ANALYSE (CharPtr)
         ANALYSE (Reticent)
@@ -98,8 +108,9 @@ namespace test {
         ANALYSE (GenNode)
         ANALYSE (GenNodePtr)
         ANALYSE (GenNodeRef)
+        ANALYSE (GenNodeRRef)
         ANALYSE (P<GenNode>)
-        cout << endl;
+        cout << "───────────────────────────╼━━━━━━━━━━╾───────────────────────────"<<endl;
       }
   }//(end)fixture
   
