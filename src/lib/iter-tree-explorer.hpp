@@ -81,6 +81,7 @@
 #include "lib/meta/trait.hpp" ////////////////TODO
 #include "lib/null-value.hpp" ////////////////TODO
 #include "lib/util.hpp"
+#include "lib/test/test-helper.hpp"///////////TODO Bug-o
 
 //#include <boost/utility/enable_if.hpp>  //////////////TODO
 #include <stack>                        ////////////////TODO
@@ -279,6 +280,8 @@ namespace lib {
     using meta::_Fun;
     using std::__and_;
     using std::__not_;
+    using std::is_convertible;
+    using std::remove_reference_t;
     using meta::can_IterForEach;
     using meta::can_STL_ForEach;
     
@@ -302,11 +305,30 @@ namespace lib {
       { };
     
     template<class SRC>
+    struct shall_use_StateCore
+      : __and_<__not_<can_IterForEach<SRC>>
+              ,is_StateCore<SRC>
+              >
+      { };
+    
+    template<class SRC>
     struct shall_use_Lumiera_Iter
       : __and_<can_IterForEach<SRC>
               ,__not_<is_StateCore<SRC>>
               >
       { };
+    
+    
+    /** the _value type_ yielded by a »state core« */
+    template<class COR>
+    struct CoreYield
+      {
+        using Res = remove_reference_t<decltype(yield (std::declval<COR>()))>;
+        
+        using value_type = typename meta::TypeBinding<Res>::value_type;
+        using reference  = typename meta::TypeBinding<Res>::reference;
+        using pointer    = typename meta::TypeBinding<Res>::pointer;
+      };
     
     
     /** decide how to adapt and embed the source sequence into the resulting TreeExplorer */
@@ -319,7 +341,7 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
-        using SrcVal  = typename std::remove_reference<decltype(yield (std::declval<SRC>()))>::type;
+        using SrcVal  = typename CoreYield<SRC>::value_type;
         using SrcIter = iter_explorer::IterableDecorator<SrcVal, SRC>;
         using SrcCore = SRC;
       };
@@ -327,7 +349,7 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<shall_use_Lumiera_Iter<SRC>>>
       {
-        using SrcIter = typename std::remove_reference<SRC>::type;
+        using SrcIter = remove_reference_t<SRC>;
         using SrcCore = iter_explorer::WrappedIteratorCore<SRC>;
         using SrcVal  = typename SrcIter::value_type;
       };
@@ -365,7 +387,7 @@ namespace lib {
      *   special adapter supports the case when the _expansion functor_ yields a child sequence
      *   type different but compatible to the original source sequence embedded in TreeExplorer.
      * @tparam FUN something _"function-like"_ passed as functor to be bound
-     * @tparam SRC the source type to apply when attempting to use a generic lambda as functor 
+     * @tparam IT  the source iterator type to apply when attempting to use a generic lambda as functor 
      */
     template<class FUN, typename SRC>
     struct _ExpansionTraits
@@ -388,7 +410,7 @@ namespace lib {
         
         
         using Sig = typename FunDetector<FUN>::Sig;
-        using Arg = typename _Fun<Sig>::Args::List::Head;
+        using Arg = typename _Fun<Sig>::Args::List::Head;  // assuming function with a single argument
         using Res = typename _Fun<Sig>::Ret;
         
         
@@ -397,25 +419,44 @@ namespace lib {
         template<class ARG, class SEL =void>
         struct ArgAccessor
           {
-            using FunArgType = typename std::remove_reference<Arg>::type;
+            using FunArgType = remove_reference_t<Arg>;
             static_assert (std::is_convertible<ARG, FunArgType>::value,
                            "the expansion functor must accept the source iterator or state core as parameter");
+            test::TypeDebugger<FunArgType> guggi;
             
             static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
           };
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
         template<class IT>
-        struct ArgAccessor<IT,   enable_if<std::is_convertible<typename IT::value_type, Arg>>>
+        struct ArgAccessor<IT,   enable_if<__and_<shall_use_Lumiera_Iter<IT>
+                                                 ,is_convertible<typename IT::value_type, Arg>>>>
           {
             static auto build() { return [](auto& iter) { return *iter; }; }
+          };
+        
+        /** in a similar way, adapt when the passed source argument is a "state core" ("monadic" usage pattern) */
+        template<class COR>
+        struct ArgAccessor<COR,   enable_if<__and_<is_StateCore<COR>
+                                                  ,is_convertible<typename CoreYield<COR>::value_type, Arg>>>>
+          {
+//            test::TypeDebugger<COR> buggi;
+            static auto build() { return [](COR const& core) { return yield(core); }; }
+          };
+        
+        template<class COR>
+        struct ArgAccessor<COR,   enable_if<__and_<is_StateCore<COR>
+                                                  ,std::is_same<SRC&, Arg>>>>
+          {
+//            test::TypeDebugger<COR> muggi;
+            static auto build() { return [](COR& core) ->SRC& { return static_cast<SRC&> (core); }; }
           };
         
         
         /** holder for the suitably adapted _expansion functor_ */
         struct Functor
           {
-            function<Sig> expandFun;
+            function<Sig> boundFunction;
             
             template<typename ARG>
             Res
@@ -423,7 +464,7 @@ namespace lib {
               {
                 auto accessArg = ArgAccessor<ARG>::build();
                 
-                return expandFun (accessArg (arg));
+                return boundFunction (accessArg (arg));
               }
           };
       };
@@ -559,6 +600,7 @@ namespace lib {
       public:
         using value_type = typename meta::TypeBinding<Res>::value_type;
         using reference  = typename meta::TypeBinding<Res>::reference;
+        using pointer    = typename meta::TypeBinding<Res>::pointer;
         
         
         Transformer() =default;
@@ -581,7 +623,7 @@ namespace lib {
         friend reference
         yield (Transformer const& tx)
         {
-          return tx.invokeTransformation();
+          return unConst(tx).invokeTransformation();
         }
         
         friend void
@@ -599,10 +641,10 @@ namespace lib {
           }
         
         reference
-        invokeTransformation ()  const
+        invokeTransformation ()
           {
             if (not treated_)
-              treated_ = trafo_(yield (core()));
+              treated_ = trafo_(core());
             return *treated_;
           }
       };

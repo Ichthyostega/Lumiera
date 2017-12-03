@@ -5356,14 +5356,22 @@
 <node CREATED="1511831840336" ID="ID_1853594905" MODIFIED="1511919879308" TEXT="Parent == Lumiera Iterator ">
 <node CREATED="1511831893369" ID="ID_1403568713" MODIFIED="1511837159071" TEXT="WrappedIteratorCore dazwischenschieben"/>
 </node>
-<node CREATED="1511831940346" ID="ID_441709942" MODIFIED="1511831960963" TEXT="Resultat: Parent ist stets state-core"/>
+<node CREATED="1511831940346" ID="ID_441709942" MODIFIED="1511831960963" TEXT="Resultat: Parent ist stets state-core">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512259489938" ID="ID_1357405758" MODIFIED="1512259684029" TEXT="Zweifelhalft">
+<linktarget COLOR="#fe2e57" DESTINATION="ID_1357405758" ENDARROW="Default" ENDINCLINATION="1323;-81;" ID="Arrow_ID_550770884" SOURCE="ID_1503180090" STARTARROW="None" STARTINCLINATION="-1297;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512259502594" ID="ID_1761695302" MODIFIED="1512259525410" TEXT="sieht nach unn&#xf6;tig verkompliziertem Design aus">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 <node CREATED="1511918986936" ID="ID_667088953" MODIFIED="1511918989357" TEXT="Konstrukt">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511919003054" ID="ID_1728459315" MODIFIED="1511919013829" TEXT="Aufsetz-Punkt">
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1511919032171" ID="ID_737737817" MODIFIED="1512010665827" TEXT="Problem Parent::Iterator">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1511919050960" ID="ID_1621131204" MODIFIED="1512010660190" TEXT="grunds&#xe4;tzliches Problem jedes Dekorators">
+<node CREATED="1511919050960" ID="ID_1621131204" MODIFIED="1512256810082" TEXT="grunds&#xe4;tzliches Problem jedes Iterator-Dekorators">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5382,8 +5390,7 @@
       Dem ist nicht so, ab dem Moment, wo wir mehrere Decorator-Layer haben!!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1511920447698" ID="ID_1780310210" MODIFIED="1511920468027" TEXT="gesucht: der Iterator, von dem wir Werte beziehen"/>
@@ -5408,7 +5415,185 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837027405" ID="ID_233806852" MODIFIED="1511837172811" TEXT="Argument-Detektor-Magie">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1511837039180" ID="ID_1296099637" MODIFIED="1511837047198" TEXT="ganz analog zur expand-Operation"/>
-<node CREATED="1511837047810" ID="ID_684902103" MODIFIED="1511837057125" TEXT="kann man die Traits wiederverwenden?"/>
+<node CREATED="1511837047810" ID="ID_684902103" MODIFIED="1511837057125" TEXT="kann man die Traits wiederverwenden?">
+<node CREATED="1512179380102" ID="ID_657845891" MODIFIED="1512179382618" TEXT="schaut gut aus"/>
+<node CREATED="1512182255367" ID="ID_1818058437" MODIFIED="1512182259778" TEXT="Funktor-Argument">
+<node CREATED="1512182288514" ID="ID_1838064094" MODIFIED="1512182295010" TEXT="bestehende Impl verwenden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1512182296169" ID="ID_770503153" MODIFIED="1512182333744" TEXT="mu&#xdf; Info aus dem Funktor gewinnen">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512182308255" ID="ID_215116122" MODIFIED="1512183510137" TEXT="komme mit generischem Lambda in den Value-Zweig">
+<linktarget COLOR="#a83e54" DESTINATION="ID_215116122" ENDARROW="Default" ENDINCLINATION="351;347;" ID="Arrow_ID_891457048" SOURCE="ID_23118252" STARTARROW="None" STARTINCLINATION="683;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512182336428" ID="ID_1075031476" MODIFIED="1512182799182" TEXT="WTF??">
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1512182366016" ID="ID_146727217" MODIFIED="1512182454305">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Aufrufpunkt: <b>invokeTransformation</b>()
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      In instantiation of 'lib::{anonymous}::_ExpansionTraits&lt;FUN, SRC&gt;::Res lib::{anonymous}::_ExpansionTraits&lt;FUN, SRC&gt;::Functor::operator()(ARG&amp;) [with ARG = long int; FUN = lib::test::IterTreeExplorer_test::verify_transformOperation()::&lt;lambda(auto:2)&gt;&amp;; SRC = lib::iter_explorer::IterableDecorator&lt;long int, lib::iter_explorer::WrappedIteratorCore&lt;lib::TreeExplorer&lt;lib::iter_explorer::StlRange&lt;std::vector&lt;long int&gt;&amp;&gt; &gt; &gt; &gt;; lib::{anonymous}::_ExpansionTraits&lt;FUN, SRC&gt;::Res = std::basic_string&lt;char&gt;]':
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      src/lib/iter-tree-explorer.hpp:426:50: error: no match for call to '(std::function&lt;std::basic_string&lt;char&gt;(lib::iter_explorer::IterableDecorator&lt;long int, lib::iter_explorer::WrappedIteratorCore&lt;lib::TreeExplorer&lt;lib::iter_explorer::StlRange&lt;std::vector&lt;long int&gt;&amp;&gt; &gt; &gt; &gt;&amp;)&gt;) (long int&amp;)'
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1512182627492" ID="ID_900469807" MODIFIED="1512182635239" TEXT="ARG = long">
+<node CREATED="1512182636875" ID="ID_995259969" MODIFIED="1512182643174" TEXT="mu&#xdf; von yield stammen"/>
+<node CREATED="1512183058625" ID="ID_1212399223" MODIFIED="1512183084458" TEXT="wir stehen in Transformer&lt;COR..."/>
+<node CREATED="1512183107627" ID="ID_1096980589" MODIFIED="1512183113342" TEXT="with COR = lib::iter_explorer::WrappedIteratorCore&lt;lib::TreeExplorer..."/>
+<node CREATED="1512183054810" ID="ID_1399207561" MODIFIED="1512183133267" TEXT="typename IT::reference yield(WrappedIteratorCore const&amp;)"/>
+<node CREATED="1512183140886" ID="ID_549090759" MODIFIED="1512183150825" TEXT="IT = TreeExplorer"/>
+<node CREATED="1512183151693" ID="ID_621724350" MODIFIED="1512183166319" TEXT="IT::reference == long&amp;"/>
+</node>
+<node CREATED="1512182644930" ID="ID_772628629" MODIFIED="1512182648389" TEXT="was ist SRC?">
+<node CREATED="1512182682149" ID="ID_1240670384" MODIFIED="1512182695423" TEXT="IterableDecorator&lt;long, WrappedIteratorCore&lt;...."/>
+<node CREATED="1512182696579" ID="ID_1928279872" MODIFIED="1512182724615">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also IterableDecorator aufgesetzt auf die Core <i>im</i>&#160;Transformer
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1512182741053" ID="ID_142258086" MODIFIED="1512182944828" TEXT="Vermutung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512182747492" ID="ID_1749262679" MODIFIED="1512182751623" TEXT="SRC ist korrekt">
+<node COLOR="#338800" CREATED="1512182891904" ID="ID_391517148" MODIFIED="1512182895697" TEXT="best&#xe4;tigt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1512182897327" ID="ID_131392784" MODIFIED="1512182918440" TEXT="_ExpansionTraits haben den vorhandenen SrcIterator genommen"/>
+<node CREATED="1512182919148" ID="ID_1915639648" MODIFIED="1512182927165" TEXT="genauso wie sie sollen!">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1512182752899" ID="ID_1075110241" MODIFIED="1512182940147" TEXT="wir sind im Iterator-Zweig, da generisches Lambda">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512182770497" ID="ID_301580428" MODIFIED="1512182786929" TEXT="also ist das ARG das Problem">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512183184560" ID="ID_1174618775" MODIFIED="1512183215189" TEXT="Anpassungs-Logik fehlt">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512183196119" ID="ID_1543276489" MODIFIED="1512183210239" TEXT="hatte nur den Sonnenschein-Fall gecodet">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1512183218675" ID="ID_293046899" MODIFIED="1512250712443" TEXT="brauche Adapter um yield">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512183306032" ID="ID_710747972" MODIFIED="1512183310819" TEXT="normalerweise 1:1"/>
+<node CREATED="1512183311551" ID="ID_783747294" MODIFIED="1512183352965" TEXT="aber je nach Funktion...">
+<node CREATED="1512183380565" ID="ID_1649641461" MODIFIED="1512183407885" TEXT="auf Core heben"/>
+<node CREATED="1512183408546" ID="ID_1438983384" MODIFIED="1512183418596" TEXT="oder sogar auf SrcIter heben"/>
+</node>
+<node CREATED="1512250716674" ID="ID_1607046573" MODIFIED="1512250752714" TEXT="nein, das w&#xfc;rde das ganze System aufdoppeln">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1512250754085" ID="ID_1665621288" MODIFIED="1512250766733" TEXT="warum &#xfc;berhaupt zwei Systeme?">
+<icon BUILTIN="help"/>
+<node CREATED="1512250771874" ID="ID_59094155" MODIFIED="1512250776853" TEXT="theoretisch k&#xf6;nnte man...."/>
+<node CREATED="1512250778322" ID="ID_52171581" MODIFIED="1512250802562" TEXT="immer wieder in einen WrappedIteratorCore einpacken"/>
+<node CREATED="1512250807318" ID="ID_1268505006" MODIFIED="1512250821328" TEXT="das w&#xe4;ren zwei Indirektionen pro Layer....">
+<node CREATED="1512250866126" ID="ID_739491519" MODIFIED="1512250917460" TEXT="zwar optimierbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir gehen davon aus,
+    </p>
+    <p>
+      da&#223; der Optimizer solche inline-Accessor-Funktionen
+    </p>
+    <p>
+      ohnehin restlos wegoptimieren wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1512250874420" ID="ID_407939641" MODIFIED="1512250969766" TEXT="aber zus&#xe4;tzlicher Code-Aufwand">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar in dem Moment, wo man die Layer zusammensetzt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1512250977247" ID="ID_363861413" MODIFIED="1512251011054" TEXT="letztlich egal, also automatisch Konverter einf&#xfc;gen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512259544994" ID="ID_702123443" MODIFIED="1512259564650" TEXT="Problem: mu&#xdf; auf Iterator hochkasten">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512259576702" ID="ID_1668053426" MODIFIED="1512259606959" TEXT="Problem: Fehl-Match auf tiefer liegende Core">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512259608498" ID="ID_1503180090" MODIFIED="1512259684029" TEXT="versautes Design">
+<arrowlink COLOR="#fe2e57" DESTINATION="ID_1357405758" ENDARROW="Default" ENDINCLINATION="1323;-81;" ID="Arrow_ID_550770884" STARTARROW="None" STARTINCLINATION="-1297;0;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="17"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512183706657" ID="ID_1135345978" MODIFIED="1512183725664" TEXT="oder: dritter Zweig in ArgAcessor?">
+<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1512251027232" ID="ID_755375196" MODIFIED="1512251042682" TEXT="soll also universell die F&#xe4;lle adaptieren k&#xf6;nnen"/>
+<node CREATED="1512251172916" ID="ID_378084629" MODIFIED="1512251199899" TEXT="Entscheidung: StateCore wird bevorzugt">
+<icon BUILTIN="yes"/>
+<node CREATED="1512251214046" ID="ID_1353274464" MODIFIED="1512251270499" TEXT="Konsequenz: alle Layer m&#xfc;ssen StateCore sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wenn mal ein Layer &quot;nur&quot; Iterator w&#228;re,
+    </p>
+    <p>
+      dann k&#246;nnte es eine Kombination geben, die einen solchen Layer &#252;bersrpingt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1512251276054" ID="ID_236669144" MODIFIED="1512251283329" TEXT="Kurzschlu&#xdf; Core -&gt; Core"/>
+</node>
+<node CREATED="1512251305810" ID="ID_737982099" MODIFIED="1512251319908" TEXT="Iterator nur, wenn Quelle keine Core ist"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512007357412" ID="ID_1659237225" MODIFIED="1512010428392" TEXT="was bedeutet ein generisches Lambda?">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
@@ -5419,7 +5604,7 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512179383254" FOLDED="true" ID="ID_1554412479" MODIFIED="1512326315343" TEXT="mu&#xdf; value_type from Funktor gewinnen">
+<node COLOR="#338800" CREATED="1512179383254" FOLDED="true" ID="ID_1554412479" MODIFIED="1512358439866" TEXT="mu&#xdf; value_type from Funktor gewinnen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512181398331" ID="ID_1715550480" MODIFIED="1512181407142" TEXT="value_type rebinden"/>
 <node CREATED="1512181407778" ID="ID_782984508" MODIFIED="1512181425706" TEXT="generischen Helper von IterAdapter">
@@ -5546,6 +5731,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1511835736414" TEXT="Transform: generic Lambda">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512181454244" ID="ID_23118252" MODIFIED="1512183510137" TEXT="AUA: warum wird hier ein Value als Arguement &#xfc;bergeben">
+<arrowlink COLOR="#a83e54" DESTINATION="ID_215116122" ENDARROW="Default" ENDINCLINATION="351;347;" ID="Arrow_ID_891457048" STARTARROW="None" STARTINCLINATION="683;0;"/>
+<icon BUILTIN="help"/>
+</node>
 <node COLOR="#338800" CREATED="1512181480616" FOLDED="true" ID="ID_1099744034" MODIFIED="1512355551250" TEXT="Beobachtung: move in join">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512181493551" ID="ID_1834475937" MODIFIED="1512181507297" TEXT="Bei &#xdc;bergabe in stringify() fehlt std::forward"/>
@@ -5569,8 +5758,7 @@
       versehentlich wurde <i>auch der</i>&#160;an std::forward gegeben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512349405280" ID="ID_1121668073" MODIFIED="1512349446256" TEXT="war nachweislich eine echte Fehlfunktion">
 <richcontent TYPE="NOTE"><html>
@@ -5585,8 +5773,7 @@
       Dazu in NumIter einen explizit tracenden move-ctor eingebaut
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1512181592137" ID="ID_1472433606" MODIFIED="1512181641886" TEXT="im Ergebnis folgenlos, aber gef&#xe4;hrlich">
@@ -5605,8 +5792,7 @@
       Deshalb f&#228;llt dieses doppelte Problem nicht auf
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 <node CREATED="1512349447978" ID="ID_1467669966" MODIFIED="1512349453141" TEXT="und zwar wegen util::join"/>
 <node CREATED="1512349454562" ID="ID_1337232290" MODIFIED="1512349470555" TEXT="dieses hat --versehentlich-- eine Kopie zu viel gemacht"/>
@@ -21839,8 +22025,7 @@
       learned
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1512178960281" FOLDED="true" ID="ID_1847018554" MODIFIED="1512179228013" TEXT="SFINAE">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512178984189" ID="ID_226963358" MODIFIED="1512179008554" TEXT="Fehler im Check scheitern stillschweigend">
 <icon BUILTIN="clanbomber"/>
@@ -21855,8 +22040,7 @@
       auf <i>incomplete type</i>&#160;achten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1512179030982" ID="ID_895612426" MODIFIED="1512179034418" TEXT="sizeof()"/>
 <node CREATED="1512179035013" ID="ID_1663591306" MODIFIED="1512179038425" TEXT="member-pointer"/>
 <node CREATED="1512179039109" ID="ID_746391928" MODIFIED="1512179057691">
@@ -21872,8 +22056,7 @@
       mutually dependent templates
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1512179063250" ID="ID_933791979" MODIFIED="1512179132703" TEXT="w&#xe4;hrend der Instantiierung....">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -21884,8 +22067,7 @@
       kann eines der Templates im Zyklus vorr&#252;bergehend als &quot;incomplete&quot; gelten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512179134400" ID="ID_1738202679" MODIFIED="1512179201014" TEXT="....kann die Metafunktion scheitern">
 <richcontent TYPE="NOTE"><html>
@@ -21909,8 +22091,7 @@
       Konsequenz: man w&#228;hlt dann z.B. eine subtil falsche Spezialisierung.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512179201831" ID="ID_1577563892" MODIFIED="1512179219196" TEXT="t&#xfc;ckischer Fehler">
 <icon BUILTIN="messagebox_warning"/>

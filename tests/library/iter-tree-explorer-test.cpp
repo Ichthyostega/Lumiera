@@ -337,6 +337,7 @@ namespace test{
                       .expand([](uint j){ return CountDown{j-1}; })                                   // expand-functor: Val > StateCore
                       );
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](uint j){ return NumberSequence{j-1}; })                              // expand-functor: Val > Iter
@@ -360,6 +361,7 @@ namespace test{
           
           // test routine called the expansion functor five times
           CHECK (5 == childBuffer.size());
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           
           
           
@@ -370,12 +372,13 @@ namespace test{
                       .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })       // expand-functor: StateCore const& -> StateCore
                       );
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](CountDown core){ return NumberSequence{ yield(core) - 1}; })         // expand-functor: StateCore -> Iter
                       );
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : Generated code works just fine and passes Test though
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
@@ -386,6 +389,7 @@ namespace test{
                     treeExplore(CountDown{5})
                       .expand([](auto it){ return decltype(it){ *it - 1}; })                          // generic Lambda: Iter -> Iter
                       );
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
         }
       
@@ -451,10 +455,9 @@ namespace test{
           auto multiply  = [](int v){ return 2*v; };
           
           _Fmt embrace{"≺%s≻"};
-          auto formatify = [&](auto it){ return embrace % *it; };
+          auto formatify = [&](auto it){ return string{embrace % *it}; };
           
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           auto ii = treeExplore (CountDown{7,4})
                       .transform(multiply)
                       ;
@@ -473,17 +476,17 @@ namespace test{
           vector<int64_t> numz{1,-2,3,-5,8,-13};
           
           cout << materialise (treeExplore(numz)
-                                 .transform(formatify));
+                                 .transform(formatify)) <<endl;
           
           cout << materialise (treeExplore(numz)
                                  .transform(multiply)
-                                 .transform(formatify));
+                                 .transform(formatify)) <<endl;
           
           cout << materialise (treeExplore(numz)
                                  .transform(multiply)
                                  .transform(multiply)
                                  .transform(formatify)
-                                 .transform(formatify));
+                                 .transform(formatify)) <<endl;
           
           
           // demonstrate the functor is evaluated only once per step
@@ -521,6 +524,7 @@ namespace test{
           ++jj;
           CHECK (fact == 2*23);
           CHECK (isnil (jj));
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
         }
       
