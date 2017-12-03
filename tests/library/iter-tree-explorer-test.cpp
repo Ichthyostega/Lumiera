@@ -337,7 +337,6 @@ namespace test{
                       .expand([](uint j){ return CountDown{j-1}; })                                   // expand-functor: Val > StateCore
                       );
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](uint j){ return NumberSequence{j-1}; })                              // expand-functor: Val > Iter
@@ -361,7 +360,6 @@ namespace test{
           
           // test routine called the expansion functor five times
           CHECK (5 == childBuffer.size());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           
           
           
@@ -372,13 +370,12 @@ namespace test{
                       .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })       // expand-functor: StateCore const& -> StateCore
                       );
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](CountDown core){ return NumberSequence{ yield(core) - 1}; })         // expand-functor: StateCore -> Iter
                       );
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : Generated code works just fine and passes Test though
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
@@ -389,7 +386,6 @@ namespace test{
                     treeExplore(CountDown{5})
                       .expand([](auto it){ return decltype(it){ *it - 1}; })                          // generic Lambda: Iter -> Iter
                       );
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
         }
       
@@ -404,13 +400,13 @@ namespace test{
           CHECK (4 == *ii);
           
           CHECK (0 == ii.depth());
-          ii.expand();
+          ii.expandChildren();
           CHECK (3 == *ii);
           CHECK (1 == ii.depth());
           ++ii;
           CHECK (2 == *ii);
           CHECK (1 == ii.depth());
-          ii.expand();
+          ii.expandChildren();
           CHECK (1 == *ii);
           CHECK (2 == ii.depth());
           ++ii;
@@ -420,20 +416,20 @@ namespace test{
           CHECK (3 == *ii);
           CHECK (0 == ii.depth());
           CHECK (materialise(ii) == "3-2-1");
-          ii.expand();
+          ii.expandChildren();
           CHECK (1 == ii.depth());
           CHECK (materialise(ii) == "2-1-2-1");
           ++++ii;
           CHECK (0 == ii.depth());
           CHECK (materialise(ii) == "2-1");
-          ii.expand();
+          ii.expandChildren();
           CHECK (1 == ii.depth());
           CHECK (materialise(ii) == "1-1");
           ++ii;
           CHECK (0 == ii.depth());
           CHECK (1 == *ii);
           CHECK (materialise(ii) == "1");
-          ii.expand();
+          ii.expandChildren();
           CHECK (isnil (ii));
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
@@ -452,6 +448,7 @@ namespace test{
       void
       verify_transformOperation()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           auto multiply  = [](int v){ return 2*v; };
           
           _Fmt embrace{"≺%s≻"};
@@ -524,7 +521,6 @@ namespace test{
           ++jj;
           CHECK (fact == 2*23);
           CHECK (isnil (jj));
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
         }
       

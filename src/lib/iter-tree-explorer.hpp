@@ -164,7 +164,7 @@ namespace lib {
         IterableDecorator& operator= (IterableDecorator&&)      =default;
         IterableDecorator& operator= (IterableDecorator const&) =default;
         
-        operator bool() const { return isValid(); }
+        explicit operator bool() const { return isValid(); }
         
         
         /* === lumiera forward iterator concept === */
@@ -224,49 +224,6 @@ namespace lib {
           return not (il == ir);
         }
       };
-    
-    
-    /** @todo WIP 11/17 */
-    template<class IT>
-    class WrappedIteratorCore
-      : public IT
-      {
-      public:
-        
-        template<typename...ARGS>
-        WrappedIteratorCore (ARGS&& ...init)
-          : IT(std::forward<ARGS>(init)...)
-          { }
-        
-        WrappedIteratorCore()                                       =default;
-        WrappedIteratorCore (WrappedIteratorCore&&)                 =default;
-        WrappedIteratorCore (WrappedIteratorCore const&)            =default;
-        WrappedIteratorCore& operator= (WrappedIteratorCore&&)      =default;
-        WrappedIteratorCore& operator= (WrappedIteratorCore const&) =default;
-        
-        
-      protected: /* === Iteration control API for IterableDecorator === */
-        
-        friend bool
-        checkPoint (WrappedIteratorCore const& core)
-        {
-          return core.isValid();
-        }
-        
-        friend typename IT::reference
-        yield (WrappedIteratorCore const& core)
-        {
-          return *core;
-        }
-        
-        friend void
-        iterNext (WrappedIteratorCore & core)
-        {
-          ++core;
-        }
-      };
-    
-    
     
   }//(End) namespace iter_explorer : predefined policies and configurations
   
@@ -343,14 +300,12 @@ namespace lib {
       {
         using SrcVal  = typename CoreYield<SRC>::value_type;
         using SrcIter = iter_explorer::IterableDecorator<SrcVal, SRC>;
-        using SrcCore = SRC;
       };
     
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<shall_use_Lumiera_Iter<SRC>>>
       {
         using SrcIter = remove_reference_t<SRC>;
-        using SrcCore = iter_explorer::WrappedIteratorCore<SRC>;
         using SrcVal  = typename SrcIter::value_type;
       };
     
@@ -360,7 +315,6 @@ namespace lib {
         static_assert (not std::is_rvalue_reference<SRC>::value,
                        "container needs to exist elsewhere during the lifetime of the iteration");
         using SrcIter = iter_explorer::StlRange<SRC>;
-        using SrcCore = iter_explorer::WrappedIteratorCore<SrcIter>;
         using SrcVal  = typename SrcIter::value_type;
       };
     
@@ -422,34 +376,15 @@ namespace lib {
             using FunArgType = remove_reference_t<Arg>;
             static_assert (std::is_convertible<ARG, FunArgType>::value,
                            "the expansion functor must accept the source iterator or state core as parameter");
-            test::TypeDebugger<FunArgType> guggi;
             
             static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
           };
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
         template<class IT>
-        struct ArgAccessor<IT,   enable_if<__and_<shall_use_Lumiera_Iter<IT>
-                                                 ,is_convertible<typename IT::value_type, Arg>>>>
+        struct ArgAccessor<IT,   enable_if<is_convertible<typename IT::value_type, Arg>>>
           {
             static auto build() { return [](auto& iter) { return *iter; }; }
-          };
-        
-        /** in a similar way, adapt when the passed source argument is a "state core" ("monadic" usage pattern) */
-        template<class COR>
-        struct ArgAccessor<COR,   enable_if<__and_<is_StateCore<COR>
-                                                  ,is_convertible<typename CoreYield<COR>::value_type, Arg>>>>
-          {
-//            test::TypeDebugger<COR> buggi;
-            static auto build() { return [](COR const& core) { return yield(core); }; }
-          };
-        
-        template<class COR>
-        struct ArgAccessor<COR,   enable_if<__and_<is_StateCore<COR>
-                                                  ,std::is_same<SRC&, Arg>>>>
-          {
-//            test::TypeDebugger<COR> muggi;
-            static auto build() { return [](COR& core) ->SRC& { return static_cast<SRC&> (core); }; }
           };
         
         
@@ -501,8 +436,8 @@ namespace lib {
     class Expander
       : public SRC
       {
-        using SrcIter = typename SRC::SrcIter;
-        using _Traits = _ExpansionTraits<FUN,SrcIter>;
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        using _Traits = _ExpansionTraits<FUN,SRC>;
         using ExpandFunctor = typename _Traits::Functor;
         
         using ResIter = typename _DecoratorTraits<typename _Traits::Res>::SrcIter;
@@ -517,7 +452,7 @@ namespace lib {
         // inherited default copy operations
         
         Expander (SRC&& parentExplorer, FUN&& expandFunctor)
-          : SRC{move (parentExplorer)}
+          : SRC{move (parentExplorer)}                           // NOTE: slicing move to strip TreeExplorer (Builder)
           , expandChildren_{forward<FUN> (expandFunctor)}
           , expansions_{}
           { }
@@ -525,7 +460,7 @@ namespace lib {
         
         /** core operation: expand current head element */
         Expander&
-        expand()
+        expandChildren()
           {
             REQUIRE (checkPoint(*this), "attempt to expand an empty explorer");
             
@@ -581,14 +516,12 @@ namespace lib {
     /**
      * 
      */
-    template<class COR, class FUN>
+    template<class SRC, class FUN>
     class Transformer
-      : public COR
+      : public SRC
       {
-        
-        using SrcIter = typename _DecoratorTraits<COR>::SrcIter;
-        
-        using _Traits = _ExpansionTraits<FUN,SrcIter>;
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        using _Traits = _ExpansionTraits<FUN,SRC>;
         using Res = typename _Traits::Res;
         
         using TransformFunctor = typename _Traits::Functor;
@@ -606,8 +539,8 @@ namespace lib {
         Transformer() =default;
         // inherited default copy operations
         
-        Transformer (COR&& parentCore, FUN&& transformFunctor)
-          : COR{move (parentCore)}
+        Transformer (SRC&& dataSrc, FUN&& transformFunctor)
+          : SRC{move (dataSrc)}
           , trafo_{forward<FUN> (transformFunctor)}
           { }
         
@@ -617,7 +550,7 @@ namespace lib {
         friend bool
         checkPoint (Transformer const& tx)
         {
-          return checkPoint (tx.core());
+          return bool(tx.srcIter());
         }
         
         friend reference
@@ -629,13 +562,13 @@ namespace lib {
         friend void
         iterNext (Transformer & tx)
         {
-          iterNext (tx.core());
+          ++ tx.srcIter();
           tx.treated_.reset();
         }
         
       private:
-        COR&
-        core()  const
+        SRC&
+        srcIter()  const
           {
             return unConst(*this);
           }
@@ -643,8 +576,8 @@ namespace lib {
         reference
         invokeTransformation ()
           {
-            if (not treated_)
-              treated_ = trafo_(core());
+            if (not treated_)  // invoke transform function once per src item
+              treated_ = trafo_(srcIter());
             return *treated_;
           }
       };
@@ -665,13 +598,13 @@ namespace lib {
   class TreeExplorer
     : public SRC
     {
+      static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
       
       
     public:
-      using SrcIter    = SRC;
-      using value_type = typename SrcIter::value_type;
-      using reference  = typename SrcIter::reference;
-      using pointer    = typename SrcIter::pointer;
+      using value_type = typename meta::TypeBinding<SRC>::value_type;
+      using reference  = typename meta::TypeBinding<SRC>::reference;
+      using pointer    = typename meta::TypeBinding<SRC>::pointer;
       
       
       /** by default create an empty iterator */
@@ -731,14 +664,10 @@ namespace lib {
       auto
       expand (FUN&& expandFunctor)
         {
-          using This   = typename meta::Strip<decltype(*this)>::TypeReferred;
-          using SrcIter = typename _DecoratorTraits<This>::SrcIter;
-          using Value  = typename SrcIter::value_type;
-          using Core   = iter_explorer::Expander<SrcIter, FUN>;
+          using ResCore = iter_explorer::Expander<SRC, FUN>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          using ExpandableExplorer = iter_explorer::IterableDecorator<Value, Core>;
-          
-          return ExpandableExplorer{move(*this), forward<FUN>(expandFunctor)};
+          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
         }
       
       
@@ -748,14 +677,10 @@ namespace lib {
       auto
       transform (FUN&& transformFunctor)
         {
-          using This   = typename meta::Strip<decltype(*this)>::TypeReferred;
-          using SrcCore = typename _DecoratorTraits<This>::SrcCore;
-          using ResCore = iter_explorer::Transformer<SrcCore, FUN>;
-          using Value   = typename ResCore::value_type;
+          using ResCore = iter_explorer::Transformer<SRC, FUN>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          using TransformedExplorer = iter_explorer::IterableDecorator<Value, ResCore>;
-          
-          return TransformedExplorer{move(*this), forward<FUN>(transformFunctor)};
+          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});
         }
       
     private:

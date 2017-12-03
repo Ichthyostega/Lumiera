@@ -5344,7 +5344,12 @@
 </node>
 <node CREATED="1511831658137" ID="ID_295934398" MODIFIED="1511831665696" TEXT="Dekorator-Ansatz">
 <icon BUILTIN="forward"/>
-<node CREATED="1511831681334" ID="ID_1182010965" MODIFIED="1511831699199" TEXT="Unterscheidung nach Parent (per Trait)"/>
+<node CREATED="1512262147649" ID="ID_1592901896" MODIFIED="1512262272749" TEXT="Dekorator auf Core">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512262162366" ID="ID_1471773970" MODIFIED="1512262276131" TEXT="kann direkt Core -&gt; Core verarbeiten">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1511831681334" ID="ID_1182010965" MODIFIED="1511831699199" TEXT="Unterscheidung nach Parent (per Trait)">
 <node CREATED="1511831718105" ID="ID_758057732" MODIFIED="1511831729507" TEXT="Parent == state-core">
 <node CREATED="1511831731159" ID="ID_1581545445" MODIFIED="1511831735258" TEXT="direkt verwenden"/>
 <node CREATED="1511831735870" ID="ID_461566244" MODIFIED="1511831743057" TEXT="bietet bereits die Extension points"/>
@@ -5363,6 +5368,43 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512259502594" ID="ID_1761695302" MODIFIED="1512259525410" TEXT="sieht nach unn&#xf6;tig verkompliziertem Design aus">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1512262200009" ID="ID_1921211925" MODIFIED="1512262243802" TEXT="f&#xfc;hrt zu unn&#xf6;tig komplexem Design">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512262213016" ID="ID_1547313420" MODIFIED="1512262221626" TEXT="wir haben jetzt &quot;zwei Schienen&quot;"/>
+<node CREATED="1512262222470" ID="ID_589647672" MODIFIED="1512262236880" TEXT="und es ist nicht mehr klar, was die Quelle ist"/>
+</node>
+</node>
+<node CREATED="1512262251706" ID="ID_1480384220" MODIFIED="1512262256926" TEXT="Dekorator auf Iterator">
+<node CREATED="1512262291085" ID="ID_1532344112" MODIFIED="1512262295993" TEXT="f&#xfc;r jeden Layer">
+<node CREATED="1512262299476" ID="ID_102544445" MODIFIED="1512262325001">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TreeExplorer per <i>slicing move</i>&#160;entfernen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512262331008" ID="ID_287760536" MODIFIED="1512262346625" TEXT="enthaltenen SrcIter dekorieren -&gt; Core"/>
+<node CREATED="1512262347637" ID="ID_1683477051" MODIFIED="1512262371854" TEXT="erneut einen TreeExplorer dar&#xfc;ber adaptieren"/>
+</node>
+<node CREATED="1512262480339" ID="ID_62641165" MODIFIED="1512262489398" TEXT="Problem: Parent-Auswahl">
+<node CREATED="1512262491362" ID="ID_1646804403" MODIFIED="1512262505036" TEXT="wir k&#xf6;nnen beliebig verschachteln"/>
+<node CREATED="1512262505760" ID="ID_534073442" MODIFIED="1512262514890" TEXT="der Trait k&#xf6;nnte eine tiefere Schicht greifen"/>
+<node CREATED="1512262516143" ID="ID_1514197178" MODIFIED="1512262520193" TEXT="L&#xf6;sung">
+<node CREATED="1512262521070" ID="ID_1457239407" MODIFIED="1512262528041" TEXT="geht nur in diesem limitierten Kontext"/>
+<node CREATED="1512262528836" ID="ID_879672594" MODIFIED="1512262550733" TEXT="Core bekommt Vorfahrt"/>
+<node CREATED="1512262584301" ID="ID_387075989" MODIFIED="1512262598534" TEXT="Folge: Alle Layer m&#xfc;ssen neue Core produzieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -5550,7 +5592,8 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1512250977247" ID="ID_363861413" MODIFIED="1512251011054" TEXT="letztlich egal, also automatisch Konverter einf&#xfc;gen">
+<node CREATED="1512250977247" ID="ID_363861413" MODIFIED="1512262612978" TEXT="letztlich egal, also automatisch Konverter einf&#xfc;gen">
+<icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512259544994" ID="ID_702123443" MODIFIED="1512259564650" TEXT="Problem: mu&#xdf; auf Iterator hochkasten">
 <icon BUILTIN="clanbomber"/>
 </node>
@@ -5562,6 +5605,10 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="17"/>
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node CREATED="1512262620480" ID="ID_967757075" MODIFIED="1512262626861" TEXT="Design aufgegeben">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>

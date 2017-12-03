@@ -435,7 +435,7 @@ namespace meta {
       META_DETECT_OPERATOR_INC();
       
     public:
-      enum{ value = std::is_convertible<Type, bool>::value
+      enum{ value = std::is_constructible<bool, Type>::value
                  && HasNested_value_type<Type>::value
                  && HasOperator_deref<Type>::value
                  && HasOperator_inc<Type>::value

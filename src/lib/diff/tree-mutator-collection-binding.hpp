@@ -362,7 +362,7 @@ namespace diff{
                   {
                     binding_.inject (move(*found));
                   }
-                return found;
+                return bool(found);
               }
             else
               return PAR::findSrc (refSpec);
