@@ -88,11 +88,10 @@ namespace test{
      * This iteration _"state core" type_ describes
      * a descending sequence of numbers yet to be delivered.
      */
-    class CountDown
+    struct CountDown
       {
         uint p,e;
         
-      public:
         CountDown(uint start =0, uint end =0)
           : p(start)
           , e(end)
@@ -444,14 +443,20 @@ namespace test{
        * and the resulting entity is again a Lumiera Forward Iterator with suitable value type.
        * The transformation function is invoked only once per step and the result produced by
        * this invocation is placed into a holder buffer embedded within the iterator.
+       * @note since the implementation uses the same generic adaptor framework,
+       *       the transformation functor may be defined with the same variations
+       *       as described for the expand-operation above. In theory, it might
+       *       collaborate with the embedded "state core" type, thereby possibly
+       *       bypassing other decorators added below.
+       * @warning don't try this at home
        */
       void
       verify_transformOperation()
         {
-          auto multiply  = [](int v){ return 2*v; };
+          auto multiply  = [](int v){ return 2*v; };                             // functional map: value -> value
           
           _Fmt embrace{"≺%s≻"};
-          auto formatify = [&](auto it){ return string{embrace % *it}; };
+          auto formatify = [&](auto it){ return string{embrace % *it}; };        // generic lambda: assumed to take an Iterator& 
           
           
           auto ii = treeExplore (CountDown{7,4})
@@ -469,6 +474,8 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
           
+          
+          // demonstrate chaining of several transformation layers
           vector<int64_t> numz{1,-2,3,-5,8,-13};
           
           CHECK ("≺1≻-≺-2≻-≺3≻-≺-5≻-≺8≻-≺-13≻"                == materialise (treeExplore(numz)
@@ -527,6 +534,28 @@ namespace test{
           
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           CHECK (fact == 2*23);    // exhaustion detected on source and thus no further evaluation
+          
+          
+          
+          // demonstrate a transformer accessing the source state core...
+          // should not be relevant in practice, but works due to the generic adapters
+          auto kk = treeExplore(CountDown{9,4})
+                      .transform([](CountDown& core)
+                                   {
+                                     uint delta = core.p - core.e;
+                                     if (delta % 2 == 0)
+                                       --core.p;     // EVIL EVIL
+                                     return delta;
+                                   });
+          
+          CHECK (5 == *kk); // the delta between 9 (start) and 4 (end)
+          ++kk;
+          CHECK (4 == *kk); // Core manipulated by SIDE-EFFECT at this point...
+          CHECK (4 == *kk); // ...but not yet obvious, since the result is cached
+          ++kk;
+          CHECK (2 == *kk); // Surprise -- someone ate my numberz...
+          ++kk;
+          CHECK (isnil (kk));
         }
       
       

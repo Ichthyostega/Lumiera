@@ -5092,10 +5092,15 @@
 <node CREATED="1510941397907" ID="ID_993148577" MODIFIED="1510941406366" TEXT="zun&#xe4;chst als abstrakter Baustein"/>
 <node CREATED="1510941406978" ID="ID_1048232110" MODIFIED="1510941437002" TEXT="sp&#xe4;ter mit IterExplorer verschmelzen"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941455667" ID="ID_1945607867" MODIFIED="1510941522371" TEXT="Builder">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1510941455667" ID="ID_1945607867" MODIFIED="1512278476654" TEXT="Builder">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1511054840038" ID="ID_18464349" MODIFIED="1511054851543" TEXT="brauch ich am Ende &#xfc;berhaupt einen builder">
 <icon BUILTIN="help"/>
+</node>
+<node CREATED="1512278433500" ID="ID_1806674229" MODIFIED="1512278469093" TEXT="TreeExplorer fungiert als Builder">
+<icon BUILTIN="yes"/>
+<node CREATED="1512278445042" ID="ID_205794467" MODIFIED="1512278456012" TEXT="wird jeweils on top dar&#xfc;bergebaut"/>
+<node CREATED="1512278456672" ID="ID_488770369" MODIFIED="1512278462388" TEXT="wird in jedem Schritt gestrippt"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1510941523082" TEXT="TreeExplorer">
@@ -5322,8 +5327,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511827103749" ID="ID_1699316886" MODIFIED="1511837183001" TEXT="transform-Operation">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1511827103749" ID="ID_1699316886" MODIFIED="1512278362994" TEXT="transform-Operation">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1511827249561" ID="ID_794510302" MODIFIED="1511827265634" TEXT="strikt nach Dekorator-Pattern"/>
 <node CREATED="1511827337686" ID="ID_1214119488" MODIFIED="1511827345695" TEXT="bestehendern TransformIter verwenden?">
 <node CREATED="1511827584523" ID="ID_1921395634" MODIFIED="1511827600541" TEXT="nein: wir m&#xfc;ssen von der Core erben">
@@ -5408,10 +5413,11 @@
 </node>
 </node>
 </node>
-<node CREATED="1511918986936" ID="ID_667088953" MODIFIED="1511918989357" TEXT="Konstrukt">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511919003054" ID="ID_1728459315" MODIFIED="1511919013829" TEXT="Aufsetz-Punkt">
-<icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1511919032171" ID="ID_737737817" MODIFIED="1512010665827" TEXT="Problem Parent::Iterator">
+<node COLOR="#338800" CREATED="1511918986936" ID="ID_667088953" MODIFIED="1512278389194" TEXT="Konstrukt">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1511919003054" ID="ID_1728459315" MODIFIED="1512278353753" TEXT="Aufsetz-Punkt">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1511919032171" FOLDED="true" ID="ID_737737817" MODIFIED="1512278392539" TEXT="Problem Parent::Iterator">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511919050960" ID="ID_1621131204" MODIFIED="1512256810082" TEXT="grunds&#xe4;tzliches Problem jedes Iterator-Dekorators">
 <richcontent TYPE="NOTE"><html>
@@ -5463,9 +5469,11 @@
 <node CREATED="1512010371291" ID="ID_563900951" MODIFIED="1512010383805" TEXT="bietet die ExtensionPoints einer State-Core"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837027405" ID="ID_233806852" MODIFIED="1511837172811" TEXT="Argument-Detektor-Magie">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1511837039180" ID="ID_1296099637" MODIFIED="1511837047198" TEXT="ganz analog zur expand-Operation"/>
+<node COLOR="#338800" CREATED="1511837027405" ID="ID_233806852" MODIFIED="1512278360077" TEXT="Argument-Detektor-Magie">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1511837039180" ID="ID_1296099637" MODIFIED="1512278401909" TEXT="ganz analog zur expand-Operation">
+<icon BUILTIN="idea"/>
+</node>
 <node CREATED="1511837047810" ID="ID_684902103" MODIFIED="1511837057125" TEXT="kann man die Traits wiederverwenden?">
 <node CREATED="1512179380102" ID="ID_657845891" MODIFIED="1512179382618" TEXT="schaut gut aus"/>
 <node CREATED="1512182255367" ID="ID_1818058437" MODIFIED="1512182259778" TEXT="Funktor-Argument">
@@ -5770,22 +5778,13 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1511835528239" TEXT="verify_transformOperation();">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835550655" ID="ID_1305788204" MODIFIED="1511835762571" TEXT="Transformer(Iter&lt;Core&gt;)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1510969031379" ID="ID_358406634" MODIFIED="1512278328452" TEXT="verify_transformOperation();">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1511835550655" ID="ID_1305788204" MODIFIED="1512276390701" TEXT="Transformer(Iter&lt;Core&gt;)">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1511835603751" ID="ID_6147833" MODIFIED="1512276267722" TEXT="Transformer(Iter&lt;Val&gt;)">
 <icon BUILTIN="button_ok"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835572331" ID="ID_90684440" MODIFIED="1511835751909" TEXT="Transformer(Core)">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1511835638915" ID="ID_678182318" MODIFIED="1512276256127" TEXT="nicht m&#xf6;glich direkt auf TreeExplorer"/>
-<node CREATED="1511835650761" ID="ID_1585618081" MODIFIED="1511835751909" TEXT="aber chained Transform sollte so funktionieren"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511835667743" ID="ID_1089942674" MODIFIED="1511835751909" TEXT="Typ verifizieren!">
-<font NAME="SansSerif" SIZE="10"/>
-<icon BUILTIN="flag-pink"/>
-</node>
 </node>
 <node COLOR="#338800" CREATED="1511835716176" ID="ID_1407397782" MODIFIED="1512276211354" TEXT="Transformer mit Seiteneffekt">
 <icon BUILTIN="button_ok"/>
@@ -5870,8 +5869,25 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835901999" ID="ID_1717235881" MODIFIED="1511836238870" TEXT="Transform: Core&amp; -&gt; irgendwas">
+<node CREATED="1511835901999" ID="ID_1717235881" MODIFIED="1512278299862" TEXT="Transform: Core&amp; -&gt; irgendwas">
 <icon BUILTIN="help"/>
+<node CREATED="1512276512313" ID="ID_725756500" MODIFIED="1512276517860" TEXT="sollte theoretisch m&#xf6;glich sein"/>
+<node CREATED="1512276524111" ID="ID_453994757" MODIFIED="1512276583587" TEXT="nicht sonderlich sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil man den konkreten Typ der Core kennen mu&#223;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1512276518472" ID="ID_1860559214" MODIFIED="1512278316412" TEXT="per Testfall dokumentiert">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1511227804622" TEXT="verify_combinedExpandTransform();">
