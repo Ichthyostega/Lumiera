@@ -448,7 +448,6 @@ namespace test{
       void
       verify_transformOperation()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           auto multiply  = [](int v){ return 2*v; };
           
           _Fmt embrace{"≺%s≻"};
@@ -472,18 +471,18 @@ namespace test{
           
           vector<int64_t> numz{1,-2,3,-5,8,-13};
           
-          cout << materialise (treeExplore(numz)
-                                 .transform(formatify)) <<endl;
+          CHECK ("≺1≻-≺-2≻-≺3≻-≺-5≻-≺8≻-≺-13≻"                == materialise (treeExplore(numz)
+                                                                                .transform(formatify)) );
           
-          cout << materialise (treeExplore(numz)
-                                 .transform(multiply)
-                                 .transform(formatify)) <<endl;
+          CHECK ("≺2≻-≺-4≻-≺6≻-≺-10≻-≺16≻-≺-26≻"              == materialise (treeExplore(numz)
+                                                                                .transform(multiply)
+                                                                                .transform(formatify)) );
           
-          cout << materialise (treeExplore(numz)
-                                 .transform(multiply)
-                                 .transform(multiply)
-                                 .transform(formatify)
-                                 .transform(formatify)) <<endl;
+          CHECK ("≺≺4≻≻-≺≺-8≻≻-≺≺12≻≻-≺≺-20≻≻-≺≺32≻≻-≺≺-52≻≻" == materialise (treeExplore(numz)
+                                                                                .transform(multiply)
+                                                                                .transform(multiply)
+                                                                                .transform(formatify)
+                                                                                .transform(formatify)) );
           
           
           // demonstrate the functor is evaluated only once per step
@@ -503,25 +502,31 @@ namespace test{
           CHECK (3*4 == *jj);
           
           ++jj;
+          CHECK (fact == -2*3);    // NOTE : functor is evaluated on first demand
+          CHECK (-2*3*3 == *jj);   //        ...which happens on yield (access the iterator value)
+          CHECK (fact == 2*2*3);   //        and this also causes the side-effect
           CHECK (-2*3*3 == *jj);
           CHECK (-2*3*3 == *jj);
-          CHECK (fact == 2*2*3);
+          CHECK (fact == 2*2*3);   //        no further evaluation and thus no further side-effect
           
           ++jj;
-          CHECK (fact == -2*2*2*3);
           CHECK (2*2*3*2 == *jj);
+          CHECK (fact == -2*2*2*3);
           
           fact = -23;
           CHECK (2*2*3*2 == *jj);
           
           ++jj;
-          CHECK (fact == 2*23);
+          CHECK (fact == -23);
           CHECK (-23*1 == *jj);
+          CHECK (fact == 2*23);
           
           ++jj;
-          CHECK (fact == 2*23);
           CHECK (isnil (jj));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          CHECK (fact == 2*23);
+          
+          VERIFY_ERROR (ITER_EXHAUST, *ii );
+          CHECK (fact == 2*23);    // exhaustion detected on source and thus no further evaluation
         }
       
       

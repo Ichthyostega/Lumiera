@@ -72,21 +72,17 @@
 
 
 #include "lib/error.hpp"
-#include "lib/meta/trait.hpp"
 #include "lib/meta/duck-detector.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/wrapper.hpp"        ////////////TODO : could be more lightweight by splitting FunctionResult into separate header. Relevant?
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-stack.hpp"
-#include "lib/meta/trait.hpp" ////////////////TODO
-#include "lib/null-value.hpp" ////////////////TODO
 #include "lib/util.hpp"
 #include "lib/test/test-helper.hpp"///////////TODO Bug-o
 
-//#include <boost/utility/enable_if.hpp>  //////////////TODO
-#include <stack>                        ////////////////TODO
-#include <utility>
 #include <functional>
+#include <utility>
 
 
 namespace lib {
@@ -322,11 +318,14 @@ namespace lib {
     
     
     /**
-     * @internal technical details of adapting an _"expansion functor"_ to allow
-     * expanding a given element from the TreeExploer (iterator) into a sequence of child elements.
+     * @internal technical details of binding a functor into the TreeExplorer.
+     * Notably, this happens when adapting an _"expansion functor"_ to allow expanding a given element
+     * from the TreeExploer (iterator) into a sequence of child elements. A quite similar situation
+     * arises when binding a _transformation function_ to be mapped onto each result element.
+     * 
      * The TreeExplorer::expand() operation accepts various flavours of functors, and depending on
-     * the signature of such a functor, an appropriate adapter will be constructed here, allowing
-     * to write a generic Expander::expand() operation. The following details are handled here
+     * the signature of such a functor, an appropriate adapter will be constructed here, allowing to
+     * write a generic Expander::expandChildren() operation. The following details are handled here:
      * - detect if the passed functor is generic, or a regular "function-like" entity.
      * - in case it is generic (generic lambda), we assume it actually accepts a reference to
      *   the source iterator type `SRC`. Thus we instantiate a templated functor with this
@@ -341,10 +340,10 @@ namespace lib {
      *   special adapter supports the case when the _expansion functor_ yields a child sequence
      *   type different but compatible to the original source sequence embedded in TreeExplorer.
      * @tparam FUN something _"function-like"_ passed as functor to be bound
-     * @tparam IT  the source iterator type to apply when attempting to use a generic lambda as functor 
+     * @tparam SRC the source iterator type to apply when attempting to use a generic lambda as functor
      */
     template<class FUN, typename SRC>
-    struct _ExpansionTraits
+    struct _BoundFunctorTraits
       {
         /** handle all regular "function-like" entities */
         template<typename F, typename SEL =void>
@@ -408,11 +407,12 @@ namespace lib {
   
   
   
+  
   namespace iter_explorer {
     
     /**
      * @internal Decorator for TreeExplorer adding the ability to "expand children".
-     * The expand() operation is the key element of a depth-first evaluation: it consumes
+     * The expandChildren() operation is the key element of a depth-first evaluation: it consumes
      * one element and performs a preconfigured _expansion functor_ on that element to yield
      * its "children". These are given in the form of another iterator, which needs to be
      * compatible to the source iterator ("compatibility" boils down to both iterators
@@ -428,7 +428,7 @@ namespace lib {
      * the source iterator wrapped by this decorator.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
      *         _expansion functor_, there is a lot of minute technical details, mostly confined
-     *         within the _ExpansionTraits.
+     *         within the _BoundFunctorTraits.
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
@@ -437,7 +437,7 @@ namespace lib {
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _ExpansionTraits<FUN,SRC>;
+        using _Traits = _BoundFunctorTraits<FUN,SRC>;
         using ExpandFunctor = typename _Traits::Functor;
         
         using ResIter = typename _DecoratorTraits<typename _Traits::Res>::SrcIter;
@@ -514,14 +514,18 @@ namespace lib {
     
     
     /**
-     * 
+     * @internal Decorator for TreeExplorer to map a transformation function on all results.
+     * The transformation function is invoked on demand, and only once per item to be treated,
+     * storing the treated result into an universal value holder buffer. The given functor
+     * is adapted in a similar way as the "expand functor", so to detect and convert the
+     * expected input on invocation.
      */
     template<class SRC, class FUN>
     class Transformer
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _ExpansionTraits<FUN,SRC>;
+        using _Traits = _BoundFunctorTraits<FUN,SRC>;
         using Res = typename _Traits::Res;
         
         using TransformFunctor = typename _Traits::Functor;
@@ -591,6 +595,9 @@ namespace lib {
    * based on a custom opaque _state core_. TreeExploer adheres to the _Monad_
    * pattern known from functional programming, insofar the _expansion step_ is
    * tied into the basic template by means of a function provided at usage site.
+   * This allows to separate the mechanics of evaluation and result combination
+   * from the actual processing and thus to define tree structured computations
+   * based on a not further disclosed, opaque source data structure.
    * 
    * @todo WIP -- preliminary draft as of 11/2017
    */
@@ -671,7 +678,14 @@ namespace lib {
         }
       
       
-      /** @todo WIP 11/17 implement the transforming decorator and apply it here
+      /** adapt this TreeExplorer to pipe each result value through a transformation function.
+       * Several "layers" of mapping can be piled on top of each other, possibly mixed with the
+       * other types of adaptation, like the child-expanding operation, or a filter. Obviously,
+       * when building such processing pipelines, the input and output types of the functors
+       * bound into the pipeline need to be compatible or convertible. The transformation
+       * functor supports the same definition styles as described for #expand
+       * - it can be pure functional, src -> res
+       * - it can accept the underlying source iterator and exploit side-effects
        */
       template<class FUN>
       auto
@@ -693,21 +707,6 @@ namespace lib {
   
   
   
-  
-  
-  namespace iter_explorer {
-    
-    /////TODO RLY?
-    
-//  using util::unConst;
-//  using lib::meta::enable_if;
-//  using lib::meta::disable_if;
-//  using std::function;
-//  using meta::_Fun;
-  }
-  
-  
-  
   /* ==== convenient builder free functions ==== */
   
   /** start building a TreeExplorer
@@ -723,25 +722,6 @@ namespace lib {
     
     return TreeExplorer<SrcIter> {std::forward<IT>(srcSeq)};
   }
-  
-  
-/*
-  template<class IT>
-  inline iter_explorer::DepthFirst<IT>
-  depthFirst (IT const& srcSeq)
-  {
-    return iter_explorer::DepthFirst<IT> (srcSeq);
-  }
-  
-  
-  template<class IT>
-  inline iter_explorer::BreadthFirst<IT>
-  breadthFirst (IT const& srcSeq)
-  {
-    return iter_explorer::BreadthFirst<IT> (srcSeq);
-  }
-  
-*/
   
   
 } // namespace lib

@@ -5344,7 +5344,7 @@
 </node>
 <node CREATED="1511831658137" ID="ID_295934398" MODIFIED="1511831665696" TEXT="Dekorator-Ansatz">
 <icon BUILTIN="forward"/>
-<node CREATED="1512262147649" ID="ID_1592901896" MODIFIED="1512262272749" TEXT="Dekorator auf Core">
+<node CREATED="1512262147649" FOLDED="true" ID="ID_1592901896" MODIFIED="1512271476980" TEXT="Dekorator auf Core">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1512262162366" ID="ID_1471773970" MODIFIED="1512262276131" TEXT="kann direkt Core -&gt; Core verarbeiten">
 <icon BUILTIN="idea"/>
@@ -5442,10 +5442,19 @@
 <node CREATED="1512010566105" ID="ID_1750414732" MODIFIED="1512010610681" TEXT="Umbenennung: _DecoratorTraits">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1512010575367" ID="ID_736035875" MODIFIED="1512010607511" TEXT="soll k&#xfc;nftig zwei F&#xe4;lle unterst&#xfc;tzen">
-<icon BUILTIN="yes"/>
+<node CREATED="1512010575367" ID="ID_736035875" MODIFIED="1512271535475" TEXT="soll k&#xfc;nftig zwei F&#xe4;lle unterst&#xfc;tzen">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1512010586173" ID="ID_1016627565" MODIFIED="1512010597616" TEXT="Finde parent-Iterator"/>
-<node CREATED="1512010598540" ID="ID_771604715" MODIFIED="1512010603735" TEXT="Finde parent-Core"/>
+<node CREATED="1512010598540" ID="ID_771604715" MODIFIED="1512271540773" TEXT="Finde parent-Core">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512271542268" ID="ID_1668978885" MODIFIED="1512271546128" TEXT="war keine gute Idee"/>
+</node>
+</node>
+<node CREATED="1512271554250" ID="ID_6017634" MODIFIED="1512271576099" TEXT="gel&#xf6;st durch stets regelm&#xe4;&#xdf;igen Aufbau der Dekorator-Kette">
+<node CREATED="1512271577423" ID="ID_1273633642" MODIFIED="1512271590865" TEXT="TreeExplorer wird gestrippt"/>
+<node CREATED="1512271591477" ID="ID_1932230950" MODIFIED="1512271605470" TEXT="Konsequenz: unmittelbare Src == Lumiera Iterator stets">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1511837060201" ID="ID_88038793" MODIFIED="1512010385590" TEXT="brauche WrappedIteratorCore">
@@ -5466,11 +5475,12 @@
 <node CREATED="1512182296169" ID="ID_770503153" MODIFIED="1512182333744" TEXT="mu&#xdf; Info aus dem Funktor gewinnen">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512182308255" ID="ID_215116122" MODIFIED="1512183510137" TEXT="komme mit generischem Lambda in den Value-Zweig">
+<node COLOR="#338800" CREATED="1512182308255" FOLDED="true" ID="ID_215116122" MODIFIED="1512271761209" TEXT="komme mit generischem Lambda in den Value-Zweig">
 <linktarget COLOR="#a83e54" DESTINATION="ID_215116122" ENDARROW="Default" ENDINCLINATION="351;347;" ID="Arrow_ID_891457048" SOURCE="ID_23118252" STARTARROW="None" STARTINCLINATION="683;0;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512182336428" ID="ID_1075031476" MODIFIED="1512182799182" TEXT="WTF??">
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512182336428" ID="ID_1075031476" MODIFIED="1512271631969" TEXT="WTF??">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1512182366016" ID="ID_146727217" MODIFIED="1512182454305">
 <richcontent TYPE="NODE"><html>
@@ -5541,12 +5551,12 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512183184560" ID="ID_1174618775" MODIFIED="1512183215189" TEXT="Anpassungs-Logik fehlt">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512183184560" ID="ID_1174618775" MODIFIED="1512271661006" TEXT="Anpassungs-Logik fehlt">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1512183196119" ID="ID_1543276489" MODIFIED="1512183210239" TEXT="hatte nur den Sonnenschein-Fall gecodet">
 <icon BUILTIN="smiley-angry"/>
 </node>
-<node CREATED="1512183218675" ID="ID_293046899" MODIFIED="1512250712443" TEXT="brauche Adapter um yield">
+<node CREATED="1512183218675" FOLDED="true" ID="ID_293046899" MODIFIED="1512271754033" TEXT="brauche Adapter um yield">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1512183306032" ID="ID_710747972" MODIFIED="1512183310819" TEXT="normalerweise 1:1"/>
 <node CREATED="1512183311551" ID="ID_783747294" MODIFIED="1512183352965" TEXT="aber je nach Funktion...">
@@ -5612,12 +5622,11 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512183706657" ID="ID_1135345978" MODIFIED="1512183725664" TEXT="oder: dritter Zweig in ArgAcessor?">
-<icon BUILTIN="flag-yellow"/>
-<icon BUILTIN="idea"/>
+<node CREATED="1512183706657" FOLDED="true" ID="ID_1135345978" MODIFIED="1512271747585" TEXT="oder: dritter Zweig in ArgAcessor?">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1512251027232" ID="ID_755375196" MODIFIED="1512251042682" TEXT="soll also universell die F&#xe4;lle adaptieren k&#xf6;nnen"/>
-<node CREATED="1512251172916" ID="ID_378084629" MODIFIED="1512251199899" TEXT="Entscheidung: StateCore wird bevorzugt">
-<icon BUILTIN="yes"/>
+<node CREATED="1512251172916" ID="ID_378084629" MODIFIED="1512271739160" TEXT="Entscheidung: StateCore wird bevorzugt">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1512251214046" ID="ID_1353274464" MODIFIED="1512251270499" TEXT="Konsequenz: alle Layer m&#xfc;ssen StateCore sein">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -5635,7 +5644,12 @@
 </node>
 <node CREATED="1512251276054" ID="ID_236669144" MODIFIED="1512251283329" TEXT="Kurzschlu&#xdf; Core -&gt; Core"/>
 </node>
-<node CREATED="1512251305810" ID="ID_737982099" MODIFIED="1512251319908" TEXT="Iterator nur, wenn Quelle keine Core ist"/>
+<node CREATED="1512251305810" ID="ID_737982099" MODIFIED="1512271742802" TEXT="Iterator nur, wenn Quelle keine Core ist">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1512271698231" ID="ID_1260885042" MODIFIED="1512271712854" TEXT="gel&#xf6;st durch Bereinigung des Design">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -5761,25 +5775,26 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835550655" ID="ID_1305788204" MODIFIED="1511835762571" TEXT="Transformer(Iter&lt;Core&gt;)">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835603751" ID="ID_6147833" MODIFIED="1511835760603" TEXT="Transformer(Iter&lt;Val&gt;)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1511835603751" ID="ID_6147833" MODIFIED="1512276267722" TEXT="Transformer(Iter&lt;Val&gt;)">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835572331" ID="ID_90684440" MODIFIED="1511835751909" TEXT="Transformer(Core)">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1511835638915" ID="ID_678182318" MODIFIED="1511835751909" TEXT="geht nicht direkt auf TreeExplorer"/>
+<node CREATED="1511835638915" ID="ID_678182318" MODIFIED="1512276256127" TEXT="nicht m&#xf6;glich direkt auf TreeExplorer"/>
 <node CREATED="1511835650761" ID="ID_1585618081" MODIFIED="1511835751909" TEXT="aber chained Transform sollte so funktionieren"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1511835667743" ID="ID_1089942674" MODIFIED="1511835751909" TEXT="Typ verifizieren!">
 <font NAME="SansSerif" SIZE="10"/>
 <icon BUILTIN="flag-pink"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835716176" ID="ID_1407397782" MODIFIED="1511835898309" TEXT="Transformer mit Seiteneffekt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1511835716176" ID="ID_1407397782" MODIFIED="1512276211354" TEXT="Transformer mit Seiteneffekt">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1511835736414" TEXT="Transform: generic Lambda">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512181454244" ID="ID_23118252" MODIFIED="1512183510137" TEXT="AUA: warum wird hier ein Value als Arguement &#xfc;bergeben">
+<node COLOR="#338800" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1512276275698" TEXT="Transform: generic Lambda">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512181454244" ID="ID_23118252" MODIFIED="1512271778125" TEXT="AUA: warum wird hier ein Value als Arguement &#xfc;bergeben">
 <arrowlink COLOR="#a83e54" DESTINATION="ID_215116122" ENDARROW="Default" ENDINCLINATION="351;347;" ID="Arrow_ID_891457048" STARTARROW="None" STARTINCLINATION="683;0;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
 </node>
 <node COLOR="#338800" CREATED="1512181480616" FOLDED="true" ID="ID_1099744034" MODIFIED="1512355551250" TEXT="Beobachtung: move in join">

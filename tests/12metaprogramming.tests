@@ -243,11 +243,16 @@ return: 0
 END
 
 
-TEST "Iterator monad variations" IterExplorer_test <<END
+TEST "Iterator monad variations (1st draft)" IterExplorer_test <<END
 out-lit: 1-2-3-4-5-6-7-8
 out-lit: 0-1-2-3-4-0-1-2-3-4-5-6-0-1-2-3-4-5-6-7-8
 out-lit: 0-1-2-3-4-5-6-7-8
 out-lit: 0-1-2-3-4-5-6-7-8
+return: 0
+END
+
+
+PLANNED "Iterator monad variations (2nd draft)" IterTreeExplorer_test <<END
 return: 0
 END
 
