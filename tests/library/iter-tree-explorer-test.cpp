@@ -324,7 +324,7 @@ namespace test{
        *   will try to instantiate the passed lambda by using the concrete source iterator type as argument.
        * 
        * @note expansion functor may use side-effects and indeed return something entirely different
-       *       than the original sequence, as long as it is iterable and yields compatible values.  
+       *       than the original sequence, as long as it is iterable and yields compatible values.
        */
       void
       verify_expandOperation()
@@ -339,7 +339,7 @@ namespace test{
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](uint j){ return NumberSequence{j-1}; })                              // expand-functor: Val > Iter
-                      );
+                      );                // NOTE: different Iterator type than the source!
           
           // lambda with side-effect and return type different from source iter
           vector<vector<uint>> childBuffer;
@@ -456,7 +456,7 @@ namespace test{
           auto multiply  = [](int v){ return 2*v; };                             // functional map: value -> value
           
           _Fmt embrace{"≺%s≻"};
-          auto formatify = [&](auto it){ return string{embrace % *it}; };        // generic lambda: assumed to take an Iterator& 
+          auto formatify = [&](auto it){ return string{embrace % *it}; };        // generic lambda: assumed to take an Iterator&
           
           
           auto ii = treeExplore (CountDown{7,4})
@@ -559,12 +559,59 @@ namespace test{
         }
       
       
-      /** @test combie the recursion into children with a tail mapping operation
+      /** @test combine the recursion into children with a tail mapping operation.
+       * Wile basically this is just the layering structure of TreeExplorer put into action,
+       * you should note one specific twist: the iter_explorer::Expander::expandChildren() call
+       * is meant to be issued from ``downstream'', from the consumer side. Yet the consumer at
+       * that point might well see the items as processed by a transforming step layered on top.
+       * So what the consumer sees and thinks will be expanded need not actually be what will
+       * be processed by the _expand functor_. This may look like a theoretical or cosmetic
+       * issue -- yet in fact it is this tiny detail which is crucial to make abstraction of
+       * the underlying data source actually work in conjunction with elaborate searching and
+       * matching algorithms. Even more so, when other operations like filtering are intermingled;
+       * in that case it might even happen that the downstream consumer does not even see the
+       * items resulting from child expansion, because they are evaluated and then filtered
+       * away by a transformer and filter placed in between.
+       * @note a corollary of the aforementioned is the observation that having several expand
+       *       layers is rather not useful in practice. Due to the nested inheritance structure
+       *       of the assembled TreeExplorer, it is the expansion layer most on top in the chain
+       *       who will receive the `expandChildren()` call.
        */
       void
       verify_combinedExpandTransform()
         {
-          UNIMPLEMENTED("combine child expansion and result mapping");
+          auto ii = treeExplore(CountDown{5})
+                      .expand([](uint j){ return CountDown{j-1}; })
+                      .transform([](int v){ return 2*v; })
+                      ;
+          
+          CHECK ("int" == meta::typeStr(*ii));  // result type is what the last transformer yields
+          CHECK (10 == *ii);
+          ++ii;
+          CHECK (8 == *ii);
+          ii.expandChildren();
+          cout << materialise(ii) <<endl;/////////////////////////////////TODO "8-4-2-6-4-2"
+          
+          
+          // the following contrived example demonstrates
+          // how intermediary processing steps may interact
+          
+          cout << materialise (
+                    treeExplore(CountDown{5})
+                      .expand([](uint j){ return CountDown{j-1}; })
+                      .transform([](int v){ return 2*v; })
+                      .transform([](auto& it)
+                                   {
+                                     auto elm = *it;
+                                     if (elm == 6)
+                                       {
+                                         it.expandChildren();
+                                         elm *= 10;
+                                       }
+                                     return elm;
+                                   })
+                      .transform([](float f){ return f/2; })
+                      ) <<endl;///////////////////////////////////////////TODO "5-4-30-1-2-1"
         }
       
       

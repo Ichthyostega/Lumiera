@@ -5105,7 +5105,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1510941523082" TEXT="TreeExplorer">
 <icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1511827102192" TEXT="expand-Operation">
+<node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1512358577968" TEXT="expand-Operation">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1511227813712" ID="ID_1961708112" MODIFIED="1511228177906" TEXT="Fall-1">
 <icon BUILTIN="button_ok"/>
@@ -5327,7 +5327,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511827103749" ID="ID_1699316886" MODIFIED="1512278362994" TEXT="transform-Operation">
+<node COLOR="#338800" CREATED="1511827103749" FOLDED="true" ID="ID_1699316886" MODIFIED="1512358581381" TEXT="transform-Operation">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511827249561" ID="ID_794510302" MODIFIED="1511827265634" TEXT="strikt nach Dekorator-Pattern"/>
 <node CREATED="1511827337686" ID="ID_1214119488" MODIFIED="1511827345695" TEXT="bestehendern TransformIter verwenden?">
@@ -5394,8 +5394,7 @@
       TreeExplorer per <i>slicing move</i>&#160;entfernen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512262331008" ID="ID_287760536" MODIFIED="1512262346625" TEXT="enthaltenen SrcIter dekorieren -&gt; Core"/>
 <node CREATED="1512262347637" ID="ID_1683477051" MODIFIED="1512262371854" TEXT="erneut einen TreeExplorer dar&#xfc;ber adaptieren"/>
@@ -5469,7 +5468,7 @@
 <node CREATED="1512010371291" ID="ID_563900951" MODIFIED="1512010383805" TEXT="bietet die ExtensionPoints einer State-Core"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511837027405" ID="ID_233806852" MODIFIED="1512278360077" TEXT="Argument-Detektor-Magie">
+<node COLOR="#338800" CREATED="1511837027405" FOLDED="true" ID="ID_233806852" MODIFIED="1512358518711" TEXT="Argument-Detektor-Magie">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511837039180" ID="ID_1296099637" MODIFIED="1512278401909" TEXT="ganz analog zur expand-Operation">
 <icon BUILTIN="idea"/>
@@ -5673,6 +5672,7 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
+</node>
 <node COLOR="#338800" CREATED="1512179383254" FOLDED="true" ID="ID_1554412479" MODIFIED="1512358439866" TEXT="mu&#xdf; value_type from Funktor gewinnen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512181398331" ID="ID_1715550480" MODIFIED="1512181407142" TEXT="value_type rebinden"/>
@@ -5691,7 +5691,6 @@
 </node>
 </node>
 </node>
-</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837279715" ID="ID_1694539348" MODIFIED="1511837456610" TEXT="filter-Operation">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1511837285306" ID="ID_928417859" MODIFIED="1511837293629" TEXT="der Vollst&#xe4;ndigkeit halber">
@@ -5706,11 +5705,108 @@
 <node CREATED="1511837345226" ID="ID_991593174" MODIFIED="1511837351797" TEXT="bestehende Funktor-Argument-Traits"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363846804" ID="ID_1346062807" MODIFIED="1512363878326" TEXT="auto-expand">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1512363305422" TEXT="Zusammenspiel">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512363297486" ID="ID_531127457" MODIFIED="1512363711955" TEXT="re-evaluate">
+<linktarget COLOR="#a25a86" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" SOURCE="ID_579206895" STARTARROW="None" STARTINCLINATION="844;55;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1512363369036" ID="ID_134602126" MODIFIED="1512363378567" TEXT="Problem Quell-&#xc4;nderung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1512363380411" ID="ID_1008917631" MODIFIED="1512363473668" TEXT="expandChildren &#xe4;ndert aktuellen Gehalt der Quelle">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363397897" ID="ID_1178182932" MODIFIED="1512363487789" TEXT="aber downstream reagiert (bisher) nur auf iterate()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512363421797" ID="ID_1732504592" MODIFIED="1512363505534" TEXT="Folge: geCacheter Wert aus Transformer &#xfc;berdeckt">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1512363518944" ID="ID_1189860266" MODIFIED="1512363524154" TEXT="L&#xf6;sungsidee">
+<icon BUILTIN="idea"/>
+<node CREATED="1512363525815" ID="ID_108313040" MODIFIED="1512363819912" TEXT="Hook, auf den alle reagieren">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1512363586327" ID="ID_594917391" MODIFIED="1512363811942" TEXT="TreeExplorer wird Update-Manager">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1511837465023" TEXT="asIterSource">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1511837396075" ID="ID_1916743569" MODIFIED="1511837401078" TEXT="abschlie&#xdf;ender Dekorator"/>
 <node CREATED="1511837401738" ID="ID_289320579" MODIFIED="1511837414204" TEXT="verpackt hinter OO-Interface mit virtuellen Funktionen"/>
 <node CREATED="1511837421967" ID="ID_906113750" MODIFIED="1511837433914" TEXT="automatische Heap-Storage"/>
+</node>
+<node CREATED="1512358595283" FOLDED="true" ID="ID_1526405052" MODIFIED="1512359008205" TEXT="piggyback?">
+<icon BUILTIN="help"/>
+<node CREATED="1512358616584" ID="ID_1041373923" MODIFIED="1512358662699" TEXT="&quot;k&#xf6;nnte mal praktisch sein&quot;">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1512358626607" ID="ID_853537387" MODIFIED="1512358721321" TEXT="hab die Idee schon lange">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da&#223; man ein Ding komplett in einen Iterator packt,
+    </p>
+    <p>
+      und dieser es dann auch managed
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1512358864343" FOLDED="true" ID="ID_1251747225" MODIFIED="1512358957195">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ist das <font color="#9e1124">#190</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512358896258" ID="ID_62377324" MODIFIED="1512358945435" TEXT="nein das ist was anderes">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1512358903177" ID="ID_1427111206" MODIFIED="1512358940471" TEXT="das w&#xe4;re OpaqueHolder heute">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1512358931774" ID="ID_1681797535" MODIFIED="1512358937271" TEXT="plus etwas Magie">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1512358965657" ID="ID_816120367" MODIFIED="1512359005565" TEXT="trotzdem... auch IterSnapshot">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ist partiell diese Idee.
+    </p>
+    <p>
+      Nur auch das auf einem etwas anderem Level,
+    </p>
+    <p>
+      und immer mit einem Heap-allozierten vector
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1512358632486" ID="ID_1795551304" MODIFIED="1512358640785" TEXT="aber keine konkrete Anwendung"/>
+<node CREATED="1512358649900" ID="ID_1625666992" MODIFIED="1512358657226" TEXT="w&#xe4;re hier billig zu haben"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1510941523722" TEXT="TreeExplorer_test">
@@ -5789,7 +5885,7 @@
 <node COLOR="#338800" CREATED="1511835716176" ID="ID_1407397782" MODIFIED="1512276211354" TEXT="Transformer mit Seiteneffekt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1512276275698" TEXT="Transform: generic Lambda">
+<node COLOR="#338800" CREATED="1511835691963" FOLDED="true" ID="ID_175353270" MODIFIED="1512358531485" TEXT="Transform: generic Lambda">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512181454244" ID="ID_23118252" MODIFIED="1512271778125" TEXT="AUA: warum wird hier ein Value als Arguement &#xfc;bergeben">
 <arrowlink COLOR="#a83e54" DESTINATION="ID_215116122" ENDARROW="Default" ENDINCLINATION="351;347;" ID="Arrow_ID_891457048" STARTARROW="None" STARTINCLINATION="683;0;"/>
@@ -5869,7 +5965,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1511835901999" ID="ID_1717235881" MODIFIED="1512278299862" TEXT="Transform: Core&amp; -&gt; irgendwas">
+<node COLOR="#338800" CREATED="1511835901999" ID="ID_1717235881" MODIFIED="1512358535692" TEXT="Transform: Core&amp; -&gt; irgendwas">
 <icon BUILTIN="help"/>
 <node CREATED="1512276512313" ID="ID_725756500" MODIFIED="1512276517860" TEXT="sollte theoretisch m&#xf6;glich sein"/>
 <node CREATED="1512276524111" ID="ID_453994757" MODIFIED="1512276583587" TEXT="nicht sonderlich sinnvoll">
@@ -5882,16 +5978,35 @@
       ...weil man den konkreten Typ der Core kennen mu&#223;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1512276518472" ID="ID_1860559214" MODIFIED="1512278316412" TEXT="per Testfall dokumentiert">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1511227804622" TEXT="verify_combinedExpandTransform();">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1512358551383" TEXT="verify_combinedExpandTransform();">
+<icon BUILTIN="pencil"/>
+<node CREATED="1512363192308" ID="ID_1913090689" MODIFIED="1512363209302" TEXT="expand &#xfc;ber Transformer hinweg">
+<node CREATED="1512363626338" ID="ID_1302720848" MODIFIED="1512363637547" TEXT="funktioniert out-of-the-Box">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1512363638640" ID="ID_67728054" MODIFIED="1512363645997" TEXT="naja fast">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node CREATED="1512363210130" ID="ID_480959271" MODIFIED="1512363224156" TEXT="expand aus manipulierendem Transformer">
+<node CREATED="1512363649158" ID="ID_1152388495" MODIFIED="1512363655383" TEXT="ebenso">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363659085" ID="ID_1079241242" MODIFIED="1512363737038" TEXT="TODO output CHECK">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363228751" ID="ID_579206895" MODIFIED="1512363711955" TEXT="Problem: re-evaluate nach expand">
+<arrowlink COLOR="#a25a86" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" STARTARROW="None" STARTINCLINATION="844;55;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836579562" ID="ID_1718741335" MODIFIED="1511836583779" TEXT="verify_FilterIterator();">
 <icon BUILTIN="flag-yellow"/>
