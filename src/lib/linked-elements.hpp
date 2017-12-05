@@ -537,6 +537,33 @@ namespace lib {
             : node(p)
             { }
           
+          /* ==== internal callback API for the iterator ==== */
+          
+          /** Iteration-logic: switch to next position
+           * @warning assuming the given node pointer belongs to this collection.
+           *          actually this is never checked; also the given node might
+           *          have been deallocated in the meantime.
+           */
+          void
+          iterNext()
+            {
+              node = node->next;
+            }
+          
+          /** Iteration-logic: detect iteration end. */
+          bool
+          checkPoint()  const
+            {
+              return bool(node);
+            }
+          
+          N&
+          yield()  const
+            {
+              REQUIRE (node);
+              return * unConst(this)->node;
+            }
+          
           friend bool
           operator== (IterationState const& il, IterationState const& ir)
           {
@@ -556,38 +583,6 @@ namespace lib {
       
       
       
-    private: /* ==== internal callback API for the iterator ==== */
-      
-      /** Iteration-logic: switch to next position
-       * @warning assuming the given node pointer belongs to this collection.
-       *          actually this is never checked; also the given node might
-       *          have been deallocated in the meantime.
-       */
-      friend void
-      iterNext (IterationState & pos)
-      {
-        pos.node = pos.node->next;
-      }
-      
-      friend void
-      iterNext (IterationState const& pos)
-      {
-        pos.node = pos.node->next;
-      }
-      
-      /** Iteration-logic: detect iteration end. */
-      friend bool
-      checkPoint (IterationState const& pos)
-      {
-        return bool(pos.node);
-      }
-      
-      friend N&
-      yield (IterationState const& pos)
-      {
-        REQUIRE (pos.node);
-        return * unConst(pos).node;
-      }
     };
   
   

@@ -5730,8 +5730,181 @@
 <node CREATED="1512363525815" ID="ID_108313040" MODIFIED="1512363819912" TEXT="Hook, auf den alle reagieren">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1512363586327" ID="ID_594917391" MODIFIED="1512363811942" TEXT="TreeExplorer wird Update-Manager">
-<icon BUILTIN="help"/>
+<node CREATED="1512439571337" ID="ID_1930899435" MODIFIED="1512440211808" TEXT="Analyse">
+<icon BUILTIN="info"/>
+<node CREATED="1512363586327" ID="ID_594917391" MODIFIED="1512439583678" TEXT="TreeExplorer wird Update-Manager">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512439586771" ID="ID_1378758194" MODIFIED="1512439588983" TEXT="geht nicht"/>
+<node CREATED="1512439589594" ID="ID_1211811605" MODIFIED="1512439628493" TEXT="Transformer rufen sich wechselseitig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....und dann k&#246;nnten diese Transformer in der Kette
+    </p>
+    <p>
+      nicht mehr die expandChildren aufrufen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1512439636532" ID="ID_443920458" MODIFIED="1512439814700" TEXT="refresh()-Call im internen API">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512439680078" ID="ID_795639412" MODIFIED="1512439682641" TEXT="geht nicht"/>
+<node CREATED="1512439683710" ID="ID_82602719" MODIFIED="1512439807833" TEXT="ohne VTable k&#xf6;nnen wir niemals von Parent -&gt; Subklasse aufrufen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, es ist nicht m&#246;glich,
+    </p>
+    <p>
+      da&#223; ein Layer irgendwo in der Mitte einen solchen generischen Hook aufruft.
+    </p>
+    <p>
+      Es sei denn, man speichert einen Funktion-Pointer in der Basis,
+    </p>
+    <p>
+      oder nimmt eben gleich eine virtuelle Funktion.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Das ist aber hier aus grunds&#228;tzlichen &#220;berlegungen heraus keine Option
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1512439832865" ID="ID_1782781235" MODIFIED="1512440146656" TEXT="anderes Iterator-API">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512439845112" ID="ID_751119405" MODIFIED="1512439849499" TEXT="geht nicht"/>
+<node CREATED="1512439850087" ID="ID_1018141727" MODIFIED="1512440143615">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das IterStateWrapper-API ist <i>optimal</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      unter der Annahme, da&#223; wir beim <b>Lumiera Forward Iterator</b>&#160;- Konzept bleiben
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      -- das hei&#223;t, beliebig oft yield, und Iterations-Ende per bool()-Test
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Unter dieser Annahme kommt yield stets vor iterNext (wenn &#252;berhaupt).
+    </p>
+    <p>
+      Und yield mu&#223; (a) einen Status liefern, (b) einen Wert liefern.
+    </p>
+    <p>
+      Einziger Ausweg w&#228;re, wie das IterAdapter macht, einen Pointer rauszugeben.
+    </p>
+    <p>
+      Das ist eigentlich keine gute L&#246;sung, weil die Implementierung dann sehr tricky wird.
+    </p>
+    <p>
+      Siehe IterAdapter als absto&#223;endes Beispiel.
+    </p>
+    <p>
+      Und als weitere Alternative bleibt nur die Einf&#252;hrung von State, und das bedeutet,
+    </p>
+    <p>
+      sich im Iterator oder in der Implementierung irgendwo noch eine zus&#228;tzliche bool-Flag zu speichern.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1512440148015" ID="ID_1475512070" MODIFIED="1512440198570" TEXT="Einzige L&#xf6;sung">
+<icon BUILTIN="yes"/>
+<node CREATED="1512440158486" ID="ID_1167307993" MODIFIED="1512440175103" TEXT="alle Layer, die darauf angewiesen sind...."/>
+<node CREATED="1512440175931" ID="ID_808598503" MODIFIED="1512440193040">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      implementieren ebenfalls <b>expandChildren</b>()
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512440216070" ID="ID_1808232294" MODIFIED="1512440440544" TEXT="Konsequenz der Analyse">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512440223221" ID="ID_741091948" MODIFIED="1512440237207" TEXT="warum verwenden wir &#xfc;berhaupt ADL-Funktionen"/>
+<node CREATED="1512440238859" ID="ID_1975957673" MODIFIED="1512440262159" TEXT="wir brauchen hier gar keinen &quot;Extension Point&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ganz anders als bei IterAdapter, wo das Sinn macht...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512440263551" ID="ID_1524108340" MODIFIED="1512440285896" TEXT="Dagegen k&#xf6;nnte die &quot;state core&quot; sehr wohl genau dieses API exponieren."/>
+<node CREATED="1512440286772" ID="ID_535994508" MODIFIED="1512440435961" TEXT="wir brauchen deshalb nicht gleich ein Interface einf&#xfc;hren">
+<icon BUILTIN="idea"/>
+<node CREATED="1512440307185" ID="ID_1513737160" MODIFIED="1512440431319" TEXT="weil das doch nicht gecheckt werden kann">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ohne da&#223; die Funktionen auch virtuell sind,
+    </p>
+    <p>
+      k&#246;nnen wir nicht sicherstellen
+    </p>
+    <ul>
+      <li>
+        da&#223; die hereingereichte Implementierung die Funktionen &#252;berschreibt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512440341573" ID="ID_1804763032" MODIFIED="1512440348845" TEXT="wir k&#xf6;nnen bis 2020 warten...">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1512440360194" ID="ID_1554793680" MODIFIED="1512440375486" TEXT="es ist n&#xe4;mlich ein Concept"/>
 </node>
 </node>
 </node>

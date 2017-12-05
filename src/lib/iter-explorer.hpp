@@ -364,25 +364,25 @@ namespace lib {
             return bool(results_);
           
           }
-        /* === Iteration control API for IterStateWrapper== */
         
-        friend bool
-        checkPoint (CombinedIteratorEvaluation const& seq)
-        {
-          return unConst(seq).findNextResultElement();
-        }
+      public:  /* === Iteration control API for IterStateWrapper== */
+        bool
+        checkPoint()  const
+          {
+            return unConst(this)->findNextResultElement();
+          }
         
-        friend reference
-        yield (CombinedIteratorEvaluation const& seq)
-        {
-          return *(seq.results_);
-        }
+        reference
+        yield()  const
+          {
+            return *results_;
+          }
         
-        friend void
-        iterNext (CombinedIteratorEvaluation & seq)
-        {
-          ++(seq.results_);
-        }
+        void
+        iterNext()
+          {
+            ++results_;
+          }
       };
     
     /**
@@ -595,36 +595,29 @@ namespace lib {
             return unConst(this)->resultBuf_.getFeed();
           }
         
+        
+      public: /* === Iteration control API for IterStateWrapper== */
+        
+        bool
+        checkPoint()  const
+          {
+            return bool(feed());
+          }
+        
+        reference
+        yield()  const
+          {
+            return *feed();
+          }
+        
         void
-        iterate ()
+        iterNext()
           {
             REQUIRE (feed());
             ResultIter nextStep = explore_(*feed());
             ++ feed();
             resultBuf_.feedBack (nextStep);
           }
-        
-        
-        /* === Iteration control API for IterStateWrapper== */
-        
-        friend bool
-        checkPoint (RecursiveExhaustingEvaluation const& seq)
-        {
-          return bool(seq.feed());
-        }
-        
-        friend reference
-        yield (RecursiveExhaustingEvaluation const& seq)
-        {
-          reference result = *(seq.feed());
-          return result;
-        }
-        
-        friend void
-        iterNext (RecursiveExhaustingEvaluation & seq)
-        {
-          seq.iterate();
-        }
       };
     
     
@@ -844,25 +837,25 @@ namespace lib {
             }
           
           
-          /* === Iteration control API for IterStateWrapper== */
+        public: /* === Iteration control API for IterStateWrapper== */
           
-          friend bool
-          checkPoint (RecursiveSelfIntegration const& seq)
-          {
-            return unConst(seq).findNextResultElement();
-          }
+          bool
+          checkPoint()  const
+            {
+              return unConst(this)->findNextResultElement();
+            }
           
-          friend reference
-          yield (RecursiveSelfIntegration const& seq)
-          {
-            return *(seq.outSeq_);
-          }
+          reference
+          yield()  const
+            {
+              return *outSeq_;
+            }
           
-          friend void
-          iterNext (RecursiveSelfIntegration & seq)
-          {
-            seq.iterate();
-          }
+          void
+          iterNext()
+            {
+              this->iterate();
+            }
       };
     
     
@@ -893,23 +886,23 @@ namespace lib {
         
         /* === Iteration control API for IterStateWrapper == */
         
-        friend bool
-        checkPoint (WrappedSequence const& sequence)
-        {
-          return bool(sequence);
-        }
+        bool
+        checkPoint()  const
+          {
+            return bool(*this);
+          }
         
-        friend typename IT::reference
-        yield (WrappedSequence const& sequence)
-        {
-          return *sequence;
-        }
+        typename IT::reference
+        yield()  const
+          {
+            return *(*this);
+          }
         
-        friend void
-        iterNext (WrappedSequence & sequence)
-        {
-          ++sequence;
-        }
+        void
+        iterNext()
+          {
+            ++(*this);
+          }
       };
     
     

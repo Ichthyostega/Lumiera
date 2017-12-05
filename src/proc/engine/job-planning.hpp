@@ -27,7 +27,7 @@
  ** into a sequence of planning steps. The net result is to present a <i>sequence of job planing</i>
  ** to the user, while actually encapsulating a depth-first tree exploration, which proceeds on demand.
  ** 
- ** \par participating elements
+ ** ## participating elements
  ** All of these job planning operations are implemented on top of the JobTicket. This is where to look
  ** for "actual" implementation code. Here, within this header, the following entities cooperate to
  ** create a simple sequence out of this implementation level tasks:
@@ -37,7 +37,7 @@
  ** - proc::engine::expandPrerequisites(JobPlanning const&) is the operation to explore further prerequisite Jobs recursively
  ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
  ** 
- ** \par how the PlanningState (sequence) is advanced
+ ** ## how the PlanningState (sequence) is advanced
  ** PlanningState is an iterator to expose a sequence of JobPlanning elements. On the implementation level,
  ** there is always just a single JobPlanning element, which represents the \em current element; this element
  ** lives as "state core" within the PlanningState object. Advancing to the next JobPlanning element (i.e. to
@@ -49,8 +49,8 @@
  ** - the current element is always accessed through \c yield
  ** - advancing to the next element happens \em either
  **   
- **   - by invoking \c iterNext (when processing a sequence of sibling job prerequisites)
- **   - by invoking \c integrate (when starting to explore the next level of children) 
+ **   - by invoking `iterNext()` (when processing a sequence of sibling job prerequisites)
+ **   - by invoking `integrate()` (when starting to explore the next level of children) 
  ** 
  ** 
  ** @see DispatcherInterface_test simplified usage examples
@@ -175,25 +175,25 @@ namespace engine {
       
       /* === Iteration control API for IterStateWrapper== */
       
-      friend bool
-      checkPoint (JobPlanning const& plan)
-      {
-        return not isnil (plan.plannedOperations_);
-      }
+      bool
+      checkPoint ()  const
+        {
+          return not isnil (plannedOperations_);
+        }
       
-      friend JobPlanning&
-      yield (JobPlanning const& plan)
-      {
-        REQUIRE (checkPoint (plan));
-        return unConst(plan);
-      }
+      JobPlanning&
+      yield ()  const
+        {
+          REQUIRE (checkPoint());
+          return unConst(*this);
+        }
       
-      friend void
-      iterNext (JobPlanning & plan)
-      {
-        plan.plannedOperations_.pullNext();
-        plan.plannedOperations_.markTreeLocation();
-      }
+      void
+      iterNext ()
+        {
+          plannedOperations_.pullNext();
+          plannedOperations_.markTreeLocation();
+        }
     };
   
   
@@ -363,35 +363,35 @@ namespace engine {
       
       /* === Iteration control API for IterStateWrapper== */
       
-      friend bool
-      checkPoint (PlanningStepGenerator const& gen)
-      {
-        return gen.currentLocation_.isDefined();
-      }     // might indicate end of this planning chunk (or of playback altogether)
+      bool
+      checkPoint ()  const
+        {
+          return currentLocation_.isDefined();
+        }     // might indicate end of this planning chunk (or of playback altogether)
       
       
-      friend JobPlanning&
-      yield (PlanningStepGenerator const& gen)
-      {
-        ENSURE (checkPoint (gen));
-        return unConst(gen).nextEvaluation_;
-      }
+      JobPlanning&
+      yield ()  const
+        {
+          ENSURE (checkPoint());
+          return unConst(this)->nextEvaluation_;
+        }
       
       
-      friend void
-      iterNext (PlanningStepGenerator & gen)
-      {
-        if (gen.locationGenerator_->canContinue (gen.currentLocation_))
-          {
-            gen.currentLocation_ = gen.locationGenerator_->getNextFrame (gen.currentLocation_);
-            gen.use_current_location_as_starting_point_for_planning();
-            ENSURE (checkPoint (gen));
-          }
-        else 
-          {  // indicate end-of playback or a jump to another playback position
-            gen.currentLocation_ = FrameCoord();
-          }
-      }
+      void
+      iterNext ()
+        {
+          if (locationGenerator_->canContinue (currentLocation_))
+            {
+              currentLocation_ = locationGenerator_->getNextFrame (currentLocation_);
+              this->use_current_location_as_starting_point_for_planning();
+              ENSURE (this->checkPoint());
+            }
+          else 
+            { // indicate end-of playback or a jump to another playback position
+              currentLocation_ = FrameCoord();
+            }
+        }
     };
   
   

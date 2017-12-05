@@ -97,24 +97,24 @@ namespace test{
           , e(end)
           { }
         
-        friend bool
-        checkPoint (CountDown const& st)
-        {
-          return st.p > st.e;
-        }
+        bool
+        checkPoint ()  const
+          {
+            return p > e;
+          }
         
-        friend uint&
-        yield (CountDown const& st)
-        {
-          return util::unConst(checkPoint(st)? st.p : st.e);
-        }
+        uint&
+        yield ()  const
+          {
+            return util::unConst (checkPoint()? p : e);
+          }
         
-        friend void
-        iterNext (CountDown & st)
-        {
-          if (not checkPoint(st)) return;
-          --st.p;
-        }
+        void
+        iterNext ()
+          {
+            if (not checkPoint()) return;
+            --p;
+          }
       };
     
     
@@ -366,12 +366,12 @@ namespace test{
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](CountDown const& core){ return CountDown{ yield(core) - 1}; })       // expand-functor: StateCore const& -> StateCore
+                      .expand([](CountDown const& core){ return CountDown{ core.yield() - 1}; })      // expand-functor: StateCore const& -> StateCore
                       );
           
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
-                      .expand([](CountDown core){ return NumberSequence{ yield(core) - 1}; })         // expand-functor: StateCore -> Iter
+                      .expand([](CountDown core){ return NumberSequence{ core.yield() - 1}; })        // expand-functor: StateCore -> Iter
                       );
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior

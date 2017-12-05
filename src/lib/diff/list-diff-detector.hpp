@@ -187,24 +187,24 @@ namespace diff{
       
       /* === Iteration control API for IterStateWrapper === */
       
-      friend bool
-      checkPoint (DiffFrame const& frame)
-      {
-        return token.NIL != frame.currentStep_;
-      }
+      bool
+      checkPoint()  const
+        {
+          return token.NIL != currentStep_;
+        }
       
-      friend DiffStep&
-      yield (DiffFrame const& frame)
-      {
-        REQUIRE (checkPoint (frame));
-        return unConst(frame).currentStep_;
-      }
+      DiffStep&
+      yield()  const
+        {
+          REQUIRE (checkPoint());
+          return unConst(this)->currentStep_;
+        }
       
-      friend void
-      iterNext (DiffFrame & frame)
-      {
-        frame.currentStep_ = frame.establishNextState();
-      }
+      void
+      iterNext()
+        {
+          currentStep_ = this->establishNextState();
+        }
       
     private:
       DiffStep

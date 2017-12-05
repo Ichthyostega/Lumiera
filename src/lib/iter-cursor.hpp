@@ -109,34 +109,34 @@ namespace lib {
         
         /* === Iteration control API for IterStateWrapper == */
         
-        friend bool
-        checkPoint (CursorGear const& gear)
-        {
-          return gear.backwards_? gear.pos_ != gear.start_
-                                : gear.pos_ != gear.end_;
-        }
+        bool
+        checkPoint()  const
+          {
+            return backwards_? pos_ != start_
+                             : pos_ != end_;
+          }
         
-        friend reference
-        yield (CursorGear const& gear)
-        {
-          return gear.backwards_? *(gear.pos_-1)
-                                : *(gear.pos_);
-        }
+        reference
+        yield()  const
+          {
+            return backwards_? *(pos_-1)
+                             : *(pos_);
+          }
         
-        friend void
-        iterNext (CursorGear & gear)
-        {
-          if (gear.backwards_)
-            --gear.pos_;
-          else
-            ++gear.pos_;
-        }
+        void
+        iterNext()
+          {
+            if (backwards_)
+              --pos_;
+            else
+              ++pos_;
+          }
         
         
         friend bool
         operator== (CursorGear const& g1, CursorGear const& g2)
         {
-          return (not checkPoint(g1) and not checkPoint(g2)) // note: all exhausted iters are equal 
+          return (not g1.checkPoint() and not g2.checkPoint()) // note: all exhausted iters are equal 
               or (   g1.pos_ == g2.pos_
                  and g1.backwards_ == g2.backwards_
                  and g1.start_ == g2.start_

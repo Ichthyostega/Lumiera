@@ -96,24 +96,24 @@ namespace test{
           , e(end)
           { }
         
-        friend bool
-        checkPoint (State const& st)
-        {
-          return st.p < st.e;
-        }
+        bool
+        checkPoint ()  const
+          {
+            return p < e;
+          }
         
-        friend uint&
-        yield (State const& st)
-        {
-          return util::unConst(checkPoint(st)? st.p : st.e);
-        }
+        uint&
+        yield ()  const
+          {
+            return util::unConst (checkPoint()? p : e);
+          }
         
-        friend void
-        iterNext (State & st)
-        {
-          if (!checkPoint(st)) return;
-          ++st.p;
-        }
+        void
+        iterNext ()
+          {
+            if (not checkPoint()) return;
+            ++p;
+          }
       };
     
     

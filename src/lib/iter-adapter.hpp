@@ -302,12 +302,12 @@ namespace lib {
    * \par Assumptions when building iterators based on IterStateWrapper
    * There is a custom state representation type ST.
    * - default constructible
-   * - this default state represents the \em bottom (invalid) state.
+   * - this default state represents the _bottom_ (invalid) state.
    * - copyable, because iterators are passed by value
-   * - this type needs to provide an <b>iteration control API</b> through free functions
+   * - this type needs to provide an *iteration control API* with the following operations
    *   -# \c checkPoint establishes if the given state element represents a valid state
    *   -# \c iterNext evolves this state by one step (sideeffect)
-   *   -# \c yield realises the given state, yielding an element of result type T
+   *   -# \c yield realises the given state, yielding an element of result type `T&`
    * @tparam T nominal result type (maybe const, but without reference).
    *         The resulting iterator will yield a reference to this type T
    * @tparam ST type of the "state core", defaults to T.
@@ -349,28 +349,28 @@ namespace lib {
       operator*() const
         {
           __throw_if_empty();
-          return yield (core_);     // extension point: yield
+          return core_.yield();      // core interface: yield
         }
       
       pointer
       operator->() const
         {
           __throw_if_empty();
-          return & yield(core_);    // extension point: yield
+          return & core_.yield();    // core interface: yield
         }
       
       IterStateWrapper&
       operator++()
         {
           __throw_if_empty();
-          iterNext (core_);         // extension point: iterNext
+          core_.iterNext();          // core interface: iterNext
           return *this;
         }
       
       bool
       isValid ()  const
         {
-          return checkPoint(core_); // extension point: checkPoint
+          return core_.checkPoint(); // core interface: checkPoint
         }
       
       bool

@@ -169,28 +169,28 @@ namespace lib {
         operator*() const
           {
             __throw_if_empty();
-            return yield (_core());     // extension point: yield
+            return _core().yield ();     // core interface: yield
           }
         
         pointer
         operator->() const
           {
             __throw_if_empty();
-            return & yield(_core());    // extension point: yield
+            return & _core().yield();    // core interface: yield
           }
         
         IterableDecorator&
         operator++()
           {
             __throw_if_empty();
-            iterNext (_core());         // extension point: iterNext
+            _core().iterNext();          // core interface: iterNext
             return *this;
           }
         
         bool
         isValid ()  const
           {
-            return checkPoint(_core()); // extension point: checkPoint
+            return _core().checkPoint(); // core interface: checkPoint
           }
         
         bool
@@ -237,16 +237,55 @@ namespace lib {
     using std::remove_reference_t;
     using meta::can_IterForEach;
     using meta::can_STL_ForEach;
-    
-    META_DETECT_EXTENSION_POINT(checkPoint);
-    META_DETECT_EXTENSION_POINT(iterNext);
-    META_DETECT_EXTENSION_POINT(yield);
+////////////////////////////////////////////////////////////////TODO WIP
+#define META_DETECT_FUNCTION_NAME(_FUN_NAME_)                   \
+    template<typename TY>                                   \
+    class HasFunName_##_FUN_NAME_                                 \
+      {                                                       \
+        template<typename SEL>                                   \
+        struct Probe;   \
+  template<class C, typename RET, typename...ARGS>  \
+  struct Probe<RET (C::*) (ARGS...)>  \
+          { };                                                    \
+                                                                   \
+        template<class X>                                           \
+        static Yes_t check(Probe<decltype(&X::_FUN_NAME_)> * );                             \
+        template<class>                                               \
+        static No_t  check(...);                                       \
+                                                                        \
+      public:                                                            \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
+      };
+
+#define META_DETECT_FUNCTION_ARGLESS(_FUN_)                 \
+    template<typename TY>                                   \
+    class HasArglessFun_##_FUN_                          \
+      {                                                       \
+        template<typename X,                                   \
+                 typename SEL = decltype(std::declval<X>()._FUN_())>\
+        struct Probe                                             \
+          { };                                                    \
+                                                                   \
+        template<class X>                                           \
+        static Yes_t check(Probe<X> * );                             \
+        template<class>                                               \
+        static No_t  check(...);                                       \
+                                                                        \
+      public:                                                            \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
+      };
+
+
+////////////////////////////////////////////////////////////////TODO WIP
+    META_DETECT_FUNCTION_ARGLESS(checkPoint);
+    META_DETECT_FUNCTION_ARGLESS(iterNext);
+    META_DETECT_FUNCTION_ARGLESS(yield);
     
     template<class SRC>
     struct is_StateCore
-      : __and_< HasExtensionPoint_checkPoint<SRC const&>
-              , HasExtensionPoint_iterNext<SRC &>
-              , HasExtensionPoint_yield<SRC const&>
+      : __and_< HasArglessFun_checkPoint<SRC>
+              , HasArglessFun_iterNext<SRC>
+              , HasArglessFun_yield<SRC>
               >
       { };
     
@@ -276,7 +315,7 @@ namespace lib {
     template<class COR>
     struct CoreYield
       {
-        using Res = remove_reference_t<decltype(yield (std::declval<COR>()))>;
+        using Res = remove_reference_t<decltype(std::declval<COR>().yield())>;
         
         using value_type = typename meta::TypeBinding<Res>::value_type;
         using reference  = typename meta::TypeBinding<Res>::reference;
@@ -462,11 +501,11 @@ namespace lib {
         Expander&
         expandChildren()
           {
-            REQUIRE (checkPoint(*this), "attempt to expand an empty explorer");
+            REQUIRE (this->checkPoint(), "attempt to expand an empty explorer");
             
             ResIter expanded{ 0 < depth()? expandChildren_(*expansions_)
                                          : expandChildren_(*this)};
-            iterNext (*this);   // consume current head element
+            iterNext();         // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));
             
@@ -481,34 +520,34 @@ namespace lib {
           }
         
         
-      protected: /* === Iteration control API for IterableDecorator === */
+      public: /* === Iteration control API for IterableDecorator === */
         
-        friend bool
-        checkPoint (Expander const& tx)
-        {
-          return 0 < tx.depth()
-              or tx.isValid();
-        }
+        bool
+        checkPoint()  const
+          {
+            return 0 < depth()
+                or this->isValid();
+          }
         
-        friend typename SRC::reference
-        yield (Expander const& tx)
-        {
-          return 0 < tx.depth()? **tx.expansions_
-                               : *tx;
-        }
+        typename SRC::reference
+        yield()  const
+          {
+            return 0 < depth()? **expansions_
+                              : **this;
+          }
         
-        friend void
-        iterNext (Expander & tx)
-        {
-          if (0 < tx.depth())
-            {
-              ++(*tx.expansions_);
-              while (0 < tx.depth() and not *tx.expansions_)
-                ++tx.expansions_;
-            }
-          else
-            ++tx;
-        }
+        void
+        iterNext()
+          {
+            if (0 < depth())
+              {
+                ++(*expansions_);
+                while (0 < depth() and not *expansions_)
+                  ++expansions_;
+              }
+            else
+              ++(*this);
+          }
       };
     
     
@@ -549,26 +588,26 @@ namespace lib {
           { }
         
         
-      protected: /* === Iteration control API for IterableDecorator === */
+      public: /* === Iteration control API for IterableDecorator === */
         
-        friend bool
-        checkPoint (Transformer const& tx)
-        {
-          return bool(tx.srcIter());
-        }
+        bool
+        checkPoint()  const
+          {
+            return bool(srcIter());
+          }
         
-        friend reference
-        yield (Transformer const& tx)
-        {
-          return unConst(tx).invokeTransformation();
-        }
+        reference
+        yield()  const
+          {
+            return unConst(this)->invokeTransformation();
+          }
         
-        friend void
-        iterNext (Transformer & tx)
-        {
-          ++ tx.srcIter();
-          tx.treated_.reset();
-        }
+        void
+        iterNext()
+          {
+            ++ srcIter();
+            treated_.reset();
+          }
         
       private:
         SRC&
