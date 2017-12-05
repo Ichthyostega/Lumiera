@@ -237,46 +237,7 @@ namespace lib {
     using std::remove_reference_t;
     using meta::can_IterForEach;
     using meta::can_STL_ForEach;
-////////////////////////////////////////////////////////////////TODO WIP
-#define META_DETECT_FUNCTION_NAME(_FUN_NAME_)                   \
-    template<typename TY>                                   \
-    class HasFunName_##_FUN_NAME_                                 \
-      {                                                       \
-        template<typename SEL>                                   \
-        struct Probe;   \
-  template<class C, typename RET, typename...ARGS>  \
-  struct Probe<RET (C::*) (ARGS...)>  \
-          { };                                                    \
-                                                                   \
-        template<class X>                                           \
-        static Yes_t check(Probe<decltype(&X::_FUN_NAME_)> * );                             \
-        template<class>                                               \
-        static No_t  check(...);                                       \
-                                                                        \
-      public:                                                            \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
-      };
-
-#define META_DETECT_FUNCTION_ARGLESS(_FUN_)                 \
-    template<typename TY>                                   \
-    class HasArglessFun_##_FUN_                          \
-      {                                                       \
-        template<typename X,                                   \
-                 typename SEL = decltype(std::declval<X>()._FUN_())>\
-        struct Probe                                             \
-          { };                                                    \
-                                                                   \
-        template<class X>                                           \
-        static Yes_t check(Probe<X> * );                             \
-        template<class>                                               \
-        static No_t  check(...);                                       \
-                                                                        \
-      public:                                                            \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
-      };
-
-
-////////////////////////////////////////////////////////////////TODO WIP
+    
     META_DETECT_FUNCTION_ARGLESS(checkPoint);
     META_DETECT_FUNCTION_ARGLESS(iterNext);
     META_DETECT_FUNCTION_ARGLESS(yield);

@@ -33,15 +33,16 @@
  ** to enter a given API function, provided this object supports some specific operations.
  ** 
  ** While C++ certainly isn't a dynamic language and does not provide any kind of run time introspection,
- ** doing such check-and branch at compile time allows even to combine such a flexible approach with
- ** static type safety, which is compelling. (The downside is the danger of code bloat, as is with all
- ** template based techniques).
+ ** doing such check-and branch at compile time allows to combine flexibility as known from dynamic
+ ** languages with static type safety, which is compelling. We can generate similar implementation
+ ** for types not further related by inheritance. Building on this, we're able to emulate some
+ ** of the features enabled by type classes (or "concepts").
  ** 
  ** # how the implementation works
  ** 
  ** Most of these trait templates rely on a creative use of function overloading. The C++ standard
- ** requires the compiler <i>silently to drop</i> any candidate of overload resolution which has
- ** gotten an invalid function signature as a result of instantiating a template (type). This allows
+ ** requires the compiler _silently to drop_ any candidate of overload resolution which has gotten
+ ** an invalid function signature as a result of instantiating a template (type). This rule allows
  ** us to set up kind of a "honey pot" for the compiler: we present two overloaded candidate functions
  ** with a different return type; by investigating the resulting return type we're able to figure
  ** out the overload actually picked by the compiler.
@@ -61,7 +62,7 @@
  **   to determine if a member function of a type in question has the desired signature.
  ** 
  ** All these detection building blocks are written such as to provide a bool member `::value`,
- ** which is in accordance to the conventions of boost metaprogramming. I.e. you can immediately
+ ** which is in accordance to the conventions of C++11 metaprogramming. I.e. you can immediately
  ** use them within `std::enable_if`
  ** 
  ** # some pitfalls to consider
@@ -71,6 +72,8 @@
  **          you'd be better off explicitly checking the detection result by an unit test.
  ** 
  ** There are several *typical problems* to care about
+ ** - none of these tests can detect any private members
+ ** - the name-only detectors will fail if the name is ambiguous
  ** - a member can be both a variable or a function of that name
  ** - function signatures need to match precisely, including const modifiers
  ** - the generated metafunction (template) uses a type parameter 'TY', which could
@@ -89,7 +92,9 @@
  **   types or RTTI
  ** 
  ** @see util-foreach.hpp usage example
+ ** @see iter-tree-explorer.hpp (example: is_StateCore<SRC>)
  ** @see duck-detector-test.cpp
+ ** @see duck-detector-extension-test.cpp
  ** 
  */
 
@@ -110,6 +115,7 @@
  *  with the given name. To answer this question, instantiate
  *  resulting HasNested_XXX template with the type in question
  *  and check the static bool value field.
+ * @warning none of these checks can not detect private members
  */
 #define META_DETECT_NESTED(_TYPE_)                            \
     template<typename TY>                                      \
@@ -131,22 +137,25 @@
  *  Defines a metafunction (template), allowing to detect
  *  the presence of a member with the given name within
  *  a type in question.
+ * @note this check will likely fail if the name is ambiguous.
+ * @warning none of these checks can not detect private members
  */
 #define META_DETECT_MEMBER(_NAME_)                         \
     template<typename TY>                                   \
     class HasMember_##_NAME_                                 \
       {                                                       \
-        template<typename X, int i = sizeof(&X::_NAME_)>       \
-        struct Probe                                            \
-          { };                                                   \
-                                                                  \
-        template<class X>                                          \
-        static Yes_t check(Probe<X> * );                            \
-        template<class>                                              \
-        static No_t  check(...);                                      \
-                                                                       \
-      public:                                                           \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+        template<typename X,                                   \
+                 typename SEL = decltype(&X::_NAME_)>           \
+        struct Probe                                             \
+          { };                                                    \
+                                                                   \
+        template<class X>                                           \
+        static Yes_t check(Probe<X> * );                             \
+        template<class>                                               \
+        static No_t  check(...);                                       \
+                                                                        \
+      public:                                                            \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
       };
 
 
@@ -154,8 +163,9 @@
 /** Detector for a specific member function.
  *  Defines a metafunction (template), allowing to detect
  *  the presence of a member function with the specific
- *  signature, as defined by the parameters. Note this
- *  check will probably fail if there are overloads
+ *  signature, as defined by the parameters.
+ * @note this check is not sensible to overloads,
+ *       due to the explicitly given argument types
  */
 #define META_DETECT_FUNCTION(_RET_TYPE_,_FUN_NAME_,_ARGS_) \
     template<typename TY>                                   \
@@ -172,6 +182,65 @@
                                                                        \
       public:                                                           \
         static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+      };
+
+
+/** Detector for a member function with the given name.
+ *  Defines a metafunction (template), allowing to detect
+ *  the presence of a member function with a specific name,
+ *  but without imposing any additional constraints on arguments
+ *  and return type. Yet a non-function member will not trigger this detector.
+ * @note this check will fail if there are overloads or similar ambiguity
+ */
+#define META_DETECT_FUNCTION_NAME(_FUN_NAME_)              \
+    template<typename TY>                                   \
+    class HasFunName_##_FUN_NAME_                            \
+      {                                                       \
+        template<typename SEL>                                 \
+        struct Probe;                                           \
+        template<class C, typename RET, typename...ARGS>         \
+        struct Probe<RET (C::*) (ARGS...)>                        \
+          {                                                        \
+            using Match = void;                                     \
+          };                                                         \
+        template<class C, typename RET, typename...ARGS>              \
+        struct Probe<RET (C::*) (ARGS...)  const>                      \
+          {                                                             \
+            using Match = void;                                          \
+          };                                                              \
+                                                                           \
+        template<class X>                                                   \
+        static Yes_t check(typename Probe<decltype(&X::_FUN_NAME_)>::Match * ); \
+        template<class>                                                       \
+        static No_t  check(...);                                               \
+                                                                                \
+      public:                                                                    \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));          \
+      };
+
+
+/** Detector for an argument-less member function with the given name.
+ *  Defines a metafunction (template), allowing to detect a member function
+ *  taking no arguments, and with arbitrary return type.
+ * @remarks the presence of overloads is irrelevant, since we explicitly
+ *          from an invocation to that function (within `decltype`)
+ */
+#define META_DETECT_FUNCTION_ARGLESS(_FUN_)                \
+    template<typename TY>                                   \
+    class HasArglessFun_##_FUN_                              \
+      {                                                       \
+        template<typename X,                                   \
+                 typename SEL = decltype(std::declval<X>()._FUN_())>\
+        struct Probe                                             \
+          { };                                                    \
+                                                                   \
+        template<class X>                                           \
+        static Yes_t check(Probe<X> * );                             \
+        template<class>                                               \
+        static No_t  check(...);                                       \
+                                                                        \
+      public:                                                            \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
       };
 
 

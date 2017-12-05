@@ -76,7 +76,7 @@ namespace test{
     
     
       void
-      run (Arg) 
+      run (Arg)
         {
           SHOW_CHECK( HasNested_Core<PropperGander> );
           SHOW_CHECK( HasNested_Core<Propaganda>    );
@@ -86,7 +86,7 @@ namespace test{
           
           SHOW_CHECK( HasFunSig_honk<PropperGander> );
           SHOW_CHECK( HasFunSig_honk<Propaganda>    );
-        } 
+        }
     };
   
   
