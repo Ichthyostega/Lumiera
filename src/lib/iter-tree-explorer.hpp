@@ -149,6 +149,11 @@ namespace lib {
         typedef T& reference;
         typedef T  value_type;
         
+        /** by default, pass anything down for initialisation of the core.
+         * @note especially this allows move-initialisation from an existing core.
+         * @remarks to prevent this rule from "eating" the standard copy operations,
+         *          and the no-op default ctor, we need to declare them explicitly below.
+         */
         template<typename...ARGS>
         IterableDecorator (ARGS&& ...init)
           : COR(std::forward<ARGS>(init)...)
@@ -411,6 +416,28 @@ namespace lib {
   namespace iter_explorer {
     
     /**
+     * @internal Base of pipe processing decorator chain.
+     * TreeExplorer allows to create a stack out of various decorating processors
+     * - each decorator is itself a _"state core"_, adding some on-demand processing
+     * - each wraps and adapts a source iterator, attaching to and passing-on the iteration logic
+     * Typically each such layer is configured with actual functionality provided as lambda or functor.
+     * Yet in addition to forming an iteration pipeline, there is kind of an internal interconnection
+     * protocol, allowing the layers to collaborate; notably this allows to handle an expandChildren()
+     * call, where some "expansion layer" consumes the current element and replaces it by an expanded
+     * series of new elements. Other layers might need to sync to this operation, and thus it is passed
+     * down the chain. For that reason, we need a dedicated BaseAdapter to adsorb such chained calls.
+     */
+    template<class SRC>
+    struct BaseAdapter
+      : SRC
+      {
+        using SRC::SRC;
+        
+        void expandChildren() { }
+      };
+    
+    
+    /**
      * @internal Decorator for TreeExplorer adding the ability to "expand children".
      * The expandChildren() operation is the key element of a depth-first evaluation: it consumes
      * one element and performs a preconfigured _expansion functor_ on that element to yield
@@ -459,7 +486,7 @@ namespace lib {
         
         
         /** core operation: expand current head element */
-        Expander&
+        void
         expandChildren()
           {
             REQUIRE (this->checkPoint(), "attempt to expand an empty explorer");
@@ -469,8 +496,6 @@ namespace lib {
             iterNext();         // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));
-            
-            return *this;
           }
         
         /** diagnostics: current level of nested child expansion */
@@ -549,6 +574,18 @@ namespace lib {
           { }
         
         
+        /** refresh state when other layers manipulate the source sequence
+         * @remark expansion replaces the current element by a sequence of
+         *         "child" elements. Since we cache our transformation, we
+         *         need to ensure possibly new source elements get processed
+         */
+        void
+        expandChildren()
+          {
+            treated_.reset();
+            SRC::expandChildren();
+          }
+        
       public: /* === Iteration control API for IterableDecorator === */
         
         bool
@@ -613,22 +650,8 @@ namespace lib {
       using reference  = typename meta::TypeBinding<SRC>::reference;
       using pointer    = typename meta::TypeBinding<SRC>::pointer;
       
-      
-      /** by default create an empty iterator */
-      TreeExplorer() { }
-      
-      // default copy acceptable (unless prohibited by nested state core)
-      
-      
-      /** wrap an iterator-like state representation
-       *  to build it into a monad. The resulting entity
-       *  is both an iterator yielding the elements generated
-       *  by the core, and it provides the (monad) bind operator.
-       */
-      explicit
-      TreeExplorer (SRC iterStateCore)
-        : SRC{std::move (iterStateCore)}
-        { }
+      /** pass-through ctor */
+      using SRC::SRC;
       
       
       
@@ -719,8 +742,9 @@ namespace lib {
   treeExplore (IT&& srcSeq)
   {
     using SrcIter = typename _DecoratorTraits<IT>::SrcIter;
+    using Base = iter_explorer::BaseAdapter<SrcIter>;
     
-    return TreeExplorer<SrcIter> {std::forward<IT>(srcSeq)};
+    return TreeExplorer<Base> {std::forward<IT>(srcSeq)};
   }
   
   

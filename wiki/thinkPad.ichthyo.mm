@@ -5710,8 +5710,9 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1512363305422" TEXT="Zusammenspiel">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512363297486" ID="ID_531127457" MODIFIED="1512363711955" TEXT="re-evaluate">
-<linktarget COLOR="#a25a86" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" SOURCE="ID_579206895" STARTARROW="None" STARTINCLINATION="844;55;"/>
+<node COLOR="#338800" CREATED="1512363297486" ID="ID_531127457" MODIFIED="1512516890757" TEXT="re-evaluate">
+<linktarget COLOR="#5a92a2" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" SOURCE="ID_579206895" STARTARROW="None" STARTINCLINATION="844;55;"/>
+<icon BUILTIN="button_ok"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1512363369036" ID="ID_134602126" MODIFIED="1512363378567" TEXT="Problem Quell-&#xc4;nderung">
 <icon BUILTIN="messagebox_warning"/>
@@ -5725,7 +5726,7 @@
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
-<node CREATED="1512363518944" ID="ID_1189860266" MODIFIED="1512363524154" TEXT="L&#xf6;sungsidee">
+<node CREATED="1512363518944" HGAP="38" ID="ID_1189860266" MODIFIED="1512516966236" TEXT="L&#xf6;sungsidee" VSHIFT="11">
 <icon BUILTIN="idea"/>
 <node CREATED="1512363525815" ID="ID_108313040" MODIFIED="1512363819912" TEXT="Hook, auf den alle reagieren">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -5861,9 +5862,11 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512440216070" ID="ID_1808232294" MODIFIED="1512440440544" TEXT="Konsequenz der Analyse">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1512440223221" ID="ID_741091948" MODIFIED="1512440237207" TEXT="warum verwenden wir &#xfc;berhaupt ADL-Funktionen"/>
+<node COLOR="#338800" CREATED="1512440216070" FOLDED="true" ID="ID_1808232294" MODIFIED="1512516491096" TEXT="Konsequenz der Analyse">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512440223221" ID="ID_741091948" MODIFIED="1512512823480" TEXT="warum verwenden wir &#xfc;berhaupt ADL-Funktionen??">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1512440238859" ID="ID_1975957673" MODIFIED="1512440262159" TEXT="wir brauchen hier gar keinen &quot;Extension Point&quot;">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -5905,6 +5908,92 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1512440360194" ID="ID_1554793680" MODIFIED="1512440375486" TEXT="es ist n&#xe4;mlich ein Concept"/>
+</node>
+<node COLOR="#338800" CREATED="1512516448421" ID="ID_980580862" MODIFIED="1512516469297" TEXT="Umstellen aller bestehenden IterstateWrapper">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1512516493271" HGAP="14" ID="ID_1713522306" MODIFIED="1512516970940" TEXT="Implementierung" VSHIFT="7">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512516499478" ID="ID_1331925282" MODIFIED="1512516507112" TEXT="f&#xfc;hre Base-Layer ein"/>
+<node CREATED="1512516508341" ID="ID_1894692287" MODIFIED="1512516517207" TEXT="dieser konsumiert die nach unten durchtereichten Aufrufe"/>
+<node CREATED="1512516517915" ID="ID_1224748245" MODIFIED="1512516534101" TEXT="einzelne Layer k&#xf6;nne bei Bedarf ebenfalls diese Ketten-Aufrufe implementieren"/>
+<node CREATED="1512516534761" ID="ID_111530510" MODIFIED="1512516542484" TEXT="speziell expandChildren()">
+<node CREATED="1512516543648" ID="ID_1021495966" MODIFIED="1512516558578" TEXT="transformer mu&#xdf; daraufhin seinen Cache wegwerfen"/>
+<node CREATED="1512516567076" ID="ID_647647031" MODIFIED="1512516587342" TEXT="filter mu&#xdf; daraufhin erneut filter-pull ausf&#xfc;hren"/>
+</node>
+<node CREATED="1512516613614" ID="ID_1415224184" MODIFIED="1512516850054">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Konzept funktioniert nicht
+    </p>
+    <p>
+      iaus processing-Function
+    </p>
+    <p>
+      innen heraus
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1512516629180" ID="ID_1157813472" MODIFIED="1512516672998" TEXT="oh wie traurig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      will sagen, das ist ja auch eine durchgeknallte Idee....
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1512516682701" ID="ID_1471867999" MODIFIED="1512516706422">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn eine Funktion <i>in</i>&#160;einem Layer expanded
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512516708649" ID="ID_474656011" MODIFIED="1512516797884" TEXT="dann mu&#xdf; sie sich zwischen Vater oder 1.Kind entscheiden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h, entweder man gibt aus dem Functor das zur&#252;ck,
+    </p>
+    <p>
+      was <i>vor</i>&#160;dem expand anstand (=der Vater), oder man verwirft diesen
+    </p>
+    <p>
+      und liefert das, was nach dem expand erscheind
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512516799653" ID="ID_589615050" MODIFIED="1512516811504" TEXT="nicht als Fehler bewertet">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1512516814507" ID="ID_347481974" MODIFIED="1512516819130" TEXT="eigentlich logisch">
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 </node>
 </node>
@@ -6176,9 +6265,9 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363228751" ID="ID_579206895" MODIFIED="1512363711955" TEXT="Problem: re-evaluate nach expand">
-<arrowlink COLOR="#a25a86" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" STARTARROW="None" STARTINCLINATION="844;55;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512363228751" ID="ID_579206895" MODIFIED="1512516921091" TEXT="Problem: re-evaluate nach expand">
+<arrowlink COLOR="#5a92a2" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" STARTARROW="None" STARTINCLINATION="844;55;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836579562" ID="ID_1718741335" MODIFIED="1511836583779" TEXT="verify_FilterIterator();">
