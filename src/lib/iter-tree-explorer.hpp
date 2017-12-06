@@ -644,6 +644,80 @@ namespace lib {
             return *treated_;
           }
       };
+    
+    
+    
+    /**
+     * @internal Decorator for TreeExplorer to filter elements based on a predicate.
+     * 
+     * @todo WIP 12/17 implement filter
+     */
+    template<class SRC, class FUN>
+    class Filter
+      : public SRC
+      {
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        using _Traits = _BoundFunctorTraits<FUN,SRC>;
+        using Res = typename _Traits::Res;
+        static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
+        
+        using FilterPredicate = typename _Traits::Functor;
+        
+        FilterPredicate trafo_;
+        
+      public:
+        
+        Filter() =default;
+        // inherited default copy operations
+        
+        Filter (SRC&& dataSrc, FUN&& filterFun)
+          : SRC{move (dataSrc)}
+          , trafo_{forward<FUN> (filterFun)}
+          { }
+        
+        
+        /** refresh state when other layers manipulate the source sequence */
+        void
+        expandChildren()
+          {
+            //////////////////////TODO trigger re-evaluation here...
+            SRC::expandChildren();
+          }
+        
+      public: /* === Iteration control API for IterableDecorator === */
+        
+        bool
+        checkPoint()  const
+          {
+            return false; //////////////TODO filter and pull here...
+          }
+        
+        typename SRC::reference
+        yield()  const
+          {
+            return *(*this);
+          }
+        
+        void
+        iterNext()
+          {
+            ++ srcIter();
+          }
+        
+      private:
+        SRC&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+        bool
+        pullFilter ()
+          {
+            ////////////////////////TODO while-not-filter iter
+            return false; //////////TODO return true if any result??
+          }
+      };
   }
   
   
@@ -741,6 +815,20 @@ namespace lib {
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});
         }
+      
+      
+      /** @todo implement filter
+       */
+      template<class FUN>
+      auto
+      filter (FUN&& filterPredicate)
+        {
+          using ResCore = iter_explorer::Filter<SRC, FUN>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
+        }
+      
       
     private:
     };

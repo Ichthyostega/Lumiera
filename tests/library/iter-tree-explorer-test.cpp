@@ -625,7 +625,10 @@ namespace test{
       void
       verify_FilterIterator()
         {
-          UNIMPLEMENTED("preconfigured repeated depth-first expansion");
+          cout << materialise (
+                    treeExplore(CountDown{10})
+                      .filter([](uint j){ return j % 2; })
+                  ) << endl;
         }
       
       
@@ -635,7 +638,7 @@ namespace test{
       void
       verify_asIterSource()
         {
-          UNIMPLEMENTED("preconfigured repeated depth-first expansion");
+          UNIMPLEMENTED("package as IterSource");
         }
       
       
