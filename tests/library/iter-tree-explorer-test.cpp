@@ -572,10 +572,14 @@ namespace test{
        * in that case it might even happen that the downstream consumer does not even see the
        * items resulting from child expansion, because they are evaluated and then filtered
        * away by a transformer and filter placed in between.
-       * @note a corollary of the aforementioned is the observation that having several expand
-       *       layers is rather not useful in practice. Due to the nested inheritance structure
-       *       of the assembled TreeExplorer, it is the expansion layer most on top in the chain
-       *       who will receive the `expandChildren()` call.
+       * @note as a consequence of the flexible automatic adapting of bound functors, it is
+       *       possible for bound functors within different "layers" to collaborate, based on
+       *       additional knowledge regarding the embedded data source internals. This test
+       *       demonstrates a transform functor, which takes the _source iterator_ as argument
+       *       and invokes `it.expandChildren()` to manipulate the underlying evaluation.
+       *       However, since the overall evaluation is demand driven, there are inherent
+       *       limitations to such a setup, which bends towards fragility when leaving
+       *       the realm of pure functional evaluation.
        */
       void
       verify_combinedExpandTransform()
@@ -590,13 +594,13 @@ namespace test{
           ++ii;
           CHECK (8 == *ii);
           ii.expandChildren();
-          cout << materialise(ii) <<endl;/////////////////////////////////TODO "8-4-2-6-4-2"
+          CHECK ("6-4-2-6-4-2" == materialise(ii) );
           
           
           // the following contrived example demonstrates
           // how intermediary processing steps may interact
           
-          cout << materialise (
+          CHECK (materialise (
                     treeExplore(CountDown{5})
                       .expand([](uint j){ return CountDown{j-1}; })
                       .transform([](int v){ return 2*v; })
@@ -605,13 +609,14 @@ namespace test{
                                      auto elm = *it;
                                      if (elm == 6)
                                        {
-                                         it.expandChildren();
-                                         elm *= 10;
+                                         it.expandChildren();         // NOTE at that point we're forced to decide if
+                                         elm = *it * 10;              //      we want to return the parent or the 1st child
                                        }
                                      return elm;
                                    })
-                      .transform([](float f){ return f/2; })
-                      ) <<endl;///////////////////////////////////////////TODO "5-4-30-1-2-1"
+                      .transform([](float f){ return 0.055 + f/2; })
+                 )
+                 == "5.055-4.055-20.055-1.055-2.055-1.055" );
         }
       
       

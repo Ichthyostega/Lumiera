@@ -5710,7 +5710,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1512363305422" TEXT="Zusammenspiel">
 <icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1512363297486" ID="ID_531127457" MODIFIED="1512516890757" TEXT="re-evaluate">
+<node COLOR="#338800" CREATED="1512363297486" FOLDED="true" ID="ID_531127457" MODIFIED="1512521973765" TEXT="re-evaluate">
 <linktarget COLOR="#5a92a2" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" SOURCE="ID_579206895" STARTARROW="None" STARTINCLINATION="844;55;"/>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -5719,10 +5719,11 @@
 <node CREATED="1512363380411" ID="ID_1008917631" MODIFIED="1512363473668" TEXT="expandChildren &#xe4;ndert aktuellen Gehalt der Quelle">
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363397897" ID="ID_1178182932" MODIFIED="1512363487789" TEXT="aber downstream reagiert (bisher) nur auf iterate()">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512363397897" ID="ID_1178182932" MODIFIED="1512521936459" TEXT="aber downstream reagiert (bisher) nur auf iterate()">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512363421797" ID="ID_1732504592" MODIFIED="1512363505534" TEXT="Folge: geCacheter Wert aus Transformer &#xfc;berdeckt">
+<node CREATED="1512363421797" ID="ID_1732504592" MODIFIED="1512521966101" TEXT="Folge: geCacheter Wert aus Transformer &#xfc;berdeckt">
+<font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
@@ -6247,9 +6248,10 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1512358551383" TEXT="verify_combinedExpandTransform();">
-<icon BUILTIN="pencil"/>
-<node CREATED="1512363192308" ID="ID_1913090689" MODIFIED="1512363209302" TEXT="expand &#xfc;ber Transformer hinweg">
+<node COLOR="#338800" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1512521923184" TEXT="verify_combinedExpandTransform();">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1512363192308" FOLDED="true" ID="ID_1913090689" MODIFIED="1512522127007" TEXT="expand &#xfc;ber Transformer hinweg">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1512363626338" ID="ID_1302720848" MODIFIED="1512363637547" TEXT="funktioniert out-of-the-Box">
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -6257,12 +6259,16 @@
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
-<node CREATED="1512363210130" ID="ID_480959271" MODIFIED="1512363224156" TEXT="expand aus manipulierendem Transformer">
+<node COLOR="#338800" CREATED="1512363210130" FOLDED="true" ID="ID_480959271" MODIFIED="1512522130630" TEXT="expand aus manipulierendem Transformer">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1512363649158" ID="ID_1152388495" MODIFIED="1512363655383" TEXT="ebenso">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363659085" ID="ID_1079241242" MODIFIED="1512363737038" TEXT="TODO output CHECK">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512522106792" ID="ID_1499481842" MODIFIED="1512522120926" TEXT="naja fast noch fastiger">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node COLOR="#338800" CREATED="1512363659085" ID="ID_1079241242" MODIFIED="1512521919442" TEXT="TODO output CHECK">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1512363228751" ID="ID_579206895" MODIFIED="1512516921091" TEXT="Problem: re-evaluate nach expand">

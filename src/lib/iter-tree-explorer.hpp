@@ -22,11 +22,12 @@
 
 /** @file iter-tree-explorer.hpp
  ** Building tree expanding and backtracking evaluations within hierarchical scopes.
- ** Based on the <b>Lumiera Forward Iterator</b> concept and using the basic IterAdaptor templates,
- ** these components allow to implement typical evaluation strategies, like e.g. depth-first or
- ** breadth-first exploration of a hierarchical structure. Since the access to this structure is
+ ** Based on the *Lumiera Forward Iterator* concept and using the basic IterAdaptor templates,
+ ** these components allow to implement typical evaluation strategies, like conditional expanding
+ ** or depth-first exploration of a hierarchical structure. Since the access to this structure is
  ** abstracted through the underlying iterator, what we effectively get is a functional datastructure.
- ** The implementation is based on the IterStateWrapper, which is one of the basic helper templates
+ ** The implementation is based on the idea of a "state core", which is wrapped right into the iterator
+ ** itself (value semantics) -- similar to the IterStateWrapper, which is one of the basic helper templates
  ** provided by iter-adapter.hpp.
  ** 
  ** @remark as of 2017, this template, as well as the initial IterExplorer (draft from 2012) can be
@@ -38,13 +39,14 @@
  **         separate the _mechanics of evaluation_ from the actual logic of the target domain.
  ** 
  ** # Iterators as Monad
- ** The fundamental idea behind the implementation technique used here is the \em Monad pattern
- ** known from functional programming. A Monad is a (abstract) container created by using some specific functions.
- ** This is an rather abstract concept with a wide variety of applications (things like IO state, parsers, combinators,
+ ** The fundamental idea behind the implementation technique used here is the _Monad pattern_
+ ** known from functional programming. A Monad is a container holding some arbitrarily typed base value; the monad can
+ ** be seen as "amplifying" and enhancing the contained base value by attaching additional properties or capabilities
+ ** This is a rather detached concept with a wide variety of applications (things like IO state, parsers, combinators,
  ** calculations with exception handling but also simple data structures like lists or trees). The key point with any
- ** monad is the ability to \em bind a function into the monad; this function will work on the \em internals of the
- ** monad and produce a modified new monad instance. In the simple case of a list, "binding" a function
- ** basically means to map the function onto the elements in the list.
+ ** monad is the ability to _bind a function_ into the monad; this function will work on the _contained base values_
+ ** and produce a modified new monad instance. In the simple case of a list, "binding" a function basically means
+ ** to _map the function onto_ the elements in the list.
  ** 
  ** ## Rationale
  ** The primary benefit of using the monad pattern is to separate the transforming operation completely from
@@ -56,6 +58,22 @@
  ** - a flexible and unspecific source data structure needs to be processed
  ** - and this evaluation needs to be done asynchronously and in parallel (no locking, immutable data)
  ** - and a partial evaluation needs to be stored as continuation (not relying on the stack for partial results)
+ ** 
+ ** # A Pipeline builder
+ ** Based on such concepts, structures and evaluation patterns, the TreeExplorer serves the purpose to provide
+ ** building blocks to assemble a _processing pipeline_, where processing will happen _on demand,_ while iterating.
+ ** TreeExplorer itself is both a Lumiera Forward Iterator based on some wrapped data source, and at the same time
+ ** it is a builder to chain up processing steps to work on the data pulled from that source. These processing steps
+ ** are attached as _decorators_ wrapping the source, in the order the corresponding builder functions were invoked.
+ ** - the _expand operation_ installs a function to consume one element and replace it by the sequence of elements
+ **   (``children'') produced by that _»expansion functor«_. But this expansion does not happen automatically and
+ **   on each element, rather it is triggered by issuing a dedicated `expandChildren()` call on the processing
+ **   pipeline. Thus, binding the expansion functor has augmented the data source with the ability to explore
+ **   some part in more detail _when required.
+ ** - the _transform operation_ installs a function to be mapped onto each element retrieved from the underlying source
+ ** - in a similar vein, the _filter operation_ binds a predicate to decide about using or discarding data
+ ** - in concert, expand- and transform operation allow to build hierarchy evaluation algorithms without exposing
+ **   any knowledge regarding the concrete hierarchy used and explored as data source.
  ** 
  ** @todo WIP-WIP-WIP initial draft as of 11/2017
  ** 
@@ -227,6 +245,8 @@ namespace lib {
       };
     
   }//(End) namespace iter_explorer : predefined policies and configurations
+  
+  
   
   
   namespace { // TreeExplorer traits
@@ -496,6 +516,8 @@ namespace lib {
             iterNext();         // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));
+            
+            SRC::expandChildren();
           }
         
         /** diagnostics: current level of nested child expansion */
