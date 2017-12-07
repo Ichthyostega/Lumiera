@@ -649,8 +649,10 @@ namespace lib {
     
     /**
      * @internal Decorator for TreeExplorer to filter elements based on a predicate.
-     * 
-     * @todo WIP 12/17 implement filter
+     * Similar to the Transformer, the given functor is adapted as appropriate. However,
+     * we require the functor's result type to be convertible to bool, to serve as approval test.
+     * The filter predicate and thus the source iterator is evaluated _eagerly_, to establish the
+     * *invariant* of this class: _if a "current element" exists, it has already been approved._
      */
     template<class SRC, class FUN>
     class Filter
@@ -824,7 +826,10 @@ namespace lib {
         }
       
       
-      /** @todo implement filter
+      /** adapt this TreeExplorer to filter results, by invoking the given functor to approve them.
+       * The previously created source layers will be "pulled" to fast-forward immediately to the
+       * next element confirmed this way by the bound functor. If none of the source elements
+       * is acceptable, the iterator will transition to exhausted state immediately.
        */
       template<class FUN>
       auto

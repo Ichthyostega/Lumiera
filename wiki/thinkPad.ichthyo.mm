@@ -6299,11 +6299,14 @@
 <node COLOR="#338800" CREATED="1512523719350" ID="ID_351021178" MODIFIED="1512606882124" TEXT="einfaches Pr&#xe4;dikat">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512523726885" ID="ID_282579718" MODIFIED="1512523741403" TEXT="konsumieren bis leer">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512523726885" ID="ID_282579718" MODIFIED="1512608271472" TEXT="konsumieren bis leer">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512523773559" ID="ID_917494688" MODIFIED="1512523798076" TEXT="Pr&#xe4;dikat&lt;Core&gt;">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512523773559" ID="ID_917494688" MODIFIED="1512609314616" TEXT="Pr&#xe4;dikat&lt;Core&gt;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512609324903" ID="ID_1654303504" MODIFIED="1512609343982" TEXT="kann an den Vorg&#xe4;ngern vorbeitunneln">
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512523783318" ID="ID_1808219280" MODIFIED="1512523797205" TEXT="Pr&#xe4;dikat&lt;Iter&gt; (generisch)">
 <icon BUILTIN="flag-yellow"/>

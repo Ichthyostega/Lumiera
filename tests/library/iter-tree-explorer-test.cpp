@@ -620,15 +620,52 @@ namespace test{
         }
       
       
-      /** @test add a filtering predicate into the pipeline
+      /** @test add a filtering predicate into the pipeline.
+       * As in all the previously demonstrated cases, also the _filtering_ is added as decorator,
+       * wrapping the source and all previously attached decoration layers. And in a similar way,
+       * various kinds of functors can be bound, and will be adapted automatically to work as a
+       * predicate to approve the elements to yield.
        */
       void
       verify_FilterIterator()
         {
-          cout << materialise (
+          // canonical example, using a clean side-effect free predicate based on element values
+          CHECK (materialise (
                     treeExplore(CountDown{10})
                       .filter([](uint j){ return j % 2; })
-                  ) << endl;
+                    )
+                 == "9-7-5-3-1");
+          
+          
+          // Filter may lead to consuming util exhaustion...
+          auto i1 = treeExplore(CountDown{10})
+                      .filter([](int j){ return j > 9; });
+          
+          CHECK (not isnil (i1));
+          CHECK (10 == *i1);
+          ++ i1;
+          CHECK (isnil (i1));
+          VERIFY_ERROR (ITER_EXHAUST, ++i1 );
+          
+          
+          // none of the source elements can be approved here...
+          auto i2 = treeExplore(CountDown{5})
+                      .filter([](int j){ return j > 9; });
+          
+          CHECK (isnil (i2));
+          
+          
+          // a tricky example, where the predicate takes the source core as argument;
+          // since the source core is embedded as baseclass, it can thus "undermine"
+          // and bypass the layers configured in between; here the transformer changes
+          // uint to float, but the filter interacts directly with the core and thus
+          // judges based on the original values
+          CHECK (materialise (
+                    treeExplore(CountDown{10,4})
+                      .transform([](float f){ return 0.55 + 2*f; })
+                      .filter([](CountDown& core){ return core.p % 2; })
+                    )
+                 == "18.55-14.55-10.55");
         }
       
       
