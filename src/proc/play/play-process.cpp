@@ -35,6 +35,8 @@
 //#include <memory>
 //#include <functional>
 
+using lib::iter_source::transform;
+using lib::append_all;
 
 
 namespace proc {
@@ -43,8 +45,6 @@ namespace play {
 //    using std::string;
 //    using lumiera::Subsys;
 //    using std::bind;
-  using lib::transform;
-  using lib::append_all;
   
   
   namespace { // Implementation details...

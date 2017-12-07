@@ -64,7 +64,6 @@ namespace play {
 //using proc::engine::BufferProvider;
 //using lib::time::Time;
 //using std::string;
-  using lib::transform;
   using lib::iter_stl::eachElm;
   
 //using std::placeholders::_1;
@@ -177,7 +176,7 @@ namespace play {
         {
                                                                                  //////////////////////////TICKET #878  not re-entrant, lifecycle isn't clear
           REQUIRE (this->isActive());
-          return transform (eachElm(connections_), connectOutputSink);
+          return lib::iter_source::transform (eachElm(connections_), connectOutputSink);
         }
       
       Timings

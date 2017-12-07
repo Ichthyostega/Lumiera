@@ -723,12 +723,42 @@ namespace test{
       
       
       /** @test package the resulting Iterator as automatically managed,
-       *        polymorphic opaque implementing the IterSource interface.
+       *        polymorphic opaque entity implementing the IterSource interface.
        */
       void
       verify_asIterSource()
         {
-          UNIMPLEMENTED("package as IterSource");
+          IterSource<uint>::iterator sequence;
+          CHECK (isnil (sequence));
+          
+          sequence = treeExplore(CountDown{20,10})
+                        .filter([](uint i){ return i % 2; })
+                        .asIterSource();
+          
+          CHECK (not isnil (sequence));
+          CHECK (19 == *sequence);
+          
+          cout << materialise (sequence) <<endl;
+          
+          sequence = treeExplore(sequence)
+                        .transform([](uint i){ return i*2; })
+                        .asIterSource();
+          
+          CHECK (38 == *sequence);
+          
+          IterExploreSource<char> exploreIter;
+          CHECK (isnil (exploreIter));
+          
+          exploreIter = treeExplore(sequence)
+                          .filter([](int i){ return i>30; })
+                          .expand([](int i){ return CountDown{i-10, 20}; })
+                          .transform([](uint u) -> char { return '@'+u-20; })
+                          .asIterSource();
+          
+          CHECK (38 == *sequence);
+          cout << materialise(exploreIter) << endl;
+          
+          CHECK (isnil (sequence));
         }
       
       

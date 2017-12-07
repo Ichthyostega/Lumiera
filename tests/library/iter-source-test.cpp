@@ -61,6 +61,14 @@ namespace test{
   
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
+  using iter_source::eachEntry;
+  using iter_source::transform;
+  using iter_source::singleVal;
+  using iter_source::eachMapKey;
+  using iter_source::eachMapVal;
+  using iter_source::eachValForKey;
+  using iter_source::eachDistinctKey;
+  
   
   
   namespace { // Subject of test

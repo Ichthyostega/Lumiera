@@ -58,7 +58,7 @@
 //#include "lib/singleton-ref.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/engine/calc-stream.hpp"
-#include "lib/iter-source.hpp"
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource base feature here
 #include "lib/util.hpp"
 //
 #include <boost/noncopyable.hpp>

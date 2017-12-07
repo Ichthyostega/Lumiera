@@ -142,9 +142,16 @@ namespace lib {
       struct iterator
         : IterAdapter<Pos, DataHandle>
         {
-          using _I = IterAdapter<Pos, DataHandle>
-          ;
+          using _I = IterAdapter<Pos, DataHandle>;
+          
           using _I::IterAdapter;
+          iterator()                            =default;     /////////////////////////////////////TICKET #1117 : why the hell do we need to declare all those ctor variants explicitly? I was under the impression ctor calls worked correct up to now without all this...
+          iterator(iterator&&)                  =default;
+          iterator(iterator const&)             =default;
+          iterator(iterator& r) : iterator((iterator const&)r) { }
+          iterator& operator= (iterator &&)     =default;
+          iterator& operator= (iterator const&) =default;
+          
           operator string()  const {return _I::source()? string(*_I::source()) : "⟂"; }
         };
       
@@ -494,16 +501,7 @@ namespace lib {
       Range contents (begin, end);
       return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
-  }
-  using iter_source::wrapIter;
-  using iter_source::singleVal;
-  using iter_source::transform;
-  using iter_source::eachMapKey;
-  using iter_source::eachDistinctKey;
-  using iter_source::eachValForKey;
-  using iter_source::eachMapVal;
-  using iter_source::eachEntry;
   
-  
-} // namespace lib
+    
+}} // namespace lib::iter_source
 #endif

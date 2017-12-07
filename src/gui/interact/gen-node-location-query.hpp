@@ -183,8 +183,8 @@ namespace interact {
                                   {
                                     return Symbol{id};
                                   };
-          return depth==UIC_PERSP? lib::singleVal (internedString (node.getType()))
-                                 : lib::transform (node.keys(), internedString);
+          return depth==UIC_PERSP? lib::iter_source::singleVal (internedString (node.getType()))
+                                 : lib::iter_source::transform (node.keys(), internedString);
                                         /////////////////////////////////////////////////////////////////////TICKET #1113 : could just use lib::wrapIter when GenNode exposes Literal as ID
         }
       

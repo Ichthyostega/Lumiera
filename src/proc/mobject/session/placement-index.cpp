@@ -79,6 +79,9 @@ namespace session {
   using lib::TypedAllocationManager;
   using lib::iter_stl::IterSnapshot;
   using lib::iter_stl::eachVal;
+  using lib::iter_source::eachMapKey;
+  using lib::iter_source::eachDistinctKey;
+  using lib::iter_source::eachValForKey;
   using std::placeholders::_1;
   using std::function;
   using std::bind;

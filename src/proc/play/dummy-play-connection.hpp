@@ -131,7 +131,6 @@ namespace play {
     using lumiera::Query;
 //  using lib::ScopedCollection;
 //  using lib::Literal;
-    using lib::eachEntry;
     
     typedef asset::ID<Pipe> PID;
     typedef asset::ID<Struct> TID;
@@ -207,7 +206,7 @@ namespace play {
         ModelPorts
         getAllModelPorts()
           {
-            return eachEntry (modelPorts_.begin(), modelPorts_.end());
+            return lib::iter_source::eachEntry (modelPorts_.begin(), modelPorts_.end());
           }
       };
   }

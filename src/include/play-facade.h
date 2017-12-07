@@ -36,7 +36,7 @@
 
 //#include "include/interfaceproxy.hpp"
 #include "lib/handle.hpp"
-#include "lib/iter-source.hpp"
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource base interface here
 #include "lib/time/control.hpp"
 #include "lib/time/timevalue.hpp"
 #include "include/interfaceproxy.hpp"

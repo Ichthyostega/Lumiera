@@ -5691,7 +5691,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511837279715" ID="ID_1694539348" MODIFIED="1512612114861" TEXT="filter-Operation">
+<node COLOR="#338800" CREATED="1511837279715" FOLDED="true" ID="ID_1694539348" MODIFIED="1512621166351" TEXT="filter-Operation">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511837285306" ID="ID_928417859" MODIFIED="1511837293629" TEXT="der Vollst&#xe4;ndigkeit halber">
 <node CREATED="1511837296921" ID="ID_151298846" MODIFIED="1511837304547" TEXT="ist zwar redundant zu den Itertools"/>
@@ -6018,11 +6018,38 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1511837465023" TEXT="asIterSource">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1512621181803" TEXT="asIterSource">
+<icon BUILTIN="pencil"/>
+<node CREATED="1512621242778" ID="ID_695969017" MODIFIED="1512621248235" TEXT="Eigenschaften">
+<icon BUILTIN="info"/>
 <node CREATED="1511837396075" ID="ID_1916743569" MODIFIED="1511837401078" TEXT="abschlie&#xdf;ender Dekorator"/>
 <node CREATED="1511837401738" ID="ID_289320579" MODIFIED="1511837414204" TEXT="verpackt hinter OO-Interface mit virtuellen Funktionen"/>
 <node CREATED="1511837421967" ID="ID_906113750" MODIFIED="1511837433914" TEXT="automatische Heap-Storage"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621260992" ID="ID_611871784" MODIFIED="1512621309522" TEXT="erweitertes Interface">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621268527" ID="ID_1388034155" MODIFIED="1512621305821" TEXT="wie bauen?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621274166" ID="ID_1452751365" MODIFIED="1512621301316" TEXT="wie expand() an die Quelle weitergeben?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512621201039" TEXT="Probleme">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621202688" ID="ID_57740660" MODIFIED="1512621221197" TEXT="durchreichen der Basis-Konstruktoren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621222901" ID="ID_701320194" MODIFIED="1512621233228" TEXT="bad function call">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512621654283" ID="ID_1975194377" MODIFIED="1512621667489" TEXT="passiert im FIlter-Iterator-Test">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512621668449" ID="ID_369576813" MODIFIED="1512621682544" TEXT="hab ich einen schon funktionierenden Test gebrochen?">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1512358595283" FOLDED="true" ID="ID_1526405052" MODIFIED="1512359008205" TEXT="piggyback?">
 <icon BUILTIN="help"/>
@@ -6329,8 +6356,66 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836589393" ID="ID_54165230" MODIFIED="1511836592073" TEXT="verify_asIterSource();">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836589393" ID="ID_54165230" MODIFIED="1512621159744" TEXT="verify_asIterSource();">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512620990860" ID="ID_167384287" MODIFIED="1512621374577" TEXT="einfach verpacken">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512620997827" ID="ID_173233581" MODIFIED="1512621372921" TEXT="erzeugte source erneut verpacken">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621101645" ID="ID_1982135306" MODIFIED="1512621376089" TEXT="polymorphie: verschiedene Pipelines">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      verschiedendste Pipeline-Konstruktionen
+    </p>
+    <p>
+      k&#246;nnen nun hinter dem gleichen Interface sitzen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621116947" ID="ID_1907769466" MODIFIED="1512621378248" TEXT="durchgeschleifte expandChildren()-Operation">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512621383815" ID="ID_1705587551" MODIFIED="1512621486222" TEXT="Problem: shallow copy">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      rein ein Problem mit der Test-Fixture.
+    </p>
+    <p>
+      Da die Quelle nun von einem shared-ptr gehalten wird,
+    </p>
+    <p>
+      erzeugt eine Kopie des Iterator-Front-End
+    </p>
+    <p>
+      nun nicht mehr eine Kopie des ganzen Zustandes.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      das w&#228;re aber bequem f&#252;r den Test.
+    </p>
+    <p>
+      <u>Frage</u>: ist das &#252;berhaupt eine gute Idee, vom Design her??
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1510969042972" TEXT="verify_depthFirstExploration();">
 <icon BUILTIN="flag-yellow"/>

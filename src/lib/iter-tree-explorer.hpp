@@ -95,6 +95,7 @@
 #include "lib/meta/trait.hpp"
 #include "lib/wrapper.hpp"        ////////////TODO : could be more lightweight by splitting FunctionResult into separate header. Relevant?
 #include "lib/iter-adapter.hpp"
+#include "lib/iter-source.hpp"   /////////////TICKET #493 : only using the IterSource base feature / interface here. Should really split the iter-source.hpp
 #include "lib/iter-stack.hpp"
 #include "lib/util.hpp"
 #include "lib/test/test-helper.hpp"///////////TODO Bug-o
@@ -452,6 +453,10 @@ namespace lib {
       : SRC
       {
         using SRC::SRC;
+        BaseAdapter(SRC const& src) : SRC(src) { } ////////////////////////TODO why the hell do we need to redeclare all those ctor variants????
+        BaseAdapter(SRC && src) : SRC(src) { }
+        BaseAdapter(SRC & src) : SRC(src) { }
+        BaseAdapter() = default;
         
         void expandChildren() { }
       };
@@ -733,6 +738,25 @@ namespace lib {
   
   
   /**
+   * @todo WIP 12/2017 
+   */
+  template<typename VAL>
+  struct IterExploreSource
+    : IterSource<VAL>::iterator
+    {
+      
+      //////TODO clarify allowed ctors
+      
+      void
+      expandChildren()
+        {
+          UNIMPLEMENTED ("how to phone home...");
+        }
+      
+    private:
+    };
+  
+  /**
    * Adapter to build a demand-driven tree expanding and exploring computation
    * based on a custom opaque _state core_. TreeExploer adheres to the _Monad_
    * pattern known from functional programming, insofar the _expansion step_ is
@@ -757,6 +781,10 @@ namespace lib {
       
       /** pass-through ctor */
       using SRC::SRC;
+      TreeExplorer(SRC const& src) : SRC(src) { } ////////////////////////TODO why the hell do we need to redeclare all those ctor variants???? why isn't copy initialisation propagated from the base ctors?
+      TreeExplorer(SRC && src) : SRC(src) { }
+      TreeExplorer(SRC & src) : SRC(src) { }
+      TreeExplorer() = default;
       
       
       
@@ -842,6 +870,15 @@ namespace lib {
         }
       
       
+      /** @todo package as IterSource
+       */
+      IterExploreSource<value_type>
+      asIterSource()
+        {
+          UNIMPLEMENTED ("wrap into IterSource");       
+        }
+      
+      
     private:
     };
   
@@ -866,7 +903,7 @@ namespace lib {
     using SrcIter = typename _DecoratorTraits<IT>::SrcIter;
     using Base = iter_explorer::BaseAdapter<SrcIter>;
     
-    return TreeExplorer<Base> {std::forward<IT>(srcSeq)};
+    return TreeExplorer<Base> (std::forward<IT> (srcSeq));
   }
   
   
