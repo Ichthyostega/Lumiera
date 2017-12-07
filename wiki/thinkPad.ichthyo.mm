@@ -5691,8 +5691,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837279715" ID="ID_1694539348" MODIFIED="1512523928755" TEXT="filter-Operation">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1511837279715" ID="ID_1694539348" MODIFIED="1512612114861" TEXT="filter-Operation">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1511837285306" ID="ID_928417859" MODIFIED="1511837293629" TEXT="der Vollst&#xe4;ndigkeit halber">
 <node CREATED="1511837296921" ID="ID_151298846" MODIFIED="1511837304547" TEXT="ist zwar redundant zu den Itertools"/>
 <node CREATED="1511837305410" ID="ID_1979322634" MODIFIED="1511837324464" TEXT="treeExplorer k&#xf6;nnte Itertools abl&#xf6;sen">
@@ -5705,7 +5705,8 @@
 <node CREATED="1511837338643" ID="ID_1734683995" MODIFIED="1511837344590" TEXT="bestehende Dekorator-Technik"/>
 <node CREATED="1511837345226" ID="ID_991593174" MODIFIED="1511837351797" TEXT="bestehende Funktor-Argument-Traits"/>
 </node>
-<node CREATED="1512523892775" ID="ID_673112014" MODIFIED="1512523896362" TEXT="Knackpunkte">
+<node COLOR="#338800" CREATED="1512523892775" ID="ID_673112014" MODIFIED="1512612109927" TEXT="Knackpunkt">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1512523897422" ID="ID_1007287631" MODIFIED="1512606862773" TEXT="pullFilter">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -6294,8 +6295,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836579562" ID="ID_1718741335" MODIFIED="1512523829719" TEXT="verify_FilterIterator();">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1511836579562" ID="ID_1718741335" MODIFIED="1512612068564" TEXT="verify_FilterIterator();">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1512523719350" ID="ID_351021178" MODIFIED="1512606882124" TEXT="einfaches Pr&#xe4;dikat">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -6308,11 +6309,24 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512523783318" ID="ID_1808219280" MODIFIED="1512523797205" TEXT="Pr&#xe4;dikat&lt;Iter&gt; (generisch)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512523783318" ID="ID_1808219280" MODIFIED="1512611989218" TEXT="Pr&#xe4;dikat&lt;Iter&gt; (generisch)">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512523810946" ID="ID_461047497" MODIFIED="1512523821311" TEXT="ggfs mit expand()">
-<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1512523810946" ID="ID_461047497" MODIFIED="1512612006569" TEXT="... mit expand()">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1512612008548" ID="ID_13525358" MODIFIED="1512612041105" TEXT="...und Seiteneffekt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1512612015283" ID="ID_1560717932" MODIFIED="1512612042056" TEXT="...und geklontem Zustand">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1512612027105" ID="ID_739092273" MODIFIED="1512612042905" TEXT="...und nachtr&#xe4;glich hinzugef&#xfc;gtem Layer">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#2b7d95" CREATED="1512612043592" ID="ID_1719204676" MODIFIED="1512612065051" TEXT="...es lebe die Komplexit&#xe4;t">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836589393" ID="ID_54165230" MODIFIED="1511836592073" TEXT="verify_asIterSource();">

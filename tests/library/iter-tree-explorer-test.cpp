@@ -620,6 +620,7 @@ namespace test{
         }
       
       
+      
       /** @test add a filtering predicate into the pipeline.
        * As in all the previously demonstrated cases, also the _filtering_ is added as decorator,
        * wrapping the source and all previously attached decoration layers. And in a similar way,
@@ -638,21 +639,22 @@ namespace test{
           
           
           // Filter may lead to consuming util exhaustion...
-          auto i1 = treeExplore(CountDown{10})
+          auto ii = treeExplore(CountDown{10})
                       .filter([](int j){ return j > 9; });
           
-          CHECK (not isnil (i1));
-          CHECK (10 == *i1);
-          ++ i1;
-          CHECK (isnil (i1));
-          VERIFY_ERROR (ITER_EXHAUST, ++i1 );
+          CHECK (not isnil (ii));
+          CHECK (10 == *ii);
+          ++ ii;
+          CHECK (isnil (ii));
+          VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
           
           // none of the source elements can be approved here...
-          auto i2 = treeExplore(CountDown{5})
+          auto jj = treeExplore(CountDown{5})
                       .filter([](int j){ return j > 9; });
           
-          CHECK (isnil (i2));
+          CHECK (isnil (jj));
+          
           
           
           // a tricky example, where the predicate takes the source core as argument;
@@ -666,6 +668,57 @@ namespace test{
                       .filter([](CountDown& core){ return core.p % 2; })
                     )
                  == "18.55-14.55-10.55");
+          
+          
+          
+          // another convoluted example to demonstrate
+          // - a filter predicate with side-effect
+          // - and moreover the predicate is a generic lambda
+          // - accepting the iterator to trigger child expansion
+          // - which also causes re-evaluation of the preceding transformer
+          bool toggle = false;
+          auto kk = treeExplore(CountDown{10,5})
+                      .expand([](uint j){ return CountDown{j-1}; })
+                      .transform([](int v){ return 2*v; })
+                      .filter([&](auto& it)
+                                   {
+                                     if (*it == 16)
+                                       {
+                                         it.expandChildren();
+                                         toggle = true;
+                                       }
+                                     return toggle;
+                                   });
+          
+          CHECK (materialise(kk)
+                 == "14-12-10-8-6-4-2-14-12");
+                 // Explanation:
+                 // The source starts at 10, but since the toggle is false,
+                 // none of the initial values makes it though to the result.
+                 // The interspersed transformer doubles the source values, and
+                 // thus at source == 8 the trigger value (16) is hit. Thus the
+                 // filter now flips the context-bound toggle (side-effect) and
+                 // then expands children, which consumes current source value 8
+                 // to replace it with the sequence 7,6,5,4,3,2,1, followed by
+                 // the rest of the original sequence, 7,6 (which stops above 5).
+          
+          CHECK (materialise(kk.filter([](long i){ return i % 7; }))
+                 == "12-10-8-6-4-2-12");
+                 // Explanation:
+                 // Since the original TreeExplorer was assigned to variable kk,
+                 // the materialise()-Function got a lvalue-ref and thus made a copy
+                 // of the whole compound. For that reason, the original state within
+                 // kk still rests at 7 -- because the filter evaluates eagerly, the
+                 // source was pulled right at construction until we reached the first
+                 // value to yield, which is the first child (7,....) within the
+                 // expanded sequence. But now, in the second call to materialise(),
+                 // we don't just copy, rather we add another filter layer on top,
+                 // which happens to filter away this first result (== 2*7), and
+                 // also the first element of the original sequence after the
+                 // expanded children
+          
+          CHECK (not isnil(kk));
+          CHECK (14 == *kk);
         }
       
       
