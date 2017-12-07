@@ -663,7 +663,7 @@ namespace lib {
         
         using FilterPredicate = typename _Traits::Functor;
         
-        FilterPredicate trafo_;
+        FilterPredicate predicate_;
         
       public:
         
@@ -672,15 +672,18 @@ namespace lib {
         
         Filter (SRC&& dataSrc, FUN&& filterFun)
           : SRC{move (dataSrc)}
-          , trafo_{forward<FUN> (filterFun)}
-          { }
+          , predicate_{forward<FUN> (filterFun)}
+          {
+            pullFilter(); // initially pull to establish the invariant
+          }
         
         
-        /** refresh state when other layers manipulate the source sequence */
+        /** refresh state when other layers manipulate the source sequence.
+         * @note possibly pulls to re-establish the invariant */
         void
         expandChildren()
           {
-            //////////////////////TODO trigger re-evaluation here...
+            pullFilter();
             SRC::expandChildren();
           }
         
@@ -689,19 +692,20 @@ namespace lib {
         bool
         checkPoint()  const
           {
-            return false; //////////////TODO filter and pull here...
+            return bool(srcIter());
           }
         
         typename SRC::reference
         yield()  const
           {
-            return *(*this);
+            return *srcIter();
           }
         
         void
         iterNext()
           {
             ++ srcIter();
+            pullFilter();
           }
         
       private:
@@ -711,11 +715,14 @@ namespace lib {
             return unConst(*this);
           }
         
-        bool
+        /** @note establishes the invariant:
+         *        whatever the source yields as current element,
+         *        has already been approved by our predicate */
+        void
         pullFilter ()
           {
-            ////////////////////////TODO while-not-filter iter
-            return false; //////////TODO return true if any result??
+            while (srcIter() and not predicate_(srcIter()))
+              ++srcIter();
           }
       };
   }
