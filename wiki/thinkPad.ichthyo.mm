@@ -6035,18 +6035,147 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512621201039" TEXT="Probleme">
-<icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621202688" ID="ID_57740660" MODIFIED="1512621221197" TEXT="durchreichen der Basis-Konstruktoren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512706124361" TEXT="Probleme">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512621202688" ID="ID_57740660" MODIFIED="1512706113620" TEXT="durchreichen der Basis-Konstruktoren">
+<icon BUILTIN="info"/>
+<node CREATED="1512706139167" ID="ID_1731306892" MODIFIED="1512706156440" TEXT="Basis-Copy-Konstruktoren werden nicht geerbt">
+<node CREATED="1512706158004" ID="ID_958479010" MODIFIED="1512706289090" TEXT="nicht in C++14">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da gibt es eine explizite Ausnahme-Regel.
+    </p>
+    <p>
+      Die Copy-Konstruktoren werden aus der Kandidaten-Menge entfernt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Grund ist, da&#223; die default-Initialisierung der Member-Felder noch nicht hinrechend gekl&#228;rt war.
+    </p>
+    <p>
+      C++17 holt das nach
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621222901" ID="ID_701320194" MODIFIED="1512621233228" TEXT="bad function call">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512706162921" ID="ID_601609235" MODIFIED="1512706394332" TEXT="ab C++17 ist das anders">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dort wird einfach on-demand in der Basisklasse nachgeschaut.
+    </p>
+    <p>
+      Wenn dabei ein Basis-Copy-Ctor gezogen wird, dann wird eben default-Init f&#252;r die Felder im abgeleiteten Objekt gemacht.
+    </p>
+    <p>
+      Es gibt dann eine neue, explizite Regel, die verhindert, da&#223; zuf&#228;llig ein aus der Basis geerbter Ctor
+    </p>
+    <p>
+      die Signatur eines Copy-ctors &#252;berdeckt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1512706405155" ID="ID_1013782130" MODIFIED="1512706515474">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Allerdings gen&#252;gt es, dies an <i>einer</i>&#160;Stelle in der Kette zu erg&#228;nzen
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar genau dort, wo erstmals ein Basis-Objekt akzeptiert wird.
+    </p>
+    <p>
+      Das ist bei uns im BaseAdapter, also der ersten Ebene &#252;ber dem zu initialisierenden Basis-Objekt.
+    </p>
+    <p>
+      Alle anderen Layer dar&#252;ber reichen dann korrekt mit dem geerbten Ctor diese Initialisierung nach Unten.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512706516628" ID="ID_1092840037" MODIFIED="1512706656273">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#252;brigens ist es im IterSource&lt;T&gt;::iterator <i>nicht</i>&#160; notwendig
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das war nur ein unn&#246;tiger Fix nach dem Gie&#223;kannen-Prinzip.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Denn dieser Iterator soll niemals mit einem Basis-Objekt initialisiert werden,
+    </p>
+    <p>
+      sondern stets von der IterSource-Builder-Funktion konstruiert.
+    </p>
+    <p>
+      Und wenn man selber keinen Ctor in eine Klasse schreibt, sondern nur ctor-erbt,
+    </p>
+    <p>
+      dann werden auch die Copy-Konstruktoren korrekt automatisch generiert.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1512621222901" ID="ID_701320194" MODIFIED="1512706102580" TEXT="bad function call">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1512621654283" ID="ID_1975194377" MODIFIED="1512621667489" TEXT="passiert im FIlter-Iterator-Test">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512621668449" ID="ID_369576813" MODIFIED="1512621682544" TEXT="hab ich einen schon funktionierenden Test gebrochen?">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1512621668449" ID="ID_369576813" MODIFIED="1512705931292" TEXT="hab ich einen schon funktionierenden Test gebrochen?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1512705938426" ID="ID_483656941" MODIFIED="1512706091518" TEXT="nein: der Test-Code war kaputt">
+<icon BUILTIN="ksmiletris"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512705974765" ID="ID_1628672101" MODIFIED="1512706019739" TEXT="Vorsicht: der Builder macht move!">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1512706022079" ID="ID_118572066" MODIFIED="1512706045943" TEXT="d.h. die lokale Variable im Test war danach kaputt..."/>
+<node CREATED="1512706051907" ID="ID_133885955" MODIFIED="1512706067900" TEXT="in der vorherigen Version fehlte nur irgendwo in der Kette ein move-ctor"/>
+<node CREATED="1512706069104" ID="ID_596682451" MODIFIED="1512706085953" TEXT="und deshalb ist nicht aufgefallen, da&#xdf; das Objekt schon tot war"/>
 </node>
 </node>
 </node>
@@ -6364,7 +6493,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512620997827" ID="ID_173233581" MODIFIED="1512621372921" TEXT="erzeugte source erneut verpacken">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621101645" ID="ID_1982135306" MODIFIED="1512621376089" TEXT="polymorphie: verschiedene Pipelines">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621101645" ID="ID_1982135306" MODIFIED="1512706679017" TEXT="Polymorphie: verschiedene Pipelines">
 <richcontent TYPE="NOTE"><html>
   <head>
     

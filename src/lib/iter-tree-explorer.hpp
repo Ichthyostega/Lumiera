@@ -447,16 +447,17 @@ namespace lib {
      * call, where some "expansion layer" consumes the current element and replaces it by an expanded
      * series of new elements. Other layers might need to sync to this operation, and thus it is passed
      * down the chain. For that reason, we need a dedicated BaseAdapter to adsorb such chained calls.
+     * @remark when building the TreeExplorer, the to-be-wrapped source is fed down into its place
+     *         within BaseAdapter. For that reason, we need to lift the copy ctors of the base.
+     *         Just inheriting the base class ctors won't do that, at least not in C++14.
      */
     template<class SRC>
     struct BaseAdapter
       : SRC
       {
-        using SRC::SRC;
-        BaseAdapter(SRC const& src) : SRC(src) { } ////////////////////////TODO why the hell do we need to redeclare all those ctor variants????
-        BaseAdapter(SRC && src) : SRC(src) { }
-        BaseAdapter(SRC & src) : SRC(src) { }
         BaseAdapter() = default;
+        BaseAdapter(SRC const& src) : SRC(src) { }
+        BaseAdapter(SRC && src)     : SRC(src) { }
         
         void expandChildren() { }
       };
@@ -781,10 +782,6 @@ namespace lib {
       
       /** pass-through ctor */
       using SRC::SRC;
-      TreeExplorer(SRC const& src) : SRC(src) { } ////////////////////////TODO why the hell do we need to redeclare all those ctor variants???? why isn't copy initialisation propagated from the base ctors?
-      TreeExplorer(SRC && src) : SRC(src) { }
-      TreeExplorer(SRC & src) : SRC(src) { }
-      TreeExplorer() = default;
       
       
       

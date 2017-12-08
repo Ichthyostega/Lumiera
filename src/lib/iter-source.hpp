@@ -143,14 +143,7 @@ namespace lib {
         : IterAdapter<Pos, DataHandle>
         {
           using _I = IterAdapter<Pos, DataHandle>;
-          
           using _I::IterAdapter;
-          iterator()                            =default;     /////////////////////////////////////TICKET #1117 : why the hell do we need to declare all those ctor variants explicitly? I was under the impression ctor calls worked correct up to now without all this...
-          iterator(iterator&&)                  =default;
-          iterator(iterator const&)             =default;
-          iterator(iterator& r) : iterator((iterator const&)r) { }
-          iterator& operator= (iterator &&)     =default;
-          iterator& operator= (iterator const&) =default;
           
           operator string()  const {return _I::source()? string(*_I::source()) : "⟂"; }
         };

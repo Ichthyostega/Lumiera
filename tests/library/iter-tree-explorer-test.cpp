@@ -751,7 +751,7 @@ namespace test{
           
           exploreIter = treeExplore(sequence)
                           .filter([](int i){ return i>30; })
-                          .expand([](int i){ return CountDown{i-10, 20}; })
+                          .expand([](uint i){ return CountDown{i-10, 20}; })
                           .transform([](uint u) -> char { return '@'+u-20; })
                           .asIterSource();
           
