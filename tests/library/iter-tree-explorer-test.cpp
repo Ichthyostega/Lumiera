@@ -717,8 +717,8 @@ namespace test{
                  // also the first element of the original sequence after the
                  // expanded children
           
-          CHECK (not isnil(kk));
-          CHECK (14 == *kk);
+          // WARNING: kk is now defunct, since we moved it into the builder expression
+          //          and then moved the resulting extended iterator into materialise!
         }
       
       
