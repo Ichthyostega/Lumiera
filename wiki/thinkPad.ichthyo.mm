@@ -6108,9 +6108,45 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
+<node CREATED="1512782185739" HGAP="21" ID="ID_787592346" MODIFIED="1512782289920" TEXT="deepCopy()" VSHIFT="13">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1512782196185" ID="ID_730992497" MODIFIED="1512782211798" TEXT="sinnvoll?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1512782214975" ID="ID_1723806811" MODIFIED="1512782227225" TEXT="Kopie des Iterator Front-End"/>
+<node CREATED="1512782228405" ID="ID_1929504787" MODIFIED="1512782239591" TEXT="aber gleiches IterSource Back-End"/>
 </node>
-<node COLOR="#338800" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512706690893" TEXT="Probleme">
+<node CREATED="1512782243187" ID="ID_836129726" MODIFIED="1512782246654" TEXT="machbar?">
+<node CREATED="1512782248162" ID="ID_1374048285" MODIFIED="1512782406785" TEXT="analog zu expandChildren">
+<icon BUILTIN="idea"/>
+<node CREATED="1512782411812" ID="ID_123602287" MODIFIED="1512782418183" TEXT="deepCopy wird virtual function"/>
+<node CREATED="1512782418987" ID="ID_1515367406" MODIFIED="1512782431453" TEXT="Implementierung klont und baut neue IterSource"/>
+<node CREATED="1512782435761" ID="ID_299702661" MODIFIED="1512782444278" TEXT="ja das w&#xe4;re machbar">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1512782259136" ID="ID_1896672181" MODIFIED="1512782271859" TEXT="einigerma&#xdf;en technisch...">
+<node CREATED="1512782296798" ID="ID_347250455" MODIFIED="1512782320932" TEXT="es m&#xfc;&#xdf;te sich PackagedTreeExplorerSource selbst bauen k&#xf6;nnen"/>
+<node CREATED="1512782329311" ID="ID_1917918946" MODIFIED="1512782351304" TEXT="au&#xdf;erdem m&#xfc;&#xdf;te nun das ChildExpandableSource auf VAL getemplated werden"/>
+<node CREATED="1512782382056" ID="ID_657754771" MODIFIED="1512782393002" TEXT="und der ganze Build-Ausdruck wird auf mehrere Klassen verteilt"/>
+<node CREATED="1512782393902" ID="ID_1809708776" MODIFIED="1512782398528" TEXT="ned schee">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1512782476707" ID="ID_1058031222" MODIFIED="1512782484550" TEXT="fragw&#xfc;rdig....">
+<node CREATED="1512782485498" ID="ID_1399160841" MODIFIED="1512782495540" TEXT="normalerweise sind Iteratoren nicht re-startbar"/>
+<node CREATED="1512782496417" ID="ID_1935883418" MODIFIED="1512782502387" TEXT="wir k&#xf6;nnten sie sogar move-only machen"/>
+<node CREATED="1512782505231" ID="ID_1563966686" MODIFIED="1512782514850" TEXT="und der Pipeline-Builder ist bequem"/>
+<node CREATED="1512782515966" ID="ID_4691119" MODIFIED="1512782523832" TEXT="also im Zwefel neu bauen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512782275078" ID="ID_14348211" MODIFIED="1512782286709" TEXT="im Moment nicht notwendig">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512787526602" TEXT="Probleme">
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1512621202688" ID="ID_57740660" MODIFIED="1512706113620" TEXT="durchreichen der Basis-Konstruktoren">
 <icon BUILTIN="info"/>
 <node CREATED="1512706139167" ID="ID_1731306892" MODIFIED="1512706156440" TEXT="Basis-Copy-Konstruktoren werden nicht geerbt">
@@ -6251,6 +6287,9 @@
 <node CREATED="1512706051907" ID="ID_133885955" MODIFIED="1512706067900" TEXT="in der vorherigen Version fehlte nur irgendwo in der Kette ein move-ctor"/>
 <node CREATED="1512706069104" ID="ID_596682451" MODIFIED="1512706085953" TEXT="und deshalb ist nicht aufgefallen, da&#xdf; das Objekt schon tot war"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512787530248" ID="ID_1415286168" MODIFIED="1512787540703" TEXT="IterSource design mismatch">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>
@@ -6586,6 +6625,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621116947" ID="ID_1907769466" MODIFIED="1512621378248" TEXT="durchgeschleifte expandChildren()-Operation">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512787465929" ID="ID_1053911863" MODIFIED="1512787472377" TEXT="Bug!">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1512787549870" ID="ID_1969077394" MODIFIED="1512787568159" TEXT="wieder mal kein refresh nach expandChildren()"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512621383815" ID="ID_1705587551" MODIFIED="1512621486222" TEXT="Problem: shallow copy">
 <richcontent TYPE="NOTE"><html>

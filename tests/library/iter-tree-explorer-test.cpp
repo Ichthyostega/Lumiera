@@ -738,32 +738,38 @@ namespace test{
           CHECK (not isnil (sequence));
           CHECK (19 == *sequence);
           
-          cout << materialise (sequence) <<endl;
           
           sequence = treeExplore(sequence)
                         .transform([](uint i){ return i*2; })
                         .asIterSource();
           
           CHECK (38 == *sequence);
+          cout << materialise (sequence) <<endl;
           
-          IterExploreSource<char> exploreIter;
+          CHECK (22 == *sequence);
+          ++sequence;
+          CHECK (isnil (sequence));
+          
+          
+          IterExploreSource<uint> exploreIter;
           CHECK (isnil (exploreIter));
           
-          exploreIter = treeExplore(sequence)
-                          .filter([](int i){ return i>30; })
+          exploreIter = treeExplore(CountDown{20,10})
+                          .filter([](uint i){ return i % 2; })
+                          .transform([](uint i){ return i*2; })
+                          .filter([](int i){ return i>25; })
                           .expand([](uint i){ return CountDown{i-10, 20}; })
-                          .transform([](uint u) -> char { return '@'+u-20; })
+//                          .transform([](uint u) -> char { return '@'+u-20; })
+                          .transform([](int u) -> uint { return u; })
                           .asIterSource();
           
-          CHECK (38 == *sequence);
-          cout << materialise(exploreIter) << endl;
           
-          CHECK (isnil (sequence));
-          CHECK (38 == *sequence);
 //          CHECK (38 == *exploreIter);
           ++exploreIter;
           exploreIter.expandChildren();
+          cout << *exploreIter << endl;
           cout << materialise(exploreIter) << endl;
+          cout << *exploreIter << endl;
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
         }
