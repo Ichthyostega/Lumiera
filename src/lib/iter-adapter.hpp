@@ -265,6 +265,13 @@ namespace lib {
       ConRef       source()       { return                source_; }
       const ConRef source() const { return unConst(this)->source_; }
       
+      void
+      resetPos (POS otherPos)
+        {
+          pos_ = otherPos;
+          check();
+        }
+      
     private:
       void
       _maybe_throw()  const

@@ -6026,14 +6026,14 @@
 <node CREATED="1511837401738" ID="ID_289320579" MODIFIED="1511837414204" TEXT="verpackt hinter OO-Interface mit virtuellen Funktionen"/>
 <node CREATED="1511837421967" ID="ID_906113750" MODIFIED="1511837433914" TEXT="automatische Heap-Storage"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621260992" ID="ID_611871784" MODIFIED="1512621309522" TEXT="erweitertes Interface">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621268527" ID="ID_1388034155" MODIFIED="1512621305821" TEXT="wie bauen?">
+<node COLOR="#338800" CREATED="1512621260992" ID="ID_611871784" MODIFIED="1512788801462" TEXT="erweitertes Interface">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#990000" CREATED="1512621268527" ID="ID_1388034155" MODIFIED="1512788783917" TEXT="wie bauen?">
 <icon BUILTIN="help"/>
 <node CREATED="1512711450864" ID="ID_1595268563" MODIFIED="1512711455248" TEXT="sollte simpel sein"/>
 <node CREATED="1512711430770" ID="ID_217126119" MODIFIED="1512711446628" TEXT="mit builder-Funktion die Baseclass initialisieren"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621274166" ID="ID_1452751365" MODIFIED="1512621301316" TEXT="wie expand() an die Quelle weitergeben?">
+<node COLOR="#990000" CREATED="1512621274166" ID="ID_1452751365" MODIFIED="1512788790692" TEXT="wie expand() an die Quelle weitergeben?">
 <icon BUILTIN="help"/>
 <node CREATED="1512711382889" ID="ID_1913647489" MODIFIED="1512711393299" TEXT="mu&#xdf; virtuelle methode sein"/>
 <node CREATED="1512711396279" ID="ID_633403108" MODIFIED="1512769358637" TEXT="also: mu&#xdf; IterSource erweitern">
@@ -6042,9 +6042,9 @@
 <node CREATED="1512711404526" ID="ID_17184885" MODIFIED="1512711414688" TEXT="IterSource steckt im shared_ptr"/>
 <node CREATED="1512711415324" ID="ID_1951957730" MODIFIED="1512711423975" TEXT="also mu&#xdf; Front-End einen downcast machen"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512711462926" ID="ID_1665958887" MODIFIED="1512769358637" TEXT="IterSource erweitern">
+<node COLOR="#338800" CREATED="1512711462926" FOLDED="true" ID="ID_1665958887" MODIFIED="1512788759251" TEXT="IterSource erweitern">
 <linktarget COLOR="#b92b64" DESTINATION="ID_1665958887" ENDARROW="Default" ENDINCLINATION="65;-99;" ID="Arrow_ID_1257583135" SOURCE="ID_633403108" STARTARROW="None" STARTINCLINATION="-371;-34;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#b60303" CREATED="1512711475196" HGAP="15" ID="ID_899953833" MODIFIED="1512769566817" TEXT="Diamond of Death ?!!" VSHIFT="23">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -6108,7 +6108,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1512782185739" HGAP="21" ID="ID_787592346" MODIFIED="1512782289920" TEXT="deepCopy()" VSHIFT="13">
+<node CREATED="1512782185739" FOLDED="true" HGAP="21" ID="ID_787592346" MODIFIED="1512788762826" TEXT="deepCopy()" VSHIFT="13">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1512782196185" ID="ID_730992497" MODIFIED="1512782211798" TEXT="sinnvoll?">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -6290,6 +6290,30 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512787530248" ID="ID_1415286168" MODIFIED="1512787540703" TEXT="IterSource design mismatch">
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1512788814147" ID="ID_499062281" MODIFIED="1512788850106" TEXT="versteckt gecachete Auswertung im Pos-Pointer">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1512788851294" ID="ID_185134520" MODIFIED="1512788873166" TEXT="hat nur zwei Iteration-control-Funtkionen">
+<node CREATED="1512788924908" ID="ID_1786665760" MODIFIED="1512788936838" TEXT="vmtl. von Java inspiriert">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1512788878042" ID="ID_1218734139" MODIFIED="1512788887877" TEXT="rein logisch sollten es 3 sein"/>
+<node CREATED="1512788911973" ID="ID_565612331" MODIFIED="1512788919552" TEXT="denn check() != yield()"/>
+</node>
+<node CREATED="1512788944977" ID="ID_1974205271" MODIFIED="1512789017379" TEXT="Konequenz">
+<node CREATED="1512788955751" ID="ID_1249769782" MODIFIED="1512788975537" TEXT="Zustand nach letztem iterate() wird verschleppt"/>
+<node CREATED="1512788976389" ID="ID_409716481" MODIFIED="1512788989639" TEXT="der Pos-Pointer zeigt irgendwo in die Implementierung"/>
+<node CREATED="1512788990467" ID="ID_1029092512" MODIFIED="1512788998757" TEXT="erzeugt ungesunde Koppelung"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512789824290" ID="ID_283479652" MODIFIED="1512789833878" TEXT="Beschlu&#xdf;">
+<icon BUILTIN="yes"/>
+<node CREATED="1512789836161" ID="ID_1758704874" MODIFIED="1512789845955" TEXT="Design von IterSource ist nicht in Ordnung"/>
+<node CREATED="1512789847183" ID="ID_1699957562" MODIFIED="1512789865193" TEXT="es sollte sich am &quot;state core&quot;-Schema orientieren"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512789870516" ID="ID_1318870340" MODIFIED="1512790017742" TEXT="Ticket machen">
+<linktarget COLOR="#7f5f85" DESTINATION="ID_1318870340" ENDARROW="Default" ENDINCLINATION="867;50;" ID="Arrow_ID_1918593298" SOURCE="ID_1066396845" STARTARROW="None" STARTINCLINATION="483;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -6600,13 +6624,13 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836589393" ID="ID_54165230" MODIFIED="1512621159744" TEXT="verify_asIterSource();">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512620990860" ID="ID_167384287" MODIFIED="1512621374577" TEXT="einfach verpacken">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512620990860" ID="ID_167384287" MODIFIED="1512789972907" TEXT="einfach verpacken">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512620997827" ID="ID_173233581" MODIFIED="1512621372921" TEXT="erzeugte source erneut verpacken">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512620997827" ID="ID_173233581" MODIFIED="1512789974436" TEXT="erzeugte source erneut verpacken">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621101645" ID="ID_1982135306" MODIFIED="1512706679017" TEXT="Polymorphie: verschiedene Pipelines">
+<node COLOR="#338800" CREATED="1512621101645" ID="ID_1982135306" MODIFIED="1512789977343" TEXT="Polymorphie: verschiedene Pipelines">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6621,16 +6645,22 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1512621116947" ID="ID_1907769466" MODIFIED="1512789886391" TEXT="durchgeschleifte expandChildren()-Operation">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1512787465929" ID="ID_1053911863" MODIFIED="1512788738307" TEXT="Bug!">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1512787549870" ID="ID_1969077394" MODIFIED="1512789984536" TEXT="wieder mal kein refresh nach expandChildren()">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512788719640" ID="ID_1066396845" MODIFIED="1512790017742" TEXT="TODO: Design-Mismatch -&gt; Ticket">
+<arrowlink COLOR="#7f5f85" DESTINATION="ID_1318870340" ENDARROW="Default" ENDINCLINATION="867;50;" ID="Arrow_ID_1918593298" STARTARROW="None" STARTINCLINATION="483;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621116947" ID="ID_1907769466" MODIFIED="1512621378248" TEXT="durchgeschleifte expandChildren()-Operation">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512787465929" ID="ID_1053911863" MODIFIED="1512787472377" TEXT="Bug!">
-<icon BUILTIN="flag-pink"/>
 </node>
-<node CREATED="1512787549870" ID="ID_1969077394" MODIFIED="1512787568159" TEXT="wieder mal kein refresh nach expandChildren()"/>
-</node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512621383815" ID="ID_1705587551" MODIFIED="1512621486222" TEXT="Problem: shallow copy">
+<node CREATED="1512621383815" ID="ID_1705587551" MODIFIED="1512789963438" TEXT="Problem: shallow copy">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6661,9 +6691,15 @@
 </html>
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1512711333823" ID="ID_1629518942" MODIFIED="1512711345303" TEXT="Idee: deepCopy bieten">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1512789897080" ID="ID_1862531344" MODIFIED="1512789900649" TEXT="njet">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1512789907575" ID="ID_1220260137" MODIFIED="1512789914778" TEXT="ist nur ein Problem in Tests etc."/>
+<node CREATED="1512789946314" ID="ID_1425696979" MODIFIED="1512789953964" TEXT="widerspricht dem Iteratoren-Konzept"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1510969042972" TEXT="verify_depthFirstExploration();">

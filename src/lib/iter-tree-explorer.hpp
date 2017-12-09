@@ -737,12 +737,13 @@ namespace lib {
       };
     
     
+    template<typename VAL>
     class ChildExpandableSource
       {
       protected:
          ~ChildExpandableSource() { }    ///< @note mix-in interface, not meant to handle objects
       public:
-          virtual void expandChildren()  =0;
+          virtual VAL* expandChildren()  =0;
       };
     
     /**
@@ -751,17 +752,20 @@ namespace lib {
     template<class SRC>
     class PackagedTreeExplorerSource
       : public WrappedLumieraIter<SRC>
-      , public ChildExpandableSource
+      , public ChildExpandableSource<typename SRC::value_type>
       {
         using Parent = WrappedLumieraIter<SRC>;
+        using Val = typename SRC::value_type;
         
       public:
         using Parent::Parent;
         
-        virtual void
+        virtual Val*
         expandChildren()  override
           {
             Parent::wrappedIter().expandChildren();
+            return Parent::wrappedIter()?  & *Parent::wrappedIter()
+                                        : nullptr;
           }
       };
     
@@ -786,14 +790,15 @@ namespace lib {
       void
       expandChildren()
         {
-          using Expandable = iter_explorer::ChildExpandableSource;
+          using Expandable = iter_explorer::ChildExpandableSource<VAL>;
           
           if (not this->source())
             throw error::State ("operating on a disabled default constructed TreeExplorer"
                                ,error::LUMIERA_ERROR_BOTTOM_VALUE);
           
           auto source = this->source().get();
-          dynamic_cast<Expandable*> (source)->expandChildren();
+          VAL* changedResult = dynamic_cast<Expandable*> (source)->expandChildren();
+          this->resetPos (changedResult);
         }
       
       
