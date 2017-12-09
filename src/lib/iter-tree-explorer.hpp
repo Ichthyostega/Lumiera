@@ -111,6 +111,8 @@ namespace lib {
   using std::function;
   using util::isnil;
   
+  namespace error = lumiera::error;
+  
   namespace iter_explorer {
     
     template<class CON>
@@ -434,7 +436,7 @@ namespace lib {
   
   
   
-  namespace iter_explorer {
+  namespace iter_explorer { // Implementation of Iterator decorating layers...
     
     /**
      * @internal Base of pipe processing decorator chain.
@@ -733,7 +735,38 @@ namespace lib {
               ++srcIter();
           }
       };
-  }
+    
+    
+    class ChildExpandableSource
+      {
+      protected:
+         ~ChildExpandableSource() { }    ///< @note mix-in interface, not meant to handle objects
+      public:
+          virtual void expandChildren()  =0;
+      };
+    
+    /**
+     * @todo WIP
+     */
+    template<class SRC>
+    class PackagedTreeExplorerSource
+      : public WrappedLumieraIter<SRC>
+      , public ChildExpandableSource
+      {
+        using Parent = WrappedLumieraIter<SRC>;
+        
+      public:
+        using Parent::Parent;
+        
+        virtual void
+        expandChildren()  override
+          {
+            Parent::wrappedIter().expandChildren();
+          }
+      };
+    
+  }//(End)Iterator decorating layer implementation
+  
   
   
   
@@ -746,15 +779,35 @@ namespace lib {
     : IterSource<VAL>::iterator
     {
       
-      //////TODO clarify allowed ctors
+      IterExploreSource()  =default;
+      // inherited default copy operations
+      
       
       void
       expandChildren()
         {
-          UNIMPLEMENTED ("how to phone home...");
+          using Expandable = iter_explorer::ChildExpandableSource;
+          
+          if (not this->source())
+            throw error::State ("operating on a disabled default constructed TreeExplorer"
+                               ,error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+          auto source = this->source().get();
+          dynamic_cast<Expandable*> (source)->expandChildren();
         }
       
+      
     private:
+      template<class SRC>
+      friend class TreeExplorer;
+      
+      template<class IT>
+      IterExploreSource (IT&& opaqueSrcPipeline)
+        : IterSource<VAL>::iterator {
+            IterSource<VAL>::build (
+              new iter_explorer::PackagedTreeExplorerSource<IT> {
+                move (opaqueSrcPipeline)})}
+      { }
     };
   
   /**
@@ -879,7 +932,7 @@ namespace lib {
       IterExploreSource<value_type>
       asIterSource()
         {
-          UNIMPLEMENTED ("wrap into IterSource");       
+          return IterExploreSource<value_type> {move(*this)};
         }
       
       

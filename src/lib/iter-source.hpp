@@ -261,6 +261,10 @@ namespace lib {
       WrappedLumieraIter (IT&& orig)
         : src_(forward<IT>(orig))
         { }
+      
+      
+    protected:
+      IT& wrappedIter() { return src_; }
     };
   
   

@@ -6030,12 +6030,86 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621268527" ID="ID_1388034155" MODIFIED="1512621305821" TEXT="wie bauen?">
 <icon BUILTIN="help"/>
+<node CREATED="1512711450864" ID="ID_1595268563" MODIFIED="1512711455248" TEXT="sollte simpel sein"/>
+<node CREATED="1512711430770" ID="ID_217126119" MODIFIED="1512711446628" TEXT="mit builder-Funktion die Baseclass initialisieren"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621274166" ID="ID_1452751365" MODIFIED="1512621301316" TEXT="wie expand() an die Quelle weitergeben?">
 <icon BUILTIN="help"/>
+<node CREATED="1512711382889" ID="ID_1913647489" MODIFIED="1512711393299" TEXT="mu&#xdf; virtuelle methode sein"/>
+<node CREATED="1512711396279" ID="ID_633403108" MODIFIED="1512769358637" TEXT="also: mu&#xdf; IterSource erweitern">
+<arrowlink COLOR="#b92b64" DESTINATION="ID_1665958887" ENDARROW="Default" ENDINCLINATION="65;-99;" ID="Arrow_ID_1257583135" STARTARROW="None" STARTINCLINATION="-371;-34;"/>
+</node>
+<node CREATED="1512711404526" ID="ID_17184885" MODIFIED="1512711414688" TEXT="IterSource steckt im shared_ptr"/>
+<node CREATED="1512711415324" ID="ID_1951957730" MODIFIED="1512711423975" TEXT="also mu&#xdf; Front-End einen downcast machen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512711462926" ID="ID_1665958887" MODIFIED="1512769358637" TEXT="IterSource erweitern">
+<linktarget COLOR="#b92b64" DESTINATION="ID_1665958887" ENDARROW="Default" ENDINCLINATION="65;-99;" ID="Arrow_ID_1257583135" SOURCE="ID_633403108" STARTARROW="None" STARTINCLINATION="-371;-34;"/>
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#b60303" CREATED="1512711475196" HGAP="15" ID="ID_899953833" MODIFIED="1512769566817" TEXT="Diamond of Death ?!!" VSHIFT="23">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1512711573727" ID="ID_1346721743" MODIFIED="1512769144693" TEXT="TODO: virtuelle inheritance nachlesen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512769100530" ID="ID_547968053" MODIFIED="1512769116100" TEXT="vitual mu&#xdf; direkt unter der Basis erfolgen"/>
+<node CREATED="1512769116952" ID="ID_1359676759" MODIFIED="1512769124770" TEXT="virtual mu&#xdf; dort in allen Zweigen verwendet werden"/>
+<node CREATED="1512769133350" ID="ID_609049064" MODIFIED="1512769142944" TEXT="andernfalles bekommen wir mehrere Sub-Objekte der Basisklasse"/>
+</node>
+<node CREATED="1512711613841" ID="ID_1594826715" MODIFIED="1512711635619" STYLE="fork" TEXT="Kosten? zus&#xe4;tzlicher VTable-Pointer?">
+<node CREATED="1512711638574" ID="ID_1769096857" MODIFIED="1512769458120" TEXT="k&#xf6;nnte verschmerzbar sein">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1512769160218" ID="ID_155388893" MODIFIED="1512769462006" TEXT="Kosten kommen vom Memory-Layout">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1512769179503" ID="ID_1053011981" MODIFIED="1512769198300">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>jeder</i>&#160;Zugriff auf ein Sub-Objekt mu&#223; durch eine VTable
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512769199597" ID="ID_1928524017" MODIFIED="1512769227486">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Stichwort: <b>virtual base offset</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#5229a2" CREATED="1512769231648" ID="ID_925551162" LINK="http://web.archive.org/web/20160413064252/http://www.phpcompiler.org/articles/virtualinheritance.html" MODIFIED="1512769289609" TEXT="Beschreibung der GCC-Implementierung">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512706124361" TEXT="Probleme">
+<node CREATED="1512711586005" ID="ID_652398650" MODIFIED="1512769369479" TEXT="vielleicht kein Problem, da wir explizit casten">
+<node CREATED="1512769376605" ID="ID_1401491527" MODIFIED="1512769512216" TEXT="ja, workaround">
+<arrowlink COLOR="#7c89a1" DESTINATION="ID_813779439" ENDARROW="Default" ENDINCLINATION="178;-25;" ID="Arrow_ID_1765195063" STARTARROW="None" STARTINCLINATION="23;85;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1512769383980" ID="ID_415336941" MODIFIED="1512769397102" TEXT="den Zusammenhang nicht im Interface ausdr&#xfc;cken"/>
+<node CREATED="1512769398050" ID="ID_1821068883" MODIFIED="1512769409404" TEXT="zusatz-Feature &quot;extendChildren&quot; in separates Interface"/>
+</node>
+<node COLOR="#2b3cb9" CREATED="1512769068942" ID="ID_1398747892" LINK="https://stackoverflow.com/questions/47722508/cost-of-virtual-inheritance-from-an-interface" MODIFIED="1512769090329" TEXT="Frage auf Stackoverflow gepostet">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1512769478607" HGAP="-17" ID="ID_813779439" MODIFIED="1512769512216" TEXT="setze den Workaround um" VSHIFT="28">
+<linktarget COLOR="#7c89a1" DESTINATION="ID_813779439" ENDARROW="Default" ENDINCLINATION="178;-25;" ID="Arrow_ID_1765195063" SOURCE="ID_1401491527" STARTARROW="None" STARTINCLINATION="23;85;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512706690893" TEXT="Probleme">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512621202688" ID="ID_57740660" MODIFIED="1512706113620" TEXT="durchreichen der Basis-Konstruktoren">
 <icon BUILTIN="info"/>
@@ -6544,6 +6618,9 @@
 </html>
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
+<node CREATED="1512711333823" ID="ID_1629518942" MODIFIED="1512711345303" TEXT="Idee: deepCopy bieten">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1510969042972" TEXT="verify_depthFirstExploration();">

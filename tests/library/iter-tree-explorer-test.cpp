@@ -759,6 +759,13 @@ namespace test{
           cout << materialise(exploreIter) << endl;
           
           CHECK (isnil (sequence));
+          CHECK (38 == *sequence);
+//          CHECK (38 == *exploreIter);
+          ++exploreIter;
+          exploreIter.expandChildren();
+          cout << materialise(exploreIter) << endl;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
         }
       
       
