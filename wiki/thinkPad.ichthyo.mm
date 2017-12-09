@@ -4977,17 +4977,17 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540282280" ID="ID_304955672" MODIFIED="1510940463183" TEXT="Baum-Explorer">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1510540409159" ID="ID_1790409069" MODIFIED="1510540416810" TEXT="wiederverwendbarer Baustein"/>
-<node CREATED="1510540682809" ID="ID_1860662906" MODIFIED="1510540688220" TEXT="konfiguriert mit">
-<node CREATED="1510540689329" ID="ID_678279547" MODIFIED="1510540693004" TEXT="expand-Funktion"/>
-<node CREATED="1510540693760" ID="ID_137650742" MODIFIED="1510540729583" TEXT="transform-Funktion"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540282280" ID="ID_304955672" MODIFIED="1512797277432" STYLE="fork" TEXT="Baum-Explorer">
+<icon BUILTIN="info"/>
+<node CREATED="1510540409159" ID="ID_1790409069" MODIFIED="1512797263191" TEXT="wiederverwendbarer Baustein"/>
+<node CREATED="1510540682809" ID="ID_1860662906" MODIFIED="1512797263191" TEXT="konfiguriert mit">
+<node CREATED="1510540689329" ID="ID_678279547" MODIFIED="1512797263191" TEXT="expand-Funktion"/>
+<node CREATED="1510540693760" ID="ID_137650742" MODIFIED="1512797263191" TEXT="transform-Funktion"/>
 </node>
-<node CREATED="1510540500403" ID="ID_494812399" MODIFIED="1510540548093" TEXT="expandierbar">
-<node CREATED="1510540735386" ID="ID_94152805" MODIFIED="1510540740389" TEXT="zus&#xe4;tzliche API-Operation"/>
-<node CREATED="1510540740977" ID="ID_1864011655" MODIFIED="1510540760435" TEXT="ersetzt aktuellen Knoten durch seine Kinder"/>
-<node CREATED="1510939295181" ID="ID_454143909" MODIFIED="1510939320253">
+<node CREATED="1510540500403" ID="ID_494812399" MODIFIED="1512797263191" TEXT="expandierbar">
+<node CREATED="1510540735386" ID="ID_94152805" MODIFIED="1512797263191" TEXT="zus&#xe4;tzliche API-Operation"/>
+<node CREATED="1510540740977" ID="ID_1864011655" MODIFIED="1512797263191" TEXT="ersetzt aktuellen Knoten durch seine Kinder"/>
+<node CREATED="1510939295181" ID="ID_454143909" MODIFIED="1512797263191">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -5001,30 +5001,30 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1510540417614" ID="ID_169601267" MODIFIED="1510540499335" TEXT="iterierbar">
-<node CREATED="1510541064485" ID="ID_15321736" MODIFIED="1510541090742" TEXT="jedes Element geht durch den Transformer"/>
-<node CREATED="1510541092114" ID="ID_1514360017" MODIFIED="1510541099717" TEXT="das ist die neue Einsicht">
+<node CREATED="1510540417614" ID="ID_169601267" MODIFIED="1512797263191" TEXT="iterierbar">
+<node CREATED="1510541064485" ID="ID_15321736" MODIFIED="1512797263192" TEXT="jedes Element geht durch den Transformer"/>
+<node CREATED="1510541092114" ID="ID_1514360017" MODIFIED="1512797263192" TEXT="das ist die neue Einsicht">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1510939495862" ID="ID_1918069733" MODIFIED="1510939511038" TEXT="Monade?">
+<node CREATED="1510939495862" ID="ID_1918069733" MODIFIED="1512797263192" TEXT="Monade?">
 <icon BUILTIN="help"/>
-<node CREATED="1510939532689" ID="ID_608280633" MODIFIED="1510970210061" TEXT="konventionelle L&#xf6;sung">
+<node CREATED="1510939532689" ID="ID_608280633" MODIFIED="1512797263192" TEXT="konventionelle L&#xf6;sung">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1510939567867" ID="ID_1799788775" MODIFIED="1510939832540" TEXT="expand: S -&gt; S"/>
-<node CREATED="1510939642250" ID="ID_456598029" MODIFIED="1510939827820" TEXT="S = opaque state"/>
-<node CREATED="1510939675821" ID="ID_71307720" MODIFIED="1510939825173" TEXT="eigentliche Erweiterung ist in S implementiert"/>
-<node CREATED="1510939688075" ID="ID_872154531" MODIFIED="1510939701342" TEXT="expand() reicht also nur einen Aufruf weiter"/>
-<node CREATED="1510939702170" ID="ID_699246805" MODIFIED="1510939818750" TEXT="Implementierung erfordert Seiteneffekt auf S"/>
-<node CREATED="1510939778231" ID="ID_763925317" MODIFIED="1510939816118" TEXT="S mu&#xdf; auf die Verwendung im Baum-Explorer vorbereitet sein"/>
-<node CREATED="1510940187687" ID="ID_349334428" MODIFIED="1510940196762" TEXT="triviale Implementierung kan sehr effizient sein"/>
+<node CREATED="1510939567867" ID="ID_1799788775" MODIFIED="1512797263192" TEXT="expand: S -&gt; S"/>
+<node CREATED="1510939642250" ID="ID_456598029" MODIFIED="1512797263192" TEXT="S = opaque state"/>
+<node CREATED="1510939675821" ID="ID_71307720" MODIFIED="1512797263192" TEXT="eigentliche Erweiterung ist in S implementiert"/>
+<node CREATED="1510939688075" ID="ID_872154531" MODIFIED="1512797263192" TEXT="expand() reicht also nur einen Aufruf weiter"/>
+<node CREATED="1510939702170" ID="ID_699246805" MODIFIED="1512797263192" TEXT="Implementierung erfordert Seiteneffekt auf S"/>
+<node CREATED="1510939778231" ID="ID_763925317" MODIFIED="1512797263192" TEXT="S mu&#xdf; auf die Verwendung im Baum-Explorer vorbereitet sein"/>
+<node CREATED="1510940187687" ID="ID_349334428" MODIFIED="1512797263192" TEXT="triviale Implementierung kan sehr effizient sein"/>
 </node>
-<node CREATED="1510939552942" ID="ID_510344823" MODIFIED="1510970213063" TEXT="modadische L&#xf6;sung">
+<node CREATED="1510939552942" ID="ID_510344823" MODIFIED="1512797263192" TEXT="modadische L&#xf6;sung">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1510939598175" ID="ID_1272498716" MODIFIED="1510939839411" TEXT="expand: S -&gt; BaumExplorer&lt;S&gt;"/>
-<node CREATED="1510939845662" ID="ID_581825327" MODIFIED="1510939852465" TEXT="S = opaque State"/>
-<node CREATED="1510939856845" ID="ID_1492383135" MODIFIED="1510939877062" TEXT="Erweiterungs-Mechanismus im Baum-Explorer implementiert"/>
-<node CREATED="1510939940275" ID="ID_767766017" MODIFIED="1510940024138">
+<node CREATED="1510939598175" ID="ID_1272498716" MODIFIED="1512797263192" TEXT="expand: S -&gt; BaumExplorer&lt;S&gt;"/>
+<node CREATED="1510939845662" ID="ID_581825327" MODIFIED="1512797263192" TEXT="S = opaque State"/>
+<node CREATED="1510939856845" ID="ID_1492383135" MODIFIED="1512797263192" TEXT="Erweiterungs-Mechanismus im Baum-Explorer implementiert"/>
+<node CREATED="1510939940275" ID="ID_767766017" MODIFIED="1512797263192">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -5039,9 +5039,9 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1510940053626" ID="ID_865181855" MODIFIED="1510940069076" TEXT="S kann Wertsemantik (aber auch Referenz-Semantik) haben"/>
-<node CREATED="1510940088149" ID="ID_791410014" MODIFIED="1510940110614" TEXT="S mu&#xdf; nicht speziell vorbereitet sein (nur konstruierbar)"/>
-<node CREATED="1510940199342" ID="ID_1423687617" MODIFIED="1511572072558" TEXT="man zahlt immer den Overhead f&#xfc;r den Stack im Baum-Explorer">
+<node CREATED="1510940053626" ID="ID_865181855" MODIFIED="1512797263192" TEXT="S kann Wertsemantik (aber auch Referenz-Semantik) haben"/>
+<node CREATED="1510940088149" ID="ID_791410014" MODIFIED="1512797263192" TEXT="S mu&#xdf; nicht speziell vorbereitet sein (nur konstruierbar)"/>
+<node CREATED="1510940199342" ID="ID_1423687617" MODIFIED="1512797263192" TEXT="man zahlt immer den Overhead f&#xfc;r den Stack im Baum-Explorer">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5066,7 +5066,7 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510939517499" ID="ID_1100296394" MODIFIED="1510940150893" TEXT="das ist eine Weichenstellung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510939517499" ID="ID_1100296394" MODIFIED="1512797263192" TEXT="das ist eine Weichenstellung">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -5103,7 +5103,8 @@
 <node CREATED="1512278456672" ID="ID_488770369" MODIFIED="1512278462388" TEXT="wird in jedem Schritt gestrippt"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1510941523082" TEXT="TreeExplorer">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1512797366789" TEXT="TreeExplorer">
+<linktarget COLOR="#585e9d" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-101;761;" ID="Arrow_ID_402051988" SOURCE="ID_1359727169" STARTARROW="None" STARTINCLINATION="208;5;"/>
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1512358577968" TEXT="expand-Operation">
 <icon BUILTIN="button_ok"/>
@@ -5769,8 +5770,7 @@
       nicht mehr die expandChildren aufrufen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1512439636532" ID="ID_443920458" MODIFIED="1512439814700" TEXT="refresh()-Call im internen API">
@@ -5801,8 +5801,7 @@
       Das ist aber hier aus grunds&#228;tzlichen &#220;berlegungen heraus keine Option
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1512439832865" ID="ID_1782781235" MODIFIED="1512440146656" TEXT="anderes Iterator-API">
@@ -5818,8 +5817,7 @@
       das IterStateWrapper-API ist <i>optimal</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5859,8 +5857,7 @@
       sich im Iterator oder in der Implementierung irgendwo noch eine zus&#228;tzliche bool-Flag zu speichern.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1512440148015" ID="ID_1475512070" MODIFIED="1512440198570" TEXT="Einzige L&#xf6;sung">
@@ -5876,8 +5873,7 @@
       implementieren ebenfalls <b>expandChildren</b>()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -5897,8 +5893,7 @@
       ganz anders als bei IterAdapter, wo das Sinn macht...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512440263551" ID="ID_1524108340" MODIFIED="1512440285896" TEXT="Dagegen k&#xf6;nnte die &quot;state core&quot; sehr wohl genau dieses API exponieren."/>
 <node CREATED="1512440286772" ID="ID_535994508" MODIFIED="1512440435961" TEXT="wir brauchen deshalb nicht gleich ein Interface einf&#xfc;hren">
@@ -5921,8 +5916,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512440341573" ID="ID_1804763032" MODIFIED="1512440348845" TEXT="wir k&#xf6;nnen bis 2020 warten...">
 <icon BUILTIN="ksmiletris"/>
@@ -5958,8 +5952,7 @@
       innen heraus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1512516629180" ID="ID_1157813472" MODIFIED="1512516672998" TEXT="oh wie traurig">
 <richcontent TYPE="NOTE"><html>
@@ -5971,8 +5964,7 @@
       will sagen, das ist ja auch eine durchgeknallte Idee....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 <node CREATED="1512516682701" ID="ID_1471867999" MODIFIED="1512516706422">
@@ -5985,8 +5977,7 @@
       wenn eine Funktion <i>in</i>&#160;einem Layer expanded
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512516708649" ID="ID_474656011" MODIFIED="1512516797884" TEXT="dann mu&#xdf; sie sich zwischen Vater oder 1.Kind entscheiden">
 <richcontent TYPE="NOTE"><html>
@@ -6004,8 +5995,7 @@
       und liefert das, was nach dem expand erscheind
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512516799653" ID="ID_589615050" MODIFIED="1512516811504" TEXT="nicht als Fehler bewertet">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -6041,15 +6031,14 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1512621181803" TEXT="asIterSource">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1511837384749" FOLDED="true" ID="ID_274979743" MODIFIED="1512841003563" TEXT="asIterSource">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1512621242778" ID="ID_695969017" MODIFIED="1512621248235" TEXT="Eigenschaften">
 <icon BUILTIN="info"/>
 <node CREATED="1511837396075" ID="ID_1916743569" MODIFIED="1511837401078" TEXT="abschlie&#xdf;ender Dekorator"/>
@@ -6101,8 +6090,7 @@
       <i>jeder</i>&#160;Zugriff auf ein Sub-Objekt mu&#223; durch eine VTable
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512769199597" ID="ID_1928524017" MODIFIED="1512769227486">
 <richcontent TYPE="NODE"><html>
@@ -6114,8 +6102,7 @@
       Stichwort: <b>virtual base offset</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#5229a2" CREATED="1512769231648" ID="ID_925551162" LINK="http://web.archive.org/web/20160413064252/http://www.phpcompiler.org/articles/virtualinheritance.html" MODIFIED="1512769289609" TEXT="Beschreibung der GCC-Implementierung">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -6202,8 +6189,7 @@
       C++17 holt das nach
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512706162921" ID="ID_601609235" MODIFIED="1512706394332" TEXT="ab C++17 ist das anders">
 <richcontent TYPE="NOTE"><html>
@@ -6224,8 +6210,7 @@
       die Signatur eines Copy-ctors &#252;berdeckt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1512706405155" ID="ID_1013782130" MODIFIED="1512706515474">
@@ -6238,8 +6223,7 @@
       Allerdings gen&#252;gt es, dies an <i>einer</i>&#160;Stelle in der Kette zu erg&#228;nzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6255,8 +6239,7 @@
       Alle anderen Layer dar&#252;ber reichen dann korrekt mit dem geerbten Ctor diese Initialisierung nach Unten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512706516628" ID="ID_1092840037" MODIFIED="1512706656273">
 <richcontent TYPE="NODE"><html>
@@ -6268,8 +6251,7 @@
       &#252;brigens ist es im IterSource&lt;T&gt;::iterator <i>nicht</i>&#160; notwendig
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6294,8 +6276,7 @@
       dann werden auch die Copy-Konstruktoren korrekt automatisch generiert.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -6349,8 +6330,7 @@
       Ticket machen: <font color="#b90736">#1125</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#7f5f85" DESTINATION="ID_1318870340" ENDARROW="Default" ENDINCLINATION="867;50;" ID="Arrow_ID_1918593298" SOURCE="ID_1066396845" STARTARROW="None" STARTINCLINATION="483;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -6376,8 +6356,7 @@
       und dieser es dann auch managed
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1512358864343" FOLDED="true" ID="ID_1251747225" MODIFIED="1512358957195">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -6388,8 +6367,7 @@
       ist das <font color="#9e1124">#190</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1512358896258" ID="ID_62377324" MODIFIED="1512358945435" TEXT="nein das ist was anderes">
 <icon BUILTIN="stop-sign"/>
@@ -6417,8 +6395,7 @@
       und immer mit einem Heap-allozierten vector
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1512358632486" ID="ID_1795551304" MODIFIED="1512358640785" TEXT="aber keine konkrete Anwendung"/>
@@ -6663,8 +6640,8 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1511836589393" ID="ID_54165230" MODIFIED="1512621159744" TEXT="verify_asIterSource();">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1511836589393" ID="ID_54165230" MODIFIED="1512841023182" TEXT="verify_asIterSource();">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1512620990860" ID="ID_167384287" MODIFIED="1512789972907" TEXT="einfach verpacken">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -6684,11 +6661,10 @@
       k&#246;nnen nun hinter dem gleichen Interface sitzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1512621116947" ID="ID_1907769466" MODIFIED="1512789886391" TEXT="durchgeschleifte expandChildren()-Operation">
+<node COLOR="#338800" CREATED="1512621116947" FOLDED="true" ID="ID_1907769466" MODIFIED="1512841020337" TEXT="durchgeschleifte expandChildren()-Operation">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1512787465929" ID="ID_1053911863" MODIFIED="1512788738307" TEXT="Bug!">
 <icon BUILTIN="button_ok"/>
@@ -6729,8 +6705,7 @@
       <u>Frage</u>: ist das &#252;berhaupt eine gute Idee, vom Design her??
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1512711333823" ID="ID_1629518942" MODIFIED="1512711345303" TEXT="Idee: deepCopy bieten">
@@ -6754,7 +6729,9 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941646050" ID="ID_596422747" MODIFIED="1510941710569" TEXT="expandable ChildIter">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1510941655360" ID="ID_1359727169" MODIFIED="1510941661027" TEXT="verwendet TreeExplorer"/>
+<node CREATED="1510941655360" ID="ID_1359727169" MODIFIED="1512797366789" TEXT="verwendet TreeExplorer">
+<arrowlink COLOR="#585e9d" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-101;761;" ID="Arrow_ID_402051988" STARTARROW="None" STARTINCLINATION="208;5;"/>
+</node>
 <node CREATED="1510941661615" ID="ID_463290050" MODIFIED="1510941665179" TEXT="verpackt in IterSource"/>
 </node>
 </node>
