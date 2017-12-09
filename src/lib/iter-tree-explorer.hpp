@@ -963,6 +963,26 @@ namespace lib {
         }
       
       
+      /** @todo WIP 12/17 auto expand all
+       */
+      auto
+      expandAll()
+        {
+          UNIMPLEMENTED ("automatically expand all elements");
+          return *this;
+        }
+      
+      
+      /** @todo WIP 12/17 auto expand down to the leafs
+       */
+      auto
+      expandLeaf()
+        {
+          UNIMPLEMENTED ("depth-first expand immediately, until reaching the leaf elements");
+          return *this;
+        }
+      
+      
       /** adapt this TreeExplorer to pipe each result value through a transformation function.
        * Several "layers" of mapping can be piled on top of each other, possibly mixed with the
        * other types of adaptation, like the child-expanding operation, or a filter. Obviously,

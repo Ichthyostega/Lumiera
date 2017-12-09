@@ -5725,11 +5725,59 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363846804" ID="ID_1346062807" MODIFIED="1512363878326" TEXT="auto-expand">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363846804" ID="ID_1346062807" MODIFIED="1512844651816" TEXT="auto-expand">
+<icon BUILTIN="pencil"/>
+<node CREATED="1512844658352" ID="ID_1411659026" MODIFIED="1512844688077" TEXT="einfache Auspr&#xe4;gung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nur was billig ist,
+    </p>
+    <p>
+      denn im Moment brauchen wir das &#252;berhaupt nicht
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1512844696922" ID="ID_396632754" MODIFIED="1512844725483" TEXT="zus&#xe4;tzlicher Dekorator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...setzt eigentliche Expand-Operation darunter voraus
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844727150" ID="ID_706634236" MODIFIED="1512844732717" TEXT="expandAll">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512844742788" ID="ID_1270260953" MODIFIED="1512844748479" TEXT="expandChildren verz&#xf6;gert"/>
+<node CREATED="1512844749235" ID="ID_1344028360" MODIFIED="1512844759661" TEXT="ausgel&#xf6;st durch Iteration"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844733549" ID="ID_1055588501" MODIFIED="1512844738184" TEXT="expandLeaf">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512844769176" ID="ID_1306087014" MODIFIED="1512844774891" TEXT="expandChildren eager"/>
+<node CREATED="1512844775893" ID="ID_781402390" MODIFIED="1512844784866" TEXT="sofort erstes Kind liefern"/>
+<node CREATED="1512844785526" ID="ID_244222856" MODIFIED="1512844788897" TEXT="rekursiv"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1512363305422" TEXT="Zusammenspiel">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844805995" ID="ID_927486947" MODIFIED="1512844819599" TEXT="single-val">
+<icon BUILTIN="help"/>
+<node CREATED="1512844821609" ID="ID_478047650" MODIFIED="1512844824644" TEXT="man k&#xf6;nnte...."/>
+<node CREATED="1512844825280" ID="ID_1599364674" MODIFIED="1512844833243" TEXT="einzelne Werte in einen Iterator &quot;heben&quot;"/>
+<node CREATED="1512844833952" ID="ID_1979934919" MODIFIED="1512844840138" TEXT="sinnvoll nur in der Expand-Funktion"/>
+</node>
 <node COLOR="#338800" CREATED="1512363297486" FOLDED="true" ID="ID_531127457" MODIFIED="1512794302599" TEXT="re-evaluate">
 <linktarget COLOR="#5a92a2" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" SOURCE="ID_579206895" STARTARROW="None" STARTINCLINATION="844;55;"/>
 <icon BUILTIN="button_ok"/>
@@ -6718,8 +6766,17 @@
 <node CREATED="1512789946314" ID="ID_1425696979" MODIFIED="1512789953964" TEXT="widerspricht dem Iteratoren-Konzept"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1510969042972" TEXT="verify_depthFirstExploration();">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1512844596824" TEXT="verify_depthFirstExploration();">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844598906" ID="ID_933777340" MODIFIED="1512844621815" TEXT="expand incl Parent">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844615941" ID="ID_1111018492" MODIFIED="1512844622908" TEXT="auto expand to leafs">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844628403" ID="ID_926180284" MODIFIED="1512844641292" TEXT="heben von single values">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_842384656" MODIFIED="1510969043561" TEXT="demonstrate_LayeredEvaluation();">
 <icon BUILTIN="flag-yellow"/>

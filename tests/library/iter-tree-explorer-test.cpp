@@ -59,6 +59,7 @@
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
+#include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-tree-explorer.hpp"
@@ -67,6 +68,7 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include <tuple>
 
 
 namespace lib {
@@ -805,7 +807,33 @@ namespace test{
       void
       verify_depthFirstExploration()
         {
-          UNIMPLEMENTED("preconfigured repeated depth-first expansion");
+          cout << materialise(
+                    treeExplore(CountDown{4})
+                      .expand([](uint j){ return CountDown{j-1}; })
+                      .expandAll()
+                      .transform([](int i){ return i*10; })
+                  ) <<endl;
+          
+          
+          using std::get;
+          using Tu2 = std::tuple<uint, uint>;
+          auto summingExpander = [](Tu2 const& tup)
+                                  {
+                                    uint val = get<0>(tup);
+                                    uint sum = get<1>(tup);
+                                    return singleValIterator (Tu2{val-1, sum+val});
+                                  };
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          cout << materialise(
+                    treeExplore(CountDown{4})
+                      .transform([](uint i){ return Tu2{i,0}; })
+//                    .expand(summingExpander)                      //////////////////TODO why isn't that result iterator (singleValIterator<Tu2>) accepted? It should be
+                      .expandLeaf()
+                      .transform([](Tu2 res){ return get<1>(res); })
+                  ) <<endl;
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          
         }
       
       
