@@ -737,6 +737,13 @@ namespace lib {
       };
     
     
+    /**
+     * @todo expandChildren() should not return the value pointer.
+     *       This is just a workaround to cope with the design mismatch in IterSource;
+     *       the fact that latter just passes around a pointer into the implementation is
+     *       ugly, dangerous and plain silly.    ////////////////////////////////////////////////////////////TICKET #1125
+     *       Incidentally, this is also the sole reason why this interface is templated with `VAL`
+     */
     template<typename VAL>
     class ChildExpandableSource
       {
@@ -755,7 +762,7 @@ namespace lib {
       , public ChildExpandableSource<typename SRC::value_type>
       {
         using Parent = WrappedLumieraIter<SRC>;
-        using Val = typename SRC::value_type;
+        using Val = typename SRC::value_type;                             ///////////////////////////////////TICKET #1125 : get rid of Val
         
       public:
         using Parent::Parent;
@@ -764,7 +771,7 @@ namespace lib {
         expandChildren()  override
           {
             Parent::wrappedIter().expandChildren();
-            return Parent::wrappedIter()?  & *Parent::wrappedIter()
+            return Parent::wrappedIter()?  & *Parent::wrappedIter()       ///////////////////////////////////TICKET #1125 : trickery to cope with the misaligned IterSource design
                                         : nullptr;
           }
       };
@@ -798,7 +805,7 @@ namespace lib {
           
           auto source = this->source().get();
           VAL* changedResult = dynamic_cast<Expandable*> (source)->expandChildren();
-          this->resetPos (changedResult);
+          this->resetPos (changedResult);                                 ///////////////////////////////////TICKET #1125 : trickery to cope with the misaligned IterSource design
         }
       
       

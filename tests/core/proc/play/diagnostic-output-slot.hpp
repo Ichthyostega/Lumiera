@@ -372,15 +372,15 @@ namespace play {
           uint currentFrame_;
           
           
-          virtual Pos
-          firstResult ()
+          virtual Pos                                          //////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
+          firstResult ()  override
             {
               REQUIRE (0 == currentFrame_);
               return outSeq_.accessEmittedFrame (currentFrame_);
             }
           
           virtual void
-          nextResult (Pos& pos)
+          nextResult (Pos& pos)  override
             {
               ++currentFrame_;
               pos = outSeq_.accessEmittedFrame(currentFrame_);

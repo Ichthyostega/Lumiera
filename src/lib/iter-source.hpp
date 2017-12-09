@@ -29,7 +29,11 @@
  ** a simple data source type, without needing to disclose details of
  ** the implementation.
  ** 
- ** \par Standard Adapters
+ ** @todo the design used for the "iteration control API" is misaligned
+ **       with the purpose of this adapter. Rather, it should be shaped
+ **       similar to IterStateWrapper with three control functions     //////////////////////////////////////TICKET #1125
+ ** 
+ ** ## Standard Adapters
  ** As a complement, this header contains a generic implementation
  ** of the IterSource interface by wrapping an existing Lumiera Forward Iterator.
  ** Using this WrappedLumieraIter, the details of this wrapped source iterator
@@ -89,7 +93,7 @@ namespace lib {
       typedef TY* Pos;
       typedef shared_ptr<IterSource> DataHandle;
       
-      
+                                                              ///////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       /** iteration start: prepare the first element.
        *  may return NULL in case of empty data source
        */
@@ -123,7 +127,7 @@ namespace lib {
       
       /* == Iteration control API for IterAdapter frontend == */
       
-      friend bool
+      friend bool                                                    ////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       checkPoint (DataHandle const&, Pos const& pos)
         {
           return bool(pos);
@@ -141,7 +145,7 @@ namespace lib {
       
       struct iterator
         : IterAdapter<Pos, DataHandle>
-        {
+        {                                                ////////////////////////////////////////////////////TICKET #1125 : should be build on top of IterStateWrapper rather than IterAdapter!
           using _I = IterAdapter<Pos, DataHandle>;
           using _I::IterAdapter;
           
@@ -231,7 +235,7 @@ namespace lib {
       
       IT src_;
       
-      Pos
+      Pos                                                ////////////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       firstResult ()
         {
           if (!src_)

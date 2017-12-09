@@ -266,7 +266,7 @@ namespace lib {
       const ConRef source() const { return unConst(this)->source_; }
       
       void
-      resetPos (POS otherPos)
+      resetPos (POS otherPos)                                    ////////////////////////////////////////////TICKET #1125 : get rid of this function! it should not be there; rectify IterSource!
         {
           pos_ = otherPos;
           check();

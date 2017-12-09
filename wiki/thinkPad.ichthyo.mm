@@ -5729,7 +5729,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1512363305422" TEXT="Zusammenspiel">
 <icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1512363297486" FOLDED="true" ID="ID_531127457" MODIFIED="1512521973765" TEXT="re-evaluate">
+<node COLOR="#338800" CREATED="1512363297486" FOLDED="true" ID="ID_531127457" MODIFIED="1512794302599" TEXT="re-evaluate">
 <linktarget COLOR="#5a92a2" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" SOURCE="ID_579206895" STARTARROW="None" STARTINCLINATION="844;55;"/>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -5942,7 +5942,7 @@
 <node CREATED="1512516543648" ID="ID_1021495966" MODIFIED="1512516558578" TEXT="transformer mu&#xdf; daraufhin seinen Cache wegwerfen"/>
 <node CREATED="1512516567076" ID="ID_647647031" MODIFIED="1512516587342" TEXT="filter mu&#xdf; daraufhin erneut filter-pull ausf&#xfc;hren"/>
 </node>
-<node CREATED="1512516613614" ID="ID_1415224184" MODIFIED="1512516850054">
+<node CREATED="1512516613614" ID="ID_1415224184" MODIFIED="1512794145729">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -5952,7 +5952,7 @@
       Konzept funktioniert nicht
     </p>
     <p>
-      iaus processing-Function
+      aus processing-Function
     </p>
     <p>
       innen heraus
@@ -6013,6 +6013,36 @@
 </node>
 <node CREATED="1512516814507" ID="ID_347481974" MODIFIED="1512516819130" TEXT="eigentlich logisch">
 <icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1512794157617" ID="ID_1639627950" MODIFIED="1512794164448" TEXT="Problem mit IterSource">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1512794166904" ID="ID_614780435" LINK="http://issues.lumiera.org/ticket/1125" MODIFIED="1512794180867" TEXT="Design-Mismatch">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1512794183629" ID="ID_783686672" MODIFIED="1512794297194" TEXT="inzwischen ein Workaround">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        asIterSource() verwendet ein eigenes Interface, um diesen call an die Implementierung durchzureichen
+      </li>
+      <li>
+        in dieses Interface habe ich nun einen R&#252;ckgabewert eingebaut
+      </li>
+      <li>
+        damit kann ich das IterSource-Front-End refreshen
+      </li>
+      <li>
+        trotzdem h&#228;sslich...
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -6145,8 +6175,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512621185490" ID="ID_1611878074" MODIFIED="1512787526602" TEXT="Probleme">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512621185490" FOLDED="true" ID="ID_1611878074" MODIFIED="1512794118863" TEXT="Probleme">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1512621202688" ID="ID_57740660" MODIFIED="1512706113620" TEXT="durchreichen der Basis-Konstruktoren">
 <icon BUILTIN="info"/>
 <node CREATED="1512706139167" ID="ID_1731306892" MODIFIED="1512706156440" TEXT="Basis-Copy-Konstruktoren werden nicht geerbt">
@@ -6269,7 +6299,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1512621222901" ID="ID_701320194" MODIFIED="1512706102580" TEXT="bad function call">
+<node CREATED="1512621222901" FOLDED="true" ID="ID_701320194" MODIFIED="1512794109999" TEXT="bad function call">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512621654283" ID="ID_1975194377" MODIFIED="1512621667489" TEXT="passiert im FIlter-Iterator-Test">
 <icon BUILTIN="messagebox_warning"/>
@@ -6288,8 +6318,8 @@
 <node CREATED="1512706069104" ID="ID_596682451" MODIFIED="1512706085953" TEXT="und deshalb ist nicht aufgefallen, da&#xdf; das Objekt schon tot war"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1512787530248" ID="ID_1415286168" MODIFIED="1512787540703" TEXT="IterSource design mismatch">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512787530248" FOLDED="true" ID="ID_1415286168" MODIFIED="1512794112672" TEXT="IterSource design mismatch">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1512788814147" ID="ID_499062281" MODIFIED="1512788850106" TEXT="versteckt gecachete Auswertung im Pos-Pointer">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -6309,9 +6339,20 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1512789836161" ID="ID_1758704874" MODIFIED="1512789845955" TEXT="Design von IterSource ist nicht in Ordnung"/>
 <node CREATED="1512789847183" ID="ID_1699957562" MODIFIED="1512789865193" TEXT="es sollte sich am &quot;state core&quot;-Schema orientieren"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512789870516" ID="ID_1318870340" MODIFIED="1512790017742" TEXT="Ticket machen">
+<node CREATED="1512789870516" ID="ID_1318870340" LINK="http://issues.lumiera.org/ticket/1125" MODIFIED="1512794035043">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ticket machen: <font color="#b90736">#1125</font>
+    </p>
+  </body>
+</html>
+</richcontent>
 <linktarget COLOR="#7f5f85" DESTINATION="ID_1318870340" ENDARROW="Default" ENDINCLINATION="867;50;" ID="Arrow_ID_1918593298" SOURCE="ID_1066396845" STARTARROW="None" STARTINCLINATION="483;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -6655,12 +6696,12 @@
 <node CREATED="1512787549870" ID="ID_1969077394" MODIFIED="1512789984536" TEXT="wieder mal kein refresh nach expandChildren()">
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512788719640" ID="ID_1066396845" MODIFIED="1512790017742" TEXT="TODO: Design-Mismatch -&gt; Ticket">
+<node COLOR="#338800" CREATED="1512788719640" ID="ID_1066396845" LINK="http://issues.lumiera.org/ticket/1125" MODIFIED="1512794080241" TEXT="TODO: Design-Mismatch -&gt; Ticket">
 <arrowlink COLOR="#7f5f85" DESTINATION="ID_1318870340" ENDARROW="Default" ENDINCLINATION="867;50;" ID="Arrow_ID_1918593298" STARTARROW="None" STARTINCLINATION="483;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1512621383815" ID="ID_1705587551" MODIFIED="1512789963438" TEXT="Problem: shallow copy">
+<node CREATED="1512621383815" FOLDED="true" ID="ID_1705587551" MODIFIED="1512794312525" TEXT="Problem: shallow copy">
 <richcontent TYPE="NOTE"><html>
   <head>
     

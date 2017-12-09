@@ -90,8 +90,8 @@ namespace test{
         string buffer_;
         CStr current_;
         
-        virtual Pos
-        firstResult ()
+        virtual Pos                                    ////////////////////////////////////////////TICKET #1125 : this iteration control API should use three control functions, similar to IterStateWrapper
+        firstResult ()  override
           {
             current_ = buffer_.c_str();
             ENSURE (current_);
@@ -99,7 +99,7 @@ namespace test{
           }
         
         virtual void
-        nextResult (Pos& pos)
+        nextResult (Pos& pos)  override
           {
             if (pos && *pos && **pos)
               ++(*pos);

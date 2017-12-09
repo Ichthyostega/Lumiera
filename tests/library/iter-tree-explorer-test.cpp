@@ -728,30 +728,36 @@ namespace test{
       void
       verify_asIterSource()
         {
-          IterSource<uint>::iterator sequence;
+          IterSource<uint>::iterator sequence;     // note `sequence` is polymorphic
           CHECK (isnil (sequence));
           
           sequence = treeExplore(CountDown{20,10})
                         .filter([](uint i){ return i % 2; })
-                        .asIterSource();
-          
+                        .asIterSource();           // note this terminal builder function
+                                                   // moves the whole pipeline onto the heap
           CHECK (not isnil (sequence));
           CHECK (19 == *sequence);
           
           
+          // use one sequence as source to build another one
           sequence = treeExplore(sequence)
                         .transform([](uint i){ return i*2; })
                         .asIterSource();
           
           CHECK (38 == *sequence);
-          cout << materialise (sequence) <<endl;
+          CHECK ("38-34-30-26-22" == materialise(sequence));
           
+          // WARNING pitfall: `sequence` is a copyable iterator front-end
+          //                  but holds onto the actual pipeline by shared-ptr
+          //                  Thus, even while materialise() creates a copy,
+          //                  the iteration state gets shared....
           CHECK (22 == *sequence);
-          ++sequence;
+          ++sequence;         // ...and even worse, iteration end is only detected after increment
           CHECK (isnil (sequence));
           
           
-          IterExploreSource<uint> exploreIter;
+          // extended API to invoke child expansion opaquely
+          IterExploreSource<char> exploreIter;
           CHECK (isnil (exploreIter));
           
           exploreIter = treeExplore(CountDown{20,10})
@@ -759,20 +765,20 @@ namespace test{
                           .transform([](uint i){ return i*2; })
                           .filter([](int i){ return i>25; })
                           .expand([](uint i){ return CountDown{i-10, 20}; })
-//                          .transform([](uint u) -> char { return '@'+u-20; })
-                          .transform([](int u) -> uint { return u; })
+                          .transform([](uint u) -> char { return '@'+u-20; })
                           .asIterSource();
           
           
-//          CHECK (38 == *exploreIter);
+          CHECK ('R' == *exploreIter);   // 38-20 + '@'
           ++exploreIter;
-          exploreIter.expandChildren();
-          cout << *exploreIter << endl;
-          cout << materialise(exploreIter) << endl;
-          cout << *exploreIter << endl;
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
-        }
+          CHECK ('N' == *exploreIter);   // 34-20 + '@'
+          
+          exploreIter.expandChildren();  // expand consumes the current element (34)
+                                         // and injects the sequence (24...20[ instead
+          CHECK ('D' == *exploreIter);   // 34-10 == 24 and 'D' ==  24-20 + '@'
+          
+          CHECK ("D-C-B-A-J-F" == materialise(exploreIter));
+        }                                // note how the remainder of the original sequence is picked up with 'J'...
       
       
       /** @test use a preconfigured exploration scheme to expand depth-first until exhaustion
