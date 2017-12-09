@@ -807,12 +807,13 @@ namespace test{
       void
       verify_depthFirstExploration()
         {
-          cout << materialise(
+          CHECK (materialise(
                     treeExplore(CountDown{4})
                       .expand([](uint j){ return CountDown{j-1}; })
                       .expandAll()
                       .transform([](int i){ return i*10; })
-                  ) <<endl;
+                    )
+                 == "40-30-20-10-10-20-10-10-30-20-10-10-20-10-10");
           
           
           using std::get;

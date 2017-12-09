@@ -549,8 +549,6 @@ namespace lib {
             iterNext();         // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));
-            
-            SRC::expandChildren();
           }
         
         /** diagnostics: current level of nested child expansion */
@@ -588,6 +586,25 @@ namespace lib {
               }
             else
               ++(*this);
+          }
+      };
+    
+    
+    
+    template<class SRC>
+    class AutoExpander
+      : public SRC
+      {
+        static_assert(is_StateCore<SRC>::value, "need wrapped state as predecessor in pipeline");
+        
+      public:
+        /** pass through ctor */
+        using SRC::SRC;
+        
+        void
+        iterNext()
+          {
+            SRC::expandChildren();
           }
       };
     
@@ -968,8 +985,10 @@ namespace lib {
       auto
       expandAll()
         {
-          UNIMPLEMENTED ("automatically expand all elements");
-          return *this;
+          using ResCore = iter_explorer::AutoExpander<SRC>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this)});
         }
       
       

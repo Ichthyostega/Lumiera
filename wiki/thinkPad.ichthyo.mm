@@ -5757,11 +5757,17 @@
 </html>
 </richcontent>
 <icon BUILTIN="yes"/>
+<node CREATED="1512861383695" ID="ID_837026008" MODIFIED="1512861394833" TEXT="setzt direkt auf drunterliegender State Core auf"/>
+<node CREATED="1512861401133" ID="ID_930964397" MODIFIED="1512861421774" TEXT="ersetzt nur eine der State-Core-Operationen"/>
+<node CREATED="1512861424976" ID="ID_1203553918" MODIFIED="1512861431277" TEXT="sehr einfach, da Typ gleich bleibt"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844727150" ID="ID_706634236" MODIFIED="1512844732717" TEXT="expandAll">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512844727150" ID="ID_706634236" MODIFIED="1512861467437" TEXT="expandAll">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1512844742788" ID="ID_1270260953" MODIFIED="1512844748479" TEXT="expandChildren verz&#xf6;gert"/>
 <node CREATED="1512844749235" ID="ID_1344028360" MODIFIED="1512844759661" TEXT="ausgel&#xf6;st durch Iteration"/>
+<node CREATED="1512861437832" ID="ID_922141164" MODIFIED="1512861464189" TEXT="iterate() durch expandChildren() ersetzt">
+<icon BUILTIN="forward"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844733549" ID="ID_1055588501" MODIFIED="1512844738184" TEXT="expandLeaf">
 <icon BUILTIN="flag-yellow"/>
@@ -6768,8 +6774,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1512844596824" TEXT="verify_depthFirstExploration();">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844598906" ID="ID_933777340" MODIFIED="1512844621815" TEXT="expand incl Parent">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1512844598906" ID="ID_933777340" MODIFIED="1512861473722" TEXT="expand incl Parent">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844615941" ID="ID_1111018492" MODIFIED="1512844622908" TEXT="auto expand to leafs">
 <icon BUILTIN="flag-yellow"/>
