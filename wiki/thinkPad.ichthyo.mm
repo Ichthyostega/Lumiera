@@ -6787,6 +6787,60 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_842384656" MODIFIED="1510969043561" TEXT="demonstrate_LayeredEvaluation();">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node COLOR="#338800" CREATED="1512952846993" ID="ID_568101334" MODIFIED="1512955085252" TEXT="TupleHelper_test broken">
+<linktarget COLOR="#408281" DESTINATION="ID_568101334" ENDARROW="Default" ENDINCLINATION="299;-71;" ID="Arrow_ID_1210920107" SOURCE="ID_748691821" STARTARROW="None" STARTINCLINATION="-124;4;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512952975600" ID="ID_1282921475" MODIFIED="1512952993489" TEXT="Types&lt;tuple&lt;TYPES...&gt;&gt;">
+<node CREATED="1512952994765" ID="ID_1028880050" MODIFIED="1512953023243" TEXT="wurde automatisch gehoben auf Types&lt;TYPES...&gt;">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1512953008628" ID="ID_105420180" MODIFIED="1512953018858" TEXT="ziemlich dumme Idee">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node CREATED="1512953639277" ID="ID_93632445" MODIFIED="1512953732408" TEXT="broken sind...">
+<icon BUILTIN="info"/>
+<node CREATED="1512953663356" ID="ID_587022650" MODIFIED="1512953666295" TEXT="Tup1        :">
+<node CREATED="1512953639278" ID="ID_1100197404" MODIFIED="1512954771519" TEXT="TUPLE-&lt;1&gt;-&lt;3&gt;-&lt;5&gt;-">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1512953639278" ID="ID_894542190" MODIFIED="1512954775187" TEXT="TUPLE-&lt;tuple&lt;Num&lt;1&gt;, Num&lt;3&gt;, Num&lt;5&gt; &gt;&gt;-">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1512953674962" ID="ID_1880760198" MODIFIED="1512953677102" TEXT="T_L1        :">
+<node CREATED="1512953639278" ID="ID_1929044147" MODIFIED="1512954778777" TEXT="TUPLE-&lt;1&gt;-&lt;3&gt;-&lt;5&gt;-">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1512953639278" ID="ID_1790615976" MODIFIED="1512954785530" TEXT="TUPLE-&lt;tuple&lt;Num&lt;1&gt;, Num&lt;3&gt;, Num&lt;5&gt; &gt;&gt;-">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1512953684233" ID="ID_608070908" MODIFIED="1512953686341" TEXT="Seq1        :">
+<node CREATED="1512953639279" ID="ID_1741392154" MODIFIED="1512955031447" TEXT="-&lt;1&gt;-&lt;3&gt;-&lt;5&gt;-">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1512953639279" ID="ID_213667790" MODIFIED="1512955034003" TEXT="-&lt;tuple&lt;Num&lt;1&gt;, Num&lt;3&gt;, Num&lt;5&gt; &gt;&gt;-">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1512953692712" ID="ID_690443382" MODIFIED="1512953694636" TEXT="Prepend        :">
+<node CREATED="1512953639279" ID="ID_1949823809" MODIFIED="1512954789660" TEXT="TUPLE-&lt;i&gt;-&lt;1&gt;-&lt;3&gt;-&lt;5&gt;-">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1512953639279" ID="ID_1268362964" MODIFIED="1512954792261" TEXT="TUPLE-&lt;tuple&lt;int, Num&lt;1&gt;, Num&lt;3&gt;, Num&lt;5&gt; &gt;&gt;-">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1512953030113" HGAP="21" ID="ID_227944051" MODIFIED="1512955073221" TEXT="bestehenden Code in Commands gefixt" VSHIFT="12">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1512953037928" ID="ID_1081876156" MODIFIED="1512953052337" TEXT="verwende nun explizite Rebinding-Metafunktion"/>
+<node CREATED="1512955051435" ID="ID_1397072837" MODIFIED="1512955062645" TEXT="weitere Fehler im Test-Diagnose-Code">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

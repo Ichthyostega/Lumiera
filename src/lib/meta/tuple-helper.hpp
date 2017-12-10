@@ -127,9 +127,15 @@ namespace meta {
   
   
   
-  /** match and rebind the type sequence from a tuple */
+  /** temporary workaround: match and rebind the type sequence from a tuple */
   template<typename...TYPES>
-  struct Types<std::tuple<TYPES...>>
+  struct RebindTySeq
+    {
+      using Seq  = typename Types<TYPES...>::Seq;
+      using List = typename Seq::List;
+    };
+  template<typename...TYPES>
+  struct RebindTySeq<std::tuple<TYPES...>>
     {
       using Seq  = typename Types<TYPES...>::Seq;
       using List = typename Seq::List;

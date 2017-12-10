@@ -80,7 +80,7 @@ namespace control {
       using ArgumentBuff = InPlaceBuffer<ArgHolder>;
       
       using ArgTuple = typename ArgHolder::ArgTuple;
-      using Args     = typename Types<ArgTuple>::Seq;
+      using Args     = typename lib::meta::RebindTySeq<ArgTuple>::Seq; // std::tuple<ARGS...> to Types<ARGS...>
       
       
       /* ====== in-place argument storage ====== */

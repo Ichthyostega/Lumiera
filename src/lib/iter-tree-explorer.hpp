@@ -427,7 +427,7 @@ namespace lib {
           {
             using FunArgType = remove_reference_t<Arg>;
             static_assert (std::is_convertible<ARG, FunArgType>::value,
-                           "the expansion functor must accept the source iterator or state core as parameter");
+                           "the bound functor must accept the source iterator or state core as parameter");
             
             static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
           };
