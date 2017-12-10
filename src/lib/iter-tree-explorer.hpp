@@ -487,6 +487,8 @@ namespace lib {
         BaseAdapter(SRC && src)     : SRC(src) { }
         
         void expandChildren() { }
+        size_t depth()  const { return 0; }
+
       };
     
     
@@ -512,7 +514,7 @@ namespace lib {
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
-    template<class SRC, class FUN>
+    template<class SRC, class FUN, bool expandToLeaf =false>
     class Expander
       : public SRC
       {
@@ -535,7 +537,9 @@ namespace lib {
           : SRC{move (parentExplorer)}                           // NOTE: slicing move to strip TreeExplorer (Builder)
           , expandChildren_{forward<FUN> (expandFunctor)}
           , expansions_{}
-          { }
+          {
+            maybeExpandToExhaustion();
+          }
         
         
         /** core operation: expand current head element */
@@ -549,6 +553,22 @@ namespace lib {
             iterNext();         // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));
+          }
+        
+        void
+        maybeExpandToExhaustion()
+          {
+            if (not (expandToLeaf and this->checkPoint())) return;
+            
+            while (true)
+              {
+                ResIter expanded{ 0 < depth()? expandChildren_(*expansions_)
+                                             : expandChildren_(*this)};
+                if (isnil(expanded))
+                  break;
+                iterate();     // consume current head element
+                expansions_.push (move(expanded));
+              }
           }
         
         /** diagnostics: current level of nested child expansion */
@@ -578,6 +598,13 @@ namespace lib {
         void
         iterNext()
           {
+            iterate();
+            maybeExpandToExhaustion();
+          }
+        
+        void
+        iterate()
+          {
             if (0 < depth())
               {
                 ++(*expansions_);
@@ -595,7 +622,7 @@ namespace lib {
     class AutoExpander
       : public SRC
       {
-        static_assert(is_StateCore<SRC>::value, "need wrapped state as predecessor in pipeline");
+        static_assert(is_StateCore<SRC>::value, "need wrapped state core as predecessor in pipeline");
         
       public:
         /** pass through ctor */
@@ -980,6 +1007,19 @@ namespace lib {
         }
       
       
+      /** @todo WIP 12/17 auto expand down to the leafs
+       */
+      template<class FUN>
+      auto
+      expandLeaf (FUN&& expandFunctor)
+        {
+          using ResCore = iter_explorer::Expander<SRC, FUN, true>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
+        }
+      
+      
       /** @todo WIP 12/17 auto expand all
        */
       auto
@@ -989,16 +1029,6 @@ namespace lib {
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this)});
-        }
-      
-      
-      /** @todo WIP 12/17 auto expand down to the leafs
-       */
-      auto
-      expandLeaf()
-        {
-          UNIMPLEMENTED ("depth-first expand immediately, until reaching the leaf elements");
-          return *this;
         }
       
       

@@ -822,19 +822,19 @@ namespace test{
                                   {
                                     uint val = get<0>(tup);
                                     uint sum = get<1>(tup);
-                                    return singleValIterator (Tu2{val-1, sum+val});
+                                    return val? singleValIterator (Tu2{val-1, sum+val})
+                                              : SingleValIter<Tu2>();
                                   };
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           cout << materialise(
                     treeExplore(CountDown{4})
                       .transform([](uint i){ return Tu2{i,0}; })
-//                    .expand(summingExpander)                      //////////////////TODO why isn't that result iterator (singleValIterator<Tu2>) accepted? It should be
-                      .expandLeaf()
+                      .expandLeaf(summingExpander)
                       .transform([](Tu2 res){ return get<1>(res); })
                   ) <<endl;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
         }
       
       
