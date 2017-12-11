@@ -522,6 +522,95 @@ noscript {display:none;} /* Fixes a feature in Firefox 1.5.0.2 where print previ
 </div>
 <!--POST-SHADOWAREA-->
 <div id="storeArea">
+<div title="AboutMonads" creator="Ichthyostega" modifier="Ichthyostega" created="201712101925" modified="201712102348" tags="Concepts discuss" changecount="71">
+<pre>//Monads are of questionable usefullness//
+
+Monads are a concept and theoretical framework from category theory.
+But the use of Monads as a programming construct is much touted in the realm of functional programming -- which unfortunately is riddled with some kind of phobia towards ''State''.
+And this in itself is ill-guided, since //not State is the problem,// ''Complexity'' is. Complexity arises from far reaching non local interdependencies and coupling. Some complexity is essential.
+
+A telltale sign is that people constantly ask »What is a Monad?«
+And they don't get an answer, rather they get a thousand answers.
+The term //&quot;Monad&quot; fails to evoke an image// once mentioned.
+
+What remains is a set of clever technicalities. Such can be applied and executed without understanding. The same technicality can be made to work on vastly distinct subjects. And a way to organise such technicalities can be a way to rule and control subjects. The exertion of control is not in need of invoking images, once its applicability is ensured. //That// state is indifferent towards complexity, at least.
+
+When we care for complexity, we do so while we care for matters tangible to humans. Related to software, this is the need to maintain it, to adjust it, to adapt and remould it, to keep it relevant. At the bottom of all of these is the need to understand software. And this mandates to use terms and notions, even patterns, which evoke meaning -- even to the uninitiated. How can Monads even be helpful with that?
+
+!To make sensible usage of Monads
+Foremost, they should be kept as what they are: technicalities. For the understanding, they must be subordinate to a real concept or pattern. One with the power to reorient our view of matters at hand.
+Thus we ask: what can be said about Monads?
+
+!!!Formalism
+Regarding the formalism, it should be mentioned
+* that a Monad is a //type constructor// -- it takes a type parameter and generates a new instant of monadic kind.
+* and assuming such an instance, there is a //constructor// &lt;br&gt;{{{
+   unit: A → M&lt;A&gt;
+   }}}
+* and once we've optained a concrete entity of type {{{M&lt;A&gt;}}}, we can //bind a function// to transform it in another monadic entity&lt;br/&gt;{{{
+   M&lt;A&gt;::bind( A → M&lt;B&gt; ) → M&lt;B&gt;
+   }}}
+At this point, also the ''Monad Axioms'' should be mentioned
+;neutrality
+:{{{unit}}} (the monad constructor) is neutral with respect to the {{{bind}}} operation
+{{{
+unit(a)::bind(f)  ≡  f(a)
+M::bind(unit)  ≡  M
+}}}
+;composition
+:we can define a //composition// of monadic functions,
+:which is equivalent to consecutive binding
+{{{
+(M::bind(f) )::bind(g)  ≡  M::bind( f ∘ g )     with f ∘ g  defined as λ.x → { f(x)::bind(g) }
+}}}
+
+!!!Distinct properties
+The obvious first observation is that a Monad must be some kind of //container// -- or //object,// for that.
+
+The next observation to spring into mind is the fact that the {{{bind}}}-operation is notoriously hard to understand.
+Why is this so? Because it //intermingles// the world of monads with the things from the value domain. You can not just write a monadic function for use with {{{bind}}}, without being aware of the world of monads. It is not possible to &quot;lift&quot; an operation from the world of values automatically into the world of monads. Please contrast this to the ''map operation'', which is easy to understand for that very reason: if you map an operation onto a container of values, the operation itself does not need to be aware of the existence of containers as such. It just operates on values.
+
+This observation can be turned into a positive use-case for monadic structures -- whenever there is an ''additional cross-cutting concern'' within the world of values, to necessitate our constant concern all over the place. The Monad technique can then be used to re-shuffle this concern in such a way that it becomes possible to keep it //mentally separate.// Thus, while it is not possible to //remove// that concern, re-casting it as Monad creates a more regular structure, which is easier to cope with. A Monad can thus be seen as an ''augmented or &quot;amplified&quot; value''. A value outfitted with additional capabilities. This view might be illustrated by looking at some of the most prominent applications
+;failure handling
+:when we mark an expression as prone to failure by wrapping it into some //exception handling monad,//
+:it becomes easy to combine several such unreliable operations into a single program unit with just one failure handler
+;partially defined operations
+:when an operation can only work on some part of the value domain, we can mark the result as //optional//
+:and combining several tasks with optional result into one chain of operations can then be done completely generic
+;multiple results
+:when some tasks might possibly produce multiple results, we can mark those with a //container monad,//
+:and collecting and combining of such multifold results can then be dealt with completely separate from the generating actions
+;secondary state attributions
+:when we have to observe, extend and communicate additional data beyond what is involved in the basic computation
+:the collection and management of such additional attributions can be externalised with a //state monad//
+;local technicalities
+:when some algorithm or computation involves specific technicalities to get at the underlying data
+:a monad can be used to encapsulate those details and expose only abstracted higher-level //operation primitives//
+
+!!!Building with monads
+As pointed out above, while all those disparate usages might share some abstract structural similarities, no overarching theme can be found to span them all. If we tend to distil an essence from all those usages, we're bound to end up with nothing. The reason is, //we do apply// monadic techniques while coping with the problem, but there is //nothing inherent &quot;monadic&quot; in the nature// of things at hand.
+
+Yet to guide our thinking and doing, when we deal with matters, other concepts, notions and patterns are better suited to guide our actions, because they concur with the inherent nature of things:
+;builder
+:a builder allows to assemble a very specific structure from building blocks,
+:when done, the structure is self-contained and can be operated and used devoid all intricacies involved in building.
+:Monads are //exceptionally viable// for performing this process of assembly within the builder.
+;domain specific language
+:a DSL can found a higher level of abstraction, where local handling details are stashed away.
+:Monads can be useful as supporting backbone below a DSL, especially in cases where a full language system and runtime engine would be overblown
+;abstract composite value
+:an abstract data type or complex value can be used to represent computations beyond simple numbers,
+:prominent examples being colours with colour space or measurement values with numerical precision and unit of measurement.
+:Monads can be used to build the basic combining operations on such custom types, and their interplay.
+;engine
+:an engine guides and enacts ongoing computations, thereby transitioning internal state
+:Monads can be used as blueprint for managing these internal state transitions, and to prevent them from leaking out into the target of processing
+;context
+:a (possibly global) context can be used to represent all further concerns, which need to be there as well.
+:Monads can be used to create a distinct, secondary system of communication (»wormhole«) and they can be used to capture and replay events.
+:beyond that, for most practical purposes, simple plain mutable variables plus nested scopes //are a solution superior to the application of Monads.//
+</pre>
+</div>
 <div title="Admin" modifier="CehTeh" created="200706080535" modified="200706110324">
 <pre>PageTemplate
 |&gt;|SiteTitle - SiteSubtitle|
@@ -2359,10 +2448,12 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201308122215" tags="def Rendering" changecount="6">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201712101920" tags="def Rendering" changecount="10">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 The dispatcher works together with the job ticket(s) and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the backend, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
+
+{{red{stalled since 2014}}} -- development on this (important) topic has been postponed. Moreover, some rough edges remain within the Design &amp;rarr; see [[some notes...|AboutMonads]]
 
 !defining the dispatcher interface
 The purpose of this interface is to support the planning of new jobs, for a given CalcStream. From time to time, a chunk of new RenderJob entries will be prepared for the [[Scheduler]]. Each job knows his frame number and the actual ProcNode to operate. So, to start planning jobs, we need to translate time &amp;rarr; frame number &amp;rarr; segment &amp;rarr; real exit node.
@@ -3322,8 +3413,8 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201504031800" tags="overview" changecount="2">
-<pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
+<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201712101756" tags="overview" changecount="6">
+<pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the years, while building the Lumiera application.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
 * [[Memory Management Issues|MemoryManagement]]
@@ -3357,6 +3448,8 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * designing how to [[build|BuildFixture]] the [[Fixture]] (...{{red{WIP}}}...)
 * from [[play process|PlayProcess]] to [[frame dispatching|FrameDispatcher]] and [[node invocation|NodeInvocation]]
 * how to shape the GuiConnection: with the help of a mediating GuiModel, which acts as UI-Bus, exchanging TreeDiffModel messages for GuiModelUpdate
+* shape the Backbone of the UI, the UI-Bus and the GuiTopLevel
+* build a framework for InteractionControl in the User Interface
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" created="200711210531" modified="201310132316" tags="Concepts design discuss" changecount="1">
@@ -4167,7 +4260,7 @@ The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangibl
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
 </div>
-<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201710152058" tags="spec decision draft GuiPattern" changecount="14">
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201712101920" tags="spec decision draft GuiPattern" changecount="19">
 <pre>//Service to navigate through the UI as generic structure.//
 The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
 
@@ -4197,7 +4290,39 @@ From these use cases we conclude that the actual requirements for a Navigator co
 In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on UI coordinates solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
 
 !Challenges of the implementation
+Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose//Service to navigate through the UI as generic structure.//
+The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
+
+!The problem of abstraction
+This goal initially poses some challenge, since it aims beyond the conventional notion of UI programming, where it is sufficient just to wire some widgets and manipulate the receiver of an event notification. The usual UI widgets are just not meant to be treated in a more systematic, generic way -- and indeed, in most cases and for most purposes it is not a good idea to approach UI programming in a to much schematic way. User interfaces need to be tangible, something concrete, with lots of specifics and local traits. Yet this very nature of UI programming tends to turn some //cross-cutting concerns// into serious liabilities. So the deliberate ''decision to introduce a Navigator'' in avoidance of these future burdens and liabilities is a decision of priorities when it comes to shaping the Lumiera UI.
+
+Which leaves us with the quest of mapping a generic location scheme onto a load of implementation defined structures not exposing any kind of genericness, and to accomplish this within an environment lacking meta information and support for self discovery beyond the most basic abstraction level. As a first step towards bridging this gap, we'll have to identify the actual //command-and-query operations// required to treat UI elements as a topological structure.
+
+!!!Analysis of expected functionality
+In order to build a navigation facility, we need to...
+* follow a path
+** which means to constitute a location
+** and to discover child nodes at that location
+* and we might want to extend (maybe also prune) the collection of children
+
+!!!Use cases
+In the current situation ({{red{10/2017}}}), before engaging into the actual implementation, we're able to identify two distinct use cases
+;View [[specification|GuiComponentView]]
+:locate a view based on a preconfigured placement
+:* either to allocate a new view instance
+:* or to get //just some instance// of a view identified by type
+;WorkSite navication
+:move the Spot to some other place in the UI known by its [[UI-Coordinates|UICoord]]
+
+!!!Requirements clarified
+From these use cases we conclude that the actual requirements for a Navigator component are less than one might expect.
+In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on UI coordinates solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
+
+!Challenges of the implementation
 Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose
+
+Moreover, the design of coordinate matching and resolving incurs a structure similar to [[render job planning|FrameDispatcher]] -- and the corresponding design problems remain to be solved in a satisfactory way &amp;rarr; [[some notes...|AboutMonads]]
+
 </pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="200909041807" tags="spec Builder Rendering">
@@ -9648,7 +9773,7 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
-<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201710300046" tags="def draft spec GuiPattern" changecount="14">
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201712101758" tags="def draft spec Concepts GuiPattern" changecount="15">
 <pre>//A topological addressing scheme to designate structural locations within the UI.//
 Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
 * to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    

@@ -488,7 +488,6 @@ namespace lib {
         
         void expandChildren() { }
         size_t depth()  const { return 0; }
-
       };
     
     
@@ -514,7 +513,7 @@ namespace lib {
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
-    template<class SRC, class FUN, bool expandToLeaf =false>
+    template<class SRC, class FUN>
     class Expander
       : public SRC
       {
@@ -537,9 +536,7 @@ namespace lib {
           : SRC{move (parentExplorer)}                           // NOTE: slicing move to strip TreeExplorer (Builder)
           , expandChildren_{forward<FUN> (expandFunctor)}
           , expansions_{}
-          {
-            maybeExpandToExhaustion();
-          }
+          { }
         
         
         /** core operation: expand current head element */
@@ -553,22 +550,6 @@ namespace lib {
             iterNext();         // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));
-          }
-        
-        void
-        maybeExpandToExhaustion()
-          {
-            if (not (expandToLeaf and this->checkPoint())) return;
-            
-            while (true)
-              {
-                ResIter expanded{ 0 < depth()? expandChildren_(*expansions_)
-                                             : expandChildren_(*this)};
-                if (isnil(expanded))
-                  break;
-                iterate();     // consume current head element
-                expansions_.push (move(expanded));
-              }
           }
         
         /** diagnostics: current level of nested child expansion */
@@ -598,13 +579,6 @@ namespace lib {
         void
         iterNext()
           {
-            iterate();
-            maybeExpandToExhaustion();
-          }
-        
-        void
-        iterate()
-          {
             if (0 < depth())
               {
                 ++(*expansions_);
@@ -618,6 +592,14 @@ namespace lib {
     
     
     
+    /**
+     * @internal extension to the Expander decorator to perform expansion automatically on each iteration step.
+     * @todo as of 12/2017, this is more like a proof-of concept and can be seen as indication, that there might
+     *       be several flavours of child expansion. Unfortunately, most of these conceivable extensions would
+     *       require a flexibilisation of Expander's internals and thus increase the complexity of the code.
+     *       Thus, if ever encounter the need of anything beyond the basic expansion pattern, we should
+     *       rework the design of Expander and introduce building blocks to define the evaluation strategy. 
+     */
     template<class SRC>
     class AutoExpander
       : public SRC
@@ -1007,20 +989,15 @@ namespace lib {
         }
       
       
-      /** @todo WIP 12/17 auto expand down to the leafs
-       */
-      template<class FUN>
-      auto
-      expandLeaf (FUN&& expandFunctor)
-        {
-          using ResCore = iter_explorer::Expander<SRC, FUN, true>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
-          
-          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
-        }
-      
-      
-      /** @todo WIP 12/17 auto expand all
+      /** extension functionality to be used on top of expand(), to perform expansion automatically.
+       * When configured, child elements will be expanded on each iteration step; it is thus not
+       * necessary to invoke `expandChildren()` (and doing so would have no further effect than
+       * just iterating). Thus, on iteration, each current element will be fed to the _expand functor_
+       * and the results will be integrated depth first.
+       * @warning iteration will be infinite, unless the _expand functor_ provides some built-in
+       *       termination condition, returning an empty child sequence at that point. This would
+       *       then be the signal for the internal combination mechanism to return to visiting the
+       *       results of preceding expansion steps, eventually exhausting all data source(s).
        */
       auto
       expandAll()

@@ -42,11 +42,11 @@
  ** there is always just a single JobPlanning element, which represents the \em current element; this element
  ** lives as "state core" within the PlanningState object. Advancing to the next JobPlanning element (i.e. to
  ** consider the next job or prerequisite job to be planned for scheduling) is performed through the iteration
- ** control API exposed by JobPlanning (the free functions \c checkPoint, \c yield and \c iterNext. Actually,
+ ** control API exposed by JobPlanning (the functions `checkPoint()`, `yield()` and `iterNext()`. Actually,
  ** these functions are invoked through the depth-first tree exploration performed by JobPlaningSequence.
  ** The implementation of these invocations can be found within the IterExplorer strategy
  ** lib::iter_explorer::RecursiveSelfIntegration. The net result is
- ** - the current element is always accessed through \c yield
+ ** - the current element is always accessed through `yield()`
  ** - advancing to the next element happens \em either
  **   
  **   - by invoking `iterNext()` (when processing a sequence of sibling job prerequisites)

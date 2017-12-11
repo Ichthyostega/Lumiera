@@ -802,7 +802,23 @@ namespace test{
         }                                // note how the remainder of the original sequence is picked up with 'J'...
       
       
-      /** @test use a preconfigured exploration scheme to expand depth-first until exhaustion
+      
+      /** @test use a preconfigured exploration scheme to expand depth-first until exhaustion.
+       * This is a simple extension where all elements are expanded automatically. In fact, the
+       * `expandChildren()` operation implies already an iteration step, namely to dispose of the
+       * parent element before injecting the expanded child elements. Based on that observation,
+       * when we just replace the regular iteration step by a call to `expandChildren()`, we'll
+       * encounter first the parent element and then delve depth-first into exploring the children.
+       * @note such continued expansion leads to infinite iteration, unless the _expand functor_
+       *       contains some kind of termination condition.
+       *       - in the first example, we spawn a child sequence with starting point one below
+       *         the current element's value. And since such a sequence is defined to terminate
+       *         when reaching zero, we'll end up spawning an empty sequence at leaf nodes, which
+       *         prompts the evaluation mechanism to pop back to the last preceding expansion.
+       *       - the second example demonstrates how to use value tuples for the intermediary
+       *         computation. In this case, we only generate a linear chain of children,
+       *         thereby summing up all encountered values. Termination is checked
+       *         explicitly in this case, returning an empty child iterator.
        */
       void
       verify_depthFirstExploration()
@@ -826,16 +842,16 @@ namespace test{
                                               : SingleValIter<Tu2>();
                                   };
           
-          cout << materialise(
+          CHECK (materialise(
                     treeExplore(CountDown{4})
                       .transform([](uint i){ return Tu2{i,0}; })
-                      .expandLeaf(summingExpander)
+                      .expand(summingExpander)
+                      .expandAll()
                       .transform([](Tu2 res){ return get<1>(res); })
-                  ) <<endl;
-          
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+                    )
+                 == "0-4-7-9-10-0-3-5-6-0-2-3-0-1");
         }
+      
       
       
       /** @test Demonstration how to build complex algorithms by layered tree expanding iteration
