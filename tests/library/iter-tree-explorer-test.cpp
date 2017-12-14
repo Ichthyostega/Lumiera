@@ -152,15 +152,20 @@ namespace test{
         size_t cnt_;
         char letter_;
         
-        static char
+//        static
+        char
         rndLetter()
           {
-            return 'A' + rand() % 26;
+            static _Fmt fmt{"rLet(%0d < %0d) → %s"};
+            char ll = 'A' + rand() % 26;
+            cout <<  fmt % cnt_ % lim_ % ll <<endl;
+            return ll;
+//            return 'A' + rand() % 26;
           }
         
       public:
-        RandomSeq(size_t len  =std::numeric_limits<size_t>::max())
-          : lim_{len}
+        RandomSeq(int len  =0)
+          : lim_{len>=0? len : std::numeric_limits<size_t>::max()}
           , cnt_{0}
           , letter_{rndLetter()}
           { }
@@ -915,8 +920,8 @@ namespace test{
         {
           // Layer-1: the search space with "hidden" implementation
           using DataSrc = IterExploreSource<char>;
-          DataSrc searchSpace = treeExplore(RandomSeq{})
-                                  .expand([](char){ return RandomSeq{15}; })
+          DataSrc searchSpace = treeExplore(RandomSeq{-1})
+                                  .expand([](char){ return RandomSeq{4}; })
                                   .asIterSource();
           
           // Layer-2: State for search algorithm
@@ -940,7 +945,7 @@ namespace test{
             };
           
           // Layer-3: Evaluation pipeline to drive search
-          string toFind = util::join (treeExplore (RandomSeq{5}));
+          string toFind = util::join (treeExplore (RandomSeq{5}), "");
           cout << "Search in random tree: toFind = "<<toFind<<endl;
           
           auto theSearch = treeExplore(State{searchSpace, toFind})
@@ -949,18 +954,28 @@ namespace test{
                                          State childState{state};
                                          state.src.expandChildren();
                                          childState.protocol.push_back(0);
-                                         ++childState.pos;
+                                         ++(childState.pos);
                                          
                                          return childState;
                                        })
-                             .filter([](auto& iter)
+                             .filter([](auto& it)
                                        {
-                                         State& state = *iter;
-                                         while (state.pos < state.toFind.size()
-                                                and *state.src == state.toFind[state.pos])
-                                           iter.expandChildren();
+                                         while (it->pos < it->toFind.size() - 1
+                                                and *(it->src) == it->toFind[it->pos])
+                                           {
+                                             cout <<"|!| expand "<<materialise(it->protocol)<<endl;
+                                           it.expandChildren();
+                                             cout <<"|.| "<<*(it->src)<<" -->> "<<materialise(it->protocol)<<endl;
+                                           }
                                          
-                                         return state.pos == state.toFind.size();
+//                                         return *state.src == state.toFind[state.pos];
+                                         if (*(it->src) == it->toFind[it->pos])
+                                           return true;
+                                         else {
+                                             cout << "|↯| "<<*(it->src)<< " ... " <<materialise(it->protocol)<<endl;
+                                             return false;
+                                         }
+
                                        });
           
           
