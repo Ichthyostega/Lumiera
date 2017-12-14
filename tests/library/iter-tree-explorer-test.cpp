@@ -67,6 +67,7 @@
 
 #include <utility>
 #include <vector>
+#include <limits>
 #include <string>
 #include <tuple>
 
@@ -120,7 +121,6 @@ namespace test{
       };
     
     
-    
     /**
      * A straight descending number sequence as basic test iterator.
      * It is built wrapping an opaque "state core" (of type CountDown).
@@ -140,6 +140,51 @@ namespace test{
           { }
       };
     
+    
+    
+    /**
+     * Another iteration _"state core"_ to produce a sequence of random numbers.
+     * Used to build an infinite random search space...
+     */
+    class RandomSeq
+      {
+        size_t lim_;
+        size_t cnt_;
+        char letter_;
+        
+        static char
+        rndLetter()
+          {
+            return 'A' + rand() % 26;
+          }
+        
+      public:
+        RandomSeq(size_t len  =std::numeric_limits<size_t>::max())
+          : lim_{len}
+          , cnt_{0}
+          , letter_{rndLetter()}
+          { }
+        
+        bool
+        checkPoint ()  const
+          {
+            return cnt_ < lim_;
+          }
+        
+        char&
+        yield ()  const
+          {
+            return unConst(this)->letter_;
+          }
+        
+        void
+        iterNext ()
+          {
+            ASSERT (checkPoint());
+            ++cnt_;
+            letter_ = rndLetter();
+          }
+      };
     
     
     /** Diagnostic helper: join all the elements from a _copy_ of the iterator */
@@ -855,12 +900,73 @@ namespace test{
       
       
       /** @test Demonstration how to build complex algorithms by layered tree expanding iteration
-       * @remarks this is the actual use case which inspired the design of TreeExplorer
+       * @remarks this is the actual use case which inspired the design of TreeExplorer:
+       *  Search with backtracking over an opaque (abstracted), tree-shaped search space.
+       *  - the first point to note is that the search algorithm knows nothing about its
+       *    data source, beyond its ability to delve down (expand) into child nodes
+       *  - in fact our data source for this test here is "infinite", since it is an
+       *    very large random root sequence, where each individual number can be expanded
+       *    into a limited random sub sequence, down to arbitrary depth. We just assume
+       *    that the search has good chances to find its target sequence eventually and
+       *    thus only ever visits a small fraction of the endless search space.
        */
       void
       demonstrate_LayeredEvaluation()
         {
-          UNIMPLEMENTED("build algorithm by layering iterator evaluation");
+          // Layer-1: the search space with "hidden" implementation
+          using DataSrc = IterExploreSource<char>;
+          DataSrc searchSpace = treeExplore(RandomSeq{})
+                                  .expand([](char){ return RandomSeq{15}; })
+                                  .asIterSource();
+          
+          // Layer-2: State for search algorithm
+          struct State
+            {
+              DataSrc& src;
+              string& toFind;
+              uint pos;
+              vector<uint> protocol;
+              
+              State(DataSrc& s, string& t)
+                : src{s}
+                , toFind{t}
+                , pos{0}
+                , protocol{0}
+                { }
+              
+              bool checkPoint() const { return src; }
+              State& yield()    const { return *unConst(this); }
+              void iterNext() { ++src; ++protocol.back(); }
+            };
+          
+          // Layer-3: Evaluation pipeline to drive search
+          string toFind = util::join (treeExplore (RandomSeq{5}));
+          cout << "Search in random tree: toFind = "<<toFind<<endl;
+          
+          auto theSearch = treeExplore(State{searchSpace, toFind})
+                             .expand([](State& state)
+                                       {
+                                         State childState{state};
+                                         state.src.expandChildren();
+                                         childState.protocol.push_back(0);
+                                         ++childState.pos;
+                                         
+                                         return childState;
+                                       })
+                             .filter([](auto& iter)
+                                       {
+                                         State& state = *iter;
+                                         while (state.pos < state.toFind.size()
+                                                and *state.src == state.toFind[state.pos])
+                                           iter.expandChildren();
+                                         
+                                         return state.pos == state.toFind.size();
+                                       });
+          
+          
+          // perform the search over a random tree...
+          CHECK (not isnil(theSearch));
+          cout << "Protocol of the search: " << materialise(theSearch->protocol) <<endl;
         }
     };
   

@@ -5090,13 +5090,56 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1510941425200" ID="ID_1773303405" MODIFIED="1512927037799" TEXT="Vorgabe">
 <icon BUILTIN="yes"/>
-<node CREATED="1510941397907" ID="ID_993148577" MODIFIED="1510941406366" TEXT="zun&#xe4;chst als abstrakter Baustein"/>
-<node CREATED="1510941406978" ID="ID_1048232110" MODIFIED="1510941437002" TEXT="sp&#xe4;ter mit IterExplorer verschmelzen"/>
+<node CREATED="1510941397907" ID="ID_993148577" MODIFIED="1512955809672" TEXT="zun&#xe4;chst als abstrakter Baustein">
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1510941455667" ID="ID_1945607867" MODIFIED="1512927037799" TEXT="Builder">
+<node CREATED="1510941406978" ID="ID_1048232110" MODIFIED="1512955812834" TEXT="sp&#xe4;ter mit IterExplorer verschmelzen">
+<icon BUILTIN="bell"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1510941455667" FOLDED="true" ID="ID_1945607867" MODIFIED="1512955806527" TEXT="Builder">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511054840038" ID="ID_18464349" MODIFIED="1511054851543" TEXT="brauch ich am Ende &#xfc;berhaupt einen builder">
 <icon BUILTIN="help"/>
+<node CREATED="1512955693493" ID="ID_622618029" MODIFIED="1512955706852">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>ich </i>brauche ihn nicht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1512955707636" ID="ID_398975798" MODIFIED="1512955789085" TEXT="aber bestehendes Verhalten ist gef&#xe4;hrlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Builder-Operationen moven den bisherigen Iterator-compound weg.
+    </p>
+    <p>
+      <i>Ich k&#246;nnte mir vorstellen, </i>da&#223; das einen naiven User ziemlich schockiert....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      L&#246;sung w&#228;re, das Iterator-API erst nach einem expliziten terminalen Aufruf freizuschalten
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1512955715434" ID="ID_1973548871" MODIFIED="1512955720444" TEXT="also: sp&#xe4;termal">
+<icon BUILTIN="bell"/>
+</node>
 </node>
 <node CREATED="1512278433500" ID="ID_1806674229" MODIFIED="1512927037814" TEXT="TreeExplorer fungiert als Builder">
 <icon BUILTIN="yes"/>
@@ -5108,7 +5151,7 @@
 <linktarget COLOR="#585e9d" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-101;761;" ID="Arrow_ID_402051988" SOURCE="ID_1359727169" STARTARROW="None" STARTINCLINATION="208;5;"/>
 <linktarget COLOR="#83dfc7" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-1109;3887;" ID="Arrow_ID_1645152965" SOURCE="ID_30857289" STARTARROW="None" STARTINCLINATION="2051;-176;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1511571446467" ID="ID_1778455053" MODIFIED="1512927037814" TEXT="expand-Operation">
+<node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1512955522174" TEXT="expand-Operation">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1511227813712" ID="ID_1961708112" MODIFIED="1512927037831" TEXT="Fall-1">
 <icon BUILTIN="button_ok"/>
@@ -5324,13 +5367,13 @@
 <node COLOR="#338800" CREATED="1511578319810" ID="ID_1918720180" MODIFIED="1511578585730" TEXT="unterst&#xfc;tzte Varianten dokumentieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1511578330448" ID="ID_1808038526" MODIFIED="1511757433857" TEXT="alle unterst&#xfc;tzten Varianten im Test abdecken">
-<arrowlink COLOR="#5d68b6" DESTINATION="ID_1298407683" ENDARROW="Default" ENDINCLINATION="-33;-51;" ID="Arrow_ID_1214344498" STARTARROW="None" STARTINCLINATION="-292;0;"/>
+<node CREATED="1511578330448" ID="ID_1808038526" MODIFIED="1512955467937" TEXT="alle unterst&#xfc;tzten Varianten im Test abdecken">
+<arrowlink COLOR="#5d68b6" DESTINATION="ID_1298407683" ENDARROW="Default" ENDINCLINATION="-53;-200;" ID="Arrow_ID_1214344498" STARTARROW="None" STARTINCLINATION="-292;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511827103749" ID="ID_1699316886" MODIFIED="1512927037813" TEXT="transform-Operation">
+<node COLOR="#338800" CREATED="1511827103749" FOLDED="true" ID="ID_1699316886" MODIFIED="1512955519615" TEXT="transform-Operation">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511827249561" ID="ID_794510302" MODIFIED="1511827265634" TEXT="strikt nach Dekorator-Pattern"/>
 <node CREATED="1511827337686" ID="ID_1214119488" MODIFIED="1512927037829" TEXT="bestehendern TransformIter verwenden?">
@@ -5694,7 +5737,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511837279715" ID="ID_1694539348" MODIFIED="1512927037812" TEXT="filter-Operation">
+<node COLOR="#338800" CREATED="1511837279715" FOLDED="true" ID="ID_1694539348" MODIFIED="1512955524165" TEXT="filter-Operation">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511837285306" ID="ID_928417859" MODIFIED="1512927037827" TEXT="der Vollst&#xe4;ndigkeit halber">
 <node CREATED="1511837296921" ID="ID_151298846" MODIFIED="1511837304547" TEXT="ist zwar redundant zu den Itertools"/>
@@ -5727,7 +5770,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512363846804" ID="ID_1346062807" MODIFIED="1512952028454" TEXT="auto-expand">
+<node COLOR="#338800" CREATED="1512363846804" FOLDED="true" ID="ID_1346062807" MODIFIED="1512955526490" TEXT="auto-expand">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512844658352" ID="ID_1411659026" MODIFIED="1512844688077" TEXT="einfache Auspr&#xe4;gung">
 <richcontent TYPE="NOTE"><html>
@@ -5742,8 +5785,7 @@
       denn im Moment brauchen wir das &#252;berhaupt nicht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1512844696922" ID="ID_396632754" MODIFIED="1512927037826" TEXT="zus&#xe4;tzlicher Dekorator">
@@ -5756,8 +5798,7 @@
       ...setzt eigentliche Expand-Operation darunter voraus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1512861383695" ID="ID_837026008" MODIFIED="1512861394833" TEXT="setzt direkt auf drunterliegender State Core auf"/>
 <node CREATED="1512861401133" ID="ID_930964397" MODIFIED="1512861421774" TEXT="ersetzt nur eine der State-Core-Operationen"/>
@@ -5820,8 +5861,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1512951913398" ID="ID_488089119" MODIFIED="1512952023972" TEXT="Komplexit&#xe4;t im Moment nicht gerechtfertigt">
@@ -5843,14 +5883,13 @@
       nicht den technischen M&#246;glichkeiten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="forward"/>
 </node>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1512951763555" TEXT="Zusammenspiel">
+<node COLOR="#338800" CREATED="1512363286920" FOLDED="true" ID="ID_1420123769" MODIFIED="1512955528973" TEXT="Zusammenspiel">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844805995" ID="ID_927486947" MODIFIED="1512927037825" TEXT="single-val">
 <icon BUILTIN="help"/>
@@ -6168,7 +6207,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1512927037811" TEXT="asIterSource">
+<node COLOR="#338800" CREATED="1511837384749" FOLDED="true" ID="ID_274979743" MODIFIED="1512955532124" TEXT="asIterSource">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512621242778" ID="ID_695969017" MODIFIED="1512927037824" TEXT="Eigenschaften">
 <icon BUILTIN="info"/>
@@ -6530,7 +6569,9 @@
 </node>
 </node>
 <node CREATED="1512358632486" ID="ID_1795551304" MODIFIED="1512358640785" TEXT="aber keine konkrete Anwendung"/>
-<node CREATED="1512358649900" ID="ID_1625666992" MODIFIED="1512358657226" TEXT="w&#xe4;re hier billig zu haben"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512358649900" ID="ID_1625666992" MODIFIED="1512955563447" TEXT="w&#xe4;re hier billig zu haben">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1512927037797" TEXT="TreeExplorer_test">
@@ -6556,8 +6597,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1510969031379" ID="ID_1298407683" MODIFIED="1512927037809" TEXT="verify_expandOperation();">
-<linktarget COLOR="#5d68b6" DESTINATION="ID_1298407683" ENDARROW="Default" ENDINCLINATION="-33;-51;" ID="Arrow_ID_1214344498" SOURCE="ID_1808038526" STARTARROW="None" STARTINCLINATION="-292;0;"/>
+<node COLOR="#338800" CREATED="1510969031379" ID="ID_1298407683" MODIFIED="1512955467937" TEXT="verify_expandOperation();">
+<linktarget COLOR="#5d68b6" DESTINATION="ID_1298407683" ENDARROW="Default" ENDINCLINATION="-53;-200;" ID="Arrow_ID_1214344498" SOURCE="ID_1808038526" STARTARROW="None" STARTINCLINATION="-292;0;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1511227813712" ID="ID_942570698" MODIFIED="1512927037822" TEXT="Fall-1">
 <icon BUILTIN="button_ok"/>
@@ -6609,7 +6650,7 @@
 <node COLOR="#338800" CREATED="1511835716176" ID="ID_1407397782" MODIFIED="1512276211354" TEXT="Transformer mit Seiteneffekt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1511835691963" ID="ID_175353270" MODIFIED="1512927037821" TEXT="Transform: generic Lambda">
+<node COLOR="#338800" CREATED="1511835691963" FOLDED="true" ID="ID_175353270" MODIFIED="1512955657412" TEXT="Transform: generic Lambda">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512181454244" ID="ID_23118252" MODIFIED="1512271778125" TEXT="AUA: warum wird hier ein Value als Arguement &#xfc;bergeben">
 <arrowlink COLOR="#a83e54" DESTINATION="ID_215116122" ENDARROW="Default" ENDINCLINATION="351;347;" ID="Arrow_ID_891457048" STARTARROW="None" STARTINCLINATION="683;0;"/>
@@ -6711,7 +6752,7 @@
 </node>
 <node COLOR="#338800" CREATED="1510969031379" ID="ID_722056043" MODIFIED="1512927037808" TEXT="verify_combinedExpandTransform();">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1512363192308" ID="ID_1913090689" MODIFIED="1512927037820" TEXT="expand &#xfc;ber Transformer hinweg">
+<node COLOR="#338800" CREATED="1512363192308" FOLDED="true" ID="ID_1913090689" MODIFIED="1512955646485" TEXT="expand &#xfc;ber Transformer hinweg">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512363626338" ID="ID_1302720848" MODIFIED="1512363637547" TEXT="funktioniert out-of-the-Box">
 <icon BUILTIN="ksmiletris"/>
@@ -6720,7 +6761,7 @@
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512363210130" ID="ID_480959271" MODIFIED="1512927037820" TEXT="expand aus manipulierendem Transformer">
+<node COLOR="#338800" CREATED="1512363210130" FOLDED="true" ID="ID_480959271" MODIFIED="1512955648908" TEXT="expand aus manipulierendem Transformer">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512363649158" ID="ID_1152388495" MODIFIED="1512363655383" TEXT="ebenso">
 <icon BUILTIN="ksmiletris"/>
@@ -6745,7 +6786,7 @@
 <node COLOR="#338800" CREATED="1512523726885" ID="ID_282579718" MODIFIED="1512608271472" TEXT="konsumieren bis leer">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1512523773559" ID="ID_917494688" MODIFIED="1512927037820" TEXT="Pr&#xe4;dikat&lt;Core&gt;">
+<node COLOR="#338800" CREATED="1512523773559" ID="ID_917494688" MODIFIED="1512955637837" TEXT="Pr&#xe4;dikat&lt;Core&gt;">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512609324903" ID="ID_1654303504" MODIFIED="1512609343982" TEXT="kann an den Vorg&#xe4;ngern vorbeitunneln">
 <icon BUILTIN="ksmiletris"/>
@@ -6795,7 +6836,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1512621116947" ID="ID_1907769466" MODIFIED="1512927037819" TEXT="durchgeschleifte expandChildren()-Operation">
+<node COLOR="#338800" CREATED="1512621116947" FOLDED="true" ID="ID_1907769466" MODIFIED="1512955630567" TEXT="durchgeschleifte expandChildren()-Operation">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1512787465929" ID="ID_1053911863" MODIFIED="1512788738307" TEXT="Bug!">
 <icon BUILTIN="button_ok"/>
@@ -6808,7 +6849,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1512621383815" ID="ID_1705587551" MODIFIED="1512927037819" TEXT="Problem: shallow copy">
+<node CREATED="1512621383815" FOLDED="true" ID="ID_1705587551" MODIFIED="1512955625640" TEXT="Problem: shallow copy">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6854,30 +6895,17 @@
 <node COLOR="#338800" CREATED="1512844598906" ID="ID_933777340" MODIFIED="1512861473722" TEXT="expand incl Parent">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1512952896394" ID="ID_501441857" MODIFIED="1512952907242" TEXT="Beispiel mit Tuple als Zwischenwert">
+<node COLOR="#338800" CREATED="1512952896394" FOLDED="true" ID="ID_501441857" MODIFIED="1512955618961" TEXT="Beispiel mit Tuple als Zwischenwert">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1512952911249" ID="ID_302553275" MODIFIED="1512952934726" TEXT="Funktion mit Tuple-Wert l&#xe4;&#xdf;t sich nicht binden">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1512952922127" ID="ID_748691821" MODIFIED="1512955108345" TEXT="Unsinn im Tuple-Helper identifiziert">
-<arrowlink COLOR="#408281" DESTINATION="ID_568101334" ENDARROW="Default" ENDINCLINATION="299;-71;" ID="Arrow_ID_1210920107" STARTARROW="None" STARTINCLINATION="-124;4;"/>
+<node CREATED="1512952922127" ID="ID_748691821" MODIFIED="1512955609419" TEXT="Unsinn im Tuple-Helper identifiziert">
+<arrowlink COLOR="#408281" DESTINATION="ID_568101334" ENDARROW="Default" ENDINCLINATION="-136;7;" ID="Arrow_ID_1210920107" STARTARROW="None" STARTINCLINATION="-417;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-</node>
-<node COLOR="#990000" CREATED="1512844615941" ID="ID_1111018492" MODIFIED="1512952089605" TEXT="auto expand to leafs">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="button_cancel"/>
-</node>
-<node COLOR="#990000" CREATED="1512844628403" ID="ID_926180284" MODIFIED="1512952089606" TEXT="heben von single values">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="button_cancel"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_842384656" MODIFIED="1510969043561" TEXT="demonstrate_LayeredEvaluation();">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node COLOR="#338800" CREATED="1512952846993" ID="ID_568101334" MODIFIED="1512955085252" TEXT="TupleHelper_test broken">
-<linktarget COLOR="#408281" DESTINATION="ID_568101334" ENDARROW="Default" ENDINCLINATION="299;-71;" ID="Arrow_ID_1210920107" SOURCE="ID_748691821" STARTARROW="None" STARTINCLINATION="-124;4;"/>
+<node COLOR="#338800" CREATED="1512952846993" HGAP="71" ID="ID_568101334" MODIFIED="1512955609419" TEXT="TupleHelper_test broken" VSHIFT="111">
+<linktarget COLOR="#408281" DESTINATION="ID_568101334" ENDARROW="Default" ENDINCLINATION="-136;7;" ID="Arrow_ID_1210920107" SOURCE="ID_748691821" STARTARROW="None" STARTINCLINATION="-417;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512952975600" ID="ID_1282921475" MODIFIED="1512952993489" TEXT="Types&lt;tuple&lt;TYPES...&gt;&gt;">
 <node CREATED="1512952994765" ID="ID_1028880050" MODIFIED="1512953023243" TEXT="wurde automatisch gehoben auf Types&lt;TYPES...&gt;">
@@ -6927,6 +6955,102 @@
 <node CREATED="1512953037928" ID="ID_1081876156" MODIFIED="1512953052337" TEXT="verwende nun explizite Rebinding-Metafunktion"/>
 <node CREATED="1512955051435" ID="ID_1397072837" MODIFIED="1512955062645" TEXT="weitere Fehler im Test-Diagnose-Code">
 <icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#990000" CREATED="1512844615941" ID="ID_1111018492" MODIFIED="1512952089605" TEXT="auto expand to leafs">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#990000" CREATED="1512844628403" ID="ID_926180284" MODIFIED="1513217015005" TEXT="Heben von single values">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_842384656" MODIFIED="1513216994004" TEXT="demonstrate_LayeredEvaluation();">
+<icon BUILTIN="pencil"/>
+<node CREATED="1513035990902" ID="ID_1647713519" MODIFIED="1513036279025" TEXT="Zweck">
+<icon BUILTIN="info"/>
+<node CREATED="1513035997493" ID="ID_1010963261" MODIFIED="1513036010287" TEXT="vorbereitender Finger&#xfc;bung f&#xfc;r UI-Coord-Matching"/>
+<node CREATED="1513036021682" ID="ID_979180127" MODIFIED="1513036042627" TEXT="demonstriert Arbeiten auf opaque Daten"/>
+<node CREATED="1513036050278" ID="ID_1967927817" MODIFIED="1513036064144" TEXT="demonstriert Algo in Layern"/>
+</node>
+<node CREATED="1513036074899" ID="ID_1736020922" MODIFIED="1513036282015" TEXT="Vorgaben">
+<icon BUILTIN="yes"/>
+<node CREATED="1513036079426" ID="ID_1465268489" MODIFIED="1513036093852" TEXT="Text-Fixture so einfach wie m&#xf6;glich"/>
+<node CREATED="1513036109158" ID="ID_142686199" MODIFIED="1513036128095" TEXT="es wird tats&#xe4;chlich etwas Baum-artig gesucht"/>
+<node CREATED="1513036128988" ID="ID_1461134959" MODIFIED="1513036135063" TEXT="das Ergebnis ist verifizierbar"/>
+</node>
+<node CREATED="1513036196163" ID="ID_994330749" MODIFIED="1513128367098" TEXT="Idee-1">
+<icon BUILTIN="idea"/>
+<node CREATED="1513036205114" ID="ID_792801416" MODIFIED="1513036214764" TEXT="zuf&#xe4;llige Zahlenfolge wiederfinden"/>
+<node CREATED="1513036215559" ID="ID_971330002" MODIFIED="1513036250591" TEXT="...indem man in N Permutationen hintereinander sucht"/>
+<node CREATED="1513036284727" ID="ID_1614652691" MODIFIED="1513036296092" TEXT="brauche...">
+<icon BUILTIN="forward"/>
+<node CREATED="1513036309324" ID="ID_1342792562" MODIFIED="1513036336740" TEXT="Folge von N (zuf&#xe4;lligen) Zahlen"/>
+<node CREATED="1513036452217" ID="ID_526681708" MODIFIED="1513036460131" TEXT="permutierte, iterierbare Kopie dieser"/>
+<node CREATED="1513036690929" ID="ID_956797377" LINK="http://en.cppreference.com/w/cpp/algorithm/random_shuffle" MODIFIED="1513036739059">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      siehe <font color="#4423e3"><b>std::shuffle</b></font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1513036568505" ID="ID_1862649545" MODIFIED="1513036572456" TEXT="Kritik">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1513128587329" ID="ID_1360317308" MODIFIED="1513202754508" TEXT="Ergebnis nicht klar erkennbar"/>
+<node CREATED="1513036574968" ID="ID_7224449" MODIFIED="1513036580732" TEXT="ist nicht wirklich ein Baum"/>
+<node CREATED="1513202756258" ID="ID_397395434" MODIFIED="1513202760717" TEXT="kein Backtracking"/>
+</node>
+</node>
+<node CREATED="1513128368566" ID="ID_405602924" MODIFIED="1513128375301" TEXT="Idee-2">
+<icon BUILTIN="idea"/>
+<node CREATED="1513128409745" ID="ID_784629005" MODIFIED="1513128419748" TEXT="naive Primfaktor-Zerlegung"/>
+<node CREATED="1513129988151" ID="ID_1967188076" MODIFIED="1513129995231" TEXT="brauche...">
+<icon BUILTIN="forward"/>
+<node CREATED="1513129996990" ID="ID_276407850" MODIFIED="1513130019831" TEXT="Baum-artige Darstellung einer repetitiven Berechnung"/>
+<node CREATED="1513130020747" ID="ID_308365494" MODIFIED="1513130093541" TEXT="die nicht so verworren ist, da&#xdf; sie sofort abschreckt"/>
+</node>
+<node CREATED="1513131251047" ID="ID_1217476327" MODIFIED="1513131255210" TEXT="Kritik">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1513131259926" ID="ID_1015392046" MODIFIED="1513131271729" TEXT="Verfahren ist komplett deterministisch"/>
+<node CREATED="1513131272956" ID="ID_1394088821" MODIFIED="1513131285590" TEXT="kein Grund, expandChildren() von au&#xdf;en aufzurufen"/>
+</node>
+</node>
+<node CREATED="1513206569503" ID="ID_729219891" MODIFIED="1513206581186" TEXT="Idee-3">
+<icon BUILTIN="idea"/>
+<node CREATED="1513206594428" ID="ID_678047423" MODIFIED="1513206615387">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vorgegebene Zahlenfolge<br />in untendlichem Zufalls-Baum finden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1513206650964" ID="ID_973791239" MODIFIED="1513206660094" TEXT="brauche...">
+<icon BUILTIN="forward"/>
+<node CREATED="1513206662290" ID="ID_250120880" MODIFIED="1513206691338" TEXT="unendlichen Zufalls-Wald"/>
+<node CREATED="1513206692190" ID="ID_1442303873" MODIFIED="1513206708352" TEXT="zuf&#xe4;llige Kind-sequenzen"/>
+<node CREATED="1513206709484" ID="ID_1659632018" MODIFIED="1513206720390" TEXT="die nicht sicher zum Erfolg f&#xfc;hren"/>
+</node>
+<node CREATED="1513206872518" ID="ID_1422148890" MODIFIED="1513206876892" TEXT="wichtig">
+<icon BUILTIN="yes"/>
+<node CREATED="1513206889508" ID="ID_436020243" MODIFIED="1513206900054" TEXT="Trennung zwischen Baum und Suche"/>
+<node CREATED="1513207103464" ID="ID_919723140" MODIFIED="1513207144478" TEXT="durchgehender Zustand in der Suche"/>
+<node CREATED="1513207165088" ID="ID_529012246" MODIFIED="1513207191511" TEXT="Nichtdeterminismus, aber 99.9999% Erfolgs-Chancen"/>
 </node>
 </node>
 </node>
@@ -22381,8 +22505,7 @@
       Thema: <b>Monaden</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#80c6b3" DESTINATION="ID_1499495468" ENDARROW="Default" ENDINCLINATION="-1812;12745;" ID="Arrow_ID_673178727" STARTARROW="None" STARTINCLINATION="4133;-10665;"/>
 <icon BUILTIN="flag-blue"/>
 <node CREATED="1512925334501" ID="ID_409327286" MODIFIED="1512925338369" TEXT="IterExplorer">
@@ -22406,8 +22529,7 @@
       Python hat das auch, Java neuerdings auch
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512925438992" ID="ID_1273839582" MODIFIED="1512925442243" TEXT="bisher nicht verwendet"/>
 </node>
@@ -22453,8 +22575,7 @@
       da eine Abstraktion hier sehr technisch werden w&#252;rde
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -22488,8 +22609,7 @@
       und f&#252;hrt dazu, da&#223; die Abstraktion undicht wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512927978133" ID="ID_1491853321" MODIFIED="1512927982640" TEXT="passen schlecht in C++">
 <node CREATED="1512928064858" ID="ID_1221151193" MODIFIED="1512928075356" TEXT="entweder massiv Metaprogrammierung"/>
@@ -22519,8 +22639,7 @@
       nach einer Seite der Glieder auszukoppeln.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512928357202" ID="ID_360277857" MODIFIED="1512928365715" TEXT="um Konfigurierbarkeit zu schaffen"/>
 <node CREATED="1512928258312" ID="ID_1469652928" MODIFIED="1512928264307" TEXT="um technische Details zu entflechten"/>
