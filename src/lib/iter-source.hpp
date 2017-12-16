@@ -268,7 +268,8 @@ namespace lib {
       
       
     protected:
-      IT& wrappedIter() { return src_; }
+      IT&       wrappedIter()       { return src_; }
+      IT const& wrappedIter() const { return src_; }
     };
   
   

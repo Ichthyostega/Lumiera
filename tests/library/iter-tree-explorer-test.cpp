@@ -929,47 +929,66 @@ namespace test{
             {
               DataSrc& src;
               string& toFind;
-              uint pos;
               vector<uint> protocol;
               
               State(DataSrc& s, string& t)
                 : src{s}
                 , toFind{t}
-                , pos{0}
                 , protocol{0}
                 { }
               
-              bool checkPoint() const { return src; }
-              State& yield()    const { return *unConst(this); }
-              void iterNext() { ++src; ++protocol.back(); }
+              bool
+              checkPoint()  const
+                {
+                  return src;
+                }
+              
+              State&
+              yield()  const
+                {
+                  return *unConst(this);
+                }
+              
+              void
+              iterNext()
+                {
+                  ++src;
+                  protocol.resize (1+src.depth());
+                  ++protocol.back();
+                }
+              
+              void
+              expandChildren()
+                {
+                  src.expandChildren();
+                }
+              
+              bool
+              isMatch()  const
+                {
+                  ASSERT (src.depth() < toFind.size());
+                  return *src == toFind[src.depth()];
+                }
             };
+          
           
           // Layer-3: Evaluation pipeline to drive search
           string toFind = util::join (treeExplore (RandomSeq{5}), "");
           cout << "Search in random tree: toFind = "<<toFind<<endl;
           
           auto theSearch = treeExplore(State{searchSpace, toFind})
-                             .expand([](State& state)
-                                       {
-                                         State childState{state};
-                                         state.src.expandChildren();
-                                         childState.protocol.push_back(0);
-                                         ++(childState.pos);
-                                         
-                                         return childState;
-                                       })
                              .filter([](auto& it)
                                        {
-                                         while (it->pos < it->toFind.size() - 1
-                                                and *(it->src) == it->toFind[it->pos])
+                                         while (it->src.depth() < it->toFind.size() - 1
+                                                and it->isMatch())
                                            {
                                              cout <<"|!| expand "<<materialise(it->protocol)<<endl;
-                                           it.expandChildren();
+                                           it->expandChildren();
                                              cout <<"|.| "<<*(it->src)<<" -->> "<<materialise(it->protocol)<<endl;
                                            }
                                          
-//                                         return *state.src == state.toFind[state.pos];
-                                         if (*(it->src) == it->toFind[it->pos])
+//                                         return it->isMatch();
+                                         if (it->isMatch())
                                            return true;
                                          else {
                                              cout << "|↯| "<<*(it->src)<< " ... " <<materialise(it->protocol)<<endl;

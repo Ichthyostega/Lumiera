@@ -804,6 +804,7 @@ namespace lib {
          ~ChildExpandableSource() { }    ///< @note mix-in interface, not meant to handle objects
       public:
           virtual VAL* expandChildren()  =0;
+          virtual size_t depth()  const  =0;
       };
     
     /**
@@ -831,6 +832,12 @@ namespace lib {
             Parent::wrappedIter().expandChildren();
             return Parent::wrappedIter()?  & *Parent::wrappedIter()       ///////////////////////////////////TICKET #1125 : trickery to cope with the misaligned IterSource design
                                         : nullptr;
+          }
+        
+        virtual size_t
+        depth()  const override
+          {
+            return Parent::wrappedIter().depth();
           }
       };
     
@@ -861,6 +868,8 @@ namespace lib {
   struct IterExploreSource
     : IterSource<VAL>::iterator
     {
+      using Expandable = iter_explorer::ChildExpandableSource<VAL>;
+      
       
       IterExploreSource()  =default;
       // inherited default copy operations
@@ -869,15 +878,14 @@ namespace lib {
       void
       expandChildren()
         {
-          using Expandable = iter_explorer::ChildExpandableSource<VAL>;
-          
-          if (not this->source())
-            throw error::State ("operating on a disabled default constructed TreeExplorer"
-                               ,error::LUMIERA_ERROR_BOTTOM_VALUE);
-          
-          auto source = this->source().get();
-          VAL* changedResult = dynamic_cast<Expandable*> (source)->expandChildren();
+          VAL* changedResult = expandableSource().expandChildren();
           this->resetPos (changedResult);                                 ///////////////////////////////////TICKET #1125 : trickery to cope with the misaligned IterSource design
+        }
+        
+      size_t
+      depth()  const
+        {
+          return expandableSource().depth();
         }
       
       
@@ -892,6 +900,17 @@ namespace lib {
               new iter_explorer::PackagedTreeExplorerSource<IT> {
                 move (opaqueSrcPipeline)})}
       { }
+      
+      Expandable&
+      expandableSource()  const
+        {
+          if (not this->source())
+            throw error::State ("operating on a disabled default constructed TreeExplorer"
+                               ,error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+          auto source = unConst(this)->source().get();
+          return dynamic_cast<Expandable&> (*source);
+        }
     };
   
   

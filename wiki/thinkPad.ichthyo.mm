@@ -6206,8 +6206,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513293471929" ID="ID_1115016372" MODIFIED="1513293478704" TEXT="chained expansion">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513293471929" ID="ID_1115016372" MODIFIED="1513395858395" TEXT="chained expansion">
+<icon BUILTIN="stop-sign"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513293488863" ID="ID_263549307" MODIFIED="1513294184112" TEXT="logisches Problem mit layered expansion">
 <linktarget COLOR="#9c5265" DESTINATION="ID_263549307" ENDARROW="Default" ENDINCLINATION="189;145;" ID="Arrow_ID_1920033917" SOURCE="ID_1013175212" STARTARROW="None" STARTINCLINATION="1219;0;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -6230,16 +6230,108 @@
 <node CREATED="1513293996403" ID="ID_770475649" MODIFIED="1513294007637" TEXT="2.Callback zum Schlie&#xdf;en notwendig"/>
 </node>
 </node>
+<node CREATED="1513395781003" ID="ID_1245121355" MODIFIED="1513395835329" TEXT="Problem: wie anschlie&#xdf;en?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      an welcher Stelle wird diese Mechanik
+    </p>
+    <p>
+      an einen bestehenden Iterator angeschlossen
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#5f7b87" DESTINATION="ID_618831184" ENDARROW="Default" ENDINCLINATION="0;-100;" ID="Arrow_ID_1648666133" STARTARROW="None" STARTINCLINATION="-110;0;"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1513294052460" ID="ID_803702364" MODIFIED="1513294117121" TEXT="Technik">
+</node>
+<node CREATED="1513395693887" ID="ID_618831184" MODIFIED="1513395835330" TEXT="Design">
+<linktarget COLOR="#5f7b87" DESTINATION="ID_618831184" ENDARROW="Default" ENDINCLINATION="0;-100;" ID="Arrow_ID_1648666133" SOURCE="ID_1245121355" STARTARROW="None" STARTINCLINATION="-110;0;"/>
+<node CREATED="1513395706469" ID="ID_708077102" MODIFIED="1513395716207" TEXT="expliziter Chain-Zustand"/>
+<node CREATED="1513395719139" ID="ID_1788966028" MODIFIED="1513395732164" TEXT="wird aus dem expandable-Iter erzeugt"/>
+<node CREATED="1513395734449" ID="ID_1906327703" MODIFIED="1513395755674" TEXT="entfaltet sich per Stack mit Backtracking"/>
+<node CREATED="1513395756646" ID="ID_1845114720" MODIFIED="1513395771104" TEXT="Entfaltungs-Funktor"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513294052460" ID="ID_803702364" MODIFIED="1513395887860" TEXT="Technik">
 <icon BUILTIN="help"/>
 <node CREATED="1513294056627" ID="ID_1384622700" MODIFIED="1513294063006" TEXT="Listener-Interface"/>
 <node CREATED="1513294065442" ID="ID_1460481832" MODIFIED="1513294078644" TEXT="Listener als Decorator-chain"/>
 <node CREATED="1513294087167" ID="ID_936833682" MODIFIED="1513294097217" TEXT="BaseAdapter wird Informations-Hub"/>
+<node CREATED="1513395621816" ID="ID_1622086178" MODIFIED="1513395664660" TEXT="Problem: virtuelle Calls">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1513395629375" ID="ID_698225511" MODIFIED="1513395640418" TEXT="mu&#xdf; nun &quot;downstream&quot; aufrufen"/>
+<node CREATED="1513395641293" ID="ID_1382186294" MODIFIED="1513395660295" TEXT="bedingt Funktor oder VTable"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513395667562" ID="ID_1022574173" MODIFIED="1513395685159" TEXT="widerspricht bisherigen Design-Zielen">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511837384749" FOLDED="true" ID="ID_274979743" MODIFIED="1512955532124" TEXT="asIterSource">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1513395862384" HGAP="-59" ID="ID_992596886" MODIFIED="1513395898750" TEXT="vorerst nicht weiter verfolgt" VSHIFT="4">
+<icon BUILTIN="yes"/>
+<node CREATED="1513395903962" ID="ID_1252615834" MODIFIED="1513395908990" TEXT="relativ komplex"/>
+<node CREATED="1513395909914" ID="ID_866089441" MODIFIED="1513395921284" TEXT="Notwendigkeit nicht klar"/>
+<node CREATED="1513395922513" ID="ID_1683537911" MODIFIED="1513396040896" TEXT="k&#xf6;nnte aber sehr sinnvoll werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Stichwort HierarchyOrientationIndicator
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      ...will sagen, bin nun schon mehrfach in dieses Problem gelaufen,
+    </p>
+    <p>
+      nachdem ich dachte, alles so sch&#246;n gel&#246;st zu haben.
+    </p>
+    <p>
+      Das Problem ist, da&#223; eben auch der <i>Konsument</i>&#160;irgendwie
+    </p>
+    <p>
+      von den verschachtelten Strukturen mit gesteuert wird.
+    </p>
+    <p>
+      Das Ergebnis ist eben nicht rein linear.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1513395931727" ID="ID_1852380231" MODIFIED="1513395937842" TEXT="erst mal Erfahrungen sammeln"/>
+<node CREATED="1513395939502" ID="ID_1752199055" MODIFIED="1513401371843" TEXT="und direkt die Baum-Tiefe durchgeben">
+<linktarget COLOR="#75c4c1" DESTINATION="ID_1752199055" ENDARROW="Default" ENDINCLINATION="653;643;" ID="Arrow_ID_1536391130" SOURCE="ID_1466307579" STARTARROW="None" STARTINCLINATION="1299;33;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1513396293343" ID="ID_861758487" MODIFIED="1513396293343">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist n&#228;mlich der triviale Workaround
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1513396299238" ID="ID_1740583889" MODIFIED="1513396343855" TEXT="noch besser: diese auf das ChildExpandableSource-Interface legen!">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1513396353871" ID="ID_1928833267" MODIFIED="1513396385476" TEXT="das k&#xf6;nnte tats&#xe4;chlich eine echte pragmatische Alternative sein!">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1513395614706" TEXT="asIterSource">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512621242778" ID="ID_695969017" MODIFIED="1512927037824" TEXT="Eigenschaften">
 <icon BUILTIN="info"/>
@@ -7156,6 +7248,148 @@
 <node CREATED="1513286442822" ID="ID_1310607126" MODIFIED="1513286465873" TEXT="...und macht daher endlos mit den Kindern weiter">
 <icon BUILTIN="broken-line"/>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513396403408" ID="ID_1034289731" MODIFIED="1513401133757" TEXT="pragmatischer Workaround">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1513396411416" ID="ID_1466307579" MODIFIED="1513401380676" TEXT="Tiefe &#xfc;ber ChildExpandableSource durchgeben">
+<arrowlink COLOR="#75c4c1" DESTINATION="ID_1752199055" ENDARROW="Default" ENDINCLINATION="653;643;" ID="Arrow_ID_1536391130" STARTARROW="None" STARTINCLINATION="1299;33;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513401151507" ID="ID_1181955496" MODIFIED="1513401174705" TEXT="Protokoll aber immer noch nicht korrekt implementiert">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1513401162242" ID="ID_147162782" MODIFIED="1513401173005" TEXT="push am Ende"/>
+<node CREATED="1513401192358" ID="ID_91552039" MODIFIED="1513401294410" TEXT="Beispiel &quot;FAVSU&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      rLet(40878 &lt; 18446744073709551615) &#8594; S
+    </p>
+    <p>
+      |&#8623;| S ... 40878
+    </p>
+    <p>
+      rLet(40879 &lt; 18446744073709551615) &#8594; F
+    </p>
+    <p>
+      |!| expand 40879
+    </p>
+    <p>
+      rLet(0 &lt; 4) &#8594; A
+    </p>
+    <p>
+      rLet(40880 &lt; 18446744073709551615) &#8594; Q
+    </p>
+    <p>
+      |.| A --&gt;&gt; 40879
+    </p>
+    <p>
+      |!| expand 40879
+    </p>
+    <p>
+      rLet(0 &lt; 4) &#8594; F
+    </p>
+    <p>
+      rLet(1 &lt; 4) &#8594; N
+    </p>
+    <p>
+      |.| F --&gt;&gt; 40879
+    </p>
+    <p>
+      |&#8623;| F ... 40879
+    </p>
+    <p>
+      rLet(1 &lt; 4) &#8594; W
+    </p>
+    <p>
+      |&#8623;| W ... 40879-0-1
+    </p>
+    <p>
+      rLet(2 &lt; 4) &#8594; N
+    </p>
+    <p>
+      |&#8623;| N ... 40879-0-2
+    </p>
+    <p>
+      rLet(3 &lt; 4) &#8594; T
+    </p>
+    <p>
+      |&#8623;| T ... 40879-0-3
+    </p>
+    <p>
+      rLet(4 &lt; 4) &#8594; F
+    </p>
+    <p>
+      |&#8623;| N ... 40879-1
+    </p>
+    <p>
+      rLet(2 &lt; 4) &#8594; F
+    </p>
+    <p>
+      |&#8623;| F ... 40879-2
+    </p>
+    <p>
+      rLet(3 &lt; 4) &#8594; A
+    </p>
+    <p>
+      |!| expand 40879-3
+    </p>
+    <p>
+      rLet(0 &lt; 4) &#8594; J
+    </p>
+    <p>
+      rLet(4 &lt; 4) &#8594; Y
+    </p>
+    <p>
+      |.| J --&gt;&gt; 40879-3
+    </p>
+    <p>
+      |&#8623;| J ... 40879-3
+    </p>
+    <p>
+      rLet(1 &lt; 4) &#8594; H
+    </p>
+    <p>
+      |&#8623;| H ... 40879-4
+    </p>
+    <p>
+      rLet(2 &lt; 4) &#8594; H
+    </p>
+    <p>
+      |&#8623;| H ... 40879-5
+    </p>
+    <p>
+      rLet(3 &lt; 4) &#8594; F
+    </p>
+    <p>
+      |&#8623;| F ... 40879-6
+    </p>
+    <p>
+      rLet(4 &lt; 4) &#8594; V
+    </p>
+    <p>
+      |&#8623;| Q ... 40880
+    </p>
+    <p>
+      rLet(40881 &lt; 18446744073709551615) &#8594; A
+    </p>
+    <p>
+      |&#8623;| A ... 40881
+    </p>
+    <p>
+      rLet(40882 &lt; 18446744073709551615) &#8594; X
+    </p>
+    <p>
+      |&#8623;| X ... 40882
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1513401185198" ID="ID_933999759" MODIFIED="1513401189850" TEXT="Z&#xe4;hler l&#xe4;uft weiter"/>
 </node>
 </node>
 </node>
