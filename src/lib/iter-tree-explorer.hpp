@@ -545,11 +545,15 @@ namespace lib {
           {
             REQUIRE (this->checkPoint(), "attempt to expand an empty explorer");
             
-            ResIter expanded{ 0 < depth()? expandChildren_(*expansions_)
-                                         : expandChildren_(*this)};
-            iterNext();         // consume current head element
+            ResIter expanded{ hasChildren()? expandChildren_(*expansions_)
+                                           : expandChildren_(*this)};
+            incrementCurrent();   // consume current head element
             if (not isnil(expanded))
               expansions_.push (move(expanded));
+            else
+              dropExhaustedChildren();
+            
+            ENSURE (invariant());
           }
         
         /** diagnostics: current level of nested child expansion */
@@ -565,28 +569,55 @@ namespace lib {
         bool
         checkPoint()  const
           {
-            return 0 < depth()
-                or this->isValid();
+            ENSURE (invariant());
+            
+            return hasChildren()
+                or SRC::isValid();
           }
         
         typename SRC::reference
         yield()  const
           {
-            return 0 < depth()? **expansions_
-                              : **this;
+            return hasChildren()? **expansions_
+                                : **this;
           }
         
         void
         iterNext()
           {
-            if (0 < depth())
-              {
-                ++(*expansions_);
-                while (0 < depth() and not *expansions_)
-                  ++expansions_;
-              }
+            incrementCurrent();
+            dropExhaustedChildren();
+            ENSURE (invariant());
+          }
+        
+      private:
+        bool
+        invariant()  const
+          {
+            return not hasChildren()
+                or *expansions_;
+          }
+        
+        bool
+        hasChildren()  const
+          {
+            return 0 < depth();
+          }
+        
+        void
+        incrementCurrent()
+          {
+            if (hasChildren())
+              ++(*expansions_);
             else
               ++(*this);
+          }
+        
+        void
+        dropExhaustedChildren()
+          {
+            while (not invariant())
+              ++expansions_;
           }
       };
     

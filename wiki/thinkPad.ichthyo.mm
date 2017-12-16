@@ -5151,7 +5151,7 @@
 <linktarget COLOR="#585e9d" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-101;761;" ID="Arrow_ID_402051988" SOURCE="ID_1359727169" STARTARROW="None" STARTINCLINATION="208;5;"/>
 <linktarget COLOR="#83dfc7" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-1109;3887;" ID="Arrow_ID_1645152965" SOURCE="ID_30857289" STARTARROW="None" STARTINCLINATION="2051;-176;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1513293453942" TEXT="expand-Operation">
+<node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1513447893872" TEXT="expand-Operation">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1511227813712" ID="ID_1961708112" MODIFIED="1512927037831" TEXT="Fall-1">
 <icon BUILTIN="button_ok"/>
@@ -6330,6 +6330,41 @@
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1513447925593" ID="ID_1239682661" MODIFIED="1513447946498" TEXT="expansion depth">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1513447947870" ID="ID_328146397" MODIFIED="1513448183232" TEXT="nach au&#xdf;en zug&#xe4;nglich machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1513447956069" ID="ID_1345517957" MODIFIED="1513447997648" TEXT="Problem: mu&#xdf; daf&#xfc;r korrekt sein">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1513447967084" ID="ID_476332936" MODIFIED="1513447978718" TEXT="d.h. mu&#xdf; die logische Tiefe widerspiegeln"/>
+<node CREATED="1513447979450" ID="ID_224439756" MODIFIED="1513448250249" TEXT="...auch wenn der Vater bereits ersch&#xf6;pft ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir hatten bisher eine auto-Aufr&#228;um-Routine in iterNext(),
+    </p>
+    <p>
+      welche dazu f&#252;hrt, da&#223; ein ersch&#246;pfter Vater sofort wegger&#228;umt wird,
+    </p>
+    <p>
+      noch bevor wir dazu kommen, die Kinder zu pushen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1513448002247" ID="ID_804459643" MODIFIED="1513448144858" TEXT="L&#xf6;sung">
+<linktarget COLOR="#63b5aa" DESTINATION="ID_804459643" ENDARROW="Default" ENDINCLINATION="456;372;" ID="Arrow_ID_1606709369" SOURCE="ID_1181955496" STARTARROW="None" STARTINCLINATION="1446;0;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1513448017406" ID="ID_753765398" MODIFIED="1513448275095" TEXT="iterNext aufspalten"/>
+<node CREATED="1513448019398" ID="ID_1143482463" MODIFIED="1513448026224" TEXT="Invariante explizit machen"/>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1513395614706" TEXT="asIterSource">
 <icon BUILTIN="button_ok"/>
@@ -7256,8 +7291,9 @@
 <arrowlink COLOR="#75c4c1" DESTINATION="ID_1752199055" ENDARROW="Default" ENDINCLINATION="653;643;" ID="Arrow_ID_1536391130" STARTARROW="None" STARTINCLINATION="1299;33;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513401151507" ID="ID_1181955496" MODIFIED="1513401174705" TEXT="Protokoll aber immer noch nicht korrekt implementiert">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513401151507" ID="ID_1181955496" MODIFIED="1513448292560" TEXT="Protokoll aber immer noch nicht korrekt implementiert">
+<arrowlink COLOR="#63b5aa" DESTINATION="ID_804459643" ENDARROW="Default" ENDINCLINATION="456;372;" ID="Arrow_ID_1606709369" STARTARROW="None" STARTINCLINATION="1446;0;"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1513401162242" ID="ID_147162782" MODIFIED="1513401173005" TEXT="push am Ende"/>
 <node CREATED="1513401192358" ID="ID_91552039" MODIFIED="1513401294410" TEXT="Beispiel &quot;FAVSU&quot;">
 <richcontent TYPE="NOTE"><html>
@@ -7390,6 +7426,107 @@
 </richcontent>
 </node>
 <node CREATED="1513401185198" ID="ID_933999759" MODIFIED="1513401189850" TEXT="Z&#xe4;hler l&#xe4;uft weiter"/>
+</node>
+<node COLOR="#338800" CREATED="1513447822247" ID="ID_1725576262" MODIFIED="1513448159466" TEXT="jetzt scheint&apos;s zu funktionieren...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      rLet(77943 &lt; 18446744073709551615) &#8594; R
+    </p>
+    <p>
+      |&#8623;| R ... 77943
+    </p>
+    <p>
+      rLet(77944 &lt; 18446744073709551615) &#8594; X
+    </p>
+    <p>
+      |!| expand 77944
+    </p>
+    <p>
+      rLet(0 &lt; 4) &#8594; U
+    </p>
+    <p>
+      rLet(77945 &lt; 18446744073709551615) &#8594; I
+    </p>
+    <p>
+      |.| U --&gt;&gt; 77944-0
+    </p>
+    <p>
+      |&#8623;| U ... 77944-0
+    </p>
+    <p>
+      rLet(1 &lt; 4) &#8594; X
+    </p>
+    <p>
+      |!| expand 77944-1
+    </p>
+    <p>
+      rLet(0 &lt; 4) &#8594; K
+    </p>
+    <p>
+      rLet(2 &lt; 4) &#8594; Z
+    </p>
+    <p>
+      |.| K --&gt;&gt; 77944-1-0
+    </p>
+    <p>
+      |!| expand 77944-1-0
+    </p>
+    <p>
+      rLet(0 &lt; 4) &#8594; V
+    </p>
+    <p>
+      rLet(1 &lt; 4) &#8594; Y
+    </p>
+    <p>
+      |.| V --&gt;&gt; 77944-1-0-0
+    </p>
+    <p>
+      |&#8623;| V ... 77944-1-0-0
+    </p>
+    <p>
+      rLet(1 &lt; 4) &#8594; I
+    </p>
+    <p>
+      |&#8623;| I ... 77944-1-0-1
+    </p>
+    <p>
+      rLet(2 &lt; 4) &#8594; I
+    </p>
+    <p>
+      |&#8623;| I ... 77944-1-0-2
+    </p>
+    <p>
+      rLet(3 &lt; 4) &#8594; Z
+    </p>
+    <p>
+      |!| expand 77944-1-0-3
+    </p>
+    <p>
+      rLet(0 &lt; 4) &#8594; Q
+    </p>
+    <p>
+      rLet(4 &lt; 4) &#8594; X
+    </p>
+    <p>
+      |.| Q --&gt;&gt; 77944-1-0-3-0
+    </p>
+    <p>
+      |&#8623;| Q ... 77944-1-0-3-0
+    </p>
+    <p>
+      rLet(1 &lt; 4) &#8594; M
+    </p>
+    <p>
+      Protocol of the search: 77944-1-0-3-1
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

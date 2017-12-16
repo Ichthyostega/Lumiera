@@ -961,6 +961,7 @@ namespace test{
               expandChildren()
                 {
                   src.expandChildren();
+                  protocol.resize (1+src.depth());
                 }
               
               bool
