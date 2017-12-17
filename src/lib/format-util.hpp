@@ -197,8 +197,8 @@ namespace util {
     if (!strings) return "";
     
     std::ostringstream buffer;
-    for (string const& elm : strings)
-        buffer << elm << delim;
+    for ( ; strings; ++strings)
+      buffer << *strings << delim;
     
     // chop off last delimiter
     size_t len = buffer.str().length();

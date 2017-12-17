@@ -7230,18 +7230,40 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1513218635200" ID="ID_418877787" MODIFIED="1513218650010" TEXT="beim Materialisieren der Random-Target-Sequenz"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513218664652" ID="ID_606716798" MODIFIED="1513218676051" TEXT="join kopiert einmal zu viel">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1513218664652" FOLDED="true" ID="ID_606716798" MODIFIED="1513476731235" TEXT="join kopiert einmal zu viel">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1513218677962" ID="ID_533421172" MODIFIED="1513218685429" TEXT="Ha! in der For-Schleife"/>
 <node CREATED="1513218687113" ID="ID_108639825" MODIFIED="1513218698203" TEXT="der Iter ist benannt, also wird kopiert"/>
-<node CREATED="1513218699103" ID="ID_645074355" MODIFIED="1513218715465" TEXT="ENABLE_IN_STD_FOR_LOOP">
+<node CREATED="1513218699103" ID="ID_645074355" MODIFIED="1513476724675" TEXT="ENABLE_IN_STD_FOR_LOOP">
 <icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513218716941" ID="ID_1490164328" MODIFIED="1513218724549" TEXT="ist das so korrekt?">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1513218716941" ID="ID_1490164328" MODIFIED="1513476644166" TEXT="ist das so korrekt?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1513476644949" ID="ID_1188646042" MODIFIED="1513476648032" TEXT="ich denke schon"/>
+<node CREATED="1513476649092" ID="ID_1643873286" MODIFIED="1513476698904">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man kann move(iter) verwenden,
+    </p>
+    <p>
+      wenn man konsumieren m&#246;chte
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1513476700629" ID="ID_316067173" MODIFIED="1513476716421" TEXT="...oder eine handgeschriebene FOR-Schleife">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513218727603" ID="ID_1592038855" MODIFIED="1513218747386" TEXT="while-Schleife verwenden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1513218727603" ID="ID_1592038855" MODIFIED="1513476627801" TEXT="while-Schleife verwenden">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1513219035419" FOLDED="true" ID="ID_1033553745" MODIFIED="1513473487443" TEXT="pr&#xfc;fen: default constructible state core">
@@ -7261,17 +7283,17 @@
 <node CREATED="1513473461140" ID="ID_9651434" MODIFIED="1513473477134" TEXT="solange man den resultierenden Iterator nicht default-konstruiert"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513283787640" ID="ID_1300399860" MODIFIED="1513473274042" TEXT="Protokoll-pop funktioniert nicht">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513283787640" FOLDED="true" ID="ID_1300399860" MODIFIED="1513476755527" TEXT="Protokoll-pop funktioniert nicht">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1513283807613" ID="ID_711568006" MODIFIED="1513283821335" TEXT="ersch&#xf6;pfter Kind-Iter wird nicht wegger&#xe4;umt"/>
 <node CREATED="1513283822323" ID="ID_1993626666" MODIFIED="1513283848220" TEXT="Folge: es wird auf dem letzten Element weitergez&#xe4;hlt"/>
 <node CREATED="1513283849472" ID="ID_1522104923" MODIFIED="1513283980027" TEXT="Aber der Basis-Iter (Datenquelle) funktioniert korrekt">
 <node CREATED="1513283998356" ID="ID_265634850" MODIFIED="1513284011958" TEXT="deshalb funktioniert der Basis-Algo halbwegs"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513284012947" ID="ID_968932002" MODIFIED="1513284033823" TEXT="aber kein korrekte Backtracking">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513284012947" ID="ID_968932002" MODIFIED="1513476746547" TEXT="aber kein korrekte Backtracking">
+<icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513284021720" ID="ID_591353215" MODIFIED="1513284032384" TEXT="und das Protokoll geht out-of sync">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513284021720" ID="ID_591353215" MODIFIED="1513476751387" TEXT="und das Protokoll geht out-of sync">
+<icon BUILTIN="info"/>
 </node>
 </node>
 <node CREATED="1513283870965" ID="ID_372321627" MODIFIED="1513286350306" TEXT="Verdacht: wieder IterSrource schuld">
