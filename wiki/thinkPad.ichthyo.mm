@@ -4739,7 +4739,7 @@
 <node CREATED="1510341163528" ID="ID_1640768302" MODIFIED="1510341167036" TEXT="fischt nach L&#xf6;sungen"/>
 </node>
 </node>
-<node CREATED="1510341362957" ID="ID_1499495468" MODIFIED="1512927071452" TEXT="wirklich monadisch?">
+<node CREATED="1510341362957" FOLDED="true" ID="ID_1499495468" MODIFIED="1513473668875" TEXT="wirklich monadisch?">
 <linktarget COLOR="#80c6b3" DESTINATION="ID_1499495468" ENDARROW="Default" ENDINCLINATION="-1812;12745;" ID="Arrow_ID_673178727" SOURCE="ID_1502143527" STARTARROW="None" STARTINCLINATION="4133;-10665;"/>
 <node CREATED="1510341374332" ID="ID_483481416" MODIFIED="1511572072346" TEXT="naja...">
 <richcontent TYPE="NOTE"><html>
@@ -4963,7 +4963,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540265979" HGAP="17" ID="ID_1160853986" MODIFIED="1512927037815" VSHIFT="26">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540265979" HGAP="17" ID="ID_1160853986" MODIFIED="1513473715007" VSHIFT="26">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -4977,7 +4977,8 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="pencil"/>
+<arrowlink COLOR="#406878" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-88;-61;" ID="Arrow_ID_409690433" STARTARROW="None" STARTINCLINATION="-374;6;"/>
+<icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510540282280" ID="ID_304955672" MODIFIED="1512927037832" STYLE="fork" TEXT="Baum-Explorer">
 <icon BUILTIN="info"/>
 <node CREATED="1510540409159" ID="ID_1790409069" MODIFIED="1512797263191" TEXT="wiederverwendbarer Baustein"/>
@@ -5082,12 +5083,15 @@
 </node>
 <node CREATED="1510540399304" ID="ID_300971395" MODIFIED="1512927037831" TEXT="Filter">
 <node CREATED="1510541335201" ID="ID_1717169058" MODIFIED="1510541339780" TEXT="fischt nach L&#xf6;sungen"/>
+<node CREATED="1513473625110" ID="ID_267118379" MODIFIED="1513473632137" TEXT="kann die Auswertung treiben">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941382478" ID="ID_667413818" MODIFIED="1510941391581" TEXT="generische L&#xf6;sung">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1510941382478" ID="ID_667413818" MODIFIED="1513473609732" TEXT="generische L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1510941425200" ID="ID_1773303405" MODIFIED="1512927037799" TEXT="Vorgabe">
 <icon BUILTIN="yes"/>
 <node CREATED="1510941397907" ID="ID_993148577" MODIFIED="1512955809672" TEXT="zun&#xe4;chst als abstrakter Baustein">
@@ -5111,8 +5115,7 @@
       <i>ich </i>brauche ihn nicht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1512955707636" ID="ID_398975798" MODIFIED="1512955789085" TEXT="aber bestehendes Verhalten ist gef&#xe4;hrlich">
 <richcontent TYPE="NOTE"><html>
@@ -5133,8 +5136,7 @@
       L&#246;sung w&#228;re, das Iterator-API erst nach einem expliziten terminalen Aufruf freizuschalten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1512955715434" ID="ID_1973548871" MODIFIED="1512955720444" TEXT="also: sp&#xe4;termal">
@@ -5147,9 +5149,10 @@
 <node CREATED="1512278456672" ID="ID_488770369" MODIFIED="1512278462388" TEXT="wird in jedem Schritt gestrippt"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1512952040864" TEXT="TreeExplorer">
+<node COLOR="#338800" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1513473715008" TEXT="TreeExplorer">
 <linktarget COLOR="#585e9d" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-101;761;" ID="Arrow_ID_402051988" SOURCE="ID_1359727169" STARTARROW="None" STARTINCLINATION="208;5;"/>
 <linktarget COLOR="#83dfc7" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-1109;3887;" ID="Arrow_ID_1645152965" SOURCE="ID_30857289" STARTARROW="None" STARTINCLINATION="2051;-176;"/>
+<linktarget COLOR="#406878" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-88;-61;" ID="Arrow_ID_409690433" SOURCE="ID_1160853986" STARTARROW="None" STARTINCLINATION="-374;6;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1511571446467" FOLDED="true" ID="ID_1778455053" MODIFIED="1513447893872" TEXT="expand-Operation">
 <icon BUILTIN="button_ok"/>
@@ -5889,7 +5892,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1513293456202" TEXT="Zusammenspiel">
+<node COLOR="#338800" CREATED="1512363286920" FOLDED="true" ID="ID_1420123769" MODIFIED="1513473558354" TEXT="Zusammenspiel">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844805995" ID="ID_927486947" MODIFIED="1512927037825" TEXT="single-val">
 <icon BUILTIN="help"/>
@@ -5900,7 +5903,7 @@
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512363297486" ID="ID_531127457" MODIFIED="1512927037825" TEXT="re-evaluate">
+<node COLOR="#338800" CREATED="1512363297486" FOLDED="true" ID="ID_531127457" MODIFIED="1513473550578" TEXT="re-evaluate">
 <linktarget COLOR="#5a92a2" DESTINATION="ID_531127457" ENDARROW="Default" ENDINCLINATION="385;167;" ID="Arrow_ID_556443427" SOURCE="ID_579206895" STARTARROW="None" STARTINCLINATION="844;55;"/>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -6206,7 +6209,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513293471929" ID="ID_1115016372" MODIFIED="1513395858395" TEXT="chained expansion">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513293471929" FOLDED="true" ID="ID_1115016372" MODIFIED="1513473546013" TEXT="chained expansion">
 <icon BUILTIN="stop-sign"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513293488863" ID="ID_263549307" MODIFIED="1513294184112" TEXT="logisches Problem mit layered expansion">
 <linktarget COLOR="#9c5265" DESTINATION="ID_263549307" ENDARROW="Default" ENDINCLINATION="189;145;" ID="Arrow_ID_1920033917" SOURCE="ID_1013175212" STARTARROW="None" STARTINCLINATION="1219;0;"/>
@@ -6243,8 +6246,7 @@
       an einen bestehenden Iterator angeschlossen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#5f7b87" DESTINATION="ID_618831184" ENDARROW="Default" ENDINCLINATION="0;-100;" ID="Arrow_ID_1648666133" STARTARROW="None" STARTINCLINATION="-110;0;"/>
 </node>
 </node>
@@ -6301,8 +6303,7 @@
       Das Ergebnis ist eben nicht rein linear.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1513395931727" ID="ID_1852380231" MODIFIED="1513395937842" TEXT="erst mal Erfahrungen sammeln"/>
 <node CREATED="1513395939502" ID="ID_1752199055" MODIFIED="1513401371843" TEXT="und direkt die Baum-Tiefe durchgeben">
@@ -6318,8 +6319,7 @@
       ...das ist n&#228;mlich der triviale Workaround
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1513396299238" ID="ID_1740583889" MODIFIED="1513396343855" TEXT="noch besser: diese auf das ChildExpandableSource-Interface legen!">
 <icon BUILTIN="idea"/>
@@ -6354,8 +6354,7 @@
       noch bevor wir dazu kommen, die Kinder zu pushen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1513448002247" ID="ID_804459643" MODIFIED="1513448144858" TEXT="L&#xf6;sung">
 <linktarget COLOR="#63b5aa" DESTINATION="ID_804459643" ENDARROW="Default" ENDINCLINATION="456;372;" ID="Arrow_ID_1606709369" SOURCE="ID_1181955496" STARTARROW="None" STARTINCLINATION="1446;0;"/>
@@ -6366,7 +6365,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1511837384749" ID="ID_274979743" MODIFIED="1513395614706" TEXT="asIterSource">
+<node COLOR="#338800" CREATED="1511837384749" FOLDED="true" ID="ID_274979743" MODIFIED="1513473563423" TEXT="asIterSource">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1512621242778" ID="ID_695969017" MODIFIED="1512927037824" TEXT="Eigenschaften">
 <icon BUILTIN="info"/>
@@ -6374,7 +6373,7 @@
 <node CREATED="1511837401738" ID="ID_289320579" MODIFIED="1511837414204" TEXT="verpackt hinter OO-Interface mit virtuellen Funktionen"/>
 <node CREATED="1511837421967" ID="ID_906113750" MODIFIED="1511837433914" TEXT="automatische Heap-Storage"/>
 </node>
-<node COLOR="#338800" CREATED="1512621260992" ID="ID_611871784" MODIFIED="1512927037824" TEXT="erweitertes Interface">
+<node COLOR="#338800" CREATED="1512621260992" FOLDED="true" ID="ID_611871784" MODIFIED="1513473535917" TEXT="erweitertes Interface">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#990000" CREATED="1512621268527" ID="ID_1388034155" MODIFIED="1512927037843" TEXT="wie bauen?">
 <icon BUILTIN="help"/>
@@ -6667,8 +6666,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1512358595283" ID="ID_1526405052" MODIFIED="1512927037810" TEXT="piggyback?">
-<icon BUILTIN="help"/>
+<node CREATED="1512358595283" FOLDED="true" ID="ID_1526405052" MODIFIED="1513473590357" TEXT="piggyback?">
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1512358616584" ID="ID_1041373923" MODIFIED="1512358662699" TEXT="&quot;k&#xf6;nnte mal praktisch sein&quot;">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -6728,13 +6727,17 @@
 </node>
 </node>
 <node CREATED="1512358632486" ID="ID_1795551304" MODIFIED="1512358640785" TEXT="aber keine konkrete Anwendung"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512358649900" ID="ID_1625666992" MODIFIED="1512955563447" TEXT="w&#xe4;re hier billig zu haben">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1512358649900" ID="ID_1625666992" MODIFIED="1513473577494" TEXT="w&#xe4;re hier billig zu haben">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1513473578677" ID="ID_834217894" MODIFIED="1513473581168" TEXT="ja..."/>
+<node CREATED="1513473581876" ID="ID_1304656331" MODIFIED="1513473586811" TEXT="bei Bedarf">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1512927037797" TEXT="TreeExplorer_test">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1513473335441" TEXT="TreeExplorer_test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1510969031378" ID="ID_1678287752" MODIFIED="1512927037810" TEXT="verify_wrappedIterator();">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1511054727547" ID="ID_328168347" MODIFIED="1511054858441" TEXT="Problem: mu&#xdf; Iterator-Arten unterscheiden">
@@ -7127,8 +7130,8 @@
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510969031379" ID="ID_842384656" MODIFIED="1513216994004" TEXT="demonstrate_LayeredEvaluation();">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1510969031379" ID="ID_842384656" MODIFIED="1513473315193" TEXT="demonstrate_LayeredEvaluation();">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1513035990902" ID="ID_1647713519" MODIFIED="1513036279025" TEXT="Zweck">
 <icon BUILTIN="info"/>
 <node CREATED="1513035997493" ID="ID_1010963261" MODIFIED="1513036010287" TEXT="vorbereitender Finger&#xfc;bung f&#xfc;r UI-Coord-Matching"/>
@@ -7141,7 +7144,7 @@
 <node CREATED="1513036109158" ID="ID_142686199" MODIFIED="1513036128095" TEXT="es wird tats&#xe4;chlich etwas Baum-artig gesucht"/>
 <node CREATED="1513036128988" ID="ID_1461134959" MODIFIED="1513036135063" TEXT="das Ergebnis ist verifizierbar"/>
 </node>
-<node CREATED="1513036196163" ID="ID_994330749" MODIFIED="1513128367098" TEXT="Idee-1">
+<node CREATED="1513036196163" FOLDED="true" ID="ID_994330749" MODIFIED="1513473349080" TEXT="Idee-1">
 <icon BUILTIN="idea"/>
 <node CREATED="1513036205114" ID="ID_792801416" MODIFIED="1513036214764" TEXT="zuf&#xe4;llige Zahlenfolge wiederfinden"/>
 <node CREATED="1513036215559" ID="ID_971330002" MODIFIED="1513036250591" TEXT="...indem man in N Permutationen hintereinander sucht"/>
@@ -7159,8 +7162,7 @@
       siehe <font color="#4423e3"><b>std::shuffle</b></font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1513036568505" ID="ID_1862649545" MODIFIED="1513036572456" TEXT="Kritik">
@@ -7170,7 +7172,7 @@
 <node CREATED="1513202756258" ID="ID_397395434" MODIFIED="1513202760717" TEXT="kein Backtracking"/>
 </node>
 </node>
-<node CREATED="1513128368566" ID="ID_405602924" MODIFIED="1513128375301" TEXT="Idee-2">
+<node CREATED="1513128368566" FOLDED="true" ID="ID_405602924" MODIFIED="1513473350640" TEXT="Idee-2">
 <icon BUILTIN="idea"/>
 <node CREATED="1513128409745" ID="ID_784629005" MODIFIED="1513128419748" TEXT="naive Primfaktor-Zerlegung"/>
 <node CREATED="1513129988151" ID="ID_1967188076" MODIFIED="1513129995231" TEXT="brauche...">
@@ -7184,7 +7186,8 @@
 <node CREATED="1513131272956" ID="ID_1394088821" MODIFIED="1513131285590" TEXT="kein Grund, expandChildren() von au&#xdf;en aufzurufen"/>
 </node>
 </node>
-<node CREATED="1513206569503" ID="ID_729219891" MODIFIED="1513206581186" TEXT="Idee-3">
+<node CREATED="1513206569503" FOLDED="true" ID="ID_729219891" MODIFIED="1513473378563" TEXT="Idee-3">
+<arrowlink COLOR="#374d84" DESTINATION="ID_570463763" ENDARROW="Default" ENDINCLINATION="2;-39;" ID="Arrow_ID_1149883114" STARTARROW="None" STARTINCLINATION="0;47;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1513206594428" ID="ID_678047423" MODIFIED="1513206615387">
 <richcontent TYPE="NODE"><html>
@@ -7196,8 +7199,7 @@
       vorgegebene Zahlenfolge<br />in untendlichem Zufalls-Baum finden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1513206650964" ID="ID_973791239" MODIFIED="1513206660094" TEXT="brauche...">
 <icon BUILTIN="forward"/>
@@ -7212,17 +7214,18 @@
 <node CREATED="1513207165088" ID="ID_529012246" MODIFIED="1513207191511" TEXT="Nichtdeterminismus, aber 99.9999% Erfolgs-Chancen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513218546828" HGAP="-37" ID="ID_570463763" MODIFIED="1513218608169" TEXT="konkret..." VSHIFT="37">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513218561938" ID="ID_1431731183" MODIFIED="1513218616291" TEXT="randomTree bauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1513218546828" HGAP="-37" ID="ID_570463763" MODIFIED="1513473371054" TEXT="konkret..." VSHIFT="37">
+<linktarget COLOR="#374d84" DESTINATION="ID_570463763" ENDARROW="Default" ENDINCLINATION="2;-39;" ID="Arrow_ID_1149883114" SOURCE="ID_729219891" STARTARROW="None" STARTINCLINATION="0;47;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1513218561938" ID="ID_1431731183" MODIFIED="1513473294567" TEXT="randomTree bauen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513218569000" ID="ID_973922179" MODIFIED="1513218617435" TEXT="Zustands-Typ bauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1513218569000" ID="ID_973922179" MODIFIED="1513473296220" TEXT="Zustands-Typ bauen">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1513218582175" ID="ID_1963772553" MODIFIED="1513218620609" TEXT="Probleme">
 <icon BUILTIN="messagebox_warning"/>
-<node COLOR="#338800" CREATED="1513218627121" ID="ID_1077327965" MODIFIED="1513284086498" TEXT="Bottom-Error">
+<node COLOR="#338800" CREATED="1513218627121" FOLDED="true" ID="ID_1077327965" MODIFIED="1513473496041" TEXT="Bottom-Error">
 <arrowlink COLOR="#179a76" DESTINATION="ID_474013760" ENDARROW="Default" ENDINCLINATION="513;33;" ID="Arrow_ID_1289625747" STARTARROW="None" STARTINCLINATION="426;-150;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1513218635200" ID="ID_418877787" MODIFIED="1513218650010" TEXT="beim Materialisieren der Random-Target-Sequenz"/>
@@ -7241,8 +7244,8 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513219035419" ID="ID_1033553745" MODIFIED="1513219047433" TEXT="pr&#xfc;fen: default constructible state core">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1513219035419" FOLDED="true" ID="ID_1033553745" MODIFIED="1513473487443" TEXT="pr&#xfc;fen: default constructible state core">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1513219271307" ID="ID_474013760" MODIFIED="1513284051101" TEXT="hier liegt der Hund begraben">
 <linktarget COLOR="#179a76" DESTINATION="ID_474013760" ENDARROW="Default" ENDINCLINATION="513;33;" ID="Arrow_ID_1289625747" SOURCE="ID_1077327965" STARTARROW="None" STARTINCLINATION="426;-150;"/>
 <icon BUILTIN="ksmiletris"/>
@@ -7251,9 +7254,15 @@
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1513473427921" ID="ID_530629075" MODIFIED="1513473441747" TEXT="Algo-State ist nicht default-constructible">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1513473445287" ID="ID_482215181" MODIFIED="1513473460312" TEXT="aber man man kommt damit &#xfc;ber die Runden"/>
+<node CREATED="1513473461140" ID="ID_9651434" MODIFIED="1513473477134" TEXT="solange man den resultierenden Iterator nicht default-konstruiert"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513283787640" ID="ID_1300399860" MODIFIED="1513283802591" TEXT="Protokoll-pop funktioniert nicht">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513283787640" ID="ID_1300399860" MODIFIED="1513473274042" TEXT="Protokoll-pop funktioniert nicht">
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1513283807613" ID="ID_711568006" MODIFIED="1513283821335" TEXT="ersch&#xf6;pfter Kind-Iter wird nicht wegger&#xe4;umt"/>
 <node CREATED="1513283822323" ID="ID_1993626666" MODIFIED="1513283848220" TEXT="Folge: es wird auf dem letzten Element weitergez&#xe4;hlt"/>
 <node CREATED="1513283849472" ID="ID_1522104923" MODIFIED="1513283980027" TEXT="Aber der Basis-Iter (Datenquelle) funktioniert korrekt">
@@ -7276,24 +7285,25 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513286396525" ID="ID_1013175212" MODIFIED="1513294184112" TEXT="Logisches Problem mit layered expand">
+<node CREATED="1513286396525" ID="ID_1013175212" MODIFIED="1513473250590" TEXT="Logisches Problem mit layered expand">
 <arrowlink COLOR="#9c5265" DESTINATION="ID_263549307" ENDARROW="Default" ENDINCLINATION="189;145;" ID="Arrow_ID_1920033917" STARTARROW="None" STARTINCLINATION="1219;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="clanbomber"/>
 <node CREATED="1513286420386" ID="ID_32133695" MODIFIED="1513286442066" TEXT="oberer Layer bekommt Ende der Quell-Folge nicht mit"/>
 <node CREATED="1513286442822" ID="ID_1310607126" MODIFIED="1513286465873" TEXT="...und macht daher endlos mit den Kindern weiter">
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513396403408" ID="ID_1034289731" MODIFIED="1513401133757" TEXT="pragmatischer Workaround">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1513396403408" ID="ID_1034289731" MODIFIED="1513473286115" TEXT="pragmatischer Workaround">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1513396411416" ID="ID_1466307579" MODIFIED="1513401380676" TEXT="Tiefe &#xfc;ber ChildExpandableSource durchgeben">
 <arrowlink COLOR="#75c4c1" DESTINATION="ID_1752199055" ENDARROW="Default" ENDINCLINATION="653;643;" ID="Arrow_ID_1536391130" STARTARROW="None" STARTINCLINATION="1299;33;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513401151507" ID="ID_1181955496" MODIFIED="1513448292560" TEXT="Protokoll aber immer noch nicht korrekt implementiert">
+<node COLOR="#338800" CREATED="1513401151507" ID="ID_1181955496" MODIFIED="1513473186627" TEXT="Protokoll aber immer noch nicht korrekt implementiert">
 <arrowlink COLOR="#63b5aa" DESTINATION="ID_804459643" ENDARROW="Default" ENDINCLINATION="456;372;" ID="Arrow_ID_1606709369" STARTARROW="None" STARTINCLINATION="1446;0;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1513401162242" ID="ID_147162782" MODIFIED="1513401173005" TEXT="push am Ende"/>
 <node CREATED="1513401192358" ID="ID_91552039" MODIFIED="1513401294410" TEXT="Beispiel &quot;FAVSU&quot;">
 <richcontent TYPE="NOTE"><html>
@@ -7422,10 +7432,14 @@
       |&#8623;| X ... 40882
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1513401185198" ID="ID_933999759" MODIFIED="1513401189850" TEXT="Z&#xe4;hler l&#xe4;uft weiter"/>
+<node CREATED="1513401185198" ID="ID_933999759" MODIFIED="1513473212036" TEXT="Z&#xe4;hler l&#xe4;uft weiter">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1513473196754" ID="ID_570569140" MODIFIED="1513473207824" TEXT="L&#xf6;sung: depth()-Infromation nutzen">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1513447822247" ID="ID_1725576262" MODIFIED="1513448159466" TEXT="jetzt scheint&apos;s zu funktionieren...">
 <richcontent TYPE="NOTE"><html>
@@ -7524,8 +7538,7 @@
       Protocol of the search: 77944-1-0-3-1
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>

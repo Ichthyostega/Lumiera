@@ -4260,7 +4260,7 @@ The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangibl
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
 </div>
-<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201712101920" tags="spec decision draft GuiPattern" changecount="19">
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201712170155" tags="spec decision draft GuiPattern" changecount="21">
 <pre>//Service to navigate through the UI as generic structure.//
 The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
 
@@ -4287,36 +4287,7 @@ In the current situation ({{red{10/2017}}}), before engaging into the actual imp
 
 !!!Requirements clarified
 From these use cases we conclude that the actual requirements for a Navigator component are less than one might expect.
-In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on UI coordinates solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
-
-!Challenges of the implementation
-Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose//Service to navigate through the UI as generic structure.//
-The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
-
-!The problem of abstraction
-This goal initially poses some challenge, since it aims beyond the conventional notion of UI programming, where it is sufficient just to wire some widgets and manipulate the receiver of an event notification. The usual UI widgets are just not meant to be treated in a more systematic, generic way -- and indeed, in most cases and for most purposes it is not a good idea to approach UI programming in a to much schematic way. User interfaces need to be tangible, something concrete, with lots of specifics and local traits. Yet this very nature of UI programming tends to turn some //cross-cutting concerns// into serious liabilities. So the deliberate ''decision to introduce a Navigator'' in avoidance of these future burdens and liabilities is a decision of priorities when it comes to shaping the Lumiera UI.
-
-Which leaves us with the quest of mapping a generic location scheme onto a load of implementation defined structures not exposing any kind of genericness, and to accomplish this within an environment lacking meta information and support for self discovery beyond the most basic abstraction level. As a first step towards bridging this gap, we'll have to identify the actual //command-and-query operations// required to treat UI elements as a topological structure.
-
-!!!Analysis of expected functionality
-In order to build a navigation facility, we need to...
-* follow a path
-** which means to constitute a location
-** and to discover child nodes at that location
-* and we might want to extend (maybe also prune) the collection of children
-
-!!!Use cases
-In the current situation ({{red{10/2017}}}), before engaging into the actual implementation, we're able to identify two distinct use cases
-;View [[specification|GuiComponentView]]
-:locate a view based on a preconfigured placement
-:* either to allocate a new view instance
-:* or to get //just some instance// of a view identified by type
-;WorkSite navication
-:move the Spot to some other place in the UI known by its [[UI-Coordinates|UICoord]]
-
-!!!Requirements clarified
-From these use cases we conclude that the actual requirements for a Navigator component are less than one might expect.
-In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on UI coordinates solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
+In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on [[UI coordinates|UICoord]] solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
 
 !Challenges of the implementation
 Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose
@@ -9773,7 +9744,7 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
-<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201712101758" tags="def draft spec Concepts GuiPattern" changecount="15">
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201712170158" tags="def draft spec Concepts GuiPattern" changecount="21">
 <pre>//A topological addressing scheme to designate structural locations within the UI.//
 Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
 * to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    
@@ -9789,12 +9760,12 @@ As starting point for the design of such a framework, we'll pick the notion of a
 * plus a locally defined access path further down to the actual UI element
 
 !Properties
-UI coordinates are a symbolic specification, and as such, their representation is immutable value-like. Essentially, a coordinate specification designates a pathway, and thus is comprised of a sequence of symbols. The individual path component symbol can be addressed by its depth index, starting with the top level window as rooting point. The meaning of first steps of each path is thus always fixed (window, perspective, panel, view), followed by an essentially open sequence of local component names. Yet a given index position need not necessarily be actually defined. A coordinate spec can be indeterminate (nil), but in all other cases a minimal consecutive sequence of symbols is guaranteed to exist.
+UI coordinates are a symbolic specification, and as such, their representation is immutable value-like. Essentially, a coordinate specification designates a pathway, and thus is comprised of a sequence of symbols. The individual path component symbol can be addressed by its depth index, starting with the top level window as rooting point. The meaning of first steps within each path is thus always fixed (top-level window, perspective, panel, view), followed by an essentially open sequence of local component names. Yet a given index position need not necessarily be actually defined. A coordinate spec can be indeterminate (NIL), but in all other cases a minimal consecutive sequence of symbols is guaranteed to exist.
 
 !!!flavours of meaning
 A given coordinate spec needs to be //interpreted// with the help of a resolver, which supplies additional knowledge regarding the actual window and UI configuration backing those interpretations. Such an interpretation allows to query for some typical predications, and it allows for //mutating operations,// which actually build a new coordinate spec from the given one. The general assumption is for all those coordinate interpretations to happen not within an excessively performance critical zone, where a little bit of iteration and repeated recomputation is deemed less costly than extended caching of evaluation state.
 
-The first distinction to draw is the ''anchor point'' of a given coordinate spec. After anchoring, the designated path is explicitly rooted within a top level window. Obviously, the act of anchoring can be obvious(trivial), it can be //covered by wildcard,// or it can be a free interpolation or match against the existing environment. Starting from the anchor, the next predication to consider is the ''coverage'': the extent to which a given coordinate spec is actually covered by real UI structures. The test for coverage starts at the anchor point and descends following the coordinate spec in question. Backed by this evaluation process of interpretation and matching, we may judge a coordinate spec with respect to several predications
+The first distinction to draw is the ''anchor point'' of a given coordinate spec. After anchoring, the designated path is explicitly rooted within a top level window. The act of anchoring can thus be obvious(trivial), it can be //covered by wildcard,// or it can be a free interpolation or match against the existing environment. Starting from the anchor, the next predication to consider is the ''coverage'': the extent to which a given coordinate spec is actually covered by real UI structures. The test for coverage starts at the anchor point and descends following the coordinate spec in question. Backed by this evaluation process of interpretation and matching, we may judge a coordinate spec with respect to several predications
 * the coordinate spec may be totally ''explicit'' -- or it might contain wildcards
 * one specific path component of the coordinate spec may be known(present) or unknown
 * regarding the coverage, we may distinguish
@@ -9803,7 +9774,7 @@ The first distinction to draw is the ''anchor point'' of a given coordinate spec
 ** a coordinate spec impossible to cover
 
 !UI coordinate path evaluation
-As indicated above, evaluation of UI coordinates requires a resolver, and this evaluation process is //stateless.// Evaluation state is confined within the individual query or mutation call. Evaluation is accomplished by first constituting an anchoring, followed by traversal of the coordinate spec and matching against a navigation path within the actual UI window configuration. This process might involve interpretation of some meta-symbols and interpolation of wildcards.
+As indicated above, evaluation of UI coordinates requires a ''resolver'', and this evaluation process is //stateless.// Evaluation state is confined within the individual query or mutation call. Evaluation is accomplished by first constituting an anchoring, followed by traversal of the coordinate spec and matching against a navigation path within the actual UI window configuration. This process might involve interpretation of some meta-symbols and interpolation of wildcards.
 
 Internally the coordinate resolver in turn relies on a context query interface, to find out about existing windows, panels, views and tabs and to navigate the real UI structure. The actual implementation of this context query interface is backed by the [[Navigator]] component exposed through the InteractionDirector.
 !!!Query operations
@@ -9821,7 +9792,7 @@ In addition to the //locally decidable properties// of a coordinate spec, which 
 :* it is //partially covered// with an remaining, uncovered extension part
 :* it is //possible to cover completely//
 :* it is //impossible to cover//
-__Some fine points to note__: Anchorage and coverage are not the same thing, but coverage implies anchorage. Only when a path is complete (starts with the window spec) and explicit (has no wildcards), then anchorage implies also partial coverage (namely at least to depth 1). To determine the possible coverage means to perform a resolution with backtracking to pick the maximal solution. Moreover, since &quot;covered&quot; means that the path specification //is at least partially supported by the real UI,// we establish an additional constraint to ensure this resolution did not just match some arbitrary wildcards. Rather we demand that beind / below the last wildcard there is at least one further explicit component in the path spec, which is supported by the real UI. As a consequence, the coverage resolution may fail altogether, will still providing at least an possible anchor point.
+__Some fine points to note__: Anchorage and coverage are not the same thing, but coverage implies anchorage. Only when a path is complete (starts with the window spec) and explicit (has no wildcards), then anchorage implies also partial coverage (namely at least to depth 1). To determine the possible coverage means to perform a resolution with backtracking to pick the maximal solution. Moreover, since &quot;covered&quot; means that the path specification //is at least partially supported by the real UI,// we establish an additional constraint to ensure this resolution did not just match some arbitrary wildcards. Rather we demand that beind / below the last wildcard there is at least one further explicit component in the path spec, which is supported by the real UI. As a consequence, the coverage resolution may fail altogether, while still providing at least a possible anchor point.
 !!!Mutations
 In addition to querying the interpretation of a given coordinate spec with respect to the current UI environment, it is also possible to rewrite or extend the spec based on this environment
 ;anchoring

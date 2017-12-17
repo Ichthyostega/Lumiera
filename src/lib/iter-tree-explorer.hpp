@@ -118,7 +118,6 @@
 #include "lib/iter-source.hpp"   /////////////TICKET #493 : only using the IterSource base feature / interface here. Should really split the iter-source.hpp
 #include "lib/iter-stack.hpp"
 #include "lib/util.hpp"
-#include "lib/test/test-helper.hpp"///////////TODO Bug-o
 
 #include <functional>
 #include <utility>
@@ -547,11 +546,11 @@ namespace lib {
             
             ResIter expanded{ hasChildren()? expandChildren_(*expansions_)
                                            : expandChildren_(*this)};
-            incrementCurrent();   // consume current head element
+            incrementCurrent();   // consume current head element (but don't clean-up)
             if (not isnil(expanded))
               expansions_.push (move(expanded));
             else
-              dropExhaustedChildren();
+              dropExhaustedChildren(); // clean-up only here to preserve the logical depth
             
             ENSURE (invariant());
           }
@@ -629,7 +628,7 @@ namespace lib {
      *       be several flavours of child expansion. Unfortunately, most of these conceivable extensions would
      *       require a flexibilisation of Expander's internals and thus increase the complexity of the code.
      *       Thus, if ever encounter the need of anything beyond the basic expansion pattern, we should
-     *       rework the design of Expander and introduce building blocks to define the evaluation strategy. 
+     *       rework the design of Expander and introduce building blocks to define the evaluation strategy.
      */
     template<class SRC>
     class AutoExpander
@@ -820,8 +819,10 @@ namespace lib {
     
     
     /**
-     * Interface to indicate the ability for _child expansion_.
+     * Interface to indicate and expose the ability for _child expansion_.
      * This interface is used when packaging a TreeExplorer pipeline opaquely into IterSource.
+     * @remark the depth() call indicates the depth of the child expansion tree. This information
+     *       can be used by a "downstream" consumer to react according to a nested scope structure.
      * @todo expandChildren() should not return the value pointer.
      *       This is just a workaround to cope with the design mismatch in IterSource;
      *       the fact that latter just passes around a pointer into the implementation is

@@ -152,15 +152,10 @@ namespace test{
         size_t cnt_;
         char letter_;
         
-//        static
-        char
+        static char
         rndLetter()
           {
-            static _Fmt fmt{"rLet(%0d < %0d) → %s"};
-            char ll = 'A' + rand() % 26;
-            cout <<  fmt % cnt_ % lim_ % ll <<endl;
-            return ll;
-//            return 'A' + rand() % 26;
+            return 'A' + rand() % 26;
           }
         
       public:
@@ -914,6 +909,18 @@ namespace test{
        *    into a limited random sub sequence, down to arbitrary depth. We just assume
        *    that the search has good chances to find its target sequence eventually and
        *    thus only ever visits a small fraction of the endless search space.
+       *  - on top of this (opaque) tree navigation we build a secondary search pipeline
+       *    based on a state tuple, which holds onto the underlying data source
+       *  - the actual decision logic to guide the search lives within the filter predicate
+       *    to pull for the first acceptable solution, i.e. a path down from root where
+       *    each node matches the next element from the search string. It is from here
+       *    that the `expandChildren()` function is actually triggered, whenever we've
+       *    found a valid match on the current level. The (random) data source was chosen
+       *    such as to make it very likely to find a match eventually, but also to produce
+       *    some partial matches followed by backtracking
+       *  - note how the "downstream" processing accesses the `depth()` information exposed
+       *    on the opaque data source to react on navigation into nested scopes: here, we use
+       *    this feature to create a protocol of the search to indicate the actual "winning path"
        */
       void
       demonstrate_LayeredEvaluation()
@@ -921,7 +928,7 @@ namespace test{
           // Layer-1: the search space with "hidden" implementation
           using DataSrc = IterExploreSource<char>;
           DataSrc searchSpace = treeExplore(RandomSeq{-1})
-                                  .expand([](char){ return RandomSeq{4}; })
+                                  .expand([](char){ return RandomSeq{15}; })
                                   .asIterSource();
           
           // Layer-2: State for search algorithm
@@ -982,20 +989,9 @@ namespace test{
                                        {
                                          while (it->src.depth() < it->toFind.size() - 1
                                                 and it->isMatch())
-                                           {
-                                             cout <<"|!| expand "<<materialise(it->protocol)<<endl;
                                            it->expandChildren();
-                                             cout <<"|.| "<<*(it->src)<<" -->> "<<materialise(it->protocol)<<endl;
-                                           }
                                          
-//                                         return it->isMatch();
-                                         if (it->isMatch())
-                                           return true;
-                                         else {
-                                             cout << "|↯| "<<*(it->src)<< " ... " <<materialise(it->protocol)<<endl;
-                                             return false;
-                                         }
-
+                                         return it->isMatch();
                                        });
           
           
