@@ -366,8 +366,13 @@ namespace lib {
         using SrcVal  = typename SrcIter::value_type;
       };
     
-    
-    
+  }//(End) TreeExplorer traits
+  
+  
+  
+  
+  
+  namespace iter_explorer { // Implementation of Iterator decorating layers...
     
     /**
      * @internal technical details of binding a functor into the TreeExplorer.
@@ -395,7 +400,7 @@ namespace lib {
      * @tparam SRC the source iterator type to apply when attempting to use a generic lambda as functor
      */
     template<class FUN, typename SRC>
-    struct _BoundFunctorTraits
+    struct _BoundFunctor
       {
         /** handle all regular "function-like" entities */
         template<typename F, typename SEL =void>
@@ -455,12 +460,7 @@ namespace lib {
           };
       };
     
-  }//(End) TreeExplorer traits
-  
-  
-  
-  
-  namespace iter_explorer { // Implementation of Iterator decorating layers...
+    
     
     /**
      * @internal Base of pipe processing decorator chain.
@@ -517,7 +517,7 @@ namespace lib {
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctorTraits<FUN,SRC>;
+        using _Traits = _BoundFunctor<FUN,SRC>;
         using ExpandFunctor = typename _Traits::Functor;
         
         using ResIter = typename _DecoratorTraits<typename _Traits::Res>::SrcIter;
@@ -661,7 +661,7 @@ namespace lib {
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctorTraits<FUN,SRC>;
+        using _Traits = _BoundFunctor<FUN,SRC>;
         using Res = typename _Traits::Res;
         
         using TransformFunctor = typename _Traits::Functor;
@@ -748,7 +748,7 @@ namespace lib {
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctorTraits<FUN,SRC>;
+        using _Traits = _BoundFunctor<FUN,SRC>;
         using Res = typename _Traits::Res;
         static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
         
