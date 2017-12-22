@@ -76,6 +76,22 @@ namespace interact {
   
   
   /**
+   * Interface to locate and move within a tree shaped structure.
+   * The actual nature of this structure is to be kept abstracted through this interface.
+   * The purpose of this construct is to build evaluations and matching operations on top.
+   */
+  class TreeStructureNavigator
+    : public lib::IterSource<Literal>
+    {
+    public:
+      virtual ~TreeStructureNavigator() { }  ///< this is an interface
+    };
+  
+  
+  
+  
+  
+  /**
    * Interface to discover a backing structure for the purpose of path navigation and resolution.
    * UICoord are meant to designate a position within the logical structure of an UI -- yet in fact
    * they may be resolved against any tree-like topological structure, which can be queried through
@@ -112,7 +128,7 @@ namespace interact {
        *         it just matches explicit UI component names.
        * @see UICoordResolver for a facility to perform such a resolution and to navigate paths.
        */
-      virtual size_t  determineCoverage (UICoord const& path)         =0;
+      virtual size_t determineCoverage (UICoord const& path)          =0;
 
       /** get the sequence of child components at a designated position in the actual UI
        * @param path an explicit UIcoord spec, expected to be anchored and at least partially
@@ -149,7 +165,7 @@ namespace interact {
           std::unique_ptr<UICoord> covfefe;
           bool isResolved    = false;
         };
-    
+      
       LocationQuery& query_;
       Resolution res_;
       
@@ -183,7 +199,7 @@ namespace interact {
        *          And while the path resolution as such might fail, it was at least
        *          successful to determine an anchor point. The existence of such an
        *          anchor point implies the path is not totally in contradiction to the
-       *          existing UI*/
+       *          existing UI */
       bool
       canAnchor()  const
         {

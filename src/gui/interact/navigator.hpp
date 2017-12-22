@@ -57,9 +57,10 @@ namespace interact {
   
   
   /**
-   * Global cross-cutting navigation in interface space
+   * Global cross-cutting navigation within user interface space
    * 
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
+   * @see UiCoordResolver
    */
   class Navigator
     : boost::noncopyable

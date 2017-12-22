@@ -977,7 +977,7 @@
 <node CREATED="1502454601603" ID="ID_384770680" MODIFIED="1502454613220" TEXT="nein: MutationMessage wird &#xfc;berfl&#xfc;ssig">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1502401987033" ID="ID_1584846573" MODIFIED="1502600092049" TEXT="erfordert Festlegung der Natur der Diff Message">
+<node CREATED="1502401987033" ID="ID_1584846573" MODIFIED="1513962913100" TEXT="erfordert Festlegung der Natur der Diff Message">
 <arrowlink COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="821;-1406;" ID="Arrow_ID_554743885" STARTARROW="None" STARTINCLINATION="1459;870;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1502402004383" ID="ID_1491065212" MODIFIED="1502403195803" TEXT="generisch bleiben?">
@@ -4638,7 +4638,7 @@
 <node CREATED="1509582024610" ID="ID_1856901364" MODIFIED="1509834445909" TEXT="ja">
 <arrowlink COLOR="#acf267" DESTINATION="ID_501629316" ENDARROW="Default" ENDINCLINATION="60;-81;" ID="Arrow_ID_1837883373" STARTARROW="None" STARTINCLINATION="126;-77;"/>
 </node>
-<node CREATED="1509582031809" FOLDED="true" ID="ID_1594605893" MODIFIED="1512926193411" TEXT="nein">
+<node CREATED="1509582031809" ID="ID_1594605893" MODIFIED="1513560515743" TEXT="nein">
 <node CREATED="1509582078939" HGAP="23" ID="ID_171156109" MODIFIED="1509915433218" TEXT="Abwurf" VSHIFT="-5">
 <arrowlink COLOR="#2648cc" DESTINATION="ID_1359435447" ENDARROW="Default" ENDINCLINATION="273;37;" ID="Arrow_ID_1082519062" STARTARROW="None" STARTINCLINATION="361;48;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -4678,7 +4678,7 @@
 <arrowlink COLOR="#172fd9" DESTINATION="ID_501629316" ENDARROW="Default" ENDINCLINATION="25;50;" ID="Arrow_ID_901660904" STARTARROW="None" STARTINCLINATION="8;-10;"/>
 </node>
 </node>
-<node CREATED="1509583164196" HGAP="45" ID="ID_1054378844" MODIFIED="1509583195165" VSHIFT="18">
+<node CREATED="1509583164196" FOLDED="true" HGAP="45" ID="ID_1054378844" MODIFIED="1513477003399" VSHIFT="18">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -5149,7 +5149,7 @@
 <node CREATED="1512278456672" ID="ID_488770369" MODIFIED="1512278462388" TEXT="wird in jedem Schritt gestrippt"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1513473715008" TEXT="TreeExplorer">
+<node COLOR="#338800" CREATED="1510941463562" ID="ID_845080696" MODIFIED="1513477667435" TEXT="TreeExplorer">
 <linktarget COLOR="#585e9d" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-101;761;" ID="Arrow_ID_402051988" SOURCE="ID_1359727169" STARTARROW="None" STARTINCLINATION="208;5;"/>
 <linktarget COLOR="#83dfc7" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-1109;3887;" ID="Arrow_ID_1645152965" SOURCE="ID_30857289" STARTARROW="None" STARTINCLINATION="2051;-176;"/>
 <linktarget COLOR="#406878" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-88;-61;" ID="Arrow_ID_409690433" SOURCE="ID_1160853986" STARTARROW="None" STARTINCLINATION="-374;6;"/>
@@ -6736,7 +6736,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1513473335441" TEXT="TreeExplorer_test">
+<node COLOR="#338800" CREATED="1510941467586" FOLDED="true" ID="ID_381928532" MODIFIED="1513476987120" TEXT="TreeExplorer_test">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1510969031378" ID="ID_1678287752" MODIFIED="1512927037810" TEXT="verify_wrappedIterator();">
 <icon BUILTIN="button_ok"/>
@@ -7570,23 +7570,496 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941646050" ID="ID_596422747" MODIFIED="1510941710569" TEXT="expandable ChildIter">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941646050" ID="ID_596422747" MODIFIED="1513560742303" TEXT="expandable ChildIter">
+<linktarget COLOR="#786296" DESTINATION="ID_596422747" ENDARROW="Default" ENDINCLINATION="278;120;" ID="Arrow_ID_1919142695" SOURCE="ID_115330701" STARTARROW="None" STARTINCLINATION="952;148;"/>
+<linktarget COLOR="#283b63" DESTINATION="ID_596422747" ENDARROW="Default" ENDINCLINATION="66;49;" ID="Arrow_ID_1521598219" SOURCE="ID_1408571420" STARTARROW="Default" STARTINCLINATION="94;-19;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1510941655360" ID="ID_1359727169" MODIFIED="1512797366789" TEXT="verwendet TreeExplorer">
 <arrowlink COLOR="#585e9d" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-101;761;" ID="Arrow_ID_402051988" STARTARROW="None" STARTINCLINATION="208;5;"/>
 </node>
 <node CREATED="1510941661615" ID="ID_463290050" MODIFIED="1510941665179" TEXT="verpackt in IterSource"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513561602173" HGAP="180" ID="ID_760843174" MODIFIED="1513891530169" TEXT="Design" VSHIFT="29">
+<icon BUILTIN="pencil"/>
+<node CREATED="1513560607636" ID="ID_774099115" MODIFIED="1513561433218" TEXT="expand -- wie?">
+<icon BUILTIN="help"/>
+<node CREATED="1513560618698" ID="ID_471382650" MODIFIED="1513560638771" TEXT="Brauche Navigations-Zustand"/>
+<node CREATED="1513560639504" ID="ID_1901070791" MODIFIED="1513560645283" TEXT="eine Position im Baum"/>
+<node CREATED="1513560646014" ID="ID_812625308" MODIFIED="1513560649570" TEXT="implementation defined"/>
+<node CREATED="1513560650614" ID="ID_127083955" MODIFIED="1513560657793" TEXT="mu&#xdf; dort Kind-iterieren k&#xf6;nnen"/>
+</node>
+<node CREATED="1513561422541" ID="ID_1500554436" MODIFIED="1513961543467" TEXT="was ist depth()?">
+<linktarget COLOR="#9493b7" DESTINATION="ID_1500554436" ENDARROW="Default" ENDINCLINATION="91;103;" ID="Arrow_ID_811314610" SOURCE="ID_937539446" STARTARROW="None" STARTINCLINATION="-39;0;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1513561437011" ID="ID_263179318" MODIFIED="1513561443415" TEXT="absolut oder relativ"/>
+<node CREATED="1513561451138" ID="ID_1617286796" MODIFIED="1513561454621" TEXT="absolut">
+<node CREATED="1513561456016" ID="ID_1274246203" MODIFIED="1513561465683" TEXT="Tiefe im Gesamt-Baum"/>
+<node CREATED="1513561467719" ID="ID_339272046" MODIFIED="1513561480090" TEXT="startet am Aufsetz-Punkt"/>
+<node CREATED="1513561484277" ID="ID_1051233845" MODIFIED="1513561491224" TEXT="kein Aufstieg dar&#xfc;ber m&#xf6;glich"/>
+</node>
+<node CREATED="1513561492668" ID="ID_600604579" MODIFIED="1513561495016" TEXT="relativ">
+<node CREATED="1513561497003" ID="ID_860544223" MODIFIED="1513561508950" TEXT="expandChildren-Level"/>
+<node CREATED="1513561509754" ID="ID_1041068517" MODIFIED="1513561522123" TEXT="startet mit 0 f&#xfc;r normalen ChildIterator"/>
+<node CREATED="1513561531383" ID="ID_442154302" MODIFIED="1513561547728" TEXT="Match-Algo mu&#xdf; start-Offset verwalten und draufschlagen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941577099" ID="ID_394904963" MODIFIED="1510941781961" TEXT="Implementierung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513561577840" HGAP="52" ID="ID_260039139" MODIFIED="1513891560341" TEXT="Struktur Navigations-Zustand" VSHIFT="13">
+<icon BUILTIN="pencil"/>
+<node CREATED="1513561744004" ID="ID_937539446" MODIFIED="1513961543467" TEXT="h&#xe4;ngt ab von relativ/absolut?">
+<arrowlink COLOR="#9493b7" DESTINATION="ID_1500554436" ENDARROW="Default" ENDINCLINATION="91;103;" ID="Arrow_ID_811314610" STARTARROW="None" STARTINCLINATION="-39;0;"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1513561681235" ID="ID_671830446" MODIFIED="1513561714093" TEXT="relativ =&gt; Node-Ref gen&#xfc;gt">
+<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1513561715590" ID="ID_1509891681" MODIFIED="1513859782028" TEXT="nein">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1513561717958" ID="ID_333457131" MODIFIED="1513561721993" TEXT="Sonderfall Perspektive"/>
+<node CREATED="1513859759850" ID="ID_799120258" MODIFIED="1513859771462" TEXT="Grunds&#xe4;tzlich kann es Sonderf&#xe4;lle geben">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1513561916554" ID="ID_1130596381" MODIFIED="1513561945359" TEXT="(node&amp;, depth)">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1513562001015" ID="ID_1952968226" MODIFIED="1513562009098" TEXT="zuz&#xfc;glich konkretem Kind-Iterator">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513564476303" ID="ID_718816032" MODIFIED="1513564513155" TEXT="Problem: Typ">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1513564486206" ID="ID_586028205" MODIFIED="1513564495520" TEXT="Typ ist nicht uniform"/>
+<node CREATED="1513564496228" ID="ID_559674728" MODIFIED="1513564503503" TEXT="wird erst hinter IterSource konform"/>
+<node CREATED="1513564546974" ID="ID_301275475" MODIFIED="1513887480560" TEXT="wirklich relevantes Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil es mutma&#223;lich
+    </p>
+    <p>
+      im realen UI in &#228;hnlicher Form auch auftreten wird:
+    </p>
+    <p>
+      die Menge der Top-Level-Fenster ist eben etwas anderes,
+    </p>
+    <p>
+      als die Menge der Tracks in der Timeline.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Erst nach einer Transformation wird daraus eine Menge von Strings
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1513859299432" ID="ID_1668202627" MODIFIED="1513859311404" TEXT="Minimal-Forderungen">
+<icon BUILTIN="info"/>
+<node CREATED="1513859392644" ID="ID_368154471" MODIFIED="1513859402742" TEXT="Verh&#xe4;ltnis von Original zu Expanded"/>
+<node CREATED="1513859408489" ID="ID_1040511060" MODIFIED="1513859645105" TEXT="Expanded::yield mu&#xdf; kompatibel zu Original::yield sein">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1513859477704" ID="ID_1667428111" MODIFIED="1513859631869">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Expand-Funktor hat <i>einen</i>&#160;R&#252;ckgabe-Typ
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1513859590489" ID="ID_1305886859" MODIFIED="1513859654062" TEXT="das ist die st&#xe4;rkste Limitierung">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1513859609438" ID="ID_1238327119" MODIFIED="1513859619487" TEXT="nicht Referenz-kompatibel">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1513859597904" ID="ID_35135467" MODIFIED="1513859623114" TEXT="Wert-Kopie-kompatibel">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1513864109584" HGAP="58" ID="ID_363837528" MODIFIED="1513891495318" TEXT="gesucht ist...." VSHIFT="-10">
+<icon BUILTIN="info"/>
+<node CREATED="1513864121911" ID="ID_137778872" MODIFIED="1513864124330" TEXT="State-Core"/>
+<node CREATED="1513864125110" ID="ID_102689213" MODIFIED="1513864143872" TEXT="(node&amp;, depth)">
+<node CREATED="1513864147403" ID="ID_1713142534" MODIFIED="1513864154086" TEXT="wegen Spezial-Behandlung"/>
+<node CREATED="1513864155194" ID="ID_173512509" MODIFIED="1513864163093" TEXT="an die Kinder rankommen"/>
+</node>
+<node CREATED="1513864167704" ID="ID_1035755808" MODIFIED="1513864175907" TEXT="aktuelle-Kind-Iteratrion">
+<node CREATED="1513864226776" ID="ID_744083786" MODIFIED="1513864232132" TEXT="fester Typ"/>
+<node CREATED="1513864232744" ID="ID_856825900" MODIFIED="1513864245898" TEXT="variablel wegen Spezial-Behandlung"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1513864247318" ID="ID_522758461" MODIFIED="1513889050556" TEXT="Widerspruch">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1513864213482" ID="ID_1903636205" MODIFIED="1513864220098" TEXT="keine zus&#xe4;tzliche Allokation">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1513889026175" ID="ID_1644294386" MODIFIED="1513889040936" TEXT="L&#xf6;sungs-M&#xf6;glichkeiten">
+<node CREATED="1513889102196" ID="ID_583394337" MODIFIED="1513890986515" TEXT="zweimal VTable">
+<linktarget COLOR="#3c6aa0" DESTINATION="ID_583394337" ENDARROW="Default" ENDINCLINATION="313;-25;" ID="Arrow_ID_387579532" SOURCE="ID_1469033836" STARTARROW="None" STARTINCLINATION="309;-7;"/>
+</node>
+<node CREATED="1513889145935" ID="ID_1909411263" MODIFIED="1513889155537" TEXT="protokoll-basierter Iterator">
+<node CREATED="1513889759051" ID="ID_1243725514" MODIFIED="1513889793242" TEXT="analog zu IterAdapter"/>
+<node CREATED="1513889793879" ID="ID_1469033836" MODIFIED="1513890986515" TEXT="braucht aber Funktions-Zeiger">
+<arrowlink COLOR="#3c6aa0" DESTINATION="ID_583394337" ENDARROW="Default" ENDINCLINATION="313;-25;" ID="Arrow_ID_387579532" STARTARROW="None" STARTINCLINATION="309;-7;"/>
+</node>
+<node CREATED="1513890876028" ID="ID_1863789470" MODIFIED="1513890944145" TEXT="oder gemeinsame Datenstruktur">
+<arrowlink COLOR="#3b69a0" DESTINATION="ID_1440266471" ENDARROW="Default" ENDINCLINATION="299;33;" ID="Arrow_ID_141537663" STARTARROW="None" STARTINCLINATION="258;0;"/>
+</node>
+</node>
+<node CREATED="1513889813876" ID="ID_1440266471" MODIFIED="1513890944145" TEXT="Abstraktion via Datenstruktur">
+<linktarget COLOR="#3b69a0" DESTINATION="ID_1440266471" ENDARROW="Default" ENDINCLINATION="299;33;" ID="Arrow_ID_141537663" SOURCE="ID_1863789470" STARTARROW="None" STARTINCLINATION="258;0;"/>
+</node>
+<node CREATED="1513890469187" ID="ID_572634197" MODIFIED="1513890498003" TEXT="Expander vor IterSource setzen">
+<node CREATED="1513891132026" HGAP="30" ID="ID_1902519381" MODIFIED="1513891279623" TEXT="Stack of IterSources" VSHIFT="13">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1513891253569" ID="ID_972377662" MODIFIED="1513891259492" TEXT="Bauformen">
+<node CREATED="1513891231085" ID="ID_1187042759" MODIFIED="1513891239903" TEXT="aus zwei TreeExplorern zusammengesetzt"/>
+<node CREATED="1513891240587" ID="ID_1455962854" MODIFIED="1513891250606" TEXT="in das IterSource-Interface integriert"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1513891620064" HGAP="-78" ID="ID_393488703" MODIFIED="1513891636119" TEXT="Diskussion" VSHIFT="10">
+<icon BUILTIN="forward"/>
+<node CREATED="1513891660578" ID="ID_1557026848" MODIFIED="1513891665718" TEXT="heterogener Baum">
+<node CREATED="1513891666641" ID="ID_84511927" MODIFIED="1513891673373" TEXT="erzwingt Abstraktion"/>
+<node CREATED="1513891674913" ID="ID_1300876479" MODIFIED="1513891696041" TEXT="erzgingt Platzhalter f&#xfc;r &quot;Position&quot;"/>
+</node>
+<node CREATED="1513891739920" ID="ID_1279255374" MODIFIED="1513891750178" TEXT="Meta-Datenstruktur == Reflection">
+<node CREATED="1513891751766" ID="ID_1061575112" MODIFIED="1513891760585" TEXT="mu&#xdf; nicht per se schlecht sein"/>
+<node CREATED="1513891771979" ID="ID_1279317536" MODIFIED="1513891793738">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>wenn</i>&#160;es sie g&#228;be <i>k&#246;nnte</i>&#160;man sie hier nutzen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1513891804199" ID="ID_992579634" MODIFIED="1513891806571" TEXT="Ideen">
+<node CREATED="1513891809406" ID="ID_397605243" MODIFIED="1513891818033" TEXT="GTK-Widget-Container"/>
+<node CREATED="1513891818933" ID="ID_1781581570" MODIFIED="1513891823696" TEXT="GObject"/>
+<node CREATED="1513891825708" ID="ID_1596653216" MODIFIED="1513891848885" TEXT="gui::model::Tangible"/>
+</node>
+<node CREATED="1513891876365" ID="ID_39114883" MODIFIED="1513891928397" TEXT="Knackpunkt: Struktur mu&#xdf; schon da sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t:
+    </p>
+    <p>
+      diese Struktur mu&#223; bereits beim Aufbauen des GUI
+    </p>
+    <p>
+      nebenbei mit aufgebaut werden, und &#252;ber alle
+    </p>
+    <p>
+      mutierenden Aktionen hinweg automatisch konsistent bleiben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#37417e" CREATED="1513891943436" ID="ID_1217718033" MODIFIED="1513891970693" TEXT="ist mir unsympatisch">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1513892821757" ID="ID_812339590" MODIFIED="1513892833608" TEXT="Navigation allein erzwingt schon VTable"/>
+<node CREATED="1513893044279" ID="ID_1996211433" MODIFIED="1513893313192" TEXT="Nav und IterSource verschmelzen">
+<icon BUILTIN="idea"/>
+<node CREATED="1513893027482" ID="ID_1061106814" MODIFIED="1513893042316" TEXT="minimales Design"/>
+<node CREATED="1513893243100" ID="ID_622400006" MODIFIED="1513893248576" TEXT="Cursor-Interface">
+<node CREATED="1513893512792" ID="ID_254466319" MODIFIED="1513893533977" TEXT="Iteration: next sibling"/>
+<node CREATED="1513893536957" ID="ID_1831743270" MODIFIED="1513893551318" TEXT="Up: zum Vater"/>
+<node CREATED="1513893552050" ID="ID_917117587" MODIFIED="1513893567173" TEXT="expand: Kind-Navigator"/>
+<node CREATED="1513893589742" ID="ID_487266516" MODIFIED="1513893601664" TEXT="yield: Knoten-ID"/>
+<node CREATED="1513893602348" ID="ID_1276818073" MODIFIED="1513893611167" TEXT="path: konstruiere UI-Coord"/>
+</node>
+<node CREATED="1513961350296" ID="ID_1067031793" MODIFIED="1513961358138" TEXT="TreeExplorer k&#xf6;nnte sowas unterst&#xfc;tzen..."/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513893637863" ID="ID_1710637822" MODIFIED="1513961369447" TEXT="sch&#xf6;n aber fragw&#xfc;rdig">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1513893645254" ID="ID_111789267" MODIFIED="1513893649713" TEXT="YAGNI"/>
+<node CREATED="1513893653949" ID="ID_201919603" MODIFIED="1513893660896" TEXT="Up erfordert Backlink"/>
+<node CREATED="1513893682521" ID="ID_1477689037" MODIFIED="1513893811288">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>m&#246;glicherwese</i>&#160;aber notwendig
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...will sagen
+    </p>
+    <p>
+      wenn ich mir heute so die Situation vorstelle,
+    </p>
+    <p>
+      k&#246;nnte es darauf hinauslaufen, da&#223; man das braucht.
+    </p>
+    <p>
+      Und zwar, zumindest die Eigenschaft, von gegebenem Element
+    </p>
+    <p>
+      die Koordinaten zu ermitteln.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Das ist aber dann <i>pratkisch auch schon</i>&#160;eine &quot;Up&quot;-Funktion,
+    </p>
+    <p>
+      selbst wenn man sie nur indirekt implementiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1513893841787" ID="ID_588599089" MODIFIED="1513893854354">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>vorl&#228;ufige</i>&#160;MInimal-L&#246;sung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1513893858089" ID="ID_1090821912" MODIFIED="1513893873067" TEXT="nur Expander nach au&#xdf;en ziehen"/>
+<node CREATED="1513893873983" ID="ID_926734576" MODIFIED="1513893886449" TEXT="und fest als &quot;Iterator&quot;-Klasse definieren"/>
+<node CREATED="1513894301013" ID="ID_1705515857" MODIFIED="1513894303961" TEXT="aktuell">
+<node CREATED="1513893940206" ID="ID_1268073991" MODIFIED="1513893969869">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>bis jetzt</i>&#160;kommen wir ohne <b>Pos</b>-Abstraktion aus
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1513893892581" ID="ID_447708501" MODIFIED="1513893978568">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das <b>Nav</b>-Interface k&#246;nnte daraus entstehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1513893916705" ID="ID_1837000174" MODIFIED="1513894531402" TEXT="als nested-Interface von LocationQuery"/>
+</node>
+<node COLOR="#177d54" CREATED="1513894057318" HGAP="19" ID="ID_1657702066" MODIFIED="1513894127494" TEXT="Weiterungen..." VSHIFT="28">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1513894072292" ID="ID_550737261" MODIFIED="1513894085095" TEXT="die n&#xe4;chsten Schritte w&#xe4;ren....">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1513894141899" ID="ID_210080543" MODIFIED="1513894154501" TEXT="IterSource control-API umbauen"/>
+<node CREATED="1513894156185" ID="ID_1081040201" MODIFIED="1513894165924" TEXT="spezielle StateCore f&#xfc;r IterSource"/>
+<node CREATED="1513894173999" ID="ID_1818551612" MODIFIED="1513894187080" TEXT="...damit das breiter API aus Funktoren zug&#xe4;nglich wird"/>
+<node CREATED="1513894188668" ID="ID_910323938" MODIFIED="1513894200942" TEXT="TreeExplorer erkennt IterSource"/>
+<node CREATED="1513894240293" ID="ID_1730534731" MODIFIED="1513894256719" TEXT="Expander kann expand-Funktor in VTable nutzen"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1513961595678" HGAP="101" ID="ID_66715685" MODIFIED="1513961650705" TEXT="Beschlu&#xdf;" VSHIFT="26">
+<icon BUILTIN="yes"/>
+<node CREATED="1513961667045" ID="ID_688351481" MODIFIED="1513962278992" TEXT="nur Verwenden von bestehenden Bausteinen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es werden jetzt keine weiteren Features f&#252;r TreeExplorer gebaut....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1513961683154" ID="ID_1803800382" MODIFIED="1513961693725" TEXT="Expander kommt vor das IterSource-Interface"/>
+<node CREATED="1513962370870" ID="ID_1858133966" MODIFIED="1513962394590" TEXT="in einen komplett generischen Iterator-Typ"/>
+<node CREATED="1513961696753" ID="ID_1159003711" MODIFIED="1513961771032" TEXT="unsch&#xf6;n aber zukunftsweisend...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1513961791716" ID="ID_996099359" MODIFIED="1513961923982" TEXT="zus&#xe4;tzliche Heap-Alloc f&#xfc;r jedes Expand">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint ist,
+    </p>
+    <p>
+      <i>zus&#228;tzlich</i>&#160;zu dem Eintrag im Stack,
+    </p>
+    <p>
+      der ohnehin selbst Heap-alloziert ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1513961961661" ID="ID_96700718" MODIFIED="1513961967328" TEXT="Ziel w&#xe4;re...">
+<node CREATED="1513962003719" ID="ID_432597650" MODIFIED="1513962013743" TEXT="nur ein shared_ptr"/>
+<node CREATED="1513961972116" ID="ID_135060444" MODIFIED="1513961978462" TEXT="nur ein Heap-Block"/>
+<node CREATED="1513961979106" ID="ID_1816600166" MODIFIED="1513961984765" TEXT="inilne+overflow"/>
+</node>
+<node CREATED="1513962016229" ID="ID_328900065" MODIFIED="1513962029692" TEXT="Relevanz sp&#xe4;ter untersuchen">
+<icon BUILTIN="yes"/>
+<node CREATED="1513962043170" ID="ID_156284138" MODIFIED="1513962051989" TEXT="dazu mu&#xdf; das GUI weitgehend ausprogrammiert sein"/>
+<node CREATED="1513962052808" ID="ID_1434970767" MODIFIED="1513962062555" TEXT="dann kann man das Nutzuns-Pattern extrahieren"/>
+<node CREATED="1513962063639" ID="ID_1542094830" MODIFIED="1513962069898" TEXT="und dann druch Messung &#xfc;berpr&#xfc;fen"/>
+</node>
+</node>
+<node CREATED="1513961838174" ID="ID_579783999" MODIFIED="1513962463112" TEXT="Verh&#xe4;ltnis der VTable-APIs noch unklar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Was ist <b>Nav</b>&#160;und was ist <b>Iteration-control</b>?
+    </p>
+    <p>
+      Ist es sinnvoll, beide in einem gemeinsamen API zu haben,
+    </p>
+    <p>
+      oder delegieren wir besser?
+    </p>
+    <p>
+      Was sind die Kosten daf&#252;r?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513961620603" ID="ID_1014293898" MODIFIED="1513961632617" TEXT="Implementierung">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513962702097" ID="ID_1829231358" MODIFIED="1513963104538" TEXT="Iterator-Typ konstruieren">
+<arrowlink COLOR="#1d3877" DESTINATION="ID_989478065" ENDARROW="Default" ENDINCLINATION="33;-151;" ID="Arrow_ID_1500458185" STARTARROW="Default" STARTINCLINATION="-56;-2;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1513966648491" ID="ID_558045889" MODIFIED="1513966652550" TEXT="Anforderungen">
+<node CREATED="1513962999465" ID="ID_677650141" MODIFIED="1513963008827" TEXT="ist nicht mehr IterSource&lt;String&gt;::iterator"/>
+<node CREATED="1513963010239" ID="ID_1755646553" MODIFIED="1513963023753" TEXT="baut auf einem Sub-Interface von IterSource auf"/>
+<node CREATED="1513963030333" ID="ID_540171697" MODIFIED="1513963048414" TEXT="delegiert an den WrappedLumieraIterator f&#xfc;r Konstruktion"/>
+<node CREATED="1513963055921" ID="ID_598702105" MODIFIED="1513963075090" TEXT="exponiert das expandChildren()"/>
+</node>
+<node CREATED="1513966658753" ID="ID_1038653404" MODIFIED="1513966664964" TEXT="Konstrukt">
+<node CREATED="1513966673608" ID="ID_343053579" MODIFIED="1513966861900" TEXT="auf IterExploreSource aufbauen?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1513966727648" ID="ID_538128057" MODIFIED="1513966744402" TEXT="das Interface wird in der Implementierung druchgreicht"/>
+<node CREATED="1513966745134" ID="ID_1575558282" MODIFIED="1513966751273" TEXT="man kommt da nicht ohne weiteres ran"/>
+<node CREATED="1513966752029" ID="ID_852127426" MODIFIED="1513966770086" TEXT="genau die expand() und depth() wird gar nicht gebraucht"/>
+<node CREATED="1513966793087" ID="ID_1973470560" MODIFIED="1513966803775" TEXT="das w&#xe4;re Implementation-reuse">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1513966770770" ID="ID_1037405328" MODIFIED="1513966791882" TEXT="wir bauen gar nicht darauf auf">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1513966690757" ID="ID_335317868" MODIFIED="1513966865080" TEXT="direkt IterSource::iterator reimplementieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1513966814204" ID="ID_1477637829" MODIFIED="1513966818232" TEXT="ist halt l&#xe4;stig"/>
+<node CREATED="1513966819268" ID="ID_725108588" MODIFIED="1513966823134" TEXT="hier aber wohl einfacher"/>
+<node CREATED="1513966826779" ID="ID_806221726" MODIFIED="1513966853280" TEXT="k&#xf6;nnte blueprint sein??">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      IterSource mu&#223; insgesamt besser erweiterbar werden....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513962712192" ID="ID_357363842" MODIFIED="1513963083142" TEXT="festlegen, wo die VTable ist">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513962765760" ID="ID_795911284" MODIFIED="1513963084358" TEXT="Demo-Impl mit GenNode-Tree">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941577099" ID="ID_394904963" MODIFIED="1513477849374" TEXT="Implementierung">
+<linktarget COLOR="#653655" DESTINATION="ID_394904963" ENDARROW="Default" ENDINCLINATION="606;374;" ID="Arrow_ID_1674594671" SOURCE="ID_286375730" STARTARROW="None" STARTINCLINATION="863;77;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1510941687588" ID="ID_601914095" MODIFIED="1510941775002" TEXT="beispielhaft f&#xfc;r GenNode umsetzen">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1510941740069" ID="ID_1408571420" MODIFIED="1510941747584" TEXT="erweiterter ChildIter"/>
-<node CREATED="1510941748388" ID="ID_209463158" MODIFIED="1510941753599" TEXT="Zustands-Layer"/>
-<node CREATED="1510941754211" ID="ID_996085388" MODIFIED="1510941756447" TEXT="Filter-Layer"/>
-<node CREATED="1510941766817" ID="ID_1117346518" MODIFIED="1510941769117" TEXT="Testf&#xe4;lle"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941740069" ID="ID_1408571420" MODIFIED="1513560742303" TEXT="erweiterter ChildIter">
+<arrowlink COLOR="#283b63" DESTINATION="ID_596422747" ENDARROW="Default" ENDINCLINATION="66;49;" ID="Arrow_ID_1521598219" STARTARROW="Default" STARTINCLINATION="94;-19;"/>
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513560671819" ID="ID_989478065" MODIFIED="1513962937735" TEXT="Interface umstellen">
+<linktarget COLOR="#1d3877" DESTINATION="ID_989478065" ENDARROW="Default" ENDINCLINATION="33;-151;" ID="Arrow_ID_1500458185" SOURCE="ID_1829231358" STARTARROW="Default" STARTINCLINATION="-56;-2;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513560680562" ID="ID_634877617" MODIFIED="1513560754433" TEXT="TreeExplorer-Ausdr&#xfc;cke">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513560690440" ID="ID_122153660" MODIFIED="1513560756281" TEXT="Spezial-Behandlung f&#xfc;r Perspektive">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941748388" ID="ID_209463158" MODIFIED="1513477856265" TEXT="Zustands-Layer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941754211" ID="ID_996085388" MODIFIED="1513477857872" TEXT="Filter-Layer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941766817" ID="ID_1117346518" MODIFIED="1513477861712" TEXT="Testf&#xe4;lle">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477873206" ID="ID_939423021" MODIFIED="1513477891813" TEXT="definieren was abzudecken ist...">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513478153511" ID="ID_1826394146" MODIFIED="1513478160000" TEXT="bisherige ChildIter-Testf&#xe4;lle">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1508540835505" ID="ID_191493714" MODIFIED="1508540848899" TEXT="swap(*this, Coverage)"/>
@@ -7707,10 +8180,10 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1506984614487" ID="ID_380908645" MODIFIED="1509329414242" TEXT="UICoordResolver_test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984614487" ID="ID_380908645" MODIFIED="1513477111455" TEXT="UICoordResolver_test">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645745" ID="ID_244163155" MODIFIED="1509329383990" TEXT="verify_simpleUsage">
-<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645745" ID="ID_244163155" MODIFIED="1513477122251" TEXT="verify_simpleUsage">
+<icon BUILTIN="hourglass"/>
 </node>
 <node COLOR="#338800" CREATED="1506984645747" ID="ID_517262443" MODIFIED="1512926191814" TEXT="verify_backingQuery">
 <icon BUILTIN="button_ok"/>
@@ -7860,6 +8333,41 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645748" ID="ID_1254044275" MODIFIED="1506984664457" TEXT="verify_queryAnchor">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1513477632318" ID="ID_1636138355" MODIFIED="1513477675273" TEXT="setzt PathResolution voraus">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477685935" ID="ID_115330701" MODIFIED="1513477750466" TEXT="brauche layered pull-Evaluation">
+<arrowlink COLOR="#786296" DESTINATION="ID_596422747" ENDARROW="Default" ENDINCLINATION="278;120;" ID="Arrow_ID_1919142695" STARTARROW="None" STARTINCLINATION="952;148;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477772387" ID="ID_1207553398" MODIFIED="1513478191111" TEXT="neu implementierter ChildIter">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477790161" ID="ID_286375730" MODIFIED="1513477849374" TEXT="PathResolution implementieren">
+<arrowlink COLOR="#653655" DESTINATION="ID_394904963" ENDARROW="Default" ENDINCLINATION="606;374;" ID="Arrow_ID_1674594671" STARTARROW="None" STARTINCLINATION="863;77;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1513477954730" ID="ID_1541867154" MODIFIED="1513478089188" TEXT="F&#xe4;lle...">
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477957584" ID="ID_862780828" MODIFIED="1513478092737" TEXT="Explizit: window(&quot;window-1&quot;).persp(&quot;perspective-A&quot;)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477957585" ID="ID_992417953" MODIFIED="1513478093809" TEXT="Gibtsned: window(&quot;windows&quot;);">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477957586" ID="ID_1927496001" MODIFIED="1513478094800" TEXT="contextual state: firstWindow();">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477957586" ID="ID_519256473" MODIFIED="1513478095840" TEXT="context-relativ: currentWindow().persp(&quot;perspective-B&quot;);">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477957586" ID="ID_1636269470" MODIFIED="1513478096816" TEXT="context-relativ-unl&#xf6;sbar: currentWindow().panel(&quot;panelY&quot;);">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513477957586" ID="ID_1247686548" MODIFIED="1513478097784" TEXT="partiell-interpolierbar: view(&quot;someView&quot;).path(&quot;&#x3b1;/&#x3b2;/&#x3b3;&quot;);">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645748" ID="ID_670536416" MODIFIED="1506984663914" TEXT="verify_queryCoverage">
 <icon BUILTIN="flag-yellow"/>
@@ -16372,7 +16880,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1502453753155" ID="ID_89098030" MODIFIED="1512926192153" TEXT="Schritt-2">
+<node CREATED="1502453753155" ID="ID_89098030" MODIFIED="1513962913100" TEXT="Schritt-2">
 <linktarget COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="821;-1406;" ID="Arrow_ID_554743885" SOURCE="ID_1584846573" STARTARROW="None" STARTINCLINATION="1459;870;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1502453814499" ID="ID_727706359" MODIFIED="1502453827917" TEXT="Puffer-Ansatz...">
@@ -23095,7 +23603,7 @@
 <node CREATED="1512925864774" ID="ID_1543264108" MODIFIED="1512925953264" TEXT="verwendet f&#xfc;r JobPlanning">
 <arrowlink COLOR="#5379b5" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="41;130;" ID="Arrow_ID_1786254694" STARTARROW="Default" STARTINCLINATION="-100;0;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512925959074" ID="ID_30857289" MODIFIED="1512926278157" TEXT="TODO: abl&#xf6;sen durch IterTreeExplorer">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512925959074" ID="ID_30857289" MODIFIED="1513477667435" TEXT="TODO: abl&#xf6;sen durch IterTreeExplorer">
 <arrowlink COLOR="#83dfc7" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-1109;3887;" ID="Arrow_ID_1645152965" STARTARROW="None" STARTINCLINATION="2051;-176;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>

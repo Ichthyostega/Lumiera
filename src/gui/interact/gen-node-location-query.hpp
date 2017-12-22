@@ -115,7 +115,7 @@ namespace interact {
       
       /** resolve Anchor against GenNode tree */
       virtual Literal
-      determineAnchor (UICoord const& path)
+      determineAnchor (UICoord const& path)  override
         {
           if (isnil(tree_) or not path.isPresent(UIC_WINDOW))
             return Symbol::BOTTOM;
@@ -131,7 +131,7 @@ namespace interact {
 
       /** evaluate to what extent a UIcoord spec matches the structure given as GenNode tree */
       virtual size_t
-      determineCoverage (UICoord const& path)
+      determineCoverage (UICoord const& path)  override
         {
           size_t depth = 0;
           drillDown (tree_, path, path.size(), depth);
@@ -140,7 +140,7 @@ namespace interact {
 
       /** get the sequence of child IDs at a designated position in the backing GenNode tree */
       virtual ChildIter
-      getChildren (UICoord const& path, size_t pos)
+      getChildren (UICoord const& path, size_t pos)  override
         {
           size_t depth = 0;
           Rec const& node = drillDown (tree_, path, pos, depth);
@@ -174,18 +174,6 @@ namespace interact {
           REQUIRE (path.isPresent(depth));
           return depth==UIC_WINDOW? GenNodeLocationQuery::determineAnchor(path)
                                   : path[depth];
-        }
-      
-      static ChildIter
-      childSequence (Rec const& node, size_t& depth)
-        {
-          auto internedString = [](string const& id) -> Literal
-                                  {
-                                    return Symbol{id};
-                                  };
-          return depth==UIC_PERSP? lib::iter_source::singleVal (internedString (node.getType()))
-                                 : lib::iter_source::transform (node.keys(), internedString);
-                                        /////////////////////////////////////////////////////////////////////TICKET #1113 : could just use lib::wrapIter when GenNode exposes Literal as ID
         }
       
       
@@ -223,6 +211,27 @@ namespace interact {
         {
           return depth==UIC_PERSP? tree // perspective info is attached as type at the parent node
                                  : tree.get(pathElm).data.get<Rec>();
+        }
+      
+      
+      struct TreePos
+        {
+          Rec const& node;
+          size_t depth;
+          
+          ////////////TODO wtf to return as iterator type? it is not uniform!
+        };
+      
+      static ChildIter
+      childSequence (Rec const& node, size_t& depth)
+        {
+          auto internedString = [](string const& id) -> Literal
+                                  {
+                                    return Symbol{id};
+                                  };
+          return depth==UIC_PERSP? lib::iter_source::singleVal (internedString (node.getType()))
+                                 : lib::iter_source::transform (node.keys(), internedString);
+                                        /////////////////////////////////////////////////////////////////////TICKET #1113 : could just use lib::wrapIter when GenNode exposes Literal as ID
         }
     };
   

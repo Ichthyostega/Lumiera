@@ -146,8 +146,8 @@ namespace test {
        *            nested scope, we start a new nested builder with `MakeRec()`.
        *          - there is a special convention _for this test setup solely_ to
        *            set the `currentWindow` to be the last one in list -- in a real
-       *            UI this would not of course not be a configurable property of
-       *            the LocationQuery, but rather just reflect the transient window
+       *            UI this would of course not be a configurable property of the
+       *            LocationQuery, but rather just reflect the transient window
        *            state and return the currently activated window
        */
       void
