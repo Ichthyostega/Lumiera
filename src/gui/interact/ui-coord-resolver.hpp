@@ -84,7 +84,21 @@ namespace interact {
     : public lib::IterSource<Literal>
     {
     public:
-      virtual ~TreeStructureNavigator() { }  ///< this is an interface
+      virtual ~TreeStructureNavigator();     ///< this is an interface
+      
+      /** expand into exploration of child elements at "current position".
+       * At any point, a TreeStructureNavicator instance indicates and represents a position
+       * within a tree-like structure. At the same time, it is part of a sequence of siblings,
+       * which is accessible through iteration. This operation now allows to extend visitation
+       * of siblings by consuming the current element and replacing it with the sequence of its
+       * immediate child elements, exposing the first one as the _"current position"_.
+       * @return pointer to a new heap allocated TreeStructureNavigator implementation, which
+       *         represents the sequence of children. The object `this` will not be affected.
+       * @note it is the caller's responsibility to own and manage the generated navigator.
+       *         The typical (and recommended) way to achieve this is to rely on the embedded
+       *         type #iterator, which exposes an appropriately wired iterator::expandChildren()
+       */
+      virtual TreeStructureNavigator* expandChildren()  const   =0;
     };
   
   
@@ -101,7 +115,7 @@ namespace interact {
   class LocationQuery
     {
     public:
-      virtual ~LocationQuery() { }  ///< this is an interface
+      virtual ~LocationQuery();    ///< this is an interface
       
       using ChildIter = lib::IterSource<Literal>::iterator;
 

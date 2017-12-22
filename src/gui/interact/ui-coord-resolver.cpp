@@ -41,6 +41,13 @@ using lib::Symbol;
 namespace gui {
 namespace interact {
   
+  // emit typeinfo and VTables here....
+  TreeStructureNavigator::~TreeStructureNavigator() { }
+  
+  LocationQuery::~LocationQuery() { }
+  
+  
+  
   /** @internal working data for path resolution */
   struct UICoordResolver::ResolutionState
     {
