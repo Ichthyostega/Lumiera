@@ -8014,6 +8014,48 @@
 </richcontent>
 </node>
 </node>
+<node CREATED="1513980929860" ID="ID_1710959906" MODIFIED="1513980939173" TEXT="Alternativen?">
+<icon BUILTIN="help"/>
+<node CREATED="1513980747077" ID="ID_458778699" MODIFIED="1513980959957" TEXT="IterExploreSource geschickt nutzen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1513980786024" ID="ID_906988400" MODIFIED="1513980803442" TEXT="front-End ist IterExploreSource, ohne Wenn und Aber"/>
+<node CREATED="1513980816020" ID="ID_1544667042" MODIFIED="1513980839954">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Expander sitzt nun doch <i>dahinter,</i>&#160;in der Implementierung
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1513980949474" ID="ID_884281761" MODIFIED="1513980956209" TEXT="damit wieder zwei VTables">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1513981063250" ID="ID_1701586789" MODIFIED="1513981066214" TEXT="Builder">
+<node CREATED="1513981080616" ID="ID_75384138" MODIFIED="1513981107456" TEXT="bekommt TreeStructureNavigator *"/>
+<node CREATED="1513981138280" ID="ID_878429069" MODIFIED="1513981146075" TEXT="baut darauf den IterSource::iterator"/>
+<node CREATED="1513981147519" ID="ID_1838710944" MODIFIED="1513981198132" TEXT="setzt darauf einen TreeExplorer auf"/>
+<node CREATED="1513981205567" ID="ID_1678344039" MODIFIED="1513981213954" TEXT="stattet diesen mit einem Expander aus"/>
+<node CREATED="1513981215822" ID="ID_1059471923" MODIFIED="1513981236247" TEXT="welcher das TreeStructureNavigator-Interface nutzt"/>
+<node CREATED="1513981274958" ID="ID_895258746" MODIFIED="1513981289179">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Ergebnis ist der <b>konkrete Iterator-Typ</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513962712192" ID="ID_357363842" MODIFIED="1513978505393" TEXT="festlegen, wo die VTable ist">

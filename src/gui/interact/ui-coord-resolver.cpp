@@ -30,6 +30,7 @@
 
 #include "gui/interact/ui-coord-resolver.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
+#include "lib/iter-stack.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 

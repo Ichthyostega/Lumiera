@@ -48,8 +48,8 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/iter-source.hpp"
-#include "lib/iter-stack.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/noncopyable.hpp>
@@ -99,6 +99,16 @@ namespace interact {
        *         type #iterator, which exposes an appropriately wired iterator::expandChildren()
        */
       virtual TreeStructureNavigator* expandChildren()  const   =0;
+      
+      
+      static auto
+      buildIterator (TreeStructureNavigator* source)
+        {
+          return lib::treeExplore(
+                   lib::IterSource<Literal>::build (source))
+                        .expand([](Literal id){ return lib::IterSource<Literal>::build (
+                                                          ((TreeStructureNavigator*)nullptr)->expandChildren() ); });
+        }
     };
   
   
@@ -117,6 +127,7 @@ namespace interact {
     public:
       virtual ~LocationQuery();    ///< this is an interface
       
+      using iteratorZ = decltype (TreeStructureNavigator::buildIterator(std::declval<TreeStructureNavigator*>()));
       using ChildIter = lib::IterSource<Literal>::iterator;
 
 
