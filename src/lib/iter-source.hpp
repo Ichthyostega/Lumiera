@@ -229,13 +229,12 @@ namespace lib {
    * is passed to one of the IterSource's builder functions, thereby
    * erasing the specific type information of the template parameter IT
    */
-  template<class IT>
+  template<class IT,  class ISO = IterSource<typename IT::value_type>>
   class WrappedLumieraIter
-    : public IterSource<typename IT::value_type>
+    : public ISO
     , boost::noncopyable
     {
-      using _Base = IterSource<typename IT::value_type>;
-      using   Pos = typename _Base::Pos;
+      using Pos = typename ISO::Pos;
       
       IT src_;
       

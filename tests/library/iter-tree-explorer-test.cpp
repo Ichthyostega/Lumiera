@@ -856,15 +856,15 @@ namespace test{
       verify_IterSource()
         {
           class PrivateSource
-//          : public IterSource<uint>       /////////////////////////////////////TODO linearised Mix-in problem
+            : public IterSource<uint>
             {
             public:
               virtual PrivateSource* expandChildren()  const  =0;
             };
           
           class VerySpecivicIter
-            : public WrappedLumieraIter<NumberSequence>
-            , public PrivateSource
+            : public WrappedLumieraIter<NumberSequence
+            ,        PrivateSource     >
             {
             public:
               VerySpecivicIter(uint start)
