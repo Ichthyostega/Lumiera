@@ -876,8 +876,66 @@ namespace test{
                 {
                   return new VerySpecivicIter{*wrappedIter() - 1};
                 }
+              
+              uint
+              currentVal()  const
+                {
+                  return *wrappedIter();
+                }
             };
-          UNIMPLEMENTED ("directly wrap and handle IterSource sub-interfaces");
+          
+          
+          VerySpecivicIter vsit{5};
+
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          auto ii = treeExplore(vsit);
+          
+          CHECK (not isnil (ii));
+          CHECK (5 == *ii);
+          ++ii;
+          CHECK (4 == *ii);
+          CHECK (4 == vsit.currentVal());
+          
+          VerySpecivicIter* clone = new VerySpecivicIter(vsit);
+          
+          CHECK (4 == clone->currentVal());
+          
+          cout << materialise(
+                    treeExplore(clone)
+                    
+                  ) <<endl;
+          
+          CHECK (4 == vsit.currentVal());
+          CHECK (4 == *ii);
+          ++ii;
+          CHECK (3 == *ii);
+          
+          auto jj = ii.explore([](PrivateSource& source){ return source.expandChildren(); });
+          
+          CHECK (3 == *jj);
+          CHECK (3 == vsit.currentVal());
+          
+          CHECK (0 == jj.depth());
+          jj.expandChildren();
+          CHECK (1 == jj.depth());
+          
+          CHECK (2 == *jj);
+          ++jj;
+          CHECK (1 == *jj);
+          
+          CHECK (2 == vsit.currentVal());
+          CHECK (1 == jj.depth());
+          ++jj;
+          CHECK (0 == jj.depth());
+          CHECK (2 == *jj);
+          CHECK (2 == vsit.currentVal());
+          ++jj;
+          CHECK (1 == *jj);
+          CHECK (1 == vsit.currentVal());
+          ++jj;
+          CHECK (isnil (jj));
+          CHECK (0 == vsit.currentVal());
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
         }
       
       

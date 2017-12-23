@@ -5892,7 +5892,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1512363286920" FOLDED="true" ID="ID_1420123769" MODIFIED="1513473558354" TEXT="Zusammenspiel">
+<node COLOR="#338800" CREATED="1512363286920" ID="ID_1420123769" MODIFIED="1513990796074" TEXT="Zusammenspiel">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512844805995" ID="ID_927486947" MODIFIED="1512927037825" TEXT="single-val">
 <icon BUILTIN="help"/>
@@ -6364,6 +6364,19 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513990803915" ID="ID_292438102" MODIFIED="1513990973201" TEXT="IterSource-Integration">
+<linktarget COLOR="#659fa4" DESTINATION="ID_292438102" ENDARROW="Default" ENDINCLINATION="853;414;" ID="Arrow_ID_1802135668" SOURCE="ID_1529167083" STARTARROW="None" STARTINCLINATION="674;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513990840253" ID="ID_923982542" MODIFIED="1513990864970" TEXT="wrapper analog zu WrappedLumieraIter">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513990851580" ID="ID_1445466432" MODIFIED="1513990865914" TEXT="Traits erweitern">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513990858787" ID="ID_1444097417" MODIFIED="1513990866482" TEXT="Funktor erweitern">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1511837384749" FOLDED="true" ID="ID_274979743" MODIFIED="1513473563423" TEXT="asIterSource">
 <icon BUILTIN="button_ok"/>
@@ -6736,7 +6749,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1510941467586" FOLDED="true" ID="ID_381928532" MODIFIED="1513476987120" TEXT="TreeExplorer_test">
+<node COLOR="#338800" CREATED="1510941467586" ID="ID_381928532" MODIFIED="1513990811649" TEXT="TreeExplorer_test">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1510969031378" ID="ID_1678287752" MODIFIED="1512927037810" TEXT="verify_wrappedIterator();">
 <icon BUILTIN="button_ok"/>
@@ -7050,6 +7063,15 @@
 </node>
 <node CREATED="1512789907575" ID="ID_1220260137" MODIFIED="1512789914778" TEXT="ist nur ein Problem in Tests etc."/>
 <node CREATED="1512789946314" ID="ID_1425696979" MODIFIED="1512789953964" TEXT="widerspricht dem Iteratoren-Konzept"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513990814361" ID="ID_306902168" MODIFIED="1513990821537" TEXT="verify_IterSource()">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513990873545" ID="ID_1789456983" MODIFIED="1513990887336" TEXT="einfache Iteration">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513990880600" ID="ID_1730629901" MODIFIED="1513990886456" TEXT="Iteration + Expansion">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1510969031379" ID="ID_1327871737" MODIFIED="1512952095270" TEXT="verify_depthFirstExploration();">
@@ -8059,8 +8081,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513962712192" ID="ID_357363842" MODIFIED="1513978505393" TEXT="festlegen, wo die VTable ist">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1513962712192" ID="ID_357363842" MODIFIED="1513992370526" TEXT="festlegen, wo die VTable ist">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1513978430367" ID="ID_616991569" MODIFIED="1513978446605" TEXT="Nav und Iter">
 <icon BUILTIN="yes"/>
 </node>
@@ -8068,8 +8090,8 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513986023498" ID="ID_1413967372" MODIFIED="1513986029842" TEXT="Integration mit TreeExplorer">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513986023498" ID="ID_1413967372" MODIFIED="1513992377089" TEXT="Integration mit TreeExplorer">
+<icon BUILTIN="pencil"/>
 <node CREATED="1513986032290" ID="ID_1427647343" MODIFIED="1513986048710" TEXT="Problem: Zugang zur IterSource">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1513986054199" ID="ID_1239076586" MODIFIED="1513986063345" TEXT="bisher: protected im IterSource::iterator"/>
@@ -8096,13 +8118,22 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513988744665" HGAP="27" ID="ID_1242119956" MODIFIED="1513989064956" TEXT="vorl&#xe4;ufige IterSource-Integration" VSHIFT="12">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513988744665" HGAP="27" ID="ID_1242119956" MODIFIED="1513992382452" TEXT="vorl&#xe4;ufige IterSource-Integration" VSHIFT="12">
 <linktarget COLOR="#1f9aa8" DESTINATION="ID_1242119956" ENDARROW="Default" ENDINCLINATION="87;-111;" ID="Arrow_ID_662359263" SOURCE="ID_1398933111" STARTARROW="None" STARTINCLINATION="-259;16;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1513988930537" ID="ID_594152265" MODIFIED="1513992353318" TEXT="kann selbst&#xe4;ndig Iterator-Front-End bauen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1513988952901" ID="ID_1668656742" MODIFIED="1513992356071" TEXT="dieses Front-End hat Zugang zum konkreten Sub-Interface">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1513988974179" ID="ID_900695722" MODIFIED="1513992358833" TEXT="Funktoren k&#xf6;nnen dieses Sub-Interface akzeptieren und liefern">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513989030587" ID="ID_1529167083" MODIFIED="1513990973201" TEXT="TreeExplorer &#xfc;bernimmt / wrappt / packt aus">
+<arrowlink COLOR="#659fa4" DESTINATION="ID_292438102" ENDARROW="Default" ENDINCLINATION="853;414;" ID="Arrow_ID_1802135668" STARTARROW="None" STARTINCLINATION="674;0;"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1513988930537" ID="ID_594152265" MODIFIED="1513988942954" TEXT="kann selbst&#xe4;ndig Iterator-Front-End bauen"/>
-<node CREATED="1513988952901" ID="ID_1668656742" MODIFIED="1513988971647" TEXT="dieses Front-End hat Zugang zum konkreten Sub-Interface"/>
-<node CREATED="1513988974179" ID="ID_900695722" MODIFIED="1513989005434" TEXT="Funktoren k&#xf6;nnen dieses Sub-Interface akzeptieren und liefern"/>
-<node CREATED="1513989030587" ID="ID_1529167083" MODIFIED="1513989044189" TEXT="TreeExplorer &#xfc;bernimmt / wrappt / packt aus"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513962765760" ID="ID_795911284" MODIFIED="1513963084358" TEXT="Demo-Impl mit GenNode-Tree">
