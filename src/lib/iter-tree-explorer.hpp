@@ -271,6 +271,40 @@ namespace lib {
         }
       };
     
+    
+    /**
+     * Adapt an IterSource to make it iterable. As such, lib::IterSource is meant
+     * to be iterable, while only exposing a conventional VTable-based _iteration interface_.
+     * To support this usage, the library offers some builders to attach an iterator adapter.
+     * Two flavours need to be distinguished:
+     * - we get a _reference_ to something living elsewhere; all we know is it's iterable.
+     * - we get a pointer, indicating that we must take ownership and manage the lifetime.
+     *   The iterable entity in this case can be assumed heap allocated, featuring a virtual
+     *   destructor.
+     * The generated front-end has identical type in both cases; it is based on a shared_ptr,
+     * just a different deleter function is used in both cases. This design makes sense,
+     * since the protocol requires us to invoke virtual function IterSource::disconnect()
+     * when use count goes to zero.
+     */
+    template<class ISO>
+    class IterSourceIter
+      : public ISO::iterator
+      {
+      public:
+        IterSourceIter()  =default;
+        // standard copy operations
+        
+        /** link to existing IterSource (without memory management) */
+        IterSourceIter (ISO& externalSource)
+          : ISO::iterator{ISO::build (externalSource)}
+          { }
+        
+        /** own and manage a heap allocated IterSource */
+        IterSourceIter (ISO* heap_allocated_IterSource)
+          : ISO::iterator{ISO::build (heap_allocated_IterSource)}
+          { }
+      };
+    
   }//(End) namespace iter_explorer : basic iterator wrappers
   
   
@@ -364,6 +398,20 @@ namespace lib {
                        "container needs to exist elsewhere during the lifetime of the iteration");
         using SrcIter = iter_explorer::StlRange<SRC>;
         using SrcVal  = typename SrcIter::value_type;
+      };
+    
+    template<class ISO>
+    struct _DecoratorTraits<ISO*,  enable_if<std::is_base_of<IterSource<typename ISO::value_type>, ISO>>>
+      {
+        using SrcIter = iter_explorer::IterSourceIter<ISO>;
+        using SrcVal  = typename ISO::value_type;
+      };
+    
+    template<class ISO>
+    struct _DecoratorTraits<ISO&,  enable_if<std::is_base_of<IterSource<typename ISO::value_type>, ISO>>>
+      {
+        using SrcIter = iter_explorer::IterSourceIter<ISO>;
+        using SrcVal  = typename ISO::value_type;
       };
     
   }//(End) TreeExplorer traits

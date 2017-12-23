@@ -178,6 +178,10 @@ namespace lib {
       
       static iterator EMPTY_SOURCE;
       
+      using value_type = TY;
+      using reference  = TY&;
+      using pointer    = TY*;
+      
       
       
     private:

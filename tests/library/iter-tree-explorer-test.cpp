@@ -885,31 +885,26 @@ namespace test{
             };
           
           
-          VerySpecivicIter vsit{5};
+          // simple standard case: create a new heap allocated IterSource implementation.
+          // TreeExplorer will take ownership (by smart-ptr) and build a Lumiera Iterator front-End
+          CHECK ("7-6-5-4-3-2-1" == materialise (
+                                      treeExplore(new VerySpecivicIter{7})));
+          
+          
+          
+          VerySpecivicIter vsit{4};
 
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          // attach to an IterSource living here in local scope...
           auto ii = treeExplore(vsit);
           
           CHECK (not isnil (ii));
-          CHECK (5 == *ii);
-          ++ii;
           CHECK (4 == *ii);
           CHECK (4 == vsit.currentVal());
-          
-          VerySpecivicIter* clone = new VerySpecivicIter(vsit);
-          
-          CHECK (4 == clone->currentVal());
-          
-          cout << materialise(
-                    treeExplore(clone)
-                    
-                  ) <<endl;
-          
-          CHECK (4 == vsit.currentVal());
-          CHECK (4 == *ii);
           ++ii;
           CHECK (3 == *ii);
+          CHECK (3 == vsit.currentVal());
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
           auto jj = ii.explore([](PrivateSource& source){ return source.expandChildren(); });
           
           CHECK (3 == *jj);
