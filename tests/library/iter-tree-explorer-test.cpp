@@ -272,6 +272,7 @@ namespace test{
           verify_combinedExpandTransform();
           verify_FilterIterator();
           verify_asIterSource();
+          verify_IterSource();
           
           verify_depthFirstExploration();
           demonstrate_LayeredEvaluation();
@@ -845,6 +846,39 @@ namespace test{
           
           CHECK ("D-C-B-A-J-F" == materialise(exploreIter));
         }                                // note how the remainder of the original sequence is picked up with 'J'...
+      
+      
+      
+      /** @test ability to wrap and handle IterSource based iteration
+       * 
+       */
+      void
+      verify_IterSource()
+        {
+          class PrivateSource
+//          : public IterSource<uint>       /////////////////////////////////////TODO linearised Mix-in problem
+            {
+            public:
+              virtual PrivateSource* expandChildren()  const  =0;
+            };
+          
+          class VerySpecivicIter
+            : public WrappedLumieraIter<NumberSequence>
+            , public PrivateSource
+            {
+            public:
+              VerySpecivicIter(uint start)
+                : WrappedLumieraIter(NumberSequence{start})
+                { }
+              
+              virtual PrivateSource*
+              expandChildren()  const override
+                {
+                  return new VerySpecivicIter{*wrappedIter() - 1};
+                }
+            };
+          UNIMPLEMENTED ("directly wrap and handle IterSource sub-interfaces");
+        }
       
       
       

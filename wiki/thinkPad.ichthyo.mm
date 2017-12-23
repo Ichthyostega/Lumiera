@@ -8081,6 +8081,28 @@
 <node CREATED="1513986085162" ID="ID_1791331544" MODIFIED="1513986090214" TEXT="von au&#xdf;en daran kommen"/>
 <node CREATED="1513986090946" ID="ID_668980524" MODIFIED="1513986103340" TEXT="und auch noch downcasten auf TreeStructureNavigator"/>
 </node>
+<node CREATED="1513988678091" ID="ID_787175675" MODIFIED="1513988732759" TEXT="Pragmatismus-Trip">
+<icon BUILTIN="idea"/>
+<node CREATED="1513988687617" ID="ID_1652718385" MODIFIED="1513988692411" TEXT="nicht jetzt l&#xf6;sen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1513988694704" ID="ID_1570679085" MODIFIED="1513988710933" TEXT="das w&#xe4;re ein Komplett-Umbau von IterSource">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#174e54" CREATED="1513988715838" ID="ID_1398933111" MODIFIED="1513989057765" TEXT="stattdessen: Vorentwurf auf die gr&#xfc;ne Wiese">
+<arrowlink COLOR="#1f9aa8" DESTINATION="ID_1242119956" ENDARROW="Default" ENDINCLINATION="87;-111;" ID="Arrow_ID_662359263" STARTARROW="None" STARTINCLINATION="-259;16;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="licq"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513988744665" HGAP="27" ID="ID_1242119956" MODIFIED="1513989064956" TEXT="vorl&#xe4;ufige IterSource-Integration" VSHIFT="12">
+<linktarget COLOR="#1f9aa8" DESTINATION="ID_1242119956" ENDARROW="Default" ENDINCLINATION="87;-111;" ID="Arrow_ID_662359263" SOURCE="ID_1398933111" STARTARROW="None" STARTINCLINATION="-259;16;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1513988930537" ID="ID_594152265" MODIFIED="1513988942954" TEXT="kann selbst&#xe4;ndig Iterator-Front-End bauen"/>
+<node CREATED="1513988952901" ID="ID_1668656742" MODIFIED="1513988971647" TEXT="dieses Front-End hat Zugang zum konkreten Sub-Interface"/>
+<node CREATED="1513988974179" ID="ID_900695722" MODIFIED="1513989005434" TEXT="Funktoren k&#xf6;nnen dieses Sub-Interface akzeptieren und liefern"/>
+<node CREATED="1513989030587" ID="ID_1529167083" MODIFIED="1513989044189" TEXT="TreeExplorer &#xfc;bernimmt / wrappt / packt aus"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1513962765760" ID="ID_795911284" MODIFIED="1513963084358" TEXT="Demo-Impl mit GenNode-Tree">
