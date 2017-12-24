@@ -379,7 +379,7 @@ namespace lib {
     /** an IterSource frontend to return just a single value once.
      * @warning behind the scenes, a heap allocation is managed by shared_ptr,
      *          to maintain a copy of the wrapped element. When passing a reference,
-     *          only a reference will be wrapped, but a heap allocation happens nontheless
+     *          only a reference will be wrapped, but a heap allocation happens nonetheless
      */
     template<typename VAL>
     auto

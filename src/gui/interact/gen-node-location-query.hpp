@@ -61,10 +61,12 @@
 #define GUI_INTERACT_GEN_NODE_LOCATION_QUERY_H
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-string.hpp"
+#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-source.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
@@ -82,10 +84,11 @@ namespace interact {
   
 //  using std::unique_ptr;
 //  using std::string;
-//  using lib::Literal;
-//  using lib::Symbol;
+  using lib::Literal;
+  using lib::Symbol;
   using lib::diff::Rec;
   using util::_Fmt;
+  using std::forward;
 //  using util::unConst;
 //  using util::isnil;
 //  using util::min;
@@ -214,24 +217,34 @@ namespace interact {
         }
       
       
-      struct TreePos
+      class GenNodeNavigator
+        : public TreeStructureNavigator
         {
-          Rec const& node;
-          size_t depth;
-          
-          ////////////TODO wtf to return as iterator type? it is not uniform!
+          virtual TreeStructureNavigator*
+          expandChildren()  const override
+            {
+              UNIMPLEMENTED ("build an iterator to yield the children. This requires to remember who we are ourselves.");
+            }
         };
+      
+      template<class IT>
+      static auto
+      expandableIterSource(IT && rawIterator)
+        {
+          return TreeStructureNavigator::buildIterator(
+              new lib::WrappedLumieraIter<IT, GenNodeNavigator> {forward<IT> (rawIterator)});
+        }
       
       static ChildIter
       childSequence (Rec const& node, size_t& depth)
         {
+                                   //////////////////////////////////////////////////////////////////////////TICKET #1113 : capturing the string into the global Symbol table becomes obsolete, once GenNode exposes Literal as ID
           auto internedString = [](string const& id) -> Literal
                                   {
                                     return Symbol{id};
                                   };
-          return depth==UIC_PERSP? lib::iter_source::singleVal (internedString (node.getType()))
-                                 : lib::iter_source::transform (node.keys(), internedString);
-                                        /////////////////////////////////////////////////////////////////////TICKET #1113 : could just use lib::wrapIter when GenNode exposes Literal as ID
+          return depth==UIC_PERSP? expandableIterSource(singleValIterator (internedString (node.getType())))
+                                 : expandableIterSource(transformIterator (node.keys(), internedString));
         }
     };
   

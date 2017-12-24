@@ -101,22 +101,12 @@ namespace interact {
       virtual TreeStructureNavigator* expandChildren()  const   =0;
       
       
-      /** build a Lumiera Forward Iterator as front-end for `*this`.
+      /** build a Lumiera Forward Iterator as front-end and managing Handle for a TreeStructureNavigator
+       *  or subclass. The provided pointer is assumed to point to heap allocated storage.
        * @return copyable iterator front-end handle, which allows to retrieve once all values
-       *         yielded by this IterSource. The front-end does _not take ownership_ of this object.
+       *         yielded by this IterSource. The front-end _takes ownership_ of the given object.
        * @note the generated iterator is preconfigured to allow for _"child expansion"_, thereby
        *         calling through the virtual API function expandChildren()
-       */
-      auto
-      buildIterator ()
-        {
-          return lib::treeExplore (*this)
-                        .expand([](TreeStructureNavigator& parent){ return parent.expandChildren(); });
-        }
-      
-      /** build a Lumiera Forward Iterator as front-end and managing Handle for a heap allocated
-       * TreeStructureNavigator or subclass. The provided pointer is assumed to point to heap allocated
-       * storage, which will be owned by the generated iterator.
        */
       static auto
       buildIterator (TreeStructureNavigator* source)
@@ -142,8 +132,7 @@ namespace interact {
     public:
       virtual ~LocationQuery();    ///< this is an interface
       
-      using iteratorZ = decltype (TreeStructureNavigator::buildIterator(std::declval<TreeStructureNavigator*>()));
-      using ChildIter = lib::IterSource<Literal>::iterator;
+      using ChildIter = decltype (TreeStructureNavigator::buildIterator(0));
 
 
       /** make the real anchor point explicit.
