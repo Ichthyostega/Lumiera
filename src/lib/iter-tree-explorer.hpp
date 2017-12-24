@@ -303,6 +303,15 @@ namespace lib {
         IterSourceIter (ISO* heap_allocated_IterSource)
           : ISO::iterator{ISO::build (heap_allocated_IterSource)}
           { }
+        
+        using Source = ISO;
+        
+        Source&
+        source()
+          {
+            REQUIRE (ISO::iterator::isValid());
+            return static_cast<ISO&> (*ISO::iterator::source());
+          }
       };
     
   }//(End) namespace iter_explorer : basic iterator wrappers
@@ -319,6 +328,7 @@ namespace lib {
     using meta::_Fun;
     using std::__and_;
     using std::__not_;
+    using std::is_base_of;
     using std::is_convertible;
     using std::remove_reference_t;
     using meta::can_IterForEach;
@@ -401,14 +411,14 @@ namespace lib {
       };
     
     template<class ISO>
-    struct _DecoratorTraits<ISO*,  enable_if<std::is_base_of<IterSource<typename ISO::value_type>, ISO>>>
+    struct _DecoratorTraits<ISO*,  enable_if<is_base_of<IterSource<typename ISO::value_type>, ISO>>>
       {
         using SrcIter = iter_explorer::IterSourceIter<ISO>;
         using SrcVal  = typename ISO::value_type;
       };
     
     template<class ISO>
-    struct _DecoratorTraits<ISO&,  enable_if<std::is_base_of<IterSource<typename ISO::value_type>, ISO>>>
+    struct _DecoratorTraits<ISO&,  enable_if<is_base_of<IterSource<typename ISO::value_type>, ISO>>>
       {
         using SrcIter = iter_explorer::IterSourceIter<ISO>;
         using SrcVal  = typename ISO::value_type;
@@ -489,6 +499,17 @@ namespace lib {
         struct ArgAccessor<IT,   enable_if<is_convertible<typename IT::value_type, Arg>>>
           {
             static auto build() { return [](auto& iter) { return *iter; }; }
+          };
+        
+        /** adapt to a functor collaborating with an IterSource based iterator pipeline */
+        template<class IT>
+        struct ArgAccessor<IT,   enable_if<__and_< is_base_of<IterSource<typename IT::value_type>, typename IT::Source>
+                                                 , is_base_of<IterSource<typename IT::value_type>, remove_reference_t<Arg>>
+                                                 > >>
+          {
+            using Source = typename IT::Source;
+            
+            static auto build() { return [](auto& iter) -> Source& { return iter.source(); }; }
           };
         
         

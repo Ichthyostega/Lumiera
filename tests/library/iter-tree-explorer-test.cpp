@@ -849,8 +849,17 @@ namespace test{
       
       
       
-      /** @test ability to wrap and handle IterSource based iteration
-       * 
+      
+      /** @test ability to wrap and handle IterSource based iteration.
+       * Contrary to the preceding test case, here the point is to _base the whole pipleine_
+       * on a data source accessible through the IterSource (VTable based) interface. The notable
+       * point with this technique is the ability to use some _extended sub interface of IterSource_
+       * and to rely on this interface to implement some functor bound into the TreeExplorer pipeline.
+       * Especially this allows to delegate the "child expansion" through such an interface and just
+       * return a compatible IterSource as result. This way, the opaque implementation gains total
+       * freedom regarding the concrete implementation of the "child series" iterator. In fact,
+       * it may even use a different implementation on each level or even on each individual call;
+       * only the result type and thus the base interface need to match.
        */
       void
       verify_IterSource()
@@ -874,7 +883,7 @@ namespace test{
               virtual PrivateSource*
               expandChildren()  const override
                 {
-                  return new VerySpecivicIter{*wrappedIter() - 1};
+                  return new VerySpecivicIter{*wrappedIter() - 2};
                 }
               
               uint
@@ -892,45 +901,44 @@ namespace test{
           
           
           
-          VerySpecivicIter vsit{4};
-
           // attach to an IterSource living here in local scope...
-          auto ii = treeExplore(vsit);
+          VerySpecivicIter vsit{5};
+          
+          // ...and build a child expansion on top, which calls through the PrivateSource-API
+          // Effectively this means we do not know the concrete type of the "expanded children" iterator,
+          // only that it adheres to the same IterSource sub-interface as used on the base iterator.
+          auto ii = treeExplore(vsit)
+                      .expand ([](PrivateSource& source){ return source.expandChildren(); });
           
           CHECK (not isnil (ii));
+          CHECK (5 == *ii);
+          CHECK (5 == vsit.currentVal());
+          ++ii;
           CHECK (4 == *ii);
           CHECK (4 == vsit.currentVal());
+          
+          CHECK (0 == ii.depth());
+          ii.expandChildren();           // note: calls through source's VTable to invoke VerySpecificIter::expandChildren() 
+          CHECK (1 == ii.depth());
+          
+          CHECK (2 == *ii);
           ++ii;
+          CHECK (1 == *ii);
+          
+          CHECK (3 == vsit.currentVal());
+          CHECK (1 == ii.depth());
+          ++ii;
+          CHECK (0 == ii.depth());
           CHECK (3 == *ii);
           CHECK (3 == vsit.currentVal());
-          
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
-          auto jj = ii.explore([](PrivateSource& source){ return source.expandChildren(); });
-          
-          CHECK (3 == *jj);
-          CHECK (3 == vsit.currentVal());
-          
-          CHECK (0 == jj.depth());
-          jj.expandChildren();
-          CHECK (1 == jj.depth());
-          
-          CHECK (2 == *jj);
-          ++jj;
-          CHECK (1 == *jj);
-          
+          ++ii;
+          CHECK (2 == *ii);
           CHECK (2 == vsit.currentVal());
-          CHECK (1 == jj.depth());
-          ++jj;
-          CHECK (0 == jj.depth());
-          CHECK (2 == *jj);
-          CHECK (2 == vsit.currentVal());
-          ++jj;
-          CHECK (1 == *jj);
+          ++ii;
+          CHECK (1 == *ii);
           CHECK (1 == vsit.currentVal());
-          ++jj;
-          CHECK (isnil (jj));
-          CHECK (0 == vsit.currentVal());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+          ++ii;
+          CHECK (isnil (ii));
         }
       
       
