@@ -101,13 +101,28 @@ namespace interact {
       virtual TreeStructureNavigator* expandChildren()  const   =0;
       
       
+      /** build a Lumiera Forward Iterator as front-end for `*this`.
+       * @return copyable iterator front-end handle, which allows to retrieve once all values
+       *         yielded by this IterSource. The front-end does _not take ownership_ of this object.
+       * @note the generated iterator is preconfigured to allow for _"child expansion"_, thereby
+       *         calling through the virtual API function expandChildren()
+       */
+      auto
+      buildIterator ()
+        {
+          return lib::treeExplore (*this)
+                        .expand([](TreeStructureNavigator& parent){ return parent.expandChildren(); });
+        }
+      
+      /** build a Lumiera Forward Iterator as front-end and managing Handle for a heap allocated
+       * TreeStructureNavigator or subclass. The provided pointer is assumed to point to heap allocated
+       * storage, which will be owned by the generated iterator.
+       */
       static auto
       buildIterator (TreeStructureNavigator* source)
         {
-          return lib::treeExplore(
-                   lib::IterSource<Literal>::build (source))
-                        .expand([](Literal id){ return lib::IterSource<Literal>::build (
-                                                          ((TreeStructureNavigator*)nullptr)->expandChildren() ); });
+          return lib::treeExplore (source)
+                        .expand([](TreeStructureNavigator& parent){ return parent.expandChildren(); });
         }
     };
   

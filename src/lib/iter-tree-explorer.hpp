@@ -290,18 +290,21 @@ namespace lib {
     class IterSourceIter
       : public ISO::iterator
       {
+        using Iterator = typename ISO::iterator;
+        
       public:
         IterSourceIter()  =default;
         // standard copy operations
         
         /** link to existing IterSource (without memory management) */
         IterSourceIter (ISO& externalSource)
-          : ISO::iterator{ISO::build (externalSource)}
+          : Iterator{ISO::build (externalSource)}
           { }
         
         /** own and manage a heap allocated IterSource */
-        IterSourceIter (ISO* heap_allocated_IterSource)
-          : ISO::iterator{ISO::build (heap_allocated_IterSource)}
+        IterSourceIter (ISO* heapObject)
+          : Iterator{heapObject? ISO::build (heapObject)
+                               : Iterator()}
           { }
         
         using Source = ISO;
@@ -418,11 +421,14 @@ namespace lib {
       };
     
     template<class ISO>
+    struct _DecoratorTraits<ISO*&, enable_if<is_base_of<IterSource<typename ISO::value_type>, ISO>>>
+      : _DecoratorTraits<ISO*>
+      { };
+    
+    template<class ISO>
     struct _DecoratorTraits<ISO&,  enable_if<is_base_of<IterSource<typename ISO::value_type>, ISO>>>
-      {
-        using SrcIter = iter_explorer::IterSourceIter<ISO>;
-        using SrcVal  = typename ISO::value_type;
-      };
+      : _DecoratorTraits<ISO*>
+      { };
     
   }//(End) TreeExplorer traits
   

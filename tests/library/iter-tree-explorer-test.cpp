@@ -900,6 +900,10 @@ namespace test{
                                       treeExplore(new VerySpecivicIter{7})));
           
           
+          // missing source detected
+          PrivateSource* niente = nullptr;
+          CHECK (isnil (treeExplore(niente)));
+          
           
           // attach to an IterSource living here in local scope...
           VerySpecivicIter vsit{5};
@@ -918,7 +922,7 @@ namespace test{
           CHECK (4 == vsit.currentVal());
           
           CHECK (0 == ii.depth());
-          ii.expandChildren();           // note: calls through source's VTable to invoke VerySpecificIter::expandChildren() 
+          ii.expandChildren();           // note: calls through source's VTable to invoke VerySpecificIter::expandChildren()
           CHECK (1 == ii.depth());
           
           CHECK (2 == *ii);
