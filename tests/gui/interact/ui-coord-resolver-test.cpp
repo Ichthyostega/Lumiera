@@ -79,7 +79,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-//          verify_simpleUsage();
+          verify_simpleUsage();
           verify_backingQuery();
           verify_queryAnchor();
           verify_queryCoverage();
@@ -149,6 +149,7 @@ namespace test {
        *            UI this would of course not be a configurable property of the
        *            LocationQuery, but rather just reflect the transient window
        *            state and return the currently activated window
+       * @see IterTreeExplorer_test::verify_IterSource() regarding "child expansion"...
        */
       void
       verify_backingQuery()
@@ -222,20 +223,21 @@ namespace test {
           CHECK ("thirdView"                    == join (queryAPI.getChildren (uic5, 3)));
           VERIFY_ERROR (STATE,                           queryAPI.getChildren (uic5, 4) ); // "someOtherView" at level 4 does not exist
           
-          // verify child exploration via iterator interface
-          cii = queryAPI.getChildren (uic3, 0);
-          CHECK ("window-1" == *cii);
-          CHECK (0 == cii.depth());
-          cii.expandChildren();
+          
+          // verify "child exploration" via iterator interface
+          cii = queryAPI.getChildren (uic3, 0);                               // enter at root level...
+          CHECK ("window-1" == *cii);                                         // first child of root to appear is "window-1"
+          CHECK (0 == cii.depth());                                           // (note depth just happens to coincide with absolute tree depth here)
+          cii.expandChildren();                                               // drill down into current element's children
           CHECK (1 == cii.depth());
-          CHECK ("perspective-A" == *cii);
-          cii.expandChildren();
+          CHECK ("perspective-A" == *cii);                                    // which is just one, the perspective
+          cii.expandChildren();                                               // drill down into the (formal, logical) children of "perspective-A"
           CHECK (2 == cii.depth());
-          CHECK ("panelX" == *cii);
-          cii.expandChildren();
+          CHECK ("panelX" == *cii);                                           // ..and find the "panelX" at level 2
+          cii.expandChildren();                                               // drill down one level further
           CHECK (3 == cii.depth());
-          CHECK ("firstView" == *cii);
-          CHECK ("firstView, window-2, window-3" == join (cii));
+          CHECK ("firstView" == *cii);                                        // and then just continue iteration, which first explores that scope...
+          CHECK ("firstView, secondView, window-2, window-3" == join (cii));  // ...followed by returing to the enclosing scopes, finaly top level.
         }
       
       

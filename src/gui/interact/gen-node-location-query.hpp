@@ -190,7 +190,7 @@ namespace interact {
               if (hasNode (tree, pathElm, depth))
                 {
                   ++depth;
-                  return drillDown (descendInto(tree,pathElm,depth-1), path, maxDepth, depth);
+                  return drillDown (descendInto(tree,depth-1,pathElm), path, maxDepth, depth);
                 }
             }
           return tree;
@@ -210,8 +210,9 @@ namespace interact {
                                  : tree.hasAttribute(pathElm);
         }
       
+      /** within `tree` _at level_ `depth` descend into the child element designated by `pathElm` */
       static Rec const&
-      descendInto (Rec const& tree, const char* pathElm, size_t depth)
+      descendInto (Rec const& tree, size_t depth, const char* pathElm)
         {
           return depth==UIC_PERSP? tree // perspective info is attached as type at the parent node
                                  : tree.get(pathElm).data.get<Rec>();
@@ -228,7 +229,7 @@ namespace interact {
           virtual TreeStructureNavigator*
           expandChildren()  const override
             {
-              return childNavigator (descendInto (pos_, currentChild_, depth_+1), depth_+1);
+              return childNavigator (descendInto (pos_,depth_, currentChild_), depth_+1);
             }
           
           ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1125 : work around the misaligned IterSource design
