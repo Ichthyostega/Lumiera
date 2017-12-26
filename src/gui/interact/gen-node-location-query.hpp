@@ -156,7 +156,8 @@ namespace interact {
                                    % depth
                                    % path
                               );
-          return childSequence(node, depth);
+          return TreeStructureNavigator::buildIterator(
+                   childNavigator (node, depth));
         }
       
     private:
@@ -217,34 +218,48 @@ namespace interact {
         }
       
       
+      template<class PAR>
       class GenNodeNavigator
-        : public TreeStructureNavigator
+        : public PAR
         {
+          Rec const& pos_;
+          size_t depth_;
+          
           virtual TreeStructureNavigator*
           expandChildren()  const override
             {
               UNIMPLEMENTED ("build an iterator to yield the children. This requires to remember who we are ourselves.");
             }
+
+          
+        public:
+          template<class IT>
+          GenNodeNavigator(Rec const& node, size_t depth, IT&& rawChildIter)
+            : PAR{forward<IT> (rawChildIter)}
+            , pos_{node}
+            , depth_{depth}
+            { }
         };
       
       template<class IT>
-      static auto
-      expandableIterSource(IT && rawIterator)
+      static TreeStructureNavigator*
+      buildNavigator (Rec const& node, size_t depth, IT && rawIterator)
         {
-          return TreeStructureNavigator::buildIterator(
-              new lib::WrappedLumieraIter<IT, GenNodeNavigator> {forward<IT> (rawIterator)});
+          return new GenNodeNavigator<
+                    lib::WrappedLumieraIter<IT,
+                      TreeStructureNavigator>> {node, depth, forward<IT> (rawIterator)};
         }
       
-      static ChildIter
-      childSequence (Rec const& node, size_t& depth)
+      static TreeStructureNavigator*
+      childNavigator (Rec const& node, size_t depth)
         {
                                    //////////////////////////////////////////////////////////////////////////TICKET #1113 : capturing the string into the global Symbol table becomes obsolete, once GenNode exposes Literal as ID
           auto internedString = [](string const& id) -> Literal
                                   {
                                     return Symbol{id};
                                   };
-          return depth==UIC_PERSP? expandableIterSource(singleValIterator (internedString (node.getType())))
-                                 : expandableIterSource(transformIterator (node.keys(), internedString));
+          return depth==UIC_PERSP? buildNavigator (node, depth, singleValIterator (internedString (node.getType())))
+                                 : buildNavigator (node, depth, transformIterator (node.keys(), internedString));
         }
     };
   
