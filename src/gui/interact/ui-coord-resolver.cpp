@@ -77,7 +77,7 @@ namespace interact {
   bool
   UICoordResolver::pathResolution()
   {
-    
+    return false; ////////////////////////TODO WIP
   }
   
   

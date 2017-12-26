@@ -234,9 +234,10 @@ namespace lib {
     : public ISO
     , boost::noncopyable
     {
-      using Pos = typename ISO::Pos;
-      
       IT src_;
+      
+    protected:
+      using Pos = typename ISO::Pos;
       
       Pos                                                ////////////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       firstResult ()

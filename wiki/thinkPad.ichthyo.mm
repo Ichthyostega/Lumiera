@@ -8165,6 +8165,27 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514153999177" ID="ID_1077665588" MODIFIED="1514154104535" TEXT="Child-Expansion">
 <linktarget COLOR="#477889" DESTINATION="ID_1077665588" ENDARROW="Default" ENDINCLINATION="-191;0;" ID="Arrow_ID_1839260012" SOURCE="ID_1352163554" STARTARROW="None" STARTINCLINATION="277;0;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1514257085356" ID="ID_1953942552" MODIFIED="1514257145970" TEXT="AUA: wieder Problem mit IterSource">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514257106679" ID="ID_639495082" MODIFIED="1514257205927" TEXT="Design kaputt">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1514257118263" ID="ID_1711832615" MODIFIED="1514257127032" TEXT="nur der Iterator kennt &quot;aktuelles Element&quot;"/>
+<node CREATED="1514257127740" ID="ID_1443037774" MODIFIED="1514257143638" TEXT="via IterSource-Interface kommt man da nicht ran"/>
+</node>
+<node CREATED="1514257226775" ID="ID_813552503" MODIFIED="1514257248239" TEXT="workaround: mitlauschen...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wire-Tap-Implementierung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>

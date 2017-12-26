@@ -228,8 +228,34 @@ namespace interact {
           virtual TreeStructureNavigator*
           expandChildren()  const override
             {
-              UNIMPLEMENTED ("build an iterator to yield the children. This requires to remember who we are ourselves.");
+              return childNavigator (descendInto (pos_, currentChild_, depth_+1), depth_+1);
             }
+          
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1125 : work around the misaligned IterSource design
+          // The design of IterSource attempts to be too clever, and we have to pay for it now...
+          // If IterSource would just work like a StateCore and expose the "current element" via API call,
+          // then we'd be able to retrieve the name of the current child node. Unfortunately it doesn't
+          // and thus we rig a "wire tap" here and capture the node names whenever an iteration happens.
+          // 
+          Literal currentChild_ = Symbol::BOTTOM;
+          
+          using Pos = typename PAR::Pos;
+          
+          virtual Pos
+          firstResult ()  override
+            {
+              Pos pos = PAR::firstResult();
+              if (pos) currentChild_ = *pos;
+              return pos;
+            }
+          
+          virtual void
+          nextResult(Pos& pos)  override
+            {
+              PAR::nextResult (pos);
+              if (pos) currentChild_ = *pos;
+            }
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1125 : work around the misaligned IterSource design          
 
           
         public:
