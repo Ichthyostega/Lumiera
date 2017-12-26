@@ -33,6 +33,18 @@
  ** the UICoordResolver should be designed as an abstract intermediary, built on top of a command and
  ** query interface, provided by the \ref Navigator and backed by the actual UI configuration.
  ** 
+ ** # Abstraction
+ ** 
+ ** The abstraction used to found this interface is twofold. For one, we rely on the notion of logical,
+ ** topological [Coordinates in User Interface space](\ref UICoord). And secondly, we rely on a very
+ ** limited form of navigation: we navigate a tree-shaped (abstracted) structure just by
+ ** - iteration over siblings, which are children of our previous starting point
+ ** - the ability, _on this iterator,_ to expand the "current child" and inject
+ **   the next level of child iteration at its place, similar to the `flatMap`
+ **   operation known from functional programming.
+ ** Together, these two capabilities allow us to build exploring and backtracking evaluations,
+ ** which is enough to build a secondary helper component on top, the gui::interact::UICoordResolver
+ ** 
  ** @todo WIP 10/2017 first draft ////////////////////////////////////////////////////////////////////////////TICKET #1106 generic UI coordinate system
  ** 
  ** @see UICoordResolver_test
@@ -52,9 +64,6 @@
 #include "lib/iter-source.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
-//#include <string>
-//#include <vector>
 #include <utility>
 #include <memory>
 
@@ -64,15 +73,12 @@ namespace interact {
   
   namespace error = lumiera::error;
   
-//  using std::unique_ptr;
-//  using std::string;
-  using lib::Literal;
-//  using lib::Symbol;
+  using std::unique_ptr;
   using util::unConst;
-//  using util::isnil;
-//  using util::min;
+  using lib::Literal;
+  using lib::Symbol;
   
-
+  
   
   
   /**
@@ -191,7 +197,7 @@ namespace interact {
         {
           const char* anchor = nullptr;
           size_t depth       = 0;
-          std::unique_ptr<UICoord> covfefe;
+          unique_ptr<UICoord> covfefe;
           bool isResolved    = false;
         };
       

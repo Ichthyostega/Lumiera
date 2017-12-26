@@ -52,6 +52,7 @@
  **       if this implementation can be used beyond this limited purpose
  ** 
  ** @see UICoordResolver_test
+ ** @see IterTreeExplorer_test
  ** @see ui-coord-resolver.hpp
  ** @see navigator.hpp
  */
@@ -70,11 +71,8 @@
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
-//#include <string>
-//#include <vector>
 #include <utility>
-//#include <memory>
+#include <string>
 
 
 namespace gui {
@@ -82,16 +80,13 @@ namespace interact {
   
   namespace error = lumiera::error;
   
-//  using std::unique_ptr;
-//  using std::string;
-  using lib::Literal;
   using lib::Symbol;
+  using lib::Literal;
   using lib::diff::Rec;
+  using util::isnil;
   using util::_Fmt;
   using std::forward;
-//  using util::unConst;
-//  using util::isnil;
-//  using util::min;
+  using std::string;
   
 
   
@@ -100,7 +95,6 @@ namespace interact {
    * Test/Diagnostics: implementation of the LocationQuery-API
    * based on a abstract topological structure given as Record<GenNode> ("GenNode tree").
    * @remark intended for verifying path resolution and navigation through unit tests
-   * @todo initial draft as of 10/2017
    */
   class GenNodeLocationQuery
     : public LocationQuery
@@ -219,6 +213,33 @@ namespace interact {
         }
       
       
+      
+      
+      /* ==== iterate over siblings with the ability to expand one node's children ==== */
+      
+      /** @return a heap allocated object attached at "current tree position" while
+       *          exposing the names of all child nodes [through iteration](\ref lib::IterSource)
+       */
+      static TreeStructureNavigator*
+      childNavigator (Rec const& node, size_t depth)
+        {
+                                   //////////////////////////////////////////////////////////////////////////TICKET #1113 : capturing the string into the global Symbol table becomes obsolete, once GenNode exposes Literal as ID
+          auto internedString = [](string const& id) -> Literal
+                                  {
+                                    return Symbol{id};
+                                  };
+          return depth==UIC_PERSP? buildNavigator (node, depth, singleValIterator (internedString (node.getType())))
+                                 : buildNavigator (node, depth, transformIterator (node.keys(), internedString));
+        }
+      
+      
+      /**
+       * Helper to navigate a tree topology represented as GenNode tree.
+       * Basically this is a lib::IterSource<Literal> to encapsulate a sequence of sibling nodes.
+       * A "current element" representation is layered on top to allow to expand one level deeper
+       * on demand. This "child expansion" is triggered by invoking the `expandChildren()` function
+       * on the iterator front-end provided as LocationQuery::ChildIter
+       */
       template<class PAR>
       class GenNodeNavigator
         : public PAR
@@ -256,7 +277,7 @@ namespace interact {
               PAR::nextResult (pos);
               if (pos) currentChild_ = *pos;
             }
-          ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1125 : work around the misaligned IterSource design          
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1125 : work around the misaligned IterSource design
 
           
         public:
@@ -268,6 +289,8 @@ namespace interact {
             { }
         };
       
+      
+      /** type rebinding helper to pick up the concrete child iterator type `IT` */
       template<class IT>
       static TreeStructureNavigator*
       buildNavigator (Rec const& node, size_t depth, IT && rawIterator)
@@ -275,18 +298,6 @@ namespace interact {
           return new GenNodeNavigator<
                     lib::WrappedLumieraIter<IT,
                       TreeStructureNavigator>> {node, depth, forward<IT> (rawIterator)};
-        }
-      
-      static TreeStructureNavigator*
-      childNavigator (Rec const& node, size_t depth)
-        {
-                                   //////////////////////////////////////////////////////////////////////////TICKET #1113 : capturing the string into the global Symbol table becomes obsolete, once GenNode exposes Literal as ID
-          auto internedString = [](string const& id) -> Literal
-                                  {
-                                    return Symbol{id};
-                                  };
-          return depth==UIC_PERSP? buildNavigator (node, depth, singleValIterator (internedString (node.getType())))
-                                 : buildNavigator (node, depth, transformIterator (node.keys(), internedString));
         }
     };
   

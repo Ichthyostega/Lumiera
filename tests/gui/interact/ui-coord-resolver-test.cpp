@@ -149,7 +149,7 @@ namespace test {
        *            UI this would of course not be a configurable property of the
        *            LocationQuery, but rather just reflect the transient window
        *            state and return the currently activated window
-       * @see IterTreeExplorer_test::verify_IterSource() regarding "child expansion"...
+       * @see IterTreeExplorer_test::verify_IterSource() regarding "child exploration"...
        */
       void
       verify_backingQuery()
@@ -237,7 +237,7 @@ namespace test {
           cii.expandChildren();                                               // drill down one level further
           CHECK (3 == cii.depth());
           CHECK ("firstView" == *cii);                                        // and then just continue iteration, which first explores that scope...
-          CHECK ("firstView, secondView, window-2, window-3" == join (cii));  // ...followed by returing to the enclosing scopes, finaly top level.
+          CHECK ("firstView, secondView, window-2, window-3" == join (cii));  // ...followed by returning to the enclosing scopes, finally top level.
         }
       
       
