@@ -79,7 +79,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-          verify_simpleUsage();
+//          verify_simpleUsage();
           verify_backingQuery();
           verify_queryAnchor();
           verify_queryCoverage();
@@ -221,6 +221,21 @@ namespace test {
           CHECK ("panelZ, panelZZ"              == join (queryAPI.getChildren (uic5, 2)));
           CHECK ("thirdView"                    == join (queryAPI.getChildren (uic5, 3)));
           VERIFY_ERROR (STATE,                           queryAPI.getChildren (uic5, 4) ); // "someOtherView" at level 4 does not exist
+          
+          // verify child exploration via iterator interface
+          cii = queryAPI.getChildren (uic3, 0);
+          CHECK ("window-1" == *cii);
+          CHECK (0 == cii.depth());
+          cii.expandChildren();
+          CHECK (1 == cii.depth());
+          CHECK ("perspective-A" == *cii);
+          cii.expandChildren();
+          CHECK (2 == cii.depth());
+          CHECK ("panelX" == *cii);
+          cii.expandChildren();
+          CHECK (3 == cii.depth());
+          CHECK ("firstView" == *cii);
+          CHECK ("firstView, window-2, window-3" == join (cii));
         }
       
       
