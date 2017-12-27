@@ -484,8 +484,9 @@ namespace lib {
             {
               Literal* end = elms_.end();
               Literal* pos = getPosition(newSize);
-              for ( ; pos!=end; ++pos)
-                setContent (pos, nullptr);
+              if (pos)
+                for ( ; pos!=end; ++pos)
+                  setContent (pos, nullptr);
               tail_.resizeTo (0);
             }
           else
