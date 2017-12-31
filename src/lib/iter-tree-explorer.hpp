@@ -1135,6 +1135,21 @@ namespace lib {
         }
       
       
+      /** extension functionality to be used on top of expand(), to perform expansion on next iteration. 
+       * When configured, an expandChildren() call will not happen immediately, but rather in place of
+       * the next iteration step. Basically child expansion _is kind of a special iteration step,_ and
+       * thus all we need to do is add another layer with a boolean state flag, which catches the
+       * expandChildren() and iterNext() calls and redirects appropriately.
+       * @warning expandAll and expandOnIteration are not meant to be used at the same time.
+       */
+      auto
+      expandOnIteration()
+        {
+          UNIMPLEMENTED ("expansion scheduler flag");
+          return *this;
+        }
+      
+      
       /** adapt this TreeExplorer to pipe each result value through a transformation function.
        * Several "layers" of mapping can be piled on top of each other, possibly mixed with the
        * other types of adaptation, like the child-expanding operation, or a filter. Obviously,

@@ -270,6 +270,7 @@ namespace test{
           verify_expandOperation();
           verify_transformOperation();
           verify_combinedExpandTransform();
+          verify_scheduledExpansion();
           verify_FilterIterator();
           verify_asIterSource();
           verify_IterSource();
@@ -665,6 +666,23 @@ namespace test{
                       .transform([](float f){ return 0.055 + f/2; })
                  )
                  == "5.055-4.055-20.055-1.055-2.055-1.055" );
+        }
+      
+      
+      
+      /** @test child expansion can be scheduled to happen on next iteration.
+       * As such, _"child expansion"_ happens right away, thereby consuming a node
+       * and replacing it with its child sequence. Sometimes, when building search and matching
+       * algorithms, we rather just want to _plan_ a child expansion to happen on next increment.
+       * Such is especially relevant when searching for a locally or global maximal solution, which
+       * is rather simple to implement with an additional filtering layer -- and this approach requires
+       * us to deliver all partial solutions for the filter layer to act on. Obviously this functionality
+       * leads to additional state and thus is provided as optional layer in the TreeExplorer builder.
+       */
+      void
+      verify_scheduledExpansion()
+        {
+          UNIMPLEMENTED ("schedule child expansion to be performed on next iteration");
         }
       
       
