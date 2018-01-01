@@ -702,7 +702,7 @@ namespace lib {
      * @todo as of 12/2017, this is more like a proof-of concept and can be seen as indication, that there might
      *       be several flavours of child expansion. Unfortunately, most of these conceivable extensions would
      *       require a flexibilisation of Expander's internals and thus increase the complexity of the code.
-     *       Thus, if ever encounter the need of anything beyond the basic expansion pattern, we should
+     *       Thus, if we ever encounter the need of anything beyond the basic expansion pattern, we should
      *       rework the design of Expander and introduce building blocks to define the evaluation strategy.
      */
     template<class SRC>
@@ -719,6 +719,42 @@ namespace lib {
         iterNext()
           {
             SRC::expandChildren();
+          }
+      };
+    
+    
+    
+    /**
+     * @internal extension to the Expander decorator to perform expansion delayed on next iteration. 
+     */
+    template<class SRC>
+    class ScheduledExpander
+      : public SRC
+      {
+        static_assert(is_StateCore<SRC>::value, "need wrapped state core as predecessor in pipeline");
+        
+        bool shallExpand_ = false;
+        
+      public:
+        /** pass through ctor */
+        using SRC::SRC;
+        
+        void
+        expandChildren()
+          {
+            shallExpand_ = true;
+          }
+        
+        void
+        iterNext()
+          {
+            if (shallExpand_)
+              {
+                SRC::expandChildren();
+                shallExpand_ = false;
+              }
+            else
+              SRC::iterNext();
           }
       };
     
@@ -1141,12 +1177,16 @@ namespace lib {
        * thus all we need to do is add another layer with a boolean state flag, which catches the
        * expandChildren() and iterNext() calls and redirects appropriately.
        * @warning expandAll and expandOnIteration are not meant to be used at the same time.
+       *          Recommendation is to use expandOnIteration() right above (after) the expand()
+       *          definition, since interplay with intermingled layers can be complex
        */
       auto
       expandOnIteration()
         {
-          UNIMPLEMENTED ("expansion scheduler flag");
-          return *this;
+          using ResCore = iter_explorer::ScheduledExpander<SRC>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this)});
         }
       
       
