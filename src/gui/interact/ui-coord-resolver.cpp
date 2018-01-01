@@ -30,13 +30,15 @@
 
 #include "gui/interact/ui-coord-resolver.hpp"
 //#include "gui/ctrl/global-ctx.hpp"
-#include "lib/iter-stack.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
+
+#include <boost/noncopyable.hpp>
 
 //using util::cStr;
 //using util::isnil;
 using lib::Symbol;
+using lib::treeExplore;
 
 
 namespace gui {
@@ -49,16 +51,36 @@ namespace interact {
   
   
   
-  /** @internal working data for path resolution */
-  struct UICoordResolver::ResolutionState
-    {
-      using ChildIter = LocationQuery::ChildIter;
-
-      lib::IterStack<ChildIter> backlog;
-      lib::IterQueue<Resolution> solutions;
-    };
   
   namespace { //
+    
+    class PathManipulator
+      : public UICoord
+      {
+        size_t currDepth_;
+        
+      public:
+        PathManipulator ()
+          : UICoord{}
+          , currDepth_{0}
+          { }
+        // inherited copy operations
+        
+        UICoord const
+        retrieveResult()
+          {
+            UNIMPLEMENTED ("truncate to currDepth_");
+            PathArray::normalise();
+            return *this;
+          }
+        
+        void
+        setAt (size_t depth, Literal newSpec)
+          {
+            UNIMPLEMENTED ("forcibly set content, ensure storage");
+            currDepth_ = depth;
+          }
+      };
 
 
   }//(End) implementation details
@@ -77,7 +99,40 @@ namespace interact {
   bool
   UICoordResolver::pathResolution()
   {
-    return false; ////////////////////////TODO WIP
+    size_t maxDepth = 0;
+    PathManipulator coverage;
+    auto searchAlgo = query_.getChildren (this->uic_, 0)
+                            .expandOnIteration()
+                            .filter([&](auto& iter)
+                                       {
+                                          size_t depth = iter.depth();
+                                          Literal elm = uic_[depth];
+                                          coverage.setAt (depth,elm);
+                                          iter.expandChildren();
+                                          UNIMPLEMENTED ("bollocks");
+                                          return true;
+                                       })
+                            .filter([&](auto& iter)
+                                       {
+                                          if (iter.depth() <= maxDepth)
+                                            return false;
+                                          maxDepth = iter.depth();
+                                          return true;
+                                       })
+                            .transform([&](auto&)
+                                       {
+                                          return coverage.retrieveResult();
+                                       });
+    if (isnil (searchAlgo))
+      return false;
+    
+    while (searchAlgo)
+      if (not res_.covfefe)
+        res_.covfefe.reset (new UICoord{*searchAlgo});
+      else
+        *res_.covfefe = *searchAlgo;
+    
+    return true;
   }
   
   

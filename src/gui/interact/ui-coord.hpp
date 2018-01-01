@@ -622,7 +622,7 @@ namespace interact {
     return window (UIC_FIRST_WINDOW);
   }
 
-  /** @return aBuilder with just the windowID defined */
+  /** @return a Builder with just the windowID defined */
   inline UICoord::Builder
   UICoord::window (Literal windowID)
   {

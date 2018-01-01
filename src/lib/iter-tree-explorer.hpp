@@ -1178,7 +1178,7 @@ namespace lib {
        * expandChildren() and iterNext() calls and redirects appropriately.
        * @warning expandAll and expandOnIteration are not meant to be used at the same time.
        *          Recommendation is to use expandOnIteration() right above (after) the expand()
-       *          definition, since interplay with intermingled layers can be complex
+       *          definition, since interplay with intermingled layers can be complex.
        */
       auto
       expandOnIteration()

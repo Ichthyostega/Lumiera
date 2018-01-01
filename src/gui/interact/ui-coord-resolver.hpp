@@ -197,14 +197,12 @@ namespace interact {
         {
           const char* anchor = nullptr;
           size_t depth       = 0;
-          unique_ptr<UICoord> covfefe;
+          unique_ptr<UICoord> covfefe{};
           bool isResolved    = false;
         };
       
       LocationQuery& query_;
       Resolution res_;
-      
-      struct ResolutionState;
       
     public:
       UICoordResolver (UICoord const& uic, LocationQuery& queryAPI)
