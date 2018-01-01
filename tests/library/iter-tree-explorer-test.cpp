@@ -682,7 +682,49 @@ namespace test{
       void
       verify_scheduledExpansion()
         {
-          UNIMPLEMENTED ("schedule child expansion to be performed on next iteration");
+          auto ii = treeExplore(CountDown{6})
+                      .expand([](uint j){ return CountDown{j-2}; })
+                      .expandOnIteration();
+          
+          CHECK (!isnil (ii));
+          CHECK (6 == *ii);
+          ++ii;
+          CHECK (5 == *ii);
+          CHECK (ii.depth() == 0);
+          
+          ii.expandChildren();
+          CHECK (5 == *ii);
+          CHECK (ii.depth() == 0);
+          ++ii;
+          CHECK (3 == *ii);
+          CHECK (ii.depth() == 1);
+          
+          ii.expandChildren();
+          ii.expandChildren();
+          CHECK (ii.depth() == 1);
+          CHECK (3 == *ii);
+          ++ii;
+          CHECK (1 == *ii);
+          CHECK (ii.depth() == 2);
+          ++ii;
+          CHECK (2 == *ii);
+          CHECK (ii.depth() == 1);
+          
+          ii.expandChildren();
+          ++ii;
+          CHECK (1 == *ii);
+          CHECK (ii.depth() == 1);
+          ++ii;
+          CHECK (4 == *ii);
+          CHECK (ii.depth() == 0);
+          ++ii;
+          CHECK (3 == *ii);
+          ++ii;
+          CHECK (2 == *ii);
+          ++ii;
+          CHECK (1 == *ii);
+          ++ii;
+          CHECK (isnil (ii));
         }
       
       

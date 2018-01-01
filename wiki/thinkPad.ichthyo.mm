@@ -7165,8 +7165,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514747089115" ID="ID_1696559217" MODIFIED="1514747192393" TEXT="verify_scheduledExpansion">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514747105248" ID="ID_952786179" MODIFIED="1514747124111" TEXT="setup wie child expansion">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514747105248" ID="ID_952786179" MODIFIED="1514824954671" TEXT="setup wie child expansion">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514747112048" ID="ID_1206186653" MODIFIED="1514747124984" TEXT="wird aber erst bei Iteration vollzogen">
 <icon BUILTIN="flag-yellow"/>
