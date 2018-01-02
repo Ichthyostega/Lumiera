@@ -52,8 +52,15 @@ namespace interact {
   
   
   
-  namespace { //
+  namespace { // Helpers for patch matching algorithm
     
+    /**
+     * Special UI-Coordinate builder
+     * to define the solution path step by step
+     * while we recurse down into the reference tree
+     * @note when backtracking, an existing solution will
+     *       be partially rewritten starting from lower depth
+     */
     class PathManipulator
       : public UICoord
       {
@@ -69,7 +76,7 @@ namespace interact {
         UICoord const
         retrieveResult()
           {
-            UNIMPLEMENTED ("truncate to currDepth_");
+            PathArray::truncateTo(currDepth_);
             PathArray::normalise();
             return *this;
           }
@@ -77,8 +84,9 @@ namespace interact {
         void
         setAt (size_t depth, Literal newSpec)
           {
-            UNIMPLEMENTED ("forcibly set content, ensure storage");
-            currDepth_ = depth;
+            Literal* storage = PathArray::expandPosition (depth);
+            PathArray::setContent (storage, newSpec);
+            currDepth_ = depth+1;
           }
       };
 
@@ -94,7 +102,16 @@ namespace interact {
    * over the whole structure tree, since we have to try every possible branch until we can disprove
    * the possibility of a match. Implemented as depth-first search with backtracking, this scanning
    * pass produces a list of possible matches, from which we pick the first one with maximum
-   * coverage, to produce a single solution.
+   * coverage, to yield a single solution.
+   * @remark the search and matching is based on an iterator pipeline builder, with the special ability
+   *         to expand and recurse into the children of the current element on demand: when `expandChildren()`
+   *         was invoked, the next iteration will continue with the first child element; there is a stack of
+   *         such "child expansions" -- meaning that the search will backtrack and explore further possibilities
+   *         later on. Each position where the pattern matches the actual tree is marked as possible solution.
+   *         As a sideeffect, a new coordinate spec to reflect the actual coverage is built and re-written,
+   *         while the algorithm proceeds. Thus, at any point marked as solution, the current (partial)
+   *         solution can be retrieved and copied from this PathManipulator buffer.
+   *         An additional filter layer discriminates the first maximal solutions seen thus far.
    */
   bool
   UICoordResolver::pathResolution()
@@ -115,24 +132,25 @@ namespace interact {
                                              return false;                  // it's no solution; backtracking to next alternative
                                            
                                            coverage.setAt (depth, *iter);   // record match rsp. interpolate wildcard into output
-                                           iter.expandChildren();           // continue matching one level down into the tree    
+                                           iter.expandChildren();           // next iteration will match one level down into the tree    
                                            return elm != Symbol::EMPTY;     // wildcard match itself does not count as solution
                                         })                                  // ...yet we'll continue matching with children
                             .filter ([&](auto& iter)
                                         {
-                                           if (iter.depth() <= maxDepth)    // filter for maximum solution depth
+                                           if (iter.depth()+1 <= maxDepth)  // filter for maximum solution length
                                              return false;
-                                           maxDepth = iter.depth();
+                                           maxDepth = 1 + iter.depth();
                                            return true;
                                         })
                             .transform ([&](auto&)
                                         {
                                            return coverage.retrieveResult();
                                         });
+    // perform the matching
     if (isnil (searchAlgo))
-      return false;
+      return false;     // no solution found
     
-    while (searchAlgo)
+    while (searchAlgo)  // pull first maximal solution
       if (not res_.covfefe)
         res_.covfefe.reset (new UICoord{*searchAlgo});
       else
