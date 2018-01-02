@@ -101,28 +101,34 @@ namespace interact {
   {
     size_t maxDepth = 0;
     PathManipulator coverage;
-    auto searchAlgo = query_.getChildren (this->uic_, 0)
+    size_t coordDepth = this->uic_.size();
+    auto searchAlgo = query_.getChildren (uic_, 0)
                             .expandOnIteration()
-                            .filter([&](auto& iter)
-                                       {
-                                          size_t depth = iter.depth();
-                                          Literal elm = uic_[depth];
-                                          coverage.setAt (depth,elm);
-                                          iter.expandChildren();
-                                          UNIMPLEMENTED ("bollocks");
-                                          return true;
-                                       })
-                            .filter([&](auto& iter)
-                                       {
-                                          if (iter.depth() <= maxDepth)
-                                            return false;
-                                          maxDepth = iter.depth();
-                                          return true;
-                                       })
-                            .transform([&](auto&)
-                                       {
-                                          return coverage.retrieveResult();
-                                       });
+                            .filter ([&](auto& iter)
+                                        {
+                                           size_t depth = iter.depth();     // we are at that depth in target tree
+                                           if (depth >= coordDepth)         // search pattern exhausted
+                                             return false;
+                                           Literal elm = uic_[depth];       // pick search pattern component at that depth
+                                           if (elm != *iter and             // if no direct match
+                                               elm != Symbol::EMPTY)        // and not a wildcard in the pattern
+                                             return false;                  // it's no solution; backtracking to next alternative
+                                           
+                                           coverage.setAt (depth, *iter);   // record match rsp. interpolate wildcard into output
+                                           iter.expandChildren();           // continue matching one level down into the tree    
+                                           return elm != Symbol::EMPTY;     // wildcard match itself does not count as solution
+                                        })                                  // ...yet we'll continue matching with children
+                            .filter ([&](auto& iter)
+                                        {
+                                           if (iter.depth() <= maxDepth)    // filter for maximum solution depth
+                                             return false;
+                                           maxDepth = iter.depth();
+                                           return true;
+                                        })
+                            .transform ([&](auto&)
+                                        {
+                                           return coverage.retrieveResult();
+                                        });
     if (isnil (searchAlgo))
       return false;
     

@@ -435,6 +435,8 @@ namespace lib {
           return ++lastPos; // at start if empty, else one behind the last
         }
       
+      
+      /* ===== manipulation by UICoord and Builder subclasses ===== */
     protected:
       /**
        * @internal access content element by index

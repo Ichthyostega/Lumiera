@@ -227,8 +227,8 @@ namespace interact {
        * Check if this coordinate spec can be seen as an extension
        * of the given parent coordinates and thus reaches further down
        * towards specific UI elements in comparison to the parent path
-       * This constitutes a _partial order_, since some paths might
-       * just be totally unrelated to each other not comparable.
+       * This constitutes a _partial order_, since some paths might just
+       * be totally unrelated to each other and thus not comparable.
        * @note we tolerate (but not demand) expansion/interpolation
        *       of the given parent, i.e. parent may be incomplete
        *       or contain `'*'` placeholders.
@@ -419,7 +419,7 @@ namespace interact {
       
       /** replace the existing path information with the given elements
        * @note - storage will possibly be expanded to accommodate
-       *       - the individual path elements will be _interned_ as Symbol
+       *       - the individual path elements are required to persist
        *       - any excess elements will be cleared
        *       - the pathElms can be _empty_ in which case just
        *         any content starting from `idx` will be cleared
