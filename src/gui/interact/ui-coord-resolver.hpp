@@ -289,14 +289,14 @@ namespace interact {
       UICoordResolver
       cover()
         {
-          if (isCovered())
+          if (isCovered() and not res_.covfefe)
             truncateTo (res_.depth);
           else if (canCover())
             {
               ASSERT (res_.isResolved);
               REQUIRE (res_.covfefe);
               res_.depth = res_.covfefe->size();
-              std::swap (this->uic_, *res_.covfefe);
+              this->uic_ = std::move (*res_.covfefe);
               res_.covfefe.reset();
               ENSURE (isTotallyCovered());
             }

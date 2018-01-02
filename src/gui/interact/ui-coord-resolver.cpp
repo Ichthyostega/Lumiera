@@ -23,20 +23,17 @@
 
 /** @file ui-coord-resolver.cpp
  ** Implementation details of resolving a UICoord path against the actual UI topology.
+ ** Algorithm to match a UI-Coord spec, possibly with wildcards, against the current actual tree of UI widgets.
  ** 
- ** @todo WIP 10/2017 initial draft       ////////////////////////////////////////////////////////////TICKET #1107
  */
 
 
 #include "gui/interact/ui-coord-resolver.hpp"
-//#include "gui/ctrl/global-ctx.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 
-//using util::cStr;
-//using util::isnil;
+using util::isnil;
 using lib::Symbol;
 using lib::treeExplore;
 
@@ -73,11 +70,10 @@ namespace interact {
           { }
         // inherited copy operations
         
-        UICoord const
+        UICoord const&
         retrieveResult()
           {
             PathArray::truncateTo(currDepth_);
-            PathArray::normalise();
             return *this;
           }
         
@@ -128,12 +124,12 @@ namespace interact {
                                              return false;
                                            Literal elm = uic_[depth];       // pick search pattern component at that depth
                                            if (elm != *iter and             // if no direct match
-                                               elm != Symbol::EMPTY)        // and not a wildcard in the pattern
+                                               elm != Symbol::ANY)          // and not a wildcard in the pattern
                                              return false;                  // it's no solution; backtracking to next alternative
                                            
                                            coverage.setAt (depth, *iter);   // record match rsp. interpolate wildcard into output
-                                           iter.expandChildren();           // next iteration will match one level down into the tree    
-                                           return elm != Symbol::EMPTY;     // wildcard match itself does not count as solution
+                                           iter.expandChildren();           // next iteration will match one level down into the tree
+                                           return elm != Symbol::ANY;       // wildcard match itself does not count as solution
                                         })                                  // ...yet we'll continue matching with children
                             .filter ([&](auto& iter)
                                         {
@@ -142,7 +138,7 @@ namespace interact {
                                            maxDepth = 1 + iter.depth();
                                            return true;
                                         })
-                            .transform ([&](auto&)
+                            .transform ([&](auto&) -> UICoord const&
                                         {
                                            return coverage.retrieveResult();
                                         });
@@ -151,11 +147,18 @@ namespace interact {
       return false;     // no solution found
     
     while (searchAlgo)  // pull first maximal solution
-      if (not res_.covfefe)
-        res_.covfefe.reset (new UICoord{*searchAlgo});
-      else
-        *res_.covfefe = *searchAlgo;
+      {
+        if (not res_.covfefe)
+          res_.covfefe.reset (new UICoord {*searchAlgo});
+        else
+          *res_.covfefe = *searchAlgo;
+        ++searchAlgo;
+      }
     
+    ENSURE (res_.covfefe and res_.covfefe->size() >= 1);
+    res_.isResolved = true;
+    res_.anchor = res_.covfefe->getWindow();
+    res_.depth = res_.covfefe->size();
     return true;
   }
   
