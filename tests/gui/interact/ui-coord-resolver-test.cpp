@@ -279,14 +279,14 @@ namespace test {
           CHECK (not r2.isAnchored());
           CHECK (    r3.isAnchored());
           CHECK (    r4.isAnchored());
-          CHECK (not r5.isAnchored());
+          CHECK (    r5.isAnchored());
           CHECK (not r6.isAnchored());
 
           CHECK (    r1.canAnchor());
           CHECK (not r2.canAnchor());
           CHECK (    r3.canAnchor());
           CHECK (    r4.canAnchor());
-          CHECK (not r5.canAnchor());
+          CHECK (    r5.canAnchor());
           CHECK (    r6.canAnchor());
         }
       

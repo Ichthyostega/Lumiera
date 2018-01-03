@@ -164,7 +164,7 @@ namespace interact {
       getCurrentWindow()
         {
           return Symbol{lib::pull_last (tree_.keys())};        //////////////////////////////////////////////TICKET #1113 : warning use of Symbol table becomes obsolete when EntryID relies on Literal
-        }
+        }            // special convention for unit-tests
       
       Literal
       resolveElm (UICoord const& path, size_t depth)

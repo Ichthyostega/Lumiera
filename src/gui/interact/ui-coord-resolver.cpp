@@ -142,6 +142,9 @@ namespace interact {
                                         {
                                            return coverage.retrieveResult();
                                         });
+    // we know for sure now if coverage is possible
+    res_.isResolved = true;
+    
     // perform the matching
     if (isnil (searchAlgo))
       return false;     // no solution found
@@ -156,10 +159,16 @@ namespace interact {
       }
     
     ENSURE (res_.covfefe and res_.covfefe->size() >= 1);
-    res_.isResolved = true;
     res_.anchor = res_.covfefe->getWindow();
-    res_.depth = res_.covfefe->size();
-    return true;
+    
+    // but depth reflects only that part coverable without wildcards
+    if (res_.depth == 0)
+      res_.depth = query_.determineCoverage(uic_);
+    if (res_.depth == 0 and res_.anchor)
+      res_.depth = 1;
+    
+    // signal success only when total coverage is possible
+    return res_.covfefe->size() == uic_.size();
   }
   
   

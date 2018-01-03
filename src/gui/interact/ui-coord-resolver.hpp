@@ -222,8 +222,8 @@ namespace interact {
       bool
       isAnchored()  const
         {
-          return res_.isResolved
-             and res_.anchor and res_.anchor != Symbol::BOTTOM;
+          return res_.anchor
+             and res_.anchor != Symbol::BOTTOM;
         }
 
       /** determine if a mutation is possible to anchor the path explicitly
@@ -244,25 +244,28 @@ namespace interact {
 
       /** is this path at least _partially_ covered?
        *  A covered path describes an access path through widgets actually existing in the UI.
-       * @remarks this also implies the path is anchored, complete and explicit.
+       * @remark this also implies the path is anchored, complete and explicit.
        * @note this predicate tests for _partial_ coverage, which means, there might
        *       be some extraneous suffix in this path descending beyond existing UI
        */
       bool
-      isCovered()  const
+      isCoveredPartially()  const
         {
           return res_.isResolved
              and res_.depth > 0;
         }
       
-      /** there is no extraneous uncovered suffix in this path spec */
+      /** this path is completely covered by the currently existing UI structure;
+       * @remark there is no extraneous uncovered suffix in this path spec;
+       *         moreover, the path is anchored, complete and explicit
+       */
       bool
-      isTotallyCovered()  const
+      isCovered()  const
         {
           return res_.isResolved
              and res_.depth == this->uic_.size();
         }
-
+      
       /** determine if a mutation is possible to get the path (partially) covered.
        * @remarks in order to be successful, a path resolution must interpolate any gaps in the
        *       path spec _and_ reach a point behind / below the gap (wildcards), where an existing
@@ -275,9 +278,10 @@ namespace interact {
       bool
       canCover()  const
         {
-          return isCovered()
-              or (res_.isResolved and res_.covfefe)
-              or unConst(this)->pathResolution();
+          return isCovered()                          // either explicit coverage known
+              or (res_.isResolved and res_.covfefe)   // or previous matching run found (partial) solution
+              or unConst(this)->pathResolution()      // perform matching run now to find total coverage
+              or (res_.covfefe);                      // or at least partial coverage was found
         }
       
       
@@ -289,7 +293,7 @@ namespace interact {
       UICoordResolver
       cover()
         {
-          if (isCovered() and not res_.covfefe)
+          if (isCoveredPartially() and not res_.covfefe)
             truncateTo (res_.depth);
           else if (canCover())
             {
@@ -298,7 +302,7 @@ namespace interact {
               res_.depth = res_.covfefe->size();
               this->uic_ = std::move (*res_.covfefe);
               res_.covfefe.reset();
-              ENSURE (isTotallyCovered());
+              ENSURE (isCovered());
             }
           else
             {
@@ -316,12 +320,12 @@ namespace interact {
       UICoordResolver
       extend (Literal pathExtension)
         {
-          if (not isTotallyCovered())
+          if (not isCovered())
             cover();
-          ENSURE (isTotallyCovered());
+          ENSURE (isCovered());
           append (pathExtension);
           res_.depth = query_.determineCoverage (this->uic_); // coverage may grow
-          ENSURE (isCovered());
+          ENSURE (isCoveredPartially());
           return std::move (*this);
         }
       
@@ -335,13 +339,16 @@ namespace interact {
       void
       attempt_trivialResolution()
         {
-          if (not uic_.isExplicit()) return;
           res_.anchor = query_.determineAnchor  (this->uic_);
+          if (not uic_.isExplicit()) return;
           res_.depth  = query_.determineCoverage(this->uic_);
           res_.isResolved = true;
         }
 
-      /** @internal algorithm to resolve this UICoord path against the actual UI topology. */
+      /** @internal algorithm to resolve this UICoord path against the actual UI topology.
+       *  @return true if total coverage is possibly (by interpolating wildcards)
+       *  @remark after invoking this function, res_.isResolved and possible coverage are set.
+       */
       bool pathResolution();
     };
   

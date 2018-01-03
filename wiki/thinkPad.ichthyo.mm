@@ -8462,6 +8462,18 @@
 <node CREATED="1514847950576" ID="ID_1211653233" MODIFIED="1514850848636" TEXT="normalisiert automatisch beim Abholen des Ergebnisses"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942333406" ID="ID_1235716633" MODIFIED="1514942345420" TEXT="Ankern unvollst&#xe4;ndiger Pfade">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942350940" ID="ID_1658536334" MODIFIED="1514942362533" TEXT="erweitertes Verst&#xe4;ndnis von &quot;Wildcard&quot;">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942365034" ID="ID_1911438770" MODIFIED="1514942370417" TEXT="nebenbei Anker ermitteln">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942372976" ID="ID_1541868169" MODIFIED="1514942397215" TEXT="feststellen, ob coverage real oder m&#xf6;glich">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514897795054" ID="ID_1126804251" MODIFIED="1514897809479" TEXT="Erweiterung: verschiedne Filter">
 <icon BUILTIN="hourglass"/>
 </node>
@@ -8492,8 +8504,8 @@
 <node CREATED="1514339695220" ID="ID_1819447572" MODIFIED="1514339700103" TEXT="&#xfc;berschreibt Position"/>
 <node CREATED="1514339700955" ID="ID_503690023" MODIFIED="1514339717876" TEXT="k&#xfc;rzt/&#xe4;ndert sonst nix"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514746187370" ID="ID_989083906" MODIFIED="1514746260155" TEXT="Problem der partiellen Covfefe">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514746187370" ID="ID_989083906" MODIFIED="1514942318329" TEXT="Problem der partiellen Covfefe">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1514746268280" ID="ID_1650861625" MODIFIED="1514746277434" TEXT="totale Coverage ist einfach">
 <node CREATED="1514746278542" ID="ID_638094416" MODIFIED="1514746296223">
 <richcontent TYPE="NODE"><html>
@@ -8603,6 +8615,15 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829238960" ID="ID_1556354374" MODIFIED="1514829326442" TEXT="Varianten definieren">
 <arrowlink COLOR="#c34a6d" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="16;64;" ID="Arrow_ID_26195276" STARTARROW="Default" STARTINCLINATION="-2;-11;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1514942095070" ID="ID_815761690" MODIFIED="1514942191785" TEXT="default: ermitteln der maximalen partiellen Coverage">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1514942111347" ID="ID_1991949921" MODIFIED="1514942189079" TEXT="die maximale L&#xf6;sung ist totale Coverage, wenn m&#xf6;glich">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942171091" ID="ID_1193370362" MODIFIED="1514942185922" TEXT="sp&#xe4;ter/bei Bedarf: alle L&#xf6;sungen">
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514848454621" ID="ID_472406160" MODIFIED="1514848465900" TEXT="std::swap f&#xfc;r UICoord">
 <icon BUILTIN="flag-yellow"/>
@@ -8631,6 +8652,29 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829244384" ID="ID_174527898" MODIFIED="1514829250504" TEXT="API umstellen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514942071848" ID="ID_642968204" MODIFIED="1514942081800" TEXT="totale Coverage wird default">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514942216013" ID="ID_1147733516" MODIFIED="1514942276155" TEXT="Pr&#xe4;dikate spiegeln stets den Zustand der UI-Coord">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und nicht den <i>m&#246;glichen</i>&#160;Zustand.
+    </p>
+    <p>
+      Denn f&#252;r letzteren gibt es die &quot;canXX&quot;-Pr&#228;dikate
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-pink"/>
+</node>
+<node COLOR="#338800" CREATED="1514943888969" ID="ID_1634332467" MODIFIED="1514943896784" TEXT="m&#xf6;glichen Anker nebenbei ermitteln">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941766817" HGAP="13" ID="ID_1117346518" MODIFIED="1514829215489" TEXT="Testf&#xe4;lle" VSHIFT="29">
