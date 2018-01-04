@@ -122,15 +122,16 @@ namespace interact {
                                            size_t depth = iter.depth();     // we are at that depth in target tree
                                            if (depth >= coordDepth)         // search pattern exhausted
                                              return false;
-                                           Literal elm = uic_[depth];       // pick search pattern component at that depth
-                                           if (elm != *iter and             // if no direct match
-                                               elm != Symbol::ANY)          // and not a wildcard in the pattern
-                                             return false;                  // it's no solution; backtracking to next alternative
-                                           
-                                           coverage.setAt (depth, *iter);   // record match rsp. interpolate wildcard into output
-                                           iter.expandChildren();           // next iteration will match one level down into the tree
-                                           return elm != Symbol::ANY;       // wildcard match itself does not count as solution
-                                        })                                  // ...yet we'll continue matching with children
+                                           Literal patt = uic_[depth];      // pick search pattern component at that depth
+                                           Literal curr = *iter;            // iterator points at current tree position (ID)
+                                           if (patt == curr or              // if either direct match
+                                               patt == Symbol::ANY)         // or wildcard match
+                                             {
+                                               coverage.setAt (depth,curr); // record match rsp. interpolate wildcard into output
+                                               iter.expandChildren();       // next iteration will match one level down into the tree
+                                             }
+                                           return patt == curr;             // only direct match counts as (partial) solution
+                                        })
                             .filter ([&](auto& iter)
                                         {
                                            if (iter.depth()+1 <= maxDepth)  // filter for maximum solution length

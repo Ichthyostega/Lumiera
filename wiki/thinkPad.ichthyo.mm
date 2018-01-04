@@ -8467,7 +8467,10 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942350940" ID="ID_1658536334" MODIFIED="1514942362533" TEXT="erweitertes Verst&#xe4;ndnis von &quot;Wildcard&quot;">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942365034" ID="ID_1911438770" MODIFIED="1514942370417" TEXT="nebenbei Anker ermitteln">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515031418282" ID="ID_1390320369" MODIFIED="1515031436673" TEXT="Anker im Match ber&#xfc;cksichtigen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942365034" ID="ID_1911438770" MODIFIED="1515031444706" TEXT="nebenbei Anker aktualisieren">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942372976" ID="ID_1541868169" MODIFIED="1514942397215" TEXT="feststellen, ob coverage real oder m&#xf6;glich">
@@ -8555,8 +8558,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941754211" HGAP="36" ID="ID_996085388" MODIFIED="1514898110286" TEXT="Filter-Layer" VSHIFT="-1">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1510941754211" HGAP="36" ID="ID_996085388" MODIFIED="1515031584659" TEXT="Filter-Layer" VSHIFT="-1">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1514747460122" ID="ID_1735380227" MODIFIED="1514908757875" TEXT="fischt nach tats&#xe4;chlichen L&#xf6;sungen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -8565,11 +8568,20 @@
 </node>
 <node CREATED="1514747496973" ID="ID_1992822141" MODIFIED="1514829326442" TEXT="F&#xe4;lle">
 <linktarget COLOR="#c34a6d" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="16;64;" ID="Arrow_ID_26195276" SOURCE="ID_1556354374" STARTARROW="Default" STARTINCLINATION="-2;-11;"/>
-<node CREATED="1514747500948" ID="ID_849508712" MODIFIED="1514747505528" TEXT="erste totale L&#xf6;sung"/>
-<node CREATED="1514747506516" ID="ID_1823650567" MODIFIED="1514747510710" TEXT="alle totalen L&#xf6;sungen"/>
-<node CREATED="1514747511683" ID="ID_1711746734" MODIFIED="1514747525357" TEXT="erste maximale partielle L&#xf6;sung"/>
-<node CREATED="1514747534880" ID="ID_668507058" MODIFIED="1514747541754" TEXT="alle maximalen partiellen L&#xf6;sungen"/>
-<node CREATED="1514747542535" ID="ID_1475644253" MODIFIED="1514747551514" TEXT="alle lokal maximalen partiellen L&#xf6;sungen">
+<node CREATED="1514747500948" ID="ID_849508712" MODIFIED="1515031494705" TEXT="erste totale L&#xf6;sung">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1514747506516" ID="ID_1823650567" MODIFIED="1515031497729" TEXT="alle totalen L&#xf6;sungen">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1514747511683" ID="ID_1711746734" MODIFIED="1515031538639" TEXT="erste maximale partielle L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1514747534880" ID="ID_668507058" MODIFIED="1515031542774" TEXT="alle maximalen partiellen L&#xf6;sungen">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1514747542535" FOLDED="true" ID="ID_1475644253" MODIFIED="1515031550657" TEXT="alle lokal maximalen partiellen L&#xf6;sungen">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1514747562436" ID="ID_1216946339" MODIFIED="1514747569143" TEXT="am Ende einer Gl&#xfc;cksstr&#xe4;ne"/>
 <node CREATED="1514747652752" ID="ID_694825695" MODIFIED="1514747659603" TEXT="etwas kniffelig zu implementieren"/>
 <node CREATED="1514747694763" ID="ID_1088990348" MODIFIED="1514747707037" TEXT="letztlich &#xe4;hnlich wie globale Maximums-Suche"/>
@@ -8650,12 +8662,12 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829244384" ID="ID_174527898" MODIFIED="1514829250504" TEXT="API umstellen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514942071848" ID="ID_642968204" MODIFIED="1514942081800" TEXT="totale Coverage wird default">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829244384" ID="ID_174527898" MODIFIED="1515031352940" TEXT="API umstellen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1514942071848" ID="ID_642968204" MODIFIED="1515031341204" TEXT="totale Coverage wird default">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514942216013" ID="ID_1147733516" MODIFIED="1514942276155" TEXT="Pr&#xe4;dikate spiegeln stets den Zustand der UI-Coord">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942216013" ID="ID_1147733516" MODIFIED="1515031345812" TEXT="Pr&#xe4;dikate spiegeln stets den Zustand der UI-Coord">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -8670,7 +8682,7 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node COLOR="#338800" CREATED="1514943888969" ID="ID_1634332467" MODIFIED="1514943896784" TEXT="m&#xf6;glichen Anker nebenbei ermitteln">
 <icon BUILTIN="button_ok"/>
