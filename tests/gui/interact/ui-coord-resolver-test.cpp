@@ -82,9 +82,8 @@ namespace test {
           verify_simpleUsage();
           verify_backingQuery();
           verify_queryAnchor();
-          verify_queryCoverage();
+          verify_mutateCoverage();
           verify_mutateAnchor();
-          verify_mutateCovered();
           verify_mutateExtend();
         }
       
@@ -243,11 +242,14 @@ namespace test {
       
       /** @test query anchorage of given UI coordinates.
        *        - an anchored UI coordinate spec explicitly rooted within a top level window.
+       *        - an explicit UI coordinate spec impossible to anchor within current UI tree
+       *        - a UI coordinate spec with dynamic reference to first/current window
+       *        - an incomplete spec, which needs to be solved (pattern matched) to determine anchor.
        */
       void
       verify_queryAnchor()
         {
-          GenNodeLocationQuery loQu{MakeRec()
+          GenNodeLocationQuery tree{MakeRec()
                                       .set("window-1"
                                           , MakeRec()
                                               .type("perspective-A")
@@ -268,12 +270,12 @@ namespace test {
           UICoord uic5 = UICoord::currentWindow().panel("panelY");
           UICoord uic6 = UICoord().view("someView").path("α/β/γ");
 
-          UICoordResolver r1{uic1, loQu};
-          UICoordResolver r2{uic2, loQu};
-          UICoordResolver r3{uic3, loQu};
-          UICoordResolver r4{uic4, loQu};
-          UICoordResolver r5{uic5, loQu};
-          UICoordResolver r6{uic6, loQu};
+          UICoordResolver r1{uic1, tree};
+          UICoordResolver r2{uic2, tree};
+          UICoordResolver r3{uic3, tree};
+          UICoordResolver r4{uic4, tree};
+          UICoordResolver r5{uic5, tree};
+          UICoordResolver r6{uic6, tree};
 
           CHECK (    r1.isAnchored());
           CHECK (not r2.isAnchored());
@@ -291,10 +293,75 @@ namespace test {
         }
       
       
+      
+      /** @test patch matching algorithm to resolve UI coordinates with wildcards against the current UI structure tree.  
+       * Since an UI coordinate path with gaps and wildcards could match anywhere, even several times, we need to perform
+       * an exhaustive search with backtracking over the whole tree. By convention, we use the first maximal solution,
+       * which can be just a partial solution, leaving an additional uncovered trailing part of the UI coordinate spec.
+       * Whenever a coordinate spec is _not explicit,_ has wildcards or a leading gap, we need to perform the full
+       * matching algorithm, even to just answer the question if coverage _is possible_. The result, i.e. the computed
+       * coverage, is cached internally, and can be used to _mutate_ the UI coordinate spec to match that coverage.
+       * 
+       * This test verifies various corner cases; especially there is a rule to prevent a partial match based
+       * on wildcards solely, rather we require at least one explicit match to qualify as partial solution.
+       * - (r1) trivial cases not requiring a tree search
+       *   ** total coverage
+       *   ** partial coverage, leaving an uncovered suffix
+       */
       void
-      verify_queryCoverage()
+      verify_mutateCoverage()
         {
-          UNIMPLEMENTED ("query coverage of given UI coordinates with respect to actual UI");
+          GenNodeLocationQuery tree{MakeRec()
+                                      .set("window-1"
+                                          , MakeRec()
+                                              .type("perspective-A")
+                                              .set("panelX"
+                                                  , MakeRec()
+                                                      .set("firstView", MakeRec())
+                                                      .set("secondView", MakeRec())
+                                                  )
+                                          )
+                                      .set("window-2"
+                                          , MakeRec()
+                                              .type("perspective-B")
+                                              .set("panelY", MakeRec())
+                                          )
+                                      .set("window-3"
+                                          , MakeRec()
+                                              .type("perspective-C")
+                                              .set("panelZ"
+                                                  , MakeRec()
+                                                      .set("thirdView", MakeRec())
+                                                  )
+                                              .set("panelZZ", MakeRec())
+                                          )
+                                   };
+          
+          /* === trivial cases === */
+          UICoordResolver r11 {UICoord::window("window-1")
+                                       .persp("perspective-A")
+                                       .panel("panelX"), tree};
+          CHECK (r11.isCovered());
+          CHECK (3 == r11.coverDepth());
+          
+          
+          UICoordResolver r12 {UICoord::window("window-1")
+                                       .persp("perspective-A")
+                                       .panel("panelX")
+                                       .view("thirdView"), tree};
+          CHECK (not r12.isCovered());
+          CHECK (    r12.isCoveredPartially());
+          CHECK (3 ==r12.coverDepth());
+          CHECK ("UI:window-1[perspective-A]-panelX.thirdView" == string(r12));
+          
+          auto r12_covered = r12.cover();
+          CHECK (r12_covered.isCovered());
+          CHECK (r12_covered.isCoveredPartially());
+          CHECK (3 ==r12_covered.coverDepth());
+          CHECK ("UI:window-1[perspective-A]-panelX" == string(r12_covered));
+          
+          
+          UNIMPLEMENTED ("TODO: further cases of coverage query....");
         }
       
       
@@ -302,13 +369,6 @@ namespace test {
       verify_mutateAnchor()
         {
           UNIMPLEMENTED ("mutate given UI coordinates by anchoring them");
-        }
-      
-      
-      void
-      verify_mutateCovered()
-        {
-          UNIMPLEMENTED ("mutate given UI coordinates by reducing to covered part");
         }
       
       

@@ -330,6 +330,12 @@ namespace interact {
         }
       
       
+      /** diagnostics */
+      operator string()   const { return string(this->uic_); }
+      size_t coverDepth() const { return res_.depth; }
+      
+      
+      
     private:
       /** establish a trivial anchorage and coverage, if possible.
        * @note when the UICoord contains wildcards or is incomplete,
