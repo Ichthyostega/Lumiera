@@ -8356,8 +8356,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1510941748388" HGAP="38" ID="ID_209463158" MODIFIED="1514829197011" TEXT="Zustands-Layer" VSHIFT="1">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1510941748388" HGAP="38" ID="ID_209463158" MODIFIED="1515034445054" TEXT="Zustands-Layer" VSHIFT="1">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1514333524247" ID="ID_1136271037" MODIFIED="1514908803527" TEXT="Zustand umfa&#xdf;t...">
 <icon BUILTIN="info"/>
 <node CREATED="1514333554411" ID="ID_1337747593" MODIFIED="1514333618358" TEXT="target (Pattern) const&amp;"/>
@@ -8415,8 +8415,8 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514828322209" HGAP="447" ID="ID_868482472" MODIFIED="1514908779147" TEXT="Implementierung" VSHIFT="24">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1514828322209" HGAP="447" ID="ID_868482472" MODIFIED="1515034439374" TEXT="Implementierung" VSHIFT="24">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1514828365236" ID="ID_596741108" MODIFIED="1514828377582" TEXT="per Seiteneffekt auf den privaten Resolver-state"/>
 <node CREATED="1514828408694" ID="ID_360791024" MODIFIED="1514828619139">
 <richcontent TYPE="NODE"><html>
@@ -8462,23 +8462,47 @@
 <node CREATED="1514847950576" ID="ID_1211653233" MODIFIED="1514850848636" TEXT="normalisiert automatisch beim Abholen des Ergebnisses"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942333406" ID="ID_1235716633" MODIFIED="1514942345420" TEXT="Ankern unvollst&#xe4;ndiger Pfade">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942350940" ID="ID_1658536334" MODIFIED="1514942362533" TEXT="erweitertes Verst&#xe4;ndnis von &quot;Wildcard&quot;">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514942333406" ID="ID_1235716633" MODIFIED="1515034320114" TEXT="Ankern unvollst&#xe4;ndiger Pfade">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1514942350940" ID="ID_1658536334" MODIFIED="1515034261027" TEXT="erweitertes Verst&#xe4;ndnis von &quot;Wildcard&quot;">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515031418282" ID="ID_1390320369" MODIFIED="1515031436673" TEXT="Anker im Match ber&#xfc;cksichtigen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1515031418282" ID="ID_1390320369" MODIFIED="1515034265977" TEXT="Anker im Match ber&#xfc;cksichtigen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942365034" ID="ID_1911438770" MODIFIED="1515031444706" TEXT="nebenbei Anker aktualisieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514942365034" ID="ID_1911438770" MODIFIED="1515034279431" TEXT="nebenbei Anker aktualisieren">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942372976" ID="ID_1541868169" MODIFIED="1514942397215" TEXT="feststellen, ob coverage real oder m&#xf6;glich">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514942372976" ID="ID_1541868169" MODIFIED="1515034395295" TEXT="feststellen, ob coverage real oder m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...insofern wir nur eine (partielle) L&#246;sung signalisieren,
+    </p>
+    <p>
+      wenn wir einen <i>direkten</i>&#160;Match erziehlen.
+    </p>
+    <p>
+      Ein wildcard-Match f&#252;hrt nur dazu, da&#223; wir zu den Kindern absteigen,
+    </p>
+    <p>
+      aber z&#228;hlt erst mal f&#252;r sich nicht als L&#246;sung
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514897795054" ID="ID_1126804251" MODIFIED="1514897809479" TEXT="Erweiterung: verschiedne Filter">
 <icon BUILTIN="hourglass"/>
+<node CREATED="1515034405447" ID="ID_1908721517" MODIFIED="1515034409410" TEXT="YAGNI"/>
+<node CREATED="1515034414286" ID="ID_216901407" MODIFIED="1515034430396" TEXT="kann mir jetzt keinen wirklichen Nutzen daf&#xfc;r vorstellen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
 </node>
 </node>
 <node CREATED="1514339655585" ID="ID_20763657" MODIFIED="1514339725688" TEXT="brauche">
@@ -8566,8 +8590,8 @@
 <node CREATED="1514747470624" ID="ID_43243557" MODIFIED="1514827781975" TEXT="erm&#xf6;glicht partielle und maximale L&#xf6;sungen">
 <linktarget COLOR="#426785" DESTINATION="ID_43243557" ENDARROW="Default" ENDINCLINATION="156;-113;" ID="Arrow_ID_977247001" SOURCE="ID_1714254434" STARTARROW="None" STARTINCLINATION="-109;6;"/>
 </node>
-<node CREATED="1514747496973" ID="ID_1992822141" MODIFIED="1514829326442" TEXT="F&#xe4;lle">
-<linktarget COLOR="#c34a6d" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="16;64;" ID="Arrow_ID_26195276" SOURCE="ID_1556354374" STARTARROW="Default" STARTINCLINATION="-2;-11;"/>
+<node CREATED="1514747496973" ID="ID_1992822141" MODIFIED="1515034520605" TEXT="F&#xe4;lle">
+<linktarget COLOR="#7e90a1" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="0;56;" ID="Arrow_ID_26195276" SOURCE="ID_1556354374" STARTARROW="Default" STARTINCLINATION="-20;-69;"/>
 <node CREATED="1514747500948" ID="ID_849508712" MODIFIED="1515031494705" TEXT="erste totale L&#xf6;sung">
 <icon BUILTIN="hourglass"/>
 </node>
@@ -8589,57 +8613,61 @@
 </node>
 </node>
 </node>
-<node CREATED="1514829169777" HGAP="32" ID="ID_331008637" MODIFIED="1514829187105" TEXT="Integration" VSHIFT="10">
-<node COLOR="#338800" CREATED="1514829220907" ID="ID_1488508113" MODIFIED="1514908671197" TEXT="zun&#xe4;chst Algo f&#xfc;r partielle Coverage bauen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829169777" HGAP="32" ID="ID_331008637" MODIFIED="1515034466920" TEXT="Integration" VSHIFT="10">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1514829220907" ID="ID_1488508113" MODIFIED="1515034463168" TEXT="zun&#xe4;chst Algo f&#xfc;r partielle Coverage bauen">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1514829338427" ID="ID_623381151" MODIFIED="1514850789328" TEXT="Zustandstyp">
+<node COLOR="#338800" CREATED="1514829338427" ID="ID_623381151" MODIFIED="1515034463168" TEXT="Zustandstyp">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1514829343538" FOLDED="true" ID="ID_61753442" MODIFIED="1514897725352" TEXT="Transformer auf Zustand">
+<node CREATED="1514829343538" FOLDED="true" ID="ID_61753442" MODIFIED="1515034463168" TEXT="Transformer auf Zustand">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1514850791535" ID="ID_1339395363" MODIFIED="1514850794763" TEXT="nicht notwendig"/>
 <node CREATED="1514850795678" ID="ID_497352305" MODIFIED="1514850803482" TEXT="Zustand per Seiteneffekt">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1514829349585" ID="ID_1389488008" MODIFIED="1514897718205" TEXT="Algo-Kern">
+<node COLOR="#338800" CREATED="1514829349585" ID="ID_1389488008" MODIFIED="1515034463168" TEXT="Algo-Kern">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1514829353681" ID="ID_62480447" MODIFIED="1514850810350" TEXT="einfachster Filter">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1514829412249" ID="ID_1641757769" MODIFIED="1514908679780" TEXT="Einbindung Resolution-State">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1514829452692" ID="ID_1692090746" MODIFIED="1514829463589" TEXT="nested Class">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1514829466506" ID="ID_1652951449" MODIFIED="1514908675143" TEXT="low-level writeAt">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1514829511716" ID="ID_747113559" MODIFIED="1514850777417" TEXT="Pipeline-Builder wie?">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1514829532945" ID="ID_1664484116" MODIFIED="1514908677336" TEXT="Ergebnis-Abruf">
+<node COLOR="#338800" CREATED="1514829353681" ID="ID_62480447" MODIFIED="1515034463168" TEXT="einfachster Filter">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829238960" ID="ID_1556354374" MODIFIED="1514829326442" TEXT="Varianten definieren">
-<arrowlink COLOR="#c34a6d" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="16;64;" ID="Arrow_ID_26195276" STARTARROW="Default" STARTINCLINATION="-2;-11;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1514942095070" ID="ID_815761690" MODIFIED="1514942191785" TEXT="default: ermitteln der maximalen partiellen Coverage">
+<node COLOR="#338800" CREATED="1514829412249" ID="ID_1641757769" MODIFIED="1515034463168" TEXT="Einbindung Resolution-State">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1514829452692" ID="ID_1692090746" MODIFIED="1515034463169" TEXT="nested Class">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1514829466506" ID="ID_1652951449" MODIFIED="1515034463169" TEXT="low-level writeAt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1514829511716" ID="ID_747113559" MODIFIED="1515034463169" TEXT="Pipeline-Builder wie?">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1514829532945" ID="ID_1664484116" MODIFIED="1515034463169" TEXT="Ergebnis-Abruf">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829238960" ID="ID_1556354374" MODIFIED="1515034520605" TEXT="Varianten definieren">
+<arrowlink COLOR="#7e90a1" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="0;56;" ID="Arrow_ID_26195276" STARTARROW="Default" STARTINCLINATION="-20;-69;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1514942095070" ID="ID_815761690" MODIFIED="1515034463169" TEXT="default: ermitteln der maximalen partiellen Coverage">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1514942111347" ID="ID_1991949921" MODIFIED="1514942189079" TEXT="die maximale L&#xf6;sung ist totale Coverage, wenn m&#xf6;glich">
+<node CREATED="1514942111347" ID="ID_1991949921" MODIFIED="1515034463169" TEXT="die maximale L&#xf6;sung ist totale Coverage, wenn m&#xf6;glich">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942171091" ID="ID_1193370362" MODIFIED="1514942185922" TEXT="sp&#xe4;ter/bei Bedarf: alle L&#xf6;sungen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942171091" ID="ID_1193370362" MODIFIED="1515034463169" TEXT="sp&#xe4;ter/bei Bedarf: alle L&#xf6;sungen">
 <icon BUILTIN="hourglass"/>
 </node>
+<node CREATED="1515034212096" ID="ID_1153983253" MODIFIED="1515034463169" TEXT="vermutlich garnicht notwendig">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514848454621" ID="ID_472406160" MODIFIED="1514848465900" TEXT="std::swap f&#xfc;r UICoord">
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514848454621" ID="ID_472406160" MODIFIED="1515034463169" TEXT="std::swap f&#xfc;r UICoord">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1514848818421" ID="ID_26529397" MODIFIED="1514848859010" TEXT="vermutlich nix zu tun">
+<node CREATED="1514848818421" ID="ID_26529397" MODIFIED="1515034463169" TEXT="vermutlich nix zu tun">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -8657,17 +8685,17 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1514848861831" ID="ID_297570158" MODIFIED="1514848873234" TEXT="noexcept() bedenken"/>
-<node CREATED="1514848874005" ID="ID_751821458" MODIFIED="1514848890774" TEXT="PathArray: move effizienter als swap">
+<node CREATED="1514848861831" ID="ID_297570158" MODIFIED="1515034463169" TEXT="noexcept() bedenken"/>
+<node CREATED="1514848874005" ID="ID_751821458" MODIFIED="1515034463169" TEXT="PathArray: move effizienter als swap">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829244384" ID="ID_174527898" MODIFIED="1515031352940" TEXT="API umstellen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514829244384" ID="ID_174527898" MODIFIED="1515034463169" TEXT="API umstellen">
 <icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1514942071848" ID="ID_642968204" MODIFIED="1515031341204" TEXT="totale Coverage wird default">
+<node COLOR="#338800" CREATED="1514942071848" ID="ID_642968204" MODIFIED="1515034463169" TEXT="totale Coverage wird default">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514942216013" ID="ID_1147733516" MODIFIED="1515031345812" TEXT="Pr&#xe4;dikate spiegeln stets den Zustand der UI-Coord">
+<node COLOR="#338800" CREATED="1514942216013" ID="ID_1147733516" MODIFIED="1515034537518" TEXT="Pr&#xe4;dikate spiegeln stets den Zustand der UI-Coord">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -8682,9 +8710,9 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1514943888969" ID="ID_1634332467" MODIFIED="1514943896784" TEXT="m&#xf6;glichen Anker nebenbei ermitteln">
+<node COLOR="#338800" CREATED="1514943888969" ID="ID_1634332467" MODIFIED="1515034463169" TEXT="m&#xf6;glichen Anker nebenbei ermitteln">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>

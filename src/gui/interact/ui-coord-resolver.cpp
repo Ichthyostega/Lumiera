@@ -112,9 +112,19 @@ namespace interact {
   bool
   UICoordResolver::pathResolution()
   {
+    // Helper to detect a wildcard match
+    auto wildMatch = [&](Literal patt, Literal curr, size_t depth)
+                        {
+                          return patt == Symbol::ANY
+                              or patt == Symbol::EMPTY
+                              or (isAnchored() and curr == res_.anchor and depth == UIC_WINDOW);
+                        };    // transitive argument: assuming res_.anchor was computed for
+                             //  the same coordinate pattern used here for patch resolution
+    // algorithm state
     size_t maxDepth = 0;
     PathManipulator coverage;
     size_t coordDepth = this->uic_.size();
+    
     auto searchAlgo = query_.getChildren (uic_, 0)
                             .expandOnIteration()
                             .filter ([&](auto& iter)
@@ -125,7 +135,7 @@ namespace interact {
                                            Literal patt = uic_[depth];      // pick search pattern component at that depth
                                            Literal curr = *iter;            // iterator points at current tree position (ID)
                                            if (patt == curr or              // if either direct match
-                                               patt == Symbol::ANY)         // or wildcard match
+                                               wildMatch(patt,curr,depth))  // or wildcard match
                                              {
                                                coverage.setAt (depth,curr); // record match rsp. interpolate wildcard into output
                                                iter.expandChildren();       // next iteration will match one level down into the tree
@@ -143,7 +153,8 @@ namespace interact {
                                         {
                                            return coverage.retrieveResult();
                                         });
-    // we know for sure now if coverage is possible
+     // is (partial) coverage possible?
+    //  search computes definitive answer!
     res_.isResolved = true;
     
     // perform the matching
