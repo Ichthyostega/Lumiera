@@ -304,9 +304,25 @@ namespace test {
        * 
        * This test verifies various corner cases; especially there is a rule to prevent a partial match based
        * on wildcards solely, rather we require at least one explicit match to qualify as partial solution.
-       * - (r1) trivial cases not requiring a tree search
+       * - (1) trivial cases not requiring a tree search
        *   ** total coverage
        *   ** partial coverage, leaving an uncovered suffix
+       * - (2) expand dynamic anchor specifiers
+       *   ** with following content
+       *   ** anchor spec alone
+       * - (3) wildcard interpolation
+       *   ** interpolate a single gap
+       *   ** interpolate several gaps
+       *   ** interpolate anchor and consecutive wildcards
+       *   ** discriminate by anchor and fill additional gap
+       * - (4) failure detection
+       *   ** reject trailing wildcards
+       *   ** reject gap beyond existing real UI tree
+       *   ** reject gap ending at perimeter of real UI tree
+       *   ** reject interpolated gap on immediately following mismatch
+       *   ** reject mismatch immediately behind second gap
+       *   ** mismatch of tree level
+       *   ** contradiction to anchorage
        */
       void
       verify_mutateCoverage()
@@ -320,6 +336,15 @@ namespace test {
                                                       .set("firstView", MakeRec())
                                                       .set("secondView", MakeRec())
                                                   )
+                                              .set("panelZ"
+                                                  , MakeRec()
+                                                      .set("thirdView"
+                                                          , MakeRec()
+                                                              .set("#1", MakeRec())
+                                                              .set("#2", MakeRec())
+                                                              .set("special", MakeRec())
+                                                          )
+                                                  )
                                           )
                                       .set("window-2"
                                           , MakeRec()
@@ -331,7 +356,13 @@ namespace test {
                                               .type("perspective-C")
                                               .set("panelZ"
                                                   , MakeRec()
-                                                      .set("thirdView", MakeRec())
+                                                      .set("thirdView"
+                                                          , MakeRec()
+                                                              .set("special"
+                                                                  , MakeRec()
+                                                                      .set("sub", MakeRec())
+                                                                  )
+                                                          )
                                                   )
                                               .set("panelZZ", MakeRec())
                                           )
@@ -359,6 +390,67 @@ namespace test {
           CHECK (r12_covered.isCoveredPartially());
           CHECK (3 ==r12_covered.coverDepth());
           CHECK ("UI:window-1[perspective-A]-panelX" == string(r12_covered));
+          
+          
+          /* === expand anchor === */
+          UICoordResolver r21 {UICoord::firstWindow().persp("perspective-A"), tree};
+          cout << r21.cover()<<endl;
+          
+          /* === expand anchor alone === */
+          UICoordResolver r22 {UICoord::currentWindow(), tree};
+          cout << r22.cover()<<endl;
+          
+          
+          /* === interpolate a single gap === */
+          UICoordResolver r31 {UICoord::window("window-1").view("secondView"), tree};
+          cout << r31.cover()<<endl;
+          
+          /* === interpolate several gaps === */
+          UICoordResolver r32 {UICoord().view("thirdView").path("sub"), tree};
+          cout << r32.cover()<<endl;
+          
+          /* === interpolate anchor and consecutive wildcards === */
+          UICoordResolver r33 {UICoord::firstWindow().tab(2), tree};
+          cout << r33.cover()<<endl;
+          
+          /* === discriminate by anchor and fill second gap === */
+          UICoordResolver r34 {UICoord::currentWindow().view("thirdView").path("sub"), tree};
+          cout << r34.cover()<<endl;
+          
+          
+          /* === reject trailing wildcards === */
+          UICoordResolver r41 {UICoord::window("window-2").append("*/*"), tree};
+          cout << r41 <<endl;
+          auto r41_extended = r41.extend("*/*");
+          cout << r41_extended <<endl;
+          cout << r41_extended.cover()<<endl;
+//          CHECK (not r41_extended.canCover());
+          
+          /* === reject gap beyond existing real UI tree === */
+          UICoordResolver r42 {UICoord::window("window-2").append("*/*/*/some/path"), tree};
+          cout << r42.cover()<<endl;
+//          CHECK (not r42.canCover());
+          
+          /* === reject gap ending at real UI tree boundary === */
+          UICoordResolver r43 {UICoord::currentWindow().view("firstView").path("sub"), tree};
+          CHECK (not r43.canCover());
+          
+          /* === reject interpolated gap on mismatch right behind === */
+          UICoordResolver r44 {UICoord().view("otherView"), tree};
+          CHECK (not r44.canCover());
+          
+          /* === reject mismatch immediately behind second gap === */
+          UICoordResolver r45 {UICoord().panel("panelZ").tab(3), tree};
+          cout << r45.cover()<<endl;
+//          CHECK (not r45.canCover());
+          
+          /* === mismatch of tree level === */
+          UICoordResolver r46 {UICoord::currentWindow().append("*/*/panelZ/thirdView"), tree};
+          CHECK (not r46.canCover());
+          
+          /* === impossible to anchor === */
+          UICoordResolver r47 {UICoord::firstWindow().tab(3), tree};
+          CHECK (not r47.canCover());
           
           
           UNIMPLEMENTED ("TODO: further cases of coverage query....");
