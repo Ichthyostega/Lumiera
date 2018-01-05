@@ -4463,10 +4463,10 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539143849" ID="ID_1632791283" MODIFIED="1515037686112" TEXT="path-resolution">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539152568" ID="ID_153711822" MODIFIED="1508539175926" TEXT="Beschreibung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1508539143849" ID="ID_1632791283" MODIFIED="1515120970745" TEXT="path-resolution">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1508539152568" ID="ID_153711822" MODIFIED="1515120963483" TEXT="Beschreibung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1508539226014" ID="ID_1714773115" MODIFIED="1511572072101" TEXT="informell...">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -4489,12 +4489,12 @@
 <node CREATED="1508539330312" ID="ID_67492497" MODIFIED="1508539911843" TEXT="bewegt nur Suchmarken">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539350382" ID="ID_585593926" MODIFIED="1508539902990" TEXT="Ergebnis">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539582959" ID="ID_54646462" MODIFIED="1508539905188" TEXT="Anchor == Literal">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1508539350382" ID="ID_585593926" MODIFIED="1515120942582" TEXT="Ergebnis">
+<icon BUILTIN="info"/>
+<node CREATED="1508539582959" ID="ID_54646462" MODIFIED="1515120947568" TEXT="Anchor == Literal">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539633800" ID="ID_471699110" MODIFIED="1511572072114" TEXT="coverDepth (Zahl)">
+<node CREATED="1508539633800" ID="ID_471699110" MODIFIED="1515120953828" TEXT="coverDepth (Zahl)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4508,9 +4508,8 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539644775" ID="ID_186144507" MODIFIED="1511572072121" TEXT="[optional] explizite Coverage">
+<node CREATED="1508539644775" ID="ID_186144507" MODIFIED="1515120958547" TEXT="[optional] explizite Coverage">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4529,7 +4528,6 @@
     </ul>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -8779,33 +8777,36 @@
 <icon BUILTIN="flag-pink"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515114740273" ID="ID_224432926" MODIFIED="1515114745673" TEXT="interpolieren">
+<node COLOR="#338800" CREATED="1515114740273" ID="ID_224432926" MODIFIED="1515120853113" TEXT="interpolieren">
 <icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1514329498169" ID="ID_259096801" MODIFIED="1515114763818" TEXT="einfache L&#xfc;cke schlie&#xdf;en">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514329504776" ID="ID_1411396073" MODIFIED="1514330072531" TEXT="doppelte L&#xfc;cke schlie&#xdf;en">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514329504776" ID="ID_1411396073" MODIFIED="1515120845626" TEXT="doppelte L&#xfc;cke schlie&#xdf;en">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514329542594" ID="ID_959715297" MODIFIED="1514330073572" TEXT="fehlenden Anker interpolieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514329542594" ID="ID_959715297" MODIFIED="1515120847766" TEXT="fehlenden Anker interpolieren">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514745294579" ID="ID_576780085" MODIFIED="1514745338174" TEXT="fehlender Anker und folgende L&#xfc;cke">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514745294579" ID="ID_576780085" MODIFIED="1515120849514" TEXT="fehlender Anker und folgende L&#xfc;cke">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514329555505" ID="ID_1508437078" MODIFIED="1514330074538" TEXT="fehlender Anker plus zweite L&#xfc;cke">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1514329555505" ID="ID_1508437078" MODIFIED="1515120851424" TEXT="fehlender Anker plus zweite L&#xfc;cke">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514329861519" ID="ID_946875811" MODIFIED="1514330089705" TEXT="Scheitern">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514329465117" ID="ID_1304144230" MODIFIED="1515114583527" TEXT="trailing Wildcards scheitern">
-<icon BUILTIN="flag-yellow"/>
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1514329861519" ID="ID_946875811" MODIFIED="1515120903633" TEXT="Scheitern">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1514329465117" ID="ID_1304144230" MODIFIED="1515120860646" TEXT="trailing Wildcards scheitern">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1515120863655" ID="ID_1222552441" MODIFIED="1515120873442" TEXT="werden stets schon vom Konstrukor bereinigt"/>
+<node COLOR="#338800" CREATED="1515120874318" ID="ID_282902710" MODIFIED="1515120893868" TEXT="kann jedoch demonstrieren, da&#xdf; der Algorithmus solche L&#xf6;sungen verwirft">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514329890564" ID="ID_723199137" MODIFIED="1515114588078" TEXT="realer Pfad endet vor Wildcards">
-<icon BUILTIN="flag-yellow"/>
-<icon BUILTIN="flag-pink"/>
+</node>
+<node COLOR="#338800" CREATED="1514329890564" ID="ID_723199137" MODIFIED="1515120898108" TEXT="realer Pfad endet vor Wildcards">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1514329901562" ID="ID_1644217459" MODIFIED="1515114671856" TEXT="realer Pfad endet b&#xfc;ndig mit Wildcards">
 <icon BUILTIN="button_ok"/>
@@ -8813,9 +8814,8 @@
 <node COLOR="#338800" CREATED="1514329925895" ID="ID_257945525" MODIFIED="1515114669999" TEXT="mismatch auf erstem festen element">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1514329932501" ID="ID_1190347841" MODIFIED="1515114659060" TEXT="mismatch direkt hinter zweiter L&#xfc;cke">
-<icon BUILTIN="flag-yellow"/>
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1514329932501" ID="ID_1190347841" MODIFIED="1515120900249" TEXT="mismatch direkt hinter zweiter L&#xfc;cke">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1514330003204" ID="ID_443318342" MODIFIED="1515114674215" TEXT="mismatch wg. verschobenem (matchendem) Element">
 <icon BUILTIN="button_ok"/>

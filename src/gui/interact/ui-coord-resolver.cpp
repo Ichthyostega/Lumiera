@@ -85,6 +85,20 @@ namespace interact {
             currDepth_ = depth+1;
           }
       };
+    
+    
+    size_t
+    find_wildcardFree_suffix (UICoord const& uic)
+    {
+      size_t pos = uic.size();
+      for ( ; 0 < pos; --pos)
+        {
+          Literal const& elm = uic[pos-1];
+          if (elm == Symbol::ANY or elm == Symbol::EMPTY)
+            break;
+        }
+      return pos;
+    }
 
 
   }//(End) implementation details
@@ -123,7 +137,8 @@ namespace interact {
     // algorithm state
     size_t maxDepth = 0;
     PathManipulator coverage;
-    size_t coordDepth = this->uic_.size();
+    const size_t coordDepth = this->uic_.size();
+    const size_t minSolutionDepth = find_wildcardFree_suffix (uic_);
     
     auto searchAlgo = query_.getChildren (uic_, 0)
                             .expandOnIteration()
@@ -144,6 +159,8 @@ namespace interact {
                                         })
                             .filter ([&](auto& iter)
                                         {
+                                           if (iter.depth() < minSolutionDepth)
+                                             return false;                  // filter solutions which did not bind all wildcards
                                            if (iter.depth()+1 <= maxDepth)  // filter for maximum solution length
                                              return false;
                                            maxDepth = 1 + iter.depth();
