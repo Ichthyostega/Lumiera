@@ -329,6 +329,10 @@ namespace test {
        *   ** reject mismatch immediately behind second gap
        *   ** mismatch of tree level
        *   ** contradiction to anchorage
+       * - (5) selection between several possible solutions
+       *   ** the length of the covered trailing suffix decides
+       *   ** when two solutions are equivalent, pick the fist one
+       *   ** best solution will be picked, irrespective of discovery order
        */
       void
       verify_mutateCoverage()
@@ -368,6 +372,7 @@ namespace test {
                                                                   , MakeRec()
                                                                       .set("sub", MakeRec())
                                                                   )
+                                                              .set("#1", MakeRec())
                                                           )
                                                   )
                                               .set("panelZZ", MakeRec())
@@ -468,7 +473,23 @@ namespace test {
           CHECK (not r47.canCover());
           
           
-          UNIMPLEMENTED ("TODO: further cases of coverage query....");
+          /* === the solution with maximum covered depth wins === */
+          UICoordResolver r51 {UICoord().tab("tab").path("sub"), tree};
+          CHECK ("UI:window-3[persp-C]-panelZ.thirdView.tab/sub" == string(r51.cover()));          // the second solution found covers to maximum depth
+          
+          /* === when two solutions are equivalent, pick the fist one === */
+          UICoordResolver r52 {UICoord().tab("tab"), tree};
+          CHECK ("UI:window-1[persp-A]-panelZ.thirdView.tab" == string(r52.cover()));              // "UI:window-3[persp-C]-panelZ.thirdView.tab" would match too
+          
+          /* === best solution will be picked, irrespective of discovery order === */
+          UICoordResolver r531 {UICoord().persp("persp-A").tab(1), tree};
+          CHECK ("UI:window-1[persp-A]-panelZ.thirdView.#1" == string(r531.cover()));              // best solution discovered as first one
+          
+          UICoordResolver r532 {UICoord().view("thirdView").tab("tab"), tree};
+          CHECK ("UI:window-1[persp-A]-panelZ.thirdView.tab" == string(r532.cover()));             // best solution is 3rd of five possible ones
+          
+          UICoordResolver r533 {UICoord().persp("persp-C").tab(1), tree};
+          CHECK ("UI:window-3[persp-C]-panelZ.thirdView.#1" == string(r533.cover()));              // best solution is found as last one
         }
       
       
