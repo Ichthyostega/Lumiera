@@ -31,8 +31,6 @@
 #include "gui/interact/ui-coord-resolver.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
-
 using util::isnil;
 using lib::Symbol;
 using lib::treeExplore;

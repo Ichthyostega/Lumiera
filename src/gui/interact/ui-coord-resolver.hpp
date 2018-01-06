@@ -159,6 +159,7 @@ namespace interact {
        * @return the depth to which the given spec is _"covered"_ by the actual UI.
        *         Can be zero, in which case the given coordinates can not be resolved
        *         and addressed within the currently existing windows, panes and views.
+       * @remark a depth > 0 also implies that the path can be _anchored._
        * @note this operation does not perform any _resolution_ or interpolation of wildcards,
        *         it just matches explicit UI component names.
        * @see UICoordResolver for a facility to perform such a resolution and to navigate paths.
@@ -289,12 +290,22 @@ namespace interact {
       /* === mutation functions === */
       
       /** mutate the path to get it totally covered
+       *  - make the anchorage explicit
+       *  - possibly match and expand any wildcards
+       *  - then truncate the UI-Coordinate spec to that part
+       *    actually covered by the UI
+       * @note if the coordinate spec can not be covered at all,
+       *    it will be truncated to zero size
        */
       UICoordResolver
       cover()
         {
           if (isCoveredPartially() and not res_.covfefe)
-            truncateTo (res_.depth);
+            {
+              ASSERT (res_.anchor);    // depth > 0 implies anchorage
+              window (res_.anchor);   //  thus make this anchor explicit
+              truncateTo (res_.depth);
+            }
           else if (canCover())
             {
               ASSERT (res_.isResolved);

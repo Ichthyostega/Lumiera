@@ -67,6 +67,12 @@ namespace test {
   
   /******************************************************************************//**
    * @test verify query and mutation of UICoord in relation to actual UI topology.
+   *       A UI-Coordinate resolver is a special builder, which is initialised by
+   *       the given coordinate spec, and also attached to a "location query API",
+   *       which allows to investigate the current actual UI structure. The builder
+   *       then exposes query and mutation operations, to determine to what extent
+   *       the coordinate spec is "covered" by the real UI, and to match and expand
+   *       any wildcards in the coordinate spec (pattern).
    * 
    * @see UICoordResolver
    * @see navigator.hpp
@@ -294,7 +300,7 @@ namespace test {
       
       
       
-      /** @test patch matching algorithm to resolve UI coordinates with wildcards against the current UI structure tree.  
+      /** @test patch matching algorithm to resolve UI coordinates with wildcards against the current UI structure tree.
        * Since an UI coordinate path with gaps and wildcards could match anywhere, even several times, we need to perform
        * an exhaustive search with backtracking over the whole tree. By convention, we use the first maximal solution,
        * which can be just a partial solution, leaving an additional uncovered trailing part of the UI coordinate spec.
@@ -385,47 +391,57 @@ namespace test {
           CHECK (3 ==r12.coverDepth());
           CHECK ("UI:window-1[persp-A]-panelX.thirdView" == string(r12));
           
-          auto r12_covered = r12.cover();
-          CHECK (r12_covered.isCovered());
-          CHECK (r12_covered.isCoveredPartially());
-          CHECK (3 ==r12_covered.coverDepth());
-          CHECK ("UI:window-1[persp-A]-panelX" == string(r12_covered));
+          r12.cover();
+          CHECK (r12.isCovered());
+          CHECK (r12.isCoveredPartially());
+          CHECK (3 ==r12.coverDepth());
+          CHECK ("UI:window-1[persp-A]-panelX" == string(r12));
           
           
           /* === expand anchor === */
           UICoordResolver r21 {UICoord::firstWindow().persp("persp-A"), tree};
-          cout << r21.cover()<<endl;                       ///////////////////////////////////////////TODO doesn't work, yields UI:firstWindow[persp-A]
+          CHECK ("UI:firstWindow[persp-A]" == string(r21));
+          r21.cover();
+          CHECK ("UI:window-1[persp-A]"    == string(r21));
           
           /* === expand anchor alone === */
           UICoordResolver r22 {UICoord::currentWindow(), tree};
-          cout << r22.cover()<<endl;                       ///////////////////////////////////////////TODO doesn't work, yields UI:currentWindow
+          CHECK ("UI:window-3" == string(r22.cover()));
           
           
           /* === interpolate a single gap === */
           UICoordResolver r31 {UICoord::window("window-1").view("secondView"), tree};
-          CHECK("UI:window-1[persp-A]-panelX.secondView" == string(r31.cover()));
+          CHECK ("UI:window-1[*]-*.secondView" == string(r31));
+          CHECK (0 ==r31.coverDepth());
+          CHECK (not r31.isCovered());
+          CHECK (r31.canCover());
+          r31.cover();
+          CHECK (r31.isCovered());
+          CHECK (4 == r31.coverDepth());
+          CHECK ("UI:window-1[persp-A]-panelX.secondView" == string(r31));
           
           /* === interpolate several gaps === */
           UICoordResolver r32 {UICoord().view("thirdView").path("sub"), tree};
-          CHECK("UI:window-3[persp-C]-panelZ.thirdView.tab/sub" == string(r32.cover()));
+          CHECK ("UI:window-3[persp-C]-panelZ.thirdView.tab/sub" == string(r32.cover()));
           
           /* === interpolate anchor and consecutive wildcards === */
           UICoordResolver r33 {UICoord::firstWindow().tab(2), tree};
-          CHECK("UI:window-1[persp-A]-panelZ.thirdView.#2" == string(r33.cover()));
+          CHECK ("UI:window-1[persp-A]-panelZ.thirdView.#2" == string(r33.cover()));
           
           /* === discriminate by anchor and fill second gap === */
           UICoordResolver r34 {UICoord::currentWindow().panel("panelZ").tab("tab"), tree};
-          CHECK("UI:window-3[persp-C]-panelZ.thirdView.tab" == string(r34.cover()));               // Note: rest of the path would also match on window-1, but currentWindow == window-3
+          CHECK ("UI:currentWindow[*]-panelZ.*.tab"          == string(r34));
+          CHECK ("UI:window-3[persp-C]-panelZ.thirdView.tab" == string(r34.cover()));              // Note: rest of the path would also match on window-1, but currentWindow == window-3
           
           
           /* === trailing wildcards stripped automatically === */
           UICoordResolver r41 {UICoord::window("window-2").append("*/*"), tree};
-          CHECK("UI:window-2" == string(r41));                                                     // Note: trailing wildcards are already discarded by PathArray / UICoord
+          CHECK ("UI:window-2" == string(r41));                                                    // Note: trailing wildcards are already discarded by PathArray / UICoord
           
-          auto r41_extended = r41.extend("*/*");                                                   // if we now attempt to "sneak in" trailing wildcards...
-          CHECK("UI:window-2[*]-*" == string(r41_extended));
-          CHECK(not r41_extended.canCover());                                                      // ...then the algorithm rejects any solution
-          CHECK("UI:window-2" == string(r41_extended.cover()));                                    // Note: but cover() will act on the previous coverage and just strip the extraneous suffix
+          r41.extend("*/*");                                                                       // if we now attempt to "sneak in" trailing wildcards...
+          CHECK ("UI:window-2[*]-*" == string(r41));
+          CHECK (not r41.canCover());                                                              // ...then the algorithm rejects any solution
+          CHECK ("UI:window-2" == string(r41.cover()));                                            // Note: but cover() will act on the previous coverage and just strip the extraneous suffix
           
           /* === reject gap beyond existing real UI tree === */
           UICoordResolver r42 {UICoord::window("window-2").append("*/*/*/some/path"), tree};
