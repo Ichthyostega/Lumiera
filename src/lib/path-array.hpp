@@ -115,7 +115,7 @@ namespace lib {
               delete[] storage_;
           }
         
-        Extension()
+        Extension()  noexcept
           : storage_{nullptr}
           { }
         
@@ -132,7 +132,7 @@ namespace lib {
           : storage_{r.storage_? r.newCopy() : nullptr}
           { }
         
-        Extension (Extension&& rr)
+        Extension (Extension&& rr)  noexcept
           : storage_{nullptr}
           {
             if (rr.storage_)
@@ -153,7 +153,7 @@ namespace lib {
             return *this;
           }
         
-        Extension& operator= (Extension&& rr)
+        Extension& operator= (Extension&& rr)  noexcept
           {
             if (this != &rr)
               {

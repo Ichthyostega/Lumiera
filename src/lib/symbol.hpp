@@ -77,13 +77,14 @@ namespace lib {
        const char * str_;
        
     public:
-       Literal(); ///< empty string by default
+       /** empty string by default */
+       Literal()  noexcept;
        
-       Literal (const char* literal)
+       Literal (const char* literal) noexcept
          : str_(literal)
          { }
        
-       Literal (Literal const& o)
+       Literal (Literal const& o) noexcept
          : str_(o.str_)
          { }
        
@@ -100,7 +101,7 @@ namespace lib {
 
     protected:
        /** Assignment generally prohibited */
-       Literal& operator= (const char* newStr)
+       Literal& operator= (const char* newStr) noexcept
          {
            str_ = newStr;
            return *this;
@@ -163,7 +164,7 @@ namespace lib {
   extern const size_t STRING_MAX_RELEVANT;
   
   /** @note storage guaranteed to exist */
-  inline Literal::Literal() : str_(Symbol::EMPTY) { }
+  inline Literal::Literal() noexcept : str_(Symbol::EMPTY) { }
   
   
   /* ===== to be picked up by ADL ===== */
