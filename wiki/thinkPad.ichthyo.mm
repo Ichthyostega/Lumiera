@@ -4570,12 +4570,26 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1508539191283" ID="ID_1571889765" MODIFIED="1508539199219" TEXT="anchor">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1508540643163" ID="ID_600567923" MODIFIED="1508540728299" TEXT="trivial: Anker-Literal setzen"/>
-<node CREATED="1508540736254" ID="ID_531471348" MODIFIED="1508540755144" TEXT="incomplete: path-resolution machen"/>
-<node CREATED="1508540764667" ID="ID_772420189" MODIFIED="1508540772133" TEXT="scheitert: Anchor == bottom"/>
-<node CREATED="1508540811196" ID="ID_841748634" MODIFIED="1508540819447" TEXT="Ergebnis: Window-Komponente setzen"/>
+<node COLOR="#338800" CREATED="1508539191283" ID="ID_1571889765" MODIFIED="1515287574648" TEXT="anchor">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1508540643163" ID="ID_600567923" MODIFIED="1515287569776" TEXT="trivial: Anker-Literal setzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1508540736254" ID="ID_531471348" MODIFIED="1515287568184" TEXT="incomplete: path-resolution machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1508540764667" ID="ID_772420189" MODIFIED="1515287566905" TEXT="scheitert: Anchor == bottom">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1508540811196" ID="ID_841748634" MODIFIED="1515287563969" TEXT="Ergebnis: Window-Komponente setzen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515287545795" ID="ID_1277908675" MODIFIED="1515287556163" TEXT="aber nur wenn ankerbar">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1515287557121" ID="ID_610935487" MODIFIED="1515287561833" TEXT="sonst: kein Effekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1508539195258" ID="ID_1044429952" MODIFIED="1509329355200" TEXT="cover">
 <icon BUILTIN="button_ok"/>
@@ -9238,6 +9252,27 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645748" ID="ID_1171284706" MODIFIED="1506984663361" TEXT="verify_mutateAnchor">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287623841" ID="ID_11774693" MODIFIED="1515287734866" TEXT="explizit verankert: &#xe4;ndert sich nix">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287648717" ID="ID_293459284" MODIFIED="1515287736050" TEXT="firstWindow explizit machen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287660188" ID="ID_811260333" MODIFIED="1515287736850" TEXT="currentWindow explizit machen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287665939" ID="ID_525267705" MODIFIED="1515287738746" TEXT="l&#xf6;sbare coverage">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287694871" ID="ID_953283273" MODIFIED="1515287741026" TEXT="schon berechnet: eintragen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287701126" ID="ID_1257691503" MODIFIED="1515287740146" TEXT="noch nicht berechnet: errechnen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287717092" ID="ID_459525933" MODIFIED="1515287743561" TEXT="nicht coverbar: &#xe4;ndert sich nix">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1506984645748" ID="ID_1688800613" MODIFIED="1515209392926" TEXT="verify_mutateCoverage">
 <arrowlink COLOR="#4b5c8d" DESTINATION="ID_1362494392" ENDARROW="Default" ENDINCLINATION="398;572;" ID="Arrow_ID_82261909" STARTARROW="None" STARTINCLINATION="1404;115;"/>

@@ -493,10 +493,62 @@ namespace test {
         }
       
       
+      /** @test mutate given UI coordinates by anchoring them.
+       * This operation changes only the window part of the coordinate spec;
+       * it might use the result of a preceding coverage solution search or even
+       * trigger such a search, but only to find out about the root window.
+       */
       void
       verify_mutateAnchor()
         {
-          UNIMPLEMENTED ("mutate given UI coordinates by anchoring them");
+          GenNodeLocationQuery tree{MakeRec()
+                                      .set("window-1"
+                                          , MakeRec()
+                                              .type("persp-A")
+                                              .set("panelX"
+                                                  , MakeRec()
+                                                      .set("firstView", MakeRec())
+                                                      .set("secondView", MakeRec())
+                                                  )
+                                              .set("panelZ"
+                                                  , MakeRec()
+                                                      .set("thirdView"
+                                                          , MakeRec()
+                                                              .set("#1", MakeRec())
+                                                              .set("#2", MakeRec())
+                                                              .set("tab", MakeRec())
+                                                          )
+                                                  )
+                                          )
+                                      .set("window-2"
+                                          , MakeRec()
+                                              .type("persp-B")
+                                              .set("panelY", MakeRec())
+                                          )
+                                      .set("window-3"
+                                          , MakeRec()
+                                              .type("persp-C")
+                                              .set("panelZ"
+                                                  , MakeRec()
+                                                      .set("thirdView"
+                                                          , MakeRec()
+                                                              .set("tab"
+                                                                  , MakeRec()
+                                                                      .set("sub", MakeRec())
+                                                                  )
+                                                              .set("#1", MakeRec())
+                                                          )
+                                                  )
+                                              .set("panelZZ", MakeRec())
+                                          )
+                                   };
+          
+          /* === explicitly given window spec remains unchanged === */
+          /* === `firstWindow` meta spec is resolved === */
+          /* === `currentWindow` meta spec is resolved === */
+          /* === already calculated coverage solution is used === */
+          /* === coverage solution is calculated on demand === */
+          /* === impossible to cover and can not be anchored === */
         }
       
       

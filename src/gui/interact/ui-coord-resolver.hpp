@@ -326,6 +326,24 @@ namespace interact {
         }
       
       
+      /** mutate the window part of the path such as
+       *  to make the anchorage explicit, if possible
+       * @remark if the path starts with meta specs like
+       *  `firstWindow` or `currentWindow`, they will be
+       *  replaced by their current meaning. If the path
+       *  is incomplete, but can somehow be resolved, we
+       *  use the anchorage as indicated by that resolution,
+       *  without interpolating the rest of the path.
+       */
+      UICoordResolver
+      anchor()
+        {
+          if (canAnchor())
+            window (res_.anchor);
+          return std::move (*this);
+        }
+      
+      
       /** mutate the path to extend it while keeping it partially covered
        */
       UICoordResolver
