@@ -497,6 +497,12 @@ namespace test {
        * This operation changes only the window part of the coordinate spec;
        * it might use the result of a preceding coverage solution search or even
        * trigger such a search, but only to find out about the root window.
+       * @note some fine points touched here: to anchor a path is something
+       *       different than to cover it; in fact there are cases where we
+       *       can determine the possible anchor point, but are unable to
+       *       cover the path spec beyond that. And, on the other hand,
+       *       there are cases where you _need to compute a coverage_
+       *       in order to decide upon the anchor point.
        */
       void
       verify_mutateAnchor()
@@ -563,12 +569,13 @@ namespace test {
           
           /* === coverage solution is calculated on demand === */
           UICoordResolver r4 {UICoord().view("thirdView").append("#2/sub"), tree};
+          CHECK ("UI:?.thirdView.#2/sub" == string(r4));
           CHECK (not r4.isAnchored());
           CHECK (0 == r4.coverDepth());
           r4.anchor();
           CHECK (1 == r4.coverDepth());
           CHECK (r4.isCoveredPartially());
-          cout << r4 <<endl;
+          CHECK ("UI:window-3[*]-*.thirdView.#2/sub" == string(r4));
           
           /* === already calculated coverage solution is used === */
           UICoordResolver r5 {UICoord::currentWindow().view("thirdView"), tree};
@@ -579,15 +586,15 @@ namespace test {
           CHECK (1 == r5.coverDepth());
           CHECK (not r5.isCovered());
           CHECK (r5.isCoveredPartially());
-          cout << r5 <<endl;
+          CHECK ("UI:currentWindow[*]-*.thirdView" == string(r5));
           r5.anchor();
-          cout << r5 <<endl;
+          CHECK ("UI:window-3[*]-*.thirdView"      == string(r5));
           CHECK (1 == r5.coverDepth());
           CHECK (not r5.isCovered());
           r5.cover();
           CHECK (r5.isCovered());
           CHECK (4 == r5.coverDepth());
-          cout << r5 <<endl;
+          CHECK ("UI:window-3[persp-C]-panelZ.thirdView" == string(r5));
           
           /* === impossible to cover and can not be anchored === */
           UICoordResolver r6 {UICoord::window("windows").path("to/hell"), tree};
@@ -596,7 +603,7 @@ namespace test {
           r6.anchor();
           CHECK (not r6.isAnchored());
           CHECK (0 == r6.coverDepth());
-          cout << r6 << endl;
+          CHECK ("UI:windows[*]-*.*.*/to/hell" == string(r6));
         }
       
       

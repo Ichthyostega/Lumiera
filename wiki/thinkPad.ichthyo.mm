@@ -9250,8 +9250,8 @@
 <node CREATED="1515209280278" ID="ID_959372189" MODIFIED="1515209291984" TEXT="sinnlos, da man das Ergebnis nicht sieht"/>
 <node CREATED="1515209292804" ID="ID_907780055" MODIFIED="1515209308566" TEXT="ansonsten redundant zur Mutierung"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645748" ID="ID_1171284706" MODIFIED="1506984663361" TEXT="verify_mutateAnchor">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1506984645748" ID="ID_1171284706" MODIFIED="1515305946325" TEXT="verify_mutateAnchor">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1515287623841" ID="ID_11774693" MODIFIED="1515290983628" TEXT="explizit verankert: &#xe4;ndert sich nix">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -9267,21 +9267,42 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287665939" ID="ID_525267705" MODIFIED="1515287738746" TEXT="l&#xf6;sbare coverage">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287701126" ID="ID_1257691503" MODIFIED="1515289604179" TEXT="noch nicht berechnet: errechnen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515291242698" ID="ID_512594119" MODIFIED="1515291278142" TEXT="mu&#xdf; re-normalisieren">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1515287665939" ID="ID_525267705" MODIFIED="1515305941140" TEXT="l&#xf6;sbare coverage">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1515287701126" ID="ID_1257691503" MODIFIED="1515305915468" TEXT="noch nicht berechnet: errechnen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1515291242698" ID="ID_512594119" MODIFIED="1515305838412" TEXT="mu&#xdf; re-normalisieren">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515291264591" ID="ID_250465802" MODIFIED="1515291278998" TEXT="sollte dann coverDepth neu errechnen">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1515291264591" FOLDED="true" ID="ID_250465802" MODIFIED="1515305937791" TEXT="sollte dann coverDepth neu errechnen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1515305853681" ID="ID_1757724837" MODIFIED="1515305908431" TEXT="nicht notwendig">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1515305858184" ID="ID_1728979618" MODIFIED="1515305903027">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist <i>immer</i>&#160;schon korrekt erledigt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1515305886989" ID="ID_877994644" MODIFIED="1515305894383" TEXT="entweder der Beginn ist explizit"/>
+<node CREATED="1515305895307" ID="ID_371777501" MODIFIED="1515305899622" TEXT="oder wir haben eine L&#xf6;sung"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287694871" ID="ID_953283273" MODIFIED="1515287741026" TEXT="schon berechnet: eintragen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1515291343277" ID="ID_1704851738" MODIFIED="1515291349128" TEXT="explizites Cover machen"/>
-<node COLOR="#338800" CREATED="1515291350332" ID="ID_219986282" MODIFIED="1515298798947" TEXT="neue coverDepth mu&#xdf; sichtbar werden">
+</node>
+<node COLOR="#338800" CREATED="1515287694871" ID="ID_953283273" MODIFIED="1515305930404" TEXT="schon berechnet: eintragen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515291343277" ID="ID_1704851738" MODIFIED="1515305922611" TEXT="explizites Cover machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1515291350332" FOLDED="true" ID="ID_219986282" MODIFIED="1515305928168" TEXT="neue coverDepth mu&#xdf; sichtbar werden">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1515298565483" ID="ID_719457405" MODIFIED="1515298571802" TEXT="Autsch">
 <icon BUILTIN="smily_bad"/>
@@ -9321,8 +9342,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287717092" ID="ID_459525933" MODIFIED="1515287743561" TEXT="nicht coverbar: &#xe4;ndert sich nix">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1515287717092" ID="ID_459525933" MODIFIED="1515305943856" TEXT="nicht coverbar: &#xe4;ndert sich nix">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1506984645748" ID="ID_1688800613" MODIFIED="1515209392926" TEXT="verify_mutateCoverage">

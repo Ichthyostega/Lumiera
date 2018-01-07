@@ -591,6 +591,14 @@ namespace interact {
           uic_.truncateTo (depth);
           return std::move (*this);
         }
+      
+    protected:
+      Builder&&
+      normalise()
+        {
+          uic_.normalise();
+          return std::move (*this);
+        }
     };
   
   

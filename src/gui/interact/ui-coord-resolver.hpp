@@ -347,7 +347,10 @@ namespace interact {
       anchor()
         {
           if (canAnchor())
-            window (res_.anchor);
+            {
+              window (res_.anchor);
+              normalise();
+            }
           return std::move (*this);
         }
       
