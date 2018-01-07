@@ -9252,22 +9252,38 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506984645748" ID="ID_1171284706" MODIFIED="1506984663361" TEXT="verify_mutateAnchor">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287623841" ID="ID_11774693" MODIFIED="1515287734866" TEXT="explizit verankert: &#xe4;ndert sich nix">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1515287623841" ID="ID_11774693" MODIFIED="1515290983628" TEXT="explizit verankert: &#xe4;ndert sich nix">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287648717" ID="ID_293459284" MODIFIED="1515287736050" TEXT="firstWindow explizit machen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1515287648717" ID="ID_293459284" MODIFIED="1515290985688" TEXT="firstWindow explizit machen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515291045220" ID="ID_907726638" MODIFIED="1515291066019" TEXT="...selbst wenn sonst nicht l&#xf6;sbar">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287660188" ID="ID_811260333" MODIFIED="1515287736850" TEXT="currentWindow explizit machen">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1515287660188" ID="ID_811260333" MODIFIED="1515290994597" TEXT="currentWindow explizit machen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515291071497" ID="ID_913736296" MODIFIED="1515291083841" TEXT="...und tr&#xe4;gt auch zur L&#xf6;sung bei">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287665939" ID="ID_525267705" MODIFIED="1515287738746" TEXT="l&#xf6;sbare coverage">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287701126" ID="ID_1257691503" MODIFIED="1515289604179" TEXT="noch nicht berechnet: errechnen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515291242698" ID="ID_512594119" MODIFIED="1515291278142" TEXT="mu&#xdf; re-normalisieren">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515291264591" ID="ID_250465802" MODIFIED="1515291278998" TEXT="sollte dann coverDepth neu errechnen">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287694871" ID="ID_953283273" MODIFIED="1515287741026" TEXT="schon berechnet: eintragen">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1515291343277" ID="ID_1704851738" MODIFIED="1515291349128" TEXT="explizites Cover machen"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515291350332" ID="ID_219986282" MODIFIED="1515291362081" TEXT="neue coverDepth mu&#xdf; sichtbar werden">
+<icon BUILTIN="flag-pink"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287701126" ID="ID_1257691503" MODIFIED="1515287740146" TEXT="noch nicht berechnet: errechnen">
-<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287717092" ID="ID_459525933" MODIFIED="1515287743561" TEXT="nicht coverbar: &#xe4;ndert sich nix">

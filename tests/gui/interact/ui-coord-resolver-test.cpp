@@ -510,45 +510,93 @@ namespace test {
                                                       .set("firstView", MakeRec())
                                                       .set("secondView", MakeRec())
                                                   )
-                                              .set("panelZ"
-                                                  , MakeRec()
-                                                      .set("thirdView"
-                                                          , MakeRec()
-                                                              .set("#1", MakeRec())
-                                                              .set("#2", MakeRec())
-                                                              .set("tab", MakeRec())
-                                                          )
-                                                  )
                                           )
                                       .set("window-2"
                                           , MakeRec()
                                               .type("persp-B")
-                                              .set("panelY", MakeRec())
+                                              .set("panelY"
+                                                  , MakeRec())
+                                                      .set("thirdView"
+                                                          , MakeRec()
+                                                              .set("#1", MakeRec())
+                                                              .set("#2", MakeRec())
+                                                          )
                                           )
                                       .set("window-3"
                                           , MakeRec()
                                               .type("persp-C")
                                               .set("panelZ"
                                                   , MakeRec()
-                                                      .set("thirdView"
-                                                          , MakeRec()
-                                                              .set("tab"
-                                                                  , MakeRec()
-                                                                      .set("sub", MakeRec())
-                                                                  )
-                                                              .set("#1", MakeRec())
-                                                          )
+                                                      .set("thirdView", MakeRec())
                                                   )
-                                              .set("panelZZ", MakeRec())
                                           )
                                    };
           
           /* === explicitly given window spec remains unchanged === */
+          UICoordResolver r1 {UICoord{"window-2","persp-B","panelY"}, tree};
+          CHECK (3 == r1.coverDepth());
+          r1.anchor();
+          CHECK ("UI:window-2[persp-B]-panelY"  == string(r1));
+          
           /* === `firstWindow` meta spec is resolved === */
+          UICoordResolver r2 {UICoord::firstWindow().view("blah"), tree};
+          CHECK (0 == r2.coverDepth());
+          CHECK (r2.isAnchored());
+          CHECK (not r2.canCover());
+          CHECK ("UI:firstWindow[*]-*.blah"  == string(r2));
+          r2.anchor();
+          CHECK ("UI:window-1[*]-*.blah"  == string(r2));
+          CHECK (0 == r2.coverDepth());
+          CHECK (not r2.canCover());
+          
           /* === `currentWindow` meta spec is resolved === */
-          /* === already calculated coverage solution is used === */
+          UICoordResolver r3 {UICoord::currentWindow().view("thirdView"), tree};
+          CHECK (0 == r3.coverDepth());
+          CHECK (r3.isAnchored());
+          CHECK (not r3.isCovered());
+          CHECK (r3.canCover());
+          r3.anchor();
+          CHECK (not r3.isCovered());
+          CHECK (r3.isCoveredPartially());
+          CHECK (1 == r3.coverDepth());
+          CHECK ("UI:window-3[*]-*.thirdView" == string(r3));
+          
           /* === coverage solution is calculated on demand === */
+          UICoordResolver r4 {UICoord().view("thirdView").append("#2/sub"), tree};
+          CHECK (not r4.isAnchored());
+          CHECK (0 == r4.coverDepth());
+          r4.anchor();
+          CHECK (1 == r4.coverDepth());
+          CHECK (r4.isCoveredPartially());
+          cout << r4 <<endl;
+          
+          /* === already calculated coverage solution is used === */
+          UICoordResolver r5 {UICoord::currentWindow().view("thirdView"), tree};
+          CHECK (not r5.isCovered());
+          CHECK (not r5.isCoveredPartially());
+          CHECK (0 == r5.coverDepth());
+          CHECK (r5.canCover());
+          CHECK (1 == r5.coverDepth());
+          CHECK (not r5.isCovered());
+          CHECK (r5.isCoveredPartially());
+          cout << r5 <<endl;
+          r5.anchor();
+          cout << r5 <<endl;
+          CHECK (1 == r5.coverDepth());
+          CHECK (not r5.isCovered());
+          r5.cover();
+          CHECK (r5.isCovered());
+          CHECK (4 == r5.coverDepth());
+          cout << r5 <<endl;
+          
           /* === impossible to cover and can not be anchored === */
+          UICoordResolver r6 {UICoord::window("windows").path("to/hell"), tree};
+          CHECK (not r6.isAnchored());
+          CHECK (not r6.canCover());
+          r6.anchor();
+          CHECK (not r6.isAnchored());
+          CHECK (0 == r6.coverDepth());
+          cout << r6 << endl;
         }
       
       
