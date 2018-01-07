@@ -491,7 +491,7 @@ namespace interact {
       
       /** change UI coordinate spec to define it to be rooted within the given window
        * @note this function allows to _undefine_ the window, thus creating an incomplete spec */
-      Builder
+      Builder&&
       window (Literal windowID)
         {
           uic_.setComponent (UIC_WINDOW, windowID);
@@ -499,7 +499,7 @@ namespace interact {
         }
       
       /** augment UI coordinates to mandate a specific perspective to be active within the window */
-      Builder
+      Builder&&
       persp (Literal perspectiveID)
         {
           uic_.setComponent (UIC_PERSP, perspectiveID);
@@ -507,7 +507,7 @@ namespace interact {
         }
       
       /** augment UI coordinates to indicate a specific view to be used */
-      Builder
+      Builder&&
       panel (Literal panelID)
         {
           uic_.setComponent (UIC_PANEL, panelID);
@@ -515,7 +515,7 @@ namespace interact {
         }
 
       /** augment UI coordinates to indicate a specific view to be used */
-      Builder
+      Builder&&
       view (Literal viewID)
         {
           uic_.setComponent (UIC_VIEW, viewID);
@@ -523,7 +523,7 @@ namespace interact {
         }
       
       /** augment UI coordinates to indicate a specific tab within the view" */
-      Builder
+      Builder&&
       tab (Literal tabID)
         {
           uic_.setComponent (UIC_TAB, tabID);
@@ -531,7 +531,7 @@ namespace interact {
         }
       
       /** augment UI coordinates to indicate a tab specified by index number */
-      Builder
+      Builder&&
       tab (uint tabIdx)
         {
           uic_.setComponent (UIC_TAB, Symbol{"#"+util::toString (tabIdx)});
@@ -540,7 +540,7 @@ namespace interact {
       
       /** augment UI coordinates to indicate that no tab specification is necessary
        * @remarks typically this happens when a panel just holds a simple view */
-      Builder
+      Builder&&
       noTab()
         {
           uic_.setComponent (UIC_TAB, UIC_ELIDED);
@@ -552,7 +552,7 @@ namespace interact {
        * @note the element might define a sequence of components separated by `'/'`,
        *       in which case several elements will be appended.
        */
-      Builder
+      Builder&&
       append (Literal elm)
         {
           if (not isnil(elm))
@@ -561,7 +561,7 @@ namespace interact {
         }
       
       /** augment partially defined UI coordinates by extending them towards the root */
-      Builder
+      Builder&&
       prepend (Literal elmID)
         {
           if (not uic_.isIncomplete())
@@ -577,7 +577,7 @@ namespace interact {
        * @param pathDef a path, possibly with multiple components separated by `'/'`
        * @note any existing path definition is completely replaced by the new path
        */
-      Builder
+      Builder&&
       path (Literal pathDef)
         {
           uic_.setTailSequence (UIC_PATH, pathDef);
@@ -585,7 +585,7 @@ namespace interact {
         }
 
       /** possibly shorten this path specification to a limited depth */
-      Builder
+      Builder&&
       truncateTo (size_t depth)
         {
           uic_.truncateTo (depth);

@@ -214,6 +214,14 @@ namespace interact {
           attempt_trivialResolution();
         }
       
+      UICoordResolver (UICoord && uic, LocationQuery& queryAPI)
+        : Builder{std::move(uic)}
+        , query_{queryAPI}
+        , res_{}
+        {
+          attempt_trivialResolution();
+        }
+      
       
       /* === query functions === */
       
@@ -297,7 +305,7 @@ namespace interact {
        * @note if the coordinate spec can not be covered at all,
        *    it will be truncated to zero size
        */
-      UICoordResolver
+      UICoordResolver&&
       cover()
         {
           if (isCoveredPartially() and not res_.covfefe)
@@ -335,7 +343,7 @@ namespace interact {
        *  use the anchorage as indicated by that resolution,
        *  without interpolating the rest of the path.
        */
-      UICoordResolver
+      UICoordResolver&&
       anchor()
         {
           if (canAnchor())
@@ -346,7 +354,7 @@ namespace interact {
       
       /** mutate the path to extend it while keeping it partially covered
        */
-      UICoordResolver
+      UICoordResolver&&
       extend (Literal pathExtension)
         {
           if (not isCovered())

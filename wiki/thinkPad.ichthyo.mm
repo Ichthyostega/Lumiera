@@ -9281,8 +9281,43 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515287694871" ID="ID_953283273" MODIFIED="1515287741026" TEXT="schon berechnet: eintragen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1515291343277" ID="ID_1704851738" MODIFIED="1515291349128" TEXT="explizites Cover machen"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515291350332" ID="ID_219986282" MODIFIED="1515291362081" TEXT="neue coverDepth mu&#xdf; sichtbar werden">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1515291350332" ID="ID_219986282" MODIFIED="1515298798947" TEXT="neue coverDepth mu&#xdf; sichtbar werden">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515298565483" ID="ID_719457405" MODIFIED="1515298571802" TEXT="Autsch">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515298572994" ID="ID_1082678541" MODIFIED="1515298599961" TEXT="Denkfehler im Builder-Konzept!">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1515298602326" ID="ID_13919667" MODIFIED="1515298692557" TEXT="R&#xfc;ckgabe ist Value...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das hei&#223;t.
+    </p>
+    <p>
+      ein Value wird auch sofort konstruiert,
+    </p>
+    <p>
+      egal, ob man den dann gleich wegwirft.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1515298698849" ID="ID_1957524269" MODIFIED="1515298709411" TEXT="Objekt wird nach erstem Aufruf tats&#xe4;chlich zerst&#xf6;rt"/>
+</node>
+<node COLOR="#338800" CREATED="1515298710952" ID="ID_167586553" MODIFIED="1515298806412" TEXT="L&#xf6;sung: &amp;&amp; zur&#xfc;ckgeben">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1515298722702" ID="ID_273407473" MODIFIED="1515298730297" TEXT="k&#xf6;nnte gef&#xe4;hrlich sein">
+<icon BUILTIN="bell"/>
+<node CREATED="1515298735548" ID="ID_966210103" MODIFIED="1515298746799" TEXT="Stichwort: Sequence Points"/>
+<node CREATED="1515298747531" ID="ID_1013710090" MODIFIED="1515298752254" TEXT="im Debugger beobachtet"/>
+<node CREATED="1515298753074" ID="ID_5305718" MODIFIED="1515298776867" TEXT="Builder-Syntax scheint zu funktionieren, wie erwartet"/>
+<node CREATED="1515298777551" ID="ID_1384914895" MODIFIED="1515298789593" TEXT="explizite Aufruf-Syntax ebenso"/>
+</node>
 </node>
 </node>
 </node>
