@@ -369,6 +369,13 @@ namespace interact {
           return std::move (*this);
         }
       
+      UICoordResolver&&
+      extend (UICoord const& partialExtensionSpec)
+        {
+          UNIMPLEMENTED ("extend by UI-Coordinates");
+        }
+      
+      
       
       /** diagnostics */
       operator string()   const { return string(this->uic_); }

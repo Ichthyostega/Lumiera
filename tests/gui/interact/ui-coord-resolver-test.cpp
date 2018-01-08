@@ -56,7 +56,7 @@ namespace interact {
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-//  using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_STATE;
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
@@ -547,8 +547,8 @@ namespace test {
           /* === `firstWindow` meta spec is resolved === */
           UICoordResolver r2 {UICoord::firstWindow().view("blah"), tree};
           CHECK (0 == r2.coverDepth());
-          CHECK (r2.isAnchored());
-          CHECK (not r2.canCover());
+          CHECK (r2.isAnchored());                                                                 // can obviously be anchored, since there is always a first window
+          CHECK (not r2.canCover());                                                               // yet this path is impossible to cover in the current UI
           CHECK ("UI:firstWindow[*]-*.blah"  == string(r2));
           r2.anchor();
           CHECK ("UI:window-1[*]-*.blah"  == string(r2));
@@ -564,34 +564,34 @@ namespace test {
           r3.anchor();
           CHECK (not r3.isCovered());
           CHECK (r3.isCoveredPartially());
-          CHECK (1 == r3.coverDepth());
-          CHECK ("UI:window-3[*]-*.thirdView" == string(r3));
+          CHECK (1 == r3.coverDepth());                                                            // anchoring also picks the second of two possible solutions
+          CHECK ("UI:window-3[*]-*.thirdView" == string(r3));                                      // thereby covering the "thirdView"
           
           /* === coverage solution is calculated on demand === */
           UICoordResolver r4 {UICoord().view("thirdView").append("#2/sub"), tree};
-          CHECK ("UI:?.thirdView.#2/sub" == string(r4));
+          CHECK ("UI:?.thirdView.#2/sub" == string(r4));                                           // an incomplete path is not automatically resolved
           CHECK (not r4.isAnchored());
           CHECK (0 == r4.coverDepth());
-          r4.anchor();
-          CHECK (1 == r4.coverDepth());
-          CHECK (r4.isCoveredPartially());
-          CHECK ("UI:window-3[*]-*.thirdView.#2/sub" == string(r4));
+          r4.anchor();                                                                             // but if we anchor, we force search for a coverage solution
+          CHECK (1 == r4.coverDepth());                                                            // which is actually found starting from the third window,
+          CHECK (r4.isCoveredPartially());                                                         // and kept in the internal cache for future use,
+          CHECK ("UI:window-3[*]-*.thirdView.#2/sub" == string(r4));                               // but not made explicit, since we only requested anchorage
           
           /* === already calculated coverage solution is used === */
           UICoordResolver r5 {UICoord::currentWindow().view("thirdView"), tree};
           CHECK (not r5.isCovered());
           CHECK (not r5.isCoveredPartially());
           CHECK (0 == r5.coverDepth());
-          CHECK (r5.canCover());
+          CHECK (r5.canCover());                                                                   // this triggers search for a coverage solution
           CHECK (1 == r5.coverDepth());
           CHECK (not r5.isCovered());
           CHECK (r5.isCoveredPartially());
           CHECK ("UI:currentWindow[*]-*.thirdView" == string(r5));
-          r5.anchor();
+          r5.anchor();                                                                             // and this (cached) solution is also used to make anchorage explicit
           CHECK ("UI:window-3[*]-*.thirdView"      == string(r5));
           CHECK (1 == r5.coverDepth());
           CHECK (not r5.isCovered());
-          r5.cover();
+          r5.cover();                                                                              // ...now also the coverage solution was made explicit
           CHECK (r5.isCovered());
           CHECK (4 == r5.coverDepth());
           CHECK ("UI:window-3[persp-C]-panelZ.thirdView" == string(r5));
@@ -607,10 +607,44 @@ namespace test {
         }
       
       
+      /** @test mutate given UI coordinates by uncovered extension.
+       * Contrary to just appending something to the path (which is a basic path operation
+       * available on the generic path builder), a _path extension_ is always rooted at the
+       * end of the actually covered part of the UI coordinates. So extending a path implies
+       * search for a coverage solution, followed by truncating the path to the covered part.
+       */
       void
       verify_mutateExtend()
         {
-          UNIMPLEMENTED ("mutate given UI coordinates by uncovered extension");
+          GenNodeLocationQuery tree{MakeRec()
+                                      .set("window-2"
+                                          , MakeRec()
+                                              .type("persp-B")
+                                              .set("panelY"
+                                                  , MakeRec())
+                                                      .set("thirdView"
+                                                          , MakeRec()
+                                                              .set("#1", MakeRec())
+                                                              .set("#2", MakeRec())
+                                                          )
+                                          )
+                                   };
+          
+          /* === extend fully covered explicit path === */
+          UICoordResolver r1 {UICoord{"window-2","persp-B","panelY"}, tree};
+          r1.extend (UICoord().path("engulfed"));
+          cout << string(r1)<<endl;
+          
+          /* === extend partially covered path === */
+          UICoordResolver r2 {UICoord().view("thirdView").append("some/where"), tree};
+          r2.extend ("no/where");
+          VERIFY_ERROR (INVALID, r2.extend(UICoord().persp("fisheye")));
+          cout << string(r2)<<endl;
+          
+          /* === unsolvable: truncate, extend, recalculate coverage === */
+          UICoordResolver r3 {UICoord().persp("awesome"), tree};
+          r3.extend (UICoord::currentWindow().view("outlandish"));
+          cout << string(r3)<<endl;
         }
     };
   
