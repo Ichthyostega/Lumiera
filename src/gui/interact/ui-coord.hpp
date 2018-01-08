@@ -599,6 +599,14 @@ namespace interact {
           uic_.normalise();
           return std::move (*this);
         }
+      
+      Builder&&
+      overwrite (size_t depth, Literal newSpec)
+        {
+          Literal* storage = uic_.expandPosition (depth);
+          uic_.setContent (storage, newSpec);
+          return std::move (*this);
+        }
     };
   
   

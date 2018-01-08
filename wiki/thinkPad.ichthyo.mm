@@ -8944,6 +8944,13 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515451127221" ID="ID_130067342" MODIFIED="1515451168209" TEXT="durch (partielle) UI-Coord spec">
 <linktarget COLOR="#4f6f95" DESTINATION="ID_130067342" ENDARROW="Default" ENDINCLINATION="544;89;" ID="Arrow_ID_992203487" SOURCE="ID_1736775031" STARTARROW="None" STARTINCLINATION="704;0;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1515455194222" ID="ID_1550640486" MODIFIED="1515455202609" TEXT="brauche (nun doch) overwrite">
+<node CREATED="1515455204572" ID="ID_538708318" MODIFIED="1515455215023" TEXT="im UI-Coord-Builder ansiedeln"/>
+<node CREATED="1515455215779" ID="ID_1744879837" MODIFIED="1515455225131" TEXT="protected....">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node CREATED="1515455238808" ID="ID_1864948105" MODIFIED="1515455247459" TEXT="Fehlerbehandlung: &#xdc;berlapp finden"/>
 </node>
 </node>
 </node>
@@ -9372,6 +9379,15 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515451047192" ID="ID_554336668" MODIFIED="1515451078845" TEXT="erweitern scheitert wegen &#xdc;berlapp">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515455278659" ID="ID_1749331083" MODIFIED="1515455288490" TEXT="pr&#xe4;ziser Anschlu&#xdf; funktioniert">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515455289417" ID="ID_228177396" MODIFIED="1515455317398" TEXT="&#xdc;berlapp == 1 scheitert">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515455296784" ID="ID_957569216" MODIFIED="1515455313258" TEXT="sinnvolle Fehlermeldung">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515449669446" ID="ID_1747646759" MODIFIED="1515449741572" TEXT="partially covered erweitern">
 <icon BUILTIN="flag-yellow"/>

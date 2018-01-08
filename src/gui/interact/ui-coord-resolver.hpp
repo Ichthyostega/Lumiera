@@ -59,6 +59,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/format-string.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/iter-source.hpp"
@@ -372,7 +373,29 @@ namespace interact {
       UICoordResolver&&
       extend (UICoord const& partialExtensionSpec)
         {
-          UNIMPLEMENTED ("extend by UI-Coordinates");
+          if (not canCover())
+            {
+              uic_ = partialExtensionSpec;
+            }
+          else
+            {
+              ENSURE (res_.isResolved and res_.covfefe);
+              size_t coverable = res_.covfefe->size();
+              auto newContent = partialExtensionSpec.begin();
+              size_t extensionPos = newContent? partialExtensionSpec.indexOf(*newContent) : 0;
+              if (coverable >= extensionPos)
+                throw error::Invalid (util::_Fmt{"Attempt to extend covered path %s with %s "
+                                                 "would overwrite positions %d to %d (incl)"}
+                                                % *res_.covfefe
+                                                % partialExtensionSpec
+                                                % extensionPos
+                                                % coverable);
+              cover();
+              for ( ; newContent; ++newContent, ++extensionPos )
+                overwrite (extensionPos, *newContent);
+            }
+          res_.depth = query_.determineCoverage (this->uic_); // coverage may grow
+          return std::move (*this);
         }
       
       
