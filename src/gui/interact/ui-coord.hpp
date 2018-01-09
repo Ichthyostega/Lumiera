@@ -158,6 +158,7 @@ namespace interact {
       Builder path (Literal pathDefinition) const;
       Builder append  (Literal elmID) const;
       Builder prepend (Literal elmID) const;
+      Builder rebuild() const;
       
       
       
@@ -709,6 +710,12 @@ namespace interact {
   UICoord::prepend (Literal elmID)  const
   {
     return Builder(*this).prepend (elmID);
+  }
+  
+  inline UICoord::Builder
+  UICoord::rebuild ()  const
+  {
+    return Builder(*this);
   }
   
   

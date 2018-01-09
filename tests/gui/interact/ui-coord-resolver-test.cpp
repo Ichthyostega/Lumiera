@@ -634,18 +634,24 @@ namespace test {
           
           /* === extend fully covered explicit path === */
           UICoordResolver r1 {UICoord{"window-2","persp-B","panelY"}, tree};
-          r1.extend (UICoord().path("engulfed"));
+          r1.extend (UICoord().path("gappy").tab(2));
+          cout << string(r1)<<endl;
+          r1.extend ("seamless");
           cout << string(r1)<<endl;
           
           /* === extend partially covered path === */
           UICoordResolver r2 {UICoord().view("thirdView").append("some/where"), tree};
           r2.extend ("no/where");
+          cout << string(r2)<<endl;
           VERIFY_ERROR (INVALID, r2.extend(UICoord().persp("fisheye")));
           cout << string(r2)<<endl;
           
           /* === unsolvable: truncate, extend, recalculate coverage === */
           UICoordResolver r3 {UICoord().persp("awesome"), tree};
-          r3.extend (UICoord::currentWindow().view("outlandish"));
+          CHECK (not r3.canCover());
+          CHECK (0 == r3.coverDepth());
+          r3.extend (UICoord::currentWindow().tab(1));
+          CHECK (1 == r3.coverDepth());
           cout << string(r3)<<endl;
         }
     };

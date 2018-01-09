@@ -322,7 +322,6 @@ namespace interact {
               res_.depth = res_.covfefe->size();
               this->uic_ = std::move (*res_.covfefe);
               res_.covfefe.reset();
-              ENSURE (isCovered());
             }
           else
             {
@@ -331,6 +330,7 @@ namespace interact {
               REQUIRE (not res_.covfefe);
               truncateTo (0);
             }
+          ENSURE (isCovered());
           return std::move (*this);
         }
       
@@ -366,7 +366,6 @@ namespace interact {
           ENSURE (isCovered());
           append (pathExtension);
           res_.depth = query_.determineCoverage (this->uic_); // coverage may grow
-          ENSURE (isCoveredPartially());
           return std::move (*this);
         }
       
@@ -374,27 +373,28 @@ namespace interact {
       extend (UICoord const& partialExtensionSpec)
         {
           if (not canCover())
-            {
-              uic_ = partialExtensionSpec;
-            }
+            uic_ = partialExtensionSpec;
           else
             {
-              ENSURE (res_.isResolved and res_.covfefe);
-              size_t coverable = res_.covfefe->size();
+              REQUIRE (res_.isResolved);
+              size_t coverable = res_.covfefe? res_.covfefe->size() : res_.depth;
               auto newContent = partialExtensionSpec.begin();
               size_t extensionPos = newContent? partialExtensionSpec.indexOf(*newContent) : 0;
               if (coverable >= extensionPos)
                 throw error::Invalid (util::_Fmt{"Attempt to extend covered path %s with %s "
                                                  "would overwrite positions %d to %d (incl)"}
-                                                % *res_.covfefe
+                                                % (res_.covfefe? *res_.covfefe : UICoord{uic_.rebuild().truncateTo(res_.depth)})
                                                 % partialExtensionSpec
                                                 % extensionPos
                                                 % coverable);
               cover();
               for ( ; newContent; ++newContent, ++extensionPos )
                 overwrite (extensionPos, *newContent);
+              normalise();
             }
-          res_.depth = query_.determineCoverage (this->uic_); // coverage may grow
+          res_ = Resolution{};      // start over with pristine resolution state
+          attempt_trivialResolution();
+          canCover();
           return std::move (*this);
         }
       
