@@ -521,12 +521,13 @@ namespace test {
                                           , MakeRec()
                                               .type("persp-B")
                                               .set("panelY"
-                                                  , MakeRec())
+                                                  , MakeRec()
                                                       .set("thirdView"
                                                           , MakeRec()
                                                               .set("#1", MakeRec())
                                                               .set("#2", MakeRec())
                                                           )
+                                                  )
                                           )
                                       .set("window-3"
                                           , MakeRec()
@@ -573,9 +574,9 @@ namespace test {
           CHECK (not r4.isAnchored());
           CHECK (0 == r4.coverDepth());
           r4.anchor();                                                                             // but if we anchor, we force search for a coverage solution
-          CHECK (1 == r4.coverDepth());                                                            // which is actually found starting from the third window,
+          CHECK (1 == r4.coverDepth());                                                            // which is actually found starting from the second window,
           CHECK (r4.isCoveredPartially());                                                         // and kept in the internal cache for future use,
-          CHECK ("UI:window-3[*]-*.thirdView.#2/sub" == string(r4));                               // but not made explicit, since we only requested anchorage
+          CHECK ("UI:window-2[*]-*.thirdView.#2/sub" == string(r4));                               // but not made explicit, since we only requested anchorage
           
           /* === already calculated coverage solution is used === */
           UICoordResolver r5 {UICoord::currentWindow().view("thirdView"), tree};
@@ -621,12 +622,13 @@ namespace test {
                                           , MakeRec()
                                               .type("persp-B")
                                               .set("panelY"
-                                                  , MakeRec())
+                                                  , MakeRec()
                                                       .set("thirdView"
                                                           , MakeRec()
                                                               .set("#1", MakeRec())
                                                               .set("#2", MakeRec())
                                                           )
+                                                  )
                                           )
                                    };
           
