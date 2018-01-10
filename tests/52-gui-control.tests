@@ -17,6 +17,6 @@ return: 0
 END
 
 
-PLANNED "resolving UI coordinates" UICoordResolver_test <<END
+TEST "resolving UI coordinates" UICoordResolver_test <<END
 return: 0
 END

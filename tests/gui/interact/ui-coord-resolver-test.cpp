@@ -31,20 +31,15 @@
 #include "gui/interact/ui-coord-resolver.hpp"
 #include "gui/interact/gen-node-location-query.hpp"
 #include "lib/diff/gen-node.hpp"
-#include "lib/format-cout.hpp"/////////////////////////TODO RLY?
 #include "lib/format-util.hpp"
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 
 
 using std::string;
-//using lib::idi::EntryID;
 using lib::diff::MakeRec;
 using lib::diff::Rec;
-//using util::isSameObject;
 using lib::Symbol;
 using util::isnil;
 using util::join;
@@ -55,14 +50,9 @@ namespace gui  {
 namespace interact {
 namespace test {
   
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_STATE;
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
-  namespace { //Test fixture...
-    
-  }//(End)Test fixture
   
   
   /******************************************************************************//**
@@ -613,6 +603,10 @@ namespace test {
        * available on the generic path builder), a _path extension_ is always rooted at the
        * end of the actually covered part of the UI coordinates. So extending a path implies
        * search for a coverage solution, followed by truncating the path to the covered part.
+       * There are two flavours of extending a path:
+       * - extending with a literal specification, which is just appended behind the coverage
+       * - extending with an incomplete UI coordinate spec, which allows to place the extension
+       *   at a specific depth (e.g. as a view). This is typically what we want in practice.
        */
       void
       verify_mutateExtend()

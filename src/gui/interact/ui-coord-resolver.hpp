@@ -45,7 +45,65 @@
  ** Together, these two capabilities allow us to build exploring and backtracking evaluations,
  ** which is enough to build a secondary helper component on top, the gui::interact::UICoordResolver
  ** 
- ** @todo WIP 10/2017 first draft ////////////////////////////////////////////////////////////////////////////TICKET #1106 generic UI coordinate system
+ ** 
+ ** # UI coordinate path evaluation
+ ** 
+ ** Such a _resolver_ can be used to relate and match a given, incomplete UI coordinate specification
+ ** (a "pattern") against the actual UI topology. Evaluation is accomplished by first constituting an anchoring,
+ ** followed by traversal of the coordinate spec and matching against a navigation path within the actual UI window
+ ** configuration. This process might involve interpretation of some meta-symbols and interpolation of wildcards.
+ ** 
+ ** As indicated above, the coordinate resolver internally relies on a [context query interface](\ref LocationQuery),
+ ** to find out about existing windows, panels, views and tabs and to navigate the real UI structure. The actual
+ ** implementation of this context query interface is backed by the \ref Navigator component exposed through the
+ ** \ref InteractionDirector.
+ ** 
+ ** ## Query operations
+ ** In addition to the _locally decidable properties_ of a [coordinate spec](\ref UICoord), which are the explicitness
+ ** and the presence of some component, several contextual predications may be queried:
+ ** 
+ ** - *anchorage*
+ **   ** the way the given coordinate spec is or can be anchored
+ **      *** it is already _explicitly anchored_ by referring either to a specific window or by generic specification
+ **      *** it _can be a anchored_ by interpolation of some wildcards
+ **      *** it is _incomplete_ and need to be extended to allow anchoring
+ **      *** it is _impossible to anchor_ in the current UI configuration
+ ** 
+ ** - *coverage*
+ **   ** the extent to which a given coordinate spec is backed by the actual UI configuration
+ **   ** _please note_: to determine the coverage, the spec needs to be anchored, either explicitly,
+ **      or by interpolation, or by extension of an incomplete spec
+ **      *** it is _completely covered_
+ **      *** it is _partially covered_ with an remaining, uncovered extension part
+ **      *** it is _possible to cover completely_
+ **      *** it is _impossible to cover_ related to the current UI topology
+ ** 
+ ** \par Some fine points to note
+ ** Anchorage and coverage are not the same thing, but coverage implies anchorage. Only when a path is complete
+ ** (i.e. it starts with the window spec) and explicit (has no wildcards), then anchorage implies also partial coverage
+ ** (namely at least to depth 1). To determine the possibility of coverage means to perform a resolution with backtracking
+ ** to pick the maximal solution. Moreover, since "covered" means that the path specification _is at least partially supported
+ ** by the real UI,_ we establish an additional constraint to ensure this resolution did not just match some arbitrary wildcards.
+ ** Rather we demand that behind rsp. below the last wildcard there is at least one further explicit component in the path spec,
+ ** which is supported by the real UI. As a consequence, the coverage resolution may fail altogether, while still providing at
+ ** least a possible anchor point.
+ ** 
+ ** ## Mutations
+ ** In addition to querying the interpretation of a given coordinate spec with respect to the current UI environment,
+ ** it is also possible to rewrite or extend the spec based on this environment
+ ** 
+ ** - *anchoring*
+ **   ** in correspondence to the possible states of anchorage, we may derive an explicitly anchored spec
+ **      *** by interpolating the given spec
+ **      *** by interpretation and extension of the given spec
+ ** 
+ ** - *covering*
+ **   ** we may construct the covered part of a given spec, which includes automatic anchoring
+ ** 
+ ** - *extending*
+ **   ** a given UI coordinate pattern is covered...
+ **   ** and _truncated_ to the covered part
+ **   ** the given _extension suffix_ is then attached behind
  ** 
  ** @see UICoordResolver_test
  ** @see UICoord_test
@@ -133,6 +191,9 @@ namespace interact {
    * they may be resolved against any tree-like topological structure, which can be queried through
    * this interface.
    * @see Navigator the implementation used in the Lumiera UI, as backed by actual GUI components
+   * @see GenNodeLocationQuery a dummy/test implementation, where the "UI topology" is hard wired
+   *      as a tree of GenNode elements. This serves the purpose of unit testing, without having
+   *      to rely on an actual UI.
    */
   class LocationQuery
     {
@@ -188,8 +249,32 @@ namespace interact {
   
   /**
    * Query and mutate UICoord specifications in relation to actual UI topology.
-   * 
-   * @todo initial draft as of 10/2017
+   * This specialised builder uses a _location query facility_ to retrieve information about
+   * the current actual UI topology. The UI coordinate spec given as initialisation acts as a
+   * _pattern_, to be *queried and resolved* against that actual UI topology in various ways
+   *  - determine the _anchor point_, where this UI coordinate pattern will be rooted in the UI
+   *  - determine to which extent this UI coordinate pattern can be _"covered"_ (= supported)
+   *    by the exiting UI. To resolve this query, it is necessary to perform a matching search
+   *    with backtracking, in order to find the best possible coverage
+   *    ** the coverage can be _complete_, which means that all components mentioned explicitly
+   *       within the pattern in fact exist in the actual UI
+   *    ** a _partial coverage_ means that there is a prefix actually supported, while some
+   *       extraneous tailing components do not (yet) exist in the UI.
+   * Moreover, the pattern can be *mutated to conform* with the existing UI topology:
+   *  - the anchor point can be made explicit, which means to replace the _meta specifications_
+   *    ** `firstWindow`
+   *    ** `currentWindow`
+   *  - the calculated _coverage solution_ can be interpolated into the pattern, thereby binding
+   *    and replacing any placeholders ("wildcards", i.e. components designated as `"*"`)
+   *  - we may _extend_ the pattern by attaching further elements, _behind_ the covered part.
+   * @note this is a _coordinate builder,_ which means that it works on a copy of the UI coordinate
+   *       pattern provided at initialisation. The result, a possibly reworked UI coordinate spec
+   *       can be _moved out_ into a new target UI coordinate (which is then immutable). The
+   *       various query and binding operations work by side-effect on the internal state
+   *       encapsulated within this builder.
+   * @warning computing a coverage solution for a sparsely defined pattern against a large
+   *       UI topology can be expensive, since in worst case we have to perform a depth-first
+   *       scan of the whole tree structure
    */
   class UICoordResolver
     : public UICoord::Builder
@@ -356,7 +441,11 @@ namespace interact {
         }
       
       
+      
       /** mutate the path to extend it while keeping it partially covered
+       * @param pathExtension a literal specification, which is extended immediately
+       *        behind the actually covered part of the path, irrespective of the depth
+       * @note the extension may contain '/', which are treated as component separators
        */
       UICoordResolver&&
       extend (Literal pathExtension)
@@ -369,6 +458,12 @@ namespace interact {
           return std::move (*this);
         }
       
+      /** mutate the path and extend it with components at fixed positions
+       * @param partialExtensionSpec UI coordinates used as extension
+       * @throw if the extension would overwrite the covered part.
+       * @remark this is the typical use case, where we want to place some component
+       *         explicitly at a given depth (e.g. a new view or tab)
+       */
       UICoordResolver&&
       extend (UICoord const& partialExtensionSpec)
         {
