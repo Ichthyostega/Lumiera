@@ -379,14 +379,14 @@ namespace interact {
               REQUIRE (res_.isResolved);
               size_t coverable = res_.covfefe? res_.covfefe->size() : res_.depth;
               auto newContent = partialExtensionSpec.begin();
-              size_t extensionPos = newContent? partialExtensionSpec.indexOf(*newContent) : 0;
-              if (coverable >= extensionPos)
+              size_t extensionPos = newContent? partialExtensionSpec.indexOf(*newContent) : coverable;
+              if (coverable > extensionPos)
                 throw error::Invalid (util::_Fmt{"Attempt to extend covered path %s with %s "
                                                  "would overwrite positions %d to %d (incl)"}
                                                 % (res_.covfefe? *res_.covfefe : UICoord{uic_.rebuild().truncateTo(res_.depth)})
                                                 % partialExtensionSpec
                                                 % extensionPos
-                                                % coverable);
+                                                % (coverable-1));
               cover();
               for ( ; newContent; ++newContent, ++extensionPos )
                 overwrite (extensionPos, *newContent);

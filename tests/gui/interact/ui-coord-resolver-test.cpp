@@ -634,25 +634,36 @@ namespace test {
           
           /* === extend fully covered explicit path === */
           UICoordResolver r1 {UICoord{"window-2","persp-B","panelY"}, tree};
-          r1.extend (UICoord().path("gappy").tab(2));
-          cout << string(r1)<<endl;
-          r1.extend ("seamless");
-          cout << string(r1)<<endl;
+          CHECK ("UI:window-2[persp-B]-panelY" == string(r1));
+          CHECK (r1.isCovered());
+          r1.extend (UICoord().path("gappy").tab(2));                                              // can extend with partially defined UI coordinates
+          CHECK ("UI:window-2[persp-B]-panelY.*.#2/gappy" == string(r1));                          // ...the resulting UI path is unresolved, yet can be partially covered
+          r1.extend ("seamless");                                                                  // ...and this partial coverage is used as base for further extension
+          CHECK ("UI:window-2[persp-B]-panelY.thirdView.#2/seamless" ==string(r1));
           
           /* === extend partially covered path === */
           UICoordResolver r2 {UICoord().view("thirdView").append("some/where"), tree};
+          CHECK ("UI:?.thirdView.some/where" ==string(r2));                                        // "thirdView" is covered, "some/where" is not
           r2.extend ("no/where");
-          cout << string(r2)<<endl;
-          VERIFY_ERROR (INVALID, r2.extend(UICoord().persp("fisheye")));
-          cout << string(r2)<<endl;
+          CHECK ("UI:window-2[persp-B]-panelY.thirdView.no/where" ==string(r2));                   // ...and thus the extension is attached behind "thirdView"
+          CHECK (r2.isCoveredPartially());
+          
+          /* === impossible extensions rejected === */                                             // since r2 already specifies a perspective ("persp-B")....
+          VERIFY_ERROR (INVALID, r2.extend(UICoord().persp("fisheye")));                           // ...overwriting with another perspective is rejected as extension
+          CHECK ("UI:window-2[persp-B]-panelY.thirdView.no/where" ==string(r2));                   // ...and the existing state is unaffected from this error
+          VERIFY_ERROR (INVALID, r2.extend(UICoord().view("alternative")));                        // Likewise, extending with a conflicting view spec is rejected
+          r2.extend(UICoord().tab("nada"));                                                        // But a tab is not yet covered and thus acceptable as extension
+          CHECK ("UI:window-2[persp-B]-panelY.thirdView.nada"     ==string(r2));
+          r2.extend(UICoord());
+          CHECK ("UI:window-2[persp-B]-panelY.thirdView"          ==string(r2));                   // empty coordinates implicitly attached behind the covered part
           
           /* === unsolvable: truncate, extend, recalculate coverage === */
           UICoordResolver r3 {UICoord().persp("awesome"), tree};
           CHECK (not r3.canCover());
           CHECK (0 == r3.coverDepth());
-          r3.extend (UICoord::currentWindow().tab(1));
-          CHECK (1 == r3.coverDepth());
-          cout << string(r3)<<endl;
+          r3.extend (UICoord::currentWindow().tab(1));                                             // Extension implies covering, which effectively truncates the path
+          CHECK (1 == r3.coverDepth());                                                            // ...and "currentWindow" can even be covered, thus the coverage increases
+          CHECK ("UI:currentWindow[*]-*.*.#1" ==string(r3));                                       // note coverage calculated internally, not made explicit
         }
     };
   
