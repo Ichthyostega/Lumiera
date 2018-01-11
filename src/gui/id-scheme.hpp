@@ -112,7 +112,7 @@ namespace gui {
         
         ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : consider use of a DSL to configure component view access 
         //
-        // count = onePerWindow
+        // alloc = onePerWindow
         // locate = within(InfoBoxPanel)
       };
     
@@ -121,14 +121,14 @@ namespace gui {
 // Timeline
 // add to group of timelines within the timelinePanel
 
-count = unlimited
+alloc = unlimited
 locate = panel(timeline)
 
 // Viewer
 // here multiple alternatives are conceivable
 // - allow only a single view instance in the whole application
 
-count = onlyOne
+alloc = onlyOne
 locate = external(beamer)
                 or perspective(mediaView), panel(viewer)
                 or existingPanel(viewer)
@@ -136,7 +136,7 @@ locate = external(beamer)
 
 // - allow two viewer panels (the standard layout of editing applications)
 
-count = limitPerWindow(2)
+alloc = limitPerWindow(2)
 locate = perspective(edit), existingPanel(viewer)
                 or currentWindow, existingPanel(viewer)
                 or existingPanel(viewer)
@@ -145,7 +145,7 @@ locate = perspective(edit), existingPanel(viewer)
 // (Asset)Bin
 // within the dedicated asset panel, add to the appropriate group for the kind of asset
 
-count = unlimited
+alloc = unlimited
 locate = currentWindow, perspective(edit), existingPanel(asset), existingGroup
                 or perspective(asset), panel(asset)
                 or firstWindow, panel(asset)
@@ -153,7 +153,7 @@ locate = currentWindow, perspective(edit), existingPanel(asset), existingGroup
 // Error-Log
 // use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
 
-count = limitPerWindow(1)
+alloc = limitPerWindow(1)
 locate = currentWindow, existingPanel(infobox)
                 or firstWindow, panel(infobox)
 

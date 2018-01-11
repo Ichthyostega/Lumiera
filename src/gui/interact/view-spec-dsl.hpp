@@ -23,24 +23,25 @@
 
 /** @file view-spec-dsl.hpp
  ** A framework for configuration of view access and allocation patterns.
- ** Component views are building blocks of the Lumiera UI, and may, depending on their,
- ** be instantiated or allocated according to specific rules and patterns. And these might
- ** vary in accordance to the desired working style. To give a typical example, at times it
- ** might be mandatory to use a single, external output for all kind of media playback, while
+ ** Component views are building blocks of the Lumiera UI, and may, depending on their
+ ** type, be instantiated or allocated according to specific rules and patterns. And these
+ ** might vary in accordance to the desired working style. To give a typical example, at times
+ ** it might be mandatory to use a single, external output for all kind of media playback, while
  ** other users prefer the classical editing application layout with two media viewers side by
  ** side. And yet another working style would be to use a stack of media viewers allocated on
  ** demand in MRU-fashion.
  ** 
  ** To specify those standard behaviour patterns, we provide a small internal DSL to spell out
  ** the default configuration in a (hopefully) self explanatory way.
- ** @todo as of 9/2017, the intention to open this configuration DSL for some kind of
- **       user provided flexible configuration of screen layouts eventually; right now
+ ** @todo as of 9/2017, we confirm the intention to open this configuration DSL for some kind
+ **       of user provided flexible configuration of screen layouts eventually; yet right now,
  **       only the foundation for this flexible configuration is provided while the defaults
- **       are compiled in hard wired.
+ **       are to be compiled into the UI as hard wired constants.
+ ** 
  ** 
  ** # Allocation of UI component views
  ** 
- ** Here, Allocation means
+ ** Within this context, _Allocation_ means...
  ** - to constitute the desired element's identity
  ** - to consider multiplicity and possibly retrieve an existing instance
  ** - to determine the hosting location
@@ -58,8 +59,8 @@
  ** and thus allow to manage them like child objects. Operating on top of these primitive operations,
  ** the _configuration of view access patterns_ creates a flexible binding layer, which isolates the
  ** users of component views (typically other parts of the UI) from the actual mechanics of locating.
- ** While the client just retrieves a view instance, a dedicate _allocation logic_ ensures this view
- ** instance is placed at the desired place within the UI and manages the active view instances.
+ ** While the client just retrieves a view instance, a dedicated _allocation logic_ ensures this view
+ ** instance is actually placed at the desired place within the UI, and manages active view instances.
  ** 
  ** ## Configuration DSL
  ** 
@@ -133,7 +134,7 @@ namespace interact {
           UNIMPLEMENTED ("build a view spec from explicitly given UI coordinates");
         }
       
-      /** shortcut to allow initialisation from UI-Coordintate builder expressiong */
+      /** shortcut to allow initialisation from UI-Coordinate builder expression */
       ViewSpec(UICoord::Builder&& coordinates)
         : ViewSpec{UICoord(std::move (coordinates))}
         { }
@@ -159,6 +160,17 @@ namespace interact {
     };
   
   
+  /**
+   * A specification to describe the strategy for allocating (placing, retrieving) a component view.
+   * On a DSL-technical level, AllocSpec is a _function generator_: it produces Allocator entities,
+   * which in turn are functions to perform the actual allocation.
+   * @note AllocSpec relies on a specific *convention* how to specify the actual allocation operation:
+   *       - the operation is a two-argument function
+   *       - its first argument is the _work triggering argument_, namely the concrete UI coordinates
+   *         passed to the Allocator, requesting to create or retrieve or claim the view at that location
+   *       - its second argument serves for parametrisation or specialisation of the strategy; it will
+   *         be "baked" into the generated allocator.
+   */
   template<typename PAR>
   class AllocSpec
     : public std::function<Allocator(PAR)>
