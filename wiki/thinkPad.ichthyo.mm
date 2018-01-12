@@ -4343,8 +4343,7 @@
       und totale Coverage nur nachtr&#228;glich durch L&#228;ngenvergleich festzustellen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -8420,8 +8419,7 @@
       ist <i>keine </i>L&#246;sung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -8440,8 +8438,7 @@
       ist <i>partielle </i>L&#246;sung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -8463,8 +8460,7 @@
       <i>Ergebnis-Ausgabe </i>ist die jeweilige m&#246;gliche Coverage
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1514847720759" ID="ID_831358447" MODIFIED="1514847725306" TEXT="Struktur">
 <node CREATED="1514847726158" ID="ID_460639525" MODIFIED="1514847735617" TEXT="wo brauche ich Builder?">
@@ -8527,8 +8523,7 @@
       aber z&#228;hlt erst mal f&#252;r sich nicht als L&#246;sung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -8582,8 +8577,7 @@
       am Ende des Patterns liegen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -8694,8 +8688,7 @@
       YAGNI
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#7e90a1" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="0;56;" ID="Arrow_ID_26195276" STARTARROW="Default" STARTINCLINATION="-20;-69;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1514942095070" ID="ID_815761690" MODIFIED="1515034463169" TEXT="default: ermitteln der maximalen partiellen Coverage">
@@ -8728,8 +8721,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1514848861831" FOLDED="true" ID="ID_297570158" MODIFIED="1515206133192" TEXT="noexcept() bedenken">
 <icon BUILTIN="button_ok"/>
@@ -8765,8 +8757,7 @@
       Denn f&#252;r letzteren gibt es die &quot;canXX&quot;-Pr&#228;dikate
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1514943888969" ID="ID_1634332467" MODIFIED="1515034463169" TEXT="m&#xf6;glichen Anker nebenbei ermitteln">
@@ -8929,8 +8920,7 @@
       Also sollte <i>das</i>&#160;auf dem API der default sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -9085,6 +9075,111 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631937958" ID="ID_1051141312" MODIFIED="1515631963523" TEXT="partielle Funktions-Applikation">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1515725638196" ID="ID_919161877" MODIFIED="1515725655468" TEXT="geht das generisch...?">
+<icon BUILTIN="help"/>
+<node CREATED="1515725146909" ID="ID_1363811781" MODIFIED="1515725162527" TEXT="lib::meta::func::PApply"/>
+<node CREATED="1515725168850" ID="ID_612007718" MODIFIED="1515725199322" TEXT="analog zum applyLast() helper"/>
+<node CREATED="1515725368856" ID="ID_194935085" MODIFIED="1515725407815" TEXT="PApply&lt;SIG, ARGS&gt;::bindBack"/>
+<node CREATED="1515725202278" ID="ID_1268597725" MODIFIED="1515725220567" TEXT="&quot;restliche Argumente&quot; abgreifen"/>
+<node CREATED="1515725440814" ID="ID_848138398" MODIFIED="1515725457544" TEXT="daraus Funktion fabrizieren, welche diese akzeptiert"/>
+<node CREATED="1515725468723" ID="ID_1514420105" MODIFIED="1515725488084" TEXT="keine klassische partielle Applikation..."/>
+<node CREATED="1515725488928" ID="ID_1084170574" MODIFIED="1515725505066" TEXT="sonder eine Art non-Standard currying"/>
+</node>
+<node CREATED="1515725713155" ID="ID_1250695567" MODIFIED="1515726131510" TEXT="w&#xfc;rde schon gehen...">
+<icon BUILTIN="idea"/>
+<node CREATED="1515725719930" ID="ID_746038986" MODIFIED="1515725729012" TEXT="Aber man bekommt komplexere AlocSpec-Typen"/>
+<node CREATED="1515726089841" ID="ID_527144420" MODIFIED="1515726125268" TEXT="der harte (technische) Teil ist bereits implementiert...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich in lib::meta::func::PApply::bindBack
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1515725834771" ID="ID_403863327" MODIFIED="1515725871768" TEXT="variadisch Template-Argumente">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1515725847329" ID="ID_1980343962" MODIFIED="1515725874461" TEXT="Wichtig: im ctor (Builder) statisch asserten">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1515726221600" ID="ID_1657507656" MODIFIED="1515726232922" TEXT="Implementierung">
+<node CREATED="1515726234742" ID="ID_95404514" MODIFIED="1515726237056" TEXT="Prinzip">
+<node CREATED="1515726238061" ID="ID_1475189544" MODIFIED="1515726244416" TEXT="ctor nimmt beliebige Funktion"/>
+<node CREATED="1515726245124" ID="ID_914794335" MODIFIED="1515726258014" TEXT="zerlegt und verifiziert Signatur"/>
+<node CREATED="1515726258819" ID="ID_1930194336" MODIFIED="1515726267917" TEXT="generiert ein Lambda">
+<node CREATED="1515726634601" ID="ID_41891466" MODIFIED="1515726639664" TEXT="geht das?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1515726644600" ID="ID_1701085444" MODIFIED="1515726741538" TEXT="C++14">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      // generic lambda, operator() is a template with one parameter
+    </p>
+    <p>
+      auto vglambda = [](auto printer) {
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;return [=](auto&amp;&amp;... ts) // generic lambda, ts is a parameter pack
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;printer(std::forward&lt;decltype(ts)&gt;(ts)...);
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return [=] { printer(ts...); }; // nullary lambda (takes no parameters)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;};
+    </p>
+    <p>
+      };
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#ef5d2b" CREATED="1515726754041" ID="ID_315893428" LINK="http://en.cppreference.com/w/cpp/language/lambda" MODIFIED="1515726793618" TEXT="cppreference..."/>
+<node COLOR="#ef5d2b" CREATED="1515726774055" ID="ID_1076829685" LINK="https://stackoverflow.com/questions/25885893/how-to-create-a-variadic-generic-lambda" MODIFIED="1515726793620" TEXT="stackoverflow..."/>
+</node>
+<node CREATED="1515726268721" ID="ID_243053845" MODIFIED="1515726329213" TEXT="welches intern PApply aufruft"/>
+</node>
+<node CREATED="1515732350136" ID="ID_1294398139" MODIFIED="1515732355403" TEXT="technisch....">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515732356319" ID="ID_1071937152" MODIFIED="1515732381516" TEXT="Problem generisches Lambda">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1515732383331" ID="ID_1688687565" MODIFIED="1515732413862">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Vermutung: mu&#223; Lambda <b>instantiieren</b>...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1515732415503" ID="ID_1684331001" MODIFIED="1515732424394" TEXT="...bevor wir es in std::function binden k&#xf6;nnen"/>
+<node CREATED="1515732427637" ID="ID_1533625561" MODIFIED="1515732445688" TEXT="Alternativ: old-style Binder konstruieren....?">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631948148" ID="ID_1460703660" MODIFIED="1515631961915" TEXT="Funktor generieren">
 <icon BUILTIN="flag-yellow"/>
@@ -9388,8 +9483,7 @@
       das ist <i>immer</i>&#160;schon korrekt erledigt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1515305886989" ID="ID_877994644" MODIFIED="1515305894383" TEXT="entweder der Beginn ist explizit"/>
 <node CREATED="1515305895307" ID="ID_371777501" MODIFIED="1515305899622" TEXT="oder wir haben eine L&#xf6;sung"/>
@@ -9797,8 +9891,7 @@
       thin autmentation layer
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>

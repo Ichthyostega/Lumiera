@@ -99,6 +99,9 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/meta/function.hpp"
+#include "lib/meta/tuple-helper.hpp"
+#include "lib/meta/function-closure.hpp"
 #include "gui/interact/ui-coord.hpp"
 
 //#include <boost/noncopyable.hpp>
@@ -113,6 +116,7 @@ namespace interact {
   
 //  using std::unique_ptr;
 //  using std::string;
+  using std::forward;
   
 //  class GlobalCtx;
   
@@ -171,13 +175,45 @@ namespace interact {
    *       - its second argument serves for parametrisation or specialisation of the strategy; it will
    *         be "baked" into the generated allocator.
    */
-  template<typename PAR>
+  template<typename... ARGS>
   class AllocSpec
-    : public std::function<Allocator(PAR)>
+    : public std::function<Allocator(ARGS&&...)>
     {
+      template<class FUN>
+      static auto
+      buildPartialApplicator (FUN fun)
+        {
+          using lib::meta::_Fun;
+          using lib::meta::Split;
+          using lib::meta::Tuple;
+          using lib::meta::func::_Sig;
+          using lib::meta::func::PApply;
+          
+          typedef typename _Fun<FUN>::Ret Ret;
+          typedef typename _Fun<FUN>::Args Args;
+          typedef typename Split<Args>::Head Arg1;
+          typedef typename Split<Args>::Tail FurtherArgs;
+//          typedef typename _Sig<Ret,FurtherArgs>::Type Signature;
+//          typedef std::function<Signature> Function;
+          
+          typedef Tuple<FurtherArgs> ArgTuple;
+//    typedef typename _PapE<SIG>::Arg ArgType;
+//    typedef Types<ArgType>           ArgTypeSeq;
+//    typedef Tuple<ArgTypeSeq>        ArgTuple;
+//    ArgTuple val(arg);
+//    return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
+                                  /////////////////////////////////////////////////TODO looks like we need to *instantiate* the generic lambda before being able to bind it into a function
+          return [=](auto&&... args)
+                    {
+                      ArgTuple params {forward<decltype(args)> (args)...};
+                      return PApply<FUN const&,FurtherArgs>::bindBack (fun, params);
+                    };
+        }
+      
     public:
       template<class FUN>
       AllocSpec(FUN fun)
+//      : std::function<Allocator(ARGS&&...)> (buildPartialApplicator (forward<FUN> (fun)))
         {
           UNIMPLEMENTED ("generate an allocator builder functor by partial function application");
         }

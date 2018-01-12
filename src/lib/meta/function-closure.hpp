@@ -545,7 +545,7 @@ namespace func{
    * @tparam VAL type sequence describing the tuple of values
    *             used for closing arguments
    * @note the construction of this helper template does not verify or
-   *       match types to to the signature. In case of mismatch, you'll get
+   *       match types to the signature. In case of mismatch, you'll get
    *       a compilation failure from `std::bind` (which can be confusing)
    */
   template<typename SIG, typename VAL>
