@@ -157,11 +157,7 @@ namespace interact {
    * in creation or allocation of the view. The result of this invocation are the UI coordinates
    * of an existing or newly created view.
    */
-  class Allocator
-    : public std::function<UICoord(UICoord)>
-    {
-      
-    };
+  using Allocator = std::function<UICoord(UICoord)>;
   
   
   /**
@@ -202,8 +198,8 @@ namespace interact {
 //    typedef Tuple<ArgTypeSeq>        ArgTuple;
 //    ArgTuple val(arg);
 //    return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
-                                  /////////////////////////////////////////////////TODO looks like we need to *instantiate* the generic lambda before being able to bind it into a function
-          return [=](auto&&... args)
+          
+          return [=](auto&&... args) -> Allocator
                     {
                       ArgTuple params {forward<decltype(args)> (args)...};
                       return PApply<FUN const&,FurtherArgs>::bindBack (fun, params);
@@ -213,10 +209,8 @@ namespace interact {
     public:
       template<class FUN>
       AllocSpec(FUN fun)
-//      : std::function<Allocator(ARGS&&...)> (buildPartialApplicator (forward<FUN> (fun)))
-        {
-          UNIMPLEMENTED ("generate an allocator builder functor by partial function application");
-        }
+        : std::function<Allocator(ARGS&&...)> (buildPartialApplicator (forward<FUN> (fun)))
+        { }
     };
   
 }}// namespace gui::interact

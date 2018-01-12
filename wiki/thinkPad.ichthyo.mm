@@ -9157,10 +9157,10 @@
 <node CREATED="1515726268721" ID="ID_243053845" MODIFIED="1515726329213" TEXT="welches intern PApply aufruft"/>
 </node>
 <node CREATED="1515732350136" ID="ID_1294398139" MODIFIED="1515732355403" TEXT="technisch....">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515732356319" ID="ID_1071937152" MODIFIED="1515732381516" TEXT="Problem generisches Lambda">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515732356319" ID="ID_1071937152" MODIFIED="1515798985447" TEXT="Problem: generisches Lambda in std::function binden">
 <icon BUILTIN="broken-line"/>
 </node>
-<node CREATED="1515732383331" ID="ID_1688687565" MODIFIED="1515732413862">
+<node CREATED="1515732383331" ID="ID_1688687565" MODIFIED="1515797049652">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -9172,11 +9172,15 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1515797030493" ID="ID_973074141" MODIFIED="1515799063868" TEXT="Nein: es ist wohl ehr der R&#xfc;ckgabetyp">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515798991747" ID="ID_1053457138" MODIFIED="1515799030345" TEXT="Allocator erbt nur von function"/>
+<node CREATED="1515799031197" ID="ID_516020279" MODIFIED="1515799045183" TEXT="Lambda liefert aber nur UICoord(UICoord)"/>
+<node CREATED="1515799046027" ID="ID_1437287913" MODIFIED="1515799056910" TEXT="L&#xf6;sung: Allocator als reine Typedef">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1515732415503" ID="ID_1684331001" MODIFIED="1515732424394" TEXT="...bevor wir es in std::function binden k&#xf6;nnen"/>
-<node CREATED="1515732427637" ID="ID_1533625561" MODIFIED="1515732445688" TEXT="Alternativ: old-style Binder konstruieren....?">
-<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
