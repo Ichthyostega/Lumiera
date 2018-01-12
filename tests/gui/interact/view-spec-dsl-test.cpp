@@ -107,16 +107,16 @@ namespace test {
           UICoord targetLocation = locate;
           UICoord realView1 = alloc(targetLocation);
           CHECK (1 == allocCounter);
-          CHECK (realView1 == UICoord::currentWindow().view("viewID").tab("1"));
+          CHECK (realView1 == UICoord::currentWindow().view("viewID").tab(1));
           
           UICoord realView2 = alloc(targetLocation);
           CHECK (2 == allocCounter);
-          CHECK (realView2 == UICoord::currentWindow().view("viewID").tab("2"));
+          CHECK (realView2 == UICoord::currentWindow().view("viewID").tab(2));
           CHECK (realView2 != realView1);
           
           UICoord realView3 = alloc(targetLocation);
           CHECK (3 == allocCounter);
-          CHECK (realView3 == UICoord::currentWindow().view("viewID").tab("3"));
+          CHECK (realView3 == UICoord::currentWindow().view("viewID").tab(3));
           
           UICoord realView3b = alloc(targetLocation);
           CHECK (3 == allocCounter);

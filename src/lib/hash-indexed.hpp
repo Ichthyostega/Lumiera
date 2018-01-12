@@ -41,7 +41,7 @@
  **   and the IDs denoting specific subclasses, such that the latter can stand-in
  **   for the generic ID.
  ** - providing a Mixin, which allows any hierarchy to use this facility without 
- **   much code duplication, including an adapter for tr1::unordered_map
+ **   much code duplication, including an adapter for std::unordered_map
  ** - equality comparison
  **
  ** @see HashIndexed_test
@@ -68,7 +68,7 @@ extern "C" {
 namespace lib {
   
   /** Hash implementations usable for the HashIndexed mixin
-   *  as well as key within tr1::unordered_map */
+   *  as well as key within std::unordered_map */
   namespace hash {
     
     /** 
@@ -156,7 +156,7 @@ namespace lib {
         };
       
       
-      /** enables use of BA objects as keys within tr1::unordered_map */
+      /** enables use of BA objects as keys within std::unordered_map */
       struct UseEmbeddedHash
         : public std::unary_function<BA, HashVal>
         {

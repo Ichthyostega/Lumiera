@@ -504,7 +504,7 @@ namespace func{
   /**
    * Closing a function over its arguments.
    * This is a small usage example or spin-off,
-   * having almost the same effect than invoking tr1::bind.
+   * having almost the same effect than invoking `std::bind()`.
    * The notable difference is that the function arguments for
    * creating the closure are passed in as one tuple compound.
    */

@@ -25,6 +25,7 @@
  ** Collection of small helpers and utilities related to function objects.
  ** 
  ** @todo combine with meta/function-closure.hpp and reorganise
+ ** @todo 2017 find out to what extent we still need that (looks obsolete)
  **  
  ** @see GuiSubsysDescriptor#start (guifacade.cpp)
  ** @see MementoTie
@@ -72,7 +73,8 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
      * we use a conservative approach, by requiring
      * the concrete invoker, the storage manager and
      * the actual function and argument data pointers
-     * to be the same. 
+     * to be the same.
+     * @todo 2017 is this still necessary today?
      */
     class HijackedFunction 
       : std::_Function_base

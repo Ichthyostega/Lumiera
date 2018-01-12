@@ -58,7 +58,7 @@ namespace control {
   
   /**
    * Unspecific command functor for implementing Proc-Layer Command.
-   * To be created from an tr1::function object, which later on gets
+   * To be created from an std::function object, which later on gets
    * any necessary arguments from a closure passed in on invocation.
    * The concrete type of the function  and the arguments is
    * concealed (erased) on the interface.

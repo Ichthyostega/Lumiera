@@ -144,7 +144,7 @@ namespace lib {
    * a common interface; use this policy if the intention is
    * to use OpaqueHolder with a family of similar classes, 
    * \em without requiring all of them to be derived from
-   * a common base class. (E.g. tr1::function objects).
+   * a common base class. (E.g. std::function objects).
    * In this case, the "Base" type will be defined to void*
    * As a consequence, we loose all type information and
    * no conversions are possible on re-access. You need
