@@ -177,7 +177,7 @@ namespace interact {
     {
       template<class FUN>
       static auto
-      buildPartialApplicator (FUN fun)
+      buildPartialApplicator (FUN&& fun)
         {
           using lib::meta::_Fun;
           using lib::meta::Split;
@@ -202,13 +202,13 @@ namespace interact {
           return [=](auto&&... args) -> Allocator
                     {
                       ArgTuple params {forward<decltype(args)> (args)...};
-                      return PApply<FUN const&,FurtherArgs>::bindBack (fun, params);
+                      return PApply<FUN,FurtherArgs>::bindBack (fun, params);
                     };
         }
       
     public:
       template<class FUN>
-      AllocSpec(FUN fun)
+      AllocSpec(FUN&& fun)
         : std::function<Allocator(ARGS&&...)> (buildPartialApplicator (forward<FUN> (fun)))
         { }
     };

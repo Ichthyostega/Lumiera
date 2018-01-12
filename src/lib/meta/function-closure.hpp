@@ -620,7 +620,7 @@ namespace func{
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */
       static LeftReducedFunc
-      bindFront (SIG& f, Tuple<ValTypes> const& arg)
+      bindFront (SIG const& f, Tuple<ValTypes> const& arg)
         {
           LeftReplacedArgs params {BuildL(arg)};
           return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
@@ -635,7 +635,7 @@ namespace func{
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */
       static RightReducedFunc
-      bindBack (SIG& f, Tuple<ValTypes> const& arg)
+      bindBack (SIG const& f, Tuple<ValTypes> const& arg)
         {
           RightReplacedArgs params {BuildR(arg)};
           return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params);

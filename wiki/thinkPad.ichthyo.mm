@@ -9098,8 +9098,7 @@
       n&#228;mlich in lib::meta::func::PApply::bindBack
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1515725834771" ID="ID_403863327" MODIFIED="1515725871768" TEXT="variadisch Template-Argumente">
 <icon BUILTIN="messagebox_warning"/>
@@ -9147,8 +9146,7 @@
       };
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#ef5d2b" CREATED="1515726754041" ID="ID_315893428" LINK="http://en.cppreference.com/w/cpp/language/lambda" MODIFIED="1515726793618" TEXT="cppreference..."/>
@@ -9157,7 +9155,8 @@
 <node CREATED="1515726268721" ID="ID_243053845" MODIFIED="1515726329213" TEXT="welches intern PApply aufruft"/>
 </node>
 <node CREATED="1515732350136" ID="ID_1294398139" MODIFIED="1515732355403" TEXT="technisch....">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1515732356319" ID="ID_1071937152" MODIFIED="1515798985447" TEXT="Problem: generisches Lambda in std::function binden">
+<node COLOR="#a41e57" CREATED="1515732356319" HGAP="25" ID="ID_1071937152" MODIFIED="1515800950319" TEXT="Problem: generisches Lambda in std::function binden">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1515732383331" ID="ID_1688687565" MODIFIED="1515797049652">
@@ -9170,8 +9169,7 @@
       Vermutung: mu&#223; Lambda <b>instantiieren</b>...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1515797030493" ID="ID_973074141" MODIFIED="1515799063868" TEXT="Nein: es ist wohl ehr der R&#xfc;ckgabetyp">
@@ -9181,6 +9179,12 @@
 <node CREATED="1515799046027" ID="ID_1437287913" MODIFIED="1515799056910" TEXT="L&#xf6;sung: Allocator als reine Typedef">
 <icon BUILTIN="idea"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1515801302955" ID="ID_208115762" MODIFIED="1515801394951" TEXT="Argument-&#xdc;bergabe">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515801313185" ID="ID_1411407565" MODIFIED="1515801322004" TEXT="Funktor bis in die Closure per Move"/>
+<node CREATED="1515801324016" ID="ID_814347755" MODIFIED="1515801353352" TEXT="Closure an PApply per const&amp;  --&gt;  Binder erzeugen"/>
+<node CREATED="1515801355124" ID="ID_1735797839" MODIFIED="1515801393059" TEXT="Lambda: Argumente in das Argument-Tupel per Move"/>
 </node>
 </node>
 </node>
