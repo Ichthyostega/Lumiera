@@ -9066,16 +9066,30 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631726569" ID="ID_1252372720" MODIFIED="1515634594574" TEXT="wie mit ViewLocator-Service verdrahten?">
 <linktarget COLOR="#614483" DESTINATION="ID_1252372720" ENDARROW="Default" ENDINCLINATION="-106;0;" ID="Arrow_ID_1759099248" SOURCE="ID_1454085887" STARTARROW="Default" STARTINCLINATION="-276;-13;"/>
 <icon BUILTIN="help"/>
+<node CREATED="1515803834302" ID="ID_1965813896" MODIFIED="1515803841033" TEXT="&#xfc;berhaupt nicht auf DSL-Ebene"/>
+<node CREATED="1515803844276" ID="ID_512581752" MODIFIED="1515803862928">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nur &quot;hinten herum&quot; &#252;ber die verwendete <b>LocationQuery</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631909081" ID="ID_1875881401" MODIFIED="1515631923152" TEXT="Aufrufe auf ViewLocator-API &#xfc;bersetzen">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506181875481" ID="ID_941513985" MODIFIED="1506181880554" TEXT="AllocatorSpec">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631937958" ID="ID_1051141312" MODIFIED="1515631963523" TEXT="partielle Funktions-Applikation">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1515725638196" ID="ID_919161877" MODIFIED="1515725655468" TEXT="geht das generisch...?">
+<node COLOR="#338800" CREATED="1506181875481" ID="ID_941513985" MODIFIED="1515803785328" TEXT="AllocatorSpec">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1515631937958" ID="ID_1051141312" MODIFIED="1515803767138" TEXT="partielle Funktions-Applikation">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1515725638196" FOLDED="true" ID="ID_919161877" MODIFIED="1515803751922" TEXT="geht das generisch...?">
 <icon BUILTIN="help"/>
 <node CREATED="1515725146909" ID="ID_1363811781" MODIFIED="1515725162527" TEXT="lib::meta::func::PApply"/>
 <node CREATED="1515725168850" ID="ID_612007718" MODIFIED="1515725199322" TEXT="analog zum applyLast() helper"/>
@@ -9085,7 +9099,7 @@
 <node CREATED="1515725468723" ID="ID_1514420105" MODIFIED="1515725488084" TEXT="keine klassische partielle Applikation..."/>
 <node CREATED="1515725488928" ID="ID_1084170574" MODIFIED="1515725505066" TEXT="sonder eine Art non-Standard currying"/>
 </node>
-<node CREATED="1515725713155" ID="ID_1250695567" MODIFIED="1515726131510" TEXT="w&#xfc;rde schon gehen...">
+<node CREATED="1515725713155" FOLDED="true" ID="ID_1250695567" MODIFIED="1515803753601" TEXT="w&#xfc;rde schon gehen...">
 <icon BUILTIN="idea"/>
 <node CREATED="1515725719930" ID="ID_746038986" MODIFIED="1515725729012" TEXT="Aber man bekommt komplexere AlocSpec-Typen"/>
 <node CREATED="1515726089841" ID="ID_527144420" MODIFIED="1515726125268" TEXT="der harte (technische) Teil ist bereits implementiert...">
@@ -9107,7 +9121,8 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1515726221600" ID="ID_1657507656" MODIFIED="1515726232922" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1515726221600" ID="ID_1657507656" MODIFIED="1515803758366" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1515726234742" ID="ID_95404514" MODIFIED="1515726237056" TEXT="Prinzip">
 <node CREATED="1515726238061" ID="ID_1475189544" MODIFIED="1515726244416" TEXT="ctor nimmt beliebige Funktion"/>
 <node CREATED="1515726245124" ID="ID_914794335" MODIFIED="1515726258014" TEXT="zerlegt und verifiziert Signatur"/>
@@ -9189,8 +9204,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631948148" ID="ID_1460703660" MODIFIED="1515631961915" TEXT="Funktor generieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1515631948148" ID="ID_1460703660" MODIFIED="1515803775790" TEXT="Funktor generieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515633963179" HGAP="-9" ID="ID_423312626" MODIFIED="1515633981449" TEXT="konkrete Bausteine" VSHIFT="34">

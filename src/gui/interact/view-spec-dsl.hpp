@@ -104,21 +104,14 @@
 #include "lib/meta/function-closure.hpp"
 #include "gui/interact/ui-coord.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <functional>
-//#include <string>
-//#include <memory>
 #include <utility>
 
 
 namespace gui {
 namespace interact {
   
-//  using std::unique_ptr;
-//  using std::string;
   using std::forward;
-  
-//  class GlobalCtx;
   
   
   
@@ -165,16 +158,25 @@ namespace interact {
    * On a DSL-technical level, AllocSpec is a _function generator_: it produces Allocator entities,
    * which in turn are functions to perform the actual allocation.
    * @note AllocSpec relies on a specific *convention* how to specify the actual allocation operation:
-   *       - the operation is a two-argument function
+   *       - the operation takes one main argument and additional parameters
    *       - its first argument is the _work triggering argument_, namely the concrete UI coordinates
    *         passed to the Allocator, requesting to create or retrieve or claim the view at that location
-   *       - its second argument serves for parametrisation or specialisation of the strategy; it will
-   *         be "baked" into the generated allocator.
+   *       - the additional argument(s) serves for parametrisation or specialisation of the strategy;
+   *         they will be "baked" into the generated allocator.
+   * @remark to give a typical example: an allocation operation might want to limit the number of
+   *         generated views per window and take this instance limit as additional parameter. But for the DSL
+   *         we want a allocation spec of the form `limitPerWindow(cnt)` -- which is a function accepting the
+   *         concrete limit and producing the actual allocator function `UICoord -> UICoord`, which has this
+   *         actual limit "baked in".
    */
   template<typename... ARGS>
   class AllocSpec
     : public std::function<Allocator(ARGS&&...)>
     {
+      /** @internal analyse and dissect the given allocation operation
+       * and fabricate a builder to accept the additional arguments
+       * and produce a partially closed allocation functor
+       * @note the generated lambda captures by value */
       template<class FUN>
       static auto
       buildPartialApplicator (FUN&& fun)
@@ -182,6 +184,7 @@ namespace interact {
           using lib::meta::_Fun;
           using lib::meta::Split;
           using lib::meta::Tuple;
+          using lib::meta::Types;
           using lib::meta::func::_Sig;
           using lib::meta::func::PApply;
           
@@ -189,15 +192,16 @@ namespace interact {
           typedef typename _Fun<FUN>::Args Args;
           typedef typename Split<Args>::Head Arg1;
           typedef typename Split<Args>::Tail FurtherArgs;
-//          typedef typename _Sig<Ret,FurtherArgs>::Type Signature;
-//          typedef std::function<Signature> Function;
+          
+          static_assert (std::is_convertible<UICoord, Arg1>::value,
+                         "Allocator function must accept UICoordinates (where to create/locate) as first argument");
+          static_assert (std::is_convertible<Ret, UICoord>::value,
+                         "Allocator function must produce UICoordinates (of the actually allocated UI element)");
+          static_assert (std::is_convertible<FurtherArgs, Types<ARGS...>>::value,
+                         "Additional parameters of the allocator function must match the AllocSpec<ARGS> template parameters");
+          
           
           typedef Tuple<FurtherArgs> ArgTuple;
-//    typedef typename _PapE<SIG>::Arg ArgType;
-//    typedef Types<ArgType>           ArgTypeSeq;
-//    typedef Tuple<ArgTypeSeq>        ArgTuple;
-//    ArgTuple val(arg);
-//    return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
           
           return [=](auto&&... args) -> Allocator
                     {
@@ -206,12 +210,14 @@ namespace interact {
                     };
         }
       
+      
     public:
       template<class FUN>
       AllocSpec(FUN&& fun)
-        : std::function<Allocator(ARGS&&...)> (buildPartialApplicator (forward<FUN> (fun)))
+        : std::function<Allocator(ARGS&&...)> {buildPartialApplicator (forward<FUN> (fun))}
         { }
     };
+  
   
 }}// namespace gui::interact
 #endif /*GUI_INTERACT_VIEW_SPEC_DSL_H*/

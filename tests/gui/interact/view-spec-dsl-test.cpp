@@ -70,7 +70,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-          verify_basicProperties();
+//        verify_basicProperties();
           verify_standardUsage();
           verify_alternatives();
         }
