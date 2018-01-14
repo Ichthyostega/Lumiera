@@ -28,15 +28,15 @@
 
 #include <cairomm/cairomm.h>
 
-#ifndef GUI_UTIL_CAIRO_H
-#define GUI_UTIL_CAIRO_H
+#ifndef GUI_DRAW_CAIRO_H
+#define GUI_DRAW_CAIRO_H
 
 using Cairo::RefPtr;
 using Cairo::SolidPattern;
 
 
 namespace gui {
-namespace util {
+namespace draw {
   
   /**
    * @todo this is not a real entity; consider to turn this into a set of free functions!
@@ -78,5 +78,5 @@ namespace util {
     };
   
   
-}}// namespace gui::util
-#endif /*GUI_UTIL_CAIRO_H*/
+}}// namespace gui::draw
+#endif /*GUI_DRAW_CAIRO_H*/

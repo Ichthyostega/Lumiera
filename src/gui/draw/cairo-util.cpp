@@ -26,10 +26,10 @@
  */
 
 
-#include "gui/util/cairo-util.hpp"
+#include "gui/draw/cairo-util.hpp"
 
 namespace gui {
-namespace util {
+namespace draw {
   
   RefPtr<SolidPattern>
   CairoUtil::pattern_set_red (const RefPtr<SolidPattern> color, double red)
@@ -83,4 +83,4 @@ namespace util {
     return Cairo::SolidPattern::create_rgba (red, blue, green, alpha);
   }
   
-}}// namespace gui::util
+}}// namespace gui::draw

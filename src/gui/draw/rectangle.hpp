@@ -1,5 +1,5 @@
 /*
-  Rectangle  -  utility functions for GDK rectangles
+  RECTANGLE.hpp  -  utility functions for GDK rectangles
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -21,40 +21,26 @@
 * *****************************************************/
 
 
-/** @file rectangle.cpp
- ** Implementation of functions to work with rectangular screen ranges
+/** @file rectangle.hpp
+ ** Helper functions to work with rectangular screen ranges
  */
 
-#include "gui/util/rectangle.hpp"
-#include <algorithm>
 
+#ifndef GUI_DRAW_RECTANGLE_H
+#define GUI_DRAW_RECTANGLE_H
 
-using std::max;
-using std::min;
+#include "gui/gtk-base.hpp"
 
 namespace gui {
-namespace util{
+namespace draw {
   
-  bool
-  pt_in_rect(const Gdk::Point &point, const Gdk::Rectangle &rect)
-  {
-    return (point.get_x() >= rect.get_x() &&
-      point.get_x() < rect.get_x() + rect.get_width() &&
-      point.get_y() >= rect.get_y() &&
-      point.get_y() < rect.get_y() + rect.get_height());
-  }
-  
-  bool
-  rects_overlap (Gdk::Rectangle const& a, Gdk::Rectangle const& b)
-  {
-    return (
-      max(a.get_x(), b.get_x()) <
-      min(a.get_x() + a.get_width(), b.get_x() + b.get_width())
-      &&
-      max(a.get_y(), b.get_y()) <
-      min(a.get_y() + a.get_height(), b.get_y() + b.get_height())
-      );
-  }
+  /** determine whether point is within the bounding box of a rectangle */
+  bool pt_in_rect(Gdk::Point const& point, Gdk::Rectangle const& rect);
   
   
-}}// namespace gui::util
+  /** determine whether two rectangles overlap */
+  bool rects_overlap(Gdk::Rectangle const& a, Gdk::Rectangle const& b);
+  
+  
+}}// namespace gui::draw
+#endif /*GUI_DRAW_RECTANGLE_H*/

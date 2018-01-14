@@ -31,7 +31,7 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/workspace/panel-manager.hpp"
 #include "gui/panel/panel.hpp"
-#include "gui/util/rectangle.hpp"
+#include "gui/draw/rectangle.hpp"
 #include "include/logging.h"
 
 #include <boost/foreach.hpp>

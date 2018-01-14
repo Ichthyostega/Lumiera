@@ -27,7 +27,7 @@
 
 
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/util/rectangle.hpp"
+#include "gui/draw/rectangle.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -239,10 +239,10 @@ namespace timeline {
     bool hovering = false;
     
     const Gdk::Rectangle box = get_allocation();
-    if (util::pt_in_rect(Gdk::Point(event->x, event->y),
-                         Gdk::Rectangle(margin, margin,
-                                        expand_button_size,
-                                        box.get_height() - margin * 2)))
+    if (gui::draw::pt_in_rect (Gdk::Point(event->x, event->y),
+                               Gdk::Rectangle(margin, margin,
+                                              expand_button_size,
+                                              box.get_height() - margin * 2)))
       hovering = true;
     
     if(hovering != hoveringExpander)

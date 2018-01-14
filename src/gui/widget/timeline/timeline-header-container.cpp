@@ -29,7 +29,7 @@
 #include "gui/widget/timeline/timeline-header-container.hpp"
 #include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/util/rectangle.hpp"
+#include "gui/draw/rectangle.hpp"
 
 #include <boost/foreach.hpp>
 #include <memory>
