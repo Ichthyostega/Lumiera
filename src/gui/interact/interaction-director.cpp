@@ -83,9 +83,9 @@ namespace interact {
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
     : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
     , globalCtx_(globals)
-    , viewLocator_{new ViewLocator{globals.windowLoc_.locatePanel()}}
+    , viewLocator_{new ViewLocator{globals, [this]() -> LocationQuery& { return *navigator_; }}}
     , spotLocator_{new SpotLocator}
-    , navigator_{new Navigator{*spotLocator_}}
+    , navigator_{new Navigator{*spotLocator_, *viewLocator_}}
     , tracker_{new FocusTracker{*navigator_}}
     , uiState_{new UiState{globals.uiBus_.getStateManager(), *tracker_}}
     , assets_{new AssetController{session::Root::getAssetID(), this->uiBus_}}

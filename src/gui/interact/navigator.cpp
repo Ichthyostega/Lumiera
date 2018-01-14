@@ -23,8 +23,14 @@
 
 /** @file navigator.cpp
  ** Implementation of global interface navigation mechanisms.
+ ** Especially we implement the LocationQuery interface, which exposes the structures
+ ** of the UI as an abstracted, tree-shaped topology. This task adds up to levelling all the
+ ** specifics of accessing individual components and to assemble them into a virtual component tree.
+ ** The actual details of component access are thereby delegated to the ViewLocator, which is a sibling
+ ** service maintained by the InteractionDirector.
  ** 
  ** @todo WIP 2/2017 early draft / foundations of "interaction control"
+ ** @todo WIP 1/2018 integrating the concept of UI-Coordinate navigation and resolution. Still WIP-WIP-WIP...
  */
 
 
@@ -47,9 +53,34 @@ namespace interact {
     { }
   
   
-  Navigator::Navigator (SpotLocator& spotLocator)
-    : spotLocator_{spotLocator}
+  Navigator::Navigator (SpotLocator& spotLoc, ViewLocator& viewLoc)
+    : spotLocator_{spotLoc}
+    , viewLocator_{viewLoc}
     { }
+  
+  
+  /* ==== implementing the LocationQuery API ==== */
+  
+  Literal
+  Navigator::determineAnchor (UICoord const& path)
+  {
+    UNIMPLEMENTED ("LocationQuery in real UI: resolve anchor point of given UI-Coordinates");
+  }
+  
+  
+  size_t
+  Navigator::determineCoverage (UICoord const& path)
+  {
+    UNIMPLEMENTED ("LocationQuery in real UI: determine explicit coverage of given UI-Coordinates");
+  }
+  
+  
+  LocationQuery::ChildIter
+  Navigator::getChildren (UICoord const& path, size_t pos)
+  {
+    UNIMPLEMENTED ("LocationQuery in real UI: build child iterator rooted at given point in the UI tree");
+  }
+  
   
   
   /** */

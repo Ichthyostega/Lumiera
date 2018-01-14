@@ -29,13 +29,18 @@
 
 
 #include "gui/interact/view-locator.hpp"
-//#include "gui/ctrl/global-ctx.hpp"
+#include "gui/ctrl/panel-locator.hpp"
+#include "gui/ctrl/window-locator.hpp"
+#include "gui/interact/ui-coord-resolver.hpp"
+#include "gui/ctrl/global-ctx.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
 //using util::cStr;
 //using util::isnil;
 using lib::Symbol;
+using gui::ctrl::PanelLocator;
+using gui::ctrl::WindowLocator;
 
 
 namespace gui {
@@ -52,9 +57,27 @@ namespace interact {
   ViewLocator::~ViewLocator() { }
   
   
-  ViewLocator::ViewLocator (ctrl::PanelLocator& panelLocator)
-    : panelLoc_{panelLocator}
+  ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel, std::function<LocationQuery&()> getLocQuery)
+    : globals_{uiTopLevel}
+    , locationQuery{getLocQuery}
     { }
+  
+  
+  /* === Service accessors within global context === */
+  
+  PanelLocator&
+  ViewLocator::panelLocator()
+  {
+    return globals_.windowLoc_.locatePanel();
+  }
+  
+  WindowLocator&
+  ViewLocator::windowLocator()
+  {
+    return globals_.windowLoc_;
+  }
+  
+  
   
   
   /** */

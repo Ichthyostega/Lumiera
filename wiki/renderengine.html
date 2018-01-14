@@ -3705,7 +3705,7 @@ Especially the focus navigation entails the use of some kind of ubiquitous [[coo
 
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201709021522" tags="def design GuiPattern" changecount="25">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201801132336" tags="def design GuiPattern" changecount="27">
 <pre>//the top-level controller within the UI.//
 In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within this model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, together with the asset management and defaults and rules configuration within the session.
 
@@ -3726,7 +3726,7 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 :anything related to forming and tracking of user interactions &amp;rarr; InteractionControl
 :* the SpotLocator is what is &quot;moved&quot; when the [[Spot]] of current activity moves
 :* the FocusTracker is responsible for //detecting changes in current selection and focus.//
-:* the [[Navigator]] is a special controller to handle moving the SpotLocator
+:* the [[Navigator]] is a special controller to handle moving the SpotLocator within the UI tree topology
 
 !Collaborations
 * several global actions are exposed here, like opening the session and creating a new timeline.&lt;br/&gt;Such operations are typically bound into menu and action buttons, and in turn invoke [[commands|CommandHandling]] into the Session
@@ -3736,6 +3736,9 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 ** or can exist only once per top level window
 ** some might even be required once per window
 ** while others may be duplicated locally or globally
+
+!!!cyclic dependencies
+The InteractionDirector interconnects various aspects of UI management and thus can be expected to exhibit cyclic dependencies on several levels. Bootstraping the InteractionDirector is thus a tricky procedure and requires all participating services to operate demand-driven. In fact, these services represent some aspects of the same whole -- the UI. They are bounded by thematic considerations, not so much implementation concerns, and many of them rely on their siblings actually provide some essential part of their service. For example, the Navigator exposes the UI as topological tree structure, while the ViewLocator encapsulates the concrete access paths towards specific kinds of UI entities (views, panels). Obviously, the Navigator needs the ViewLocator to build its tree abstraction on top. But, thematically, //resolving a view// is part of accessing and / or creating  some view, and thus the ViewLocator becomes indirectly dependent on the tree topology established by the Navigator.
 </pre>
 </div>
 <div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704171824" tags="def design GuiIntegration draft" changecount="9">

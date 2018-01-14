@@ -45,19 +45,26 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/id-scheme.hpp"
-#include "gui/ctrl/panel-locator.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <functional>
 //#include <string>
 //#include <memory>
 
 
 namespace gui {
+namespace ctrl{
+  class GlobalCtx;
+  class PanelLocator;
+  class WindowLocator;
+}
 namespace interact {
   
 //  using std::unique_ptr;
 //  using std::string;
+  using std::function;
   
+  class LocationQuery;
 //  class GlobalCtx;
   
   
@@ -70,10 +77,10 @@ namespace interact {
   class ViewLocator
     : boost::noncopyable
     {
-      ctrl::PanelLocator& panelLoc_;
+      ctrl::GlobalCtx& globals_;
       
     public:
-      ViewLocator (ctrl::PanelLocator&);
+      ViewLocator (ctrl::GlobalCtx&, function<LocationQuery&()>);
      ~ViewLocator();
       
       
@@ -84,6 +91,10 @@ namespace interact {
       V& get();
       
     private:
+      /* === accessors to sibling global services  === */
+      function<LocationQuery&()> locationQuery;
+      ctrl::PanelLocator&  panelLocator();
+      ctrl::WindowLocator& windowLocator();
       
     };
   
