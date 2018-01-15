@@ -46,6 +46,9 @@ using gui::ctrl::WindowLocator;
 namespace gui {
 namespace interact {
   
+  namespace error = lumiera::error;
+  
+  
   /* ==== definitions and concrete bindings for the View-Spec-DSL ==== */
   
   Symbol UIC_CURRENT_WINDOW{"currentWindow"};
@@ -53,14 +56,39 @@ namespace interact {
   Symbol UIC_ELIDED        {"."};
   
   
-  // dtors via smart-ptr invoked from here...
-  ViewLocator::~ViewLocator() { }
+  
+  namespace {
+    const LocationQueryAccess LOCATION_QUERY_SERIVCE_NOT_AVAILABLE
+      = []() -> LocationQuery&
+          {
+            throw error::State (error::LUMIERA_ERROR_LIFECYCLE
+                               ,"No LocationQuery service available. Is the GUI running?");
+          };
+  }
+  
+  /** @internal global access point to some implementation of the LocationQuery API.
+   * Typically, this is provided by the Navigator service in conjunction with the ViewLocator;
+   * both are components managed by the InteractionDirector. Thus, when the UI starts, a suitable
+   * access functor will be installed here, and likewise removed/disabled on shutdown.
+   */
+  LocationQueryAccess locationQuery = LOCATION_QUERY_SERIVCE_NOT_AVAILABLE;
   
   
-  ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel, std::function<LocationQuery&()> getLocQuery)
+  
+  
+  
+  ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel, LocationQueryAccess getLocQuery)
     : globals_{uiTopLevel}
-    , locationQuery{getLocQuery}
-    { }
+    {
+      locationQuery = getLocQuery;
+    }
+  
+  // dtors via smart-ptr invoked from here...
+  ViewLocator::~ViewLocator()
+    {
+      locationQuery = LOCATION_QUERY_SERIVCE_NOT_AVAILABLE;
+    }
+  
   
   
   /* === Service accessors within global context === */

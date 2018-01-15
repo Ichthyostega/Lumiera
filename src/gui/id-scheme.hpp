@@ -56,6 +56,7 @@
 
 #include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "gui/interact/view-spec-dsl.hpp"
 
 
 /* === forward declarations === */
@@ -122,7 +123,8 @@ namespace gui {
 // add to group of timelines within the timelinePanel
 
 alloc = unlimited
-locate = panel(timeline)
+locate = perspective(edit).panel(timeline)
+          or panel(timeline)
 
 // Viewer
 // here multiple alternatives are conceivable
@@ -130,32 +132,32 @@ locate = panel(timeline)
 
 alloc = onlyOne
 locate = external(beamer)
-                or perspective(mediaView), panel(viewer)
-                or existingPanel(viewer)
-                or firstWindow, panel(viewer)
+          or perspective(mediaView).panel(viewer)
+          or panel(viewer).existing()
+          or firstWindow().panel(viewer)
 
 // - allow two viewer panels (the standard layout of editing applications)
 
 alloc = limitPerWindow(2)
-locate = perspective(edit), existingPanel(viewer)
-                or currentWindow, existingPanel(viewer)
-                or existingPanel(viewer)
-                or panel(viewer)
+locate = perspective(edit).panel(viewer).existing()
+          or currentWindow().panel(viewer).existing()
+          or panel(viewer).existing()
+          or panel(viewer)
 
 // (Asset)Bin
 // within the dedicated asset panel, add to the appropriate group for the kind of asset
 
 alloc = unlimited
-locate = currentWindow, perspective(edit), existingPanel(asset), existingGroup
-                or perspective(asset), panel(asset)
-                or firstWindow, panel(asset)
+locate = currentWindow().perspective(edit).panel(asset).assetTypeGroup().existing()
+          or perspective(asset).panel(asset)
+          or firstWindow().panel(asset)
 
 // Error-Log
 // use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
 
 alloc = limitPerWindow(1)
-locate = currentWindow, existingPanel(infobox)
-                or firstWindow, panel(infobox)
+locate = currentWindow().panel(infobox).existing()
+          or firstWindow().panel(infobox)
 
 */    
     

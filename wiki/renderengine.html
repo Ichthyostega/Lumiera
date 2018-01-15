@@ -2838,7 +2838,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201709232234" tags="def GuiPattern design" changecount="36">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201801150207" tags="def GuiPattern design" changecount="37">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2877,7 +2877,8 @@ Since view allocation offers a choice amongst several complex patterns of behavi
 :add to group of timelines within the timelinePanel
 {{{
 alloc = unlimited
-locate = panel(timeline)
+locate = perspective(edit).panel(timeline)
+          or panel(timeline)
 }}}
 ;Viewer
 :here multiple alternatives are conceivable
@@ -2886,22 +2887,22 @@ locate = panel(timeline)
 alloc = onlyOne
 locate = external(beamer)
           or perspective(mediaView).panel(viewer)
-          or existingPanel(viewer)
+          or panel(viewer).existing()
           or firstWindow().panel(viewer)
 }}}
 :* allow two viewer panels (the standard layout of editing applications)
 {{{
 alloc = limitPerWindow(2)
-locate = perspective(edit).existingPanel(viewer)
-          or currentWindow().existingPanel(viewer)
-          or existingPanel(viewer)
+locate = perspective(edit).panel(viewer).existing()
+          or currentWindow().panel(viewer).existing()
+          or panel(viewer).existing()
           or panel(viewer)
 }}}
 ;(Asset)Bin
 :within the dedicated asset panel, add to the appropriate group for the kind of asset
 {{{
 alloc = unlimited
-locate = currentWindow().perspective(edit).existingPanel(asset).existingGroup()
+locate = currentWindow().perspective(edit).panel(asset).assetTypeGroup().existing()
           or perspective(asset).panel(asset)
           or firstWindow().panel(asset)
 }}}
@@ -2909,7 +2910,7 @@ locate = currentWindow().perspective(edit).existingPanel(asset).existingGroup()
 :use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
 {{{
 alloc = limitPerWindow(1)
-locate = currentWindow().existingPanel(infobox)
+locate = currentWindow().panel(infobox).existing()
           or firstWindow().panel(infobox)
 }}}
 ;Playcontrol
@@ -2938,12 +2939,15 @@ locate = currentWindow().existingPanel(infobox)
 : currentWindow
 : perspective(id)
 : panel(id)
-: existingPanel(id)
-: existingGroup {{red{WIP 9/17 not clear if possible}}}
+: assetTypeGroup {{red{WIP 9/17 not clear if possible}}}
+: existing()
 ;alloc
 : unlimited
 : onlyOne
 : limitPerWindow(cnt)
+
+!!!Semantics of location
+The given UICoord specs are matched one by one, using the first one applicable. The location indicated by this process describes the parent or scope where the desired view can be found or shall be created. The matching itself is based on the matching of UI coordinates against the existing UI topology, but enriched with some contextual information. When the predicate {{{existing()}}} is used, the constructed UI coordinate path is required to exist already, i.e. we demand //complete coverage.// In all other cases, only partial coverage is required, and the remaining, extraneous suffix of the coordinate path is what will be created by the instantiation process.
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">

@@ -103,6 +103,7 @@
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "gui/interact/ui-coord-resolver.hpp"
 
 #include <functional>
 #include <utility>
@@ -113,6 +114,12 @@ namespace interact {
   
   using std::forward;
   
+  class LocationQuery;
+  
+  using LocationQueryAccess = std::function<LocationQuery&()>;
+  
+  /** @internal access UI service to query and discover locations within UI topology */
+  extern LocationQueryAccess loactionQuery;
   
   
   /**

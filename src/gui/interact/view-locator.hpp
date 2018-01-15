@@ -33,6 +33,21 @@
  ** - multiplicity (one, one per window, many) depends on the type of view and needs to be managed.
  ** - such a view is not just _created_ -- rather it needs to be _allocated_
  ** 
+ ** ## LocationQuery and the View-Spec DSL
+ ** 
+ ** Implementation wise, there is a tight connection between the ViewLocator service, the Navigator service
+ ** and the configuration how and where to create standard view elements (the "View-Spec DSL"). Several interactions
+ ** require the UI to access or create some specific view widget by side-effect. And the logic how and where to create
+ ** views can be quite intricate and is closely related to global, overarching topics of interaction design. Lumiera
+ ** thus relies on a framework for default configuration, and a matching mechanism to determine the location and
+ ** creation modes of such views. This matching mechanism in turn requires an abstracted view on the UI seen as
+ ** a topological tree structure of relevant entities (windows, panels, views,...) -- which is basically the
+ ** service provided by the Navigator; yet this Navigator service can be abstracted into the gui::interact::LocationQuery
+ ** API, and this abstraction allows to keep all the intricacies of navigating concrete UI widgets confined within the
+ ** implementation of the Navigator service. To enable this usage pattern, there is an access functor, to be found at
+ ** gui::interact::locationQuery, which will be installed when the UI starts and disabled on shutdown. This functor
+ ** can be exchanged for the purpose of unit testing.
+ ** 
  ** @todo WIP 9/2017 early draft       ////////////////////////////////////////////////////////////TICKET #1104
  ** 
  ** @see interaction-director.hpp
@@ -44,6 +59,7 @@
 #define GUI_INTERACT_VIEW_LOCATOR_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/interact/view-spec-dsl.hpp"
 #include "gui/id-scheme.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -62,9 +78,9 @@ namespace interact {
   
 //  using std::unique_ptr;
 //  using std::string;
-  using std::function;
-  
   class LocationQuery;
+  using LocationQueryAccess = std::function<LocationQuery&()>;
+  
 //  class GlobalCtx;
   
   
@@ -80,7 +96,7 @@ namespace interact {
       ctrl::GlobalCtx& globals_;
       
     public:
-      ViewLocator (ctrl::GlobalCtx&, function<LocationQuery&()>);
+      ViewLocator (ctrl::GlobalCtx&, LocationQueryAccess);
      ~ViewLocator();
       
       
@@ -92,7 +108,6 @@ namespace interact {
       
     private:
       /* === accessors to sibling global services  === */
-      function<LocationQuery&()> locationQuery;
       ctrl::PanelLocator&  panelLocator();
       ctrl::WindowLocator& windowLocator();
       
