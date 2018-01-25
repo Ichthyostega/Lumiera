@@ -2838,7 +2838,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201801150207" tags="def GuiPattern design" changecount="37">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201801252134" tags="def GuiPattern design" changecount="42">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2879,6 +2879,7 @@ Since view allocation offers a choice amongst several complex patterns of behavi
 alloc = unlimited
 locate = perspective(edit).panel(timeline)
           or panel(timeline)
+          or currentWindow().panel(timeline).create()
 }}}
 ;Viewer
 :here multiple alternatives are conceivable
@@ -2886,32 +2887,37 @@ locate = perspective(edit).panel(timeline)
 {{{
 alloc = onlyOne
 locate = external(beamer)
+          or view(viewer)
           or perspective(mediaView).panel(viewer)
-          or panel(viewer).existing()
-          or firstWindow().panel(viewer)
+          or panel(viewer)
+          or firstWindow().panel(viewer).view(viewer).create()
 }}}
 :* allow two viewer panels (the standard layout of editing applications)
 {{{
 alloc = limitPerWindow(2)
-locate = perspective(edit).panel(viewer).existing()
-          or currentWindow().panel(viewer).existing()
-          or panel(viewer).existing()
+locate = perspective(edit).panel(viewer)
+          or currentWindow().panel(viewer)
           or panel(viewer)
+          or currentWindow().panel(viewer).create()
 }}}
 ;(Asset)Bin
 :within the dedicated asset panel, add to the appropriate group for the kind of asset
 {{{
 alloc = unlimited
-locate = currentWindow().perspective(edit).panel(asset).assetTypeGroup().existing()
-          or perspective(asset).panel(asset)
-          or firstWindow().panel(asset)
+locate = currentWindow().perspective(edit).tab(assetType())
+          or perspective(asset).view(asset)
+          or tab(assetType())
+          or view(asset).tab(assetType()).create()
+          or firstWindow().panel(asset).view(asset).create()
 }}}
 ;~Error-Log
 :use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
 {{{
 alloc = limitPerWindow(1)
-locate = currentWindow().panel(infobox).existing()
-          or firstWindow().panel(infobox)
+locate = currentWindow().panel(infobox)
+          or view(error)
+          or panel(infobox)
+          or firstWindow().panel(infobox).view(error).create()
 }}}
 ;Playcontrol
 ://not determined yet what we'll need here....//
@@ -2939,15 +2945,22 @@ locate = currentWindow().panel(infobox).existing()
 : currentWindow
 : perspective(id)
 : panel(id)
-: assetTypeGroup {{red{WIP 9/17 not clear if possible}}}
-: existing()
+: assetType() {{red{WIP 9/17 not clear if possible}}}
+: create()
 ;alloc
 : unlimited
 : onlyOne
 : limitPerWindow(cnt)
 
 !!!Semantics of location
-The given UICoord specs are matched one by one, using the first one applicable. The location indicated by this process describes the parent or scope where the desired view can be found or shall be created. The matching itself is based on the matching of UI coordinates against the existing UI topology, but enriched with some contextual information. When the predicate {{{existing()}}} is used, the constructed UI coordinate path is required to exist already, i.e. we demand //complete coverage.// In all other cases, only partial coverage is required, and the remaining, extraneous suffix of the coordinate path is what will be created by the instantiation process.
+The given UICoord specs are matched one by one, using the first one applicable. The location indicated by this process describes the parent or scope where the desired view can be found or shall be created. The matching itself is based on the matching of UI coordinates against the existing UI topology, but enriched with some contextual information. By default, a given coordinate spec //is required to exist// -- which implies the semantics of //total coverage,// as defined by the coordinate resolver. When to the contrary the predicate {{{create()}}} is used, we only require that the given path //can be formed unambiguously// within the existing window topology -- the semantics of which is, again, defined by the coordinate resolver and basically implies that the path can be anchored and any missing parts can be interpolated without ambiguity, while possibly some extraneous suffix of components remains to be created by the instantiation process.
+
+The coordinate specs as written within the DSL are slightly abridged, as the final element, the actual component to be created, can be omitted and will be supplied automatically. This is possible insofar the ID of the queried element is actually more like a type specifier, and thus drawn from a finite and well known collection of possible elements (Timeline, Asset Bin, Error Log, Media Viewer, etc.). The elements to be created must invoke existing code and must be able to interface with their actual environment after all.
+
+However, the semantics of UI coordinate resolution and matching are applied against the coordinate specs //as given in the DSL.// Since, by default, what is given is required to exist, it makes quite a difference as to what kind of element is used as terminal element of a given spec. Since our UI coordinate system establishes a distinct depth for each kind of element, we can and even must reject any spec which does yield a definite location for at least the parent element; we do not interpolate or even invent arbitrary elements, we only ever match against existing ones. Thus any DSL definition must encompass a sane default, and is considered broken if it doesn't.
+
+!!!Semantics of allocation
+While the process of probing and matching the location specification finally yields an explicit UICoord path to the desired element, it is up to the allocation step actually to decide on the action to be taken. Some allocation operations impose some kind of limit, and are thus free to ignore the given spec and rather return an existing element in place. In the end, the purpose of this whole matching and allocation process is to get hold of a suitable UI component without knowing its precise coordinates in the UI topology. And this is the very property to enable flexible mapping of the strictly hierarchical session structures onto the UI in a fluid way.
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">

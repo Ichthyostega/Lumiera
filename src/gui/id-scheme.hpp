@@ -125,6 +125,7 @@ namespace gui {
 alloc = unlimited
 locate = perspective(edit).panel(timeline)
           or panel(timeline)
+          or currentWindow().panel(timeline).create()
 
 // Viewer
 // here multiple alternatives are conceivable
@@ -132,32 +133,37 @@ locate = perspective(edit).panel(timeline)
 
 alloc = onlyOne
 locate = external(beamer)
+          or view(viewer)
           or perspective(mediaView).panel(viewer)
-          or panel(viewer).existing()
-          or firstWindow().panel(viewer)
+          or panel(viewer)
+          or firstWindow().panel(viewer).view(viewer).create()
 
 // - allow two viewer panels (the standard layout of editing applications)
 
 alloc = limitPerWindow(2)
-locate = perspective(edit).panel(viewer).existing()
-          or currentWindow().panel(viewer).existing()
-          or panel(viewer).existing()
+locate = perspective(edit).panel(viewer)
+          or currentWindow().panel(viewer)
           or panel(viewer)
+          or currentWindow().panel(viewer).create()
 
 // (Asset)Bin
 // within the dedicated asset panel, add to the appropriate group for the kind of asset
 
 alloc = unlimited
-locate = currentWindow().perspective(edit).panel(asset).assetTypeGroup().existing()
-          or perspective(asset).panel(asset)
-          or firstWindow().panel(asset)
+locate = currentWindow().perspective(edit).tab(assetType())
+          or perspective(asset).view(asset)
+          or tab(assetType())
+          or view(asset).tab(assetType()).create()
+          or firstWindow().panel(asset).view(asset).create()
 
 // Error-Log
-// use the current {{{InfoBoxPanel}}} if such exists, fall back to using a single view on the primary window
+// use the current `InfoBoxPanel` if such exists, fall back to using a single view on the primary window
 
 alloc = limitPerWindow(1)
-locate = currentWindow().panel(infobox).existing()
-          or firstWindow().panel(infobox)
+locate = currentWindow().panel(infobox)
+          or view(error)
+          or panel(infobox)
+          or firstWindow().panel(infobox).view(error).create()
 
 */    
     

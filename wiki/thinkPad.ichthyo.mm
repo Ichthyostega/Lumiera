@@ -9164,15 +9164,19 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515979648475" ID="ID_350272872" MODIFIED="1515979660275" TEXT="Funktionsweise der &quot;Resolution&quot; kl&#xe4;ren">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515979664353" ID="ID_1353761382" MODIFIED="1515979675135" TEXT="was hei&#xdf;t &quot;existing&quot;?">
+<node CREATED="1515980158112" ID="ID_1744041635" MODIFIED="1515980169299" TEXT="der Reihe nach pr&#xfc;fen"/>
+<node COLOR="#338800" CREATED="1515979664353" ID="ID_1353761382" MODIFIED="1516916404656" TEXT="was hei&#xdf;t &quot;existing&quot;?">
 <icon BUILTIN="help"/>
 <node CREATED="1515979750382" ID="ID_598253186" MODIFIED="1515979758102" TEXT="darf nicht neu erzeugt werden">
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1515979791512" ID="ID_1473589676" MODIFIED="1515979802699" TEXT="Gegensatz: View ggfs an bekannter Stelle erzeugen"/>
-<node CREATED="1515979803503" ID="ID_397957162" MODIFIED="1515979850797" TEXT="Schlu&#xdf;folgerung: &quot;existing&quot; &#x27fa;  totale coverage "/>
+<node CREATED="1515979803503" ID="ID_397957162" MODIFIED="1516909962541" TEXT="Schlu&#xdf;folgerung">
+<icon BUILTIN="forward"/>
+<node CREATED="1516909893778" ID="ID_659065678" MODIFIED="1516909954338" TEXT="&quot;existing&quot; &#x27fa;  total coverage"/>
+<node CREATED="1516909908686" ID="ID_1886532442" MODIFIED="1516909948938" TEXT="&quot;create&quot; &#x27fa;  can cover"/>
 </node>
-<node CREATED="1515980158112" ID="ID_1744041635" MODIFIED="1515980169299" TEXT="der Reihe nach pr&#xfc;fen"/>
+</node>
 <node CREATED="1515980170359" ID="ID_1820091983" MODIFIED="1515980204934" TEXT="L&#xf6;sung erfordert wenigstens partielle coverage"/>
 <node CREATED="1515982274106" ID="ID_1283888757" MODIFIED="1515982290450" TEXT="Problem: Match erm&#xf6;glichen">
 <icon BUILTIN="messagebox_warning"/>
@@ -9180,8 +9184,149 @@
 <node CREATED="1515982302678" ID="ID_1579006450" MODIFIED="1515982327255" TEXT="nicht existierende Parents"/>
 <node CREATED="1515982330139" ID="ID_176314830" MODIFIED="1515982336638" TEXT="Perspective == egal"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515982375397" ID="ID_773035469" MODIFIED="1515982388556" TEXT="Fallback &quot;wenn alles scheitert&quot;?">
+<node COLOR="#990000" CREATED="1515982375397" ID="ID_773035469" MODIFIED="1516916373475" STYLE="fork" TEXT="Fallback &quot;wenn alles scheitert&quot;?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1516910666253" ID="ID_1056732886" MODIFIED="1516916324715" TEXT="Misconfig"/>
+<node CREATED="1516910669357" ID="ID_1129354200" MODIFIED="1516916324715" TEXT="fataler Fehler"/>
+<node CREATED="1516910673110" ID="ID_436584221" MODIFIED="1516916324715" TEXT="Regel mu&#xdf; Fallback enthalten">
+<icon BUILTIN="yes"/>
+<node CREATED="1516910710727" ID="ID_1042011734" MODIFIED="1516916324715" TEXT="warum?"/>
+<node CREATED="1516910736388" ID="ID_1267411576" MODIFIED="1516916324715" TEXT="Principle of least surprise"/>
+<node CREATED="1516910715343" ID="ID_1721041331" MODIFIED="1516916324715" TEXT="sonst default f&#xfc;r den default">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sonst bekommen wir eine versteckte
+    </p>
+    <p>
+      zweite hart-gecodete Fallback-Konfig
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516147992493" HGAP="24" ID="ID_4925227" MODIFIED="1516916306312" TEXT="wie wird das Zielobjekt selber bestimmt?" VSHIFT="-1">
 <icon BUILTIN="help"/>
+<node CREATED="1516148029148" ID="ID_1974346974" MODIFIED="1516148033502" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1516148034899" ID="ID_1675414085" MODIFIED="1516148040263" TEXT="explizit anschreiben"/>
+<node CREATED="1516148048121" ID="ID_1850664922" MODIFIED="1516148057362" TEXT="aus letzter gegebener Komponente ableiten"/>
+<node CREATED="1516909656846" ID="ID_1429663106" MODIFIED="1516909673367" TEXT="aus Typ ableiten und fehlende Parents erg&#xe4;nzen"/>
+</node>
+<node CREATED="1516148091716" ID="ID_1815243780" MODIFIED="1516148097950" TEXT="Anforderungen">
+<node CREATED="1516148107065" ID="ID_389475040" MODIFIED="1516148113397" TEXT="Name-ID des Elements bestimmbar"/>
+<node CREATED="1516148118064" ID="ID_541058997" MODIFIED="1516148124297" TEXT="Coverage feststellbar">
+<node CREATED="1516148128790" ID="ID_739368723" MODIFIED="1516148131233" TEXT="partiell">
+<node CREATED="1516148133085" ID="ID_325513379" MODIFIED="1516148143584" TEXT="ein nicht-Wildcard darunter mu&#xdf; schon existieren"/>
+<node CREATED="1516148144267" ID="ID_1074912934" MODIFIED="1516148148718" TEXT="Problem: Perspektive"/>
+</node>
+<node CREATED="1516148152938" ID="ID_1439081992" MODIFIED="1516148154902" TEXT="total">
+<node CREATED="1516148156514" ID="ID_323573839" MODIFIED="1516148165540" TEXT="Komponente selber mu&#xdf; spezifiziert sein"/>
+<node CREATED="1516148172864" ID="ID_1611427093" MODIFIED="1516148181130" TEXT="erst dann kann man Match &#xfc;berhaupt pr&#xfc;fen"/>
+</node>
+</node>
+<node CREATED="1516148185461" ID="ID_1903672954" MODIFIED="1516148189025" TEXT="Konsequenz">
+<node CREATED="1516148190821" ID="ID_1390287231" MODIFIED="1516148216525" TEXT="Koordinaten-Erg&#xe4;nzung mu&#xdf; im Locator erfolgen"/>
+<node CREATED="1516909726125" ID="ID_1451248007" MODIFIED="1516910078402">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>existing()</b>&#160;sollte <i>default</i>&#160;sein und <b>create()</b>&#160;explizit anzufordern
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil der gr&#246;&#223;te Teil aller real anzugebenden Regel-Klauseln
+    </p>
+    <p>
+      von der Bedeutung her &quot;existing&quot; meint
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1516912422576" ID="ID_1350672682" MODIFIED="1516912431635" TEXT="create() tritt normalerweise auf der letzten Regel auf"/>
+<node CREATED="1516912433647" ID="ID_1102539904" MODIFIED="1516912444928" TEXT="das k&#xf6;nnte redundant sein, ist aber klarer so"/>
+<node CREATED="1516910880176" ID="ID_1842572487" MODIFIED="1516910885275" TEXT="create() kann scheitern"/>
+<node CREATED="1516910885938" ID="ID_348346243" MODIFIED="1516910926262" TEXT="abschlie&#xdf;ende create()-Regel">
+<node CREATED="1516910927252" ID="ID_219541480" MODIFIED="1516910927252" TEXT="sollte failsafe sein"/>
+<node CREATED="1516910928914" ID="ID_698619582" MODIFIED="1516910935548" TEXT="d.h. stets realisierbar"/>
+<node CREATED="1516910936185" ID="ID_1449340119" MODIFIED="1516910940164" TEXT="modulo Perspektive"/>
+</node>
+</node>
+</node>
+<node CREATED="1516916455847" ID="ID_1054137561" MODIFIED="1516916458554" TEXT="Ergebnis">
+<node CREATED="1516916468901" ID="ID_1527047531" MODIFIED="1516916486539">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>komplett definierter</i>&#160;Pfad incl Zielobjekt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1516916496673" ID="ID_1162890109" MODIFIED="1516916529349">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ggfs wird <i>h&#246;chstes ein abschlie&#223;endes</i>&#160;Element hinzugef&#252;gt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1516916543155" ID="ID_458920753" MODIFIED="1516916567895">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dieser Pfad ist stets <i>anchored</i>&#160;und <i>partially covered</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1516916096887" HGAP="32" ID="ID_319974456" MODIFIED="1516916301866" TEXT="zu kl&#xe4;ren...." VSHIFT="8">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516916105462" ID="ID_1576570507" MODIFIED="1516916178768" TEXT="ist die Semantik of canCover() ausreichend?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516916140785" ID="ID_1667593991" MODIFIED="1516916163013" TEXT="wie umschiffen wir konkret das Problem mit der Perspektive?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516916210656" ID="ID_1339759450" MODIFIED="1516916257406" TEXT="wie ermitteln wir das zu erzeugende Suffix des Pfades?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516916599018" ID="ID_809925267" MODIFIED="1516916633710" TEXT="wie genau mu&#xdf; die Aufrufschnittstelle aussehen?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516916611433" ID="ID_1887578617" MODIFIED="1516916629056" TEXT="welche zus&#xe4;tzlichen Services werden ben&#xf6;tigt?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 </node>
@@ -10037,7 +10182,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515632006668" ID="ID_1085098385" MODIFIED="1515632023521" TEXT="wirklich?">
 <icon BUILTIN="broken-line"/>
 </node>
-<node CREATED="1515632050143" ID="ID_1858706501" MODIFIED="1515632086231">
+<node CREATED="1515632050143" ID="ID_1858706501" MODIFIED="1516147364366">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -10047,10 +10192,11 @@
       Alternative: wrap UI-Coord,
     </p>
     <p>
-      thin autmentation layer
+      thin augmentation layer
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
