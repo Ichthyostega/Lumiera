@@ -23,12 +23,24 @@
 
 /** @file view-locator.cpp
  ** Implementation details of a machinery to allocate UI global component views.
+ ** Essentially this compilation unit hosts the implementation backing the [ViewSpec-DSL](view-spec-dsl.hpp)
+ ** and the [Location Solver](ui-location-solver.hpp) to drive evaluation of the standard location defaults,
+ ** which are [hard-wired into the UI](\ref id-scheme.hpp). For this integration of various facilities and
+ ** frameworks we rely on actual definitions for the DSL-tokens, which themselves are functors and tied by
+ ** lambda-binding into the implementation side of ViewLocator; which both acts as a front-end to access
+ ** the service to "get or create" a component and also holds the UILocationSolver component to perform
+ ** the actual location solving mechanism. The DSL thus sits between both poles, since _resolving a view_
+ ** draws upon the default locating configuration encoded as DSL tokens, which in turn call back into
+ ** the implementation services within ViewLocator to resolve those partial location specifications
+ ** against the currently existing UI topology and then to access or create new UI components as
+ ** laid out through those definitions.
  ** 
  ** @todo WIP 9/2017 early draft       ////////////////////////////////////////////////////////////TICKET #1104
  */
 
 
 #include "gui/interact/view-locator.hpp"
+#include "gui/interact/ui-location-solver.hpp"
 #include "gui/ctrl/panel-locator.hpp"
 #include "gui/ctrl/window-locator.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
@@ -79,6 +91,7 @@ namespace interact {
   
   ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel, LocationQueryAccess getLocQuery)
     : globals_{uiTopLevel}
+    , locResolver_{new UILocationSolver}
     {
       locationQuery = getLocQuery;
     }

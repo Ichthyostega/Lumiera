@@ -143,7 +143,7 @@ namespace interact {
                             .filter ([&](auto& iter)
                                         {
                                            size_t depth = iter.depth();     // we are at that depth in target tree
-                                           if (depth >= coordDepth)         // search pattern exhausted
+                                           if (depth >= coordDepth)         // search pattern exhausted without match...
                                              return false;
                                            Literal patt = uic_[depth];      // pick search pattern component at that depth
                                            Literal curr = *iter;            // iterator points at current tree position (ID)

@@ -65,7 +65,7 @@
 #include <boost/noncopyable.hpp>
 #include <functional>
 //#include <string>
-//#include <memory>
+#include <memory>
 
 
 namespace gui {
@@ -76,12 +76,12 @@ namespace ctrl{
 }
 namespace interact {
   
-//  using std::unique_ptr;
+  using std::unique_ptr;
 //  using std::string;
   class LocationQuery;
   using LocationQueryAccess = std::function<LocationQuery&()>;
   
-//  class GlobalCtx;
+  class UILocationSolver;
   
   
   
@@ -94,6 +94,7 @@ namespace interact {
     : boost::noncopyable
     {
       ctrl::GlobalCtx& globals_;
+      unique_ptr<UILocationSolver> locResolver_;
       
     public:
       ViewLocator (ctrl::GlobalCtx&, LocationQueryAccess);

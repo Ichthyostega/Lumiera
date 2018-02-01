@@ -517,7 +517,7 @@ namespace interact {
         }
 
       /** @internal algorithm to resolve this UICoord path against the actual UI topology.
-       *  @return true if total coverage is possibly (by interpolating wildcards)
+       *  @return true if total coverage is possible (by interpolating wildcards)
        *  @remark after invoking this function, res_.isResolved and possible coverage are set.
        */
       bool pathResolution();
