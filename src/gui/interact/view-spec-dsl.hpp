@@ -103,7 +103,6 @@
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "gui/interact/ui-coord.hpp"
-#include "gui/interact/ui-coord-resolver.hpp"
 
 #include <functional>
 #include <utility>

@@ -50,15 +50,47 @@
 //#include "gui/interact/ui-coord-resolver.hpp"
 
 //#include <functional>
+#include <boost/noncopyable.hpp>
 #include <utility>
+#include <vector>
 
 
 namespace gui {
 namespace interact {
   
 //  using std::forward;
+  using std::move;
   
-  class LocationQuery;
+  class LocationClause
+    : boost::noncopyable
+    {
+      UICoord pattern_;
+      
+    public:
+      LocationClause (UICoord && locationPattern)
+        : pattern_{move (locationPattern)}
+        { }
+      LocationClause (LocationClause && rr)
+        : pattern_{move (rr.pattern_)}
+        { }
+      
+    };
+  
+  
+  class LocationRule
+    : boost::noncopyable
+    {
+      using Clauses = std::vector<LocationClause>;
+      
+      Clauses clauses_;
+      
+    public:
+      LocationRule (UICoord && firstRule)
+        : clauses_{}
+        { 
+          clauses_.emplace_back (move (firstRule));
+        }
+    };
   
   
   /**

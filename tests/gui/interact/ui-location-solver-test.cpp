@@ -57,13 +57,13 @@ namespace test {
   
   
   /******************************************************************************//**
-   * @test cover a mechanism to resolve the desired location of an ui element.
+   * @test cover a mechanism to resolve the desired location of an UI-element.
    *       The UILocationSolver is operated by the ViewLocator service, which itself
    *       is part of the InteractionDirector. In typical usage, the location rules
    *       are drawn from the [ViewSpec-DSL](\ref view-spec-dsl.hpp), evaluated
    *       with the help of a [Coordinate Resolver](\ref UICoordResolver), based on
    *       the real UI topology existing at that moment, accessible in abstracted
-   *       form through the LocationQuery interface. This test setup mimics this
+   *       form through the LocationQuery interface. This test setup here mimics that
    *       invocation scheme, but replaces the real UI by an abstract tree notation
    *       embedded directly into the individual test cases.
    * 
