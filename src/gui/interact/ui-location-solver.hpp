@@ -42,12 +42,12 @@
 #define GUI_INTERACT_UI_LOCATION_SOLVER_H
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 //#include "lib/meta/function.hpp"
 //#include "lib/meta/tuple-helper.hpp"
 //#include "lib/meta/function-closure.hpp"
 #include "gui/interact/ui-coord.hpp"
-//#include "gui/interact/ui-coord-resolver.hpp"
+#include "gui/interact/ui-coord-resolver.hpp"
 
 //#include <functional>
 #include <boost/noncopyable.hpp>
@@ -60,6 +60,16 @@ namespace interact {
   
 //  using std::forward;
   using std::move;
+  using lib::Symbol;
+  
+  
+  class LocationQuery;
+  using LocationQueryAccess = std::function<LocationQuery&()>;
+  
+  /** @internal access UI service to query and discover locations within UI topology */
+  extern LocationQueryAccess loactionQuery;
+  
+  
   
   class LocationClause
     : boost::noncopyable
@@ -141,14 +151,23 @@ namespace interact {
 //      ctrl::GlobalCtx& globals_;
       
     public:
-      UILocationSolver()
+      explicit
+      UILocationSolver (LocationQueryAccess)
+        { }
+      
+      explicit
+      UILocationSolver (LocationQuery&)
         { }
       
       
       /**
        * Access and possibly create _just some_ component view of the desired type
        */
-      UICoord solve();
+      UICoord
+      solve (LocationRule& rule, size_t depth, Symbol elementName)
+        {
+          UNIMPLEMENTED ("actually solve for a location according to the given rule");
+        }
       
     private:
       

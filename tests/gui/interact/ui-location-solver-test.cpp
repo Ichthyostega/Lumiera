@@ -27,8 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "gui/interact/ui-location-solver.hpp"
+#include "gui/interact/gen-node-location-query.hpp"
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
@@ -37,11 +38,15 @@
 //#include <string>
 
 
-//using std::string;
+using std::string;
+using lib::diff::MakeRec;
+using lib::diff::Rec;
+//using lib::Symbol;
+//using util::join;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
 //using util::isSameObject;
-//using util::isnil;
+using util::isnil;
 
 
 namespace gui  {
@@ -49,7 +54,7 @@ namespace interact {
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-  using lib::test::showSizeof;
+//  using lib::test::showSizeof;
   
   namespace { //Test fixture...
     
@@ -83,11 +88,51 @@ namespace test {
         }
       
       
+      /** @test demonstrate the typical invocation and usage" */
       void
       simple_usage_example()
         {
-          UNIMPLEMENTED ("demonstrate the typical invocation and usage");
+           //-------------------------------------------------------------Test-Fixture
+          // a Test dummy placeholder for the real UI structure
+          Rec dummyUiStructure = MakeRec()
+                                   .set("window-1"
+                                       , MakeRec()
+                                           .type("perspective-A")
+                                           .set("exclusivePanel", MakeRec())
+                                       );
+            // helper to answer "location queries" backed by this structure
+          GenNodeLocationQuery locationQuery{dummyUiStructure};
+          //--------------------------------------------------------------(End)Test-Fixture
+          
+          
+          // our test subject....
+          UILocationSolver solver{locationQuery};
+          
+          // a rule to probe (meaning: attach it at the "shoddy" panel)
+          LocationRule rule{UICoord().panel("shoddy")};
+          
+          // Now ask for a location to attach a view named "worldview" at the "shoddy" panel
+          // No solution can be found, since there is no "shoddy" panel
+          CHECK (isnil (solver.solve (rule, UIC_VIEW, "worldview")));
+          
+          // add second location clause to the rule
+          // (meaning: accept any suitable location within the first window)
+          rule.append(UICoord::firstWindow());
+          
+          // and now we get a solution, since the second rule can be wildcard-matched
+          UICoord location = solver.solve (rule, UIC_VIEW, "worldview");
+          CHECK (not isnil (location));
+          
+          // the full solution filled in the missing parts and added the new view on top
+          CHECK ("UI:window-1[perspective-A]-exclusivePanel.worldview" == string(location));
+          
+          // NOTE: the new view does not (yet) exist, but the preceding part can be "covered"
+          //       To verify this, we attach a coordinate resolver (likewise backed by our dummy UI)
+          UICoordResolver resolver{location, locationQuery};
+          CHECK (resolver.isCoveredPartially());
+          CHECK (UIC_PANEL == resolver.coverDepth());
         }
+      
       
       
       void

@@ -91,7 +91,7 @@ namespace interact {
   
   ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel, LocationQueryAccess getLocQuery)
     : globals_{uiTopLevel}
-    , locResolver_{new UILocationSolver}
+    , locResolver_{new UILocationSolver{getLocQuery}}
     {
       locationQuery = getLocQuery;
     }

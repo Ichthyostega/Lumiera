@@ -78,8 +78,6 @@ namespace interact {
   
   using std::unique_ptr;
 //  using std::string;
-  class LocationQuery;
-  using LocationQueryAccess = std::function<LocationQuery&()>;
   
   class UILocationSolver;
   
