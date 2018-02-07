@@ -65,13 +65,16 @@ namespace interact {
     : boost::noncopyable
     {
       UICoord pattern_;
+      bool createParents_;
       
     public:
-      LocationClause (UICoord && locationPattern)
+      LocationClause (UICoord && locationPattern, bool createParents =false)
         : pattern_{move (locationPattern)}
+        , createParents_{createParents}
         { }
       LocationClause (LocationClause && rr)
         : pattern_{move (rr.pattern_)}
+        , createParents_{rr.createParents_}
         { }
       
     };
@@ -87,10 +90,44 @@ namespace interact {
     public:
       LocationRule (UICoord && firstRule)
         : clauses_{}
-        { 
-          clauses_.emplace_back (move (firstRule));
+        {
+          this->append (move (firstRule));
+        }
+      LocationRule (LocationRule && rr)
+        : clauses_{move (rr.clauses_)}
+        { }
+      
+      
+      LocationRule&&
+      append (UICoord && furtherRule)
+        {
+          clauses_.emplace_back (move (furtherRule));
+          return move (*this);
         }
     };
+  
+  
+  /** DSL operator to assemble a sequence of clauses.
+   * Introduced solely for the purpose of writing location specifications within the
+   * [ViewSpec-DSL](\ref id-scheme.hpp), this operator acts on several UI-Coordinate specs
+   * to create a sequence of clauses, to be checked against the currently existing UI topology,
+   * in the given order, ranging from more specific to more general patterns.
+   */
+  inline LocationRule
+  operator or (UICoord::Builder && firstRule, UICoord secondRule)
+  {
+    return LocationRule{move (firstRule)}
+            .append (move (secondRule));
+  }
+  
+  inline LocationRule&&
+  operator or (LocationRule && ruleSet, UICoord furtherRule)
+  {
+    ruleSet.append (move (furtherRule));
+    return move(ruleSet);
+  }
+  
+  
   
   
   /**

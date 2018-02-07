@@ -9955,6 +9955,48 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631663265" ID="ID_1149231463" MODIFIED="1515631712900" TEXT="ODER-Operator">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517970584075" ID="ID_1155445128" MODIFIED="1517970604769" TEXT="Syntax / DSL-Technik">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1517970606791" ID="ID_1375091296" MODIFIED="1517970622625" TEXT="Operatoren haben feste Pr&#xe4;zedenz">
+<node CREATED="1517970623613" ID="ID_271068747" MODIFIED="1517970637311" TEXT="OR bindet st&#xe4;rker als Zuweisung"/>
+<node CREATED="1517970650217" ID="ID_1384466296" MODIFIED="1517970687920" TEXT="LocationSpec = ( UICoord::Builder || UICoord)"/>
+</node>
+<node CREATED="1517970828105" ID="ID_803913203" MODIFIED="1517970847438" TEXT="m&#xf6;gliche Alternativen">
+<icon BUILTIN="info"/>
+<node CREATED="1517970849142" ID="ID_1434826323" MODIFIED="1517971161073" TEXT="Komma-Operator verwenden">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1517970857389" ID="ID_815195379" MODIFIED="1517970864567" TEXT="bindet schw&#xe4;cher als Zuweisung"/>
+<node CREATED="1517970865180" ID="ID_349717845" MODIFIED="1517970879022" TEXT="wird folglich auf LocationSpec definiert"/>
+<node CREATED="1517971057730" ID="ID_1385090987" MODIFIED="1517971066684" TEXT="somit einfach zu implementieren"/>
+<node CREATED="1517971070856" ID="ID_1569393703" MODIFIED="1517971081490" TEXT="sauber aus Sicht der Code-Organisation"/>
+<node CREATED="1517971082198" ID="ID_821482262" MODIFIED="1517971131424" TEXT="aber semantisch irref&#xfc;hrend">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Komma hei&#223;t &quot;and then&quot; in der Logikprogrammierung
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1517970882714" ID="ID_1615423213" MODIFIED="1517971158573" TEXT="Builder mu&#xdf; bereits mit OR umgehen k&#xf6;nnen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1517971040980" ID="ID_1600012363" MODIFIED="1517971050093" TEXT="vermischt die Themen">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1517971023823" ID="ID_1961997914" MODIFIED="1517971040248" TEXT="verkehrt die Definitions-Reihenfolge"/>
+</node>
+<node CREATED="1517970999466" ID="ID_1299498209" MODIFIED="1517971266395" TEXT="freier OR-Operator im DSL-Kontext definiert">
+<linktarget COLOR="#55618e" DESTINATION="ID_1299498209" ENDARROW="Default" ENDINCLINATION="115;1000;" ID="Arrow_ID_1706569145" SOURCE="ID_1413272427" STARTARROW="None" STARTINCLINATION="561;-39;"/>
+<node CREATED="1517971299201" ID="ID_1350388784" MODIFIED="1517971364140" TEXT="Builder || UICoord  -&gt; LocationRule(LocationClause) . add(LocationClause)"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631675752" ID="ID_1586757410" MODIFIED="1515631712140" TEXT="Repr&#xe4;sentation als Liste von UICoord">
 <icon BUILTIN="flag-yellow"/>
@@ -11039,8 +11081,19 @@
 <icon BUILTIN="idea"/>
 <node CREATED="1504882554718" ID="ID_744764331" MODIFIED="1504882559553" TEXT="weil auf dem DSL-Proxy"/>
 <node CREATED="1504882560202" ID="ID_1190541919" MODIFIED="1504882574911" TEXT="egal, wenn beide Seiten der Zuweisung DSL sind"/>
-<node CREATED="1504882584218" ID="ID_790570102" MODIFIED="1504882601506" TEXT="was hier der Fall ist">
-<icon BUILTIN="stop-sign"/>
+<node CREATED="1504882584218" ID="ID_790570102" MODIFIED="1517970553374">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      was hier <i>vielleicht</i>&#160;der Fall sein k&#246;nnte
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1504882467714" ID="ID_759428035" MODIFIED="1504882597098" TEXT="bedeutet &quot;and then&quot; in Logik-Programmierung">
@@ -11062,6 +11115,41 @@
 </node>
 <node CREATED="1504882665519" ID="ID_590443599" MODIFIED="1504882684431" TEXT="numerische Auswertung auszuschlie&#xdf;en">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517970380222" ID="ID_1663499246" MODIFIED="1517970401964" TEXT="trickreich zu implementieren">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1517970403323" ID="ID_676104700" MODIFIED="1517970409862" TEXT="...wofern &#xfc;berhaupt m&#xf6;glich"/>
+<node CREATED="1517970410690" ID="ID_1716625175" MODIFIED="1517970519730" TEXT="Problem sind die LocationClauses">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir haben nicht einfach UI-Coordinaten als DSl-Elemente,
+    </p>
+    <p>
+      sondern einzelne Klauseln, die allerdings jeweils eine UI-Coord wrappen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wenn man jedoch, rein syntaktisch zu schreiben beginnt &quot;UICoord::window()&quot;
+    </p>
+    <p>
+      dann bekommt man einen UICoord::Builder&#160;&#160;und das ist noch keine Klausel!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#281977" CREATED="1517971193343" ID="ID_1413272427" MODIFIED="1517971266395" TEXT="vielleicht mit freiem OR-Operator?">
+<arrowlink COLOR="#55618e" DESTINATION="ID_1299498209" ENDARROW="Default" ENDINCLINATION="115;1000;" ID="Arrow_ID_1706569145" STARTARROW="None" STARTINCLINATION="561;-39;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
 </node>
 </node>
 </node>
