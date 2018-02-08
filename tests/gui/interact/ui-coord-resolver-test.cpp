@@ -79,6 +79,7 @@ namespace test {
           verify_backingQuery();
           verify_queryAnchor();
           verify_mutateCoverage();
+          verify_mutateCoverPartially();
           verify_mutateAnchor();
           verify_mutateExtend();
         }
@@ -290,7 +291,7 @@ namespace test {
       
       
       
-      /** @test patch matching algorithm to resolve UI coordinates with wildcards against the current UI structure tree.
+      /** @test path matching algorithm to resolve UI coordinates with wildcards against the current UI structure tree.
        * Since an UI coordinate path with gaps and wildcards could match anywhere, even several times, we need to perform
        * an exhaustive search with backtracking over the whole tree. By convention, we use the first maximal solution,
        * which can be just a partial solution, leaving an additional uncovered trailing part of the UI coordinate spec.
@@ -481,6 +482,65 @@ namespace test {
           UICoordResolver r533 {UICoord().persp("persp-C").tab(1), tree};
           CHECK ("UI:window-3[persp-C]-panelZ.thirdView.#1" == string(r533.cover()));              // best solution is found as last one
         }
+      
+      
+      
+      /** @test resolve by matching, but retain an extraneous, uncovered extension.
+       * This is a variation of the UICoordResolver::cover() operation, which resolves any
+       * wildcards, while tolerating some additional elements behind the covered part,
+       * as long as those are explicit. The typical use case is when we're about to
+       * create a new UI element at a specific existing anchor location within the UI.
+       */
+      void
+      verify_mutateCoverPartially()
+        {
+          GenNodeLocationQuery tree{MakeRec()
+                                      .set("window-1"
+                                          , MakeRec()
+                                              .type("persp-B")
+                                              .set("panelY"
+                                                  , MakeRec()
+                                                      .set("someView"
+                                                          , MakeRec()
+                                                              .set("#1", MakeRec())
+                                                              .set("#2", MakeRec())
+                                                          )
+                                                  )
+                                          )
+                                   };
+          
+          /* === explicitly given spec partially covered === */
+          UICoordResolver r1 {UICoord{"window-1","persp-B","panelY","otherView","tab"}, tree};
+          CHECK (3 == r1.coverDepth());
+          r1.coverPartially();
+          CHECK (not r1.isCovered());
+          CHECK (3 == r1.coverDepth());
+          CHECK (r1.isCoveredPartially());
+          CHECK ("UI:window-2[persp-B]-panelY.otherView.tab"  == string(r1));
+          
+          /* === fill wildcard gap but retain uncovered extension === */
+          UICoordResolver r2 {UICoord::currentWindow().view("someView").tab(3).path("sub"), tree};
+          CHECK (0 == r2.coverDepth());
+          r2.coverPartially();
+          CHECK (not r2.isCovered());
+          CHECK (4 == r2.coverDepth());
+          CHECK (r2.isCoveredPartially());
+          CHECK ("UI:window-2[persp-B]-panelY.someView.#3/sub"  == string(r2));
+          r2.cover();
+          CHECK ("UI:window-2[persp-B]-panelY.someView"  == string(r2));
+          
+          /* === reject when gap can not be closed unambiguously === */
+          UICoordResolver r3 {UICoord::currentWindow().view("otherView").tab(3).path("sub"), tree};
+          CHECK (not r3.canCover());
+          r3.coverPartially();
+          CHECK (isnil (r3));
+          
+          /* === reject when some wildcards remain after partial coverage === */
+          UICoordResolver r4 {UICoord::currentWindow().tab(3).path("sub"), tree};
+          r4.coverPartially();
+          CHECK (isnil (r4));
+        }
+      
       
       
       /** @test mutate given UI coordinates by anchoring them.

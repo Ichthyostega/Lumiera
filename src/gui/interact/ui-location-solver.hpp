@@ -198,6 +198,10 @@ namespace interact {
             {
               if (clause.size() > depth+1) continue;
               UICoordResolver resolver{clause, getLocationQuery()};
+              resolver.coverPartially();
+              if (not isnil (resolver))
+                return move (resolver);
+              //////////////////////////////TODO this is only the more relaxed "create" case 
             }
         }
       
