@@ -82,6 +82,7 @@ namespace interact {
    * Typically, this is provided by the Navigator service in conjunction with the ViewLocator;
    * both are components managed by the InteractionDirector. Thus, when the UI starts, a suitable
    * access functor will be installed here, and likewise removed/disabled on shutdown.
+   *                  ///////////////////////////////////////////////////////////////////////////////////////TICKET #1127 looks like we could get rid of that global state
    */
   LocationQueryAccess locationQuery = LOCATION_QUERY_SERIVCE_NOT_AVAILABLE;
   

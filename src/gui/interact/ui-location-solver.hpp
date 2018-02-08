@@ -87,6 +87,16 @@ namespace interact {
         , createParents_{rr.createParents_}
         { }
       
+      operator UICoord const&()  const
+        {
+          return pattern_;
+        }
+      
+      size_t
+      size()  const
+        {
+          return pattern_.size();
+        }
     };
   
   
@@ -114,6 +124,11 @@ namespace interact {
           clauses_.emplace_back (move (furtherRule));
           return move (*this);
         }
+      
+      
+      using iterator = lib::RangeIter<Clauses::const_iterator>;
+      iterator begin() const { return iterator{clauses_.begin(), clauses_.end()}; }
+      iterator end()   const { return iterator(); }
     };
   
   
@@ -143,30 +158,47 @@ namespace interact {
   /**
    * Access or allocate a UI component view
    * 
-   * @todo initial draft as of 9/2017 -- actual implementation need to be filled in
+   * @todo initial draft as of 2/2018 -- actual implementation need to be filled in
    */
   class UILocationSolver
     : boost::noncopyable
     {
 //      ctrl::GlobalCtx& globals_;
+      LocationQueryAccess getLocationQuery;
       
     public:
       explicit
-      UILocationSolver (LocationQueryAccess)
+      UILocationSolver (LocationQueryAccess accessor)
+        : getLocationQuery{accessor}
         { }
       
       explicit
-      UILocationSolver (LocationQuery&)
+      UILocationSolver (LocationQuery& locationQueryService)
+        : getLocationQuery{[&]() -> LocationQuery& { return locationQueryService; }}
         { }
       
       
       /**
-       * Access and possibly create _just some_ component view of the desired type
+       * Solve for a location according to the given location rule.
+       * @param depth desired kind of UI element (and thus the depth in the UI topology tree)
+       * @param elementType designator of the specific element to be created at that level
+       * @return a explicit location, resolved against the current UI topology. May be empty
+       * @remarks the returned path is either empty (no solution exists), or it is "partially covered"
+       *        by the existing UI; here, the "covered" part are the already existing UI elements,
+       *        while the remaining, uncovered extension describes additional elements to be created.
+       *        When the resolution process found an already existing UI element, the returned path
+       *        is completely covered. The degree of coverage of a path can be found out with the
+       *        help of a UICoordResolver, which also needs a LocationQuery (service) to find out
+       *        about the currently existing UI topology.
        */
       UICoord
-      solve (LocationRule& rule, size_t depth, Symbol elementName)
+      solve (LocationRule& rule, size_t depth, Symbol elementType)
         {
-          UNIMPLEMENTED ("actually solve for a location according to the given rule");
+          for (auto& clause : rule)
+            {
+              if (clause.size() > depth+1) continue;
+              UICoordResolver resolver{clause, getLocationQuery()};
+            }
         }
       
     private:

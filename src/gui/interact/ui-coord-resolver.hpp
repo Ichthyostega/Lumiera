@@ -420,6 +420,19 @@ namespace interact {
         }
       
       
+      /** mutate the path to resolve all wildcards to achieve partial coverage
+       *  - anchorage and all wildcards will be resolved against current UI
+       *  - but an extraneous, uncovered, explicit suffix is retained
+       * @note if the coordinate spec can not be (partially) covered at all,
+       *    it will be truncated to zero size
+       */
+      UICoordResolver&&
+      coverPartially()
+        {
+          UNIMPLEMENTED ("mutate to partial coverage, retaining extension");
+        }
+      
+      
       /** mutate the window part of the path such as
        *  to make the anchorage explicit, if possible
        * @remark if the path starts with meta specs like

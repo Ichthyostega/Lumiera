@@ -487,6 +487,9 @@ namespace interact {
       /** @remark moving a builder instance is acceptable */
       Builder (Builder &&)  = default;
       
+      size_t size() const { return uic_.size(); }
+      bool empty()  const { return uic_.empty();}
+      
       
       /* == Builder functions == */
       

@@ -20,3 +20,8 @@ END
 TEST "resolving UI coordinates" UICoordResolver_test <<END
 return: 0
 END
+
+
+PLANNED "solving for UI location" UILocationSolver_test <<END
+return: 0
+END
