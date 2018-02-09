@@ -361,6 +361,14 @@ namespace interact {
              and res_.depth == this->uic_.size();
         }
       
+      /** synonymous to #isCovered() */
+      bool
+      isCoveredTotally()  const
+        {
+          return isCovered();
+        }
+      
+      
       /** determine if a mutation is possible to get the path (partially) covered.
        * @remarks in order to be successful, a path resolution must interpolate any gaps in the
        *       path spec _and_ reach a point behind / below the gap (wildcards), where an existing

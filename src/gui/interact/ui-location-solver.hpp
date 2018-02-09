@@ -71,32 +71,21 @@ namespace interact {
   
   
   
-  class LocationClause
+  struct LocationClause
     : boost::noncopyable
     {
-      UICoord pattern_;
-      bool createParents_;
+      UICoord pattern;
+      bool createParents;
       
-    public:
-      LocationClause (UICoord && locationPattern, bool createParents =false)
-        : pattern_{move (locationPattern)}
-        , createParents_{createParents}
+      
+      LocationClause (UICoord && locationPattern, bool allowCreate =false)
+        : pattern{move (locationPattern)}
+        , createParents{allowCreate}
         { }
       LocationClause (LocationClause && rr)
-        : pattern_{move (rr.pattern_)}
-        , createParents_{rr.createParents_}
+        : pattern{move (rr.pattern)}
+        , createParents{rr.createParents}
         { }
-      
-      operator UICoord const&()  const
-        {
-          return pattern_;
-        }
-      
-      size_t
-      size()  const
-        {
-          return pattern_.size();
-        }
     };
   
   
@@ -182,7 +171,7 @@ namespace interact {
        * Solve for a location according to the given location rule.
        * @param depth desired kind of UI element (and thus the depth in the UI topology tree)
        * @param elementType designator of the specific element to be created at that level
-       * @return a explicit location, resolved against the current UI topology. May be empty
+       * @return an explicit location, resolved against the current UI topology. May be empty
        * @remarks the returned path is either empty (no solution exists), or it is "partially covered"
        *        by the existing UI; here, the "covered" part are the already existing UI elements,
        *        while the remaining, uncovered extension describes additional elements to be created.
@@ -196,12 +185,26 @@ namespace interact {
         {
           for (auto& clause : rule)
             {
-              if (clause.size() > depth+1) continue;
-              UICoordResolver resolver{clause, getLocationQuery()};
+              if (clause.pattern.size() > depth+1) continue;
+              UICoordResolver resolver{clause.pattern, getLocationQuery()};
               resolver.coverPartially();
-              if (not isnil (resolver))
-                return move (resolver);
-              //////////////////////////////TODO this is only the more relaxed "create" case 
+              if (clause.createParents)
+                {
+                  if (not isnil (resolver))
+                    //////////////////////////////////////TODO ensure correct depth. Possibly append element itself
+                    return move (resolver);
+                  else
+                    if (clause.pattern.isExplicit())
+                      // allow creation of a totally new path
+                      // as long as it is complete and explicitly given
+                      return clause.pattern;
+                }
+              else
+                {
+                  if (not isnil (resolver) and resolver.isCoveredTotally())
+                    //////////////////////////////////////TODO ensure correct depth. Possibly append element itself
+                    return move (resolver);
+                }
             }
         }
       

@@ -9960,6 +9960,9 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055394000" ID="ID_1230502265" MODIFIED="1518055399228" TEXT="alles bis auf Komponente selber">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1518143878531" ID="ID_780612574" MODIFIED="1518143891082" TEXT="d.h. mu&#xdf; total covered sein">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055400412" ID="ID_1517580371" MODIFIED="1518055426432">
 <richcontent TYPE="NODE"><html>
@@ -9981,7 +9984,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055442607" ID="ID_93235547" MODIFIED="1518055447159" TEXT="partielle coverage erlauben">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055453981" ID="ID_1927049673" MODIFIED="1518055539515" TEXT="Frage: totale Neuerzeugung unterst&#xfc;tzen?">
+<node COLOR="#338800" CREATED="1518055453981" ID="ID_1927049673" MODIFIED="1518145561724" TEXT="Frage: totale Neuerzeugung unterst&#xfc;tzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -9997,8 +10000,20 @@
 </html>
 </richcontent>
 <icon BUILTIN="help"/>
+<node CREATED="1518145517036" ID="ID_272248384" MODIFIED="1518145520391" TEXT="ja">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1518145521684" ID="ID_17194778" MODIFIED="1518145547345" TEXT="ungedeckter Pfad mu&#xdf; explizit sein">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518145595274" ID="ID_1539200142" MODIFIED="1518145607193" TEXT="in jedem Fall korrekte L&#xe4;nge sicherstellen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518145778249" ID="ID_462394658" MODIFIED="1518145795919" TEXT="F&#xe4;lle geschickt zusammenfassen (duplikate Aktionen)">
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507082826" ID="ID_1177191870" MODIFIED="1517507092970" TEXT="R&#xfc;ckgabe per Value">
 <icon BUILTIN="flag-yellow"/>
