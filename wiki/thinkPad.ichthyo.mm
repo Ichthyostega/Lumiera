@@ -2224,7 +2224,7 @@
 </node>
 <node CREATED="1481777114203" ID="ID_1156396729" MODIFIED="1483654726680" TEXT="Lock, um Deadlock zu vermeiden"/>
 <node CREATED="1481777122306" ID="ID_1506554988" MODIFIED="1481777133445" TEXT="alles im dtor  -&gt; noexcept"/>
-<node CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1517016477941" TEXT="sicherstellen da&#xdf; shutdown nicht blockt">
+<node CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1518215136837" TEXT="sicherstellen da&#xdf; shutdown nicht blockt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2253,7 +2253,7 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3225;0;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="2095;-126;"/>
+<arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3225;0;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="2096;-122;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -9956,28 +9956,12 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055049276" ID="ID_1963190796" MODIFIED="1518055056879" TEXT="Fallunterscheidung">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055059890" ID="ID_1240967474" MODIFIED="1518055392625" TEXT="Standard-Fall">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055059890" ID="ID_1240967474" MODIFIED="1518214982472" TEXT="Standard: totale Coverage!">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055394000" ID="ID_1230502265" MODIFIED="1518055399228" TEXT="alles bis auf Komponente selber">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1518143878531" ID="ID_780612574" MODIFIED="1518143891082" TEXT="d.h. mu&#xdf; total covered sein">
-<icon BUILTIN="idea"/>
+<node CREATED="1518055394000" ID="ID_1230502265" MODIFIED="1518215014491" TEXT="alles bis auf Komponente selber mu&#xdf; best&#xe4;tigt sein">
+<icon BUILTIN="info"/>
 </node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055400412" ID="ID_1517580371" MODIFIED="1518055426432">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Komponente <i>falls n&#246;tig</i>&#160;anh&#228;ngen
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="flag-yellow"/>
-</node>
+<node CREATED="1518215016983" ID="ID_643091836" MODIFIED="1518215031985" TEXT="ggfs anzuh&#xe4;ngende KOmponente nicht Teil der L&#xf6;sung"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055089510" ID="ID_1374209563" MODIFIED="1518055441235" TEXT="Create-Fall">
 <icon BUILTIN="flag-yellow"/>
@@ -10008,12 +9992,147 @@
 </node>
 </node>
 </node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518145595274" ID="ID_1539200142" MODIFIED="1518145607193" TEXT="in jedem Fall korrekte L&#xe4;nge sicherstellen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055400412" ID="ID_1517580371" MODIFIED="1518055426432">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Komponente <i>falls n&#246;tig</i>&#160;anh&#228;ngen
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518145778249" ID="ID_462394658" MODIFIED="1518145795919" TEXT="F&#xe4;lle geschickt zusammenfassen (duplikate Aktionen)">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518215051242" ID="ID_1984395087" MODIFIED="1518215068068" TEXT="Ablauf-Logik">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1518213040236" ID="ID_1048898871" MODIFIED="1518213506527" STYLE="bubble" TEXT="L&#xe4;ngenbeschrenkung">
+<node BACKGROUND_COLOR="#b6c6f7" CREATED="1518213142062" ID="ID_1389235831" MODIFIED="1518213765139" TEXT="next"/>
+</node>
+<node CREATED="1518213047987" ID="ID_1894250137" MODIFIED="1518213506524" STYLE="bubble" TEXT="Klausel l&#xf6;sen"/>
+<node BACKGROUND_COLOR="#efedc4" CREATED="1518213057553" ID="ID_1840655064" MODIFIED="1518215136125" STYLE="bubble" TEXT="Standard/Create?">
+<arrowlink COLOR="#4976b7" DESTINATION="ID_1713281564" ENDARROW="Default" ENDINCLINATION="-214;-32;" ID="Arrow_ID_1015037061" STARTARROW="None" STARTINCLINATION="-133;64;"/>
+<node CREATED="1518213079183" ID="ID_533214872" MODIFIED="1518213515939" TEXT="Standard">
+<node BACKGROUND_COLOR="#efedc4" CREATED="1518213086862" ID="ID_6239293" MODIFIED="1518213907069" TEXT="totalyCovered?">
+<node CREATED="1518213134767" ID="ID_775708906" MODIFIED="1518213515940" TEXT="nein?">
+<node BACKGROUND_COLOR="#b6c6f7" CREATED="1518213142062" ID="ID_1245747447" MODIFIED="1518214048100" TEXT="next"/>
+</node>
+<node CREATED="1518213159380" ID="ID_213462597" MODIFIED="1518213515940" TEXT="ja?">
+<node CREATED="1518213162419" ID="ID_109286322" MODIFIED="1518213515940" TEXT="ggfs Elmnt anhngn"/>
+<node BACKGROUND_COLOR="#efbab6" CREATED="1518213219564" ID="ID_1188365373" MODIFIED="1518213810523" TEXT="move(Solution)"/>
+</node>
+</node>
+</node>
+<node CREATED="1518213235362" ID="ID_977251605" MODIFIED="1518213867591" TEXT="Create">
+<node BACKGROUND_COLOR="#efedc4" CREATED="1518213253255" ID="ID_1769779207" MODIFIED="1518213907069" TEXT="not empty?">
+<node CREATED="1518213302080" ID="ID_1846077322" MODIFIED="1518213515941" TEXT="ja?">
+<node CREATED="1518213162419" ID="ID_51616856" MODIFIED="1518213515941" TEXT="ggfs Elmnt anhngn"/>
+<node BACKGROUND_COLOR="#efbab6" CREATED="1518213219564" ID="ID_1352698993" MODIFIED="1518213810523" TEXT="move(Solution)"/>
+</node>
+<node CREATED="1518213331788" ID="ID_1239103431" MODIFIED="1518213515942" TEXT="nein?">
+<node BACKGROUND_COLOR="#efedc4" CREATED="1518213337332" ID="ID_901388238" MODIFIED="1518213907068" TEXT="Klausel explizit?">
+<node BACKGROUND_COLOR="#efbab6" CREATED="1518213440630" ID="ID_1608293138" MODIFIED="1518213851674" STYLE="bubble" TEXT="copy(Klausel)">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+</node>
+<node CREATED="1518213451860" ID="ID_1678375217" MODIFIED="1518213515942" TEXT="Wildcards">
+<node BACKGROUND_COLOR="#b6c6f7" CREATED="1518213469114" ID="ID_239069612" MODIFIED="1518213765138" TEXT="next"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1518145595274" ID="ID_1539200142" MODIFIED="1518216313328" TEXT="in jedem Fall korrekte L&#xe4;nge sicherstellen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1518212471553" ID="ID_1821401889" MODIFIED="1518212475437" TEXT="Frage: wann?">
+<node CREATED="1518212565636" ID="ID_1223770753" MODIFIED="1518212627099" TEXT="L&#xf6;sen einer zu kurzen Klausel bringt nix">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil wir keinen Zustand sammeln
+    </p>
+    <p>
+      und daher jede Klausel von Grund auf neu l&#246;sen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1518212627092" ID="ID_1184420038" MODIFIED="1518212634887" TEXT="...also kann man die sofort wegsortieren"/>
+</node>
+<node CREATED="1518212670854" ID="ID_1003923585" MODIFIED="1518212767079" TEXT="Frage: zu lange Klauseln?">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1518212721599" ID="ID_1131508916" MODIFIED="1518212757812" TEXT="...w&#xe4;ren nachtr&#xe4;glich unter Ziel-Level zu k&#xfc;rzen">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1518212683340" ID="ID_1968312736" MODIFIED="1518212784080">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>k&#246;nnte</i>&#160;man zulassen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1518212772256" ID="ID_1238641704" MODIFIED="1518212777185" TEXT="YAGNI">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1518212791566" ID="ID_1644096915" MODIFIED="1518212982426" TEXT="Ergebnis">
+<icon BUILTIN="forward"/>
+<node CREATED="1518212828593" ID="ID_351911326" MODIFIED="1518213001285" TEXT="gegeben: depth, auf welcher Zielelement aufgesetzt wird">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1518212871379" ID="ID_451555590" MODIFIED="1518212959018" TEXT="len &gt;= depth"/>
+<node CREATED="1518212959895" ID="ID_930933486" MODIFIED="1518212965778" TEXT="len &lt;= depth+1"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1518145778249" ID="ID_462394658" MODIFIED="1518216304625" TEXT="F&#xe4;lle geschickt zusammenfassen (duplikate Aktionen)">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#efedc4" CREATED="1518213086862" ID="ID_1713281564" MODIFIED="1518215136125">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      not empty? UND
+    </p>
+    <p>
+      Create ODER totalyCovered?
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#4976b7" DESTINATION="ID_1713281564" ENDARROW="Default" ENDINCLINATION="-214;-32;" ID="Arrow_ID_1015037061" SOURCE="ID_1840655064" STARTARROW="None" STARTINCLINATION="-133;64;"/>
+<node CREATED="1518213159380" ID="ID_1113830798" MODIFIED="1518213515940" TEXT="ja?">
+<node CREATED="1518213162419" ID="ID_621215851" MODIFIED="1518213515940" TEXT="ggfs Elmnt anhngn"/>
+<node BACKGROUND_COLOR="#efbab6" CREATED="1518213219564" ID="ID_1128021646" MODIFIED="1518213810523" TEXT="move(Solution)"/>
+</node>
+<node CREATED="1518213134767" ID="ID_679511688" MODIFIED="1518214549232" TEXT="nein?">
+<node BACKGROUND_COLOR="#efedc4" CREATED="1518213337332" ID="ID_1046262927" MODIFIED="1518214602396" TEXT="Create UND Klausel explizit?">
+<node CREATED="1518214337116" ID="ID_1397265252" MODIFIED="1518214340389" TEXT="ja">
+<node BACKGROUND_COLOR="#efbab6" CREATED="1518213440630" ID="ID_343251054" MODIFIED="1518213851674" STYLE="bubble" TEXT="copy(Klausel)">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+</node>
+</node>
+<node CREATED="1518213451860" ID="ID_1801836476" MODIFIED="1518214363532" TEXT="sonst">
+<node BACKGROUND_COLOR="#b6c6f7" CREATED="1518213469114" ID="ID_955201730" MODIFIED="1518213765138" TEXT="next"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507082826" ID="ID_1177191870" MODIFIED="1517507092970" TEXT="R&#xfc;ckgabe per Value">
 <icon BUILTIN="flag-yellow"/>
@@ -25474,8 +25593,8 @@
 <node CREATED="1481688529539" ID="ID_1972961763" MODIFIED="1481688540109" TEXT="SessionManager ist zust&#xe4;ndig"/>
 <node CREATED="1481688544921" ID="ID_1934560784" MODIFIED="1481688561386" TEXT="wenn Session geladen, ist ProcDispatcher freigegeben"/>
 <node CREATED="1481688562830" ID="ID_708961458" MODIFIED="1481688582024" TEXT="SessionSubsystem startet processing loop im ProcDispatcher"/>
-<node CREATED="1481777252497" ID="ID_1789585729" MODIFIED="1517016477941" TEXT="Shutdown">
-<linktarget COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3225;0;" ID="Arrow_ID_1930701586" SOURCE="ID_1392452935" STARTARROW="None" STARTINCLINATION="2095;-126;"/>
+<node CREATED="1481777252497" ID="ID_1789585729" MODIFIED="1518215136837" TEXT="Shutdown">
+<linktarget COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3225;0;" ID="Arrow_ID_1930701586" SOURCE="ID_1392452935" STARTARROW="None" STARTINCLINATION="2096;-122;"/>
 <node CREATED="1481777297635" ID="ID_483368010" MODIFIED="1481777305432" TEXT="Deadlock-Gefahr">
 <icon BUILTIN="messagebox_warning"/>
 </node>

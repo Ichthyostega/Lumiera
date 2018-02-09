@@ -177,35 +177,43 @@ namespace interact {
        *        while the remaining, uncovered extension describes additional elements to be created.
        *        When the resolution process found an already existing UI element, the returned path
        *        is completely covered. The degree of coverage of a path can be found out with the
-       *        help of a UICoordResolver, which also needs a LocationQuery (service) to find out
-       *        about the currently existing UI topology.
+       *        help of a UICoordResolver, which also needs a LocationQuery (service) to discover
+       *        the currently existing UI topology.
        */
       UICoord
-      solve (LocationRule& rule, size_t depth, Symbol elementType)
+      solve (LocationRule& rule, size_t depth, Symbol elementTypeID)
         {
           for (auto& clause : rule)
             {
-              if (clause.pattern.size() > depth+1) continue;
+              // Clauses which do not at least describe an element at parent level
+              // will never lead to a solution and can thus be skipped
+              if (depth+1 < clause.pattern.size()
+                  or depth > clause.pattern.size())
+                continue;
+              
+              // try to solve the current Clause by matching against real UI topology
               UICoordResolver resolver{clause.pattern, getLocationQuery()};
-              resolver.coverPartially();
-              if (clause.createParents)
+              resolver.coverPartially(); // now either holds a solution or is empty
+              
+              if (not isnil(resolver)                     // Solution found!
+                  and (clause.createParents              //  The "create" case requires only some part to exist,
+                       or resolver.isCoveredTotally())) //   while in the default case we demand complete coverage
                 {
-                  if (not isnil (resolver))
-                    //////////////////////////////////////TODO ensure correct depth. Possibly append element itself
-                    return move (resolver);
-                  else
-                    if (clause.pattern.isExplicit())
-                      // allow creation of a totally new path
-                      // as long as it is complete and explicitly given
-                      return clause.pattern;
+                  if (depth == clause.pattern.size())
+                    // append ID of the new element to be created
+                    // unless it's already there (and thus exists)
+                    resolver.append (elementTypeID);
+                  return move (resolver);
+                      // use the first suitable solution and exit
                 }
               else
-                {
-                  if (not isnil (resolver) and resolver.isCoveredTotally())
-                    //////////////////////////////////////TODO ensure correct depth. Possibly append element itself
-                    return move (resolver);
-                }
+                if (clause.createParents and clause.pattern.isExplicit())
+                  // allow creation of a totally new path from scratch
+                  // as long as it is complete and explicitly given
+                  return clause.pattern;
             }
+           //all clauses tried without success...
+          return UICoord();
         }
       
     private:
