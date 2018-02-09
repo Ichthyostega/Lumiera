@@ -486,16 +486,17 @@ namespace test {
       
       
       /** @test resolve by matching, but retain an extraneous, uncovered extension.
-       * This is a variation of the UICoordResolver::cover() operation, which resolves any
-       * wildcards, while tolerating some additional elements behind the covered part,
-       * as long as those are explicit. The typical use case is when we're about to
-       * create a new UI element at a specific existing anchor location within the UI.
+       * This is a variation of the UICoordResolver::cover() operation, which likewise resolves
+       * any wildcards; but here we tolerate _additional elements below_ the covered part, as long
+       * as those are explicit. The typical use case is when we're about to create a new UI element
+       * at a specific existing anchor location within the UI. The extraneous uncovered part then
+       * describes those extra element yet to be created.
        */
       void
       verify_mutateCoverPartially()
         {
           GenNodeLocationQuery tree{MakeRec()
-                                      .set("window-1"
+                                      .set("window-2"
                                           , MakeRec()
                                               .type("persp-B")
                                               .set("panelY"
@@ -510,13 +511,16 @@ namespace test {
                                    };
           
           /* === explicitly given spec partially covered === */
-          UICoordResolver r1 {UICoord{"window-1","persp-B","panelY","otherView","tab"}, tree};
+          UICoordResolver r1 {UICoord{"window-2","persp-B","panelY","otherView","tab"}, tree};
           CHECK (3 == r1.coverDepth());
           r1.coverPartially();
           CHECK (not r1.isCovered());
           CHECK (3 == r1.coverDepth());
-          CHECK (r1.isCoveredPartially());
+          CHECK (r1.isCoveredPartially());                       // is covered down to the "panelY"
           CHECK ("UI:window-2[persp-B]-panelY.otherView.tab"  == string(r1));
+          r1.cover();
+          CHECK (r1.isCovered());                             // cover() retains the covered part only
+          CHECK ("UI:window-2[persp-B]-panelY"  == string(r1));
           
           /* === fill wildcard gap but retain uncovered extension === */
           UICoordResolver r2 {UICoord::currentWindow().view("someView").tab(3).path("sub"), tree};
@@ -530,8 +534,8 @@ namespace test {
           CHECK ("UI:window-2[persp-B]-panelY.someView"  == string(r2));
           
           /* === reject when gap can not be closed unambiguously === */
-          UICoordResolver r3 {UICoord::currentWindow().view("otherView").tab(3).path("sub"), tree};
-          CHECK (not r3.canCover());
+          UICoordResolver r3 {UICoord::currentWindow().view("someView").path("sub"), tree};
+          CHECK (not r3.canCover());                                 // NOTE: second gap here, tab info missing
           r3.coverPartially();
           CHECK (isnil (r3));
           
@@ -540,6 +544,7 @@ namespace test {
           r4.coverPartially();
           CHECK (isnil (r4));
         }
+      
       
       
       

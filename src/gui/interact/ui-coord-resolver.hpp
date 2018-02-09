@@ -420,7 +420,7 @@ namespace interact {
         }
       
       
-      /** mutate the path to resolve all wildcards to achieve partial coverage
+      /** mutate the path by resolving all wildcards to achieve partial coverage
        *  - anchorage and all wildcards will be resolved against current UI
        *  - but an extraneous, uncovered, explicit suffix is retained
        * @note if the coordinate spec can not be (partially) covered at all,
@@ -429,7 +429,31 @@ namespace interact {
       UICoordResolver&&
       coverPartially()
         {
-          UNIMPLEMENTED ("mutate to partial coverage, retaining extension");
+          if (isCoveredPartially() and not res_.covfefe)
+            {
+              ASSERT (res_.anchor);
+              window (res_.anchor); // just ensure the anchor info is explicit,
+            }                      //  the rest is already in place and explicit
+          else if (canCover())
+            {
+              ASSERT (res_.isResolved);
+              REQUIRE (res_.covfefe);
+              REQUIRE (uic_.size() >= res_.covfefe->size());
+              res_.depth = res_.covfefe->size();
+              // possibly overwrite placeholders by explicitly resolved info...
+              for (size_t pos = 0; pos < res_.depth; ++pos )
+                overwrite (pos, (*res_.covfefe)[pos]);
+              res_.covfefe.reset();
+            }
+          else
+            {
+              ASSERT (res_.isResolved);
+              REQUIRE (res_.depth == 0);
+              REQUIRE (not res_.covfefe);
+              truncateTo (0);
+            }
+          ENSURE (empty() or (isCoveredPartially() and uic_.isExplicit()));
+          return std::move (*this);                 // no wildcards remain
         }
       
       

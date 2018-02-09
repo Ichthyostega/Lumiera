@@ -8938,20 +8938,20 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518051827562" ID="ID_126260279" MODIFIED="1518052181911" TEXT="partielle coverage mit Rest">
+<node COLOR="#338800" CREATED="1518051827562" ID="ID_126260279" MODIFIED="1518143033239" TEXT="partielle coverage mit Rest">
 <linktarget COLOR="#647a94" DESTINATION="ID_126260279" ENDARROW="Default" ENDINCLINATION="-70;102;" ID="Arrow_ID_1703739591" SOURCE="ID_1400256094" STARTARROW="None" STARTINCLINATION="417;-7;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518051858813" ID="ID_712764658" MODIFIED="1518051937379" TEXT="Erfolg: alles explizit, teilweise gecovert">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1518051858813" ID="ID_712764658" MODIFIED="1518143241991" TEXT="Erfolg: alles explizit, teilweise gecovert">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518051877651" ID="ID_931862394" MODIFIED="1518051936595" TEXT="Erfolg: L&#xfc;cke schlie&#xdf;en, Rest erhalten">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518051877651" ID="ID_931862394" MODIFIED="1518143243864" TEXT="Erfolg: L&#xfc;cke schlie&#xdf;en, Rest erhalten">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518051909942" ID="ID_1891019118" MODIFIED="1518051935763" TEXT="Scheitern: kann L&#xfc;cke nicht schlie&#xdf;en">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518051909942" ID="ID_1891019118" MODIFIED="1518143247660" TEXT="Scheitern: kann L&#xfc;cke nicht schlie&#xdf;en">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518051925316" ID="ID_766944591" MODIFIED="1518051935012" TEXT="Scheitern: Rest enth&#xe4;lt noch Wildcards">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518051925316" ID="ID_766944591" MODIFIED="1518143250190" TEXT="Scheitern: Rest enth&#xe4;lt noch Wildcards">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -8989,18 +8989,18 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518052051947" ID="ID_1272905286" MODIFIED="1518052251086" TEXT="coverPartially">
+<node COLOR="#338800" CREATED="1518052051947" ID="ID_1272905286" MODIFIED="1518143016697" TEXT="coverPartially">
 <linktarget COLOR="#50546a" DESTINATION="ID_1272905286" ENDARROW="Default" ENDINCLINATION="394;1164;" ID="Arrow_ID_396720500" SOURCE="ID_1447232325" STARTARROW="None" STARTINCLINATION="1558;-33;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518052100828" ID="ID_1400256094" MODIFIED="1518052188048" TEXT="funktioniert analog zu cover()">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1518052100828" ID="ID_1400256094" MODIFIED="1518143014344" TEXT="funktioniert analog zu cover()">
 <arrowlink COLOR="#647a94" DESTINATION="ID_126260279" ENDARROW="Default" ENDINCLINATION="-70;102;" ID="Arrow_ID_1703739591" STARTARROW="None" STARTINCLINATION="417;-7;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518052123401" ID="ID_969568669" MODIFIED="1518052132337" TEXT="&#xfc;bernimmt &#xfc;bersch&#xfc;ssigen Rest">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518052123401" ID="ID_969568669" MODIFIED="1518143010646" TEXT="&#xfc;bernimmt &#xfc;bersch&#xfc;ssigen Rest">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518052149982" ID="ID_1099521506" MODIFIED="1518052165812" TEXT="sicherstellen, da&#xdf; keine Wildcards verbleiben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518052149982" ID="ID_1099521506" MODIFIED="1518143007944" TEXT="sicherstellen, da&#xdf; keine Wildcards verbleiben">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1515451105808" FOLDED="true" ID="ID_1323377531" MODIFIED="1515555619692" TEXT="extend">
@@ -9900,13 +9900,13 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507566761" ID="ID_839496495" MODIFIED="1517507584384" TEXT="UILocationSolver">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507576168" ID="ID_700127725" MODIFIED="1517507585119" TEXT="LocationClause">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507586447" ID="ID_170204980" MODIFIED="1517507595758" TEXT="eingebettete UI-Coord">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517507576168" ID="ID_700127725" MODIFIED="1518055354173" TEXT="LocationClause">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1517507586447" ID="ID_170204980" MODIFIED="1518055361860" TEXT="eingebettete UI-Coord">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507596445" ID="ID_386656276" MODIFIED="1517507605189" TEXT="zus&#xe4;tzliche Flags">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517507596445" ID="ID_386656276" MODIFIED="1518055359965" TEXT="zus&#xe4;tzliche Flags">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -9919,18 +9919,18 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505700422" ID="ID_387055301" MODIFIED="1517507668288" TEXT="erweiterte solve()-Methode">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505717508" ID="ID_636863312" MODIFIED="1517505726627" TEXT="Framework f&#xfc;r mehrere Klauseln">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517506971514" ID="ID_1227765715" MODIFIED="1517507659640" TEXT="Iterator(LocationClause const&amp;)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517505717508" ID="ID_636863312" MODIFIED="1518055340567" TEXT="Framework f&#xfc;r mehrere Klauseln">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1517506971514" ID="ID_1227765715" MODIFIED="1518055336685" TEXT="Iterator(LocationClause const&amp;)">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517508131749" ID="ID_1527522188" MODIFIED="1517508143236" TEXT="LocationRule">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517508131749" ID="ID_1527522188" MODIFIED="1518055334328" TEXT="LocationRule">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1517508155177" ID="ID_1404330274" MODIFIED="1518048327002" TEXT="vector(LocationClause (values))">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517508205555" ID="ID_1524544821" MODIFIED="1517508212539" TEXT="Iterator daraus generieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517508205555" ID="ID_1524544821" MODIFIED="1518055332380" TEXT="Iterator daraus generieren">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1517508218889" ID="ID_360290307" MODIFIED="1518048330162" TEXT="Alternative anf&#xfc;gen">
 <icon BUILTIN="button_ok"/>
@@ -9950,17 +9950,54 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507036433" ID="ID_921121750" MODIFIED="1517507092163" TEXT="zieht die Antwort bei ersem Erfolg">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518051766018" ID="ID_1447232325" MODIFIED="1518052251085" TEXT="brauche neue Resolver-Primitive">
+<node COLOR="#338800" CREATED="1518051766018" ID="ID_1447232325" MODIFIED="1518143325159" TEXT="brauche neue Resolver-Primitive">
 <arrowlink COLOR="#50546a" DESTINATION="ID_1272905286" ENDARROW="Default" ENDINCLINATION="394;1164;" ID="Arrow_ID_396720500" STARTARROW="None" STARTINCLINATION="1558;-33;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055049276" ID="ID_1963190796" MODIFIED="1518055056879" TEXT="Fallunterscheidung">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055059890" ID="ID_1240967474" MODIFIED="1518055088279" TEXT="Standard: alles bis auf Komponente selber">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055059890" ID="ID_1240967474" MODIFIED="1518055392625" TEXT="Standard-Fall">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055394000" ID="ID_1230502265" MODIFIED="1518055399228" TEXT="alles bis auf Komponente selber">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055089510" ID="ID_1374209563" MODIFIED="1518055104389" TEXT="Create-Case: partielle coverage erlauben">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055400412" ID="ID_1517580371" MODIFIED="1518055426432">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Komponente <i>falls n&#246;tig</i>&#160;anh&#228;ngen
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055089510" ID="ID_1374209563" MODIFIED="1518055441235" TEXT="Create-Fall">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055442607" ID="ID_93235547" MODIFIED="1518055447159" TEXT="partielle coverage erlauben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518055453981" ID="ID_1927049673" MODIFIED="1518055539515" TEXT="Frage: totale Neuerzeugung unterst&#xfc;tzen?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das w&#252;rde bedeuten, da&#223; man sogar ein neues Hauptfenster erzeugt.
+    </p>
+    <p>
+      Also in diesem Fall w&#252;rde &#252;berhaupt nichts mit dem existierenden UI matchen...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507082826" ID="ID_1177191870" MODIFIED="1517507092970" TEXT="R&#xfc;ckgabe per Value">
