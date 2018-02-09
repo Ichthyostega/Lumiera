@@ -116,8 +116,8 @@ namespace test {
           CHECK (isnil (solver.solve (rule, UIC_VIEW, "worldview")));
           
           // add second location clause to the rule
-          // (meaning: accept any suitable location within the first window)
-          rule.append(UICoord::firstWindow());
+          // (meaning: accept any path leading down to an "exclusivePanel")
+          rule.append(UICoord().panel("exclusivePanel"));
           
           // and now we get a solution, since the second rule can be wildcard-matched
           UICoord location = solver.solve (rule, UIC_VIEW, "worldview");
@@ -130,8 +130,9 @@ namespace test {
           //       To verify this, we attach a coordinate resolver (likewise backed by our dummy UI)
           UICoordResolver resolver{location, locationQuery};
           CHECK (resolver.isCoveredPartially());
-          CHECK (UIC_PANEL == resolver.coverDepth());
-        }
+          CHECK (not resolver.isCoveredTotally());
+          CHECK (UIC_VIEW == resolver.coverDepth());  // covered up to VIEW level
+        }                                            //  (the view itself is not covered)
       
       
       
