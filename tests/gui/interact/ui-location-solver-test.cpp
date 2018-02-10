@@ -140,6 +140,81 @@ namespace test {
       verify_cornerCases()
         {
           UNIMPLEMENTED ("cover some corner cases");
+          
+          /* === empty clause === */
+          
+          /* === empty clause is neutral === */
+          
+
+          /* === clause too short === */
+          
+          /* === clause too long === */
+          
+          
+          /* === query on existing window === */
+          
+          /* === query on generic window spec === */
+          
+          /* === query on non existing window === */
+          
+          /* === query on existing window with create clause === */
+          
+          /* === query on non existing window with create clause === */
+          
+          
+          /* === query on existing perspective === */
+          
+          /* === query on elided perspective === */
+          
+          /* === query on non existing perspective === */
+          
+          /* === query on non existing perspective with create clause === */
+          
+          
+          /* === query on deep path covered === */
+          
+          /* === query on deep path covered with create clause === */
+          
+          /* === query on deep path partially covered === */
+          
+          /* === query on deep path partially covered with create clause === */
+          
+          /* === query on deep path uncovered === */
+          
+          /* === query on deep path uncovered with create clause === */
+          
+          
+          /* === clause with wildcard covered === */
+          
+          /* === clause with wildcard covered without final element === */
+          
+          /* === create clause with wildcard completely covered === */
+          
+          /* === create clause with wildcard covered without final element === */
+          
+          /* === clause with wildcard partially covered === */
+          
+          /* === create clause with wildcard partially covered === */
+          
+          /* === clause with wildcard uncovered === */
+          
+          /* === create clause with wildcard uncovered === */
+          
+          
+          /* === two clauses both satisfied === */
+          
+          /* === two clauses first one unsatisfied === */
+          
+          /* === create clause first and satisfied === */
+          
+          /* === create clause first and unsatisfied === */
+          
+          /* === create clause second but first clause satisfied === */
+          
+          /* === create clause second and satisfied === */
+          
+          /* === create clause second and both unsatisfied === */
+          
         }
       
       
@@ -147,6 +222,27 @@ namespace test {
       verify_standardSituations()
         {
           UNIMPLEMENTED ("emulate the relevant standard situations of view location resolution");
+          
+          /* === match by perspective + panel === */
+          
+          /* === match by window + panel === */
+          
+          /* === match by panel alone === */
+          
+          /* === match on create clause with generic window spec and panel === */
+          
+          
+          /* === wildcard match on view === */
+          
+          /* === wildcard match on panel and view appended === */
+          
+          
+          /* === successful create clause with wildcard === */
+          
+          /* === unsatisfied create clause with wildcard === */
+          
+          /* === completely uncovered create-from-scratch === */
+          
         }
     };
   
