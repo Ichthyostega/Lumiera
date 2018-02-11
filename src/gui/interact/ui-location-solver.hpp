@@ -204,7 +204,7 @@ namespace interact {
        *        the currently existing UI topology.
        */
       UICoord
-      solve (LocationRule& rule, size_t depth, Symbol elementTypeID)
+      solve (LocationRule const& rule, size_t depth, Symbol elementTypeID)
         {
           for (auto& clause : rule)
             {

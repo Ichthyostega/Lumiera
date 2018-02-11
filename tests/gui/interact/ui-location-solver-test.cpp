@@ -191,8 +191,15 @@ namespace test {
           
 
           /* === clause too short === */
+          LocationRule r2{UICoord().path("down/the")};
+          CHECK (    isnil (solver.solve (r2, UIC_PATH+3, "sink")));
           
           /* === clause too long === */
+          CHECK (    isnil (solver.solve (r2, UIC_VIEW, "theView")));
+          
+          CHECK (not isnil (solver.solve (r2, UIC_PATH+1, "any")));
+          CHECK (not isnil (solver.solve (r2, UIC_PATH+2, "kitchen")));
+          
           
           
           /* === query on existing window === */
