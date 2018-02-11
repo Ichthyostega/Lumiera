@@ -183,11 +183,12 @@ namespace test {
           /* === empty clause === */
           LocationRule r1{UICoord()};
           CHECK (isnil (solver.solve (r1, UIC_PATH, "to/salvation")));
+          CHECK (isnil (solver.solve (r1, UIC_WINDOW, "redemption")));
           
           /* === empty clause is neutral === */
           r1.append (UICoord().path("down/to").create());
           auto s1 = solver.solve(r1, UIC_PATH+2, "hell");
-          CHECK ("UI:win[A]-thePanel.theView.#5/down/to/hell" == string(s1));
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/to/hell" == string{s1});
           
 
           /* === clause too short === */
@@ -203,14 +204,24 @@ namespace test {
           
           
           /* === query on existing window === */
+          LocationRule r31{UICoord::window("win")};
+          CHECK ("UI:win" == string{solver.solve (r31, UIC_WINDOW, "wigwam")});
           
           /* === query on generic window spec === */
+          LocationRule r32{UICoord::currentWindow()};
+          CHECK ("UI:win" == string{solver.solve (r32, UIC_WINDOW, "wigwam")});
           
           /* === query on non existing window === */
+          LocationRule r33{UICoord::window("lindows")};
+          CHECK (isnil (solver.solve (r33, UIC_WINDOW, "wigwam")));
           
           /* === query on existing window with create clause === */
+          LocationRule r34{UICoord::window("win").create()};
+          CHECK ("UI:win" == string{solver.solve (r34, UIC_WINDOW, "wigwam")});
           
           /* === query on non existing window with create clause === */
+          LocationRule r35{UICoord::window("windux").create()};
+          CHECK ("UI:windux" == string{solver.solve (r35, UIC_WINDOW, "wigwam")});
           
           
           /* === query on existing perspective === */
