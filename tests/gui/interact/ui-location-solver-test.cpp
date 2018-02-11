@@ -30,7 +30,7 @@
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-location-solver.hpp"
 #include "gui/interact/gen-node-location-query.hpp"
-#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp" ////////////TODO
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
@@ -181,12 +181,12 @@ namespace test {
           
           
           /* === empty clause === */
-          LocationRule r1 = UICoord();
+          LocationRule r1{UICoord()};
           CHECK (isnil (solver.solve (r1, UIC_PATH, "to/salvation")));
           
           /* === empty clause is neutral === */
-          r1.append (UICoord().path("down/to/hell"));
-          auto s1 = solver.solve(r1, UIC_PATH+2, "well");
+          r1.append (UICoord().path("down/to").create());
+          auto s1 = solver.solve(r1, UIC_PATH+2, "hell");
           CHECK ("UI:win[A]-thePanel.theView.#5/down/to/hell" == string(s1));
           
 

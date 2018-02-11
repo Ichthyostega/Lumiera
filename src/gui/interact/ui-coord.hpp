@@ -41,6 +41,37 @@
  ** 
  ** @note UICoord is designed with immutability in mind; possibly we may decide to disallow assignment.
  ** 
+ ** # Coordinate Builder
+ ** 
+ ** Since UI-Coordinates are conceived as immutable values, we provide a distinct _Builder notation_
+ ** for the purpose of defining and assembling coordinate specifications. This notation also helps
+ ** to keep such specifications more readable, since each component is "tagged" with its intended
+ ** position within the tree, and thus the order of definition is irrelevant. Relying on that
+ ** notation, it is also possible to write _sparse_ or _incomplete_ coordinate specifications,
+ ** since each component _not explicitly given_ is assumed to be a _wildcard_ (`*`). E.g.
+ ** 
+ **     UICoord::currentWindow()
+ **             .path("a/b/c")
+ **             .tab(3)
+ **             .view("Timeline")
+ ** 
+ ** is translated into the following UI-Coordinate specification
+ ** 
+ **     UI::currentWindow[*]-*.Timeline.#3/a/b/c
+ ** 
+ ** which indicates the currently active main window, disregarding the perspective, just some
+ ** panel, holding the view "Timeline", selecting the third tab/group within this view and there
+ ** to descend the path of local sub-components "c" nested within "b" nested within "a"
+ ** 
+ ** @warning beware, all the builder functions offer a *move* reference!
+ **          These builder expressions are intended for typical inline constant expressions
+ **          according to the *builder pattern*; any other use, like assignment of the builder
+ **          itself to a variable might be dangerous, since, after using the builder result
+ **          _just once_, the result has been moved away. Even worse, this fact may remain
+ **          concealed, since short Coordinate specs use inline storage, which the compiler
+ **          may choose to copy instead of actually moving; only the heap allocated extension
+ **          will typically be moved.
+ ** 
  ** @see UICoord_test
  ** @see id-scheme.hpp
  ** @see view-spec-dsl.hpp
@@ -465,6 +496,8 @@ namespace interact {
   
   /* === Builder API === */
   
+  class LocationClause;
+  
   class UICoord::Builder
     {
     protected:
@@ -595,6 +628,10 @@ namespace interact {
           uic_.truncateTo (depth);
           return std::move (*this);
         }
+      
+      /** support for use in the [ViewSpec-DSL](\ref ui-location-solver.hpp) */
+      operator LocationClause();
+      LocationClause create();
       
     protected:
       Builder&&

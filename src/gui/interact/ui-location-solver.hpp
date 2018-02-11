@@ -97,7 +97,7 @@ namespace interact {
       Clauses clauses_;
       
     public:
-      LocationRule (UICoord && firstRule)
+      LocationRule (LocationClause && firstRule)
         : clauses_{}
         {
           this->append (move (firstRule));
@@ -108,7 +108,7 @@ namespace interact {
       
       
       LocationRule&&
-      append (UICoord && furtherRule)
+      append (LocationClause && furtherRule)
         {
           clauses_.emplace_back (move (furtherRule));
           return move (*this);
@@ -119,6 +119,29 @@ namespace interact {
       iterator begin() const { return iterator{clauses_.begin(), clauses_.end()}; }
       iterator end()   const { return iterator(); }
     };
+  
+  
+  /* ==== Support of UI-Coordinate notation within the ViewSpec-DSL ==== */
+  
+  /** interprets the current (inline) contents of an UICoord builder expression
+   * as a standard LocationClause, which has the meaning of "when an element
+   * exists at the location XYZ in the real UI"
+   * @warning like all the UICoord::Builder functions, the contents are moved.
+   *          Thus, after using this conversion path _once_, the Builder _is defunct_
+   */
+  inline
+  UICoord::Builder::operator LocationClause()
+  {
+    return LocationClause{move(*this), false};
+  }
+  
+  /** interprets the current (inline) builder contents as _create clause_,
+   * which has the meaning "create a new element XYZ when possible" */
+  inline LocationClause
+  UICoord::Builder::create()
+  {
+    return LocationClause{move(*this), true};
+  }
   
   
   /** DSL operator to assemble a sequence of clauses.

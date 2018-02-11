@@ -9923,7 +9923,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518312817798" ID="ID_473624624" MODIFIED="1518312839006">
+<node COLOR="#338800" CREATED="1518312817798" ID="ID_473624624" MODIFIED="1518317860441">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -9935,7 +9935,7 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505346701" ID="ID_1733459677" MODIFIED="1518219028843" TEXT="LocationSolver einf&#xfc;hren">
@@ -10172,8 +10172,12 @@
 <node COLOR="#338800" CREATED="1518312788963" ID="ID_1715641481" MODIFIED="1518312793227" TEXT="brauche Setup">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518312794346" ID="ID_98359518" MODIFIED="1518312805737" TEXT="Schreibweise f&#xfc;r create-Klauseln im Test">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518312794346" ID="ID_98359518" MODIFIED="1518317924513" TEXT="Schreibweise f&#xfc;r create-Klauseln im Test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1518317872064" ID="ID_230463403" MODIFIED="1518317891161" TEXT="verwende normale Koordinaten-Notation">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1518317892197" ID="ID_20769359" MODIFIED="1518317915421" TEXT="forward-Definition des Konversionsoperators"/>
 </node>
 </node>
 </node>
