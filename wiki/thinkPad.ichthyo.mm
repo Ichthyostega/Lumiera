@@ -9923,6 +9923,20 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518312817798" ID="ID_473624624" MODIFIED="1518312839006">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Schreibweise f&#252;r <i>create Clauses</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505346701" ID="ID_1733459677" MODIFIED="1518219028843" TEXT="LocationSolver einf&#xfc;hren">
 <linktarget COLOR="#7999a3" DESTINATION="ID_1733459677" ENDARROW="Default" ENDINCLINATION="460;0;" ID="Arrow_ID_1447990036" SOURCE="ID_570287604" STARTARROW="None" STARTINCLINATION="-15;211;"/>
@@ -10155,6 +10169,12 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505737977" ID="ID_1981924615" MODIFIED="1517506790089" TEXT="Unit-Test">
 <arrowlink COLOR="#465888" DESTINATION="ID_957265584" ENDARROW="Default" ENDINCLINATION="351;-62;" ID="Arrow_ID_1922023705" STARTARROW="None" STARTINCLINATION="-226;69;"/>
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518312788963" ID="ID_1715641481" MODIFIED="1518312793227" TEXT="brauche Setup">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518312794346" ID="ID_98359518" MODIFIED="1518312805737" TEXT="Schreibweise f&#xfc;r create-Klauseln im Test">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -10225,6 +10245,9 @@
 </node>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518312758758" ID="ID_675085959" MODIFIED="1518312769326" TEXT="Schreibweise f&#xfc;r create-Klauseln">
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631675752" ID="ID_1586757410" MODIFIED="1515631712140" TEXT="Repr&#xe4;sentation als Liste von UICoord">
 <icon BUILTIN="flag-yellow"/>
@@ -10793,8 +10816,8 @@
 <node CREATED="1518220764202" ID="ID_1551836374" MODIFIED="1518221675074" TEXT="geht nicht">
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518220767426" ID="ID_1678897927" MODIFIED="1518221677895" TEXT="aber eine leere Klausel geht">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518220767426" ID="ID_1678897927" MODIFIED="1518312514423" TEXT="aber eine leere Klausel geht">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518221630349" ID="ID_748354557" MODIFIED="1518221679006" TEXT="leere Klausel plus andere">
 <icon BUILTIN="flag-yellow"/>

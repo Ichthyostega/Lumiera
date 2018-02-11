@@ -136,14 +136,58 @@ namespace test {
       
       
       
+      /** @test cover theoretical corner cases regarding the process of location solving.
+       * Point in question are the requirements and limits when querying against one or several 
+       * location specification clauses. The actual matching of a location pattern against a UI topology
+       * is beyond scope and covered [elsewhere](\ref UICoordResolver_test::verify_mutateCoverage)
+       * - empty clauses act as neutral element
+       * - prerequisites regarding the depth of a location clause relevant for solution
+       * - the impact of the query and especially its expected depth
+       * - completely explicit clauses vs clauses with wildcards
+       * - relevance of partial or total coverage for the solution
+       * - regular clauses vs. _create clauses_ (which mandate creating parents as needed)
+       * - usage of the first applicable solution when several clauses are given
+       */
       void
       verify_cornerCases()
         {
-          UNIMPLEMENTED ("cover some corner cases");
+           //-------------------------------------------------------------Test-Fixture
+          GenNodeLocationQuery tree{MakeRec()
+                                      .set("win"
+                                          , MakeRec()
+                                              .type("A")
+                                              .set ("thePanel"
+                                                   , MakeRec()
+                                                       .set ("theView"
+                                                            , MakeRec()
+                                                                .set ("#5"
+                                                                     , MakeRec()
+                                                                         .set ("down"
+                                                                              , MakeRec()
+                                                                                  .set ("the"
+                                                                                       , MakeRec()
+                                                                                           .set ("kitchen"
+                                                                                                , MakeRec()
+                                                                                                    .set ("sink", MakeRec())
+                                                                                                )
+                                                                                       )
+                                                                              )
+                                                                     )
+                                                            )
+                                                   )
+                                          )};
+          UILocationSolver solver{tree};
+          //--------------------------------------------------------------(End)Test-Fixture
+          
           
           /* === empty clause === */
+          LocationRule r1 = UICoord();
+          CHECK (isnil (solver.solve (r1, UIC_PATH, "to/salvation")));
           
           /* === empty clause is neutral === */
+          r1.append (UICoord().path("down/to/hell"));
+          auto s1 = solver.solve(r1, UIC_PATH+2, "well");
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/to/hell" == string(s1));
           
 
           /* === clause too short === */
