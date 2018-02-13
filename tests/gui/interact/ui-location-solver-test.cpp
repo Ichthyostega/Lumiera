@@ -246,16 +246,34 @@ namespace test {
           
           
           /* === query on deep path covered === */
+          LocationRule r51{UICoord("firstWindow","A","thePanel","theView","#5","down","the","kitchen")};
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen"       == string{solver.solve (r51, UIC_PATH+2, "drain")});
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen/drain" == string{solver.solve (r51, UIC_PATH+3, "drain")});
           
           /* === query on deep path covered with create clause === */
+          LocationRule r52{UICoord::firstWindow().append("A/thePanel/theView/#5/down/the/kitchen").create()};
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen"       == string{solver.solve (r52, UIC_PATH+2, "drain")});
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen/drain" == string{solver.solve (r52, UIC_PATH+3, "drain")});
           
           /* === query on deep path partially covered === */
+          LocationRule r53{UICoord::firstWindow().append("A/thePanel/theView/#5/down/the/drain")};
+          CHECK (isnil (solver.solve (r53, UIC_PATH+2, "drain")));
+          CHECK (isnil (solver.solve (r53, UIC_PATH+3, "drain")));
           
           /* === query on deep path partially covered with create clause === */
+          LocationRule r54{UICoord::firstWindow().append("A/thePanel/theView/#5/down/the/drain").create()};
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/drain"         == string{solver.solve (r54, UIC_PATH+2, "drain")});
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/drain/drain"   == string{solver.solve (r54, UIC_PATH+3, "drain")});
           
           /* === query on deep path uncovered === */
+          LocationRule r55{UICoord("rearWindow","A","thePanel","theView","#5","down","the","kitchen")};
+          CHECK (isnil (solver.solve (r55, UIC_PATH+2, "floor")));
+          CHECK (isnil (solver.solve (r55, UIC_PATH+3, "floor")));
           
           /* === query on deep path uncovered with create clause === */
+          LocationRule r56{UICoord("rearWindow","A","thePanel","theView","#5","down","the","kitchen").rebuild().create()};
+          CHECK ("UI:rearWindow[A]-thePanel.theView.#5/down/the/kitchen"       == string{solver.solve (r56, UIC_PATH+2, "floor")});
+          CHECK ("UI:rearWindow[A]-thePanel.theView.#5/down/the/kitchen/floor" == string{solver.solve (r56, UIC_PATH+3, "floor")});
           
           
           /* === clause with wildcard covered === */

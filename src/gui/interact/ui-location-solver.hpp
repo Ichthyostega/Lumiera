@@ -233,7 +233,12 @@ namespace interact {
                 if (clause.createParents and clause.pattern.isExplicit())
                   // allow creation of a totally new path from scratch
                   // as long as it is complete and explicitly given
-                  return clause.pattern;
+                  {
+                    if (depth == clause.pattern.size())
+                      return clause.pattern.append (elementTypeID);
+                    else
+                      return clause.pattern;
+                  }
             }
            //all clauses tried without success...
           return UICoord();
