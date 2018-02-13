@@ -277,20 +277,34 @@ namespace test {
           
           
           /* === clause with wildcard covered === */
+          LocationRule r61{UICoord().path("//kitchen")};
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen"       == string{solver.solve (r61, UIC_PATH+2, "drain")});
           
           /* === clause with wildcard covered without final element === */
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen/drain" == string{solver.solve (r61, UIC_PATH+3, "drain")});
           
           /* === create clause with wildcard completely covered === */
+          LocationRule r62{UICoord().path("//kitchen").create()};
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen"       == string{solver.solve (r62, UIC_PATH+2, "window")});
           
           /* === create clause with wildcard covered without final element === */
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/kitchen/window" == string{solver.solve (r62, UIC_PATH+3, "window")});
           
           /* === clause with wildcard partially covered === */
+          LocationRule r63{UICoord().path("/the/road")};
+          CHECK (isnil (solver.solve (r63, UIC_PATH+2, "kitchen")));   //NOTE: .../down/the/kitchen would match, but actually .../down/the/road is tested, which fails
           
           /* === create clause with wildcard partially covered === */
+          LocationRule r64{UICoord().path("/the/road").create()};
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/the/road" == string{solver.solve (r64, UIC_PATH+2, "drain")});
           
           /* === clause with wildcard uncovered === */
+          LocationRule r65{UICoord().path("//road")};
+          CHECK (isnil (solver.solve (r65, UIC_PATH+2, "kitchen")));
           
           /* === create clause with wildcard uncovered === */
+          LocationRule r66{UICoord().path("//road").create()};
+          CHECK (isnil (solver.solve (r66, UIC_PATH+2, "kitchen")));
           
           
           /* === two clauses both satisfied === */
