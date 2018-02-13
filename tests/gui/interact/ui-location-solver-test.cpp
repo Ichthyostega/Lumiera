@@ -225,12 +225,24 @@ namespace test {
           
           
           /* === query on existing perspective === */
+          LocationRule r41{UICoord().persp("A")};
+          CHECK ("UI:win[A]"   == string{solver.solve (r41, UIC_PERSP, "x")});
+          CHECK ("UI:win[A]-x" == string{solver.solve (r41, UIC_PANEL, "x")});
           
           /* === query on elided perspective === */
+          LocationRule r42{UICoord().persp(UIC_ELIDED)};
+//        CHECK ("UI:win[A]"   == string{solver.solve (r42, UIC_PERSP, "x")}); //////////////////////////////TICKET #1128 : support existential quantification
+//        CHECK ("UI:win[A]-x" == string{solver.solve (r42, UIC_PANEL, "x")});
           
           /* === query on non existing perspective === */
+          LocationRule r43{UICoord::firstWindow().persp("Ω")};
+          CHECK (isnil (solver.solve (r43, UIC_PERSP, "x")));
+          CHECK (isnil (solver.solve (r43, UIC_PANEL, "x")));
           
           /* === query on non existing perspective with create clause === */
+          LocationRule r44{UICoord::firstWindow().persp("Ω").create()};
+          CHECK ("UI:win[Ω]"   == string{solver.solve (r44, UIC_PERSP, "x")});
+          CHECK ("UI:win[Ω]-x" == string{solver.solve (r44, UIC_PANEL, "x")});
           
           
           /* === query on deep path covered === */
