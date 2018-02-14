@@ -10950,22 +10950,39 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517506289222" ID="ID_1250541940" MODIFIED="1518573725304" TEXT="praktische Standard-F&#xe4;lle">
 <icon BUILTIN="pencil"/>
+<node CREATED="1518575724831" ID="ID_712009155" MODIFIED="1518579539092" TEXT="Idee">
+<icon BUILTIN="idea"/>
+<node CREATED="1518575730894" ID="ID_24825251" MODIFIED="1518575750656">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nur <i>einen Satz</i>&#160;Klauseln
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1518575751651" ID="ID_1423547228" MODIFIED="1518575765468" TEXT="stattdessen den Test-&quot;Baum&quot; variieren"/>
+<node CREATED="1518575766889" ID="ID_1639479655" MODIFIED="1518575777979" TEXT="damit die Situationen der realen Regeln nachbilden"/>
+<node CREATED="1518575779991" ID="ID_1194432520" MODIFIED="1518575791081" TEXT="und beweisen, da&#xdf; die Ergebnisse eindeutig sind"/>
+</node>
+<node COLOR="#338800" CREATED="1518579541832" ID="ID_512680632" MODIFIED="1518579550376" TEXT="flexibles Test-Setup hierf&#xfc;r">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1518221768370" ID="ID_958994214" MODIFIED="1518487921072" TEXT="match by">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223023735" ID="ID_1788599676" MODIFIED="1518487921072" TEXT="pespective + panel">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223029399" ID="ID_1184092341" MODIFIED="1518487921072" TEXT="window + panel">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223029399" ID="ID_1184092341" MODIFIED="1518574786042" TEXT="generic window + existing panel">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223039229" ID="ID_427870686" MODIFIED="1518487921072" TEXT="panel alone">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223044301" ID="ID_1476637837" MODIFIED="1518487921072" TEXT="generic window + panel create">
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-<node CREATED="1518223077376" ID="ID_586407261" MODIFIED="1518487921072" TEXT="match">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223101637" ID="ID_481219776" MODIFIED="1518487921072" TEXT="wildcard view">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223101637" ID="ID_481219776" MODIFIED="1518579487507" TEXT="wildcard view + specific tab">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223107508" ID="ID_254700276" MODIFIED="1518487921072" TEXT="wildcard panel + view appended">
@@ -10977,6 +10994,9 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223149750" ID="ID_1733413613" MODIFIED="1518487921072" TEXT="on wildcard fail">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223044301" ID="ID_1476637837" MODIFIED="1518579513685" TEXT="generic window + panel create">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223201375" ID="ID_1794858276" MODIFIED="1518487921072" TEXT="complete create">

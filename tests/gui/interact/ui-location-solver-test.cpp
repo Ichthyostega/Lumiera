@@ -348,18 +348,52 @@ namespace test {
         }
       
       
+      /** @test emulate the relevant standard situations of view location resolution.
+       * The typical location specifications to be expected in practice can be subsumed
+       * under a small selection of standard situations; this test demonstrates how these
+       * are triggered by specific tree configurations in a (hopefully) obvious way.
+       * 
+       * For this purpose, we create a single set of location clauses here, but evaluate them
+       * each time against different (simulated) UI tree configurations to verify that the expected
+       * resulting location is actually derived in all those cases.
+       */
       void
       verify_standardSituations()
         {
-          UNIMPLEMENTED ("emulate the relevant standard situations of view location resolution");
+          // Test Fixture: a solver which always queries the current state of a (simulated) uiTree
+          Rec uiTree;
+          std::unique_ptr<GenNodeLocationQuery> query;
+          UILocationSolver solver{[&]() -> GenNodeLocationQuery&
+                                     {
+                                       query.reset (new GenNodeLocationQuery(uiTree));
+                                       return *query;
+                                     }};
+          
+          // Test Fixture: common set of location clauses
+          LocationRule location{UICoord().persp("edit").panel("viewer")};
+          location.append      (UICoord::currentWindow().panel("viewer"));
+          location.append      (UICoord().panel("viewer"));
+          location.append      (UICoord().tab("type(Asset)"));
+          location.append      (UICoord().persp("asset").view("asset"));
+          location.append      (UICoord().view("asset").tab("type(Asset)").create());
+          location.append      (UICoord::currentWindow().panel("viewer").create());
+          location.append      (UICoord::window("meta").panel("infobox").view("inspect").create());
+          
+          cout << location << endl;
+          
           
           /* === match by perspective + panel === */
+          uiTree = MakeRec()
+                     .set("win"
+                         , MakeRec()
+                             .type("edit")
+                             .set ("viewer", MakeRec()));
+          cout << solver.solve (location, UIC_VIEW, "videoViewer") <<endl;
+          cout << solver.solve (location, UIC_TAB, "clipAssets") <<endl;
           
-          /* === match by window + panel === */
+          /* === match by generic window + panel === */
           
           /* === match by panel alone === */
-          
-          /* === match on create clause with generic window spec and panel === */
           
           
           /* === wildcard match on view === */
@@ -370,6 +404,8 @@ namespace test {
           /* === successful create clause with wildcard === */
           
           /* === unsatisfied create clause with wildcard === */
+          
+          /* === match on create clause with generic window spec and panel === */
           
           /* === completely uncovered create-from-scratch === */
           
