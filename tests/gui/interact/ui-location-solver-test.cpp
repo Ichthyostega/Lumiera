@@ -162,6 +162,7 @@ namespace test {
                                                             , MakeRec()
                                                                 .set ("#5"
                                                                      , MakeRec()
+                                                                         .set ("up", MakeRec())
                                                                          .set ("down"
                                                                               , MakeRec()
                                                                                   .set ("the"
@@ -308,19 +309,42 @@ namespace test {
           
           
           /* === two clauses both satisfied === */
+          LocationRule r71{UICoord().path("down")};
+          r71.append      (UICoord().path("up"));
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/time" == string{solver.solve (r71, UIC_PATH+1, "time")});
           
           /* === two clauses first one unsatisfied === */
+          LocationRule r72{UICoord().path("up/the")};
+          r72.append      (UICoord().path("down/"));
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/time" == string{solver.solve (r72, UIC_PATH+1, "time")});
           
           /* === create clause first and satisfied === */
+          LocationRule r73{UICoord().path("up/link").create()};
+          r73.append      (UICoord().path("down/"));
+          CHECK ("UI:win[A]-thePanel.theView.#5/up/link"   == string{solver.solve (r73, UIC_PATH+1, "time")});
           
           /* === create clause first and unsatisfied === */
+          LocationRule r74{UICoord().path("cross/link").create()};
+          r74.append      (UICoord().path("down/"));
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/time" == string{solver.solve (r74, UIC_PATH+1, "time")});
           
           /* === create clause second but first clause satisfied === */
+          LocationRule r75{UICoord().path("up/")};
+          r75.append      (UICoord().path("down/link").create());
+          CHECK ("UI:win[A]-thePanel.theView.#5/up/time"   == string{solver.solve (r75, UIC_PATH+1, "time")});
           
           /* === create clause second and satisfied === */
+          LocationRule r76{UICoord().path("up/link")};
+          r76.append      (UICoord().path("down/link").create());
+          CHECK ("UI:win[A]-thePanel.theView.#5/down/link" == string{solver.solve (r76, UIC_PATH+1, "time")});
           
           /* === create clause second and both unsatisfied === */
+          LocationRule r77{UICoord().path("up/link")};
+          r77.append      (UICoord().path("town/link").create());
+          CHECK (isnil (solver.solve (r77, UIC_PATH+1, "time")));
           
+          CHECK (string{r77} == "=~	.. UI:?/up/link"
+                                "\n	OR UI:?/town/link create!");
         }
       
       

@@ -46,21 +46,22 @@
 //#include "lib/meta/function.hpp"
 //#include "lib/meta/tuple-helper.hpp"
 //#include "lib/meta/function-closure.hpp"
+#include "lib/format-util.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
 
-//#include <functional>
 #include <boost/noncopyable.hpp>
 #include <utility>
 #include <vector>
+#include <string>
 
 
 namespace gui {
 namespace interact {
   
-//  using std::forward;
-  using std::move;
   using lib::Symbol;
+  using std::string;
+  using std::move;
   
   
   class LocationQuery;
@@ -86,6 +87,8 @@ namespace interact {
         : pattern{move (rr.pattern)}
         , createParents{rr.createParents}
         { }
+      
+      operator string() const;
     };
   
   
@@ -118,7 +121,10 @@ namespace interact {
       using iterator = lib::RangeIter<Clauses::const_iterator>;
       iterator begin() const { return iterator{clauses_.begin(), clauses_.end()}; }
       iterator end()   const { return iterator(); }
+      
+      operator string() const;
     };
+  
   
   
   /* ==== Support of UI-Coordinate notation within the ViewSpec-DSL ==== */
@@ -162,6 +168,23 @@ namespace interact {
   {
     ruleSet.append (move (furtherRule));
     return move(ruleSet);
+  }
+  
+  
+  
+  /* === diagnostics === */
+  
+  inline
+  LocationClause::operator string()  const
+  {
+    return string{pattern}
+         + (createParents? " create!":"");
+  }
+  inline
+  LocationRule::operator string()  const
+  {
+    return "=~\t.. "
+         + util::join(clauses_, "\n\tOR ");
   }
   
   
