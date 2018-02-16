@@ -122,9 +122,9 @@ namespace interact {
     };
   
   
-  extern Symbol UIC_CURRENT_WINDOW; ///< window spec to refer to the _current window_ @see view-locator.cpp
-  extern Symbol UIC_FIRST_WINDOW;   ///< window spec to refer to the _first window_ of the application
-  extern Symbol UIC_ELIDED;         ///< indicate that a component is elided or irrelevant here
+  extern const Symbol UIC_CURRENT_WINDOW; ///< window spec to refer to the _current window_ @see view-locator.cpp
+  extern const Symbol UIC_FIRST_WINDOW;   ///< window spec to refer to the _first window_ of the application
+  extern const Symbol UIC_ELIDED;         ///< indicate that a component is elided or irrelevant here
   
   
   

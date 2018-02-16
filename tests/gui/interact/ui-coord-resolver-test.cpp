@@ -429,6 +429,14 @@ namespace test {
           CHECK ("UI:currentWindow[*]-panelZ.*.tab"          == string(r34));
           CHECK ("UI:window-3[persp-C]-panelZ.thirdView.tab" == string(r34.cover()));              // Note: rest of the path would also match on window-1, but currentWindow == window-3
           
+          UICoordResolver r35 {UICoord::currentWindow().persp(UIC_ELIDED).panel("panelZ").tab("tab"), tree};
+          CHECK ("UI:currentWindow[.]-panelZ.*.tab"          == string(r35));
+          CHECK ("UI:window-3[persp-C]-panelZ.thirdView.tab" == string(r35.cover()));              // elided (existentially quantified) element interpolated similar to a wildcard
+          
+          UICoordResolver r36 {UICoord::currentWindow().panel(UIC_ELIDED).view("nonexisting"), tree};
+          CHECK ("UI:currentWindow[*]-..nonexisting"         == string(r36));
+          CHECK ("UI:window-3[persp-C]-panelZ"               == string(r36.cover()));              // ...but elided counts as existing element and matches arbitrarily (-> contrast this to r44)
+          
           
           /* === trailing wildcards stripped automatically === */
           UICoordResolver r41 {UICoord::window("window-2").append("*/*"), tree};
@@ -543,6 +551,19 @@ namespace test {
           UICoordResolver r4 {UICoord::currentWindow().tab(3).path("sub"), tree};
           r4.coverPartially();
           CHECK (isnil (r4));
+          
+          /* === existentially quantified (elided) element constitutes partial coverage === */
+          UICoordResolver r5 {UICoord::currentWindow().persp(UIC_ELIDED).panel("fantasy").view("fantomas"), tree};
+          CHECK ("UI:currentWindow[.]-fantasy.fantomas"  == string(r5));
+          CHECK (1 == r5.coverDepth());
+          r5.coverPartially();
+          CHECK (not r5.isCovered());
+          CHECK (2 == r5.coverDepth());     // Note side-effect of computing the coverage...
+          CHECK (r5.isCoveredPartially());  // it is known to be covered including "the" perspective
+          CHECK ("UI:window-2[persp-B]-fantasy.fantomas"  == string(r5));
+          r5.cover();
+          CHECK ("UI:window-2[persp-B]"  == string(r5));
+          CHECK (2 == r5.coverDepth());
         }
       
       

@@ -63,9 +63,9 @@ namespace interact {
   
   /* ==== definitions and concrete bindings for the View-Spec-DSL ==== */
   
-  Symbol UIC_CURRENT_WINDOW{"currentWindow"};
-  Symbol UIC_FIRST_WINDOW  {"firstWindow"};
-  Symbol UIC_ELIDED        {"."};
+  const Symbol UIC_CURRENT_WINDOW{"currentWindow"};
+  const Symbol UIC_FIRST_WINDOW  {"firstWindow"};
+  const Symbol UIC_ELIDED        {"."};
   
   
   

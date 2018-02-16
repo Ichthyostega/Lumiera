@@ -8538,7 +8538,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517508915741" ID="ID_974516393" MODIFIED="1517509657311">
+<node COLOR="#338800" CREATED="1517508915741" ID="ID_974516393" MODIFIED="1518750409200">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -8550,8 +8550,9 @@
   </body>
 </html>
 </richcontent>
+<arrowlink COLOR="#7e9da8" DESTINATION="ID_796216711" ENDARROW="Default" ENDINCLINATION="989;-91;" ID="Arrow_ID_925245331" STARTARROW="None" STARTINCLINATION="199;-5;"/>
 <linktarget COLOR="#91a7b5" DESTINATION="ID_974516393" ENDARROW="Default" ENDINCLINATION="-759;53;" ID="Arrow_ID_862004765" SOURCE="ID_140988955" STARTARROW="None" STARTINCLINATION="1590;41;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1514897795054" ID="ID_1126804251" MODIFIED="1514897809479" TEXT="Erweiterung: verschiedne Filter">
@@ -8870,12 +8871,30 @@
 <node COLOR="#338800" CREATED="1514329555505" ID="ID_1508437078" MODIFIED="1518487921065" TEXT="fehlender Anker plus zweite L&#xfc;cke">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517509311733" ID="ID_796216711" MODIFIED="1518487921065" TEXT="Anker+elided plus L&#xfc;cke schlie&#xdf;en">
+<node COLOR="#338800" CREATED="1517509311733" ID="ID_796216711" MODIFIED="1518750402160" TEXT="Anker+elided plus L&#xfc;cke schlie&#xdf;en">
 <linktarget COLOR="#4b5cab" DESTINATION="ID_796216711" ENDARROW="Default" ENDINCLINATION="-145;942;" ID="Arrow_ID_570641462" SOURCE="ID_1542036736" STARTARROW="None" STARTINCLINATION="383;78;"/>
-<icon BUILTIN="flag-yellow"/>
+<linktarget COLOR="#7e9da8" DESTINATION="ID_796216711" ENDARROW="Default" ENDINCLINATION="989;-91;" ID="Arrow_ID_925245331" SOURCE="ID_974516393" STARTARROW="None" STARTINCLINATION="199;-5;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517509325755" ID="ID_208496330" MODIFIED="1518487921065" TEXT="Anker+elided gilt als partial coverage">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517509541382" FOLDED="true" ID="ID_1722401650" MODIFIED="1518752274910">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      realer Pfad endet mit elided <i>nach</i>&#160;Wildcard
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1518752249648" ID="ID_221401224" MODIFIED="1518752257211" TEXT="erst wollte ich das ausschlie&#xdf;en"/>
+<node CREATED="1518752257871" ID="ID_1394674174" MODIFIED="1518752269436" TEXT="denke jetzt aber, das soll so sein">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1517509325755" ID="ID_208496330" MODIFIED="1518758436086" TEXT="Anker+elided gilt als partial coverage">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1514329861519" ID="ID_946875811" MODIFIED="1518487921065" TEXT="Scheitern">
@@ -8906,20 +8925,6 @@
 </node>
 <node COLOR="#338800" CREATED="1514329901562" ID="ID_1644217459" MODIFIED="1518487921065" TEXT="realer Pfad endet b&#xfc;ndig mit Wildcards">
 <icon BUILTIN="button_ok"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517509541382" ID="ID_1722401650" MODIFIED="1518487921066">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      realer Pfad endet mit elided <i>nach</i>&#160;Wildcard
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="flag-yellow"/>
 </node>
 <node COLOR="#338800" CREATED="1514329925895" ID="ID_257945525" MODIFIED="1518487921066" TEXT="mismatch auf erstem festen element">
 <icon BUILTIN="button_ok"/>
