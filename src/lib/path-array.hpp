@@ -392,6 +392,10 @@ namespace lib {
       using const_iterator = lib::IterAdapter<Literal const*, PathArray const*>;
       using iterator = const_iterator;
       
+      using value_type = Literal;
+      using reference = Literal&;
+      using const_reference = Literal const&;
+      
       /** @remark iteration is defined to begin with real content */
       iterator begin()  const { return firstNonempty(); }
       iterator end()    const { return iterator{}; }

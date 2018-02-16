@@ -101,6 +101,8 @@
 #include "lib/error.hpp"
 #include "lib/meta/value-type-binding.hpp"
 
+#include <iterator>
+
 
 namespace lib {
   
@@ -118,7 +120,9 @@ namespace lib {
 #define ENABLE_USE_IN_STD_RANGE_FOR_LOOPS(ITER)                              \
       friend ITER   begin (ITER const& it){ return it; }                      \
       friend ITER&& begin (ITER&& it)     { return static_cast<ITER&&> (it); } \
-      friend ITER   end   (ITER const&)   { return ITER(); }
+      friend ITER   end   (ITER const&)   { return ITER(); }                    \
+      using iterator_category = std::input_iterator_tag;                         \
+      using difference_type = size_t;
   
   
 
@@ -281,6 +285,7 @@ namespace lib {
         }
       
       
+    public:
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterAdapter);
       
       /// comparison is allowed to access impl iterator
@@ -405,6 +410,7 @@ namespace lib {
       
       
       
+    public:
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterStateWrapper);
       
       /// comparison is allowed to access state implementation core
@@ -770,6 +776,9 @@ namespace lib {
         {
           return i_;
         }
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (ConstIter);
     };
   
   
