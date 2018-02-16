@@ -373,9 +373,8 @@ namespace test {
           LocationRule location{UICoord().persp("edit").panel("viewer")};
           location.append      (UICoord::currentWindow().panel("viewer"));
           location.append      (UICoord().panel("viewer"));
-          location.append      (UICoord().tab("type(Asset)"));
+//        location.append      (UICoord().tab("assetType()"));                         //////////////////////TICKET #1130 : do we want to support match based on invocation context (here: the type of the asset to be displayed)
           location.append      (UICoord().persp("asset").view("asset"));
-          location.append      (UICoord().view("asset").tab("type(Asset)").create());
           location.append      (UICoord::currentWindow().panel("viewer").create());
           location.append      (UICoord::window("meta").persp("config").panel("infobox").view("inspect").create());
           
@@ -431,16 +430,32 @@ namespace test {
                                   ));
           CHECK ("UI:woe[asset]-panel.asset" == string{solver.solve (location, UIC_VIEW, "video")});         //Note: the 4th Rule matches on existing view "asset",
                                                                                                              //      in spite of our query demanding a view "video"
+          /* === wildcard match based on the type of entity to be displaced === */
+#if false ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1130 : not yet possible. Match based on placeholder substitutet from context
+//        uiTree = MakeRec()
+//                   .set("win"
+//                       , MakeRec()
+//                           .type("shady")
+//                           .set ("special"
+//                                , MakeRec()
+//                                    .set ("asset",
+//                                          MakeRec()
+//                                            .set ("specialAsset", MakeRec())
+//                                         )
+//                                ))
+//                   .set("woe"
+//                       , MakeRec()
+//                           .type("asset")
+//                           .set ("panel"
+//                                , MakeRec()
+//                                    .set ("asset", MakeRec())
+//                                ));
+//        CHECK ("UI:win[shady]-special.asset.specialAsset" == string{solver.solve (location, UIC_TAB, "specialAsset")});
+//                                                                                                         //Note: the next rule would match on the general asset panel
+//                                                                                                         //      but this special rule allows to re-use a tab dedicated to specialAsset
+#endif    ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1130 : not yet possible. Match based on placeholder substitutet from context
           
-          /* === wildcard match on panel and view appended === */
-          ///////////////////////////////////////////////////////////////////////////////////////////////////TODO not yet possible. How to match on type(Asset)???
           
-          
-          /* === successful create clause with wildcard === */
-          ///////////////////////////////////////////////////////////////////////////////////////////////////TODO not yet possible. How to match on type(Asset)???
-          
-          /* === unsatisfied create clause with wildcard === */
-          ///////////////////////////////////////////////////////////////////////////////////////////////////TODO not yet possible. How to match on type(Asset)???
           
           /* === match on create clause with generic window spec and panel === */
           uiTree = MakeRec()

@@ -3796,8 +3796,8 @@
 <node CREATED="1504463020913" ID="ID_808284638" MODIFIED="1518487921063" TEXT="[optional] Gruppe"/>
 <node CREATED="1504463028384" ID="ID_1928250888" MODIFIED="1518487921063" TEXT="View-ID"/>
 </node>
-<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1518659475358" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
-<arrowlink COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" STARTARROW="None" STARTINCLINATION="1135;-33;"/>
+<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1518742955375" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
+<arrowlink COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -8402,7 +8402,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1510941748388" FOLDED="true" HGAP="38" ID="ID_209463158" MODIFIED="1518487921065" TEXT="Zustands-Layer" VSHIFT="1">
+<node COLOR="#338800" CREATED="1510941748388" HGAP="38" ID="ID_209463158" MODIFIED="1518743357648" TEXT="Zustands-Layer" VSHIFT="1">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1514333524247" ID="ID_1136271037" MODIFIED="1514908803527" TEXT="Zustand umfa&#xdf;t...">
 <icon BUILTIN="info"/>
@@ -9784,7 +9784,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1518659028202" ID="ID_1880101392" MODIFIED="1518659037749" TEXT="betrifft eigentlich auch currentWindow()"/>
-<node CREATED="1518659526767" ID="ID_839916178" MODIFIED="1518659610753" TEXT="&#x27f9; ist Variablen-Bindung und Funktionsauswertung">
+<node CREATED="1518659526767" ID="ID_839916178" MODIFIED="1518742936572" TEXT="&#x27f9; ist Variablen-Bindung und Funktionsauswertung">
 <arrowlink COLOR="#8e6e9e" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-458;-16;" ID="Arrow_ID_504124124" STARTARROW="None" STARTINCLINATION="-600;49;"/>
 </node>
 </node>
@@ -9931,7 +9931,7 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658696759" ID="ID_68856104" MODIFIED="1518658712847">
+<node COLOR="#990000" CREATED="1518658696759" ID="ID_68856104" MODIFIED="1518743116362">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -9946,24 +9946,94 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<linktarget COLOR="#e46465" DESTINATION="ID_68856104" ENDARROW="Default" ENDINCLINATION="74;449;" ID="Arrow_ID_110301671" SOURCE="ID_1208480183" STARTARROW="None" STARTINCLINATION="-232;7;"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1518658759567" ID="ID_1257805922" MODIFIED="1518658772007" TEXT="wie?">
 <node CREATED="1517014036148" ID="ID_1650726696" MODIFIED="1518487921069" TEXT="on the fly">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517014040147" ID="ID_144379993" MODIFIED="1518487921069" TEXT="beim Erzeugen des Resolvers">
-<icon BUILTIN="flag-yellow"/>
-</node>
+<node CREATED="1517014040147" ID="ID_144379993" MODIFIED="1518743268543" TEXT="beim Erzeugen des Resolvers"/>
 </node>
 <node CREATED="1518658744024" ID="ID_1009975119" MODIFIED="1518658745685" TEXT="Zweck">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517014013207" ID="ID_1843964714" MODIFIED="1518487921069" TEXT="automatisches Injizieren von &quot;elided&quot;">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1518743292259" ID="ID_1943028471" MODIFIED="1518743301047" TEXT="das machen wir trotzdem">
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658412982" ID="ID_1860407174" MODIFIED="1518658433427" TEXT="L&#xf6;sung f&#xfc;r &quot;asset Tab&quot;">
+<node CREATED="1518743303177" ID="ID_1758602660" MODIFIED="1518743321547" TEXT="...und zwar direkt im LocationSolver"/>
+</node>
+<node CREATED="1518658412982" ID="ID_1860407174" MODIFIED="1518745767401" TEXT="L&#xf6;sung f&#xfc;r &quot;asset Tab&quot;">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1518745809189" ID="ID_334346990" MODIFIED="1518746202442" TEXT="hier geht es um einen subtilen Punkt im Gebrauch des UI-Raumes">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Man m&#246;chte, da&#223; f&#252;r spezielle Sub-Elemente,
+    </p>
+    <p>
+      die aus einem fremden Kontext heraus ge&#246;ffnet werden,
+    </p>
+    <p>
+      zun&#228;chst versucht wird, einen irgendwo im UI schon bestehenden TAB
+    </p>
+    <p>
+      f&#252;r speziell diesen Element-Typ wiederzuverwenden; das erlaubt dem User,
+    </p>
+    <p>
+      sich einen Platz f&#252;r sehr spezielle Sachen beiseite zu setzen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      z.B. sehr spezielle Assets oder ein virtueller Clip.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Erst wenn so ein Ort nicht gefunden wird, m&#246;chte man auf einen
+    </p>
+    <p>
+      generischen Ort zur&#252;ckfallen, und erst als letzte default-L&#246;sung
+    </p>
+    <p>
+      im aktuellen Fenster einen v&#246;llig neuen UI-Elementkontext schaffen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#2c4580" DESTINATION="ID_334346990" ENDARROW="Default" ENDINCLINATION="242;0;" ID="Arrow_ID_1968525556" SOURCE="ID_1219364679" STARTARROW="None" STARTINCLINATION="78;0;"/>
+</node>
+<node CREATED="1518745834329" ID="ID_877601312" MODIFIED="1518745855890" TEXT="nicht klar, ob es gerechtfertigt ist, hierf&#xfc;r solche Komplexit&#xe4;ten zu schaffen"/>
+<node CREATED="1518745857950" ID="ID_1572087161" MODIFIED="1518745944379" TEXT="wenn sollte man es besser explizit als Spezialfall hart-coden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...statt die gesamte Matching-Engine mit einer Art
+    </p>
+    <p>
+      halbgaren Unifikation aufzubrezln
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1518745906400" ID="ID_958966084" MODIFIED="1518745914960" TEXT="wildMatch() in ui-coord-resolver.cpp">
+<icon BUILTIN="forward"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518746009058" ID="ID_43313184" MODIFIED="1518746024360" TEXT="#1130 allow view location by similar kind">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1518660243382" ID="ID_1951597669" MODIFIED="1518660249616" TEXT="technischer Ansatz">
+</node>
+<node CREATED="1518660243382" HGAP="32" ID="ID_1951597669" MODIFIED="1518743133223" TEXT="technischer Ansatz" VSHIFT="-2">
 <node CREATED="1518660484501" ID="ID_1142230788" MODIFIED="1518660490688" TEXT="Pattern umschreiben">
 <node CREATED="1518660561314" ID="ID_719818438" MODIFIED="1518660568165" TEXT="sehr leicht zu implementieren"/>
 <node CREATED="1518660569273" ID="ID_357095507" MODIFIED="1518660615103" TEXT="verwirrend/magisch/manipulativ"/>
@@ -9982,6 +10052,35 @@
 <node CREATED="1518660845588" ID="ID_1526822574" MODIFIED="1518660850327" TEXT="Definitionsaufwand"/>
 <node CREATED="1518660851035" ID="ID_1271437627" MODIFIED="1518660856798" TEXT="Einrichtungs-Aufwand"/>
 <node CREATED="1518660857434" ID="ID_1501111250" MODIFIED="1518660906191" TEXT="komplex f&#xfc;r Test einzurichten"/>
+</node>
+<node CREATED="1518742996348" ID="ID_328356111" MODIFIED="1518743006606" TEXT="von der Ebene der Sprache her schwer zu verstehen"/>
+<node CREATED="1518743012337" ID="ID_1220573120" MODIFIED="1518743054926">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bleibt dem Charakter nach <i>imperativ</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1518743065930" HGAP="79" ID="ID_1989234578" MODIFIED="1518745957053" TEXT="vorerst abgelehnt" VSHIFT="21">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1518743153214" ID="ID_513041431" MODIFIED="1518743159705" TEXT="keine der L&#xf6;sungen wirklich attraktiv"/>
+<node CREATED="1518743167708" ID="ID_1748977650" MODIFIED="1518743186813" TEXT="sprengt gewisserma&#xdf;en den Ansatz eines reinen Matchers"/>
+<node CREATED="1518743192305" ID="ID_1134364758" MODIFIED="1518743222705" TEXT="wenn man wirkliche Unifikation will  &#x27f9;  Resolution-Engine nehmen"/>
+<node CREATED="1518743226772" ID="ID_1108128377" MODIFIED="1518743247533" TEXT="DSL-Entwurf nochmal angeschaut....">
+<node CREATED="1518743248497" ID="ID_1219364679" MODIFIED="1518745996865" TEXT="Feature kann weitgehend umgangen werden">
+<arrowlink COLOR="#2c4580" DESTINATION="ID_334346990" ENDARROW="Default" ENDINCLINATION="242;0;" ID="Arrow_ID_1968525556" STARTARROW="None" STARTINCLINATION="78;0;"/>
+</node>
+<node CREATED="1518743254401" ID="ID_1218065629" MODIFIED="1518743258377" TEXT="YAGNI">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 </node>
@@ -10057,10 +10156,11 @@
 <node COLOR="#338800" CREATED="1517506994783" ID="ID_1943710017" MODIFIED="1518487921069" TEXT="baut jeweils UICorrdResolver">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658805744" ID="ID_1208480183" MODIFIED="1518742608702" TEXT="Kontext-Bindung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658805744" ID="ID_1208480183" MODIFIED="1518742966038" TEXT="Kontext-Bindung">
+<arrowlink COLOR="#e46465" DESTINATION="ID_68856104" ENDARROW="Default" ENDINCLINATION="74;449;" ID="Arrow_ID_110301671" STARTARROW="None" STARTINCLINATION="-232;7;"/>
 <linktarget COLOR="#8e6e9e" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-458;-16;" ID="Arrow_ID_504124124" SOURCE="ID_839916178" STARTARROW="None" STARTINCLINATION="-600;49;"/>
 <linktarget COLOR="#b78791" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-1240;134;" ID="Arrow_ID_831550289" SOURCE="ID_481219776" STARTARROW="None" STARTINCLINATION="1654;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1518659629689" ID="ID_666680369" MODIFIED="1518659660281" TEXT="L&#xf6;se-Funktion bekommt Kontext"/>
 <node CREATED="1518660033466" ID="ID_1879301424" MODIFIED="1518660044053" TEXT="jede Klausel wird vorbehandelt"/>
 <node CREATED="1518660206867" ID="ID_1357657997" MODIFIED="1518660237412">
@@ -10089,6 +10189,10 @@
   </body>
 </html>
 </richcontent>
+</node>
+<node CREATED="1518742862470" ID="ID_588911138" MODIFIED="1518742880332" TEXT="YAGNI">
+<font BOLD="true" NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1517507036433" ID="ID_921121750" MODIFIED="1518487921069" TEXT="zieht die Antwort bei ersem Erfolg">
@@ -10534,14 +10638,14 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515634054990" HGAP="44" ID="ID_146987308" MODIFIED="1518487921071" TEXT="Struktur-L&#xf6;sung" VSHIFT="19">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515634166656" ID="ID_760459550" MODIFIED="1518487921071" TEXT="UI-Coord-Builder">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1515634166656" ID="ID_760459550" MODIFIED="1518743424687" TEXT="UI-Coord-Builder">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1515634180942" ID="ID_1485314989" MODIFIED="1518487921071" TEXT="praktisch schon da">
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515634197876" ID="ID_731095389" MODIFIED="1518659372127" TEXT="Problem Asset-Tab...">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#990000" CREATED="1515634197876" ID="ID_731095389" MODIFIED="1518743462219" TEXT="Problem Asset-Tab...">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1515634208379" ID="ID_1341895683" MODIFIED="1518487921071" TEXT="Vermutung: auf backing service angewiesen"/>
 <node CREATED="1518659373972" ID="ID_1782316588" MODIFIED="1518659386753" TEXT="ist eine Kontext-Auswertung/Bindung">
 <icon BUILTIN="idea"/>
@@ -11105,9 +11209,9 @@
 <node COLOR="#338800" CREATED="1518223039229" ID="ID_427870686" MODIFIED="1518739358673" TEXT="panel alone">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223101637" ID="ID_481219776" MODIFIED="1518742608702" TEXT="wildcard view + specific tab">
+<node COLOR="#990000" CREATED="1518223101637" ID="ID_481219776" MODIFIED="1518742835910" TEXT="wildcard view + specific tab">
 <arrowlink COLOR="#b78791" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-1240;134;" ID="Arrow_ID_831550289" STARTARROW="None" STARTINCLINATION="1654;0;"/>
-<icon BUILTIN="hourglass"/>
+<icon BUILTIN="button_cancel"/>
 </node>
 <node COLOR="#338800" CREATED="1518223107508" ID="ID_254700276" MODIFIED="1518742616988" TEXT="wildcard panel + view appended">
 <icon BUILTIN="button_ok"/>
@@ -20329,8 +20433,8 @@
 <node CREATED="1487273377603" ID="ID_1842094630" MODIFIED="1518487921088" TEXT="SpotLocator"/>
 </node>
 <node CREATED="1487272813119" ID="ID_1794274698" MODIFIED="1518487921088" TEXT="Bezug">
-<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1518659475358" TEXT="Koordinatensystem">
-<linktarget COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" SOURCE="ID_50865654" STARTARROW="None" STARTINCLINATION="1135;-33;"/>
+<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1518742955375" TEXT="Koordinatensystem">
+<linktarget COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" SOURCE="ID_50865654" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <node CREATED="1504462869149" ID="ID_248419130" MODIFIED="1518487921088" TEXT="beschreibt Zugangsweg">
 <icon BUILTIN="yes"/>
 </node>

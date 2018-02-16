@@ -2838,7 +2838,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201802080022" tags="def GuiPattern design" changecount="46">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201802160224" tags="def GuiPattern design" changecount="50">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2945,7 +2945,7 @@ locate = currentWindow().panel(infobox)
 : currentWindow
 : perspective(id)
 : panel(id)
-: assetType() {{red{WIP 9/17 not clear if possible}}}
+: assetType() {{red{WIP 2/18 not clear if necessary}}}
 : create()
 ;alloc
 : unlimited
@@ -2958,6 +2958,14 @@ The given UICoord specs are matched one by one, using the first one applicable. 
 The coordinate specs as written within the DSL are slightly abridged, as the final element, the actual component to be created, can be omitted and will be supplied automatically. This is possible insofar the ID of the queried element is actually more like a type specifier, and thus drawn from a finite and well known collection of possible elements (Timeline, Asset Bin, Error Log, Media Viewer, etc.). The elements to be created must invoke existing code and must be able to interface with their actual environment after all.
 
 However, the semantics of UI coordinate resolution and matching are applied against the coordinate specs //as given in the DSL.// Since, by default, what is given is required to exist, it makes quite a difference as to what kind of element is used as terminal element of a given spec. Since our UI coordinate system establishes a distinct depth for each kind of element, we can and even must reject any spec which does not yield a definite location for at least the parent element; we do not interpolate or even invent arbitrary elements, we only ever match against existing ones. Thus any DSL definition must encompass a sane default, a final alternative clause which always succeeds -- and the DSL is considered broken if it doesn't.
+
+!!!!The problem with {{{assetType()}}}
+There is a very special use case, where we'd might want to express some fine points regarding placement of a new sub-tab within the view requested. This need arises when the system requires to show some sub-element through a dedicated view. Such might be the case for a special kind of asset, or when a virtual clip or media is to be opened from a context //other than editing the timeline.// In such a situation, a preferable action would be to use or re-use an existing tab of a view of similar kind. Only if this fails, we'd want a new view to be created at a generic location (e.g. a window dedicated to asset management), and only as fall-back we'd want a completely new asset section to show up within the current window.
+
+Unfortunately such surpasses the ability of the solution mechanism backing this location DSL, which basically relies on pattern matching without further expression evaluation or unification. To express the aforementioned special treatment, we'd need a placeholder within the rules, indicated above as {{{assetType()}}}, which has to be replaced by the actual typeID used in the concrete location query. Since our system does not support unification, either the matching mechanism has to be manipulated based on the context, or the specific rule must be preprocessed for token replacement.
+It is not clear yet {{red{as of 2/2018}}}, if those additional complexities are justified...
+&amp;rarr; Ticket #1130
+
 
 !!!Semantics of allocation
 While the process of probing and matching the location specification finally yields an explicit UICoord path to the desired element, it is up to the allocation step actually to decide on the action to be taken. Some allocation operations impose some kind of limit, and are thus free to ignore the given spec and rather return an existing element in place. In the end, the purpose of this whole matching and allocation process is to get hold of a suitable UI component without knowing its precise coordinates in the UI topology. And this is the very property to enable flexible mapping of the strictly hierarchical session structures onto the UI in a fluid way.
