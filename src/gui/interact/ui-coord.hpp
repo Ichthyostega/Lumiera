@@ -290,6 +290,7 @@ namespace interact {
       
       /* === String representation === */
       
+      explicit
       operator string()  const
         {
           if (isnil (*this))
