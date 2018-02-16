@@ -550,7 +550,9 @@ namespace interact {
       /** establish a trivial anchorage and coverage, if possible.
        * @note when the UICoord contains wildcards or is incomplete,
        *       a full resolution with backtracking is necessary to
-       *       determine anchorage and coverage
+       *       determine anchorage and coverage. The same is true
+       *       when the pattern uses an elided element, since such
+       *       an existentially quantified item must be interpolated.
        */
       void
       attempt_trivialResolution()
@@ -558,6 +560,7 @@ namespace interact {
           res_.anchor = query_.determineAnchor  (this->uic_);
           if (not uic_.isExplicit()) return;
           res_.depth  = query_.determineCoverage(this->uic_);
+          if (util::contains (this->uic_, UIC_ELIDED)) return;  // existentially quantified
           res_.isResolved = true;
         }
 

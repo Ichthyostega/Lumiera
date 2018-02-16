@@ -129,6 +129,7 @@ namespace interact {
                         {
                           return patt == Symbol::ANY
                               or patt == Symbol::EMPTY
+                              or patt == UIC_ELIDED // "existentially quantified"
                               or (isAnchored() and curr == res_.anchor and depth == UIC_WINDOW);
                         };    // transitive argument: assuming res_.anchor was computed for
                              //  the same coordinate pattern used here for patch resolution
@@ -153,7 +154,8 @@ namespace interact {
                                                coverage.setAt (depth,curr); // record match rsp. interpolate wildcard into output
                                                iter.expandChildren();       // next iteration will match one level down into the tree
                                              }
-                                           return patt == curr;             // only direct match counts as (partial) solution
+                                           return patt == curr              // direct match counts as (partial) solution
+                                               or patt == UIC_ELIDED;       // existentially quantified elements also accepted
                                         })
                             .filter ([&](auto& iter)
                                         {
