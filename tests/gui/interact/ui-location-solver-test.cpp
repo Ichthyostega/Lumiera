@@ -377,7 +377,7 @@ namespace test {
           location.append      (UICoord().persp("asset").view("asset"));
           location.append      (UICoord().view("asset").tab("type(Asset)").create());
           location.append      (UICoord::currentWindow().panel("viewer").create());
-          location.append      (UICoord::window("meta").panel("infobox").view("inspect").create());
+          location.append      (UICoord::window("meta").persp("config").panel("infobox").view("inspect").create());
           
           cout << location << endl;
           
@@ -388,27 +388,88 @@ namespace test {
                          , MakeRec()
                              .type("edit")
                              .set ("viewer", MakeRec()));
-          cout << solver.solve (location, UIC_VIEW, "videoViewer") <<endl;
-          cout << solver.solve (location, UIC_TAB, "clipAssets") <<endl;
+          CHECK ("UI:win[edit]-viewer.video" == string{solver.solve (location, UIC_VIEW, "video")});
           
           /* === match by generic window + panel === */
+          uiTree = MakeRec()
+                     .set("win"
+                         , MakeRec()
+                             .type("murky")
+                             .set ("viewer", MakeRec()))
+                     .set("woe"
+                         , MakeRec()
+                             .type("gloomy")
+                             .set ("viewer", MakeRec()));
+          CHECK ("UI:woe[gloomy]-viewer.video" == string{solver.solve (location, UIC_VIEW, "video")});       //Note: first rule does not match due to perspective
           
           /* === match by panel alone === */
+          uiTree = MakeRec()
+                     .set("win"
+                         , MakeRec()
+                             .type("murky")
+                             .set ("viewer", MakeRec()))
+                     .set("woe"
+                         , MakeRec()
+                             .type("gloomy")
+                             .set ("timeline", MakeRec()));
+          CHECK ("UI:win[murky]-viewer.video" == string{solver.solve (location, UIC_VIEW, "video")});        //Note: current window (==last one) has no "viewer"-panel
           
           
-          /* === wildcard match on view === */
+          
+          /* === wildcard match on explicit existing view === */
+          uiTree = MakeRec()
+                     .set("win"
+                         , MakeRec()
+                             .type("shady")
+                             .set("timeline", MakeRec()))
+                     .set("woe"
+                         , MakeRec()
+                             .type("asset")
+                             .set ("panel"
+                                  , MakeRec()
+                                      .set ("asset", MakeRec())
+                                  ));
+          CHECK ("UI:woe[asset]-panel.asset" == string{solver.solve (location, UIC_VIEW, "video")});         //Note: the 4th Rule matches on existing view "asset",
+                                                                                                             //      in spite of our query demanding a view "video"
           
           /* === wildcard match on panel and view appended === */
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TODO not yet possible. How to match on type(Asset)???
           
           
           /* === successful create clause with wildcard === */
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TODO not yet possible. How to match on type(Asset)???
           
           /* === unsatisfied create clause with wildcard === */
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TODO not yet possible. How to match on type(Asset)???
           
           /* === match on create clause with generic window spec and panel === */
+          uiTree = MakeRec()
+                     .set("win"
+                         , MakeRec()
+                             .type("shady")
+                             .set("timeline", MakeRec()))
+                     .set("woe"
+                         , MakeRec()
+                             .type("shoddy")
+                             .set ("viewer", MakeRec()));                     ///////////////////////////////TODO do this without the panel, and rely on UIC_ELIDED (not yet implemented)
+          auto solution = solver.solve (location, UIC_VIEW, "video");
+          CHECK ("UI:woe[shoddy]-viewer.video" == string{solution});
+          CHECK ( 3 == UICoordResolver(solution, *query)
+                                      .coverDepth());
           
           /* === completely uncovered create-from-scratch === */
-          
+          uiTree = MakeRec()
+                     .set("win"
+                         , MakeRec()
+                             .type("shady")
+                             .set("timeline", MakeRec()))
+                     .set("woe"
+                         , MakeRec()
+                             .type("shoddy"));
+          solution = solver.solve (location, UIC_TAB, "engine");
+          CHECK ("UI:meta[config]-infobox.inspect.engine" == string{solution});                              //Note: thus the last catch-all rule was triggered;
+          CHECK ( 0 == UICoordResolver(solution, *query)                                                     //Note: result indeed entirely uncovered (-> create from scratch)
+                                      .coverDepth());
         }
     };
   

@@ -3796,7 +3796,7 @@
 <node CREATED="1504463020913" ID="ID_808284638" MODIFIED="1518487921063" TEXT="[optional] Gruppe"/>
 <node CREATED="1504463028384" ID="ID_1928250888" MODIFIED="1518487921063" TEXT="View-ID"/>
 </node>
-<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1518487921063" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
+<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1518659475358" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
 <arrowlink COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" STARTARROW="None" STARTINCLINATION="1135;-33;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -9293,7 +9293,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516147992493" HGAP="24" ID="ID_4925227" MODIFIED="1518487921067" TEXT="wie wird das Zielobjekt selber bestimmt?" VSHIFT="-1">
+<node CREATED="1516147992493" HGAP="24" ID="ID_4925227" MODIFIED="1518658156723" TEXT="wie wird das Zielobjekt selber bestimmt?" VSHIFT="-1">
 <icon BUILTIN="help"/>
 <node CREATED="1516148029148" ID="ID_1974346974" MODIFIED="1518487921067" TEXT="M&#xf6;glichkeiten">
 <node CREATED="1516148034899" ID="ID_1675414085" MODIFIED="1518487921067" TEXT="explizit anschreiben"/>
@@ -9312,7 +9312,8 @@
 <node CREATED="1516148172864" ID="ID_1611427093" MODIFIED="1518487921067" TEXT="erst dann kann man Match &#xfc;berhaupt pr&#xfc;fen"/>
 </node>
 </node>
-<node CREATED="1516148185461" ID="ID_1903672954" MODIFIED="1518487921067" TEXT="Konsequenz">
+<node CREATED="1516148185461" ID="ID_1903672954" MODIFIED="1518658169070" TEXT="Konsequenz">
+<icon BUILTIN="forward"/>
 <node CREATED="1516148190821" ID="ID_1390287231" MODIFIED="1518487921067" TEXT="Koordinaten-Erg&#xe4;nzung mu&#xdf; im Locator erfolgen"/>
 <node CREATED="1516909726125" ID="ID_1451248007" MODIFIED="1518487921067">
 <richcontent TYPE="NODE"><html>
@@ -9752,6 +9753,41 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658487899" ID="ID_1831478029" MODIFIED="1518659504863" TEXT="wie k&#xf6;nnen Regeln auf den Anwendungs-Kontext Bezug nehmen?">
+<linktarget COLOR="#967ea6" DESTINATION="ID_1831478029" ENDARROW="Default" ENDINCLINATION="-800;514;" ID="Arrow_ID_162294902" SOURCE="ID_986224819" STARTARROW="None" STARTINCLINATION="693;-50;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658506857" ID="ID_589229909" MODIFIED="1518658523711" TEXT="das Problem &quot;asset Tab&quot;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1518658837468" ID="ID_744795602" MODIFIED="1518658861070" TEXT="invertiert die logischen Abh&#xe4;ngigkeiten">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1518658902747" ID="ID_976555378" MODIFIED="1518658960741" TEXT="entspricht der Unifikation in Logik-Programmierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...insofern auch dort
+    </p>
+    <p>
+      die jeweilige generische Regel parametrisiert / instantiiert wird
+    </p>
+    <p>
+      gegen den Kontext, mit dem sie matchen soll
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1518659028202" ID="ID_1880101392" MODIFIED="1518659037749" TEXT="betrifft eigentlich auch currentWindow()"/>
+<node CREATED="1518659526767" ID="ID_839916178" MODIFIED="1518659610753" TEXT="&#x27f9; ist Variablen-Bindung und Funktionsauswertung">
+<arrowlink COLOR="#8e6e9e" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-458;-16;" ID="Arrow_ID_504124124" STARTARROW="None" STARTINCLINATION="-600;49;"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516916599018" ID="ID_809925267" MODIFIED="1518487921068" TEXT="wie genau mu&#xdf; die Aufrufschnittstelle aussehen?">
 <icon BUILTIN="help"/>
 <node CREATED="1517084001346" ID="ID_101484926" MODIFIED="1518487921068" TEXT="bekannter Ausgangspunkt">
@@ -9895,13 +9931,59 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517014013207" ID="ID_1843964714" MODIFIED="1518487921069" TEXT="automatisches Injizieren von &quot;elided&quot;">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658696759" ID="ID_68856104" MODIFIED="1518658712847">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Regel-Parametrisierung
+    </p>
+    <p>
+      Kontextualisierung
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1518658759567" ID="ID_1257805922" MODIFIED="1518658772007" TEXT="wie?">
 <node CREATED="1517014036148" ID="ID_1650726696" MODIFIED="1518487921069" TEXT="on the fly">
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517014040147" ID="ID_144379993" MODIFIED="1518487921069" TEXT="beim Erzeugen des Resolvers">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1518658744024" ID="ID_1009975119" MODIFIED="1518658745685" TEXT="Zweck">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517014013207" ID="ID_1843964714" MODIFIED="1518487921069" TEXT="automatisches Injizieren von &quot;elided&quot;">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658412982" ID="ID_1860407174" MODIFIED="1518658433427" TEXT="L&#xf6;sung f&#xfc;r &quot;asset Tab&quot;">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1518660243382" ID="ID_1951597669" MODIFIED="1518660249616" TEXT="technischer Ansatz">
+<node CREATED="1518660484501" ID="ID_1142230788" MODIFIED="1518660490688" TEXT="Pattern umschreiben">
+<node CREATED="1518660561314" ID="ID_719818438" MODIFIED="1518660568165" TEXT="sehr leicht zu implementieren"/>
+<node CREATED="1518660569273" ID="ID_357095507" MODIFIED="1518660615103" TEXT="verwirrend/magisch/manipulativ"/>
+<node CREATED="1518660696792" ID="ID_90938050" MODIFIED="1518660722928" TEXT="verschwenderisch">
+<node CREATED="1518660724012" ID="ID_471630453" MODIFIED="1518660730367" TEXT="zus&#xe4;tzlicher Pass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518660732051" ID="ID_595304644" MODIFIED="1518738065908" TEXT="f&#xfc;r ein selten verwendetes Feature">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node CREATED="1518660504026" ID="ID_923980639" MODIFIED="1518660513437" TEXT="Matcher/Unifizierer">
+<node CREATED="1518660781261" ID="ID_1851856047" MODIFIED="1518660789479" TEXT="sitzt im Solver selber"/>
+<node CREATED="1518660790596" ID="ID_869512309" MODIFIED="1518660793175" TEXT="logisch korrekt"/>
+<node CREATED="1518660795403" ID="ID_1080152835" MODIFIED="1518660844616" TEXT="erfordert Abstraktion">
+<node CREATED="1518660845588" ID="ID_1526822574" MODIFIED="1518660850327" TEXT="Definitionsaufwand"/>
+<node CREATED="1518660851035" ID="ID_1271437627" MODIFIED="1518660856798" TEXT="Einrichtungs-Aufwand"/>
+<node CREATED="1518660857434" ID="ID_1501111250" MODIFIED="1518660906191" TEXT="komplex f&#xfc;r Test einzurichten"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505328936" ID="ID_406973235" MODIFIED="1518487921069" TEXT="Umbauen Locator in Functor">
@@ -9974,6 +10056,40 @@
 </node>
 <node COLOR="#338800" CREATED="1517506994783" ID="ID_1943710017" MODIFIED="1518487921069" TEXT="baut jeweils UICorrdResolver">
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658805744" ID="ID_1208480183" MODIFIED="1518742608702" TEXT="Kontext-Bindung">
+<linktarget COLOR="#8e6e9e" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-458;-16;" ID="Arrow_ID_504124124" SOURCE="ID_839916178" STARTARROW="None" STARTINCLINATION="-600;49;"/>
+<linktarget COLOR="#b78791" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-1240;134;" ID="Arrow_ID_831550289" SOURCE="ID_481219776" STARTARROW="None" STARTINCLINATION="1654;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1518659629689" ID="ID_666680369" MODIFIED="1518659660281" TEXT="L&#xf6;se-Funktion bekommt Kontext"/>
+<node CREATED="1518660033466" ID="ID_1879301424" MODIFIED="1518660044053" TEXT="jede Klausel wird vorbehandelt"/>
+<node CREATED="1518660206867" ID="ID_1357657997" MODIFIED="1518660237412">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      technische L&#246;sug <i>diskutierbar</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...will sagen,
+    </p>
+    <p>
+      man kann das erheblich tief und generisch ausbauen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1517507036433" ID="ID_921121750" MODIFIED="1518487921069" TEXT="zieht die Antwort bei ersem Erfolg">
 <icon BUILTIN="button_ok"/>
@@ -10424,9 +10540,16 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515634197876" ID="ID_731095389" MODIFIED="1518487921071" TEXT="existing...">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515634197876" ID="ID_731095389" MODIFIED="1518659372127" TEXT="Problem Asset-Tab...">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1515634208379" ID="ID_1341895683" MODIFIED="1518487921071" TEXT="Vermutung: auf backing service angewiesen"/>
+<node CREATED="1518659373972" ID="ID_1782316588" MODIFIED="1518659386753" TEXT="ist eine Kontext-Auswertung/Bindung">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518659396385" ID="ID_986224819" MODIFIED="1518659504863" TEXT="in den L&#xf6;sungsmechanismus zu integrieren">
+<arrowlink COLOR="#967ea6" DESTINATION="ID_1831478029" ENDARROW="Default" ENDINCLINATION="-800;514;" ID="Arrow_ID_162294902" STARTARROW="None" STARTINCLINATION="693;-50;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515634249365" ID="ID_498582439" MODIFIED="1518487921071" TEXT="Allokator-Strategien">
 <icon BUILTIN="flag-yellow"/>
@@ -10973,34 +11096,39 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1518221768370" ID="ID_958994214" MODIFIED="1518487921072" TEXT="match by">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223023735" ID="ID_1788599676" MODIFIED="1518487921072" TEXT="pespective + panel">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518223023735" ID="ID_1788599676" MODIFIED="1518739354202" TEXT="pespective + panel">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223029399" ID="ID_1184092341" MODIFIED="1518574786042" TEXT="generic window + existing panel">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518223029399" ID="ID_1184092341" MODIFIED="1518739356121" TEXT="generic window + existing panel">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223039229" ID="ID_427870686" MODIFIED="1518487921072" TEXT="panel alone">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518223039229" ID="ID_427870686" MODIFIED="1518739358673" TEXT="panel alone">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223101637" ID="ID_481219776" MODIFIED="1518579487507" TEXT="wildcard view + specific tab">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223101637" ID="ID_481219776" MODIFIED="1518742608702" TEXT="wildcard view + specific tab">
+<arrowlink COLOR="#b78791" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-1240;134;" ID="Arrow_ID_831550289" STARTARROW="None" STARTINCLINATION="1654;0;"/>
+<icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223107508" ID="ID_254700276" MODIFIED="1518487921072" TEXT="wildcard panel + view appended">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518223107508" ID="ID_254700276" MODIFIED="1518742616988" TEXT="wildcard panel + view appended">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1518223136888" ID="ID_373048163" MODIFIED="1518487921072" TEXT="create match">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223141623" ID="ID_1610919464" MODIFIED="1518487921072" TEXT="on wildcard">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518223141623" ID="ID_1610919464" MODIFIED="1518742653179" TEXT="on wildcard">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223149750" ID="ID_1733413613" MODIFIED="1518487921072" TEXT="on wildcard fail">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518223149750" ID="ID_1733413613" MODIFIED="1518742650810" TEXT="on wildcard fail">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1518742624742" ID="ID_1245433967" MODIFIED="1518742630585" TEXT="implizit mitgetestet">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223044301" ID="ID_1476637837" MODIFIED="1518579513685" TEXT="generic window + panel create">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1518742642180" ID="ID_194206742" MODIFIED="1518742648655" TEXT="....indem die n&#xe4;chste Regel zieht"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518223201375" ID="ID_1794858276" MODIFIED="1518487921072" TEXT="complete create">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518223044301" ID="ID_1476637837" MODIFIED="1518742655379" TEXT="generic window + panel create">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1518223201375" ID="ID_1794858276" MODIFIED="1518742656811" TEXT="complete create">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -20201,7 +20329,7 @@
 <node CREATED="1487273377603" ID="ID_1842094630" MODIFIED="1518487921088" TEXT="SpotLocator"/>
 </node>
 <node CREATED="1487272813119" ID="ID_1794274698" MODIFIED="1518487921088" TEXT="Bezug">
-<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1518487921088" TEXT="Koordinatensystem">
+<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1518659475358" TEXT="Koordinatensystem">
 <linktarget COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" SOURCE="ID_50865654" STARTARROW="None" STARTINCLINATION="1135;-33;"/>
 <node CREATED="1504462869149" ID="ID_248419130" MODIFIED="1518487921088" TEXT="beschreibt Zugangsweg">
 <icon BUILTIN="yes"/>
