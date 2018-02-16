@@ -30,22 +30,15 @@
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-location-solver.hpp"
 #include "gui/interact/gen-node-location-query.hpp"
-#include "lib/format-cout.hpp" ////////////TODO
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/diff/gen-node.hpp"
-//#include "lib/util.hpp"
+#include "lib/format-cout.hpp"
 
-//#include <string>
+#include <string>
 
 
 using std::string;
 using lib::diff::MakeRec;
 using lib::diff::Rec;
-//using lib::Symbol;
-//using util::join;
-//using lib::idi::EntryID;
-//using lib::diff::GenNode;
-//using util::isSameObject;
+
 using util::isnil;
 
 
@@ -53,12 +46,6 @@ namespace gui  {
 namespace interact {
 namespace test {
   
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-//  using lib::test::showSizeof;
-  
-  namespace { //Test fixture...
-    
-  }//(End)Test fixture
   
   
   /******************************************************************************//**
@@ -137,7 +124,7 @@ namespace test {
       
       
       /** @test cover theoretical corner cases regarding the process of location solving.
-       * Point in question are the requirements and limits when querying against one or several 
+       * Point in question are the requirements and limits when querying against one or several
        * location specification clauses. The actual matching of a location pattern against a UI topology
        * is beyond scope and covered [elsewhere](\ref UICoordResolver_test::verify_mutateCoverage)
        * - empty clauses act as neutral element
@@ -232,8 +219,8 @@ namespace test {
           
           /* === query on elided perspective === */
           LocationRule r42{UICoord().persp(UIC_ELIDED)};
-//        CHECK ("UI:win[A]"   == string{solver.solve (r42, UIC_PERSP, "x")}); //////////////////////////////TICKET #1128 : support existential quantification
-//        CHECK ("UI:win[A]-x" == string{solver.solve (r42, UIC_PANEL, "x")});
+          CHECK ("UI:win[A]"   == string{solver.solve (r42, UIC_PERSP, "x")});
+          CHECK ("UI:win[A]-x" == string{solver.solve (r42, UIC_PANEL, "x")});
           
           /* === query on non existing perspective === */
           LocationRule r43{UICoord::firstWindow().persp("Ω")};
@@ -375,7 +362,8 @@ namespace test {
           location.append      (UICoord().panel("viewer"));
 //        location.append      (UICoord().tab("assetType()"));                         //////////////////////TICKET #1130 : do we want to support match based on invocation context (here: the type of the asset to be displayed)
           location.append      (UICoord().persp("asset").view("asset"));
-          location.append      (UICoord::currentWindow().panel("viewer").create());
+          location.append      (UICoord().panel("asset").view("asset").create());
+          location.append      (UICoord::currentWindow().persp(UIC_ELIDED).panel("viewer").create());
           location.append      (UICoord::window("meta").persp("config").panel("infobox").view("inspect").create());
           
           cout << location << endl;
@@ -457,22 +445,19 @@ namespace test {
           
           
           
-          /* === match on create clause with generic window spec and panel === */
+          /* === create clause to build on a specific anchor point === */
           uiTree = MakeRec()
                      .set("win"
                          , MakeRec()
                              .type("shady")
-                             .set("timeline", MakeRec()))
-                     .set("woe"
-                         , MakeRec()
-                             .type("shoddy")
-                             .set ("viewer", MakeRec()));                     ///////////////////////////////TODO do this without the panel, and rely on UIC_ELIDED (not yet implemented)
-          auto solution = solver.solve (location, UIC_VIEW, "video");
-          CHECK ("UI:woe[shoddy]-viewer.video" == string{solution});
-          CHECK ( 3 == UICoordResolver(solution, *query)
+                             .set ("asset", MakeRec())
+                                  );
+          auto solution = solver.solve (location, UIC_TAB, "video");                                         //Note: here the first "create"-rule is triggered: UI:?-asset.asset
+          CHECK ("UI:win[shady]-asset.asset.video" == string{solution});                                     //      It requires a panel("asset") to exist, but creates the rest;
+          CHECK ( 3 == UICoordResolver(solution, *query)                                                     //      indeed only the part up to the panel is detected as covered.
                                       .coverDepth());
-          
-          /* === completely uncovered create-from-scratch === */
+                                                                                                             //Note: the following test cases can not trigger this rule, since it
+          /* === match on create clause with generic window spec and panel === */                            //      contains leading wildcards and thus requires panel("asset")
           uiTree = MakeRec()
                      .set("win"
                          , MakeRec()
@@ -481,9 +466,15 @@ namespace test {
                      .set("woe"
                          , MakeRec()
                              .type("shoddy"));
-          solution = solver.solve (location, UIC_TAB, "engine");
-          CHECK ("UI:meta[config]-infobox.inspect.engine" == string{solution});                              //Note: thus the last catch-all rule was triggered;
-          CHECK ( 0 == UICoordResolver(solution, *query)                                                     //Note: result indeed entirely uncovered (-> create from scratch)
+          solution = solver.solve (location, UIC_VIEW, "video");
+          CHECK ("UI:woe[shoddy]-viewer.video" == string{solution});
+          CHECK ( 2 == UICoordResolver(solution, *query)                                                     //Note: only window and perspective are covered, the rest is to be created
+                                      .coverDepth());
+          
+          /* === completely uncovered create-from-scratch === */
+          solution = solver.solve (location, UIC_TAB, "engine");                                             //Note: same UI-tree, but this time we ask for a tab, so the previous rule
+          CHECK ("UI:meta[config]-infobox.inspect.engine" == string{solution});                              //      is too short and thus the last catch-all rule gets triggered;
+          CHECK ( 0 == UICoordResolver(solution, *query)                                                     //Note: result is indeed entirely uncovered (-> create from scratch)
                                       .coverDepth());
         }
     };
