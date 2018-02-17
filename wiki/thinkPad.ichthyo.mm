@@ -9758,9 +9758,9 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1518658487899" FOLDED="true" ID="ID_1831478029" MODIFIED="1518762127977" TEXT="wie k&#xf6;nnen Regeln auf den Anwendungs-Kontext Bezug nehmen?">
+<node COLOR="#338800" CREATED="1518658487899" FOLDED="true" ID="ID_1831478029" MODIFIED="1518835344832" TEXT="wie k&#xf6;nnen Regeln auf den Anwendungs-Kontext Bezug nehmen?">
 <linktarget COLOR="#967ea6" DESTINATION="ID_1831478029" ENDARROW="Default" ENDINCLINATION="-800;514;" ID="Arrow_ID_162294902" SOURCE="ID_986224819" STARTARROW="None" STARTINCLINATION="693;-50;"/>
-<icon BUILTIN="button_ok"/>
+<icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658506857" ID="ID_589229909" MODIFIED="1518658523711" TEXT="das Problem &quot;asset Tab&quot;">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -9790,12 +9790,10 @@
 <node CREATED="1518762048186" ID="ID_1857576258" MODIFIED="1518762055013" TEXT="m&#xf6;chte ich eigentlich nicht einf&#xfc;hren"/>
 <node CREATED="1518762055881" ID="ID_1976334061" MODIFIED="1518762100381" TEXT="vorerst nicht weiter verfolgt">
 <icon BUILTIN="yes"/>
-<node CREATED="1518762071967" ID="ID_1501187790" MODIFIED="1518762110266" TEXT="ggfs partielle L&#xf6;sung?">
-<icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518746009058" ID="ID_1800549154" MODIFIED="1518746024360" TEXT="#1130 allow view location by similar kind">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518746009058" ID="ID_1800549154" MODIFIED="1518830352525" TEXT="#1130 allow view location by similar kind">
+<arrowlink COLOR="#77546e" DESTINATION="ID_1501187790" ENDARROW="Default" ENDINCLINATION="447;-339;" ID="Arrow_ID_437325251" STARTARROW="None" STARTINCLINATION="486;0;"/>
 <icon BUILTIN="flag-yellow"/>
-</node>
 </node>
 </node>
 <node CREATED="1518659028202" ID="ID_1880101392" MODIFIED="1518659037749" TEXT="betrifft eigentlich auch currentWindow()"/>
@@ -10047,6 +10045,43 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518746009058" ID="ID_43313184" MODIFIED="1518746024360" TEXT="#1130 allow view location by similar kind">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1518762071967" FOLDED="true" ID="ID_1501187790" MODIFIED="1518830656615" TEXT="ggfs partielle L&#xf6;sung?">
+<linktarget COLOR="#77546e" DESTINATION="ID_1501187790" ENDARROW="Default" ENDINCLINATION="447;-339;" ID="Arrow_ID_437325251" SOURCE="ID_1800549154" STARTARROW="None" STARTINCLINATION="486;0;"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1518830375356" ID="ID_580870700" MODIFIED="1518830460134">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>nur eingeschr&#228;nkt</i>&#160;auf die TypID?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1518830433876" ID="ID_486080918" MODIFIED="1518830471955" TEXT="Flag, um diese vor Matching injizieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1518830500331" ID="ID_314535087" MODIFIED="1518830531395">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Preprocessing beim <i>Anlegen</i>&#160;der Klausel
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1518830545773" ID="ID_533394110" MODIFIED="1518830552887" TEXT="setzt spezielle Syntax in Flag um"/>
+<node CREATED="1518830581200" ID="ID_1879545754" MODIFIED="1518830625478" TEXT="Flag &#x27f9; aktuelle typID wird als Term angeh&#xe4;ngt"/>
+<node CREATED="1518830626306" ID="ID_1109967783" MODIFIED="1518830635572" TEXT="...und mu&#xdf; somit schon existieren"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -10173,7 +10208,7 @@
 <node COLOR="#338800" CREATED="1517506994783" ID="ID_1943710017" MODIFIED="1518487921069" TEXT="baut jeweils UICorrdResolver">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658805744" FOLDED="true" ID="ID_1208480183" MODIFIED="1518762230442" TEXT="Kontext-Bindung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518658805744" FOLDED="true" ID="ID_1208480183" MODIFIED="1518830196573" TEXT="Kontext-Bindung">
 <arrowlink COLOR="#e46465" DESTINATION="ID_68856104" ENDARROW="Default" ENDINCLINATION="74;449;" ID="Arrow_ID_110301671" STARTARROW="None" STARTINCLINATION="-232;7;"/>
 <linktarget COLOR="#8e6e9e" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-458;-16;" ID="Arrow_ID_504124124" SOURCE="ID_839916178" STARTARROW="None" STARTINCLINATION="-600;49;"/>
 <linktarget COLOR="#b78791" DESTINATION="ID_1208480183" ENDARROW="Default" ENDINCLINATION="-1240;134;" ID="Arrow_ID_831550289" SOURCE="ID_481219776" STARTARROW="None" STARTINCLINATION="1654;0;"/>
@@ -10426,9 +10461,9 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505737977" ID="ID_1981924615" MODIFIED="1518487921070" TEXT="Unit-Test">
+<node COLOR="#338800" CREATED="1517505737977" ID="ID_1981924615" MODIFIED="1518835363372" TEXT="Unit-Test">
 <arrowlink COLOR="#465888" DESTINATION="ID_957265584" ENDARROW="Default" ENDINCLINATION="351;-62;" ID="Arrow_ID_1922023705" STARTARROW="None" STARTINCLINATION="-226;69;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1518312788963" ID="ID_1715641481" MODIFIED="1518487921070" TEXT="brauche Setup">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -10510,15 +10545,15 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518312758758" ID="ID_675085959" MODIFIED="1518487921070" TEXT="Schreibweise f&#xfc;r create-Klauseln">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1518312758758" ID="ID_675085959" MODIFIED="1518835387835" TEXT="Schreibweise f&#xfc;r create-Klauseln">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631675752" ID="ID_1586757410" MODIFIED="1518487921070" TEXT="Repr&#xe4;sentation als Liste von UICoord">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1515631675752" ID="ID_1586757410" MODIFIED="1518835393496" TEXT="Repr&#xe4;sentation als Liste von UICoord">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631690390" ID="ID_783849930" MODIFIED="1518487921070" TEXT="&quot;committed choice&quot; L&#xf6;sungsmechanismus">
+<node COLOR="#338800" CREATED="1515631690390" ID="ID_783849930" MODIFIED="1518835396708" TEXT="&quot;committed choice&quot; L&#xf6;sungsmechanismus">
 <arrowlink COLOR="#8b9e9d" DESTINATION="ID_606655578" ENDARROW="Default" ENDINCLINATION="-152;43;" ID="Arrow_ID_1433975114" STARTARROW="None" STARTINCLINATION="213;-13;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

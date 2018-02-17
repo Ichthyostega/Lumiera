@@ -22,6 +22,13 @@ return: 0
 END
 
 
-PLANNED "solving for UI location" UILocationSolver_test <<END
+TEST "solving for UI location" UILocationSolver_test <<END
+out-lit: =~	.. UI:?[edit]-viewer
+out-lit: 	OR UI:currentWindow[*]-viewer
+out-lit: 	OR UI:?-viewer
+out-lit: 	OR UI:?[asset]-*.asset
+out-lit: 	OR UI:?-asset.asset create!
+out-lit: 	OR UI:currentWindow[.]-viewer create!
+out-lit: 	OR UI:meta[config]-infobox.inspect create!
 return: 0
 END

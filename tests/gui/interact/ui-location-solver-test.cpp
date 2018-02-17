@@ -49,7 +49,7 @@ namespace test {
   
   
   /******************************************************************************//**
-   * @test cover a mechanism to resolve the desired location of an UI-element.
+   * @test verify a mechanism to resolve the desired location of an UI-element.
    *       The UILocationSolver is operated by the ViewLocator service, which itself
    *       is part of the InteractionDirector. In typical usage, the location rules
    *       are drawn from the [ViewSpec-DSL](\ref view-spec-dsl.hpp), evaluated
@@ -84,7 +84,7 @@ namespace test {
           Rec dummyUiStructure = MakeRec()
                                    .set("window-1"
                                        , MakeRec()
-                                           .type("perspective-A")
+                                           .type("perspective")
                                            .set("exclusivePanel", MakeRec())
                                        );
             // helper to answer "location queries" backed by this structure
@@ -111,7 +111,7 @@ namespace test {
           CHECK (not isnil (location));
           
           // the full solution filled in the missing parts and added the new view on top
-          CHECK ("UI:window-1[perspective-A]-exclusivePanel.worldview" == string(location));
+          CHECK ("UI:window-1[perspective]-exclusivePanel.worldview" == string(location));
           
           // NOTE: the new view does not (yet) exist, but the preceding part can be "covered"
           //       To verify this, we attach a coordinate resolver (likewise backed by our dummy UI)
@@ -217,7 +217,7 @@ namespace test {
           CHECK ("UI:win[A]"   == string{solver.solve (r41, UIC_PERSP, "x")});
           CHECK ("UI:win[A]-x" == string{solver.solve (r41, UIC_PANEL, "x")});
           
-          /* === query on elided perspective === */
+          /* === query on elided perspective ("just any existing") === */
           LocationRule r42{UICoord().persp(UIC_ELIDED)};
           CHECK ("UI:win[A]"   == string{solver.solve (r42, UIC_PERSP, "x")});
           CHECK ("UI:win[A]-x" == string{solver.solve (r42, UIC_PANEL, "x")});

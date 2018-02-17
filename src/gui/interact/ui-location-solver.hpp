@@ -29,7 +29,34 @@
  ** actual event handling code. Rather, the ViewLocator, as a service related to the InteractionDirector,
  ** can be invoked to draw on some default configuration plus the actual UI topology present at this time.
  ** 
- ** @todo WIP 2/2018 early draft       ////////////////////////////////////////////////////////////TICKET #1127
+ ** ## Pattern matching against the actual UI-tree
+ ** 
+ ** This Location solver is based on the pattern matching algorithm [embedded](\ref ui-coord-resolver.cpp)
+ ** within the UICoordResolver component. This mechanism allows to treat (typically) incomplete coordinate
+ ** specifications as rules for locating an element. Several such coordinate _clauses_ can be combined into
+ ** a _disjunctive_ LocationRule, which is evaluated by matching the clauses one by one, in given order,
+ ** against the currently existing UI tree (topology). Each clause is evaluated individually from scratch
+ ** (there is no common variable binding); the first clause to produce a successful match is used as
+ ** solution -- with any placeholders replaced by the actually matching UI elements.
+ ** 
+ ** ## Default View location configuration DSL
+ ** 
+ ** Whenever a new UI element of a given kind is to be created, we query a standard location configuration
+ ** to determine it's actual location within the interface. This standard configuration is known as
+ ** ["ViewSpec DSL"](\ref id-scheme.hpp) and hard-wired into the UI code. Based on the aforementioned
+ ** pattern matching rules, it allows to express placement rules dependent on the already existing UI.
+ ** There are two kinds of location clauses
+ ** - the standard rules describe an element required to exist. Typically this is the _parent element_
+ **   of the UI widget in question. But it is also possible to write clauses directly mentioning this
+ **   element, in which case such an element must already exist in the UI and will be retrieved as result.
+ ** - the more relaxed _create clauses_ describe a new location / path within the UI-tree, meaning that
+ **   any (parent) elements not yet present are to be created. A _create clause_ is defined within the
+ **   DSL by ending a UI coordinate specification with the term `.create()`. It may still be incomplete
+ **   (i.e. contain wildcards), which means, that the first explicitly given element after (below) the
+ **   wildcards must exist in the tree, to allow for an unambiguous pattern match. Otherwise, for
+ **   creating a new path completely from scratch, all elements have to be given explicitly.
+ ** As a minimum requirement, each LocationRule should be concluded with such a "catch-all" explicit
+ ** create clause, which describes the standard location of the element in question.
  ** 
  ** @see UILocationResolver_test
  ** @see ViewSpecDSL_test
@@ -43,9 +70,6 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-//#include "lib/meta/function.hpp"
-//#include "lib/meta/tuple-helper.hpp"
-//#include "lib/meta/function-closure.hpp"
 #include "lib/format-util.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
@@ -68,10 +92,16 @@ namespace interact {
   using LocationQueryAccess = std::function<LocationQuery&()>;
   
   /** @internal access UI service to query and discover locations within UI topology */
-  extern LocationQueryAccess loactionQuery;
+  extern LocationQueryAccess loactionQuery;   ///////////////////////////////////////////////////////////////TODO this global variable seems to be dispensable
   
   
   
+  /**
+   * A single location specification to be matched and fulfilled.
+   * It is created from a -- typically incomplete -- UICoord spec,
+   * which in turn can be built through a DSL notation.
+   * @todo maybe add a flag to require the current query goal to exist in tree //////////////////////////////TICKET #1130
+   */
   struct LocationClause
     : boost::noncopyable
     {
@@ -92,6 +122,12 @@ namespace interact {
     };
   
   
+  /**
+   * A rule to determine some location by matching against the UI-tree.
+   * It is comprised of one or several disjunctive [clauses](\ref LocationClause),
+   * each of which is a coordinate pattern to be matched. The clauses are tried
+   * in order and the first successfully matched clause wins.
+   */
   class LocationRule
     : boost::noncopyable
     {
@@ -124,6 +160,7 @@ namespace interact {
       
       operator string() const;
     };
+  
   
   
   
@@ -191,14 +228,13 @@ namespace interact {
   
   
   /**
-   * Access or allocate a UI component view
-   * 
-   * @todo initial draft as of 2/2018 -- actual implementation need to be filled in
+   * Service to determine the location of an UI component view.
+   * @see LocationRule
+   * @see UILocationResolver_test::simple_usage_example()
    */
   class UILocationSolver
     : boost::noncopyable
     {
-//      ctrl::GlobalCtx& globals_;
       LocationQueryAccess getLocationQuery;
       
     public:
