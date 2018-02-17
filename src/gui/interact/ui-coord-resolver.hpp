@@ -539,6 +539,24 @@ namespace interact {
         }
       
       
+      /** mutate to turn a wildcard into _existentially quantified._
+       * This means to assume (or require) that an element actually exists at the given position,
+       * without knowing or caring about its actual name. This becomes relevant when matching for
+       * _partially covered_ path; normal wildcards are only accepted to build a solution, when
+       * the matching can be confirmed by an explicit element after (below) the wildcard part.
+       * While this restriction serves to prevent ambiguous and surprising arbitrary matches,
+       * it can sometimes defeat any solution, e.g. when creating a new panel on top of an
+       * existing but irrelevant perspective.
+       */
+      UICoordResolver&&
+      existentiallyQuantify (size_t pos)
+        {
+          if (pos < uic_.size() and not uic_.isPresent(pos))
+            overwrite (pos, UIC_ELIDED);
+          return std::move (*this);
+        }
+      
+      
       
       /** diagnostics */
       operator string()   const { return string(this->uic_); }

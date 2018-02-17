@@ -275,6 +275,7 @@ namespace interact {
               
               // try to solve the current Clause by matching against real UI topology
               UICoordResolver resolver{clause.pattern, getLocationQuery()};
+              preprocess (resolver, clause);
               resolver.coverPartially(); // now either holds a solution or is empty
               
               if (not isnil(resolver)                     // Solution found!
@@ -304,7 +305,21 @@ namespace interact {
         }
       
     private:
-      
+      /** perform adjustments on the current pattern to support some very specific situations
+       * - when we want to create a new panel (or re-use an existing of the same name), on top
+       *   of an existing (but irrelevant) perspective, we mark this perspective as "just there".
+       *   This allows to get a new path as solution, which is just covered up to and including
+       *   that perspective; without special treatment, such a match would otherwise be rejected.
+       */
+      void
+      preprocess (UICoordResolver& builder, LocationClause const& clause)
+        {
+          if (clause.createParents
+              and clause.pattern.isComplete())
+            {
+              builder.existentiallyQuantify (UIC_PERSP);
+            }
+        }
     };
   
   

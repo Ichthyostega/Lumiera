@@ -252,7 +252,7 @@ return: 0
 END
 
 
-TEST: "Iterator monad variations (2nd draft)" IterTreeExplorer_test <<END
+TEST "Iterator monad variations (2nd draft)" IterTreeExplorer_test <<END
 out-lit: 4-3-2-1
 out: Search in random tree: toFind = .....
 out: Protocol of the search: .+\-.+\-.+\-.+\-.+

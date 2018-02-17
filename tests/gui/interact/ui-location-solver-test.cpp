@@ -363,7 +363,7 @@ namespace test {
 //        location.append      (UICoord().tab("assetType()"));                         //////////////////////TICKET #1130 : do we want to support match based on invocation context (here: the type of the asset to be displayed)
           location.append      (UICoord().persp("asset").view("asset"));
           location.append      (UICoord().panel("asset").view("asset").create());
-          location.append      (UICoord::currentWindow().persp(UIC_ELIDED).panel("viewer").create());
+          location.append      (UICoord::currentWindow().panel("viewer").create());                          //Note: especially for this kind of rule, .persp(UIC_ELIDED) is injected automatically
           location.append      (UICoord::window("meta").persp("config").panel("infobox").view("inspect").create());
           
           cout << location << endl;

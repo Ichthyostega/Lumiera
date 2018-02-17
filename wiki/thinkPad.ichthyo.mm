@@ -2436,7 +2436,7 @@
 <node CREATED="1483921070115" ID="ID_398046799" MODIFIED="1518487921058" TEXT="Prototyp-Service"/>
 <node CREATED="1483921132114" ID="ID_1652398711" MODIFIED="1518487921058" TEXT="liefert dekorierte Command-ID"/>
 <node CREATED="1483921149368" ID="ID_1028150245" MODIFIED="1518487921058" TEXT="im GUI nur noch Command-IDs"/>
-<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1518487921058">
+<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1518840407152">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -3542,7 +3542,7 @@
 <node CREATED="1504393221051" ID="ID_938886823" MODIFIED="1518487921063" TEXT="wie bekommt man eine Objekt-ID?">
 <linktarget COLOR="#8e2a4d" DESTINATION="ID_938886823" ENDARROW="Default" ENDINCLINATION="-367;31;" ID="Arrow_ID_265571961" SOURCE="ID_1909730752" STARTARROW="None" STARTINCLINATION="-367;31;"/>
 </node>
-<node CREATED="1506175115772" FOLDED="true" HGAP="318" ID="ID_1448696607" MODIFIED="1518487921063" VSHIFT="64">
+<node CREATED="1506175115772" FOLDED="true" HGAP="318" ID="ID_1448696607" MODIFIED="1518840357589" VSHIFT="64">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -3853,8 +3853,31 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1507939270618" ID="ID_1505797299" MODIFIED="1518487921063" TEXT="abstrakte Struktur -&gt; konkrete Widgets"/>
 <node CREATED="1507939279761" ID="ID_250590373" MODIFIED="1518487921063" TEXT="keine nat&#xfc;rliche Introspektion gegeben"/>
-<node CREATED="1507939312860" HGAP="78" ID="ID_444535530" MODIFIED="1518487921063" TEXT="Analyse" VSHIFT="7">
-<icon BUILTIN="pencil"/>
+<node CREATED="1507939312860" FOLDED="true" HGAP="78" ID="ID_444535530" MODIFIED="1518840304236" TEXT="Analyse" VSHIFT="7">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      habe diese Analyse 2017/2018 ein St&#252;ck weit vorangetrieben.
+    </p>
+    <p>
+      Ergebnis war die Schaffung von UI-Koordinaten und die ViewSpec-DSL
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Damit ist das Thema aber bei Weitem noch nicht ausgesch&#246;pft,
+    </p>
+    <p>
+      jedoch gen&#252;gend aufgeschlossen, um die konkrete Implementierung fortzusetzen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="hourglass"/>
 <node CREATED="1507939326250" ID="ID_1890759249" MODIFIED="1518487921063" TEXT="Aufgaben">
 <node CREATED="1507939400248" ID="ID_1464418318" MODIFIED="1518487921063" TEXT="einem Pfad folgen">
 <arrowlink COLOR="#7d375a" DESTINATION="ID_721718509" ENDARROW="Default" ENDINCLINATION="166;0;" ID="Arrow_ID_1170204247" STARTARROW="None" STARTINCLINATION="96;-13;"/>
@@ -9246,8 +9269,8 @@
 <node COLOR="#338800" CREATED="1515631616944" ID="ID_700537003" MODIFIED="1518487921066" TEXT="verbinden mit Navigator als LocationQuery-Implementierung">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631646108" ID="ID_1553855476" MODIFIED="1518487921066" TEXT="UICoordResolver erzeugen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1515631646108" ID="ID_1553855476" MODIFIED="1518840394020" TEXT="UICoordResolver erzeugen">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515979648475" ID="ID_350272872" MODIFIED="1518487921066" TEXT="Funktionsweise der &quot;Resolution&quot; kl&#xe4;ren">
 <icon BUILTIN="flag-yellow"/>
@@ -9910,7 +9933,12 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1516916611433" ID="ID_1887578617" MODIFIED="1518487921069" TEXT="welche zus&#xe4;tzlichen Services werden ben&#xf6;tigt?">
 <icon BUILTIN="help"/>
 <node CREATED="1517021372159" ID="ID_841350723" MODIFIED="1518487921069" TEXT="location">
-<node CREATED="1517021326957" ID="ID_20403834" MODIFIED="1518487921069" TEXT="nur LocationQuery"/>
+<node CREATED="1518840121972" ID="ID_989066633" MODIFIED="1518840181886" TEXT="ein LocationSolver">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1517021326957" ID="ID_20403834" MODIFIED="1518840184881" TEXT="LocationQuery qua Navigator">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1517021298929" ID="ID_621970077" MODIFIED="1518487921069">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -9944,7 +9972,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1518658696759" ID="ID_68856104" MODIFIED="1518743116362">
+<node COLOR="#990000" CREATED="1518658696759" FOLDED="true" ID="ID_68856104" MODIFIED="1518839544741">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -9968,12 +9996,11 @@
 <node CREATED="1517014040147" ID="ID_144379993" MODIFIED="1518743268543" TEXT="beim Erzeugen des Resolvers"/>
 </node>
 <node CREATED="1518658744024" ID="ID_1009975119" MODIFIED="1518658745685" TEXT="Zweck">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517014013207" ID="ID_1843964714" MODIFIED="1518487921069" TEXT="automatisches Injizieren von &quot;elided&quot;">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518743292259" ID="ID_1943028471" MODIFIED="1518762623661" TEXT="das machen wir trotzdem">
+<node COLOR="#338800" CREATED="1517014013207" ID="ID_1843964714" MODIFIED="1518839527924" TEXT="automatisches Injizieren von &quot;elided&quot;">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1518743292259" ID="ID_1943028471" MODIFIED="1518839525198" TEXT="das machen wir trotzdem">
 <arrowlink COLOR="#595f8d" DESTINATION="ID_1516856737" ENDARROW="Default" ENDINCLINATION="302;0;" ID="Arrow_ID_241747952" STARTARROW="None" STARTINCLINATION="697;-153;"/>
 <icon BUILTIN="yes"/>
-<icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1518743303177" ID="ID_1758602660" MODIFIED="1518743321547" TEXT="...und zwar direkt im LocationSolver"/>
 </node>
@@ -10171,9 +10198,9 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505346701" ID="ID_1733459677" MODIFIED="1518487921069" TEXT="LocationSolver einf&#xfc;hren">
+<node COLOR="#338800" CREATED="1517505346701" FOLDED="true" ID="ID_1733459677" MODIFIED="1518839586558" TEXT="LocationSolver einf&#xfc;hren">
 <linktarget COLOR="#7999a3" DESTINATION="ID_1733459677" ENDARROW="Default" ENDINCLINATION="460;0;" ID="Arrow_ID_1447990036" SOURCE="ID_570287604" STARTARROW="None" STARTINCLINATION="-15;211;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1517505662323" ID="ID_1295083929" MODIFIED="1518487921069" TEXT="baut auf LocationQuery auf">
 <icon BUILTIN="idea"/>
 </node>
@@ -10247,7 +10274,7 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518762499749" ID="ID_214794727" MODIFIED="1518762708094">
+<node COLOR="#338800" CREATED="1518762499749" FOLDED="true" ID="ID_214794727" MODIFIED="1518839561765">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -10260,14 +10287,53 @@
 </html>
 </richcontent>
 <linktarget COLOR="#8eacb9" DESTINATION="ID_214794727" ENDARROW="Default" ENDINCLINATION="-653;0;" ID="Arrow_ID_1678351989" SOURCE="ID_606433871" STARTARROW="None" STARTINCLINATION="1400;0;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518762520034" ID="ID_1516856737" MODIFIED="1518762623661" TEXT="hier automatisch injizieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1518762520034" ID="ID_1516856737" MODIFIED="1518839506876" TEXT="hier automatisch injizieren">
 <linktarget COLOR="#595f8d" DESTINATION="ID_1516856737" ENDARROW="Default" ENDINCLINATION="302;0;" ID="Arrow_ID_241747952" SOURCE="ID_1943028471" STARTARROW="None" STARTINCLINATION="697;-153;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1518762547918" ID="ID_1868672591" MODIFIED="1518762557041" TEXT="nur f&#xfc;r create()-Klauseln"/>
 <node CREATED="1518762532376" ID="ID_720810877" MODIFIED="1518762565908" TEXT="pragmatische L&#xf6;sung, statt voller Unifikation">
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1518838263050" ID="ID_443518928" MODIFIED="1518838266589" TEXT="Implementierung">
+<node CREATED="1518838267457" ID="ID_943649771" MODIFIED="1518838276599" TEXT="als pre-Processing im Solver">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1518838283262" ID="ID_238691976" MODIFIED="1518838297385" TEXT="wie Pattern modifizieren?">
+<node CREATED="1518838298468" ID="ID_753244692" MODIFIED="1518838305407" TEXT="mu&#xdf; &#xfc;berschreiben">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1518838306835" ID="ID_1187474816" MODIFIED="1518838315594" TEXT="overwrite ist protected">
+<icon BUILTIN="yes"/>
+<node CREATED="1518838316762" ID="ID_375483047" MODIFIED="1518838388905" TEXT="aus gutem Grund">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn durch overwrite kann man denormalisierte Pattern erzeugen.
+    </p>
+    <p>
+      Also mu&#223; jeder Anwender dieser Funktion sicherstellen, da&#223; dies
+    </p>
+    <p>
+      entweder nicht passieren kann, oder explizit normalise() aufrufen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1518838372771" ID="ID_1787971906" MODIFIED="1518838384249" TEXT="das soll in der Schachtel bleiben">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1518838394663" ID="ID_1070204465" MODIFIED="1518839504321" TEXT="der Resolver mu&#xdf; das f&#xfc;r uns machen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1517507036433" ID="ID_921121750" MODIFIED="1518487921069" TEXT="zieht die Antwort bei ersem Erfolg">
@@ -10368,7 +10434,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1518145595274" ID="ID_1539200142" MODIFIED="1518487921070" TEXT="in jedem Fall korrekte L&#xe4;nge sicherstellen">
+<node COLOR="#338800" CREATED="1518145595274" FOLDED="true" ID="ID_1539200142" MODIFIED="1518839569193" TEXT="in jedem Fall korrekte L&#xe4;nge sicherstellen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1518212471553" ID="ID_1821401889" MODIFIED="1518487921070" TEXT="Frage: wann?">
 <node CREATED="1518212565636" ID="ID_1223770753" MODIFIED="1518487921070" TEXT="L&#xf6;sen einer zu kurzen Klausel bringt nix">
@@ -10422,7 +10488,7 @@
 <node CREATED="1518212959895" ID="ID_930933486" MODIFIED="1518487921070" TEXT="len &lt;= depth+1"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1518145778249" ID="ID_462394658" MODIFIED="1518487921070" TEXT="F&#xe4;lle geschickt zusammenfassen (duplikate Aktionen)">
+<node COLOR="#338800" CREATED="1518145778249" FOLDED="true" ID="ID_462394658" MODIFIED="1518839572648" TEXT="F&#xe4;lle geschickt zusammenfassen (duplikate Aktionen)">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#efedc4" CREATED="1518213086862" ID="ID_1713281564" MODIFIED="1518487921070" STYLE="bubble">
 <richcontent TYPE="NODE"><html>
@@ -11106,9 +11172,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517506145618" ID="ID_718086573" MODIFIED="1518487921071" TEXT="UILocationSolver_test">
+<node COLOR="#338800" CREATED="1517506145618" FOLDED="true" ID="ID_718086573" MODIFIED="1518840088211" TEXT="UILocationSolver_test">
 <linktarget COLOR="#465888" DESTINATION="ID_718086573" ENDARROW="Default" ENDINCLINATION="-185;-461;" ID="Arrow_ID_1844529849" SOURCE="ID_957265584" STARTARROW="None" STARTINCLINATION="-598;29;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1517506161024" ID="ID_21333166" MODIFIED="1518487921071" TEXT="Verdrahtung mit Test/Dummy-UI">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -11305,9 +11371,9 @@
 </node>
 <node COLOR="#338800" CREATED="1518223044301" ID="ID_1476637837" MODIFIED="1518742655379" TEXT="generic window + panel create">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1518762440997" ID="ID_606433871" MODIFIED="1518762708094" TEXT="ggfs auto-elided?">
+<node COLOR="#338800" CREATED="1518762440997" ID="ID_606433871" MODIFIED="1518840066703" TEXT="ggfs auto-elided?">
 <arrowlink COLOR="#8eacb9" DESTINATION="ID_214794727" ENDARROW="Default" ENDINCLINATION="-653;0;" ID="Arrow_ID_1678351989" STARTARROW="None" STARTINCLINATION="1400;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1518223201375" ID="ID_1794858276" MODIFIED="1518742656811" TEXT="complete create">
@@ -21067,7 +21133,7 @@
 <node CREATED="1492205732389" ID="ID_1080697951" MODIFIED="1518487921090" TEXT="wir k&#xf6;nnen stets gleich triggern"/>
 </node>
 <node CREATED="1492205741483" ID="ID_1132272888" MODIFIED="1518487921090" TEXT="Command wird sofort nach dem Binden getriggert"/>
-<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1518487921090" TEXT="Protokoll-Erweiterung" VSHIFT="8">
+<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1518840407152" TEXT="Protokoll-Erweiterung" VSHIFT="8">
 <arrowlink COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-940;1675;" ID="Arrow_ID_1617518648" STARTARROW="None" STARTINCLINATION="3436;-1136;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1483925298713" ID="ID_347702585" MODIFIED="1518487921090" TEXT="Command-Prototyp forken"/>
