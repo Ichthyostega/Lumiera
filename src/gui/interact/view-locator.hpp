@@ -44,9 +44,7 @@
  ** a topological tree structure of relevant entities (windows, panels, views,...) -- which is basically the
  ** service provided by the Navigator; yet this Navigator service can be abstracted into the gui::interact::LocationQuery
  ** API, and this abstraction allows to keep all the intricacies of navigating concrete UI widgets confined within the
- ** implementation of the Navigator service. To enable this usage pattern, there is an access functor, to be found at
- ** gui::interact::locationQuery, which will be installed when the UI starts and disabled on shutdown. This functor
- ** can be exchanged for the purpose of unit testing.
+ ** implementation of the Navigator service.
  ** 
  ** @todo WIP 9/2017 early draft       ////////////////////////////////////////////////////////////TICKET #1104
  ** 

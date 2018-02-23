@@ -117,6 +117,16 @@ namespace interact {
   
   
   /**
+   * Locator is a functor to resolve to a topological location in the UI-tree.
+   * It takes a _viewID_ as argument, which actually is more of a typeID to designate
+   * the kind of view or UI widget, which shall be attached at or retrieved from the
+   * location resolved through the LocationRule. The latter is essentially what is
+   * embedded within the Locator functor
+   */
+  using Locator = std::function<UICoord(Literal)>;
+  
+  
+  /**
    * A specification to describe the desired location of a component view within the Lumiera UI.
    * ViewSpec is basically a set of [UI coordinates](\ref UICoord), with the additional possibility
    * of specifying several alternatives, with the intention to pick the first applicable one.
@@ -137,7 +147,8 @@ namespace interact {
         : ViewSpec{UICoord(std::move (coordinates))}
         { }
       
-      operator UICoord()
+      UICoord
+      operator() (Literal componentID)
         {
           UNIMPLEMENTED ("resolve a view spec to yield explicit UI coordinates");
         }
