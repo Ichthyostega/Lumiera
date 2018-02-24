@@ -10223,13 +10223,193 @@
 <node CREATED="1519358000671" ID="ID_49826255" MODIFIED="1519358015345" TEXT="Aufruf mit Typ-ID-Argument"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519358138988" ID="ID_1481930885" MODIFIED="1519358147156" TEXT="Problem: DSL-Mechanik">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519358138988" ID="ID_1481930885" MODIFIED="1519442424308" TEXT="DSL-Mechanik">
+<icon BUILTIN="pencil"/>
 <node CREATED="1519358154386" ID="ID_1810798001" MODIFIED="1519358201550" TEXT="Allocator wird durch Zuweisen der AlocSpec generiert">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1519358178623" ID="ID_517547970" MODIFIED="1519358197549" TEXT="beim Locator fehlt ein entsprechendes Gegenst&#xfc;ck">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1519358178623" ID="ID_517547970" MODIFIED="1519442398323" TEXT="beim Locator fehlt ein entsprechendes Gegenst&#xfc;ck">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1519359156410" ID="ID_1786241256" MODIFIED="1519359162713" TEXT="Idee">
+<icon BUILTIN="idea"/>
+<node CREATED="1519359176855" ID="ID_853060191" MODIFIED="1519359192777">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der <i>Level</i>&#160;im UI ist noch offen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1519359193821" ID="ID_588596170" MODIFIED="1519359234665" STYLE="fork" TEXT="das k&#xf6;nnte Argument eines Builders sein"/>
+<node CREATED="1519359239735" ID="ID_988890391" MODIFIED="1519442391464" TEXT="konkret......">
+<node CREATED="1519438604809" ID="ID_313142617" MODIFIED="1519438615852" TEXT="L&#xf6;sevorgang mu&#xdf; den Ziel-Level kennen"/>
+<node CREATED="1519438617271" ID="ID_1310079168" MODIFIED="1519438673926">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>fast immer</i>&#160;ist das aber UIC_VIEW
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im Moment f&#228;llt mir &#252;berhaupt keine Ausnahme ein
+    </p>
+    <p>
+      aber man soll niemals nie sagen;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      jedenfalls ist der LocationSolver komplett generisch geschrieben,
+    </p>
+    <p>
+      w&#228;re ja auch d&#228;mlich, den auf einen Level festzunageln
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1519439848624" ID="ID_1356890401" MODIFIED="1519440019400">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann man den Level <i>erschlie&#223;en?</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1519439872572" ID="ID_1387780581" MODIFIED="1519439914138" TEXT="fast, aber leider nein">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1519439893089" ID="ID_350245814" MODIFIED="1519440011427" TEXT="nicht wenn alle Pattern gleich lang sind">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es ist nicht klar, ob die pattern bereits das fragliche View-Element mit einschlie&#223;en,
+    </p>
+    <p>
+      oder ob das View-Element noch angeh&#228;ngt werden soll. Diese Variation ist essentiell,
+    </p>
+    <p>
+      um Regeln auszudr&#252;cken, die explizit nur eine schon existierende UI-Komponente greifen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1519440039302" ID="ID_779685706" MODIFIED="1519442729591" TEXT="folglich...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1519440044629" ID="ID_433141744" MODIFIED="1519442714991" TEXT="mu&#xdf; der Level entweder aus der DSL kommen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1519440054651" ID="ID_1512334426" MODIFIED="1519442712213" TEXT="oder er mu&#xdf; &#xfc;ber den Typ gecodet sein">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1519442682549" ID="ID_1285145089" MODIFIED="1519442708878" TEXT="oder explizit beim Aufruf mitgegeben">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1519437341366" ID="ID_1400629217" MODIFIED="1519437344737" TEXT="Alternativen">
+<node CREATED="1519437362523" ID="ID_1967120024" MODIFIED="1519440122737" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auto locate = matchView(
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;panel(&quot;blah&quot;)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow().panel(&quot;blubb&quot;).create() )
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1519437509655" ID="ID_241024117" MODIFIED="1519442360056" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      LocatorSpec&lt;UIC_VIEW&gt; locate = panel(&quot;blah&quot;)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow().panel(&quot;blubb&quot;).create()
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1519437756333" ID="ID_565391583" MODIFIED="1519440134474" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ViewSpec locate = panel(&quot;blah&quot;)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow().panel(&quot;blubb&quot;).create()
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1519440138712" ID="ID_861550710" MODIFIED="1519440299158" TEXT="Entscheidung">
+<icon BUILTIN="yes"/>
+<node CREATED="1519440157310" ID="ID_1912054433" MODIFIED="1519440166344" TEXT="ziehe die letzte Variante als Standard-Fall vor">
+<node CREATED="1519440168660" ID="ID_1954754744" MODIFIED="1519440288338" TEXT="weil sie am unscheinbarsten ist">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1519440271318" ID="ID_436275698" MODIFIED="1519440283871" TEXT="auch wenn dadurch die Definitionen etwas schief werden">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1519440180978" ID="ID_42017722" MODIFIED="1519440194012" TEXT="die vorletzte Variante ist die eigentliche Definition">
+<node CREATED="1519440198016" ID="ID_650838793" MODIFIED="1519440207306" TEXT="und ViewSpec ein Typ-Alias"/>
+<node CREATED="1519440208487" ID="ID_1465224504" MODIFIED="1519440222184" TEXT="analog f&#xfc;r PanelSpec, WindowSpec"/>
+</node>
+<node CREATED="1519440250849" ID="ID_800018525" MODIFIED="1519440267084" TEXT="die Asymetrie in der DSL-Definition nehme ich in Kauf">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node CREATED="1519355735012" ID="ID_241646491" MODIFIED="1519355793090" TEXT="wo entsteht die LocationRule?">

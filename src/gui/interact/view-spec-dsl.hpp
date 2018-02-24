@@ -121,7 +121,7 @@ namespace interact {
    * It takes a _viewID_ as argument, which actually is more of a typeID to designate
    * the kind of view or UI widget, which shall be attached at or retrieved from the
    * location resolved through the LocationRule. The latter is essentially what is
-   * embedded within the Locator functor
+   * embedded within the Locator functor.
    */
   using Locator = std::function<UICoord(Literal)>;
   
@@ -130,31 +130,40 @@ namespace interact {
    * A specification to describe the desired location of a component view within the Lumiera UI.
    * ViewSpec is basically a set of [UI coordinates](\ref UICoord), with the additional possibility
    * of specifying several alternatives, with the intention to pick the first applicable one.
-   * 
-   * @todo initial draft as of 9/2017
+   * @tparam depth the level in the tree addressed by this locator
+   * @remarks Locator is build from a DSL expression, which is basically a UICoord::Builder.
+   *            This coordinate spec describes a sequence of several places where to locate
+   *            the UI-Element in question. The template parameter clarifies if we're talking
+   *            about windows here, or panels or views. The latter is the [default case](\ref ViewSpec).
    */
-  class ViewSpec
+  template<size_t depth>
+  class LocatorSpec
+    : public Locator
     {
       
     public:
-      ViewSpec(UICoord coordinates)
+      LocatorSpec(UICoord coordinates)
+        : Locator([](Literal componentID) -> UICoord
+                    {
+                      UNIMPLEMENTED ("resolve a view spec to yield explicit UI coordinates");
+                    })
         {
           UNIMPLEMENTED ("build a view spec from explicitly given UI coordinates");
         }
       
       /** shortcut to allow initialisation from UI-Coordinate builder expression */
-      ViewSpec(UICoord::Builder&& coordinates)
-        : ViewSpec{UICoord(std::move (coordinates))}
+      LocatorSpec(UICoord::Builder&& coordinates)
+        : LocatorSpec{UICoord(std::move (coordinates))}
         { }
       
-      UICoord
-      operator() (Literal componentID)
-        {
-          UNIMPLEMENTED ("resolve a view spec to yield explicit UI coordinates");
-        }
-    private:
-      
     };
+  
+  /**
+   * A specification to describe the desired location of a component view within the Lumiera UI.
+   * ViewSpec is basically a set of [UI coordinates](\ref UICoord), with the additional possibility
+   * of specifying several alternatives, with the intention to pick the first applicable one.
+   */
+  using ViewSpec = LocatorSpec<UIC_VIEW>;
   
   
   /**

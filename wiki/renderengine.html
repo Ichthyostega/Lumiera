@@ -2838,7 +2838,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201802160224" tags="def GuiPattern design" changecount="50">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201802240154" tags="def GuiPattern design" changecount="51">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2858,7 +2858,7 @@ Here, //Allocation// means
 The classical example to verify this definition is the //allocation of viewers:// when starting playback of a new media item, we &quot;need a viewer&quot; to show it. But we can not just create yet another viewer window -- rather we're bound to allocate one of the possible &quot;viewer slots&quot;. In fact this is a configurable property of the UI layout employed; sometimes some people need the limitation to one single viewer entity (which might even be external, routed to a beamer or monitor), while other ones request the classical editor layout with two viewer windows side by side, while yet different working styles might exploit a limited set of viewers allocated in stack- or round-robin style.
 
 !View access
-The global access point to component views is the {{{ViewLocator}}} within InteractionDirector, which exposes a generic access- and management API to
+The global access point to component views is the ViewLocator within InteractionDirector, which exposes a generic access- and management API to
 * get (possibly create) some view of given type
 * get (possibly create) a view with specific identity
 * destroy a specific view
@@ -3730,7 +3730,7 @@ Especially the focus navigation entails the use of some kind of ubiquitous [[coo
 
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201801132336" tags="def design GuiPattern" changecount="27">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201802240129" tags="def design GuiPattern" changecount="28">
 <pre>//the top-level controller within the UI.//
 In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within this model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, together with the asset management and defaults and rules configuration within the session.
 
@@ -3752,6 +3752,7 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 :* the SpotLocator is what is &quot;moved&quot; when the [[Spot]] of current activity moves
 :* the FocusTracker is responsible for //detecting changes in current selection and focus.//
 :* the [[Navigator]] is a special controller to handle moving the SpotLocator within the UI tree topology
+:* the ViewLocator serves for any kind of high-level, abstracted access to [[component views|GuiComponentView]] and location resolution.
 
 !Collaborations
 * several global actions are exposed here, like opening the session and creating a new timeline.&lt;br/&gt;Such operations are typically bound into menu and action buttons, and in turn invoke [[commands|CommandHandling]] into the Session
@@ -4288,7 +4289,7 @@ The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangibl
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
 </div>
-<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201712170155" tags="spec decision draft GuiPattern" changecount="21">
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201802240130" tags="spec decision draft GuiPattern" changecount="23">
 <pre>//Service to navigate through the UI as generic structure.//
 The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
 
@@ -4312,6 +4313,10 @@ In the current situation ({{red{10/2017}}}), before engaging into the actual imp
 :* or to get //just some instance// of a view identified by type
 ;WorkSite navication
 :move the Spot to some other place in the UI known by its [[UI-Coordinates|UICoord]]
+!!!{{red{Update 2/2018:}}} changed responsibilities
+Elaboration on the topic of »View Allocation« caused some minor architectural rearrangements.
+* Navigator became a pure information service (read-only), working on an abstracted view of the UI through [[UI coordinates|UICoord]]
+* the ViewLocator became service point for any high-level access to GuiComponentView elements
 
 !!!Requirements clarified
 From these use cases we conclude that the actual requirements for a Navigator component are less than one might expect.
@@ -9845,6 +9850,14 @@ Establishing a ~ViewConnection is prerequisite for creating or attaching an Play
 
 View connections are part of the model and thus persistent. They can be created explicitly, or just derived by //allocating a viewer.// And a new view connection can push aside (and thus &quot;break&quot;) an existing one from another timeline or model element. When a view connection is //broken,// any associated PlayProcess needs to be terminated (this is a blocking operation). Thus, at any time, there can be only one active view connection to a given viewer or output sink; here &quot;active&quot; means, that a PlayController has been hooked up, and the connection is ready for playback or rendering. But on the other hand, nothing prevents a timeline (or similar model object) to maintain multiple view connections -- consequently the actual playback position behaves as if associated with the view connection; it has only meaning with respect to this specific connection. An obvious example is that you may play back, without interfering with an ongoing render.
 </pre>
+</div>
+<div title="ViewLocator" creator="Ichthyostega" modifier="Ichthyostega" created="201802240138" modified="201802240150" tags="spec decision draft GuiPattern" changecount="6">
+<pre>//access and location of [[component views|GuiComponentView]] as abstracted from actual UI widgets.//
+The ViewLocator is a close sibling and mutually interdependent with the [[Navigator]] -- the primary difference being the uniform, completely symbolic representation by [[UI-tree topology|UICoord]], as exposed through the latter, which precludes //immediate manipulation.// The ViewLocator likewise presents an abstracted view, but oriented towards individual components, which it allows to locate, allocate and expose by direct reference as UI-Element.
+
+!Rules based handling by kind-of-view
+A small selection of //relevant UI elements// can in fact be located &quot;by-type&quot;, relying on a configuration in the form of //locating rules...// &amp;rarr; elaborated in more detail [[here|GuiComponentView]].
+This access mechanism allows to act on &quot;the primary one of that kind&quot;, possibly creating a new instance on demand -- such UI elements are not to be confused with the model entities they expose for user interaction; typically they can either be re-linked or re-bound to a specific entity, or they are able to handle multiple model connections in separate tabs within the view (e.g. several [[Timelines|GuiTimelineView]]).</pre>
 </div>
 <div title="ViewerAsset" modifier="Ichthyostega" created="201105230116" modified="201105232228" tags="Model spec">
 <pre>A [[structural Asset|StructAsset]] corresponding to a Viewer element in the GUI.
