@@ -107,12 +107,14 @@
 
 #include <functional>
 #include <utility>
+#include <string>
 
 
 namespace gui {
 namespace interact {
   
   using std::forward;
+  using std::string;
   
   
   
@@ -140,22 +142,30 @@ namespace interact {
   class LocatorSpec
     : public Locator
     {
+      LocationRule rules_;
       
     public:
-      LocatorSpec(UICoord coordinates)
-        : Locator([](Literal componentID) -> UICoord
+      LocatorSpec(LocationRule && ruleToDetermineLocation)
+        : Locator([&](Literal componentID) -> UICoord
                     {
+                      string lala{rules_};
                       UNIMPLEMENTED ("resolve a view spec to yield explicit UI coordinates");
                     })
-        {
-          UNIMPLEMENTED ("build a view spec from explicitly given UI coordinates");
-        }
-      
-      /** shortcut to allow initialisation from UI-Coordinate builder expression */
-      LocatorSpec(UICoord::Builder&& coordinates)
-        : LocatorSpec{UICoord(std::move (coordinates))}
+        , rules_{move (ruleToDetermineLocation)}
         { }
       
+      /** shortcut to allow initialisation from UI-Coordinate builder expression */
+      LocatorSpec(UICoord::Builder&& simpleLocationSpec)
+        : LocatorSpec{
+            LocationRule{
+              LocationClause{
+                UICoord{std::move (simpleLocationSpec)}}}}
+        { }
+      
+      operator string()  const
+        {
+          return string{rules_};
+        }
     };
   
   /**
