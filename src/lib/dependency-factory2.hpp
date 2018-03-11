@@ -25,14 +25,14 @@
  ** Implementation of a singleton factory used to bring up services as dependency.
  ** @internal this implementation header belongs to our framework to deal with
  **           [service dependencies](\ref depend.hpp) and should not be used directly.
- ** @deprecated 3/18 rework of the singleton / dependency factory is underway
+ ** @todo WIP-WIP 3/18 rework of the singleton / dependency factory is underway
  */
 
 
 
 
-#ifndef LIB_DEPENDENCY_FACTORY_H
-#define LIB_DEPENDENCY_FACTORY_H
+#ifndef WIP_LIB_DEPENDENCY_FACTORY_H
+#define WIP_LIB_DEPENDENCY_FACTORY_H
 
 
 
@@ -55,9 +55,8 @@ namespace lib {
    * creates and manages the singleton instances in default configuration;
    * it is placed into a function-scope static variable; consequently
    * the singleton instances are placed into static memory by default.
-   * @deprecated 3/18 rework of the singleton / dependency factory is underway
    */
-  class DependencyFactory
+  class DependencyFactory2
     {
     public:
       typedef void* (*InstanceConstructor)(void);
@@ -195,7 +194,7 @@ namespace lib {
       
       
       template<class TAR>
-      friend InstanceConstructor buildSingleton();
+      friend InstanceConstructor buildSingleton2();
       
     };
   
@@ -212,10 +211,10 @@ namespace lib {
    * the actual concrete implementation class
    */
   template<class TAR>
-  inline DependencyFactory::InstanceConstructor
-  buildSingleton()
+  inline DependencyFactory2::InstanceConstructor
+  buildSingleton2()
   {
-    return & DependencyFactory::createSingletonInstance<TAR>;
+    return & DependencyFactory2::createSingletonInstance<TAR>;
   }
   
   

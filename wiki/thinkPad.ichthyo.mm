@@ -3896,8 +3896,7 @@
       jedoch gen&#252;gend aufgeschlossen, um die konkrete Implementierung fortzusetzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1507939326250" ID="ID_1890759249" MODIFIED="1518487921063" TEXT="Aufgaben">
 <node CREATED="1507939400248" ID="ID_1464418318" MODIFIED="1518487921063" TEXT="einem Pfad folgen">
@@ -4898,7 +4897,7 @@
 <node CREATED="1510341163528" ID="ID_1640768302" MODIFIED="1510341167036" TEXT="fischt nach L&#xf6;sungen"/>
 </node>
 </node>
-<node CREATED="1510341362957" FOLDED="true" ID="ID_1499495468" MODIFIED="1513473668875" TEXT="wirklich monadisch?">
+<node CREATED="1510341362957" FOLDED="true" ID="ID_1499495468" MODIFIED="1520721823019" TEXT="wirklich monadisch?">
 <linktarget COLOR="#80c6b3" DESTINATION="ID_1499495468" ENDARROW="Default" ENDINCLINATION="-1812;12745;" ID="Arrow_ID_673178727" SOURCE="ID_1502143527" STARTARROW="None" STARTINCLINATION="4133;-10665;"/>
 <node CREATED="1510341374332" ID="ID_483481416" MODIFIED="1511572072346" TEXT="naja...">
 <richcontent TYPE="NOTE"><html>
@@ -8592,8 +8591,7 @@
       Support f&#252;r <i>elided</i>&#160;element
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#7e9da8" DESTINATION="ID_796216711" ENDARROW="Default" ENDINCLINATION="989;-91;" ID="Arrow_ID_925245331" STARTARROW="None" STARTINCLINATION="199;-5;"/>
 <linktarget COLOR="#91a7b5" DESTINATION="ID_974516393" ENDARROW="Default" ENDINCLINATION="-759;53;" ID="Arrow_ID_862004765" SOURCE="ID_140988955" STARTARROW="None" STARTINCLINATION="1590;41;"/>
 <icon BUILTIN="button_ok"/>
@@ -8916,8 +8914,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1517509311733" ID="ID_796216711" MODIFIED="1518750402160" TEXT="Anker+elided plus L&#xfc;cke schlie&#xdf;en">
-<linktarget COLOR="#4b5cab" DESTINATION="ID_796216711" ENDARROW="Default" ENDINCLINATION="-145;942;" ID="Arrow_ID_570641462" SOURCE="ID_1542036736" STARTARROW="None" STARTINCLINATION="383;78;"/>
 <linktarget COLOR="#7e9da8" DESTINATION="ID_796216711" ENDARROW="Default" ENDINCLINATION="989;-91;" ID="Arrow_ID_925245331" SOURCE="ID_974516393" STARTARROW="None" STARTINCLINATION="199;-5;"/>
+<linktarget COLOR="#4b5cab" DESTINATION="ID_796216711" ENDARROW="Default" ENDINCLINATION="-145;942;" ID="Arrow_ID_570641462" SOURCE="ID_1542036736" STARTARROW="None" STARTINCLINATION="383;78;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1517509541382" FOLDED="true" ID="ID_1722401650" MODIFIED="1518752274910">
@@ -8959,8 +8957,7 @@
       da&#223; der Algorithmus solche L&#246;sungen verwirft
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -9337,8 +9334,7 @@
       zweite hart-gecodete Fallback-Konfig
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -9374,8 +9370,7 @@
       <b>existing()</b>&#160;sollte <i>default</i>&#160;sein und <b>create()</b>&#160;explizit anzufordern
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -9388,8 +9383,7 @@
       von der Bedeutung her &quot;existing&quot; meint
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1516912422576" ID="ID_1350672682" MODIFIED="1518487921067" TEXT="create() tritt normalerweise auf der letzten Regel auf"/>
 <node CREATED="1516912433647" ID="ID_1102539904" MODIFIED="1518487921067" TEXT="das k&#xf6;nnte redundant sein, ist aber klarer so"/>
@@ -9412,8 +9406,7 @@
       <i>komplett definierter</i>&#160;Pfad incl Zielobjekt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1516916496673" ID="ID_1162890109" MODIFIED="1518487921067">
 <richcontent TYPE="NODE"><html>
@@ -9425,8 +9418,7 @@
       ggfs wird <i>h&#246;chstes ein abschlie&#223;endes</i>&#160;Element hinzugef&#252;gt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1516916543155" ID="ID_458920753" MODIFIED="1518487921067">
 <richcontent TYPE="NODE"><html>
@@ -9438,8 +9430,7 @@
       dieser Pfad ist stets <i>anchored</i>&#160;und <i>partially covered</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -9468,8 +9459,7 @@
       da&#223; wir mehrere Perspektiven gleichzeitig in die UI-Topologie abbilden...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517011727918" ID="ID_1678474222" MODIFIED="1518487921067" TEXT="und man daher typischerweise diese in der Spec weglassen m&#xf6;chte">
 <richcontent TYPE="NOTE"><html>
@@ -9490,8 +9480,7 @@
       und deshalb habe ich die Perspektive zu den UI-Koordinaten hinzugenommen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517011745635" ID="ID_1001739741" MODIFIED="1518487921067" TEXT="aber dies einen Wildcard zur Folge hat, der eine L&#xf6;sung verhindern kann">
 <richcontent TYPE="NOTE"><html>
@@ -9512,8 +9501,7 @@
       um den Match eindeutig zu machen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1517012023926" ID="ID_836827160" MODIFIED="1518487921067" TEXT="mehre M&#xf6;glichkeiten">
@@ -9542,8 +9530,7 @@
       ...sofern es stets eine Perspektive geben mu&#223;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517012407785" ID="ID_420210882" MODIFIED="1518487921068" TEXT="leicht auf den bestehenden Algo aufzupflanzen"/>
 </node>
@@ -9577,8 +9564,7 @@
       ein Konstrukt, mit dem sich eine Ebene im Baum &#252;berspringen l&#228;&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517012879513" ID="ID_391823235" MODIFIED="1518487921068" TEXT="mu&#xdf; sowiso noch nachimplementiert werden">
 <richcontent TYPE="NOTE"><html>
@@ -9599,8 +9585,7 @@
       einfach wenn die betreffende Komponente in der Angabe fehlt)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517012889559" ID="ID_1411847979" MODIFIED="1518487921068" TEXT="f&#xfc;gt sich organisch in die Implementierung ein">
 <richcontent TYPE="NOTE"><html>
@@ -9615,8 +9600,7 @@
       es ist nur eine weitere Zeile in dem Test, ob ein Match vorliegt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1517012992353" ID="ID_1397586437" MODIFIED="1518487921068" TEXT="Contra">
@@ -9634,8 +9618,7 @@
       w&#228;hrend der andere (eben dieses '.' == elided) eigens erkl&#228;rt werden mu&#223;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517013053265" ID="ID_1569479466" MODIFIED="1518487921068" TEXT="gewisses Mi&#xdf;brauchs-Potential">
 <richcontent TYPE="NOTE"><html>
@@ -9653,8 +9636,7 @@
       Damit kann man alle Einschr&#228;nkungen unterlaufen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517013164050" ID="ID_623452791" MODIFIED="1518487921068" TEXT="mehrfach-L&#xf6;sungen nicht offensichtlich">
 <richcontent TYPE="NOTE"><html>
@@ -9684,8 +9666,7 @@
       zuf&#228;lligen Umst&#228;nden ab, ob man die erwartete L&#246;sung bekommt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -9716,8 +9697,7 @@
       Allocator = std::function&lt;UICoord(UICoordResolver)&gt;;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517018171153" ID="ID_912683774" MODIFIED="1518487921068" TEXT="wird ziemlich technisch in der Implementierung">
 <richcontent TYPE="NOTE"><html>
@@ -9735,8 +9715,7 @@
       in einem St&#252;ck Metaprogramming-Code, das ohnenhin schon ziemlich &quot;dicht&quot; ist....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517018198398" ID="ID_986073860" MODIFIED="1518487921068" TEXT="sonst mu&#xdf; man halt noch mal traversieren">
 <richcontent TYPE="NOTE"><html>
@@ -9777,8 +9756,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517018183472" ID="ID_1424416822" MODIFIED="1518487921068" TEXT="als Optimierung auf sp&#xe4;ter vertagt...">
 <richcontent TYPE="NOTE"><html>
@@ -9793,8 +9771,7 @@
       sich ein Interface versaut und ziemliche zus&#228;tzliche Komplexit&#228;ten an Bord zieht.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -9828,8 +9805,7 @@
       gegen den Kontext, mit dem sie matchen soll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1518762048186" ID="ID_1857576258" MODIFIED="1518762055013" TEXT="m&#xf6;chte ich eigentlich nicht einf&#xfc;hren"/>
 <node CREATED="1518762055881" ID="ID_1976334061" MODIFIED="1518762100381" TEXT="vorerst nicht weiter verfolgt">
@@ -9904,8 +9880,7 @@
       es gibt <i>nur einen</i>&#160;&quot;Locator&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1517504936349" ID="ID_554771782" MODIFIED="1518487921068" TEXT="aber viele Allocatoren"/>
 <node CREATED="1517504985135" ID="ID_1830919763" MODIFIED="1518487921068" TEXT="keine partielle Funktor-Applikation notwendig">
@@ -9916,8 +9891,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505097399" ID="ID_294737534" MODIFIED="1518487921068" TEXT="Konsequenz: Locator wird zum Funktor">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517505097399" ID="ID_294737534" MODIFIED="1520209798915" TEXT="Konsequenz: Locator wird zum Funktor">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1517505142369" ID="ID_940906263" MODIFIED="1518487921068" TEXT="wird weiterhin initialisiert mit einer UI-Coord"/>
 <node CREATED="1517508084435" ID="ID_536404927" MODIFIED="1518487921068" TEXT="baut daraus eine LocationRule (embedded delegate)"/>
 <node CREATED="1517505168030" ID="ID_570287604" MODIFIED="1518487921068" STYLE="fork" TEXT="delegiert L&#xf6;sung an LocationSolver (PImpl)">
@@ -10006,8 +9981,7 @@
       Kontextualisierung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#e46465" DESTINATION="ID_68856104" ENDARROW="Default" ENDINCLINATION="74;449;" ID="Arrow_ID_110301671" SOURCE="ID_1208480183" STARTARROW="None" STARTINCLINATION="-232;7;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1518658759567" ID="ID_1257805922" MODIFIED="1518658772007" TEXT="wie?">
@@ -10067,8 +10041,7 @@
       im aktuellen Fenster einen v&#246;llig neuen UI-Elementkontext schaffen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#2c4580" DESTINATION="ID_334346990" ENDARROW="Default" ENDINCLINATION="242;0;" ID="Arrow_ID_1968525556" SOURCE="ID_1219364679" STARTARROW="None" STARTINCLINATION="78;0;"/>
 </node>
 <node CREATED="1518745834329" ID="ID_877601312" MODIFIED="1518745855890" TEXT="nicht klar, ob es gerechtfertigt ist, hierf&#xfc;r solche Komplexit&#xe4;ten zu schaffen"/>
@@ -10085,8 +10058,7 @@
       halbgaren Unifikation aufzubrezln
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1518745906400" ID="ID_958966084" MODIFIED="1518745914960" TEXT="wildMatch() in ui-coord-resolver.cpp">
 <icon BUILTIN="forward"/>
@@ -10106,8 +10078,7 @@
       <i>nur eingeschr&#228;nkt</i>&#160;auf die TypID?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1518830433876" ID="ID_486080918" MODIFIED="1518830471955" TEXT="Flag, um diese vor Matching injizieren">
@@ -10122,8 +10093,7 @@
       Preprocessing beim <i>Anlegen</i>&#160;der Klausel
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1518830545773" ID="ID_533394110" MODIFIED="1518830552887" TEXT="setzt spezielle Syntax in Flag um"/>
 <node CREATED="1518830581200" ID="ID_1879545754" MODIFIED="1518830625478" TEXT="Flag &#x27f9; aktuelle typID wird als Term angeh&#xe4;ngt"/>
@@ -10164,8 +10134,7 @@
       bleibt dem Charakter nach <i>imperativ</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
@@ -10189,8 +10158,8 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517505339663" ID="ID_470503309" MODIFIED="1518487921069" TEXT="DSL-Header restrukturieren">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507830918" ID="ID_1112334086" MODIFIED="1519355815117" TEXT="Locator symmetrisch zu Allocator">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1517507830918" ID="ID_1112334086" MODIFIED="1520207938255" TEXT="Locator analog zu Allocator definieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1519355684307" ID="ID_336676610" MODIFIED="1519355726724">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -10201,8 +10170,7 @@
       was <i>ist</i>&#160;der Locator?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1519355702409" ID="ID_609593004" MODIFIED="1520205015753" TEXT="eine LocationRule">
 <icon BUILTIN="forward"/>
 </node>
@@ -10225,8 +10193,8 @@
 <node CREATED="1519358000671" ID="ID_49826255" MODIFIED="1519358015345" TEXT="Aufruf mit Typ-ID-Argument"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519358138988" ID="ID_1481930885" MODIFIED="1519442424308" TEXT="DSL-Mechanik">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1519358138988" ID="ID_1481930885" MODIFIED="1520207942582" TEXT="DSL-Mechanik">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1519358154386" ID="ID_1810798001" MODIFIED="1519358201550" TEXT="Allocator wird durch Zuweisen der AlocSpec generiert">
 <icon BUILTIN="idea"/>
 </node>
@@ -10245,8 +10213,7 @@
       der <i>Level</i>&#160;im UI ist noch offen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1519359193821" ID="ID_588596170" MODIFIED="1519359234665" STYLE="fork" TEXT="das k&#xf6;nnte Argument eines Builders sein"/>
 <node CREATED="1519359239735" ID="ID_988890391" MODIFIED="1519442391464" TEXT="konkret......">
@@ -10261,8 +10228,7 @@
       <i>fast immer</i>&#160;ist das aber UIC_VIEW
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -10284,8 +10250,7 @@
       w&#228;re ja auch d&#228;mlich, den auf einen Level festzunageln
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1519439848624" ID="ID_1356890401" MODIFIED="1519440019400">
 <richcontent TYPE="NODE"><html>
@@ -10297,8 +10262,7 @@
       kann man den Level <i>erschlie&#223;en?</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1519439872572" ID="ID_1387780581" MODIFIED="1519439914138" TEXT="fast, aber leider nein">
 <icon BUILTIN="smily_bad"/>
@@ -10319,8 +10283,7 @@
       um Regeln auszudr&#252;cken, die explizit nur eine schon existierende UI-Komponente greifen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -10356,8 +10319,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow().panel(&quot;blubb&quot;).create() )
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1519437509655" ID="ID_241024117" MODIFIED="1519442360056" STYLE="bubble">
@@ -10373,8 +10335,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow().panel(&quot;blubb&quot;).create()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1519437756333" ID="ID_565391583" MODIFIED="1519440134474" STYLE="bubble">
@@ -10390,8 +10351,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;or currentWindow().panel(&quot;blubb&quot;).create()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -10428,12 +10388,42 @@
       Anwendung <i>delegiert</i>&#160;an einen Serivce
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519355422807" ID="ID_1718427051" MODIFIED="1519355428558" TEXT="Service-Zugang regeln">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1520221913300" ID="ID_906905" MODIFIED="1520221920710" TEXT="Design?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520221927138" ID="ID_782466951" MODIFIED="1520222272577" TEXT="hintenrum injizieren">
+<arrowlink COLOR="#3391c4" DESTINATION="ID_1058958215" ENDARROW="Default" ENDINCLINATION="356;0;" ID="Arrow_ID_1958186293" STARTARROW="None" STARTINCLINATION="40;166;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1520222029276" ID="ID_1305200988" MODIFIED="1520222040102" TEXT="magisch"/>
+<node CREATED="1520222040762" ID="ID_1805401030" MODIFIED="1520222046261" TEXT="statefull (Singleton)"/>
+<node CREATED="1520222046905" ID="ID_1622261658" MODIFIED="1520222079625" TEXT="Test wird verwirrend"/>
+</node>
+<node CREATED="1520221939552" ID="ID_1782927241" MODIFIED="1520222215939" TEXT="mit Aufruf mitgeben">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1520221963005" ID="ID_1864632806" MODIFIED="1520221965097" TEXT="sauber"/>
+<node CREATED="1520221971275" ID="ID_1783955125" MODIFIED="1520222023640" TEXT="gradlinig zu testen"/>
+<node CREATED="1520221965972" ID="ID_610476428" MODIFIED="1520221970496" TEXT="einfach zu implementieren"/>
+<node CREATED="1520221985682" ID="ID_589257049" MODIFIED="1520221992862" TEXT="gef&#xe4;llt mir trotzdem nicht">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1520222097723" ID="ID_435762794" MODIFIED="1520222108581" TEXT="weil es die Abstraktion der DSL bricht"/>
+<node CREATED="1520222137669" ID="ID_497050094" MODIFIED="1520222152007" TEXT="weil es logisch nichts mit dem query-Aufruf zu tun hat"/>
+<node CREATED="1520222159722" ID="ID_462075011" MODIFIED="1520222170981" TEXT="weil es asymetrisch zur Allokation ist"/>
+<node CREATED="1520222178063" ID="ID_1483417403" MODIFIED="1520222192305" TEXT="weil es ein Implementierungsdetail auf dem API ist"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520721753927" ID="ID_1564232821" MODIFIED="1520721763166" TEXT="DependencyFactory verwenden">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1520721767005" ID="ID_364557801" MODIFIED="1520721776960" TEXT="dazu mu&#xdf; diese erst mal ausgebaut werden"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520721792978" ID="ID_871055051" MODIFIED="1520722011920" TEXT="#1086 unify Depend singleton and instance management">
+<arrowlink COLOR="#7188b5" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="2227;-4042;" ID="Arrow_ID_1654818003" STARTARROW="None" STARTINCLINATION="775;393;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1517507576168" ID="ID_700127725" MODIFIED="1518487921069" TEXT="LocationClause">
 <icon BUILTIN="button_ok"/>
@@ -10454,8 +10444,7 @@
       Schreibweise f&#252;r <i>create Clauses</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -10513,8 +10502,7 @@
       technische L&#246;sug <i>diskutierbar</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -10527,8 +10515,7 @@
       man kann das erheblich tief und generisch ausbauen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1518742862470" ID="ID_588911138" MODIFIED="1518742880332" TEXT="YAGNI">
 <font BOLD="true" NAME="SansSerif" SIZE="13"/>
@@ -10545,8 +10532,7 @@
       Perspective <i>elided</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#8eacb9" DESTINATION="ID_214794727" ENDARROW="Default" ENDINCLINATION="-653;0;" ID="Arrow_ID_1678351989" SOURCE="ID_606433871" STARTARROW="None" STARTINCLINATION="1400;0;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1518762520034" ID="ID_1516856737" MODIFIED="1518839506876" TEXT="hier automatisch injizieren">
@@ -10583,8 +10569,7 @@
       entweder nicht passieren kann, oder explizit normalise() aufrufen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1518838372771" ID="ID_1787971906" MODIFIED="1518838384249" TEXT="das soll in der Schachtel bleiben">
@@ -10631,8 +10616,7 @@
       Also in diesem Fall w&#252;rde &#252;berhaupt nichts mit dem existierenden UI matchen...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1518145517036" ID="ID_272248384" MODIFIED="1518487921069" TEXT="ja">
 <icon BUILTIN="yes"/>
@@ -10711,8 +10695,7 @@
       und daher jede Klausel von Grund auf neu l&#246;sen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1518212627092" ID="ID_1184420038" MODIFIED="1518487921070" TEXT="...also kann man die sofort wegsortieren"/>
@@ -10732,8 +10715,7 @@
       <i>k&#246;nnte</i>&#160;man zulassen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="hourglass"/>
 </node>
 <node CREATED="1518212772256" ID="ID_1238641704" MODIFIED="1518487921070" TEXT="YAGNI">
@@ -10803,9 +10785,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519347191513" ID="ID_1058958215" MODIFIED="1519347378142" TEXT="Zugang zum LocationSolver">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519347191513" ID="ID_1058958215" MODIFIED="1520222272574" TEXT="Zugang zum LocationSolver">
 <arrowlink COLOR="#33a0d6" DESTINATION="ID_1459009906" ENDARROW="Default" ENDINCLINATION="766;0;" ID="Arrow_ID_393354619" STARTARROW="None" STARTINCLINATION="-338;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<linktarget COLOR="#3391c4" DESTINATION="ID_1058958215" ENDARROW="Default" ENDINCLINATION="356;0;" ID="Arrow_ID_1958186293" SOURCE="ID_782466951" STARTARROW="None" STARTINCLINATION="40;166;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519347295051" ID="ID_846050459" MODIFIED="1519347299883" TEXT="im realen UI">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -10867,8 +10849,7 @@
       Komma hei&#223;t &quot;and then&quot; in der Logikprogrammierung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -10888,8 +10869,14 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519355632354" ID="ID_1664602603" MODIFIED="1519355793090" TEXT="wo entsteht die LocationRule?">
 <linktarget COLOR="#647b96" DESTINATION="ID_1664602603" ENDARROW="Default" ENDINCLINATION="1374;300;" ID="Arrow_ID_947721778" SOURCE="ID_241646491" STARTARROW="None" STARTINCLINATION="298;36;"/>
 <icon BUILTIN="help"/>
-<node CREATED="1519355656423" ID="ID_1547517953" MODIFIED="1519355665786" TEXT="in der LocationSpec"/>
-<node CREATED="1519355666797" ID="ID_1270620528" MODIFIED="1519355670433" TEXT="vor der LocationSpec"/>
+<node CREATED="1519355656423" ID="ID_1547517953" MODIFIED="1519355665786" TEXT="in der LocationSpec">
+<node CREATED="1520207968932" ID="ID_1172076522" MODIFIED="1520207982341" TEXT="wenn eine einfache Ortsangabe gegeben ist"/>
+<node CREATED="1520208008190" ID="ID_874779146" MODIFIED="1520208019664" TEXT="dann wird aus dem Builder inline eine LocationClause gemacht"/>
+</node>
+<node CREATED="1519355666797" ID="ID_1270620528" MODIFIED="1519355670433" TEXT="vor der LocationSpec">
+<node CREATED="1520207985113" ID="ID_372230629" MODIFIED="1520208000019" TEXT="wenn mehrere Angaben per OR verbunden werden"/>
+<node CREATED="1520208026027" ID="ID_409650611" MODIFIED="1520208035510" TEXT="dann passiert die Umwandlung bereits im operator OR"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1518312758758" ID="ID_675085959" MODIFIED="1518835387835" TEXT="Schreibweise f&#xfc;r create-Klauseln">
@@ -10955,8 +10942,7 @@
       UI-Koordinaten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -10984,8 +10970,7 @@
       um eine <i>Position</i>&#160;zu kennzeichnen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1519357262332" ID="ID_1067286247" MODIFIED="1519357267471" TEXT="sie sind generisch"/>
@@ -11699,8 +11684,7 @@
       nur <i>einen Satz</i>&#160;Klauseln
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1518575751651" ID="ID_1423547228" MODIFIED="1518575765468" TEXT="stattdessen den Test-&quot;Baum&quot; variieren"/>
 <node CREATED="1518575766889" ID="ID_1639479655" MODIFIED="1518575777979" TEXT="damit die Situationen der realen Regeln nachbilden"/>
@@ -12060,8 +12044,7 @@
       thin augmentation layer
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -12271,8 +12254,7 @@
       was hier <i>vielleicht</i>&#160;der Fall sein k&#246;nnte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -12322,8 +12304,7 @@
       dann bekommt man einen UICoord::Builder&#160;&#160;und das ist noch keine Klausel!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node COLOR="#281977" CREATED="1517971193343" ID="ID_1413272427" MODIFIED="1518487921075" TEXT="vielleicht mit freiem OR-Operator?">
@@ -12937,6 +12918,13 @@
 </node>
 <node CREATED="1488677751537" ID="ID_75445042" MODIFIED="1518487921078" TEXT="schwierig f&#xfc;r Widgets">
 <icon BUILTIN="smily_bad"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520721624161" ID="ID_1714114896" MODIFIED="1520722071693" TEXT="DependencyFactory">
+<arrowlink COLOR="#5c71a3" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="767;-2073;" ID="Arrow_ID_1454095581" STARTARROW="None" STARTINCLINATION="1892;380;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1520721630328" ID="ID_1547268458" MODIFIED="1520721637315" TEXT="wir haben schon eine L&#xf6;sung f&#xfc;r Singletons"/>
+<node CREATED="1520721638143" ID="ID_1691402961" MODIFIED="1520721645210" TEXT="diese kann auf Services erweitert werden"/>
+<node CREATED="1520721647670" ID="ID_1649501241" MODIFIED="1520721660608" TEXT="sollte auch L&#xf6;sung f&#xfc;r Tests beinhalten"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1486520281897" ID="ID_827558797" MODIFIED="1518487921078" TEXT="Problem: zwei Inseln" VSHIFT="16">
@@ -22777,7 +22765,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1492095433567" FOLDED="true" HGAP="69" ID="ID_1208499974" MODIFIED="1518487921092" TEXT="DSL schaffen" VSHIFT="1">
+<node CREATED="1492095433567" FOLDED="true" HGAP="69" ID="ID_1208499974" MODIFIED="1520718634871" TEXT="DSL schaffen" VSHIFT="1">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26390,17 +26378,18 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1448319925356" ID="ID_1589130421" MODIFIED="1518487921095" TEXT="angeblich ziemlich schnell">
+<node CREATED="1448319925356" ID="ID_1589130421" MODIFIED="1520722535213" TEXT="angeblich ziemlich schnell">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      lt. eigenen Benchmakrs deutlich schneller als rapitjson, welches eigentlich immer als der &quot;schnelle&quot; JSON-Parser gilt.
+      lt. eigenen Benchmakrs deutlich schneller als rapidjson, welches eigentlich immer als der &quot;schnelle&quot; JSON-Parser gilt.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1448319936915" ID="ID_1093677957" MODIFIED="1518487921095" TEXT="C++, aber ehr C-artiges API"/>
 <node CREATED="1448319955328" ID="ID_534293846" MODIFIED="1518487921095" TEXT="type-tag, switch-on-type"/>
@@ -26484,7 +26473,7 @@
 <node CREATED="1482524641484" ID="ID_1651495185" MODIFIED="1518487921096" TEXT="Architektur"/>
 <node CREATED="1482524498822" ID="ID_431883229" MODIFIED="1518487921096" TEXT="Datenstrom"/>
 <node CREATED="1482524516371" ID="ID_396707258" MODIFIED="1518487921096" TEXT="Event-Sourcing"/>
-<node CREATED="1482524530842" FOLDED="true" ID="ID_606738640" MODIFIED="1518487921096" TEXT="Dependency-Injection">
+<node CREATED="1482524530842" ID="ID_606738640" MODIFIED="1520718477944" TEXT="Dependency-Injection">
 <node CREATED="1515975589922" ID="ID_367021032" MODIFIED="1515975593045" TEXT="Architektur"/>
 <node CREATED="1515975593614" ID="ID_79714950" MODIFIED="1515975595605" TEXT="Technik">
 <node CREATED="1515975596673" ID="ID_1304673048" MODIFIED="1515975599660" TEXT="f&#xfc;r Services">
@@ -26495,9 +26484,55 @@
 <node CREATED="1515975650458" ID="ID_1359158691" MODIFIED="1515976422894" TEXT="Serivice by-Name">
 <linktarget COLOR="#b6829b" DESTINATION="ID_1359158691" ENDARROW="Default" ENDINCLINATION="1134;-1646;" ID="Arrow_ID_927211935" SOURCE="ID_1305671938" STARTARROW="None" STARTINCLINATION="1359;916;"/>
 <node CREATED="1515975677462" ID="ID_1848164117" MODIFIED="1515975685784" TEXT="Problem: Lebenszyklus">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492094235291" HGAP="36" ID="ID_451964727" MODIFIED="1515975730725" TEXT="#1086 unify Depend singleton and instance management" VSHIFT="-20">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492094235291" HGAP="36" ID="ID_451964727" MODIFIED="1520722071693" TEXT="#1086 unify Depend singleton and instance management" VSHIFT="-20">
 <linktarget COLOR="#8697be" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="200;-562;" ID="Arrow_ID_1211717131" SOURCE="ID_1032947061" STARTARROW="None" STARTINCLINATION="1387;-152;"/>
+<linktarget COLOR="#5c71a3" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="767;-2073;" ID="Arrow_ID_1454095581" SOURCE="ID_1714114896" STARTARROW="None" STARTINCLINATION="1892;380;"/>
+<linktarget COLOR="#7188b5" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="2227;-4042;" ID="Arrow_ID_1654818003" SOURCE="ID_871055051" STARTARROW="None" STARTINCLINATION="775;393;"/>
 <icon BUILTIN="hourglass"/>
+<node CREATED="1520722130803" ID="ID_1194364308" MODIFIED="1520722135383" TEXT="Anforderungen">
+<node CREATED="1520722192387" ID="ID_1178804552" MODIFIED="1520722204325" TEXT="leicht zu verwenden">
+<node CREATED="1520722210416" ID="ID_18853847" MODIFIED="1520722214920" TEXT="access by-name"/>
+<node CREATED="1520722205225" ID="ID_187805501" MODIFIED="1520722209444" TEXT="klare einfache Syntax"/>
+<node CREATED="1520722223159" ID="ID_1464262858" MODIFIED="1520722243728" TEXT="geringer Overhead beim Zugriff"/>
+</node>
+<node CREATED="1520722250315" ID="ID_1739587251" MODIFIED="1520722257494" TEXT="Standard-Fall: Singleton">
+<node CREATED="1520722258346" ID="ID_601560365" MODIFIED="1520722263109" TEXT="meint: lazy initialisation"/>
+</node>
+<node CREATED="1520722285614" ID="ID_243579470" MODIFIED="1520722297840" TEXT="rekonfigurierbar als Service">
+<node CREATED="1520722553009" ID="ID_186796738" MODIFIED="1520722562724" TEXT="Service-Instanz kontrolliert Lebenszyklus"/>
+<node CREATED="1520722565023" ID="ID_705029613" MODIFIED="1520722569219" TEXT="kann geschlossen werden"/>
+</node>
+<node CREATED="1520722582981" ID="ID_412048061" MODIFIED="1520722588312" TEXT="Konfigurierbarkeit">
+<node CREATED="1520722616336" ID="ID_609325041" MODIFIED="1520722635842" TEXT="Policy">
+<node CREATED="1520722600227" ID="ID_1619106434" MODIFIED="1520722604870" TEXT="klar"/>
+<node CREATED="1520722606698" ID="ID_1509953000" MODIFIED="1520722608430" TEXT="sicher"/>
+<node CREATED="1520722594371" ID="ID_1430939011" MODIFIED="1520722647022" TEXT="ad hoc"/>
+</node>
+<node CREATED="1520722662066" ID="ID_1398252383" MODIFIED="1520722668845" TEXT="Eigenschaften">
+<node CREATED="1520722689638" ID="ID_555318445" MODIFIED="1520722702296" TEXT="Service"/>
+<node CREATED="1520723536370" ID="ID_98564224" MODIFIED="1520723551009" TEXT="Mockbarkeit"/>
+<node CREATED="1520722720322" ID="ID_1574090447" MODIFIED="1520722762564" TEXT="Implementierung"/>
+</node>
+</node>
+</node>
+<node CREATED="1520722136029" ID="ID_1922898574" MODIFIED="1520722144366" TEXT="Problem: double checked locking">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1520725664365" ID="ID_1453945091" MODIFIED="1520725671423" TEXT="was bringt C++11?">
+<node CREATED="1520725673123" ID="ID_574000501" LINK="http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/" MODIFIED="1520726129608" TEXT="Jeff Preshings: double-checked-locking-is-fixed-in-cpp11"/>
+<node CREATED="1520726409894" ID="ID_1296403824" LINK="http://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton" MODIFIED="1520726425377" TEXT="Rainer Grimm: thread local initialization of singletons"/>
+</node>
+<node CREATED="1520726342863" ID="ID_1875729983" MODIFIED="1520726350066" TEXT="moderne L&#xf6;sung">
+<node CREATED="1520726350894" ID="ID_47446040" MODIFIED="1520726354025" TEXT="Atomics"/>
+<node CREATED="1520726354878" ID="ID_1241761015" MODIFIED="1520726363168" TEXT="vorgeschaltetes thread_local">
+<node CREATED="1520726364612" ID="ID_818685184" MODIFIED="1520726369804" TEXT="Performance nicht klar">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1520722149761" ID="ID_39179906" MODIFIED="1520722154268" TEXT="neue Implementierung"/>
+<node CREATED="1520722160591" ID="ID_135546699" MODIFIED="1520722168810" TEXT="Unit-Test"/>
+<node CREATED="1520722155112" ID="ID_1512641426" MODIFIED="1520722159028" TEXT="Integration"/>
 </node>
 <node CREATED="1515975745485" ID="ID_132088730" MODIFIED="1515976000614" TEXT="Konzept">
 <icon BUILTIN="info"/>
@@ -27024,7 +27059,7 @@
 <node CREATED="1512925253328" ID="ID_922277724" MODIFIED="1518487921098" TEXT="JobTicket"/>
 <node CREATED="1512925246057" ID="ID_181262071" MODIFIED="1518487921098" TEXT="JobPlanning">
 <linktarget COLOR="#5379b5" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="41;130;" ID="Arrow_ID_1786254694" SOURCE="ID_1543264108" STARTARROW="Default" STARTINCLINATION="-100;0;"/>
-<node CREATED="1512925265295" ID="ID_1502143527" MODIFIED="1518487921098">
+<node CREATED="1512925265295" ID="ID_1502143527" MODIFIED="1520721823019">
 <richcontent TYPE="NODE"><html>
   <head>
     

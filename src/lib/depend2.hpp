@@ -67,7 +67,7 @@ This code is heavily inspired by
  ** beyond releasing references, and we acknowledge that singletons can be released
  ** in _arbitrary order_.
  ** 
- ** @deprecated 3/18 rework of the singleton / dependency factory is underway
+ ** @todo WIP-WIP 3/18 rework of the singleton / dependency factory is underway
  ** 
  ** @see lib::Depend
  ** @see lib::DependencyFactory
@@ -77,12 +77,12 @@ This code is heavily inspired by
  */
 
 
-#ifndef LIB_DEPEND_H
-#define LIB_DEPEND_H
+#ifndef WIP_LIB_DEPEND_H
+#define WIP_LIB_DEPEND_H
 
 
 #include "lib/sync-classlock.hpp"
-#include "lib/dependency-factory.hpp"
+#include "lib/dependency-factory2.hpp"
 
 
 namespace lib {
@@ -107,16 +107,16 @@ namespace lib {
    *   to the singleton instance variable, which then resides within the scope of a single
    *   access function. Such would counterfeit the ability to exchange the instance to
    *   inject a mock for unit testing.
-   * @deprecated 3/18 rework of the singleton / dependency factory is underway     /////////////////////TICKET #1086
+   * @todo WIP-WIP 3/18 rework of the singleton / dependency factory is underway   /////////////////////TICKET #1086
    * @param SI the class of the Singleton instance
    */
   template<class SI>
-  class Depend
+  class Depend2
     {
       typedef ClassLock<SI> SyncLock;
       
       static SI* volatile instance;
-      static DependencyFactory factory;
+      static DependencyFactory2 factory;
       
       
     public:
@@ -141,14 +141,14 @@ namespace lib {
       
       
       
-      typedef DependencyFactory::InstanceConstructor Constructor;
+      typedef DependencyFactory2::InstanceConstructor Constructor;
       
       
       /** default configuration of the dependency factory
        *  is to build a singleton instance on demand */
-      Depend()
+      Depend2()
         {
-          factory.ensureInitialisation (buildSingleton<SI>());
+          factory.ensureInitialisation (buildSingleton2<SI>());
         }
       
       /**
@@ -165,7 +165,7 @@ namespace lib {
        *         And this is the point where this ctor will be invoked, in the static
        *         initialisation phase of the respective translation unit (*.cpp)
        */
-      Depend (Constructor ctor)
+      Depend2 (Constructor ctor)
         {
           factory.installConstructorFunction (ctor);
         }
@@ -206,10 +206,10 @@ namespace lib {
   
   // Storage for static per type instance management...
   template<class SI>
-  SI* volatile Depend<SI>::instance;
+  SI* volatile Depend2<SI>::instance;
   
   template<class SI>
-  DependencyFactory Depend<SI>::factory;
+  DependencyFactory2 Depend2<SI>::factory;
   
   
   

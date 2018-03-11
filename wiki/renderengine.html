@@ -1927,6 +1927,21 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
+<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803110214" tags="def Concepts draft" changecount="3">
+<pre>//Access point to dependencies by-name.//
+In the Lumiera code base, we refrain from building or using a full-blown Dependency Injection Container. A lot of FUD has been spread regarding Dependency Injection and Singletons, to the point that a majority of developers confuses and conflates the ~Inversion-of-Control principle (which is essential) with the use of a ~DI-Container. Today, you can not even mention the word &quot;Singleton&quot; without everyone yelling out &quot;Evil! Evil!&quot; -- while most of these people just feel comfortable living in the annotation hell.
+
+Not Singletons as such are problematic -- rather, the coupling of the Singleton class itself with the instantiation and lifecycle mechanism is what creates the problems. In C++ these problems can be mitigated by use of a generic //Singleton Factory// -- which can be augmented into a DependencyFactory for those rare cases where we actually need more instance and lifecycle management beyond lazy initialisation. Client code indicates the dependence on some other service by planting an instance of that Dependency Factory (for Lumiera this is {{{lib::Depend&lt;TY&gt;}}}) and remain unaware if the instance is created lazily in singleton style (which is the default) or has been reconfigured to expose a service instance explicitly created by some subsystem lifecycle.
+
+!Requirements
+Our DependencyFactory satisfies the following requirements
+* client code is able to access some service //by-name// -- where the name is actually the //type name// of the service interface.
+* client code remains agnostic with regard to the lifecycle or backing context of the service it relies on
+* in the simplest (and most prominent case), //nothing// has to be done at all by anyone to manage that lifecycle. By default, the DependencyFactory creates a singleton instance lazily in static memory on demand and ensures thread-safe initialisation and access.
+* we establish a policy to ''disallow any significant functionality during application shutdown''. After leaving {{{main()}}}, only trivial dtors are invoked and possibly a few resource handles are dropped. No filesystem writes, no clean-up and reorganisation, not even any logging is allowed. For this reason, we established a [[Subsystem]] concept with explicit shutdown hooks, which are invoked beforehand.
+* the DependencyFactory can be re-configured for individual services (type names) to refer to an explicitly installed service instance. In those cases, access while the service is not available will raise an exception. There is a simple one-shot mechanism to reconfigure DependencyFactory and create a link to an actual service implementation, including automatic deregistration.
+</pre>
+</div>
 <div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
@@ -3279,7 +3294,7 @@ This top-level circle is established starting from the UI-Bus (''Nexus'') and th
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201704140022" tags="GuiPattern design decision draft img" changecount="49">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201803102227" tags="GuiPattern design decision draft img" changecount="50">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3302,7 +3317,7 @@ The workspace dimension (vertical layout) is more like a ''Fork'', which can be 
 ** the content stack, comprised of [[clip widgets|GuiClipWidget]], attached effects and transitions
 ** a stack of nested sub-scopes (recursive).
 
-@@float: right;background-color: #E9EDF8;width: 82ex;padding: 2ex;margin: 0px 4em 1em 2em;__Note in this example__
+@@float: right;background-color: #e9edf8;width: 82ex;padding: 2ex;margin: 0px 4em 1em 2em;__Note in this example__
 * on top level, there are two tracks, the second track has nested sub tracks
 * Clip-2 has an effect attached, Clip-3 is expanded and also has an effect attached
 * the second track has a global effect attached; it shows up in the scope ruler
@@ -5915,7 +5930,7 @@ When the session is closed or dismantled, further processing in the ProcDispatch
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" created="200706190056" modified="201410160050" tags="overview" changecount="3">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" created="200706190056" modified="201803102227" tags="overview" changecount="4">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Relying on system level services and retrieving raw audio and video data through [[Lumiera's Backend|Backend]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
 !About this wiki page

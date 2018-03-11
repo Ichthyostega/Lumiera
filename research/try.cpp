@@ -36,67 +36,22 @@
 // 11/17 - metaprogramming to detect the presence of extension points
 // 11/17 - detect generic lambda
 // 12/17 - investigate SFINAE failure. Reason was indirect use while in template instantiation
+// 03/18 - Dependency Injection / Singleton initialisation / double checked locking
 
 
 /** @file try.cpp
- ** Bug hunt: a typedef detecting metafunction failed mysteriously.
- ** As it turned out, the implemented check required a _complete definition_, since it applied `sizeof()`.
- ** But the Detection was invoked indirectly from a template while this was still in instantiation.
- ** This explains why the metafunction worked in a clean test setup, but failed when integrated
- ** in the actual code base. The tricky and insidious part of this story is the fact, that
- ** in a regular definition, this would cause a compilation failure. But since our detector
- ** relies on SFINAE, just the detection went wrong, and consequently an improper template
- ** specialisation was picked. These are the perils of metaprogramming with a language
- ** never really made for functional programming...
- ** 
- ** The solution or workaround is simple: use a detection technique able to work with incomplete types.
- ** 
- ** For context: lib::diff::Record defines various Iterators. And lib::dif::GenNode is a _recursive datatype_,
- ** which means, already the definition of GenNode requires the instantiation of `Record<GenNode>`. Now we added
- ** some detector magic to our Iterator Adapters, and this magic failed on the Iterators defined by `Record,`
- ** because `Record<GenNode>` was not fully instantiated at that point.
+ ** Rework of the template lib::Depend for singleton and service access.
  */
 
 typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
-#include "lib/meta/util.hpp"
+#include "lib/depend.hpp"
+#include "lib/depend2.hpp"
+//#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <vector>
-
-
-  template<typename X, typename XX = typename X::value_type>
-  struct Test_Incomplete
-    { };
-  
-  template<typename X, int s = sizeof(typename X::value_type)>
-  struct Test_Complete
-    { };
-
-
-using lib::meta::Yes_t;
-using lib::meta::No_t;
-  
-  template<class X>
-  static Yes_t detectComplete(Test_Complete<X> * );
-  template<class>
-  static No_t detectComplete(...);
-  
-  template<class X>
-  static Yes_t detectIncomplete(Test_Incomplete<X> * );
-  template<class>
-  static No_t detectIncomplete(...);
-
-
-
-  struct InStatuNascendi
-    {
-      using Iter = std::vector<InStatuNascendi>::iterator;
-      
-      static const auto detectedComplete   = (sizeof(Yes_t) == sizeof(detectComplete<Iter>(0)));    // will produce No, erroneously
-      static const auto detectedIncomplete = (sizeof(Yes_t) == sizeof(detectIncomplete<Iter>(0)));  // will produce Yes
-    };
+//#include <vector>
 
 
 #define SHOW_TYPE(_TY_) \
@@ -109,8 +64,6 @@ using lib::meta::No_t;
 int
 main (int, char**)
   {
-    SHOW_EXPR (InStatuNascendi::detectedComplete);
-    SHOW_EXPR (InStatuNascendi::detectedIncomplete);
     
     cout <<  "\n.gulp.\n";
     
