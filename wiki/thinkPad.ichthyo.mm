@@ -11159,18 +11159,18 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515634076196" HGAP="-17" ID="ID_1380959703" MODIFIED="1518487921071" TEXT="Implementierung" VSHIFT="20">
 <icon BUILTIN="hourglass"/>
-<node CREATED="1515634129061" MODIFIED="1518487921071" TEXT="locate">
-<node CREATED="1515634129062" MODIFIED="1518487921071" TEXT="firstWindow"/>
-<node CREATED="1515634129062" MODIFIED="1518487921071" TEXT="currentWindow"/>
-<node CREATED="1515634129062" MODIFIED="1518487921071" TEXT="perspective(id)"/>
-<node CREATED="1515634129062" MODIFIED="1518487921071" TEXT="panel(id)"/>
-<node CREATED="1515634129062" MODIFIED="1518487921071" TEXT="existingPanel(id)"/>
-<node CREATED="1515634129062" MODIFIED="1518487921071" TEXT="existingGroup WIP 9/17 not clear if possible"/>
+<node CREATED="1515634129061" ID="ID_1554987217" MODIFIED="1518487921071" TEXT="locate">
+<node CREATED="1515634129062" ID="ID_1263439663" MODIFIED="1518487921071" TEXT="firstWindow"/>
+<node CREATED="1515634129062" ID="ID_935490983" MODIFIED="1518487921071" TEXT="currentWindow"/>
+<node CREATED="1515634129062" ID="ID_115783898" MODIFIED="1518487921071" TEXT="perspective(id)"/>
+<node CREATED="1515634129062" ID="ID_353316788" MODIFIED="1518487921071" TEXT="panel(id)"/>
+<node CREATED="1515634129062" ID="ID_1180499191" MODIFIED="1518487921071" TEXT="existingPanel(id)"/>
+<node CREATED="1515634129062" ID="ID_67330452" MODIFIED="1518487921071" TEXT="existingGroup WIP 9/17 not clear if possible"/>
 </node>
-<node CREATED="1515634129062" MODIFIED="1518487921071" TEXT="alloc">
-<node CREATED="1515634129063" MODIFIED="1518487921071" TEXT="unlimited"/>
-<node CREATED="1515634129063" MODIFIED="1518487921071" TEXT="onlyOne"/>
-<node CREATED="1515634129063" MODIFIED="1518487921071" TEXT="limitPerWindow(cnt)"/>
+<node CREATED="1515634129062" ID="ID_1198810867" MODIFIED="1518487921071" TEXT="alloc">
+<node CREATED="1515634129063" ID="ID_299053476" MODIFIED="1518487921071" TEXT="unlimited"/>
+<node CREATED="1515634129063" ID="ID_125752214" MODIFIED="1518487921071" TEXT="onlyOne"/>
+<node CREATED="1515634129063" ID="ID_1164137116" MODIFIED="1518487921071" TEXT="limitPerWindow(cnt)"/>
 </node>
 </node>
 </node>
@@ -26502,7 +26502,7 @@
 <node CREATED="1520722553009" ID="ID_186796738" MODIFIED="1520722562724" TEXT="Service-Instanz kontrolliert Lebenszyklus"/>
 <node CREATED="1520722565023" ID="ID_705029613" MODIFIED="1520722569219" TEXT="kann geschlossen werden"/>
 </node>
-<node CREATED="1520722582981" ID="ID_412048061" MODIFIED="1520722588312" TEXT="Konfigurierbarkeit">
+<node CREATED="1520722582981" ID="ID_412048061" MODIFIED="1520722588312" TEXT="Konfigurierbarkeit" VGAP="2">
 <node CREATED="1520722616336" ID="ID_609325041" MODIFIED="1520722635842" TEXT="Policy">
 <node CREATED="1520722600227" ID="ID_1619106434" MODIFIED="1520722604870" TEXT="klar"/>
 <node CREATED="1520722606698" ID="ID_1509953000" MODIFIED="1520722608430" TEXT="sicher"/>
@@ -26512,6 +26512,84 @@
 <node CREATED="1520722689638" ID="ID_555318445" MODIFIED="1520722702296" TEXT="Service"/>
 <node CREATED="1520723536370" ID="ID_98564224" MODIFIED="1520723551009" TEXT="Mockbarkeit"/>
 <node CREATED="1520722720322" ID="ID_1574090447" MODIFIED="1520722762564" TEXT="Implementierung"/>
+</node>
+<node CREATED="1521081597008" HGAP="23" ID="ID_198915567" MODIFIED="1521081653981" TEXT="Design" VSHIFT="11">
+<node CREATED="1521081661071" ID="ID_500707872" MODIFIED="1521082831734" TEXT="L&#xf6;sung-1">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      war im Einsatz seit Beginn der Lumiera-Projektes.
+    </p>
+    <p>
+      Wurde aufgegeben da
+    </p>
+    <ul>
+      <li>
+        die Policies komplexe L&#246;sungsvarianten implementierten, die nie gebraucht wurden
+      </li>
+      <li>
+        die Implementierung einen t&#252;ckischen Fehler in CLang aufgedeckt hat
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1521081684036" ID="ID_1402765741" MODIFIED="1521081692822" TEXT="Polycy-based"/>
+<node CREATED="1521081693419" ID="ID_889786982" MODIFIED="1521081703773" TEXT="Spezialisierung des Depend-Templates"/>
+<node CREATED="1521081709169" ID="ID_390237547" MODIFIED="1521081723794" TEXT="ein zentraler Header, wird per depend.hpp includiert"/>
+<node CREATED="1521081724766" ID="ID_1002030069" MODIFIED="1521081739408" TEXT="erfordert Forwards aller zu spezialisierenden Payload-Typen"/>
+</node>
+<node CREATED="1521081775631" ID="ID_1326847098" MODIFIED="1521082974424" TEXT="L&#xf6;sung-2">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Im Einsatz seit der Behebung des CLang-Problems bis heute (3/2018).
+    </p>
+    <p>
+      Wird nun aufgegeben, da sich auf dieser Basis keine DI implementieren l&#228;&#223;t,
+    </p>
+    <p>
+      welche auf einem Service mit explizitem Lebenszyklus beruht.
+    </p>
+    <p>
+      Au&#223;erdem stellte sich diese L&#246;sung als ziemlich fragil heraus
+    </p>
+    <p>
+      und ben&#246;tigt diverse Laufzeit-Konsistenzchecks, die den Implementierungscode schwer lesbar machen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1521081796836" ID="ID_1599810209" MODIFIED="1521081803975" TEXT="Zuweisung eines Factory-Funktors"/>
+<node CREATED="1521082335930" ID="ID_1689932476" MODIFIED="1521082347044" TEXT="via Depend-Instanz-Initialisierung"/>
+<node CREATED="1521082503275" ID="ID_230807085" MODIFIED="1521082510286" TEXT="erst zur Laufzeit"/>
+<node CREATED="1521082510738" ID="ID_1074113096" MODIFIED="1521082525452" TEXT="jederzeit und an beliebiger Stelle m&#xf6;glich"/>
+<node CREATED="1521082548173" ID="ID_1948451513" MODIFIED="1521082559567" TEXT="Konsistenz nur per Laufzeit-Check"/>
+<node CREATED="1521082560611" ID="ID_1943270534" MODIFIED="1521082576132" TEXT="fragil da von Init-Ordnung abh&#xe4;ngig"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521082621363" ID="ID_1344462005" MODIFIED="1521082719926" TEXT="L&#xf6;sung-NEU">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521082670076" ID="ID_916083959" MODIFIED="1521082700329" TEXT="geeignete Technik gesucht">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1521082703384" ID="ID_510028220" MODIFIED="1521082713218" TEXT="Anforderungen / W&#xfc;nsche">
+<node CREATED="1521082629322" ID="ID_1026313608" MODIFIED="1521082657826" TEXT="Storage und Zugriffs-Steuerung in einem Modul zusammen"/>
+<node CREATED="1521083235390" ID="ID_816115467" MODIFIED="1521083248992" TEXT="ad hoc, am Ort des Service-Providers"/>
+<node CREATED="1521083250124" ID="ID_914104558" MODIFIED="1521083312912" TEXT="Optional per Mix-In and die Provider-Instanz gebunden"/>
+<node CREATED="1521083332673" ID="ID_1445046036" MODIFIED="1521083346179" TEXT="tempor&#xe4;r global schattierbar f&#xfc;r Test-Mocking"/>
+<node CREATED="1521083598077" ID="ID_1129579564" MODIFIED="1521083604836" TEXT="Problem Konsistenz">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -27738,11 +27816,9 @@
     <p>
       oder neu in das Window-System gemappt wird.
     </p>
-    <p>
-      
-    </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1478037986046" ID="ID_1293899679" MODIFIED="1518487921101">
 <richcontent TYPE="NODE"><html>
