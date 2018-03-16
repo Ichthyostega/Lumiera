@@ -26388,8 +26388,7 @@
       lt. eigenen Benchmakrs deutlich schneller als rapidjson, welches eigentlich immer als der &quot;schnelle&quot; JSON-Parser gilt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1448319936915" ID="ID_1093677957" MODIFIED="1518487921095" TEXT="C++, aber ehr C-artiges API"/>
 <node CREATED="1448319955328" ID="ID_534293846" MODIFIED="1518487921095" TEXT="type-tag, switch-on-type"/>
@@ -26485,9 +26484,9 @@
 <linktarget COLOR="#b6829b" DESTINATION="ID_1359158691" ENDARROW="Default" ENDINCLINATION="1134;-1646;" ID="Arrow_ID_927211935" SOURCE="ID_1305671938" STARTARROW="None" STARTINCLINATION="1359;916;"/>
 <node CREATED="1515975677462" ID="ID_1848164117" MODIFIED="1515975685784" TEXT="Problem: Lebenszyklus">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492094235291" HGAP="36" ID="ID_451964727" MODIFIED="1520722071693" TEXT="#1086 unify Depend singleton and instance management" VSHIFT="-20">
-<linktarget COLOR="#8697be" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="200;-562;" ID="Arrow_ID_1211717131" SOURCE="ID_1032947061" STARTARROW="None" STARTINCLINATION="1387;-152;"/>
-<linktarget COLOR="#5c71a3" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="767;-2073;" ID="Arrow_ID_1454095581" SOURCE="ID_1714114896" STARTARROW="None" STARTINCLINATION="1892;380;"/>
 <linktarget COLOR="#7188b5" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="2227;-4042;" ID="Arrow_ID_1654818003" SOURCE="ID_871055051" STARTARROW="None" STARTINCLINATION="775;393;"/>
+<linktarget COLOR="#5c71a3" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="767;-2073;" ID="Arrow_ID_1454095581" SOURCE="ID_1714114896" STARTARROW="None" STARTINCLINATION="1892;380;"/>
+<linktarget COLOR="#8697be" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="200;-562;" ID="Arrow_ID_1211717131" SOURCE="ID_1032947061" STARTARROW="None" STARTINCLINATION="1387;-152;"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1520722130803" ID="ID_1194364308" MODIFIED="1520722135383" TEXT="Anforderungen">
 <node CREATED="1520722192387" ID="ID_1178804552" MODIFIED="1520722204325" TEXT="leicht zu verwenden">
@@ -26535,8 +26534,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 <node CREATED="1521081684036" ID="ID_1402765741" MODIFIED="1521081692822" TEXT="Polycy-based"/>
 <node CREATED="1521081693419" ID="ID_889786982" MODIFIED="1521081703773" TEXT="Spezialisierung des Depend-Templates"/>
@@ -26565,8 +26563,7 @@
       und ben&#246;tigt diverse Laufzeit-Konsistenzchecks, die den Implementierungscode schwer lesbar machen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 <node CREATED="1521081796836" ID="ID_1599810209" MODIFIED="1521081803975" TEXT="Zuweisung eines Factory-Funktors"/>
 <node CREATED="1521082335930" ID="ID_1689932476" MODIFIED="1521082347044" TEXT="via Depend-Instanz-Initialisierung"/>
@@ -26577,16 +26574,156 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521082621363" ID="ID_1344462005" MODIFIED="1521082719926" TEXT="L&#xf6;sung-NEU">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521082670076" ID="ID_916083959" MODIFIED="1521082700329" TEXT="geeignete Technik gesucht">
+<node COLOR="#338800" CREATED="1521082670076" ID="ID_916083959" MODIFIED="1521160630521" TEXT="geeignete Technik gesucht">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1521082703384" ID="ID_510028220" MODIFIED="1521082713218" TEXT="Anforderungen / W&#xfc;nsche">
+<node CREATED="1521082703384" ID="ID_510028220" MODIFIED="1521160639079" TEXT="Anforderungen / W&#xfc;nsche">
+<icon BUILTIN="idea"/>
 <node CREATED="1521082629322" ID="ID_1026313608" MODIFIED="1521082657826" TEXT="Storage und Zugriffs-Steuerung in einem Modul zusammen"/>
-<node CREATED="1521083235390" ID="ID_816115467" MODIFIED="1521083248992" TEXT="ad hoc, am Ort des Service-Providers"/>
-<node CREATED="1521083250124" ID="ID_914104558" MODIFIED="1521083312912" TEXT="Optional per Mix-In and die Provider-Instanz gebunden"/>
+<node CREATED="1521083235390" ID="ID_816115467" MODIFIED="1521153348286" TEXT="Konfiguration ad hoc, am Ort des Service-Providers"/>
+<node CREATED="1521083250124" ID="ID_914104558" MODIFIED="1521154409699" TEXT="Optional per Mix-In an die Provider-Instanz gebunden"/>
 <node CREATED="1521083332673" ID="ID_1445046036" MODIFIED="1521083346179" TEXT="tempor&#xe4;r global schattierbar f&#xfc;r Test-Mocking"/>
 <node CREATED="1521083598077" ID="ID_1129579564" MODIFIED="1521083604836" TEXT="Problem Konsistenz">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1521158992344" ID="ID_985106186" MODIFIED="1521160594373" TEXT="Fazit">
+<icon BUILTIN="forward"/>
+<node CREATED="1521159000968" ID="ID_1381648131" MODIFIED="1521159186533">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Bei <i>diesem</i>&#160;Wunsch-Profil bleibt nur eine Variante von <b>L&#246;sung-2</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn nur eine dynamische Laufzeit-Factory erm&#246;glicht, <i>jederzeit</i>&#160; den Konstruktionsmodus zu wechseln
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1521159238935" ID="ID_1109622706" MODIFIED="1521159663752" TEXT="Ein Instanz-Pointer ist zwingend notwendig und auch besser">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn nur ein Instanz-Pointer kann umgebogen oder auf NULL zur&#252;ckgesetzt werden.
+    </p>
+    <p>
+      Der einzige Ausweg aus diesem Dilemma w&#228;re eine statische L&#246;sung,
+    </p>
+    <p>
+      in der bereits durch den #include von lib/depend.hpp endg&#252;ltig klar w&#228;re,
+    </p>
+    <p>
+      was f&#252;r eine Art von Dependency-Factory zum Einsatz kommen soll. Denn nur auf <i>diesem</i>
+    </p>
+    <p>
+      Weg k&#246;nnte der Optimiser unmittelbar auf eine Singleton-Instanz im statischen Speicher
+    </p>
+    <p>
+      zugreifen, nach einem Check auf ein atomic&lt;bool&gt;.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Eine solche statische L&#246;sung allerdings widerspricht nicht nur meinen W&#252;nschen,
+    </p>
+    <p>
+      sondern w&#228;re auch architektonisch ung&#252;nstig, denn dadurch
+    </p>
+    <ul>
+      <li>
+        entsteht eine zentrale DI-Konfiguration
+      </li>
+      <li>
+        erfolgt eine R&#252;ckverkopplung von lib/depend.hpp auf die Applikations-Struktur
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521159870784" ID="ID_1588722588" MODIFIED="1521160019955" TEXT="der Zugang zur DependencyFactory ist stets ein virtueller Funktionsaufruf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn er mu&#223; komplett generisch sein, und lib/depend.hpp darf keinerlei Kenntnis
+    </p>
+    <p>
+      &#252;ber die konkrete DependencyFactory voraussetzen. Denn sonst w&#252;rden wir die
+    </p>
+    <p>
+      Freiheit der dynamischen Laufzeit-Konfiguration verlieren.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521160020971" ID="ID_1097297428" MODIFIED="1521160553255" TEXT="Deshalb sollte die Factory konventionell implementiert werden, nicht als Lambda">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn ein Lambda kann in dieser Lage grunds&#228;tzlich keinen optimierungs-Vorteil bringen,
+    </p>
+    <p>
+      und die konventionelle L&#246;sung hat demgegen&#252;ber den Vorteil, da&#223; sie Struktur und Kontrakt explizit macht.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521160107759" ID="ID_669924852" MODIFIED="1521160477774" TEXT="Das Konsistenz-Problem ist in Wirklichkeit ein Architekturproblem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es l&#228;uft darauf hinaus, da&#223; die Nutzung eines Dienstes zwar <i>on demand</i>&#160;erfolgt,
+    </p>
+    <p>
+      jedoch <i>stets erst nach</i>&#160;seiner Bereitstellung. So etwas l&#228;&#223;t sich niemals &#252;ber einzelne
+    </p>
+    <p>
+      technische Einrichtungen l&#246;sen, denn es ist eine Frage des Aufbaues der gesamten Applikation.
+    </p>
+    <p>
+      Es gibt hierf&#252;r nur zwei L&#246;sungswege
+    </p>
+    <ul>
+      <li>
+        dynamisch: man definiert alle Abh&#228;ngigkeiten durch Regeln und zieht das System nach Bedarf konsistent hoch, was bedingt, da&#223; <i>alle </i>Abh&#228;ngigkeiten &#252;ber diesen Mechanismus laufen m&#252;ssen
+      </li>
+      <li>
+        statisch: man strukturiert das System so, da&#223; Nutzer erst nach dem Hochfahren der von ihnen ben&#246;tigten Subsysteme aktiv sein k&#246;nnen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -26605,12 +26742,71 @@
 <node CREATED="1520726364612" ID="ID_818685184" MODIFIED="1520726369804" TEXT="Performance nicht klar">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1521160832611" ID="ID_1479783938" MODIFIED="1521161094120">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>scheidet</i>&#160;f&#252;r unser Nutzungsmuster aus
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es bedutet effektiv, da&#223; viele Instanz-Zeiger &quot;herumfliegen&quot;,
+    </p>
+    <p>
+      welche man in einer zentralen Registry erfassen m&#252;&#223;te, um sie bei Bedarf
+    </p>
+    <p>
+      wieder auf NULL zur&#252;cksetzen zu k&#246;nnen.
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
-<node CREATED="1520722149761" ID="ID_39179906" MODIFIED="1520722154268" TEXT="neue Implementierung"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722149761" ID="ID_39179906" MODIFIED="1521160728142" TEXT="neue Implementierung">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160662691" ID="ID_1475127406" MODIFIED="1521160719787" TEXT="Entwurf Syntax und Nutzungsmuster">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1521161117092" ID="ID_672223000" MODIFIED="1521161119935" TEXT="Syntax">
+<node CREATED="1521161120859" ID="ID_1236102866" MODIFIED="1521161279265" TEXT="Depend&lt;Bla&gt; instance"/>
+<node CREATED="1521161130050" ID="ID_1706757665" MODIFIED="1521161170232" TEXT="instance().doIt()"/>
+<node CREATED="1521161171324" ID="ID_744864215" MODIFIED="1521161285976" TEXT="DependInject&lt;Bla&gt; = Singleton&lt;UnterBla&gt;"/>
+<node CREATED="1521161572133" ID="ID_1327949928" MODIFIED="1521161589311" TEXT="DependInject&lt;Bla&gt;{ServiceInstance(this)}"/>
+<node CREATED="1521161634205" ID="ID_619508229" MODIFIED="1521161843291" TEXT="DependInject&lt;Bla&gt; mock{Local&lt;UnterBla&gt;}"/>
+<node CREATED="1521161919893" ID="ID_1606842354" MODIFIED="1521161929704" TEXT="mock-&gt;doItSpecial()"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521160718843" TEXT="Implementierung ausf&#xfc;hren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160700669" ID="ID_978221585" MODIFIED="1521160718035" TEXT="Dokumentation">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 <node CREATED="1520722160591" ID="ID_135546699" MODIFIED="1520722168810" TEXT="Unit-Test"/>
-<node CREATED="1520722155112" ID="ID_1512641426" MODIFIED="1520722159028" TEXT="Integration"/>
+<node CREATED="1520722155112" ID="ID_1512641426" MODIFIED="1520722159028" TEXT="Integration">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160755182" ID="ID_678080556" MODIFIED="1521160802831" TEXT="Umbenennen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160765588" ID="ID_1857896991" MODIFIED="1521160801792" TEXT="Konfig-Aufrufe anpassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160792856" ID="ID_367925099" MODIFIED="1521160800344" TEXT="System l&#xe4;uft wie zuvor">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node CREATED="1515975745485" ID="ID_132088730" MODIFIED="1515976000614" TEXT="Konzept">
 <icon BUILTIN="info"/>
@@ -27817,8 +28013,7 @@
       oder neu in das Window-System gemappt wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1478037986046" ID="ID_1293899679" MODIFIED="1518487921101">
 <richcontent TYPE="NODE"><html>

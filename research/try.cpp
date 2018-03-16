@@ -60,6 +60,51 @@ typedef unsigned int uint;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
+using lib::ClassLock;
+
+
+template<class SRV>
+class DependencyFactory
+  {
+  public:
+    static void
+    build (SRV*& instance)
+      {
+        UNIMPLEMENTED ("how to access the per-type factory");
+      }
+  };
+
+
+
+template<class SRV>
+class DependInject;
+
+template<class SRV>
+class Depend
+  {
+    static SRV* instance;
+    
+    friend class DependInject<SRV>;
+    
+  public:
+    SRV&
+    operator() ()
+      {
+        if (!instance)
+          {
+            ClassLock<SRV> guard;
+            
+            if (!instance)
+              DependencyFactory<SRV>::build (instance);
+          }
+        ENSURE (instance);
+        return *instance;
+      }
+  };
+
+template<class SRV>
+SRV* Depend<SRV>::instance;
+
 
 int
 main (int, char**)
