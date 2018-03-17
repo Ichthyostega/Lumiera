@@ -26995,13 +26995,39 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521254014422" ID="ID_961824675" MODIFIED="1521254035254" TEXT="Meyers Singleton oder explizit ausprogrammieren?">
 <icon BUILTIN="help"/>
+<node CREATED="1521303577633" ID="ID_1665490706" MODIFIED="1521303615967" TEXT="das w&#xe4;re die &quot;Standard-L&#xf6;sung&quot; f&#xfc;r Singletons"/>
+<node CREATED="1521303616675" ID="ID_135579041" MODIFIED="1521303721048" TEXT="hier aber nicht sinnvoll...">
+<node CREATED="1521303634705" ID="ID_433169847" MODIFIED="1521303737486" TEXT="weil wir explizit ein Lock halten m&#xfc;ssen">
+<node CREATED="1521303738410" ID="ID_213625497" MODIFIED="1521303748316" TEXT="um den Instanz-Pointer und die Factory zu managen"/>
+<node CREATED="1521303749169" ID="ID_762346402" MODIFIED="1521303772913" TEXT="und der Compiler f&#xfc;r Meyers Singleton nochmal ein Lock generiert"/>
+</node>
+<node CREATED="1521303775845" ID="ID_1256913997" MODIFIED="1521303814515" TEXT="weil wir unsere Singletons ggfs explizit zerst&#xf6;ren wollen"/>
+<node CREATED="1521303816879" ID="ID_1463480909" MODIFIED="1521303842240" TEXT="weil wir eine Closure f&#xfc;r den Konstruktor erzeugen wollen"/>
+<node CREATED="1521303847923" ID="ID_917362189" MODIFIED="1521303866596" TEXT="weil wir Abstrakte Typen explizit ausschlie&#xdf;en m&#xfc;ssen"/>
+</node>
+<node CREATED="1521303869768" ID="ID_712811337" MODIFIED="1521303904421" TEXT="all das w&#xe4;re auch mit Meyers Singleton irgendwie hinzubekommen....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...aber dann eben nicht mehr <i>elegant.</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521303905491" ID="ID_1749674332" MODIFIED="1521303916944" TEXT="Fazit: explizit ist besser">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253797733" ID="ID_1640990866" MODIFIED="1521253802565" TEXT="Fehlerbehandlung">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253803963" ID="ID_100415207" MODIFIED="1521253827633" TEXT="Installation wenn Factory bereits genutzt wurde">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253831776" ID="ID_1332033733" MODIFIED="1521253852814" TEXT="Zugriff auf Service bevor her hochgefahren wurde">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253831776" ID="ID_1332033733" MODIFIED="1521303545433" TEXT="Zugriff auf Service bevor er hochgefahren wurde">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253858692" ID="ID_442301762" MODIFIED="1521253866011" TEXT="t&#xfc;ckisch">
 <icon BUILTIN="flag-pink"/>

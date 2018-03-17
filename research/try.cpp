@@ -48,12 +48,14 @@ typedef unsigned int uint;
 #include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
 #include "lib/depend2.hpp"
+#include "lib/meta/util.hpp"
 //#include "lib/meta/util.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <functional>
+#include <type_traits>
 
 
 #define SHOW_TYPE(_TY_) \
@@ -62,9 +64,64 @@ typedef unsigned int uint;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
-using lib::ClassLock;
 namespace error = lumiera::error;
 
+using lib::ClassLock;
+using lib::meta::enable_if;
+
+
+
+  template<typename TAR, typename SEL =void>
+  class InstanceHolder
+    : boost::noncopyable
+    {
+      /** storage for the service instance */
+      char buff_[sizeof(TAR)];
+      bool alive_ = false;
+      
+      
+    public:
+     ~InstanceHolder()
+        {
+          if (alive_)
+            try {
+                alive_ = false;
+                reinterpret_cast<TAR&> (buff_). ~TAR();
+              }
+            catch(...)
+              { // no logging since we might be in static shutdown
+                lumiera_error(); // reset errorflag
+              }
+        }
+      
+      
+      TAR*
+      buildInstance()
+        {
+          if (alive_)
+            throw error::Fatal("Attempt to double-create a singleton service. "
+                               "Either the application logic, or the compiler "
+                               "or runtime system is seriously broken"
+                              ,error::LUMIERA_ERROR_LIFECYCLE);
+          
+          // place new instance into embedded buffer
+          TAR* newInstance = new(&buff_) TAR ();
+          alive_ = true;
+          return newInstance;
+        }
+    };
+  
+  template<typename ABS>
+  class InstanceHolder<ABS,  enable_if<std::is_abstract<ABS>>>
+    {
+    public:
+      ABS*
+      buildInstance()
+        {
+          throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
+                             "Application architecture or lifecycle is seriously broken.");
+        }
+    };
 
 
 
@@ -74,14 +131,16 @@ class DependInject;
 template<class SRV>
 class Depend
   {
+  public:
     using Factory = std::function<SRV*()>;
     
     static SRV* instance;
     static Factory factory;
     
+    static InstanceHolder<SRV> singleton;
+    
     friend class DependInject<SRV>;
     
-  public:
     SRV&
     operator() ()
       {
@@ -101,8 +160,7 @@ class Depend
           {
             if (!factory)
               {
-                static SRV singleton{};
-                instance = &singleton;
+                instance = singleton.buildInstance();
                 factory = disabledFactory;
               }
             else
@@ -125,17 +183,29 @@ SRV* Depend<SRV>::instance;
 template<class SRV>
 typename Depend<SRV>::Factory Depend<SRV>::factory;
 
+template<class SRV>
+InstanceHolder<SRV> Depend<SRV>::singleton;
 
+
+
+struct Dum
+  : boost::noncopyable
+  {
+    virtual ~Dum() { }
+    virtual int probe()  =0;
+  };
+
+  
 int checksum = 0;
 
 template<int N>
 struct Dummy
-  : boost::noncopyable
+  : Dum
   {
     Dummy() { checksum += N; }
    ~Dummy() { checksum -= N; }
     
-    int
+    virtual int
     probe()
       {
         return N * checksum;
@@ -160,6 +230,10 @@ main (int, char**)
     SHOW_EXPR( checksum );
     SHOW_EXPR( dep12().probe() );
     SHOW_EXPR( checksum );
+    
+    Depend<Dum> dumm;
+    Depend<Dum>::factory = [](){ return nullptr; };
+    SHOW_EXPR( dumm().probe() );
     
     
     cout <<  "\n.gulp.\n";
