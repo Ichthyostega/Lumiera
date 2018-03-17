@@ -26839,21 +26839,38 @@
 <node CREATED="1521208339124" ID="ID_1092066450" MODIFIED="1521387948246" TEXT="(optional)Closure &#xfc;ber konkreten Ctor"/>
 </node>
 <node CREATED="1521208261887" ID="ID_384054163" MODIFIED="1521208264827" TEXT="Local">
-<node CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521209058181" TEXT="Closure &#xfc;ber konkreten Ctor"/>
-<node CREATED="1521209708336" ID="ID_1870723126" MODIFIED="1521209734757" TEXT="Storage f&#xfc;r UnterBla-Instanz bereitstellen"/>
-<node CREATED="1521209447572" ID="ID_1106858165" MODIFIED="1521209693387" TEXT="bestehenden Service-Zugang aus Depend&lt;Bla&gt; beiseite speichern"/>
-<node CREATED="1521209547606" ID="ID_1693604174" MODIFIED="1521209881556" TEXT="tempor&#xe4;r neuen Service-Zugang in Depend&lt;Bla&gt; installieren, an erzeugte Closure delegierend"/>
-<node CREATED="1521209759585" ID="ID_267047467" MODIFIED="1521209766124" TEXT="Lebenszyklus-Koppelung">
-<node CREATED="1521209811802" ID="ID_1712617923" MODIFIED="1521209827180" TEXT="f&#xfc;r die UnterBla-Instanz"/>
-<node CREATED="1521209827775" ID="ID_280216675" MODIFIED="1521209850760" TEXT="f&#xfc;r den tempor&#xe4;r installierten Service-Zugang"/>
+<node CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521409010023" TEXT="(optional)Closure mit speziellen Argumenten "/>
+<node COLOR="#338800" CREATED="1521209708336" ID="ID_1870723126" MODIFIED="1521411844636" TEXT="Storage f&#xfc;r UnterBla-Instanz bereitstellen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1521208724943" ID="ID_221402501" MODIFIED="1521208881882" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl"/>
-<node CREATED="1521209904013" ID="ID_1098048607" MODIFIED="1521209918615" TEXT="debug/Kontroll-API">
-<node CREATED="1521209958014" ID="ID_1638584681" MODIFIED="1521210043546" TEXT="Lebenszustand"/>
-<node CREATED="1521209945287" ID="ID_42798820" MODIFIED="1521210049471" TEXT="Erzeugen/Zerst&#xf6;ren der Instanz">
-<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1521209447572" ID="ID_1106858165" MODIFIED="1521411847148" TEXT="bestehenden Service-Zugang aus Depend&lt;Bla&gt; beiseite speichern">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1521210051457" ID="ID_1794637059" MODIFIED="1521210070534" TEXT="explizites Deinstallieren">
+<node COLOR="#338800" CREATED="1521209547606" ID="ID_1693604174" MODIFIED="1521411853636" TEXT="tempor&#xe4;r neuen Service-Zugang in Depend&lt;Bla&gt; installieren, an erzeugte Closure delegierend">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521209759585" ID="ID_267047467" MODIFIED="1521411859346" TEXT="Lebenszyklus-Koppelung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521209811802" ID="ID_1712617923" MODIFIED="1521411860363" TEXT="f&#xfc;r die UnterBla-Instanz">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521209827775" ID="ID_280216675" MODIFIED="1521411861265" TEXT="f&#xfc;r den tempor&#xe4;r installierten Service-Zugang">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1521208724943" ID="ID_221402501" MODIFIED="1521411863017" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1521209904013" ID="ID_1098048607" MODIFIED="1521411940211" STYLE="fork" TEXT="debug/Kontroll-API">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521209958014" ID="ID_1638584681" MODIFIED="1521411938195" TEXT="Lebenszustand">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1521209945287" ID="ID_42798820" MODIFIED="1521411938195" TEXT="Erzeugen/Zerst&#xf6;ren der Instanz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1521411917770" ID="ID_50731939" MODIFIED="1521411938195" TEXT="YAGNI"/>
+</node>
+<node CREATED="1521210051457" ID="ID_1794637059" MODIFIED="1521411938195" TEXT="explizites Deinstallieren">
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>

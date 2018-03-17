@@ -182,6 +182,14 @@ class DependInject
   {
     using Factory = typename Depend<SRV>::Factory;
   public:
+    template<class SUB>
+    static void
+    __assert_compatible()
+      {
+        static_assert (std::is_base_of<SRV,SUB>::value,
+                       "Installed implementation class must be compatible to the interface.");
+      }
+    
     static void
     installFactory (Factory&& otherFac)
       {
@@ -191,6 +199,24 @@ class DependInject
                              "The previously installed factory (typically Singleton) was already used."
                             , error::LUMIERA_ERROR_LIFECYCLE);
         Depend<SRV>::factory = move (otherFac);
+      }
+    
+    static void
+    temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, Factory&& newFac)
+      {
+        ClassLock<SRV> guard;
+        stashFac = move(Depend<SRV>::factory);
+        stashInstance = Depend<SRV>::instance;
+        Depend<SRV>::factory = move(newFac);
+        Depend<SRV>::instance = nullptr;
+      }
+    
+    static void
+    restoreOriginalFactory (SRV*& stashInstance, Factory& stashFac)
+      {
+        ClassLock<SRV> guard;
+        Depend<SRV>::factory = move(stashFac);
+        Depend<SRV>::instance = stashInstance;
       }
     
     static void
@@ -225,6 +251,7 @@ class DependInject
     static void
     useSingleton()
       {
+        __assert_compatible<SUB>();
         static InstanceHolder<SUB> singleton;
         installFactory ([&]()
                             {
@@ -243,6 +270,7 @@ class DependInject
         ServiceInstance()
           : instance_(new IMP{})
           {
+            __assert_compatible<IMP>();
             activateServiceAccess (*instance_);
           }
         
@@ -250,6 +278,10 @@ class DependInject
           {
             deactivateServiceAccess();
           }
+        
+        ServiceInstance (ServiceInstance&&)            = default;
+        ServiceInstance (ServiceInstance const&)       = delete;
+        ServiceInstance& operator= (ServiceInstance&&) = delete;
         
         explicit
         operator bool()  const
@@ -272,13 +304,54 @@ class DependInject
           }
       };
     
-    template<class IMP>
+    
+    template<class MOC>
     class Local
       {
+        std::unique_ptr<MOC> mock_;
+        
+        SRV* origInstance_;
+        Factory origFactory_;
+        
       public:
         Local()
           {
-            
+            __assert_compatible<MOC>();
+            temporarilyInstallAlternateFactory (origInstance_, origFactory_
+                                               ,[this]()
+                                                   {
+                                                      disableFactory();
+                                                      mock_.reset(new MOC{});
+                                                      return mock_.get();
+                                                   });
+          }
+       ~Local()
+          {
+            restoreOriginalFactory (origInstance_, origFactory_);
+          }
+        
+        Local (Local&&)            = default;
+        Local (Local const&)       = delete;
+        Local& operator= (Local&&) = delete;
+        
+        explicit
+        operator bool()  const
+          {
+            return bool(mock_);
+          }
+        
+        MOC&
+        operator* ()  const
+          {
+            ENSURE (mock_);
+            return *mock_;
+          }
+        
+        MOC*
+        operator-> ()  const
+          {
+            ENSURE (mock_);
+            return mock_.get();
           }
       };
   };
@@ -367,6 +440,69 @@ main (int, char**)
     VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::ServiceInstance<SubDummy>{} );
     SHOW_EXPR( checksum );
     
+    {
+      DependInject<Dum>::Local<SubDummy>      mockDum;
+      DependInject<Dummy<3>>::Local<SubDummy> mockDummy3;
+      CHECK (!mockDum);
+      CHECK (!mockDummy3);
+      SHOW_EXPR( dumm().probe() );
+      CHECK ( mockDum);
+      CHECK (!mockDummy3);
+      SHOW_EXPR( checksum );
+      SHOW_EXPR( mockDum->probe() );
+      SHOW_EXPR( checksum );
+      mockDum->offset = 20;
+      SHOW_EXPR( dumm().probe() );
+      
+      VERIFY_ERROR (LIFECYCLE, mockDummy3->probe() );
+      SHOW_EXPR( checksum );
+      SHOW_EXPR( dep3().probe() );
+      SHOW_EXPR( checksum );
+      CHECK ( mockDummy3);
+      SHOW_EXPR( mockDummy3->probe() );
+      SHOW_EXPR( checksum );
+      mockDummy3->offset = 10;
+      SHOW_EXPR( dep3().probe() );
+      mockDum->offset = 50;
+      SHOW_EXPR( dep3().probe() );
+      SHOW_EXPR( dumm().probe() );
+      SHOW_EXPR( checksum );
+    }
+    SHOW_EXPR( checksum );
+    SHOW_EXPR( dumm().probe() );
+    VERIFY_ERROR (LIFECYCLE, dep3().probe() );
+    SHOW_EXPR( checksum );
+    {
+      DependInject<Dummy<3>>::ServiceInstance<SubDummy> service{};
+      SHOW_EXPR( checksum );
+      SHOW_EXPR( dep3().probe() );
+      service->offset = 5;
+      SHOW_EXPR( dep3().probe() );
+      SHOW_EXPR( checksum );
+      {
+        DependInject<Dummy<3>>::Local<SubDummy> mockDummy31;
+        CHECK (!mockDummy31);
+        SHOW_EXPR( checksum );
+        SHOW_EXPR( dep3().probe() );
+        SHOW_EXPR( checksum );
+        mockDummy31->offset = 10;
+        SHOW_EXPR( dep3().probe() );
+        SHOW_EXPR( mockDummy31->probe() );
+        SHOW_EXPR( service->probe() );
+        CHECK (mockDummy31->offset != service->offset);
+        service->offset = 35;
+        SHOW_EXPR( dep3().probe() );
+        SHOW_EXPR( mockDummy31->probe() );
+        SHOW_EXPR( service->probe() );
+        SHOW_EXPR( checksum );
+      }
+      SHOW_EXPR( checksum );
+      SHOW_EXPR( dep3().probe() );
+      SHOW_EXPR( checksum );
+    }
+    SHOW_EXPR( checksum );
+    VERIFY_ERROR (LIFECYCLE, dep3().probe() );
+    SHOW_EXPR( checksum );
     
     cout <<  "\n.gulp.\n";
     
