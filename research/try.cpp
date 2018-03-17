@@ -49,9 +49,11 @@ typedef unsigned int uint;
 #include "lib/depend.hpp"
 #include "lib/depend2.hpp"
 //#include "lib/meta/util.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
-//#include <vector>
+#include <boost/noncopyable.hpp>
+#include <functional>
 
 
 #define SHOW_TYPE(_TY_) \
@@ -61,18 +63,8 @@ typedef unsigned int uint;
 
 
 using lib::ClassLock;
+namespace error = lumiera::error;
 
-
-template<class SRV>
-class DependencyFactory
-  {
-  public:
-    static void
-    build (SRV*& instance)
-      {
-        UNIMPLEMENTED ("how to access the per-type factory");
-      }
-  };
 
 
 
@@ -82,7 +74,10 @@ class DependInject;
 template<class SRV>
 class Depend
   {
+    using Factory = std::function<SRV*()>;
+    
     static SRV* instance;
+    static Factory factory;
     
     friend class DependInject<SRV>;
     
@@ -91,24 +86,81 @@ class Depend
     operator() ()
       {
         if (!instance)
-          {
-            ClassLock<SRV> guard;
-            
-            if (!instance)
-              DependencyFactory<SRV>::build (instance);
-          }
+          retrieveInstance();
         ENSURE (instance);
         return *instance;
       }
+    
+  private:
+    void
+    retrieveInstance()
+      {
+        ClassLock<SRV> guard;
+        
+        if (!instance)
+          {
+            if (!factory)
+              {
+                static SRV singleton{};
+                instance = &singleton;
+                factory = disabledFactory;
+              }
+            else
+              instance = factory();
+          }
+      }
+    
+    static SRV*
+    disabledFactory()
+      {
+        throw error::Fatal("Service not available at this point of the Application Lifecycle"
+                          ,error::LUMIERA_ERROR_LIFECYCLE);
+      }
   };
+
 
 template<class SRV>
 SRV* Depend<SRV>::instance;
+
+template<class SRV>
+typename Depend<SRV>::Factory Depend<SRV>::factory;
+
+
+int checksum = 0;
+
+template<int N>
+struct Dummy
+  : boost::noncopyable
+  {
+    Dummy() { checksum += N; }
+   ~Dummy() { checksum -= N; }
+    
+    int
+    probe()
+      {
+        return N * checksum;
+      }
+  };
+
 
 
 int
 main (int, char**)
   {
+    Depend<Dummy<1>> dep11;
+    Depend<Dummy<5>> dep5;
+    Depend<Dummy<1>> dep12;
+    
+    cout << "Siz-DUM : " << lib::test::showSizeof(dep11) << " " << lib::test::showSizeof(dep5) << endl;
+    cout << "check-vor="<<checksum<<endl;
+    
+    SHOW_EXPR( dep11().probe() );
+    SHOW_EXPR( checksum );
+    SHOW_EXPR( dep5().probe() );
+    SHOW_EXPR( checksum );
+    SHOW_EXPR( dep12().probe() );
+    SHOW_EXPR( checksum );
+    
     
     cout <<  "\n.gulp.\n";
     

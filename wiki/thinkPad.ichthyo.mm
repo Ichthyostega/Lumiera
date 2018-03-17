@@ -26694,7 +26694,7 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1521160107759" ID="ID_669924852" MODIFIED="1521160477774" TEXT="Das Konsistenz-Problem ist in Wirklichkeit ein Architekturproblem">
+<node CREATED="1521160107759" ID="ID_669924852" MODIFIED="1521239034598" TEXT="Das Konsistenz-Problem ist in Wirklichkeit ein Architekturproblem">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26723,6 +26723,7 @@
   </body>
 </html>
 </richcontent>
+<linktarget COLOR="#a9c1bb" DESTINATION="ID_669924852" ENDARROW="Default" ENDINCLINATION="795;125;" ID="Arrow_ID_949036001" SOURCE="ID_1505788760" STARTARROW="None" STARTINCLINATION="779;51;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -26777,15 +26778,243 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722149761" ID="ID_39179906" MODIFIED="1521160728142" TEXT="neue Implementierung">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160662691" ID="ID_1475127406" MODIFIED="1521160719787" TEXT="Entwurf Syntax und Nutzungsmuster">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160662691" ID="ID_1475127406" MODIFIED="1521238630164" TEXT="Design Syntax und Nutzungsmuster">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1521161117092" ID="ID_672223000" MODIFIED="1521161119935" TEXT="Syntax">
 <node CREATED="1521161120859" ID="ID_1236102866" MODIFIED="1521161279265" TEXT="Depend&lt;Bla&gt; instance"/>
 <node CREATED="1521161130050" ID="ID_1706757665" MODIFIED="1521161170232" TEXT="instance().doIt()"/>
 <node CREATED="1521161171324" ID="ID_744864215" MODIFIED="1521161285976" TEXT="DependInject&lt;Bla&gt; = Singleton&lt;UnterBla&gt;"/>
-<node CREATED="1521161572133" ID="ID_1327949928" MODIFIED="1521161589311" TEXT="DependInject&lt;Bla&gt;{ServiceInstance(this)}"/>
+<node CREATED="1521161572133" ID="ID_1327949928" MODIFIED="1521213240214" TEXT="DependInject&lt;Bla&gt;{ServiceInstance&lt;UnterBla&gt;}"/>
 <node CREATED="1521161634205" ID="ID_619508229" MODIFIED="1521161843291" TEXT="DependInject&lt;Bla&gt; mock{Local&lt;UnterBla&gt;}"/>
 <node CREATED="1521161919893" ID="ID_1606842354" MODIFIED="1521161929704" TEXT="mock-&gt;doItSpecial()"/>
+</node>
+<node CREATED="1521207954859" ID="ID_631339002" MODIFIED="1521207965947" TEXT="Analyse">
+<node CREATED="1521208242178" ID="ID_539882602" MODIFIED="1521208246821" TEXT="erforderliche Mechanismen">
+<node CREATED="1521208254376" ID="ID_1933406851" MODIFIED="1521208256603" TEXT="Singleton">
+<node CREATED="1521208339124" ID="ID_287433738" MODIFIED="1521209063045" TEXT="Closure &#xfc;ber konkreten Ctor"/>
+<node CREATED="1521209708336" ID="ID_1667188609" MODIFIED="1521209724265" TEXT="Storage f&#xfc;r UnterBla-Instanz bereitstellen"/>
+<node CREATED="1521208380663" ID="ID_1434723425" MODIFIED="1521210156302" TEXT="neuen lazy-init-Service-Zugang in Depend&lt;Bla&gt; installieren"/>
+<node CREATED="1521208395181" ID="ID_1161468794" MODIFIED="1521210186010" TEXT="Check, ob der vorher dort bestehende Zugang bereits verwendet wurde"/>
+<node CREATED="1521208451621" ID="ID_1429591553" MODIFIED="1521208472454" TEXT="Exception aus DependInject, falls ja"/>
+</node>
+<node CREATED="1521208257336" ID="ID_1129640741" MODIFIED="1521208261323" TEXT="ServiceInstance">
+<node CREATED="1521208859989" ID="ID_549061661" MODIFIED="1521208874756" TEXT="Lazy-Init-Factory deaktivieren"/>
+<node CREATED="1521208793630" ID="ID_1357481546" MODIFIED="1521208825093" TEXT="Service-Zugang in Depend&lt;Bla&gt; injizieren"/>
+<node CREATED="1521208889297" ID="ID_214019029" MODIFIED="1521208932875" TEXT="Lebenszyklus-Koppelung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. Service-Zugang wird automatisch geschlossen,
+    </p>
+    <p>
+      wenn die DependInject-Instanz stirbt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521208943105" ID="ID_295121984" MODIFIED="1521208976657" TEXT="Ownership an &#xfc;bergebener Service-Impl &#xfc;bernehmen"/>
+<node CREATED="1521208724943" ID="ID_1527628667" MODIFIED="1521208881882" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl"/>
+</node>
+<node CREATED="1521208261887" ID="ID_384054163" MODIFIED="1521208264827" TEXT="Local">
+<node CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521209058181" TEXT="Closure &#xfc;ber konkreten Ctor"/>
+<node CREATED="1521209708336" ID="ID_1870723126" MODIFIED="1521209734757" TEXT="Storage f&#xfc;r UnterBla-Instanz bereitstellen"/>
+<node CREATED="1521209447572" ID="ID_1106858165" MODIFIED="1521209693387" TEXT="bestehenden Service-Zugang aus Depend&lt;Bla&gt; beiseite speichern"/>
+<node CREATED="1521209547606" ID="ID_1693604174" MODIFIED="1521209881556" TEXT="tempor&#xe4;r neuen Service-Zugang in Depend&lt;Bla&gt; installieren, an erzeugte Closure delegierend"/>
+<node CREATED="1521209759585" ID="ID_267047467" MODIFIED="1521209766124" TEXT="Lebenszyklus-Koppelung">
+<node CREATED="1521209811802" ID="ID_1712617923" MODIFIED="1521209827180" TEXT="f&#xfc;r die UnterBla-Instanz"/>
+<node CREATED="1521209827775" ID="ID_280216675" MODIFIED="1521209850760" TEXT="f&#xfc;r den tempor&#xe4;r installierten Service-Zugang"/>
+</node>
+<node CREATED="1521208724943" ID="ID_221402501" MODIFIED="1521208881882" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl"/>
+<node CREATED="1521209904013" ID="ID_1098048607" MODIFIED="1521209918615" TEXT="debug/Kontroll-API">
+<node CREATED="1521209958014" ID="ID_1638584681" MODIFIED="1521210043546" TEXT="Lebenszustand"/>
+<node CREATED="1521209945287" ID="ID_42798820" MODIFIED="1521210049471" TEXT="Erzeugen/Zerst&#xf6;ren der Instanz">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1521210051457" ID="ID_1794637059" MODIFIED="1521210070534" TEXT="explizites Deinstallieren">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1521213011289" ID="ID_1360216253" MODIFIED="1521213015444" TEXT="Vereinheitlichung">
+<node CREATED="1521213017168" ID="ID_1734833663" MODIFIED="1521213021084" TEXT="alle Varianten">
+<node CREATED="1521213036670" ID="ID_1288760048" MODIFIED="1521213042401" TEXT="sind move-only"/>
+<node CREATED="1521213116611" ID="ID_1639434185" MODIFIED="1521213127773" TEXT="enthalten eine Closure &#xfc;ber einen konkreten Ctor"/>
+<node CREATED="1521213855997" ID="ID_1959805856" MODIFIED="1521213868751" TEXT="installieren eine mit dieser parametrisierte Factory"/>
+<node CREATED="1521236923444" ID="ID_909632246" MODIFIED="1521236929411" TEXT="irgendwie...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1521236930715" ID="ID_1673303474" MODIFIED="1521236948604" TEXT="managen alle die Service-Instanz"/>
+<node CREATED="1521236972917" ID="ID_513518069" MODIFIED="1521236991993">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>aber</b>&#160;Lebenszyklus ist an die Factory gebunden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521236997978" ID="ID_937624268" MODIFIED="1521237012251" TEXT="...und im Fall Singleton lebt die Factory l&#xe4;nger"/>
+</node>
+</node>
+<node CREATED="1521237050866" ID="ID_306994173" MODIFIED="1521237053757" TEXT="die Factory">
+<node CREATED="1521237057169" ID="ID_1684411297" MODIFIED="1521237061196" TEXT="ist stets stateless">
+<node CREATED="1521237078919" ID="ID_576191440" MODIFIED="1521237088921" TEXT="Zustand steckt im instance-Ptr"/>
+<node CREATED="1521237089413" ID="ID_961860289" MODIFIED="1521237111238" TEXT="Zustand steckt im DependInject-Lebenszyklus"/>
+</node>
+<node CREATED="1521237387044" ID="ID_1004256215" MODIFIED="1521237394199" TEXT="speichert aber eine konkrete Closure"/>
+<node CREATED="1521237410713" ID="ID_1848566975" MODIFIED="1521237417420" TEXT="der default-Fall k&#xf6;nnte generisch sein"/>
+</node>
+<node CREATED="1521238550267" ID="ID_722062331" MODIFIED="1521238725975" TEXT="Ort f&#xfc;r Storage">
+<node CREATED="1521238557210" ID="ID_674365093" MODIFIED="1521238563917" TEXT="f&#xfc;r die Factory">
+<node CREATED="1521238571832" ID="ID_53152012" MODIFIED="1521238597166" TEXT="Heap">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1521238576920" ID="ID_1251870411" MODIFIED="1521242422287" TEXT="in DependInject">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1521238764190" ID="ID_1859795284" MODIFIED="1521238777840" TEXT="f&#xfc;r zwei F&#xe4;lle ist das die nat&#xfc;rliche Wahl"/>
+<node CREATED="1521238796793" ID="ID_1719458168" MODIFIED="1521238815844" TEXT="den ersten Fall (Singleton) quetschen wir hier mit rein">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1521242379731" ID="ID_1396082906" MODIFIED="1521242418936" TEXT="erzwingt lokalen Typ oder opaque holder">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1521240566398" ID="ID_1596629515" MODIFIED="1521242373542" TEXT="in den Trampolin-Funktionen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1521242426269" ID="ID_256868222" MODIFIED="1521242434728" TEXT="normalerweise inline"/>
+<node CREATED="1521242435292" ID="ID_503349041" MODIFIED="1521242454674" TEXT="automatisch heap-alloziert f&#xfc;r komplexe closure">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1521238641935" ID="ID_1638918713" MODIFIED="1521238649354" TEXT="Factory-Trampolin">
+<node CREATED="1521238662196" ID="ID_1029621449" MODIFIED="1521238671488" TEXT="Heap">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1521238665347" ID="ID_1310408215" MODIFIED="1521238668095" TEXT="statisch">
+<node CREATED="1521238747512" ID="ID_183342291" MODIFIED="1521238753603" TEXT="bietet sich an..."/>
+<node CREATED="1521238754287" ID="ID_1930878495" MODIFIED="1521238758794" TEXT="pa&#xdf;t zum Design-Stil"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1521238885741" HGAP="116" ID="ID_378163884" MODIFIED="1521238895249" TEXT="Stil-Fragen" VSHIFT="-29">
+<node CREATED="1521238918577" ID="ID_592274908" MODIFIED="1521238925476" TEXT="Wunsch: unscheinbar-elegant"/>
+<node CREATED="1521238926208" ID="ID_1895053354" MODIFIED="1521238933626" TEXT="explizite &quot;Maschinerie&quot; vermeiden"/>
+<node CREATED="1521239771475" ID="ID_658740954" MODIFIED="1521239917171" TEXT="Storage ist wenn m&#xf6;glich statisch"/>
+<node BACKGROUND_COLOR="#e3d49b" COLOR="#990000" CREATED="1521238998374" ID="ID_1505788760" MODIFIED="1521239221405" TEXT="keine Architektur-Fragen technisch &quot;l&#xf6;sen&quot;">
+<arrowlink COLOR="#a9c1bb" DESTINATION="ID_669924852" ENDARROW="Default" ENDINCLINATION="795;125;" ID="Arrow_ID_949036001" STARTARROW="None" STARTINCLINATION="779;51;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1521239059741" ID="ID_1063831478" MODIFIED="1521239067040" TEXT="Grenzf&#xe4;lle ausklammern">
+<node CREATED="1521239073363" ID="ID_1392431590" MODIFIED="1521239273497" STYLE="fork" TEXT="Shutdown von Singletons">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1521239466149" ID="ID_178901788" MODIFIED="1521239728744" TEXT="Local schattiert Lebensende">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Folgendes Szenario ignorieren wir:
+    </p>
+    <ul>
+      <li>
+        eine Dependency ist als Service konfiguriert
+      </li>
+      <li>
+        f&#252;r einen Testmock wird eine Local-Konfiguration dar&#252;bergelegt
+      </li>
+      <li>
+        der Service wechselt seinen Lebenszyklus-Status (aktiv/inaktiv)
+      </li>
+    </ul>
+    <p>
+      &#10233; der Service zerschie&#223;t den Local, oder der Local restauriert am Ende den bereits toten Service.
+    </p>
+    <p>
+      Har Har Har! Selber schuld wer sowas macht.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1521169086441" ID="ID_284471203" MODIFIED="1521169088676" TEXT="Design">
+<node CREATED="1521240056932" ID="ID_1189728630" MODIFIED="1521240061863" TEXT="Strukturen">
+<node CREATED="1521240105285" ID="ID_711335043" MODIFIED="1521240109744" TEXT="Dependency-Factory">
+<node CREATED="1521240317600" ID="ID_1626104494" MODIFIED="1521240328410" TEXT="Design-1">
+<node CREATED="1521240110948" ID="ID_219745040" MODIFIED="1521240117087" TEXT="ist ein Interface"/>
+<node CREATED="1521240117611" ID="ID_786865088" MODIFIED="1521240124694" TEXT="nicht getemplated"/>
+<node CREATED="1521240284429" ID="ID_1132898054" MODIFIED="1521240294807" TEXT="eingebettetes getyptes Trampolin"/>
+<node CREATED="1521240298267" ID="ID_116565565" MODIFIED="1521240312364" TEXT="Folge: static_cast nach Factory-Aufruf"/>
+</node>
+<node CREATED="1521240336717" ID="ID_468626388" MODIFIED="1521240340704" TEXT="Design-2">
+<node CREATED="1521241524730" ID="ID_267557752" MODIFIED="1521241530652" TEXT="ist generisches Front-End"/>
+<node CREATED="1521241625115" ID="ID_469205839" MODIFIED="1521241635214" TEXT="bietet API zum (re)Konfigurieren"/>
+<node CREATED="1521241544559" ID="ID_1174783081" MODIFIED="1521241552521" TEXT="nur eine Funktion konfigurierbar">
+<node CREATED="1521241553590" ID="ID_1087180465" MODIFIED="1521241560816" TEXT="entweder ins Trampolin eingebettet"/>
+<node CREATED="1521241561380" ID="ID_437866764" MODIFIED="1521241569823" TEXT="oder als Funktionszeiger"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521245885376" ID="ID_1336783261" MODIFIED="1521245899152" TEXT="k&#xf6;nnte komplett wegfallen">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1521242246702" ID="ID_650712800" MODIFIED="1521242253953" TEXT="DependInject">
+<node CREATED="1521242468983" ID="ID_956915310" MODIFIED="1521242481313" TEXT="ist nur ein Lebenszyklus-Manager"/>
+<node CREATED="1521242666204" ID="ID_219666575" MODIFIED="1521242758283" TEXT="delegiert an eine funktionale Konfig"/>
+<node CREATED="1521242758775" ID="ID_594637783" MODIFIED="1521242762355" TEXT="ist komplett generisch"/>
+</node>
+<node CREATED="1521242784556" ID="ID_1052722676" MODIFIED="1521242792302" TEXT="Konfig-Selektor">
+<node CREATED="1521242793458" ID="ID_1174857326" MODIFIED="1521242802085" TEXT="baut die Closure"/>
+<node CREATED="1521242805641" ID="ID_68866373" MODIFIED="1521242811164" TEXT="baut die funktionale Konfig"/>
+<node CREATED="1521242824239" ID="ID_1013563756" MODIFIED="1521242834313" TEXT="inline-wegwerf-Objekt"/>
+</node>
+</node>
+<node CREATED="1521240053852" ID="ID_666003564" MODIFIED="1521240074107" TEXT="Detail-Fragen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521169099047" ID="ID_1183392158" MODIFIED="1521169127596" TEXT="DependencyFactory-Basisklasse">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521169111957" ID="ID_1706232823" MODIFIED="1521169126860" TEXT="Ort f&#xfc;r den Implementierungs-Pointer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521169130251" ID="ID_1252056818" MODIFIED="1521169146081" TEXT="Zugang f&#xfc;r DependInject">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521254014422" ID="ID_961824675" MODIFIED="1521254035254" TEXT="Meyers Singleton oder explizit ausprogrammieren?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253797733" ID="ID_1640990866" MODIFIED="1521253802565" TEXT="Fehlerbehandlung">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253803963" ID="ID_100415207" MODIFIED="1521253827633" TEXT="Installation wenn Factory bereits genutzt wurde">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253831776" ID="ID_1332033733" MODIFIED="1521253852814" TEXT="Zugriff auf Service bevor her hochgefahren wurde">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253858692" ID="ID_442301762" MODIFIED="1521253866011" TEXT="t&#xfc;ckisch">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253867787" ID="ID_662728746" MODIFIED="1521253891037" TEXT="beachte Lifecycle-Handle existiert noch nicht">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253986491" ID="ID_546204807" MODIFIED="1521254005609" TEXT="Singleton wenn Interfaceklasse abstrakt ist">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521160718843" TEXT="Implementierung ausf&#xfc;hren">

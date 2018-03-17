@@ -1927,7 +1927,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803110214" tags="def Concepts draft" changecount="3">
+<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803170228" tags="def Concepts draft" changecount="7">
 <pre>//Access point to dependencies by-name.//
 In the Lumiera code base, we refrain from building or using a full-blown Dependency Injection Container. A lot of FUD has been spread regarding Dependency Injection and Singletons, to the point that a majority of developers confuses and conflates the ~Inversion-of-Control principle (which is essential) with the use of a ~DI-Container. Today, you can not even mention the word &quot;Singleton&quot; without everyone yelling out &quot;Evil! Evil!&quot; -- while most of these people just feel comfortable living in the annotation hell.
 
@@ -1940,6 +1940,30 @@ Our DependencyFactory satisfies the following requirements
 * in the simplest (and most prominent case), //nothing// has to be done at all by anyone to manage that lifecycle. By default, the DependencyFactory creates a singleton instance lazily in static memory on demand and ensures thread-safe initialisation and access.
 * we establish a policy to ''disallow any significant functionality during application shutdown''. After leaving {{{main()}}}, only trivial dtors are invoked and possibly a few resource handles are dropped. No filesystem writes, no clean-up and reorganisation, not even any logging is allowed. For this reason, we established a [[Subsystem]] concept with explicit shutdown hooks, which are invoked beforehand.
 * the DependencyFactory can be re-configured for individual services (type names) to refer to an explicitly installed service instance. In those cases, access while the service is not available will raise an exception. There is a simple one-shot mechanism to reconfigure DependencyFactory and create a link to an actual service implementation, including automatic deregistration.
+
+!!!Configuration
+The DependencyFactory and thus the behaviour of dependency injection can be reconfigured, ad hoc, at runtime.
+Deliberately, we do not enforce global consistency statically (since that would lead to one central static configuration). However, a runtime sanity check is performed to ensure configuration actually happens prior to any use, which means any invocation to retrieve (and thus lazily create) the service instance. The following flavours can be configured
+;default
+:a singleton instance of the designated type is created lazily, on first access
+:define an instance for access (preferably static) {{{Depend&lt;Bla&gt; theBla;}}}
+:access the singleton instance as {{{theBla().doIt();}}}
+;singleton subclass
+:{{{DependInject&lt;Bla&gt; = Singleton&lt;SubBla&gt;}}}
+:causes the dependency factory {{{Depend&lt;Bla&gt;}}} to create a {{{SubBla}}} singleton instance
+;attach to service
+:{{{DependInject&lt;Bla&gt;{ServiceInstance&lt;SubBla&gt;} }}}
+:* build and manage an instance of {{{SubBla}}} in heap memory immediately (not lazily)
+:* configure the dependency factory to return a reference //to this instance//
+:* the {{{DependInject&lt;Bla&gt;}}} instance itself acts as lifecycle handle (and managing smart-ptr)
+:* when it is destroyed, the dependency factory is automatically cleared, and further access will trigger an error
+;support for test mocking
+:{{{DependInject&lt;Bla&gt; mock{Local&lt;SubBla&gt;} }}}
+:temporarily shadows whatever configuration resides within the dependency factory
+:the next access will create a (non singleton) {{{SubBla}}} instance in heap memory and return a {{{Bla&amp;}}}
+:the  {{{DependInject&lt;Bla&gt;}}} again acts as lifecycle handle and smart-ptr to access the {{{SubBla}}} instance like {{{mock-&gt;doItSpecial()}}}
+:when this handle goes out of scope, the original configuration of the dependency factory is restored
+
 </pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
