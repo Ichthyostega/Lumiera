@@ -71,7 +71,7 @@ using lib::ClassLock;
 using lib::meta::enable_if;
 
 
-
+namespace {
   template<typename TAR, typename SEL =void>
   class InstanceHolder
     : boost::noncopyable
@@ -106,6 +106,7 @@ using lib::meta::enable_if;
                              "Application architecture or lifecycle is seriously broken.");
         }
     };
+}//(End)Implementation helper
 
 
 
@@ -171,6 +172,43 @@ template<class SRV>
 InstanceHolder<SRV> Depend<SRV>::singleton;
 
 
+///////////////////////////////////////////////////////Configuration
+
+template<class SRV>
+class DependInject
+  {
+  public:
+    
+    template<class SUB>
+    void
+    useSingleton()
+      {
+        UNIMPLEMENTED ("reconfigure to plant a singleton of subclass type");
+      }
+    
+    template<class IMP>
+    class ServiceInstance
+      {
+      public:
+        ServiceInstance()
+          {
+            
+          }
+      };
+    
+    template<class IMP>
+    class Local
+      {
+      public:
+        Local()
+          {
+            
+          }
+      };
+  };
+
+
+///////////////////////////////////////////////////////Usage
 
 struct Dum
   : boost::noncopyable
