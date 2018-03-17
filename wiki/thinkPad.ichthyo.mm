@@ -26993,7 +26993,48 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521169130251" ID="ID_1252056818" MODIFIED="1521169146081" TEXT="Zugang f&#xfc;r DependInject">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521254014422" ID="ID_961824675" MODIFIED="1521254035254" TEXT="Meyers Singleton oder explizit ausprogrammieren?">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521324229082" ID="ID_1398878858" MODIFIED="1521324233702" TEXT="Storage">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1521324240124" ID="ID_1099103129" MODIFIED="1521324253936">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      statische Storage ist <i>irgendwie cool</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521324275919" ID="ID_1710451095" MODIFIED="1521324497413" TEXT="sehe aber auch keinen wirklichen Vorteil">
+<node CREATED="1521324529228" ID="ID_1786667023" MODIFIED="1521324543094" TEXT="man mu&#xdf; sich nicht um die de-Allokation k&#xfc;mmern"/>
+<node CREATED="1521324554465" ID="ID_1577416641" MODIFIED="1521324568043" TEXT="Storage ist garantiert vorhanden, kein out-of-Memory"/>
+<node CREATED="1521324668449" ID="ID_1013908061" MODIFIED="1521324682434" TEXT="Meyers Singleton ist elegant und schnell"/>
+</node>
+<node CREATED="1521324321601" ID="ID_805959606" MODIFIED="1521324477609" TEXT="Nachteil: Storage ist stets belegt, auch wenn nicht notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das gilt im Besonderen f&#252;r eine default-Storage als Singleton.
+    </p>
+    <p>
+      Wofern wir dynamisch konfigurieren (wollen), mu&#223; dieser Default stets statisch bereitgestellt werden,
+    </p>
+    <p>
+      selbst wenn die dynamische Konfiguration so angelegt ist, da&#223; die Storage nie ben&#246;tigt wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521324883035" ID="ID_1438637057" MODIFIED="1521324896069" TEXT="Heap-Allokation k&#xf6;nnte insgesamt einfacher sein"/>
+</node>
+<node COLOR="#338800" CREATED="1521254014422" ID="ID_961824675" MODIFIED="1521324200616" TEXT="Meyers Singleton oder explizit ausprogrammieren?">
 <icon BUILTIN="help"/>
 <node CREATED="1521303577633" ID="ID_1665490706" MODIFIED="1521303615967" TEXT="das w&#xe4;re die &quot;Standard-L&#xf6;sung&quot; f&#xfc;r Singletons"/>
 <node CREATED="1521303616675" ID="ID_135579041" MODIFIED="1521303721048" TEXT="hier aber nicht sinnvoll...">

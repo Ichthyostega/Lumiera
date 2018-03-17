@@ -56,6 +56,7 @@ typedef unsigned int uint;
 #include <boost/noncopyable.hpp>
 #include <functional>
 #include <type_traits>
+#include <memory>
 
 
 #define SHOW_TYPE(_TY_) \
@@ -75,39 +76,22 @@ using lib::meta::enable_if;
   class InstanceHolder
     : boost::noncopyable
     {
-      /** storage for the service instance */
-      char buff_[sizeof(TAR)];
-      bool alive_ = false;
+      std::unique_ptr<TAR> instance_;
       
       
     public:
-     ~InstanceHolder()
-        {
-          if (alive_)
-            try {
-                alive_ = false;
-                reinterpret_cast<TAR&> (buff_). ~TAR();
-              }
-            catch(...)
-              { // no logging since we might be in static shutdown
-                lumiera_error(); // reset errorflag
-              }
-        }
-      
-      
       TAR*
       buildInstance()
         {
-          if (alive_)
+          if (instance_)
             throw error::Fatal("Attempt to double-create a singleton service. "
                                "Either the application logic, or the compiler "
                                "or runtime system is seriously broken"
                               ,error::LUMIERA_ERROR_LIFECYCLE);
           
           // place new instance into embedded buffer
-          TAR* newInstance = new(&buff_) TAR ();
-          alive_ = true;
-          return newInstance;
+          instance_.reset (new TAR{});
+          return instance_.get();
         }
     };
   
@@ -232,7 +216,7 @@ main (int, char**)
     SHOW_EXPR( checksum );
     
     Depend<Dum> dumm;
-    Depend<Dum>::factory = [](){ return nullptr; };
+//  Depend<Dum>::factory = [](){ return nullptr; };
     SHOW_EXPR( dumm().probe() );
     
     
