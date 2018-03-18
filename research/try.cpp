@@ -116,7 +116,6 @@ class DependInject;
 template<class SRV>
 class Depend
   {
-  public:
     using Factory = std::function<SRV*()>;
     
     static SRV* instance;
@@ -125,6 +124,7 @@ class Depend
     static InstanceHolder<SRV> singleton;
     
     friend class DependInject<SRV>;
+  public:
     
     SRV&
     operator() ()
@@ -209,6 +209,7 @@ class DependInject
                              "but another instance has already been dependency-injected."
                             , error::LUMIERA_ERROR_LIFECYCLE);
         Depend<SRV>::instance = &newInstance;
+        Depend<SRV>::factory = Depend<SRV>::disabledFactory;
       }
     
     static void
@@ -362,7 +363,7 @@ main (int, char**)
       SHOW_EXPR( checksum );
     }
     SHOW_EXPR( checksum );
-    SHOW_EXPR( dep3().probe() );
+    VERIFY_ERROR (LIFECYCLE, dep3().probe() );
     VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::ServiceInstance<SubDummy>{} );
     SHOW_EXPR( checksum );
     

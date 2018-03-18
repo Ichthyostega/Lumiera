@@ -26792,6 +26792,7 @@
 <node CREATED="1521208242178" ID="ID_539882602" MODIFIED="1521208246821" TEXT="erforderliche Mechanismen">
 <node CREATED="1521208254376" ID="ID_1933406851" MODIFIED="1521208256603" TEXT="Singleton">
 <node CREATED="1521208339124" ID="ID_287433738" MODIFIED="1521209063045" TEXT="Closure &#xfc;ber konkreten Ctor"/>
+<node CREATED="1521208339124" ID="ID_826329078" MODIFIED="1521387972747" TEXT="(optional)Closure mit speziellen Argumenten"/>
 <node COLOR="#338800" CREATED="1521209708336" ID="ID_1667188609" MODIFIED="1521332921903" TEXT="Storage f&#xfc;r UnterBla-Instanz bereitstellen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -26806,7 +26807,9 @@
 </node>
 </node>
 <node CREATED="1521208257336" ID="ID_1129640741" MODIFIED="1521208261323" TEXT="ServiceInstance">
-<node CREATED="1521208859989" ID="ID_549061661" MODIFIED="1521208874756" TEXT="Lazy-Init-Factory deaktivieren"/>
+<node COLOR="#338800" CREATED="1521208859989" ID="ID_549061661" MODIFIED="1521387920055" TEXT="Lazy-Init-Factory deaktivieren">
+<icon BUILTIN="button_ok"/>
+</node>
 <node COLOR="#338800" CREATED="1521208793630" ID="ID_1357481546" MODIFIED="1521335430941" TEXT="Service-Zugang in Depend&lt;Bla&gt; injizieren">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -26833,6 +26836,7 @@
 <node COLOR="#338800" CREATED="1521208724943" ID="ID_1527628667" MODIFIED="1521335442003" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl">
 <icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1521208339124" ID="ID_1092066450" MODIFIED="1521387948246" TEXT="(optional)Closure &#xfc;ber konkreten Ctor"/>
 </node>
 <node CREATED="1521208261887" ID="ID_384054163" MODIFIED="1521208264827" TEXT="Local">
 <node CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521209058181" TEXT="Closure &#xfc;ber konkreten Ctor"/>
@@ -27093,13 +27097,62 @@
 <node COLOR="#338800" CREATED="1521253803963" ID="ID_100415207" MODIFIED="1521332991888" TEXT="Installation wenn Factory bereits genutzt wurde">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253831776" ID="ID_1332033733" MODIFIED="1521303545433" TEXT="Zugriff auf Service bevor er hochgefahren wurde">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253858692" ID="ID_442301762" MODIFIED="1521253866011" TEXT="t&#xfc;ckisch">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1521253831776" ID="ID_1332033733" MODIFIED="1521387909137" TEXT="Zugriff auf Service bevor er hochgefahren wurde">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253858692" ID="ID_442301762" MODIFIED="1521385565612" TEXT="t&#xfc;ckisch">
+<icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253867787" ID="ID_662728746" MODIFIED="1521253891037" TEXT="beachte Lifecycle-Handle existiert noch nicht">
+<node CREATED="1521253867787" ID="ID_662728746" MODIFIED="1521385616988" TEXT="Lifecycle-Handle existiert erst viel sp&#xe4;ter">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1521385652999" ID="ID_1974848336" MODIFIED="1521385657839" TEXT="statischer Schutz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1521385660206" ID="ID_200575604" MODIFIED="1521385685919" TEXT="fragil">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1521385687874" ID="ID_1561975152" MODIFIED="1521386168998" TEXT="C++ kennt keine statische Klassen-Initialisierung">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1521385709463" ID="ID_713439022" MODIFIED="1521385757820" TEXT="workaround">
+<node CREATED="1521385721637" ID="ID_1822970415" MODIFIED="1521386025178" TEXT="Initialisieren eines statischen member">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1521385768359" ID="ID_1123247553" MODIFIED="1521385776914" TEXT="ist unzuverl&#xe4;ssig">
+<node CREATED="1521385782861" ID="ID_1190214158" MODIFIED="1521385787152" TEXT="erfordert non-const member"/>
+<node CREATED="1521385787980" ID="ID_81600101" MODIFIED="1521385794375" TEXT="wird vom Compiler wegoptimiert"/>
+<node CREATED="1521385795059" ID="ID_1426898485" MODIFIED="1521386008204" TEXT="sofern er Wirkungslosigkeit nachweisen kann...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Und das h&#228;ngt nur von den Umst&#228;nden ab.
+    </p>
+    <p>
+      In einem einfachen statisch gelinkten Executable entfernt gcc die gesamte Variable sogar ohne Optimierung.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In Zukunft k&#246;nnten Compiler/Linker noch &quot;schlauer&quot; werden...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1521386182598" ID="ID_1671815821" MODIFIED="1521386187993" TEXT="ist undurchsichtig">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+</node>
+<node CREATED="1521386206627" ID="ID_1928841192" MODIFIED="1521386214661" TEXT="erzeugt eh blo&#xdf; eine Fehlermeldung"/>
+<node CREATED="1521386219297" ID="ID_1181038545" MODIFIED="1521386233755" TEXT="...was auch noch beim Hochfahren des Service passieren kann"/>
+</node>
+<node CREATED="1521386241406" ID="ID_1481722887" MODIFIED="1521386259129" TEXT="es ist ein Architektur-Problem">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253986491" ID="ID_546204807" MODIFIED="1521254005609" TEXT="Singleton wenn Interfaceklasse abstrakt ist">

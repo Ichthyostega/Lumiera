@@ -1927,7 +1927,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803180023" tags="def Concepts draft" changecount="9">
+<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803181619" tags="def Concepts draft" changecount="10">
 <pre>//Access point to dependencies by-name.//
 In the Lumiera code base, we refrain from building or using a full-blown Dependency Injection Container. A lot of FUD has been spread regarding Dependency Injection and Singletons, to the point that a majority of developers confuses and conflates the ~Inversion-of-Control principle (which is essential) with the use of a ~DI-Container. Today, you can not even mention the word &quot;Singleton&quot; without everyone yelling out &quot;Evil! Evil!&quot; -- while most of these people just feel comfortable living in the annotation hell.
 
@@ -1964,6 +1964,8 @@ Deliberately, we do not enforce global consistency statically (since that would 
 :the generated object again acts as lifecycle handle and smart-ptr to access the {{{SubBlah}}} instance like {{{mock-&gt;doItSpecial()}}}
 :when this handle goes out of scope, the original configuration of the dependency factory is restored
 
+We consider the usage pattern of dependencies a question of architecture rather -- such can not be solved by any mechanism on implementation level.
+For this reason, DependencyFactory prevents reconfiguration after use, but does nothing exceeding such basic sanity checks
 </pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
