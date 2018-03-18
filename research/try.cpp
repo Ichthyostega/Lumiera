@@ -144,12 +144,10 @@ class Depend
         if (!instance)
           {
             if (!factory)
-              {
-                instance = singleton.buildInstance();
-                factory = disabledFactory;
-              }
+              instance = singleton.buildInstance();
             else
               instance = factory();
+            factory = disabledFactory;
           }
       }
     
@@ -220,13 +218,6 @@ class DependInject
       }
     
     static void
-    disableFactory()
-      {
-        ClassLock<SRV> guard;
-        Depend<SRV>::factory = Depend<SRV>::disabledFactory;
-      }
-    
-    static void
     activateServiceAccess (SRV& newInstance)
       {
         ClassLock<SRV> guard;
@@ -255,7 +246,6 @@ class DependInject
         static InstanceHolder<SUB> singleton;
         installFactory ([&]()
                             {
-                              disableFactory();
                               return singleton.buildInstance();
                             });
       }
@@ -320,7 +310,6 @@ class DependInject
             temporarilyInstallAlternateFactory (origInstance_, origFactory_
                                                ,[this]()
                                                    {
-                                                      disableFactory();
                                                       mock_.reset(new MOC{});
                                                       return mock_.get();
                                                    });
@@ -451,19 +440,19 @@ main (int, char**)
       SHOW_EXPR( checksum );
       SHOW_EXPR( mockDum->probe() );
       SHOW_EXPR( checksum );
-      mockDum->offset = 20;
+      mockDum->offset = -4;
       SHOW_EXPR( dumm().probe() );
       
-      VERIFY_ERROR (LIFECYCLE, mockDummy3->probe() );
+      CHECK (!mockDummy3);
       SHOW_EXPR( checksum );
       SHOW_EXPR( dep3().probe() );
       SHOW_EXPR( checksum );
       CHECK ( mockDummy3);
       SHOW_EXPR( mockDummy3->probe() );
       SHOW_EXPR( checksum );
-      mockDummy3->offset = 10;
+      mockDummy3->offset = 19;
       SHOW_EXPR( dep3().probe() );
-      mockDum->offset = 50;
+      mockDum->offset = -6;
       SHOW_EXPR( dep3().probe() );
       SHOW_EXPR( dumm().probe() );
       SHOW_EXPR( checksum );
@@ -490,7 +479,7 @@ main (int, char**)
         SHOW_EXPR( mockDummy31->probe() );
         SHOW_EXPR( service->probe() );
         CHECK (mockDummy31->offset != service->offset);
-        service->offset = 35;
+        service->offset = 20;
         SHOW_EXPR( dep3().probe() );
         SHOW_EXPR( mockDummy31->probe() );
         SHOW_EXPR( service->probe() );
@@ -502,7 +491,9 @@ main (int, char**)
     }
     SHOW_EXPR( checksum );
     VERIFY_ERROR (LIFECYCLE, dep3().probe() );
+    SHOW_EXPR( dumm().probe() );
     SHOW_EXPR( checksum );
+    
     
     cout <<  "\n.gulp.\n";
     
