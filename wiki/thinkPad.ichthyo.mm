@@ -26807,8 +26807,10 @@
 </node>
 <node CREATED="1521208257336" ID="ID_1129640741" MODIFIED="1521208261323" TEXT="ServiceInstance">
 <node CREATED="1521208859989" ID="ID_549061661" MODIFIED="1521208874756" TEXT="Lazy-Init-Factory deaktivieren"/>
-<node CREATED="1521208793630" ID="ID_1357481546" MODIFIED="1521208825093" TEXT="Service-Zugang in Depend&lt;Bla&gt; injizieren"/>
-<node CREATED="1521208889297" ID="ID_214019029" MODIFIED="1521208932875" TEXT="Lebenszyklus-Koppelung">
+<node COLOR="#338800" CREATED="1521208793630" ID="ID_1357481546" MODIFIED="1521335430941" TEXT="Service-Zugang in Depend&lt;Bla&gt; injizieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521208889297" ID="ID_214019029" MODIFIED="1521335434588" TEXT="Lebenszyklus-Koppelung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26823,9 +26825,14 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1521208943105" ID="ID_295121984" MODIFIED="1521208976657" TEXT="Ownership an &#xfc;bergebener Service-Impl &#xfc;bernehmen"/>
-<node CREATED="1521208724943" ID="ID_1527628667" MODIFIED="1521208881882" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl"/>
+<node COLOR="#338800" CREATED="1521208943105" ID="ID_295121984" MODIFIED="1521335440371" TEXT="Ownership an &#xfc;bergebener Service-Impl &#xfc;bernehmen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521208724943" ID="ID_1527628667" MODIFIED="1521335442003" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1521208261887" ID="ID_384054163" MODIFIED="1521208264827" TEXT="Local">
 <node CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521209058181" TEXT="Closure &#xfc;ber konkreten Ctor"/>
@@ -27006,7 +27013,7 @@
 </node>
 <node COLOR="#338800" CREATED="1521324229082" ID="ID_1398878858" MODIFIED="1521326553373" TEXT="Storage">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1521324240124" ID="ID_1099103129" MODIFIED="1521324253936">
+<node CREATED="1521324240124" ID="ID_1099103129" MODIFIED="1521333223154">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -27018,8 +27025,10 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1521324275919" ID="ID_1710451095" MODIFIED="1521324497413" TEXT="sehe aber auch keinen wirklichen Vorteil">
+<node CREATED="1521324275919" ID="ID_1710451095" MODIFIED="1521333231077" TEXT="sehe aber auch keinen wirklichen Vorteil">
+<icon BUILTIN="smiley-neutral"/>
 <node CREATED="1521324529228" ID="ID_1786667023" MODIFIED="1521324543094" TEXT="man mu&#xdf; sich nicht um die de-Allokation k&#xfc;mmern"/>
 <node CREATED="1521324554465" ID="ID_1577416641" MODIFIED="1521324568043" TEXT="Storage ist garantiert vorhanden, kein out-of-Memory"/>
 <node CREATED="1521324668449" ID="ID_1013908061" MODIFIED="1521324682434" TEXT="Meyers Singleton ist elegant und schnell"/>

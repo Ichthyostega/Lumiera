@@ -200,6 +200,24 @@ class DependInject
         Depend<SRV>::factory = Depend<SRV>::disabledFactory;
       }
     
+    static void
+    activateServiceAccess (SRV& newInstance)
+      {
+        ClassLock<SRV> guard;
+        if (Depend<SRV>::instance)
+          throw error::Logic("Attempt to activate an external service implementation, "
+                             "but another instance has already been dependency-injected."
+                            , error::LUMIERA_ERROR_LIFECYCLE);
+        Depend<SRV>::instance = &newInstance;
+      }
+    
+    static void
+    deactivateServiceAccess()
+      {
+        ClassLock<SRV> guard;
+        Depend<SRV>::instance = nullptr;
+      }
+    
     
     
     template<class SUB>
@@ -214,13 +232,42 @@ class DependInject
                             });
       }
     
+    
     template<class IMP>
     class ServiceInstance
       {
+        std::unique_ptr<IMP> instance_;
+        
       public:
         ServiceInstance()
+          : instance_(new IMP{})
           {
-            
+            activateServiceAccess (*instance_);
+          }
+        
+       ~ServiceInstance()
+          {
+            deactivateServiceAccess();
+          }
+        
+        explicit
+        operator bool()  const
+          {
+            return bool(instance_);
+          }
+        
+        IMP&
+        operator* ()  const
+          {
+            ENSURE (instance_);
+            return *instance_;
+          }
+        
+        IMP*
+        operator-> ()  const
+          {
+            ENSURE (instance_);
+            return instance_.get();
           }
       };
     
@@ -256,7 +303,7 @@ struct Dummy
    ~Dummy() { checksum -= N; cout << "~Dummy<"<<N<<">"<<endl;}
     
     virtual int
-    probe()
+    probe()  override
       {
         return N * checksum;
       }
@@ -288,6 +335,35 @@ main (int, char**)
     SHOW_EXPR( checksum );
     VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::useSingleton<Dummy<9>>() );
     SHOW_EXPR( Depend<Dum>{}().probe() );
+    SHOW_EXPR( checksum );
+    
+    struct SubDummy
+      : Dummy<3>
+      {
+        virtual int
+        probe()  override
+          {
+            return -checksum + offset;
+          }
+        
+        int offset = 0;
+      };
+    
+    Depend<Dummy<3>> dep3;
+    SHOW_EXPR( checksum );
+    {
+      DependInject<Dummy<3>>::ServiceInstance<SubDummy> service{};
+      CHECK (service);
+      SHOW_EXPR( checksum );
+      SHOW_EXPR( dep3().probe() );
+      SHOW_EXPR( checksum );
+      service->offset = 5;
+      SHOW_EXPR( dep3().probe() );
+      SHOW_EXPR( checksum );
+    }
+    SHOW_EXPR( checksum );
+    SHOW_EXPR( dep3().probe() );
+    VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::ServiceInstance<SubDummy>{} );
     SHOW_EXPR( checksum );
     
     
