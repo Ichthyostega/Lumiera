@@ -174,16 +174,44 @@ InstanceHolder<SRV> Depend<SRV>::singleton;
 
 ///////////////////////////////////////////////////////Configuration
 
+using std::move;
+
+
 template<class SRV>
 class DependInject
   {
+    using Factory = typename Depend<SRV>::Factory;
   public:
+    static void
+    installFactory (Factory&& otherFac)
+      {
+        ClassLock<SRV> guard;
+        if (Depend<SRV>::instance)
+          throw error::Logic("Attempt to reconfigure dependency injection after the fact. "
+                             "The previously installed factory (typically Singleton) was already used."
+                            , error::LUMIERA_ERROR_LIFECYCLE);
+        Depend<SRV>::factory = move (otherFac);
+      }
+    
+    static void
+    disableFactory()
+      {
+        ClassLock<SRV> guard;
+        Depend<SRV>::factory = Depend<SRV>::disabledFactory;
+      }
+    
+    
     
     template<class SUB>
-    void
+    static void
     useSingleton()
       {
-        UNIMPLEMENTED ("reconfigure to plant a singleton of subclass type");
+        static InstanceHolder<SUB> singleton;
+        installFactory ([&]()
+                            {
+                              disableFactory();
+                              return singleton.buildInstance();
+                            });
       }
     
     template<class IMP>
@@ -225,7 +253,7 @@ struct Dummy
   : Dum
   {
     Dummy() { checksum += N; }
-   ~Dummy() { checksum -= N; }
+   ~Dummy() { checksum -= N; cout << "~Dummy<"<<N<<">"<<endl;}
     
     virtual int
     probe()
@@ -235,6 +263,7 @@ struct Dummy
   };
 
 
+using error::LUMIERA_ERROR_LIFECYCLE;
 
 int
 main (int, char**)
@@ -254,8 +283,12 @@ main (int, char**)
     SHOW_EXPR( checksum );
     
     Depend<Dum> dumm;
-//  Depend<Dum>::factory = [](){ return nullptr; };
+    DependInject<Dum>::useSingleton<Dummy<7>>();
     SHOW_EXPR( dumm().probe() );
+    SHOW_EXPR( checksum );
+    VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::useSingleton<Dummy<9>>() );
+    SHOW_EXPR( Depend<Dum>{}().probe() );
+    SHOW_EXPR( checksum );
     
     
     cout <<  "\n.gulp.\n";
