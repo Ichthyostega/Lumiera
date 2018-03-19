@@ -81,17 +81,76 @@ This code is heavily inspired by
 #define WIP_LIB_DEPEND_H
 
 
+#include "lib/error.hpp"
+#include "lib/nobug-init.hpp"
 #include "lib/sync-classlock.hpp"
-#include "lib/dependency-factory2.hpp"
+#include "lib/meta/util.hpp"
+
+#include <boost/noncopyable.hpp>
+#include <type_traits>
+#include <functional>
+#include <memory>
 
 
 namespace lib {
+  namespace error = lumiera::error;
+  
+  
+  namespace { // Implementation helper...
+    
+    using lib::meta::enable_if;
+    
+    template<typename TAR, typename SEL =void>
+    class InstanceHolder
+      : boost::noncopyable
+      {
+        std::unique_ptr<TAR> instance_;
+        
+        
+      public:
+        TAR*
+        buildInstance()
+          {
+            if (instance_)
+              throw error::Fatal("Attempt to double-create a singleton service. "
+                                 "Either the application logic, or the compiler "
+                                 "or runtime system is seriously broken"
+                                ,error::LUMIERA_ERROR_LIFECYCLE);
+            
+            // place new instance into embedded buffer
+            instance_.reset (new TAR{});
+            return instance_.get();
+          }
+      };
+    
+    template<typename ABS>
+    class InstanceHolder<ABS,  enable_if<std::is_abstract<ABS>>>
+      {
+      public:
+        ABS*
+        buildInstance()
+          {
+            throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
+                               "Application architecture or lifecycle is seriously broken.");
+          }
+      };
+  }//(End)Implementation helper
+  
+  
+  
+  /** 
+   * @internal access point to reconfigure dependency injection on a per type base
+   * @see depend-inject.hpp
+   */
+  template<class SRV>
+  class DependInject;
+  
   
   /**
    * Access point to singletons and other kinds of dependencies.
    * Actually this is a Factory object, which is typically placed into a
    * static field of the Singleton (target) class or some otherwise suitable interface.
-   * @param SI the class of the Singleton instance
+   * @tparam SRV the class of the Service or Singleton instance
    * @note uses static fields internally, so all factory configuration is shared per type
    * @remark there is an ongoing discussion regarding the viability of the
    *   Double Checked Locking pattern, which requires either the context of a clearly defined
@@ -110,106 +169,70 @@ namespace lib {
    * @todo WIP-WIP 3/18 rework of the singleton / dependency factory is underway   /////////////////////TICKET #1086
    * @param SI the class of the Singleton instance
    */
-  template<class SI>
-  class Depend2
+  template<class SRV>
+  class Depend
     {
-      typedef ClassLock<SI> SyncLock;
+      using Factory = std::function<SRV*()>;
       
-      static SI* volatile instance;
-      static DependencyFactory2 factory;
+      static SRV* instance;
+      static Factory factory;
+      
+      static InstanceHolder<SRV> singleton;
+      
+      friend class DependInject<SRV>;
       
       
     public:
       /** Interface to be used by clients for retrieving the service instance.
        *  Manages the instance creation, lifecycle and access in multithreaded context.
-       *  @return instance of class SI. When used in default configuration,
+       *  @return instance of class `SRV`. When used in default configuration,
        *          this service instance is a singleton
        */
-      SI&
+      SRV&
       operator() ()
         {
           if (!instance)
-            {
-              SyncLock guard;
-              
-              if (!instance)
-                instance = static_cast<SI*> (factory.buildInstance());
-            }
+            retrieveInstance();
           ENSURE (instance);
           return *instance;
         }
       
-      
-      
-      typedef DependencyFactory2::InstanceConstructor Constructor;
-      
-      
-      /** default configuration of the dependency factory
-       *  is to build a singleton instance on demand */
-      Depend2()
+    private:
+      void
+      retrieveInstance()
         {
-          factory.ensureInitialisation (buildSingleton2<SI>());
+          ClassLock<SRV> guard;
+          
+          if (!instance)
+            {
+              if (!factory)
+                instance = singleton.buildInstance();
+              else
+                instance = factory();
+              factory = disabledFactory;
+            }
         }
       
-      /**
-       * optionally, the instance creation process can be configured explicitly
-       * \em once per type. By default, a singleton instance will be created.
-       * Installing another factory function enables other kinds of dependency injection;
-       * this configuration must be done \em prior to any use the dependency factory.
-       * @param ctor a constructor function, which will be invoked on first usage.
-       * @note basically a custom constructor function is responsible to manage any
-       *         created service instances.
-       * @remark typically the \c Depend<TY> factory will be placed into a static variable,
-       *         embedded into another type or interface. In this case, actual storage for
-       *         this static variable needs to be allocated within some translation unit.
-       *         And this is the point where this ctor will be invoked, in the static
-       *         initialisation phase of the respective translation unit (*.cpp)
-       */
-      Depend2 (Constructor ctor)
+      static SRV*
+      disabledFactory()
         {
-          factory.installConstructorFunction (ctor);
-        }
-      
-      // standard copy operations applicable
-      
-      
-      
-      /* === Management / Test support interface === */
-      
-      /** temporarily replace the service instance.
-       *  The purpose of this operation is to support unit testing.
-       * @param mock reference to an existing service instance (mock).
-       * @return reference to the currently active service instance.
-       * @warning this is a dangerous operation and not threadsafe.
-       *       Concurrent accesses might still get the old reference;
-       *       the only way to prevent this would be to synchronise
-       *       \em any access (which is too expensive).
-       *       This feature should only be used for unit tests thusly.
-       * @remark the replacement is not actively managed by the DependencyFactory,
-       *       it remains in ownership of the calling client (unit test). Typically
-       *       this test will keep the returned original service reference and
-       *       care for restoring the original state when done.
-       * @see Depend4Test scoped object for automated test mock injection
-       */
-      static SI*
-      injectReplacement (SI* mock)
-        {
-          SyncLock guard;
-          SI* currentInstance = instance; 
-          instance = mock;
-          return currentInstance;
+          throw error::Fatal("Service not available at this point of the Application Lifecycle"
+                            ,error::LUMIERA_ERROR_LIFECYCLE);
         }
     };
   
   
   
   
-  // Storage for static per type instance management...
-  template<class SI>
-  SI* volatile Depend2<SI>::instance;
+  /* === allocate Storage for static per type instance management === */
+  template<class SRV>
+  SRV* Depend<SRV>::instance;
   
-  template<class SI>
-  DependencyFactory2 Depend2<SI>::factory;
+  template<class SRV>
+  typename Depend<SRV>::Factory Depend<SRV>::factory;
+  
+  template<class SRV>
+  InstanceHolder<SRV> Depend<SRV>::singleton;
   
   
   
