@@ -148,6 +148,11 @@ return: 0
 END
 
 
+PLANNED "Dependency injection configuration" DependencyConfiguration_test <<END
+return: 0
+END
+
+
 TEST "Diff: apply list diff to target sequence" DiffListApplication_test <<END
 return: 0
 END
