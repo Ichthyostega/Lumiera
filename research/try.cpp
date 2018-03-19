@@ -65,321 +65,321 @@ typedef unsigned int uint;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
-namespace error = lumiera::error;
-
-using lib::ClassLock;
-using lib::meta::enable_if;
-
-
-namespace {
-  template<typename TAR, typename SEL =void>
-  class InstanceHolder
-    : boost::noncopyable
-    {
-      std::unique_ptr<TAR> instance_;
-      
-      
-    public:
-      TAR*
-      buildInstance()
-        {
-          if (instance_)
-            throw error::Fatal("Attempt to double-create a singleton service. "
-                               "Either the application logic, or the compiler "
-                               "or runtime system is seriously broken"
-                              ,error::LUMIERA_ERROR_LIFECYCLE);
-          
-          // place new instance into embedded buffer
-          instance_.reset (new TAR{});
-          return instance_.get();
-        }
-    };
+  namespace error = lumiera::error;
   
-  template<typename ABS>
-  class InstanceHolder<ABS,  enable_if<std::is_abstract<ABS>>>
-    {
-    public:
-      ABS*
-      buildInstance()
-        {
-          throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
-                             "Application architecture or lifecycle is seriously broken.");
-        }
-    };
-}//(End)Implementation helper
-
-
-
-template<class SRV>
-class DependInject;
-
-template<class SRV>
-class Depend
-  {
-    using Factory = std::function<SRV*()>;
-    
-    static SRV* instance;
-    static Factory factory;
-    
-    static InstanceHolder<SRV> singleton;
-    
-    friend class DependInject<SRV>;
-  public:
-    
-    SRV&
-    operator() ()
+  using lib::ClassLock;
+  using lib::meta::enable_if;
+  
+  
+  namespace {
+    template<typename TAR, typename SEL =void>
+    class InstanceHolder
+      : boost::noncopyable
       {
-        if (!instance)
-          retrieveInstance();
-        ENSURE (instance);
-        return *instance;
-      }
-    
-  private:
-    void
-    retrieveInstance()
-      {
-        ClassLock<SRV> guard;
+        std::unique_ptr<TAR> instance_;
         
-        if (!instance)
-          {
-            if (!factory)
-              instance = singleton.buildInstance();
-            else
-              instance = factory();
-            factory = disabledFactory;
-          }
-      }
-    
-    static SRV*
-    disabledFactory()
-      {
-        throw error::Fatal("Service not available at this point of the Application Lifecycle"
-                          ,error::LUMIERA_ERROR_LIFECYCLE);
-      }
-  };
-
-
-template<class SRV>
-SRV* Depend<SRV>::instance;
-
-template<class SRV>
-typename Depend<SRV>::Factory Depend<SRV>::factory;
-
-template<class SRV>
-InstanceHolder<SRV> Depend<SRV>::singleton;
-
-
-///////////////////////////////////////////////////////Configuration
-
-using std::move;
-
-
-template<class SRV>
-struct DependInject
-  {
-    using Factory = typename Depend<SRV>::Factory;
-    
-    
-    /** configure dependency-injection for type SRV to build a subclass singleton
-     * @tparam SUB concrete subclass type to build on demand when invoking `Depend<SRV>`
-     * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
-     *         been invoked at the point when calling this (re)configuration function.
-     */
-    template<class SUB>
-    static void
-    useSingleton()
-      {
-        __assert_compatible<SUB>();
-        static InstanceHolder<SUB> singleton;
-        installFactory ([&]()
-                            {
-                              return singleton.buildInstance();
-                            });
-      }
-    
-    
-    /**
-     * Configuration handle to expose a service implementation through the `Depend<SRV>` front-end.
-     * This noncopyable (but movable) handle shall be planted within the context operating the service
-     * to be exposed. It will immediately create (in RAII style) and manage a heap-allocated instance
-     * of the subclass `IMP` and expose a baseclass pointer to this specific instance through `Depend<SRV>`.
-     * Moreover, the implementation subclass can be accessed through this handle, which acts as smart-ptr.
-     * When the handle goes out of scope, the implementation instance is destroyed and the access through
-     * `Depend<SRV>` is closed and inhibited, to prevent on-demand creation of a baseclass `SRV` singleton.
-     * @tparam IMP concrete service implementation subclass to build, manage and expose.
-     * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
-     *         been invoked at the point when calling this (re)configuration function.
-     */
-    template<class IMP>
-    class ServiceInstance
-      {
-        std::unique_ptr<IMP> instance_;
         
       public:
-        ServiceInstance()
-          : instance_(new IMP{})
+        TAR*
+        buildInstance()
           {
-            __assert_compatible<IMP>();
-            activateServiceAccess (*instance_);
-          }
-        
-       ~ServiceInstance()
-          {
-            deactivateServiceAccess();
-          }
-        
-        ServiceInstance (ServiceInstance&&)            = default;
-        ServiceInstance (ServiceInstance const&)       = delete;
-        ServiceInstance& operator= (ServiceInstance&&) = delete;
-        
-        explicit
-        operator bool()  const
-          {
-            return bool(instance_);
-          }
-        
-        IMP&
-        operator* ()  const
-          {
-            ENSURE (instance_);
-            return *instance_;
-          }
-        
-        IMP*
-        operator-> ()  const
-          {
-            ENSURE (instance_);
+            if (instance_)
+              throw error::Fatal("Attempt to double-create a singleton service. "
+                                 "Either the application logic, or the compiler "
+                                 "or runtime system is seriously broken"
+                                ,error::LUMIERA_ERROR_LIFECYCLE);
+            
+            // place new instance into embedded buffer
+            instance_.reset (new TAR{});
             return instance_.get();
           }
       };
     
-    
-    /**
-     * Configuration handle for temporarily shadowing a dependency by a test mock instance.
-     * This noncopyable (but movable) handle shall be planted within the immediate test context.
-     * It immediately stashes away the existing state and configuration from `Depend<SRV>`, but
-     * waits for actual invocation of the `Depend<SRV>`-front-end to create a heap-allocated
-     * instance of the `MOC` subclass, which it manages and exposes like a smart-ptr.
-     * When the handle goes out of scope, the original state and configuration is restored
-     */
-    template<class MOC>
-    class Local
+    template<typename ABS>
+    class InstanceHolder<ABS,  enable_if<std::is_abstract<ABS>>>
       {
-        std::unique_ptr<MOC> mock_;
-        
-        SRV* origInstance_;
-        Factory origFactory_;
-        
       public:
-        Local()
+        ABS*
+        buildInstance()
           {
-            __assert_compatible<MOC>();
-            temporarilyInstallAlternateFactory (origInstance_, origFactory_
-                                               ,[this]()
-                                                   {
-                                                      mock_.reset(new MOC{});
-                                                      return mock_.get();
-                                                   });
-          }
-       ~Local()
-          {
-            restoreOriginalFactory (origInstance_, origFactory_);
-          }
-        
-        Local (Local&&)            = default;
-        Local (Local const&)       = delete;
-        Local& operator= (Local&&) = delete;
-        
-        explicit
-        operator bool()  const
-          {
-            return bool(mock_);
-          }
-        
-        MOC&
-        operator* ()  const
-          {
-            ENSURE (mock_);
-            return *mock_;
-          }
-        
-        MOC*
-        operator-> ()  const
-          {
-            ENSURE (mock_);
-            return mock_.get();
+            throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
+                               "Application architecture or lifecycle is seriously broken.");
           }
       };
-    
-    
-    
-  protected: /* ======= internal access-API for those configurations to manipulate Depend<SRV> ======= */
-    template<class IMP>
-    friend class ServiceInstance;
-    template<class MOC>
-    friend class Local;
-    
-    
-    template<class SUB>
-    static void
-    __assert_compatible()
-      {
-        static_assert (std::is_base_of<SRV,SUB>::value,
-                       "Installed implementation class must be compatible to the interface.");
-      }
-    
-    static void
-    installFactory (Factory&& otherFac)
-      {
-        ClassLock<SRV> guard;
-        if (Depend<SRV>::instance)
-          throw error::Logic("Attempt to reconfigure dependency injection after the fact. "
-                             "The previously installed factory (typically Singleton) was already used."
-                            , error::LUMIERA_ERROR_LIFECYCLE);
-        Depend<SRV>::factory = move (otherFac);
-      }
-    
-    static void
-    temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, Factory&& newFac)
-      {
-        ClassLock<SRV> guard;
-        stashFac = move(Depend<SRV>::factory);
-        stashInstance = Depend<SRV>::instance;
-        Depend<SRV>::factory = move(newFac);
-        Depend<SRV>::instance = nullptr;
-      }
-    
-    static void
-    restoreOriginalFactory (SRV*& stashInstance, Factory& stashFac)
-      {
-        ClassLock<SRV> guard;
-        Depend<SRV>::factory = move(stashFac);
-        Depend<SRV>::instance = stashInstance;
-      }
-    
-    static void
-    activateServiceAccess (SRV& newInstance)
-      {
-        ClassLock<SRV> guard;
-        if (Depend<SRV>::instance)
-          throw error::Logic("Attempt to activate an external service implementation, "
-                             "but another instance has already been dependency-injected."
-                            , error::LUMIERA_ERROR_LIFECYCLE);
-        Depend<SRV>::instance = &newInstance;
-        Depend<SRV>::factory = Depend<SRV>::disabledFactory;
-      }
-    
-    static void
-    deactivateServiceAccess()
-      {
-        ClassLock<SRV> guard;
-        Depend<SRV>::instance = nullptr;
-        Depend<SRV>::factory = Depend<SRV>::disabledFactory;
-      }
-  };
-
-
+  }//(End)Implementation helper
+  
+  
+  
+  template<class SRV>
+  class DependInject;
+  
+  template<class SRV>
+  class Depend
+    {
+      using Factory = std::function<SRV*()>;
+      
+      static SRV* instance;
+      static Factory factory;
+      
+      static InstanceHolder<SRV> singleton;
+      
+      friend class DependInject<SRV>;
+    public:
+      
+      SRV&
+      operator() ()
+        {
+          if (!instance)
+            retrieveInstance();
+          ENSURE (instance);
+          return *instance;
+        }
+      
+    private:
+      void
+      retrieveInstance()
+        {
+          ClassLock<SRV> guard;
+          
+          if (!instance)
+            {
+              if (!factory)
+                instance = singleton.buildInstance();
+              else
+                instance = factory();
+              factory = disabledFactory;
+            }
+        }
+      
+      static SRV*
+      disabledFactory()
+        {
+          throw error::Fatal("Service not available at this point of the Application Lifecycle"
+                            ,error::LUMIERA_ERROR_LIFECYCLE);
+        }
+    };
+  
+  
+  template<class SRV>
+  SRV* Depend<SRV>::instance;
+  
+  template<class SRV>
+  typename Depend<SRV>::Factory Depend<SRV>::factory;
+  
+  template<class SRV>
+  InstanceHolder<SRV> Depend<SRV>::singleton;
+  
+  
+  ///////////////////////////////////////////////////////Configuration
+  
+  using std::move;
+  
+  
+  template<class SRV>
+  struct DependInject
+    {
+      using Factory = typename Depend<SRV>::Factory;
+      
+      
+      /** configure dependency-injection for type SRV to build a subclass singleton
+       * @tparam SUB concrete subclass type to build on demand when invoking `Depend<SRV>`
+       * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
+       *         been invoked at the point when calling this (re)configuration function.
+       */
+      template<class SUB>
+      static void
+      useSingleton()
+        {
+          __assert_compatible<SUB>();
+          static InstanceHolder<SUB> singleton;
+          installFactory ([&]()
+                              {
+                                return singleton.buildInstance();
+                              });
+        }
+      
+      
+      /**
+       * Configuration handle to expose a service implementation through the `Depend<SRV>` front-end.
+       * This noncopyable (but movable) handle shall be planted within the context operating the service
+       * to be exposed. It will immediately create (in RAII style) and manage a heap-allocated instance
+       * of the subclass `IMP` and expose a baseclass pointer to this specific instance through `Depend<SRV>`.
+       * Moreover, the implementation subclass can be accessed through this handle, which acts as smart-ptr.
+       * When the handle goes out of scope, the implementation instance is destroyed and the access through
+       * `Depend<SRV>` is closed and inhibited, to prevent on-demand creation of a baseclass `SRV` singleton.
+       * @tparam IMP concrete service implementation subclass to build, manage and expose.
+       * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
+       *         been invoked at the point when calling this (re)configuration function.
+       */
+      template<class IMP>
+      class ServiceInstance
+        {
+          std::unique_ptr<IMP> instance_;
+          
+        public:
+          ServiceInstance()
+            : instance_(new IMP{})
+            {
+              __assert_compatible<IMP>();
+              activateServiceAccess (*instance_);
+            }
+          
+         ~ServiceInstance()
+            {
+              deactivateServiceAccess();
+            }
+          
+          ServiceInstance (ServiceInstance&&)            = default;
+          ServiceInstance (ServiceInstance const&)       = delete;
+          ServiceInstance& operator= (ServiceInstance&&) = delete;
+          
+          explicit
+          operator bool()  const
+            {
+              return bool(instance_);
+            }
+          
+          IMP&
+          operator* ()  const
+            {
+              ENSURE (instance_);
+              return *instance_;
+            }
+          
+          IMP*
+          operator-> ()  const
+            {
+              ENSURE (instance_);
+              return instance_.get();
+            }
+        };
+      
+      
+      /**
+       * Configuration handle for temporarily shadowing a dependency by a test mock instance.
+       * This noncopyable (but movable) handle shall be planted within the immediate test context.
+       * It immediately stashes away the existing state and configuration from `Depend<SRV>`, but
+       * waits for actual invocation of the `Depend<SRV>`-front-end to create a heap-allocated
+       * instance of the `MOC` subclass, which it manages and exposes like a smart-ptr.
+       * When the handle goes out of scope, the original state and configuration is restored
+       */
+      template<class MOC>
+      class Local
+        {
+          std::unique_ptr<MOC> mock_;
+          
+          SRV* origInstance_;
+          Factory origFactory_;
+          
+        public:
+          Local()
+            {
+              __assert_compatible<MOC>();
+              temporarilyInstallAlternateFactory (origInstance_, origFactory_
+                                                 ,[this]()
+                                                     {
+                                                        mock_.reset(new MOC{});
+                                                        return mock_.get();
+                                                     });
+            }
+         ~Local()
+            {
+              restoreOriginalFactory (origInstance_, origFactory_);
+            }
+          
+          Local (Local&&)            = default;
+          Local (Local const&)       = delete;
+          Local& operator= (Local&&) = delete;
+          
+          explicit
+          operator bool()  const
+            {
+              return bool(mock_);
+            }
+          
+          MOC&
+          operator* ()  const
+            {
+              ENSURE (mock_);
+              return *mock_;
+            }
+          
+          MOC*
+          operator-> ()  const
+            {
+              ENSURE (mock_);
+              return mock_.get();
+            }
+        };
+      
+      
+      
+    protected: /* ======= internal access-API for those configurations to manipulate Depend<SRV> ======= */
+      template<class IMP>
+      friend class ServiceInstance;
+      template<class MOC>
+      friend class Local;
+      
+      
+      template<class SUB>
+      static void
+      __assert_compatible()
+        {
+          static_assert (std::is_base_of<SRV,SUB>::value,
+                         "Installed implementation class must be compatible to the interface.");
+        }
+      
+      static void
+      installFactory (Factory&& otherFac)
+        {
+          ClassLock<SRV> guard;
+          if (Depend<SRV>::instance)
+            throw error::Logic("Attempt to reconfigure dependency injection after the fact. "
+                               "The previously installed factory (typically Singleton) was already used."
+                              , error::LUMIERA_ERROR_LIFECYCLE);
+          Depend<SRV>::factory = move (otherFac);
+        }
+      
+      static void
+      temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, Factory&& newFac)
+        {
+          ClassLock<SRV> guard;
+          stashFac = move(Depend<SRV>::factory);
+          stashInstance = Depend<SRV>::instance;
+          Depend<SRV>::factory = move(newFac);
+          Depend<SRV>::instance = nullptr;
+        }
+      
+      static void
+      restoreOriginalFactory (SRV*& stashInstance, Factory& stashFac)
+        {
+          ClassLock<SRV> guard;
+          Depend<SRV>::factory = move(stashFac);
+          Depend<SRV>::instance = stashInstance;
+        }
+      
+      static void
+      activateServiceAccess (SRV& newInstance)
+        {
+          ClassLock<SRV> guard;
+          if (Depend<SRV>::instance)
+            throw error::Logic("Attempt to activate an external service implementation, "
+                               "but another instance has already been dependency-injected."
+                              , error::LUMIERA_ERROR_LIFECYCLE);
+          Depend<SRV>::instance = &newInstance;
+          Depend<SRV>::factory = Depend<SRV>::disabledFactory;
+        }
+      
+      static void
+      deactivateServiceAccess()
+        {
+          ClassLock<SRV> guard;
+          Depend<SRV>::instance = nullptr;
+          Depend<SRV>::factory = Depend<SRV>::disabledFactory;
+        }
+    };
+  
+  
 ///////////////////////////////////////////////////////Usage
 
 struct Dum
@@ -413,124 +413,124 @@ using error::LUMIERA_ERROR_FATAL;
 int
 main (int, char**)
   {
-    Depend<Dummy<1>> dep11;
-    Depend<Dummy<5>> dep5;
-    Depend<Dummy<1>> dep12;
-    
-    cout << "Siz-DUM : " << lib::test::showSizeof(dep11) << " " << lib::test::showSizeof(dep5) << endl;
-    cout << "check-vor="<<checksum<<endl;
-    
-    SHOW_EXPR( dep11().probe() );
-    SHOW_EXPR( checksum );
-    SHOW_EXPR( dep5().probe() );
-    SHOW_EXPR( checksum );
-    SHOW_EXPR( dep12().probe() );
-    SHOW_EXPR( checksum );
-    
-    // unable to create singleton instance of abstract baseclass
-    VERIFY_ERROR (FATAL, Depend<Dum>{}() );
-
-    Depend<Dum> dumm;
-    DependInject<Dum>::useSingleton<Dummy<7>>();
-    SHOW_EXPR( dumm().probe() );
-    SHOW_EXPR( checksum );
-    VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::useSingleton<Dummy<9>>() );
-    SHOW_EXPR( Depend<Dum>{}().probe() );
-    SHOW_EXPR( checksum );
-    
-    struct SubDummy
-      : Dummy<3>
-      {
-        virtual int
-        probe()  override
-          {
-            return -checksum + offset;
-          }
-        
-        int offset = 0;
-      };
-    
-    Depend<Dummy<3>> dep3;
-    SHOW_EXPR( checksum );
-    {
-      DependInject<Dummy<3>>::ServiceInstance<SubDummy> service{};
-      CHECK (service);
-      SHOW_EXPR( checksum );
-      SHOW_EXPR( dep3().probe() );
-      SHOW_EXPR( checksum );
-      service->offset = 5;
-      SHOW_EXPR( dep3().probe() );
-      SHOW_EXPR( checksum );
-    }
-    SHOW_EXPR( checksum );
-    VERIFY_ERROR (LIFECYCLE, dep3().probe() );
-    VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::ServiceInstance<SubDummy>{} );
-    SHOW_EXPR( checksum );
-    
-    {
-      DependInject<Dum>::Local<SubDummy>      mockDum;
-      DependInject<Dummy<3>>::Local<SubDummy> mockDummy3;
-      CHECK (!mockDum);
-      CHECK (!mockDummy3);
-      SHOW_EXPR( dumm().probe() );
-      CHECK ( mockDum);
-      CHECK (!mockDummy3);
-      SHOW_EXPR( checksum );
-      SHOW_EXPR( mockDum->probe() );
-      SHOW_EXPR( checksum );
-      mockDum->offset = -4;
-      SHOW_EXPR( dumm().probe() );
+          Depend<Dummy<1>> dep11;
+          Depend<Dummy<5>> dep5;
+          Depend<Dummy<1>> dep12;
+          
+          cout << "Siz-DUM : " << lib::test::showSizeof(dep11) << " " << lib::test::showSizeof(dep5) << endl;
+          cout << "check-vor="<<checksum<<endl;
+          
+          SHOW_EXPR( dep11().probe() );
+          SHOW_EXPR( checksum );
+          SHOW_EXPR( dep5().probe() );
+          SHOW_EXPR( checksum );
+          SHOW_EXPR( dep12().probe() );
+          SHOW_EXPR( checksum );
+          
+          // unable to create singleton instance of abstract baseclass
+          VERIFY_ERROR (FATAL, Depend<Dum>{}() );
       
-      CHECK (!mockDummy3);
-      SHOW_EXPR( checksum );
-      SHOW_EXPR( dep3().probe() );
-      SHOW_EXPR( checksum );
-      CHECK ( mockDummy3);
-      SHOW_EXPR( mockDummy3->probe() );
-      SHOW_EXPR( checksum );
-      mockDummy3->offset = 19;
-      SHOW_EXPR( dep3().probe() );
-      mockDum->offset = -6;
-      SHOW_EXPR( dep3().probe() );
-      SHOW_EXPR( dumm().probe() );
-      SHOW_EXPR( checksum );
-    }
-    SHOW_EXPR( checksum );
-    SHOW_EXPR( dumm().probe() );
-    VERIFY_ERROR (LIFECYCLE, dep3().probe() );
-    SHOW_EXPR( checksum );
-    {
-      DependInject<Dummy<3>>::ServiceInstance<SubDummy> service{};
-      SHOW_EXPR( checksum );
-      SHOW_EXPR( dep3().probe() );
-      service->offset = 5;
-      SHOW_EXPR( dep3().probe() );
-      SHOW_EXPR( checksum );
-      {
-        DependInject<Dummy<3>>::Local<SubDummy> mockDummy31;
-        CHECK (!mockDummy31);
-        SHOW_EXPR( checksum );
-        SHOW_EXPR( dep3().probe() );
-        SHOW_EXPR( checksum );
-        mockDummy31->offset = 10;
-        SHOW_EXPR( dep3().probe() );
-        SHOW_EXPR( mockDummy31->probe() );
-        SHOW_EXPR( service->probe() );
-        CHECK (mockDummy31->offset != service->offset);
-        service->offset = 20;
-        SHOW_EXPR( dep3().probe() );
-        SHOW_EXPR( mockDummy31->probe() );
-        SHOW_EXPR( service->probe() );
-        SHOW_EXPR( checksum );
-      }
-      SHOW_EXPR( checksum );
-      SHOW_EXPR( dep3().probe() );
-      SHOW_EXPR( checksum );
-    }
-    SHOW_EXPR( checksum );
-    VERIFY_ERROR (LIFECYCLE, dep3().probe() );
-    SHOW_EXPR( dumm().probe() );
-    SHOW_EXPR( checksum );
+          Depend<Dum> dumm;
+          DependInject<Dum>::useSingleton<Dummy<7>>();
+          SHOW_EXPR( dumm().probe() );
+          SHOW_EXPR( checksum );
+          VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::useSingleton<Dummy<9>>() );
+          SHOW_EXPR( Depend<Dum>{}().probe() );
+          SHOW_EXPR( checksum );
+          
+          struct SubDummy
+            : Dummy<3>
+            {
+              virtual int
+              probe()  override
+                {
+                  return -checksum + offset;
+                }
+              
+              int offset = 0;
+            };
+          
+          Depend<Dummy<3>> dep3;
+          SHOW_EXPR( checksum );
+          {
+            DependInject<Dummy<3>>::ServiceInstance<SubDummy> service{};
+            CHECK (service);
+            SHOW_EXPR( checksum );
+            SHOW_EXPR( dep3().probe() );
+            SHOW_EXPR( checksum );
+            service->offset = 5;
+            SHOW_EXPR( dep3().probe() );
+            SHOW_EXPR( checksum );
+          }
+          SHOW_EXPR( checksum );
+          VERIFY_ERROR (LIFECYCLE, dep3().probe() );
+          VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::ServiceInstance<SubDummy>{} );
+          SHOW_EXPR( checksum );
+          
+          {
+            DependInject<Dum>::Local<SubDummy>      mockDum;
+            DependInject<Dummy<3>>::Local<SubDummy> mockDummy3;
+            CHECK (!mockDum);
+            CHECK (!mockDummy3);
+            SHOW_EXPR( dumm().probe() );
+            CHECK ( mockDum);
+            CHECK (!mockDummy3);
+            SHOW_EXPR( checksum );
+            SHOW_EXPR( mockDum->probe() );
+            SHOW_EXPR( checksum );
+            mockDum->offset = -4;
+            SHOW_EXPR( dumm().probe() );
+            
+            CHECK (!mockDummy3);
+            SHOW_EXPR( checksum );
+            SHOW_EXPR( dep3().probe() );
+            SHOW_EXPR( checksum );
+            CHECK ( mockDummy3);
+            SHOW_EXPR( mockDummy3->probe() );
+            SHOW_EXPR( checksum );
+            mockDummy3->offset = 19;
+            SHOW_EXPR( dep3().probe() );
+            mockDum->offset = -6;
+            SHOW_EXPR( dep3().probe() );
+            SHOW_EXPR( dumm().probe() );
+            SHOW_EXPR( checksum );
+          }
+          SHOW_EXPR( checksum );
+          SHOW_EXPR( dumm().probe() );
+          VERIFY_ERROR (LIFECYCLE, dep3().probe() );
+          SHOW_EXPR( checksum );
+          {
+            DependInject<Dummy<3>>::ServiceInstance<SubDummy> service{};
+            SHOW_EXPR( checksum );
+            SHOW_EXPR( dep3().probe() );
+            service->offset = 5;
+            SHOW_EXPR( dep3().probe() );
+            SHOW_EXPR( checksum );
+            {
+              DependInject<Dummy<3>>::Local<SubDummy> mockDummy31;
+              CHECK (!mockDummy31);
+              SHOW_EXPR( checksum );
+              SHOW_EXPR( dep3().probe() );
+              SHOW_EXPR( checksum );
+              mockDummy31->offset = 10;
+              SHOW_EXPR( dep3().probe() );
+              SHOW_EXPR( mockDummy31->probe() );
+              SHOW_EXPR( service->probe() );
+              CHECK (mockDummy31->offset != service->offset);
+              service->offset = 20;
+              SHOW_EXPR( dep3().probe() );
+              SHOW_EXPR( mockDummy31->probe() );
+              SHOW_EXPR( service->probe() );
+              SHOW_EXPR( checksum );
+            }
+            SHOW_EXPR( checksum );
+            SHOW_EXPR( dep3().probe() );
+            SHOW_EXPR( checksum );
+          }
+          SHOW_EXPR( checksum );
+          VERIFY_ERROR (LIFECYCLE, dep3().probe() );
+          SHOW_EXPR( dumm().probe() );
+          SHOW_EXPR( checksum );
     
     
     cout <<  "\n.gulp.\n";
