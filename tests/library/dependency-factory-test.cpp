@@ -22,6 +22,9 @@
 
 /** @file dependency-factory-test.cpp
  ** unit test \ref DependencyFactory_test
+ ** @remark this is an old test from 2013 and thus verifies that the functionality
+ **         for dependency-injection was not broken by the rewrite in 2018
+ ** @see dependency-configuration-test.cpp
  */
 
 
@@ -95,6 +98,7 @@ namespace test{
    * 
    * @see lib::Dependency
    * @see Singleton_test
+   * @see DependencyConfiguration_test newer test from 2018 to cover the same ground
    */
   class DependencyFactory_test : public Test
     {

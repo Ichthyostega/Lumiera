@@ -148,7 +148,7 @@ return: 0
 END
 
 
-PLANNED "Dependency injection configuration" DependencyConfiguration_test <<END
+TEST "Dependency injection configuration" DependencyConfiguration_test <<END
 return: 0
 END
 

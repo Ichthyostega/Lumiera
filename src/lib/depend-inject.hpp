@@ -1,8 +1,8 @@
 /*
-  DEPENDENCY-FACTORY.hpp  -  managing the lifecycle of singletons and dependencies
+  DEPEND-INJECT.hpp  -  managing the lifecycle of singletons and dependencies
 
   Copyright (C)         Lumiera.org
-    2013,               Hermann Vosseler <Ichthyostega@web.de>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,10 +22,9 @@
 
 
 /** @file dependency-factory.hpp
- ** Implementation of a singleton factory used to bring up services as dependency.
- ** @internal this implementation header belongs to our framework to deal with
- **           [service dependencies](\ref depend.hpp) and should not be used directly.
+ ** Per type specific configuration of instances created as service dependencies.
  ** @todo WIP-WIP 3/18 rework of the singleton / dependency factory is underway
+ ** @see DependencyConfiguration_test
  */
 
 
