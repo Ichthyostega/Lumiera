@@ -26788,7 +26788,8 @@
 <node CREATED="1521161634205" ID="ID_619508229" MODIFIED="1521330190739" TEXT="DependInject&lt;Bla&gt;::Local&lt;UnterBla&gt; mock"/>
 <node CREATED="1521161919893" ID="ID_1606842354" MODIFIED="1521161929704" TEXT="mock-&gt;doItSpecial()"/>
 </node>
-<node CREATED="1521207954859" ID="ID_631339002" MODIFIED="1521207965947" TEXT="Analyse">
+<node CREATED="1521207954859" ID="ID_631339002" MODIFIED="1521418307590" TEXT="Analyse">
+<icon BUILTIN="idea"/>
 <node CREATED="1521208242178" ID="ID_539882602" MODIFIED="1521208246821" TEXT="erforderliche Mechanismen">
 <node CREATED="1521208254376" ID="ID_1933406851" MODIFIED="1521208256603" TEXT="Singleton">
 <node CREATED="1521208339124" ID="ID_287433738" MODIFIED="1521209063045" TEXT="Closure &#xfc;ber konkreten Ctor"/>
@@ -26990,7 +26991,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1521169086441" ID="ID_284471203" MODIFIED="1521169088676" TEXT="Design">
+<node COLOR="#338800" CREATED="1521169086441" ID="ID_284471203" MODIFIED="1521418328021" TEXT="Design">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1521240056932" ID="ID_1189728630" MODIFIED="1521240061863" TEXT="Strukturen">
 <node CREATED="1521240105285" ID="ID_711335043" MODIFIED="1521240109744" TEXT="Dependency-Factory">
 <node CREATED="1521240317600" ID="ID_1626104494" MODIFIED="1521332944744" TEXT="Design-1">
@@ -27009,7 +27011,8 @@
 <node CREATED="1521241561380" ID="ID_437866764" MODIFIED="1521241569823" TEXT="oder als Funktionszeiger"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521245885376" ID="ID_1336783261" MODIFIED="1521245899152" TEXT="k&#xf6;nnte komplett wegfallen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521245885376" ID="ID_1336783261" MODIFIED="1521416492280" TEXT="k&#xf6;nnte komplett wegfallen">
+<linktarget COLOR="#b4a9c1" DESTINATION="ID_1336783261" ENDARROW="Default" ENDINCLINATION="224;0;" ID="Arrow_ID_37940927" SOURCE="ID_870619413" STARTARROW="None" STARTINCLINATION="83;-7;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
@@ -27024,19 +27027,24 @@
 <node CREATED="1521242824239" ID="ID_1013563756" MODIFIED="1521242834313" TEXT="inline-wegwerf-Objekt"/>
 </node>
 </node>
-<node CREATED="1521240053852" ID="ID_666003564" MODIFIED="1521240074107" TEXT="Detail-Fragen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521169099047" ID="ID_1183392158" MODIFIED="1521332981466" TEXT="DependencyFactory-Rahmenklasse">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521169111957" ID="ID_1706232823" MODIFIED="1521169126860" TEXT="Ort f&#xfc;r den Implementierungs-Pointer">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521169130251" ID="ID_1252056818" MODIFIED="1521169146081" TEXT="Zugang f&#xfc;r DependInject">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node COLOR="#338800" CREATED="1521324229082" ID="ID_1398878858" MODIFIED="1521326553373" TEXT="Storage">
+<node CREATED="1521240053852" ID="ID_666003564" MODIFIED="1521418339291" STYLE="fork" TEXT="Detail-Fragen">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1521324240124" ID="ID_1099103129" MODIFIED="1521333223154">
+<node COLOR="#990000" CREATED="1521169099047" ID="ID_1183392158" MODIFIED="1521418281285" TEXT="DependencyFactory-Rahmenklasse">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1521416462342" ID="ID_1333178845" MODIFIED="1521418281285" TEXT="f&#xe4;llt weg"/>
+<node CREATED="1521416471820" ID="ID_870619413" MODIFIED="1521418281285" TEXT="wir arbeiten direkt mit Lambdas">
+<arrowlink COLOR="#b4a9c1" DESTINATION="ID_1336783261" ENDARROW="Default" ENDINCLINATION="224;0;" ID="Arrow_ID_37940927" STARTARROW="None" STARTINCLINATION="83;-7;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1521169111957" ID="ID_1706232823" MODIFIED="1521418281285" TEXT="Ort f&#xfc;r den Implementierungs-Pointer">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521169130251" ID="ID_1252056818" MODIFIED="1521418281285" TEXT="Zugang f&#xfc;r DependInject">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521324229082" ID="ID_1398878858" MODIFIED="1521418281285" TEXT="Storage">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1521324240124" ID="ID_1099103129" MODIFIED="1521418281285">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -27050,13 +27058,13 @@
 </richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1521324275919" ID="ID_1710451095" MODIFIED="1521333231077" TEXT="sehe aber auch keinen wirklichen Vorteil">
+<node CREATED="1521324275919" ID="ID_1710451095" MODIFIED="1521418281285" TEXT="sehe aber auch keinen wirklichen Vorteil">
 <icon BUILTIN="smiley-neutral"/>
-<node CREATED="1521324529228" ID="ID_1786667023" MODIFIED="1521324543094" TEXT="man mu&#xdf; sich nicht um die de-Allokation k&#xfc;mmern"/>
-<node CREATED="1521324554465" ID="ID_1577416641" MODIFIED="1521324568043" TEXT="Storage ist garantiert vorhanden, kein out-of-Memory"/>
-<node CREATED="1521324668449" ID="ID_1013908061" MODIFIED="1521324682434" TEXT="Meyers Singleton ist elegant und schnell"/>
+<node CREATED="1521324529228" ID="ID_1786667023" MODIFIED="1521418281285" TEXT="man mu&#xdf; sich nicht um die de-Allokation k&#xfc;mmern"/>
+<node CREATED="1521324554465" ID="ID_1577416641" MODIFIED="1521418281285" TEXT="Storage ist garantiert vorhanden, kein out-of-Memory"/>
+<node CREATED="1521324668449" ID="ID_1013908061" MODIFIED="1521418281285" TEXT="Meyers Singleton ist elegant und schnell"/>
 </node>
-<node CREATED="1521324321601" ID="ID_805959606" MODIFIED="1521324477609" TEXT="Nachteil: Storage ist stets belegt, auch wenn nicht notwendig">
+<node CREATED="1521324321601" ID="ID_805959606" MODIFIED="1521418281285" TEXT="Nachteil: Storage ist stets belegt, auch wenn nicht notwendig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27075,26 +27083,26 @@
 </html>
 </richcontent>
 </node>
-<node COLOR="#338800" CREATED="1521324883035" ID="ID_1438637057" MODIFIED="1521326539612" TEXT="Heap-Allokation k&#xf6;nnte insgesamt einfacher sein">
+<node COLOR="#338800" CREATED="1521324883035" ID="ID_1438637057" MODIFIED="1521418281285" TEXT="Heap-Allokation k&#xf6;nnte insgesamt einfacher sein">
 <icon BUILTIN="yes"/>
 </node>
-<node COLOR="#338800" CREATED="1521326541575" ID="ID_966508253" MODIFIED="1521326547454" TEXT="umgebaut auf Heap">
+<node COLOR="#338800" CREATED="1521326541575" ID="ID_966508253" MODIFIED="1521418281285" TEXT="umgebaut auf Heap">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1521254014422" ID="ID_961824675" MODIFIED="1521324200616" TEXT="Meyers Singleton oder explizit ausprogrammieren?">
+<node COLOR="#338800" CREATED="1521254014422" ID="ID_961824675" MODIFIED="1521418281285" TEXT="Meyers Singleton oder explizit ausprogrammieren?">
 <icon BUILTIN="help"/>
-<node CREATED="1521303577633" ID="ID_1665490706" MODIFIED="1521303615967" TEXT="das w&#xe4;re die &quot;Standard-L&#xf6;sung&quot; f&#xfc;r Singletons"/>
-<node CREATED="1521303616675" ID="ID_135579041" MODIFIED="1521303721048" TEXT="hier aber nicht sinnvoll...">
-<node CREATED="1521303634705" ID="ID_433169847" MODIFIED="1521303737486" TEXT="weil wir explizit ein Lock halten m&#xfc;ssen">
-<node CREATED="1521303738410" ID="ID_213625497" MODIFIED="1521303748316" TEXT="um den Instanz-Pointer und die Factory zu managen"/>
-<node CREATED="1521303749169" ID="ID_762346402" MODIFIED="1521303772913" TEXT="und der Compiler f&#xfc;r Meyers Singleton nochmal ein Lock generiert"/>
+<node CREATED="1521303577633" ID="ID_1665490706" MODIFIED="1521418281285" TEXT="das w&#xe4;re die &quot;Standard-L&#xf6;sung&quot; f&#xfc;r Singletons"/>
+<node CREATED="1521303616675" ID="ID_135579041" MODIFIED="1521418281285" TEXT="hier aber nicht sinnvoll...">
+<node CREATED="1521303634705" ID="ID_433169847" MODIFIED="1521418281286" TEXT="weil wir explizit ein Lock halten m&#xfc;ssen">
+<node CREATED="1521303738410" ID="ID_213625497" MODIFIED="1521418281286" TEXT="um den Instanz-Pointer und die Factory zu managen"/>
+<node CREATED="1521303749169" ID="ID_762346402" MODIFIED="1521418281286" TEXT="und der Compiler f&#xfc;r Meyers Singleton nochmal ein Lock generiert"/>
 </node>
-<node CREATED="1521303775845" ID="ID_1256913997" MODIFIED="1521303814515" TEXT="weil wir unsere Singletons ggfs explizit zerst&#xf6;ren wollen"/>
-<node CREATED="1521303816879" ID="ID_1463480909" MODIFIED="1521303842240" TEXT="weil wir eine Closure f&#xfc;r den Konstruktor erzeugen wollen"/>
-<node CREATED="1521303847923" ID="ID_917362189" MODIFIED="1521303866596" TEXT="weil wir Abstrakte Typen explizit ausschlie&#xdf;en m&#xfc;ssen"/>
+<node CREATED="1521303775845" ID="ID_1256913997" MODIFIED="1521418281286" TEXT="weil wir unsere Singletons ggfs explizit zerst&#xf6;ren wollen"/>
+<node CREATED="1521303816879" ID="ID_1463480909" MODIFIED="1521418281286" TEXT="weil wir eine Closure f&#xfc;r den Konstruktor erzeugen wollen"/>
+<node CREATED="1521303847923" ID="ID_917362189" MODIFIED="1521418281286" TEXT="weil wir Abstrakte Typen explizit ausschlie&#xdf;en m&#xfc;ssen"/>
 </node>
-<node CREATED="1521303869768" ID="ID_712811337" MODIFIED="1521303904421" TEXT="all das w&#xe4;re auch mit Meyers Singleton irgendwie hinzubekommen....">
+<node CREATED="1521303869768" ID="ID_712811337" MODIFIED="1521418281286" TEXT="all das w&#xe4;re auch mit Meyers Singleton irgendwie hinzubekommen....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27107,38 +27115,38 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1521303905491" ID="ID_1749674332" MODIFIED="1521303916944" TEXT="Fazit: explizit ist besser">
+<node CREATED="1521303905491" ID="ID_1749674332" MODIFIED="1521418281286" TEXT="Fazit: explizit ist besser">
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253797733" ID="ID_1640990866" MODIFIED="1521253802565" TEXT="Fehlerbehandlung">
-<icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1521253803963" ID="ID_100415207" MODIFIED="1521332991888" TEXT="Installation wenn Factory bereits genutzt wurde">
+<node COLOR="#338800" CREATED="1521253797733" ID="ID_1640990866" MODIFIED="1521418281286" TEXT="Fehlerbehandlung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521253803963" ID="ID_100415207" MODIFIED="1521418281286" TEXT="Installation wenn Factory bereits genutzt wurde">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1521253831776" ID="ID_1332033733" MODIFIED="1521387909137" TEXT="Zugriff auf Service bevor er hochgefahren wurde">
+<node COLOR="#338800" CREATED="1521253831776" ID="ID_1332033733" MODIFIED="1521418281286" TEXT="Zugriff auf Service bevor er hochgefahren wurde">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253858692" ID="ID_442301762" MODIFIED="1521385565612" TEXT="t&#xfc;ckisch">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521253858692" ID="ID_442301762" MODIFIED="1521418281286" TEXT="t&#xfc;ckisch">
 <icon BUILTIN="broken-line"/>
 </node>
-<node CREATED="1521253867787" ID="ID_662728746" MODIFIED="1521385616988" TEXT="Lifecycle-Handle existiert erst viel sp&#xe4;ter">
+<node CREATED="1521253867787" ID="ID_662728746" MODIFIED="1521418281286" TEXT="Lifecycle-Handle existiert erst viel sp&#xe4;ter">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1521385652999" ID="ID_1974848336" MODIFIED="1521385657839" TEXT="statischer Schutz">
+<node CREATED="1521385652999" ID="ID_1974848336" MODIFIED="1521418281286" TEXT="statischer Schutz">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1521385660206" ID="ID_200575604" MODIFIED="1521385685919" TEXT="fragil">
+<node CREATED="1521385660206" ID="ID_200575604" MODIFIED="1521418281286" TEXT="fragil">
 <icon BUILTIN="stop-sign"/>
-<node CREATED="1521385687874" ID="ID_1561975152" MODIFIED="1521386168998" TEXT="C++ kennt keine statische Klassen-Initialisierung">
+<node CREATED="1521385687874" ID="ID_1561975152" MODIFIED="1521418281286" TEXT="C++ kennt keine statische Klassen-Initialisierung">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1521385709463" ID="ID_713439022" MODIFIED="1521385757820" TEXT="workaround">
-<node CREATED="1521385721637" ID="ID_1822970415" MODIFIED="1521386025178" TEXT="Initialisieren eines statischen member">
+<node CREATED="1521385709463" ID="ID_713439022" MODIFIED="1521418281286" TEXT="workaround">
+<node CREATED="1521385721637" ID="ID_1822970415" MODIFIED="1521418281286" TEXT="Initialisieren eines statischen member">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1521385768359" ID="ID_1123247553" MODIFIED="1521385776914" TEXT="ist unzuverl&#xe4;ssig">
-<node CREATED="1521385782861" ID="ID_1190214158" MODIFIED="1521385787152" TEXT="erfordert non-const member"/>
-<node CREATED="1521385787980" ID="ID_81600101" MODIFIED="1521385794375" TEXT="wird vom Compiler wegoptimiert"/>
-<node CREATED="1521385795059" ID="ID_1426898485" MODIFIED="1521386008204" TEXT="sofern er Wirkungslosigkeit nachweisen kann...">
+<node CREATED="1521385768359" ID="ID_1123247553" MODIFIED="1521418281286" TEXT="ist unzuverl&#xe4;ssig">
+<node CREATED="1521385782861" ID="ID_1190214158" MODIFIED="1521418281286" TEXT="erfordert non-const member"/>
+<node CREATED="1521385787980" ID="ID_81600101" MODIFIED="1521418281286" TEXT="wird vom Compiler wegoptimiert"/>
+<node CREATED="1521385795059" ID="ID_1426898485" MODIFIED="1521418281286" TEXT="sofern er Wirkungslosigkeit nachweisen kann...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27161,21 +27169,21 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1521386182598" ID="ID_1671815821" MODIFIED="1521386187993" TEXT="ist undurchsichtig">
+<node CREATED="1521386182598" ID="ID_1671815821" MODIFIED="1521418281286" TEXT="ist undurchsichtig">
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
 </node>
-<node CREATED="1521386206627" ID="ID_1928841192" MODIFIED="1521386214661" TEXT="erzeugt eh blo&#xdf; eine Fehlermeldung"/>
-<node CREATED="1521386219297" ID="ID_1181038545" MODIFIED="1521386233755" TEXT="...was auch noch beim Hochfahren des Service passieren kann"/>
+<node CREATED="1521386206627" ID="ID_1928841192" MODIFIED="1521418281286" TEXT="erzeugt eh blo&#xdf; eine Fehlermeldung"/>
+<node CREATED="1521386219297" ID="ID_1181038545" MODIFIED="1521418281286" TEXT="...was auch noch beim Hochfahren des Service passieren kann"/>
 </node>
-<node CREATED="1521386241406" ID="ID_1481722887" MODIFIED="1521386259129" TEXT="es ist ein Architektur-Problem">
+<node CREATED="1521386241406" ID="ID_1481722887" MODIFIED="1521418281286" TEXT="es ist ein Architektur-Problem">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521253986491" ID="ID_546204807" MODIFIED="1521254005609" TEXT="Singleton wenn Interfaceklasse abstrakt ist">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521253986491" ID="ID_546204807" MODIFIED="1521418281286" TEXT="Singleton wenn Interfaceklasse abstrakt ist">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

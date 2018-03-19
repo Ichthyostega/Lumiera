@@ -176,10 +176,151 @@ using std::move;
 
 
 template<class SRV>
-class DependInject
+struct DependInject
   {
     using Factory = typename Depend<SRV>::Factory;
-  public:
+    
+    
+    /** configure dependency-injection for type SRV to build a subclass singleton
+     * @tparam SUB concrete subclass type to build on demand when invoking `Depend<SRV>`
+     * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
+     *         been invoked at the point when calling this (re)configuration function.
+     */
+    template<class SUB>
+    static void
+    useSingleton()
+      {
+        __assert_compatible<SUB>();
+        static InstanceHolder<SUB> singleton;
+        installFactory ([&]()
+                            {
+                              return singleton.buildInstance();
+                            });
+      }
+    
+    
+    /**
+     * Configuration handle to expose a service implementation through the `Depend<SRV>` front-end.
+     * This noncopyable (but movable) handle shall be planted within the context operating the service
+     * to be exposed. It will immediately create (in RAII style) and manage a heap-allocated instance
+     * of the subclass `IMP` and expose a baseclass pointer to this specific instance through `Depend<SRV>`.
+     * Moreover, the implementation subclass can be accessed through this handle, which acts as smart-ptr.
+     * When the handle goes out of scope, the implementation instance is destroyed and the access through
+     * `Depend<SRV>` is closed and inhibited, to prevent on-demand creation of a baseclass `SRV` singleton.
+     * @tparam IMP concrete service implementation subclass to build, manage and expose.
+     * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
+     *         been invoked at the point when calling this (re)configuration function.
+     */
+    template<class IMP>
+    class ServiceInstance
+      {
+        std::unique_ptr<IMP> instance_;
+        
+      public:
+        ServiceInstance()
+          : instance_(new IMP{})
+          {
+            __assert_compatible<IMP>();
+            activateServiceAccess (*instance_);
+          }
+        
+       ~ServiceInstance()
+          {
+            deactivateServiceAccess();
+          }
+        
+        ServiceInstance (ServiceInstance&&)            = default;
+        ServiceInstance (ServiceInstance const&)       = delete;
+        ServiceInstance& operator= (ServiceInstance&&) = delete;
+        
+        explicit
+        operator bool()  const
+          {
+            return bool(instance_);
+          }
+        
+        IMP&
+        operator* ()  const
+          {
+            ENSURE (instance_);
+            return *instance_;
+          }
+        
+        IMP*
+        operator-> ()  const
+          {
+            ENSURE (instance_);
+            return instance_.get();
+          }
+      };
+    
+    
+    /**
+     * Configuration handle for temporarily shadowing a dependency by a test mock instance.
+     * This noncopyable (but movable) handle shall be planted within the immediate test context.
+     * It immediately stashes away the existing state and configuration from `Depend<SRV>`, but
+     * waits for actual invocation of the `Depend<SRV>`-front-end to create a heap-allocated
+     * instance of the `MOC` subclass, which it manages and exposes like a smart-ptr.
+     * When the handle goes out of scope, the original state and configuration is restored
+     */
+    template<class MOC>
+    class Local
+      {
+        std::unique_ptr<MOC> mock_;
+        
+        SRV* origInstance_;
+        Factory origFactory_;
+        
+      public:
+        Local()
+          {
+            __assert_compatible<MOC>();
+            temporarilyInstallAlternateFactory (origInstance_, origFactory_
+                                               ,[this]()
+                                                   {
+                                                      mock_.reset(new MOC{});
+                                                      return mock_.get();
+                                                   });
+          }
+       ~Local()
+          {
+            restoreOriginalFactory (origInstance_, origFactory_);
+          }
+        
+        Local (Local&&)            = default;
+        Local (Local const&)       = delete;
+        Local& operator= (Local&&) = delete;
+        
+        explicit
+        operator bool()  const
+          {
+            return bool(mock_);
+          }
+        
+        MOC&
+        operator* ()  const
+          {
+            ENSURE (mock_);
+            return *mock_;
+          }
+        
+        MOC*
+        operator-> ()  const
+          {
+            ENSURE (mock_);
+            return mock_.get();
+          }
+      };
+    
+    
+    
+  protected: /* ======= internal access-API for those configurations to manipulate Depend<SRV> ======= */
+    template<class IMP>
+    friend class ServiceInstance;
+    template<class MOC>
+    friend class Local;
+    
+    
     template<class SUB>
     static void
     __assert_compatible()
@@ -234,115 +375,8 @@ class DependInject
       {
         ClassLock<SRV> guard;
         Depend<SRV>::instance = nullptr;
+        Depend<SRV>::factory = Depend<SRV>::disabledFactory;
       }
-    
-    
-    
-    template<class SUB>
-    static void
-    useSingleton()
-      {
-        __assert_compatible<SUB>();
-        static InstanceHolder<SUB> singleton;
-        installFactory ([&]()
-                            {
-                              return singleton.buildInstance();
-                            });
-      }
-    
-    
-    template<class IMP>
-    class ServiceInstance
-      {
-        std::unique_ptr<IMP> instance_;
-        
-      public:
-        ServiceInstance()
-          : instance_(new IMP{})
-          {
-            __assert_compatible<IMP>();
-            activateServiceAccess (*instance_);
-          }
-        
-       ~ServiceInstance()
-          {
-            deactivateServiceAccess();
-          }
-        
-        ServiceInstance (ServiceInstance&&)            = default;
-        ServiceInstance (ServiceInstance const&)       = delete;
-        ServiceInstance& operator= (ServiceInstance&&) = delete;
-        
-        explicit
-        operator bool()  const
-          {
-            return bool(instance_);
-          }
-        
-        IMP&
-        operator* ()  const
-          {
-            ENSURE (instance_);
-            return *instance_;
-          }
-        
-        IMP*
-        operator-> ()  const
-          {
-            ENSURE (instance_);
-            return instance_.get();
-          }
-      };
-    
-    
-    template<class MOC>
-    class Local
-      {
-        std::unique_ptr<MOC> mock_;
-        
-        SRV* origInstance_;
-        Factory origFactory_;
-        
-      public:
-        Local()
-          {
-            __assert_compatible<MOC>();
-            temporarilyInstallAlternateFactory (origInstance_, origFactory_
-                                               ,[this]()
-                                                   {
-                                                      mock_.reset(new MOC{});
-                                                      return mock_.get();
-                                                   });
-          }
-       ~Local()
-          {
-            restoreOriginalFactory (origInstance_, origFactory_);
-          }
-        
-        Local (Local&&)            = default;
-        Local (Local const&)       = delete;
-        Local& operator= (Local&&) = delete;
-        
-        explicit
-        operator bool()  const
-          {
-            return bool(mock_);
-          }
-        
-        MOC&
-        operator* ()  const
-          {
-            ENSURE (mock_);
-            return *mock_;
-          }
-        
-        MOC*
-        operator-> ()  const
-          {
-            ENSURE (mock_);
-            return mock_.get();
-          }
-      };
   };
 
 
@@ -374,6 +408,7 @@ struct Dummy
 
 
 using error::LUMIERA_ERROR_LIFECYCLE;
+using error::LUMIERA_ERROR_FATAL;
 
 int
 main (int, char**)
@@ -392,6 +427,9 @@ main (int, char**)
     SHOW_EXPR( dep12().probe() );
     SHOW_EXPR( checksum );
     
+    // unable to create singleton instance of abstract baseclass
+    VERIFY_ERROR (FATAL, Depend<Dum>{}() );
+
     Depend<Dum> dumm;
     DependInject<Dum>::useSingleton<Dummy<7>>();
     SHOW_EXPR( dumm().probe() );
