@@ -26809,7 +26809,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1521208257336" ID="ID_1129640741" MODIFIED="1521208261323" TEXT="ServiceInstance">
+<node COLOR="#338800" CREATED="1521208257336" ID="ID_1129640741" MODIFIED="1521688342829" TEXT="ServiceInstance">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521208859989" ID="ID_549061661" MODIFIED="1521387920055" TEXT="Lazy-Init-Factory deaktivieren">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -26839,7 +26840,26 @@
 <node COLOR="#338800" CREATED="1521208724943" ID="ID_1527628667" MODIFIED="1521335442003" TEXT="smart-ptr-artiger Zugriff auf die Service-Impl">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1521208339124" ID="ID_1092066450" MODIFIED="1521387948246" TEXT="(optional)Closure &#xfc;ber konkreten Ctor"/>
+<node CREATED="1521208339124" ID="ID_1092066450" MODIFIED="1521688307817" TEXT="(optional)Closure &#xfc;ber konkreten Ctor">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1521688310369" ID="ID_1697840327" MODIFIED="1521688369496" TEXT="sinnlos">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sie werden ja sofort ausgewertet, da die Service-Instanz unmittelbar gebaut wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#338800" CREATED="1521688321599" ID="ID_764253251" MODIFIED="1521688339230" TEXT="stattdessen: ctor-Argumente forwarden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node CREATED="1521208261887" ID="ID_384054163" MODIFIED="1521208264827" TEXT="Local">
 <node CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521409010023" TEXT="(optional)Closure mit speziellen Argumenten "/>
@@ -27193,16 +27213,23 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521160718843" TEXT="Implementierung ausf&#xfc;hren">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521418559868" ID="ID_592269917" MODIFIED="1521418569579" TEXT="Depend&lt;SRV&gt; Front-End">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521418559868" ID="ID_592269917" MODIFIED="1521688403021" TEXT="Depend&lt;SRV&gt; Front-End">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521418571594" ID="ID_1432227459" MODIFIED="1521418597112" TEXT="DependInject&lt;SRV&gt; ersetzt dependency-factory.hpp">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521418571594" ID="ID_1432227459" MODIFIED="1521688407751" TEXT="DependInject&lt;SRV&gt; ersetzt dependency-factory.hpp">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521418598463" ID="ID_237484313" MODIFIED="1521418617389" TEXT="Objekterzeugung erweitern">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521418618052" ID="ID_1253147848" MODIFIED="1521418626516" TEXT="auf beliebige Argumente">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#990000" CREATED="1521418618052" ID="ID_1253147848" MODIFIED="1521688468798" TEXT="auf beliebige Argumente">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1521688471643" ID="ID_1037697154" MODIFIED="1521688504558" TEXT="gef&#xe4;hrlich wenn Objekterzeugung lazy">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1521688505734" ID="ID_1656307893" MODIFIED="1521688520760" TEXT="der Client sieht ja nicht, wie wir die Argumente speichern"/>
+<node CREATED="1521688524620" ID="ID_480802115" MODIFIED="1521688537015" TEXT="sinnvoll nur im Fall Service-Instanz">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521418627130" ID="ID_206705145" MODIFIED="1521418639801" TEXT="auf allgemeine Closures">
 <icon BUILTIN="flag-yellow"/>

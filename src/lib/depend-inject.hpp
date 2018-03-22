@@ -40,12 +40,14 @@
 #include "lib/sync-classlock.hpp"
 
 #include <type_traits>
+#include <utility>
 #include <memory>
 
 
 namespace lib {
   namespace error = lumiera::error;
   
+  using std::forward;
   using std::move;
   
   
@@ -108,8 +110,9 @@ namespace lib {
           std::unique_ptr<IMP> instance_;
           
         public:
-          ServiceInstance()
-            : instance_(new IMP{})
+          template<typename...ARGS>
+          ServiceInstance(ARGS&& ...ctorArgs)
+            : instance_(new IMP(forward<ARGS> (ctorArgs)...))
             {
               __assert_compatible<IMP>();
               activateServiceAccess (*instance_);
