@@ -26792,10 +26792,16 @@
 </node>
 <node CREATED="1521207954859" ID="ID_631339002" MODIFIED="1521418307590" TEXT="Analyse">
 <icon BUILTIN="idea"/>
-<node CREATED="1521208242178" ID="ID_539882602" MODIFIED="1521208246821" TEXT="erforderliche Mechanismen">
-<node CREATED="1521208254376" ID="ID_1933406851" MODIFIED="1521208256603" TEXT="Singleton">
-<node CREATED="1521208339124" ID="ID_287433738" MODIFIED="1521209063045" TEXT="Closure &#xfc;ber konkreten Ctor"/>
-<node CREATED="1521208339124" ID="ID_826329078" MODIFIED="1521387972747" TEXT="(optional)Closure mit speziellen Argumenten"/>
+<node CREATED="1521208242178" ID="ID_539882602" MODIFIED="1521696589693" TEXT="erforderliche Mechanismen">
+<icon BUILTIN="info"/>
+<node COLOR="#338800" CREATED="1521208254376" ID="ID_1933406851" MODIFIED="1521696578693" TEXT="Singleton">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521208339124" ID="ID_287433738" MODIFIED="1521696567487" TEXT="Closure &#xfc;ber konkreten Ctor">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521208339124" ID="ID_826329078" MODIFIED="1521696572039" TEXT="(optional)Closure mit speziellen Argumenten">
+<icon BUILTIN="button_ok"/>
+</node>
 <node COLOR="#338800" CREATED="1521209708336" ID="ID_1667188609" MODIFIED="1521332921903" TEXT="Storage f&#xfc;r UnterBla-Instanz bereitstellen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -26861,8 +26867,11 @@
 </node>
 </node>
 </node>
-<node CREATED="1521208261887" ID="ID_384054163" MODIFIED="1521208264827" TEXT="Local">
-<node CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521409010023" TEXT="(optional)Closure mit speziellen Argumenten "/>
+<node COLOR="#338800" CREATED="1521208261887" ID="ID_384054163" MODIFIED="1521696582060" TEXT="Local">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521209044203" ID="ID_1994153994" MODIFIED="1521696576989" TEXT="(optional)Closure mit speziellen Argumenten ">
+<icon BUILTIN="button_ok"/>
+</node>
 <node COLOR="#338800" CREATED="1521209708336" ID="ID_1870723126" MODIFIED="1521411844636" TEXT="Storage f&#xfc;r UnterBla-Instanz bereitstellen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -27049,7 +27058,7 @@
 <node CREATED="1521242824239" ID="ID_1013563756" MODIFIED="1521242834313" TEXT="inline-wegwerf-Objekt"/>
 </node>
 </node>
-<node CREATED="1521240053852" FOLDED="true" ID="ID_666003564" MODIFIED="1521418511493" STYLE="fork" TEXT="Detail-Fragen">
+<node CREATED="1521240053852" FOLDED="true" ID="ID_666003564" MODIFIED="1521696619000" STYLE="fork" TEXT="Detail-Fragen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#990000" CREATED="1521169099047" ID="ID_1183392158" MODIFIED="1521418281285" TEXT="DependencyFactory-Rahmenklasse">
 <icon BUILTIN="button_cancel"/>
@@ -27219,8 +27228,8 @@
 <node COLOR="#338800" CREATED="1521418571594" ID="ID_1432227459" MODIFIED="1521688407751" TEXT="DependInject&lt;SRV&gt; ersetzt dependency-factory.hpp">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521418598463" ID="ID_237484313" MODIFIED="1521418617389" TEXT="Objekterzeugung erweitern">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521418598463" ID="ID_237484313" MODIFIED="1521696529892" TEXT="Objekterzeugung erweitern">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#990000" CREATED="1521418618052" ID="ID_1253147848" MODIFIED="1521688468798" TEXT="auf beliebige Argumente">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1521688471643" ID="ID_1037697154" MODIFIED="1521688504558" TEXT="gef&#xe4;hrlich wenn Objekterzeugung lazy">
@@ -27231,8 +27240,42 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521418627130" ID="ID_206705145" MODIFIED="1521418639801" TEXT="auf allgemeine Closures">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521418627130" ID="ID_206705145" MODIFIED="1521696521621" TEXT="auf allgemeine Closures">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1521696315169" ID="ID_914761003" MODIFIED="1521696326988" TEXT="ob das wohl geht...."/>
+<node CREATED="1521696477035" ID="ID_1232450528" MODIFIED="1521696510682" TEXT="Verdammter Mist! Wird die Closure nun kopiert oder geMOVEd?"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521696673440" ID="ID_1408713510" MODIFIED="1521696682160" TEXT="compile-time Checks mal verifizieren">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1521696334383" ID="ID_1627167666" MODIFIED="1521696684626" TEXT="gef&#xe4;llt mir nicht wirklich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn nun wird das &quot;singleton&quot; schon ziemlich gehaltlos,
+    </p>
+    <p>
+      und es ist einigerma&#223;en undurchsichtig, wo nun die Instanz erzeugt wird.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Allerdings gibt es auch kein stichhaltiges Argument, dieses Feature<i>&#160;nicht</i>&#160;zu implementieren.
+    </p>
+    <p>
+      Es ist halt einfach nahheliegend, da&#223; man mal eine Subklasse mit abweichenden Parametern
+    </p>
+    <p>
+      konstruieren wollen k&#246;nnte, und es ist von der Implementierung her &quot;quasi geschenkt&quot;.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433938944" ID="ID_546086969" MODIFIED="1521433946432" TEXT="double-checked-locking">
@@ -27286,8 +27329,14 @@
 <node COLOR="#338800" CREATED="1521433807714" ID="ID_655174082" MODIFIED="1521433832327" TEXT="Assertions explizit machen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433833942" ID="ID_841958834" MODIFIED="1521433843486" TEXT="Factory-Closure abdecken">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521433833942" ID="ID_841958834" MODIFIED="1521696534947" TEXT="Factory-Closure abdecken">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521696537522" ID="ID_1639668362" MODIFIED="1521696552680" TEXT="f&#xfc;r subclass-Singleton">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521696547161" ID="ID_413219021" MODIFIED="1521696551785" TEXT="f&#xfc;r Test-Mock">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1521433852660" ID="ID_1581010755" MODIFIED="1521433857543" TEXT="l&#xe4;uft">
 <icon BUILTIN="button_ok"/>

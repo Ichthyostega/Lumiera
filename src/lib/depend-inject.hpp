@@ -37,6 +37,7 @@
 
 #include "lib/error.hpp"
 #include "lib/depend2.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/sync-classlock.hpp"
 
 #include <type_traits>
@@ -83,11 +84,34 @@ namespace lib {
       static void
       useSingleton()
         {
-          __assert_compatible<SUB>();
-          static InstanceHolder<SUB> singleton;
-          installFactory ([&]()
+          useSingleton ([]{ return new SUB{}; });
+        }
+      
+      /** configure dependency-injection for type SRV to manage a subclass singleton,
+       *  which is created lazily on demand by invoking the given builder function
+       * @param ctor functor to create a heap allocated instance of subclass
+       * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
+       *         been invoked at the point when calling this (re)configuration function.
+       */
+      template<class FUN>
+      static void
+      useSingleton(FUN&& ctor)
+        {
+          using lib::meta::_Fun;
+          using lib::meta::Strip;
+          
+          static_assert (_Fun<FUN>::value, "Need a Lambda or Function object to create a heap allocated instance");
+          
+          using Ret = typename _Fun<FUN>::Ret;
+          using Sub = typename Strip<Ret>::TypePlain;
+          
+          __assert_compatible<Sub>();
+          static_assert (std::is_pointer<Ret>::value, "Function must yield a pointer to a heap allocated instance");
+          
+          static InstanceHolder<Sub> singleton;
+          installFactory ([ctor]()
                               {
-                                return singleton.buildInstance();
+                                return singleton.buildInstance (ctor);
                               });
         }
       
@@ -167,12 +191,18 @@ namespace lib {
           
         public:
           Local()
+            : Local([]{ return new MOC{}; })
+          { }
+          
+          template<class FUN>
+          explicit
+          Local (FUN&& buildInstance)
             {
               __assert_compatible<MOC>();
               temporarilyInstallAlternateFactory (origInstance_, origFactory_
-                                                 ,[this]()
+                                                 ,[=]()
                                                      {
-                                                        mock_.reset(new MOC{});
+                                                        mock_.reset (buildInstance());
                                                         return mock_.get();
                                                      });
             }

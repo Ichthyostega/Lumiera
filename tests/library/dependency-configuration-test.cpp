@@ -109,10 +109,10 @@ namespace test{
           verify_Singleton();
           verify_SubclassSingleton();
           verify_expose_Service_with_Lifecycle();
-          verify_customFactory();
           verify_automaticReplacement();
+          verify_customFactory();
           
-          CHECK (7+5+1 == checksum); // singletons stay alive until application shutdown
+          CHECK (9+7+5+1 == checksum); // singletons stay alive until application shutdown
       }
       
       
@@ -200,15 +200,6 @@ namespace test{
           VERIFY_ERROR (LIFECYCLE, dep3().probe() );
           VERIFY_ERROR (LIFECYCLE, DependInject<Dum>::ServiceInstance<SubDummy>{} );
           CHECK ((1+5+7) == checksum );
-        }
-      
-      
-      
-      /** @test instance creation can be preconfigured with a closure */
-      void
-      verify_customFactory()
-        {
-          TODO ("implement arbitrary ctor closure");
         }
       
       
@@ -311,6 +302,90 @@ namespace test{
           CHECK ((1+5+7)*7 == dumm().probe() );
           CHECK ((1+5+7) == checksum );
         }
+      
+      
+      
+      /** @test instance creation can be preconfigured with a closure
+       * Both Singleton and Test-Mock creation can optionally be performed through a
+       * user provided Lambda or Functor. To demonstrate this, we use a `Veryspecial` local class,
+       * which takes an `int&` as constructor parameter -- and we create the actual instance through
+       * a lambda, which happens to capture a local variable by reference.
+       * @warning this can be dangerous; in the example demonstrated here, the created singleton instance
+       *          continues to live until termination of the test-suite. After leaving this test function,
+       *          it thus holds a dangling reference, pointing into stack memory....
+       */
+      void
+      verify_customFactory()
+        {
+          CHECK ((1+5+7) == checksum );
+          
+          struct Veryspecial
+            : Dummy<9>
+            {
+              Veryspecial(int& ref)
+                : magic_{ref}
+              { }
+              
+              int& magic_;
+              
+              virtual int
+              probe()  override
+                {
+                  return magic_++;
+                }
+            };
+          
+          int backdoor = 22;
+          
+          DependInject<Dummy<9>>::useSingleton ([&]{ return new Veryspecial{backdoor}; });
+          
+          CHECK ((1+5+7) == checksum );
+          CHECK ( 22 == backdoor );
+          
+          Depend<Dummy<9>> tricky;
+          CHECK ((1+5+7) == checksum );
+          CHECK (22 == backdoor );
+          
+          CHECK (22 == tricky().probe());
+          CHECK (23 == backdoor );
+          CHECK ((1+5+7+9) == checksum );        // Veryspecial Dummy<9> subclass was created on the heap
+                                                 // and will continue to live there until the testsuite terminates
+          backdoor = 41;
+          CHECK (41 == tricky().probe());
+          CHECK (42 == backdoor );
+          
+          
+          Depend<Dum> dumm;
+          CHECK ((1+5+7+9)*7 == dumm().probe() );
+          
+          {////////////////////////////////////////////////////TEST-Scope
+           
+            DependInject<Dum>::Local<Dum> insidious ([&]{ return new Veryspecial{backdoor}; });
+            
+            CHECK ((1+5+7+9) == checksum );
+            CHECK (not insidious);
+            
+            CHECK (42 == dumm().probe() );
+            CHECK (43 == backdoor );
+            CHECK ((1+5+7+9+9) == checksum );
+            
+            CHECK (isSameObject (dumm(), *insidious));
+            
+            CHECK (43 == tricky().probe());
+            CHECK (44 == backdoor );
+            
+            backdoor = -1;
+            CHECK (-1 == dumm().probe() );
+            CHECK ( 0 == backdoor );
+            
+            CHECK ((1+5+7+9+9) == checksum );
+          }////////////////////////////////////////////////////(End)TEST-Scope
+           
+          CHECK ((1+5+7+9) == checksum );
+          CHECK ((1+5+7+9)*7 == dumm().probe() );
+          CHECK ( 0 == tricky().probe());
+          CHECK (+1 == backdoor );
+        }                                        // NOTE: Veryspecial holds a dangling reference into stack memory from now on!
     };
   
   

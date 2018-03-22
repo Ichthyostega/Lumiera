@@ -102,14 +102,20 @@ namespace lib {
         TAR*
         buildInstance()
           {
+            return buildInstance ([]{ return new TAR{}; });
+          }
+      
+        template<class FUN>
+        TAR*
+        buildInstance(FUN&& ctor)
+          {
             if (instance_)
               throw error::Fatal("Attempt to double-create a singleton service. "
                                  "Either the application logic, or the compiler "
                                  "or runtime system is seriously broken"
                                 ,error::LUMIERA_ERROR_LIFECYCLE);
             
-            // place new instance into embedded buffer
-            instance_.reset (new TAR{});
+            instance_.reset (ctor());
             return instance_.get();
           }
       };
@@ -119,7 +125,7 @@ namespace lib {
       {
       public:
         ABS*
-        buildInstance()
+        buildInstance(...)
           {
             throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
                                "Application architecture or lifecycle is seriously broken.");
