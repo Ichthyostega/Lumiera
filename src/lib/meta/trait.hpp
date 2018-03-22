@@ -94,12 +94,15 @@ namespace meta {
   using std::remove_cv;
   using std::remove_pointer;
   using std::remove_reference;
+  using std::is_pointer;
+  using std::is_base_of;
   using std::is_convertible;
   using std::is_constructible;
   using std::is_floating_point;
   using std::is_arithmetic;
   using std::is_unsigned;
   using std::is_signed;
+  using std::is_class;
   using std::is_same;
   using std::__not_;
   using std::__and_;
@@ -270,6 +273,17 @@ namespace meta {
               ,typename Strip<U>::TypeReferred>
     { };
   
+  /** verify compliance to an interface by subtype check */
+  template<typename S, typename I>
+  struct is_Subclass
+    : __or_< __and_< is_class<I>
+                   , is_class<S>
+                   , is_base_of<I,S>
+                   >
+           , is_same<I,S>
+           >
+    { };
+  
   /** detect various flavours of string / text data */
   template<typename X>
   struct is_StringLike
@@ -311,8 +325,8 @@ namespace meta {
   /** when to use custom string conversions for output streams */
   template<typename X>
   struct use_StringConversion4Stream
-    : __and_<std::is_class<typename Strip<X>::TypePlain>
-            ,__not_<std::is_pointer<X>>
+    : __and_<is_class<typename Strip<X>::TypePlain>
+            ,__not_<is_pointer<X>>
             ,__not_<can_lexical2string<X>>
             >
     { };

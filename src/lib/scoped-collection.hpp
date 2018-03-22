@@ -70,6 +70,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/iter-adapter.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -136,8 +137,7 @@ namespace lib {
           TY&
           create (ARGS&& ...args)
             {
-              static_assert ( (std::is_same<I,TY>::value
-                             ||std::is_base_of<I,TY>::value)
+              static_assert ( meta::is_Subclass<TY,I>()
                              && sizeof(TY) <= siz,
                              "ElementHolder buffer to small");
               

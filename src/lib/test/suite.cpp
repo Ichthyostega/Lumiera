@@ -151,7 +151,7 @@ namespace test {
     TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
     
     // Seed random number generator
-    std::srand (std::time (NULL));
+    std::srand (std::time (nullptr));
     
     if (!testcases.getGroup(groupID))
       throw lumiera::error::Invalid ("empty testsuite");

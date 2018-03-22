@@ -26601,8 +26601,7 @@
       Bei <i>diesem</i>&#160;Wunsch-Profil bleibt nur eine Variante von <b>L&#246;sung-2</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26612,8 +26611,7 @@
       ...denn nur eine dynamische Laufzeit-Factory erm&#246;glicht, <i>jederzeit</i>&#160; den Konstruktionsmodus zu wechseln
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1521159238935" ID="ID_1109622706" MODIFIED="1521159663752" TEXT="Ein Instanz-Pointer ist zwingend notwendig und auch besser">
@@ -26658,8 +26656,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521159870784" ID="ID_1588722588" MODIFIED="1521160019955" TEXT="der Zugang zur DependencyFactory ist stets ein virtueller Funktionsaufruf">
 <richcontent TYPE="NOTE"><html>
@@ -26677,8 +26674,7 @@
       Freiheit der dynamischen Laufzeit-Konfiguration verlieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521160020971" ID="ID_1097297428" MODIFIED="1521160553255" TEXT="Deshalb sollte die Factory konventionell implementiert werden, nicht als Lambda">
 <richcontent TYPE="NOTE"><html>
@@ -26693,8 +26689,7 @@
       und die konventionelle L&#246;sung hat demgegen&#252;ber den Vorteil, da&#223; sie Struktur und Kontrakt explizit macht.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521160107759" ID="ID_669924852" MODIFIED="1521239034598" TEXT="Das Konsistenz-Problem ist in Wirklichkeit ein Architekturproblem">
 <richcontent TYPE="NOTE"><html>
@@ -26723,8 +26718,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a9c1bb" DESTINATION="ID_669924852" ENDARROW="Default" ENDINCLINATION="795;125;" ID="Arrow_ID_949036001" SOURCE="ID_1505788760" STARTARROW="None" STARTINCLINATION="779;51;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -26755,8 +26749,7 @@
       <i>scheidet</i>&#160;f&#252;r unser Nutzungsmuster aus
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26772,8 +26765,7 @@
       wieder auf NULL zur&#252;cksetzen zu k&#246;nnen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -26836,8 +26828,7 @@
       wenn die DependInject-Instanz stirbt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1521208943105" ID="ID_295121984" MODIFIED="1521335440371" TEXT="Ownership an &#xfc;bergebener Service-Impl &#xfc;bernehmen">
@@ -26858,8 +26849,7 @@
       sie werden ja sofort ausgewertet, da die Service-Instanz unmittelbar gebaut wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node COLOR="#338800" CREATED="1521688321599" ID="ID_764253251" MODIFIED="1521688339230" TEXT="stattdessen: ctor-Argumente forwarden">
@@ -26908,7 +26898,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1521213011289" ID="ID_1360216253" MODIFIED="1521213015444" TEXT="Vereinheitlichung">
+<node CREATED="1521213011289" FOLDED="true" ID="ID_1360216253" MODIFIED="1521751375990" TEXT="Vereinheitlichung">
+<icon BUILTIN="idea"/>
 <node CREATED="1521213017168" ID="ID_1734833663" MODIFIED="1521213021084" TEXT="alle Varianten">
 <node CREATED="1521213036670" ID="ID_1288760048" MODIFIED="1521416387077" TEXT="sind move-only">
 <icon BUILTIN="button_ok"/>
@@ -26928,8 +26919,7 @@
       <b>aber</b>&#160;Lebenszyklus ist an die Factory gebunden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521236997978" ID="ID_937624268" MODIFIED="1521237012251" TEXT="...und im Fall Singleton lebt die Factory l&#xe4;nger"/>
 </node>
@@ -27017,8 +27007,7 @@
       Har Har Har! Selber schuld wer sowas macht.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -27085,8 +27074,7 @@
       statische Storage ist <i>irgendwie cool</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1521324275919" ID="ID_1710451095" MODIFIED="1521418281285" TEXT="sehe aber auch keinen wirklichen Vorteil">
@@ -27111,8 +27099,7 @@
       selbst wenn die dynamische Konfiguration so angelegt ist, da&#223; die Storage nie ben&#246;tigt wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1521324883035" ID="ID_1438637057" MODIFIED="1521418281285" TEXT="Heap-Allokation k&#xf6;nnte insgesamt einfacher sein">
 <icon BUILTIN="yes"/>
@@ -27143,8 +27130,7 @@
       ...aber dann eben nicht mehr <i>elegant.</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521303905491" ID="ID_1749674332" MODIFIED="1521418281286" TEXT="Fazit: explizit ist besser">
 <icon BUILTIN="yes"/>
@@ -27196,8 +27182,7 @@
       In Zukunft k&#246;nnten Compiler/Linker noch &quot;schlauer&quot; werden...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1521386182598" ID="ID_1671815821" MODIFIED="1521418281286" TEXT="ist undurchsichtig">
@@ -27244,8 +27229,8 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1521696315169" ID="ID_914761003" MODIFIED="1521696326988" TEXT="ob das wohl geht...."/>
 <node CREATED="1521696477035" ID="ID_1232450528" MODIFIED="1521696510682" TEXT="Verdammter Mist! Wird die Closure nun kopiert oder geMOVEd?"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1521696673440" ID="ID_1408713510" MODIFIED="1521696682160" TEXT="compile-time Checks mal verifizieren">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1521696673440" ID="ID_1408713510" MODIFIED="1521751343055" TEXT="compile-time Checks mal verifizieren">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1521696334383" ID="ID_1627167666" MODIFIED="1521696684626" TEXT="gef&#xe4;llt mir nicht wirklich">
 <richcontent TYPE="NOTE"><html>
@@ -27272,8 +27257,7 @@
       konstruieren wollen k&#246;nnte, und es ist von der Implementierung her &quot;quasi geschenkt&quot;.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -27365,8 +27349,7 @@
       und heute w&#252;rde ich den Code <i>so</i>&#160;nicht mehr schreiben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>

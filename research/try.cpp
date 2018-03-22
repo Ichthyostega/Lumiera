@@ -70,7 +70,12 @@ typedef unsigned int uint;
 int
 main (int, char**)
   {
+    std::srand(std::time(nullptr));
     
+//  DependInject<long>::useSingleton ([&] { return "long{rand() % 100}"; });
+//  DependInject<long>::Local<std::string> dummy ([&]{ return new long{rand() % 100}; });
+    
+    cout << "rrrrrr.."<< Depend<long>{}() <<endl;
     
     cout <<  "\n.gulp.\n";
     

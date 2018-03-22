@@ -97,16 +97,8 @@ namespace lib {
       static void
       useSingleton(FUN&& ctor)
         {
-          using lib::meta::_Fun;
-          using lib::meta::Strip;
-          
-          static_assert (_Fun<FUN>::value, "Need a Lambda or Function object to create a heap allocated instance");
-          
-          using Ret = typename _Fun<FUN>::Ret;
-          using Sub = typename Strip<Ret>::TypePlain;
-          
+          using Sub = typename SubclassFactory<FUN>::Sub;
           __assert_compatible<Sub>();
-          static_assert (std::is_pointer<Ret>::value, "Function must yield a pointer to a heap allocated instance");
           
           static InstanceHolder<Sub> singleton;
           installFactory ([ctor]()
@@ -199,6 +191,8 @@ namespace lib {
           Local (FUN&& buildInstance)
             {
               __assert_compatible<MOC>();
+              __assert_compatible<typename SubclassFactory<FUN>::Sub>();
+              
               temporarilyInstallAlternateFactory (origInstance_, origFactory_
                                                  ,[=]()
                                                      {
@@ -249,9 +243,23 @@ namespace lib {
       static void
       __assert_compatible()
         {
-          static_assert (std::is_base_of<SRV,SUB>::value,
-                         "Installed implementation class must be compatible to the interface.");
+          static_assert (meta::is_Subclass<SUB,SRV>()
+                        ,"Installed implementation class must be compatible to the interface.");
         }
+      
+      template<typename FUN>
+      struct SubclassFactory
+        {
+          static_assert (meta::_Fun<FUN>(),
+                         "Need a Lambda or Function object to create a heap allocated instance");
+          
+          using Res = typename meta::_Fun<FUN>::Ret;
+          using Sub = typename meta::Strip<Res>::TypePlain;
+          
+          static_assert (std::is_pointer<Res>::value,
+                         "Function must yield a pointer to a heap allocated instance");
+        };
+      
       
       static void
       installFactory (Factory&& otherFac)
