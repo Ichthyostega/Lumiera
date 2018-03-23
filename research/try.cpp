@@ -53,6 +53,7 @@ typedef unsigned int uint;
 #include "lib/util.hpp"
 
 
+
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 #define SHOW_EXPR(_XX_) \
@@ -64,19 +65,111 @@ typedef unsigned int uint;
   using lib::Depend;
   using lib::DependInject;
   
+//////////////////////////////////////////////////////////////////////////Microbenchmark
+#include "backend/thread-wrapper.hpp"
+#include <chrono>
+#include <vector>
   
+  namespace {
+    constexpr size_t NUM_MEASUREMENTS = 10000000;
+    constexpr double SCALE = 1e6;                  // Results are in µ sec
+  }
+  
+  
+  /** perform a multithreaded microbenchmark.
+   * This function fires up a number of threads
+   * and invokes the given test subject repeatedly.
+   * @tparam number of threads to run in parallel
+   * @param subject `void(void)` function to be timed
+   * @return the averaged invocation time in _mircroseconds_
+   * @remarks - the subject function will be _copied_ into each thread
+   *          - so `nThreads` copies of this function will run in parallel
+   *          - consider locking if this function accesses a shared closure.
+   *          - if you pass a lambda, it is eligible for inlining followed
+   *            by loop optimisation -- be sure to include some action, like
+   *            e.g. accessing a volatile variable, to prevent the compiler
+   *            from optimising it away entirely.
+   */
+  template<size_t nThreads, class FUN>
+  double
+  microbenchmark(FUN const& subject)
+  {
+    using backend::ThreadJoinable;
+    using std::chrono::system_clock;
+    
+    using Dur = std::chrono::duration<double>;
+    
+    struct Thread
+      : ThreadJoinable
+      {
+        Thread(FUN const& subject)
+          : ThreadJoinable("Micro-Benchmark"
+                          ,[subject, this]()       // local copy of the test-subject-Functor
+                                    {
+                                      syncPoint(); // block until all threads are ready
+                                      auto start = system_clock::now();
+                                      for (size_t i=0; i < NUM_MEASUREMENTS; ++i)
+                                        subject();
+                                      duration = system_clock::now () - start;
+                                    })
+          { }
+        /** measured time within thread */
+        Dur duration{};
+      };
+    
+    std::vector<Thread> threads;
+    threads.reserve(nThreads);
+    for (size_t n=0; n<nThreads; ++n)              // create test threads
+      threads.emplace_back (subject);
+
+    for (auto& thread : threads)
+      thread.sync();                               // start timing measurement
+    
+    Dur sumDuration{0.0};
+    for (auto& thread : threads)
+      {
+        thread.join();                             // block on measurement end
+        sumDuration += thread.duration;
+      }
+    
+    return sumDuration.count() / (nThreads * NUM_MEASUREMENTS) * SCALE;
+  }
+//////////////////////////////////////////////////////////////////////////(End)Microbenchmark
+
+#include "include/lifecycle.h"
+#include "lib/test/testoption.hpp"
+#include "lib/test/suite.hpp"
+
+using lumiera::LifecycleHook;
+using lumiera::ON_GLOBAL_INIT;
+using lumiera::ON_GLOBAL_SHUTDOWN;
+
 ///////////////////////////////////////////////////////Usage
 
 int
 main (int, char**)
   {
     std::srand(std::time(nullptr));
+    LifecycleHook::trigger (ON_GLOBAL_INIT);
     
 //  DependInject<long>::useSingleton ([&] { return "long{rand() % 100}"; });
 //  DependInject<long>::Local<std::string> dummy ([&]{ return new long{rand() % 100}; });
     
-    cout << "rrrrrr.."<< Depend<long>{}() <<endl;
+    volatile int blackHole{0};
     
+    cout << "pling..."<<endl;
+    cout << "plong..."<< microbenchmark<8> ([&]()
+                                              {
+                                                //volatile int dummy =0;
+                                                //dummy == 0;
+                                                //++dummy;
+                                                blackHole == 0;
+                                                //++blackHole;
+                                              })
+                      << endl;
+    cout << "........"<< blackHole/8<<endl;
+    
+    LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
     cout <<  "\n.gulp.\n";
     
     return 0;

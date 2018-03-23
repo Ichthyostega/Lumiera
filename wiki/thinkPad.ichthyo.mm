@@ -26468,6 +26468,148 @@
 </node>
 </node>
 </node>
+<node CREATED="1521843763852" ID="ID_1208981523" MODIFIED="1521843769399" TEXT="Microbenchmarks">
+<node CREATED="1521843772026" ID="ID_1334641753" MODIFIED="1521843776448" TEXT="selber schreiben">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1521843783161" ID="ID_1151208744" MODIFIED="1521843819176" TEXT="mehrere Threads unterst&#xfc;tzen"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521843822020" ID="ID_1862348515" MODIFIED="1521844094107" TEXT="Library-Funktion">
+<icon BUILTIN="pencil"/>
+<node CREATED="1521843838865" ID="ID_1649689781" MODIFIED="1521843944839" TEXT="bekommt eigentlichen Testcode als Lambda">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1521843849712" ID="ID_579604510" MODIFIED="1521843940495" STYLE="fork" TEXT="verwendet std::chrono::duration&lt;double&gt;">
+<icon BUILTIN="info"/>
+<node CREATED="1521843873173" ID="ID_952548619" MODIFIED="1521843938941" TEXT="mi&#xdf;t micro-Ticks"/>
+<node CREATED="1521843880155" ID="ID_1245721460" MODIFIED="1521843938941" TEXT="Ergebnis f&#xe4;llt in Sekunden"/>
+</node>
+<node CREATED="1521843959433" ID="ID_133306105" MODIFIED="1521844083428" TEXT="verwendet Lumiera&apos;s Threading-Framework">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man h&#228;tte genausogut std::future und std::async verwenden k&#246;nnen.
+    </p>
+    <p>
+      Vorteil von unseren Framework:
+    </p>
+    <ul>
+      <li>
+        wir haben es schon, und wir werden es verwenden, wegen den Thradpools
+      </li>
+      <li>
+        man baut ein Objekt f&#252;r einen Thread. Das ist explizit und sauber
+      </li>
+      <li>
+        wir haben eine eingebaute Barriere und k&#246;nnen unseren Objekt-Monitor nutzen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1521843907144" ID="ID_848033940" MODIFIED="1521843935500" TEXT="Ergebnis normieren auf einzelnen Aufruf">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521843926501" ID="ID_984510403" MODIFIED="1521843934725" TEXT="Ergebnis in Mirkosekunden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1521844261439" ID="ID_1538240853" MODIFIED="1521844284174" TEXT="Korrektheit der Zeitangaben verifiziert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      habe einen usleep(1000) getimed
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1521844101045" ID="ID_1065212487" MODIFIED="1521844108488" TEXT="Erfahrungen">
+<node CREATED="1521844121043" ID="ID_1041692639" MODIFIED="1521844128201" TEXT="Optimizer">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1521844504174" ID="ID_318676926" MODIFIED="1521844520954" TEXT="Optimierung per -O3 ist sehr deutlich me&#xdf;bar">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1521844130561" ID="ID_1541346658" MODIFIED="1521844139739" TEXT="&#xfc;bergebene Lambdas werden tats&#xe4;chlich ge-inlined"/>
+<node CREATED="1521844157909" ID="ID_1833250915" MODIFIED="1521844656552" TEXT="wenn wir in der Loop messen, messen wir die Aufrufe von chrono::system_clock mit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      daher messen wir die Loop als Ganzes.
+    </p>
+    <p>
+      Es gibt daher keine M&#246;glichkeit, den Loop-Overhead selber zu messen.
+    </p>
+    <p>
+      Er sollte sich aber bei einer Wiederholung im Millionenbereich gut amortisieren
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Au&#223;erdem ist ja auch noch der Aufruf des Funktors mit im Spiel, wenngleich der auch typischerweise geinlined wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1521844236539" ID="ID_176799135" MODIFIED="1521844248411" TEXT="tats&#xe4;chlich verifiziert">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1521844204015" ID="ID_188310893" MODIFIED="1521844251027" TEXT="Gr&#xf6;&#xdf;enordnung 10 ns">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1521844141248" ID="ID_328319936" MODIFIED="1521844156769" TEXT="wenn man nicht aufpa&#xdf;t, wird die ganze Loop wegoptimiert"/>
+<node CREATED="1521844306601" ID="ID_126627605" MODIFIED="1521844338425" TEXT="Beste L&#xf6;sung">
+<node CREATED="1521844339269" ID="ID_1885600326" MODIFIED="1521844361265">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      volatile Variable <i>au&#223;en,</i>&#160;im Aufrufkontext
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521844366944" ID="ID_1258575129" MODIFIED="1521844373484" TEXT="Zugriff via Closure und Referenz"/>
+<node CREATED="1521844374503" ID="ID_1548234021" MODIFIED="1521844386090" TEXT="diese Variable mit Konstante vergleichen"/>
+<node CREATED="1521844391605" ID="ID_1603234514" MODIFIED="1521844411462" TEXT="Lokale volatile Variable: Initialisierung kostet +5ns"/>
+<node CREATED="1521844412602" ID="ID_1758142813" MODIFIED="1521844418949" TEXT="Inkrementieren kostet +10ns"/>
+<node CREATED="1521844419657" ID="ID_1892679887" MODIFIED="1521844482141" TEXT="konkurrentes Inkrementieren auf globale Volatile: Faktor 100 !!!!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was sehr sch&#246;n beweist,
+    </p>
+    <p>
+      da&#223; x86_64 tats&#228;chlich cache-koh&#228;rent ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1482524641484" ID="ID_1651495185" MODIFIED="1518487921096" TEXT="Architektur"/>
 <node CREATED="1482524498822" ID="ID_431883229" MODIFIED="1518487921096" TEXT="Datenstrom"/>

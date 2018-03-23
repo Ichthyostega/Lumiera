@@ -108,7 +108,6 @@ namespace backend {
    * If this doesn't happen, you'll block forever.
    */
   class Thread
-    : boost::noncopyable
     {
       
     protected:
@@ -179,7 +178,14 @@ namespace backend {
       
       LumieraThread thread_;
       
+      // Threads can be default constructed (inactive) and moved
       Thread() : thread_(0) { }
+      Thread (Thread &&)                = default;
+      
+      // Threads must not be copied and assigned
+      Thread (Thread const&)            = delete;
+      Thread& operator= (Thread &&)     = delete;
+      Thread& operator= (Thread const&) = delete;
       
       
     public:
