@@ -26914,8 +26914,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722149761" ID="ID_39179906" MODIFIED="1521160728142" TEXT="neue Implementierung" VGAP="6">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160662691" ID="ID_1475127406" MODIFIED="1521238630164" TEXT="Design Syntax und Nutzungsmuster">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521160662691" ID="ID_1475127406" MODIFIED="1521885033360" TEXT="Design Syntax und Nutzungsmuster">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1521161117092" ID="ID_672223000" MODIFIED="1521161119935" TEXT="Syntax">
 <node CREATED="1521161120859" ID="ID_1236102866" MODIFIED="1521161279265" TEXT="Depend&lt;Bla&gt; instance"/>
 <node CREATED="1521161130050" ID="ID_1706757665" MODIFIED="1521161170232" TEXT="instance().doIt()"/>
@@ -26926,7 +26926,7 @@
 </node>
 <node CREATED="1521207954859" ID="ID_631339002" MODIFIED="1521418307590" TEXT="Analyse">
 <icon BUILTIN="idea"/>
-<node CREATED="1521208242178" ID="ID_539882602" MODIFIED="1521696589693" TEXT="erforderliche Mechanismen">
+<node CREATED="1521208242178" FOLDED="true" ID="ID_539882602" MODIFIED="1521885037640" TEXT="erforderliche Mechanismen">
 <icon BUILTIN="info"/>
 <node COLOR="#338800" CREATED="1521208254376" ID="ID_1933406851" MODIFIED="1521696578693" TEXT="Singleton">
 <icon BUILTIN="button_ok"/>
@@ -27347,8 +27347,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521791648429" TEXT="Implementierung ausf&#xfc;hren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521885000400" TEXT="Implementierung ausf&#xfc;hren">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1521418559868" ID="ID_592269917" MODIFIED="1521688403021" TEXT="Depend&lt;SRV&gt; Front-End">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -27404,10 +27404,10 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433938944" ID="ID_546086969" MODIFIED="1521433946432" TEXT="double-checked-locking">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433948534" ID="ID_176845865" MODIFIED="1521433954006" TEXT="umstellen auf atomics">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521433938944" ID="ID_546086969" MODIFIED="1521884986940" TEXT="double-checked-locking">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521433948534" ID="ID_176845865" MODIFIED="1521882845033" TEXT="umstellen auf atomics">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1521779239745" ID="ID_1772115642" MODIFIED="1521783134468">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -27437,7 +27437,9 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1521788423421" ID="ID_992901826" MODIFIED="1521788427481" TEXT="use-cases">
+<node CREATED="1521788423421" FOLDED="true" ID="ID_992901826" MODIFIED="1521882883828" TEXT="use-cases">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
 <node CREATED="1521788428588" ID="ID_1454492096" MODIFIED="1521788437479" TEXT="lazy init">
 <node CREATED="1521788443562" ID="ID_699722245" MODIFIED="1521788611886" TEXT="acquire-release ist &quot;ausreichend&quot;">
 <richcontent TYPE="NOTE"><html>
@@ -27660,8 +27662,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521434009142" ID="ID_117782655" MODIFIED="1521434015486" TEXT="Performance-Messung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521434009142" ID="ID_117782655" MODIFIED="1521884984027" TEXT="Performance-Messung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1521791686994" ID="ID_1750734364" MODIFIED="1521791753975" TEXT="Erwartetes Ergebnis: wird nur geringf&#xfc;gig langsamer">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -27675,22 +27677,23 @@
 </html>
 </richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521866206751" ID="ID_702466096" MODIFIED="1521866223424" TEXT="Bezugspunkt: Zugriff auf bereits existierenden Service">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521866206751" ID="ID_702466096" MODIFIED="1521882798384" TEXT="Bezugspunkt: Zugriff auf bereits existierenden Service">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1521791785677" ID="ID_565916879" MODIFIED="1521791789208" TEXT="drei F&#xe4;lle">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791790172" ID="ID_995415475" MODIFIED="1521791831096" TEXT="Mutex f&#xfc;r jeden Zugriff">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1521791785677" ID="ID_565916879" MODIFIED="1521882832691" TEXT="drei F&#xe4;lle">
+<icon BUILTIN="forward"/>
+<node COLOR="#338800" CREATED="1521791790172" ID="ID_995415475" MODIFIED="1521882801672" TEXT="Mutex f&#xfc;r jeden Zugriff">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791805930" ID="ID_1036499157" MODIFIED="1521791832702" TEXT="L&#xf6;sung ohne Atomics (inkorrekt)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521791805930" ID="ID_1036499157" MODIFIED="1521882803656" TEXT="L&#xf6;sung ohne Atomics (inkorrekt)">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791823055" ID="ID_1820322207" MODIFIED="1521791833719" TEXT="L&#xf6;sung mit Atomics">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521791823055" ID="ID_1820322207" MODIFIED="1521882806238" TEXT="L&#xf6;sung mit Atomics">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791837014" ID="ID_1625592637" MODIFIED="1521791845516" TEXT="Messwerte in Prozent umrechnen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521791837014" ID="ID_1625592637" MODIFIED="1521882823105" TEXT="Messwerte als Verh&#xe4;ltniszahl angeben">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -27699,11 +27702,14 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790595841" ID="ID_1874367277" MODIFIED="1521790983987" TEXT="Doku-Text im TiddlyWiki">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790613318" ID="ID_506011313" MODIFIED="1521790986067" TEXT="Diskussion der Locking / Atomic-Problematik">
-<icon BUILTIN="flag-yellow"/>
-</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790681557" ID="ID_1346970835" MODIFIED="1521790986851" TEXT="die generelle Haltung bez&#xfc;gl. Performance / Korrektheit">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790613318" ID="ID_506011313" MODIFIED="1521885094991" TEXT="Diskussion der Locking / Atomic-Problematik">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1521885096858" ID="ID_1403195900" MODIFIED="1521885106977" TEXT="Benchmark-Zahlen dokumentieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790709017" ID="ID_1263887689" MODIFIED="1521790982924" TEXT="Doxygen">

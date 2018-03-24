@@ -106,7 +106,7 @@ main (int, char**)
                                  {
                                    0 == mystery().readMe();
                                  }
-                              ,1000000000)
+                              ,5000000000)
          << endl;
     
     LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
