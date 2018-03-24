@@ -61,9 +61,9 @@
 #include "include/logging.h"
 #include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-local-key.hpp"
+#include "lib/nocopy.hpp"
 
 #include <unordered_map>
-#include <boost/noncopyable.hpp>
 
 
 namespace proc {
@@ -540,7 +540,7 @@ namespace engine {
    * when \em locking or \em freeing the corresponding buffer.
    */
   class BufferMetadata
-    : boost::noncopyable
+    : util::NonCopyable
     {
       Literal id_;
       HashVal family_;

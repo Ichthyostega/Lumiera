@@ -60,7 +60,6 @@
 #include "include/logging.h"
 
 #include <boost/functional/hash.hpp>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <functional>
 #include <memory>
@@ -72,7 +71,6 @@ namespace mobject {
 namespace session {
   
   using boost::hash;
-  using boost::noncopyable;
   using std::shared_ptr;
   using std::unordered_map;
   using std::unordered_multimap;

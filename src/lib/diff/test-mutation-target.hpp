@@ -53,9 +53,9 @@
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
 #include "lib/test/event-log.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <utility>
 #include <string>
 #include <vector>
@@ -193,7 +193,7 @@ namespace diff{
    * @see TreeMutatorBinding_test::mutateDummy()
    */
   class TestMutationTarget
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using VecG = std::vector<GenNode>;
       

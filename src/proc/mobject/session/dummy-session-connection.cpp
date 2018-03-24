@@ -40,7 +40,6 @@
 //#include "include/logging.h"
 #include "proc/mobject/session/dummy-session-connection.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <string>
 #include <map>
 

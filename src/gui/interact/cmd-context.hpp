@@ -55,13 +55,13 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 //#include "gui/ctrl/bus-term.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/hash-indexed.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -81,7 +81,7 @@ namespace interact {
    * @todo write type comment...
    */
   class CmdContext
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

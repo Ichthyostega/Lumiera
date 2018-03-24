@@ -39,11 +39,9 @@
 #include "lib/depend.hpp"
 #include "proc/play/output-manager.hpp"
 #include "common/subsys.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/sync.hpp"
 
-#include <boost/noncopyable.hpp>
-//#include <string>
-//#include <vector>
 #include <memory>
 
 
@@ -69,7 +67,7 @@ namespace play {
    * @todo write Type comment
    */
   class OutputDirector
-    : boost::noncopyable
+    : util::NonCopyable
     , public lib::Sync<>
     {
       typedef lumiera::Subsys::SigTerm SigTerm;

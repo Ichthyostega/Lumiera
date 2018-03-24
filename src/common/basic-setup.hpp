@@ -55,10 +55,10 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <boost/program_options.hpp>
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -95,7 +95,7 @@ namespace lumiera {
    * @see AppState 
    */
   class BasicSetup
-    : boost::noncopyable
+    : util::NonCopyable
     {
         opt::options_description syntax;
         opt::variables_map settings;

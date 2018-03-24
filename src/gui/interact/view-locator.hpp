@@ -59,8 +59,8 @@
 #include "gui/gtk-base.hpp"
 #include "gui/interact/view-spec-dsl.hpp"
 #include "gui/id-scheme.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 //#include <string>
 #include <memory>
@@ -87,7 +87,7 @@ namespace interact {
    * @todo initial draft as of 9/2017 -- actual implementation need to be filled in
    */
   class ViewLocator
-    : boost::noncopyable
+    : util::NonCopyable
     {
       ctrl::GlobalCtx& globals_;
       unique_ptr<UILocationSolver> locResolver_;

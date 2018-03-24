@@ -61,7 +61,7 @@ namespace gui {
    * @see gui::widget::TimelineWidget
    */
   class TimelineLayoutHelper
-    : public boost::noncopyable
+    : util::NonCopyable
     {
     public:
       /** Definition of the layout track tree type.*/

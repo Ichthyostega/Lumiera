@@ -38,6 +38,7 @@
 
 
 #include "proc/control/stypemanager.hpp"
+#include "lib/nocopy.hpp"
 //#include "common/query.hpp"
 //#include "lib/util.hpp"
 //#include "lib/p.hpp"
@@ -45,7 +46,6 @@
 //#include <set>
 //#include <vector>
 //#include <memory>
-#include <boost/noncopyable.hpp>
 
 
 namespace proc {
@@ -72,7 +72,7 @@ namespace control {
    * exact behaviour has to be defined.
    */
   class STypeManager::Registry
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       

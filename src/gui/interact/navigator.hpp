@@ -40,8 +40,8 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -66,7 +66,7 @@ namespace interact {
    */
   class Navigator
     : public LocationQuery
-    , boost::noncopyable
+    , util::NonCopyable
     {
       SpotLocator& spotLocator_;
       ViewLocator& viewLocator_;

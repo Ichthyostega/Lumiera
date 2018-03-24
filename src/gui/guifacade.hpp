@@ -39,12 +39,12 @@
 
 
 #include "common/subsys.hpp"
+#include "lib/nocopy.hpp"
 
 extern "C" {
 #include "common/interface.h"
 }
 
-#include <boost/noncopyable.hpp>
 
 
 namespace gui {
@@ -77,7 +77,7 @@ namespace gui {
    * 
    */
   class GuiFacade
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       

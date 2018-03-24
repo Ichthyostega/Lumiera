@@ -50,8 +50,8 @@
 
 #include "lib/sync.hpp"
 #include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <unordered_set>
 #include <utility>
 #include <string>
@@ -72,7 +72,7 @@ namespace lib {
    */
   class SymbolTable
     : public Sync<>
-    , boost::noncopyable
+    , util::NonCopyable
     {
       std::unordered_set<string> table_;
       

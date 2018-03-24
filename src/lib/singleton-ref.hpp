@@ -42,8 +42,7 @@
 
 
 #include "lib/error.hpp"
-
-#include <boost/noncopyable.hpp>
+#include "lib/nocopy.hpp"
 
 
 namespace lib {
@@ -56,7 +55,7 @@ namespace lib {
      */
     template<class TY>
     class AccessAsReference
-      : boost::noncopyable
+      : util::NonCopyable
       {
         TY* obj_;
         
@@ -106,7 +105,7 @@ namespace lib {
    * @param Accessor how to implement the static instance access
    */
   template< class TY
-          , class B                       = boost::noncopyable
+          , class B                       = util::NonCopyable
           , template<class> class Access  = singleton::AccessAsReference
           >
   struct SingletonRef

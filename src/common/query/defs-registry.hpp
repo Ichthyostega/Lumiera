@@ -55,11 +55,11 @@
 #include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
+#include "lib/nocopy.hpp"
 
 #include <set>
 #include <vector>
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 
 namespace lumiera{
@@ -193,7 +193,7 @@ namespace query  {
      * exact behaviour has to be defined.
      */
     class DefsRegistry
-      : boost::noncopyable
+      : util::NonCopyable
       {
         Table table_;
         

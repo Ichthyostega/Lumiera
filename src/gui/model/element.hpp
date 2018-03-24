@@ -43,11 +43,11 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
 //#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 

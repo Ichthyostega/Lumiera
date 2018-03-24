@@ -30,7 +30,6 @@
 #include "proc/mobject/builder/toolfactory.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace proc {

@@ -49,7 +49,6 @@
 //#include "lib/iter-source.hpp"
 //#include "lib/sync.hpp"
 
-//#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
 //#include <memory>

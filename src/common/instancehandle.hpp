@@ -43,6 +43,7 @@
 
 #include "include/logging.h"
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/interfaceproxy.hpp"
 
 extern "C" {
@@ -50,7 +51,6 @@ extern "C" {
 #include "common/interfaceregistry.h"
 }
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -118,7 +118,7 @@ namespace lumiera {
      */
     template<class I, class FA>
     struct Link
-      : boost::noncopyable
+      : util::NonCopyable
       {
         typedef InstanceHandle<I,FA> IH;
         
@@ -140,7 +140,7 @@ namespace lumiera {
      */
     template<class I>
     struct Link<I,I>
-      : boost::noncopyable
+      : util::NonCopyable
       {
         typedef InstanceHandle<I,I> IH;
         
@@ -174,7 +174,7 @@ namespace lumiera {
           , class FA = I    ///< facade interface type to be used by clients
           >
   class InstanceHandle
-    : private boost::noncopyable
+    : util::NonCopyable
     { 
       LumieraInterface desc_;
       I*                instance_;

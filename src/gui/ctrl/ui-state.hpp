@@ -55,8 +55,8 @@
 #define GUI__H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -82,7 +82,7 @@ namespace ctrl {
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
   class UiState
-    : boost::noncopyable
+    : util::NonCopyable
     {
       StateManager& stateManager_;
       interact::FocusTracker& tracker_;

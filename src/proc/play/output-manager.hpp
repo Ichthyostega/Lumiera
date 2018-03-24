@@ -32,10 +32,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "proc/play/output-slot.hpp"
 #include "proc/mobject/model-port.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
 #include <memory>
@@ -66,7 +66,7 @@ namespace play {
    * @todo write Type comment
    */
   class OutputManager
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       virtual ~OutputManager() { }

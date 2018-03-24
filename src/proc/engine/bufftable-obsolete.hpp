@@ -32,10 +32,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "proc/engine/channel-descriptor.hpp"
 #include "proc/engine/procnode.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 #include <utility>
 
@@ -157,7 +157,7 @@ namespace engine {
    */
   class BuffTableChunk
     : public BuffTable,
-      boost::noncopyable
+      util::NonCopyable
     {
       const uint siz_;
       BuffTable::Chunk tab_;

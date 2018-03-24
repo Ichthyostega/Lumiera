@@ -35,9 +35,7 @@
 #include "lib/allocation-cluster.hpp"
 #include "proc/engine/nodewiring-def.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <memory>
-//#include <cstddef>
 
 
 

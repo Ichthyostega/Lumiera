@@ -57,7 +57,7 @@ namespace gui {
   
   /** load and start the GUI as a plugin */
   struct GuiRunner
-    : boost::noncopyable
+    : util::NonCopyable
     {
       typedef InstanceHandle<LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1)> GuiHandle;
       

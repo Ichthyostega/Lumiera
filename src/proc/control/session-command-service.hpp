@@ -48,9 +48,9 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 
@@ -79,7 +79,7 @@ namespace control {
    */
   class SessionCommandService
     : public SessionCommand
-    , boost::noncopyable
+    , util::NonCopyable
     {
       CommandDispatch& dispatcher_;
       CommandInstanceManager instanceManager_;

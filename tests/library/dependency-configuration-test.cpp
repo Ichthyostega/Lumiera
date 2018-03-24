@@ -37,8 +37,6 @@
 #include "lib/depend2.hpp"
 #include "lib/depend-inject.hpp"
 
-#include <boost/noncopyable.hpp>
-
 
 
 namespace lib {
@@ -50,7 +48,7 @@ namespace test{
   namespace {
     
     struct Dum
-      : boost::noncopyable
+      : util::NonCopyable
       {
         virtual ~Dum() { }
         virtual int probe()  =0;

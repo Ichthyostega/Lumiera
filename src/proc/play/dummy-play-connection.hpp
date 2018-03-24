@@ -90,13 +90,11 @@
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/pipe.hpp"
 #include "common/query.hpp"
-#include "lib/util.hpp"
-//#include "lib/symbol.hpp"
 
 #include "lib/iter-source.hpp"
-//
-#include <boost/noncopyable.hpp>
-//#include <string>
+#include "lib/nocopy.hpp"
+#include "lib/util.hpp"
+
 #include <vector>
 
 
@@ -224,7 +222,7 @@ namespace play {
    */
   template<class DEF>
   class DummyPlayConnection
-    : boost::noncopyable
+    : util::NonCopyable
     {
       SimulatedBuilderContext mockBuilder_;
       

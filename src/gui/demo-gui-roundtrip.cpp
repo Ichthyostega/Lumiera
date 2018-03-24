@@ -43,8 +43,8 @@
 #include "lib/depend.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/ctrl/ui-manager.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -77,7 +77,7 @@ namespace gui {
    * @see CallQueue_test
    */
   class DemoGuiRoundtrip
-    : boost::noncopyable
+    : util::NonCopyable
     {
       string nothing_;
 

@@ -32,7 +32,6 @@
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 using lib::Symbol;

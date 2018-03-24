@@ -56,7 +56,6 @@
 //#include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
 
-//#include <boost/noncopyable.hpp>
 //#include <cairomm/cairomm.h>
 //#include <string>
 #include <vector>

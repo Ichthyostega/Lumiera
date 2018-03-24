@@ -28,18 +28,15 @@
 
 #include "lib/error.hpp"
 #include "include/logging.h"
-//#include "lib/meta/function.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/util-foreach.hpp"
 
 #include "proc/engine/tracking-heap-block-provider.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <algorithm>
 #include <vector>
 
-//using util::for_each;
 using util::and_all;
 using std::vector;
 using lib::ScopedHolder;

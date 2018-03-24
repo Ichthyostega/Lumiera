@@ -45,7 +45,7 @@
  **   - full copy support
  **   - copy construction but no assignment
  **   - only move construction allowed
- **   - noncopyable type
+ **   - non-copyable type
  ** - we use type traits and a policy template to pick the correct implementation
  **   for a given data type. Any assignment or copy operations not supported by the
  **   target type will be replaced by an implementation which raises a runtime error

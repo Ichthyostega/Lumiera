@@ -30,7 +30,6 @@
 #include "proc/play/output-slot.hpp"
 #include "proc/play/output-slot-connection.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 
 

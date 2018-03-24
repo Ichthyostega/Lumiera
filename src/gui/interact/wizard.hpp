@@ -43,8 +43,8 @@
 #define GUI_INTERACT_WIZARD_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -69,7 +69,7 @@ namespace interact {
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
   class Wizard
-    : boost::noncopyable
+    : util::NonCopyable
     {
       ctrl::GlobalCtx& globalCtx_;
     

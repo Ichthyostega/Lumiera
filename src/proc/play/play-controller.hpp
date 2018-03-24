@@ -36,8 +36,8 @@
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 
 
@@ -52,7 +52,7 @@ namespace play {
    * Isn't lumiera::Play::Controller already sufficient?
    */
   class PlayController
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

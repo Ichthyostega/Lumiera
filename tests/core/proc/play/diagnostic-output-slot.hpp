@@ -32,6 +32,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "proc/play/output-slot.hpp"
 #include "proc/play/output-slot-connection.hpp"
@@ -47,7 +48,6 @@
 #include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
 #include <unordered_set>
@@ -97,7 +97,7 @@ namespace play {
    */
   class TrackingInMemoryBlockSequence
     : public OutputSlot::Connection
-    , boost::noncopyable
+    , util::NonCopyable
     {
       
       typedef std::unordered_set<FrameID> FrameTrackingInfo;
@@ -366,7 +366,7 @@ namespace play {
        */
       class OutputFramesLog
         : public lib::IterSource<const TestFrame>
-        , boost::noncopyable
+        , util::NonCopyable
         {
           TrackingInMemoryBlockSequence const& outSeq_;
           uint currentFrame_;

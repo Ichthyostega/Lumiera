@@ -43,8 +43,6 @@
 #include "proc/play/timings.hpp"
 #include "backend/engine/job.h"
 
-#include <boost/noncopyable.hpp>
-
 
 namespace proc {
 namespace engine {

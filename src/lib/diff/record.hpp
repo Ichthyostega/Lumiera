@@ -87,14 +87,13 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/itertools.hpp"
 #include "lib/format-util.hpp"        ///////////////////////////////TICKET #973 : investigate the impact of this inclusion on code size
 #include "lib/util.hpp"
 
-
-#include <boost/noncopyable.hpp>
 
 #include <algorithm>
 #include <utility>
@@ -399,7 +398,7 @@ namespace diff{
   
   template<typename VAL>
   class Record<VAL>::Mutator
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using Rec = Record<VAL>;
       

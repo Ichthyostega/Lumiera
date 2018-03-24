@@ -28,6 +28,7 @@
  ** 
  ** @todo care for unit test coverage
  ** @todo WIP-WIP. Maybe add facilities similar to boost::specific_ptr
+ ** @deprecated C++11 has a `thread_local` storage class...
  **/
 
 
@@ -36,8 +37,8 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <pthread.h>
 
 
@@ -54,7 +55,7 @@ namespace lib {
    */
   template<typename TAR>
   class ThreadLocalPtr
-    : boost::noncopyable
+    : util::NonCopyable
     {
       pthread_key_t key_;
       

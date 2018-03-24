@@ -40,8 +40,8 @@
 #include "lib/time/timevalue.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/clip.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 
@@ -141,7 +141,7 @@ namespace asset {
    * Factory specialised for creating Media Asset objects.
    */ 
   class MediaFactory 
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       typedef lib::P<Media> PType;

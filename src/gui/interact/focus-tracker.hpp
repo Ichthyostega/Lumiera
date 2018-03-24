@@ -55,8 +55,8 @@
 #define GUI_INTERACT_FOCUS_TRACKER_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -81,7 +81,7 @@ namespace interact {
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
   class FocusTracker
-    : boost::noncopyable
+    : util::NonCopyable
     {
       Navigator& navigator_;
       

@@ -386,6 +386,12 @@ namespace mobject {
     HashVal hash4query = _mapping::slot (query4pipe);
     if (not contains (hash4query))
       {
+        // need to resolve this query first
+        auto addEntry = [&](auto query)
+                          {
+                            table_[hash4query] = _mapping::resolveQuery (query);
+                          };
+        
         if (uint seqNr = _mapping::is_defaults_query_with_channel (query4pipe))
           {
             // treat the special case
@@ -396,11 +402,10 @@ namespace mobject {
             ENSURE (corresponding_sourcePipe);
             
             PId sourcePipeID = corresponding_sourcePipe->getID();
-            query4pipe = DEF::buildQuery (sourcePipeID, seqNr);
+            addEntry (DEF::buildQuery (sourcePipeID, seqNr));
           }
-        
-        // need to resolve this query first
-        table_[hash4query] = _mapping::resolveQuery (query4pipe);
+        else
+          addEntry (query4pipe);
       }
     
     ENSURE (this->contains (hash4query));

@@ -245,7 +245,7 @@ namespace lib {
        * to prepare and pre-fill a sequence
        */
       struct Builder
-        : util::no_copy_by_client
+        : util::Cloneable
         {
           Builder(IterQueue& initialElements)
             : queue_(initialElements)

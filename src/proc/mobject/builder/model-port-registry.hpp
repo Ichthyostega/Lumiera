@@ -78,7 +78,7 @@ namespace builder {
    * new model is complete and ready for use.
    */
   class ModelPortRegistry
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       typedef ID<Pipe>   PID;

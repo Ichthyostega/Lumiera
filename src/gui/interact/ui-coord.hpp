@@ -85,6 +85,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/path-array.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <cstring>
@@ -500,6 +501,7 @@ namespace interact {
   class LocationClause;
   
   class UICoord::Builder
+    : util::MoveOnly
     {
     protected:
       UICoord uic_;
@@ -509,10 +511,6 @@ namespace interact {
       Builder (ARGS&& ...args)      : uic_{std::forward<ARGS> (args)...} { }
       Builder (UICoord && anonRef)  : uic_{std::move(anonRef)} { }
       Builder (UICoord const& base) : uic_{base} { }
-      
-      Builder (Builder const&)            = delete;
-      Builder& operator= (Builder const&) = delete;
-      Builder& operator= (Builder &&)     = delete;
       
       /** builder instances created by UICoord */
       friend class UICoord;

@@ -47,8 +47,8 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/workspace/panel-manager.hpp"
 #include "lib/format-string.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -74,7 +74,7 @@ namespace ctrl {
   * user action events.
   */
   class Actions
-    : boost::noncopyable
+    : util::NonCopyable
     {
       GlobalCtx& globalCtx_;
       

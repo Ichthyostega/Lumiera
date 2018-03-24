@@ -54,7 +54,6 @@
 #include "include/interfaceproxy.hpp"
 #include "lib/handle.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 

@@ -34,8 +34,8 @@
 #define COMMON_SEARCHPATH_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
 #include <string>
@@ -74,7 +74,7 @@ namespace lib {
    * @note #next picks the current component and advances the iteration. 
    */
   class SearchPathSplitter
-    : boost::noncopyable
+    : util::NonCopyable
     {
       string pathSpec_;
       sregex_iterator pos_,

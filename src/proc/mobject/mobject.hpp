@@ -46,7 +46,6 @@
 #include "lib/p.hpp"
 #include "lib/time/timevalue.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
 #include <string>
 
@@ -79,7 +78,7 @@ namespace mobject {
    */
   class MObject 
     : public Buildable,
-      boost::noncopyable,
+      util::NonCopyable,
       boost::equality_comparable< MObject >
     {
     protected:

@@ -106,7 +106,7 @@ namespace engine {
    * backed by the Segmentation (i.e. the render nodes network).
    */
   class FrameSequencer
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

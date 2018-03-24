@@ -36,6 +36,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/depend2.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/sync-classlock.hpp"
@@ -110,7 +111,7 @@ namespace lib {
       
       /**
        * Configuration handle to expose a service implementation through the `Depend<SRV>` front-end.
-       * This noncopyable (but movable) handle shall be planted within the context operating the service
+       * This non-copyable (but movable) handle shall be planted within the context operating the service
        * to be exposed. It will immediately create (in RAII style) and manage a heap-allocated instance
        * of the subclass `IMP` and expose a baseclass pointer to this specific instance through `Depend<SRV>`.
        * Moreover, the implementation subclass can be accessed through this handle, which acts as smart-ptr.
@@ -122,6 +123,7 @@ namespace lib {
        */
       template<class IMP>
       class ServiceInstance
+        : util::MoveOnly
         {
           std::unique_ptr<IMP> instance_;
           
@@ -138,10 +140,6 @@ namespace lib {
             {
               deactivateServiceAccess();
             }
-          
-          ServiceInstance (ServiceInstance&&)            = default;
-          ServiceInstance (ServiceInstance const&)       = delete;
-          ServiceInstance& operator= (ServiceInstance&&) = delete;
           
           explicit
           operator bool()  const
@@ -167,7 +165,7 @@ namespace lib {
       
       /**
        * Configuration handle for temporarily shadowing a dependency by a test mock instance.
-       * This noncopyable (but movable) handle shall be planted within the immediate test context.
+       * This non-copyable (but movable) handle shall be planted within the immediate test context.
        * It immediately stashes away the existing state and configuration from `Depend<SRV>`, but
        * waits for actual invocation of the `Depend<SRV>`-front-end to create a heap-allocated
        * instance of the `MOC` subclass, which it manages and exposes like a smart-ptr.
@@ -175,6 +173,7 @@ namespace lib {
        */
       template<class MOC>
       class Local
+        : util::MoveOnly
         {
           std::unique_ptr<MOC> mock_;
           
@@ -204,10 +203,6 @@ namespace lib {
             {
               restoreOriginalFactory (origInstance_, origFactory_);
             }
-          
-          Local (Local&&)            = default;
-          Local (Local const&)       = delete;
-          Local& operator= (Local&&) = delete;
           
           explicit
           operator bool()  const

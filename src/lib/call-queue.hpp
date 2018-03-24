@@ -40,8 +40,8 @@
 #include "lib/error.hpp"
 #include "lib/sync.hpp"
 #include "lib/iter-stack.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 
 
@@ -56,7 +56,7 @@ namespace lib {
    * their concrete parameters into another thread for invocation.
    */
   class CallQueue
-    : boost::noncopyable
+    : util::NonCopyable
     , public Sync<>
     {
     public:

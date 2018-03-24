@@ -49,8 +49,7 @@
 #include "proc/control/command-mutation.hpp"
 #include "lib/typed-allocation-manager.hpp"
 #include "lib/opaque-holder.hpp"
-
-#include <boost/noncopyable.hpp>
+#include "lib/nocopy.hpp"
 
 
 namespace proc {
@@ -122,7 +121,7 @@ namespace control {
    * and the memento storage within the cloned parts.
    */
   class CommandImplCloneBuilder
-    : public boost::noncopyable
+    : util::NonCopyable
     {
       typedef InPlaceBuffer<impl::CloneContext, sizeof(impl::ClonedContext)> ContextHolder;
       

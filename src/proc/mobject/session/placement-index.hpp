@@ -112,8 +112,8 @@
 #include "lib/itertools.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <memory>
 #include <vector>
@@ -177,7 +177,7 @@ namespace session {
    * Placement's hash-IDs.
    */
   class PlacementIndex
-    : boost::noncopyable
+    : util::NonCopyable
     {
       class Table;
       class Validator;

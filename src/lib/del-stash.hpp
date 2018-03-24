@@ -45,10 +45,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 
 #include <vector>
 #include <algorithm>
-#include <boost/noncopyable.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -66,7 +66,7 @@ namespace lib {
    * @warning clients must not add a given object more than once
    */
   class DelStash
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       typedef void KillFun(void*);

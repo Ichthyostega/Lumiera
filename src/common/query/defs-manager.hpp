@@ -96,9 +96,9 @@
 
 
 #include "lib/p.hpp"
+#include "lib/nocopy.hpp"
 #include "common/query.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -127,7 +127,8 @@ namespace query  {
    *       roughly final, as of 12/09 most of the actual object
    *       handling is placeholder code.
    */
-  class DefsManager : private boost::noncopyable
+  class DefsManager
+    : util::NonCopyable
     {
       unique_ptr<impl::DefsRegistry> defsRegistry_;
       

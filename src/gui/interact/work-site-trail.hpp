@@ -41,8 +41,8 @@
 #define GUI_INTERACT_WORK_SITE_TRAIL_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -63,7 +63,7 @@ namespace interact {
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
   class WorkSiteTrail
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

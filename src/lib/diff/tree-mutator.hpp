@@ -94,6 +94,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/diff/gen-node.hpp"
@@ -139,18 +140,15 @@ namespace diff{
    *   activities to concrete manipulations known within target scope.
    */
   class TreeMutator
+    : util::MoveOnly
     {
       
     public:
       virtual ~TreeMutator(); ///< this is an interface
       
-      /** only allow default and move construction */
+      // only default and move construction allowed
       TreeMutator ()                    =default;
       TreeMutator (TreeMutator&&)       =default;
-      TreeMutator (TreeMutator const&)  =delete;
-      
-      TreeMutator& operator= (TreeMutator const&) =delete;
-      TreeMutator& operator= (TreeMutator&&)      =delete;
       
       
       

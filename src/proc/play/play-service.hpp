@@ -57,10 +57,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/play-facade.h"
 #include "common/interface-facade-link.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 //#include <string>
 
@@ -100,7 +100,7 @@ namespace play {
    */
   class PlayService
     : public lumiera::Play
-    , boost::noncopyable
+    , util::NonCopyable
     {
       InterfaceFacadeLink<lumiera::Play> facadeAccess_;
       std::unique_ptr<ProcessTable>      pTable_;

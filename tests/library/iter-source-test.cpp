@@ -29,12 +29,12 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-source.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <cstdlib>
 #include <string>
@@ -48,7 +48,6 @@ namespace test{
   
   using ::Test;
   using boost::lexical_cast;
-  using boost::noncopyable;
   using lib::time::TimeVar;
   using lib::test::randStr;
   using lib::test::randTime;
@@ -84,7 +83,7 @@ namespace test{
      */
     class TestSource
       : public IterSource<CStr>
-      , noncopyable
+      , util::NonCopyable
       {
         
         string buffer_;

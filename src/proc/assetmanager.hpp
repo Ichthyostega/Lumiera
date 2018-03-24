@@ -68,7 +68,7 @@ namespace asset {
    * Facade for the Asset subsystem
    */
   class AssetManager 
-    : private boost::noncopyable
+    : util::NonCopyable
     {
       asset::DB & registry;
     

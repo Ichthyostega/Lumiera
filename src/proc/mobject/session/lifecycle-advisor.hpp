@@ -50,11 +50,10 @@
 #define PROC_MOBJECT_SESSION_LIFECYCLE_ADVISOR_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/lifecycle.h"
 #include "proc/mobject/session.hpp"
 #include "lib/symbol.hpp"
-
-#include <boost/noncopyable.hpp>
 
 
 namespace proc {
@@ -72,7 +71,7 @@ namespace session {
    *          in a controlled and safe (single threaded) environment
    */
   class LifecycleAdvisor
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       

@@ -43,8 +43,8 @@
 #define GUI_CTRL_FACADE_H
 
 #include "gui/notification-service.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 namespace gui {
@@ -59,7 +59,7 @@ namespace ctrl {
    * @remark the UiManager is responsible to activate and deactivate those interfaces
    */
   class Facade
-    : boost::noncopyable
+    : util::NonCopyable
     {
       NotificationService notificationService_;
       

@@ -41,7 +41,7 @@
 #ifdef __cplusplus
 
 #include "lib/symbol.hpp"
-#include <boost/noncopyable.hpp>
+#include "lib/nocopy.hpp"
 
 
 
@@ -74,7 +74,7 @@ namespace lumiera {
    *  @note duplicate or repeated calls with the same callback are NOP 
    */
   class LifecycleHook
-    : private boost::noncopyable
+    : util::NonCopyable
     {
     public:
       typedef void (*Hook)(void);

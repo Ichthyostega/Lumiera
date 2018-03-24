@@ -55,13 +55,13 @@
 #include "gui/display-service.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "common/subsys.hpp"
+#include "lib/nocopy.hpp"
 
 extern "C" {
 #include "common/interface.h"
 #include "common/interface-descriptor.h"
 }
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -89,7 +89,7 @@ namespace gui {
      *       open other interfaces here...)            ///////////////////////////TICKET #82
      */
     class GtkLumiera
-      : boost::noncopyable
+      : util::NonCopyable
       {
         UiBus uiBus_;
         UiManager uiManager_;

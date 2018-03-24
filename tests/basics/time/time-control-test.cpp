@@ -81,7 +81,7 @@ namespace test{
      */
     template<class TI>
     class TestListener
-      : boost::noncopyable
+      : util::NonCopyable
       {
         mutable
         ScopedHolder<TI> received_;

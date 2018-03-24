@@ -41,6 +41,8 @@
 #include "lib/error.hpp"
 #include "backend/thread-wrapper.hpp"
 
+#include <unistd.h>   // for usleep()
+
 #include <functional>
 #include <limits>
 

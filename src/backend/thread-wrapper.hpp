@@ -41,6 +41,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/meta/function.hpp"
 #include "lib/result.hpp"
@@ -107,6 +108,7 @@ namespace backend {
    * If this doesn't happen, you'll block forever.
    */
   class Thread
+    : util::MoveOnly
     {
       /** @internal perfect forwarding through a C-style `void*` */
       template<class FUN>
@@ -179,14 +181,6 @@ namespace backend {
       
       
     public:
-      // Threads can be moved only
-      Thread (Thread &&)                = default;
-      
-      // Threads must not be copied and assigned
-      Thread (Thread const&)            = delete;
-      Thread& operator= (Thread &&)     = delete;
-      Thread& operator= (Thread const&) = delete;
-      
       /** Create a new thread to execute the given operation.
        *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
        *  @param purpose fixed char string used to denote the thread for diagnostics

@@ -73,8 +73,8 @@
 #include "lib/format-util.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <utility>
 #include <vector>
 #include <string>
@@ -103,7 +103,7 @@ namespace interact {
    * @todo maybe add a flag to require the current query goal to exist in tree //////////////////////////////TICKET #1130
    */
   struct LocationClause
-    : boost::noncopyable
+    : util::NonCopyable
     {
       UICoord pattern;
       bool createParents;
@@ -129,7 +129,7 @@ namespace interact {
    * in order and the first successfully matched clause wins.
    */
   class LocationRule
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using Clauses = std::vector<LocationClause>;
       
@@ -233,7 +233,7 @@ namespace interact {
    * @see UILocationResolver_test::simple_usage_example()
    */
   class UILocationSolver
-    : boost::noncopyable
+    : util::NonCopyable
     {
       LocationQueryAccess getLocationQuery;
       

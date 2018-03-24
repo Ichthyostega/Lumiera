@@ -34,6 +34,8 @@
  ** 
  ** @see lib::TransformIter
  ** 
+ ** @todo 2017 consider to split off the FunctionResult into a dedicated header to reduce includes
+ ** 
  */
 
 
@@ -41,12 +43,12 @@
 #define LIB_WRAPPER_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 
 
@@ -388,7 +390,7 @@ namespace wrapper {
   template<typename SIG>
   class FunctionResult
     : public function<SIG>
-    , boost::noncopyable
+    , util::NonCopyable
     {
       using Res = typename _Fun<SIG>::Ret;
       using ResWrapper = ItemWrapper<Res>;

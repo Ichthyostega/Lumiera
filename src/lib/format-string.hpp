@@ -106,10 +106,10 @@
 #define UTIL_FORMAT_STRING_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/meta/size-trait.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -152,7 +152,7 @@ namespace util {
    * @see FormatString_test
    */
   class _Fmt
-    : boost::noncopyable
+    : util::NonCopyable
     {
       /** size of an opaque implementation Buffer */
       enum{ FORMATTER_SIZE = lib::meta::SizeTrait::BOOST_FORMAT };

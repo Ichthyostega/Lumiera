@@ -41,7 +41,6 @@
 #include "gui/model/session-facade.hpp"
 #include "lib/depend.hpp"
 
-//#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <map>
 

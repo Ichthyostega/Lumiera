@@ -73,11 +73,11 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/nobug-init.hpp"
 #include "lib/sync-classlock.hpp"
 #include "lib/meta/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <type_traits>
 #include <functional>
 #include <memory>
@@ -93,7 +93,7 @@ namespace lib {
     
     template<typename TAR, typename SEL =void>
     class InstanceHolder
-      : boost::noncopyable
+      : util::NonCopyable
       {
         std::unique_ptr<TAR> instance_;
         

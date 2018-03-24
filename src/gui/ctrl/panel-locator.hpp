@@ -36,8 +36,8 @@
 #define GUI_CTRL_PANEL_LOCATOR_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <list>
 
@@ -57,7 +57,7 @@ namespace ctrl {
    * located within the top-level windows.
    */
   class PanelLocator
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using PWindow = std::shared_ptr<workspace::WorkspaceWindow>;
       using WindowList = list<PWindow>;

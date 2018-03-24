@@ -95,8 +95,8 @@ namespace asset {
    * As of 8/2007 implemented by a hashtable.
    */
   class DB 
-    : private boost::noncopyable,
-      public Sync<RecursiveLock_NoWait>
+    : util::NonCopyable
+    , public Sync<RecursiveLock_NoWait>
     {
       IdHashtable table;
       

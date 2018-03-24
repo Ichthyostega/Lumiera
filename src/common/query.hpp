@@ -123,7 +123,7 @@ namespace lumiera {
    * of the type of query.
    */
   class Goal
-    : util::no_copy_by_client
+    : util::Cloneable
     {
     public:
       virtual ~Goal(); ///< this is a marker baseclass

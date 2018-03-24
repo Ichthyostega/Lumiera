@@ -42,8 +42,8 @@
 #include "gui/gtk-base.hpp"
 #include "include/dummy-player-facade.h"
 #include "include/display-facade.h"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 namespace gui {
@@ -53,7 +53,7 @@ namespace ctrl {
   
   /** @deprecated we need a durable design for the playback process */
   class PlaybackController
-    : boost::noncopyable
+    : util::NonCopyable
     {
 
       volatile bool playing_;

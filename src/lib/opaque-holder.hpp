@@ -68,13 +68,13 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/access-casted.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <utility>
 #include <type_traits>
-#include <boost/noncopyable.hpp>
+#include <utility>
 
 
 namespace lib {
@@ -593,7 +593,7 @@ namespace lib {
     , class DEFAULT = BA
     >
   class InPlaceBuffer
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       mutable char buf_[siz];

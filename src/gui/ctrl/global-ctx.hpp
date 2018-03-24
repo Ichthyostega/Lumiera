@@ -59,8 +59,8 @@
 #include "gui/ctrl/window-locator.hpp"
 #include "gui/interact/wizard.hpp"
 #include "gui/interact/interaction-director.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -80,7 +80,7 @@ namespace ctrl {
    * @remark the UiManager is responsible to install this top-level context
    */
   class GlobalCtx
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

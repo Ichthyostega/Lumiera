@@ -38,6 +38,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "proc/engine/engine-service.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
@@ -50,7 +51,6 @@
 //#include "lib/polymorphic-value.hpp"
 //#include "lib/depend.hpp"
 //
-#include <boost/noncopyable.hpp>
 //#include <string>
 
 
@@ -79,7 +79,7 @@ namespace engine{
    *          of EngineDiagnostics may be used.  
    */
   class EngineDiagnostics
-    : boost::noncopyable
+    : util::NonCopyable
     {
       EngineService& engine_;
       

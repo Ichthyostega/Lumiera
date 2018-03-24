@@ -43,7 +43,7 @@ namespace timeline {
   
   /////////TODO some questions:
   /////////     1) who is allowed to destroy DrawStrategy objects
-  /////////     2) shouldn't DrawStragegy be boost::noncopyable?
+  /////////     2) shouldn't DrawStragegy be util::NonCopyable?
   
   
   /**

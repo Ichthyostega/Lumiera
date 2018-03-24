@@ -48,8 +48,8 @@
 #define GUI_CTRL_UI_MANAGER_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 #include <memory>
 
@@ -72,7 +72,7 @@ namespace ctrl {
   
   /** Framework initialisation base */
   class ApplicationBase
-    : boost::noncopyable
+    : util::NonCopyable
     {
     protected:
       ApplicationBase();

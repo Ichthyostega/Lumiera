@@ -35,7 +35,6 @@
 #include "lib/depend.hpp"
 #include "lib/meta/duck-detector.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -100,7 +99,7 @@ namespace test{
    */
   template<class TYPE>
   struct Depend4Test
-    : boost::noncopyable
+    : util::NonCopyable
     {
       typedef typename ServiceInterface<TYPE>::Type Interface;
       

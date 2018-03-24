@@ -40,6 +40,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "proc/play/output-slot.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-adapter-stl.hpp"
@@ -50,7 +51,6 @@
 //#include "proc/play/timings.hpp"
 //#include "lib/sync.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 #include <functional>
 #include <vector>
@@ -93,7 +93,7 @@ namespace play {
    *   implementation; yet it may as well be called from a separate
    *   service thread or some kind of callback.
    * @note the meaning of FrameID is implementation defined.
-   * @note typically the concrete connection is noncopyable
+   * @note typically the concrete connection is non-copyable
    */
   class OutputSlot::Connection
     {
@@ -119,7 +119,7 @@ namespace play {
    */
   class OutputSlot::ConnectionState
     : public OutputSlot::Allocation
-    , boost::noncopyable
+    , util::NonCopyable
     {
     public:
       virtual ~ConnectionState() { }

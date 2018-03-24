@@ -153,7 +153,7 @@ namespace diff{
    * TreeMutators dedicated to nested scopes
    */
   class ScopeManager
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       virtual ~ScopeManager();  ///< this is an interface

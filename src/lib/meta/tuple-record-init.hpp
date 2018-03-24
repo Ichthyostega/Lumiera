@@ -98,7 +98,7 @@ namespace meta {
      */
     template<typename TAR>
     struct GenNodeAccessor
-      : boost::noncopyable
+      : util::NonCopyable
       {
         
         template<typename TY>

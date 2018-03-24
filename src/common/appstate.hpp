@@ -41,11 +41,11 @@
 #define LUMIERA_APPSTATE_H
 
 #include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 #include "common/option.hpp"
 #include "common/subsys.hpp"
 #include "common/basic-setup.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <string>
 #include <map>
@@ -55,7 +55,6 @@
 namespace lumiera {
   
   using std::string;
-  using boost::noncopyable;
   
   class SubsystemRunner;
   
@@ -68,7 +67,7 @@ namespace lumiera {
    * @warning don't use AppState in destructors.
    */
   class AppState
-    : private noncopyable
+    : util::NonCopyable
     {
     private:
       AppState ();

@@ -213,7 +213,7 @@ namespace engine {
    */
   class JobClosure
     : public lumiera_jobClosure
-    , boost::noncopyable          // ....has distinct identity and stable address
+    , util::NonCopyable            // ....has distinct identity and stable address
     {
     public:
       virtual ~JobClosure();     ///< this is an interface

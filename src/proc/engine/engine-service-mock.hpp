@@ -52,8 +52,6 @@
 //#include "lib/singleton-ref.hpp"
 #include "proc/engine/engine-service.hpp"
 #include "lib/scoped-ptrvect.hpp"
-//
-#include <boost/noncopyable.hpp>
 
 
 namespace proc {

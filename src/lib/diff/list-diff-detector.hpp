@@ -61,8 +61,8 @@
 #include "lib/diff/list-diff.hpp"
 #include "lib/diff/index-table.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <utility>
 
 
@@ -85,7 +85,7 @@ namespace diff{
    */
   template<class SEQ>
   class DiffDetector
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using Val = typename SEQ::value_type;
       using Idx = IndexTable<Val>;

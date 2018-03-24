@@ -38,12 +38,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
 #include "lib/time/timevalue.hpp"
 #include "backend/engine/scheduler-frontend.hpp"
-
-#include <boost/noncopyable.hpp>
-//#include <string>
 
 
 namespace backend{
@@ -68,7 +66,7 @@ namespace engine {
    *          of SchedulerDiagnostics may be used.  
    */
   class SchedulerDiagnostics
-    : boost::noncopyable
+    : util::NonCopyable
     {
       SchedulerFrontend& scheduler_;
       

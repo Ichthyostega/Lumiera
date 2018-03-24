@@ -145,7 +145,7 @@ namespace lib {
        */
       template<typename TAR>
       class InstanceHolder
-        : boost::noncopyable
+        : util::NonCopyable
         {
           /** storage for the service instance */
           char buff_[sizeof(TAR)];

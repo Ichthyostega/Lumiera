@@ -78,8 +78,8 @@
 #include "gui/gtk-base.hpp"
 #include "lib/call-queue.hpp"
 #include "lib/format-string.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <utility>
 
 
@@ -109,7 +109,7 @@ namespace ctrl {
    *          it outlives the GTK event loop
    */
   class UiDispatcher
-    : boost::noncopyable
+    : util::NonCopyable
     {
       lib::CallQueue queue_;
       Glib::Dispatcher dispatcher_;

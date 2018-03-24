@@ -37,8 +37,8 @@
 #define GUI_WORKSPACE_STYLE_MANAGER_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <cairomm/cairomm.h>
 #include <string>
 
@@ -64,7 +64,7 @@ namespace workspace {
    */
   class StyleManager
     : public Gtk::UIManager
-    , boost::noncopyable
+    , util::NonCopyable
     {
       
       string iconSearchPath_;

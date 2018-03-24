@@ -61,10 +61,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <boost/static_assert.hpp>
 
 
@@ -315,7 +315,7 @@ namespace lib {
     , class ALO = linked_elements::OwningHeapAllocated
     >
   class LinkedElements
-    : boost::noncopyable
+    : util::NonCopyable
     , ALO
     {
       N* head_;

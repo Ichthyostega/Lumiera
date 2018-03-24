@@ -51,11 +51,11 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/util.hpp"
 #include "include/interfaceproxy.hpp"
 #include "lib/symbol.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 
@@ -83,7 +83,7 @@ namespace facade {
   template<class FA>
   class InterfaceFacadeLink
     : protected Accessor<FA>
-    , boost::noncopyable
+    , util::NonCopyable
     {
       string displayName_;
       

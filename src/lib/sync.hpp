@@ -68,13 +68,13 @@
 #define LIB_SYNC_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 extern "C" {
 #include "lib/lockerror.h"
 }
 
-#include <boost/noncopyable.hpp>
 #include <pthread.h>
 #include <cerrno>
 #include <ctime>
@@ -440,7 +440,7 @@ namespace lib {
        * scoped object to control the actual locking.
        */
       class Lock
-        : boost::noncopyable
+        : util::NonCopyable
         {
           Monitor& mon_;
           

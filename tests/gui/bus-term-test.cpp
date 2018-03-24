@@ -598,7 +598,7 @@ namespace test {
                * a representation of the "changes" in diff format
                */
               struct BorgGenerator
-                : boost::noncopyable
+                : util::NonCopyable
                 , TreeDiffLanguage
                 , DiffSource
                 {

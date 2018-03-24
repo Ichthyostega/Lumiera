@@ -54,41 +54,6 @@ source code comment near the static assertion statement to help solving the actu
 
 Relevant Bosst extensions
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-.noncopyable
-Inheriting from `boost::noncoypable` inhibits any copy, assignment and copy construction. It's a highly
-recommended practice _by default to use that for every new class you create_ -- unless you know for sure
-your class is going to have _value semantics_. The C++ language has kind of a ``fixation'' on value
-semantics, passing objects by value, and the language adds a lot of magic on that behalf. Which might lead
-to surprising results if you aren't aware of the fine details.
-
-.type traits
-Boost provides a very elaborate collection of type trait templates, allowing to ``detect'' several
-properties of a given type at compile time. Since C++ has no reflection and only a very weak introspection
-feature (RTTI, run time type information), using these type traits is often indispensable.
-
-.enable_if
-a simple but ingenious metaprogramming trick, allowing to control precisely in which cases the compiler
-shall pick a specific class or function template specialisation. Basically this allows to control the
-code generation, based on some type traits or other (metaprogramming) predicates you provide. Again,
-since C++ is lacking introspection features, we're frequently forced to resort to metaprogramming
-techniques, i.e to influence the way the compiler translates our code from within that very code.
-
-.metaprogramming library
-A very elaborate, and sometimes mind-bending library and framework. While heavily used within
-Boost to build the more advanced features, it seems too complicated and esoteric for general purpose
-and everyday use. Code written using the MPL tends to be very abstract and almost unreadable for
-people without math background. In Lumiera, we _try to avoid using MPL directly._ Instead, we
-supplement some metaprogramming helpers (type lists and tuples), written in a simple LISP style,
-which -- hopefully -- should be decipherable without having to learn an abstract academic
-terminology and framework.
-
-.lambda
-In a similar vein, the `boost::lambda` library might be worth exploring a bit, yet doesn't add
-much value in practical use. It is stunning to see how this library adds the capability to define
-real _lambda expressions_ on-the-fly, but since C++ was never designed for language extensions of
-that kind, using lambda in practice is surprisingly tricky, sometimes even obscure and rarely
-not worth the hassle. (An notable exception might be when it comes to defining parser combinators)
-
 .operators
 The `boost::operators` library allows to build families of types/objects with consistent
 algebraic properties. Especially, it eases building _equality comparable_, _totally ordered_,
@@ -108,6 +73,15 @@ on `printf` -- you can expect it to be 5 to 10 times slower than the latter, and
 quite some compilation overhead and size impact (-> see our own
 link:http://git.lumiera.org/gitweb?p=lumiera/ichthyo;a=blob;f=src/lib/format-string.hpp;h=716aa0e3d23f09269973b7659910d74b3ee334ea;hb=37384f1b681f5bbfa7dc4d50b8588ed801fbddb3[formatting front-end]
 to reduce this overhead)
+
+.metaprogramming library
+A very elaborate, and sometimes mind-bending library and framework. While heavily used within
+Boost to build the more advanced features, it seems too complicated and esoteric for general purpose
+and everyday use. Code written using the MPL tends to be very abstract and almost unreadable for
+people without math background. In Lumiera, we _try to avoid using MPL directly._ Instead, we
+supplement some metaprogramming helpers (type lists and tuples), written in a simple LISP style,
+which -- hopefully -- should be decipherable without having to learn an abstract academic
+terminology and framework.
 
 .variant and any
 These library provide a nice option for building data structures able to hold a mixture of

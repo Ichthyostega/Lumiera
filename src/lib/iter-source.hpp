@@ -55,8 +55,8 @@
 #include "lib/meta/util.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <type_traits>
 #include <utility>
 #include <string>
@@ -232,7 +232,7 @@ namespace lib {
   template<class IT,  class ISO = IterSource<typename IT::value_type>>
   class WrappedLumieraIter
     : public ISO
-    , boost::noncopyable
+    , util::NonCopyable
     {
       IT src_;
       

@@ -28,14 +28,13 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 #include "lib/error.hpp"
 
 #include "lib/scoped-holder.hpp"
 #include "lib/test/testdummy.hpp"
 
-#include <boost/noncopyable.hpp>
-#include <iostream>
 #include <map>
 
 
@@ -47,7 +46,6 @@ namespace test{
   using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   using std::map;
-  using std::cout;
   
   typedef ScopedHolder<Dummy>    HolderD;
   typedef ScopedPtrHolder<Dummy> PtrHolderD;

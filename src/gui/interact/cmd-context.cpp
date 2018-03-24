@@ -34,7 +34,6 @@
 //#include "include/logging.h"
 #include "gui/interact/cmd-context.hpp"
 
-//#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <map>
 

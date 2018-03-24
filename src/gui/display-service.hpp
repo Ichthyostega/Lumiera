@@ -55,10 +55,10 @@
 #include "lib/singleton-ref.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "include/logging.h"
+#include "lib/nocopy.hpp"
 
 #include <glibmm.h>
 #include <sigc++/sigc++.h>
-#include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
 
@@ -84,7 +84,7 @@ namespace gui {
    */
   class DisplayerSlot
     : public lumiera_displaySlot,
-      boost::noncopyable
+      util::NonCopyable
     {
       Dispatcher dispatcher_;
       FrameSignal hasFrame_;
@@ -128,7 +128,7 @@ namespace gui {
    * course of the play process for outputting frames.
    */
   class DisplayService
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       string error_;

@@ -66,7 +66,7 @@ namespace gui {
    */
   template<class TI>
   class SelectionListener
-    : boost::noncopyable
+    : util::NonCopyable
     {
       sigc::signal<void, TI> valueChangedSignal_;
       

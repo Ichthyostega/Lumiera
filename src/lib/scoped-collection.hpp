@@ -21,7 +21,7 @@
 */
 
 /** @file scoped-collection.hpp
- ** Managing a collection of noncopyable polymorphic objects in compact storage.
+ ** Managing a collection of non-copyable polymorphic objects in compact storage.
  ** This helper supports the frequently encountered situation where a service
  ** implementation internally manages a collection of implementation related
  ** sub-components with reference semantics. Typically, those objects are
@@ -70,10 +70,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/iter-adapter.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <type_traits>
 
 
@@ -86,7 +86,7 @@ namespace lib {
   
   
   /**
-   * A fixed collection of noncopyable polymorphic objects.
+   * A fixed collection of non-copyable polymorphic objects.
    * 
    * All child objects reside in a common chunk of storage
    * and are owned and managed by this collection holder.
@@ -99,7 +99,7 @@ namespace lib {
     , size_t siz = sizeof(I)
     >
   class ScopedCollection
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:
@@ -110,7 +110,7 @@ namespace lib {
        * @note doesn't manage the Child
        */
       class ElementHolder
-        : boost::noncopyable
+        : util::NonCopyable
         {
           
           mutable char buf_[siz];

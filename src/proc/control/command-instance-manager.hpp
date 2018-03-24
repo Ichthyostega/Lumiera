@@ -58,12 +58,12 @@
 #define CONTROL_COMMAND_INSTANCE_MANAGER_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-dispatch.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/symbol.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <string>
 
@@ -97,7 +97,7 @@ namespace control {
    * @warning CommandInstanceManager is *not threadsafe*
    */
   class CommandInstanceManager
-    : boost::noncopyable
+    : util::NonCopyable
     {
       CommandDispatch& dispatcher_;
       std::unordered_map<Symbol,Command> table_;

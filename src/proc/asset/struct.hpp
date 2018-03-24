@@ -64,8 +64,8 @@
 #include "lib/symbol.hpp"
 #include "proc/asset.hpp"
 #include "common/query.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <string>
 
@@ -142,7 +142,7 @@ namespace asset {
    * Factory specialised for creating Structural Asset objects.
    */ 
   class StructFactory
-    : boost::noncopyable
+    : util::NonCopyable
     {
       unique_ptr<StructFactoryImpl> impl_;
       

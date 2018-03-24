@@ -72,8 +72,8 @@
 #include "proc/engine/buffer-provider.hpp"
 #include "proc/play/timings.hpp"
 #include "lib/iter-source.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -108,7 +108,7 @@ namespace play {
    * through the Allocation object returned from there.
    */
   class OutputSlot
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     protected:
