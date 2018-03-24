@@ -49,8 +49,9 @@ extern "C" {
 }
 #include "backend/threadpool-init.hpp"
 
+#include <type_traits>
 #include <functional>
-#include <boost/noncopyable.hpp>
+#include <utility>
 
 
 namespace backend {
@@ -109,77 +110,77 @@ namespace backend {
    */
   class Thread
     {
+      /** @internal perfect forwarding through a C-style `void*` */
+      template<class FUN>
+      static FUN&&
+      forwardInitialiser (void* rawPtr) noexcept
+        {
+          REQUIRE (rawPtr);
+          FUN& initialiser = *reinterpret_cast<FUN*> (rawPtr);
+          return static_cast<FUN&&> (initialiser);
+        }
+      
+      
+      template<class FUN>
+      static void
+      threadMain (void* arg)
+        {
+          function<void()> _doIt_{forwardInitialiser<FUN> (arg)};
+          
+          lumiera_thread_sync (); // sync point: arguments handed over
+          
+          try {
+              _doIt_(); // execute the actual operation in the new thread
+            }
+          
+          catch (std::exception& failure)
+            {
+              if (!lumiera_error_peek())
+                LUMIERA_ERROR_SET (sync, STATE
+                                  ,failure.what());
+            }
+          catch (...)
+            {
+              LUMIERA_ERROR_SET_ALERT (sync, EXTERNAL
+                                      , "Thread terminated abnormally");
+            }
+        }
+      
       
     protected:
-      typedef function<void(void)> Operation;
+      LumieraThread threadHandle_;
+      
+      /** @internal derived classes may create an inactive thread */
+      Thread() : threadHandle_(0) { }
       
       
-      struct ThreadStartContext
-        : boost::noncopyable
+      /** @internal use the Lumiera thread manager to start a new thread and hand over the operation */
+      template<class FUN>
+      void
+      launchThread (Literal purpose, FUN&& operation, NoBugFlag logging_flag, uint additionalFlags =0)
         {
+          REQUIRE (!lumiera_error(), "Error pending at thread start");
+          using Functor = typename std::remove_reference<FUN>::type;
+          threadHandle_ =
+            lumiera_thread_run ( LUMIERA_THREADCLASS_INTERACTIVE | additionalFlags
+                               , &threadMain<Functor>
+                               , reinterpret_cast<void*> (&operation)
+                               , purpose.c()
+                               , logging_flag
+                               );
+          if (!threadHandle_)
+            throw error::State ("Failed to start a new Thread for \"+purpose+\""
+                               , lumiera_error());
           
-          Operation const& operation_;
-          
-          static void
-          run (void* arg)
-            {
-              REQUIRE (arg);
-              ThreadStartContext* ctx = reinterpret_cast<ThreadStartContext*>(arg);
-              Operation _doIt_(ctx->operation_);
-              
-              lumiera_thread_sync (); // sync point: arguments handed over
-              
-              try {
-                  _doIt_(); // execute the actual operation in the new thread
-                }
-              
-              catch (std::exception& failure)
-                {
-                  if (!lumiera_error_peek())
-                    LUMIERA_ERROR_SET (sync, STATE
-                                      ,failure.what());
-                }
-              catch (...)
-                {
-                  LUMIERA_ERROR_SET_ALERT (sync, EXTERNAL
-                                          , "Thread terminated abnormally");
-                }
-            }
-          
-          
-        public:
-          ThreadStartContext (LumieraThread& handle
-                             ,Operation const& operation_to_execute
-                             ,Literal& purpose
-                             ,NoBugFlag logging_flag
-                             ,uint additionalFlags   =0
-                             )
-            : operation_(operation_to_execute)
-            {
-              REQUIRE (!lumiera_error(), "Error pending at thread start");
-              handle =
-                lumiera_thread_run ( LUMIERA_THREADCLASS_INTERACTIVE | additionalFlags
-                                   , &run         // invoking the run helper and..
-                                   , this         // passing this start context as parameter
-                                   , purpose.c()
-                                   , logging_flag
-                                   );
-              if (!handle)
-                throw error::State ("Failed to start a new Thread for \"+purpose+\""
-                                   , lumiera_error());
-              
-              // make sure the new thread had the opportunity to take the Operation
-              // prior to leaving and thereby possibly destroying this local context
-              lumiera_thread_sync_other (handle);
-            }
-        };
+          // make sure the new thread had the opportunity to take the Operation
+          // prior to leaving and thereby possibly destroying this local context
+          lumiera_thread_sync_other (threadHandle_);
+        }
       
       
       
-      LumieraThread thread_;
-      
-      // Threads can be default constructed (inactive) and moved
-      Thread() : thread_(0) { }
+    public:
+      // Threads can be moved only
       Thread (Thread &&)                = default;
       
       // Threads must not be copied and assigned
@@ -187,21 +188,22 @@ namespace backend {
       Thread& operator= (Thread &&)     = delete;
       Thread& operator= (Thread const&) = delete;
       
-      
-    public:
       /** Create a new thread to execute the given operation.
-       *  The new thread starts up synchronously, it can't
-       *  be cancelled and it can't be joined.
+       *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
        *  @param purpose fixed char string used to denote the thread for diagnostics
        *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
-       *  @param operation defining what to execute within the new thread. Any functor
-       *         which can be bound to function<void(void)>. Note this functor will be
-       *         copied onto the stack of the new thread, thus it can be transient.
+       *  @param operation a functor holding the code to execute within the new thread.
+       *         Any function-like entity with signature `void(void)` is acceptable.
+       *  @warning The operation functor will be forwarded to create a copy residing
+       *         on the stack of the new thread; thus it can be transient, however
+       *         anything referred through a lambda closure here must stay alive
+       *         until the new thread terminates.
        */
-      Thread (Literal purpose, Operation const& operation, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
-        : thread_(0)
+      template<class FUN>
+      Thread (Literal purpose, FUN&& operation, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
+        : threadHandle_{nullptr}
         {
-          ThreadStartContext (thread_, operation, purpose, logging_flag);
+          launchThread (purpose, std::forward<FUN> (operation), logging_flag);
         }
       
       
@@ -213,7 +215,7 @@ namespace backend {
       bool
       isValid()  const
         {
-          return thread_;
+          return threadHandle_;
         }
       
       
@@ -225,7 +227,7 @@ namespace backend {
       sync()
         {
           REQUIRE (isValid(), "Thread not running");
-          if (!lumiera_thread_sync_other (thread_))
+          if (!lumiera_thread_sync_other (threadHandle_))
             lumiera::throwOnError();
         }
       
@@ -248,7 +250,7 @@ namespace backend {
           REQUIRE (isValid(), "Thread not running");
           LumieraThread current = lumiera_thread_self ();
           return current
-             and current == this->thread_;
+             and current == this->threadHandle_;
         }
     };
   
@@ -265,11 +267,13 @@ namespace backend {
     : public Thread
     {
     public:
-      ThreadJoinable (Literal purpose, Operation const& operation,
+      template<class FUN>
+      ThreadJoinable (Literal purpose, FUN&& operation,
                       NoBugFlag logging_flag = &NOBUG_FLAG(thread))
+        : Thread{}
         {
-          ThreadStartContext (thread_, operation, purpose, logging_flag,
-                              LUMIERA_THREAD_JOINABLE);
+          launchThread<FUN> (purpose, std::forward<FUN> (operation), logging_flag,
+                             LUMIERA_THREAD_JOINABLE);
         }
       
       
@@ -285,8 +289,8 @@ namespace backend {
             throw error::Logic ("joining on an already terminated thread");
           
           lumiera_err errorInOtherThread =
-              lumiera_thread_join (thread_);
-          thread_ = 0;
+              lumiera_thread_join (threadHandle_);
+          threadHandle_ = 0;
           
           if (errorInOtherThread)
             return error::State ("Thread terminated with error", errorInOtherThread);
