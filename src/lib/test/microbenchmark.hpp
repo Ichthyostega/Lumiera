@@ -64,7 +64,7 @@ namespace lib {
 namespace test{
   
   namespace {
-    constexpr size_t NUM_MEASUREMENTS = 10000000;
+    constexpr size_t DEFAULT_RUNS = 10000000;
     constexpr double SCALE = 1e6;                  // Results are in µ sec
   }
   
@@ -85,7 +85,7 @@ namespace test{
    */
   template<size_t nThreads, class FUN>
   inline double
-  microbenchmark(FUN const& subject)
+  microbenchmark(FUN const& subject, const size_t nRepeat = DEFAULT_RUNS)
   {
     using backend::ThreadJoinable;
     using std::chrono::system_clock;
@@ -95,16 +95,16 @@ namespace test{
     struct Thread
       : ThreadJoinable
       {
-        Thread(FUN const& subject)
+        Thread(FUN const& subject, size_t loopCnt)
           : ThreadJoinable("Micro-Benchmark"
-                          ,[subject, this]()       // local copy of the test-subject-Functor
-                                    {
-                                      syncPoint(); // block until all threads are ready
-                                      auto start = system_clock::now();
-                                      for (size_t i=0; i < NUM_MEASUREMENTS; ++i)
-                                        subject();
-                                      duration = system_clock::now () - start;
-                                    })
+                          ,[=]()                   // local copy of the test-subject-Functor
+                             {
+                               syncPoint();        // block until all threads are ready
+                               auto start = system_clock::now();
+                               for (size_t i=0; i < loopCnt; ++i)
+                                 subject();
+                               duration = system_clock::now () - start;
+                             })
           { }
         /** measured time within thread */
         Dur duration{};
@@ -113,7 +113,7 @@ namespace test{
     std::vector<Thread> threads;
     threads.reserve(nThreads);
     for (size_t n=0; n<nThreads; ++n)              // create test threads
-      threads.emplace_back (subject);
+      threads.emplace_back (subject, nRepeat);
 
     for (auto& thread : threads)
       thread.sync();                               // start timing measurement
@@ -125,7 +125,7 @@ namespace test{
         sumDuration += thread.duration;
       }
     
-    return sumDuration.count() / (nThreads * NUM_MEASUREMENTS) * SCALE;
+    return sumDuration.count() / (nThreads * nRepeat) * SCALE;
   }
   
   

@@ -84,31 +84,36 @@ using lumiera::ON_GLOBAL_SHUTDOWN;
 
 ///////////////////////////////////////////////////////Usage
 
+class BlackHoleService
+  : util::NonCopyable
+  {
+    volatile int theHole_ = rand() % 1000;
+    
+    public:
+      int readMe() { return theHole_; }
+  };
+
+
 int
 main (int, char**)
   {
     std::srand(std::time(nullptr));
     LifecycleHook::trigger (ON_GLOBAL_INIT);
     
-//  DependInject<long>::useSingleton ([&] { return "long{rand() % 100}"; });
-//  DependInject<long>::Local<std::string> dummy ([&]{ return new long{rand() % 100}; });
+//  Depend<BlackHoleService> mystery;
+    std::unique_ptr<BlackHoleService> mystery{new BlackHoleService};
+    BlackHoleService mist;
     
-    volatile int blackHole{0};
-    
-    cout << "pling..."<<endl;
-    cout << "plong..."<< microbenchmark<8> ([&]()
-                                              {
-                                                //volatile int dummy =0;
-                                                //dummy == 0;
-                                                //++dummy;
-                                                blackHole == 0;
-                                                //++blackHole;
-                                              })
-                      << endl;
-    cout << "........"<< blackHole/8<<endl;
+    cout << microbenchmark<8> ([&]()
+                                 {
+                                   0 == mystery->readMe();
+                                   //0 == mist.readMe();
+                                 }
+                              ,300000000)
+         << endl;
     
     LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
-    cout <<  "\n.gulp.\n";
+//  cout <<  "\n.gulp.\n";
     
     return 0;
   }
