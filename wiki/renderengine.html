@@ -1927,7 +1927,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803240729" tags="def Concepts draft" changecount="42">
+<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803240827" tags="def Concepts draft" changecount="49">
 <pre>//Access point to dependencies by-name.//
 In the Lumiera code base, we refrain from building or using a full-blown Dependency Injection Container. A lot of FUD has been spread regarding Dependency Injection and Singletons, to the point that a majority of developers confuses and conflates the ~Inversion-of-Control principle (which is essential) with the use of a ~DI-Container. Today, you can not even mention the word &quot;Singleton&quot; without everyone yelling out &quot;Evil! Evil!&quot; -- while most of these people just feel comfortable living in the metadata hell.
 
@@ -1985,6 +1985,7 @@ The following table lists averaged results in relative numbers, in relation to a
 |invoke existing object through unique_ptr  |   60.76|   63.20|     1.20|   1.64|
 |lazy init unprotected (not threadsafe)           |   27.29|   26.57|     2.37|   3.58|
 |lazy init always mutex protected                    | 179,62| 10917.18| 86.40| 6661.23|
+|Double Checked Locking with mutex          |   27,37|   26,27|    2.04|    3.26|
 
 These benchmarks used a dummy service class holding a volatile int, initialised to a random value. The complete code was visible to the compiler and thus eligible for inlining. After accessing this dummy object through the means listed in the table, the benchmarked code retrieved this value repeatedly and compared it to zero. The concurrent measurement used 8 threads (number of cores); as expected, the unprotected lazy init crashed several times randomly during those tests.
 </pre>

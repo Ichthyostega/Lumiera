@@ -189,7 +189,6 @@ namespace lib {
       SRV&
       operator() ()
         {
-          Lock guard;
           if (!instance)
             retrieveInstance();
 //        ENSURE (instance);
@@ -200,16 +199,16 @@ namespace lib {
       void
       retrieveInstance()
         {
-//        Lock guard;
+          Lock guard;
           
-//        if (!instance)
-//          {
+          if (!instance)
+            {
               if (!factory)
                 instance = singleton.buildInstance();
               else
                 instance = factory();
               factory = disabledFactory;
-//          }
+            }
         }
       
       static SRV*
