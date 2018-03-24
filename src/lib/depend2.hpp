@@ -80,6 +80,7 @@
 
 #include <type_traits>
 #include <functional>
+#include <atomic>
 #include <memory>
 
 
@@ -172,8 +173,8 @@ namespace lib {
       using Factory = std::function<SRV*()>;
       using Lock = ClassLock<SRV, NonrecursiveLock_NoWait>;
       
-      static SRV* instance;
-      static Factory factory;
+      static std::atomic<SRV*> instance;
+      static Factory            factory;
       
       static InstanceHolder<SRV> singleton;
       
@@ -189,27 +190,26 @@ namespace lib {
       SRV&
       operator() ()
         {
-          if (!instance)
-            retrieveInstance();
-//        ENSURE (instance);
-          return *instance;
+          SRV* object = instance.load (std::memory_order_acquire);
+          if (!object)
+            {
+              Lock guard;
+              
+              object = instance.load (std::memory_order_relaxed);
+              if (!object)
+                {
+                  if (!factory)
+                    object = singleton.buildInstance();
+                  else
+                    object = factory();
+                  factory = disabledFactory;
+                }
+              instance.store (object, std::memory_order_release);
+            }
+//        ENSURE (object);
+          return *object;
         }
       
-    private:
-      void
-      retrieveInstance()
-        {
-          Lock guard;
-          
-          if (!instance)
-            {
-              if (!factory)
-                instance = singleton.buildInstance();
-              else
-                instance = factory();
-              factory = disabledFactory;
-            }
-        }
       
       static SRV*
       disabledFactory()
@@ -224,7 +224,7 @@ namespace lib {
   
   /* === allocate Storage for static per type instance management === */
   template<class SRV>
-  SRV* Depend<SRV>::instance;
+  std::atomic<SRV*> Depend<SRV>::instance;
   
   template<class SRV>
   typename Depend<SRV>::Factory Depend<SRV>::factory;

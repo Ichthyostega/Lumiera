@@ -4897,7 +4897,7 @@
 <node CREATED="1510341163528" ID="ID_1640768302" MODIFIED="1510341167036" TEXT="fischt nach L&#xf6;sungen"/>
 </node>
 </node>
-<node CREATED="1510341362957" FOLDED="true" ID="ID_1499495468" MODIFIED="1520721823019" TEXT="wirklich monadisch?">
+<node CREATED="1510341362957" FOLDED="true" ID="ID_1499495468" MODIFIED="1521782862284" TEXT="wirklich monadisch?">
 <linktarget COLOR="#80c6b3" DESTINATION="ID_1499495468" ENDARROW="Default" ENDINCLINATION="-1812;12745;" ID="Arrow_ID_673178727" SOURCE="ID_1502143527" STARTARROW="None" STARTINCLINATION="4133;-10665;"/>
 <node CREATED="1510341374332" ID="ID_483481416" MODIFIED="1511572072346" TEXT="naja...">
 <richcontent TYPE="NOTE"><html>
@@ -26912,7 +26912,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722149761" ID="ID_39179906" MODIFIED="1521160728142" TEXT="neue Implementierung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722149761" ID="ID_39179906" MODIFIED="1521160728142" TEXT="neue Implementierung" VGAP="6">
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160662691" ID="ID_1475127406" MODIFIED="1521238630164" TEXT="Design Syntax und Nutzungsmuster">
 <icon BUILTIN="flag-yellow"/>
@@ -27347,7 +27347,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521160718843" TEXT="Implementierung ausf&#xfc;hren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521791648429" TEXT="Implementierung ausf&#xfc;hren">
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1521418559868" ID="ID_592269917" MODIFIED="1521688403021" TEXT="Depend&lt;SRV&gt; Front-End">
 <icon BUILTIN="button_ok"/>
@@ -27408,14 +27408,345 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433948534" ID="ID_176845865" MODIFIED="1521433954006" TEXT="umstellen auf atomics">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1521779239745" ID="ID_1772115642" MODIFIED="1521783134468">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Thema</u>: Memory access order constraints
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#5a6caa" DESTINATION="ID_1416813337" ENDARROW="Default" ENDINCLINATION="-1755;162;" ID="Arrow_ID_751165448" STARTARROW="None" STARTINCLINATION="-4287;-237;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1521783335195" ID="ID_594004742" LINK="http://en.cppreference.com/w/cpp/atomic/memory_order" MODIFIED="1521783351104" TEXT="CPP-Reference"/>
+</node>
+<node CREATED="1521783156564" ID="ID_1193354198" MODIFIED="1521783219950">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#45317b">Grundidee</font>: <b>synchronizes-with</b>-Beziehung herstellen <i>auf Guard-Variable</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521788423421" ID="ID_992901826" MODIFIED="1521788427481" TEXT="use-cases">
+<node CREATED="1521788428588" ID="ID_1454492096" MODIFIED="1521788437479" TEXT="lazy init">
+<node CREATED="1521788443562" ID="ID_699722245" MODIFIED="1521788611886" TEXT="acquire-release ist &quot;ausreichend&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das meint zweierlei
+    </p>
+    <ul>
+      <li>
+        wir brauchen keine volle sequentielle Konsistenz
+      </li>
+      <li>
+        eigentlich w&#252;rde <i>consume</i>&#160;statt <i>acquire</i>&#160;gen&#252;gen,<br />aber wir verzichten auf diesen ehr theoretischen Performance-Gewinn,<br />welcher nur relevant w&#228;re, wenn wir auf ARM einen modernen Compiler einsetzen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521788638623" ID="ID_16016457" MODIFIED="1521788679409">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      essentiell ist, im Mutex-gesch&#252;tzten Bereich
+    </p>
+    <p>
+      auf einer tempor&#228;ren lokalen Instanz-Variable zu arbeiten
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1521788695911" ID="ID_326620949" MODIFIED="1521788702450" TEXT="config Singleton-sub">
+<node CREATED="1521788724243" ID="ID_1337448866" MODIFIED="1521788751467" TEXT="hier wird synchronizes-with per Mutex (blocking) hergestellt"/>
+<node CREATED="1521788777364" ID="ID_1496795291" MODIFIED="1521788787982" TEXT="der Atomic wird nur gelesen, um einen Fehler zu erkennen"/>
+<node CREATED="1521788788546" ID="ID_1572121226" MODIFIED="1521788818778" TEXT="...es w&#xfc;rde sogar ein nicht-atomic gen&#xfc;gen"/>
+<node CREATED="1521788825341" ID="ID_984179535" MODIFIED="1521788870307" TEXT="memory_order_relaxed w&#xe4;re korrekt"/>
+<node CREATED="1521788871702" ID="ID_1445815040" MODIFIED="1521789034029" TEXT="aber seq_cst ist tolerierbar und lesbarer">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      warum?
+    </p>
+    <p>
+      weil per Definitionem dieses gesamte Konfigurations-Thema
+    </p>
+    <p>
+      als <i>nicht performance-kritisch</i>&#160;eingestuft wird -- und ich mehr Wert darauf lege,
+    </p>
+    <p>
+      die verschiedenen Belange im Quelltext nicht zu vermischen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1521789050110" ID="ID_916308999" MODIFIED="1521789055937" TEXT="start Service">
+<node CREATED="1521789241116" ID="ID_1521979010" MODIFIED="1521789252480" TEXT="Frage: besteht hier eine race-condition?">
+<icon BUILTIN="help"/>
+<node CREATED="1521789253954" ID="ID_1012950744" MODIFIED="1521789259925" TEXT="das ist eine Architektur-Frage"/>
+<node CREATED="1521789283782" ID="ID_87566462" MODIFIED="1521789291248" TEXT="&quot;Ja&quot; w&#xfc;rde bedeuten....">
+<node CREATED="1521789292172" ID="ID_1709140060" MODIFIED="1521789340386" TEXT="da&#xdf; Konkurrenz zwischen Singleton und Service vorgesehen ist"/>
+<node CREATED="1521789342638" ID="ID_1682448407" MODIFIED="1521789361687" TEXT="und wir m&#xfc;&#xdf;ten in diesem Fall mit CAS den Service ver&#xf6;ffentlichen"/>
+</node>
+<node CREATED="1521789364195" ID="ID_603083662" MODIFIED="1521789452318" TEXT="die Antwort ist eindeutig &quot;Nein&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gilt schlichtweg als Architektur-Fehler, wenn hier eine Kollision geschiet.
+    </p>
+    <p>
+      Und es gibt keinen sinnvollen Weg, wie die Applikation dann weiterarbeiten kann.
+    </p>
+    <p>
+      Daher werfen wir ja auch error::Fatal
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1521789511870" ID="ID_553276693" MODIFIED="1521789526160" TEXT="Konsistenz-check und Service-Start im Mutex sind ausreichend"/>
+<node CREATED="1521789611377" ID="ID_923887770" MODIFIED="1521789676331" TEXT="aber der Service mu&#xdf; per memory_order_release ver&#xf6;ffentlicht werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn sonst k&#246;nnte genau das gleiche Desaster passieren,
+    </p>
+    <p>
+      das auch in fehlerhaftem Double-Checked-Locking auftritt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1521789904872" ID="ID_1237807951" MODIFIED="1521789930400" TEXT="...was aber durch den default (memory_order_seq_cst) mit impliziert ist">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1521789938539" ID="ID_1248059454" MODIFIED="1521789942239" TEXT="stop Service">
+<node CREATED="1521789943683" ID="ID_128133787" MODIFIED="1521790025755" TEXT="v&#xf6;llig analog: instance = nullptr braucht release-Semantik"/>
+<node CREATED="1521790091662" ID="ID_1518955379" MODIFIED="1521790105520" TEXT="Frage: besteht ein Race auf den Destruktor?">
+<icon BUILTIN="help"/>
+<node CREATED="1521790108228" ID="ID_1075157743" MODIFIED="1521790114983" TEXT="das ist wiederum eine Architektur-Frage"/>
+<node CREATED="1521790115851" ID="ID_1077549103" MODIFIED="1521790219873" TEXT="theoretisch besteht er sehr wohl">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. das ganze Locking und die memory-order sch&#252;tzt uns hier <b>&#252;berhaupt nicht</b>!
+    </p>
+    <p>
+      Es kann sehr wohl passieren, da&#223; ein anderer Thread grade eben noch
+    </p>
+    <p>
+      sicht den Pointer auf den Service geholt hat, und wir dann den Service zerst&#246;ren, w&#228;hrend
+    </p>
+    <p>
+      der andere Thread ihn grade nutzt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521790222356" ID="ID_168283882" MODIFIED="1521790445457">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      unsere Architektur stellt aber sicher,
+    </p>
+    <p>
+      da&#223; dieser Fall nicht relevant ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      warum?
+    </p>
+    <p>
+      Weil der &quot;andere Thread&quot; nur von zwei Subsystemen her kommen kann
+    </p>
+    <ul>
+      <li>
+        dem Subsystem selber, das auch den Service erzeugt.<br />Beispiel ist eine UI-Interaktion aus dem Event-Loop thread
+      </li>
+      <li>
+        aus einem anderen Subsystem, das vom Serivce-Provider abh&#228;ngt
+      </li>
+    </ul>
+    <p>
+      In beiden F&#228;llen stellen unsere Prinzipien zum Betreiben von Subsystemen sicher,
+    </p>
+    <p>
+      da&#223; dieser &quot;andere Thread&quot; nicht (mehr) aktiv sein darf, wenn der Shutdown erfolgt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521790458636" ID="ID_1895342635" MODIFIED="1521791087780" TEXT="Ausnahme: Emergency-Shutdown">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1521790499246" ID="ID_671183540" MODIFIED="1521790505505" TEXT="wenn ein Subsystem zusammenbricht"/>
+<node CREATED="1521790506069" ID="ID_1950061016" MODIFIED="1521790513032" TEXT="sind seine Services bereits weg,"/>
+<node CREATED="1521790515308" ID="ID_1260618160" MODIFIED="1521790538596" TEXT="wenn der Subsystem-Manager den Applikations-Shutdown signalisiert"/>
+<node CREATED="1521790557030" ID="ID_663628696" MODIFIED="1521790571891">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier ist ein <b>Segfault</b>&#160;m&#246;glich
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1521791102683" ID="ID_1344381807" MODIFIED="1521791106262" TEXT="Mock">
+<node CREATED="1521791122872" ID="ID_236648459" MODIFIED="1521791134858" TEXT="Generell unterstellen wir hier gutm&#xfc;tige Verh&#xe4;ltnisse">
+<node CREATED="1521791137678" ID="ID_1107870970" MODIFIED="1521791147768" TEXT="Mocks sollen niemals produktiv verwendet werden"/>
+<node CREATED="1521791149596" ID="ID_301182144" MODIFIED="1521791176628" TEXT="Concurrency tritt (wenn &#xfc;berhaupt) nur sehr kontrolliert auf"/>
+</node>
+<node CREATED="1521791233344" ID="ID_1474658967" MODIFIED="1521791269115" TEXT="auch hier erschl&#xe4;gt Mutex + default-Memory-order alle Belange">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521434009142" ID="ID_117782655" MODIFIED="1521434015486" TEXT="Performance-Messung">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1521791686994" ID="ID_1750734364" MODIFIED="1521791753975" TEXT="Erwartetes Ergebnis: wird nur geringf&#xfc;gig langsamer">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir sind auf x86_64 -- und diese Plattform ist per default <i>fast &#252;berall</i>&#160;sequentially coherent
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160700669" ID="ID_978221585" MODIFIED="1521160718035" TEXT="Dokumentation">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521866206751" ID="ID_702466096" MODIFIED="1521866223424" TEXT="Bezugspunkt: Zugriff auf bereits existierenden Service">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1521791785677" ID="ID_565916879" MODIFIED="1521791789208" TEXT="drei F&#xe4;lle">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791790172" ID="ID_995415475" MODIFIED="1521791831096" TEXT="Mutex f&#xfc;r jeden Zugriff">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791805930" ID="ID_1036499157" MODIFIED="1521791832702" TEXT="L&#xf6;sung ohne Atomics (inkorrekt)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791823055" ID="ID_1820322207" MODIFIED="1521791833719" TEXT="L&#xf6;sung mit Atomics">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791837014" ID="ID_1625592637" MODIFIED="1521791845516" TEXT="Messwerte in Prozent umrechnen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160700669" HGAP="4" ID="ID_978221585" MODIFIED="1521791636399" TEXT="Dokumentation" VSHIFT="25">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790595841" ID="ID_1874367277" MODIFIED="1521790983987" TEXT="Doku-Text im TiddlyWiki">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790613318" ID="ID_506011313" MODIFIED="1521790986067" TEXT="Diskussion der Locking / Atomic-Problematik">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790681557" ID="ID_1346970835" MODIFIED="1521790986851" TEXT="die generelle Haltung bez&#xfc;gl. Performance / Korrektheit">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790709017" ID="ID_1263887689" MODIFIED="1521790982924" TEXT="Doxygen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790767697" ID="ID_1445751091" MODIFIED="1521790987852" TEXT="Grunds&#xe4;tzliches zu Singleton und Dependency-Injection (aktualisieren)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790800253" ID="ID_878208550" MODIFIED="1521790988539" TEXT="Eigenes Kapitel zum Thema Double-Checked Locking">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790816937" ID="ID_776249726" MODIFIED="1521790989859" TEXT="Grenzziehung zur Architektur">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1521790858701" ID="ID_1382870211" MODIFIED="1521790870103" TEXT="Belange die hier nicht behandelt werden"/>
+<node CREATED="1521790870898" ID="ID_662113030" MODIFIED="1521790886784">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Konsequenz: das ist <b>keine Library-Implementierung</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790951152" ID="ID_974126504" MODIFIED="1521790991474" TEXT="Semantik der Konfigurations-Varianten beschreiben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790992538" ID="ID_1892242381" MODIFIED="1521791005169" TEXT="die hier ausgef&#xfc;hrte Analyse zusammenfassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791026749" ID="ID_1199387367" MODIFIED="1521791033909" TEXT="Doku-Subsysteme">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791034972" ID="ID_1629095174" MODIFIED="1521791050755" TEXT="&#xfc;berlegen, wo das Architektur-Thema dargestellt werden sollte">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791058689" ID="ID_564899806" MODIFIED="1521791078375" TEXT="Hinweis auf die offene Flanke bei Emergency-Shutdown">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1520722160591" ID="ID_135546699" MODIFIED="1520722168810" TEXT="Unit-Test">
@@ -27475,6 +27806,18 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160765588" ID="ID_1857896991" MODIFIED="1521160801792" TEXT="Konfig-Aufrufe anpassen">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521858774321" ID="ID_302686020" MODIFIED="1521858778744" TEXT="aufr&#xe4;umen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521858779614" ID="ID_62114860" MODIFIED="1521858790147" TEXT="was ist depend4test?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521858791160" ID="ID_1863623429" MODIFIED="1521858801327" TEXT="brauchen wir DelStash noch?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521861040846" ID="ID_1297884815" MODIFIED="1521861055999" TEXT="brauchen wir singleton-ref?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433694233" ID="ID_1951071885" MODIFIED="1521433716263" TEXT="Nebenbei: Schwartz-Counter in ClassLock abl&#xf6;sen">
 <icon BUILTIN="flag-yellow"/>
@@ -28025,7 +28368,7 @@
 <node CREATED="1512925253328" ID="ID_922277724" MODIFIED="1518487921098" TEXT="JobTicket"/>
 <node CREATED="1512925246057" ID="ID_181262071" MODIFIED="1518487921098" TEXT="JobPlanning">
 <linktarget COLOR="#5379b5" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="41;130;" ID="Arrow_ID_1786254694" SOURCE="ID_1543264108" STARTARROW="Default" STARTINCLINATION="-100;0;"/>
-<node CREATED="1512925265295" ID="ID_1502143527" MODIFIED="1520721823019">
+<node CREATED="1512925265295" ID="ID_1502143527" MODIFIED="1521782862284">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -29046,6 +29389,243 @@
 <node CREATED="1450489395711" ID="ID_1661542298" MODIFIED="1518487921102" TEXT="when ctrl flow enters first"/>
 <node CREATED="1450489412364" ID="ID_965405072" LINK="http://stackoverflow.com/a/8102145/444796" MODIFIED="1518487921102" TEXT="threadsafe since C++11"/>
 <node CREATED="1450489421795" ID="ID_12247357" MODIFIED="1518487921102" TEXT="lives until the end of the program"/>
+</node>
+</node>
+<node CREATED="1521779331036" ID="ID_1416813337" MODIFIED="1521783134469" TEXT="memory access ordering">
+<linktarget COLOR="#5a6caa" DESTINATION="ID_1416813337" ENDARROW="Default" ENDINCLINATION="-1755;162;" ID="Arrow_ID_751165448" SOURCE="ID_1772115642" STARTARROW="None" STARTINCLINATION="-4287;-237;"/>
+<node CREATED="1521779387708" ID="ID_663855061" MODIFIED="1521779394271" TEXT="C++ memory model"/>
+<node CREATED="1521779395219" ID="ID_1890752917" MODIFIED="1521779403446" TEXT="C++11 Atomic library"/>
+<node CREATED="1521783284922" ID="ID_970193431" MODIFIED="1521783295429" TEXT="Quellen &amp; Erl&#xe4;uterungen">
+<icon BUILTIN="info"/>
+<node CREATED="1521783300728" ID="ID_789225244" LINK="http://preshing.com/20120913/acquire-and-release-semantics/" MODIFIED="1521783329728" TEXT="Blog: Preshing on Programming"/>
+<node CREATED="1521783335195" ID="ID_722067069" LINK="http://en.cppreference.com/w/cpp/atomic/memory_order" MODIFIED="1521783351104" TEXT="CPP-Reference"/>
+</node>
+<node CREATED="1521779409601" FOLDED="true" ID="ID_1607777448" MODIFIED="1521782820325" TEXT="fences vs. barriers vs ordering constraints">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das sind verschiedene Blickwinkel auf das gleiche Thema
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1521779467554" ID="ID_257299836" MODIFIED="1521779468925" TEXT="fence">
+<node CREATED="1521779469969" ID="ID_178160333" MODIFIED="1521779473476" TEXT="total-global"/>
+<node CREATED="1521779489966" ID="ID_113452488" MODIFIED="1521779500040" TEXT="das ganze System sieht alle &#xc4;nderungen"/>
+<node CREATED="1521779502213" ID="ID_503013735" MODIFIED="1521779525101" TEXT="Keine Umordnung durch Compiler oder CPU"/>
+</node>
+<node CREATED="1521779532728" ID="ID_263784335" MODIFIED="1521779534459" TEXT="barrier">
+<node CREATED="1521779535264" ID="ID_1004323525" MODIFIED="1521779541691" TEXT="bestimmte Umordnungen werden verboten"/>
+<node CREATED="1521779542351" ID="ID_219555790" MODIFIED="1521780205692" TEXT="vier Typen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Bedeutung dieser Schreibweise:
+    </p>
+    <ul>
+      <li>
+        der erste Zugriff liegt vor der Barriere, der zweite danach
+      </li>
+      <li>
+        die Barriere garantiert jeweils nur, da&#223; der zweitgenannte Zugriff nicht vor den erstgenannten verschoben werden kann
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1521779549150" ID="ID_754401646" MODIFIED="1521779560424" TEXT="ReadRead"/>
+<node CREATED="1521779561540" ID="ID_177816200" MODIFIED="1521779564336" TEXT="ReadWrite"/>
+<node CREATED="1521779565188" ID="ID_1059751946" MODIFIED="1521779570999" TEXT="WriteWrite"/>
+<node CREATED="1521779572470" ID="ID_853931655" MODIFIED="1521779576702" TEXT="WriteRead"/>
+</node>
+<node CREATED="1521779611813" ID="ID_1803991638" MODIFIED="1521779620277" TEXT="Vorsicht">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1521779621764" ID="ID_818642871" MODIFIED="1521779630422" TEXT="garantiert keine Atomizit&#xe4;t"/>
+<node CREATED="1521779631386" ID="ID_548078416" MODIFIED="1521779642021" TEXT="garantiert keine data-dependency consistency"/>
+</node>
+</node>
+<node CREATED="1521779647000" ID="ID_641325372" MODIFIED="1521779651836" TEXT="constraints">
+<node CREATED="1521779654007" ID="ID_1897577946" MODIFIED="1521779668209" TEXT="werden an eine (meist atomare) Guard-Variable gebunden"/>
+<node CREATED="1521779776975" ID="ID_594964930" MODIFIED="1521779831563" TEXT="erzeugen Relation f&#xfc;r Zugriffe auf Payload">
+<node CREATED="1521779923346" ID="ID_725815164" MODIFIED="1521779936380" TEXT="geregelt wird Sichtbarkeit von &#xc4;nderungen"/>
+<node CREATED="1521779943743" ID="ID_433064665" MODIFIED="1521779963241" TEXT="Payload == bestimmte nicht-atomare Variablen"/>
+<node CREATED="1521779978451" ID="ID_459766743" MODIFIED="1521779988549" TEXT="welche?">
+<node CREATED="1521779990345" ID="ID_6762933" MODIFIED="1521779995036" TEXT="normalerweise &quot;alle&quot;"/>
+<node CREATED="1521779996480" ID="ID_1211879916" MODIFIED="1521780022216" TEXT="f&#xfc;r &quot;consume&quot;-Semantik aber nur solche mit data-dependency"/>
+</node>
+<node CREATED="1521780026668" ID="ID_1047639499" MODIFIED="1521780044109" TEXT="Zusammenhang wird durch Nutzungspattern hergestellt">
+<node CREATED="1521780047969" ID="ID_1812009696" MODIFIED="1521780057251" TEXT="Zugriff/Mutation nur..."/>
+<node CREATED="1521780057775" ID="ID_216370648" MODIFIED="1521780074977" TEXT="wenn Signaliisierung via Guard sichtbar wird"/>
+<node CREATED="1521780076253" ID="ID_708835482" MODIFIED="1521780116390">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eine <i>Solche</i>&#160;konstituiert die synchronizes-with-Beziehuung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1521779841462" ID="ID_1131913901" MODIFIED="1521779896124">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Grundbeziehung</b>: synchronizes-with
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1521780332842" ID="ID_968730029" MODIFIED="1521780339536" TEXT="Mutex">
+<icon BUILTIN="idea"/>
+<node CREATED="1521780355015" ID="ID_1565927718" MODIFIED="1521780366841" TEXT="erzeugt einen vollen Fence auf beiden Seiten"/>
+<node CREATED="1521780375364" ID="ID_816580184" MODIFIED="1521780391453" TEXT="d.h. am Eingang und Ausgang gelten alle vier barriers"/>
+<node CREATED="1521780411423" ID="ID_1904243826" MODIFIED="1521780423585" TEXT="das impliziert auch Atomizit&#xe4;t"/>
+<node CREATED="1521780424149" ID="ID_1787016583" MODIFIED="1521780430670" TEXT="aber">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1521780432156" ID="ID_583365135" MODIFIED="1521780487933">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das gilt nur im Rahmen der <b>synchronizes-with</b>-Beziehung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521780488708" ID="ID_945270217" MODIFIED="1521780517520">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, nur f&#252;r einen <b>vom gleichen Mutex gesch&#252;tzen</b>&#160; Bereich!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521782262223" HGAP="30" ID="ID_1323377815" MODIFIED="1521782807539" TEXT="Typisches Gegenbeispiel: Double Checked Locking" VSHIFT="18">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      In der <i>naiven Implementierung</i>&#160;greift der pr&#252;fende Thread auf die instance-Variable
+    </p>
+    <p>
+      <i>ohne jedwede Beziehung</i>&#160;zum anderen Thread zu; er verwendet keinen Mutex und keinen Atomic.
+    </p>
+    <p>
+      Und genau deshalb kann er das Setzen des Instanz-Pointers sehen, ohne da&#223; eine
+    </p>
+    <p>
+      Ordnungsbeziehung zur der restlichen Initialisierung oder lazy computation besteht.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Fix: die Beziehung herstellen. Das ist verursacht stets zus&#228;tzliche Kosten.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Allerdinsg nicht auf einer Plattform, die ohnehin sequentiell-konsistent ist. Wie &quot;zum Beispiel&quot; x86/64
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1521791354104" HGAP="-1" ID="ID_287671137" MODIFIED="1521791364604" TEXT="grunds&#xe4;tzlich...." VSHIFT="7">
+<node CREATED="1521791365590" ID="ID_1571110438" MODIFIED="1521791379580">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...haben wir es hier mit einem <b>Pattern</b>&#160;zu tun
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521791417311" ID="ID_668833788" MODIFIED="1521791528549">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich nenne es &quot;<b>synchronised visibility cones</b>&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1521791441996" ID="ID_656786136" MODIFIED="1521791513129">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dieses errichtet die Fiktion,
+    </p>
+    <p>
+      als w&#252;rden wir nur auf einer gemeinsamen (shared) Instanz arbeiten.
+    </p>
+    <p>
+      In Realit&#228;t arbeiten mehrere Threads/Cores mit mehreren Entit&#228;ten
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1521791567491" ID="ID_328701027" MODIFIED="1521791613112" TEXT="Code mu&#xdf; das Bestehen der Beziehung aktiv pr&#xfc;fen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und andernfalls &#252;berhaupt vermeiden,
+    </p>
+    <p>
+      die shared zone anzufassen!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
