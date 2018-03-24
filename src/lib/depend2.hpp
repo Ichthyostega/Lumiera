@@ -190,7 +190,7 @@ namespace lib {
         {
           if (!instance)
             retrieveInstance();
-          ENSURE (instance);
+//        ENSURE (instance);
           return *instance;
         }
       
@@ -198,16 +198,16 @@ namespace lib {
       void
       retrieveInstance()
         {
-          ClassLock<SRV> guard;
+//        ClassLock<SRV> guard;
           
-          if (!instance)
-            {
+//        if (!instance)
+//          {
               if (!factory)
                 instance = singleton.buildInstance();
               else
                 instance = factory();
               factory = disabledFactory;
-            }
+//          }
         }
       
       static SRV*

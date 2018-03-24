@@ -100,16 +100,13 @@ main (int, char**)
     std::srand(std::time(nullptr));
     LifecycleHook::trigger (ON_GLOBAL_INIT);
     
-//  Depend<BlackHoleService> mystery;
-    std::unique_ptr<BlackHoleService> mystery{new BlackHoleService};
-    BlackHoleService mist;
+    Depend<BlackHoleService> mystery;
     
     cout << microbenchmark<8> ([&]()
                                  {
-                                   0 == mystery->readMe();
-                                   //0 == mist.readMe();
+                                   0 == mystery().readMe();
                                  }
-                              ,300000000)
+                              ,200000000)
          << endl;
     
     LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);

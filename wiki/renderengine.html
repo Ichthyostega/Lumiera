@@ -1927,7 +1927,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803240643" tags="def Concepts draft" changecount="35">
+<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201803240729" tags="def Concepts draft" changecount="42">
 <pre>//Access point to dependencies by-name.//
 In the Lumiera code base, we refrain from building or using a full-blown Dependency Injection Container. A lot of FUD has been spread regarding Dependency Injection and Singletons, to the point that a majority of developers confuses and conflates the ~Inversion-of-Control principle (which is essential) with the use of a ~DI-Container. Today, you can not even mention the word &quot;Singleton&quot; without everyone yelling out &quot;Evil! Evil!&quot; -- while most of these people just feel comfortable living in the metadata hell.
 
@@ -1978,12 +1978,14 @@ We acknowledge that such a dependency or service will be accessed frequently and
 Our requirements on (optional) reconfigurability have some impact on the implementation technique though, since we need access to the instance pointer for individual service types. This basically rules out //Meyers Singleton// -- and so the adequate implementation technique for our usage pattern is //Double Checked Locking.// In the past, there was much debate about DCL being broken -- which indeed was true when //assuming full portability and arbitrary target platform.// Since our focus is primarily on ~PC-with-Linux systems, this argument seems rather theoretical though, since the x86/64 platform is known to employ rather strong memory and cache coherency constraints. With the advent of ARM systems, the situation has changed however. Anyway, since C++11 there is a portable solution for writing a correct DCL implementation, based on {{{std::atomic}}}.
 
 To give some idea of the rough proportions of performance impact, in 2018 we conducted some micro benchmarks (using a 8 core AMD 64bit processor running Debian/Jessie building with GCC 4.9)
-The following table lists averaged results in relative numbers, in relation to a single threaded direct non virtual member function invocation
+The following table lists averaged results in relative numbers, in relation to a single threaded direct non virtual member function invocation (≈ 0.3ns)
 | !Access Technique |&gt;| !development |&gt;| !optimised |
 |~| single threaded|multithreaded | single threaded|multithreaded |
 |direct invoke shared local object                  |   15.13|   16.30|  ''1.00''|   1.59|
 |invoke existing object through unique_ptr  |   60.76|   63.20|     1.20|   1.64|
+|lazy init unprotected (not threadsafe)           |   27.29|   26.57|     2.37|   3.58|
 
+These benchmarks used a dummy service class holding a volatile int, initialised to a random value. The complete code was visible to the compiler and thus eligible for inlining. After accessing this dummy object through the means listed in the table, the benchmarked code retrieved this value repeatedly and compared it to zero. The concurrent measurement used 8 threads (number of cores); as expected, the unprotected lazy init crashed several times randomly during those tests.
 </pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
