@@ -104,13 +104,17 @@ namespace meta{
   template<typename FUN, typename SEL =void>
   struct _Fun
     : std::false_type
-    { };
+    {
+      using Functor = FUN;
+    };
   
   /** Specialisation for function objects and lambdas */
   template<typename FUN>
   struct _Fun<FUN,  enable_if<has_FunctionOperator<FUN>> >
     : _Fun<decltype(&FUN::operator())>
-    { };
+    {
+      using Functor = FUN;
+    };
   
   /** Specialisation for a bare function signature */
   template<typename RET, typename...ARGS>
@@ -120,6 +124,7 @@ namespace meta{
       using Ret  = RET;
       using Args = Types<ARGS...>;
       using Sig  = RET(ARGS...);
+      using Functor = std::function<Sig>;
     };
   /** Specialisation for using a function pointer */
   template<typename SIG>

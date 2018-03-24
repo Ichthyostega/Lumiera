@@ -42,6 +42,7 @@
 
 #include "lib/error.hpp"
 #include "include/logging.h"
+#include "lib/meta/function.hpp"
 #include "lib/result.hpp"
 
 extern "C" {
@@ -50,14 +51,11 @@ extern "C" {
 #include "backend/threadpool-init.hpp"
 
 #include <type_traits>
-#include <functional>
 #include <utility>
 
 
 namespace backend {
   
-  using std::bind;
-  using std::function;
   using lib::Literal;
   namespace error = lumiera::error;
   using error::LUMIERA_ERROR_STATE;
@@ -125,7 +123,8 @@ namespace backend {
       static void
       threadMain (void* arg)
         {
-          function<void()> _doIt_{forwardInitialiser<FUN> (arg)};
+          using Fun= typename lib::meta::_Fun<FUN>::Functor;
+          Fun _doIt_{forwardInitialiser<FUN> (arg)};
           
           lumiera_thread_sync (); // sync point: arguments handed over
           
