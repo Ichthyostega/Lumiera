@@ -170,6 +170,7 @@ namespace lib {
   class Depend
     {
       using Factory = std::function<SRV*()>;
+      using Lock = ClassLock<SRV, NonrecursiveLock_NoWait>;
       
       static SRV* instance;
       static Factory factory;
@@ -188,6 +189,7 @@ namespace lib {
       SRV&
       operator() ()
         {
+          Lock guard;
           if (!instance)
             retrieveInstance();
 //        ENSURE (instance);
@@ -198,7 +200,7 @@ namespace lib {
       void
       retrieveInstance()
         {
-//        ClassLock<SRV> guard;
+//        Lock guard;
           
 //        if (!instance)
 //          {

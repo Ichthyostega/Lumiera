@@ -102,11 +102,11 @@ main (int, char**)
     
     Depend<BlackHoleService> mystery;
     
-    cout << microbenchmark<8> ([&]()
+    cout << microbenchmark<1> ([&]()
                                  {
                                    0 == mystery().readMe();
                                  }
-                              ,200000000)
+                              ,50000000)
          << endl;
     
     LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);

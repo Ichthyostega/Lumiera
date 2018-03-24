@@ -74,7 +74,7 @@ namespace lib {
   struct DependInject
     {
       using Factory = typename Depend<SRV>::Factory;
-      
+      using Lock    = typename Depend<SRV>::Lock;
       
       /** configure dependency-injection for type SRV to build a subclass singleton
        * @tparam SUB concrete subclass type to build on demand when invoking `Depend<SRV>`
@@ -259,7 +259,7 @@ namespace lib {
       static void
       installFactory (Factory&& otherFac)
         {
-          ClassLock<SRV> guard;
+          Lock guard;
           if (Depend<SRV>::instance)
             throw error::Logic("Attempt to reconfigure dependency injection after the fact. "
                                "The previously installed factory (typically Singleton) was already used."
@@ -270,7 +270,7 @@ namespace lib {
       static void
       temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, Factory&& newFac)
         {
-          ClassLock<SRV> guard;
+          Lock guard;
           stashFac = move(Depend<SRV>::factory);
           stashInstance = Depend<SRV>::instance;
           Depend<SRV>::factory = move(newFac);
@@ -280,7 +280,7 @@ namespace lib {
       static void
       restoreOriginalFactory (SRV*& stashInstance, Factory& stashFac)
         {
-          ClassLock<SRV> guard;
+          Lock guard;
           Depend<SRV>::factory = move(stashFac);
           Depend<SRV>::instance = stashInstance;
         }
@@ -288,7 +288,7 @@ namespace lib {
       static void
       activateServiceAccess (SRV& newInstance)
         {
-          ClassLock<SRV> guard;
+          Lock guard;
           if (Depend<SRV>::instance)
             throw error::Logic("Attempt to activate an external service implementation, "
                                "but another instance has already been dependency-injected."
@@ -300,7 +300,7 @@ namespace lib {
       static void
       deactivateServiceAccess()
         {
-          ClassLock<SRV> guard;
+          Lock guard;
           Depend<SRV>::instance = nullptr;
           Depend<SRV>::factory = Depend<SRV>::disabledFactory;
         }
