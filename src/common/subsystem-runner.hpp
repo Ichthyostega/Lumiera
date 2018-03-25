@@ -94,7 +94,7 @@ namespace lumiera {
    * correspond to a single component, interface or plugin. It may well be a
    * complete layer of the application (e.g. the GUI).
    * 
-   * \par Protocol of operation
+   * ## Protocol of operation
    * The SubsystemRunner is to be configured with a lumiera::Option object first.
    * Then, primary subsystems are \link #maybeRun provided \endlink for eventual
    * startup, which may depend on conditions defined by the subsystem. When
@@ -112,7 +112,7 @@ namespace lumiera {
    * will be triggered. The #wait() function returns after shutdown of all subsystems,
    * signalling an emergency exit (caused by an exception) with its return value.
    * 
-   * @todo maybe use my refArray (see builder) to use Subsys& instead of Subsys* ??
+   * @todo 2018 this component works well but could be (re)written in a cleaner way
    * 
    * @see lumiera::AppState
    * @see lumiera::Subsys

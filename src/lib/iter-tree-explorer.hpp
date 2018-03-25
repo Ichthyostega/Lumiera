@@ -279,8 +279,8 @@ namespace lib {
      * Two flavours need to be distinguished:
      * - we get a _reference_ to something living elsewhere; all we know is it's iterable.
      * - we get a pointer, indicating that we must take ownership and manage the lifetime.
-     *   The iterable entity in this case can be assumed heap allocated, featuring a virtual
-     *   destructor.
+     *   The iterable entity in this case can be assumed to be heap allocated, featuring a
+     *   virtual destructor.
      * The generated front-end has identical type in both cases; it is based on a shared_ptr,
      * just a different deleter function is used in both cases. This design makes sense,
      * since the protocol requires us to invoke virtual function IterSource::disconnect()

@@ -23,8 +23,87 @@
 
 /** @file dependency-factory.hpp
  ** Per type specific configuration of instances created as service dependencies.
- ** @todo WIP-WIP 3/18 rework of the singleton / dependency factory is underway
+ ** This is the _"Backstage Area"_ of lib::Depend, where the actual form and details
+ ** of instance creation can be configured in various ways. Client code typically
+ ** plants an instance of lib::Depend, templated to the actual type of the dependency.
+ ** This is a way to express the dependency on some interface or service, while not
+ ** expanding on any details as to when and how this dependency is created. Without
+ ** and explicit configuration, lib::Depend will automatically create and manage a
+ ** singleton instance of the type given as type parameter.
+ ** 
+ ** ## Architecture
+ ** A _dependency_ is understood as something we need to do the task at hand, yet
+ ** a dependency lies beyond that task and relates to concerns outside the scope
+ ** and theme of this actual task. The usage site of the dependency is only bound
+ ** and coupled to the _interface_ exposed as dependency, and the associated
+ ** _contract_ of a service. Initially, such a dependency is _dormant_ and will
+ ** be activated on first access. This simplifies the bootstrap of complex
+ ** interwoven structures; it suffices to ensure that none of the participating
+ ** entities actually starts to work before all of the setup and wiring is done.
+ ** 
+ ** For that reason, lib::DependInject<SRV> is meant to be used at the site providing
+ ** the _actual_ service or implementation subtype -- not at the site consuming a
+ ** dependency (through lib::Depend<SRV>). This choice also means that the actual
+ ** configuration of services is not centralised, and can not be static; it need
+ ** to happen prior to any service access (on violation error::Logic is raised)
+ ** 
+ ** The public configuration mechanisms offered by DependInject address various concerns:
+ ** 
+ ** \paragraph Wiring
+ ** Even when relying on lazy on-demand initialisation, a concrete service implementation
+ ** typically needs to connect to further services, and maybe even decide upon the actual
+ ** subclass to be instantiated. By invoking the DependInject<SRV>::useSingleton(FUN)
+ ** function, a functor or lambda can be installed into the static factory of lib::Depend.
+ ** Especially, a lambda could be bound into the internal context of the service provider.
+ ** This function is expected to deliver a heap allocated instance on invocation, which
+ ** will be owned and managed by lib::Depend<SRV>::singleton (An InstanceHolder<SRV>).
+ ** 
+ ** \paragraph Service Lifecycle
+ ** Whenever a module or subsystem can be started and stopped, several interconnected
+ ** services become operational together, with dependent lifecycle. It is possible to
+ ** expose such services through a lib::Depend<SRV> front-end; this way, the actual
+ ** usage context remains agnostic with respect to details of the lifecycle. Any
+ ** access while the service is _not_ available will just raise an error::Logic.
+ ** This kind of configuration can be achieved by planting a smart-handle of type
+ ** DependInject<SRV>::ServiceInstance<IMP>
+ ** 
+ ** \paragraph Unit Testing with Mock Services
+ ** Dependencies tend to hamper unit testing, but global variables and actively
+ ** linked and collaborating implementations are worse and often prevent test coverage
+ ** altogether. Preferably dependencies are limited to an interface and a focused topic,
+ ** and then it might be possible to inject a _mock implementation_ locally within the
+ ** unit test. Such a mock instance temporarily shadows any previously existing state,
+ ** instance or configuration for this dependency; the mock object can be rigged and
+ ** instrumented by the test code to probe or observe the subject's behaviour. This
+ ** concept can only work when the test subject does not cache any state and really
+ ** pulls the dependency whenever necessary.
+ ** 
+ ** 
+ ** ## Performance, concurrency and sanity
+ ** 
+ ** The lib::Depend<SRV> front-end is optimised for the access path. It uses an
+ ** std::atomic to hold the instance pointer and a class-level Mutex to protect
+ ** the initialisation phase. On the other hand, initialisation happens only once
+ ** and will be expensive anyway. And, most importantly, for any non-standard
+ ** configuration we assume, that -- by architecture -- there is _no contention_
+ ** between usage and configuration. Services are to be started in a dedicated bootstrap
+ ** phase, and unit tests operated within a controlled, single threaded environment.
+ ** For this reason, any configuration grabs the lock, and publishes via the default
+ ** memory order of std::atomic (which is std::memory_order_seq_cst). Any spotted
+ ** collision or inconsistency raises an exception, which typically should not
+ ** be absorbed, but rather trigger component, subsystem or application shutdown.
+ ** @warning there is a known coherency breach in "emergency shutdown": When a
+ **     subsystem collapses unexpectedly, its root handler signals the subsystem
+ **     runner to initiate emergency shutdown. However, the collapsed subsystem
+ **     is already defunct at that point, which breaks the the general contract
+ **     of prerequisite subsystems to be available in operative mode. Lumiera
+ **     is not built as a resilient service in that respect, but we also
+ **     mandate for any parts not to cache essential work results in
+ **     transient memory; actions are logged and performed for
+ **     persistent history and UNDO.
+ ** 
  ** @see DependencyConfiguration_test
+ ** @see subsys.hpp
  */
 
 
@@ -71,11 +150,13 @@ namespace lib {
    *   which is managed automatically and removed when leaving the scope of the test.
    */
   template<class SRV>
-  struct DependInject
+  class DependInject
+    : util::NoInstance
     {
       using Factory = typename Depend<SRV>::Factory;
       using Lock    = typename Depend<SRV>::Lock;
       
+    public:
       /** configure dependency-injection for type SRV to build a subclass singleton
        * @tparam SUB concrete subclass type to build on demand when invoking `Depend<SRV>`
        * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
@@ -305,7 +386,6 @@ namespace lib {
           Depend<SRV>::factory = Depend<SRV>::disabledFactory;
         }
     };
-  
   
   
   

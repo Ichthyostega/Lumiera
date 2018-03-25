@@ -85,5 +85,18 @@ namespace util {
       Cloneable& operator= (Cloneable const&) = delete;
     };
   
+  /**
+   * Not meant to be instantiated in any way.
+   * Types marked this way are typically used for metaprogramming
+   * or expose static factory methods to some related sibling
+   * based on a template parameter or similar configuration.
+   */
+  class NoInstance
+    {
+    protected:
+      NoInstance() = delete;
+    };
+  
+  
 } // namespace util
 #endif /*LIB_NOCOPY_H*/

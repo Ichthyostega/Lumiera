@@ -1,0 +1,51 @@
+Layers -- Subsystems -- Lifecycle
+=================================
+:Author:	Hermann Voßeler
+:Email:	<Ichthyostega@web.de>
+:Date:      2018
+
+WARNING: under construction [red]#TO BE WRITTEN#
+
+
+Terminology
+-----------
+
+Layer::
+  A conceptual realm within the application to group related concerns and define an ordering.
+  Layers are above/below each other and may depend _solely_ on lower layers. The Application
+  may be operated in a partial layer configuration with only some lower layers. Each layer
+  deals with distinct topics and has its own style. In Lumiera, we distinguish three layers
++
+* User Interface -> Interaction
+* Proc-Layer -> Processing
+* Backend -> Data manipulation
+
+Subsystem::
+  A runtime entity which acts as anchor point and framework to maintain a well defined lifecycle.
+  While layers are conceptual realms, subsystems can actually be started and stopped and their
+  dependencies are represented as data structure. A subsystem typically starts one or several
+  primary components, which might spawn a dedicated thread and instantiate further components
+  and services.
+
+Service::
+  A component within some subsystem is termed _Service_
++
+--
+  * when it exposes an interfaces with an associated contract (informal rules about usage pattern)
+  * when it accepts invocations from arbitrary other components without specific wiring hard coded knowledge
+--
++
+The service lifecycle is tied to the lifecycle of the related subsystem; whenever the subsystem is ``up and running'',
+any contained serivces can be accessed and used. Within Lumiera, there is no _service broker_ or any similar kind
+of elaborate _service discovery_ -- rather, services are accessed *by name*, where ``name'' is the _type name_
+of the service interface.
+
+Dependency::
+  A relation at implementation level and thus a local property of an individual component. A dependency is something
+  we need to complete the task at hand, yet a dependency lies beyond that task and relates to concerns outside the scope
+  and theme of this actual task. Wich means, a dependency is not brought in by the task or part of the task, rather
+  the task is the reason why some entity dealing with that task needs to _pull_ the dependency, in order to be able
+  to handle the task. So essentially, dependencies are accessed on-demand. Dependencies might be other components
+  or services, and typically the user (consumer) of a dependency just relies on the corresponding interface and
+  remains agnostic with respect to the dependencie's actual implementation or lifecycle details.
+

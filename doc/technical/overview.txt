@@ -401,11 +401,37 @@ Common Services
 
 Subsystem runner
 ~~~~~~~~~~~~~~~~
-_tbw_
+Conceptually, the application is structured into layers. However, as actual runtime
+entities we rely on a small number of link:{ldoc}/design/architecture/Subsystems.html[Subsystems],
+which can be started and stopped and have well defined dependencies:
+
+- Engine
+- Session and Builder
+- Play and Render Subsystem
+- Lumiera GUI
+- Script runner [yellow-background small]#planned#
+- Renderfarm node [yellow-background small]#planned#
+
+Lumiera's `main()` function defines an _Application Object_, which in turn operates
+the _Subsystem Runner_. Each Subsystem implements a descriptor with the necessary
+hooks callbacks to be started and stopped when necessary.
 
 Lifecycle events
 ~~~~~~~~~~~~~~~~
-_tbw_
+Beyond parsing the commandline and triggering start of the subsystems, the Application
+Object also issues _Lifecycle Events_. Individual components can register a callback
+to be invoked when this happens. Currently (2018) the following events are known
+(see 'include/lifecycle.h'):
+
+- ON_BASIC_INIT
+- ON_GLOBAL_INIT
+- ON_GLOBAL_SHUTDOWN
+- ON_EMERGENCY_EXIT
+
+-> see here for
+link:{ldoc}/design/application/SubsystemLifecycle.html#_initialisation_and_lifecycle[explanation in detail]
+[small]#(somewhat preliminary and messy, yet still valid as of [yellow-background]##2018##)#
+
 
 Interface system
 ~~~~~~~~~~~~~~~~
@@ -448,9 +474,6 @@ Config loader
 ~~~~~~~~~~~~~
 _tbw_
 
-Lua Scripting
-~~~~~~~~~~~~~
-_tbw_
 
 
 
@@ -656,18 +679,22 @@ mayfail()
 
 
 
-Singletons
-~~~~~~~~~~
+Singletons and Dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Deliberately, Lumiera stays below the level of utilising a dependency injection framework.
 Consequently, we access most services _by type name_, pulling up a single implementation
-instance on demand. Rather than placing this singleton lifecycle logic into the individual
-implementation classes, we use a _singleton factory_, managing the lifecycle through static
-variables and placing the singleton object into a static memory block. Singleton initialisation
-is protected by a monitor per singleton type, while shutdown is triggered by the clean-up of
-a static variable. This results in the general policy that within Lumiera, performing any
-``business'' code in the application shutdown phase (after exiting +main()+) is _strictly
-prohibited._ Generally speaking, destructors _must not perform any significant work_ and
-are are expected to be failsafe.
+instance on demand. Yet some aspects of the *Singleton Pattern* are known to be problematic.
+Rather than placing this singleton lifecycle logic into the individual implementation classes,
+we use a _singleton factory_, to manage the instance creation and lifecycle of the singleton
+or service instance separate from the singleton class itself. Singleton initialisation happens
+lazily with this approach, and thus needs to be protected in a multithreaded environment; we
+use Double Checked Locking with std::atomic for this purpose.
+
+Singletons need to be written in a way to cope with that somewhat nondeterministic environment.
+They will be created on-demand, and be destroyed _eventually,_ in the application shutdown phase.
+This results in the general policy that within Lumiera, performing any ``business'' code in the
+application shutdown phase (after exiting +main()+) is _strictly prohibited._ Generally speaking,
+destructors _must not perform any significant work_ and are are expected to be failsafe.
 
 .accessing the singleton instance
 By convention, when clients are expected actively to access the singleton instance,
@@ -675,16 +702,21 @@ the interface class holds the singleton factory as a public static member with t
 name +instance+. This allows clients to write `SomeService::instance()` to get a
 reference to the implementation.
 
-.subclasses and mock testing support
-There is a mechanism to ``push aside'' the existing singleton instance and shadow
-it temporarily with a mock implementation. Besides, there is a variation of the
-general singleton factory, allowing to fabricate a specific subclass of the 
-exposed interface. Both of these facilities are rather technically involved
-and require some specific set-up -- fortunately it turned out that they are
-used only occasionally and rarely required. (Probably this is a result of
-Lumiera being developed _test-driven_ -- things are being written mostly
-in a unit test friendly fashion).
+.subclasses and services
+Actually, what appears as a mere ``singleton'' here is a form of _Dependency Injection,_
+and can easily be extended to cover other forms of dependencies and other types of lifecycle.
+Our experience indicates that this is rarely necessary, but when it happens, it's essential.
+Lumiera's Dependency-Factory thus offers a configuration mechanism, which allows to switch
+those modes of operation for individual types; the client consuming the ``singleton'' remains
+unaware of such special setup.
 
+.mock testing support
+Moreover, the Dependency-Factory also offers a mechanism to ``push aside'' the existing singleton
+or serviec instance and shadow it temporarily with a mock implementation. Again, it turned out that
+such mocking mechanisms are used only occasionally and rarely required. Likely this is a result of
+Lumiera being developed _test-driven_ -- things are being written mostly in a unit test friendly way.
+
+-> more about link:{ldoc}/technical/library/Dependencies.html[dependency handling]
 
 Extensible Factory
 ~~~~~~~~~~~~~~~~~~
@@ -748,6 +780,16 @@ templates are provided to build _filtering iterators, transforming iterators,_ t
 only _unique values,_ to _take a snapshot on-the-fly_ etc. There are convenience
 builder functions for those operations, figuring out the actual source and destination
 types by template metaprogramming.
+
+Pipeline Builder
+^^^^^^^^^^^^^^^^
+As an extension to the iterator framework, the pipeline builder is able
+to wrap arbitrary source iterators, decorate them with filters and transformations
+provided as Lambda, and finally package all together into a self contained new
+iterator (value object). This is a rather new feature [small]#(as of 2017)# and
+we still need to determine its viability, yet it proved helpful when implementing
+certain kinds of search algorithms on top of an abstracted data source exposed
+as iterator. -> 'lib/iter-tree-explorer.hpp'
 
 
 Front-end for boost::format

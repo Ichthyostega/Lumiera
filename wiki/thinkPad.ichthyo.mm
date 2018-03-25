@@ -27700,28 +27700,28 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160700669" HGAP="4" ID="ID_978221585" MODIFIED="1521791636399" TEXT="Dokumentation" VSHIFT="25">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790595841" ID="ID_1874367277" MODIFIED="1521790983987" TEXT="Doku-Text im TiddlyWiki">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790681557" ID="ID_1346970835" MODIFIED="1521790986851" TEXT="die generelle Haltung bez&#xfc;gl. Performance / Korrektheit">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521790595841" ID="ID_1874367277" MODIFIED="1521936684007" TEXT="Doku-Text im TiddlyWiki">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521790681557" ID="ID_1346970835" MODIFIED="1521936679674" TEXT="die generelle Haltung bez&#xfc;gl. Performance / Korrektheit">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790613318" ID="ID_506011313" MODIFIED="1521885094991" TEXT="Diskussion der Locking / Atomic-Problematik">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521790613318" ID="ID_506011313" MODIFIED="1521936677400" TEXT="Diskussion der Locking / Atomic-Problematik">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1521885096858" ID="ID_1403195900" MODIFIED="1521885106977" TEXT="Benchmark-Zahlen dokumentieren">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790709017" ID="ID_1263887689" MODIFIED="1521790982924" TEXT="Doxygen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790767697" ID="ID_1445751091" MODIFIED="1521790987852" TEXT="Grunds&#xe4;tzliches zu Singleton und Dependency-Injection (aktualisieren)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521790709017" ID="ID_1263887689" MODIFIED="1521947771608" TEXT="Doxygen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1521790767697" ID="ID_1445751091" MODIFIED="1521936696493" TEXT="Grunds&#xe4;tzliches zu Singleton und Dependency-Injection (aktualisieren)">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790800253" ID="ID_878208550" MODIFIED="1521790988539" TEXT="Eigenes Kapitel zum Thema Double-Checked Locking">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521790800253" ID="ID_878208550" MODIFIED="1521946968361" TEXT="Eigenes Kapitel zum Thema Double-Checked Locking">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790816937" ID="ID_776249726" MODIFIED="1521790989859" TEXT="Grenzziehung zur Architektur">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521790816937" ID="ID_776249726" MODIFIED="1521946976350" TEXT="Grenzziehung zur Architektur">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1521790858701" ID="ID_1382870211" MODIFIED="1521790870103" TEXT="Belange die hier nicht behandelt werden"/>
 <node CREATED="1521790870898" ID="ID_662113030" MODIFIED="1521790886784">
 <richcontent TYPE="NODE"><html>
@@ -27737,19 +27737,38 @@
 </richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790951152" ID="ID_974126504" MODIFIED="1521790991474" TEXT="Semantik der Konfigurations-Varianten beschreiben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521790951152" ID="ID_974126504" MODIFIED="1521946981024" TEXT="Semantik der Konfigurations-Varianten beschreiben">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521790992538" ID="ID_1892242381" MODIFIED="1521791005169" TEXT="die hier ausgef&#xfc;hrte Analyse zusammenfassen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521790992538" ID="ID_1892242381" MODIFIED="1521947767631" TEXT="die hier ausgef&#xfc;hrte Analyse zusammenfassen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791026749" ID="ID_1199387367" MODIFIED="1521791033909" TEXT="Doku-Subsysteme">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791034972" ID="ID_1629095174" MODIFIED="1521791050755" TEXT="&#xfc;berlegen, wo das Architektur-Thema dargestellt werden sollte">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521791034972" ID="ID_1629095174" MODIFIED="1521962998443" TEXT="&#xfc;berlegen, wo das Architektur-Thema dargestellt werden sollte">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1521962966238" ID="ID_1724029235" MODIFIED="1521962976832" TEXT="geh&#xf6;rt in die Architektur-Sektion"/>
+<node COLOR="#338800" CREATED="1521962977140" ID="ID_1121275609" MODIFIED="1521962995498" TEXT="Neue Seite &quot;Subsystems&quot; angelegt">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791058689" ID="ID_564899806" MODIFIED="1521791078375" TEXT="Hinweis auf die offene Flanke bei Emergency-Shutdown">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521929151045" ID="ID_1800182456" MODIFIED="1521929162564" TEXT="Doku-Seite f&#xfc;r DependencyFactory anlegen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1521929165380" ID="ID_15396392" MODIFIED="1521929185272" TEXT="kann in etwa der Content aus dem TiddlyWiki sein">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1521963017631" ID="ID_380828830" MODIFIED="1521963032077" TEXT="Neue Seite angelegt und von The Inner Core verlinkt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521929186281" ID="ID_1078337367" MODIFIED="1521929199008" TEXT="ein, zwei Einleitungss&#xe4;tze dazu">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521929199799" ID="ID_507602296" MODIFIED="1521929217037" TEXT="Wichtig: die Benchmark-Daten hier auch darstellen">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -27815,14 +27834,36 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521858774321" ID="ID_302686020" MODIFIED="1521858778744" TEXT="aufr&#xe4;umen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521858779614" ID="ID_62114860" MODIFIED="1521858790147" TEXT="was ist depend4test?">
+<node COLOR="#338800" CREATED="1521858779614" ID="ID_62114860" MODIFIED="1521928808594" TEXT="was ist depend4test?">
 <icon BUILTIN="help"/>
+<node CREATED="1521928764171" ID="ID_507085354" MODIFIED="1521928798462" TEXT="die alte Testmock-L&#xf6;sung">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521858791160" ID="ID_1863623429" MODIFIED="1521858801327" TEXT="brauchen wir DelStash noch?">
-<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521928773218" ID="ID_1837242179" MODIFIED="1521928795280" TEXT="nach Schwenken aller Unit-Tests wegfallend">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521861040846" ID="ID_1297884815" MODIFIED="1521861055999" TEXT="brauchen wir singleton-ref?">
+</node>
+<node COLOR="#338800" CREATED="1521858791160" ID="ID_1863623429" MODIFIED="1521929094523" TEXT="brauchen wir DelStash noch?">
 <icon BUILTIN="help"/>
+<node CREATED="1521929071984" ID="ID_529951044" MODIFIED="1521929092199" TEXT="wird vom Advice-System genutzt"/>
+<node CREATED="1521929080591" ID="ID_192438703" MODIFIED="1521929097694" TEXT="bleibt weiterhin notwendig">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1521861040846" ID="ID_1297884815" MODIFIED="1521929021187" TEXT="brauchen wir singleton-ref?">
+<icon BUILTIN="help"/>
+<node CREATED="1521928945937" ID="ID_1967326849" MODIFIED="1521929017586" TEXT="die alte (partielle) L&#xf6;sung f&#xfc;r externe Services">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1521928963447" ID="ID_1493572426" MODIFIED="1521929015463" TEXT="ziemlich eng mit den Interface-Proxies verbandelt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521928978853" ID="ID_47671209" MODIFIED="1521929006930" TEXT="diese sollten auf Depend umgestellt werden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521929007449" ID="ID_451474924" MODIFIED="1521929011482" TEXT="danach kann es weg">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433694233" ID="ID_1951071885" MODIFIED="1521433716263" TEXT="Nebenbei: Schwartz-Counter in ClassLock abl&#xf6;sen">

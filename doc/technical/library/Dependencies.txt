@@ -1,0 +1,41 @@
+Singletons and Dependency Handling
+==================================
+:Date: 2018
+:Toc:
+
+WARNING: [red]#under construction# +
+         There is a rather complete page ``DependencyFactory'' in the TiddlyWiki,
+         which should be integrated here
+
+We encounter _dependencies as an issue at implementation level:_ In order to deal with some task at hand,
+sometimes we need to arrange matters way beyond the scope of that task. We could just thoughtlessly reach out and
+settle those extraneous concerns -- yet this kind of pragmatism has a price tag: we are now mutually dependent
+with internals of some other part of the system we do not even care much about. A more prudent choice would be
+to let ``that other part'' provide a service for us, focussed to what we actually need right here to get _our_
+work done. In essence, we create a dependency to resolve issues of coupling and to reduce complexity
+(»divide et impera«).
+
+Unfortunately this solution created a new problem: how do we get at our dependencies? We can not just step ahead
+and create them or manage them, because then we'd be ``back to square one''. Rather someone else has to care.
+Someone _needs to connect us with those dependencies,_ so we can use them. This is a special meta-service known
+as _Dependency Injection_. A dedicated part of the application wires all other components, so each component
+can focus on its specific concern and abstract away everything else. Dependency Injection can be seen as
+application of the principle »Inversion Of Control«: each part is sovereign within its own realm, but becomes
+a client (asks for help) for anything beyond that.
+
+
+Requirements
+------------
+_tbw_
+
+Configuration
+~~~~~~~~~~~~~
+_tbw_
+
+Performance
+~~~~~~~~~~~
+_tbw_
+
+Architecture
+------------
+
