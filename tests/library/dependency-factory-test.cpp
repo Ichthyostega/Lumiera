@@ -33,8 +33,8 @@
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
-#include "lib/depend.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend2.hpp"
+#include "lib/depend-inject.hpp"
 #include "test-target-obj.hpp"
 
 #include <cstdlib>
@@ -73,12 +73,7 @@ namespace test{
     
     struct SubSub
       : Sub
-      {
-        /** marker typedef for Depend4Test,
-         *  allowing to pick the correct Depend<ServiceInterface>
-         *  to apply the instrumentation with the test mock. */
-        typedef Sub ServiceInterface;
-      };
+      { };
     
     struct SubSubSub
       : SubSub
@@ -111,7 +106,6 @@ namespace test{
           verify_SubclassCreation();
           verify_FactoryDefinition_is_sticky();
           verify_customFactory();
-          verify_temporaryReplacement();
           verify_automaticReplacement();
         }
       
@@ -131,8 +125,11 @@ namespace test{
       void
       verify_SubclassCreation()
         {
-          Depend<SubSub> specialAccessor(buildSingleton<SubSubSub>());
+          Depend<SubSub> specialAccessor;
           Depend<Sub>    genericAccessor;
+          
+          // configure singleton subclass (prior to first use)
+          DependInject<SubSub>::useSingleton<SubSubSub>();
           
           SubSub& oSub = specialAccessor();
           Sub&    o    = genericAccessor();
@@ -155,13 +152,18 @@ namespace test{
           
           SubSub& yetAnotherInstance = yetAnotherSpecialAccessor();
           CHECK ( INSTANCEOF (SubSubSub, &yetAnotherInstance));
+          
+          // both refer to the same configuration and thus access the singleton
+          CHECK (isSameObject (oSub, yetAnotherInstance));
         }
       
       
       void
       verify_customFactory()
         {
-          Depend<SubSubSub> customisedAccessor(&customFactoryFunction);
+          DependInject<SubSubSub>::useSingleton (customFactoryFunction);
+          
+          Depend<SubSubSub> customisedAccessor;
           Depend<SubSub>    otherSpecialAccessor;
           
           SubSub&     oSub = otherSpecialAccessor();
@@ -175,47 +177,12 @@ namespace test{
           CHECK (MAX_ID + 10      == oSubS.instanceID_);
         }
       
-      static void*
+      static SubSubSub*
       customFactoryFunction (void)
         {
-          static SubSubSub specialInstance;
-              // NOTE: the factory function is responsible
-              //       for managing the instance's lifecycle
-          
-          specialInstance.instanceID_ = MAX_ID + 10;
-          return &specialInstance;
-        }
-      
-      
-      
-      void
-      verify_temporaryReplacement()
-        {
-          typedef Depend<Sub> GenericAccessor;
-          
-          GenericAccessor genericAccessor;
-          Sub& original = genericAccessor();
-          uint oID = original.instanceID_;
-          
-          SubSubSub mockObject;
-          Sub* shaddowedOriginal = GenericAccessor::injectReplacement (&mockObject);
-          
-          Sub& replacement = genericAccessor();
-          CHECK ( isSameObject (replacement, mockObject));
-          CHECK (!isSameObject (original, replacement));
-          CHECK ( isSameObject (original, *shaddowedOriginal));
-          
-          Depend<SubSub>   special;
-          Depend<SubSubSub> custom;
-          
-          CHECK(!isSameObject (replacement, special() ));
-          CHECK(!isSameObject (replacement, custom()  ));
-          
-          GenericAccessor::injectReplacement (shaddowedOriginal);
-          
-          Sub& nextFetch = genericAccessor();
-          CHECK (isSameObject (original, nextFetch));
-          CHECK (oID == nextFetch.instanceID_);
+          SubSubSub* specialInstance = new SubSubSub;
+          specialInstance->instanceID_ = MAX_ID + 10;
+          return specialInstance;
         }
       
       
@@ -227,8 +194,26 @@ namespace test{
           Sub& original = genericAccessor();
           uint oID = original.instanceID_;
           
-          {
-            Depend4Test<SubSub> withinThisScope;
+          {////////////////////////////////////////////////////TEST-Scope
+            DependInject<Sub>::Local<SubSubSub> mockObject;
+            
+            Sub& replacement = genericAccessor();
+            CHECK ( isSameObject (replacement, *mockObject));
+            CHECK (!isSameObject (original, replacement));
+            
+            Depend<SubSub>   special;
+            Depend<SubSubSub> custom;
+            
+            CHECK(!isSameObject (replacement, special() ));
+            CHECK(!isSameObject (replacement, custom()  ));
+          }////////////////////////////////////////////////////(End)TEST-Scope
+          
+          Sub& nextFetch = genericAccessor();
+          CHECK (isSameObject (original, nextFetch));
+          CHECK (oID == nextFetch.instanceID_);
+          
+          {////////////////////////////////////////////////////TEST-Scope-2
+            DependInject<Sub>::Local<SubSub> otherMock;
             
             Sub& replacement = genericAccessor();
             uint repID = replacement.instanceID_;
@@ -254,11 +239,10 @@ namespace test{
             CHECK (!isSameObject (original,    subTypeAccess));
             CHECK (repID != subTypeAccess.instanceID_);
             CHECK (  oID != subTypeAccess.instanceID_);
-          }
+          }////////////////////////////////////////////////////(End)TEST-Scope-2
           
-          Sub& nextFetch = genericAccessor();
-          CHECK (isSameObject (original, nextFetch));
-          CHECK (oID == nextFetch.instanceID_);
+          CHECK (isSameObject (original, genericAccessor()));
+          CHECK (oID == genericAccessor().instanceID_);
         }
     };
   

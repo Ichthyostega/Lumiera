@@ -686,15 +686,15 @@ END
 
 
 TEST "SingletonTestMock_test" SingletonTestMock_test <<END
-out-lit: TestSingletonO::doIt() call=1
-out-lit: TestSingletonO::doIt() call=2
+out-lit: TestSingO::doIt() call=1
+out-lit: TestSingO::doIt() call=2
 out-lit: Mock_1::doIt() call=1
 out-lit: Mock_1::doIt() call=2
 out-lit: Mock_1::doIt() call=3
 out-lit: Mock_1::doIt() call=4
 out-lit: Mock_1::doIt() call=5
-out-lit: Mock_2::doIt() call=1
-out-lit: TestSingletonO::doIt() call=3
+out: Mock_.::doIt\(\) call=1
+out-lit: TestSingO::doIt() call=3
 return: 0
 END
 

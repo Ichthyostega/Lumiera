@@ -32,7 +32,8 @@
 #include "lib/util.hpp"
 
 #include "test-target-obj.hpp"
-#include "lib/depend.hpp"
+#include "lib/depend2.hpp"
+#include "lib/depend-inject.hpp"
 
 #include <boost/lexical_cast.hpp>
 
@@ -65,7 +66,8 @@ namespace test{
       Interface () : TestTargetObj(cnt) {}
       virtual ~Interface() {}
       
-      friend class lib::DependencyFactory;
+      friend class lib::InstanceHolder<Interface>;
+      friend class std::default_delete<Interface>;
     };
   
   int Interface::cnt = 0;
@@ -86,13 +88,12 @@ namespace test{
   
   
   /***************************************************************//**
-   * @test specialised variant of the Singleton Factory, for creating
-   *       subclasses (implementation classes) without coupling the
-   *       caller to the concrete class type.
-   * Expected results: an instance of the subclass is created.
+   * @test specific dependency-injection setup, to create a singleton
+   *       subclass (implementation class) instance, without coupling
+   *       the caller to the concrete type.
+   * @remark Expected results: an instance of the subclass is created.
    * @see  lib::Depend
-   * @see  lib::buildSingleton()
-   * @see  lib/dependency-factory.hpp
+   * @see  lib/depend-inject.hpp
    */
   class SingletonSubclass_test : public Test
     {
@@ -106,12 +107,11 @@ namespace test{
           
           Interface::setCountParam(num);
           
-          // marker to declare the concrete type to be created
-          DependencyFactory::InstanceConstructor factoryFunction = buildSingleton<Impl>();
+          // configuration to use the subclass on demand
+          DependInject<Interface>::useSingleton<Impl>();
           
-          // define an instance of the Singleton factory,
-          // specialised to create the concrete Type passed in
-          Depend<Interface> instance (factoryFunction);
+          // define an instance of the Singleton factory as always...
+          Depend<Interface> instance;
           
           // Now use the Singleton factory...
           // Note: we get the Base type
@@ -119,6 +119,8 @@ namespace test{
           Interface& t2 = instance();
           
           CHECK (isSameObject (t1, t2), "not a Singleton, got two different instances." );
+          CHECK ( INSTANCEOF (Impl,&t1));         // got the subclass as expected
+          CHECK ("Implementation" == t2.identify());
           
           cout << "calling a non-static method on the Singleton-"
                << t1.identify() << endl
@@ -132,11 +134,13 @@ namespace test{
       void
       verify_error_detection ()
         {
-          VERIFY_ERROR (LIFECYCLE, Depend<Interface> instance (buildSingleton<Impl_XXX>()) );
-          VERIFY_ERROR (LIFECYCLE, Depend<Interface> instance (buildSingleton<Unrelated>()) );
+          VERIFY_ERROR (LIFECYCLE, DependInject<Interface>::useSingleton<Impl_XXX>() );
           
           Depend<Interface> newFactory;
           CHECK ( INSTANCEOF (Impl, &newFactory() )); // works as before
+          
+//////////does not compile due to incompatible baseclass
+//        DependInject<Interface>::useSingleton<Unrelated>();
         }
     };
   

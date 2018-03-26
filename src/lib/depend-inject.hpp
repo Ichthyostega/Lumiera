@@ -103,6 +103,7 @@
  **     persistent history and UNDO.
  ** 
  ** @see DependencyConfiguration_test
+ ** @see SingletonSubclass_test
  ** @see subsys.hpp
  */
 
@@ -117,6 +118,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/depend2.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/sync-classlock.hpp"
 
@@ -179,14 +181,11 @@ namespace lib {
       static void
       useSingleton(FUN&& ctor)
         {
+          using Fun = typename SubclassFactory<FUN>::Fun;
           using Sub = typename SubclassFactory<FUN>::Sub;
           __assert_compatible<Sub>();
           
-          static InstanceHolder<Sub> singleton;
-          installFactory ([ctor]()
-                              {
-                                return singleton.buildInstance (ctor);
-                              });
+          installFactory (buildCustomSingleton<Sub,Fun> (forward<FUN> (ctor)));
         }
       
       
@@ -329,6 +328,7 @@ namespace lib {
           static_assert (meta::_Fun<FUN>(),
                          "Need a Lambda or Function object to create a heap allocated instance");
           
+          using Fun = typename meta::_Fun<FUN>::Functor;   // suitable type to store for later invocation 
           using Res = typename meta::_Fun<FUN>::Ret;
           using Sub = typename meta::Strip<Res>::TypePlain;
           
@@ -346,6 +346,22 @@ namespace lib {
                                "The previously installed factory (typically Singleton) was already used."
                               , error::LUMIERA_ERROR_LIFECYCLE);
           Depend<SRV>::factory = move (otherFac);
+        }
+      
+      /** wrap custom factory function to plant a singleton instance
+       * @remark call through this intermediary function because we need to capture a _copy_ of the functor,
+       *  to invoke it later, on-demand. Especially we need the ability to change the type of this functor,
+       *  since sometimes the argument is passed as function reference, which can not be instantiated,
+       *  but needs to be wrapped into a std::function. */
+      template<class SUB, class FUN>
+      static Factory
+      buildCustomSingleton (FUN&& ctor)
+        {
+          static InstanceHolder<SUB> singleton;
+          return ([ctor]()                    // copy of ctor in the closure
+                       {
+                         return singleton.buildInstance (ctor);
+                       });
         }
       
       static void

@@ -67,12 +67,15 @@ namespace meta{
   /**
    * Helper for uniform access to function signature types.
    * Extract the type information contained in a function or functor type,
-   * so it can be manipulated by metaprogramming. The embedded typedefs
-   * allow to pick up the return type, the sequence of argument types
-   * and the bare function signature type. This template works on
+   * so it can be manipulated by metaprogramming. This template works on
    * anything _function like_, irrespective if the parameter is given
    * as function reference, function pointer, member function pointer,
-   * functor object, `std::function` or lambda.
+   * functor object, `std::function` or lambda. The embedded typedefs
+   * allow to pick up
+   * - `Ret` : the return type
+   * - `Args`: the sequence of argument types as type sequence `Types<ARGS...>`
+   * - `Sig` : the bare function signature type
+   * - `Functor` : corresponding Functor type which can be instantiated or copied.
    * 
    * This template can also be used in metaprogramming with `enable_if` to enable
    * some definition or specialisation only if a function-like type was detected; thus

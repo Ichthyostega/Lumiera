@@ -27,7 +27,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/depend.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/util.hpp"
 
 #include "lib/format-cout.hpp"
@@ -45,14 +45,14 @@ namespace test{
    * Client Class normally to be instantiated as Singleton.
    * But for tests, this class should be replaced by a Mock....
    */
-  class TestSingletonO
+  class TestSingO
     {
       int callCnt_;
       Symbol typid_;
       _Fmt msg_;
       
     public:
-      TestSingletonO(Symbol ty="TestSingletonO")
+      TestSingO(Symbol ty="TestSingO")
         : callCnt_(0)
         , typid_(ty)
         , msg_("%s::doIt() call=%d\n")
@@ -61,7 +61,7 @@ namespace test{
         }
       
       virtual
-     ~TestSingletonO()
+     ~TestSingO()
         {
           TRACE (test, "dtor %s", typid_.c());
         }
@@ -83,17 +83,23 @@ namespace test{
   /**
    * Mock-1 to replace the Client Class...
    */
-  struct Mock_1 : TestSingletonO
+  struct Mock_1 : TestSingO
     {
-      Mock_1() : TestSingletonO("Mock_1") { };
+      Mock_1() : TestSingO("Mock_1") { };
     };
   
   /**
    * Mock-2 to replace the Client Class...
+   * @note no default ctor
    */
-  struct Mock_2 : TestSingletonO
+  struct Mock_2 : TestSingO
     {
-      Mock_2() : TestSingletonO("Mock_2") { };
+      int id;
+      
+      Mock_2(Literal specialID, int i)
+        : TestSingO{Symbol (_Fmt{"%s_%d"} % specialID % i)}
+        , id{i}
+      { };
     };
   
   
@@ -112,7 +118,7 @@ namespace test{
    *       Client Object, then replace it by two different mocks,
    *       and finally restore the original Client Object.
    * @see  lib::Depend
-   * @see  lib::test::Depend4Test
+   * @see  depend-inject.hpp
    * @see  DependencyFactory_test
    */
   class SingletonTestMock_test : public Test
@@ -121,28 +127,36 @@ namespace test{
       void
       run (Arg)
         {
-          Depend<TestSingletonO> sing;
+          Depend<TestSingO> sing;
           
           sing().doIt();
           sing().doIt();
           CHECK (sing().getCnt() == 2);
           
-          Mock_1 mock_1;
-          TestSingletonO* original =
-          sing.injectReplacement (&mock_1);
-          sing().doIt();
-          sing().doIt();
-          sing().doIt();
-          sing().doIt();
-          sing().doIt();
-          CHECK (sing().getCnt() == 5);
+          {
+            // shadow by local Mock instance
+            DependInject<TestSingO>::Local<Mock_1> mock_1;
+            sing().doIt();
+            sing().doIt();
+            sing().doIt();
+            sing().doIt();
+            sing().doIt();
+            CHECK (sing().getCnt() == 5);
+            
+            // shadow again by different local Mock, this time with special ctor call
+            int instanceID = 0;
+            DependInject<TestSingO>::Local<Mock_2> mock_2 ([&]{ return new Mock_2{"Mock", instanceID}; });
+            
+            // NOTE: the ctor call for the Mock really happens delayed...
+            instanceID = rand() % 10;
+            sing().doIt();             // ctor invoked on first access
+            CHECK (sing().getCnt() == 1);
+            
+            // can access the Mock for instrumentation
+            CHECK (instanceID == mock_2->id);
+            
+          }// original instance automatically un-shadowed here
           
-          Mock_2 mock_2;
-          sing.injectReplacement (&mock_2);
-          sing().doIt();
-          CHECK (sing().getCnt() == 1);
-          
-          sing.injectReplacement (original);  // un-shadowing original instance
           CHECK (sing().getCnt() == 2);
           sing().doIt();
           CHECK (sing().getCnt() == 3);

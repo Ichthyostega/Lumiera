@@ -150,7 +150,7 @@ Lifecycle Events
 ~~~~~~~~~~~~~~~~
 The Application as a whole conducts a well defined lifecycle; whenever transitioning to the next phase,
 a _Lifecycle Event_ is issued. Components may register a notification hook with the central _Lifecycle Manager_
-(see 'include/lifecycle.h) to be invoked whenever a specific event is emitted. The process of registration
+(see 'include/lifecycle.h') to be invoked whenever a specific event is emitted. The process of registration
 can be simplified by planting a static variable of type `lumiera::LifecycleHook`.
 
 WARNING: A callback enrolled this way needs to be callable at the respective point in the lifecycle,
