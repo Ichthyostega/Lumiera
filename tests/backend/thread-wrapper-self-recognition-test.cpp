@@ -40,15 +40,13 @@ namespace test {
     class TestThread
       : Thread
       {
-        void
-        doIt()
-          {
-            CHECK (invocation_happens_within_this_thread());
-          }
-        
         public:
           TestThread()
-            : Thread{"test Thread self recognition", [&]() { doIt(); }}
+            : Thread{"test Thread self recognition"
+                    ,[&]()
+                        {
+                          CHECK (invocation_happens_within_this_thread());
+                        }}
             { }
           
           bool

@@ -100,7 +100,10 @@ namespace play {
     if (not shutdown_initiated_)
       {
         shutdown_initiated_ = true;
-        Thread ("Output shutdown supervisor", bind (&OutputDirector::bringDown, this, completedSignal));
+        Thread ("Output shutdown supervisor",
+                [=]{
+                     bringDown (completedSignal);
+                   });
       }
   }
   

@@ -26625,11 +26625,11 @@
 <node CREATED="1515975650458" ID="ID_1359158691" MODIFIED="1515976422894" TEXT="Serivice by-Name">
 <linktarget COLOR="#b6829b" DESTINATION="ID_1359158691" ENDARROW="Default" ENDINCLINATION="1134;-1646;" ID="Arrow_ID_927211935" SOURCE="ID_1305671938" STARTARROW="None" STARTINCLINATION="1359;916;"/>
 <node CREATED="1515975677462" ID="ID_1848164117" MODIFIED="1515975685784" TEXT="Problem: Lebenszyklus">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492094235291" HGAP="36" ID="ID_451964727" MODIFIED="1520722071693" TEXT="#1086 unify Depend singleton and instance management" VSHIFT="-20">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492094235291" HGAP="36" ID="ID_451964727" MODIFIED="1522030153616" TEXT="#1086 unify Depend singleton and instance management" VSHIFT="-20">
 <linktarget COLOR="#7188b5" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="2227;-4042;" ID="Arrow_ID_1654818003" SOURCE="ID_871055051" STARTARROW="None" STARTINCLINATION="775;393;"/>
 <linktarget COLOR="#5c71a3" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="767;-2073;" ID="Arrow_ID_1454095581" SOURCE="ID_1714114896" STARTARROW="None" STARTINCLINATION="1892;380;"/>
 <linktarget COLOR="#8697be" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="200;-562;" ID="Arrow_ID_1211717131" SOURCE="ID_1032947061" STARTARROW="None" STARTINCLINATION="1387;-152;"/>
-<icon BUILTIN="hourglass"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1520722130803" ID="ID_1194364308" MODIFIED="1521433923249" TEXT="Anforderungen">
 <icon BUILTIN="yes"/>
 <node CREATED="1520722192387" ID="ID_1178804552" MODIFIED="1520722204325" TEXT="leicht zu verwenden">
@@ -27744,8 +27744,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791026749" ID="ID_1199387367" MODIFIED="1521791033909" TEXT="Doku-Subsysteme">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521791026749" ID="ID_1199387367" MODIFIED="1522025343672" TEXT="Doku-Subsysteme">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521791034972" ID="ID_1629095174" MODIFIED="1521962998443" TEXT="&#xfc;berlegen, wo das Architektur-Thema dargestellt werden sollte">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1521962966238" ID="ID_1724029235" MODIFIED="1521962976832" TEXT="geh&#xf6;rt in die Architektur-Sektion"/>
@@ -27753,20 +27753,20 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521791058689" ID="ID_564899806" MODIFIED="1521791078375" TEXT="Hinweis auf die offene Flanke bei Emergency-Shutdown">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521791058689" ID="ID_564899806" MODIFIED="1522025340181" TEXT="Hinweis auf die offene Flanke bei Emergency-Shutdown">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521929151045" ID="ID_1800182456" MODIFIED="1521929162564" TEXT="Doku-Seite f&#xfc;r DependencyFactory anlegen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521929151045" ID="ID_1800182456" MODIFIED="1522025351449" TEXT="Doku-Seite f&#xfc;r DependencyFactory anlegen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1521929165380" ID="ID_15396392" MODIFIED="1521929185272" TEXT="kann in etwa der Content aus dem TiddlyWiki sein">
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#338800" CREATED="1521963017631" ID="ID_380828830" MODIFIED="1521963032077" TEXT="Neue Seite angelegt und von The Inner Core verlinkt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521929186281" ID="ID_1078337367" MODIFIED="1521929199008" TEXT="ein, zwei Einleitungss&#xe4;tze dazu">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1521929186281" ID="ID_1078337367" MODIFIED="1522025355714" TEXT="ein, zwei Einleitungss&#xe4;tze dazu">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521929199799" ID="ID_507602296" MODIFIED="1521929217037" TEXT="Wichtig: die Benchmark-Daten hier auch darstellen">
 <icon BUILTIN="flag-yellow"/>
@@ -27865,6 +27865,12 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522018567685" ID="ID_1619059123" MODIFIED="1522018578992" TEXT="Frage: was ist mit AppState?">
+<icon BUILTIN="help"/>
+<node CREATED="1522018581283" ID="ID_132446315" MODIFIED="1522018592182" TEXT="macht es Sinn, das via Depend zug&#xe4;nglich zu machen?"/>
+<node CREATED="1522018593697" ID="ID_1730197219" MODIFIED="1522018623361" TEXT="ist bisher ein Meyer&apos;s Singleton"/>
+<node CREATED="1522018623861" ID="ID_1923633930" MODIFIED="1522018631776" TEXT="aber lebt bereits im globalen Speicher"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521433694233" ID="ID_1951071885" MODIFIED="1521433716263" TEXT="Nebenbei: Schwartz-Counter in ClassLock abl&#xf6;sen">
 <icon BUILTIN="flag-yellow"/>
@@ -30831,7 +30837,155 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1518487921106" TEXT="Au Au"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1522025908991" TEXT="Au Au">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1521963965164" ID="ID_1027875371" MODIFIED="1522030106272" TEXT="multithreaded-Test scheitert">
+<node CREATED="1522025948980" ID="ID_295336770" MODIFIED="1522025952959" TEXT="3/2018">
+<node COLOR="#338800" CREATED="1521964015114" FOLDED="true" ID="ID_1116388701" MODIFIED="1522030100489" TEXT="CallQueue_test">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TEST Dispatch functors into other threads: CallQueue_test .. FAILED
+    </p>
+    <p>
+      unexpected return value 134, expected 0
+    </p>
+    <p>
+      stderr was:
+    </p>
+    <p>
+      0000000459: INFO: suite.cpp:180: thread_1: invokeTestCase: ++------------------- invoking TEST: CallQueue_test
+    </p>
+    <p>
+      0000003117: CHECK: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: (globalProducerSum == globalConsumerSum)
+    </p>
+    <p>
+      0000003127: BACKTRACE: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: /Werk/devel/lumi/target/modules/libtest-basics.so(_ZN3lib4test14CallQueue_test19verify_ThreadSafetyEv+0x24a) [0x7fdfce328a20]
+    </p>
+    <p>
+      0000003128: BACKTRACE: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: /Werk/devel/lumi/target/modules/libtest-basics.so(_ZN3lib4test14CallQueue_test3runERSt6vectorISsSaISsEE+0x34) [0x7fdfce32764e]
+    </p>
+    <p>
+      0000003129: BACKTRACE: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: /Werk/devel/lumi/target/modules/liblumierasupport.so(+0x1d7cb0) [0x7fdfcb7dfcb0]
+    </p>
+    <p>
+      0000003130: BACKTRACE: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: /Werk/devel/lumi/target/modules/liblumierasupport.so(_ZN4test5Suite3runERSt6vectorISsSaISsEE+0x38f) [0x7fdfcb7e0249]
+    </p>
+    <p>
+      0000003131: BACKTRACE: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: ./test-suite() [0x40625e]
+    </p>
+    <p>
+      0000003132: BACKTRACE: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf5) [0x7fdfc9029b45]
+    </p>
+    <p>
+      0000003133: BACKTRACE: call-queue-test.cpp:251: thread_1: verify_ThreadSafety: ./test-suite() [0x4060a9]
+    </p>
+    <p>
+      END
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522025982759" ID="ID_1830638050" MODIFIED="1522025987194" TEXT="reproduzierbar....">
+<node CREATED="1522025990246" ID="ID_261366619" MODIFIED="1522026014541" TEXT="Auf mehreren Terminals x-mal starten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      for I in `seq 1 50`; do target/test-suite CallQueue_test; done
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1522026027993" ID="ID_25191931" MODIFIED="1522026034036" TEXT="Anhaltspunkte">
+<node CREATED="1522026034720" ID="ID_584589060" MODIFIED="1522026104830" TEXT="erstmals beobachtet unter starker System-Last">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      habe gleichzeitig erst die Testsuite gebaut mit -j 36 und dann laufen lassen.
+    </p>
+    <p>
+      Gleichzeitig aber auch noch das ./build-website-Skript
+    </p>
+    <p>
+      und eine Doxygen-Seite im Browser geladen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#990000" CREATED="1521963972811" ID="ID_1942164320" MODIFIED="1522029864550" TEXT="hab ich da was mit dem ThreadWrapper kaputt gemacht?">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1522026114725" ID="ID_288423678" MODIFIED="1522026122240" TEXT="hatte kurz vorher den ThreadWrapper modernisiert"/>
+<node CREATED="1522026122756" ID="ID_1246030370" MODIFIED="1522026127927" TEXT="und gebe nun ein Lambda durch"/>
+<node CREATED="1522026128467" ID="ID_387844871" MODIFIED="1522026139087" TEXT="verwende dabei aber perfect-forwarding-Tricks">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node COLOR="#338800" CREATED="1522029869047" ID="ID_221734956" MODIFIED="1522029880963" TEXT="Anwort: vermutlich NEIN">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1522026152280" ID="ID_156370463" MODIFIED="1522030023168" TEXT="anderer Verdacht: Objekt-Initialisierung">
+<icon BUILTIN="back"/>
+<node CREATED="1522026166734" ID="ID_731765048" MODIFIED="1522030021122" TEXT="das bekannte Problem"/>
+<node CREATED="1522026170781" ID="ID_1581699734" MODIFIED="1522030021122" TEXT="der Thread l&#xe4;uft schon"/>
+<node CREATED="1522026178860" ID="ID_917574124" MODIFIED="1522030021122" TEXT="aber das abgeleitete Objekt ist noch nicht so weit"/>
+<node CREATED="1522029908986" ID="ID_1350487644" MODIFIED="1522030029028" TEXT="Jupp. Dat warsz">
+<icon BUILTIN="idea"/>
+<node CREATED="1522029922592" ID="ID_301766693" MODIFIED="1522030021122" TEXT="Barriere eingebaut"/>
+<node CREATED="1522029928983" ID="ID_761637509" MODIFIED="1522030021122" TEXT="ist auch sinnvoll vom Testdesgin her">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil sich die Threads gegenseitig ihre Counter inkrementieren.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1522029979544" ID="ID_1820534569" MODIFIED="1522030021122" TEXT="Stre&#xdf;test wiederholt, sogar mit 500 Thrads"/>
+<node COLOR="#338800" CREATED="1522029995205" ID="ID_556688250" MODIFIED="1522030021122" TEXT="jetzt reproduzierbar alles sauber">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1522030032424" ID="ID_1791738866" MODIFIED="1522030091201" TEXT="Problem war fehlende Barriere nach Objekt-Initialisierung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1522030047375" ID="ID_1979180035" MODIFIED="1522030090497" TEXT="alle anderen multithreaded-Tests durchgepr&#xfc;ft">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alle anderen (mit Ausnahme von BusTerm_test)
+    </p>
+    <p>
+      verwenden globale Variable oder &#252;berhaupt keine Objektfelder
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </map>
