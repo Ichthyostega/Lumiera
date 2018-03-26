@@ -430,8 +430,10 @@ to be invoked when this happens. Currently (2018) the following events are known
 
 -> see here for
 link:{ldoc}/design/application/SubsystemLifecycle.html#_initialisation_and_lifecycle[explanation in detail]
-[small]#(somewhat preliminary and messy, yet still valid as of [yellow-background]##2018##)#
-
+[small]#(somewhat preliminary and messy, yet still valid as of [yellow-background]##2018##)# +
+-> more
+link:{ldoc}/design/architecture/Subsystems.html#_lifecycle[documentation]
+[small]#(likewise incomplete, but we're getting there, eventually [yellow-background]##2018##)#
 
 Interface system
 ~~~~~~~~~~~~~~~~

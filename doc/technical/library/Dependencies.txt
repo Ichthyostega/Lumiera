@@ -36,6 +36,36 @@ Performance
 ~~~~~~~~~~~
 _tbw_
 
+
 Architecture
 ------------
+Dependency management does not define the architecture, nor can it solve architecture problems.
+Rather, its purpose is to _enact_ the architecture. A dependency is something we need in order to perform
+the task at hand, yet essence of a dependency lies outside the scope and relates to concerns beyond and theme
+of this actual task. A naïve functional approach -- pass everything you need as argument -- would be as harmful
+as thoughtlessly manipulating some off-site data to fit current needs. The local function would be splendid,
+strict and referentially transparent -- yet anyone using it would be infected with issues of tangling and
+tight coupling. As remedy, a _global context_ can be introduced, which works well as long as this global
+context does not exhibit any other state than ``being available''. The root of those problems however
+lies in the drive to conceive matters simpler as they are.
+
+- collaboration typically leads to indirect mutual dependency.
+  We can only define precisely _what is required locally,_ and then _pull our requirements_ on demand.
+- a given local action can be part of a process, or a conversation or interaction chain, which in turn
+  might originate from various, quite distinct contexts. At _that level,_ we might find a simpler structure
+  to hinge questions of lifecycle on.
+
+In Lumiera we encounter both these kinds of circumstances. On a global level, we have a simple and well defined
+order of dependencies, cast into link:{ldoc}/design/architecture/Subsystems.html[Subsystem relations].
+We know e.g. that mutating changes to the session can originate from scripts or from UI interactions.
+It suffices thus, when the _leading subsystem_ (the UI or the script runner) refrains from emitting any further
+external activities, _prior_ to reaching that point in the lifecycle where everything is ``basically set''.
+Yet however self evident this insight might be, it yields some unsettling and challenging consequences:
+The UI _must not assume_ the presence of specific data structures within the lower layers, nor is it allowed to
+``pull'' session contents while starting up. Rather the UI-Layer is bound to bootstrap itself into completely
+usable and operative state, without the ability to attach anything onto existing tangible content structures.
+This runs completely counter common practice of UI programming, where it is customary to wire most of the
+application internals somehow directly below the UI ``shell''. Rather, in Lumiera the UI must be conceived
+as a _collection of services_ -- and when running, a _population request_ can be issued to fill the prepared
+UI framework with content. This is Inversion-of-Control at work.
 

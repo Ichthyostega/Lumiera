@@ -82,7 +82,7 @@ namespace mobject {
   
   
   
-  /** \par
+  /**
    *  LifecycleHook, to perform all the basic setup for a new session,
    *  prior to adding any specific data, configuration or content. Any subsystems
    *  requiring to (re)-initialise for a new session should register here. When this
@@ -93,17 +93,17 @@ namespace mobject {
    *        session should register their basic setup functions using this hook, which can be
    *        done via the C interface functions defined in lifecycle.h
    */
-  const char* ON_SESSION_START ("ON_SESSION_START");
+  const char* ON_SESSION_START = "ON_SESSION_START";
   
-  /** \par
+  /**
    *  LifecycleHook, to perform any initialisation, wiring and registrations necessary
    *  to get the session into a usable state. When activated, the specific session content
    *  and configuration has already be loaded. Any subsystems requiring to build some indices
    *  or wiring to keep track of the session's content should register here.
    */
-  const char* ON_SESSION_INIT ("ON_SESSION_INIT");
+  const char* ON_SESSION_INIT = "ON_SESSION_INIT";
   
-  /** \par
+  /**
    *  LifecycleHook, to perform post loading tasks, requiring an already completely usable
    *  and configured session to be in place. When activated, the session is completely restored
    *  according to the standard or persisted definition and any access interfaces are already
@@ -112,9 +112,18 @@ namespace mobject {
    *  fully functional client side APIs. Examples would be statistics gathering, validation
    *  or auto-correction of the session's contents.
    */
-  const char* ON_SESSION_READY ("ON_SESSION_READY");
+  const char* ON_SESSION_READY = "ON_SESSION_READY";
   
-  /** \par
+  /**
+   *  LifecycleHook, to commence any activity relying on an opened and fully operative session.
+   *  When invoked, the session is still in fully operative state, all interfaces are open and
+   *  the render engine is available. However, after issuing this event, the session shutdown
+   *  sequence will be initiated, by detaching the engine interfaces and signalling the
+   *  scheduler to cease running render jobs.
+   */
+  const char* ON_SESSION_CLOSE ="ON_SESSION_CLOSE";
+  
+  /**
    *  LifecycleHook, to perform any state saving, deregistration or de-activation necessary 
    *  before bringing down an existing session. When invoked, the session is still fully valid
    *  and functional, but the GUI/external access has already been closed.
@@ -122,7 +131,7 @@ namespace mobject {
    *        specific/internal information into the persisted state, besides actually attaching
    *        data to objects within the session?
    */
-  const char* ON_SESSION_END ("ON_SESSION_END");
+  const char* ON_SESSION_END ="ON_SESSION_END";
   
   
   

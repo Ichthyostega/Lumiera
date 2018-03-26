@@ -21,7 +21,7 @@
 */
 
 
-/** @file dependency-factory.hpp
+/** @file depend-inject.hpp
  ** Per type specific configuration of instances created as service dependencies.
  ** This is the _"Backstage Area"_ of lib::Depend, where the actual form and details
  ** of instance creation can be configured in various ways. Client code typically

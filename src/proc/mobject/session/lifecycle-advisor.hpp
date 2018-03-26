@@ -111,6 +111,7 @@ namespace session {
       void
       shutDown()
         {
+          emitEvent (ON_SESSION_CLOSE);
           closeSessionInterface();
           disconnectRenderProcesses();
           emitEvent (ON_SESSION_END);
