@@ -27697,6 +27697,111 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522110414912" ID="ID_1861060212" MODIFIED="1522110495402" TEXT="Singleton-Erzeugung zusammenf&#xfc;hren">
+<linktarget COLOR="#5f8d94" DESTINATION="ID_1861060212" ENDARROW="Default" ENDINCLINATION="-566;0;" ID="Arrow_ID_319700222" SOURCE="ID_1624172022" STARTARROW="None" STARTINCLINATION="205;-440;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522110563499" ID="ID_470760423" MODIFIED="1522113397796" TEXT="stets ausf&#xfc;hrend">
+<icon BUILTIN="idea"/>
+<node CREATED="1522110568307" ID="ID_311971109" MODIFIED="1522110579069" TEXT="Depend&lt;SUB&gt;"/>
+<node CREATED="1522110579561" ID="ID_1773742926" MODIFIED="1522110587404" TEXT="mit SUB == konkreter Typ"/>
+</node>
+<node CREATED="1522110657678" ID="ID_22217041" MODIFIED="1522110664929" TEXT="Locking/Korrektheit">
+<node CREATED="1522110665733" ID="ID_329494929" MODIFIED="1522110676431" TEXT="Achtung abweichender Typ!">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1522110683363" ID="ID_352813223" MODIFIED="1522110710611" TEXT="Normaler Zugang via Depend&lt;SUB&gt; wird zum Synonym"/>
+<node CREATED="1522111399080" ID="ID_753159927" MODIFIED="1522111402852" TEXT="kaskadierend">
+<node CREATED="1522110724165" ID="ID_879974852" MODIFIED="1522110749614" TEXT="acquire Lock&lt;SUB&gt;"/>
+<node CREATED="1522110842845" ID="ID_12886357" MODIFIED="1522110920894" TEXT="store into Depend&lt;SUB&gt;::instance"/>
+</node>
+</node>
+<node CREATED="1522110508507" ID="ID_789229743" MODIFIED="1522113383149" TEXT="F&#xe4;lle">
+<node CREATED="1522110513930" ID="ID_752814721" MODIFIED="1522110519669" TEXT="normal-default">
+<node CREATED="1522113463844" ID="ID_1945711876" MODIFIED="1522113489197" TEXT="nur Konstruktor / Destruktor-Funktion"/>
+<node CREATED="1522113490025" ID="ID_1330140057" MODIFIED="1522113531135" TEXT="Alternativ-Behandlung f&#xfc;r nicht-instantiierbare Typen"/>
+</node>
+<node CREATED="1522110520777" ID="ID_336202422" MODIFIED="1522110530260" TEXT="Subclass-default">
+<node CREATED="1522113128835" ID="ID_166213716" MODIFIED="1522113152107" TEXT="kaskadierenden Zugriff als Factory"/>
+<node CREATED="1522113152999" ID="ID_1443678098" MODIFIED="1522113288917" TEXT="Instantiierungs-Check kann entfallen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...man <i>k&#246;nnte</i>&#160;ihn aber genausogut auch machen.
+    </p>
+    <p>
+      Das Argument ist: wenn wir kaskadierend aufrufen, dann ist das Ergebnis in jedem Fall korrekt,
+    </p>
+    <p>
+      und wird auch durch das Installieren dieses (zweiten) Zuganges in keinster Weise beeintr&#228;chtigt.
+    </p>
+    <p>
+      Sollte Depend&lt;SUB&gt; bereits instantiiert sein, dann auch gut.
+    </p>
+    <p>
+      Der kaskadierende Aufruf liest dann einfach <i>dessen</i>&#160;Instanz-Pointer
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1522110531344" ID="ID_1376369013" MODIFIED="1522110534779" TEXT="custom-ctor">
+<node CREATED="1522112368219" ID="ID_774074460" MODIFIED="1522112375518" TEXT="konkreten Typ feststellen"/>
+<node CREATED="1522112376154" ID="ID_1394042003" MODIFIED="1522112394043" TEXT="f&#xfc;r diesen...">
+<node CREATED="1522113449575" ID="ID_644735948" MODIFIED="1522113456734" TEXT="acquire Lock&lt;SUB&gt;"/>
+<node CREATED="1522112395280" ID="ID_995036578" MODIFIED="1522113339076" TEXT="Instantiierungs-Check">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier notwendig, weil wir eine neue Factory-Funktion ablegen.
+    </p>
+    <p>
+      Das k&#246;nnte mit dem Factory-Management einer bereits installierten Konfiguration kollidieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1522112400703" ID="ID_1562178283" MODIFIED="1522112404258" TEXT="Factory erstellen"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522200092935" ID="ID_1314237888" MODIFIED="1522200242915" TEXT="Deleter-Behandlung">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522200102534" ID="ID_284894079" MODIFIED="1522200105025" TEXT="bisher">
+<node CREATED="1522200106373" ID="ID_1981188993" MODIFIED="1522200226028" TEXT="was die Factory zur&#xfc;ckliefert, wird nicht gemanaged">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1522200122883" ID="ID_564595724" MODIFIED="1522200229769" TEXT="der instance-Pointer bleibt bestehen, selbst wenn das Objekt weg ist">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1522200231404" ID="ID_357657857" MODIFIED="1522200238612" TEXT="ned schee">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1522200147696" ID="ID_929047067" MODIFIED="1522200270431" TEXT="gew&#xfc;nscht">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522200152927" ID="ID_326569334" MODIFIED="1522200261233" TEXT="keine Memory-leaks">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522200167861" ID="ID_908074030" MODIFIED="1522200262177" TEXT="alles soll zerst&#xf6;rt werden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522200189706" ID="ID_302642427" MODIFIED="1522200262864" TEXT="m&#xf6;glichst alle instance-Pointer zur&#xfc;cksetzen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522200249626" ID="ID_215336836" MODIFIED="1522200263456" TEXT="Freunschafts-f&#xe4;hig">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160700669" HGAP="4" ID="ID_978221585" MODIFIED="1521791636399" TEXT="Dokumentation" VSHIFT="25">
 <icon BUILTIN="flag-yellow"/>
@@ -27892,6 +27997,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522033635991" ID="ID_321432260" MODIFIED="1522033646528" TEXT="k&#xf6;nnte das Depend selber sein?">
 <icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522110432870" ID="ID_1624172022" MODIFIED="1522110495402" TEXT="dann m&#xfc;&#xdf;ten alle Singletons an einer Stelle erzeugt werden">
+<arrowlink COLOR="#5f8d94" DESTINATION="ID_1861060212" ENDARROW="Default" ENDINCLINATION="-566;0;" ID="Arrow_ID_319700222" STARTARROW="None" STARTINCLINATION="205;-440;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522033193572" ID="ID_508353720" MODIFIED="1522033212243" TEXT="DependencyFactory">

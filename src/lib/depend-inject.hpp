@@ -168,7 +168,7 @@ namespace lib {
       static void
       useSingleton()
         {
-          useSingleton ([]{ return new SUB{}; });
+          installFactory ([]{ return & Depend<SUB>{}(); });
         }
       
       /** configure dependency-injection for type SRV to manage a subclass singleton,
@@ -357,10 +357,11 @@ namespace lib {
       static Factory
       buildCustomSingleton (FUN&& ctor)
         {
-          static InstanceHolder<SUB> singleton;
+          static std::unique_ptr<SUB> singleton;
           return ([ctor]()                    // copy of ctor in the closure
                        {
-                         return singleton.buildInstance (ctor);
+                         singleton.reset (ctor());
+                         return singleton.get();
                        });
         }
       

@@ -78,6 +78,10 @@ namespace test{
     struct SubSubSub
       : SubSub
       { };
+    
+    struct SubSubDub
+      : SubSub
+      { };
   }
   
   
@@ -148,7 +152,7 @@ namespace test{
           SubSub& oSub = otherSpecialAccessor();
           CHECK ( INSTANCEOF (SubSubSub, &oSub));
           
-          Depend<SubSub> yetAnotherSpecialAccessor;
+          Depend<SubSubSub> yetAnotherSpecialAccessor;
           
           SubSub& yetAnotherInstance = yetAnotherSpecialAccessor();
           CHECK ( INSTANCEOF (SubSubSub, &yetAnotherInstance));
@@ -161,26 +165,18 @@ namespace test{
       void
       verify_customFactory()
         {
-          DependInject<SubSubSub>::useSingleton (customFactoryFunction);
+          DependInject<SubSubDub>::useSingleton (customFactoryFunction);
           
-          Depend<SubSubSub> customisedAccessor;
-          Depend<SubSub>    otherSpecialAccessor;
+          Depend<SubSubDub> customised;
           
-          SubSub&     oSub = otherSpecialAccessor();
-          SubSubSub& oSubS = customisedAccessor();
-          
-          CHECK (!isSameObject (oSub, oSubS));
-          CHECK ( INSTANCEOF (SubSubSub, &oSub));
-          CHECK ( INSTANCEOF (SubSubSub, &oSubS));
-          
-          CHECK (oSub.instanceID_ != oSubS.instanceID_);
-          CHECK (MAX_ID + 10      == oSubS.instanceID_);
+          CHECK ( INSTANCEOF (SubSubDub, &customised()));
+          CHECK (MAX_ID + 10      == customised().instanceID_);
         }
       
-      static SubSubSub*
+      static SubSubDub*
       customFactoryFunction (void)
         {
-          SubSubSub* specialInstance = new SubSubSub;
+          SubSubDub* specialInstance = new SubSubDub;
           specialInstance->instanceID_ = MAX_ID + 10;
           return specialInstance;
         }
