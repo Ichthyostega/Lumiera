@@ -105,7 +105,89 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  
+  /**
+   * Helper to abstract creation and lifecycle of a dependency
+   */
+  template<class OBJ>
+  class DependencyFactory
+    : util::MoveOnly
+    {
+      using Creator = std::function<OBJ*()>;
+      using Deleter = std::function<void()>;
+      
+      Creator creator_;
+      Deleter deleter_;
+      
+    public:
+      DependencyFactory() = default;
+     ~DependencyFactory()
+        {
+          if (deleter_)
+            deleter_();
+        }
+      
+      explicit operator bool()  const
+        {
+          return bool(creator_);
+        }
+      
+      OBJ*
+      operator() ()
+        {
+          return creator_? creator_()
+                         : buildAndManage();
+        }
+      
+      OBJ*
+      buildAndManage()
+        {
+          OBJ* obj = buildInstance<OBJ>();
+          atDestruction ([obj]{ delete obj; });
+        }
+      
+      template<typename FUN>
+      DependencyFactory&
+      atDestruction (FUN&& additionalAction)
+        {
+          if (deleter_)
+            {
+              Deleter oldDeleter{std::move (deleter_)};
+              deleter_ = [oldDeleter, additionalAction]
+                          {
+                            additionalAction();
+                            oldDeleter();
+                          };
+            }
+          else
+            deleter_ = std::forward<FUN> (additionalAction);
+          return *this;
+        }
+      
+    private:
+      template<class ABS>
+      static     meta::enable_if<std::is_abstract<ABS>,
+      ABS*                      >
+      buildInstance()
+        {
+          throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
+                             "Application architecture or lifecycle is seriously broken.");
+        }
+      template<class TAR>
+      static     meta::disable_if<std::is_abstract<TAR>,
+      TAR*                      >
+      buildInstance()
+        {
+          return new TAR;
+        }
+      
+      static void
+      destroy (OBJ* obj)
+        {
+          if (obj)
+            delete obj;
+        }
+
+    };
   
   
   
