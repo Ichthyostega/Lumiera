@@ -66,8 +66,7 @@ namespace test{
       Interface () : TestTargetObj(cnt) {}
       virtual ~Interface() {}
       
-      friend class lib::InstanceHolder<Interface>;
-      friend class std::default_delete<Interface>;
+      friend class lib::Depend<Interface>;
     };
   
   int Interface::cnt = 0;

@@ -105,49 +105,6 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace { // Implementation helper...
-    
-    using lib::meta::enable_if;
-    
-    template<typename TAR, typename SEL =void>
-    class InstanceHolder
-      : util::NonCopyable
-      {
-        std::unique_ptr<TAR> instance_;
-        
-      public:
-        TAR*
-        buildInstance()
-          {
-            return buildInstance ([]{ return new TAR{}; });
-          }
-        
-        template<class FUN>
-        TAR*
-        buildInstance(FUN&& ctor)
-          {
-            if (instance_)
-              throw error::Fatal("Attempt to double-create a singleton service. "
-                                 "Either the application logic, or the compiler "
-                                 "or runtime system is seriously broken"
-                                ,error::LUMIERA_ERROR_LIFECYCLE);
-            instance_.reset (ctor());
-            return instance_.get();
-          }
-      };
-    
-    template<typename ABS>
-    class InstanceHolder<ABS,  enable_if<std::is_abstract<ABS>>>
-      {
-      public:
-        ABS*
-        buildInstance(...)
-          {
-            throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
-                               "Application architecture or lifecycle is seriously broken.");
-          }
-      };
-  }//(End)Implementation helper
   
   
   
@@ -181,8 +138,6 @@ namespace lib {
       static std::atomic<SRV*> instance;
       static Factory            factory;
       
-      static InstanceHolder<SRV> singleton;
-      
       friend class DependInject<SRV>;
       
       
@@ -204,7 +159,13 @@ namespace lib {
               if (!object)
                 {
                   if (!factory)
-                    object = singleton.buildInstance();
+                    {
+                      object = buildInstance<SRV>();
+                      deleter = []{
+                                    destroy (instance);
+                                    instance = nullptr;
+                                  };
+                    }
                   else
                     object = factory();
                   factory = disabledFactory;
@@ -224,6 +185,48 @@ namespace lib {
           throw error::Fatal("Service not available at this point of the Application Lifecycle"
                             ,error::LUMIERA_ERROR_LIFECYCLE);
         }
+      
+      template<class ABS>
+      static     meta::enable_if<std::is_abstract<ABS>,
+      ABS*                      >
+      buildInstance()
+        {
+          throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
+                             "Application architecture or lifecycle is seriously broken.");
+        }
+      template<class TAR>
+      static     meta::disable_if<std::is_abstract<TAR>,
+      TAR*                      >
+      buildInstance()
+        {
+          return new TAR;
+        }
+      
+      static void
+      destroy (SRV* obj)
+        {
+          if (obj)
+            delete obj;
+        }
+      
+      class Deleter
+        {
+          std::function<void(void)> cleanUp_;
+          
+        public:
+         ~Deleter()
+            {
+              if (cleanUp_)
+                cleanUp_();
+            }
+          template<typename DEL>
+          void operator= (DEL&& fun)
+            {
+              cleanUp_ = std::forward<DEL> (fun);
+            }
+        };
+      
+      static Deleter deleter;
     };
   
   
@@ -237,7 +240,7 @@ namespace lib {
   typename Depend<SRV>::Factory Depend<SRV>::factory;
   
   template<class SRV>
-  InstanceHolder<SRV> Depend<SRV>::singleton;
+  typename Depend<SRV>::Deleter Depend<SRV>::deleter;
   
   
   

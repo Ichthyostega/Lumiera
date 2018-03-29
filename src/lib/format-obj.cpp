@@ -306,7 +306,7 @@ apologies for that."
     static regex identifierChars {"[A-Za-z]\\w*", regex::ECMAScript | regex::optimize};
     
     return regex_replace (text, identifierChars, "$&", std::regex_constants::format_no_copy);
-  }
+  }                                                      // don't copy what does not match
   
   
   
