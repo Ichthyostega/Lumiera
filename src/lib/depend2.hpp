@@ -187,9 +187,25 @@ namespace lib {
           atDestruction ([obj]{ delete obj; });
           return obj;
         }
+
+                                   // try to instantiate the default ctor
+      template<class X, typename = decltype(X())>
+      static std::true_type  __try_instantiate(int);
+      template<class>
+      static std::false_type __try_instantiate(...);
+      
+      /** metafunction: can we instantiate the desired object here?
+       * @remark need to perform the check right here in this scope, because
+       *  default ctor can be private with DependencyFactory declared friend
+       */
+      template<typename X>
+      struct canDefaultConstruct
+        : decltype(__try_instantiate<X>(0))
+        { };
+      
       
       template<class TAR>
-      static     meta::enable_if<std::is_constructible<TAR>,
+      static     meta::enable_if<canDefaultConstruct<TAR>,
       TAR*                      >
       buildInstance()
         {
@@ -204,7 +220,7 @@ namespace lib {
                              "Application architecture or lifecycle is seriously broken.");
         }
       template<class ABS>
-      static     meta::disable_if<std::__or_<std::is_abstract<ABS>,std::is_constructible<ABS>>,
+      static     meta::disable_if<std::__or_<std::is_abstract<ABS>,canDefaultConstruct<ABS>>,
       ABS*                       >
       buildInstance()
         {

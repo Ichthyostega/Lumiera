@@ -332,6 +332,11 @@ namespace test{
                   return magic_++;
                 }
             };
+
+          // NOTE: the following is rejected due to missing default ctor
+          DependInject<Dummy<9>>::useSingleton<Veryspecial>();
+          VERIFY_ERROR (FATAL, Depend<Dummy<9>>{}() );
+          
           
           int backdoor = 22;
           
@@ -358,6 +363,11 @@ namespace test{
           
           {////////////////////////////////////////////////////TEST-Scope
            
+////////////// NOTE: the following does not compile
+//          //       since Veryspecial has no default ctor...
+//          //
+//          DependInject<Dum>::Local<Dum> impossible;
+            
             DependInject<Dum>::Local<Dum> insidious ([&]{ return new Veryspecial{backdoor}; });
             
             CHECK ((1+5+7+9) == checksum );
@@ -378,7 +388,7 @@ namespace test{
             
             CHECK ((1+5+7+9+9) == checksum );
           }////////////////////////////////////////////////////(End)TEST-Scope
-           
+          
           CHECK ((1+5+7+9) == checksum );
           CHECK ((1+5+7+9)*7 == dumm().probe() );
           CHECK ( 0 == tricky().probe());
