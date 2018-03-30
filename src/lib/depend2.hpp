@@ -110,7 +110,7 @@ namespace lib {
    */
   template<class OBJ>
   class DependencyFactory
-    : util::MoveOnly
+//  : util::MoveAssign                                         //////////////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
     {
       using Creator = std::function<OBJ*()>;
       using Deleter = std::function<void()>;
@@ -126,11 +126,6 @@ namespace lib {
             deleter_();
         }
       
-      explicit operator bool()  const
-        {
-          return bool(creator_);
-        }
-      
       OBJ*
       operator() ()
         {
@@ -138,15 +133,37 @@ namespace lib {
                          : buildAndManage();
         }
       
-      OBJ*
-      buildAndManage()
+      template<typename FUN>
+      void
+      defineCreator (FUN&& ctor)
         {
-          OBJ* obj = buildInstance<OBJ>();
-          atDestruction ([obj]{ delete obj; });
+          creator_ = std::forward<FUN> (ctor);
         }
       
       template<typename FUN>
-      DependencyFactory&
+      void
+      defineCreatorAndManage (FUN&& ctor)
+        {
+          creator_ = [this,ctor]
+                      {
+                        OBJ* obj = ctor();
+                        atDestruction ([obj]{ delete obj; });
+                        return obj;
+                      };
+        }
+      
+      void
+      disable()
+        {
+          creator_ = []() -> OBJ*
+                      {
+                        throw error::Fatal("Service not available at this point of the Application Lifecycle"
+                                        ,error::LUMIERA_ERROR_LIFECYCLE);
+                      };
+        }
+      
+      template<typename FUN>
+      void
       atDestruction (FUN&& additionalAction)
         {
           if (deleter_)
@@ -160,10 +177,24 @@ namespace lib {
             }
           else
             deleter_ = std::forward<FUN> (additionalAction);
-          return *this;
         }
       
     private:
+      OBJ*
+      buildAndManage()
+        {
+          OBJ* obj = buildInstance<OBJ>();
+          atDestruction ([obj]{ delete obj; });
+          return obj;
+        }
+      
+      template<class TAR>
+      static     meta::enable_if<std::is_constructible<TAR>,
+      TAR*                      >
+      buildInstance()
+        {
+          return new TAR;
+        }
       template<class ABS>
       static     meta::enable_if<std::is_abstract<ABS>,
       ABS*                      >
@@ -172,21 +203,14 @@ namespace lib {
           throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
                              "Application architecture or lifecycle is seriously broken.");
         }
-      template<class TAR>
-      static     meta::disable_if<std::is_abstract<TAR>,
-      TAR*                      >
+      template<class ABS>
+      static     meta::disable_if<std::__or_<std::is_abstract<ABS>,std::is_constructible<ABS>>,
+      ABS*                       >
       buildInstance()
         {
-          return new TAR;
+          throw error::Fatal("Desired singleton class is not default constructible. "
+                             "Application architecture or lifecycle is seriously broken.");
         }
-      
-      static void
-      destroy (OBJ* obj)
-        {
-          if (obj)
-            delete obj;
-        }
-
     };
   
   
@@ -214,11 +238,11 @@ namespace lib {
   template<class SRV>
   class Depend
     {
-      using Factory = std::function<SRV*()>;
+      using Factory = DependencyFactory<SRV>;
       using Lock = ClassLock<SRV, NonrecursiveLock_NoWait>;
       
       static std::atomic<SRV*> instance;
-      static Factory            factory;
+      static DependencyFactory<SRV> factory;
       
       friend class DependInject<SRV>;
       
@@ -240,75 +264,15 @@ namespace lib {
               object = instance.load (std::memory_order_relaxed);
               if (!object)
                 {
-                  if (!factory)
-                    {
-                      object = buildInstance<SRV>();
-                      deleter = []{
-                                    destroy (instance);
-                                    instance = nullptr;
-                                  };
-                    }
-                  else
-                    object = factory();
-                  factory = disabledFactory;
+                  object = factory();
+                  factory.disable();
+                  factory.atDestruction([]{ instance = nullptr; });
                 }
               instance.store (object, std::memory_order_release);
             }
           ENSURE (object);
           return *object;
         }
-      
-      
-    private:
-      /** @internal preconfigured factory to block any (further) on-demand instance creation */
-      static SRV*
-      disabledFactory()
-        {
-          throw error::Fatal("Service not available at this point of the Application Lifecycle"
-                            ,error::LUMIERA_ERROR_LIFECYCLE);
-        }
-      
-      template<class ABS>
-      static     meta::enable_if<std::is_abstract<ABS>,
-      ABS*                      >
-      buildInstance()
-        {
-          throw error::Fatal("Attempt to create a singleton instance of an abstract class. "
-                             "Application architecture or lifecycle is seriously broken.");
-        }
-      template<class TAR>
-      static     meta::disable_if<std::is_abstract<TAR>,
-      TAR*                      >
-      buildInstance()
-        {
-          return new TAR;
-        }
-      
-      static void
-      destroy (SRV* obj)
-        {
-          if (obj)
-            delete obj;
-        }
-      
-      class Deleter
-        {
-          std::function<void(void)> cleanUp_;
-          
-        public:
-         ~Deleter()
-            {
-              if (cleanUp_)
-                cleanUp_();
-            }
-          template<typename DEL>
-          void operator= (DEL&& fun)
-            {
-              cleanUp_ = std::forward<DEL> (fun);
-            }
-        };
-      
-      static Deleter deleter;
     };
   
   
@@ -319,10 +283,7 @@ namespace lib {
   std::atomic<SRV*> Depend<SRV>::instance;
   
   template<class SRV>
-  typename Depend<SRV>::Factory Depend<SRV>::factory;
-  
-  template<class SRV>
-  typename Depend<SRV>::Deleter Depend<SRV>::deleter;
+  DependencyFactory<SRV> Depend<SRV>::factory;
   
   
   

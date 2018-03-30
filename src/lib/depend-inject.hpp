@@ -160,6 +160,7 @@ namespace lib {
       
     public:
       /** configure dependency-injection for type SRV to build a subclass singleton
+       * @note actually a delegation to `Depend<SUB>` is installed into `Depend<SRV>`
        * @tparam SUB concrete subclass type to build on demand when invoking `Depend<SRV>`
        * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
        *         been invoked at the point when calling this (re)configuration function.
@@ -168,11 +169,14 @@ namespace lib {
       static void
       useSingleton()
         {
-          installFactory ([]{ return & Depend<SUB>{}(); });
+          __assert_compatible<SUB>();
+          installFactory<SUB>();
         }
       
       /** configure dependency-injection for type SRV to manage a subclass singleton,
        *  which is created lazily on demand by invoking the given builder function
+       * @note actual Subclass type is determined from the given functor and then
+       *       a delegation to `Depend<Subclass>` is installed into `Depend<SRV>`
        * @param ctor functor to create a heap allocated instance of subclass
        * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
        *         been invoked at the point when calling this (re)configuration function.
@@ -181,11 +185,11 @@ namespace lib {
       static void
       useSingleton(FUN&& ctor)
         {
-          using Fun = typename SubclassFactory<FUN>::Fun;
-          using Sub = typename SubclassFactory<FUN>::Sub;
-          __assert_compatible<Sub>();
+          using Fun = typename SubclassFactoryType<FUN>::Fun;
+          using Sub = typename SubclassFactoryType<FUN>::Sub;
           
-          installFactory (buildCustomSingleton<Sub,Fun> (forward<FUN> (ctor)));
+          __assert_compatible<Sub>();
+          installFactory<Sub,Fun> (forward<FUN> (ctor));
         }
       
       
@@ -258,7 +262,7 @@ namespace lib {
           std::unique_ptr<MOC> mock_;
           
           SRV* origInstance_;
-          Factory origFactory_;
+          DependencyFactory<SRV> origFactory_;
           
         public:
           Local()
@@ -270,7 +274,7 @@ namespace lib {
           Local (FUN&& buildInstance)
             {
               __assert_compatible<MOC>();
-              __assert_compatible<typename SubclassFactory<FUN>::Sub>();
+              __assert_compatible<typename SubclassFactoryType<FUN>::Sub>();
               
               temporarilyInstallAlternateFactory (origInstance_, origFactory_
                                                  ,[=]()
@@ -281,7 +285,7 @@ namespace lib {
             }
          ~Local()
             {
-              restoreOriginalFactory (origInstance_, origFactory_);
+              restoreOriginalFactory (origInstance_, move(origFactory_));
             }
           
           explicit
@@ -322,8 +326,17 @@ namespace lib {
                         ,"Installed implementation class must be compatible to the interface.");
         }
       
+      static void
+      __ensure_pristine()
+        {
+          if (Depend<SRV>::instance)
+            throw error::Logic("Attempt to reconfigure dependency injection after the fact. "
+                               "The previously installed factory (typically Singleton) was already used."
+                              , error::LUMIERA_ERROR_LIFECYCLE);
+        }
+      
       template<typename FUN>
-      struct SubclassFactory
+      struct SubclassFactoryType
         {
           static_assert (meta::_Fun<FUN>(),
                          "Need a Lambda or Function object to create a heap allocated instance");
@@ -337,49 +350,53 @@ namespace lib {
         };
       
       
+      template<class SUB, typename FUN>
       static void
-      installFactory (Factory&& otherFac)
+      installFactory (FUN&& ctor)
         {
           Lock guard;
-          if (Depend<SRV>::instance)
-            throw error::Logic("Attempt to reconfigure dependency injection after the fact. "
-                               "The previously installed factory (typically Singleton) was already used."
-                              , error::LUMIERA_ERROR_LIFECYCLE);
-          Depend<SRV>::factory = move (otherFac);
+          if (std::is_same<SRV,SUB>())
+            {
+              __ensure_pristine();
+              Depend<SRV>::factory.defineCreatorAndManage (forward<FUN> (ctor));
+            }
+          else
+            {
+              __ensure_pristine();
+              Depend<SRV>::factory.defineCreator ([]{ return & Depend<SUB>{}(); });
+              DependInject<SUB>::useSingleton (forward<FUN> (ctor));
+            }                 // delegate actual instance creation to Depend<SUB>
         }
       
-      /** wrap custom factory function to plant a singleton instance
-       * @remark call through this intermediary function because we need to capture a _copy_ of the functor,
-       *  to invoke it later, on-demand. Especially we need the ability to change the type of this functor,
-       *  since sometimes the argument is passed as function reference, which can not be instantiated,
-       *  but needs to be wrapped into a std::function. */
-      template<class SUB, class FUN>
-      static Factory
-      buildCustomSingleton (FUN&& ctor)
-        {
-          static std::unique_ptr<SUB> singleton;
-          return ([ctor]()                    // copy of ctor in the closure
-                       {
-                         singleton.reset (ctor());
-                         return singleton.get();
-                       });
-        }
-      
+      template<class SUB>
       static void
-      temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, Factory&& newFac)
+      installFactory ()
+        {
+          if (not std::is_same<SRV,SUB>())
+            {
+              Lock guard;
+              __ensure_pristine();
+              Depend<SRV>::factory.defineCreator ([]{ return & Depend<SUB>{}(); });
+            }
+        }
+      
+      
+      template<typename FUN>
+      static void
+      temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, FUN&& newFac)
         {
           Lock guard;
-          stashFac = move(Depend<SRV>::factory);
+          stashFac = move(Depend<SRV>::factory);                       //////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
           stashInstance = Depend<SRV>::instance;
-          Depend<SRV>::factory = move(newFac);
+          Depend<SRV>::factory.defineCreator (forward<FUN>(newFac));   //////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
           Depend<SRV>::instance = nullptr;
         }
       
       static void
-      restoreOriginalFactory (SRV*& stashInstance, Factory& stashFac)
+      restoreOriginalFactory (SRV*& stashInstance, Factory&& stashFac)
         {
           Lock guard;
-          Depend<SRV>::factory = move(stashFac);
+          Depend<SRV>::factory = move(stashFac);                       //////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
           Depend<SRV>::instance = stashInstance;
         }
       
@@ -392,7 +409,7 @@ namespace lib {
                                "but another instance has already been dependency-injected."
                               , error::LUMIERA_ERROR_LIFECYCLE);
           Depend<SRV>::instance = &newInstance;
-          Depend<SRV>::factory = Depend<SRV>::disabledFactory;
+          Depend<SRV>::factory.disable();
         }
       
       static void
@@ -400,7 +417,7 @@ namespace lib {
         {
           Lock guard;
           Depend<SRV>::instance = nullptr;
-          Depend<SRV>::factory = Depend<SRV>::disabledFactory;
+          Depend<SRV>::factory.disable();
         }
     };
   

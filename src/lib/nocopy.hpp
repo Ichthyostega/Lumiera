@@ -58,12 +58,26 @@ namespace util {
   class MoveOnly
     {
     protected:
-     ~MoveOnly()                              = default;
-      MoveOnly()                              = default;
-      MoveOnly (MoveOnly&&)                   = default;
-      MoveOnly (MoveOnly const&)              = delete;
-      MoveOnly& operator= (MoveOnly&&)        = delete;
-      MoveOnly& operator= (MoveOnly const&)   = delete;
+     ~MoveOnly()                                = default;
+      MoveOnly()                                = default;
+      MoveOnly (MoveOnly&&)                     = default;
+      MoveOnly (MoveOnly const&)                = delete;
+      MoveOnly& operator= (MoveOnly&&)          = delete;
+      MoveOnly& operator= (MoveOnly const&)     = delete;
+    };
+  
+  /**
+   * Types marked with this mix-in may be moved and move-assigned
+   */
+  class MoveAssign
+    {
+    protected:
+     ~MoveAssign()                              = default;
+      MoveAssign()                              = default;
+      MoveAssign (MoveAssign&&)                 = default;
+      MoveAssign (MoveAssign const&)            = delete;
+      MoveAssign& operator= (MoveAssign&&)      = default;
+      MoveAssign& operator= (MoveAssign const&) = delete;
     };
   
   /**
@@ -77,12 +91,12 @@ namespace util {
   class Cloneable
     {
     protected:
-     ~Cloneable()                             = default;
-      Cloneable()                             = default;
-      Cloneable (Cloneable&&)                 = default;
-      Cloneable (Cloneable const&)            = default;
-      Cloneable& operator= (Cloneable&&)      = delete;
-      Cloneable& operator= (Cloneable const&) = delete;
+     ~Cloneable()                               = default;
+      Cloneable()                               = default;
+      Cloneable (Cloneable&&)                   = default;
+      Cloneable (Cloneable const&)              = default;
+      Cloneable& operator= (Cloneable&&)        = delete;
+      Cloneable& operator= (Cloneable const&)   = delete;
     };
   
   /**

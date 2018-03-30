@@ -59,7 +59,7 @@ namespace test{
     protected:
       TargetObj () : TestTargetObj(cnt) {}
       
-      friend class lib::Depend<TargetObj>;
+      friend class lib::DependencyFactory<TargetObj>;
     };
   
   int TargetObj::cnt = 0;
