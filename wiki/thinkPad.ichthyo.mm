@@ -27697,9 +27697,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522110414912" ID="ID_1861060212" MODIFIED="1522384924858" TEXT="Singleton-Erzeugung zusammenf&#xfc;hren">
+<node COLOR="#338800" CREATED="1522110414912" ID="ID_1861060212" MODIFIED="1522388012137" TEXT="Singleton-Erzeugung zusammenf&#xfc;hren">
 <linktarget COLOR="#5f8d94" DESTINATION="ID_1861060212" ENDARROW="Default" ENDINCLINATION="-566;0;" ID="Arrow_ID_319700222" SOURCE="ID_1624172022" STARTARROW="None" STARTINCLINATION="205;-440;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522110563499" ID="ID_470760423" MODIFIED="1522113397796" TEXT="stets ausf&#xfc;hrend">
 <icon BUILTIN="idea"/>
 <node CREATED="1522110568307" ID="ID_311971109" MODIFIED="1522110579069" TEXT="Depend&lt;SUB&gt;"/>
@@ -27796,18 +27796,47 @@
 <node COLOR="#338800" CREATED="1522200189706" ID="ID_302642427" MODIFIED="1522382084962" TEXT="m&#xf6;glichst alle instance-Pointer zur&#xfc;cksetzen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522384942847" ID="ID_1152640572" MODIFIED="1522385141698" TEXT="Fehlermeldung beim Zugriff nach Zerst&#xf6;rung">
+<node COLOR="#338800" CREATED="1522384942847" ID="ID_1152640572" MODIFIED="1522387791802" TEXT="Fehlermeldung beim Zugriff nach Zerst&#xf6;rung">
 <linktarget COLOR="#639d9e" DESTINATION="ID_1152640572" ENDARROW="Default" ENDINCLINATION="-89;0;" ID="Arrow_ID_1512382393" SOURCE="ID_1741501987" STARTARROW="None" STARTINCLINATION="28;-1;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1522200249626" ID="ID_215336836" MODIFIED="1522382087401" TEXT="Freunschafts-f&#xe4;hig">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522384902500" ID="ID_1741501987" MODIFIED="1522385141698" TEXT="Zugriff beim Herunterfahren">
+<node COLOR="#338800" CREATED="1522384902500" ID="ID_1741501987" MODIFIED="1522387795093" TEXT="Zugriff beim Herunterfahren">
 <arrowlink COLOR="#639d9e" DESTINATION="ID_1152640572" ENDARROW="Default" ENDINCLINATION="-89;0;" ID="Arrow_ID_1512382393" STARTARROW="None" STARTINCLINATION="28;-1;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522387798572" HGAP="35" ID="ID_1522844249" MODIFIED="1522387935592" TEXT="war ein &#xfc;briggebliebener Destruktor in einem Mock" VSHIFT="12">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zwar wird beim L&#246;schen des Mock
+    </p>
+    <p>
+      die urspr&#252;ngliche Factory wieder an ihren Platz zur&#252;ckgeschoben,
+    </p>
+    <p>
+      aber niemand sagt, da&#223; ein Move auch wirklich ein Move (swap) ist.
+    </p>
+    <p>
+      Mu&#223; daher diese leer gewordene tempor&#228;re Factory explizit auf Default-Zustand zur&#252;cksetzen,
+    </p>
+    <p>
+      damit nicht doch noch der Deleter l&#228;uft.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522387936585" ID="ID_1922190351" MODIFIED="1522388036540" TEXT="es w&#xe4;re besser, wenn Factory &#xfc;berhaupt nicht assignable w&#xe4;re">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1522334796724" ID="ID_1080992734" MODIFIED="1522384890030" TEXT="Funktoren zusammenf&#xfc;hren">

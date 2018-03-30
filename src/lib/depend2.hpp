@@ -70,8 +70,8 @@
  ** ## Implementation and performance
  ** 
  ** Due to this option for flexible configuration, the implementation can not be built
- ** as Meyer's Singleton. Rather, Double Checked Locking of a Mutex is combined with an
- ** std::atomic to work around the known (rather theoretical) problems of this pattern.
+ ** as Meyer's Singleton. Rather, Double Checked Locking of a Mutex is combined with
+ ** an std::atomic to work around the known (rather theoretical) concurrency problems.
  ** Microbenchmarks indicate that this implementation technique ranges close to the
  ** speed of a direct access to an already existing object; in the fully optimised
  ** variant it was found to be roughly at ≈ 1ns and thus about 3 to 4 times slower
@@ -107,10 +107,17 @@ namespace lib {
   
   /**
    * Helper to abstract creation and lifecycle of a dependency
+   * Holds a configurable constructor function and optionally
+   * an automatically invoked deleter function.
+   * @note DependencyFactory can be declared friend to indicate
+   *       the expected way to invoke an otherwise private ctor.
+   *       This is a classical idiom for singletons.
+   * @see lib::Depend
+   * @see lib::DependInject
    */
   template<class OBJ>
   class DependencyFactory
-//  : util::MoveAssign                                         //////////////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
+    : util::NonCopyable
     {
       using Creator = std::function<OBJ*()>;
       using Deleter = std::function<void()>;
@@ -211,6 +218,7 @@ namespace lib {
         {
           return new TAR;
         }
+      
       template<class ABS>
       static     meta::enable_if<std::is_abstract<ABS>,
       ABS*                      >
@@ -254,20 +262,23 @@ namespace lib {
   template<class SRV>
   class Depend
     {
+      using Instance = std::atomic<SRV*>;
       using Factory = DependencyFactory<SRV>;
       using Lock = ClassLock<SRV, NonrecursiveLock_NoWait>;
       
-      static std::atomic<SRV*> instance;
-      static DependencyFactory<SRV> factory;
+      /* === shared per type === */
+      static Instance instance;
+      static Factory  factory;
       
       friend class DependInject<SRV>;
       
       
     public:
-      /** Interface to be used by clients for retrieving the service instance.
-       *  Manages the instance creation, lifecycle and access in multithreaded context.
-       *  @return instance of class `SRV`. When used in default configuration,
-       *          this service instance is a singleton
+      /**
+       * Interface to be used by clients for retrieving the service instance.
+       * Manages the instance creation, lifecycle and access in multithreaded context.
+       * @return instance of class `SRV`. When used in default configuration,
+       *         the returned service instance is a singleton.
        */
       SRV&
       operator() ()

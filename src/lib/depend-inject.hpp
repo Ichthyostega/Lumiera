@@ -95,8 +95,8 @@
  ** @warning there is a known coherency breach in "emergency shutdown": When a
  **     subsystem collapses unexpectedly, its root handler signals the subsystem
  **     runner to initiate emergency shutdown. However, the collapsed subsystem
- **     is already defunct at that point, which breaks the the general contract
- **     of prerequisite subsystems to be available in operative mode. Lumiera
+ **     is already defunct at that point, which breaks the general contract of
+ **     prerequisite subsystems to be available in operative mode. Lumiera
  **     is not built as a resilient service in that respect, but we also
  **     mandate for any parts not to cache essential work results in
  **     transient memory; actions are logged and performed for
@@ -262,7 +262,7 @@ namespace lib {
           std::unique_ptr<MOC> mock_;
           
           SRV* origInstance_;
-          DependencyFactory<SRV> origFactory_;
+          Factory origFactory_;
           
         public:
           Local()
@@ -286,7 +286,8 @@ namespace lib {
          ~Local()
             {
               restoreOriginalFactory (origInstance_, move(origFactory_));
-            }
+              origFactory_ = Factory{};
+            }             // clear possibly leftover deleter
           
           explicit
           operator bool()  const
@@ -341,7 +342,7 @@ namespace lib {
           static_assert (meta::_Fun<FUN>(),
                          "Need a Lambda or Function object to create a heap allocated instance");
           
-          using Fun = typename meta::_Fun<FUN>::Functor;   // suitable type to store for later invocation 
+          using Fun = typename meta::_Fun<FUN>::Functor;   // suitable type to store for later invocation
           using Res = typename meta::_Fun<FUN>::Ret;
           using Sub = typename meta::Strip<Res>::TypePlain;
           
