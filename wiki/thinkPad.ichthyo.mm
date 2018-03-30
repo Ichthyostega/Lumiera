@@ -27153,7 +27153,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1521169086441" ID="ID_284471203" MODIFIED="1521418328021" TEXT="Design">
+<node COLOR="#338800" CREATED="1521169086441" FOLDED="true" ID="ID_284471203" MODIFIED="1522389263020" TEXT="Design">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1521240056932" ID="ID_1189728630" MODIFIED="1521240061863" TEXT="Strukturen">
 <node CREATED="1521240105285" ID="ID_711335043" MODIFIED="1521240109744" TEXT="Dependency-Factory">
@@ -27176,6 +27176,12 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521245885376" ID="ID_1336783261" MODIFIED="1521416492280" TEXT="k&#xf6;nnte komplett wegfallen">
 <linktarget COLOR="#b4a9c1" DESTINATION="ID_1336783261" ENDARROW="Default" ENDINCLINATION="224;0;" ID="Arrow_ID_37940927" SOURCE="ID_870619413" STARTARROW="None" STARTINCLINATION="83;-7;"/>
 <icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#338800" CREATED="1522389217216" ID="ID_1137026613" MODIFIED="1522389254396" TEXT="bekommt neue Rolle">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522389224063" ID="ID_913743224" MODIFIED="1522389235913" TEXT="speichert ctor und automatischen dtor"/>
+<node CREATED="1522389236525" ID="ID_773636278" MODIFIED="1522389243256" TEXT="&#xfc;bernimmt das Managen der Objekte"/>
+<node CREATED="1522389243868" ID="ID_104693188" MODIFIED="1522389252479" TEXT="ist interne Schnittstelle zur Konfiguration"/>
 </node>
 </node>
 <node CREATED="1521242246702" ID="ID_650712800" MODIFIED="1521242253953" TEXT="DependInject">
@@ -27347,15 +27353,15 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1521885000400" TEXT="Implementierung ausf&#xfc;hren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1521160691830" ID="ID_53329830" MODIFIED="1522388786880" TEXT="Implementierung ausf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521418559868" ID="ID_592269917" MODIFIED="1521688403021" TEXT="Depend&lt;SRV&gt; Front-End">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1521418571594" ID="ID_1432227459" MODIFIED="1521688407751" TEXT="DependInject&lt;SRV&gt; ersetzt dependency-factory.hpp">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1521418598463" ID="ID_237484313" MODIFIED="1521696529892" TEXT="Objekterzeugung erweitern">
+<node COLOR="#338800" CREATED="1521418598463" FOLDED="true" ID="ID_237484313" MODIFIED="1522389194597" TEXT="Objekterzeugung erweitern">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#990000" CREATED="1521418618052" ID="ID_1253147848" MODIFIED="1521688468798" TEXT="auf beliebige Argumente">
 <icon BUILTIN="stop-sign"/>
@@ -27401,10 +27407,19 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="smily_bad"/>
+<node COLOR="#338800" CREATED="1522389159792" ID="ID_1574961457" MODIFIED="1522389181299" TEXT="besserer Name">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1522389172206" ID="ID_14747848" MODIFIED="1522389177726" TEXT="komplettes Refactoring">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1522389165095" ID="ID_533975153" MODIFIED="1522389170272" TEXT="DependencyFactory">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1521433938944" ID="ID_546086969" MODIFIED="1521884986940" TEXT="double-checked-locking">
+</node>
+<node COLOR="#338800" CREATED="1521433938944" FOLDED="true" ID="ID_546086969" MODIFIED="1522389196419" TEXT="double-checked-locking">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521433948534" ID="ID_176845865" MODIFIED="1521882845033" TEXT="umstellen auf atomics">
 <icon BUILTIN="button_ok"/>
@@ -27697,7 +27712,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1522110414912" ID="ID_1861060212" MODIFIED="1522388012137" TEXT="Singleton-Erzeugung zusammenf&#xfc;hren">
+<node COLOR="#338800" CREATED="1522110414912" FOLDED="true" ID="ID_1861060212" MODIFIED="1522388800716" TEXT="Singleton-Erzeugung zusammenf&#xfc;hren">
 <linktarget COLOR="#5f8d94" DESTINATION="ID_1861060212" ENDARROW="Default" ENDINCLINATION="-566;0;" ID="Arrow_ID_319700222" SOURCE="ID_1624172022" STARTARROW="None" STARTINCLINATION="205;-440;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522110563499" ID="ID_470760423" MODIFIED="1522113397796" TEXT="stets ausf&#xfc;hrend">
@@ -27834,12 +27849,23 @@
 </richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522387936585" ID="ID_1922190351" MODIFIED="1522388036540" TEXT="es w&#xe4;re besser, wenn Factory &#xfc;berhaupt nicht assignable w&#xe4;re">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522387936585" ID="ID_1922190351" MODIFIED="1522388778471" TEXT="es w&#xe4;re besser, wenn Factory &#xfc;berhaupt nicht assignable w&#xe4;re">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und man stattdessen explizit eine <i>gef&#228;hrliche Funktion</i>&#160; aufrufen mu&#223;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1522334796724" ID="ID_1080992734" MODIFIED="1522384890030" TEXT="Funktoren zusammenf&#xfc;hren">
+<node COLOR="#338800" CREATED="1522334796724" FOLDED="true" ID="ID_1080992734" MODIFIED="1522388803386" TEXT="Funktoren zusammenf&#xfc;hren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1522334843062" FOLDED="true" ID="ID_1526236017" MODIFIED="1522385032004" TEXT="DependencyFactory f&#xfc;r">
 <icon BUILTIN="button_ok"/>
@@ -28100,8 +28126,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160765588" ID="ID_1857896991" MODIFIED="1521160801792" TEXT="Konfig-Aufrufe anpassen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522033578207" HGAP="18" ID="ID_252429770" MODIFIED="1522035653422" TEXT="Name f&#xfc;r Freunschaft+?" VSHIFT="-20">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522033578207" HGAP="18" ID="ID_252429770" MODIFIED="1522389026807" TEXT="Name f&#xfc;r Freunschaft+" VSHIFT="-20">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522033614743" ID="ID_1110690522" MODIFIED="1522033614743" TEXT="friend class lib::InstanceHolder&lt;TargetObj&gt;;">
 <node CREATED="1522033621114" ID="ID_1807735289" MODIFIED="1522033629872" TEXT="nicht so sexy">
 <icon BUILTIN="smiley-oh"/>
@@ -28110,12 +28136,49 @@
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522033635991" ID="ID_321432260" MODIFIED="1522033646528" TEXT="k&#xf6;nnte das Depend selber sein?">
-<icon BUILTIN="help"/>
+<node CREATED="1522033635991" ID="ID_321432260" MODIFIED="1522388978649" TEXT="k&#xf6;nnte das Depend selber sein?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1522388820751" ID="ID_721931573" MODIFIED="1522388962542" TEXT="ist doch ehr ein irref&#xfc;hrender Name">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn man n&#228;mlicht Lumiera's L&#246;sung nicht genau kennt,
+    </p>
+    <p>
+      k&#246;nnte sich das so lesen, als w&#228;re Depend&lt;X&gt; ein Mixin,
+    </p>
+    <p>
+      welches einer Klasse <i>magisch</i>&#160;eine Dependency als protected-Feld zug&#228;nglich macht.
+    </p>
+    <p>
+      Und dann w&#228;re es ziemlich pervasiv, sowas zum Freund zu erkl&#228;ren.
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522110432870" ID="ID_1624172022" MODIFIED="1522110495402" TEXT="dann m&#xfc;&#xdf;ten alle Singletons an einer Stelle erzeugt werden">
+<node COLOR="#338800" CREATED="1522388857786" ID="ID_1151074517" MODIFIED="1522389011363">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>DependencyFactory</b>&#160;ist viel besser geeignet
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1522110432870" ID="ID_1624172022" MODIFIED="1522388983897" TEXT="dann m&#xfc;&#xdf;ten alle Singletons an einer Stelle erzeugt werden">
 <arrowlink COLOR="#5f8d94" DESTINATION="ID_1861060212" ENDARROW="Default" ENDINCLINATION="-566;0;" ID="Arrow_ID_319700222" STARTARROW="None" STARTINCLINATION="205;-440;"/>
 <icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522033193572" ID="ID_508353720" MODIFIED="1522033212243" TEXT="DependencyFactory">

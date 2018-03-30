@@ -186,6 +186,15 @@ namespace lib {
             deleter_ = std::forward<FUN> (additionalAction);
         }
       
+      void
+      transferDefinition (DependencyFactory&& source)
+        {
+          creator_ = std::move (source.creator_);
+          deleter_ = std::move (source.deleter_);
+          source.creator_ = Creator();
+          source.deleter_ = Deleter(); // clear possible leftover deleter
+        }
+      
     private:
       OBJ*
       buildAndManage()

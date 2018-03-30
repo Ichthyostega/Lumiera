@@ -286,8 +286,7 @@ namespace lib {
          ~Local()
             {
               restoreOriginalFactory (origInstance_, move(origFactory_));
-              origFactory_ = Factory{};
-            }             // clear possibly leftover deleter
+            }
           
           explicit
           operator bool()  const
@@ -387,9 +386,9 @@ namespace lib {
       temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, FUN&& newFac)
         {
           Lock guard;
-          stashFac = move(Depend<SRV>::factory);                       //////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
+          stashFac.transferDefinition (move (Depend<SRV>::factory));
           stashInstance = Depend<SRV>::instance;
-          Depend<SRV>::factory.defineCreator (forward<FUN>(newFac));   //////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
+          Depend<SRV>::factory.defineCreator (forward<FUN>(newFac));
           Depend<SRV>::instance = nullptr;
         }
       
@@ -397,7 +396,7 @@ namespace lib {
       restoreOriginalFactory (SRV*& stashInstance, Factory&& stashFac)
         {
           Lock guard;
-          Depend<SRV>::factory = move(stashFac);                       //////////////////////////////////////TICKET #1059 : GCC-4.9 stubbornly picks the copy assignment
+          Depend<SRV>::factory.transferDefinition (move (stashFac));
           Depend<SRV>::instance = stashInstance;
         }
       
