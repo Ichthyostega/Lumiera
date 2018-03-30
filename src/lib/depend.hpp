@@ -85,8 +85,8 @@
  */
 
 
-#ifndef WIP_LIB_DEPEND_H
-#define WIP_LIB_DEPEND_H
+#ifndef LIB_DEPEND_H
+#define LIB_DEPEND_H
 
 
 #include "lib/error.hpp"
@@ -324,4 +324,4 @@ namespace lib {
   
   
 } // namespace lib
-#endif
+#endif /*LIB_DEPEND_H*/

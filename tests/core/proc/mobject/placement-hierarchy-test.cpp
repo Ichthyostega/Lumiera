@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "backend/media-access-mock.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "proc/mobject/session/clip.hpp"

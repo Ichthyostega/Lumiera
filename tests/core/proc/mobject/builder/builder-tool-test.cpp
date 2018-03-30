@@ -34,13 +34,12 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 using util::cStr;
 using std::string;
-using std::cout;
 
 
 

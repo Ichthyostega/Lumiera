@@ -26507,8 +26507,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#338800" CREATED="1521843907144" ID="ID_848033940" MODIFIED="1521843935500" TEXT="Ergebnis normieren auf einzelnen Aufruf">
@@ -26527,8 +26526,7 @@
       habe einen usleep(1000) getimed
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -26561,8 +26559,7 @@
       Au&#223;erdem ist ja auch noch der Aufruf des Funktors mit im Spiel, wenngleich der auch typischerweise geinlined wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1521844236539" ID="ID_176799135" MODIFIED="1521844248411" TEXT="tats&#xe4;chlich verifiziert">
 <icon BUILTIN="idea"/>
@@ -26583,8 +26580,7 @@
       volatile Variable <i>au&#223;en,</i>&#160;im Aufrufkontext
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521844366944" ID="ID_1258575129" MODIFIED="1521844373484" TEXT="Zugriff via Closure und Referenz"/>
 <node CREATED="1521844374503" ID="ID_1548234021" MODIFIED="1521844386090" TEXT="diese Variable mit Konstante vergleichen"/>
@@ -26603,8 +26599,7 @@
       da&#223; x86_64 tats&#228;chlich cache-koh&#228;rent ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -26869,15 +26864,25 @@
 </node>
 </node>
 </node>
-<node CREATED="1520722136029" ID="ID_1922898574" MODIFIED="1520722144366" TEXT="Problem: double checked locking">
+<node COLOR="#338800" CREATED="1520722136029" ID="ID_1922898574" MODIFIED="1522421599316" TEXT="Problem: double checked locking">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1520725664365" ID="ID_1453945091" MODIFIED="1520725671423" TEXT="was bringt C++11?">
 <node CREATED="1520725673123" ID="ID_574000501" LINK="http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/" MODIFIED="1520726129608" TEXT="Jeff Preshings: double-checked-locking-is-fixed-in-cpp11"/>
 <node CREATED="1520726409894" ID="ID_1296403824" LINK="http://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton" MODIFIED="1520726425377" TEXT="Rainer Grimm: thread local initialization of singletons"/>
 </node>
-<node CREATED="1520726342863" ID="ID_1875729983" MODIFIED="1520726350066" TEXT="moderne L&#xf6;sung">
-<node CREATED="1520726350894" ID="ID_47446040" MODIFIED="1520726354025" TEXT="Atomics"/>
-<node CREATED="1520726354878" ID="ID_1241761015" MODIFIED="1520726363168" TEXT="vorgeschaltetes thread_local">
+<node COLOR="#338800" CREATED="1520726342863" FOLDED="true" ID="ID_1875729983" MODIFIED="1522421593574" TEXT="moderne L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1520726350894" ID="ID_47446040" MODIFIED="1522421521283" TEXT="Atomics">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522421526272" ID="ID_406901713" MODIFIED="1522421532577" TEXT="Performance sehr gut"/>
+<node CREATED="1522421537122" ID="ID_1012365029" MODIFIED="1522421553659" TEXT="nahe an einem direkten lokalen Zugriff"/>
+<node CREATED="1522421554271" ID="ID_1930807074" MODIFIED="1522421564034" TEXT="etwa halb so schnell wie DCL alleine"/>
+<node CREATED="1522421564582" ID="ID_596046075" MODIFIED="1522421575992" TEXT="Zugriff etwa 1 Nanosekunde">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1520726354878" ID="ID_1241761015" MODIFIED="1522421518773" TEXT="vorgeschaltetes thread_local">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1520726364612" ID="ID_818685184" MODIFIED="1520726369804" TEXT="Performance nicht klar">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -27433,8 +27438,7 @@
       <u>Thema</u>: Memory access order constraints
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#5a6caa" DESTINATION="ID_1416813337" ENDARROW="Default" ENDINCLINATION="-1755;162;" ID="Arrow_ID_751165448" STARTARROW="None" STARTINCLINATION="-4287;-237;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1521783335195" ID="ID_594004742" LINK="http://en.cppreference.com/w/cpp/atomic/memory_order" MODIFIED="1521783351104" TEXT="CPP-Reference"/>
@@ -27449,8 +27453,7 @@
       <font color="#45317b">Grundidee</font>: <b>synchronizes-with</b>-Beziehung herstellen <i>auf Guard-Variable</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521788423421" FOLDED="true" ID="ID_992901826" MODIFIED="1521882883828" TEXT="use-cases">
 <font NAME="SansSerif" SIZE="12"/>
@@ -27474,8 +27477,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521788638623" ID="ID_16016457" MODIFIED="1521788679409">
 <richcontent TYPE="NODE"><html>
@@ -27490,8 +27492,7 @@
       auf einer tempor&#228;ren lokalen Instanz-Variable zu arbeiten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -27519,8 +27520,7 @@
       die verschiedenen Belange im Quelltext nicht zu vermischen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -27548,8 +27548,7 @@
       Daher werfen wir ja auch error::Fatal
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1521789511870" ID="ID_553276693" MODIFIED="1521789526160" TEXT="Konsistenz-check und Service-Start im Mutex sind ausreichend"/>
@@ -27566,8 +27565,7 @@
       das auch in fehlerhaftem Double-Checked-Locking auftritt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1521789904872" ID="ID_1237807951" MODIFIED="1521789930400" TEXT="...was aber durch den default (memory_order_seq_cst) mit impliziert ist">
@@ -27598,8 +27596,7 @@
       der andere Thread ihn grade nutzt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521790222356" ID="ID_168283882" MODIFIED="1521790445457">
 <richcontent TYPE="NODE"><html>
@@ -27614,8 +27611,7 @@
       da&#223; dieser Fall nicht relevant ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27642,8 +27638,7 @@
       da&#223; dieser &quot;andere Thread&quot; nicht (mehr) aktiv sein darf, wenn der Shutdown erfolgt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521790458636" ID="ID_1895342635" MODIFIED="1521791087780" TEXT="Ausnahme: Emergency-Shutdown">
 <icon BUILTIN="broken-line"/>
@@ -27660,8 +27655,7 @@
       hier ist ein <b>Segfault</b>&#160;m&#246;glich
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -27689,8 +27683,7 @@
       ...denn wir sind auf x86_64 -- und diese Plattform ist per default <i>fast &#252;berall</i>&#160;sequentially coherent
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1521866206751" ID="ID_702466096" MODIFIED="1521882798384" TEXT="Bezugspunkt: Zugriff auf bereits existierenden Service">
 <icon BUILTIN="button_ok"/>
@@ -27759,8 +27752,7 @@
       Der kaskadierende Aufruf liest dann einfach <i>dessen</i>&#160;Instanz-Pointer
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1522110531344" ID="ID_1376369013" MODIFIED="1522110534779" TEXT="custom-ctor">
@@ -27780,8 +27772,7 @@
       Das k&#246;nnte mit dem Factory-Management einer bereits installierten Konfiguration kollidieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1522112400703" ID="ID_1562178283" MODIFIED="1522112404258" TEXT="Factory erstellen"/>
 </node>
@@ -27845,8 +27836,7 @@
       damit nicht doch noch der Deleter l&#228;uft.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node COLOR="#338800" CREATED="1522387936585" ID="ID_1922190351" MODIFIED="1522388778471" TEXT="es w&#xe4;re besser, wenn Factory &#xfc;berhaupt nicht assignable w&#xe4;re">
@@ -27859,8 +27849,7 @@
       ...und man stattdessen explizit eine <i>gef&#228;hrliche Funktion</i>&#160; aufrufen mu&#223;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -27979,8 +27968,7 @@
       Konsequenz: das ist <b>keine Library-Implementierung</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1521790951152" ID="ID_974126504" MODIFIED="1521946981024" TEXT="Semantik der Konfigurations-Varianten beschreiben">
@@ -28020,7 +28008,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1520722160591" ID="ID_135546699" MODIFIED="1520722168810" TEXT="Unit-Test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722160591" ID="ID_135546699" MODIFIED="1522421617782" TEXT="Unit-Test">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1521419576303" ID="ID_726128967" MODIFIED="1522042418343" TEXT="alte Tests portieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521418937870" ID="ID_906296527" MODIFIED="1522033081893" TEXT="Singleton_test">
@@ -28081,8 +28070,7 @@
       die von der alten DependencyFactory abh&#228;ngen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#b8154d" DESTINATION="ID_278956866" ENDARROW="Default" ENDINCLINATION="32;436;" ID="Arrow_ID_1985884795" SOURCE="ID_513111416" STARTARROW="None" STARTINCLINATION="223;-69;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522033940685" ID="ID_447878554" MODIFIED="1522034123685" TEXT="media-access-mock-test.cpp">
@@ -28120,9 +28108,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1520722155112" ID="ID_1512641426" MODIFIED="1520722159028" TEXT="Integration">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160755182" ID="ID_678080556" MODIFIED="1521160802831" TEXT="Umbenennen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722155112" ID="ID_1512641426" MODIFIED="1522421627198" TEXT="Integration">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1521160755182" ID="ID_678080556" MODIFIED="1522428573233" TEXT="Umbenennen">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521160765588" ID="ID_1857896991" MODIFIED="1521160801792" TEXT="Konfig-Aufrufe anpassen">
 <icon BUILTIN="flag-yellow"/>
@@ -28157,8 +28146,7 @@
       Und dann w&#228;re es ziemlich pervasiv, sowas zum Freund zu erkl&#228;ren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1522388857786" ID="ID_1151074517" MODIFIED="1522389011363">
 <richcontent TYPE="NODE"><html>
@@ -28170,8 +28158,7 @@
       <b>DependencyFactory</b>&#160;ist viel besser geeignet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -29859,8 +29846,7 @@
       das sind verschiedene Blickwinkel auf das gleiche Thema
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 <node CREATED="1521779467554" ID="ID_257299836" MODIFIED="1521779468925" TEXT="fence">
 <node CREATED="1521779469969" ID="ID_178160333" MODIFIED="1521779473476" TEXT="total-global"/>
@@ -29887,8 +29873,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1521779549150" ID="ID_754401646" MODIFIED="1521779560424" TEXT="ReadRead"/>
 <node CREATED="1521779561540" ID="ID_177816200" MODIFIED="1521779564336" TEXT="ReadWrite"/>
 <node CREATED="1521779565188" ID="ID_1059751946" MODIFIED="1521779570999" TEXT="WriteWrite"/>
@@ -29922,8 +29907,7 @@
       eine <i>Solche</i>&#160;konstituiert die synchronizes-with-Beziehuung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -29937,8 +29921,7 @@
       <b>Grundbeziehung</b>: synchronizes-with
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -29960,8 +29943,7 @@
       das gilt nur im Rahmen der <b>synchronizes-with</b>-Beziehung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521780488708" ID="ID_945270217" MODIFIED="1521780517520">
 <richcontent TYPE="NODE"><html>
@@ -29973,8 +29955,7 @@
       das hei&#223;t, nur f&#252;r einen <b>vom gleichen Mutex gesch&#252;tzen</b>&#160; Bereich!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521782262223" HGAP="30" ID="ID_1323377815" MODIFIED="1521782807539" TEXT="Typisches Gegenbeispiel: Double Checked Locking" VSHIFT="18">
 <richcontent TYPE="NOTE"><html>
@@ -30007,8 +29988,7 @@
       Allerdinsg nicht auf einer Plattform, die ohnehin sequentiell-konsistent ist. Wie &quot;zum Beispiel&quot; x86/64
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -30023,8 +30003,7 @@
       ...haben wir es hier mit einem <b>Pattern</b>&#160;zu tun
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521791417311" ID="ID_668833788" MODIFIED="1521791528549">
 <richcontent TYPE="NODE"><html>
@@ -30036,8 +30015,7 @@
       ich nenne es &quot;<b>synchronised visibility cones</b>&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1521791441996" ID="ID_656786136" MODIFIED="1521791513129">
 <richcontent TYPE="NODE"><html>
@@ -30055,8 +30033,7 @@
       In Realit&#228;t arbeiten mehrere Threads/Cores mit mehreren Entit&#228;ten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1521791567491" ID="ID_328701027" MODIFIED="1521791613112" TEXT="Code mu&#xdf; das Bestehen der Beziehung aktiv pr&#xfc;fen">
@@ -30072,8 +30049,7 @@
       die shared zone anzufassen!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -31283,8 +31259,7 @@
       END
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522025982759" ID="ID_1830638050" MODIFIED="1522025987194" TEXT="reproduzierbar....">
 <node CREATED="1522025990246" ID="ID_261366619" MODIFIED="1522026014541" TEXT="Auf mehreren Terminals x-mal starten">
@@ -31348,8 +31323,7 @@
       weil sich die Threads gegenseitig ihre Counter inkrementieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1522029979544" ID="ID_1820534569" MODIFIED="1522030021122" TEXT="Stre&#xdf;test wiederholt, sogar mit 500 Thrads"/>
 <node COLOR="#338800" CREATED="1522029995205" ID="ID_556688250" MODIFIED="1522030021122" TEXT="jetzt reproduzierbar alles sauber">
@@ -31374,8 +31348,7 @@
       verwenden globale Variable oder &#252;berhaupt keine Objektfelder
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>

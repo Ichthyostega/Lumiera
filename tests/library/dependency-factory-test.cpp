@@ -33,7 +33,7 @@
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
-#include "lib/depend2.hpp"
+#include "lib/depend.hpp"
 #include "lib/depend-inject.hpp"
 #include "test-target-obj.hpp"
 

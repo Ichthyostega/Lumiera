@@ -35,7 +35,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 
 using lib::test::Depend4Test;
 using util::contains;

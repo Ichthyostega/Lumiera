@@ -34,7 +34,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
-#include "lib/depend2.hpp"
+#include "lib/depend.hpp"
 #include "lib/depend-inject.hpp"
 
 

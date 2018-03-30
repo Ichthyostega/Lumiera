@@ -40,7 +40,7 @@
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 

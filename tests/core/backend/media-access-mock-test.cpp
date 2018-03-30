@@ -27,7 +27,7 @@
 
 #include "backend/media-access-facade.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 
 #include "lib/test/run.hpp"

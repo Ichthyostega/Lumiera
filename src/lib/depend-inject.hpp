@@ -28,18 +28,18 @@
  ** plants an instance of lib::Depend, templated to the actual type of the dependency.
  ** This is a way to express the dependency on some interface or service, while not
  ** expanding on any details as to when and how this dependency is created. Without
- ** and explicit configuration, lib::Depend will automatically create and manage a
+ ** an explicit configuration, lib::Depend will automatically create and manage a
  ** singleton instance of the type given as type parameter.
  ** 
  ** ## Architecture
- ** A _dependency_ is understood as something we need to do the task at hand, yet
- ** a dependency lies beyond that task and relates to concerns outside the scope
- ** and theme of this actual task. The usage site of the dependency is only bound
- ** and coupled to the _interface_ exposed as dependency, and the associated
+ ** A _dependency_ is understood as something we need to perform the task at hand,
+ ** yet a dependency referres beyond that task and relates to concerns outside the
+ ** scope and theme of this actual task. The usage site of the dependency is only
+ ** bound and coupled to the _interface_ exposed as dependency, and the associated
  ** _contract_ of a service. Initially, such a dependency is _dormant_ and will
- ** be activated on first access. This simplifies the bootstrap of complex
+ ** be activated on first access. This simplifies the bootstrap of complexly
  ** interwoven structures; it suffices to ensure that none of the participating
- ** entities actually starts to work before all of the setup and wiring is done.
+ ** entities actually starts its work before all of the setup and wiring is done.
  ** 
  ** For that reason, lib::DependInject<SRV> is meant to be used at the site providing
  ** the _actual_ service or implementation subtype -- not at the site consuming a
@@ -56,7 +56,7 @@
  ** function, a functor or lambda can be installed into the static factory of lib::Depend.
  ** Especially, a lambda could be bound into the internal context of the service provider.
  ** This function is expected to deliver a heap allocated instance on invocation, which
- ** will be owned and managed by lib::Depend<SRV>::singleton (An InstanceHolder<SRV>).
+ ** will be owned and managed by lib::Depend<SRV>::factory (A DependencyFactory<SRV>).
  ** 
  ** \paragraph Service Lifecycle
  ** Whenever a module or subsystem can be started and stopped, several interconnected
@@ -117,7 +117,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/depend2.hpp"
+#include "lib/depend.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/sync-classlock.hpp"
@@ -139,9 +139,9 @@ namespace lib {
   /**
    * This framework allows to (re)configure the lib::Depend front-end for dependency-injection.
    * By default, `Depend<TY>` will create a singleton instance of `TY` lazily, on demand.
-   * When instantiating one of the configuration handles provided here -- _prior_ to using
+   * When instantiating one of the configuration handles provided here -- _prior_ to anyone
    * retrieving the instance through `Depend<TY>` -- this default (singleton) behaviour
-   * can be reconfigured in various ways, without the client being aware of it
+   * can be reconfigured in various ways, without the client being aware of it:
    * - instead of a singleton, a service instance with well defined lifecycle can be
    *   exposed through the `Depend<TY>` front-end. When the service is shut down,
    *   clients will receive an exception on access.
@@ -150,6 +150,7 @@ namespace lib {
    *   singleton type, which still happens lazily, on demand
    * - the current state and configuration can be shadowed temporarily by a test mock instance,
    *   which is managed automatically and removed when leaving the scope of the test.
+   * @note DependInject<SRV> is declared fried by Depend<SRV> to reconfigure the latter's internals
    */
   template<class SRV>
   class DependInject
@@ -159,7 +160,7 @@ namespace lib {
       using Lock    = typename Depend<SRV>::Lock;
       
     public:
-      /** configure dependency-injection for type SRV to build a subclass singleton
+      /** configure dependency-injection for type SRV to build a subclass singleton.
        * @note actually a delegation to `Depend<SUB>` is installed into `Depend<SRV>`
        * @tparam SUB concrete subclass type to build on demand when invoking `Depend<SRV>`
        * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
@@ -174,19 +175,19 @@ namespace lib {
         }
       
       /** configure dependency-injection for type SRV to manage a subclass singleton,
-       *  which is created lazily on demand by invoking the given builder function
+       *  which is created lazily on demand by invoking the given builder function.
        * @note actual Subclass type is determined from the given functor and then
        *       a delegation to `Depend<Subclass>` is installed into `Depend<SRV>`
-       * @param ctor functor to create a heap allocated instance of subclass
+       * @param ctor functor to create a heap allocated instance of the subclass
        * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
        *         been invoked at the point when calling this (re)configuration function.
        */
       template<class FUN>
       static void
-      useSingleton(FUN&& ctor)
+      useSingleton (FUN&& ctor)
         {
-          using Fun = typename SubclassFactoryType<FUN>::Fun;
-          using Sub = typename SubclassFactoryType<FUN>::Sub;
+          using Sub = typename SubclassFactoryType<FUN>::Subclass;
+          using Fun = typename SubclassFactoryType<FUN>::Functor;
           
           __assert_compatible<Sub>();
           installFactory<Sub,Fun> (forward<FUN> (ctor));
@@ -214,7 +215,7 @@ namespace lib {
         public:
           template<typename...ARGS>
           ServiceInstance(ARGS&& ...ctorArgs)
-            : instance_(new IMP(forward<ARGS> (ctorArgs)...))
+            : instance_{new IMP(forward<ARGS> (ctorArgs)...)}
             {
               __assert_compatible<IMP>();
               activateServiceAccess (*instance_);
@@ -239,7 +240,7 @@ namespace lib {
             }
           
           IMP*
-          operator-> ()  const
+          operator->()  const
             {
               ENSURE (instance_);
               return instance_.get();
@@ -274,7 +275,7 @@ namespace lib {
           Local (FUN&& buildInstance)
             {
               __assert_compatible<MOC>();
-              __assert_compatible<typename SubclassFactoryType<FUN>::Sub>();
+              __assert_compatible<typename SubclassFactoryType<FUN>::Subclass>();
               
               temporarilyInstallAlternateFactory (origInstance_, origFactory_
                                                  ,[=]()
@@ -341,11 +342,11 @@ namespace lib {
           static_assert (meta::_Fun<FUN>(),
                          "Need a Lambda or Function object to create a heap allocated instance");
           
-          using Fun = typename meta::_Fun<FUN>::Functor;   // suitable type to store for later invocation
-          using Res = typename meta::_Fun<FUN>::Ret;
-          using Sub = typename meta::Strip<Res>::TypePlain;
+          using Functor   = typename meta::_Fun<FUN>::Functor; // suitable type to store for later invocation
+          using ResultVal = typename meta::_Fun<FUN>::Ret;
+          using Subclass  = typename meta::Strip<ResultVal>::TypePlain;
           
-          static_assert (std::is_pointer<Res>::value,
+          static_assert (std::is_pointer<ResultVal>::value,
                          "Function must yield a pointer to a heap allocated instance");
         };
       
@@ -378,6 +379,7 @@ namespace lib {
               __ensure_pristine();
               Depend<SRV>::factory.defineCreator ([]{ return & Depend<SUB>{}(); });
             }
+          // note: we do not install an actual factory; rather we use the default for SUB
         }
       
       
@@ -424,4 +426,4 @@ namespace lib {
   
   
 } // namespace lib
-#endif
+#endif /*LIB_DEPEND_INJECT_H*/

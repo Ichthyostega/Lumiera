@@ -29,7 +29,7 @@
 #include "proc/asset/testasset.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/util.hpp"

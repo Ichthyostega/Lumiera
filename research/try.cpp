@@ -50,7 +50,7 @@
 typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
-#include "lib/depend2.hpp"
+#include "lib/depend.hpp"
 #include "lib/depend-inject.hpp"
 //#include "lib/meta/util.hpp"
 #include "lib/test/test-helper.hpp"

@@ -32,7 +32,7 @@
 #include "lib/util.hpp"
 
 #include "test-target-obj.hpp"
-#include "lib/depend2.hpp"
+#include "lib/depend.hpp"
 #include "lib/depend-inject.hpp"
 
 #include <boost/lexical_cast.hpp>
