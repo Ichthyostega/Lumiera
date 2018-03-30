@@ -35,6 +35,7 @@
 #include "lib/sync.hpp"
 #include "lib/error.hpp"
 #include "proc/asset.hpp"
+#include "lib/depend-inject.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -109,7 +110,7 @@ namespace asset {
          clear();
         }
       
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<DB>;
       
       
     public:

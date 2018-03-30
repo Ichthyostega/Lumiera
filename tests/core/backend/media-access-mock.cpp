@@ -26,6 +26,7 @@
  ** information from the data backend. The Mock implementation instead holds
  ** a map of fixed response which will be delivered when querying some magic
  ** filenames.
+ ** @todo this facility was occasionally used until 2011, yet never really completed
  ** 
  ** @see mediaaccessmocktest.cpp validating the Mock
  ** @see MediaAccessFactory the real thing
@@ -83,7 +84,9 @@ namespace test {
         
       private:
         static int _i_;
-        ChanHandle genH()
+        
+        ChanHandle
+        genH()
           {
             return reinterpret_cast<ChanHandle> (++_i_);
           }
@@ -111,7 +114,8 @@ namespace test {
             // ----------------------------------------------------------------------TESTCASES
           }
         
-        bool known (string key)
+        bool
+        known (string key)
           {
             const_iterator i = find (key);
             return (i != end());
@@ -130,7 +134,7 @@ namespace test {
   {
     if (isnil (name))
       throw Invalid ("empty filename passed to MediaAccessFacade.");
-  
+    
     if (!testCases().known(name))
       throw Invalid ("unable to use media file \""+name+"\"."
                      "Hint: you're using a test-mock file access, "
@@ -145,7 +149,7 @@ namespace test {
   {
     Response const& res (*reinterpret_cast<Response*> (&h));
     
-    if (res.channels.size() <= chanNo) 
+    if (res.channels.size() <= chanNo)
       return NULLResponse;
     else
       return res.channels[chanNo];

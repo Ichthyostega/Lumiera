@@ -81,7 +81,7 @@ namespace lumiera {
     private:
       Config();
      ~Config();
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<Config>;
     };
   
   

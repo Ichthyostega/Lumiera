@@ -34,15 +34,16 @@
 #include "proc/asset/clip.hpp"
 #include "lib/util.hpp"
 
-using lib::test::Depend4Test;
 using util::contains;
 using util::isnil;
-
 
 
 namespace proc {
 namespace asset{
 namespace test {
+  
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
   
   
   
@@ -199,7 +200,7 @@ namespace test {
        */
       void checkRealAssetDependencyRegistration ()
         {
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           // -----Media and Clip--------------------------------
           typedef lib::P<Media> PM;

@@ -66,7 +66,7 @@ namespace session {
       unique_ptr<LifecycleAdvisor> lifecycle_;
       
       SessManagerImpl()  throw();
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<SessManagerImpl>;
       
      ~SessManagerImpl() ;
       

@@ -35,14 +35,13 @@
 
 #include <string>
 
-using lib::test::Depend4Test;
+using lib::DependInject;
 using lib::Literal;
 using std::string;
 
 
 namespace backend {
 namespace test {
-  
   
   
   
@@ -57,7 +56,7 @@ namespace test {
       
       virtual void run(Arg) 
         {
-          Depend4Test<MediaAccessMock> within_this_scope;
+          DependInject<MediaAccessFacade>::Local<MediaAccessMock> useMockMedia;
           
           queryScenario ("test-1");
           queryScenario ("test-2");

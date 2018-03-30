@@ -39,7 +39,6 @@
 
 
 using lib::HashIndexed;
-using lib::test::Depend4Test;
 
 
 namespace proc    {
@@ -51,6 +50,9 @@ namespace test    {
   using lib::test::showSizeof;
   using namespace mobject::test;
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
+  
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
   
   
   /***********************************************************************************//**
@@ -65,9 +67,9 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           
           typedef Placement<MObject>                    PMObj;

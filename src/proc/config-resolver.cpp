@@ -31,16 +31,17 @@
 
 #include "lib/error.hpp"
 #include "proc/config-resolver.hpp"
-#include "proc/mobject/session/query/fake-configrules.hpp"
 
 
 
 namespace proc {
   
-  using lib::buildSingleton;
   
-  /** Singleton factory instance, configured with the actual implementation type. */
-  lib::Depend<ConfigResolver> ConfigResolver::instance (buildSingleton<proc::mobject::session::query::MockConfigRules>());
+  /** Singleton factory instance, configured with the actual implementation type.
+   * @see DefsManager::DefsManager()
+   * @see defs-manager-impl.hpp
+   */
+  lib::Depend<ConfigResolver> ConfigResolver::instance;
   
 } // namespace proc
 

@@ -50,8 +50,10 @@ namespace test    {
       
       using session::Clip;
       using session::AbstractMO;
-      using lib::test::Depend4Test;
       using namespace mobject::test;
+  
+      using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                    ::Local<backend::test::MediaAccessMock>;
       
       
       
@@ -115,7 +117,7 @@ namespace test    {
           virtual void
           run(Arg)
             {
-              Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+              MediaAccessMock useMockMedia;
               
               
               TestTool t1;

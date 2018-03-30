@@ -102,15 +102,17 @@ main (int, char**)
     
     Depend<BlackHoleService> mystery;
     
-    cout << microbenchmark<1> ([&]()
+    thread_local int64_t cnt = 0;
+    
+    cout << microbenchmark<8> ([&]()
                                  {
-                                   0 == mystery().readMe();
+                                   cnt += mystery().readMe();
                                  }
-                              ,5000000000)
+                              ,50000000)
          << endl;
     
     LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
-//  cout <<  "\n.gulp.\n";
+    cout <<  "\n.gulp.\n";
     
     return 0;
   }

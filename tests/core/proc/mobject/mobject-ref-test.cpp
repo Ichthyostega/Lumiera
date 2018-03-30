@@ -44,7 +44,6 @@
 #include "lib/util.hpp"
 
 
-using lib::test::Depend4Test;
 using lib::test::showSizeof;
 using lib::time::Duration;
 using lib::time::FSecs;
@@ -84,6 +83,9 @@ namespace test    {
   using session::SessionServiceMockIndex;
   using session::PPIdx;
   
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
+  
   
   
   /***********************************************************************//**
@@ -107,7 +109,7 @@ namespace test    {
       virtual void
       run (Arg)
         {
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           
           // create data simulating a "Session"

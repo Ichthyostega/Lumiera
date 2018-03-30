@@ -73,7 +73,7 @@ namespace engine {
       DiagnosticBufferProvider();
      ~DiagnosticBufferProvider();
      
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<DiagnosticBufferProvider>;
      
     public:
       /** build a new Diagnostic Buffer Provider instance,

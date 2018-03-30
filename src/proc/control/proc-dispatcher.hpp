@@ -87,7 +87,6 @@ namespace control {
       unique_ptr<DispatcherLoop> runningLoop_;
       bool active_{false};
       
-      
     public:
       static lib::Depend<ProcDispatcher> instance;
       
@@ -104,6 +103,10 @@ namespace control {
       
     private:
       void endRunningLoopState();
+      
+     ~ProcDispatcher();
+      ProcDispatcher();
+      friend class lib::DependencyFactory<ProcDispatcher>;
     };
   
   

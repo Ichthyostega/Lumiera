@@ -37,7 +37,6 @@
 #include "backend/media-access-mock.hpp"
 #include "lib/depend-inject.hpp"
 
-using lib::test::Depend4Test;
 using util::isnil;
 using std::string;
 
@@ -45,6 +44,9 @@ using std::string;
 namespace proc {
 namespace asset{
 namespace test {
+  
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
 
 
 
@@ -57,7 +59,7 @@ namespace test {
     {
       virtual void run(Arg arg)
         {
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           createMedia();
           factoryVariants();

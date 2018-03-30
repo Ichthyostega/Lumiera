@@ -326,6 +326,9 @@ namespace control {
   
   /* ======== ProcDispatcher implementation ======== */
   
+  ProcDispatcher::ProcDispatcher()  { }
+  ProcDispatcher::~ProcDispatcher() { }
+  
   /** starting the ProcDispatcher means to start the session subsystem.
    * @return `false` when _starting_ failed since it is already running...
    * @remark this function implements the start operation for the »session subsystem«.

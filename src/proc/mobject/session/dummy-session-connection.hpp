@@ -71,7 +71,7 @@ namespace session {
       DummySessionConnection();
      ~DummySessionConnection();
 
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<DummySessionConnection>;
 
     public:
       /** access point to set up the scaffolding.
