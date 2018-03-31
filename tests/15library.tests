@@ -2,91 +2,6 @@ TESTING "Library Test Suite: basic and low-level components" ./test-suite --grou
 
 
 
-TEST "casting or converting access helper" AccessCasted_test <<END
-out-lit: can_downcast<B,D>     = 1
-out-lit: can_downcast<B*,D*>   = 1
-out-lit: can_downcast<B&,D&>   = 1
-out-lit: can_downcast<B&,D*>   = 0
-out-lit: can_downcast<B*,D&>   = 0
-out-lit: can_downcast<B*&,D*&> = 1
-out-lit: can_downcast<D*&,D*&> = 1
-out-lit: can_downcast<D*,E*>   = 1
-out-lit: can_downcast<E*,F*>   = 1
-out-lit: has_RTTI<D*> = 0
-out-lit: has_RTTI<E*> = 1
-out-lit: has_RTTI<F*> = 1
-out-lit: is_convertible<D,D&>  = 0
-out-lit: is_convertible<D&,D>  = 1
-out-lit: can_use_dynamic_downcast<D,D&>  = 0
-out-lit: can_use_conversion<D,D&>        = 0
-out-lit: can_use_dynamic_downcast<B*,D*> = 0
-out-lit: can_use_conversion<D*,B*>       = 1
-out-lit: can_use_dynamic_downcast<D*&,D*&> = 0
-out-lit: can_use_conversion<D*&,D*&>       = 1
-out-lit: can_use_conversion<D*,E*>         = 0
-out-lit: can_use_dynamic_downcast<D*&,E*>  = 0
-out-lit: can_use_conversion<E*,F*>         = 0
-out-lit: can_use_dynamic_downcast<E*,F*>   = 1
-out-lit: === standard case: References ===
-out: Access\(D  as D&\) .+D.. adr=╲\w{8} ↗«D»
-out: Access\(D& as D&\) .+D.. adr=╲\w{8} ↗«D»
-out-lit: === build a value object ===
-out: Access.D  as D.    .+D.. adr=╲\w{8} ↗«D»
-out: Access.D& as D.    .+D.. adr=╲\w{8} ↗«D»
-out: Access.D&& as D.   .+D.. adr=╲\w{8} ↗«D»
-out-lit: === take a pointer ===
-out: Access.D  as D\*.  .+╲\w{8}
-out: Access.D& as D\*.  .+╲\w{8}
-out-lit: === dereference a pointer ===
-out: Access.D\* as D&.  .+D.. adr=╲\w{8} ↗«D»
-out: Access.D\* as D.   .+D.. adr=╲\w{8} ↗«D»
-out: Access.D\*&& as D. .+D.. adr=╲\w{8} ↗«D»
-out-lit: === const correctness ===
-out: Access.D  as D const&.       .+D.. adr=╲\w{8} ↗«D»
-out: Access.D& as D const&.       .+D.. adr=╲\w{8} ↗«D»
-out: Access.D  as const D.        .+D.. adr=╲\w{8} ↗«D»
-out: Access.D& as const D.        .+D.. adr=╲\w{8} ↗«D»
-out: Access.D  as const D\*.      .+╲\w{8}
-out: Access.D& as const D\*.      .+╲\w{8}
-out: Access.D\* as D const&.      .+D.. adr=╲\w{8} ↗«D»
-out: Access.D\* as const D.       .+D.. adr=╲\w{8} ↗«D»
-out: Access.const D  as D const&. .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const& as D const&. .+D.. adr=╲\w{8} ↗«D»
-out: Access.const D  as const D.  .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const& as const D.  .+D.. adr=╲\w{8} ↗«D»
-out: Access.const D  as const D\*..+╲\w{8}
-out: Access.D const& as const D\*..+╲\w{8}
-out: Access.const D\* as D const&..+D.. adr=╲\w{8} ↗«D»
-out: Access.const D\* as const D. .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const& as D.        .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const&& as D.       .+D.. adr=╲\w{8} ↗«D»
-out-lit: === work cases: actual conversions ===
-out: Access.B& as B&.             .+B.. adr=╲\w{8} ↗«B»
-out: Access.D& as B&.             .+B.. adr=╲\w{8} ↗«B»
-out: Access.B\* as B\*.           .+╲\w{8}
-out: Access.D\* as B\*.           .+╲\w{8}
-out: Access.D& as B\*.            .+╲\w{8}
-out: Access.D\* as B&.            .+B.. adr=╲\w{8} ↗«B»
-out: Access.B\*& as B\*&.         .+╲\w{8}
-out: Access.D\*& as D\*&.         .+╲\w{8}
-out: Access.D& as const B\*.      .+╲\w{8}
-out: Access.D\* as B const&.      .+B.. adr=╲\w{8} ↗«B»
-out: Access.D const& as const B\*..+╲\w{8}
-out: Access.const D\* as B const&..+B.. adr=╲\w{8} ↗«B»
-out: Access.E\(F\)& as F&.        .+F.. adr=╲\w{8} ↗«F»
-out: Access.E\(F\)\* as F\*.      .+╲\w{8}
-out: Access.E\(F\)\* as F&.       .+F.. adr=╲\w{8} ↗«F»
-out: Access.E\(F\)& as F\*.       .+╲\w{8}
-out: Access.F\\* as X\*.          .+╲\w{8}
-out: Access.X\(F\)\* as X\*.      .+╲\w{8}
-out: Access.F\* as B&.            .+B.. adr=╲\w{8} ↗«B»
-out: Access.F\* as E&*.           .+E.. adr=╲\w{8} ↗«F»
-out-lit: Access(int as double) --->2
-out-lit: Access(float as long) --->3
-return: 0
-END
-
-
 TEST "CmdlineWrapper_test" CmdlineWrapper_test <<END
 out-lit: wrapping cmdline:...
 out-lit: -->
@@ -129,26 +44,6 @@ END
 
 
 TEST "Deleter function collection" DelStash_test <<END
-return: 0
-END
-
-
-TEST "Dependency injection" DependencyFactory_test <<END
-out-lit: ctor TargetObj(0) successful
-out-lit: ctor TargetObj(1) successful
-out-lit: ctor TargetObj(2) successful
-out-lit: ctor TargetObj(3) successful
-out-lit: dtor ~TargetObj(3) successful
-out-lit: ctor TargetObj(4) successful
-out-lit: dtor ~TargetObj(4) successful
-out-lit: dtor ~TargetObj(2) successful
-out-lit: dtor ~TargetObj(1) successful
-out-lit: dtor ~TargetObj(0) successful
-return: 0
-END
-
-
-TEST "Dependency injection configuration" DependencyConfiguration_test <<END
 return: 0
 END
 
@@ -661,40 +556,6 @@ out: ➢➢.d.
 out-lit: ➢➢ e f
 out-lit: ➢➢/usr/bin
 out-lit: ➢➢/usr/lib
-return: 0
-END
-
-
-TEST "Singleton_test" Singleton_test 23 <<END
-out-lit: testing TargetObj(23) as Singleton
-out-lit: ctor TargetObj(23) successful
-out-lit: calling a non-static method on the Singleton instance
-out-lit: .....TargetObj(23): data="***********************", array[23]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,}
-out-lit: dtor ~TargetObj(23) successful
-return: 0
-END
-
-
-TEST "SingletonSubclass_test" SingletonSubclass_test 13 <<END
-out-lit: using the Singleton should create TargetObj(13)...
-out-lit: ctor TargetObj(13) successful
-out-lit: calling a non-static method on the Singleton-Implementation
-out-lit: .....TargetObj(13): data="*************", array[13]={0,1,2,3,4,5,6,7,8,9,10,11,12,}
-out-lit: dtor ~TargetObj(13) successful
-return: 0
-END
-
-
-TEST "SingletonTestMock_test" SingletonTestMock_test <<END
-out-lit: TestSingO::doIt() call=1
-out-lit: TestSingO::doIt() call=2
-out-lit: Mock_1::doIt() call=1
-out-lit: Mock_1::doIt() call=2
-out-lit: Mock_1::doIt() call=3
-out-lit: Mock_1::doIt() call=4
-out-lit: Mock_1::doIt() call=5
-out: Mock_.::doIt\(\) call=1
-out-lit: TestSingO::doIt() call=3
 return: 0
 END
 
