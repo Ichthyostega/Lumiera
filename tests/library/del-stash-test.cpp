@@ -134,7 +134,7 @@ namespace test{
           
           killer.manage (p);
           killer.manage (r);
-          killer.manage<Probe<9>> (v);
+          killer.manage (static_cast<Probe<9>*> (v));
           
           CHECK (3 == killer.size());
           
