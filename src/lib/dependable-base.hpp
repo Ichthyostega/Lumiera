@@ -1,9 +1,8 @@
 /*
-  SYNC-CLASSLOCK.hpp  -  special case of object based locking tied directly to a type
+  DEPENDABLE-BASE.hpp  -  fundamental structures with extended lifespan
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,7 +20,8 @@
 
 */
 
-/** @file sync-classlock.hpp
+/** @file dependable-base.hpp
+ ** Static container to hold basic entities needed during static init and shutdown.
  ** A special implementation of lib::Sync, where the storage of the object monitor
  ** is associated directly to a type rather then to a single object instance. While
  ** being problematic in conjunction with static startup/shutdown, doing so is sometimes
@@ -33,8 +33,8 @@
  */
 
 
-#ifndef LIB_SYNC_CLASSLOCK_H
-#define LIB_SYNC_CLASSLOCK_H
+#ifndef LIB_DEPENDABLE_BASE_H
+#define LIB_DEPENDABLE_BASE_H
 
 #include "lib/nobug-init.hpp"
 #include "lib/sync.hpp"
@@ -98,7 +98,7 @@ namespace lib {
    * @see Sync::Lock the usual simple instance-bound variant
    */
   template<class X, class CONF = RecursiveLock_NoWait>
-  class ClassLock 
+  class ClassLock_WIP 
     : public Sync<CONF>::Lock
     {
       typedef typename Sync<CONF>::Lock Lock;
@@ -112,8 +112,7 @@ namespace lib {
           static nifty::Holder<PerClassMonitor> __used_here;
           if (1 != use_count())
             {
-              ///////////////////////////////////////////////////////////////////////////TICKET #1133 investigate Problems with shutdown order
-              ERROR (progress, "AUA %d", use_count());
+              ERROR (progress, "AUA %d", use_count()); 
             }
           ASSERT (1==use_count(), "static init broken");
           
@@ -121,11 +120,11 @@ namespace lib {
         }
       
     public:
-      ClassLock() : Lock (getPerClassMonitor()) { }
+      ClassLock_WIP() : Lock (getPerClassMonitor()) { }
       
       uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
     };
   
   
 } // namespace lib
-#endif /*LIB_SYNC_CLASSLOCK_H*/
+#endif /*LIB_DEPENDABLE_BASE_H*/
