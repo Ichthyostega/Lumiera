@@ -22,22 +22,18 @@
 
 /** @file dependable-base.hpp
  ** Static container to hold basic entities needed during static init and shutdown.
- ** A special implementation of lib::Sync, where the storage of the object monitor
- ** is associated directly to a type rather then to a single object instance. While
- ** being problematic in conjunction with static startup/shutdown, doing so is sometimes
- ** necessary to setup type based dispatcher tables, managing singleton creation etc.
- **
- ** @note simply using the ClassLock may cause a Monitor object (with a mutex) to be
- **       created at static initialisation and destroyed on application shutdown.
- ** @see singleton-factory.hpp usage example
+ ** @see sync-classlock.hpp
+ ** @see depend.hpp
  */
 
 
 #ifndef LIB_DEPENDABLE_BASE_H
 #define LIB_DEPENDABLE_BASE_H
 
-#include "lib/nobug-init.hpp"
-#include "lib/sync.hpp"
+#include "lib/nocopy.hpp"
+
+#include <iostream>
+#include <utility>
 
 
 namespace lib {
@@ -47,83 +43,54 @@ namespace lib {
     template<class X>
     struct Holder 
       {
-        static uint accessed_;
-        static char content_[sizeof(X)];
+        char payload_[sizeof(X)];
         
-        Holder() 
-          {
-            if (!accessed_)
-              new(content_) X();
-            ++accessed_; 
-          }
-        
-       ~Holder() 
-          {
-            --accessed_; 
-            if (0==accessed_)
-              get().~X();
-          }
+        //NOTE: deliberately no ctor/dtor
        
-       X&
-       get()
-        { 
-          X* obj = reinterpret_cast<X*> (&content_);
-          ASSERT (obj, "Logic of Schwartz counter broken.");
-          return *obj;
-        }
+        X&
+        access()
+          { 
+            return *reinterpret_cast<X*> (&payload_);
+          }
       };
     
-    template<class X>
-    uint Holder<X>::accessed_;
-    
-    template<class X>
-    char Holder<X>::content_[sizeof(X)];
+    ///////////////////////////////////////////////////////////////TICKET #1133 damn it. How the hell do we determine when the object is initialised...?
+    ///////////////////////////////////////////////////////////////TICKET #1133 ........ Looks like the whole approach is ill guided
     
   } // (End) nifty implementation details
   
   
   
   /**
-   * A synchronisation protection guard employing a lock scoped
-   * to the parameter type as a whole, not an individual instance.
-   * After creating an instance, every other access specifying the same
-   * type is blocked.
-   * @note the Lock is recursive, because several instances within the same
-   *       thread may want to acquire it at the same time without deadlock.
-   * @note there is a design sloppiness, as two instantiations of the
-   *       ClassLock template with differing CONF count as different type.
-   *       Actually using two different configurations within for a single
-   *       class X should be detected and flagged as error, but actually
-   *       just two non-shared lock instances get created silently. Beware! 
-   * @see Sync::Lock the usual simple instance-bound variant
+   * A dependable data container available with extended lifespan.
+   * Automatically plants a ref-count to ensure the data stays alive
+   * until the last static reference goes out of scope.
    */
-  template<class X, class CONF = RecursiveLock_NoWait>
-  class ClassLock_WIP 
-    : public Sync<CONF>::Lock
+  template<class X>
+  class DependableBase
+    : util::NonCopyable
     {
-      typedef typename Sync<CONF>::Lock Lock;
-      typedef typename sync::Monitor<CONF> Monitor;
-      
-      struct PerClassMonitor : Monitor {};
-      
-      Monitor&
-      getPerClassMonitor()
-        {
-          static nifty::Holder<PerClassMonitor> __used_here;
-          if (1 != use_count())
-            {
-              ERROR (progress, "AUA %d", use_count()); 
-            }
-          ASSERT (1==use_count(), "static init broken");
-          
-          return __used_here.get();
-        }
+      static nifty::Holder<X> storage_;
       
     public:
-      ClassLock_WIP() : Lock (getPerClassMonitor()) { }
+      template<typename...ARGS>
+      explicit
+      DependableBase (ARGS&& ...args)
+        {
+          storage_.maybeInit (std::forward<ARGS> (args)...);
+        }
+      
+      operator X& ()  const
+        {
+          return storage_.access();
+        }
       
       uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
     };
+  
+  /** plant a static buffer to hold the payload X */
+  template<class X>
+  nifty::Holder<X> DependableBase<X>::storage_;
   
   
 } // namespace lib
