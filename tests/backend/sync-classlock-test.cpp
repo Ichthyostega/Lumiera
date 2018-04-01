@@ -26,42 +26,22 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/error.hpp"
-
 #include "lib/sync-classlock.hpp"
+#include "lib/scoped-collection.hpp"
+#include "backend/thread-wrapper.hpp"
 
 using test::Test;
-
+using backend::ThreadJoinable;
 
 namespace lib {
 namespace test {
   
-  namespace { // private test classes and data...
+  namespace { // Parameters for multithreaded contention test
     
-    const uint NUM_INSTANCES = 20;   ///< number of probe instances to create
+    const uint NUM_THREADS = 20;   ///< number of contending threads to create
+    const uint NUM_LOOP    = 1000; ///< number of loop iterations per thread
     
-    
-    /**
-     * Several instances of this probe class will be created.
-     * Each of them acquires the shared lock; but anyway, just
-     * by defining this class, the embedded Monitor got created.
-     */
-    struct Probe
-      {
-        ClassLock<Probe> shared_lock_;
-        
-        Probe() {}
-       ~Probe() {}
-      };
-    
-    
-  } // (End) test classes and data....
-  
-  
-  
-  
-  
-  
+  }
   
   
   
@@ -70,9 +50,10 @@ namespace test {
    * @test check proper handling of class (not instance)-based Monitor locks.
    * Because no instance is available in this case, a hidden storage for the
    * Monitor object needs to be provided in a way safe for use even in the
-   * static startup/shutdown phase. This test validates the associated
-   * refcounting and object creation works as expected. It does \em not
-   * validate the locking functionality as such.
+   * static startup/shutdown phase. This can not directly validate this
+   * allocation of a shared monitor object behind the scenes, but it
+   * can verify the monitor is indeed shared by all ClassLock instances
+   * templated to a specific type.
    * 
    * @see sync.hpp
    */
@@ -82,15 +63,37 @@ namespace test {
       virtual void
       run (Arg)
         {
-          {
-            Probe objs[NUM_INSTANCES];
-            
-            CHECK (1 == objs[0].shared_lock_.use_count());
-          }
+          int contended = 0;
           
-          ClassLock<Probe> get_class_lock;
-          CHECK ( 1 ==  get_class_lock.use_count());  // embedded PerClassMonitor<Probe> got created exactly once
-        }                                            //  and stays alive until static dtors are called....
+          using Threads = lib::ScopedCollection<ThreadJoinable>;
+          
+               // Start a bunch of threads with random access pattern
+          Threads threads{NUM_THREADS,
+                          [&](Threads::ElementHolder& storage)
+                             {
+                               storage.create<ThreadJoinable> ("Sync-ClassLock stress test"
+                                                              ,[&]{
+                                                                    for (uint i=0; i<NUM_LOOP; ++i)
+                                                                      {
+                                                                        uint delay = rand() % 10;
+                                                                        usleep (delay);
+                                                                        {
+                                                                          ClassLock<void> guard;
+                                                                          ++contended;
+                                                                        }
+                                                                      }
+                                                                  });
+                             }
+                         };
+          
+          for (auto& thread : threads)
+            thread.join();   // block until thread terminates
+          
+          CHECK (contended == NUM_THREADS * NUM_LOOP,
+                 "ALARM: Lock failed, concurrent modification "
+                 "during counter increment. Delta == %d"
+                ,NUM_THREADS * NUM_LOOP - contended);
+        }
       
     };
   

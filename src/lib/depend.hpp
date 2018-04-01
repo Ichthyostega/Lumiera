@@ -93,6 +93,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/nobug-init.hpp"
 #include "lib/sync-classlock.hpp"
+#include "lib/zombie-check.hpp"
 #include "lib/meta/util.hpp"
 
 #include <type_traits>
@@ -125,23 +126,14 @@ namespace lib {
       Creator creator_;
       Deleter deleter_;
       
-      bool deceased_ =false;
     public:
+      ZombieCheck zombieCheck;
+      
       DependencyFactory() = default;
      ~DependencyFactory()
         {
-          deceased_ = true;
           if (deleter_)
             deleter_();
-        }
-      
-      void
-      zombieCheck()
-        {
-          if (deceased_)
-            throw error::Fatal("DependencyFactory invoked out of order during Application shutdown. "
-                               "Lumiera Policy violated: Dependencies must not be used from destructors."
-                              ,error::LUMIERA_ERROR_LIFECYCLE);
         }
       
       OBJ*

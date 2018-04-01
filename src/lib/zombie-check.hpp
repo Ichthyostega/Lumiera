@@ -22,6 +22,14 @@
 
 /** @file dependable-base.hpp
  ** Detector to set off alarm when (re)using deceased objects.
+ ** When implementing services based on static fields or objects,
+ ** an invocation after static shutdown can not be precluded -- be it by
+ ** re-entrance, be through indirect reference to some dependency within a
+ ** static function residing in another translation unit. Since typically the
+ ** values in static storage are not overwritten after invoking the destructor,
+ ** we may plant an automatic "zombie detector" to give a clear indication of
+ ** such a policy violation (Lumiera forbids to use dependencies from dtors).
+ ** 
  ** @see sync-classlock.hpp
  ** @see depend.hpp
  */
@@ -30,68 +38,42 @@
 #ifndef LIB_ZOMBIE_CHECK_H
 #define LIB_ZOMBIE_CHECK_H
 
-#include "lib/del-stash.hpp"
-#include "lib/nocopy.hpp"
+#include "lib/error.hpp"
 
-#include <iostream>
-#include <utility>
 
 
 namespace lib {
-  
-  namespace nifty { // implementation details
-    
-    template<class X>
-    struct Holder 
-      {
-        char payload_[sizeof(X)];
-        
-        //NOTE: deliberately no ctor/dtor
-       
-        X&
-        access()
-          { 
-            return *reinterpret_cast<X*> (&payload_);
-          }
-      };
-    
-    template<class X>
-    uint Holder<X>::accessed_;
-    
-  } // (End) nifty implementation details
-  
+  namespace error = lumiera::error;
   
   
   /**
-   * A dependable data container available with extended lifespan.
-   * Automatically plants a ref-count to ensure the data stays alive
-   * until the last static reference goes out of scope.
+   * Automatic lifecycle tracker, to produce an alarm when accessing objects after deletion.
    */
-  template<class X>
-  class DependableBase
-    : util::NonCopyable
+  class ZombieCheck
     {
-      static nifty::Holder<X> storage_;
+      bool deceased_ = false;
       
     public:
-      template<typename...ARGS>
-      explicit
-      DependableBase (ARGS&& ...args)
+      ZombieCheck() = default;
+     ~ZombieCheck()
         {
-          storage_.maybeInit (std::forward<ARGS> (args)...);
+          deceased_ = true;
         }
       
-      operator X& ()  const
+      operator bool()  const
         {
-          return storage_.access();
+          return deceased_;
         }
       
-      uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
+      void
+      operator() ()  const
+        {
+          if (deceased_)
+            throw error::Fatal("Already deceased object called out of order during Application shutdown. "
+                               "Lumiera Policy violated: Dependencies must not be used from destructors."
+                              ,error::LUMIERA_ERROR_LIFECYCLE);
+        }
     };
-  
-  /** plant a static buffer to hold the payload X */
-  template<class X>
-  nifty::Holder<X> DependableBase<X>::storage_;
   
   
 } // namespace lib
