@@ -72,8 +72,8 @@ namespace test{
       };
   }
   
-  using error::LUMIERA_ERROR_LIFECYCLE;
-  using error::LUMIERA_ERROR_FATAL;
+  using error::LERR_(LIFECYCLE);
+  using error::LERR_(FATAL);
   
   
   

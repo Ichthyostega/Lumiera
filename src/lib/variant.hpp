@@ -312,7 +312,7 @@ namespace lib {
                 throw error::Logic("Variant type mismatch: "
                                    "the given variant record does not hold "
                                    "a value of the type requested here"
-                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+                                  ,error::LERR_(WRONG_TYPE));
               else
                return *buff;
             }

@@ -42,7 +42,7 @@ namespace test    {
   
   using util::isnil;
   using util::isSameObject;
-  using lumiera::error::LUMIERA_ERROR_INVALID;
+  using lumiera::error::LERR_(INVALID);
   
   
   /***********************************************************************//**

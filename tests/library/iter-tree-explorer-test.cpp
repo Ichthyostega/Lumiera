@@ -80,7 +80,7 @@ namespace test{
   using util::isnil;
   using util::isSameObject;
   using lib::iter_stl::eachElm;
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   using std::vector;
   using std::string;
   

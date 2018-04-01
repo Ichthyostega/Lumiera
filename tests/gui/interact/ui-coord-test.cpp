@@ -45,8 +45,8 @@ namespace gui  {
 namespace interact {
 namespace test {
   
-  using lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS;
-  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LERR_(INDEX_BOUNDS);
+  using lumiera::error::LERR_(LOGIC);
   
   
   

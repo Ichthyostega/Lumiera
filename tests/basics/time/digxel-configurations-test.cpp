@@ -34,7 +34,7 @@
 
 #include <cstdlib>
 
-using lumiera::error::LUMIERA_ERROR_ASSERTION;
+using lumiera::error::LERR_(ASSERTION);
 using util::isSameObject;
 using util::typeStr;
 using std::rand;

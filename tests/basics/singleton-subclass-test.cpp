@@ -47,7 +47,7 @@ using std::string;
 namespace lib {
 namespace test{
   
-  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
+  using lumiera::error::LERR_(LIFECYCLE);
   
   /**
    * Target object to be instantiated as Singleton

@@ -80,8 +80,8 @@
 namespace lib {
   
   namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_CAPACITY;
-  using error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using error::LERR_(CAPACITY);
+  using error::LERR_(INDEX_BOUNDS);
   
   
   
@@ -329,7 +329,7 @@ namespace lib {
             return elements_[index].accessObj();
           
           throw error::Logic ("Attempt to access not (yet) existing object in ScopedCollection"
-                             , LUMIERA_ERROR_INDEX_BOUNDS);
+                             , LERR_(INDEX_BOUNDS));
         }
       
       
@@ -366,7 +366,7 @@ namespace lib {
         {
           if (level_ >= capacity_)
             throw error::State ("ScopedCollection exceeding the initially defined capacity"
-                               , LUMIERA_ERROR_CAPACITY);
+                               , LERR_(CAPACITY));
         }
       
       

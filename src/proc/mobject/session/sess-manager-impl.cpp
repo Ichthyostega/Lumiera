@@ -79,7 +79,7 @@ namespace session {
         {
           ERROR (progress, "Unrecoverable Failure while creating the empty default session.");
           throw lumiera::error::Fatal ( "Failure while creating the basic session object. System halted."
-                                      , LUMIERA_ERROR_CREATE_SESSION );
+                                      , LERR_(CREATE_SESSION));
         }
     
     

@@ -34,7 +34,6 @@ using test::Test;
 namespace backend {
 namespace test {
   
-  using lumiera::error::LUMIERA_ERROR_LOGIC;
   namespace {
     
     class TestThread

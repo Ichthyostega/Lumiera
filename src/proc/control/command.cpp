@@ -80,7 +80,7 @@ namespace control {
       REQUIRE (handle);
       if (!handle->isValid())
         throw error::Invalid (operation_descr+" an undefined command"
-                             , LUMIERA_ERROR_INVALID_COMMAND);
+                             , LERR_(INVALID_COMMAND));
     }
     
     void
@@ -89,7 +89,7 @@ namespace control {
       REQUIRE (handle);
       if (!handle->canExec())
         throw error::State ("Lifecycle error: command arguments not bound"
-                           , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                           , LERR_(UNBOUND_ARGUMENTS));
     }
     
     void
@@ -98,7 +98,7 @@ namespace control {
       REQUIRE (handle);
       if (!handle->canUndo())
         throw error::State ("Lifecycle error: command has not yet captured UNDO information"
-                           , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                           , LERR_(UNBOUND_ARGUMENTS));
     }
     
   }
@@ -129,7 +129,7 @@ namespace control {
     Command cmd = CommandRegistry::instance().queryIndex (cmdID);
     if (!cmd)
       throw error::Invalid(_Fmt("Command \"%s\" not found") % cmdID
-                          , LUMIERA_ERROR_INVALID_COMMAND);
+                          , LERR_(INVALID_COMMAND));
     
     ENSURE (cmdID == CommandRegistry::instance().findDefinition(cmd));
     return cmd;
@@ -240,7 +240,7 @@ namespace control {
                              "ID \"%s\" is already in use")
                             % *this
                             % newCmdID
-                       , LUMIERA_ERROR_DUPLICATE_COMMAND);
+                       , LERR_(DUPLICATE_COMMAND));
   }
   
   

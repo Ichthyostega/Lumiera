@@ -59,8 +59,8 @@ namespace backend {
   
   using lib::Literal;
   namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_STATE;
-  using error::LUMIERA_ERROR_EXTERNAL;
+  using error::LERR_(STATE);
+  using error::LERR_(EXTERNAL);
   
   typedef struct nobug_flag* NoBugFlag;
   

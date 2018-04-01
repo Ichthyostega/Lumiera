@@ -509,7 +509,7 @@ namespace advice {
       {
         SelfCheckFailure (Literal failure)
           : error::Fatal (string("Failed test: ")+failure
-                         ,LUMIERA_ERROR_INDEX_CORRUPTED)
+                         ,LERR_(INDEX_CORRUPTED))
           { }
       };
   }

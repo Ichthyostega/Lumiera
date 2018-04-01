@@ -62,7 +62,7 @@ namespace test    {
   using util::contains;
   
   
-  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
+  using lumiera::error::LERR_(EXTERNAL);
   
   
   /** diagnostics: checks if the given value has been written

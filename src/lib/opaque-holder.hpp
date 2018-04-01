@@ -80,6 +80,8 @@
 namespace lib {
   
   namespace error = lumiera::error;
+  using error::LERR_(BOTTOM_VALUE);
+  using error::LERR_(WRONG_TYPE);
   
   using util::isSameObject;
   using util::unConst;
@@ -134,7 +136,7 @@ namespace lib {
             return asBase;
           
           throw error::Logic ("Unable to convert concrete object to Base interface"
-                             , error::LUMIERA_ERROR_WRONG_TYPE
+                             , LERR_(WRONG_TYPE)
                              );
         }
     };
@@ -219,7 +221,7 @@ namespace lib {
           getBase()  const
             {
               throw error::Invalid("accessing empty holder"
-                                  , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                                  , LERR_(BOTTOM_VALUE));
             }
           
           virtual void
@@ -452,11 +454,11 @@ namespace lib {
           
           if (this->empty())
             throw error::Invalid("accessing empty holder"
-                                , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                                ,LERR_(BOTTOM_VALUE));
           else
             throw error::Logic ("Attempt to access OpaqueHolder's contents "
                                 "specifying incompatible target type"
-                               , error::LUMIERA_ERROR_WRONG_TYPE
+                               , LERR_(WRONG_TYPE)
                                );
         }
       

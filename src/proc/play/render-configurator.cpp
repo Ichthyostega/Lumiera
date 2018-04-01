@@ -78,7 +78,7 @@ namespace play {
             OutputSlot& slot = outputResolver_->getOutputFor (port);
             if (!slot.isFree())
               throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
-                                , LUMIERA_ERROR_CANT_PLAY);
+                                , LERR_(CANT_PLAY));
             return slot;
           }
         

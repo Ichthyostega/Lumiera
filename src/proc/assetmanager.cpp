@@ -70,7 +70,7 @@ namespace asset {
       UnknownID (ID<Asset> aID)
         : IDErr(_Fmt("Query for Asset with ID=%d, which up to now "
                      "hasn't been created or encountered.") % aID
-               ,LUMIERA_ERROR_UNKNOWN_ASSET_ID)
+               ,LERR_(UNKNOWN_ASSET_ID))
         { }
     };
   
@@ -80,7 +80,7 @@ namespace asset {
         : IDErr (_Fmt("Request for Asset(%s), specifying an Asset kind, "
                       "that doesn't match the actual type (and can't be "
                       "casted either).") % idi
-                ,LUMIERA_ERROR_WRONG_ASSET_KIND)
+                ,LERR_(WRONG_ASSET_KIND))
         { }
     };
   

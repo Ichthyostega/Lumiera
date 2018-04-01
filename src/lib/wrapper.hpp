@@ -58,7 +58,7 @@ namespace wrapper {
   using util::unConst;
   using util::isSameObject;
   using lib::meta::_Fun;
-  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+  using lumiera::error::LERR_(BOTTOM_VALUE);
   
   using std::function;
   
@@ -272,7 +272,7 @@ namespace wrapper {
         {
           if (!created_)
             throw lumiera::error::State ("accessing uninitialised value/ref wrapper"
-                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+                                        , LERR_(BOTTOM_VALUE));
           return access();
         }
       
@@ -339,7 +339,7 @@ namespace wrapper {
         {
           if (!content_)
             throw lumiera::error::State ("accessing uninitialised reference wrapper"
-                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+                                        , LERR_(BOTTOM_VALUE));
           return *content_;
         }
       

@@ -92,7 +92,7 @@ namespace facade {
         {
           if (Accessor<FA>::implProxy_)
             throw error::State("Attempt to open an already opened Facade interface."
-                              , error::LUMIERA_ERROR_LIFECYCLE);
+                              , error::LERR_(LIFECYCLE));
         }
       
     public:

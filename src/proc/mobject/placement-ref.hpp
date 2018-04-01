@@ -271,14 +271,14 @@ namespace proc {
         {
           if (!placementID)
             throw error::Logic ("Attempt to access a NIL PlacementRef"
-                               ,LUMIERA_ERROR_BOTTOM_PLACEMENTREF);
+                               , LERR_(BOTTOM_PLACEMENTREF));
           
           Placement<MObject> & genericPlacement (session::SessionServiceFetch::resolveID (placementID));  // may throw
           REQUIRE (genericPlacement.isValid());
           
           if (!(genericPlacement.template isCompatible<MX>()))
             throw error::Invalid("actual type of the resolved placement is incompatible"
-                                , LUMIERA_ERROR_INVALID_PLACEMENTREF);
+                                , LERR_(INVALID_PLACEMENTREF));
                   ////////////////////////TODO: 1. better message, including type?
                   ////////////////////////TODO: 2. define a separate error-ID for the type mismatch!
           

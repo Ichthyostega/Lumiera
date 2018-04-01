@@ -44,7 +44,7 @@ namespace lib {
 namespace test{
   
   using ::Test;
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   using boost::lexical_cast;
   using util::for_each;
   using util::isnil;

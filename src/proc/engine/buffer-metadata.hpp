@@ -126,8 +126,8 @@ namespace engine {
   
   namespace metadata {
     
-    using error::LUMIERA_ERROR_LIFECYCLE;
-    using error::LUMIERA_ERROR_BOTTOM_VALUE;
+    using error::LERR_(LIFECYCLE);
+    using error::LERR_(BOTTOM_VALUE);
     
     namespace { // details of hash calculation
         template<typename VAL>
@@ -242,7 +242,7 @@ namespace engine {
           {
             if (nontrivial(this->instanceFunc_))
               throw error::Logic ("unable to supersede an already attached TypeHandler"
-                                 , LUMIERA_ERROR_LIFECYCLE);
+                                 , LERR_(LIFECYCLE));
             instanceFunc_ = ref.instanceFunc_;
           }
         
@@ -399,7 +399,7 @@ namespace engine {
             if (NIL == state_)
               throw error::Fatal ("Buffer metadata entry with state==NIL encountered."
                                   "State transition logic broken (programming error)"
-                                 , LUMIERA_ERROR_LIFECYCLE);
+                                 , LERR_(LIFECYCLE));
           }
         
         void
@@ -409,7 +409,7 @@ namespace engine {
                 throw error::Logic ("Buffer is inaccessible (marked as free). "
                                     "Need a new buffer pointer in order to lock an entry. "
                                     "You should invoke markLocked(buffer) prior to access."
-                                   , LUMIERA_ERROR_LIFECYCLE );
+                                   , LERR_(LIFECYCLE));
           }
         
         void
@@ -417,7 +417,7 @@ namespace engine {
           {
             if (FREE != state_)
                 throw error::Logic ("Buffer already in use"
-                                   , LUMIERA_ERROR_LIFECYCLE );
+                                   , LERR_(LIFECYCLE));
             REQUIRE (!buffer_, "Buffer marked as free, "
                                "but buffer pointer is set.");
           }

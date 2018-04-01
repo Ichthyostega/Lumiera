@@ -72,7 +72,7 @@
 namespace lib {
   
   namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using error::LERR_(INDEX_BOUNDS);
   using util::unConst;
   
   
@@ -495,7 +495,7 @@ namespace lib {
           
           if (!p || index)
             throw error::Logic ("Attempt to access element beyond the end of LinkedElements list"
-                               , LUMIERA_ERROR_INDEX_BOUNDS);
+                               , LERR_(INDEX_BOUNDS));
           else
             return *p;
         }

@@ -47,9 +47,9 @@ namespace proc {
 namespace engine{
 namespace test  {
   
-  using lumiera::error::LUMIERA_ERROR_FATAL;
-  using lumiera::error::LUMIERA_ERROR_INVALID;
-  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
+  using lumiera::error::LERR_(FATAL);
+  using lumiera::error::LERR_(INVALID);
+  using lumiera::error::LERR_(LIFECYCLE);
   
   
   namespace { // Test fixture

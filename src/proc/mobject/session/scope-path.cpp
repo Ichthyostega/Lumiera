@@ -71,7 +71,7 @@ namespace session {
       REQUIRE (path);
       if (path->empty())
         throw error::Logic (operation_descr+" an empty placement scope path"
-                           , LUMIERA_ERROR_EMPTY_SCOPE_PATH);
+                           , LERR_(EMPTY_SCOPE_PATH));
     }
   }//(End) helpers
   
@@ -319,7 +319,7 @@ namespace session {
     ___check_notBottom (this, "Navigating");
     if (!target.isValid())
       throw error::Invalid ("can't navigate to a target scope outside the model"
-                           , LUMIERA_ERROR_INVALID_SCOPE);
+                           , LERR_(INVALID_SCOPE));
     
     std::vector<Scope> otherPath;
     append_all (discoverScopePath(target), otherPath);

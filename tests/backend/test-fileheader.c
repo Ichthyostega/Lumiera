@@ -69,7 +69,7 @@ TEST (create_nowrite)
     {
       lumiera_fileheader header = lumiera_fileheader_create (file, "TEST", 0, sizeof (lumiera_fileheader), NULL);
 
-      CHECK(lumiera_error() == LUMIERA_ERROR_FILEHEADER_NOWRITE);
+      CHECK (lumiera_error() == LUMIERA_ERROR_FILEHEADER_NOWRITE);
 
       lumiera_fileheader_close (&header, LUMIERA_FILEHEADER_FLAG_CLEAN);
     }
@@ -91,8 +91,8 @@ TEST (acquire_wrongheader)
                                                            sizeof (lumiera_fileheader),
                                                            LUMIERA_FILEHEADER_FLAG_CLEAN, LUMIERA_FILEHEADER_FLAG_CLEAN);
 
-      CHECK(!header.header);
-      CHECK(lumiera_error() == LUMIERA_ERROR_FILEHEADER_HEADER);
+      CHECK (!header.header);
+      CHECK (lumiera_error() == LUMIERA_ERROR_FILEHEADER_HEADER);
 
       lumiera_fileheader_close (&header, LUMIERA_FILEHEADER_FLAG_CLEAN);
     }
@@ -114,8 +114,8 @@ TEST (acquire_basic)
                                                            sizeof (lumiera_fileheader),
                                                            LUMIERA_FILEHEADER_FLAG_CLEAN, LUMIERA_FILEHEADER_FLAG_CLEAN);
 
-      CHECK(header.header);
-      CHECK(!lumiera_error());
+      CHECK (header.header);
+      CHECK (!lumiera_error());
 
       CHECK (lumiera_fileheader_version (&header) == 0);
 
@@ -141,8 +141,8 @@ TEST (acquire_basic_readonly)
                                                            sizeof (lumiera_fileheader),
                                                            LUMIERA_FILEHEADER_FLAG_CLEAN, NULL);
 
-      CHECK(header.header);
-      CHECK(!lumiera_error());
+      CHECK (header.header);
+      CHECK (!lumiera_error());
 
       CHECK (lumiera_fileheader_version (&header) == 0);
 

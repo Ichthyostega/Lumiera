@@ -80,7 +80,7 @@ namespace control {
         {
           if (!clo)
             throw lumiera::error::State ("Lifecycle error: function arguments not ready",
-                                         LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                                         LERR_(UNBOUND_ARGUMENTS));
           clo.invoke (func_);
         }
       
@@ -138,7 +138,7 @@ namespace control {
         {
           if (!clo)
             throw lumiera::error::State ("need additional function arguments to be able to capture UNDO state",
-                                         LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                                         LERR_(UNBOUND_ARGUMENTS));
           
           captureMemento_(clo);
           return *this;

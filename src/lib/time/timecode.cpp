@@ -77,7 +77,7 @@ namespace time {
         return frameGrid.timeOf (lexical_cast<FrameCnt> (match[1]));
       else
         throw error::Invalid ("unable to parse framecount \""+frameNumber+"\""
-                             , LUMIERA_ERROR_INVALID_TIMECODE);
+                             , LERR_(INVALID_TIMECODE));
     }
     
     
@@ -145,7 +145,7 @@ namespace time {
           }
       else
         throw error::Invalid ("unable to parse \""+seconds+"\" as (fractional)seconds"
-                             , LUMIERA_ERROR_INVALID_TIMECODE);
+                             , LERR_(INVALID_TIMECODE));
     }
     
     

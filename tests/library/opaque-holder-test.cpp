@@ -43,9 +43,9 @@ namespace test{
   using util::isnil;
   using util::for_each;
   using util::isSameObject;
-  using error::LUMIERA_ERROR_BOTTOM_VALUE;
-  using error::LUMIERA_ERROR_WRONG_TYPE;
-  using error::LUMIERA_ERROR_ASSERTION;
+  using error::LERR_(BOTTOM_VALUE);
+  using error::LERR_(WRONG_TYPE);
+  using error::LERR_(ASSERTION);
   
   using std::vector;
   using std::cout;

@@ -168,7 +168,7 @@ namespace lib {
           creator_ = []() -> OBJ*
                       {
                         throw error::Fatal("Service not available at this point of the Application Lifecycle"
-                                        ,error::LUMIERA_ERROR_LIFECYCLE);
+                                          ,error::LERR_(LIFECYCLE));
                       };
         }
       

@@ -58,7 +58,7 @@ namespace session {
 //    return theGlobalRegistry();
 //  
 //  throw error::State ("global model port registry is not accessible"
-//                     , LUMIERA_ERROR_BUILDER_LIFECYCLE); 
+//                     , LERR_(BUILDER_LIFECYCLE)); 
 //}
   
   

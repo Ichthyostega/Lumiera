@@ -284,13 +284,13 @@ namespace lib {
         wait (BF& predicate, Timeout& waitEndTime)
           {
             bool ok = true;
-            while (ok && !predicate())
+            while (ok and !predicate())
               if (waitEndTime)
                 ok = Cond::timedwait (&waitEndTime);
               else
                 ok = Cond::wait ();
             
-            if (!ok && lumiera_error_expect(LUMIERA_ERROR_LOCK_TIMEOUT)) return false;
+            if (not ok and lumiera_error_expect(LUMIERA_ERROR_LOCK_TIMEOUT)) return false;
             lumiera::throwOnError();     // any other error throws
             
             return true;

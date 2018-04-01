@@ -266,7 +266,7 @@ namespace session {
                                      "while the actual type of the pointee (MObject) "
                                      "registered within the index isn't compatible with the "
                                      "requested specific MObject subclass"
-                                    ,LUMIERA_ERROR_PLACEMENT_TYPE);
+                                    , LERR_(PLACEMENT_TYPE));
     }
     
     inline void
@@ -274,10 +274,10 @@ namespace session {
     {
     if (!id)
       throw lumiera::error::Logic ("Encountered a NIL Placement-ID marker"
-                                  ,LUMIERA_ERROR_BOTTOM_PLACEMENTREF);
+                                  , LERR_(BOTTOM_PLACEMENTREF));
     if (!idx.contains (id))
       throw lumiera::error::Invalid ("Accessing Placement not registered within the index"
-                                    ,LUMIERA_ERROR_NOT_IN_SESSION);              ///////////////////////TICKET #197
+                                    , LERR_(NOT_IN_SESSION));              ///////////////////////TICKET #197
     }
   }//(End) shortcuts
   

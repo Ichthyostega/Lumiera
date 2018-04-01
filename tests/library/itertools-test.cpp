@@ -50,7 +50,7 @@ namespace test{
   using std::vector;
   using std::rand;
   
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   
   
   

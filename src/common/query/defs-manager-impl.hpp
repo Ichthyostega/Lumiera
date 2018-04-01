@@ -55,7 +55,7 @@ using util::_Fmt;
 
 using proc::ConfigResolver;
 using lumiera::query::QueryHandler;                    ///////TODO preliminary interface defined in config-rules.hpp
-using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
+using lumiera::query::LERR_(CAPABILITY_QUERY);
 
 
 namespace lumiera{

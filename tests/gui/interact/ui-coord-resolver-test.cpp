@@ -50,8 +50,8 @@ namespace gui  {
 namespace interact {
 namespace test {
   
-  using lumiera::error::LUMIERA_ERROR_INVALID;
-  using lumiera::error::LUMIERA_ERROR_STATE;
+  using lumiera::error::LERR_(INVALID);
+  using lumiera::error::LERR_(STATE);
   
   
   

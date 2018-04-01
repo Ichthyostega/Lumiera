@@ -215,7 +215,7 @@ namespace session {
   {
     if (isRoot())
         throw lumiera::error::Invalid ("can't get parent of root scope"
-                                      , LUMIERA_ERROR_NO_PARENT_SCOPE);
+                                      , LERR_(NO_PARENT_SCOPE));
     
     return SessionServiceExploreScope::getScope (*anchor_);
   }

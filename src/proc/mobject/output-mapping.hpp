@@ -218,7 +218,7 @@ namespace mobject {
             {
               if (not isValid())
                 throw error::Logic ("attempt to resolve an unconnected output mapping"
-                                   , error::LUMIERA_ERROR_UNCONNECTED);
+                                   , error::LERR_(UNCONNECTED));
               return resolve();
             }
           

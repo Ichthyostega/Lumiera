@@ -242,7 +242,7 @@ namespace asset {
                                  "(multichannel) media. Found parent Media %s.") 
                                  % mediaref
                                  % *mediaref.checkCompound()
-                           ,LUMIERA_ERROR_PART_OF_COMPOUND);
+                           ,LERR_(PART_OF_COMPOUND));
     Clip* pC = new Clip (mediaref);
     return AssetManager::instance().wrap (*pC);
   }

@@ -515,7 +515,7 @@ namespace session {
     if (!contains (targetScope))
       throw error::Logic ("Specified a non-registered Placement as scope "
                           "while adding another Placement to the index"
-                         ,LUMIERA_ERROR_INVALID_SCOPE);              ////////////////TICKET #197
+                         ,LERR_(INVALID_SCOPE));                          ////////////////TICKET #197
       
     return pTab_->addEntry(newObj, targetScope);
   }

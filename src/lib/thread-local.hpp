@@ -101,7 +101,7 @@ namespace lib {
           TAR *p(get());
           if (!p)
             throw lumiera::error::State ("dereferencing a thread local NULL pointer"
-                                        ,lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE);
+                                        ,lumiera::error::LERR_(BOTTOM_VALUE));
           return p;
         }
       

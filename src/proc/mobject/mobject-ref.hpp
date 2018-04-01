@@ -109,7 +109,7 @@ namespace mobject {
         {
           if (!smPtr_)
             throw error::State("Lifecycle error: MObject ref not activated"
-                              ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+                              , LERR_(BOTTOM_MOBJECTREF));
           
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return smPtr_.operator-> ();
@@ -120,7 +120,7 @@ namespace mobject {
         {
           if (!isValid())
             throw error::State("Accessing inactive MObject ref"
-                              ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+                              , LERR_(BOTTOM_MOBJECTREF));
           
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return *pRef_;
@@ -167,7 +167,7 @@ namespace mobject {
         {
           if (!isValid())
             throw error::State("Attempt to attach a child to an inactive MObject ref"
-                              , LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+                              , LERR_(BOTTOM_MOBJECTREF));
           MORef<MOX> newInstance;
           PlacementMO::ID thisScope = pRef_;
           return newInstance.activate (

@@ -76,7 +76,7 @@ namespace test{
   using util::isSameObject;
   using lib::iter_stl::eachElm;
   using lib::iter_explorer::ChainedIters;
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   using std::string;
   
   

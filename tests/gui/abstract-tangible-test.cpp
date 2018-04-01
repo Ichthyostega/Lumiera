@@ -84,7 +84,7 @@ namespace gui  {
 namespace model{
 namespace test {
   
-  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+  using lumiera::error::LERR_(WRONG_TYPE);
   using ID = lib::idi::BareEntryID const&;
   
   namespace { // test fixture...

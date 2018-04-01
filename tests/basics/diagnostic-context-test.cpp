@@ -56,7 +56,7 @@ namespace test{
   } // (End) test setup....
   
   using backend::ThreadJoinable;
-  using error::LUMIERA_ERROR_LOGIC;
+  using error::LERR_(LOGIC);
   using std::rand;
   
   

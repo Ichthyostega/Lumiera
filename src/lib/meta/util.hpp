@@ -263,7 +263,7 @@ namespace meta {
    *    do want the pointer itself (and not a pointer to the pointer). We then
    *    pass the "object" as so called "glvalue" to the `typeid()` function,
    *    so to get the evaluation of RTTI, when applicable.
-   * @warning this function does string transformations behind the scenes,
+   * @warning this function does string transformations behind the scene,
    *    and thus should not be used in performance critical context. Moreover,
    *    the returned type string is not necessarily exact and re-parsable.
    */

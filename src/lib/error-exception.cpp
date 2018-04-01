@@ -40,6 +40,7 @@
 #include <typeinfo>
 #include <iostream>
 
+using util::cStr;
 using util::isnil;
 using std::exception;
 
@@ -51,12 +52,12 @@ namespace lumiera {
      *  if an exception reaches one of the top-level
      *  catch clauses.
      *  @todo to be localised
+     *  @todo develop a framework to set more specific yet friendly messages
      */
     inline const string
     default_usermsg (Error* exception_obj)  noexcept
     {
-      return string("Sorry, Lumiera encountered an internal error. (")
-           + util::typeStr(*exception_obj) + ")";
+      return "Sorry, Lumiera encountered an internal error.";
     }
     
     CStr
@@ -163,22 +164,58 @@ namespace lumiera {
   
   
   
-  namespace error
-  {
+  namespace error {
+    namespace {
+      void install_unexpectedException_handler ()
+      {
+        std::set_terminate (lumiera_unexpectedException);
+      }
+      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);
+      
+      std::terminate_handler nextHandler = nullptr;
+    }
+
     
-    void lumiera_unexpectedException ()  throw()
+    void lumiera_unexpectedException ()  noexcept
     {
-      CCStr is_halted 
+      CStr is_halted
         = "### Lumiera halted due to an unexpected Error ###";
       
-      std::cerr << "\n" << is_halted << "\n\n";
       ERROR (NOBUG_ON, "%s", is_halted);
+      std::cerr << "\n" << is_halted << "\n\n";
       
-      if (CCStr errorstate = lumiera_error ())
+      
+      try { // -----find-out-about-any-Exceptions--------
+          auto lastException = std::current_exception();
+          if (lastException) {
+              std::rethrow_exception (lastException);
+          }
+      } catch(const lumiera::Error& lerr) {
+          std::cout << "\n+++ Caught Exception " << lerr.getID() << "\n\n";
+          ERROR (NOBUG_ON, "+++ caught %s\n+++ messg: %s\n+++ descr: %s"
+                         , cStr(util::typeStr(lerr))
+                         , cStr(lerr.getUsermsg())
+                         , cStr(lerr.what())
+                         );
+          if (not isnil(lerr.rootCause()))
+            ERROR (NOBUG_ON, "+++ cause: %s",cStr(lerr.rootCause()));
+          
+      } catch(const std::exception& e) {
+          ERROR (NOBUG_ON, "Generic Exception: %s", e.what());
+          std::cout << "+++ Caught Exception \"" << e.what() << "\"\n";
+      } catch(...) {
+          ERROR (NOBUG_ON, "FATAL -- unknown exception");
+      }
+      
+      if (CStr errorstate = lumiera_error ())
         ERROR (NOBUG_ON, "last registered error was....\n%s", errorstate);
       
-      std::terminate();
+      if (nextHandler)
+        nextHandler();
+      else
+        std::abort();
     }
+    
     
     void assertion_terminate (const string& location)
     {
@@ -187,17 +224,6 @@ namespace lumiera {
                              "an internal consistency check.");
     }
     
-    
-    void install_unexpectedException_handler ()
-    {
-      std::set_unexpected (lumiera_unexpectedException);
-    }
-    
-    namespace {
-      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);
-    }
-  
-  
   } // namespace error
 
 } // namespace lumiera
