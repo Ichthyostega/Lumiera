@@ -107,7 +107,7 @@ namespace lib {
   
   
   /**
-   * Helper to abstract creation and lifecycle of a dependency
+   * Helper to abstract creation and lifecycle of a dependency.
    * Holds a configurable constructor function and optionally
    * an automatically invoked deleter function.
    * @note DependencyFactory can be declared friend to indicate
@@ -181,8 +181,8 @@ namespace lib {
               Deleter oldDeleter{std::move (deleter_)};
               deleter_ = [oldDeleter, additionalAction]
                           {
-                            additionalAction();
                             oldDeleter();
+                            additionalAction();
                           };
             }
           else

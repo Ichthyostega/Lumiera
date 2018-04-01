@@ -30,6 +30,7 @@
  ** @note simply using the ClassLock may cause a Monitor object (with a mutex) to be
  **       created at static initialisation and destroyed on application shutdown.
  ** @see depend.hpp usage example
+ ** @see SyncClasslock_test
  */
 
 
