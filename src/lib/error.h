@@ -69,16 +69,16 @@ typedef const char* lumiera_err;
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  */
 #define LUMIERA_ERROR_DECLARE(err) \
-extern lumiera_err LUMIERA_ERROR_##err
+extern lumiera_err const LUMIERA_ERROR_##err
 
 /**
- * Definition and initialization of an error constant.
+ * Definition and initialisation of an error constant.
  * This macro eases the error definition in implementation files
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
- * @param msg message describing the error in plain english (example: "memory allocation failed")
+ * @param msg message describing the error in plain English (example: "memory allocation failed")
  */
 #define LUMIERA_ERROR_DEFINE(err, msg) \
-lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
+lumiera_err const LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 
 /**
  * Helper macro to raise an error for the current thread.

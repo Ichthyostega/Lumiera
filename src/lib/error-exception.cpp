@@ -45,11 +45,6 @@ using std::exception;
 
 
 namespace lumiera {
-  
-  typedef const char*       CStr;
-  typedef const char* const CCStr;
-  
-  
   namespace error {
     
     /** the message shown to the user per default
@@ -58,22 +53,16 @@ namespace lumiera {
      *  @todo to be localised
      */
     inline const string
-    default_usermsg (Error* exception_obj)  throw() 
+    default_usermsg (Error* exception_obj)  noexcept
     {
       return string("Sorry, Lumiera encountered an internal error. (")
            + util::typeStr(*exception_obj) + ")";
     }
     
-    inline CStr
-    default_or_given (CCStr id)
-    {
-      return id? id : LUMIERA_ERROR_STATE;
-    }
-    
     CStr
     detailInfo ()
     {
-      CCStr detailinfo = lumiera_error_extra();
+      CStr detailinfo = lumiera_error_extra();
       return isnil (detailinfo)? "Lumiera errorstate detected"
                                : detailinfo;
     }
@@ -90,16 +79,14 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
     
     /* some further generic error situations */
-    LUMIERA_ERROR_DEFINE (LIFECYCLE, "Lifecycle assumptions violated");
-    LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch");
+    LUMIERA_ERROR_DEFINE (LIFECYCLE,    "Lifecycle assumptions violated");
+    LUMIERA_ERROR_DEFINE (WRONG_TYPE,   "runtime type mismatch");
     LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached");
     LUMIERA_ERROR_DEFINE (CAPACITY,     "predefined fixed storage capacity");
     LUMIERA_ERROR_DEFINE (INDEX_BOUNDS, "index out of bounds");
     LUMIERA_ERROR_DEFINE (BOTTOM_VALUE, "invalid or NIL value");
-    LUMIERA_ERROR_DEFINE (UNCONNECTED, "missing connection");
-    LUMIERA_ERROR_DEFINE (UNIMPLEMENTED, "using a feature not yet implemented....");
-
-    
+    LUMIERA_ERROR_DEFINE (UNCONNECTED,  "missing connection");
+    LUMIERA_ERROR_DEFINE (UNIMPLEMENTED,"using a feature not yet implemented....");
     
   } // namespace error
   
@@ -109,37 +96,28 @@ namespace lumiera {
   
   
   /** @note we set the C-style errorstate as a side effect */
-  Error::Error (string description, CCStr id) throw()
-    : std::exception (),
-      id_ (error::default_or_given (id)),
-      msg_ (error::default_usermsg (this)),
-      desc_ (description),
-      cause_ ("")
-  {
-    lumiera_error_set (this->id_, description.c_str ());
-  }
+  Error::Error (string description, lumiera_err const id)  noexcept
+    : std::exception{}
+    , id_{id}
+    , msg_{error::default_usermsg (this)}
+    , desc_{description}
+    , cause_{}
+    {
+      lumiera_error_set (this->id_, description.c_str());
+    }
   
   
   Error::Error (std::exception const& cause, 
-                string description, CCStr id) throw()
-    : std::exception (),
-      id_ (error::default_or_given (id)),
-      msg_ (error::default_usermsg (this)),
-      desc_ (description),
-      cause_ (extractCauseMsg(cause))
-  {
-    lumiera_error_set (this->id_, description.c_str ());
-  }
+                string description, lumiera_err const id)  noexcept
+    : std::exception{}
+    , id_{id}
+    , msg_{error::default_usermsg (this)}
+    , desc_{description}
+    , cause_{extractCauseMsg(cause)}
+    {
+      lumiera_error_set (this->id_, description.c_str());
+    }
   
-  
-  /** @note copy ctor behaves like chaining, i.e setting the cause_. */
-  Error::Error (const Error& ref) throw()
-    : std::exception (),
-      id_ (ref.id_),
-      msg_ (ref.msg_),
-      desc_ (ref.desc_),
-      cause_ (extractCauseMsg(ref))
-  { }
   
   
   
@@ -149,7 +127,7 @@ namespace lumiera {
    *  generated output as well. 
    */
   CStr
-  Error::what() const  throw()
+  Error::what()  const noexcept
   {
     if (isnil (this->what_))
       {
@@ -165,9 +143,9 @@ namespace lumiera {
    *  first exception encountered in a chain of exceptions
    */
   const string
-  Error::extractCauseMsg (const exception& cause)  throw()
+  Error::extractCauseMsg (const exception& cause)  noexcept
   {
-    const Error* err=dynamic_cast<const Error*> (&cause);
+    const Error* err = dynamic_cast<const Error*> (&cause);
     if (err)
       {
         if (isnil (err->cause_))
@@ -175,7 +153,6 @@ namespace lumiera {
         else
           return err->cause_; // cause was caused by another exception
       }
-    
     // unknown other exception type
     return cause.what ();
   }
