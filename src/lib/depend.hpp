@@ -125,12 +125,23 @@ namespace lib {
       Creator creator_;
       Deleter deleter_;
       
+      bool deceased_ =false;
     public:
       DependencyFactory() = default;
      ~DependencyFactory()
         {
+          deceased_ = true;
           if (deleter_)
             deleter_();
+        }
+      
+      void
+      zombieCheck()
+        {
+          if (deceased_)
+            throw error::Fatal("DependencyFactory invoked out of order during Application shutdown. "
+                               "Lumiera Policy violated: Dependencies must not be used from destructors."
+                              ,error::LUMIERA_ERROR_LIFECYCLE);
         }
       
       OBJ*
@@ -295,6 +306,7 @@ namespace lib {
           SRV* object = instance.load (std::memory_order_acquire);
           if (!object)
             {
+              factory.zombieCheck();
               Lock guard;
               
               object = instance.load (std::memory_order_relaxed);

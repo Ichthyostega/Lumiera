@@ -46,7 +46,7 @@ of the service interface.
 Dependency::
   A relation at implementation level and thus a local property of an individual component. A dependency
   is something we need in order to complete the task at hand, yet a dependency lies beyond that task and
-  relates to concerns outside the scope and theme of this actual task. Wich means, a dependency is not
+  relates to concerns outside the scope and theme of this actual task. Which means, a dependency is not
   introduced by the task or part of the task, rather the task is the reason why some entity dealing with
   it needs to _pull_ the dependency, in order to be able to handle the task. So essentially, dependencies
   are accessed on-demand. Dependencies might be other components or services, and typically the user
@@ -145,6 +145,28 @@ be summarised as ``Let it crash''. And this is another rationale for the ruling 
 Any valuable work done by the user should be accepted and recorded persistently right away. Actions on the
 session are logged, like in a database. The user may still save snapshots, but basically any actual change
 is immediately recorded persistently. And thus we may crash without remorse.
+
+Static initialisation and shutdown
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A lot of fine points can be made about when precisely static objects in C\++ will be initialised or destroyed.
+However, anything beyond the scope of `main()` is not meant to be used for regular application code. Extended
+initialisation, dependency management and decommissioning -- when actually necessary -- should be part of the
+application code proper.footnote:[this is established ``best practice'' for good reasons. The interplay of
+static lifespan, various translation units and even dynamically loaded libraries together with shared access
+becomes intricate and insidious quite easily. And since in theory any static function could use some static
+variable residing in another translation unit, it is always possible to construct a situation where objects
+are accessed after being destroyed. Typically such objects do not even look especially ``dead'', since the
+static storage remains in place and still holds possibly sane values. Static (global) variables, like raw
+pointers, allow to subvert the deterministic automatic memory management, which otherwise is one of the
+greatest strengths of C++. Whenever we find ourselves developing extended collaborative logic based on
+several statics, we should consider to transform this logic into regular objects, which are easier to
+test and better to reason about. If it really can not be avoided to use such units of logic from a
+static context, it should at least be packaged as a single object, plus we should ensure this logic
+can only be accessed through a regular (non static) object as front-end. Packaged this way, the
+most common and dangerous pitfalls with statics can be avoided.] And since Lumiera indeed allows
+for link:{ldoc}/technical/library/Dependencies.html[[lazily initialised dependencies], we
+establish the policy that *destructors must not rely on dependencies*. In fact, they should
+not do any tangible work at all, beyond releasing other resources.
 
 Lifecycle Events
 ~~~~~~~~~~~~~~~~

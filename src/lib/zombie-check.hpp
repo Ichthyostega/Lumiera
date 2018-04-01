@@ -1,5 +1,5 @@
 /*
-  DEPENDABLE-BASE.hpp  -  fundamental structures with extended lifespan
+  ZOMBIE-CHECK.hpp  -   flatliner self-detection
 
   Copyright (C)         Lumiera.org
     2018,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,15 +21,16 @@
 */
 
 /** @file dependable-base.hpp
- ** Static container to hold basic entities needed during static init and shutdown.
+ ** Detector to set off alarm when (re)using deceased objects.
  ** @see sync-classlock.hpp
  ** @see depend.hpp
  */
 
 
-#ifndef LIB_DEPENDABLE_BASE_H
-#define LIB_DEPENDABLE_BASE_H
+#ifndef LIB_ZOMBIE_CHECK_H
+#define LIB_ZOMBIE_CHECK_H
 
+#include "lib/del-stash.hpp"
 #include "lib/nocopy.hpp"
 
 #include <iostream>
@@ -54,8 +55,8 @@ namespace lib {
           }
       };
     
-    ///////////////////////////////////////////////////////////////TICKET #1133 damn it. How the hell do we determine when the object is initialised...?
-    ///////////////////////////////////////////////////////////////TICKET #1133 ........ Looks like the whole approach is ill guided
+    template<class X>
+    uint Holder<X>::accessed_;
     
   } // (End) nifty implementation details
   
@@ -94,4 +95,4 @@ namespace lib {
   
   
 } // namespace lib
-#endif /*LIB_DEPENDABLE_BASE_H*/
+#endif /*LIB_ZOMBIE_CHECK_H*/

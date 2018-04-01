@@ -28294,9 +28294,15 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522454132616" ID="ID_1054219137" MODIFIED="1522456961034" TEXT="brauchen wir einen Basis-Layer?">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1522455499003" ID="ID_323278727" MODIFIED="1522455503078" TEXT="vermutlich ja"/>
+<node COLOR="#990000" CREATED="1522454132616" ID="ID_1054219137" MODIFIED="1522547155318" TEXT="brauchen wir einen Basis-Layer?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1522455499003" ID="ID_323278727" MODIFIED="1522547122649" TEXT="vermutlich ja">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#338800" CREATED="1522547104318" ID="ID_1075985632" MODIFIED="1522547119436" TEXT="nein besser nicht">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1522455507937" ID="ID_1029197196" MODIFIED="1522457177939" TEXT="f&#xfc;r wen?">
 <linktarget COLOR="#512c6f" DESTINATION="ID_1029197196" ENDARROW="Default" ENDINCLINATION="-299;0;" ID="Arrow_ID_845867084" SOURCE="ID_22169859" STARTARROW="None" STARTINCLINATION="1419;0;"/>
 <node CREATED="1522455514361" ID="ID_1288380071" MODIFIED="1522455518148" TEXT="ClassLock"/>
@@ -28444,11 +28450,14 @@
 </node>
 <node CREATED="1515975600368" ID="ID_896967532" MODIFIED="1515976656307" TEXT="f&#xfc;r Unit-Tests">
 <linktarget COLOR="#c1a9ac" DESTINATION="ID_896967532" ENDARROW="Default" ENDINCLINATION="46;-116;" ID="Arrow_ID_618937075" SOURCE="ID_1385819621" STARTARROW="None" STARTINCLINATION="-41;116;"/>
+<node COLOR="#338800" CREATED="1522506758042" ID="ID_1422898694" MODIFIED="1522506783584" TEXT="DependInject&lt;I&gt;::Local&lt;MOC&gt;">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457000411" ID="ID_736034555" MODIFIED="1522457004364" TEXT="Basis-System">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457000411" ID="ID_736034555" MODIFIED="1522547807040" TEXT="Basis-System">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457035478" ID="ID_1692167558" MODIFIED="1522457039855" TEXT="#1133 dependable base system">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -28457,29 +28466,172 @@
 </node>
 <node CREATED="1522506451269" ID="ID_55500881" MODIFIED="1522506467912" TEXT="Anforderungen">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522506486504" ID="ID_1878547223" MODIFIED="1522506497312" TEXT="Scope jeweils f&#xfc;r einen Target-Typ">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522506486504" ID="ID_1878547223" MODIFIED="1522547691142" TEXT="Scope jeweils f&#xfc;r einen Payload-Typ"/>
+<node CREATED="1522506518348" ID="ID_1014457759" MODIFIED="1522547692821" TEXT="gemeinsame statische Storage f&#xfc;r diesen Typ"/>
+<node CREATED="1522506636907" ID="ID_662985730" MODIFIED="1522547695756" TEXT="ctor/dtor f&#xfc;r Payload werden aufgerufen">
+<node CREATED="1522511826327" ID="ID_200801018" MODIFIED="1522511828746" TEXT="ctor">
+<node CREATED="1522518918379" ID="ID_261980616" MODIFIED="1522518931653" TEXT="bevor Payload ben&#xf6;tigt wird"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522506518348" ID="ID_1014457759" MODIFIED="1522506526379" TEXT="gemeinsame statische Storage f&#xfc;r diesen Typ">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522511829358" ID="ID_509925407" MODIFIED="1522511830546" TEXT="dtor">
+<node CREATED="1522518935777" ID="ID_1823418824" MODIFIED="1522518941700" TEXT="&quot;m&#xf6;glichst sp&#xe4;t&quot;"/>
+<node CREATED="1522518942263" ID="ID_203967064" MODIFIED="1522518945211" TEXT="aber zuverl&#xe4;ssig"/>
+</node>
+<node CREATED="1522514043309" ID="ID_1380359037" MODIFIED="1522514045656" TEXT="wann?">
+<node CREATED="1522514050796" ID="ID_191668372" MODIFIED="1522514056079" TEXT="pro Typ">
+<node CREATED="1522518875353" ID="ID_1629001557" MODIFIED="1522518882228" TEXT="ist das &#xfc;berhaupt m&#xf6;glich?"/>
+<node CREATED="1522518882744" ID="ID_1818509600" MODIFIED="1522518901851" TEXT="l&#xe4;uft wieder auf ein Template-generiertes Static hinaus">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457084472" ID="ID_1662610871" MODIFIED="1522457093048" TEXT="Schwartz-Counter implementieren">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457095319" ID="ID_1811034910" MODIFIED="1522457208551" TEXT="generisch">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522514056835" ID="ID_1693314028" MODIFIED="1522514067974" TEXT="f&#xfc;r alle DependableBase">
+<node CREATED="1522514071649" ID="ID_433197904" MODIFIED="1522514079988" TEXT="erfordert DelStash"/>
+<node CREATED="1522514086711" ID="ID_1216342984" MODIFIED="1522514117422" TEXT="an einem sicheren Ort"/>
+<node CREATED="1522514120075" ID="ID_664406309" MODIFIED="1522514130012" TEXT="Idee: shared_ptr hierf&#xfc;r">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457099278" ID="ID_293179749" MODIFIED="1522457209831" TEXT="wasserdicht mit Header-L&#xf6;sung">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522514148983" ID="ID_1331551985" MODIFIED="1522514165872" TEXT="jede neue DependableBase registriert sich"/>
+<node CREATED="1522514307456" ID="ID_930138927" MODIFIED="1522514332529" TEXT="Problem: Deregistrierung von Eintr&#xe4;gen aus shared libs">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1522541153861" ID="ID_1598087575" MODIFIED="1522541200548" TEXT="Problem: mu&#xdf; auch jeden einzelnen ctor tracken">
+<icon BUILTIN="stop-sign"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457113044" ID="ID_1913798256" MODIFIED="1522457130605" TEXT="umzustellen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457119491" ID="ID_715588139" MODIFIED="1522457204997" TEXT="ClassLock">
+</node>
+</node>
+<node CREATED="1522506685708" ID="ID_172729748" MODIFIED="1522547698341" TEXT="...allerdings &#xfc;ber einen Refcount f&#xfc;r den Scope"/>
+<node CREATED="1522506808180" ID="ID_962156028" MODIFIED="1522547700284" TEXT="Refcount verwendet Atomics"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522518973331" ID="ID_136789565" MODIFIED="1522518988634" TEXT="Design-Dilemma">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1522519009127" ID="ID_989945730" MODIFIED="1522519024864" TEXT="einfache Statics &quot;sollten&quot; lokal funktionieren"/>
+<node CREATED="1522519025972" ID="ID_714585131" MODIFIED="1522519142036" TEXT="das Problem ist, wenn man sich auf externe Statics abst&#xfc;tzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das kann ziemlich indirekt passieren.
+    </p>
+    <p>
+      Beispiel ist das ClassLock. Das ist ein Front-End, und verwendet verdeckt wieder einen Static.
+    </p>
+    <p>
+      Und genau <i>daf&#252;r</i>&#160;gibt es anscheinend keine Garantieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1522541262254" ID="ID_1609622536" MODIFIED="1522541279648" TEXT="genauer: wenn man sich auf on-demand (local) statics abst&#xfc;tzt"/>
+<node CREATED="1522541280331" ID="ID_296029834" MODIFIED="1522541319853">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      C++ h&#228;llt die Erzeugungs/Zerst&#246;rungs-Reihenfolge <b>exakt</b>&#160;ein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1522541321043" ID="ID_966332775" MODIFIED="1522541356223">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. wenn das local static <i>sp&#228;ter erzeugt</i>&#160;wird, wird es <b>vor</b>&#160; dem Hauptobjekt zerst&#246;rt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1522519161785" ID="ID_608910503" MODIFIED="1522519198800" TEXT="aus Gr&#xfc;nden der Code-Organisation will man aber nicht immer alles in ein Objekt packen"/>
+<node CREATED="1522519253645" ID="ID_1316230973" MODIFIED="1522519267958" TEXT="aber eine wirklich wasserdichte, genersche L&#xf6;sung ist komplex bis unm&#xf6;glich"/>
+<node CREATED="1522519269002" ID="ID_1313794115" MODIFIED="1522519283292" TEXT="und statt einer halb-wasserdichten L&#xf6;sung k&#xf6;nnte man ja einfache Statics verwenden"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522519308709" ID="ID_1997666438" MODIFIED="1522547255792" TEXT="Beschlu&#xdf;">
+<icon BUILTIN="yes"/>
+<node CREATED="1522547261520" ID="ID_539336828" MODIFIED="1522547285145" TEXT="das ist insgesamt eine schlechte Idee">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1522547285877" ID="ID_1921668956" MODIFIED="1522547323528">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Statische Initialisierung funktioniert <b>pr&#228;zise</b>, korrekt und <b>zuverl&#228;ssig</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1522547330726" ID="ID_994306275" MODIFIED="1522547749968" TEXT="C++ stellt das eigens sicher -- man mu&#xdf; es nur erst mal verstehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der Aufruf von Konstrukturen statischer Objekte konstituiert eine (dynamische) Reihenfolge.
+    </p>
+    <p>
+      Desktuktoren werden exakt r&#252;ckw&#228;rts in dieser Reihenfolge aufgerufen.
+    </p>
+    <p>
+      Statische Objektfelder werden vor der ersten Verwendung der Klassen<b>definition</b>&#160; initialisiert
+    </p>
+    <p>
+      Dagegen Funktions-lokale statische Variablen werden initialisiert, wenn der Kontrollflu&#223; sie zum ersten mal ber&#252;hrt.
+    </p>
+    <p>
+      Wenn ein Konstruktor ein statisches Feld verwendet, dann wird dieses Feld vor dem Konstruktor erzeugt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Beachte: in jedem dieser F&#228;lle wird auch die o.g. Reihenfolge konstituiert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <u>Corollar</u>: wenn man ein Meyer's Singleton erst indirekt aus dem Implementierungs-Code verwendet,
+    </p>
+    <p>
+      so wird es garantiert zerst&#246;rt, <i>bevor</i>&#160;der Destruktor des aufrufenden Objekts l&#228;uft.
+    </p>
+    <p>
+      Hallo ClassLock...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1522547752788" ID="ID_1333812920" MODIFIED="1522547762343" TEXT="eine handgeschriebene L&#xf6;sung kann da nicht besser sein"/>
+<node CREATED="1522547763547" ID="ID_1065493509" MODIFIED="1522547771413" TEXT="und verschiebt nur das Problem nach hinten"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457113044" ID="ID_1913798256" MODIFIED="1522547725898" TEXT="umzustellen">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1522457119491" ID="ID_715588139" MODIFIED="1522547714913" TEXT="ClassLock">
 <linktarget COLOR="#735d7e" DESTINATION="ID_715588139" ENDARROW="Default" ENDINCLINATION="1087;0;" ID="Arrow_ID_1384015103" SOURCE="ID_1951071885" STARTARROW="None" STARTINCLINATION="-84;86;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1522457132025" ID="ID_828796576" MODIFIED="1522457136460" TEXT="Applikation-Objekt?"/>
+<node CREATED="1522457132025" ID="ID_828796576" MODIFIED="1522547718346" TEXT="Applikation-Objekt?">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522547772617" ID="ID_671236738" MODIFIED="1522547788328" TEXT="besser nur einen Zombie-Check bereitstellen">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 <node CREATED="1482524535575" ID="ID_387248900" MODIFIED="1518487921096" TEXT="Extension-System"/>
