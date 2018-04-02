@@ -28328,8 +28328,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522033564057" ID="ID_1294295502" MODIFIED="1522033567713" TEXT="Nacharbeiten">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522454023039" ID="ID_1828121921" MODIFIED="1522454031095" TEXT="Folge-Probleme">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1522454023039" ID="ID_1828121921" MODIFIED="1522630470765" TEXT="Folge-Probleme">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522454040500" ID="ID_1674154774" MODIFIED="1522454043160" TEXT="Architektur">
 <node CREATED="1522454061873" ID="ID_1012349550" MODIFIED="1522454068316" TEXT="unklare statische Abh&#xe4;ngigkeiten">
 <node CREATED="1522454074760" ID="ID_1884600051" MODIFIED="1522457273211" TEXT="ClassLock">
@@ -28362,8 +28362,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1522454146645" ID="ID_818640049" MODIFIED="1522557422822" TEXT="Advice-System">
-<linktarget COLOR="#7a8fa9" DESTINATION="ID_818640049" ENDARROW="Default" ENDINCLINATION="-384;-20;" ID="Arrow_ID_1167388040" SOURCE="ID_1527905225" STARTARROW="None" STARTINCLINATION="288;-115;"/>
+<node CREATED="1522454146645" ID="ID_818640049" MODIFIED="1522628482100" TEXT="Advice-System">
+<linktarget COLOR="#7a8fa9" DESTINATION="ID_818640049" ENDARROW="Default" ENDINCLINATION="-384;-20;" ID="Arrow_ID_1167388040" SOURCE="ID_1527905225" STARTARROW="None" STARTINCLINATION="309;-116;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1522454318558" ID="ID_65008261" MODIFIED="1522454338494" TEXT="braucht sicht selbst beim Runterfahren">
 <icon BUILTIN="smiley-oh"/>
@@ -28507,8 +28507,8 @@
 <node CREATED="1522454162939" ID="ID_867445269" MODIFIED="1522454175102" TEXT="Subklassen-Konfig">
 <node CREATED="1522454176426" ID="ID_964380935" MODIFIED="1522454188772" TEXT="mu&#xdf; jetzt in den Provider-Scope"/>
 <node CREATED="1522454189359" ID="ID_1178508604" MODIFIED="1522454200306" TEXT="dieser ist meist nicht so offensichtlich klar"/>
-<node COLOR="#338800" CREATED="1522454200902" ID="ID_1367664577" MODIFIED="1522628368155" TEXT="ConfigRules">
-<linktarget COLOR="#8fbeb3" DESTINATION="ID_1367664577" ENDARROW="Default" ENDINCLINATION="-183;5;" ID="Arrow_ID_1637829369" SOURCE="ID_1789329281" STARTARROW="None" STARTINCLINATION="26;-32;"/>
+<node COLOR="#338800" CREATED="1522454200902" ID="ID_1367664577" MODIFIED="1522628490770" TEXT="ConfigRules">
+<linktarget COLOR="#8fbeb3" DESTINATION="ID_1367664577" ENDARROW="Default" ENDINCLINATION="-268;0;" ID="Arrow_ID_1637829369" SOURCE="ID_1789329281" STARTARROW="None" STARTINCLINATION="26;-32;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522454211157" ID="ID_1826864875" MODIFIED="1522454217672" TEXT="Subclass MockConfigRules"/>
 <node CREATED="1522454218267" ID="ID_1085608506" MODIFIED="1522628399085" TEXT="in die ConfigManager-Implementierung verelgt"/>
@@ -28516,11 +28516,47 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522018567685" ID="ID_1619059123" MODIFIED="1522018578992" TEXT="Frage: was ist mit AppState?">
+<node COLOR="#338800" CREATED="1522018567685" ID="ID_1619059123" MODIFIED="1522630290145" TEXT="Frage: was ist mit AppState?">
 <icon BUILTIN="help"/>
-<node CREATED="1522018581283" ID="ID_132446315" MODIFIED="1522018592182" TEXT="macht es Sinn, das via Depend zug&#xe4;nglich zu machen?"/>
+<node CREATED="1522018581283" ID="ID_132446315" MODIFIED="1522630357153" TEXT="macht es Sinn, das via Depend zug&#xe4;nglich zu machen?">
+<icon BUILTIN="forward"/>
+<node CREATED="1522630308841" ID="ID_1688145864" MODIFIED="1522630349227" TEXT="Ja">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1522630312898" ID="ID_23962719" MODIFIED="1522630325291" TEXT="Wird zwar von lumiera::Config hochgezogen"/>
+<node CREATED="1522630325999" ID="ID_976681959" MODIFIED="1522630344624" TEXT="...welches aber selber schon per lib::Depend instantiiert wird"/>
+</node>
 <node CREATED="1522018593697" ID="ID_1730197219" MODIFIED="1522018623361" TEXT="ist bisher ein Meyer&apos;s Singleton"/>
 <node CREATED="1522018623861" ID="ID_1923633930" MODIFIED="1522018631776" TEXT="aber lebt bereits im globalen Speicher"/>
+<node CREATED="1522630364690" ID="ID_1442746804" MODIFIED="1522630460073" TEXT="ABER: LifecycleRegistry mu&#xdf; Meyer&apos;s Singleton bleiben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil Nobug-Init ON_BASIC_INIT braucht,
+    </p>
+    <p>
+      und lib::Depend wiederum von Nobug-Init abh&#228;ngig ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Also w&#252;rde DependencyFactory&lt;LifecycleRegistry&gt; aufgerufen,
+    </p>
+    <p>
+      bevor es statisch initialisiert sein kann...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node COLOR="#338800" CREATED="1522630297899" ID="ID_365546675" MODIFIED="1522630305978" TEXT="umgestellt auf lib::Depend">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1521433694233" ID="ID_1951071885" MODIFIED="1522557016686" STYLE="fork" TEXT="Nebenbei: Schwartz-Counter in ClassLock abl&#xf6;sen">
 <arrowlink COLOR="#735d7e" DESTINATION="ID_715588139" ENDARROW="Default" ENDINCLINATION="1087;0;" ID="Arrow_ID_1384015103" STARTARROW="None" STARTINCLINATION="-84;86;"/>
@@ -28583,11 +28619,15 @@
 <node COLOR="#338800" CREATED="1522457377743" ID="ID_157728376" MODIFIED="1522628243174" TEXT="DefsManager_test">
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522630494375" ID="ID_787599487" MODIFIED="1522630496224" TEXT="PlacementHierarchy_test">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node CREATED="1522457303466" ID="ID_28369083" MODIFIED="1522597732907" TEXT="Advice-System verpfuscht">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1522457315568" ID="ID_1527905225" MODIFIED="1522457337194" TEXT="Policy-Verletzung">
-<arrowlink COLOR="#7a8fa9" DESTINATION="ID_818640049" ENDARROW="Default" ENDINCLINATION="-384;-20;" ID="Arrow_ID_1167388040" STARTARROW="None" STARTINCLINATION="288;-115;"/>
+<node CREATED="1522457315568" ID="ID_1527905225" MODIFIED="1522628482100" TEXT="Policy-Verletzung">
+<arrowlink COLOR="#7a8fa9" DESTINATION="ID_818640049" ENDARROW="Default" ENDINCLINATION="-384;-20;" ID="Arrow_ID_1167388040" STARTARROW="None" STARTINCLINATION="309;-116;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#338800" CREATED="1522597569180" ID="ID_602663488" MODIFIED="1522597663372" TEXT="naja... nicht sch&#xf6;n aber OK">
 <richcontent TYPE="NOTE"><html>
@@ -28621,8 +28661,8 @@
 <node CREATED="1522457406523" ID="ID_715525481" MODIFIED="1522628426366" TEXT="wer ist schuld?">
 <icon BUILTIN="help"/>
 </node>
-<node COLOR="#338800" CREATED="1522628298319" ID="ID_1789329281" MODIFIED="1522628438825" TEXT="ein Nebeneffekt der Konfiguration f&#xfc;r ConfigResolver">
-<arrowlink COLOR="#8fbeb3" DESTINATION="ID_1367664577" ENDARROW="Default" ENDINCLINATION="-183;5;" ID="Arrow_ID_1637829369" STARTARROW="None" STARTINCLINATION="26;-32;"/>
+<node COLOR="#338800" CREATED="1522628298319" ID="ID_1789329281" MODIFIED="1522628490770" TEXT="ein Nebeneffekt der Konfiguration f&#xfc;r ConfigResolver">
+<arrowlink COLOR="#8fbeb3" DESTINATION="ID_1367664577" ENDARROW="Default" ENDINCLINATION="-268;0;" ID="Arrow_ID_1637829369" STARTARROW="None" STARTINCLINATION="26;-32;"/>
 <icon BUILTIN="info"/>
 </node>
 </node>

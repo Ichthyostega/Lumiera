@@ -40,15 +40,20 @@ namespace lumiera {
   // ==== implementation Lifecycle Registry =======
   
   /** @remark since the LifecycleRegistry is used to implement
-   * the most basic initialisation, we need to ensure it is fully
-   * initialised and gets up on demand as early as possible. */
+   * the most basic initialisation, we need to ensure it is fully initialised
+   * as early as possible. Especially we can not use lib::Depend for that purpose,
+   * since the latter needs the LifecycleRegistry to pull up the NoBug-Library.
+   * More specifically, if we `#include "lib/depend.hpp"`, on static initialisation
+   * the handle planted within that include would invoke `DependencyFactory<LifecycleRegistry>`,
+   * which is defined later in the same header and thus not yet initialised.
+   */
   LifecycleRegistry&
   LifecycleRegistry::instance()
   {
     static LifecycleRegistry theRegistry;
     return theRegistry;   // Meyer's singleton
   }
-
+  
   
   
   // ==== implementation LifecycleHook class =======
@@ -102,7 +107,7 @@ extern "C" { /* ==== implementation C interface for lifecycle hooks ======= */
   
   
   
-  void 
+  void
   lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void))
   {
     lumiera::LifecycleHook (eventLabel, callbackFun);

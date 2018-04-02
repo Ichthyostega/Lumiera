@@ -46,7 +46,7 @@
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
-extern "C" { 
+extern "C" {
   #include "common/config.h"
 }
 
@@ -61,7 +61,7 @@ extern "C" {
 /** Similarly, this key is used to fetch the configured default
  *  plugin/module search path from the basic setup.ini
  *  This patch is used by the plugin-loader to discover
- *  lumiera plugins and extensions.  
+ *  lumiera plugins and extensions.
  */
 #define KEY_PLUGIN_PATH "Lumiera.modulepath"
 
@@ -81,8 +81,8 @@ namespace lumiera {
   
   namespace {
     
-    void 
-    pull_up_ConfigSystem () 
+    void
+    pull_up_ConfigSystem ()
     {
       TRACE (common, "booting up config system");
       Config::instance();
@@ -139,7 +139,7 @@ extern "C" { /* ==== implementation C interface for accessing setup.ini ======= 
   
   
   
-  const char* 
+  const char*
   lumiera_get_plugin_path_default ()
   {
     static string pathSpec;
@@ -147,7 +147,7 @@ extern "C" { /* ==== implementation C interface for accessing setup.ini ======= 
       {
         pathSpec += "plugin.path="; // syntax expected by lumiera_config_setdefault
         
-        // fetch plugin search path from setup.ini and expand any $ORIGIN token 
+        // fetch plugin search path from setup.ini and expand any $ORIGIN token
         SearchPathSplitter pathElement(Config::get (KEY_PLUGIN_PATH));
         while (pathElement)
           pathSpec += pathElement.next() +":";

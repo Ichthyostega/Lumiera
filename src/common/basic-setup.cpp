@@ -75,9 +75,9 @@ namespace lumiera {
   /**
    * Creating the BasicSetup object performs the
    * initial self-configuration of the Lumiera Application.
-   * For this, the \c setup.ini file is located relative to the
+   * For this, the `setup.ini` file is located relative to the
    * current application executable, read in and parsed into a
-   * map of setup variables. 
+   * map of setup variables.
    */
   BasicSetup::BasicSetup (string bootstrapIni)
     : syntax("Lumiera installation and platform configuration")
@@ -118,7 +118,7 @@ namespace lumiera {
       opt::parsed_options parsed = opt::parse_config_file (configIn, syntax);
       
       opt::store (parsed, settings);
-      opt::notify(settings);   
+      opt::notify(settings);
     }
 
   

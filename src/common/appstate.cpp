@@ -33,7 +33,6 @@
 
 
 #include "lib/error.hpp"
-#include "include/lifecycle.h"
 #include "common/appstate.hpp"
 #include "common/subsystem-runner.hpp"
 
@@ -65,20 +64,12 @@ namespace lumiera {
       if (lumiera_err errorstate = lumiera_error ())
         ALERT (common, "*** Unexpected error: %s\n     Triggering emergency exit.", errorstate);
     }
-    
-    void
-    createAppStateInstance(){
-      AppState::instance();
-    }
-    
-    LifecycleHook schedule_ (ON_BASIC_INIT, &createAppStateInstance);         
-    
   }
   
   
   
   
-  /** perform initialisation triggered on first access. 
+  /** perform initialisation triggered on first access.
    *  Will execute BasicSetup sequence to determine the location
    *  of the executable and read in \c setup.ini  --
    *  Since above a LifecycleHook is installed ON_BASIC_INIT,
@@ -94,17 +85,8 @@ namespace lumiera {
     , core_up_{false}
   { }
   
-  
-  
-  
-  AppState& 
-  AppState::instance()  // Meyer's singleton
-  {
-    static unique_ptr<AppState> theApp_;
-    if (!theApp_) theApp_.reset (new AppState ());
-    return *theApp_;
-  }
-  
+  /** storage for the Appstate Singleton instance */
+  lib::Depend<AppState> AppState::instance;
   
   
   string
@@ -120,7 +102,7 @@ namespace lumiera {
   // ===== Implementation startup and shutdown sequence for main() ========
   
   
-#define _THROW_IF \
+#define _MAYBE_THROW_ \
   maybeThrow<error::Fatal> ("internal failure while initialising the "\
                             "Lumiera application framework");
   
@@ -132,17 +114,17 @@ namespace lumiera {
     TRACE (common, "initialising application core...");
     
     lumiera_interfaceregistry_init ();
-    _THROW_IF
+    _MAYBE_THROW_
     
     lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
-    _THROW_IF
+    _MAYBE_THROW_
     
     lumiera_config_interface_init ();
-    _THROW_IF
+    _MAYBE_THROW_
     
     core_up_= true;
     LifecycleHook::trigger (ON_GLOBAL_INIT);
-    _THROW_IF
+    _MAYBE_THROW_
     
     
     subsystems_.reset (new SubsystemRunner (options));
@@ -174,7 +156,7 @@ namespace lumiera {
    *  the termination of all other subsystems is initiated; when detecting this case,
    *  the emergency exit sequence is called. Any error which can't be handled within
    *  this scheme, should be thrown as exception, in which case the abort handler
-   *  is activated.  
+   *  is activated.
    */
   ExitCode
   AppState::maybeWait()
@@ -265,8 +247,6 @@ namespace lumiera {
       {
         log_and_clear_unexpected_errorstate();
     } }
-  
-  
   
   
   
