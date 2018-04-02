@@ -52,7 +52,6 @@
 
 #include "include/display-facade.h"
 #include "common/instancehandle.hpp"
-#include "lib/singleton-ref.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "include/logging.h"
 #include "lib/nocopy.hpp"
@@ -140,17 +139,12 @@ namespace gui {
       typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
                                      , lumiera::Display
                                      > ServiceInstanceHandle;
-      
-      lib::SingletonRef<DisplayService> implInstance_;
       ServiceInstanceHandle serviceInstance_;
       
       
     public:
       DisplayService();
-     ~DisplayService() {
-                      INFO (proc_dbg, "Display service dying...");
-
-     }
+     ~DisplayService() { INFO (proc_dbg, "Display service dying..."); }
       
       
       /** open a new display, sending frames to the given output destination

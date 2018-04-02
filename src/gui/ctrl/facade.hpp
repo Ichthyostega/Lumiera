@@ -43,6 +43,8 @@
 #define GUI_CTRL_FACADE_H
 
 #include "gui/notification-service.hpp"
+#include "gui/display-service.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/nocopy.hpp"
 
 
@@ -61,7 +63,11 @@ namespace ctrl {
   class Facade
     : util::NonCopyable
     {
-      NotificationService notificationService_;
+      using Instance_Notification = lib::DependInject<NotificationService>::ServiceInstance<>;
+      using Instance_DisplayService = lib::DependInject<DisplayService>::ServiceInstance<>;
+      
+      Instance_Notification notificationService_;
+      Instance_DisplayService displayService_;        ///////////////////////////////////////////////////////TICKET #82 obsolete and will go away once we have a real OutputSlot offered by the UI
       
       
     public:
@@ -69,7 +75,8 @@ namespace ctrl {
        * Activate all external UI facade interfaces.
        */
       Facade (UiBus& bus, UiManager& manager)
-        : notificationService_(bus.getAccessPoint(), manager)   // opens the GuiNotificationService instance
+        : notificationService_{bus.getAccessPoint(), manager}   // opens the GuiNotificationService instance
+        , displayService_{}                                     // opens the DisplayService instance ////////TICKET #82 obsolete
         {
           INFO (gui, "UI-Facade Interfaces activated.");
         }

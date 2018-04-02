@@ -33,6 +33,7 @@
 
 
 #include "gui/display-service.hpp"
+#include "lib/depend.hpp"
 
 extern "C" {
 #include "common/interface-descriptor.h"
@@ -120,9 +121,8 @@ namespace gui {
     
     
     using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
-    typedef lib::SingletonRef<DisplayService>::Accessor InstanceRef;
     
-    InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual DisplayService implementation...
+    lib::Depend<DisplayService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
     
     
     
@@ -143,7 +143,7 @@ namespace gui {
                                                                REQUIRE (slotHandle);
                                                                try
                                                                  {
-                                                                 _instance->allocate (slotHandle,true); 
+                                                                 _instance().allocate (slotHandle,true); 
                                                                  }
                                                                catch (lumiera::Error&){ /* error state remains set */ }
                                                              }
@@ -158,7 +158,7 @@ namespace gui {
                                                                  }
                                                                
                                                                REQUIRE (slotHandle);
-                                                               _instance->allocate (slotHandle,false);
+                                                               _instance().allocate (slotHandle,false);
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (put,
@@ -168,7 +168,7 @@ namespace gui {
                                                                REQUIRE (_instance && !lumiera_error_peek());
                                                                
                                                                REQUIRE (slotHandle);
-                                                               DisplayerSlot& slot = _instance->resolve (slotHandle);
+                                                               DisplayerSlot& slot = _instance().resolve (slotHandle);
                                                                slot.put (frame);
                                                              }
                                                           )
@@ -183,19 +183,18 @@ namespace gui {
   
   
   DisplayService::DisplayService()
-    : error_("")
-    , implInstance_(this,_instance)
+    : error_{}
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_Display, 0, lumieraorg_DisplayService))
-  {
-    INFO (progress, "Display Facade opened.");
-  }
+    {
+      INFO (progress, "Display Facade opened.");
+    }
   
   
   
   LumieraDisplaySlot
   DisplayService::setUp (FrameDestination const& outputDestination)
   {
-    DisplayerTab& slots (_instance->slots_);
+    DisplayerTab& slots (_instance().slots_);
     return &slots.manage (new DisplayerSlot (outputDestination));
   }
   

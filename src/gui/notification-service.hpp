@@ -42,7 +42,6 @@
 #include "include/gui-notification-facade.h"
 #include "common/instancehandle.hpp"
 #include "gui/ctrl/bus-term.hpp"
-#include "lib/singleton-ref.hpp"
 
 #include <memory>
 
@@ -78,15 +77,6 @@ namespace gui {
     , public ctrl::BusTerm
     {
       
-      /* === Implementation of the Facade Interface === */
-      
-      void displayInfo (NotifyLevel,string const& text) override;
-      void markError (ID uiElement, string const& text) override;
-      void markNote  (ID uiElement, string const& text) override;
-      void mutate (ID uiElement, MutationMessage&&)     override;
-      void triggerGuiShutdown (string const& cause)     override;
-      
-    private:
       std::unique_ptr<ctrl::UiDispatcher> dispatch_;
       ctrl::UiManager& uiManager_;
       
@@ -98,15 +88,20 @@ namespace gui {
       using ServiceInstanceHandle = lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                                                            , GuiNotification
                                                            > ;
-      lib::SingletonRef<GuiNotification> implInstance_;
       ServiceInstanceHandle serviceInstance_;
-      
       
       
     public:
      ~NotificationService();
       NotificationService (ctrl::BusTerm& upLink, ctrl::UiManager& uiManager);
       
+      /* === Implementation of the Facade Interface === */
+      
+      void displayInfo (NotifyLevel,string const& text) override;
+      void markError (ID uiElement, string const& text) override;
+      void markNote  (ID uiElement, string const& text) override;
+      void mutate (ID uiElement, MutationMessage&&)     override;
+      void triggerGuiShutdown (string const& cause)     override;
     };
     
   

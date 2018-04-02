@@ -29,6 +29,7 @@
 #include "proc/play/dummy-player-service.hpp"
 #include "proc/engine/worker/dummy-image-generator.hpp"
 #include "proc/engine/worker/tick-service.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/depend.hpp"
 
 extern "C" {
@@ -58,6 +59,12 @@ namespace proc  {
       class DummyPlayerSubsysDescriptor
         : public Subsys
         {
+          using ServiceHandle = lib::DependInject<DummyPlayerService>::ServiceInstance<>;
+          
+          /** manages the actual (single) instance of the player service impl */
+          ServiceHandle thePlayer_;
+          
+          
           operator string ()  const { return "Dummy-Player"; }
           
           
@@ -72,18 +79,14 @@ namespace proc  {
             {
               ASSERT (!thePlayer_);
               
-              thePlayer_.reset (new DummyPlayerService (terminationHandle));
+              thePlayer_.createInstance (terminationHandle);
               return true;
             }
-          
-          /** manages the actual (single) instance of the player service impl */
-          std::unique_ptr<DummyPlayerService> thePlayer_;
-          
           
           void
           triggerShutdown ()  noexcept override
             {
-              thePlayer_.reset(0);
+              thePlayer_.shutdown();
               // note: shutdown of the DummyPlayerService instance may block
              //        for a short period, until termination of all tick services
             }
@@ -174,9 +177,7 @@ namespace proc  {
       
       
       using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
-      typedef lib::SingletonRef<DummyPlayerService>::Accessor InstanceRef;
-      
-      InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual DummyPlayer implementation...
+      lib::Depend<DummyPlayerService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
       
       typedef ProcessImpl* ProcP;
       
@@ -195,7 +196,7 @@ namespace proc  {
                                                                      return 0;
                                                                    }
                                                                  
-                                                                 return static_cast<LumieraPlayProcess> (_instance->start(viewerHandle)); 
+                                                                 return static_cast<LumieraPlayProcess> (_instance().start(viewerHandle)); 
                                                                }
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (togglePlay,
@@ -241,11 +242,10 @@ namespace proc  {
     DummyPlayerService::DummyPlayerService (Subsys::SigTerm terminationHandle)
       : error_("")
       , notifyTermination_(terminationHandle)
-      , implInstance_(this,_instance)
       , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_DummyPlayer, 0, lumieraorg_DummyPlayerService))
-    {
-      INFO (progress, "DummyPlayer Facade opened.");
-    }
+      {
+        INFO (progress, "DummyPlayer Facade opened.");
+      }
     
     
     
