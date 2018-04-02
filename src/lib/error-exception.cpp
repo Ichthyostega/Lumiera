@@ -55,7 +55,7 @@ namespace lumiera {
      *  @todo develop a framework to set more specific yet friendly messages
      */
     inline const string
-    default_usermsg (Error* exception_obj)  noexcept
+    default_usermsg (Error*)  noexcept
     {
       return "Sorry, Lumiera encountered an internal error.";
     }

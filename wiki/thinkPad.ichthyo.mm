@@ -4897,7 +4897,7 @@
 <node CREATED="1510341163528" ID="ID_1640768302" MODIFIED="1510341167036" TEXT="fischt nach L&#xf6;sungen"/>
 </node>
 </node>
-<node CREATED="1510341362957" FOLDED="true" ID="ID_1499495468" MODIFIED="1522557657272" TEXT="wirklich monadisch?">
+<node CREATED="1510341362957" FOLDED="true" ID="ID_1499495468" MODIFIED="1522559756341" TEXT="wirklich monadisch?">
 <linktarget COLOR="#80c6b3" DESTINATION="ID_1499495468" ENDARROW="Default" ENDINCLINATION="-1812;12745;" ID="Arrow_ID_673178727" SOURCE="ID_1502143527" STARTARROW="None" STARTINCLINATION="4133;-10665;"/>
 <node CREATED="1510341374332" ID="ID_483481416" MODIFIED="1511572072346" TEXT="naja...">
 <richcontent TYPE="NOTE"><html>
@@ -27355,8 +27355,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1522557552545" ID="ID_399844845" MODIFIED="1522558342897" TEXT="Zugriff im statischen Shutdown">
-<linktarget COLOR="#487bba" DESTINATION="ID_399844845" ENDARROW="Default" ENDINCLINATION="237;509;" ID="Arrow_ID_1393532861" SOURCE="ID_1003385410" STARTARROW="None" STARTINCLINATION="733;-537;"/>
 <linktarget COLOR="#27a7a7" DESTINATION="ID_399844845" ENDARROW="Default" ENDINCLINATION="-36;283;" ID="Arrow_ID_1430148682" SOURCE="ID_1023585478" STARTARROW="None" STARTINCLINATION="104;0;"/>
+<linktarget COLOR="#487bba" DESTINATION="ID_399844845" ENDARROW="Default" ENDINCLINATION="237;509;" ID="Arrow_ID_1393532861" SOURCE="ID_1003385410" STARTARROW="None" STARTINCLINATION="733;-537;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522557562543" ID="ID_442673617" MODIFIED="1522558305695" TEXT="t&#xfc;ckisches Problem">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -27383,8 +27383,7 @@
       daher <b>mu&#223;</b>&#160;sein dtor <b>vor</b>&#160;dem dtor von DependencyFactory laufen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1522557924661" ID="ID_1965837896" MODIFIED="1522557931936" TEXT="konsistent?">
 <node CREATED="1522557833985" ID="ID_449005089" MODIFIED="1522557848371" TEXT="Bis zum dtor-Aufruf ist alles koh&#xe4;rent"/>
@@ -27421,8 +27420,7 @@
       Destruktoren gesequenced. Sollte passen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1522558025471" ID="ID_408630768" MODIFIED="1522558194504" TEXT="danach spezielle Sperre einbauen, da die Factory nicht mehr existiert">
@@ -28360,8 +28358,7 @@
       da&#223; re-entrant-Aufrufe w&#228;hrend dem dtor erlaubt sind
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -28398,8 +28395,7 @@
       kann und mu&#223; man das &quot;durchwinken&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28451,8 +28447,7 @@
       Aber wie gesagt, das ganze Advice-System ist eine Skizze
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -28512,11 +28507,12 @@
 <node CREATED="1522454162939" ID="ID_867445269" MODIFIED="1522454175102" TEXT="Subklassen-Konfig">
 <node CREATED="1522454176426" ID="ID_964380935" MODIFIED="1522454188772" TEXT="mu&#xdf; jetzt in den Provider-Scope"/>
 <node CREATED="1522454189359" ID="ID_1178508604" MODIFIED="1522454200306" TEXT="dieser ist meist nicht so offensichtlich klar"/>
-<node COLOR="#338800" CREATED="1522454200902" ID="ID_1367664577" MODIFIED="1522454250176" TEXT="ConfigRules">
+<node COLOR="#338800" CREATED="1522454200902" ID="ID_1367664577" MODIFIED="1522628368155" TEXT="ConfigRules">
+<linktarget COLOR="#8fbeb3" DESTINATION="ID_1367664577" ENDARROW="Default" ENDINCLINATION="-183;5;" ID="Arrow_ID_1637829369" SOURCE="ID_1789329281" STARTARROW="None" STARTINCLINATION="26;-32;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522454211157" ID="ID_1826864875" MODIFIED="1522454217672" TEXT="Subclass MockConfigRules"/>
-<node CREATED="1522454218267" ID="ID_1085608506" MODIFIED="1522454239117" TEXT="in den Defaults-Manager verelgt"/>
-<node CREATED="1522454239657" ID="ID_746728834" MODIFIED="1522454248571" TEXT="passiert nun beim Session-Start"/>
+<node CREATED="1522454218267" ID="ID_1085608506" MODIFIED="1522628399085" TEXT="in die ConfigManager-Implementierung verelgt"/>
+<node CREATED="1522454239657" ID="ID_746728834" MODIFIED="1522628416235" TEXT="passiert nun ON_GLOBAL_INIT"/>
 </node>
 </node>
 </node>
@@ -28570,8 +28566,7 @@
       Nicht einem, der in einem Meyer's Singleton steckt...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#b12341" DESTINATION="ID_1878626771" ENDARROW="Default" ENDINCLINATION="166;90;" ID="Arrow_ID_1822166267" STARTARROW="None" STARTINCLINATION="385;46;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -28581,24 +28576,54 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457229331" ID="ID_1130290094" MODIFIED="1522457234996" TEXT="Test-Suite">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457238099" ID="ID_1287049121" MODIFIED="1522457273211" TEXT="ClassLock schl&#xe4;gt Alarm">
+<node COLOR="#338800" CREATED="1522457238099" ID="ID_1287049121" MODIFIED="1522597557304" TEXT="ClassLock schl&#xe4;gt Alarm">
 <arrowlink COLOR="#8195ac" DESTINATION="ID_1884600051" ENDARROW="Default" ENDINCLINATION="-604;0;" ID="Arrow_ID_648096672" STARTARROW="None" STARTINCLINATION="175;-122;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457377743" ID="ID_157728376" MODIFIED="1522457379824" TEXT="DefsManager_test">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522457377743" ID="ID_157728376" MODIFIED="1522628243174" TEXT="DefsManager_test">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457303466" ID="ID_28369083" MODIFIED="1522457309129" TEXT="Advice-System verpfuscht">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522457303466" ID="ID_28369083" MODIFIED="1522597732907" TEXT="Advice-System verpfuscht">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1522457315568" ID="ID_1527905225" MODIFIED="1522457337194" TEXT="Policy-Verletzung">
 <arrowlink COLOR="#7a8fa9" DESTINATION="ID_818640049" ENDARROW="Default" ENDINCLINATION="-384;-20;" ID="Arrow_ID_1167388040" STARTARROW="None" STARTINCLINATION="288;-115;"/>
 </node>
+<node COLOR="#338800" CREATED="1522597569180" ID="ID_602663488" MODIFIED="1522597663372" TEXT="naja... nicht sch&#xf6;n aber OK">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es ruft sich selbst rekursiv auf, via Depend&lt;AdviceSystem&gt;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457395749" ID="ID_1439882391" MODIFIED="1522457403684" TEXT="Subclass-Ingleton">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522457406523" ID="ID_715525481" MODIFIED="1522457411620" TEXT="wer ist schuld?">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1522597604367" ID="ID_1036644185" MODIFIED="1522597629034" TEXT="Alternative w&#xe4;re aufwendig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...n&#228;mlich eine ganz spezielle, dedzierte Aufr&#228;um-Routine schreiben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1522597631464" ID="ID_1772415968" MODIFIED="1522597644885" TEXT="...und dazu ist das Advice-System zu experimentell"/>
+</node>
+<node COLOR="#338800" CREATED="1522457395749" ID="ID_1439882391" MODIFIED="1522628434994" TEXT="Subclass-Singleton">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522457406523" ID="ID_715525481" MODIFIED="1522628426366" TEXT="wer ist schuld?">
+<icon BUILTIN="help"/>
+</node>
+<node COLOR="#338800" CREATED="1522628298319" ID="ID_1789329281" MODIFIED="1522628438825" TEXT="ein Nebeneffekt der Konfiguration f&#xfc;r ConfigResolver">
+<arrowlink COLOR="#8fbeb3" DESTINATION="ID_1367664577" ENDARROW="Default" ENDINCLINATION="-183;5;" ID="Arrow_ID_1637829369" STARTARROW="None" STARTINCLINATION="26;-32;"/>
+<icon BUILTIN="info"/>
 </node>
 </node>
 </node>
@@ -28644,7 +28669,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1522457000411" ID="ID_736034555" MODIFIED="1522559183014" TEXT="Basis-System">
+<node COLOR="#990000" CREATED="1522457000411" FOLDED="true" ID="ID_736034555" MODIFIED="1522559751902" TEXT="Basis-System">
 <linktarget COLOR="#af98b6" DESTINATION="ID_736034555" ENDARROW="Default" ENDINCLINATION="2208;-356;" ID="Arrow_ID_1927977085" SOURCE="ID_1228603701" STARTARROW="None" STARTINCLINATION="448;721;"/>
 <icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457035478" ID="ID_1692167558" MODIFIED="1522556857858" TEXT="#1133 dependable base system">
@@ -28710,8 +28735,7 @@
       Und genau <i>daf&#252;r</i>&#160;gibt es anscheinend keine Garantieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1522541262254" ID="ID_1609622536" MODIFIED="1522541279648" TEXT="genauer: wenn man sich auf on-demand (local) statics abst&#xfc;tzt"/>
 <node CREATED="1522541280331" ID="ID_296029834" MODIFIED="1522541319853">
 <richcontent TYPE="NODE"><html>
@@ -28723,8 +28747,7 @@
       C++ h&#228;llt die Erzeugungs/Zerst&#246;rungs-Reihenfolge <b>exakt</b>&#160;ein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1522541321043" ID="ID_966332775" MODIFIED="1522541356223">
 <richcontent TYPE="NODE"><html>
@@ -28736,8 +28759,7 @@
       d.h. wenn das local static <i>sp&#228;ter erzeugt</i>&#160;wird, wird es <b>vor</b>&#160; dem Hauptobjekt zerst&#246;rt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1522519161785" ID="ID_608910503" MODIFIED="1522519198800" TEXT="aus Gr&#xfc;nden der Code-Organisation will man aber nicht immer alles in ein Objekt packen"/>
@@ -28758,8 +28780,7 @@
       Statische Initialisierung funktioniert <b>pr&#228;zise</b>, korrekt und <b>zuverl&#228;ssig</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1522547330726" ID="ID_994306275" MODIFIED="1522547749968" TEXT="C++ stellt das eigens sicher -- man mu&#xdf; es nur erst mal verstehen">
 <richcontent TYPE="NOTE"><html>
@@ -28801,8 +28822,7 @@
       Hallo ClassLock...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1522547752788" ID="ID_1333812920" MODIFIED="1522547762343" TEXT="eine handgeschriebene L&#xf6;sung kann da nicht besser sein"/>
@@ -29311,7 +29331,7 @@
 <node CREATED="1512925253328" ID="ID_922277724" MODIFIED="1518487921098" TEXT="JobTicket"/>
 <node CREATED="1512925246057" ID="ID_181262071" MODIFIED="1518487921098" TEXT="JobPlanning">
 <linktarget COLOR="#5379b5" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="41;130;" ID="Arrow_ID_1786254694" SOURCE="ID_1543264108" STARTARROW="Default" STARTINCLINATION="-100;0;"/>
-<node CREATED="1512925265295" ID="ID_1502143527" MODIFIED="1522557657271">
+<node CREATED="1512925265295" ID="ID_1502143527" MODIFIED="1522559756341">
 <richcontent TYPE="NODE"><html>
   <head>
     

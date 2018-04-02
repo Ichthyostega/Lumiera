@@ -46,8 +46,6 @@
 #include "common/query/defs-manager.hpp"
 #include "common/query/defs-registry.hpp"
 #include "common/config-rules.hpp"
-#include "proc/mobject/session/query/fake-configrules.hpp"
-#include "lib/depend-inject.hpp"
 #include "lib/format-string.hpp"
 #include "lib/error.hpp"
 
@@ -65,14 +63,10 @@ namespace query  {
   
   
   /** initialise the most basic internal defaults. */
-  DefsManager::DefsManager ()  throw()
+  DefsManager::DefsManager ()  noexcept
     : defsRegistry_(new DefsRegistry)
   {
     INFO (session, "Configure technical defaults of the session.");
-    
-    // PLANNED: use an embedded Prolog-System or similar rules engine.
-    //          For the time being, we use preconfigured fake answers for some common Config-Queries
-    lib::DependInject<ConfigResolver>::useSingleton<proc::mobject::session::query::MockConfigRules>();
     
   }
   

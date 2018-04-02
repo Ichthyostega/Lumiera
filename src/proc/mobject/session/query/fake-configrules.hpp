@@ -48,6 +48,7 @@
 
 #include "proc/mobject/session.hpp"
 #include "proc/config-resolver.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/query-util.hpp"
 #include "lib/util.hpp"
 #include "lib/p.hpp"
@@ -291,12 +292,12 @@ namespace session {
       protected:
         MockConfigRules ();                         ///< to be used only by the singleton factory
         friend class lib::DependencyFactory<MockConfigRules>;
-
-        virtual ~MockConfigRules() {}
-        
+        friend class lib::DependInject<ConfigResolver>::Local<MockConfigRules>;
       public:
+        virtual ~MockConfigRules() {}           ///< extends the ConfigResolver interface
         
-        // TODO: implementation of any additional functions on the ConfigRules interface goes here
+        
+        /* === implementation of additional functions on the ConfigRules interface goes here === */
       };
       
     

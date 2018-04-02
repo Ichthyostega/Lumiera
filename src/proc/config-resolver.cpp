@@ -30,11 +30,34 @@
 
 
 #include "lib/error.hpp"
+#include "include/lifecycle.h"
 #include "proc/config-resolver.hpp"
+#include "proc/mobject/session/query/fake-configrules.hpp"
+#include "lib/depend-inject.hpp"
 
+using lumiera::LifecycleHook;
+using lumiera::ON_GLOBAL_INIT;
 
 
 namespace proc {
+  namespace {
+    
+    /**
+     * Install the actual ConfigResolver implementation.
+     * The ConfigResolver answers queries about configuration and default configuration
+     * of various aspects of the session, based on configuration rules.
+     * @todo PLANNED: use an embedded Prolog-System or similar rules engine.
+     *       For the time being (as of 2008-2018),
+     *       we use preconfigured fake answers for some common Config-Queries
+     */
+    void
+    configure_ConfigResolver()
+    {
+      lib::DependInject<ConfigResolver>::useSingleton<mobject::session::query::MockConfigRules>();
+    }
+
+    LifecycleHook schedule_ (ON_GLOBAL_INIT, &configure_ConfigResolver);
+  }
   
   
   /** Singleton factory instance, configured with the actual implementation type.
