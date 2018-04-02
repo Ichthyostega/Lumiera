@@ -44,6 +44,7 @@
 #include "include/logging.h"
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/depend-inject.hpp"
 #include "include/interfaceproxy.hpp"
 
 extern "C" {
@@ -107,6 +108,9 @@ namespace lumiera {
   
   namespace facade {
     
+    template<class I, class FA>
+    using ServiceHandle = typename lib::DependInject<FA>::template ServiceInstance<Proxy<InstanceHandle<I,FA>>>;
+    
     /**
      * @internal Helper/Adapter for establishing a link
      * between an InstanceHandle and a facade interface,
@@ -118,39 +122,41 @@ namespace lumiera {
      */
     template<class I, class FA>
     struct Link
-      : util::NonCopyable
+      : ServiceHandle<I,FA>
       {
-        typedef InstanceHandle<I,FA> IH;
+        using IH = InstanceHandle<I,FA>;
+        using SH = ServiceHandle<I,FA>;
         
-        Link (IH const& iha) { facade::openProxy(iha); }
-       ~Link()               { facade::closeProxy<IH>(); }
+        using SH::SH;
         
-        FA&
-        operator() (IH const&)  const
+        FA*
+        operator->()  const
           {
-            return facade::Accessor<FA>()();
+            return SH::operator->();
           }
       };
     
     
     /**
      * @internal when the InstanceHandle isn't associated with a
-     * facade interface, then this specialisation switches 
+     * facade interface, then this specialisation switches
      * the facade::Link into "NOP" mode.
      */
     template<class I>
     struct Link<I,I>
       : util::NonCopyable
       {
-        typedef InstanceHandle<I,I> IH;
+        using IH = InstanceHandle<I,I>;
+        IH& ih_;
         
-        Link (IH const&)     { /* NOP */ }
-       ~Link()               { /* NOP */ }
-       
-        I&
-        operator() (IH const& handle)  const
+        Link (IH const& ih)
+          : ih_{ih}
+        { }
+        
+        I*
+        operator->()  const
           {
-            return handle.get();
+            return & ih_.get();
           }
       };
     
@@ -222,7 +228,7 @@ namespace lumiera {
       
       /** act as smart pointer providing access through the facade.
        *  @note we don't provide operator*                      */
-      FA * operator-> ()  const { return &(facadeLink_(*this)); }
+      FA * operator-> ()  const { return facadeLink_; }
       
       /** directly access the instance via the CL interface */
       I& get ()  const { ENSURE(instance_); return *instance_; }

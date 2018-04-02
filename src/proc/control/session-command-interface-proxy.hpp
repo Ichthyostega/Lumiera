@@ -39,6 +39,7 @@
 /* ==================== SessionCommand =================================== */
 
 #include "include/session-command-facade.h"
+#include "include/interfaceproxy.hpp"
 
 namespace proc {
 namespace control {
@@ -61,7 +62,7 @@ namespace facade {
   
   template<>
   class Proxy<IHandle_SessionCommand>
-    : public Holder<IHandle_SessionCommand>
+    : public Binding<IHandle_SessionCommand>
     {
       //----Proxy-Implementation-of-SessionCommand--------
       
@@ -72,12 +73,12 @@ namespace facade {
       
       
     public:
-      Proxy (IHandle const& iha) : THolder(iha) {}
+      using IBinding::IBinding;
     };
   
   
-  template  void openProxy<IHandle_SessionCommand>  (IHandle_SessionCommand const&);
-  template  void closeProxy<IHandle_SessionCommand> (void);
+//  template  void openProxy<IHandle_SessionCommand>  (IHandle_SessionCommand const&);
+//  template  void closeProxy<IHandle_SessionCommand> (void);
   
   
 }} // namespace lumiera::facade

@@ -63,7 +63,7 @@ namespace facade {
   
   template<>
   class Proxy<IHandle_GuiNotification>
-    : public Holder<IHandle_GuiNotification>
+    : public Binding<IHandle_GuiNotification>
     {
       using Level = gui::NotifyLevel;
       
@@ -77,12 +77,12 @@ namespace facade {
       
       
     public:
-      Proxy (IHandle const& iha) : THolder(iha) {}
+      using IBinding::IBinding;
     };
   
   
-  template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
-  template  void closeProxy<IHandle_GuiNotification> (void);
+//  template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
+//  template  void closeProxy<IHandle_GuiNotification> (void);
   
   
 }} // namespace lumiera::facade

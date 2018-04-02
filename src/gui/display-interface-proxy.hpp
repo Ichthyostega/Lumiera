@@ -65,7 +65,7 @@ namespace facade {
   
   template<>
   class Proxy<IHandle_Display>
-    : public Holder<IHandle_Display>
+    : public Binding<IHandle_Display>
     {
       //----Proxy-Implementation-of-lumiera::Display--------
       
@@ -83,11 +83,11 @@ namespace facade {
       
       
     public:
-      Proxy (IHandle const& iha) : THolder(iha) {}
+      using IBinding::IBinding;
     };
   
   
-  template  void openProxy<IHandle_Display>  (IHandle_Display const&);
-  template  void closeProxy<IHandle_Display> (void);
+//  template  void openProxy<IHandle_Display>  (IHandle_Display const&);
+//  template  void closeProxy<IHandle_Display> (void);
   
 }} // namespace lumiera::facade

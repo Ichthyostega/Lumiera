@@ -77,7 +77,7 @@ namespace lumiera {
     
     template<>
     class Proxy<IHandle_DummyPlayer>
-      : public Holder<IHandle_DummyPlayer>
+      : public Binding<IHandle_DummyPlayer>
       {
         //----Proxy-Implementation-of-DummyPlayer--------
         typedef lumiera::DummyPlayer::Process Process;
@@ -106,12 +106,12 @@ namespace lumiera {
         
         
       public:
-        Proxy (IHandle const& iha) : THolder(iha) {}
+        using IBinding::IBinding;
       };
     
     
-    template  void openProxy<IHandle_DummyPlayer>  (IHandle_DummyPlayer const&);
-    template  void closeProxy<IHandle_DummyPlayer> (void);
+//    template  void openProxy<IHandle_DummyPlayer>  (IHandle_DummyPlayer const&);
+//    template  void closeProxy<IHandle_DummyPlayer> (void);
     
     
   } // namespace facade

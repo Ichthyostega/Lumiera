@@ -117,15 +117,33 @@ namespace facade {
   void
   openProxy (IHA const& iha)
     {
-      Proxy<IHA>::open(iha);
+//      Proxy<IHA>::open(iha);
     }
   
   template<class IHA>
   void
   closeProxy ()
     {
-      Proxy<IHA>::close();
+//      Proxy<IHA>::close();
     }
+  /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1086 : new implementation draft below....
+  template<class IHA>
+  class Binding;
+  
+  template<class FA, class I>
+  class Binding<InstanceHandle<I,FA>>
+    : public FA
+    {
+    protected:
+      typedef InstanceHandle<I,FA> IHandle;
+      typedef Binding<IHandle> IBinding;
+      
+      I& _i_;
+      
+      Binding (IHandle const& iha)
+        : _i_(iha.get())
+        {  }
+    };
   
 }} // namespace lumiera::facade
 
