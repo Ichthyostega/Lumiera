@@ -39,6 +39,8 @@
 #ifndef LUMIERA_ERROR_HPP_
 #define LUMIERA_ERROR_HPP_
 
+#define _STDBOOL_H // prevent <atomic> from including stdbool.h
+
 #include "include/logging.h"
 #include "include/lifecycle.h"
 #include "lib/error.h"

@@ -151,9 +151,9 @@ namespace test    {
           CHECK (2 == pClip.use_count());
           CHECK (2 == pSub1.use_count());
           
+#if false
 ///////////////////////////////////////////////////////////////////////////////TODO: find a way to configure NoBug to throw in case of assertion
 ///////////////////////////////////////////////////////////////////////////////TODO: configure NoBug specifically for the testsuite
-#ifdef false
           VERIFY_ERROR (ASSERTION, hijacked->specialAPI() );
 #endif
           
