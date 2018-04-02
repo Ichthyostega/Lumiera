@@ -313,6 +313,17 @@ namespace lib {
           ENSURE (object);
           return *object;
         }
+      
+      
+      /**
+       * allow to "peek" if a dependency is already available and exposed.
+       * @remark relevant when C code relies on a service with lifecycle.
+       */
+      explicit
+      operator bool()  const
+        {
+          return instance.load (std::memory_order_acquire);
+        }
     };
   
   

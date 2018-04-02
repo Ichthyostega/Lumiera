@@ -206,7 +206,7 @@ namespace lib {
        * @throws error::Logic (LUMIERA_ERROR_LIFECYCLE) when the default factory has already
        *         been invoked at the point when calling this (re)configuration function.
        */
-      template<class IMP>
+      template<class IMP =SRV>
       class ServiceInstance
         : util::MoveOnly
         {
@@ -221,10 +221,37 @@ namespace lib {
               activateServiceAccess (*instance_);
             }
           
+          /** create in deactivated state. Can be [activated](\ref #createInstance) later */
+          ServiceInstance()
+            : instance_{}
+            {
+              __assert_compatible<IMP>();
+            }
+          
          ~ServiceInstance()
             {
-              deactivateServiceAccess();
+              shutdown();
             }
+          
+          template<typename...ARGS>
+          IMP&
+          createInstance(ARGS&& ...ctorArgs)
+            {
+              instance_.reset (new IMP(forward<ARGS> (ctorArgs)...));
+              activateServiceAccess (*instance_);
+              return *instance_;
+            }
+          
+          void
+          shutdown()  noexcept
+            {
+              if (instance_)
+                {
+                  deactivateServiceAccess();
+                  instance_.reset();
+                }
+            }
+          
           
           explicit
           operator bool()  const
