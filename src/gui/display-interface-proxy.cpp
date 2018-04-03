@@ -22,14 +22,15 @@
 
 
 
-/** @file display-interface-proxy.hpp
- ** This is an implementation fragment, intended to be included into common/interfaceproxy.cpp
- ** 
+/** @file display-interface-proxy.cpp
+ ** Interface-Proxy for the lumiera::Display facade (experimental/deprecated).
  ** The purpose is to define a proxy implementation of lumiera::Display, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_Display"
  ** 
  ** @see display-facade.hpp
  ** @see display-service.hpp actual implementation within the GUI
+ ** @deprecated obsolete early design draft from 2009;
+ **             as of 2018 only kept in source to compile some likewise obsolete UI widgets. 
  */
 
 

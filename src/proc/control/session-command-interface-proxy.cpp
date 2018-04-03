@@ -22,9 +22,8 @@
 
 
 
-/** @file session-command-interface-proxy.hpp
- ** This is an implementation fragment, intended to be included into common/interfaceproxy.cpp
- ** 
+/** @file session-command-interface-proxy.cpp
+ ** Interface-Proxy for the proc::control::SessionCommand facade.
  ** The purpose is to define a proxy implementation of proc::control::SessionCommand, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_SessionCommand"
  ** 

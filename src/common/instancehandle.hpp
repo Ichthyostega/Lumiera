@@ -45,7 +45,6 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/depend-inject.hpp"
-#include "include/interfaceproxy.hpp"
 
 extern "C" {
 #include "common/interface.h"
@@ -107,6 +106,9 @@ namespace lumiera {
     
   
   namespace facade {
+    
+    template<class IHA>
+    class Proxy;
     
     template<class I, class FA>
     using ServiceHandle = typename lib::DependInject<FA>::template ServiceInstance<Proxy<InstanceHandle<I,FA>>>;

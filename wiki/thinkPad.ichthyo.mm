@@ -28400,7 +28400,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1522638949038" ID="ID_1756362217" MODIFIED="1522716029672" TEXT="interfaceproxy - Accessor">
+<node COLOR="#338800" CREATED="1522638949038" ID="ID_1756362217" MODIFIED="1522717901995" TEXT="interfaceproxy - Accessor">
+<linktarget COLOR="#68baaa" DESTINATION="ID_1756362217" ENDARROW="Default" ENDINCLINATION="32;1321;" ID="Arrow_ID_1797728654" SOURCE="ID_1293938610" STARTARROW="None" STARTINCLINATION="-288;-420;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522638978298" ID="ID_253383763" MODIFIED="1522638984645" TEXT="der Proxy selber bleibt wohl bestehen"/>
 <node CREATED="1522638985329" ID="ID_1803368145" MODIFIED="1522638997699" TEXT="der Accessor ist wieder genau ein Access-handle"/>
@@ -28729,8 +28730,9 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709729297" ID="ID_1293938610" MODIFIED="1522709747111" TEXT="Facade-Accessoren auf lib::Depend umstellen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522709729297" ID="ID_1293938610" MODIFIED="1522717901995" TEXT="Facade-Accessoren auf lib::Depend umstellen">
+<arrowlink COLOR="#68baaa" DESTINATION="ID_1756362217" ENDARROW="Default" ENDINCLINATION="32;1321;" ID="Arrow_ID_1797728654" STARTARROW="None" STARTINCLINATION="-288;-420;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1522635397309" ID="ID_883916833" MODIFIED="1522710489037" TEXT="SessionCommand">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -28750,11 +28752,11 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709748015" ID="ID_44849308" MODIFIED="1522709755686" TEXT="bestehenden Accessor zur&#xfc;ckbauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522709748015" ID="ID_44849308" MODIFIED="1522717910945" TEXT="bestehenden Accessor zur&#xfc;ckbauen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709756798" ID="ID_1024028685" MODIFIED="1522709762798" TEXT="Header umorganisieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522709756798" ID="ID_1024028685" MODIFIED="1522717913716" TEXT="Header umorganisieren">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709763388" ID="ID_778622044" MODIFIED="1522709775687" TEXT="Doxygen-Doku aktualisieren">
 <icon BUILTIN="flag-yellow"/>

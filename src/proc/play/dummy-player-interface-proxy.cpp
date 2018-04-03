@@ -22,9 +22,8 @@
 
 
 
-/** @file dummy-player-interface-proxy.hpp
- ** This is an implementation fragment, intended to be included into common/interfaceproxy.cpp
- ** 
+/** @file dummy-player-interface-proxy.cpp
+ ** Interface-Proxy for the lumiera::DummyPlayer facade (experimental/obsolete).
  ** The purpose is to define a proxy implementation of lumiera::DummyPlayer, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_DummyPlayer"
  ** 
@@ -43,6 +42,8 @@
  ** 
  ** @see dummy-player-facade.hpp
  ** @see dummy-player-service.hpp actual implementation within the Proc-Layer 
+ ** @deprecated obsolete early design draft from 2009;
+ **             as of 2018 only kept in source to compile some likewise obsolete UI widgets. 
  */
 
 
@@ -52,7 +53,6 @@
 
     /* ==================== DummyPlayer ======================================= */
     
-//#include "proc/play/dummy-player-service.hpp"
 #include "include/dummy-player-facade.h"
 #include "include/interfaceproxy.hpp"
 

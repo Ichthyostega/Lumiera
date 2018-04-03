@@ -22,9 +22,8 @@
 
 
 
-/** @file notification-interface-proxy.hpp
- ** This is an implementation fragment, intended to be included into common/interfaceproxy.cpp
- ** 
+/** @file notification-interface-proxy.cpp
+ ** Interface-Proxy for the gui::GuiNotification facade.
  ** The purpose is to define a proxy implementation of gui::GuiNotification, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_GuiNotification"
  ** 
@@ -51,7 +50,7 @@ namespace facade {
                         > IHandle_GuiNotification;
   
   
-  template<>
+  template
   class Proxy<IHandle_GuiNotification>
     : public Binding<IHandle_GuiNotification>
     {

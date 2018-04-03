@@ -65,6 +65,21 @@
  ** some translation unit. The usual place is interfaceproxy.cpp, which gets linked into 
  ** `liblumieracommon.so` and contains actual specialisations and literal forwarding
  ** code _for each individual facade._
+ ** @todo
+ ** Implementation of C++ binding proxies on top of the (plain-C based)
+ ** interface system. This is an implementation facility within the application core,
+ ** which allows to embody just an ["interface instance handle"](\ref instancehandle.hpp),
+ ** in order to get RAII-style registration of interfaces and loading of plug-ins.
+ ** 
+ ** A *crucial requirement* for this approach to work is, that any relevant interface
+ ** to be bound and exposed as C++ object needs to set up a concrete specialisation of
+ ** lumiera::facade::Proxy to drive instantiation of the actual binding proxy.
+ ** The relevant specialisations _need to be included explicitly_ into this
+ ** compilation unit!
+ ** 
+ ** The result of this setup is that clients can just invoke `SomeInterface::facade()`
+ ** and thus call through proper C++ bindings with type safety and automatic
+ ** lifecycle management.
  **
  ** @see interface.h
  ** @see plugin.h
@@ -79,14 +94,42 @@
 
 
 #include "lib/error.hpp"
-
+#include "common/instancehandle.hpp"
 
 
 namespace lumiera {
 namespace facade {
 
+  /**
+   * Implementation Base
+   * for building Facade Proxy implementations.
+   * Typically the purpose of such a proxy is to route
+   * any calls through the C-Bindings of the Lumiera Interface system.
+   * The actual instance and thus the storage for the concrete proxy object
+   * is controlled via lib::DependInject::ServiceInstance, which in turn is
+   * embedded into and thus linked to the lifetime of a InstanceHandle to
+   * connect via Lumiera's Interface/Plug-in system. Typically the actual
+   * Service implementation object will hold an instance of that InstanceHandle
+   * and thus tie the opening/closing of the interface and access mechanism
+   * to the service lifecycle.
+   */
   template<class IHA>
-  class Proxy;
+  class Binding;
+  
+  template<class FA, class I>
+  class Binding<InstanceHandle<I,FA>>
+    : public FA
+    {
+    protected:
+      typedef InstanceHandle<I,FA> IHandle;
+      typedef Binding<IHandle> IBinding;
+      
+      I& _i_;
+      
+      Binding (IHandle const& iha)
+        : _i_(iha.get())
+        {  }
+    };
   
   
 }} // namespace lumiera::facade
