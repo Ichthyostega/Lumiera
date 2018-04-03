@@ -48,15 +48,6 @@ namespace lumiera {
   Play::~Play() { } // emit VTables here...
   
   
-  /** Storage for the lumiera::Play facade access point 
-   * @note PlayService uses a InterfaceFacadeLink member
-   *       for actually establishing the PlayService instance
-   *       as implementation of lumiera::Play
-   */
-  facade::Accessor<Play> Play::facade;
-  
-  
-  
 }//(End) namespace lumiera
 
 

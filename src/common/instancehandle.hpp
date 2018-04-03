@@ -127,13 +127,10 @@ namespace lumiera {
         using IH = InstanceHandle<I,FA>;
         using SH = ServiceHandle<I,FA>;
         
-        using SH::SH;
+        Link (IH const& iha);
+       ~Link ();
         
-        FA*
-        operator->()  const
-          {
-            return SH::operator->();
-          }
+        FA* operator->()  const;
       };
     
     

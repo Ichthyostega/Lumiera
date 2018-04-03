@@ -51,7 +51,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "include/interfaceproxy.hpp"
+#include "lib/depend.hpp"
 #include "lib/handle.hpp"
 
 
@@ -87,7 +87,7 @@ namespace lumiera {
     {
     public:
       /** get an implementation instance of this service */
-      static lumiera::facade::Accessor<Display> facade;
+      static lib::Depend<Display> facade;
       
       
       /**

@@ -43,7 +43,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "include/interfaceproxy.hpp"
+#include "lib/depend.hpp"
 #include "lib/diff/mutation-message.hpp"
 #include "lib/idi/entry-id.hpp"
 
@@ -77,7 +77,7 @@ namespace gui {
   class GuiNotification
     {
     public:
-      static lumiera::facade::Accessor<GuiNotification> facade;
+      static lib::Depend<GuiNotification> facade;
       
       
       /** push a user visible notification text */

@@ -85,60 +85,6 @@
 namespace lumiera {
 namespace facade {
 
-  /** error-ID for accessing a (currently) closed facade */
-  LUMIERA_ERROR_DECLARE(FACADE_LIFECYCLE);  
-
-
-  /*****************************************************************//**
-   * access-frontend to the implementation of a service.
-   * Usually, an instance of Accessor is placed as static member
-   * right into the facade interface used to access the service.
-   * This allows clients to get the current actual implementation
-   * of that service, just by invoking the function operator on
-   * that member, e.g. \c lumiera::Play::facade()
-   * 
-   * The reason for this rather indirect access technique is Lifecycle:
-   * Service implementations may come up and go down; moreover, a service
-   * might be implemented through a plugin component and thus the actual
-   * invocation needs to be passed through a binding layer. In this case,
-   * clients rather access a proxy object, which then passes on any call
-   * through that binding layer to the actual implementation located
-   * "somewhere".
-   * 
-   * @note the pointer to the actual implementation is a static variable.
-   *       This has two consequences. For one, we're dealing with kind of
-   *       singleton service here. And, secondly, the implementation or
-   *       proxy accessor can inherit from Accessor<FA> where FA is the
-   *       facade interface. Being a subclass, allows the implementation
-   *       to set that pointer when the service comes up, and to clear
-   *       it when the service goes down and the access needs to
-   *       be closed.
-   */
-  template<class FA>
-  class Accessor
-    {
-    protected:
-      static FA* implProxy_;
-      
-      
-    public:
-      FA&
-      operator() ()
-        {
-          if (implProxy_)
-            return *implProxy_;
-          else
-            throw error::State("Facade interface currently closed."
-                              , LUMIERA_ERROR_FACADE_LIFECYCLE);
-        }
-    };
-  
-  template<class IHA>
-  void openProxy (IHA const&);
-  
-  template<class IHA>
-  void closeProxy ();
-  
   template<class IHA>
   class Proxy;
   

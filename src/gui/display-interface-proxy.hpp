@@ -44,10 +44,6 @@
 
 namespace lumiera {
   
-  /** storage for the facade proxy factory
-   *  used by client code to invoke through the interface */
-  lumiera::facade::Accessor<Display> Display::facade;
-  
   /// emit the vtable here into this translation unit within liblumieracommon.so...
   Display::~Display()      { }
   

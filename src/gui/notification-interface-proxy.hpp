@@ -41,16 +41,6 @@
 #include "include/gui-notification-facade.h"
 #include "include/interfaceproxy.hpp"
 
-namespace gui {
-  
-  /** storage for the facade proxy factory
-   *  used by client code to invoke through the interface */
-  lumiera::facade::Accessor<GuiNotification> GuiNotification::facade;
-
-} // namespace gui
-
-
-
 namespace lumiera {
 namespace facade {
   using gui::ID;

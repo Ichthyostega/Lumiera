@@ -41,17 +41,6 @@
 #include "include/session-command-facade.h"
 #include "include/interfaceproxy.hpp"
 
-namespace proc {
-namespace control {
-  
-  /** storage for the facade proxy factory
-   *  used by client code to invoke through the interface */
-  lumiera::facade::Accessor<SessionCommand> SessionCommand::facade;
-
-}} // namespace proc::control
-
-
-
 namespace lumiera {
 namespace facade {
   

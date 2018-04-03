@@ -22,6 +22,7 @@
 
 
 /** @file dummy-player-facade.h
+ *  @deprecated left-over from an early design draft (2009)
  */
 
 
@@ -36,7 +37,7 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "common/subsys.hpp"
-#include "include/interfaceproxy.hpp"
+#include "lib/depend.hpp"
 #include "lib/handle.hpp"
 
 
@@ -65,7 +66,8 @@ namespace lumiera {
      * with our interface layout and the way we create bindings to the
      * implementation. The moment we attempt to use other abstractions
      * within an interface (as we do here with the Process interface),
-     * we're running into serious maintenance and library dependency problems. 
+     * we're running into serious maintenance and library dependency problems.
+     * @deprecated obsoleted design from 2009 and not operative anymore (2018)
      */
     class DummyPlayer
       {
@@ -76,7 +78,7 @@ namespace lumiera {
         static lumiera::Subsys& getDescriptor();
         
         /** get an implementation instance of this service */
-        static lumiera::facade::Accessor<DummyPlayer> facade;
+        static lib::Depend<DummyPlayer> facade;
         
         class ProcessImplementationLink;
         

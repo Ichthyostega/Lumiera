@@ -28400,16 +28400,16 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522638949038" ID="ID_1756362217" MODIFIED="1522639349336" TEXT="interfaceproxy - Accessor">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522638949038" ID="ID_1756362217" MODIFIED="1522716029672" TEXT="interfaceproxy - Accessor">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522638978298" ID="ID_253383763" MODIFIED="1522638984645" TEXT="der Proxy selber bleibt wohl bestehen"/>
 <node CREATED="1522638985329" ID="ID_1803368145" MODIFIED="1522638997699" TEXT="der Accessor ist wieder genau ein Access-handle"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522639336921" ID="ID_1332611153" MODIFIED="1522639348392" TEXT="kann komplett durch lib::Depend ersetzt werden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522639336921" ID="ID_1332611153" MODIFIED="1522716025758" TEXT="kann komplett durch lib::Depend ersetzt werden">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522639301526" ID="ID_1959793943" MODIFIED="1522639333394" TEXT="InterfaceProxy umschreiben">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522639301526" ID="ID_1959793943" MODIFIED="1522716036952" TEXT="InterfaceProxy umschreiben">
+<icon BUILTIN="pencil"/>
 <node CREATED="1522639313964" ID="ID_620355867" MODIFIED="1522639322758" TEXT="er soll sich in lib::Depend einklinken"/>
 <node CREATED="1522639904986" ID="ID_568095840" MODIFIED="1522639917092" TEXT="etwas wie den Holder brauchen wir weiterhin"/>
 <node CREATED="1522640047991" ID="ID_965836148" MODIFIED="1522640058690" TEXT="wie funktioniert&apos;s?">
@@ -28424,8 +28424,7 @@
       der Interface-<i>Anbieter</i>&#160;implementiert einen konkreten Proxy
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1522640103854" ID="ID_904543861" MODIFIED="1522640126272" TEXT="dieser implementiert das Interface durch forwarden in das Interface-System"/>
 <node CREATED="1522640127923" ID="ID_1407739777" MODIFIED="1522640137926" TEXT="dieser konkrete Proxy erbt von Holder"/>
@@ -28487,9 +28486,180 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522649799320" ID="ID_1473698958" MODIFIED="1522649810312" TEXT="Ort der Definition">
 <icon BUILTIN="help"/>
+<node CREATED="1522696074226" ID="ID_1811816913" MODIFIED="1522696081693" TEXT="G&#xfc;terabw&#xe4;gung notwendig">
+<node CREATED="1522696114852" ID="ID_550024261" MODIFIED="1522696125095" TEXT="Entkoppelung Serivce / Interface"/>
+<node CREATED="1522696125987" ID="ID_387527816" MODIFIED="1522696135565" TEXT="Wartbarkeit des Binding-Codes"/>
+<node CREATED="1522696172285" ID="ID_958011405" MODIFIED="1522696180623" TEXT="Komplexit&#xe4;t der Implementierung"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522649812255" ID="ID_624985973" MODIFIED="1522649852109" TEXT="Modus der Definition und Instantiierung">
+<node CREATED="1522697094565" ID="ID_407823709" MODIFIED="1522697097264" TEXT="Wertung">
+<node CREATED="1522697098420" ID="ID_640748324" MODIFIED="1522697195082" TEXT="Entkoppelung ist verpflichtend f&#xfc;r Plug-Ins">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1522697126545" ID="ID_942767861" MODIFIED="1522697197851" TEXT="Wartbarkeit ist eine Frage der Binding-Technologie">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1522697141710" ID="ID_1821904602" MODIFIED="1522697200469" TEXT="Komplexit&#xe4;t ist eine Folge der f&#xfc;hrenden Belange">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1522697220012" ID="ID_153609314" MODIFIED="1522697286189" TEXT="Fazit">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1522697230906" ID="ID_1495746023" MODIFIED="1522697253419" TEXT="alle Bindings sind vom Instance-Handle zu entkoppeln"/>
+<node CREATED="1522697255215" ID="ID_1841184306" MODIFIED="1522697273416" TEXT="f&#xfc;r jedes Binding soll eine TranslationUnit frei w&#xe4;hlbar sein"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697350106" ID="ID_138544872" MODIFIED="1522697365816" TEXT="Technik zur Entkoppelung ben&#xf6;tigt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522649812255" ID="ID_624985973" MODIFIED="1522697373660">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Modus der Definition
+    </p>
+    <p>
+      und Instantiierung
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="help"/>
+<node CREATED="1522697375430" ID="ID_712460375" MODIFIED="1522697380058" TEXT="Instantiierung">
+<node COLOR="#338800" CREATED="1522697381141" ID="ID_855121513" MODIFIED="1522697467594" TEXT="gesteuert nur durch Lebensdauer des InstanceHandle">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697396899" ID="ID_1172830820" MODIFIED="1522697469042" TEXT="Code der Proxy-Instantiierung in separater TU">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1522697475153" ID="ID_520808733" MODIFIED="1522697478164" TEXT="Definition">
+<node CREATED="1522697495790" ID="ID_1870975704" MODIFIED="1522697630073" TEXT="von Hand geschrieben">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697613893" ID="ID_1829346202" MODIFIED="1522697626900" TEXT="Idealerweise lediglich eigene TU">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1522697501541" ID="ID_793991584" MODIFIED="1522697634674" TEXT="Forwading-Implementation des Business-Interface">
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697646161" ID="ID_1020206021" MODIFIED="1522697654713" TEXT="Technologie">
+<icon BUILTIN="pencil"/>
+<node CREATED="1522697675229" ID="ID_1605136526" MODIFIED="1522697732617" STYLE="fork" TEXT="Indirektion notwendig">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697690651" ID="ID_1244533717" MODIFIED="1522697720935" TEXT="Erzeugung">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697699297" ID="ID_891061833" MODIFIED="1522697720295" TEXT="Zerst&#xf6;rung">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697702521" ID="ID_1874387796" MODIFIED="1522697719559" TEXT="Zugriff auf Facade(Proxy)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1522697743604" ID="ID_829814208" MODIFIED="1522697751286" TEXT="m&#xf6;gliche L&#xf6;sungen">
+<node CREATED="1522697764121" ID="ID_809124789" MODIFIED="1522697772891" TEXT="PImpl">
+<node CREATED="1522698166313" ID="ID_904988310" MODIFIED="1522698184466" TEXT="facade::Link h&#xe4;lt einen smart-Ptr"/>
+<node CREATED="1522698185030" ID="ID_53125514" MODIFIED="1522698208087" TEXT="auf die eigentliche DependInject::ServiceInstance"/>
+<node CREATED="1522698222201" ID="ID_1341541114" MODIFIED="1522698292643" TEXT="facade::Link mu&#xdf; Methoden (ctor/dtor und operator) separat definieren"/>
+<node CREATED="1522698295719" ID="ID_381014397" MODIFIED="1522698339173" TEXT="das ist effektiv die L&#xf6;sung &quot;separat definieren&quot; + separate Storage"/>
+</node>
+<node CREATED="1522697803923" ID="ID_238110365" MODIFIED="1522697807907" TEXT="freie Funktionen">
+<node CREATED="1522698092963" ID="ID_433421738" MODIFIED="1522698105987" TEXT="ist die bisher bestehende L&#xf6;sung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1522698013526" ID="ID_712885279" MODIFIED="1522698021465" TEXT="k&#xf6;nnen selber komplett generisch sein"/>
+<node CREATED="1522698022005" ID="ID_518407557" MODIFIED="1522698033855" TEXT="m&#xfc;ssen jeweils explizit von einem Template instantiiert werden"/>
+<node CREATED="1522698034563" ID="ID_1793485859" MODIFIED="1522698091426">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      brauchen eigenen Zugriffs-Mechanismus auf ein <i>weiteres</i>&#160;Handle-Objekt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1522698124263" ID="ID_475034985" MODIFIED="1522698140464" TEXT="das ist effektiv ein PImpl, das aber auch noch gemanaged werden mu&#xdf;"/>
+</node>
+<node CREATED="1522697773903" ID="ID_116063224" MODIFIED="1522697803239" TEXT="Methoden separat definieren">
+<node CREATED="1522698343480" ID="ID_1548420276" MODIFIED="1522698385583" TEXT="daf&#xfc;r sorgen, da&#xdf; die Definitionen nur in der Proxy-Instantiierung (TU) sichtbar sind"/>
+<node CREATED="1522698386810" ID="ID_1773412414" MODIFIED="1522698405108" TEXT="diese Definitionen m&#xfc;ssen externe Linkage bekommen (d.h. nicht inline)"/>
+<node CREATED="1522698437036" ID="ID_1400832405" MODIFIED="1522698754819" TEXT="Erzeugung ist automatisch, sofern dort das InstanceHandle-Template instantiiert wird"/>
+<node CREATED="1522698892532" ID="ID_584280618" MODIFIED="1522698944569" TEXT="Fazit: in einer TU mu&#xdf; (nur) eine explizite Template-Instantiierung erfolgen"/>
+<node CREATED="1522699050727" ID="ID_1923832821" MODIFIED="1522699053402" TEXT="wie auch immer">
+<node CREATED="1522699055062" ID="ID_1759934312" MODIFIED="1522699078711" TEXT="Spezialisierung Proxy&lt;IHA&gt; + Template Instanz dieser">
+<node CREATED="1522699225239" ID="ID_894223806" MODIFIED="1522699240168" TEXT="das ist praktisch die bestehende L&#xf6;sung"/>
+<node CREATED="1522699240684" ID="ID_600377865" MODIFIED="1522699259238" TEXT="wird dort nur indirekt &#xfc;ber die Instanz der freinen Funktionen ausgel&#xf6;et"/>
+</node>
+<node CREATED="1522699093017" ID="ID_471646453" MODIFIED="1522699210312" TEXT="Definition einer ungetemplateten Proxy-Klasse + CRTP">
+<icon BUILTIN="idea"/>
+<node CREATED="1522699211944" ID="ID_1925086643" MODIFIED="1522699223507" TEXT="geht das &#xfc;berhaupt?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1522702931486" ID="ID_2039076" MODIFIED="1522702953351" TEXT="CRTP-Klasse mu&#xdf; in allen anderen TU abstrakt bleiben"/>
+<node CREATED="1522703026153" ID="ID_1981862674" MODIFIED="1522709571741" TEXT="M&#xf6;glichkeiten">
+<icon BUILTIN="help"/>
+<node CREATED="1522703031009" ID="ID_1131804681" MODIFIED="1522703033909" TEXT="PImpl"/>
+<node CREATED="1522703258857" ID="ID_1322673347" MODIFIED="1522703371845" TEXT="Service-Impl (=Proxy)"/>
+<node CREATED="1522703996867" ID="ID_690162584" MODIFIED="1522704008861" TEXT="Proxy ist Subklasse">
+<node CREATED="1522704019688" ID="ID_1004073220" MODIFIED="1522704033386" TEXT="mu&#xdf; per Lambda erzeugt werden"/>
+<node CREATED="1522704033950" ID="ID_1313113320" MODIFIED="1522704041464" TEXT="mu&#xdf; virtuellen dtor haben"/>
+<node CREATED="1522704194912" ID="ID_317190411" MODIFIED="1522704592454" TEXT="Problem: konkrete Proxy-Klasse mu&#xdf; in ServiceInstance::activate">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...oder sogar den ctor, das ist egal --
+    </p>
+    <p>
+      denn das Problem ist, ctor (oder activate) werden aus <i>demjenigen</i>&#160;Kontext heraus aufgerufen,
+    </p>
+    <p>
+      der die Service-Implementierung startet und damit die Erzeugung des Proxy triggert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dieser Kontext darf den konkreten Typ des Proxy aber genau nicht kennen (wegen Entkopplung)&#8230;
+    </p>
+    <p>
+      Genau aus diesem Grunde leiten wir ja ctor/dtor der ServiceInstance(Handle)-Klasse in eine ander TU um.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <b>Problem</b>&#160;ist nun, diese umgeleiteten Funktionsdefinitionen k&#246;nnen <i>nur einen Typ</i>&#160;(Template-Parameter) bekommen, und dieser Typ&#160;wiederum mu&#223; -- zumindest als abstrakter Platzhalter -- in allen TU sichtbar sein.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522709471957" ID="ID_170352206" MODIFIED="1522709540572" TEXT="scheint nicht l&#xf6;sbar">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1522709550450" ID="ID_1653470424" MODIFIED="1522709566783" TEXT="konnte keine ganbare L&#xf6;sung finden">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1522709579398" ID="ID_1445259032" MODIFIED="1522709595885" TEXT="kann man spezialisieren und zugleich Instantiieren?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -28527,8 +28697,7 @@
       an der gleichen Stelle erfolgen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522649701166" ID="ID_444680334" MODIFIED="1522649709173" TEXT="knock-out f&#xfc;r das GUI">
 <icon BUILTIN="flag-pink"/>
 </node>
@@ -28540,6 +28709,55 @@
 <arrowlink COLOR="#86d29d" DESTINATION="ID_1187300065" ENDARROW="Default" ENDINCLINATION="-35;65;" ID="Arrow_ID_1735914452" STARTARROW="None" STARTINCLINATION="-135;-67;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1522709629935" ID="ID_151551561" MODIFIED="1522709645169" TEXT="L&#xf6;sung zum Entkoppeln der Proxy-Definition"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709654308" ID="ID_1059248114" MODIFIED="1522709793386" TEXT="bestehenden Code umschreiben">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709669498" ID="ID_9288802" MODIFIED="1522709700910" TEXT="alle bestehenden Proxies">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635397309" ID="ID_590180071" MODIFIED="1522709705713" TEXT="SessionCommandService">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635417932" ID="ID_1711611771" MODIFIED="1522709706659" TEXT="DisplayService">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635433910" ID="ID_444280759" MODIFIED="1522709723772" TEXT="GuiNotification">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635450269" ID="ID_1963184158" MODIFIED="1522709725003" TEXT="DummyPlayerService">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709729297" ID="ID_1293938610" MODIFIED="1522709747111" TEXT="Facade-Accessoren auf lib::Depend umstellen">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522635397309" ID="ID_883916833" MODIFIED="1522710489037" TEXT="SessionCommand">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1522635417932" ID="ID_245882411" MODIFIED="1522710526832" TEXT="Display(Facade)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1522635433910" ID="ID_1703058328" MODIFIED="1522710636764" TEXT="GuiNotification">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1522635450269" ID="ID_193152767" MODIFIED="1522710900353" TEXT="DummyPlayer">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1522711261733" ID="ID_1953483085" MODIFIED="1522711267533" TEXT="Play(Facade)">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522711269948" ID="ID_153188000" MODIFIED="1522711287118" TEXT="h&#xe4;ngt aber an dem InterfaceFacadeLink">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709748015" ID="ID_44849308" MODIFIED="1522709755686" TEXT="bestehenden Accessor zur&#xfc;ckbauen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709756798" ID="ID_1024028685" MODIFIED="1522709762798" TEXT="Header umorganisieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709763388" ID="ID_778622044" MODIFIED="1522709775687" TEXT="Doxygen-Doku aktualisieren">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -28769,8 +28987,7 @@
       bevor es statisch initialisiert sein kann...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 <node COLOR="#338800" CREATED="1522630297899" ID="ID_365546675" MODIFIED="1522630305978" TEXT="umgestellt auf lib::Depend">

@@ -51,7 +51,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "include/interfaceproxy.hpp"
+#include "lib/depend.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/symbol.hpp"
 
@@ -93,7 +93,7 @@ namespace control {
   class SessionCommand
     {
     public:
-      static lumiera::facade::Accessor<SessionCommand> facade;
+      static lib::Depend<SessionCommand> facade;
       
       /** start next command cycle and "open" a new anonymous command instance */
       virtual Symbol cycle (Symbol cmdID, string const& invocationID) =0;
