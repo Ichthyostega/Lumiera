@@ -221,8 +221,10 @@ namespace lib {
               activateServiceAccess (*instance_);
             }
           
+          enum StartMode { NOT_YET_STARTED };
+          
           /** create in deactivated state. Can be [activated](\ref #createInstance) later */
-          ServiceInstance()
+          ServiceInstance(StartMode)
             : instance_{}
             {
               __assert_compatible<IMP>();

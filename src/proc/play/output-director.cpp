@@ -56,6 +56,8 @@ namespace play {
    *  the Lifecycle of booting, connecting, operating, disconnecting.
    */
   OutputDirector::OutputDirector()
+    : player_{PlayServiceHandle::NOT_YET_STARTED}
+    , shutdown_initiated_{false}
     { }
   
   OutputDirector::~OutputDirector() { }

@@ -137,7 +137,7 @@ namespace control {
        */
       DispatcherLoop (Subsys::SigTerm notification)
         : Thread{"Lumiera Session", bind (&DispatcherLoop::runSessionThread, this, notification)}
-        , commandService_{}
+        , commandService_{ServiceHandle::NOT_YET_STARTED}
         , queue_{}
         , looper_([&]() -> bool
                     {

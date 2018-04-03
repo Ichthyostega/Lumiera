@@ -62,7 +62,7 @@ namespace proc  {
           using ServiceHandle = lib::DependInject<DummyPlayerService>::ServiceInstance<>;
           
           /** manages the actual (single) instance of the player service impl */
-          ServiceHandle thePlayer_;
+          ServiceHandle thePlayer_{ServiceHandle::NOT_YET_STARTED};
           
           
           operator string ()  const { return "Dummy-Player"; }
