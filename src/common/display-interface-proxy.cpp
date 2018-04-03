@@ -34,12 +34,6 @@
  */
 
 
-
-
-
-
-/* ==================== gui::Display ====================================== */
-
 #include "include/display-facade.h"
 #include "include/interfaceproxy.hpp"
 
@@ -58,9 +52,16 @@ namespace lumiera {
 namespace lumiera {
 namespace facade {
   
-  using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
-                                , lumiera::Display
-                                >;
+  
+  
+  /* ==================== gui::Display ====================================== */
+  
+  using Interface = LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0);
+  using Facade    = lumiera::Display;
+  
+  using IHandle   = InstanceHandle<Interface, Facade>;
+  
+  
   template<>
   class Proxy<IHandle>
     : public Binding<IHandle>
@@ -81,16 +82,12 @@ namespace facade {
       
       
     public:
-      using IBinding::IBinding;
+      using Binding<IHandle>::Binding;
     };
   
   
-} //namespace facade
-
-
-// emit code for the proxy implementation here...
-template
-class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
-                    , lumiera::Display
-                    >;
-} // namespace lumiera
+  /**  emit proxy code here... */
+  template
+  class Link<Interface,Facade>;
+  
+}} //namespace facade::lumiera

@@ -28192,8 +28192,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722155112" ID="ID_1512641426" MODIFIED="1522421627198" TEXT="Integration">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1520722155112" FOLDED="true" ID="ID_1512641426" MODIFIED="1522734082428" TEXT="Integration">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521160755182" ID="ID_678080556" MODIFIED="1522428573233" TEXT="Umbenennen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -28295,8 +28295,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1521858774321" ID="ID_302686020" MODIFIED="1522635466053" TEXT="aufr&#xe4;umen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1521858774321" FOLDED="true" ID="ID_302686020" MODIFIED="1522734077340" TEXT="aufr&#xe4;umen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521858779614" ID="ID_62114860" MODIFIED="1521928808594" TEXT="was ist depend4test?">
 <icon BUILTIN="help"/>
 <node CREATED="1521928764171" ID="ID_507085354" MODIFIED="1521928798462" TEXT="die alte Testmock-L&#xf6;sung">
@@ -28409,8 +28409,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522639301526" ID="ID_1959793943" MODIFIED="1522716036952" TEXT="InterfaceProxy umschreiben">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1522639301526" FOLDED="true" ID="ID_1959793943" MODIFIED="1522734050849" TEXT="InterfaceProxy umschreiben">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522639313964" ID="ID_620355867" MODIFIED="1522639322758" TEXT="er soll sich in lib::Depend einklinken"/>
 <node CREATED="1522639904986" ID="ID_568095840" MODIFIED="1522639917092" TEXT="etwas wie den Holder brauchen wir weiterhin"/>
 <node CREATED="1522640047991" ID="ID_965836148" MODIFIED="1522640058690" TEXT="wie funktioniert&apos;s?">
@@ -28442,8 +28442,9 @@
 </node>
 <node CREATED="1522640586812" ID="ID_1577947298" MODIFIED="1522640604677" TEXT="das InstanceHandle ist Member in der Service-Implementierung"/>
 </node>
-<node CREATED="1522640617752" ID="ID_312762900" MODIFIED="1522640623163" TEXT="Plan zum Umschreiben">
-<node CREATED="1522640706787" ID="ID_1205995335" MODIFIED="1522642873197" TEXT="Idee-1">
+<node COLOR="#338800" CREATED="1522640617752" ID="ID_312762900" MODIFIED="1522734029362" TEXT="Plan zum Umschreiben">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522640706787" ID="ID_1205995335" MODIFIED="1522734041752" TEXT="Idee-1">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1522640624319" ID="ID_448652627" MODIFIED="1522640718658" TEXT="den Holder umbauen">
 <icon BUILTIN="info"/>
@@ -28475,8 +28476,8 @@
 <node CREATED="1522641344691" ID="ID_1154911224" MODIFIED="1522641358813" TEXT="gegenw&#xe4;rtig: bekommt das InstanceHandle"/>
 <node CREATED="1522641378263" ID="ID_1762905192" MODIFIED="1522641389641" TEXT="k&#xf6;nnte aber direkt eine Interface-Ref sein"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522641405299" ID="ID_676190433" MODIFIED="1522729429778" TEXT="Proxy">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1522641405299" FOLDED="true" ID="ID_676190433" MODIFIED="1522734021476" TEXT="Proxy">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522641413586" ID="ID_1187300065" MODIFIED="1522649896016" TEXT="Anforderungen">
 <linktarget COLOR="#86d29d" DESTINATION="ID_1187300065" ENDARROW="Default" ENDINCLINATION="-35;65;" ID="Arrow_ID_1735914452" SOURCE="ID_1212106242" STARTARROW="None" STARTINCLINATION="-135;-67;"/>
 <node CREATED="1522641419769" ID="ID_1008132394" MODIFIED="1522641450457" TEXT="erbt vom Business-Interface"/>
@@ -28545,7 +28546,7 @@
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522729001386" ID="ID_242747417" MODIFIED="1522729342788" TEXT="ist mir bisher nicht gelungen">
+<node CREATED="1522729001386" ID="ID_242747417" MODIFIED="1522733826161" TEXT="ist mir bisher nicht gelungen...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28560,16 +28561,18 @@
   </body>
 </html>
 </richcontent>
-<arrowlink COLOR="#a02659" DESTINATION="ID_1547993807" ENDARROW="Default" ENDINCLINATION="231;-29;" ID="Arrow_ID_1421481593" STARTARROW="None" STARTINCLINATION="544;-14;"/>
-<icon BUILTIN="flag-pink"/>
+<arrowlink COLOR="#b49ca6" DESTINATION="ID_1547993807" ENDARROW="Default" ENDINCLINATION="10;-59;" ID="Arrow_ID_1421481593" STARTARROW="None" STARTINCLINATION="323;-44;"/>
+</node>
+<node COLOR="#338800" CREATED="1522733831301" ID="ID_1741953995" MODIFIED="1522733846627" TEXT="Spezialisierung + explizite Template-Instanz">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1522697501541" ID="ID_793991584" MODIFIED="1522729342788" TEXT="Forwading-Implementation des Business-Interface">
 <icon BUILTIN="info"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697646161" ID="ID_1020206021" MODIFIED="1522697654713" TEXT="Technologie">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1522697646161" ID="ID_1020206021" MODIFIED="1522733904640" TEXT="Technologie">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522697675229" ID="ID_1605136526" MODIFIED="1522697732617" STYLE="fork" TEXT="Indirektion notwendig">
 <node COLOR="#338800" CREATED="1522697690651" ID="ID_1244533717" MODIFIED="1522724892373" TEXT="Erzeugung">
 <icon BUILTIN="button_ok"/>
@@ -28581,15 +28584,16 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1522697743604" ID="ID_829814208" MODIFIED="1522697751286" TEXT="m&#xf6;gliche L&#xf6;sungen">
-<node CREATED="1522697764121" FOLDED="true" ID="ID_809124789" MODIFIED="1522729411578" TEXT="PImpl">
+<node COLOR="#338800" CREATED="1522697743604" FOLDED="true" ID="ID_829814208" MODIFIED="1522733898797" TEXT="m&#xf6;gliche L&#xf6;sungen">
+<icon BUILTIN="forward"/>
+<node CREATED="1522697764121" FOLDED="true" ID="ID_809124789" MODIFIED="1522733895572" TEXT="PImpl">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1522698166313" ID="ID_904988310" MODIFIED="1522698184466" TEXT="facade::Link h&#xe4;lt einen smart-Ptr"/>
 <node CREATED="1522698185030" ID="ID_53125514" MODIFIED="1522698208087" TEXT="auf die eigentliche DependInject::ServiceInstance"/>
 <node CREATED="1522698222201" ID="ID_1341541114" MODIFIED="1522698292643" TEXT="facade::Link mu&#xdf; Methoden (ctor/dtor und operator) separat definieren"/>
 <node CREATED="1522698295719" ID="ID_381014397" MODIFIED="1522698339173" TEXT="das ist effektiv die L&#xf6;sung &quot;separat definieren&quot; + separate Storage"/>
 </node>
-<node CREATED="1522697803923" FOLDED="true" ID="ID_238110365" MODIFIED="1522729409819" TEXT="freie Funktionen">
+<node CREATED="1522697803923" FOLDED="true" ID="ID_238110365" MODIFIED="1522733895572" TEXT="freie Funktionen">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1522698092963" ID="ID_433421738" MODIFIED="1522698105987" TEXT="ist die bisher bestehende L&#xf6;sung">
 <icon BUILTIN="idea"/>
@@ -28613,19 +28617,23 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1522697773903" ID="ID_116063224" MODIFIED="1522697803239" TEXT="Methoden separat definieren">
-<node CREATED="1522698343480" ID="ID_1548420276" MODIFIED="1522698385583" TEXT="daf&#xfc;r sorgen, da&#xdf; die Definitionen nur in der Proxy-Instantiierung (TU) sichtbar sind"/>
-<node CREATED="1522698386810" ID="ID_1773412414" MODIFIED="1522698405108" TEXT="diese Definitionen m&#xfc;ssen externe Linkage bekommen (d.h. nicht inline)"/>
-<node CREATED="1522698437036" ID="ID_1400832405" MODIFIED="1522698754819" TEXT="Erzeugung ist automatisch, sofern dort das InstanceHandle-Template instantiiert wird"/>
-<node CREATED="1522698892532" ID="ID_584280618" MODIFIED="1522698944569" TEXT="Fazit: in einer TU mu&#xdf; (nur) eine explizite Template-Instantiierung erfolgen"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522699050727" ID="ID_1923832821" MODIFIED="1522729422771" TEXT="wie auch immer">
-<icon BUILTIN="pencil"/>
-<node CREATED="1522699055062" ID="ID_1759934312" MODIFIED="1522699078711" TEXT="Spezialisierung Proxy&lt;IHA&gt; + Template Instanz dieser">
-<node CREATED="1522699225239" ID="ID_894223806" MODIFIED="1522699240168" TEXT="das ist praktisch die bestehende L&#xf6;sung"/>
-<node CREATED="1522699240684" ID="ID_600377865" MODIFIED="1522699259238" TEXT="wird dort nur indirekt &#xfc;ber die Instanz der freinen Funktionen ausgel&#xf6;et"/>
+<node CREATED="1522697773903" ID="ID_116063224" MODIFIED="1522733895572" TEXT="Methoden separat definieren">
+<icon BUILTIN="forward"/>
+<node CREATED="1522698343480" ID="ID_1548420276" MODIFIED="1522733895572" TEXT="daf&#xfc;r sorgen, da&#xdf; die Definitionen nur in der Proxy-Instantiierung (TU) sichtbar sind"/>
+<node CREATED="1522698386810" ID="ID_1773412414" MODIFIED="1522733895572" TEXT="diese Definitionen m&#xfc;ssen externe Linkage bekommen (d.h. nicht inline)"/>
+<node CREATED="1522698437036" ID="ID_1400832405" MODIFIED="1522733895572" TEXT="Erzeugung ist automatisch, sofern dort das InstanceHandle-Template instantiiert wird"/>
+<node CREATED="1522698892532" ID="ID_584280618" MODIFIED="1522733895572" TEXT="Fazit: in einer TU mu&#xdf; (nur) eine explizite Template-Instantiierung erfolgen"/>
+<node COLOR="#338800" CREATED="1522699050727" FOLDED="true" ID="ID_1923832821" MODIFIED="1522733895572" TEXT="wie auch immer">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522699055062" ID="ID_1759934312" MODIFIED="1522733778687" TEXT="Spezialisierung Proxy&lt;IHA&gt; + Template Instanz dieser">
+<icon BUILTIN="forward"/>
+<node CREATED="1522699225239" ID="ID_894223806" MODIFIED="1522733778687" TEXT="das ist praktisch die bestehende L&#xf6;sung">
+<icon BUILTIN="info"/>
 </node>
-<node CREATED="1522699093017" ID="ID_471646453" MODIFIED="1522699210312" TEXT="Definition einer ungetemplateten Proxy-Klasse + CRTP">
-<icon BUILTIN="idea"/>
+<node CREATED="1522699240684" ID="ID_600377865" MODIFIED="1522733778687" TEXT="wird dort nur indirekt &#xfc;ber die Instanz der freinen Funktionen ausgel&#xf6;et"/>
+</node>
+<node CREATED="1522699093017" FOLDED="true" ID="ID_471646453" MODIFIED="1522733778687" TEXT="Definition einer ungetemplateten Proxy-Klasse + CRTP">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1522699211944" ID="ID_1925086643" MODIFIED="1522699223507" TEXT="geht das &#xfc;berhaupt?">
 <icon BUILTIN="help"/>
 </node>
@@ -28677,28 +28685,92 @@
 </node>
 </node>
 </node>
-<node CREATED="1522709550450" ID="ID_1653470424" MODIFIED="1522709566783" TEXT="konnte keine ganbare L&#xf6;sung finden">
+<node CREATED="1522709550450" ID="ID_1653470424" MODIFIED="1522733671833" TEXT="konnte keine ganbare L&#xf6;sung finden">
+<linktarget COLOR="#4a2d79" DESTINATION="ID_1653470424" ENDARROW="Default" ENDINCLINATION="-1;58;" ID="Arrow_ID_362703203" SOURCE="ID_1800542023" STARTARROW="None" STARTINCLINATION="109;-22;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
-<node CREATED="1522709579398" ID="ID_1445259032" MODIFIED="1522709595885" TEXT="kann man spezialisieren und zugleich Instantiieren?">
+<node CREATED="1522709579398" ID="ID_1445259032" MODIFIED="1522733778687" TEXT="kann man spezialisieren und zugleich Instantiieren?">
 <icon BUILTIN="help"/>
-<node CREATED="1522720815569" ID="ID_1906873483" MODIFIED="1522720817589" TEXT="nein"/>
-<node CREATED="1522720818625" ID="ID_693558811" MODIFIED="1522720821985" TEXT="wie schade">
+<node CREATED="1522720815569" ID="ID_1906873483" MODIFIED="1522733778687" TEXT="nein"/>
+<node CREATED="1522720818625" ID="ID_693558811" MODIFIED="1522733778687" TEXT="wie schade">
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
 </node>
-<node CREATED="1522724948516" ID="ID_1547993807" MODIFIED="1522729247734" TEXT="explizite Instantiierung notwendig">
-<linktarget COLOR="#a02659" DESTINATION="ID_1547993807" ENDARROW="Default" ENDINCLINATION="231;-29;" ID="Arrow_ID_1421481593" SOURCE="ID_242747417" STARTARROW="None" STARTINCLINATION="544;-14;"/>
+<node CREATED="1522724948516" ID="ID_1547993807" MODIFIED="1522733895572" TEXT="explizite Instantiierung notwendig">
+<linktarget COLOR="#b49ca6" DESTINATION="ID_1547993807" ENDARROW="Default" ENDINCLINATION="10;-59;" ID="Arrow_ID_1421481593" SOURCE="ID_242747417" STARTARROW="None" STARTINCLINATION="323;-44;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1522724966777" ID="ID_650754221" MODIFIED="1522724973013" TEXT="h&#xe4;&#xdf;lich und umst&#xe4;ndlich"/>
-<node CREATED="1522724973625" ID="ID_1016558302" MODIFIED="1522724976780" TEXT="Code dupliziert"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522724977440" ID="ID_686663661" MODIFIED="1522724991255" TEXT="bessere L&#xf6;sung?">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1522724966777" ID="ID_650754221" MODIFIED="1522733895572" TEXT="h&#xe4;&#xdf;lich und umst&#xe4;ndlich"/>
+<node CREATED="1522724973625" ID="ID_1016558302" MODIFIED="1522733895572" TEXT="Code dupliziert"/>
+<node COLOR="#338800" CREATED="1522724977440" ID="ID_686663661" MODIFIED="1522733895572" TEXT="bessere L&#xf6;sung?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522733470671" ID="ID_1296497133" MODIFIED="1522733895572" TEXT="nicht wirklich....">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1522733478510" ID="ID_1800542023" MODIFIED="1522733895572" TEXT="Proxy erbt per CRTP geht nicht">
+<arrowlink COLOR="#4a2d79" DESTINATION="ID_1653470424" ENDARROW="Default" ENDINCLINATION="-1;58;" ID="Arrow_ID_362703203" STARTARROW="None" STARTINCLINATION="109;-22;"/>
+</node>
+<node CREATED="1522733542453" ID="ID_239191861" MODIFIED="1522733895572" TEXT="Proxy-Instantiierung triggert nicht InstanceHandle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      obwohl es das sollte.
+    </p>
+    <p>
+      Aber anscheinend macht der Compiler das nur partiell,
+    </p>
+    <p>
+      denn es wird ja nur eine const&amp; an den ctor von Binding &#252;bergeben.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Allerdings erscheint es mir nicht sinnvoll, hier mit Tricksereien zu arbeiten!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1522733618506" ID="ID_1873321000" MODIFIED="1522733895572" TEXT="man k&#xf6;nnte stattdesen Link instantiieren">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1522733629233" ID="ID_424753876" MODIFIED="1522733895572" TEXT="Code-Duplizierung durch Typedefs beseitigt">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1522733866272" ID="ID_762156149" MODIFIED="1522734019934" TEXT="aktuelle L&#xf6;sung erscheint ad&#xe4;quat">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sie ist zwar nicht sch&#246;n -- aber was ist an einem Interface-Binding schon &quot;sch&#246;n&quot;?
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Sie ist hinreichend wartbar, sofern man sie per copy-n-pate vervielf&#228;ltigt.
+    </p>
+    <p>
+      Es w&#228;re sogar denkbar, in diesen Rump eine generierte Proxy-Klasse zu kleben,
+    </p>
+    <p>
+      da nur wenige Variable erstetzt werden m&#252;&#223;ten.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

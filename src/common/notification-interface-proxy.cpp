@@ -32,11 +32,6 @@
  */
 
 
-
-
-
-/* ==================== GuiNotification =================================== */
-    
 #include "include/gui-notification-facade.h"
 #include "include/interfaceproxy.hpp"
 
@@ -50,9 +45,15 @@ namespace facade {
   using lib::diff::MutationMessage;
   
   
-  using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                                , gui::GuiNotification
-                                >;
+  
+  /* ==================== SessionCommand =================================== */
+  
+  using Interface = LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0);
+  using Facade    = gui::GuiNotification;
+  
+  using IHandle   = InstanceHandle<Interface, Facade>;
+  
+  
   template<>
   class Proxy<IHandle>
     : public Binding<IHandle>
@@ -69,15 +70,12 @@ namespace facade {
       
       
     public:
-      using IBinding::IBinding;
+      using Binding<IHandle>::Binding;
     };
   
-} //namespace facade
-
-
-// emit code for the proxy implementation here...
-template
-class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                    , gui::GuiNotification
-                    >;
-} // namespace lumiera
+  
+  /**  emit proxy code here... */
+  template
+  class Link<Interface,Facade>;
+  
+}} //namespace facade::lumiera

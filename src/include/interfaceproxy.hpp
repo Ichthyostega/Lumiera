@@ -153,8 +153,7 @@ namespace facade {
   struct Binding<InstanceHandle<I,FA>>
     : public FA
     {
-      typedef InstanceHandle<I,FA> IHandle;
-      typedef Binding<IHandle> IBinding;
+      using IHandle = InstanceHandle<I,FA>;
       
       I& _i_;
       

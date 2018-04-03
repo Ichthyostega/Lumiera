@@ -32,11 +32,6 @@
  */
 
 
-
-
-
-/* ==================== SessionCommand =================================== */
-
 #include "include/session-command-facade.h"
 #include "include/interfaceproxy.hpp"
 
@@ -48,9 +43,14 @@ namespace control{
 namespace lumiera {
 namespace facade {
   
-  using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
-                                , proc::control::SessionCommand
-                                >;
+  
+  
+  /* ==================== SessionCommand =================================== */
+  
+  using Interface = LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0);
+  using Facade    = proc::control::SessionCommand;
+  
+  using IHandle   = InstanceHandle<Interface, Facade>;
   
   
   template<>
@@ -66,15 +66,12 @@ namespace facade {
       
       
     public:
-      using IBinding::IBinding;
+      using Binding<IHandle>::Binding;
     };
   
-} //namespace facade
-
-
-// emit code for the proxy implementation here...
-template
-class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
-                    , proc::control::SessionCommand
-                    >;
-} // namespace lumiera
+  
+  /**  emit proxy code here... */
+  template
+  class Link<Interface,Facade>;
+  
+}} //namespace facade::lumiera

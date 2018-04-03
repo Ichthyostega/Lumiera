@@ -47,12 +47,6 @@
  */
 
 
-
-
-
-
-    /* ==================== DummyPlayer ======================================= */
-
 #include "include/dummy-player-facade.h"
 #include "include/interfaceproxy.hpp"
 
@@ -60,6 +54,8 @@ namespace lumiera {
   
   // emit the vtable here into this translation unit within liblumieracommon.so ...
   DummyPlayer::~DummyPlayer()  { }
+  DummyPlayer::ProcessImplementationLink::~ProcessImplementationLink() { };
+  
   
   /** static storage for the facade access front-end */
   lib::Depend<DummyPlayer> DummyPlayer::facade;
@@ -69,9 +65,14 @@ namespace lumiera {
   
   namespace facade {
     
-    using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                  , lumiera::DummyPlayer
-                                  >;
+    
+    
+    /* ==================== DummyPlayer ======================================= */
+    
+    using Interface = LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0);
+    using Facade    = lumiera::DummyPlayer;
+    
+    using IHandle   = InstanceHandle<Interface, Facade>;
     
     
     template<>
@@ -105,8 +106,13 @@ namespace lumiera {
         
         
       public:
-        using IBinding::IBinding;
+        using Binding<IHandle>::Binding;
       };
+    
+    
+    /**  emit proxy code here... */
+    template
+    class Link<Interface,Facade>;
     
   } // namespace facade
 
@@ -120,14 +126,5 @@ namespace lumiera {
       impl().doPlay(yes);
     }
   
-  // emit the VTable and typeinfo for this interface here (in liblumieracommon.so)
-  DummyPlayer::ProcessImplementationLink::~ProcessImplementationLink() { };
   
-  
-  
-  
-template
-class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                             , lumiera::DummyPlayer
-                                             >;
 } // namespace lumiera
