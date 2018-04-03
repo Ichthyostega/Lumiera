@@ -176,7 +176,7 @@ namespace proc  {
       
       
       
-      using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
+      using lumiera::error::LERR_(LIFECYCLE);
       lib::Depend<DummyPlayerService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
       
       typedef ProcessImpl* ProcP;
@@ -192,7 +192,7 @@ namespace proc  {
                                                                { 
                                                                  if (!_instance)
                                                                    { 
-                                                                     lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, 0);
+                                                                     lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, 0);
                                                                      return 0;
                                                                    }
                                                                  
@@ -204,7 +204,7 @@ namespace proc  {
                                                                { 
                                                                  if (!_instance)
                                                                    { 
-                                                                     lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, 0);
+                                                                     lumiera_error_set(LUMIERA_ERROR_LIFECYCLE, 0);
                                                                      return;
                                                                    }
                                                                  
@@ -219,7 +219,7 @@ namespace proc  {
                                                                { 
                                                                  if (!_instance)
                                                                    { 
-                                                                     lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, 0);
+                                                                     lumiera_error_set(LUMIERA_ERROR_LIFECYCLE, 0);
                                                                      return;
                                                                    }
                                                                  

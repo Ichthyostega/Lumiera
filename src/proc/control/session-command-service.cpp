@@ -188,7 +188,7 @@ namespace control {
     
     
     
-    using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
+    using lumiera::error::LERR_(LIFECYCLE);
     
     lib::Depend<SessionCommandService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
     
@@ -203,7 +203,7 @@ namespace control {
                                                            const char*, (const char* cmdID, const char* invocationID),
                                                              {
                                                                if (!_instance) 
-                                                                 return lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                                 return lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
                                                                  return _instance().cycle(cmdID, invocationID);
                                                              }
@@ -211,7 +211,7 @@ namespace control {
                                , LUMIERA_INTERFACE_INLINE (trigger,
                                                            void, (const char* cmdID, const void* args),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
                                                                  _instance().trigger(cmdID, *static_cast<Rec const *> (args));
                                                              }
@@ -219,7 +219,7 @@ namespace control {
                                , LUMIERA_INTERFACE_INLINE (bindArg,
                                                            void, (const char* cmdID, const void* args),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
                                                                  _instance().bindArg(cmdID, *static_cast<Rec const *> (args));
                                                              }
@@ -227,7 +227,7 @@ namespace control {
                                , LUMIERA_INTERFACE_INLINE (invoke,
                                                            void, (const char* cmdID),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
                                                                  _instance().invoke(cmdID);
                                                              }

@@ -76,6 +76,10 @@ namespace gui {
    */
   class GuiNotification
     {
+    protected:
+      virtual ~GuiNotification() {}   ///< this is an interface
+      friend class lib::DependencyFactory<GuiNotification>;
+      
     public:
       static lib::Depend<GuiNotification> facade;
       
@@ -108,9 +112,6 @@ namespace gui {
        */
       virtual void triggerGuiShutdown (string const& cause)      =0;
       
-      
-    protected:
-      virtual ~GuiNotification() {}
     };
     
   

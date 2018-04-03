@@ -28508,8 +28508,8 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1522697230906" ID="ID_1495746023" MODIFIED="1522697253419" TEXT="alle Bindings sind vom Instance-Handle zu entkoppeln"/>
 <node CREATED="1522697255215" ID="ID_1841184306" MODIFIED="1522697273416" TEXT="f&#xfc;r jedes Binding soll eine TranslationUnit frei w&#xe4;hlbar sein"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697350106" ID="ID_138544872" MODIFIED="1522697365816" TEXT="Technik zur Entkoppelung ben&#xf6;tigt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522697350106" ID="ID_138544872" MODIFIED="1522724906505" TEXT="Technik zur Entkoppelung ben&#xf6;tigt">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -28551,14 +28551,14 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697646161" ID="ID_1020206021" MODIFIED="1522697654713" TEXT="Technologie">
 <icon BUILTIN="pencil"/>
 <node CREATED="1522697675229" ID="ID_1605136526" MODIFIED="1522697732617" STYLE="fork" TEXT="Indirektion notwendig">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697690651" ID="ID_1244533717" MODIFIED="1522697720935" TEXT="Erzeugung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522697690651" ID="ID_1244533717" MODIFIED="1522724892373" TEXT="Erzeugung">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697699297" ID="ID_891061833" MODIFIED="1522697720295" TEXT="Zerst&#xf6;rung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522697699297" ID="ID_891061833" MODIFIED="1522724893954" TEXT="Zerst&#xf6;rung">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697702521" ID="ID_1874387796" MODIFIED="1522697719559" TEXT="Zugriff auf Facade(Proxy)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522697702521" ID="ID_1874387796" MODIFIED="1522724895488" TEXT="Zugriff auf Facade(Proxy)">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1522697743604" ID="ID_829814208" MODIFIED="1522697751286" TEXT="m&#xf6;gliche L&#xf6;sungen">
@@ -28657,6 +28657,18 @@
 </node>
 <node CREATED="1522709579398" ID="ID_1445259032" MODIFIED="1522709595885" TEXT="kann man spezialisieren und zugleich Instantiieren?">
 <icon BUILTIN="help"/>
+<node CREATED="1522720815569" ID="ID_1906873483" MODIFIED="1522720817589" TEXT="nein"/>
+<node CREATED="1522720818625" ID="ID_693558811" MODIFIED="1522720821985" TEXT="wie schade">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+</node>
+<node CREATED="1522724948516" ID="ID_1547993807" MODIFIED="1522724964722" TEXT="explizite Instantiierung notwendig">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1522724966777" ID="ID_650754221" MODIFIED="1522724973013" TEXT="h&#xe4;&#xdf;lich und umst&#xe4;ndlich"/>
+<node CREATED="1522724973625" ID="ID_1016558302" MODIFIED="1522724976780" TEXT="Code dupliziert"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522724977440" ID="ID_686663661" MODIFIED="1522724991255" TEXT="bessere L&#xf6;sung?">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>
@@ -28711,23 +28723,25 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1522709629935" ID="ID_151551561" MODIFIED="1522709645169" TEXT="L&#xf6;sung zum Entkoppeln der Proxy-Definition"/>
+<node COLOR="#338800" CREATED="1522709629935" ID="ID_151551561" MODIFIED="1522724915985" TEXT="L&#xf6;sung zum Entkoppeln der Proxy-Definition">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709654308" ID="ID_1059248114" MODIFIED="1522709793386" TEXT="bestehenden Code umschreiben">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709669498" ID="ID_9288802" MODIFIED="1522709700910" TEXT="alle bestehenden Proxies">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635397309" ID="ID_590180071" MODIFIED="1522709705713" TEXT="SessionCommandService">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522709669498" ID="ID_9288802" MODIFIED="1522724927071" TEXT="alle bestehenden Proxies">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1522635397309" ID="ID_590180071" MODIFIED="1522724921600" TEXT="SessionCommandService">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635417932" ID="ID_1711611771" MODIFIED="1522709706659" TEXT="DisplayService">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522635417932" ID="ID_1711611771" MODIFIED="1522724922888" TEXT="DisplayService">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635433910" ID="ID_444280759" MODIFIED="1522709723772" TEXT="GuiNotification">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522635433910" ID="ID_444280759" MODIFIED="1522724924183" TEXT="GuiNotification">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635450269" ID="ID_1963184158" MODIFIED="1522709725003" TEXT="DummyPlayerService">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522635450269" ID="ID_1963184158" MODIFIED="1522724925717" TEXT="DummyPlayerService">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1522709729297" ID="ID_1293938610" MODIFIED="1522717901995" TEXT="Facade-Accessoren auf lib::Depend umstellen">

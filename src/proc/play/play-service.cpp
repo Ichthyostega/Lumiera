@@ -47,6 +47,8 @@ namespace lumiera {
   
   Play::~Play() { } // emit VTables here...
   
+  /** static storage for the facade access front-end */
+  lib::Depend<Play> Play::facade;
   
 }//(End) namespace lumiera
 

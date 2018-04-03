@@ -118,8 +118,7 @@ namespace lumiera {
       virtual Sink getHandle(LumieraDisplaySlot)   =0;
       
       
-    protected:
-      virtual ~Display();
+      virtual ~Display();  ///< this is an interface
     };
   
   

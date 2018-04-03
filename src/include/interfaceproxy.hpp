@@ -93,9 +93,11 @@
 #define LUMIERA_INTERFACE_PROXY_H
 
 
-#include "lib/error.hpp"
 #include "common/instancehandle.hpp"
+#include "lib/error.hpp"
+#include "lib/util.hpp"
 
+using util::cStr;
 
 namespace lumiera {
 namespace facade {
@@ -114,13 +116,12 @@ namespace facade {
    * to the service lifecycle.
    */
   template<class IHA>
-  class Binding;
+  struct Binding;
   
   template<class FA, class I>
-  class Binding<InstanceHandle<I,FA>>
+  struct Binding<InstanceHandle<I,FA>>
     : public FA
     {
-    protected:
       typedef InstanceHandle<I,FA> IHandle;
       typedef Binding<IHandle> IBinding;
       
@@ -130,6 +131,25 @@ namespace facade {
         : _i_(iha.get())
         {  }
     };
+  
+  
+  
+  template<class I, class FA>
+  Link<I,FA>::Link (IH const& iha)
+    : ServiceHandle<I,FA>{iha}
+    { }
+  
+  template<class I, class FA>
+  Link<I,FA>::~Link() { }
+  
+  
+  template<class I, class FA>
+  FA*
+  Link<I,FA>::operator->()  const
+  {
+    return ServiceHandle<I,FA>::operator->();
+  }
+
   
   
 }} // namespace lumiera::facade

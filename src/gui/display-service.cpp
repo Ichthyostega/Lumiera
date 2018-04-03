@@ -120,7 +120,7 @@ namespace gui {
     
     
     
-    using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
+    using lumiera::error::LERR_(LIFECYCLE);
     
     lib::Depend<DisplayService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
     
@@ -136,7 +136,7 @@ namespace gui {
                                                              { 
                                                                if (!_instance)
                                                                  { 
-                                                                   lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, 0);
+                                                                   lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, 0);
                                                                    return;
                                                                  }
                                                                
@@ -153,7 +153,7 @@ namespace gui {
                                                              { 
                                                                if (!_instance)
                                                                  { 
-                                                                   lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, 0);
+                                                                   lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, 0);
                                                                    return;
                                                                  }
                                                                

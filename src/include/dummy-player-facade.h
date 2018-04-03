@@ -131,6 +131,7 @@ namespace lumiera {
         
       protected:
         virtual ~DummyPlayer();
+        friend class lib::DependencyFactory<DummyPlayer>;
       };
     
     

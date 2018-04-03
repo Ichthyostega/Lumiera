@@ -30,7 +30,7 @@
  ** @see display-facade.hpp
  ** @see display-service.hpp actual implementation within the GUI
  ** @deprecated obsolete early design draft from 2009;
- **             as of 2018 only kept in source to compile some likewise obsolete UI widgets. 
+ **             as of 2018 only kept in source to compile some likewise obsolete UI widgets.
  */
 
 
@@ -48,6 +48,9 @@ namespace lumiera {
   /// emit the vtable here into this translation unit within liblumieracommon.so...
   Display::~Display()      { }
   
+  /** static storage for the facade access front-end */
+  lib::Depend<Display> Display::facade;
+  
 } // namespace lumiera
 
 
@@ -55,14 +58,12 @@ namespace lumiera {
 namespace lumiera {
 namespace facade {
   
-  typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
-                        , lumiera::Display
-                        > IHandle_Display;
-  
-  
+  using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
+                                , lumiera::Display
+                                >;
   template<>
-  class Proxy<IHandle_Display>
-    : public Binding<IHandle_Display>
+  class Proxy<IHandle>
+    : public Binding<IHandle>
     {
       //----Proxy-Implementation-of-lumiera::Display--------
       
@@ -84,7 +85,12 @@ namespace facade {
     };
   
   
-//  template  void openProxy<IHandle_Display>  (IHandle_Display const&);
-//  template  void closeProxy<IHandle_Display> (void);
-  
-}} // namespace lumiera::facade
+} //namespace facade
+
+
+// emit code for the proxy implementation here...
+template
+class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
+                    , lumiera::Display
+                    >;
+} // namespace lumiera

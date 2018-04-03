@@ -209,7 +209,7 @@ namespace gui {
     
     
     
-    using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
+    using lumiera::error::LERR_(LIFECYCLE);
     
     lib::Depend<NotificationService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
     
@@ -223,7 +223,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_INLINE (displayInfo,
                                                            void, (uint severity, const char* text),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, text);
                                                                else
                                                                  _instance().displayInfo (NotifyLevel(severity), text);
                                                              }
@@ -231,7 +231,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_INLINE (markError,
                                                            void, (LumieraUid element, const char* text),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, text);
                                                                else
                                                                  _instance().markError (reinterpret_cast<ID> (*element), text);
                                                              }
@@ -239,7 +239,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_INLINE (markNote,
                                                            void, (LumieraUid element, const char* text),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, text);
                                                                else
                                                                  _instance().markNote (reinterpret_cast<ID> (*element), text);
                                                              }
@@ -247,7 +247,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_INLINE (mutate,
                                                            void, (LumieraUid element, void* diff),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, "passing diff message");
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, "passing diff message");
                                                                else
                                                                  _instance().mutate (reinterpret_cast<ID> (*element), move(*reinterpret_cast<MutationMessage*> (diff)));
                                                              }
@@ -255,7 +255,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown,
                                                            void, (const char* cause),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cause);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cause);
                                                                else
                                                                  _instance().triggerGuiShutdown (cause);
                                                              }

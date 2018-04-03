@@ -109,7 +109,8 @@ namespace control {
       
       
     protected:
-      virtual ~SessionCommand() {}
+      virtual ~SessionCommand() {} ///< this is an interface
+      friend class lib::DependencyFactory<SessionCommand>;
     };
     
   

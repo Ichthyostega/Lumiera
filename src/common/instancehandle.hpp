@@ -127,7 +127,6 @@ namespace lumiera {
       : ServiceHandle<I,FA>
       {
         using IH = InstanceHandle<I,FA>;
-        using SH = ServiceHandle<I,FA>;
         
         Link (IH const& iha);
        ~Link ();
@@ -148,7 +147,7 @@ namespace lumiera {
         using IH = InstanceHandle<I,I>;
         IH& ih_;
         
-        Link (IH const& ih)
+        Link (IH& ih)
           : ih_{ih}
         { }
         
@@ -227,7 +226,7 @@ namespace lumiera {
       
       /** act as smart pointer providing access through the facade.
        *  @note we don't provide operator*                      */
-      FA * operator-> ()  const { return facadeLink_; }
+      FA * operator-> ()  const { return facadeLink_.operator ->(); }
       
       /** directly access the instance via the CL interface */
       I& get ()  const { ENSURE(instance_); return *instance_; }

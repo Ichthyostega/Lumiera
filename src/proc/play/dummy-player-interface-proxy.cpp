@@ -41,9 +41,9 @@
  **          proxy used by the client code to access the interface).
  ** 
  ** @see dummy-player-facade.hpp
- ** @see dummy-player-service.hpp actual implementation within the Proc-Layer 
+ ** @see dummy-player-service.hpp actual implementation within the Proc-Layer
  ** @deprecated obsolete early design draft from 2009;
- **             as of 2018 only kept in source to compile some likewise obsolete UI widgets. 
+ **             as of 2018 only kept in source to compile some likewise obsolete UI widgets.
  */
 
 
@@ -52,7 +52,7 @@
 
 
     /* ==================== DummyPlayer ======================================= */
-    
+
 #include "include/dummy-player-facade.h"
 #include "include/interfaceproxy.hpp"
 
@@ -61,20 +61,22 @@ namespace lumiera {
   // emit the vtable here into this translation unit within liblumieracommon.so ...
   DummyPlayer::~DummyPlayer()  { }
   
+  /** static storage for the facade access front-end */
+  lib::Depend<DummyPlayer> DummyPlayer::facade;
   
   
   
   
   namespace facade {
     
-    typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                   , lumiera::DummyPlayer
-                                   > IHandle_DummyPlayer;
+    using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
+                                  , lumiera::DummyPlayer
+                                  >;
     
     
     template<>
-    class Proxy<IHandle_DummyPlayer>
-      : public Binding<IHandle_DummyPlayer>
+    class Proxy<IHandle>
+      : public Binding<IHandle>
       {
         //----Proxy-Implementation-of-DummyPlayer--------
         typedef lumiera::DummyPlayer::Process Process;
@@ -106,13 +108,8 @@ namespace lumiera {
         using IBinding::IBinding;
       };
     
-    
-//    template  void openProxy<IHandle_DummyPlayer>  (IHandle_DummyPlayer const&);
-//    template  void closeProxy<IHandle_DummyPlayer> (void);
-    
-    
   } // namespace facade
-  
+
   
    /* === Forwarding function(s) on the Process handle === */
   
@@ -128,4 +125,9 @@ namespace lumiera {
   
   
   
+  
+template
+class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
+                                             , lumiera::DummyPlayer
+                                             >;
 } // namespace lumiera

@@ -40,19 +40,22 @@
 #include "include/gui-notification-facade.h"
 #include "include/interfaceproxy.hpp"
 
+namespace gui {
+  /** static storage for the facade access front-end */
+  lib::Depend<GuiNotification> GuiNotification::facade;
+}
 namespace lumiera {
 namespace facade {
   using gui::ID;
   using lib::diff::MutationMessage;
   
-  typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                        , gui::GuiNotification
-                        > IHandle_GuiNotification;
   
-  
-  template
-  class Proxy<IHandle_GuiNotification>
-    : public Binding<IHandle_GuiNotification>
+  using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
+                                , gui::GuiNotification
+                                >;
+  template<>
+  class Proxy<IHandle>
+    : public Binding<IHandle>
     {
       using Level = gui::NotifyLevel;
       
@@ -69,9 +72,12 @@ namespace facade {
       using IBinding::IBinding;
     };
   
-  
-//  template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
-//  template  void closeProxy<IHandle_GuiNotification> (void);
-  
-  
-}} // namespace lumiera::facade
+} //namespace facade
+
+
+// emit code for the proxy implementation here...
+template
+class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
+                    , gui::GuiNotification
+                    >;
+} // namespace lumiera

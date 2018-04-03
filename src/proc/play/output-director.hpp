@@ -46,6 +46,9 @@
 #include <memory>
 
 
+namespace lumiera {
+  class Play;
+}
 namespace proc {
 namespace play {
   
@@ -54,12 +57,7 @@ namespace play {
 //using std::shared_ptr;
   using std::unique_ptr;
   
-  
-  class Play;
   class PlayService;
-  
-  
-//typedef lib::ScopedPtrVect<DisplayerSlot> DisplayerTab;
   
   
   
@@ -73,7 +71,7 @@ namespace play {
     , public lib::Sync<>
     {
       using SigTerm = lumiera::Subsys::SigTerm;
-      using PlayServiceHandle = lib::DependInject<Play>::ServiceInstance<PlayService>;
+      using PlayServiceHandle = lib::DependInject<lumiera::Play>::ServiceInstance<PlayService>;
       
       PlayServiceHandle player_;
       ///////TODO more components and connections to manage here...

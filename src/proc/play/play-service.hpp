@@ -68,7 +68,6 @@ namespace proc {
 namespace play {
 
   using std::string;
-  using lumiera::facade::InterfaceFacadeLink;
 //using lumiera::Subsys;
 //using lumiera::Display;
 //using lumiera::DummyPlayer;

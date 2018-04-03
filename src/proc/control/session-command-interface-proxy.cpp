@@ -40,17 +40,22 @@
 #include "include/session-command-facade.h"
 #include "include/interfaceproxy.hpp"
 
+namespace proc {
+namespace control{
+  /** static storage for the facade access front-end */
+  lib::Depend<SessionCommand> SessionCommand::facade;
+}}
 namespace lumiera {
 namespace facade {
   
-  typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
-                        , proc::control::SessionCommand
-                        > IHandle_SessionCommand;
+  using IHandle = InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
+                                , proc::control::SessionCommand
+                                >;
   
   
   template<>
-  class Proxy<IHandle_SessionCommand>
-    : public Binding<IHandle_SessionCommand>
+  class Proxy<IHandle>
+    : public Binding<IHandle>
     {
       //----Proxy-Implementation-of-SessionCommand--------
       
@@ -64,9 +69,12 @@ namespace facade {
       using IBinding::IBinding;
     };
   
-  
-//  template  void openProxy<IHandle_SessionCommand>  (IHandle_SessionCommand const&);
-//  template  void closeProxy<IHandle_SessionCommand> (void);
-  
-  
-}} // namespace lumiera::facade
+} //namespace facade
+
+
+// emit code for the proxy implementation here...
+template
+class InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
+                    , proc::control::SessionCommand
+                    >;
+} // namespace lumiera

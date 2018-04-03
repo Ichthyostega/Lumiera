@@ -81,6 +81,9 @@ namespace lumiera {
      */
     class Play
       {
+      protected:
+        virtual ~Play();
+        friend class lib::DependencyFactory<Play>;
       public:
         
         /** get an implementation instance of this service */
@@ -145,8 +148,6 @@ namespace lumiera {
         Controller perform(Clip);
         
       protected:
-        virtual ~Play();
-        
         /** core operation: create a new playback process
          *  outputting to the given viewer/display  */
         virtual Controller connect(ModelPorts, Output)      =0;
