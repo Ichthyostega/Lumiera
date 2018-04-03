@@ -133,6 +133,6 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_SessionCommand, 0,
 
 
 #ifdef __cplusplus
-}
+}// extern "C"
 #endif
 #endif /*PROC_CONTROL_SESSION_COMMAND_H*/

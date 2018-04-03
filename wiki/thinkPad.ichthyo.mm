@@ -28028,7 +28028,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1521790709017" ID="ID_1263887689" MODIFIED="1521947771608" TEXT="Doxygen">
+<node COLOR="#338800" CREATED="1521790709017" FOLDED="true" ID="ID_1263887689" MODIFIED="1522729534009" TEXT="Doxygen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521790767697" ID="ID_1445751091" MODIFIED="1521936696493" TEXT="Grunds&#xe4;tzliches zu Singleton und Dependency-Injection (aktualisieren)">
 <icon BUILTIN="button_ok"/>
@@ -28059,7 +28059,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1521791026749" ID="ID_1199387367" MODIFIED="1522025343672" TEXT="Doku-Subsysteme">
+<node COLOR="#338800" CREATED="1521791026749" FOLDED="true" ID="ID_1199387367" MODIFIED="1522729536992" TEXT="Doku-Subsysteme">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521791034972" ID="ID_1629095174" MODIFIED="1521962998443" TEXT="&#xfc;berlegen, wo das Architektur-Thema dargestellt werden sollte">
 <icon BUILTIN="button_ok"/>
@@ -28089,8 +28089,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520722160591" ID="ID_135546699" MODIFIED="1522421617782" TEXT="Unit-Test">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1520722160591" FOLDED="true" ID="ID_135546699" MODIFIED="1522729521383" TEXT="Unit-Test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521419576303" ID="ID_726128967" MODIFIED="1522042418343" TEXT="alte Tests portieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1521418937870" ID="ID_906296527" MODIFIED="1522033081893" TEXT="Singleton_test">
@@ -28144,7 +28144,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1522033106576" ID="ID_278956866" MODIFIED="1522451856604" TEXT="weitere Tests...">
+<node COLOR="#338800" CREATED="1522033106576" FOLDED="true" ID="ID_278956866" MODIFIED="1522729509491" TEXT="weitere Tests...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28155,7 +28155,7 @@
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#15b89e" DESTINATION="ID_278956866" ENDARROW="Default" ENDINCLINATION="32;436;" ID="Arrow_ID_1985884795" SOURCE="ID_513111416" STARTARROW="None" STARTINCLINATION="223;-69;"/>
+<linktarget COLOR="#15b89e" DESTINATION="ID_278956866" ENDARROW="Default" ENDINCLINATION="-6;80;" ID="Arrow_ID_1985884795" SOURCE="ID_513111416" STARTARROW="None" STARTINCLINATION="-88;0;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1522033940685" ID="ID_447878554" MODIFIED="1522451818368" TEXT="media-access-mock-test.cpp">
 <icon BUILTIN="button_ok"/>
@@ -28199,7 +28199,7 @@
 </node>
 <node COLOR="#338800" CREATED="1521160765588" ID="ID_1857896991" MODIFIED="1522451910586" TEXT="Konfig-Aufrufe anpassen">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1522033578207" HGAP="18" ID="ID_252429770" MODIFIED="1522389026807" TEXT="Name f&#xfc;r Freunschaft+" VSHIFT="-20">
+<node COLOR="#338800" CREATED="1522033578207" FOLDED="true" HGAP="18" ID="ID_252429770" MODIFIED="1522729499183" TEXT="Name f&#xfc;r Freunschaft+" VSHIFT="-20">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522033614743" ID="ID_1110690522" MODIFIED="1522033614743" TEXT="friend class lib::InstanceHolder&lt;TargetObj&gt;;">
 <node CREATED="1522033621114" ID="ID_1807735289" MODIFIED="1522033629872" TEXT="nicht so sexy">
@@ -28251,7 +28251,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1522033193572" ID="ID_508353720" MODIFIED="1522446432407" TEXT="DependencyFactory">
+<node COLOR="#338800" CREATED="1522033193572" FOLDED="true" ID="ID_508353720" MODIFIED="1522729485800" TEXT="DependencyFactory">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1522033199726" ID="ID_314595550" MODIFIED="1522445880917" TEXT="engine-config.h">
 <icon BUILTIN="button_ok"/>
@@ -28290,8 +28290,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1522034066988" ID="ID_513111416" MODIFIED="1522451868492" TEXT="alle Mock-Tests">
-<arrowlink COLOR="#15b89e" DESTINATION="ID_278956866" ENDARROW="Default" ENDINCLINATION="32;436;" ID="Arrow_ID_1985884795" STARTARROW="None" STARTINCLINATION="223;-69;"/>
+<node COLOR="#338800" CREATED="1522034066988" ID="ID_513111416" MODIFIED="1522729509491" TEXT="alle Mock-Tests">
+<arrowlink COLOR="#15b89e" DESTINATION="ID_278956866" ENDARROW="Default" ENDINCLINATION="-6;80;" ID="Arrow_ID_1985884795" STARTARROW="None" STARTINCLINATION="-88;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -28340,7 +28340,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522635350488" ID="ID_1673980887" MODIFIED="1522635365465" TEXT="InterfaceProxy auch umstellen?">
+<node COLOR="#338800" CREATED="1522635350488" ID="ID_1673980887" MODIFIED="1522729286917" TEXT="InterfaceProxy auch umstellen?">
 <icon BUILTIN="help"/>
 <node CREATED="1522635366958" ID="ID_70940233" MODIFIED="1522639464220" TEXT="w&#xe4;re jetzt ebenfalls denkbar">
 <icon BUILTIN="yes"/>
@@ -28475,8 +28475,8 @@
 <node CREATED="1522641344691" ID="ID_1154911224" MODIFIED="1522641358813" TEXT="gegenw&#xe4;rtig: bekommt das InstanceHandle"/>
 <node CREATED="1522641378263" ID="ID_1762905192" MODIFIED="1522641389641" TEXT="k&#xf6;nnte aber direkt eine Interface-Ref sein"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522641405299" ID="ID_676190433" MODIFIED="1522641417642" TEXT="Proxy">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522641405299" ID="ID_676190433" MODIFIED="1522729429778" TEXT="Proxy">
+<icon BUILTIN="pencil"/>
 <node CREATED="1522641413586" ID="ID_1187300065" MODIFIED="1522649896016" TEXT="Anforderungen">
 <linktarget COLOR="#86d29d" DESTINATION="ID_1187300065" ENDARROW="Default" ENDINCLINATION="-35;65;" ID="Arrow_ID_1735914452" SOURCE="ID_1212106242" STARTARROW="None" STARTINCLINATION="-135;-67;"/>
 <node CREATED="1522641419769" ID="ID_1008132394" MODIFIED="1522641450457" TEXT="erbt vom Business-Interface"/>
@@ -28485,7 +28485,7 @@
 <node CREATED="1522643863687" ID="ID_1695236696" MODIFIED="1522643867842" TEXT="nicht kopierbar"/>
 <node CREATED="1522641463059" ID="ID_487803821" MODIFIED="1522641471349" TEXT="lebt nur so lange das Interface offen ist"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522649799320" ID="ID_1473698958" MODIFIED="1522649810312" TEXT="Ort der Definition">
+<node COLOR="#0e0099" CREATED="1522649799320" ID="ID_1473698958" MODIFIED="1522729333546" TEXT="Ort der Definition">
 <icon BUILTIN="help"/>
 <node CREATED="1522696074226" ID="ID_1811816913" MODIFIED="1522696081693" TEXT="G&#xfc;terabw&#xe4;gung notwendig">
 <node CREATED="1522696114852" ID="ID_550024261" MODIFIED="1522696125095" TEXT="Entkoppelung Serivce / Interface"/>
@@ -28513,7 +28513,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522649812255" ID="ID_624985973" MODIFIED="1522697373660">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#0e0099" CREATED="1522649812255" ID="ID_624985973" MODIFIED="1522729342790" STYLE="fork">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -28527,23 +28527,43 @@
     </p>
   </body>
 </html></richcontent>
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="help"/>
-<node CREATED="1522697375430" ID="ID_712460375" MODIFIED="1522697380058" TEXT="Instantiierung">
-<node COLOR="#338800" CREATED="1522697381141" ID="ID_855121513" MODIFIED="1522697467594" TEXT="gesteuert nur durch Lebensdauer des InstanceHandle">
+<node CREATED="1522697375430" ID="ID_712460375" MODIFIED="1522729342788" TEXT="Instantiierung">
+<node COLOR="#338800" CREATED="1522697381141" ID="ID_855121513" MODIFIED="1522729342788" TEXT="gesteuert nur durch Lebensdauer des InstanceHandle">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697396899" ID="ID_1172830820" MODIFIED="1522697469042" TEXT="Code der Proxy-Instantiierung in separater TU">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522697396899" ID="ID_1172830820" MODIFIED="1522729342788" TEXT="Code der Proxy-Instantiierung in separater TU">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1522697475153" ID="ID_520808733" MODIFIED="1522697478164" TEXT="Definition">
-<node CREATED="1522697495790" ID="ID_1870975704" MODIFIED="1522697630073" TEXT="von Hand geschrieben">
+<node CREATED="1522697475153" ID="ID_520808733" MODIFIED="1522729342788" TEXT="Definition">
+<node CREATED="1522697495790" ID="ID_1870975704" MODIFIED="1522729342788" TEXT="von Hand geschrieben">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522697613893" ID="ID_1829346202" MODIFIED="1522697626900" TEXT="Idealerweise lediglich eigene TU">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#990000" CREATED="1522697613893" ID="ID_1829346202" MODIFIED="1522729342788" TEXT="Idealerweise lediglich eigene TU">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1522697501541" ID="ID_793991584" MODIFIED="1522697634674" TEXT="Forwading-Implementation des Business-Interface">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522729001386" ID="ID_242747417" MODIFIED="1522729342788" TEXT="ist mir bisher nicht gelungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wir m&#252;ssen immer, f&#252;r jeden Proxy
+    </p>
+    <p>
+      explizit eine Template-Instaniierung triggern, und zwar f&#252;r
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#a02659" DESTINATION="ID_1547993807" ENDARROW="Default" ENDINCLINATION="231;-29;" ID="Arrow_ID_1421481593" STARTARROW="None" STARTINCLINATION="544;-14;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1522697501541" ID="ID_793991584" MODIFIED="1522729342788" TEXT="Forwading-Implementation des Business-Interface">
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -28562,13 +28582,15 @@
 </node>
 </node>
 <node CREATED="1522697743604" ID="ID_829814208" MODIFIED="1522697751286" TEXT="m&#xf6;gliche L&#xf6;sungen">
-<node CREATED="1522697764121" ID="ID_809124789" MODIFIED="1522697772891" TEXT="PImpl">
+<node CREATED="1522697764121" FOLDED="true" ID="ID_809124789" MODIFIED="1522729411578" TEXT="PImpl">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1522698166313" ID="ID_904988310" MODIFIED="1522698184466" TEXT="facade::Link h&#xe4;lt einen smart-Ptr"/>
 <node CREATED="1522698185030" ID="ID_53125514" MODIFIED="1522698208087" TEXT="auf die eigentliche DependInject::ServiceInstance"/>
 <node CREATED="1522698222201" ID="ID_1341541114" MODIFIED="1522698292643" TEXT="facade::Link mu&#xdf; Methoden (ctor/dtor und operator) separat definieren"/>
 <node CREATED="1522698295719" ID="ID_381014397" MODIFIED="1522698339173" TEXT="das ist effektiv die L&#xf6;sung &quot;separat definieren&quot; + separate Storage"/>
 </node>
-<node CREATED="1522697803923" ID="ID_238110365" MODIFIED="1522697807907" TEXT="freie Funktionen">
+<node CREATED="1522697803923" FOLDED="true" ID="ID_238110365" MODIFIED="1522729409819" TEXT="freie Funktionen">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1522698092963" ID="ID_433421738" MODIFIED="1522698105987" TEXT="ist die bisher bestehende L&#xf6;sung">
 <icon BUILTIN="idea"/>
 </node>
@@ -28587,13 +28609,17 @@
 </html></richcontent>
 </node>
 <node CREATED="1522698124263" ID="ID_475034985" MODIFIED="1522698140464" TEXT="das ist effektiv ein PImpl, das aber auch noch gemanaged werden mu&#xdf;"/>
+<node CREATED="1522729383029" ID="ID_212849140" MODIFIED="1522729398784" TEXT="Vorteil: erzeugen &quot;nebenbei&quot; die Template-Instantiierung">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1522697773903" ID="ID_116063224" MODIFIED="1522697803239" TEXT="Methoden separat definieren">
 <node CREATED="1522698343480" ID="ID_1548420276" MODIFIED="1522698385583" TEXT="daf&#xfc;r sorgen, da&#xdf; die Definitionen nur in der Proxy-Instantiierung (TU) sichtbar sind"/>
 <node CREATED="1522698386810" ID="ID_1773412414" MODIFIED="1522698405108" TEXT="diese Definitionen m&#xfc;ssen externe Linkage bekommen (d.h. nicht inline)"/>
 <node CREATED="1522698437036" ID="ID_1400832405" MODIFIED="1522698754819" TEXT="Erzeugung ist automatisch, sofern dort das InstanceHandle-Template instantiiert wird"/>
 <node CREATED="1522698892532" ID="ID_584280618" MODIFIED="1522698944569" TEXT="Fazit: in einer TU mu&#xdf; (nur) eine explizite Template-Instantiierung erfolgen"/>
-<node CREATED="1522699050727" ID="ID_1923832821" MODIFIED="1522699053402" TEXT="wie auch immer">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522699050727" ID="ID_1923832821" MODIFIED="1522729422771" TEXT="wie auch immer">
+<icon BUILTIN="pencil"/>
 <node CREATED="1522699055062" ID="ID_1759934312" MODIFIED="1522699078711" TEXT="Spezialisierung Proxy&lt;IHA&gt; + Template Instanz dieser">
 <node CREATED="1522699225239" ID="ID_894223806" MODIFIED="1522699240168" TEXT="das ist praktisch die bestehende L&#xf6;sung"/>
 <node CREATED="1522699240684" ID="ID_600377865" MODIFIED="1522699259238" TEXT="wird dort nur indirekt &#xfc;ber die Instanz der freinen Funktionen ausgel&#xf6;et"/>
@@ -28663,7 +28689,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1522724948516" ID="ID_1547993807" MODIFIED="1522724964722" TEXT="explizite Instantiierung notwendig">
+<node CREATED="1522724948516" ID="ID_1547993807" MODIFIED="1522729247734" TEXT="explizite Instantiierung notwendig">
+<linktarget COLOR="#a02659" DESTINATION="ID_1547993807" ENDARROW="Default" ENDINCLINATION="231;-29;" ID="Arrow_ID_1421481593" SOURCE="ID_242747417" STARTARROW="None" STARTINCLINATION="544;-14;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1522724966777" ID="ID_650754221" MODIFIED="1522724973013" TEXT="h&#xe4;&#xdf;lich und umst&#xe4;ndlich"/>
 <node CREATED="1522724973625" ID="ID_1016558302" MODIFIED="1522724976780" TEXT="Code dupliziert"/>
@@ -28677,8 +28704,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522649565217" ID="ID_1192073765" MODIFIED="1522649581256" TEXT="Probleme bei der Realisierung">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1522649565217" FOLDED="true" ID="ID_1192073765" MODIFIED="1522728960801" TEXT="Probleme bei der Realisierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522649583511" ID="ID_709785832" MODIFIED="1522649600993" TEXT="Instancehandle mu&#xdf; jetzt die Proxy-Implementierung sehen"/>
 <node CREATED="1522649601916" ID="ID_114261035" MODIFIED="1522649700061" TEXT="die beiden Seiten des Bindings sind damit fest verkoppelt">
 <richcontent TYPE="NOTE"><html>
@@ -28727,8 +28754,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709654308" ID="ID_1059248114" MODIFIED="1522709793386" TEXT="bestehenden Code umschreiben">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1522709654308" FOLDED="true" ID="ID_1059248114" MODIFIED="1522728958026" TEXT="bestehenden Code umschreiben">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1522709669498" ID="ID_9288802" MODIFIED="1522724927071" TEXT="alle bestehenden Proxies">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1522635397309" ID="ID_590180071" MODIFIED="1522724921600" TEXT="SessionCommandService">
@@ -28772,8 +28799,8 @@
 <node COLOR="#338800" CREATED="1522709756798" ID="ID_1024028685" MODIFIED="1522717913716" TEXT="Header umorganisieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522709763388" ID="ID_778622044" MODIFIED="1522709775687" TEXT="Doxygen-Doku aktualisieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522709763388" ID="ID_778622044" MODIFIED="1522728945187" TEXT="Doxygen-Doku aktualisieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -28781,7 +28808,7 @@
 </node>
 <node COLOR="#338800" CREATED="1522033564057" ID="ID_1294295502" MODIFIED="1522632239961" TEXT="Nacharbeiten">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1522454023039" ID="ID_1828121921" MODIFIED="1522630470765" TEXT="Folge-Probleme">
+<node COLOR="#338800" CREATED="1522454023039" FOLDED="true" ID="ID_1828121921" MODIFIED="1522729272839" TEXT="Folge-Probleme">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522454040500" ID="ID_1674154774" MODIFIED="1522640613359" TEXT="Architektur">
 <node CREATED="1522454061873" ID="ID_1012349550" MODIFIED="1522454068316" TEXT="unklare statische Abh&#xe4;ngigkeiten">

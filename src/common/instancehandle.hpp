@@ -1,5 +1,5 @@
 /*
-  INSTANCEHANDLE.hpp  -  automatically handling interface lifecycle 
+  INSTANCEHANDLE.hpp  -  automatically handling interface lifecycle
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -32,7 +32,7 @@
  ** @see gui::GuiFacade usage example
  ** @see interface.h
  ** @see interfaceproxy.hpp (more explanations)
- ** @see interfaceproxy.cpp (Implementation of the proxies)
+ ** @see session-command-interface-proxy.cpp (Proxy implementation example)
  **
  */
 
@@ -66,17 +66,17 @@ namespace lumiera {
   namespace { // implementation details
     
     void
-    throwIfError() 
+    throwIfError()
     {
       if (lumiera_error_peek())
         throw lumiera::error::Config("failed to open interface or plugin.",lumiera_error());
     }
-  
+    
     /** takes a (single) instance definitions, as typically created
      *  when defining interfaces for external use, and registers it
      *  with the InterfaceSystem. Then uses the data found in the
      *  \em given instance descriptor to open an instance handle.
-     *  @throws error::Config when the registration process fails  
+     *  @throws error::Config when the registration process fails
      */
     LumieraInterface
     register_and_open (LumieraInterface descriptor)
@@ -97,21 +97,32 @@ namespace lumiera {
     verify_validity (LumieraInterface ifa)
     {
       REQUIRE (ifa);
-      return (ifa == lumiera_interfaceregistry_interface_find (ifa->interface, 
-                                                               ifa->version, 
+      return (ifa == lumiera_interfaceregistry_interface_find (ifa->interface,
+                                                               ifa->version,
                                                                ifa->name));
     }
-  
-  } // (End) impl details
     
+  } // (End) impl details
+  
+  
+  
   
   namespace facade {
-    
+
+    /**
+     * to be specialised and implemented for each
+     * individual interface and facade interface.
+     * The actual proxy implements the facade interface
+     * and reroutes each call to the corresponding function
+     * on the CL-Interface for the Lumiera interface system.
+     */
     template<class IHA>
     class Proxy;
     
+    /** The ServiceHandle automatically creates and manages the Proxy instance */
     template<class I, class FA>
     using ServiceHandle = typename lib::DependInject<FA>::template ServiceInstance<Proxy<InstanceHandle<I,FA>>>;
+    
     
     /**
      * @internal Helper/Adapter for establishing a link
@@ -179,7 +190,7 @@ namespace lumiera {
           >
   class InstanceHandle
     : util::NonCopyable
-    { 
+    {
       LumieraInterface desc_;
       I*                instance_;
       facade::Link<I,FA> facadeLink_;
@@ -194,14 +205,14 @@ namespace lumiera {
        */
       InstanceHandle (string const& iName, uint version, size_t minminor, string const& impName)
         : desc_(0)
-        , instance_(reinterpret_cast<I*> 
+        , instance_(reinterpret_cast<I*>
               (lumiera_interface_open (iName.c_str(), version, minminor, impName.c_str())))
         , facadeLink_(*this)
-        { 
+        {
           throwIfError();
         }
       
-      /** Set up an InstanceHandle managing the 
+      /** Set up an InstanceHandle managing the
        *  registration and deregistration of interface(s).
        *  Should be placed at the service providing side.
        *  @param a (single) interface descriptor, which can be created with
@@ -211,7 +222,7 @@ namespace lumiera {
         : desc_(descriptor)
         , instance_(reinterpret_cast<I*> (register_and_open (desc_)))
         , facadeLink_(*this)
-        { 
+        {
           throwIfError();
         }
       
@@ -224,24 +235,41 @@ namespace lumiera {
       
       
       
-      /** act as smart pointer providing access through the facade.
-       *  @note we don't provide operator*                      */
-      FA * operator-> ()  const { return facadeLink_.operator ->(); }
+      /** act as smart pointer to allow access through the facade.
+       *  @note we don't provide `operator*`
+       */
+      FA*
+      operator-> ()  const
+        {
+          return facadeLink_.operator ->();
+        }
       
       /** directly access the instance via the CL interface */
-      I& get ()  const { ENSURE(instance_); return *instance_; }
+      I&
+      get ()  const
+        {
+          ENSURE(instance_);
+          return *instance_;
+        }
       
       
-      
-      explicit operator bool() const { return isValid(); }
-      bool operator! ()        const { return not isValid();}
+      explicit
+      operator bool()  const
+        {
+          return isValid();
+        }
+      bool
+      operator!() const
+        {
+          return not isValid();
+        }
       
       
     private:
-      bool 
+      bool
       isValid()  const
-        { 
-          return instance_ 
+        {
+          return instance_
               && verify_validity (&instance_->interface_header_);
         }
     };

@@ -137,6 +137,6 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
 
 
 #ifdef __cplusplus
-}
+}// extern "C"
 #endif
 #endif /*GUI_GUI_NOTIFICATION_H*/
