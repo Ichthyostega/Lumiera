@@ -58,8 +58,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "include/play-facade.h"
-#include "common/interface-facade-link.hpp"
+#include "include/play-facade.hpp"
 
 #include <memory>
 //#include <string>
@@ -102,7 +101,6 @@ namespace play {
     : public lumiera::Play
     , util::NonCopyable
     {
-      InterfaceFacadeLink<lumiera::Play> facadeAccess_;
       std::unique_ptr<ProcessTable>      pTable_;
       
       

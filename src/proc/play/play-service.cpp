@@ -27,7 +27,7 @@
 
 
 #include "lib/error.hpp"
-#include "include/play-facade.h"
+#include "include/play-facade.hpp"
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
 #include "proc/play/render-configurator.hpp"
@@ -167,8 +167,7 @@ namespace play {
    *  this service through the lumiera::Play facade.
    */
   PlayService::PlayService()
-    : facadeAccess_(*this, "Player")
-    , pTable_(new ProcessTable)
+    : pTable_(new ProcessTable)
     { }
   
   

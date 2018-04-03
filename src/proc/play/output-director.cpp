@@ -72,7 +72,7 @@ namespace play {
     Lock sync(this);
     REQUIRE (not shutdown_initiated_);
     
-    player_.reset (new PlayService);
+    player_.createInstance();
     return this->isOperational();
   }
   
@@ -132,7 +132,7 @@ namespace play {
     try
       {
         TODO ("actually bring down the output generation");
-        player_.reset(0);
+        player_.shutdown();
         
         completedSignal(0);
       }

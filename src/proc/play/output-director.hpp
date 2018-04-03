@@ -37,6 +37,7 @@
 
 #include "lib/error.hpp"
 #include "lib/depend.hpp"
+#include "lib/depend-inject.hpp"
 #include "proc/play/output-manager.hpp"
 #include "common/subsys.hpp"
 #include "lib/nocopy.hpp"
@@ -54,6 +55,7 @@ namespace play {
   using std::unique_ptr;
   
   
+  class Play;
   class PlayService;
   
   
@@ -70,9 +72,10 @@ namespace play {
     : util::NonCopyable
     , public lib::Sync<>
     {
-      typedef lumiera::Subsys::SigTerm SigTerm;
+      using SigTerm = lumiera::Subsys::SigTerm;
+      using PlayServiceHandle = lib::DependInject<Play>::ServiceInstance<PlayService>;
       
-      unique_ptr<PlayService> player_;
+      PlayServiceHandle player_;
       ///////TODO more components and connections to manage here...
       
       bool shutdown_initiated_ = false;   /////TODO probably need a way more elaborate lifecylce management

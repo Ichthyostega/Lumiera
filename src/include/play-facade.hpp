@@ -21,8 +21,13 @@
 */
 
 
-/** @file play-facade.h
+/** @file play-facade.hpp
  ** Public access point to the _playback service_ provided by the »play-out subsystem«
+ ** @todo in theory this could be an external interface mapped via Lumiera's interface system.
+ **       This would be much work however, and not serve any tangible goal in the current stage
+ **       of development (2018). I take this as just another confirmation that turning everything
+ **       into a plug-in does not quality as good architecture: if you want to do it right, it
+ **       creates a lot of additional cost. And to do it just superficially would be like cheating.
  */
 
 
@@ -31,15 +36,11 @@
 
 
 
-
-#ifdef __cplusplus  /* ============== C++ Interface ================= */
-
-//#include "include/interfaceproxy.hpp"
+#include "lib/depend.hpp"
 #include "lib/handle.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource base interface here
 #include "lib/time/control.hpp"
 #include "lib/time/timevalue.hpp"
-#include "include/interfaceproxy.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/mobject/output-designation.hpp"
 #include "proc/mobject/session/clip.hpp"
@@ -83,7 +84,7 @@ namespace lumiera {
       public:
         
         /** get an implementation instance of this service */
-        static lumiera::facade::Accessor<Play> facade;
+        static lib::Depend<Play> facade;
         
         
         /**
@@ -153,19 +154,4 @@ namespace lumiera {
     
     
 } // namespace lumiera
-
-
-
-
-extern "C" {
-#endif /* =========================== CL Interface ===================== */
-
-
-// #include "common/interface.h"
-////////////////////////////////////TODO define a C binding for the Interface system here
-
-
-#ifdef __cplusplus
-}
-#endif
-#endif
+#endif /*PROC_INTERFACE_PLAY_H*/

@@ -28345,8 +28345,8 @@
 <node CREATED="1522635366958" ID="ID_70940233" MODIFIED="1522639464220" TEXT="w&#xe4;re jetzt ebenfalls denkbar">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522638768719" ID="ID_1027038623" MODIFIED="1522639457609" TEXT="InterfaceFacadeLink">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522638768719" ID="ID_1027038623" MODIFIED="1522713321459" TEXT="InterfaceFacadeLink">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522638777486" ID="ID_1287650379" MODIFIED="1522638916886" TEXT="serivce-Handle"/>
 <node CREATED="1522638783717" ID="ID_357133685" MODIFIED="1522638790235" TEXT="umgeht das Interface-system">
 <icon BUILTIN="ksmiletris"/>
@@ -28354,7 +28354,8 @@
 <node CREATED="1522638791268" ID="ID_965518210" MODIFIED="1522638800868" TEXT="tja, lib::Depend macht das jetzt auch">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1522638812521" ID="ID_893221959" MODIFIED="1522638820556" TEXT="nur ein einziges mal verwendet">
+<node CREATED="1522638812521" ID="ID_893221959" MODIFIED="1522712867059" TEXT="nur ein einziges mal verwendet">
+<icon BUILTIN="idea"/>
 <node CREATED="1522638830367" ID="ID_792298822" MODIFIED="1522638835178" TEXT="PlayService"/>
 <node CREATED="1522638837022" ID="ID_362446492" MODIFIED="1522638876050">
 <richcontent TYPE="NODE"><html>
@@ -28366,8 +28367,7 @@
       den habe ich <b>nicht mehr</b>&#160;&#252;ber das Interface-System gemappt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28380,12 +28380,24 @@
       Also hat das hier Prototyp-Charakter!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522638877744" ID="ID_1175146695" MODIFIED="1522638901259" TEXT="sollte prototypisch-sauber umgestellt werden">
+<node CREATED="1522638877744" ID="ID_1175146695" MODIFIED="1522712862995" TEXT="sollte prototypisch-sauber umgestellt werden">
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1522712059423" ID="ID_885178924" MODIFIED="1522713316288" TEXT="komplett auf lib::Depend umstellen">
+<icon BUILTIN="yes"/>
+<node CREATED="1522712083659" ID="ID_1397345256" MODIFIED="1522712851333" TEXT="das hei&#xdf;t: nicht einmal mehr die Fiktion einer Trennung">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1522712827196" ID="ID_61159385" MODIFIED="1522712843093" TEXT="ein sauber gebautes C++ - Inteface ist Trennung genug">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1522713332342" ID="ID_1078169696" MODIFIED="1522713348764" TEXT="der OutputDirector steuert nun diesen Service">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522638949038" ID="ID_1756362217" MODIFIED="1522639349336" TEXT="interfaceproxy - Accessor">
