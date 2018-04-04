@@ -91,8 +91,6 @@ namespace interact {
   class LocationQuery;
   using LocationQueryAccess = std::function<LocationQuery&()>;
   
-  /** @internal access UI service to query and discover locations within UI topology */
-  extern LocationQueryAccess loactionQuery;   ///////////////////////////////////////////////////////////////TODO this global variable seems to be dispensable
   
   
   

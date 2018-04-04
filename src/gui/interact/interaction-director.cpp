@@ -84,7 +84,7 @@ namespace interact {
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
     : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
     , globalCtx_(globals)
-    , viewLocator_{new ViewLocator{globals, [this]() -> LocationQuery& { return *navigator_; }}}
+    , viewLocator_{new ViewLocator{globals}}
     , spotLocator_{new SpotLocator}
     , navigator_{*spotLocator_, *viewLocator_}    // Service exposed as Depend<LocationQuery>
     , tracker_{new FocusTracker{*navigator_}}

@@ -121,6 +121,7 @@
 #include "gui/interact/ui-coord.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/iter-source.hpp"
+#include "lib/depend.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -191,6 +192,7 @@ namespace interact {
    * they may be resolved against any tree-like topological structure, which can be queried through
    * this interface.
    * @see Navigator the implementation used in the Lumiera UI, as backed by actual GUI components
+   * @see InteractionDirector manages the Navigator and exposes it via lib::Depend<LocationQuery>
    * @see GenNodeLocationQuery a dummy/test implementation, where the "UI topology" is hard wired
    *      as a tree of GenNode elements. This serves the purpose of unit testing, without having
    *      to rely on an actual UI.
@@ -199,6 +201,10 @@ namespace interact {
     {
     public:
       virtual ~LocationQuery();    ///< this is an interface
+      
+      /** access point to global LocationQuery service implementation */
+      static lib::Depend<LocationQuery> service;
+      
       
       using ChildIter = decltype (TreeStructureNavigator::buildIterator(0));
 

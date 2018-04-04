@@ -44,6 +44,9 @@ namespace interact {
   
   LocationQuery::~LocationQuery() { }
   
+  /** storage for the global LocationQuery service access point */
+  lib::Depend<LocationQuery> LocationQuery::service;
+  
   
   
   

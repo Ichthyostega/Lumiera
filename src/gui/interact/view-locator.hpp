@@ -93,7 +93,7 @@ namespace interact {
       unique_ptr<UILocationSolver> locResolver_;
       
     public:
-      ViewLocator (ctrl::GlobalCtx&, LocationQueryAccess);
+      ViewLocator (ctrl::GlobalCtx&);
      ~ViewLocator();
       
       

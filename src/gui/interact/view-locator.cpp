@@ -45,6 +45,7 @@
 #include "gui/ctrl/window-locator.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
 #include "gui/ctrl/global-ctx.hpp"
+#include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -69,39 +70,14 @@ namespace interact {
   
   
   
-  namespace {
-    const LocationQueryAccess LOCATION_QUERY_SERIVCE_NOT_AVAILABLE
-      = []() -> LocationQuery&
-          {
-            throw error::State (error::LUMIERA_ERROR_LIFECYCLE
-                               ,"No LocationQuery service available. Is the GUI running?");
-          };
-  }
   
-  /** @internal global access point to some implementation of the LocationQuery API.
-   * Typically, this is provided by the Navigator service in conjunction with the ViewLocator;
-   * both are components managed by the InteractionDirector. Thus, when the UI starts, a suitable
-   * access functor will be installed here, and likewise removed/disabled on shutdown.
-   *                  ///////////////////////////////////////////////////////////////////////////////////////TICKET #1127 looks like we could get rid of that global state
-   */
-  LocationQueryAccess locationQuery = LOCATION_QUERY_SERIVCE_NOT_AVAILABLE;
-  
-  
-  
-  
-  
-  ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel, LocationQueryAccess getLocQuery)
+  ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel)
     : globals_{uiTopLevel}
-    , locResolver_{new UILocationSolver{getLocQuery}}
-    {
-      locationQuery = getLocQuery;
-    }
+    , locResolver_{new UILocationSolver{LocationQuery::service}}
+    { }
   
   // dtors via smart-ptr invoked from here...
-  ViewLocator::~ViewLocator()
-    {
-      locationQuery = LOCATION_QUERY_SERIVCE_NOT_AVAILABLE;
-    }
+  ViewLocator::~ViewLocator() { }
   
   
   
