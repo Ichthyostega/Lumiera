@@ -57,6 +57,7 @@
 #define GUI_INTERACT_VIEW_LOCATOR_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/depend-inject.hpp"
 #include "gui/interact/view-spec-dsl.hpp"
 #include "gui/id-scheme.hpp"
 #include "lib/nocopy.hpp"
@@ -89,8 +90,11 @@ namespace interact {
   class ViewLocator
     : util::NonCopyable
     {
-      ctrl::GlobalCtx& globals_;
-      unique_ptr<UILocationSolver> locResolver_;
+      using Service_LocationSolver = lib::DependInject<UILocationSolver>::ServiceInstance<>;
+      
+      ctrl::GlobalCtx&       globals_;
+      Service_LocationSolver locResolver_;
+      
       
     public:
       ViewLocator (ctrl::GlobalCtx&);

@@ -10378,7 +10378,7 @@
 <arrowlink COLOR="#647b96" DESTINATION="ID_1664602603" ENDARROW="Default" ENDINCLINATION="1374;300;" ID="Arrow_ID_947721778" STARTARROW="None" STARTINCLINATION="298;36;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1517507566761" ID="ID_839496495" MODIFIED="1519347241272">
+<node COLOR="#338800" CREATED="1517507566761" ID="ID_839496495" MODIFIED="1522807055397">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -10389,18 +10389,50 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522807009051" ID="ID_578310400" MODIFIED="1522807052395">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      f&#252;r <i>LocationQuery</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#2c5db0" DESTINATION="ID_578310400" ENDARROW="Default" ENDINCLINATION="52;3;" ID="Arrow_ID_808786860" SOURCE="ID_704863615" STARTARROW="None" STARTINCLINATION="52;3;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519355422807" ID="ID_1718427051" MODIFIED="1519355428558" TEXT="Service-Zugang regeln">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522807024217" ID="ID_704863615" MODIFIED="1522807052394">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      f&#252;r <i>LocationSolver</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#2c5db0" DESTINATION="ID_578310400" ENDARROW="Default" ENDINCLINATION="52;3;" ID="Arrow_ID_808786860" STARTARROW="None" STARTINCLINATION="52;3;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1519355422807" ID="ID_1718427051" MODIFIED="1522806887713" TEXT="Service-Zugang regeln">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1520221913300" ID="ID_906905" MODIFIED="1520221920710" TEXT="Design?">
 <icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520221927138" ID="ID_782466951" MODIFIED="1520222272577" TEXT="hintenrum injizieren">
+<node CREATED="1520221927138" ID="ID_782466951" MODIFIED="1522806883217" TEXT="hintenrum injizieren">
 <arrowlink COLOR="#3391c4" DESTINATION="ID_1058958215" ENDARROW="Default" ENDINCLINATION="356;0;" ID="Arrow_ID_1958186293" STARTARROW="None" STARTINCLINATION="40;166;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1520222029276" ID="ID_1305200988" MODIFIED="1520222040102" TEXT="magisch"/>
 <node CREATED="1520222040762" ID="ID_1805401030" MODIFIED="1520222046261" TEXT="statefull (Singleton)"/>
 <node CREATED="1520222046905" ID="ID_1622261658" MODIFIED="1520222079625" TEXT="Test wird verwirrend"/>
+<node COLOR="#338800" CREATED="1522806901418" ID="ID_1922399331" MODIFIED="1522806952792" TEXT="Sch&#xf6;ne L&#xf6;sung: lib::Depend">
+<arrowlink COLOR="#3390b9" DESTINATION="ID_871055051" ENDARROW="Default" ENDINCLINATION="-128;-126;" ID="Arrow_ID_1437440702" STARTARROW="None" STARTINCLINATION="-21;26;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 <node CREATED="1520221939552" ID="ID_1782927241" MODIFIED="1520222215939" TEXT="mit Aufruf mitgeben">
 <icon BUILTIN="button_cancel"/>
@@ -10416,24 +10448,30 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522804403692" ID="ID_281326685" MODIFIED="1522804412796" TEXT="globale Variable zur&#xfc;ckbauen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522804419777" ID="ID_631271577" MODIFIED="1522804468779" TEXT="locationQuery">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522804403692" ID="ID_281326685" MODIFIED="1522806860633" TEXT="globale Variable zur&#xfc;ckbauen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1522804419777" ID="ID_631271577" MODIFIED="1522806858336" TEXT="locationQuery">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1522804436623" ID="ID_968463465" MODIFIED="1522804473410" TEXT="view-locator.cpp">
 <icon BUILTIN="info"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1520721753927" ID="ID_1564232821" MODIFIED="1522806867566" TEXT="DependencyFactory verwenden">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1520721767005" ID="ID_364557801" MODIFIED="1522806969961" TEXT="dazu mu&#xdf; diese erst mal ausgebaut werden">
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520721753927" ID="ID_1564232821" MODIFIED="1520721763166" TEXT="DependencyFactory verwenden">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1520721767005" ID="ID_364557801" MODIFIED="1520721776960" TEXT="dazu mu&#xdf; diese erst mal ausgebaut werden"/>
-<node COLOR="#338800" CREATED="1520721792978" ID="ID_871055051" MODIFIED="1522739052423" TEXT="#1086 unify Depend singleton and instance management">
+<node CREATED="1522806971408" ID="ID_747664714" MODIFIED="1522806984381" TEXT="tja, das waren 14 Tage Arbeit....">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node COLOR="#338800" CREATED="1520721792978" ID="ID_871055051" MODIFIED="1522806952792" TEXT="#1086 unify Depend singleton and instance management">
 <arrowlink COLOR="#7188b5" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="2227;-4042;" ID="Arrow_ID_1654818003" STARTARROW="None" STARTINCLINATION="775;393;"/>
+<linktarget COLOR="#3390b9" DESTINATION="ID_871055051" ENDARROW="Default" ENDINCLINATION="-128;-126;" ID="Arrow_ID_1437440702" SOURCE="ID_1922399331" STARTARROW="None" STARTINCLINATION="-21;26;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522804252041" HGAP="-15" ID="ID_557569003" MODIFIED="1522804294049" TEXT="Verdrahtung einrichten" VSHIFT="61">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1522804252041" HGAP="-15" ID="ID_557569003" MODIFIED="1522806864760" TEXT="Verdrahtung einrichten" VSHIFT="61">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1522804312832" ID="ID_1841038371" MODIFIED="1522804485667" STYLE="fork" TEXT="InteractionDirector -&gt; Navigator == Service LocationQuery"/>
 <node CREATED="1522804344916" ID="ID_456601994" MODIFIED="1522804392465" TEXT="ViewLocator -&gt; UILocationSolver == Service"/>
 </node>

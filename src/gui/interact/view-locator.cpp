@@ -73,7 +73,7 @@ namespace interact {
   
   ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel)
     : globals_{uiTopLevel}
-    , locResolver_{new UILocationSolver{LocationQuery::service}}
+    , locResolver_{LocationQuery::service}
     { }
   
   // dtors via smart-ptr invoked from here...
