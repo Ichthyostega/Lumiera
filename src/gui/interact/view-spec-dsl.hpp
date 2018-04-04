@@ -99,6 +99,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/depend.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function-closure.hpp"
@@ -148,8 +149,8 @@ namespace interact {
       LocatorSpec(LocationRule && ruleToDetermineLocation)
         : Locator([&](Literal componentID) -> UICoord
                     {
-                      string lala{rules_};
-                      UNIMPLEMENTED ("resolve a view spec to yield explicit UI coordinates");
+                      lib::Depend<UILocationSolver> locationSolver;
+                      return locationSolver().solve (rules_, depth, componentID);
                     })
         , rules_{move (ruleToDetermineLocation)}
         { }

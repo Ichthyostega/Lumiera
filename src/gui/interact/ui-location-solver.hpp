@@ -83,7 +83,7 @@
 namespace gui {
 namespace interact {
   
-  using lib::Symbol;
+  using lib::Literal;
   using std::string;
   using std::move;
   
@@ -261,7 +261,7 @@ namespace interact {
        *        the currently existing UI topology.
        */
       UICoord
-      solve (LocationRule const& rule, size_t depth, Symbol elementTypeID)
+      solve (LocationRule const& rule, size_t depth, Literal elementTypeID)
         {
           for (auto& clause : rule)
             {
