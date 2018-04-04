@@ -55,6 +55,7 @@
 
 //#include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
+#include "lib/depend-inject.hpp"
 
 //#include <cairomm/cairomm.h>
 //#include <string>
@@ -85,8 +86,10 @@ namespace interact {
   using std::unique_ptr;
   
 //class Actions;
-  class SpotLocator;
+  class LocationQuery;
+  
   class Navigator;
+  class SpotLocator;
   class FocusTracker;
   class ViewLocator;
   
@@ -101,10 +104,14 @@ namespace interact {
     {
       ctrl::GlobalCtx& globalCtx_;
       
+      // == exposed to Depend on ==
+      using Service_LocationQuery = lib::DependInject<LocationQuery>::ServiceInstance<Navigator>;
+      
+      
       // == global Services ==
       unique_ptr<ViewLocator> viewLocator_;
       unique_ptr<SpotLocator> spotLocator_;
-      unique_ptr<Navigator>    navigator_;
+      Service_LocationQuery    navigator_;
       unique_ptr<FocusTracker>  tracker_;
       
       // == Model globals ==

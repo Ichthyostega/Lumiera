@@ -35,6 +35,7 @@
 #include "gui/interact/spot-locator.hpp"
 #include "gui/interact/navigator.hpp"
 #include "gui/interact/focus-tracker.hpp"
+#include "gui/interact/ui-coord-resolver.hpp"
 #include "gui/dialog/preferences-dialog.hpp"
 #include "gui/dialog/render.hpp"
 #include "gui/workspace/workspace-window.hpp"
@@ -85,7 +86,7 @@ namespace interact {
     , globalCtx_(globals)
     , viewLocator_{new ViewLocator{globals, [this]() -> LocationQuery& { return *navigator_; }}}
     , spotLocator_{new SpotLocator}
-    , navigator_{new Navigator{*spotLocator_, *viewLocator_}}
+    , navigator_{*spotLocator_, *viewLocator_}    // Service exposed as Depend<LocationQuery>
     , tracker_{new FocusTracker{*navigator_}}
     , uiState_{new UiState{globals.uiBus_.getStateManager(), *tracker_}}
     , assets_{new AssetController{session::Root::getAssetID(), this->uiBus_}}

@@ -130,7 +130,7 @@ namespace interact {
   
   /**
    * A specification to describe the desired location of a component view within the Lumiera UI.
-   * ViewSpec is basically a set of [UI coordinates](\ref UICoord), with the additional possibility
+   * LocatorSpec is basically a set of [UI coordinates](\ref UICoord), with the additional possibility
    * of specifying several alternatives, with the intention to pick the first applicable one.
    * @tparam depth the level in the tree addressed by this locator
    * @remarks Locator is build from a DSL expression, which is basically a UICoord::Builder.
@@ -232,7 +232,7 @@ namespace interact {
                          "Additional parameters of the allocator function must match the AllocSpec<ARGS> template parameters");
           
           
-          typedef Tuple<FurtherArgs> ArgTuple;
+          using ArgTuple = Tuple<FurtherArgs>;
           
           return [=](auto&&... args) -> Allocator
                     {

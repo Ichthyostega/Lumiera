@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file ui-location-resolver-test.cpp
+/** @file ui-location-solver-test.cpp
  ** unit test \ref UILocationSolver_test
  */
 
@@ -75,7 +75,7 @@ namespace test {
         }
       
       
-      /** @test demonstrate the typical invocation and usage" */
+      /** @test demonstrate the typical invocation and usage */
       void
       simple_usage_example()
         {

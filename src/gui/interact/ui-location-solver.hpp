@@ -21,7 +21,7 @@
 */
 
 
-/** @file ui-location-resolver.hpp
+/** @file ui-location-solver.hpp
  ** A solver to match incomplete coordinate specifications against the actual UI topology.
  ** Within the Lumiera UI, a _component view_ is typically _created or retrieved_ to live at some position
  ** within the tree-like topology of the interface. Such happens as a consequence of interaction or other
@@ -58,7 +58,7 @@
  ** As a minimum requirement, each LocationRule should be concluded with such a "catch-all" explicit
  ** create clause, which describes the standard location of the element in question.
  ** 
- ** @see UILocationResolver_test
+ ** @see UILocationSolver_test
  ** @see ViewSpecDSL_test
  ** @see UICoordResolver
  ** @see view-locator.hpp
@@ -230,7 +230,7 @@ namespace interact {
   /**
    * Service to determine the location of an UI component view.
    * @see LocationRule
-   * @see UILocationResolver_test::simple_usage_example()
+   * @see UILocationSolver_test::simple_usage_example()
    */
   class UILocationSolver
     : util::NonCopyable

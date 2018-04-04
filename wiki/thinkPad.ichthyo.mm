@@ -10416,12 +10416,26 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522804403692" ID="ID_281326685" MODIFIED="1522804412796" TEXT="globale Variable zur&#xfc;ckbauen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522804419777" ID="ID_631271577" MODIFIED="1522804468779" TEXT="locationQuery">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522804436623" ID="ID_968463465" MODIFIED="1522804473410" TEXT="view-locator.cpp">
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1520721753927" ID="ID_1564232821" MODIFIED="1520721763166" TEXT="DependencyFactory verwenden">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1520721767005" ID="ID_364557801" MODIFIED="1520721776960" TEXT="dazu mu&#xdf; diese erst mal ausgebaut werden"/>
 <node COLOR="#338800" CREATED="1520721792978" ID="ID_871055051" MODIFIED="1522739052423" TEXT="#1086 unify Depend singleton and instance management">
 <arrowlink COLOR="#7188b5" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="2227;-4042;" ID="Arrow_ID_1654818003" STARTARROW="None" STARTINCLINATION="775;393;"/>
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522804252041" HGAP="-15" ID="ID_557569003" MODIFIED="1522804294049" TEXT="Verdrahtung einrichten" VSHIFT="61">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1522804312832" ID="ID_1841038371" MODIFIED="1522804485667" STYLE="fork" TEXT="InteractionDirector -&gt; Navigator == Service LocationQuery"/>
+<node CREATED="1522804344916" ID="ID_456601994" MODIFIED="1522804392465" TEXT="ViewLocator -&gt; UILocationSolver == Service"/>
 </node>
 </node>
 </node>
@@ -28563,8 +28577,7 @@
       explizit eine Template-Instaniierung triggern, und zwar f&#252;r
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#b49ca6" DESTINATION="ID_1547993807" ENDARROW="Default" ENDINCLINATION="10;-59;" ID="Arrow_ID_1421481593" STARTARROW="None" STARTINCLINATION="323;-44;"/>
 </node>
 <node COLOR="#338800" CREATED="1522733831301" ID="ID_1741953995" MODIFIED="1522733846627" TEXT="Spezialisierung + explizite Template-Instanz">
@@ -28680,8 +28693,7 @@
       <b>Problem</b>&#160;ist nun, diese umgeleiteten Funktionsdefinitionen k&#246;nnen <i>nur einen Typ</i>&#160;(Template-Parameter) bekommen, und dieser Typ&#160;wiederum mu&#223; -- zumindest als abstrakter Platzhalter -- in allen TU sichtbar sein.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522709471957" ID="ID_170352206" MODIFIED="1522709540572" TEXT="scheint nicht l&#xf6;sbar">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -28737,8 +28749,7 @@
       Allerdings erscheint es mir nicht sinnvoll, hier mit Tricksereien zu arbeiten!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1522733618506" ID="ID_1873321000" MODIFIED="1522733895572" TEXT="man k&#xf6;nnte stattdesen Link instantiieren">
 <icon BUILTIN="idea"/>
@@ -28772,8 +28783,7 @@
       da nur wenige Variable erstetzt werden m&#252;&#223;ten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
