@@ -285,7 +285,7 @@ namespace lib {
        * instance of the `MOC` subclass, which it manages and exposes like a smart-ptr.
        * When the handle goes out of scope, the original state and configuration is restored
        */
-      template<class MOC>
+      template<class MOC =SRV>
       class Local
         : util::MoveOnly
         {

@@ -29,15 +29,20 @@
 #include "lib/test/test-helper.hpp"
 #include "gui/interact/view-spec-dsl.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "gui/interact/gen-node-location-query.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
+//#include <vector>
 
 
-//using std::string;
+using std::string;
+using lib::diff::MakeRec;
+using lib::diff::Rec;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
 //using util::isSameObject;
@@ -50,6 +55,8 @@ namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   using lib::test::showSizeof;
+  
+  using MockLoationSolver = lib::DependInject<UILocationSolver>::Local<>;
   
   namespace { //Test fixture...
     
@@ -86,6 +93,21 @@ namespace test {
       void
       verify_standardUsage()
         {
+           //-------------------------------------------------------------Test-Fixture
+          // a Test dummy placeholder for the real UI structure
+          Rec dummyUiStructure = MakeRec()
+                                   .set("win-1"
+                                       , MakeRec()
+                                           .type("perspective")
+                                           .set("parentLocation", MakeRec())
+                                       );
+          // answer "location queries" backed by this structure
+          GenNodeLocationQuery locationQuery{dummyUiStructure};
+          MockLoationSolver mock ([&]{ return new UILocationSolver{locationQuery}; });
+          //--------------------------------------------------------------(End)Test-Fixture
+          
+          
+          
           uint allocCounter = 0;
           
           // Simulation/Example for an allocator-builder
@@ -96,8 +118,6 @@ namespace test {
                                                 else
                                                   return target.tab(limit);
                                               };
-          /////////TODO verify this...
-          cout << showSizeof(limitAllocation) <<endl;
           
           // the actual View Specification would then be written as...
           ViewSpec locate = UICoord::currentWindow().panel("parentLocation");
