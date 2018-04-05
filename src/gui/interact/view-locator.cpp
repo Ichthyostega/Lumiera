@@ -44,7 +44,6 @@
 #include "gui/ctrl/panel-locator.hpp"
 #include "gui/ctrl/window-locator.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
-#include "gui/ctrl/global-ctx.hpp"
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
@@ -71,8 +70,8 @@ namespace interact {
   
   
   
-  ViewLocator::ViewLocator (ctrl::GlobalCtx& uiTopLevel)
-    : globals_{uiTopLevel}
+  ViewLocator::ViewLocator (ctrl::WindowLocator& windowLocatorService)
+    : windowLoc_{windowLocatorService}
     , locResolver_{LocationQuery::service}
     { }
   
@@ -86,13 +85,7 @@ namespace interact {
   PanelLocator&
   ViewLocator::panelLocator()
   {
-    return globals_.windowLoc_.locatePanel();
-  }
-  
-  WindowLocator&
-  ViewLocator::windowLocator()
-  {
-    return globals_.windowLoc_;
+    return windowLoc_.locatePanel();
   }
   
   

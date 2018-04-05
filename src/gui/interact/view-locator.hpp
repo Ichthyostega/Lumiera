@@ -69,7 +69,6 @@
 
 namespace gui {
 namespace ctrl{
-  class GlobalCtx;
   class PanelLocator;
   class WindowLocator;
 }
@@ -92,12 +91,12 @@ namespace interact {
     {
       using Service_LocationSolver = lib::DependInject<UILocationSolver>::ServiceInstance<>;
       
-      ctrl::GlobalCtx&       globals_;
+      ctrl::WindowLocator&   windowLoc_;
       Service_LocationSolver locResolver_;
       
       
     public:
-      ViewLocator (ctrl::GlobalCtx&);
+      ViewLocator (ctrl::WindowLocator&);
      ~ViewLocator();
       
       
@@ -110,7 +109,6 @@ namespace interact {
     private:
       /* === accessors to sibling global services  === */
       ctrl::PanelLocator&  panelLocator();
-      ctrl::WindowLocator& windowLocator();
       
     };
   
