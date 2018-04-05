@@ -419,7 +419,7 @@ namespace test {
           CHECK ("UI:woe[asset]-panel.asset" == string{solver.solve (location, UIC_VIEW, "video")});         //Note: the 4th Rule matches on existing view "asset",
                                                                                                              //      in spite of our query demanding a view "video"
           /* === wildcard match based on the type of entity to be displaced === */
-#if false ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1130 : not yet possible. Match based on placeholder substitutet from context
+#if false ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1130 : not yet possible. Match based on placeholder substituted from context
 //        uiTree = MakeRec()
 //                   .set("win"
 //                       , MakeRec()
@@ -441,7 +441,7 @@ namespace test {
 //        CHECK ("UI:win[shady]-special.asset.specialAsset" == string{solver.solve (location, UIC_TAB, "specialAsset")});
 //                                                                                                         //Note: the next rule would match on the general asset panel
 //                                                                                                         //      but this special rule allows to re-use a tab dedicated to specialAsset
-#endif    ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1130 : not yet possible. Match based on placeholder substitutet from context
+#endif    ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1130 : not yet possible. Match based on placeholder substituted from context
           
           
           

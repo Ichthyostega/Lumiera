@@ -80,6 +80,8 @@ namespace test {
 //        verify_basicProperties();
           verify_standardUsage();
           verify_alternatives();
+          
+          verify_genericInvocation();
         }
       
       
@@ -148,6 +150,30 @@ namespace test {
       verify_alternatives()
         {
           UNIMPLEMENTED ("querying and selection of location alternatives");
+        }
+      
+      
+      void
+      verify_genericInvocation()
+        {
+           //-------------------------------------------------------------Test-Fixture
+          // a Test dummy placeholder for the real UI structure
+          Rec dummyUiStructure = MakeRec()
+                                   .set("win-1"
+                                       , MakeRec()
+                                           .type("perspective")
+                                           .set("parentLocation", MakeRec())
+                                       );
+          // answer "location queries" backed by this structure
+          GenNodeLocationQuery locationQuery{dummyUiStructure};
+          MockLoationSolver mock ([&]{ return new UILocationSolver{locationQuery}; });
+          /////////////////////////////////////////////////////////////////////////////////////////TICKET 1129 : how to create ViewLocator mock without global context??
+          //--------------------------------------------------------------(End)Test-Fixture
+          
+//        ErrorLogView errorLog = viwLocator.get<ErrorLogView>();
+//        TimelineView timeline = viwLocator.get<TimelineView>();
+          
+          /////////////////////////////////////////////////////////////////////////////////////////TICKET 1129 : use an EventLog to verify the forwarded invocations??
         }
     };
   
