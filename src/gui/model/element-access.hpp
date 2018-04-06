@@ -1,5 +1,5 @@
 /*
-  ELEMENT.hpp  -  a generic element in the UI-Model
+  ELEMENT-ACCESS.hpp  -  access to generic elements in the UI
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file element.hpp
+/** @file element-access.hpp
  ** Generic building block in the Lumiera GUI model.
  ** A model::Element has a unique identifier, which is tied to the
  ** identification scheme used in the "real" model in Proc-Layer.
@@ -30,7 +30,7 @@
  ** representation of attributes is provided.
  ** 
  ** @note as of 1/2015 this is a first draft and WIP-WIP-WIP
- ** @todo WIP  ///////////////////////TICKET #959
+ ** @todo WIP  ///////////////////////TICKET #1134
  ** 
  ** @see ////TODO_test usage example
  ** @see element.cpp implementation
@@ -38,8 +38,8 @@
  */
 
 
-#ifndef GUI_MODEL_ELEMENT_H
-#define GUI_MODEL_ELEMENT_H
+#ifndef GUI_MODEL_ELEMENT_ACCESS_H
+#define GUI_MODEL_ELEMENT_ACCESS_H
 
 
 #include "lib/error.hpp"
@@ -67,13 +67,13 @@ namespace model {
    * @see NA_test
    */
   template<class X>
-  class Element
+  class ElementAccess
     {
       string nothing_;
       
     public:
       explicit
-      Element (string const& b)
+      ElementAccess (string const& b)
         : nothing_(b)
         { }
       
@@ -87,10 +87,10 @@ namespace model {
       setSolution (string const& solution ="")
         {
           UNIMPLEMENTED ("tbw");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
           if (isDeaf())
             this->transmogrify (solution);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
         }
       
       
@@ -114,7 +114,7 @@ namespace model {
    */
   template<class X>
   inline void
-  Element<X>::maybe ()  const
+  ElementAccess<X>::maybe ()  const
   {
     UNIMPLEMENTED ("tbw");
   }
@@ -124,4 +124,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_ELEMENT_H*/
+#endif /*GUI_MODEL_ELEMENT_ACCESS_H*/

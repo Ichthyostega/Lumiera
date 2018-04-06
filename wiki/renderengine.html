@@ -2906,7 +2906,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201802240154" tags="def GuiPattern design" changecount="51">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201804062230" tags="def GuiPattern design" changecount="52">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -3037,6 +3037,7 @@ It is not clear yet {{red{as of 2/2018}}}, if those additional complexities are 
 
 !!!Semantics of allocation
 While the process of probing and matching the location specification finally yields an explicit UICoord path to the desired element, it is up to the allocation step actually to decide on the action to be taken. Some allocation operations impose some kind of limit, and are thus free to ignore the given spec and rather return an existing element in place. In the end, the purpose of this whole matching and allocation process is to get hold of a suitable UI component without knowing its precise coordinates in the UI topology. And this is the very property to enable flexible mapping of the strictly hierarchical session structures onto the UI in a fluid way.
+&amp;rarr; [[low level component access|UILowLevelAccess]]
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">
@@ -4357,7 +4358,7 @@ The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangibl
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
 </div>
-<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201802240130" tags="spec decision draft GuiPattern" changecount="23">
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201804062245" tags="spec decision draft GuiPattern" changecount="24">
 <pre>//Service to navigate through the UI as generic structure.//
 The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
 
@@ -4391,7 +4392,7 @@ From these use cases we conclude that the actual requirements for a Navigator co
 In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on [[UI coordinates|UICoord]] solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
 
 !Challenges of the implementation
-Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose
+Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose. The actual access to low-level UI entities generates a host of further tecnicalities, which we attempt to stash away into a different low-level service, the  [[gui:ctrl::ElmAccessDir|UILowLevelAccess]].
 
 Moreover, the design of coordinate matching and resolving incurs a structure similar to [[render job planning|FrameDispatcher]] -- and the corresponding design problems remain to be solved in a satisfactory way &amp;rarr; [[some notes...|AboutMonads]]
 
@@ -9845,7 +9846,7 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
-<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201801100331" tags="def draft spec Concepts GuiPattern" changecount="26">
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201804062229" tags="def draft spec Concepts GuiPattern" changecount="27">
 <pre>//A topological addressing scheme to designate structural locations within the UI.//
 Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
 * to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    
@@ -9877,7 +9878,7 @@ The first distinction to draw is the ''anchor point'' of a given coordinate spec
 !UI coordinate path evaluation
 As indicated above, evaluation of UI coordinates requires a ''resolver'', to perform a search and matching operation and to hold the evaluation state. Evaluation is accomplished by first constituting an anchoring, followed by traversal of the coordinate spec and matching against a navigation path within the actual UI window configuration. This process might involve interpretation of some meta-symbols and interpolation of wildcards.
 
-Internally the coordinate resolver in turn relies on a context query interface, to find out about existing windows, panels, views and tabs and to navigate the real UI structure. The actual implementation of this context query interface is backed by the [[Navigator]] component exposed through the InteractionDirector.
+Internally the coordinate resolver in turn relies on a context query interface, to find out about existing windows, panels, views and tabs and to navigate the real UI structure. The actual implementation of this context query interface is backed by the [[Navigator]] component exposed through the InteractionDirector. In practice, the Navigator relies on another service for the [[low level access to UI components|UILowLevelAccess]]
 !!!Query operations
 In addition to the //locally decidable properties// of a coordinate spec, which are the explicitness and the presence of some component, several contextual predications may be queried 
 ;anchorage
@@ -9909,6 +9910,16 @@ In addition to querying the interpretation of a given coordinate spec with respe
 :* the given //extension suffix// is then attached behind
 
 __Navigation mutations:__ //In theory,// it would even be possible to extend the path by creating suitable child components; but actually this would require all &quot;elements&quot; to implement a suitable mutation interface -- which in the case of //generic elements// might be far beyond the common ground. For this reason, we keep mutation of the backing environment outside of a path mutator's scope and rather keep mutation limited to the path itself.
+</pre>
+</div>
+<div title="UILowLevelAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201804062255" tags="spec draft GuiPattern" changecount="1">
+<pre>//Cross cutting access to elementary UI structures.//
+We have several orthogonal identification and access schemes within the UI. A naively written UI application just attaches the core logic below some widgets and controllers -- not only does this lead to a hard to maintain codebase, this approch is even outright impossible in our case, due to the strict decoupling between core and GUI, which places us into the situation to connect a self contained core with a self contained UI. This is a binding, which, as a sideline, also generates a control structure of its own. We can indeed write code dealing with a generic UI element -- but there needs to be some place where this kind of generic designation is translated into internal structures of the UI toolkit (GTK in our case), to obtain a direct (language) reference to some implementation widget finally.
+
+A service to translate some generic address scheme into actual entities builds the foundation of designating a &quot;place withih the UI&quot; by abstracted topological [[UI coordinates|UICoord]]. It allows to define //rules// how some generic [[kind of view|GuiComponentView]] shall be //placed and allocated// into the existing UI structure.
+
+!Notes about design and implementation {{red{WIP 4/2018}}}
+At the time of this writing, it is not really clear if we need such a facility and what form its implementation will take -- which in turn places several further planning steps and design consideration into dangling state. The programmer's usual remedy in such a situation is to create yet another abstraction as a tie break. We do not know what it is, but at least we can write unit tests against it to find out what it could be.
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">

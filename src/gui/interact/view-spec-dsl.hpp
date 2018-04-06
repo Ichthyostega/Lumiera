@@ -134,7 +134,7 @@ namespace interact {
    * LocatorSpec is basically a set of [UI coordinates](\ref UICoord), with the additional possibility
    * of specifying several alternatives, with the intention to pick the first applicable one.
    * @tparam depth the level in the tree addressed by this locator
-   * @remarks Locator is build from a DSL expression, which is basically a UICoord::Builder.
+   * @remarks Locator is built from a DSL expression, which is basically a UICoord::Builder.
    *            This coordinate spec describes a sequence of several places where to locate
    *            the UI-Element in question. The template parameter clarifies if we're talking
    *            about windows here, or panels or views. The latter is the [default case](\ref ViewSpec).

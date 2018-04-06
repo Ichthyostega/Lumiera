@@ -3565,7 +3565,8 @@
 <node CREATED="1487034180712" ID="ID_1371598611" MODIFIED="1518487921063" TEXT="und jedes genau wei&#xdf;, was die andern k&#xf6;nnen"/>
 </node>
 </node>
-<node CREATED="1504393149140" HGAP="16" ID="ID_48107354" MODIFIED="1518487921063" TEXT="Addressierung" VSHIFT="27">
+<node CREATED="1504393149140" HGAP="16" ID="ID_48107354" MODIFIED="1523022936584" TEXT="Addressierung" VSHIFT="27">
+<arrowlink COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" STARTARROW="None" STARTINCLINATION="-597;127;"/>
 <node CREATED="1504393160466" ID="ID_450547493" MODIFIED="1518487921063" TEXT="globales ID-Schema">
 <node CREATED="1504393168946" ID="ID_390425361" MODIFIED="1518487921063" TEXT="Model-Typen"/>
 <node CREATED="1504393177712" ID="ID_1686403667" MODIFIED="1518487921063" TEXT="View-Deskriptor">
@@ -9312,8 +9313,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506175097367" ID="ID_1442345755" MODIFIED="1518487921066" TEXT="ViewSpec-DSL">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506175097367" ID="ID_1442345755" MODIFIED="1523022775958" TEXT="ViewSpec-DSL">
 <arrowlink COLOR="#b45c5a" DESTINATION="ID_686917529" ENDARROW="Default" ENDINCLINATION="-468;-196;" ID="Arrow_ID_1955094318" STARTARROW="None" STARTINCLINATION="360;85;"/>
+<linktarget COLOR="#6a8499" DESTINATION="ID_1442345755" ENDARROW="Default" ENDINCLINATION="-971;84;" ID="Arrow_ID_1191206769" SOURCE="ID_1844877136" STARTARROW="None" STARTINCLINATION="502;0;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1515877499720" HGAP="-59" ID="ID_1283126436" MODIFIED="1518487921066" TEXT="Basis" VSHIFT="29">
 <node CREATED="1515877527300" ID="ID_1356241564" MODIFIED="1518487921066" TEXT="ist Teil des ViewLocators">
@@ -10038,8 +10040,7 @@
       ein <b>LocationSolver</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1517021326957" ID="ID_20403834" MODIFIED="1522938411626">
@@ -10052,8 +10053,7 @@
       <b>LocationQuery</b>&#160;qua Navigator
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1517021298929" ID="ID_621970077" MODIFIED="1518487921069">
@@ -10081,8 +10081,7 @@
       sehen <b>ViewLocator</b>-API
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -11963,28 +11962,29 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182023288" ID="ID_1539184761" MODIFIED="1522883337660" TEXT="ViewSpecDSL_test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182023288" ID="ID_1539184761" MODIFIED="1523053425474" STYLE="fork" TEXT="ViewSpecDSL_test">
+<arrowlink COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-345;-1481;" ID="Arrow_ID_839730277" STARTARROW="None" STARTINCLINATION="-530;453;"/>
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182077694" ID="ID_839824654" MODIFIED="1518487921072" TEXT="verify_basicProperties">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182077694" ID="ID_839824654" MODIFIED="1523053425474" TEXT="verify_basicProperties">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1515633695710" ID="ID_1540478220" MODIFIED="1518487921072" TEXT="aus standardUsage ablzuleiten"/>
-<node CREATED="1515633710396" ID="ID_335824710" MODIFIED="1518487921072" TEXT="spezifiziert die formalen Basis-Eigenschaften"/>
+<node CREATED="1515633695710" ID="ID_1540478220" MODIFIED="1523053425474" TEXT="aus standardUsage ablzuleiten"/>
+<node CREATED="1515633710396" ID="ID_335824710" MODIFIED="1523053425474" TEXT="spezifiziert die formalen Basis-Eigenschaften"/>
 </node>
-<node COLOR="#338800" CREATED="1506182037003" ID="ID_439307131" MODIFIED="1522883325632" TEXT="verify_standardUsage">
+<node COLOR="#338800" CREATED="1506182037003" ID="ID_439307131" MODIFIED="1523053425474" TEXT="verify_standardUsage">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1515633645885" ID="ID_1659749577" MODIFIED="1518487921072" TEXT="einfaches Dummy-Setup"/>
-<node CREATED="1515633651212" ID="ID_704575529" MODIFIED="1518487921072" TEXT="erlaubt, die Strukturen zu bauen"/>
-<node CREATED="1515633658483" ID="ID_149158343" MODIFIED="1518487921072" TEXT="l&#xe4;uft ohne die UI-Backbone">
+<node CREATED="1515633645885" ID="ID_1659749577" MODIFIED="1523053425474" TEXT="einfaches Dummy-Setup"/>
+<node CREATED="1515633651212" ID="ID_704575529" MODIFIED="1523053425474" TEXT="erlaubt, die Strukturen zu bauen"/>
+<node CREATED="1515633658483" ID="ID_149158343" MODIFIED="1523053425474" TEXT="l&#xe4;uft ohne die UI-Backbone">
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182087462" ID="ID_47070993" MODIFIED="1518487921072" TEXT="verify_alternatives">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182087462" ID="ID_47070993" MODIFIED="1523053425474" TEXT="verify_alternatives">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1515633722883" ID="ID_9454050" MODIFIED="1518487921072" TEXT="rein technische Erweiterung"/>
-<node CREATED="1515633737905" ID="ID_1500220475" MODIFIED="1518487921072" TEXT="Auswahl der ersten &quot;passenden&quot; L&#xf6;sung"/>
-<node CREATED="1515633770884" ID="ID_861669562" MODIFIED="1518487921072" TEXT="Dummy: GenNodeLocationQuery anstelle eines realen UI"/>
+<node CREATED="1515633722883" ID="ID_9454050" MODIFIED="1523053425474" TEXT="rein technische Erweiterung"/>
+<node CREATED="1515633737905" ID="ID_1500220475" MODIFIED="1523053425474" TEXT="Auswahl der ersten &quot;passenden&quot; L&#xf6;sung"/>
+<node CREATED="1515633770884" ID="ID_861669562" MODIFIED="1523053425474" TEXT="Dummy: GenNodeLocationQuery anstelle eines realen UI"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522940227022" ID="ID_1745396406" MODIFIED="1522940273981" TEXT="verify_invocation">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522940227022" ID="ID_1745396406" MODIFIED="1523053425474" TEXT="verify_invocation">
 <linktarget COLOR="#4c8891" DESTINATION="ID_1745396406" ENDARROW="Default" ENDINCLINATION="-828;-41;" ID="Arrow_ID_1830310728" SOURCE="ID_1539937928" STARTARROW="None" STARTINCLINATION="242;22;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -12573,6 +12573,76 @@
 <node CREATED="1504831537746" ID="ID_692369391" MODIFIED="1518487921075" TEXT="sp&#xe4;ter k&#xf6;nnte das user-Konfigurierbar werden">
 <node CREATED="1504831564095" ID="ID_1860813217" MODIFIED="1518487921075" TEXT="per Einrichtungs UI"/>
 <node CREATED="1504831577317" ID="ID_1281872136" MODIFIED="1518487921075" TEXT="als textuelle Konfiguration"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523019202064" HGAP="-88" ID="ID_1224438713" MODIFIED="1523023211290" TEXT="Low-Level-Zugriff" VSHIFT="93">
+<arrowlink COLOR="#48678b" DESTINATION="ID_435980488" ENDARROW="Default" ENDINCLINATION="-1768;-2819;" ID="Arrow_ID_689216354" STARTARROW="Default" STARTINCLINATION="309;919;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1523023060481" ID="ID_1061103814" MODIFIED="1523023064036" TEXT="Zweck">
+<node CREATED="1523020311838" ID="ID_118722698" MODIFIED="1523020315553" TEXT="Bindeglied">
+<node CREATED="1523020317117" ID="ID_36029855" MODIFIED="1523020327967" TEXT="UI-Koordinaten"/>
+<node CREATED="1523020328651" ID="ID_57107983" MODIFIED="1523020334087" TEXT="Component Views"/>
+<node CREATED="1523020334770" ID="ID_1169326637" MODIFIED="1523020339014" TEXT="konkrete Widgets"/>
+</node>
+<node CREATED="1523023241752" ID="ID_1541233512" MODIFIED="1523023254890">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Schicht <i>unter</i>&#160;dem ViewLocator
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1523023256246" ID="ID_1600604589" MODIFIED="1523023271295" TEXT="UI-Koordinaten -&gt;">
+<node CREATED="1523023272292" ID="ID_81266590" MODIFIED="1523023288805" TEXT="konkretes Element erreichen"/>
+<node CREATED="1523023289345" ID="ID_625415004" MODIFIED="1523023295980" TEXT="konkretes Element erzeugen"/>
+</node>
+</node>
+<node CREATED="1523028361507" ID="ID_393788551" MODIFIED="1523028366222" TEXT="Abstraktion">
+<node CREATED="1523028367338" ID="ID_204804362" MODIFIED="1523051167969" TEXT="ElementAccess">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1523028460629" ID="ID_683539946" MODIFIED="1523028462433" TEXT="Service">
+<node CREATED="1523028463213" ID="ID_795295203" MODIFIED="1523030738854" TEXT="lib::Depend&lt;ElementAccess&gt;"/>
+<node CREATED="1523030678458" ID="ID_1970353135" MODIFIED="1523030681637" TEXT="mockbar"/>
+</node>
+<node CREATED="1523055325343" ID="ID_1512953348" MODIFIED="1523055328331" TEXT="Dienste">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523055329159" ID="ID_1316858206" MODIFIED="1523055337404" TEXT="noch nicht wirklich klar">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1523055339293" ID="ID_805375580" MODIFIED="1523055357236" TEXT="erst mal ein Hilfsmittel f&#xfc;r das Design">
+<icon BUILTIN="idea"/>
+<node CREATED="1523055360002" ID="ID_1183834156" MODIFIED="1523055363894" TEXT="yet another abstraction"/>
+</node>
+</node>
+</node>
+<node CREATED="1523053331956" ID="ID_563797148" MODIFIED="1523053334615" TEXT="Test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" ID="ID_1234019560" MODIFIED="1523053434519" TEXT="ElementAccess_test">
+<linktarget COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-345;-1481;" ID="Arrow_ID_839730277" SOURCE="ID_1539184761" STARTARROW="None" STARTINCLINATION="-530;453;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1523055378032" ID="ID_1727349685" MODIFIED="1523055384523" TEXT="Test-Hilfsmittel">
+<node CREATED="1523055393950" ID="ID_62932320" MODIFIED="1523055412955" TEXT="TestElementAccess">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1523055422074" ID="ID_1765892157" MODIFIED="1523055430229" TEXT="Fake-Implementierung des Interfaces">
+<node CREATED="1523055519972" ID="ID_52044142" MODIFIED="1523055528879" TEXT="k&#xf6;nnte sich mal zu einem Test-Framework auswachsen"/>
+<node CREATED="1523055529443" ID="ID_567387345" MODIFIED="1523055536280" TEXT="...aber nicht jetzt">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1523055431649" ID="ID_1190698125" MODIFIED="1523055442076" TEXT="kein GTK dahinter">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1523055476638" ID="ID_1252887483" MODIFIED="1523055485333" TEXT="verwende Marker-Dummy-Typen"/>
+<node CREATED="1523055489736" ID="ID_1578213763" MODIFIED="1523055499219" TEXT="um polymorphen und generischen Zugang zu pr&#xfc;fen"/>
 </node>
 </node>
 </node>
@@ -14912,6 +14982,190 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
+<node CREATED="1523019258000" HGAP="-55" ID="ID_974158229" MODIFIED="1523022936584" TEXT="Struktur-Schemata" VSHIFT="-28">
+<linktarget COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" SOURCE="ID_48107354" STARTARROW="None" STARTINCLINATION="-597;127;"/>
+<font NAME="SansSerif" SIZE="14"/>
+<node CREATED="1523019333461" ID="ID_631113825" MODIFIED="1523019344239" TEXT="UI-Element - Hierarchie">
+<node CREATED="1523019501198" ID="ID_531041967" MODIFIED="1523019517194" TEXT="Systematisches UI-Modell">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1523021670034" ID="ID_1102842396" MODIFIED="1523021676897" TEXT="Einstiegspunkte">
+<icon BUILTIN="idea"/>
+<node CREATED="1523021679960" ID="ID_1386792927" MODIFIED="1523021704154">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (GlobalCtx)-&gt;<b>InteractionDirector</b>&#160;(=Model Root)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1523019349923" ID="ID_353542665" MODIFIED="1523019373947" TEXT="UI-Koordinaten (UICoord)">
+<node CREATED="1523019476817" ID="ID_1756924881" MODIFIED="1523019520204" TEXT="abstrahierte UI-Topologie">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1523021751558" ID="ID_816148300" MODIFIED="1523021811070" TEXT="Einstiegspunkte">
+<icon BUILTIN="idea"/>
+<node CREATED="1523020094460" ID="ID_950968515" MODIFIED="1523021776371">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (GlobalCtx)-&gt;InteractionDirector-&gt;<b>Navigator</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1523021779698" ID="ID_1153977477" MODIFIED="1523021791197" TEXT="erforschen der aktuellen Topologie"/>
+<node CREATED="1523021791784" ID="ID_1683105699" MODIFIED="1523021800219" TEXT="Navigation von einem Punkt weg"/>
+</node>
+<node CREATED="1523019770144" ID="ID_385008471" MODIFIED="1523020297176">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (GlobalCtx)-&gt;WindowLocator-&gt;<b>UIComponentAccessor</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1523021816637" ID="ID_217124542" MODIFIED="1523021829911" TEXT="Element zu gegebenen Koordinaten"/>
+</node>
+</node>
+</node>
+<node CREATED="1523019393893" ID="ID_1642953007" MODIFIED="1523019399464" TEXT="Component View">
+<node CREATED="1523019457868" ID="ID_1319307429" MODIFIED="1523019522833" TEXT="Menge relevanter Entit&#xe4;ten">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+<node CREATED="1523021612818" ID="ID_366179512" MODIFIED="1523021633434" TEXT="Per Konvention festgelegt">
+<node CREATED="1523022525819" ID="ID_1844877136" MODIFIED="1523022775958" TEXT="ViewSpec-DSL">
+<arrowlink COLOR="#6a8499" DESTINATION="ID_1442345755" ENDARROW="Default" ENDINCLINATION="-971;84;" ID="Arrow_ID_1191206769" STARTARROW="None" STARTINCLINATION="502;0;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1523021634614" ID="ID_1226976079" MODIFIED="1523021641914" TEXT="flacher Namensraum"/>
+<node CREATED="1523021642573" ID="ID_488343933" MODIFIED="1523021654544" TEXT="komplett von ihrem Ort abstrahiert"/>
+</node>
+<node CREATED="1523020082453" ID="ID_1678299024" MODIFIED="1523020148531" TEXT="Einstiegspunkte">
+<icon BUILTIN="idea"/>
+<node CREATED="1523020094460" ID="ID_970478590" MODIFIED="1523020111929">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (GlobalCtx)-&gt;InteractionDirector-&gt;<b>ViewLocator</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1523021575831" ID="ID_952406415" MODIFIED="1523021592656" TEXT="findet oder belegt"/>
+<node CREATED="1523021593460" ID="ID_565564905" MODIFIED="1523021606966" TEXT="Prinzip: ein St&#xfc;ck vom Typ XYZ"/>
+</node>
+<node CREATED="1523019770144" ID="ID_435980488" MODIFIED="1523023211290">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (GlobalCtx)-&gt;WindowLocator-&gt;<b>UIComponentAccessor</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#48678b" DESTINATION="ID_435980488" ENDARROW="Default" ENDINCLINATION="-1768;-2819;" ID="Arrow_ID_689216354" SOURCE="ID_1224438713" STARTARROW="Default" STARTINCLINATION="309;919;"/>
+<node CREATED="1523020311838" ID="ID_807452449" MODIFIED="1523020315553" TEXT="Bindeglied">
+<node CREATED="1523020317117" ID="ID_1026544092" MODIFIED="1523020327967" TEXT="UI-Koordinaten"/>
+<node CREATED="1523020328651" ID="ID_1384216871" MODIFIED="1523020334087" TEXT="Component Views"/>
+<node CREATED="1523020334770" ID="ID_446983517" MODIFIED="1523020339014" TEXT="konkrete Widgets"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1523019409939" ID="ID_13197399" MODIFIED="1523019426500" TEXT="Fenster - Panel - Widget">
+<node CREATED="1523019435095" FOLDED="true" ID="ID_1087922610" MODIFIED="1523020033004" TEXT="die nat&#xfc;rliche Ordnung">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+<node CREATED="1523019528770" ID="ID_880857626" MODIFIED="1523019581654" TEXT="der real existierende konkrete Inhalt des UI"/>
+<node CREATED="1523019583242" ID="ID_1200584395" MODIFIED="1523019592269" TEXT="ein Wildwuchs an nativen Komponenten"/>
+<node CREATED="1523019593833" ID="ID_770462134" MODIFIED="1523019612266" TEXT="ausschlie&#xdf;lich an das UI-Toolkit gebunden"/>
+<node CREATED="1523019635739" ID="ID_883974404" MODIFIED="1523019732087" TEXT="Einzelfall-Wissen vorausgesetzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man mu&#223; die Implementierungs-Details <i>jeder einzelnen Komponente</i>&#160;kennen,
+    </p>
+    <p>
+      um damit &#252;berhaupt etwas anfangen zu k&#246;nnen. Es gibt hier keine schematische Ordnung.
+    </p>
+    <p>
+      Selbst die Frage, ob es sich um ein Blatt handelt, oder um einen inneren Knoten,
+    </p>
+    <p>
+      erfordert bereits Kenntnis der Innereien
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1523019753259" ID="ID_281223690" MODIFIED="1523019759668" TEXT="Einstiegspunkte">
+<icon BUILTIN="idea"/>
+<node CREATED="1523019770144" FOLDED="true" ID="ID_253563802" MODIFIED="1523020030446">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (GlobalCtx)-&gt;<b>WindowLocator</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1523019793861" ID="ID_656158432" MODIFIED="1523019804904" TEXT="f&#xfc;r die top-level WorkspaceWindows"/>
+<node CREATED="1523019808196" ID="ID_674258018" MODIFIED="1523019813886" TEXT="kann diese erzeugen und zerst&#xf6;ren"/>
+</node>
+<node CREATED="1523019770144" FOLDED="true" ID="ID_1782262126" MODIFIED="1523020031797">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (GlobalCtx)-&gt;WindowLocator-&gt;<b>PanelLocator</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1523019918268" ID="ID_830201534" MODIFIED="1523019927679" TEXT="Zugang zu einzelnen docking-Panels"/>
+<node CREATED="1523019928387" ID="ID_928262089" MODIFIED="1523019940676" TEXT="jedes Fenster hat eignen PanelManager">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1523019972924" ID="ID_1402741681" MODIFIED="1523019977168" TEXT="Grundbausteine">
+<node CREATED="1523019978236" ID="ID_103533434" MODIFIED="1523019981695" TEXT="GTK-Container"/>
+<node CREATED="1523019982331" ID="ID_533152750" MODIFIED="1523019983943" TEXT="Widget"/>
+</node>
+</node>
+</node>
 <node CREATED="1448070545132" HGAP="31" ID="ID_1410368513" MODIFIED="1518487921085" TEXT="Element" VSHIFT="-7">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="pencil"/>
