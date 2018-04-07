@@ -44,6 +44,8 @@
 
 #include "lib/error.hpp"
 #include "gui/model/element-access.hpp"
+#include "gui/ctrl/window-locator.hpp"
+#include "gui/ctrl/panel-locator.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -64,11 +66,16 @@ namespace ctrl{
    */
   class ElemAccessDir
     : public model::ElementAccess
+    , ::util::NonCopyable
     {
+      WindowLocator& windowLoc_;
+      PanelLocator& panelLoc_;
       
     public:
       explicit
-      ElemAccessDir ()
+      ElemAccessDir (WindowLocator& windowLocatorService, PanelLocator& panelLocatorService)
+        : windowLoc_{windowLocatorService}
+        , panelLoc_{panelLocatorService}
         { }
       
       

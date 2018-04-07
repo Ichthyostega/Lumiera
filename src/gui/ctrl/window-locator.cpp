@@ -30,6 +30,7 @@
 #include "gui/ctrl/global-ctx.hpp"
 #include "gui/ctrl/panel-locator.hpp"
 #include "gui/ctrl/window-locator.hpp"
+#include "gui/ctrl/elem-access-dir.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/util.hpp"
 
@@ -58,7 +59,11 @@ namespace ctrl {
     : globalCtx_{globals}
     , windowList_{}
     , panelLoc_{windowList_}
+    , elementAccess_{*this, panelLoc_}
     { }
+  
+  WindowLocator::~WindowLocator () { }
+  
   
   
   void

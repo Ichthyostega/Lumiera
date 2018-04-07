@@ -37,6 +37,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/ctrl/panel-locator.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -49,10 +50,13 @@ namespace gui {
   namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   
 namespace workspace { class WorkspaceWindow; }
+namespace model {
+  class ElementAccess;
+}
 namespace ctrl {
   
   class GlobalCtx;
-  
+  class ElemAccessDir;
   using std::list;
   
   
@@ -61,17 +65,21 @@ namespace ctrl {
    * A centralised manager of all top level application windows.
    */
   class WindowLocator
-    : util::NonCopyable
+    : ::util::NonCopyable
     {
       using PWindow = std::shared_ptr<workspace::WorkspaceWindow>;
+      using Service_ElementAccess = lib::DependInject<model::ElementAccess>::ServiceInstance<ElemAccessDir>;
       
       GlobalCtx&    globalCtx_;
       list<PWindow> windowList_;
       PanelLocator  panelLoc_;
       
+      Service_ElementAccess elementAccess_;
+      
       
     public:
       WindowLocator (GlobalCtx&);
+     ~WindowLocator ();
       
       bool empty()  const;
       

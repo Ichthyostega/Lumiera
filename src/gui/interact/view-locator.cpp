@@ -42,7 +42,7 @@
 #include "gui/interact/view-locator.hpp"
 #include "gui/interact/ui-location-solver.hpp"
 #include "gui/ctrl/panel-locator.hpp"
-#include "gui/ctrl/window-locator.hpp"
+#include "gui/model/element-access.hpp"
 #include "gui/interact/ui-coord-resolver.hpp"
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"
@@ -51,8 +51,9 @@
 //using util::cStr;
 //using util::isnil;
 using lib::Symbol;
-using gui::ctrl::PanelLocator;
-using gui::ctrl::WindowLocator;
+//using gui::ctrl::PanelLocator;
+//using gui::ctrl::WindowLocator;
+using gui::model::ElementAccess;
 
 
 namespace gui {
@@ -70,9 +71,8 @@ namespace interact {
   
   
   
-  ViewLocator::ViewLocator (ctrl::WindowLocator& windowLocatorService)
-    : windowLoc_{windowLocatorService}
-    , locResolver_{LocationQuery::service}
+  ViewLocator::ViewLocator ()
+    : locResolver_{LocationQuery::service}
     { }
   
   // dtors via smart-ptr invoked from here...
@@ -82,11 +82,11 @@ namespace interact {
   
   /* === Service accessors within global context === */
   
-  PanelLocator&
-  ViewLocator::panelLocator()
-  {
-    return windowLoc_.locatePanel();
-  }
+//  PanelLocator&
+//  ViewLocator::panelLocator()
+//  {
+//    return windowLoc_.locatePanel();
+//  }
   
   
   

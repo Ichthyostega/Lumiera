@@ -68,9 +68,11 @@
 
 
 namespace gui {
+namespace model{
+  class ElementAccess;
+}
 namespace ctrl{
   class PanelLocator;
-  class WindowLocator;
 }
 namespace interact {
   
@@ -87,16 +89,16 @@ namespace interact {
    * @todo initial draft as of 9/2017 -- actual implementation need to be filled in
    */
   class ViewLocator
-    : util::NonCopyable
+    : ::util::NonCopyable
     {
       using Service_LocationSolver = lib::DependInject<UILocationSolver>::ServiceInstance<>;
       
-      ctrl::WindowLocator&   windowLoc_;
+      lib::Depend<model::ElementAccess>  elementAccess;
       Service_LocationSolver locResolver_;
       
       
     public:
-      ViewLocator (ctrl::WindowLocator&);
+      ViewLocator ();
      ~ViewLocator();
       
       
@@ -108,7 +110,6 @@ namespace interact {
       
     private:
       /* === accessors to sibling global services  === */
-      ctrl::PanelLocator&  panelLocator();
       
     };
   
