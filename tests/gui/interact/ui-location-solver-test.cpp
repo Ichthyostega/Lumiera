@@ -29,7 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "gui/interact/ui-location-solver.hpp"
-#include "gui/interact/gen-node-location-query.hpp"
+#include "gen-node-location-query.hpp"
 #include "lib/format-cout.hpp"
 
 #include <string>

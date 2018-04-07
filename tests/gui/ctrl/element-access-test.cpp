@@ -20,16 +20,17 @@
 
 * *****************************************************/
 
-/** @file view-spec-dsl-test.cpp
- ** unit test \ref ViewSpecDSL_test
+/** @file element-access-test.cpp
+ ** unit test \ref ElementAccess_test
  */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
+//#include "gui/interact/view-spec-dsl.hpp"
+#include "test/test-element-access.hpp"
 #include "gui/interact/ui-coord.hpp"
-#include "gui/interact/gen-node-location-query.hpp"
+//#include "gen-node-location-query.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
@@ -40,9 +41,9 @@
 //#include <vector>
 
 
-using std::string;
-using lib::diff::MakeRec;
-using lib::diff::Rec;
+//using std::string;
+//using lib::diff::MakeRec;
+//using lib::diff::Rec;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
 //using util::isSameObject;
@@ -50,13 +51,13 @@ using lib::diff::Rec;
 
 
 namespace gui  {
-namespace interact {
+namespace model {
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-  using lib::test::showSizeof;
+//  using lib::test::showSizeof;
   
-  using MockLoationSolver = lib::DependInject<UILocationSolver>::Local<>;
+  using MockAccess = lib::DependInject<ElementAccess>::Local<TestElementAccess>;
   
   namespace { //Test fixture...
     
@@ -64,12 +65,12 @@ namespace test {
   
   
   /******************************************************************************//**
-   * @test verify the mechanics of a functor based internal DSL
-   *       to configure access and allocation patters for component views.
+   * @test verify the usage pattern of low-level UI element access, based on a
+   *       mock implementation of the accessor directory.
    * 
    * @see id-scheme.hpp
    * @see ViewLocator
-   * @see UICoord_test
+   * @see ViewSpecDSL_test
    */
   class ElementAccess_test : public Test
     {
@@ -77,6 +78,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          MockAccess fakeDirectory;
+          
 //        verify_basicProperties();
           verify_standardUsage();
           verify_alternatives();
@@ -121,7 +124,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (ElementAccess, "unit gui");
+  LAUNCHER (ElementAccess_test, "unit gui");
   
   
-}}} // namespace gui::interact::test
+}}} // namespace gui::model::test

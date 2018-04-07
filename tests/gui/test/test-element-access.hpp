@@ -43,22 +43,19 @@
 
 
 #include "lib/error.hpp"
-#include "lib/nocopy.hpp"
-#include "lib/hash-value.h"
 #include "gui/model/element-access.hpp"
 //#include "lib/symbol.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
-#include <string>
+//#include <string>
 
 
   
 namespace gui {
 namespace model {
   
-  using lib::HashVal;
-  using util::isnil;
-  using std::string;
+//  using util::isnil;
+//  using std::string;
   
   
   /**
@@ -67,43 +64,23 @@ namespace model {
    * @see SomeSystem
    * @see NA_test
    */
-  template<class X>
-  class ElementAccess
+  class TestElementAccess
+    : public ElementAccess
     {
-      string nothing_;
       
     public:
       explicit
-      ElementAccess (string const& b)
-        : nothing_(b)
+      TestElementAccess ()
         { }
       
-      // using default copy/assignment
       
       
       
       /* == Adapter interface for == */
       
-      void
-      setSolution (string const& solution ="")
-        {
-          UNIMPLEMENTED ("tbw");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
-          if (isDeaf())
-            this->transmogrify (solution);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
-        }
       
       
     protected:
-      void maybe ()  const;
-      
-      
-      friend HashVal
-      hash_value (Element const& entry)
-      {
-        return hash_value (entry.nothing_);
-      }
     };
   
   
@@ -113,12 +90,14 @@ namespace model {
   
   /** @internal in case
    */
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
   template<class X>
   inline void
   ElementAccess<X>::maybe ()  const
   {
     UNIMPLEMENTED ("tbw");
   }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
   
   
   

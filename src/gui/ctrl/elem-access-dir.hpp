@@ -22,18 +22,18 @@
 
 
 /** @file elem-access-directory.hpp
- ** Generic building block in the Lumiera GUI model.
- ** A model::Element has a unique identifier, which is tied to the
- ** identification scheme used in the "real" model in Proc-Layer.
- ** Model elements can be addressed receive mutations caused by changes
- ** and rebuilding of elements within the Session; moreover, a generic
- ** representation of attributes is provided.
+ ** A service to discover and access raw UI elements in a cross cutting way.
+ ** This is the actual low-level implementation of the model::ElementAccess interface
+ ** Tightly coupled to the internals of Lumiera's GTK UI, this implementation embodies
+ ** all the inside knowledge necessary to navigate over the various levels (Windows,
+ ** panels, views, specific components) to get at those elements abstracted as
+ ** UI-Coordinates.
  ** 
- ** @note as of 1/2015 this is a first draft and WIP-WIP-WIP
- ** @todo WIP  ///////////////////////TICKET #1134
+ ** @note as of 4/2018 this is a first draft and will remain unimplemented for the time being
+ ** @todo WIP-WIP-WIP need to learn more about the concrete UI implementation  ///////////////////////TICKET #1134
  ** 
- ** @see ////TODO_test usage example
- ** @see element.cpp implementation
+ ** @see view-locator.hpp
+ ** @see navigator.hpp
  ** 
  */
 
@@ -43,67 +43,46 @@
 
 
 #include "lib/error.hpp"
-#include "lib/nocopy.hpp"
-#include "lib/hash-value.h"
 #include "gui/model/element-access.hpp"
 //#include "lib/symbol.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
-#include <string>
+//#include <string>
 
 
   
 namespace gui {
-namespace model {
+namespace ctrl{
   
-  using lib::HashVal;
-  using util::isnil;
-  using std::string;
+//  using util::isnil;
+//  using std::string;
   
   
   /**
-   * Basic (abstracted) view of...
-   * 
-   * @see SomeSystem
-   * @see NA_test
+   * Low-level service to navigate the internals of the Lumiera GTK UI.
+   * @todo mostly not yet implemented as of 4/2018 -- need to learn more about aforementioned internals.
    */
-  template<class X>
   class ElemAccessDir
+    : public model::ElementAccess
     {
-      string nothing_;
       
     public:
       explicit
-      ElemAccessDir (string const& b)
-        : nothing_(b)
+      ElemAccessDir ()
         { }
       
-      // using default copy/assignment
       
       
       
       /* == Adapter interface for == */
       
-      void
-      setSolution (string const& solution ="")
-        {
-          UNIMPLEMENTED ("tbw");
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
           if (isDeaf())
             this->transmogrify (solution);
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
-        }
       
       
     protected:
-      void maybe ()  const;
-      
-      
-      friend HashVal
-      hash_value (Element const& entry)
-      {
-        return hash_value (entry.nothing_);
-      }
     };
   
   
@@ -113,16 +92,10 @@ namespace model {
   
   /** @internal in case
    */
-  template<class X>
-  inline void
-  ElementAccess<X>::maybe ()  const
-  {
-    UNIMPLEMENTED ("tbw");
-  }
   
   
   
   
   
-}} // namespace gui::model
+}} // namespace gui::ctrl
 #endif /*GUI_CTRL_ELEM_ACCESS_DIR_H*/

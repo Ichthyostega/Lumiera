@@ -12622,6 +12622,43 @@
 </node>
 </node>
 </node>
+<node CREATED="1523059565187" ID="ID_685856143" MODIFIED="1523059569334" TEXT="Implementierung">
+<node CREATED="1523059570619" ID="ID_1720611397" MODIFIED="1523059579790" TEXT="Problem: Typisierung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1523059593831" ID="ID_1175935224" MODIFIED="1523059666434" TEXT="will mich nicht auf eine Basisklasse festlegen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      model::Tangible ist sch&#246;n,
+    </p>
+    <p>
+      aber ich wei&#223; nicht, ob das nicht zu eingeschr&#228;nkt ist.
+    </p>
+    <p>
+      Beispielsweise werden Panel oder WorkspaceWindow ganz sicher keine Tangibles sein,
+    </p>
+    <p>
+      aber es k&#246;nnte durchaus sein, da&#223; man auf sie generisch zugreifen m&#246;chte
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1523059669693" ID="ID_11075132" MODIFIED="1523059678809" TEXT="lib::AccessCasted">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1523059717622" ID="ID_598506387" MODIFIED="1523059721041" TEXT="Grundstruktur">
+<node CREATED="1523059685611" ID="ID_1274858318" MODIFIED="1523059711165" TEXT="lib::Result">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1523059729276" ID="ID_117320755" MODIFIED="1523059751029" TEXT="sollte auf die Struktur von LocationQuery hinauslaufen"/>
+<node CREATED="1523059751905" ID="ID_345254237" MODIFIED="1523059757668" TEXT="aber mit zus&#xe4;tzlichen Operationen...."/>
+</node>
+</node>
 <node CREATED="1523053331956" ID="ID_563797148" MODIFIED="1523053334615" TEXT="Test">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" ID="ID_1234019560" MODIFIED="1523053434519" TEXT="ElementAccess_test">
 <linktarget COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-345;-1481;" ID="Arrow_ID_839730277" SOURCE="ID_1539184761" STARTARROW="None" STARTINCLINATION="-530;453;"/>

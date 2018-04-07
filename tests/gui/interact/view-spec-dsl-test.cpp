@@ -29,7 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "gui/interact/view-spec-dsl.hpp"
 #include "gui/interact/ui-coord.hpp"
-#include "gui/interact/gen-node-location-query.hpp"
+#include "gen-node-location-query.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
