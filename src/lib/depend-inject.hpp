@@ -324,17 +324,26 @@ namespace lib {
               return bool(mock_);
             }
           
+          /** trigger lazy service object instantiation */
+          MOC&
+          triggerCreate()
+            {
+              Depend<SRV>{}.operator()();
+              ENSURE (mock_);
+              return *mock_;
+            }
+          
           MOC&
           operator* ()  const
             {
-              ENSURE (mock_);
+              REQUIRE (mock_);
               return *mock_;
             }
           
           MOC*
           operator-> ()  const
             {
-              ENSURE (mock_);
+              REQUIRE (mock_);
               return mock_.get();
             }
         };

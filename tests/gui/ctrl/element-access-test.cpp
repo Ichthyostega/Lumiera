@@ -116,6 +116,7 @@ namespace test {
           auto location = UICoord{"win-1","persp-A","thePanel","someView","tab#5"};
           DummyTab dummyTab;
           
+          fakeDirectory.triggerCreate();
           fakeDirectory->expectedQuery = location;
           fakeDirectory->expectedAnswer = &dummyTab;
           
