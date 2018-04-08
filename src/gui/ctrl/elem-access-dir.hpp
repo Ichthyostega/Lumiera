@@ -82,7 +82,7 @@ namespace ctrl{
       
       /* == ElementAccess interface == */
       
-      void*
+      RawResult
       performAccessTo (UICoord, size_t limitCreation)  override
         {
           UNIMPLEMENTED ("implementation of access function based on real UI widgets");

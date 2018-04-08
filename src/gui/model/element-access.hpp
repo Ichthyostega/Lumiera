@@ -65,7 +65,9 @@
 #include <string>
 
 
-  
+namespace Gtk {
+  class Widget;
+}
 namespace gui {
 namespace model {
   namespace error = lumiera::error;
@@ -74,6 +76,7 @@ namespace model {
 //  using util::isnil;
   using std::string;
   
+  class Tangible;
   
   /**
    * Interface: access UI elements by navigating the UI topology.
@@ -102,8 +105,19 @@ namespace model {
       
       
     protected:
+      struct RawResult
+        {
+          model::Tangible* tangible = nullptr;
+          Gtk::Widget* gtkWidget    = nullptr;
+          
+          RawResult (model::Tangible& t) : tangible{&t} { }
+          RawResult (Gtk::Widget& w)     : gtkWidget{&w} { }
+          RawResult() =default;
+          // standard copy
+        };
+      
       /** @internal drill down according to coordinates, maybe create element */
-      virtual void* performAccessTo (UICoord, size_t limitCreation)    =0;
+      virtual RawResult performAccessTo (UICoord, size_t limitCreation)    =0;
     };
   
   
@@ -124,9 +138,12 @@ namespace model {
   inline ElementAccess::Result<TAR&>
   ElementAccess::access (UICoord destination)
   {
-    void* targetElm = performAccessTo (destination, 0);
-    if (targetElm)
-      return *util::AccessCasted<TAR*>::access (targetElm);
+    RawResult targetElm = performAccessTo (destination, 0);
+    if (targetElm.tangible)
+      return util::AccessCasted<TAR&>::access (targetElm.tangible);
+    else
+    if (targetElm.gtkWidget)
+      return util::AccessCasted<TAR&>::access (targetElm.gtkWidget);
     else
       return "In current UI, there is no element at location "+string(destination);
   }
