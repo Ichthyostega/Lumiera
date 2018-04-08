@@ -9335,6 +9335,35 @@
   </body>
 </html></richcontent>
 </node>
+<node COLOR="#435e98" CREATED="1523117792890" ID="ID_1972679538" MODIFIED="1523117991412" TEXT="Effizienz m&#xe4;&#xdf;ig/unkritisch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ein Lookup-Vorgang ist schon ehr aufwendig,
+    </p>
+    <p>
+      jedoch harmlos im Vergleich zu einer einzigen Frame-Berechnung.
+    </p>
+    <ul>
+      <li>
+        im ersten Schritt machen wir eine Tiefensuche potentiell &#252;ber die ganze UI-Topologie
+      </li>
+      <li>
+        im zweiten Schritt wiederholen wir noch mal den Abstiegspfad zur L&#246;sung des ersten Schrittes
+      </li>
+    </ul>
+    <p>
+      Grunds&#228;tzlich gilt hier die Einsch&#228;tzung: <b>Klarheit der Schnittstelle hat Vorrang</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#abc5e4" DESTINATION="ID_1210359211" ENDARROW="Default" ENDINCLINATION="-250;-498;" ID="Arrow_ID_1226100946" STARTARROW="None" STARTINCLINATION="105;519;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1506181855132" ID="ID_787628963" MODIFIED="1522939107508" TEXT="ViewSpec">
 <icon BUILTIN="button_ok"/>
@@ -11110,6 +11139,64 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1515631909081" ID="ID_1875881401" MODIFIED="1518487921071" TEXT="Aufrufe auf ViewLocator-API &#xfc;bersetzen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523118005620" ID="ID_1743128010" MODIFIED="1523118384712" TEXT="TODO: kl&#xe4;ren auf welches API nun wirklich">
+<linktarget COLOR="#ef9f88" DESTINATION="ID_1743128010" ENDARROW="Default" ENDINCLINATION="-2099;1258;" ID="Arrow_ID_175864704" SOURCE="ID_1335551290" STARTARROW="Default" STARTINCLINATION="-20;-1838;"/>
+<linktarget COLOR="#d87477" DESTINATION="ID_1743128010" ENDARROW="Default" ENDINCLINATION="205;0;" ID="Arrow_ID_1437087367" SOURCE="ID_539031017" STARTARROW="None" STARTINCLINATION="205;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1523117208251" FOLDED="true" HGAP="27" ID="ID_1210359211" MODIFIED="1523117979853" TEXT="ist das nicht furchbar verschwenderisch...?" VSHIFT="4">
+<linktarget COLOR="#abc5e4" DESTINATION="ID_1210359211" ENDARROW="Default" ENDINCLINATION="-250;-498;" ID="Arrow_ID_1226100946" SOURCE="ID_1972679538" STARTARROW="None" STARTINCLINATION="105;519;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1523117293583" ID="ID_1129944871" MODIFIED="1523117297666" TEXT="schrittweise...">
+<node CREATED="1523117228552" ID="ID_11867965" MODIFIED="1523117242297" TEXT="wir verwenden erst einen Resolver"/>
+<node CREATED="1523117242910" ID="ID_260255550" MODIFIED="1523117250656" TEXT="dabei wird der Pfad aufgedr&#xf6;selt"/>
+<node CREATED="1523117251365" ID="ID_1344883302" MODIFIED="1523117269374" TEXT="dann das Ergebnis in einen neuen Pfad kopiert"/>
+<node CREATED="1523117269970" ID="ID_1283489925" MODIFIED="1523117277269" TEXT="und dieser mu&#xdf; dann wieder aufgedr&#xf6;selt werden"/>
+<node CREATED="1523117278161" ID="ID_1145162087" MODIFIED="1523117288019" TEXT="um das das Ergebnis auch umzusetzen"/>
+</node>
+<node CREATED="1523117332841" ID="ID_58827305" MODIFIED="1523117335261" TEXT="effektiv">
+<node CREATED="1523117336257" ID="ID_1661836054" MODIFIED="1523117354618" TEXT="zwei Traversierungen der realen UI-Struktur"/>
+<node CREATED="1523117355966" ID="ID_901586822" MODIFIED="1523117362673" TEXT="die sich unterscheiden">
+<node CREATED="1523117363405" ID="ID_415134573" MODIFIED="1523117377647" TEXT="die erste ist eine depth-first Suche (aufwendig)"/>
+<node CREATED="1523117378307" ID="ID_228369164" MODIFIED="1523117399516" TEXT="die zweite steigt zum L&#xf6;sungspunkt der ersten nochmal ab"/>
+<node CREATED="1523117436451" ID="ID_1526973711" MODIFIED="1523117445502" TEXT="und baut dort i.d.R weitere Elemente an"/>
+</node>
+</node>
+<node CREATED="1523117416901" ID="ID_666361594" MODIFIED="1523117419705" TEXT="Optimierung">
+<node CREATED="1523117421189" ID="ID_1083685803" MODIFIED="1523117433679" TEXT="den vollen Kontext von der L&#xf6;sung zur zweiten Traversierung durchreichen"/>
+<node CREATED="1523117477813" ID="ID_5382937" MODIFIED="1523117519937" TEXT="Problem... nicht alles sind L&#xf6;sungen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1523117488172" ID="ID_1947043295" MODIFIED="1523117492743" TEXT="es gibt zwei F&#xe4;lle"/>
+<node CREATED="1523117493427" ID="ID_391352800" MODIFIED="1523117501086" TEXT="nur in einem Fall wird eine L&#xf6;sung konstruiert"/>
+<node CREATED="1523117501722" ID="ID_1104653648" MODIFIED="1523117510604" TEXT="im anderen Fall wird der Pfad direkt interpretiert"/>
+</node>
+<node CREATED="1523117563481" ID="ID_1561615666" MODIFIED="1523117576899" TEXT="Einspar-Potential">
+<node CREATED="1523117578175" ID="ID_17072072" MODIFIED="1523117605679" TEXT="erneuter Einstieg"/>
+<node CREATED="1523117606179" ID="ID_1306679723" MODIFIED="1523117618878" TEXT="i.d.R. Window - Panel - View"/>
+<node CREATED="1523117625392" ID="ID_1699581450" MODIFIED="1523117630964" TEXT="vermutlich gering gegen&#xfc;ber Suche"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1523117634200" ID="ID_249271137" MODIFIED="1523117761784" TEXT="Fazit">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1523117637807" ID="ID_1136409597" MODIFIED="1523117654081" TEXT="Optimierungs-Gewinn nicht offensichtlich, vermutlich gering"/>
+<node CREATED="1523117656380" ID="ID_375543215" MODIFIED="1523117676286" TEXT="Optimierung w&#xfc;rde die Schnittstelle komplex machen"/>
+<node CREATED="1523117678010" ID="ID_988976556" MODIFIED="1523117691307" TEXT="die Schnittstelle ist ohnehin schon nicht leicht zu verstehen"/>
+<node CREATED="1523117735746" ID="ID_1310906003" MODIFIED="1523117755013">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      klassischer Fall von &#187;<b>premature optimisation</b>&#171;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519354320645" ID="ID_431727101" MODIFIED="1519354329172" TEXT="Verh&#xe4;ltnis zur DSL">
 <icon BUILTIN="flag-yellow"/>
@@ -11127,7 +11214,7 @@
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519355201077" ID="ID_539031017" MODIFIED="1519355238944">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519355201077" HGAP="31" ID="ID_539031017" MODIFIED="1523118403786" VSHIFT="13">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -11141,6 +11228,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#d87477" DESTINATION="ID_1743128010" ENDARROW="Default" ENDINCLINATION="205;0;" ID="Arrow_ID_1437087367" STARTARROW="None" STARTINCLINATION="205;0;"/>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -11148,15 +11236,16 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519354443485" ID="ID_1474832227" MODIFIED="1519354447748" TEXT="always create">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519354760313" ID="ID_321705251" MODIFIED="1519355264234" TEXT="Umgang mit Duplikaten">
-<linktarget COLOR="#807e9b" DESTINATION="ID_321705251" ENDARROW="Default" ENDINCLINATION="85;-104;" ID="Arrow_ID_1030149985" SOURCE="ID_1792932496" STARTARROW="None" STARTINCLINATION="204;-199;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519354760313" ID="ID_321705251" MODIFIED="1523118358268" TEXT="Umgang mit Duplikaten">
+<linktarget COLOR="#807e9b" DESTINATION="ID_321705251" ENDARROW="Default" ENDINCLINATION="85;-104;" ID="Arrow_ID_1030149985" SOURCE="ID_1792932496" STARTARROW="None" STARTINCLINATION="243;-203;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1519354813458" ID="ID_168710453" MODIFIED="1519354818789" TEXT="beiseite schieben"/>
 <node CREATED="1519354819473" ID="ID_996615547" MODIFIED="1519354824572" TEXT="Tab innerhalb erzeugen"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1519354769960" ID="ID_778018274" MODIFIED="1519357212192" TEXT="Festlegung: was sind die Namen?">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1519354769960" ID="ID_778018274" MODIFIED="1523118363412" TEXT="Festlegung: was sind die Namen?">
 <linktarget COLOR="#2b4283" DESTINATION="ID_778018274" ENDARROW="Default" ENDINCLINATION="-1752;0;" ID="Arrow_ID_1022345699" SOURCE="ID_377787861" STARTARROW="None" STARTINCLINATION="795;544;"/>
-<icon BUILTIN="flag-yellow"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1519357238119" ID="ID_490731063" MODIFIED="1519357248970" TEXT="Namen sind Platzhalter-Symbole"/>
 <node CREATED="1519357249702" ID="ID_1135871152" MODIFIED="1519357313101">
 <richcontent TYPE="NODE"><html>
@@ -11189,8 +11278,8 @@
 <node CREATED="1519354685828" ID="ID_966759751" MODIFIED="1519354691638" TEXT="genau wie global"/>
 </node>
 <node CREATED="1519354697578" ID="ID_1780825164" MODIFIED="1519354715139" TEXT="pro Endpunkt">
-<node CREATED="1519354849469" ID="ID_1792932496" MODIFIED="1519355264234" TEXT="Variante des create-Mechanismus">
-<arrowlink COLOR="#807e9b" DESTINATION="ID_321705251" ENDARROW="Default" ENDINCLINATION="85;-104;" ID="Arrow_ID_1030149985" STARTARROW="None" STARTINCLINATION="204;-199;"/>
+<node CREATED="1519354849469" ID="ID_1792932496" MODIFIED="1523118074184" TEXT="Variante des create-Mechanismus">
+<arrowlink COLOR="#807e9b" DESTINATION="ID_321705251" ENDARROW="Default" ENDINCLINATION="85;-104;" ID="Arrow_ID_1030149985" STARTARROW="None" STARTINCLINATION="243;-203;"/>
 </node>
 <node CREATED="1519354723262" ID="ID_1902026620" MODIFIED="1519354929283" TEXT="erbt dessen m&#xf6;gliche Auspr&#xe4;gung"/>
 </node>
@@ -11962,8 +12051,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182023288" ID="ID_1539184761" MODIFIED="1523053425474" STYLE="fork" TEXT="ViewSpecDSL_test">
-<arrowlink COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-345;-1481;" ID="Arrow_ID_839730277" STARTARROW="None" STARTINCLINATION="-530;453;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182023288" ID="ID_1539184761" MODIFIED="1523118243889" STYLE="fork" TEXT="ViewSpecDSL_test">
+<arrowlink COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-338;-1489;" ID="Arrow_ID_839730277" STARTARROW="None" STARTINCLINATION="-530;453;"/>
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506182077694" ID="ID_839824654" MODIFIED="1523053425474" TEXT="verify_basicProperties">
 <icon BUILTIN="flag-yellow"/>
@@ -12616,6 +12705,10 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523055329159" ID="ID_1316858206" MODIFIED="1523055337404" TEXT="noch nicht wirklich klar">
 <icon BUILTIN="clanbomber"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523118112181" HGAP="58" ID="ID_1335551290" MODIFIED="1523118278708" TEXT="noch nicht klar, wer diesen Dienst bieten kann" VSHIFT="2">
+<arrowlink COLOR="#ef9f88" DESTINATION="ID_1743128010" ENDARROW="Default" ENDINCLINATION="-2099;1258;" ID="Arrow_ID_175864704" STARTARROW="Default" STARTINCLINATION="-20;-1838;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
 <node CREATED="1523055339293" ID="ID_805375580" MODIFIED="1523055357236" TEXT="erst mal ein Hilfsmittel f&#xfc;r das Design">
 <icon BUILTIN="idea"/>
 <node CREATED="1523055360002" ID="ID_1183834156" MODIFIED="1523055363894" TEXT="yet another abstraction"/>
@@ -12658,11 +12751,49 @@
 <node CREATED="1523059729276" ID="ID_117320755" MODIFIED="1523059751029" TEXT="sollte auf die Struktur von LocationQuery hinauslaufen"/>
 <node CREATED="1523059751905" ID="ID_345254237" MODIFIED="1523059757668" TEXT="aber mit zus&#xe4;tzlichen Operationen...."/>
 </node>
+<node CREATED="1523118465853" ID="ID_1546860746" MODIFIED="1523118472608" TEXT="Differenzierung">
+<node CREATED="1523118474171" ID="ID_96237584" MODIFIED="1523118480758" TEXT="verschiedene Typen von Aufgaben">
+<node CREATED="1523118482458" ID="ID_1606478842" MODIFIED="1523118484694" TEXT="Zugriff"/>
+<node CREATED="1523118485802" ID="ID_1745902381" MODIFIED="1523118494781" TEXT="Zugriff + Erzeugen"/>
+<node CREATED="1523118498760" ID="ID_290260966" MODIFIED="1523118517809" TEXT="multiplicity kontrollieren"/>
+</node>
+</node>
 </node>
 <node CREATED="1523053331956" ID="ID_563797148" MODIFIED="1523053334615" TEXT="Test">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" ID="ID_1234019560" MODIFIED="1523053434519" TEXT="ElementAccess_test">
-<linktarget COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-345;-1481;" ID="Arrow_ID_839730277" SOURCE="ID_1539184761" STARTARROW="None" STARTINCLINATION="-530;453;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" ID="ID_1234019560" MODIFIED="1523118243889" TEXT="ElementAccess_test">
+<linktarget COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-338;-1489;" ID="Arrow_ID_839730277" SOURCE="ID_1539184761" STARTARROW="None" STARTINCLINATION="-530;453;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523118534675" ID="ID_669651266" MODIFIED="1523118659130" TEXT="Mock-Implementierung">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1523118577557" ID="ID_1246038265" MODIFIED="1523118589479" TEXT="Mock-Prinzip">
+<icon BUILTIN="help"/>
+<node CREATED="1523118591395" ID="ID_1571065062" MODIFIED="1523118636465" TEXT="vorgefertigter Response">
+<icon BUILTIN="full-1"/>
+<node CREATED="1523118640980" ID="ID_866333439" MODIFIED="1523118644680" TEXT="billig"/>
+<node CREATED="1523118645363" ID="ID_620926078" MODIFIED="1523118650798" TEXT="bringt mit jetzt schnell weiter"/>
+</node>
+<node CREATED="1523118600186" ID="ID_1717703636" MODIFIED="1523118638974" TEXT="emulierte Auswertung">
+<icon BUILTIN="full-2"/>
+<node CREATED="1523118604809" ID="ID_224206639" MODIFIED="1523118612228" TEXT="GenNodeLocationQuery aufbohren?"/>
+<node CREATED="1523118613096" ID="ID_169844591" MODIFIED="1523118623074" TEXT="== Vorarbeit f&#xfc;r die sp&#xe4;tere Implementierung"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523118660882" ID="ID_1452843558" MODIFIED="1523118677304" TEXT="Testf&#xe4;lle">
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205670160" ID="ID_649704431" MODIFIED="1523205774546" TEXT="einfacher Zugriff auf existierendes Objekt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205706547" ID="ID_210608554" MODIFIED="1523205776609" TEXT="Zugriff auf Parent-Ebene, ein Kind-Knoten wird erzeugt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205752509" ID="ID_212194424" MODIFIED="1523205775730" TEXT="partielle oder komplette Erzeugung eines Pfades">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205740998" ID="ID_1828083346" MODIFIED="1523205777745" TEXT="Limitierte Erzeugung von Kindern">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node CREATED="1523055378032" ID="ID_1727349685" MODIFIED="1523055384523" TEXT="Test-Hilfsmittel">
 <node CREATED="1523055393950" ID="ID_62932320" MODIFIED="1523055412955" TEXT="TestElementAccess">

@@ -44,6 +44,7 @@
 
 #include "lib/error.hpp"
 #include "gui/model/element-access.hpp"
+#include "gui/interact/ui-coord.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -56,6 +57,7 @@ namespace model {
   
 //  using util::isnil;
 //  using std::string;
+  using interact::UICoord;
   
   
   /**
@@ -74,9 +76,16 @@ namespace model {
         { }
       
       
+      /* == Test/Diagnostics interface == */
+      
+      /** the next query will fail unless it presents this Path */
+      UICoord expectedQuery;
+      
+      /** ...and if acceptable, the next query will answer with this object */
+      void* expectedAnswer;
       
       
-      /* == Adapter interface for == */
+      /* == ElementAccess interface == */
       
       
       

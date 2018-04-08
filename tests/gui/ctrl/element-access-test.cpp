@@ -35,7 +35,7 @@
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 //#include <vector>
@@ -46,7 +46,7 @@
 //using lib::diff::Rec;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
-//using util::isSameObject;
+using util::isSameObject;
 //using util::isnil;
 
 
@@ -56,10 +56,23 @@ namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 //  using lib::test::showSizeof;
+  using interact::UICoord;
   
   using MockAccess = lib::DependInject<ElementAccess>::Local<TestElementAccess>;
+  using AccessAPI = lib::Depend<ElementAccess>;
   
   namespace { //Test fixture...
+    
+    class DummyWidget
+      : ::util::NonCopyable
+      {
+      protected:
+        virtual ~DummyWidget() { } ///< is an interface
+      };
+    
+    class DummyTab
+      : public DummyWidget
+      { };
     
   }//(End)Test fixture
   
@@ -67,6 +80,14 @@ namespace test {
   /******************************************************************************//**
    * @test verify the usage pattern of low-level UI element access, based on a
    *       mock implementation of the accessor directory.
+   * @todo 4/2018 in the course of establishing an UI backbone, it is sufficient
+   *       just to _have_ that abstraction interface; so the test focuses merely
+   *       on the invocation, and documents how the mock be used. Which is a
+   *       prerequisite to get the ViewSpecDSL_test finished. The intention is
+   *       to elaborate the mock in a second step later and use it to build a
+   *       draft of the implementation mechanics, but based on `Rec<GenNode>`
+   *       rather than on the real UI topology.
+   * @see GenNodeLocationQuery
    * 
    * @see id-scheme.hpp
    * @see ViewLocator
@@ -78,9 +99,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-          MockAccess fakeDirectory;
-          
-//        verify_basicProperties();
+          verify_simpleAccess();
           verify_standardUsage();
           verify_alternatives();
           
@@ -88,10 +107,25 @@ namespace test {
         }
       
       
+      /** @test simple access to an existing element designated by coordinates */
       void
-      verify_basicProperties()
+      verify_simpleAccess()
         {
-          UNIMPLEMENTED ("basic properties of the view spec DSL");
+          MockAccess fakeDirectory;
+          
+          auto location = UICoord{"win-1","persp-A","thePanel","someView","tab#5"};
+          DummyTab dummyTab;
+          
+          fakeDirectory->expectedQuery = location;
+          fakeDirectory->expectedAnswer = &dummyTab;
+          
+          AccessAPI accessAPI;
+          auto answer = accessAPI().access<DummyWidget> (location);
+          
+          CHECK (answer.isValid());
+          DummyWidget& widget = answer;
+          CHECK (INSTANCEOF (DummyTab, &widget));
+          CHECK (isSameObject (widget, dummyTab));
         }
       
       
