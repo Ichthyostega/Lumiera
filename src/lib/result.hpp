@@ -42,6 +42,7 @@
 #include "lib/wrapper.hpp"
 #include "lib/util.hpp"
 
+#include <utility>
 #include <string>
 
 
@@ -71,8 +72,8 @@ namespace lib {
       
     public:
       /** mark an invalid/failed result */
-      Result ()
-        : failureLog_{"no result"}
+      Result (string const& failureReason ="no result")
+        : failureLog_{failureReason}
         { }
       
       /** failed result, with reason given.*/
@@ -81,9 +82,9 @@ namespace lib {
        { }
       
       /** standard case: valid result */
-      Result (RES const& value)
+      Result (RES&& value)
        : failureLog_{}
-       , value_{value}
+       , value_{std::forward<RES> (value)}
        { }
       
       

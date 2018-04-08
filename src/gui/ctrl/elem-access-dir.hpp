@@ -80,8 +80,14 @@ namespace ctrl{
       
       
       
+      /* == ElementAccess interface == */
       
-      /* == Adapter interface for == */
+      void*
+      performAccessTo (UICoord, size_t limitCreation)  override
+        {
+          UNIMPLEMENTED ("implementation of access function based on real UI widgets");
+        }
+      
       
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
           if (isDeaf())

@@ -55,20 +55,24 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/result.hpp"
+#include "include/limits.h"
+#include "lib/access-casted.hpp"
 #include "gui/interact/ui-coord.hpp"
+//#include "lib/format-string.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-//#include <string>
+#include <string>
 
 
   
 namespace gui {
 namespace model {
+  namespace error = lumiera::error;
   
   using interact::UICoord;
 //  using util::isnil;
-//  using std::string;
+  using std::string;
   
   
   /**
@@ -94,14 +98,12 @@ namespace model {
       Result<TAR&> access (UICoord destination);
       
       template<class TAR>
-      Result<TAR&> access_or_create (UICoord destination);
+      Result<TAR&> access_or_create (UICoord destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
       
       
     protected:
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
-          if (isDeaf())
-            this->transmogrify (solution);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
+      /** @internal drill down according to coordinates, maybe create element */
+      virtual void* performAccessTo (UICoord, size_t limitCreation)    =0;
     };
   
   
@@ -109,9 +111,12 @@ namespace model {
   
   
   
-  /** Navigate the UI topology to access the designated component
+  /** Navigate the UI topology to access the designated component.
+   * @tparam TAR type of result element expected at the designated location
    * @return suitably converted direct (language) reference to the desired element
    *         wrapped as _result proxy_
+   * @throw error::Invalid when the designated element exists, but is not
+   *        type or conversion compatible to the expected result type
    * @note when access was not possible because the element does not exist,
    *       the result proxy is empty and convertible to `bool(false)`
    */
@@ -119,7 +124,11 @@ namespace model {
   inline ElementAccess::Result<TAR&>
   ElementAccess::access (UICoord destination)
   {
-    UNIMPLEMENTED ("delegate to a suitable polymorphic navigation function");
+    void* targetElm = performAccessTo (destination, 0);
+    if (targetElm)
+      return *util::AccessCasted<TAR*>::access (targetElm);
+    else
+      return "In current UI, there is no element at location "+string(destination);
   }
   
   
@@ -131,7 +140,7 @@ namespace model {
    */
   template<class TAR>
   inline ElementAccess::Result<TAR&>
-  ElementAccess::access_or_create (UICoord destination)
+  ElementAccess::access_or_create (UICoord destination, size_t limitCreation)
   {
     UNIMPLEMENTED ("delegate to a suitable polymorphic navigation/creation function");
   }

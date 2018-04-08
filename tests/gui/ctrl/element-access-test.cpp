@@ -64,7 +64,7 @@ namespace test {
   namespace { //Test fixture...
     
     class DummyWidget
-      : ::util::NonCopyable
+      : util::NonCopyable
       {
       protected:
         virtual ~DummyWidget() { } ///< is an interface

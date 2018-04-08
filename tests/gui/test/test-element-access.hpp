@@ -87,6 +87,11 @@ namespace model {
       
       /* == ElementAccess interface == */
       
+      void*
+      performAccessTo (UICoord, size_t limitCreation)  override
+        {
+          UNIMPLEMENTED ("internal access function");
+        }
       
       
     protected:

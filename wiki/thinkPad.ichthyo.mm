@@ -12740,13 +12740,75 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1523059669693" ID="ID_11075132" MODIFIED="1523059678809" TEXT="lib::AccessCasted">
+<node CREATED="1523059669693" ID="ID_11075132" MODIFIED="1523222415970" STYLE="fork" TEXT="lib::AccessCasted">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_11075132" ENDARROW="Default" ENDINCLINATION="282;0;" ID="Arrow_ID_62085379" SOURCE="ID_1101595897" STARTARROW="None" STARTINCLINATION="282;0;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
 <node CREATED="1523059717622" ID="ID_598506387" MODIFIED="1523059721041" TEXT="Grundstruktur">
 <node CREATED="1523059685611" ID="ID_1274858318" MODIFIED="1523059711165" TEXT="lib::Result">
 <icon BUILTIN="idea"/>
+<node CREATED="1523222317789" ID="ID_223201063" MODIFIED="1523222325262" TEXT="ist ein Either-Typ">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1523222326668" ID="ID_1906453858" MODIFIED="1523222336646" TEXT="bietet bereits bool-Abfrage / Exception"/>
+<node CREATED="1523222338258" ID="ID_1400754551" MODIFIED="1523224303183" TEXT="pa&#xdf;t perfekt">
+<arrowlink COLOR="#97db97" DESTINATION="ID_1568226158" ENDARROW="Default" ENDINCLINATION="226;0;" ID="Arrow_ID_26754858" STARTARROW="None" STARTINCLINATION="277;-10;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1523224208591" ID="ID_1896914767" MODIFIED="1523225015564" TEXT="geht&apos;s noch einfacher?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1523224222477" ID="ID_769675431" MODIFIED="1523224258636" TEXT="reinen Pointer liefern?"/>
+<node CREATED="1523224259839" ID="ID_1984912464" MODIFIED="1523224818692" TEXT="wer braucht Fehler?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zwei F&#228;lle sind hier zu unterscheiden:
+    </p>
+    <ol>
+      <li>
+        der gew&#252;nschte Wert existiert nicht, und das ist auch das Ergebnis der Anfrage
+      </li>
+      <li>
+        es liegt eine Fehleinsch&#228;tzung der Situation vor, insofern fest mit einem Ergebnis gerechnet wurde
+      </li>
+    </ol>
+    <p>
+      In Fall-1 wird man eine bool-Abfrage machen wollen, und man kann auch mit einer false-Antwort umgehen. In Fall-2 dagegen bleibt nur noch der Tod. Und davon ist im Regelfall nicht auszugehen. Im Moment sehe ich Fall-2 als den <b>standard-use-Case</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1523224898647" ID="ID_1600596253" MODIFIED="1523225000638" TEXT="zwei nicht-kongruente F&#xe4;lle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        im Fall-1 wei&#223; der Client, da&#223; er pr&#252;fen mu&#223;
+      </li>
+      <li>
+        im Fall-2 marschiert der Client einfach durch
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1523224938633" ID="ID_1168693432" MODIFIED="1523225005333" TEXT="SEGFAULT droht">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1523224949440" ID="ID_1408830480" MODIFIED="1523224963825" TEXT="Option/Maybe-Typ notwendig">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1523059729276" ID="ID_117320755" MODIFIED="1523059751029" TEXT="sollte auf die Struktur von LocationQuery hinauslaufen"/>
 <node CREATED="1523059751905" ID="ID_345254237" MODIFIED="1523059757668" TEXT="aber mit zus&#xe4;tzlichen Operationen...."/>
@@ -12758,11 +12820,60 @@
 <node CREATED="1523118498760" ID="ID_290260966" MODIFIED="1523118517809" TEXT="multiplicity kontrollieren"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205852655" ID="ID_101568597" MODIFIED="1523205860142" TEXT="Zugriffs-Mechanik">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222428901" ID="ID_1793979710" MODIFIED="1523222512561" TEXT="ein rekursiver drill-Down">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222444467" ID="ID_770319889" MODIFIED="1523222512562" TEXT="der Endpunkt wird zug&#xe4;nglich gemacht">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222481262" ID="ID_1485862182" MODIFIED="1523222512562" TEXT="allerdings nur zur Anwendung einer Strategie">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222204556" ID="ID_1018012203" MODIFIED="1523222419178" TEXT="Ergebnis-Ausgabe">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1523222214579" ID="ID_1568226158" MODIFIED="1523224303183" STYLE="fork" TEXT="Feststellung: keine Status-R&#xfc;ckmeldung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das mag &#252;berraschend klingen,
+    </p>
+    <p>
+      aber in der (zu erwartenden) Nutzsituation interessiert sich <i>keine Sau</i>&#160;daf&#252;r,
+    </p>
+    <p>
+      was denn nun konkret gemacht wurde, um den Dienst zu erbringen.
+    </p>
+    <p>
+      Die einzig interessante Information ist, ob es <b>gelungen</b>&#160;ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#97db97" DESTINATION="ID_1568226158" ENDARROW="Default" ENDINCLINATION="226;0;" ID="Arrow_ID_26754858" SOURCE="ID_1400754551" STARTARROW="None" STARTINCLINATION="277;-10;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222380124" ID="ID_1101595897" MODIFIED="1523222420847" TEXT="mu&#xdf; nur noch pr&#xfc;fen, ob der Cast m&#xf6;glich ist">
+<arrowlink DESTINATION="ID_11075132" ENDARROW="Default" ENDINCLINATION="282;0;" ID="Arrow_ID_62085379" STARTARROW="None" STARTINCLINATION="282;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1523225025493" ID="ID_1731501078" MODIFIED="1523225070764" TEXT="der interne Aufruf kann einen Pointer liefern">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1523225052314" ID="ID_271482556" MODIFIED="1523225066889" TEXT="die Aufrufschnittstelle stellt NULL-Check sicher">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node CREATED="1523053331956" ID="ID_563797148" MODIFIED="1523053334615" TEXT="Test">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" ID="ID_1234019560" MODIFIED="1523118243889" TEXT="ElementAccess_test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" ID="ID_1234019560" MODIFIED="1523205867255" TEXT="ElementAccess_test">
 <linktarget COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-338;-1489;" ID="Arrow_ID_839730277" SOURCE="ID_1539184761" STARTARROW="None" STARTINCLINATION="-530;453;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523118534675" ID="ID_669651266" MODIFIED="1523118659130" TEXT="Mock-Implementierung">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1523118577557" ID="ID_1246038265" MODIFIED="1523118589479" TEXT="Mock-Prinzip">
@@ -12781,8 +12892,8 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523118660882" ID="ID_1452843558" MODIFIED="1523118677304" TEXT="Testf&#xe4;lle">
 <icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205670160" ID="ID_649704431" MODIFIED="1523205774546" TEXT="einfacher Zugriff auf existierendes Objekt">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205670160" ID="ID_649704431" MODIFIED="1523205878512" TEXT="einfacher Zugriff auf existierendes Objekt">
+<icon BUILTIN="pencil"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205706547" ID="ID_210608554" MODIFIED="1523205776609" TEXT="Zugriff auf Parent-Ebene, ein Kind-Knoten wird erzeugt">
 <icon BUILTIN="flag-yellow"/>
