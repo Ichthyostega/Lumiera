@@ -56,6 +56,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/result.hpp"
 #include "include/limits.h"
+#include "lib/variant.hpp"
 #include "lib/access-casted.hpp"
 #include "gui/interact/ui-coord.hpp"
 //#include "lib/format-string.hpp"
@@ -73,6 +74,7 @@ namespace model {
   namespace error = lumiera::error;
   
   using interact::UICoord;
+  using lib::meta::Types;
 //  using util::isnil;
   using std::string;
   
@@ -105,16 +107,7 @@ namespace model {
       
       
     protected:
-      struct RawResult
-        {
-          model::Tangible* tangible = nullptr;
-          Gtk::Widget* gtkWidget    = nullptr;
-          
-          RawResult (model::Tangible& t) : tangible{&t} { }
-          RawResult (Gtk::Widget& w)     : gtkWidget{&w} { }
-          RawResult() =default;
-          // standard copy
-        };
+      using RawResult = lib::Variant<Types<model::Tangible*, Gtk::Widget*>>;
       
       /** @internal drill down according to coordinates, maybe create element */
       virtual RawResult performAccessTo (UICoord, size_t limitCreation)    =0;
@@ -138,14 +131,7 @@ namespace model {
   inline ElementAccess::Result<TAR&>
   ElementAccess::access (UICoord destination)
   {
-    RawResult targetElm = performAccessTo (destination, 0);
-    if (targetElm.tangible)
-      return util::AccessCasted<TAR&>::access (targetElm.tangible);
-    else
-    if (targetElm.gtkWidget)
-      return util::AccessCasted<TAR&>::access (targetElm.gtkWidget);
-    else
-      return "In current UI, there is no element at location "+string(destination);
+    return access_or_create<TAR> (destination, 0);
   }
   
   
@@ -159,7 +145,23 @@ namespace model {
   inline ElementAccess::Result<TAR&>
   ElementAccess::access_or_create (UICoord destination, size_t limitCreation)
   {
-    UNIMPLEMENTED ("delegate to a suitable polymorphic navigation/creation function");
+    struct TypeConverter
+      : RawResult::Visitor
+      {
+        Result<TAR&> result;
+        
+        void accept (model::Tangible* t) { result = util::AccessCasted<TAR&>::access (t); }
+        void accept (Gtk::Widget* w)     { result = util::AccessCasted<TAR&>::access (w); }
+      };
+///////////////////////////////////////////////////////////////////////////////////////////////////TODO Verdammter Mist!!!! es werden WIEDER beide Zweige compiliert, aber nur einer geht!!!      
+    RawResult targetElm = performAccessTo (destination, limitCreation);
+    if (targetElm.tangible)
+      return util::AccessCasted<TAR&>::access (targetElm.tangible);
+    else
+    if (targetElm.gtkWidget)
+      return util::AccessCasted<TAR&>::access (targetElm.gtkWidget);
+    else
+      return "In current UI, there is no element at location "+string(destination);
   }
   
   

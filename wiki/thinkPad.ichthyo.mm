@@ -12748,6 +12748,11 @@
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
+<node CREATED="1523229374586" ID="ID_1962044591" MODIFIED="1523229381985" TEXT="sigc::trackable">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1523229383305" ID="ID_1786273483" MODIFIED="1523229392595" TEXT="hat kein RTTI"/>
+<node CREATED="1523229393567" ID="ID_1067337253" MODIFIED="1523229403706" TEXT="wohl bewu&#xdf;te Design-Entscheidung"/>
+</node>
 <node CREATED="1523228995279" ID="ID_924400738" MODIFIED="1523229065936" TEXT="mu&#xdf; mich wohl auf eine Menge von Basis-Typen festlegen">
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1523229075403" ID="ID_808081590" MODIFIED="1523229080671" TEXT="model::Tangible"/>
@@ -12869,9 +12874,47 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222380124" ID="ID_1101595897" MODIFIED="1523228027969" TEXT="mu&#xdf; pr&#xfc;fen, ob der Cast m&#xf6;glich ist">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1523229139923" ID="ID_636796034" MODIFIED="1523229145773" TEXT="Variant?"/>
-<node CREATED="1523229147593" ID="ID_1510668106" MODIFIED="1523229166296" TEXT="if-else-Kaskade?">
+<node CREATED="1523229139923" ID="ID_636796034" MODIFIED="1523229481422" TEXT="Variant?">
 <icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523229483619" ID="ID_1116388815" MODIFIED="1523232763524" TEXT="wohl einzige L&#xf6;sung?"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523232748878" ID="ID_153055029" MODIFIED="1523232770707" TEXT="AUA --- geht auch nicht">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1523232788680" ID="ID_849117954" MODIFIED="1523232797628" TEXT="&#xc4;ndert nix am Grundproblem">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1523232798911" ID="ID_351873038" MODIFIED="1523232810481" TEXT="AccessCasted f&#xfc;r Zieltyp"/>
+<node CREATED="1523232811805" ID="ID_577095101" MODIFIED="1523232886443" TEXT="l&#xe4;&#xdf;t sich nur bei kompatiblem Basistyp &#xfc;berhaupt instantiieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1523232888115" ID="ID_800807629" MODIFIED="1523232908023">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber genau das ist hier jeweils nur <i>in einem Fall</i>&#160;gegeben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1523232932724" ID="ID_386898631" MODIFIED="1523232938983" TEXT="Runtime-Compiletime-Problem">
+<node CREATED="1523232945043" ID="ID_45452812" MODIFIED="1523232954053" TEXT="erst zur Laufzeit wissen wir, was zur&#xfc;ckkommt"/>
+<node CREATED="1523233007258" ID="ID_1076174983" MODIFIED="1523233019060" TEXT="aber zur Compilezeit m&#xfc;ssen wir schon den Cast vorbereiten"/>
+</node>
+<node CREATED="1523233031479" ID="ID_1135973571" MODIFIED="1523233048184" TEXT="Idee: Visitor spezialisieren">
+<node CREATED="1523233049316" ID="ID_278890079" MODIFIED="1523233057943" TEXT="er implementiert &#xfc;berhaupt nur den Fall, der geht"/>
+</node>
+</node>
+<node CREATED="1523229496001" ID="ID_190653452" MODIFIED="1523229516738" TEXT="bedeutet...">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1523229517523" ID="ID_1510464943" MODIFIED="1523229517523" TEXT="Variant-Visitor"/>
+<node CREATED="1523229519846" ID="ID_307916731" MODIFIED="1523229533208" TEXT="Einschr&#xe4;nkungen f&#xfc;r die Test-Dummies"/>
+</node>
+</node>
+<node CREATED="1523229147593" ID="ID_1510668106" MODIFIED="1523229476684" TEXT="if-else-Kaskade?">
+<icon BUILTIN="button_cancel"/>
 </node>
 </node>
 <node CREATED="1523225025493" ID="ID_1731501078" MODIFIED="1523225070764" TEXT="der interne Aufruf kann einen Pointer liefern">
