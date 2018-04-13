@@ -57,11 +57,13 @@
 #include "lib/result.hpp"
 #include "include/limits.h"
 #include "lib/variant.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/access-casted.hpp"
 #include "gui/interact/ui-coord.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
+#include "lib/test/test-helper.hpp" ////////TOD-o
 
 #include <string>
 
@@ -111,6 +113,57 @@ namespace model {
       
       /** @internal drill down according to coordinates, maybe create element */
       virtual RawResult performAccessTo (UICoord, size_t limitCreation)    =0;
+      
+    private:
+      template<class TAR>
+      struct TypeConverter;
+    };
+  
+  
+  namespace {
+    using TypeSeq = Types<model::Tangible*, Gtk::Widget*>;
+    
+    using lib::meta::Node;
+    using lib::meta::NullType;
+    
+    template<typename T>
+    struct Identity
+      {
+        using Type = T;
+      };
+    
+    template<class TYPES, template<class> class _P_>
+    struct FirstMatching
+      {
+        static_assert(not sizeof(TYPES), "None of the possible Types fulfils the condition");
+      };
+    template<class...TYPES, template<class> class _P_>
+    struct FirstMatching<Types<TYPES...>, _P_>
+      : FirstMatching<typename Types<TYPES...>::List, _P_>
+      { };
+    template<class T, class TYPES, template<class> class _P_>
+    struct FirstMatching<Node<T,TYPES>, _P_>
+      : std::conditional_t<_P_<T>::value, Identity<T>, FirstMatching<TYPES, _P_>>
+      {  };
+    
+  }
+  template<class TAR>
+  struct ElementAccess::TypeConverter
+    : RawResult::Visitor
+    {
+      Result<TAR&> result;
+      
+      template<typename X>
+      using canCast = std::is_convertible<TAR*, X>;
+      
+      using Base = typename FirstMatching<TypeSeq, canCast>::Type;
+      
+      void
+      accept (Base* pb)
+        {
+          if (pb)
+            result = *dynamic_cast<TAR*> (pb);
+        }
     };
   
   
@@ -145,21 +198,11 @@ namespace model {
   inline ElementAccess::Result<TAR&>
   ElementAccess::access_or_create (UICoord destination, size_t limitCreation)
   {
-    struct TypeConverter
-      : RawResult::Visitor
-      {
-        Result<TAR&> result;
-        
-        void accept (model::Tangible* t) { result = util::AccessCasted<TAR&>::access (t); }
-        void accept (Gtk::Widget* w)     { result = util::AccessCasted<TAR&>::access (w); }
-      };
-///////////////////////////////////////////////////////////////////////////////////////////////////TODO Verdammter Mist!!!! es werden WIEDER beide Zweige compiliert, aber nur einer geht!!!      
+    TypeConverter<TAR> converter;
     RawResult targetElm = performAccessTo (destination, limitCreation);
-    if (targetElm.tangible)
-      return util::AccessCasted<TAR&>::access (targetElm.tangible);
-    else
-    if (targetElm.gtkWidget)
-      return util::AccessCasted<TAR&>::access (targetElm.gtkWidget);
+    targetElm.accept (converter);
+    if (converter.result.isValid())
+      return converter.result;
     else
       return "In current UI, there is no element at location "+string(destination);
   }

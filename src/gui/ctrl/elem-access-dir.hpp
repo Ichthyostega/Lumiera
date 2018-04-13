@@ -58,6 +58,7 @@ namespace ctrl{
   
 //  using util::isnil;
 //  using std::string;
+  using interact::UICoord;
   
   
   /**

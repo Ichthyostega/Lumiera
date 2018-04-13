@@ -30,6 +30,7 @@
 //#include "gui/interact/view-spec-dsl.hpp"
 #include "test/test-element-access.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "test/mock-elm.hpp"
 //#include "gen-node-location-query.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
@@ -64,10 +65,13 @@ namespace test {
   namespace { //Test fixture...
     
     class DummyWidget
-      : util::NonCopyable
+      : public gui::test::MockElm
       {
       protected:
         virtual ~DummyWidget() { } ///< is an interface
+        DummyWidget()
+          : MockElm("DummyWidget")
+          { }
       };
     
     class DummyTab
@@ -120,6 +124,9 @@ namespace test {
           fakeDirectory->expectedQuery = location;
           fakeDirectory->expectedAnswer = &dummyTab;
           
+          DummyWidget* duf = &dummyTab;
+          model::Tangible* luf{duf};
+          static_assert (std::is_convertible<DummyWidget*, model::Tangible*>::value, "lalü");
           AccessAPI accessAPI;
           auto answer = accessAPI().access<DummyWidget> (location);
           
