@@ -100,7 +100,7 @@ namespace test {
       /* == ElementAccess interface == */
       
       RawResult
-      performAccessTo (UICoord target, size_t limitCreation)  override
+      performAccessTo (UICoord const& target, size_t limitCreation)  override
         {
           CHECK (target == expectedQuery);
           return expectedAnswer;

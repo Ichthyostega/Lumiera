@@ -102,17 +102,17 @@ namespace model {
       /* == Access by Location == */
       
       template<class TAR>
-      Result<TAR&> access (UICoord destination);
+      Result<TAR&> access (UICoord const& destination);
       
       template<class TAR>
-      Result<TAR&> access_or_create (UICoord destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
+      Result<TAR&> access_or_create (UICoord const& destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
       
       
     protected:
       using RawResult = lib::Variant<Types<model::Tangible*, Gtk::Widget*>>;
       
       /** @internal drill down according to coordinates, maybe create element */
-      virtual RawResult performAccessTo (UICoord, size_t limitCreation)      =0;
+      virtual RawResult performAccessTo (UICoord const&, size_t limitCreation)  =0;
       
     private:
       template<class TAR>
@@ -149,13 +149,13 @@ namespace model {
                                                      //   we know then the following dynamic_cast (downcast) can succeed  
       using Base = typename RawResult::FirstMatching<canUpcast>::Type;
       
-      void
-      accept (Base* pb)
+      virtual void
+      handle (Base& pb)  override
         {
           if (pb)
             result = *dynamic_cast<TAR*> (pb);
           else
-            result = "access returns empty answer";
+            result = Result<TAR&>{"access returns empty answer"};
         }
     };
   
@@ -174,7 +174,7 @@ namespace model {
    */
   template<class TAR>
   inline ElementAccess::Result<TAR&>
-  ElementAccess::access (UICoord destination)
+  ElementAccess::access (UICoord const& destination)
   {
     return access_or_create<TAR> (destination, 0);
   }
@@ -189,7 +189,7 @@ namespace model {
    */
   template<class TAR>
   inline ElementAccess::Result<TAR&>
-  ElementAccess::access_or_create (UICoord destination, size_t limitCreation)
+  ElementAccess::access_or_create (UICoord const& destination, size_t limitCreation)
   {
     TypeConverter<TAR> converter;
     RawResult targetElm = performAccessTo (destination, limitCreation);

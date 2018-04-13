@@ -67,7 +67,6 @@ namespace ctrl{
    */
   class ElemAccessDir
     : public model::ElementAccess
-    , ::util::NonCopyable
     {
       WindowLocator& windowLoc_;
       PanelLocator& panelLoc_;
@@ -84,7 +83,7 @@ namespace ctrl{
       /* == ElementAccess interface == */
       
       RawResult
-      performAccessTo (UICoord, size_t limitCreation)  override
+      performAccessTo (UICoord const&, size_t limitCreation)  override
         {
           UNIMPLEMENTED ("implementation of access function based on real UI widgets");
         }
