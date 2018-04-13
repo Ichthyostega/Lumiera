@@ -151,7 +151,7 @@ namespace model {
   struct ElementAccess::TypeConverter
     : RawResult::Visitor
     {
-      Result<TAR&> result;
+      Result<TAR&> result{"not convertible"};
       
       template<typename X>
       using canCast = std::is_convertible<TAR*, X>;
@@ -163,6 +163,8 @@ namespace model {
         {
           if (pb)
             result = *dynamic_cast<TAR*> (pb);
+          else
+            result = "access returns empty answer";
         }
     };
   
@@ -175,10 +177,9 @@ namespace model {
    * @tparam TAR type of result element expected at the designated location
    * @return suitably converted direct (language) reference to the desired element
    *         wrapped as _result proxy_
-   * @throw error::Invalid when the designated element exists, but is not
-   *        type or conversion compatible to the expected result type
-   * @note when access was not possible because the element does not exist,
-   *       the result proxy is empty and convertible to `bool(false)`
+   * @note when access was not possible because either the element does not exist,
+   *       or is not convertible to the desired target type, the result proxy is empty
+   *       and convertible to `bool(false)`
    */
   template<class TAR>
   inline ElementAccess::Result<TAR&>
@@ -201,10 +202,7 @@ namespace model {
     TypeConverter<TAR> converter;
     RawResult targetElm = performAccessTo (destination, limitCreation);
     targetElm.accept (converter);
-    if (converter.result.isValid())
-      return converter.result;
-    else
-      return "In current UI, there is no element at location "+string(destination);
+    return converter.result;
   }
   
   

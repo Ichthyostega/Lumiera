@@ -124,9 +124,6 @@ namespace test {
           fakeDirectory->expectedQuery = location;
           fakeDirectory->expectedAnswer = &dummyTab;
           
-          DummyWidget* duf = &dummyTab;
-          model::Tangible* luf{duf};
-          static_assert (std::is_convertible<DummyWidget*, model::Tangible*>::value, "lalü");
           AccessAPI accessAPI;
           auto answer = accessAPI().access<DummyWidget> (location);
           
