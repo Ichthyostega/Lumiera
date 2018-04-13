@@ -112,7 +112,7 @@ namespace model {
       using RawResult = lib::Variant<Types<model::Tangible*, Gtk::Widget*>>;
       
       /** @internal drill down according to coordinates, maybe create element */
-      virtual RawResult performAccessTo (UICoord, size_t limitCreation)    =0;
+      virtual RawResult performAccessTo (UICoord, size_t limitCreation)      =0;
       
     private:
       template<class TAR>
@@ -120,43 +120,34 @@ namespace model {
     };
   
   
-  namespace {
-    using TypeSeq = Types<model::Tangible*, Gtk::Widget*>;
-    
-    using lib::meta::Node;
-    using lib::meta::NullType;
-    
-    template<typename T>
-    struct Identity
-      {
-        using Type = T;
-      };
-    
-    template<class TYPES, template<class> class _P_>
-    struct FirstMatching
-      {
-        static_assert(not sizeof(TYPES), "None of the possible Types fulfils the condition");
-      };
-    template<class...TYPES, template<class> class _P_>
-    struct FirstMatching<Types<TYPES...>, _P_>
-      : FirstMatching<typename Types<TYPES...>::List, _P_>
-      { };
-    template<class T, class TYPES, template<class> class _P_>
-    struct FirstMatching<Node<T,TYPES>, _P_>
-      : std::conditional_t<_P_<T>::value, Identity<T>, FirstMatching<TYPES, _P_>>
-      {  };
-    
-  }
+  
+  
+  /** @internal helper to perform conversion to the desired result type.
+   * This is a bit of tricky metaprogramming to deal with the problem that we can not
+   * assume a single base interface for all the UI elements or widgets accessible through
+   * UI-Coordinates. Rather we have to deal with a small set of possible base interfaces,
+   * and thus the actual [access function](\ref #performAccessTo) returns a _variant record_
+   * holding a pointer, and internally tagged with the base interface type to apply. Now the
+   * public API functions are templated to the _result type as expected by the invoking clinent_
+   * and thus we get a matrix of possible cases; when the expected result type is _reachable by
+   * dynamic downcast_ from the actual base interface type returned by the internal access function,
+   * we can perform this dynamic_cast. Otherwise the returned result proxy object is marked as empty.
+   * @remark technically this solution relies on the lib::Variant::Visitor to provide a NOP default
+   *         implementation. The TypeConverter template is instantiated with the desired target type
+   *         and thus only overwrites _the first case where an conversion is possible._ In all other
+   *         cases the default implementation does nothing and thus retains the embedded result proxy
+   *         in empty state.
+   */
   template<class TAR>
   struct ElementAccess::TypeConverter
     : RawResult::Visitor
     {
       Result<TAR&> result{"not convertible"};
       
-      template<typename X>
-      using canCast = std::is_convertible<TAR*, X>;
-      
-      using Base = typename FirstMatching<TypeSeq, canCast>::Type;
+      template<typename X>                             // note the "backward" use. We pick that base interface
+      using canUpcast = std::is_convertible<TAR*, X>; //  into which our desired result type can be upcast, because
+                                                     //   we know then the following dynamic_cast (downcast) can succeed  
+      using Base = typename RawResult::FirstMatching<canUpcast>::Type;
       
       void
       accept (Base* pb)
@@ -193,7 +184,8 @@ namespace model {
    * @return suitably converted direct (language) reference to the desired element
    *         wrapped as _result proxy_
    * @note when access was not possible because the element could not been created,
-   *       the result proxy is empty and convertible to `bool(false)`
+   *       or is not convertible to the desired target type, the result proxy is empty,
+   *       and convertible to `bool(false)` (or raises an exception on attempted access)
    */
   template<class TAR>
   inline ElementAccess::Result<TAR&>
