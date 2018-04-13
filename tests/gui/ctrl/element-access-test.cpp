@@ -30,7 +30,6 @@
 //#include "gui/interact/view-spec-dsl.hpp"
 #include "test/test-element-access.hpp"
 #include "gui/interact/ui-coord.hpp"
-#include "test/mock-elm.hpp"
 //#include "gen-node-location-query.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
@@ -52,33 +51,19 @@ using util::isSameObject;
 
 
 namespace gui  {
-namespace model {
+namespace model{
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 //  using lib::test::showSizeof;
   using interact::UICoord;
+  using gui::test::TestElementAccess;
+  using gui::test::DummyWidget;
+  using gui::test::DummyTab;
   
   using MockAccess = lib::DependInject<ElementAccess>::Local<TestElementAccess>;
   using AccessAPI = lib::Depend<ElementAccess>;
   
-  namespace { //Test fixture...
-    
-    class DummyWidget
-      : public gui::test::MockElm
-      {
-      protected:
-        virtual ~DummyWidget() { } ///< is an interface
-        DummyWidget()
-          : MockElm("DummyWidget")
-          { }
-      };
-    
-    class DummyTab
-      : public DummyWidget
-      { };
-    
-  }//(End)Test fixture
   
   
   /******************************************************************************//**
@@ -93,6 +78,7 @@ namespace test {
    *       rather than on the real UI topology.
    * @see GenNodeLocationQuery
    * 
+   * @see [Mock testing support](test-element-access.hpp)
    * @see id-scheme.hpp
    * @see ViewLocator
    * @see ViewSpecDSL_test

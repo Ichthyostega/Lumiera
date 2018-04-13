@@ -22,29 +22,25 @@
 
 
 /** @file test-element-access.hpp
- ** Generic building block in the Lumiera GUI model.
- ** A model::Element has a unique identifier, which is tied to the
- ** identification scheme used in the "real" model in Proc-Layer.
- ** Model elements can be addressed receive mutations caused by changes
- ** and rebuilding of elements within the Session; moreover, a generic
- ** representation of attributes is provided.
+ ** Unit test helper for access to UI elements without actually running an UI.
  ** 
  ** @note as of 1/2015 this is a first draft and WIP-WIP-WIP
  ** @todo WIP  ///////////////////////TICKET #1134
  ** 
- ** @see ////TODO_test usage example
- ** @see element.cpp implementation
+ ** @see ElementAccess_test usage example
+ ** @see elem-access-dir.hpp real implementation
  ** 
  */
 
 
-#ifndef GUI_MODEL_TEST_ELEMENT_ACCESS_H
-#define GUI_MODEL_TEST_ELEMENT_ACCESS_H
+#ifndef GUI_TEST_ELEMENT_ACCESS_H
+#define GUI_TEST_ELEMENT_ACCESS_H
 
 
 #include "lib/error.hpp"
 #include "gui/model/element-access.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "test/mock-elm.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -52,22 +48,38 @@
 
 
   
-namespace gui {
-namespace model {
+namespace gui  {
+namespace test {
   
 //  using util::isnil;
 //  using std::string;
   using interact::UICoord;
   
   
+  /* === Dummy Widgets for Unit testing === */
+  
+  class DummyWidget
+    : public MockElm
+    {
+    protected:
+      virtual ~DummyWidget() { } ///< is an interface
+      DummyWidget()
+        : MockElm("DummyWidget")
+        { }
+    };
+  
+  class DummyTab
+    : public DummyWidget
+    { };
+  
+  
+  
   /**
-   * Basic (abstracted) view of...
-   * 
-   * @see SomeSystem
-   * @see NA_test
+   * Mock implementation of the model::ElementAccess interface for testing without actual UI.
+   * @see ElementAccess_test
    */
   class TestElementAccess
-    : public ElementAccess
+    : public model::ElementAccess
     {
       
     public:
@@ -82,15 +94,16 @@ namespace model {
       UICoord expectedQuery;
       
       /** ...and if acceptable, the next query will answer with this object */
-      void* expectedAnswer;
+      model::Tangible* expectedAnswer;
       
       
       /* == ElementAccess interface == */
       
       RawResult
-      performAccessTo (UICoord, size_t limitCreation)  override
+      performAccessTo (UICoord target, size_t limitCreation)  override
         {
-          UNIMPLEMENTED ("internal access function");
+          CHECK (target == expectedQuery);
+          return expectedAnswer;
         }
       
       
@@ -100,22 +113,5 @@ namespace model {
   
   
   
-  
-  
-  /** @internal in case
-   */
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
-  template<class X>
-  inline void
-  ElementAccess<X>::maybe ()  const
-  {
-    UNIMPLEMENTED ("tbw");
-  }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1134
-  
-  
-  
-  
-  
-}} // namespace gui::model
-#endif /*GUI_MODEL_TEST_ELEMENT_ACCESS_H*/
+}} // namespace gui::test
+#endif /*GUI_TEST_ELEMENT_ACCESS_H*/

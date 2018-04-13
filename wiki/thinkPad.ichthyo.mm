@@ -12872,12 +12872,14 @@
 <linktarget COLOR="#97db97" DESTINATION="ID_1568226158" ENDARROW="Default" ENDINCLINATION="226;0;" ID="Arrow_ID_26754858" SOURCE="ID_1400754551" STARTARROW="None" STARTINCLINATION="277;-10;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222380124" ID="ID_1101595897" MODIFIED="1523228027969" TEXT="mu&#xdf; pr&#xfc;fen, ob der Cast m&#xf6;glich ist">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1523222380124" ID="ID_1101595897" MODIFIED="1523587710088" TEXT="mu&#xdf; pr&#xfc;fen, ob der Cast m&#xf6;glich ist">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1523229139923" ID="ID_636796034" MODIFIED="1523229481422" TEXT="Variant?">
 <icon BUILTIN="forward"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523229483619" ID="ID_1116388815" MODIFIED="1523232763524" TEXT="wohl einzige L&#xf6;sung?"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523232748878" ID="ID_153055029" MODIFIED="1523232770707" TEXT="AUA --- geht auch nicht">
+<node COLOR="#338800" CREATED="1523229483619" ID="ID_1116388815" MODIFIED="1523587648174" TEXT="wohl einzige L&#xf6;sung?">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#6c2525" CREATED="1523232748878" ID="ID_153055029" MODIFIED="1523587755516" TEXT="AUA --- geht auch nicht ohne Weiteres">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1523232788680" ID="ID_849117954" MODIFIED="1523232797628" TEXT="&#xc4;ndert nix am Grundproblem">
 <icon BUILTIN="smily_bad"/>
@@ -12903,13 +12905,21 @@
 <node CREATED="1523232945043" ID="ID_45452812" MODIFIED="1523232954053" TEXT="erst zur Laufzeit wissen wir, was zur&#xfc;ckkommt"/>
 <node CREATED="1523233007258" ID="ID_1076174983" MODIFIED="1523233019060" TEXT="aber zur Compilezeit m&#xfc;ssen wir schon den Cast vorbereiten"/>
 </node>
-<node CREATED="1523233031479" ID="ID_1135973571" MODIFIED="1523233048184" TEXT="Idee: Visitor spezialisieren">
-<node CREATED="1523233049316" ID="ID_278890079" MODIFIED="1523233057943" TEXT="er implementiert &#xfc;berhaupt nur den Fall, der geht"/>
+<node COLOR="#338800" CREATED="1523233031479" ID="ID_1135973571" MODIFIED="1523587851464" TEXT="Idee: Visitor spezialisieren">
+<linktarget COLOR="#3f6796" DESTINATION="ID_1135973571" ENDARROW="Default" ENDINCLINATION="-62;1;" ID="Arrow_ID_290291364" SOURCE="ID_1510464943" STARTARROW="None" STARTINCLINATION="8;-34;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1523233049316" ID="ID_278890079" MODIFIED="1523396787384" TEXT="er implementiert &#xfc;berhaupt nur den Fall, der geht">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1523587774453" ID="ID_887720572" MODIFIED="1523587792039" TEXT="in allen anderen F&#xe4;llen bleibt der Result-Proxy leer"/>
 </node>
 </node>
 <node CREATED="1523229496001" ID="ID_190653452" MODIFIED="1523229516738" TEXT="bedeutet...">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1523229517523" ID="ID_1510464943" MODIFIED="1523229517523" TEXT="Variant-Visitor"/>
+<node CREATED="1523229517523" ID="ID_1510464943" MODIFIED="1523587856731" TEXT="Variant-Visitor">
+<arrowlink COLOR="#3f6796" DESTINATION="ID_1135973571" ENDARROW="Default" ENDINCLINATION="-62;1;" ID="Arrow_ID_290291364" STARTARROW="None" STARTINCLINATION="8;-34;"/>
+</node>
+<node CREATED="1523587686010" ID="ID_533196954" MODIFIED="1523587697908" TEXT="trickreiches Metaprogramming"/>
 <node CREATED="1523229519846" ID="ID_307916731" MODIFIED="1523229533208" TEXT="Einschr&#xe4;nkungen f&#xfc;r die Test-Dummies"/>
 </node>
 </node>
@@ -12920,7 +12930,7 @@
 <node CREATED="1523225025493" ID="ID_1731501078" MODIFIED="1523225070764" TEXT="der interne Aufruf kann einen Pointer liefern">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1523225052314" ID="ID_271482556" MODIFIED="1523225066889" TEXT="die Aufrufschnittstelle stellt NULL-Check sicher">
+<node COLOR="#338800" CREATED="1523225052314" ID="ID_271482556" MODIFIED="1523587734563" TEXT="die Aufrufschnittstelle stellt NULL-Check sicher">
 <icon BUILTIN="yes"/>
 </node>
 </node>
