@@ -23,9 +23,15 @@
 
 /** @file test-element-access.hpp
  ** Unit test helper for access to UI elements without actually running an UI.
+ ** This allows to cover functionality for resolving UI-coordinates against an UI topology
+ ** and accessing or creating elements. Obviously, only faked UI widgets can be returned,
+ ** but this does not matter for those features anyway.
  ** 
- ** @note as of 1/2015 this is a first draft and WIP-WIP-WIP
- ** @todo WIP  ///////////////////////TICKET #1134
+ ** @note as of 4/2018 this is a first draft and WIP-WIP-WIP
+ ** @todo right now this test is braindead; the idea is to extend it similar to the
+ **       GenNodeLocationQuery eventually, so to mimic the way an actual implementation
+ **       would drill down into the UI topology. Yet at the moment (4/2018) we are still
+ **       far from implementing anything in this regard; we just need the interface...  ///////////////////////////////TICKET #1134
  ** 
  ** @see ElementAccess_test usage example
  ** @see elem-access-dir.hpp real implementation
@@ -41,20 +47,24 @@
 #include "gui/model/element-access.hpp"
 #include "gui/interact/ui-coord.hpp"
 #include "test/mock-elm.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-//#include <string>
+#include <string>
 #include <memory>
 
 
   
 namespace gui  {
 namespace test {
+  namespace error = lumiera::error;
   
 //  using util::isnil;
-//  using std::string;
+  using std::string;
+  using lib::Literal;
   using interact::UICoord;
+  using interact::UIC_VIEW;
+  using interact::UIC_TAB;
   
   
   
@@ -64,20 +74,28 @@ namespace test {
   class DummyWidget
     : public MockElm
     {
-    protected:
+    public:
       virtual ~DummyWidget() { } ///< is an interface
-      DummyWidget()
-        : MockElm("DummyWidget")
+      
+      DummyWidget(string name ="DummyWidget")
+        : MockElm{name}
+        { }
+      DummyWidget(Literal name)
+        : DummyWidget{string (name)}
         { }
     };
   
-  class DummyTab
-    : public DummyWidget
-    { };
+  struct DummyTab
+    : DummyWidget
+    {
+      using DummyWidget::DummyWidget;
+    };
   
-  class DummyView
-    : public DummyWidget
-    { };
+  struct DummyView
+    : DummyWidget
+    {
+      using DummyWidget::DummyWidget;
+    };
   
   
   
@@ -109,7 +127,18 @@ namespace test {
       RawResult
       performAccessTo (UICoord const& target, size_t limitCreation)  override
         {
-          CHECK (target <= existingPath);
+          CHECK (existingPath >= target);
+          if (existingPath > target and !response)
+            {
+              if (target.size()-1 == UIC_VIEW)
+                response.reset(new DummyView(target[UIC_VIEW]));
+              else
+              if (target.size()-1 == UIC_TAB)
+                response.reset(new DummyTab(target[UIC_TAB]));
+              else
+                throw error::Invalid("Mock ElementAccess supports only creation of VIEW and TAB. Requested Target was "+string(target));
+            }
+          
           return response.get();
         }
       

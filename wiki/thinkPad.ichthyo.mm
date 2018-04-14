@@ -12846,8 +12846,8 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523222204556" ID="ID_1018012203" MODIFIED="1523222419178" TEXT="Ergebnis-Ausgabe">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1523222204556" ID="ID_1018012203" MODIFIED="1523670938347" TEXT="Ergebnis-Ausgabe">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1523222214579" ID="ID_1568226158" MODIFIED="1523224303183" STYLE="fork" TEXT="Feststellung: keine Status-R&#xfc;ckmeldung">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -12954,10 +12954,14 @@
 <node CREATED="1523118613096" ID="ID_169844591" MODIFIED="1523118623074" TEXT="== Vorarbeit f&#xfc;r die sp&#xe4;tere Implementierung"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523663840577" ID="ID_1523982995" MODIFIED="1523663860831" TEXT="Mock-Widget-Erzeugung">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1523663862182" ID="ID_937721725" MODIFIED="1523663879959" TEXT="besser in die Mock-Service-Impl verlegen"/>
-<node CREATED="1523663880731" ID="ID_1244735047" MODIFIED="1523663886894" TEXT="von dort nachpr&#xfc;fbar machen"/>
+<node COLOR="#338800" CREATED="1523663840577" ID="ID_1523982995" MODIFIED="1523670899095" TEXT="Mock-Widget-Erzeugung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1523663862182" ID="ID_937721725" MODIFIED="1523670907629" TEXT="besser in die Mock-Service-Impl verlegen">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1523663880731" ID="ID_1244735047" MODIFIED="1523670903598" TEXT="von dort nachpr&#xfc;fbar machen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523118660882" ID="ID_1452843558" MODIFIED="1523118677304" TEXT="Testf&#xe4;lle">
@@ -12965,8 +12969,8 @@
 <node COLOR="#338800" CREATED="1523205670160" ID="ID_649704431" MODIFIED="1523663805752" TEXT="einfacher Zugriff auf existierendes Objekt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205706547" ID="ID_210608554" MODIFIED="1523205776609" TEXT="Zugriff auf Parent-Ebene, ein Kind-Knoten wird erzeugt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1523205706547" ID="ID_210608554" MODIFIED="1523670915381" TEXT="Zugriff auf Parent-Ebene, ein Kind-Knoten wird erzeugt">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523205752509" ID="ID_212194424" MODIFIED="1523205775730" TEXT="partielle oder komplette Erzeugung eines Pfades">
 <icon BUILTIN="flag-yellow"/>
@@ -13155,8 +13159,8 @@
 <arrowlink COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" STARTARROW="None" STARTINCLINATION="1555;-260;"/>
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1487313191100" ID="ID_1619021408" MODIFIED="1518487921076" TEXT="Fazit(TODO)">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1487313191100" ID="ID_1619021408" MODIFIED="1523670995386" TEXT="Fazit(TODO)">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1487313203254" ID="ID_573801539" MODIFIED="1518487921076" TEXT="Klassen anlegen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1487313231355" ID="ID_1566121505" MODIFIED="1518487921076" TEXT="WorkSite">

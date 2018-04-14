@@ -119,6 +119,9 @@ namespace test {
         }
       
       
+      /** @test the standard use case is to create one new child node
+       *        below an existing path (widget) within the UI
+       */
       void
       verify_standardUsage()
         {
