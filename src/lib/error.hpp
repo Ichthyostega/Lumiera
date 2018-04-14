@@ -199,12 +199,12 @@ namespace lumiera {
       public:
         LumieraError (std::string description=""
                      ,lumiera_err const id=eID)  noexcept
-          : PAR{description, id}
+          : PAR{description, id? id:eID}
         { }
         LumieraError (std::exception const& cause
                      ,std::string description=""
                      ,lumiera_err const id=eID)  noexcept
-          : PAR{cause, description, id}
+          : PAR{cause, description, id? id:eID}
         { }
       };
     
