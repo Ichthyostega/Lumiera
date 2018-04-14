@@ -30,7 +30,7 @@
 #include "gui/ctrl/global-ctx.hpp"
 #include "gui/ctrl/panel-locator.hpp"
 #include "gui/ctrl/window-locator.hpp"
-#include "gui/ctrl/elem-access-dir.hpp"
+#include "gui/interact/elem-access-dir.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "lib/util.hpp"
 
