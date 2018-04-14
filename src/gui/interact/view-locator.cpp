@@ -39,7 +39,9 @@
  */
 
 
+#include "gui/gtk-base.hpp"
 #include "gui/interact/view-locator.hpp"
+#include "gui/interact/view-spec-dsl.hpp"
 #include "gui/interact/ui-location-solver.hpp"
 #include "gui/ctrl/panel-locator.hpp"
 #include "gui/model/element-access.hpp"
@@ -57,42 +59,53 @@ using gui::model::ElementAccess;
 
 
 namespace gui {
-namespace interact {
-  
   namespace error = lumiera::error;
+  
   
   
   /* ==== definitions and concrete bindings for the View-Spec-DSL ==== */
   
-  const Symbol UIC_CURRENT_WINDOW{"currentWindow"};
-  const Symbol UIC_FIRST_WINDOW  {"firstWindow"};
-  const Symbol UIC_ELIDED        {"."};
+  namespace idi { // Namespace for the actual ViewSpec DSL tokens
+    
+    
+    AllocSpec<uint> limitAllocation =[&](UICoord target, uint limit)
+                                        {
+                                          UNIMPLEMENTED ("Actual DSL token to cause a (limited) view allocation");
+                                          return target; /////////////////////////////////////////////////////////TICKET #1129 : need at least a working draft implementation here
+                                        };
   
-  
-  
-  
-  ViewLocator::ViewLocator ()
-    : locResolver_{LocationQuery::service}
-    { }
-  
-  // dtors via smart-ptr invoked from here...
-  ViewLocator::~ViewLocator() { }
-  
-  
-  
-  /* === Service accessors within global context === */
-  
-//  PanelLocator&
-//  ViewLocator::panelLocator()
-//  {
-//    return windowLoc_.locatePanel();
-//  }
-  
-  
-  
-  
-  /** */
-  
-  
-  
+  }
+  namespace interact {
+    
+    const Symbol UIC_CURRENT_WINDOW{"currentWindow"};
+    const Symbol UIC_FIRST_WINDOW  {"firstWindow"};
+    const Symbol UIC_ELIDED        {"."};
+    
+    
+    
+    
+    ViewLocator::ViewLocator ()
+      : locResolver_{LocationQuery::service}
+      { }
+    
+    // dtors via smart-ptr invoked from here...
+    ViewLocator::~ViewLocator() { }
+    
+    
+    
+    /* === Service accessors within global context === */
+    
+  //  PanelLocator&
+  //  ViewLocator::panelLocator()
+  //  {
+  //    return windowLoc_.locatePanel();
+  //  }
+    
+    
+    
+    
+    /** */
+    
+    
+    
 }}// namespace gui::interact

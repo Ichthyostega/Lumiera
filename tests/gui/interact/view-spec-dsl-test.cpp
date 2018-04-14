@@ -27,9 +27,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
 #include "gui/interact/ui-coord.hpp"
+#include "gui/interact/view-locator.hpp"
+#include "gui/interact/view-spec-dsl.hpp"
 #include "gen-node-location-query.hpp"
+#include "test/test-element-access.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
@@ -50,13 +52,44 @@ using lib::diff::Rec;
 
 
 namespace gui  {
+namespace idi { //------Mock ViewSpec definitions for component test
+  
+  struct MockView1
+    : gui::test::DummyWidget
+    {
+      using DummyWidget::DummyWidget;
+    };
+  
+  struct MockView2
+    : gui::test::DummyWidget
+    {
+      using DummyWidget::DummyWidget;
+    };
+  
+  /* ==== Dummy ViewSpec rules for those two mock view types (--> see id-scheme.hpp) ==== */
+    
+  template<>
+  struct Descriptor<MockView1>
+    {
+      ViewSpec locate = UICoord::currentWindow().panel("parentLocation");
+      Allocator alloc = limitAllocation(2);
+    };
+  
+}//----------------(End)Mock ViewSpec definitions
+
 namespace interact {
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   using lib::test::showSizeof;
+  using gui::model::ElementAccess;
+  using gui::test::TestElementAccess;
+  using gui::test::DummyWidget;
+  using gui::test::DummyView;
+  using gui::test::DummyTab;
   
   using MockLoationSolver = lib::DependInject<UILocationSolver>::Local<>;
+  using MockElementAccess = lib::DependInject<ElementAccess>::Local<TestElementAccess>;
   
   namespace { //Test fixture...
     
@@ -79,7 +112,7 @@ namespace test {
         {
 //        verify_basicProperties();
           verify_standardUsage();
-          verify_alternatives();
+//        verify_alternatives();
           
           verify_genericInvocation();
         }
@@ -156,6 +189,8 @@ namespace test {
       void
       verify_genericInvocation()
         {
+          ViewLocator viewLocator;
+          
            //-------------------------------------------------------------Test-Fixture
           // a Test dummy placeholder for the real UI structure
           Rec dummyUiStructure = MakeRec()
@@ -167,11 +202,14 @@ namespace test {
           // answer "location queries" backed by this structure
           GenNodeLocationQuery locationQuery{dummyUiStructure};
           MockLoationSolver mock ([&]{ return new UILocationSolver{locationQuery}; });
-          /////////////////////////////////////////////////////////////////////////////////////////TICKET 1129 : how to create ViewLocator mock without global context??
+          
+          MockElementAccess fakeAccessor;
           //--------------------------------------------------------------(End)Test-Fixture
           
-//        ErrorLogView errorLog = viwLocator.get<ErrorLogView>();
-//        TimelineView timeline = viwLocator.get<TimelineView>();
+          using idi::MockView1;
+          
+          MockView1& view1 = viewLocator.get<MockView1>();
+//        TimelineView timeline = viewLocator.get<TimelineView>();
           
           /////////////////////////////////////////////////////////////////////////////////////////TICKET 1129 : use an EventLog to verify the forwarded invocations??
         }

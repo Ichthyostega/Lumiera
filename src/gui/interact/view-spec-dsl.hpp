@@ -251,5 +251,15 @@ namespace interact {
     };
   
   
-}}// namespace gui::interact
+} // namespace interact
+namespace idi {
+//bring definitions into scope for DSL use...
+  using interact::ViewSpec;
+  using interact::Allocator;
+  
+  using interact::AllocSpec;
+  
+  extern AllocSpec<uint> limitAllocation;
+  
+}}// namespace gui::idi
 #endif /*GUI_INTERACT_VIEW_SPEC_DSL_H*/

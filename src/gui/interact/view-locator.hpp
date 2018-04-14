@@ -56,7 +56,6 @@
 #ifndef GUI_INTERACT_VIEW_LOCATOR_H
 #define GUI_INTERACT_VIEW_LOCATOR_H
 
-#include "gui/gtk-base.hpp"
 #include "lib/depend-inject.hpp"
 #include "gui/interact/view-spec-dsl.hpp"
 #include "gui/id-scheme.hpp"

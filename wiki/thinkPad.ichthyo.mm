@@ -3879,7 +3879,7 @@
 <node CREATED="1504463020913" ID="ID_808284638" MODIFIED="1518487921063" TEXT="[optional] Gruppe"/>
 <node CREATED="1504463028384" ID="ID_1928250888" MODIFIED="1518487921063" TEXT="View-ID"/>
 </node>
-<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1518742955375" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
+<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1523746854594" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
 <arrowlink COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -9414,7 +9414,7 @@
 <node COLOR="#338800" CREATED="1515631646108" ID="ID_1553855476" MODIFIED="1518840394020" TEXT="UICoordResolver erzeugen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1515979648475" HGAP="38" ID="ID_350272872" MODIFIED="1522939030329" TEXT="Funktionsweise der &quot;Resolution&quot; kl&#xe4;ren" VSHIFT="1">
+<node COLOR="#338800" CREATED="1515979648475" FOLDED="true" HGAP="38" ID="ID_350272872" MODIFIED="1523727268917" TEXT="Funktionsweise der &quot;Resolution&quot; kl&#xe4;ren" VSHIFT="1">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1515980158112" ID="ID_1744041635" MODIFIED="1522939070606" TEXT="der Reihe nach pr&#xfc;fen">
 <icon BUILTIN="info"/>
@@ -12073,9 +12073,96 @@
 <node CREATED="1515633737905" ID="ID_1500220475" MODIFIED="1523053425474" TEXT="Auswahl der ersten &quot;passenden&quot; L&#xf6;sung"/>
 <node CREATED="1515633770884" ID="ID_861669562" MODIFIED="1523053425474" TEXT="Dummy: GenNodeLocationQuery anstelle eines realen UI"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522940227022" ID="ID_1745396406" MODIFIED="1523053425474" TEXT="verify_invocation">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522940227022" ID="ID_1745396406" MODIFIED="1523746775368" TEXT="verify_genericInvocation">
 <linktarget COLOR="#4c8891" DESTINATION="ID_1745396406" ENDARROW="Default" ENDINCLINATION="-828;-41;" ID="Arrow_ID_1830310728" SOURCE="ID_1539937928" STARTARROW="None" STARTINCLINATION="242;22;"/>
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1523746830877" ID="ID_179614354" MODIFIED="1523746850828" TEXT="Ziel ist ein Komponenten-Integrationstest">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1523727045276" ID="ID_1873415671" MODIFIED="1523727056587" TEXT="Problem: wie testen ohne UI-Context?">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1523727057907" ID="ID_465631036" MODIFIED="1523746795582" TEXT="Ausweg">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn irgendwann wird's l&#228;cherlich mit der Unit-Testerei.
+    </p>
+    <p>
+      Oder zumindest Hexagonal.
+    </p>
+    <p>
+      Bedingt durch die ganzen rausgezogenen Interfaces hat jetzt bereits ViewLocator &#252;berhaupt keinen Gehalt mehr.
+    </p>
+    <p>
+      Wenn ich jetzt auch noch die einzige verbleibende Methode rausziehe, um sie testen zu k&#246;nnen,
+    </p>
+    <p>
+      drehe ich mich komplett im Kreis. Schlie&#223;lich kann ich diese Methode ja, genau genommen,
+    </p>
+    <p>
+      im Moment auch noch nicht wirklich testen, aus genau den gleichen Gr&#252;nden,
+    </p>
+    <p>
+      warum ViewLocator so nebul&#246;s bleibt: <b>es gibt noch kein Lumiera GUI</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1523746796508" ID="ID_1839059733" MODIFIED="1523746796508" TEXT="Aufruf nur nachbauen"/>
+<node CREATED="1523746798210" ID="ID_1076120435" MODIFIED="1523746818187" TEXT="Fake-DSL-Definitionen verwenden"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1523746600925" HGAP="1" ID="ID_435582808" MODIFIED="1523746656723" VSHIFT="36">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das urspr&#252;ngliche Ziel f&#252;r diesen Test
+    </p>
+    <p>
+      ist in unserem Test-Framework <b>nicht realisierbar</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1523746659654" ID="ID_1299891788" MODIFIED="1523746698882" TEXT="Das Ziel war: alle konkreten Standard-F&#xe4;lle durchspielen">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1523746674939" ID="ID_1008453652" MODIFIED="1523746693800" TEXT="dies erfordert, die realen WIdgets zu instantiieren">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1523746704479" ID="ID_462392796" MODIFIED="1523746735833" TEXT="...und das ist ausgeschlossen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Policy</u>: Unit-Tests d&#252;rfen keine GTK-Abh&#228;ngigkeit haben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1523748895111" ID="ID_613307109" MODIFIED="1523748953311" TEXT="sp&#xe4;ter mal....">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523748900655" ID="ID_1768095597" MODIFIED="1523748939872" TEXT="#1140 UI integration tests">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523748905725" ID="ID_748849132" MODIFIED="1523748935631" TEXT="#1141 verify UI default view allocation">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -12716,7 +12803,7 @@
 </node>
 </node>
 <node CREATED="1523059565187" ID="ID_685856143" MODIFIED="1523059569334" TEXT="Implementierung">
-<node CREATED="1523059570619" ID="ID_1720611397" MODIFIED="1523059579790" TEXT="Problem: Typisierung">
+<node CREATED="1523059570619" FOLDED="true" ID="ID_1720611397" MODIFIED="1523726985005" TEXT="Problem: Typisierung">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1523059593831" ID="ID_1175935224" MODIFIED="1523059666434" TEXT="will mich nicht auf eine Basisklasse festlegen">
 <richcontent TYPE="NOTE"><html>
@@ -12759,7 +12846,7 @@
 <node CREATED="1523229081683" ID="ID_766417564" MODIFIED="1523229084838" TEXT="Gtk::Widget"/>
 </node>
 </node>
-<node CREATED="1523059717622" ID="ID_598506387" MODIFIED="1523059721041" TEXT="Grundstruktur">
+<node CREATED="1523059717622" FOLDED="true" ID="ID_598506387" MODIFIED="1523726983181" TEXT="Grundstruktur">
 <node CREATED="1523059685611" ID="ID_1274858318" MODIFIED="1523059711165" TEXT="lib::Result">
 <icon BUILTIN="idea"/>
 <node CREATED="1523222317789" ID="ID_223201063" MODIFIED="1523222325262" TEXT="ist ein Either-Typ">
@@ -12846,7 +12933,7 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1523222204556" ID="ID_1018012203" MODIFIED="1523670938347" TEXT="Ergebnis-Ausgabe">
+<node COLOR="#338800" CREATED="1523222204556" FOLDED="true" ID="ID_1018012203" MODIFIED="1523726977962" TEXT="Ergebnis-Ausgabe">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1523222214579" ID="ID_1568226158" MODIFIED="1523224303183" STYLE="fork" TEXT="Feststellung: keine Status-R&#xfc;ckmeldung">
 <richcontent TYPE="NOTE"><html>
@@ -12936,9 +13023,9 @@
 </node>
 </node>
 <node CREATED="1523053331956" ID="ID_563797148" MODIFIED="1523053334615" TEXT="Test">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" ID="ID_1234019560" MODIFIED="1523205867255" TEXT="ElementAccess_test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523053336219" FOLDED="true" ID="ID_1234019560" MODIFIED="1523727001068" TEXT="ElementAccess_test">
 <linktarget COLOR="#43667c" DESTINATION="ID_1234019560" ENDARROW="Default" ENDINCLINATION="-338;-1489;" ID="Arrow_ID_839730277" SOURCE="ID_1539184761" STARTARROW="None" STARTINCLINATION="-530;453;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523118534675" ID="ID_669651266" MODIFIED="1523663819813" TEXT="Mock-Implementierung">
 <icon BUILTIN="pencil"/>
 <node CREATED="1523118577557" ID="ID_1246038265" MODIFIED="1523118589479" TEXT="Mock-Prinzip">
@@ -12964,8 +13051,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523118660882" ID="ID_1452843558" MODIFIED="1523118677304" TEXT="Testf&#xe4;lle">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523118660882" ID="ID_1452843558" MODIFIED="1523725214734" TEXT="Testf&#xe4;lle">
+<icon BUILTIN="hourglass"/>
 <node COLOR="#338800" CREATED="1523205670160" ID="ID_649704431" MODIFIED="1523663805752" TEXT="einfacher Zugriff auf existierendes Objekt">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -12979,8 +13066,14 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523725217249" ID="ID_168041841" MODIFIED="1523725232375" TEXT="bleibt halbfertig liegen">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523726928069" ID="ID_1480266497" MODIFIED="1523726945723" TEXT="#1036 low-level Access implementieren">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1523055378032" ID="ID_1727349685" MODIFIED="1523055384523" TEXT="Test-Hilfsmittel">
+</node>
+</node>
+<node CREATED="1523055378032" FOLDED="true" ID="ID_1727349685" MODIFIED="1523727007178" TEXT="Test-Hilfsmittel">
 <node CREATED="1523055393950" ID="ID_62932320" MODIFIED="1523055412955" TEXT="TestElementAccess">
 <icon BUILTIN="forward"/>
 </node>
@@ -21790,7 +21883,7 @@
 <node CREATED="1487273377603" ID="ID_1842094630" MODIFIED="1518487921088" TEXT="SpotLocator"/>
 </node>
 <node CREATED="1487272813119" ID="ID_1794274698" MODIFIED="1518487921088" TEXT="Bezug">
-<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1518742955375" TEXT="Koordinatensystem">
+<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1523746854594" TEXT="Koordinatensystem">
 <linktarget COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" SOURCE="ID_50865654" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <node CREATED="1504462869149" ID="ID_248419130" MODIFIED="1518487921088" TEXT="beschreibt Zugangsweg">
 <icon BUILTIN="yes"/>

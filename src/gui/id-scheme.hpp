@@ -77,6 +77,8 @@ namespace gui {
     
     using lib::Literal;
     using lib::idi::EntryID;
+    using interact::UICoord;
+    
     
     using ID = lib::idi::BareEntryID const&;
     
