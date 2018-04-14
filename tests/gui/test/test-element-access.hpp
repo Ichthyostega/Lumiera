@@ -45,6 +45,7 @@
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <memory>
 
 
   
@@ -54,6 +55,8 @@ namespace test {
 //  using util::isnil;
 //  using std::string;
   using interact::UICoord;
+  
+  
   
   
   /* === Dummy Widgets for Unit testing === */
@@ -69,6 +72,10 @@ namespace test {
     };
   
   class DummyTab
+    : public DummyWidget
+    { };
+  
+  class DummyView
     : public DummyWidget
     { };
   
@@ -91,10 +98,10 @@ namespace test {
       /* == Test/Diagnostics interface == */
       
       /** the next query will fail unless it presents this Path */
-      UICoord expectedQuery;
+      UICoord existingPath;
       
       /** ...and if acceptable, the next query will answer with this object */
-      model::Tangible* expectedAnswer;
+      std::unique_ptr<model::Tangible> response;
       
       
       /* == ElementAccess interface == */
@@ -102,8 +109,8 @@ namespace test {
       RawResult
       performAccessTo (UICoord const& target, size_t limitCreation)  override
         {
-          CHECK (target == expectedQuery);
-          return expectedAnswer;
+          CHECK (target <= existingPath);
+          return response.get();
         }
       
       

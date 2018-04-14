@@ -59,6 +59,7 @@ namespace test {
   using interact::UICoord;
   using gui::test::TestElementAccess;
   using gui::test::DummyWidget;
+  using gui::test::DummyView;
   using gui::test::DummyTab;
   
   using MockAccess = lib::DependInject<ElementAccess>::Local<TestElementAccess>;
@@ -91,9 +92,8 @@ namespace test {
         {
           verify_simpleAccess();
           verify_standardUsage();
-          verify_alternatives();
-          
-          verify_genericInvocation();
+          verify_limitedCreate();
+          verify_createNewPath();
         }
       
       
@@ -104,11 +104,10 @@ namespace test {
           MockAccess fakeDirectory;
           
           auto location = UICoord{"win-1","persp-A","thePanel","someView","tab#5"};
-          DummyTab dummyTab;
           
           fakeDirectory.triggerCreate();
-          fakeDirectory->expectedQuery = location;
-          fakeDirectory->expectedAnswer = &dummyTab;
+          fakeDirectory->existingPath = location;
+          fakeDirectory->response.reset (new DummyTab);
           
           AccessAPI accessAPI;
           auto answer = accessAPI().access<DummyWidget> (location);
@@ -116,34 +115,40 @@ namespace test {
           CHECK (answer.isValid());
           DummyWidget& widget = answer;
           CHECK (INSTANCEOF (DummyTab, &widget));
-          CHECK (isSameObject (widget, dummyTab));
+          CHECK (isSameObject (widget, *fakeDirectory->response));
         }
       
       
       void
       verify_standardUsage()
         {
+          MockAccess fakeDirectory;
+          
+          auto path     = UICoord{"win-1","persp-A","thePanel"};
+          auto location = UICoord{"win-1","persp-A","thePanel","someView"};
+          
+          fakeDirectory.triggerCreate();
+          fakeDirectory->existingPath = path;
+          CHECK (not fakeDirectory->response);
+          
+          AccessAPI accessAPI;
+          DummyView& view = accessAPI().access<DummyView> (location);
+          CHECK (    fakeDirectory->response); // has been created
+          CHECK (isSameObject (view, *fakeDirectory->response));
         }
       
       
       void
-      verify_alternatives()
+      verify_limitedCreate()
         {
-          UNIMPLEMENTED ("querying and selection of location alternatives");
+          UNIMPLEMENTED ("limit creation of new sibling objects");
         }
       
       
       void
-      verify_genericInvocation()
+      verify_createNewPath()
         {
-          /////////////////////////////////////////////////////////////////////////////////////////TICKET 1134 : how to create ViewLocator mock without global context??
-           //-------------------------------------------------------------Test-Fixture
-          //--------------------------------------------------------------(End)Test-Fixture
-          
-//        ErrorLogView errorLog = viwLocator.get<ErrorLogView>();
-//        TimelineView timeline = viwLocator.get<TimelineView>();
-          
-          /////////////////////////////////////////////////////////////////////////////////////////TICKET 1134 : use an EventLog to verify the forwarded invocations??
+          UNIMPLEMENTED ("create a new path from scratch");
         }
     };
   
