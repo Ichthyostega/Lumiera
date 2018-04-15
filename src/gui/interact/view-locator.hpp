@@ -57,26 +57,27 @@
 #define GUI_INTERACT_VIEW_LOCATOR_H
 
 #include "lib/depend-inject.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
 #include "gui/id-scheme.hpp"
+#include "gui/interact/view-spec-dsl.hpp"
+#include "gui/model/element-access.hpp"
+#include "lib/idi/genfunc.hpp"
+#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
 
 #include <functional>
-//#include <string>
+#include <string>
 #include <memory>
 
 
 namespace gui {
-namespace model{
-  class ElementAccess;
-}
 namespace ctrl{
   class PanelLocator;
 }
 namespace interact {
   
   using std::unique_ptr;
-//  using std::string;
+  using std::string;
+  using lib::Symbol;
   
   class UILocationSolver;
   
@@ -118,7 +119,14 @@ namespace interact {
   inline V&
   ViewLocator::get()
   {
-    UNIMPLEMENTED ("what is the *generic way* to access such a component? does it always involve the PanelLocator? Is there a generic Panel-API?");
+    using ViewSpec = idi::Descriptor<V>;
+    ViewSpec viewSpec;                              /////////////////////////////////////////////////////////TICKET #1129 : can't create instances all the time. Need some kind of Factory
+    Symbol viewID{lib::idi::typeSymbol<V>()};
+    
+    UICoord targetLocation = viewSpec.locate(viewID);
+    UICoord realView       = viewSpec.alloc (targetLocation);
+    
+    return elementAccess().access<V> (realView);
   }
   
   

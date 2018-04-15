@@ -2906,7 +2906,7 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201804062230" tags="def GuiPattern design" changecount="52">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201804150106" tags="def GuiPattern design" changecount="56">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
@@ -2930,7 +2930,9 @@ The global access point to component views is the ViewLocator within Interaction
 * get (possibly create) some view of given type
 * get (possibly create) a view with specific identity
 * destroy a specific view
-While these operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases it is sufficient to address a component view just via the UI-Bus. This is possible since component ~IDs are formed systematically and thus always predictable: it is the same ID as used within Proc-Layer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].
+For all these direct access operations, elements are designated by a private name-ID, which is actually more like a type-~IDs, and just serves to distinguish the element from its siblings. The same ~IDs are used for the components in [[UI coordinate specifications|UICoord]]; both usages are closely interconnected, because view access is accomplished by forming an UI coordinate path to the element, which is then in turn used to navigate the internal UI widget structure to reach out for the actual implementation element.
+
+While these aforementioned access operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases we are more interested in UI elements representing tangible elements from the session. In those cases,  it is sufficient to address the desired component view just via the UI-Bus. This is possible since component ~IDs of such globally relevant elements are formed systematically and thus always predictable: it is the same ID as used within Proc-Layer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].
 
 !!!Configuration of view allocation
 Since view allocation offers a choice amongst several complex patterns of behaviour, it seems adequate to offer at least some central configuration site with a DSL for readability. That being said -- it is conceivable that we'll have to open this topic altogether for general configuration by the user. For this reason, the configuration site and DSL are designed in a way to foster further evolution of possibilites...
@@ -9846,7 +9848,7 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
-<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201804062229" tags="def draft spec Concepts GuiPattern" changecount="27">
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201804150100" tags="def draft spec Concepts GuiPattern" changecount="29">
 <pre>//A topological addressing scheme to designate structural locations within the UI.//
 Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
 * to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    
@@ -9863,6 +9865,9 @@ As starting point for the design of such a framework, we'll pick the notion of a
 
 !Properties
 UI coordinates are a symbolic specification, and as such, their representation is immutable value-like. Essentially, a coordinate specification designates a pathway, and thus is comprised of a sequence of symbols. The individual path component symbol can be addressed by its depth index, starting with the top level window as rooting point. The meaning of first steps within each path is thus always fixed (top-level window, perspective, panel, view), followed by an essentially open sequence of local component names. Yet a given index position need not necessarily be actually defined. A coordinate spec can be indeterminate (NIL), but in all other cases a minimal consecutive sequence of symbols is guaranteed to exist.
+
+!!!about component names
+The individual components within such a coordinate spec are given as name-~IDs. In this context, we are more interested in the //topology// of UI components, and thus the names serve to distinguish sibling nodes. In fact, those names are created as type names and then decorated with number suffix while creating actual components. In this form, those name become real identifiers attached to those widgets, and can be used to access the respective implementation entity. Most of the elements designated and accessed this way are //mere UI entities// -- however, some elements can be representations of corresponding elements in the session (e.g. Tracks, Clips). If that is the case, obviously the name-ID has to match the &quot;official&quot; ID as used within the session.
 
 !!!flavours of meaning
 A given coordinate spec needs to be //interpreted// with the help of a resolver, which supplies additional knowledge regarding the actual window and UI configuration backing those interpretations. Such an interpretation allows to query for some typical predications, and it allows for //mutating operations,// which actually build a new coordinate spec from the given one. The general assumption is for all those coordinate interpretations to happen not within an excessively performance critical zone, where a little bit of iteration and repeated recomputation is deemed less costly than extended caching of evaluation state.
@@ -9912,7 +9917,7 @@ In addition to querying the interpretation of a given coordinate spec with respe
 __Navigation mutations:__ //In theory,// it would even be possible to extend the path by creating suitable child components; but actually this would require all &quot;elements&quot; to implement a suitable mutation interface -- which in the case of //generic elements// might be far beyond the common ground. For this reason, we keep mutation of the backing environment outside of a path mutator's scope and rather keep mutation limited to the path itself.
 </pre>
 </div>
-<div title="UILowLevelAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201804062255" modified="201804062321" tags="spec draft GuiPattern" changecount="2">
+<div title="UILowLevelAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201804062255" modified="201804150051" tags="spec draft GuiPattern" changecount="4">
 <pre>//Cross cutting access to elementary UI structures.//
 We have several orthogonal identification and access schemes within the UI. A naively written UI application just attaches the core logic below some widgets and controllers -- not only does this lead to a hard to maintain code base, this approach is even outright impossible in our case, due to the strict decoupling between core and GUI, which places us into the situation to connect a self contained core with a self contained UI. This is a binding, which, as a sideline, also generates a control structure of its own. We can indeed write code dealing with a generic UI element -- but there needs to be some place where this kind of generic designation is translated into internal structures of the UI toolkit (GTK in our case), to obtain a direct (language) reference to some implementation widget finally.
 
@@ -9920,6 +9925,11 @@ A service to translate some generic address scheme into actual entities builds t
 
 !Notes about design and implementation {{red{WIP 4/2018}}}
 At the time of this writing, it is not really clear if we need such a facility and what form its implementation will take -- which in turn places several further planning steps and design consideration into dangling state. The programmer's usual remedy in such a situation is to create yet another abstraction as a tie break. We do not know what it is, but at least we can write unit tests against it to find out what it could be.
+* we need to confine ourselves to a small selection of base interfaces to cover all possible elements accessible this way: {{{gui::model::Tangible}}}, {{{Gtk::Widget}}}, ...?
+* looks like this accessor service will be backed by a structure similar to {{{LocationQuery}}} -- maybe it will even be the same backing structure at the end.
+* so effectively an access request will drill down the real UI topology, following the path of the given UI Coordinates.
+* the result can then be packaged into a {{{lib::Variant}}} and use a //variant visitor// (double dispatch) to invoke the apropriate {{{dynamic_cast}}}
+* together, this mechanism allows us to return direct language references to actual implementation widgets
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">

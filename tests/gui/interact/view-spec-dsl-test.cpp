@@ -33,7 +33,7 @@
 #include "gen-node-location-query.hpp"
 #include "test/test-element-access.hpp"
 #include "lib/depend-inject.hpp"
-#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"   ////////////////TODO only while this test is under development
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"
@@ -186,6 +186,19 @@ namespace test {
         }
       
       
+      /** @test generic integrated access through ViewLocator
+       * This test demonstrates and verifies the way ViewLocator combines type based
+       * selection of the applicable DSL clauses, the invocation of those DSL definitions,
+       * the allocation of a suitable element and finally specifically typed access to this
+       * located or allocated element.
+       * @remarks due to limitations of our unit test setup (GTK is prohibited), this component
+       *          integration test can not be performed against the actual DSL definitions of the
+       *          real UI, even while it uses the actual code from ViewLocator. Simply because we
+       *          can not instantiated UI widgets in a unit test. We have to resort to mock UI
+       *          elements and thus use a dummy "view type" together with faked DSL definitions
+       *          for this dummy. These definitions are given in the test fixture above, right
+       *          within this translation unit. (see `namespace idi` and the class `MockView1`).
+       */
       void
       verify_genericInvocation()
         {
@@ -204,11 +217,22 @@ namespace test {
           MockLoationSolver mock ([&]{ return new UILocationSolver{locationQuery}; });
           
           MockElementAccess fakeAccessor;
+          fakeAccessor.triggerCreate();
           //--------------------------------------------------------------(End)Test-Fixture
           
+          
+          //--------------------------------------------------------------Staging: Testcase-1
           using idi::MockView1;
+          fakeAccessor->existingPath = UICoord{"win-1","perspective","parentLocation"};
+          CHECK (not fakeAccessor->response); // not yet created
+          //--------------------------------------------------------------Staging: Testcase-1
           
           MockView1& view1 = viewLocator.get<MockView1>();
+          cout << "created view:" << view1.getID() << endl;
+                                                      /////////////////////////////////////////////TICKET 1129 : some way to verify the last allocated path. Should be a child of "parentLocation"
+          
+          
+          
 //        TimelineView timeline = viewLocator.get<TimelineView>();
           
           /////////////////////////////////////////////////////////////////////////////////////////TICKET 1129 : use an EventLog to verify the forwarded invocations??
