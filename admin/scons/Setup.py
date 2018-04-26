@@ -74,7 +74,7 @@ def defineBuildEnvironment():
     env.Replace( CPPPATH   =["#src"]    # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['LUMIERA_VERSION='+VERSION ]    # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra -Wformat-security'
-               , CXXFLAGS='-std=gnu++14 -Wno-enum-compare'
+               , CXXFLAGS='-std=gnu++14 -Wno-enum-compare -Wno-noexcept-type'
                , CFLAGS='-std=gnu99' 
                )
     env.Append(LINKFLAGS='-Wl,--no-undefined')  # require every dependency is given on link, in the right order
