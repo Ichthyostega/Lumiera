@@ -739,7 +739,7 @@ namespace lib {
           using Holder = InPlaceBuffer<BA, sizeof(SUB)>;
           Holder& holder = *static_cast<Holder*> (buffer_);
           
-          return holder.create<SUB> (std::forward<SUB> (implementation));
+          return holder.template create<SUB> (std::forward<SUB> (implementation));
         }
       
       template<class SUB>
