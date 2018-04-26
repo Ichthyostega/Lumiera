@@ -149,7 +149,7 @@ namespace lib {
       ~RefArrayTable() { cleanup(); }
       
     private:
-      void cleanup(size_t top=n) throw()
+      void cleanup(size_t top=n) noexcept
         {
           while (top) array_[--top].~IM();
         }

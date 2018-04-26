@@ -299,7 +299,7 @@ namespace asset {
        *  @return \c false if the state could not be changed
        *          due to parent objects being disabled
        */
-      bool enable (bool on=true)  throw(lumiera::error::State);
+      bool enable (bool on=true);
       
       
     };

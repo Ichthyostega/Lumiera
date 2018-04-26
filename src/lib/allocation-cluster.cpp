@@ -194,7 +194,7 @@ namespace lib {
    *  destruction order is maintained by explicitly invoking a cleanup
    *  operation on each of the low-level memory manager objects. 
    */
-  AllocationCluster::~AllocationCluster()  throw()
+  AllocationCluster::~AllocationCluster()  noexcept
   {
     try
       {                                         // avoiding a per-instance lock for now.

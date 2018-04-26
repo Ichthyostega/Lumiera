@@ -133,7 +133,7 @@ namespace query  {
       
     public:
       
-      DefsManager ()  throw();
+      DefsManager ()  noexcept;
      ~DefsManager ();
       
       /** common access point: retrieve the default object fulfilling

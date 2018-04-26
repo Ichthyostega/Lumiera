@@ -228,7 +228,7 @@ namespace lumiera {
   
   
   ExitCode
-  AppState::abort ()  throw()
+  AppState::abort ()  noexcept
   {
     log_and_clear_unexpected_errorstate();
     

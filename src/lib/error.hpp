@@ -64,21 +64,21 @@ namespace lumiera {
   class Error : public std::exception
     {
     public:
-      Error (string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) throw();
+      Error (string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) noexcept;
       Error (std::exception const& cause,
-             string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) throw();
+             string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) noexcept;
       
-      Error (const Error&) throw();
-      virtual ~Error () throw() {};
+      Error (const Error&) noexcept;
+      virtual ~Error () noexcept {};
       
       /** yield a diagnostic message characterising the problem */
-      virtual const char* what () const throw();
+      virtual const char* what () const noexcept;
       
       /** the internal Lumiera-error-ID (was set as C-errorstate in ctor) */
-      const char* getID () const throw() { return this->id_; }
+      const char* getID () const noexcept { return this->id_; }
       
       /** extract the message to be displayed for the user */
-      const string& getUsermsg () const throw();
+      const string& getUsermsg () const noexcept;
       
       /** If this exception was caused by a chain of further exceptions,
        *  return the description of the first one registered in this throw sequence.
@@ -86,13 +86,13 @@ namespace lumiera {
        *  is properly constructed by passing the original exception to the constructor
        *  @return the description string, maybe empty (if there is no known root cause)
        */
-      const string& rootCause () const throw()  { return this->cause_; }
+      const string& rootCause () const noexcept  { return this->cause_; }
       
       /** replace the previous or default friendly message for the user. To be localised. */
-      Error& setUsermsg (const string& newMsg) throw() { this->msg_ = newMsg; return *this; }
+      Error& setUsermsg (const string& newMsg) noexcept { this->msg_ = newMsg; return *this; }
       
       /** give additional developer info. Typically used at intermediate handlers to add context. */
-      Error& prependInfo (const string& text) throw() { this->desc_.insert (0,text); return *this; }
+      Error& prependInfo (const string& text) noexcept { this->desc_.insert (0,text); return *this; }
       
       
     private:
@@ -102,7 +102,7 @@ namespace lumiera {
       mutable string what_;  ///< buffer for generating the detailed description on demand
       const string cause_;   ///< description of first exception encountered in the chain
       
-      static const string extractCauseMsg (std::exception const&)  throw();
+      static const string extractCauseMsg (std::exception const&)  noexcept;
     };
   
   
@@ -120,7 +120,7 @@ namespace lumiera {
      *  can be considered a severe design flaw; we can just
      *  add some diagnostics prior to halting.
      */
-    void lumiera_unexpectedException ()  throw();
+    void lumiera_unexpectedException ()  noexcept;
     
     /** throw an error::Fatal indicating "assertion failure" */
     void assertion_terminate (const string& location);
@@ -160,12 +160,12 @@ namespace lumiera {
       {                                                 \
       public:                                           \
         CLASS (std::string description="",              \
-               const char* id=_ID_) throw()             \
+               const char* id=_ID_) noexcept            \
         : PARENT (description, id)  {}                  \
                                                         \
         CLASS (std::exception const& cause,             \
                std::string description="",              \
-               const char* id=_ID_) throw()             \
+               const char* id=_ID_) noexcept            \
         : PARENT (cause, description, id)   {}          \
       };
     

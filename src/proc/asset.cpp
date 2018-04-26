@@ -140,7 +140,7 @@ namespace asset {
 
   /**change the enablement status of this asset. */
   bool
-  Asset::enable (bool on)  throw(lumiera::error::State)
+  Asset::enable (bool on)
   {
     if (on == this->enabled)
       return true;

@@ -63,7 +63,7 @@ namespace query  {
   
   
   /** initialise the most basic internal defaults. */
-  DefsManager::DefsManager ()  throw()
+  DefsManager::DefsManager ()  noexcept
     : defsRegistry_(new DefsRegistry)
   {
     TODO ("setup basic technical defaults of the session?");

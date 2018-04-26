@@ -112,7 +112,7 @@ namespace lumiera {
          *  Some levels up, this error get caught and the root cause can be 
          *  extracted successfully.
          */
-        void nestedThrower (string msg) throw(Error)
+        void nestedThrower (string msg)
         {
           try { throwExternal(msg); }
           catch (std::exception& e)
@@ -124,7 +124,7 @@ namespace lumiera {
         }
         
         /** @test repeated repackaging and rethrowing */
-        void doubleNestedTh (string msg) throw(error::Config)
+        void doubleNestedTh (string msg)
         {
           try { nestedThrower (msg); }
           catch (Error& e)
@@ -208,7 +208,7 @@ namespace lumiera {
          *  @note inside error.hpp, an initialisation hook has been installed into
          *        AppState, causing our own unknown() handler to be installed and
          *        invoked, which gives additional diagnostics.*/
-        void terminateUnknown ()  throw() 
+        void terminateUnknown ()  noexcept
         {
           throw Error("You'll never get me, won't you?");
         }

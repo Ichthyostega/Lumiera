@@ -58,7 +58,7 @@ namespace lumiera {
      *  @todo to be localised
      */
     inline const string
-    default_usermsg (Error* exception_obj)  throw() 
+    default_usermsg (Error* exception_obj)  noexcept
     {
       return string("Sorry, Lumiera encountered an internal error. (")
            + util::typeStr(*exception_obj) + ")";
@@ -109,7 +109,7 @@ namespace lumiera {
   
   
   /** @note we set the C-style errorstate as a side effect */
-  Error::Error (string description, CCStr id) throw()
+  Error::Error (string description, CCStr id) noexcept
     : std::exception (),
       id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
@@ -121,7 +121,7 @@ namespace lumiera {
   
   
   Error::Error (std::exception const& cause, 
-                string description, CCStr id) throw()
+                string description, CCStr id) noexcept
     : std::exception (),
       id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
@@ -133,7 +133,7 @@ namespace lumiera {
   
   
   /** @note copy ctor behaves like chaining, i.e setting the cause_. */
-  Error::Error (const Error& ref) throw()
+  Error::Error (const Error& ref) noexcept
     : std::exception (),
       id_ (ref.id_),
       msg_ (ref.msg_),
@@ -149,7 +149,7 @@ namespace lumiera {
    *  generated output as well. 
    */
   CStr
-  Error::what() const  throw()
+  Error::what() const  noexcept
   {
     if (isnil (this->what_))
       {
@@ -165,7 +165,7 @@ namespace lumiera {
    *  first exception encountered in a chain of exceptions
    */
   const string
-  Error::extractCauseMsg (const exception& cause)  throw()
+  Error::extractCauseMsg (const exception& cause)  noexcept
   {
     const Error* err=dynamic_cast<const Error*> (&cause);
     if (err)
@@ -189,7 +189,7 @@ namespace lumiera {
   namespace error
   {
     
-    void lumiera_unexpectedException ()  throw()
+    void lumiera_unexpectedException ()  noexcept
     {
       CCStr is_halted 
         = "### Lumiera halted due to an unexpected Error ###";

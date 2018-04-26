@@ -130,7 +130,7 @@ namespace mobject {
   Session::Session (DefaultsAccess defs
                    ,ElementsAccess quer
                    ,TimelineAccess tils
-                   ,SequenceAccess seqs)  throw()
+                   ,SequenceAccess seqs) noexcept
     : defaults(defs)
     , elements(quer)
     , timelines(tils)

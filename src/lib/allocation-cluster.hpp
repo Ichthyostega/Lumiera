@@ -93,7 +93,7 @@ namespace lib {
       
     public:
       AllocationCluster ();
-      ~AllocationCluster ()  throw();
+      ~AllocationCluster ()  noexcept;
       
       
       template<class TY>

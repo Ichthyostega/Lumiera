@@ -125,7 +125,7 @@ namespace lumiera {
       
       /** initiate an fatal emergency shutdown,
        *  caused by an unforeseen error condition */
-      ExitCode abort ()  throw();
+      ExitCode abort ()  noexcept;
       
       
     

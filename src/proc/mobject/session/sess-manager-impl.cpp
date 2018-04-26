@@ -209,7 +209,7 @@ namespace session {
    *  subsystem and the Defaults manager) is created on first
    *  \link #operator-> access \endlink to the session object.
    */
-  SessManagerImpl::SessManagerImpl ()  throw()
+  SessManagerImpl::SessManagerImpl ()
     : pSess_{}
     , lifecycle_{new SessionLifecycleDetails(pSess_)}
   {

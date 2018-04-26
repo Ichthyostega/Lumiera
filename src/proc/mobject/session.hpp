@@ -118,7 +118,7 @@ namespace mobject {
       Session (DefaultsAccess,
                ElementsAccess,
                TimelineAccess,
-               SequenceAccess)  throw();
+               SequenceAccess) noexcept;
       virtual ~Session ();
       
       
@@ -198,7 +198,7 @@ namespace mobject {
          *  This is the sole access path available for clients.
          *  @note there is no operator*
          */
-        virtual Session* operator-> ()  throw() =0;
+        virtual Session* operator-> ()  noexcept =0;
         
         virtual ~SessManager();
       };
