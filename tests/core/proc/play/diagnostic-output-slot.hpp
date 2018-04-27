@@ -32,6 +32,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "proc/play/output-slot.hpp"
 #include "proc/play/output-slot-connection.hpp"
@@ -47,7 +48,6 @@
 #include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
 #include <unordered_set>
@@ -97,7 +97,7 @@ namespace play {
    */
   class TrackingInMemoryBlockSequence
     : public OutputSlot::Connection
-    , boost::noncopyable
+    , util::NonCopyable
     {
       
       typedef std::unordered_set<FrameID> FrameTrackingInfo;
@@ -366,21 +366,21 @@ namespace play {
        */
       class OutputFramesLog
         : public lib::IterSource<const TestFrame>
-        , boost::noncopyable
+        , util::NonCopyable
         {
           TrackingInMemoryBlockSequence const& outSeq_;
           uint currentFrame_;
           
           
-          virtual Pos
-          firstResult ()
+          virtual Pos                                          //////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
+          firstResult ()  override
             {
               REQUIRE (0 == currentFrame_);
               return outSeq_.accessEmittedFrame (currentFrame_);
             }
           
           virtual void
-          nextResult (Pos& pos)
+          nextResult (Pos& pos)  override
             {
               ++currentFrame_;
               pos = outSeq_.accessEmittedFrame(currentFrame_);

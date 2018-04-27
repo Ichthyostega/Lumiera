@@ -52,6 +52,7 @@
 #define LIB_META_FUNCTION_H
 
 #include "lib/meta/typelist.hpp"
+#include "lib/meta/util.hpp"
 
 #include <functional>
 
@@ -66,14 +67,21 @@ namespace meta{
   /**
    * Helper for uniform access to function signature types.
    * Extract the type information contained in a function or functor type,
-   * so it can be manipulated by metaprogramming. The embedded typedefs
-   * allow to pick up the return type, the sequence of argument types
-   * and the bare function signature type. This template works on
+   * so it can be manipulated by metaprogramming. This template works on
    * anything _function like_, irrespective if the parameter is given
    * as function reference, function pointer, member function pointer,
-   * functor object, `std::function` or lambda.
+   * functor object, `std::function` or lambda. The embedded typedefs
+   * allow to pick up
+   * - `Ret` : the return type
+   * - `Args`: the sequence of argument types as type sequence `Types<ARGS...>`
+   * - `Sig` : the bare function signature type
+   * - `Functor` : corresponding Functor type which can be instantiated or copied.
    * 
-   * The base case assumes a functor object, i.e. anything with an `operator()`.
+   * This template can also be used in metaprogramming with `enable_if` to enable
+   * some definition or specialisation only if a function-like type was detected; thus
+   * the base case holds no nested type definitions and inherits from std::false_type.
+   * The primary, catch-all case gets activated whenever on functor objects, i.e. anything
+   * with an `operator()`.
    * The following explicit specialisations handle the other cases, which are
    * not objects, but primitive types (function (member) pointers and references).
    * @remarks The key trick of this solution is to rely on `decltype` of `operator()`
@@ -82,23 +90,44 @@ namespace meta{
    *          function signature are reflected. But if you bind such a member
    *          pointer into a `std::function`, an additional first parameter
    *          will show up to take the `this` pointer of the class instance.
+   * @warning this detection scheme fails when the signature of a function call
+   *          operator is ambiguous, which is especially the case
+   *          - when there are several overloads of `operator()`
+   *          - when the function call operator is templated
+   *          - on *generic lambdas*
+   *          All these cases will activate the base (false) case, as if the
+   *          tested subject was not a function at all. Generally speaking,
+   *          it is _not possible_ to probe a generic lambda or templated function,
+   *          unless you bind it beforehand into a std::function with correct signature.
    * @see FunctionSignature_test
    * 
    * [kennytm]: http://stackoverflow.com/users/224671/kennytm
    * [stackoverflow] : http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765 "answer on stackoverflow"
    */
-  template<typename FUN>
+  template<typename FUN, typename SEL =void>
   struct _Fun
+    : std::false_type
+    {
+      using Functor = FUN;
+    };
+  
+  /** Specialisation for function objects and lambdas */
+  template<typename FUN>
+  struct _Fun<FUN,  enable_if<has_FunctionOperator<FUN>> >
     : _Fun<decltype(&FUN::operator())>
-    { };
+    {
+      using Functor = FUN;
+    };
   
   /** Specialisation for a bare function signature */
   template<typename RET, typename...ARGS>
   struct _Fun<RET(ARGS...)>
+    : std::true_type
     {
       using Ret  = RET;
       using Args = Types<ARGS...>;
       using Sig  = RET(ARGS...);
+      using Functor = std::function<Sig>;
     };
   /** Specialisation for using a function pointer */
   template<typename SIG>
@@ -132,12 +161,6 @@ namespace meta{
     : _Fun<RET(ARGS...)>
     { };
   
-  
-  
-  template<typename FUN>
-  struct is_Functor                 { static const bool value = false; };
-  template<typename SIG>
-  struct is_Functor<function<SIG> > { static const bool value = true;  };
   
   
   

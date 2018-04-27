@@ -54,8 +54,8 @@
 
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 
@@ -251,7 +251,7 @@ namespace lib {
           , template<typename> class Access  
           >
   class VariantO
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       typedef variant::Holder<TYPES> Holder;

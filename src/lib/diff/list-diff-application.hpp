@@ -91,12 +91,12 @@ namespace diff{
           if (end_of_target())
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "no (further) elements in target sequence") % oper % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
           if (*pos_ != elm)
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "found element %s on current target position instead")
                                     % oper % elm % *pos_
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
         }
       
       void
@@ -105,7 +105,7 @@ namespace diff{
           if (end_of_target())
             throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
                                     "unable to apply diff further.") % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
         }
       
       void
@@ -114,7 +114,7 @@ namespace diff{
           if (targetPos == orig_.end())
             throw error::State(_Fmt("Premature end of sequence; unable to locate "
                                     "element %s in the remainder of the target.") % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
         }
       
       

@@ -71,7 +71,7 @@ namespace engine {
      * to store some additional tracking information.
      */
     class Block
-      : boost::noncopyable
+      : util::NonCopyable
       {
         unique_ptr<char[]> storage_;
         

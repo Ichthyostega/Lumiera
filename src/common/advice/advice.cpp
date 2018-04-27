@@ -90,6 +90,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/del-stash.hpp"
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"
@@ -99,7 +100,6 @@
 #include "common/advice.hpp"
 #include "common/advice/index.hpp"
 
-#include <boost/noncopyable.hpp>
 
 using lib::Literal;
 using lib::DelStash;
@@ -121,7 +121,7 @@ namespace advice {
      */
     class AdviceSystem
       : public lib::Sync<>
-      , boost::noncopyable
+      , util::NonCopyable
       {
         
         DelStash adviceDataRegistry_;

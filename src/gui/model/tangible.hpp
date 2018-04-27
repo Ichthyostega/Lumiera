@@ -131,12 +131,12 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "lib/diff/diff-mutable.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <sigc++/trackable.h>
 #include <utility>
 #include <string>
@@ -156,7 +156,7 @@ namespace model {
    * which is the [UI-Bus](ui-bus.hpp). Any tangible element acquires a distinct identity
    * and has to be formed starting from an already existing bus nexus.
    * @see [explanation of the basic interactions](tangible.hpp)
-   * @warning Tangible is `noncopyable` for good reason: the UI-Bus Nexus adds a direct
+   * @warning Tangible is `NonCopyable` for good reason: the UI-Bus Nexus adds a direct
    *          reference into the routing table, tied to the given Tangible's ID (identity.
    *          Consequently you must not store tangibles in STL containers, since these
    *          might re-allocate and thus change the location in memory.
@@ -164,7 +164,7 @@ namespace model {
   class Tangible
     : public sigc::trackable
     , public lib::diff::DiffMutable
-    , boost::noncopyable
+    , util::NonCopyable
     {
     public:
       using ID = ctrl::BusTerm::ID;

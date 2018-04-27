@@ -54,7 +54,6 @@
 //#include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
 
-//#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 

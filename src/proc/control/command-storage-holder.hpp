@@ -86,7 +86,7 @@ namespace control {
       using  MementoBuff = InPlaceBuffer<MemHolder>;
       
       using ArgTuple = typename ArgHolder::ArgTuple;
-      using Args     = typename Types<ArgTuple>::Seq;
+      using Args     = typename lib::meta::RebindTySeq<ArgTuple>::Seq; // std::tuple<ARGS...> to Types<ARGS...>
       
       
       /* ====== in-place storage buffers ====== */
@@ -145,7 +145,7 @@ namespace control {
           if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
                                          "command arguments not yet provided",
-                                         LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                                         LERR_(UNBOUND_ARGUMENTS));
           
           arguments_->invoke(func);
         }

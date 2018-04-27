@@ -45,10 +45,9 @@
 
 #include "lib/error.hpp"
 #include "lib/depend.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 namespace proc {
@@ -65,14 +64,14 @@ namespace session {
    * @see DummySessionConnection_test
    */
   class DummySessionConnection
-    : boost::noncopyable
+    : util::NonCopyable
     {
       string nothing_;
 
       DummySessionConnection();
      ~DummySessionConnection();
 
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<DummySessionConnection>;
 
     public:
       /** access point to set up the scaffolding.

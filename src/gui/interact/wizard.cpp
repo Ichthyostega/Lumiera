@@ -96,7 +96,7 @@ namespace interact {
     dialog.set_website(Config::get (KEY_WEBSITE));
     dialog.set_authors(authorsList);
     
-    WorkspaceWindow& currentWindow = globalCtx_.windowList_.findActiveWindow();
+    WorkspaceWindow& currentWindow = globalCtx_.windowLoc_.findActiveWindow();
     dialog.set_transient_for (currentWindow);
     
     // Show the about dialog

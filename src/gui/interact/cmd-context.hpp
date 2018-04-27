@@ -42,6 +42,7 @@
  ** context-bound command becomes executable by picking up suitable parameter values from this context.
  ** 
  ** @todo as of 3/2017 this is a early design draft and WIP-WIP-WIP
+ ** @todo after initial design draft, postponed as of 10/2017
  ** 
  ** @see CmdContext_test
  ** @see ////TODO_test usage example
@@ -54,13 +55,13 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 //#include "gui/ctrl/bus-term.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/hash-indexed.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -80,7 +81,7 @@ namespace interact {
    * @todo write type comment...
    */
   class CmdContext
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

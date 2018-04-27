@@ -29,8 +29,8 @@
  */
 
 
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <algorithm>
 
 
@@ -39,7 +39,7 @@ namespace test{
     
   
   class Dummy 
-    : boost::noncopyable
+    : util::NonCopyable
     {
       int val_;
       

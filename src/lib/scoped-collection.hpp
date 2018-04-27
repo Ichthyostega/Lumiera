@@ -21,7 +21,7 @@
 */
 
 /** @file scoped-collection.hpp
- ** Managing a collection of noncopyable polymorphic objects in compact storage.
+ ** Managing a collection of non-copyable polymorphic objects in compact storage.
  ** This helper supports the frequently encountered situation where a service
  ** implementation internally manages a collection of implementation related
  ** sub-components with reference semantics. Typically, those objects are
@@ -70,22 +70,23 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/iter-adapter.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <type_traits>
 
 
 namespace lib {
   
   namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_CAPACITY;
-  using error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using error::LERR_(CAPACITY);
+  using error::LERR_(INDEX_BOUNDS);
   
   
   
   /**
-   * A fixed collection of noncopyable polymorphic objects.
+   * A fixed collection of non-copyable polymorphic objects.
    * 
    * All child objects reside in a common chunk of storage
    * and are owned and managed by this collection holder.
@@ -98,7 +99,7 @@ namespace lib {
     , size_t siz = sizeof(I)
     >
   class ScopedCollection
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:
@@ -109,7 +110,7 @@ namespace lib {
        * @note doesn't manage the Child
        */
       class ElementHolder
-        : boost::noncopyable
+        : util::NonCopyable
         {
           
           mutable char buf_[siz];
@@ -136,8 +137,7 @@ namespace lib {
           TY&
           create (ARGS&& ...args)
             {
-              static_assert ( (std::is_same<I,TY>::value
-                             ||std::is_base_of<I,TY>::value)
+              static_assert ( meta::is_Subclass<TY,I>()
                              && sizeof(TY) <= siz,
                              "ElementHolder buffer to small");
               
@@ -329,7 +329,7 @@ namespace lib {
             return elements_[index].accessObj();
           
           throw error::Logic ("Attempt to access not (yet) existing object in ScopedCollection"
-                             , LUMIERA_ERROR_INDEX_BOUNDS);
+                             , LERR_(INDEX_BOUNDS));
         }
       
       
@@ -366,7 +366,7 @@ namespace lib {
         {
           if (level_ >= capacity_)
             throw error::State ("ScopedCollection exceeding the initially defined capacity"
-                               , LUMIERA_ERROR_CAPACITY);
+                               , LERR_(CAPACITY));
         }
       
       
@@ -462,7 +462,7 @@ namespace lib {
     {
       IT iter_;
       
-      typedef typename iter::TypeBinding<IT>::value_type ElementType;
+      typedef typename meta::TypeBinding<IT>::value_type ElementType;
       
     public:
       PullFrom (IT source)

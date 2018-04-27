@@ -95,7 +95,8 @@ namespace meta {
   
 #ifdef __GNUG__
   /**
-   * \par Implementation notes
+   * # Implementation notes
+   * 
    * GCC / G++ subscribes to a cross-vendor ABI for C++, sometimes called the IA64 ABI
    * because it happens to be the native ABI for that platform. It is summarised at
    * \link http://www.codesourcery.com/cxx-abi/ mentor-embedded \endlink
@@ -305,7 +306,7 @@ apologies for that."
     static regex identifierChars {"[A-Za-z]\\w*", regex::ECMAScript | regex::optimize};
     
     return regex_replace (text, identifierChars, "$&", std::regex_constants::format_no_copy);
-  }
+  }                                                      // don't copy what does not match
   
   
   

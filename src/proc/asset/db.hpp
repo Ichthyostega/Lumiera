@@ -35,6 +35,7 @@
 #include "lib/sync.hpp"
 #include "lib/error.hpp"
 #include "proc/asset.hpp"
+#include "lib/depend-inject.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -95,8 +96,8 @@ namespace asset {
    * As of 8/2007 implemented by a hashtable.
    */
   class DB 
-    : private boost::noncopyable,
-      public Sync<RecursiveLock_NoWait>
+    : util::NonCopyable
+    , public Sync<RecursiveLock_NoWait>
     {
       IdHashtable table;
       
@@ -109,7 +110,7 @@ namespace asset {
          clear();
         }
       
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<DB>;
       
       
     public:

@@ -37,8 +37,8 @@
 #include "proc/mobject/mobject-ref.hpp"
 #include "proc/mobject/session/specific-contents-query.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 
 
@@ -100,7 +100,7 @@ namespace session {
    * @see struct-factory-impl.hpp usage example
    */
   class ElementQuery
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

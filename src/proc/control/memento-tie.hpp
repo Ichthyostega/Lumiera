@@ -178,7 +178,7 @@ namespace control {
         {
           if (!isCaptured_)
             throw lumiera::error::State ("need to invoke memento state capturing beforehand",
-                                         LUMIERA_ERROR_MISSING_MEMENTO);
+                                         LERR_(MISSING_MEMENTO));
           return memento_;
         }
       

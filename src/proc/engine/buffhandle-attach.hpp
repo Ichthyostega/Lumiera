@@ -120,7 +120,7 @@ namespace engine {
   {
     if (!pBuffer_)
       throw error::Logic ("buffer not (yet) locked for access by clients"
-                         , LUMIERA_ERROR_LIFECYCLE);
+                         , LERR_(LIFECYCLE));
     return *reinterpret_cast<BU*> (pBuffer_);
   }
   

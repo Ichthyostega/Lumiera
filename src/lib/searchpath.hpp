@@ -34,8 +34,8 @@
 #define COMMON_SEARCHPATH_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
 #include <string>
@@ -55,7 +55,7 @@ namespace lib {
   namespace fsys = boost::filesystem;
   
   LUMIERA_ERROR_DECLARE (FILE_NOT_DIRECTORY); ///< path element points at a file instead of a directory
-  using error::LUMIERA_ERROR_ITER_EXHAUST;
+  using error::LERR_(ITER_EXHAUST);
   
   
   /** retrieve the location of the executable */
@@ -74,7 +74,7 @@ namespace lib {
    * @note #next picks the current component and advances the iteration. 
    */
   class SearchPathSplitter
-    : boost::noncopyable
+    : util::NonCopyable
     {
       string pathSpec_;
       sregex_iterator pos_,
@@ -102,7 +102,7 @@ namespace lib {
         {
           if (!isValid())
             throw error::Logic ("Search path exhausted."
-                               ,LUMIERA_ERROR_ITER_EXHAUST);
+                               ,LERR_(ITER_EXHAUST));
           
           string currentPathElement = pos_->str();
           ++pos_;

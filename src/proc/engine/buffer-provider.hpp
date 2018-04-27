@@ -48,8 +48,8 @@
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-local-key.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -79,7 +79,7 @@ namespace engine {
    * @todo as of 11/11 thread safety within the engine remains to be clarified   ///////////////////////////TICKET #854
    */
   class BufferProvider
-    : boost::noncopyable
+    : util::NonCopyable
     {
       unique_ptr<BufferMetadata> meta_;
       

@@ -2,6 +2,91 @@ TESTING "Metaprogramming facilities and techniques" ./test-suite --group=common
 
 
 
+TEST "casting or converting access helper" AccessCasted_test <<END
+out-lit: can_downcast<B,D>     = 1
+out-lit: can_downcast<B*,D*>   = 1
+out-lit: can_downcast<B&,D&>   = 1
+out-lit: can_downcast<B&,D*>   = 0
+out-lit: can_downcast<B*,D&>   = 0
+out-lit: can_downcast<B*&,D*&> = 1
+out-lit: can_downcast<D*&,D*&> = 1
+out-lit: can_downcast<D*,E*>   = 1
+out-lit: can_downcast<E*,F*>   = 1
+out-lit: has_RTTI<D*> = 0
+out-lit: has_RTTI<E*> = 1
+out-lit: has_RTTI<F*> = 1
+out-lit: is_convertible<D,D&>  = 0
+out-lit: is_convertible<D&,D>  = 1
+out-lit: can_use_dynamic_downcast<D,D&>  = 0
+out-lit: can_use_conversion<D,D&>        = 0
+out-lit: can_use_dynamic_downcast<B*,D*> = 0
+out-lit: can_use_conversion<D*,B*>       = 1
+out-lit: can_use_dynamic_downcast<D*&,D*&> = 0
+out-lit: can_use_conversion<D*&,D*&>       = 1
+out-lit: can_use_conversion<D*,E*>         = 0
+out-lit: can_use_dynamic_downcast<D*&,E*>  = 0
+out-lit: can_use_conversion<E*,F*>         = 0
+out-lit: can_use_dynamic_downcast<E*,F*>   = 1
+out-lit: === standard case: References ===
+out: Access\(D  as D&\) .+D.. adr=╲\w{8} ↗«D»
+out: Access\(D& as D&\) .+D.. adr=╲\w{8} ↗«D»
+out-lit: === build a value object ===
+out: Access.D  as D.    .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as D.    .+D.. adr=╲\w{8} ↗«D»
+out: Access.D&& as D.   .+D.. adr=╲\w{8} ↗«D»
+out-lit: === take a pointer ===
+out: Access.D  as D\*.  .+╲\w{8}
+out: Access.D& as D\*.  .+╲\w{8}
+out-lit: === dereference a pointer ===
+out: Access.D\* as D&.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\* as D.   .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\*&& as D. .+D.. adr=╲\w{8} ↗«D»
+out-lit: === const correctness ===
+out: Access.D  as D const&.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as D const&.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.D  as const D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as const D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D  as const D\*.      .+╲\w{8}
+out: Access.D& as const D\*.      .+╲\w{8}
+out: Access.D\* as D const&.      .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\* as const D.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as D const&. .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as D const&. .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as const D.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as const D.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as const D\*..+╲\w{8}
+out: Access.D const& as const D\*..+╲\w{8}
+out: Access.const D\* as D const&..+D.. adr=╲\w{8} ↗«D»
+out: Access.const D\* as const D. .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const&& as D.       .+D.. adr=╲\w{8} ↗«D»
+out-lit: === work cases: actual conversions ===
+out: Access.B& as B&.             .+B.. adr=╲\w{8} ↗«B»
+out: Access.D& as B&.             .+B.. adr=╲\w{8} ↗«B»
+out: Access.B\* as B\*.           .+╲\w{8}
+out: Access.D\* as B\*.           .+╲\w{8}
+out: Access.D& as B\*.            .+╲\w{8}
+out: Access.D\* as B&.            .+B.. adr=╲\w{8} ↗«B»
+out: Access.B\*& as B\*&.         .+╲\w{8}
+out: Access.D\*& as D\*&.         .+╲\w{8}
+out: Access.D& as const B\*.      .+╲\w{8}
+out: Access.D\* as B const&.      .+B.. adr=╲\w{8} ↗«B»
+out: Access.D const& as const B\*..+╲\w{8}
+out: Access.const D\* as B const&..+B.. adr=╲\w{8} ↗«B»
+out: Access.E\(F\)& as F&.        .+F.. adr=╲\w{8} ↗«F»
+out: Access.E\(F\)\* as F\*.      .+╲\w{8}
+out: Access.E\(F\)\* as F&.       .+F.. adr=╲\w{8} ↗«F»
+out: Access.E\(F\)& as F\*.       .+╲\w{8}
+out: Access.F\\* as X\*.          .+╲\w{8}
+out: Access.X\(F\)\* as X\*.      .+╲\w{8}
+out: Access.F\* as B&.            .+B.. adr=╲\w{8} ↗«B»
+out: Access.F\* as E&*.           .+E.. adr=╲\w{8} ↗«F»
+out-lit: Access(int as double) --->2
+out-lit: Access(float as long) --->3
+return: 0
+END
+
+
 TEST "ConfigFlags_test" ConfigFlags_test <<END
 out-lit: Conf0	:-
 out-lit: Conf1	:-<1>-
@@ -112,6 +197,11 @@ out: HasMember_honk<PropperGander>	 : Yes
 out: HasMember_honk<Propaganda>	 : Yes
 out: HasFunSig_honk<PropperGander>	 : Yes
 out: HasFunSig_honk<Propaganda>	 : No
+return: 0
+END
+
+
+TEST "Duck detect extension points" DuckDetectorExtension_test <<END
 return: 0
 END
 
@@ -238,11 +328,19 @@ return: 0
 END
 
 
-TEST "Iterator monad variations" IterExplorer_test <<END
+TEST "Iterator monad variations (1st draft)" IterExplorer_test <<END
 out-lit: 1-2-3-4-5-6-7-8
 out-lit: 0-1-2-3-4-0-1-2-3-4-5-6-0-1-2-3-4-5-6-7-8
 out-lit: 0-1-2-3-4-5-6-7-8
 out-lit: 0-1-2-3-4-5-6-7-8
+return: 0
+END
+
+
+TEST "Iterator monad variations (2nd draft)" IterTreeExplorer_test <<END
+out-lit: 4-3-2-1
+out: Search in random tree: toFind = .....
+out: Protocol of the search: .+\-.+\-.+\-.+\-.+
 return: 0
 END
 
@@ -561,6 +659,16 @@ out: Rec...GenNode.+DataCap.«string».lalü, GenNode.+DataCap.«int».42
 out: Rec...GenNode.+DataCap.«string».lalü, GenNode.+DataCap.«string».lala, GenNode.+DataCap.«int».12, GenNode.+DataCap.«int».34, GenNode.+DataCap.«double».5.6, GenNode.+DataCap.«Time».0:09:08.007
 out-lit: «tuple<string, int>»──(lalü,42)
 out-lit: «tuple<idi::EntryID<long>, Symbol, int, long, double, Duration>»──(ID<long>-lal,lala,12,34,5.6,≺548s7ms≻)
+return: 0
+END
+
+
+TEST "variadic argument manipulation" VariadicArgumentPicker_test <<END
+out:  4╎N<1>──.─┼N<2>──.─┼N<3>──.─┼N<3>──.─┤
+out:  4╎N<0>──.─┼N<1>──.─┼N<2>──.─┼N<3>──.─┤
+out:  4╎N<3>──.─┼N<2>──.─┼N<1>──.─┼N<0>──.─┤
+out:  2╎N<1>──.─┼N<0>──.─┤
+out:  2╎N<2>──.─┼N<3>──.─┤
 return: 0
 END
 

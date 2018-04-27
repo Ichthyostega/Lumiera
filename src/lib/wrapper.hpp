@@ -34,6 +34,8 @@
  ** 
  ** @see lib::TransformIter
  ** 
+ ** @todo 2017 consider to split off the FunctionResult into a dedicated header to reduce includes
+ ** 
  */
 
 
@@ -41,12 +43,12 @@
 #define LIB_WRAPPER_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 
 
@@ -56,16 +58,16 @@ namespace wrapper {
   using util::unConst;
   using util::isSameObject;
   using lib::meta::_Fun;
-  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+  using lumiera::error::LERR_(BOTTOM_VALUE);
   
   using std::function;
   
   
-  /** 
-   * Extension to std::reference_wrapper: 
+  /**
+   * Extension to std::reference_wrapper:
    * Allows additionally to re-bind to another reference,
    * almost like a pointer. Helpful for building templates.
-   * @warning potentially dangerous 
+   * @warning potentially dangerous
    */
   template<typename TY>
   class AssignableRefWrapper
@@ -95,7 +97,7 @@ namespace wrapper {
   
   
   
-  /** 
+  /**
    * Reference wrapper implemented as constant function,
    * returning the (fixed) reference on invocation
    */
@@ -145,21 +147,15 @@ namespace wrapper {
       using TY_unconst = typename meta::UnConst<TY>::Type ;
       
       
-      mutable 
+      mutable
       char content_[sizeof(TY)];
       bool created_;
       
+      template<typename REF>
       void
-      build (TY const& ref)
+      build (REF&& ref)
         {
-          new(&content_) TY{ref};
-          created_ = true;
-        }
-      
-      void
-      build (TY&& rref)
-        {
-          new(&content_) TY{std::forward<TY> (rref)};
+          new(&content_) TY{std::forward<REF> (ref)};
           created_ = true;
         }
       
@@ -179,7 +175,7 @@ namespace wrapper {
       TY_unconst&
       access_unconst()  const  ///< used to assign new buffer contents
         {
-          return const_cast<TY_unconst&> (access()); 
+          return const_cast<TY_unconst&> (access());
         }
       
     public:
@@ -192,11 +188,10 @@ namespace wrapper {
         {
           build (o);
         }
-      
       explicit
-      ItemWrapper(TY&& rref)
+      ItemWrapper(TY && ro)
         {
-          build (std::forward<TY> (rref));
+          build (std::move(ro));
         }
       
      ~ItemWrapper()
@@ -206,52 +201,62 @@ namespace wrapper {
       
       
       /* == copy and assignment == */
-     
+      
       ItemWrapper (ItemWrapper const& ref)
         : created_(false)
         {
           if (ref.isValid())
             build (*ref);
         }
-      ItemWrapper (ItemWrapper&& rref)
+      ItemWrapper (ItemWrapper && rref)
         : created_(false)
         {
           if (rref.isValid())
-            build (std::forward<TY> (*rref));
+            {
+              build (std::move (*rref));
+              rref.discard();
+            }
         }
       
       ItemWrapper&
-      operator= (ItemWrapper const& ref)
+      operator= (ItemWrapper const& cref)
         {
-          if (!ref.isValid())
+          if (!cref.isValid())
             discard();
           else
-            this->operator= (*ref);
+            this->operator= (*cref);
           
           return *this;
         }
-      
       ItemWrapper&
-      operator= (ItemWrapper&& rref)
+      operator= (ItemWrapper & ref)
+        {
+          return *this = (ItemWrapper const&)ref;
+        }
+      ItemWrapper&
+      operator= (ItemWrapper && rref)
         {
           if (!rref.isValid())
             discard();
           else
-            this->operator= (std::forward<TY> (*rref));
+            {
+              this->operator= (std::move(*rref));
+              rref.discard();
+            }
           
           return *this;
         }
       
       template<typename X>
       ItemWrapper&
-      operator= (X something) ///< move in anything assignable to TY
+      operator= (X&& something) ///< accept anything assignable to TY
         {
           if (!isSameObject (something, access() ))
             {
               if (created_)
-                access() = std::forward<X> (something);
+                access() = std::forward<X>(something);
               else
-                build (std::forward<X> (something));
+                build (std::forward<X>(something));
             }
           
           return *this;
@@ -269,14 +274,20 @@ namespace wrapper {
         {
           if (!created_)
             throw lumiera::error::State ("accessing uninitialised value/ref wrapper"
-                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+                                        , LERR_(BOTTOM_VALUE));
           return access();
+        }
+      
+      TY*
+      operator-> ()  const
+        {
+          return & **this;
         }
       
       bool
       isValid ()  const
         {
-          return created_;   
+          return created_;
         }
       
       void
@@ -285,12 +296,12 @@ namespace wrapper {
           discard();
         }
     };
-  
+    
     
   /**
    * Specialisation of the ItemWrapper to deal with references,
    * as if they were pointer values. Allows the reference value
-   * to be default constructed to \c NULL and to be re-assigned.
+   * to be default constructed to `NULL` and to be re-assigned.
    */
   template<typename TY>
   class ItemWrapper<TY &>
@@ -330,14 +341,14 @@ namespace wrapper {
         {
           if (!content_)
             throw lumiera::error::State ("accessing uninitialised reference wrapper"
-                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+                                        , LERR_(BOTTOM_VALUE));
           return *content_;
         }
       
       bool
       isValid ()  const
         {
-          return bool(content_);   
+          return bool(content_);
         }
       
       void
@@ -366,12 +377,13 @@ namespace wrapper {
   
   
   
-  /** 
+  
+  /**
    * Extension of ItemWrapper: a function remembering
    * the result of the last invocation. Initially, the "value"
-   * is bottom (undefined, NIL), until the function is invoked 
-   * for the first time. After that, the result of the last 
-   * invocation can be accessed by \c  operator*()
+   * is bottom (undefined, NIL), until the function is invoked
+   * for the first time. After that, the result of the last
+   * invocation can be accessed by `operator* ()`
    * 
    * @note non-copyable. (removing this limitation would
    *       require a much more expensive implementation,
@@ -380,7 +392,7 @@ namespace wrapper {
   template<typename SIG>
   class FunctionResult
     : public function<SIG>
-    , boost::noncopyable
+    , util::NonCopyable
     {
       using Res = typename _Fun<SIG>::Ret;
       using ResWrapper = ItemWrapper<Res>;
@@ -402,7 +414,7 @@ namespace wrapper {
       
       /** Create result-remembering functor
        *  by binding the given function. Explanation:
-       *  - *this is a \em function
+       *  - `*this` is a _function_
        *  - initially it is defined as invalid
        *  - then we build the function composition of
        *    the target function, and a function storing
@@ -418,7 +430,7 @@ namespace wrapper {
           using lib::meta::func::chained;
                                                       // note: binding "this" mandates noncopyable
           function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );
-          function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult); 
+          function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult);
           
           function<SIG>::operator= (chainedWithResCapture); // define the function (baseclass)
         }

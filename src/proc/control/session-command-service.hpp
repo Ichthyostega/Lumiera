@@ -46,11 +46,10 @@
 #include "proc/control/command-dispatch.hpp"
 #include "proc/control/command-instance-manager.hpp"
 #include "common/instancehandle.hpp"
-#include "lib/singleton-ref.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 
@@ -79,10 +78,21 @@ namespace control {
    */
   class SessionCommandService
     : public SessionCommand
-    , boost::noncopyable
+    , util::NonCopyable
     {
       CommandDispatch& dispatcher_;
       CommandInstanceManager instanceManager_;
+      
+      
+      /* === Interface Lifecycle === */
+      
+      using ServiceInstanceHandle = lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
+                                                           , SessionCommand
+                                                           >;
+      ServiceInstanceHandle serviceInstance_;
+      
+    public:
+      SessionCommandService (CommandDispatch& dispatcherLoopInterface);
       
       
       /* === Implementation of the Facade Interface === */
@@ -91,20 +101,6 @@ namespace control {
       void trigger (Symbol cmdID, Rec const& args)            override;
       void bindArg (Symbol cmdID, Rec const& args)            override;
       void invoke  (Symbol cmdID)                             override;
-      
-      
-      /* === Interface Lifecycle === */
-      
-      typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
-                                     , SessionCommand
-                                     > ServiceInstanceHandle;
-      
-      lib::SingletonRef<SessionCommand> implInstance_;
-      ServiceInstanceHandle serviceInstance_;
-      
-    public:
-      SessionCommandService (CommandDispatch& dispatcherLoopInterface);
-      
     };
     
   

@@ -504,7 +504,7 @@ namespace func{
   /**
    * Closing a function over its arguments.
    * This is a small usage example or spin-off,
-   * having almost the same effect than invoking tr1::bind.
+   * having almost the same effect than invoking `std::bind()`.
    * The notable difference is that the function arguments for
    * creating the closure are passed in as one tuple compound.
    */
@@ -545,7 +545,7 @@ namespace func{
    * @tparam VAL type sequence describing the tuple of values
    *             used for closing arguments
    * @note the construction of this helper template does not verify or
-   *       match types to to the signature. In case of mismatch, you'll get
+   *       match types to the signature. In case of mismatch, you'll get
    *       a compilation failure from `std::bind` (which can be confusing)
    */
   template<typename SIG, typename VAL>
@@ -620,7 +620,7 @@ namespace func{
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */
       static LeftReducedFunc
-      bindFront (SIG& f, Tuple<ValTypes> const& arg)
+      bindFront (SIG const& f, Tuple<ValTypes> const& arg)
         {
           LeftReplacedArgs params {BuildL(arg)};
           return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
@@ -635,7 +635,7 @@ namespace func{
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */
       static RightReducedFunc
-      bindBack (SIG& f, Tuple<ValTypes> const& arg)
+      bindBack (SIG const& f, Tuple<ValTypes> const& arg)
         {
           RightReplacedArgs params {BuildR(arg)};
           return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params);

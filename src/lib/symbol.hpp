@@ -21,16 +21,30 @@
 */
 
 /** @file symbol.hpp
- ** WIP placeholder definition for a planned Symbol datatype.
+ ** Marker types to indicate a literal string and a Symbol.
+ ** Instead of working just with pointers, which could represent pretty much anything,
+ ** it is prudent to express the meaning at interfaces and for variables and members explicitly.
  ** 
- ** @todo for the (currently just planned as of 11/08) rules based configuration
- ** in the Proc-Layer a explicit Symbol datatype will probably very helpful.
- ** For now just a typedef is sufficient. A real Symbol datatype should 
- ** - be definable by string constant
- ** - integrate smoothly with std::string
- ** - provide a unique numeric index for each distinct Symbol
- ** - automatically maintain a symbol table at runtime to support this
- ** - provide some magic (macros) allowing to build distinct types based on symbols.
+ ** On concept level, while a string is just some sequence of characters and nothing can be said
+ ** about mutability or lifetime, a Literal on the contrary is meant to be _static._ It is fixed
+ ** and assumed to exist literally as is during the whole lifetime of the execution. The concept
+ ** of a Symbol is related, yet slightly different: it is meant to be a distinguishable fixed,
+ ** unique token. _Identical sequence_ of characters means we have exactly the _same Symbol._
+ ** 
+ ** These concepts can be fused by treating Symbol as a specialisation of Literal, additionally
+ ** maintaining an automatically populated, static [symbol table](\ref symbol-table.hpp), and
+ ** we close the circle by allowing Symbol instances to be created from strings at runtime.
+ ** 
+ ** @remark this started on occasion 11/2008, just with a typedef to mark assumption on interfaces
+ **   for rules based configuration in the Proc-Layer. Over time, conversions, comparison and
+ **   hashcode implementation were added. It turned out that the most smooth integration in
+ **   coding practice is achieved when allowing transparent conversion for Literal, but not
+ **   for Symbol or std::string.
+ ** @todo 9/2017 consider this mostly as settled, but might require some finishing touches
+ ** - maybe improve interoperation of Symbol and std::string
+ ** - investigate performance of the automatic symbol table
+ ** - improve Lifecycle in startup and shutdown phase
+ ** - maybe some metaprogramming magic to build distinct types based on symbols.
  ** 
  ** @see symbol-impl.cpp 
  ** @see configrules.hpp
@@ -50,18 +64,27 @@
 namespace lib {
   
   /** inline string literal
-   *  This is a marker type to handle literally given C-Strings.
+   *  This is a _marker type_ to indicate that
+   *  - the string was given literally
+   *  - storage is _somewhere_, not managed by Literal,
+   *    yet guaranteed to exist during the whole lifetime
+   *  - it is transparently convertible to/from C-string
+   *  - defaults to the empty string
+   *  - can not be altered
    */
   class Literal
     {
        const char * str_;
        
     public:
-       Literal (const char* literal)
+       /** empty string by default */
+       Literal()  noexcept;
+       
+       Literal (const char* literal) noexcept
          : str_(literal)
          { }
        
-       Literal (Literal const& o)
+       Literal (Literal const& o) noexcept
          : str_(o.str_)
          { }
        
@@ -77,8 +100,8 @@ namespace lib {
        bool operator== (const char* cString)  const;
 
     protected:
-       /** Assignment prohibited */
-       Literal& operator= (const char* newStr)
+       /** Assignment generally prohibited */
+       Literal& operator= (const char* newStr) noexcept
          {
            str_ = newStr;
            return *this;
@@ -86,13 +109,16 @@ namespace lib {
     };
   
   
-  /** Token or Atom with distinct identity
+  /** Token or Atom with distinct identity.
+   *  It can be created from arbitrary strings, yet not altered
    * @note same literal string==same pointer representation
    */
   class Symbol
     : public Literal
     {
     public:
+      static Symbol ANY;
+      static Symbol EMPTY;
       static Symbol BOTTOM;
       static Symbol FAILURE;
       
@@ -136,6 +162,9 @@ namespace lib {
    *  For comparisons, hash calculations etc., when dealing
    *  with raw char ptrs (typically literal values) */
   extern const size_t STRING_MAX_RELEVANT;
+  
+  /** @note storage guaranteed to exist */
+  inline Literal::Literal() noexcept : str_(Symbol::EMPTY) { }
   
   
   /* ===== to be picked up by ADL ===== */

@@ -35,9 +35,8 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 
-using lib::test::Depend4Test;
 using util::contains;
 using util::isnil;
 using std::string;
@@ -47,6 +46,9 @@ using std::static_pointer_cast; //TODO only temporarily;
 namespace proc {
 namespace asset{
 namespace test {
+  
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
   
   
   
@@ -63,7 +65,7 @@ namespace test {
           
       virtual void run (Arg) 
         {
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           
           PM mm = asset::Media::create("test-1", VIDEO);

@@ -53,7 +53,7 @@ using util::_Fmt;
 
 using proc::ConfigResolver;
 using lumiera::query::QueryHandler;                    ///////TODO preliminary interface defined in config-rules.hpp
-using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
+using lumiera::query::LERR_(CAPABILITY_QUERY);
 
 
 namespace lumiera{
@@ -66,7 +66,8 @@ namespace query  {
   DefsManager::DefsManager ()  noexcept
     : defsRegistry_(new DefsRegistry)
   {
-    TODO ("setup basic technical defaults of the session?");
+    INFO (session, "Configure technical defaults of the session.");
+    
   }
   
   

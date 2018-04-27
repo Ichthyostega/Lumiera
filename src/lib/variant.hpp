@@ -28,7 +28,7 @@
  ** but also doesn't deal with alignment issues and is <b>not threadsafe</b>.
  ** 
  ** Deliberately, the design rules out re-binding of the contained type. Thus,
- ** once created, a variant \em must hold a valid element and always an element
+ ** once created, a variant _must hold a valid element_ and always an element
  ** of the same type. Beyond that, variant elements are copyable and mutable.
  ** Direct access requires knowledge of the embedded type (no switch-on type).
  ** Type mismatch is checked at runtime. As a fallback, we provide a visitor
@@ -39,10 +39,11 @@
  ** Likewise, we do not want to support mutations of the variant type at runtime. Basically,
  ** using a variant record is recommended only if either the receiving context has structural
  ** knowledge about the type to expect, or when a visitor implementation can supply a sensible
- ** handling for \em all the possible types. As an alternative, you might consider the
+ ** handling for _all the possible types._ As an alternative, you might consider the
  ** lib::PolymorphicValue to hold types implementing a common interface.
  ** 
- ** \par implementation notes
+ ** ## implementation notes
+ ** 
  ** We use a "double capsule" implementation technique similar to lib::OpaqueHolder.
  ** In fact, Variant is almost identical to the latter, just omitting unnecessary flexibility.
  ** The outer capsule exposes the public handling interface, while the inner, private capsule
@@ -61,9 +62,9 @@
  ** 
  ** @note we use a Visitor interface generated through metaprogramming.
  **       This may generate a lot of warnings "-Woverloaded-virtual",
- **       since one \c handle(TX) function may shadow other \c handle(..) functions
+ **       since one `handle(TX)` function may shadow other `handle(..)` functions
  **       from the inherited (generated) Visitor interface. These warnings are besides
- **       the point, since not the \em client uses these functions, but the Variant does,
+ **       the point, since not the _client_ uses these functions, but the Variant does,
  **       after upcasting to the interface. Make sure you define your specialisations with
  **       the override modifier; when done so, it is safe to disable this warning here.
  ** 
@@ -102,10 +103,11 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace variant { // implementation helpers
+  namespace variant { // implementation metaprogramming helpers
     
     using std::remove_reference;
     using meta::NullType;
+    using meta::Types;
     using meta::Node;
     
     
@@ -148,6 +150,33 @@ namespace lib {
       { };
     
     
+    template<typename T>
+    struct Identity { using Type = T; };
+    
+    /**
+     * Helper to pick the first type from a type sequence,
+     * which fulfils the predicate (meta function) given as template
+     * @tparam TYPES a type sequence or type list
+     * @tparam a predicate template or type trait
+     * @note result as embedded typedef `Type`
+     */
+    template<class TYPES, template<class> class _P_>
+    struct FirstMatchingType
+      {
+        static_assert(not sizeof(TYPES), "None of the possible Types fulfils the condition");
+      };
+    
+    template<class...TYPES, template<class> class _P_>
+    struct FirstMatchingType<Types<TYPES...>, _P_>
+      : FirstMatchingType<typename Types<TYPES...>::List, _P_>
+      { };
+    
+    template<class T, class TYPES, template<class> class _P_>
+    struct FirstMatchingType<Node<T,TYPES>, _P_>
+      : std::conditional_t<_P_<T>::value, Identity<T>, FirstMatchingType<TYPES, _P_>>
+      {  };
+    
+    
     
     template<typename RET>
     struct VFunc
@@ -188,7 +217,7 @@ namespace lib {
    * @todo we need to define all copy operations explicitly, due to the
    *       templated one-arg ctor to wrap the actual values.
    *       There might be a generic solution for that     ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
-   *       But -- Beware of unverifiable generic solutions! 
+   *       But -- Beware of unverifiable generic solutions!
    */
   template<typename TYPES>
   class Variant
@@ -218,6 +247,14 @@ namespace lib {
         public:
           virtual ~Predicate() { } ///< this is an interface
         };
+      
+      /**
+       * Metafunction to pick the first of the variant's types,
+       * which satisfies the given trait or predicate template
+       * @note result is the embedded typedef `FirstMatching<P>::Type`
+       */
+      template<template<class> class _P_>
+      using FirstMatching = variant::FirstMatchingType<TYPES, _P_>;
       
       
     private:
@@ -313,7 +350,7 @@ namespace lib {
                 throw error::Logic("Variant type mismatch: "
                                    "the given variant record does not hold "
                                    "a value of the type requested here"
-                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+                                  ,error::LERR_(WRONG_TYPE));
               else
                return *buff;
             }

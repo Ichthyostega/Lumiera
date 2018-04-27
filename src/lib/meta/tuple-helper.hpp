@@ -27,6 +27,17 @@
  ** some additional manipulations on type sequences, especially to integrate
  ** with the Tuples provided by the standard library.
  ** 
+ ** @warning the metaprogramming part of Lumiera to deal with type sequences is in a
+ **          state of transition, since C++11 now offers direct language support for
+ **          processing of flexible template parameter sequences ("parameter packs").
+ **          It is planned to regroup and simplify our homemade type sequence framework
+ **          to rely on variadic templates and integrate better with std::tuple.
+ **          It is clear that we will _retain some parts_ of our own framework,
+ **          since programming with _Loki-style typelists_ is way more obvious
+ **          and straight forward than handling of template parameter packs,
+ **          since the latter can only be rebound through pattern matching.
+ ** @todo transition lib::meta::Types to variadic parameters  /////////////////////////////////TICKET #987
+ ** 
  ** @see control::CommandDef usage example
  ** @see TupleHelper_test
  ** @see typelist.hpp
@@ -42,6 +53,7 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/typeseq-util.hpp"
+#include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/util.hpp"
 
 #include <tuple>
@@ -57,67 +69,6 @@ namespace util { // forward declaration
 
 namespace lib {
 namespace meta {
-  
-  /**
-   * temporary workaround:
-   * alternative definition of "type sequence",
-   * already using variadic template parameters.
-   * @remarks the problem with our existing type sequence type
-   *    is that it fills the end of each sequence with NullType,
-   *    which was the only way to get a flexible type sequence
-   *    prior to C++11. Unfortunately these trailing NullType
-   *    entries do not play well with other variadic defs.
-   * @deprecated when we switch our primary type sequence type
-   *    to variadic parameters, this type will be superfluous.
-   */
-  template<typename...TYPES>
-  struct TySeq
-    {
-      using Seq = TySeq;
-      using List = typename Types<TYPES...>::List;
-    };
-  
-  
-  /**
-   * temporary workaround: additional specialisation for the template
-   * `Prepend` to work also with the (alternative) variadic TySeq.
-   * @see typeseq-util.hpp
-   */
-  template<typename T, typename...TYPES>
-  struct Prepend<T, TySeq<TYPES...>>
-  {
-    using Seq  = TySeq<T, TYPES...>;
-    using List = typename Types<T, TYPES...>::List;
-  };
-  
-  
-  /**
-   * temporary workaround: strip trailing NullType entries from a
-   * type sequence, to make it compatible with new-style variadic
-   * template definitions.
-   * @note the result type is a TySec, to keep it apart from our
-   *    legacy (non-variadic) lib::meta::Types
-   * @deprecated necessary for the transition to variadic sequences
-   */
-  template<typename SEQ>
-  struct StripNullType;
-  
-  template<typename T, typename...TYPES>
-  struct StripNullType<Types<T,TYPES...>>
-    {
-      using TailSeq = typename StripNullType<Types<TYPES...>>::Seq;
-      
-      using Seq = typename Prepend<T, TailSeq>::Seq;
-    };
-  
-  template<typename...TYPES>
-  struct StripNullType<Types<NullType, TYPES...>>
-    {
-      using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
-    };
-  
-  
-  
   
   namespace { // rebinding helper to create std::tuple from a type sequence
     
@@ -176,9 +127,15 @@ namespace meta {
   
   
   
-  /** match and rebind the type sequence from a tuple */
+  /** temporary workaround: match and rebind the type sequence from a tuple */
   template<typename...TYPES>
-  struct Types<std::tuple<TYPES...>>
+  struct RebindTySeq
+    {
+      using Seq  = typename Types<TYPES...>::Seq;
+      using List = typename Seq::List;
+    };
+  template<typename...TYPES>
+  struct RebindTySeq<std::tuple<TYPES...>>
     {
       using Seq  = typename Types<TYPES...>::Seq;
       using List = typename Seq::List;
@@ -200,76 +157,27 @@ namespace meta {
   
   
   
-  /** Hold a sequence of index numbers as template parameters */
-  template<size_t...idx>
-  struct IndexSeq
-    {
-      template<size_t i>
-      using AppendElm = IndexSeq<idx..., i>;
-    };
-  
-  /** build an `IndexSeq<0, 1, 2, ..., n-1>` */
-  template<size_t n>
-  struct BuildIndexSeq
-    {
-      using Ascending = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
-      
-      template<size_t i>
-      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<i>::template AppendElm<i>;
-    };
-  
-  template<>
-  struct BuildIndexSeq<0>
-    {
-      using Ascending = IndexSeq<>;
-      
-      template<size_t>
-      using FilledWith = IndexSeq<>;;
-    };
-  
-  
-  
-  /** build an index number sequence from a structured reference type */
-  template<class REF>
-  struct IndexIter;
-  
-  /** build an index number sequence from a type sequence */
-  template<typename...TYPES>
-  struct IndexIter<Types<TYPES...>>
-    {
-      /////TODO as long as Types is not variadic (#987), we need to strip NullType here (instead of just using sizeof...(TYPES)
-      enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
-      
-      using Seq = typename BuildIndexSeq<SIZ>::Ascending;
-    };
-  
-  
-  
-  
-  
   
   /**
-   * Extensible Adapter to construct a distinct tuple
-   * from some arbitrary source type. This includes the
-   * possibility to re-map elements or element positions.
+   * Extensible Adapter to construct a distinct tuple from some arbitrary source type.
+   * This includes the possibility to re-map elements or element positions.
    * @tparam TYPES sequence of types to use for the tuple
    * @tparam _ElmMapper_ a _template_ to extract each
    *         constructor argument from the source value.
-   *         On invocation, we'll pick up the source type from the
-   *         actual ctor argument, and then invoke this helper template
-   *         iteratively for each component of the tuple, with arguments
+   *         On invocation, we'll pick up the source type from the actual ctor argument,
+   *         and then invoke this helper template iteratively for each component of the
+   *         tuple, passing as template arguments
    *         - the source type, as picked up from the constructor
    *         - the target tuple type, i.e. `Tuple<TYPES>`
    *         - the actual index position of the tuple element
    *           to be initialised through this concrete instantiation.
-   * @remarks this design has several extension points. Pretty much
-   *    any conceivable initialisation logic can be embodied in the
-   *    `_ElmMapper_` template. The sole requirement is that the
-   *    concrete instance is _assignable_ by the source type and
-   *    _convertible_ to the individual member type of the target
-   *    tuple it is invoked for. Moreover, it is possible to build
-   *    a generic _element extractor_, which will be specialised
-   *    on base of the source type accepted. See \ref ExtractArg
+   * @remarks this design has several extension points. Pretty much any conceivable
+   *    initialisation logic can be embodied in the `_ElmMapper_` template. The sole
+   *    requirement is that the concrete instance is _assignable_ by the source type
+   *    and _convertible_ to the individual member type of the target tuple it is
+   *    invoked for. Moreover, it is possible to build a generic _element extractor_,
+   *    which will be specialised on base of the source type accepted.
+   * @see ExtractArg
    */
   template< typename TYPES
           , template<class,class, size_t> class _ElmMapper_
@@ -277,11 +185,12 @@ namespace meta {
   struct TupleConstructor
     : Tuple<TYPES>
     {
-      using TypeIdxIterator = typename IndexIter<TYPES>::Seq;
+      /** meta-sequence to drive instantiation of the ElmMapper */
+      using SequenceIterator = typename BuildIdxIter<TYPES>::Ascending;
       
     protected:
       template<class SRC, size_t...idx>
-      TupleConstructor (SRC values, IndexSeq<idx...>*)
+      TupleConstructor (SRC values, IndexSeq<idx...>)
         : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{values}...)
         { }
       
@@ -289,7 +198,7 @@ namespace meta {
     public:
       template<class SRC>
       TupleConstructor (SRC values)
-        : TupleConstructor (values, (TypeIdxIterator*)nullptr)
+        : TupleConstructor (values, SequenceIterator())
         { }
     };
   

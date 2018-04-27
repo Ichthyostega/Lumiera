@@ -22,6 +22,8 @@
 
 /** @file cmd-context-test.cpp
  ** unit test \ref CmdContext_test
+ ** 
+ ** @todo created 3/2017 as a marker for planned concepts, postponed for now... 
  */
 
 

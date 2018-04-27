@@ -38,7 +38,7 @@ using boost::lexical_cast;
 using util::isnil;
 using std::string;
 
-using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+using lumiera::error::LERR_(BOTTOM_VALUE);
 
 namespace lib {
 namespace time{

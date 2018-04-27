@@ -582,7 +582,7 @@ namespace time {
     {
       if (n == 0)
         throw error::Logic ("Degenerated frame grid not allowed"
-                           , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                           , error::LERR_(BOTTOM_VALUE));
       return n;
     }
   }//(End) implementation helpers

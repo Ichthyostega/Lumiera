@@ -81,14 +81,13 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "include/session-command-facade.h"
 #include "gui/ctrl/state-recorder.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/nexus.hpp"
-
-#include <boost/noncopyable.hpp>
 
 
 namespace gui {
@@ -107,7 +106,7 @@ namespace ctrl{
    */
   class CoreService
     : public BusTerm
-    , boost::noncopyable
+    , util::NonCopyable
     {
       
       Nexus uiBusBackbone_;

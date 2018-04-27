@@ -45,13 +45,11 @@ namespace test {
    * Mock implementation of the MediaAccessFacade. 
    * Provides preconfigured responses for some Test-Filenames.
    */
-  class MediaAccessMock : public MediaAccessFacade
+  class MediaAccessMock
+    : public MediaAccessFacade
     {
-      MediaDesc& queryFile (string const& name)        const;
-      ChanDesc queryChannel (MediaDesc&, uint chanNo)  const;
-      
-    public:
-      typedef MediaAccessFacade ServiceInterface;
+      MediaDesc& queryFile (string const& name)        const override;
+      ChanDesc queryChannel (MediaDesc&, uint chanNo)  const override;
     };
   
   

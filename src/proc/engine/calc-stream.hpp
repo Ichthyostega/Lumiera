@@ -54,7 +54,6 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //
-//#include <boost/noncopyable.hpp>
 //#include <string>
 #include <vector>
 

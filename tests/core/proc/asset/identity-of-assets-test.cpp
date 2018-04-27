@@ -35,9 +35,8 @@
 
 #include "proc/asset/asset-diagnostics.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 
-using lib::test::Depend4Test;
 using util::isnil;
 using std::string;
 
@@ -45,6 +44,9 @@ using std::string;
 namespace proc {
 namespace asset{
 namespace test {
+  
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
   
   
   
@@ -76,7 +78,7 @@ namespace test {
        */
       void createDuplicate()
         { 
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           PM mm1 = asset::Media::create ("test-1.mov", VIDEO);
           

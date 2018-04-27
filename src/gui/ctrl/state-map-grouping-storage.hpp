@@ -38,11 +38,11 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <algorithm>
 #include <set>
@@ -72,7 +72,7 @@ namespace ctrl {
    * @see StateMapGroupingStorage_test
    */
   class StateMapGroupingStorage
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using StateData = std::set<GenNode,  GenNode::IDComparator>;
       using Storage = std::unordered_map<BareEntryID, StateData,  BareEntryID::UseEmbeddedHash>;

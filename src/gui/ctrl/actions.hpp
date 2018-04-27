@@ -43,12 +43,12 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/ctrl/global-ctx.hpp"
-#include "gui/ctrl/window-list.hpp"
+#include "gui/ctrl/window-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/workspace/panel-manager.hpp"
 #include "lib/format-string.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -74,7 +74,7 @@ namespace ctrl {
   * user action events.
   */
   class Actions
-    : boost::noncopyable
+    : util::NonCopyable
     {
       GlobalCtx& globalCtx_;
       
@@ -133,8 +133,8 @@ namespace ctrl {
           
           
           menu("WindowMenu", _("_Window"));
-          entry ([&]() { globalCtx_.windowList_.newWindow(); } , "WindowNewWindow", StockID("new_window"));
-          entry ([&]() { globalCtx_.windowList_.closeWindow();}, "WindowCloseWindow", _("Close Window"));
+          entry ([&]() { globalCtx_.windowLoc_.newWindow(); }   , "WindowNewWindow", StockID("new_window"));
+          entry ([&]() { globalCtx_.windowLoc_.closeWindow();}  , "WindowCloseWindow", _("Close Window"));
           actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
 
           
@@ -142,6 +142,10 @@ namespace ctrl {
           assetsPanelAction = ToggleAction::create("ViewAssets", StockID("panel_assets"));
           assetsPanelAction->signal_toggled().connect (                              [&]() { onMenu_view_assets(); });
           actionGroup->add(assetsPanelAction);
+          
+          infoboxPanelAction = ToggleAction::create("ViewInfoBox", StockID("panel_infobox"));
+          infoboxPanelAction->signal_toggled().connect (                             [&]() { onMenu_view_infobox(); });
+          actionGroup->add(infoboxPanelAction);
           
           timelinePanelAction = ToggleAction::create("ViewTimeline", StockID("panel_timeline"));
           timelinePanelAction->signal_toggled().connect(                             [&]() { onMenu_view_timeline(); });
@@ -181,6 +185,7 @@ namespace ctrl {
                   </menu>
                   <menu action='ViewMenu'>
                     <menuitem action='ViewAssets'/>
+                    <menuitem action='ViewInfoBox'/>
                     <menuitem action='ViewTimeline'/>
                     <menuitem action='ViewViewer'/>
                   </menu>
@@ -282,9 +287,9 @@ namespace ctrl {
               cuString panelName = ustring::compose("Panel%1", i);
               actionGroup->add(Action::create(panelName, StockID(stock_id)),
                                [i,this]() {
-                                            globalCtx_.windowList_.findActiveWindow()
-                                                                  .getPanelManager()
-                                                                  .showPanel (i);
+                                            globalCtx_.windowLoc_.findActiveWindow()
+                                                                 .getPanelManager()
+                                                                 .showPanel (i);
                                           });
             }
           
@@ -312,6 +317,16 @@ namespace ctrl {
           //  workspaceWindow.assetsPanel->show(
           //    assetsPanelAction->get_active());                                        //////global -> InteractionDirector
           unimplemented ("view assets");
+        }
+      
+      void
+      onMenu_view_infobox()
+        {
+          /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
+          //if(!is_updating_action_state)
+          //  workspaceWindow.infoboxPanel->show(
+          //    infoboxPanelAction->get_active());                                        //////global -> InteractionDirector
+          unimplemented ("view infobox");
         }
       
       void
@@ -347,6 +362,7 @@ namespace ctrl {
       Glib::RefPtr<Gtk::ActionGroup> actionGroup;
       
       Glib::RefPtr<Gtk::ToggleAction> assetsPanelAction;
+      Glib::RefPtr<Gtk::ToggleAction> infoboxPanelAction;
       Glib::RefPtr<Gtk::ToggleAction> timelinePanelAction;
       Glib::RefPtr<Gtk::ToggleAction> viewerPanelAction;
       

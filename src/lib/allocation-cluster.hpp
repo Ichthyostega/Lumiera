@@ -48,11 +48,11 @@
 #define LIB_ALLOCATION_CLUSTER_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/sync-classlock.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/scoped-holder-transfer.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 
 
@@ -88,7 +88,7 @@ namespace lib {
    *          Is this issue worth the hassle?            //////////////////////////////TICKET #169
    */
   class AllocationCluster
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

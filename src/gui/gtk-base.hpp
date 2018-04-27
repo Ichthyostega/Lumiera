@@ -149,8 +149,13 @@ namespace gui {
   /** Lumiera custom widgets. */
   namespace widget {}
   
-  /** GUI helpers, utility functions and classes. */
-  namespace util {}
+  /** Display and drawing helpers and utilities. */
+  namespace draw {}
+  
+  /** generic definitions for element ID and access.
+   * @see id-scheme.hpp
+   */
+  namespace idi {}
   
   
 }// namespace gui

@@ -32,7 +32,7 @@
 #define LIB_REF_ARRAY_H
 
 
-#include <boost/noncopyable.hpp>
+#include "lib/nocopy.hpp"
 
 
 namespace lib {
@@ -46,7 +46,7 @@ namespace lib {
    */
   template<class T>
   class RefArray
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       virtual ~RefArray() {}  ///< this is an interface

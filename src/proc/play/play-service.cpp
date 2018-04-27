@@ -27,7 +27,7 @@
 
 
 #include "lib/error.hpp"
-#include "include/play-facade.h"
+#include "include/play-facade.hpp"
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
 #include "proc/play/render-configurator.hpp"
@@ -47,15 +47,8 @@ namespace lumiera {
   
   Play::~Play() { } // emit VTables here...
   
-  
-  /** Storage for the lumiera::Play facade access point 
-   * @note PlayService uses a InterfaceFacadeLink member
-   *       for actually establishing the PlayService instance
-   *       as implementation of lumiera::Play
-   */
-  facade::Accessor<Play> Play::facade;
-  
-  
+  /** static storage for the facade access front-end */
+  lib::Depend<Play> Play::facade;
   
 }//(End) namespace lumiera
 
@@ -167,8 +160,7 @@ namespace play {
    *  this service through the lumiera::Play facade.
    */
   PlayService::PlayService()
-    : facadeAccess_(*this, "Player")
-    , pTable_(new ProcessTable)
+    : pTable_(new ProcessTable)
     { }
   
   

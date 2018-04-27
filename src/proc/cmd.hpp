@@ -42,7 +42,6 @@
 //#include "lib/symbol.hpp"
 //#include "proc/common.hpp"
 
-//#include <boost/noncopyable.hpp>
 //#include <string>
 
 

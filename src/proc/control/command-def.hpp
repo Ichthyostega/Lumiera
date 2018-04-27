@@ -54,6 +54,7 @@
 #define CONTROL_COMMAND_DEF_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
@@ -70,7 +71,6 @@
 
 #include <memory>
 #include <functional>
-#include <boost/noncopyable.hpp>
 
 
 
@@ -276,7 +276,7 @@ namespace control {
    * 
    */
   class CommandDef
-    : boost::noncopyable
+    : util::NonCopyable
     {
       Symbol id_;
       Command prototype_;

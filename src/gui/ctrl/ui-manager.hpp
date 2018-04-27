@@ -37,7 +37,7 @@
  ** - the global Actions available though the menu
  ** - the InteractionDirector (top-level controller)
  ** - the StyleManager
- ** - the WindowList
+ ** - the WindowLocator
  ** 
  ** @see gtk-lumiera.hpp
  ** @see ui-bus.hpp
@@ -48,8 +48,8 @@
 #define GUI_CTRL_UI_MANAGER_H
 
 #include "gui/gtk-base.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 #include <memory>
 
@@ -72,7 +72,7 @@ namespace ctrl {
   
   /** Framework initialisation base */
   class ApplicationBase
-    : boost::noncopyable
+    : util::NonCopyable
     {
     protected:
       ApplicationBase();

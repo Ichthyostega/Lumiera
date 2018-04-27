@@ -30,6 +30,7 @@
 #define TESTHELPER_TESTOPTION_H
 
 #include "lib/cmdline.hpp"
+#include "lib/nocopy.hpp"
 
 #include <string>
 #include <iostream>
@@ -55,7 +56,8 @@ namespace test {
    * vector will contain only the remaining
    * unrecognised parts.
    */
-  class TestOption : private boost::noncopyable
+  class TestOption
+    : util::NonCopyable
     {
     public:
       TestOption (lib::Cmdline& cmdline);

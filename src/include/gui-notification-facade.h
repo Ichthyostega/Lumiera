@@ -43,7 +43,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "include/interfaceproxy.hpp"
+#include "lib/depend.hpp"
 #include "lib/diff/mutation-message.hpp"
 #include "lib/idi/entry-id.hpp"
 
@@ -76,8 +76,12 @@ namespace gui {
    */
   class GuiNotification
     {
+    protected:
+      virtual ~GuiNotification() {}   ///< this is an interface
+      friend class lib::DependencyFactory<GuiNotification>;
+      
     public:
-      static lumiera::facade::Accessor<GuiNotification> facade;
+      static lib::Depend<GuiNotification> facade;
       
       
       /** push a user visible notification text */
@@ -108,9 +112,6 @@ namespace gui {
        */
       virtual void triggerGuiShutdown (string const& cause)      =0;
       
-      
-    protected:
-      virtual ~GuiNotification() {}
     };
     
   
@@ -136,6 +137,6 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
 
 
 #ifdef __cplusplus
-}
+}// extern "C"
 #endif
 #endif /*GUI_GUI_NOTIFICATION_H*/

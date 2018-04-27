@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "backend/media-access-mock.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "proc/mobject/session/clip.hpp"
@@ -39,7 +39,6 @@
 
 
 using lib::HashIndexed;
-using lib::test::Depend4Test;
 
 
 namespace proc    {
@@ -51,6 +50,9 @@ namespace test    {
   using lib::test::showSizeof;
   using namespace mobject::test;
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
+  
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
   
   
   /***********************************************************************************//**
@@ -65,9 +67,9 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           
           typedef Placement<MObject>                    PMObj;
@@ -149,9 +151,9 @@ namespace test    {
           CHECK (2 == pClip.use_count());
           CHECK (2 == pSub1.use_count());
           
+#if false
 ///////////////////////////////////////////////////////////////////////////////TODO: find a way to configure NoBug to throw in case of assertion
 ///////////////////////////////////////////////////////////////////////////////TODO: configure NoBug specifically for the testsuite
-#ifdef false
           VERIFY_ERROR (ASSERTION, hijacked->specialAPI() );
 #endif
           

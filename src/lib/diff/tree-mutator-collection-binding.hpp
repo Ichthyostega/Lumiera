@@ -52,6 +52,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/tree-mutator.hpp"
@@ -96,6 +97,7 @@ namespace diff{
      */
     template<class COLL, class MAT, class CTR, class SEL, class ASS, class MUT>
     struct CollectionBinding
+      : util::MoveOnly
       {
         using Coll = typename Strip<COLL>::TypeReferred;
         using Elm  = typename Coll::value_type;
@@ -128,10 +130,8 @@ namespace diff{
           , openSub(u)
           { }
         
-        // allow move construction only,
+        // only move construction allowed,
         // to enable use of unique_ptr in collections
-        CollectionBinding(CollectionBinding&&) = default;
-        CollectionBinding(CollectionBinding&) = delete;
         
         
         
@@ -172,7 +172,7 @@ namespace diff{
           }
         
         
-      private: /* === technicallities of container access === */
+      private: /* === Technicalities of container access === */
         
         /** @internal technicality
          * Our iterator is actually a Lumiera RangeIter, and thus we need
@@ -362,7 +362,7 @@ namespace diff{
                   {
                     binding_.inject (move(*found));
                   }
-                return found;
+                return bool(found);
               }
             else
               return PAR::findSrc (refSpec);

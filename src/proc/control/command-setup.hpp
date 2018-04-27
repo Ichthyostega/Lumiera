@@ -53,6 +53,7 @@
 #define CONTROL_COMMAND_SETUP_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "proc/control/command.hpp"
 #include "lib/symbol.hpp"
 
@@ -94,15 +95,13 @@ namespace control {
    *   to be defined and configured for use with the session subsystem.
    */
   class CommandSetup
+    : util::Cloneable   // copy-construction allowed, but no assignment
     {
       Symbol cmdID_;
       
     public:
      ~CommandSetup();
       CommandSetup (Symbol cmdID);
-      CommandSetup (CommandSetup const&)  = default;
-      CommandSetup (CommandSetup &&)      = default;
-      CommandSetup& operator= (CommandSetup const&) = delete;
       
       operator Symbol const&()  const
         {

@@ -98,7 +98,7 @@ namespace engine {
    *       will be prepared on locking and cleanup will be invoked
    *       automatically when releasing. 
    * @warning comparison and hash values rely on internals of the
-   *       tr1::function implementation and might not be 100% accurate
+   *       std::function implementation and might not be 100% accurate
    */
   struct TypeHandler
     {

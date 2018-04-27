@@ -49,12 +49,12 @@
 
 #include "include/logging.h"
 #include "lib/iter-adapter-ptr-deref.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
 #include <vector>
 #include <algorithm>
-#include <boost/noncopyable.hpp>
 
 
 namespace lib {
@@ -70,7 +70,7 @@ namespace lib {
   template<class T>
   class ScopedPtrVect
     : std::vector<T*>,
-      boost::noncopyable
+      util::NonCopyable
     {
       typedef std::vector<T*> _Vec;
       typedef typename _Vec::iterator VIter;

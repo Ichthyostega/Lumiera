@@ -176,7 +176,7 @@ namespace idi {
       operator string()  const;
       
       
-      /** using BareEntryID derived objects as keys within tr1::unordered_map */
+      /** using BareEntryID derived objects as keys within std::unordered_map */
       struct UseEmbeddedHash
         : public std::unary_function<BareEntryID, size_t>
         {

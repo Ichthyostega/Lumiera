@@ -44,7 +44,7 @@ namespace test{
   using util::isnil;
   using std::vector;
   
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   
   
   namespace { // test fixture

@@ -30,7 +30,7 @@
  ** - and sends a "mark" message towards some UI demo widget
  ** - which in turn displays the mark text
  ** 
- ** @todo WIP as of 8/20176          ////////////////////////////////////////////////////////////////////////TICKET #1099
+ ** @todo WIP as of 8/2017          ////////////////////////////////////////////////////////////////////////TICKET #1099
  ** 
  ** @see CallQueue_test
  ** @see notification-service.hpp
@@ -43,8 +43,8 @@
 #include "lib/depend.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/ctrl/ui-manager.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -77,14 +77,14 @@ namespace gui {
    * @see CallQueue_test
    */
   class DemoGuiRoundtrip
-    : boost::noncopyable
+    : util::NonCopyable
     {
       string nothing_;
 
       DemoGuiRoundtrip();
      ~DemoGuiRoundtrip();
 
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<DemoGuiRoundtrip>;
 
     public:
       /** access point to set up the scaffolding.

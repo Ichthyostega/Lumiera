@@ -522,6 +522,95 @@ noscript {display:none;} /* Fixes a feature in Firefox 1.5.0.2 where print previ
 </div>
 <!--POST-SHADOWAREA-->
 <div id="storeArea">
+<div title="AboutMonads" creator="Ichthyostega" modifier="Ichthyostega" created="201712101925" modified="201712102348" tags="Concepts discuss" changecount="71">
+<pre>//Monads are of questionable usefullness//
+
+Monads are a concept and theoretical framework from category theory.
+But the use of Monads as a programming construct is much touted in the realm of functional programming -- which unfortunately is riddled with some kind of phobia towards ''State''.
+And this in itself is ill-guided, since //not State is the problem,// ''Complexity'' is. Complexity arises from far reaching non local interdependencies and coupling. Some complexity is essential.
+
+A telltale sign is that people constantly ask »What is a Monad?«
+And they don't get an answer, rather they get a thousand answers.
+The term //&quot;Monad&quot; fails to evoke an image// once mentioned.
+
+What remains is a set of clever technicalities. Such can be applied and executed without understanding. The same technicality can be made to work on vastly distinct subjects. And a way to organise such technicalities can be a way to rule and control subjects. The exertion of control is not in need of invoking images, once its applicability is ensured. //That// state is indifferent towards complexity, at least.
+
+When we care for complexity, we do so while we care for matters tangible to humans. Related to software, this is the need to maintain it, to adjust it, to adapt and remould it, to keep it relevant. At the bottom of all of these is the need to understand software. And this mandates to use terms and notions, even patterns, which evoke meaning -- even to the uninitiated. How can Monads even be helpful with that?
+
+!To make sensible usage of Monads
+Foremost, they should be kept as what they are: technicalities. For the understanding, they must be subordinate to a real concept or pattern. One with the power to reorient our view of matters at hand.
+Thus we ask: what can be said about Monads?
+
+!!!Formalism
+Regarding the formalism, it should be mentioned
+* that a Monad is a //type constructor// -- it takes a type parameter and generates a new instant of monadic kind.
+* and assuming such an instance, there is a //constructor// &lt;br&gt;{{{
+   unit: A → M&lt;A&gt;
+   }}}
+* and once we've optained a concrete entity of type {{{M&lt;A&gt;}}}, we can //bind a function// to transform it in another monadic entity&lt;br/&gt;{{{
+   M&lt;A&gt;::bind( A → M&lt;B&gt; ) → M&lt;B&gt;
+   }}}
+At this point, also the ''Monad Axioms'' should be mentioned
+;neutrality
+:{{{unit}}} (the monad constructor) is neutral with respect to the {{{bind}}} operation
+{{{
+unit(a)::bind(f)  ≡  f(a)
+M::bind(unit)  ≡  M
+}}}
+;composition
+:we can define a //composition// of monadic functions,
+:which is equivalent to consecutive binding
+{{{
+(M::bind(f) )::bind(g)  ≡  M::bind( f ∘ g )     with f ∘ g  defined as λ.x → { f(x)::bind(g) }
+}}}
+
+!!!Distinct properties
+The obvious first observation is that a Monad must be some kind of //container// -- or //object,// for that.
+
+The next observation to spring into mind is the fact that the {{{bind}}}-operation is notoriously hard to understand.
+Why is this so? Because it //intermingles// the world of monads with the things from the value domain. You can not just write a monadic function for use with {{{bind}}}, without being aware of the world of monads. It is not possible to &quot;lift&quot; an operation from the world of values automatically into the world of monads. Please contrast this to the ''map operation'', which is easy to understand for that very reason: if you map an operation onto a container of values, the operation itself does not need to be aware of the existence of containers as such. It just operates on values.
+
+This observation can be turned into a positive use-case for monadic structures -- whenever there is an ''additional cross-cutting concern'' within the world of values, to necessitate our constant concern all over the place. The Monad technique can then be used to re-shuffle this concern in such a way that it becomes possible to keep it //mentally separate.// Thus, while it is not possible to //remove// that concern, re-casting it as Monad creates a more regular structure, which is easier to cope with. A Monad can thus be seen as an ''augmented or &quot;amplified&quot; value''. A value outfitted with additional capabilities. This view might be illustrated by looking at some of the most prominent applications
+;failure handling
+:when we mark an expression as prone to failure by wrapping it into some //exception handling monad,//
+:it becomes easy to combine several such unreliable operations into a single program unit with just one failure handler
+;partially defined operations
+:when an operation can only work on some part of the value domain, we can mark the result as //optional//
+:and combining several tasks with optional result into one chain of operations can then be done completely generic
+;multiple results
+:when some tasks might possibly produce multiple results, we can mark those with a //container monad,//
+:and collecting and combining of such multifold results can then be dealt with completely separate from the generating actions
+;secondary state attributions
+:when we have to observe, extend and communicate additional data beyond what is involved in the basic computation
+:the collection and management of such additional attributions can be externalised with a //state monad//
+;local technicalities
+:when some algorithm or computation involves specific technicalities to get at the underlying data
+:a monad can be used to encapsulate those details and expose only abstracted higher-level //operation primitives//
+
+!!!Building with monads
+As pointed out above, while all those disparate usages might share some abstract structural similarities, no overarching theme can be found to span them all. If we tend to distil an essence from all those usages, we're bound to end up with nothing. The reason is, //we do apply// monadic techniques while coping with the problem, but there is //nothing inherent &quot;monadic&quot; in the nature// of things at hand.
+
+Yet to guide our thinking and doing, when we deal with matters, other concepts, notions and patterns are better suited to guide our actions, because they concur with the inherent nature of things:
+;builder
+:a builder allows to assemble a very specific structure from building blocks,
+:when done, the structure is self-contained and can be operated and used devoid all intricacies involved in building.
+:Monads are //exceptionally viable// for performing this process of assembly within the builder.
+;domain specific language
+:a DSL can found a higher level of abstraction, where local handling details are stashed away.
+:Monads can be useful as supporting backbone below a DSL, especially in cases where a full language system and runtime engine would be overblown
+;abstract composite value
+:an abstract data type or complex value can be used to represent computations beyond simple numbers,
+:prominent examples being colours with colour space or measurement values with numerical precision and unit of measurement.
+:Monads can be used to build the basic combining operations on such custom types, and their interplay.
+;engine
+:an engine guides and enacts ongoing computations, thereby transitioning internal state
+:Monads can be used as blueprint for managing these internal state transitions, and to prevent them from leaking out into the target of processing
+;context
+:a (possibly global) context can be used to represent all further concerns, which need to be there as well.
+:Monads can be used to create a distinct, secondary system of communication (»wormhole«) and they can be used to capture and replay events.
+:beyond that, for most practical purposes, simple plain mutable variables plus nested scopes //are a solution superior to the application of Monads.//
+</pre>
+</div>
 <div title="Admin" modifier="CehTeh" created="200706080535" modified="200706110324">
 <pre>PageTemplate
 |&gt;|SiteTitle - SiteSubtitle|
@@ -1838,6 +1927,74 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
+<div title="DependencyFactory" creator="Ichthyostega" modifier="Ichthyostega" created="201803110155" modified="201804032335" tags="def Concepts draft" changecount="80">
+<pre>//Access point to dependencies by-name.//
+In the Lumiera code base, we refrain from building or using a full-blown Dependency Injection Container. Rather, we rely on a generic //Singleton Factory// -- which can be augmented into a //Dependency Factory// for those rare cases where we actually need more instance and lifecycle management beyond lazy initialisation. Client code indicates the dependence on some other service by planting an instance of that Dependency Factory (for Lumiera this is {{{lib::Depend&lt;TY&gt;}}}). The //essence of a &quot;dependency&quot;// of this kind is that we ''access a service //by name//''. And this service name or service ID is in our case a //type name.//
+
+&amp;rarr; see the Introductory Page about [[Dependencies|http://lumiera.org/documentation/technical/library/Dependencies.html]] in Lumiera online documentation.
+
+!Requirements
+Our DependencyFactory satisfies the following requirements
+* client code is able to access some service //by-name// -- where the name is actually the //type name// of the service interface.
+* client code remains agnostic with regard to the lifecycle or backing context of the service it relies on
+* in the simplest (and most prominent case), //nothing// has to be done at all by anyone to manage that lifecycle.&lt;br/&gt;By default, the Dependency Factory creates a singleton instance lazily (heap allocated) on demand and ensures thread-safe initialisation and access.
+* we establish a policy to ''disallow any significant functionality during application shutdown''. After leaving {{{main()}}}, only trivial dtors are invoked and possibly a few resource handles are dropped. No filesystem writes, no clean-up and reorganisation, not even any logging is allowed. For this reason, we established a [[Subsystem]] concept with explicit shutdown hooks, which are invoked beforehand.
+* the Dependency Factory can be re-configured for individual services (type names) to refer to an explicitly installed service instance. In those cases, access while the service is not available will raise an exception. There is a simple one-shot mechanism to reconfigure Dependency Factory and create a link to an actual service implementation, including automatic deregistration.
+
+!!!Configuration
+The DependencyFactory and thus the behaviour of dependency injection can be reconfigured, ad hoc, at runtime.
+Deliberately, we do not enforce global consistency statically (since that would lead to one central static configuration). However, a runtime sanity check is performed to ensure configuration actually happens prior to any use, which means any invocation to retrieve (and thus lazily create) the service instance. The following flavours can be configured
+;default
+:a singleton instance of the designated type is created lazily, on first access
+:define an instance for access (preferably static) {{{Depend&lt;Blah&gt; theBla;}}}
+:access the singleton instance as {{{theBla().doIt();}}}
+;singleton subclass
+:{{{DependInject&lt;Blah&gt;::useSingleton&lt;SubBlah&gt;() }}}
+:causes the dependency factory {{{Depend&lt;Bla&gt;}}} to create a {{{SubBlah}}} singleton instance from now on
+;attach to service
+:{{{DependInject&lt;Blah&gt;::ServiceInstance&lt;SubBlah&gt; service{p1, p2, p3}}}}
+:* build and manage an instance of {{{SubBlah}}} in heap memory immediately (not lazily)
+:* configure the dependency factory to return a reference //to this instance//
+:* the generated {{{ServiceInstance&lt;SubBlah&gt;}}} object itself acts as lifecycle handle (and managing smart-ptr)
+:* when it is destroyed, the dependency factory is automatically cleared, and further access will trigger an error
+;support for test mocking
+:{{{DependInject&lt;Blah&gt;::Local&lt;SubBlah&gt; mock }}}
+:temporarily shadows whatever configuration resides within the dependency factory
+:the next access will create a (non singleton) {{{SubBlah}}} instance in heap memory and return a {{{Blah&amp;}}}
+:the generated object again acts as lifecycle handle and smart-ptr to access the {{{SubBlah}}} instance like {{{mock-&gt;doItSpecial()}}}
+:when this handle goes out of scope, the original configuration of the dependency factory is restored
+;custom constructors
+:both the subclass singleton configuration and the test mock support optionally accept a functor or lambda argument with signature {{{SubBlah*()}}}.
+:the contract is for this construction functor to return a heap allocated object, which will be owned and managed by the DependencyFactory.
+:especially this enables use of subclasses with non default ctor and / or binding to some additional hidden context.
+:please note //that this closure will be invoked later, on-demand.//
+
+We consider the usage pattern of dependencies a question of architecture rather -- such can not be solved by any mechanism at implementation level.
+For this reason, Lumiera's Dependency Factory prevents reconfiguration after use, but does nothing exceeding such basic sanity checks
+
+!!!Performance considerations
+To gain insight into the rough proportions of performance impact, in 2018 we conducted some micro benchmarks (using a 8 core AMD ~FX-8350 64bit CPU running Debian/Jessie and GCC 4.9 compiler)
+The following table lists averaged results //in relative numbers,// in relation to a single threaded optimised direct non virtual member function invocation (≈ 0.3ns)
+| !Access Technique |&gt;| !development |&gt;| !optimised |
+|~| single threaded|multithreaded | single threaded|multithreaded |
+|direct invoke on shared local object             |   15.13|   16.30|  ''1.00''|   1.59|
+|invoke existing object through unique_ptr  |   60.76|   63.20|     1.20|   1.64|
+|lazy init unprotected (not threadsafe)           |   27.29|   26.57|     2.37|   3.58|
+|lazy init always mutex protected                    | 179.62| 10917.18| 86.40| 6661.23|
+|Double Checked Locking with mutex          |   27.37|   26.27|    2.04|    3.26|
+|DCL with std::atomic and mutex for init       |   44.06|   52.27|    2.79|    4.04|
+
+Some observations:
+* The numbers obtained pretty much confirm [[other people's measurments|http://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton]]
+* Synchronisation is indeed necessary; the unprotected lazy init crashed several times randomly during multithreaded tests.
+* Contention on concurrent access is very tangible; even for unguarded access the cache and memory hardware has to perform additional work
+* However, the concurrency situation in this example is rather extreme and deliberately provokes collisions; in practice we'd be closer to the single threaded case
+* Double Checked Locking is a very effective implementation strategy and results in timings within the same order of magnitude as direct access
+* Unprotected lazy initialisation performs spurious duplicate initialisations, which can be avoided by DCL
+* Naïve Mutex locking is slow even with non-recursive Mutex without contention
+* Optimisation achieves access times around ≈ 1ns
+</pre>
+</div>
 <div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
@@ -2359,10 +2516,12 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201308122215" tags="def Rendering" changecount="6">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="201712101920" tags="def Rendering" changecount="10">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 The dispatcher works together with the job ticket(s) and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the backend, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
+
+{{red{stalled since 2014}}} -- development on this (important) topic has been postponed. Moreover, some rough edges remain within the Design &amp;rarr; see [[some notes...|AboutMonads]]
 
 !defining the dispatcher interface
 The purpose of this interface is to support the planning of new jobs, for a given CalcStream. From time to time, a chunk of new RenderJob entries will be prepared for the [[Scheduler]]. Each job knows his frame number and the actual ProcNode to operate. So, to start planning jobs, we need to translate time &amp;rarr; frame number &amp;rarr; segment &amp;rarr; real exit node.
@@ -2522,7 +2681,7 @@ we need a test setup for this investigation.
 * realistic: shall reflect the situation in our actual UI
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201612012311" tags="GuiPattern design draft" changecount="22">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201708311414" tags="GuiPattern design draft" changecount="25">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels)
@@ -2535,7 +2694,7 @@ To start with, a clip can be rendered in ''abridged form'', which means that the
 
 The next step in a series of progressively more detailed clip representations is the ''compact form'', which still focuses on handling the clip as an unit, while at least indicating some of the inherent structuring. Essentially, the clip here is represented as a //strip of rendered preview content,// decorated with some overlays. One of these overlays is the //ID pane,// which resembles the arrangement known from the abridged form: The icon here is always the [[Placement]] icon, followed by the expand widget and the ID label. Again, this pane is aligned such as to remain in sight. Then, there is a pair of overlays, termed the //boundary panes,// which indicate the begin and the end of the clip respectively. Graphically, these overlays should be rendered in a more subtle way, just enough to be recognisable. The boundary panes are the attachment areas for //trimming gestures,// as opposed to moving and dragging the whole clip or shuffle editing of the content. Moreover, these boundary panes compensate for the alignment of the ID pane, which mostly keeps the latter in sight. As this might counterfeit the visual perception of scrolling, the boundary panes serve to give a clear visual clue when reaching the boundary of an extended clip. Optionally, another overlay is rendered at the upper side of the clip's area, to indicate attached effect(s). It is quite possible for these effect decorations not to cover the whole temporal span of the clip.
 
-A yet more detailed display of the clip's internals is exposed in the ''expanded form.'' Here, the clip is displayed as an window pane holding nested clip displays, which in turn might again be abridged, compact or ({{red{maybe 11/16}}}) even expanded. This enclosing clip window pane should be rendered semi transparent, just to indicate the enclosing whole. The individual clip displays embedded therein serve to represent individual media parts or channels, or individual attached effects. Due to the recursive nature of Lumiera's HighLevelModel, each of these parts exposes essentially the same controls, allowing to control the respective aspects of the part in question. We may even consider {{red{unclear as of 11/16}}} to allow accessing the parts of a VirtualClip, this way turning the enclosing clip into a lightweight container ({{red{11/2016 give proper credit for this concept! Who proposed this initially in 2008? was this Thosten Wilms?}}}
+A yet more detailed display of the clip's internals is exposed in the ''expanded form.'' Here, the clip is displayed as a window pane holding nested clip displays, which in turn might again be abridged, compact or ({{red{maybe 11/16}}}) even expanded. This enclosing clip window pane should be rendered semi transparent, just to indicate the enclosing whole. The individual clip displays embedded therein serve to represent individual media parts or channels, or individual attached effects. Due to the recursive nature of Lumiera's HighLevelModel, each of these parts exposes essentially the same controls, allowing to control the respective aspects of the part in question. We may even consider ({{red{unclear as of 11/16}}}) to allow accessing the parts of a VirtualClip, this way turning the enclosing clip into a lightweight container ({{red{11/2016 give proper credit for this concept! Who proposed this initially in 2008? was this Thosten Wilms?}}}
 
 Finally, there can be a situation where it is just not possible to render any of the aforementioned display styles properly, due to size constraints. Especially, this happens when zooming out such as to show a whole sequence or even timeline in overview. We need to come up with a scheme of ''graceful display degradation'' to deal with this situation -- just naively attempting to render any form might easily send our UI thread into a minute long blocking render state, for no good reason. Instead, in such cases display should fall back to a ''degraded form''
 * showing just a placeholder rectangle, when the clip (or any other media element) will cover a temporal span relating to at least 1 pixel width (configurable trigger condition)
@@ -2561,7 +2720,7 @@ A prime consideration regarding this whole clip presentation strategy is the per
 !clip content rendering
 In a typical editing application, the user can expect to get some visual clue regarding the media content of a clip. For example, sound clips can be visualised as waveform, while movie clips might feature a sequence of images taken from the video. Our intention is to ''use our own rendering engine'' to produce these thumbnails. In fact, our engine is perfectly suited for this task: it has precisely the necessary media decoding and rendering abilities, plus it offers an elaborate system of priorities and deadlines, allowing to throttle the load produced by thumbnail generation. In addition to all those qualities, our engine is planned to be complemented by an &quot;intelligent&quot; frame cache, which, given proper parametrisation, ensures the frequently requested thumbnails will be available for quick display. For this approach to work, we need to provide some infrastructure
 * we need to configure and maintain a //preview rendering strategy.//
-* the request for rendering has to be cast &quot;just somewhere&quot; as message, obviously via the UI-Bus
+* the request for rendering has to be cast &quot;just somewhere&quot; as message, possibly via the UI-Bus
 * actually rendered content will likewise arrive asynchronously as message via UI-Bus.
 * we still need to work out how buffer management for this task will be handled; it should be a derivative of typical buffer management for display rendering.
 * the clip widget needs to provide a simple placeholder drawing to mark the respective space in the interface, until the actual preview arrives.
@@ -2747,6 +2906,142 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201804150106" tags="def GuiPattern design" changecount="56">
+<pre>//A view within the UI, featuring some component of relevance to »the model«.//
+While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
+Such UI component views exhibit some substantial traits
+* they conform to a built-in fixed list of view types, each of which is unique and dedicated to a very specific purpose: //''Timeline'', ''Viewer'', (Asset)''Bin'', ''Infobox'', ''Playcontrol'',...//
+* each component view has a distinguishable identity and is connected to and addressable through the UI-Bus
+* it can be hosted only at a dedicated location within one or several specific [[docking panels|GuiDockingPanel]].
+* multiplicity (one, one per window, many) depends on the type of view and needs to be managed.
+* such a view is not just //created// -- rather it needs to be //allocated//
+
+!Allocation of UI component views
+Here, //Allocation// means
+* to constitute the desired element's identity
+* to consider multiplicity and possibly retrieve an existing instance
+* to determine the hosting location
+* possibly to instantiate and register a new instance
+* and finally to configure that instance for the desired role
+The classical example to verify this definition is the //allocation of viewers:// when starting playback of a new media item, we &quot;need a viewer&quot; to show it. But we can not just create yet another viewer window -- rather we're bound to allocate one of the possible &quot;viewer slots&quot;. In fact this is a configurable property of the UI layout employed; sometimes some people need the limitation to one single viewer entity (which might even be external, routed to a beamer or monitor), while other ones request the classical editor layout with two viewer windows side by side, while yet different working styles might exploit a limited set of viewers allocated in stack- or round-robin style.
+
+!View access
+The global access point to component views is the ViewLocator within InteractionDirector, which exposes a generic access- and management API to
+* get (possibly create) some view of given type
+* get (possibly create) a view with specific identity
+* destroy a specific view
+For all these direct access operations, elements are designated by a private name-ID, which is actually more like a type-~IDs, and just serves to distinguish the element from its siblings. The same ~IDs are used for the components in [[UI coordinate specifications|UICoord]]; both usages are closely interconnected, because view access is accomplished by forming an UI coordinate path to the element, which is then in turn used to navigate the internal UI widget structure to reach out for the actual implementation element.
+
+While these aforementioned access operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases we are more interested in UI elements representing tangible elements from the session. In those cases,  it is sufficient to address the desired component view just via the UI-Bus. This is possible since component ~IDs of such globally relevant elements are formed systematically and thus always predictable: it is the same ID as used within Proc-Layer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].
+
+!!!Configuration of view allocation
+Since view allocation offers a choice amongst several complex patterns of behaviour, it seems adequate to offer at least some central configuration site with a DSL for readability. That being said -- it is conceivable that we'll have to open this topic altogether for general configuration by the user. For this reason, the configuration site and DSL are designed in a way to foster further evolution of possibilites...
+* at definition site {{{id-scheme.hpp}}}, explicit specialisations are given for the relevant types of component view
+* each of those general //view configurations//
+** defines the multiplicity allowed for this kind of view
+** defines how to locate this view
+* and that //location definition// is given as a list of //alternatives in order of precedence.// That is, the system tries each pattern of location and uses the first one applicable
+
+!!Standard examples
+;Timeline
+:add to group of timelines within the timelinePanel
+{{{
+alloc = unlimited
+locate = perspective(edit).panel(timeline)
+          or panel(timeline)
+          or currentWindow().panel(timeline).create()
+}}}
+;Viewer
+:here multiple alternatives are conceivable
+:* allow only a single view instance in the whole application
+{{{
+alloc = onlyOne
+locate = external(beamer)
+          or view(viewer)
+          or perspective(mediaView).panel(viewer)
+          or panel(viewer)
+          or firstWindow().panel(viewer).view(viewer).create()
+}}}
+:* allow two viewer panels (the standard layout of editing applications)
+{{{
+alloc = limitPerWindow(2)
+locate = perspective(edit).panel(viewer)
+          or currentWindow().panel(viewer)
+          or panel(viewer)
+          or currentWindow().panel(viewer).create()
+}}}
+;(Asset)Bin
+:within the dedicated asset panel, add to the appropriate group for the kind of asset
+{{{
+alloc = unlimited
+locate = currentWindow().perspective(edit).tab(assetType())
+          or perspective(asset).view(asset)
+          or tab(assetType())
+          or view(asset).tab(assetType()).create()
+          or firstWindow().panel(asset).view(asset).create()
+}}}
+;~Error-Log
+:use the current {{{InfoBoxPanel}}} if such exists, else fall back to using a single view on the primary window
+{{{
+alloc = limitPerWindow(1)
+locate = currentWindow().panel(infobox)
+          or view(error)
+          or panel(infobox)
+          or firstWindow().panel(infobox).view(error).create()
+}}}
+;Playcontrol
+://not determined yet what we'll need here....//
+
+!!DSL structure
+* the DSL assigns tokens to some expected Specs
+* the tokens themselves are provided as constants
+* in fact those tokens are functors
+* and are opaquely bound into {{{ViewLocator}}}'s implementation
+
+!!!Signatures
+;locate
+:is evaluated first and determines the UICoord of the target view
+:is a disjunction of alternative specs, which are resolved to use the first applicable one
+;alloc
+:the //Allocator// is run on those coordinates and actually //allocates// the view
+:returns coordinates of an (now) existing view
+;allocator specs
+:these are //builder functions// to yield a specifically parametrised allocator
+:typical example is an allocator to create only a limited number of view instances per window
+:the actual builder tokens are synthesised by partial function application on the given lambda
+!!!Spec Tokens
+;locate
+:firstWindow
+: currentWindow
+: perspective(id)
+: panel(id)
+: assetType() {{red{WIP 2/18 not clear if necessary}}}
+: create()
+;alloc
+: unlimited
+: onlyOne
+: limitPerWindow(cnt)
+
+!!!Semantics of location
+The given UICoord specs are matched one by one, using the first one applicable. The location indicated by this process describes the parent or scope where the desired view can be found or shall be created. The matching itself is based on the matching of UI coordinates against the existing UI topology, but enriched with some contextual information. By default, a given coordinate spec //is required to exist// -- which implies the semantics of //total coverage,// as defined by the coordinate resolver. When to the contrary the predicate {{{create()}}} is used, we only require that the given path //can be formed unambiguously// within the existing window topology -- the semantics of which is, again, defined by the coordinate resolver and basically implies that the path can be anchored and any missing parts can be interpolated without ambiguity, while possibly some extraneous suffix of components remains to be created by the instantiation process.
+
+The coordinate specs as written within the DSL are slightly abridged, as the final element, the actual component to be created, can be omitted and will be supplied automatically. This is possible insofar the ID of the queried element is actually more like a type specifier, and thus drawn from a finite and well known collection of possible elements (Timeline, Asset Bin, Error Log, Media Viewer, etc.). The elements to be created must invoke existing code and must be able to interface with their actual environment after all.
+
+However, the semantics of UI coordinate resolution and matching are applied against the coordinate specs //as given in the DSL.// Since, by default, what is given is required to exist, it makes quite a difference as to what kind of element is used as terminal element of a given spec. Since our UI coordinate system establishes a distinct depth for each kind of element, we can and even must reject any spec which does not yield a definite location for at least the parent element; we do not interpolate or even invent arbitrary elements, we only ever match against existing ones. Thus any DSL definition must encompass a sane default, a final alternative clause which always succeeds -- and the DSL is considered broken if it doesn't.
+
+!!!!The problem with {{{assetType()}}}
+There is a very special use case, where we'd might want to express some fine points regarding placement of a new sub-tab within the view requested. This need arises when the system requires to show some sub-element through a dedicated view. Such might be the case for a special kind of asset, or when a virtual clip or media is to be opened from a context //other than editing the timeline.// In such a situation, a preferable action would be to use or re-use an existing tab of a view of similar kind. Only if this fails, we'd want a new view to be created at a generic location (e.g. a window dedicated to asset management), and only as fall-back we'd want a completely new asset section to show up within the current window.
+
+Unfortunately such surpasses the ability of the solution mechanism backing this location DSL, which basically relies on pattern matching without further expression evaluation or unification. To express the aforementioned special treatment, we'd need a placeholder within the rules, indicated above as {{{assetType()}}}, which has to be replaced by the actual typeID used in the concrete location query. Since our system does not support unification, either the matching mechanism has to be manipulated based on the context, or the specific rule must be preprocessed for token replacement.
+It is not clear yet {{red{as of 2/2018}}}, if those additional complexities are justified...
+&amp;rarr; Ticket #1130
+
+
+!!!Semantics of allocation
+While the process of probing and matching the location specification finally yields an explicit UICoord path to the desired element, it is up to the allocation step actually to decide on the action to be taken. Some allocation operations impose some kind of limit, and are thus free to ignore the given spec and rather return an existing element in place. In the end, the purpose of this whole matching and allocation process is to get hold of a suitable UI component without knowing its precise coordinates in the UI topology. And this is the very property to enable flexible mapping of the strictly hierarchical session structures onto the UI in a fluid way.
+&amp;rarr; [[low level component access|UILowLevelAccess]]
+</pre>
+</div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">
 <pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
 
@@ -2873,6 +3168,22 @@ In order to build a sensible plan for our timeline structure, we need to investi
 }}}
 </pre>
 </div>
+<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201709021604" tags="design GuiPattern draft" changecount="8">
+<pre>//Management of dockable content panes//
+Within each top level application window, the usable screen real estate can be split and arranged into a number of standard view building blocks. Each of this //panels// follows a specific preconfigured basic layout -- these are hard coded, yet customisable in detail. There is a finite list of such panel types available:
+* the [[timeline display|GuiTimelineView]]
+* the media viewer
+* asset management
+* information box
+Within the preconfigured layout it is a panel's role to host and incorporate GuiComponentView elements.
+Please note the distinction between UI component view and panel; in many cases there is one of each for a given kind, and these need to be distinguished: e.g. there is the [[timeline view|GuiTimelineView]] and there is the timeline panel, which houses several timelines (as tabs). Or there is the viewer component, which is located within a dedicated viewer panel each.
+
+!Instantiation
+!Placing and addressing of embedded contents
+A specific problem arises insofar other parts of the UI need to create, address and control some UI entities, which at the same time exist as part of a docking panel. This is a problem of crosscutting concerns: UI control and interaction structure should not be mingled with the generic concern to maintain a component as part of a screen layout. Unfortunately, the design of standard UI toolkit sets is incredibly naive when it comes to interaction design, and the only available alternative is to rely on frameworks, which come with a hard-wired philosophy.
+As a result, we're forced to build our UI from components which fall short on the distinction between //ownership and control.//
+</pre>
+</div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">
 <pre>special LayerSeparationInterface which serves the main purpose to load the GuiStarterPlugin, thus bringing up the Lumiera GTK UI at application start.
 
@@ -2985,16 +3296,16 @@ This treatment ensures each nested diff is consumed within a properly typed cont
 &amp;rarr; this is the purpose of the {{{DataCap}}} within our [[generic node element|GenNode]]
 </pre>
 </div>
-<div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" modified="201708101341" tags="spec" changecount="9">
+<div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" modified="201708222311" tags="spec" changecount="12">
 <pre>LayerSeparationInterface provided by the GUI.
-Access point for the lower layers to push information and state changes (asynchronously) to the GUI. Most operations within Lumiera are in fact initiated by the user through the GUI. In the course of such actions, the GUI uses the services of the lower layer and typically receives an immediate synchronous response to indicate the change was noted. Yet often, these operations may cause additional changes to happen asynchronously from the GUI's perspective. For example, an edit operation might trigger a re-build of the low-level model, which then detects an error. Any such consequences and notifications can be &quot;cast&quot; up into the UI, using this service here.
+Access point for the lower layers to push information and state changes (asynchronously) to the GUI. Most operations within Lumiera are in fact initiated by the user through the GUI. In the course of such actions, the GUI uses the services of the lower layer and typically receives an immediate synchronous response to indicate the change was noted. Yet often, these operations may cause additional changes to happen asynchronously from the GUI's perspective. For example, an edit operation might trigger a re-build of the low-level model, which then detects an error. Any such consequences and notifications can be &quot;cast&quot; up into the UI, using the {{{NotificationService}}} described here.
 
-Beyond that, a call to trigger shutdown of the UI layer is also exposed here -- which becomes relevant when other [[sub-systems|Subsystem]] initiate general shutdown.
+Beyond that, a call to trigger shutdown of the UI layer is also exposed at this façade -- which becomes relevant when other [[sub-systems|Subsystem]] initiate general shutdown.
 
 !Lifecycle and Threading concerns
 The GuiNotificationFacade is installed as part of and managed by the ''UI Manager'', and connected to the UI-Bus, which happens while establishing the GuiTopLevel. Yet there is a specific twist, insofar GTK is ''not threadsafe by design''. Any event handling and presentation changes will happen from within a dedicated UI event loop, which needs to be started explicitly, after all of the primary windows and widgets are created and wired. Only after this point the UI becomes //life.//
 
-A dedicated ''activation state'' is necessary for this reason -- which within the implementation translate into a queuing and dispatching facility to reschedule any calls into the UI event thread ''asynchronously''.
+A dedicated ''activation state'' is necessary for this reason -- which within the implementation translates into a queuing and dispatching facility to reschedule any calls into the UI event thread ''asynchronously''.
 
 !Addressing of UI elements
 Most calls in this interface require to specify a receiver or target, in the form of an element ID. It is assumed the caller effectively just knows these ~IDs, typically because the same ~IDs are also used as element ~IDs for the corresponding session entities. And, to start with, the whole UI representation of the session was at some point generated by //population diff messages,// which used the same ~IDs to indicate the creation of the corresponding UI representation elements.
@@ -3039,7 +3350,7 @@ This top-level circle is established starting from the UI-Bus (''Nexus'') and th
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201704140022" tags="GuiPattern design decision draft img" changecount="49">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201803102227" tags="GuiPattern design decision draft img" changecount="50">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3062,7 +3373,7 @@ The workspace dimension (vertical layout) is more like a ''Fork'', which can be 
 ** the content stack, comprised of [[clip widgets|GuiClipWidget]], attached effects and transitions
 ** a stack of nested sub-scopes (recursive).
 
-@@float: right;background-color: #E9EDF8;width: 82ex;padding: 2ex;margin: 0px 4em 1em 2em;__Note in this example__
+@@float: right;background-color: #e9edf8;width: 82ex;padding: 2ex;margin: 0px 4em 1em 2em;__Note in this example__
 * on top level, there are two tracks, the second track has nested sub tracks
 * Clip-2 has an effect attached, Clip-3 is expanded and also has an effect attached
 * the second track has a global effect attached; it shows up in the scope ruler
@@ -3133,7 +3444,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
-<div title="GuiTopLevel" creator="Ichthyostega" modifier="YourName" created="201701261944" modified="201705192326" tags="GuiPattern spec draft" changecount="11">
+<div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201708311555" tags="GuiPattern spec draft" changecount="12">
 <pre>To a large extent, the Lumiera user interface is built around a //backbone structure,// known as the UI-Bus.
 But there are some dedicated top-level entities, collaborating to maintain a consistent application lifecycle
 ;Application
@@ -3150,6 +3461,7 @@ But there are some dedicated top-level entities, collaborating to maintain a con
 :the InteractionDirector is the root controller and corresponds to the [[root object in session|ModelRootMO]].
 ;Window List
 :organise and maintain the top level workspace windows
+:which involves the interplay with [[docking panels|GuiDockingPanel]]
 ;Notification Façade
 :attachment point for lower layers and anyone in need to &quot;talk to the UI&quot;
 :the GuiNotificationFacade is a LayerSeparationInterface and integrated with Lumiera's interface system
@@ -3197,8 +3509,8 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201504031800" tags="overview" changecount="2">
-<pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
+<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201712101756" tags="overview" changecount="6">
+<pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the years, while building the Lumiera application.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
 * [[Memory Management Issues|MemoryManagement]]
@@ -3232,6 +3544,8 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * designing how to [[build|BuildFixture]] the [[Fixture]] (...{{red{WIP}}}...)
 * from [[play process|PlayProcess]] to [[frame dispatching|FrameDispatcher]] and [[node invocation|NodeInvocation]]
 * how to shape the GuiConnection: with the help of a mediating GuiModel, which acts as UI-Bus, exchanging TreeDiffModel messages for GuiModelUpdate
+* shape the Backbone of the UI, the UI-Bus and the GuiTopLevel
+* build a framework for InteractionControl in the User Interface
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" created="200711210531" modified="201310132316" tags="Concepts design discuss" changecount="1">
@@ -3426,12 +3740,12 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InteractionControl" creator="Ichthyostega" modifier="YourName" created="201511272315" modified="201705032208" tags="design decision Concepts GuiPattern draft discuss" changecount="25">
+<div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201710082338" tags="design decision Concepts GuiPattern draft discuss" changecount="36">
 <pre>This overarching topic is where the arrangement of our interface components meets considerations about interaction design.
 The interface programming allows us to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework. Beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit level of understanding, where things just happen, which can not fully be derived from first principles. It is fine to have a convention to put the &quot;OK&quot; button right -- but how to we get at trimming a clip? How do we how we are to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen? or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base (as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability to assimilate the practical situation yet to come.
 
 ;interface has a spatial quality
-:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition of some dose of //&quot;hyper&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
+:the elements within an user interface are arranged in a way that parallels our experience when working in real world space. With the addition of some minor dose of //&quot;hyper&quot;// -- allowing for cross connections and shortcuts beyond spatial logic
 ;locality of work spaces
 :but the arrangement of the interface interactions is not amorphous, rather it is segregated into cohesive clusters of closely interrelated actions. We move between these clusters of activity the same way as we move between several well confined rooms within a building.
 ;context and focus of activity
@@ -3468,28 +3782,39 @@ The primary insight is  //that we build upon a spatial metaphor// -- and thus we
 :the focus path specifies the UI frame (top-level window), the perspective, and then some canonical path to navigate down a hierarchy to reach the anchor point of the work site
 ;the spot locator
 :navigating means to move the SpotLocator, in order to move the spot from work site to work site
-:the spot locator is relocated by loading a new focus path to another [[work site|WorkSite]]
+:the spot locator is relocated by loading a new focus path leading to another [[work site|WorkSite]]
 
-The concept of a //focus goal// has several ramifications: for one it implies that there is something like //&quot;current cotrol system&quot;,// which also could be the //currently active control system(s).// Simply because focus, as the realisation of the abstract notion of the spot, is always tied to a control system able to implement it. And when we're able to define generic location coordinates and then //&quot;move there&quot;,// with the help of the SpotLocator, we draw the conclusion that there must be a focus (implementation) be moving towards that location. Like e.g.  the desired entity gaining the keyboard focus. And the second thing we may conclude is that there is some degree of leeway in the way how such a focus goal is reached. Since the inner logic of control systems can be quite drastically different from each other, we need to leave it to the actual control system //how a focus goal is reached.// To point out an obvious example: it is not a good idea to move the mouse pointer forcibly onto a screen element. Rather, we must use the established mechanisms of switching, scrolling and unfolding to bring the desired target element into the visible area, leaving the last step to the user, which must actively move the mouse onto the target. And we must give good visual clues as to what happened, and what we expect from the user (namely to direct her attention onto the element brought into focus).
+The concept of a //focus goal// has several ramifications: for one it implies that there is something akin the //&quot;current cotrol system&quot;,// which also could be the //currently active control system(s).// Simply because focus, as the realisation of the abstract notion of the spot, is always tied to a control system able to implement it. And when we're able to define generic location coordinates and then //&quot;move there&quot;,// with the help of the SpotLocator, we draw the conclusion that there must be a focus (implementation), somehow getting shifted towards that location. Like e.g.  the desired entity to gain the keyboard focus. And, beyond that, the second thing we may conclude is that there need to be some degree of leeway in the way such a focus goal can be reached. Since the inner logic of control systems can be quite drastically different from each other, we are well advised to leave it to the actual control system //how actually to fulfil the focus goal.// To point out an obvious example: it is not a good idea to move the mouse pointer forcibly onto a screen element. Rather, we must use the established mechanisms of switching, scrolling and unfolding to bring the desired target element into the visible area, leaving the last step to the user, which must actively move the mouse onto the target. And we must give good visual clues as to what happened, and what we expect from the user (namely to direct her attention onto the element brought into focus).
 
 !Building the framework
-To create such a system is an ambitious goal. We can not reach it in a single step, since it entails the formation of a whole intermediary layer, on top of the //usual UI mechanics,// yet below the concrete UI interactions. Especially, we'd need to clarify the meaning of //perspective,// we need to decide on the relation of top level frame, individual view, layout, focus and //current location within the UI.// On a second thought, building such a system implies we'll have to live with an intermediary state of evolution, where parts of the new framework are already in place without interfering with common conventional usage of the interface as-is.
+To create such a system is an ambitious goal for sure. We can not reach it in a single step, since it entails the formation of a whole intermediary layer, on top of the //usual UI mechanics,// yet below the concrete UI interactions. Especially, we'd need to clarify the meaning of //perspective,// we need to decide on the relation of top level frame, individual view, layout, focus and //current location within the UI.// On a second thought, building such a system implies we'll have to live with an intermediary state of evolution, where parts of the new framework are already in place without interfering with common conventional usage of the interface as-is.
+
+!!!UI coordinates
+Especially the focus navigation entails the use of some kind of ubiquitous [[coordinate system within the user interface|UICoord]]. In fact this is more of a topological navigation, since these coordinates describe the decisions and forks taken on navigation down the //focus path.//
+* [optional] top-level Window (UI frame)
+* [optional] Perspective
+* Panel
+* local path
+** [optional] Group
+** ~View-ID
+** component.component.component...
+
 </pre>
 </div>
-<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201703021658" tags="def draft" changecount="9">
+<div title="InteractionDirector" creator="Ichthyostega" modifier="Ichthyostega" created="201702102146" modified="201802240129" tags="def design GuiPattern" changecount="28">
 <pre>//the top-level controller within the UI.//
-In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within the model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, with the asset management and defaults and rules configuration within the session.
+In Lumiera, the structures of the model within the [[Session]] (the so called HighLevelModel) are mapped onto corresponding [[tangible UI entities|UI-Element]], which serve as a front-end to represent those entities towards the user. Within this model, there is a //conceptual root node// -- which logically corresponds to the session itself. This [[root element in model|ModelRootMO]] links together the actual top-level entities, which are the (multiple) timelines, together with the asset management and defaults and rules configuration within the session.
 
-And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, opening and closing of the session as a whole, and even shutdown of the application as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and also what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
+And the counterpart of this root element within the UI is the {{{InteractionDirector}}}, a top-level controller. As a controller, it responds to actions like opening a specific timeline, entering the asset management section, the request for help, and actions like saving, opening and closing of the session as a whole. Beyond that, the Interaction Director is the connection joint to that part of the UI which deals with global interaction state: this topic relates to questions about &quot;the current element&quot;, &quot;the focus&quot;, &quot;where we are right now&quot; (in what &quot;location&quot; or &quot;room&quot; within the UI) and also what tangible interface controller we're actually using (mouse, keyboard, graphics pen, hardware controller, touch screen).
 
 Why do we need a connection joint between those parts?
-Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we want to build a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
+Because issuing any actions on the model within the session -- i.e. any editing operation -- is like forming a sentence: we need to spell out //what we want to do// and we need to spell out the subject and the object of our activity. And any one of these can, and will in fact, be sometimes derived //from the context of the interaction.// Because, given the right context, it is almost clear what you want to do -- you just need to fill in that tiny little bit of information to actually make it happen. In Lumiera we strive at building a good UI, which is an UI well suited to this very human way of interacting with one's environment within a given context.
 &gt; to understand this, it is best &amp;rarr; to [[look at some examples|CommandInvocationAnalysis]]
 
 !Children
 The InteractionDirector is part of the model, and thus we have to distinguish between model children and other UI components held as children.
 ;model
-:anything related to global structures falls into that category
+:anything related to //core concerns// and session global structures falls into that category
 :* some parts might be related to ''Asset management''
 :* some concerns might touch questions of ''configuration''
 :* and interaction state is closely related to ''persistent UI state''
@@ -3497,9 +3822,20 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 :anything related to forming and tracking of user interactions &amp;rarr; InteractionControl
 :* the SpotLocator is what is &quot;moved&quot; when the [[Spot]] of current activity moves
 :* the FocusTracker is responsible for //detecting changes in current selection and focus.//
-:* the [[Navigator]] is a special controller to handle moving the SpotLocator
+:* the [[Navigator]] is a special controller to handle moving the SpotLocator within the UI tree topology
+:* the ViewLocator serves for any kind of high-level, abstracted access to [[component views|GuiComponentView]] and location resolution.
 
 !Collaborations
+* several global actions are exposed here, like opening the session and creating a new timeline.&lt;br/&gt;Such operations are typically bound into menu and action buttons, and in turn invoke [[commands|CommandHandling]] into the Session
+* some further actions involve [[management of docking panels|GuiDockingPanel]], like e.g. instantiating a new [[timeline display|GuiTimelineView]] into a timeline pane.
+* in fact it is the InteractionDirector's job to keep track of [[component views|GuiComponentView]], some of which
+** can exist only once
+** or can exist only once per top level window
+** some might even be required once per window
+** while others may be duplicated locally or globally
+
+!!!cyclic dependencies
+The InteractionDirector interconnects various aspects of UI management and thus can be expected to exhibit cyclic dependencies on several levels. Bootstraping the InteractionDirector is thus a tricky procedure and requires all participating services to operate demand-driven. In fact, these services represent some aspects of the same whole -- the UI. They are bounded by thematic considerations, not so much implementation concerns, and many of them rely on their siblings actually provide some essential part of their service. For example, the Navigator exposes the UI as topological tree structure, while the ViewLocator encapsulates the concrete access paths towards specific kinds of UI entities (views, panels). Obviously, the Navigator needs the ViewLocator to build its tree abstraction on top. But, thematically, //resolving a view// is part of accessing and / or creating  some view, and thus the ViewLocator becomes indirectly dependent on the tree topology established by the Navigator.
 </pre>
 </div>
 <div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704171824" tags="def design GuiIntegration draft" changecount="9">
@@ -4023,6 +4359,46 @@ As an immediate consequence of not being able to reduce processing to elementary
 The UI-Bus offers a dedicated API to direct ~MutationMessages towards {{{Tangible}}} elements, as designated by the given ID. Actually, such messages serve as //capsule to transport a [[diff-sequence|TreeDiffModel]]// -- since a diff sequence as such is always concrete and tied to a specific context, we can not represent it directly as an abstract type at interface level. The receiver of a diff sequence must offer the ability to be reshaped through diff messages, which is expressed through the interface {{{DiffMutable}}}.
 
 In the case at hand, the basic building block of the Lumiera UI, the {{{Tangible}}} offers this interface and thus the ability to construct a concrete TreeMutator, which in turn is bound to the internals of the actual UI-Element in question. Together this allows for a generic implementation of MutationMessage handling, where the designated UI-Element is reshaped by applying a concrete diff sequence embedded in the message with the help of a {{{DiffApplicator&lt;DiffMutable&gt;}}}, based on the TreeMutator exposed.</pre>
+</div>
+<div title="Navigator" creator="Ichthyostega" modifier="Ichthyostega" created="201710132354" modified="201804062245" tags="spec decision draft GuiPattern" changecount="24">
+<pre>//Service to navigate through the UI as generic structure.//
+The Navigator is a component maintained by the InteractionDirector, and the actual implementation is backed by several facilities of the GuiTopLevel. It serves as foundation to treat the UI as a topological network of abstracted locations, represented as [[UI-Coordinates|UICoord]]. This design, together with the UI-Bus helps to reduce coupling within the UI implementation, since it enables to //get somewhere// and reach //some place// -- without the necessity to rely on concrete widget implementation structure.
+
+!The problem of abstraction
+This goal initially poses some challenge, since it aims beyond the conventional notion of UI programming, where it is sufficient just to wire some widgets and manipulate the receiver of an event notification. The usual UI widgets are just not meant to be treated in a more systematic, generic way -- and indeed, in most cases and for most purposes it is not a good idea to approach UI programming in a to much schematic way. User interfaces need to be tangible, something concrete, with lots of specifics and local traits. Yet this very nature of UI programming tends to turn some //cross-cutting concerns// into serious liabilities. So the deliberate ''decision to introduce a Navigator'' in avoidance of these future burdens and liabilities is a decision of priorities when it comes to shaping the Lumiera UI.
+
+Which leaves us with the quest of mapping a generic location scheme onto a load of implementation defined structures not exposing any kind of genericness, and to accomplish this within an environment lacking meta information and support for self discovery beyond the most basic abstraction level. As a first step towards bridging this gap, we'll have to identify the actual //command-and-query operations// required to treat UI elements as a topological structure.
+
+!!!Analysis of expected functionality
+In order to build a navigation facility, we need to...
+* follow a path
+** which means to constitute a location
+** and to discover child nodes at that location
+* and we might want to extend (maybe also prune) the collection of children
+
+!!!Use cases
+In the current situation ({{red{10/2017}}}), before engaging into the actual implementation, we're able to identify two distinct use cases
+;View [[specification|GuiComponentView]]
+:locate a view based on a preconfigured placement
+:* either to allocate a new view instance
+:* or to get //just some instance// of a view identified by type
+;WorkSite navication
+:move the Spot to some other place in the UI known by its [[UI-Coordinates|UICoord]]
+!!!{{red{Update 2/2018:}}} changed responsibilities
+Elaboration on the topic of »View Allocation« caused some minor architectural rearrangements.
+* Navigator became a pure information service (read-only), working on an abstracted view of the UI through [[UI coordinates|UICoord]]
+* the ViewLocator became service point for any high-level access to GuiComponentView elements
+
+!!!Requirements clarified
+From these use cases we conclude that the actual requirements for a Navigator component are less than one might expect.
+In fact it is sufficient to keep //the actual element// entirely opaque, so the Navigator works on [[UI coordinates|UICoord]] solely. The result -- some other UI coordinates -- can then be used to accomplish some tasks implemented elsewhere, like allocating a new view or actually moving [[the Spot|Spot]] (&amp;rarr; InteractionControl)
+
+!Challenges of the implementation
+Some tricky problems remain to be solved, though: since the Navigator works on UI coordinates, the fundamental problem remains how to acquire the initial coordinates to start navigation. This is a problem of //reverse lookup:// given a concrete element of the UI, find it's UI coordinates. While we should note that it might not be necessary to &quot;discover&quot; coordinates, because in fact we may know them already -- either the element has to store them (on creation), or some lookup index table could be maintained to serve the same purpose. The actual access to low-level UI entities generates a host of further tecnicalities, which we attempt to stash away into a different low-level service, the  [[gui:ctrl::ElmAccessDir|UILowLevelAccess]].
+
+Moreover, the design of coordinate matching and resolving incurs a structure similar to [[render job planning|FrameDispatcher]] -- and the corresponding design problems remain to be solved in a satisfactory way &amp;rarr; [[some notes...|AboutMonads]]
+
+</pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="200909041807" tags="spec Builder Rendering">
 <pre>Various aspects of the individual [[render node|ProcNode]] are subject to configuration and may influence the output quality or the behaviour of the render process.
@@ -5610,7 +5986,7 @@ When the session is closed or dismantled, further processing in the ProcDispatch
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" created="200706190056" modified="201410160050" tags="overview" changecount="3">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" created="200706190056" modified="201803102227" tags="overview" changecount="4">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Relying on system level services and retrieving raw audio and video data through [[Lumiera's Backend|Backend]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
 !About this wiki page
@@ -9472,6 +9848,90 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 
 The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Proc-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
+<div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201804150100" tags="def draft spec Concepts GuiPattern" changecount="29">
+<pre>//A topological addressing scheme to designate structural locations within the UI.//
+Contrary to conventional screen pixel coordinates, here we aim at a topological description of the UI structure. Such a framework of structural reference allows us                                                                     
+* to refer to some &quot;place&quot; or &quot;space&quot; within the interface                                    
+* to remember and return to such a location
+* to move a [[work focus (»Spot«)|Spot]] structurally within the UI
+* to describe and configure the pattern view access and arrangement
+
+As starting point for the design of such a framework, we'll pick the notion of an access path within a hierarchical structure    
+* the top-level window
+* the perspective used within that window
+* the panel within this window
+* a view group within the panel
+* plus a locally defined access path further down to the actual UI element
+
+!Properties
+UI coordinates are a symbolic specification, and as such, their representation is immutable value-like. Essentially, a coordinate specification designates a pathway, and thus is comprised of a sequence of symbols. The individual path component symbol can be addressed by its depth index, starting with the top level window as rooting point. The meaning of first steps within each path is thus always fixed (top-level window, perspective, panel, view), followed by an essentially open sequence of local component names. Yet a given index position need not necessarily be actually defined. A coordinate spec can be indeterminate (NIL), but in all other cases a minimal consecutive sequence of symbols is guaranteed to exist.
+
+!!!about component names
+The individual components within such a coordinate spec are given as name-~IDs. In this context, we are more interested in the //topology// of UI components, and thus the names serve to distinguish sibling nodes. In fact, those names are created as type names and then decorated with number suffix while creating actual components. In this form, those name become real identifiers attached to those widgets, and can be used to access the respective implementation entity. Most of the elements designated and accessed this way are //mere UI entities// -- however, some elements can be representations of corresponding elements in the session (e.g. Tracks, Clips). If that is the case, obviously the name-ID has to match the &quot;official&quot; ID as used within the session.
+
+!!!flavours of meaning
+A given coordinate spec needs to be //interpreted// with the help of a resolver, which supplies additional knowledge regarding the actual window and UI configuration backing those interpretations. Such an interpretation allows to query for some typical predications, and it allows for //mutating operations,// which actually build a new coordinate spec from the given one. The general assumption is for all those coordinate interpretations to happen not within an excessively performance critical zone, where a little bit of iteration and repeated recomputation is deemed less costly than extended caching of evaluation state.
+
+The first distinction to draw is the ''anchor point'' of a given coordinate spec. After anchoring, the designated path is explicitly rooted within a top level window. The act of anchoring can thus be obvious(trivial), it can be //covered by wildcard,// or it can be a free interpolation or match against the existing environment. Starting from the anchor, the next predication to consider is the ''coverage'': the extent to which a given coordinate spec is actually covered by real UI structures. The test for coverage starts at the anchor point and descends following the coordinate spec in question. Backed by this evaluation process of interpretation and matching, we may judge a coordinate spec with respect to several predications
+* the coordinate spec may be totally ''explicit'' -- or it might contain wildcards
+* one specific path component of the coordinate spec may be known(present) or unknown
+* regarding the coverage, we may distinguish
+** a totally covered coordinate spec
+** a partially covered coordinate spec
+** a coordinate spec impossible to cover
+
+!UI coordinate path evaluation
+As indicated above, evaluation of UI coordinates requires a ''resolver'', to perform a search and matching operation and to hold the evaluation state. Evaluation is accomplished by first constituting an anchoring, followed by traversal of the coordinate spec and matching against a navigation path within the actual UI window configuration. This process might involve interpretation of some meta-symbols and interpolation of wildcards.
+
+Internally the coordinate resolver in turn relies on a context query interface, to find out about existing windows, panels, views and tabs and to navigate the real UI structure. The actual implementation of this context query interface is backed by the [[Navigator]] component exposed through the InteractionDirector. In practice, the Navigator relies on another service for the [[low level access to UI components|UILowLevelAccess]]
+!!!Query operations
+In addition to the //locally decidable properties// of a coordinate spec, which are the explicitness and the presence of some component, several contextual predications may be queried 
+;anchorage
+:the way the given coordinate spec is or can be anchored
+:* it is already //explicitly anchored// by referring either to a specific window or by generic specification
+:* it //can be a anchored// by interpolation of some wildcards
+:* it is //incomplete// and need to be extended to allow anchoring
+:* it is //impossible to anchor// in the current UI configuration
+;coverage
+:the extent to which a given coordinate spec is backed by the actual UI configuration
+:please note: to determine the coverage, the spec needs to be anchored (either explicitly, or by interpolation, or by extension of an incomplete spec)
+:* it is //completely covered//
+:* it is //partially covered// with an remaining, uncovered extension part
+:* it is //possible to cover completely//
+:* it is //impossible to cover//
+__Some fine points to note__: Anchorage and coverage are not the same thing, but coverage implies anchorage. Only when a path is complete (starts with the window spec) and explicit (has no wildcards), then anchorage implies also partial coverage (namely at least to depth 1). To determine the possibility of coverage means to perform a resolution with backtracking to pick the maximal solution. Moreover, since &quot;covered&quot; means that the path specification //is at least partially supported by the real UI,// we establish an additional constraint to ensure this resolution did not just match some arbitrary wildcards. Rather we demand that behind rsp. below the last wildcard there is at least one further explicit component in the path spec, which is supported by the real UI. As a consequence, the coverage resolution may fail altogether, while still providing at least a possible anchor point.
+!!!Mutations
+In addition to querying the interpretation of a given coordinate spec with respect to the current UI environment, it is also possible to rewrite or extend the spec based on this environment
+;anchoring
+:in correspondence to the possible states of anchorage, we may derive an explicitly anchored spec
+:*by interpolating the given spec
+:*by interpretation and extension of the given spec
+;covering
+:we may construct the covered part of a given spec, which includes automatic anchoring.
+;extending
+:a (partially) covered UI coordinate pattern is extended by a further suffix of path...
+:* the given UI coordinate pattern is first anchored and covered
+:* and //truncated// to the covered part
+:* the given //extension suffix// is then attached behind
+
+__Navigation mutations:__ //In theory,// it would even be possible to extend the path by creating suitable child components; but actually this would require all &quot;elements&quot; to implement a suitable mutation interface -- which in the case of //generic elements// might be far beyond the common ground. For this reason, we keep mutation of the backing environment outside of a path mutator's scope and rather keep mutation limited to the path itself.
+</pre>
+</div>
+<div title="UILowLevelAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201804062255" modified="201804150051" tags="spec draft GuiPattern" changecount="4">
+<pre>//Cross cutting access to elementary UI structures.//
+We have several orthogonal identification and access schemes within the UI. A naively written UI application just attaches the core logic below some widgets and controllers -- not only does this lead to a hard to maintain code base, this approach is even outright impossible in our case, due to the strict decoupling between core and GUI, which places us into the situation to connect a self contained core with a self contained UI. This is a binding, which, as a sideline, also generates a control structure of its own. We can indeed write code dealing with a generic UI element -- but there needs to be some place where this kind of generic designation is translated into internal structures of the UI toolkit (GTK in our case), to obtain a direct (language) reference to some implementation widget finally.
+
+A service to translate some generic address scheme into actual entities builds the foundation of designating a &quot;place within the UI&quot; by abstracted topological [[UI coordinates|UICoord]]. It allows to define //rules// how some generic [[kind of view|GuiComponentView]] shall be //placed and allocated// into the existing UI structure.
+
+!Notes about design and implementation {{red{WIP 4/2018}}}
+At the time of this writing, it is not really clear if we need such a facility and what form its implementation will take -- which in turn places several further planning steps and design consideration into dangling state. The programmer's usual remedy in such a situation is to create yet another abstraction as a tie break. We do not know what it is, but at least we can write unit tests against it to find out what it could be.
+* we need to confine ourselves to a small selection of base interfaces to cover all possible elements accessible this way: {{{gui::model::Tangible}}}, {{{Gtk::Widget}}}, ...?
+* looks like this accessor service will be backed by a structure similar to {{{LocationQuery}}} -- maybe it will even be the same backing structure at the end.
+* so effectively an access request will drill down the real UI topology, following the path of the given UI Coordinates.
+* the result can then be packaged into a {{{lib::Variant}}} and use a //variant visitor// (double dispatch) to invoke the apropriate {{{dynamic_cast}}}
+* together, this mechanism allows us to return direct language references to actual implementation widgets
+</pre>
+</div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
 <pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).
 
@@ -9479,6 +9939,14 @@ Establishing a ~ViewConnection is prerequisite for creating or attaching an Play
 
 View connections are part of the model and thus persistent. They can be created explicitly, or just derived by //allocating a viewer.// And a new view connection can push aside (and thus &quot;break&quot;) an existing one from another timeline or model element. When a view connection is //broken,// any associated PlayProcess needs to be terminated (this is a blocking operation). Thus, at any time, there can be only one active view connection to a given viewer or output sink; here &quot;active&quot; means, that a PlayController has been hooked up, and the connection is ready for playback or rendering. But on the other hand, nothing prevents a timeline (or similar model object) to maintain multiple view connections -- consequently the actual playback position behaves as if associated with the view connection; it has only meaning with respect to this specific connection. An obvious example is that you may play back, without interfering with an ongoing render.
 </pre>
+</div>
+<div title="ViewLocator" creator="Ichthyostega" modifier="Ichthyostega" created="201802240138" modified="201802240150" tags="spec decision draft GuiPattern" changecount="6">
+<pre>//access and location of [[component views|GuiComponentView]] as abstracted from actual UI widgets.//
+The ViewLocator is a close sibling and mutually interdependent with the [[Navigator]] -- the primary difference being the uniform, completely symbolic representation by [[UI-tree topology|UICoord]], as exposed through the latter, which precludes //immediate manipulation.// The ViewLocator likewise presents an abstracted view, but oriented towards individual components, which it allows to locate, allocate and expose by direct reference as UI-Element.
+
+!Rules based handling by kind-of-view
+A small selection of //relevant UI elements// can in fact be located &quot;by-type&quot;, relying on a configuration in the form of //locating rules...// &amp;rarr; elaborated in more detail [[here|GuiComponentView]].
+This access mechanism allows to act on &quot;the primary one of that kind&quot;, possibly creating a new instance on demand -- such UI elements are not to be confused with the model entities they expose for user interaction; typically they can either be re-linked or re-bound to a specific entity, or they are able to handle multiple model connections in separate tabs within the view (e.g. several [[Timelines|GuiTimelineView]]).</pre>
 </div>
 <div title="ViewerAsset" modifier="Ichthyostega" created="201105230116" modified="201105232228" tags="Model spec">
 <pre>A [[structural Asset|StructAsset]] corresponding to a Viewer element in the GUI.

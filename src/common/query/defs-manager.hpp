@@ -85,6 +85,14 @@
  ** - for sake of completeness, we can also require a specific element to
  **   be purged from knowledge
  ** 
+ ** ## Fake implementation
+ ** As of 2018, the Lumiera project still has to reach the goal of a complete
+ ** running engine; we are proceeding with partial integrations for the time being.
+ ** And we postpone advanced topics, like integration of an actual rules solver
+ ** to future milestones. Meanwhile, we use a [fake implementation](\ref MockConfigRules)
+ ** with preconfigured, hard-wired "answers" to some frequently encountered standard queries.
+ ** This Fake implementation is configured and instantiated by the [Defaults Manager](\ref DefsManager)
+ ** 
  ** @see DefsManager_test
  ** @see DefsManagerImpl_test
  ** 
@@ -96,9 +104,9 @@
 
 
 #include "lib/p.hpp"
+#include "lib/nocopy.hpp"
 #include "common/query.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -127,7 +135,8 @@ namespace query  {
    *       roughly final, as of 12/09 most of the actual object
    *       handling is placeholder code.
    */
-  class DefsManager : private boost::noncopyable
+  class DefsManager
+    : util::NonCopyable
     {
       unique_ptr<impl::DefsRegistry> defsRegistry_;
       

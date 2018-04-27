@@ -86,11 +86,11 @@ namespace control {
       STypeManager() ;
       ~STypeManager();
       
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<STypeManager>;
       
       /** Lifecycle: reset all type registration information
        *  to the <i>generic pristine default</i> state. This includes
-       *  hard wired defaults and defauls provided by type plugins, but
+       *  hard wired defaults and defaults provided by type plugins, but
        *  excludes everything added by the session
        */
       void reset() ;

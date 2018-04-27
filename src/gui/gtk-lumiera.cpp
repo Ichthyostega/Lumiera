@@ -52,16 +52,15 @@
 #include "gui/ui-bus.hpp"
 #include "gui/guifacade.hpp"
 #include "gui/ctrl/ui-manager.hpp"
-#include "gui/display-service.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "common/subsys.hpp"
+#include "lib/nocopy.hpp"
 
 extern "C" {
 #include "common/interface.h"
 #include "common/interface-descriptor.h"
 }
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -84,22 +83,19 @@ namespace gui {
     /**************************************************************************//**
      * Implement the necessary steps for actually making the Lumiera Gui available.
      * Establish the UI backbone services and start up the GTK GUI main event loop.
-     * @todo to ensure invocation of the termination signal, any members
-     *       should be failsafe on initialisation (that means, we must not
-     *       open other interfaces here...)            ///////////////////////////TICKET #82
+     * @warning to ensure reliable invocation of the termination signal,
+     *          any members should be failsafe on initialisation
      */
     class GtkLumiera
-      : boost::noncopyable
+      : util::NonCopyable
       {
         UiBus uiBus_;
         UiManager uiManager_;
-        DisplayService activateDisplayService_;        ///////////////////////////TICKET #82 will go away once we have a real OutputSlot offered by the UI
         
       public:
         GtkLumiera ()
           : uiBus_{}
           , uiManager_{uiBus_}
-          , activateDisplayService_()                  ///////////////////////////TICKET #82 obsolete (and incurs a race)
           { }
         
         

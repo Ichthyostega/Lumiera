@@ -1,0 +1,137 @@
+Interaction Control
+===================
+:Author:	Hermann Voßeler
+:Email:	<Ichthyostega@web.de>
+:Date:      Summer 2017
+
+This overarching topic is where the arrangement of our interface components meets considerations about
+https://en.wikipedia.org/wiki/Interaction_design[Interaction Design]. The interface programming allows us
+to react on events and trigger behaviour, and it allows us to arrange building blocks within a layout framework.
+And beyond that, there needs to be some kind of coherency in the way matters are arranged -- this is the realm
+of conventions and guidelines. Yet in any more than trivial UI application, there is an intermediate and implicit
+level of understanding, where things just ``happen to happen'', which can not fully be derived from first principles.
+
+It is fine to have a convention to put the »OK« button right -- but how do we get at trimming a clip?
+How are we assumed to get at trimming a clip? if we work with the mouse? or the keyboard? or with a pen?
+or with a hardware controller we don't even know yet? We could deal with such on a case-by-case base
+(as the so called reasonable people do) or we could aim at an abstract intermediary space, with the ability
+to assimilate the practical situation yet to come.
+
+interface has a spatial quality::
+  the elements within an user interface are arranged in a way that parallels our experience when working
+  in real world space. With the addition of some minor dose of __ ``hyper'' __ -- allowing for cross connections
+  and shortcuts beyond spatial logic...
+
+locality of work spaces::
+  but the arrangement of the interface interactions is not amorphous,
+  rather it is segregated into cohesive clusters of closely interrelated actions.
+  We move between these clusters of activity the same way as we move between several
+  clearly segregated rooms confined within a building.
+
+context and focus of activity::
+  most of what we could do _in theory,_ is not relevant _right now_ most of the time.
+  Yet only when the inner logic of what we're about to do coincides with the things at hand _right now,_
+  only then we might feel _enabled_ to perform our work.
+
+shift of perspective::
+  and while we work, the focus moves along. +
+  Some things are closer, other things are remote and require us to move and re-orient and reshape our perspective,
+  should we choose to turn towards them.
+
+the ability to arrange what is relevant::
+  all day long, we do the same stuff again and again, and this makes us observe and gradually understand matters.
+  As we reveal the inner nature of what we're doing, we desire to arrange _close at hand_ what belongs together,
+  and to expunge the superficial and distracting.
+
+
+Foundation Concepts
+-------------------
+
+
+The primary insight is _that we build upon a spatial metaphor_ --
+and thus we start out by defining various kinds of _locations._
+We express interactions as _happening somewhere..._
+
+Work Site::
+  a distinct, coherent place where some ongoing work is done +
+  the [blue]#Work Site# might move along with the work, but we also may leave it temporarily
+  to visit some other [blue]#Work Site#
+
+the Spot::
+  the [blue]#Spot# is _where we currently are_ -- taken both in the sense of a location and a spotlight.
+  Thus a [blue]#Spot# is potentially at some [blue]#Work Site#, but it can be navigated to another one
+
+Focus::
+  the concrete realisation of the [blue]#Spot# within a given [blue]#Control System#
+
+Control System::
+  a practical technical realisation of an human-computer-interface,
+  like keyboard input/navigation, mouse, pen, hardware controller, touch
+
+Focus Goal::
+  an _order_ or _instruction_ to bring something _into focus,_
+  which also means to move the [blue]#Spot# to the designated location.
+
+UI Frame::
+  the overall interface is arranged into independent top-level segments of equal importance.
+  Practically speaking, we may have multiple top-level windows residing on multiple desktops...
+
+Perspective::
+  a set of concrete configuration parameters defining the contents and arrangement within one [blue]#UI Frame#.
+  The [blue]#Perspective# defines which views are opened and arranged at what position and within which docking panel
+
+Focus Path::
+  concrete coordinates to reach a specific [blue]#Work Site#. +
+  The [blue]#Focus Path# specifies the [blue]#UI Frame# (top-level window), the perspective, and then some canonical
+  path to navigate down a component hierarchy in order to reach the anchor point of the new [blue]#Work Site#
+
+the Spot Locator::
+  navigating means to move the [blue]#Spot Locator#, in order to move the spot from [blue]#Work Site# to
+  [blue]#Work Site#.
+  The [blue]#Spot Locator# is relocated by loading a new [blue]#Focus Path# leading to another [blue]#Work Site#
+
+The concept of a __[blue]#Focus Goal#__ has several ramifications:
+For one it implies that there is something akin the __ ``current Control System'',__ which also could be the
+_currently active Control System(s)._ Simply because Focus, as the realisation of the _abstract notion_ of the Spot,
+is always tied to a Control System able to implement it. And when we're able to define generic location coordinates
+and then __ ``move there'',__ with the help of the `SpotLocator`, we draw the conclusion that there must be a Focus
+(implementation), somehow getting shifted towards that location.
+Like e.g. the desired entity to gain the keyboard focus.
+And, beyond that, the second thing we may conclude is that there need to be some degree of leeway in the way
+such a Focus Goal can be reached. Since the inner logic of Control Systems can be quite drastically different
+from each other, we are well advised to leave it to the actual Control System how _actually to fulfil the focus goal._
+
+To point out an obvious example: it is not a good idea to move the mouse pointer forcibly onto a screen element.
+Rather, we must use the established mechanisms of switching, scrolling and unfolding to bring the desired
+target element into the visible area, leaving the last step to the user, which must actively move the mouse
+onto the target. And we must give good visual clues as to what happened, and what we expect from the user
+(namely to direct her attention onto the element brought into focus).
+
+
+Building the framework
+----------------------
+
+To create such a system is an ambitious goal for sure.
+We can not reach it in a single step, since it entails the formation of a whole intermediary layer,
+on top of the _usual UI mechanics,_ yet below the concrete UI interactions.
+Especially, we'd need to clarify the meaning of _Perspective,_ we need to decide on the relation of top level frame,
+individual view, layout, focus and _current location within the UI._
+On a second thought, building such a system implies we'll have to live with an intermediary state of evolution,
+where parts of the new framework are already in place without interfering with common conventional usage
+of the interface as-is.
+
+UI coordinates
+~~~~~~~~~~~~~~
+
+Especially the focus navigation entails the use of some kind of ubiquitous coordinate system within the user interface.
+In fact this is more of a topological navigation, since these coordinates describe the decisions and forks taken on
+navigation down the _Focus Path._
+
+* [optional] top-level Window (UI frame)
+* [optional] Perspective
+* Panel
+* View-ID
+* [optional] Group or Tab
+* local path: `component.component.component`...
+
+

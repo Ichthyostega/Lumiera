@@ -41,8 +41,8 @@ using std::ostream;
 
 using util::isSameObject;
 
-using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
-using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+using lumiera::error::LERR_(BOTTOM_VALUE);
+using lumiera::error::LERR_(WRONG_TYPE);
 
 
 namespace util {

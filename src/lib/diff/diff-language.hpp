@@ -85,10 +85,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/verb-token.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <tuple>
 
 
@@ -285,7 +285,7 @@ namespace diff{
    */
   template<class TAR>
   class DiffApplicator
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using Interpreter = DiffApplicationStrategy<TAR>;
       

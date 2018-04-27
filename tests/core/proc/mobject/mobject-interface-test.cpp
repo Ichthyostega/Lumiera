@@ -40,7 +40,7 @@
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 
@@ -55,7 +55,6 @@ namespace test    {
 //  using lib::test::showSizeof;
   
   using lib::Symbol;
-  using lib::test::Depend4Test;
   using lib::time::Duration;
   using lib::time::FSecs;
   using lib::time::Time;
@@ -63,6 +62,9 @@ namespace test    {
   
 //  using session::Clip;
 //  using session::PMedia;
+  
+  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                ::Local<backend::test::MediaAccessMock>;
   
   
   using namespace mobject::test;
@@ -85,7 +87,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+          MediaAccessMock useMockMedia;
           
           
           PMO  testClip1 = asset::Media::create("test-1", asset::VIDEO)->createClip();

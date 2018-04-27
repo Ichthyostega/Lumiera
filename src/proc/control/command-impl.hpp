@@ -46,8 +46,8 @@
 #include "proc/control/command-closure.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "lib/format-string.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <functional>
 
@@ -77,7 +77,7 @@ namespace control {
    * @see Mutation
    */
   class CommandImpl
-    : boost::noncopyable
+    : util::NonCopyable
     {
       Mutation do_;
       UndoMutation undo_;

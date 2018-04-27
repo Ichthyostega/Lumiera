@@ -68,7 +68,7 @@ namespace asset {
    * Facade for the Asset subsystem
    */
   class AssetManager 
-    : private boost::noncopyable
+    : util::NonCopyable
     {
       asset::DB & registry;
     
@@ -100,7 +100,7 @@ namespace asset {
       
       /** deregister and evict all known Assets.
        * @note the actual object instances are managed by reference count,
-       *       i.e. typically the Assets will be kept alive by MObjects from the sesison
+       *       i.e. typically the Assets will be kept alive by MObjects from the session
        * @warning unsure if this design is sane. Asset subsystem needs a rework   ////////////////////////////TICKET #691
        * @todo verify this actually works, especially with session shutdown       ////////////////////////////TICKET #154
        */
@@ -124,9 +124,9 @@ namespace asset {
       
       friend Asset::Asset (Asset::Ident const& idi);
       
-      AssetManager ();
+      AssetManager();
       
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<AssetManager>;
       
     };
     

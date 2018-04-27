@@ -30,7 +30,7 @@
 #include "proc/play/dummy-play-connection.hpp"
 //#include "proc/engine/buffhandle.hpp"
 //#include "proc/engine/testframe.hpp"
-#include "include/play-facade.h"
+#include "include/play-facade.hpp"
 #include "lib/time/control.hpp"
 
 

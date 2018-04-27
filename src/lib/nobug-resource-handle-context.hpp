@@ -45,9 +45,9 @@
 
 
 #include "lib/error.hpp"
+#include "lib/diagnostic-context.hpp"
 #include "lib/thread-local.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <nobug.h>
 
 
@@ -77,7 +77,7 @@ namespace lib {
    * Disabled placeholder for the Diagnostic context, not used in release builds.
    */
   class NobugResourceHandleContext
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       typedef nobug_resource_user* Handle;

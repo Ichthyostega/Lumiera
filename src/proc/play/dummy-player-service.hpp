@@ -44,9 +44,8 @@
 #include "include/dummy-player-facade.h"
 #include "include/display-facade.h"
 #include "common/instancehandle.hpp"
-#include "lib/singleton-ref.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <string>
 
@@ -79,7 +78,7 @@ namespace proc {
      */
     class ProcessImpl
       : public lumiera::DummyPlayer::ProcessImplementationLink,
-        boost::noncopyable
+        util::NonCopyable
       {
         uint fps_;
         bool play_;
@@ -126,7 +125,7 @@ namespace proc {
      * route calls through this interface.
      */
     class DummyPlayerService
-      : boost::noncopyable
+      : util::NonCopyable
       {
         
         string error_;
@@ -138,13 +137,10 @@ namespace proc {
         typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
                                        , DummyPlayer
                                        > ServiceInstanceHandle;
-        
-        lib::SingletonRef<DummyPlayerService> implInstance_;
         ServiceInstanceHandle serviceInstance_;
         
       public:
         DummyPlayerService(Subsys::SigTerm terminationHandle);
-        
        ~DummyPlayerService() { notifyTermination_(&error_); }
         
         

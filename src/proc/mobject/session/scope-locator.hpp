@@ -99,7 +99,7 @@ namespace session {
     protected:
       ScopeLocator();
       
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<ScopeLocator>;
       
     private:
       lumiera::QueryResolver const& theResolver();

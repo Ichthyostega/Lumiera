@@ -44,7 +44,7 @@ namespace lib {
 namespace test{
   
   using ::Test;
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   using boost::lexical_cast;
   using util::for_each;
   using util::isnil;
@@ -135,13 +135,17 @@ namespace test{
         
       protected: /* ==== API for the IterAdapter ==== */
         
-        /** Implementation of Iteration-logic: pull next element. */
+        /** Implementation of Iteration-logic: pull next element.
+         * @remarks typically the implementation is simplistic,
+         *        since the way this extension point is called from IterAdapter
+         *        ensures that _`pos` is still valid_ and that the `checkPoint()` function
+         *        is invoked immediately afterwards, allowing to adjust `pos` if necessary
+         */
         template<class ITER>
         friend void
-        iterNext (const TestContainer* src, ITER& pos)
+        iterNext (const TestContainer*, ITER& pos)
           {
             ++pos;
-            checkPoint (src,pos);
           }
         
         /** Implementation of Iteration-logic: detect iteration end.

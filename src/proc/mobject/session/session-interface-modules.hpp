@@ -94,7 +94,7 @@ namespace session {
    * exposed on the public Session API.
    */
   struct SessionInterfaceModules
-    : boost::noncopyable
+    : util::NonCopyable
     {
       lumiera::query::DefsManager defaultsManager_;
       mobject::session::ElementQuery elementQueryAPI_;

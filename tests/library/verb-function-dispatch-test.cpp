@@ -21,7 +21,8 @@
 * *****************************************************/
 
 /** @file verb-function-dispatch-test.cpp
- ** unit test \ref VerbFunctionDispatch_test
+ ** Demonstrate the concept of a _verb language_ based on double dispatch.
+ ** @see diff-language.hpp
  */
 
 
@@ -124,7 +125,7 @@ namespace test{
    *       of double dispatch; thus the implementation relies on a
    *       variation of the visitor pattern.
    *       
-   * @see session-structure-mapping-test.cpp
+   * @see DiffListApplication_test
    */
   class VerbFunctionDispatch_test : public Test
     {

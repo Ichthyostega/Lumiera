@@ -60,10 +60,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <utility>
 #include <string>
 
@@ -103,6 +103,7 @@ namespace ctrl{
    * some element.
    */
   class BusTerm
+    : util::MoveOnly
     {
     protected:
       using EntryID = lib::idi::BareEntryID;
@@ -135,9 +136,6 @@ namespace ctrl{
       /** may be moved, but not copied,
        *  due to the embedded identity */
       BusTerm(BusTerm&&)      = default;
-      BusTerm(BusTerm const&) = delete;
-      
-      BusTerm& operator= (BusTerm const&) = delete;
       
     protected:
       /**

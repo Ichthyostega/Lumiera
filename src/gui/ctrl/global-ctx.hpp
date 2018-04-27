@@ -40,7 +40,7 @@
  ** - connection to the [UI-Bus](\ref ui-bus.hpp)
  ** - the UiManager
  ** - the InteractionDirector
- ** - the WindowList
+ ** - the WindowLocator
  ** - the Wizard
  ** 
  ** @see gtk-lumiera.hpp
@@ -56,11 +56,11 @@
 #include "gui/gtk-base.hpp"
 #include "gui/ui-bus.hpp"
 #include "gui/ctrl/ui-manager.hpp"
-#include "gui/ctrl/window-list.hpp"
+#include "gui/ctrl/window-locator.hpp"
 #include "gui/interact/wizard.hpp"
 #include "gui/interact/interaction-director.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -80,14 +80,14 @@ namespace ctrl {
    * @remark the UiManager is responsible to install this top-level context
    */
   class GlobalCtx
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:
       UiBus&     uiBus_;
       UiManager& uiManager_;
       
-      WindowList          windowList_;
+      WindowLocator       windowLoc_;
       InteractionDirector director_;
       interact::Wizard    wizard_;
       
@@ -99,7 +99,7 @@ namespace ctrl {
       GlobalCtx (UiBus& bus, UiManager& manager)
         : uiBus_{bus}
         , uiManager_{manager}
-        , windowList_{*this}
+        , windowLoc_{*this}
         , director_{*this}
         , wizard_{*this}
         { }

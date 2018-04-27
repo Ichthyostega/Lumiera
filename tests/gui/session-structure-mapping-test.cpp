@@ -32,7 +32,16 @@
  ** @todo WIP  ///////////////////////TICKET #955
  ** @todo WIP  ///////////////////////TICKET #961
  ** 
- ** @see gui::model::SessionFacade
+ ** @todo as of 9/2017 there is now a whole subsystem based on those ideas,
+ **       yet still we can not demonstrate a complete integration as was
+ **       intended by this test. For now this test is an empty placeholder and
+ **       reminder to create a concise and readable high-level demonstration
+ **       eventually. And the idea to provide a model::Diagnostics counterpart
+ **       for test invocation seems worth exploring further...
+ ** 
+ ** @note meanwhile there is a working diff framework and implementation in place...
+ ** @see DiffTreeApplication_test
+ ** @see DiffComplexApplication_test
  ** 
  */
 

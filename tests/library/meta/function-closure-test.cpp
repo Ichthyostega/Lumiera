@@ -22,7 +22,7 @@
 
 
 /** @file function-closure-test.cpp
- ** Testing a combination of tr1::function objects and metaprogramming.
+ ** Testing a combination of std::function objects and metaprogramming.
  ** Argument types will be extracted and represented as typelist, so they
  ** can be manipulated at compile time. This test uses some test functions
  ** and systematically applies or binds them to corresponding data tuples.

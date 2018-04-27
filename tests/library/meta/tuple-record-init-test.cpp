@@ -32,7 +32,6 @@
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 using lib::Symbol;
@@ -48,7 +47,7 @@ using lib::time::Duration;
 using lib::time::Time;
 using lib::hash::LuidH;
 
-using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+using lumiera::error::LERR_(WRONG_TYPE);
 
 using std::string;
 using std::tuple;

@@ -35,8 +35,8 @@
 #include "lib/util.hpp"
 #include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-provider.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -59,7 +59,7 @@ namespace engine {
    * @todo write type comment
    */
   class DiagnosticBufferProvider
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       std::unique_ptr<TrackingHeapBlockProvider>   pImpl_;
@@ -73,7 +73,7 @@ namespace engine {
       DiagnosticBufferProvider();
      ~DiagnosticBufferProvider();
      
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<DiagnosticBufferProvider>;
      
     public:
       /** build a new Diagnostic Buffer Provider instance,

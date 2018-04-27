@@ -29,7 +29,7 @@
 #include "gui/widget/timeline/timeline-body.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/workspace/style-manager.hpp"
-#include "gui/util/cairo-util.hpp"
+#include "gui/draw/cairo-util.hpp"
 
 #include "timeline-arrow-tool.hpp"
 #include "timeline-ibeam-tool.hpp"
@@ -42,7 +42,7 @@ using namespace Gtk;         ///////////////////////////////////////////////////
 using namespace std;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace lumiera;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-using gui::util::CairoUtil;
+using gui::draw::CairoUtil;
 using std::shared_ptr;
 
 namespace gui {

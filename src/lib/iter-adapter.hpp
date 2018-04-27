@@ -1,5 +1,5 @@
 /*
-  ITER-ADAPTER.hpp  -  helpers for building simple forward iterators 
+  ITER-ADAPTER.hpp  -  helpers for building simple forward iterators
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,11 +21,11 @@
 */
 
 /** @file iter-adapter.hpp
- ** Helper template(s) for creating <b>lumiera forward iterators</b>.
+ ** Helper template(s) for creating *Lumiera Forward Iterators*.
  ** These are the foundation to build up iterator like types from scratch.
  ** Usually, these templates will be created and provided by a custom
  ** container type and accessed by the client through a typedef name
- ** "iterator" (similar to the usage within the STL). For more advanced
+ ** "`iterator`" (similar to the usage within the STL). For more advanced
  ** usage, the providing container might want to subclass these iterators,
  ** e.g. to provide an additional, specialised API.
  ** 
@@ -48,20 +48,20 @@
  **   contents of a stable and unmodifiable data structure through pointers.
  **   The AddressExposingIter wraps another Lumiera Forward Iterator and
  **   exposes addresses -- assuming the used source iterator is exposing
- **   references to pre-existing storage locations (not temporaries). 
+ **   references to pre-existing storage locations (not temporaries).
  ** 
- ** There are many further ways of yielding a Lumiera forward iterator.
- ** For example, lib::IterSource builds a "iterable" source of data elements,
+ ** There are many further ways of building a Lumiera Forward Iterator.
+ ** For example, lib::IterSource exposes a "iterable" source of data elements,
  ** while hiding the actual container or generator implementation behind a
- ** vtable call. Besides, there are adapters for the most common usages
+ ** VTable call. Besides, there are adapters for the most common usages
  ** with STL containers, and such iterators can also be combined and
- ** extended with the help of itertools.hpp
+ ** extended with the help of \ref itertools.hpp
  ** 
  ** Basically every class in compliance with our specific iterator concept
  ** can be used as a building block within this framework.
  ** 
  ** 
- ** # Lumiera forward iterator concept
+ ** # Lumiera Forward Iterator concept
  ** 
  ** Similar to the STL, instead of using a common "Iterator" base class,
  ** we rather define a common set of functions and behaviour which can
@@ -73,7 +73,7 @@
  ** support the various extended iterator concepts from STL and boost
  ** (random access iterators, output iterators, arithmetics, difference
  ** between iterators and the like). According to this concept,
- ** <i>an iterator is a promise for pulling values,</i>
+ ** _an iterator is a promise for pulling values,_
  ** and nothing beyond that.
  ** 
  ** - Any Lumiera forward iterator can be in a "exhausted" (invalid) state,
@@ -82,14 +82,14 @@
  **   state is final and can't be reset, meaning that any iterator is
  **   a disposable one-way-off object.
  ** - iterators are copyable and equality comparable
- ** - when an iterator is \em not in the exhausted state, it may be
- **   \em dereferenced to yield the "current" value.
+ ** - when an iterator is _not_ in the exhausted state, it may be
+ **   _dereferenced_ to yield the "current" value.
  ** - moreover, iterators may be incremented until exhaustion.
  ** 
  ** @see iter-adapter-test.cpp
  ** @see itertools.hpp
  ** @see IterSource (completely opaque iterator)
- ** @see iter-type-binding.hpp
+ ** @see value-type-binding.hpp
  **
  */
 
@@ -99,7 +99,9 @@
 
 
 #include "lib/error.hpp"
-#include "lib/iter-type-binding.hpp"
+#include "lib/meta/value-type-binding.hpp"
+
+#include <iterator>
 
 
 namespace lib {
@@ -118,12 +120,14 @@ namespace lib {
 #define ENABLE_USE_IN_STD_RANGE_FOR_LOOPS(ITER)                              \
       friend ITER   begin (ITER const& it){ return it; }                      \
       friend ITER&& begin (ITER&& it)     { return static_cast<ITER&&> (it); } \
-      friend ITER   end   (ITER const&)   { return ITER(); }
+      friend ITER   end   (ITER const&)   { return ITER(); }                    \
+      using iterator_category = std::input_iterator_tag;                         \
+      using difference_type = size_t;
   
   
 
   /**
-   * Adapter for building an implementation of the lumiera forward iterator concept.
+   * Adapter for building an implementation of the »Lumiera Forward Iterator« concept.
    * The "current position" is represented as an opaque element (usually a nested iterator),
    * with callbacks into the controlling container instance to manage this position.
    * This allows to influence and customise the iteration process to a large extent.
@@ -132,9 +136,14 @@ namespace lib {
    * - it checks validity on every operation and may throw
    * - it has a distinct back-link to the source container
    * - the source container needs to provide hasNext() and iterNext() free functions.
-   * - we may need friendship to implement those extension points on the container 
+   * - we may need friendship to implement those extension points on the container
    * - the end-of-iteration can be detected by bool check
    * @note it is possible to "hide" a smart-ptr within the CON template parameter.
+   * 
+   * @tparam POS pointer or similar mutable link to the _current value_.
+   *             Will be `bool()` checked to detect iteration end
+   * @tparam CON type of the backing container, which needs to implement two
+   *             extension point functions for iteration control
    * 
    * \par Stipulations
    * - POS refers to the current position within the data source of this iterator.
@@ -142,17 +151,22 @@ namespace lib {
    *       -# it should be copy constructible
    *       -# when IterAdapter is supposed to be assignable, then POS should be
    *       -# it should provide embedded typedefs for pointer, reference and value_type,
-   *          or alternatively resolve these types through specialisation of iter::TypeBinding.
+   *          or alternatively resolve these types through specialisation of meta::TypeBinding.
    *       -# it should be convertible to the pointer type it declares
    *       -# dereferencing should yield a type that is convertible to the reference type
    * - CON points to the data source of this iterator (typically a data container type)
    *       We store a pointer-like backlink to invoke a special iteration control API:
    *       -# \c checkPoint yields true iff the source has yet more result values to yield
-   *       -# \c iterNext advances the POS to the next element 
+   *       -# \c iterNext advances the POS to the next element
+   * 
+   * @note
+   *  - when POS is just a pointer, we use the pointee as value type
+   *  - but when POS is a class, we expect the usual STL style nested typedefs
+   *    `value_type`, `reference` and `pointer`
    * 
    * @see scoped-ptrvect.hpp usage example
-   * @see iter-type-binding.hpp
-   * @see iter-adaptor-test.cpp
+   * @see value-type-binding.hpp
+   * @see iter-adapter-test.cpp
    */
   template<class POS, class CON>
   class IterAdapter
@@ -160,15 +174,18 @@ namespace lib {
       CON source_;
       mutable POS pos_;
       
+      using _ValTrait = meta::TypeBinding<std::remove_pointer_t<POS>>;
+      
     public:
-      typedef typename iter::TypeBinding<POS>::pointer pointer;
-      typedef typename iter::TypeBinding<POS>::reference reference;
-      typedef typename iter::TypeBinding<POS>::value_type value_type;
+      using value_type = typename _ValTrait::value_type;
+      using reference = typename _ValTrait::reference;
+      using pointer = typename _ValTrait::pointer;
+      
       
       IterAdapter (CON src, POS const& startpos)
         : source_(src)
         , pos_(startpos)
-        { 
+        {
           check();
         }
       
@@ -223,7 +240,7 @@ namespace lib {
        *  @note this function is called before any operation,
        *        thus the container may adjust the position value,
        *        for example setting it to a "stop iteration" mark.
-       */ 
+       */
       bool
       check()  const
         {
@@ -238,8 +255,7 @@ namespace lib {
       void
       iterate()
         {
-          if (check())
-            iterNext (source_,pos_);                             // extension point: free function iterNext(...)
+          iterNext (source_,pos_);                               // extension point: free function iterNext(...)
           check();
         }    // checkPoint() might mark end condition
             //  for comparison with IterAdapter{}
@@ -247,11 +263,18 @@ namespace lib {
       
       
     protected:
-      using ConRef = typename iter::TypeBinding<CON>::reference;
+      using ConRef = typename meta::TypeBinding<CON>::reference;
       
       /** allow derived classes to access backing container */
       ConRef       source()       { return                source_; }
       const ConRef source() const { return unConst(this)->source_; }
+      
+      void
+      resetPos (POS otherPos)                                    ////////////////////////////////////////////TICKET #1125 : get rid of this function! it should not be there; rectify IterSource!
+        {
+          pos_ = otherPos;
+          check();
+        }
       
     private:
       void
@@ -262,6 +285,7 @@ namespace lib {
         }
       
       
+    public:
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterAdapter);
       
       /// comparison is allowed to access impl iterator
@@ -281,7 +305,7 @@ namespace lib {
   
 
   /**
-   * Another Lumiera Forward Iterator building block, based on incorporating a state type 
+   * Another Lumiera Forward Iterator building block, based on incorporating a state type
    * right into the iterator. Contrast this to IterAdapter, which refers to a managing
    * container behind the scenes. Here, all of the state is assumed to live in the
    * custom type embedded into this iterator, accessed and manipulated through
@@ -290,18 +314,18 @@ namespace lib {
    * \par Assumptions when building iterators based on IterStateWrapper
    * There is a custom state representation type ST.
    * - default constructible
-   * - this default state represents the \em bottom (invalid) state.
+   * - this default state represents the _bottom_ (invalid) state.
    * - copyable, because iterators are passed by value
-   * - this type needs to provide an <b>iteration control API</b> through free functions
+   * - this type needs to provide an *iteration control API* with the following operations
    *   -# \c checkPoint establishes if the given state element represents a valid state
    *   -# \c iterNext evolves this state by one step (sideeffect)
-   *   -# \c yield realises the given state, yielding an element of result type T
-   * @param T nominal result type (maybe const, but without reference).
-   *        The resulting iterator will yield a reference to this type T
-   * @param ST type of the "state core", defaults to T.
-   *        The resulting iterator will hold an instance of ST, which thus
-   *        needs to be copyable and default constructible to the extent
-   *        this is required for the iterator as such.
+   *   -# \c yield realises the given state, yielding an element of result type `T&`
+   * @tparam T nominal result type (maybe const, but without reference).
+   *         The resulting iterator will yield a reference to this type T
+   * @tparam ST type of the "state core", defaults to T.
+   *         The resulting iterator will hold an instance of ST, which thus
+   *         needs to be copyable and default constructible to the extent
+   *         this is required for the iterator as such.
    * @see IterExplorer an iterator monad built on top of IterStateWrapper
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
@@ -318,15 +342,11 @@ namespace lib {
       
       IterStateWrapper (ST&& initialState)
         : core_(std::forward<ST>(initialState))
-        {
-          checkPoint (core_);       // extension point: checkPoint
-        }
+        { }
       
       IterStateWrapper (ST const& initialState)
         : core_(initialState)
-        {
-          checkPoint (core_);       // extension point: checkPoint
-        }
+        { }
       
       IterStateWrapper ()
         : core_()
@@ -341,28 +361,28 @@ namespace lib {
       operator*() const
         {
           __throw_if_empty();
-          return yield (core_);     // extension point: yield
+          return core_.yield();      // core interface: yield
         }
       
       pointer
       operator->() const
         {
           __throw_if_empty();
-          return & yield(core_);    // extension point: yield
+          return & core_.yield();    // core interface: yield
         }
       
       IterStateWrapper&
       operator++()
         {
           __throw_if_empty();
-          iterNext (core_);         // extension point: iterNext
+          core_.iterNext();          // core interface: iterNext
           return *this;
         }
       
       bool
       isValid ()  const
         {
-          return checkPoint(core_); // extension point: checkPoint
+          return core_.checkPoint(); // core interface: checkPoint
         }
       
       bool
@@ -390,6 +410,7 @@ namespace lib {
       
       
       
+    public:
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterStateWrapper);
       
       /// comparison is allowed to access state implementation core
@@ -411,7 +432,7 @@ namespace lib {
   template<class T1, class T2, class ST>
   inline bool
   operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
-  { 
+  {
     return not (il == ir);
   }
   
@@ -422,14 +443,19 @@ namespace lib {
   
   
   
-  /** 
+  /**
    * Accessing a STL element range through a Lumiera forward iterator,
    * An instance of this iterator adapter is completely self-contained
-   * and allows to iterate once over the range of elements, until 
-   * \c pos==end . Thus, a custom container may expose a range of
+   * and allows to iterate once over the range of elements, until
+   * `pos==end`. Thus, a custom container may expose a range of
    * elements of an embedded STL container, without controlling
    * the details of the iteration (as is possible using the
    * more generic IterAdapter).
+   * 
+   * @note
+   *  - when IT is just a pointer, we use the pointee as value type
+   *  - but when IT is a class, we expect the usual STL style nested typedefs
+   *    `value_type`, `reference` and `pointer`
    */
   template<class IT>
   class RangeIter
@@ -437,10 +463,13 @@ namespace lib {
       IT p_;
       IT e_;
       
+      using _ValTrait = meta::TypeBinding<std::remove_pointer_t<IT>>;
+      
     public:
-      typedef typename iter::TypeBinding<IT>::pointer pointer;
-      typedef typename iter::TypeBinding<IT>::reference reference;
-      typedef typename iter::TypeBinding<IT>::value_type value_type;
+      using value_type = typename _ValTrait::value_type;
+      using reference  = typename _ValTrait::reference;
+      using pointer    = typename _ValTrait::pointer;
+      
       
       RangeIter (IT const& start, IT const& end)
         : p_(start)
@@ -525,7 +554,7 @@ namespace lib {
   /// Supporting equality comparisons...
   template<class I1, class I2>
   inline bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
-    
+  
   template<class I1, class I2>
   inline bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return !(il == ir); }
   
@@ -633,7 +662,7 @@ namespace lib {
   /// Supporting equality comparisons...
   template<class I1, class I2>
   inline bool operator== (NumIter<I1> const& il, NumIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
-    
+  
   template<class I1, class I2>
   inline bool operator!= (NumIter<I1> const& il, NumIter<I2> const& ir)  { return !(il == ir); }
   
@@ -653,7 +682,7 @@ namespace lib {
   
   
   
-  /** 
+  /**
    * Helper for type rewritings:
    * get the element type for an iterator like entity
    */
@@ -687,7 +716,7 @@ namespace lib {
   
   
   
-  /** wrapper to declare exposed values const */
+  /** wrapper to expose values as const */
   template<class IT>
   class ConstIter
     {
@@ -747,6 +776,9 @@ namespace lib {
         {
           return i_;
         }
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (ConstIter);
     };
   
   

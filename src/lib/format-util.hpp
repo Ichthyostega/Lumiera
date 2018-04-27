@@ -111,6 +111,7 @@ namespace util {
   
   /** convert a sequence of elements to string
    * @param elms sequence of arbitrary elements
+   * @tparam CON the container type to collect the results
    * @return a collection of type CON, initialised by the
    *         string representation of the given elements
    */
@@ -193,12 +194,12 @@ namespace util {
     using Coll = typename lib::meta::Strip<CON>::TypePlain;
     _RangeIter<Coll> range(std::forward<CON>(coll));
     
-    auto strings = stringify (range.iter);
+    auto strings = stringify (std::move (range.iter));
     if (!strings) return "";
     
     std::ostringstream buffer;
-    for (string const& elm : strings)
-        buffer << elm << delim;
+    for ( ; strings; ++strings)
+      buffer << *strings << delim;
     
     // chop off last delimiter
     size_t len = buffer.str().length();

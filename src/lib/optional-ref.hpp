@@ -36,7 +36,7 @@
 
 namespace lib {
   
-  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+  using lumiera::error::LERR_(BOTTOM_VALUE);
   
   
   
@@ -88,7 +88,7 @@ namespace lib {
         {
           if (!isValid())
             throw lumiera::error::Logic ("access to this object is (not/yet) enabled"
-                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+                                        , LERR_(BOTTOM_VALUE));
           return *ref_;
         }
       

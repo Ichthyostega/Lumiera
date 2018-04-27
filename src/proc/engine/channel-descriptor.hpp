@@ -45,7 +45,7 @@ namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_LIFECYCLE;
+  using error::LERR_(LIFECYCLE);
   
   using lib::HashVal;
   

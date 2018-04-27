@@ -56,6 +56,8 @@ namespace play {
    *  the Lifecycle of booting, connecting, operating, disconnecting.
    */
   OutputDirector::OutputDirector()
+    : player_{PlayServiceHandle::NOT_YET_STARTED}
+    , shutdown_initiated_{false}
     { }
   
   OutputDirector::~OutputDirector() { }
@@ -72,7 +74,7 @@ namespace play {
     Lock sync(this);
     REQUIRE (not shutdown_initiated_);
     
-    player_.reset (new PlayService);
+    player_.createInstance();
     return this->isOperational();
   }
   
@@ -100,7 +102,10 @@ namespace play {
     if (not shutdown_initiated_)
       {
         shutdown_initiated_ = true;
-        Thread ("Output shutdown supervisor", bind (&OutputDirector::bringDown, this, completedSignal));
+        Thread ("Output shutdown supervisor",
+                [=]{
+                     bringDown (completedSignal);
+                   });
       }
   }
   
@@ -129,7 +134,7 @@ namespace play {
     try
       {
         TODO ("actually bring down the output generation");
-        player_.reset(0);
+        player_.shutdown();
         
         completedSignal(0);
       }

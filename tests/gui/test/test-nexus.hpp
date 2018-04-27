@@ -46,6 +46,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/model/tangible.hpp"
 #include "gui/ctrl/state-manager.hpp"
@@ -53,7 +54,6 @@
 #include "lib/test/event-log.hpp"
 #include "lib/diff/gen-node.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 #include <string>
 
@@ -74,7 +74,7 @@ namespace test{
    * @see abstract-tangible-test.cpp
    */
   class Nexus
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

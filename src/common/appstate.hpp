@@ -41,11 +41,12 @@
 #define LUMIERA_APPSTATE_H
 
 #include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/depend.hpp"
 #include "common/option.hpp"
 #include "common/subsys.hpp"
 #include "common/basic-setup.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <string>
 #include <map>
@@ -55,7 +56,6 @@
 namespace lumiera {
   
   using std::string;
-  using boost::noncopyable;
   
   class SubsystemRunner;
   
@@ -63,24 +63,24 @@ namespace lumiera {
   /**
    * The Lumiera Application state and basic initialisation.
    * Singleton to hold global flags directing the overall application behaviour,
-   * for triggering lifecycle events and performing early initialisation tasks.
+   * responsible for triggering lifecycle events and performing early initialisation tasks.
    * AppState services are available already from static initialisation code.
    * @warning don't use AppState in destructors.
    */
   class AppState
-    : private noncopyable
+    : util::NonCopyable
     {
     private:
       AppState ();
       
      ~AppState ();
-      friend class std::default_delete<AppState>;
+      friend class lib::DependencyFactory<AppState>;
       
       
     public:
-      /** get the (single) AppState instance. 
+      /** get the (single) AppState instance.
        *  @warning don't use it after the end of main()! */
-      static AppState& instance();
+      static lib::Depend<AppState> instance;
       
       
       /** evaluate the result of option parsing and maybe additional configuration
@@ -112,7 +112,7 @@ namespace lumiera {
        *  On termination of one of those components, tear down the remaining
        *  components and initiate a normal or emergency shutdown of the
        *  application, depending on the triggering component's
-       *  mode of termination (exit or exception). 
+       *  mode of termination (exit or exception).
        *  @return global application exit code
        */
       ExitCode maybeWait();
@@ -128,7 +128,7 @@ namespace lumiera {
       ExitCode abort ()  noexcept;
       
       
-    
+      
     private:
       using PSub = std::unique_ptr<SubsystemRunner>;
       

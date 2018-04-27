@@ -105,8 +105,8 @@
 
 #include "gui/gtk-base.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
 #include "gui/ctrl/playback-controller.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -157,7 +157,7 @@ namespace gui {
    * and must not be accessed from anywhere else.
    */
   class UiBus
-    : boost::noncopyable
+    : util::NonCopyable
     {
       unique_ptr<ctrl::CoreService> coreService_;
       

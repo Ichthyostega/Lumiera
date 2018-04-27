@@ -60,7 +60,6 @@
 #include "include/logging.h"
 
 #include <boost/functional/hash.hpp>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <functional>
 #include <memory>
@@ -72,13 +71,15 @@ namespace mobject {
 namespace session {
   
   using boost::hash;
-  using boost::noncopyable;
   using std::shared_ptr;
   using std::unordered_map;
   using std::unordered_multimap;
   using lib::TypedAllocationManager;
   using lib::iter_stl::IterSnapshot;
   using lib::iter_stl::eachVal;
+  using lib::iter_source::eachMapKey;
+  using lib::iter_source::eachDistinctKey;
+  using lib::iter_source::eachValForKey;
   using std::placeholders::_1;
   using std::function;
   using std::bind;
@@ -514,7 +515,7 @@ namespace session {
     if (!contains (targetScope))
       throw error::Logic ("Specified a non-registered Placement as scope "
                           "while adding another Placement to the index"
-                         ,LUMIERA_ERROR_INVALID_SCOPE);              ////////////////TICKET #197
+                         ,LERR_(INVALID_SCOPE));                          ////////////////TICKET #197
       
     return pTab_->addEntry(newObj, targetScope);
   }

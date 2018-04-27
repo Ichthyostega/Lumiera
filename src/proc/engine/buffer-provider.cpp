@@ -211,7 +211,7 @@ namespace engine {
     REQUIRE (!metaEntry.isTypeKey());
     if (!metaEntry.isLocked())
       throw error::Logic ("unable to attach an object because buffer isn't locked for use"
-                         , LUMIERA_ERROR_LIFECYCLE);
+                         , LERR_(LIFECYCLE));
     
     metaEntry.useTypeHandlerFrom (refEntry); // EX_STRONG
   }
@@ -307,8 +307,7 @@ namespace engine {
   BuffHandle::takeOwnershipFor(BufferDescriptor const& type)
   {
     if (!this->isValid())
-      throw error::Logic ("attaching an object requires an buffer in locked state"
-                         , LUMIERA_ERROR_LIFECYCLE);
+      throw error::Logic ("attaching an object requires an buffer in locked state", LERR_(LIFECYCLE));
     if (this->size() < type.determineBufferSize())
       throw error::Logic ("insufficient buffer size to hold an instance of that type");
     

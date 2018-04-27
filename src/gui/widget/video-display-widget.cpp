@@ -23,6 +23,7 @@
 
 /** @file video-display-widget.cpp
  ** Implementation of video display, embedded into the UI.
+ ** @deprecated defunct since the transition to GTK-3
  */
 
 

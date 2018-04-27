@@ -62,6 +62,7 @@
 #include "lib/depend.hpp"
 #include "lib/sync.hpp"
 #include "include/logging.h"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/command.hpp"
@@ -70,7 +71,6 @@
 #include "lib/typed-allocation-manager.hpp"
 
 #include <boost/functional/hash.hpp>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <memory>
 #include <string>
@@ -82,7 +82,6 @@ namespace proc {
 namespace control {
   
   using boost::hash;
-  using boost::noncopyable;
   using std::shared_ptr;
   using std::unordered_map;
   using lib::TypedAllocationManager;
@@ -118,7 +117,7 @@ namespace control {
    */
   class CommandRegistry
     : public lib::Sync<>
-    , noncopyable
+    , util::NonCopyable
     {
       // using a hashtable to implement the index
       typedef unordered_map<Symbol, Command, hash<Symbol>> CmdIndex;

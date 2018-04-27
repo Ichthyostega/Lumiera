@@ -10,7 +10,7 @@
 // 4/08  - comparison operators on shared_ptr<Asset>
 // 4/08  - conversions on the value_type used for boost::any
 // 5/08  - how to guard a downcasting access, so it is compiled in only if the involved types are convertible
-// 7/08  - combining partial specialisation and subclasses 
+// 7/08  - combining partial specialisation and subclasses
 // 10/8  - abusing the STL containers to hold noncopyable values
 // 6/09  - investigating how to build a mixin template providing an operator bool()
 // 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
@@ -32,194 +32,86 @@
 // 1/16  - generic to-string conversion for ostream
 // 1/16  - build tuple from runtime-typed variant container
 // 3/17  - generic function signature traits, including support for Lambdas
+// 9/17  - manipulate variadic templates to treat varargs in several chunks
+// 11/17 - metaprogramming to detect the presence of extension points
+// 11/17 - detect generic lambda
+// 12/17 - investigate SFINAE failure. Reason was indirect use while in template instantiation
+// 03/18 - Dependency Injection / Singleton initialisation / double checked locking
 
 
 /** @file try.cpp
- ** Metaprogramming: unified treatment of functors, function references and lambdas.
- ** Rework our existing function signature trait to also support lambdas, which forces us
- ** to investigate and in the end to change the handling of function member pointers.
- ** 
- ** This investigation is a partial step towards #994 and became necessary to support
- ** Command definition by Lambda
- ** 
+ ** Rework of the template lib::Depend for singleton and service access.
+ ** The (now for the third time rewritten) dependency factory can be configured to yield
+ ** a subclass singleton, or to bind to an external service. Lazy initialisation relies on
+ ** Double Checked Locking, which we need switch to C++11 Atomics in order to be correct
+ ** (in theory). The impact of this initialisation guard should be investigated by benchmark.
  */
 
 typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
-#include "lib/format-util.hpp"
-#include "lib/meta/function.hpp"
-
-#include <functional>
-#include <string>
-
-using lib::meta::_Fun;
-
-using std::function;
-using std::placeholders::_1;
-using std::bind;
-using std::string;
-using std::tuple;
-using std::move;
-
-
-
-
-int
-funny (uint i)
-{
-  return -i+1;
-}
-
-struct Funky
-  {
-    int ii = 2;
-    
-    int
-    fun (uint i2)
-      {
-        return ii + funny(i2);
-      }
-    
-    int
-    operator() (uint i2)
-      {
-        return 2*ii - fun(i2);
-      }
-    
-    static int
-    notfunny (uint i)
-      {
-        return 2*funny (i);
-      }
-  };
+#include "lib/depend.hpp"
+#include "lib/depend-inject.hpp"
+//#include "lib/meta/util.hpp"
+#include "lib/test/test-helper.hpp"
+#include "lib/util.hpp"
 
 
 
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
+#define SHOW_EXPR(_XX_) \
+    cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
-#define EVAL_PREDICATE(_PRED_) \
-    cout << STRINGIFY(_PRED_) << "\t : " << _PRED_ <<endl;
 
+  namespace error = lumiera::error;
 
-template<typename F>
-void
-showType (F)
+  using lib::Depend;
+  using lib::DependInject;
+  
+//////////////////////////////////////////////////////////////////////////Microbenchmark
+#include "lib/test/microbenchmark.hpp"
+using lib::test::microbenchmark;
+//////////////////////////////////////////////////////////////////////////(End)Microbenchmark
+
+#include "include/lifecycle.h"
+#include "lib/test/testoption.hpp"
+#include "lib/test/suite.hpp"
+
+using lumiera::LifecycleHook;
+using lumiera::ON_GLOBAL_INIT;
+using lumiera::ON_GLOBAL_SHUTDOWN;
+
+///////////////////////////////////////////////////////Usage
+
+class BlackHoleService
+  : util::NonCopyable
   {
-    using Sig = typename _Fun<F>::Sig;
+    volatile int theHole_ = rand() % 1000;
     
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
+    public:
+      int readMe() { return theHole_; }
+  };
 
-template<typename F>
-void
-showRef (F&)
-  {
-    using Sig = typename _Fun<F>::Sig;
-    
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showCRef (F&)
-  {
-    using Sig = typename _Fun<F>::Sig;
-    
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-template<typename F>
-void
-showRRef (F&&)
-  {
-    using Sig = typename _Fun<F>::Sig;
-    
-    SHOW_TYPE (F);
-    SHOW_TYPE (Sig);
-  }
-
-
-using Fun = function<int(uint)>;
-using Fuk = function<int(Funky&, uint)>;
 
 int
 main (int, char**)
   {
-    Fun f1{funny};
-    Fun f2{&funny};
+    std::srand(std::time(nullptr));
+    LifecycleHook::trigger (ON_GLOBAL_INIT);
     
-    Fun f3{Funky::notfunny};
-    Fun f4{&Funky::notfunny};
+    Depend<BlackHoleService> mystery;
     
-    auto memfunP = &Funky::fun;
+    thread_local int64_t cnt = 0;
     
-    Fuk f5{memfunP};
+    cout << microbenchmark<8> ([&]()
+                                 {
+                                   cnt += mystery().readMe();
+                                 }
+                              ,50000000)
+         << endl;
     
-    Funky funk;
-    
-    Fun f6{bind (f5, funk, _1)};
-    
-    auto lambda = [&](uint ii) { return funk.fun(ii); };
-    
-    Fun f7{lambda};
-    
-    showType (funny);
-    showType (&funny);
-    showType (Funky::notfunny);
-    
-    showType (memfunP);
-    showType (lambda);
-    showType (f7);
-    
-    cout << "\n\n-------\n";
-    
-    showRef (funny);
-    showRef (lambda);
-    showRef (f7);
-    
-    showCRef (funny);
-    showCRef (lambda);
-    showCRef (f7);
-    
-    showRRef (move(lambda));
-    showRRef (move(f7));
-    
-    showType (move(&funny));
-    showType (move(lambda));
-    showType (move(f7));
-    
-    Fun& funRef = f1;
-    Funky& funkyRef = funk;
-    Fun const& funCRef = f1;
-    Funky const& funkyCRef = funk;
-    showType (funRef);
-    showType (funkyRef);
-    showType (funCRef);
-    showType (funkyCRef);
-    
-    cout << "\n\n-------\n";
-    
-    SHOW_TYPE (decltype(&Funky::operator()));
-    SHOW_TYPE (decltype(lambda));
-    
-    SHOW_TYPE (_Fun<int(uint)>::Sig);
-    SHOW_TYPE (_Fun<Fun&>::Sig);
-    SHOW_TYPE (_Fun<Fun&&>::Sig);
-    SHOW_TYPE (_Fun<Fun const&>::Sig);
-    SHOW_TYPE (_Fun<Funky&>::Sig);
-    SHOW_TYPE (_Fun<Funky&&>::Sig);
-    SHOW_TYPE (_Fun<Funky const&>::Sig);
-    
-    using Siggy = _Fun<Fun>::Sig;
-    SHOW_TYPE (_Fun<Siggy&>::Sig);
-    SHOW_TYPE (_Fun<Siggy&&>::Sig);
-    SHOW_TYPE (_Fun<Siggy const&>::Sig);
-    
+    LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
     cout <<  "\n.gulp.\n";
     
     return 0;

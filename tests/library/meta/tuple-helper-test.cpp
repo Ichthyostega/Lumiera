@@ -120,8 +120,8 @@ namespace test {
           typedef Types1::List L1; // starting from an existing Typelist...
           
           typedef Tuple<L1> T_L1;           // derive a tuple type from this typelist
-          typedef Types<T_L1>::Seq Seq1;    // extract the underlying type sequence
-          
+          typedef RebindTySeq<T_L1>::Seq Seq1;
+                                            // extract the underlying type sequence
           DISPLAY (T_L1);
           DISPLAY (Seq1);
           

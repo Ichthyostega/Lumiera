@@ -46,7 +46,7 @@ namespace test{
   
   using util::isnil;
   using util::isSameObject;
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   
   
   namespace { // test data...
@@ -80,7 +80,7 @@ namespace test{
           , next(0)
           {
             if (i == exception_trigger)
-              throw error::Fatal("simulated error", LUMIERA_ERROR_PROVOKED_FAILURE);
+              throw error::Fatal("simulated error", LERR_(PROVOKED_FAILURE));
           }
       };
     

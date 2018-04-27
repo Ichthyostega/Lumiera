@@ -28,7 +28,7 @@
 #include "proc/mobject/session/testclip.hpp"
 #include "backend/media-access-facade.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/depend.hpp"
@@ -41,10 +41,12 @@ namespace test    {
   
   using lib::time::Time;
   using lib::time::Duration;
-  typedef shared_ptr<asset::Media> PM;
-  typedef backend_interface::MediaAccessFacade MAF;
-  using backend::test::MediaAccessMock;
   using asset::VIDEO;
+  
+  using PM = shared_ptr<asset::Media>;
+  using MAF = backend_interface::MediaAccessFacade;
+  
+  using MediaAccessMock = lib::DependInject<MAF>::Local<backend::test::MediaAccessMock>;
   
   
   
@@ -52,7 +54,7 @@ namespace test    {
   createTestMedia ()
   {
     // install Mock-Interface to Lumiera backend
-    lib::test::Depend4Test<MediaAccessMock> withinThisScope;
+    MediaAccessMock useMockMedia;
     
     return *asset::Media::create("test-2", VIDEO); // query magic filename
   }

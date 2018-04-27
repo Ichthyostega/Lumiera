@@ -34,21 +34,18 @@ using test::Test;
 namespace backend {
 namespace test {
   
-  using lumiera::error::LUMIERA_ERROR_LOGIC;
   namespace {
     
     class TestThread
       : Thread
       {
-        void
-        doIt()
-          {
-            CHECK (invocation_happens_within_this_thread());
-          }
-        
         public:
           TestThread()
-            : Thread{"test Thread self recognition", [&]() { doIt(); }}
+            : Thread{"test Thread self recognition"
+                    ,[&]()
+                        {
+                          CHECK (invocation_happens_within_this_thread());
+                        }}
             { }
           
           bool

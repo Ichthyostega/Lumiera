@@ -122,7 +122,7 @@ namespace control {
   {
     if (not definitionBlock)
       throw error::Invalid ("unbound function/closure provided for CommandSetup"
-                           , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                           , error::LERR_(BOTTOM_VALUE));
     
     pendingCmdDefinitions().emplace_front (cmdID_, move(definitionBlock));
     return *this;
@@ -189,7 +189,7 @@ namespace control {
                                    "is currently open for parametrisation and "
                                    "not yet dispatched for execution."}
                                   % instanceID % invocationID
-                             , LUMIERA_ERROR_DUPLICATE_COMMAND
+                             , LERR_(DUPLICATE_COMMAND)
                              );
     // create new clone from the prototype
     table_[instanceID] = move (Command::get(prototypeID).newInstance());
@@ -219,7 +219,7 @@ namespace control {
     if (not entry->second)
       throw error::Logic (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
                               % instanceID
-                         , error::LUMIERA_ERROR_LIFECYCLE);
+                         , error::LERR_(LIFECYCLE));
     return entry->second;
   }
   
@@ -241,11 +241,11 @@ namespace control {
                                     "globally registered command definition, "
                                     "nor to an previously opened command instance")
                                    % instanceID
-                              , LUMIERA_ERROR_INVALID_COMMAND);
+                              , LERR_(INVALID_COMMAND));
         if (not entry->second.isValid())
           throw error::Logic (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
                                   % instanceID
-                             , error::LUMIERA_ERROR_LIFECYCLE);
+                             , error::LERR_(LIFECYCLE));
         if (not must_be_bound or entry->second.canExec())
           instance = move(entry->second);
       }
@@ -253,7 +253,7 @@ namespace control {
       throw error::State (_Fmt{"attempt to dispatch command instance '%s' "
                                "without binding all arguments properly beforehand"}
                               % instanceID
-                         , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                         , LERR_(UNBOUND_ARGUMENTS));
     
     ENSURE (instance.isValid() and
            (instance.canExec() or not must_be_bound));

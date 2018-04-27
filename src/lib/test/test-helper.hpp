@@ -135,6 +135,116 @@ namespace test{
   
   
   
+  /**
+   * Helper to show types involved in metaprogramming.
+   * Place an instantiation of this template into some scope
+   * to provoke a compilation failure, which reveals what type X was bound to.
+   * Look for "in instantiation of TypeDebuger<..." in the error output.
+   */
+  template<typename X>
+  struct TypeDebugger
+    {
+      static_assert (not sizeof(X), "### Type Debugging ###");
+    };
+  
+  
+  
+  namespace { // helper for printing type diagnostics
+    
+    template<typename X>
+    struct TypeDiagnostics
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = "";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = "&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X&&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " &&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X const&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " const&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X const&&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " &&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " *";
+      };
+    template<typename X>
+    struct TypeDiagnostics<const X *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " *";
+      };
+    template<typename X>
+    struct TypeDiagnostics<const X * const>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " * const";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X * const>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " * const";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X * const *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " * const *";
+      };
+  }
+  
+  /** diagnostic type output, including const and similar adornments
+   * @warning operates after-the-fact and relies on mangled type names
+   *          plus several heuristics. Output might thus not be entirely correct,
+   *          especially when several levels of const, pointer and references are involved.
+   *          If in doubt, place the TypeDebugger<T> to reveal the type as the compiler sees it.
+   * @remarks the function lib::meta::typeStr removes adornments and does not work on all kinds
+   *          of reference. This helper attempts to work around those limitations.
+   */
+  template<typename X>
+  inline string
+  showType()
+  {
+    using Case = TypeDiagnostics<X>;
+    using Type = typename Case::Type;
+    
+    return Case::prefix
+         + meta::humanReadableTypeID (typeid(Type).name())
+         + Case::postfix;
+  }
+  
+  
+  
   
   
   /** create a random but not insane Time value */

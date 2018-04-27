@@ -53,6 +53,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 #include "proc/engine/calc-stream.hpp"
@@ -63,8 +64,7 @@
 //#include "lib/singleton-ref.hpp"
 #include "lib/polymorphic-value.hpp"
 #include "lib/depend.hpp"
-//
-#include <boost/noncopyable.hpp>
+
 #include <functional>
 //#include <string>
 
@@ -98,7 +98,7 @@ namespace engine{
    * @ingroup engine
    */
   class EngineService
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       

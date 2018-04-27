@@ -39,7 +39,6 @@
 #include "proc/engine/procnode.hpp"
 #include "lib/iter-adapter.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 #include <utility>
 

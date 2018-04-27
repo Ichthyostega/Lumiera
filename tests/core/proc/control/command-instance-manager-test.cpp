@@ -50,7 +50,7 @@ namespace test {
   using std::move;
   using std::rand;
   
-  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
+  using lumiera::error::LERR_(LIFECYCLE);
   
   
   

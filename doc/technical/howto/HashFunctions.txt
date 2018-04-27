@@ -48,7 +48,7 @@ The Boost library *functional-hash* provided the foundation for the definition n
 into the new C++ standard. Yet the boost library provides some additional facilities not
 part of the standard. Thus we're bound to choose
 
-* either including +<tr1/functional>+ and +using std::tr1::hash+
+* either including +<functional>+ and +using std::hash+
 * or including +<boost/functional-hash>+ and +using boost::hash+
 
 The boost version additionally provides pre defined hash functors for STL containers holding

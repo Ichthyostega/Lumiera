@@ -35,6 +35,7 @@
 #include <functional>
 #include <iostream>
 #include <cstdlib>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -51,6 +52,7 @@ namespace test{
   
   using std::placeholders::_1;
   using std::ref;
+  using std::shared_ptr;
   using std::vector;
   using std::string;
   using std::rand;
@@ -131,6 +133,7 @@ namespace test{
           
           
           verifySaneInstanceHandling();
+          verifySaneMoveHandling();
           verifyWrappedRef ();
           
           verifyFunctionResult ();
@@ -218,6 +221,60 @@ namespace test{
             
           }
           CHECK (0 == cntTracker);
+        }
+      
+      
+      /** @test proper handling of move and rvalue references */
+      void
+      verifySaneMoveHandling()
+        {
+          using Data = shared_ptr<int>;
+          using Wrap = ItemWrapper<Data>;
+          
+          Data data{new int(12345)};
+          CHECK (1 == data.use_count());
+          
+          Wrap wrap{data};
+          CHECK (2 == data.use_count());
+          CHECK (12345 == **wrap);
+          CHECK (isSameObject (*data, **wrap));
+          CHECK (!isSameObject (data, *wrap));
+          
+          Wrap wcopy{wrap};
+          CHECK (3 == data.use_count());
+          
+          Wrap wmove{move (wcopy)};
+          CHECK (3 == data.use_count());
+          CHECK (not wcopy);
+          CHECK (wmove);
+          
+          wcopy = move(wmove);
+          CHECK (3 == data.use_count());
+          CHECK (not wmove);
+          CHECK (wcopy);
+          
+          Wrap wmove2{move (data)};
+          CHECK (0 == data.use_count());
+          CHECK (3 == wmove2->use_count());
+          CHECK (not data);
+          CHECK (wmove2);
+          CHECK (wrap);
+          
+          wmove2 = move (wcopy);
+          CHECK (2 == wmove2->use_count());
+          CHECK (not wcopy);
+          CHECK (wmove2);
+          CHECK (wrap);
+          
+          wmove2 = move (wrap);
+          CHECK (1 == wmove2->use_count());
+          CHECK (not wrap);
+          CHECK (wmove2);
+          
+          wmove2 = move (wmove);
+          CHECK (not wcopy);
+          CHECK (not wmove);
+          CHECK (not wmove2);
         }
       
       

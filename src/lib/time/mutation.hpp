@@ -62,11 +62,11 @@
 #define LIB_TIME_MUTATION_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/polymorphic-value.hpp"
 #include "lib/symbol.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 namespace lib {

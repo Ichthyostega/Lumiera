@@ -61,10 +61,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <boost/static_assert.hpp>
 
 
@@ -72,7 +72,7 @@
 namespace lib {
   
   namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_INDEX_BOUNDS;
+  using error::LERR_(INDEX_BOUNDS);
   using util::unConst;
   
   
@@ -315,7 +315,7 @@ namespace lib {
     , class ALO = linked_elements::OwningHeapAllocated
     >
   class LinkedElements
-    : boost::noncopyable
+    : util::NonCopyable
     , ALO
     {
       N* head_;
@@ -495,7 +495,7 @@ namespace lib {
           
           if (!p || index)
             throw error::Logic ("Attempt to access element beyond the end of LinkedElements list"
-                               , LUMIERA_ERROR_INDEX_BOUNDS);
+                               , LERR_(INDEX_BOUNDS));
           else
             return *p;
         }
@@ -537,6 +537,33 @@ namespace lib {
             : node(p)
             { }
           
+          /* ==== internal callback API for the iterator ==== */
+          
+          /** Iteration-logic: switch to next position
+           * @warning assuming the given node pointer belongs to this collection.
+           *          actually this is never checked; also the given node might
+           *          have been deallocated in the meantime.
+           */
+          void
+          iterNext()
+            {
+              node = node->next;
+            }
+          
+          /** Iteration-logic: detect iteration end. */
+          bool
+          checkPoint()  const
+            {
+              return bool(node);
+            }
+          
+          N&
+          yield()  const
+            {
+              REQUIRE (node);
+              return * unConst(this)->node;
+            }
+          
           friend bool
           operator== (IterationState const& il, IterationState const& ir)
           {
@@ -556,38 +583,6 @@ namespace lib {
       
       
       
-    private: /* ==== internal callback API for the iterator ==== */
-      
-      /** Iteration-logic: switch to next position
-       * @warning assuming the given node pointer belongs to this collection.
-       *          actually this is never checked; also the given node might
-       *          have been deallocated in the meantime.
-       */
-      friend void
-      iterNext (IterationState & pos)
-      {
-        pos.node = pos.node->next;
-      }
-      
-      friend void
-      iterNext (IterationState const& pos)
-      {
-        pos.node = pos.node->next;
-      }
-      
-      /** Iteration-logic: detect iteration end. */
-      friend bool
-      checkPoint (IterationState const& pos)
-      {
-        return bool(pos.node);
-      }
-      
-      friend N&
-      yield (IterationState const& pos)
-      {
-        REQUIRE (pos.node);
-        return * unConst(pos).node;
-      }
     };
   
   

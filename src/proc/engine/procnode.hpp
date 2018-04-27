@@ -50,7 +50,6 @@
 #include "lib/ref-array.hpp"
 
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 
 
@@ -134,7 +133,7 @@ namespace engine {
    *       ProcNode as a frontend entirely.
    */
   class ProcNode
-    : boost::noncopyable
+    : util::NonCopyable
     {
       typedef mobject::Parameter<double> Param;   //////TODO: just a placeholder for automation as of 6/2008
       vector<Param> params;

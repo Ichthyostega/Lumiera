@@ -213,6 +213,28 @@ namespace test {
           CHECK ("int (unsigned int)"           == typeStr<_Fun<decltype(memfunP)>::Sig>());
           CHECK ("int (Functor&, unsigned int)" == typeStr<_Fun<decltype(fM)>::Sig     >());
           CHECK ("int (unsigned int)"           == typeStr<_Fun<decltype(fMF)>::Sig    >());
+          
+          
+          // _Fun<F> can be used for metaprogramming with enable_if
+          CHECK (    _Fun<Func>::value);      // yes : a Functor
+          CHECK (    _Fun<int(long)>::value); // yes : a function type
+          CHECK (not _Fun<int>::value);       // no  : a type without function call operator
+          
+          auto lambda1 = [](int i)  { return double(i) / (i*i); };
+          auto lambda2 = [](auto i) { return double(i) / (i*i); };
+          
+          using TLamb1 = decltype(lambda1);
+          using TLamb2 = decltype(lambda2);
+          
+          CHECK (    _Fun<TLamb1>::value);    // yes : detect signature of lambda
+          CHECK (not _Fun<TLamb2>::value);    // no  : can not detect signature of a generic lambda!
+          
+          // but detection works, once the templated operator() has been instantiated to some fixed type
+          auto stdFunction = function<double(float)> (lambda2);
+          CHECK (    _Fun<decltype(stdFunction)>::value);
+          
+          CHECK ("double (int)"   == showSig (lambda1));
+          CHECK ("double (float)" == showSig (stdFunction));
         }
     };
   

@@ -30,7 +30,7 @@
  ** storage for the concrete functor object, which might become problematic when
  ** dealing with lots of functor objects. 
  ** 
- ** Especially when dealing with tr1::function objects, all of the type differences
+ ** Especially when dealing with std::function objects, all of the type differences
  ** are actually encoded into 3 internal pointers, thus yielding the same size for
  ** all various types of functors. Building on this observation, we can create an
  ** common container object to store the varying functors inline, while hiding the

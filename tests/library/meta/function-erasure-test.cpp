@@ -130,7 +130,7 @@ namespace test {
           typedef int  (Sig4) ();
           
           _sum_ = 0;
-          f1.getFun<Sig1>() (-11,'M');                // invoke stored tr1::function...
+          f1.getFun<Sig1>() (-11,'M');                // invoke stored std::function...
           CHECK (_sum_ == 'M'-11);
           
           _sum_ = 0;

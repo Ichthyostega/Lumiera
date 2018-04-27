@@ -89,6 +89,7 @@
 #include "proc/control/session-command-service.hpp"
 #include "proc/mobject/session.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/util.hpp"                ///////////////TODO for test command invocation
 
 #include <memory>
@@ -116,9 +117,10 @@ namespace control {
     , public CommandDispatch
     , public Sync<RecursiveLock_Waitable>
     {
+      using ServiceHandle = lib::DependInject<SessionCommandService>::ServiceInstance<>;
       
       /** manage the primary public Session interface */
-      unique_ptr<SessionCommandService> commandService_;
+      ServiceHandle commandService_;
       
       CommandQueue queue_;
       Looper      looper_;
@@ -135,8 +137,8 @@ namespace control {
        */
       DispatcherLoop (Subsys::SigTerm notification)
         : Thread{"Lumiera Session", bind (&DispatcherLoop::runSessionThread, this, notification)}
-        , commandService_()
-        , queue_()
+        , commandService_{ServiceHandle::NOT_YET_STARTED}
+        , queue_{}
         , looper_([&]() -> bool
                     {
                       return not queue_.empty();
@@ -145,15 +147,15 @@ namespace control {
           Thread::sync(); // done with setup; loop may run now....
           INFO (session, "Proc-Dispatcher running...");
             {
-              Lock(this);          // open public session interface:
-              commandService_.reset(new SessionCommandService(*this));
+              Lock(this);     // open public session interface:
+              commandService_.createInstance(*this);
             }
         }
       
      ~DispatcherLoop()
         {
           try {
-              commandService_.reset();  // redundant call, to ensure session interface is closed reliably 
+              commandService_.shutdown();  // redundant call, to ensure session interface is closed reliably 
               INFO (session, "Proc-Dispatcher stopped.");
             }
           ERROR_LOG_AND_IGNORE(session, "Stopping the Proc-Dispatcher");
@@ -181,7 +183,7 @@ namespace control {
       requestStop()  noexcept
         {
           Lock sync(this);
-          commandService_.reset(); // closes Session interface
+          commandService_.shutdown(); // closes Session interface
           looper_.triggerShutdown();
           sync.notifyAll();
         }
@@ -325,6 +327,9 @@ namespace control {
   
   
   /* ======== ProcDispatcher implementation ======== */
+  
+  ProcDispatcher::ProcDispatcher()  { }
+  ProcDispatcher::~ProcDispatcher() { }
   
   /** starting the ProcDispatcher means to start the session subsystem.
    * @return `false` when _starting_ failed since it is already running...

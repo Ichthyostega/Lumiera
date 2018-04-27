@@ -66,7 +66,7 @@ namespace builder {
    * TODO type comment
    */
   class FixtureChangeDetector
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       typedef ID<Pipe>   PID;

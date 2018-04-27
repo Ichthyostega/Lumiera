@@ -43,7 +43,6 @@
 #include "proc/engine/job-planning.hpp"
 #include "lib/time/timevalue.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 
 

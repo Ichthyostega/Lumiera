@@ -80,11 +80,11 @@ namespace mobject {
   class OutputDesignation
     {
     public:
-      typedef asset::ID<asset::Pipe> PID;
-      typedef asset::PPipe PPipe;
+      using   PID = asset::ID<asset::Pipe>;
+      using PPipe = asset::PPipe;
       
       explicit OutputDesignation (PID explicitTarget);
-      explicit OutputDesignation (RefPlacement const& indirectTarget); 
+      explicit OutputDesignation (RefPlacement const& indirectTarget);
       explicit OutputDesignation (uint relative_busNr =0);
       
       // using default copying
@@ -93,8 +93,8 @@ namespace mobject {
       /** retrieve the direct destination
        *  this descriptor is actually pointing to.
        *  In case of a target pipe not explicitly specified
-       *  this might involve a resolution step and take the 
-       *  current context into account. 
+       *  this might involve a resolution step and take the
+       *  current context into account.
        * @param origin starting point for figuring out connections
        * @return a pipe-ID, which should be used as next connection.
        *         This might not be the final designation, but the
@@ -121,7 +121,7 @@ namespace mobject {
         { VTABLE   = sizeof(size_t)
         , SPEC_SIZ = VTABLE
                    + mp::maxSize<
-                       mp::Types< PID, lumiera_uid, uint>::List>::value 
+                       mp::Types< PID, lumiera_uid, uint>::List>::value
         };
       typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
       

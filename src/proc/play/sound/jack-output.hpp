@@ -41,7 +41,6 @@
 //
 //#include <glibmm.h>
 //#include <sigc++/sigc++.h>
-//#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
 

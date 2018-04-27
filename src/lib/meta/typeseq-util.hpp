@@ -31,12 +31,23 @@
  ** - shifting a type sequence
  ** - re-generating a type sequence from a typelist.
  ** 
+ ** @warning the metaprogramming part of Lumiera to deal with type sequences is in a
+ **          state of transition, since C++11 now offers direct language support for
+ **          processing of flexible template parameter sequences ("parameter packs").
+ **          It is planned to regroup and simplify our homemade type sequence framework
+ **          to rely on variadic templates and integrate better with std::tuple.
+ **          It is clear that we will _retain some parts_ of our own framework,
+ **          since programming with _Loki-style typelists_ is way more obvious
+ **          and straight forward than handling of template parameter packs,
+ **          since the latter can only be rebound through pattern matching.
+ ** @todo transition lib::meta::Types to variadic parameters  /////////////////////////////////TICKET #987
+ ** 
  ** @see typeseq-manip-test.cpp
  ** @see typelist.hpp
  ** @see typelist-util.hpp
+ ** @see tuple-helper.hpp
  ** @see function.hpp
  ** @see generator.hpp
- ** @see tuple.hpp
  ** 
  */
 

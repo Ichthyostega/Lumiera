@@ -46,9 +46,9 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/thread-local.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <nobug.h>
 
 
@@ -68,7 +68,7 @@ namespace lib {
    */
   template<typename VAL>
   class DiagnosticContext
-    : boost::noncopyable
+    : util::NonCopyable
     {
       typedef ThreadLocalPtr<DiagnosticContext> ThreadLocalAccess;
       typedef std::vector<VAL>                  ValSequence;

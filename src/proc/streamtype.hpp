@@ -38,7 +38,6 @@
 //#include "common/query.hpp"
 #include "lib/idi/entry-id.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 namespace proc {
@@ -52,7 +51,8 @@ namespace proc {
   /**
    * @todo this is just a draft to show the general idea....
    */
-  struct StreamType : boost::noncopyable
+  struct StreamType
+    : util::NonCopyable
     {
       enum MediaKind
         {

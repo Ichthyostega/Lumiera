@@ -178,14 +178,14 @@ namespace test {
           typedef Num<1> Sig123(Num<1>, Num<2>, Num<3>);             // signature of the original function
           
           typedef Num<1> Sig23(Num<2>, Num<3>);                      // signature after having closed over the first argument
-          typedef function<Sig23> F23;                               // and a tr1::function object to hold such a function
+          typedef function<Sig23> F23;                               // and a std::function object to hold such a function
           
           Sig123& f =fun13<1,2,3>;                                   // the actual input: a reference to the bare function
           
           
           // Version1: do a direct argument binding----------------- //
           
-          using PH1 = std::_Placeholder<1>;                          // tr1::function argument placeholders
+          using PH1 = std::_Placeholder<1>;                          // std::function argument placeholders
           using PH2 = std::_Placeholder<2>;
           
           PH1 ph1;                                                   // these empty structs are used to mark the arguments to be kept "open"
@@ -246,7 +246,7 @@ namespace test {
           
           
           // what follows is the real unit test...
-          function<Sig123> func123 (f);                              // alternatively do it with an tr1::function object
+          function<Sig123> func123 (f);                              // alternatively do it with an std::function object
           fun_23 = func::applyFirst (func123, Num<1>(19));
           res = fun_23 (_2_,_3_).o_;
           CHECK (24 == res);

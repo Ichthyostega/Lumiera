@@ -21,23 +21,20 @@
 * *****************************************************/
 
 /** @file duck-detector-test.cpp
- ** unit test \ref DuckDetector_test
+ ** unit test \ref DuckDetector_test:
+ ** duck typing through metaprogramming
  */
 
 
 #include "lib/test/run.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
-
-#include <iostream>
 
 
 namespace lib {
 namespace meta{
 namespace test{
-  
-  using std::cout;
-  using std::endl;
   
   
   namespace { // some test ducks....
@@ -79,7 +76,7 @@ namespace test{
     
     
       void
-      run (Arg) 
+      run (Arg)
         {
           SHOW_CHECK( HasNested_Core<PropperGander> );
           SHOW_CHECK( HasNested_Core<Propaganda>    );
@@ -89,7 +86,7 @@ namespace test{
           
           SHOW_CHECK( HasFunSig_honk<PropperGander> );
           SHOW_CHECK( HasFunSig_honk<Propaganda>    );
-        } 
+        }
     };
   
   

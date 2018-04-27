@@ -38,8 +38,7 @@
 
 #include "proc/asset.hpp"
 #include "proc/streamtype.hpp"
-
-#include <boost/noncopyable.hpp>
+#include "lib/nocopy.hpp"
 
 
 
@@ -118,7 +117,7 @@ namespace asset {
    * Factory specialised for creating Processor Asset objects.
    */ 
   class ProcFactory
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       typedef lib::P<asset::Proc> PType;

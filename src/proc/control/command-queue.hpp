@@ -76,7 +76,7 @@ namespace control {
           if (not cmd.canExec())
             throw error::Logic(_Fmt("Reject '%s'. Not suitably prepared for invocation: %s")
                                    % cmd.getID() % cmd
-                              , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                              , LERR_(UNBOUND_ARGUMENTS));
           
           lib::IterQueue<Command>::feed (move(cmd));
           return *this;

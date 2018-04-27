@@ -47,8 +47,8 @@
 #include "proc/mobject/session/fork.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/session/auto.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <list>
 
@@ -70,7 +70,7 @@ namespace session {
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Fixture
-    : boost::noncopyable
+    : util::NonCopyable
     {
     protected:
       /////////////////////////////////////////////////TODO: placeholder code

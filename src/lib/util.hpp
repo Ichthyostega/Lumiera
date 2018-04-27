@@ -210,7 +210,7 @@ namespace util {
   /** shortcut for set value containment test */
   template <typename T>
   inline bool 
-  contains (std::set<T>& set, T const& val)
+  contains (std::set<T> const& set, T const& val)
   {
     return set.end() != set.find (val);
   }

@@ -37,16 +37,18 @@
 
 #include "lib/error.hpp"
 #include "lib/depend.hpp"
+#include "lib/depend-inject.hpp"
 #include "proc/play/output-manager.hpp"
 #include "common/subsys.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/sync.hpp"
 
-#include <boost/noncopyable.hpp>
-//#include <string>
-//#include <vector>
 #include <memory>
 
 
+namespace lumiera {
+  class Play;
+}
 namespace proc {
 namespace play {
   
@@ -55,11 +57,7 @@ namespace play {
 //using std::shared_ptr;
   using std::unique_ptr;
   
-  
   class PlayService;
-  
-  
-//typedef lib::ScopedPtrVect<DisplayerSlot> DisplayerTab;
   
   
   
@@ -69,12 +67,13 @@ namespace play {
    * @todo write Type comment
    */
   class OutputDirector
-    : boost::noncopyable
+    : util::NonCopyable
     , public lib::Sync<>
     {
-      typedef lumiera::Subsys::SigTerm SigTerm;
+      using SigTerm = lumiera::Subsys::SigTerm;
+      using PlayServiceHandle = lib::DependInject<lumiera::Play>::ServiceInstance<PlayService>;
       
-      unique_ptr<PlayService> player_;
+      PlayServiceHandle player_;
       ///////TODO more components and connections to manage here...
       
       bool shutdown_initiated_ = false;   /////TODO probably need a way more elaborate lifecylce management
@@ -90,7 +89,7 @@ namespace play {
     private:
       OutputDirector() ;
      ~OutputDirector() ;
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<OutputDirector>;
       
       
       void bringDown (SigTerm completedSignal);

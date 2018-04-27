@@ -69,7 +69,7 @@ namespace engine {
       EngineConfig();
      ~EngineConfig();
       
-      friend class lib::DependencyFactory;
+      friend class lib::DependencyFactory<EngineConfig>;
       
     public:
       /** access point to the Engine Interface.

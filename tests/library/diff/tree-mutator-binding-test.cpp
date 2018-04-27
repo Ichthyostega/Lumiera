@@ -55,7 +55,7 @@ namespace lib {
 namespace diff{
 namespace test{
   
-  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LERR_(LOGIC);
   
   
   namespace {//Test fixture....

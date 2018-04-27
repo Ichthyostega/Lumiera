@@ -40,8 +40,8 @@
 
 
 #include "lib/util.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 #include <string>
 #include <set>
@@ -50,7 +50,6 @@
 
 namespace lumiera {
   
-  using boost::noncopyable;
   using util::contains;
   using std::function;
   using std::string;
@@ -64,7 +63,7 @@ namespace lumiera {
    * to implement the lumiera lifecycle (init, shutdown) hooks.
    */
   class LifecycleRegistry
-    : private noncopyable
+    : util::NonCopyable
     {
     public:
       typedef void (*Hook)(void);

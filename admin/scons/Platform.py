@@ -82,8 +82,6 @@ def configure(env):
     if not conf.CheckCXXHeader('boost/config.hpp'):
         problems.append('We need the C++ boost-libraries.')
     else:
-        if not conf.CheckCXXHeader('boost/noncopyable.hpp'):
-            problems.append('We need boost::noncopyable')
         if not conf.CheckCXXHeader('boost/lexical_cast.hpp'):
             problems.append('We need boost::lexical_cast')
         if not conf.CheckCXXHeader('boost/format.hpp'):

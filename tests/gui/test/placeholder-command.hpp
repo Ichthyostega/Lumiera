@@ -47,10 +47,7 @@
 #include "lib/test/event-log.hpp"
 #include "proc/control/command-def.hpp"
 #include "lib/format-util.hpp"
-//#include "lib/diff/gen-node.hpp"
 
-//#include <boost/noncopyable.hpp>
-//#include <functional>
 #include <vector>
 #include <string>
 
@@ -69,7 +66,7 @@ namespace test{
    * This is a typed definition frame with some operations,
    * suitably to be bound into a Proc-Layer command. The actual
    * command "operation" just logs invocation into a statically
-   * obtained \ref EventLog Event-Log instance. 
+   * obtained [Event-Log](\ref EventLog) instance.
    * @note by design, in Lumiera the actual command functions are stateless.
    *       For this reason, the command framework provides no way to associate
    *       an _instance_ of some kind of "command object" with the (conceptual)

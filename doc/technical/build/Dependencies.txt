@@ -58,7 +58,8 @@ Languages and Tools
    occasionally we check using Clang]
  - GCC *4.9* or Clang *3.5* should be fine footnote:[basically we try to use just the stock language.
    On rare occasions in the past, we _did_ use some GCC extensions, like `typeof()`, but we care for
-   workarounds, in case this becomes a problem].
+   workarounds, in case this becomes a problem. Incidentally, `typeof()` is obsoleted by the new
+   C++ standard, which provides `decltype()` for this purpose.].
  
 * BOOST (listed below are the Debian package names)
  - libboost-dev (at least *1.55*)

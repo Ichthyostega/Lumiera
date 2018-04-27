@@ -1,0 +1,258 @@
+Layers -- Subsystems -- Lifecycle
+=================================
+:Author:	Hermann Voßeler
+:Email:	<Ichthyostega@web.de>
+:Date:      2018
+:Toc:
+
+WARNING: under construction -- [red]#some parts to be filled in#
+
+
+Terminology
+-----------
+
+Layer::
+  A conceptual realm within the application to group related concerns and define an ordering.
+  Layers are above/below each other and may depend _solely_ on lower layers. The Application
+  may be operated in a partial layer configuration with only some lower layers. Each layer
+  deals with distinct topics and has its own style. In Lumiera, we distinguish three layers
++
+* User Interface -> Interaction
+* Proc-Layer -> Processing
+* Backend -> Data manipulation
+
+Subsystem::
+  A runtime entity which acts as anchor point and framework to maintain a well defined lifecycle.
+  While layers are conceptual realms, subsystems can actually be started and stopped and their
+  dependencies are represented as data structure. A subsystem typically starts one or several
+  primary components, which might spawn a dedicated thread and instantiate further components
+  and services.
+
+Service::
+  A component within some subsystem is termed _Service_
++
+--
+  * when it exposes an interfaces with an associated contract
+    (informal rules about usage pattern and expectations)
+  * when it accepts invocations from arbitrary other components
+    without specific wiring or hard coded knowledge
+--
++
+The service lifecycle is tied to the lifecycle of the related subsystem; whenever the subsystem is ``up and running'',
+any contained services can be accessed and used. Within Lumiera, there is no _service broker_ or any similar kind
+of elaborate _service discovery_ -- rather, services are accessed *by name*, where ``name'' is the _type name_
+of the service interface.
+
+Dependency::
+  A relation at implementation level and thus a local property of an individual component. A dependency
+  is something we need in order to complete the task at hand, yet a dependency lies beyond that task and
+  relates to concerns outside the scope and theme of this actual task. Which means, a dependency is not
+  introduced by the task or part of the task, rather the task is the reason why some entity dealing with
+  it needs to _pull_ the dependency, in order to be able to handle the task. So essentially, dependencies
+  are accessed on-demand. Dependencies might be other components or services, and typically the user
+  (consumer) of a dependency just relies on the corresponding interface and remains agnostic with respect
+  to the dependency's actual implementation or lifecycle details.
+
+Subsystems
+----------
+As a coherent part of the application, a subsystem can be started into running state. Several subsystems
+can reside within a single layer, which leads to rather tight coupling. We do not define boundaries between
+subsystems in a strict way (as we do with layers) -- rather some component is associated with a subsystem
+when it relies on services of the subsystem to be ``just available''. However, the grouping into subsystems
+is often also a thematic one, and related to a specific abstraction level. To give an example, the Player
+deals with _calculation streams,_ while the engine handles individual _render jobs,_ which together form
+a calculation stream. So there is a considerable grey area in between. Any code related with defining and
+then dispatching frame jobs needs at least some knowledge about the presence of calculation streams; yet
+it depends and relies on the scheduling service of the engine. In the end, it remains a question of
+architecture to keep those dependency chains ordered in a way to form a one-way route: when we start
+the engine, it must not instantiate a component which _requires the player_ in order to be operative.
+Yet we can not start the player without having started the engine beforehand; if we do, its services
+will throw exceptions due to missing dependencies on first use.
+
+However, subsystems as such are not dynamically configured. This was a clear cut design decision (and the
+result of a heated debate within the Lumiera team at that time). We do _not expect_ to load just some plug-in
+dynamically, inserted via an UI-action at runtime, which then installs a new subsystem and hooks it into the
+existing architecture. The flexibility lies in what we can do with the _contents_ of the session -- yet the
+application itself is not conceived as set of Lego(TM) bricks. Rather, we identify a small number of coherent
+parts of the application, each with its own theme, style, relations and contingencies.
+
+Engine
+~~~~~~
+_tbw_
+
+Player
+~~~~~~
+_tbw_
+
+Session
+~~~~~~~
+_tbw_
+
+User Interface
+~~~~~~~~~~~~~~
+_tbw_
+
+Script Runner
+~~~~~~~~~~~~~
+_tbw_
+
+Net Node
+~~~~~~~~
+_tbw_
+
+
+Lifecycle
+---------
+Dependencies and abstraction through interfaces are ways to deal with complexity getting out of hand.
+When done well, we can avoid adding _accidental complexity_ -- yet essential complexity as such can not
+be removed, but with the help of abstractions it can be raised to another level.footnote:[Irony tags here.
+There is a lot of hostility towards abstractions, because it is quite natural to conflate the abstraction
+with the essential complexity it has to deal with. It seems compelling to kill the abstraction, in the
+hope to kill the complexities as well -- an attitude rather effective, in practice...].
+When components express their external needs in the form of dependency on an interface, the immediate tangling
+at the code level is resolved, however, someone needs to implement that interface, and this other entity needs
+to be _available_. It is now an architecture challenge to get those dependency chains ordered. A way to
+circumvent this problem is to rely on a _lifecycle_ with several _phases._
+This is the idea behind the subsystems and the subsystem runner.
+
+. First we define an ordering between the subsystems. The most basic subsystem (the Engine) is started first.
+. Within a subsystem, components may be mutually dependent. However, we establish a new rule, dictating that
+  during the _startup phase_ only local operations within a single component are allowed. The component need
+  to be written in a way that it does not need the help of anything ``remote'' in order to get its inner
+  workings up and ready. The component may rely on its members and on other services it created, _owns and
+  manages._ And sometimes we do need to rely on a more low-level service in another subsystem or in the
+  application core.footnote:[A typical example would be the reliance on threading, locking or application
+  configuration.] -- which then creates a hard dependency on _architecture level_
+. Moreover, we ensure that all operational activity is generated by actual work tasks, and that such tasks
+  in turn may be initiated _solely through official interfaces._ Such interfaces are to be _opened explicitly_
+  at the end of the startup phase.
+. In operational mode, any part of the system can now assume for its dependencies to be ``just available''.
+. And finally we establish a further rule to _disallow extended clean-up._ Everything must be written in a
+  way such that when a task is done, it is _really done_ and settled. (Obviously there are some fine points
+  to consider here, like caching or elaborate buffer and I/O management). The rationale is that after leaving
+  the operational phase at the end of `main()` the application is able to unwind in any arbitrary way.
+
+The problem with emergencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This concept has a weak spot however: A catastrophic failure might cause any subsystem to break down immediately.
+The handler within the subsystem's primary component will hopefully detect the corresponding exception and signal
+emergency to the subsystem runner. However, the working services of that subsystem are already gone at that point.
+And even while other subsystems get the (emergency) shutdown trigger, some working parts may be already failing
+catastrophically due to their dependencies being dragged away suddenly.
+
+Lumiera is not written for exceptional resilience or high availability. Our attitude towards such failures can
+be summarised as ``Let it crash''. And this is another rationale for the ruling against extended clean-up.
+Any valuable work done by the user should be accepted and recorded persistently right away. Actions on the
+session are logged, like in a database. The user may still save snapshots, but basically any actual change
+is immediately recorded persistently. And thus we may crash without remorse.
+
+Static initialisation and shutdown
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A lot of fine points can be made about when precisely static objects in C\++ will be initialised or destroyed.
+However, anything beyond the scope of `main()` is not meant to be used for regular application code. Extended
+initialisation, dependency management and decommissioning -- when actually necessary -- should be part of the
+application code proper.footnote:[this is established ``best practice'' for good reasons. The interplay of
+static lifespan, various translation units and even dynamically loaded libraries together with shared access
+becomes intricate and insidious quite easily. And since in theory any static function could use some static
+variable residing in another translation unit, it is always possible to construct a situation where objects
+are accessed after being destroyed. Typically such objects do not even look especially ``dead'', since the
+static storage remains in place and still holds possibly sane values. Static (global) variables, like raw
+pointers, allow to subvert the deterministic automatic memory management, which otherwise is one of the
+greatest strengths of C++. Whenever we find ourselves developing extended collaborative logic based on
+several statics, we should consider to transform this logic into regular objects, which are easier to
+test and better to reason about. If it really can not be avoided to use such units of logic from a
+static context, it should at least be packaged as a single object, plus we should ensure this logic
+can only be accessed through a regular (non static) object as front-end. Packaged this way, the
+most common and dangerous pitfalls with statics can be avoided.] And since Lumiera indeed allows
+for link:{ldoc}/technical/library/Dependencies.html[[lazily initialised dependencies], we
+establish the policy that *destructors must not rely on dependencies*. In fact, they should
+not do any tangible work at all, beyond releasing other resources.
+
+Lifecycle Events
+~~~~~~~~~~~~~~~~
+The Application as a whole conducts a well defined lifecycle; whenever transitioning to the next phase,
+a _Lifecycle Event_ is issued. Components may register a notification hook with the central _Lifecycle Manager_
+(see 'include/lifecycle.h') to be invoked whenever a specific event is emitted. The process of registration
+can be simplified by planting a static variable of type `lumiera::LifecycleHook`.
+
+WARNING: A callback enrolled this way needs to be callable at the respective point in the lifecycle,
+         otherwise the application will crash.
+
+`ON_BASIC_INIT`::
+  Invoked as early as possible, somewhere in the static initialisation phase prior to entering `main()`.
+  In order to install a callback hook for this event, the client must plant a static variable somewhere.
+
+`AppState`::
+  This is the Lumiera »Application Object«. It is a singleton, and should be used by `main()` solely.
+  While not a lifecycle event in itself, it serves to bring up some very fundamental application services:
++
+--
+- the plug-in loader
+- the application configuration
+--
++
+After starting those services within the `AppState::init()` function,
+the event `ON_GLOBAL_INIT` is emitted.
+ 
+`ON_GLOBAL_INIT`::
+  When this event occurs, the start-up phase of the application has commenced. The command line was already
+  parsed and the basic application configuration is loaded, but the subsystems are not yet initialised.
+
+`Subsys::start()`::
+  By evaluation of the command line, the application object determines what subsystems actually need to
+  be started; those will receive the `start()` call, prompting them to enter their startup phase, to
+  instantiate all service objects and open their business façade when ready
+
+`ON_SESSION_START`::
+  When this hook is activated, the session implementation facilities are available and the corresponding
+  interfaces are already opened and accessible, but the session itself is completely pristine and empty.
+  Basic setup of the session can be performed at that point. Afterwards, the session contents will be
+  populated.
+
+`ON_SESSION_INIT`::
+  At this point, all specific session content and configuration has already be loaded. Any subsystems
+  in need to build some indices or to establish additional wiring to keep track of the session's content
+  should register here.
+
+`ON_SESSION_READY`::
+  Lifecycle hook to perform post loading tasks, which require an already completely usable and configured
+  session to be in place. When activated, the session is completely restored according to the defaulted or
+  persisted definition, and any access interfaces are already opened and enabled. Scripts and the GUI might
+  even be accessing the session in parallel already. Subsystems intending to perform additional processing
+  should register here, when requiring fully functional client side APIs. Examples would be statistics gathering,
+  validation or auto-correction of the session's contents.
+
+`ON_SESSION_CLOSE`::
+  This event indicates to commence any activity relying on an opened and fully operative session.
+  When invoked, the session is still in fully operative state, all interfaces are open and the render engine
+  is available. However, after issuing this event, the session shutdown sequence will be initiated, by detaching
+  the engine interfaces and signalling the scheduler to cease running render jobs.
+
+`ON_SESSION_END`::
+  This is the point to perform any state saving, deregistration or de-activation necessary before
+  an existing session can be brought down. When invoked, the session is still fully valid and functional,
+  but the GUI/external access has already been closed. Rendering tasks might be running beyond this point,
+  since the low-level session data is maintained by reference count.
+
+`Subsys::triggerShutdown()`::
+  While not a clear cut lifecycle event, this call prompts any subsystem to close external interfaces
+  and cease any activity. Especially the GUI will signal the UI toolkit set to end the event loop and
+  then to destroy all windows and widgets.
+
+`ON_GLOBAL_SHUTDOWN`::
+  Issued when the control flow is about to leave `main()` regularly to proceed into the shutdown and
+  unwinding phase. All subsystems have already signalled termination at that point. So this is the right
+  point to perform any non-trivial clean-up, since, on a language level, all service objects (especially
+  the singletons) are still alive, but all actual application activity has ceased.
+
+`ON_EMERGENCY_EXIT`::
+  As notification of emergency shutdown, this event is issued _instead of_ `ON_GLOBAL_SHUTDOWN`, whenever
+  some subsystem collapsed irregularly with a top-level exception.
+
+NOTE: all lifecycle hooks installed on those events are _blocking_. This is intentionally so, since any
+      lifecycle event is a breaking point, after which some assumptions can or can not be made further on.
+      However, care should be taken not to block unconditionally from within such a callback, since this
+      would freeze the whole application. Moreover, implementers should be careful not to make too much
+      assumptions regarding the actual thread of invocation; we only affirm that it will be _that specific_
+      thread responsible for bringing the global lifecycle ahead at this point.
+

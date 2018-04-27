@@ -29,7 +29,8 @@
  **
  ** @note simply using the ClassLock may cause a Monitor object (with a mutex) to be
  **       created at static initialisation and destroyed on application shutdown.
- ** @see singleton-factory.hpp usage example
+ ** @see depend.hpp usage example
+ ** @see SyncClasslock_test
  */
 
 
@@ -37,50 +38,11 @@
 #define LIB_SYNC_CLASSLOCK_H
 
 #include "lib/nobug-init.hpp"
+#include "lib/zombie-check.hpp"
 #include "lib/sync.hpp"
 
 
 namespace lib {
-  
-  namespace nifty { // implementation details
-    
-    template<class X>
-    struct Holder 
-      {
-        static uint accessed_;
-        static char content_[sizeof(X)];
-        
-        Holder() 
-          {
-            if (!accessed_)
-              new(content_) X();
-            ++accessed_; 
-          }
-        
-       ~Holder() 
-          {
-            --accessed_; 
-            if (0==accessed_)
-              get().~X();
-          }
-       
-       X&
-       get()
-        { 
-          X* obj = reinterpret_cast<X*> (&content_);
-          ASSERT (obj, "Logic of Schwartz counter broken.");
-          return *obj;
-        }
-      };
-    
-    template<class X>
-    uint Holder<X>::accessed_;
-    
-    template<class X>
-    char Holder<X>::content_[sizeof(X)];
-    
-  } // (End) nifty implementation details
-  
   
   
   /**
@@ -109,18 +71,17 @@ namespace lib {
       Monitor&
       getPerClassMonitor()
         {
-          static nifty::Holder<PerClassMonitor> __used_here;
-          ASSERT (1==use_count(), "static init broken");
+          static PerClassMonitor classMonitor;
+          static ZombieCheck zombieCheck;
           
-          return __used_here.get();
+          zombieCheck();
+          return classMonitor;
         }
       
     public:
       ClassLock() : Lock (getPerClassMonitor()) { }
-      
-      uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
     };
   
   
 } // namespace lib
-#endif
+#endif /*LIB_SYNC_CLASSLOCK_H*/

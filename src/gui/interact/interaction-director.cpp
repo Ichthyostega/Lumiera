@@ -31,9 +31,11 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/global-ctx.hpp"
 #include "gui/interact/interaction-director.hpp"
+#include "gui/interact/view-locator.hpp"
 #include "gui/interact/spot-locator.hpp"
 #include "gui/interact/navigator.hpp"
 #include "gui/interact/focus-tracker.hpp"
+#include "gui/interact/ui-coord-resolver.hpp"
 #include "gui/dialog/preferences-dialog.hpp"
 #include "gui/dialog/render.hpp"
 #include "gui/workspace/workspace-window.hpp"
@@ -82,8 +84,9 @@ namespace interact {
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
     : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
     , globalCtx_(globals)
+    , viewLocator_{new ViewLocator}
     , spotLocator_{new SpotLocator}
-    , navigator_{new Navigator{*spotLocator_}}
+    , navigator_{*spotLocator_, *viewLocator_}    // Service exposed as Depend<LocationQuery>
     , tracker_{new FocusTracker{*navigator_}}
     , uiState_{new UiState{globals.uiBus_.getStateManager(), *tracker_}}
     , assets_{new AssetController{session::Root::getAssetID(), this->uiBus_}}
@@ -261,7 +264,7 @@ namespace interact {
   workspace::WorkspaceWindow&
   InteractionDirector::getWorkspaceWindow()
   {
-    return globalCtx_.windowList_.findActiveWindow();
+    return globalCtx_.windowLoc_.findActiveWindow();
   }
 
   

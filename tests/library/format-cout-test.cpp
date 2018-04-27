@@ -49,7 +49,7 @@ namespace test {
   namespace { // test fixture
     
     /** opaque class without string conversion */
-    class Reticent 
+    class Reticent
       {
         uint neigh_ = 42;
       };
@@ -82,15 +82,25 @@ namespace test {
     void
     showTraits()
       {
-        using CharLit = typeof("literal");
-        using CharPtr = typeof(const char*);
-        using StrCRef = typeof(string const&);
-        using GenNodePtr = typeof(GenNode*);
-        using GenNodeRef = typeof(GenNode&);
+        using CharLit = decltype("literal");
+        using CharPtr = const char*;
+        using StringPtr = string *;
+        using StringRef = string &;
+        using StringRRef = string &&;
+        using StrConstRef = string const&;
+        using GenNodePtr  = GenNode*;
+        using GenNodeRef  = GenNode&;
+        using GenNodeRRef = GenNode&&;
         
+        ANALYSE (int);
+        ANALYSE (char);
         ANALYSE (double);
+        ANALYSE (int64_t);
         ANALYSE (string);
-        ANALYSE (StrCRef);
+        ANALYSE (StringPtr);
+        ANALYSE (StringRef);
+        ANALYSE (StringRRef);
+        ANALYSE (StrConstRef);
         ANALYSE (CharLit);
         ANALYSE (CharPtr)
         ANALYSE (Reticent)
@@ -98,8 +108,9 @@ namespace test {
         ANALYSE (GenNode)
         ANALYSE (GenNodePtr)
         ANALYSE (GenNodeRef)
+        ANALYSE (GenNodeRRef)
         ANALYSE (P<GenNode>)
-        cout << endl;
+        cout << "───────────────────────────╼━━━━━━━━━━╾───────────────────────────"<<endl;
       }
   }//(end)fixture
   
@@ -110,7 +121,7 @@ namespace test {
    * @test How to build generic string conversion into `ostream::operator<< `.
    * This task (#985) was actually a conglomerate of several chores:
    * - sanitise and segregate the type-traits usage
-   * - disentangle the existing util::str conversion helper
+   * - disentangle the existing util::str() conversion helper
    * - extract a basic form from this helper, which can be placed
    *   into a header with minimal dependencies. After some consideration,
    *   I decided to allow `<typeinfo>` in this category, which allows us

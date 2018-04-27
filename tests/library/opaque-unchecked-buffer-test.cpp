@@ -28,11 +28,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include "lib/opaque-holder.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <iostream>
 #include <cstring>
 
@@ -42,8 +42,8 @@ namespace test{
   using ::Test;
   using util::min;
   using lumiera::error::LUMIERA_ERROR_FATAL;
+  using util::NonCopyable;
   
-  using boost::noncopyable;
   using std::strlen;
   using std::cout;
   using std::endl;
@@ -58,7 +58,7 @@ namespace test{
     
     
     struct Base
-      : noncopyable
+      : NonCopyable
       {
         uint id_;
           

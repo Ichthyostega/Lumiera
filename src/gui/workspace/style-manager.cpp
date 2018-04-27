@@ -152,6 +152,7 @@ namespace workspace {
     
     addStockIconSet(factory, "panel-assets",   "panel_assets",  _("_Assets"));
     addStockIconSet(factory, "panel-viewer",   "panel_viewer",  _("_Viewer"));
+    addStockIconSet(factory, "panel-infobox",  "panel_infobox", _("_InfoBox"));
     addStockIconSet(factory, "panel-timeline", "panel_timeline",_("_Timeline"));
     addStockIconSet(factory, "panel-timeline", "panel_timeline_obsolete",_("_ZombieTimeline"));
     

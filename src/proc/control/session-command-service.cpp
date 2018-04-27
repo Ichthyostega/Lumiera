@@ -188,10 +188,9 @@ namespace control {
     
     
     
-    using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
-    typedef lib::SingletonRef<SessionCommand>::Accessor InstanceRef;
+    using lumiera::error::LERR_(LIFECYCLE);
     
-    InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
+    lib::Depend<SessionCommandService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
     
     
     
@@ -204,33 +203,33 @@ namespace control {
                                                            const char*, (const char* cmdID, const char* invocationID),
                                                              {
                                                                if (!_instance) 
-                                                                 return lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                                 return lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
-                                                                 return _instance->cycle(cmdID, invocationID);
+                                                                 return _instance().cycle(cmdID, invocationID);
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (trigger,
                                                            void, (const char* cmdID, const void* args),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
-                                                                 _instance->trigger(cmdID, *static_cast<Rec const *> (args));
+                                                                 _instance().trigger(cmdID, *static_cast<Rec const *> (args));
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (bindArg,
                                                            void, (const char* cmdID, const void* args),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
-                                                                 _instance->bindArg(cmdID, *static_cast<Rec const *> (args));
+                                                                 _instance().bindArg(cmdID, *static_cast<Rec const *> (args));
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (invoke,
                                                            void, (const char* cmdID),
                                                              {
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cmdID);
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
-                                                                 _instance->invoke(cmdID);
+                                                                 _instance().invoke(cmdID);
                                                              }
                                                           )
                                );
@@ -241,15 +240,14 @@ namespace control {
   
   
   
-  
-  SessionCommandService::SessionCommandService  (CommandDispatch& dispatcherLoopInterface)
+  /** @remark actual instance created from within ProcDispatcher */
+  SessionCommandService::SessionCommandService (CommandDispatch& dispatcherLoopInterface)
     : dispatcher_{dispatcherLoopInterface}
     , instanceManager_{dispatcher_}
-    , implInstance_{this,_instance}
     , serviceInstance_{ LUMIERA_INTERFACE_REF (lumieraorg_SessionCommand, 0, lumieraorg_SessionCommandService)}
-  {
-    INFO (gui, "SessionCommand Facade opened.");
-  }
+    {
+      INFO (gui, "SessionCommand Facade opened.");
+    }
   
   
   

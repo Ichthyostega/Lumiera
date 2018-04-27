@@ -36,6 +36,7 @@
 
 
 using lib::transformIterator;
+using lib::iter_stl::snapshot;
 using lib::iter_stl::eachElm;
 using lib::eachNum;
 using util::_Fmt;
@@ -157,6 +158,30 @@ namespace test {
           // another variant: collect arbitrary number of arguments
           VecS vals = stringify<VecS> (short(12), 345L, "67", '8');
           CHECK (vals == VecS({"12", "345", "67", "8"}));
+          
+          
+          // stringify can both consume (RValue-Ref) or take a copy from its source
+          auto nn = snapshot (eachNum (5, 10));
+          CHECK (5 == *nn);
+          ++nn;
+          CHECK (6 == *nn);
+          
+          auto sn = stringify (nn);
+          CHECK ("6" == *sn);
+          ++sn;
+          CHECK ("7" == *sn);
+          CHECK (6 == *nn);
+          ++++nn;
+          CHECK (8 == *nn);
+          CHECK ("7" == *sn);
+          
+          sn = stringify (std::move(nn));
+          CHECK ("8" == *sn);
+          CHECK (isnil (nn)); // was consumed by moving it into sn
+          ++sn;
+          CHECK ("9" == *sn);
+          ++sn;
+          CHECK (isnil (sn));
         }
       
       

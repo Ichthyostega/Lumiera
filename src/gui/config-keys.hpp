@@ -25,7 +25,8 @@
 /** @file config-keys.hpp
  ** Hard wired key constants to access the global application configuration.
  ** 
- ** \par configuration and resource search
+ ** # configuration and resource search
+ ** 
  ** The UI layer retrieves the necessary configuration values from lumiera::Config,
  ** the config facade in the application core. Currently as of 2/2011 these values are
  ** loaded from setup.ini, because the full-blown config system is not yet implemented.

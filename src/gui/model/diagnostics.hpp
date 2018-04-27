@@ -39,10 +39,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 
 
@@ -64,7 +64,7 @@ namespace model {
    * @see NA_test
    */
   class Diagnostics
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

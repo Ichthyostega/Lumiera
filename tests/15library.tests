@@ -2,91 +2,6 @@ TESTING "Library Test Suite: basic and low-level components" ./test-suite --grou
 
 
 
-TEST "casting or converting access helper" AccessCasted_test <<END
-out-lit: can_downcast<B,D>     = 1
-out-lit: can_downcast<B*,D*>   = 1
-out-lit: can_downcast<B&,D&>   = 1
-out-lit: can_downcast<B&,D*>   = 0
-out-lit: can_downcast<B*,D&>   = 0
-out-lit: can_downcast<B*&,D*&> = 1
-out-lit: can_downcast<D*&,D*&> = 1
-out-lit: can_downcast<D*,E*>   = 1
-out-lit: can_downcast<E*,F*>   = 1
-out-lit: has_RTTI<D*> = 0
-out-lit: has_RTTI<E*> = 1
-out-lit: has_RTTI<F*> = 1
-out-lit: is_convertible<D,D&>  = 0
-out-lit: is_convertible<D&,D>  = 1
-out-lit: can_use_dynamic_downcast<D,D&>  = 0
-out-lit: can_use_conversion<D,D&>        = 0
-out-lit: can_use_dynamic_downcast<B*,D*> = 0
-out-lit: can_use_conversion<D*,B*>       = 1
-out-lit: can_use_dynamic_downcast<D*&,D*&> = 0
-out-lit: can_use_conversion<D*&,D*&>       = 1
-out-lit: can_use_conversion<D*,E*>         = 0
-out-lit: can_use_dynamic_downcast<D*&,E*>  = 0
-out-lit: can_use_conversion<E*,F*>         = 0
-out-lit: can_use_dynamic_downcast<E*,F*>   = 1
-out-lit: === standard case: References ===
-out: Access\(D  as D&\) .+D.. adr=╲\w{8} ↗«D»
-out: Access\(D& as D&\) .+D.. adr=╲\w{8} ↗«D»
-out-lit: === build a value object ===
-out: Access.D  as D.    .+D.. adr=╲\w{8} ↗«D»
-out: Access.D& as D.    .+D.. adr=╲\w{8} ↗«D»
-out: Access.D&& as D.   .+D.. adr=╲\w{8} ↗«D»
-out-lit: === take a pointer ===
-out: Access.D  as D\*.  .+╲\w{8}
-out: Access.D& as D\*.  .+╲\w{8}
-out-lit: === dereference a pointer ===
-out: Access.D\* as D&.  .+D.. adr=╲\w{8} ↗«D»
-out: Access.D\* as D.   .+D.. adr=╲\w{8} ↗«D»
-out: Access.D\*&& as D. .+D.. adr=╲\w{8} ↗«D»
-out-lit: === const correctness ===
-out: Access.D  as D const&.       .+D.. adr=╲\w{8} ↗«D»
-out: Access.D& as D const&.       .+D.. adr=╲\w{8} ↗«D»
-out: Access.D  as const D.        .+D.. adr=╲\w{8} ↗«D»
-out: Access.D& as const D.        .+D.. adr=╲\w{8} ↗«D»
-out: Access.D  as const D\*.      .+╲\w{8}
-out: Access.D& as const D\*.      .+╲\w{8}
-out: Access.D\* as D const&.      .+D.. adr=╲\w{8} ↗«D»
-out: Access.D\* as const D.       .+D.. adr=╲\w{8} ↗«D»
-out: Access.const D  as D const&. .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const& as D const&. .+D.. adr=╲\w{8} ↗«D»
-out: Access.const D  as const D.  .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const& as const D.  .+D.. adr=╲\w{8} ↗«D»
-out: Access.const D  as const D\*..+╲\w{8}
-out: Access.D const& as const D\*..+╲\w{8}
-out: Access.const D\* as D const&..+D.. adr=╲\w{8} ↗«D»
-out: Access.const D\* as const D. .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const& as D.        .+D.. adr=╲\w{8} ↗«D»
-out: Access.D const&& as D.       .+D.. adr=╲\w{8} ↗«D»
-out-lit: === work cases: actual conversions ===
-out: Access.B& as B&.             .+B.. adr=╲\w{8} ↗«B»
-out: Access.D& as B&.             .+B.. adr=╲\w{8} ↗«B»
-out: Access.B\* as B\*.           .+╲\w{8}
-out: Access.D\* as B\*.           .+╲\w{8}
-out: Access.D& as B\*.            .+╲\w{8}
-out: Access.D\* as B&.            .+B.. adr=╲\w{8} ↗«B»
-out: Access.B\*& as B\*&.         .+╲\w{8}
-out: Access.D\*& as D\*&.         .+╲\w{8}
-out: Access.D& as const B\*.      .+╲\w{8}
-out: Access.D\* as B const&.      .+B.. adr=╲\w{8} ↗«B»
-out: Access.D const& as const B\*..+╲\w{8}
-out: Access.const D\* as B const&..+B.. adr=╲\w{8} ↗«B»
-out: Access.E\(F\)& as F&.        .+F.. adr=╲\w{8} ↗«F»
-out: Access.E\(F\)\* as F\*.      .+╲\w{8}
-out: Access.E\(F\)\* as F&.       .+F.. adr=╲\w{8} ↗«F»
-out: Access.E\(F\)& as F\*.       .+╲\w{8}
-out: Access.F\\* as X\*.          .+╲\w{8}
-out: Access.X\(F\)\* as X\*.      .+╲\w{8}
-out: Access.F\* as B&.            .+B.. adr=╲\w{8} ↗«B»
-out: Access.F\* as E&*.           .+E.. adr=╲\w{8} ↗«F»
-out-lit: Access(int as double) --->2
-out-lit: Access(float as long) --->3
-return: 0
-END
-
-
 TEST "CmdlineWrapper_test" CmdlineWrapper_test <<END
 out-lit: wrapping cmdline:...
 out-lit: -->
@@ -129,21 +44,6 @@ END
 
 
 TEST "Deleter function collection" DelStash_test <<END
-return: 0
-END
-
-
-TEST "Dependency injection" DependencyFactory_test <<END
-out-lit: ctor TargetObj(0) successful
-out-lit: ctor TargetObj(1) successful
-out-lit: ctor TargetObj(2) successful
-out-lit: ctor TargetObj(3) successful
-out-lit: dtor ~TargetObj(3) successful
-out-lit: ctor TargetObj(4) successful
-out-lit: dtor ~TargetObj(4) successful
-out-lit: dtor ~TargetObj(2) successful
-out-lit: dtor ~TargetObj(1) successful
-out-lit: dtor ~TargetObj(0) successful
 return: 0
 END
 
@@ -255,6 +155,158 @@ END
 
 
 TEST "formatting/string conversion in output" FormatCOUT_test <<END
+out-lit: Type: int ......
+out-lit: is_StringLike<int>	 : No
+out-lit: BasicallyString<int>	 : No
+out-lit: BasicallyCString<int>	 : No
+out-lit: std::is_arithmetic<int>	 : Yes
+out-lit: can_lexical2string<int>	 : Yes
+out-lit: can_convertToString<int>	 : No
+out-lit: use_StringConversion4Stream<int>	 : No
+out-lit: Type: char ......
+out-lit: is_StringLike<char>	 : No
+out-lit: BasicallyString<char>	 : No
+out-lit: BasicallyCString<char>	 : No
+out-lit: std::is_arithmetic<char>	 : Yes
+out-lit: can_lexical2string<char>	 : Yes
+out-lit: can_convertToString<char>	 : No
+out-lit: use_StringConversion4Stream<char>	 : No
+out-lit: Type: double ......
+out-lit: is_StringLike<double>	 : No
+out-lit: BasicallyString<double>	 : No
+out-lit: BasicallyCString<double>	 : No
+out-lit: std::is_arithmetic<double>	 : Yes
+out-lit: can_lexical2string<double>	 : Yes
+out-lit: can_convertToString<double>	 : No
+out-lit: use_StringConversion4Stream<double>	 : No
+out-lit: Type: int64_t ......
+out-lit: is_StringLike<int64_t>	 : No
+out-lit: BasicallyString<int64_t>	 : No
+out-lit: BasicallyCString<int64_t>	 : No
+out-lit: std::is_arithmetic<int64_t>	 : Yes
+out-lit: can_lexical2string<int64_t>	 : Yes
+out-lit: can_convertToString<int64_t>	 : No
+out-lit: use_StringConversion4Stream<int64_t>	 : No
+out-lit: Type: string ......
+out-lit: is_StringLike<string>	 : Yes
+out-lit: BasicallyString<string>	 : Yes
+out-lit: BasicallyCString<string>	 : No
+out-lit: std::is_arithmetic<string>	 : No
+out-lit: can_lexical2string<string>	 : Yes
+out-lit: can_convertToString<string>	 : Yes
+out-lit: use_StringConversion4Stream<string>	 : No
+out-lit: Type: StringPtr ......
+out-lit: is_StringLike<StringPtr>	 : No
+out-lit: BasicallyString<StringPtr>	 : No
+out-lit: BasicallyCString<StringPtr>	 : No
+out-lit: std::is_arithmetic<StringPtr>	 : No
+out-lit: can_lexical2string<StringPtr>	 : No
+out-lit: can_convertToString<StringPtr>	 : No
+out-lit: use_StringConversion4Stream<StringPtr>	 : No
+out-lit: Type: StringRef ......
+out-lit: is_StringLike<StringRef>	 : Yes
+out-lit: BasicallyString<StringRef>	 : Yes
+out-lit: BasicallyCString<StringRef>	 : No
+out-lit: std::is_arithmetic<StringRef>	 : No
+out-lit: can_lexical2string<StringRef>	 : Yes
+out-lit: can_convertToString<StringRef>	 : Yes
+out-lit: use_StringConversion4Stream<StringRef>	 : No
+out-lit: Type: StringRRef ......
+out-lit: is_StringLike<StringRRef>	 : Yes
+out-lit: BasicallyString<StringRRef>	 : Yes
+out-lit: BasicallyCString<StringRRef>	 : No
+out-lit: std::is_arithmetic<StringRRef>	 : No
+out-lit: can_lexical2string<StringRRef>	 : Yes
+out-lit: can_convertToString<StringRRef>	 : Yes
+out-lit: use_StringConversion4Stream<StringRRef>	 : No
+out-lit: Type: StrConstRef ......
+out-lit: is_StringLike<StrConstRef>	 : No
+out-lit: BasicallyString<StrConstRef>	 : No
+out-lit: BasicallyCString<StrConstRef>	 : No
+out-lit: std::is_arithmetic<StrConstRef>	 : No
+out-lit: can_lexical2string<StrConstRef>	 : No
+out-lit: can_convertToString<StrConstRef>	 : Yes
+out-lit: use_StringConversion4Stream<StrConstRef>	 : Yes
+out-lit: Type: CharLit ......
+out-lit: is_StringLike<CharLit>	 : Yes
+out-lit: BasicallyString<CharLit>	 : No
+out-lit: BasicallyCString<CharLit>	 : Yes
+out-lit: std::is_arithmetic<CharLit>	 : No
+out-lit: can_lexical2string<CharLit>	 : Yes
+out-lit: can_convertToString<CharLit>	 : Yes
+out-lit: use_StringConversion4Stream<CharLit>	 : No
+out-lit: Type: CharPtr ......
+out-lit: is_StringLike<CharPtr>	 : Yes
+out-lit: BasicallyString<CharPtr>	 : No
+out-lit: BasicallyCString<CharPtr>	 : Yes
+out-lit: std::is_arithmetic<CharPtr>	 : No
+out-lit: can_lexical2string<CharPtr>	 : Yes
+out-lit: can_convertToString<CharPtr>	 : Yes
+out-lit: use_StringConversion4Stream<CharPtr>	 : No
+out-lit: Type: Reticent ......
+out-lit: is_StringLike<Reticent>	 : No
+out-lit: BasicallyString<Reticent>	 : No
+out-lit: BasicallyCString<Reticent>	 : No
+out-lit: std::is_arithmetic<Reticent>	 : No
+out-lit: can_lexical2string<Reticent>	 : No
+out-lit: can_convertToString<Reticent>	 : No
+out-lit: use_StringConversion4Stream<Reticent>	 : Yes
+out-lit: Type: P<Reticent> ......
+out-lit: is_StringLike<P<Reticent>>	 : No
+out-lit: BasicallyString<P<Reticent>>	 : No
+out-lit: BasicallyCString<P<Reticent>>	 : No
+out-lit: std::is_arithmetic<P<Reticent>>	 : No
+out-lit: can_lexical2string<P<Reticent>>	 : No
+out-lit: can_convertToString<P<Reticent>>	 : Yes
+out-lit: use_StringConversion4Stream<P<Reticent>>	 : Yes
+out-lit: Type: GenNode ......
+out-lit: is_StringLike<GenNode>	 : No
+out-lit: BasicallyString<GenNode>	 : No
+out-lit: BasicallyCString<GenNode>	 : No
+out-lit: std::is_arithmetic<GenNode>	 : No
+out-lit: can_lexical2string<GenNode>	 : No
+out-lit: can_convertToString<GenNode>	 : Yes
+out-lit: use_StringConversion4Stream<GenNode>	 : Yes
+out-lit: Type: GenNodePtr ......
+out-lit: is_StringLike<GenNodePtr>	 : No
+out-lit: BasicallyString<GenNodePtr>	 : No
+out-lit: BasicallyCString<GenNodePtr>	 : No
+out-lit: std::is_arithmetic<GenNodePtr>	 : No
+out-lit: can_lexical2string<GenNodePtr>	 : No
+out-lit: can_convertToString<GenNodePtr>	 : No
+out-lit: use_StringConversion4Stream<GenNodePtr>	 : No
+out-lit: Type: GenNodeRef ......
+out-lit: is_StringLike<GenNodeRef>	 : No
+out-lit: BasicallyString<GenNodeRef>	 : No
+out-lit: BasicallyCString<GenNodeRef>	 : No
+out-lit: std::is_arithmetic<GenNodeRef>	 : No
+out-lit: can_lexical2string<GenNodeRef>	 : No
+out-lit: can_convertToString<GenNodeRef>	 : Yes
+out-lit: use_StringConversion4Stream<GenNodeRef>	 : Yes
+out-lit: Type: GenNodeRRef ......
+out-lit: is_StringLike<GenNodeRRef>	 : No
+out-lit: BasicallyString<GenNodeRRef>	 : No
+out-lit: BasicallyCString<GenNodeRRef>	 : No
+out-lit: std::is_arithmetic<GenNodeRRef>	 : No
+out-lit: can_lexical2string<GenNodeRRef>	 : No
+out-lit: can_convertToString<GenNodeRRef>	 : Yes
+out-lit: use_StringConversion4Stream<GenNodeRRef>	 : Yes
+out-lit: Type: P<GenNode> ......
+out-lit: is_StringLike<P<GenNode>>	 : No
+out-lit: BasicallyString<P<GenNode>>	 : No
+out-lit: BasicallyCString<P<GenNode>>	 : No
+out-lit: std::is_arithmetic<P<GenNode>>	 : No
+out-lit: can_lexical2string<P<GenNode>>	 : No
+out-lit: can_convertToString<P<GenNode>>	 : Yes
+out-lit: use_StringConversion4Stream<P<GenNode>>	 : Yes
+out-lit: ───────────────────────────╼━━━━━━━━━━╾───────────────────────────
+out-lit: smart-ptr, no string conv...«Reticent»
+out-lit: smart-ptr, custom conv......GenNode-ID("Hui")-DataCap|«string»|Buh
+out-lit: reference, no string conv...«Reticent»
+out-lit: reference, custom conv......GenNode-ID("Hui")-DataCap|«string»|Buh
+out: pointer,   custom conv......╲_....+ ↗GenNode-ID("Hui")-DataCap|«string»|Buh
+out-lit: smart-ptr, NULL pointee.....⟂ P<GenNode>
+out-lit: pointer,   NULL pointee.....⟂ «GenNode»
 return: 0
 END
 
@@ -415,6 +467,11 @@ return: 0
 END
 
 
+TEST "path array abstraction" PathArray_test <<END
+return: 0
+END
+
+
 TEST "RefArray_test" RefArray_test  <<END
 return: 0
 END
@@ -499,40 +556,6 @@ out: ➢➢.d.
 out-lit: ➢➢ e f
 out-lit: ➢➢/usr/bin
 out-lit: ➢➢/usr/lib
-return: 0
-END
-
-
-TEST "Singleton_test" Singleton_test 23 <<END
-out-lit: testing TargetObj(23) as Singleton
-out-lit: ctor TargetObj(23) successful
-out-lit: calling a non-static method on the Singleton instance
-out-lit: .....TargetObj(23): data="***********************", array[23]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,}
-out-lit: dtor ~TargetObj(23) successful
-return: 0
-END
-
-
-TEST "SingletonSubclass_test" SingletonSubclass_test 13 <<END
-out-lit: using the Singleton should create TargetObj(13)...
-out-lit: ctor TargetObj(13) successful
-out-lit: calling a non-static method on the Singleton-Implementation
-out-lit: .....TargetObj(13): data="*************", array[13]={0,1,2,3,4,5,6,7,8,9,10,11,12,}
-out-lit: dtor ~TargetObj(13) successful
-return: 0
-END
-
-
-TEST "SingletonTestMock_test" SingletonTestMock_test <<END
-out-lit: TestSingletonO::doIt() call=1
-out-lit: TestSingletonO::doIt() call=2
-out-lit: Mock_1::doIt() call=1
-out-lit: Mock_1::doIt() call=2
-out-lit: Mock_1::doIt() call=3
-out-lit: Mock_1::doIt() call=4
-out-lit: Mock_1::doIt() call=5
-out-lit: Mock_2::doIt() call=1
-out-lit: TestSingletonO::doIt() call=3
 return: 0
 END
 

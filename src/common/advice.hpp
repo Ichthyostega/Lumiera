@@ -95,13 +95,12 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/null-value.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include "common/advice/binding.hpp"
-
-#include <boost/noncopyable.hpp>
 
 
 namespace lumiera{
@@ -315,7 +314,7 @@ namespace advice {
   template<class AD>
   class ActiveProvision
     : public PointOfAdvice
-    , boost::noncopyable
+    , util::NonCopyable
     {
       AD theAdvice_;
       

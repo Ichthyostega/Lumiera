@@ -43,7 +43,7 @@
 #include "proc/mobject/session/query-focus-stack.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
-#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : using the IterSource adapters here
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource wrapIter adapter here
 #include "common/query/query-resolver.hpp"
 
 #include <vector>
@@ -215,7 +215,7 @@ namespace session {
   {
     if (isRoot())
         throw lumiera::error::Invalid ("can't get parent of root scope"
-                                      , LUMIERA_ERROR_NO_PARENT_SCOPE);
+                                      , LERR_(NO_PARENT_SCOPE));
     
     return SessionServiceExploreScope::getScope (*anchor_);
   }

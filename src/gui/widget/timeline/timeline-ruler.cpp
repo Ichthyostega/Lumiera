@@ -30,7 +30,7 @@
 #include "gui/widget/timeline/timeline-ruler.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/workspace/style-manager.hpp"
-#include "gui/util/cairo-util.hpp"
+#include "gui/draw/cairo-util.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time.h"
 
@@ -43,7 +43,7 @@ using namespace gui::widget;     ///////////////////////////////////////////////
 using namespace gui::widget::timeline;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using std::shared_ptr;
-using gui::util::CairoUtil;
+using gui::draw::CairoUtil;
 using lib::time::Time;
 using lib::time::TimeVar;
 

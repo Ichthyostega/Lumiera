@@ -34,7 +34,6 @@
 //#include "include/logging.h"
 #include "gui/interact/interaction-state.hpp"
 
-//#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <map>
 

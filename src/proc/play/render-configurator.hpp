@@ -35,6 +35,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
@@ -46,8 +47,7 @@
 #include "proc/play/output-manager.hpp"
 //#include "lib/iter-source.hpp"
 //#include "lib/util.hpp"
-//
-#include <boost/noncopyable.hpp>
+
 #include <functional>
 #include <vector>
 //#include <string>
@@ -72,7 +72,7 @@ namespace play {
   
   /** Strategy for configuring the render process */
   class RenderConfigurator
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
     public:

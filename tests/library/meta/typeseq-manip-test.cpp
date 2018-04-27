@@ -42,10 +42,6 @@
 #include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
-#include <boost/format.hpp>
-#include <iostream>
-
-using ::test::Test;
 using std::string;
 using std::cout;
 using std::endl;

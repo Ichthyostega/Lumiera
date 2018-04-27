@@ -42,7 +42,7 @@ namespace time{
 namespace test{
   
   using proc::asset::meta::TimeGrid;
-  using format::LUMIERA_ERROR_INVALID_TIMECODE;
+  using format::LERR_(INVALID_TIMECODE);
   
   
   namespace { // Helper for writing test cases

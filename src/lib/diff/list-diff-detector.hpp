@@ -61,8 +61,8 @@
 #include "lib/diff/list-diff.hpp"
 #include "lib/diff/index-table.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <utility>
 
 
@@ -85,7 +85,7 @@ namespace diff{
    */
   template<class SEQ>
   class DiffDetector
-    : boost::noncopyable
+    : util::NonCopyable
     {
       using Val = typename SEQ::value_type;
       using Idx = IndexTable<Val>;
@@ -187,24 +187,24 @@ namespace diff{
       
       /* === Iteration control API for IterStateWrapper === */
       
-      friend bool
-      checkPoint (DiffFrame const& frame)
-      {
-        return token.NIL != frame.currentStep_;
-      }
+      bool
+      checkPoint()  const
+        {
+          return token.NIL != currentStep_;
+        }
       
-      friend DiffStep&
-      yield (DiffFrame const& frame)
-      {
-        REQUIRE (checkPoint (frame));
-        return unConst(frame).currentStep_;
-      }
+      DiffStep&
+      yield()  const
+        {
+          REQUIRE (checkPoint());
+          return unConst(this)->currentStep_;
+        }
       
-      friend void
-      iterNext (DiffFrame & frame)
-      {
-        frame.currentStep_ = frame.establishNextState();
-      }
+      void
+      iterNext()
+        {
+          currentStep_ = this->establishNextState();
+        }
       
     private:
       DiffStep

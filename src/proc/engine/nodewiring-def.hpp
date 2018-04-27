@@ -43,8 +43,7 @@
 #include "proc/engine/procnode.hpp"
 #include "lib/ref-array.hpp"
 #include "lib/util-foreach.hpp"
-
-#include <boost/noncopyable.hpp>
+#include "lib/nocopy.hpp"
 
 
 
@@ -70,7 +69,7 @@ namespace engine {
    * should be used, without adding any connection information. 
    */
   class WiringSituation
-    : boost::noncopyable
+    : util::NonCopyable
     {
       long flags_;
       asset::Proc::ProcFunc* function_;

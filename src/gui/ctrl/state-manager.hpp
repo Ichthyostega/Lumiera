@@ -55,8 +55,8 @@
 
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -77,7 +77,7 @@ namespace ctrl {
    * element.
    */
   class StateManager
-    : boost::noncopyable
+    : util::NonCopyable
     {
     protected:
       virtual ~StateManager();    ///< this is an interface

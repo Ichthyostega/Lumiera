@@ -80,7 +80,7 @@ namespace test {
   string                >
   showType ()
   {
-    using TypeList = typename Types<TUP>::List;
+    using TypeList = typename RebindTySeq<TUP>::List;
     using DumpPrinter = InstantiateChained<TypeList, Printer, NullP>;
     
     return "TUPLE"

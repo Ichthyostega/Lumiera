@@ -68,19 +68,22 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/access-casted.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <utility>
-#include <type_traits>
-#include <boost/noncopyable.hpp>
 #include <boost/lexical_cast.hpp>
+
+#include <type_traits>
+#include <utility>
 
 
 namespace lib {
   
   namespace error = lumiera::error;
+  using error::LERR_(BOTTOM_VALUE);
+  using error::LERR_(WRONG_TYPE);
   
   using util::isSameObject;
   using util::unConst;
@@ -135,7 +138,7 @@ namespace lib {
             return asBase;
           
           throw error::Logic ("Unable to convert concrete object to Base interface"
-                             , error::LUMIERA_ERROR_WRONG_TYPE
+                             , LERR_(WRONG_TYPE)
                              );
         }
     };
@@ -145,7 +148,7 @@ namespace lib {
    * a common interface; use this policy if the intention is
    * to use OpaqueHolder with a family of similar classes, 
    * \em without requiring all of them to be derived from
-   * a common base class. (E.g. tr1::function objects).
+   * a common base class. (E.g. std::function objects).
    * In this case, the "Base" type will be defined to void*
    * As a consequence, we loose all type information and
    * no conversions are possible on re-access. You need
@@ -220,7 +223,7 @@ namespace lib {
           getBase()  const
             {
               throw error::Invalid("accessing empty holder"
-                                  , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                                  , LERR_(BOTTOM_VALUE));
             }
           
           virtual void
@@ -453,11 +456,11 @@ namespace lib {
           
           if (this->empty())
             throw error::Invalid("accessing empty holder"
-                                , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                                ,LERR_(BOTTOM_VALUE));
           else
             throw error::Logic ("Attempt to access OpaqueHolder's contents "
                                 "specifying incompatible target type"
-                               , error::LUMIERA_ERROR_WRONG_TYPE
+                               , LERR_(WRONG_TYPE)
                                );
         }
       
@@ -594,7 +597,7 @@ namespace lib {
     , class DEFAULT = BA
     >
   class InPlaceBuffer
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       mutable char buf_[siz];

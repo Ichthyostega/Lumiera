@@ -29,7 +29,11 @@
  ** a simple data source type, without needing to disclose details of
  ** the implementation.
  ** 
- ** \par Standard Adapters
+ ** @todo the design used for the "iteration control API" is misaligned
+ **       with the purpose of this adapter. Rather, it should be shaped
+ **       similar to IterStateWrapper with three control functions     //////////////////////////////////////TICKET #1125
+ ** 
+ ** ## Standard Adapters
  ** As a complement, this header contains a generic implementation
  ** of the IterSource interface by wrapping an existing Lumiera Forward Iterator.
  ** Using this WrappedLumieraIter, the details of this wrapped source iterator
@@ -51,8 +55,8 @@
 #include "lib/meta/util.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <type_traits>
 #include <utility>
 #include <string>
@@ -89,14 +93,14 @@ namespace lib {
       typedef TY* Pos;
       typedef shared_ptr<IterSource> DataHandle;
       
-      
+                                                              ///////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       /** iteration start: prepare the first element.
        *  may return NULL in case of empty data source
        */
       virtual Pos firstResult ()         =0;
       
       /** iteration step: switch on to the next element.
-       *  The pos pointer may be set to NULL to report
+       *  The pos pointer should be set to NULL to report
        *  iteration end
        */
       virtual void nextResult(Pos& pos)  =0;
@@ -123,7 +127,7 @@ namespace lib {
       
       /* == Iteration control API for IterAdapter frontend == */
       
-      friend bool
+      friend bool                                                    ////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       checkPoint (DataHandle const&, Pos const& pos)
         {
           return bool(pos);
@@ -141,10 +145,10 @@ namespace lib {
       
       struct iterator
         : IterAdapter<Pos, DataHandle>
-        {
-          using _I = IterAdapter<Pos, DataHandle>
-          ;
+        {                                                ////////////////////////////////////////////////////TICKET #1125 : should be build on top of IterStateWrapper rather than IterAdapter!
+          using _I = IterAdapter<Pos, DataHandle>;
           using _I::IterAdapter;
+          
           operator string()  const {return _I::source()? string(*_I::source()) : "⟂"; }
         };
       
@@ -173,6 +177,10 @@ namespace lib {
         }
       
       static iterator EMPTY_SOURCE;
+      
+      using value_type = TY;
+      using reference  = TY&;
+      using pointer    = TY*;
       
       
       
@@ -221,17 +229,17 @@ namespace lib {
    * is passed to one of the IterSource's builder functions, thereby
    * erasing the specific type information of the template parameter IT
    */
-  template<class IT>
+  template<class IT,  class ISO = IterSource<typename IT::value_type>>
   class WrappedLumieraIter
-    : public IterSource<typename IT::value_type>
-    , boost::noncopyable
+    : public ISO
+    , util::NonCopyable
     {
-      using _Base = IterSource<typename IT::value_type>;
-      using   Pos = typename _Base::Pos;
-      
       IT src_;
       
-      Pos
+    protected:
+      using Pos = typename ISO::Pos;
+      
+      Pos                                                ////////////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       firstResult ()
         {
           if (!src_)
@@ -261,6 +269,11 @@ namespace lib {
       WrappedLumieraIter (IT&& orig)
         : src_(forward<IT>(orig))
         { }
+      
+      
+    protected:
+      IT&       wrappedIter()       { return src_; }
+      IT const& wrappedIter() const { return src_; }
     };
   
   
@@ -364,6 +377,22 @@ namespace lib {
     }
     
     
+    /** an IterSource frontend to return just a single value once.
+     * @warning behind the scenes, a heap allocation is managed by shared_ptr,
+     *          to maintain a copy of the wrapped element. When passing a reference,
+     *          only a reference will be wrapped, but a heap allocation happens nonetheless
+     */
+    template<typename VAL>
+    auto
+    singleVal (VAL&& something)
+    {
+      using Src = decltype(singleValIterator (forward<VAL>(something)));
+      using Val = typename _IterT<Src>::Val;
+
+      return IterSource<Val>::build (new WrappedLumieraIter<Src>{singleValIterator (forward<VAL>(something))});
+    }
+    
+    
     /** pipes a given Lumiera Forward Iterator through
      *  a transformation function and wraps the resulting
      *  transforming Iterator, exposing just an IterSource.
@@ -461,11 +490,11 @@ namespace lib {
       using Range   = RangeIter<typename CON::iterator>;
       
       Range contents (container.begin(), container.end());
-      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents)); 
+      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
     
-
-    /** @return a Lumiera Forward Iterator yielding all values
+    
+    /** @return a Lumiera Forward Iterator to yield all values
      *          defined by a classical Iterator range.
      */
     template<class IT>
@@ -478,16 +507,7 @@ namespace lib {
       Range contents (begin, end);
       return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
-
-  }
-  using iter_source::wrapIter;
-  using iter_source::transform;
-  using iter_source::eachMapKey;
-  using iter_source::eachDistinctKey;
-  using iter_source::eachValForKey;
-  using iter_source::eachMapVal;
-  using iter_source::eachEntry;
   
-  
-} // namespace lib
+    
+}} // namespace lib::iter_source
 #endif

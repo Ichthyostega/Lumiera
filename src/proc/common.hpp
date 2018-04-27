@@ -45,6 +45,7 @@
 
 #include "lib/p.hpp"
 #include "lib/util.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"   // pulls in NoBug via loggging.h

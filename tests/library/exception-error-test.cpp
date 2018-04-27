@@ -28,41 +28,39 @@
 
 #include "lib/error.h"
 #include "lib/error.hpp"
-
 #include "lib/test/run.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-
-#include <string>
-#include <iostream>
 #include <exception>
 #include <stdexcept>
+#include <string>
 
 using std::runtime_error;
 using std::exception;
 using std::string;
-using std::cout;
 
 
 
 namespace lumiera {
   namespace test  {
     
-    /** local specific error-constant for use in the 
+    LUMIERA_ERROR_DEFINE (LIFE_AND_UNIVERSE, "and everything?");
+    /** local specific error-constant for use in the
      *  constructor of the nested SpecificError class.
      */
-    LUMIERA_ERROR_DEFINE(LIFE_AND_UNIVERSE, "and everything?");
-    LUMIERA_ERROR_DEFINE(DERIVED, "convoluted exception");
+    LUMIERA_ERROR_DECLARE(DERIVED);
+    LUMIERA_ERROR_DEFINE (DERIVED, "convoluted exception");
     
-    /** declare a specific Error class with parent class error::external */
-    LUMIERA_EXCEPTION_DECLARE (DerivedError, error::External,  LUMIERA_ERROR_DERIVED);
+    /** define a specific Error subclass derived from error::external */
+    using DerivedError = error::LumieraError<LERR_(DERIVED), error::External>;
     
     
     /******************************************************//**
      * Some aspects of C++ exception handling.
-     * Not to be confused with the basic C-style error value 
+     * Not to be confused with the basic C-style error value
      * mechanism used by the low-level parts of the backend.
-     * Both approaches are laregely orthogonal, but the
+     * Both approaches are largely orthogonal, but the
      * C++ exception handling uses the C-style error constants.
      * 
      */
@@ -71,8 +69,8 @@ namespace lumiera {
         typedef ExceptionError_test test;
         virtual void run (Arg arg)
           {
-            if (0 < arg.size() && arg[1]=="terminate")
-              terminateUnknown ();
+            if (0 < arg.size() and arg[1]=="terminate")
+              terminateUnknown();
             
             
             catcher (&test::throwSpecial,  "");
@@ -109,7 +107,7 @@ namespace lumiera {
          *  which we are able to catch because it is derived from std::exception.
          *  We don't need to know the exact type, but we can classify the error situation
          *  as a "state error" and throw an error::State, passing on the root cause.
-         *  Some levels up, this error get caught and the root cause can be 
+         *  Some levels up, this error get caught and the root cause can be
          *  extracted successfully.
          */
         void nestedThrower (string msg)
@@ -117,7 +115,7 @@ namespace lumiera {
           try { throwExternal(msg); }
           catch (std::exception& e)
             {
-              cout << "intermediate handler caught: " << e.what() 
+              cout << "intermediate handler caught: " << e.what()
                    << "....will rethrow as error::State\n";
               throw error::State (e);
             }
@@ -142,25 +140,25 @@ namespace lumiera {
         void checkErrorIntegration()
         {
           lumiera_error ();
-          CHECK (!lumiera_error ());
+          CHECK (not lumiera_error());
           
           Error err1;
-          Error err2("boo",LUMIERA_ERROR_DERIVED);
+          Error err2("boo",LERR_(DERIVED));
           CHECK (err1.getID () == lumiera_error ()); // (we didn't clear the first one!)
           
-          Error err3("boooo",LUMIERA_ERROR_DERIVED);
+          Error err3("boooo",LERR_(DERIVED));
           CHECK (err3.getID () == lumiera_error ());
           
           SpecificError err4;
-          CHECK (err4.getID () == LUMIERA_ERROR_LIFE_AND_UNIVERSE);
+          CHECK (err4.getID () == LERR_(LIFE_AND_UNIVERSE));
           CHECK (err4.getID () == lumiera_error ());
           
-          CHECK (!lumiera_error ());
+          CHECK (not lumiera_error());
         }
         
         
         void detectErrorflag        (string)     { throwOnError(); }
-        void detectErrorflagChained (string msg) { maybeThrow<error::Logic>(msg); }
+        void detectErrorflagChained (string msg) { maybeThrow<error::Logic> (msg); }
         
         
         /** @test verify throwing of Exceptions
@@ -168,14 +166,14 @@ namespace lumiera {
          */
         void checkErrorFlagPropagation()
         {
-          lumiera_error_set(LUMIERA_ERROR_LIFE_AND_UNIVERSE, "what is the answer?");
+          lumiera_error_set(LERR_(LIFE_AND_UNIVERSE), "what is the answer?");
           CHECK (lumiera_error_peek());
           
           catcher (&test::detectErrorflag, "");
-          CHECK (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error_peek());
+          CHECK (LERR_(LIFE_AND_UNIVERSE) == lumiera_error_peek());
           
           catcher (&test::detectErrorflagChained, "the big bang");
-          CHECK (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error());
+          CHECK (LERR_(LIFE_AND_UNIVERSE) == lumiera_error());
         }
         
         
@@ -186,8 +184,8 @@ namespace lumiera {
         {
           error::Logic err1;
           error::Config err2(err1);
-          error::Config err3(err2); //note: using copy ctor behaves like chaining
-          Error err4(err1);        // note: copy ctor
+          error::Config err3(err2);
+          Error err4(err1);      // note: copy ctor
           
           std::runtime_error rerr("what a shame");
           error::External err5(rerr);
@@ -195,7 +193,7 @@ namespace lumiera {
           
           CHECK (err2.rootCause() == err1.what());
           CHECK (err3.rootCause() == err1.what());
-          CHECK (err4.rootCause() == err1.what());
+          CHECK (err4.rootCause() == err1.rootCause()); // mere copy is not a root cause
           
           CHECK (err5.rootCause() == rerr.what());
           CHECK (err6.rootCause() == rerr.what());
@@ -204,7 +202,7 @@ namespace lumiera {
         
         /** @test terminate the Application by throwing an undeclared exception.
          *        this should result in the global unknown() handler to be called,
-         *        so usually it will terminate the test run. 
+         *        so usually it will terminate the test run.
          *  @note inside error.hpp, an initialisation hook has been installed into
          *        AppState, causing our own unknown() handler to be installed and
          *        invoked, which gives additional diagnostics.*/
@@ -215,20 +213,29 @@ namespace lumiera {
         
         
         /** a very specific Exception class
-         *  local to this scope and with 
+         *  local to this scope and with
          *  additional behaviour.
-         */ 
-        class SpecificError : public error::Invalid
+         */
+        class SpecificError
+          : public error::Invalid
           {
-            int value;
+            int value_;
           public:
-            SpecificError () : Invalid("don't panic",LUMIERA_ERROR_LIFE_AND_UNIVERSE), value(42) {}
-            int revealIt ()   { return value; }
+            SpecificError()
+              : error::Invalid{"don't panic", LUMIERA_ERROR_LIFE_AND_UNIVERSE}
+              , value_(42)
+              { }
+            
+            int
+            revealIt()
+              {
+                return value_;
+              }
           };
         
         
         
-        /** helper: provides a bunch of catch-clauses and 
+        /** helper: provides a bunch of catch-clauses and
          *  runs the given member functions within
          */
         void catcher (void (ExceptionError_test::*funky)(string), string context)

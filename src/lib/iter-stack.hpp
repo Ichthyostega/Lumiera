@@ -82,25 +82,25 @@ namespace lib {
       {
         /* === Iteration control API for IterStateWrapper == */
         
-        friend bool
-        checkPoint (IterDequeStorage const& elements)
-        {
-          return not elements.empty();
-        }
+        bool
+        checkPoint()  const
+          {
+            return not this->empty();
+          }
         
-        friend TY &
-        yield (IterDequeStorage const& elements)
-        {
-          REQUIRE (not elements.empty());
-          return unConst(elements).back();
-        }
+        TY &
+        yield()  const
+          {
+            REQUIRE (not this->empty());
+            return unConst(this)->back();
+          }
         
-        friend void
-        iterNext (IterDequeStorage & elements)
-        {
-          REQUIRE (not elements.empty());
-          elements.pop_back();
-        }
+        void
+        iterNext()
+          {
+            REQUIRE (not this->empty());
+            this->pop_back();
+          }
       };
   } // namespace lib::iter
   
@@ -245,7 +245,7 @@ namespace lib {
        * to prepare and pre-fill a sequence
        */
       struct Builder
-        : util::no_copy_by_client
+        : util::Cloneable
         {
           Builder(IterQueue& initialElements)
             : queue_(initialElements)

@@ -39,12 +39,12 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -59,9 +59,10 @@ namespace interact {
   /**
    * Abstract foundation of UI state tracking components.
    * @todo write type comment...
+   * ///////////////////////////////////TODO do we need a translation unit interaction-state.cpp (otherwise delete it!)
    */
   class InteractionState
-    : boost::noncopyable
+    : util::NonCopyable
     {
     protected:
       

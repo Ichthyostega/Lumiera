@@ -52,16 +52,16 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/engine/calc-stream.hpp"
-#include "lib/iter-source.hpp"
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource base feature here
 #include "lib/util.hpp"
-//
-#include <boost/noncopyable.hpp>
+
 #include <functional>
 //#include <string>
 #include <vector>
@@ -127,7 +127,7 @@ namespace play {
    *       from the PlayService.
    */
   class PlayProcess
-    : boost::noncopyable
+    : util::NonCopyable
     {
       OutputFeeds outputFeeds_;
       

@@ -23,45 +23,94 @@
 
 /** @file nocopy.hpp
  ** Mix-Ins to allow or prohibit various degrees of copying and cloning.
- ** @todo 2016 this could be organised way better. Also C++11 offers a way more
- **       elegant way of expressing the intention. We could get rid of `boost::noncopyable`
- **       The basic idea of using a marker mixin seems very reasonable though.     ////////////////////////////TICKET #1084
+ ** Whenever a class is conceived as entity with a well-defined "identity",
+ ** or whenever a service has to manage resources, we consider it good practice
+ ** to define it by default as "non copyable". This rules out a lot of complexities
+ ** with mutable state and confusion regarding equality.
+ ** @remark inspired by [Boost-Noncopyable]
+ ** 
+ ** [Boost-Noncopyable]: http://www.boost.org/doc/libs/1_55_0/libs/utility/utility.htm#Class_noncopyable
  */
 
 
 #ifndef LIB_NOCOPY_H
 #define LIB_NOCOPY_H
 
-#include <boost/noncopyable.hpp>
-
 
 
 namespace util {
   
   /**
-   * any copy and copy construction prohibited
+   * Any copy and copy construction prohibited
    */
-  class no_copy
-    : boost::noncopyable
-    { };
+  class NonCopyable
+    {
+    protected:
+     ~NonCopyable()                               = default;
+      NonCopyable()                               = default;
+      NonCopyable (NonCopyable const&)            = delete;
+      NonCopyable& operator= (NonCopyable const&) = delete;
+    };
   
   /**
-   * classes inheriting from this mixin
-   * may be created by copy-construction,
-   * but any copy-assignment is prohibited.
-   * @note especially this allows returning
-   *       by-value from a builder function,
-   *       while prohibiting any further copy
+   * Types marked with this mix-in may be moved but not copied
    */
-  class no_copy_by_client
+  class MoveOnly
     {
-     protected:
-       ~no_copy_by_client() {}
-        no_copy_by_client() {}
-        no_copy_by_client (no_copy_by_client const&) {}
-        no_copy_by_client const&
-        operator=(no_copy_by_client const&) { return *this; }
+    protected:
+     ~MoveOnly()                                = default;
+      MoveOnly()                                = default;
+      MoveOnly (MoveOnly&&)                     = default;
+      MoveOnly (MoveOnly const&)                = delete;
+      MoveOnly& operator= (MoveOnly&&)          = delete;
+      MoveOnly& operator= (MoveOnly const&)     = delete;
     };
+  
+  /**
+   * Types marked with this mix-in may be moved and move-assigned
+   */
+  class MoveAssign
+    {
+    protected:
+     ~MoveAssign()                              = default;
+      MoveAssign()                              = default;
+      MoveAssign (MoveAssign&&)                 = default;
+      MoveAssign (MoveAssign const&)            = delete;
+      MoveAssign& operator= (MoveAssign&&)      = default;
+      MoveAssign& operator= (MoveAssign const&) = delete;
+    };
+  
+  /**
+   * Types marked with this mix-in may be created by
+   * copy-construction (or move construction),
+   * but may be not reassigned thereafter.
+   * @remark especially this allows returning
+   *         by-value from a builder function,
+   *         while prohibiting any further copy
+   */
+  class Cloneable
+    {
+    protected:
+     ~Cloneable()                               = default;
+      Cloneable()                               = default;
+      Cloneable (Cloneable&&)                   = default;
+      Cloneable (Cloneable const&)              = default;
+      Cloneable& operator= (Cloneable&&)        = delete;
+      Cloneable& operator= (Cloneable const&)   = delete;
+    };
+  
+  /**
+   * Not meant to be instantiated in any way.
+   * Types marked this way are typically used for metaprogramming
+   * or expose static factory methods to some related sibling
+   * based on a template parameter or similar configuration.
+   */
+  class NoInstance
+    {
+    protected:
+      NoInstance() = delete;
+    };
+  
   
 } // namespace util
 #endif /*LIB_NOCOPY_H*/

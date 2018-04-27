@@ -57,7 +57,7 @@ namespace test{
   using proc::asset::meta::TimeGrid;
   using lib::meta::Types;
   using lib::meta::InstantiateChainedCombinations;
-  using error::LUMIERA_ERROR_UNCONNECTED;
+  using error::LERR_(UNCONNECTED);
   
   
   
@@ -81,7 +81,7 @@ namespace test{
      */
     template<class TI>
     class TestListener
-      : boost::noncopyable
+      : util::NonCopyable
       {
         mutable
         ScopedHolder<TI> received_;

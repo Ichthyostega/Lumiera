@@ -200,6 +200,7 @@ namespace test{
                                 uint cnt    = rand() % MAX_RAND_STEPS;
                                 uint delay  = rand() % MAX_RAND_DELAY;
                                 
+                                syncPoint();               // block until all threads are ready
                                 for (uint i=0; i<cnt; ++i)
                                   {
                                     uint increment = rand() % MAX_RAND_INCMT;
@@ -233,6 +234,10 @@ namespace test{
                               storage.create<Worker>(queue);
                             }
                          };
+          
+          // unleash all worker functions
+          for (auto& thread : workers)
+            thread.sync();
           
           // wait for termination of all threads
           for (auto& worker : workers)

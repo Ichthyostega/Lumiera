@@ -39,8 +39,9 @@
 #define GUI_INTERACT_NAVIGATOR_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/interact/ui-coord-resolver.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <memory>
 
@@ -53,23 +54,32 @@ namespace interact {
   
 //  class GlobalCtx;
   class SpotLocator;
+  class ViewLocator;
   
   
   
   /**
-   * Global cross-cutting navigation in interface space
+   * Global cross-cutting navigation within user interface space
    * 
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
+   * @see UiCoordResolver
    */
   class Navigator
-    : boost::noncopyable
+    : public LocationQuery
+    , util::NonCopyable
     {
       SpotLocator& spotLocator_;
+      ViewLocator& viewLocator_;
       
     public:
-      Navigator (SpotLocator&);
+      Navigator (SpotLocator&, ViewLocator&);
      ~Navigator ();
       
+      /* === LocationQuery API === */
+      Literal   determineAnchor (UICoord const& path)         override final;
+      size_t    determineCoverage (UICoord const& path)       override final;
+      ChildIter getChildren (UICoord const& path, size_t pos) override final;
+     
     private:
       
     };

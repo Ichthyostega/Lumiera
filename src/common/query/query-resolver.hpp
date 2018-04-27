@@ -37,8 +37,8 @@
 
 #include "lib/iter-adapter.hpp"
 #include "common/query.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 #include <memory>
 #include <string>
@@ -47,7 +47,6 @@ using std::function;
 
 namespace lumiera {
   
-  using boost::noncopyable;
   using std::unique_ptr;
   using std::string;
   
@@ -65,7 +64,7 @@ namespace lumiera {
    * of an individual query resolution
    */
   class Resolution
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       typedef Goal::Result Result;
@@ -106,7 +105,7 @@ namespace lumiera {
    * Thus the implementation might downcast query and resultset.
    */
   class QueryResolver
-    : noncopyable
+    : util::NonCopyable
     {
       unique_ptr<QueryDispatcher> dispatcher_;
       

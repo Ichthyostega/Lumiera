@@ -1,6 +1,12 @@
 Design Documents: Lumiera Architecture
 ======================================
 
+// Menu :  sort children
+// Menu :  prepend child Subsystems
+// Menu :  prepend child ArchitectureSummary
+
+// Menu :  attach child TimeQuant after TimeUsage
+
 This section will feature some rather high-level considerations regarding
 the architecture of the application.
 

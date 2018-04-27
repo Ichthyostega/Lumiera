@@ -43,7 +43,6 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <stack>
 
 
@@ -83,7 +82,7 @@ using util::isnil;
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
   class JobTicket
-    : boost::noncopyable
+    : util::NonCopyable
     {
       struct Provision
         {

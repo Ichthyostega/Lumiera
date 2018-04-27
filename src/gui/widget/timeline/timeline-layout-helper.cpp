@@ -30,7 +30,7 @@
 #include "gui/widget/timeline/timeline-layout-helper.hpp"
 #include "gui/widget/timeline-widget.hpp"
 #include "gui/model/sequence.hpp"
-#include "gui/util/rectangle.hpp"
+#include "gui/draw/rectangle.hpp"
 
 #include <boost/foreach.hpp>
 #include <memory>
@@ -45,7 +45,7 @@ using std::dynamic_pointer_cast;
 using namespace Gtk;           ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace lumiera;       ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace util;          ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::util;     /////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace gui::draw;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace gui {
 namespace widget {
@@ -119,7 +119,7 @@ namespace timeline {
     BOOST_FOREACH( pair, headerBoxes )
       {
         // Hit test the rectangle      
-        if(util::pt_in_rect(point, pair.second))
+        if (gui::draw::pt_in_rect (point, pair.second))
           return shared_ptr<timeline::Track>(pair.first);
       }
     

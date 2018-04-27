@@ -26,21 +26,13 @@
 
 
 #include "lib/test/run.hpp"
-
-//#include "lib/p.hpp"
-//#include "lib/diff/gen-node.hpp"
-
 #include "lib/meta/util.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>       //////////TODO
 #include <string>
 
-//using lib::P;
-//using lib::diff::GenNode;
 
 using std::string;
-using std::cout;       /////////////TODO
-using std::endl;       /////////////TODO
 
 
 namespace lib {
@@ -130,8 +122,8 @@ namespace test{
           CHECK (typeStr(&magic)    == "Space const* (*)(Outer<Space>::Inner&&)");
           CHECK (typeSymbol(&magic) == "Function");
           
-          CHECK (typeStr   <Outer<typeof(this)>::Inner>()    == "Outer<test::TypeDisplay_test*>::Inner");
-          CHECK (typeSymbol<Outer<typeof(this)>::Inner>()    == "Inner"      );
+          CHECK (typeStr   <Outer<decltype(this)>::Inner>()  == "Outer<test::TypeDisplay_test*>::Inner");
+          CHECK (typeSymbol<Outer<decltype(this)>::Inner>()  == "Inner"      );
           
           CHECK (primaryTypeComponent("")                    == "void"       );
           CHECK (primaryTypeComponent("Sym&")                == "Sym"        );

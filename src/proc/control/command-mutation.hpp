@@ -58,7 +58,7 @@ namespace control {
   
   /**
    * Unspecific command functor for implementing Proc-Layer Command.
-   * To be created from an tr1::function object, which later on gets
+   * To be created from an std::function object, which later on gets
    * any necessary arguments from a closure passed in on invocation.
    * The concrete type of the function  and the arguments is
    * concealed (erased) on the interface.
@@ -80,7 +80,7 @@ namespace control {
         {
           if (!clo)
             throw lumiera::error::State ("Lifecycle error: function arguments not ready",
-                                         LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                                         LERR_(UNBOUND_ARGUMENTS));
           clo.invoke (func_);
         }
       
@@ -138,7 +138,7 @@ namespace control {
         {
           if (!clo)
             throw lumiera::error::State ("need additional function arguments to be able to capture UNDO state",
-                                         LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+                                         LERR_(UNBOUND_ARGUMENTS));
           
           captureMemento_(clo);
           return *this;

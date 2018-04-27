@@ -57,6 +57,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "proc/asset/category.hpp"
 #include "lib/hash-value.h"
@@ -64,7 +65,6 @@
 
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/operators.hpp>
-#include <boost/noncopyable.hpp>
 
 #include <cstddef>
 #include <string>
@@ -144,8 +144,8 @@ namespace asset {
    * @author Ichthyo
    */
   class Asset 
-    : boost::totally_ordered1< Asset,
-        boost::noncopyable>
+    : public boost::totally_ordered1< Asset
+    , util::NonCopyable             >
     {
     public:
 

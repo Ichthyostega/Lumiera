@@ -52,8 +52,8 @@ namespace lib {
 namespace diff{
 namespace test{
   
-  using error::LUMIERA_ERROR_WRONG_TYPE;
-  using error::LUMIERA_ERROR_BOTTOM_VALUE;
+  using error::LERR_(WRONG_TYPE);
+  using error::LERR_(BOTTOM_VALUE);
   
   namespace {//Test fixture....
     

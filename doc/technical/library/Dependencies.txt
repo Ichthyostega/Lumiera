@@ -1,0 +1,226 @@
+Singletons and Dependency Handling
+==================================
+:Date: 2018
+:Toc:
+
+We encounter _dependencies as an issue at implementation level:_ In order to deal with some task at hand,
+sometimes we need to arrange matters way beyond the scope of that task. We could just thoughtlessly reach out and
+settle those extraneous concerns -- yet this kind of pragmatism has a price tag: we are now mutually dependent
+with internals of some other part of the system we do not even care much about. A more prudent choice would be
+to let ``that other part'' provide a service for us, focussed to what we actually need right here to get _our_
+work done. In essence, we create a dependency to resolve issues of coupling and to reduce complexity
+(»divide et impera«).
+
+Unfortunately this solution created a new problem: how do we get at our dependencies? We can not just step ahead
+and create them or manage them, because then we'd be ``back to square one''. Rather someone else has to care.
+Someone _needs to connect us with those dependencies,_ so we can use them. This is a special meta-service known
+as _Dependency Injection_. A dedicated part of the application wires all other components, so each component
+can focus on its specific concern and abstract away everything else. Dependency Injection can be seen as
+application of the principle »Inversion Of Control«: each part is sovereign within its own realm, but becomes
+a client (asks for help) for anything beyond that.
+
+However, in the Lumiera code base, we refrain from building or using a full-blown Dependency Injection Container.
+A lot of FUD has been spread regarding Dependency Injection and Singletons, to the point that a majority of developers
+confuses and conflates the Inversion-of-Control principle (which is essential) with the use of a DI-Container. Nowadays,
+you can not even utter the word ``Singleton'' without everyone yelling out ``Evil! Evil!'' -- while most of these people
+at the same time feel just comfortable living in the metadata hell.
+
+Not Singletons as such are problematic -- rather, the _coupling_ of the Singleton class _itself_ with the instantiation
+and lifecycle mechanism is what creates the problems. This situation is similar to the use of _global variables,_ which
+likewise are not evil as such; the problems arise from an imperative, operation driven and data centric mindset,
+combined with hostility towards any abstraction. In C++ such problems can be mitigated by use of a generic
+_Singleton Factory_ -- which can be augmented into a _Dependency Factory_ for those rare cases where we actually need
+more instance and lifecycle management beyond lazy initialisation. Client code indicates the dependence on some other
+service by planting an instance of that Dependency Factory (for Lumiera this is `lib::Depend<TY>`) and remains unaware
+if the instance is created lazily in singleton style (which is the default) or has been reconfigured to expose
+a service instance explicitly created by some subsystem lifecycle. The __essence of a ``dependency'' __ of this kind is
+that we **access a service _by name_**. And this service name or service ID is in our case a _type name._
+
+
+Requirements
+------------
+Our *DependencyFactory* satisfies the following requirements
+
+- client code is able to access some service _by-name_ -- where the name is actually
+  the _type name_ of the service interface.
+- client code remains agnostic with regard to the lifecycle or backing context of the service it relies on.
+- in the simplest (and most prominent case), _nothing_ has to be done at all by anyone to manage that lifecycle. +
+  By default, the Dependency Factory creates a *singleton* instance lazily (heap allocated) on demand and it ensures
+  thread-safe initialisation and access.
+- we establish a policy to *disallow any significant functionality during application shutdown*.
+  After leaving `main()`, only trivial dtors are invoked and possibly a few resource handles are dropped.
+  No filesystem writes, no clean-up and reorganisation, not even any logging is allowed. For this reason,
+  we established a link:{ldoc}/design/architecture/Subsystems.html[Subsystem] concept with explicit shutdown hooks,
+  which are invoked beforehand.
+- the Dependency Factory can be re-configured for individual services (type names) to refer to an explicitly installed
+  service instance. In those cases, access while the service is not available will raise an exception.
+  There is a simple one-shot mechanism to reconfigure Dependency Factory and create a link to an actual
+  service implementation, including automatic deregistration.
+
+
+Configuration
+~~~~~~~~~~~~~
+The DependencyFactory and thus the behaviour of dependency injection can be reconfigured, ad hoc, at runtime. +
+Deliberately, we do not enforce global consistency statically (since that would lead to one central static configuration).
+However, a runtime sanity check is performed to ensure configuration actually happens prior to any use, which means any
+invocation to retrieve (and thus lazily create) the service instance. The following flavours can be configured:
+
+default::
+  a singleton instance of the designated type is created lazily, on first access
+
+  - define an instance for access (preferably static): `Depend<Blah> theBla;`
+  - access the singleton instance as `theBla().doIt()`
+
+singleton subclass::
+  `DependInject<Blah>::useSingleton<SubBlah>();` +
+  causes the dependency factory `Depend<Bla>` to create a `SubBlah` singleton instance from now on
+
+attach to service::
+  `DependInject<Blah>::ServiceInstance<SubBlah> service{p1, p2, p3};`
+
+  - build and manage an instance of `SubBlah` in heap memory immediately (not lazily)
+  - configure the dependency factory to return a reference _to this instance_
+  - the instantiated `ServiceInstance<SubBlah>` object itself acts as lifecycle handle (and managing smart-ptr)
+  - when it is destroyed, the dependency factory is automatically cleared, and further access will trigger an error
+
+support for test mocking::
+  `DependInject<Blah>::Local<SubBlah> mock;` +
+
+  - temporarily shadows whatever configuration resides within the dependency factory
+  - the next access will create a (non singleton) `SubBlah` instance in heap memory and return a `Blah&`
+  - the instantiated mock handle object again acts as lifecycle handle and smart-ptr
+    to access the `SubBlah` instance like `mock->doItSpecial()`
+  - when this handle goes out of scope, the original configuration of the dependency factory is restored
+
+custom constructors::
+  both the subclass singleton configuration and the test mock support optionally accept a functor
+  or lambda argument with signature `SubBlah*()`. The contract is for this construction functor
+  to return a heap allocated object, which will be owned and managed by the DependencyFactory.
+  Especially this enables use of subclasses with non default ctor and / or binding to some
+  additional hidden context. Please note _that this closure will be invoked later, on-demand._
+
+We consider the usage pattern of dependencies a question of architecture rather --
+such can not be solved by any mechanism at implementation level. For this reason,
+Lumiera's Dependency Factory prevents reconfiguration after use, but does nothing beyond such basic sanity checks.
+
+
+Performance considerations
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+We acknowledge that such a dependency or service will be accessed frequently and even from rather performance critical
+parts of the application. We have to optimise for low overhead on access, while initialisation happens only once and
+can be arbitrarily expensive. It is more important that configuration, setup and initialisation code remains readable.
+And it is important to place such configuration at a location within the code where the related concerns are treated --
+which is not at the usage site, and which is likewise not within some global central core application setup. At which
+point precisely initialisation happens is a question of architecture -- lazy initialisation can be used to avoid
+expensive setup of rarely used services, or it can be employed to simplify the bootstrap of complex subsystems,
+or to break service dependency cycles. All of this builds on the assumption that the global application structure
+is fixed and finite and well-known -- we assume we are in full control about when and how parts of the application
+start and stop.
+
+Our requirements on (optional) reconfigurability have some impact on the implementation technique though,
+since we need access to the instance pointer for individual service types. This basically rules out
+_Meyers Singleton_ -- and so the adequate implementation technique for our usage pattern is _Double Checked Locking._
+In the past, there was much debate about DCL being
+link:http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html[broken] -- which indeed was true when
+_assuming full portability and arbitrary target platform._ Since our focus is primarily on PC-with-Linux systems,
+this argument seems to lean more to the theoretical side though, since the x86/64 platform is known to employ rather
+strong memory and cache coherency constraints. With the recent advent of ARM systems, the situation has changed however.
+Anyway, since C++11 there
+link:http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11[is now a portable solution available]
+for writing a correct DCL implementation, based on `std::atomic`.
+
+The idea underlying Double Checked Locking is to optimise for the access path, which is achieved by moving the
+expensive locking entirely out of that path. However, any kind of concurrent consistency assertion requires us
+to establish a »happens before« relation between two events of information exchange. Both traditional locking
+and lock-free concurrency implement this relation by establishing a *synchronises-with* relation between two actions
+on a common *guard* entity -- for traditional locking, this would be a Lock, Mutex, Monitor or Semaphore, while
+lock-free concurrency uses the notion of a _fence_ connected with some well defined action on a userspace guard variable.
+In modern C++, typically we use _Atomic variables_ as guard. In addition to well defined semantics regarding concurrent
+visibility of changes, these link:http://en.cppreference.com/w/cpp/atomic["atomics"] offer indivisible access and
+exchange operations. A correct concurrent interaction must involve some kind of well defined handshake to establish
+the aforementioned _synchronises-with_ relation -- otherwise we just can not assume anything. Herein lies the problem
+with Double Checked Locking: when we move all concurrency precautions away from the optimised access path, we get
+performance close to a direct local memory access, but we can not give any correctness assertions in this setup.
+If we are lucky (and the underlying hardware does much to yield predictable behaviour), everything works as expected,
+but we can never be sure about that. A correct solution thus inevitably needs to take away some of the performance
+from the optimised access path. Fortunately, with properly used atomics this price tag is known to be low.
+At the end of the day, correctness is more important than some superficially performance boost.
+
+To gain insight into the rough proportions of performance impact, in 2018 we conducted some micro benchmarks
+(using a 8 core AMD FX-8350 64bit CPU running Debian/Jessie and GCC 4.9 compiler)
+The following table lists averaged results _in relative numbers,_
+in relation to a single threaded optimised direct non virtual member function invocation (≈ 0.3ns)
+
+[width="80%",cols="4e,4*>",frame="topbot",options="header"]
+|==========================
+| Access Technique 2+^| development 2+^| optimised
+||[small]#singlethreaded#
+|[small]#multithreaded#
+|[small]#singlethreaded#
+|[small]#multithreaded#
+|direct invoke on shared local object       |   15.13|   16.30|  *1.00*|   1.59
+|invoke existing object through unique_ptr  |   60.76|   63.20|    1.20|   1.64
+|lazy init unprotected (not threadsafe)     |   27.29|   26.57|    2.37|   3.58
+|lazy init always mutex protected           | 179.62| 10917.18|   86.40| 6661.23
+|Double Checked Locking with mutex          |   27.37|   26.27|    2.04|   3.26
+|DCL with std::atomic and mutex for init    |   44.06|   52.27|    2.79|   4.04
+|==========================
+
+These benchmarks used a dummy service class holding a `volatile int`, initialised to a random value.
+The complete code was visible to the compiler and thus eligible for inlining. Repeatedly the benchmarked code
+accessed this dummy object through the means listed in the table, then retrieved the (actually constant) value
+from the private volatile variable within the service and compared it to zero.
+This setup ensures the optimiser can not remove the code altogether, while the access to the service dominates
+the measured time. The concurrent measurement used 8 threads (number of cores), each performing the same timing loop
+on a local instance. The number of invocations within each thread was high enough (several millions) to amortise
+the actual costs of object allocation.
+Some observations:
+
+- The numbers obtained pretty much confirm
+  link:http://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton[other people's measurments].
+- Synchronisation is indeed necessary;
+  the unprotected lazy init crashed several times randomly during multithreaded tests.
+- Contention on concurrent access is very tangible;
+  even for unguarded access the cache and memory hardware has to perform additional work
+- However, the concurrency situation in this example is rather extreme and deliberately provokes collisions;
+  in practice we'd be closer to the single threaded case
+- Double Checked Locking is a very effective implementation strategy and results in timings
+  within the same order of magnitude as direct unprotected access
+- Unprotected lazy initialisation performs spurious duplicate initialisations, which can be avoided by DCL
+- Naïve Mutex locking is slow even with non-recursive Mutex without contention
+- Optimisation achieves access times around ≈ 1ns
+
+
+
+Architecture
+------------
+Dependency management does not define the architecture, nor can it solve architecture problems.
+Rather, its purpose is to _enact_ the architecture. A dependency is something we need in order to perform
+the task at hand, yet essence of a dependency lies outside the scope and relates to concerns beyond and theme
+of this actual task. A naïve functional approach -- pass everything you need as argument -- would be as harmful
+as thoughtlessly manipulating some off-site data to fit current needs. The local function would be splendid,
+strict and referentially transparent -- yet anyone using it would be infected with issues of tangling and
+tight coupling. As remedy, a _global context_ can be introduced, which works well as long as this global
+context does not exhibit any other state than ``being available''. The root of those problems however
+lies in the drive to conceive matters simpler as they are.
+
+- collaboration typically leads to indirect mutual dependency.
+  We can only define precisely _what is required locally,_ and then _pull our requirements_ on demand.
+- a given local action can be part of a process, or a conversation or interaction chain, which in turn
+  might originate from various, quite distinct contexts. At _that level,_ we might find a simpler structure
+  to hinge questions of lifecycle on.
+
+In Lumiera we encounter both these kinds of circumstances. On a global level, we have a simple and well defined
+order of dependencies, cast into link:{ldoc}/design/architecture/Subsystems.html[Subsystem relations].
+We know e.g. that mutating changes to the session can originate from scripts or from UI interactions.
+It suffices thus, when the _leading subsystem_ (the UI or the script runner) refrains from emitting any further
+external activities, _prior_ to reaching that point in the lifecycle where everything is ``basically set''.
+Yet however self evident this insight might be, it yields some unsettling and challenging consequences:
+The UI _must not assume_ the presence of specific data structures within the lower layers, nor is it allowed to
+``pull'' session contents as a dependency while starting up. Rather the UI-Layer is bound to bootstrap itself into
+completely usable and operative state, without the ability to attach anything onto existing tangible content structures.
+This runs completely counter common practice of UI programming, where it is customary to wire most of the
+application internals somehow directly below the UI ``shell''. Rather, in Lumiera the UI must be conceived
+as a _collection of services_ -- and when running, a _population request_ can be issued to fill the prepared
+UI framework with content. This is Inversion-of-Control at work.
+

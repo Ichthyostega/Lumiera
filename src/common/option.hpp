@@ -74,7 +74,7 @@ namespace lumiera {
    * unrecognised parts.
    */
   class Option
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       Option (lib::Cmdline& cmdline);

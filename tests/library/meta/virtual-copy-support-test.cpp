@@ -41,8 +41,8 @@ using util::_Fmt;
 using util::isnil;
 using std::string;
 
-using lumiera::error::LUMIERA_ERROR_LOGIC;
-using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+using lumiera::error::LERR_(LOGIC);
+using lumiera::error::LERR_(WRONG_TYPE);
 
 
 namespace lib  {
@@ -222,7 +222,7 @@ namespace test {
               if (!impl)
                 throw error::Logic("virtual copy works only on instances "
                                    "of the same concrete implementation class"
-                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+                                  ,error::LERR_(WRONG_TYPE));
               else
                return *impl;
             }

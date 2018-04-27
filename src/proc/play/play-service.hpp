@@ -57,10 +57,9 @@
 
 
 #include "lib/error.hpp"
-#include "include/play-facade.h"
-#include "common/interface-facade-link.hpp"
+#include "lib/nocopy.hpp"
+#include "include/play-facade.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 //#include <string>
 
@@ -69,7 +68,6 @@ namespace proc {
 namespace play {
 
   using std::string;
-  using lumiera::facade::InterfaceFacadeLink;
 //using lumiera::Subsys;
 //using lumiera::Display;
 //using lumiera::DummyPlayer;
@@ -100,9 +98,8 @@ namespace play {
    */
   class PlayService
     : public lumiera::Play
-    , boost::noncopyable
+    , util::NonCopyable
     {
-      InterfaceFacadeLink<lumiera::Play> facadeAccess_;
       std::unique_ptr<ProcessTable>      pTable_;
       
       

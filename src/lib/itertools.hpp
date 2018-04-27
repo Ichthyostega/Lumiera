@@ -42,11 +42,23 @@
  ** The FilterIter template can be used to build a filter into a pipeline,
  ** as it forwards only those elements from its source iterator, which pass
  ** the predicate evaluation. Anything acceptable as ctor parameter for a
- ** tr1::function object can be passed in as predicate, but of course the
+ ** std::function object can be passed in as predicate, but of course the
  ** signature must be sensible. Please note, that -- depending on the
- ** predicate -- already the ctor or even a simple \c bool test might
+ ** predicate -- already the ctor or even a simple `bool` test might
  ** pull and exhaust the source iterator completely, in an attempt
  ** to find the first element passing the predicate test.
+ ** 
+ ** \par extensible Filter
+ ** Based on the FilterIter, this facility allows to elaborate the filter
+ ** function while in the middle of iteration. The new augmented filter
+ ** will be in effect starting with the current element, which might even
+ ** be filtered away now due to a more restrictive condition. However,
+ ** since this is still an iterator, any "past" elements are already
+ ** extracted and gone and can thus not be subject to changed filtering.
+ ** The ExtensibleFilterIter template provides several _builder functions_
+ ** to elaborate the initial filter condition, like adding conjunctive or
+ ** disjunctive clauses, flip the filter's meaning or even replace it
+ ** altogether by a completely different filter function.
  ** 
  ** \par processing Iterator
  ** the TransformIter template can be used as processing (or transforming)
@@ -55,11 +67,9 @@
  ** source iterator. The signature of the functor must match the
  ** desired value (output) type. 
  ** 
- ** @todo some more building blocks are planned, see Ticket #347
- ** 
  ** @see iter-adapter.hpp
  ** @see itertools-test.cpp
- ** @see contents-query.hpp
+ ** @see event-log.hpp
  */
 
 
@@ -311,7 +321,7 @@ namespace lib {
         : Raw{forward<IT>(source)}
         , predicate_(prediDef) // induces a signature check
         , cached_(false)      //  not yet cached
-        , isOK_()            //   some value
+        , isOK_(false)       //   not yet relevant
         { }
       
       template<typename PRED>
@@ -319,7 +329,7 @@ namespace lib {
         : Raw{source}
         , predicate_(prediDef)
         , cached_(false)
-        , isOK_()
+        , isOK_(false)
         { }
     };
   
@@ -373,7 +383,7 @@ namespace lib {
   filterIterator (IT&& src, PRED filterPredicate)
   {
     using SrcIT  = typename std::remove_reference<IT>::type;
-    return FilterIter<SrcIT>{forward<SrcIT>(src), filterPredicate};
+    return FilterIter<SrcIT>{forward<IT>(src), filterPredicate};
   }
   
   
@@ -393,7 +403,7 @@ namespace lib {
    *       for the added clause.
    * @warning the addition of disjunctive and negated clauses might
    *       actually weaken the filter condition. Yet still there is
-   *       \em no reset of the source iterator, i.e. we don't
+   *       _no reset of the source iterator,_ i.e. we don't
    *       re-evaluate from start, but just from current head.
    *       Which means we might miss elements in the already consumed
    *       part of the source sequence, which theoretically would
@@ -565,6 +575,102 @@ namespace lib {
   
   
   
+  /**
+   * Implementation of a _singleton value_ holder,
+   * which discards the contained value once "iterated"
+   */
+  template<typename VAL>
+  class SingleValCore
+    {
+      typedef wrapper::ItemWrapper<VAL> Item;
+      
+      Item theValue_;
+      
+    public:
+      SingleValCore() { } ///< passive and empty
+      
+      SingleValCore (VAL&& something)
+        : theValue_{forward<VAL> (something)}
+        { }
+      
+      Item const&
+      pipe ()  const
+        {
+          return theValue_;
+        }
+      
+      void
+      advance ()
+        {
+          theValue_.reset();
+        }
+      
+      bool
+      evaluate () const
+        {
+          return theValue_.isValid();
+        }
+      
+      typedef typename std::remove_reference<VAL>::type * pointer;
+      typedef typename std::remove_reference<VAL>::type & reference;
+      typedef typename std::remove_reference<VAL>::type   value_type;
+    };
+  
+  
+  /**
+   * Pseudo-Iterator to yield just a single value.
+   * When incremented, the value is destroyed and
+   * the Iterator transitions to _exhausted state_.
+   * @remark as such might look nonsensical, but proves
+   *   useful when a function yields an iterator, while
+   *   producing an explicit value in some special case.
+   * @tparam VAL anything, value or reference to store
+   */
+  template<class VAL>
+  class SingleValIter
+    : public IterTool<SingleValCore<VAL>>
+    {
+      using _ValHolder = SingleValCore<VAL>;
+      using _IteratorImpl = IterTool<_ValHolder> ;
+      
+    public:
+      SingleValIter ()
+        : _IteratorImpl{_ValHolder{}}
+        { }
+      
+      SingleValIter (VAL&& something)
+        : _IteratorImpl{_ValHolder{forward<VAL>(something)}}
+        { }
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (SingleValIter)
+    };
+  
+  
+  
+  /** Build a SingleValIter: convenience free function shortcut,
+   *  to pick up just any value and wrap it as Lumiera Forward Iterator.
+   *  @return Iterator to yield the value once
+   *  @warning be sure to understand that we literally pick up and wrap anything
+   *           provided as argument. If you pass a reference, we wrap a reference.
+   *           If you want to wrap a copy, you have to do the copy yourself inline
+   */
+  template<class VAL>
+  inline auto
+  singleValIterator (VAL&& something)
+  {
+    return SingleValIter<VAL>{forward<VAL>(something)};
+  }
+  
+  template<class VAL>
+  inline auto
+  singleValIterator (VAL const& ref)
+  {
+    return SingleValIter<VAL>{ref};
+  }
+  
+
+  
+  
   
   /**
    * Implementation of custom processing logic.
@@ -643,8 +749,8 @@ namespace lib {
   
   /**
    * Iterator tool treating pulled data by a custom transformation (function)
-   * @param IT source iterator
-   * @param VAL result (output) type
+   * @tparam IT source iterator
+   * @tparam VAL result (output) type
    */
   template<class IT, class VAL>
   class TransformIter
@@ -676,7 +782,7 @@ namespace lib {
   
   /** Build a TransformIter: convenience free function shortcut,
    *  picking up the involved types automatically.
-   *  @param  processingFunc to be invoked for each source element
+   *  @tparam processingFunc to be invoked for each source element
    *  @return Iterator processing the source feed
    */
   template<class IT, typename FUN>
@@ -693,7 +799,7 @@ namespace lib {
   {
     using SrcIT  = typename std::remove_reference<IT>::type;
     using OutVal = typename lib::meta::_Fun<FUN>::Ret;
-    return TransformIter<SrcIT,OutVal>{forward<SrcIT>(src), processingFunc};
+    return TransformIter<SrcIT,OutVal>{forward<IT>(src), processingFunc};
   }
   
   
@@ -751,7 +857,7 @@ namespace lib {
   {
     using SrcIT = typename std::remove_reference<IT>::type;
     using Val   = typename SrcIT::value_type;
-    return filterIterator (forward<SrcIT>(source), SkipRepetition<Val>() );
+    return filterIterator (forward<IT>(source), SkipRepetition<Val>() );
   }
   
   

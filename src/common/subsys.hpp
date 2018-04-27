@@ -44,8 +44,8 @@
 #define LUMIERA_SUBSYS_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 #include <string>
 #include <vector>
@@ -55,7 +55,6 @@
 namespace lumiera {
   
   using std::string;
-  using boost::noncopyable;
   using std::function;
   
   class Option;
@@ -69,7 +68,7 @@ namespace lumiera {
    * @note synchronisation is up to the implementor.
    */
   class Subsys
-    : private noncopyable
+    : util::NonCopyable
     {
     public:
       typedef function<void(string*)> SigTerm;

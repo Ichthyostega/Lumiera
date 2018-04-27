@@ -24,15 +24,13 @@
 /** @file result.hpp
  ** Intermediary value object to represent the result of an operation.
  ** This operation might have produced a value result or failed with an exception.
- ** Typically, the Result token is used \em inline -- immediately either invoking
+ ** Typically, the Result token is used _inline_ -- immediately either invoking
  ** one of the member function or employing the built-in result type conversion.
  ** It will be copyable iff the result value is copyable. There is an implicit
  ** valid or failure state, which can be tested. Any attempt to get the value
- ** of an invalid result token will cause in an exception to be thrown.
+ ** of an invalid result token will cause an exception to be thrown.
  ** 
- ** @todo WIP and rather brainstorming as of 2/10
- ** 
- ** @see backend::ThreadJob usage example
+ ** @see backend::ThreadJoinable usage example
  */
 
 
@@ -44,6 +42,7 @@
 #include "lib/wrapper.hpp"
 #include "lib/util.hpp"
 
+#include <utility>
 #include <string>
 
 
@@ -58,7 +57,7 @@ namespace lib {
   
   /**
    * Optional Result value or status of some operation.
-   * It can be created for passing a result produced by the operation, or the 
+   * It can be created for passing a result produced by the operation, or the
    * failure to do so. The value can be retrieved by implicit or explicit conversion.
    * @throw error::State on any attempt to access the value in case of failure
    * @warning this class has a lot of implicit conversions;
@@ -73,19 +72,19 @@ namespace lib {
       
     public:
       /** mark an invalid/failed result */
-      Result ()
-        : failureLog_("no result")
+      Result (string const& failureReason ="no result")
+        : failureLog_{failureReason}
         { }
       
       /** failed result, with reason given.*/
       Result (lumiera::Error const& reason)
-       : failureLog_(reason.what())
-       { }  
+       : failureLog_{reason.what()}
+       { }
       
       /** standard case: valid result */
-      Result (RES const& value)
-       : failureLog_("")
-       , value_(value)
+      Result (RES&& value)
+       : failureLog_{}
+       , value_{std::forward<RES> (value)}
        { }
       
       
@@ -99,7 +98,7 @@ namespace lib {
       void
       maybeThrow()  const
         {
-          if (!isValid())
+          if (not isValid())
             throw error::State (failureLog_, lumiera_error_peek());
         }
       
@@ -131,12 +130,12 @@ namespace lib {
     public:
       /** mark either failure (default) or success */
       Result (bool success =false)
-        : failureLog_(success? "": "operation failed")
+        : failureLog_{success? "": "operation failed"}
         { }
       
       /** failed result, with reason given.*/
       Result (lumiera::Error const& reason)
-       : failureLog_(reason.what())
+       : failureLog_{reason.what()}
        { }
       
       
@@ -150,7 +149,7 @@ namespace lib {
       void
       maybeThrow()  const
         {
-          if (!isValid())
+          if (not isValid())
             throw error::State (failureLog_, lumiera_error_peek());
         }
     };

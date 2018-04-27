@@ -32,8 +32,8 @@
 #define MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 
 #include "proc/mobject/session/scope-path.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <list>
 
 using std::list;
@@ -68,7 +68,7 @@ namespace session {
    * @see QueryFocus access point for client code
    */
   class QueryFocusStack
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       std::list<ScopePath> paths_;

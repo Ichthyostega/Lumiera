@@ -58,7 +58,6 @@
 #include "lib/symbol.hpp"
 #include "lib/p.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 
@@ -106,7 +105,7 @@ namespace mobject {
    * 
    */
   class Session 
-    : boost::noncopyable
+    : util::NonCopyable
     {
     protected:
       typedef lumiera::query::DefsManager&     DefaultsAccess;
@@ -147,6 +146,7 @@ namespace mobject {
   extern const char* ON_SESSION_START;  ///< triggered before loading any content into a newly created session
   extern const char* ON_SESSION_INIT;   ///< triggered when initialising a new session, after adding content
   extern const char* ON_SESSION_READY;  ///< triggered after session is completely functional and all APIs are open.
+  extern const char* ON_SESSION_CLOSE;  ///< triggered before initiating the session shutdown sequence
   extern const char* ON_SESSION_END;    ///< triggered before discarding an existing session
   
   
@@ -156,7 +156,8 @@ namespace mobject {
      * creation, access and Session lifecycle Interface.
      * An instance is accessible via Session::current
      */
-    class SessManager : private boost::noncopyable
+    class SessManager
+      : util::NonCopyable
       {
       public:
         /** diagnostics: session interface opened? */

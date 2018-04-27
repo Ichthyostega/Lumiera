@@ -120,7 +120,7 @@ namespace session {
       {
         if (Scope(placement).isRoot())
           throw error::Invalid ("Can't detach the model root."
-                               , LUMIERA_ERROR_INVALID_SCOPE);
+                               , LERR_(INVALID_SCOPE));
         
         QueryFocus currentFocus;
         currentFocus.shift (Scope(placement).getParent());

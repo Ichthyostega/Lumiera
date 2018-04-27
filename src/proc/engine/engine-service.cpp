@@ -43,7 +43,7 @@ namespace engine{
   using std::function;
   using std::bind;
   using std::ref;
-  using lib::transform;
+  using lib::iter_source::transform;
   using lib::append_all;
 
   

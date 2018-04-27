@@ -521,26 +521,26 @@ namespace diff{
       
       /* === Iteration control API for IterStateWrapper == */
       
-      friend bool
-      checkPoint (Locator const& loc)
-      {
-        return loc.get();
-      }
+      bool
+      checkPoint()  const
+        {
+          return this->get();
+        }
       
-      friend GenNode const&
-      yield (Locator const& loc)
-      {
-        return *loc.get();
-      }
+      GenNode const&
+      yield()  const
+        {
+          return *get();
+        }
       
-      friend void
-      iterNext (Locator & loc)
-      {
-        if (loc.node_)
-          loc.node_ = nullptr;
-        else
-          ++loc.scope_;
-      }
+      void
+      iterNext()
+        {
+          if (node_)
+            node_ = nullptr;
+          else
+            ++scope_;
+        }
     };
   
   
@@ -570,28 +570,28 @@ namespace diff{
       
       /* === Iteration control API for IterStateWrapper == */
       
-      friend bool
-      checkPoint (ScopeExplorer const& explorer)
-      {
-        return not  explorer.scopes_.empty()
-            && bool(explorer.scopes_.back());
-      }
+      bool
+      checkPoint()  const
+        {
+          return not  scopes_.empty()
+             and bool(scopes_.back());
+        }
       
-      friend GenNode const&
-      yield (ScopeExplorer const& explorer)
-      {
-        return * (explorer.scopes_.back());
-      }
+      GenNode const&
+      yield()  const
+        {
+          return *(scopes_.back());
+        }
       
-      friend void
-      iterNext (ScopeExplorer & explorer)
-      {
-        ScopeIter& current = explorer.scopes_.back();
-        explorer.scopes_.emplace_back (current->data.expand());
-        ++current;
-        while (!explorer.scopes_.empty() && !explorer.scopes_.back())
-          explorer.scopes_.pop_back();
-      }
+      void
+      iterNext()
+        {
+          ScopeIter& current = scopes_.back();
+          scopes_.emplace_back (current->data.expand());
+          ++current;
+          while (not scopes_.empty() and not scopes_.back())
+            scopes_.pop_back();
+        }
       
       friend bool
       operator== (ScopeExplorer const& s1, ScopeExplorer const& s2)
@@ -599,7 +599,7 @@ namespace diff{
         return not s1.scopes_.empty()
             && not s2.scopes_.empty()
             && s1.scopes_.size() == s2.scopes_.size()
-            && yield(s1) == yield(s2);
+            && s1.yield() == s2.yield();
       }
     };
   
@@ -844,10 +844,26 @@ namespace diff{
   inline GenNode
   Rec::buildAttribute (string const& key, X&& payload)
   {
-    return GenNode(key, payload);
+    return GenNode(key, std::forward<X>(payload));
   }
   
   
   
-}} // namespace lib::diff
+}// namespace lib::diff
+
+namespace variant {
+    using diff::Rec;
+    
+    /**
+     * specialisation allowing to build a GenNode with a
+     * nested record from a Record::Mutator (aka `MakeRec`)
+     */
+    template<typename TYPES>
+    struct CanBuildFrom<diff::MakeRec, Node<Rec, TYPES>>
+      : std::true_type
+      {
+        using Type = Rec;
+      };
+
+}} // namespace lib::variant
 #endif /*LIB_DIFF_GEN_NODE_H*/

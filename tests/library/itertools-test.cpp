@@ -50,7 +50,7 @@ namespace test{
   using std::vector;
   using std::rand;
   
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using lumiera::error::LERR_(ITER_EXHAUST);
   
   
   
@@ -114,6 +114,8 @@ namespace test{
           buildFilterIterator (ii);
           verify_filterExtension();
           verify_filterRepetitions();
+          
+          buildWrappedSingleElement();
           
           buildTransformingIterator (source.begin());
           
@@ -265,6 +267,48 @@ namespace test{
             CHECK (num == *filtered);
           
           CHECK (num == NUM_ELMS && isnil(filtered));
+        }
+      
+      
+      
+      /** @test wrap an arbitrary single element as pseudo-iterator */
+      void
+      buildWrappedSingleElement()
+        {
+          uint i{12};
+          
+          auto i1 = singleValIterator(12);
+          auto i2 = singleValIterator( i);
+          auto i3 = singleValIterator(&i);
+          
+          CHECK (not isnil(i1));
+          CHECK (not isnil(i2));
+          CHECK (not isnil(i3));
+          CHECK (12 == *i1);
+          CHECK (12 == *i2);
+          CHECK (12 == **i3);
+          
+          i = 23;
+          CHECK (12 == *i1);
+          CHECK (23 == *i2);
+          CHECK (23 == **i3);
+          
+          ++i1;
+          ++i2;
+          ++i3;
+          CHECK (isnil(i1));
+          CHECK (isnil(i2));
+          CHECK (isnil(i3));
+          VERIFY_ERROR (ITER_EXHAUST, *i1 );
+          VERIFY_ERROR (ITER_EXHAUST, *i2 );
+          VERIFY_ERROR (ITER_EXHAUST, *i3 );
+          
+          // assignable as any iterator..
+          i1 = singleValIterator(13);
+          CHECK (13 == *i1);
+          
+          i1 = SingleValIter<int>{};
+          CHECK (isnil(i1));
         }
       
       

@@ -34,13 +34,12 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "backend/media-access-mock.hpp"
-#include "lib/test/depend-4test.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 using util::cStr;
 using std::string;
-using std::cout;
 
 
 
@@ -51,8 +50,10 @@ namespace test    {
       
       using session::Clip;
       using session::AbstractMO;
-      using lib::test::Depend4Test;
       using namespace mobject::test;
+  
+      using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
+                                    ::Local<backend::test::MediaAccessMock>;
       
       
       
@@ -116,7 +117,7 @@ namespace test    {
           virtual void
           run(Arg)
             {
-              Depend4Test<backend::test::MediaAccessMock> within_this_scope;
+              MediaAccessMock useMockMedia;
               
               
               TestTool t1;
