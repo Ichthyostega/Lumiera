@@ -45,7 +45,7 @@ namespace engine {
     const rational<uint> ONE_THIRD(1,3);
     const rational<uint> EIGHTY_PERCENT(8,10);
     
-    const Duration DEFAULT_ENGINE_LATENCY  = EIGHTY_PERCENT * Duration(1, FrameRate::PAL);
+    const Duration DEFAULT_ENGINE_LATENCY  = EIGHTY_PERCENT * Duration(1, FrameRate{25}); ///////TODO: shouldn't be hard wired and shouldn't be calculated in static/global init
     const Duration DEFAULT_JOB_PLANNING_TURNOVER(FSecs(3,2));
     
   }//(End)hard wired settings

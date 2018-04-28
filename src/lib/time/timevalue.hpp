@@ -293,7 +293,7 @@ namespace time {
           TimeValue::operator= (o);
           return *this;
         }
-
+      
     public:
       explicit 
       Offset (TimeValue const& distance =Time::ZERO)
@@ -314,6 +314,10 @@ namespace time {
         {
           return TimeValue(std::llabs (t_));
         }
+      
+      /** @internal stretch offset by a possibly fractional factor,
+       *            and quantise into raw (micro tick) grid */
+      Offset stretchedByRationalFactor (boost::rational<int64_t>)  const;
       
       /** @internal diagnostics, indicating ∆ */
       operator std::string ()  const;
@@ -350,14 +354,10 @@ namespace time {
   
   template<typename INTX>
   inline Offset
-  operator* (boost::rational<INTX> factor, Offset const& o)
+  operator* (boost::rational<INTX> factor, Offset const& offset)
   {
-    return boost::rational<int64_t>(factor.numerator(), factor.denominator()) * o;
+    return offset.stretchedByRationalFactor (boost::rational<int64_t>(factor.numerator(), factor.denominator()));
   }
-  
-  /** stretch offset by a possibly fractional factor */
-  Offset
-  operator* (boost::rational<int64_t> factor, Offset const& o);
   
   
   /** flip offset direction */

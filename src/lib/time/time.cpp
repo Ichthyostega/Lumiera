@@ -213,10 +213,11 @@ namespace time {
 
   
   
+  /** @internal stretch offset by a possibly fractional factor, and quantise into raw (micro tick) grid */
   Offset
-  operator* (boost::rational<int64_t> factor, Offset const& o)
+  Offset::stretchedByRationalFactor (boost::rational<int64_t> factor)  const
   {
-    boost::rational<int64_t> distance (_raw(o));
+    boost::rational<int64_t> distance (this->t_);
     distance *= factor;
     gavl_time_t microTicks = floordiv (distance.numerator(), distance.denominator());
     return Offset(TimeValue(microTicks));
