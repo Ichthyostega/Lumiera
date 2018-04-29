@@ -78,6 +78,7 @@ namespace test{
        * 
        * This problem is especially dangerous when storing objects keyed
        * by a string-id, which is generated from running numbers.
+       * @remark as of 2018 the boost::hash function does not show this weakness anymore
        */
       void
       demonstrate_boost_hash_weakness ()
@@ -106,7 +107,10 @@ namespace test{
                 }
               hashValues[hashVal] = candidate;
             }
-          CHECK (0 < collisions, "boost::hash for strings is expected to produce collisions");
+          if  (0 < collisions)
+            cout << "boost::hash for strings produced "<<collisions<<" collisions. This is a known problem."<<endl;
+          else
+            cout << "SURPRISE. No collisions with the boost::hash function." <<endl;
         }
       
       

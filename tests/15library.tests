@@ -150,6 +150,7 @@ out: ID<Fork>-Fork.0..
 out: ID<Fork>-special
 out: sizeof\( idi::EntryID<Fork> \) .+ =
 out: sizeof\( idi::BareEntryID \)   .+ =
+out: sizeof\( \w+[^\)]* \)   .+ =
 return: 0
 END
 
