@@ -41,7 +41,11 @@
 
 
 /** @file try.cpp
- * Investigation: static initialisation order -- especially of static template member fields
+ * Investigation: static initialisation order -- especially of static template member fields.
+ * This version embeds the factory as Meyer's Singleton into the Front-Template using it, and
+ * it invokes the factory from within the Front<TY> constructor -- thereby ensuring the factory
+ * is indeed initialised prior to any usage and its lifespan extends beyond the lifespan of the
+ * last instance using it.
  */
 
 typedef unsigned int uint;
@@ -76,25 +80,31 @@ template<typename T>
 class Front
   {
   public:
-    static Factory<T> fac;
+    Factory<T>&
+    fac()
+      {
+        static Factory<T> fac;
+        return fac;
+      }
+    
     
     Front()
       {
-        cout << "Front-ctor    val="<<fac.val<<endl;
-        fac.val += 100;
+        cout << "Front-ctor    val="<<fac().val<<endl;
+        fac().val += 100;
       }
     
     T&
     operate ()
       {
-        cout << "Front-operate val="<<fac.val<<endl;
-        ++ fac.val;
-        return fac.val;
+        cout << "Front-operate val="<<fac().val<<endl;
+        ++ fac().val;
+        return fac().val;
       }
   };
 
-template<typename T>
-Factory<T> Front<T>::fac;
+//template<typename T>
+//Factory<T> Front<T>::fac;
 
 
 namespace {

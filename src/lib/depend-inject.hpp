@@ -397,12 +397,12 @@ namespace lib {
           if (std::is_same<SRV,SUB>())
             {
               __ensure_pristine();
-              Depend<SRV>::factory.defineCreatorAndManage (forward<FUN> (ctor));
+              Depend<SRV>::factory().defineCreatorAndManage (forward<FUN> (ctor));
             }
           else
             {
               __ensure_pristine();
-              Depend<SRV>::factory.defineCreator ([]{ return & Depend<SUB>{}(); });
+              Depend<SRV>::factory().defineCreator ([]{ return & Depend<SUB>{}(); });
               DependInject<SUB>::useSingleton (forward<FUN> (ctor));
             }                 // delegate actual instance creation to Depend<SUB>
         }
@@ -415,7 +415,7 @@ namespace lib {
             {
               Lock guard;
               __ensure_pristine();
-              Depend<SRV>::factory.defineCreator ([]{ return & Depend<SUB>{}(); });
+              Depend<SRV>::factory().defineCreator ([]{ return & Depend<SUB>{}(); });
             }
           // note: we do not install an actual factory; rather we use the default for SUB
         }
@@ -426,9 +426,9 @@ namespace lib {
       temporarilyInstallAlternateFactory (SRV*& stashInstance, Factory& stashFac, FUN&& newFac)
         {
           Lock guard;
-          stashFac.transferDefinition (move (Depend<SRV>::factory));
+          stashFac.transferDefinition (move (Depend<SRV>::factory()));
           stashInstance = Depend<SRV>::instance;
-          Depend<SRV>::factory.defineCreator (forward<FUN>(newFac));
+          Depend<SRV>::factory().defineCreator (forward<FUN>(newFac));
           Depend<SRV>::instance = nullptr;
         }
       
@@ -436,7 +436,7 @@ namespace lib {
       restoreOriginalFactory (SRV*& stashInstance, Factory&& stashFac)
         {
           Lock guard;
-          Depend<SRV>::factory.transferDefinition (move (stashFac));
+          Depend<SRV>::factory().transferDefinition (move (stashFac));
           Depend<SRV>::instance = stashInstance;
         }
       
@@ -449,7 +449,7 @@ namespace lib {
                                "but another instance has already been dependency-injected."
                               , error::LUMIERA_ERROR_LIFECYCLE);
           Depend<SRV>::instance = &newInstance;
-          Depend<SRV>::factory.disable();
+          Depend<SRV>::factory().disable();
         }
       
       static void
@@ -457,7 +457,7 @@ namespace lib {
         {
           Lock guard;
           Depend<SRV>::instance = nullptr;
-          Depend<SRV>::factory.disable();
+          Depend<SRV>::factory().disable();
         }
     };
   

@@ -78,6 +78,20 @@
  ** than the comparable unprotected direct access without lazy initialisation.
  ** This is orders of magnitude better than any flavour of conventional locking.
  ** 
+ ** ### Initialisation of the shared factory
+ ** 
+ ** We package the creation and destruction functors for the object to be managed
+ ** into a factory, which is shared per type. Such a shared factory could live within
+ ** a static member field `Depend<TY>::factory` -- however, the _definition_ of such
+ ** a templated static member happens on first use of the enclosing template _instance_,
+ ** and it seems the _initialisation order_ of such fields is not guaranteed, especially
+ ** when used prior to main, from static initialisation code. For that reason, we manage
+ ** the _factory_ as Meyer's singleton, so it can be accessed independently from the
+ ** actual target object's lifecycle and the compiler will ensure initialisation
+ ** prior to first use. To ensure the lifespan of this embedded factory object
+ ** extends beyond the last instance of `lib::Depend<TY>`, we also need to
+ ** access that factory from a ctor
+ ** 
  ** @see depend-inject.hpp
  ** @see lib::DependInject
  ** @see Singleton_test
@@ -137,7 +151,7 @@ namespace lib {
         }
       
       OBJ*
-      operator() ()
+      buildTarget()
         {
           return creator_? creator_()
                          : buildAndManage();
@@ -278,9 +292,15 @@ namespace lib {
       using Factory = DependencyFactory<SRV>;
       using Lock = ClassLock<SRV, NonrecursiveLock_NoWait>;
       
-      /* === shared per type === */
+      /** shared per type */
       static Instance instance;
-      static Factory  factory;
+      
+      static Factory&
+      factory() ///< Meyer's Singleton to ensure initialisation on first use
+        {
+          static Factory sharedFactory;
+          return sharedFactory;
+        }
       
       friend class DependInject<SRV>;
       
@@ -298,15 +318,15 @@ namespace lib {
           SRV* object = instance.load (std::memory_order_acquire);
           if (!object)
             {
-              factory.zombieCheck();
+              factory().zombieCheck();
               Lock guard;
               
               object = instance.load (std::memory_order_relaxed);
               if (!object)
                 {
-                  object = factory();
-                  factory.disable();
-                  factory.atDestruction([]{ instance = nullptr; });
+                  object = factory().buildTarget();
+                  factory().disable();
+                  factory().atDestruction([]{ instance = nullptr; });
                 }
               instance.store (object, std::memory_order_release);
             }
@@ -324,6 +344,14 @@ namespace lib {
         {
           return instance.load (std::memory_order_acquire);
         }
+      
+      /** @remark this ctor ensures the factory is created prior to first use,
+       *          and stays alive during the whole lifespan of any `Depend<TY>`
+       */
+      Depend()
+        {
+          factory().zombieCheck();
+        }
     };
   
   
@@ -332,9 +360,6 @@ namespace lib {
   /* === allocate Storage for static per type instance management === */
   template<class SRV>
   std::atomic<SRV*> Depend<SRV>::instance;
-  
-  template<class SRV>
-  DependencyFactory<SRV> Depend<SRV>::factory;
   
   
   
