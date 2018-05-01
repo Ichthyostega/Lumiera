@@ -37,24 +37,17 @@
 // 11/17 - detect generic lambda
 // 12/17 - investigate SFINAE failure. Reason was indirect use while in template instantiation
 // 03/18 - Dependency Injection / Singleton initialisation / double checked locking
+// 04/18 - investigate construction of static template members
 
 
 /** @file try.cpp
- ** Rework of the template lib::Depend for singleton and service access.
- ** The (now for the third time rewritten) dependency factory can be configured to yield
- ** a subclass singleton, or to bind to an external service. Lazy initialisation relies on
- ** Double Checked Locking, which we need switch to C++11 Atomics in order to be correct
- ** (in theory). The impact of this initialisation guard should be investigated by benchmark.
+ * Investigation: static initialisation order -- especially of static template member fields
  */
 
 typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
-#include "lib/depend.hpp"
-#include "lib/depend-inject.hpp"
-//#include "lib/meta/util.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
 
 
 
@@ -64,54 +57,73 @@ typedef unsigned int uint;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
-  namespace error = lumiera::error;
-
-  using lib::Depend;
-  using lib::DependInject;
   
-//////////////////////////////////////////////////////////////////////////Microbenchmark
-#include "lib/test/microbenchmark.hpp"
-using lib::test::microbenchmark;
-//////////////////////////////////////////////////////////////////////////(End)Microbenchmark
-
-#include "include/lifecycle.h"
-#include "lib/test/testoption.hpp"
-#include "lib/test/suite.hpp"
-
-using lumiera::LifecycleHook;
-using lumiera::ON_GLOBAL_INIT;
-using lumiera::ON_GLOBAL_SHUTDOWN;
-
-///////////////////////////////////////////////////////Usage
-
-class BlackHoleService
-  : util::NonCopyable
+template<typename T>
+class Factory
   {
-    volatile int theHole_ = rand() % 1000;
+  public:
+    T val;
     
-    public:
-      int readMe() { return theHole_; }
+    Factory()
+      : val{}
+      {
+        cout << "Factory-ctor  val="<<val<<endl;
+      }
   };
+
+
+template<typename T>
+class Front
+  {
+  public:
+    static Factory<T> fac;
+    
+    Front()
+      {
+        cout << "Front-ctor    val="<<fac.val<<endl;
+        fac.val += 100;
+      }
+    
+    T&
+    operate ()
+      {
+        cout << "Front-operate val="<<fac.val<<endl;
+        ++ fac.val;
+        return fac.val;
+      }
+  };
+
+template<typename T>
+Factory<T> Front<T>::fac;
+
+
+namespace {
+  Front<int> front;
+  
+  int
+  staticFun()
+  {
+    cout << "staticFun"<<endl;
+    return front.operate() += 10;
+  }
+  
+  int global_int = front.operate();
+}
+
 
 
 int
 main (int, char**)
   {
-    std::srand(std::time(nullptr));
-    LifecycleHook::trigger (ON_GLOBAL_INIT);
     
-    Depend<BlackHoleService> mystery;
+    cout << "make-Front<int>..."<<endl;
+    Front<int> fint;
     
-    thread_local int64_t cnt = 0;
+    int& i = fint.operate();
+    cout << "main:         val="<<i<<endl;
+    cout << "main: staticFun..."<<staticFun()<<endl;
+    cout << "global_int.......="<<global_int<<endl;
     
-    cout << microbenchmark<8> ([&]()
-                                 {
-                                   cnt += mystery().readMe();
-                                 }
-                              ,50000000)
-         << endl;
-    
-    LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
     cout <<  "\n.gulp.\n";
     
     return 0;
