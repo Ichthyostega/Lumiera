@@ -261,5 +261,31 @@ namespace idi {
   
   extern AllocSpec<uint> limitAllocation;
   
+  
+  /** Generic Component View descriptors */
+  template<class V>
+  struct Descriptor
+    {
+      static_assert (not sizeof(V), "unknown generic view type");
+    };
+   // for the actual specialisations: see id-scheme.hpp
+  
+  
+  /**
+   * Access point: Factory for "view specs".
+   * These are (singleton) instances of idi::Descriptor<V>, and assumed to expose
+   * - a member `viewSpec.locate`, which solves for the actual view location within UI topology
+   * - a member `viewSpec.alloc`, which actually claims / allocates an existing or new view instance
+   * @see gui::ctrl::ViewLocator::get
+   */
+  template<class VIEW>
+  inline Descriptor<VIEW>&
+  viewSpec()
+  {
+    static Descriptor<VIEW> dslInstance;
+    return dslInstance;
+  }
+  
+  
 }}// namespace gui::idi
 #endif /*GUI_INTERACT_VIEW_SPEC_DSL_H*/

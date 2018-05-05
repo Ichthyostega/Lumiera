@@ -119,8 +119,7 @@ namespace interact {
   inline V&
   ViewLocator::get()
   {
-    using ViewSpec = idi::Descriptor<V>;
-    ViewSpec viewSpec;                              /////////////////////////////////////////////////////////TICKET #1129 : can't create instances all the time. Need some kind of Factory
+    auto& viewSpec = idi::viewSpec<V>();
     Symbol viewID{lib::idi::typeSymbol<V>()};
     
     UICoord targetLocation = viewSpec.locate(viewID);

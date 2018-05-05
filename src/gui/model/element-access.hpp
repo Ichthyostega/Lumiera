@@ -29,7 +29,7 @@
  ** is even outright impossible for Lumiera, since the core is able to run standalone and
  ** the UI is loaded as plug-in, which places us into the situation to connect a self
  ** contained core with a self contained UI. This is a binding, which, as a sideline, also
- ** generates a control structure of its own. An another kind of generic access happens
+ ** generates a control structure of its own. And another kind of generic access happens
  ** when we _navigate_ the topological UI structure for focus management.
  ** 
  ** This interface defines an abstract service to translate a generic element designation
@@ -131,7 +131,7 @@ namespace model {
    * public API functions are templated to the _result type as expected by the invoking clinent_
    * and thus we get a matrix of possible cases; when the expected result type is _reachable by
    * dynamic downcast_ from the actual base interface type returned by the internal access function,
-   * we can perform this dynamic_cast. Otherwise the returned result proxy object is marked as empty.
+   * we can perform this `dynamic_cast`. Otherwise the returned result proxy object is marked as empty.
    * @remark technically this solution relies on the lib::Variant::Visitor to provide a NOP default
    *         implementation. The TypeConverter template is instantiated with the desired target type
    *         and thus only overwrites _the first case where an conversion is possible._ In all other
@@ -146,7 +146,7 @@ namespace model {
       
       template<typename X>                             // note the "backward" use. We pick that base interface
       using canUpcast = std::is_convertible<TAR*, X>; //  into which our desired result type can be upcast, because
-                                                     //   we know then the following dynamic_cast (downcast) can succeed  
+                                                     //   we know the then following dynamic_cast (downcast) can succeed
       using Base = typename RawResult::FirstMatching<canUpcast>::Type;
       
       virtual void

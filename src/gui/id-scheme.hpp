@@ -87,14 +87,6 @@ namespace gui {
     using ErrorLogView = widget::ErrorLogWidget;
     
     
-    /** Generic Component View descriptors */
-    template<class V>
-    struct Descriptor
-      {
-        static_assert (not sizeof(V), "unknown generic view type");
-      };
-    
-    
     /**
      * Descriptor for the Timeline UI
      */
