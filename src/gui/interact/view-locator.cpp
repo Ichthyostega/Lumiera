@@ -70,8 +70,9 @@ namespace gui {
     
     AllocSpec<uint> limitAllocation =[&](UICoord target, uint limit)
                                         {
-                                          UNIMPLEMENTED ("Actual DSL token to cause a (limited) view allocation");
-                                          return target; /////////////////////////////////////////////////////////TICKET #1129 : need at least a working draft implementation here
+                                          lib::Depend<model::ElementAccess> rawElementAccessor;
+                                          
+                                          return target;
                                         };
   
   }

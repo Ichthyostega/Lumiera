@@ -11453,8 +11453,26 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752547477" ID="ID_1121433532" MODIFIED="1523752551764" TEXT="limitAllocation">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752559939" ID="ID_597346628" MODIFIED="1523752566099" TEXT="umsetzen auf ElementAccess-API">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752559939" ID="ID_597346628" MODIFIED="1525564300862" TEXT="umsetzen auf ElementAccess-API">
+<linktarget COLOR="#97cad5" DESTINATION="ID_597346628" ENDARROW="Default" ENDINCLINATION="126;9;" ID="Arrow_ID_89575203" SOURCE="ID_1979012219" STARTARROW="None" STARTINCLINATION="567;-16;"/>
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1525567190247" ID="ID_42079899" MODIFIED="1525567200526" TEXT="Problem: API noch nicht vollst&#xe4;ndig">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1525567207940" HGAP="76" ID="ID_1154047307" MODIFIED="1525567222800" TEXT="wirklich zwei Zugriffe?" VSHIFT="-9">
+<icon BUILTIN="help"/>
+<node CREATED="1525567242728" ID="ID_408728922" MODIFIED="1525567256385" TEXT="Finden / Allozieren">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1525567257934" ID="ID_756598430" MODIFIED="1525567271113" TEXT="Zugang zu diesem Element">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1525567314774" HGAP="-80" ID="ID_1634864230" MODIFIED="1525567346631" TEXT="warum?" VSHIFT="65">
+<edge STYLE="linear"/>
+<node CREATED="1525567347850" ID="ID_314618181" MODIFIED="1525567352685" TEXT="DSL sauber halten"/>
+<node CREATED="1525567353825" ID="ID_729394034" MODIFIED="1525567362044" TEXT="Element-Access erfordert Visitor"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752571241" ID="ID_1806352950" MODIFIED="1523752593134" TEXT="Anzahl Instanzen herausfinden">
 <icon BUILTIN="flag-yellow"/>
@@ -11489,22 +11507,56 @@
 <node CREATED="1523750592900" ID="ID_266745032" MODIFIED="1523750611005" TEXT="&quot;viewID&quot; ist erst mal eine Typ-ID"/>
 <node CREATED="1523750621640" ID="ID_776549392" MODIFIED="1523750635474" TEXT="wird aber ggfs noch dekoriert (wg. Multiplizit&#xe4;t)"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522940124932" ID="ID_636475854" MODIFIED="1522940194187" TEXT="Aufruf-Mechanismus">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1522940151016" ID="ID_254319466" MODIFIED="1522940158818" TEXT="Strategy in id-scheme.hpp"/>
+<node COLOR="#338800" CREATED="1522940124932" ID="ID_636475854" MODIFIED="1525564213845" TEXT="Aufruf-Mechanismus">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1522940151016" ID="ID_254319466" MODIFIED="1525564207503" TEXT="Strategy/Spezialisierungen in id-scheme.hpp">
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1522940161655" ID="ID_1905184084" MODIFIED="1522940166466" TEXT="pro Typ spezialisiert">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1523752892269" ID="ID_1603142051" MODIFIED="1523752899141" TEXT="Problem: Instanzen">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1523752892269" ID="ID_1603142051" MODIFIED="1525564152661" TEXT="Problem: Instanzen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1523752902739" ID="ID_1018267741" MODIFIED="1523752943957" TEXT="statische Felder gehen nicht ohne Weiteres">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1523752911010" ID="ID_1174940020" MODIFIED="1523752930531" TEXT="...also brauchen wir Instanzen der Deskriptoren"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752932735" ID="ID_225005955" MODIFIED="1523752937567" TEXT="geeignete Factory finden">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1523752932735" ID="ID_225005955" MODIFIED="1525564117580" TEXT="Familie von Meyer&apos;s Singletons"/>
+<node CREATED="1525564118640" ID="ID_327931353" MODIFIED="1525564137811" TEXT="lebt in view-spec-dsl.hpp (inline)">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
 <node CREATED="1522940167125" ID="ID_980922327" MODIFIED="1522940174904" TEXT="h&#xe4;lt die konkrete ViewSpec-DSL"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525564232321" ID="ID_46755801" MODIFIED="1525564248456" TEXT="konkrete Allokator-Strategien verdrahten">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1525564255702" ID="ID_645519559" MODIFIED="1525564259768" TEXT="hinten rum">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1525564261653" ID="ID_1979012219" MODIFIED="1525564307309" TEXT="Interface ElementAccess">
+<arrowlink COLOR="#97cad5" DESTINATION="ID_597346628" ENDARROW="Default" ENDINCLINATION="126;9;" ID="Arrow_ID_89575203" STARTARROW="None" STARTINCLINATION="567;-16;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1525565917296" ID="ID_174717640" MODIFIED="1525565932959" TEXT="Problem: resultierende UI-Coord">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1525565935350" ID="ID_252570354" MODIFIED="1525565950136" TEXT="Instanz-Limit"/>
+<node CREATED="1525565950988" ID="ID_1233385790" MODIFIED="1525567162939">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann dazu f&#252;hren,
+    </p>
+    <p>
+      da&#223; etwas Bestehendes zur&#252;ckgeliefert wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522940203377" ID="ID_1539937928" MODIFIED="1522940298042" TEXT="Testabdeckung">
 <arrowlink COLOR="#4c8891" DESTINATION="ID_1745396406" ENDARROW="Default" ENDINCLINATION="-828;-41;" ID="Arrow_ID_1830310728" STARTARROW="None" STARTINCLINATION="242;22;"/>
@@ -29030,8 +29082,7 @@
       Initialisierung von Statics &quot;faul&quot; ist, wenn shared objects dynamisch geladen werden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -31972,8 +32023,8 @@
 </node>
 <node CREATED="1450488895106" ID="ID_1586185818" MODIFIED="1518487921102" TEXT="Threading">
 <node CREATED="1450488902049" ID="ID_1126260262" MODIFIED="1525124445345" TEXT="static init">
-<linktarget COLOR="#9e9bae" DESTINATION="ID_1126260262" ENDARROW="Default" ENDINCLINATION="-1485;213;" ID="Arrow_ID_1269745634" SOURCE="ID_1921668956" STARTARROW="None" STARTINCLINATION="-1534;0;"/>
 <linktarget COLOR="#9a97b5" DESTINATION="ID_1126260262" ENDARROW="Default" ENDINCLINATION="-1465;211;" ID="Arrow_ID_372705466" SOURCE="ID_1086493226" STARTARROW="None" STARTINCLINATION="-1025;0;"/>
+<linktarget COLOR="#9e9bae" DESTINATION="ID_1126260262" ENDARROW="Default" ENDINCLINATION="-1485;213;" ID="Arrow_ID_1269745634" SOURCE="ID_1921668956" STARTARROW="None" STARTINCLINATION="-1534;0;"/>
 <node CREATED="1450489361187" ID="ID_1013681859" LINK="http://stackoverflow.com/a/17803616/444796" MODIFIED="1525130639421" TEXT="Zusammenfassung (SO)">
 <icon BUILTIN="idea"/>
 </node>
@@ -32014,8 +32065,7 @@
       selber aus einem statischen Initialisierungs-Kontext heraus erfolgt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525192054281" ID="ID_414612523" MODIFIED="1525192075199" TEXT="#1142 initialisation of static template members">
@@ -32217,8 +32267,7 @@
       &#160;&#160;}
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1450489388912" ID="ID_1935538293" MODIFIED="1518487921102" TEXT="function-static">

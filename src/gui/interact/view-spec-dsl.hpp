@@ -179,8 +179,8 @@ namespace interact {
   
   /**
    * Allocator is a functor to resolve a given, desired location of a view within the UI, resulting
-   * in creation or allocation of the view. The result of this invocation are the UI coordinates
-   * of an existing or newly created view.
+   * in creation or allocation of the view -- which happens _as side-effect._ The result of this invocation
+   * are the UI coordinates of an existing or newly created view.
    */
   using Allocator = std::function<UICoord(UICoord)>;
   
