@@ -11471,7 +11471,16 @@
 <edge STYLE="linear"/>
 <node CREATED="1525567347850" ID="ID_314618181" MODIFIED="1525567352685" TEXT="DSL sauber halten"/>
 <node CREATED="1525567353825" ID="ID_729394034" MODIFIED="1525567362044" TEXT="Element-Access erfordert Visitor"/>
+<node CREATED="1525567420608" ID="ID_1865194597" MODIFIED="1525567450407" TEXT="erscheint sinnvoll vom API her">
+<icon BUILTIN="ksmiletris"/>
 </node>
+<node CREATED="1525567432127" ID="ID_1190994966" MODIFIED="1525567453224" TEXT="aber d&#xe4;mlich von der Implementierung her">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525567474513" HGAP="136" ID="ID_492657286" MODIFIED="1525567497243" TEXT="ElementAccess-API umbauen" VSHIFT="5">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752571241" ID="ID_1806352950" MODIFIED="1523752593134" TEXT="Anzahl Instanzen herausfinden">
