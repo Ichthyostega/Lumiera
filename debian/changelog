@@ -1,3 +1,10 @@
+lumiera (0.pre.03-3+stretch) Lumiera-stretch; urgency=medium
+
+  * Rebuild without change for Debian/Stretch.
+  * this is just to prepare upgrading the reference platform
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Tue, 15 May 2018 03:42:10 +0200
+
 lumiera (0.pre.03-3) Lumiera-jessie; urgency=low
 
   * fix a compilation problem with GCC-5 (Ubuntu/wily)
