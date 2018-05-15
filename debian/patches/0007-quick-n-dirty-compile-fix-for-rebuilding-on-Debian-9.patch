@@ -1,0 +1,22 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Tue, 15 May 2018 04:12:28 +0200
+Subject: quick-n-dirty compile fix for rebuilding on Debian-9-Stretch
+
+this patch only serves the purpose of somehow getting the old package rebuilt on Stretch.
+Meanwhile we have done extensive rework to make the code base play well with GCC > 5
+---
+ tests/library/test/test-helper-demangling-test.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/library/test/test-helper-demangling-test.cpp b/tests/library/test/test-helper-demangling-test.cpp
+index c158d1c..db065e6 100644
+--- a/tests/library/test/test-helper-demangling-test.cpp
++++ b/tests/library/test/test-helper-demangling-test.cpp
+@@ -24,6 +24,7 @@
+ #include "lib/test/run.hpp"
+ #include "lib/test/test-helper.hpp"
+ 
++#include <iostream>
+ #include <string>
+ 
+ using std::string;
