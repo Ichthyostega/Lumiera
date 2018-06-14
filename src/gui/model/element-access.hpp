@@ -33,8 +33,8 @@
  ** when we _navigate_ the topological UI structure for focus management.
  ** 
  ** This interface defines an abstract service to translate a generic element designation
- ** into a (language level) access to internal structures of the UI toolkit (GTK in our case).
- ** This access to low-level structure proceeds in two stages:
+ ** into a (C++ language level) access to internal structures of the UI toolkit (GTK in our case).
+ ** This access to low-level structures proceeds in two stages:
  ** - navigate down the UI topology. Optionally, this may involve a mutation (create element)
  ** - evaluate the result (found, not found, element created) and access the target,
  **   possibly with conversion (which might fail)

@@ -314,6 +314,12 @@ namespace lib {
                       : findInlineEnd() - elms_.begin();
         }
       
+      size_t
+      leafLevel()  const
+        {
+          return empty()? 0 : size()-1;
+        }
+      
       bool
       empty()  const
         {

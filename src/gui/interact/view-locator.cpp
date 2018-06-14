@@ -68,12 +68,12 @@ namespace gui {
   namespace idi { // Namespace for the actual ViewSpec DSL tokens
     
     
-    AllocSpec<uint> limitAllocation =[&](UICoord target, uint limit)
-                                        {
-                                          lib::Depend<model::ElementAccess> rawElementAccessor;
-                                          
-                                          return target;
-                                        };
+    AllocSpec<uint> limitAllocation =[](UICoord target, uint limit)
+                                       {
+                                         lib::Depend<model::ElementAccess> rawElementAccessor;
+                                         
+                                         return target;
+                                       };
   
   }
   namespace interact {

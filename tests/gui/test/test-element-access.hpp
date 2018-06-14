@@ -130,10 +130,10 @@ namespace test {
           CHECK (existingPath >= target);
           if (existingPath > target and !response)
             {
-              if (target.size()-1 == UIC_VIEW)
+              if (target.leafLevel() == UIC_VIEW)
                 response.reset(new DummyView(target[UIC_VIEW]));
               else
-              if (target.size()-1 == UIC_TAB)
+              if (target.leafLevel() == UIC_TAB)
                 response.reset(new DummyTab(target[UIC_TAB]));
               else
                 throw error::Invalid("Mock ElementAccess supports only creation of VIEW and TAB. Requested Target was "+string(target));

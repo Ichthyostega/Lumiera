@@ -199,7 +199,7 @@ namespace interact {
    *         generated views per window and take this instance limit as additional parameter. But for the DSL
    *         we want a allocation spec of the form `limitPerWindow(cnt)` -- which is a function accepting the
    *         concrete limit and producing the actual allocator function `UICoord -> UICoord`, which has this
-   *         actual limit "baked in".
+   *         actual limit `cnt` "baked in".
    */
   template<typename... ARGS>
   class AllocSpec

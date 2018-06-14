@@ -194,7 +194,7 @@ namespace test {
        * @remarks due to limitations of our unit test setup (GTK is prohibited), this component
        *          integration test can not be performed against the actual DSL definitions of the
        *          real UI, even while it uses the actual code from ViewLocator. Simply because we
-       *          can not instantiated UI widgets in a unit test. We have to resort to mock UI
+       *          can not instantiate UI widgets in a unit test. We have to resort to mock UI
        *          elements and thus use a dummy "view type" together with faked DSL definitions
        *          for this dummy. These definitions are given in the test fixture above, right
        *          within this translation unit. (see `namespace idi` and the class `MockView1`).

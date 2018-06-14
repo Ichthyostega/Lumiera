@@ -11479,8 +11479,39 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525567474513" HGAP="136" ID="ID_492657286" MODIFIED="1525567497243" TEXT="ElementAccess-API umbauen" VSHIFT="5">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525567474513" HGAP="136" ID="ID_492657286" MODIFIED="1528988453047" TEXT="ElementAccess-API umbauen" VSHIFT="5">
+<icon BUILTIN="pencil"/>
+<node CREATED="1528988155980" ID="ID_425314989" MODIFIED="1528988170052" TEXT="Variante-1">
+<icon BUILTIN="full-1"/>
+<node CREATED="1528988234950" ID="ID_1668042554" MODIFIED="1528988252512" TEXT="UI-Coord zur&#xfc;ckliefern"/>
+<node CREATED="1528988289119" ID="ID_1881432398" MODIFIED="1528988440865" TEXT="tricky conversion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn ich es irgendwie schaffe,
+    </p>
+    <p>
+      doch auch noch UI-Coord als R&#252;ckgabewert
+    </p>
+    <p>
+      da &quot;hineinzuw&#252;rgen&quot;...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1528988263818" ID="ID_480404928" MODIFIED="1528988286380" TEXT="Element-Cache"/>
+</node>
+<node CREATED="1528988317699" ID="ID_1560503454" MODIFIED="1528988323954" TEXT="Variante-2 ">
+<icon BUILTIN="full-2"/>
+<node CREATED="1528988340425" ID="ID_1706382791" MODIFIED="1528988354569" TEXT="keine Erzeugung / Allokation"/>
+<node CREATED="1528988355802" ID="ID_523121546" MODIFIED="1528988365328" TEXT="ElementAccess = reine Zugriffsfunktion"/>
+<node CREATED="1528988379946" ID="ID_131306130" MODIFIED="1528988391702" TEXT="brauche anderweitige Abstraktion"/>
+<node CREATED="1528988369596" ID="ID_1174830872" MODIFIED="1528988376583" TEXT="Allokator erzeugt anderweitig"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752571241" ID="ID_1806352950" MODIFIED="1523752593134" TEXT="Anzahl Instanzen herausfinden">
@@ -11561,8 +11592,7 @@
       da&#223; etwas Bestehendes zur&#252;ckgeliefert wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
