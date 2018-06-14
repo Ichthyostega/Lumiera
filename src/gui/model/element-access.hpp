@@ -96,16 +96,15 @@ namespace model {
       virtual ~ElementAccess () { }   ///< this is an interface
       
       
-      template<class TAR>
-      using Result = lib::Result<TAR>;
-      
       /* == Access by Location == */
       
       template<class TAR>
-      Result<TAR&> access (UICoord const& destination);
+      lib::Result<TAR&> access (UICoord const& destination);
       
       template<class TAR>
-      Result<TAR&> access_or_create (UICoord const& destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
+      lib::Result<TAR&> access_or_create (UICoord const& destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
+      
+      UICoord allocate (UICoord const& destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
       
       
     protected:
@@ -142,7 +141,7 @@ namespace model {
   struct ElementAccess::TypeConverter
     : RawResult::Visitor
     {
-      Result<TAR&> result{"not convertible"};
+      lib::Result<TAR&> result{"not convertible"};
       
       template<typename X>                             // note the "backward" use. We pick that base interface
       using canUpcast = std::is_convertible<TAR*, X>; //  into which our desired result type can be upcast, because
@@ -155,7 +154,7 @@ namespace model {
           if (pb)
             result = *dynamic_cast<TAR*> (pb);
           else
-            result = Result<TAR&>{"access returns empty answer"};
+            result = lib::Result<TAR&>{"access returns empty answer"};
         }
     };
   
@@ -173,7 +172,7 @@ namespace model {
    *       and convertible to `bool(false)`
    */
   template<class TAR>
-  inline ElementAccess::Result<TAR&>
+  inline lib::Result<TAR&>
   ElementAccess::access (UICoord const& destination)
   {
     return access_or_create<TAR> (destination, 0);
@@ -188,7 +187,7 @@ namespace model {
    *       and convertible to `bool(false)` (or raises an exception on attempted access)
    */
   template<class TAR>
-  inline ElementAccess::Result<TAR&>
+  inline lib::Result<TAR&>
   ElementAccess::access_or_create (UICoord const& destination, size_t limitCreation)
   {
     TypeConverter<TAR> converter;

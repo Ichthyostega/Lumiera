@@ -9917,7 +9917,7 @@ In addition to querying the interpretation of a given coordinate spec with respe
 __Navigation mutations:__ //In theory,// it would even be possible to extend the path by creating suitable child components; but actually this would require all &quot;elements&quot; to implement a suitable mutation interface -- which in the case of //generic elements// might be far beyond the common ground. For this reason, we keep mutation of the backing environment outside of a path mutator's scope and rather keep mutation limited to the path itself.
 </pre>
 </div>
-<div title="UILowLevelAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201804062255" modified="201804150051" tags="spec draft GuiPattern" changecount="4">
+<div title="UILowLevelAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201804062255" modified="201806142339" tags="spec draft GuiPattern" changecount="7">
 <pre>//Cross cutting access to elementary UI structures.//
 We have several orthogonal identification and access schemes within the UI. A naively written UI application just attaches the core logic below some widgets and controllers -- not only does this lead to a hard to maintain code base, this approach is even outright impossible in our case, due to the strict decoupling between core and GUI, which places us into the situation to connect a self contained core with a self contained UI. This is a binding, which, as a sideline, also generates a control structure of its own. We can indeed write code dealing with a generic UI element -- but there needs to be some place where this kind of generic designation is translated into internal structures of the UI toolkit (GTK in our case), to obtain a direct (language) reference to some implementation widget finally.
 
@@ -9930,6 +9930,9 @@ At the time of this writing, it is not really clear if we need such a facility a
 * so effectively an access request will drill down the real UI topology, following the path of the given UI Coordinates.
 * the result can then be packaged into a {{{lib::Variant}}} and use a //variant visitor// (double dispatch) to invoke the apropriate {{{dynamic_cast}}}
 * together, this mechanism allows us to return direct language references to actual implementation widgets
+
+!Extend UICoord to an opaque concrete {{{UILocation}}} handle?
+This is a possible different turn in the design, considered as an option {{red{as of 6/2018}}}. Such would complement a symbolic coordinate specification with an opaque handle pointing to an actually existing UI widget. Access to this widget requires knowledge about its actual type -- basically a variant record tacked onto the UICoord representation, packaged into a subclass of the latter. The obvious benefit would be to avoid drilling down into the UI widget tree repeatedly, since there is now a way to pass along hidden //insider information// regarding actual UI elements. However, such a design bears a &quot;smell&quot; of being implementation driven, and undercuts the whole idea of a entirely symbolic layer of location specifications. Building such an extension can be considered sensible only under the additional assumption that this kind of //location token// is to be passed over various interfaces and indeed becomes a generic token of exchange and interaction within the UI layer implementation -- which, right now is not a given.
 </pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">

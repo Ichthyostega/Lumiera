@@ -11474,36 +11474,19 @@
 <node CREATED="1525567420608" ID="ID_1865194597" MODIFIED="1525567450407" TEXT="erscheint sinnvoll vom API her">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1525567432127" ID="ID_1190994966" MODIFIED="1525567453224" TEXT="aber d&#xe4;mlich von der Implementierung her">
+<node CREATED="1525567432127" ID="ID_1190994966" MODIFIED="1528992332480" TEXT="aber d&#xe4;mlich in der Implementierung">
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525567474513" HGAP="136" ID="ID_492657286" MODIFIED="1528988453047" TEXT="ElementAccess-API umbauen" VSHIFT="5">
 <icon BUILTIN="pencil"/>
+<node CREATED="1529016810234" ID="ID_190701762" MODIFIED="1529016835751" TEXT="M&#xf6;glichkeiten">
 <node CREATED="1528988155980" ID="ID_425314989" MODIFIED="1528988170052" TEXT="Variante-1">
 <icon BUILTIN="full-1"/>
 <node CREATED="1528988234950" ID="ID_1668042554" MODIFIED="1528988252512" TEXT="UI-Coord zur&#xfc;ckliefern"/>
-<node CREATED="1528988289119" ID="ID_1881432398" MODIFIED="1528988440865" TEXT="tricky conversion">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...wenn ich es irgendwie schaffe,
-    </p>
-    <p>
-      doch auch noch UI-Coord als R&#252;ckgabewert
-    </p>
-    <p>
-      da &quot;hineinzuw&#252;rgen&quot;...
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-<node CREATED="1528988263818" ID="ID_480404928" MODIFIED="1528988286380" TEXT="Element-Cache"/>
+<node CREATED="1528988263818" ID="ID_480404928" MODIFIED="1529016940289" TEXT="Element-Cache?"/>
+<node CREATED="1529016904083" ID="ID_1517114370" MODIFIED="1529016934839" TEXT="API erweitern"/>
 </node>
 <node CREATED="1528988317699" ID="ID_1560503454" MODIFIED="1528988323954" TEXT="Variante-2 ">
 <icon BUILTIN="full-2"/>
@@ -11511,6 +11494,130 @@
 <node CREATED="1528988355802" ID="ID_523121546" MODIFIED="1528988365328" TEXT="ElementAccess = reine Zugriffsfunktion"/>
 <node CREATED="1528988379946" ID="ID_131306130" MODIFIED="1528988391702" TEXT="brauche anderweitige Abstraktion"/>
 <node CREATED="1528988369596" ID="ID_1174830872" MODIFIED="1528988376583" TEXT="Allokator erzeugt anderweitig"/>
+</node>
+<node CREATED="1529016988678" ID="ID_1209500762" MODIFIED="1529016994968" TEXT="Variante-3">
+<icon BUILTIN="full-3"/>
+<node CREATED="1529017028938" ID="ID_359770283" MODIFIED="1529017068647" TEXT="Opaque Location Representation"/>
+<node CREATED="1529017070019" ID="ID_57519695" MODIFIED="1529017101538" TEXT="Allocator-API darauf umstellen"/>
+<node CREATED="1529017279135" ID="ID_707219104" MODIFIED="1529017285322" TEXT="(down)cast-Mechanismus"/>
+</node>
+<node CREATED="1529018080237" ID="ID_776753961" MODIFIED="1529018319679" TEXT="Variante-3b">
+<icon BUILTIN="full-4"/>
+<node CREATED="1529018093267" ID="ID_389715312" MODIFIED="1529018099078" TEXT="Hybrid-L&#xf6;sung"/>
+<node CREATED="1529018100234" ID="ID_1628139323" MODIFIED="1529018119792">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      als <i>Subklasse</i>&#160;von UICoord
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1529018125015" ID="ID_740978949" MODIFIED="1529018137465" TEXT="f&#xfc;gt den Variant-Record und den Konverter hinzu"/>
+</node>
+</node>
+<node CREATED="1529016854248" ID="ID_1664191705" MODIFIED="1529016857972" TEXT="Abw&#xe4;gung">
+<node CREATED="1529016871262" ID="ID_957194065" MODIFIED="1529017825322" TEXT="Variante-2 verschiebt das Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn das eigentliche Problem ist,
+    </p>
+    <p>
+      da&#223; ich noch keinerlei Implementierung schreiben kann.
+    </p>
+    <p>
+      Mithin schiebe ich mir Platzhalter von der linken in die rechte Tasche
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1529017693432" ID="ID_70956393" MODIFIED="1529018209759" TEXT="Variante-3 verwendet zwei Repr&#xe4;sentationen f&#xfc;r die gleiche Sache">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar f&#252;r die abstrahierte GUI-Location
+    </p>
+    <ul>
+      <li>
+        einmal symbolisch als UI-Koordinaten
+      </li>
+      <li>
+        einmal opaque als eingekapselte L&#246;sung
+      </li>
+    </ul>
+    <p>
+      Und sowas ist verwirrend und verlockt gradezu, die Schachtel aufzumachen
+    </p>
+    <p>
+      und an der Implementierung zu kleben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1529018409007" ID="ID_1460094266" MODIFIED="1529018714798" TEXT="Variante-3b w&#xe4;re nur interessant als eigenst&#xe4;ndige Entit&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was <i>bis jetzt</i>&#160;nicht gegeben ist!
+    </p>
+    <p>
+      Bis jetzt haben wir einen &quot;Durchlauf-Erhitzer&quot;: letztlich will man nur die Referenz
+    </p>
+    <p>
+      auf das GUI-Element haben, und die dazwischenliegende symbolische Schicht
+    </p>
+    <p>
+      dient nur der Konfiguration und L&#246;sungs-Suche.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wenn allerdings sp&#228;ter mal diese <b>UILocation</b>&#160;== bereits decodierte UI-Koordinaten
+    </p>
+    <p>
+      ein eigenst&#228;ndiges Token wird, welches &#252;ber mehrere Schnittstellen hinweg geschoben wird,
+    </p>
+    <p>
+      <i>dann und nur dann</i>&#160;w&#252;rde die zus&#228;tzliche API-Komplexit&#228;t Sinn machen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1529019621707" ID="ID_537306231" MODIFIED="1529019680878" STYLE="fork" TEXT="Beschlu&#xdf;">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1529019899294" ID="ID_514740736" MODIFIED="1529019930053" TEXT="Variante-3b wird als Option f&#xfc;r sp&#xe4;ter festgehalten"/>
+<node CREATED="1529019931210" ID="ID_963819454" MODIFIED="1529019961969" TEXT="Variante-1 mit API-Erweiterung ist naheliegend"/>
+<node CREATED="1529019962989" ID="ID_1964052993" MODIFIED="1529019985410">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die <b>verfickte</b>&#160;Performance wird ignoriert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
