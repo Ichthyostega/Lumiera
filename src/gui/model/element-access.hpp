@@ -60,10 +60,6 @@
 #include "lib/meta/typelist-manip.hpp"
 #include "lib/access-casted.hpp"
 #include "gui/interact/ui-coord.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
-#include "lib/test/test-helper.hpp" ////////TOD-o
 
 #include <string>
 
@@ -77,7 +73,6 @@ namespace model {
   
   using interact::UICoord;
   using lib::meta::Types;
-//  using util::isnil;
   using std::string;
   
   class Tangible;
@@ -185,6 +180,8 @@ namespace model {
   
   
   /** Navigate to the designated component, possibly create the element and parents
+   * @param limitCreation limit on the number of similar UI elements that can be created
+   *         within a scope. A value of zero prohibits creating of new elements.
    * @return location of the actual element to use, as UI-coordinates.
    * @note when access was not possible because the element could not been created,
    *       the indicated location returned is an _empty coordinate spec._

@@ -36,7 +36,7 @@
 #include "lib/format-cout.hpp"   ////////////////TODO only while this test is under development
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 //#include <vector>
@@ -49,6 +49,7 @@ using lib::diff::Rec;
 //using lib::diff::GenNode;
 //using util::isSameObject;
 //using util::isnil;
+using util::contains;
 
 
 namespace gui {
@@ -217,11 +218,9 @@ namespace test {
           
           DummyView& view1 = viewLocator.get<DummyView>();
           cout << "created view:" << view1.getID() << endl;
+          CHECK (fakeAccessor->response);                   // a new "widget" was created
+          CHECK (contains (view1.getID(), "DummyView"));    // using the type name as ID prefix
                                                       /////////////////////////////////////////////TICKET 1129 : some way to verify the last allocated path. Should be a child of "parentLocation"
-          
-          
-          
-//        TimelineView timeline = viewLocator.get<TimelineView>();
           
           /////////////////////////////////////////////////////////////////////////////////////////TICKET 1129 : use an EventLog to verify the forwarded invocations??
         }

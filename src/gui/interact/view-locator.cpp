@@ -71,8 +71,7 @@ namespace gui {
     AllocSpec<uint> limitAllocation =[](UICoord target, uint limit)
                                        {
                                          lib::Depend<model::ElementAccess> rawElementAccessor;
-                                         
-                                         return target;
+                                         return rawElementAccessor().locate_or_create (target, limit);
                                        };
   
   }

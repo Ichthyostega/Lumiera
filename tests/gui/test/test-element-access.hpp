@@ -118,7 +118,7 @@ namespace test {
       /** the next query will fail unless it presents this Path */
       UICoord existingPath;
       
-      /** ...and if acceptable, the next query will answer with this object */
+      /** ...and if acceptable, we record the last answer here */
       std::unique_ptr<model::Tangible> response;
       
       

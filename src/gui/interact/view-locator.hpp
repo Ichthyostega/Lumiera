@@ -46,7 +46,15 @@
  ** API, and this abstraction allows to keep all the intricacies of navigating concrete UI widgets confined within the
  ** implementation of the Navigator service.
  ** 
- ** @todo WIP 9/2017 early draft       ////////////////////////////////////////////////////////////TICKET #1104
+ ** @todo WIP 6/2018 half finished draft       ////////////////////////////////////////////////////////////TICKET #1104
+ ** 
+ ** @remark the *performance* of such an view location and access step is not considered a priority.
+ **         As it's implemented right now, the access several times repeats the same drill-down into the
+ **         UI widget structure. This was deemed acceptable, since we assume views will be located only
+ **         occasionally, while further UI interactions will use either direct wiring or messages via
+ **         the UI-Bus. On the other hand, the flexibility in the configuration seems important and
+ **         the complexities generated thereby can be a maintenance burden. Which means, a clear
+ **         typed interface within the DSL is more important than burning some more CPU cycles.
  ** 
  ** @see interaction-director.hpp
  ** @see panel-locator.hpp
