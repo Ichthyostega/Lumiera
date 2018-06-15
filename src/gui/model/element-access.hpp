@@ -101,17 +101,14 @@ namespace model {
       template<class TAR>
       lib::Result<TAR&> access (UICoord const& destination);
       
-      template<class TAR>
-      lib::Result<TAR&> access_or_create (UICoord const& destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
-      
-      UICoord allocate (UICoord const& destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
+      UICoord locate_or_create (UICoord const& destination, size_t limitCreation = LUMIERA_MAX_ORDINAL_NUMBER);
       
       
     protected:
       using RawResult = lib::Variant<Types<model::Tangible*, Gtk::Widget*>>;
       
       /** @internal drill down according to coordinates, maybe create element */
-      virtual RawResult performAccessTo (UICoord const&, size_t limitCreation)  =0;
+      virtual RawResult performAccessTo (UICoord::Builder &, size_t limitCreation)  =0;
       
     private:
       template<class TAR>
@@ -141,7 +138,7 @@ namespace model {
   struct ElementAccess::TypeConverter
     : RawResult::Visitor
     {
-      lib::Result<TAR&> result{"not convertible"};
+      lib::Result<TAR&> result{"not convertible to desired target widget"};
       
       template<typename X>                             // note the "backward" use. We pick that base interface
       using canUpcast = std::is_convertible<TAR*, X>; //  into which our desired result type can be upcast, because
@@ -152,7 +149,11 @@ namespace model {
       handle (Base& pb)  override
         {
           if (pb)
-            result = *dynamic_cast<TAR*> (pb);
+            {
+              TAR* downcasted = dynamic_cast<TAR*> (pb);
+              if (downcasted)
+                result = *downcasted;
+            }
           else
             result = lib::Result<TAR&>{"access returns empty answer"};
         }
@@ -175,25 +176,25 @@ namespace model {
   inline lib::Result<TAR&>
   ElementAccess::access (UICoord const& destination)
   {
-    return access_or_create<TAR> (destination, 0);
+    UICoord::Builder targetLocation{destination.rebuild()};
+    TypeConverter<TAR> converter;
+    RawResult targetElm = performAccessTo (targetLocation, 0);
+    targetElm.accept (converter);
+    return converter.result;
   }
   
   
   /** Navigate to the designated component, possibly create the element and parents
-   * @return suitably converted direct (language) reference to the desired element
-   *         wrapped as _result proxy_
+   * @return location of the actual element to use, as UI-coordinates.
    * @note when access was not possible because the element could not been created,
-   *       or is not convertible to the desired target type, the result proxy is empty,
-   *       and convertible to `bool(false)` (or raises an exception on attempted access)
+   *       the indicated location returned is an _empty coordinate spec._
    */
-  template<class TAR>
-  inline lib::Result<TAR&>
-  ElementAccess::access_or_create (UICoord const& destination, size_t limitCreation)
+  inline UICoord
+  ElementAccess::locate_or_create (UICoord const& destination, size_t limitCreation)
   {
-    TypeConverter<TAR> converter;
-    RawResult targetElm = performAccessTo (destination, limitCreation);
-    targetElm.accept (converter);
-    return converter.result;
+    UICoord::Builder targetLocation{destination.rebuild()};
+    performAccessTo (targetLocation, limitCreation);
+    return targetLocation;
   }
   
   

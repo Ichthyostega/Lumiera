@@ -83,7 +83,7 @@ namespace ctrl{
       /* == ElementAccess interface == */
       
       RawResult
-      performAccessTo (UICoord const&, size_t limitCreation)  override
+      performAccessTo (UICoord::Builder & target, size_t limitCreation)  override
         {
           UNIMPLEMENTED ("implementation of access function based on real UI widgets");
         }

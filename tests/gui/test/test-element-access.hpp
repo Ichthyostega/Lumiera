@@ -125,18 +125,20 @@ namespace test {
       /* == ElementAccess interface == */
       
       RawResult
-      performAccessTo (UICoord const& target, size_t limitCreation)  override
+      performAccessTo (UICoord::Builder & target, size_t limitCreation)  override
         {
-          CHECK (existingPath >= target);
-          if (existingPath > target and !response)
+          UICoord const& location = target.uiCoord();
+          
+          CHECK (existingPath >= location);
+          if (existingPath > location and !response)
             {
-              if (target.leafLevel() == UIC_VIEW)
-                response.reset(new DummyView(target[UIC_VIEW]));
+              if (location.leafLevel() == UIC_VIEW)
+                response.reset(new DummyView(location[UIC_VIEW]));
               else
-              if (target.leafLevel() == UIC_TAB)
-                response.reset(new DummyTab(target[UIC_TAB]));
+              if (location.leafLevel() == UIC_TAB)
+                response.reset(new DummyTab(location[UIC_TAB]));
               else
-                throw error::Invalid("Mock ElementAccess supports only creation of VIEW and TAB. Requested Target was "+string(target));
+                throw error::Invalid("Mock ElementAccess supports only creation of VIEW and TAB. Requested Target was "+string(location));
             }
           
           return response.get();

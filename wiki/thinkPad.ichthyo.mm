@@ -11451,14 +11451,14 @@
 <node CREATED="1515634282345" ID="ID_788516837" MODIFIED="1518487921071" TEXT="kl&#xe4;ren, wer sie umsetzt">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752547477" ID="ID_1121433532" MODIFIED="1523752551764" TEXT="limitAllocation">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752559939" ID="ID_597346628" MODIFIED="1525564300862" TEXT="umsetzen auf ElementAccess-API">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752547477" ID="ID_1121433532" MODIFIED="1529073662084" TEXT="limitAllocation">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523752559939" ID="ID_597346628" MODIFIED="1529073653822" TEXT="umsetzen auf ElementAccess-API">
 <linktarget COLOR="#97cad5" DESTINATION="ID_597346628" ENDARROW="Default" ENDINCLINATION="126;9;" ID="Arrow_ID_89575203" SOURCE="ID_1979012219" STARTARROW="None" STARTINCLINATION="567;-16;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1525567190247" ID="ID_42079899" MODIFIED="1525567200526" TEXT="Problem: API noch nicht vollst&#xe4;ndig">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1525567190247" ID="ID_42079899" MODIFIED="1529073619928" TEXT="Problem: API noch nicht vollst&#xe4;ndig">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1525567207940" HGAP="76" ID="ID_1154047307" MODIFIED="1525567222800" TEXT="wirklich zwei Zugriffe?" VSHIFT="-9">
 <icon BUILTIN="help"/>
 <node CREATED="1525567242728" ID="ID_408728922" MODIFIED="1525567256385" TEXT="Finden / Allozieren">
@@ -11479,8 +11479,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525567474513" HGAP="136" ID="ID_492657286" MODIFIED="1528988453047" TEXT="ElementAccess-API umbauen" VSHIFT="5">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1525567474513" HGAP="136" ID="ID_492657286" MODIFIED="1529073647301" TEXT="ElementAccess-API umbauen" VSHIFT="5">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1529016810234" ID="ID_190701762" MODIFIED="1529016835751" TEXT="M&#xf6;glichkeiten">
 <node CREATED="1528988155980" ID="ID_425314989" MODIFIED="1528988170052" TEXT="Variante-1">
 <icon BUILTIN="full-1"/>
@@ -11519,7 +11519,7 @@
 <node CREATED="1529018125015" ID="ID_740978949" MODIFIED="1529018137465" TEXT="f&#xfc;gt den Variant-Record und den Konverter hinzu"/>
 </node>
 </node>
-<node CREATED="1529016854248" ID="ID_1664191705" MODIFIED="1529016857972" TEXT="Abw&#xe4;gung">
+<node CREATED="1529016854248" HGAP="37" ID="ID_1664191705" MODIFIED="1529073423992" TEXT="Abw&#xe4;gung" VSHIFT="5">
 <node CREATED="1529016871262" ID="ID_957194065" MODIFIED="1529017825322" TEXT="Variante-2 verschiebt das Problem">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -11536,8 +11536,7 @@
       Mithin schiebe ich mir Platzhalter von der linken in die rechte Tasche
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1529017693432" ID="ID_70956393" MODIFIED="1529018209759" TEXT="Variante-3 verwendet zwei Repr&#xe4;sentationen f&#xfc;r die gleiche Sache">
 <richcontent TYPE="NOTE"><html>
@@ -11563,8 +11562,7 @@
       und an der Implementierung zu kleben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1529018409007" ID="ID_1460094266" MODIFIED="1529018714798" TEXT="Variante-3b w&#xe4;re nur interessant als eigenst&#xe4;ndige Entit&#xe4;t">
 <richcontent TYPE="NOTE"><html>
@@ -11597,14 +11595,14 @@
       <i>dann und nur dann</i>&#160;w&#252;rde die zus&#228;tzliche API-Komplexit&#228;t Sinn machen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1529019621707" ID="ID_537306231" MODIFIED="1529019680878" STYLE="fork" TEXT="Beschlu&#xdf;">
-<font NAME="SansSerif" SIZE="12"/>
-<node CREATED="1529019899294" ID="ID_514740736" MODIFIED="1529019930053" TEXT="Variante-3b wird als Option f&#xfc;r sp&#xe4;ter festgehalten"/>
-<node CREATED="1529019931210" ID="ID_963819454" MODIFIED="1529019961969" TEXT="Variante-1 mit API-Erweiterung ist naheliegend"/>
-<node CREATED="1529019962989" ID="ID_1964052993" MODIFIED="1529019985410">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1529019621707" ID="ID_537306231" MODIFIED="1529065532539" TEXT="Beschlu&#xdf;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1529019899294" ID="ID_514740736" MODIFIED="1529065532532" TEXT="Variante-3b wird als Option f&#xfc;r sp&#xe4;ter festgehalten"/>
+<node CREATED="1529019931210" ID="ID_963819454" MODIFIED="1529065532532" TEXT="Variante-1 mit API-Erweiterung ist naheliegend"/>
+<node CREATED="1529019962989" ID="ID_1964052993" MODIFIED="1529065532532">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -11614,9 +11612,34 @@
       die <b>verfickte</b>&#160;Performance wird ignoriert
     </p>
   </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1529073415777" HGAP="19" ID="ID_834523571" MODIFIED="1529073575521" TEXT="L&#xf6;sung" VSHIFT="12">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1529073429723" ID="ID_100395564" MODIFIED="1529073437526" TEXT="Funktion locate_or_create()">
+<node CREATED="1529073456407" ID="ID_838325275" MODIFIED="1529073466881" TEXT="macht Zugriff und erzeugt ggfs neu"/>
+<node CREATED="1529073467710" ID="ID_149127263" MODIFIED="1529073477217" TEXT="gibt UICoord::Builder nach unten"/>
+<node CREATED="1529073477988" ID="ID_1842592627" MODIFIED="1529073484271" TEXT="dieser wird dort ggfs umgeschrieben"/>
+<node CREATED="1529073485027" ID="ID_1766613398" MODIFIED="1529073496141" TEXT="gibt nur UICoord zur&#xfc;ck"/>
+</node>
+<node CREATED="1529073497945" ID="ID_1104671546" MODIFIED="1529073502069" TEXT="Funktion access()">
+<node CREATED="1529073503466" ID="ID_1047392798" MODIFIED="1529073510052" TEXT="darf niemals neu erzeugen"/>
+<node CREATED="1529073510904" ID="ID_403151375" MODIFIED="1529073549243" TEXT="navigiert den vorbereiten Pfad nochmal hinunter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....jaaaaa, das ist verschwenderisch
+    </p>
+  </body>
 </html>
 </richcontent>
 </node>
+<node CREATED="1529073559905" ID="ID_1370869277" MODIFIED="1529073571068" TEXT="liefert nun aber den verpackten Ergebnis-Zeiger"/>
 </node>
 </node>
 </node>

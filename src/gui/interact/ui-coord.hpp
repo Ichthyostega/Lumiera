@@ -522,6 +522,14 @@ namespace interact {
       size_t size() const { return uic_.size(); }
       bool empty()  const { return uic_.empty();}
       
+      /** @warning exposes transient state,
+       *           not normalised. */
+      UICoord const&
+      uiCoord()
+        {
+          return uic_;
+        }
+      
       
       /* == Builder functions == */
       

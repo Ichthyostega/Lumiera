@@ -51,25 +51,14 @@ using lib::diff::Rec;
 //using util::isnil;
 
 
-namespace gui  {
+namespace gui {
 namespace idi { //------Mock ViewSpec definitions for component test
   
-  struct MockView1
-    : gui::test::DummyWidget
-    {
-      using DummyWidget::DummyWidget;
-    };
-  
-  struct MockView2
-    : gui::test::DummyWidget
-    {
-      using DummyWidget::DummyWidget;
-    };
   
   /* ==== Dummy ViewSpec rules for those two mock view types (--> see id-scheme.hpp) ==== */
     
   template<>
-  struct Descriptor<MockView1>
+  struct Descriptor<test::DummyView>
     {
       ViewSpec locate = UICoord::currentWindow().panel("parentLocation");
       Allocator alloc = limitAllocation(2);
@@ -222,12 +211,11 @@ namespace test {
           
           
           //--------------------------------------------------------------Staging: Testcase-1
-          using idi::MockView1;
           fakeAccessor->existingPath = UICoord{"win-1","perspective","parentLocation"};
           CHECK (not fakeAccessor->response); // not yet created
           //--------------------------------------------------------------Staging: Testcase-1
           
-          MockView1& view1 = viewLocator.get<MockView1>();
+          DummyView& view1 = viewLocator.get<DummyView>();
           cout << "created view:" << view1.getID() << endl;
                                                       /////////////////////////////////////////////TICKET 1129 : some way to verify the last allocated path. Should be a child of "parentLocation"
           
