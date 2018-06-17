@@ -1,8 +1,9 @@
 /*
-  PANEL-MANAGER.hpp  -  management of dockable GDL panels
+  DOCK-AREA.hpp  -  maintain a docking area within the WorkspaceWindow
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,18 +22,18 @@
 */
 
 
-/** @file panel-manager.hpp
- ** Management of dockable panels.
+/** @file dock-area.hpp
+ ** Management of dockable panels within each top-level WorkspaceWindow.
  ** 
  ** @todo 2017 need to clarify the intended behaviour of panels
  **                               ///////////////////////////////////////////////////////////////////////////TICKET #1097  clarify the role and behaviour of Panels
- ** @deprecated shall be transformed into a Dock entity as of 6/2018   //////////////////////////////////////TICKET #1144  refactor dock handling
+ ** @todo will be transformed into a Dock entity as of 6/2018   /////////////////////////////////////////////TICKET #1144  refactor dock handling
  ** 
  ** @see actions.hpp
  */
 
-#ifndef GUI_WORKSPACE_PANEL_MANAGER_H
-#define GUI_WORKSPACE_PANEL_MANAGER_H
+#ifndef GUI_WORKSPACE_DOCK_AREA_H
+#define GUI_WORKSPACE_DOCK_AREA_H
 
 #include "gui/panel/panel.hpp"
 
@@ -50,7 +51,7 @@ namespace workspace {
    * A class to manage DockItem objects for WorkspaceWindow.
    * @todo this code is smelly and needs some clean-up        ///////////////////////////////TICKET #1026
    */
-  class PanelManager
+  class DockArea
     {
       /** reference to the owner workspace window object */
       WorkspaceWindow& workspaceWindow_;
@@ -85,8 +86,8 @@ namespace workspace {
       
       
     public:
-      PanelManager (WorkspaceWindow&);
-     ~PanelManager();
+      DockArea (WorkspaceWindow&);
+     ~DockArea();
       
       /**
        * Initialises this dock manager and creates the dock and all it's widgets.
@@ -335,4 +336,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_PANEL_MANAGER_H*/
+#endif /*GUI_WORKSPACE_DOCK_AREA_H*/

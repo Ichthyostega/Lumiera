@@ -1,8 +1,9 @@
 /*
-  PanelManager  -  management of dockable GDL panels
+  DockArea  -  maintain a docking area within the WorkspaceWindow
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,14 +22,14 @@
 * *****************************************************/
 
 
-/** @file panel-manager.cpp
+/** @file dock-area.cpp
  ** Implementation of dockable UI panels, implemented with the
  ** help of lib GDL (»Gnome Docking Library«, formerly aka »Gnome Design Library«)
- ** @deprecated shall be transformed into a Dock entity as of 6/2018
+ ** @todo will be transformed into a Dock entity as of 6/2018   /////////////////////////////////////////////TICKET #1144  refactor dock handling
  */
 
 
-#include "gui/workspace/panel-manager.hpp"
+#include "gui/workspace/dock-area.hpp"
 
 #include "gui/panel/assets-panel.hpp"
 #include "gui/panel/viewer-panel.hpp"
@@ -45,20 +46,20 @@ using namespace Gtk;         ///////////////////////////////////////////////////
 namespace gui {
 namespace workspace {
   
-  const PanelManager::PanelDescription
-    PanelManager::panelDescriptionList[] = {
-      PanelManager::Panel<TimelinePanel>(),
-      PanelManager::Panel<TimelinePanelObsolete>(),
-      PanelManager::Panel<InfoBoxPanel>(),
-      PanelManager::Panel<ViewerPanel>(),
-      PanelManager::Panel<AssetsPanel>()
+  const DockArea::PanelDescription
+    DockArea::panelDescriptionList[] = {
+      DockArea::Panel<TimelinePanel>(),
+      DockArea::Panel<TimelinePanelObsolete>(),
+      DockArea::Panel<InfoBoxPanel>(),
+      DockArea::Panel<ViewerPanel>(),
+      DockArea::Panel<AssetsPanel>()
     };
   
-  unsigned short PanelManager::panelID = 0;
+  unsigned short DockArea::panelID = 0;
   
   
   
-  PanelManager::PanelManager (WorkspaceWindow& owner)
+  DockArea::DockArea (WorkspaceWindow& owner)
     : workspaceWindow_(owner)
     , dock_()
     , dockBar_(dock_)
@@ -76,7 +77,7 @@ namespace workspace {
   
   
   
-  PanelManager::~PanelManager()
+  DockArea::~DockArea()
   {
       ///////////////////////////////////////////////////////TICKET #195 : violation of policy, dtors must not do any work 
       ///////////////////////////////////////////////////////TICKET #172 : observed as a reason for crashes when closing the GUI. It was invoked after end of main, when the GUI as already gone.
@@ -94,7 +95,7 @@ namespace workspace {
   
   
   void
-  PanelManager::setupDock()
+  DockArea::setupDock()
   {
       ///////////////////////////////////////////////////////TICKET #1027 : investigate what would be the proper way to do this with gdlmm (C++ binding). No direct usage of GDL !
 
@@ -116,28 +117,28 @@ namespace workspace {
   
   
   Gdl::Dock&
-  PanelManager::getDock()
+  DockArea::getDock()
   {
     return dock_;
   }
   
   
   Gdl::DockBar&
-  PanelManager::getDockBar()
+  DockArea::getDockBar()
   {
     return dockBar_;
   }
   
   
   WorkspaceWindow&
-  PanelManager::getWorkspaceWindow()
+  DockArea::getWorkspaceWindow()
   {
     return workspaceWindow_;
   }
   
   
   void
-  PanelManager::showPanel (const int description_index)
+  DockArea::showPanel (const int description_index)
   {
     // Try and find the panel and present it if possible
     list< panel::Panel* >::iterator i;
@@ -164,7 +165,7 @@ namespace workspace {
   
   
   void
-  PanelManager::switchPanel (panel::Panel& old_panel, const int description_index)
+  DockArea::switchPanel (panel::Panel& old_panel, const int description_index)
   {
     REQUIRE (description_index >= 0 &&
              description_index < getPanelDescriptionCount());
@@ -181,7 +182,7 @@ namespace workspace {
   
   
   void
-  PanelManager::splitPanel (panel::Panel& panel, Gtk::Orientation split_direction)
+  DockArea::splitPanel (panel::Panel& panel, Gtk::Orientation split_direction)
   {
     
     // Create the new panel
@@ -212,14 +213,14 @@ namespace workspace {
   
   
   int
-  PanelManager::getPanelDescriptionCount()
+  DockArea::getPanelDescriptionCount()
   {
     return sizeof(panelDescriptionList) / sizeof(PanelDescription);
   }
   
   
   const gchar*
-  PanelManager::getPanelStockID (int index)
+  DockArea::getPanelStockID (int index)
   {
     REQUIRE (index >= 0 && index < getPanelDescriptionCount());
     return panelDescriptionList[index].getStockID();
@@ -227,7 +228,7 @@ namespace workspace {
   
   
   const char*
-  PanelManager::getPanelTitle (int index)
+  DockArea::getPanelTitle (int index)
   {
     REQUIRE (index >= 0 && index < getPanelDescriptionCount());
     return panelDescriptionList[index].getTitle();
@@ -235,7 +236,7 @@ namespace workspace {
   
   
   void
-  PanelManager::createPanels()
+  DockArea::createPanels()
   {
                                                             ///////////////////////////////TICKET #1026 : code smell, use types directly instead          
     panel::Panel* assetsPanel =   createPanel_by_name("AssetsPanel");
@@ -249,7 +250,7 @@ namespace workspace {
   
   
   int
-  PanelManager::findPanelDescription (const char* class_name)  const
+  DockArea::findPanelDescription (const char* class_name)  const
   {
     REQUIRE(class_name);
     
@@ -266,7 +267,7 @@ namespace workspace {
   
   
   panel::Panel*
-  PanelManager::createPanel_by_index (const int index)
+  DockArea::createPanel_by_index (const int index)
   {
     REQUIRE(index >= 0 && index < getPanelDescriptionCount());
     
@@ -281,7 +282,7 @@ namespace workspace {
   
   
   panel::Panel*
-  PanelManager::createPanel_by_index (const int index, Gdl::DockItem &dock_item)
+  DockArea::createPanel_by_index (const int index, Gdl::DockItem &dock_item)
   {
     // Create the panel object
     panel::Panel *panel =  panelDescriptionList[index].create(*this, dock_item);
@@ -300,7 +301,7 @@ namespace workspace {
   
   
   panel::Panel*
-  PanelManager::createPanel_by_name (const char* class_name)
+  DockArea::createPanel_by_name (const char* class_name)
   {
     REQUIRE(class_name);
     const int index = findPanelDescription(class_name);
@@ -309,7 +310,7 @@ namespace workspace {
   
   
   int
-  PanelManager::getPanelType (panel::Panel* const panel)  const
+  DockArea::getPanelType (panel::Panel* const panel)  const
   {
     REQUIRE(panel);
     
@@ -327,7 +328,7 @@ namespace workspace {
   
   
   void
-  PanelManager::removePanel (panel::Panel* const panel)
+  DockArea::removePanel (panel::Panel* const panel)
   {
     REQUIRE(panel);
     
@@ -345,7 +346,7 @@ namespace workspace {
   
   
   void
-  PanelManager::clearPanels()
+  DockArea::clearPanels()
   {
       ///////////////////////////////////////////////////////TICKET #195 : this whole approach smells like an obsolete "C-style" approach.  We should strive to let the runtime system do such stuff for us whenever possible, eg. by using smart pointers
     
@@ -357,7 +358,7 @@ namespace workspace {
   
   
   void
-  PanelManager::on_panel_shown (panel::Panel* panel)
+  DockArea::on_panel_shown (panel::Panel* panel)
   {
     REQUIRE(panel);
     if(panel->is_shown() || panel->is_iconified()) return;
