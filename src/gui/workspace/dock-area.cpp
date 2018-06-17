@@ -48,11 +48,13 @@ namespace workspace {
   
   const DockArea::PanelDescription
     DockArea::panelDescriptionList[] = {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1144
       DockArea::Panel<TimelinePanel>(),
       DockArea::Panel<TimelinePanelObsolete>(),
       DockArea::Panel<InfoBoxPanel>(),
       DockArea::Panel<ViewerPanel>(),
       DockArea::Panel<AssetsPanel>()
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1144
     };
   
   unsigned short DockArea::panelID = 0;
@@ -291,7 +293,7 @@ namespace workspace {
     
     // Connect event handlers
     panel->signal_hidePanel().connect(sigc::bind(
-      sigc::mem_fun(*this, &PanelManager::on_panel_shown), panel));
+      sigc::mem_fun(*this, &DockArea::on_panel_shown), panel));
     
     // Add the panel to the list
     panels_.push_back(panel);

@@ -223,7 +223,7 @@ namespace workspace {
       class PanelDescription
         {
         protected:
-          typedef panel::Panel* (*const CreatePanelProc)(PanelManager&, Gdl::DockItem&);
+          typedef panel::Panel* (*const CreatePanelProc)(DockArea&, Gdl::DockItem&);
                                                             ///////////////////////////////TICKET #1026 : code smell, why not just using inheritance?          
         private:
           /** reference to the typeID of this class */
@@ -291,7 +291,7 @@ namespace workspace {
            * @return Returns a pointer to the panel object.
            */
           panel::Panel*
-          create (PanelManager& panelManager, Gdl::DockItem& dockItem)  const
+          create (DockArea& panelManager, Gdl::DockItem& dockItem)  const
             {
               REQUIRE(createPanelProc_);
               return createPanelProc_ (panelManager, dockItem);
@@ -303,6 +303,7 @@ namespace workspace {
       /**
        * A helper class that will create PanelDescription objects.
        * @param P The type of panel::Panel that the PanelDescription will describe.
+       * @deprecated to be refactored as of 6/2018   /////////////////////////////////////////////TICKET #1144  refactor dock handling
        */
       template<class P>
       class Panel
@@ -323,7 +324,7 @@ namespace workspace {
            * @return pointer to the created panel object.
            */
           static panel::Panel*
-          createPanel (PanelManager& panelManager, Gdl::DockItem& dockItem)
+          createPanel (DockArea& panelManager, Gdl::DockItem& dockItem)
             {
               return new P(panelManager, dockItem);
             }
