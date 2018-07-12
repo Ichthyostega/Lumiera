@@ -92,6 +92,8 @@ namespace workspace {
       /**
        * Initialises this dock manager and creates the dock and all it's widgets.
        * @remarks This function must be called only once as the first call after construction.
+       * @deprecated ///////////////////////////////////////////////////////////////////////////////////TICKET #1145  UI must not populate itself!!!!!
+       * 
        */
       void setupDock();
       

@@ -3058,6 +3058,13 @@ The consequence is that both sides, &quot;the core&quot; and &quot;the UI&quot; 
 Rather, the core sends ''diff messages'' up to the UI, indicating how it sees this virtual structure to be changing. The UI reflects these changes into //its own understanding and representation,// that is here a structure of display widgets. When the user interacts with these structures of the presentation layer, ''command messages'' are generated, using the element ~IDs to designate the arguments of the intended operation. This again causes reaction and change in the core, which is reflected back in the form of further diff messages. (&amp;rarr; GuiCommandCycle)
 </pre>
 </div>
+<div title="GuiContentPopulation" creator="Ichthyostega" modifier="Ichthyostega" created="201807121909" modified="201807121914" tags="GuiIntegration spec draft" changecount="3">
+<pre>//install a listener into the session to cause sending of population diff messages.//
+The Lumiera application is not structured as an UI with internal functionality dangling below. Rather, the architecture calls for several self-contained subsystems, where all of the actual &quot;application content&quot; is modelled within the [[Session]] subsystem. The UI implements the //mechanics of user interaction// -- yet as far as content is concerned, it plays a passive role. Within the UI-Layer, there is a hierarchy of presentation entities, to mirror the structure of the session contents. These entities are built step by step, in reception of //population diff messages// sent upwards from the session.
+
+To establish this interaction pattern, a listener gets installed into the session. In fact, the UI just issues a specific command to indicate it is ready for receiving content; this command, when executed down within the ProcDispatcher, causes the setup of aforementioned listener. This listener first has to //catch up// with all content already existing within the session -- it still needs to be defined {{red{as of 7/2018}}} in which form this existing content can be translated into a diff to reflect it within the UI. Since the session itself is {{red{planned (as of 2018)}}} to be persisted as a sequence of building instructions (CQRS, event sourcing), it might be possible just to replay the appropriate defining messages from the global log. After that point, the UI is attached and synchronised with the session contents and receives any altering messages in the order they emerge.
+</pre>
+</div>
 <div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611182349" tags="GuiPattern discuss decision draft" changecount="64">
 <pre>Inevitably, the UI of an advanced application like Lumiera needs some parts beyond the scope of what can be achieved by combining standard widgets. Typically, an UI toolkit (GTK is no exception here) offers some extension mechanism to integrate such more elaborate, application specific behaviour. Within Lumiera, the Timeline is probably the most prominent place where we need to come up with our own handling solution -- which also means to rely on such extension mechanisms and to integrate well with the more conventional parts of the UI. Since the core concept of typical UI toolkit sets is that of a //widget,// we end up with writing some kind of customised or completely custom defined widget. 
 
@@ -3328,7 +3335,7 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201703021621" tags="GuiIntegration GuiPattern" changecount="5">
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201807121900" tags="GuiIntegration GuiPattern" changecount="7">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
 * main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
 * loading a GuiStarterPlugin actually
@@ -3337,11 +3344,14 @@ Based on these foundations, we shape and form the core part of the interface, wh
 *** GuiNotificationFacade
 *** DisplayFacade
 ** Finally, the ~GTK-main() is invoked.
+* bring up a network of framework entities known als the GuiTopLevel
+* establish a connection to allow the GUI to be [[populated with content|GuiContentPopulation]]
 
 !public services
 The GUI provides a small number of public services, callable through LayerSeparationInterfaces. Besides that, the main purpose of the GUI of course is user interaction. Effectively the behaviour of the whole system is driven by GUI events to a large extent. These events are executed within the event handling thread (~GTK-main-Thread) and may in turn invoke services of the lower layers, again through the respective LayerSeparationInterfaces.
 But the question of special interest here is how the //public services// of the GUI are implemented and made accessible for the lower Layers. Layer isolation is an issue here. If implemented in a rigorous manner, no facility within one layer may invoke implementation code of another layer directly. In practice, this tends to put quite some additional burden on the implementer, without any obvious benefit. Thus we decided to lower the barrier somewhat: while we still require that all service invoking calls are written against a public LayerSeparationInterface, actually the GUI (shared lib) is //linked// against the respective shared libs of the lower layers, thus especially enabling the exchange of iterators, closures and functor objects.
 
+!!!Layer separation
 Note that we retain strict isolation in the other direction: no part of the lower layers is allowed to call directly into the GUI. Thus it's especially interesting how access to some GUI public service from the lower layers works in detail.
 * when the GUI plugin starts, instances of the Services implementing those public service interfaces are created.
 * these service objects in turn hold an ~InstanceHandle, which cares to register and open the corresponding C Language Interface
@@ -3351,6 +3361,11 @@ Now, when invoking an operation on some public interface, the code in the lower 
 !!!UI top level
 Regarding the internal organisation of Lumiera's ~UI-Layer, there is a [[top level structure|GuiTopLevel]] to manage application lifecycle.
 This top-level circle is established starting from the UI-Bus (''Nexus'') and the ''UI Manager'', which in turn creates the other dedicated control entities, especially the InteractionDirector. All these build-up steps are triggered right from the UI main() function, right before starting the ''UI event loop''. The remainder of the start-up process is driven by //contextual state,// as discovered by the top-level entities, delegating to the controllers and widgets.
+
+!content population
+In accordance with the Lumiera application architecture in general, the UI is not allowed to open and build its visible parts on its own behalf. Content and structure is defined by the [[Session]] while the UI takes on a passive role to receive and reflect the session's content. This is accomplished by issuing a //content request,// which in turn installs a listener within the session. This listener in turn causes a //population diff// to be sent upwards into the UI-Layer. Only in response to these content messages the UI will build and activate the visible structures for user interaction.
+&amp;rarr; GuiContentPopulation
+
 </pre>
 </div>
 <div title="GuiStarterPlugin" modifier="Ichthyostega" created="200902080716" tags="def GuiIntegration">
