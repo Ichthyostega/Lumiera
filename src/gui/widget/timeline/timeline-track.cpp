@@ -30,7 +30,7 @@
 
 #include "gui/widget/timeline/timeline-track.hpp"
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/workspace/style-manager.hpp"
+#include "gui/workspace/ui-style.hpp"
 #include "gui/dialog/name-chooser.hpp"
 #include "include/logging.h"
 
@@ -54,8 +54,8 @@ namespace timeline {
     , expanded(true)
     , expandDirection(None)
     , headerWidget(*this)
-    , enableButton(Gtk::StockID("track_enabled"), workspace::StyleManager::MenuIconSize)
-    , lockButton(Gtk::StockID("track_unlocked"), workspace::StyleManager::MenuIconSize)
+    , enableButton(Gtk::StockID("track_enabled"), workspace::UIStyle::MenuIconSize)
+    , lockButton(Gtk::StockID("track_unlocked"), workspace::UIStyle::MenuIconSize)
     {
       REQUIRE(modelTrack);
       
@@ -327,12 +327,12 @@ namespace timeline {
     
     if (modelTrack->getEnabled())
       {
-        enableButton.setStockID (Gtk::StockID("track_enabled"), workspace::StyleManager::MenuIconSize);
+        enableButton.setStockID (Gtk::StockID("track_enabled"), workspace::UIStyle::MenuIconSize);
         enableButton.set_tooltip_text(_("Disable track"));
       }
     else
       {
-        enableButton.setStockID (Gtk::StockID("track_disabled"), workspace::StyleManager::MenuIconSize);
+        enableButton.setStockID (Gtk::StockID("track_disabled"), workspace::UIStyle::MenuIconSize);
         enableButton.set_tooltip_text(_("Enable track"));
       }
   }
@@ -345,12 +345,12 @@ namespace timeline {
     
     if (modelTrack->getLocked())
       {
-        lockButton.setStockID (Gtk::StockID("track_locked"), workspace::StyleManager::MenuIconSize);
+        lockButton.setStockID (Gtk::StockID("track_locked"), workspace::UIStyle::MenuIconSize);
         lockButton.set_tooltip_text(_("Unlock track"));
       }
     else
       {
-        lockButton.setStockID (Gtk::StockID("track_unlocked"), workspace::StyleManager::MenuIconSize);
+        lockButton.setStockID (Gtk::StockID("track_unlocked"), workspace::UIStyle::MenuIconSize);
         lockButton.set_tooltip_text(_("Lock track"));
       }
   }

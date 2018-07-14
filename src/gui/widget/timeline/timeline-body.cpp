@@ -28,7 +28,7 @@
 
 #include "gui/widget/timeline/timeline-body.hpp"
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/workspace/style-manager.hpp"
+#include "gui/workspace/ui-style.hpp"
 #include "gui/draw/cairo-util.hpp"
 
 #include "timeline-arrow-tool.hpp"
@@ -531,14 +531,14 @@ TimelineBody::register_styles() const
 void
 TimelineBody::read_styles()
 {
-  backgroundColour = workspace::StyleManager::readStyleColourProperty(
+  backgroundColour = workspace::UIStyle::readStyleColourProperty(
     *this, "background", 0, 0, 0);
     
-  selectionColour = workspace::StyleManager::readStyleColourProperty(
+  selectionColour = workspace::UIStyle::readStyleColourProperty(
     *this, "selection", 0, 0, 0);
   get_style_property("selection_alpha", selectionAlpha);
   
-  playbackPointColour = workspace::StyleManager::readStyleColourProperty(
+  playbackPointColour = workspace::UIStyle::readStyleColourProperty(
     *this, "playback_point", 0, 0, 0);
 }
   

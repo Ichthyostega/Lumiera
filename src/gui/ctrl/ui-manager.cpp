@@ -37,7 +37,7 @@
 #include "gui/ctrl/global-ctx.hpp"
 #include "gui/ctrl/actions.hpp"
 #include "gui/ctrl/facade.hpp"
-#include "gui/workspace/style-manager.hpp"
+#include "gui/workspace/ui-style.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 
@@ -53,7 +53,7 @@ namespace ctrl {
   using Gtk::IconSize;
   using Gtk::IconFactory;
   
-  using workspace::StyleManager;
+  using workspace::UIStyle;
   
   
   
@@ -101,9 +101,9 @@ namespace ctrl {
     : ApplicationBase()
     , Gtk::UIManager()
     , globals_{new GlobalCtx{bus, *this}}
+    , uiStyle_{new UIStyle{}}
     , actions_{new Actions{*globals_}}
     , facade_{} // note: not activated yet
-    , styleManager_{new StyleManager{}}
     {
       actions_->populateMainActions (*this);
     }

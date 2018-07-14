@@ -3335,7 +3335,7 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201807121900" tags="GuiIntegration GuiPattern" changecount="7">
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201807141734" tags="GuiIntegration GuiPattern" changecount="8">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
 * main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
 * loading a GuiStarterPlugin actually
@@ -3361,6 +3361,9 @@ Now, when invoking an operation on some public interface, the code in the lower 
 !!!UI top level
 Regarding the internal organisation of Lumiera's ~UI-Layer, there is a [[top level structure|GuiTopLevel]] to manage application lifecycle.
 This top-level circle is established starting from the UI-Bus (''Nexus'') and the ''UI Manager'', which in turn creates the other dedicated control entities, especially the InteractionDirector. All these build-up steps are triggered right from the UI main() function, right before starting the ''UI event loop''. The remainder of the start-up process is driven by //contextual state,// as discovered by the top-level entities, delegating to the controllers and widgets.
+
+!!!reaching the operative state
+The UI is basically in operative state when the GTK event loop is running. Before this happens, the initial //workspace window// is explicitly created and made visible -- showing an empty workspace frame without content and detail views. However, from that point on, any user interaction with and UI control currently available is guaranteed to yield the desired effect, which is typically to issue and enqueue a command into the ProcDispatcher, or to show/hide some other UI element. Which also means that all backbone components of the UI have to be created and wired prior to entering operative state. This is ensured through the construction of the {{{UIManager}}}, which holds all the relevant core components either as directly managed &quot;~PImpl&quot; members, or as references. The GTK UI event loop is activated through a blocking call of {{{UIManager::performMainLoop()}}}, which also happens to open all external façade interfaces of the UI-Layer. In a similar vein, the //shutdown of the UI// can be effected through the call {{{UIManager::terminateUI()}}}, causing the GTK loop to terminate, and so the UI thread will leave the aforementioned {{{performMainLoop()}}} and commence to destroy the {{{UIManager}}}, which causes disposal of all core UI components.
 
 !content population
 In accordance with the Lumiera application architecture in general, the UI is not allowed to open and build its visible parts on its own behalf. Content and structure is defined by the [[Session]] while the UI takes on a passive role to receive and reflect the session's content. This is accomplished by issuing a //content request,// which in turn installs a listener within the session. This listener in turn causes a //population diff// to be sent upwards into the UI-Layer. Only in response to these content messages the UI will build and activate the visible structures for user interaction.

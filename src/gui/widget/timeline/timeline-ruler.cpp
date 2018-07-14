@@ -29,7 +29,7 @@
 
 #include "gui/widget/timeline/timeline-ruler.hpp"
 #include "gui/widget/timeline-widget.hpp"
-#include "gui/workspace/style-manager.hpp"
+#include "gui/workspace/ui-style.hpp"
 #include "gui/draw/cairo-util.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time.h"
@@ -691,12 +691,12 @@ namespace timeline {
     get_style_property("mouse_chevron_size", mouseChevronSize);
     get_style_property("selection_chevron_size", selectionChevronSize);
     
-    playbackPointColour = workspace::StyleManager::readStyleColourProperty(
+    playbackPointColour = workspace::UIStyle::readStyleColourProperty(
       *this, "playback_point_colour", 0, 0, 0);
     get_style_property("playback_point_alpha", playbackPointAlpha);
     get_style_property("playback_point_size", playbackPointSize);
     
-    playbackPeriodArrowColour =workspace::StyleManager::readStyleColourProperty(
+    playbackPeriodArrowColour =workspace::UIStyle::readStyleColourProperty(
       *this, "playback_period_arrow_colour", 0, 0, 0);
     get_style_property("playback_period_arrow_alpha",
       playbackPeriodArrowAlpha);

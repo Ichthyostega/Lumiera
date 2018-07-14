@@ -1,5 +1,5 @@
 /*
-  STYLE-MANAGER.hpp  -  Global UI Manager
+  UI-STYLE.hpp  -  manage coherent UI styling
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -22,7 +22,7 @@
 */
 
 
-/** @file style-manager.hpp
+/** @file ui-style.hpp
  ** Service for global theming and style related concerns.
  ** The central UiManager operates an instance of this service to set up and configure the UI
  ** globally. Widgets and similar parts of the interface may use it, when taking decisions
@@ -33,8 +33,8 @@
  */
 
 
-#ifndef GUI_WORKSPACE_STYLE_MANAGER_H
-#define GUI_WORKSPACE_STYLE_MANAGER_H
+#ifndef GUI_WORKSPACE_UI_STYLE_H
+#define GUI_WORKSPACE_UI_STYLE_H
 
 #include "gui/gtk-base.hpp"
 #include "lib/nocopy.hpp"
@@ -62,7 +62,7 @@ namespace workspace {
    * further global services to create workspace windows, to bind
    * menu / command actions and to enter the top-level model parts.
    */
-  class StyleManager
+  class UIStyle
     : public Gtk::UIManager
     , util::NonCopyable
     {
@@ -87,13 +87,12 @@ namespace workspace {
       
     public:
       /**
-       * There is one global UiManager instance,
-       * which is created by [the Application](\ref GtkLumiera)
-       * and allows access to the UI-Bus backbone. The UiManager itself
-       * is _not a ctrl::Controller,_ and thus not directly connected to the Bus.
-       * Rather, supports the top-level windows for creating a consistent interface.
+       * Set up a coherent theming and styling for the application.
+       * Based on the Gtk::UIManager, the UIStyle service allows to access some
+       * style related resources, but mostly its task is to configure the GTK toolkit
+       * appropriately during startup.
        */
-      StyleManager ();
+      UIStyle();
       
       /**
        * Sets the theme to use for the Lumiera GUI.
@@ -200,4 +199,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_STYLE_MANAGER_H*/
+#endif /*GUI_WORKSPACE_UI_STYLE_H*/

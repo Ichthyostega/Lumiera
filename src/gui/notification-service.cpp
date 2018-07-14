@@ -90,8 +90,8 @@ namespace gui {
   void 
   NotificationService::displayInfo (NotifyLevel severity, string const& text)
   {
-    INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));  ///////////////////////////////////TICKET #1102 : build a message display box in the UI
-    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1098 : use a suitable Dispatcher
+    INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
+    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1102 : build a message display box in the UI
                                                                ////////////////////////////////////////////////TICKET #1047 : as a temporary solution, use the InfoBox panel... 
   }
   

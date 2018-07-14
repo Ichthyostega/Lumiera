@@ -58,7 +58,7 @@ namespace gui {
   
   class UiBus;
   
-namespace workspace { class StyleManager; }
+namespace workspace { class UIStyle; }
 namespace ctrl {
   
   using std::unique_ptr;
@@ -95,11 +95,13 @@ namespace ctrl {
     : public ApplicationBase
     , public Gtk::UIManager
     {
+      using UIStyle = workspace::UIStyle;
+      
       unique_ptr<GlobalCtx> globals_;
+      unique_ptr<UIStyle>   uiStyle_;
       unique_ptr<Actions>   actions_;
       unique_ptr<Facade>    facade_;
       
-      unique_ptr<workspace::StyleManager> styleManager_;
       
     public:
       /**

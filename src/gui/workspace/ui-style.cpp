@@ -1,5 +1,5 @@
 /*
-  StyleManager  -  Global UI Manager
+  UiStyle  -  manage coherent UI styling
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -22,7 +22,7 @@
 * *****************************************************/
 
 
-/** @file style-manager.cpp
+/** @file ui-style.cpp
  ** Implementation of global concerns regarding a coherent UI and global state.
  ** Especially, the wiring of top-level components is done here, as is the
  ** basic initialisation of the interface and global configuration on
@@ -31,7 +31,7 @@
  */
 
 
-#include "gui/workspace/style-manager.hpp"
+#include "gui/workspace/ui-style.hpp"
 #include "gui/config-keys.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
@@ -50,21 +50,21 @@ namespace workspace {
   
   namespace fsys = boost::filesystem;
   
-  IconSize StyleManager::GiantIconSize = Gtk::ICON_SIZE_INVALID;
-  IconSize StyleManager::MenuIconSize = Gtk::ICON_SIZE_INVALID;
+  IconSize UIStyle::GiantIconSize = Gtk::ICON_SIZE_INVALID;
+  IconSize UIStyle::MenuIconSize = Gtk::ICON_SIZE_INVALID;
   
   
   
   
   /**
-   * Initialise the theme and style related global properties of the UI.
+   * @internal Initialise the theme and style related global properties of the UI.
    * Register the icon configuration and sizes and lookup all standard icons --
    * either from the default theme of via the given Lumiera icon search paths,
    * typically from `setup.ini`.
    * 
    * @see lumiera::Config
    */
-  StyleManager::StyleManager()
+  UIStyle::UIStyle()
     : Gtk::UIManager()
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
@@ -80,7 +80,7 @@ namespace workspace {
   
   
   void
-  StyleManager::setTheme (string const& stylesheetName)
+  UIStyle::setTheme (string const& stylesheetName)
   {
     auto screen = Gdk::Screen::get_default();
     auto css_provider = Gtk::CssProvider::create();
@@ -102,9 +102,9 @@ namespace workspace {
   
   
   Cairo::RefPtr<Cairo::SolidPattern>
-  StyleManager::readStyleColourProperty (Gtk::Widget& widget
-                                        ,const gchar * property_name
-                                        ,guint16 red, guint16 green, guint16 blue)
+  UIStyle::readStyleColourProperty (Gtk::Widget& widget
+                                   ,const gchar * property_name
+                                   ,guint16 red, guint16 green, guint16 blue)
   {
     REQUIRE (property_name);
     
@@ -113,7 +113,7 @@ namespace workspace {
     gtk_widget_style_get(widget.gobj(), property_name, &color, NULL);
     
     Cairo::RefPtr<Cairo::SolidPattern> pattern;
-    // Did the color load successfully?
+    // Did the colour load successfully?
     if (color != NULL)
       {
         pattern = Cairo::SolidPattern::create_rgb ( (double)color->red   / 0xFFFF,
@@ -132,7 +132,7 @@ namespace workspace {
   
   
   void
-  StyleManager::registerAppIconSizes()
+  UIStyle::registerAppIconSizes()
   {
     if(GiantIconSize == Gtk::ICON_SIZE_INVALID)
       GiantIconSize = IconSize::register_new ("giant", 48, 48);
@@ -146,7 +146,7 @@ namespace workspace {
    * icons and labels associated with IDs
    */
   void
-  StyleManager::registerStockItems()
+  UIStyle::registerStockItems()
   {
     Glib::RefPtr<IconFactory> factory = Gtk::IconFactory::create();
     
@@ -171,10 +171,10 @@ namespace workspace {
   
   
   bool
-  StyleManager::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
-                                ,cuString& icon_name
-                                ,cuString& id
-                                ,cuString& label)
+  UIStyle::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
+                           ,cuString& icon_name
+                           ,cuString& id
+                           ,cuString& label)
   {
     Glib::RefPtr<Gtk::IconSet> icon_set = Gtk::IconSet::create();
     
@@ -207,10 +207,10 @@ namespace workspace {
   
   
   bool
-  StyleManager::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                             ,cuString& icon_name
-                             ,Gtk::IconSize size
-                             ,bool wildcard)
+  UIStyle::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
+                        ,cuString& icon_name
+                        ,Gtk::IconSize size
+                        ,bool wildcard)
   {
     // Try the icon theme  
     if (addThemeIconSource(icon_set, icon_name, size, wildcard))
@@ -231,10 +231,10 @@ namespace workspace {
   
   
   bool
-  StyleManager::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                   ,cuString& icon_name
-                                   ,Gtk::IconSize size
-                                   ,bool wildcard)
+  UIStyle::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+                              ,cuString& icon_name
+                              ,Gtk::IconSize size
+                              ,bool wildcard)
   {
     // Get the size
     int width = 0, height = 0;
@@ -257,11 +257,11 @@ namespace workspace {
   
   
   bool
-  StyleManager::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                      ,cuString& base_dir
-                                      ,cuString& icon_name
-                                      ,Gtk::IconSize size
-                                      ,bool wildcard)
+  UIStyle::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+                                 ,cuString& base_dir
+                                 ,cuString& icon_name
+                                 ,Gtk::IconSize size
+                                 ,bool wildcard)
   {
     // Get the size
     int width = 0, height = 0;
@@ -277,10 +277,10 @@ namespace workspace {
   
   
   bool
-  StyleManager::addStockIconFromPath (string path
-                                     ,Glib::RefPtr<Gtk::IconSet> const& icon_set
-                                     ,Gtk::IconSize size
-                                     ,bool wildcard)
+  UIStyle::addStockIconFromPath (string path
+                                ,Glib::RefPtr<Gtk::IconSet> const& icon_set
+                                ,Gtk::IconSize size
+                                ,bool wildcard)
   {
     if (!fsys::exists (path)) return false;
     
