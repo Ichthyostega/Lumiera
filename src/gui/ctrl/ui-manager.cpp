@@ -28,6 +28,8 @@
  ** basic initialisation of the interface and global configuration on
  ** UI toolkit level.
  ** 
+ ** @see TICKET #1032 regarding replacements for the deprecated Gtk::Main
+ ** 
  */
 
 
@@ -69,6 +71,7 @@ namespace ctrl {
    *         incorporated the framework initialisation code directly into
    *         our own code base. This allows us to ignore all the shiny new
    *         D-Bus and desktop integration stuff.
+   * @note confirmed this class calls the proper Gtk internals as of 2018
    */
   ApplicationBase::ApplicationBase()
     {
@@ -88,6 +91,8 @@ namespace ctrl {
       Glib::wrap_register_cleanup();
       Glib::Error::register_cleanup();
       //---------------------------------------------copied from Gtk::Main
+      
+      // NOTE: GtkMainConnectionNode only serves the deprecated key_snooper API as of 2018
     }
   
   
