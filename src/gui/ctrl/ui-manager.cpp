@@ -159,6 +159,21 @@ namespace ctrl {
     gtk_main_quit();
   }
   
+  
+  /**
+   * @remarks moves the given operation into our private dispatcher queue and then
+   *          schedules dequeuing and invocation into the UI event thread.
+   * @param op a completely closed lambda or functor
+   * @warning closure need to be by value or equivalent, since
+   *          the operation will be executed within another call stack
+   */
+  void
+  UiManager::schedule (Operation&& task)
+  {
+    UNIMPLEMENTED ("TICKET #1151 build a suitable dispatcher into the GTK loop");
+  }
+
+  
   void
   UiManager::updateWindowFocusRelatedActions()
   {

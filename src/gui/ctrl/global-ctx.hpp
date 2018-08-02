@@ -26,7 +26,7 @@
  ** There is a small number of management facilities, responsible for conducting all the
  ** global concerns of the Lumiera UI. The circle of these _top level managers_ is quite cohesive,
  ** insofar each knows each other and is aware of each others responsibilities. When starting the UI,
- ** this global context is established and wired in one shot, any any failure here immediately terminates
+ ** this global context is established and wired in one shot, and any failure here immediately terminates
  ** the UI-Layer. It is the UiManager's responsibility to install this management circle and this task is
  ** what effectively brings the UI into operative state.
  ** 
@@ -60,9 +60,6 @@
 #include "gui/interact/wizard.hpp"
 #include "gui/interact/interaction-director.hpp"
 #include "lib/nocopy.hpp"
-
-//#include <string>
-//#include <memory>
 
 
 namespace gui {

@@ -15880,7 +15880,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788645307" ID="ID_254810710" MODIFIED="1532788655288" TEXT="Trigger-Technik kl&#xe4;ren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1532788681197" ID="ID_32192034" MODIFIED="1532788722848" TEXT="bei GTK selber abschauen">
+<node CREATED="1532788681197" FOLDED="true" ID="ID_32192034" MODIFIED="1533218445055" TEXT="bei GTK selber abschauen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15897,7 +15897,8 @@
 </richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1532793805646" ID="ID_1917720417" MODIFIED="1532793811649" TEXT="Gtk::Application">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1532794470116" ID="ID_539459561" MODIFIED="1532794471965" TEXT="TODO">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1532794470116" ID="ID_539459561" MODIFIED="1533218296183" TEXT="TODO">
+<linktarget COLOR="#dc217a" DESTINATION="ID_539459561" ENDARROW="Default" ENDINCLINATION="33;201;" ID="Arrow_ID_601982135" SOURCE="ID_1901487140" STARTARROW="None" STARTINCLINATION="-55;-186;"/>
 <icon BUILTIN="flag-pink"/>
 <node CREATED="1532794476795" ID="ID_1999030504" MODIFIED="1532794483438" TEXT="gibt es statische Funktionen?"/>
 <node CREATED="1532794485778" ID="ID_86543147" MODIFIED="1532794494804" TEXT="was f&#xfc;r on-start-Callbacks gibt es?"/>
@@ -15938,8 +15939,51 @@
 </node>
 </node>
 </node>
+<node CREATED="1533218310967" ID="ID_955496166" MODIFIED="1533218319204" TEXT="nicht mehr n&#xf6;tig">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1533218320846" ID="ID_533086066" MODIFIED="1533218324233" TEXT="abgebrochen"/>
+<node CREATED="1533218324829" ID="ID_1592564377" MODIFIED="1533218328713" TEXT="nur noch zu dokumentieren"/>
 </node>
-<node CREATED="1532788727680" ID="ID_889790361" MODIFIED="1532788735546" TEXT="Gtk::Main auf aktuellem Stand">
+<node CREATED="1533218330252" ID="ID_1616633221" MODIFIED="1533218339147" TEXT="hab&apos;s erraten">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1533218341027" ID="ID_805779569" MODIFIED="1533218349822" TEXT="Glib::Dispatcher"/>
+<node CREATED="1533218355929" ID="ID_489375421" MODIFIED="1533218433083" TEXT="glaube ich...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      will sagen,
+    </p>
+    <p>
+      ich gebe mir jetzt nicht mal mehr die M&#252;he,
+    </p>
+    <p>
+      meine erratene L&#246;sung zu verifizieren.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Sie erscheint mir einfach so absolut offensichtlich,
+    </p>
+    <p>
+      da&#223; es keine weitere M&#252;he lohnt.
+    </p>
+    <p>
+      Glib::Dispatcher ist genau das richtige Ding f&#252;r diesen Zweck
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1532788727680" FOLDED="true" ID="ID_889790361" MODIFIED="1533218449273" TEXT="Gtk::Main auf aktuellem Stand">
+<arrowlink COLOR="#f3396a" DESTINATION="ID_1283695968" ENDARROW="Default" ENDINCLINATION="-81;-236;" ID="Arrow_ID_1530325920" STARTARROW="None" STARTINCLINATION="119;-5;"/>
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1532788737366" ID="ID_1527913663" MODIFIED="1532788745870" TEXT="aktuellen Code bereitlegen in Eclipse">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -16129,10 +16173,22 @@
 <node CREATED="1532796692445" ID="ID_1979586408" MODIFIED="1532796706398" TEXT="Wrapper-Mechanismus f&#xfc;r Gtk+-&quot;Objekte&quot; initialisieren"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1532797168836" ID="ID_1283695968" MODIFIED="1532797178971" TEXT="TODO: diesen Stand dokumentieren">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1532797168836" ID="ID_1283695968" MODIFIED="1533218227864" TEXT="TODO: diesen Stand dokumentieren">
+<linktarget COLOR="#f3396a" DESTINATION="ID_1283695968" ENDARROW="Default" ENDINCLINATION="-81;-236;" ID="Arrow_ID_1530325920" SOURCE="ID_889790361" STARTARROW="None" STARTINCLINATION="119;-5;"/>
 <icon BUILTIN="flag-pink"/>
 <node CREATED="1532797180066" ID="ID_687615166" MODIFIED="1532797192496" TEXT="siehe Ticket #1032">
 <icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533218052308" ID="ID_1734927969" MODIFIED="1533218091117" TEXT="neue Kategorie: technical/code base/ GTK">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533218096245" ID="ID_1901487140" MODIFIED="1533218296183" TEXT="dort Seite startup">
+<arrowlink COLOR="#dc217a" DESTINATION="ID_539459561" ENDARROW="Default" ENDINCLINATION="33;201;" ID="Arrow_ID_601982135" STARTARROW="None" STARTINCLINATION="-55;-186;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1533218137447" ID="ID_59387223" MODIFIED="1533218142874" TEXT="lose Notizen dorthin"/>
+<node CREATED="1533218147981" ID="ID_1385133985" MODIFIED="1533218153417" TEXT="Main vs Application"/>
+<node CREATED="1533218154141" ID="ID_511849124" MODIFIED="1533218165327" TEXT="unser Ansatz"/>
+<node CREATED="1533218170914" ID="ID_1610394794" MODIFIED="1533218176629" TEXT="was macht Main?"/>
 </node>
 </node>
 </node>
@@ -16146,8 +16202,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788656585" ID="ID_99363690" MODIFIED="1532788661346" TEXT="geeignet ansiedeln">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788656585" ID="ID_99363690" MODIFIED="1533223405882" TEXT="geeignet ansiedeln">
+<icon BUILTIN="pencil"/>
 <node CREATED="1532794614249" ID="ID_884179844" MODIFIED="1532794617028" TEXT="Plan">
 <node CREATED="1532794617968" ID="ID_1917693631" MODIFIED="1532794659877" TEXT="geeigneten Zugang &#xfc;ber die Notification-facade">
 <icon BUILTIN="full-1"/>
@@ -16157,6 +16213,72 @@
 </node>
 <node CREATED="1532794643461" ID="ID_1862931436" MODIFIED="1532794664726" TEXT="dieser sendet in der Loop das Aktivierungs-Command">
 <icon BUILTIN="full-3"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221103349" ID="ID_1053145038" MODIFIED="1533223398404" TEXT="Anker">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533221107205" ID="ID_1202141905" MODIFIED="1533221141349" TEXT="es mu&#xdf; der InteractionDirector sein">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1533221115139" ID="ID_1655397510" MODIFIED="1533221117607" TEXT="wer sonst?"/>
+<node CREATED="1533221118267" ID="ID_517862983" MODIFIED="1533221132317" TEXT="er verk&#xf6;rpert &quot;das Globale&quot;"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221145295" ID="ID_45639892" MODIFIED="1533221166358" TEXT="Problem: Zugang zum NotificationService">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1533221554888" ID="ID_1545304194" MODIFIED="1533221603239" TEXT="wird explizit erst von UiManager::performMainLoop() installiert">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1533221577485" ID="ID_890031207" MODIFIED="1533221596939" TEXT="Problem f&#xfc;r allen Setup-Code aus InteractionDirector et al">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1533221649380" ID="ID_727991171" MODIFIED="1533221669408">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist ein <i>akzidentelles Problem</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1533221681199" ID="ID_979914270" MODIFIED="1533221738765" TEXT="Folge unserer Architektur">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn es ist gradezu der Sinn von Glib::Dispatcher,
+    </p>
+    <p>
+      schon vor der Loop verf&#252;gbar zu sein (?)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1533221742343" ID="ID_1970220536" MODIFIED="1533221747599" TEXT="Alternativen gesucht">
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221752837" ID="ID_583598881" MODIFIED="1533221770083" TEXT="verifizieren: ist Glib::Dispatcher die richtige Technik">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221770859" ID="ID_1962039642" MODIFIED="1533221828924" TEXT="ggfs daf&#xfc;r einen dedizierten Service bauen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1533221796823" ID="ID_179436166" MODIFIED="1533221810377" TEXT="dann im UiManager"/>
+<node CREATED="1533221813285" ID="ID_1627865297" MODIFIED="1533221816584" TEXT="aus logischen Gr&#xfc;nden"/>
+<node CREATED="1533221818572" ID="ID_806537689" MODIFIED="1533221826270" TEXT="pa&#xdf;t auch thematisch dort hin"/>
+</node>
+<node CREATED="1533223360183" ID="ID_1309454354" MODIFIED="1533223389415" TEXT="Idee">
+<icon BUILTIN="idea"/>
+<node CREATED="1533223371534" ID="ID_891597430" MODIFIED="1533223376721" TEXT="UiDispatcher"/>
+<node CREATED="1533223377381" ID="ID_1197977205" MODIFIED="1533223383568" TEXT="einfach eine weitere Instanz davon"/>
+<node CREATED="1533223384180" ID="ID_141172630" MODIFIED="1533223387239" TEXT="geht das?"/>
+</node>
 </node>
 </node>
 </node>

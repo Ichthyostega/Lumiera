@@ -81,6 +81,14 @@ namespace interact {
     { }
   
   
+  /**
+   * Setup and initialise all representations of "global-ness".
+   * @param globals wiring to the circle of top-level UI managers (including ourselves)
+   * @warning this ctor is performed within the UI thread, yet _prior_ to entering the GTK event loop.
+   *    For this reason, all initialisation performed here must be wiring-only; any tasks requiring an
+   *    actually operative UI need to be scheduled, by means of the NotificationService.
+   * @todo 7/2018 STOP no, can't be the NotificationService.     ////////////////////////////////////////////TICKET #1151 : Need a new dedicated service in UiManager 
+   */
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
     : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
     , globalCtx_(globals)

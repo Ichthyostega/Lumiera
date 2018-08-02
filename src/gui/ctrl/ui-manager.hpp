@@ -50,8 +50,9 @@
 #include "gui/gtk-base.hpp"
 #include "lib/nocopy.hpp"
 
-#include <string>
+#include <functional>
 #include <memory>
+#include <string>
 
 
 namespace gui {
@@ -129,6 +130,14 @@ namespace ctrl {
        * Cause the main event loop to terminate, so the application as a whole unwinds.
        */
       void terminateUI();
+      
+      
+      using Operation = std::function<void(void)>;
+      /**
+       * perform an action within the UI event loop (GTK loop).
+       */
+      void schedule (Operation&& task);
+      
       
       /** @todo find a solution how to enable/disable menu entries according to focus
        *                                               /////////////////////////////////////////////////TICKET #1076  find out how to handle this properly

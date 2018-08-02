@@ -64,7 +64,8 @@ namespace interact {
   
   
   /**
-   * Global cross-cutting navigation in interface space
+   * Global cross-cutting navigation in interface space,
+   * foundation to implement user assistance and context sensitive help.
    * 
    * @todo initial draft as of 2/2017 -- actual implementation has to be filled in
    */
