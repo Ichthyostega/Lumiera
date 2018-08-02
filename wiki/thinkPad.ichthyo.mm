@@ -13481,7 +13481,7 @@
 <node CREATED="1488566356774" ID="ID_969011841" MODIFIED="1518487921075" TEXT="Ankerpunkt zum Bilden der Commands">
 <arrowlink COLOR="#706a9a" DESTINATION="ID_1461875887" ENDARROW="Default" ENDINCLINATION="-923;-789;" ID="Arrow_ID_457540370" STARTARROW="None" STARTINCLINATION="806;300;"/>
 <node CREATED="1488566405248" ID="ID_355508260" MODIFIED="1518487921075" TEXT="auffinden der Command-IDs">
-<node CREATED="1489191528425" ID="ID_1331796226" MODIFIED="1518487921075" TEXT="Neuer Service hierf&#xfc;r in Proc">
+<node CREATED="1489191528425" ID="ID_1331796226" MODIFIED="1533253376724" TEXT="Neuer Service hierf&#xfc;r in Proc">
 <arrowlink COLOR="#584d79" DESTINATION="ID_341428100" ENDARROW="Default" ENDINCLINATION="1995;-1317;" ID="Arrow_ID_879741123" STARTARROW="None" STARTINCLINATION="334;-13;"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677809297" ID="ID_1520540731" MODIFIED="1518487921075" TEXT="Problem: Zugang / Wiring">
@@ -15880,7 +15880,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788645307" ID="ID_254810710" MODIFIED="1532788655288" TEXT="Trigger-Technik kl&#xe4;ren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1532788681197" FOLDED="true" ID="ID_32192034" MODIFIED="1533218445055" TEXT="bei GTK selber abschauen">
+<node CREATED="1532788681197" ID="ID_32192034" MODIFIED="1533252687709" TEXT="bei GTK selber abschauen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15933,51 +15933,71 @@
       sondern Sachen wie verallgemeinerte &quot;Files&quot;, D-Bus-Connection etc etc
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1533218310967" ID="ID_955496166" MODIFIED="1533218319204" TEXT="nicht mehr n&#xf6;tig">
-<icon BUILTIN="stop-sign"/>
-<node CREATED="1533218320846" ID="ID_533086066" MODIFIED="1533218324233" TEXT="abgebrochen"/>
-<node CREATED="1533218324829" ID="ID_1592564377" MODIFIED="1533218328713" TEXT="nur noch zu dokumentieren"/>
-</node>
-<node CREATED="1533218330252" ID="ID_1616633221" MODIFIED="1533218339147" TEXT="hab&apos;s erraten">
+<node CREATED="1533252714471" ID="ID_1128899175" MODIFIED="1533252726200" TEXT="Gtk::Application::run( Window&amp;)">
+<node CREATED="1533252783548" ID="ID_1476873021" MODIFIED="1533252802635" TEXT="irgendwie hatte ich das in Erinnerung">
 <icon BUILTIN="ksmiletris"/>
-<node CREATED="1533218341027" ID="ID_805779569" MODIFIED="1533218349822" TEXT="Glib::Dispatcher"/>
-<node CREATED="1533218355929" ID="ID_489375421" MODIFIED="1533218433083" TEXT="glaube ich...">
+</node>
+<node CREATED="1533252737995" ID="ID_763153536" MODIFIED="1533252745030" TEXT="application.cc Zeile 160"/>
+<node CREATED="1533252758840" ID="ID_346690959" MODIFIED="1533252777856" TEXT="signal_activate()">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      will sagen,
+      &#160;&#160;//We cannot add and show the window until the GApplication::activate signal
     </p>
     <p>
-      ich gebe mir jetzt nicht mal mehr die M&#252;he,
+      &#160;&#160;//has been emitted, or we will crash because the application has not been
     </p>
     <p>
-      meine erratene L&#246;sung zu verifizieren.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Sie erscheint mir einfach so absolut offensichtlich,
-    </p>
-    <p>
-      da&#223; es keine weitere M&#252;he lohnt.
-    </p>
-    <p>
-      Glib::Dispatcher ist genau das richtige Ding f&#252;r diesen Zweck
+      &#160;&#160;//registered. (At least if window is an ApplicationWindow.)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<node CREATED="1533252809112" ID="ID_394563790" MODIFIED="1533252812836" TEXT="woot?"/>
+<node CREATED="1533252813376" ID="ID_1458058904" MODIFIED="1533252820105" TEXT="wer definiert das?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1533252821175" ID="ID_1891535415" MODIFIED="1533253383339" TEXT="Gio::Application ??">
+<arrowlink COLOR="#224e99" DESTINATION="ID_28088492" ENDARROW="Default" ENDINCLINATION="37;-48;" ID="Arrow_ID_550550684" STARTARROW="None" STARTINCLINATION="-151;-4;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node CREATED="1533252898732" ID="ID_28088492" MODIFIED="1533253383340" TEXT="Gio::Application::signal_activate()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      The signal_activate() signal is emitted on the primary instance
+    </p>
+    <p>
+      when an&#160;activation occurs. See g_application_activate().
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#224e99" DESTINATION="ID_28088492" ENDARROW="Default" ENDINCLINATION="37;-48;" ID="Arrow_ID_550550684" SOURCE="ID_1891535415" STARTARROW="None" STARTINCLINATION="-151;-4;"/>
+<node CREATED="1533252951945" ID="ID_182447520" MODIFIED="1533252955015">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      g_application_activate()
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -16273,11 +16293,18 @@
 <node CREATED="1533221813285" ID="ID_1627865297" MODIFIED="1533221816584" TEXT="aus logischen Gr&#xfc;nden"/>
 <node CREATED="1533221818572" ID="ID_806537689" MODIFIED="1533221826270" TEXT="pa&#xdf;t auch thematisch dort hin"/>
 </node>
-<node CREATED="1533223360183" ID="ID_1309454354" MODIFIED="1533223389415" TEXT="Idee">
-<icon BUILTIN="idea"/>
+<node CREATED="1533223360183" ID="ID_1309454354" MODIFIED="1533252142536" TEXT="Idee">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1533223371534" ID="ID_891597430" MODIFIED="1533223376721" TEXT="UiDispatcher"/>
 <node CREATED="1533223377381" ID="ID_1197977205" MODIFIED="1533223383568" TEXT="einfach eine weitere Instanz davon"/>
-<node CREATED="1533223384180" ID="ID_141172630" MODIFIED="1533223387239" TEXT="geht das?"/>
+<node CREATED="1533223384180" ID="ID_141172630" MODIFIED="1533252147479" TEXT="geht das?">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1533252148493" ID="ID_535856197" MODIFIED="1533252155392" TEXT="geht nicht">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1533252156737" ID="ID_945337228" MODIFIED="1533252171708" TEXT="Glib::Dispatcher ist nur eine FiFo"/>
+<node CREATED="1533252172584" ID="ID_230437417" MODIFIED="1533252187890" TEXT="setzt zwingend voraus, da&#xdf; die Event-Loop schon l&#xe4;uft"/>
+</node>
 </node>
 </node>
 </node>
