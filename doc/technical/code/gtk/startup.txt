@@ -2,68 +2,145 @@ GTK start-up
 ============
 :Date: 2018
 
+//Menu: label start-up
+
 _some insights regarding the start-up of GTK and related framework aspects_
 
-A facility like GTK can be seen to serve various needs. It can be used to simplify
-the arduous task of building a graphical user interface, but it can also be seen as
-a one-stop solution for just creating a (``damn modern cool'') application, which
-all ``reasonable'' people today expect to have a shiny GUI. In fact, we can identify
-these two different levels of support, which inevitably create conflicting goals.
+As outlined on the link:{ldoc}/technical/code/gtk/index.html[overview page], we need to discern between
+toolkit aspects, and GTK-the-framework. Moreover, we use GTK though the C++ bindings (`gtkmm`), which also
+add a thin layer of software abstractions.
 
-- GTK-the-framework shall be easy to use and cover everything I never wanted to know
-  about user interfaces. Ideally, I just inherit from a base class, implement two or
-  three abstract methods and fill in my actual working logic.
-- GTK-the-toolkit is a collection of prefabricated building blocks, ready to be used
-  and put into action, by people with a clear conception about what is required for
-  a productive UI and how to achieve that in detail.
+Initialisation
+--------------
+So in order to ``use GTK'' ...
 
-Needless to say that Lumiera's use of GTK falls into the second category. Even more so,
-as the GTK UI is just a plug-in, loaded optionally, and not identical with the application
-as such. Which often places us into a tricky situation -- obviously GTK-the-framework is
-what attracts most attention, both from the users and the developers.
+- we need to build our application against the appropriate headers of GTK\--, which also implies to
+  install the corresponding development packages (or a source tree) of the libraries involved.
+- when our main application decides to use the GTK-UI, it loads the GUI plug-in -- at this point
+  the dynamic loader also requires and loads the runtime libraries of GTK, Glib, GDL, Cairo, Pango,
+  plus the runtime libraries of the C++ wrappers (Gtkmm, Glibmm, Gdlmm)
+- at this point, the various layers of software comprising ``the GTK'' will require some very
+  specific initialisation hooks to be invoked. Especially
 
-The Gtk::Application
---------------------
-*In short*: we do not use it, we do not want it, we do not need it, it's just obnoxious.
+  ** GTK itself requires the invocation of `gtk_init()` in order to attach to the windowing system.
+     This might also parse additional framework specific command lines and react on some environment
+     variables, init the gettext library and maybe activate interactive UI debugging. But nothing
+     beyond that
 
-In the _good old days(TM)_ there used to be a singleton class `GTK::Main`. You'd activate
-your application by invoking the blocking function `Main::run()`. This design was simple
-and sweet, but turned out to be too rigid once people started to expect lots of things
-to ``just work''. Consequently, `Gtk::Main` was deprecated by the GTK-developers and
-``replaced'' by `Gtk::Application`. Unfortunately, this move reflects a paradigm shift
-from _toolkit_ towards an _application building framework._ This framework includes
+  ** the `gtkmm` C\++ wrappers deal with a lot of additional ceremony, required by the plain-C
+     implementation of the GTK core. Especially, they automatically register any ``object type''
+     with the GObject-system of Glib. Moreover, some virtual function tables will be populated
+     and several ``object functions'' and signals need to be wrapped, so client code can invoke
+     the more convenient C++ equivalents. All of this additional initialisation is effected
+     by invoking `Gtk::Main::init_gtkmm_internals()` or the (equivalent) static function within
+     `Gtk::Application`
 
-- command line parsing with extension points for custom argument handling
-- a ready-made framework of _actions_, to be arranged into menus and toolbars
-- management of ``the application instance'', with inter process communication
-  in case the deaf user double clicks the application icon a second time
-- registration with the desktop, interconnection with the D-Bus
-- the notion of a ``associated document type'' and ``desktop actions''
-  to be forwarded to the implementing application, which thus needs to
-  be invocable in service-style.
+  ** finally, any features of GTK-the-framework need to be initialised and prepared for use:
 
-None of the above is _evil_ in any sense, much is even useful. However, there is a notion
-of a working style, underlying the vision for Lumiera: work is a long-term undertaking,
-organised into a project and carried out in a fixed and controlled environment over the
-course of an extended time period. Basically we envision the user to make some _footage_
-available to a _editing workstation_, and then to return to this very setup over the
-course of weeks, or months, or years, expecting everything to remain reliably the same
-as configured initially.
+     *** lifecycle events need to be issued. GTK uses ``signals'' for this purpose
+         footnote:[not to be confused with the signals on operating system level]
+     *** registration of document types with the desktop environment
+     *** the application instance will connect to the D-bus and install the necessary callbacks,
+         possibly even waiting for an ``activation event''
+     *** depending on the specific way of _activation_, behaviour and error response of the
+         application instance need to be controlled in distinct ways -- maybe just rendering
+         content or even silently terminating altogether after a timeout has passed
 
-Based on this model, we basically want to shape all application global concerns in a
-very specific way -- and almost all the standard solutions offered by GTK-the-framework
-tend to get into our way of working. For this reason
+For reasons outlined link:{ldoc}/technical/code/gtk/index.html#_the_gtk_application[above],
+Lumiera does not need nor use a `Gtk::Application`.footnote:[In fact, most of the framework
+functionality is actually handled within the base class `Gio::Application`, which corresponds
+to the plain-C type `GApplication`.] Thus, we leave out the third stage and deal with all those
+application global aspects through means appropriate to our specific purpose.
 
-- we have our own framework of subsystems
-- we build our own approach towards command line handling
-- we rely on the notion of a project to define a specific work environment
-- we want menus and toolbars to be configurable based on both the project and user preference
-- we deliberately allow for various ways to launch the application, possibly in multiple instances
-- we build our own system to navigate within the UI, spanning several top-level windows and desktops.
+- our link:{ldoc}/design/architecture/Subsystems.html[Subsystem runner] boots the UI subsystem
+  (`gui::GuiFacade`), which in turn loads the UI-plug-in ('target/modules/gtk_gui.lum').
+- within this plug-in, the class `gui::GtkLumiera` governs the complete UI lifecycle.
+- this class holds a member `gui::ctl::UiManager` -- which is our ``UI main object'' and mimics
+  the design of the late `Gtk::Main`.
+- we inherit from our own `gui::ctrl::ApplicationBase` class, to ensure invocation of all the
+  initialisation and clean-up functions required by GTK
+- we instantiate a class `gui::ctrl::GlobalCtx` to hold and provide all global services used
+  throughout the UI layer, including population of the menu and global actions
+- within the global context, there is also `gui::ctrl::WindowLocator`, to keep track of all
+  top-level application windows, and to support direct navigation to relevant entities within
+  the UI, based on _abstracted UI-coordinates_.
+- finally, `GtkLumiera` invokes the functions
+  
+  ** `UiManager::createApplicationWindow()` to create the visible interface frame
+  ** `UiManager::performMainLoop()` to activate `gtk_main()` -- the blocking GTK event loop
 
-Consequently, none of the services offered by `Gtk::Application` is of any use for us. After reading
-the source code, we came to the conclusion that it is perfectly valid to sidestep all those aspects
-of GTK, and just perform those small number of toolkit initialisation steps -- previously invoked
-by `Gtk::Main` -- directly from our application code. Basically Lumiera's `gui::ctrl::UiManager`
-replaces `Gtk::Main`, invokes `gtk_init` and enters the blocking event loop by calling `gtk_main`.
+
+Running a GTK application
+-------------------------
+The _event processing_ is what makes an UI application ``live''. However, event processing must
+not be confused with graphical presentation. In GTK, it is perfectly valid to create and even
+show a widget prior to entering the event loop. Yet it is a very fundamental design decision
+within GTK to operate all of the UI concerns *synchronously*, from within a single dedicated
+*UI thread*. We consider this a very wise design decision, and expand it to all of Lumiera's
+UI concerns, including the UI-Bus; any ``interaction mechanics'' has to happen within this
+single thread, and is completely decoupled from all other application functionality like
+editing actions and rendering, which happen in separate threads and respond asynchronously
+by _dispatching_ their reactions back into the UI event thread.
+
+Due to the shifted scope between the old-style `Gtk::Main` and the corresponding `gtk_main()`
+C-function on one side, and the newer, more framework-centric `Gtk::Application`, it might seem
+on first sight, that both will perform different tasks. However, a closer look reveals that
+during the redesign for GTK-3, the old ``main'' functionality has been _retrofitted_ to rely
+on the newer, more generic GIO-Framework. More specifically
+
+- the classical `gtk_main()` without much ado invokes `g_main_loop_run()`, which in turn
+  immediately starts to ``pull'' the GIO main context by repeatedly invoking `g_main_context_iterate()`
+
+- whereas the `Gtk::Application::run()` invokes `Gio::Application::run()` and from there the new
+  application-level _main function_ `g_application_run(gobj(), argc, argv)`. Which in turn handles
+  all the above mentioned framework concerns (e.g. D-Bus registration / activation). Then it
+  enters `g_main_context_iteration()` which -- similar to `g_main_loop_run()` -- starts ``pulling''
+  the GIO main context by repeatedly invoking `g_main_context_iterate()`
+
+Thus, once we reach the actual operative state, both paths of activating a GTK application behave
+essentially the same.footnote:[This is the state of affairs during the GTK-3 lifetime cycle,
+as verified in 8/2018 based on the source code of `GTK 3.22`. Note though that GTK-4 is ``around
+the corner'' -- let's see what awesome innovations we have to face then...]
+
+
+The application activation signal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+However, the old-style approach seems to lack a feature offered by `Gio::Application`:
+the *activation* signal, which is a feature solely present at the ``application-framework'' level
+and used internally for the convenience function to ``run an ApplicationWindow object''
+(-> `Gtk::Application::run(Gtk::Window&)`). In fact, this happens to be a lifecycle event,
+and can be used by connecting a SigC++ slot to the application object's `signal_activation()`.
+Outside the realm of GTK-the-framework this feature turns out to be not so useful; especially, the
+signal is emitted _shortly before_ entering the event loop, and not from within (as you'd might expect).
+
+A better alternative is to rely on the `Glib::signal_idle()` rsp. `Glib::signal_timeout()`. Both allow
+to invoke a slot only once, and both ensure the invocation really happens from within the event loop.
+
+SigC++ trackable
+~~~~~~~~~~~~~~~~
+Any closure or callback based system of wiring and activation suffers from the inherent danger of invoking
+a dangling reference. Within an interactive UI environment, this problem becomes quite acid, since widgets
+will be created and destroyed through arbitrary interactions, yet still need to be connected to ``live state''.
+When building UI applications with Gtkmm (the C\++ wrapper of GTK), this problem is dealt with by inheriting
+all widget classes from the `sigc::trackable` mix-in. This mechanism automatically detaches a signal slot
+when the corresponding target widget goes out of scope. However, this solution only works reliably when
+all slots are created and connected from within a single thread (the UI event thread!). Moreover, we
+can not possibly ``track'' a slot created from a C\++ language lambda or functor -- which sometimes
+is even the only option, unless we want to incur a dependency on the SigC++ library. In Lumiera,
+we have a strict policy to prohibit any dependency on GTK libraries outside the UI layer.
+
+
+Shutdown
+--------
+The GTK main loop terminates after invocation of `gtk_main_quit()` (or in case of serious internal errors).
+Typically, this function is somehow bound to a widget interaction, like clicking on the ``close'' button.
+In Lumiera, this concern is managed by the `gui::ctrl::WindowLocator`, which keeps track of all top-level
+windows and terminates the UI when the last one is closed. Moreover, the UI can deliberately be closed
+by sending an event over the `GuiNotification::triggerGuiShutdown(message)' call.
+
+After leaving the main loop, the external façade interfaces are closed. By general architectonic reasoning,
+no event can be processed and no signal can be invoked any more -- and thus we're free to destroy all widgets,
+services and the backbone of the UI. After that, the UI subsystem signals termination, which causes all other
+subsystems to shut down as well.footnote:[We are aware that there is a race between closing the façade and actually
+ceasing other subsystem's activities, which might cause those other activities to fail with an exception]
 

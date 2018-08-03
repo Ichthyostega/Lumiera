@@ -7,3 +7,72 @@ GTK -- UI toolkit and framework
 Within this subsection we collect some random bits of information related to our
 use of the GTK windowing toolkit for building Lumiera's user interface.
 
+Concepts
+--------
+
+A facility like GTK can be seen to serve various needs. It can be used to simplify
+the arduous task of building a graphical user interface, but it can also be seen as
+a one-stop solution for just creating a (``damn modern cool'') application, which
+all ``reasonable'' people today expect to have a shiny GUI. In fact, we can identify
+these two different levels of support, which inevitably create conflicting goals.
+
+- GTK-the-framework shall be easy to use and cover everything I never wanted to know
+  about user interfaces. Ideally, I just inherit from a base class, implement two or
+  three abstract methods and fill in my actual working logic.
+- GTK-the-toolkit is a collection of prefabricated building blocks, ready to be used
+  and put into action, by people with a clear conception about what is required for
+  a productive UI and how to achieve that in detail.
+
+Needless to say that Lumiera's use of GTK falls into the second category. Even more so,
+as the GTK UI is just a plug-in, loaded optionally, and not identical with the application
+as such. Which often places us into a tricky situation -- obviously GTK-the-framework is
+what attracts most attention, both from the users and the developers.
+
+The Gtk::Application
+~~~~~~~~~~~~~~~~~~~~
+*In short*: we do not use it, we do not want it, we do not need it, it's just obnoxious.
+
+In the _good old days(TM)_ there used to be a singleton class `GTK::Main`. You'd activate
+your application by invoking the blocking function `Main::run()`. This design was sweet
+and simple, but turned out to be too rigid once people started to expect lots of things
+to ``just work''. Consequently, `Gtk::Main` was deprecated by the GTK-developers and
+``replaced'' by `Gtk::Application`. Unfortunately, this move reflects a paradigm shift
+from _toolkit_ towards an _application building framework._ This framework includes
+
+- a well defined global application lifecycle
+- command line parsing with extension points for custom argument handling
+- a ready-made framework of _actions_, to be arranged into menus and toolbars
+- management of ``the application instance'', with inter process communication
+  in case the deaf user double clicks the application icon a second time
+- the notion of a ``associated document type'' and ``desktop actions''
+  to be forwarded to the implementing application, which thus needs to
+  be invocable in service-style.
+- registration with the desktop, interconnection with the D-Bus
+
+None of the above is _evil_ in any sense, much is even useful. However, there is a notion
+of a working style, underlying the vision for Lumiera: work is considered a long-term
+undertaking, organised into a project and carried out in a fixed and controlled environment
+over the course of an extended time period. Basically we envision the user to make some
+_footage_ available to an _editing workstation_, and then to return to this very setup over
+the course of weeks, or months, or years, expecting everything to remain reliably the same,
+just as configured initially.
+
+Based on this model, we basically want to shape all application global concerns in a
+very specific way -- and almost all the standard solutions offered by GTK-the-framework
+tend to get into our way of working. For this reason
+
+- we have our own framework of subsystems
+- we build our own approach towards command line handling
+- we rely on the notion of a project to define a specific work environment
+- we want menus and toolbars to be configurable based on both the project and user preference,
+  goverened by rules and with persistent interface state
+- we deliberately allow for various ways to launch the application, even without UI
+- we build our own system to navigate within the UI, spanning several top-level windows and desktops.
+
+Consequently, none of the services offered by `Gtk::Application` is of much use for us. After reading
+the source code, we came to the conclusion that it is perfectly valid to sidestep all those aspects
+of GTK, and just perform those small number of toolkit initialisation steps -- previously invoked
+by `Gtk::Main` -- directly from our application code. Basically Lumiera's `gui::ctrl::UiManager`
+replaces `Gtk::Main`, invokes `gtk_init` and enters the blocking event loop by calling `gtk_main`.
+
+
