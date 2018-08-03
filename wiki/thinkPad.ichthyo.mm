@@ -1013,8 +1013,8 @@
 <node CREATED="1502454601603" ID="ID_384770680" MODIFIED="1518487921050" TEXT="nein: MutationMessage wird &#xfc;berfl&#xfc;ssig">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1502401987033" ID="ID_1584846573" MODIFIED="1529076989537" TEXT="erfordert Festlegung der Natur der Diff Message">
-<arrowlink COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="821;-1406;" ID="Arrow_ID_554743885" STARTARROW="None" STARTINCLINATION="1459;870;"/>
+<node CREATED="1502401987033" ID="ID_1584846573" MODIFIED="1533303965804" TEXT="erfordert Festlegung der Natur der Diff Message">
+<arrowlink COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="600;-1189;" ID="Arrow_ID_554743885" STARTARROW="None" STARTINCLINATION="1459;870;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1502402004383" ID="ID_1491065212" MODIFIED="1518487921050" TEXT="generisch bleiben?">
 <icon BUILTIN="button_cancel"/>
@@ -1336,8 +1336,7 @@
       Im Moment loggen wir nur ins textuelle Konsole-Log (NoBug)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -1742,6 +1741,11 @@
 <node CREATED="1485124305157" ID="ID_1632068669" MODIFIED="1518487921055" TEXT="schlie&#xdf;t sich automatisch, wenn das letzte Fenster zu ist"/>
 <node CREATED="1485124315795" ID="ID_178656069" MODIFIED="1518487921055" TEXT="unser WindowManager macht das Gleiche"/>
 </node>
+<node COLOR="#435e98" CREATED="1533303793015" ID="ID_1636078216" MODIFIED="1533306062548" TEXT="Infos zu Gtk::Main, Gtk::Application und Gio::Application">
+<arrowlink COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-981;-106;" ID="Arrow_ID_1912776282" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1493754789137" ID="ID_1903744710" MODIFIED="1518487921055" TEXT="kommt mir komisch vor">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1493754799439" ID="ID_288205807" MODIFIED="1518487921055" TEXT="das &quot;riecht&quot; nach Framework"/>
@@ -1827,7 +1831,7 @@
 <node CREATED="1493762498476" ID="ID_1290148687" MODIFIED="1518487921056" TEXT="direkt gtk_main_quit aufrufen">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1493762556755" FOLDED="true" HGAP="34" ID="ID_651403872" MODIFIED="1531584014123" TEXT="siehe" VSHIFT="16">
+<node CREATED="1493762556755" FOLDED="true" HGAP="34" ID="ID_651403872" MODIFIED="1533303992861" TEXT="siehe" VSHIFT="16">
 <node CREATED="1493762559339" ID="ID_742529116" MODIFIED="1518487921056" TEXT="altes Gtk::Main::quit"/>
 <node CREATED="1493762568266" ID="ID_902609710" MODIFIED="1518487921056" TEXT="Gio::Application::quit"/>
 </node>
@@ -1836,13 +1840,16 @@
 <node CREATED="1493762968018" ID="ID_1056007574" MODIFIED="1518487921056" TEXT="brauchen wir ein Application GObject?">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1493762987751" ID="ID_236361713" MODIFIED="1518487921056" TEXT="Gtk::Main funktioniert ohne"/>
-<node CREATED="1493763356907" FOLDED="true" ID="ID_981398529" MODIFIED="1531584014123" TEXT="aber">
+<node CREATED="1493762987751" ID="ID_236361713" MODIFIED="1533304173000" TEXT="Gtk::Main funktioniert ohne">
+<arrowlink COLOR="#469fa6" DESTINATION="ID_1120787097" ENDARROW="Default" ENDINCLINATION="1826;-6782;" ID="Arrow_ID_433910583" STARTARROW="None" STARTINCLINATION="821;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1493763356907" FOLDED="true" ID="ID_981398529" MODIFIED="1533303138298" TEXT="aber">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1493763398798" ID="ID_760049978" MODIFIED="1518487921056" TEXT="Gtk::Main ist deprecated"/>
 <node CREATED="1493763393720" ID="ID_112295077" MODIFIED="1518487921056" TEXT="wohin entwickelt sich GTK?"/>
 </node>
-<node CREATED="1493768460811" FOLDED="true" ID="ID_1862271811" MODIFIED="1531584014123" TEXT="Alternativen">
+<node CREATED="1493768460811" FOLDED="true" ID="ID_1862271811" MODIFIED="1533303182413" TEXT="Alternativen">
 <node CREATED="1493768465482" ID="ID_1159523698" MODIFIED="1518487921056" TEXT="gtk_main aufrufen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2528,7 +2535,7 @@
 <node CREATED="1483921070115" ID="ID_398046799" MODIFIED="1518487921058" TEXT="Prototyp-Service"/>
 <node CREATED="1483921132114" ID="ID_1652398711" MODIFIED="1518487921058" TEXT="liefert dekorierte Command-ID"/>
 <node CREATED="1483921149368" ID="ID_1028150245" MODIFIED="1518487921058" TEXT="im GUI nur noch Command-IDs"/>
-<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1529077146541">
+<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1533303593408">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -2539,7 +2546,7 @@
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-1125;1565;" ID="Arrow_ID_1617518648" SOURCE="ID_1479669922" STARTARROW="None" STARTINCLINATION="3436;-1136;"/>
+<linktarget COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-944;1604;" ID="Arrow_ID_1617518648" SOURCE="ID_1479669922" STARTARROW="None" STARTINCLINATION="3617;-1097;"/>
 </node>
 <node CREATED="1483927472385" HGAP="30" ID="ID_774425061" MODIFIED="1518487921058" VSHIFT="13">
 <richcontent TYPE="NODE"><html>
@@ -2948,6 +2955,11 @@
 </node>
 <node CREATED="1485454375917" ID="ID_1935695209" MODIFIED="1518487921060" TEXT="erbt von Gtk::UiManager">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1533303793015" ID="ID_433225506" MODIFIED="1533306068667" TEXT="Infos zu Gtk::Main, Gtk::Application und Gio::Application">
+<arrowlink COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-1088;-39;" ID="Arrow_ID_234165792" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="info"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485457021805" ID="ID_1476863246" MODIFIED="1518487921060" TEXT="Gtk::UiManager ist deprecated">
 <linktarget COLOR="#6d7495" DESTINATION="ID_1476863246" ENDARROW="Default" ENDINCLINATION="1126;-247;" ID="Arrow_ID_1941890495" SOURCE="ID_384827553" STARTARROW="None" STARTINCLINATION="-231;14;"/>
@@ -15880,7 +15892,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788645307" ID="ID_254810710" MODIFIED="1532788655288" TEXT="Trigger-Technik kl&#xe4;ren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1532788681197" ID="ID_32192034" MODIFIED="1533252687709" TEXT="bei GTK selber abschauen">
+<node CREATED="1532788681197" FOLDED="true" HGAP="336" ID="ID_32192034" MODIFIED="1533310206546" TEXT="bei GTK selber abschauen" VSHIFT="-52">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15893,17 +15905,9 @@
       die erlauben, eine Init-Aktion in die Loop zu schedulen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1532793805646" ID="ID_1917720417" MODIFIED="1532793811649" TEXT="Gtk::Application">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1532794470116" ID="ID_539459561" MODIFIED="1533218296183" TEXT="TODO">
-<linktarget COLOR="#dc217a" DESTINATION="ID_539459561" ENDARROW="Default" ENDINCLINATION="33;201;" ID="Arrow_ID_601982135" SOURCE="ID_1901487140" STARTARROW="None" STARTINCLINATION="-55;-186;"/>
-<icon BUILTIN="flag-pink"/>
-<node CREATED="1532794476795" ID="ID_1999030504" MODIFIED="1532794483438" TEXT="gibt es statische Funktionen?"/>
-<node CREATED="1532794485778" ID="ID_86543147" MODIFIED="1532794494804" TEXT="was f&#xfc;r on-start-Callbacks gibt es?"/>
-<node CREATED="1532794495416" ID="ID_1267822394" MODIFIED="1532794501700" TEXT="wie wird das Fenster angezeigt?"/>
-</node>
 <node CREATED="1532797033134" ID="ID_1310675334" MODIFIED="1532797038441" TEXT="Gio::Application">
 <node CREATED="1532797039293" ID="ID_827848177" MODIFIED="1532797041784" TEXT="Basisklasse"/>
 <node CREATED="1532797042628" ID="ID_868500366" MODIFIED="1532797129536" TEXT="statisches member: Application_Class">
@@ -15919,8 +15923,7 @@
       betrifft aber <b>nur Framework</b>-Funktionalit&#228;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15937,8 +15940,43 @@
 </node>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1532794470116" ID="ID_539459561" MODIFIED="1533310145219" TEXT="Fazit">
+<linktarget COLOR="#dc217a" DESTINATION="ID_539459561" ENDARROW="Default" ENDINCLINATION="33;201;" ID="Arrow_ID_601982135" SOURCE="ID_1901487140" STARTARROW="None" STARTINCLINATION="-55;-186;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1532794476795" ID="ID_1999030504" MODIFIED="1532794483438" TEXT="gibt es statische Funktionen?">
+<node CREATED="1533310001705" ID="ID_1113571044" MODIFIED="1533310014123" TEXT="nur Application::create(..)  -&gt; smart-Ptr"/>
 </node>
-<node CREATED="1533252714471" ID="ID_1128899175" MODIFIED="1533252726200" TEXT="Gtk::Application::run( Window&amp;)">
+<node CREATED="1532794485778" ID="ID_86543147" MODIFIED="1532794494804" TEXT="was f&#xfc;r on-start-Callbacks gibt es?">
+<node CREATED="1533309934787" ID="ID_768351523" MODIFIED="1533309939685" TEXT="signal_activate()"/>
+</node>
+<node CREATED="1532794495416" ID="ID_1267822394" MODIFIED="1532794501700" TEXT="wie wird das Fenster angezeigt?">
+<node CREATED="1533309900271" ID="ID_1679581564" MODIFIED="1533310081074" TEXT="entweder man macht es selber noch sichtbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        ein Fenster als Solches braucht noch keine Event-Loop
+      </li>
+      <li>
+        ohne ein Fenster macht die event-Loop keinen Sinn
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1533309913133" ID="ID_1543846508" MODIFIED="1533310043556" TEXT="oder man verwendet run(Window&amp;)">
+<arrowlink COLOR="#88cecc" DESTINATION="ID_1128899175" ENDARROW="Default" ENDINCLINATION="112;-110;" ID="Arrow_ID_117418578" STARTARROW="None" STARTINCLINATION="-22;73;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1533252714471" ID="ID_1128899175" MODIFIED="1533310039265" TEXT="Gtk::Application::run( Window&amp;)">
+<linktarget COLOR="#88cecc" DESTINATION="ID_1128899175" ENDARROW="Default" ENDINCLINATION="112;-110;" ID="Arrow_ID_117418578" SOURCE="ID_1543846508" STARTARROW="None" STARTINCLINATION="-22;73;"/>
 <node CREATED="1533252783548" ID="ID_1476873021" MODIFIED="1533252802635" TEXT="irgendwie hatte ich das in Erinnerung">
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -15999,15 +16037,88 @@
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1533301504184" ID="ID_887027939" MODIFIED="1533301509336" TEXT="Fragen">
+<icon BUILTIN="help"/>
+<node CREATED="1533301510663" ID="ID_494910709" MODIFIED="1533301520633" TEXT="wer ruft das auf?">
+<node CREATED="1533309175099" ID="ID_574887736" MODIFIED="1533309275410" TEXT="im Framework nur Application::run(Window&amp;)">
+<arrowlink COLOR="#6280a2" DESTINATION="ID_103827073" ENDARROW="Default" ENDINCLINATION="-1131;-99;" ID="Arrow_ID_138401663" STARTARROW="None" STARTINCLINATION="1028;-75;"/>
+</node>
+<node COLOR="#338800" CREATED="1533309280940" ID="ID_918869201" MODIFIED="1533309368851" TEXT="Stand 8/2018 verifiziert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      suche (case insensitive) nach application_activate
+    </p>
+    <ul>
+      <li>
+        treffer auf APPLICATION_ACTIVATE in g_application_activate()
+      </li>
+      <li>
+        die Treffer in Gtk::Application
+      </li>
+      <li>
+        diverse false positives mit anderen &quot;Activation&quot;-Signalen, z.B. in Aktionen oder Buttons
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1532788727680" FOLDED="true" ID="ID_889790361" MODIFIED="1533218449273" TEXT="Gtk::Main auf aktuellem Stand">
+<node CREATED="1533301523716" ID="ID_10188406" MODIFIED="1533309824191" TEXT="haben wir eine GApplication?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1533301551049" ID="ID_229745628" MODIFIED="1533301558139" TEXT="was ist GApplication in C++?">
+<node CREATED="1533309723431" ID="ID_47606560" MODIFIED="1533309729450" TEXT="Gio::Application"/>
+</node>
+<node CREATED="1533301567374" ID="ID_34255114" MODIFIED="1533301574929" TEXT="hatte Gtk::Main das?">
+<node CREATED="1533302102181" ID="ID_1070266886" MODIFIED="1533302125340">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Main <b>erbt nicht</b>&#160;von Gio::Application
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1533302523445" ID="ID_1043113531" MODIFIED="1533302527999" TEXT="init">
+<node CREATED="1533303553351" ID="ID_377749143" MODIFIED="1533306139169" TEXT="gtk_init">
+<arrowlink COLOR="#87a8bf" DESTINATION="ID_1850885017" ENDARROW="Default" ENDINCLINATION="-195;-45;" ID="Arrow_ID_960670945" STARTARROW="None" STARTINCLINATION="416;0;"/>
+</node>
+<node CREATED="1533303559495" ID="ID_1106606369" MODIFIED="1533306019466" TEXT="init_gtkmm_nternals">
+<arrowlink COLOR="#679cc6" DESTINATION="ID_681479502" ENDARROW="Default" ENDINCLINATION="-182;-16;" ID="Arrow_ID_1451320473" STARTARROW="None" STARTINCLINATION="273;0;"/>
+</node>
+</node>
+</node>
+<node CREATED="1533309797149" ID="ID_1211740672" MODIFIED="1533309821531" TEXT="Antwort: wir haben keine">
+<icon BUILTIN="forward"/>
+</node>
+<node COLOR="#435e98" CREATED="1533309804964" ID="ID_6946585" MODIFIED="1533309813851" TEXT="(und das ist gut so)">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533309837472" HGAP="6" ID="ID_1304218174" MODIFIED="1533309870065" TEXT="Fazit: wir m&#xfc;ssen das selber bauen" VSHIFT="5">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1532788727680" HGAP="57" ID="ID_889790361" MODIFIED="1533310405367" TEXT="Gtk::Main auf aktuellem Stand" VSHIFT="8">
 <arrowlink COLOR="#f3396a" DESTINATION="ID_1283695968" ENDARROW="Default" ENDINCLINATION="-81;-236;" ID="Arrow_ID_1530325920" STARTARROW="None" STARTINCLINATION="119;-5;"/>
 <icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1532788737366" ID="ID_1527913663" MODIFIED="1532788745870" TEXT="aktuellen Code bereitlegen in Eclipse">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1532788747909" ID="ID_279791197" MODIFIED="1532788759217" TEXT="wir haben kopierten Code">
+<node CREATED="1532788747909" FOLDED="true" ID="ID_279791197" MODIFIED="1533310221022" TEXT="wir haben kopierten Code">
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1532788761699" ID="ID_656345742" MODIFIED="1532788789963" TEXT="in gui::ctrl::ApplicationBase"/>
 <node CREATED="1532788794126" ID="ID_552465239" MODIFIED="1532788875600" TEXT="aus Gtk::Main ctor/dtor">
@@ -16033,8 +16144,7 @@
       ...f&#252;r Signale, die nicht automatisch detached werden k&#246;nnen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1532789833473" ID="ID_1171567949" MODIFIED="1532789838020" TEXT="relevant f&#xfc;r...">
 <node CREATED="1532789860594" ID="ID_1189172516" MODIFIED="1532791847381" TEXT="gtk_init_add()">
@@ -16055,8 +16165,7 @@
       @deprecated: 3.4: Key snooping should not be done. Events should&#160;&#160;be handled by widgets
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1532790702292" ID="ID_1501770920" MODIFIED="1532790728882" TEXT="GTKmm: KeySnooperSig in main.h / main.cpp">
 <icon BUILTIN="idea"/>
@@ -16077,8 +16186,7 @@
       wohl <b>einzige verbleibende</b>&#160;Verwendung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16093,91 +16201,30 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1532794546778" ID="ID_1120787097" MODIFIED="1532796721825" TEXT="nochmal gepr&#xfc;ft">
+<node COLOR="#338800" CREATED="1532794546778" ID="ID_1120787097" MODIFIED="1533303442524" TEXT="GTK::Main nochmal gepr&#xfc;ft">
+<linktarget COLOR="#469fa6" DESTINATION="ID_1120787097" ENDARROW="Default" ENDINCLINATION="1826;-6782;" ID="Arrow_ID_433910583" SOURCE="ID_236361713" STARTARROW="None" STARTINCLINATION="821;0;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1532795620784" ID="ID_1782393731" MODIFIED="1532796757171" TEXT="gtk_init">
+<node COLOR="#435e98" CREATED="1533303793015" ID="ID_1894791438" MODIFIED="1533304526458" TEXT="Infos zu Gtk::Main, Gtk::Application und Gio::Application">
+<arrowlink COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-652;20;" ID="Arrow_ID_315633048" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1533304463274" HGAP="91" ID="ID_693983942" MODIFIED="1533304538638" TEXT="Initialisierung" VSHIFT="5">
+<node CREATED="1532795620784" ID="ID_1782393731" MODIFIED="1533304483942" TEXT="gtk_init">
 <icon BUILTIN="forward"/>
 <node CREATED="1532796724776" ID="ID_1145845020" MODIFIED="1532796729971" TEXT="bleibt weiterhin bestehen"/>
 <node CREATED="1532796730560" ID="ID_1851309737" MODIFIED="1532796741082" TEXT="wird von jeder Applikations-Klasse aufgerufen"/>
 </node>
-<node CREATED="1532795594468" ID="ID_1963442278" MODIFIED="1532796512805" TEXT="Main::init_gtkmm_internals">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      void Main::init_gtkmm_internals()
-    </p>
-    <p>
-      {
-    </p>
-    <p>
-      &#160;&#160;static bool init_done = false;
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      &#160;&#160;if(!init_done)
-    </p>
-    <p>
-      &#160;&#160;{
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;Glib::init();
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;Gio::init();
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;// Populate the map of GTypes to C++ wrap_new() functions.
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;Pango::wrap_init();
-    </p>
-    <p>
-      #ifdef GTKMM_ATKMM_ENABLED
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;Atk::wrap_init();
-    </p>
-    <p>
-      #endif //GTKMM_ATKMM_ENABLED
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;Gdk::wrap_init();
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;Gtk::wrap_init();
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      &#160;&#160;&#160;&#160;init_done = true;
-    </p>
-    <p>
-      &#160;&#160;}
-    </p>
-    <p>
-      }
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="info"/>
+<node CREATED="1533304499504" ID="ID_1636222563" MODIFIED="1533304499504" TEXT="Main::init_gtkmm_internals">
+<node CREATED="1532796682566" ID="ID_591452701" MODIFIED="1532796691801" TEXT="Glib, Gio und Pango initialisieren"/>
+<node CREATED="1532796692445" ID="ID_1979586408" MODIFIED="1532796706398" TEXT="Wrapper-Mechanismus f&#xfc;r Gtk+-&quot;Objekte&quot; initialisieren"/>
 <node CREATED="1532794561968" ID="ID_235365968" MODIFIED="1532796658012" TEXT="ist das zukunfts-fest?">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1532796634853" ID="ID_375193574" MODIFIED="1532796646840" TEXT="in application.cc gibts die gleiche Funktion">
@@ -16188,9 +16235,38 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1532794577245" ID="ID_981554213" MODIFIED="1532794580305" TEXT="was macht das?">
-<node CREATED="1532796682566" ID="ID_591452701" MODIFIED="1532796691801" TEXT="Glib, Gio und Pango initialisieren"/>
-<node CREATED="1532796692445" ID="ID_1979586408" MODIFIED="1532796706398" TEXT="Wrapper-Mechanismus f&#xfc;r Gtk+-&quot;Objekte&quot; initialisieren"/>
+</node>
+<node COLOR="#435e98" CREATED="1533310237105" ID="ID_937500948" MODIFIED="1533310305665" TEXT="sonst nichts...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist explizit so gew&#252;nscht
+    </p>
+    <ul>
+      <li>
+        keine Kommandozeilen-Behandlung
+      </li>
+      <li>
+        keine &quot;Registrierung&quot; jedweder Art
+      </li>
+      <li>
+        keine D-Bus-connection
+      </li>
+      <li>
+        kein Application-Lifecycle
+      </li>
+      <li>
+        folglich auch <b>kein Aktivierungs-Signal</b>
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1532797168836" ID="ID_1283695968" MODIFIED="1533218227864" TEXT="TODO: diesen Stand dokumentieren">
@@ -16213,22 +16289,39 @@
 </node>
 </node>
 </node>
-<node CREATED="1532793816029" ID="ID_519518808" MODIFIED="1532793841165" TEXT="Glib::Dispatcher">
+<node CREATED="1532793816029" FOLDED="true" ID="ID_519518808" MODIFIED="1533310588598" TEXT="Glib::Dispatcher">
+<linktarget COLOR="#c1a9ad" DESTINATION="ID_519518808" ENDARROW="Default" ENDINCLINATION="70;0;" ID="Arrow_ID_985135564" SOURCE="ID_1796116534" STARTARROW="None" STARTINCLINATION="149;-223;"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1532793842721" ID="ID_1258451078" MODIFIED="1532793868919" TEXT="schon integriert in unseren UiDispatcher">
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1532793854287" ID="ID_1072348424" MODIFIED="1532793872744" TEXT="installiert in dem NotificationService">
 <icon BUILTIN="info"/>
 </node>
+<node CREATED="1533310357440" ID="ID_250151476" MODIFIED="1533310362540" TEXT="kommt nicht in Frage">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1533310371726" ID="ID_682159285" MODIFIED="1533310393879" TEXT="signalisiert nur einen Trigger"/>
+<node CREATED="1533310381845" ID="ID_833159461" MODIFIED="1533310389328" TEXT="setzt laufende event-Loop voraus"/>
+</node>
+</node>
+<node CREATED="1533310412185" FOLDED="true" ID="ID_968448480" MODIFIED="1533310508061" TEXT="Aktivierungs-Signal">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1533310421328" ID="ID_1168151937" MODIFIED="1533310429603" TEXT="Gtk::Application macht das so"/>
+<node CREATED="1533310430167" ID="ID_1809941457" MODIFIED="1533310441873" TEXT="setzt eine GApplication (=Gio::Application) voraus"/>
+<node CREATED="1533310442557" ID="ID_1182449800" MODIFIED="1533310447656" TEXT="und das wollen wir nicht"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533310502420" ID="ID_1045876919" MODIFIED="1533310506297" TEXT="selber bauen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788656585" ID="ID_99363690" MODIFIED="1533223405882" TEXT="geeignet ansiedeln">
 <icon BUILTIN="pencil"/>
 <node CREATED="1532794614249" ID="ID_884179844" MODIFIED="1532794617028" TEXT="Plan">
-<node CREATED="1532794617968" ID="ID_1917693631" MODIFIED="1532794659877" TEXT="geeigneten Zugang &#xfc;ber die Notification-facade">
+<node CREATED="1532794617968" ID="ID_1917693631" MODIFIED="1533310766197" TEXT="geeigneten Zugang vom Ctor-Code">
 <icon BUILTIN="full-1"/>
 </node>
-<node CREATED="1532794630007" ID="ID_1449747192" MODIFIED="1532794662092" TEXT="die installiert unseren Callback via UiDispatcher">
+<node CREATED="1532794630007" ID="ID_1449747192" MODIFIED="1533310797536" TEXT="dieser installiert unseren Callback">
 <icon BUILTIN="full-2"/>
 </node>
 <node CREATED="1532794643461" ID="ID_1862931436" MODIFIED="1532794664726" TEXT="dieser sendet in der Loop das Aktivierungs-Command">
@@ -16243,8 +16336,8 @@
 <node CREATED="1533221115139" ID="ID_1655397510" MODIFIED="1533221117607" TEXT="wer sonst?"/>
 <node CREATED="1533221118267" ID="ID_517862983" MODIFIED="1533221132317" TEXT="er verk&#xf6;rpert &quot;das Globale&quot;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221145295" ID="ID_45639892" MODIFIED="1533221166358" TEXT="Problem: Zugang zum NotificationService">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221145295" ID="ID_45639892" MODIFIED="1533310691940" TEXT="Problem: Zugang zum NotificationService">
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1533221554888" ID="ID_1545304194" MODIFIED="1533221603239" TEXT="wird explizit erst von UiManager::performMainLoop() installiert">
 <icon BUILTIN="broken-line"/>
 </node>
@@ -16261,8 +16354,7 @@
       das ist ein <i>akzidentelles Problem</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1533221681199" ID="ID_979914270" MODIFIED="1533221738765" TEXT="Folge unserer Architektur">
@@ -16278,24 +16370,32 @@
       schon vor der Loop verf&#252;gbar zu sein (?)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+</node>
+<node COLOR="#990000" CREATED="1533221752837" ID="ID_583598881" MODIFIED="1533310555941" TEXT="verifizieren: ist Glib::Dispatcher die richtige Technik">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1533310564980" ID="ID_1796116534" MODIFIED="1533310610000" TEXT="ist es nicht...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nur bei laufender Event-Loop
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#c1a9ad" DESTINATION="ID_519518808" ENDARROW="Default" ENDINCLINATION="70;0;" ID="Arrow_ID_985135564" STARTARROW="None" STARTINCLINATION="149;-223;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1533221742343" ID="ID_1970220536" MODIFIED="1533221747599" TEXT="Alternativen gesucht">
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1533221742343" ID="ID_1970220536" MODIFIED="1533310682384" TEXT="Alternative schaffen">
 <icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221752837" ID="ID_583598881" MODIFIED="1533221770083" TEXT="verifizieren: ist Glib::Dispatcher die richtige Technik">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221770859" ID="ID_1962039642" MODIFIED="1533221828924" TEXT="ggfs daf&#xfc;r einen dedizierten Service bauen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1533221796823" ID="ID_179436166" MODIFIED="1533221810377" TEXT="dann im UiManager"/>
-<node CREATED="1533221813285" ID="ID_1627865297" MODIFIED="1533221816584" TEXT="aus logischen Gr&#xfc;nden"/>
-<node CREATED="1533221818572" ID="ID_806537689" MODIFIED="1533221826270" TEXT="pa&#xdf;t auch thematisch dort hin"/>
-</node>
 <node CREATED="1533223360183" ID="ID_1309454354" MODIFIED="1533252142536" TEXT="Idee">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1533223371534" ID="ID_891597430" MODIFIED="1533223376721" TEXT="UiDispatcher"/>
+<node CREATED="1533223371534" ID="ID_891597430" MODIFIED="1533310719489" TEXT="UiDispatcher">
+<icon BUILTIN="stop-sign"/>
+</node>
 <node CREATED="1533223377381" ID="ID_1197977205" MODIFIED="1533223383568" TEXT="einfach eine weitere Instanz davon"/>
 <node CREATED="1533223384180" ID="ID_141172630" MODIFIED="1533252147479" TEXT="geht das?">
 <icon BUILTIN="stop-sign"/>
@@ -16304,6 +16404,93 @@
 </node>
 <node CREATED="1533252156737" ID="ID_945337228" MODIFIED="1533252171708" TEXT="Glib::Dispatcher ist nur eine FiFo"/>
 <node CREATED="1533252172584" ID="ID_230437417" MODIFIED="1533252187890" TEXT="setzt zwingend voraus, da&#xdf; die Event-Loop schon l&#xe4;uft"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221770859" ID="ID_1962039642" MODIFIED="1533314199241" TEXT="daf&#xfc;r einen dedizierten Service einbauen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533310637466" ID="ID_1772394299" MODIFIED="1533310663064" TEXT="wo?">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1533221796823" ID="ID_179436166" MODIFIED="1533310650010" TEXT="im UiManager">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1533221813285" ID="ID_1627865297" MODIFIED="1533221816584" TEXT="aus logischen Gr&#xfc;nden"/>
+<node CREATED="1533221818572" ID="ID_806537689" MODIFIED="1533221826270" TEXT="pa&#xdf;t auch thematisch dort hin"/>
+</node>
+<node CREATED="1533311253662" ID="ID_704687465" MODIFIED="1533311258358" TEXT="was?">
+<icon BUILTIN="help"/>
+<node CREATED="1533311314709" ID="ID_277761751" MODIFIED="1533311321160" TEXT="wirklich in der Loop?">
+<node CREATED="1533311322220" ID="ID_1614182663" MODIFIED="1533311415466" TEXT="Fenster-aktivieren passiert vor der Loop">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist f&#252;r mich eine neue Einsicht.
+    </p>
+    <p>
+      Die Anzeige eines Fensters und die Event-Verarbeitung sind zun&#228;chst einmal unabh&#228;ngig voneinander.
+    </p>
+    <p>
+      Sie sind aber aufeinander angewiesen. Die Events machen das Fenster reaktiv, aber ohne
+    </p>
+    <p>
+      Fenster gibt es gar keine Benutzer-Events.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1533311415455" ID="ID_1211339520" MODIFIED="1533311614570" TEXT="GTK-Aktivierungs-Mechanismus hat andere Gr&#xfc;nde">
+<arrowlink COLOR="#949fb4" DESTINATION="ID_1806268533" ENDARROW="Default" ENDINCLINATION="-1845;-608;" ID="Arrow_ID_1146394851" STARTARROW="None" STARTINCLINATION="-474;0;"/>
+</node>
+<node CREATED="1533311655519" ID="ID_946023766" MODIFIED="1533311676384">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber <i>wir</i>&#160;brauchen ein <b>laufendes</b>&#160;UI
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1533311682171" ID="ID_1084601430" MODIFIED="1533311693093" TEXT="und zwar f&#xfc;r die Antworten aus Proc-Layer"/>
+<node CREATED="1533311693705" ID="ID_152811842" MODIFIED="1533311698877" TEXT="Facade mu&#xdf; offen sein"/>
+<node CREATED="1533311707207" ID="ID_364798350" MODIFIED="1533311732464" TEXT="der Glib::Dispatcher darf nicht ins Leere gehen"/>
+</node>
+</node>
+<node CREATED="1533311794860" ID="ID_11666506" MODIFIED="1533311813929" TEXT="ein Command aus der event-Loop heraus">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1533311818120" ID="ID_413505030" MODIFIED="1533311824592" TEXT="Forschung: wie machbar?">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1533311849484" ID="ID_741726269" MODIFIED="1533311856167" TEXT="Problem: gtk_main blockt"/>
+<node CREATED="1533311863586" ID="ID_1275401100" MODIFIED="1533311895161" TEXT="jeder Aufruf davor k&#xf6;nnte zum Race f&#xfc;hren"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1533311922114" ID="ID_542781128" MODIFIED="1533311941004" TEXT="gibt es dazu irgendwelche Doku?">
+<icon BUILTIN="flag-pink"/>
+<node COLOR="#435e98" CREATED="1533311999743" ID="ID_159524494" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-the-constraints.html.de" MODIFIED="1533312023736" TEXT="GTKmm-Tutorial: multithreaded">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1533312933850" ID="ID_151434027" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-idle-functions.html.en" MODIFIED="1533312947999" TEXT="Idle / Timeout-Beispiel"/>
+</node>
+<node CREATED="1533312248199" ID="ID_1852545829" MODIFIED="1533314003668" TEXT="was ist mit Glib::SignalIdle und SignalTimeout?">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1533314025414" ID="ID_408671915" MODIFIED="1533314164488" TEXT="Glib::signal_timeout()">
+<icon BUILTIN="forward"/>
+<node COLOR="#338800" CREATED="1533314031621" ID="ID_1030647718" MODIFIED="1533314158876" TEXT="das ist wohl die beste L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1533314040716" ID="ID_314344665" MODIFIED="1533314158876" TEXT="f&#xfc;gt eine minimale Karenz-Zeit ein"/>
+<node CREATED="1533314084613" ID="ID_1361630751" MODIFIED="1533314158876" TEXT="gut f&#xfc;r die System-Stabilit&#xe4;t">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -22194,8 +22381,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1502453753155" ID="ID_89098030" MODIFIED="1529076989537" TEXT="Schritt-2">
-<linktarget COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="821;-1406;" ID="Arrow_ID_554743885" SOURCE="ID_1584846573" STARTARROW="None" STARTINCLINATION="1459;870;"/>
+<node CREATED="1502453753155" ID="ID_89098030" MODIFIED="1533303965804" TEXT="Schritt-2">
+<linktarget COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="600;-1189;" ID="Arrow_ID_554743885" SOURCE="ID_1584846573" STARTARROW="None" STARTINCLINATION="1459;870;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1502453814499" FOLDED="true" ID="ID_727706359" MODIFIED="1531584014221" TEXT="Puffer-Ansatz...">
 <node CREATED="1502453828721" ID="ID_1337002332" MODIFIED="1502453830621" TEXT="komplex"/>
@@ -23365,8 +23552,8 @@
 <node CREATED="1492205732389" ID="ID_1080697951" MODIFIED="1518487921090" TEXT="wir k&#xf6;nnen stets gleich triggern"/>
 </node>
 <node CREATED="1492205741483" ID="ID_1132272888" MODIFIED="1518487921090" TEXT="Command wird sofort nach dem Binden getriggert"/>
-<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1529077146541" TEXT="Protokoll-Erweiterung" VSHIFT="8">
-<arrowlink COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-1125;1565;" ID="Arrow_ID_1617518648" STARTARROW="None" STARTINCLINATION="3436;-1136;"/>
+<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1533303593408" TEXT="Protokoll-Erweiterung" VSHIFT="8">
+<arrowlink COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-944;1604;" ID="Arrow_ID_1617518648" STARTARROW="None" STARTINCLINATION="3617;-1097;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1483925298713" ID="ID_347702585" MODIFIED="1518487921090" TEXT="Command-Prototyp forken"/>
 <node CREATED="1483925307385" ID="ID_509982277" MODIFIED="1518487921090" TEXT="ID durch Kontext-ID dekorieren"/>
@@ -32108,7 +32295,10 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1495221220040" HGAP="43" ID="ID_782313223" MODIFIED="1518487921099" TEXT="Framework" VSHIFT="-20">
+<node CREATED="1495221220040" HGAP="43" ID="ID_782313223" MODIFIED="1533306068667" TEXT="Framework" VSHIFT="-20">
+<linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-652;20;" ID="Arrow_ID_315633048" SOURCE="ID_1894791438" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
+<linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-1088;-39;" ID="Arrow_ID_234165792" SOURCE="ID_433225506" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
+<linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-981;-106;" ID="Arrow_ID_1912776282" SOURCE="ID_1636078216" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
 <node CREATED="1495221242285" ID="ID_185528211" MODIFIED="1518487921099" TEXT="Applikation">
 <node CREATED="1495221272545" ID="ID_624250153" MODIFIED="1518487921099" TEXT="Gtk::Application">
 <node CREATED="1495222327564" ID="ID_175461027" MODIFIED="1518487921099" TEXT="initialisiert Gio::Application"/>
@@ -32143,12 +32333,156 @@
 </node>
 </node>
 <node CREATED="1495221280336" ID="ID_1925569425" MODIFIED="1518487921099" TEXT="Gio::Application">
-<node CREATED="1495221530614" ID="ID_1085605910" MODIFIED="1518487921099" TEXT="initialisiert das Framework"/>
+<node COLOR="#435e98" CREATED="1533309749035" HGAP="-6" ID="ID_274394313" MODIFIED="1533309768489" TEXT="entspricht GApplication in C" VSHIFT="-20">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1495221530614" ID="ID_1085605910" MODIFIED="1533306146656" TEXT="initialisiert das Framework">
+<arrowlink DESTINATION="ID_1615155508" ENDARROW="Default" ENDINCLINATION="-27;-158;" ID="Arrow_ID_152226640" STARTARROW="None" STARTINCLINATION="-209;0;"/>
+</node>
 <node CREATED="1495221537366" ID="ID_381245884" MODIFIED="1518487921099" TEXT="stellt eine dBus-Verbindung bereit"/>
 <node CREATED="1495221546252" ID="ID_771692992" MODIFIED="1518487921099" TEXT="erbt von Gio::ActionGroup und ActionMap"/>
-<node CREATED="1495223467588" ID="ID_666842762" MODIFIED="1518487921099" TEXT="run">
+<node CREATED="1533307013028" HGAP="32" ID="ID_1511454400" MODIFIED="1533307028207" TEXT="on activation" VSHIFT="16">
+<node CREATED="1533307054478" ID="ID_1200897297" MODIFIED="1533307059929" TEXT="g_application_activate">
+<node CREATED="1533307252691" ID="ID_11609503" MODIFIED="1533307276116" TEXT="gapplication.c (ca line 2220)"/>
+<node CREATED="1533307297630" ID="ID_312502406" MODIFIED="1533307298225" TEXT="g_signal_emit (application, g_application_signals[SIGNAL_ACTIVATE], 0)"/>
+</node>
+<node CREATED="1533307413701" ID="ID_1516098159" MODIFIED="1533307416809" TEXT="aufgerufen von">
+<node CREATED="1533307417845" ID="ID_1665005953" MODIFIED="1533307423040" TEXT="Gio::Application"/>
+<node CREATED="1533307444641" ID="ID_1571069781" MODIFIED="1533307445757" TEXT="g_application_real_local_command_line">
+<node CREATED="1533307489459" ID="ID_849008375" MODIFIED="1533307492846" TEXT="das ist class-&gt;local_command_line"/>
+<node CREATED="1533307886653" ID="ID_322984790" MODIFIED="1533307918597" TEXT="wird auch von Gtkmm so erhalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...allerdings eingepackt in eine vfunc,
+    </p>
+    <p>
+      welche ggfs C++ - Exceptions f&#228;ngt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1533307599332" ID="ID_1228966939" MODIFIED="1533307626966" TEXT="aufgerufen von g_application_run">
+<arrowlink DESTINATION="ID_1602611708" ENDARROW="Default" ENDINCLINATION="262;0;" ID="Arrow_ID_1688106140" STARTARROW="None" STARTINCLINATION="-50;95;"/>
+</node>
+</node>
+</node>
+<node CREATED="1533309080840" ID="ID_1911292426" MODIFIED="1533309083211" TEXT="verwendet">
+<node CREATED="1533309084015" ID="ID_103827073" MODIFIED="1533309275410" TEXT="vom Framework...">
+<linktarget COLOR="#6280a2" DESTINATION="ID_103827073" ENDARROW="Default" ENDINCLINATION="-1131;-99;" ID="Arrow_ID_138401663" SOURCE="ID_574887736" STARTARROW="None" STARTINCLINATION="1028;-75;"/>
+<node CREATED="1533309088679" ID="ID_603142056" MODIFIED="1533309096553" TEXT="um ein Fenster nach start darzustellen"/>
+<node CREATED="1533309142479" ID="ID_1556321232" MODIFIED="1533309146650" TEXT="Gtk::Application::run(Window&amp;)"/>
+</node>
+<node CREATED="1533311444004" ID="ID_1806268533" MODIFIED="1533311614570" TEXT="notwendig weil....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nur wegen dem ganzen Registrierungs-Glump.
+    </p>
+    <p>
+      Ein &quot;GTK-Application-Window&quot; ist auch irgendwie registriert und h&#228;ngt am Bus.
+    </p>
+    <p>
+      Frag mich nicht wie. Jedenfalls kann man das nicht im Konstruktor von Gtk::Application machen.
+    </p>
+    <p>
+      <i>Nur</i>&#160;das ist der Grund. Es <i>geht gar nicht</i>&#160;um die Event-Loop
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#949fb4" DESTINATION="ID_1806268533" ENDARROW="Default" ENDINCLINATION="-1845;-608;" ID="Arrow_ID_1146394851" SOURCE="ID_1211339520" STARTARROW="None" STARTINCLINATION="-474;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1533309280940" ID="ID_1482488845" MODIFIED="1533309401924" TEXT="Stand 8/2018 keine anderen Treffer">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      suche (case insensitive) nach application_activate
+    </p>
+    <ul>
+      <li>
+        treffer auf APPLICATION_ACTIVATE in g_application_activate()
+      </li>
+      <li>
+        die Treffer in Gtk::Application
+      </li>
+      <li>
+        diverse false positives mit anderen &quot;Activation&quot;-Signalen, z.B. in Aktionen oder Buttons
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1533309516556" ID="ID_459213298" MODIFIED="1533309561611">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nicht durch <b>gtk_main</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wichtige Einsicht:
+    </p>
+    <ul>
+      <li>
+        gtk_main ist Toolit ohne Framework
+      </li>
+      <li>
+        bietet keine solchen Lebenszyklus-Signale
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1495223467588" HGAP="27" ID="ID_666842762" MODIFIED="1533307038494" TEXT="run" VSHIFT="12">
+<icon BUILTIN="back"/>
+<node CREATED="1533306448070" ID="ID_1602611708" MODIFIED="1533307626966" TEXT="g_application_run(gobj(), argc, argv)">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1602611708" ENDARROW="Default" ENDINCLINATION="262;0;" ID="Arrow_ID_1688106140" SOURCE="ID_1228966939" STARTARROW="None" STARTINCLINATION="-50;95;"/>
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1495223902619" ID="ID_11620264" MODIFIED="1518487921099" TEXT="behandelt Argumente"/>
 <node CREATED="1495223912401" ID="ID_1575164060" MODIFIED="1518487921099" TEXT="falls Service: wartet auf Nachricht vom dBus"/>
+<node CREATED="1533307972881" ID="ID_1094265011" MODIFIED="1533308000083">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beachte: <b>ruft nicht gtk_main</b>&#160;sondern macht das &#196;quivalent
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 <node CREATED="1495224012668" ID="ID_566886010" MODIFIED="1518487921099" TEXT="Event-Loop">
 <node CREATED="1495224031057" ID="ID_1352224458" MODIFIED="1518487921099" TEXT="use-count"/>
 <node CREATED="1495224034585" ID="ID_1852291898" MODIFIED="1518487921099" TEXT="bestimmt, ob die Loop weiter l&#xe4;uft"/>
@@ -32166,7 +32500,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1495224595638" ID="ID_1774384379" MODIFIED="1518487921099" TEXT="@deprecated">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1495224609188" ID="ID_1615155508" MODIFIED="1518487921099">
+<node CREATED="1495224609188" ID="ID_1615155508" MODIFIED="1533306146656">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -32180,17 +32514,204 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1615155508" ENDARROW="Default" ENDINCLINATION="-27;-158;" ID="Arrow_ID_152226640" SOURCE="ID_1085605910" STARTARROW="None" STARTINCLINATION="-209;0;"/>
 <node CREATED="1495224862227" ID="ID_762530588" MODIFIED="1518487921099" TEXT="init_gtkmm_internals"/>
 <node CREATED="1495224890119" ID="ID_137730290" MODIFIED="1518487921099" TEXT="statische funktion"/>
+<node CREATED="1532795620784" FOLDED="true" ID="ID_1850885017" MODIFIED="1533306139169" TEXT="gtk_init">
+<linktarget COLOR="#87a8bf" DESTINATION="ID_1850885017" ENDARROW="Default" ENDINCLINATION="-195;-45;" ID="Arrow_ID_960670945" SOURCE="ID_377749143" STARTARROW="None" STARTINCLINATION="416;0;"/>
+<icon BUILTIN="back"/>
+<node CREATED="1532796724776" ID="ID_685469322" MODIFIED="1532796729971" TEXT="bleibt weiterhin bestehen"/>
+<node CREATED="1532796730560" ID="ID_727373355" MODIFIED="1532796741082" TEXT="wird von jeder Applikations-Klasse aufgerufen"/>
+<node CREATED="1533305525992" ID="ID_1048078112" MODIFIED="1533305987413" TEXT="stellt elementare Initialisierung sicher">
+<node CREATED="1533305546669" ID="ID_717378410" MODIFIED="1533305616608" TEXT="gtk_init_check">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gboolean
+    </p>
+    <p>
+      gtk_init_check (int&#160;&#160;&#160;&#160;*argc,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;char ***argv)
+    </p>
+    <p>
+      {
+    </p>
+    <p>
+      &#160;&#160;gboolean ret;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;if (!gtk_parse_args (argc, argv))
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;return FALSE;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;ret = GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;if (gtk_get_debug_flags () &amp; GTK_DEBUG_INTERACTIVE)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;gtk_window_set_interactive_debugging (TRUE);
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;return ret;
+    </p>
+    <p>
+      }
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1533305661254" ID="ID_1064217503" MODIFIED="1533305671871" TEXT="parse commandline">
+<node CREATED="1533305895966" ID="ID_1828704033" MODIFIED="1533305900774" TEXT="init gettext"/>
+<node CREATED="1533305890638" ID="ID_1711757539" MODIFIED="1533305894930" TEXT="keine weitere Magie"/>
+</node>
+<node CREATED="1533305672436" ID="ID_1662141734" MODIFIED="1533305683502" TEXT="open/attach to windowing system"/>
+<node CREATED="1533305684102" ID="ID_41618780" MODIFIED="1533305691437" TEXT="enable interactive debugging"/>
+</node>
+</node>
+<node CREATED="1533305534919" ID="ID_1905259387" MODIFIED="1533305545069" TEXT="terminiert ohne Windowing-System">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1532795594468" FOLDED="true" ID="ID_681479502" MODIFIED="1533306019466" TEXT="Main::init_gtkmm_internals">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      void Main::init_gtkmm_internals()
+    </p>
+    <p>
+      {
+    </p>
+    <p>
+      &#160;&#160;static bool init_done = false;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;if(!init_done)
+    </p>
+    <p>
+      &#160;&#160;{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Glib::init();
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Gio::init();
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;// Populate the map of GTypes to C++ wrap_new() functions.
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Pango::wrap_init();
+    </p>
+    <p>
+      #ifdef GTKMM_ATKMM_ENABLED
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Atk::wrap_init();
+    </p>
+    <p>
+      #endif //GTKMM_ATKMM_ENABLED
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Gdk::wrap_init();
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Gtk::wrap_init();
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;init_done = true;
+    </p>
+    <p>
+      &#160;&#160;}
+    </p>
+    <p>
+      }
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#679cc6" DESTINATION="ID_681479502" ENDARROW="Default" ENDINCLINATION="-182;-16;" ID="Arrow_ID_1451320473" SOURCE="ID_1106606369" STARTARROW="None" STARTINCLINATION="273;0;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1532794577245" ID="ID_1061673956" MODIFIED="1532794580305" TEXT="was macht das?">
+<node CREATED="1532796682566" ID="ID_1741006267" MODIFIED="1532796691801" TEXT="Glib, Gio und Pango initialisieren"/>
+<node CREATED="1532796692445" ID="ID_1058977996" MODIFIED="1532796706398" TEXT="Wrapper-Mechanismus f&#xfc;r Gtk+-&quot;Objekte&quot; initialisieren"/>
+<node COLOR="#435e98" CREATED="1533303515053" ID="ID_806534769" MODIFIED="1533303521236" TEXT="im Detail....">
+<icon BUILTIN="info"/>
+<node CREATED="1533302528747" ID="ID_436589291" MODIFIED="1533302531718" TEXT="Glib::init"/>
+<node CREATED="1533302532330" ID="ID_1077746701" MODIFIED="1533302534862" TEXT="Gio::init">
+<node CREATED="1533302535642" ID="ID_669104938" MODIFIED="1533302538965" TEXT="Glib::init">
+<node CREATED="1533302837329" ID="ID_1446415127" MODIFIED="1533302841899" TEXT="wiederum...">
+<node CREATED="1533302842944" ID="ID_974899245" MODIFIED="1533302853323" TEXT="Gio::wrap_init()"/>
+<node CREATED="1533302853959" ID="ID_872170516" MODIFIED="1533302861305" TEXT="Gio::wrap_register_init()"/>
+</node>
+</node>
+<node CREATED="1533302544745" ID="ID_358165246" MODIFIED="1533302550260" TEXT="Gio::wrap_init()">
+<node CREATED="1533302581788" ID="ID_1825151057" MODIFIED="1533302612899" TEXT="viele Aufrufe Glib::wrap_register(...)"/>
+<node CREATED="1533302590130" ID="ID_815735282" MODIFIED="1533302604205" TEXT="richtet C++-Bindings ein"/>
+<node CREATED="1533302617511" ID="ID_1544414198" MODIFIED="1533302640740" TEXT="sonst keine Funktionalit&#xe4;t ersichtlich">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1532794561968" ID="ID_1365959028" MODIFIED="1532796658012" TEXT="ist das zukunfts-fest?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1532796634853" ID="ID_1398685017" MODIFIED="1532796646840" TEXT="in application.cc gibts die gleiche Funktion">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1532796648307" ID="ID_8715855" MODIFIED="1532796654824" TEXT="kein Grund zur Sorge">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node CREATED="1495224625466" ID="ID_668309036" MODIFIED="1518487921099" TEXT="run">
 <node CREATED="1495224647071" ID="ID_660577000" MODIFIED="1518487921099" TEXT="gtk_main">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1495224927362" ID="ID_904812640" MODIFIED="1518487921099" TEXT="Kommandozeile"/>
-</node>
 <node CREATED="1495224649943" ID="ID_1753452940" MODIFIED="1518487921099" TEXT="g_main_loop_run">
 <node CREATED="1495224690714" ID="ID_355427981" MODIFIED="1518487921099" TEXT="g_main_context_iterate">
 <arrowlink COLOR="#4da894" DESTINATION="ID_1221113124" ENDARROW="Default" ENDINCLINATION="-37;92;" ID="Arrow_ID_603815905" STARTARROW="None" STARTINCLINATION="17;-42;"/>
+</node>
+</node>
+<node CREATED="1533308108853" ID="ID_650869075" MODIFIED="1533308136078" TEXT="entspricht (im Kern) g_application_run">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1533309576891" ID="ID_1533505296" MODIFIED="1533309583947" TEXT="ohne Lebenzyklus-Management">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 </node>
@@ -32200,6 +32721,22 @@
 <node CREATED="1495225019502" ID="ID_1829681403" MODIFIED="1518487921099" TEXT="beide machen in etwas das Gleiche"/>
 <node CREATED="1495225006920" ID="ID_1631847350" MODIFIED="1518487921099" TEXT="Application ist generischer"/>
 <node CREATED="1495226503104" ID="ID_1991720691" MODIFIED="1518487921099" TEXT="es geht dabei um Desktop-Integration"/>
+<node CREATED="1533308053493" ID="ID_281791270" MODIFIED="1533308091691" TEXT="Gio::Application ruft g_application_run">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist <i>nicht</i>&#160;gtk_main,
+    </p>
+    <p>
+      aber macht in etwa die gleichen Operationen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1495225050138" ID="ID_1077152710" MODIFIED="1518487921099" TEXT="gtk_main beruht heute auf Gio">
 <richcontent TYPE="NOTE"><html>
   <head>

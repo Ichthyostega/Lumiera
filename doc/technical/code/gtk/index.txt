@@ -1,0 +1,9 @@
+GTK -- UI toolkit and framework
+===============================
+
+//Menu: label GTK
+
+
+Within this subsection we collect some random bits of information related to our
+use of the GTK windowing toolkit for building Lumiera's user interface.
+
