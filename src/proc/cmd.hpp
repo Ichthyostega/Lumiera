@@ -71,5 +71,12 @@ namespace cmd {
   
   
   
+  /* ========= meta actions ======= */
+  
+  extern CommandSetup meta_activateContentDiff;
+  extern CommandSetup meta_deactivateContentDiff;
+  
+  
+  
 }} // namespace proc::cmd
 #endif /*PROC_CMD_H*/

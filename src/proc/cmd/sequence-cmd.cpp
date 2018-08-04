@@ -76,7 +76,7 @@ namespace cmd {
                         {
                           return addedTrack;
                         })
-         .undoOperation ([](LuidH context, LuidH addedTrack, LuidH newID)
+         .undoOperation ([](LuidH context, LuidH newID, LuidH addedTrack)
                         {
                           REQUIRE (addedTrack == newID);
                           UNIMPLEMENTED ("how to remove a sub-track from the given context");

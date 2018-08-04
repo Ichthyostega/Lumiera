@@ -109,7 +109,7 @@ namespace interact {
   void
   InteractionDirector::populateContent_afterStart()
     {
-      UNIMPLEMENTED ("issue content population request as command into the session");
+      invoke (cmd::meta_activateContentDiff);
     }
   
   

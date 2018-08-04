@@ -70,7 +70,7 @@ namespace gui {
    * asynchronously and triggered by events within the lower layers.
    * 
    * This is a layer separation facade interface. Clients should use
-   * the embedded #facade factory, which yields a proxy routing any 
+   * the embedded #facade factory, which yields a proxy routing any
    * calls through the lumieraorg_GuiNotification interface
    * @throws lumiera::error::State when interface is not opened
    */
@@ -113,14 +113,14 @@ namespace gui {
       virtual void triggerGuiShutdown (string const& cause)      =0;
       
     };
-    
+  
   
   
 } // namespace gui
 
 
 extern "C" {
-#endif /* =========================== CL Interface ===================== */ 
+#endif /* =========================== CL Interface ===================== */
 
   
 #include "common/interface.h"

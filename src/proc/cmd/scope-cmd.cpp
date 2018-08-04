@@ -65,7 +65,7 @@ namespace cmd {
   
   
   
-  /** @todo placeholder 4/2017
+  /** @todo placeholder 4/2017 -- need to build a timeline display first...
    */
 //COMMAND_DEFINITION (session_newSequence)
 //  {
