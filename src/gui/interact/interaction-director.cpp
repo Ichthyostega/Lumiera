@@ -109,7 +109,7 @@ namespace interact {
   void
   InteractionDirector::populateContent_afterStart()
     {
-      invoke (cmd::meta_activateContentDiff);
+      invoke (cmd::test_meta_activateContentDiff);               ////////////////////////////////////////////TICKET #211 prefix test_ bypasses logging and immediately executes for now (2018)
     }
   
   
