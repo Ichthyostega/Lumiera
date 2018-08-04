@@ -38,6 +38,7 @@
 #include "proc/cmd.hpp"
 #include "proc/control/command-def.hpp"
 //#include "proc/mobject/session.hpp"
+#include "include/gui-notification-facade.h"
 //#include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/format-string.hpp"
@@ -78,6 +79,8 @@ COMMAND_DEFINITION (test_meta_activateContentDiff)
                       {
                         TODO ("send a population diff starting from scratch");
                         TODO ("activate life-update service within the session");
+                        // Temporary hack to get any meaningful UI <-> Proc communication
+                        gui::GuiNotification::facade().displayInfo(gui::NOTE_INFO, "Request: population-Diff from Session.");
                       })
        .captureUndo ([]() -> bool
                       {
