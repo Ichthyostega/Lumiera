@@ -3058,7 +3058,7 @@ The consequence is that both sides, &quot;the core&quot; and &quot;the UI&quot; 
 Rather, the core sends ''diff messages'' up to the UI, indicating how it sees this virtual structure to be changing. The UI reflects these changes into //its own understanding and representation,// that is here a structure of display widgets. When the user interacts with these structures of the presentation layer, ''command messages'' are generated, using the element ~IDs to designate the arguments of the intended operation. This again causes reaction and change in the core, which is reflected back in the form of further diff messages. (&amp;rarr; GuiCommandCycle)
 </pre>
 </div>
-<div title="GuiContentPopulation" creator="Ichthyostega" modifier="Ichthyostega" created="201807121909" modified="201808031636" tags="GuiIntegration spec draft" changecount="9">
+<div title="GuiContentPopulation" creator="Ichthyostega" modifier="Ichthyostega" created="201807121909" modified="201808041325" tags="GuiIntegration spec draft" changecount="10">
 <pre>//install a listener into the session to cause sending of population diff messages.//
 The Lumiera application is not structured as an UI with internal functionality dangling below. Rather, the architecture calls for several self-contained subsystems, where all of the actual &quot;application content&quot; is modelled within the [[Session]] subsystem. The UI implements the //mechanics of user interaction// -- yet as far as content is concerned, it plays a passive role. Within the UI-Layer, there is a hierarchy of presentation entities, to mirror the structure of the session contents. These entities are built step by step, in reception of //population diff messages// sent upwards from the session.
 
@@ -3071,6 +3071,7 @@ And since we are talking about a generic facility, the framework of content popu
 
 The general plan to trigger content population thus boils down to
 * have the InteractionDirector inject the population trigger with the help of {{{Glib::signal_timeout()}}}
+* which will activate with a slight delay (100ms) after UI start, and after primary drawing activities ceases
 * the trigger itself issues a command towards the session
 * execution of aforementioned command activates sending of population / diff messages
 * on shutdown of the top-level, send the corresponding deactivation command </pre>

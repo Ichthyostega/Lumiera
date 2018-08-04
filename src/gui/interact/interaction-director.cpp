@@ -86,8 +86,7 @@ namespace interact {
    * @param globals wiring to the circle of top-level UI managers (including ourselves)
    * @warning this ctor is performed within the UI thread, yet _prior_ to entering the GTK event loop.
    *    For this reason, all initialisation performed here must be wiring-only; any tasks requiring an
-   *    actually operative UI need to be scheduled, by means of the NotificationService.
-   * @todo 7/2018 STOP no, can't be the NotificationService.     ////////////////////////////////////////////TICKET #1151 : Need a new dedicated service in UiManager 
+   *    actually operative UI will be _scheduled,_ to run later when the UI is fully operative.
    */
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
     : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
@@ -100,7 +99,17 @@ namespace interact {
     , assets_{new AssetController{session::Root::getAssetID(), this->uiBus_}}
     , timelines_{}
     {
-      
+      Glib::signal_timeout()
+        .connect_once (sigc::mem_fun(*this, &InteractionDirector::populateContent_afterStart)
+                      ,DELAY_AFTER_GUI_START_in_ms
+                      ,Glib::PRIORITY_LOW);     // after all initial drawing tasks
+    }
+  
+  
+  void
+  InteractionDirector::populateContent_afterStart()
+    {
+      UNIMPLEMENTED ("issue content population request as command into the session");
     }
   
   

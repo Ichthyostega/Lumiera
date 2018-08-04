@@ -115,6 +115,10 @@ signal is emitted _shortly before_ entering the event loop, and not from within 
 
 A better alternative is to rely on the `Glib::signal_idle()` rsp. `Glib::signal_timeout()`. Both allow
 to invoke a slot only once, and both ensure the invocation really happens from within the event loop.
+footnote:[Verified as of 8/2018: uses `g_main_context_default()`, which creates the default context
+on demand. This is also the default context _pulled_ when running the event loop. So indeed we're
+able to attach an ``event source'' (i.e. an action or closure) even before the loop is running.
+Use `Glib::PRIORITY_LOW` to schedule after any (re)drawing activities.]
 
 SigC++ trackable
 ~~~~~~~~~~~~~~~~

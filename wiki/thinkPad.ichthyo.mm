@@ -2,8 +2,8 @@
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1518487921106" STYLE="fork" TEXT="Lumi">
 <font NAME="SansSerif" SIZE="25"/>
-<node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1518487921038" POSITION="right" TEXT="GUI">
-<font NAME="SansSerif" SIZE="14"/>
+<node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1533388497006" POSITION="right" TEXT="GUI">
+<font BOLD="true" NAME="SansSerif" SIZE="14"/>
 <node CREATED="1434128054470" HGAP="7" ID="ID_1166611516" MODIFIED="1518487921038" TEXT="Workflow" VSHIFT="-15">
 <node CREATED="1455289597596" ID="ID_970065036" MODIFIED="1518487921038" TEXT="work site"/>
 <node CREATED="1455289466261" ID="ID_273679080" MODIFIED="1518487921038" TEXT="PresentationState"/>
@@ -13466,8 +13466,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1489777837120" ID="ID_466927949" MODIFIED="1518487921075" TEXT="Ort f&#xfc;r Command-Definitionen"/>
-<node COLOR="#338800" CREATED="1489777846095" ID="ID_1401258681" MODIFIED="1518487921075" TEXT="Design Proc-Command-Framework vorantreiben">
-<arrowlink COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" STARTARROW="None" STARTINCLINATION="1932;0;"/>
+<node COLOR="#338800" CREATED="1489777846095" ID="ID_1401258681" MODIFIED="1533385633816" TEXT="Design Proc-Command-Framework vorantreiben">
+<arrowlink COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" STARTARROW="None" STARTINCLINATION="1929;0;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -15887,8 +15887,8 @@
 <node CREATED="1531423650339" ID="ID_583637266" MODIFIED="1531423655294" TEXT="Lebenszyklus kl&#xe4;ren"/>
 <node CREATED="1531423734880" ID="ID_1658395629" MODIFIED="1531423739643" TEXT="Verbindungen kl&#xe4;ren"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788529509" ID="ID_390131579" MODIFIED="1532788535403" TEXT="Trigger-Punkt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1532788529509" ID="ID_390131579" MODIFIED="1533388695623" TEXT="Trigger-Punkt">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788547560" ID="ID_1581791639" MODIFIED="1532788625456" TEXT="mu&#xdf; in der GTK-Event-Loop liegen">
 <linktarget COLOR="#9d1a41" DESTINATION="ID_1581791639" ENDARROW="Default" ENDINCLINATION="-211;-16;" ID="Arrow_ID_1635616322" SOURCE="ID_387089286" STARTARROW="None" STARTINCLINATION="-419;0;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -16313,13 +16313,13 @@
 <node CREATED="1533310430167" ID="ID_1809941457" MODIFIED="1533310441873" TEXT="setzt eine GApplication (=Gio::Application) voraus"/>
 <node CREATED="1533310442557" ID="ID_1182449800" MODIFIED="1533310447656" TEXT="und das wollen wir nicht"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533310502420" ID="ID_1045876919" MODIFIED="1533310506297" TEXT="selber bauen">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533310502420" ID="ID_1045876919" MODIFIED="1533388596803" TEXT="Glib::SignalTimeout nutzen">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1532788656585" ID="ID_99363690" MODIFIED="1533223405882" TEXT="geeignet ansiedeln">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1532788656585" ID="ID_99363690" MODIFIED="1533388668090" TEXT="geeignet ansiedeln">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1532794614249" ID="ID_884179844" MODIFIED="1532794617028" TEXT="Plan">
 <node CREATED="1532794617968" ID="ID_1917693631" MODIFIED="1533310766197" TEXT="geeigneten Zugang vom Ctor-Code">
 <icon BUILTIN="full-1"/>
@@ -16331,8 +16331,8 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221103349" ID="ID_1053145038" MODIFIED="1533223398404" TEXT="Anker">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1533221103349" ID="ID_1053145038" MODIFIED="1533388653067" TEXT="Anker">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533221107205" ID="ID_1202141905" MODIFIED="1533221141349" TEXT="es mu&#xdf; der InteractionDirector sein">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -16392,9 +16392,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1533221742343" ID="ID_1970220536" MODIFIED="1533310682384" TEXT="Alternative schaffen">
-<icon BUILTIN="flag-pink"/>
-<node CREATED="1533223360183" ID="ID_1309454354" MODIFIED="1533252142536" TEXT="Idee">
+<node CREATED="1533223360183" FOLDED="true" ID="ID_1309454354" MODIFIED="1533388625069" TEXT="Idee">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1533223371534" ID="ID_891597430" MODIFIED="1533310719489" TEXT="UiDispatcher">
 <icon BUILTIN="stop-sign"/>
@@ -16409,10 +16407,10 @@
 <node CREATED="1533252172584" ID="ID_230437417" MODIFIED="1533252187890" TEXT="setzt zwingend voraus, da&#xdf; die Event-Loop schon l&#xe4;uft"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221770859" ID="ID_1962039642" MODIFIED="1533314199241" TEXT="daf&#xfc;r einen dedizierten Service einbauen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533310637466" ID="ID_1772394299" MODIFIED="1533310663064" TEXT="wo?">
-<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<node CREATED="1533221770859" FOLDED="true" ID="ID_1962039642" MODIFIED="1533387993628" TEXT="daf&#xfc;r einen dedizierten Service einbauen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1533310637466" ID="ID_1772394299" MODIFIED="1533385333187" TEXT="wo?">
+<font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1533221796823" ID="ID_179436166" MODIFIED="1533310650010" TEXT="im UiManager">
 <icon BUILTIN="idea"/>
@@ -16422,7 +16420,8 @@
 </node>
 <node CREATED="1533311253662" ID="ID_704687465" MODIFIED="1533311258358" TEXT="was?">
 <icon BUILTIN="help"/>
-<node CREATED="1533311314709" ID="ID_277761751" MODIFIED="1533311321160" TEXT="wirklich in der Loop?">
+<node CREATED="1533311314709" ID="ID_277761751" MODIFIED="1533385647446" TEXT="wirklich in der Loop?">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_277761751" ENDARROW="Default" ENDINCLINATION="-48;213;" ID="Arrow_ID_1127398125" SOURCE="ID_748660217" STARTARROW="None" STARTINCLINATION="256;0;"/>
 <node CREATED="1533311322220" ID="ID_1614182663" MODIFIED="1533311415466" TEXT="Fenster-aktivieren passiert vor der Loop">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -16442,8 +16441,7 @@
       Fenster gibt es gar keine Benutzer-Events.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1533311415455" ID="ID_1211339520" MODIFIED="1533311614570" TEXT="GTK-Aktivierungs-Mechanismus hat andere Gr&#xfc;nde">
 <arrowlink COLOR="#949fb4" DESTINATION="ID_1806268533" ENDARROW="Default" ENDINCLINATION="-1845;-608;" ID="Arrow_ID_1146394851" STARTARROW="None" STARTINCLINATION="-474;0;"/>
@@ -16458,8 +16456,7 @@
       aber <i>wir</i>&#160;brauchen ein <b>laufendes</b>&#160;UI
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1533311682171" ID="ID_1084601430" MODIFIED="1533311693093" TEXT="und zwar f&#xfc;r die Antworten aus Proc-Layer"/>
 <node CREATED="1533311693705" ID="ID_152811842" MODIFIED="1533311698877" TEXT="Facade mu&#xdf; offen sein"/>
 <node CREATED="1533311707207" ID="ID_364798350" MODIFIED="1533311732464" TEXT="der Glib::Dispatcher darf nicht ins Leere gehen"/>
@@ -16484,7 +16481,8 @@
 <node CREATED="1533312248199" ID="ID_1852545829" MODIFIED="1533314003668" TEXT="was ist mit Glib::SignalIdle und SignalTimeout?">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#338800" CREATED="1533314025414" ID="ID_408671915" MODIFIED="1533314164488" TEXT="Glib::signal_timeout()">
+<node COLOR="#338800" CREATED="1533314025414" ID="ID_408671915" MODIFIED="1533385371119" TEXT="Glib::signal_timeout()">
+<arrowlink COLOR="#375fa2" DESTINATION="ID_1586631508" ENDARROW="Default" ENDINCLINATION="88;0;" ID="Arrow_ID_258924675" STARTARROW="None" STARTINCLINATION="-87;42;"/>
 <icon BUILTIN="forward"/>
 <node COLOR="#338800" CREATED="1533314031621" ID="ID_1030647718" MODIFIED="1533314158876" TEXT="das ist wohl die beste L&#xf6;sung">
 <icon BUILTIN="button_ok"/>
@@ -16496,7 +16494,60 @@
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1533385296078" ID="ID_911350305" MODIFIED="1533388643836" TEXT="einfache direkt L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533385305101" ID="ID_1586631508" MODIFIED="1533388506937" TEXT="Glib::signal_timeout() lokal nutzen">
+<arrowlink COLOR="#5568a6" DESTINATION="ID_580405745" ENDARROW="Default" ENDINCLINATION="-472;0;" ID="Arrow_ID_244184105" STARTARROW="None" STARTINCLINATION="-2132;-72;"/>
+<linktarget COLOR="#375fa2" DESTINATION="ID_1586631508" ENDARROW="Default" ENDINCLINATION="88;0;" ID="Arrow_ID_258924675" SOURCE="ID_408671915" STARTARROW="None" STARTINCLINATION="-87;42;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
+<node COLOR="#435e98" CREATED="1533385573236" ID="ID_220261898" MODIFIED="1533386018084" TEXT="Begr&#xfc;ndung">
+<node CREATED="1533385581435" ID="ID_613721842" MODIFIED="1533385589533" TEXT="ich glaube, das bleibt ein Einzelfall"/>
+<node CREATED="1533385595528" ID="ID_748660217" MODIFIED="1533385647446" TEXT="es mu&#xdf; wirklich in der Event-Loop laufen">
+<arrowlink COLOR="#a9b4c1" DESTINATION="ID_277761751" ENDARROW="Default" ENDINCLINATION="-48;213;" ID="Arrow_ID_1127398125" STARTARROW="None" STARTINCLINATION="256;0;"/>
+</node>
+<node CREATED="1533385674860" ID="ID_204825661" MODIFIED="1533386007106" TEXT="minimale Verz&#xf6;gerung nach Prgrammstart ist gut">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dann kann sich das Sytem erst mal <i>beruhigen</i>
+    </p>
+    <p>
+      nach der Lastspitze zum Programmstart, f&#252;r den viel Code geladen werden mu&#223;te.
+    </p>
+    <p>
+      Au&#223;erdem hatten dann die anderen Subsysteme schon Zeit, ihre Grunddatenstrukturen aufzubauen;
+    </p>
+    <p>
+      im Besonderen spekulieren wir darauf, da&#223; die Session-Daten bereits geladen sind,
+    </p>
+    <p>
+      und daher der Diff direkt und kompakt in einem Durchgang emittiert werden kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1533385403578" ID="ID_340344973" MODIFIED="1533388551009" TEXT="direkt im InteractionDirector">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1533388656903" ID="ID_1245171257" MODIFIED="1533388664575" TEXT="verdrahtet im ctor">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1533388528345" ID="ID_281702031" MODIFIED="1533388548893" TEXT="Trigger-Zeit">
+<icon BUILTIN="forward"/>
+<node CREATED="1533388533248" ID="ID_526629253" MODIFIED="1533388538867" TEXT="vorerst fest verdrahtet"/>
+<node CREATED="1533388539455" ID="ID_20867821" MODIFIED="1533388544338" TEXT="w&#xe4;hle 100ms"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1533388675213" ID="ID_1893531200" MODIFIED="1533388686365" TEXT="funktioniert">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
 </node>
@@ -25498,8 +25549,8 @@
 </node>
 </node>
 </node>
-<node COLOR="#252298" CREATED="1489546623162" HGAP="-24" ID="ID_1622574347" MODIFIED="1518487921093" TEXT="was wird gebraucht" VSHIFT="21">
-<linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="1932;0;"/>
+<node COLOR="#252298" CREATED="1489546623162" HGAP="-24" ID="ID_1622574347" MODIFIED="1533385633816" TEXT="was wird gebraucht" VSHIFT="21">
+<linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="1929;0;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="help"/>
 <node COLOR="#f10a1a" CREATED="1489546678250" ID="ID_228157787" MODIFIED="1518487921093" TEXT="Vorsicht UI-Programmierung">
@@ -32302,6 +32353,41 @@
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-652;20;" ID="Arrow_ID_315633048" SOURCE="ID_1894791438" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-1088;-39;" ID="Arrow_ID_234165792" SOURCE="ID_433225506" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-981;-106;" ID="Arrow_ID_1912776282" SOURCE="ID_1636078216" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
+<node CREATED="1533388030963" ID="ID_1973994334" MODIFIED="1533388353007" TEXT="main context">
+<node CREATED="1533388053839" ID="ID_970610402" MODIFIED="1533388063674" TEXT="abstrahierte &quot;main loop&quot;">
+<node CREATED="1533388065237" ID="ID_1853196275" MODIFIED="1533388071944" TEXT="es gibt einen default_main_context"/>
+<node CREATED="1533388072628" ID="ID_1382049092" MODIFIED="1533388077743" TEXT="dieser wird on demand erzeugt"/>
+<node CREATED="1533388078595" ID="ID_1456212114" MODIFIED="1533388091037" TEXT="dieser wird von den run()-Funktionen &quot;gepullt&quot;"/>
+</node>
+<node CREATED="1533388113350" ID="ID_1546795729" MODIFIED="1533388208027" TEXT="Glib::signal_idle()">
+<node CREATED="1533388147720" ID="ID_1897188155" MODIFIED="1533388158218" TEXT="&#xfc;bergebene Closure l&#xe4;uft erst in der Event-Loop"/>
+<node CREATED="1533388162662" ID="ID_1573817854" MODIFIED="1533388168352" TEXT="kann aber schon vorher hinzugef&#xfc;gt werden"/>
+<node CREATED="1533388185290" ID="ID_1158890484" MODIFIED="1533388238450" TEXT="verwendet main_context_default">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und erzeugt diesen on demand auch neu
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1533388264550" ID="ID_32738634" MODIFIED="1533388282104" TEXT="gmain.c : g_source_attach"/>
+<node CREATED="1533388282692" ID="ID_1259525027" MODIFIED="1533388301765" TEXT="gmain.c : g_main_context_default"/>
+</node>
+<node CREATED="1533388309295" ID="ID_775603522" MODIFIED="1533388317610" TEXT="man kann connect_once() macne"/>
+</node>
+<node CREATED="1533388128579" ID="ID_580405745" MODIFIED="1533388506937" TEXT="Glib::signal_timeout()">
+<linktarget COLOR="#5568a6" DESTINATION="ID_580405745" ENDARROW="Default" ENDINCLINATION="-472;0;" ID="Arrow_ID_244184105" SOURCE="ID_1586631508" STARTARROW="None" STARTINCLINATION="-2132;-72;"/>
+<node CREATED="1533388319102" ID="ID_1118350475" MODIFIED="1533388324553" TEXT="analog wie signal_idle()"/>
+<node CREATED="1533388325053" ID="ID_1341702889" MODIFIED="1533388334672" TEXT="Timeout in Millisekunden"/>
+<node CREATED="1533388335188" ID="ID_980760340" MODIFIED="1533388343815" TEXT="bedeutet Delay, nicht pr&#xe4;zises Timing">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
 <node CREATED="1495221242285" ID="ID_185528211" MODIFIED="1518487921099" TEXT="Applikation">
 <node CREATED="1495221272545" FOLDED="true" ID="ID_624250153" MODIFIED="1533325443038" TEXT="Gtk::Application">
 <node CREATED="1495222327564" ID="ID_175461027" MODIFIED="1518487921099" TEXT="initialisiert Gio::Application"/>

@@ -121,11 +121,17 @@ namespace interact {
       Assets    assets_;
       Timelines timelines_;
       
+      
       /** set up a binding to allow some top-level UI state
        *  to be treated as part of the session model
-       * @see tree-mutator.hpp 
+       * @see tree-mutator.hpp
        */
       void buildMutator (lib::diff::TreeMutator::Handle)  override;
+      
+      /** ask Session to push up structures for presentation */
+      void populateContent_afterStart();
+      
+      static constexpr auto DELAY_AFTER_GUI_START_in_ms = 100;
       
     public:
       InteractionDirector (ctrl::GlobalCtx&);
