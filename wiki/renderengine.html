@@ -2906,14 +2906,14 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201804150106" tags="def GuiPattern design" changecount="56">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201808070208" tags="def GuiPattern design" changecount="57">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
 * they conform to a built-in fixed list of view types, each of which is unique and dedicated to a very specific purpose: //''Timeline'', ''Viewer'', (Asset)''Bin'', ''Infobox'', ''Playcontrol'',...//
 * each component view has a distinguishable identity and is connected to and addressable through the UI-Bus
 * it can be hosted only at a dedicated location within one or several specific [[docking panels|GuiDockingPanel]].
-* multiplicity (one, one per window, many) depends on the type of view and needs to be managed.
+* multiplicity (only one, one per window, many) depends on the type of view and needs to be managed.
 * such a view is not just //created// -- rather it needs to be //allocated//
 
 !Allocation of UI component views
@@ -3186,7 +3186,7 @@ In order to build a sensible plan for our timeline structure, we need to investi
 }}}
 </pre>
 </div>
-<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201806171308" tags="design GuiPattern draft" changecount="10">
+<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201808070252" tags="design GuiPattern draft" changecount="11">
 <pre>//Management of dockable content panes//
 Within each top level application window, the usable screen real estate can be split and arranged into a number of standard view building blocks. Each of this //panels// follows a specific preconfigured basic layout -- these are hard coded, yet customisable in detail. There is a finite list of such panel types available:
 * the [[timeline display|GuiTimelineView]]
@@ -3197,6 +3197,20 @@ Within the preconfigured layout it is a panel's role to host and incorporate Gui
 Please note the distinction between UI component view and panel; in many cases there is one of each for a given kind, and these need to be distinguished: e.g. there is the [[timeline view|GuiTimelineView]] and there is the timeline panel, which houses several timelines (as tabs). Or there is the viewer component, which is located within a dedicated viewer panel each.
 
 !Instantiation
+A panel as such is //an identifiable, named, delineated space within the UI.//
+* since it is just a space, instantiation of any panel //implies the creation of its content// -- at least in minimal or default form.
+* the type of the panel determines, what the possible content of such a panel might be, and what need to be created to allow the panel to exist.
+Consequently, there are two distinct ways to instantiate a panel
+;by view allocation
+:some process or action requires a specific GuiComponentView, and requests access or allocation through the ViewLocator.
+:in this case, the panel holding this view is created on demand as a by-product
+;by explicit setup
+:initiated through user interaction, or caused by default wiring, a certain panel is made to exist somewhere in the UI
+:in this case, the type of the panel determines what content view(s) need to be present to allow the panel to exist
+
+!!!requirements and consequences for panel instantiation
+Based on these considerations, and based on the fact that any GuiComponentView needs an ID and an UI-Bus connection, we can conclude that the actual panel creation need to be carried out by some core component directly related to the GuiTopLevel (to get UI-Bus access). And we need to ensure that the ID of any created or allocated view is //predictable,// since other parts need to be able to talk to this component via the bus, without any direct way to discover and retrieve the ID beforehand.
+
 !Placing and addressing of embedded contents
 A specific problem arises insofar other parts of the UI need to create, address and control some UI entities, which at the same time exist as part of a docking panel. This is a problem of crosscutting concerns: UI control and interaction structure should not be mingled with the generic concern to maintain a component as part of a screen layout. Unfortunately, the design of standard UI toolkit sets is incredibly naive when it comes to interaction design, and the only available alternative is to rely on frameworks, which come with a hard-wired philosophy.
 As a result, we're forced to build our UI from components which fall short on the distinction between //ownership and control.//
@@ -3346,9 +3360,9 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201807141734" tags="GuiIntegration GuiPattern" changecount="8">
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201808070201" tags="GuiIntegration GuiPattern" changecount="9">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
-* main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
+* main and {{{lumiera::AppState}}} activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
 * loading a GuiStarterPlugin actually
 ** loads the GUI (shared lib)
 ** creates instances of all the GUI services available through LayerSeparationInterfaces

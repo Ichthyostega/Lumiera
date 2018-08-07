@@ -222,7 +222,7 @@ namespace model {
       
       
       /** override default size traits for diff application.
-       * @remarks this value here is hard coded, base on what
+       * @remarks this value here is hard coded, based on what
        *  can be expected for diff application to UI elements.
        */
       friend constexpr size_t

@@ -109,6 +109,11 @@ namespace interact {
   void
   InteractionDirector::populateContent_afterStart()
     {
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1099 trigger creation of the UI notification display here
+      //// TODO : this clearly is a preliminary solution. Later it might be possible,
+      ////      : to create the notification display on demand. But right now (8/2018)
+      ////      : we need a GuiComponentView with predictable ID instructed to exist "somewhere"
+      ////
       invoke (cmd::test_meta_activateContentDiff);               ////////////////////////////////////////////TICKET #211 prefix test_ bypasses logging and immediately executes for now (2018)
     }
   

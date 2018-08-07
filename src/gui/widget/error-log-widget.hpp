@@ -22,7 +22,7 @@
 
 
 /** @file error-log-widget.hpp
- ** Widget to display error messages to the use in non-modal way.
+ ** Widget to display error messages to be accessible in non-modal way.
  ** Notifications are shown in a simple text window with scrollbars; new
  ** entries can be added with a severity level, causing the widget to scroll
  ** down to the last line of the content buffer.
