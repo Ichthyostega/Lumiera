@@ -25,6 +25,8 @@
  ** Common Abstraction of all sub-controller, coordinated by the UI-Bus.
  ** 
  ** @todo as of 1/2015 this is complete WIP-WIP-WIP
+ ** @todo as of 8/2018 we should consider to distill a common default implementation usable for most controllers.
+ **       especially, there might be a default (NOP) implementation of the diff mutator builder
  ** 
  ** @see model::Tangible
  ** @see gui::UIBus

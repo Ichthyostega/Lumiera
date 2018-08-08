@@ -37,35 +37,53 @@
 #ifndef GUI_CTRL_NOTIFICATION_HUB_H
 #define GUI_CTRL_NOTIFICATION_HUB_H
 
-#include "gui/gtk-base.hpp"
-#include "lib/nocopy.hpp"
+#include "gui/widget/error-log-widget.hpp"
+#include "gui/model/controller.hpp"
+#include "lib/diff/tree-mutator.hpp"
 
-#include <memory>
-#include <list>
+//#include <memory>
+//#include <list>
 
 
 namespace gui {
-namespace workspace { class WorkspaceWindow; }
 namespace ctrl {
   
+  using lib::diff::TreeMutator;
   
-  using std::list;
   
   
   
   /**
    * Service to receive and display error, warning and notification messages.
    * These are sent over the UI-Bus through the NotificationService; after receiving
-   * such a message, this controller ensures to display the message and altert the
+   * such a message, this controller ensures to display the message and alert the
    * user, while not blocking the overall UI. 
    */
   class NotificationHub
-    : util::NonCopyable
+    : public model::Controller
     {
       
+      /** content population and manipulation via UI-Bus */
+      void
+      buildMutator (lib::diff::TreeMutator::Handle buffer)  override
+        {
+      //  using Attrib = std::pair<const string,string>;
+      //  using lib::diff::collection;
+          
+          buffer.create (
+            TreeMutator::build()
+          );
+          UNIMPLEMENTED ("create a sensible binding between AssetManager in the section and AssetController in the UI");
+        }
+    
+    public:
       
     public:
-      NotificationHub ();
+      NotificationHub (ID identity, ctrl::BusTerm& nexus)////////////////////////////////////TODO #1099 : define the ID hard-wired at an appropriate location, so it can be used from the NotificationService impl as well
+        : model::Controller{identity, nexus}
+        { }
+        
+     ~NotificationHub() { };
       
     private:
       
