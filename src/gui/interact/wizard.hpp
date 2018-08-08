@@ -46,16 +46,17 @@
 #include "lib/nocopy.hpp"
 
 //#include <string>
-//#include <memory>
+#include <memory>
 
 
 namespace gui {
 namespace ctrl {
   class GlobalCtx;
+  class NotificationHub;
 }
 namespace interact {
   
-//  using std::unique_ptr;
+  using std::unique_ptr;
 //  using std::string;
   
 //  class GlobalCtx;
@@ -73,6 +74,7 @@ namespace interact {
     : util::NonCopyable
     {
       ctrl::GlobalCtx& globalCtx_;
+      unique_ptr<ctrl::NotificationHub> notificationHub_;
     
     public:
       Wizard (ctrl::GlobalCtx&);

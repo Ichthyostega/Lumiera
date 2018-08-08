@@ -33,6 +33,7 @@
 #include "gui/interact/wizard.hpp"
 #include "gui/interact/spot-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
+#include "gui/ctrl/notification-hub.hpp"
 #include "gui/ctrl/global-ctx.hpp"
 #include "lib/format-string.hpp"
 //#include "lib/util.hpp"
