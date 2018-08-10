@@ -860,7 +860,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" created="200708100337" modified="201505310058" tags="def classes img" changecount="1">
+<div title="Asset" modifier="Ichthyostega" created="200708100337" modified="201808101636" tags="def classes img" changecount="2">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property information to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -888,7 +888,7 @@ Some of the building blocks providing the framework for the objects placed into 
 &amp;rarr; StructAsset {{red{still a bit vague...}}}
 
 !Meta Asset
-Any resources related to the //reflective recurse of the application on itself,// including parametrisation and customisation aspects and similar metadata, are categorised and tracked apart of the primary entities. Examples being types, scales and quantisation grids, decision rules, control data stores (automation data), annotations attached to labels, inventory entities etc.
+Any resources related to the //reflective recurse of the application on itself,// including parametrisation and customisation aspects and similar metadata, are categorised and tracked apart of the primary entities. Examples being types, scales and quantisation grids, decision rules, control data stores (automation data), annotations attached to labels, inventory entities, error items etc.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; MetaAsset {{red{just emerging as of 12/2010}}}
@@ -4210,8 +4210,8 @@ For the case here in question this seems to be the __R__esource __A__llocation _
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Generally speaking, client code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in handy. Questions of setup and lifecycle should allways be delegated, typically through the usage of some [[factory|Factories]], which might return the product conveniently wrapped into a RAII style handle. Memory allocation is crucial for performance, and needs to be adapted to the actual platform -- which is impossible unless abstracted and treated as a separate concern.
 </pre>
 </div>
-<div title="MetaAsset" modifier="Ichthyostega" created="201012290320" modified="201501091121" tags="def" changecount="1">
-<pre>This category encompasses the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as opposed to the way the edited data is structured and organised (which is the realm of [[structural assets|StructAsset]]
+<div title="MetaAsset" modifier="Ichthyostega" created="201012290320" modified="201808101637" tags="def" changecount="2">
+<pre>This category encompasses the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as opposed to the way the edited data is structured and organised (which is the realm of [[structural assets|StructAsset]])
 * StreamType &amp;rarr; a type system for describing and relating media data streams
 * ScaleGrid &amp;rarr; to manage time scales and frame alignment
 

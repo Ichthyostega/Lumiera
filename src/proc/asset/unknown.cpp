@@ -41,19 +41,19 @@ namespace asset {
   /** create a placeholder for a media with the given identity.
    *  the denoted original media (identity) can be accessed later
    *  on using the Unknown::getOrg() function.
-   *  @note we don't depend on the refered media...
+   *  @note we don't depend on the referred media...
    */
   Unknown::Unknown (const Asset::Ident& idi, string name, Duration length)
     : Media (idi, name, length)
   {
     TODO ("implement some sensible behaviour for the »unknown media« placeholder...");
-  }  
+  }
   
   
-  /** using the information stored in this placeholder asset, 
+  /** using the information stored in this placeholder asset,
    *  try to access the "real" media it stands for.
    */
-  Media::PMedia 
+  Media::PMedia
   Unknown::getOrg()
   {
     UNIMPLEMENTED ("how to get at the original media from a »Unknown« placeholder");

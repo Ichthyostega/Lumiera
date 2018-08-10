@@ -42,8 +42,8 @@
 #ifndef GUI_INTERACT_WIZARD_H
 #define GUI_INTERACT_WIZARD_H
 
-#include "gui/gtk-base.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/idi/entry-id.hpp"
 
 //#include <string>
 #include <memory>
@@ -61,6 +61,8 @@ namespace interact {
   
 //  class GlobalCtx;
 //  class SpotLocator;
+  
+  extern lib::idi::EntryID<ErrorLog> theErrorLog_ID;
   
   
   

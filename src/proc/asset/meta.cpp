@@ -96,9 +96,6 @@ namespace asset {
    /**************************************************/
 
 #include "proc/asset/meta/time-grid.hpp"
-//#include "proc/asset/procpatt.hpp"
-//#include "proc/asset/timeline.hpp"
-//#include "proc/asset/sequence.hpp"
 
 
 namespace proc {

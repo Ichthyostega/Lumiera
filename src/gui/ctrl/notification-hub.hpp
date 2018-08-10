@@ -73,7 +73,7 @@ namespace ctrl {
           buffer.create (
             TreeMutator::build()
           );
-          UNIMPLEMENTED ("create a sensible binding between AssetManager in the section and AssetController in the UI");
+          UNIMPLEMENTED ("create a sensible binding between AssetManager in the session and AssetController in the UI");
         }
     
     public:
