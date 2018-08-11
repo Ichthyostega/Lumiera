@@ -104,17 +104,17 @@ namespace meta {
   template<>
   struct Builder<TimeGrid>
     {
-      string id_;
+      string id;
       
-      FrameRate fps_;
-      TimeVar origin_;
+      FrameRate fps;
+      TimeVar origin;
       
       /** when building a compound or variable grid,
-       *  the predecessor is the grid active \em before
+       *  the predecessor is the grid active _before_
        *  the origin of this (local) grid.
        * @todo currently not supported (as of 12/2010)
        */
-      lib::P<TimeGrid> predecessor_;
+      lib::P<TimeGrid> predecessor;
       
       /** 
        * initialise to blank (zero).
@@ -122,10 +122,10 @@ namespace meta {
        * in order to create a usable TimeGrid
        */
       Builder(string const& nameID  ="")
-        : id_(nameID)
-        , fps_(1)
-        , origin_(TimeValue(0))
-        , predecessor_()
+        : id {nameID}
+        , fps{1}
+        , origin{TimeValue(0)}
+        , predecessor{}
         { }
       
       /** create a time grid

@@ -96,6 +96,7 @@ namespace asset {
    /**************************************************/
 
 #include "proc/asset/meta/time-grid.hpp"
+#include "proc/asset/meta/error-log.hpp"
 
 
 namespace proc {
@@ -106,7 +107,11 @@ namespace asset {
   using meta::TimeGrid;
   
   template Builder<TimeGrid>  MetaFactory::operator() (EntryID<TimeGrid>);
-  
   template Builder<TimeGrid>  MetaFactory::operator() (Descriptor const&, EntryID<TimeGrid>);
+  
+  using meta::ErrorLog;
+  
+  template Builder<ErrorLog>  MetaFactory::operator() (EntryID<ErrorLog>);
+  template Builder<ErrorLog>  MetaFactory::operator() (Descriptor const&, EntryID<ErrorLog>);
   
 }} // namespace proc::asset

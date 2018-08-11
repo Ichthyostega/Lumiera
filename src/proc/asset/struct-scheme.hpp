@@ -151,7 +151,7 @@ namespace asset{
      *  The remaining fields are filled in with hardwired defaults.
      * @note there is a twist, as this asset identity tuple generates
      *       a different hash as the EntryID. It would be desirable
-     *       to make those two addressing systems interchangeable.      /////////////TICKET #739
+     *       to make those two addressing systems interchangeable. ////////////////////////////////TICKET #739 : make identification schemes compatible
      */
     template<typename TY>
     inline Asset::Ident

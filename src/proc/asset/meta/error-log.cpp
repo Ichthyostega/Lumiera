@@ -27,18 +27,19 @@
 
 
 #include "proc/asset/meta/error-log.hpp"
-//#include "proc/asset/struct-scheme.hpp"
-//#include "proc/assetmanager.hpp"
+#include "proc/asset/struct-scheme.hpp"
+#include "proc/assetmanager.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-string.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 
 //using util::_Fmt;
 //using util::cStr;
-//using util::isnil;
+using util::isnil;
 //using std::string;
+using std::dynamic_pointer_cast;
 
 
 namespace proc {
@@ -48,13 +49,34 @@ namespace meta {
   namespace error = lumiera::error;
   
   
- 
+  /** storage for an unique, globally known ID.
+   * Used to address the corresponding ErrorLogView in the UI
+   * @todo 8/2018 for now this is a mere placeholder, but someone
+   *       need to build a singleton asset to incorporate this eventually ///////////////////////////////////TICKET #1157
+   */
+  LogID theErrorLog_ID{"global_ErrorLog"};
+  
+  
   /** */
   ErrorLog::ErrorLog (LogID const& nameID)
     : Meta{nameID}
     { }
   
   
+  PLog
+  ErrorLog::global()
+  {
+    Asset::Ident ident = asset::idi::getAssetIdent (theErrorLog_ID, META);
+    ID<Asset> globalLogID = AssetManager::instance().getID(ident);
+                            /////////////////////////////////////////////////////////////////////////////////TICKET #739 sort out this mess with asset::ID vs EntryID
+    
+    if (not AssetManager::instance().known (globalLogID))
+      return asset::Meta::create (theErrorLog_ID)
+                         .commit();
+    else
+      return dynamic_pointer_cast<ErrorLog> (AssetManager::instance().getAsset (globalLogID));
+  }
+
 //  using lib::time::Time;
 //  using lib::time::TimeValue;
   
@@ -63,13 +85,13 @@ namespace meta {
    *  then create an appropriately configured ErrorLog instance.
    * @return shared_ptr holding onto the new asset::Meta, which has already been
    *         registered with the AssetManager.
-   * @todo currently (8/2018) this is a mere placeholder, we just need an EntryID<ErrorLog>.
+   * @todo currently (8/2018) this is a mere placeholder, we just need an EntryID<ErrorLog>.  ///////////////TICKET #1157
    */
   lib::P<ErrorLog>
   Builder<ErrorLog>::commit()
-  {
-//  return new ErrorLog;
-    UNIMPLEMENTED ("how to build and properly register an error log entity");
+  { 
+    ASSERT (isnil (nameID), "only the single global Error Log is implemented for now");  ////////////////////TICKET #1157 : and the entity created here is bare of any functionality
+    return AssetManager::wrap (*new ErrorLog{theErrorLog_ID});
   }
   
   

@@ -44,12 +44,15 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/symbol.hpp"
 
+#include <string>
+
 
 
 namespace proc {
 namespace asset {
 namespace meta {
   
+  using std::string;
 //  using lib::Symbol;
 //  using lib::time::Time;
 //  using lib::time::TimeVar;
@@ -59,6 +62,8 @@ namespace meta {
   class ErrorLog;
   using PLog = lib::P<ErrorLog>;
   using LogID = lib::idi::EntryID<ErrorLog>;
+  
+  extern LogID theErrorLog_ID;
   
   
   /**
@@ -71,9 +76,15 @@ namespace meta {
     {
       
     public:
+      /** retrieve (possibly create) the global singleton asset
+       *  corresponding to "the" global error log, as shown in the UI.
+       */
+      static PLog global();
       
     protected:
       ErrorLog (LogID const&);
+      
+      friend class Builder<ErrorLog>;
     };
   
   
@@ -83,11 +94,12 @@ namespace meta {
   template<>
   struct Builder<ErrorLog>
     {
-      
+      string nameID;
       /**
        * @todo what is "the default log"??
        */
-      Builder()
+      Builder(string name)
+        : nameID{name}
         { }
       
       /** create a specific error log

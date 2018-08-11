@@ -145,19 +145,19 @@ namespace meta {
   lib::P<TimeGrid>
   Builder<TimeGrid>::commit()
   {
-    if (predecessor_)
+    if (predecessor)
       throw error::Invalid("compound and variable time grids are a planned feature"
                           , error::LUMIERA_ERROR_UNIMPLEMENTED);
-    ENSURE (fps_, "infinite grid should have been detected by FrameRate ctor");
+    ENSURE (fps, "infinite grid should have been detected by FrameRate ctor");
     
-    if (isnil (id_))
+    if (isnil (id))
       {
         _Fmt gridIdFormat("grid(%f_%d)");
-        id_ = string(gridIdFormat % fps_ % _raw(origin_));
+        id = string(gridIdFormat % fps % _raw(origin));
       }
-    GridID nameID (id_);
+    GridID nameID (id);
     
-    return publishWrapped (*new SimpleTimeGrid(origin_, fps_, nameID));
+    return publishWrapped (*new SimpleTimeGrid(origin, fps, nameID));
   }
   
   
@@ -175,8 +175,8 @@ namespace meta {
   {
     string name(gridID);
     Builder<TimeGrid> spec(name);
-    spec.fps_ = frames_per_second;
-    spec.origin_ = origin;
+    spec.fps = frames_per_second;
+    spec.origin = origin;
     
     return spec.commit();
   }
