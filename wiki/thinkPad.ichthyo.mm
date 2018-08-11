@@ -14325,7 +14325,9 @@
 </node>
 </node>
 <node CREATED="1486943969999" ID="ID_1823284637" MODIFIED="1518487921078" TEXT="Wizzard">
-<node CREATED="1533688038820" ID="ID_70134302" MODIFIED="1533688050029" TEXT="Fehlerlog (notification display"/>
+<node CREATED="1533688038820" ID="ID_70134302" MODIFIED="1533998488236" TEXT="Fehlerlog (notification display)">
+<linktarget COLOR="#a9aac1" DESTINATION="ID_70134302" ENDARROW="Default" ENDINCLINATION="-1984;0;" ID="Arrow_ID_1885125683" SOURCE="ID_361019548" STARTARROW="None" STARTINCLINATION="803;-67;"/>
+</node>
 <node CREATED="1486943974590" ID="ID_1603501979" MODIFIED="1518487921078" TEXT="Hilfe (Website?)"/>
 <node CREATED="1486944977005" ID="ID_811162889" MODIFIED="1518487921078" TEXT="kontextsensitive Hilfe"/>
 <node CREATED="1488494783190" ID="ID_1886731977" MODIFIED="1518487921078" TEXT="Assistenten"/>
@@ -32085,14 +32087,153 @@
 <node CREATED="1533918425908" ID="ID_1069430929" MODIFIED="1533918430743" TEXT="Einordnung">
 <node CREATED="1533918431595" ID="ID_1121251191" MODIFIED="1533918772587" TEXT="ErrorLog(Asset)">
 <linktarget COLOR="#68788a" DESTINATION="ID_1121251191" ENDARROW="Default" ENDINCLINATION="-1644;0;" ID="Arrow_ID_146013003" SOURCE="ID_1117749960" STARTARROW="None" STARTINCLINATION="-4766;280;"/>
+<node CREATED="1533997520937" ID="ID_130549036" MODIFIED="1533997523524" TEXT="Typ">
 <node CREATED="1533918806369" ID="ID_1198682609" MODIFIED="1533918809694" TEXT="Media">
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1533918810848" ID="ID_29240989" MODIFIED="1533918815271" TEXT="Struct">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1533918821511" ID="ID_1150910919" MODIFIED="1533918823011" TEXT="Meta">
+<node CREATED="1533918821511" ID="ID_1150910919" MODIFIED="1533997535081" TEXT="Meta">
+<icon BUILTIN="forward"/>
 <node CREATED="1533919635505" ID="ID_353835069" MODIFIED="1533919642476" TEXT="pa&#xdf;t soweit schon"/>
+<node CREATED="1533920004719" ID="ID_402802807" MODIFIED="1533994722201" TEXT="was hei&#xdf;t hier &quot;immutable&quot;?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Meta-Assets sind per Definition <i>&quot;immutable&quot;</i><br />Es gibt einen Builder
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1533994326945" ID="ID_1821159631" MODIFIED="1533994327255" TEXT="Eigenschaften des Log"/>
+<node CREATED="1533994327584" ID="ID_780339362" MODIFIED="1533994784549" TEXT="Filter, Persistenz, Warnschwellen, Weiterleitung"/>
+<node CREATED="1533994328152" ID="ID_538198315" MODIFIED="1533994328390" TEXT="k&#xf6;nnen bei bestehendem Log nicht ge&#xe4;ndert werden"/>
+</node>
+</node>
+</node>
+<node CREATED="1533997546077" ID="ID_1270326369" MODIFIED="1533997549209" TEXT="Rolle">
+<node CREATED="1533997550413" ID="ID_1832028422" MODIFIED="1533997561821">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>das</i>&#160;ErrorLog
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1533997846989" ID="ID_1324960272" MODIFIED="1533997854911" TEXT="zun&#xe4;chst nur Platzhalter">
+<node CREATED="1533997938232" ID="ID_40537012" MODIFIED="1533997995641" TEXT="brauche EntryID&lt;ErrorLog&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....weil hier ein allgemeines Schema entsteht:
+    </p>
+    <p>
+      jede Aktion, die in das UI &quot;reflektiert&quot; wird, erfolgt, indem man eine Nachricht
+    </p>
+    <p>
+      &#252;ber den UI-Bus schickt, an einen Empf&#228;nger mit bekannter ID.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1533997855707" ID="ID_663263517" MODIFIED="1533997862414" TEXT="nomineller Empf&#xe4;nger"/>
+<node CREATED="1533997863858" ID="ID_680229716" MODIFIED="1533997880164" TEXT="entspricht dem UI">
+<node CREATED="1533997895182" ID="ID_1179742637" MODIFIED="1533997924871">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dort gibt es eine <b>ErrorLogView</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1533997901765" ID="ID_361019548" MODIFIED="1533998488236">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und den Controller: <b>NotificationHub</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#a9aac1" DESTINATION="ID_70134302" ENDARROW="Default" ENDINCLINATION="-1984;0;" ID="Arrow_ID_1885125683" STARTARROW="None" STARTINCLINATION="803;-67;"/>
+</node>
+</node>
+<node CREATED="1533997881703" ID="ID_405103584" MODIFIED="1533997890166" TEXT="Persistenz">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1533997570242" ID="ID_503070656" MODIFIED="1533997575269" TEXT="spezielle Detail-Logs"/>
+<node CREATED="1533997581280" ID="ID_398592361" MODIFIED="1533997591029" TEXT="Idee: Verallgemeinerung auf Logs">
+<icon BUILTIN="idea"/>
+<node CREATED="1533997595735" ID="ID_459951978" MODIFIED="1533997703292" TEXT="selbstreferentielle Struktur">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist diese Idee, da&#223; eine Struktur sich selbst meta-repr&#228;sentiert;
+    </p>
+    <p>
+      dadurch werden Meta-Operationen auf gleiche Ebene gestellt wie normale Struktur-Manipulationen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1533997603741" ID="ID_1980534712" MODIFIED="1533997832361" TEXT="die Command und Event-Logs k&#xf6;nnten repr&#xe4;sentiert sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und dadruch w&#252;rden History-Operationen wie
+    </p>
+    <ul>
+      <li>
+        undo
+      </li>
+      <li>
+        redo
+      </li>
+      <li>
+        repeat command
+      </li>
+    </ul>
+    <p>
+      ...zu ganz normalen Manipulationen der Session, w&#252;rden ihrerseits geloggt und historisiert
+    </p>
+    <p>
+      und verlieren ihren <i>magischen Charakter</i>&#160;au&#223;erhalb der Event-Sourcing-Struktur
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>

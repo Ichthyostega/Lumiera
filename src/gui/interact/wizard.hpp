@@ -49,6 +49,12 @@
 #include <memory>
 
 
+namespace proc {
+  namespace asset {
+    namespace meta {
+      class ErrorLog;
+} } }
+
 namespace gui {
 namespace ctrl {
   class GlobalCtx;
@@ -62,7 +68,7 @@ namespace interact {
 //  class GlobalCtx;
 //  class SpotLocator;
   
-  extern lib::idi::EntryID<ErrorLog> theErrorLog_ID;
+  extern lib::idi::EntryID<proc::asset::meta::ErrorLog> theErrorLog_ID;
   
   
   
