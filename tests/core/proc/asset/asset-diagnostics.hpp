@@ -54,14 +54,14 @@ namespace proc {
 namespace asset {
   
   inline void
-  dump (PcAsset& aa)
+  dump (PcAsset const& aa)
   {
     if (!aa)
       cout << "Asset(NULL)\n";
     else
       {
         _Fmt fmt("%s %|50T.| id=%s  adr=%p smart-ptr=%p use-count=%u");
-        cout << fmt % aa % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";
+        cout << fmt % aa % aa->getID() % (void*)aa.get() % &aa % (aa.use_count() - 1) << "\n";
   }   }
   
   
@@ -70,7 +70,8 @@ namespace asset {
   {
     list<PcAsset> assets (AssetManager::instance().listContent());
     cout << "----all-registered-Assets----\n";
-    for_each (assets, bind (&dump, _1));
+    for (auto const& pA : assets)
+      dump (pA);
   }
   
   

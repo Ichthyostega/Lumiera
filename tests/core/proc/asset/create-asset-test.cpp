@@ -236,9 +236,13 @@ namespace test {
           // for the ErrorLog assert, as of 8/2018 there is just one single global placeholder entity available
           asset::meta::PLog globalLog = asset::meta::ErrorLog::global();    /////////////////////////////////TICKET #1157 : what's the purpose of this ErrorLog Asset after all??
           
-          
           CHECK (globalLog->ident.name == meta::theErrorLog_ID.getSym());
           CHECK (AssetManager::instance().known (globalLog->getID()));
+          CHECK (2 == globalLog.use_count()); // AssetManager also holds a reference
+          
+          PAsset furtherRef = asset::meta::ErrorLog::global();
+          CHECK (3 == globalLog.use_count());
+          CHECK (furtherRef == globalLog);
         }
     };
 

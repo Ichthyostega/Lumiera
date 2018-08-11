@@ -31,13 +31,13 @@
 #include "proc/assetmanager.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-string.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
 //#include <string>
 
 //using util::_Fmt;
 //using util::cStr;
-using util::isnil;
+//using util::isnil;
 //using std::string;
 using std::dynamic_pointer_cast;
 
@@ -90,7 +90,7 @@ namespace meta {
   lib::P<ErrorLog>
   Builder<ErrorLog>::commit()
   { 
-    ASSERT (isnil (nameID), "only the single global Error Log is implemented for now");  ////////////////////TICKET #1157 : and the entity created here is bare of any functionality
+    ASSERT (nameID == theErrorLog_ID.getSym(), "only the single global Error Log is implemented for now");///TICKET #1157 : and the entity created here is bare of any functionality
     return AssetManager::wrap (*new ErrorLog{theErrorLog_ID});
   }
   
