@@ -49,7 +49,7 @@
 
 
 namespace proc {
-namespace asset {
+namespace asset{
 namespace meta {
   
   using std::string;

@@ -43,7 +43,7 @@ using std::dynamic_pointer_cast;
 
 
 namespace proc {
-namespace asset {
+namespace asset{
 namespace meta {
   
   namespace error = lumiera::error;

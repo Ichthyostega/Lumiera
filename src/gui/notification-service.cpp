@@ -48,6 +48,8 @@
 #include "gui/ctrl/ui-manager.hpp"
 #include "gui/ctrl/ui-dispatcher.hpp"
 #include "gui/notification-service.hpp"
+#include "gui/interact/wizard.hpp"
+
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "include/logging.h"
@@ -91,6 +93,7 @@ namespace gui {
   NotificationService::displayInfo (NotifyLevel severity, string const& text)
   {
     INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
+    ID errorLogID = interact::Wizard::getErrorLogID();
     ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1102 : build a message display box in the UI
                                                                ////////////////////////////////////////////////TICKET #1047 : as a temporary solution, use the InfoBox panel... 
   }

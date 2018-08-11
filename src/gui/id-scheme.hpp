@@ -63,6 +63,10 @@
 namespace proc {
   namespace asset {
     class Timeline;
+    
+    namespace meta {
+      class ErrorLog;
+    }
   }
 }
 
@@ -103,7 +107,7 @@ namespace gui {
     template<>
     struct Descriptor<ErrorLogView>
       {
-        ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : need a model placeholder to represent UI specific global entities
+        using Model = proc::asset::meta::ErrorLog;
         
         ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : consider use of a DSL to configure component view access 
         //

@@ -53,9 +53,13 @@ namespace proc {
   namespace asset {
     namespace meta {
       class ErrorLog;
+      
+      extern lib::idi::EntryID<ErrorLog> theErrorLog_ID;
 } } }
 
 namespace gui {
+  using ID = lib::idi::BareEntryID const&;
+  
 namespace ctrl {
   class GlobalCtx;
   class NotificationHub;
@@ -65,10 +69,7 @@ namespace interact {
   using std::unique_ptr;
 //  using std::string;
   
-//  class GlobalCtx;
 //  class SpotLocator;
-  
-  extern lib::idi::EntryID<proc::asset::meta::ErrorLog> theErrorLog_ID;
   
   
   
@@ -89,6 +90,8 @@ namespace interact {
      ~Wizard ();
       
       void show_HelpAbout();
+      
+      static ID getErrorLogID() { return proc::asset::meta::theErrorLog_ID; }
     private:
       
     };
