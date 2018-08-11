@@ -61,6 +61,7 @@
 #define ASSET_META_H
 
 #include "proc/asset.hpp"
+#include "proc/asset/struct-scheme.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/nocopy.hpp"
 
@@ -112,6 +113,7 @@ namespace asset {
   /**
    * key abstraction: metadata, parametrisation, customisation and similar organisational traits.
    * @todo just a stub, still have to figure out the distinctive properties of asset::Meta
+   *                                                             //////////////////////////////////TICKET #1156 : do we need the distinction between STRUCT and META?
    */
   class Meta
     : public Asset
@@ -127,7 +129,14 @@ namespace asset {
         }
       
     protected:
-      Meta (Asset::Ident const& idi) : Asset(idi) {}  //////////////TODO
+      Meta (Asset::Ident const& idi)
+        : Asset{idi}
+        { }
+      
+      template<typename TY>
+      Meta (lib::idi::EntryID<TY> const& nameID)
+        : Meta{idi::getAssetIdent (nameID, META)}
+        { }
       
 //    friend class MetaFactory;  ///////////////////////////////////TODO still necessary?
     };

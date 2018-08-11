@@ -108,6 +108,7 @@ namespace asset {
    *       The idea is to have a generic mechanism for attaching properties and relations.
    *       This will become relevant once we build the real query subsystem.
    *       Right now (as of 1/2015), asset::Struct is just an ID provider.
+   *                                                             //////////////////////////////////TICKET #1156 : do we need the distinction between STRUCT and META?
    */
   class Struct : public Asset
     {

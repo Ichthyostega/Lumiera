@@ -32085,6 +32085,57 @@
 <node CREATED="1533918403071" ID="ID_277977903" MODIFIED="1533918404515" TEXT="Meta"/>
 </node>
 <node CREATED="1533918425908" ID="ID_1069430929" MODIFIED="1533918430743" TEXT="Einordnung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534001954612" ID="ID_1527156035" MODIFIED="1534001972543" TEXT="Probleme">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534001984536" ID="ID_1186986383" MODIFIED="1534002025741" TEXT="#1156 clarify distinction between asset::Struct and asset::Meta">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534002074828" ID="ID_867232883" MODIFIED="1534002083668" TEXT="Asymetrie in asset::Category">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534002102456" ID="ID_101543995" MODIFIED="1534002106435" TEXT="benutzer-orientiert"/>
+<node CREATED="1534002106999" ID="ID_354946108" MODIFIED="1534002112546" TEXT="GUI ist aber noch nicht gebaut"/>
+<node CREATED="1534002113086" ID="ID_1894075831" MODIFIED="1534002172804" TEXT="Audio und Video werden eigens unterschieden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...obwohl die betreffenden Assets in die Kategorie &quot;Medien&quot; fallen,
+    </p>
+    <p>
+      und wir einen eigenen StreamType definieren wollen, also explizit die Art der Medien offen lassen.
+    </p>
+    <p>
+      Ganz prominent fehlt hier also z.B: MIDI
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1534002180893" ID="ID_1074039128" MODIFIED="1534002196087" TEXT="daf&#xfc;r erscheint die Unterscheidung STRUCT vs. META schwammig"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534002037961" ID="ID_95419141" MODIFIED="1534002049833" TEXT="Erzeugung und Lebenszyklus">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534002202098" ID="ID_1411648485" MODIFIED="1534002215541" TEXT="diese Auto-Regisierung"/>
+<node CREATED="1534002225888" ID="ID_138566211" MODIFIED="1534002272126" TEXT="smart-Ptr als Handle nicht immer sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...n&#228;mlich genau <i>nicht</i>&#160;f&#252;r alle Assets,
+    </p>
+    <p>
+      die Aufgrund von Klassifikationen automatisch bereits existieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 <node CREATED="1533918431595" ID="ID_1121251191" MODIFIED="1533918772587" TEXT="ErrorLog(Asset)">
 <linktarget COLOR="#68788a" DESTINATION="ID_1121251191" ENDARROW="Default" ENDINCLINATION="-1644;0;" ID="Arrow_ID_146013003" SOURCE="ID_1117749960" STARTARROW="None" STARTINCLINATION="-4766;280;"/>
 <node CREATED="1533997520937" ID="ID_130549036" MODIFIED="1533997523524" TEXT="Typ">
@@ -32183,7 +32234,11 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node CREATED="1533997570242" ID="ID_503070656" MODIFIED="1533997575269" TEXT="spezielle Detail-Logs"/>
+<node CREATED="1533997570242" ID="ID_503070656" MODIFIED="1533997575269" TEXT="spezielle Detail-Logs">
+<node CREATED="1534002311748" ID="ID_440257353" MODIFIED="1534002317208" TEXT="geplant/Idee">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 <node CREATED="1533997581280" ID="ID_398592361" MODIFIED="1533997591029" TEXT="Idee: Verallgemeinerung auf Logs">
 <icon BUILTIN="idea"/>
 <node CREATED="1533997595735" ID="ID_459951978" MODIFIED="1533997703292" TEXT="selbstreferentielle Struktur">

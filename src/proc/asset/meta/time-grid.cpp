@@ -51,9 +51,12 @@ namespace meta {
   
   
  
-  /** */
+  /**
+   * @internal to be invoked indirectly by means of the Builder<TimeGrid>.
+   * @todo drafted in 2010 -- usage of the builder feels unsatisfactory as of 2018
+   */
   TimeGrid::TimeGrid (GridID const& nameID)
-    : Meta (idi::getAssetIdent (nameID))
+    : Meta{nameID}
     { }
   
   
@@ -76,7 +79,7 @@ namespace meta {
     /** @internal helper to retrieve the smart-ptr
      * from the AssetManager, then attach a further
      * smart-ptr-to-Quantiser to that, which then can be
-     * published via the \link advice.hpp "advice system"\endlink
+     * published via the [advice system](\ref advice.hpp)
      * @note this allows to use a time grid just "by name",
      *       without explicit dependence to the Session / Assets
      */

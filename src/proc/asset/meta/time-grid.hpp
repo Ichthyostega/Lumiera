@@ -22,7 +22,7 @@
 
 
 /** @file time-grid.hpp
- ** Establishing a reference scale for quantised time values.
+ ** To establish a reference scale for quantised time values.
  ** Contrary to the continuous Time values (Lumiera internal time scale),
  ** quantised time can only take on some discrete values corresponding
  ** to blocks or frames, according to the respective \em timecode format.
@@ -34,7 +34,8 @@
  ** Time grid specifications are integrated into Lumiera's framework
  ** for meta assets, automation, configuration and similar metadata.
  ** 
- ** \par using time grids
+ ** ## using time grids
+ ** 
  ** TimeGrid is an interface (ABC), but provides some actual factory
  ** functions, which can be used as a convenience shortcut to fabricate
  ** the kind of simple time grid used most often.

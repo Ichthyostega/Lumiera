@@ -57,7 +57,7 @@ namespace asset {
     , VIDEO
     , EFFECT
     , CODEC
-    , STRUCT
+    , STRUCT                                                     //////////////////////////////////TICKET #1156 : do we need the distinction between STRUCT and META?
     , META
     };
   
