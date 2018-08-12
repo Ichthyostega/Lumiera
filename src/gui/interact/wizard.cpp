@@ -56,6 +56,7 @@ namespace interact {
   using boost::algorithm::is_any_of;
   using boost::algorithm::split;
   using workspace::WorkspaceWindow;
+  using ctrl::NotificationHub;
   using ctrl::GlobalCtx;
   using Gtk::AboutDialog;
   
@@ -67,6 +68,7 @@ namespace interact {
   
   Wizard::Wizard (GlobalCtx& globals)
     : globalCtx_{globals}
+    , notificationHub_{new NotificationHub{getErrorLogID(), globals.uiBus_.getAccessPoint()}}
     { }
   
   

@@ -76,13 +76,12 @@ namespace ctrl {
           UNIMPLEMENTED ("create a sensible binding between AssetManager in the session and AssetController in the UI");
         }
     
-    public:
       
     public:
-      NotificationHub (ID identity, ctrl::BusTerm& nexus)////////////////////////////////////TODO #1099 : define the ID hard-wired at an appropriate location, so it can be used from the NotificationService impl as well
+      NotificationHub (ID identity, ctrl::BusTerm& nexus)
         : model::Controller{identity, nexus}
         { }
-        
+      
      ~NotificationHub() { };
       
     private:
