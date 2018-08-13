@@ -639,11 +639,11 @@ namespace test {
                          .beforeEvent("create", "a")
                          .beforeEvent("diff","create child \"b\"")              // insert second child
                          .beforeEvent("create", "b")
-                         .beforeEvent("diff","set Attib α <-quadrant")          // assign value to existing attribute α
+                         .beforeEvent("diff","set Attrib α <-quadrant")         // assign value to existing attribute α
                          .beforeCall("buildMutator").on(&childB)                // establish nested mutator for second child
                          .beforeEvent("diff","b accepts mutation...")
                          .beforeEvent("diff",">>Scope>> b")                     // recursively mutate second child
-                         .beforeEvent("diff","++Attib++ π = 3.1415927"));       // insert new attribute π within nested scope
+                         .beforeEvent("diff","++Attrib++ π = 3.1415927"));      // insert new attribute π within nested scope
           
           
           CHECK (nexusLog.verifyCall("routeAdd").arg(rootMock.getID(), memLocation(rootMock))      // rootMock was attached to Nexus

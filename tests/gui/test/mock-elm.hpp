@@ -281,14 +281,14 @@ namespace test{
                         {
                           string key{spec.idi.getSym()},
                                  val{render(spec.data)};
-                          log_.event("diff", "++Attib++ "+key+" = "+val);
+                          log_.event("diff", "++Attrib++ "+key+" = "+val);
                           return {key, val};
                         })
                      .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
                         {
                           string key{spec.idi.getSym()},
                                  newVal{render (spec.data)};
-                          log_.event("diff", "set Attib "+key+" <-"+newVal);
+                          log_.event("diff", "set Attrib "+key+" <-"+newVal);
                           target.second = newVal;
                           return true;
                         })));

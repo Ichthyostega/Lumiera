@@ -29,6 +29,33 @@
  ** On first use, an InfoboxPanel is allocated to hold an ErrorlogWidget for presentation
  ** of those messages
  ** 
+ ** # Notification Controller Behaviour
+ ** 
+ ** This controller serves the purpose to present information and error messages to the user.
+ ** For the actual display, it allocates an appropriate view, placed into a docking pane
+ ** reserved for information display, in accordance to the configured screen layout
+ ** @todo 8/2018 for now we just use and possibly create a hard wired display within the
+ **       first (primary) application window. Moreover, we do so directly, instead of
+ **       consulting the (not yet fully implemented) ViewSpec mechanism. (via ViewLocator).
+ ** 
+ ** The actual widget for information display is prepared, but it is actually allocated when
+ ** the need for information display arises. Which means, the user may close this display
+ ** widget, thereby discarding its current information content -- but when the next notification
+ ** needs to be shown, the controller will ensure to allocate an appropriate widget again. Moreover,
+ ** the widget can be _expanded_ or _collapsed_, without affecting its content.
+ ** - information messages are just added to the buffer without much ado. No attempt is made
+ **   to reveal or expand the widget (but if necessary, a new widget is allocated)
+ ** - error messages also set an error marker state (*TODO* reflect this in the presentation),
+ **   and they cause the display widget to be expanded
+ **   (*TODO* 8/18 consider also call the doRevealYourself() function)
+ ** - the error state can be _cleared_, which also demotes all error messages to mere information.
+ ** - information content can also be _cleared_, which removes all mere information messages,
+ **   while retaining the error entries.
+ ** - the doReset() operation completely clears the log contents, collapses the widget and clears state.
+ ** - expanding of the display widget is state marked, irrespective if it happened by user interaction
+ **   or as result of some display. However, the actual message content is _not_ state marked; it needs
+ **   to be persisted elsewhere (in the session) and replayed from there if desired.
+ ** 
  ** @see error-log-widget.hpp
  ** @see notification-service.hpp
  */
@@ -76,6 +103,57 @@ namespace ctrl {
           UNIMPLEMENTED ("create a sensible binding between AssetManager in the session and AssetController in the UI");
         }
     
+      
+      /* ==== Tangible interface ==== */
+      
+      virtual bool
+      doReset()  override
+        {
+          UNIMPLEMENTED ("Clear log contents, collapse widget, clear error state");
+        }
+      
+      virtual bool
+      doExpand (bool yes)  override
+        {
+          UNIMPLEMENTED ("Allocate Widget if necessary, expand widget");
+        }
+      
+      virtual void
+      doRevealYourself()  override
+        {
+          UNIMPLEMENTED ("TODO: how can the Log-Widget be 'revealed'?? Possibly allocate Widget, expand it. But how to make it visible?");
+        }
+      
+      virtual bool
+      doMsg (string text)  override
+        {
+          UNIMPLEMENTED ("Possibly allocate Widget, place text into its buffer. No need to expand");
+        }
+      
+      virtual bool
+      doClearMsg ()  override
+        {
+          UNIMPLEMENTED ("remove all mere information messages");
+        }
+      
+      virtual bool
+      doErr (string text)  override
+        {
+          UNIMPLEMENTED ("Set error state. Allocate Widget if necessary, expand widget, place error message into its buffer");
+        }
+      
+      virtual bool
+      doClearErr ()  override
+        {
+          UNIMPLEMENTED ("clear error state. If widget exists, turn all error entries into mere information entries");
+        }
+      
+      virtual void
+      doFlash()  override
+        {
+          UNIMPLEMENTED ("If widget exists: expand it, trigger its flash function (paint with timeout). TODO also doRevealYourself.");
+        }
+      
       
     public:
       NotificationHub (ID identity, ctrl::BusTerm& nexus)

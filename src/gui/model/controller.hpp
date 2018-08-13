@@ -118,10 +118,15 @@ namespace model {
           UNIMPLEMENTED ("Controller doFlash");
         }
       
+      /** default handler for all generic mark messages. Forwards to Tangible::doMark
+       * @todo is there any default implementation for special messages,
+       *       which might be eligible as a base class implementation??
+       */
       virtual void
       doMark (GenNode const& mark)  override
         {
-          UNIMPLEMENTED ("Controller doMark");
+          // forward to default handler
+          Tangible::doMark (mark);
         }
       
       

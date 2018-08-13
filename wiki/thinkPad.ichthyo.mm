@@ -1715,7 +1715,7 @@
 <node COLOR="#338800" CREATED="1533689055601" ID="ID_335901895" MODIFIED="1533689061409" TEXT="InfoboxPanel anlegen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689065976" ID="ID_1456563113" MODIFIED="1533689296703" TEXT="NotificationController im Wizzard ansiedeln">
+<node COLOR="#338800" CREATED="1533689065976" ID="ID_1456563113" MODIFIED="1534119944991" TEXT="NotificationController im Wizzard ansiedeln">
 <icon BUILTIN="full-1"/>
 <node CREATED="1533768795377" ID="ID_377710833" MODIFIED="1533768810140" TEXT="wirklich ein eigenst&#xe4;ndiger Controller??">
 <icon BUILTIN="help"/>
@@ -1761,11 +1761,13 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689076590" ID="ID_321096443" MODIFIED="1533689299058" TEXT="mit Bus verdrahten und ID global konstant definieren">
+<node COLOR="#338800" CREATED="1533689076590" ID="ID_321096443" MODIFIED="1534119951865" TEXT="mit Bus verdrahten und ID global konstant definieren">
 <icon BUILTIN="full-2"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689098787" ID="ID_191346591" MODIFIED="1533689301486" TEXT="Empfangs-Logik im NotificationController">
 <icon BUILTIN="full-3"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119968325" ID="ID_1630503080" MODIFIED="1534119972876" TEXT="Einrichtung">
+<icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689120536" ID="ID_1806645586" MODIFIED="1533689143685" TEXT="View belegen">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -1777,6 +1779,107 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689146501" ID="ID_1371087868" MODIFIED="1533689151053" TEXT="bei Bedarf anzeigen">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119979555" ID="ID_1159164748" MODIFIED="1534119985027" TEXT="Controller-Interface">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1534120180110" TEXT="doReset()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150458" ID="ID_1390376483" MODIFIED="1534120202934" TEXT="&quot;Clear log contents, collapse widget, clear error state&quot;&quot;">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150458" ID="ID_1083026482" MODIFIED="1534120180109" TEXT="doExpand(yes)">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150459" ID="ID_1182032725" MODIFIED="1534120202934" TEXT="&quot;Allocate Widget if necessary, expand widget&quot;">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150459" ID="ID_1466610963" MODIFIED="1534120180109" TEXT="doRevealYourself()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150460" ID="ID_1726008784" MODIFIED="1534120253931">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b><font color="#ae1414">TODO</font></b>: how can the Log-Widget be 'revealed'??
+    </p>
+    <p>
+      Possibly allocate Widget, expand it. But how to make it visible?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150462" ID="ID_1528884346" MODIFIED="1534120180108" TEXT="doMsg(text)">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150462" ID="ID_1226643824" MODIFIED="1534120202934" TEXT="&quot;Possibly allocate Widget, place text into its buffer. No need to expand&quot;">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150463" ID="ID_183847307" MODIFIED="1534120180107" TEXT="doClearMsg()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150463" ID="ID_1378278687" MODIFIED="1534120202934" TEXT="&quot;remove all mere information messages&quot;">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150463" ID="ID_1967851591" MODIFIED="1534120180106" TEXT="doErr(text)">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150463" ID="ID_764543121" MODIFIED="1534120282524">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Set error state.
+      </li>
+      <li>
+        Allocate Widget if necessary
+      </li>
+      <li>
+        expand widget
+      </li>
+      <li>
+        place error message into its buffer&quot;
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150464" ID="ID_1675673289" MODIFIED="1534120180106" TEXT="doClearErr()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150465" ID="ID_1858186015" MODIFIED="1534120202932" TEXT="&quot;clear error state. If widget exists, turn all error entries into mere information entries&quot;">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150465" ID="ID_1862649971" MODIFIED="1534120180105" TEXT="doFlash()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534120150465" ID="ID_222097969" MODIFIED="1534120315751">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;If widget exists: expand it, trigger its flash function (paint with timeout).
+    </p>
+    <p>
+      <b><font color="#951c1c">TODO</font></b>&#160;also doRevealYourself.&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689164394" ID="ID_405297881" MODIFIED="1533689307645" TEXT="in NotificationService integrieren">
