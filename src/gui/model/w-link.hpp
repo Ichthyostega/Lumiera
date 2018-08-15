@@ -27,6 +27,9 @@
  ** The is statefull, can be reconnected, and automatically transitions into disconnected
  ** state when the target dies.
  ** 
+ ** @warning this class is not threadsafe, because lib SigC++ is not either,
+ **          and it can only be used reliably from within the GUI thread.
+ ** 
  ** @see \ref WLink_test
  ** @see \ref NotificationHub (usage example)
  ** 
@@ -56,6 +59,7 @@ namespace model {
   
   /**
    * Managed link to a `sigc::trackable` UI widget, without taking ownership.
+   * @warning _not_ threadsafe
    */
   template<class TAR>
   class WLink
@@ -70,16 +74,21 @@ namespace model {
     public:
      ~WLink()
         {
-       
+          if (widget_)
+            disconnect (*widget_);
         }
       WLink()
-        {
-          
-        }
+        : widget_{nullptr}
+        { }
+      
       explicit
       WLink(TAR& targetWidget)
         : widget_{&targetWidget}
-        { }
+        {
+          connect (targetWidget);
+        }
+      
+      ////////////////////////////TODO copy operations
       
       explicit
       operator bool()  const
@@ -109,6 +118,25 @@ namespace model {
           if (not widget_)
             throw lumiera::error::State ("zombie widget encountered"
                                         , LERR_(BOTTOM_VALUE));
+        }
+      
+      void
+      connect (sigc::trackable& target)
+        {
+          target.add_destroy_notify_callback (&widget_
+                                             ,[](void* p)
+                                                {
+                                                  TAR* & widgetPtr = *static_cast<TAR**>(p);
+                                                  ASSERT (widgetPtr);
+                                                  widgetPtr = nullptr;
+                                                  return p;
+                                                });
+        }
+      
+      void
+      disconnect (sigc::trackable& target)
+        {
+          target.remove_destroy_notify_callback (&widget_);
         }
     };
   
