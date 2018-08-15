@@ -22,7 +22,7 @@
 <node CREATED="1487212066024" ID="ID_378199749" MODIFIED="1518487921038" TEXT="Spot Locator == das was navigiert wird, wenn sich der Spot bewegt"/>
 </node>
 </node>
-<node CREATED="1477784761581" HGAP="72" ID="ID_854334914" MODIFIED="1518487921039" TEXT="Rahmen" VSHIFT="-21">
+<node CREATED="1477784761581" HGAP="72" ID="ID_854334914" MODIFIED="1518487921039" TEXT="Rahmen" VGAP="19" VSHIFT="-21">
 <node CREATED="1481320580216" ID="ID_1418071897" MODIFIED="1518487921039" TEXT="vorantreiben">
 <node CREATED="1501776053522" ID="ID_664046169" MODIFIED="1518487921039" TEXT="R&#xfc;ckpfad Session -&gt; UI">
 <node CREATED="1501776081782" ID="ID_1369579979" MODIFIED="1518487921039" TEXT="warum wichtig?">
@@ -1573,8 +1573,7 @@
       in proc::asset::meta::<b><font color="#c01a1a">theErrorLog_ID</font></b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1534026821186" ID="ID_1959407299" MODIFIED="1534026961333" TEXT="dieses Interface f&#xfc;hlt sich irgendwie falsch an">
@@ -1768,6 +1767,10 @@
 <icon BUILTIN="full-3"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119968325" ID="ID_1630503080" MODIFIED="1534119972876" TEXT="Einrichtung">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534336479160" ID="ID_203145360" MODIFIED="1534336575048" TEXT="Link zum Widget herstellen">
+<arrowlink COLOR="#a66b86" DESTINATION="ID_1326202399" ENDARROW="Default" ENDINCLINATION="279;-1333;" ID="Arrow_ID_664593340" STARTARROW="None" STARTINCLINATION="-1296;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689120536" ID="ID_1806645586" MODIFIED="1533689143685" TEXT="View belegen">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -1810,8 +1813,7 @@
       Possibly allocate Widget, expand it. But how to make it visible?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150462" ID="ID_1528884346" MODIFIED="1534120180108" TEXT="doMsg(text)">
@@ -1849,8 +1851,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -1875,11 +1876,13 @@
       <b><font color="#951c1c">TODO</font></b>&#160;also doRevealYourself.&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334029619" ID="ID_1981930639" MODIFIED="1534334039368" TEXT="ErrorLogView vorl&#xe4;ufig...">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689164394" ID="ID_405297881" MODIFIED="1533689307645" TEXT="in NotificationService integrieren">
@@ -3156,8 +3159,68 @@
 </node>
 <node CREATED="1477784829157" ID="ID_1998357180" MODIFIED="1518487921059" TEXT="Icon-Laden modernisieren"/>
 <node CREATED="1477784821925" ID="ID_1871474250" MODIFIED="1518487921059" TEXT="Styling aufr&#xe4;umen">
-<node CREATED="1477784846162" ID="ID_1164942946" MODIFIED="1518487921059" TEXT="siehe Info zum CssProvider">
-<arrowlink COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1600;-25;" ID="Arrow_ID_1610122569" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
+<node CREATED="1477784846162" ID="ID_1164942946" MODIFIED="1534336601077" TEXT="siehe Info zum CssProvider">
+<arrowlink COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1600;-25;" ID="Arrow_ID_1610122569" STARTARROW="None" STARTINCLINATION="-756;164;"/>
+</node>
+</node>
+</node>
+<node CREATED="1534336252375" HGAP="27" ID="ID_1755017021" MODIFIED="1534336284856" TEXT="Hilfsmittel">
+<node CREATED="1534336320373" ID="ID_708892482" MODIFIED="1534336324377" TEXT="Grundbausteine"/>
+<node CREATED="1534336325916" ID="ID_762624766" MODIFIED="1534336335351" TEXT="Bindeglieder"/>
+<node CREATED="1534336335963" ID="ID_1176525116" MODIFIED="1534336338575" TEXT="Werkzeug">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334810537" ID="ID_1326202399" MODIFIED="1534336575049" TEXT="Link zum Widget">
+<linktarget COLOR="#a66b86" DESTINATION="ID_1326202399" ENDARROW="Default" ENDINCLINATION="279;-1333;" ID="Arrow_ID_664593340" SOURCE="ID_203145360" STARTARROW="None" STARTINCLINATION="-1296;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334822288" ID="ID_1305015272" MODIFIED="1534334828778" TEXT="Allozieren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334830126" ID="ID_932140820" MODIFIED="1534334868795" TEXT="als Funktor konfiguriert">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334914667" ID="ID_511749457" MODIFIED="1534334932930" TEXT="smart-Ref">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334939159" ID="ID_1853703071" MODIFIED="1534335238329" TEXT="leer konstruierbar">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334944207" ID="ID_1989000221" MODIFIED="1534335237689" TEXT="bool testbar">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534334964700" ID="ID_1509791330" MODIFIED="1534335236977" TEXT="dereferenzierbar">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534335220066" ID="ID_132223755" MODIFIED="1534335235369" TEXT="target anbinden">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534335240246" ID="ID_1480460700" MODIFIED="1534336108969" TEXT="sigc::trackable">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534336110858" ID="ID_280796006" MODIFIED="1534336115810" TEXT="connect()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534336116617" ID="ID_1274372728" MODIFIED="1534336119507" TEXT="clear()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534335253941" ID="ID_269300171" MODIFIED="1534335534298" TEXT="magisch kopierbar">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1534336069415" ID="ID_1775411301" MODIFIED="1534337958030">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Name: <b>WLink</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534336127895" HGAP="21" ID="ID_352867763" MODIFIED="1534337985657" TEXT="WLink_test" VSHIFT="9">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -32241,8 +32304,7 @@
       Ganz prominent fehlt hier also z.B: MIDI
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1534002180893" ID="ID_1074039128" MODIFIED="1534002196087" TEXT="daf&#xfc;r erscheint die Unterscheidung STRUCT vs. META schwammig"/>
 </node>
@@ -32262,8 +32324,7 @@
       die Aufgrund von Klassifikationen automatisch bereits existieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1534024950739" ID="ID_1395279965" MODIFIED="1534024969582" TEXT="Races und m&#xf6;gliche Kollisionen &#xfc;berall">
 <icon BUILTIN="clanbomber"/>
@@ -32313,8 +32374,7 @@
       <i>das</i>&#160;ErrorLog
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1533997846989" ID="ID_1324960272" MODIFIED="1533997854911" TEXT="zun&#xe4;chst nur Platzhalter">
 <node CREATED="1533997938232" ID="ID_40537012" MODIFIED="1533997995641" TEXT="brauche EntryID&lt;ErrorLog&gt;">
 <richcontent TYPE="NOTE"><html>
@@ -32332,8 +32392,7 @@
       &#252;ber den UI-Bus schickt, an einen Empf&#228;nger mit bekannter ID.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -32349,8 +32408,7 @@
       dort gibt es eine <b>ErrorLogView</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1533997901765" ID="ID_361019548" MODIFIED="1534025106095">
 <richcontent TYPE="NODE"><html>
@@ -32362,8 +32420,7 @@
       und den Controller: <b>NotificationHub</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#a9aac1" DESTINATION="ID_70134302" ENDARROW="Default" ENDINCLINATION="-1984;0;" ID="Arrow_ID_1885125683" STARTARROW="None" STARTINCLINATION="803;-67;"/>
 </node>
 </node>
@@ -32391,8 +32448,7 @@
       dadurch werden Meta-Operationen auf gleiche Ebene gestellt wie normale Struktur-Manipulationen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1533997603741" ID="ID_1980534712" MODIFIED="1533997832361" TEXT="die Command und Event-Logs k&#xf6;nnten repr&#xe4;sentiert sein">
@@ -32422,8 +32478,7 @@
       und verlieren ihren <i>magischen Charakter</i>&#160;au&#223;erhalb der Event-Sourcing-Struktur
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -34112,7 +34167,7 @@
 <node CREATED="1504215729848" ID="ID_518260540" MODIFIED="1518487921101" TEXT="howto">
 <node CREATED="1446515847047" ID="ID_290915762" MODIFIED="1518487921101" TEXT="GtkCssProvider">
 <node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1518487921101" TEXT="parsing errors"/>
-<node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1518487921101" TEXT="Beispiel im GTKmm-Guide (custom widget)">
+<node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1534336601077" TEXT="Beispiel im GTKmm-Guide (custom widget)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -34129,7 +34184,7 @@
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1600;-25;" ID="Arrow_ID_1610122569" SOURCE="ID_1164942946" STARTARROW="None" STARTINCLINATION="-227;-646;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1600;-25;" ID="Arrow_ID_1610122569" SOURCE="ID_1164942946" STARTARROW="None" STARTINCLINATION="-756;164;"/>
 <icon BUILTIN="info"/>
 </node>
 </node>
