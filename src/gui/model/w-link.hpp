@@ -51,6 +51,7 @@ namespace model {
   
 //  using std::string;
 //  using lib::Symbol;
+  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   
   /**
@@ -62,6 +63,7 @@ namespace model {
       static_assert (std::is_base_of<sigc::trackable, TAR>()
                     ,"target type required to be sigc::trackable");
       
+      //mutable
       TAR* widget_;
       
       
@@ -79,7 +81,35 @@ namespace model {
         : widget_{&targetWidget}
         { }
       
-    protected:
+      explicit
+      operator bool()  const
+        {
+          return bool(widget_);
+        }
+      
+      
+      TAR&
+      operator* ()  const
+        {
+          __ensureAlive();
+          return *widget_;
+        }
+      
+      TAR*
+      operator-> ()  const
+        {
+          __ensureAlive();
+          return widget_;
+        }
+      
+    private:
+      void
+      __ensureAlive()  const
+        {
+          if (not widget_)
+            throw lumiera::error::State ("zombie widget encountered"
+                                        , LERR_(BOTTOM_VALUE));
+        }
     };
   
   

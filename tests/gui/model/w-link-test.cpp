@@ -32,10 +32,10 @@
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
 //#include <string>
-//#include <vector>
+#include <memory>
 
 
 //using std::string;
@@ -43,8 +43,9 @@
 //using lib::diff::Rec;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
-using util::isSameObject;
-using util::isnil;
+using std::make_unique;
+//using util::isSameObject;
+//using util::isnil;
 
 
 namespace gui  {
@@ -53,6 +54,16 @@ namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 //  using lib::test::showSizeof;
+  
+  namespace { // Test fixture...
+    
+    template<typename X>
+    struct DummyWidget
+      : public sigc::trackable
+      {
+        X val;
+      };
+  }
   
   
   
@@ -80,7 +91,21 @@ namespace test {
       void
       verify_standardUsage()
         {
-          UNIMPLEMENTED ("demonstrate a simple usage scenario");
+          using Wint = DummyWidget<int>;
+          int r{rand() % 100};
+          
+          auto widget = make_unique<Wint>();
+          widget->val = r;
+          
+          WLink<Wint> link{*widget};
+          CHECK (link);
+          link->val += 23;
+          CHECK (r+23 == widget->val);
+          
+          // kill widget
+          widget.reset();
+          CHECK (not link);
+          VERIFY_ERROR (BOTTOM_VALUE, link->val );
         }
       
       
