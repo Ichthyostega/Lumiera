@@ -756,7 +756,7 @@ namespace test {
                                                               "emu.+?"+childID)
                              .beforeCall("routeAdd").arg(borg.getID(), memLocation(borg))              // Borg was inserted as child and attached to Nexus
                              .beforeEvent("applied diff to "+string(rootMock.getID()))
-                             );
+                             );                      ////////////////////////////////////////////////////////TICKET #1158
             }
           
           CHECK (rootMock.attrib["α"] == "Quadrant");     // attribute alpha was preserved while injecting all those Borg

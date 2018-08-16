@@ -38,20 +38,26 @@
 // 12/17 - investigate SFINAE failure. Reason was indirect use while in template instantiation
 // 03/18 - Dependency Injection / Singleton initialisation / double checked locking
 // 04/18 - investigate construction of static template members
+// 08/18 - Segfault when compiling some regular expressions for EventLog search
 
 
 /** @file try.cpp
- * Investigation: static initialisation order -- especially of static template member fields.
- * This version embeds the factory as Meyer's Singleton into the Front-Template using it, and
- * it invokes the factory from within the Front<TY> constructor -- thereby ensuring the factory
- * is indeed initialised prior to any usage and its lifespan extends beyond the lifespan of the
- * last instance using it.
+ * Heisenbug hunt: random crashes in BusTerm_test, seemingly emerging from regular expression compilation.
+ * Not able to reproduce the crash, unfortunately. //////////////////////////////////////////////////////////TICKET #1158
  */
 
 typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/util.hpp"
+
+#include <regex>
+#include <string>
+#include <vector>
+
+using std::string;
+using VecS = std::vector<string>;
 
 
 
@@ -62,77 +68,26 @@ typedef unsigned int uint;
 
 
   
-template<typename T>
-class Factory
-  {
-  public:
-    T val;
-    
-    Factory()
-      : val{}
-      {
-        cout << "Factory-ctor  val="<<val<<endl;
-      }
-  };
-
-
-template<typename T>
-class Front
-  {
-  public:
-    Factory<T>&
-    fac()
-      {
-        static Factory<T> fac;
-        return fac;
-      }
-    
-    
-    Front()
-      {
-        cout << "Front-ctor    val="<<fac().val<<endl;
-        fac().val += 100;
-      }
-    
-    T&
-    operate ()
-      {
-        cout << "Front-operate val="<<fac().val<<endl;
-        ++ fac().val;
-        return fac().val;
-      }
-  };
-
-//template<typename T>
-//Factory<T> Front<T>::fac;
-
-
-namespace {
-  Front<int> front;
-  
-  int
-  staticFun()
-  {
-    cout << "staticFun"<<endl;
-    return front.operate() += 10;
-  }
-  
-  int global_int = front.operate();
-}
-
 
 
 int
 main (int, char**)
   {
+    VecS rexs{{"after.+_ATTRIBS_.+ins.+1 of 62 ≺293.gen029≻.+mut.+1 of 62 ≺293.gen029≻.+ins.+borgID.+293.+emu.+1 of 62 ≺293.gen029≻"
+              ,"after.+_ATTRIBS_.+ins.+1 of 64 ≺251.gen019≻.+mut.+1 of 64 ≺251.gen019≻.+ins.+borgID.+251.+emu.+1 of 64 ≺251.gen019≻"
+              ,"after.+_ATTRIBS_.+ins.+1 of 8 ≺203.gen036≻.+mut.+1 of 8 ≺203.gen036≻.+ins.+borgID.+203.+emu.+1 of 8 ≺203.gen036≻"
+              ,"after.+?_ATTRIBS_.+?ins.+?53 of 57 ≺358.gen010≻.+?mut.+?53 of 57 ≺358.gen010≻.+?ins.+?borgID.+?358.+?emu.+?53 of 57 ≺358.gen010≻"
+              ,"after.+?_ATTRIBS_.+?ins.+?53 of 63 ≺178.gen028≻.+?mut.+?53 of 63 ≺178.gen028≻.+?ins.+?borgID.+?178.+?emu.+?53 of 63 ≺178.gen028≻"
+              ,"after.+?_ATTRIBS_.+?ins.+?53 of 59 ≺498.gen038≻.+?mut.+?53 of 59 ≺498.gen038≻.+?ins.+?borgID.+?498.+?emu.+?53 of 59 ≺498.gen038≻"
+              ,"after.+?_ATTRIBS_.+?ins.+?53 of 60 ≺223.gen003≻.+?mut.+?53 of 60 ≺223.gen003≻.+?ins.+?borgID.+?223.+?emu.+?53 of 60 ≺223.gen003≻"
+              ,"after.+?_ATTRIBS_.+?ins.+?53 of 78 ≺121.gen015≻.+?mut.+?53 of 78 ≺121.gen015≻.+?ins.+?borgID.+?121.+?emu.+?53 of 78 ≺121.gen015≻"
+             }};
+    for (auto const& str : rexs)
+      {
+        auto rex = std::regex{str};
+        SHOW_EXPR (std::regex_search(str, rex));
+      }
     
-    cout << "make-Front<int>..."<<endl;
-    Front<int> fint;
-    
-    int& i = fint.operate();
-    cout << "main:         val="<<i<<endl;
-    cout << "main: staticFun..."<<staticFun()<<endl;
-    cout << "global_int.......="<<global_int<<endl;
     
     cout <<  "\n.gulp.\n";
     
