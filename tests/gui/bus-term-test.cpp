@@ -749,11 +749,11 @@ namespace test {
               
               CHECK (nexusLog.verifyCall("routeAdd").arg(rootMock.getID(), memLocation(rootMock))      // rootMock was attached to Nexus
                              .beforeCall("change")  .argMatch(rootMock.getID(),                        // diff message sent via UI-Bus
-                                                              "after.+_ATTRIBS_.+"                     // verify diff pattern generated for each Borg
-                                                              "ins.+"+childID+".+"
-                                                              "mut.+"+childID+".+"
-                                                              "ins.+borgID.+"+borgID+".+"
-                                                              "emu.+"+childID)
+                                                              "after.+?_ATTRIBS_.+?"                   // verify diff pattern generated for each Borg
+                                                              "ins.+?"+childID+".+?"
+                                                              "mut.+?"+childID+".+?"
+                                                              "ins.+?borgID.+?"+borgID+".+?"
+                                                              "emu.+?"+childID)
                              .beforeCall("routeAdd").arg(borg.getID(), memLocation(borg))              // Borg was inserted as child and attached to Nexus
                              .beforeEvent("applied diff to "+string(rootMock.getID()))
                              );
