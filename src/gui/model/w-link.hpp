@@ -74,8 +74,7 @@ namespace model {
     public:
      ~WLink()
         {
-          if (widget_)
-            disconnect (*widget_);
+          this->clear();
         }
       WLink()
         : widget_{nullptr}
@@ -83,10 +82,8 @@ namespace model {
       
       explicit
       WLink(TAR& targetWidget)
-        : widget_{&targetWidget}
-        {
-          connect (targetWidget);
-        }
+        : widget_{attachTo (targetWidget)}
+        { }
       
       ////////////////////////////TODO copy operations
       
@@ -95,7 +92,6 @@ namespace model {
         {
           return bool(widget_);
         }
-      
       
       TAR&
       operator* ()  const
@@ -111,6 +107,23 @@ namespace model {
           return widget_;
         }
       
+      
+      void
+      clear()
+        {
+          if (widget_)
+            widget_->remove_destroy_notify_callback (&widget_);
+          widget_ = nullptr;
+        }
+      
+      void
+      connect (TAR& otherTarget)
+        {
+          if (widget_ == &otherTarget) return;
+          clear();
+          widget_ = attachTo (otherTarget);
+        }
+      
     private:
       void
       __ensureAlive()  const
@@ -120,8 +133,8 @@ namespace model {
                                         , LERR_(BOTTOM_VALUE));
         }
       
-      void
-      connect (sigc::trackable& target)
+      TAR*
+      attachTo (TAR& target)
         {
           target.add_destroy_notify_callback (&widget_
                                              ,[](void* p)
@@ -131,12 +144,7 @@ namespace model {
                                                   widgetPtr = nullptr;
                                                   return p;
                                                 });
-        }
-      
-      void
-      disconnect (sigc::trackable& target)
-        {
-          target.remove_destroy_notify_callback (&widget_);
+          return &target;
         }
     };
   

@@ -32,7 +32,7 @@
 #include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 #include <memory>
@@ -44,7 +44,7 @@
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
 using std::make_unique;
-//using util::isSameObject;
+using util::isSameObject;
 //using util::isnil;
 
 
@@ -61,7 +61,7 @@ namespace test {
     struct DummyWidget
       : public sigc::trackable
       {
-        X val;
+        X val = 1 + rand() % 100;
       };
   }
   
@@ -92,10 +92,8 @@ namespace test {
       verify_standardUsage()
         {
           using Wint = DummyWidget<int>;
-          int r{rand() % 100};
-          
           auto widget = make_unique<Wint>();
-          widget->val = r;
+          int r = widget->val;
           
           WLink<Wint> link{*widget};
           CHECK (link);
@@ -112,7 +110,48 @@ namespace test {
       void
       verify_reconnect()
         {
-          UNIMPLEMENTED ("change connection state");
+          using Wint = DummyWidget<int>;
+          
+          auto w1 = make_unique<Wint>();
+          auto w2 = make_unique<Wint>();
+          int r1 = w1->val;
+          int r2 = w2->val;
+          
+          WLink<Wint> l1;
+          WLink<Wint> l2{*w1};
+          CHECK (not l1);
+          CHECK (    l2);
+          
+          l2->val = r1;
+          l1.connect(*l2);
+          ++l1->val;
+          CHECK (w1->val == r1+1);
+          CHECK (isSameObject (*l1, *l2));
+          
+          l2.connect(*w2);
+          CHECK (not isSameObject (*l1, *l2));
+          w2->val = r2;
+          CHECK (r1+1 == l1->val);
+          CHECK (r2   == l2->val);
+          
+          w1.reset();  // kill first widget
+          CHECK (not l1);
+          CHECK (    l2);
+          l2->val *= -10;
+          l2.clear();
+          CHECK (not l1);
+          CHECK (not l2);
+          CHECK (-10*r2 == w2->val);
+          l1.connect(*w2);
+          l2.connect(*l1);
+          CHECK (-10*r2 == l2->val);
+          CHECK (isSameObject (*l1, *l2));
+          CHECK (isSameObject (*l1, *w2));
+          
+          // implicitly kill second widget
+          *w2 = Wint{};
+          CHECK (not l1);
+          CHECK (not l2);
         }
       
       
