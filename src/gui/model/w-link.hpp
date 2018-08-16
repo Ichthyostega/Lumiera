@@ -52,19 +52,14 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
 
 #include <type_traits>
 #include <sigc++/trackable.h>
-//#include <utility>
-//#include <string>
 
 
 namespace gui {
 namespace model {
   
-//  using std::string;
-//  using lib::Symbol;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   
@@ -93,11 +88,39 @@ namespace model {
         { }
       
       explicit
-      WLink(TAR& targetWidget)
+      WLink (TAR& targetWidget)
         : widget_{attachTo (targetWidget)}
         { }
       
-      ////////////////////////////TODO copy operations
+      WLink (WLink const& r)
+        : widget_{r.widget_? attachTo(*r.widget_) : nullptr}
+        { }
+      
+      WLink (WLink && rr)
+        : widget_{rr.widget_? attachTo(*rr.widget_) : nullptr}
+        {
+          rr.clear();
+        }
+      
+      WLink&
+      operator= (WLink other)
+        {
+          swap (*this, other);
+          return *this;
+        }
+      
+      friend void
+      swap (WLink& l, WLink& r)
+        {
+          TAR* tl = l.widget_;
+          TAR* tr = r.widget_;
+          if (tl == tr) return;
+          l.clear();
+          r.clear();
+          if (tr) l.widget_ = l.attachTo (*tr);
+          if (tl) r.widget_ = r.attachTo (*tl);
+        }
+      
       
       explicit
       operator bool()  const
@@ -122,17 +145,20 @@ namespace model {
       
       /** detach and deactivate this link */
       void
-      clear()
+      clear()  noexcept
         {
           if (widget_)
-            widget_->remove_destroy_notify_callback (&widget_);
+            try {
+              widget_->remove_destroy_notify_callback (&widget_);
+            }
+            catch(...) { }
           widget_ = nullptr;
         }
       
       /** (re)connect this smart link to the given target.
        *  Any previously existing link is detached beforehand */
       void
-      connect (TAR& otherTarget)
+      connect (TAR& otherTarget)  noexcept
         {
           if (widget_ == &otherTarget) return;
           clear();
@@ -152,17 +178,23 @@ namespace model {
        *   to detach this link in case the target is destroyed
        */
       TAR*
-      attachTo (TAR& target)
+      attachTo (TAR& target)  noexcept
         {
-          target.add_destroy_notify_callback (&widget_
-                                             ,[](void* p)
-                                                {
-                                                  TAR* & widgetPtr = *static_cast<TAR**>(p);
-                                                  ASSERT (widgetPtr);
-                                                  widgetPtr = nullptr;
-                                                  return p;
-                                                });
-          return &target;
+          try {
+              target.add_destroy_notify_callback (&widget_
+                                                 ,[](void* p)
+                                                    {
+                                                      TAR* & widgetPtr = *static_cast<TAR**>(p);
+                                                      ASSERT (widgetPtr);
+                                                      widgetPtr = nullptr;
+                                                      return p;
+                                                    });
+              return &target;
+            }
+          catch(...)
+            {
+              return nullptr;
+            }
         }
     };
   

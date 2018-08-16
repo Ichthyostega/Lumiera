@@ -28,33 +28,21 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "gui/model/w-link.hpp"
-//#include "gen-node-location-query.hpp"
-#include "lib/format-cout.hpp"
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
 #include <memory>
 
 
-//using std::string;
-//using lib::diff::MakeRec;
-//using lib::diff::Rec;
-//using lib::idi::EntryID;
-//using lib::diff::GenNode;
 using util::isSameObject;
 using std::make_unique;
 using std::move;
-//using util::isnil;
 
 
 namespace gui  {
 namespace model{
 namespace test {
   
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-//  using lib::test::showSizeof;
   
   namespace { // Test fixture...
     
@@ -70,8 +58,7 @@ namespace test {
   
   
   /******************************************************************************//**
-   * @test verify the usage pattern of low-level UI element access, based on a
-   *       mock implementation of the accessor directory.
+   * @test verify proper behaviour of a smart-link to a `sigc::trackable` GTK widget.
    * @see w-link.hpp
    */
   class WLink_test : public Test
@@ -108,6 +95,7 @@ namespace test {
         }
       
       
+      /** @test registration is automatically maintained when re-assigning targets */
       void
       verify_reconnect()
         {
@@ -202,12 +190,12 @@ namespace test {
           auto uu = make_unique<Wuint>();
           WLink<Wuint> lu{*uu};
           
-///////////////does not compile...          
+///////////////does not compile...
 //        l1 = uu;
 //        l1.connect(*uu);
           
           // but it is a compile time check...
-          l1 = reinterpret_cast<WLink<Wint>&&> (uu);
+          l1 = reinterpret_cast<WLink<Wint>&&> (lu);
           CHECK ((int)uu->val == l1->val);
           CHECK (not lu);
         }
