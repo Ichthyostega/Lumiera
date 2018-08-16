@@ -23,12 +23,23 @@
 
 /** @file w-link.hpp
  ** A smart link to an GTK widget with automatic disconnection.
- ** Allows to hold a connection to a `sigc::trackable` without ownership.
- ** The is statefull, can be reconnected, and automatically transitions into disconnected
- ** state when the target dies.
+ ** Allows to hold a connection to a [trackable] without taking ownership.
+ ** The link is statefull, can be reconnected, and automatically transitions
+ ** into disconnected state when the target dies.
  ** 
  ** @warning this class is not threadsafe, because lib SigC++ is not either,
  **          and it can only be used reliably from within the GUI thread.
+ ** @remarks the lib SigC++ is used in GTKmm for handling "Signals" and invoking
+ **          "Slots" (i.e. functors) as result of such a signal. Such is dangerous
+ **          within the context of an interactive UI, since widgets might go away
+ **          and be destroyed due to user interaction. To deal with this problem,
+ **          GTKmm derives all widgets from [trackable], which offers an auto
+ **          deregistration callback, when the object is destroyed, so any
+ **          remaining signal connections can be dropped to avoid calling
+ **          a dead functor. We make use of the same mechanism here to
+ **          install a callback to invalidate this smart-handle.
+ ** 
+ ** [trackable]: https://developer.gnome.org/libsigc++/stable/structsigc_1_1trackable.html#details "`sigc::trackable`"
  ** 
  ** @see \ref WLink_test
  ** @see \ref NotificationHub (usage example)
@@ -59,6 +70,8 @@ namespace model {
   
   /**
    * Managed link to a `sigc::trackable` UI widget, without taking ownership.
+   * Automatically installs a callback to switch this link into detached state
+   * when the target (widget) is destroyed.
    * @warning _not_ threadsafe
    */
   template<class TAR>
@@ -67,7 +80,6 @@ namespace model {
       static_assert (std::is_base_of<sigc::trackable, TAR>()
                     ,"target type required to be sigc::trackable");
       
-      //mutable
       TAR* widget_;
       
       
@@ -108,6 +120,7 @@ namespace model {
         }
       
       
+      /** detach and deactivate this link */
       void
       clear()
         {
@@ -116,6 +129,8 @@ namespace model {
           widget_ = nullptr;
         }
       
+      /** (re)connect this smart link to the given target.
+       *  Any previously existing link is detached beforehand */
       void
       connect (TAR& otherTarget)
         {
@@ -133,6 +148,9 @@ namespace model {
                                         , LERR_(BOTTOM_VALUE));
         }
       
+      /** @internal installs the necessary callback
+       *   to detach this link in case the target is destroyed
+       */
       TAR*
       attachTo (TAR& target)
         {
@@ -147,11 +165,6 @@ namespace model {
           return &target;
         }
     };
-  
-  
-  
-  /** c */
-  
   
   
 }} // namespace gui::model
