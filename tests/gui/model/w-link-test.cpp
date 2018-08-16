@@ -34,7 +34,7 @@
 //#include "lib/diff/gen-node.hpp"
 #include "lib/util.hpp"
 
-//#include <string>
+#include <utility>
 #include <memory>
 
 
@@ -43,8 +43,9 @@
 //using lib::diff::Rec;
 //using lib::idi::EntryID;
 //using lib::diff::GenNode;
-using std::make_unique;
 using util::isSameObject;
+using std::make_unique;
+using std::move;
 //using util::isnil;
 
 
@@ -158,7 +159,57 @@ namespace test {
       void
       verify_copy()
         {
-          UNIMPLEMENTED ("copy with magic");
+          using Wint = DummyWidget<int>;
+          auto w1 = make_unique<Wint>();
+          auto w2 = make_unique<Wint>();
+          
+          WLink<Wint> l1;
+          WLink<Wint> l2{l1};
+          CHECK (not l2);
+          l2.connect(*w1);
+          
+          WLink<Wint> l3{l2};
+          CHECK (l3);
+          CHECK (w1->val == l3->val);
+          
+          CHECK (not l1); // they are statefull and independent
+          l1 = move(l2);
+          CHECK (not l2);
+          CHECK (l1);
+          CHECK (isSameObject (*l1, *l3));
+          
+          l2 = WLink<Wint>{WLink<Wint>{*w2}};
+          CHECK (w2->val == l2->val);
+          
+          l1 = l3;
+          CHECK (w1->val == l1->val);
+          WLink<Wint>& ref{l1};
+          l1 = move(ref);
+          CHECK (w1->val == l1->val);
+          CHECK (w1->val == l3->val);
+          
+          std::swap (l2, l3);
+          CHECK (w1->val == l1->val);
+          CHECK (w1->val == l2->val);
+          CHECK (w2->val == l3->val);
+          
+          w1.reset();
+          CHECK (not l1);
+          CHECK (not l2);
+          CHECK (w2->val == l3->val);
+          
+          using Wuint = DummyWidget<uint>;
+          auto uu = make_unique<Wuint>();
+          WLink<Wuint> lu{*uu};
+          
+///////////////does not compile...          
+//        l1 = uu;
+//        l1.connect(*uu);
+          
+          // but it is a compile time check...
+          l1 = reinterpret_cast<WLink<Wint>&&> (uu);
+          CHECK ((int)uu->val == l1->val);
+          CHECK (not lu);
         }
     };
   
