@@ -144,6 +144,7 @@ namespace test {
         }
       
       
+      /** @test registration state is properly handled on copy, move and swap */
       void
       verify_copy()
         {
@@ -194,10 +195,19 @@ namespace test {
 //        l1 = uu;
 //        l1.connect(*uu);
           
-          // but it is a compile time check...
+          // But it is a compile time check...
+          // At runtime, only the bare pointer is managed
           l1 = reinterpret_cast<WLink<Wint>&&> (lu);
           CHECK ((int)uu->val == l1->val);
-          CHECK (not lu);
+          CHECK (not lu);               // assignment was actually a move
+          
+          // even the subversively attached link is managed properly
+          uu.reset();
+          CHECK (not l1);
+          
+          // others unaffected...
+          CHECK (not l2);
+          CHECK (l3);
         }
     };
   
