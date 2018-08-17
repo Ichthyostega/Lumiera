@@ -136,7 +136,7 @@ namespace workspace {
   }
   
   
-  void
+  panel::Panel&
   PanelManager::showPanel (const int description_index)
   {
     // Try and find the panel and present it if possible
@@ -149,9 +149,9 @@ namespace workspace {
             if (!panel->is_shown()) panel->show();
             
             Gdl::DockItem &dock_item = panel->getDockItem();
-         // ENSURE(dock_item);
             dock_item.present(dock_);
-            return;
+            ENSURE (panel);
+            return *panel;
           }
       }
     
@@ -160,6 +160,9 @@ namespace workspace {
     
     // Dock the item
     dock_.add_item(new_panel->getDockItem(), Gdl::DOCK_FLOATING);
+    
+    ENSURE (new_panel);
+    return *new_panel;
   }
   
   

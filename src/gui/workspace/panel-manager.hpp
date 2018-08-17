@@ -114,8 +114,9 @@ namespace workspace {
       /**
        * Shows a panel given a description index.
        * @param description_index The index of the panel type to show.
+       * @return existing or new Panel, docked within the realm of this PanelManager.
        */
-      void showPanel (const int description_index);
+      panel::Panel& showPanel (const int description_index);
       
       /**
        * Switches a panel from one type to another,
