@@ -252,7 +252,7 @@ namespace workspace {
   
   
   int
-  PanelManager::findPanelDescription (const char* class_name)  const
+  PanelManager::findPanelDescription (const char* class_name)
   {
     REQUIRE(class_name);
     

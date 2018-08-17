@@ -143,7 +143,7 @@ namespace workspace {
   }
   
   
-  void
+  panel::Panel&
   DockArea::showPanel (const int description_index)
   {
     // Try and find the panel and present it if possible
@@ -158,7 +158,8 @@ namespace workspace {
             Gdl::DockItem &dock_item = panel->getDockItem();
          // ENSURE(dock_item);
             dock_item.present(dock_);
-            return;
+            ENSURE (panel);
+            return *panel;
           }
       }
     
@@ -167,6 +168,9 @@ namespace workspace {
     
     // Dock the item
     dock_.add_item(new_panel->getDockItem(), Gdl::DOCK_FLOATING);
+    
+    ENSURE (new_panel);
+    return *new_panel;
   }
   
   
@@ -256,7 +260,7 @@ namespace workspace {
   
   
   int
-  DockArea::findPanelDescription (const char* class_name)  const
+  DockArea::findPanelDescription (const char* class_name)
   {
     REQUIRE(class_name);
     

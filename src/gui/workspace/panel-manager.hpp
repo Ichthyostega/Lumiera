@@ -136,6 +136,14 @@ namespace workspace {
       
       
     public:
+      /**
+       * retrieve the internal type-ID corresponding to the given panel implementation type.
+       * @return internal index into the #panelDescriptionList, or `-1` if not found.
+       * @deprecated the whole concept of panel identification needs overhaul 8/2018
+       */
+      template<class P>
+      static int findPanelID();
+      
       /** Gets the number of panel descriptions. */
       static int getPanelDescriptionCount();
       
@@ -164,7 +172,7 @@ namespace workspace {
        * @return Returns the index of the panel description found, or -1
        * if no description was found for this type.
        */
-      int findPanelDescription (const char* class_name)  const;
+      static int findPanelDescription (const char* class_name);
       
       /**
        * Creates a panel by description index.
@@ -333,6 +341,17 @@ namespace workspace {
       /** The list of panel descriptions */
       static const PanelDescription panelDescriptionList[];
     };
+  
+  
+  
+  
+  template<class P>
+  inline int
+  PanelManager::findPanelID()
+  {
+    return PanelManager::findPanelDescription (typeid(P).name());
+  }
+  
   
   
 }}// namespace gui::workspace
