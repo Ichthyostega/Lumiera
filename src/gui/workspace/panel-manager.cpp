@@ -37,6 +37,7 @@
 #include "gui/panel/timeline-panel-obsolete.hpp"
 
 #include "include/logging.h"
+#include "lib/util-foreach.hpp"
 
 using namespace boost;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace std;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
@@ -139,7 +140,10 @@ namespace workspace {
   bool
   PanelManager::hasPanel (const int description_index)
   {
-    UNIMPLEMENTED ("search for a specific panel");
+    return util::has_any (panels_, [=](panel::Panel* panel)
+                                    {
+                                      return getPanelType(panel) == description_index;
+                                    });
   }
 
   panel::Panel&

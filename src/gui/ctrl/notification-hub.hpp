@@ -179,6 +179,15 @@ namespace ctrl {
       /** collaboration with a log display allocated elsewhere */
       WLink<widget::ErrorLogDisplay> widget_;
       
+      
+      widget::ErrorLogDisplay&
+      getWidget()
+        {
+          if (not widget_)
+            widget_.connect (allocateWidget_());
+          return *widget_;
+        }
+      
     };
   
   
