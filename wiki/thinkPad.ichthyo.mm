@@ -1641,7 +1641,8 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1533608459780" ID="ID_1685349188" MODIFIED="1533608467039" TEXT="k&#xf6;nnen wir nicht sofort l&#xf6;sen"/>
-<node CREATED="1533608471274" ID="ID_1700599331" MODIFIED="1533608486779" TEXT="aber m&#xfc;ssen der L&#xf6;sung vorgreifen">
+<node CREATED="1533608471274" ID="ID_1700599331" MODIFIED="1534520115340" TEXT="aber m&#xfc;ssen der L&#xf6;sung vorgreifen">
+<linktarget COLOR="#c1a9be" DESTINATION="ID_1700599331" ENDARROW="Default" ENDINCLINATION="123;115;" ID="Arrow_ID_399610434" SOURCE="ID_193790781" STARTARROW="None" STARTINCLINATION="282;-120;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1533608548408" ID="ID_154643654" MODIFIED="1533608602022" TEXT="man fragt einen Service: gib mir....">
 <richcontent TYPE="NOTE"><html>
@@ -1668,7 +1669,7 @@
 <node CREATED="1533608822826" ID="ID_1772827095" MODIFIED="1533608834604" TEXT="Schema zur reproduzierbaren ID-Generierung ist notwendig"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534513723209" ID="ID_592805858" MODIFIED="1534516350994" TEXT="PanelManger liefert Panel">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534513723209" ID="ID_592805858" MODIFIED="1534519994733" TEXT="PanelManger liefert Panel">
 <arrowlink COLOR="#99a7bd" DESTINATION="ID_1360472787" ENDARROW="Default" ENDINCLINATION="772;-6907;" ID="Arrow_ID_1137118362" STARTARROW="None" STARTINCLINATION="698;1616;"/>
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1534513739655" ID="ID_1688346556" MODIFIED="1534516101304" TEXT="Suche per Typ-ID">
@@ -1678,6 +1679,18 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1534513747542" ID="ID_313486234" MODIFIED="1534513755681" TEXT="im Moment eine int-ID">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534513723209" ID="ID_1131466377" MODIFIED="1534520036655" TEXT="Zugang durch WindowLocator / PanelLocator">
+<arrowlink COLOR="#aab7cb" DESTINATION="ID_1614049284" ENDARROW="Default" ENDINCLINATION="772;-6907;" ID="Arrow_ID_139428133" STARTARROW="None" STARTINCLINATION="676;1738;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534520043319" ID="ID_1510680356" MODIFIED="1534520065894" TEXT="vorl&#xe4;ufige Implementierung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1534520050783" ID="ID_193790781" MODIFIED="1534520115340" TEXT="greift vor auf ViewLocator">
+<arrowlink COLOR="#c1a9be" DESTINATION="ID_1700599331" ENDARROW="Default" ENDINCLINATION="123;115;" ID="Arrow_ID_399610434" STARTARROW="None" STARTINCLINATION="282;-120;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -14373,8 +14386,9 @@
 <node CREATED="1504193340786" ID="ID_751993082" MODIFIED="1518487921077" TEXT="PanelLocator hier integrieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1504370542909" ID="ID_1318769916" MODIFIED="1518487921077" TEXT="Query-Front-end"/>
-<node CREATED="1504371342426" ID="ID_1606296935" MODIFIED="1518487921077" TEXT="wird ben&#xf6;tigt vom ViewLocator (InteractionDirector)">
+<node CREATED="1504371342426" ID="ID_1606296935" MODIFIED="1534517606904" TEXT="wird ben&#xf6;tigt vom ViewLocator (InteractionDirector)">
 <arrowlink COLOR="#7c8aa8" DESTINATION="ID_1346454848" ENDARROW="Default" ENDINCLINATION="22;11;" ID="Arrow_ID_1776804306" STARTARROW="Default" STARTINCLINATION="313;-14;"/>
+<arrowlink COLOR="#546195" DESTINATION="ID_1633069135" ENDARROW="Default" ENDINCLINATION="-329;-257;" ID="Arrow_ID_1665485418" STARTARROW="None" STARTINCLINATION="273;0;"/>
 </node>
 <node CREATED="1504370524687" ID="ID_816760158" MODIFIED="1518487921077" TEXT="PanelManager in den einzelnen Fenstern"/>
 </node>
@@ -14384,7 +14398,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534510993903" ID="ID_1287156693" MODIFIED="1534511005821" TEXT="M&#xfc;llhaufen">
 <icon BUILTIN="clanbomber"/>
 </node>
-<node CREATED="1534515750767" HGAP="258" ID="ID_1360472787" MODIFIED="1534516350994" TEXT="bestehende Anforderungen" VSHIFT="-4">
+<node CREATED="1534515750767" HGAP="258" ID="ID_1360472787" MODIFIED="1534519968433" TEXT="bestehende Anforderungen" VSHIFT="-4">
 <linktarget COLOR="#99a7bd" DESTINATION="ID_1360472787" ENDARROW="Default" ENDINCLINATION="772;-6907;" ID="Arrow_ID_1137118362" SOURCE="ID_592805858" STARTARROW="None" STARTINCLINATION="698;1616;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1534515787114" ID="ID_1305719148" MODIFIED="1534515800828" TEXT="Standard-Ausstattung mit Panels in jedem Fenster erzeugen"/>
@@ -14467,12 +14481,79 @@
 <node CREATED="1529235583621" ID="ID_627187553" MODIFIED="1529235589904" TEXT="&#xfc;bergreifende Steuerung">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1529240710412" HGAP="79" ID="ID_1137103744" MODIFIED="1529240803601" TEXT="Kontroll-Struktur einrichten" VSHIFT="-15">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1529240725545" ID="ID_1633069135" MODIFIED="1529240728445" TEXT="PanelLocator">
+<node CREATED="1529240725545" ID="ID_1633069135" MODIFIED="1534517606904" TEXT="PanelLocator">
+<linktarget COLOR="#546195" DESTINATION="ID_1633069135" ENDARROW="Default" ENDINCLINATION="-329;-257;" ID="Arrow_ID_1665485418" SOURCE="ID_1606296935" STARTARROW="None" STARTINCLINATION="273;0;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1529240729817" ID="ID_899357717" MODIFIED="1529240766068" TEXT="h&#xe4;lt Kontakt zu allen Docks">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1529240757677" ID="ID_1894889790" MODIFIED="1529240766845" TEXT="Lebenszyklus-Signale">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534519634333" ID="ID_298940282" MODIFIED="1534519643957" TEXT="vorl&#xe4;ufig">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1534519645420" ID="ID_1509280168" MODIFIED="1534519736382" TEXT="&#xfc;bernimmt Funktionen vom ViewLocator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil ich Stand 8/2018 nicht im Stande bin,
+    </p>
+    <p>
+      den ViewLocator wirklich soweit fertig zu coden, da&#223; er schon einsetzbar ist.
+    </p>
+    <p>
+      Problem ist die ganze abstrahierte Widget-Access-Schicht, die sich erst sinnvoll bauen l&#228;&#223;t,
+    </p>
+    <p>
+      wenn es schon wirkliche und funktionierende Widgets im System gibt.
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534515750767" ID="ID_1614049284" MODIFIED="1534520027505" TEXT="Panel-Lookup/Allocation">
+<linktarget COLOR="#aab7cb" DESTINATION="ID_1614049284" ENDARROW="Default" ENDINCLINATION="772;-6907;" ID="Arrow_ID_139428133" SOURCE="ID_1131466377" STARTARROW="None" STARTINCLINATION="676;1738;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520212473" ID="ID_172585735" MODIFIED="1534520248134" TEXT="durch alle WorkspaceWindows iterieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520223304" ID="ID_605426716" MODIFIED="1534520247134" TEXT="jeden lokalen PanelManager fragen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520258251" ID="ID_634139165" MODIFIED="1534520270331" TEXT="wenn nicht gefunden, dann erzeugen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520271354" ID="ID_1722998809" MODIFIED="1534520296735" TEXT="PanelManage: reine Anfrage">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...bisher erzeugt die lookup-Operation automatisch
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520304493" ID="ID_1795676672" MODIFIED="1534520343635" TEXT="wo erzeugen?">
+<icon BUILTIN="help"/>
+<node CREATED="1534520344584" ID="ID_637468747" MODIFIED="1534520371103" TEXT="im primary window">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1534520354510" ID="ID_1031648158" MODIFIED="1534520366567" TEXT="im aktuellen Fenster">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520233134" ID="ID_1625789153" MODIFIED="1534520242615" TEXT="typsicheres Front-end vorschalten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1529240774003" ID="ID_1594029670" MODIFIED="1529240795457" TEXT="Zugriff auf Dock-Master">
