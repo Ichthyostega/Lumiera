@@ -73,7 +73,9 @@ namespace interact {
                                           ,globals.uiBus_.getAccessPoint()
                                           ,[&]() -> widget::ErrorLogDisplay&
                                              {
-                                               return allocateErrorLogView();
+                                               return globalCtx_.windowLoc_.locatePanel()
+                                                         .find_or_create<panel::InfoBoxPanel>()
+                                                         .getLog();
                                           }} }
     { }
   
@@ -110,19 +112,6 @@ namespace interact {
     
     // Show the about dialog
     dialog.run();
-  }
-  
-  
-  
-  /** @internal reach out to attach or allocate a display widget for the error log.
-   *  @todo as of 8/2018 we use "inside knowledge" to create this view in a hard wired location.
-   *        But in the end, this allocation task should be delegated to the ViewLocator
-   */
-  widget::ErrorLogDisplay&
-  Wizard::allocateErrorLogView()
-  {
-    auto& infoBox = globalCtx_.windowLoc_.locatePanel().find_or_create<panel::InfoBoxPanel>();
-    return infoBox.getLog();
   }
   
   
