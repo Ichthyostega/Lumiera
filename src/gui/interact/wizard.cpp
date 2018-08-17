@@ -33,6 +33,7 @@
 #include "gui/interact/wizard.hpp"
 #include "gui/interact/spot-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
+#include "gui/panel/infobox-panel.hpp"
 #include "gui/ctrl/notification-hub.hpp"
 #include "gui/ctrl/global-ctx.hpp"
 #include "lib/format-string.hpp"
@@ -120,6 +121,7 @@ namespace interact {
   widget::ErrorLogDisplay&
   Wizard::allocateErrorLogView()
   {
+    auto& infoBox = globalCtx_.windowLoc_.locatePanel().find_or_create<panel::InfoBoxPanel>();
     UNIMPLEMENTED("reach out to attach or allocate a display widget for the error log");
   }
   

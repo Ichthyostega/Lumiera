@@ -14526,7 +14526,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520258251" ID="ID_634139165" MODIFIED="1534520270331" TEXT="wenn nicht gefunden, dann erzeugen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520271354" ID="ID_1722998809" MODIFIED="1534520296735" TEXT="PanelManage: reine Anfrage">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520271354" ID="ID_1722998809" MODIFIED="1534522392135" TEXT="PanelManager: reine Anfrage">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -14540,7 +14540,7 @@
 </richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520304493" ID="ID_1795676672" MODIFIED="1534520343635" TEXT="wo erzeugen?">
+<node COLOR="#338800" CREATED="1534520304493" ID="ID_1795676672" MODIFIED="1534522378245" TEXT="wo erzeugen?">
 <icon BUILTIN="help"/>
 <node CREATED="1534520344584" ID="ID_637468747" MODIFIED="1534520371103" TEXT="im primary window">
 <icon BUILTIN="button_cancel"/>
@@ -14550,8 +14550,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534520233134" ID="ID_1625789153" MODIFIED="1534520242615" TEXT="typsicheres Front-end vorschalten">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1534520233134" ID="ID_1625789153" MODIFIED="1534522425348" TEXT="typsicheres Front-end vorschalten">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
