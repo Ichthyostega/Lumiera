@@ -185,7 +185,19 @@ namespace ctrl {
   panel::Panel&
   PanelLocator::preliminary_impl_PanelLookup (int typeID)
   {
-    UNIMPLEMENTED ("search for existing panel in all windows, possibly create");
+    REQUIRE (not isnil(windowList_));
+    
+    for (auto window : windowList_)
+      if (window->getPanelManager().hasPanel (typeID))
+        return window->getPanelManager().showPanel (typeID);
+    
+    // no instance of the desired panel type exists yet...
+    for (auto window : windowList_)
+      if (window->is_active())
+        return window->getPanelManager().showPanel (typeID);
+    
+    // use the first window in list when none is active
+    return windowList_.front()->getPanelManager().showPanel (typeID);
   }
 
   

@@ -136,6 +136,12 @@ namespace workspace {
   }
   
   
+  bool
+  PanelManager::hasPanel (const int description_index)
+  {
+    UNIMPLEMENTED ("search for a specific panel");
+  }
+
   panel::Panel&
   PanelManager::showPanel (const int description_index)
   {

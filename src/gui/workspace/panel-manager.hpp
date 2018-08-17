@@ -118,6 +118,9 @@ namespace workspace {
        */
       panel::Panel& showPanel (const int description_index);
       
+      /** was the indicated panel already allocated within this PanelManager's realm? */
+      bool hasPanel (const int description_index);
+      
       /**
        * Switches a panel from one type to another,
        * without touching the underlying GdlDockItem.
