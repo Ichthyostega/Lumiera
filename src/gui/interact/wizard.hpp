@@ -64,6 +64,9 @@ namespace ctrl {
   class GlobalCtx;
   class NotificationHub;
 }
+namespace widget {
+  class ErrorLogDisplay;
+}
 namespace interact {
   
   using std::unique_ptr;
@@ -92,8 +95,9 @@ namespace interact {
       void show_HelpAbout();
       
       static ID getErrorLogID() { return proc::asset::meta::theErrorLog_ID; }
-    private:
       
+    private:
+      widget::ErrorLogDisplay& allocateErrorLogView();
     };
   
   

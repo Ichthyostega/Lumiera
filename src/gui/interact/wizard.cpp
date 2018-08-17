@@ -68,7 +68,12 @@ namespace interact {
   
   Wizard::Wizard (GlobalCtx& globals)
     : globalCtx_{globals}
-    , notificationHub_{new NotificationHub{getErrorLogID(), globals.uiBus_.getAccessPoint()}}
+    , notificationHub_{new NotificationHub{getErrorLogID()
+                                          ,globals.uiBus_.getAccessPoint()
+                                          ,[&]() -> widget::ErrorLogDisplay&
+                                             {
+                                               return allocateErrorLogView();
+                                          }} }
     { }
   
   
@@ -105,6 +110,19 @@ namespace interact {
     // Show the about dialog
     dialog.run();
   }
+  
+  
+  
+  /** @internal reach out to attach or allocate a display widget for the error log.
+   *  @todo as of 8/2018 we use "inside knowledge" to create this view in a hard wired location.
+   *        But in the end, this allocation task should be delegated to the ViewLocator
+   */
+  widget::ErrorLogDisplay&
+  Wizard::allocateErrorLogView()
+  {
+    UNIMPLEMENTED("reach out to attach or allocate a display widget for the error log");
+  }
+  
   
   
 }}// namespace gui::interact

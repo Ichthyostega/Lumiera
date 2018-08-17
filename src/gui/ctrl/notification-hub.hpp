@@ -69,6 +69,7 @@
 #include "gui/model/controller.hpp"
 #include "gui/model/w-link.hpp"
 
+#include <functional>
 //#include <memory>
 //#include <list>
 
@@ -159,13 +160,21 @@ namespace ctrl {
       
       
     public:
-      NotificationHub (ID identity, ctrl::BusTerm& nexus)
+      using WidgetAllocator = std::function<widget::ErrorLogDisplay&(void)>;
+      
+      
+      NotificationHub (ID identity, ctrl::BusTerm& nexus, WidgetAllocator wa)
         : model::Controller{identity, nexus}
+        , allocateWidget_{wa}
+        , widget_{}
         { }
       
      ~NotificationHub() { };
       
     private:
+      
+      /** external operation to find or allocate an log display widget */
+      WidgetAllocator allocateWidget_;
       
       /** collaboration with a log display allocated elsewhere */
       WLink<widget::ErrorLogDisplay> widget_;
