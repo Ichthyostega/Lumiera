@@ -36,7 +36,7 @@
 
 
 #include "gui/panel/panel.hpp"
-#include "gui/widget/error-log-widget.hpp"
+#include "gui/widget/error-log-display.hpp"
 
 namespace gui  {
 namespace panel{
@@ -62,7 +62,7 @@ namespace panel{
       Gtk::ButtonBox buttons_;
       Gtk::Button button_1_;
       Gtk::Frame frame_;
-      widget::ErrorLogWidget errorLog_;
+      widget::ErrorLogDisplay errorLog_;
       
       void experiment_1();
     };

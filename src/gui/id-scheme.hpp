@@ -75,7 +75,7 @@ namespace gui {
     class TimelineController;
   }
   namespace widget {
-    class ErrorLogWidget;
+    class ErrorLogDisplay;
   }
   namespace idi {
     
@@ -88,7 +88,7 @@ namespace gui {
     
     /* === primary component view types === */
     using TimelineView = timeline::TimelineController;
-    using ErrorLogView = widget::ErrorLogWidget;
+    using ErrorLogView = widget::ErrorLogDisplay;
     
     
     /**

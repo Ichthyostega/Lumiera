@@ -1,5 +1,5 @@
 /*
-  ERROR-LOG-WIDGET.hpp  -  display of error messages in a text box
+  ERROR-LOG-DISPLAY.hpp  -  display of error messages in a text box
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file error-log-widget.hpp
+/** @file error-log-display.hpp
  ** Widget to display error messages to be accessible in non-modal way.
  ** Notifications are shown in a simple text window with scrollbars; new
  ** entries can be added with a severity level, causing the widget to scroll
@@ -33,8 +33,8 @@
  */
 
 
-#ifndef GUI_WIDGET_ERROR_LOG_WIDGET_H
-#define GUI_WIDGET_ERROR_LOG_WIDGET_H
+#ifndef GUI_WIDGET_ERROR_LOG_DISPLAY_H
+#define GUI_WIDGET_ERROR_LOG_DISPLAY_H
 
 #include "gui/gtk-base.hpp"
 #include "include/gui-notification-facade.h"
@@ -55,13 +55,13 @@ namespace widget {
    *       Just a text display box with scrollbars.
    *       Need to add formatting etc.
    */
-  class ErrorLogWidget
+  class ErrorLogDisplay
     : public Gtk::ScrolledWindow
     {
     public:
-     ~ErrorLogWidget() { };
+     ~ErrorLogDisplay() { };
       
-      ErrorLogWidget()
+      ErrorLogDisplay()
         : Gtk::ScrolledWindow()
         , textLog_{}
         {
@@ -118,4 +118,4 @@ namespace widget {
   
   
 }}// namespace gui::widget
-#endif /*GUI_WIDGET_ERROR_LOG_WIDGET_H*/
+#endif /*GUI_WIDGET_ERROR_LOG_DISPLAY_H*/

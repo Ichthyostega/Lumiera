@@ -56,7 +56,7 @@
  **   or as result of some display. However, the actual message content is _not_ state marked; it needs
  **   to be persisted elsewhere (in the session) and replayed from there if desired.
  ** 
- ** @see error-log-widget.hpp
+ ** @see error-log-display.hpp
  ** @see notification-service.hpp
  */
 
@@ -64,9 +64,10 @@
 #ifndef GUI_CTRL_NOTIFICATION_HUB_H
 #define GUI_CTRL_NOTIFICATION_HUB_H
 
-#include "gui/widget/error-log-widget.hpp"
-#include "gui/model/controller.hpp"
+#include "gui/widget/error-log-display.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "gui/model/controller.hpp"
+#include "gui/model/w-link.hpp"
 
 //#include <memory>
 //#include <list>
@@ -76,6 +77,7 @@ namespace gui {
 namespace ctrl {
   
   using lib::diff::TreeMutator;
+  using model::WLink;
   
   
   
@@ -90,6 +92,7 @@ namespace ctrl {
     : public model::Controller
     {
       
+      
       /** content population and manipulation via UI-Bus */
       void
       buildMutator (lib::diff::TreeMutator::Handle buffer)  override
@@ -100,7 +103,7 @@ namespace ctrl {
           buffer.create (
             TreeMutator::build()
           );
-          UNIMPLEMENTED ("create a sensible binding between AssetManager in the session and AssetController in the UI");
+          UNIMPLEMENTED ("define and implement what need to be reflected from asset::ErrorLog");
         }
     
       
@@ -163,6 +166,9 @@ namespace ctrl {
      ~NotificationHub() { };
       
     private:
+      
+      /** collaboration with a log display allocated elsewhere */
+      WLink<widget::ErrorLogDisplay> widget_;
       
     };
   
