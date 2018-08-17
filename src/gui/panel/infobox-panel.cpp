@@ -27,6 +27,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/panel/infobox-panel.hpp"
+#include "gui/widget/error-log-display.hpp"
 #include "lib/format-string.hpp"
 
 using util::_Fmt;
@@ -35,12 +36,15 @@ using Glib::ustring;
 namespace gui  {
 namespace panel{
   
+  using widget::ErrorLogDisplay;
+  
+  
   InfoBoxPanel::InfoBoxPanel (workspace::PanelManager& panelManager, Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
     , twoParts_{Gtk::ORIENTATION_VERTICAL}
     , buttons_{}
     , frame_{"UI Integration Experiments"}
-    , errorLog_{}
+    , theLog_{}
     {
       twoParts_.pack_start(frame_);
       twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
@@ -56,10 +60,7 @@ namespace panel{
       buttons_.add (button_1_);
       //(End)buttons...
       
-      frame_.set_border_width (5);
-      frame_.add (errorLog_);
-      
-      // show everything....
+      // show initial configuration....
       this->add (twoParts_);
       this->show_all();
     }
@@ -77,6 +78,23 @@ namespace panel{
   }
   
   
+  /** on demand allocate display of information / error log
+   * @note we assume it stays alive forever, once allocated
+   * @todo add possibility to collapse it
+   */
+  ErrorLogDisplay&
+  InfoBoxPanel::getLog()
+  {
+    if (not theLog_)
+      {
+        theLog_.reset (new ErrorLogDisplay{});
+        frame_.set_border_width (5);
+        frame_.add (*theLog_);
+        frame_.show_all();    ///////////////TODO necessary?
+      }
+    return *theLog_;
+  }
+  
   
   void
   InfoBoxPanel::experiment_1()
@@ -86,7 +104,7 @@ namespace panel{
     static uint bangNo{0};
     static _Fmt msgTemplate{"Bang #%d\n"};
     
-    errorLog_.showMsg(NOTE_WARN, msgTemplate % ++bangNo);
+    getLog().showMsg(NOTE_WARN, msgTemplate % ++bangNo);
   }
   
   

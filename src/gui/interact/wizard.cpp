@@ -122,7 +122,7 @@ namespace interact {
   Wizard::allocateErrorLogView()
   {
     auto& infoBox = globalCtx_.windowLoc_.locatePanel().find_or_create<panel::InfoBoxPanel>();
-    UNIMPLEMENTED("reach out to attach or allocate a display widget for the error log");
+    return infoBox.getLog();
   }
   
   

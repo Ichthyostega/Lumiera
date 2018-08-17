@@ -36,9 +36,13 @@
 
 
 #include "gui/panel/panel.hpp"
-#include "gui/widget/error-log-display.hpp"
+
+#include <memory>
 
 namespace gui  {
+namespace widget {
+  class ErrorLogDisplay;
+}
 namespace panel{
   
   class InfoBoxPanel
@@ -57,12 +61,15 @@ namespace panel{
       static const char* getTitle();   ///< @deprecated need better design of the PanelManager /////TICKET #1026
       static const gchar* getStockID();
       
+      widget::ErrorLogDisplay& getLog();
+      
     private:
       Gtk::Box twoParts_;
       Gtk::ButtonBox buttons_;
       Gtk::Button button_1_;
       Gtk::Frame frame_;
-      widget::ErrorLogDisplay errorLog_;
+      
+      std::unique_ptr<widget::ErrorLogDisplay> theLog_;
       
       void experiment_1();
     };
