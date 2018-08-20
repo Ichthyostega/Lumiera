@@ -27,6 +27,26 @@
  ** entries can be added with a severity level, causing the widget to scroll
  ** down to the last line of the content buffer.
  ** 
+ ** ## Lifecycle considerations
+ ** 
+ ** The ErrorLogDisplay is typically managed as child of a container widget.
+ ** However, the ctrl::NotificationHub as controller does a lookup and attaches
+ ** to an ErrorLogDisplay found within the InfoBoxPanel, using it as holder for
+ ** information and error messages pushed into the GUI. For that reason, it is
+ ** important really _to destroy_ the ErrorLogDisplay, when it is taken out of
+ ** service. Since ErrorLogDisplay inherits from `sigc::tangible`, it is
+ ** automatically detached from the WLink implementing this cross-attachment,
+ ** when actually the dtor is called.
+ ** @note this is a special convention; usually it is sufficient just to hide()
+ **       a GTK widget, because it is then left alone by the event handling and
+ **       automatically cleaned up at shutdown. Moreover, if you ` remove()` a
+ **       widget from a container, the container no longer manages the widget,
+ **       so you are responsible to take ownership in such situations. And,
+ **       as said, in case of the ErrorLogDisplay, you should `delete` it.
+ ** @remark the standard use case is to have the ErrorLogDisplay sitting
+ **       within the InfoBoxPanel. If the latter is destroyed, it destroys
+ **       its children and all works as expected without much ado.
+ ** 
  ** @todo WIP-WIP-WIP as of 9/2017 this is a first draft of a widget to be
  **       used as receiver by the GuiNotificationService.
  ** 
@@ -94,10 +114,11 @@ namespace widget {
           }
         }
       
-      void
+      bool
       expand (bool yes)
         {
           UNIMPLEMENTED ("Maintain expansion state, build a collapsed representation.");
+          return false; //////TODO true if state change happened; this makes the state persistent
         }
       
       void

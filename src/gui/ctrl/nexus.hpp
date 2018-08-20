@@ -69,7 +69,7 @@ namespace ctrl{
    * 
    * Thus, the "uplink", which is in fact the CoreService, is left to handle
    * - the *`act`* messages (command invocation)
-   * - the *`mark`* messages (upstream state change notification)
+   * - the *`note`* messages (upstream state change notification)
    * 
    * @todo write type comment
    */

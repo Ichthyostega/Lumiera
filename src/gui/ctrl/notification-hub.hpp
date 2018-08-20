@@ -121,8 +121,9 @@ namespace ctrl {
       doExpand (bool yes)  override
         {
           if (widget_ or yes)
-             getWidget().expand (yes);
-          return false; // expand state not sticky
+             if (getWidget().expand (yes))
+               uiBus_.note (GenNode("expand", yes));
+          return false; // state persisted if necessary
         }
       
       virtual void

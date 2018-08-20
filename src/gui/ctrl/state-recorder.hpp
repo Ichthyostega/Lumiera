@@ -187,6 +187,14 @@ namespace ctrl {
         }
       
     private:
+      /** @remark depending on the response of the notified element,
+       *   this might lead to a reentrant record() call, because the
+       *   element might chose to send a _note_ message immediately,
+       *   to record a state change, since it can not know this _is_
+       *   already the replay of a stored state note. However, this
+       *   reentrant call is harmless, it just updates the existing
+       *   entry with identical content.
+       */
       void
       replayPropertiesOf (Record entry)
         {

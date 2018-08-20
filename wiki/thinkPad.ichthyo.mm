@@ -1888,8 +1888,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689098787" ID="ID_191346591" MODIFIED="1533689301486" TEXT="Empfangs-Logik im NotificationController">
 <icon BUILTIN="full-3"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119968325" ID="ID_1630503080" MODIFIED="1534119972876" TEXT="Einrichtung">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119968325" ID="ID_1630503080" MODIFIED="1534730011960" TEXT="Einrichtung">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1534336479160" ID="ID_203145360" MODIFIED="1534527345585" TEXT="Link zum Widget herstellen">
 <arrowlink COLOR="#a66b86" DESTINATION="ID_1326202399" ENDARROW="Default" ENDINCLINATION="279;-1333;" ID="Arrow_ID_664593340" STARTARROW="None" STARTINCLINATION="-1296;0;"/>
 <icon BUILTIN="button_ok"/>
@@ -1906,7 +1906,7 @@
 <linktarget COLOR="#726b86" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="232;27;" ID="Arrow_ID_246715972" SOURCE="ID_1305015272" STARTARROW="None" STARTINCLINATION="180;-21;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689125583" ID="ID_1077285383" MODIFIED="1534721386800" TEXT="mit close-signal verdrahten">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689125583" FOLDED="true" ID="ID_1077285383" MODIFIED="1534728946122" TEXT="mit close-signal verdrahten">
 <icon BUILTIN="stop-sign"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534629989468" ID="ID_1497889519" MODIFIED="1534630008024" TEXT="close-Signal gibtsned">
 <icon BUILTIN="broken-line"/>
@@ -1946,7 +1946,7 @@
 <node CREATED="1534630517045" ID="ID_435686246" MODIFIED="1534630526167" TEXT="und dann wirklich zerst&#xf6;rt, nicht nur verborgen"/>
 <node CREATED="1534630526995" ID="ID_626097783" MODIFIED="1534630535742" TEXT="zugeh&#xf6;riges Model wird ebenfalls zerst&#xf6;rt"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534630538178" ID="ID_706923205" MODIFIED="1534721356240" TEXT="wenn Docking-Panel geschlossen wird">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534630538178" FOLDED="true" ID="ID_706923205" MODIFIED="1534726744532" TEXT="wenn Docking-Panel geschlossen wird">
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#338800" CREATED="1534630581532" ID="ID_333724082" MODIFIED="1534721330781" TEXT="herausfinden ob und was passiert">
 <icon BUILTIN="button_ok"/>
@@ -2101,10 +2101,27 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721400696" ID="ID_1935193271" MODIFIED="1534721415696" TEXT="jeder Zugriff pr&#xfc;ft WLink">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1534721400696" ID="ID_1935193271" MODIFIED="1534729121908" TEXT="jeder Zugriff pr&#xfc;ft WLink">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1534721417590" ID="ID_1471234946" MODIFIED="1534721567118" STYLE="fork" TEXT="das er&#xfc;brigt Verwalten eines eigenen Signales">
 <linktarget COLOR="#69b2a9" DESTINATION="ID_1471234946" ENDARROW="Default" ENDINCLINATION="37;-44;" ID="Arrow_ID_1612034198" SOURCE="ID_997317939" STARTARROW="None" STARTINCLINATION="-209;0;"/>
+</node>
+<node COLOR="#338800" CREATED="1534729080597" ID="ID_1547931497" MODIFIED="1534729118672" TEXT="Code durchgesehen: alle Zugriffe sauber">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      entweder sie laufen &#252;ber den Getter,
+    </p>
+    <p>
+      oder sie pr&#252;fen den Zustand und machen nichts, wenn das Widget nicht da ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1534721435740" ID="ID_1066281960" MODIFIED="1534721509684" TEXT="Konvention: Fehlerlog-Widget zerst&#xf6;ren">
 <richcontent TYPE="NOTE"><html>
@@ -2122,8 +2139,8 @@
 <arrowlink DESTINATION="ID_1360416196" ENDARROW="Default" ENDINCLINATION="417;34;" ID="Arrow_ID_1337668046" STARTARROW="None" STARTINCLINATION="-454;-9;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721523435" ID="ID_679085788" MODIFIED="1534721526433" TEXT="dokumentieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1534721523435" ID="ID_679085788" MODIFIED="1534729998070" TEXT="dokumentieren">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721512505" ID="ID_1260021418" MODIFIED="1534721539161" TEXT="sofern es im Panel lebt, passiert das automatisch">
 <icon BUILTIN="flag-yellow"/>
