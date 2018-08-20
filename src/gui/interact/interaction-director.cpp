@@ -131,9 +131,6 @@ namespace interact {
   void
   InteractionDirector::buildMutator (TreeMutator::Handle buffer)
   {
-//  using Attrib = std::pair<const string,string>;
-//  using lib::diff::collection;
-    
     buffer.create (
       TreeMutator::build()
     );

@@ -94,6 +94,55 @@ namespace widget {
           }
         }
       
+      void
+      expand (bool yes)
+        {
+          UNIMPLEMENTED ("Maintain expansion state, build a collapsed representation.");
+        }
+      
+      void
+      clearAll()
+        {
+          UNIMPLEMENTED ("empty buffer and discard all error bookmarks");
+        }
+      
+      void
+      addMsg (string text)
+        {
+          UNIMPLEMENTED ("add normal information message to buffer");
+        }
+      
+      void
+      addError (string text)
+        {
+          UNIMPLEMENTED ("add error with special tag and bookmark");
+        }
+      
+      void
+      clearInfoMsg()
+        {
+          UNIMPLEMENTED ("clear all mere information messages; then re-insert the errors with tags");
+        }
+      
+      void
+      turnError_into_InfoMsg()
+        {
+          UNIMPLEMENTED ("visit all errors and downgrade the markup; discard all bookmarks");
+        }
+      
+      void
+      triggerFlash()
+        {
+          UNIMPLEMENTED ("paint and set callback-timeout to return to normal state");
+        }
+      
+      void
+      revealYourself()
+        {
+          UNIMPLEMENTED ("store a link to parent. Ask parent to reveal us. Switch to expanded display");
+        }
+
+      
       
     private:/* ===== Internals ===== */
       

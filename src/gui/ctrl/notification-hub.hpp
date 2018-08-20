@@ -98,9 +98,6 @@ namespace ctrl {
       void
       buildMutator (lib::diff::TreeMutator::Handle buffer)  override
         {
-      //  using Attrib = std::pair<const string,string>;
-      //  using lib::diff::collection;
-          
           buffer.create (
             TreeMutator::build()
           );
@@ -113,49 +110,64 @@ namespace ctrl {
       virtual bool
       doReset()  override
         {
-          UNIMPLEMENTED ("Clear log contents, collapse widget, clear error state");
+          if (not widget_) return false;
+          
+          widget_->clearAll();
+          widget_->expand (false);
+          return true;
         }
       
       virtual bool
       doExpand (bool yes)  override
         {
-          UNIMPLEMENTED ("Allocate Widget if necessary, expand widget");
+          if (widget_ or yes)
+             getWidget().expand (yes);
+          return false; // expand state not sticky
         }
       
       virtual void
       doRevealYourself()  override
         {
-          UNIMPLEMENTED ("TODO: how can the Log-Widget be 'revealed'?? Possibly allocate Widget, expand it. But how to make it visible?");
+          getWidget().revealYourself(); // implies also expand
         }
       
       virtual bool
       doMsg (string text)  override
         {
-          UNIMPLEMENTED ("Possibly allocate Widget, place text into its buffer. No need to expand");
+          getWidget().addMsg (text);
+          return false; // logging is no persistent state
         }
       
       virtual bool
       doClearMsg ()  override
         {
-          UNIMPLEMENTED ("remove all mere information messages");
+          if (widget_)
+            widget_->clearInfoMsg();
+          return false; // not persistent (sticky)
         }
       
       virtual bool
       doErr (string text)  override
         {
-          UNIMPLEMENTED ("Set error state. Allocate Widget if necessary, expand widget, place error message into its buffer");
+          getWidget().addError (text);
+          widget_->expand (true);
+          return false;
         }
       
       virtual bool
       doClearErr ()  override
         {
-          UNIMPLEMENTED ("clear error state. If widget exists, turn all error entries into mere information entries");
+          if (widget_)
+            widget_->turnError_into_InfoMsg();
+          return false; // not persistent (sticky)
         }
       
       virtual void
       doFlash()  override
         {
-          UNIMPLEMENTED ("If widget exists: expand it, trigger its flash function (paint with timeout). TODO also doRevealYourself.");
+          if (not widget_) return;
+          widget_->revealYourself();
+          widget_->triggerFlash();
         }
       
       

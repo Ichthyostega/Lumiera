@@ -1734,6 +1734,76 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504203754175" ID="ID_580465154" MODIFIED="1533402997076" TEXT="Fehler-Level erkennen">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725200588" ID="ID_871562482" MODIFIED="1534725208028" TEXT="Operationen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725109137" ID="ID_694776463" MODIFIED="1534725415160" TEXT="expand">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725397553" ID="ID_1072347956" MODIFIED="1534725407905" TEXT="collapsed-Repr&#xe4;sentation schaffen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725101578" ID="ID_974315967" MODIFIED="1534725412673" TEXT="clearAll">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725131214" ID="ID_1479834475" MODIFIED="1534725417504" TEXT="addMsg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725152139" ID="ID_887758432" MODIFIED="1534725420632" TEXT="addError">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725422454" ID="ID_1459967459" MODIFIED="1534725491846" TEXT="spezieller Markup">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725501467" ID="ID_1420459325" MODIFIED="1534725506867" TEXT="Bookmark speichern">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725142756" ID="ID_343395831" MODIFIED="1534725674269" TEXT="clearInfoMsg">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725716254" ID="ID_1648079400" MODIFIED="1534725735604" TEXT="Fehler-Texte beiseite Speichern">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725675884" ID="ID_1549487041" MODIFIED="1534725711920" TEXT="Textbuffer leeren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725690450" ID="ID_314460083" MODIFIED="1534725710992" TEXT="Fehler-Bookmarks erneut einsetzen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725160618" ID="ID_1981616896" MODIFIED="1534725672469" TEXT="turnError_into_InfoMsg">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725575098" ID="ID_383201596" MODIFIED="1534725585810" TEXT="Markup reduzieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725587112" ID="ID_31905080" MODIFIED="1534725593152" TEXT="Bookmarks entfernen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725180543" ID="ID_1442607312" MODIFIED="1534725302600" TEXT="triggerFlash">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725283337" ID="ID_1256364821" MODIFIED="1534725298760" TEXT="farbigen Rahmen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534725366734" ID="ID_951505172" MODIFIED="1534725377925" TEXT="vorl&#xe4;ufig feste Farbe">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725292080" ID="ID_1462887421" MODIFIED="1534725297672" TEXT="timeout setzen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722011622" ID="ID_232472679" MODIFIED="1534722142986" TEXT="revealYourself">
+<linktarget COLOR="#af6a8f" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" SOURCE="ID_898428560" STARTARROW="None" STARTINCLINATION="859;27;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722040354" ID="ID_633013" MODIFIED="1534722061920" TEXT="eigennen show/hide-Status erkennen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722062911" ID="ID_1134044414" MODIFIED="1534722072607" TEXT="braucht Parent-Link">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722073526" ID="ID_1428186731" MODIFIED="1534722090132" TEXT="parent.reveal(this)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1522936265009" ID="ID_433355936" MODIFIED="1522936276561" TEXT="Bang! -Button">
 <icon BUILTIN="button_ok"/>
@@ -1832,36 +1902,307 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1533689120536" ID="ID_1806645586" MODIFIED="1534525243617" TEXT="View belegen">
-<linktarget COLOR="#726b86" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="232;27;" ID="Arrow_ID_246715972" SOURCE="ID_1305015272" STARTARROW="None" STARTINCLINATION="180;-21;"/>
 <linktarget COLOR="#88a8b3" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="-186;-20;" ID="Arrow_ID_948128706" SOURCE="ID_1941760302" STARTARROW="None" STARTINCLINATION="-4;127;"/>
+<linktarget COLOR="#726b86" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="232;27;" ID="Arrow_ID_246715972" SOURCE="ID_1305015272" STARTARROW="None" STARTINCLINATION="180;-21;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689125583" ID="ID_1077285383" MODIFIED="1533689142951" TEXT="mit close-signal verdrahten">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689125583" ID="ID_1077285383" MODIFIED="1534721386800" TEXT="mit close-signal verdrahten">
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534629989468" ID="ID_1497889519" MODIFIED="1534630008024" TEXT="close-Signal gibtsned">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1534630165971" ID="ID_783988097" MODIFIED="1534630171687" TEXT="nur Fenster haben signal_delete_event"/>
+<node CREATED="1534630176586" ID="ID_712401559" MODIFIED="1534630190996" TEXT="wird aber per Default auf hide() gemappt"/>
+<node COLOR="#435e98" CREATED="1534634189347" ID="ID_146943890" MODIFIED="1534635809110">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      GTK-Konzepte: &quot;<b>Schlie&#223;en</b>&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#6f7ab9" DESTINATION="ID_1900017952" ENDARROW="Default" ENDINCLINATION="-2264;0;" ID="Arrow_ID_1220603071" STARTARROW="None" STARTINCLINATION="-6278;0;"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1534630195728" ID="ID_1711320497" MODIFIED="1534630202867" TEXT="was brauche ich?">
+<node CREATED="1534630216909" ID="ID_1211516480" MODIFIED="1534630237569">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn Log-Anzeige <i>verworfen</i>&#160;wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1534630507190" ID="ID_1710219381" MODIFIED="1534630516168" TEXT="aus dem umschlie&#xdf;enden Container entfernt"/>
+<node CREATED="1534630517045" ID="ID_435686246" MODIFIED="1534630526167" TEXT="und dann wirklich zerst&#xf6;rt, nicht nur verborgen"/>
+<node CREATED="1534630526995" ID="ID_626097783" MODIFIED="1534630535742" TEXT="zugeh&#xf6;riges Model wird ebenfalls zerst&#xf6;rt"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534630538178" ID="ID_706923205" MODIFIED="1534721356240" TEXT="wenn Docking-Panel geschlossen wird">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1534630581532" ID="ID_333724082" MODIFIED="1534721330781" TEXT="herausfinden ob und was passiert">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1534636016460" ID="ID_16558042" MODIFIED="1534636022815" TEXT="vom Code her nicht klar"/>
+<node CREATED="1534636023499" ID="ID_1133271303" MODIFIED="1534636030757" TEXT="k&#xf6;nnte kaputt sein"/>
+<node CREATED="1534636033826" ID="ID_1327331647" MODIFIED="1534636037572" TEXT="theoretisch....">
+<node CREATED="1534636038545" ID="ID_20267823" MODIFIED="1534636076288" TEXT="sollte das Panel aus seinem Container genommen werden"/>
+<node CREATED="1534636077660" ID="ID_1153072337" MODIFIED="1534636097661" TEXT="und der Container (=DockItem) sollte daraufhin dieses Kind (=Panel) verbergen"/>
+<node CREATED="1534636098937" ID="ID_684477198" MODIFIED="1534636108035" TEXT="jedenfalls w&#xe4;re das die normale GTK-Logik"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534636118486" ID="ID_1396783317" MODIFIED="1534636136704" TEXT="TODO: empirisch herausfinden">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1534630593946" ID="ID_332877746" MODIFIED="1534630600819" TEXT="Einstiegspunkt: PanelManager">
+<icon BUILTIN="idea"/>
+<node CREATED="1534630686134" ID="ID_1763470642" MODIFIED="1534630687561" TEXT="PanelManager::removePanel"/>
+<node CREATED="1534630698524" ID="ID_170868004" MODIFIED="1534630699432" TEXT="delete panel;"/>
+<node CREATED="1534630922134" ID="ID_1602014175" MODIFIED="1534630925289" TEXT="komisch...">
+<node CREATED="1534630926326" ID="ID_1520511750" MODIFIED="1534630932161" TEXT="Panel erbt von VBox"/>
+<node CREATED="1534630932821" ID="ID_669390115" MODIFIED="1534630940399" TEXT="h&#xe4;lt nur eine Referenz auf das DockItem"/>
+<node CREATED="1534631014841" ID="ID_997149684" MODIFIED="1534631085070" TEXT="dieser Code ist gegenw&#xe4;rtig auskommentiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      er ist n&#228;mlich auch aufgerufen worden, nachdem die GTK-Loop bereits beendet war.
+    </p>
+    <p>
+      Dieser Code hat fr&#252;her C-m&#228;&#223;ig direkt die GObjects manipuliert (Anfangs hatten wir nur GDL, nicht GDLmm)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1534630941563" ID="ID_701586360" MODIFIED="1534631013681" TEXT="Code im dtor entfernt das Panel aus dem DockItem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Erl&#228;uterung: DockItem ist ein 1-elementiger GTK-Container,
+    </p>
+    <p>
+      der sichtbare Inhalt liegt in diesem Container. Bei uns ist das das Panel.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1534632167588" ID="ID_482488418" MODIFIED="1534632171240" TEXT="gtk_container_remove">
+<node CREATED="1534632172396" ID="ID_1415075917" MODIFIED="1534632183158" TEXT="&#xe4;ndert nichts am Sichtbarkeits-Status"/>
+<node CREATED="1534632183818" ID="ID_1537037393" MODIFIED="1534632194005" TEXT="aber erniedrigt den Refcount"/>
+<node CREATED="1534632290500" ID="ID_1165360257" MODIFIED="1534632304077" TEXT="emittiert das signal_remove auf dem Container"/>
+<node CREATED="1534632195136" ID="ID_1692600031" MODIFIED="1534632241155" TEXT="Intersssanter Kommentar: man sollte direkt zerst&#xf6;ren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Removes @widget from @container. @widget must be inside @container.
+    </p>
+    <p>
+      Note that @container will own a reference to @widget, and that this
+    </p>
+    <p>
+      may be the last reference held; so removing a widget from its&#160;&#160;&#160;&#160;&#160;
+    </p>
+    <p>
+      container can destroy that widget. If you want to use @widget&#160;&#160;&#160;&#160;&#160;
+    </p>
+    <p>
+      again, you need to add a reference to it before removing it from&#160;&#160;
+    </p>
+    <p>
+      a container, using g_object_ref(). If you don&#8217;t want to use @widget
+    </p>
+    <p>
+      again it&#8217;s usually more efficient to simply destroy it directly&#160;&#160;&#160;
+    </p>
+    <p>
+      using gtk_widget_destroy() since this will remove it from the&#160;&#160;&#160;&#160;&#160;
+    </p>
+    <p>
+      container and help break any circular reference count cycles.&#160;&#160;&#160;&#160;&#160;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1534632585779" ID="ID_1472646683" MODIFIED="1534632587041" TEXT="gtk_widget_destroy">
+<node CREATED="1534632595042" ID="ID_818220639" MODIFIED="1534632609779" TEXT="macht praktisch nix"/>
+<node CREATED="1534632593098" ID="ID_1924038071" MODIFIED="1534632594262" TEXT="g_object_run_dispose">
+<node CREATED="1534632642379" ID="ID_1189983629" MODIFIED="1534632650014" TEXT="macht nur Memory-Management"/>
+</node>
+<node CREATED="1534632859518" ID="ID_738187804" MODIFIED="1534632873272" TEXT="aufgerufen von : gtk_container_destroy">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1534636163120" ID="ID_1102539072" MODIFIED="1534721182274" TEXT="explizites Destroy-Signal bauen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1534636203306" ID="ID_1590219615" MODIFIED="1534636301238" TEXT="wird nicht vom Framework bereitgestellt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist das Fazit meiner Untersuchung.
+    </p>
+    <p>
+      &quot;destroy&quot; ist kein relevantes Konzept f&#252;r GTK. Es gibt nur show()/hide().
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Also m&#252;ssen wir <i>explizit</i>
+    </p>
+    <ul>
+      <li>
+        eine Destroy-Signal bauen
+      </li>
+      <li>
+        daf&#252;r sorgen, da&#223; das Infobox-Panel das auch aufruft
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1534636462287" ID="ID_1581893176" MODIFIED="1534721195248" TEXT="eigenes SigC Signal bereitstellen"/>
+<node CREATED="1534636486123" ID="ID_1855036791" MODIFIED="1534721209774" TEXT="w&#xfc;rde vom EventLog-dtor aufgerufen"/>
+<node CREATED="1534721236063" ID="ID_1398832202" MODIFIED="1534721247336" TEXT="das w&#xe4;re eine private Konvention">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1534721249117" ID="ID_997317939" MODIFIED="1534721572753" TEXT="....dann ist WLink genauso gut">
+<arrowlink COLOR="#69b2a9" DESTINATION="ID_1471234946" ENDARROW="Default" ENDINCLINATION="37;-44;" ID="Arrow_ID_1612034198" STARTARROW="None" STARTINCLINATION="-209;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721400696" ID="ID_1935193271" MODIFIED="1534721415696" TEXT="jeder Zugriff pr&#xfc;ft WLink">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1534721417590" ID="ID_1471234946" MODIFIED="1534721567118" STYLE="fork" TEXT="das er&#xfc;brigt Verwalten eines eigenen Signales">
+<linktarget COLOR="#69b2a9" DESTINATION="ID_1471234946" ENDARROW="Default" ENDINCLINATION="37;-44;" ID="Arrow_ID_1612034198" SOURCE="ID_997317939" STARTARROW="None" STARTINCLINATION="-209;0;"/>
+</node>
+<node CREATED="1534721435740" ID="ID_1066281960" MODIFIED="1534721509684" TEXT="Konvention: Fehlerlog-Widget zerst&#xf6;ren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und nicht blo&#223; inaktiv schalten.
+    </p>
+  </body>
+</html>
+</richcontent>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721528967" ID="ID_1984401497" MODIFIED="1534721870151" TEXT="verifizieren">
+<arrowlink DESTINATION="ID_1360416196" ENDARROW="Default" ENDINCLINATION="417;34;" ID="Arrow_ID_1337668046" STARTARROW="None" STARTINCLINATION="-454;-9;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721523435" ID="ID_679085788" MODIFIED="1534721526433" TEXT="dokumentieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721512505" ID="ID_1260021418" MODIFIED="1534721539161" TEXT="sofern es im Panel lebt, passiert das automatisch">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689146501" ID="ID_1371087868" MODIFIED="1533689151053" TEXT="bei Bedarf anzeigen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534636343111" ID="ID_1922277957" MODIFIED="1534636350863" TEXT="ebenfalls explizit zu bauen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1534636352398" ID="ID_435790811" MODIFIED="1534636448600" TEXT="&#xe4;hnliche Lage wie bei Destroy">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      GTK bietet nur Anzeigen von top-down:
+    </p>
+    <ul>
+      <li>
+        show_all() auf Containern zeigt rekursiv alle Kinder
+      </li>
+      <li>
+        show() zeigt nur ein bestimmtes Widget
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1534636369107" ID="ID_898428560" MODIFIED="1534722142986" TEXT="reveal / revealYourself">
+<arrowlink COLOR="#af6a8f" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" STARTARROW="None" STARTINCLINATION="859;27;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1534636377938" ID="ID_64685935" MODIFIED="1534636392354" TEXT="k&#xf6;nnte Lumiera-Framework werden">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1534721937152" ID="ID_1396835945" MODIFIED="1534721944841" TEXT="macht aber nicht der Controller">
+<icon BUILTIN="yes"/>
+<node CREATED="1534721946351" ID="ID_1570295012" MODIFIED="1534721954170" TEXT="typisches OO-Design"/>
+<node CREATED="1534721955070" ID="ID_1390682663" MODIFIED="1534722916337" TEXT="der Controller sagt nur &quot;revealYourself&quot;">
+<linktarget COLOR="#7691b1" DESTINATION="ID_1390682663" ENDARROW="Default" ENDINCLINATION="-71;33;" ID="Arrow_ID_1469414604" SOURCE="ID_558411855" STARTARROW="None" STARTINCLINATION="109;16;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689138950" ID="ID_580572298" MODIFIED="1534451630033" TEXT="status-Flag">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1534722574441" ID="ID_558411855" MODIFIED="1534722916336" TEXT="delegiert an Widget">
+<arrowlink COLOR="#7691b1" DESTINATION="ID_1390682663" ENDARROW="Default" ENDINCLINATION="-71;33;" ID="Arrow_ID_1469414604" STARTARROW="None" STARTINCLINATION="109;16;"/>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722791268" ID="ID_1074988560" MODIFIED="1534722909109" TEXT="Error-State">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722566362" HGAP="29" ID="ID_202753412" MODIFIED="1534722910293" TEXT="sichtbar" VSHIFT="-18">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119979555" ID="ID_1159164748" MODIFIED="1534119985027" TEXT="Controller-Interface">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1534120180110" TEXT="doReset()">
-<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119979555" ID="ID_1159164748" MODIFIED="1534725765116" TEXT="Controller-Interface">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1534725759893" TEXT="doReset()">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150458" ID="ID_1390376483" MODIFIED="1534120202934" TEXT="&quot;Clear log contents, collapse widget, clear error state&quot;&quot;">
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150458" ID="ID_1083026482" MODIFIED="1534120180109" TEXT="doExpand(yes)">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150458" ID="ID_1083026482" MODIFIED="1534725759894" TEXT="doExpand(yes)">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150459" ID="ID_1182032725" MODIFIED="1534120202934" TEXT="&quot;Allocate Widget if necessary, expand widget&quot;">
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150459" ID="ID_1466610963" MODIFIED="1534120180109" TEXT="doRevealYourself()">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150459" ID="ID_1466610963" MODIFIED="1534725759894" TEXT="doRevealYourself()">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150460" ID="ID_1726008784" MODIFIED="1534120253931">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -1878,20 +2219,20 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150462" ID="ID_1528884346" MODIFIED="1534120180108" TEXT="doMsg(text)">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150462" ID="ID_1528884346" MODIFIED="1534725759894" TEXT="doMsg(text)">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150462" ID="ID_1226643824" MODIFIED="1534120202934" TEXT="&quot;Possibly allocate Widget, place text into its buffer. No need to expand&quot;">
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150463" ID="ID_183847307" MODIFIED="1534120180107" TEXT="doClearMsg()">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150463" ID="ID_183847307" MODIFIED="1534725759894" TEXT="doClearMsg()">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150463" ID="ID_1378278687" MODIFIED="1534120202934" TEXT="&quot;remove all mere information messages&quot;">
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150463" ID="ID_1967851591" MODIFIED="1534120180106" TEXT="doErr(text)">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150463" ID="ID_1967851591" MODIFIED="1534725759893" TEXT="doErr(text)">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150463" ID="ID_764543121" MODIFIED="1534120282524">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -1917,14 +2258,14 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150464" ID="ID_1675673289" MODIFIED="1534120180106" TEXT="doClearErr()">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150464" ID="ID_1675673289" MODIFIED="1534725759893" TEXT="doClearErr()">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150465" ID="ID_1858186015" MODIFIED="1534120202932" TEXT="&quot;clear error state. If widget exists, turn all error entries into mere information entries&quot;">
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150465" ID="ID_1862649971" MODIFIED="1534120180105" TEXT="doFlash()">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150465" ID="ID_1862649971" MODIFIED="1534725759893" TEXT="doFlash()">
+<icon BUILTIN="pencil"/>
 <node CREATED="1534120150465" ID="ID_222097969" MODIFIED="1534120315751">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -1956,6 +2297,23 @@
 <node CREATED="1533689235200" ID="ID_1760873318" MODIFIED="1533689242460" TEXT="in der Test-Timeline"/>
 <node CREATED="1533689243871" ID="ID_1745090225" MODIFIED="1533689254514" TEXT="triggert Dummy-Command"/>
 <node CREATED="1533689255174" ID="ID_821013695" MODIFIED="1533689263657" TEXT="dieses ruft die Notification_Facade auf"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534721737507" ID="ID_1467431829" MODIFIED="1534721762112" TEXT="verifizieren">
+<icon BUILTIN="full-6"/>
+<node CREATED="1534721764680" ID="ID_237796687" MODIFIED="1534721771410" TEXT="Belegen der View"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721772238" ID="ID_130695962" MODIFIED="1534721838886" TEXT="Verbinden mit bestehendem InfoboxPanel">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721811969" ID="ID_1320259895" MODIFIED="1534721838431" TEXT="auch in einerm anderen Fenster">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721785596" ID="ID_1517054985" MODIFIED="1534721837983" TEXT="Erzeugen eines neuen InfoboxPanels">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721819264" ID="ID_1360416196" MODIFIED="1534721870151" TEXT="Panel durch Ersetzung zerst&#xf6;ren">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1360416196" ENDARROW="Default" ENDINCLINATION="417;34;" ID="Arrow_ID_1337668046" SOURCE="ID_1984401497" STARTARROW="None" STARTINCLINATION="-454;-9;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -3271,8 +3629,7 @@
       Name: <b>WLink</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#338800" CREATED="1534336127895" HGAP="21" ID="ID_352867763" MODIFIED="1534436566889" TEXT="WLink_test" VSHIFT="9">
@@ -3401,8 +3758,8 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504191345606" ID="ID_1249897876" MODIFIED="1534511409141" TEXT="#1026 cleanup PanelManager">
-<linktarget COLOR="#e1a169" DESTINATION="ID_1249897876" ENDARROW="Default" ENDINCLINATION="-636;0;" ID="Arrow_ID_446871395" SOURCE="ID_125942292" STARTARROW="None" STARTINCLINATION="-311;562;"/>
 <linktarget COLOR="#ce6b5f" DESTINATION="ID_1249897876" ENDARROW="Default" ENDINCLINATION="1299;0;" ID="Arrow_ID_1635700276" SOURCE="ID_1335931102" STARTARROW="Default" STARTINCLINATION="-1412;-1014;"/>
+<linktarget COLOR="#e1a169" DESTINATION="ID_1249897876" ENDARROW="Default" ENDINCLINATION="-636;0;" ID="Arrow_ID_446871395" SOURCE="ID_125942292" STARTARROW="None" STARTINCLINATION="-311;562;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504193029907" ID="ID_1020871440" MODIFIED="1518487921060" TEXT="#1104 how to instruct actions through panels">
 <linktarget COLOR="#806893" DESTINATION="ID_1020871440" ENDARROW="Default" ENDINCLINATION="-3;460;" ID="Arrow_ID_412107208" SOURCE="ID_1943521361" STARTARROW="Default" STARTINCLINATION="-618;-18;"/>
@@ -14531,8 +14888,7 @@
       wenn es schon wirkliche und funktionierende Widgets im System gibt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -14557,8 +14913,7 @@
       ...bisher erzeugt die lookup-Operation automatisch
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1534520304493" ID="ID_1795676672" MODIFIED="1534522378245" TEXT="wo erzeugen?">
@@ -33377,7 +33732,101 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node CREATED="1477523681978" HGAP="23" ID="ID_400257229" MODIFIED="1518487921099" TEXT="Richtlinien" VSHIFT="-21">
+<node COLOR="#435e98" CREATED="1534634232557" HGAP="31" ID="ID_1467351006" MODIFIED="1534635461322" TEXT="Konzepte" VSHIFT="-22">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+<node CREATED="1534635219848" ID="ID_1769333890" MODIFIED="1534635235608" TEXT="show / hide">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1534635236910" ID="ID_1635567005" MODIFIED="1534635253280" TEXT="das zentrale Konzept in GTK">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1534635271809" ID="ID_545450309" MODIFIED="1534635282636" TEXT="GTK == Event-Framework">
+<node CREATED="1534635363429" ID="ID_1102578851" MODIFIED="1534635379942" TEXT="GTK interessiert sich nur indirekt f&#xfc;r den Lebenszyklus"/>
+<node CREATED="1534635380794" ID="ID_121089426" MODIFIED="1534635399627" TEXT="...insofern Callbacks nicht in toten Speicher zeigen d&#xfc;rfen"/>
+<node CREATED="1534635400479" ID="ID_1808051725" MODIFIED="1534635411242" TEXT="was aber sonst mit den &quot;Objekten&quot; passiert, ist GTK egal"/>
+<node CREATED="1534635412070" ID="ID_1070513169" MODIFIED="1534635425784" TEXT="am Ende gehen alle Refcounts ohnehin auf Null"/>
+<node CREATED="1534635426684" ID="ID_995597401" MODIFIED="1534635433703" TEXT="und wenn nicht, drof jeschissen"/>
+</node>
+<node CREATED="1534635260267" ID="ID_287252267" MODIFIED="1534635295432" TEXT="was verborgen ist, bekommt keine Events">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1534635309500" ID="ID_717136118" MODIFIED="1534635316303" TEXT="Container">
+<node CREATED="1534635317179" ID="ID_921739364" MODIFIED="1534635322366" TEXT="verbergen rekursiv"/>
+<node CREATED="1534635322938" ID="ID_1532459469" MODIFIED="1534635328573" TEXT="show_all zeigt rekursiv an"/>
+</node>
+</node>
+<node CREATED="1534634259498" ID="ID_1900017952" MODIFIED="1534635809110" TEXT="&quot;Schlie&#xdf;en&quot;">
+<linktarget COLOR="#6f7ab9" DESTINATION="ID_1900017952" ENDARROW="Default" ENDINCLINATION="-2264;0;" ID="Arrow_ID_1220603071" SOURCE="ID_146943890" STARTARROW="None" STARTINCLINATION="-6278;0;"/>
+<node CREATED="1534634292477" ID="ID_1867321008" MODIFIED="1534634310281">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Konzept <b>gibts nicht</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1534634334767" ID="ID_1445477599" MODIFIED="1534634373419">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      GTK-Widget: <b>hide</b>()
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1534634379762" ID="ID_83493459" MODIFIED="1534634386116" TEXT="es wird unmapped">
+<node CREATED="1534634403766" ID="ID_1515267212" MODIFIED="1534634426295" TEXT="keine Screen-Space-Zuordnung mehr"/>
+<node CREATED="1534634426883" ID="ID_586184038" MODIFIED="1534634431582" TEXT="es wird nicht mehr gezeichnet"/>
+</node>
+<node CREATED="1534634386704" ID="ID_131269615" MODIFIED="1534634394739" TEXT="es wird aus dem Event-Processing herausgenommen"/>
+</node>
+<node CREATED="1534634453703" ID="ID_289385917" MODIFIED="1534634468974">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      GObject: <b>unref</b>()
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1534634472325" ID="ID_180385322" MODIFIED="1534634490430" TEXT="Glib hat ein refcounting Memory-Management"/>
+<node CREATED="1534634502817" ID="ID_1557422702" MODIFIED="1534634512131" TEXT="das betrifft nur das Memory-Managment"/>
+<node CREATED="1534634512864" ID="ID_952501435" MODIFIED="1534634524762" TEXT="jeder Client ist verantwortlich, seine Referenzen freizugeben"/>
+</node>
+<node CREATED="1534635126901" ID="ID_868113400" MODIFIED="1534635131976" TEXT="gtk_widget_destroy">
+<node CREATED="1534635139155" ID="ID_1958818389" MODIFIED="1534635155125" TEXT="l&#xf6;st ein DESTROY-Signal aus"/>
+<node CREATED="1534635156137" ID="ID_1010364630" MODIFIED="1534635215323" TEXT="macht sonst nur Refcount-Zeugs"/>
+<node CREATED="1534635167295" ID="ID_418523562" MODIFIED="1534635211504" TEXT="keinerlei Auswirkung auf die Sichtbarkeit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...in der Praxis aber entsteht indirekt eine Auswirkung,
+    </p>
+    <p>
+      insofern Container auf das DESTROY-Signal ihrer Kinder reagieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1477523681978" HGAP="14" ID="ID_400257229" MODIFIED="1534634566726" TEXT="Richtlinien" VSHIFT="11">
 <node CREATED="1477523701544" ID="ID_1802991794" MODIFIED="1518487921099" TEXT="empfohlen">
 <node CREATED="1477523709342" ID="ID_781118281" MODIFIED="1518487921099" TEXT="Box">
 <node CREATED="1477524273619" ID="ID_216152004" MODIFIED="1518487921099" TEXT="pack_start() / pack_end()"/>
@@ -33413,6 +33862,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#627292" DESTINATION="ID_185528211" ENDARROW="Default" ENDINCLINATION="58;-164;" ID="Arrow_ID_390519319" STARTARROW="None" STARTINCLINATION="135;0;"/>
+</node>
 </node>
 </node>
 <node CREATED="1495221220040" HGAP="43" ID="ID_782313223" MODIFIED="1533306068667" TEXT="Framework" VSHIFT="-20">
@@ -34536,8 +34986,7 @@
       The grip is implemented as a GdlDockItemGrip
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1534512072391" ID="ID_1008938926" MODIFIED="1534512077442" TEXT="gdl::DockPlaceholder">
