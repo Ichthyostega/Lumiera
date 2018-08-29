@@ -44,6 +44,7 @@ namespace panel{
     , twoParts_{Gtk::ORIENTATION_VERTICAL}
     , buttons_{}
     , frame_{"UI Integration Experiments"}
+    , logExpander_{"Error Log"}
     , theLog_{}
     {
       twoParts_.pack_start(frame_);
@@ -88,9 +89,13 @@ namespace panel{
     if (not theLog_)
       {
         theLog_.reset (new ErrorLogDisplay{});
+        logExpander_.set_expanded (true);
+        logExpander_.add (*theLog_);
         frame_.set_border_width (5);
-        frame_.add (*theLog_);
-        frame_.show_all();    ///////////////TODO necessary?
+        frame_.add (logExpander_);
+//        frame_.add (*theLog_);
+//        frame_.check_resize();
+        frame_.show_all();
       }
     return *theLog_;
   }

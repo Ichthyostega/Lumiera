@@ -85,7 +85,7 @@ namespace widget {
         : Gtk::ScrolledWindow()
         , textLog_{}
         {
-          set_size_request (200, 50);
+          set_size_request (200, 80);           // must be > 50 for the scrollbar to work properly 
           set_border_width (10);
           set_shadow_type  (Gtk::SHADOW_NONE);
           
@@ -93,7 +93,6 @@ namespace widget {
           set_policy (Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
           this->add (textLog_);
           textLog_.set_editable (false);
-          
         }
       
       

@@ -68,6 +68,7 @@ namespace panel{
       Gtk::ButtonBox buttons_;
       Gtk::Button button_1_;
       Gtk::Frame frame_;
+      Gtk::Expander logExpander_;
       
       std::unique_ptr<widget::ErrorLogDisplay> theLog_;
       

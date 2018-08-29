@@ -1744,8 +1744,46 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725109137" ID="ID_694776463" MODIFIED="1534725415160" TEXT="expand">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725397553" ID="ID_1072347956" MODIFIED="1534725407905" TEXT="collapsed-Repr&#xe4;sentation schaffen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725397553" ID="ID_1072347956" MODIFIED="1535563380736" TEXT="collapsed-Repr&#xe4;sentation schaffen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1535554610295" ID="ID_1050608842" MODIFIED="1535554619117" TEXT="nur vorl&#xe4;ufige L&#xf6;sung">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1535554620165" ID="ID_1243930693" MODIFIED="1535554624774" TEXT="Gtk::Expander">
+<icon BUILTIN="idea"/>
+<node CREATED="1535557111546" ID="ID_649935976" MODIFIED="1535557120786" TEXT="Label-Text als ctor param"/>
+<node CREATED="1535557122205" ID="ID_1034248466" MODIFIED="1535557176171" TEXT="resize_toplevel (=true by default)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ob beim Expand/Collapse das umschlie&#223;ende Widget resized werden soll
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535563193014" ID="ID_1551506828" MODIFIED="1535563373775" TEXT="Problem: dehnt sich nicht aus">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1535563256725" ID="ID_327777357" MODIFIED="1535563288805" TEXT="scrolled pane belegt nur minimal notwendigen Platz"/>
+<node CREATED="1535563300695" ID="ID_862867674" MODIFIED="1535563311905" TEXT="egal ob initial zugeklappt (=default) oder aufgeklappt"/>
+<node CREATED="1535563317214" ID="ID_201611533" MODIFIED="1535563330839" TEXT="egal in welcher Reihenfolge man es hinzuf&#xfc;gt"/>
+<node CREATED="1535563334050" ID="ID_718726647" MODIFIED="1535563366331" TEXT="dagegen direkt im Frame dehnt sie sich aus"/>
+</node>
+</node>
+<node CREATED="1535554640586" ID="ID_1376241476" MODIFIED="1535554936517" TEXT="essentiell: passiert im Parent-Widget">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>...wesentliches Struktur-Element:</p>
+    <p>der Parent-Container ist f&#252;r das expand/collapse zust&#228;ndig</p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725101578" ID="ID_974315967" MODIFIED="1534725412673" TEXT="clearAll">
@@ -2106,7 +2144,7 @@
 <node CREATED="1534721417590" ID="ID_1471234946" MODIFIED="1534721567118" STYLE="fork" TEXT="das er&#xfc;brigt Verwalten eines eigenen Signales">
 <linktarget COLOR="#69b2a9" DESTINATION="ID_1471234946" ENDARROW="Default" ENDINCLINATION="37;-44;" ID="Arrow_ID_1612034198" SOURCE="ID_997317939" STARTARROW="None" STARTINCLINATION="-209;0;"/>
 </node>
-<node COLOR="#338800" CREATED="1534729080597" ID="ID_1547931497" MODIFIED="1534729118672" TEXT="Code durchgesehen: alle Zugriffe sauber">
+<node COLOR="#338800" CREATED="1534729080597" ID="ID_1547931497" MODIFIED="1535556768694" TEXT="Code durchgesehen: alle Zugriffe sauber">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2119,7 +2157,8 @@
       oder sie pr&#252;fen den Zustand und machen nichts, wenn das Widget nicht da ist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1534721435740" ID="ID_1066281960" MODIFIED="1534721509684" TEXT="Konvention: Fehlerlog-Widget zerst&#xf6;ren">
