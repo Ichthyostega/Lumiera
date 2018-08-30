@@ -89,12 +89,10 @@ namespace panel{
     if (not theLog_)
       {
         theLog_.reset (new ErrorLogDisplay{});
-        logExpander_.set_expanded (true);
+        logExpander_.set_expanded (false);
         logExpander_.add (*theLog_);
         frame_.set_border_width (5);
         frame_.add (logExpander_);
-//        frame_.add (*theLog_);
-//        frame_.check_resize();
         frame_.show_all();
       }
     return *theLog_;

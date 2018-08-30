@@ -1744,12 +1744,13 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725109137" ID="ID_694776463" MODIFIED="1534725415160" TEXT="expand">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725397553" ID="ID_1072347956" MODIFIED="1535563380736" TEXT="collapsed-Repr&#xe4;sentation schaffen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1534725397553" ID="ID_1072347956" MODIFIED="1535631557024" TEXT="collapsed-Repr&#xe4;sentation schaffen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535554610295" ID="ID_1050608842" MODIFIED="1535554619117" TEXT="nur vorl&#xe4;ufige L&#xf6;sung">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1535554620165" ID="ID_1243930693" MODIFIED="1535554624774" TEXT="Gtk::Expander">
+<node COLOR="#435e98" CREATED="1535629564615" ID="ID_1047933726" MODIFIED="1535630651685" TEXT="Gtk::Expander">
+<arrowlink COLOR="#4561ae" DESTINATION="ID_1889724128" ENDARROW="Default" ENDINCLINATION="-1778;-100;" ID="Arrow_ID_219393455" STARTARROW="None" STARTINCLINATION="-6486;0;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1535557111546" ID="ID_649935976" MODIFIED="1535557120786" TEXT="Label-Text als ctor param"/>
 <node CREATED="1535557122205" ID="ID_1034248466" MODIFIED="1535557176171" TEXT="resize_toplevel (=true by default)">
@@ -1762,16 +1763,19 @@
       ...ob beim Expand/Collapse das umschlie&#223;ende Widget resized werden soll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535563193014" ID="ID_1551506828" MODIFIED="1535563373775" TEXT="Problem: dehnt sich nicht aus">
+<node COLOR="#990000" CREATED="1535563193014" FOLDED="true" ID="ID_1551506828" MODIFIED="1535630371536" TEXT="Problem: dehnt sich nicht aus">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1535563256725" ID="ID_327777357" MODIFIED="1535563288805" TEXT="scrolled pane belegt nur minimal notwendigen Platz"/>
 <node CREATED="1535563300695" ID="ID_862867674" MODIFIED="1535563311905" TEXT="egal ob initial zugeklappt (=default) oder aufgeklappt"/>
 <node CREATED="1535563317214" ID="ID_201611533" MODIFIED="1535563330839" TEXT="egal in welcher Reihenfolge man es hinzuf&#xfc;gt"/>
 <node CREATED="1535563334050" ID="ID_718726647" MODIFIED="1535563366331" TEXT="dagegen direkt im Frame dehnt sie sich aus"/>
+</node>
+<node COLOR="#338800" CREATED="1535629564615" ID="ID_228360739" MODIFIED="1535630629855" TEXT="L&#xf6;sung: Widget::property_expand()">
+<arrowlink COLOR="#6277b2" DESTINATION="ID_860094095" ENDARROW="Default" ENDINCLINATION="-1778;-100;" ID="Arrow_ID_761942436" STARTARROW="None" STARTINCLINATION="-6486;0;"/>
+<icon BUILTIN="info"/>
 </node>
 </node>
 <node CREATED="1535554640586" ID="ID_1376241476" MODIFIED="1535554936517" TEXT="essentiell: passiert im Parent-Widget">
@@ -33931,6 +33935,55 @@
 </node>
 </node>
 </node>
+<node CREATED="1535629105141" ID="ID_387236763" MODIFIED="1535629113123" TEXT="Layout">
+<font NAME="SansSerif" SIZE="14"/>
+<node CREATED="1535629144783" ID="ID_603397185" MODIFIED="1535629149074" TEXT="Phasen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535629169164" ID="ID_1301809885" MODIFIED="1535629197406" TEXT="realized">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535629172787" ID="ID_1666976097" MODIFIED="1535629187584" TEXT="mapped">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1535629240762" ID="ID_860094095" MODIFIED="1535630624000" STYLE="fork" TEXT="Platzierung">
+<edge COLOR="#b4a9e3" STYLE="bezier" WIDTH="thin"/>
+<linktarget COLOR="#6277b2" DESTINATION="ID_860094095" ENDARROW="Default" ENDINCLINATION="-1778;-100;" ID="Arrow_ID_761942436" SOURCE="ID_228360739" STARTARROW="None" STARTINCLINATION="-6486;0;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1535629255856" ID="ID_66989854" MODIFIED="1535630246025" TEXT="size_request">
+<node CREATED="1535629316512" ID="ID_82343540" MODIFIED="1535630246025" TEXT="minimale oder nat&#xfc;rliche Gr&#xf6;&#xdf;e"/>
+<node CREATED="1535629328246" ID="ID_1797361390" MODIFIED="1535630246025" TEXT="Widget wird niemals kleiner gemacht"/>
+</node>
+<node CREATED="1535629360298" ID="ID_872009465" MODIFIED="1535630246025" TEXT="Widget::property_expand()">
+<node CREATED="1535629434440" ID="ID_384811116" MODIFIED="1535630246025" TEXT="bool">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1535629385583" ID="ID_147722143" MODIFIED="1535630246025" TEXT="nur wenn es zus&#xe4;tzlichen Platz gibt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was der Fall sein kann in einer Box oder einem Grid,
+    </p>
+    <p>
+      sofern das Widget mit entsprechendem Modus eingef&#252;gt wurde
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1535629439847" ID="ID_1925784750" MODIFIED="1535630246025" TEXT="Widget dehnt sich aus, um verf&#xfc;gbaren Platz einzunehmen">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1535630122372" ID="ID_1833778868" MODIFIED="1535630246025" TEXT="hat keinen Getter / Setter"/>
+<node CREATED="1535629472923" ID="ID_927038398" MODIFIED="1535630246025" TEXT="es gibt vexpand und hexpand">
+<node CREATED="1535630137082" ID="ID_793513557" MODIFIED="1535630246025" TEXT="nur f&#xfc;r eine Richtung"/>
+<node CREATED="1535630147960" ID="ID_701726630" MODIFIED="1535630246025" TEXT="diese haben Getter/Setter"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1477523681978" HGAP="14" ID="ID_400257229" MODIFIED="1534634566726" TEXT="Richtlinien" VSHIFT="11">
 <node CREATED="1477523701544" ID="ID_1802991794" MODIFIED="1518487921099" TEXT="empfohlen">
 <node CREATED="1477523709342" ID="ID_781118281" MODIFIED="1518487921099" TEXT="Box">
@@ -34567,6 +34620,81 @@
 <node CREATED="1477785856731" ID="ID_63204089" MODIFIED="1518487921100" TEXT="R&#xfc;ckgabewert: true == fertig behandelt"/>
 </node>
 <node CREATED="1504215708147" ID="ID_975007807" MODIFIED="1518487921100" TEXT="Widget">
+<node CREATED="1535630469053" ID="ID_608304313" MODIFIED="1535630477518" TEXT="konkret...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1535630478836" ID="ID_51688888" MODIFIED="1535630481352" TEXT="Container">
+<node CREATED="1535629240762" ID="ID_1889724128" MODIFIED="1535631527979" STYLE="fork">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Gtk::<b>Expander</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#b4a9e3" STYLE="bezier" WIDTH="thin"/>
+<linktarget COLOR="#4561ae" DESTINATION="ID_1889724128" ENDARROW="Default" ENDINCLINATION="-1778;-100;" ID="Arrow_ID_219393455" SOURCE="ID_1047933726" STARTARROW="None" STARTINCLINATION="-6486;0;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1535630679569" ID="ID_1488556262" MODIFIED="1535630685068" TEXT="ein Kind-Widget"/>
+<node CREATED="1535630685712" ID="ID_848335172" MODIFIED="1535630699099" TEXT="ein/ausklapp-Handle">
+<node CREATED="1535630699999" ID="ID_895008056" MODIFIED="1535630702610" TEXT="immer sichtbar"/>
+<node CREATED="1535630703150" ID="ID_1252755884" MODIFIED="1535630710185" TEXT="animierter Pfeil-Button"/>
+<node CREATED="1535630710781" ID="ID_194514515" MODIFIED="1535630724687" TEXT="Label-Text als ctor-Param"/>
+</node>
+<node CREATED="1535630745440" ID="ID_1732954181" MODIFIED="1535630748668" TEXT="Verhalten">
+<node CREATED="1535557122205" ID="ID_523553375" MODIFIED="1535631130732" TEXT="resize_toplevel (=true by default)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ob beim Expand/Collapse das umschlie&#223;ende Widget resized werden soll
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1535631187965" ID="ID_586010488" MODIFIED="1535631341839" TEXT="expanded (=false by default)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ob eingeklappt oder ausgeklappt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1535631368701" ID="ID_1441730618" MODIFIED="1535631388301" TEXT="platziert Kind-Widget as-is">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1535631390194" ID="ID_356344952" MODIFIED="1535631402732" TEXT="in dessen nat&#xfc;rlicher Gr&#xf6;&#xdf;e"/>
+<node CREATED="1535631403576" ID="ID_518089172" MODIFIED="1535631474193" TEXT="verh&#xe4;lt sich anders als Frame">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein Frame setzt beim Kind property_expand() = true,
+    </p>
+    <p>
+      was dazu f&#252;hrt, da&#223; das Kind stets allen verf&#252;gbaren Platz nimmt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1477526858307" ID="ID_676269117" MODIFIED="1518487921100" TEXT="custom widget">
 <node COLOR="#ca1b00" CREATED="1477526864162" ID="ID_1385929770" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1518487921100" TEXT="Beispiel">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" SOURCE="ID_426069181" STARTARROW="None" STARTINCLINATION="1055;0;"/>
