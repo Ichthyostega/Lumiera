@@ -2664,7 +2664,7 @@ Typically, when starting the draw operation, we retrieve our //allocation.// Thi
 Thus, if we want to use absolute canvas coordinates for our drawing, we need to adjust the cairo context prior to any drawing operations: we translate it in the opposite direction of the values retrieved from the scrollbar {{{Gtk::Adjustment}}}s. This causes the //user coordinates// to coincede with the absolute canvas coordinates.
 </pre>
 </div>
-<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201611012211" tags="GuiPattern impl" changecount="4">
+<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201808301543" tags="GuiPattern impl" changecount="6">
 <pre>//This is the canvas widget of ~GTK-3//
 It allows not only custom drawing, but also to embed other widgets at defined coordinates.
 
@@ -2681,6 +2681,9 @@ we need a test setup for this investigation.
 * easy to launch
 * don't waste much time, it is disposable
 * realistic: shall reflect the situation in our actual UI
+As starting point, {{red{in winter 2016/17}}} the old (broken) timeline panel was moved aside and a new panel was attached for GTK experiments. These basically confirmed the envisioned approach; it is possible to place widgets freely onto the canvas; they are drawn in insert order, which allows for overlapped widgets (and mouse events are dispatched properly, as you'd expect). Moreover, it is also possible to draw directly onto the canvas, by overriding the {{{on_draw()}}}-function. However, some (rather trivial) adjustments need to be done to get a virtual canvas, which moves along with the placed widgets. That is, GtkLayoutWidget handles scrolling of embedded widgets automatically, but you need to adjust the Cairo drawing context manually to move along. The aforementioned experimental code shows how.
+
+After that initial experiments, my focus shifted to the still unsatisfactory top-level UI structure, and I am working towards an initial integration with Proc-Layer since then.
 </pre>
 </div>
 <div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201708311414" tags="GuiPattern design draft" changecount="25">
@@ -3238,7 +3241,7 @@ More specifically, the integration is based on ''messaging''. To start with, the
 ----
 In a preliminary attempt to establish an integration between the GUI and the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget. This highlighted the problems we're about to encounter and made us think about the more radically decoupled approach we followed thereafter...</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201702190021" tags="GuiIntegration design draft" changecount="13">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201808301754" tags="GuiIntegration design draft" changecount="22">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
@@ -3250,11 +3253,25 @@ The GUI model is largely comprised of immutable ID elements, which can be treate
 
 !{{red{WARNING 2/2017}}} more questionable than ever
 The whole Idea to have a &quot;UI model&quot; appears more questionable than ever. It leads to tight coupling with the session and a lot of thread synchronisation headaches, without any clear benefit -- beyond just being the obvious no-brainer solution. During the last months, step by step, several presentation related structures emerged, which //indeed are structured to parallel the outline of the session.// But those structures are widgets and controllers, and it might well be that we do not need a model, beyond the data already present within the widget implementation. Rather it seems we'll get a nested structure of //presenters,// which are linked to the session with the help of the UI-Bus and the [[diff framework|TreeDiffModel]].
+* {{red{as of 8/2018}}}, matters on a large scale converge towards a structure //without a classical UI model.// Seemingly we can do without...
+* there is a working demonstration in {{{BusTerm_test}}}, which pushes mutation diffs against a mock UI-Element. The immediate response to receiving such a diff notification via the UI-Bus has now been coded; it incurs invoking a passed callback (functor), which performs within the originating context, but within the ~UI-Thread, and produces the actual diff //on-demand.// (&quot;pull principle&quot;)
 
 !synchronisation guarantees
 We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the responsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Proc-Layer, with the help of the ProcDispatcher.
 
-The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
+The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. The notification will be dispatched into the GUI event thread (by the {{{GuiNotification}}} façade), which implies that also the callback embedded within the notification will be invoked by the  widgets to perform within the GUI  thread.
+
+!generic model tree building blocks
+According {{red{to the current plan (2018)}}}, the GuiModel will not be a dedicated and isolated data structure -- rather it will be interwoven with the actual structure of the widgets and controllers. Some controllers and also some widgets additionally implement the {{{gui::model::Tangible}}}-interface and thus act as &quot;tangible&quot; UI-Element, where each such &quot;tangible element&quot; directly corresponds to a component within the session model. The interface UI-Element requires such elements to provide an attachment point to receive mutations in the form of diff messages, while it remains a local implementation detail within each such element //how actually to respond and reflect// the changes indicated by the diff message. Typically the adding of child elements will result in creation of several GTK widgets, some of which are in turn also again UI-Element implementations, and only the latter count conceptually as &quot;children&quot;.
+
+While most actual details are abstracted away by this approach, it can be expected that the handling of typical diff changes is somewhat similar in most actual widgets. For this reason we provide a selection of generic adapters and building blocks to simplify the assembly of actual widget implementations.
+
+!!!expanding and collapsing
+Several UI elements offer the ability to be collapsed into a minimal representation to save screen real estate. The UI-Element protocol defines this to happen either by invoking a dedicated signal slot on the element, or by sending an appropriate message over the UI-Bus. The actual implementation is quite simple, but unfortunately requires knowledge regarding the specific widget configuration. A commonly used approach is to wrap the expandable/collapsible element into a {{{Gtk::Expandable}}}, but there are notable exceptions, where the widget is bound to handle the expanding or reducing of information display all by itself. We bridge this discrepancy by introducing an {{{Expander}}} interface to act as adapter. 
+
+!!!revealing an element
+The UI-Element protocol also includes the ability to //reveal an element// -- which means actively to bring this element into sight, in case it is hidden, collapsed or obscured by scrolling away.
+{{red{As of 8/2018 this is just an idea}}}, and many details still need to be considered. Yet at least one point is clear: implementing such a feature requires the help of the container widget actually holding the element to be revealed. It might even happen that also the collaboration of the container holding aforementioned immediate parent container is necessary -- indicating a recursive implementation scheme.
 </pre>
 </div>
 <div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201703170201" tags="GuiIntegration design draft img" changecount="47">
@@ -9817,7 +9834,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :direct a MutationMessage towards the designated UI-Element, causing the latter to build a TreeMutator to receive the embedded [[diff-sequence|TreeDiffModel]]
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201704171607" tags="GuiPattern design draft decision" changecount="54">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201808301533" tags="GuiPattern design draft decision" changecount="57">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -9890,7 +9907,7 @@ It is clear by now (9/2016) how shape and content changes are to be represented 
 !!!questions
 * how to integrate &quot;diff calls&quot; into UI-Bus and {{{Tangible}}}
 * how to ensure that diff processing happens within the event thread
-* what is the exact relation to the GuiModel -- this remained nebulous up to now
+* what is the exact relation to the GuiModel -- this remained nebulous up to now ({{red{8/2018}}} &amp;rArr; seems to be obsolete)
 
 !!!Diff messages
 The dispatch of //diff messages// is directly integrated into the UI-Bus -- which is not just some abstract messaging system, but deliberately made to act as backbone for the kind of operations and collaborations detailed here. This seamless integration helps to overcome several technical (detail) problems. For one, the diff framework itself is //generic,// which allows to apply diff sequences to a wide variety of different target data structures. And, secondly, choose the whole approach of diff messages delivered over a bus system for a very specific, architectural reason: we want to decouple from internal structures, while still allowing low-level collaboration over this abstracted interconnection channel. On both counts, we are thus bound to encapsulate the actual diff at interface level. So the MutationMessage marks the purpose to alter the designated {{{Tangible}}}, while offering an embedded, generic implementation to apply the (hidden) diff message, relying in turn on the interface {{{DiffMutatble}}}, which -- surprise -- is offered by {{{Tangible}}}. Basically this means that each tangible interface element offers the ability to be reshaped, by creating a TreeMutator on demand, internally wired to effect the changes inscribed within the diff.

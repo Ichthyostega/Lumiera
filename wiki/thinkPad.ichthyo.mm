@@ -7,8 +7,8 @@
 <node CREATED="1434128054470" HGAP="7" ID="ID_1166611516" MODIFIED="1518487921038" TEXT="Workflow" VSHIFT="-15">
 <node CREATED="1455289597596" ID="ID_970065036" MODIFIED="1518487921038" TEXT="work site"/>
 <node CREATED="1455289466261" ID="ID_273679080" MODIFIED="1518487921038" TEXT="PresentationState"/>
-<node CREATED="1487210691163" ID="ID_1259700796" MODIFIED="1518487921038" TEXT="konzeptioneller Rahmen">
-<linktarget COLOR="#34dbd3" DESTINATION="ID_1259700796" ENDARROW="Default" ENDINCLINATION="450;232;" ID="Arrow_ID_114106295" SOURCE="ID_1430752735" STARTARROW="None" STARTINCLINATION="-1346;-1090;"/>
+<node CREATED="1487210691163" ID="ID_1259700796" MODIFIED="1535638478130" TEXT="konzeptioneller Rahmen">
+<linktarget COLOR="#34dbd3" DESTINATION="ID_1259700796" ENDARROW="Default" ENDINCLINATION="473;607;" ID="Arrow_ID_114106295" SOURCE="ID_1430752735" STARTARROW="None" STARTINCLINATION="-1346;-1090;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <node CREATED="1487210978300" ID="ID_1502972928" MODIFIED="1518487921038" TEXT="Spot == wo wir sind"/>
 <node CREATED="1487211011447" ID="ID_61564732" MODIFIED="1518487921038" TEXT="Work Site == wo wir sein k&#xf6;nnen"/>
@@ -1605,8 +1605,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1504200793444" ID="ID_340215113" MODIFIED="1534850802878" TEXT="mi&#xdf;brauche InfoBox">
+<node CREATED="1504200793444" ID="ID_340215113" MODIFIED="1535647887424" TEXT="mi&#xdf;brauche InfoBox">
 <arrowlink COLOR="#f5dd67" DESTINATION="ID_19179662" ENDARROW="Default" ENDINCLINATION="743;-1563;" ID="Arrow_ID_1195014928" STARTARROW="None" STARTINCLINATION="-452;605;"/>
+<linktarget COLOR="#e0d18d" DESTINATION="ID_340215113" ENDARROW="Default" ENDINCLINATION="-389;5426;" ID="Arrow_ID_1440864098" SOURCE="ID_622217667" STARTARROW="None" STARTINCLINATION="-1637;-8191;"/>
 <icon BUILTIN="idea"/>
 <node COLOR="#338800" CREATED="1504200974955" FOLDED="true" ID="ID_1182589184" MODIFIED="1534527069860" TEXT="neues Dock(Panel)">
 <icon BUILTIN="button_ok"/>
@@ -1788,6 +1789,130 @@
     <p>der Parent-Container ist f&#252;r das expand/collapse zust&#228;ndig</p>
   </body>
 </html></richcontent>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535634032601" ID="ID_964641889" MODIFIED="1535646954908" TEXT="Design-Problem: sich expandieren">
+<icon BUILTIN="pencil"/>
+<node CREATED="1535634116925" ID="ID_1129948550" MODIFIED="1535634126600" TEXT="Voraussetzung: unser Widget-Protokoll">
+<node CREATED="1535634127852" ID="ID_317106359" MODIFIED="1535634136126" TEXT="enth&#xe4;lt eine expand()-Methode"/>
+<node CREATED="1535636097808" ID="ID_1540209936" MODIFIED="1535636109795" TEXT="Unterschied Widget / Controller ?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1535636169439" FOLDED="true" ID="ID_631287309" MODIFIED="1535646972760" TEXT="zwei Modelle denkbar">
+<icon BUILTIN="yes"/>
+<node CREATED="1535636219312" ID="ID_1940674226" MODIFIED="1535636242077" TEXT="Widget ist Expander">
+<icon BUILTIN="full-1"/>
+<node CREATED="1535636281176" ID="ID_232056866" MODIFIED="1535636470569" TEXT="w&#xe4;hle &quot;das Widget&quot; geeignet">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1535636297102" ID="ID_1966837488" MODIFIED="1535636338854">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      als <i>denjenigen</i>&#160;Container...
+    </p>
+    <p>
+      ...der das <i>eigentliche</i>&#160;Widget expandieren kann
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1535636621140" ID="ID_1785708787" MODIFIED="1535636640069" TEXT="pro">
+<node CREATED="1535636644385" ID="ID_976356089" MODIFIED="1535636649884" TEXT="elegantes Design"/>
+<node CREATED="1535636650664" ID="ID_457403473" MODIFIED="1535636661234" TEXT="minimalistisch"/>
+</node>
+<node CREATED="1535636640849" ID="ID_1629039815" MODIFIED="1535636642157" TEXT="con">
+<node CREATED="1535636663334" ID="ID_1826518668" MODIFIED="1535636693159" TEXT="ordnet alle anderen Belange diesem Belang unter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ggfs m&#252;ssen alle anderen Funktionen nach unten delegieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1535636755202" ID="ID_507299995" MODIFIED="1535636897708" TEXT="kann grunds&#xe4;tzlich nicht alle F&#xe4;lle abdecken">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn n&#228;mlich das &quot;Expandieren&quot; in einen weiter reichenden Zusammenhang integriert ist,
+    </p>
+    <p>
+      wie z.B. Darstellung in verschiedenen Detailierungs-Graden, oder ein generelles
+    </p>
+    <p>
+      Fokus-/Layout- Management <i>mehrerer</i>&#160;Komponenten zusammen
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Standard-Beispiel: Property-Panel
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1535636904118" ID="ID_489559609" MODIFIED="1535636933948" TEXT="Fazit">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1535636909262" ID="ID_1644409361" MODIFIED="1535636911657" TEXT="abgelehnt"/>
+<node CREATED="1535636912365" ID="ID_298319841" MODIFIED="1535636929783" TEXT="da einfacher als die Essenz"/>
+</node>
+</node>
+<node CREATED="1535636231135" ID="ID_913979725" MODIFIED="1535636244698" TEXT="Widget kennt Expander">
+<icon BUILTIN="full-2"/>
+<node CREATED="1535636486110" ID="ID_285628512" MODIFIED="1535636495891" TEXT="in Form eines Adapters">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1535636600599" ID="ID_103556348" MODIFIED="1535636618368" TEXT="der die &quot;expand/collapse&quot;-Funktionalit&#xe4;t abstrahiert"/>
+<node CREATED="1535637406019" ID="ID_1125726861" MODIFIED="1535637415126" TEXT="erm&#xf6;glicht generische Impl">
+<node CREATED="1535637416210" ID="ID_1038164215" MODIFIED="1535637424461" TEXT="Gegenwart des Adapters schaltet Feature ein"/>
+<node CREATED="1535637441351" ID="ID_181377485" MODIFIED="1535637498835" TEXT="Standard-Adapter f&#xfc;r Gtk::Expander"/>
+<node CREATED="1535637512597" ID="ID_1713615715" MODIFIED="1535637520896" TEXT="Parent-Container kann Adapter selber implementieren"/>
+<node CREATED="1535637534163" ID="ID_1194572504" MODIFIED="1535637548308" TEXT="kann mit &quot;Reveal&quot;-Funktion kombiniert werden"/>
+<node CREATED="1535638307459" ID="ID_1697210606" MODIFIED="1535638391524" TEXT="possibly to discover dynamically">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn wir eine Mix-in -Implementierung w&#228;hlen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1535638228558" ID="ID_1027845785" MODIFIED="1535638283984" TEXT="Fazit">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535638234405" ID="ID_1845070371" MODIFIED="1535638250610" TEXT="komplex mit der Gefahr des Over-Engineering">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1535638255138" ID="ID_591635299" MODIFIED="1535638276217" TEXT="erscheint trotzdem als die angemessene L&#xf6;sung">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535638412517" ID="ID_447101734" MODIFIED="1535646941006" TEXT="Adapter-Interfaces entwerfen">
+<arrowlink COLOR="#709eaf" DESTINATION="ID_316446199" ENDARROW="Default" ENDINCLINATION="-354;-490;" ID="Arrow_ID_1105268233" STARTARROW="None" STARTINCLINATION="-3385;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725101578" ID="ID_974315967" MODIFIED="1534725412673" TEXT="clearAll">
@@ -16899,7 +17024,8 @@
 </node>
 </node>
 <node CREATED="1477522265208" HGAP="53" ID="ID_41510242" MODIFIED="1518487921084" TEXT="Neuerungen" VSHIFT="28">
-<node CREATED="1477522271822" ID="ID_622217667" MODIFIED="1518487921084" TEXT="PanelExperiment">
+<node CREATED="1477522271822" ID="ID_622217667" MODIFIED="1535647887424" TEXT="PanelExperiment">
+<arrowlink COLOR="#e0d18d" DESTINATION="ID_340215113" ENDARROW="Default" ENDINCLINATION="-389;5426;" ID="Arrow_ID_1440864098" STARTARROW="None" STARTINCLINATION="-1637;-8191;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1477522330886" ID="ID_1920846276" MODIFIED="1518487921084" TEXT="ScrolledWindow"/>
 <node CREATED="1477522340573" ID="ID_168076322" MODIFIED="1518487921084" TEXT="Grid">
@@ -16912,7 +17038,7 @@
 <node CREATED="1477523561930" ID="ID_868197404" MODIFIED="1518487921084" TEXT="pack_start() "/>
 <node CREATED="1477523573184" ID="ID_1063091132" MODIFIED="1518487921084" TEXT="pack_end()"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534849790225" ID="ID_326815949" MODIFIED="1534850544930" TEXT="Aufgaben">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534849790225" HGAP="46" ID="ID_326815949" MODIFIED="1535647586457" TEXT="#1164 investigate docking panel behaviour">
 <linktarget COLOR="#a35f7f" DESTINATION="ID_326815949" ENDARROW="Default" ENDINCLINATION="33;189;" ID="Arrow_ID_746548615" SOURCE="ID_1536071305" STARTARROW="None" STARTINCLINATION="246;-229;"/>
 <icon BUILTIN="flag-pink"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534850081097" ID="ID_264379011" MODIFIED="1534850134831" TEXT="m&#xf6;gliche Schachtelungen">
@@ -18046,7 +18172,7 @@
 <node CREATED="1448070559466" ID="ID_182430638" MODIFIED="1518487921085" TEXT="Controller"/>
 </node>
 <node CREATED="1448070583679" HGAP="30" ID="ID_1248152908" MODIFIED="1518487921085" TEXT="Protokoll">
-<node CREATED="1448078263344" FOLDED="true" ID="ID_1136748666" MODIFIED="1533684857379" TEXT="Verhaltensweisen">
+<node CREATED="1448078263344" FOLDED="true" ID="ID_1136748666" MODIFIED="1535638754133" TEXT="Verhaltensweisen">
 <cloud COLOR="#e0d6ba"/>
 <icon BUILTIN="info"/>
 <node CREATED="1448078268223" ID="ID_1027574047" MODIFIED="1518487921085" TEXT="Lebenszyklus">
@@ -18278,7 +18404,7 @@
 <node CREATED="1448659792782" ID="ID_1547056651" MODIFIED="1518487921086" TEXT="r&#xe4;umliche Navigation"/>
 <node CREATED="1448659824337" ID="ID_1734858009" MODIFIED="1518487921086" TEXT="Markierungen"/>
 </node>
-<node CREATED="1455236472002" HGAP="49" ID="ID_952544600" MODIFIED="1518487921086" TEXT="generische Eigenschaften" VSHIFT="15">
+<node CREATED="1455236472002" FOLDED="true" HGAP="49" ID="ID_952544600" MODIFIED="1535638928899" TEXT="generische Eigenschaften" VSHIFT="15">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1455236491432" ID="ID_1268644179" MODIFIED="1518487921086" TEXT="Idee">
 <icon BUILTIN="idea"/>
@@ -18405,6 +18531,111 @@
 </html></richcontent>
 </node>
 <node CREATED="1455236418290" ID="ID_1765760054" MODIFIED="1518487921086" TEXT="dieses ruft parent.reveal(myID)"/>
+</node>
+</node>
+</node>
+<node CREATED="1535639028984" ID="ID_316446199" MODIFIED="1535646941006" TEXT="hilfs-Abstraktionen">
+<linktarget COLOR="#709eaf" DESTINATION="ID_316446199" ENDARROW="Default" ENDINCLINATION="-354;-490;" ID="Arrow_ID_1105268233" SOURCE="ID_447101734" STARTARROW="None" STARTINCLINATION="-3385;0;"/>
+<node CREATED="1535639151330" ID="ID_301022990" MODIFIED="1535639159958" TEXT="mix-in">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1535639038857" ID="ID_978884512" MODIFIED="1535639051322" TEXT="erm&#xf6;glichen generische Implementierung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1535639052671" ID="ID_1134562624" MODIFIED="1535639073976" TEXT="Expander">
+<node CREATED="1535639110104" ID="ID_712715565" MODIFIED="1535639113355" TEXT="bool-Testbar"/>
+<node CREATED="1535639114727" ID="ID_1791716176" MODIFIED="1535639125769" TEXT="expand(yes)"/>
+<node CREATED="1535639129085" ID="ID_723131136" MODIFIED="1535639132713" TEXT="collapse()"/>
+</node>
+<node CREATED="1535639174623" ID="ID_1755607605" MODIFIED="1535639177466" TEXT="Revealer">
+<node CREATED="1535639337897" ID="ID_1186867690" MODIFIED="1535639379927" TEXT="defineRevealable(ID)"/>
+<node CREATED="1535639368981" ID="ID_220149026" MODIFIED="1535639375736" TEXT="isRevealable(ID)"/>
+<node CREATED="1535639517897" ID="ID_1175119585" MODIFIED="1535639523892" TEXT="reveal(ID)"/>
+<node CREATED="1535640911061" ID="ID_777387548" MODIFIED="1535640922887" TEXT="reveal(canvasX,canvasY)"/>
+</node>
+<node CREATED="1535655039395" ID="ID_1646511082" MODIFIED="1535655045412" TEXT="Diskussion">
+<icon BUILTIN="pencil"/>
+<node CREATED="1535655065175" ID="ID_702941818" MODIFIED="1535655069235" TEXT="Symmetrie?">
+<node CREATED="1535655118800" ID="ID_1058761508" MODIFIED="1535655127308" TEXT="Expander ist nur pro Komponente">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1535655136902" ID="ID_126171743" MODIFIED="1535655170274" TEXT="Wunsch: Mix-ins in NavScope-Interface kombinieren">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1535655069967" ID="ID_340217269" MODIFIED="1535655076674" TEXT="Expander und Revealer als Proxy?">
+<node CREATED="1535655293760" ID="ID_1318206385" MODIFIED="1535655302082" TEXT="Syntax?">
+<node CREATED="1535655199741" ID="ID_942388081" MODIFIED="1535655235119" TEXT="scope.getExpander(ID).expand(false)">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1535655252694" ID="ID_1462365996" MODIFIED="1535655259251" TEXT="scope.canExpand(ID)">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1535655285938" ID="ID_1449182402" MODIFIED="1535655292365" TEXT="oder">
+<node CREATED="1535655304095" ID="ID_482365383" MODIFIED="1535655319455" TEXT="scope.expand(ID, true)">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1535655363543" ID="ID_1383221002" MODIFIED="1535655385497" TEXT="scope.canReveal(ID)">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1535655400386" ID="ID_1267051500" MODIFIED="1535655402638" TEXT="Storage">
+<node CREATED="1535655416192" ID="ID_1700423924" MODIFIED="1535721537469" TEXT="value: Funktor">
+<icon BUILTIN="full-1"/>
+<node CREATED="1535655437493" ID="ID_949368248" MODIFIED="1535655450647" TEXT="kopierbar"/>
+<node CREATED="1535655452419" ID="ID_338667405" MODIFIED="1535655462678" TEXT="besteht nur aus std::function"/>
+<node CREATED="1535655501013" ID="ID_822333393" MODIFIED="1535655513719" TEXT="wird direkt im verwendenden Widget gespeichert"/>
+<node CREATED="1535722990637" ID="ID_1278252704" MODIFIED="1535723000688" TEXT="aber es gibt verdeckte Heap-Allokationen"/>
+<node CREATED="1535655479976" ID="ID_1685363954" MODIFIED="1535655485792" TEXT="Gefahr: dangling references">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1535655427943" ID="ID_1559607876" MODIFIED="1535721543060" TEXT="ref: Proxy-Objekt">
+<icon BUILTIN="full-2"/>
+<node CREATED="1535655553598" ID="ID_714380046" MODIFIED="1535655564832" TEXT="nicht-kopierbar"/>
+<node CREATED="1535655565420" ID="ID_1503255611" MODIFIED="1535655575607" TEXT="ist eine konkrete Subklasse"/>
+<node CREATED="1535655576843" ID="ID_1432131188" MODIFIED="1535655585397" TEXT="storage...">
+<node CREATED="1535655586265" ID="ID_267652544" MODIFIED="1535655612409" TEXT="entweder inline, aber mit vector&lt;function&gt;"/>
+<node CREATED="1535655613518" ID="ID_146906659" MODIFIED="1535655634423" TEXT="direkt auf dem Heap, mit expliziter konkreter Impl"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1535722960729" ID="ID_303674498" MODIFIED="1535722964125" TEXT="Abw&#xe4;gung"/>
+<node CREATED="1535640932722" ID="ID_1411372901" MODIFIED="1535655004304" TEXT="NavScope">
+<icon BUILTIN="help"/>
+<node CREATED="1535654864507" ID="ID_976171939" MODIFIED="1535654872624" TEXT="erst mal nur so eine Idee....">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1535654895926" ID="ID_518978388" MODIFIED="1535655662803" TEXT="zwei Fliegen mit einer Klappe">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1535654884104" ID="ID_1335278492" MODIFIED="1535654995472" TEXT="k&#xf6;nnte f&#xfc;r den ViewLocator n&#xfc;tzlich sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn dort fehlt noch die konkrete Implementierung,
+    </p>
+    <p>
+      welche die Monaden-Baum-Repr&#228;sentation schlie&#223;lich
+    </p>
+    <p>
+      auf konkrete Widgets abbildet. Das ist viel Arbeit, und es lie&#223;e sich vereinfachen,
+    </p>
+    <p>
+      wenn f&#252;r gewisse Knoten erkannt werden kann, da&#223; sie einen NavScope darstellen;
+    </p>
+    <p>
+      denn dann g&#228;be es eine Implementierung &quot;von der Stange&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -24018,7 +24249,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1448658819990" ID="ID_405705528" MODIFIED="1518487921087" TEXT="API explizit">
+<node CREATED="1448658819990" FOLDED="true" ID="ID_405705528" MODIFIED="1535638840052" TEXT="API explizit">
 <icon BUILTIN="help"/>
 <node CREATED="1448658861760" ID="ID_1373851015" MODIFIED="1518487921087" TEXT="pro">
 <node CREATED="1448658867680" ID="ID_766147415" MODIFIED="1518487921087" TEXT="sauber"/>
@@ -24058,7 +24289,7 @@
 <node CREATED="1448683525822" ID="ID_1395068730" MODIFIED="1518487921087" TEXT="Gesten"/>
 </node>
 </node>
-<node CREATED="1448691191042" HGAP="35" ID="ID_1710578352" MODIFIED="1525124215240" TEXT="Lebenszyklus" VSHIFT="-1">
+<node CREATED="1448691191042" FOLDED="true" HGAP="35" ID="ID_1710578352" MODIFIED="1535638813532" TEXT="Lebenszyklus" VSHIFT="-1">
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="go"/>
 <node CREATED="1448691210544" ID="ID_242337741" MODIFIED="1448691218906" TEXT="Command-Skript: im Code"/>
@@ -24268,8 +24499,8 @@
 </node>
 </node>
 <node CREATED="1487210642170" HGAP="28" ID="ID_337241818" MODIFIED="1518487921088" TEXT="Rahmen global" VSHIFT="-1">
-<node CREATED="1487210648449" ID="ID_1430752735" MODIFIED="1518487921088" TEXT="konzeptionell">
-<arrowlink COLOR="#34dbd3" DESTINATION="ID_1259700796" ENDARROW="Default" ENDINCLINATION="450;232;" ID="Arrow_ID_114106295" STARTARROW="None" STARTINCLINATION="-1346;-1090;"/>
+<node CREATED="1487210648449" ID="ID_1430752735" MODIFIED="1535638478130" TEXT="konzeptionell">
+<arrowlink COLOR="#34dbd3" DESTINATION="ID_1259700796" ENDARROW="Default" ENDINCLINATION="473;607;" ID="Arrow_ID_114106295" STARTARROW="None" STARTINCLINATION="-1346;-1090;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <node CREATED="1487269963098" ID="ID_723170966" MODIFIED="1518487921088" TEXT="Raum als Metapher"/>
 <node CREATED="1487269990582" ID="ID_164128588" MODIFIED="1518487921088">
@@ -33981,6 +34212,63 @@
 <node CREATED="1535630137082" ID="ID_793513557" MODIFIED="1535630246025" TEXT="nur f&#xfc;r eine Richtung"/>
 <node CREATED="1535630147960" ID="ID_701726630" MODIFIED="1535630246025" TEXT="diese haben Getter/Setter"/>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1535632661385" ID="ID_1021079796" MODIFIED="1535632664916" TEXT="Hierarchie">
+<node CREATED="1535632673655" ID="ID_849385989" MODIFIED="1535632684721" TEXT="Gdk::Window">
+<node CREATED="1535632686045" ID="ID_20909674" MODIFIED="1535632722095">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein Widget <i>kann</i>&#160;einem G<b>D</b>K-Window zugeordnet sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1535632728343" ID="ID_1087443097" MODIFIED="1535632737794" TEXT="dieses repr&#xe4;sentiert den low-level Screen-Space"/>
+<node CREATED="1535632754900" ID="ID_1804383493" MODIFIED="1535632762415" TEXT="diese Zuordnung hei&#xdf;t &quot;mapping&quot;"/>
+<node CREATED="1535632903512" ID="ID_653149380" MODIFIED="1535632929956" TEXT="Gtk::Widget::get_parent_window ()">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1535632766298" ID="ID_651213437" MODIFIED="1535632770166" TEXT="Container">
+<node CREATED="1535632771490" ID="ID_54072996" MODIFIED="1535632787931" TEXT="machen sich beim Hinzuf&#xfc;gen den Kindern bekannt"/>
+<node CREATED="1535632789207" ID="ID_1814287136" MODIFIED="1535632918202" TEXT="Gtk::Widget::get_parent ()">
+<node CREATED="1535632854135" ID="ID_1093554517" MODIFIED="1535632859610" TEXT="Gtk::Container *"/>
+<node CREATED="1535632860126" ID="ID_710254808" MODIFIED="1535632864913" TEXT="kann NULL sein"/>
+</node>
+<node CREATED="1535633353996" ID="ID_1722614856" MODIFIED="1535633359215" TEXT="Gtk::Widget::get_toplevel ()"/>
+<node CREATED="1535633447375" ID="ID_1390203707" LINK="https://developer.gnome.org/gtkmm/3.22/classGtk_1_1Widget.html#ad65bedf64acfd0401abbe489312fba8e" MODIFIED="1535633492092" TEXT="Widget *  Gtk::Widget::get_ancestor(GType widget_type)"/>
+</node>
+<node CREATED="1535633140424" ID="ID_293762905" MODIFIED="1535633144596" TEXT="WidgetPath">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535633147295" ID="ID_14373153" MODIFIED="1535633217669" TEXT="Konzept ist mir nicht klar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      8/2018:
+    </p>
+    <p>
+      ist das eine Sequenz von konkreten Objekten, die ineinander verschachtelt sind?
+    </p>
+    <p>
+      oder ist es eine Vererbungs-Hierarchie, wie sie f&#252;r das CSS-Styling ben&#246;tigt wird?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1535633221189" ID="ID_623946936" MODIFIED="1535633238637" TEXT="beachte: hier werden Typen (GType) gespeichert">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1535633267727" ID="ID_168272548" MODIFIED="1535633287322" TEXT="Gtk::Widget::get_path()">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
