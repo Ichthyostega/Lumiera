@@ -81,7 +81,11 @@ namespace panel{
   
   /** on demand allocate display of information / error log
    * @note we assume it stays alive forever, once allocated
-   * @todo add possibility to collapse it
+   * @remark the ErrorLogDisplay widget exposes a \ref Expander functor,
+   *         which is wired here with the Gtk::Expander container holding the Log.
+   *         This setup allows to trigger the expand/collapse functionality and
+   *         query the expansion state directly on the widget. Especially
+   *         \ref NotificationHub relies on this configuration.
    */
   ErrorLogDisplay&
   InfoBoxPanel::getLog()
@@ -91,6 +95,9 @@ namespace panel{
         theLog_.reset (new ErrorLogDisplay{});
         logExpander_.set_expanded (false);
         logExpander_.add (*theLog_);
+        theLog_->expand = model::Expander{[&]()         { return logExpander_.get_expanded(); }
+                                         ,[&](bool yes) { logExpander_.set_expanded (yes); }
+                                         };
         frame_.set_border_width (5);
         frame_.add (logExpander_);
         frame_.show_all();

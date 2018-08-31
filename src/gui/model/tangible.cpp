@@ -262,7 +262,10 @@ namespace model {
   Tangible::doMark (GenNode const& stateMark)
   {
     if (stateMark.idi.getSym() == "expand")
-      this->doExpand (stateMark.data.get<bool>());
+      {
+        if (this->doExpand (stateMark.data.get<bool>()))
+          uiBus_.note (GenNode("expand", true));    // possibly reentrant (yet harmless)
+      }
     else
     if (stateMark.idi.getSym() == "reset")
       this->reset();

@@ -117,15 +117,6 @@ namespace ctrl {
           return true;
         }
       
-      virtual bool
-      doExpand (bool yes)  override
-        {
-          if (widget_ or yes)
-             if (getWidget().expand (yes))
-               uiBus_.note (GenNode("expand", yes));
-          return false; // state persisted if necessary
-        }
-      
       virtual void
       doRevealYourself()  override
         {
@@ -180,7 +171,15 @@ namespace ctrl {
         : model::Controller{identity, nexus}
         , allocateWidget_{wa}
         , widget_{}
-        { }
+        {
+          installExpander([&](){ return widget_ and widget_->expand; }
+                         ,[&](bool yes)
+                               {
+                                 if (widget_ or yes)
+                                   getWidget().expand (yes);
+                               }
+                         );
+        }
       
      ~NotificationHub() { };
       

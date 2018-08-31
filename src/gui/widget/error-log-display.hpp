@@ -57,6 +57,7 @@
 #define GUI_WIDGET_ERROR_LOG_DISPLAY_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/model/expander-revealer.hpp"
 #include "include/gui-notification-facade.h"
 
 //#include "lib/util.hpp"
@@ -96,6 +97,8 @@ namespace widget {
           textLog_.set_editable (false);
         }
       
+      model::Expander expand;
+      
       
       void
       showMsg (NotifyLevel severity, string const& text)
@@ -112,13 +115,6 @@ namespace widget {
                 addEntry (text);
               break;
           }
-        }
-      
-      bool
-      expand (bool yes)
-        {
-          UNIMPLEMENTED ("Maintain expansion state, build a collapsed representation.");
-          return false; //////TODO true if state change happened; this makes the state persistent
         }
       
       void

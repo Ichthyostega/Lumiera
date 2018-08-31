@@ -1741,10 +1741,10 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504203754175" ID="ID_580465154" MODIFIED="1533402997076" TEXT="Fehler-Level erkennen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725200588" ID="ID_871562482" MODIFIED="1534725208028" TEXT="Operationen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725109137" ID="ID_694776463" MODIFIED="1534725415160" TEXT="expand">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725200588" ID="ID_871562482" MODIFIED="1535752292770" TEXT="Operationen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1534725109137" ID="ID_694776463" MODIFIED="1535752255561" TEXT="expand">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1534725397553" ID="ID_1072347956" MODIFIED="1535631557024" TEXT="collapsed-Repr&#xe4;sentation schaffen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535554610295" ID="ID_1050608842" MODIFIED="1535554619117" TEXT="nur vorl&#xe4;ufige L&#xf6;sung">
@@ -1779,7 +1779,7 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535554640586" ID="ID_1376241476" MODIFIED="1535737885653" TEXT="essentiell: passiert im Parent-Widget">
+<node COLOR="#435e98" CREATED="1535554640586" ID="ID_1376241476" MODIFIED="1535752092225" TEXT="essentiell: passiert im Parent-Widget">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1789,7 +1789,7 @@
     <p>der Parent-Container ist f&#252;r das expand/collapse zust&#228;ndig</p>
   </body>
 </html></richcontent>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1535634032601" ID="ID_964641889" MODIFIED="1535731317069" TEXT="Design-Problem: sich expandieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535634116925" ID="ID_1129948550" MODIFIED="1535634126600" TEXT="Voraussetzung: unser Widget-Protokoll">
@@ -1941,8 +1941,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725923421" ID="ID_298871659" MODIFIED="1535725936028" TEXT="Expander geeignet verdrahten">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535725923421" ID="ID_298871659" MODIFIED="1535752076020" TEXT="Expander geeignet verdrahten">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1535725940226" ID="ID_162482468" MODIFIED="1535750016792" TEXT="validiert das Design">
 <icon BUILTIN="yes"/>
 </node>
@@ -2441,19 +2441,19 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119979555" ID="ID_1159164748" MODIFIED="1534725765116" TEXT="Controller-Interface">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1534725759893" TEXT="doReset()">
-<icon BUILTIN="pencil"/>
-<node CREATED="1534120150458" ID="ID_1390376483" MODIFIED="1534120202934" TEXT="&quot;Clear log contents, collapse widget, clear error state&quot;&quot;">
-<icon BUILTIN="info"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150458" ID="ID_1083026482" MODIFIED="1534725759894" TEXT="doExpand(yes)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1534120150458" ID="ID_1083026482" MODIFIED="1535752367109" TEXT="Expander">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1534120150459" ID="ID_1182032725" MODIFIED="1534120202934" TEXT="&quot;Allocate Widget if necessary, expand widget&quot;">
 <icon BUILTIN="info"/>
 </node>
+<node COLOR="#338800" CREATED="1535752333217" ID="ID_332486075" MODIFIED="1535752360062" TEXT="geeignet verdrahten f&#xfc;r Delegation">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150459" ID="ID_1466610963" MODIFIED="1534725759894" TEXT="doRevealYourself()">
+<node COLOR="#338800" CREATED="1535752347574" ID="ID_883461261" MODIFIED="1535752358566" TEXT="Expander im ErrorLog widget verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150459" ID="ID_1466610963" MODIFIED="1535752377006" TEXT="doRevealYourself()">
 <icon BUILTIN="pencil"/>
 <node CREATED="1534120150460" ID="ID_1726008784" MODIFIED="1534120253931">
 <richcontent TYPE="NODE"><html>
@@ -2469,6 +2469,12 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1534725759893" TEXT="doReset()">
+<icon BUILTIN="pencil"/>
+<node CREATED="1534120150458" ID="ID_1390376483" MODIFIED="1534120202934" TEXT="&quot;Clear log contents, collapse widget, clear error state&quot;&quot;">
+<icon BUILTIN="info"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150462" ID="ID_1528884346" MODIFIED="1534725759894" TEXT="doMsg(text)">
