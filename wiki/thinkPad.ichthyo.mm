@@ -1779,7 +1779,7 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node CREATED="1535554640586" ID="ID_1376241476" MODIFIED="1535554936517" TEXT="essentiell: passiert im Parent-Widget">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535554640586" ID="ID_1376241476" MODIFIED="1535737885653" TEXT="essentiell: passiert im Parent-Widget">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1789,6 +1789,7 @@
     <p>der Parent-Container ist f&#252;r das expand/collapse zust&#228;ndig</p>
   </body>
 </html></richcontent>
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1535634032601" ID="ID_964641889" MODIFIED="1535731317069" TEXT="Design-Problem: sich expandieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535634116925" ID="ID_1129948550" MODIFIED="1535634126600" TEXT="Voraussetzung: unser Widget-Protokoll">
@@ -1917,15 +1918,15 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535638412517" ID="ID_447101734" MODIFIED="1535731461556" TEXT="Adapter-Interfaces entwerfen">
+<node COLOR="#338800" CREATED="1535638412517" ID="ID_447101734" MODIFIED="1535737874447" TEXT="Adapter-Interfaces entwerfen">
 <arrowlink COLOR="#709eaf" DESTINATION="ID_316446199" ENDARROW="Default" ENDINCLINATION="-354;-490;" ID="Arrow_ID_1105268233" STARTARROW="None" STARTINCLINATION="-3385;0;"/>
 <linktarget COLOR="#5f8cc1" DESTINATION="ID_447101734" ENDARROW="Default" ENDINCLINATION="22;-23;" ID="Arrow_ID_272345450" SOURCE="ID_603236457" STARTARROW="None" STARTINCLINATION="-97;-5;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725900392" ID="ID_489679545" MODIFIED="1535725913903" TEXT="Expander">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535725900392" ID="ID_489679545" MODIFIED="1535737870629" TEXT="Expander">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725906647" ID="ID_1380126396" MODIFIED="1535725914798" TEXT="Revealer">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535725906647" ID="ID_1380126396" MODIFIED="1535737872678" TEXT="Revealer">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726065753" ID="ID_578786610" MODIFIED="1535726072346" TEXT="default-Impl doExpand()">
@@ -1940,6 +1941,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725923421" ID="ID_298871659" MODIFIED="1535725936028" TEXT="Expander geeignet verdrahten">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1535725940226" ID="ID_162482468" MODIFIED="1535725949205" TEXT="validiert das Design"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737902126" ID="ID_1001984094" MODIFIED="1535737905991" TEXT="Unit-Test">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -2013,6 +2017,9 @@
 <icon BUILTIN="button_cancel"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725982021" ID="ID_858097581" MODIFIED="1535725997876" TEXT="Revealer geeignet verdrahten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737911365" ID="ID_79619425" MODIFIED="1535737923428" TEXT="Unit-Test: AbtractTangible_test erweitern">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
