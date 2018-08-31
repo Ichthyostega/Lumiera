@@ -83,9 +83,11 @@ namespace model {
    */
   class Expander
     {
+    public:
       using ProbeFun = std::function<bool(void)>;
       using ChangeFun = std::function<void(bool)>;
       
+    private:
       ProbeFun probeState_;
       ChangeFun changeState_;
       
@@ -151,8 +153,10 @@ namespace model {
    */
   class Revealer
     {
+    public:
       using RevealeItFun = std::function<void()>;
       
+    private:
       RevealeItFun revealIt_;
       
     public:

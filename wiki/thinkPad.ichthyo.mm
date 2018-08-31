@@ -1929,18 +1929,24 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726065753" ID="ID_578786610" MODIFIED="1535726072346" TEXT="default-Impl doExpand()">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726077504" ID="ID_1806068721" MODIFIED="1535726084288" TEXT="pr&#xfc;fen: canExpand">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535726065753" ID="ID_578786610" MODIFIED="1535743677411" TEXT="default-Impl doExpand()">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535726077504" ID="ID_1806068721" MODIFIED="1535743682618" TEXT="pr&#xfc;fen: canExpand">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726086631" ID="ID_1753268128" MODIFIED="1535726090655" TEXT="Expander aufrufen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535726086631" ID="ID_1753268128" MODIFIED="1535743684443" TEXT="Expander aufrufen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535743810027" ID="ID_778321095" MODIFIED="1535743836008" TEXT="bestehende default-Impl aus Widget/Controller entfernen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725923421" ID="ID_298871659" MODIFIED="1535725936028" TEXT="Expander geeignet verdrahten">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1535725940226" ID="ID_162482468" MODIFIED="1535725949205" TEXT="validiert das Design"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743705113" ID="ID_54369760" MODIFIED="1535743721369" TEXT="auch MockElm anpassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737902126" ID="ID_1001984094" MODIFIED="1535737905991" TEXT="Unit-Test">
 <icon BUILTIN="flag-yellow"/>
@@ -2009,6 +2015,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726053483" ID="ID_628118697" MODIFIED="1535726058196" TEXT="Revealer aufrufen">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743810027" ID="ID_1786165843" MODIFIED="1535743829532" TEXT="bestehende default-Impl aus Widget/Controller entfernen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node CREATED="1534722062911" ID="ID_1134044414" MODIFIED="1535725975155" TEXT="braucht Parent-Link">
 <icon BUILTIN="button_cancel"/>
@@ -2018,6 +2027,12 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725982021" ID="ID_858097581" MODIFIED="1535725997876" TEXT="Revealer geeignet verdrahten">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743705113" ID="ID_267884906" MODIFIED="1535743721369" TEXT="auch MockElm anpassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743754227" ID="ID_1964115972" MODIFIED="1535743768498" TEXT="doReveal(ID) API entfernen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737911365" ID="ID_79619425" MODIFIED="1535737923428" TEXT="Unit-Test: AbtractTangible_test erweitern">
 <icon BUILTIN="flag-yellow"/>

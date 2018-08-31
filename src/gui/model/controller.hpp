@@ -70,12 +70,6 @@ namespace model {
           UNIMPLEMENTED ("Controller reset");
         }
       
-      virtual bool
-      doExpand (bool yes)  override
-        {
-          UNIMPLEMENTED ("Controller doExpand");
-        }
-      
       virtual void
       doReveal (ID child)  override
         {

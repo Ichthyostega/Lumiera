@@ -148,6 +148,9 @@ namespace model {
    *       behaviour. If this virtual method returns `true`, the
    *       state change is deemed relevant and persistent, and
    *       thus a "state mark" is sent on the UI-Bus.
+   * @remark a default implementation of ::doExpand() is provided,
+   *       based on installing an \ref Expander functor through
+   *       the [configuration function](\ref #installExpander).
    */
   void
   Tangible::slotExpand()
@@ -166,6 +169,22 @@ namespace model {
   {
     if (this->doExpand(false))
       uiBus_.note (GenNode("expand", false));
+  }
+  
+  
+  /**
+   * generic default implementation of the expand/collapse functionality.
+   * Based on the #expand_ functor, which needs to be [configured](\ref installExpander())
+   * explicitly to enable this functionality.
+   * @return `true` if the actual expansion state has been changed.
+   */
+  bool
+  Tangible::doExpand (bool yes)
+  {
+    if (not expand_.canExpand())
+      return false;
+    bool oldState = expand_(yes);
+    return oldState != yes; // actually changed
   }
   
   

@@ -176,9 +176,14 @@ namespace model {
       
       ctrl::BusTerm uiBus_;
       
+      Expander expand_;
+      Revealer reveal_;
+      
       
       Tangible(ID identity, ctrl::BusTerm& nexus)
         : uiBus_{nexus.attach(identity, *this)}
+        , expand_{}
+        , reveal_{}
         { }
       
     public:
@@ -205,11 +210,13 @@ namespace model {
       void markErr (string error);
       void mark(GenNode const&);
       
+      void installExpander (Expander::ProbeFun, Expander::ChangeFun);
+      
     protected:
       virtual bool doReset()           =0;
       virtual bool doClearMsg()        =0;
       virtual bool doClearErr()        =0;
-      virtual bool doExpand (bool yes) =0;
+      virtual bool doExpand (bool yes);
       virtual void doReveal (ID child) =0;
       virtual void doRevealYourself () =0;
       
@@ -247,6 +254,22 @@ namespace model {
                ,GenNodeIL{}
                ,GenNodeIL {std::forward<ARGS> (args)...}));
   }           // not typed, no attributes, all arguments as children
+  
+  
+  /**
+   * Configure the (optional) functionality to expand or collapse the UI-Element.
+   * @param detectCurrExpansionState a lambda or function<bool()> to retrieve if the element is currently expanded
+   * @param howto_expand_collapse a lambda or function<void(bool)> to switch the element's expansion state
+   * @note unless this setup function is invoked, the expand/collapse functionality remains disabled;
+   *       invoking the #slotExpand() or sending **mark** "`expand`" messages via UI-Bus has no effect then.
+   */
+  inline void
+  Tangible::installExpander (Expander::ProbeFun detectCurrExpansionState,
+                             Expander::ChangeFun howto_expand_collapse)
+  {
+    expand_ = Expander{move (detectCurrExpansionState), move (howto_expand_collapse)};
+  }
+
   
   
   

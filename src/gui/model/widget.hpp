@@ -67,12 +67,6 @@ namespace model {
           UNIMPLEMENTED ("Widget reset");
         }
       
-      virtual bool
-      doExpand (bool yes)  override
-        {
-          UNIMPLEMENTED ("Widget doExpand");
-        }
-      
       virtual void
       doReveal (ID child)  override
         {
