@@ -1943,13 +1943,21 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725923421" ID="ID_298871659" MODIFIED="1535725936028" TEXT="Expander geeignet verdrahten">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1535725940226" ID="ID_162482468" MODIFIED="1535725949205" TEXT="validiert das Design"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743705113" ID="ID_54369760" MODIFIED="1535743721369" TEXT="auch MockElm anpassen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1535725940226" ID="ID_162482468" MODIFIED="1535750016792" TEXT="validiert das Design">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1535743705113" ID="ID_54369760" MODIFIED="1535749999498" TEXT="auch MockElm anpassen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737902126" ID="ID_1001984094" MODIFIED="1535737905991" TEXT="Unit-Test">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535737902126" ID="ID_1001984094" MODIFIED="1535750031727" TEXT="Unit-Test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535750033829" ID="ID_1808097547" MODIFIED="1535750109787" TEXT="AbstractTangible_test::markState()">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1535750110787" ID="ID_1169665466" MODIFIED="1535750125766" TEXT="tested implizit die neue default-Implementierung mit">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

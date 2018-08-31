@@ -142,13 +142,7 @@ namespace test{
       doExpand (bool yes)  override
         {
           log_.call(this->identify(), "expand", yes);
-          if (expanded_ == yes)
-            return false; // nothing to change
-          
-          virgin_ = false;
-          expanded_ = yes;
-          log_.event (expanded_? "expanded" : "collapsed");
-          return true; // record a state change
+          return Tangible::doExpand (yes);
         }
       
       virtual void
@@ -317,6 +311,13 @@ namespace test{
         {
           log_.call (this->identify(), "ctor", identity, string(nexus));
           log_.create (getID().getSym());
+          installExpander ([&](){ return this->expanded_; }
+                          ,[&](bool yes)
+                                {
+                                  virgin_ = false;
+                                  expanded_ = yes;
+                                  log_.event (expanded_? "expanded" : "collapsed");
+                                });
         }
       
       
