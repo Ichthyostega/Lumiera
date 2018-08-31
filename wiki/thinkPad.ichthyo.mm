@@ -2009,22 +2009,19 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722011622" ID="ID_232472679" MODIFIED="1534722142986" TEXT="revealYourself">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722011622" ID="ID_232472679" MODIFIED="1535756110798" TEXT="revealYourself">
 <linktarget COLOR="#af6a8f" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" SOURCE="ID_898428560" STARTARROW="None" STARTINCLINATION="859;27;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726017256" ID="ID_899234988" MODIFIED="1535726030336" TEXT="default-Impl doReveal()">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726035309" ID="ID_1034773573" MODIFIED="1535726044126" TEXT="pr&#xfc;fen canReveal">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535726017256" ID="ID_899234988" MODIFIED="1535756045754" TEXT="default-Impl doReveal()">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535726035309" ID="ID_1034773573" MODIFIED="1535756048350" TEXT="pr&#xfc;fen canReveal">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722040354" ID="ID_633013" MODIFIED="1534722061920" TEXT="eigennen show/hide-Status erkennen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535726053483" ID="ID_628118697" MODIFIED="1535756052676" TEXT="Revealer aufrufen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726053483" ID="ID_628118697" MODIFIED="1535726058196" TEXT="Revealer aufrufen">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743810027" ID="ID_1786165843" MODIFIED="1535743829532" TEXT="bestehende default-Impl aus Widget/Controller entfernen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535743810027" ID="ID_1786165843" MODIFIED="1535756056057" TEXT="bestehende default-Impl aus Widget/Controller entfernen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1534722062911" ID="ID_1134044414" MODIFIED="1535725975155" TEXT="braucht Parent-Link">
@@ -2033,17 +2030,20 @@
 <node CREATED="1534722073526" ID="ID_1428186731" MODIFIED="1535725979353" TEXT="parent.reveal(this)">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725982021" ID="ID_858097581" MODIFIED="1535725997876" TEXT="Revealer geeignet verdrahten">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743705113" ID="ID_267884906" MODIFIED="1535743721369" TEXT="auch MockElm anpassen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535725982021" ID="ID_858097581" MODIFIED="1535756066541" TEXT="Revealer geeignet verdrahten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535743705113" ID="ID_267884906" MODIFIED="1535756061190" TEXT="auch MockElm anpassen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535743754227" ID="ID_1964115972" MODIFIED="1535743768498" TEXT="doReveal(ID) API entfernen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535743754227" ID="ID_1964115972" MODIFIED="1535756064674" TEXT="doReveal(ID) API entfernen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737911365" ID="ID_79619425" MODIFIED="1535737923428" TEXT="Unit-Test: AbtractTangible_test erweitern">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1535756076321" ID="ID_1044092797" MODIFIED="1535756101199" TEXT="konkret was machen, damit man die Funktion sehen kann">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>

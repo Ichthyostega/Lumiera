@@ -189,19 +189,38 @@ namespace model {
   
   
   /**
-   * @todo 12/2015 not clear yet what needs to be done
-   * @remarks the intention is to request the given child
-   *          to be brought into sight. We need to set up some kind
-   *          of children registration, but better not do this in
-   *          a completely generic fashion, for danger of overengineering.
-   *          Moreover, it is not clear yet, who will issue this request
-   *          and at which element the initial request can/will be targeted.
+   * Cause the element to be brought into sight.
+   * This is a generic Slot to connect UI signals against;
+   * the same action can also be triggered by sending a **mark**
+   * message over the UI-Bus with the symbol "`revealYourself`".
+   * @note this is an optional feature and requires the actual widget or controller
+   *       either to override the ::doRevealYourself() extension point, or to
+   *       [install a suitable closure](\ref installRevealer()). Typically this
+   *       is not in itself a persistent state change; however, it might incur
+   *       expanding some widgets, which is recorded as persistent UI state.
+   * @remarks the intention is to make a specific element visible, e.g. to reveal
+   *       the effect of some operation, or to mark a serious error condition.
+   *       Implementing this is by no means trivial, since it involves the
+   *       possibly recursive collaboration with enclosing container widgets,
+   *       and maybe even to scroll to a given canvas position.
    */
   void
-  Tangible::slotReveal(ID child)
+  Tangible::slotReveal()
   {
-    this->doReveal(child);
     this->doRevealYourself();
+  }
+  
+  
+  /**
+   * generic default implementation of the "reveal" functionality.
+   * Based on the #reveal_ functor, which needs to be [configured](\ref installRevealer())
+   * explicitly to enable this functionality.
+   */
+  void
+  Tangible::doRevealYourself()
+  {
+    if (reveal_.canReveal())
+      reveal_();
   }
   
   

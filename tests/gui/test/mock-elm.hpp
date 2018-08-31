@@ -146,15 +146,10 @@ namespace test{
         }
       
       virtual void
-      doReveal (ID child)  override
-        {
-          UNIMPLEMENTED ("mock doReveal");
-        }
-      
-      virtual void
       doRevealYourself()  override
         {
-          UNIMPLEMENTED ("mock doRevealYourself");
+          log_.call(this->identify(), "revealYourself");
+          Tangible::doRevealYourself();  // NOTE: without specific configuration this is NOP
         }
       
       virtual bool

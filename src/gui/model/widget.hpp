@@ -67,18 +67,6 @@ namespace model {
           UNIMPLEMENTED ("Widget reset");
         }
       
-      virtual void
-      doReveal (ID child)  override
-        {
-          UNIMPLEMENTED ("Widget doReveal");
-        }
-      
-      virtual void
-      doRevealYourself()  override
-        {
-          UNIMPLEMENTED ("Widget doRevealYourself");
-        }
-      
       virtual bool
       doMsg (string text)  override
         {

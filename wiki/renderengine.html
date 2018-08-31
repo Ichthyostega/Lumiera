@@ -3241,7 +3241,7 @@ More specifically, the integration is based on ''messaging''. To start with, the
 ----
 In a preliminary attempt to establish an integration between the GUI and the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget. This highlighted the problems we're about to encounter and made us think about the more radically decoupled approach we followed thereafter...</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201808311937" tags="GuiIntegration design draft" changecount="23">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201808312301" tags="GuiIntegration design draft" changecount="24">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
@@ -3275,7 +3275,7 @@ Several UI elements offer the ability to be collapsed into a minimal representat
 
 !!!revealing an element
 The UI-Element protocol also includes the ability to //reveal an element// -- which means actively to bring this element into sight, in case it is hidden, collapsed or obscured by scrolling away.
-{{red{As of 8/2018 this is just an idea}}}, and many details still need to be considered. Yet at least one point is clear: implementing such a feature requires the help of the container widget actually holding the element to be revealed. It might even happen that also the collaboration of the container holding aforementioned immediate parent container is necessary -- indicating a recursive implementation scheme.
+{{red{As of 8/2018 this is just an idea}}}, and many details still need to be considered. Yet at least one point is clear: implementing such a feature requires the help of the container widget actually holding the element to be revealed. It might even happen that also the collaboration of the container holding aforementioned immediate parent container is necessary -- indicating a recursive implementation scheme. The default implementation is based on a similar scheme as the expand/collapse functionality: here we embed a {{{Revealer}}} functor, which then needs to be outfitted with a lambda binding into the internals of the parent container to effect the necessary presentation changes.
 </pre>
 </div>
 <div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201703170201" tags="GuiIntegration design draft img" changecount="47">

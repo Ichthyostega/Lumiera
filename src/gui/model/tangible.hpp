@@ -202,8 +202,7 @@ namespace model {
       
       void slotExpand();
       void slotCollapse();
-      
-      void slotReveal(ID child);
+      void slotReveal();
       
       void markFlash();
       void markMsg (string message);
@@ -211,14 +210,14 @@ namespace model {
       void mark(GenNode const&);
       
       void installExpander (Expander::ProbeFun, Expander::ChangeFun);
+      void installRevealer (Revealer::RevealeItFun);
       
     protected:
       virtual bool doReset()           =0;
       virtual bool doClearMsg()        =0;
       virtual bool doClearErr()        =0;
       virtual bool doExpand (bool yes);
-      virtual void doReveal (ID child) =0;
-      virtual void doRevealYourself () =0;
+      virtual void doRevealYourself();
       
       virtual bool doMsg (string)          =0;
       virtual bool doErr (string)          =0;
@@ -268,6 +267,20 @@ namespace model {
                              Expander::ChangeFun howto_expand_collapse)
   {
     expand_ = Expander{move (detectCurrExpansionState), move (howto_expand_collapse)};
+  }
+  
+  
+  /**
+   * Configure the (optional) functionality to bring the UI-Element into sight.
+   * @param how_to_uncover_the_element a lambda or function<void()> to actually cause the necessary actions.
+   * @note unless this setup function is invoked, the "`revealYourself`" functionality remains disabled.
+   *       Typically this setup will be done by an owning parent container, binding to some internals
+   *       and also recursively invoking the "`revealYourself`" action on the container.
+   */
+  inline void
+  Tangible::installRevealer (Revealer::RevealeItFun how_to_uncover_the_element)
+  {
+    reveal_ = Revealer{move (how_to_uncover_the_element)};
   }
 
   

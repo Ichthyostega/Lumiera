@@ -70,18 +70,6 @@ namespace model {
           UNIMPLEMENTED ("Controller reset");
         }
       
-      virtual void
-      doReveal (ID child)  override
-        {
-          UNIMPLEMENTED ("Controller doReveal");
-        }
-      
-      virtual void
-      doRevealYourself()  override
-        {
-          UNIMPLEMENTED ("Controller doRevealYourself");
-        }
-      
       virtual bool
       doMsg (string text)  override
         {

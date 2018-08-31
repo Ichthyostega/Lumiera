@@ -117,12 +117,6 @@ namespace ctrl {
           return true;
         }
       
-      virtual void
-      doRevealYourself()  override
-        {
-          getWidget().revealYourself(); // implies also expand
-        }
-      
       virtual bool
       doMsg (string text)  override
         {
@@ -179,6 +173,7 @@ namespace ctrl {
                                    getWidget().expand (yes);
                                }
                          );
+          installRevealer([&](){ getWidget().revealYourself(); }); // implementation implies also expand
         }
       
      ~NotificationHub() { };
