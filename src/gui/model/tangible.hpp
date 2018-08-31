@@ -105,7 +105,7 @@
  ** - **act**: send a \ref GenNode representing the action
  ** - **note**: _send_ a GenNode representing the _state mark_
  ** - **mark**: _receive_ a GenNode representing the _feedback,_ a replayed _state mark_ or _generic message._
- ** - **diff**: ask to retrieve a diff, which
+ ** - **diff**: prompt the element to retrieve a diff, which
  **   - either is an incremental status update
  **   - or is a from-scratch reconfiguration
  ** 
@@ -133,6 +133,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/model/expander-revealer.hpp"
 #include "lib/diff/diff-mutable.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"

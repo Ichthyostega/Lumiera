@@ -1,5 +1,6 @@
 Coding Policies within UI-Layer
 ===============================
+:Toc:
 
 NOTE: for the time being, this is a loose collection of
       Conventions and Policies deemed adequate for work
@@ -38,6 +39,40 @@ on each other and their start-up sequence is intricate. Implement global and cro
 concerns here. In case some widget or controller needs access to such a service, then you
 should prefer using `lib::Depend<ServiceInterface>`, and install the corresponding service
 via `lib::DependInject<ServiceInterface>::ServiceInstance<ServiceImpl>`.
+
+
+Behaviour patterns
+------------------
+
+Parent Containers
+~~~~~~~~~~~~~~~~~
+A _Parent Container_ is an object managing a collection of children, with respect to
+the structure of _tangible UI elements._ Irrespective if this container is also a
+`Gtk::Container` widget, or ``just'' a controller. The key point to turn something
+into a _Parent Container_ is the fact that this entity creates the children
+in response to a (population) diff message.
+
+.Responsibilities
+- a _Parent Container_ has to wire each child properly, so to enable the adequate
+  use of the UI element protocol. This includes
+
+  ** to ensure the child is attached to the UI-Bus (usually enforced by ctor call)
+  ** to install a suitable `Expander` functor if the child supports expand/collapse
+  ** to install a suitable `Revealer` when it is relevant for the child to be brought
+     into sight in response to some message (e.g. to indicate error state).
+
+- whenever a child is detached from the container, you need to _ensure it is destroyed_
+  right away, before there is any chance of processing some other UI event.footnote:[
+  Invoking the destructor triggers a lot of magic here, especially it causes the child
+  to be properly detached from signals. We want to ensure this happens as soon as the
+  child is taken out of service. Do not use an ``can collect garbage later'' approach.]
+
+Error handling
+~~~~~~~~~~~~~~
+Be aware that GTK is written in C. And while GTKmm has some safeguards in place,
+better be sure no exception can emanate from event handling code.
+
+WARNING: [red]#TODO#: probably we'll need a common wrapper to do so...
 
 
 Code organisation

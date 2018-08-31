@@ -1789,15 +1789,15 @@
     <p>der Parent-Container ist f&#252;r das expand/collapse zust&#228;ndig</p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535634032601" ID="ID_964641889" MODIFIED="1535646954908" TEXT="Design-Problem: sich expandieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535634032601" ID="ID_964641889" MODIFIED="1535731317069" TEXT="Design-Problem: sich expandieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535634116925" ID="ID_1129948550" MODIFIED="1535634126600" TEXT="Voraussetzung: unser Widget-Protokoll">
 <node CREATED="1535634127852" ID="ID_317106359" MODIFIED="1535634136126" TEXT="enth&#xe4;lt eine expand()-Methode"/>
 <node CREATED="1535636097808" ID="ID_1540209936" MODIFIED="1535636109795" TEXT="Unterschied Widget / Controller ?">
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1535636169439" FOLDED="true" ID="ID_631287309" MODIFIED="1535646972760" TEXT="zwei Modelle denkbar">
+<node CREATED="1535636169439" FOLDED="true" ID="ID_631287309" MODIFIED="1535731360335" TEXT="zwei Modelle denkbar">
 <icon BUILTIN="yes"/>
 <node CREATED="1535636219312" ID="ID_1940674226" MODIFIED="1535636242077" TEXT="Widget ist Expander">
 <icon BUILTIN="full-1"/>
@@ -1908,10 +1908,38 @@
 </node>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1535731363267" ID="ID_603236457" MODIFIED="1535731485315" TEXT="L&#xf6;sung">
+<arrowlink COLOR="#5f8cc1" DESTINATION="ID_447101734" ENDARROW="Default" ENDINCLINATION="22;-23;" ID="Arrow_ID_272345450" STARTARROW="None" STARTINCLINATION="-97;-5;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1535731373978" ID="ID_182280315" MODIFIED="1535731492690" TEXT="Widget h&#xe4;lt einen Expander-Funktor"/>
+<node CREATED="1535731402126" ID="ID_1177558244" MODIFIED="1535731498221" TEXT="damit ist eine Standard-Impl von Tangible::doExpand() m&#xf6;glich">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535638412517" ID="ID_447101734" MODIFIED="1535646941006" TEXT="Adapter-Interfaces entwerfen">
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535638412517" ID="ID_447101734" MODIFIED="1535731461556" TEXT="Adapter-Interfaces entwerfen">
 <arrowlink COLOR="#709eaf" DESTINATION="ID_316446199" ENDARROW="Default" ENDINCLINATION="-354;-490;" ID="Arrow_ID_1105268233" STARTARROW="None" STARTINCLINATION="-3385;0;"/>
+<linktarget COLOR="#5f8cc1" DESTINATION="ID_447101734" ENDARROW="Default" ENDINCLINATION="22;-23;" ID="Arrow_ID_272345450" SOURCE="ID_603236457" STARTARROW="None" STARTINCLINATION="-97;-5;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725900392" ID="ID_489679545" MODIFIED="1535725913903" TEXT="Expander">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725906647" ID="ID_1380126396" MODIFIED="1535725914798" TEXT="Revealer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726065753" ID="ID_578786610" MODIFIED="1535726072346" TEXT="default-Impl doExpand()">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726077504" ID="ID_1806068721" MODIFIED="1535726084288" TEXT="pr&#xfc;fen: canExpand">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726086631" ID="ID_1753268128" MODIFIED="1535726090655" TEXT="Expander aufrufen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725923421" ID="ID_298871659" MODIFIED="1535725936028" TEXT="Expander geeignet verdrahten">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1535725940226" ID="ID_162482468" MODIFIED="1535725949205" TEXT="validiert das Design"/>
 </node>
 </node>
 </node>
@@ -1966,13 +1994,25 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722011622" ID="ID_232472679" MODIFIED="1534722142986" TEXT="revealYourself">
 <linktarget COLOR="#af6a8f" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" SOURCE="ID_898428560" STARTARROW="None" STARTINCLINATION="859;27;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726017256" ID="ID_899234988" MODIFIED="1535726030336" TEXT="default-Impl doReveal()">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726035309" ID="ID_1034773573" MODIFIED="1535726044126" TEXT="pr&#xfc;fen canReveal">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722040354" ID="ID_633013" MODIFIED="1534722061920" TEXT="eigennen show/hide-Status erkennen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722062911" ID="ID_1134044414" MODIFIED="1534722072607" TEXT="braucht Parent-Link">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535726053483" ID="ID_628118697" MODIFIED="1535726058196" TEXT="Revealer aufrufen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722073526" ID="ID_1428186731" MODIFIED="1534722090132" TEXT="parent.reveal(this)">
+</node>
+<node CREATED="1534722062911" ID="ID_1134044414" MODIFIED="1535725975155" TEXT="braucht Parent-Link">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1534722073526" ID="ID_1428186731" MODIFIED="1535725979353" TEXT="parent.reveal(this)">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535725982021" ID="ID_858097581" MODIFIED="1535725997876" TEXT="Revealer geeignet verdrahten">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -18544,17 +18584,97 @@
 </node>
 <node CREATED="1535639052671" ID="ID_1134562624" MODIFIED="1535639073976" TEXT="Expander">
 <node CREATED="1535639110104" ID="ID_712715565" MODIFIED="1535639113355" TEXT="bool-Testbar"/>
-<node CREATED="1535639114727" ID="ID_1791716176" MODIFIED="1535639125769" TEXT="expand(yes)"/>
-<node CREATED="1535639129085" ID="ID_723131136" MODIFIED="1535639132713" TEXT="collapse()"/>
+<node CREATED="1535725570140" ID="ID_39824556" MODIFIED="1535725586590" TEXT="canExpand()"/>
+<node CREATED="1535639114727" ID="ID_1791716176" MODIFIED="1535725472597" TEXT="Funktions-Operator(bool expand)"/>
 </node>
 <node CREATED="1535639174623" ID="ID_1755607605" MODIFIED="1535639177466" TEXT="Revealer">
-<node CREATED="1535639337897" ID="ID_1186867690" MODIFIED="1535639379927" TEXT="defineRevealable(ID)"/>
-<node CREATED="1535639368981" ID="ID_220149026" MODIFIED="1535639375736" TEXT="isRevealable(ID)"/>
-<node CREATED="1535639517897" ID="ID_1175119585" MODIFIED="1535639523892" TEXT="reveal(ID)"/>
-<node CREATED="1535640911061" ID="ID_777387548" MODIFIED="1535640922887" TEXT="reveal(canvasX,canvasY)"/>
+<node CREATED="1535639368981" ID="ID_220149026" MODIFIED="1535725407546">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>nicht</i>&#160;bool-Testbar
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ganz bewu&#223;t verzichten wir darauf,
+    </p>
+    <p>
+      festzustellen, ob ein Kind gegenw&#228;rtig zug&#228;nglich (revealed) ist.
+    </p>
+    <p>
+      Denn dies auf dem API zu exponieren bringt keinen Mehrwehrt.
+    </p>
+    <p>
+      Letztlich ist das ein lokales Detail des Layout-Managers.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Es ist nicht Sache des client-Codes, auf einem Widget ein anderes Verhalten auszul&#246;sen,
+    </p>
+    <p>
+      wenn es nicht sichtbar ist. Denn Sichtbarkeit geh&#246;rt zur UI-Mechanik und geht den Client nix an
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1535655039395" ID="ID_1646511082" MODIFIED="1535655045412" TEXT="Diskussion">
-<icon BUILTIN="pencil"/>
+<node CREATED="1535725591561" ID="ID_1362809449" MODIFIED="1535725594837" TEXT="canReveal()"/>
+<node CREATED="1535639517897" ID="ID_1175119585" MODIFIED="1535725607419" TEXT="Funktions-Operator(void) == reveal"/>
+<node CREATED="1535640911061" ID="ID_777387548" MODIFIED="1535725678665" TEXT="reveal(canvasX,canvasY) auf dem Layout-Manager"/>
+</node>
+<node CREATED="1535640932722" FOLDED="true" ID="ID_1411372901" MODIFIED="1535723883504" TEXT="NavScope">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1535654864507" ID="ID_976171939" MODIFIED="1535654872624" TEXT="erst mal nur so eine Idee....">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1535654895926" ID="ID_518978388" MODIFIED="1535655662803" TEXT="zwei Fliegen mit einer Klappe">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1535654884104" ID="ID_1335278492" MODIFIED="1535654995472" TEXT="k&#xf6;nnte f&#xfc;r den ViewLocator n&#xfc;tzlich sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn dort fehlt noch die konkrete Implementierung,
+    </p>
+    <p>
+      welche die Monaden-Baum-Repr&#228;sentation schlie&#223;lich
+    </p>
+    <p>
+      auf konkrete Widgets abbildet. Das ist viel Arbeit, und es lie&#223;e sich vereinfachen,
+    </p>
+    <p>
+      wenn f&#252;r gewisse Knoten erkannt werden kann, da&#223; sie einen NavScope darstellen;
+    </p>
+    <p>
+      denn dann g&#228;be es eine Implementierung &quot;von der Stange&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1535723854290" ID="ID_333598922" MODIFIED="1535723874600" TEXT="f&#xe4;llt aus diesem Thema heraus">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1535655039395" FOLDED="true" ID="ID_1646511082" MODIFIED="1535725225038" TEXT="Diskussion">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535655065175" ID="ID_702941818" MODIFIED="1535655069235" TEXT="Symmetrie?">
 <node CREATED="1535655118800" ID="ID_1058761508" MODIFIED="1535655127308" TEXT="Expander ist nur pro Komponente">
 <icon BUILTIN="smily_bad"/>
@@ -18562,8 +18682,26 @@
 <node CREATED="1535655136902" ID="ID_126171743" MODIFIED="1535655170274" TEXT="Wunsch: Mix-ins in NavScope-Interface kombinieren">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1535723351533" ID="ID_909635517" MODIFIED="1535723375219">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber die Operationen sind <i>der Sache nach</i>&#160;nicht symmetrisch
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1535655069967" ID="ID_340217269" MODIFIED="1535655076674" TEXT="Expander und Revealer als Proxy?">
+<node CREATED="1535725181176" ID="ID_1947404851" MODIFIED="1535725210681" TEXT="ins Kind verlagert lassen sie sich jedoch symmetrisieren">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1535655069967" FOLDED="true" ID="ID_340217269" MODIFIED="1535725176627" TEXT="Expander und Revealer als Proxy?">
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1535655293760" ID="ID_1318206385" MODIFIED="1535655302082" TEXT="Syntax?">
 <node CREATED="1535655199741" ID="ID_942388081" MODIFIED="1535655235119" TEXT="scope.getExpander(ID).expand(false)">
 <icon BUILTIN="help"/>
@@ -18602,40 +18740,75 @@
 </node>
 </node>
 </node>
+<node CREATED="1535724509562" ID="ID_833385943" MODIFIED="1535724515909" TEXT="Implementierungs-Modell">
+<node CREATED="1535724523160" FOLDED="true" ID="ID_1440345421" MODIFIED="1535725153382" TEXT="Parent-Container f&#xfc;hrt Index">
+<icon BUILTIN="full-1"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1535724838670" ID="ID_1787800884" MODIFIED="1535724867702" TEXT="das Kind wird dort per ID registriert"/>
+<node CREATED="1535724882528" ID="ID_1169954047" MODIFIED="1535724888883" TEXT="per ID bekommt man einen...">
+<node CREATED="1535724890399" ID="ID_1544051424" MODIFIED="1535724893410" TEXT="Expander-Proxy"/>
+<node CREATED="1535724894022" ID="ID_91331753" MODIFIED="1535724897842" TEXT="Revealer-Proxy"/>
 </node>
-<node CREATED="1535722960729" ID="ID_303674498" MODIFIED="1535722964125" TEXT="Abw&#xe4;gung"/>
-<node CREATED="1535640932722" ID="ID_1411372901" MODIFIED="1535655004304" TEXT="NavScope">
-<icon BUILTIN="help"/>
-<node CREATED="1535654864507" ID="ID_976171939" MODIFIED="1535654872624" TEXT="erst mal nur so eine Idee....">
+<node CREATED="1535724910940" ID="ID_1389683609" MODIFIED="1535724922199" TEXT="das Kind h&#xe4;lt eine Referenz auf seinen Parent"/>
+</node>
+<node CREATED="1535724555244" ID="ID_336857888" MODIFIED="1535724635442" TEXT="Parent-Container konfiguriert Funktor in das Kind">
+<icon BUILTIN="full-2"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1535724936297" ID="ID_947922423" MODIFIED="1535724966529" TEXT="die default-Impl des Kindes enth&#xe4;lt Storage f&#xfc;r diese Funktoren"/>
+<node CREATED="1535724976291" ID="ID_1742203413" MODIFIED="1535724996837" TEXT="beim Einbinden in einen Container verdrahtet dieser die Funktoren"/>
+<node CREATED="1535724997873" ID="ID_493457848" MODIFIED="1535725010507" TEXT="und aktiviert damit ggfs die F&#xe4;higkeit Expand/Reveal"/>
+<node CREATED="1535725011710" ID="ID_206250793" MODIFIED="1535725020409" TEXT="das Kind kennt seinen Parent nicht"/>
+</node>
+<node CREATED="1535724570738" FOLDED="true" ID="ID_1785171345" MODIFIED="1535725155045" TEXT="Funktor ist in Mix-in im Kind gespeichert">
+<icon BUILTIN="full-3"/>
 <icon BUILTIN="hourglass"/>
+<node CREATED="1535725026621" ID="ID_1063803104" MODIFIED="1535725041437" TEXT="Erweiterung zur L&#xf6;sung">
+<icon BUILTIN="full-2"/>
 </node>
-<node CREATED="1535654895926" ID="ID_518978388" MODIFIED="1535655662803" TEXT="zwei Fliegen mit einer Klappe">
-<icon BUILTIN="ksmiletris"/>
+<node CREATED="1535725048130" ID="ID_1987768737" MODIFIED="1535725075314" TEXT="die Funktor-Storage wird in das Kind als Mix-in eingebaut"/>
+<node CREATED="1535725076142" ID="ID_904760905" MODIFIED="1535725093936" TEXT="dieser Mix-In &#xfc;berschreibt auch die default-NOP-Implementierung"/>
+<node CREATED="1535725100803" ID="ID_1869635653" MODIFIED="1535725113085" TEXT="man k&#xf6;nnte auf Typ-Ebene Capabilities pr&#xfc;fen"/>
+<node CREATED="1535725117080" ID="ID_417282292" MODIFIED="1535725140662" TEXT="diese L&#xf6;sung erscheit cool, aber im Moment &#xfc;bertrieben">
+<icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1535654884104" ID="ID_1335278492" MODIFIED="1535654995472" TEXT="k&#xf6;nnte f&#xfc;r den ViewLocator n&#xfc;tzlich sein">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...denn dort fehlt noch die konkrete Implementierung,
-    </p>
-    <p>
-      welche die Monaden-Baum-Repr&#228;sentation schlie&#223;lich
-    </p>
-    <p>
-      auf konkrete Widgets abbildet. Das ist viel Arbeit, und es lie&#223;e sich vereinfachen,
-    </p>
-    <p>
-      wenn f&#252;r gewisse Knoten erkannt werden kann, da&#223; sie einen NavScope darstellen;
-    </p>
-    <p>
-      denn dann g&#228;be es eine Implementierung &quot;von der Stange&quot;
-    </p>
-  </body>
-</html>
-</richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1535722960729" FOLDED="true" ID="ID_303674498" MODIFIED="1535725812302" TEXT="Abw&#xe4;gung">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1535723619257" ID="ID_1146060205" MODIFIED="1535723638348" TEXT="Ich folge dem appeal der Funktor-L&#xf6;sung">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1535723641150" ID="ID_945428972" MODIFIED="1535723664351" TEXT="die beiden F&#xe4;lle werden symmetrisch gemacht..."/>
+<node CREATED="1535723665347" ID="ID_243620982" MODIFIED="1535723693571" TEXT="...indem sie als Funktor direkt in das Widget verlagert sind"/>
+<node CREATED="1535723705158" ID="ID_1284580377" MODIFIED="1535723721479" TEXT="das API reveal(ID) auf dem Parent entf&#xe4;llt ersatzlos"/>
+<node CREATED="1535723722763" ID="ID_751870134" MODIFIED="1535723735461" TEXT="das Herstellen der Funktoren wird ein Implementierungs-Detail"/>
+<node CREATED="1535725684749" ID="ID_711293491" MODIFIED="1535725797751" TEXT="bubble-Up pasiert somit nur noch implizit">
+<node CREATED="1535725711241" ID="ID_1059426307" MODIFIED="1535725743161" TEXT="sofern der Parent-Container seinen eigenen Revealer aufrufen kann"/>
+<node CREATED="1535725744085" ID="ID_1761380382" MODIFIED="1535725770365" TEXT="dagegen das reveal(canvasX,canvasY) wird explizit auf den Layout-Manager verschoben"/>
+<node CREATED="1535725771305" ID="ID_988494427" MODIFIED="1535725789821" TEXT="...welcher somit explizit an geeigneter Stelle verdrahtet sein mu&#xdf;">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1535723783155" ID="ID_1961294443" MODIFIED="1535725808284" TEXT="Konsequenz: die Idee mit den Mix-ins gebe ich auf">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1535723904043" HGAP="12" ID="ID_878787948" MODIFIED="1535725871700" TEXT="Struktur">
+<icon BUILTIN="info"/>
+<node CREATED="1535723916153" ID="ID_91381589" MODIFIED="1535723927220" TEXT="Tangible bekommt einen Expander und einen Revealer"/>
+<node CREATED="1535723930631" ID="ID_1166620864" MODIFIED="1535723955464" TEXT="default-konstruiert sind diese Funktionen deaktiviert"/>
+<node CREATED="1535723958404" ID="ID_1293339775" MODIFIED="1535723973358" TEXT="es gibt hierf&#xfc;r ein Konfigurations-API">
+<node CREATED="1535723978137" ID="ID_1758020852" MODIFIED="1535724000466" TEXT="installExpander(lambda, lambda)"/>
+<node CREATED="1535723987360" ID="ID_1134664898" MODIFIED="1535723995651" TEXT="installRevealer(lambda)"/>
+</node>
+<node CREATED="1535724283280" ID="ID_316168549" MODIFIED="1535724371580" TEXT="ein Container-Parent hat die Pflicht, diese Funktoren ggfs zu installieren">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1535724349855" ID="ID_782260645" MODIFIED="1535724369173" TEXT="aus einer Hierarchie herausgenommene Widgets sind unverz&#xfc;glich zu zerst&#xf6;ren">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
