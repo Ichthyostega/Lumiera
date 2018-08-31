@@ -1,8 +1,10 @@
 Lumiera GUI style and theming
 =============================
 
+//Menu: label Theme/Style
 
-'this page collects some pieces of information regarding the visual appearance of the Lumiera GTK GUI'
+_this page collects some pieces of information regarding the visual appearance of the Lumiera GTK UI_
+
 
 GTK-3 styles
 ------------
