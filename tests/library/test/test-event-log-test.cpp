@@ -108,6 +108,9 @@ namespace test{
           CHECK (log.verify("ham").after("spam").after("beans"));
           CHECK (log.verify("ham").after("beans").before("spam").before("ham"));
           CHECK (not log.verify("spam").after("beans").after("ham"));
+          
+          log.event("beans");
+          CHECK (log.verify("beans").after("spam"));
         }
       
       

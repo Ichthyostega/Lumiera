@@ -111,7 +111,7 @@ namespace test{
       bool
       foundSolution()
         {
-          return !isnil (solution_);
+          return not isnil (solution_);
         }
       
       /** this is actually called after each refinement of
@@ -129,7 +129,7 @@ namespace test{
           if (look_for_match_ and not isnil (violation_)) return;
              // already failed, no further check necessary
           
-          if (foundSolution())
+          if (foundSolution()) // NOTE this pulls the filter
             {
               lastMatch_ = matchSpec+" @ "+string(*solution_)
                          + (isnil(lastMatch_)? ""
@@ -898,10 +898,14 @@ namespace test{
           return matcher;
         }
       
-      /** start a query to ensure the given expression does \em not match.
+      /** start a query to ensure the given expression does _not_ match.
        * @remarks the query expression is built similar to the other queries,
        *          but the logic of evaluation is flipped: whenever we find any match
        *          the overall result (when evaluating to `bool`) will be `false`.
+       * @warning this is not an proper exhaustive negation, since the implementation
+       *          does not proper backtracking with a stack of choices. This becomes
+       *          evident, when you combine `ensureNot()` with a switch in search
+       *          direction, like e.g. using `afterXXX` at some point in the chain.
        */
       EventMatch
       ensureNot (string match)  const

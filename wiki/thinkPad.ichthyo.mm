@@ -1818,8 +1818,7 @@
       ...der das <i>eigentliche</i>&#160;Widget expandieren kann
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535636621140" ID="ID_1785708787" MODIFIED="1535636640069" TEXT="pro">
 <node CREATED="1535636644385" ID="ID_976356089" MODIFIED="1535636649884" TEXT="elegantes Design"/>
@@ -1836,8 +1835,7 @@
       ggfs m&#252;ssen alle anderen Funktionen nach unten delegieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535636755202" ID="ID_507299995" MODIFIED="1535636897708" TEXT="kann grunds&#xe4;tzlich nicht alle F&#xe4;lle abdecken">
 <richcontent TYPE="NOTE"><html>
@@ -1861,8 +1859,7 @@
       Standard-Beispiel: Property-Panel
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1535636904118" ID="ID_489559609" MODIFIED="1535636933948" TEXT="Fazit">
@@ -1892,8 +1889,7 @@
       ...wenn wir eine Mix-in -Implementierung w&#228;hlen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -2041,6 +2037,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737911365" ID="ID_79619425" MODIFIED="1535737923428" TEXT="Unit-Test: AbtractTangible_test erweitern">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535815055702" ID="ID_493114230" MODIFIED="1535815475299" TEXT="EventLog: Problem mit Backtracking">
+<arrowlink COLOR="#ba8096" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" STARTARROW="None" STARTINCLINATION="838;114;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1535756076321" ID="ID_1044092797" MODIFIED="1535756101199" TEXT="konkret was machen, damit man die Funktion sehen kann">
 <icon BUILTIN="flag-pink"/>
@@ -2149,7 +2149,7 @@
 <linktarget COLOR="#726b86" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="232;27;" ID="Arrow_ID_246715972" SOURCE="ID_1305015272" STARTARROW="None" STARTINCLINATION="180;-21;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689125583" FOLDED="true" ID="ID_1077285383" MODIFIED="1534728946122" TEXT="mit close-signal verdrahten">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689125583" FOLDED="true" ID="ID_1077285383" MODIFIED="1535814842908" TEXT="mit close-signal verdrahten">
 <icon BUILTIN="stop-sign"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534629989468" ID="ID_1497889519" MODIFIED="1534630008024" TEXT="close-Signal gibtsned">
 <icon BUILTIN="broken-line"/>
@@ -2327,7 +2327,7 @@
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1534636462287" ID="ID_1581893176" MODIFIED="1534721195248" TEXT="eigenes SigC Signal bereitstellen"/>
-<node CREATED="1534636486123" ID="ID_1855036791" MODIFIED="1534721209774" TEXT="w&#xfc;rde vom EventLog-dtor aufgerufen"/>
+<node CREATED="1534636486123" ID="ID_1855036791" MODIFIED="1535814840374" TEXT="w&#xfc;rde vom ErrorLog-dtor aufgerufen"/>
 <node CREATED="1534721236063" ID="ID_1398832202" MODIFIED="1534721247336" TEXT="das w&#xe4;re eine private Konvention">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -2356,8 +2356,7 @@
       oder sie pr&#252;fen den Zustand und machen nichts, wenn das Widget nicht da ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1534721435740" ID="ID_1066281960" MODIFIED="1534721509684" TEXT="Konvention: Fehlerlog-Widget zerst&#xf6;ren">
@@ -18634,8 +18633,7 @@
       <i>nicht</i>&#160;bool-Testbar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18663,8 +18661,7 @@
       wenn es nicht sichtbar ist. Denn Sichtbarkeit geh&#246;rt zur UI-Mechanik und geht den Client nix an
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535725591561" ID="ID_1362809449" MODIFIED="1535725594837" TEXT="canReveal()"/>
 <node CREATED="1535639517897" ID="ID_1175119585" MODIFIED="1535725607419" TEXT="Funktions-Operator(void) == reveal"/>
@@ -18701,8 +18698,7 @@
       denn dann g&#228;be es eine Implementierung &quot;von der Stange&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1535723854290" ID="ID_333598922" MODIFIED="1535723874600" TEXT="f&#xe4;llt aus diesem Thema heraus">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -18728,8 +18724,7 @@
       aber die Operationen sind <i>der Sache nach</i>&#160;nicht symmetrisch
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1535725181176" ID="ID_1947404851" MODIFIED="1535725210681" TEXT="ins Kind verlagert lassen sie sich jedoch symmetrisieren">
@@ -25100,6 +25095,13 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535815195338" ID="ID_1743938908" MODIFIED="1535815207849" TEXT="naive Implementierung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535815210288" ID="ID_1041148737" MODIFIED="1535815475299" TEXT="Problem: kein wirkliches Backtracking">
+<linktarget COLOR="#ba8096" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" SOURCE="ID_493114230" STARTARROW="None" STARTINCLINATION="838;114;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548830035" HGAP="5" ID="ID_1295711115" MODIFIED="1518487921090" TEXT="Nutzen" VSHIFT="17">
@@ -34410,8 +34412,7 @@
       sofern das Widget mit entsprechendem Modus eingef&#252;gt wurde
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535629439847" ID="ID_1925784750" MODIFIED="1535630246025" TEXT="Widget dehnt sich aus, um verf&#xfc;gbaren Platz einzunehmen">
 <icon BUILTIN="info"/>
@@ -35130,8 +35131,7 @@
       Gtk::<b>Expander</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge COLOR="#b4a9e3" STYLE="bezier" WIDTH="thin"/>
 <linktarget COLOR="#4561ae" DESTINATION="ID_1889724128" ENDARROW="Default" ENDINCLINATION="-1778;-100;" ID="Arrow_ID_219393455" SOURCE="ID_1047933726" STARTARROW="None" STARTINCLINATION="-6486;0;"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -35152,8 +35152,7 @@
       ...ob beim Expand/Collapse das umschlie&#223;ende Widget resized werden soll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535631187965" ID="ID_586010488" MODIFIED="1535631341839" TEXT="expanded (=false by default)">
 <richcontent TYPE="NOTE"><html>
@@ -35165,8 +35164,7 @@
       ob eingeklappt oder ausgeklappt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535631368701" ID="ID_1441730618" MODIFIED="1535631388301" TEXT="platziert Kind-Widget as-is">
 <icon BUILTIN="messagebox_warning"/>
@@ -35184,8 +35182,7 @@
       was dazu f&#252;hrt, da&#223; das Kind stets allen verf&#252;gbaren Platz nimmt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>

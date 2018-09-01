@@ -532,6 +532,13 @@ namespace test {
                          .before("revealYourself")
                          .beforeEvent("delivered mark"));
           
+          // Note the fine point: the target element /was/ already expanded
+          // and thus there is no second "expanded" event, nor is there a
+          // second state mark emitted into the UI-Bus...
+          CHECK (mock.ensureNot("expand")
+//                     .afterCall("revealYourself")
+                     .afterEvent("expanded"));
+          
           
           
           cout << "____Event-Log_________________\n"
