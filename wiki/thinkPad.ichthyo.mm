@@ -31051,13 +31051,50 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1535919506060" ID="ID_308901003" MODIFIED="1535920180860" TEXT="heterogene Pr&#xe4;dikat-Typen">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535919540560" ID="ID_544134703" MODIFIED="1535920188703" TEXT="geht nicht(?)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1535919549942" ID="ID_809087906" MODIFIED="1535919754360" TEXT="das zu Beginn verwendete Filter-Pr&#xe4;dikat legt den Typ fest">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...f&#252;r das dort hineingereichte Funktor-Objekt wird der Argument-Accessor ausgew&#228;hlt (Metaprogrammierung).
+    </p>
+    <p>
+      Er ist dann im Typ des Wrappers == _Traits::Functor codiert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wir k&#246;nnen zwar den im Wrapper enthaltenen Funktor neu zuweisen (in gewissen Grenzen),
+    </p>
+    <p>
+      aber er wird stets den zu Beginn gew&#228;hlten Argument-Accessor nehmen.
+    </p>
+    <p>
+      Typischerweise wird dieser ja sogar beim Aufruf des getemplateteten Funtions-Operators geInlined
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535919835337" ID="ID_984434298" MODIFIED="1535920192370" TEXT="Ausweg: doppelt wrappen?">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535899873112" ID="ID_1460874987" MODIFIED="1535913524436" TEXT="Unit-Test (replizieren)">
 <icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1535913527837" ID="ID_1506533000" MODIFIED="1535913542932" TEXT="anlegen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535913531701" ID="ID_1093929821" MODIFIED="1535913541204" TEXT="andere F&#xe4;ll auch covern">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535913531701" ID="ID_1093929821" MODIFIED="1535919483699" TEXT="andere F&#xe4;lle auch covern">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>

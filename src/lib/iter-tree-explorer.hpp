@@ -725,7 +725,7 @@ namespace lib {
     
     
     /**
-     * @internal extension to the Expander decorator to perform expansion delayed on next iteration. 
+     * @internal extension to the Expander decorator to perform expansion delayed on next iteration.
      */
     template<class SRC>
     class ScheduledExpander
@@ -932,6 +932,17 @@ namespace lib {
     
     
     
+    /**
+     * @internal Special variant of the \ref Filter Decorator to allow for dynamic remoulding.
+     * This covers a rather specific use case, where we want to remould or even exchange the
+     * Filter predicate in the middle of an ongoing iteration. Such a remoulding can be achieved
+     * by binding the existing (opaque) filter predicate into a new combined lambda, thereby
+     * capturing it _by value._ After building, this remoulded version can be assigned to the
+     * original filter functor, under the assumption that both are roughly compatible. Moreover,
+     * since we wrap the actual lambda into an adapter, allowing for generic lambdas to be used
+     * as filter predicates, this setup allows for a lot of leeway regarding the concrete predicates.
+     * @note whenever the filter is remoulded, the invariant is immediately [re-established](\ref Filter::pullFilter() )
+     */
     template<class SRC, class FUN>
     class MutableFilter
       : public Filter<SRC,FUN>
@@ -943,6 +954,7 @@ namespace lib {
         
       public: /* === API to Remould the Filter condition underway === */
         
+        /** remould existing predicate to require in addition the given clause to hold */
         template<typename COND>
         void
         andFilter (COND&& conjunctiveClause)
@@ -958,8 +970,101 @@ namespace lib {
                              });
           }
         
+        /** remould existing predicate to require in addition the negation of the given clause to hold */
+        template<typename COND>
+        void
+        andNotFilter (COND&& conjunctiveClause)
+          {
+            remouldFilter (forward<COND> (conjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto val)
+                                         {
+                                           return first(val)
+                                              and not chain(val);
+                                         };
+                             });
+          }
+        
+        /** remould existing predicate to require either the old _OR_ the given new clause to hold */
+        template<typename COND>
+        void
+        orFilter (COND&& disjunctiveClause)
+          {
+            remouldFilter (forward<COND> (disjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto val)
+                                         {
+                                           return first(val)
+                                               or chain(val);
+                                         };
+                             });
+          }
+        
+        /** remould existing predicate to require either the old _OR_ the negation of a new clause to hold */
+        template<typename COND>
+        void
+        orNotFilter (COND&& disjunctiveClause)
+          {
+            remouldFilter (forward<COND> (disjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto val)
+                                         {
+                                           return first(val)
+                                               or not chain(val);
+                                         };
+                             });
+          }
+        
+        /** remould existing predicate to negate the meaning of the existing clause */
+        void
+        flipFilter()
+          {
+            auto dummy = [](auto){ return false; };
+            remouldFilter (dummy
+                          ,[](auto currentFilter, auto)
+                             {
+                               return [=](auto val)
+                                         {
+                                           return not currentFilter(val);
+                                         };
+                             });
+          }
+        
+        /** replace the existing predicate with the given, entirely different predicate */
+        template<typename COND>
+        void
+        setNewFilter (COND&& entirelyDifferentPredicate)
+          {
+            remouldFilter (forward<COND> (entirelyDifferentPredicate)
+                          ,[](auto, auto chain)
+                             {
+                               return [=](auto val)
+                                         {
+                                           return chain(val);
+                                         };
+                             });
+          }
+        
         
       private:
+        /** @internal boilerplate to remould the filter predicate in-place
+         * @param additionalClause additional functor object to combine
+         * @param buildCombinedClause a _generic lambda_ (important!) to define
+         *        how exactly the old and the new predicate are to be combined
+         * @note the actual combination logic is handed in as generic lambda, which
+         *       essentially is a template class, and this allows to bind to any kind
+         *       of function objects or lambdas. This combination closure requires a
+         *       specific setup: when invoked with the existing and the new functor
+         *       as argument, it needs to build a new _likewise generic_ lambda
+         *       to perform the combined evaluation.
+         * @warning the handed-in lambda `buildCombinedClause` must capture its
+         *       arguments, the existing functors _by value._ This is the key piece
+         *       in the puzzle, since it effectively moves the existing functor into
+         *       a new heap allocated storage.
+         */
         template<typename COND, class COMB>
         void
         remouldFilter (COND&& additionalClause, COMB buildCombinedClause)
@@ -971,13 +1076,15 @@ namespace lib {
             using FilterPredicate = typename _Base::FilterPredicate;
             using ChainPredicate = typename _ChainTraits::Functor;
             
-            FilterPredicate& firstClause = Filter<SRC,FUN>::predicate_;
-            ChainPredicate chainClause{forward<COND> (additionalClause)};
+            FilterPredicate& firstClause = _Base::predicate_;              // pick up the existing filter predicate
+            ChainPredicate chainClause{forward<COND> (additionalClause)};  // wrap the extension predicate in a similar way
             
             _Base::predicate_ = FilterPredicate{buildCombinedClause (firstClause, chainClause)};
-            _Base::pullFilter();
+            _Base::pullFilter();                                           // pull to re-establish the Invariant
           }
       };
+    
+    
     
     
     /**
@@ -1222,7 +1329,7 @@ namespace lib {
         }
       
       
-      /** extension functionality to be used on top of expand(), to perform expansion on next iteration. 
+      /** extension functionality to be used on top of expand(), to perform expansion on next iteration.
        * When configured, an expandChildren() call will not happen immediately, but rather in place of
        * the next iteration step. Basically child expansion _is kind of a special iteration step,_ and
        * thus all we need to do is add another layer with a boolean state flag, which catches the
@@ -1277,6 +1384,21 @@ namespace lib {
         }
       
       
+      /** attach a special filter adapter, allowing to change the filter predicate while iterating.
+       * While otherwise this filter layer behaves exactly like the [standard version](\ref #filter),
+       * it exposes a special API to augment or even completely switch the filter predicate while
+       * in the middle of iterator evaluation. Of course, the underlying iterator is not re-evaluated
+       * from start (our iterators can not be reset), and so the new filter logic takes effect starting
+       * from the current element. Whenever the filter is remoulded, it is immediately re-evaluated,
+       * possibly causing the underlying iterator to be pulled until an element matching the condition
+       * is found.
+       * @see MutableFilter::andFilter
+       * @see MutableFilter::andNotFilter
+       * @see MutableFilter::orFilter
+       * @see MutableFilter::orNotFilter
+       * @see MutableFilter::flipFilter
+       * @see MutableFilter::setNewFilter
+       */
       template<class FUN>
       auto
       mutableFilter (FUN&& filterPredicate)

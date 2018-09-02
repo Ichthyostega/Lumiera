@@ -867,6 +867,37 @@ namespace test{
           CHECK (18 == *seq);
           ++seq;
           CHECK (16 == *seq);
+          
+          seq.andFilter (takeTrd);
+          CHECK (12 == *seq);
+          
+          seq.flipFilter();
+          CHECK (11 == *seq);   // not divisible (by 2 AND by 3)
+          ++seq;
+          CHECK (10 == *seq);
+          
+          seq.setNewFilter (takeTrd);
+          CHECK ( 9 == *seq);
+          ++seq;
+          CHECK ( 6 == *seq);
+          
+          seq.orNotFilter (takeEve);
+          CHECK ( 6 == *seq);
+          ++seq;
+          CHECK ( 5 == *seq);
+          ++seq;
+          CHECK ( 3 == *seq);
+          
+//        string buff{"."};
+//        seq.andNotFilter ([&](CountDown& core)
+//                            {
+//                              buff += util::toString(core.p) + ".";
+//                              --core.p;
+//                              return core.p % 2;
+//                            });
+//        cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
+//        cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
+//        cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
         }
       
       
