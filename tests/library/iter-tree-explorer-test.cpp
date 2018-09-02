@@ -218,42 +218,46 @@ namespace test{
   
   /*******************************************************************//**
    * @test use a simple source iterator yielding numbers
-   *       to build various functional evaluation structures,
-   *       based on the \ref IterExplorer template.
-   *       - the [state adapter](\ref verifyStateAdapter() )
-   *          iterator construction pattern
-   *       - helper to [chain iterators](\ref verifyChainedIterators() )
-   *       - building [tree exploring structures](\ref verifyDepthFirstExploration())
-   *       - the [monadic nature](\ref verifyMonadOperator()) of IterExplorer
-   *       - a [recursively self-integrating](\ref verifyRecrusiveSelfIntegration())
-   *         evaluation pattern
+   *       to build various functional evaluation pipelines,
+   *       based on the \ref TreeExplorer template.
+   *       - the adapter to wrap the source, which can either
+   *         [be a "state core"](\ref verify_wrappedState() ), or can
+   *         [be a "Lumiera Forward Iterator"](\ref verify_wrappedIterator() )
+   *       - the defining use case for TreeExplorer is to build a
+   *         [pipeline for depth-first exploration](\ref verify_expandOperation() )
+   *         of a (functional) tree structure. This "tree" is  created by invoking
+   *         a "expand functor", which can be defined in various ways.
+   *       - the usual building blocks for functional evaluation pipelines, that is
+   *         [filtering](\ref verify_FilterIterator() ) and
+   *         [transforming](\ref verify_transformOperation() ) of
+   *         the elements yielded by the wrapped source iterator.
+   *       - building complex pipelines by combining the aforementioned building blocks
+   *       - using an opaque source, hidden behind the IterSource interface, and
+   *         an extension (sub interface) to allow for "tree exploration" without
+   *         any knowledge regarding the concrete implementation of the data source.
    * 
    * ## Explanation
    * 
-   * Both this test and the IterExplorer template might be bewildering
-   * and cryptic, unless you know the *Monad design pattern*. »Monads«
-   * are heavily used in functional programming, actually they originate
-   * from Category Theory. Basically, Monad is a pattern where we combine
-   * several computation steps in a specific way; but instead of intermingling
-   * the individual computation steps and their combination, the goal is to
-   * isolate and separate the _mechanics of combination_, so we can focus on
-   * the actual _computation steps:_ The mechanics of combination are embedded
-   * into the Monad type, which acts as a kind of container, holding some entities
-   * to be processed. The actual processing steps are then attached to the monad as
-   * "function object" parameters. It is up to the monad to decide if, and when
-   * those processing steps are applied to the embedded values and how to combine
-   * the results into a new monad.
+   * These tests build a evaluation pipeline by _wrapping_ some kind of data source
+   * and then layering some evaluation stages on top. There are two motivations why
+   * one might want to build such a _filter pipeline:_
+   * - on demand processing ("pull principle")
+   * - separation of source computation and "evaluation mechanics"
+   *   when building complex search and backtracking algorithms.
    * 
-   * Using the monad pattern is well suited when both the mechanics of
-   * combination and the individual computation steps tend to be complex.
-   * In such a situation, it is beneficial to develop and test both
-   * in isolation. The IterExplorer template applies this pattern
-   * to the task of processing a source sequence. Typically we use
-   * this in situations where we can't afford building elaborate
-   * data structures in (global) memory, but rather strive at
-   * doing everything on-the-fly. A typical example is the
-   * processing of a variably sized data set without
-   * using heap memory for intermediary results.
+   * This usage style is inspired from the *Monad design pattern*. In our case here,
+   * the Iterator pipeline would be the monad, and can be augmented and reshaped by
+   * attaching further processing steps. How those processing steps are to be applied
+   * remains an internal detail, defined by the processing pipeline. »Monads« are heavily
+   * used in functional programming, actually they originate from Category Theory. Basically,
+   * Monad is a pattern where we combine several computation steps in a specific way; but
+   * instead of intermingling the individual computation steps and their combination,
+   * the goal is to isolate and separate the _mechanics of combination_, so we can focus
+   * on the actual _computation steps:_ The mechanics of combination are embedded into the
+   * Monad type, which acts as a kind of container, holding some entities to be processed.
+   * The actual processing steps are then attached to the monad as "function object" parameters.
+   * It is up to the monad to decide if, and when those processing steps are applied to the
+   * embedded values and how to combine the results into a new monad.
    * 
    * @see TreeExplorer
    * @see IterAdapter
@@ -440,7 +444,7 @@ namespace test{
       
       template<class EXP>
       void
-      verify_treeExpandingIterator(EXP ii)
+      verify_treeExpandingIterator (EXP ii)
         {
           CHECK (!isnil (ii));
           CHECK (5 == *ii);
@@ -620,7 +624,7 @@ namespace test{
        * matching algorithms. Even more so, when other operations like filtering are intermingled;
        * in that case it might even happen that the downstream consumer does not even see the
        * items resulting from child expansion, because they are evaluated and then filtered
-       * away by a transformer and filter placed in between.
+       * away by transformers and filters placed in between.
        * @note as a consequence of the flexible automatic adapting of bound functors, it is
        *       possible for bound functors within different "layers" to collaborate, based on
        *       additional knowledge regarding the embedded data source internals. This test
@@ -778,6 +782,16 @@ namespace test{
                  == "18.55-14.55-10.55");
           
           
+          
+          // contrived example to verify interplay of filtering and child expansion;
+          // especially note that the filter is re-evaluated after expansion happened.
+          cout << "VERIFY->"
+               <<materialise(
+                    treeExplore(CountDown{10})
+                      .expand([](uint i){ return CountDown{i%4==0? i-1 : 0}; })
+//                      .filter([](uint i){ return i%2; })
+                      .expandAll()
+                    )<<endl;
           
           // another convoluted example to demonstrate
           // - a filter predicate with side-effect

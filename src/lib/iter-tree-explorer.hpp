@@ -574,7 +574,7 @@ namespace lib {
      * yielding a compatible value type). Now, this _sequence of children_ effectively
      * replaces the expanded source element in the overall resulting sequence; which
      * means, the nested sequence was _flattened_ into the results. Since this expand()
-     * operation can again invoked on the results, the implementation of such an evaluation
+     * operation can again be invoked on the results, the implementation of such an evaluation
      * requires a stack datastructure, so the nested iterator from each expand() invocation
      * can be pushed to become the new active source for iteration. Thus the primary purpose
      * of this Expander (decorator) is to integrate those "nested child iterators" seamlessly
@@ -583,7 +583,7 @@ namespace lib {
      * the source iterator wrapped by this decorator.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
      *         _expansion functor_, there is a lot of minute technical details, mostly confined
-     *         within the _BoundFunctorTraits.
+     *         within the _BoundFunctor traits.
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
@@ -1108,7 +1108,7 @@ namespace lib {
       /* ==== Builder functions ==== */
       
       /** preconfigure this TreeExplorer to allow for _"expansion of children"_.
-       * The resulting iterator exposes an `expand()` function, which consumes
+       * The resulting iterator exposes an `expandChildren()` function, which consumes
        * the current head element of this iterator and feeds it through the
        * _expansion functor_, which was provided to this builder function here.
        * The _expansion functor_ is expected to yield a sequence of "child" elements,
