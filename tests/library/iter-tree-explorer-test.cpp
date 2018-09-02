@@ -785,13 +785,15 @@ namespace test{
           
           // contrived example to verify interplay of filtering and child expansion;
           // especially note that the filter is re-evaluated after expansion happened.
-          cout << "VERIFY->"
-               <<materialise(
+          CHECK (materialise (
                     treeExplore(CountDown{10})
-                      .expand([](uint i){ return CountDown{i%4==0? i-1 : 0}; })
-//                      .filter([](uint i){ return i%2; })
-                      .expandAll()
-                    )<<endl;
+                      .expand([](uint i){ return CountDown{i%4==0? i-1 : 0}; })      // generate subtree at 8 and 4 ==> 10-9-8-7-6-5-4-3-2-1-3-2-1-7-6-5-4-3-2-1-3-2-1
+                      .filter([](uint i){ return i%2 == 0; })
+                      .expandAll()                                                   // Note: sends the expandChildren down through the filter
+                    )
+                 == "10-8-6-4-2-2-6-4-2-2");
+          
+          
           
           // another convoluted example to demonstrate
           // - a filter predicate with side-effect

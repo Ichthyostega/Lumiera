@@ -885,8 +885,8 @@ namespace lib {
         void
         expandChildren()
           {
-            pullFilter();
             SRC::expandChildren();
+            pullFilter();
           }
         
       public: /* === Iteration control API for IterableDecorator === */

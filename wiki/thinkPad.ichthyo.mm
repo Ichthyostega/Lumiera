@@ -30745,8 +30745,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535894221015" ID="ID_977007729" MODIFIED="1535894381051" TEXT="Bug im Filter-Layer?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535894221015" FOLDED="true" ID="ID_977007729" MODIFIED="1535898215661" TEXT="Bug im Filter-Layer">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535894239308" ID="ID_1809452702" MODIFIED="1535894251655" TEXT="Reihenfolge des Parent-Aufrufes in expandChildren()"/>
 <node CREATED="1535894252195" ID="ID_373085595" MODIFIED="1535894291490" TEXT="kommt mir komisch vor; pullFilter() sollte doch danach kommen"/>
 <node CREATED="1535894301413" ID="ID_1630859517" MODIFIED="1535894376961" TEXT="sieht nach copy-n-paste aus">
@@ -30780,8 +30780,8 @@
 </richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535894385009" ID="ID_1130325761" MODIFIED="1535894392233" TEXT="Testfall schreiben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535894385009" ID="ID_1130325761" MODIFIED="1535898198283" TEXT="Testfall schreiben">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
