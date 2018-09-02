@@ -863,6 +863,7 @@ namespace lib {
         using Res = typename _Traits::Res;
         static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
         
+      protected:
         using FilterPredicate = typename _Traits::Functor;
         
         FilterPredicate predicate_;
@@ -911,7 +912,7 @@ namespace lib {
           }
         
         
-      private:
+      protected:
         SRC&
         srcIter()  const
           {
@@ -927,7 +928,17 @@ namespace lib {
             while (srcIter() and not predicate_(srcIter()))
               ++srcIter();
           }
-        
+      };
+    
+    
+    
+    template<class SRC, class FUN>
+    class MutableFilter
+      : public Filter<SRC,FUN>
+      {
+        using _Base = Filter<SRC,FUN>;
+      public:
+        using _Base::Filter;
         
         
       public: /* === API to Remould the Filter condition underway === */
@@ -957,13 +968,14 @@ namespace lib {
             using Res = typename _ChainTraits::Res;
             static_assert(std::is_constructible<bool, Res>::value, "Chained Functor must be a predicate");
             
+            using FilterPredicate = typename _Base::FilterPredicate;
             using ChainPredicate = typename _ChainTraits::Functor;
             
-            FilterPredicate& firstClause = this->predicate_;
+            FilterPredicate& firstClause = Filter<SRC,FUN>::predicate_;
             ChainPredicate chainClause{forward<COND> (additionalClause)};
             
-            predicate_ = FilterPredicate{buildCombinedClause (firstClause, chainClause)};
-            pullFilter();
+            _Base::predicate_ = FilterPredicate{buildCombinedClause (firstClause, chainClause)};
+            _Base::pullFilter();
           }
       };
     
@@ -1259,6 +1271,17 @@ namespace lib {
       filter (FUN&& filterPredicate)
         {
           using ResCore = iter_explorer::Filter<SRC, FUN>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
+        }
+      
+      
+      template<class FUN>
+      auto
+      mutableFilter (FUN&& filterPredicate)
+        {
+          using ResCore = iter_explorer::MutableFilter<SRC, FUN>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});

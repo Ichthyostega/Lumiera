@@ -853,7 +853,7 @@ namespace test{
       verify_FilterChanges()
         {
           auto seq = treeExplore(CountDown{20})
-                       .filter([](uint){ return true; });
+                       .mutableFilter([](uint){ return true; });
           
           auto takeEve = [](uint i){ return i%2 == 0; };
           auto takeTrd = [](uint i){ return i%3 == 0; };
