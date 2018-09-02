@@ -911,34 +911,6 @@ namespace lib {
           }
         
         
-        /* === Remould the Filter condition underway === */
-        
-        template<typename COND>
-        void
-        andFilter (COND conjunctiveClause)
-          {
-            using _ChainTraits = _BoundFunctor<COND,SRC>;
-            using Res = typename _ChainTraits::Res;
-            static_assert(std::is_constructible<bool, Res>::value, "Chained Functor must be a predicate");
-            
-            using ChainPredicate = typename _ChainTraits::Functor;
-            
-            FilterPredicate& firstClause = this->predicate_;
-            ChainPredicate chainClause{forward<COND> (conjunctiveClause)};
-            
-            auto buildCombinedClause = [](auto first, auto second)
-                                          {
-                                            return [=](auto val)
-                                                      {
-                                                        return first(val)
-                                                           and second(val);
-                                                      };
-                                          };
-            
-            predicate_ = FilterPredicate{buildCombinedClause (firstClause, chainClause)};
-            pullFilter();
-          }
-        
       private:
         SRC&
         srcIter()  const
@@ -954,6 +926,44 @@ namespace lib {
           {
             while (srcIter() and not predicate_(srcIter()))
               ++srcIter();
+          }
+        
+        
+        
+      public: /* === API to Remould the Filter condition underway === */
+        
+        template<typename COND>
+        void
+        andFilter (COND&& conjunctiveClause)
+          {
+            remouldFilter (forward<COND> (conjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto val)
+                                         {
+                                           return first(val)
+                                              and chain(val);
+                                         };
+                             });
+          }
+        
+        
+      private:
+        template<typename COND, class COMB>
+        void
+        remouldFilter (COND&& additionalClause, COMB buildCombinedClause)
+          {
+            using _ChainTraits = _BoundFunctor<COND,SRC>;
+            using Res = typename _ChainTraits::Res;
+            static_assert(std::is_constructible<bool, Res>::value, "Chained Functor must be a predicate");
+            
+            using ChainPredicate = typename _ChainTraits::Functor;
+            
+            FilterPredicate& firstClause = this->predicate_;
+            ChainPredicate chainClause{forward<COND> (additionalClause)};
+            
+            predicate_ = FilterPredicate{buildCombinedClause (firstClause, chainClause)};
+            pullFilter();
           }
       };
     

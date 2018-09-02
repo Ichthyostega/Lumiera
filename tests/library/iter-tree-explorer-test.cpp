@@ -865,6 +865,8 @@ namespace test{
           
           seq.andFilter (takeEve);
           CHECK (18 == *seq);
+          ++seq;
+          CHECK (16 == *seq);
         }
       
       
