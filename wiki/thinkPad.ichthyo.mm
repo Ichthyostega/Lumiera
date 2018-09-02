@@ -30977,10 +30977,32 @@
 <node CREATED="1535906261464" ID="ID_1343076549" MODIFIED="1535906264259" TEXT="Auswege">
 <node CREATED="1535906265911" ID="ID_442265155" MODIFIED="1535906279633" TEXT="speziellen Filter-Layer nur hierf&#xfc;r">
 <node CREATED="1535906327782" ID="ID_1903350743" MODIFIED="1535906334769" TEXT="letztlich nur Code-Kosmetik"/>
+<node CREATED="1535909106704" ID="ID_1756811057" MODIFIED="1535909115714" TEXT="w&#xfc;rde aber sehr speziellen Fall markieren"/>
+<node CREATED="1535909145091" ID="ID_23855152" MODIFIED="1535909185418">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Name: <b>mutableFilter</b>()
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1535906283948" ID="ID_367978731" MODIFIED="1535906294727" TEXT="Chain-Filter-Bau in HIlfsfunktion">
 <node CREATED="1535906394646" ID="ID_296637778" MODIFIED="1535906399057" TEXT="w&#xfc;nschenswert"/>
 <node CREATED="1535906399621" ID="ID_1487063274" MODIFIED="1535906407632" TEXT="nicht klar, ob &#xfc;berhaupt m&#xf6;glich"/>
+<node CREATED="1535909021163" ID="ID_1776922208" MODIFIED="1535909030226" TEXT="geschachtelte generische Lambdas verwenden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1535909041497" ID="ID_911444458" MODIFIED="1535909052069" TEXT="AUA&#xb3;">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1535909192572" ID="ID_1938820560" MODIFIED="1535909197055" TEXT="aber es geht...."/>
+</node>
 </node>
 </node>
 </node>

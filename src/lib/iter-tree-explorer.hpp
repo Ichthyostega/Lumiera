@@ -926,12 +926,16 @@ namespace lib {
             FilterPredicate& firstClause = this->predicate_;
             ChainPredicate chainClause{forward<COND> (conjunctiveClause)};
             
+            auto buildCombinedClause = [](auto first, auto second)
+                                          {
+                                            return [=](auto val)
+                                                      {
+                                                        return first(val)
+                                                           and second(val);
+                                                      };
+                                          };
             
-            predicate_ = FilterPredicate{[firstClause, chainClause] (auto val)
-                                                                    {
-                                                                      return firstClause(val)
-                                                                         and chainClause(val);
-                                        }                           };
+            predicate_ = FilterPredicate{buildCombinedClause (firstClause, chainClause)};
             pullFilter();
           }
         
