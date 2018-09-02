@@ -30840,7 +30840,8 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1535893707036" ID="ID_257876647" MODIFIED="1535893716894" TEXT="Aufgabe: Filter erweiterbar machen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535893707036" ID="ID_257876647" MODIFIED="1535899964941" TEXT="Aufgabe: Filter erweiterbar machen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1535893718194" ID="ID_872370459" MODIFIED="1535893743691" TEXT="analog zum Filter in den Itertools"/>
 <node CREATED="1535893752174" ID="ID_386073545" MODIFIED="1535893777011" TEXT="ggfs diesen dort abl&#xf6;sen">
 <richcontent TYPE="NOTE"><html>
@@ -30855,6 +30856,152 @@
 </html>
 </richcontent>
 </node>
+<node CREATED="1535903530421" ID="ID_384303362" MODIFIED="1535903535289" TEXT="Aua">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1535903536820" ID="ID_1343418651" MODIFIED="1535903541919" TEXT="das wird komplex..."/>
+<node CREATED="1535903542556" ID="ID_1721469481" MODIFIED="1535903551375" TEXT="der Filter-Layer ist hochgradig generisch"/>
+<node CREATED="1535904105560" ID="ID_1560346116" MODIFIED="1535904127224" TEXT="mu&#xdf; auch das Chain-Argument durch die Funktor-Traits schleusen"/>
+<node CREATED="1535904128524" ID="ID_1238934363" MODIFIED="1535904140074" TEXT="Code wird grausam">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1535904143098" ID="ID_646600775" MODIFIED="1535904152669" TEXT="funktioniert, aber gewaltig aufgebl&#xe4;ht"/>
+<node CREATED="1535904153353" ID="ID_616241221" MODIFIED="1535904403272" TEXT="ganz nah am Segfault vorbei">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das h&#228;ngt an einem hauchd&#252;nnen Faden,
+    </p>
+    <p>
+      und ist subtil bis zum geht nicht mehr....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wenn man das Lambda einfach per [=] schreibt, und das Feld this-&gt;predicate_ verwendet,
+    </p>
+    <p>
+      dann wird this gecaptured (und das ist effektiv per Referenz). Wenn ich dann den
+    </p>
+    <p>
+      konstruierten Funktor an this-&gt;predicate_ zuweise, haben wir eine Endlos-Rekursion.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      L&#246;sung: man mu&#223; im lokalen Frame eine Referenz auf this-&gt;predicate definieren und binden.
+    </p>
+    <p>
+      Diese wird dann per Value gecaptured, was die gew&#252;nschte Kopie bewirkt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1535904168943" ID="ID_1936705749" MODIFIED="1535904249188" TEXT="eine unn&#xf6;tige Kopie">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...mu&#223; den Chain-Funktor aus dem Template-Argument erzeugen,
+    </p>
+    <p>
+      und ihn dann in die per-Value-Closure des erzeugten neuen Lambda binden (=Kopie).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Erst ab C++17 kann man Lambda-Captures pre move machen
+    </p>
+    <p>
+      (und auch daf&#252;r ist die Syntax grausam)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1535904461720" ID="ID_317840110" MODIFIED="1535904468474" TEXT="will ich das wirklich.....?">
+<node CREATED="1535904470670" ID="ID_160594644" MODIFIED="1535904516890" TEXT="nat&#xfc;rlich nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es soll blo&#223; einfach funktionieren!!!!!!!!!!!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1535906366785" ID="ID_1488862884" MODIFIED="1535906388442" TEXT="Komplexit&#xe4;t entsteht aus der Flexibilit&#xe4;t der Argumente">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1535904517824" ID="ID_305725479" MODIFIED="1535904857801" TEXT="stattdessen Itertools-Filter verwenden?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      keine gute Idee.
+    </p>
+    <p>
+      Dann verwenden wir im einen Funktor-Framework eine Filter-Komponente
+    </p>
+    <p>
+      aus dem anderen Framework, obwohl es direkt hier auch eine Filter-Komponente g&#228;be.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Au&#223;erdem habe ich immer noch die Hoffnung, irgendwann mal
+    </p>
+    <p>
+      die Itertools komplett durch den TreeExplorer abl&#246;sen zu k&#246;nnen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1535906261464" ID="ID_1343076549" MODIFIED="1535906264259" TEXT="Auswege">
+<node CREATED="1535906265911" ID="ID_442265155" MODIFIED="1535906279633" TEXT="speziellen Filter-Layer nur hierf&#xfc;r">
+<node CREATED="1535906327782" ID="ID_1903350743" MODIFIED="1535906334769" TEXT="letztlich nur Code-Kosmetik"/>
+</node>
+<node CREATED="1535906283948" ID="ID_367978731" MODIFIED="1535906294727" TEXT="Chain-Filter-Bau in HIlfsfunktion">
+<node CREATED="1535906394646" ID="ID_296637778" MODIFIED="1535906399057" TEXT="w&#xfc;nschenswert"/>
+<node CREATED="1535906399621" ID="ID_1487063274" MODIFIED="1535906407632" TEXT="nicht klar, ob &#xfc;berhaupt m&#xf6;glich"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535899873112" ID="ID_1460874987" MODIFIED="1535899882165" TEXT="Unit-Test (replizieren)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535899922873" ID="ID_1971708144" MODIFIED="1535899950863" TEXT="bestehende Aufrufe konsolidieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...so da&#223; es nur noch wenige Zugangs-Punkte zum unterliegenden Iterator gibt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node CREATED="1535893799799" ID="ID_706866636" MODIFIED="1535893804419" TEXT="Auswertungs-Stack">

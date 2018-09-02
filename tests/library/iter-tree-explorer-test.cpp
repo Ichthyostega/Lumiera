@@ -276,6 +276,7 @@ namespace test{
           verify_combinedExpandTransform();
           verify_scheduledExpansion();
           verify_FilterIterator();
+          verify_FilterChanges();
           verify_asIterSource();
           verify_IterSource();
           
@@ -844,6 +845,28 @@ namespace test{
           // WARNING: kk is now defunct, since we moved it into the builder expression
           //          and then moved the resulting extended iterator into materialise!
         }
+      
+      
+      
+      /** @test the filter layer can be re-configured on the fly */
+      void
+      verify_FilterChanges()
+        {
+          auto seq = treeExplore(CountDown{20})
+                       .filter([](uint){ return true; });
+          
+          auto takeEve = [](uint i){ return i%2 == 0; };
+          auto takeTrd = [](uint i){ return i%3 == 0; };
+          
+          CHECK (20 == *seq);
+          ++seq;
+          CHECK (19 == *seq);
+          CHECK (19 == *seq);
+          
+          seq.andFilter (takeEve);
+          CHECK (18 == *seq);
+        }
+      
       
       
       

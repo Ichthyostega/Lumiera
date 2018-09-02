@@ -526,7 +526,7 @@ namespace lib {
             
             template<typename ARG>
             Res
-            operator() (ARG& arg)
+            operator() (ARG& arg)  const
               {
                 auto accessArg = ArgAccessor<ARG>::build();
                 
@@ -907,6 +907,31 @@ namespace lib {
         iterNext()
           {
             ++ srcIter();
+            pullFilter();
+          }
+        
+        
+        /* === Remould the Filter condition underway === */
+        
+        template<typename COND>
+        void
+        andFilter (COND conjunctiveClause)
+          {
+            using _ChainTraits = _BoundFunctor<COND,SRC>;
+            using Res = typename _ChainTraits::Res;
+            static_assert(std::is_constructible<bool, Res>::value, "Chained Functor must be a predicate");
+            
+            using ChainPredicate = typename _ChainTraits::Functor;
+            
+            FilterPredicate& firstClause = this->predicate_;
+            ChainPredicate chainClause{forward<COND> (conjunctiveClause)};
+            
+            
+            predicate_ = FilterPredicate{[firstClause, chainClause] (auto val)
+                                                                    {
+                                                                      return firstClause(val)
+                                                                         and chainClause(val);
+                                        }                           };
             pullFilter();
           }
         
