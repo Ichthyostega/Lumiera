@@ -31086,6 +31086,26 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535919835337" ID="ID_984434298" MODIFIED="1535920192370" TEXT="Ausweg: doppelt wrappen?">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1535923167297" ID="ID_1611885187" MODIFIED="1535923219590" TEXT="Basis-Filter sieht unspezifische Form des Pr&#xe4;dikates"/>
+<node CREATED="1535923237336" ID="ID_873685254" MODIFIED="1535923251434" TEXT="im Funktor steckt eingewickelt eine spezifische Form"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535924949587" ID="ID_283543674" MODIFIED="1535925042250" TEXT="L&#xf6;sung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535924955458" ID="ID_257130301" MODIFIED="1535927205707" TEXT="Typ des gewrappten Funktors konstruieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535924963017" ID="ID_1923686219" MODIFIED="1535927208519" TEXT="diesen schon in die Instanz der Basisklasse einflie&#xdf;en lassen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535924983038" ID="ID_966924861" MODIFIED="1535927210570" TEXT="Konstruktor eigens definieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535924991781" ID="ID_28842573" MODIFIED="1535927212273" TEXT="inline wrappen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535925016969" ID="ID_214947623" MODIFIED="1535927239938" TEXT="der Rest m&#xfc;&#xdf;te von selber funktionieren...">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -31116,7 +31136,7 @@
 </node>
 <node CREATED="1535893799799" ID="ID_706866636" MODIFIED="1535893804419" TEXT="Auswertungs-Stack">
 <node CREATED="1535893826972" ID="ID_352546105" MODIFIED="1535894073967" TEXT="aktueller Frame">
-<node CREATED="1535894074891" ID="ID_1972842519" MODIFIED="1535894075798" TEXT="== aktuel wirksamer Suchfilter"/>
+<node CREATED="1535894074891" ID="ID_1972842519" MODIFIED="1535923151832" TEXT="== aktuell wirksamer Suchfilter"/>
 <node CREATED="1535894076546" ID="ID_880245387" MODIFIED="1535894084445" TEXT="schie&#xdf;t Suchposition ein"/>
 </node>
 <node CREATED="1535893989214" ID="ID_875812160" MODIFIED="1535894010499">

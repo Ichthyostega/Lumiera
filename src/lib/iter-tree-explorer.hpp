@@ -941,15 +941,41 @@ namespace lib {
      * original filter functor, under the assumption that both are roughly compatible. Moreover,
      * since we wrap the actual lambda into an adapter, allowing for generic lambdas to be used
      * as filter predicates, this setup allows for a lot of leeway regarding the concrete predicates.
-     * @note whenever the filter is remoulded, the invariant is immediately [re-established](\ref Filter::pullFilter() )
+     * @note whenever the filter is remoulded, the invariant is immediately
+     *       [re-established](\ref Filter::pullFilter() ), possibly forwarding the sequence
+     *       to the next element approved by the new version of the filter.
+     * @remarks filter predicates can be specified in a wide variety of forms, and will be adapted
+     *       automatically. This flexibility also holds for any of the additional clauses provided
+     *       for remoulding the filter. Especially this means that functors of different kinds can
+     *       be mixed and combined. To allow for this flexibility, we need to drive the _base class_
+     *       with the most general form of a predicate functor, corresponding to `bool<SRC&>`.
+     *       Hereby we exploit the fact that the _wrapped filter,_ i.e. the Functor type constructed
+     *       in the _BoundFunctor traits, boils down to that most generic form, adapting the arguments
+     *       automatically. Thus the initial functor, the one passed to the ctor of this class, is
+     *       effectively wrapped twice, so it can be combined later on with any other form and
+     *       shape of functor. And since everything is inline, the compiler will remove any
+     *       overhead resulting from this redundant wrapping.
      */
     template<class SRC, class FUN>
     class MutableFilter
-      : public Filter<SRC,FUN>
+      : public Filter<SRC, typename _BoundFunctor<FUN,SRC>::Functor>
       {
-        using _Base = Filter<SRC,FUN>;
+        using _Traits = _BoundFunctor<FUN,SRC>;
+        using FilterPredicate = typename _Traits::Functor;
+        using _Base = Filter<SRC,FilterPredicate>;
+        
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        using Res = typename _Traits::Res;
+        static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
+        
+        
       public:
-        using _Base::Filter;
+        MutableFilter() =default;
+        // inherited default copy operations
+        
+        MutableFilter (SRC&& dataSrc, FUN&& filterFun)
+          : _Base{move (dataSrc), FilterPredicate{forward<FUN> (filterFun)}}
+          { }
         
         
       public: /* === API to Remould the Filter condition underway === */
@@ -1073,13 +1099,13 @@ namespace lib {
             using Res = typename _ChainTraits::Res;
             static_assert(std::is_constructible<bool, Res>::value, "Chained Functor must be a predicate");
             
-            using FilterPredicate = typename _Base::FilterPredicate;
+            using WrappedPredicate = typename _Base::FilterPredicate;
             using ChainPredicate = typename _ChainTraits::Functor;
             
-            FilterPredicate& firstClause = _Base::predicate_;              // pick up the existing filter predicate
+            WrappedPredicate& firstClause = _Base::predicate_;             // pick up the existing filter predicate
             ChainPredicate chainClause{forward<COND> (additionalClause)};  // wrap the extension predicate in a similar way
             
-            _Base::predicate_ = FilterPredicate{buildCombinedClause (firstClause, chainClause)};
+            _Base::predicate_ = WrappedPredicate{buildCombinedClause (firstClause, chainClause)};
             _Base::pullFilter();                                           // pull to re-establish the Invariant
           }
       };

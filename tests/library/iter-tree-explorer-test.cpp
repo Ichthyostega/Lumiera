@@ -888,16 +888,19 @@ namespace test{
           ++seq;
           CHECK ( 3 == *seq);
           
-//        string buff{"."};
-//        seq.andNotFilter ([&](CountDown& core)
-//                            {
-//                              buff += util::toString(core.p) + ".";
-//                              --core.p;
-//                              return core.p % 2;
-//                            });
-//        cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
-//        cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
-//        cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
+          string buff{"."};
+          seq.andNotFilter ([&](CountDown& core)
+                              {
+                                buff += util::toString(core.p) + ".";
+                                --core.p;
+                                return core.p % 2;
+                              });
+          cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
+          ++seq;
+          cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
+          ++seq;
+          CHECK (isnil (seq));
+          VERIFY_ERROR (ITER_EXHAUST, *seq );
         }
       
       
