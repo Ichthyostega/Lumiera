@@ -30840,8 +30840,8 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535893707036" ID="ID_257876647" MODIFIED="1535899964941" TEXT="Aufgabe: Filter erweiterbar machen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535893707036" ID="ID_257876647" MODIFIED="1535932142834" TEXT="Aufgabe: Filter erweiterbar machen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535893718194" ID="ID_872370459" MODIFIED="1535893743691" TEXT="analog zum Filter in den Itertools"/>
 <node CREATED="1535893752174" ID="ID_386073545" MODIFIED="1535893777011" TEXT="ggfs diesen dort abl&#xf6;sen">
 <richcontent TYPE="NOTE"><html>
@@ -30856,7 +30856,7 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1535903530421" ID="ID_384303362" MODIFIED="1535903535289" TEXT="Aua">
+<node COLOR="#338800" CREATED="1535903530421" ID="ID_384303362" MODIFIED="1535932193036" TEXT="Aua">
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1535903536820" ID="ID_1343418651" MODIFIED="1535903541919" TEXT="das wird komplex..."/>
 <node CREATED="1535903542556" ID="ID_1721469481" MODIFIED="1535903551375" TEXT="der Filter-Layer ist hochgradig generisch"/>
@@ -30927,7 +30927,7 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1535904461720" ID="ID_317840110" MODIFIED="1535904468474" TEXT="will ich das wirklich.....?">
+<node CREATED="1535904461720" FOLDED="true" ID="ID_317840110" MODIFIED="1535932207865" TEXT="will ich das wirklich.....?">
 <node CREATED="1535904470670" ID="ID_160594644" MODIFIED="1535904516890" TEXT="nat&#xfc;rlich nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -30977,7 +30977,7 @@
 </node>
 <node COLOR="#338800" CREATED="1535906261464" ID="ID_1343076549" MODIFIED="1535909947735" TEXT="Auswege">
 <icon BUILTIN="idea"/>
-<node COLOR="#338800" CREATED="1535906265911" ID="ID_442265155" MODIFIED="1535913504313" TEXT="speziellen Filter-Layer nur hierf&#xfc;r">
+<node COLOR="#338800" CREATED="1535906265911" FOLDED="true" ID="ID_442265155" MODIFIED="1535932222887" TEXT="speziellen Filter-Layer nur hierf&#xfc;r">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535906327782" ID="ID_1903350743" MODIFIED="1535906334769" TEXT="letztlich nur Code-Kosmetik"/>
 <node CREATED="1535909106704" ID="ID_1756811057" MODIFIED="1535909115714" TEXT="w&#xfc;rde aber sehr speziellen Fall markieren"/>
@@ -30995,7 +30995,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535906283948" ID="ID_367978731" MODIFIED="1535909918916" TEXT="Chain-Filter-Bau in HIlfsfunktion">
+<node COLOR="#338800" CREATED="1535906283948" FOLDED="true" ID="ID_367978731" MODIFIED="1535932223855" TEXT="Chain-Filter-Bau in HIlfsfunktion">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535906394646" ID="ID_296637778" MODIFIED="1535906399057" TEXT="w&#xfc;nschenswert"/>
 <node CREATED="1535906399621" ID="ID_1487063274" MODIFIED="1535906407632" TEXT="nicht klar, ob &#xfc;berhaupt m&#xf6;glich"/>
@@ -31051,9 +31051,10 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1535919506060" ID="ID_308901003" MODIFIED="1535920180860" TEXT="heterogene Pr&#xe4;dikat-Typen">
-<icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535919540560" ID="ID_544134703" MODIFIED="1535920188703" TEXT="geht nicht(?)">
+<node COLOR="#338800" CREATED="1535919506060" FOLDED="true" ID="ID_308901003" MODIFIED="1535932218407" TEXT="heterogene Pr&#xe4;dikat-Typen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535919540560" ID="ID_544134703" MODIFIED="1535932049581" TEXT="geht nicht?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1535919549942" ID="ID_809087906" MODIFIED="1535919754360" TEXT="das zu Beginn verwendete Filter-Pr&#xe4;dikat legt den Typ fest">
@@ -31081,15 +31082,26 @@
       Typischerweise wird dieser ja sogar beim Aufruf des getemplateteten Funtions-Operators geInlined
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535919835337" ID="ID_984434298" MODIFIED="1535920192370" TEXT="Ausweg: doppelt wrappen?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535919835337" ID="ID_984434298" MODIFIED="1535932021329" TEXT="Ausweg: doppelt wrappen?">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535923167297" ID="ID_1611885187" MODIFIED="1535923219590" TEXT="Basis-Filter sieht unspezifische Form des Pr&#xe4;dikates"/>
 <node CREATED="1535923237336" ID="ID_873685254" MODIFIED="1535923251434" TEXT="im Funktor steckt eingewickelt eine spezifische Form"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535924949587" ID="ID_283543674" MODIFIED="1535925042250" TEXT="L&#xf6;sung">
-<icon BUILTIN="pencil"/>
+<node CREATED="1535932069618" ID="ID_937611933" MODIFIED="1535932128786" TEXT="kein wirklicher overhead">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Aufruf vom &#228;u&#223;eren in den inneren Wrapper ist 1:1 und sollte vom Compiler wegoptimiert werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1535924949587" ID="ID_283543674" MODIFIED="1535932018158" TEXT="L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1535924955458" ID="ID_257130301" MODIFIED="1535927205707" TEXT="Typ des gewrappten Funktors konstruieren">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -31109,13 +31121,13 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535899873112" ID="ID_1460874987" MODIFIED="1535913524436" TEXT="Unit-Test (replizieren)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535899873112" ID="ID_1460874987" MODIFIED="1535932139639" TEXT="Unit-Test (replizieren)">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1535913527837" ID="ID_1506533000" MODIFIED="1535913542932" TEXT="anlegen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535913531701" ID="ID_1093929821" MODIFIED="1535919483699" TEXT="andere F&#xe4;lle auch covern">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535913531701" ID="ID_1093929821" MODIFIED="1535932138102" TEXT="andere F&#xe4;lle auch covern">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

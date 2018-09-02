@@ -848,7 +848,7 @@ namespace test{
       
       
       
-      /** @test the filter layer can be re-configured on the fly */
+      /** @test a special filter layer which can be re-configured on the fly */
       void
       verify_FilterChanges()
         {
@@ -869,7 +869,7 @@ namespace test{
           CHECK (16 == *seq);
           
           seq.andFilter (takeTrd);
-          CHECK (12 == *seq);
+          CHECK (12 == *seq);   //  is divisible (by 2 AND by 3)
           
           seq.flipFilter();
           CHECK (11 == *seq);   // not divisible (by 2 AND by 3)
@@ -884,22 +884,29 @@ namespace test{
           seq.orNotFilter (takeEve);
           CHECK ( 6 == *seq);
           ++seq;
-          CHECK ( 5 == *seq);
+          CHECK ( 5 == *seq);   // disjunctive condition actually weakens the filter
           ++seq;
           CHECK ( 3 == *seq);
           
+          // NOTE: arbitrary functors can be used/combined,
+          //       since they are adapted individually.
+          // To demonstrate this, we use a functor accessing and
+          // manipulating the state core by side effect...
           string buff{"."};
           seq.andNotFilter ([&](CountDown& core)
                               {
                                 buff += util::toString(core.p) + ".";
-                                --core.p;
-                                return core.p % 2;
+                                --core.p;                              // manipulate state core
+                                return core.p % 2;                     // return a number, not bool
                               });
-          cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
-          ++seq;
-          cout << "URGS: "<<*seq<< " ..."<<buff<<endl;
-          ++seq;
-          CHECK (isnil (seq));
+          
+          CHECK ( 2 == *seq);                   // value in the core has been manipulated
+          CHECK (".3." == buff);                // the filter has been invoked once, and saw core == 3
+          
+          ++seq;                                // core == 2 is filtered by the existing other filter (== not take even)
+          CHECK (".3.1." == buff);              // the filter has been invoked again, and saw core == 1
+          CHECK (0 == seq.p);                   // ...which he manipulated, so that core == 0
+          CHECK (isnil (seq));                  // .....and thus iteration end is detected
           VERIFY_ERROR (ITER_EXHAUST, *seq );
         }
       

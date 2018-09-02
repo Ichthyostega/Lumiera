@@ -988,7 +988,7 @@ namespace lib {
             remouldFilter (forward<COND> (conjunctiveClause)
                           ,[](auto first, auto chain)
                              {
-                               return [=](auto val)
+                               return [=](auto& val)
                                          {
                                            return first(val)
                                               and chain(val);
@@ -1004,7 +1004,7 @@ namespace lib {
             remouldFilter (forward<COND> (conjunctiveClause)
                           ,[](auto first, auto chain)
                              {
-                               return [=](auto val)
+                               return [=](auto& val)
                                          {
                                            return first(val)
                                               and not chain(val);
@@ -1020,7 +1020,7 @@ namespace lib {
             remouldFilter (forward<COND> (disjunctiveClause)
                           ,[](auto first, auto chain)
                              {
-                               return [=](auto val)
+                               return [=](auto& val)
                                          {
                                            return first(val)
                                                or chain(val);
@@ -1036,7 +1036,7 @@ namespace lib {
             remouldFilter (forward<COND> (disjunctiveClause)
                           ,[](auto first, auto chain)
                              {
-                               return [=](auto val)
+                               return [=](auto& val)
                                          {
                                            return first(val)
                                                or not chain(val);
@@ -1052,7 +1052,7 @@ namespace lib {
             remouldFilter (dummy
                           ,[](auto currentFilter, auto)
                              {
-                               return [=](auto val)
+                               return [=](auto& val)
                                          {
                                            return not currentFilter(val);
                                          };
@@ -1067,7 +1067,7 @@ namespace lib {
             remouldFilter (forward<COND> (entirelyDifferentPredicate)
                           ,[](auto, auto chain)
                              {
-                               return [=](auto val)
+                               return [=](auto& val)
                                          {
                                            return chain(val);
                                          };
