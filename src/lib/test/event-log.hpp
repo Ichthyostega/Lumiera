@@ -308,6 +308,37 @@ namespace test{
         }
       
       
+      /* === configure the underlying search engine === */
+      
+      enum Direction {
+        FORWARD, BACKWARD
+      };
+      
+      template<typename COND>
+      void
+      attachNextSerchStep (COND&& filter, Direction direction)
+        {
+          switch (direction)
+            {
+              case FORWARD:
+                solution_.underlying().switchForwards();
+                break;
+              case BACKWARD:
+                solution_.underlying().switchBackwards();
+                break;
+            }
+          solution_.setNewFilter (forward<COND> (filter));
+        }
+      
+      template<typename COND>
+      void
+      refineSerach (COND&& additionalFilter)
+        {
+          solution_.andFilter (forward<COND> (additionalFilter));
+        }
+      
+      
+      
     public:
       /** final evaluation of the match query,
        *  usually triggered from the unit test `CHECK()`.
@@ -335,8 +366,7 @@ namespace test{
       EventMatch&
       before (string match)
         {
-          solution_.underlying().switchForwards();
-          solution_.setNewFilter(find(match));
+          attachNextSerchStep (find(match), FORWARD);
           evaluateQuery ("match(\""+match+"\")");
           return *this;
         }
@@ -345,8 +375,7 @@ namespace test{
       EventMatch&
       beforeMatch (string regExp)
         {
-          solution_.underlying().switchForwards();
-          solution_.setNewFilter(findRegExp(regExp));
+          attachNextSerchStep (findRegExp(regExp), FORWARD);
           evaluateQuery ("find-RegExp(\""+regExp+"\")");
           return *this;
         }
@@ -367,8 +396,7 @@ namespace test{
       EventMatch&
       beforeEvent (string match)
         {
-          solution_.underlying().switchForwards();
-          solution_.setNewFilter(findEvent(match));
+          attachNextSerchStep (findEvent(match), FORWARD);
           evaluateQuery ("match-event(\""+match+"\")");
           return *this;
         }
@@ -376,8 +404,7 @@ namespace test{
       EventMatch&
       beforeEvent (string classifier, string match)
         {
-          solution_.underlying().switchForwards();
-          solution_.setNewFilter(findEvent(classifier,match));
+          attachNextSerchStep (findEvent(classifier,match), FORWARD);
           evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")");
           return *this;
         }
@@ -389,8 +416,7 @@ namespace test{
       EventMatch&
       beforeCall (string match)
         {
-          solution_.underlying().switchForwards();
-          solution_.setNewFilter(findCall(match));
+          attachNextSerchStep (findCall(match), FORWARD);
           evaluateQuery ("match-call(\""+match+"\")");
           return *this;
         }
@@ -398,8 +424,7 @@ namespace test{
       EventMatch&
       after (string match)
         {
-          solution_.underlying().switchBackwards();
-          solution_.setNewFilter(find(match));
+          attachNextSerchStep (find(match), BACKWARD);
           evaluateQuery ("match(\""+match+"\")", "before");
           return *this;
         }
@@ -407,8 +432,7 @@ namespace test{
       EventMatch&
       afterMatch (string regExp)
         {
-          solution_.underlying().switchBackwards();
-          solution_.setNewFilter(findRegExp(regExp));
+          attachNextSerchStep (findRegExp(regExp), BACKWARD);
           evaluateQuery ("find-RegExp(\""+regExp+"\")", "before");
           return *this;
         }
@@ -416,8 +440,7 @@ namespace test{
       EventMatch&
       afterEvent (string match)
         {
-          solution_.underlying().switchBackwards();
-          solution_.setNewFilter(findEvent(match));
+          attachNextSerchStep (findEvent(match), BACKWARD);
           evaluateQuery ("match-event(\""+match+"\")", "before");
           return *this;
         }
@@ -425,8 +448,7 @@ namespace test{
       EventMatch&
       afterEvent (string classifier, string match)
         {
-          solution_.underlying().switchBackwards();
-          solution_.setNewFilter(findEvent(classifier,match));
+          attachNextSerchStep (findEvent(classifier,match), BACKWARD);
           evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")", "before");
           return *this;
         }
@@ -435,8 +457,7 @@ namespace test{
       EventMatch&
       afterCall (string match)
         {
-          solution_.underlying().switchBackwards();
-          solution_.setNewFilter(findCall(match));
+          attachNextSerchStep (findCall(match), BACKWARD);
           evaluateQuery ("match-call(\""+match+"\")", "before");
           return *this;
         }
@@ -454,7 +475,7 @@ namespace test{
           ArgSeq argSeq(stringify<ArgSeq> (args...));
           string argList(util::join(argSeq));
           
-          solution_.andFilter (matchArguments(move(argSeq)));
+          refineSerach (matchArguments(move(argSeq)));
           evaluateQuery ("match-arguments("+argList+")");
           return *this;
         }
@@ -473,7 +494,7 @@ namespace test{
       EventMatch&
       argMatch (ARGS const& ...regExps)
         {
-          solution_.andFilter (matchArgsRegExp (stringify<RExSeq> (regExps...)));
+          refineSerach (matchArgsRegExp (stringify<RExSeq> (regExps...)));
           evaluateQuery ("match-args-RegExp("+util::join(stringify<ArgSeq>(regExps...))+")");
           return *this;
         }
@@ -482,7 +503,7 @@ namespace test{
       EventMatch&
       type (string typeID)
         {
-          solution_.andFilter (matchType(typeID));
+          refineSerach (matchType(typeID));
           evaluateQuery ("match-type("+typeID+")");
           return *this;
         }
@@ -491,7 +512,7 @@ namespace test{
       EventMatch&
       key (string key)
         {
-          solution_.andFilter (ensureAttribute(key));
+          refineSerach (ensureAttribute(key));
           evaluateQuery ("ensure-attribute("+key+")");
           return *this;
         }
@@ -500,7 +521,7 @@ namespace test{
       EventMatch&
       attrib (string key, string valueMatch)
         {
-          solution_.andFilter (matchAttribute(key,valueMatch));
+          refineSerach (matchAttribute(key,valueMatch));
           evaluateQuery ("match-attribute("+key+"=\""+valueMatch+"\")");
           return *this;
         }
@@ -509,7 +530,7 @@ namespace test{
       EventMatch&
       id (string classifier)
         {
-          solution_.andFilter (matchAttribute("ID",classifier));
+          refineSerach (matchAttribute("ID",classifier));
           evaluateQuery ("match-ID(\""+classifier+"\")");
           return *this;
         }
@@ -518,7 +539,7 @@ namespace test{
       EventMatch&
       on (string targetID)
         {
-          solution_.andFilter (matchAttribute("this",targetID));
+          refineSerach (matchAttribute("this",targetID));
           evaluateQuery ("match-this(\""+targetID+"\")");
           return *this;
         }
@@ -526,7 +547,7 @@ namespace test{
       EventMatch&
       on (const char* targetID)
         {
-          solution_.andFilter (matchAttribute("this",targetID));
+          refineSerach (matchAttribute("this",targetID));
           evaluateQuery ("match-this(\""+string(targetID)+"\")");
           return *this;
         }
@@ -536,7 +557,7 @@ namespace test{
       on (const X *const targetObj)
         {
           string targetID = idi::instanceTypeID (targetObj);
-          solution_.andFilter (matchAttribute("this",targetID));
+          refineSerach (matchAttribute("this",targetID));
           evaluateQuery ("match-this(\""+targetID+"\")");
           return *this;
         }

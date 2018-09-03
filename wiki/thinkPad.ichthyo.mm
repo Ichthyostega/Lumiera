@@ -30840,7 +30840,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535893707036" ID="ID_257876647" MODIFIED="1535932142834" TEXT="Aufgabe: Filter erweiterbar machen">
+<node COLOR="#338800" CREATED="1535893707036" FOLDED="true" ID="ID_257876647" MODIFIED="1535934249016" TEXT="Aufgabe: Filter erweiterbar machen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535893718194" ID="ID_872370459" MODIFIED="1535893743691" TEXT="analog zum Filter in den Itertools"/>
 <node CREATED="1535893752174" ID="ID_386073545" MODIFIED="1535893777011" TEXT="ggfs diesen dort abl&#xf6;sen">
@@ -31131,7 +31131,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535899922873" ID="ID_1971708144" MODIFIED="1535899950863" TEXT="bestehende Aufrufe konsolidieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535899922873" ID="ID_1971708144" MODIFIED="1535934181826" TEXT="bestehende Aufrufe in EventMatch konsolidieren">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535934086931" ID="ID_805705448" MODIFIED="1535934155059" TEXT="internes API f&#xfc;r die Such-Konfiguration einf&#xfc;hren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -31143,7 +31145,11 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535934121614" ID="ID_757923717" MODIFIED="1535934185871" TEXT="umstellen von IterTools -&gt; TreeExplorer">
 <icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node CREATED="1535893799799" ID="ID_706866636" MODIFIED="1535893804419" TEXT="Auswertungs-Stack">
