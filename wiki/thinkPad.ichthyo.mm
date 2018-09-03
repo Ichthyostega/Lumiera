@@ -30715,6 +30715,8 @@
 </node>
 <node CREATED="1535891156816" ID="ID_679300718" MODIFIED="1535891164631" TEXT="ist komplex">
 <icon BUILTIN="smiley-neutral"/>
+<node CREATED="1535939100410" ID="ID_1893557511" MODIFIED="1535939107373" TEXT="aber von einer Art, die mir gef&#xe4;llt"/>
+<node CREATED="1535939111640" ID="ID_1649632412" MODIFIED="1535939115932" TEXT="war bisher gut wartbar"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1514328717684" ID="ID_137835978" MODIFIED="1535892401183" TEXT="neuer Anlauf IterExplorer II">
@@ -31148,6 +31150,23 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1535934121614" ID="ID_757923717" MODIFIED="1535937964888" TEXT="umstellen von IterTools -&gt; TreeExplorer">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535938792363" ID="ID_428321880" MODIFIED="1535938844914" TEXT="CursorGear direkt als Core verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TreeExplorer macht das Wrappen f&#252;r uns automatisch,
+    </p>
+    <p>
+      und au&#223;erdem haben wir nun ein direktes API f&#252;r die Laufrichtung
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>

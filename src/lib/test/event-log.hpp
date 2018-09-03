@@ -77,8 +77,8 @@ namespace test{
     auto
     buildSearchFilter(Log const& srcSeq)
     {
-      using Iter  = lib::IterCursor<Log::const_iterator>;
-      return treeExplore(Iter (srcSeq))
+      using Cursor  = lib::iter::CursorGear<Log::const_iterator>;
+      return treeExplore (Cursor{srcSeq.begin(), srcSeq.end()})
                 .mutableFilter();
     }
   }
@@ -327,15 +327,7 @@ namespace test{
       void
       attachNextSerchStep (COND&& filter, Direction direction)
         {
-          switch (direction)
-            {
-              case FORWARD:
-                solution_.switchForwards();
-                break;
-              case BACKWARD:
-                solution_.switchBackwards();
-                break;
-            }
+          solution_.reverse (BACKWARD == direction);
           solution_.setNewFilter (forward<COND> (filter));
         }
       
