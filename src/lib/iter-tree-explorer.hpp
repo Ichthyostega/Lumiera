@@ -557,8 +557,8 @@ namespace lib {
       : SRC
       {
         BaseAdapter() = default;
-        BaseAdapter(SRC const& src) : SRC(src) { }
-        BaseAdapter(SRC && src)     : SRC(src) { }
+        BaseAdapter(SRC const& src) : SRC{src}                { }
+        BaseAdapter(SRC && src)     : SRC{forward<SRC> (src)} { }
         
         void expandChildren() { }
         size_t depth()  const { return 0; }
@@ -1433,6 +1433,13 @@ namespace lib {
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
+        }
+      
+      
+      auto
+      mutableFilter()
+        {
+          return mutableFilter ([](auto){ return true; });
         }
       
       

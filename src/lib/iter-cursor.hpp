@@ -170,7 +170,12 @@ namespace lib {
       using _Parent = IterStateWrapper<typename _Core::value_type, _Core>;
       
     public:
-      IterCursor() { }
+      IterCursor()                              =default;
+      IterCursor (IterCursor&&)                 =default;
+      IterCursor (IterCursor const&)            =default;
+      IterCursor& operator= (IterCursor&&)      =default;
+      IterCursor& operator= (IterCursor const&) =default;
+      
       
       template<class CON>
       explicit

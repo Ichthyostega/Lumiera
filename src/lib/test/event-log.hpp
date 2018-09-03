@@ -45,7 +45,7 @@
 
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
-#include "lib/iter-adapter.hpp"
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/iter-cursor.hpp"
 #include "lib/format-util.hpp"
 #include "lib/format-cout.hpp"
@@ -70,6 +70,18 @@ namespace test{
   using lib::Symbol;
   using std::string;
   
+  namespace {
+    using Entry = lib::diff::Record<string>;
+    using Log   = std::vector<Entry>;
+    
+    auto
+    buildSearchFilter(Log const& srcSeq)
+    {
+      using Iter  = lib::IterCursor<Log::const_iterator>;
+      return treeExplore(Iter (srcSeq))
+                .mutableFilter();
+    }
+  }
   
   
   /**
@@ -83,10 +95,7 @@ namespace test{
    */
   class EventMatch
     {
-      using Entry = lib::diff::Record<string>;
-      using Log   = std::vector<Entry>;
-      using Iter  = lib::IterCursor<Log::const_iterator>;
-      using Filter = ExtensibleFilterIter<Iter>;
+      using Filter = decltype( buildSearchFilter (std::declval<Log const&>()) );
       
       using ArgSeq = lib::diff::RecordSetup<string>::Storage;
       using RExSeq = std::vector<std::regex>;
@@ -151,10 +160,10 @@ namespace test{
       
       /** @internal for creating EventLog matchers */
       EventMatch(Log const& srcSeq)
-        : solution_(Iter(srcSeq))
-        , lastMatch_("HEAD "+ solution_->get("this"))
-        , look_for_match_(true)
-        , violation_()
+        : solution_{buildSearchFilter (srcSeq)}
+        , lastMatch_{"HEAD "+ solution_->get("this")}
+        , look_for_match_{true}
+        , violation_{}
         { }
       
       friend class EventLog;
@@ -321,10 +330,10 @@ namespace test{
           switch (direction)
             {
               case FORWARD:
-                solution_.underlying().switchForwards();
+                solution_.switchForwards();
                 break;
               case BACKWARD:
-                solution_.underlying().switchBackwards();
+                solution_.switchBackwards();
                 break;
             }
           solution_.setNewFilter (forward<COND> (filter));
@@ -577,9 +586,6 @@ namespace test{
    */
   class EventLog
     {
-      using Entry = lib::diff::Record<string>;
-      using Log   = std::vector<Entry>;
-      using Iter  = lib::RangeIter<Log::const_iterator>;
       
       std::shared_ptr<Log> log_;
       
@@ -834,6 +840,8 @@ namespace test{
           return 1 >= log_->size();  // do not count the log header
         }
       
+      
+      using Iter  = lib::RangeIter<Log::const_iterator>;
       
       typedef Iter const_iterator;
       typedef const Entry value_type;
