@@ -1445,7 +1445,7 @@ namespace lib {
       
       /** _terminal builder_ to package the processing pipeline as IterSource.
        * Invoking this function moves the whole iterator compound, as assembled by the preceding
-       * builder calls, into heap allocated memory and returns a [iterator front-end](\ref IterExploreSource).
+       * builder calls, into heap allocated memory and returns an [iterator front-end](\ref IterExploreSource).
        * Any iteration and manipulation on that front-end is passed through virtual function calls into
        * the back-end, thereby concealing all details of the processing pipeline.
        */
