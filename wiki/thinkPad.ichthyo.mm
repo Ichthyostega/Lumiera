@@ -31247,6 +31247,18 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536018943472" TEXT="treeExplorer-Konfiguration">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536115788134" ID="ID_1444917457" MODIFIED="1536121333262" TEXT="Problem: Basis-Typ inferieren">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536115842002" ID="ID_1601482334" MODIFIED="1536121336222" TEXT="resultiert aus treeExplorer-Aufruf">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1536121365113" ID="ID_1114285918" MODIFIED="1536121373905" TEXT="const STL container unterst&#xfc;tzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536115852336" ID="ID_1044191557" MODIFIED="1536115863616" TEXT="mu&#xdf; aber geeignete Funktoren binden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018420398" ID="ID_41628967" MODIFIED="1536018460817" TEXT="Abgreifen des Iterators von STL-Container">
 <icon BUILTIN="flag-yellow"/>
@@ -31281,6 +31293,9 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1536018580388" ID="ID_186304417" MODIFIED="1536018584425" TEXT="lovely spam">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1536121351659" ID="ID_1756544626" MODIFIED="1536121358722" TEXT="const container">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018539621" ID="ID_1857591081" MODIFIED="1536018556917" TEXT="simpleSearch()">

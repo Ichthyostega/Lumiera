@@ -166,6 +166,13 @@ namespace lib {
        // standard copy operations acceptable
       };
     
+    template<class CON>
+    struct StlRange<CON &>
+      : StlRange<CON>
+      {
+        using StlRange<CON>::StlRange;
+      };
+    
     
     /**
      * Decorate a state or logic core to treat it as Lumiera Forward Iterator.

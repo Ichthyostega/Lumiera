@@ -28,7 +28,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-util.hpp"  /////////////////////////////TODO necessary?
+#include "lib/format-cout.hpp"  /////////////////////////////TODO necessary?
 #include "lib/iter-chain-search.hpp"
 #include "lib/util.hpp"
 
@@ -69,6 +70,12 @@ namespace test{
   
   
   
+///////////////////////////////////////////////////TODO WIP
+#define SHOW_TYPE(_TY_) \
+    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
+#define SHOW_EXPR(_XX_) \
+    cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
+///////////////////////////////////////////////////TODO WIP
   
   
   
@@ -100,6 +107,14 @@ namespace test{
                           .search("bacon")
                           .search("tomato");
           
+///////////////////////////////////////////////////TODO WIP
+          using Searcher = decltype(search);
+          SHOW_TYPE (Searcher);
+          SHOW_TYPE (Searcher::value_type);
+          SHOW_TYPE (Searcher::pointer);
+          
+//        TypeDebugger<Searcher::reference> guggi;   // --> std::__cxx11::basic_string<char> const&
+///////////////////////////////////////////////////TODO WIP
           CHECK (search);
           CHECK (not isnil(search));
           CHECK ("tomato" == *search);

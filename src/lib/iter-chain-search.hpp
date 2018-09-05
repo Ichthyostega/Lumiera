@@ -41,7 +41,7 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/iter-adapter.hpp"
+#include "lib/iter-tree-explorer.hpp"
 
 //#include <type_traits>
 //#include <utility>
@@ -52,19 +52,32 @@
 namespace lib {
   
   using std::move;
+  using std::forward;
   using std::string;
   
   namespace iter {
     
+    namespace {
+      
+      template<class SRC>
+      auto
+      buildSearchFilter(SRC&& dataSource)
+      {
+        return treeExplore (forward<SRC> (dataSource))
+                  .mutableFilter();
+      }
+    }
+    
     /**
      * @internal implementation for....
      */
-    template<class IT>
-    class Cur
+    template<class SRC>
+    class _IterChainSetup
       {
         
         
       public:
+        using Pipeline = decltype( buildSearchFilter (std::declval<SRC>()) );
       };
     
     
@@ -81,10 +94,11 @@ namespace lib {
    * After the first combination of matches is exhausted, the search will backtrack and try to evaluate
    * the next combination, leading to a tree of search solutions.
    */
-//  template<class IT>
+  template<class SRC>
   class IterChainSearch
+    : public iter::_IterChainSetup<SRC>::Pipeline
     {
-//      using _Core = iter::CursorGear<IT>;
+      using _Base = typename iter::_IterChainSetup<SRC>::Pipeline;
 //      using _Parent = IterStateWrapper<typename _Core::value_type, _Core>;
       
     public:
@@ -122,7 +136,7 @@ namespace lib {
       IterChainSearch&&
       search (string target)
         {
-          UNIMPLEMENTED ("configure additional chained search condition");
+          TODO ("configure additional chained search condition");
           return move(*this);
         }
       
@@ -163,15 +177,14 @@ namespace lib {
    *         TreeExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
    */
-  template<class CON>
+  template<class SRC>
   inline auto
-  chainSearch (CON&& srcData)
+  chainSearch (SRC&& srcData)
   {
 //  using SrcIter = typename _DecoratorTraits<IT>::SrcIter;
 //  using Base = iter_explorer::BaseAdapter<SrcIter>;
     
-    UNIMPLEMENTED ("figure out the Iterator type and build a suitable IterChainSearch instance");
-    return IterChainSearch();
+    return IterChainSearch<SRC>();
 //  return TreeExplorer<Base> (std::forward<IT> (srcSeq));
   }
   
