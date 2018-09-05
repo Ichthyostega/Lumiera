@@ -221,8 +221,8 @@ namespace test{
    *       to build various functional evaluation pipelines,
    *       based on the \ref TreeExplorer template.
    *       - the adapter to wrap the source, which can either
-   *         [be a "state core"](\ref verify_wrappedState() ), or can
-   *         [be a "Lumiera Forward Iterator"](\ref verify_wrappedIterator() )
+   *         [be a state core](\ref verify_wrappedState() ), or can
+   *         [be a Lumiera Forward Iterator](\ref verify_wrappedIterator() )
    *       - the defining use case for TreeExplorer is to build a
    *         [pipeline for depth-first exploration](\ref verify_expandOperation() )
    *         of a (functional) tree structure. This "tree" is  created by invoking

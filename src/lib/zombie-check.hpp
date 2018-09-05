@@ -20,7 +20,7 @@
 
 */
 
-/** @file dependable-base.hpp
+/** @file zombie-check.hpp
  ** Detector to set off alarm when (re)using deceased objects.
  ** When implementing services based on static fields or objects,
  ** an invocation after static shutdown can not be precluded -- be it by

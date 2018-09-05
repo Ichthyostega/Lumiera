@@ -1254,10 +1254,14 @@ namespace lib {
    * This allows to separate the mechanics of evaluation and result combination
    * from the actual processing and thus to define tree structured computations
    * based on an opaque source data structure not further disclosed.
+   * @tparam SRC a suitably adapted _source iterator_ or _state core_, wrapped
+   *             into an instance of the iter_explorer::BaseAdapter template
    * 
-   * \param usage
+   * \par usage
+   * TreeExplorer is meant to be used as *Builder* for a processing pipeline.
+   * For this to work, it is essential to pick the `SRC` baseclass properly.
    *        - to build a TreeExplorer, use the treeExplore() free function,
-   *          which cares to pick up an possibly adapt the given iteration source
+   *          which cares to pick up and possibly adapt the given iteration source
    *        - to add processing layers, invoke the builder operations on TreeExplorer
    *          in a chained fashion, thereby binding functors or lambdas. Capture the
    *          final result with an auto variable.
@@ -1323,6 +1327,7 @@ namespace lib {
        *       typed argument. Obviously, argument and result type should also make sense for
        *       the desired evaluation pattern, otherwise you'll get all kinds of nasty
        *       template compilation failures (have fun!)
+       * @return processing pipeline with attached [Expander](\ref iter_explorer::Expander) decorator
        */
       template<class FUN>
       auto
@@ -1340,6 +1345,7 @@ namespace lib {
        * necessary to invoke `expandChildren()` (and doing so would have no further effect than
        * just iterating). Thus, on iteration, each current element will be fed to the _expand functor_
        * and the results will be integrated depth first.
+       * @return processing pipeline with attached [AutoExpander](\ref iter_explorer::AutoExpander) decorator
        * @warning iteration will be infinite, unless the _expand functor_ provides some built-in
        *       termination condition, returning an empty child sequence at that point. This would
        *       then be the signal for the internal combination mechanism to return to visiting the
@@ -1382,6 +1388,7 @@ namespace lib {
        * functor supports the same definition styles as described for #expand
        * - it can be pure functional, src -> res
        * - it can accept the underlying source iterator and exploit side-effects
+       * @return processing pipeline with attached [Transformer](\ref iter_explorer::Transformer) decorator
        */
       template<class FUN>
       auto
@@ -1398,6 +1405,7 @@ namespace lib {
        * The previously created source layers will be "pulled" to fast-forward immediately to the
        * next element confirmed this way by the bound functor. If none of the source elements
        * is acceptable, the iterator will transition to exhausted state immediately.
+       * @return processing pipeline with attached [Filter](\ref iter_explorer::Filter) decorator
        */
       template<class FUN>
       auto
@@ -1418,12 +1426,14 @@ namespace lib {
        * from the current element. Whenever the filter is remoulded, it is immediately re-evaluated,
        * possibly causing the underlying iterator to be pulled until an element matching the condition
        * is found.
-       * @see MutableFilter::andFilter
-       * @see MutableFilter::andNotFilter
-       * @see MutableFilter::orFilter
-       * @see MutableFilter::orNotFilter
-       * @see MutableFilter::flipFilter
-       * @see MutableFilter::setNewFilter
+       * @return processing pipeline with attached [special MutableFilter](\ref iter_explorer::MutableFilter) decorator
+       * @see \ref IterTreeExplorer_test::verify_FilterChanges()
+       * @see \ref iter_explorer::MutableFilter::andFilter()
+       * @see \ref iter_explorer::MutableFilter::andNotFilter()
+       * @see \ref iter_explorer::MutableFilter::orFilter()
+       * @see \ref iter_explorer::MutableFilter::orNotFilter()
+       * @see \ref iter_explorer::MutableFilter::flipFilter()
+       * @see \ref iter_explorer::MutableFilter::setNewFilter()
        */
       template<class FUN>
       auto
@@ -1448,6 +1458,8 @@ namespace lib {
        * builder calls, into heap allocated memory and returns an [iterator front-end](\ref IterExploreSource).
        * Any iteration and manipulation on that front-end is passed through virtual function calls into
        * the back-end, thereby concealing all details of the processing pipeline.
+       * @return an front-end handle object, which is an "Lumiera Forward Iterator",
+       *         while holding onto a heap allocated [abstracted data source](\ref lib::IterExplorer).
        */
       IterExploreSource<value_type>
       asIterSource()
@@ -1473,6 +1485,44 @@ namespace lib {
    *         be sure to understand that invoking any further builder operation on
    *         TreeExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
+   * 
+   * ## usage
+   * 
+   * This function starts a *Builder* expression. It picks up the given source,
+   * which can be something "sequence-like" or "iterable", and will automatically
+   * wrapped and adapted.
+   * - from a STL container, we retrieve a pair of STL iterators (`begin()`, `end()`)
+   * - a "Lumiera Forward Iterator" is copied or moved into the wrapper and used as
+   *   data source, pulling results on demand until exhaustion
+   * - a _State Core_ object is copied or moved into the wrapper and adapted to
+   *   be iterated as "Lumiera Forward Iterator". Any object with suitable extension
+   *   points and behaviour can be used, as explained [here](\ref lib::IterStateWrapper).
+   * 
+   * The resulting TreeExplorer instance can be directly used as "Lumiera Forward Iterator".
+   * However, typically you might want to invoke the builder functions to configure further
+   * processing steps in a processing pipeline...
+   * - to [filter](\ref TreeExplorer::filter) the results with a predicate (functor)
+   * - to [transform](\ref TreeExplorer::transform) the yielded results
+   * - to bind and configure a [child expansion operation](\ref TreeExplorer::expand), which
+   *   can then be triggered by explicitly invoking [.expandChildren()](\ref iter_explorer::Expander::expandChildren)
+   *   on the resulting pipeline; the generated child sequence is "flat mapped" into the results
+   *   (a *Monad* style usage).
+   * - to [package](\ref TreeExplorer::asIterSource) the pipeline built thus far behind an opaque
+   *   interface and move the implementation into heap memory.
+   * 
+   * A typical usage might be...
+   * \code
+   * auto multiply  = [](int v){ return 2*v; };
+   * 
+   * auto ii = treeExplore (CountDown{7,4})
+   *             .transform(multiply);
+   * 
+   * CHECK (14 == *ii);
+   * ++ii;
+   * CHECK (12 == *ii);
+   * ++ii;
+   * \endcode
+   * In this example, a `CountDown` _state core_ is used, as defined in iter-tree-explorer-test.cpp
    */
   template<class IT>
   inline auto

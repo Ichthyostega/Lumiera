@@ -164,7 +164,7 @@ test and better to reason about. If it really can not be avoided to use such uni
 static context, it should at least be packaged as a single object, plus we should ensure this logic
 can only be accessed through a regular (non static) object as front-end. Packaged this way, the
 most common and dangerous pitfalls with statics can be avoided.] And since Lumiera indeed allows
-for link:{ldoc}/technical/library/Dependencies.html[[lazily initialised dependencies], we
+for link:{ldoc}/technical/library/Dependencies.html[lazily initialised dependencies], we
 establish the policy that *destructors must not rely on dependencies*. In fact, they should
 not do any tangible work at all, beyond releasing other resources.
 
@@ -223,7 +223,7 @@ the event `ON_GLOBAL_INIT` is emitted.
   validation or auto-correction of the session's contents.
 
 `ON_SESSION_CLOSE`::
-  This event indicates to commence any activity relying on an opened and fully operative session.
+  This event indicates to cease any activity relying on an opened and fully operative session.
   When invoked, the session is still in fully operative state, all interfaces are open and the render engine
   is available. However, after issuing this event, the session shutdown sequence will be initiated, by detaching
   the engine interfaces and signalling the scheduler to cease running render jobs.
