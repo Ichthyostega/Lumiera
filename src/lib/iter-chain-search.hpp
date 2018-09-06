@@ -50,31 +50,30 @@
 
 
 namespace lib {
+namespace iter {
   
   using std::move;
   using std::forward;
   using std::string;
   
-  namespace iter {
+  
+  namespace { // implementation helpers...
     
-    namespace {
-      
-      template<class SRC>
-      auto
-      buildSearchFilter (SRC&& dataSource)
-      {
-        return treeExplore (forward<SRC> (dataSource))
-                  .mutableFilter();
-      }
-      
-      template<class SRC, class FUN>
-      auto
-      buildExplorer (SRC&& dataSource, FUN&& expandFunctor)
-      {
-        return buildSearchFilter (forward<SRC> (dataSource))
-                  .expand (forward<FUN> (expandFunctor))
-                  .expandAll();
-      }
+    template<class SRC>
+    auto
+    buildSearchFilter (SRC&& dataSource)
+    {
+      return treeExplore (forward<SRC> (dataSource))
+                .mutableFilter();
+    }
+    
+    template<class SRC, class FUN>
+    auto
+    buildExplorer (SRC&& dataSource, FUN&& expandFunctor)
+    {
+      return buildSearchFilter (forward<SRC> (dataSource))
+                .expand (forward<FUN> (expandFunctor))
+                .expandAll();
     }
     
     /**
@@ -91,8 +90,8 @@ namespace lib {
         using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
       };
     
-    
-  } // namespace iter
+  }//(End)implementation helpers
+  
   
   
   
@@ -107,9 +106,9 @@ namespace lib {
    */
   template<class SRC>
   class IterChainSearch
-    : public iter::_IterChainSetup<SRC>::Pipeline
+    : public _IterChainSetup<SRC>::Pipeline
     {
-      using _Base = typename iter::_IterChainSetup<SRC>::Pipeline;
+      using _Base = typename _IterChainSetup<SRC>::Pipeline;
 //      using _Parent = IterStateWrapper<typename _Core::value_type, _Core>;
       
     public:
@@ -202,5 +201,5 @@ namespace lib {
   
   
   
-} // namespace lib
+}} // namespace lib::iter
 #endif /*SRC_LIB_ITER_CHAIN_SEARCH_H*/

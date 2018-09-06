@@ -39,6 +39,7 @@
 
 
 namespace lib {
+namespace iter{
 namespace test{
   
   using ::Test;
@@ -157,5 +158,4 @@ namespace test{
   LAUNCHER (IterChainSearch_test, "unit common");
   
   
-}} // namespace lib::test
-
+}}} // namespace lib::iter::test
