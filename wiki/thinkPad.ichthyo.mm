@@ -25107,8 +25107,7 @@
       match(&quot;a&quot;).after(&quot;b&quot;) scheitert, weil sich die Suche am ersten &quot;a&quot; festbei&#223;t.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1535835709996" ID="ID_239175550" MODIFIED="1535835723893" TEXT="wir brauchen zwingend eine Art Stack">
@@ -30761,8 +30760,7 @@
       ...von der entsprechenden Methode im Transformer
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 <node CREATED="1535894292222" ID="ID_1328694952" MODIFIED="1535894370745" TEXT="vermutlich im Test &#xfc;bersehen">
@@ -30778,8 +30776,7 @@
       und im Unit-Test nur f&#252;r die Kombination Transformer + Explorer abgedeckt....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node COLOR="#338800" CREATED="1535894385009" ID="ID_1130325761" MODIFIED="1535898198283" TEXT="Testfall schreiben">
@@ -30804,8 +30801,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535893231835" ID="ID_637460742" MODIFIED="1535893326431" TEXT="Such-Pr&#xe4;dikate auf EventLog">
 <richcontent TYPE="NOTE"><html>
@@ -30829,8 +30825,7 @@
       hinter der sich eine verkettete Suche mit Backtracking verbirgt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535893353955" ID="ID_1665477644" MODIFIED="1535893590393" TEXT="bestehende L&#xf6;sung umstellen">
 <linktarget COLOR="#cc3e57" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" SOURCE="ID_1626597975" STARTARROW="None" STARTINCLINATION="1631;0;"/>
 <icon BUILTIN="pencil"/>
@@ -30855,8 +30850,7 @@
       sofern l&#228;ngerfristig Itertools durch TreeExplorer abgel&#246;st werden k&#246;nnte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1535903530421" ID="ID_384303362" MODIFIED="1535932193036" TEXT="Aua">
 <icon BUILTIN="smily_bad"/>
@@ -30900,8 +30894,7 @@
       Diese wird dann per Value gecaptured, was die gew&#252;nschte Kopie bewirkt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1535904168943" ID="ID_1936705749" MODIFIED="1535904249188" TEXT="eine unn&#xf6;tige Kopie">
 <richcontent TYPE="NOTE"><html>
@@ -30925,8 +30918,7 @@
       (und auch daf&#252;r ist die Syntax grausam)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1535904461720" FOLDED="true" ID="ID_317840110" MODIFIED="1535932207865" TEXT="will ich das wirklich.....?">
@@ -30940,8 +30932,7 @@
       ...es soll blo&#223; einfach funktionieren!!!!!!!!!!!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1535906366785" ID="ID_1488862884" MODIFIED="1535906388442" TEXT="Komplexit&#xe4;t entsteht aus der Flexibilit&#xe4;t der Argumente">
@@ -30972,8 +30963,7 @@
       die Itertools komplett durch den TreeExplorer abl&#246;sen zu k&#246;nnen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
@@ -31046,8 +31036,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -31145,8 +31134,7 @@
       ...so da&#223; es nur noch wenige Zugangs-Punkte zum unterliegenden Iterator gibt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1535934121614" ID="ID_757923717" MODIFIED="1535937964888" TEXT="umstellen von IterTools -&gt; TreeExplorer">
@@ -31165,8 +31153,7 @@
       und au&#223;erdem haben wir nun ein direktes API f&#252;r die Laufrichtung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -31193,8 +31180,7 @@
       <u>Invariante</u>: <b>pullMatch</b>()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1535894029921" ID="ID_152779506" MODIFIED="1535894037411" TEXT="den Stack schrittweise hochsteigen"/>
 </node>
@@ -31235,8 +31221,207 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018406232" ID="ID_1330264339" MODIFIED="1536018459425" TEXT="Schritte als Funktoren">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018684754" ID="ID_1076606298" MODIFIED="1536018696034" TEXT="geeignete Signatur f&#xfc;r die Schritt-Funktoren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018684754" ID="ID_1076606298" MODIFIED="1536273597914" TEXT="geeignete Signatur f&#xfc;r die Schritt-Funktoren">
+<icon BUILTIN="pencil"/>
+<node CREATED="1536184281271" ID="ID_1736323474" MODIFIED="1536184299802" TEXT="Problem: Funktor-Signatur zu Beginn nicht bekannt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1536184313018" ID="ID_306473960" MODIFIED="1536184367056" TEXT="es w&#xfc;rde gen&#xfc;gen, wenn der Werttyp kompatibel ist">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1536184383689" ID="ID_1457889497" MODIFIED="1536184509943">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir <i>m&#252;ssen </i>hier eine Festlegung treffen
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil die Ergebnisse der einzelnen Schritt-Funktoren,
+    </p>
+    <p>
+      jeweils in den Auswertungs-Stack gepackt werden sollen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Daher m&#252;ssen sie untereinander kompatibel sein.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1536184509936" ID="ID_936035440" MODIFIED="1536184832177" TEXT="pragmatische Wahl: Kopie des Basis-Filters">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im typischen Fall kopiert man den Basis-Iterator,
+    </p>
+    <p>
+      und manipuliert dann einige Einstellungen auf diesem.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wir k&#246;nnten diese Kopie-Semantik sogar <i>erzwingen,</i>
+    </p>
+    <p>
+      indem wir als Argument-Typ des Schritt-Funktors eine const&amp; vorgeben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1536185340920" ID="ID_1706168706" MODIFIED="1536185362297" TEXT="also: konstruiere Pipeline mit Filter"/>
+<node CREATED="1536185364045" ID="ID_301562283" MODIFIED="1536185381295" TEXT="dann: Filter -&gt; Filter als Funktor vorgeben"/>
+<node COLOR="#338800" CREATED="1536194368432" ID="ID_665607293" MODIFIED="1536273432151" TEXT="kniffelig in der Praxis">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1536194407802" ID="ID_752443094" MODIFIED="1536194421332" TEXT="der &quot;Filter&quot;-Typ ist in einen TreeExplorer gewrappt"/>
+<node CREATED="1536194422544" ID="ID_1594827200" MODIFIED="1536194440618" TEXT="konkret ist der Quell-Typ aber nur ein IterableDecorator"/>
+<node CREATED="1536194493975" ID="ID_1706559693" MODIFIED="1536194563398" TEXT="und der doppelt gewrappter Funktor....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...den ich mache, um den Adapter in jedem Einzelfall zu bekommen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1536194565261" ID="ID_892309176" MODIFIED="1536194581751" TEXT="...f&#xfc;hrt dazu, da&#xdf; der innere Funktor ein Template ist"/>
+<node CREATED="1536194582411" ID="ID_427362932" MODIFIED="1536194600916" TEXT="und deshalb mit IterableDecorator&amp; ge-probed wird"/>
+<node CREATED="1536195443615" ID="ID_1532213156" MODIFIED="1536195450119" TEXT="Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1536195452006" ID="ID_1758963929" MODIFIED="1536195513457" TEXT="IterableDecorator hat einen Wildcard-Konstruktor"/>
+<node CREATED="1536195515142" ID="ID_207755200" MODIFIED="1536271102169" TEXT="deshalb scheint die Konvertierung string -&gt; IterableDecorator m&#xf6;glich">
+<linktarget COLOR="#d83e76" DESTINATION="ID_207755200" ENDARROW="Default" ENDINCLINATION="262;10;" ID="Arrow_ID_1979852913" SOURCE="ID_360255766" STARTARROW="None" STARTINCLINATION="262;5;"/>
+</node>
+<node CREATED="1536195621631" ID="ID_1458745075" MODIFIED="1536195633265" TEXT="...was dann aber im eingewickelten MutableFunctor scheitert"/>
+<node CREATED="1536195633854" ID="ID_1469022446" MODIFIED="1536195641136" TEXT="(und ohnehin ein Schmarrrn w&#xe4;re)"/>
+</node>
+<node CREATED="1536195694269" ID="ID_260759561" MODIFIED="1536273228593" TEXT="L&#xf6;sung?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536195707299" ID="ID_1061111376" MODIFIED="1536273251780" TEXT="der innere Funktor ist generisch">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1536195819221" ID="ID_730902625" MODIFIED="1536270305176" TEXT="auf den flexiblen Adapter verzichten">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1536270307241" ID="ID_1232849452" MODIFIED="1536270310156" TEXT="bringt nix"/>
+<node CREATED="1536270310936" ID="ID_1638227415" MODIFIED="1536270381734" TEXT="string -&gt; IterableDecorator greift trotzdem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....und f&#228;llt dann beim Instantiieren des Template auf die Schnautze
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1536271061916" ID="ID_360255766" MODIFIED="1536271107605" TEXT="ist ein grunds&#xe4;tzliches Problem">
+<arrowlink COLOR="#d83e76" DESTINATION="ID_207755200" ENDARROW="Default" ENDINCLINATION="262;10;" ID="Arrow_ID_1979852913" STARTARROW="None" STARTINCLINATION="262;5;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1536271137786" ID="ID_618430280" MODIFIED="1536273236978" TEXT="Fehl-Konvertierung gezielt unterbinden">
+<icon BUILTIN="forward"/>
+<node CREATED="1536271169845" ID="ID_481868916" MODIFIED="1536271374301">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sofern eine Initialisierung ausidem Source-Iterator <i>m&#246;glich ist</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1536271209768" ID="ID_1767817102" MODIFIED="1536271396476" TEXT="...weil es dann grunds&#xe4;tzch nicht notwendig ist, eigens etwas zu tun"/>
+</node>
+</node>
+<node CREATED="1536273280517" ID="ID_422856174" MODIFIED="1536273415840">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und sonst ist das <i>nicht wirklich</i>&#160;&quot;kniffelig&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...blo&#223; sind die zig-fach geschachtelten Template-Typen,
+    </p>
+    <p>
+      die dann die Intantiierungs-Call-Hierarchie bev&#246;lkern,
+    </p>
+    <p>
+      nahezu unlesbar....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      AAber ... wenn es erst mal duch den Compiler ist,
+    </p>
+    <p>
+      dann <i>sollte </i>der Optimizer diese gesamten x-fachen Wrapper nahezu restlos entfernen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node CREATED="1536273453876" ID="ID_1094128800" MODIFIED="1536273496418" TEXT="verwende nun  BoundFunctor&lt;Filter(Filter const&amp;)&gt; als Signatur">
+<icon BUILTIN="info"/>
+<node CREATED="1536273527418" ID="ID_180233427" MODIFIED="1536273554776">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Konsequenz: jede Argument-Funktion wird <i>nochmal</i>&#160;gewrappt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1536273556422" ID="ID_368248341" MODIFIED="1536273569201" TEXT="...und kann damit auch ein generisches Lambda sein">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018696977" ID="ID_1710558292" MODIFIED="1536018702049" TEXT="Sequenz solcher Funktoren">
 <icon BUILTIN="flag-yellow"/>

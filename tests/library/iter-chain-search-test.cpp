@@ -110,6 +110,7 @@ namespace test{
 ///////////////////////////////////////////////////TODO WIP
           using Searcher = decltype(search);
           SHOW_TYPE (Searcher);
+          SHOW_TYPE (Searcher::DebugPipeline);
           SHOW_TYPE (Searcher::value_type);
           SHOW_TYPE (Searcher::pointer);
           

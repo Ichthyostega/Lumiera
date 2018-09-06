@@ -61,10 +61,19 @@ namespace lib {
       
       template<class SRC>
       auto
-      buildSearchFilter(SRC&& dataSource)
+      buildSearchFilter (SRC&& dataSource)
       {
         return treeExplore (forward<SRC> (dataSource))
                   .mutableFilter();
+      }
+      
+      template<class SRC, class FUN>
+      auto
+      buildExplorer (SRC&& dataSource, FUN&& expandFunctor)
+      {
+        return buildSearchFilter (forward<SRC> (dataSource))
+                  .expand (forward<FUN> (expandFunctor))
+                  .expandAll();
       }
     }
     
@@ -74,10 +83,12 @@ namespace lib {
     template<class SRC>
     class _IterChainSetup
       {
+        using Filter = decltype( buildSearchFilter (std::declval<SRC>()) );
         
+        using StepFunctor = typename iter_explorer::_BoundFunctor<Filter(Filter const&), Filter>::Functor;
         
       public:
-        using Pipeline = decltype( buildSearchFilter (std::declval<SRC>()) );
+        using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
       };
     
     
@@ -102,6 +113,7 @@ namespace lib {
 //      using _Parent = IterStateWrapper<typename _Core::value_type, _Core>;
       
     public:
+      using DebugPipeline = _Base;
 //    IterChainSearch()                                   =default;
 //    IterChainSearch (IterChainSearch&&)                 =default;
 //    IterChainSearch (IterChainSearch const&)            =default;
