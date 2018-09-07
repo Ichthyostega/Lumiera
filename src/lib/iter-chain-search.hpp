@@ -200,6 +200,7 @@ namespace iter {
       IterChainSearch&&
       clearFilter()
         {
+        //////////////////////////////////////////////////////TODO logically broken. We need also to get rid of the current expansions, while retaining the current position
           stepChain_.clear();
           return move(*this);
         }
@@ -208,7 +209,7 @@ namespace iter {
       Filter
       configureFilterChain (Filter const& currentFilterState)
         {
-          uint depth = currentFilterState.depth();
+          uint depth = this->depth();
           if (depth < stepChain_.size())
             return stepChain_[depth](currentFilterState); // augmented copy
           else

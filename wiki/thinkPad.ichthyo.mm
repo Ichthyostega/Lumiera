@@ -31206,17 +31206,17 @@
 <node COLOR="#338800" CREATED="1536018705511" ID="ID_1131109871" MODIFIED="1536329731179" TEXT="greedy Tiefensuche">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018802738" ID="ID_1560348563" MODIFIED="1536018807506" TEXT="Abbruchbedingung">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018816272" ID="ID_40740226" MODIFIED="1536018828687" TEXT="Ende der Filterkette">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536018802738" ID="ID_1560348563" MODIFIED="1536353099280" TEXT="Abbruchbedingung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1536018816272" ID="ID_40740226" MODIFIED="1536353104580" TEXT="Ende der Filterkette">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018829583" ID="ID_722941976" MODIFIED="1536018849229" TEXT="aktueller Filter ersch&#xf6;pft">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536018829583" ID="ID_722941976" MODIFIED="1536353106355" TEXT="aktueller Filter ersch&#xf6;pft">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536340043113" ID="ID_1162927294" MODIFIED="1536340232698" TEXT="aktuellen Zustand als Argument">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536340043113" FOLDED="true" ID="ID_1162927294" MODIFIED="1536353155727" TEXT="aktuellen Zustand als Argument">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536340051461" ID="ID_1232898317" MODIFIED="1536345629500" TEXT="Wichtig: Referenz">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1232898317" ENDARROW="Default" ENDINCLINATION="550;0;" ID="Arrow_ID_1329838760" SOURCE="ID_1977741990" STARTARROW="None" STARTINCLINATION="109;0;"/>
 <icon BUILTIN="button_ok"/>
@@ -31525,6 +31525,44 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536326576841" TEXT="treeExplorer-Konfiguration">
 <arrowlink COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536353107155" HGAP="27" ID="ID_1163131751" MODIFIED="1536353202260" TEXT="Problem: Basis-Layer" VSHIFT="23">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536353117930" ID="ID_625995057" MODIFIED="1536353132265" TEXT="hinzugef&#xfc;gt f&#xfc;r &quot;leeren&quot; Zustand">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1536353133264" ID="ID_597888311" MODIFIED="1536353144626" TEXT="Backtracking in leeren Zustand">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536353280436" ID="ID_967254721" MODIFIED="1536353333302" TEXT="Problem: clearFilter()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536353286739" ID="ID_1451254899" MODIFIED="1536353295077" TEXT="bauchen wir das &#xfc;berhaupt">
+<icon BUILTIN="help"/>
+<node CREATED="1536353310976" ID="ID_809196267" MODIFIED="1536353322688" TEXT="&quot;Filter komplett abschalten&quot;">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1536353297546" ID="ID_1841672356" MODIFIED="1536353306185" TEXT="war erst mal nur f&#xfc;r Test">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536353335500" ID="ID_698525366" MODIFIED="1536353392694" TEXT="Problem ist partielle Expansion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir sind irgendwo im Baum, nicht auf dem Basis-Layer.
+    </p>
+    <p>
+      Und der Basis-Layer steht irgendwo, nicht an der aktuellen Position.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1536115788134" ID="ID_1444917457" MODIFIED="1536281847097" TEXT="Problem: Basis-Typ inferieren">
 <icon BUILTIN="button_ok"/>
