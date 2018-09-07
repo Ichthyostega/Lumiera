@@ -31215,15 +31215,15 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018862802" ID="ID_1044555993" MODIFIED="1536281910775" TEXT="abgeleiteten Frame konstruieren">
-<linktarget COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="200;225;" ID="Arrow_ID_575633930" SOURCE="ID_1532889609" STARTARROW="None" STARTINCLINATION="158;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018862802" ID="ID_1044555993" MODIFIED="1536326576841" TEXT="abgeleiteten Frame konstruieren">
+<linktarget COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" SOURCE="ID_1532889609" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018406232" ID="ID_1330264339" MODIFIED="1536018459425" TEXT="Schritte als Funktoren">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018684754" ID="ID_1076606298" MODIFIED="1536273597914" TEXT="geeignete Signatur f&#xfc;r die Schritt-Funktoren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536018406232" ID="ID_1330264339" MODIFIED="1536326484790" TEXT="Schritte als Funktoren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1536018684754" FOLDED="true" ID="ID_1076606298" MODIFIED="1536326570743" TEXT="geeignete Signatur f&#xfc;r die Schritt-Funktoren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1536184281271" ID="ID_1736323474" MODIFIED="1536184299802" TEXT="Problem: Funktor-Signatur zu Beginn nicht bekannt">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -31403,7 +31403,8 @@
 <icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
-<node CREATED="1536273453876" ID="ID_1094128800" MODIFIED="1536273496418" TEXT="verwende nun  BoundFunctor&lt;Filter(Filter const&amp;)&gt; als Signatur">
+</node>
+<node CREATED="1536273453876" HGAP="46" ID="ID_1094128800" MODIFIED="1536326529585" TEXT="verwende nun  BoundFunctor&lt;Filter(Filter const&amp;)&gt; als Signatur" VSHIFT="5">
 <icon BUILTIN="info"/>
 <node CREATED="1536273527418" ID="ID_180233427" MODIFIED="1536273554776">
 <richcontent TYPE="NODE"><html>
@@ -31415,23 +31416,21 @@
       Konsequenz: jede Argument-Funktion wird <i>nochmal</i>&#160;gewrappt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1536273556422" ID="ID_368248341" MODIFIED="1536273569201" TEXT="...und kann damit auch ein generisches Lambda sein">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018696977" ID="ID_1710558292" MODIFIED="1536018702049" TEXT="Sequenz solcher Funktoren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536018696977" ID="ID_1710558292" MODIFIED="1536326467718" TEXT="Sequenz solcher Funktoren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018923378" ID="ID_1163666446" MODIFIED="1536018929138" TEXT="Pipeline konstruieren">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536281924138" TEXT="treeExplorer-Konfiguration">
-<arrowlink COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="200;225;" ID="Arrow_ID_575633930" STARTARROW="None" STARTINCLINATION="158;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536326576841" TEXT="treeExplorer-Konfiguration">
+<arrowlink COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="pencil"/>
 </node>
 <node COLOR="#338800" CREATED="1536115788134" ID="ID_1444917457" MODIFIED="1536281847097" TEXT="Problem: Basis-Typ inferieren">
@@ -31447,13 +31446,13 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018420398" ID="ID_41628967" MODIFIED="1536018460817" TEXT="Abgreifen des Iterators von STL-Container">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018880168" ID="ID_1619721301" MODIFIED="1536019004173" TEXT="Wert-Typ finden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018420398" ID="ID_41628967" MODIFIED="1536326452308" TEXT="Adaptieren der Quell-Datensequenz">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536018880168" ID="ID_1619721301" MODIFIED="1536326442522" TEXT="macht normalerweise TreeExplorer">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1619721301" ENDARROW="Default" ENDINCLINATION="129;0;" ID="Arrow_ID_1721152439" SOURCE="ID_1700266521" STARTARROW="None" STARTINCLINATION="76;-5;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018887223" ID="ID_832237706" MODIFIED="1536018900966" TEXT="Range-Iter konstruieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018887223" ID="ID_832237706" MODIFIED="1536326437258" TEXT="speziell: gear switch">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>

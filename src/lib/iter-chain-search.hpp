@@ -46,6 +46,7 @@
 //#include <type_traits>
 //#include <utility>
 #include <utility>
+#include <vector>
 #include <string>
 
 
@@ -57,7 +58,7 @@ namespace iter {
   using std::string;
   
   
-  namespace { // implementation helpers...
+  namespace { // type construction helpers...
     
     template<class SRC>
     auto
@@ -95,7 +96,7 @@ namespace iter {
         using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
       };
     
-  }//(End)implementation helpers
+  }//(End)type construction helpers
   
   
   
@@ -103,9 +104,9 @@ namespace iter {
   
   /**
    * Iterator based linear search mechanism, with the ability to perform consecutive search with backtracking.
-   * The IterChainSearch can be configured with a sequence of search goals (filter conditions), and will
-   * apply these in succession on the underlying iterator. It will search for the first hit of the first
-   * condition, and then continue to search _from there_ matching on the second condition, and so on.
+   * The IterChainSearch can be configured with a sequence of search goals (filter conditions), and will apply
+   * these in succession on the underlying iterator. It will search _by linear search_ for the first hit of the
+   * first condition, and then continue to search _from there_ matching on the second condition, and so on.
    * After the first combination of matches is exhausted, the search will backtrack and try to evaluate
    * the next combination, leading to a tree of search solutions.
    */
@@ -119,17 +120,24 @@ namespace iter {
       using Filter = typename _Trait::Filter;
       using Step   = typename _Trait::StepFunctor;
       
+      std::vector<Step> stepChain_;
+      
     public:
-      using DebugPipeline = _Base;
-      
-      using _Base::_Base;
-      
+      /** Build a chain-search mechanism based on the given source data sequence.
+       * @remark iterators will be copied or moved as appropriate, while from a STL compliant
+       *         container just a pair of (`begin()`, `end()`) iterators is retrieved; the latter
+       *         is also the reason why a rvalue reference to STL container is rejected, since the
+       *         container needs to reside elsewhere; only the iterator is wrapped here.
+       */
       template<class SEQ>
       explicit
       IterChainSearch (SEQ&& srcData)
         : _Base{move (buildExplorer (forward<SEQ> (srcData)
                                     ,Step{[this](Filter const& curr){ return configureFilterChain(curr); }}))}
         { }
+      
+      // inherited default ctor and standard copy operations
+      using _Base::_Base;
       
       
       
@@ -169,6 +177,8 @@ namespace iter {
    *         be sure to understand that invoking any further builder operation on
    *         TreeExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
+   * @param srcData either a »Lumiera Forward Iterator«, a _reference_ to a STL
+   *         container, or a [»State Core«](\ref lib::IterStateWrapper) object.
    */
   template<class SRC>
   inline auto
