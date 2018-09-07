@@ -31215,6 +31215,99 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536340043113" ID="ID_1162927294" MODIFIED="1536340232698" TEXT="aktuellen Zustand als Argument">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536340051461" ID="ID_1232898317" MODIFIED="1536345629500" TEXT="Wichtig: Referenz">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1232898317" ENDARROW="Default" ENDINCLINATION="550;0;" ID="Arrow_ID_1329838760" SOURCE="ID_1977741990" STARTARROW="None" STARTINCLINATION="109;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536340255596" ID="ID_1394539187" MODIFIED="1536340348029" TEXT="&#xfc;berfl&#xfc;ssige Kopie erstellt">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1536340275802" ID="ID_1689368781" MODIFIED="1536340292559" TEXT="im Aufruf des inneren (grwrappten) Funktors">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1536340301958" ID="ID_932937045" MODIFIED="1536340319264" TEXT="das reingegebene Argument zeigt noch (korrekt) auf die aktuelle Pipeline"/>
+<node CREATED="1536340325843" ID="ID_1834736142" MODIFIED="1536340342005" TEXT="aber das eingwickelte Lambda sieht eine const&amp; auf eine Kopie"/>
+</node>
+<node COLOR="#338800" CREATED="1536342792784" ID="ID_363834044" MODIFIED="1536342806527" TEXT="doppeltes Wrappen unn&#xf6;tig">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1536342807526" ID="ID_1490056918" MODIFIED="1536342900054" TEXT="stattdessen im vector&lt;Step&gt; wrappen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. die <i>einzelnen</i>&#160;Steps in der Pipeline direkt wrappen.
+    </p>
+    <p>
+      Dann ist au&#223;en herum keine Anpassung der Argumente mehr notwendig,
+    </p>
+    <p>
+      und man kann die Expand-Funktion direkt als std::function-Objekt durchgeben
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1536340063062" ID="ID_1554385479" MODIFIED="1536340152896" TEXT="und zwar const&amp;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...um den Expand-Funktor zu zwingen, eine Kopie zu machen;
+    </p>
+    <p>
+      es sollte die Filter-Konfiguration auf der Kopie manipuliert werden,
+    </p>
+    <p>
+      w&#228;hrend das Original auf dem Auswertungs-Stack liegen bleibt,
+    </p>
+    <p>
+      f&#252;r sp&#228;teres Backtracking...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1536345349807" ID="ID_219089137" MODIFIED="1536345462776" TEXT="TreeExplorer strippen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536345360133" ID="ID_23274093" MODIFIED="1536345384449" TEXT="wird immer noch au&#xdf;ern herumgewickelt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit man stets weitere Builder-Funktionen auf der Pipeline aufrufen kann
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1536345386770" ID="ID_1554908631" MODIFIED="1536345421597" TEXT="wir brauchen aber den Filter-Iterator selber">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil wir <i>diesen</i>&#160;manipulieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1536345422997" ID="ID_1977741990" MODIFIED="1536345460034" TEXT="nur so kann man eine Referenz auf den Zustand in den Expand-Funktor geben">
+<arrowlink DESTINATION="ID_1232898317" ENDARROW="Default" ENDINCLINATION="550;0;" ID="Arrow_ID_1329838760" STARTARROW="None" STARTINCLINATION="109;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 <node COLOR="#338800" CREATED="1536018862802" ID="ID_1044555993" MODIFIED="1536329736419" TEXT="abgeleiteten Frame konstruieren">
 <linktarget COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" SOURCE="ID_1532889609" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="button_ok"/>

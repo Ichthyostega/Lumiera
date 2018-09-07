@@ -1474,6 +1474,16 @@ namespace lib {
         {
           return IterExploreSource<value_type> {move(*this)};
         }
+      
+      
+      /** _terminal builder_ to strip the TreeExplorer and expose the built Pipeline.
+       * @return a »Lumiera Forward iterator« incorporating the complete pipeline logic.
+       */
+      SRC
+      asIterator()
+        {
+          return SRC {move(*this)};
+        }
     };
   
   

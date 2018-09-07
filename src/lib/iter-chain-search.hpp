@@ -92,11 +92,19 @@ namespace iter {
     template<class SRC>
     struct _IterChainSetup
       {
-        using Filter = decltype( buildSearchFilter (std::declval<SRC>()) );
+        using Filter = decltype( buildSearchFilter(std::declval<SRC>()).asIterator() );
         
-        using StepFunctor = typename iter_explorer::_BoundFunctor<Filter(Filter const&), Filter const&>::Functor;
-        
+        using StepFunctor = std::function<Filter(Filter const&)>;
+        using StepWrapper = typename iter_explorer::_BoundFunctor<Filter(Filter const&), Filter const&>::Functor;
+                                                                                      // ^^^^^^^^^^^^^ used as argument on generic lambda 
         using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
+        
+        static Pipeline
+        configurePipeline (SRC&& dataSource, StepFunctor step)
+          {
+            return buildExplorer(forward<SRC> (dataSource), move (step));
+          }
+        
       };
     
   }//(End)type construction helpers
@@ -122,7 +130,7 @@ namespace iter {
       
       using Value  = typename _Base::value_type;
       using Filter = typename _Trait::Filter;
-      using Step   = typename _Trait::StepFunctor;
+      using Step   = typename _Trait::StepWrapper;
       
       std::vector<Step> stepChain_;
       
@@ -136,8 +144,8 @@ namespace iter {
       template<class SEQ>
       explicit
       IterChainSearch (SEQ&& srcData)
-        : _Base{move (buildExplorer (forward<SEQ> (srcData)
-                                    ,Step{[this](Filter const& curr){ return configureFilterChain(curr); }}))}
+        : _Base{_Trait::configurePipeline (forward<SEQ> (srcData)
+                                          ,[this](Filter const& curr){ return configureFilterChain(curr); })}
         { }
       
       // inherited default ctor and standard copy operations
@@ -165,6 +173,7 @@ namespace iter {
       search (FUN&& configureSearchStep)
         {
           stepChain_.emplace_back (Step{forward<FUN> (configureSearchStep)});
+          this->iterNext();    // establish invariant: expand to leaf and forward to first match
           return move(*this);
         }
       
