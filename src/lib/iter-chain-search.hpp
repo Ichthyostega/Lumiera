@@ -42,6 +42,7 @@
 
 #include "lib/error.hpp"
 #include "lib/iter-tree-explorer.hpp"
+#include "lib/meta/util.hpp"
 
 //#include <type_traits>
 //#include <utility>
@@ -56,6 +57,8 @@ namespace iter {
   using std::move;
   using std::forward;
   using std::string;
+  
+  using lib::meta::disable_if;
   
   
   namespace { // type construction helpers...
@@ -91,7 +94,7 @@ namespace iter {
       {
         using Filter = decltype( buildSearchFilter (std::declval<SRC>()) );
         
-        using StepFunctor = typename iter_explorer::_BoundFunctor<Filter(Filter const&), Filter>::Functor;
+        using StepFunctor = typename iter_explorer::_BoundFunctor<Filter(Filter const&), Filter const&>::Functor;
         
         using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
       };
@@ -117,6 +120,7 @@ namespace iter {
       using _Trait = _IterChainSetup<SRC>;
       using _Base  = typename _Trait::Pipeline;
       
+      using Value  = typename _Base::value_type;
       using Filter = typename _Trait::Filter;
       using Step   = typename _Trait::StepFunctor;
       
@@ -141,18 +145,53 @@ namespace iter {
       
       
       
-      /** */
-      IterChainSearch&&
-      search (string target)
+      /** configure additional chained search condition.
+       * @param a functor `Filter const& -> filter`, which takes a current filter configuration,
+       *        returning a copy from this configuration, possibly configured differently.
+       * @note the given functor, lambda or function reference will be wrapped and adapted
+       *       to conform to the required function signature. When using a generic lambda,
+       *       the argument type `Filter const&` is assumed
+       * @remarks the additional chained search condition given here will be applied _after_
+       *       matching all other conditions already in the filter chain. Each such condition
+       *       is used to _filter_ the underlying source iterator, i.e. pull it until finding
+       *       and element to match the condition. Basically these conditions are _not_ used in
+       *       conjunction, but rather one after another. But since each such step in the chain
+       *       is defined by a functor, which gets the previous filter configuration as argument,
+       *       it is _possible_ to build a step which _extends_ or sharpens the preceding condition.
+       */
+      template<typename FUN>
+                                          disable_if<is_convertible<FUN, Value>,
+      IterChainSearch&&                             >
+      search (FUN&& configureSearchStep)
         {
-          TODO ("configure additional chained search condition");
+          stepChain_.emplace_back (Step{forward<FUN> (configureSearchStep)});
           return move(*this);
         }
       
+      /** attach additional direct search for a given value.
+       *  After successfully searching for all the conditions currently in the filter chain,
+       *  the underlying iterator will finally be pulled until matching the given target value.
+       */
+      IterChainSearch&&
+      search (Value target)
+        {
+          search ([=](Filter filter)      // note: filter taken by value
+                    {
+                      filter.setNewFilter ([target](Value const& currVal) { return currVal == target; });
+                      return filter;   // return copy of the original state with changed filter
+                    });
+          return move(*this);
+        }
+      
+      /** drop all search condition frames.
+       * @remark the filter chain becomes empty,
+       *         passing through the unaltered
+       *         source sequence
+       */
       IterChainSearch&&
       clearFilter()
         {
-          UNIMPLEMENTED ("drop all search condition frames");
+          stepChain_.clear();
           return move(*this);
         }
       
@@ -160,8 +199,11 @@ namespace iter {
       Filter
       configureFilterChain (Filter const& currentFilterState)
         {
-          uint depth = this->depth();
-          return Filter{}; /////TODO empty filter means recursion end
+          uint depth = currentFilterState.depth();
+          if (depth < stepChain_.size())
+            return stepChain_[depth](currentFilterState); // augmented copy
+          else
+            return Filter{};     // empty filter indicates recursion end
         }
     };
   

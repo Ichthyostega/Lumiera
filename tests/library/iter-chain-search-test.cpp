@@ -111,14 +111,11 @@ namespace test{
 ///////////////////////////////////////////////////TODO WIP
           using Searcher = decltype(search);
           SHOW_TYPE (Searcher);
-          SHOW_TYPE (Searcher::DebugPipeline);
           SHOW_TYPE (Searcher::value_type);
           SHOW_TYPE (Searcher::pointer);
           
 //        TypeDebugger<Searcher::reference> guggi;   // --> std::__cxx11::basic_string<char> const&
           cout << "search[0]=" <<*search<<endl;
-          ++search;
-          cout << "search[1]=" <<*search<<endl;
 ///////////////////////////////////////////////////TODO WIP
           CHECK (search);
           CHECK (not isnil(search));
