@@ -116,6 +116,9 @@ namespace test{
           SHOW_TYPE (Searcher::pointer);
           
 //        TypeDebugger<Searcher::reference> guggi;   // --> std::__cxx11::basic_string<char> const&
+          cout << "search[0]=" <<*search<<endl;
+          ++search;
+          cout << "search[1]=" <<*search<<endl;
 ///////////////////////////////////////////////////TODO WIP
           CHECK (search);
           CHECK (not isnil(search));

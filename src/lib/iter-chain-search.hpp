@@ -77,16 +77,21 @@ namespace iter {
     }
     
     /**
-     * @internal implementation for....
+     * @internal helper to rebind on inferred types.
+     * @remark we use the TreeExplorer framework to assemble the processing pipeline
+     *         from suitable building blocks configured with some lambdas. However, we
+     *         also want to _inherit_ from this filter pipeline, so to expose the typical
+     *         iterator operations without much ado. Thus we use some (static) helper function
+     *         templates, instantiate them with the actual source data iterator and pick up
+     *         the inferred type.
      */
     template<class SRC>
-    class _IterChainSetup
+    struct _IterChainSetup
       {
         using Filter = decltype( buildSearchFilter (std::declval<SRC>()) );
         
         using StepFunctor = typename iter_explorer::_BoundFunctor<Filter(Filter const&), Filter>::Functor;
         
-      public:
         using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
       };
     
@@ -108,39 +113,24 @@ namespace iter {
   class IterChainSearch
     : public _IterChainSetup<SRC>::Pipeline
     {
-      using _Base = typename _IterChainSetup<SRC>::Pipeline;
-//      using _Parent = IterStateWrapper<typename _Core::value_type, _Core>;
+      using _Trait = _IterChainSetup<SRC>;
+      using _Base  = typename _Trait::Pipeline;
+      
+      using Filter = typename _Trait::Filter;
+      using Step   = typename _Trait::StepFunctor;
       
     public:
       using DebugPipeline = _Base;
-//    IterChainSearch()                                   =default;
-//    IterChainSearch (IterChainSearch&&)                 =default;
-//    IterChainSearch (IterChainSearch const&)            =default;
-//    IterChainSearch& operator= (IterChainSearch&&)      =default;
-//    IterChainSearch& operator= (IterChainSearch const&) =default;
       
+      using _Base::_Base;
       
-//    template<class CON>
-//    explicit
-//    IterChainSearch (CON& container)
-////    : _Parent(_Core(container.begin(), container.end()))
-//      { }
-//    
-//    IterChainSearch (IT&& begin, IT&& end)
-////    : _Parent(_Core(std::forward<IT>(begin), std::forward<IT>(end)))
-//      { }
+      template<class SEQ>
+      explicit
+      IterChainSearch (SEQ&& srcData)
+        : _Base{move (buildExplorer (forward<SEQ> (srcData)
+                                    ,Step{[this](Filter const& curr){ return configureFilterChain(curr); }}))}
+        { }
       
-      
-      operator bool()  const
-        {
-          UNIMPLEMENTED ("solution test");
-        }
-      
-      bool
-      empty()  const
-        {
-          return not(*this);
-        }
       
       
       /** */
@@ -158,21 +148,13 @@ namespace iter {
           return move(*this);
         }
       
-      
-      /////////////////////////TODO dummy placeholder code. Replace by real iterator access
-      string&
-      operator*()  const
+    private:
+      Filter
+      configureFilterChain (Filter const& currentFilterState)
         {
-          static string boo{"bääääh"};
-          return boo;
+          uint depth = this->depth();
+          return Filter{}; /////TODO empty filter means recursion end
         }
-      
-      IterChainSearch&
-      operator++()
-        {
-          return *this;
-        }
-      /////////////////////////TODO dummy placeholder code. Replace by real iterator access
     };
   
   
@@ -192,11 +174,7 @@ namespace iter {
   inline auto
   chainSearch (SRC&& srcData)
   {
-//  using SrcIter = typename _DecoratorTraits<IT>::SrcIter;
-//  using Base = iter_explorer::BaseAdapter<SrcIter>;
-    
-    return IterChainSearch<SRC>();
-//  return TreeExplorer<Base> (std::forward<IT> (srcSeq));
+    return IterChainSearch<SRC>{forward<SRC> (srcData)};
   }
   
   

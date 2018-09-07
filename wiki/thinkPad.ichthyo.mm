@@ -31215,7 +31215,8 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018862802" ID="ID_1044555993" MODIFIED="1536018873126" TEXT="abgeleiteten Frame konstruieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018862802" ID="ID_1044555993" MODIFIED="1536281910775" TEXT="abgeleiteten Frame konstruieren">
+<linktarget COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="200;225;" ID="Arrow_ID_575633930" SOURCE="ID_1532889609" STARTARROW="None" STARTINCLINATION="158;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -31288,7 +31289,7 @@
 </node>
 <node CREATED="1536185340920" ID="ID_1706168706" MODIFIED="1536185362297" TEXT="also: konstruiere Pipeline mit Filter"/>
 <node CREATED="1536185364045" ID="ID_301562283" MODIFIED="1536185381295" TEXT="dann: Filter -&gt; Filter als Funktor vorgeben"/>
-<node COLOR="#338800" CREATED="1536194368432" ID="ID_665607293" MODIFIED="1536273432151" TEXT="kniffelig in der Praxis">
+<node COLOR="#338800" CREATED="1536194368432" FOLDED="true" ID="ID_665607293" MODIFIED="1536274950954" TEXT="kniffelig in der Praxis">
 <icon BUILTIN="smiley-angry"/>
 <node CREATED="1536194407802" ID="ID_752443094" MODIFIED="1536194421332" TEXT="der &quot;Filter&quot;-Typ ist in einen TreeExplorer gewrappt"/>
 <node CREATED="1536194422544" ID="ID_1594827200" MODIFIED="1536194440618" TEXT="konkret ist der Quell-Typ aber nur ein IterableDecorator"/>
@@ -31429,19 +31430,20 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018923378" ID="ID_1163666446" MODIFIED="1536018929138" TEXT="Pipeline konstruieren">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536018943472" TEXT="treeExplorer-Konfiguration">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536115788134" ID="ID_1444917457" MODIFIED="1536121333262" TEXT="Problem: Basis-Typ inferieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536281924138" TEXT="treeExplorer-Konfiguration">
+<arrowlink COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="200;225;" ID="Arrow_ID_575633930" STARTARROW="None" STARTINCLINATION="158;0;"/>
 <icon BUILTIN="pencil"/>
+</node>
+<node COLOR="#338800" CREATED="1536115788134" ID="ID_1444917457" MODIFIED="1536281847097" TEXT="Problem: Basis-Typ inferieren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536115842002" ID="ID_1601482334" MODIFIED="1536121336222" TEXT="resultiert aus treeExplorer-Aufruf">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1536121365113" ID="ID_1114285918" MODIFIED="1536121373905" TEXT="const STL container unterst&#xfc;tzen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536115852336" ID="ID_1044191557" MODIFIED="1536115863616" TEXT="mu&#xdf; aber geeignete Funktoren binden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536115852336" ID="ID_1044191557" MODIFIED="1536281849860" TEXT="mu&#xdf; aber geeignete Funktoren binden">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
