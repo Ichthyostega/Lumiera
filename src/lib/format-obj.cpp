@@ -205,7 +205,7 @@ apologies for that."
                                 "|lumiera::"
                                 , regex::ECMAScript | regex::optimize};
     
-    static regex stdString {"(__cxx11::)?basic_string<char, char_traits<char>, allocator<char>\\s*>\\s*"
+    static regex stdString {"(__cxx11::)?basic_string<char, char_traits<char>, allocator<char>\\s*>(\\s+\\B)?"
                                 , regex::ECMAScript | regex::optimize};
     
     static regex stdAllocator {"(\\w+<(" TYP_EXP ")), allocator<\\2>\\s*"
