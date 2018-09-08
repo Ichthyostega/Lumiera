@@ -445,6 +445,8 @@ namespace lib {
   
   namespace iter_explorer { // Implementation of Iterator decorating layers...
     
+    constexpr auto ACCEPT_ALL = [](auto){return true;};
+    
     /**
      * @internal technical details of binding a functor into the TreeExplorer.
      * Notably, this happens when adapting an _"expansion functor"_ to allow expanding a given element
@@ -927,12 +929,19 @@ namespace lib {
             return unConst(*this);
           }
         
+        bool
+        isDisabled()  const
+          {
+            return not predicate_.boundFunction;
+          }
+        
         /** @note establishes the invariant:
          *        whatever the source yields as current element,
          *        has already been approved by our predicate */
         void
         pullFilter ()
           {
+            if (isDisabled()) return;
             while (srcIter() and not predicate_(srcIter()))
               ++srcIter();
           }
@@ -1082,6 +1091,13 @@ namespace lib {
                              });
           }
         
+        /** discard filter predicates and disable any filtering */
+        void
+        disableFilter()
+          {
+            _Base::predicate_.boundFunction = nullptr;
+          }
+        
         
       private:
         /** @internal boilerplate to remould the filter predicate in-place
@@ -1113,6 +1129,9 @@ namespace lib {
             WrappedPredicate& firstClause = _Base::predicate_;             // pick up the existing filter predicate
             ChainPredicate chainClause{forward<COND> (additionalClause)};  // wrap the extension predicate in a similar way
             
+            if (_Base::isDisabled())
+              firstClause.boundFunction = ACCEPT_ALL;
+                
             _Base::predicate_ = WrappedPredicate{buildCombinedClause (firstClause, chainClause)};
             _Base::pullFilter();                                           // pull to re-establish the Invariant
           }
@@ -1457,7 +1476,7 @@ namespace lib {
       auto
       mutableFilter()
         {
-          return mutableFilter ([](auto){ return true; });
+          return mutableFilter (iter_explorer::ACCEPT_ALL);
         }
       
       

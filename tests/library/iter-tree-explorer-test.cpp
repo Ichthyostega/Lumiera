@@ -853,7 +853,7 @@ namespace test{
       verify_FilterChanges()
         {
           auto seq = treeExplore(CountDown{20})
-                       .mutableFilter([](uint){ return true; });
+                       .mutableFilter();
           
           auto takeEve = [](uint i){ return i%2 == 0; };
           auto takeTrd = [](uint i){ return i%3 == 0; };
@@ -908,6 +908,29 @@ namespace test{
           CHECK (0 == seq.p);                   // ...which he manipulated, so that core == 0
           CHECK (isnil (seq));                  // .....and thus iteration end is detected
           VERIFY_ERROR (ITER_EXHAUST, *seq );
+          
+          
+          // verify enabling and disabling...
+          auto seq2 = treeExplore(CountDown{10})
+                        .mutableFilter(takeTrd);
+          
+          CHECK (9 == *seq2);
+          seq2.disableFilter();
+          CHECK (9 == *seq2);
+          ++seq2;
+          CHECK (8 == *seq2);
+          seq2.andNotFilter (takeEve);
+          CHECK (7 == *seq2);
+          ++seq2;
+          CHECK (5 == *seq2);
+          seq2.disableFilter();
+          CHECK (5 == *seq2);
+          ++seq2;
+          CHECK (4 == *seq2);
+          ++seq2;
+          CHECK (3 == *seq2);
+          seq2.flipFilter();  // everything rejected
+          CHECK (isnil (seq2));
         }
       
       

@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1518487921106" STYLE="fork" TEXT="Lumi">
+<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1536409461357" STYLE="fork" TEXT="Lumi">
 <font NAME="SansSerif" SIZE="25"/>
 <node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1533388497006" POSITION="right" TEXT="GUI">
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>
@@ -30746,6 +30746,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
+<node CREATED="1536410175049" ID="ID_1439541143" MODIFIED="1536410185984" TEXT="Erg&#xe4;nzungen">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1535894221015" FOLDED="true" ID="ID_977007729" MODIFIED="1535898215661" TEXT="Bug im Filter-Layer">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535894239308" ID="ID_1809452702" MODIFIED="1535894251655" TEXT="Reihenfolge des Parent-Aufrufes in expandChildren()"/>
@@ -30781,6 +30783,400 @@
 </node>
 <node COLOR="#338800" CREATED="1535894385009" ID="ID_1130325761" MODIFIED="1535898198283" TEXT="Testfall schreiben">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1535893707036" ID="ID_650057716" MODIFIED="1536410348400" TEXT="Aufgabe: Filter erweiterbar machen">
+<linktarget COLOR="#62909b" DESTINATION="ID_650057716" ENDARROW="Default" ENDINCLINATION="100;100;" ID="Arrow_ID_1700598512" SOURCE="ID_257876647" STARTARROW="None" STARTINCLINATION="-412;-19;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535893718194" ID="ID_177803317" MODIFIED="1535893743691" TEXT="analog zum Filter in den Itertools"/>
+<node CREATED="1535893752174" ID="ID_27030007" MODIFIED="1535893777011" TEXT="ggfs diesen dort abl&#xf6;sen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sofern l&#228;ngerfristig Itertools durch TreeExplorer abgel&#246;st werden k&#246;nnte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1535903530421" ID="ID_326687543" MODIFIED="1535932193036" TEXT="Aua">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1535903536820" ID="ID_34512098" MODIFIED="1535903541919" TEXT="das wird komplex..."/>
+<node CREATED="1535903542556" ID="ID_945730027" MODIFIED="1535903551375" TEXT="der Filter-Layer ist hochgradig generisch"/>
+<node CREATED="1535904105560" ID="ID_1683260823" MODIFIED="1535904127224" TEXT="mu&#xdf; auch das Chain-Argument durch die Funktor-Traits schleusen"/>
+<node CREATED="1535904128524" ID="ID_1305515398" MODIFIED="1535904140074" TEXT="Code wird grausam">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1535904143098" ID="ID_62668261" MODIFIED="1535904152669" TEXT="funktioniert, aber gewaltig aufgebl&#xe4;ht"/>
+<node CREATED="1535904153353" ID="ID_1229789568" MODIFIED="1535904403272" TEXT="ganz nah am Segfault vorbei">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das h&#228;ngt an einem hauchd&#252;nnen Faden,
+    </p>
+    <p>
+      und ist subtil bis zum geht nicht mehr....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wenn man das Lambda einfach per [=] schreibt, und das Feld this-&gt;predicate_ verwendet,
+    </p>
+    <p>
+      dann wird this gecaptured (und das ist effektiv per Referenz). Wenn ich dann den
+    </p>
+    <p>
+      konstruierten Funktor an this-&gt;predicate_ zuweise, haben wir eine Endlos-Rekursion.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      L&#246;sung: man mu&#223; im lokalen Frame eine Referenz auf this-&gt;predicate definieren und binden.
+    </p>
+    <p>
+      Diese wird dann per Value gecaptured, was die gew&#252;nschte Kopie bewirkt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1535904168943" ID="ID_1486081044" MODIFIED="1535904249188" TEXT="eine unn&#xf6;tige Kopie">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...mu&#223; den Chain-Funktor aus dem Template-Argument erzeugen,
+    </p>
+    <p>
+      und ihn dann in die per-Value-Closure des erzeugten neuen Lambda binden (=Kopie).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Erst ab C++17 kann man Lambda-Captures pre move machen
+    </p>
+    <p>
+      (und auch daf&#252;r ist die Syntax grausam)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1535904461720" FOLDED="true" ID="ID_1122890797" MODIFIED="1535932207865" TEXT="will ich das wirklich.....?">
+<node CREATED="1535904470670" ID="ID_1319028134" MODIFIED="1535904516890" TEXT="nat&#xfc;rlich nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es soll blo&#223; einfach funktionieren!!!!!!!!!!!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1535906366785" ID="ID_772195469" MODIFIED="1535906388442" TEXT="Komplexit&#xe4;t entsteht aus der Flexibilit&#xe4;t der Argumente">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1535904517824" ID="ID_495813123" MODIFIED="1535904857801" TEXT="stattdessen Itertools-Filter verwenden?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      keine gute Idee.
+    </p>
+    <p>
+      Dann verwenden wir im einen Funktor-Framework eine Filter-Komponente
+    </p>
+    <p>
+      aus dem anderen Framework, obwohl es direkt hier auch eine Filter-Komponente g&#228;be.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Au&#223;erdem habe ich immer noch die Hoffnung, irgendwann mal
+    </p>
+    <p>
+      die Itertools komplett durch den TreeExplorer abl&#246;sen zu k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1535906261464" ID="ID_792586244" MODIFIED="1535909947735" TEXT="Auswege">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1535906265911" FOLDED="true" ID="ID_949648101" MODIFIED="1535932222887" TEXT="speziellen Filter-Layer nur hierf&#xfc;r">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535906327782" ID="ID_1362040513" MODIFIED="1535906334769" TEXT="letztlich nur Code-Kosmetik"/>
+<node CREATED="1535909106704" ID="ID_1965298489" MODIFIED="1535909115714" TEXT="w&#xfc;rde aber sehr speziellen Fall markieren"/>
+<node CREATED="1535909145091" ID="ID_1036104765" MODIFIED="1535909185418">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Name: <b>mutableFilter</b>()
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1535906283948" FOLDED="true" ID="ID_1882070577" MODIFIED="1535932223855" TEXT="Chain-Filter-Bau in HIlfsfunktion">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535906394646" ID="ID_1941257576" MODIFIED="1535906399057" TEXT="w&#xfc;nschenswert"/>
+<node CREATED="1535906399621" ID="ID_1167561151" MODIFIED="1535906407632" TEXT="nicht klar, ob &#xfc;berhaupt m&#xf6;glich"/>
+<node CREATED="1535909021163" ID="ID_1877231025" MODIFIED="1535909030226" TEXT="geschachtelte generische Lambdas verwenden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1535909041497" ID="ID_1207755293" MODIFIED="1535909052069" TEXT="AUA&#xb3;">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1535909192572" ID="ID_1654371024" MODIFIED="1535909197055" TEXT="aber es geht...."/>
+<node COLOR="#338800" CREATED="1535909967725" ID="ID_163021784" MODIFIED="1535912743392" TEXT="im Debugger verifizieren!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sieht gut aus.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Folgendes habe ich gesehen
+    </p>
+    <ul>
+      <li>
+        zu Beginn zeigt das eingebettete Funktor-Objekt auf eine Position auf dem Stack
+      </li>
+      <li>
+        beim Aufrufen der andFilter()-Funktion werden diverse Funktoren kopiert,<br />wobei nacheinander die (zu erwartenden) Argumente als Quelle auftauchen<br />
+      </li>
+      <li>
+        danach hat sich der Funktor ge&#228;ndert: er zeigt nun auf eine Position auf dem Heap<br />
+      </li>
+      <li>
+        der bisherige Funktor wurde mit der Closure des zusammengesetzten Funktors kollabiert (hat gleiche Addresse)<br />
+      </li>
+      <li>
+        der Chain-Funktor hat eine Closure bekommen, die ebenfalls Heap-alloziert ist.<br />das deutet darauf hin, da&#223; das capturen per copy funktioniert hat<br />
+      </li>
+      <li>
+        Beim Aufruf steppen wir nacheinander erst in den kombinierten Funktor,<br />und von dort wie erwartet in die beiden Lambdas.
+      </li>
+      <li>
+        <br />
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1535919506060" ID="ID_1859852045" MODIFIED="1536410320485" TEXT="heterogene Pr&#xe4;dikat-Typen">
+<arrowlink COLOR="#616f95" DESTINATION="ID_1587572708" ENDARROW="Default" ENDINCLINATION="105;-232;" ID="Arrow_ID_346491515" STARTARROW="None" STARTINCLINATION="-143;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535919540560" ID="ID_1538734134" MODIFIED="1535932049581" TEXT="geht nicht?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1535919549942" ID="ID_790617987" MODIFIED="1535919754360" TEXT="das zu Beginn verwendete Filter-Pr&#xe4;dikat legt den Typ fest">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...f&#252;r das dort hineingereichte Funktor-Objekt wird der Argument-Accessor ausgew&#228;hlt (Metaprogrammierung).
+    </p>
+    <p>
+      Er ist dann im Typ des Wrappers == _Traits::Functor codiert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wir k&#246;nnen zwar den im Wrapper enthaltenen Funktor neu zuweisen (in gewissen Grenzen),
+    </p>
+    <p>
+      aber er wird stets den zu Beginn gew&#228;hlten Argument-Accessor nehmen.
+    </p>
+    <p>
+      Typischerweise wird dieser ja sogar beim Aufruf des getemplateteten Funtions-Operators geInlined
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1535919835337" ID="ID_1492056572" MODIFIED="1536409243145" TEXT="Ausweg: doppelt wrappen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536367874016" ID="ID_109911994" MODIFIED="1536410392505" TEXT="Filter deaktivierbar machen">
+<linktarget COLOR="#d683c5" DESTINATION="ID_109911994" ENDARROW="Default" ENDINCLINATION="1326;0;" ID="Arrow_ID_1556921295" SOURCE="ID_649387933" STARTARROW="None" STARTINCLINATION="142;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1535899873112" ID="ID_81164806" MODIFIED="1535932139639" TEXT="Unit-Test (replizieren)">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535913527837" ID="ID_756446305" MODIFIED="1535913542932" TEXT="anlegen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535913531701" ID="ID_1872325076" MODIFIED="1535932138102" TEXT="andere F&#xe4;lle auch covern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536410408473" ID="ID_1812410133" MODIFIED="1536410416079" TEXT="Filter deaktivieren">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536367899301" ID="ID_1128977501" MODIFIED="1536367913469" TEXT="Neuzuweisung kompatibler Filter">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536367916619" ID="ID_411753478" MODIFIED="1536367919774" TEXT="geht das?"/>
+<node CREATED="1536367921474" ID="ID_849620368" MODIFIED="1536367938773" TEXT="nur Signatur-Typ auf MutableFilter ">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1536368287265" ID="ID_29049674" MODIFIED="1536368351977">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: std::function <b>in</b>&#160;FilterPredicate
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1536368354288" ID="ID_1161186805" MODIFIED="1536368384597" TEXT="mu&#xdf; die richtige &quot;Kategorie&quot; haben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      entweder Val -&gt; bool oder Iter -&gt; bool
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1536409170928" ID="ID_1850744645" MODIFIED="1536409531056" TEXT="Design-Probleme">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535919506060" ID="ID_1587572708" MODIFIED="1536410313468" TEXT="heterogene Pr&#xe4;dikat-Typen">
+<linktarget COLOR="#616f95" DESTINATION="ID_1587572708" ENDARROW="Default" ENDINCLINATION="105;-232;" ID="Arrow_ID_346491515" SOURCE="ID_1859852045" STARTARROW="None" STARTINCLINATION="-143;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1535919549942" ID="ID_270773242" MODIFIED="1536409271272" TEXT="das zu Beginn verwendete Filter-Pr&#xe4;dikat legt den Typ fest">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...f&#252;r das dort hineingereichte Funktor-Objekt wird der Argument-Accessor ausgew&#228;hlt (Metaprogrammierung).
+    </p>
+    <p>
+      Er ist dann im Typ des Wrappers == _Traits::Functor codiert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wir k&#246;nnen zwar den im Wrapper enthaltenen Funktor neu zuweisen (in gewissen Grenzen),
+    </p>
+    <p>
+      aber er wird stets den zu Beginn gew&#228;hlten Argument-Accessor nehmen.
+    </p>
+    <p>
+      Typischerweise wird dieser ja sogar beim Aufruf des getemplateteten Funtions-Operators geInlined
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1535919835337" ID="ID_619686338" MODIFIED="1536409289139" TEXT="1.L&#xf6;sung: doppelt wrappen?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1535923167297" ID="ID_1635196754" MODIFIED="1535923219590" TEXT="Basis-Filter sieht unspezifische Form des Pr&#xe4;dikates"/>
+<node CREATED="1535923237336" ID="ID_508718189" MODIFIED="1535923251434" TEXT="im Funktor steckt eingewickelt eine spezifische Form"/>
+<node CREATED="1535932069618" ID="ID_856161473" MODIFIED="1535932128786" TEXT="kein wirklicher overhead">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Aufruf vom &#228;u&#223;eren in den inneren Wrapper ist 1:1 und sollte vom Compiler wegoptimiert werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1535924949587" ID="ID_835090820" MODIFIED="1535932018158" TEXT="L&#xf6;sung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535924955458" ID="ID_1924886650" MODIFIED="1535927205707" TEXT="Typ des gewrappten Funktors konstruieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535924963017" ID="ID_1255665831" MODIFIED="1535927208519" TEXT="diesen schon in die Instanz der Basisklasse einflie&#xdf;en lassen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535924983038" ID="ID_343931650" MODIFIED="1535927210570" TEXT="Konstruktor eigens definieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535924991781" ID="ID_1047870457" MODIFIED="1535927212273" TEXT="inline wrappen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1535925016969" ID="ID_797104795" MODIFIED="1535927239938" TEXT="der Rest m&#xfc;&#xdf;te von selber funktionieren...">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536409302285" ID="ID_913930564" MODIFIED="1536409311669" TEXT="extrem komplexe Typen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536409316172" ID="ID_1468538186" MODIFIED="1536409340127" TEXT="Call-Traces sind nahezu unlesbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ich verbrenne Stunden beim Debuggen von neuem Code
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1536409470623" ID="ID_862991864" MODIFIED="1536409494631" TEXT="Ansatzpunkte">
+<node CREATED="1536409438003" ID="ID_254117479" MODIFIED="1536409449286" TEXT="erhebliche Redundanzen in den Typen"/>
+<node CREATED="1536409503106" ID="ID_377815860" MODIFIED="1536409513965" TEXT="konkrete Lambdas in der Typsignatur"/>
+</node>
+<node CREATED="1536409720285" ID="ID_610904065" MODIFIED="1536409725545" TEXT="Untersuchung">
+<node CREATED="1536409726421" ID="ID_1705785900" MODIFIED="1536409738318" TEXT="welche Typen werden wirklich ben&#xf6;tigt">
+<icon BUILTIN="help"/>
+<node CREATED="1536409761248" ID="ID_753549743" MODIFIED="1536409843345" TEXT="Quelle == Basis-Typ"/>
+<node CREATED="1536409788637" ID="ID_87247261" MODIFIED="1536409835506" TEXT="bei Transofmation: neuer value_type"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -30837,290 +31233,9 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535893707036" FOLDED="true" ID="ID_257876647" MODIFIED="1535934249016" TEXT="Aufgabe: Filter erweiterbar machen">
+<node COLOR="#338800" CREATED="1535893707036" ID="ID_257876647" MODIFIED="1536410348399" TEXT="Aufgabe: Filter erweiterbar machen">
+<arrowlink COLOR="#62909b" DESTINATION="ID_650057716" ENDARROW="Default" ENDINCLINATION="100;100;" ID="Arrow_ID_1700598512" STARTARROW="None" STARTINCLINATION="-412;-19;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1535893718194" ID="ID_872370459" MODIFIED="1535893743691" TEXT="analog zum Filter in den Itertools"/>
-<node CREATED="1535893752174" ID="ID_386073545" MODIFIED="1535893777011" TEXT="ggfs diesen dort abl&#xf6;sen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      sofern l&#228;ngerfristig Itertools durch TreeExplorer abgel&#246;st werden k&#246;nnte
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node COLOR="#338800" CREATED="1535903530421" ID="ID_384303362" MODIFIED="1535932193036" TEXT="Aua">
-<icon BUILTIN="smily_bad"/>
-<node CREATED="1535903536820" ID="ID_1343418651" MODIFIED="1535903541919" TEXT="das wird komplex..."/>
-<node CREATED="1535903542556" ID="ID_1721469481" MODIFIED="1535903551375" TEXT="der Filter-Layer ist hochgradig generisch"/>
-<node CREATED="1535904105560" ID="ID_1560346116" MODIFIED="1535904127224" TEXT="mu&#xdf; auch das Chain-Argument durch die Funktor-Traits schleusen"/>
-<node CREATED="1535904128524" ID="ID_1238934363" MODIFIED="1535904140074" TEXT="Code wird grausam">
-<icon BUILTIN="smiley-angry"/>
-<node CREATED="1535904143098" ID="ID_646600775" MODIFIED="1535904152669" TEXT="funktioniert, aber gewaltig aufgebl&#xe4;ht"/>
-<node CREATED="1535904153353" ID="ID_616241221" MODIFIED="1535904403272" TEXT="ganz nah am Segfault vorbei">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...und das h&#228;ngt an einem hauchd&#252;nnen Faden,
-    </p>
-    <p>
-      und ist subtil bis zum geht nicht mehr....
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Wenn man das Lambda einfach per [=] schreibt, und das Feld this-&gt;predicate_ verwendet,
-    </p>
-    <p>
-      dann wird this gecaptured (und das ist effektiv per Referenz). Wenn ich dann den
-    </p>
-    <p>
-      konstruierten Funktor an this-&gt;predicate_ zuweise, haben wir eine Endlos-Rekursion.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      L&#246;sung: man mu&#223; im lokalen Frame eine Referenz auf this-&gt;predicate definieren und binden.
-    </p>
-    <p>
-      Diese wird dann per Value gecaptured, was die gew&#252;nschte Kopie bewirkt.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1535904168943" ID="ID_1936705749" MODIFIED="1535904249188" TEXT="eine unn&#xf6;tige Kopie">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...mu&#223; den Chain-Funktor aus dem Template-Argument erzeugen,
-    </p>
-    <p>
-      und ihn dann in die per-Value-Closure des erzeugten neuen Lambda binden (=Kopie).
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Erst ab C++17 kann man Lambda-Captures pre move machen
-    </p>
-    <p>
-      (und auch daf&#252;r ist die Syntax grausam)
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1535904461720" FOLDED="true" ID="ID_317840110" MODIFIED="1535932207865" TEXT="will ich das wirklich.....?">
-<node CREATED="1535904470670" ID="ID_160594644" MODIFIED="1535904516890" TEXT="nat&#xfc;rlich nicht">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...es soll blo&#223; einfach funktionieren!!!!!!!!!!!
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="ksmiletris"/>
-</node>
-<node CREATED="1535906366785" ID="ID_1488862884" MODIFIED="1535906388442" TEXT="Komplexit&#xe4;t entsteht aus der Flexibilit&#xe4;t der Argumente">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1535904517824" ID="ID_305725479" MODIFIED="1535904857801" TEXT="stattdessen Itertools-Filter verwenden?">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      keine gute Idee.
-    </p>
-    <p>
-      Dann verwenden wir im einen Funktor-Framework eine Filter-Komponente
-    </p>
-    <p>
-      aus dem anderen Framework, obwohl es direkt hier auch eine Filter-Komponente g&#228;be.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Au&#223;erdem habe ich immer noch die Hoffnung, irgendwann mal
-    </p>
-    <p>
-      die Itertools komplett durch den TreeExplorer abl&#246;sen zu k&#246;nnen
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_cancel"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1535906261464" ID="ID_1343076549" MODIFIED="1535909947735" TEXT="Auswege">
-<icon BUILTIN="idea"/>
-<node COLOR="#338800" CREATED="1535906265911" FOLDED="true" ID="ID_442265155" MODIFIED="1535932222887" TEXT="speziellen Filter-Layer nur hierf&#xfc;r">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1535906327782" ID="ID_1903350743" MODIFIED="1535906334769" TEXT="letztlich nur Code-Kosmetik"/>
-<node CREATED="1535909106704" ID="ID_1756811057" MODIFIED="1535909115714" TEXT="w&#xfc;rde aber sehr speziellen Fall markieren"/>
-<node CREATED="1535909145091" ID="ID_23855152" MODIFIED="1535909185418">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Name: <b>mutableFilter</b>()
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1535906283948" FOLDED="true" ID="ID_367978731" MODIFIED="1535932223855" TEXT="Chain-Filter-Bau in HIlfsfunktion">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1535906394646" ID="ID_296637778" MODIFIED="1535906399057" TEXT="w&#xfc;nschenswert"/>
-<node CREATED="1535906399621" ID="ID_1487063274" MODIFIED="1535906407632" TEXT="nicht klar, ob &#xfc;berhaupt m&#xf6;glich"/>
-<node CREATED="1535909021163" ID="ID_1776922208" MODIFIED="1535909030226" TEXT="geschachtelte generische Lambdas verwenden">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1535909041497" ID="ID_911444458" MODIFIED="1535909052069" TEXT="AUA&#xb3;">
-<icon BUILTIN="ksmiletris"/>
-<node CREATED="1535909192572" ID="ID_1938820560" MODIFIED="1535909197055" TEXT="aber es geht...."/>
-<node COLOR="#338800" CREATED="1535909967725" ID="ID_745154448" MODIFIED="1535912743392" TEXT="im Debugger verifizieren!">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...sieht gut aus.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Folgendes habe ich gesehen
-    </p>
-    <ul>
-      <li>
-        zu Beginn zeigt das eingebettete Funktor-Objekt auf eine Position auf dem Stack
-      </li>
-      <li>
-        beim Aufrufen der andFilter()-Funktion werden diverse Funktoren kopiert,<br />wobei nacheinander die (zu erwartenden) Argumente als Quelle auftauchen<br />
-      </li>
-      <li>
-        danach hat sich der Funktor ge&#228;ndert: er zeigt nun auf eine Position auf dem Heap<br />
-      </li>
-      <li>
-        der bisherige Funktor wurde mit der Closure des zusammengesetzten Funktors kollabiert (hat gleiche Addresse)<br />
-      </li>
-      <li>
-        der Chain-Funktor hat eine Closure bekommen, die ebenfalls Heap-alloziert ist.<br />das deutet darauf hin, da&#223; das capturen per copy funktioniert hat<br />
-      </li>
-      <li>
-        Beim Aufruf steppen wir nacheinander erst in den kombinierten Funktor,<br />und von dort wie erwartet in die beiden Lambdas.
-      </li>
-      <li>
-        <br />
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1535919506060" FOLDED="true" ID="ID_308901003" MODIFIED="1535932218407" TEXT="heterogene Pr&#xe4;dikat-Typen">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1535919540560" ID="ID_544134703" MODIFIED="1535932049581" TEXT="geht nicht?">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1535919549942" ID="ID_809087906" MODIFIED="1535919754360" TEXT="das zu Beginn verwendete Filter-Pr&#xe4;dikat legt den Typ fest">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...f&#252;r das dort hineingereichte Funktor-Objekt wird der Argument-Accessor ausgew&#228;hlt (Metaprogrammierung).
-    </p>
-    <p>
-      Er ist dann im Typ des Wrappers == _Traits::Functor codiert.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Wir k&#246;nnen zwar den im Wrapper enthaltenen Funktor neu zuweisen (in gewissen Grenzen),
-    </p>
-    <p>
-      aber er wird stets den zu Beginn gew&#228;hlten Argument-Accessor nehmen.
-    </p>
-    <p>
-      Typischerweise wird dieser ja sogar beim Aufruf des getemplateteten Funtions-Operators geInlined
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node COLOR="#338800" CREATED="1535919835337" ID="ID_984434298" MODIFIED="1535932021329" TEXT="Ausweg: doppelt wrappen?">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1535923167297" ID="ID_1611885187" MODIFIED="1535923219590" TEXT="Basis-Filter sieht unspezifische Form des Pr&#xe4;dikates"/>
-<node CREATED="1535923237336" ID="ID_873685254" MODIFIED="1535923251434" TEXT="im Funktor steckt eingewickelt eine spezifische Form"/>
-<node CREATED="1535932069618" ID="ID_937611933" MODIFIED="1535932128786" TEXT="kein wirklicher overhead">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      der Aufruf vom &#228;u&#223;eren in den inneren Wrapper ist 1:1 und sollte vom Compiler wegoptimiert werden
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node COLOR="#338800" CREATED="1535924949587" ID="ID_283543674" MODIFIED="1535932018158" TEXT="L&#xf6;sung">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1535924955458" ID="ID_257130301" MODIFIED="1535927205707" TEXT="Typ des gewrappten Funktors konstruieren">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1535924963017" ID="ID_1923686219" MODIFIED="1535927208519" TEXT="diesen schon in die Instanz der Basisklasse einflie&#xdf;en lassen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1535924983038" ID="ID_966924861" MODIFIED="1535927210570" TEXT="Konstruktor eigens definieren">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1535924991781" ID="ID_28842573" MODIFIED="1535927212273" TEXT="inline wrappen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1535925016969" ID="ID_214947623" MODIFIED="1535927239938" TEXT="der Rest m&#xfc;&#xdf;te von selber funktionieren...">
-<icon BUILTIN="idea"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1535899873112" ID="ID_1460874987" MODIFIED="1535932139639" TEXT="Unit-Test (replizieren)">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1535913527837" ID="ID_1506533000" MODIFIED="1535913542932" TEXT="anlegen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1535913531701" ID="ID_1093929821" MODIFIED="1535932138102" TEXT="andere F&#xe4;lle auch covern">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
 </node>
 <node COLOR="#338800" CREATED="1535899922873" ID="ID_1971708144" MODIFIED="1535937992260" TEXT="bestehende Aufrufe in EventMatch konsolidieren">
 <icon BUILTIN="button_ok"/>
@@ -31162,6 +31277,31 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1535939763441" ID="ID_132867774" MODIFIED="1535939780642" TEXT="mu&#xdf; &quot;nur noch&quot; Cursor gegen neue State-Core austauschen"/>
 <node CREATED="1535939781302" ID="ID_285459121" MODIFIED="1535939796824" TEXT="diese h&#xe4;lt den Cursor plus einen Stack mit den Filtern"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536368106394" ID="ID_1324169393" MODIFIED="1536368114930" TEXT="in eigene Translation-Unit verschieben">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536368121224" ID="ID_684768731" MODIFIED="1536368139195">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Search-Engine bl&#228;ht die Debug-Infos <b>gewaltig</b>&#160;auf
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1536368144661" ID="ID_184622907" MODIFIED="1536368158636" TEXT="BusTerm_test = 12 MB">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1536368166242" ID="ID_280400966" MODIFIED="1536368177458" TEXT="EventLog_test = 6 MB">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+<node CREATED="1536368188063" ID="ID_1725693994" MODIFIED="1536368197862" TEXT="kein Wunder bei den Typen...">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1535893799799" ID="ID_706866636" MODIFIED="1535938019075" TEXT="Auswertungs-Stack">
@@ -31525,12 +31665,16 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536326576841" TEXT="treeExplorer-Konfiguration">
 <arrowlink COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536353107155" HGAP="27" ID="ID_1163131751" MODIFIED="1536353202260" TEXT="Problem: Basis-Layer" VSHIFT="23">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536353107155" HGAP="33" ID="ID_1163131751" MODIFIED="1536361617044" TEXT="Problem: Basis-Layer" VSHIFT="37">
+<arrowlink COLOR="#4471b4" DESTINATION="ID_942897075" ENDARROW="Default" ENDINCLINATION="37;-79;" ID="Arrow_ID_537236489" STARTARROW="None" STARTINCLINATION="30;44;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1536353117930" ID="ID_625995057" MODIFIED="1536353132265" TEXT="hinzugef&#xfc;gt f&#xfc;r &quot;leeren&quot; Zustand">
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1536353133264" ID="ID_597888311" MODIFIED="1536353144626" TEXT="Backtracking in leeren Zustand">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1536357642662" ID="ID_77507334" MODIFIED="1536357654371" TEXT="Basis-Layer wird eigentlich nie mehr besucht">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -31545,7 +31689,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536353335500" ID="ID_698525366" MODIFIED="1536353392694" TEXT="Problem ist partielle Expansion">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536353335500" ID="ID_698525366" MODIFIED="1536358327376" TEXT="mu&#xdf; Stack der partiellen Auswertungen verwerfen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -31560,6 +31704,7 @@
   </body>
 </html>
 </richcontent>
+<arrowlink COLOR="#60a2d5" DESTINATION="ID_33678789" ENDARROW="Default" ENDINCLINATION="315;0;" ID="Arrow_ID_1930258825" STARTARROW="None" STARTINCLINATION="106;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -31574,6 +31719,87 @@
 </node>
 <node COLOR="#338800" CREATED="1536115852336" ID="ID_1044191557" MODIFIED="1536281849860" TEXT="mu&#xdf; aber geeignete Funktoren binden">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1536357666667" ID="ID_886527146" MODIFIED="1536357671758" TEXT="Design-Kritik">
+<node CREATED="1536357672802" ID="ID_2301559" MODIFIED="1536357696186" TEXT="aktuelles Design ist minimalistisch aber nicht elegant">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1536357853649" ID="ID_1868098250" MODIFIED="1536357864980" TEXT="API geradliniger als die interne Struktur">
+<node CREATED="1536357700806" ID="ID_484166025" MODIFIED="1536357804847" TEXT="der Basis-Layer ist aufgrund des API vorhanden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn
+    </p>
+    <ul>
+      <li>
+        es ist praktisch, zun&#228;chst &quot;leer&quot; zu konstruieren
+      </li>
+      <li>
+        es ist verst&#228;ndlicher, wenn alle Bedingungen symmetrisch angegeben werden
+      </li>
+      <li>
+        es ist nat&#252;rlich, da&#223; ein &quot;leerer&quot; Filter alles durchl&#228;&#223;t
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1536357809367" ID="ID_118025251" MODIFIED="1536357830652" TEXT="die clearFilter()-Funktion folgt derselben Logik">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Filter leer == alles durchlassen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536357878006" ID="ID_1225195123" MODIFIED="1536358257081" TEXT="Aufr&#xe4;umen und nachr&#xfc;sten">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536357891412" ID="ID_942897075" MODIFIED="1536358349759" TEXT="den Basis-Layer eliminieren">
+<linktarget COLOR="#4471b4" DESTINATION="ID_942897075" ENDARROW="Default" ENDINCLINATION="37;-79;" ID="Arrow_ID_537236489" SOURCE="ID_1163131751" STARTARROW="None" STARTINCLINATION="30;44;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536357900635" ID="ID_646733499" MODIFIED="1536358247780" TEXT="brauche einen &quot;leer&quot;-Status im Filter">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536367745114" ID="ID_945289619" MODIFIED="1536367753030" TEXT="explizit als bool-Flag">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536367754089" ID="ID_649387933" MODIFIED="1536410400971" TEXT="im Filter-Funktor verstecken">
+<arrowlink COLOR="#d683c5" DESTINATION="ID_109911994" ENDARROW="Default" ENDINCLINATION="1326;0;" ID="Arrow_ID_1556921295" STARTARROW="None" STARTINCLINATION="142;0;"/>
+<icon BUILTIN="pencil"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536357917385" ID="ID_1615410357" MODIFIED="1536358250507" TEXT="wenn leer, dann direkt den Basis-Layer konfigurieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536357952068" ID="ID_876149668" MODIFIED="1536358251475" TEXT="nur an die Kette anf&#xfc;gen, wenn nicht leer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536357967826" ID="ID_634133289" MODIFIED="1536358245365" TEXT="clearFilter()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536357973769" ID="ID_33678789" MODIFIED="1536358316984" TEXT="brauche Unterst&#xfc;tzung vom Expander">
+<linktarget COLOR="#60a2d5" DESTINATION="ID_33678789" ENDARROW="Default" ENDINCLINATION="315;0;" ID="Arrow_ID_1930258825" SOURCE="ID_698525366" STARTARROW="None" STARTINCLINATION="106;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536357986087" ID="ID_1097583555" MODIFIED="1536358230631" TEXT="rootCurrent()">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536358193211" ID="ID_601406114" MODIFIED="1536358229327" TEXT="hebt aktuelle Sequenz auf Root-Level">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536358204137" ID="ID_1724606451" MODIFIED="1536358228591" TEXT="verwirft den sonstigen Stack komplett">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
