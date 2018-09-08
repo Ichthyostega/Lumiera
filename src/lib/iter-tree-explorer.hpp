@@ -469,10 +469,13 @@ namespace lib {
      *   keep the argument-accepting front-end still generic (templated `operator()`). This
      *   special adapter supports the case when the _expansion functor_ yields a child sequence
      *   type different but compatible to the original source sequence embedded in TreeExplorer.
-     * @tparam FUN something _"function-like"_ passed as functor to be bound
-     * @tparam SRC the source iterator type to apply when attempting to use a generic lambda as functor
+     * @tparam FUN either the signature, or something _"function-like"_ passed as functor to be bound
+     * @tparam SRC (optional) but need to specify the source iterator type to apply when passing
+     *             a generic lambda or template as FUN. Such a generic functor will be _instantiated_
+     *             passing the type `SRC&` as argument. This instantiation may fail (and abort compilation),
+     *             but when it succeeds, we can infer the result type `Res` from the generic lambda
      */
-    template<class FUN, typename SRC>
+    template<class SIG, typename SRC =void>
     struct _FunTraits
       {
         /** handle all regular "function-like" entities */
@@ -492,7 +495,7 @@ namespace lib {
           };
         
         
-        using Sig = typename FunDetector<FUN>::Sig;
+        using Sig = typename FunDetector<SIG>::Sig;
         using Arg = typename _Fun<Sig>::Args::List::Head;  // assuming function with a single argument
         using Res = typename _Fun<Sig>::Ret;
         
