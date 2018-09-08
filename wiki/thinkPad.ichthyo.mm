@@ -25129,6 +25129,56 @@
 <arrowlink COLOR="#cc3e57" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" STARTARROW="None" STARTINCLINATION="1631;0;"/>
 <icon BUILTIN="pencil"/>
 </node>
+<node CREATED="1536441983485" ID="ID_330124350" MODIFIED="1536442038343" TEXT="Warnung: anonymous namespace">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ist mir nicht v&#246;llig klar, warum das bei einigen Includes auftritt,
+    </p>
+    <p>
+      und bei anderen nicht. Beispiel
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In file included from src/lib/diff/test-mutation-target.hpp:55:0,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;from tests/library/diff/diff-complex-application-test.cpp:35:
+    </p>
+    <p>
+      src/lib/test/event-log.hpp:96:9: warning: 'lib::test::EventMatch' has a field 'lib::test::EventMatch::solution_' whose type uses the anonymous namespace [-Wsubobject-linkage]
+    </p>
+    <p>
+      &#160;&#160;&#160;class EventMatch
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;^~~~~~~~~~
+    </p>
+    <p>
+      In file included from src/lib/diff/test-mutation-target.hpp:55:0,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;from tests/library/diff/tree-mutator-binding-test.cpp:32:
+    </p>
+    <p>
+      src/lib/test/event-log.hpp:96:9: warning: 'lib::test::EventMatch' has a field 'lib::test::EventMatch::solution_' whose type uses the anonymous namespace [-Wsubobject-linkage]
+    </p>
+    <p>
+      &#160;&#160;&#160;class EventMatch
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;^~~~~~~~~~
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>
@@ -31175,6 +31225,87 @@
 <icon BUILTIN="help"/>
 <node CREATED="1536409761248" ID="ID_753549743" MODIFIED="1536409843345" TEXT="Quelle == Basis-Typ"/>
 <node CREATED="1536409788637" ID="ID_87247261" MODIFIED="1536409835506" TEXT="bei Transofmation: neuer value_type"/>
+</node>
+<node CREATED="1536420551954" ID="ID_1265946119" MODIFIED="1536420561095" TEXT="Rolle der Traits">
+<node CREATED="1536420562706" ID="ID_1510273577" MODIFIED="1536420573085" TEXT="Baumuster erkennen">
+<node CREATED="1536420576968" ID="ID_1438017036" MODIFIED="1536420618407" TEXT="monadisch: res(val)"/>
+<node CREATED="1536420581231" ID="ID_790634219" MODIFIED="1536420608360" TEXT="imperativ: res(SRC&amp;)"/>
+</node>
+<node CREATED="1536420632457" ID="ID_1027876524" MODIFIED="1536420638164" TEXT="Signatur abnehmen"/>
+<node CREATED="1536420639016" ID="ID_221776251" MODIFIED="1536420654441" TEXT="Funktor(Holder)-Typ konstruieren"/>
+<node CREATED="1536420659869" ID="ID_176968684" MODIFIED="1536420669838" TEXT="Resultat">
+<icon BUILTIN="idea"/>
+<node CREATED="1536420671212" ID="ID_1077375672" MODIFIED="1536420678038" TEXT="Funktor(Holder)-Typ"/>
+<node CREATED="1536420678842" ID="ID_1524886712" MODIFIED="1536420681830" TEXT="Ergebnis-Typ"/>
+</node>
+</node>
+<node CREATED="1536420803778" ID="ID_1315131204" MODIFIED="1536420809629" TEXT="Funktions-Signatur verbergen">
+<node CREATED="1536420811265" ID="ID_1167994865" MODIFIED="1536420823683" TEXT="reduzieren auf res(SRC)"/>
+<node CREATED="1536420824983" ID="ID_784540518" MODIFIED="1536420836185" TEXT="konkrete Funktion in Adapter setzen"/>
+<node CREATED="1536420932944" ID="ID_512498364" MODIFIED="1536420940219" TEXT="ArgAccessor beim Aufruf">
+<node CREATED="1536420941519" ID="ID_1927165900" MODIFIED="1536420945112" TEXT="kann wegfallen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1536420945998" ID="ID_582317324" MODIFIED="1536420989876" TEXT="trotzdem notwendig">
+<icon BUILTIN="help"/>
+<node CREATED="1536420950054" ID="ID_1462776992" MODIFIED="1536420952593" TEXT="wegen Expander">
+<node CREATED="1536421001935" ID="ID_1416192275" MODIFIED="1536421016769" TEXT="unterschiedliche Iter-Typen m&#xf6;glich"/>
+<node CREATED="1536421023732" ID="ID_293881968" MODIFIED="1536421035374" TEXT="in beiden Baumuster-F&#xe4;llen"/>
+</node>
+<node CREATED="1536421204268" ID="ID_1225988621" MODIFIED="1536421235479">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Konsequenz: brauche <b>Template</b>&#160;Funktions-Operator
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1536441211468" ID="ID_435661366" MODIFIED="1536441216296" TEXT="L&#xf6;sungs-Idee">
+<node CREATED="1536441217427" ID="ID_1508660342" MODIFIED="1536441270931" TEXT="die Signatur im Builder konstruieren. Traits nur noch auf Signatur abst&#xfc;tzen">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1536441337478" ID="ID_1343620192" MODIFIED="1536441363753" TEXT="Traits bieten nun einen Funktor-Konstruktur">
+<icon BUILTIN="full-2"/>
+<node CREATED="1536441426912" ID="ID_1985454424" MODIFIED="1536441520374">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Funktor f&#252;r den Expander wird <i>explizit als Sonderfall</i>&#160; aufgefa&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das <i>eigentliche Problem </i>mit der bestehenden L&#246;sung ist,
+    </p>
+    <p>
+      da&#223; ich ausgerechnet mit diesem Sonderfall angefangen habe.
+    </p>
+    <p>
+      Daher ist jetzt das gesamte Design &quot;anders herum&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1536441367354" ID="ID_1778093460" MODIFIED="1536441424596" TEXT="welcher eine gegebene Funktion in eine vorgegebene function&lt;SIG&gt; einpasst"/>
 </node>
 </node>
 </node>

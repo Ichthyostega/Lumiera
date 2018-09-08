@@ -473,7 +473,7 @@ namespace lib {
      * @tparam SRC the source iterator type to apply when attempting to use a generic lambda as functor
      */
     template<class FUN, typename SRC>
-    struct _BoundFunctor
+    struct _FunTraits
       {
         /** handle all regular "function-like" entities */
         template<typename F, typename SEL =void>
@@ -500,7 +500,7 @@ namespace lib {
         
         /** adapt to a functor, which accesses the source iterator or embedded "state core" */
         template<class ARG, class SEL =void>
-        struct ArgAccessor
+        struct ArgAdapter
           {
             using FunArgType = remove_reference_t<Arg>;
             static_assert (std::is_convertible<ARG, FunArgType>::value,
@@ -511,7 +511,7 @@ namespace lib {
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
         template<class IT>
-        struct ArgAccessor<IT,   enable_if<__and_<is_convertible<typename IT::value_type, Arg>
+        struct ArgAdapter<IT,   enable_if<__and_<is_convertible<typename IT::value_type, Arg>
                                                  ,__not_<is_convertible<IT, Arg>>>>>        // need to exclude the latter, since IterableDecorator
           {                                                                                //  often seems to accept IT::value_type (while in fact it doesn't)
             static auto build() { return [](auto& iter) { return *iter; }; }
@@ -519,7 +519,7 @@ namespace lib {
         
         /** adapt to a functor collaborating with an IterSource based iterator pipeline */
         template<class IT>
-        struct ArgAccessor<IT,   enable_if<__and_< is_base_of<IterSource<typename IT::value_type>, typename IT::Source>
+        struct ArgAdapter<IT,   enable_if<__and_< is_base_of<IterSource<typename IT::value_type>, typename IT::Source>
                                                  , is_base_of<IterSource<typename IT::value_type>, remove_reference_t<Arg>>
                                                  > >>
           {
@@ -538,7 +538,7 @@ namespace lib {
             Res
             operator() (ARG& arg)  const
               {
-                auto accessArg = ArgAccessor<ARG>::build();
+                auto accessArg = ArgAdapter<ARG>::build();
                 
                 return boundFunction (accessArg (arg));
               }
@@ -593,7 +593,7 @@ namespace lib {
      * the source iterator wrapped by this decorator.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
      *         _expansion functor_, there is a lot of minute technical details, mostly confined
-     *         within the _BoundFunctor traits.
+     *         within the _FunTraits traits.
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
@@ -602,7 +602,7 @@ namespace lib {
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctor<FUN,SRC>;
+        using _Traits = _FunTraits<FUN,SRC>;
         using ExpandFunctor = typename _Traits::Functor;
         
         using ResIter = typename _DecoratorTraits<typename _Traits::Res>::SrcIter;
@@ -782,7 +782,7 @@ namespace lib {
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctor<FUN,SRC>;
+        using _Traits = _FunTraits<FUN,SRC>;
         using Res = typename _Traits::Res;
         
         using TransformFunctor = typename _Traits::Functor;
@@ -869,7 +869,7 @@ namespace lib {
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctor<FUN,SRC>;
+        using _Traits = _FunTraits<FUN,SRC>;
         using Res = typename _Traits::Res;
         static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
         
@@ -967,7 +967,7 @@ namespace lib {
      *       be mixed and combined. To allow for this flexibility, we need to drive the _base class_
      *       with the most general form of a predicate functor, corresponding to `bool<SRC&>`.
      *       Hereby we exploit the fact that the _wrapped filter,_ i.e. the Functor type constructed
-     *       in the _BoundFunctor traits, boils down to that most generic form, adapting the arguments
+     *       in the _FunTraits traits, boils down to that most generic form, adapting the arguments
      *       automatically. Thus the initial functor, the one passed to the ctor of this class, is
      *       effectively wrapped twice, so it can be combined later on with any other form and
      *       shape of functor. And since everything is inline, the compiler will remove any
@@ -975,9 +975,9 @@ namespace lib {
      */
     template<class SRC, class FUN>
     class MutableFilter
-      : public Filter<SRC, typename _BoundFunctor<FUN,SRC>::Functor>
+      : public Filter<SRC, typename _FunTraits<FUN,SRC>::Functor>
       {
-        using _Traits = _BoundFunctor<FUN,SRC>;
+        using _Traits = _FunTraits<FUN,SRC>;
         using FilterPredicate = typename _Traits::Functor;
         using _Base = Filter<SRC,FilterPredicate>;
         
@@ -1119,7 +1119,7 @@ namespace lib {
         void
         remouldFilter (COND&& additionalClause, COMB buildCombinedClause)
           {
-            using _ChainTraits = _BoundFunctor<COND,SRC>;
+            using _ChainTraits = _FunTraits<COND,SRC>;
             using Res = typename _ChainTraits::Res;
             static_assert(std::is_constructible<bool, Res>::value, "Chained Functor must be a predicate");
             

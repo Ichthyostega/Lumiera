@@ -95,7 +95,7 @@ namespace iter {
         using Filter = decltype( buildSearchFilter(std::declval<SRC>()).asIterator() );
         
         using StepFunctor = std::function<Filter(Filter const&)>;
-        using StepWrapper = typename iter_explorer::_BoundFunctor<Filter(Filter const&), Filter const&>::Functor;
+        using StepWrapper = typename iter_explorer::_FunTraits<Filter(Filter const&), Filter const&>::Functor;
                                                                                       // ^^^^^^^^^^^^^ used as argument on generic lambda 
         using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
         
