@@ -194,7 +194,11 @@ namespace lib {
         , pos_()
         { }
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       /* === lumiera forward iterator concept === */
@@ -352,7 +356,11 @@ namespace lib {
         : core_()
         { }
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       /* === lumiera forward iterator concept === */
@@ -491,7 +499,11 @@ namespace lib {
         , e_(oIter.getEnd())
         { }
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       /* === lumiera forward iterator concept === */
@@ -599,7 +611,11 @@ namespace lib {
       
       // standard copy operations acceptable
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       
@@ -732,7 +748,11 @@ namespace lib {
         : i_(srcIter)
         { }
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       

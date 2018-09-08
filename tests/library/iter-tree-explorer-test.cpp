@@ -1188,7 +1188,7 @@ namespace test{
               bool
               checkPoint()  const
                 {
-                  return src;
+                  return bool{src};
                 }
               
               State&

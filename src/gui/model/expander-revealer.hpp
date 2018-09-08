@@ -107,6 +107,7 @@ namespace model {
              and bool{changeState_};
         }
       
+      explicit
       operator bool()  const
         {
           REQUIRE (canExpand());

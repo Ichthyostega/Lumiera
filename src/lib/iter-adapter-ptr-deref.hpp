@@ -141,7 +141,11 @@ namespace lib {
           return *this;
         }
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       
@@ -266,7 +270,11 @@ namespace lib {
           takeAddress();
         }
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       
