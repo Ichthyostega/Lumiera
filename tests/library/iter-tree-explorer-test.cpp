@@ -912,26 +912,26 @@ namespace test{
           
           
           // verify enabling and disabling...
-          auto seq2 = treeExplore(CountDown{10})
-                        .mutableFilter(takeTrd);
+          seq = treeExplore(CountDown{10})
+                  .mutableFilter(takeTrd);
           
-          CHECK (9 == *seq2);
-          seq2.disableFilter();
-          CHECK (9 == *seq2);
-          ++seq2;
-          CHECK (8 == *seq2);
-          seq2.andNotFilter (takeEve);
-          CHECK (7 == *seq2);
-          ++seq2;
-          CHECK (5 == *seq2);
-          seq2.disableFilter();
-          CHECK (5 == *seq2);
-          ++seq2;
-          CHECK (4 == *seq2);
-          ++seq2;
-          CHECK (3 == *seq2);
-          seq2.flipFilter();  // everything rejected
-          CHECK (isnil (seq2));
+          CHECK (9 == *seq);
+          seq.disableFilter();
+          CHECK (9 == *seq);
+          ++seq;
+          CHECK (8 == *seq);
+          seq.andNotFilter (takeEve);
+          CHECK (7 == *seq);
+          ++seq;
+          CHECK (5 == *seq);
+          seq.disableFilter();
+          CHECK (5 == *seq);
+          ++seq;
+          CHECK (4 == *seq);
+          ++seq;
+          CHECK (3 == *seq);
+          seq.flipFilter();  // everything rejected
+          CHECK (isnil (seq));
         }
       
       

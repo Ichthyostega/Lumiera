@@ -562,6 +562,24 @@ namespace lib {
       };
     
     
+    template<typename FUN, typename SRC>
+    inline void
+    static_assert_isPredicate()
+    {
+      using Res = typename _FunTraits<FUN,SRC>::Res;
+      static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
+    }
+    
+    template<typename FUN, typename SRC>
+    inline void
+    static_assert_isSourceResultCompatible()
+    {
+      using ResIter = typename _DecoratorTraits<typename _FunTraits<FUN,SRC>::Res>::SrcIter;
+      static_assert (std::is_convertible<typename ResIter::value_type, typename SRC::value_type>::value,
+                     "the iterator from the expansion must yield compatible values");
+    }
+    
+    
     
     /**
      * @internal Base of pipe processing decorator chain.
@@ -879,17 +897,14 @@ namespace lib {
      * The filter predicate and thus the source iterator is evaluated _eagerly_, to establish the
      * *invariant* of this class: _if a "current element" exists, it has already been approved._
      */
-    template<class SRC, class FUN>
+    template<class SRC>
     class Filter
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _FunTraits<FUN,SRC>;
-        using Res = typename _Traits::Res;
-        static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
         
       protected:
-        using FilterPredicate = typename _Traits::Functor;
+        using FilterPredicate = function<bool(SRC&)>;
         
         FilterPredicate predicate_;
         
@@ -898,9 +913,10 @@ namespace lib {
         Filter() =default;
         // inherited default copy operations
         
+        template<typename FUN>
         Filter (SRC&& dataSrc, FUN&& filterFun)
           : SRC{move (dataSrc)}
-          , predicate_{forward<FUN> (filterFun)}
+          , predicate_{_FunTraits<FUN,SRC>::template adaptFunctor<SRC> (forward<FUN> (filterFun))}
           {
             pullFilter(); // initially pull to establish the invariant
           }
@@ -947,7 +963,7 @@ namespace lib {
         bool
         isDisabled()  const
           {
-            return not predicate_.boundFunction;
+            return not bool{predicate_};
           }
         
         /** @note establishes the invariant:
@@ -979,34 +995,22 @@ namespace lib {
      * @remarks filter predicates can be specified in a wide variety of forms, and will be adapted
      *       automatically. This flexibility also holds for any of the additional clauses provided
      *       for remoulding the filter. Especially this means that functors of different kinds can
-     *       be mixed and combined. To allow for this flexibility, we need to drive the _base class_
-     *       with the most general form of a predicate functor, corresponding to `bool<SRC&>`.
-     *       Hereby we exploit the fact that the _wrapped filter,_ i.e. the Functor type constructed
-     *       in the _FunTraits traits, boils down to that most generic form, adapting the arguments
-     *       automatically. Thus the initial functor, the one passed to the ctor of this class, is
-     *       effectively wrapped twice, so it can be combined later on with any other form and
-     *       shape of functor. And since everything is inline, the compiler will remove any
-     *       overhead resulting from this redundant wrapping.
+     *       be mixed and combined.
      */
-    template<class SRC, class FUN>
+    template<class SRC>
     class MutableFilter
-      : public Filter<SRC, typename _FunTraits<FUN,SRC>::Functor>
+      : public Filter<SRC>
       {
-        using _Traits = _FunTraits<FUN,SRC>;
-        using FilterPredicate = typename _Traits::Functor;
-        using _Base = Filter<SRC,FilterPredicate>;
-        
+        using _Filter = Filter<SRC>;
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using Res = typename _Traits::Res;
-        static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
-        
         
       public:
         MutableFilter() =default;
         // inherited default copy operations
         
+        template<typename FUN>
         MutableFilter (SRC&& dataSrc, FUN&& filterFun)
-          : _Base{move (dataSrc), FilterPredicate{forward<FUN> (filterFun)}}
+          : _Filter{move (dataSrc), forward<FUN> (filterFun)}
           { }
         
         
@@ -1110,7 +1114,7 @@ namespace lib {
         void
         disableFilter()
           {
-            _Base::predicate_.boundFunction = nullptr;
+            _Filter::predicate_ = nullptr;
           }
         
         
@@ -1134,21 +1138,18 @@ namespace lib {
         void
         remouldFilter (COND&& additionalClause, COMB buildCombinedClause)
           {
-            using _ChainTraits = _FunTraits<COND,SRC>;
-            using Res = typename _ChainTraits::Res;
-            static_assert(std::is_constructible<bool, Res>::value, "Chained Functor must be a predicate");
+            static_assert_isPredicate<COND,SRC>();
             
-            using WrappedPredicate = typename _Base::FilterPredicate;
-            using ChainPredicate = typename _ChainTraits::Functor;
+            using WrappedPredicate = typename _Filter::FilterPredicate;
             
-            WrappedPredicate& firstClause = _Base::predicate_;             // pick up the existing filter predicate
-            ChainPredicate chainClause{forward<COND> (additionalClause)};  // wrap the extension predicate in a similar way
-            
-            if (_Base::isDisabled())
-              firstClause.boundFunction = ACCEPT_ALL;
+            WrappedPredicate& firstClause = _Filter::predicate_;             // pick up the existing filter predicate
+            WrappedPredicate chainClause{_FunTraits<COND,SRC>::template adaptFunctor<SRC> (forward<COND> (additionalClause))};
+                                                                             // wrap the extension predicate in a similar way
+            if (_Filter::isDisabled())
+              _Filter::predicate_ = ACCEPT_ALL;
                 
-            _Base::predicate_ = WrappedPredicate{buildCombinedClause (firstClause, chainClause)};
-            _Base::pullFilter();                                           // pull to re-establish the Invariant
+            _Filter::predicate_ = buildCombinedClause (firstClause, chainClause);
+            _Filter::pullFilter();                                           // pull to re-establish the Invariant
           }
       };
     
@@ -1455,7 +1456,9 @@ namespace lib {
       auto
       filter (FUN&& filterPredicate)
         {
-          using ResCore = iter_explorer::Filter<SRC, FUN>;
+          iter_explorer::static_assert_isPredicate<FUN,SRC>();
+          
+          using ResCore = iter_explorer::Filter<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
@@ -1483,7 +1486,9 @@ namespace lib {
       auto
       mutableFilter (FUN&& filterPredicate)
         {
-          using ResCore = iter_explorer::MutableFilter<SRC, FUN>;
+          iter_explorer::static_assert_isPredicate<FUN,SRC>();
+          
+          using ResCore = iter_explorer::MutableFilter<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
