@@ -21,13 +21,17 @@
 */
 
 
-/** @file iter-cursor.hpp
- ** An iterator with the ability to switch direction.
- ** This wrapper relies on the ability of typical STL container iterators
- ** to work in both directions, similar to std::reverse_iterator.
- ** Yet it is a single, self-contained element and in compliance to the
- ** ["Lumiera Forward Iterator"](iter-adapter.hpp) concept. But it has
- ** the additional ability to [switch the working direction](\ref IterCursor<IT>::switchDir).
+/** @file iter-chain-search.hpp
+ ** Evaluation mechanism to apply a sequence of conditions onto a linear search.
+ ** This search algorithm is implemented on top of a tree expanding (monadic) filter pipeline,
+ ** to allow for backtracking. The intention is not to combine the individual conditions, but
+ ** rather to apply them one by one. After finding a match for the first condition, we'll search
+ ** for the next condition _starting at the position of the previous match_. In the most general
+ ** case, this immediate progression down the search chain might be too greedy; it could be that
+ ** we don't find a match for the next condition, but if we backtrack and first search further
+ ** on the previous condition, continuing with the search from that further position might
+ ** then lead to a match. Basically we have to try all combinations of all possible local
+ ** matches, to find a solution to satisfy the whole chain of conditions.
  ** 
  ** @see IterCursor_test
  ** @see iter-adapter.hpp
@@ -130,8 +134,12 @@ namespace iter {
       using Filter = typename _Trait::Filter;
       using Step   = typename _Trait::StepFunctor;
       
-      std::vector<Step> stepChain_;
+      /** @internal access embedded filter sub-Pipeline */
+      Filter& filter() { return *this; }
       
+      /** Storage for a sequence of filter configuration functors */
+      std::vector<Step> stepChain_;
+
     public:
       /** Build a chain-search mechanism based on the given source data sequence.
        * @remark iterators will be copied or moved as appropriate, while from a STL compliant
@@ -144,7 +152,10 @@ namespace iter {
       IterChainSearch (SEQ&& srcData)
         : _Base{_Trait::configurePipeline (forward<SEQ> (srcData)
                                           ,[this](Filter const& curr){ return configureFilterChain(curr); })}
-        { }
+        , stepChain_{}
+        {       // mark initial pristine state
+          _Base::disableFilter();
+        }
       
       // inherited default ctor and standard copy operations
       using _Base::_Base;
@@ -170,8 +181,14 @@ namespace iter {
       IterChainSearch&&                             >
       search (FUN&& configureSearchStep)
         {
-          stepChain_.emplace_back (Step{forward<FUN> (configureSearchStep)});
-          this->iterNext();    // establish invariant: expand to leaf and forward to first match
+          Step nextStep{forward<FUN> (configureSearchStep)};
+          
+          if (_Base::isDisabled())
+            this-> filter() = move (nextStep (*this));     // immediately apply first step
+          else                                            //
+            stepChain_.emplace_back (move (nextStep));   //   append all further steps into the chain...
+                                                        //    then establish invariant:
+          this->iterNext();                            //     expand to leaf and forward to first match
           return move(*this);
         }
       
@@ -200,6 +217,7 @@ namespace iter {
         {
         //////////////////////////////////////////////////////TODO logically broken. We need also to get rid of the current expansions, while retaining the current position
           stepChain_.clear();
+          _Base::disableFilter();
           return move(*this);
         }
       
