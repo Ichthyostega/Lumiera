@@ -465,10 +465,10 @@ namespace lib {
      *   accepts the iterator or state core itself (the "opaque state manipulation" usage pattern).
      * - we generate a suitable argument accessor function and build the function composition
      *   of this accessor and the provided _expansion functor_.
-     * - the resulting, combined functor is stored into a std::function, but wired in a way to
-     *   keep the argument-accepting front-end still generic (templated `operator()`). This
-     *   special adapter supports the case when the _expansion functor_ yields a child sequence
-     *   type different but compatible to the original source sequence embedded in TreeExplorer.
+     * - the resulting, combined functor is stored into a std::function, thereby abstracting
+     *   from the actual adapting mechanism. This allows to combine different kinds of functors
+     *   within the same processing step; and in addition, it allows the processing step to
+     *   remain agnostic with respect to the adaptation and concrete type of the functor/lambda.
      * @tparam FUN either the signature, or something _"function-like"_ passed as functor to be bound
      * @tparam SRC (optional) but need to specify the source iterator type to apply when passing
      *             a generic lambda or template as FUN. Such a generic functor will be _instantiated_
@@ -509,9 +509,11 @@ namespace lib {
             static_assert (std::is_convertible<ARG, FunArgType>::value,
                            "the bound functor must accept the source iterator or state core as parameter");
             
-            static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
-            
-            static decltype(auto) wrap (FUN&& rawFunctor) { return forward<FUN> (rawFunctor); }
+            static decltype(auto)
+            wrap (FUN&& rawFunctor)  ///< actually pass-through the raw functor unaltered
+              {
+                return forward<FUN> (rawFunctor);
+              }
           };
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
@@ -519,9 +521,11 @@ namespace lib {
         struct ArgAdapter<IT,   enable_if<__and_<is_convertible<typename IT::value_type, Arg>
                                                  ,__not_<is_convertible<IT, Arg>>>>>        // need to exclude the latter, since IterableDecorator
           {                                                                                //  often seems to accept IT::value_type (while in fact it doesn't)
-            static auto build() { return [](auto& iter) { return *iter; }; }
-            
-            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& srcIter) -> Res { return rawFun(*srcIter); }; }
+            static auto
+            wrap (function<Sig> rawFun)          ///< adapt by dereferencing the source iterator
+              {
+                return [rawFun](IT& srcIter) -> Res { return rawFun(*srcIter); };
+              }
           };
         
         /** adapt to a functor collaborating with an IterSource based iterator pipeline */
@@ -532,27 +536,16 @@ namespace lib {
           {
             using Source = typename IT::Source;
             
-            static auto build() { return [](auto& iter) -> Source& { return iter.source(); }; }
-            
-            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& iter) -> Res { return rawFun(iter.source()); }; }
-          };
-        
-        
-        /** holder for the suitably adapted _expansion functor_ */
-        struct Functor
-          {
-            function<Sig> boundFunction;
-            
-            template<typename ARG>
-            Res
-            operator() (ARG& arg)  const
+            static auto
+            wrap (function<Sig> rawFun)       ///< extract the (abstracted) IterSource
               {
-                auto accessArg = ArgAdapter<ARG>::build();
-                
-                return boundFunction (accessArg (arg));
+                return [rawFun](IT& iter) -> Res { return rawFun(iter.source()); };
               }
           };
         
+        
+        
+        /** builder to create a nested/wrapping functor, suitably adapting the arguments */
         template<typename IT>
         static auto
         adaptFunctor (FUN&& rawFunctor)
@@ -618,7 +611,10 @@ namespace lib {
      * the source iterator wrapped by this decorator.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
      *         _expansion functor_, there is a lot of minute technical details, mostly confined
-     *         within the _FunTraits traits.
+     *         within the _FunTraits traits. For the same reason, we need to prepare two different
+     *         bindings of the passed raw functor, one to work on the source sequence, and the other
+     *         one to work on the result sequence of a recursive child expansions; these two sequences
+     *         need not be implemented in the same way, which simplifies the definition of algorithms.
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
@@ -651,6 +647,7 @@ namespace lib {
           , expandChild_{_FunTraits<FUN,ResIter>::template adaptFunctor<ResIter> (forward<FUN> (expandFunctor))}  // adapt to accept RES&
           , expansions_{}
           { }
+        
         
         
         /** core operation: expand current head element */
@@ -1189,6 +1186,7 @@ namespace lib {
         using Parent = WrappedLumieraIter<SRC>;
         using Val = typename SRC::value_type;                             ///////////////////////////////////TICKET #1125 : get rid of Val
         
+       ~PackagedTreeExplorerSource() { }
       public:
         using Parent::Parent;
         

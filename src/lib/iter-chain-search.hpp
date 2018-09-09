@@ -93,10 +93,8 @@ namespace iter {
     struct _IterChainSetup
       {
         using Filter = decltype( buildSearchFilter(std::declval<SRC>()).asIterator() );
-        
         using StepFunctor = std::function<Filter(Filter const&)>;
-        using StepWrapper = typename iter_explorer::_FunTraits<Filter(Filter const&), Filter const&>::Functor;
-                                                                                      // ^^^^^^^^^^^^^ used as argument on generic lambda 
+        
         using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
         
         static Pipeline
@@ -130,7 +128,7 @@ namespace iter {
       
       using Value  = typename _Base::value_type;
       using Filter = typename _Trait::Filter;
-      using Step   = typename _Trait::StepWrapper;
+      using Step   = typename _Trait::StepFunctor;
       
       std::vector<Step> stepChain_;
       
