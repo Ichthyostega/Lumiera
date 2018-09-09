@@ -25175,8 +25175,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;^~~~~~~~~~
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -31095,8 +31094,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536410408473" ID="ID_1812410133" MODIFIED="1536410416079" TEXT="Filter deaktivieren">
 <icon BUILTIN="pencil"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536367899301" ID="ID_1128977501" MODIFIED="1536367913469" TEXT="Neuzuweisung kompatibler Filter">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536367899301" ID="ID_1128977501" MODIFIED="1536514380198" TEXT="Neuzuweisung kompatibler Filter">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1536367916619" ID="ID_411753478" MODIFIED="1536367919774" TEXT="geht das?"/>
 <node CREATED="1536367921474" ID="ID_849620368" MODIFIED="1536367938773" TEXT="nur Signatur-Typ auf MutableFilter ">
 <icon BUILTIN="idea"/>
@@ -31136,9 +31135,9 @@
 </node>
 <node CREATED="1536409170928" ID="ID_1850744645" MODIFIED="1536409531056" TEXT="Design-Probleme">
 <icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535919506060" ID="ID_1587572708" MODIFIED="1536410313468" TEXT="heterogene Pr&#xe4;dikat-Typen">
+<node COLOR="#338800" CREATED="1535919506060" ID="ID_1587572708" MODIFIED="1536514384786" TEXT="heterogene Pr&#xe4;dikat-Typen">
 <linktarget COLOR="#616f95" DESTINATION="ID_1587572708" ENDARROW="Default" ENDINCLINATION="105;-232;" ID="Arrow_ID_346491515" SOURCE="ID_1859852045" STARTARROW="None" STARTINCLINATION="-143;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535919549942" ID="ID_270773242" MODIFIED="1536409271272" TEXT="das zu Beginn verwendete Filter-Pr&#xe4;dikat legt den Typ fest">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -31164,11 +31163,10 @@
       Typischerweise wird dieser ja sogar beim Aufruf des getemplateteten Funtions-Operators geInlined
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node COLOR="#338800" CREATED="1535919835337" ID="ID_619686338" MODIFIED="1536409289139" TEXT="1.L&#xf6;sung: doppelt wrappen?">
+<node COLOR="#338800" CREATED="1535919835337" FOLDED="true" ID="ID_619686338" MODIFIED="1536514373005" TEXT="1.L&#xf6;sung: doppelt wrappen?">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535923167297" ID="ID_1635196754" MODIFIED="1535923219590" TEXT="Basis-Filter sieht unspezifische Form des Pr&#xe4;dikates"/>
 <node CREATED="1535923237336" ID="ID_508718189" MODIFIED="1535923251434" TEXT="im Funktor steckt eingewickelt eine spezifische Form"/>
@@ -31203,6 +31201,15 @@
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1536514257510" ID="ID_1708992184" MODIFIED="1536514273317" TEXT="2.L&#xf6;sung: type erasure auf dem Funktor">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536514274780" ID="ID_767166560" MODIFIED="1536514286353" TEXT="l&#xe4;uft auch auf doppelt wrappen hinaus">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1536514288618" ID="ID_821501153" MODIFIED="1536514362703" TEXT="...nur machen wir das im umgebauten Desgin ohnehin immer">
+<arrowlink COLOR="#3163b8" DESTINATION="ID_389572303" ENDARROW="Default" ENDINCLINATION="1208;0;" ID="Arrow_ID_1470957358" STARTARROW="None" STARTINCLINATION="627;32;"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536409302285" ID="ID_913930564" MODIFIED="1536455982782" TEXT="extrem komplexe Typen">
 <icon BUILTIN="pencil"/>
@@ -31216,8 +31223,7 @@
       ...ich verbrenne Stunden beim Debuggen von neuem Code
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1536409470623" ID="ID_862991864" MODIFIED="1536409494631" TEXT="Ansatzpunkte">
@@ -31267,8 +31273,7 @@
       Konsequenz: brauche <b>Template</b>&#160;Funktions-Operator
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1536499557658" ID="ID_1939855291" MODIFIED="1536499572569" TEXT="daf&#xfc;r verschwindet konkreter Funktor-Typ vom Template">
@@ -31293,8 +31298,7 @@
       der Funktor f&#252;r den Expander wird <i>explizit als Sonderfall</i>&#160; aufgefa&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -31310,13 +31314,13 @@
       Daher ist jetzt das gesamte Design &quot;anders herum&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1536441367354" ID="ID_1778093460" MODIFIED="1536441424596" TEXT="welcher eine gegebene Funktion in eine vorgegebene function&lt;SIG&gt; einpasst"/>
 </node>
 </node>
-<node CREATED="1536451222025" HGAP="9" ID="ID_389572303" MODIFIED="1536451229468" TEXT="Umbau" VSHIFT="5">
+<node CREATED="1536451222025" HGAP="9" ID="ID_389572303" MODIFIED="1536514344935" TEXT="Umbau" VSHIFT="5">
+<linktarget COLOR="#3163b8" DESTINATION="ID_389572303" ENDARROW="Default" ENDINCLINATION="1208;0;" ID="Arrow_ID_1470957358" SOURCE="ID_821501153" STARTARROW="None" STARTINCLINATION="627;32;"/>
 <node COLOR="#338800" CREATED="1536451240308" ID="ID_241157222" MODIFIED="1536451273762" TEXT="den SRC-Parameter optional machen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -31338,8 +31342,7 @@
       ...wo der volle Typ des Funktors FUN bekannt ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1536451415725" ID="ID_1712691133" MODIFIED="1536451426247" TEXT="Bekommt SRC-Iterator als Template-Param"/>
 <node CREATED="1536451430508" ID="ID_224998497" MODIFIED="1536451471881" TEXT="wirft eine std::function&lt;Ret(SRC&amp;)&gt; ab"/>
@@ -31362,12 +31365,11 @@
       In dem Fall dann <b>keine</b>&#160;doppelte Verpackung mehr!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453317787" ID="ID_975974776" MODIFIED="1536453363634" TEXT="integrieren in...">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536453317787" ID="ID_975974776" MODIFIED="1536514227734" TEXT="integrieren in...">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536453326978" ID="ID_1071395763" MODIFIED="1536453367022" TEXT="Transformer">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536455906647" ID="ID_603515158" MODIFIED="1536455919470" TEXT="im Debugger beobachtet">
@@ -31384,8 +31386,122 @@
 <node COLOR="#338800" CREATED="1536453373605" ID="ID_1544724438" MODIFIED="1536499295024" TEXT="MutableFilter">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453408359" ID="ID_63715215" MODIFIED="1536453414663" TEXT="Anpassen an Expander">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536453408359" ID="ID_63715215" MODIFIED="1536514221593" TEXT="Anpassen an Expander">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536507478977" ID="ID_1869401041" MODIFIED="1536508603516" TEXT="zwei Alternativen">
+<icon BUILTIN="info"/>
+<node CREATED="1536507484384" ID="ID_1235979491" MODIFIED="1536507500681" TEXT="wie bisher">
+<node CREATED="1536507602416" ID="ID_42128364" MODIFIED="1536508634353" TEXT="konkreter Funktor Typ-Parameter">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1536507659208" ID="ID_35307754" MODIFIED="1536508637902" TEXT="Adapter im konkreten Aufruf">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1536507751800" ID="ID_941404287" MODIFIED="1536507757104" TEXT="in expandChildren()"/>
+<node CREATED="1536507757860" ID="ID_133943734" MODIFIED="1536507768814" TEXT="jeweils beide Varianten instantiiert"/>
+</node>
+<node CREATED="1536507818274" ID="ID_1978344432" MODIFIED="1536508645416" TEXT="Adapter-Lambda ruft (inneren) Basis-Funktor">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1536507882434" ID="ID_216951915" MODIFIED="1536507892221" TEXT="type erasure">
+<node CREATED="1536507918965" ID="ID_1992478190" MODIFIED="1536508652494" TEXT="expanded Iter als 2.Typ-Parameter">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1536507954841" ID="ID_281799195" MODIFIED="1536507969106" TEXT="weil wir ihn speichern m&#xfc;ssen"/>
+<node CREATED="1536507960432" ID="ID_164121163" MODIFIED="1536507962403" TEXT="im Stack"/>
+</node>
+<node CREATED="1536508021816" ID="ID_1317784150" MODIFIED="1536508682562" TEXT="m&#xfc;ssen zwei Funktoren speichern">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1536508097204" ID="ID_1486255600" MODIFIED="1536508101760" TEXT="unvermeidbar, egal wo"/>
+<node CREATED="1536508116330" ID="ID_156138966" MODIFIED="1536508135549">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da sich die Iteratoren <i>wirklich</i>&#160;unterscheiden k&#246;nnen d&#252;rfen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1536508169610" ID="ID_1935713564" MODIFIED="1536508703334" TEXT="beide Funktoren direkt in expandChildren() verwendet">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1536508188208" ID="ID_220313082" MODIFIED="1536508708301" TEXT="&#xe4;u&#xdf;erer Adapter-Funktor ruft inneren Basis-Funktor">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1536508254591" ID="ID_1794037057" MODIFIED="1536508268217" TEXT="mehr Overhead wie alte L&#xf6;sung"/>
+<node CREATED="1536508268765" ID="ID_1221492112" MODIFIED="1536508288165" TEXT="aber genauso viel wie f&#xfc;r die anderen F&#xe4;lle (neue L&#xf6;sung)"/>
+<node CREATED="1536508292026" ID="ID_775504670" MODIFIED="1536508307124" TEXT="verwendet gleichen Code, Funktor-struct f&#xe4;llt weg"/>
+</node>
+</node>
+</node>
+<node CREATED="1536508310935" ID="ID_838394264" MODIFIED="1536508324120" TEXT="Entscheidung: type erasure">
+<icon BUILTIN="forward"/>
+<node CREATED="1536508326877" ID="ID_206041639" MODIFIED="1536508777424" TEXT="die gesamte neue L&#xf6;sung ist etwas aufwendiger zur Laufzeit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wobei der konkrete Overhead noch nicht wirklich klar ist;
+    </p>
+    <p>
+      h&#228;ngt davon ab, wie geschickt der Optimizer ist, und was man konkret als Funktoren angibt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Vermutlich haben wir hier
+    </p>
+    <ul>
+      <li>
+        zwingend eine Indirektion durch einen Funktions-Pointer (weil eine Type Erasure stattfindet)
+      </li>
+      <li>
+        m&#246;glicherweise eine zus&#228;tzliche Heap-Allocation (es sei denn, der Optimizer ist wirklich clever)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="down"/>
+</node>
+<node CREATED="1536508343419" ID="ID_1905482399" MODIFIED="1536508782549" TEXT="und hat daf&#xfc;r einfacheren Code und klarere Template-Argumente">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und <b>das</b>&#160;ist das Argument, das sticht
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="up"/>
+</node>
+<node CREATED="1536508376894" ID="ID_1216206461" MODIFIED="1536508787136" TEXT="Erhalten der alten L&#xf6;sung w&#xfc;rde zwei redundante Code-Pfade erfordern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...will sagen, wenn schon eine neue L&#246;sung, dann von A bis Z
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="up"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1536514206125" HGAP="-18" ID="ID_1018008959" MODIFIED="1536514219722" TEXT="Implementierung umschreiben" VSHIFT="13">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453419141" ID="ID_564310637" MODIFIED="1536453427198" TEXT="vereinfachen">
@@ -31504,8 +31620,7 @@
       die Search-Engine bl&#228;ht die Debug-Infos <b>gewaltig</b>&#160;auf
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1536368144661" ID="ID_184622907" MODIFIED="1536368158636" TEXT="BusTerm_test = 12 MB">
 <icon BUILTIN="smiley-angry"/>
 </node>
@@ -31602,8 +31717,7 @@
       und man kann die Expand-Funktion direkt als std::function-Objekt durchgeben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -31626,8 +31740,7 @@
       f&#252;r sp&#228;teres Backtracking...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1536345349807" ID="ID_219089137" MODIFIED="1536345462776" TEXT="TreeExplorer strippen">
 <icon BUILTIN="button_ok"/>
@@ -31641,8 +31754,7 @@
       ...damit man stets weitere Builder-Funktionen auf der Pipeline aufrufen kann
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1536345386770" ID="ID_1554908631" MODIFIED="1536345421597" TEXT="wir brauchen aber den Filter-Iterator selber">
 <richcontent TYPE="NOTE"><html>
@@ -31654,8 +31766,7 @@
       weil wir <i>diesen</i>&#160;manipulieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1536345422997" ID="ID_1977741990" MODIFIED="1536345460034" TEXT="nur so kann man eine Referenz auf den Zustand in den Expand-Funktor geben">
 <arrowlink DESTINATION="ID_1232898317" ENDARROW="Default" ENDINCLINATION="550;0;" ID="Arrow_ID_1329838760" STARTARROW="None" STARTINCLINATION="109;0;"/>
@@ -31801,8 +31912,7 @@
       sofern eine Initialisierung ausidem Source-Iterator <i>m&#246;glich ist</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1536271209768" ID="ID_1767817102" MODIFIED="1536271396476" TEXT="...weil es dann grunds&#xe4;tzch nicht notwendig ist, eigens etwas zu tun"/>
 </node>
@@ -31817,8 +31927,7 @@
       und sonst ist das <i>nicht wirklich</i>&#160;&quot;kniffelig&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -31846,8 +31955,7 @@
       dann <i>sollte </i>der Optimizer diese gesamten x-fachen Wrapper nahezu restlos entfernen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
@@ -31917,8 +32025,7 @@
       Und der Basis-Layer steht irgendwo, nicht an der aktuellen Position.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#60a2d5" DESTINATION="ID_33678789" ENDARROW="Default" ENDINCLINATION="315;0;" ID="Arrow_ID_1930258825" STARTARROW="None" STARTINCLINATION="106;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>

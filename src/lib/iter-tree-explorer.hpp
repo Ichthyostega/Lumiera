@@ -511,7 +511,7 @@ namespace lib {
             
             static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
             
-            static auto wrap (FUN&& rawFunctor) { return forward<FUN> (rawFunctor); }
+            static decltype(auto) wrap (FUN&& rawFunctor) { return forward<FUN> (rawFunctor); }
           };
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
@@ -521,7 +521,7 @@ namespace lib {
           {                                                                                //  often seems to accept IT::value_type (while in fact it doesn't)
             static auto build() { return [](auto& iter) { return *iter; }; }
             
-            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& srcIter) { return rawFun(*srcIter); }; }
+            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& srcIter) -> Res { return rawFun(*srcIter); }; }
           };
         
         /** adapt to a functor collaborating with an IterSource based iterator pipeline */
@@ -534,7 +534,7 @@ namespace lib {
             
             static auto build() { return [](auto& iter) -> Source& { return iter.source(); }; }
             
-            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& iter) { return rawFun(*iter.source()); }; }
+            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& iter) -> Res { return rawFun(iter.source()); }; }
           };
         
         
@@ -568,15 +568,6 @@ namespace lib {
     {
       using Res = typename _FunTraits<FUN,SRC>::Res;
       static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
-    }
-    
-    template<typename FUN, typename SRC>
-    inline void
-    static_assert_isSourceResultCompatible()
-    {
-      using ResIter = typename _DecoratorTraits<typename _FunTraits<FUN,SRC>::Res>::SrcIter;
-      static_assert (std::is_convertible<typename ResIter::value_type, typename SRC::value_type>::value,
-                     "the iterator from the expansion must yield compatible values");
     }
     
     
@@ -631,28 +622,33 @@ namespace lib {
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
-    template<class SRC, class FUN>
+    template<class SRC, class RES>
     class Expander
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _FunTraits<FUN,SRC>;
-        using ExpandFunctor = typename _Traits::Functor;
         
-        using ResIter = typename _DecoratorTraits<typename _Traits::Res>::SrcIter;
-        static_assert (std::is_convertible<typename ResIter::value_type, typename SRC::value_type>::value,
+        using ResIter = typename _DecoratorTraits<RES>::SrcIter;
+        static_assert (std::is_convertible<typename ResIter::value_type, typename SRC::value_type>(),
                        "the iterator from the expansion must yield compatible values");
         
-        ExpandFunctor expandChildren_;
+        using RootExpandFunctor = function<RES(SRC&)>;
+        using ChldExpandFunctor = function<RES(ResIter&)>;
+        
+        RootExpandFunctor expandRoot_;
+        ChldExpandFunctor expandChild_;
+        
         IterStack<ResIter> expansions_;
         
       public:
         Expander() =default;
         // inherited default copy operations
         
+        template<typename FUN>
         Expander (SRC&& parentExplorer, FUN&& expandFunctor)
           : SRC{move (parentExplorer)}                           // NOTE: slicing move to strip TreeExplorer (Builder)
-          , expandChildren_{forward<FUN> (expandFunctor)}
+          , expandRoot_ {_FunTraits<FUN,SRC>    ::template adaptFunctor<SRC>     (forward<FUN> (expandFunctor))}  // adapt to accept SRC&
+          , expandChild_{_FunTraits<FUN,ResIter>::template adaptFunctor<ResIter> (forward<FUN> (expandFunctor))}  // adapt to accept RES&
           , expansions_{}
           { }
         
@@ -663,8 +659,8 @@ namespace lib {
           {
             REQUIRE (this->checkPoint(), "attempt to expand an empty explorer");
             
-            ResIter expanded{ hasChildren()? expandChildren_(*expansions_)
-                                           : expandChildren_(*this)};
+            ResIter expanded{ hasChildren()? expandChild_(*expansions_)
+                                           : expandRoot_(*this)};
             incrementCurrent();   // consume current head element (but don't clean-up)
             if (not isnil(expanded))
               expansions_.push (move(expanded));
@@ -834,7 +830,7 @@ namespace lib {
         
         template<typename FUN>
         Transformer (SRC&& dataSrc, FUN&& transformFunctor)
-          : SRC{move (dataSrc)}
+          : SRC{move (dataSrc)}                            // NOTE: slicing move to strip TreeExplorer (Builder)
           , trafo_{_FunTraits<FUN,SRC>::template adaptFunctor<SRC> (forward<FUN> (transformFunctor))}
           { }
         
@@ -1376,7 +1372,9 @@ namespace lib {
       auto
       expand (FUN&& expandFunctor)
         {
-          using ResCore = iter_explorer::Expander<SRC, FUN>;
+          using ExpandedChildren = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
+          
+          using ResCore = iter_explorer::Expander<SRC, ExpandedChildren>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
