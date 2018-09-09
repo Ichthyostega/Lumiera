@@ -31269,7 +31269,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1536441211468" ID="ID_435661366" MODIFIED="1536441216296" TEXT="L&#xf6;sungs-Idee">
+<node CREATED="1536441211468" HGAP="84" ID="ID_435661366" MODIFIED="1536451220949" TEXT="L&#xf6;sungs-Idee" VSHIFT="15">
 <node CREATED="1536441217427" ID="ID_1508660342" MODIFIED="1536441270931" TEXT="die Signatur im Builder konstruieren. Traits nur noch auf Signatur abst&#xfc;tzen">
 <icon BUILTIN="full-1"/>
 </node>
@@ -31306,6 +31306,57 @@
 </richcontent>
 </node>
 <node CREATED="1536441367354" ID="ID_1778093460" MODIFIED="1536441424596" TEXT="welcher eine gegebene Funktion in eine vorgegebene function&lt;SIG&gt; einpasst"/>
+</node>
+</node>
+<node CREATED="1536451222025" HGAP="9" ID="ID_389572303" MODIFIED="1536451229468" TEXT="Umbau" VSHIFT="5">
+<node COLOR="#338800" CREATED="1536451240308" ID="ID_241157222" MODIFIED="1536451273762" TEXT="den SRC-Parameter optional machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1536451256034" ID="ID_645889218" MODIFIED="1536451285944" TEXT="FunTraits sind idempotent">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1536451303308" ID="ID_1343290323" MODIFIED="1536451313142" TEXT="man kann sie mit dem Funktor aufrufen -&gt; Sig"/>
+<node CREATED="1536451313778" ID="ID_439029617" MODIFIED="1536451336475" TEXT="man kann sie mit Sig aufrufen -&gt; Arg, Ret"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536451345998" ID="ID_1853688774" MODIFIED="1536451360667" TEXT="Funktor-Konstruktor-Funktion">
+<icon BUILTIN="pencil"/>
+<node CREATED="1536451365731" ID="ID_552359289" MODIFIED="1536451394878" TEXT="f&#xfc;r Aufruf aus dem Konstruktor-Kontext">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wo der volle Typ des Funktors FUN bekannt ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1536451415725" ID="ID_1712691133" MODIFIED="1536451426247" TEXT="Bekommt SRC-Iterator als Template-Param"/>
+<node CREATED="1536451430508" ID="ID_224998497" MODIFIED="1536451471881" TEXT="wirft eine std::function&lt;Ret(SRC&amp;)&gt; ab"/>
+<node CREATED="1536451473013" ID="ID_1179844665" MODIFIED="1536451543886" TEXT="in die der eigentliche Funktor geeignet adaptiert ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und in dem besonders wichtigen Fall,
+    </p>
+    <p>
+      in dem der Funktor direkt den SRC-Iterator akzeptiert,
+    </p>
+    <p>
+      wird er ohne Weiteres durchgereicht.
+    </p>
+    <p>
+      In dem Fall dann <b>keine</b>&#160;doppelte Verpackung mehr!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>

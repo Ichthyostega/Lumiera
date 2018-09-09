@@ -475,7 +475,7 @@ namespace lib {
      *             passing the type `SRC&` as argument. This instantiation may fail (and abort compilation),
      *             but when it succeeds, we can infer the result type `Res` from the generic lambda
      */
-    template<class SIG, typename SRC =void>
+    template<class FUN, typename SRC =void>
     struct _FunTraits
       {
         /** handle all regular "function-like" entities */
@@ -495,7 +495,7 @@ namespace lib {
           };
         
         
-        using Sig = typename FunDetector<SIG>::Sig;
+        using Sig = typename FunDetector<FUN>::Sig;
         using Arg = typename _Fun<Sig>::Args::List::Head;  // assuming function with a single argument
         using Res = typename _Fun<Sig>::Ret;
         
@@ -510,6 +510,8 @@ namespace lib {
                            "the bound functor must accept the source iterator or state core as parameter");
             
             static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
+            
+            static auto wrap (FUN&& rawFunctor) { return forward<FUN> (rawFunctor); }
           };
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
@@ -518,6 +520,8 @@ namespace lib {
                                                  ,__not_<is_convertible<IT, Arg>>>>>        // need to exclude the latter, since IterableDecorator
           {                                                                                //  often seems to accept IT::value_type (while in fact it doesn't)
             static auto build() { return [](auto& iter) { return *iter; }; }
+            
+            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& srcIter) { return rawFun(*srcIter); }; }
           };
         
         /** adapt to a functor collaborating with an IterSource based iterator pipeline */
@@ -529,6 +533,8 @@ namespace lib {
             using Source = typename IT::Source;
             
             static auto build() { return [](auto& iter) -> Source& { return iter.source(); }; }
+            
+            static auto wrap (function<Sig> rawFun) { return [rawFun](IT& iter) { return rawFun(*iter.source()); }; }
           };
         
         
@@ -546,6 +552,13 @@ namespace lib {
                 return boundFunction (accessArg (arg));
               }
           };
+        
+        template<typename IT>
+        static auto
+        adaptFunctor (FUN&& rawFunctor)
+          {
+            return function<Res(IT&)> {ArgAdapter<IT>::wrap (forward<FUN> (rawFunctor))};
+          }
       };
     
     
