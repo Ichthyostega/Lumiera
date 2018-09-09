@@ -546,11 +546,10 @@ namespace lib {
         
         
         /** builder to create a nested/wrapping functor, suitably adapting the arguments */
-        template<typename IT>
         static auto
         adaptFunctor (FUN&& rawFunctor)
           {
-            return function<Res(IT&)> {ArgAdapter<IT>::wrap (forward<FUN> (rawFunctor))};
+            return function<Res(SRC&)> {ArgAdapter<SRC>::wrap (forward<FUN> (rawFunctor))};
           }
       };
     
@@ -642,9 +641,9 @@ namespace lib {
         
         template<typename FUN>
         Expander (SRC&& parentExplorer, FUN&& expandFunctor)
-          : SRC{move (parentExplorer)}                           // NOTE: slicing move to strip TreeExplorer (Builder)
-          , expandRoot_ {_FunTraits<FUN,SRC>    ::template adaptFunctor<SRC>     (forward<FUN> (expandFunctor))}  // adapt to accept SRC&
-          , expandChild_{_FunTraits<FUN,ResIter>::template adaptFunctor<ResIter> (forward<FUN> (expandFunctor))}  // adapt to accept RES&
+          : SRC{move (parentExplorer)}                   // NOTE: slicing move to strip TreeExplorer (Builder)
+          , expandRoot_ {_FunTraits<FUN,SRC>    ::adaptFunctor (forward<FUN> (expandFunctor))}  // adapt to accept SRC&
+          , expandChild_{_FunTraits<FUN,ResIter>::adaptFunctor (forward<FUN> (expandFunctor))}  // adapt to accept RES&
           , expansions_{}
           { }
         
@@ -828,7 +827,7 @@ namespace lib {
         template<typename FUN>
         Transformer (SRC&& dataSrc, FUN&& transformFunctor)
           : SRC{move (dataSrc)}                            // NOTE: slicing move to strip TreeExplorer (Builder)
-          , trafo_{_FunTraits<FUN,SRC>::template adaptFunctor<SRC> (forward<FUN> (transformFunctor))}
+          , trafo_{_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (transformFunctor))}
           { }
         
         
@@ -909,7 +908,7 @@ namespace lib {
         template<typename FUN>
         Filter (SRC&& dataSrc, FUN&& filterFun)
           : SRC{move (dataSrc)}
-          , predicate_{_FunTraits<FUN,SRC>::template adaptFunctor<SRC> (forward<FUN> (filterFun))}
+          , predicate_{_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (filterFun))}
           {
             pullFilter(); // initially pull to establish the invariant
           }
@@ -1133,16 +1132,13 @@ namespace lib {
           {
             static_assert_isPredicate<COND,SRC>();
             
-            using WrappedPredicate = typename _Filter::FilterPredicate;
-            
-            WrappedPredicate& firstClause = _Filter::predicate_;             // pick up the existing filter predicate
-            WrappedPredicate chainClause{_FunTraits<COND,SRC>::template adaptFunctor<SRC> (forward<COND> (additionalClause))};
-                                                                             // wrap the extension predicate in a similar way
             if (_Filter::isDisabled())
               _Filter::predicate_ = ACCEPT_ALL;
-                
-            _Filter::predicate_ = buildCombinedClause (firstClause, chainClause);
-            _Filter::pullFilter();                                           // pull to re-establish the Invariant
+            
+            _Filter::predicate_ = buildCombinedClause (_Filter::predicate_   // pick up the existing filter predicate
+                                                      ,_FunTraits<COND,SRC>::adaptFunctor (forward<COND> (additionalClause))
+                                                      );                   //   wrap the extension predicate in a similar way
+            _Filter::pullFilter();                                        //    then pull to re-establish the Invariant
           }
       };
     
