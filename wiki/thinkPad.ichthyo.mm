@@ -31200,8 +31200,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536409302285" ID="ID_913930564" MODIFIED="1536409311669" TEXT="extrem komplexe Typen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536409302285" ID="ID_913930564" MODIFIED="1536455982782" TEXT="extrem komplexe Typen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1536409316172" ID="ID_1468538186" MODIFIED="1536409340127" TEXT="Call-Traces sind nahezu unlesbar">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -31318,8 +31318,8 @@
 <node CREATED="1536451303308" ID="ID_1343290323" MODIFIED="1536451313142" TEXT="man kann sie mit dem Funktor aufrufen -&gt; Sig"/>
 <node CREATED="1536451313778" ID="ID_439029617" MODIFIED="1536451336475" TEXT="man kann sie mit Sig aufrufen -&gt; Arg, Ret"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536451345998" ID="ID_1853688774" MODIFIED="1536451360667" TEXT="Funktor-Konstruktor-Funktion">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536451345998" ID="ID_1853688774" MODIFIED="1536453357128" TEXT="Funktor-Konstruktor-Funktion">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1536451365731" ID="ID_552359289" MODIFIED="1536451394878" TEXT="f&#xfc;r Aufruf aus dem Konstruktor-Kontext">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -31357,6 +31357,31 @@
 </html>
 </richcontent>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453317787" ID="ID_975974776" MODIFIED="1536453363634" TEXT="integrieren in...">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536453326978" ID="ID_1071395763" MODIFIED="1536453367022" TEXT="Transformer">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1536455906647" ID="ID_603515158" MODIFIED="1536455919470" TEXT="im Debugger beobachtet">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1536455920701" ID="ID_1992285034" MODIFIED="1536455938637" TEXT="&#xe4;u&#xdf;erer Funktor liegt im Heap">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1536455947209" ID="ID_1054869208" MODIFIED="1536455959131" TEXT="innerer Funktor ist aber direkt dort eingebettet"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453368676" ID="ID_1560078731" MODIFIED="1536453372397" TEXT="Filter">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453373605" ID="ID_1544724438" MODIFIED="1536453376828" TEXT="MutableFilter">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453408359" ID="ID_63715215" MODIFIED="1536453414663" TEXT="Anpassen an Expander">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536453419141" ID="ID_564310637" MODIFIED="1536453427198" TEXT="vereinfachen">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

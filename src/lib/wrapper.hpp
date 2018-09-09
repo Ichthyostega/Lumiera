@@ -185,11 +185,13 @@ namespace wrapper {
       
       explicit
       ItemWrapper(TY const& o)
+        : created_(false)
         {
           build (o);
         }
       explicit
       ItemWrapper(TY && ro)
+        : created_(false)
         {
           build (std::move(ro));
         }

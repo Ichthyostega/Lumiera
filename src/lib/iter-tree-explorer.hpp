@@ -793,32 +793,31 @@ namespace lib {
      * is adapted in a similar way as the "expand functor", so to detect and convert the
      * expected input on invocation.
      */
-    template<class SRC, class FUN>
+    template<class SRC, class RES>
     class Transformer
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _FunTraits<FUN,SRC>;
-        using Res = typename _Traits::Res;
         
-        using TransformFunctor = typename _Traits::Functor;
-        using TransformedItem = wrapper::ItemWrapper<Res>;
+        using TransformFunctor = function<RES(SRC&)>;
+        using TransformedItem = wrapper::ItemWrapper<RES>;
         
         TransformFunctor trafo_;
         TransformedItem treated_;
         
       public:
-        using value_type = typename meta::TypeBinding<Res>::value_type;
-        using reference  = typename meta::TypeBinding<Res>::reference;
-        using pointer    = typename meta::TypeBinding<Res>::pointer;
+        using value_type = typename meta::TypeBinding<RES>::value_type;
+        using reference  = typename meta::TypeBinding<RES>::reference;
+        using pointer    = typename meta::TypeBinding<RES>::pointer;
         
         
         Transformer() =default;
         // inherited default copy operations
         
+        template<typename FUN>
         Transformer (SRC&& dataSrc, FUN&& transformFunctor)
           : SRC{move (dataSrc)}
-          , trafo_{forward<FUN> (transformFunctor)}
+          , trafo_{_FunTraits<FUN,SRC>::template adaptFunctor<SRC> (forward<FUN> (transformFunctor))}
           { }
         
         
@@ -1437,7 +1436,9 @@ namespace lib {
       auto
       transform (FUN&& transformFunctor)
         {
-          using ResCore = iter_explorer::Transformer<SRC, FUN>;
+          using Product = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
+          
+          using ResCore = iter_explorer::Transformer<SRC, Product>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});

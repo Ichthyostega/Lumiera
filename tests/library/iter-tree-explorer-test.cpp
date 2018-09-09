@@ -518,6 +518,7 @@ namespace test{
                       ;
           
           CHECK (14 == *ii);
+          CHECK (14 == *ii);
           ++ii;
           CHECK (12 == *ii);
           ++ii;
