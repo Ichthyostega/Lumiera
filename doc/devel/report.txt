@@ -6,13 +6,13 @@ Statistics and Reports
 
 ++++++++++++++++++++++++++++++++++++++
 <div style="float:left">
-<script type="text/javascript" src="http://www.openhub.net/p/13239/widgets/project_basic_stats.js"></script>
+<script type='text/javascript' src='https://www.openhub.net/p/lumiera/widgets/project_basic_stats?format=js'></script>
 </div>
 ++++++++++++++++++++++++++++++++++++++
 
 ++++++++++++++++++++++++++++++++++++++
 <div style="float:right; margin-left: 2em;">
-<script type="text/javascript" src="http://www.openhub.net/p/13239/widgets/project_cocomo.js"></script>
+<script type='text/javascript' src='https://www.openhub.net/p/lumiera/widgets/project_cocomo?format=js'></script>
 </div>
 <p style="clear:both" />
 ++++++++++++++++++++++++++++++++++++++
