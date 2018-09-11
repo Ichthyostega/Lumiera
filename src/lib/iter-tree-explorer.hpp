@@ -187,6 +187,7 @@ namespace lib {
         COR &      _core()       { return static_cast<COR&>       (*this); }
         COR const& _core() const { return static_cast<COR const&> (*this); }
         
+      protected:
         void
         __throw_if_empty()  const
           {
@@ -754,6 +755,7 @@ namespace lib {
         void
         iterNext()
           {
+            SRC::__throw_if_empty();
             SRC::expandChildren();
           }
       };
@@ -786,6 +788,7 @@ namespace lib {
           {
             if (shallExpand_)
               {
+                SRC::__throw_if_empty();
                 SRC::expandChildren();
                 shallExpand_ = false;
               }

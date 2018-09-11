@@ -181,14 +181,17 @@ namespace iter {
       IterChainSearch&&                             >
       search (FUN&& configureSearchStep)
         {
-          Step nextStep{forward<FUN> (configureSearchStep)};
-          
-          if (_Base::isDisabled())
-            this-> filter() = move (nextStep (*this));     // immediately apply first step
-          else                                            //
-            stepChain_.emplace_back (move (nextStep));   //   append all further steps into the chain...
-                                                        //    then establish invariant:
-          this->iterNext();                            //     expand to leaf and forward to first match
+          if (not this->empty())
+            {
+              Step nextStep{forward<FUN> (configureSearchStep)};
+              
+              if (_Base::isDisabled())
+                this-> filter() = move (nextStep (*this));     // immediately apply first step
+              else                                            //
+                stepChain_.emplace_back (move (nextStep));   //   append all further steps into the chain...
+                                                            //    then establish invariant:
+              this->iterNext();                            //     expand to leaf and forward to first match
+            }
           return move(*this);
         }
       
