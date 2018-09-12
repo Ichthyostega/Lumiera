@@ -161,6 +161,7 @@ Version limitation::
 ------------------------------------------------------------
 git clone git://git.lumiera.org/debian/gdlmm
 cd gdlmm
+git checkout debian
 ./configure
 make
 sudo make install
