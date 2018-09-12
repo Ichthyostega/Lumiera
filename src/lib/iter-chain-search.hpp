@@ -213,14 +213,14 @@ namespace iter {
       
       /** drop all search condition frames.
        * @remark the filter chain becomes empty,
-       *         passing through the unaltered
-       *         source sequence
+       *         passing through the reset of the
+       *         source sequence unaltered
        */
       IterChainSearch&&
       clearFilter()
         {
-        //////////////////////////////////////////////////////TODO logically broken. We need also to get rid of the current expansions, while retaining the current position
           stepChain_.clear();
+          _Base::rootCurrent();
           _Base::disableFilter();
           return move(*this);
         }

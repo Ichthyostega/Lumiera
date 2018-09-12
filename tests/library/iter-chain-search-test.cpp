@@ -132,7 +132,12 @@ namespace test{
       
       
       
-      /** @test verify the
+      /** @test verify consecutive application of several functors on the underlying filter.
+       * In the general case, each step in the chain is a function working on a copy of the
+       * current filter state. Since each such step configures its own copy of the complete
+       * pipeline, it may reconfigure this filter pipeline in arbitrary ways. After exhausting
+       * the last layer, the evaluation returns to the previous layer, but immediately re-applies
+       * the configuration step on the then next element.
        */
       void
       chainedIteration ()
@@ -141,7 +146,13 @@ namespace test{
       
       
       
-      /** @test verify the
+      /** @test verify a complex search with backtracking.
+       * This becomes relevant when a given search condition can be "too greedy" for the
+       * complete chain to succeed. Most notably this is the case when the search is fundamentally
+       * reconfigured in some steps, e.g. by switching the search orientation. To demonstrate this,
+       * we use a "gear switching" iterator, which allows us to reverse the direction and to search
+       * backwards from the current position. We configure the second condition in the chain such
+       * that it can not succeed when starting from the first match on the first condition
        */
       void
       backtracking ()
