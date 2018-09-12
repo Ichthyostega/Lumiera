@@ -155,6 +155,12 @@ namespace lib {
           return topElement;
         }
       
+      void
+      clear()
+        {
+          this->stateCore().clear();
+        }
+      
       
       /* == diagnostics == */
       

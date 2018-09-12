@@ -674,6 +674,19 @@ namespace lib {
             return expansions_.size();
           }
         
+        /** lock into the current child sequence.
+         * This special feature turns the current child sequence into the new root,
+         * thereby discarding everything else in the expansions stack, including the
+         * original root sequence.
+         */
+        void
+        rootCurrent()
+          {
+            if (not hasChildren()) return;
+            static_cast<SRC&> (*this) = move (*expansions_);
+            expansions_.clear();
+          }
+        
         
       public: /* === Iteration control API for IterableDecorator === */
         

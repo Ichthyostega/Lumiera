@@ -272,6 +272,7 @@ namespace test{
           verify_wrappedIterator();
           
           verify_expandOperation();
+          verify_expand_rootCurrent();
           verify_transformOperation();
           verify_combinedExpandTransform();
           verify_scheduledExpansion();
@@ -484,6 +485,53 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
         }
+      
+      
+      /** @test special feature of the Expander to lock into current child sequence.
+       * This feature was added to support a specific use-case in the IterChainSearch component.
+       * After expanding several levels deep into a tree, it allows to turn the _current child sequence_
+       * into a new root sequence and discard the whole rest of the tree, including the original root sequence.
+       * It is implemented by moving the current child sequence down into the root sequence. We demonstrate
+       * this behaviour with the simple standard setup from #verify_expandOperation()
+       */
+      void
+      verify_expand_rootCurrent()
+        {
+          auto tree = treeExplore(CountDown{25})
+                        .expand([](uint j){ return CountDown{j-1}; });
+          
+          CHECK (materialise(tree) == "25-24-23-22-21-20-19-18-17-16-15-14-13-12-11-10-9-8-7-6-5-4-3-2-1");
+          
+          CHECK (0 == tree.depth());
+          CHECK (25 == *tree);
+          ++tree;
+          ++tree;
+          ++tree;
+          ++tree;
+          CHECK (21 == *tree);
+          tree.expandChildren();
+          CHECK (1 == tree.depth());
+          ++tree;
+          ++tree;
+          ++tree;
+          ++tree;
+          ++tree;
+          CHECK (15 == *tree);
+          tree.expandChildren();
+          ++tree;
+          ++tree;
+          CHECK (2 == tree.depth());
+          CHECK (materialise(tree) == "12-11-10-9-8-7-6-5-4-3-2-1-"                          // this is the level-2 child sequence
+                                      "14-13-12-11-10-9-8-7-6-5-4-3-2-1-"                    // ...returning to the rest of the level-1 sequence
+                                      "20-19-18-17-16-15-14-13-12-11-10-9-8-7-6-5-4-3-2-1"); // ...followed by the rest of the original root sequence
+          CHECK (12 == *tree);
+          
+          tree.rootCurrent();
+          CHECK (12 == *tree);
+          CHECK (materialise(tree) == "12-11-10-9-8-7-6-5-4-3-2-1");  // note: level-2 continues unaltered, but level-1 and the original root are gone.
+          CHECK (0 == tree.depth());
+        }
+      
       
       
       /** @test pipe each result through a transformation function.
