@@ -157,6 +157,11 @@ the following shows how to build the latter
 Version limitation::
   we rely on GTK-3 and thus need a compatible GDL-3.
 
+There is a dependency on `xmlto`, which is an xml converter. To install on Debian: 
+
+------------------------------------------------------------
+apt-get install xmlto
+------------------------------------------------------------
 
 ------------------------------------------------------------
 git clone git://git.lumiera.org/debian/gdlmm
