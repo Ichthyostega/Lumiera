@@ -24,7 +24,7 @@ behind Lumiera to start working with Lumiera quickly.
 
 .About this Document
 Lumiera is innovative video editing software, still under active development
-by an open-source community. This document acts as introduction. We try to start
+by an open-source community. This document acts as an introduction. We try to start
 with a broad overview, then explain some core concepts towards the end.
 We describe planned features here without explicitly tagging them as such and we
 omit technical details.
