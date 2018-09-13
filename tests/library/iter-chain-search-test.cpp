@@ -153,6 +153,18 @@ namespace test{
 ///////////////////////////////////////////////////TODO WIP
           cout << materialise (search) <<endl;
 ///////////////////////////////////////////////////TODO WIP
+          CHECK (search);
+          
+          search.addStep([](auto filter)
+                            {
+                              string currVal = *filter;
+                              filter.setNewFilter ([=](string const& val){
+                                  return val != currVal; });
+                              return filter;
+                            });
+///////////////////////////////////////////////////TODO WIP
+          cout << materialise (search) <<endl;
+///////////////////////////////////////////////////TODO WIP
         }
       
       

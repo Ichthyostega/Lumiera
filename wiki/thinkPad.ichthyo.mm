@@ -31796,6 +31796,18 @@
 <linktarget COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" SOURCE="ID_1532889609" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536857187385" ID="ID_1180686110" MODIFIED="1536857230548" TEXT="Bug! Referenz auf *this">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1536857213605" ID="ID_1051501156" MODIFIED="1536857238050" TEXT="...und dann moved man *this aus dem Builder!!!">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1536857284075" ID="ID_887891479" MODIFIED="1536857344032" TEXT="brauche *this...">
+<icon BUILTIN="info"/>
+<node CREATED="1536857289235" ID="ID_1909570040" MODIFIED="1536857313452" TEXT="in configureFilterChain"/>
+<node CREATED="1536857326814" ID="ID_149310473" MODIFIED="1536857328426" TEXT="this-&gt;depth()"/>
+<node CREATED="1536857336620" ID="ID_1691329557" MODIFIED="1536857340040" TEXT="this-&gt;stepChain_"/>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1536018406232" ID="ID_1330264339" MODIFIED="1536326484790" TEXT="Schritte als Funktoren">
 <icon BUILTIN="button_ok"/>
@@ -32163,7 +32175,7 @@
 <node COLOR="#338800" CREATED="1536358204137" ID="ID_1724606451" MODIFIED="1536716878774" TEXT="verwirft den sonstigen Stack komplett"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536792181982" ID="ID_548701484" MODIFIED="1536792260764" TEXT="search direkt per Pr&#xe4;dikat">
+<node COLOR="#338800" CREATED="1536792181982" ID="ID_548701484" MODIFIED="1536846067609" TEXT="search direkt per Pr&#xe4;dikat">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -32175,7 +32187,7 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1536792241949" ID="ID_613611906" MODIFIED="1536792249583" TEXT="setzt direkt nur ein neues Pr&#xe4;dikat"/>
 <node CREATED="1536792250124" ID="ID_10955924" MODIFIED="1536792257390" TEXT="spart viel Syntax ein">
 <icon BUILTIN="idea"/>
