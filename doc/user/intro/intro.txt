@@ -81,7 +81,7 @@ aspects film production tools will have to exhibit to aspire to be labelled
         Projects and budgets differ, hardware advances; and Lumiera must scale
         in many ways and make optimum use of the resources that are
         available. From small Laptops to multi-core computers up to render farms,
-        Lumiera must be adept in optimum use of the hardware at hand.
+        Lumiera must be adept to reap the maximum from the hardware at hand.
 
  Durability::
         The rapid pace at which software and hardware rampage forward is surely 
@@ -119,12 +119,12 @@ driven by finite usage stories.
 Medium Level Abstraction and Project Specific Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-These building blocks within Lumiera create a moderate level of abstraction; a
+The building blocks behind Lumiera combine to create a moderate level of abstraction; a
 user may use the GUI to manipulate several elements directly -- not only the
 clips and effects, but also individual effect parameter automation, masks, layering,
-and even the placements xref:placement[<-] used to stitch the objects together,
+and even placements xref:placement[<-] used to stitch objects together,
 which is comparatively low-level. Such moderate abstraction encourages the user to
-understand the inner workings, while shielding the user from merely technical
+understand the inner workings, while shielding the user from technical
 details such as header format conversion or access to individual channels.
 
 To complement this approach, Lumiera does _not_ rely on hard-wired, global
@@ -213,7 +213,9 @@ In this section, we discuss the user's perspective when working with the GUI.
 
 
 Although Lumiera will initially ship with a standard, default GUI, we do not presume that this GUI will be suitable for all uses.
-We expect there to be multiple, different GUIs, each designed for different kinds of tasks.  We expect that some of these will be written by users, and the proc-layer is designed to make this easy.
+We expect there to be multiple, different GUIs, each designed for different
+kinds of tasks.  We expect that some of these will be written by users, and the
+proc-layer is designed to facilitate this easily.
 
 Indeed, Lumiera can even work
 satisfactorily without a GUI, for example, for special purposes
@@ -240,7 +242,7 @@ workplaces and workflows.
 // the specifics ot the GUI presented above. -- hendrik
 
 At a first glance, the GUI might seem somewhat overwhelming, something similar
-to the cockpit of a jumbo jet.  However, nearly all the bells and whistles can
+to the cockpit in a jumbo jet.  However, nearly all the bells and whistles can
 be subdivided into groups according to their functionality.  The following
 sub-sections discusses the more prominent groupings.
 
@@ -248,7 +250,7 @@ sub-sections discusses the more prominent groupings.
 Viewer
 ~~~~~~
 
-The viewer is an area where footage and the assembled edit can be played back and investigated.
+The viewer is an area where footage and the assembled edit can be played-back and reviewed.
 Obviously, support for audio will also be provided.  As there are many sources that
 can be displayed, a viewer is attached to a source via the viewer switch board.
 Timelines, probe points, wire taps and individual clips are examples of sources
