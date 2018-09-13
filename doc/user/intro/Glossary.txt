@@ -234,3 +234,5 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         possible to allow the Viewer to be collapsed to a control, thus,
         allowing a video to be sent to a dedicated monitor, e.g., to a separate
         X/-display or to a firewire. 
+anchor:Viewer Switch Board[] link:#Viewer-Switch-Board[->]Viewer Switch Board::
+       The connection between a viewer and its source??? 
