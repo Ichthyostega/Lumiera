@@ -45,6 +45,7 @@ namespace test{
   using ::Test;
   using util::join;
   using util::isnil;
+  using util::startsWith;
   using util::isSameObject;
   using std::vector;
   using std::string;
@@ -76,6 +77,14 @@ namespace test{
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 #define SHOW_EXPR(_XX_) \
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
+
+    /** Diagnostic helper: join all the elements from a _copy_ of the iterator */
+    template<class II>
+    inline string
+    materialise (II&& ii)
+    {
+      return util::join (std::forward<II> (ii), "-");
+    }
 ///////////////////////////////////////////////////TODO WIP
   
   
@@ -108,9 +117,6 @@ namespace test{
                           .search("bacon")
                           .search("tomato");
           
-///////////////////////////////////////////////////TODO WIP
-          cout << "search[0]=" <<*search<<endl;
-///////////////////////////////////////////////////TODO WIP
           CHECK (search);
           CHECK (not isnil(search));
           CHECK ("tomato" == *search);
@@ -142,6 +148,11 @@ namespace test{
       void
       chainedIteration ()
         {
+          auto search = chainSearch(SPAM)
+                          .search([](string const& str){ return startsWith (str, "s"); });
+///////////////////////////////////////////////////TODO WIP
+          cout << materialise (search) <<endl;
+///////////////////////////////////////////////////TODO WIP
         }
       
       

@@ -177,9 +177,8 @@ namespace iter {
        *       it is _possible_ to build a step which _extends_ or sharpens the preceding condition.
        */
       template<typename FUN>
-                                          disable_if<is_convertible<FUN, Value>,
-      IterChainSearch&&                             >
-      search (FUN&& configureSearchStep)
+      IterChainSearch&&
+      addStep (FUN&& configureSearchStep)
         {
           if (not this->empty())
             {
@@ -196,18 +195,34 @@ namespace iter {
           return move(*this);
         }
       
+      /** attach additional search with the given filter predicate.
+       *  After successfully searching for all the conditions currently in the filter chain,
+       *  the embedded iterator will finally be pulled until matching the given target value.
+       * @remarks adds a new layer on the stack of search conditions with a _copy_ of the
+       *  previously used iterator, and installs the given filter predicate therein.
+       */
+      template<typename FUN>
+                                          disable_if<is_convertible<FUN, Value>,
+      IterChainSearch&&                             >
+      search (FUN&& filterPredicate)
+        {
+          addStep ([predicate{forward<FUN> (filterPredicate)}]
+                   (Filter filter)      // note: filter taken by value
+                     {
+                       filter.setNewFilter (predicate);
+                       return filter;   // return copy of the original state with changed filter
+                     });
+          return move(*this);
+        }
+      
       /** attach additional direct search for a given value.
        *  After successfully searching for all the conditions currently in the filter chain,
-       *  the underlying iterator will finally be pulled until matching the given target value.
+       *  the embedded iterator will finally be pulled until matching the given target value.
        */
       IterChainSearch&&
       search (Value target)
         {
-          search ([=](Filter filter)      // note: filter taken by value
-                    {
-                      filter.setNewFilter ([target](Value const& currVal) { return currVal == target; });
-                      return filter;   // return copy of the original state with changed filter
-                    });
+          search ([target](Value const& currVal) { return currVal == target; });
           return move(*this);
         }
       

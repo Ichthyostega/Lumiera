@@ -32163,6 +32163,56 @@
 <node COLOR="#338800" CREATED="1536358204137" ID="ID_1724606451" MODIFIED="1536716878774" TEXT="verwirft den sonstigen Stack komplett"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536792181982" ID="ID_548701484" MODIFIED="1536792260764" TEXT="search direkt per Pr&#xe4;dikat">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. direkt das Pr&#228;dikat, und nicht eine Funktion, die den Filter konfiguriert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536792241949" ID="ID_613611906" MODIFIED="1536792249583" TEXT="setzt direkt nur ein neues Pr&#xe4;dikat"/>
+<node CREATED="1536792250124" ID="ID_10955924" MODIFIED="1536792257390" TEXT="spart viel Syntax ein">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1536845264898" ID="ID_1033092941" MODIFIED="1536845289109" TEXT="Problem: capture forward">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1536845290596" ID="ID_1184113483" MODIFIED="1536845467915" TEXT="Lamda soll eine &quot;universelle referenz&quot; capturen">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1536845309386" ID="ID_1593606355" MODIFIED="1536845460398" TEXT="Ausweg: forward-into captured value">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1536845374585" ID="ID_794602132" LINK="https://stackoverflow.com/a/20669290" MODIFIED="1536845438985" TEXT="geht seit C++14"/>
+<node CREATED="1536845439219" ID="ID_372370252" MODIFIED="1536845455950" TEXT="nur Eclipse / CDT mault herum">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1536845496960" ID="ID_1490455562" MODIFIED="1536845539474" TEXT="und deshalb...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...habe ich noch gar nicht gemerkt, da&#223; das geht,
+    </p>
+    <p>
+      und manchen komischen Workaround implementiert.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1536845594971" ID="ID_1942437093" MODIFIED="1536845602373" TEXT="Eclipse updaten?">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536018420398" ID="ID_41628967" MODIFIED="1536326452308" TEXT="Adaptieren der Quell-Datensequenz">
