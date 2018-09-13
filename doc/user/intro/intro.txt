@@ -261,6 +261,11 @@ up to a beamer or monitor.
 
 Transport Controls
 ~~~~~~~~~~~~~~~~~~
+Transport controls are devices that are controlled by widgets or by some input device
+(MIDI, control surface, etc) so the look-and-feel of the transport control
+widget may vary, depending on what the transport controls have been assigned
+to.  Irrespective of their look-and-feel, they are connected to a play
+controller.
 
 The preliminary layout in the current GUI is rather provisional -- a final decision
 has yet to be taken on where the transport controls will be located.  In later
@@ -270,13 +275,6 @@ a possibility that the transport controls will be allocated their own GUI elemen
 // A final decision about where the transport controls are located?
 // Isn't the whole point of enabling multiple GUIs that there won't be
 // final  decisions?  Only provisional ones?
-
-
-Transport controls are devices that are controlled by widgets or by some input device
-(MIDI, control surface, etc) so the look-and-feel of the transport control
-widget may vary, depending on what the transport controls have been assigned
-to.  Irrespective of their look-and-feel, they are connected to a play
-controller.
 
 A _play controller_ coordinates playback, cueing and rewinding.  Transport
 controls are ganged when they attach to the same play controller.

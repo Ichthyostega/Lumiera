@@ -235,7 +235,7 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         allowing a video to be sent to a dedicated monitor, e.g., to a separate
         X/-display or to a firewire.
 
- anchor:Viewer Switch Board[] link:#Viewer-Switch-Board[->]Viewer Switch Board::
+ anchor:ViewerSwitchBoard[] link:#Viewer-Switch-Board[->]Viewer Switch Board::
         A control panel attached to the viewer, allowing to select dynamically
         between various possible inputs. With the help of the Switch Board,
         ``A vs B'' comparisons can be done, optionally in split screen mode.
