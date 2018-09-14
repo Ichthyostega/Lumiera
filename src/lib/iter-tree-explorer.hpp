@@ -46,7 +46,7 @@
  ** calculations with exception handling but also simple data structures like lists or trees). The key point with any
  ** monad is the ability to _bind a function_ into the monad; this function will work on the _contained base values_
  ** and produce a modified new monad instance. In the simple case of a list, "binding" a function basically means
- ** to _map the function onto_ the elements in the list.
+ ** to _map the function onto_ the elements in the list. (actually it means the `flatMap` operation)
  ** 
  ** ## Rationale
  ** The primary benefit of using the monad pattern is to separate the transforming operation completely from
@@ -1508,6 +1508,30 @@ namespace lib {
         {
           return mutableFilter (iter_explorer::ACCEPT_ALL);
         }
+      
+      
+      
+      /** builder function to attach a _custom extension layer._
+       * Any template in compliance with the general construction scheme can be injected through the template parameter.
+       * - it must take a first template parameter SRC and inherit from this source iterator
+       * - towards layers on top, it must behave like a _state core,_ either by redefining the state core API functions,
+       *   as defined by \ref IterStateWrapper, or by inheriting them from a lower layer.
+       * - it is bound to play well with the other layers; especially it needs to be aware of `expandChildren()` calls,
+       *   which for the consumer side behave like `iterNext()` calls. If a layer needs to do something special for
+       *   `iterNext()`, it needs to perform a similar action for `expandChildren()`.
+       * - it must be behave like a default-constructible, copyable value object
+       * @return augmented TreeExplorer, incorporating and adpting the injected layer
+       */
+      template<template<class> class LAY>
+      auto
+      processingLayer()
+        {
+          using ResCore = LAY<SRC>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this)});
+        }
+      
       
       
       /** _terminal builder_ to package the processing pipeline as IterSource.

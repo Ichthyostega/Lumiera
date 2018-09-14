@@ -31144,6 +31144,36 @@
 <node CREATED="1536713969931" ID="ID_1439776917" MODIFIED="1536714013625" TEXT="verwirft damit auch die urspr&#xfc;ngliche Root-Sequenz"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958962984" ID="ID_686602920" MODIFIED="1536959121719" TEXT="custom Layer erm&#xf6;glichen">
+<linktarget COLOR="#61afb3" DESTINATION="ID_686602920" ENDARROW="Default" ENDINCLINATION="-230;613;" ID="Arrow_ID_1710661685" SOURCE="ID_519507996" STARTARROW="None" STARTINCLINATION="1241;-1305;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958972703" ID="ID_661166644" MODIFIED="1536959071081" TEXT="generische Builder-Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ist einfach und offensichtlich;
+    </p>
+    <p>
+      ohnehin laufen schon ziemlich alle konkreten Layer-Builder nach einem Schema-F
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958979046" ID="ID_700334374" MODIFIED="1536959005539" TEXT="Typ per Template-Parameter &#xfc;bergeben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958994212" ID="ID_1735239890" MODIFIED="1536959004851" TEXT="flexible zus&#xe4;tzliche Argumente">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536959023376" ID="ID_928142688" MODIFIED="1536959037879" TEXT="Test: durch IterChainSearch">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1536409170928" ID="ID_1850744645" MODIFIED="1536515953937" TEXT="Design-Probleme">
 <icon BUILTIN="go"/>
