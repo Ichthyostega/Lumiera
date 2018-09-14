@@ -233,6 +233,10 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         (partially) which would enable user comparison or it might even be
         possible to allow the Viewer to be collapsed to a control, thus,
         allowing a video to be sent to a dedicated monitor, e.g., to a separate
-        X/-display or to a firewire. 
-anchor:Viewer Switch Board[] link:#Viewer-Switch-Board[->]Viewer Switch Board::
-       The connection between a viewer and its source??? 
+        X/-display or to a firewire.
+
+ anchor:Viewer Switch Board[] link:#Viewer-Switch-Board[->]Viewer Switch Board::
+        A control panel attached to the viewer, allowing to select dynamically
+        between various possible inputs. With the help of the Switch Board,
+        ``A vs B'' comparisons can be done, optionally in split screen mode.
+
