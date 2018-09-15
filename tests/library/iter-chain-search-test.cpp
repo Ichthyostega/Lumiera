@@ -68,7 +68,15 @@ namespace test{
                    ,"spam"
                    };
     
-  } // (END)fixture
+    
+    /** Diagnostic helper: join all the elements from a _copy_ of the iterator */
+    template<class II>
+    inline string
+    materialise (II&& ii)
+    {
+      return util::join (std::forward<II> (ii), "-");
+    }
+  }// (END)fixture
   
   
   
@@ -77,14 +85,6 @@ namespace test{
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 #define SHOW_EXPR(_XX_) \
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
-
-    /** Diagnostic helper: join all the elements from a _copy_ of the iterator */
-    template<class II>
-    inline string
-    materialise (II&& ii)
-    {
-      return util::join (std::forward<II> (ii), "-");
-    }
 ///////////////////////////////////////////////////TODO WIP
   
   
@@ -148,22 +148,30 @@ namespace test{
       void
       chainedIteration ()
         {
-          auto search = chainSearch(SPAM)
+          auto search = chainSearch(SPAM)                                  // Note: 1st filter step picks all s-words
                           .search([](string const& str){ return startsWith (str, "s"); });
-///////////////////////////////////////////////////TODO WIP
-          cout << materialise (search) <<endl;
-///////////////////////////////////////////////////TODO WIP
-          CHECK (search);
+          
+          CHECK (materialise (search) =="spam-sausage-spam-spam-spam-spam");
+          CHECK ("spam" == *search);
           
           search.addStep([](auto& filter)
-                            {
-                              string currVal = *filter;
-                              filter.setNewFilter ([=](string const& val){
-                                  return val != currVal; });
+                            {                                              // Note: pick the current value at the point
+                              string currVal = *filter;                    //       where the 2nd filter step is (re)applied 
+                              filter.setNewFilter ([=](string const& val)  //       ...and bake this value into the lambda closure
+                                                    {
+                                                      return val != currVal;
+                                                    });
                             });
-///////////////////////////////////////////////////TODO WIP
-          cout << materialise (search) <<endl;
-///////////////////////////////////////////////////TODO WIP
+          
+          CHECK ("sausage" == *search);
+          CHECK (materialise (search)
+                 == "sausage-bacon-tomato-and-"               // everything in the rest, which is not "spam"
+                    "spam-spam-bacon-spam-tomato-and-spam-"   // everything starting at "sausage" which is not "sausage"
+                    "bacon-tomato-and-"                       // any non-spam behind the 2nd spam
+                    "bacon-tomato-and-"                       // any non-spam behind the 3rd spam
+                    "tomato-and"                              // any non-spam behind the 4th spam
+                    "");                                      // and any non-spam behind the final spam
+          
         }
       
       
