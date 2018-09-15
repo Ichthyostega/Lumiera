@@ -722,12 +722,6 @@ namespace lib {
                 or *expansions_;
           }
         
-        bool
-        hasChildren()  const
-          {
-            return 0 < depth();
-          }
-        
         void
         incrementCurrent()
           {
@@ -737,11 +731,27 @@ namespace lib {
               ++(*this);
           }
         
+        
+      protected:
+        /** @internal accessor for downstream layers to allow close collaboration */
+        ResIter&
+        accessCurrentChildIter()
+          {
+            REQUIRE (hasChildren());
+            return *expansions_;
+          }
+        
         void
         dropExhaustedChildren()
           {
             while (not invariant())
               ++expansions_;
+          }
+        
+        bool
+        hasChildren()  const
+          {
+            return 0 < depth();
           }
       };
     

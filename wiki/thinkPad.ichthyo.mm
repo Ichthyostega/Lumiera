@@ -31841,7 +31841,66 @@
 <icon BUILTIN="info"/>
 <node CREATED="1536857289235" ID="ID_1909570040" MODIFIED="1536857313452" TEXT="in configureFilterChain"/>
 <node CREATED="1536857326814" ID="ID_149310473" MODIFIED="1536857328426" TEXT="this-&gt;depth()"/>
-<node CREATED="1536857336620" ID="ID_1691329557" MODIFIED="1536857340040" TEXT="this-&gt;stepChain_"/>
+<node CREATED="1536857336620" ID="ID_1691329557" MODIFIED="1536857806626" TEXT="this-&gt;stepChain_">
+<linktarget COLOR="#d22d65" DESTINATION="ID_1691329557" ENDARROW="Default" ENDINCLINATION="147;-23;" ID="Arrow_ID_828211693" SOURCE="ID_396903078" STARTARROW="None" STARTINCLINATION="1;-33;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536857741221" ID="ID_1903828771" MODIFIED="1536958903408" TEXT="bricht das ganze Konzept hier zusammen??">
+<icon BUILTIN="forward"/>
+<node COLOR="#435e98" CREATED="1536880103264" HGAP="27" ID="ID_1970250282" MODIFIED="1536958907215" TEXT="so schaugts aus...." VSHIFT="-10">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1536857782632" ID="ID_396903078" MODIFIED="1536857806626" TEXT="stepChain_ ist das Problem">
+<arrowlink COLOR="#d22d65" DESTINATION="ID_1691329557" ENDARROW="Default" ENDINCLINATION="147;-23;" ID="Arrow_ID_828211693" STARTARROW="None" STARTINCLINATION="1;-33;"/>
+</node>
+<node CREATED="1536880086127" ID="ID_1559582643" MODIFIED="1536882591818" TEXT="depth wohl noch ein Gr&#xf6;&#xdf;eres">
+<node CREATED="1536882781354" ID="ID_1998865921" MODIFIED="1536882788421" TEXT="weil daran die Abbruchbedingung h&#xe4;ngt"/>
+<node CREATED="1536882789057" ID="ID_170176785" MODIFIED="1536882873905" TEXT="und depth sich aber automatisch ergibt -&gt; Backtracking"/>
+</node>
+<node CREATED="1536882920310" ID="ID_1625878480" MODIFIED="1536882937553" TEXT="eigentlich m&#xfc;&#xdf;te...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nach der &#187;reinen Lehre&#171;
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1536882938955" ID="ID_475907399" MODIFIED="1536882951373" TEXT="der Baum entweder sich selber entfalten k&#xf6;nnen">
+<node CREATED="1536883521914" ID="ID_857765324" MODIFIED="1536883531340" TEXT="und dazu den Chain in sich tragen"/>
+<node CREATED="1536883532120" ID="ID_153639655" MODIFIED="1536883537739" TEXT="und auch seinen eigenen Level kennen"/>
+</node>
+<node CREATED="1536882952177" ID="ID_563964508" MODIFIED="1536882961539" TEXT="oder von au&#xdf;erhalb entfaltet werden">
+<node CREATED="1536883544846" ID="ID_224633668" MODIFIED="1536883607066" TEXT="dann aber auch die Entfaltung von au&#xdf;en bekommen"/>
+<node CREATED="1536883607966" ID="ID_1870181162" MODIFIED="1536883618816" TEXT="also klassich-imperativ"/>
+<node CREATED="1536883623932" ID="ID_567889201" MODIFIED="1536883629455" TEXT="nix Monade!"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1536958857294" ID="ID_1302534828" MODIFIED="1536958940320" TEXT="Fazit: nur der zweite Ansatz ist durchf&#xfc;hrbar">
+<arrowlink COLOR="#81445a" DESTINATION="ID_1848331022" ENDARROW="Default" ENDINCLINATION="72;-412;" ID="Arrow_ID_1608996048" STARTARROW="None" STARTINCLINATION="672;68;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1536969411521" HGAP="36" ID="ID_1686255544" MODIFIED="1536969491348" TEXT="und selbst der braucht eine Art Hintert&#xfc;r" VSHIFT="8">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...insofern wir n&#228;mlich zwingend auf den jeweilign Kind-<i>Iterator</i>&#160;zugreifen m&#252;ssen.
+    </p>
+    <p>
+      Nicht nur auf den aktuellen Wert (=dereferenzierter Iterator, d.h. die Funktion yield())
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -32257,6 +32316,105 @@
 </node>
 <node CREATED="1536845594971" ID="ID_1942437093" MODIFIED="1536845602373" TEXT="Eclipse updaten?">
 <icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958590136" ID="ID_1848331022" MODIFIED="1536958932753" TEXT="Refactoring Pipeline-Struktur">
+<linktarget COLOR="#81445a" DESTINATION="ID_1848331022" ENDARROW="Default" ENDINCLINATION="72;-412;" ID="Arrow_ID_1608996048" SOURCE="ID_1302534828" STARTARROW="None" STARTINCLINATION="672;68;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1536958603857" ID="ID_610488133" MODIFIED="1536958622137" TEXT="das urspr&#xfc;ngliche Implementierungs-Konzept scheitert">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1536958626605" ID="ID_1277097786" MODIFIED="1536958638227" TEXT="aber ich will an dem Pipeline-Konzept festhalten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1536958647378" ID="ID_270574796" MODIFIED="1536958666418" TEXT="Konsequenz: Schlu&#xdf; mit der Magie">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958668327" ID="ID_392267635" MODIFIED="1536958691189" TEXT="keine geheimnisvollen Lambda-Closures mehr">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958680150" ID="ID_1572201908" MODIFIED="1536958697495" TEXT="zwei Layer verwenden">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958702987" ID="ID_1313964418" MODIFIED="1536958768827" TEXT="Basis == trivialer Explorer">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958719665" ID="ID_806425486" MODIFIED="1536958767715" TEXT="macht lediglich eine Kopie des Filters">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1536958727368" ID="ID_1206856632" MODIFIED="1536958732419" TEXT="nichts mehr automatisch"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958733950" ID="ID_374374485" MODIFIED="1536958769371" TEXT="Dekorator == Steuer-Logik">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958744325" ID="ID_151094681" MODIFIED="1536958763476" TEXT="h&#xe4;lt den stepChain_">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958772594" ID="ID_365283571" MODIFIED="1536958788657" TEXT="klinkt sich in iterNext ein">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1536958792215" ID="ID_519507996" MODIFIED="1536973216960" TEXT="TreeExplorer: custom-Layer">
+<arrowlink COLOR="#61afb3" DESTINATION="ID_686602920" ENDARROW="Default" ENDINCLINATION="-230;613;" ID="Arrow_ID_1710661685" STARTARROW="None" STARTINCLINATION="1241;-1305;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1536973229630" ID="ID_1567071992" MODIFIED="1536973238830" TEXT="brauche doch keinen Custom-Layer">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1536973239964" ID="ID_1858748865" MODIFIED="1536973282118" TEXT="ist besser ohne....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil ich dann auf dem IterChainSearch unmittelbar die builder-Funktionen definieren kann
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958815668" ID="ID_327461551" MODIFIED="1536958840692">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      konfiguriert <i>danach direkt</i>&#160;den Filter
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536969507092" ID="ID_1318810550" MODIFIED="1536969521859" TEXT="braucht dazu eine Hintert&#xfc;r im Explorer-Layer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1536969537728" ID="ID_1955805225" MODIFIED="1536969691123" TEXT="kann/darf diese nicht f&#xfc;r Basis-Iterator nutzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil der Basis-Iterator (also der Template-Parameter SRC)
+    </p>
+    <p>
+      explizit und absichtlich einen anderen Typ haben <i>k&#246;nnte,</i>&#160;als der expandierte Kind-Iterator.
+    </p>
+    <p>
+      Das ist ein wesentliches Feature dieses Expander-Designs, w&#252;rde aber leider eine
+    </p>
+    <p>
+      komplett generische Accessor-Funktion unm&#246;glich machen (das Template w&#252;rde in
+    </p>
+    <p>
+      einem Solchen Fall insgesamt vom Compiler zur&#252;ckgewiesen)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>

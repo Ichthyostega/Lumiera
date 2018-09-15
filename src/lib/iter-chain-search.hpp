@@ -75,13 +75,12 @@ namespace iter {
                 .mutableFilter();
     }
     
-    template<class SRC, class FUN>
+    template<class SRC>
     auto
-    buildExplorer (SRC&& dataSource, FUN&& expandFunctor)
+    buildExplorer (SRC&& dataSource)
     {
       return buildSearchFilter (forward<SRC> (dataSource))
-                .expand (forward<FUN> (expandFunctor))
-                .expandAll();
+                .expand ([](auto it){ return it; });       // child iterator starts as copy of current level iterator
     }
     
     /**
@@ -97,16 +96,9 @@ namespace iter {
     struct _IterChainSetup
       {
         using Filter = decltype( buildSearchFilter(std::declval<SRC>()).asIterator() );
-        using StepFunctor = std::function<Filter(Filter const&)>;
+        using Pipeline = decltype( buildExplorer (std::declval<SRC>()) );
         
-        using Pipeline = decltype( buildExplorer (std::declval<SRC>(), std::declval<StepFunctor>()) );
-        
-        static Pipeline
-        configurePipeline (SRC&& dataSource, StepFunctor step)
-          {
-            return buildExplorer(forward<SRC> (dataSource), move (step));
-          }
-        
+        using StepFunctor = std::function<void(Filter&)>;
       };
     
   }//(End)type construction helpers
@@ -134,9 +126,6 @@ namespace iter {
       using Filter = typename _Trait::Filter;
       using Step   = typename _Trait::StepFunctor;
       
-      /** @internal access embedded filter sub-Pipeline */
-      Filter& filter() { return *this; }
-      
       /** Storage for a sequence of filter configuration functors */
       std::vector<Step> stepChain_;
 
@@ -150,9 +139,7 @@ namespace iter {
       template<class SEQ>
       explicit
       IterChainSearch (SEQ&& srcData)
-        : _Base{_Trait::configurePipeline (forward<SEQ> (srcData)
-                                          ,[this](Filter const& curr){ return configureFilterChain(curr); })}
-        , stepChain_{}
+        : _Base{buildExplorer (forward<SEQ> (srcData))}
         {       // mark initial pristine state
           _Base::disableFilter();
         }
@@ -161,13 +148,28 @@ namespace iter {
       using _Base::_Base;
       
       
+      /* === adapted iteration control API  === */
+      void
+      iterNext()
+        {
+          _Base::__throw_if_empty();
+          while (_Base::depth() < stepChain_.size()                          // Backtracking loop: attempt to establish all conditions
+                 and _Base::checkPoint())                                    // possibly trying further combinations until success:
+            {
+              _Base::expandChildren();                                       // create copy of current filter embedded into child level
+              stepChain_[_Base::depth()] (_Base::accessCurrentChildIter());  // invoke step functor to reconfigure this filter...
+              _Base::dropExhaustedChildren();                                // which thereby might become empty
+            }
+        }
+      
+      
       
       /** configure additional chained search condition.
-       * @param a functor `Filter const& -> filter`, which takes a current filter configuration,
-       *        returning a copy from this configuration, possibly configured differently.
+       * @param a manipulation functor `void(Filter&)`, which works on the current filter
+       *       to possibly change its configuration.
        * @note the given functor, lambda or function reference will be wrapped and adapted
        *       to conform to the required function signature. When using a generic lambda,
-       *       the argument type `Filter const&` is assumed
+       *       the argument type `Filter&` is assumed
        * @remarks the additional chained search condition given here will be applied _after_
        *       matching all other conditions already in the filter chain. Each such condition
        *       is used to _filter_ the underlying source iterator, i.e. pull it until finding
@@ -185,7 +187,7 @@ namespace iter {
               Step nextStep{forward<FUN> (configureSearchStep)};
               
               if (_Base::isDisabled())
-                this-> filter() = move (nextStep (*this));      // apply first step immediately
+                nextStep (*this);                               // apply first step immediately
               else
                 {
                   stepChain_.emplace_back (move (nextStep)); //    append all further steps into the chain...
@@ -207,10 +209,9 @@ namespace iter {
       search (FUN&& filterPredicate)
         {
           addStep ([predicate{forward<FUN> (filterPredicate)}]
-                   (Filter filter)      // note: filter taken by value
-                     {
+                   (Filter& filter)
+                     {        // manipulte current filter configuration
                        filter.setNewFilter (predicate);
-                       return filter;   // return copy of the original state with changed filter
                      });
           return move(*this);
         }
@@ -238,17 +239,6 @@ namespace iter {
           _Base::rootCurrent();
           _Base::disableFilter();
           return move(*this);
-        }
-      
-    private:
-      Filter
-      configureFilterChain (Filter const& currentFilterState)
-        {
-          uint depth = this->depth();
-          if (depth < stepChain_.size())
-            return stepChain_[depth](currentFilterState); // augmented copy
-          else
-            return Filter{};     // empty filter indicates recursion end
         }
     };
   

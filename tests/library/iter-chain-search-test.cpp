@@ -160,7 +160,6 @@ namespace test{
                               string currVal = *filter;
                               filter.setNewFilter ([=](string const& val){
                                   return val != currVal; });
-                              return filter;
                             });
 ///////////////////////////////////////////////////TODO WIP
           cout << materialise (search) <<endl;
