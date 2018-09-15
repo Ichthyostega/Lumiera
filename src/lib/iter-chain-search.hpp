@@ -33,6 +33,38 @@
  ** then lead to a match. Basically we have to try all combinations of all possible local
  ** matches, to find a solution to satisfy the whole chain of conditions.
  ** 
+ ** ## Design
+ ** 
+ ** The IterChainSearch component is built as a processing pipeline, based on the
+ ** [Tree-Explorer framework](\ref iter-tree-explorer.hpp). This yields several benefits, yet also
+ ** imposes some drawbacks. Without much effort, we get a extremely flexible and configurable
+ ** solution, with acceptable / moderate performance. The result automatically adapts to a wide
+ ** array of data sources; it is possible (and even intended) to attach it on top of an already
+ ** existing on-demand data processing pipeline. The "source" can itself be a "state core" and
+ ** we may install suitable filter predicates to possibly collaborate with the internals of
+ ** such a state core. Yet we may also confine ourselves to pure functions and value processing.
+ ** 
+ ** The obvious downside of such an approach is its complexity in terms of code to understand.
+ ** The collaboration between several layers in a filter pipeline can be intricate, leading to
+ ** chains of layered similar functions calling each other. Most of these abstractions and
+ ** decorations will be removed by the compiler and optimiser, typically leading to long
+ ** compilation times and rather large size of the generated code (which in debugging mode
+ ** with full type information can even become excessively huge).
+ ** 
+ ** Some caveats
+ ** - the resulting pipeline is copyable, and it is typically moved out from a builder
+ **   function into the target location. So beware of _lambda captures by reference._
+ **   When you capture _anything_ within the pipeline itself, like some `this` pointer,
+ **   you'll end up with a dangling reference for sure. However, it is just fine to
+ **   capture extended facilities within the scope _enclosing_ the pipeline, as long
+ **   as this scope remains intact during the whole usage time of the pipeline.
+ ** - the resulting entity, an instantiation of the IterChainSearch template, is
+ **   not a generic TreeExplorer (builder). Be careful when using any builder
+ **   functions still accessible. The only functions meant to be used in
+ **   builder style are the IterChainSearch::search() variations.
+ ** - if you copy, the embedded state is copied alongside, but not
+ **   any external state referred by it.
+ ** 
  ** @see IterCursor_test
  ** @see iter-adapter.hpp
  ** @see [usage example](event-log.hpp)
@@ -48,8 +80,6 @@
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/meta/util.hpp"
 
-//#include <type_traits>
-//#include <utility>
 #include <utility>
 #include <vector>
 #include <string>
@@ -128,6 +158,13 @@ namespace iter {
       
       /** Storage for a sequence of filter configuration functors */
       std::vector<Step> stepChain_;
+      
+      
+      bool
+      needsExpansion()  const
+        {
+          return _Base::depth() < stepChain_.size();
+        }
 
     public:
       /** Build a chain-search mechanism based on the given source data sequence.
@@ -153,14 +190,25 @@ namespace iter {
       iterNext()
         {
           _Base::__throw_if_empty();
-          uint depth;
-          while (stepChain_.size() > (depth=_Base::depth())                  // Backtracking loop: attempt to establish all conditions
-                 and _Base::checkPoint())                                    // possibly trying further combinations until success:
-            {
-              _Base::expandChildren();                                       // create copy of current filter embedded into child level
-              stepChain_[depth] (_Base::accessCurrentChildIter());  // invoke step functor to reconfigure this filter...
-              _Base::dropExhaustedChildren();                                // which thereby might become empty
-            }
+          if (not needsExpansion())
+            _Base::iterNext();
+          else
+            do
+              {
+                uint depth =_Base::depth();
+                _Base::expandChildren();                              // create copy of current filter embedded into child level
+                stepChain_[depth] (_Base::accessCurrentChildIter());  // invoke step functor to reconfigure this filter...
+                _Base::dropExhaustedChildren();                       // which thereby might become empty
+              }
+          while (needsExpansion()                                     // Backtracking loop: attempt to establish all conditions
+                 and _Base::checkPoint());                            // possibly trying further combinations until success:
+        }
+      
+      IterChainSearch&
+      operator++()
+        {
+          iterNext();
+          return *this;
         }
       
       

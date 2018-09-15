@@ -31832,8 +31832,8 @@
 <linktarget COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" SOURCE="ID_1532889609" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536857187385" ID="ID_1180686110" MODIFIED="1536857230548" TEXT="Bug! Referenz auf *this">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1536857187385" FOLDED="true" ID="ID_1180686110" MODIFIED="1537022182370" TEXT="Bug! Referenz auf *this">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1536857213605" ID="ID_1051501156" MODIFIED="1536857238050" TEXT="...und dann moved man *this aus dem Builder!!!">
 <icon BUILTIN="broken-line"/>
 </node>
@@ -32336,8 +32336,8 @@
 <node COLOR="#338800" CREATED="1536958668327" ID="ID_392267635" MODIFIED="1536977591699" TEXT="keine geheimnisvollen Lambda-Closures mehr">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958680150" ID="ID_1572201908" MODIFIED="1536958697495" TEXT="zwei Layer verwenden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536958680150" ID="ID_1572201908" MODIFIED="1537022157726" TEXT="zwei Layer verwenden">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536958702987" ID="ID_1313964418" MODIFIED="1536977597184" TEXT="Basis == trivialer Explorer">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536958719665" ID="ID_806425486" MODIFIED="1536977595267" TEXT="macht lediglich eine Kopie des Filters">
@@ -32345,13 +32345,13 @@
 </node>
 <node CREATED="1536958727368" ID="ID_1206856632" MODIFIED="1536958732419" TEXT="nichts mehr automatisch"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958733950" ID="ID_374374485" MODIFIED="1536958769371" TEXT="Dekorator == Steuer-Logik">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536958733950" ID="ID_374374485" MODIFIED="1537022159071" TEXT="Dekorator == Steuer-Logik">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536958744325" ID="ID_151094681" MODIFIED="1536977615339" TEXT="h&#xe4;lt den stepChain_">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958772594" ID="ID_365283571" MODIFIED="1536958788657" TEXT="klinkt sich in iterNext ein">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536958772594" ID="ID_365283571" MODIFIED="1537022146845" TEXT="klinkt sich in iterNext ein">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1536958792215" ID="ID_519507996" MODIFIED="1536973216960" TEXT="TreeExplorer: custom-Layer">
 <arrowlink COLOR="#61afb3" DESTINATION="ID_686602920" ENDARROW="Default" ENDINCLINATION="-230;613;" ID="Arrow_ID_1710661685" STARTARROW="None" STARTINCLINATION="1241;-1305;"/>
 <icon BUILTIN="button_cancel"/>
@@ -32372,7 +32372,7 @@
 </richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1536977661129" ID="ID_700598895" MODIFIED="1536977792241" TEXT="Vorsicht: brauche nochmal IterableDecorator">
+<node COLOR="#338800" CREATED="1536977661129" ID="ID_700598895" MODIFIED="1537022064594" TEXT="Vorsicht: brauche nochmal IterableDecorator">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -32384,8 +32384,8 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536977678590" ID="ID_747407291" MODIFIED="1536977792241" TEXT="sonst wird meine spezielle IterNext() nicht aufgerufen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536977678590" ID="ID_747407291" MODIFIED="1537022078175" TEXT="sonst wird meine spezielle IterNext() nicht aufgerufen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -32406,7 +32406,13 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1537022084564" ID="ID_447764404" MODIFIED="1537022104224" TEXT="brauche doch einen top-Level TreeExplorer + custom-Layer">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1537022109392" ID="ID_1885636592" MODIFIED="1537022142275" STYLE="fork" TEXT="pragmatisch: direkt auch operator++ &#xfc;berschreiben">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -32454,6 +32460,29 @@
 </node>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537022195013" ID="ID_1801625619" MODIFIED="1537022214939" TEXT="Korrektheit der Auswertungs-Logik">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537022206627" ID="ID_983878679" MODIFIED="1537022215843" TEXT="mit komplexem Funktor">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1537022226504" ID="ID_1825074472" MODIFIED="1537022243242" TEXT="faul?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sausage-bacon-tomato-and-sausage-spam-spam-bacon-spam-tomato-and-spam-spam-bacon-tomato-and-spam-bacon-tomato-and-spam-tomato-and-spam
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537022216506" ID="ID_794497840" MODIFIED="1537022219986" TEXT="mit Backtracking">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
