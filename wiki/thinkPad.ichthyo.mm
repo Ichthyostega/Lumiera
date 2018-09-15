@@ -31144,10 +31144,10 @@
 <node CREATED="1536713969931" ID="ID_1439776917" MODIFIED="1536714013625" TEXT="verwirft damit auch die urspr&#xfc;ngliche Root-Sequenz"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958962984" ID="ID_686602920" MODIFIED="1536959121719" TEXT="custom Layer erm&#xf6;glichen">
+<node COLOR="#338800" CREATED="1536958962984" FOLDED="true" ID="ID_686602920" MODIFIED="1537052569433" TEXT="custom Layer erm&#xf6;glichen">
 <linktarget COLOR="#61afb3" DESTINATION="ID_686602920" ENDARROW="Default" ENDINCLINATION="-230;613;" ID="Arrow_ID_1710661685" SOURCE="ID_519507996" STARTARROW="None" STARTINCLINATION="1241;-1305;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958972703" ID="ID_661166644" MODIFIED="1536959071081" TEXT="generische Builder-Funktion">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1536958972703" ID="ID_661166644" MODIFIED="1537050781115" TEXT="generische Builder-Funktion">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -31162,16 +31162,22 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958979046" ID="ID_700334374" MODIFIED="1536959005539" TEXT="Typ per Template-Parameter &#xfc;bergeben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536958979046" ID="ID_700334374" MODIFIED="1537050782627" TEXT="Typ per Template-Parameter &#xfc;bergeben">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958994212" ID="ID_1735239890" MODIFIED="1536959004851" TEXT="flexible zus&#xe4;tzliche Argumente">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1536958994212" ID="ID_1735239890" MODIFIED="1537050791509" TEXT="flexible zus&#xe4;tzliche Argumente">
+<icon BUILTIN="stop-sign"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536959023376" ID="ID_928142688" MODIFIED="1536959037879" TEXT="Test: durch IterChainSearch">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536973178765" ID="ID_1098421095" MODIFIED="1537052565699" TEXT="Unit-Test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536959023376" ID="ID_928142688" MODIFIED="1536973192247" TEXT="Test implizit durch IterChainSearch">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#338800" CREATED="1536973293197" ID="ID_858941900" MODIFIED="1537052564048" TEXT="eigens abdecken">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>

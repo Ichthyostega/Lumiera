@@ -275,6 +275,7 @@ namespace test{
           verify_expand_rootCurrent();
           verify_transformOperation();
           verify_combinedExpandTransform();
+          verify_customProcessingLayer();
           verify_scheduledExpansion();
           verify_FilterIterator();
           verify_FilterChanges();
@@ -717,6 +718,50 @@ namespace test{
                       .transform([](float f){ return 0.055 + f/2; })
                  )
                  == "5.055-4.055-20.055-1.055-2.055-1.055" );
+        }
+      
+      
+      /**
+       * demo of a custom processing layer
+       * interacting directly with the iteration mechanism.
+       * @note we can assume `SRC` is itself a Lumiera Iterator
+       */
+      template<class SRC>
+      struct MagicTestRubbish
+        : public SRC
+        {
+          using SRC::SRC;
+          
+          void
+          iterNext()
+            {
+              ++(*this);
+              if (*this)
+                ++(*this);
+            }
+        };
+      
+      /** @test extension point to inject a client-defined custom processing layer
+       * This special builder function allows to install a template, which needs to wrap
+       * a source iterator and expose a _state core like_ interface. We demonstrate this
+       * extension mechanism here by defining a processing layer which skips each other element.
+       */
+      void
+      verify_customProcessingLayer()
+        {
+          CHECK (materialise(
+                    treeExplore(CountDown{7})
+                      .processingLayer<MagicTestRubbish>()
+                )
+                == "7-5-3-1");
+          
+          CHECK (materialise(
+                    treeExplore(CountDown{7})
+                      .transform([](uint v){ return 2*v; })
+                      .processingLayer<MagicTestRubbish>()
+                      .filter([](int v){ return v % 3; })
+                )
+                == "14-10-2");
         }
       
       
