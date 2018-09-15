@@ -719,7 +719,7 @@ namespace lib {
         invariant()  const
           {
             return not hasChildren()
-                or *expansions_;
+                or expansions_->isValid();
           }
         
         void

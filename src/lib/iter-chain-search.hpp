@@ -24,7 +24,7 @@
 /** @file iter-chain-search.hpp
  ** Evaluation mechanism to apply a sequence of conditions onto a linear search.
  ** This search algorithm is implemented on top of a tree expanding (monadic) filter pipeline,
- ** to allow for backtracking. The intention is not to combine the individual conditions, but
+ ** to allow for backtracking. The intention is not just to combine the individual conditions, but
  ** rather to apply them one by one. After finding a match for the first condition, we'll search
  ** for the next condition _starting at the position of the previous match_. In the most general
  ** case, this immediate progression down the search chain might be too greedy; it could be that
@@ -36,10 +36,10 @@
  ** ## Design
  ** 
  ** The IterChainSearch component is built as a processing pipeline, based on the
- ** [Tree-Explorer framework](\ref iter-tree-explorer.hpp). This yields several benefits, yet also
- ** imposes some drawbacks. Without much effort, we get a extremely flexible and configurable
- ** solution, with acceptable / moderate performance. The result automatically adapts to a wide
- ** array of data sources; it is possible (and even intended) to attach it on top of an already
+ ** [Tree-Explorer framework](\ref iter-tree-explorer.hpp). This yields several benefits, but
+ ** imposes some drawbacks. Without much effort, we get an extremely flexible and configurable
+ ** solution, with acceptable / moderate performance. The result automatically adapts to a huge
+ ** selection of data sources; it is possible (and is even intended) to attach it on top of an
  ** existing on-demand data processing pipeline. The "source" can itself be a "state core" and
  ** we may install suitable filter predicates to possibly collaborate with the internals of
  ** such a state core. Yet we may also confine ourselves to pure functions and value processing.
@@ -47,9 +47,9 @@
  ** The obvious downside of such an approach is its complexity in terms of code to understand.
  ** The collaboration between several layers in a filter pipeline can be intricate, leading to
  ** chains of layered similar functions calling each other. Most of these abstractions and
- ** decorations will be removed by the compiler and optimiser, typically leading to long
+ ** decorations will be resolved by the compiler and optimiser, typically leading to long
  ** compilation times and rather large size of the generated code (which in debugging mode
- ** with full type information can even become excessively huge).
+ ** with full type information can even become excessively large).
  ** 
  ** Some caveats
  ** - the resulting pipeline is copyable, and it is typically moved out from a builder
@@ -63,10 +63,11 @@
  **   functions still accessible. The only functions meant to be used in
  **   builder style are the IterChainSearch::search() variations.
  ** - if you copy, the embedded state is copied alongside, but not
- **   any external state referred by it.
+ **   any further external state referred by it.
  ** 
+ ** @see IterChainSearch_test
  ** @see IterCursor_test
- ** @see iter-adapter.hpp
+ ** @see iter-tree-explorer.hpp
  ** @see [usage example](event-log.hpp)
  ** 
  */
@@ -110,7 +111,7 @@ namespace iter {
     buildExplorer (SRC&& dataSource)
     {
       return buildSearchFilter (forward<SRC> (dataSource))
-                .expand ([](auto it){ return it; });       // child iterator starts as copy of current level iterator
+                .expand ([](auto it){ return it; });   // child iterator starts as copy of current level iterator
     }
     
     /**
@@ -128,6 +129,7 @@ namespace iter {
         using Filter = decltype( buildSearchFilter(std::declval<SRC>()).asIterator() );
         using Pipeline = decltype( buildExplorer (std::declval<SRC>()) );
         
+        /** each step in the chain is a functor to reconfigure the underlying filter */
         using StepFunctor = std::function<void(Filter&)>;
       };
     
@@ -137,13 +139,13 @@ namespace iter {
   
   
   
-  /**
+  /*********************************************************************************************************//**
    * Iterator based linear search mechanism, with the ability to perform consecutive search with backtracking.
    * The IterChainSearch can be configured with a sequence of search goals (filter conditions), and will apply
    * these in succession on the underlying iterator. It will search _by linear search_ for the first hit of the
    * first condition, and then continue to search _from there_ matching on the second condition, and so on.
    * After the first combination of matches is exhausted, the search will backtrack and try to evaluate
-   * the next combination, leading to a tree of search solutions.
+   * the next combination, leading to a tree of on-demand search solutions.
    */
   template<class SRC>
   class IterChainSearch
@@ -177,7 +179,7 @@ namespace iter {
       explicit
       IterChainSearch (SEQ&& srcData)
         : _Base{buildExplorer (forward<SEQ> (srcData))}
-        {       // mark initial pristine state
+        {      // mark initial pristine state
           _Base::disableFilter();
         }
       
@@ -216,7 +218,7 @@ namespace iter {
        *       to possibly change its configuration.
        * @note the given functor, lambda or function reference will be wrapped and adapted
        *       to conform to the required function signature. When using a generic lambda,
-       *       the argument type `Filter&` is assumed
+       *       the argument type `Filter&` is used for instantiation
        * @remarks the additional chained search condition given here will be applied _after_
        *       matching all other conditions already in the filter chain. Each such condition
        *       is used to _filter_ the underlying source iterator, i.e. pull it until finding
@@ -235,7 +237,7 @@ namespace iter {
               
               if (_Base::isDisabled())
                 nextStep (*this);                               // apply first step immediately
-              else
+              else                                             //  (implicitly enables the base filter)
                 {
                   stepChain_.emplace_back (move (nextStep)); //    append all further steps into the chain...
                   this->iterNext();                         //     then establish invariant:
@@ -295,14 +297,15 @@ namespace iter {
   /* ==== convenient builder free function ==== */
   
   /** setup a chain search configuration by suitably wrapping the given container.
-   * @return a TreeEplorer, which is an Iterator to yield all the source elements,
-   *         but may also be used to build an processing pipeline.
+   * @return an IterChainSearch instantiation, which is an Iterator to yield all the
+   *         source elements, but can be outfitted with a sequence of filter conditions,
+   *         to be applied to the underlying source one by one.
+   * @param srcData either a »Lumiera Forward Iterator«, a _reference_ to a STL
+   *         container, or a [»State Core«](\ref lib::IterStateWrapper) object.
    * @warning if you capture the result of this call by an auto variable,
    *         be sure to understand that invoking any further builder operation on
    *         TreeExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
-   * @param srcData either a »Lumiera Forward Iterator«, a _reference_ to a STL
-   *         container, or a [»State Core«](\ref lib::IterStateWrapper) object.
    */
   template<class SRC>
   inline auto

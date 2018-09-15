@@ -28,9 +28,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/format-util.hpp"  /////////////////////////////TODO necessary?
-#include "lib/format-cout.hpp"  /////////////////////////////TODO necessary?
+#include "lib/format-util.hpp"
 #include "lib/iter-chain-search.hpp"
+#include "lib/iter-cursor.hpp"
 #include "lib/util.hpp"
 
 #include <vector>
@@ -80,18 +80,22 @@ namespace test{
   
   
   
-///////////////////////////////////////////////////TODO WIP
-#define SHOW_TYPE(_TY_) \
-    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
-#define SHOW_EXPR(_XX_) \
-    cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
-///////////////////////////////////////////////////TODO WIP
   
   
   
   
   /*****************************************************************//**
    * @test verify a setup for consecutive searches with backtracking.
+   *       - demonstrate simple consecutive matches and iterator behaviour
+   *       - clear the filter underway and thus return to simple iteration
+   *       - set up two conditions, the second one capturing state at the
+   *         point where the first one matches
+   *       - wrap a lib::IterCursor, which allows to toggle the search
+   *         direction underway; this creates a situation where the
+   *         first options picked do not lead to a successful solution,
+   *         so the search has to track back, try further options and
+   *         in each case re-apply all the following consecutive
+   *         search conditions.
    * 
    * @see iter-chain-search.hpp
    * @see iter-cursor.hpp
@@ -156,7 +160,7 @@ namespace test{
           
           search.addStep([](auto& filter)
                             {                                              // Note: pick the current value at the point
-                              string currVal = *filter;                    //       where the 2nd filter step is (re)applied 
+                              string currVal = *filter;                    //       where the 2nd filter step is (re)applied
                               filter.setNewFilter ([=](string const& val)  //       ...and bake this value into the lambda closure
                                                     {
                                                       return val != currVal;
@@ -171,7 +175,6 @@ namespace test{
                     "bacon-tomato-and-"                       // any non-spam behind the 3rd spam
                     "tomato-and"                              // any non-spam behind the 4th spam
                     "");                                      // and any non-spam behind the final spam
-          
         }
       
       
@@ -187,6 +190,32 @@ namespace test{
       void
       backtracking ()
         {
+          using Cursor = IterCursor<decltype(SPAM.begin())>;
+          
+          auto search = chainSearch(Cursor{SPAM.begin(), SPAM.end()})
+                          .search("spam")
+                          .addStep([](auto& filter)
+                                      {
+                                        filter.switchBackwards(); // switch search direction without moving the cursor
+                                        filter.flipFilter();      // flip from match on "spam" to match on non-spam
+                                      })
+                          .addStep([](auto& filter)
+                                      {                           // filter is still configured to search non-spam backwards
+                                        ++filter;                 // just "advance" this filter by one step (backward)
+                                      });
+          
+          CHECK (materialise (search)        // Layer-0: 1-3 spam fail altogether, too greedy. Try 4rd spam....
+                                             // Layer-1: turn back, toggle to non-spam, find bacon
+                 == "sausage-"               // Layer-2: non-spam and one step further backwards yields sausage
+                                             //
+                                             // BACKTRACK to Layer-0: pick 5th (and last) spam...
+                                             // Layer-1: turn back, toggle to non-spam, find "and"
+                    "tomato-bacon-sausage-"  // Layer-2: non-spam and one step back yields tomato, next bacon, next sausage.
+                                             // BACKTRACK to Layer-1: take previous one, which is tomato
+                    "bacon-sausage-"         // Layer-2: non-spam and one step further back yields bacon, then next sausage.
+                                             // BACKTRACK to Layer-1: take previous non-spam, which is bacon
+                    "sausage"                // Layer-2: non-spam and one step further back yields sausage.
+                    "");                     // BACKTRACK to Layer-1: exhausted, BACKTRACK to Layer-0: exhausted. Done.
         }
     };
   
