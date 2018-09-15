@@ -155,7 +155,7 @@ namespace test{
 ///////////////////////////////////////////////////TODO WIP
           CHECK (search);
           
-          search.addStep([](auto filter)
+          search.addStep([](auto& filter)
                             {
                               string currVal = *filter;
                               filter.setNewFilter ([=](string const& val){

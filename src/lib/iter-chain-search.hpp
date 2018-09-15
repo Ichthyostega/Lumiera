@@ -153,11 +153,12 @@ namespace iter {
       iterNext()
         {
           _Base::__throw_if_empty();
-          while (_Base::depth() < stepChain_.size()                          // Backtracking loop: attempt to establish all conditions
+          uint depth;
+          while (stepChain_.size() > (depth=_Base::depth())                  // Backtracking loop: attempt to establish all conditions
                  and _Base::checkPoint())                                    // possibly trying further combinations until success:
             {
               _Base::expandChildren();                                       // create copy of current filter embedded into child level
-              stepChain_[_Base::depth()] (_Base::accessCurrentChildIter());  // invoke step functor to reconfigure this filter...
+              stepChain_[depth] (_Base::accessCurrentChildIter());  // invoke step functor to reconfigure this filter...
               _Base::dropExhaustedChildren();                                // which thereby might become empty
             }
         }

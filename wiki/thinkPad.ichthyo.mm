@@ -32333,22 +32333,22 @@
 </node>
 <node CREATED="1536958647378" ID="ID_270574796" MODIFIED="1536958666418" TEXT="Konsequenz: Schlu&#xdf; mit der Magie">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958668327" ID="ID_392267635" MODIFIED="1536958691189" TEXT="keine geheimnisvollen Lambda-Closures mehr">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536958668327" ID="ID_392267635" MODIFIED="1536977591699" TEXT="keine geheimnisvollen Lambda-Closures mehr">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958680150" ID="ID_1572201908" MODIFIED="1536958697495" TEXT="zwei Layer verwenden">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958702987" ID="ID_1313964418" MODIFIED="1536958768827" TEXT="Basis == trivialer Explorer">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958719665" ID="ID_806425486" MODIFIED="1536958767715" TEXT="macht lediglich eine Kopie des Filters">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536958702987" ID="ID_1313964418" MODIFIED="1536977597184" TEXT="Basis == trivialer Explorer">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1536958719665" ID="ID_806425486" MODIFIED="1536977595267" TEXT="macht lediglich eine Kopie des Filters">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1536958727368" ID="ID_1206856632" MODIFIED="1536958732419" TEXT="nichts mehr automatisch"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958733950" ID="ID_374374485" MODIFIED="1536958769371" TEXT="Dekorator == Steuer-Logik">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958744325" ID="ID_151094681" MODIFIED="1536958763476" TEXT="h&#xe4;lt den stepChain_">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1536958744325" ID="ID_151094681" MODIFIED="1536977615339" TEXT="h&#xe4;lt den stepChain_">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958772594" ID="ID_365283571" MODIFIED="1536958788657" TEXT="klinkt sich in iterNext ein">
 <icon BUILTIN="flag-yellow"/>
@@ -32372,8 +32372,45 @@
 </richcontent>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1536977661129" ID="ID_700598895" MODIFIED="1536977792241" TEXT="Vorsicht: brauche nochmal IterableDecorator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn: TreeExplorer == IterableDecorator&lt; Pipeline &gt;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536977678590" ID="ID_747407291" MODIFIED="1536977792241" TEXT="sonst wird meine spezielle IterNext() nicht aufgerufen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der oberste Layer, also hier IterChainSearch
+    </p>
+    <p>
+      ist selbst ein StateCore. Also brauche ich noch einen Dekocator
+    </p>
+    <p>
+      Wenn der fehlt, wird der n&#228;chste darunterliegende Decorator gepullt,
+    </p>
+    <p>
+      und der wickellt direkt den Expander ein
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536958815668" ID="ID_327461551" MODIFIED="1536958840692">
+</node>
+</node>
+<node COLOR="#338800" CREATED="1536958815668" ID="ID_327461551" MODIFIED="1536977621476">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -32385,9 +32422,9 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536969507092" ID="ID_1318810550" MODIFIED="1536969521859" TEXT="braucht dazu eine Hintert&#xfc;r im Explorer-Layer">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1536969507092" ID="ID_1318810550" MODIFIED="1536977610592" TEXT="braucht dazu eine Hintert&#xfc;r im Explorer-Layer">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1536969537728" ID="ID_1955805225" MODIFIED="1536969691123" TEXT="kann/darf diese nicht f&#xfc;r Basis-Iterator nutzen">
 <richcontent TYPE="NOTE"><html>
