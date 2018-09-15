@@ -32466,7 +32466,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537022206627" ID="ID_983878679" MODIFIED="1537022215843" TEXT="mit komplexem Funktor">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1537022226504" ID="ID_1825074472" MODIFIED="1537022243242" TEXT="faul?">
+<node COLOR="#338800" CREATED="1537022226504" ID="ID_1825074472" MODIFIED="1537024319743" TEXT="faul?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -32478,7 +32478,28 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537024323509" ID="ID_22995423" MODIFIED="1537024327665" TEXT="ja">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1537024330564" ID="ID_1923248765" MODIFIED="1537024353996" TEXT="das Element, auf das wir backtracken, kommt raus"/>
+</node>
+<node COLOR="#338800" CREATED="1537024363024" ID="ID_197150338" MODIFIED="1537024376343" TEXT="mu&#xdf; nach Backtracking explizit neu aufsetzen und hochspulen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1537024386500" ID="ID_792998865" MODIFIED="1537024403713" TEXT="schon besser....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sausage-bacon-tomato-and-spam-spam-bacon-spam-tomato-and-spam-bacon-tomato-and-bacon-tomato-and-tomato-and
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537022216506" ID="ID_794497840" MODIFIED="1537022219986" TEXT="mit Backtracking">

@@ -192,16 +192,14 @@ namespace iter {
           _Base::__throw_if_empty();
           if (not needsExpansion())
             _Base::iterNext();
-          else
-            do
-              {
-                uint depth =_Base::depth();
-                _Base::expandChildren();                              // create copy of current filter embedded into child level
-                stepChain_[depth] (_Base::accessCurrentChildIter());  // invoke step functor to reconfigure this filter...
-                _Base::dropExhaustedChildren();                       // which thereby might become empty
-              }
-          while (needsExpansion()                                     // Backtracking loop: attempt to establish all conditions
-                 and _Base::checkPoint());                            // possibly trying further combinations until success:
+          while (needsExpansion()                                   // Backtracking loop: attempt to establish all conditions
+                 and _Base::checkPoint())                           // possibly trying further combinations until success:
+            {
+              uint depth =_Base::depth();
+              _Base::expandChildren();                              // create copy of current filter embedded into child level
+              stepChain_[depth] (_Base::accessCurrentChildIter());  // invoke step functor to reconfigure this filter...
+              _Base::dropExhaustedChildren();                       // which thereby might become empty
+            }
         }
       
       IterChainSearch&
