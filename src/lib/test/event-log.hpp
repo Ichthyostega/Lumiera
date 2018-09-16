@@ -45,7 +45,7 @@
 
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-chain-search.hpp"
 #include "lib/iter-cursor.hpp"
 #include "lib/format-util.hpp"
 #include "lib/format-cout.hpp"
@@ -78,8 +78,7 @@ namespace test{
     buildSearchFilter(Log const& srcSeq)
     {
       using Cursor  = lib::iter::CursorGear<Log::const_iterator>;
-      return treeExplore (Cursor{srcSeq.begin(), srcSeq.end()})
-                .mutableFilter();
+      return iter::chainSearch (Cursor{srcSeq.begin(), srcSeq.end()});
     }
   }
   
@@ -327,15 +326,23 @@ namespace test{
       void
       attachNextSerchStep (COND&& filter, Direction direction)
         {
-          solution_.reverse (BACKWARD == direction);
-          solution_.setNewFilter (forward<COND> (filter));
+          solution_.addStep ([predicate{forward<COND> (filter)}, direction]
+                             (auto& filter)
+                               {
+                                 filter.reverse (BACKWARD == direction);
+                                 filter.setNewFilter (predicate);
+                               });
         }
       
       template<typename COND>
       void
       refineSerach (COND&& additionalFilter)
         {
-          solution_.andFilter (forward<COND> (additionalFilter));
+          solution_.addStep ([predicate{forward<COND> (additionalFilter)}]
+                             (auto& filter)
+                               {
+                                 filter.andFilter (predicate);
+                               });
         }
       
       

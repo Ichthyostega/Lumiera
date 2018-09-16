@@ -31164,8 +31164,7 @@
       ohnehin laufen schon ziemlich alle konkreten Layer-Builder nach einem Schema-F
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1536958979046" ID="ID_700334374" MODIFIED="1537050782627" TEXT="Typ per Template-Parameter &#xfc;bergeben">
@@ -31478,8 +31477,7 @@
       da sich die Iteratoren <i>wirklich</i>&#160;unterscheiden k&#246;nnen d&#252;rfen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1536508169610" ID="ID_1935713564" MODIFIED="1536508703334" TEXT="beide Funktoren direkt in expandChildren() verwendet">
@@ -31522,8 +31520,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="down"/>
 </node>
 <node CREATED="1536508343419" ID="ID_1905482399" MODIFIED="1536508782549" TEXT="und hat daf&#xfc;r einfacheren Code und klarere Template-Argumente">
@@ -31536,8 +31533,7 @@
       und <b>das</b>&#160;ist das Argument, das sticht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="up"/>
 </node>
 <node CREATED="1536508376894" ID="ID_1216206461" MODIFIED="1536508787136" TEXT="Erhalten der alten L&#xf6;sung w&#xfc;rde zwei redundante Code-Pfade erfordern">
@@ -31550,8 +31546,7 @@
       ...will sagen, wenn schon eine neue L&#246;sung, dann von A bis Z
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="up"/>
 </node>
 </node>
@@ -31667,8 +31662,126 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1535939763441" ID="ID_132867774" MODIFIED="1535939780642" TEXT="mu&#xdf; &quot;nur noch&quot; Cursor gegen neue State-Core austauschen"/>
 <node CREATED="1535939781302" ID="ID_285459121" MODIFIED="1535939796824" TEXT="diese h&#xe4;lt den Cursor plus einen Stack mit den Filtern"/>
+<node CREATED="1537058259201" ID="ID_1249469718" MODIFIED="1537058264460" TEXT="Anpassungen">
+<node COLOR="#338800" CREATED="1537058272183" ID="ID_1629184923" MODIFIED="1537059375100" TEXT="Alles per Filter-Chain machen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537058280542" ID="ID_1820744744" MODIFIED="1537058284929" TEXT="ist zwar aufwendiger..."/>
+<node CREATED="1537058285286" ID="ID_1430429521" MODIFIED="1537058383182" TEXT="aber das einzig Sinnvolle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn durch das Backtracking
+    </p>
+    <p>
+      w&#252;rde man nun ziemlich undurchsichtige Misch-Zust&#228;nde bekommen.
+    </p>
+    <p>
+      Und: jeder direkt gesetzte Filter k&#246;nnte die Invariante im Expander verletzen
+    </p>
+    <p>
+      (weil er einen Kind-Iterator leer machen k&#246;nnte, ohne da&#223; dieser gePOPpt wird)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1537058418739" ID="ID_232136872" MODIFIED="1537059386568" TEXT="Umstellung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1537058434897" ID="ID_1021441779" MODIFIED="1537059381029" TEXT="attachNextSerchStep">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537058445064" ID="ID_1377843323" MODIFIED="1537058450843" TEXT="kompletten Filter-Konfigurator"/>
+<node CREATED="1537058451527" ID="ID_1849109468" MODIFIED="1537058459138" TEXT="stets auch die Richtung setzen"/>
+</node>
+<node COLOR="#338800" CREATED="1537058470628" ID="ID_244817932" MODIFIED="1537059384506" TEXT="refineSerach">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537058473468" ID="ID_1720204552" MODIFIED="1537058480839" TEXT="ebenfalls kompletten Filter-Konfigurator"/>
+<node CREATED="1537058485338" ID="ID_738059771" MODIFIED="1537058694225" TEXT="Vorsicht: das gibt nun zus&#xe4;ztliche L&#xf6;sungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil wir uns bisher bei allen vorausgegangenen Bedingungen
+    </p>
+    <p>
+      auf den ersten Match &quot;festgebissen&quot; haben, und nur &#252;ber den Iterator mit der
+    </p>
+    <p>
+      zuletzt gesetzen Bedingung weiter iteriert haben.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      K&#252;nftig gibt es nach jedem Fail ein Backtracking.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1537058600555" ID="ID_717984419" MODIFIED="1537058656433" TEXT="sollte aber bei reinen AND-Klauseln egal sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h es findet zwar ein Backtracking statt, aber wenn alle konjunktiven Klauseln gesetzt sind,
+    </p>
+    <p>
+      sollte sich erneut ein FAIL ergeben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1537058662202" ID="ID_654601259" MODIFIED="1537058688483" TEXT="und blo&#xdf; zus&#xe4;tzlichen overhead bei NOT-Match-Tests bewirken"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1537059388025" ID="ID_1276869558" MODIFIED="1537059394146" TEXT="Tests scheitern...">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1537059395184" ID="ID_77123611" MODIFIED="1537059453857" TEXT="EventLog_test">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      est-event-log-test.cpp:228:&#160;&#160;verify_callLogging: (log.ensureNot(&quot;fun&quot;).after(&quot;fun&quot;).after(&quot;fun2&quot;))
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1537059455216" ID="ID_318014472" MODIFIED="1537059471791">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Verdacht: <b>Negation</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1537059402359" ID="ID_1670401833" MODIFIED="1537059407506" TEXT="BusTerm_test"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536368106394" ID="ID_1324169393" MODIFIED="1536368114930" TEXT="in eigene Translation-Unit verschieben">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1537059357301" ID="ID_1501687281" MODIFIED="1537059360761" TEXT="Beobachtungen">
 <node CREATED="1536368121224" ID="ID_684768731" MODIFIED="1536368139195">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -31680,15 +31793,32 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1536368144661" ID="ID_184622907" MODIFIED="1536368158636" TEXT="BusTerm_test = 12 MB">
+<node CREATED="1536368144661" ID="ID_184622907" MODIFIED="1537058233640" TEXT="BusTerm_test = 13.1 MB">
 <icon BUILTIN="smiley-angry"/>
 </node>
-<node CREATED="1536368166242" ID="ID_280400966" MODIFIED="1536368177458" TEXT="EventLog_test = 6 MB">
+<node CREATED="1536368166242" ID="ID_280400966" MODIFIED="1537058245743" TEXT="EventLog_test = 6.2 MB">
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
-<node CREATED="1536368188063" ID="ID_1725693994" MODIFIED="1536368197862" TEXT="kein Wunder bei den Typen...">
-<icon BUILTIN="ksmiletris"/>
+<node CREATED="1537058044500" ID="ID_637125647" MODIFIED="1537058178984" TEXT="Aber: Such-Iterator im Event-Log ist nicht der Hauptschuldige">
+<icon BUILTIN="idea"/>
+<node CREATED="1537058071056" ID="ID_1523796232" MODIFIED="1537058162420" TEXT="Versuchsweise auskommentiert"/>
+<node CREATED="1536368144661" ID="ID_1550616773" MODIFIED="1537058237543" TEXT="BusTerm_test = 11 MB">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1536368166242" ID="ID_1244843669" MODIFIED="1537058249425" TEXT="EventLog_test = 4 MB">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node CREATED="1537059265873" ID="ID_798187553" MODIFIED="1537059347543" TEXT="leider merkt man aber die Umstellung auf IterChainSearch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1536368144661" ID="ID_1266326166" MODIFIED="1537059319775" TEXT="BusTerm_test = 14.3 MB">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1536368166242" ID="ID_1222359374" MODIFIED="1537059337516" TEXT="EventLog_test = 7.4 MB">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -31900,8 +32030,7 @@
       Nicht nur auf den aktuellen Wert (=dereferenzierter Iterator, d.h. die Funktion yield())
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smily_bad"/>
 </node>
@@ -32312,8 +32441,7 @@
       ...d.h. direkt das Pr&#228;dikat, und nicht eine Funktion, die den Filter konfiguriert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1536792241949" ID="ID_613611906" MODIFIED="1536792249583" TEXT="setzt direkt nur ein neues Pr&#xe4;dikat"/>
 <node CREATED="1536792250124" ID="ID_10955924" MODIFIED="1536792257390" TEXT="spart viel Syntax ein">
@@ -32343,8 +32471,7 @@
       und manchen komischen Workaround implementiert.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1536845594971" ID="ID_1942437093" MODIFIED="1536845602373" TEXT="Eclipse updaten?">
 <icon BUILTIN="hourglass"/>
@@ -32400,8 +32527,7 @@
       weil ich dann auf dem IterChainSearch unmittelbar die builder-Funktionen definieren kann
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1536977661129" ID="ID_700598895" MODIFIED="1537022064594" TEXT="Vorsicht: brauche nochmal IterableDecorator">
@@ -32414,8 +32540,7 @@
       denn: TreeExplorer == IterableDecorator&lt; Pipeline &gt;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1536977678590" ID="ID_747407291" MODIFIED="1537022078175" TEXT="sonst wird meine spezielle IterNext() nicht aufgerufen">
 <richcontent TYPE="NOTE"><html>
@@ -32436,8 +32561,7 @@
       und der wickellt direkt den Expander ein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1537022084564" ID="ID_447764404" MODIFIED="1537022104224" TEXT="brauche doch einen top-Level TreeExplorer + custom-Layer">
@@ -32458,8 +32582,7 @@
       konfiguriert <i>danach direkt</i>&#160;den Filter
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536969507092" ID="ID_1318810550" MODIFIED="1536977610592" TEXT="braucht dazu eine Hintert&#xfc;r im Explorer-Layer">
 <icon BUILTIN="button_ok"/>
@@ -32486,8 +32609,7 @@
       einem Solchen Fall insgesamt vom Compiler zur&#252;ckgewiesen)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -32508,8 +32630,7 @@
       sausage-bacon-tomato-and-sausage-spam-spam-bacon-spam-tomato-and-spam-spam-bacon-tomato-and-spam-bacon-tomato-and-spam-tomato-and-spam
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1537024323509" ID="ID_22995423" MODIFIED="1537024327665" TEXT="ja">
 <icon BUILTIN="ksmiletris"/>
@@ -32529,8 +32650,7 @@
       sausage-bacon-tomato-and-spam-spam-bacon-spam-tomato-and-spam-bacon-tomato-and-bacon-tomato-and-tomato-and
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
