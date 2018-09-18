@@ -31775,8 +31775,64 @@
 </html>
 </richcontent>
 </node>
+<node CREATED="1537230016114" ID="ID_1768475576" MODIFIED="1537309001137" TEXT="nein... es war bisher kaputt">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1537230071267" ID="ID_325369118" MODIFIED="1537230244388" TEXT="und funktioniert jetzt korrekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      fun after fun matcht auf den immer gleichen Record
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1537230078498" ID="ID_746060961" MODIFIED="1537230098331" TEXT="wir setzen am vorherigen Match auf"/>
+<node CREATED="1537230100031" ID="ID_831756745" MODIFIED="1537230107546" TEXT="das ist &#xfc;berraschend"/>
+<node COLOR="#435e98" CREATED="1537230108686" ID="ID_256131209" MODIFIED="1537308972344" TEXT="sollten wir das &#xe4;ndern?">
+<icon BUILTIN="help"/>
+<node CREATED="1537230118588" ID="ID_173358506" MODIFIED="1537308994452" TEXT="principle of least surprise">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1537230125716" ID="ID_2590903" MODIFIED="1537308991177" TEXT="aber...">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1537230132898" ID="ID_595305834" MODIFIED="1537230142973" TEXT="manche Tests haben das ausgen&#xfc;tzt">
+<node CREATED="1537230371514" ID="ID_1967930414" MODIFIED="1537230375734" TEXT="real world?"/>
+</node>
+<node CREATED="1537230143633" ID="ID_1378112667" MODIFIED="1537230158723" TEXT="brauche dann eigene Einstiegs-Methode">
+<node CREATED="1537308984470" ID="ID_1575859366" MODIFIED="1537308986984" TEXT="besser so"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1537059402359" ID="ID_1670401833" MODIFIED="1537059407506" TEXT="BusTerm_test"/>
+<node CREATED="1537230718644" ID="ID_1760678465" MODIFIED="1537230724855" TEXT="Fix">
+<node COLOR="#338800" CREATED="1537230726491" ID="ID_1088562812" MODIFIED="1537308952574" TEXT="before / after gehen stets einen Schritt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1537230751079" ID="ID_1776084088" MODIFIED="1537308946695" TEXT="neue reine Filter-Funktionen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1537230790179" ID="ID_1688121233" MODIFIED="1537308959793" TEXT="wechseln nur den Filter">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1537230809608" ID="ID_132845471" MODIFIED="1537308961598" TEXT="attached as Step">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1537230937167" ID="ID_83896289" MODIFIED="1537230950961" TEXT="Namen">
+<node CREATED="1537230952405" ID="ID_36863841" MODIFIED="1537230954560" TEXT="locate"/>
+<node CREATED="1537230955156" ID="ID_1450598514" MODIFIED="1537230957952" TEXT="locateMatch"/>
+<node CREATED="1537230958684" ID="ID_288175427" MODIFIED="1537230961695" TEXT="locateEvent"/>
+<node CREATED="1537230962475" ID="ID_1446509249" MODIFIED="1537230964919" TEXT="locateCall"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1537230778540" ID="ID_985799795" MODIFIED="1537308964650" TEXT="diese auch f&#xfc;r den Einstieg verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536368106394" ID="ID_1324169393" MODIFIED="1536368114930" TEXT="in eigene Translation-Unit verschieben">
@@ -31818,6 +31874,44 @@
 <node CREATED="1536368166242" ID="ID_1222359374" MODIFIED="1537059337516" TEXT="EventLog_test = 7.4 MB">
 <icon BUILTIN="smiley-angry"/>
 </node>
+</node>
+</node>
+<node CREATED="1537059850803" ID="ID_253192903" MODIFIED="1537059853438" TEXT="Plan">
+<node CREATED="1537059854290" ID="ID_1281790716" MODIFIED="1537059867700" TEXT="der Typ der Search-Engine mu&#xdf; nicht verborgen werden"/>
+<node CREATED="1537059868337" ID="ID_138143272" MODIFIED="1537059878979" TEXT="es kann daher ein direktes Objektfeld bleiben"/>
+<node CREATED="1537059879759" ID="ID_893108945" MODIFIED="1537059904472" TEXT="alle Suchpr&#xe4;dikate sind Lambdas -&gt; Template Argumente"/>
+<node CREATED="1537059905107" ID="ID_133126017" MODIFIED="1537059924085" TEXT="d.h. auch die Such-Funktionen m&#xfc;ssen nach hinten in das CPP gedr&#xfc;ckt werden"/>
+<node CREATED="1537059925313" ID="ID_1283278546" MODIFIED="1537059940483" TEXT="Problem Var-Arg">
+<node CREATED="1537059941287" ID="ID_1072965326" MODIFIED="1537059944938" TEXT="Argument-Match"/>
+<node CREATED="1537059945310" ID="ID_1104771437" MODIFIED="1537059950057" TEXT="RegExp-Sequenz"/>
+<node CREATED="1537059950597" ID="ID_1688685593" MODIFIED="1537059976646" TEXT="beide erzeugen aber einen STL-container als Intermediary">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1537059978146" ID="ID_1403964414" MODIFIED="1537059984405" TEXT="d.h. man kann dazwischen schneiden"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537059994048" ID="ID_1556879726" MODIFIED="1537059997529" TEXT="Umbau">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060007341" ID="ID_137118669" MODIFIED="1537060024165" TEXT="eigene Translation-Unit EventLog.cpp anlegen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060024891" ID="ID_416527676" MODIFIED="1537060038043" TEXT="Ctor nach hinten schieben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060040409" ID="ID_440163527" MODIFIED="1537060051953" TEXT="Auswerte-Logik nach hinten schieben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060054767" ID="ID_1081334498" MODIFIED="1537060092467" TEXT="Problem: private Matcher-Builder">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060094809" ID="ID_442340693" MODIFIED="1537060104954" TEXT="in freie Template-Funktionen verwandeln?">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060267290" ID="ID_1006625301" MODIFIED="1537060278162" TEXT="auch die direkten Filter-Konfigurier-Funktionen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060121158" ID="ID_1857002867" MODIFIED="1537060136293" TEXT="Such-Funktionen nach hinten reichen">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

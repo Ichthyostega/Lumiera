@@ -319,19 +319,23 @@ namespace test{
       /* === configure the underlying search engine === */
       
       enum Direction {
-        FORWARD, BACKWARD
+        FORWARD, BACKWARD, CURRENT
       };
       
       template<typename COND>
       void
       attachNextSerchStep (COND&& filter, Direction direction)
         {
-          solution_.addStep ([predicate{forward<COND> (filter)}, direction]
-                             (auto& filter)
-                               {
-                                 filter.reverse (BACKWARD == direction);
-                                 filter.setNewFilter (predicate);
-                               });
+          if (CURRENT == direction)
+            solution_.search (forward<COND> (filter));
+          else
+            solution_.addStep ([predicate{forward<COND> (filter)}, direction]
+                               (auto& filter)
+                                 {
+                                   filter.reverse (BACKWARD == direction);
+                                   ++filter;
+                                   filter.setNewFilter (predicate);
+                                 });
         }
       
       template<typename COND>
@@ -362,6 +366,60 @@ namespace test{
           return true;
         }
       
+      
+      /**
+       * basic search function: continue linear lookup over the elements of the
+       * EventLog to find a match (substring match) of the given text. The search begins
+       * at the current position and proceeds in the currently configured direction.
+       * Initially the search starts at the first record and proceeds forward. 
+       */
+      EventMatch&
+      locate (string match)
+        {
+          attachNextSerchStep (find(match), CURRENT);
+          evaluateQuery ("match(\""+match+"\")");
+          return *this;
+        }
+      
+      /** basic search like locate() but with the given regular expression */
+      EventMatch&
+      locateMatch (string regExp)
+        {
+          attachNextSerchStep (findRegExp(regExp), CURRENT);
+          evaluateQuery ("find-RegExp(\""+regExp+"\")");
+          return *this;
+        }
+      
+      /** basic search for a matching  "event"
+       * @param match perform a substring match against the arguments of the event
+       * @see beforeEvent() for a description of possible "events"
+       */
+      EventMatch&
+      locateEvent (string match)
+        {
+          attachNextSerchStep (findEvent(match), CURRENT);
+          evaluateQuery ("match-event(\""+match+"\")");
+          return *this;
+        }
+      
+      EventMatch&
+      locateEvent (string classifier, string match)
+        {
+          attachNextSerchStep (findEvent(classifier,match), CURRENT);
+          evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")");
+          return *this;
+        }
+      
+      /** basic search for some specific function invocation
+       * @param match perform a substring match against the name of the function invoked
+       */
+      EventMatch&
+      locateCall (string match)
+        {
+          attachNextSerchStep (findCall(match), CURRENT);
+          evaluateQuery ("match-call(\""+match+"\")");
+          return *this;
+        }
       
       /**
        * find a match (substring match) of the given text
@@ -860,14 +918,15 @@ namespace test{
        *  The resulting matcher object will qualify on any log entry
        *  containing the given string. By adding subsequent further
        *  query expressions on the returned [matcher object](\ref EventMatch),
-       *  the query can be refined. Refining a query might induce backtracking.
-       *  The final result can be retrieved by `bool` conversion
+       *  the query can be refined. Moreover it is possible to chain up further
+       *  search queries, which will be executing starting from the position of the
+       *  previous match. The final result can be retrieved by `bool` conversion
        */
       EventMatch
       verify (string match)  const
         {
           EventMatch matcher(*log_);
-          matcher.before (match);   // "the start of the log is before the match"
+          matcher.locate (match);   // new matcher starts linear search from first log element
           return matcher;
         }
       
@@ -881,7 +940,7 @@ namespace test{
       verifyMatch (string regExp)  const
         {
           EventMatch matcher(*log_);
-          matcher.beforeMatch (regExp);
+          matcher.locateMatch (regExp);
           return matcher;
         }
       
@@ -896,15 +955,18 @@ namespace test{
       verifyEvent (string match)  const
         {
           EventMatch matcher(*log_);
-          matcher.beforeEvent (match);
+          matcher.locateEvent (match);
           return matcher;
         }
       
+      /** start a query to match for an specific kind of element
+       * @param classifier select kind of event by match on type or ID
+       */
       EventMatch
       verifyEvent (string classifier, string match)  const
         {
           EventMatch matcher(*log_);
-          matcher.beforeEvent (classifier, match);
+          matcher.locateEvent (classifier, match);
           return matcher;
         }
       
@@ -922,7 +984,7 @@ namespace test{
       verifyCall (string match)  const
         {
           EventMatch matcher(*log_);
-          matcher.beforeCall (match);
+          matcher.locateCall (match);
           return matcher;
         }
       
@@ -940,7 +1002,7 @@ namespace test{
         {
           EventMatch matcher(*log_);
           matcher.look_for_match_ = false; // flip logic; fail if match succeeds
-          matcher.before (match);
+          matcher.locate (match);
           return matcher;
         }
       
