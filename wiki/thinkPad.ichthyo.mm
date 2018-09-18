@@ -31762,7 +31762,7 @@
 </html>
 </richcontent>
 <icon BUILTIN="info"/>
-<node CREATED="1537059455216" ID="ID_318014472" MODIFIED="1537059471791">
+<node CREATED="1537059455216" ID="ID_318014472" MODIFIED="1537309403475">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -31774,6 +31774,7 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1537230016114" ID="ID_1768475576" MODIFIED="1537309001137" TEXT="nein... es war bisher kaputt">
 <icon BUILTIN="broken-line"/>
@@ -31792,7 +31793,8 @@
 </node>
 <node CREATED="1537230078498" ID="ID_746060961" MODIFIED="1537230098331" TEXT="wir setzen am vorherigen Match auf"/>
 <node CREATED="1537230100031" ID="ID_831756745" MODIFIED="1537230107546" TEXT="das ist &#xfc;berraschend"/>
-<node COLOR="#435e98" CREATED="1537230108686" ID="ID_256131209" MODIFIED="1537308972344" TEXT="sollten wir das &#xe4;ndern?">
+<node COLOR="#435e98" CREATED="1537230108686" ID="ID_256131209" MODIFIED="1537309438059" TEXT="sollten wir das &#xe4;ndern?">
+<arrowlink COLOR="#73a3ae" DESTINATION="ID_1088562812" ENDARROW="Default" ENDINCLINATION="255;0;" ID="Arrow_ID_1747758330" STARTARROW="None" STARTINCLINATION="191;47;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1537230118588" ID="ID_173358506" MODIFIED="1537308994452" TEXT="principle of least surprise">
 <icon BUILTIN="button_ok"/>
@@ -31808,13 +31810,59 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537309349547" ID="ID_1102778316" MODIFIED="1537309388433" TEXT="bestehende Tests korrigieren">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1537309372867" FOLDED="true" ID="ID_1847253086" MODIFIED="1537312895344" TEXT="verify_simpleUsage">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537312791212" ID="ID_510039930" MODIFIED="1537312803182" TEXT="weiterer Fehler"/>
+<node CREATED="1537312804010" ID="ID_1081351208" MODIFIED="1537312892636" TEXT="vorherigien Filter vor dem Step abschalten">
+<arrowlink COLOR="#cb8fa1" DESTINATION="ID_665208250" ENDARROW="Default" ENDINCLINATION="55;0;" ID="Arrow_ID_1772260988" STARTARROW="None" STARTINCLINATION="-39;46;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537309378682" ID="ID_129678233" MODIFIED="1537309381368" TEXT="verify_callLogging">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node CREATED="1537059402359" ID="ID_1670401833" MODIFIED="1537059407506" TEXT="BusTerm_test"/>
 <node CREATED="1537230718644" ID="ID_1760678465" MODIFIED="1537230724855" TEXT="Fix">
-<node COLOR="#338800" CREATED="1537230726491" ID="ID_1088562812" MODIFIED="1537308952574" TEXT="before / after gehen stets einen Schritt">
+<node COLOR="#338800" CREATED="1537230726491" ID="ID_1088562812" MODIFIED="1537309430399" TEXT="before / after gehen stets einen Schritt">
+<linktarget COLOR="#73a3ae" DESTINATION="ID_1088562812" ENDARROW="Default" ENDINCLINATION="255;0;" ID="Arrow_ID_1747758330" SOURCE="ID_256131209" STARTARROW="None" STARTINCLINATION="191;47;"/>
 <icon BUILTIN="button_ok"/>
+<node CREATED="1537312702960" HGAP="37" ID="ID_665208250" MODIFIED="1537312886293" VSHIFT="15">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar mit <i>abgeschaltetem </i>Filter
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      f&#252;r diesen einen Schritt
+    </p>
+    <p>
+      mu&#223; die Filter-Funktion vor&#252;bergehend deaktiviert werden,
+    </p>
+    <p>
+      damit wir exakt das n&#228;chste / vorhergehende Element bekommen
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#cb8fa1" DESTINATION="ID_665208250" ENDARROW="Default" ENDINCLINATION="55;0;" ID="Arrow_ID_1772260988" SOURCE="ID_1081351208" STARTARROW="None" STARTINCLINATION="-39;46;"/>
+<icon BUILTIN="idea"/>
 </node>
-<node COLOR="#338800" CREATED="1537230751079" ID="ID_1776084088" MODIFIED="1537308946695" TEXT="neue reine Filter-Funktionen">
+</node>
+<node COLOR="#338800" CREATED="1537230751079" FOLDED="true" ID="ID_1776084088" MODIFIED="1537309459509" TEXT="neue reine Filter-Funktionen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537230790179" ID="ID_1688121233" MODIFIED="1537308959793" TEXT="wechseln nur den Filter">
 <icon BUILTIN="button_ok"/>
@@ -31828,9 +31876,9 @@
 <node CREATED="1537230958684" ID="ID_288175427" MODIFIED="1537230961695" TEXT="locateEvent"/>
 <node CREATED="1537230962475" ID="ID_1446509249" MODIFIED="1537230964919" TEXT="locateCall"/>
 </node>
-</node>
 <node COLOR="#338800" CREATED="1537230778540" ID="ID_985799795" MODIFIED="1537308964650" TEXT="diese auch f&#xfc;r den Einstieg verwenden">
 <icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>

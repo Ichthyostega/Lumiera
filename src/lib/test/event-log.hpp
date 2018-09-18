@@ -333,7 +333,8 @@ namespace test{
                                (auto& filter)
                                  {
                                    filter.reverse (BACKWARD == direction);
-                                   ++filter;
+                                   filter.disableFilter();  // deactivate any filtering temporarily 
+                                   ++filter;               //  move one step in the required direction
                                    filter.setNewFilter (predicate);
                                  });
         }
