@@ -2035,11 +2035,14 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535737911365" ID="ID_79619425" MODIFIED="1535737923428" TEXT="Unit-Test: AbtractTangible_test erweitern">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535815055702" ID="ID_493114230" MODIFIED="1535815475299" TEXT="EventLog: Problem mit Backtracking">
-<arrowlink COLOR="#ba8096" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" STARTARROW="None" STARTINCLINATION="838;114;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1535737911365" ID="ID_79619425" MODIFIED="1537320236780" TEXT="Unit-Test: AbtractTangible_test erweitern">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1535815055702" ID="ID_493114230" MODIFIED="1537320233912" TEXT="EventLog: Problem mit Backtracking">
+<arrowlink COLOR="#80b3ba" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" STARTARROW="None" STARTINCLINATION="838;114;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1537320168170" ID="ID_1213843922" MODIFIED="1537320180729" TEXT="danach l&#xe4;&#xdf;t sich die gew&#xfc;nschte Log-Bedingung formulieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1535756076321" ID="ID_1044092797" MODIFIED="1535756101199" TEXT="konkret was machen, damit man die Funktion sehen kann">
@@ -25089,7 +25092,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535815210288" ID="ID_1041148737" MODIFIED="1535815475299" TEXT="Problem: kein wirkliches Backtracking">
-<linktarget COLOR="#ba8096" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" SOURCE="ID_493114230" STARTARROW="None" STARTINCLINATION="838;114;"/>
+<linktarget COLOR="#80b3ba" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" SOURCE="ID_493114230" STARTARROW="None" STARTINCLINATION="838;114;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1535835597691" ID="ID_218241863" MODIFIED="1535835683187" TEXT="wird relevant bei Richtungs-Wechsel">
 <richcontent TYPE="NOTE"><html>
@@ -25129,7 +25132,7 @@
 <arrowlink COLOR="#cc3e57" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" STARTARROW="None" STARTINCLINATION="1631;0;"/>
 <icon BUILTIN="pencil"/>
 </node>
-<node CREATED="1536441983485" ID="ID_330124350" MODIFIED="1536442038343" TEXT="Warnung: anonymous namespace">
+<node CREATED="1536441983485" ID="ID_330124350" MODIFIED="1537320197047" TEXT="Warnung: anonymous namespace">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25175,7 +25178,8 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;^~~~~~~~~~
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -31657,12 +31661,13 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535938028929" ID="ID_1910123172" MODIFIED="1535938091638" TEXT="Backtracking Search-Engine einbauen">
+<node COLOR="#338800" CREATED="1535938028929" ID="ID_1910123172" MODIFIED="1537320149375" TEXT="Backtracking Search-Engine einbauen">
 <arrowlink COLOR="#23408f" DESTINATION="ID_1801538785" ENDARROW="Default" ENDINCLINATION="20;-55;" ID="Arrow_ID_1048873840" STARTARROW="None" STARTINCLINATION="-120;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535939763441" ID="ID_132867774" MODIFIED="1535939780642" TEXT="mu&#xdf; &quot;nur noch&quot; Cursor gegen neue State-Core austauschen"/>
 <node CREATED="1535939781302" ID="ID_285459121" MODIFIED="1535939796824" TEXT="diese h&#xe4;lt den Cursor plus einen Stack mit den Filtern"/>
-<node CREATED="1537058259201" ID="ID_1249469718" MODIFIED="1537058264460" TEXT="Anpassungen">
+<node COLOR="#338800" CREATED="1537058259201" ID="ID_1249469718" MODIFIED="1537320125432" TEXT="Anpassungen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537058272183" ID="ID_1629184923" MODIFIED="1537059375100" TEXT="Alles per Filter-Chain machen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1537058280542" ID="ID_1820744744" MODIFIED="1537058284929" TEXT="ist zwar aufwendiger..."/>
@@ -31764,8 +31769,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1537059388025" ID="ID_1276869558" MODIFIED="1537059394146" TEXT="Tests scheitern...">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1537059388025" ID="ID_1276869558" MODIFIED="1537320123695" TEXT="Tests scheitern...">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537059395184" ID="ID_77123611" MODIFIED="1537316730803" TEXT="EventLog_test">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -31842,12 +31847,21 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537316714860" ID="ID_84746570" MODIFIED="1537316725828" TEXT="Tests zur Klarstellung erg&#xe4;nzen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537316714860" ID="ID_84746570" MODIFIED="1537320053126" TEXT="Tests zur Klarstellung erg&#xe4;nzen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1537059402359" ID="ID_1670401833" MODIFIED="1537059407506" TEXT="BusTerm_test"/>
-<node COLOR="#435e98" CREATED="1537230718644" ID="ID_1760678465" MODIFIED="1537315480594" TEXT="Fix">
+<node COLOR="#338800" CREATED="1537059402359" ID="ID_1670401833" MODIFIED="1537320056202" TEXT="BusTerm_test">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1537320056985" ID="ID_1069836812" MODIFIED="1537320066440" TEXT="AbstractTangible_test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537320067432" ID="ID_1996707326" MODIFIED="1537320080797" TEXT="der hat diesen ganzen Umbau ausgel&#xf6;st">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1537230718644" ID="ID_1760678465" MODIFIED="1537320265399" TEXT="Fix">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537230726491" ID="ID_1088562812" MODIFIED="1537315479387" TEXT="before / after gehen stets einen Schritt">
 <linktarget COLOR="#73a3ae" DESTINATION="ID_1088562812" ENDARROW="Default" ENDINCLINATION="255;0;" ID="Arrow_ID_1747758330" SOURCE="ID_256131209" STARTARROW="None" STARTINCLINATION="191;47;"/>

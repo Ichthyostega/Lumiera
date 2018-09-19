@@ -535,9 +535,12 @@ namespace test {
           // Note the fine point: the target element /was/ already expanded
           // and thus there is no second "expanded" event, nor is there a
           // second state mark emitted into the UI-Bus...
-          CHECK (mock.ensureNot("expand")
-//                     .afterCall("revealYourself")
+          CHECK (mock.ensureNot("expanded")
+                     .afterCall("revealYourself")
                      .afterEvent("expanded"));
+          CHECK (nexusLog.ensureNot("note")
+                         .afterCall("mark").arg(targetID, stateMark)
+                         .after("handling state-mark"));
           
           
           
