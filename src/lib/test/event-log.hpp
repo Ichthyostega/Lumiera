@@ -32,6 +32,12 @@
  ** 
  ** Failure of match prints a detailed trace message to `STDERR`, in order
  ** to deliver a precise indication what part of the condition failed.
+ ** @note this sequence prints the matches succeeding _at the point_ where each
+ **       condition is added to the chain. Adding more conditions, especially when
+ **       combined with changed search direction, might lead to backtracking, which
+ **       happens silently within the search engine, without printing any further
+ **       diagnostics. This means: the sequence of matches you see in this diagnostic
+ **       output is not necessarily the last match patch, which lead to the final failure
  ** 
  ** @see TestEventLog_test
  ** @see [usage example](\ref AbstractTangible_test)

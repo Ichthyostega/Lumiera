@@ -31695,6 +31695,23 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1537058445064" ID="ID_1377843323" MODIFIED="1537058450843" TEXT="kompletten Filter-Konfigurator"/>
 <node CREATED="1537058451527" ID="ID_1849109468" MODIFIED="1537058459138" TEXT="stets auch die Richtung setzen"/>
+<node CREATED="1537316776292" ID="ID_507846374" MODIFIED="1537316870949" TEXT="hier nun stets einen Schritt machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...um &quot;H&#228;ngenbleiben&quot; auf dem gleichen Element auszuschlie&#223;en.
+    </p>
+    <p>
+      Vorsicht: um sauber genau einen Schritt machen zu k&#246;nnen, m&#252;ssen wir explizit vor&#252;bergehend den Filter abschalten
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#5174b2" DESTINATION="ID_256131209" ENDARROW="Default" ENDINCLINATION="-241;-10;" ID="Arrow_ID_73536182" STARTARROW="None" STARTINCLINATION="169;19;"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1537058470628" ID="ID_244817932" MODIFIED="1537059384506" TEXT="refineSerach">
 <icon BUILTIN="button_ok"/>
@@ -31749,7 +31766,7 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1537059388025" ID="ID_1276869558" MODIFIED="1537059394146" TEXT="Tests scheitern...">
 <icon BUILTIN="flag-pink"/>
-<node CREATED="1537059395184" ID="ID_77123611" MODIFIED="1537059453857" TEXT="EventLog_test">
+<node COLOR="#338800" CREATED="1537059395184" ID="ID_77123611" MODIFIED="1537316730803" TEXT="EventLog_test">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -31762,6 +31779,7 @@
 </html>
 </richcontent>
 <icon BUILTIN="info"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1537059455216" ID="ID_318014472" MODIFIED="1537309403475">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -31793,8 +31811,9 @@
 </node>
 <node CREATED="1537230078498" ID="ID_746060961" MODIFIED="1537230098331" TEXT="wir setzen am vorherigen Match auf"/>
 <node CREATED="1537230100031" ID="ID_831756745" MODIFIED="1537230107546" TEXT="das ist &#xfc;berraschend"/>
-<node COLOR="#435e98" CREATED="1537230108686" ID="ID_256131209" MODIFIED="1537309438059" TEXT="sollten wir das &#xe4;ndern?">
+<node COLOR="#435e98" CREATED="1537230108686" ID="ID_256131209" MODIFIED="1537316863454" TEXT="sollten wir das &#xe4;ndern?">
 <arrowlink COLOR="#73a3ae" DESTINATION="ID_1088562812" ENDARROW="Default" ENDINCLINATION="255;0;" ID="Arrow_ID_1747758330" STARTARROW="None" STARTINCLINATION="191;47;"/>
+<linktarget COLOR="#5174b2" DESTINATION="ID_256131209" ENDARROW="Default" ENDINCLINATION="-241;-10;" ID="Arrow_ID_73536182" SOURCE="ID_507846374" STARTARROW="None" STARTINCLINATION="169;19;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1537230118588" ID="ID_173358506" MODIFIED="1537308994452" TEXT="principle of least surprise">
 <icon BUILTIN="button_ok"/>
@@ -31810,8 +31829,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537309349547" ID="ID_1102778316" MODIFIED="1537309388433" TEXT="bestehende Tests korrigieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1537309349547" ID="ID_1102778316" MODIFIED="1537315501823" TEXT="bestehende Tests korrigieren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537309372867" FOLDED="true" ID="ID_1847253086" MODIFIED="1537312895344" TEXT="verify_simpleUsage">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1537312791212" ID="ID_510039930" MODIFIED="1537312803182" TEXT="weiterer Fehler"/>
@@ -31819,17 +31838,21 @@
 <arrowlink COLOR="#cb8fa1" DESTINATION="ID_665208250" ENDARROW="Default" ENDINCLINATION="55;0;" ID="Arrow_ID_1772260988" STARTARROW="None" STARTINCLINATION="-39;46;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537309378682" ID="ID_129678233" MODIFIED="1537309381368" TEXT="verify_callLogging">
+<node COLOR="#338800" CREATED="1537309378682" ID="ID_129678233" MODIFIED="1537315494792" TEXT="verify_callLogging">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537316714860" ID="ID_84746570" MODIFIED="1537316725828" TEXT="Tests zur Klarstellung erg&#xe4;nzen">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-</node>
 <node CREATED="1537059402359" ID="ID_1670401833" MODIFIED="1537059407506" TEXT="BusTerm_test"/>
-<node CREATED="1537230718644" ID="ID_1760678465" MODIFIED="1537230724855" TEXT="Fix">
-<node COLOR="#338800" CREATED="1537230726491" ID="ID_1088562812" MODIFIED="1537309430399" TEXT="before / after gehen stets einen Schritt">
+<node COLOR="#435e98" CREATED="1537230718644" ID="ID_1760678465" MODIFIED="1537315480594" TEXT="Fix">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1537230726491" ID="ID_1088562812" MODIFIED="1537315479387" TEXT="before / after gehen stets einen Schritt">
 <linktarget COLOR="#73a3ae" DESTINATION="ID_1088562812" ENDARROW="Default" ENDINCLINATION="255;0;" ID="Arrow_ID_1747758330" SOURCE="ID_256131209" STARTARROW="None" STARTINCLINATION="191;47;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1537312702960" HGAP="37" ID="ID_665208250" MODIFIED="1537312886293" VSHIFT="15">
+<node CREATED="1537312702960" HGAP="37" ID="ID_665208250" MODIFIED="1537315479387" VSHIFT="15">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -31862,7 +31885,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1537230751079" FOLDED="true" ID="ID_1776084088" MODIFIED="1537309459509" TEXT="neue reine Filter-Funktionen">
+<node COLOR="#338800" CREATED="1537230751079" FOLDED="true" ID="ID_1776084088" MODIFIED="1537315479388" TEXT="neue reine Filter-Funktionen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537230790179" ID="ID_1688121233" MODIFIED="1537308959793" TEXT="wechseln nur den Filter">
 <icon BUILTIN="button_ok"/>
