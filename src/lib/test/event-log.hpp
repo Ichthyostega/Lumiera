@@ -535,22 +535,33 @@ namespace test{
           return *this;
         }
       
+      void
+      refineSerach_matchArguments (ArgSeq&& argSeq)
+        {
+          string argList(util::join(argSeq));
+          refineSerach (matchArguments(move(argSeq)));
+          evaluateQuery ("match-arguments("+argList+")");
+        }
+      
       /** refine filter to additionally require specific arguments
        * @remarks the refined filter works on each record qualified by the
        *          query expression established thus far; it additionally
        *          looks into the arguments (children list) of the log entry.
-       * @warning match is processed by comparision of string representation.
+       * @warning match is processed by comparison of string representation.
        */
       template<typename...ARGS>
       EventMatch&
       arg (ARGS const& ...args)
         {
-          ArgSeq argSeq(stringify<ArgSeq> (args...));
-          string argList(util::join(argSeq));
-          
-          refineSerach (matchArguments(move(argSeq)));
-          evaluateQuery ("match-arguments("+argList+")");
+          refineSerach_matchArguments (stringify<ArgSeq> (args...));
           return *this;
+        }
+      
+      void
+      refineSerach_matchArgsRegExp (RExSeq&& regExpSeq, string rendered_regExps)
+        {
+          refineSerach (matchArgsRegExp (move (regExpSeq)));
+          evaluateQuery ("match-args-RegExp("+rendered_regExps+")");
         }
       
       /** refine filter to additionally cover all arguments
@@ -567,8 +578,8 @@ namespace test{
       EventMatch&
       argMatch (ARGS const& ...regExps)
         {
-          refineSerach (matchArgsRegExp (stringify<RExSeq> (regExps...)));
-          evaluateQuery ("match-args-RegExp("+util::join(stringify<ArgSeq>(regExps...))+")");
+          refineSerach_matchArgsRegExp (stringify<RExSeq> (regExps...),
+                                        util::join(stringify<ArgSeq>(regExps...)));
           return *this;
         }
       
@@ -630,9 +641,7 @@ namespace test{
       on (const X *const targetObj)
         {
           string targetID = idi::instanceTypeID (targetObj);
-          refineSerach (matchAttribute("this",targetID));
-          evaluateQuery ("match-this(\""+targetID+"\")");
-          return *this;
+          return this->on(targetID);
         }
     };
   
