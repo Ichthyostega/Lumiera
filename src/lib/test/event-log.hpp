@@ -80,12 +80,12 @@
 
 
 #include "lib/error.hpp"
-#include "lib/idi/entry-id.hpp"
-#include "lib/iter-chain-search.hpp"
 #include "lib/iter-cursor.hpp"
+#include "lib/iter-chain-search.hpp"
 #include "lib/format-util.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/diff/record.hpp"
+#include "lib/idi/genfunc.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -98,13 +98,10 @@
 
 namespace lib {
 namespace test{
-  namespace error = lumiera::error;
   
-  using util::stringify;
-  using util::contains;
-  using util::isnil;
   using lib::Symbol;
   using std::string;
+  using util::stringify;
   
   namespace {
     using Entry = lib::diff::Record<string>;
@@ -148,244 +145,12 @@ namespace test{
       /** record when the underlying query has failed */
       string violation_;
       
-      /** core of the evaluation machinery:
-       * apply a filter predicate and then pull
-       * through the log to find a acceptable entry
-       */
-      bool
-      foundSolution()
-        {
-          return not isnil (solution_);
-        }
-      
-      /** this is actually called after each refinement of
-       * the filter and matching conditions. The effect is to search
-       * for an (intermediary) solution right away and to mark failure
-       * as soon as some condition can not be satisfied. Rationale is to
-       * indicate the point where a chained match fails
-       * @see ::operator bool() for extracting the result
-       * @param matchSpec diagnostics description of the predicate just being added
-       * @param rel indication of the searching relation / direction
-       */
-      void
-      evaluateQuery (string matchSpec, Literal rel = "after")
-        {
-          if (look_for_match_ and not isnil (violation_)) return;
-             // already failed, no further check necessary
-          
-          if (foundSolution()) // NOTE this pulls the filter
-            {
-              lastMatch_ = matchSpec+" @ "+string(*solution_)
-                         + (isnil(lastMatch_)? ""
-                                             : "\n.."+rel+" "+lastMatch_);
-              if (not look_for_match_)
-                violation_ = "FOUND at least "+lastMatch_;
-            }
-          else
-            {
-              if (look_for_match_)
-                violation_ = "FAILED to "+matchSpec
-                           + "\n.."+rel
-                           + " "+lastMatch_;
-              else
-                violation_ = "";
-            }
-        }
       
       
       /** @internal for creating EventLog matchers */
-      EventMatch(Log const& srcSeq)
-        : solution_{buildSearchFilter (srcSeq)}
-        , lastMatch_{"HEAD "+ solution_->get("this")}
-        , look_for_match_{true}
-        , violation_{}
-        { }
+      EventMatch(Log const& srcSeq);
       
       friend class EventLog;
-      
-      
-      
-      /* == elementary matchers == */
-      
-      auto
-      find (string match)
-        {
-          return [=](Entry const& entry)
-                    {
-                      return contains (string(entry), match);
-                    };
-        }
-      
-      auto
-      findRegExp (string regExpDef)
-        {
-          std::regex regExp(regExpDef);
-          return [=](Entry const& entry)
-                    {
-                      return std::regex_search(string(entry), regExp);
-                    };
-        }
-      
-      auto
-      findEvent (string match)
-        {
-          return [=](Entry const& entry)
-                    {
-                      return (  entry.getType() == "event"
-                             or entry.getType() == "error"
-                             or entry.getType() == "create"
-                             or entry.getType() == "destroy"
-                             or entry.getType() == "logJoin"
-                             )
-                         and !isnil(entry.scope())
-                         and contains (*entry.scope(), match);
-                    };
-        }
-      
-      auto
-      findEvent (string classifier, string match)
-        {
-          return [=](Entry const& entry)
-                    {
-                      return (  entry.getType() == classifier
-                             or (entry.hasAttribute("ID") and contains (entry.get("ID"), classifier))
-                             )
-                         and !isnil(entry.scope())
-                         and contains (*entry.scope(), match);
-                    };
-        }
-      
-      auto
-      findCall (string match)
-        {
-          return [=](Entry const& entry)
-                    {
-                      return entry.getType() == "call"
-                         and contains (entry.get("fun"), match);
-                    };
-        }
-      
-      
-      /** this filter functor is for refinement of an existing filter
-       * @param argSeq perform a substring match consecutively
-       *        for each of the log entry's arguments
-       * @note the match also fails, when the given log entry
-       *       has more or less arguments, than the number of
-       *       given match expressions in `argSeq`
-       * @see ExtensibleFilterIter::andFilter()
-       */
-      auto
-      matchArguments (ArgSeq&& argSeq)
-        {
-          return [=](Entry const& entry)
-                    {
-                      auto scope = entry.scope();
-                      for (auto const& match : argSeq)
-                        if (isnil (scope) or not contains(*scope, match))
-                          return false;
-                        else
-                          ++scope;
-                      
-                      return isnil(scope);  // must be exhausted by now
-                    };                     //  otherwise the sizes do not match...
-        }
-      
-      
-      /** refinement filter, to cover all arguments by regular expression(s)
-       * @param regExpSeq several regular expressions, which, when applied
-       *        consecutively until exhaustion, must cover and verify _all_
-       *        arguments of the log entry.
-       * @remarks to explain, we "consume" arguments with a regExp from the list,
-       *        and when this one doesn't match anymore, we try the next one.
-       *        When we'ver tried all regular expressions, we must have also
-       *        consumed all arguments, otherwise we fail.
-       */
-      auto
-      matchArgsRegExp (RExSeq&& regExpSeq)
-        {
-          return [=](Entry const& entry)
-                    {
-                      auto scope = entry.scope();
-                      for (auto const& rex : regExpSeq)
-                        {
-                          if (isnil (scope)) return false;
-                          while (scope and std::regex_search(*scope, rex))
-                            ++scope;
-                        }
-                      
-                      return isnil(scope);  // must be exhausted by now
-                    };                     //  otherwise we didn't get full coverage...
-        }
-      
-      
-      /** refinement filter to match on the given typeID */
-      auto
-      matchType (string typeID)
-        {
-          return [=](Entry const& entry)
-                    {
-                      return contains (entry.getType(), typeID);
-                    };
-        }
-      
-      
-      /** refinement filter to ensure a specific attribute is present on the log entry */
-      auto
-      ensureAttribute (string key)
-        {
-          return [=](Entry const& entry)
-                    {
-                      return entry.hasAttribute(key);
-                    };
-        }
-      
-      
-      /** refinement filter to ensure a specific attribute is present on the log entry */
-      auto
-      matchAttribute (string key, string valueMatch)
-        {
-          return [=](Entry const& entry)
-                    {
-                      return entry.hasAttribute(key)
-                         and contains (entry.get(key), valueMatch);
-                    };
-        }
-      
-      
-      /* === configure the underlying search engine === */
-      
-      enum Direction {
-        FORWARD, BACKWARD, CURRENT
-      };
-      
-      template<typename COND>
-      void
-      attachNextSerchStep (COND&& filter, Direction direction)
-        {
-          if (CURRENT == direction)
-            solution_.search (forward<COND> (filter));
-          else
-            solution_.addStep ([predicate{forward<COND> (filter)}, direction]
-                               (auto& filter)
-                                 {
-                                   filter.reverse (BACKWARD == direction);
-                                   filter.disableFilter();  // deactivate any filtering temporarily 
-                                   ++filter;               //  move one step in the required direction
-                                   filter.setNewFilter (predicate);
-                                 });
-        }
-      
-      template<typename COND>
-      void
-      refineSerach (COND&& additionalFilter)
-        {
-          solution_.addStep ([predicate{forward<COND> (additionalFilter)}]
-                             (auto& filter)
-                               {
-                                 filter.andFilter (predicate);
-                               });
-        }
-      
       
       
     public:
@@ -395,7 +160,7 @@ namespace test{
        */
       operator bool()  const
         {
-          if (!isnil (violation_))
+          if (not util::isnil (violation_))
             {
               cerr << "__Log_condition_violated__\n"+violation_ <<"\n";
               return false;
@@ -404,174 +169,31 @@ namespace test{
         }
       
       
-      /**
-       * basic search function: continue linear lookup over the elements of the
-       * EventLog to find a match (substring match) of the given text. The search begins
-       * at the current position and proceeds in the currently configured direction.
-       * Initially the search starts at the first record and proceeds forward. 
-       */
-      EventMatch&
-      locate (string match)
-        {
-          attachNextSerchStep (find(match), CURRENT);
-          evaluateQuery ("match(\""+match+"\")");
-          return *this;
-        }
+      /* query builders to continue search at current position */
       
-      /** basic search like locate() but with the given regular expression */
-      EventMatch&
-      locateMatch (string regExp)
-        {
-          attachNextSerchStep (findRegExp(regExp), CURRENT);
-          evaluateQuery ("find-RegExp(\""+regExp+"\")");
-          return *this;
-        }
+      EventMatch& locate (string match);
+      EventMatch& locateMatch (string regExp);
+      EventMatch& locateEvent (string match);
+      EventMatch& locateEvent (string classifier, string match);
+      EventMatch& locateCall (string match);
       
-      /** basic search for a matching  "event"
-       * @param match perform a substring match against the arguments of the event
-       * @see beforeEvent() for a description of possible "events"
-       */
-      EventMatch&
-      locateEvent (string match)
-        {
-          attachNextSerchStep (findEvent(match), CURRENT);
-          evaluateQuery ("match-event(\""+match+"\")");
-          return *this;
-        }
       
-      EventMatch&
-      locateEvent (string classifier, string match)
-        {
-          attachNextSerchStep (findEvent(classifier,match), CURRENT);
-          evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")");
-          return *this;
-        }
+      /* query builders to find a match stepping forwards */
       
-      /** basic search for some specific function invocation
-       * @param match perform a substring match against the name of the function invoked
-       */
-      EventMatch&
-      locateCall (string match)
-        {
-          attachNextSerchStep (findCall(match), CURRENT);
-          evaluateQuery ("match-call(\""+match+"\")");
-          return *this;
-        }
+      EventMatch& before (string match);
+      EventMatch& beforeMatch (string regExp);
+      EventMatch& beforeEvent (string match);
+      EventMatch& beforeEvent (string classifier, string match);
+      EventMatch& beforeCall (string match);
       
-      /**
-       * find a match (substring match) of the given text
-       * in an EventLog entry after the current position
-       * @remarks the name of this junctor might seem counter intuitive;
-       *          it was chosen due to expected DSL usage: `log.verify("α").before("β")`.
-       *          Operationally this means first to find a Record matching the substring "α"
-       *          and then to forward from this point until hitting a record to match "β". 
-       */
-      EventMatch&
-      before (string match)
-        {
-          attachNextSerchStep (find(match), FORWARD);
-          evaluateQuery ("match(\""+match+"\")");
-          return *this;
-        }
       
-      /** find a match with the given regular expression */
-      EventMatch&
-      beforeMatch (string regExp)
-        {
-          attachNextSerchStep (findRegExp(regExp), FORWARD);
-          evaluateQuery ("find-RegExp(\""+regExp+"\")");
-          return *this;
-        }
+      /* query builders to find a match stepping backwards */
       
-      /** find a match for an "event" _after_ the current point of reference
-       * @remarks the term "event" designates several types of entries, which
-       *          typically capture something happening within the observed entity.
-       *          Especially, the following [record types](\ref lib::Record::getType())
-       *          qualify as event:
-       *          - `event`
-       *          - `error`
-       *          - `create`
-       *          - `destroy`
-       *          - `logJoin`
-       * @param match perform a substring match against the arguments of the event
-       * @see ::findEvent
-       */
-      EventMatch&
-      beforeEvent (string match)
-        {
-          attachNextSerchStep (findEvent(match), FORWARD);
-          evaluateQuery ("match-event(\""+match+"\")");
-          return *this;
-        }
-      
-      EventMatch&
-      beforeEvent (string classifier, string match)
-        {
-          attachNextSerchStep (findEvent(classifier,match), FORWARD);
-          evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")");
-          return *this;
-        }
-      
-      /** find a match for some function invocation _after_ the current point of reference
-       * @param match perform a substring match against the name of the function invoked
-       * @see ::findCall
-       */
-      EventMatch&
-      beforeCall (string match)
-        {
-          attachNextSerchStep (findCall(match), FORWARD);
-          evaluateQuery ("match-call(\""+match+"\")");
-          return *this;
-        }
-      
-      EventMatch&
-      after (string match)
-        {
-          attachNextSerchStep (find(match), BACKWARD);
-          evaluateQuery ("match(\""+match+"\")", "before");
-          return *this;
-        }
-      
-      EventMatch&
-      afterMatch (string regExp)
-        {
-          attachNextSerchStep (findRegExp(regExp), BACKWARD);
-          evaluateQuery ("find-RegExp(\""+regExp+"\")", "before");
-          return *this;
-        }
-      
-      EventMatch&
-      afterEvent (string match)
-        {
-          attachNextSerchStep (findEvent(match), BACKWARD);
-          evaluateQuery ("match-event(\""+match+"\")", "before");
-          return *this;
-        }
-      
-      EventMatch&
-      afterEvent (string classifier, string match)
-        {
-          attachNextSerchStep (findEvent(classifier,match), BACKWARD);
-          evaluateQuery ("match-event(ID=\""+classifier+"\", \""+match+"\")", "before");
-          return *this;
-        }
-      
-      /** find a function invocation backwards, before the current point of reference */
-      EventMatch&
-      afterCall (string match)
-        {
-          attachNextSerchStep (findCall(match), BACKWARD);
-          evaluateQuery ("match-call(\""+match+"\")", "before");
-          return *this;
-        }
-      
-      void
-      refineSerach_matchArguments (ArgSeq&& argSeq)
-        {
-          string argList(util::join(argSeq));
-          refineSerach (matchArguments(move(argSeq)));
-          evaluateQuery ("match-arguments("+argList+")");
-        }
+      EventMatch& after (string match);
+      EventMatch& afterMatch (string regExp);
+      EventMatch& afterEvent (string match);
+      EventMatch& afterEvent (string classifier, string match);
+      EventMatch& afterCall (string match);
       
       /** refine filter to additionally require specific arguments
        * @remarks the refined filter works on each record qualified by the
@@ -587,12 +209,6 @@ namespace test{
           return *this;
         }
       
-      void
-      refineSerach_matchArgsRegExp (RExSeq&& regExpSeq, string rendered_regExps)
-        {
-          refineSerach (matchArgsRegExp (move (regExpSeq)));
-          evaluateQuery ("match-args-RegExp("+rendered_regExps+")");
-        }
       
       /** refine filter to additionally cover all arguments
        *  with a series of regular expressions.
@@ -613,67 +229,34 @@ namespace test{
           return *this;
         }
       
-      /** refine filter to additionally require a matching log entry type */
-      EventMatch&
-      type (string typeID)
-        {
-          refineSerach (matchType(typeID));
-          evaluateQuery ("match-type("+typeID+")");
-          return *this;
-        }
       
-      /** refine filter to additionally require the presence an attribute */
-      EventMatch&
-      key (string key)
-        {
-          refineSerach (ensureAttribute(key));
-          evaluateQuery ("ensure-attribute("+key+")");
-          return *this;
-        }
       
-      /** refine filter to additionally match on a specific attribute */
-      EventMatch&
-      attrib (string key, string valueMatch)
-        {
-          refineSerach (matchAttribute(key,valueMatch));
-          evaluateQuery ("match-attribute("+key+"=\""+valueMatch+"\")");
-          return *this;
-        }
+      /* query builders to augment and refine the currently defined search condition*/
       
-      /** refine filter to additionally match on the ID attribute */
-      EventMatch&
-      id (string classifier)
-        {
-          refineSerach (matchAttribute("ID",classifier));
-          evaluateQuery ("match-ID(\""+classifier+"\")");
-          return *this;
-        }
-      
-      /** refine filter to additionally match the `'this'` attribute */
-      EventMatch&
-      on (string targetID)
-        {
-          refineSerach (matchAttribute("this",targetID));
-          evaluateQuery ("match-this(\""+targetID+"\")");
-          return *this;
-        }
-      
-      EventMatch&
-      on (const char* targetID)
-        {
-          refineSerach (matchAttribute("this",targetID));
-          evaluateQuery ("match-this(\""+string(targetID)+"\")");
-          return *this;
-        }
+      EventMatch& type (string typeID);
+      EventMatch& key (string key);
+      EventMatch& attrib (string key, string valueMatch);
+      EventMatch& id (string classifier);
+      EventMatch& on (string targetID);
+      EventMatch& on (const char* targetID);
       
       template<typename X>
-      EventMatch&
-      on (const X *const targetObj)
+      EventMatch& on (const X *const targetObj)
         {
           string targetID = idi::instanceTypeID (targetObj);
           return this->on(targetID);
         }
+      
+    private:
+      bool foundSolution();
+      void evaluateQuery (string matchSpec, Literal rel = "after");
+      
+      void refineSerach_matchArguments (ArgSeq&& argSeq);
+      void refineSerach_matchArgsRegExp (RExSeq&& regExpSeq, string rendered_regExps);
     };
+  
+  
+  
   
   
   
@@ -716,11 +299,7 @@ namespace test{
       
     public:
       explicit
-      EventLog (string logID)
-        : log_(new Log)
-        {
-          log({"type=EventLogHeader", "this="+logID});
-        }
+      EventLog (string logID);
       
       explicit
       EventLog (const char* logID)
@@ -740,65 +319,15 @@ namespace test{
       /** Merge this log into another log, forming a combined log
        * @param otherLog target to integrate this log's contents into.
        * @return reference to the merged new log instance
-       * @remarks EventLog uses a heap based, sharable log storage,
-       *          where the EventLog object is just a front-end (shared ptr).
-       *          The `joinInto` operation both integrates this logs contents
-       *          into the other log, and then disconnects from the old storage
-       *          and connects to the storage of the combined log.
-       * @warning beware of clone copies. Since copying EventLog is always a
-       *          shallow copy, all copied handles actually refer to the same
-       *          log storage. If you invoke `joinInto` in such a situation,
-       *          only the current EventLog front-end handle will be rewritten
-       *          to point to the combined log, while any other clone will
-       *          continue to point to the original log storage.
        * @see TestEventLog_test::verify_logJoining()
        */
-      EventLog&
-      joinInto (EventLog& otherLog)
-        {
-          Log& target = *otherLog.log_;
-          target.reserve (target.size() + log_->size() + 1);
-          target.emplace_back (log_->front());
-          auto p = log_->begin();
-          while (++p != log_->end()) // move our log's content into the other log
-            target.emplace_back(std::move(*p));
-          this->log_->resize(1);
-          this->log({"type=joined", otherLog.getID()});   // leave a tag to indicate
-          otherLog.log({"type=logJoin", this->getID()}); //  where the `joinInto` took place,
-          this->log_ = otherLog.log_;                   //   connect this to the other storage
-          return *this;
-        }
+      EventLog& joinInto (EventLog& otherLog);
       
       
       /** purge log contents while retaining just the original Header-ID */
-      EventLog&
-      clear()
-        {
-          string originalLogID = this->getID();
-          return this->clear (originalLogID);
-        }
-      
-      /** purge log contents and also reset Header-ID
-       * @note actually we're starting a new log
-       *       and let the previous one go away.
-       * @warning while this also unties any joined logs,
-       *       other log front-ends might still hold onto
-       *       the existing, combined log. Just we are
-       *       detached and writing to a pristine log.
-       */
-      EventLog&
-      clear (string alteredLogID)
-        {
-          log_.reset (new Log);
-          log({"type=EventLogHeader", "this="+alteredLogID});
-          return *this;
-        }
-      
-      EventLog&
-      clear (const char* alteredLogID)
-        {
-          return clear (string{alteredLogID});
-        }
+      EventLog& clear();
+      EventLog& clear (string alteredLogID);
+      EventLog& clear (const char* alteredLogID);
       
       template<class X>
       EventLog&
@@ -813,47 +342,25 @@ namespace test{
       
       using ArgSeq = lib::diff::RecordSetup<string>::Storage;
       
-      EventLog&
-      event (string text)
-        {
-          log ("event", ArgSeq{}, ArgSeq{text});  // we use this ctor variant to ensure
-          return *this;                          //  that text is not misinterpreted as attribute,
-        }                                       //   which might happen when text contains a '='
+      /** log some text as event */
+      EventLog& event (string text);
       
       /** log some event, with additional ID or classifier
        * @param classifier info to be saved into the `ID` attribute
        * @param text actual payload info, to be logged as argument
        */
-      EventLog&
-      event (string classifier, string text)
-        {
-          log ("event", ArgSeq{"ID="+classifier}, ArgSeq{text});
-          return *this;
-        }
+      EventLog& event (string classifier, string text);
       
       /** Log occurrence of a function call with no arguments.
        * @param target the object or scope on which the function is invoked
        * @param function name of the function being invoked
        */
-      EventLog&
-      call (string target, string function)
-        {
-          return call(target, function, ArgSeq());
-        }
+      EventLog& call (string target, string function);
       
       /** Log a function call with a sequence of stringified arguments */
-      EventLog&
-      call (string target, string function, ArgSeq&& args)
-        {
-          log ("call", ArgSeq{"fun="+function, "this="+target}, std::forward<ArgSeq>(args));
-          return *this;
-        }
+      EventLog& call (string target, string function, ArgSeq&& args);
       
-      EventLog&
-      call (const char* target, const char* function, ArgSeq&& args)
-        {
-          return call (string(target), string(function), std::forward<ArgSeq>(args));
-        }
+      EventLog& call (const char* target, const char* function, ArgSeq&& args);
       
       /** Log a function call with arbitrary arguments */
       template<typename...ARGS>
@@ -882,56 +389,29 @@ namespace test{
       EventLog&
       note (ELMS const& ...initialiser)
         {
-          log_->emplace_back(stringify<ArgSeq> (initialiser...));
+          log_->emplace_back (stringify<ArgSeq> (initialiser...));
           return *this;
         }
 
       
       /** Log a warning entry */
-      EventLog&
-      warn (string text)
-        {
-          log({"type=warn", text});
-          return *this;
-        }
-
+      EventLog& warn (string text);
       
       /** Log an error note */
-      EventLog&
-      error (string text)
-        {
-          log({"type=error", text});
-          return *this;
-        }
-
+      EventLog& error (string text);
       
       /** Log a fatal failure */
-      EventLog&
-      fatal (string text)
-        {
-          log({"type=fatal", text});
-          return *this;
-        }
-
+      EventLog& fatal (string text);
       
       /** Log the creation of an object.
        *  Such an entry can be [matched as event](\ref ::verifyEvent) */
-      EventLog&
-      create (string text)
-        {
-          log({"type=create", text});
-          return *this;
-        }
+      EventLog& create (string text);
 
       
       /** Log the destruction of an object.
        *  Can be matched as event. */
-      EventLog&
-      destroy (string text)
-        {
-          log({"type=destroy", text});
-          return *this;
-        }
+      EventLog& destroy (string text);
+      
       
       
       
@@ -968,13 +448,7 @@ namespace test{
        *  search queries, which will be executing starting from the position of the
        *  previous match. The final result can be retrieved by `bool` conversion
        */
-      EventMatch
-      verify (string match)  const
-        {
-          EventMatch matcher(*log_);
-          matcher.locate (match);   // new matcher starts linear search from first log element
-          return matcher;
-        }
+      EventMatch verify (string match)  const;
       
       /** start a query to match with a regular expression
        * @param regExp definition
@@ -982,13 +456,7 @@ namespace test{
        *          `string` representation of the log entries.
        *          Meaning, it can also match type and attributes
        */
-      EventMatch
-      verifyMatch (string regExp)  const
-        {
-          EventMatch matcher(*log_);
-          matcher.locateMatch (regExp);
-          return matcher;
-        }
+      EventMatch verifyMatch (string regExp)  const;
       
       /** start a query to match for some event.
        * @remarks only a subset of all log entries is treated as "event",
@@ -997,24 +465,12 @@ namespace test{
        *          creation and destruction of objects count as "event".
        * @param match text to (substring)match against the argument logged as event
        */
-      EventMatch
-      verifyEvent (string match)  const
-        {
-          EventMatch matcher(*log_);
-          matcher.locateEvent (match);
-          return matcher;
-        }
+      EventMatch verifyEvent (string match)  const;
       
       /** start a query to match for an specific kind of element
        * @param classifier select kind of event by match on type or ID
        */
-      EventMatch
-      verifyEvent (string classifier, string match)  const
-        {
-          EventMatch matcher(*log_);
-          matcher.locateEvent (classifier, match);
-          return matcher;
-        }
+      EventMatch verifyEvent (string classifier, string match)  const;
       
       template<typename X>
       EventMatch
@@ -1026,31 +482,13 @@ namespace test{
       /** start a query to match especially a function call
        * @param match text to match against the function name
        */
-      EventMatch
-      verifyCall (string match)  const
-        {
-          EventMatch matcher(*log_);
-          matcher.locateCall (match);
-          return matcher;
-        }
+      EventMatch verifyCall (string match)  const;
       
-      /** start a query to ensure the given expression does _not_ match.
-       * @remarks the query expression is built similar to the other queries,
-       *          but the logic of evaluation is flipped: whenever we find any match
-       *          the overall result (when evaluating to `bool`) will be `false`.
-       * @warning this is not an proper exhaustive negation, since the implementation
-       *          does not proper backtracking with a stack of choices. This becomes
-       *          evident, when you combine `ensureNot()` with a switch in search
-       *          direction, like e.g. using `afterXXX` at some point in the chain.
-       */
+      /** start a query to ensure the given expression does _not_ match. */
       EventMatch
-      ensureNot (string match)  const
-        {
-          EventMatch matcher(*log_);
-          matcher.look_for_match_ = false; // flip logic; fail if match succeeds
-          matcher.locate (match);
-          return matcher;
-        }
+      ensureNot (string match)  const;
+      
+      
       
       
       /** equality comparison is based on the actual log contents */

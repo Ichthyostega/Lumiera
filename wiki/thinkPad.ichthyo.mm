@@ -25091,9 +25091,9 @@
 <node COLOR="#338800" CREATED="1535815195338" ID="ID_1743938908" MODIFIED="1535815207849" TEXT="naive Implementierung">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535815210288" ID="ID_1041148737" MODIFIED="1535815475299" TEXT="Problem: kein wirkliches Backtracking">
+<node COLOR="#338800" CREATED="1535815210288" FOLDED="true" ID="ID_1041148737" MODIFIED="1537409267514" TEXT="Problem: kein wirkliches Backtracking">
 <linktarget COLOR="#80b3ba" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" SOURCE="ID_493114230" STARTARROW="None" STARTINCLINATION="838;114;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535835597691" ID="ID_218241863" MODIFIED="1535835683187" TEXT="wird relevant bei Richtungs-Wechsel">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -25128,9 +25128,9 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535893431656" ID="ID_1626597975" MODIFIED="1535893590393" TEXT="Beschlu&#xdf;: umstellen auf TreeExplorer">
-<arrowlink COLOR="#cc3e57" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" STARTARROW="None" STARTINCLINATION="1631;0;"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535893431656" ID="ID_1626597975" MODIFIED="1537409091617" TEXT="Beschlu&#xdf;: umstellen auf TreeExplorer">
+<arrowlink COLOR="#3eccac" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" STARTARROW="None" STARTINCLINATION="1631;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1536441983485" ID="ID_330124350" MODIFIED="1537320197047" TEXT="Warnung: anonymous namespace">
 <richcontent TYPE="NOTE"><html>
@@ -30775,7 +30775,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1514328717684" ID="ID_137835978" MODIFIED="1535892401183" TEXT="neuer Anlauf IterExplorer II">
+<node COLOR="#338800" CREATED="1514328717684" FOLDED="true" ID="ID_137835978" MODIFIED="1537409073389" TEXT="neuer Anlauf IterExplorer II">
 <arrowlink COLOR="#8ad3a5" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-230;134;" ID="Arrow_ID_253437970" STARTARROW="None" STARTINCLINATION="-387;0;"/>
 <linktarget COLOR="#27998e" DESTINATION="ID_137835978" ENDARROW="Default" ENDINCLINATION="-521;-801;" ID="Arrow_ID_1873000120" SOURCE="ID_1860662881" STARTARROW="None" STARTINCLINATION="-1866;98;"/>
 <icon BUILTIN="button_ok"/>
@@ -31611,9 +31611,9 @@
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535893353955" ID="ID_1665477644" MODIFIED="1535893590393" TEXT="bestehende L&#xf6;sung umstellen">
-<linktarget COLOR="#cc3e57" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" SOURCE="ID_1626597975" STARTARROW="None" STARTINCLINATION="1631;0;"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1535893353955" FOLDED="true" ID="ID_1665477644" MODIFIED="1537409248653" TEXT="bestehende L&#xf6;sung umstellen">
+<linktarget COLOR="#3eccac" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" SOURCE="ID_1626597975" STARTARROW="None" STARTINCLINATION="1631;0;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1535893608745" ID="ID_11389264" MODIFIED="1535893673457" TEXT="Idee: Auswertungs-State">
 <icon BUILTIN="idea"/>
 <node CREATED="1535893623463" ID="ID_371015216" MODIFIED="1535893629458" TEXT="als State Core im Iterator"/>
@@ -31920,8 +31920,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1536368106394" ID="ID_1324169393" MODIFIED="1537400207423" TEXT="in eigene Translation-Unit verschieben">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1536368106394" FOLDED="true" ID="ID_1324169393" MODIFIED="1537409235841" TEXT="in eigene Translation-Unit verschieben">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1537059357301" ID="ID_1501687281" MODIFIED="1537059360761" TEXT="Beobachtungen">
 <node CREATED="1536368121224" ID="ID_684768731" MODIFIED="1536368139195">
 <richcontent TYPE="NODE"><html>
@@ -31960,6 +31960,21 @@
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
+<node CREATED="1537408492185" ID="ID_1391232995" MODIFIED="1537408509710" TEXT="nach Umstellung: hat nicht sonderlich viel gebracht">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1536368144661" ID="ID_1457614262" MODIFIED="1537408979742" TEXT="BusTerm_test = 11.7 MB">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1537408924511" ID="ID_764968453" MODIFIED="1537408971969" TEXT="AbstractTangible_test = 8.7">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1536368166242" ID="ID_40278059" MODIFIED="1537408966779" TEXT="EventLog_test = 4.5 MB">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1537409213000" ID="ID_980087931" MODIFIED="1537409228912" TEXT="aber: event-log.os = 5 MB">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node CREATED="1537059850803" ID="ID_253192903" MODIFIED="1537059853438" TEXT="Plan">
 <node CREATED="1537059854290" ID="ID_1281790716" MODIFIED="1537059867700" TEXT="der Typ der Search-Engine mu&#xdf; nicht verborgen werden"/>
@@ -31976,28 +31991,39 @@
 <node CREATED="1537059978146" ID="ID_1403964414" MODIFIED="1537059984405" TEXT="d.h. man kann dazwischen schneiden"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537059994048" ID="ID_1556879726" MODIFIED="1537400219755" TEXT="Umbau">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1537059994048" ID="ID_1556879726" MODIFIED="1537408486805" TEXT="Umbau">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537060007341" ID="ID_137118669" MODIFIED="1537402606149" TEXT="eigene Translation-Unit EventLog.cpp anlegen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060024891" ID="ID_416527676" MODIFIED="1537060038043" TEXT="Ctor nach hinten schieben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537060024891" ID="ID_416527676" MODIFIED="1537407285711" TEXT="Ctor nach hinten schieben">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060040409" ID="ID_440163527" MODIFIED="1537060051953" TEXT="Auswerte-Logik nach hinten schieben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537060040409" ID="ID_440163527" MODIFIED="1537407287283" TEXT="Auswerte-Logik nach hinten schieben">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060054767" ID="ID_1081334498" MODIFIED="1537060092467" TEXT="Problem: private Matcher-Builder">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060094809" ID="ID_442340693" MODIFIED="1537060104954" TEXT="in freie Template-Funktionen verwandeln?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537060054767" ID="ID_1081334498" MODIFIED="1537407288629" TEXT="Problem: private Matcher-Builder">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1537060094809" ID="ID_442340693" MODIFIED="1537407293640" TEXT="in freie Template-Funktionen verwandeln">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060267290" ID="ID_1006625301" MODIFIED="1537060278162" TEXT="auch die direkten Filter-Konfigurier-Funktionen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537060267290" ID="ID_1006625301" MODIFIED="1537407322172" TEXT="die direkten Filter-Konfigurier-Funktionen ebenso">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      geht gar nicht anders, denn diese sind templates
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537060121158" ID="ID_1857002867" MODIFIED="1537060136293" TEXT="Such-Funktionen nach hinten reichen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537060121158" ID="ID_1857002867" MODIFIED="1537407306625" TEXT="Such-Funktionen nach hinten reichen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
