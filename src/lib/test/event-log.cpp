@@ -1,8 +1,8 @@
 /*
-  EVENT-LOG.hpp  -  test facility to verify the occurrence of expected events
+  EventLog  -  test facility to verify the occurrence of expected events
 
   Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,68 +18,33 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-*/
+* *****************************************************/
 
-
-/** @file event-log.hpp
- ** Support for verifying the occurrence of events from unit tests.
- ** Typically used within special rigging and instrumentation for tests,
- ** the [EventLog] allows to record invocations and similar events. It is
- ** implemented as a "PImpl" to allow sharing of logs, which helps to trace
- ** events from transient UI elements and from destructor code. The front-end
- ** used for access offers a query DSL, so the test code may express some
- ** expected patterns of incidence and verify match or non-match.
+/** @file event-log.cpp
+ ** Implementation details of event logging and verification for unit tests.
+ ** The EventLog is a helper for writing tests or for special rigging within
+ ** the test or debugging or mock variant of some common services. It allows
+ ** to log some events to memory and then to build match expressions to verify
+ ** those captured information.
  ** 
- ** # Usage
- ** 
- ** The EventLog just captures invocations in memory, as sequence of
- ** [string records](\ref lib::diff::Record). The _logging API_ offers some
- ** dedicated functions to record invocations, events, the creation and destruction
- ** of objects, warnings and error messages. Data passed to those logging functions
- ** is rendered into string, using Lumiera's generic string conversion helpers.
- ** 
- ** To _verify and match_ on log contents, start an evaluation as a builder (DSL)
- ** expression, starting from one of the #verify functions, or starting with #ensureNot,
- ** to probe that a given set of matches does not occur in the log. These entrance
- ** functions set up the initial search condition, and further search conditions
- ** can be chained up by invoking suitable matching functions on the generated
- ** EventMatch builder. Most notably, it is possible to search for some further
- ** match condition _before_ or _after_ the position where the preceding condition
- ** produced a match -- allowing to specify sequences and patterns of events to
- ** expect in the log
- ** \code{.cpp}
- **   EventLog log("baked beans");
- **   log.event("spam");
- **   log.event("ham");
- **   
- **   CHECK (log.verify("ham")
- **             .after("beans")
- **             .before("spam")
- **             .before("ham"));
- ** \endcode
- ** In general, this kind of search with a switch of the search direction in the middle
- ** of a match requires some backtracking to try possible matches until exhaustion.
- ** 
- ** Failure of match prints a detailed trace message to `STDERR`, in order
- ** to deliver a precise indication what part of the condition failed.
- ** @note this sequence prints the matches succeeding _at the point_ where each
- **       condition is added to the chain. Adding more conditions, especially when
- **       combined with changed search direction, might lead to backtracking, which
- **       happens silently within the search engine, without printing any further
- **       diagnostics. This means: the sequence of matches you see in this diagnostic
- **       output is not necessarily the last match patch, which lead to the final failure
+ ** The machinery for matching on the occurrence of some events can be quite
+ ** intricate at implementation level; we use an implementation based on a
+ ** filtering iterator pipeline. This kind of code is template heavy and
+ ** can cause a significant increase of generated code size -- especially
+ ** on debug builds. For that reason, we prefer to call through regular
+ ** (non-inline) functions and package all the actual implementation
+ ** code into a dedicated translation unit.
  ** 
  ** @see TestEventLog_test
- ** @see [usage example](\ref AbstractTangible_test)
+ ** @see IterChainSearch_test
+ ** @see iter-tree-explorer.hpp
  ** 
  */
 
 
-#ifndef LIB_TEST_EVENT_LOG_H
-#define LIB_TEST_EVENT_LOG_H
-
 
 #include "lib/error.hpp"
+#include "lib/test/event-log.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/iter-chain-search.hpp"
 #include "lib/iter-cursor.hpp"
@@ -1071,4 +1036,3 @@ namespace test{
   
   
 }} // namespace lib::test
-#endif /*LIB_TEST_EVENT_LOG_H*/
