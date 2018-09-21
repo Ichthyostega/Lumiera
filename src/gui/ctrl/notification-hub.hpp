@@ -152,7 +152,7 @@ namespace ctrl {
       doFlash()  override
         {
           if (not widget_) return;
-          widget_->revealYourself();
+          widget_->reveal();
           widget_->triggerFlash();
         }
       
@@ -173,7 +173,7 @@ namespace ctrl {
                                    getWidget().expand (yes);
                                }
                          );
-          installRevealer([&](){ getWidget().revealYourself(); }); // implementation implies also expand
+          installRevealer([&](){ getWidget().reveal(); }); // implementation implies also expand
         }
       
      ~NotificationHub() { };

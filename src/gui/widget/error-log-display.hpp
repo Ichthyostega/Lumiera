@@ -98,6 +98,7 @@ namespace widget {
         }
       
       model::Expander expand;
+      model::Revealer reveal;
       
       
       void
@@ -153,12 +154,6 @@ namespace widget {
           UNIMPLEMENTED ("paint and set callback-timeout to return to normal state");
         }
       
-      void
-      revealYourself()
-        {
-          UNIMPLEMENTED ("store a link to parent. Ask parent to reveal us. Switch to expanded display");
-        }
-
       
       
     private:/* ===== Internals ===== */

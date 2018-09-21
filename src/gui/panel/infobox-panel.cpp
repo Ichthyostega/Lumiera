@@ -98,6 +98,9 @@ namespace panel{
         theLog_->expand = model::Expander{[&]()         { return logExpander_.get_expanded(); }
                                          ,[&](bool yes) { logExpander_.set_expanded (yes); }
                                          };
+        theLog_->reveal = model::Revealer{[&]()         { Panel::show(true);
+                                                          theLog_->expand(true);
+                                         }              };
         frame_.set_border_width (5);
         frame_.add (logExpander_);
         frame_.show_all();

@@ -36,10 +36,10 @@
  ** 
  ** The base class of all [tangible UI elements](\ref Tangible) provides a default implementation
  ** for these generic interaction mechanism: It offers slots to connect UI signals against, and
- ** it understands the _`mark`_ messages "`expand`" and "`revealYourself`". These are implemented
+ ** it understands the \em `mark` messages `"expand"` and `"revealYourself"`. These are implemented
  ** by delegating to the \ref Expander and \ref Revealer functors respectively. Moreover, this
  ** default implementation automatically detects a resulting state change and emits an appropriate
- ** _`note`_ message on the UI-Bus, so to make those state changes persistent. However, in order
+ ** \em `note` message on the UI-Bus, so to make those state changes persistent. However, in order
  ** to supply an concrete implementation, depending on the circumstances, either the widget itself
  ** or a parent container holding the element needs to install lambdas into those functor holders,
  ** to detail what actually needs to be done. E.g. it is quite common to implement the "expand"
@@ -53,6 +53,7 @@
  ** install an appropriate Expander functor within their constructor.
  ** 
  ** @see [UI-Element protocol](\ref tangible.hpp)
+ ** @see [simple test case](\ref AbstractTangible_test::revealer())
  ** @see [usage example](\ref error-log-display.hpp)
  ** 
  */
