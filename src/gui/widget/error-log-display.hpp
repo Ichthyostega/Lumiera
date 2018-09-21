@@ -102,32 +102,17 @@ namespace widget {
       
       
       void
-      showMsg (NotifyLevel severity, string const& text)
-        {
-          //////////////////////////////////////////////////TICKET #1102 : add formatting according to the error level
-          switch (severity) {
-            case NOTE_ERROR:
-                addEntry ("ERROR: "+text);
-              break;
-            case NOTE_WARN:
-                addEntry ("WARN: "+text);
-              break;
-            default:
-                addEntry (text);
-              break;
-          }
-        }
-      
-      void
       clearAll()
         {
           UNIMPLEMENTED ("empty buffer and discard all error bookmarks");
         }
       
+      /** just add normal information message to buffer,
+       *  without special markup and without expanding the widget */
       void
       addMsg (string text)
         {
-          UNIMPLEMENTED ("add normal information message to buffer");
+          showMsg (NOTE_INFO, text);
         }
       
       void
@@ -157,6 +142,24 @@ namespace widget {
       
       
     private:/* ===== Internals ===== */
+      
+      void
+      showMsg (NotifyLevel severity, string const& text)
+        {
+          //////////////////////////////////////////////////TICKET #1102 : add formatting according to the error level
+          switch (severity) {
+            case NOTE_ERROR:
+                addEntry ("ERROR: "+text);
+              break;
+            case NOTE_WARN:
+                addEntry ("WARN: "+text);
+              break;
+            default:
+                addEntry (text);
+              break;
+          }
+        }
+      
       
       Gtk::TextView textLog_;
       
