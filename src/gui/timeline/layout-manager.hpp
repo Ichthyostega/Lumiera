@@ -57,7 +57,7 @@
  ** 
  ** Whenever the layout of timeline contents has to be (re)established, we trigger a recursive
  ** evaluation pass, which in fact is a tree walk. The layout manager creates a DisplayEvaluation
- ** record, which is passed to the [Element's allocate function](Element::allocate). The element
+ ** record, which is passed to the [Element's allocate function](\ref Element::allocate). The element
  ** in turn has the liability to walks its children and recursively initiate a nested evaluation
  ** by invoking DisplayEvaluation::evaluateChild(Element), which in turn calls back to
  ** LayoutManager::evaluate() to initiate a recursive evaluation pass. Within the recursively

@@ -23,8 +23,8 @@
 
 /** @file nexus.hpp
  ** Core hub and routing table of the UI-Bus.
- ** Any relevant element within the Lumiera GTK UI is connected to the [UI-Bus](ui-bus.hpp)
- ** through some [bus terminal](bus-term.hpp). Actually, there is one special BustTerm
+ ** Any relevant element within the Lumiera GTK UI is connected to the [UI-Bus](\ref ui-bus.hpp)
+ ** through some [bus terminal](\ref bus-term.hpp). Actually, there is one special BustTerm
  ** implementation, which acts as router and messaging hub.
  ** 
  ** @note messages to unknown target elements are silently dropped.

@@ -78,7 +78,7 @@ namespace test{
    *
    * @see iter-cursor.hpp
    * @see iter-adapter.hpp
-   * @see [usage example](event-log.hpp)
+   * @see [usage example](\ref event-log.hpp)
    */
   class IterCursor_test : public Test
     {

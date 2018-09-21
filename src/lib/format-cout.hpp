@@ -45,7 +45,7 @@
  ** @see FormatCOUT_test
  ** @see FormatHelper_test
  ** @see [generic string conversion helper](\ref util::toString() )
- ** @see [frontend for boost::format, printf-style](format-string.hpp)
+ ** @see [frontend for boost::format, printf-style](\ref format-string.hpp)
  ** 
  */
 

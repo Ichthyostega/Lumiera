@@ -26,12 +26,12 @@
  ** This wrapper relies on the ability of typical STL container iterators
  ** to work in both directions, similar to std::reverse_iterator.
  ** Yet it is a single, self-contained element and in compliance to the
- ** ["Lumiera Forward Iterator"](iter-adapter.hpp) concept. But it has
+ ** ["Lumiera Forward Iterator"](\ref iter-adapter.hpp) concept. But it has
  ** the additional ability to [switch the working direction](\ref IterCursor<IT>::switchDir).
  ** 
  ** @see IterCursor_test
  ** @see iter-adapter.hpp
- ** @see [usage example](event-log.hpp)
+ ** @see [usage example](\ref event-log.hpp)
  ** 
  */
 
@@ -156,7 +156,7 @@ namespace lib {
    * It can be built on top of any bidirectional STL iterator or similar entity,
    * which has an `--` operator. Initially, IterCursor will operate in forward
    * direction; irrespective of the current direction, it always fulfils the
-   * ["Lumiera Forward Iterator"](iter-adapter.hpp) concept, i.e. it can be
+   * ["Lumiera Forward Iterator"](\ref iter-adapter.hpp) concept, i.e. it can be
    * iterated until exhaustion, in which case it will evaluate to bool(false).
    * @note IterCursor instances can be equality compared, also taking the
    *       current direction into account. As a special case, all

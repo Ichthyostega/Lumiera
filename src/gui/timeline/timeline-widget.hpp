@@ -38,7 +38,7 @@
  ** the [UI-Bus](\ref ui-bus.hpp). So there will be a _parent element,_ corresponding to the
  ** ["model root"](\ref session::Root), and this parent, in response to some mutation message,
  ** will create a TimelineWidget, add it into the appropriate GTK display setup and manage it
- ** as child element; the [construction parameters](TimelineWidget::TimelineWidget] ensure
+ ** as child element; the [construction parameters](\ref TimelineWidget::TimelineWidget] ensure
  ** it gets connected to the bus as well. Incidentally, this assumption also implies that
  ** this parent element has set up a _binding for diff mutation,_ typically by implementing
  ** model::Tangible::buildMutator. And further on this means that the parent will also

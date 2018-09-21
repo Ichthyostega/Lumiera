@@ -33,7 +33,7 @@
  ** The HeaderPaneWidget aggregates those patchbay elements into a nested, collapsable tree
  ** structure in accordance with the nesting of scopes. For the actual layout, it has to collaborate
  ** with the timeline::LayoutManager to work out the space available for each individual track head
- ** and to keep these parts aligned with the tracks in the [timeline body](BodyCanvasWidget).
+ ** and to keep these parts aligned with the tracks in the [timeline body](\ref BodyCanvasWidget).
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 

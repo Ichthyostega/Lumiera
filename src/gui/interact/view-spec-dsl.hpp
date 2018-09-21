@@ -84,7 +84,7 @@
  **   This results in calling a dedicated _view allocator_ to create a new view or re-use an existing one
  **   as appropriate.
  ** 
- ** @note the actual binding for the DSL tokens can be found in the [ViewLocator implementation](view-locator.cpp)
+ ** @note the actual binding for the DSL tokens can be found in the [ViewLocator implementation](\ref view-locator.cpp)
  ** 
  ** @see ViewSpecDSL_test
  ** @see id-scheme.hpp

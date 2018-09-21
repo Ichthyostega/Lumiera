@@ -31,7 +31,7 @@
  ** investigate object contents and show types and addresses. They
  ** are referred from our [lightweight string converter](\ref
  ** util::StringConv), but also from the util::toString() function
- ** and more common [formatting utils](format-util.hpp).
+ ** and more common [formatting utils](\ref format-util.hpp).
  ** 
  ** @see FormatHelper_test
  ** @see FormatString_test

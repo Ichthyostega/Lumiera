@@ -68,7 +68,7 @@ namespace gui {
    * route calls through this interface.
    * 
    * @note the ctor of this class establishes an "up-link"
-   *       connection to the [UI-Bus](ui-bus.hpp), which
+   *       connection to the [UI-Bus](\ref ui-bus.hpp), which
    *       enables the service implementation to talk to
    *       other facilities within the UI.
    */

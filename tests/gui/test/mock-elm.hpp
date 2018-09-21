@@ -101,7 +101,7 @@ namespace test{
    * on the [Tangible] interface, which we mock here for unit testing.
    * This special implementation is instrumented to [log](\ref lib::test::EventLog)
    * any invocation and any messages sent or received through the UI Backbone,
-   * which is formed by the [UI-Bus](ui-bus.hpp).
+   * which is formed by the [UI-Bus](\ref ui-bus.hpp).
    * 
    * @todo some usage details
    * @see abstract-tangible-test.cpp

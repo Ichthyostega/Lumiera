@@ -23,8 +23,8 @@
 
 /** @file view-locator.cpp
  ** Implementation details of a machinery to allocate UI global component views.
- ** Essentially this compilation unit hosts the implementation backing the [ViewSpec-DSL](view-spec-dsl.hpp)
- ** and the [Location Solver](ui-location-solver.hpp) to drive evaluation of the standard location defaults,
+ ** Essentially this compilation unit hosts the implementation backing the [ViewSpec-DSL](\ref view-spec-dsl.hpp)
+ ** and the [Location Solver](\ref ui-location-solver.hpp) to drive evaluation of the standard location defaults,
  ** which are [hard-wired into the UI](\ref id-scheme.hpp). For this integration of various facilities and
  ** frameworks we rely on actual definitions for the DSL-tokens, which themselves are functors and tied by
  ** lambda-binding into the implementation side of ViewLocator; which both acts as a front-end to access

@@ -112,7 +112,7 @@ namespace test {
   /**************************************************************************//**
    * @test cover the standard node element (terminal element) within the UI-Bus,
    * with the help of an attached mock UI element. Contrary to the related
-   * [ui-element test](AbstractTangible_test), here we focus on the bus side
+   * [ui-element test](\ref AbstractTangible_test), here we focus on the bus side
    * of the standard interactions.
    * 
    * This test enacts the fundamental generic communication patterns
@@ -150,7 +150,7 @@ namespace test {
       /** @test build a new BusTerm and verify connectivity.
        * Every [tangible UI-element](\ref Tangible) bears an embedded BusTerm
        * member. Since the latter _requires another, up-link BusTerm_ on construction,
-       * connection to the [UI-Bus](ui-bus.hpp) is structurally ensured. Moreover,
+       * connection to the [UI-Bus](\ref ui-bus.hpp) is structurally ensured. Moreover,
        * when hooking up a new UI-element, the initialisation of the embedded BusTerm
        * will cause a down-link connection to be installed into the central routing
        * table within the \ref Nexus, the hub of the UI-Bus. Routing and addressing

@@ -39,10 +39,10 @@
  ** the ability for string conversions
  ** 
  ** \par ability to iterate
- ** these traits [can be used](util-foreach.hpp) to build the notion of a
+ ** these traits [can be used](\ref util-foreach.hpp) to build the notion of a
  ** generic container -- basically anything that can be enumerated.
  ** Within Lumiera, we frequently use our own concept of "iterability",
- ** known as ["Lumiera Forward Iterator"](iter-adapter.hpp). These
+ ** known as ["Lumiera Forward Iterator"](\ref iter-adapter.hpp). These
  ** helpers here allow to unify this concept with the "Range"
  ** concept from the standard library (`begin()` and `end()`)
  ** 

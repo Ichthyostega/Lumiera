@@ -99,7 +99,7 @@ namespace test{
    * 
    * @see iter-chain-search.hpp
    * @see iter-cursor.hpp
-   * @see [usage example](event-log.hpp)
+   * @see [usage example](\ref event-log.hpp)
    */
   class IterChainSearch_test : public Test
     {

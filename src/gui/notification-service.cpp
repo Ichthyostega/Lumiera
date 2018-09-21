@@ -273,7 +273,7 @@ namespace gui {
   
   
   /**
-   * When started, NotificationService connects to the [UI-Bus](ui-bus.hpp) via the provided connection.
+   * When started, NotificationService connects to the [UI-Bus](\ref ui-bus.hpp) via the provided connection.
    * This is a simple, unidirectional up-link connection, without actively adding NotificationService
    * into the routing tables in [Nexus]. Yet this simple connection is sufficient to implement this
    * service by talking to other facilities within the UI layer.

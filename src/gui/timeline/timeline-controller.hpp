@@ -77,7 +77,7 @@ namespace timeline {
   
   /**
    * Controller to supervise the timeline display.
-   * As a [tangible element](model::Tangible), it is attached to the UI-Bus.
+   * As a [tangible element](\ref model::Tangible), it is attached to the UI-Bus.
    * @todo WIP-WIP-rewrite as of 12/2016
    * @remarks a Timeline always has an attached Sequence, which in turn has
    *     a single mandatory root track. This in turn might hold further child tracks,

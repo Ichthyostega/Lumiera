@@ -24,7 +24,7 @@
 /** @file media-impl-lib.hpp
  ** Abstraction to represent (metadata) of an external library to handle media data
  ** Lumiera delegates most actual media data processing to well established external
- ** libraries. While configuring the render process, a [stream type](streamtype.hpp)
+ ** libraries. While configuring the render process, a [stream type](\ref streamtype.hpp)
  ** framework is used to gain uniform access to heterogeneous media and processing
  ** facilities. At some point, we need to integrate the individual capabilities of
  ** the referenced libraries, though. This will be done with adapter implementations,

@@ -24,7 +24,7 @@
 /** @file tangible.hpp
  ** Abstraction: a tangible element of the User Interface.
  ** This is a generic foundation for any elements of more than local relevance
- ** within the Lumiera UI.<br/> Any such element is connected to the [UI-Bus](ui-bus.hpp).
+ ** within the Lumiera UI.<br/> Any such element is connected to the [UI-Bus](\ref ui-bus.hpp).
  ** 
  ** ## rationale
  ** 
@@ -96,7 +96,7 @@
  ** 
  ** And finally, there are the _essential updates_ -- any changes in the model _for real._
  ** These are sent as notifications just to some relevant top level element, expecting this element
- ** to request a [diff](tree-diff.hpp) and to mutate contents into shape recursively.
+ ** to request a [diff](\ref tree-diff.hpp) and to mutate contents into shape recursively.
  ** 
  ** ## Interactions
  ** 
@@ -154,9 +154,9 @@ namespace model {
    * Interface common to all UI elements of relevance for the Lumiera application.
    * Any non-local and tangible interface interaction will at some point pass through
    * this foundation element, which forms the joint and attachment to the UI backbone,
-   * which is the [UI-Bus](ui-bus.hpp). Any tangible element acquires a distinct identity
+   * which is the [UI-Bus](\ref ui-bus.hpp). Any tangible element acquires a distinct identity
    * and has to be formed starting from an already existing bus nexus.
-   * @see [explanation of the basic interactions](tangible.hpp)
+   * @see [explanation of the basic interactions](\ref tangible.hpp)
    * @warning Tangible is `NonCopyable` for good reason: the UI-Bus Nexus adds a direct
    *          reference into the routing table, tied to the given Tangible's ID (identity.
    *          Consequently you must not store tangibles in STL containers, since these

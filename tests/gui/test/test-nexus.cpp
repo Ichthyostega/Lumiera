@@ -26,12 +26,12 @@
  ** This compilation unit provides the actual setup for running a faked
  ** user interface from unit tests. Test code is assumed to access those
  ** features through the [front-end](\ref gui::test::TestNexus), while the
- ** actual implementation instances are placed [as singletons](depend.hpp)
+ ** actual implementation instances are placed [as singletons](\ref depend.hpp)
  ** 
- ** This test setup will mostly treat messages similar to the [real UI-Bus hub](nexus.hpp),
+ ** This test setup will mostly treat messages similar to the [real UI-Bus hub](\ref nexus.hpp),
  ** with additional [logging](\ref event-log.hpp). Since the TestNexus runs as singleton,
- ** there is a single shared "nexus-log", which can be [accessed](test::Nexus::getLog) or
- ** even [cleared](test::Nexus::startNewLog) through the [static front-end](test::Nexus).
+ ** there is a single shared "nexus-log", which can be [accessed](\ref test::Nexus::getLog) or
+ ** even [cleared](\ref test::Nexus::startNewLog) through the [static front-end](\ref test::Nexus).
  ** But there is no connection to any [core services](\ref core-service.hpp), so neither
  ** commands nor state marks will be processed in any way. In case the unit tests need to
  ** integrate with or verify these handling operations, we provide the ability to install
@@ -420,7 +420,7 @@ namespace test{
   }
   
   /**
-   * similar to the [custom command handler](Nexus::setCommandHandler)
+   * similar to the [custom command handler](\ref Nexus::setCommandHandler)
    * this hook allows to install a closure to intercept any
    * "state mark" messages passed over the test-UI-Bus
    */

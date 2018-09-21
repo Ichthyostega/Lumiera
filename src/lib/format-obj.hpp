@@ -38,7 +38,7 @@
  **         the way we did it for `boost::format`? This would reduce inclusion cost...
  ** 
  ** @see FormatHelper_test
- ** @see [frontend for boost::format, printf-style](format-string.hpp)
+ ** @see [frontend for boost::format, printf-style](\ref format-string.hpp)
  ** 
  */
 

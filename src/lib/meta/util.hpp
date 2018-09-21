@@ -334,7 +334,7 @@ namespace util {
    *    representation for pretty much every language object._ This minimal solution
    *    is defined here, to allow for built-in diagnostics for custom types without
    *    the danger of creating much header inclusion and code size bloat. A more
-   *    elaborate, [extended solution](lib::toString), including _lexical conversions
+   *    elaborate, [extended solution](\ref lib::toString), including _lexical conversions
    *    for numbers,_ is defined in format-obj.hpp
    * @note any exceptions during string conversion are caught and silently ignored;
    *    the returned string indicates "↯" in this case.

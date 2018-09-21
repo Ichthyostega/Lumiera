@@ -47,8 +47,8 @@
  ** routing table in Nexus, can be addressed as a _first class citizen,_
  ** that is, we're able to direct messages towards such an element, knowing
  ** only it's ID. But there is a twist: all connections to the Bus are made
- ** from [bus terminals](ctrl::BusTerm), and each _node_, i.e. each
- ** [tangible model element](model::Tangible) has a BusTerm member and
+ ** from [bus terminals](\ref ctrl::BusTerm), and each _node_, i.e. each
+ ** [tangible model element](\ref model::Tangible) has a BusTerm member and
  ** thus inherits the ability to talk to the bus. But only when _actively_
  ** connected to the bus, a full link and entry in the routing table is
  ** established. The constructor of model::Tangible indeed makes such
@@ -65,8 +65,8 @@
  ** for the Nexus, and thus gains the ability to respond to those few special
  ** messages, which can not be handled in a generic way on the Nexus:
  ** - *act* handles command invocation within the Session core, and
- **   is treated by [forwarding](command-handler.hpp) it over the
- **   SessionCommand facade to the [Proc-Dispatcher](proc-dispatcher.hpp)
+ **   is treated by [forwarding](\ref command-handler.hpp) it over the
+ **   SessionCommand facade to the [Proc-Dispatcher](\ref proc-dispatcher.hpp)
  ** - *note* observes and captures presentation state note messages, which
  **   are to be handled by a central presentation state manager (TODO 1/17).
  ** 

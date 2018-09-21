@@ -23,7 +23,7 @@
 
 /** @file dispatcher.hpp
  ** Service abstraction within the render engine for generating render jobs.
- ** On interface level, the render engine uses the notion of a [calculation stream](CalcStream)
+ ** On interface level, the render engine uses the notion of a [calculation stream](\ref CalcStream)
  ** to represent an ongoing rendering process. Within the _implementation_ of such a process,
  ** the Dispatcher is responsible for transforming the generic setup of such a calculation stream
  ** into a sequence of concrete jobs, anchored at some distinct point in time.

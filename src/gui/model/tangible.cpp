@@ -25,7 +25,7 @@
  ** Common base implementation of all tangible and connected interface elements.
  ** 
  ** @see abstract-tangible-test.cpp
- ** @see [explanation of the fundamental interactions](tangible.hpp)
+ ** @see [explanation of the fundamental interactions](\ref tangible.hpp)
  ** 
  */
 

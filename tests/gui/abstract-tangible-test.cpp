@@ -197,7 +197,7 @@ namespace test {
        * the occurrence of expected events, invocations and responses.
        * 
        * ### connectivity
-       * Any mock element will automatically connect against the [Test-Nexus](test/test-nexus.hpp),
+       * Any mock element will automatically connect against the [Test-Nexus](\ref test/test-nexus.hpp),
        * so to be suitably rigged for unit testing. This means, there is no _live connection_
        * to the session, but any command- or other messages will be captured and can be
        * retrieved or verified from the test code. Since lifecycle and robustness in

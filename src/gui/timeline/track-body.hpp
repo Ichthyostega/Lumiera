@@ -29,7 +29,7 @@
  ** yet for coordination of a globally consistent timeline layout, each
  ** track display is coordinated by a TrackPresenter, which corresponds
  ** to a session::Fork and directly controls the respective display elements
- ** in the [header pane](timeline::HeaderPaneWidget) and the display of the
+ ** in the [header pane](\ref timeline::HeaderPaneWidget) and the display of the
  ** timeline body, which is actually a canvas for custom drawing.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016

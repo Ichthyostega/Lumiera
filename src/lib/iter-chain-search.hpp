@@ -68,7 +68,7 @@
  ** @see IterChainSearch_test
  ** @see IterCursor_test
  ** @see iter-tree-explorer.hpp
- ** @see [usage example](event-log.hpp)
+ ** @see [usage example](\ref event-log.hpp)
  ** 
  */
 
