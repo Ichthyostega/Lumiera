@@ -29,6 +29,8 @@ Recommended reading
    and
    https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined style classes]
    in the GTK-3 reference manual.
+ * there is an https://developer.gnome.org/gtk3/stable/chap-css-overview.html[overview page in the developer manual],
+   and a https://developer.gnome.org/gtk3/stable/chap-css-properties.html[reference of supported properties].
  * to start, look at this http://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/[introductory text],
    or the more http://worldofgnome.org/making-gtk3-themes-part-1-basics/[hands-on series of articles from world of gnome]
  * this http://forums.fedoraforum.org/showthread.php?t=281568[post from fedora forum] features a conciese description

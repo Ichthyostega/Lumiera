@@ -63,12 +63,14 @@
 //#include "lib/util.hpp"
 
 //#include <memory>
-//#include <vector>
+#include <vector>
 
 
 
 namespace gui  {
 namespace widget {
+  
+  using std::vector;
   
   
   /**
@@ -79,11 +81,18 @@ namespace widget {
   class ErrorLogDisplay
     : public Gtk::ScrolledWindow
     {
+      
+      using Mark = Glib::RefPtr<Gtk::TextBuffer::Mark>;
+      
+      vector<Mark> errorMarks_;
+      Gtk::TextView textLog_;
+
     public:
      ~ErrorLogDisplay() { };
       
       ErrorLogDisplay()
         : Gtk::ScrolledWindow()
+        , errorMarks_{}
         , textLog_{}
         {
           set_size_request (200, 80);           // must be > 50 for the scrollbar to work properly
@@ -115,10 +124,17 @@ namespace widget {
           showMsg (NOTE_INFO, text);
         }
       
+      /** present an error notification prominently.
+       *  Adds the error text, formatted accordingly to stand out,
+       *  but also stores a [Mark] to bookmark the presence of this
+       *  error entry. And finally expand the display if collapsed.
+       *  
+       * [Mark]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
+       */
       void
       addError (string text)
         {
-          UNIMPLEMENTED ("add error with special tag and bookmark");
+          showMsg (NOTE_ERROR, text);
         }
       
       void
@@ -161,13 +177,15 @@ namespace widget {
         }
       
       
-      Gtk::TextView textLog_;
-      
       /** add message entry to the (ever growing) text buffer.
-       * @remark According to the Gtkmm tutorial, TextView::scroll_to(iter) is not reliable;
+       * @remark According to the [GTKmm tutorial], `TextView::scroll_to(iter)` is not reliable;
        *         rather we need to use a text mark and set that text mark to the insert position.
-       *         Actually, there is always one predefined text mark called "insert", which corresponds
-       *         to the text cursor. Thus it suffices to navigate to text end, insert and scroll into view.
+       *         Actually, there is always one predefined text mark [called "insert"][insert-mark],
+       *         which corresponds to the text cursor. Thus it suffices to navigate to text end,
+       *         insert and scroll into view.
+       * 
+       * [GTKmm tutorial]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
+       * [insert-mark]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
        */
       void
       addEntry (string const& text)

@@ -1718,7 +1718,7 @@
 <node CREATED="1504215958961" ID="ID_55797578" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-formatting" MODIFIED="1518487921054" TEXT="Formattierung">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1504219859389" FOLDED="true" ID="ID_653669269" MODIFIED="1534512772398" TEXT="Scrollen zum zuletzt eingef&#xfc;gten Text">
+<node CREATED="1504219859389" FOLDED="true" ID="ID_653669269" MODIFIED="1537661820926" TEXT="Scrollen zum zuletzt eingef&#xfc;gten Text">
 <arrowlink COLOR="#9bbabd" DESTINATION="ID_429138159" ENDARROW="Default" ENDINCLINATION="-1413;0;" ID="Arrow_ID_1025095859" STARTARROW="None" STARTINCLINATION="-1151;202;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1504220139416" ID="ID_1997485219" MODIFIED="1518487921054" TEXT="scroll_to(iterator) funktioniert nicht">
@@ -1740,7 +1740,8 @@
 <node CREATED="1504203763606" ID="ID_877984616" MODIFIED="1518487921054" TEXT="in ein Widget verpacken">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504203754175" ID="ID_580465154" MODIFIED="1533402997076" TEXT="Fehler-Level erkennen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504203754175" ID="ID_580465154" MODIFIED="1537572046781" TEXT="Fehler-Level erkennen">
+<arrowlink DESTINATION="ID_1459967459" ENDARROW="Default" ENDINCLINATION="-73;-253;" ID="Arrow_ID_424075973" STARTARROW="None" STARTINCLINATION="225;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725200588" ID="ID_871562482" MODIFIED="1535752292770" TEXT="Operationen">
@@ -1776,7 +1777,7 @@
 <node CREATED="1535563317214" ID="ID_201611533" MODIFIED="1535563330839" TEXT="egal in welcher Reihenfolge man es hinzuf&#xfc;gt"/>
 <node CREATED="1535563334050" ID="ID_718726647" MODIFIED="1535563366331" TEXT="dagegen direkt im Frame dehnt sie sich aus"/>
 </node>
-<node COLOR="#338800" CREATED="1535629564615" ID="ID_228360739" MODIFIED="1535630629855" TEXT="L&#xf6;sung: Widget::property_expand()">
+<node COLOR="#338800" CREATED="1535629564615" ID="ID_228360739" MODIFIED="1537576458081" TEXT="L&#xf6;sung: Widget::property_expand()">
 <arrowlink COLOR="#6277b2" DESTINATION="ID_860094095" ENDARROW="Default" ENDINCLINATION="-1778;-100;" ID="Arrow_ID_761942436" STARTARROW="None" STARTINCLINATION="-6486;0;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -1967,11 +1968,107 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725152139" ID="ID_887758432" MODIFIED="1534725420632" TEXT="addError">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725422454" ID="ID_1459967459" MODIFIED="1534725491846" TEXT="spezieller Markup">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725422454" ID="ID_1459967459" MODIFIED="1537572046781" TEXT="spezieller Markup">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1459967459" ENDARROW="Default" ENDINCLINATION="-73;-253;" ID="Arrow_ID_424075973" SOURCE="ID_580465154" STARTARROW="None" STARTINCLINATION="225;0;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571906634" ID="ID_1839759637" MODIFIED="1537571965556" TEXT="Tags anlegen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571917625" ID="ID_1900926418" MODIFIED="1537571926822" TEXT="k&#xe4;ren: CSS?">
+<icon BUILTIN="help"/>
+<node COLOR="#435e98" CREATED="1535629564615" HGAP="43" ID="ID_1432671260" MODIFIED="1537576577055" TEXT="GTK-Styling, CSS f&#xfc;r Custom-Widgets" VSHIFT="-35">
+<arrowlink COLOR="#6277b2" DESTINATION="ID_1174884362" ENDARROW="Default" ENDINCLINATION="-2315;-45;" ID="Arrow_ID_380937946" STARTARROW="None" STARTINCLINATION="-7413;0;"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1537661752104" ID="ID_373027917" MODIFIED="1537661763482" TEXT="wohl nicht so einfach"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537661764454" ID="ID_1004400727" MODIFIED="1537661786205" TEXT="Untersuchen per Inspector">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537661787387" ID="ID_20967740" MODIFIED="1537661797859" TEXT="vorl&#xe4;ufig hart verdrahten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537661799354" ID="ID_758790930" MODIFIED="1537661906780" TEXT="Style-Manager vorsehen">
+<arrowlink COLOR="#8f81b2" DESTINATION="ID_407535546" ENDARROW="Default" ENDINCLINATION="3769;-2728;" ID="Arrow_ID_1203118148" STARTARROW="None" STARTINCLINATION="-1594;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571928143" ID="ID_221069673" MODIFIED="1537571967923" TEXT="Tag f&#xfc;r Warnung">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571934143" ID="ID_447258227" MODIFIED="1537571967219" TEXT="Tag f&#xfc;r Fehler">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571949893" ID="ID_328949056" MODIFIED="1537571962861" TEXT="Tags zuweisen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571956436" ID="ID_1806243350" MODIFIED="1537571961484" TEXT="Tags entfernen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725501467" ID="ID_1420459325" MODIFIED="1534725506867" TEXT="Bookmark speichern">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1537535919147" ID="ID_1338221225" MODIFIED="1537571978137" TEXT="Technologie">
+<icon BUILTIN="info"/>
+<node CREATED="1537535925874" ID="ID_196796680" MODIFIED="1537535937395" TEXT="Tag / TagTable">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1537535939265" ID="ID_1176049085" MODIFIED="1537535942940" TEXT="geht nicht"/>
+<node CREATED="1537535943840" ID="ID_694044876" MODIFIED="1537535949979" TEXT="man kann nicht nach Tags suchen"/>
+<node CREATED="1537536772568" ID="ID_332685872" MODIFIED="1537536780459" TEXT="(Suchen kann man auf dem Iterator)"/>
+</node>
+<node CREATED="1537536783583" ID="ID_883754303" MODIFIED="1537536847824" TEXT="Mark verwenden">
+<icon BUILTIN="forward"/>
+<node CREATED="1537536791477" ID="ID_1332288045" MODIFIED="1537536806687" TEXT="mu&#xdf; Index daf&#xfc;r selber pflegen"/>
+<node CREATED="1537536808627" ID="ID_609351839" MODIFIED="1537536816686" TEXT="kann dann direkt zur Mark springen"/>
+<node CREATED="1537536819657" ID="ID_1987418184" MODIFIED="1537536840621" TEXT="wird durch Edits/Insterts nicht gest&#xf6;rt">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571771685" ID="ID_1198199438" MODIFIED="1537571817032" TEXT="ErrorIndex">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571794801" ID="ID_1255966338" MODIFIED="1537571888654" TEXT="einf&#xfc;gen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571882918" ID="ID_620353485" MODIFIED="1537571889438" TEXT="reorganisieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1537537333987" ID="ID_667263409" MODIFIED="1537537337615" TEXT="&#xdc;bersicht">
+<node CREATED="1537537339011" ID="ID_1759202815" MODIFIED="1537537343849" TEXT="L&#xf6;sung">
+<icon BUILTIN="help"/>
+<node CREATED="1537537345410" ID="ID_1560200040" MODIFIED="1537537351912" TEXT="Toolbar verwenden?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1537537353105" ID="ID_409330854" MODIFIED="1537537361078" TEXT="ButtonBox verwenden?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1537571223088" ID="ID_1186576760" MODIFIED="1537571237818" TEXT="erst mal gar nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      YAGNI
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571240500" ID="ID_1601115005" MODIFIED="1537572170448" TEXT="nur &gt;&gt; (n&#xe4;chster Fehler)">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1537571669683" ID="ID_196982892" MODIFIED="1537571676509" TEXT="wenn es Fehler gibt"/>
+<node CREATED="1537571681249" ID="ID_1273769655" MODIFIED="1537571717760" TEXT="wenn es mehr Zeilen gibt"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537572133580" ID="ID_671753441" MODIFIED="1537572167345" TEXT="Button: clear Errors">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537572142139" ID="ID_1644572130" MODIFIED="1537572166537" TEXT="Button: clear all">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531676045" ID="ID_548104404" MODIFIED="1537531681238" TEXT="addWarning">
@@ -3921,7 +4018,75 @@
 </node>
 </node>
 <node CREATED="1534336252375" HGAP="27" ID="ID_1755017021" MODIFIED="1534336284856" TEXT="Hilfsmittel">
-<node CREATED="1534336320373" ID="ID_708892482" MODIFIED="1534336324377" TEXT="Grundbausteine"/>
+<node CREATED="1534336320373" ID="ID_708892482" MODIFIED="1534336324377" TEXT="Grundbausteine">
+<node CREATED="1537659522174" ID="ID_1583657425" MODIFIED="1537659720796" TEXT="primary widgets">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Definition</b>: komplexe Widget-Strukturen,
+    </p>
+    <p>
+      welche nur einmal in dieser speziellen Konfiguration exisiteren,
+    </p>
+    <p>
+      und dabei eine zentrale Rolle im UI spielen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <u>Beispiel</u>:
+    </p>
+    <ul>
+      <li>
+        Timeline
+      </li>
+      <li>
+        Property-Grid
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1537659866783" ID="ID_1613745412" MODIFIED="1537659869395" TEXT="Timeline"/>
+<node CREATED="1537659870415" ID="ID_1181375258" MODIFIED="1537659875274" TEXT="Property-Grid"/>
+</node>
+<node CREATED="1537659527741" ID="ID_856745741" MODIFIED="1537659851138" TEXT="building blocks">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Definition</b>: speziell konfigurierte und verdrahtete Teil-Komponenten,
+    </p>
+    <p>
+      welche wiederholt an verschiedensten Stellen im UI eingesetzt werden,
+    </p>
+    <p>
+      und sich dort jeweils konsistent und uniform verhalten.
+    </p>
+    <p>
+      <u>Beispiel</u>:
+    </p>
+    <ul>
+      <li>
+        Timecode-Widget
+      </li>
+      <li>
+        Placement-Widget
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1537659880597" ID="ID_1214109906" MODIFIED="1537659889631" TEXT="Timecode"/>
+<node CREATED="1537659890292" ID="ID_1230379898" MODIFIED="1537659892520" TEXT="Placement"/>
+</node>
+</node>
 <node CREATED="1534336325916" ID="ID_762624766" MODIFIED="1534336335351" TEXT="Bindeglieder"/>
 <node CREATED="1534336335963" ID="ID_1176525116" MODIFIED="1534336338575" TEXT="Werkzeug">
 <node COLOR="#338800" CREATED="1534334810537" FOLDED="true" ID="ID_1326202399" MODIFIED="1534436661859" TEXT="Link zum Widget">
@@ -3989,6 +4154,21 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534436609323" ID="ID_1966799512" MODIFIED="1534436641103" TEXT="nicht wirklich gepr&#xfc;ft">
 <icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1537659082073" ID="ID_986070389" MODIFIED="1537659084869" TEXT="Schema">
+<node CREATED="1537659311850" ID="ID_741254991" MODIFIED="1537659315213" TEXT="Struktur"/>
+<node CREATED="1537659316321" ID="ID_1046162234" MODIFIED="1537659319957" TEXT="Style">
+<node CREATED="1537660235757" ID="ID_1679504678" MODIFIED="1537660239288" TEXT="Leitlinie">
+<node CREATED="1537660241420" ID="ID_1559839657" MODIFIED="1537660263453" TEXT="m&#xf6;glichst generisch belassen"/>
+<node CREATED="1537660355669" ID="ID_407535546" MODIFIED="1537661906780" TEXT="zentrale Palette f&#xfc;r Extra-Auszeichnungen">
+<linktarget COLOR="#8f81b2" DESTINATION="ID_407535546" ENDARROW="Default" ENDINCLINATION="3769;-2728;" ID="Arrow_ID_1203118148" SOURCE="ID_758790930" STARTARROW="None" STARTINCLINATION="-1594;0;"/>
+<node CREATED="1537661251763" ID="ID_896084387" MODIFIED="1537661266549" TEXT="virtuelle Widget-Struktur"/>
+<node CREATED="1537661267561" ID="ID_1282505273" MODIFIED="1537661278347" TEXT="systematisch organisiert"/>
+<node CREATED="1537661279344" ID="ID_635630811" MODIFIED="1537661322302" TEXT="wird bei Bedarf abgefragt"/>
+<node CREATED="1537661322914" ID="ID_165076190" MODIFIED="1537661331868" TEXT="per synthetisiertem Widget-Path"/>
 </node>
 </node>
 </node>
@@ -36779,12 +36959,14 @@
 <node CREATED="1535629144783" ID="ID_603397185" MODIFIED="1535629149074" TEXT="Phasen">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535629169164" ID="ID_1301809885" MODIFIED="1535629197406" TEXT="realized">
 <icon BUILTIN="help"/>
+<node CREATED="1537577511892" ID="ID_194223971" MODIFIED="1537577519599" TEXT="wird sichtbar"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535629172787" ID="ID_1666976097" MODIFIED="1535629187584" TEXT="mapped">
 <icon BUILTIN="help"/>
+<node CREATED="1537577522482" ID="ID_629476344" MODIFIED="1537577533836" TEXT="einem GDK-Fenster mit Koordinaten zugeordnet"/>
 </node>
 </node>
-<node CREATED="1535629240762" ID="ID_860094095" MODIFIED="1535630624000" STYLE="fork" TEXT="Platzierung">
+<node CREATED="1535629240762" ID="ID_860094095" MODIFIED="1537576497171" STYLE="fork" TEXT="Platzierung">
 <edge COLOR="#b4a9e3" STYLE="bezier" WIDTH="thin"/>
 <linktarget COLOR="#6277b2" DESTINATION="ID_860094095" ENDARROW="Default" ENDINCLINATION="-1778;-100;" ID="Arrow_ID_761942436" SOURCE="ID_228360739" STARTARROW="None" STARTINCLINATION="-6486;0;"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -36818,6 +37000,69 @@
 <node CREATED="1535629472923" ID="ID_927038398" MODIFIED="1535630246025" TEXT="es gibt vexpand und hexpand">
 <node CREATED="1535630137082" ID="ID_793513557" MODIFIED="1535630246025" TEXT="nur f&#xfc;r eine Richtung"/>
 <node CREATED="1535630147960" ID="ID_701726630" MODIFIED="1535630246025" TEXT="diese haben Getter/Setter"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1537575934664" ID="ID_849901633" MODIFIED="1537575940352" TEXT="Style">
+<font NAME="SansSerif" SIZE="13"/>
+<node CREATED="1537575947102" ID="ID_161652920" MODIFIED="1537575954753" TEXT="StyleContext">
+<node CREATED="1537575960276" ID="ID_376188043" MODIFIED="1537575972287" TEXT="enth&#xe4;lt mehrere StyleProvider"/>
+</node>
+<node CREATED="1537575973946" ID="ID_1131360657" MODIFIED="1537575979062" TEXT="StyleProvider">
+<node CREATED="1537575987001" ID="ID_1223531940" MODIFIED="1537575993275" TEXT="GtkCssStyleProvider">
+<node CREATED="1537576001423" ID="ID_707384345" MODIFIED="1537576009577" TEXT="interpretiert ein CSS-Stylesheet"/>
+</node>
+</node>
+<node CREATED="1537576031611" ID="ID_1494464724" MODIFIED="1537576034622" TEXT="Widgets">
+<node CREATED="1537576035498" ID="ID_1813123190" MODIFIED="1537576058691" TEXT="definieren jeweils die Styles, die sie verwenden">
+<node CREATED="1537577874195" ID="ID_385552696" MODIFIED="1537577883741" TEXT="style-context zum Widget beziehen"/>
+<node CREATED="1537577885042" ID="ID_9820896" MODIFIED="1537577900187" TEXT="diesem Context die spezielle Klasse hinzuf&#xfc;gen"/>
+<node CREATED="1537577901032" ID="ID_1836919045" MODIFIED="1537577913426" TEXT="diese Klasse kann nun im CSS-Selektor verwendet werden"/>
+<node CREATED="1537577914422" ID="ID_1220237808" MODIFIED="1537577928192" TEXT="geht das auch via GTKmm">
+<icon BUILTIN="help"/>
+<node CREATED="1537577929540" ID="ID_644837001" MODIFIED="1537577942529" TEXT="diverse Hinweise, da&#xdf; es nur direkt in C geht">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#803457" CREATED="1537577957752" ID="ID_36168340" LINK="https://stackoverflow.com/questions/37609381/how-to-set-a-specific-css-class-to-a-widget-in-gtk3-c" MODIFIED="1537658796933" TEXT="C-Beispiel auf Stackoverflow">
+<linktarget COLOR="#c1a9a9" DESTINATION="ID_36168340" ENDARROW="Default" ENDINCLINATION="56;152;" ID="Arrow_ID_843556021" SOURCE="ID_903275997" STARTARROW="None" STARTINCLINATION="68;8;"/>
+</node>
+</node>
+</node>
+<node CREATED="1537576059351" ID="ID_1816365537" MODIFIED="1537576067986" TEXT="k&#xf6;nnen spezielle &quot;Regions&quot; haben">
+<node CREATED="1537576068734" ID="ID_1594476628" MODIFIED="1537576071650" TEXT="was ist das">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1537658489614" ID="ID_1012337146" MODIFIED="1537658527703" TEXT="Doku gibt einen Baum an: &quot;CSS nodes&quot;"/>
+<node CREATED="1537658542249" ID="ID_956543325" MODIFIED="1537658554859" TEXT="das ist die tats&#xe4;chliche Widget-Struktur"/>
+</node>
+<node CREATED="1535629240762" ID="ID_1174884362" MODIFIED="1537576577055" STYLE="fork" TEXT="CustomWidgets">
+<edge COLOR="#b4a9e3" STYLE="bezier" WIDTH="thin"/>
+<linktarget COLOR="#6277b2" DESTINATION="ID_1174884362" ENDARROW="Default" ENDINCLINATION="-2315;-45;" ID="Arrow_ID_380937946" SOURCE="ID_1432671260" STARTARROW="None" STARTINCLINATION="-7413;0;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1537576079756" HGAP="32" ID="ID_111059124" MODIFIED="1537658672181" TEXT="siehe Tutorial" VSHIFT="-6">
+<arrowlink DESTINATION="ID_334736261" ENDARROW="Default" ENDINCLINATION="228;-492;" ID="Arrow_ID_84377619" STARTARROW="None" STARTINCLINATION="930;-42;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#990000" CREATED="1537658616952" HGAP="24" ID="ID_940676428" LINK="https://stackoverflow.com/questions/52452878/can-tags-in-gtktextbuffer-be-styled-with-css" MODIFIED="1537658665006" TEXT="habe selber auf Stackoverflow gefragt..." VSHIFT="-8">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1537658818388" ID="ID_1554071957" MODIFIED="1537658827087" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1537577389028" ID="ID_1690083237" MODIFIED="1537577400334" TEXT="k&#xf6;nnen einen eigenen Widget-Namen setzen"/>
+<node CREATED="1537577364840" ID="ID_927285198" MODIFIED="1537577379929" TEXT="k&#xf6;nnen custom-Properties haben">
+<node CREATED="1537577410065" ID="ID_1611025546" MODIFIED="1537577422244" TEXT="das ist ein Proxy-Member"/>
+<node CREATED="1537577424000" ID="ID_742914876" MODIFIED="1537577434658" TEXT="onRealize kann der Wert abgeholt werden"/>
+</node>
+<node CREATED="1537658737815" ID="ID_1865147889" MODIFIED="1537658764823" TEXT="k&#xf6;nnen Basis-Widgets mit Klasse auszeichnen">
+<node CREATED="1537658770555" ID="ID_920908371" MODIFIED="1537658777916" TEXT="nicht klar, ob das in C++ geht">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1537658785336" ID="ID_903275997" MODIFIED="1537658802879" TEXT="Beispiel">
+<arrowlink COLOR="#c1a9a9" DESTINATION="ID_36168340" ENDARROW="Default" ENDINCLINATION="56;152;" ID="Arrow_ID_843556021" STARTARROW="None" STARTINCLINATION="68;8;"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -37591,7 +37836,7 @@
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" SOURCE="ID_426069181" STARTARROW="None" STARTINCLINATION="1055;0;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1477527104426" ID="ID_334736261" MODIFIED="1518487921100" TEXT="custom style properties">
+<node CREATED="1477527104426" ID="ID_334736261" MODIFIED="1537576124396" TEXT="custom style properties">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37605,6 +37850,7 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_334736261" ENDARROW="Default" ENDINCLINATION="228;-492;" ID="Arrow_ID_84377619" SOURCE="ID_111059124" STARTARROW="None" STARTINCLINATION="930;-42;"/>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -37987,7 +38233,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1504215825762" ID="ID_429138159" MODIFIED="1534512772399" TEXT="zur letzten Zeile scrollen">
+<node CREATED="1504215825762" ID="ID_429138159" MODIFIED="1537661820926" TEXT="zur letzten Zeile scrollen">
 <linktarget COLOR="#9bbabd" DESTINATION="ID_429138159" ENDARROW="Default" ENDINCLINATION="-1413;0;" ID="Arrow_ID_1025095859" SOURCE="ID_653669269" STARTARROW="None" STARTINCLINATION="-1151;202;"/>
 <node CREATED="1504220167228" ID="ID_622474093" MODIFIED="1518487921101" TEXT="scroll_to(iterator) ist ungenau">
 <icon BUILTIN="broken-line"/>
