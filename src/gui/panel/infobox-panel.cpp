@@ -117,7 +117,7 @@ namespace panel{
     static uint bangNo{0};
     static _Fmt msgTemplate{"Bang #%d\n"};
     
-    getLog().addMsg (msgTemplate % ++bangNo);
+    getLog().addError (msgTemplate % ++bangNo);
   }
   
   

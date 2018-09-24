@@ -49,6 +49,9 @@
  ** 
  ** @todo WIP-WIP-WIP as of 9/2017 this is a first draft of a widget to be
  **       used as receiver by the GuiNotificationService.
+ ** @todo WIP-WIP and in 9/2018 this draft gradually shifts towards a prototype
+ **       how to deal with custom configured widget behaviour, and how to integrate
+ **       with our GUI framework                /////////////////////////////////////////////////////////////TICKET #1099 : build a prototype/dummy for UI <-> Proc integration  
  ** 
  */
 
@@ -76,6 +79,7 @@ namespace widget {
   namespace {
     
     const Literal TAG_ERROR{"ERROR"};           /////////////////////////////////////////////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
+    const Literal TAG_WARN{"WARN"};
     
     
     using Tag = Glib::RefPtr<Gtk::TextBuffer::Tag>;
@@ -88,9 +92,14 @@ namespace widget {
     inline void
     populateStandardTextTags (Glib::RefPtr<TextBuffer::TagTable> tagTable)
     {
-      Tag errorTag = Gtk::TextBuffer::Tag::create();
-      errorTag->property_background() = "yellow";                ////////////////////////////////////////////TICKET #1168 : should be retrieved from a central location
+      Tag errorTag = Gtk::TextBuffer::Tag::create (cuString{TAG_ERROR});
+      errorTag->property_background() = "Yellow";                ////////////////////////////////////////////TICKET #1168 : should be retrieved from a central location
+      errorTag->property_weight() = PANGO_WEIGHT_BOLD;
       tagTable->add (errorTag);
+      
+      Tag warnTag = Gtk::TextBuffer::Tag::create (cuString{TAG_WARN});
+      warnTag->property_background() = "LightYellow";            ////////////////////////////////////////////TICKET #1168 : should be retrieved from a central location
+      tagTable->add (warnTag);
     }
   }
   
@@ -194,12 +203,15 @@ namespace widget {
        * [insert-mark]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
        */
       auto
-      addEntry (string const& text)
+      addEntry (string const& text, Literal markupTagName =nullptr)
         {
           auto buff = textLog_.get_buffer();
           auto cursor = buff->get_insert();
           buff->move_mark (cursor, buff->end());
-          buff->insert (buff->end(), text);
+          if (markupTagName)
+            buff->insert_with_tag(buff->end(), text, cuString{markupTagName});
+          else
+            buff->insert (buff->end(), text);
           textLog_.scroll_to (cursor);
           return cursor;
         }
@@ -211,10 +223,12 @@ namespace widget {
           switch (severity) {
             case NOTE_ERROR:
                 errorMarks_.emplace_back(
-                    addEntry ("ERROR: "+text));
+                    addEntry ("ERROR: "+text, TAG_ERROR));
+                if (not expand.isExpanded())
+                  expand (true);
               break;
             case NOTE_WARN:
-                addEntry ("WARN: "+text);
+                addEntry ("WARN: "+text, TAG_WARN);
               break;
             default:
                 addEntry (text);
