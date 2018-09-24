@@ -59,7 +59,7 @@
 #include "gui/gtk-base.hpp"
 #include "gui/model/expander-revealer.hpp"
 #include "include/gui-notification-facade.h"
-
+#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
 //#include <memory>
@@ -70,7 +70,29 @@
 namespace gui  {
 namespace widget {
   
+  using lib::Literal;
   using std::vector;
+  
+  namespace {
+    
+    const Literal TAG_ERROR{"ERROR"};           /////////////////////////////////////////////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
+    
+    
+    using Tag = Glib::RefPtr<Gtk::TextBuffer::Tag>;
+    
+    /**
+     * @internal inject some generic standard styles for use in `TextView` components.
+     * @param tagTable reference to a `TagTable` bound with an existing `Gtk::TextBuffer`.
+     * @todo 9/2018 dummy placeholder code, later to be transformed into a framework    /////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
+     */
+    inline void
+    populateStandardTextTags (Glib::RefPtr<TextBuffer::TagTable> tagTable)
+    {
+      Tag errorTag = Gtk::TextBuffer::Tag::create();
+      errorTag->property_background() = "yellow";                ////////////////////////////////////////////TICKET #1168 : should be retrieved from a central location
+      tagTable->add (errorTag);
+    }
+  }
   
   
   /**
@@ -104,6 +126,8 @@ namespace widget {
           set_policy (Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
           this->add (textLog_);
           textLog_.set_editable (false);
+          
+          populateStandardTextTags (textLog_.get_buffer()->get_tag_table());
         }
       
       model::Expander expand;
@@ -159,24 +183,6 @@ namespace widget {
       
     private:/* ===== Internals ===== */
       
-      void
-      showMsg (NotifyLevel severity, string const& text)
-        {
-          //////////////////////////////////////////////////TICKET #1102 : add formatting according to the error level
-          switch (severity) {
-            case NOTE_ERROR:
-                addEntry ("ERROR: "+text);
-              break;
-            case NOTE_WARN:
-                addEntry ("WARN: "+text);
-              break;
-            default:
-                addEntry (text);
-              break;
-          }
-        }
-      
-      
       /** add message entry to the (ever growing) text buffer.
        * @remark According to the [GTKmm tutorial], `TextView::scroll_to(iter)` is not reliable;
        *         rather we need to use a text mark and set that text mark to the insert position.
@@ -187,7 +193,7 @@ namespace widget {
        * [GTKmm tutorial]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
        * [insert-mark]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
        */
-      void
+      auto
       addEntry (string const& text)
         {
           auto buff = textLog_.get_buffer();
@@ -195,6 +201,25 @@ namespace widget {
           buff->move_mark (cursor, buff->end());
           buff->insert (buff->end(), text);
           textLog_.scroll_to (cursor);
+          return cursor;
+        }
+      
+      void
+      showMsg (NotifyLevel severity, string const& text)
+        {
+          //////////////////////////////////////////////////TICKET #1102 : add formatting according to the error level
+          switch (severity) {
+            case NOTE_ERROR:
+                errorMarks_.emplace_back(
+                    addEntry ("ERROR: "+text));
+              break;
+            case NOTE_WARN:
+                addEntry ("WARN: "+text);
+              break;
+            default:
+                addEntry (text);
+              break;
+          }
         }
     };
   
