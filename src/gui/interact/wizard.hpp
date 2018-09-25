@@ -64,6 +64,9 @@ namespace ctrl {
   class GlobalCtx;
   class NotificationHub;
 }
+namespace dialog {
+  class TestControl;
+}
 namespace interact {
   
   using std::unique_ptr;
@@ -90,6 +93,7 @@ namespace interact {
      ~Wizard ();
       
       void show_HelpAbout();
+      void launchTestCtrl();
       
       static ID getErrorLogID() { return proc::asset::meta::theErrorLog_ID; }
       

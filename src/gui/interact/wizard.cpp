@@ -115,5 +115,18 @@ namespace interact {
   }
   
   
+  /**
+   * Launch a non modal child window to trigger self-test actions.
+   * This is a tool for developers and diagnostics. The operations exposed here
+   * allow to trigger some hard wired actions and test routines, performing within
+   * the regular UI environment and on equal footing with user operated controls.
+   */
+  void
+  Wizard::launchTestCtrl()
+  {
+    UNIMPLEMENTED ("create and attach a non-modal child dialog box page");
+  }
+  
+  
   
 }}// namespace gui::interact

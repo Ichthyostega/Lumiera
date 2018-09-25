@@ -70,8 +70,8 @@ namespace ctrl {
   
   
   /**
-  * A helper class which registers and handles
-  * user action events.
+  * A helper class which registers global user actions
+  * and populates the main menu and toolbar.
   */
   class Actions
     : util::NonCopyable
@@ -130,6 +130,7 @@ namespace ctrl {
           
           menu("HelpMenu", _("_Help"));
           entry ([&]() { globalCtx_.wizard_.show_HelpAbout(); } , "HelpAbout", Stock::ABOUT);
+          entry ([&]() { globalCtx_.wizard_.launchTestCtrl(); } , "HelpTest", _("Self _Tests..."));
           
           
           menu("WindowMenu", _("_Window"));
@@ -202,6 +203,7 @@ namespace ctrl {
                   </menu>
                   <menu action='HelpMenu'>
                     <menuitem action='HelpAbout'/>
+                    <menuitem action='HelpTest'/>
                   </menu>
                 </menubar>
                 <toolbar  name='ToolBar'>
