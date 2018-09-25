@@ -87,6 +87,7 @@ namespace interact {
     {
       ctrl::GlobalCtx& globalCtx_;
       unique_ptr<ctrl::NotificationHub> notificationHub_;
+      unique_ptr<dialog::TestControl> testControlWindow_;
     
     public:
       Wizard (ctrl::GlobalCtx&);

@@ -34,6 +34,7 @@
 #include "gui/interact/spot-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/panel/infobox-panel.hpp"
+#include "gui/dialog/test-control.hpp"
 #include "gui/ctrl/notification-hub.hpp"
 #include "gui/ctrl/global-ctx.hpp"
 #include "lib/format-string.hpp"
@@ -124,7 +125,11 @@ namespace interact {
   void
   Wizard::launchTestCtrl()
   {
-    UNIMPLEMENTED ("create and attach a non-modal child dialog box page");
+    if (testControlWindow_)
+      testControlWindow_->present(); // just (re)show the existing window
+    else
+      testControlWindow_ = std::make_unique<dialog::TestControl> (globalCtx_.uiBus_.getAccessPoint(),
+                                                                  globalCtx_.windowLoc_.findActiveWindow());
   }
   
   

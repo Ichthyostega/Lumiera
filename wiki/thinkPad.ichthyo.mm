@@ -2712,10 +2712,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689225658" ID="ID_662017160" MODIFIED="1533689310654" TEXT="Pling! -Button">
 <icon BUILTIN="full-5"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689235200" ID="ID_1760873318" MODIFIED="1537836493850" TEXT="non-modal TestControl">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537836495530" ID="ID_182389429" MODIFIED="1537836505458" TEXT="per Men&#xfc;eintrag &#xf6;ffnen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689235200" ID="ID_1760873318" MODIFIED="1537848115131" TEXT="non-modal TestControl">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1537836495530" ID="ID_182389429" MODIFIED="1537848042515" TEXT="per Men&#xfc;eintrag &#xf6;ffnen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537841662854" ID="ID_451055929" MODIFIED="1537841679676" TEXT="Men&#xfc;eintrag im Hilfe-Men&#xfc;">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2723,12 +2723,12 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537836597844" ID="ID_1217826524" MODIFIED="1537836608179" TEXT="Konstrukt wie im Tutorial">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537836597844" ID="ID_1217826524" MODIFIED="1537848040826" TEXT="Konstrukt wie im Tutorial">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1537836612210" ID="ID_225351262" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-about-dialog.html.en#aboutdialog-example" MODIFIED="1537836626843" TEXT="non-modal about dialog">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1537838250303" ID="ID_1190002074" MODIFIED="1537841497288" TEXT="ist ein sub-window besser">
+<node CREATED="1537838250303" FOLDED="true" ID="ID_1190002074" MODIFIED="1537848102311" TEXT="ist ein sub-window besser">
 <icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537838265916" ID="ID_920100816" MODIFIED="1537841473971" TEXT="wie?">
 <icon BUILTIN="help"/>
@@ -2746,12 +2746,30 @@
 <node CREATED="1537841531352" ID="ID_1190471518" MODIFIED="1537841543154" TEXT="hat eigene Konstruktoren, die den Dialog non-modal machen"/>
 <node CREATED="1537841543886" ID="ID_59238198" MODIFIED="1537841558488" TEXT="regelt schon automatisch das Verh&#xe4;ltnis zum Vaterfenster"/>
 <node CREATED="1537846114160" ID="ID_1907327221" MODIFIED="1537846128474" TEXT="Vorbild: Joel&apos;s PreferencesDialog">
-<node CREATED="1537846129846" ID="ID_984655666" MODIFIED="1537846137073" TEXT="mu&#xdf; nur noch non-modal sein..."/>
+<node COLOR="#338800" CREATED="1537848007082" ID="ID_1014258603" MODIFIED="1537848024079" TEXT="Notebook">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1537848010330" ID="ID_1307971717" MODIFIED="1537848022373" TEXT="Seite einf&#xfc;gen f&#xfc;r #1099">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1537846129846" ID="ID_984655666" MODIFIED="1537847935725" TEXT="mu&#xdf; nur noch non-modal sein...">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537847939155" ID="ID_1465508298" MODIFIED="1537847959601" TEXT="einfach per Gtk::DialogFlags">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1537847979886" ID="ID_1956886110" MODIFIED="1537847981522" TEXT="DIALOG_DESTROY_WITH_PARENT"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537836550411" ID="ID_899229612" MODIFIED="1537836572756" TEXT="h&#xe4;ngt (passiv) am UI-Bus">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537836550411" ID="ID_899229612" MODIFIED="1537848039348" TEXT="h&#xe4;ngt (passiv) am UI-Bus">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1537848045781" ID="ID_766784189" MODIFIED="1537848055613" TEXT="analog zum NotificationService">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1537848056915" ID="ID_64593877" MODIFIED="1537848089997" TEXT="globals.uiBus_.getAccessPoint()">
+<icon BUILTIN="info"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537836522950" ID="ID_87203159" MODIFIED="1537836526719" TEXT="Radiobuttons">
 <icon BUILTIN="flag-yellow"/>
@@ -2759,8 +2777,11 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537834955977" ID="ID_556296967" MODIFIED="1537834965289" TEXT="Argument-Textbox">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537836579647" ID="ID_951515368" MODIFIED="1537836584271" TEXT="Pling!">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537836579647" ID="ID_951515368" MODIFIED="1537848122882" TEXT="Pling!">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1537848127378" ID="ID_1206004" MODIFIED="1537848141916" TEXT="Argument-Werte abgreifen">
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689243871" ID="ID_1745090225" MODIFIED="1537834968776" TEXT="triggert Dummy-Command">

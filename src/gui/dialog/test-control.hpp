@@ -39,6 +39,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/dialog/dialog.hpp"
+#include "gui/ctrl/bus-term.hpp"
 
 namespace gui {
 namespace dialog {
@@ -46,6 +47,7 @@ namespace dialog {
   
   class TestControl
     : public Gtk::Dialog
+    , ctrl::BusTerm
     {
       Gtk::Notebook notebook_;
       
@@ -53,8 +55,9 @@ namespace dialog {
       Gtk::Button trigger_1_;
       
     public:
-      TestControl (Gtk::Window &parent)
+      TestControl (ctrl::BusTerm& upLink, Gtk::Window& parent)
         : Dialog(_("Test and Diagnostics"), parent, Gtk::DIALOG_DESTROY_WITH_PARENT)
+        , ctrl::BusTerm{lib::idi::EntryID<TestControl>{}, upLink}
         , page_1_{Gtk::ORIENTATION_VERTICAL}
         {
           using namespace Gtk;
@@ -74,7 +77,7 @@ namespace dialog {
           notebook_.append_page (page_1_, _("#1099"));
           
           
-          show_all_children();
+          show_all();
         }
       
         
