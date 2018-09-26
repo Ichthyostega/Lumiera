@@ -2771,6 +2771,13 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537961550200" ID="ID_226231657" MODIFIED="1537962140152" TEXT="setup f&#xfc;r Notebook-Widget">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1537961568746" ID="ID_1553519505" MODIFIED="1537962304729" TEXT="Prototyp f&#xfc;r generischen Helper">
+<arrowlink COLOR="#6ea8be" DESTINATION="ID_591860371" ENDARROW="Default" ENDINCLINATION="1162;51;" ID="Arrow_ID_1534615646" STARTARROW="None" STARTINCLINATION="-185;836;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537836522950" ID="ID_87203159" MODIFIED="1537836526719" TEXT="Radiobuttons">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -2824,7 +2831,9 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534721737507" ID="ID_1467431829" MODIFIED="1534721762112" TEXT="verifizieren">
 <icon BUILTIN="full-6"/>
-<node CREATED="1534721764680" ID="ID_237796687" MODIFIED="1534721771410" TEXT="Belegen der View"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721764680" ID="ID_237796687" MODIFIED="1537961523677" TEXT="Belegen der View">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721772238" ID="ID_130695962" MODIFIED="1534721838886" TEXT="Verbinden mit bestehendem InfoboxPanel">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -4218,6 +4227,65 @@
 </richcontent>
 <node CREATED="1537659880597" ID="ID_1214109906" MODIFIED="1537659889631" TEXT="Timecode"/>
 <node CREATED="1537659890292" ID="ID_1230379898" MODIFIED="1537659892520" TEXT="Placement"/>
+</node>
+<node CREATED="1537961656982" ID="ID_1251358269" MODIFIED="1537961731447" TEXT="frameworks">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vorbereitete Grundstrukturen f&#252;r immer wiederkehrende Setups
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1537961734956" ID="ID_345535043" MODIFIED="1537961770028" TEXT="Notebook-Widget">
+<node CREATED="1537961776184" ID="ID_167848646" MODIFIED="1537961791126" TEXT="Problematik">
+<icon BUILTIN="forward"/>
+<node CREATED="1537961797061" ID="ID_104206298" MODIFIED="1537961806159" TEXT="extrem viele Komponenten-Widgets"/>
+<node CREATED="1537961807436" ID="ID_1420879044" MODIFIED="1537961819742" TEXT="Namenskollisionen zwischen Pages"/>
+<node CREATED="1537961832009" ID="ID_380956030" MODIFIED="1537961842907" TEXT="Boilerplate-Code goes Spaghetti"/>
+</node>
+<node CREATED="1537961848735" ID="ID_1187685583" MODIFIED="1537961889952" TEXT="L&#xf6;sungs-Ideen">
+<icon BUILTIN="idea"/>
+<node CREATED="1537961860374" ID="ID_933681325" MODIFIED="1537961871080" TEXT="managing container"/>
+<node CREATED="1537961872836" ID="ID_1674501396" MODIFIED="1537961884942" TEXT="builder lambda"/>
+</node>
+<node CREATED="1537961894394" ID="ID_1253130867" MODIFIED="1537961909817" TEXT="Prototyp">
+<node CREATED="1537961917592" ID="ID_591860371" MODIFIED="1537962293792" TEXT="im TestControl">
+<linktarget COLOR="#6ea8be" DESTINATION="ID_591860371" ENDARROW="Default" ENDINCLINATION="1162;51;" ID="Arrow_ID_1534615646" SOURCE="ID_1553519505" STARTARROW="None" STARTINCLINATION="-185;836;"/>
+</node>
+<node CREATED="1537961950003" ID="ID_1083792924" MODIFIED="1537962085365" TEXT="Schema &quot;managing container&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn das erscheint mir bodenst&#228;ndiger.
+    </p>
+    <p>
+      GUI-Programmierung mu&#223; bodenst&#228;ding bleiben,
+    </p>
+    <p>
+      man gewinnt hier nichts durch blendende Abstraktionen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Ich hoffe, da&#223; der Hilfscontainer <i>nahezu transparent </i>gemacht werden kann.
+    </p>
+    <p>
+      Und der Rest sollte so <i>vertraut</i>&#160;aussehen, da&#223; es selbsterkl&#228;rend wird.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1534336325916" ID="ID_762624766" MODIFIED="1534336335351" TEXT="Bindeglieder"/>
