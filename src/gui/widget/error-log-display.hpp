@@ -212,6 +212,7 @@ namespace widget {
             buff->insert_with_tag(buff->end(), text, cuString{markupTagName});
           else
             buff->insert (buff->end(), text);
+          buff->insert (buff->end(), "\n");
           textLog_.scroll_to (cursor);
           return cursor;
         }
