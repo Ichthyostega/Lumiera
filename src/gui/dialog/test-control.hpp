@@ -72,14 +72,15 @@ namespace dialog {
    * as the widget hierarchy is concerned. Both parts are publicly accessible
    * as members, while providing a shortcut for publishing the box.
    */
-  struct FrameVBox
+  struct FrameBox
     {
       Gtk::Frame frame;
       Gtk::Box   box;
       
-      FrameVBox (cuString label)
+      FrameBox (cuString label,
+                 Gtk::Orientation orientation =Gtk::ORIENTATION_VERTICAL)
         : frame{label}
-        , box{Gtk::ORIENTATION_VERTICAL}
+        , box{orientation}
         {
           frame.add (box);
         }
@@ -166,19 +167,75 @@ namespace dialog {
        */
       struct Page1 : Page
         {
-          FrameVBox seg_1_{_("log notification")},
-                    seg_2_{_("mark via UI-Bus")};
-          Gtk::Button trigger_1_;
+          Gtk::Entry content_;
+          FrameBox seg_1_{_("log notification"), Gtk::ORIENTATION_HORIZONTAL},
+                   seg_2_{_("mark via UI-Bus")};
+          Gtk::Button trig_1_, trig_2_, trig_3_, trig_4_;
+          Gtk::RadioButton level_info_{"Info"},
+                           level_warn_{"Warn"},
+                           level_erro_{"Error"};
+          Gtk::Box         markParam_;
+          Gtk::ComboBoxText actionID_{true};  // has free-text entry field
           
           Page1(Bus bus)
             {
-              trigger_1_.set_label ("_doIt");
-              trigger_1_.set_use_underline();
-              trigger_1_.set_tooltip_markup (_("<b>Ticket #1099</b>:\ntrigger Proc-GUI roundtrip"));
-              trigger_1_.signal_clicked().connect(
+              content_.set_tooltip_markup (_("<b>Ticket #1099</b>:\n"
+                                             "text message content\n"
+                                             "<i>when invoking a suitable action,\n"
+                                             "it will be passed down and sent back</i>"));
+              trig_1_.set_use_underline();
+              trig_1_.set_label ("_display text");
+              trig_1_.set_tooltip_markup (_("Trigger Proc-GUI <b>roundtrip</b>\n"
+                                            "Proc invokes GuiNotification::displayInfo"));
+              trig_1_.signal_clicked().connect(
                           [&]{ demoGuiRoundtrip(bus); });
               
-              seg_1_.pack_start (trigger_1_, Gtk::PACK_SHRINK);
+              level_warn_.join_group(level_info_);
+              level_erro_.join_group(level_info_);
+              level_warn_.set_active();
+
+              trig_2_.set_use_underline();
+              trig_2_.property_xalign() = 0;
+              trig_2_.set_label ("mark _error");
+              trig_2_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
+                                            "sends an error state mark via UI-Bus"));
+              
+              trig_3_.set_use_underline();
+              trig_3_.property_xalign() = 0;
+              trig_3_.set_label ("mark _info");
+              trig_3_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
+                                            "sends an info state mark via UI-Bus"));
+              
+              trig_4_.set_use_underline();
+              trig_4_.set_label ("_mark");
+              trig_4_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
+                                            "sends an <b>state mark</b> message, using\n"
+                                            "the message action-ID from the combobox"));
+              actionID_.append ("Flash");
+              actionID_.append ("revealYourself");
+              actionID_.append ("clearErr");
+              actionID_.append ("clearMsg");
+              actionID_.append ("expand");
+              actionID_.append ("reset");
+              actionID_.set_active(1);
+              actionID_.set_tooltip_markup("select the specific action-ID\n"
+                                           "when sending a <b>mark</b> message.\n"
+                                           "<u>note</u>: can enter arbitrary ID");
+              
+              markParam_.pack_start(trig_4_);
+              markParam_.pack_start(actionID_, Gtk::PACK_SHRINK);
+              
+              
+              seg_1_.pack_start (trig_1_, Gtk::PACK_EXPAND_WIDGET);
+              seg_1_.pack_start (level_info_, Gtk::PACK_SHRINK);
+              seg_1_.pack_start (level_warn_, Gtk::PACK_SHRINK);
+              seg_1_.pack_start (level_erro_, Gtk::PACK_SHRINK);
+              
+              seg_2_.pack_start (trig_2_);
+              seg_2_.pack_start (trig_3_);
+              seg_2_.pack_start (markParam_);
+              
+              pack_start (content_);
               pack_start (seg_1_);
               pack_start (seg_2_);
             }
