@@ -47,6 +47,7 @@
 #include "lib/nocopy.hpp"
 
 #include <utility>
+#include <string>  /////////TODO
 
 #if true  /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1099 : WIP-WIP-WIP
 namespace proc {
@@ -60,6 +61,7 @@ namespace proc {
 namespace gui {
 namespace dialog {
   
+  using std::string; ////////////TODO
   using std::forward;
   using lib::diff::GenNode;
   
@@ -177,6 +179,13 @@ namespace dialog {
           Gtk::Box         markParam_;
           Gtk::ComboBoxText actionID_{true};  // has free-text entry field
           
+          string
+          getLogLevel()
+            {
+              return level_info_.get_active()? "NOTE_INFO" :
+                     level_warn_.get_active()? "NOTE_WARN" : "NOTE_ERROR";
+            }
+          
           Page1(Bus bus)
             {
               content_.set_tooltip_markup (_("<b>Ticket #1099</b>:\n"
@@ -187,8 +196,6 @@ namespace dialog {
               trig_1_.set_label ("_display text");
               trig_1_.set_tooltip_markup (_("Trigger Proc-GUI <b>roundtrip</b>\n"
                                             "Proc invokes GuiNotification::displayInfo"));
-              trig_1_.signal_clicked().connect(
-                          [&]{ demoGuiRoundtrip(bus); });
               
               level_warn_.join_group(level_info_);
               level_erro_.join_group(level_info_);
@@ -225,7 +232,6 @@ namespace dialog {
               markParam_.pack_start(trig_4_);
               markParam_.pack_start(actionID_, Gtk::PACK_SHRINK);
               
-              
               seg_1_.pack_start (trig_1_, Gtk::PACK_EXPAND_WIDGET);
               seg_1_.pack_start (level_info_, Gtk::PACK_SHRINK);
               seg_1_.pack_start (level_warn_, Gtk::PACK_SHRINK);
@@ -238,14 +244,24 @@ namespace dialog {
               pack_start (content_);
               pack_start (seg_1_);
               pack_start (seg_2_);
+              
+              // define the action triggers...
+              trig_1_.signal_clicked().connect(
+                          [&]{ demoGuiRoundtrip(bus, "displayInfo("+getLogLevel()+", \""+content_.get_text()+"\")"); });
+              trig_2_.signal_clicked().connect(
+                          [&]{ demoGuiRoundtrip(bus, "markError(\""+content_.get_text()+"\")"); });
+              trig_3_.signal_clicked().connect(
+                          [&]{ demoGuiRoundtrip(bus, "markNote(\""+content_.get_text()+"\")"); });
+              trig_4_.signal_clicked().connect(
+                          [&]{ demoGuiRoundtrip(bus, "mark("+actionID_.get_entry_text()+", \""+content_.get_text()+"\")"); });
             }
           
           void
-          demoGuiRoundtrip (Bus bus)
+          demoGuiRoundtrip (Bus bus, string placeholder)
             {
               TODO ("collect command arguments and then send the command message for #1099");
               ID errorLogID = proc::asset::meta::theErrorLog_ID;
-              bus.mark (errorLogID, GenNode{"Message", "Lalü"});
+              bus.mark (errorLogID, GenNode{"Message", placeholder});
             }
         };
       
