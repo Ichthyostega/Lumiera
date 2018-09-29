@@ -2835,8 +2835,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537835015601" ID="ID_1684094906" MODIFIED="1537835021881" TEXT="direkte Bus-Aufrufe">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537835015601" ID="ID_1684094906" MODIFIED="1538234774766" TEXT="direkte Bus-Aufrufe">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537835220978" ID="ID_1439086949" MODIFIED="1538220877346" TEXT="markError">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2865,11 +2865,43 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538230509179" HGAP="22" ID="ID_657255465" MODIFIED="1538232922694" TEXT="Problem ID-&#xdc;bergabe" VSHIFT="14">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1538230525641" ID="ID_1999133642" MODIFIED="1538230536846" TEXT="wieder mal das Schei&#xdf; Interface-System">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1538230675997" ID="ID_1672501842" MODIFIED="1538232718759" TEXT="br&#xe4;uchte eine C-Repr&#xe4;sentation f&#xfc;r BareEntryID"/>
+<node CREATED="1538232816534" ID="ID_712541347" MODIFIED="1538232905703" TEXT="habe den Anspruch aber bereits aufgegeben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar an dem Punkt, an dem ich eine DiffMessage in das GUI schicke.
+    </p>
+    <p>
+      DiffMessage repr&#228;sentiert einen f&#252;r den User verdeckten Callback
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538234760471" ID="ID_1256781554" MODIFIED="1538234766447" TEXT="#1175 consider EntryID as external entity ID">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534721737507" ID="ID_1467431829" MODIFIED="1534721762112" TEXT="verifizieren">
 <icon BUILTIN="full-6"/>
+<node COLOR="#338800" CREATED="1538234826126" ID="ID_1989018475" MODIFIED="1538234837334" TEXT="Round-Trip &#xfc;ber Thrad-Grenzen hinweg">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1538234843916" ID="ID_1672079020" MODIFIED="1538234869369" TEXT="Argument-&#xdc;bergabe per Kopie">
+<icon BUILTIN="button_ok"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534721764680" ID="ID_237796687" MODIFIED="1537961523677" TEXT="Belegen der View">
 <icon BUILTIN="flag-yellow"/>
 </node>

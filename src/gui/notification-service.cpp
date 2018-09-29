@@ -232,27 +232,27 @@ namespace gui {
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (markError,
-                                                           void, (LumieraUid element, const char* text),
+                                                           void, (const void* element, const char* text),
                                                              {
                                                                if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, text);
                                                                else
-                                                                 _instance().markError (reinterpret_cast<ID> (*element), text);
+                                                                 _instance().markError (*static_cast<lib::idi::BareEntryID const*> (element), text);
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (markNote,
-                                                           void, (LumieraUid element, const char* text),
+                                                           void, (const void* element, const char* text),
                                                              {
                                                                if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, text);
                                                                else
-                                                                 _instance().markNote (reinterpret_cast<ID> (*element), text);
+                                                                 _instance().markNote (*static_cast<lib::idi::BareEntryID const*> (element), text);
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (mutate,
-                                                           void, (LumieraUid element, void* diff),
+                                                           void, (const void* element, void* diff),
                                                              {
                                                                if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, "passing diff message");
                                                                else
-                                                                 _instance().mutate (reinterpret_cast<ID> (*element), move(*reinterpret_cast<MutationMessage*> (diff)));
+                                                                 _instance().mutate (*static_cast<lib::idi::BareEntryID const*> (element), move(*reinterpret_cast<MutationMessage*> (diff)));
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown,

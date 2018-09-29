@@ -129,9 +129,9 @@ extern "C" {
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (uint, const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, markError,          (LumieraUid, const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, markNote,           (LumieraUid, const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, mutate,             (LumieraUid, void*)),
+                           LUMIERA_INTERFACE_SLOT (void, markError,          (const void*, const char*)),  ////////////TICKET #1175 : need a way to pass EntryID
+                           LUMIERA_INTERFACE_SLOT (void, markNote,           (const void*, const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, mutate,             (const void*, void*)),
                            LUMIERA_INTERFACE_SLOT (void, triggerGuiShutdown, (const char*)),
 );
 
