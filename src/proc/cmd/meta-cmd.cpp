@@ -42,7 +42,7 @@
 #include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
 //#include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
-//#include "lib/format-string.hpp"
+#include "lib/format-string.hpp"               //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
 
 #include <string>
 
@@ -54,7 +54,7 @@ using gui::NOTE_ERROR;
 using gui::NotifyLevel;
 using gui::GuiNotification;
 //using util::cStr;
-//using util::_Fmt;
+using util::_Fmt;                              //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
 using std::string;
 
 
@@ -144,20 +144,17 @@ COMMAND_DEFINITION (meta_deactivateContentDiff)
    */
 COMMAND_DEFINITION (test_meta_displayInfo)
   {
-    def.operation ([](NotifyLevel level, string message)
+    def.operation ([](int level, string message)
                       {
-                        GuiNotification::facade().displayInfo (level, message);
+                        GuiNotification::facade().displayInfo (static_cast<NotifyLevel>(level), message);
                       })
-       .captureUndo ([](NotifyLevel level, string message) -> bool
+       .captureUndo ([](int level, string message) -> string
                       {
-                        return true;
+                        return _Fmt{"displayInfo(%d, '%s')"} % level % message;
                       })
-       .undoOperation ([](NotifyLevel level, string message, bool wasActive)
+       .undoOperation ([](int, string, string uiAction)
                       {
-                        if (wasActive)
-                          {
-                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
-                          }
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
                       });
   };
   
@@ -172,16 +169,13 @@ COMMAND_DEFINITION (test_meta_markError)
                         ID errorLogID = gui::interact::Wizard::getErrorLogID();
                         GuiNotification::facade().markError (errorLogID, message);
                       })
-       .captureUndo ([](string message) -> bool
+       .captureUndo ([](string message) -> string
                       {
-                        return true;
+                        return _Fmt{"GUI::errorLog <- markError('%s')"} % message;
                       })
-       .undoOperation ([](string message, bool wasActive)
+       .undoOperation ([](string, string uiAction)
                       {
-                        if (wasActive)
-                          {
-                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
-                          }
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
                       });
   };
   
@@ -196,16 +190,13 @@ COMMAND_DEFINITION (test_meta_markNote)
                         ID errorLogID = gui::interact::Wizard::getErrorLogID();
                         GuiNotification::facade().markNote (errorLogID, message);
                       })
-       .captureUndo ([](string message) -> bool
+       .captureUndo ([](string message) -> string
                       {
-                        return true;
+                        return _Fmt{"GUI::errorLog <- markNote('%s')"} % message;
                       })
-       .undoOperation ([](string message, bool wasActive)
+       .undoOperation ([](string, string uiAction)
                       {
-                        if (wasActive)
-                          {
-                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
-                          }
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
                       });
   };
   
@@ -220,16 +211,13 @@ COMMAND_DEFINITION (test_meta_markAction)
                         ID errorLogID = gui::interact::Wizard::getErrorLogID();
                         UNIMPLEMENTED ("GuiNotification::facade().mark (errorLogID, actionID, message);");
                       })
-       .captureUndo ([](string actionID, string message) -> bool
+       .captureUndo ([](string actionID, string message) -> string
                       {
-                        return true;
+                        return _Fmt{"GUI::errorLog <- mark(%s, '%s')"} % actionID % message;
                       })
-       .undoOperation ([](string actionID, string message, bool wasActive)
+       .undoOperation ([](string, string, string uiAction)
                       {
-                        if (wasActive)
-                          {
-                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
-                          }
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
                       });
   };
   

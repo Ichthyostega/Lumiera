@@ -42,6 +42,9 @@
 #include "gui/gtk-base.hpp"
 #include "gui/dialog/dialog.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/model/tangible.hpp"
+#include "proc/cmd.hpp"
+#include "include/gui-notification-facade.h"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/nocopy.hpp"
@@ -179,14 +182,27 @@ namespace dialog {
           Gtk::Box         markParam_;
           Gtk::ComboBoxText actionID_{true};  // has free-text entry field
           
-          string
+          int
           getLogLevel()
             {
-              return level_info_.get_active()? "NOTE_INFO" :
-                     level_warn_.get_active()? "NOTE_WARN" : "NOTE_ERROR";
+              return level_info_.get_active()? NOTE_INFO :
+                     level_warn_.get_active()? NOTE_WARN : NOTE_ERROR;
             }
           
-          Page1(Bus bus)
+          string
+          getContent()
+            {
+              return string{content_.get_text()};
+            }
+          
+          string
+          getActionID()
+            {
+              return string{actionID_.get_entry_text()};
+            }
+          
+          
+          Page1 (Bus bus)
             {
               content_.set_tooltip_markup (_("<b>Ticket #1099</b>:\n"
                                              "text message content\n"
@@ -247,13 +263,13 @@ namespace dialog {
               
               // define the action triggers...
               trig_1_.signal_clicked().connect(
-                          [&]{ demoGuiRoundtrip(bus, "displayInfo("+getLogLevel()+", \""+content_.get_text()+"\")"); });
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_displayInfo, getLogLevel(), getContent())); });
               trig_2_.signal_clicked().connect(
-                          [&]{ demoGuiRoundtrip(bus, "markError(\""+content_.get_text()+"\")"); });
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markError,   getContent()));                });
               trig_3_.signal_clicked().connect(
-                          [&]{ demoGuiRoundtrip(bus, "markNote(\""+content_.get_text()+"\")"); });
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markNote,    getContent()));                });
               trig_4_.signal_clicked().connect(
-                          [&]{ demoGuiRoundtrip(bus, "mark("+actionID_.get_entry_text()+", \""+content_.get_text()+"\")"); });
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markAction,  getActionID(), getContent())); });
             }
           
           void

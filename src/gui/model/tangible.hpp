@@ -241,18 +241,32 @@ namespace model {
   
   
   
+  /** convenience shortcut to build a message suitable for command invocation
+   * @param args... sequence of arguments to be packaged into a lib::diff::Rec for invocation
+   */
+  template<typename...ARGS>
+  inline lib::diff::GenNode
+  commandMessage (Symbol cmdID, ARGS&&... args)
+  {
+    using lib::diff::Rec;
+    using lib::diff::GenNode;
+    using GenNodeIL = std::initializer_list<GenNode>;
+    
+    
+    return GenNode (string{cmdID},
+                    Rec(Rec::TYPE_NIL_SYM
+                       ,GenNodeIL{}
+                       ,GenNodeIL {std::forward<ARGS> (args)...}));
+  }                  // not typed, no attributes, all arguments as children
+  
+  
   /** convenience shortcut to issue a command with several arguments */
   template<typename...ARGS>
   inline void
   Tangible::invoke (Symbol cmdID, ARGS&&... args)
   {
-    using GenNodeIL = std::initializer_list<GenNode>;
-    
-    invoke (cmdID,
-            Rec(Rec::TYPE_NIL_SYM
-               ,GenNodeIL{}
-               ,GenNodeIL {std::forward<ARGS> (args)...}));
-  }           // not typed, no attributes, all arguments as children
+    uiBus_.act (commandMessage (cmdID, std::forward<ARGS> (args)...));
+  }
   
   
   /**
