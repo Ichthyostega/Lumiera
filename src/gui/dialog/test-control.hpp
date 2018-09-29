@@ -50,21 +50,12 @@
 #include "lib/nocopy.hpp"
 
 #include <utility>
-#include <string>  /////////TODO
+#include <string>
 
-#if true  /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1099 : WIP-WIP-WIP
-namespace proc {
-  namespace asset {
-    namespace meta {
-      class ErrorLog;
-      
-      extern lib::idi::EntryID<ErrorLog> theErrorLog_ID;
-} } }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1099 : WIP-WIP-WIP
 namespace gui {
 namespace dialog {
   
-  using std::string; ////////////TODO
+  using std::string;
   using std::forward;
   using lib::diff::GenNode;
   
@@ -93,7 +84,7 @@ namespace dialog {
       operator Gtk::Widget&() { return frame; }
       
       void
-      pack_start(Gtk::Widget& child, Gtk::PackOptions options = Gtk::PACK_EXPAND_WIDGET, guint padding = 0)
+      pack_start(Gtk::Widget& child, Gtk::PackOptions options =Gtk::PACK_EXPAND_WIDGET, guint padding =0)
         {
           box.pack_start (child, options, padding);
         }
@@ -148,7 +139,7 @@ namespace dialog {
   
   
   /**
-   * A complex, tabbed-notebook style non-modal dialog window,
+   * A complex, tabbed-notebook-style non-modal dialog window,
    * dedicated to development, diagnostics and experimentation.
    * The TestControl can be launched from Lumiera's "Help" menu,
    * offers an (passive, up-link) [UI-Bus connection](\ref ui-bus.hpp)
@@ -165,7 +156,7 @@ namespace dialog {
       
       /**
        * Ticket #1099 : perform a dummy round-trip to verify Proc-GUI integration.
-       * This routine invokes the command 'xxx' down in Proc-Layer, passing the settings
+       * This routine invokes the command `test_meta_displayInfo` down in Proc-Layer, passing the settings
        * from the radio buttons to select the flavour of feedback, and the text for feedback content.
        * The expected behaviour is for the invoked command to send a feedback via UI-Bus towards
        * the ErrorLogDisplay within the InfoboxPanel.
@@ -270,14 +261,6 @@ namespace dialog {
                           [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markNote,    getContent()));                });
               trig_4_.signal_clicked().connect(
                           [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markAction,  getActionID(), getContent())); });
-            }
-          
-          void
-          demoGuiRoundtrip (Bus bus, string placeholder)
-            {
-              TODO ("collect command arguments and then send the command message for #1099");
-              ID errorLogID = proc::asset::meta::theErrorLog_ID;
-              bus.mark (errorLogID, GenNode{"Message", placeholder});
             }
         };
       

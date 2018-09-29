@@ -39,6 +39,11 @@
  ** since both CoreService and Nexus are mutually interdependent from an
  ** operational perspective, since they exchange messages in both directions.
  ** 
+ ** In fact, the CoreService even _holds and thus manages_ the Nexus as a
+ ** private member, while the latter controls and connects all nodes attached
+ ** to the bus at runtime, including CoreService. This crisscross arrangement
+ ** ensures sane start-up and shutdown of the whole UI-Bus compound.
+ ** 
  ** ## Bus connection and topology
  ** The CoreService plays a central role within the UI, since it represents
  ** _»the application core«_ from the UI layer's viewpoint. But it is not
@@ -103,6 +108,8 @@ namespace ctrl{
    * handles those messages to be processed by centralised services:
    * - commands need to be sent down to Proc-Layer
    * - presentation state messages need to be recorded and acted upon.
+   * As an object, CoreService encases the heart of the UI-Bus, the
+   * \ref Nexus, and acts as "PImpl" for the gui::UiBus front-end.
    */
   class CoreService
     : public BusTerm

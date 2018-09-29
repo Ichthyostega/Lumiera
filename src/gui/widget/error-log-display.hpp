@@ -152,9 +152,16 @@ namespace widget {
       /** just add normal information message to buffer,
        *  without special markup and without expanding the widget */
       void
-      addMsg (string text)
+      addInfo (string text)
         {
-          showMsg (NOTE_INFO, text);
+          addEntry (text);
+        }
+      
+      /** add an information message, formatted more prominent as warning */
+      void
+      addWarn (string text)
+        {
+          addEntry ("WARNING: "+text, TAG_WARN);
         }
       
       /** present an error notification prominently.
@@ -167,7 +174,10 @@ namespace widget {
       void
       addError (string text)
         {
-          showMsg (NOTE_ERROR, text);
+          errorMarks_.emplace_back(
+              addEntry ("ERROR: "+text, TAG_ERROR));
+          if (not expand.isExpanded())
+            expand (true);
         }
       
       void
@@ -202,7 +212,7 @@ namespace widget {
        * [GTKmm tutorial]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
        * [insert-mark]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
        */
-      auto
+      Mark
       addEntry (string const& text, Literal markupTagName =nullptr)
         {
           auto buff = textLog_.get_buffer();
@@ -215,26 +225,6 @@ namespace widget {
           buff->insert (buff->end(), "\n");
           textLog_.scroll_to (cursor);
           return cursor;
-        }
-      
-      void
-      showMsg (NotifyLevel severity, string const& text)
-        {
-          //////////////////////////////////////////////////TICKET #1102 : add formatting according to the error level
-          switch (severity) {
-            case NOTE_ERROR:
-                errorMarks_.emplace_back(
-                    addEntry ("ERROR: "+text, TAG_ERROR));
-                if (not expand.isExpanded())
-                  expand (true);
-              break;
-            case NOTE_WARN:
-                addEntry ("WARN: "+text, TAG_WARN);
-              break;
-            default:
-                addEntry (text);
-              break;
-          }
         }
     };
   

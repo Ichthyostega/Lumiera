@@ -100,6 +100,7 @@ namespace model {
           UNIMPLEMENTED ("Controller doFlash");
         }
       
+    protected:
       /** default handler for all generic mark messages. Forwards to Tangible::doMark
        * @todo is there any default implementation for special messages,
        *       which might be eligible as a base class implementation??

@@ -32,12 +32,19 @@
  ** lifespan of this service instance must exceed the running of the event loop,
  ** since otherwise the event loop might invoke a lambda bound to the `this`
  ** pointer of a NotificationService already decommissioned. The setup of the
- ** standard Lumiera UI top-level context ensures this is the case, since the
+ ** standard Lumiera UI top-level context ensures these requirements, since the
  ** UiManager::performMainLoop() maintains the NotificationService instance
  ** and also performs the blocking `gtk_main()` call. Consequently, any
  ** invocation added from other threads after leaving the GTK main loop
  ** but before closing the GuiNotification facade will just be enqueued,
  ** but then dropped on destruction of the UiDispatcher PImpl.
+ ** 
+ ** Beyond that dispatching functionality, the NotificationService
+ ** just serves as entry point to send messages through the [UI-Bus]
+ ** (\ref ui-bus.hpp) towards [UI elements](\ref tangible.hpp)
+ ** identified by EntryID. Even notifications and error messages
+ ** are handled this way, redirecting them toward a dedicated
+ ** [Log display](\ref error-log-display.hpp)
  ** 
  ** @see ui-dispatcher.hpp
  ** 
@@ -53,6 +60,7 @@
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "include/logging.h"
+#include "lib/format-string.hpp"
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
 
@@ -60,6 +68,7 @@ extern "C" {
 #include "common/interface-descriptor.h"
 }
 
+#include <utility>
 #include <string>
 
 
@@ -68,8 +77,11 @@ using lib::diff::TreeMutator;
 using lib::diff::MutationMessage;
 using gui::ctrl::UiDispatcher;
 using gui::ctrl::BusTerm;
-using std::string;
 using util::cStr;
+using util::_Fmt;
+
+using std::string;
+using std::move;
 
 
 namespace gui {
@@ -84,19 +96,29 @@ namespace gui {
   {
     dispatch_->event ([=]()
                       {
-                        this->mark (uiElement, uiMessage);
+                        ctrl::BusTerm::mark (uiElement, uiMessage);
                       });
   }
   
   
-  void 
+  void
   NotificationService::displayInfo (NotifyLevel severity, string const& text)
-  {
-    INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
-    ID errorLogID = interact::Wizard::getErrorLogID();
-    ////////////////////////TODO actually push the information to the GUI   ///////////////////////////////////TICKET #1102 : build a message display box in the UI
-                                                               ////////////////////////////////////////////////TICKET #1047 : as a temporary solution, use the InfoBox panel... 
-  }
+  {                                                                         ///////////////////////////////////TICKET #1102 : build a dedicated message display box in the UI
+    ID errorLogID = interact::Wizard::getErrorLogID();                     ////////////////////////////////////TICKET #1047 : as a temporary solution, use the InfoBox panel... 
+    switch (severity) {
+      case NOTE_ERROR:
+        markError (errorLogID, text);
+        break;
+      case NOTE_INFO:
+        markNote (errorLogID, text);
+        break;
+      case NOTE_WARN:
+        mark (errorLogID, GenNode{"Warning", text});
+        break;
+      default:
+        throw lumiera::error::Logic (_Fmt{"UI Notification with invalid severity %d encountered. "
+                                          "Given message text was '%s'"} % severity % text);
+    }  }
   
   
   void
@@ -107,18 +129,24 @@ namespace gui {
   
   
   void
-  NotificationService::markNote  (ID uiElement, string const& text)
+  NotificationService::markNote (ID uiElement, string const& text)
   {
     dispatchMsg (uiElement, GenNode{"Message", text});
   }
   
   
   void
+  NotificationService::mark (ID uiElement, GenNode&& stateMarkMsg)
+  {
+    dispatchMsg (uiElement, move (stateMarkMsg));
+  }
+  
+  
+  void
   NotificationService::mutate (ID uiElement, MutationMessage&& diff)
   {
-    dispatch_->event ([=]()                                                  //////////////////////////////////TODO care for error handling!!!
-                      {
-                        // apply and consume diff message stored within closure
+    dispatch_->event ([=]()
+                      { // apply and consume diff message stored within closure
                         this->change (uiElement, move(unConst(diff)));
                       });
   }
@@ -247,6 +275,14 @@ namespace gui {
                                                                  _instance().markNote (*static_cast<lib::idi::BareEntryID const*> (element), text);
                                                              }
                                                           )
+                               , LUMIERA_INTERFACE_INLINE (mark,
+                                                           void, (const void* element, void* stateMark),
+                                                             {
+                                                               if (!_instance) lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, "passing state mark");
+                                                               else
+                                                                 _instance().mark   (*static_cast<lib::idi::BareEntryID const*> (element), move(*reinterpret_cast<GenNode*> (stateMark)));
+                                                             }
+                                                          )
                                , LUMIERA_INTERFACE_INLINE (mutate,
                                                            void, (const void* element, void* diff),
                                                              {
@@ -265,9 +301,7 @@ namespace gui {
                                                           )
                                );
     
-    
-    
-  } // (END) facade implementation details
+  } //(END) facade implementation details
   
   
   

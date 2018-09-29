@@ -40,9 +40,10 @@
 //#include "proc/mobject/session.hpp"
 #include "include/gui-notification-facade.h"
 #include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
-//#include "lib/symbol.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/format-string.hpp"               //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
+//#include "lib/symbol.hpp"
 
 #include <string>
 
@@ -53,6 +54,7 @@ using gui::NOTE_WARN;
 using gui::NOTE_ERROR;
 using gui::NotifyLevel;
 using gui::GuiNotification;
+using lib::diff::GenNode;
 //using util::cStr;
 using util::_Fmt;                              //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
 using std::string;
@@ -209,7 +211,7 @@ COMMAND_DEFINITION (test_meta_markAction)
     def.operation ([](string actionID, string message)
                       {
                         ID errorLogID = gui::interact::Wizard::getErrorLogID();
-                        UNIMPLEMENTED ("GuiNotification::facade().mark (errorLogID, actionID, message);");
+                        GuiNotification::facade().mark (errorLogID, GenNode{actionID, message});
                       })
        .captureUndo ([](string actionID, string message) -> string
                       {

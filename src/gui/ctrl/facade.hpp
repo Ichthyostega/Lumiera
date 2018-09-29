@@ -30,8 +30,8 @@
  ** 
  ** @note GTK operates single threaded by design.
  **       For this reason, any call from other parts of the application need to be explicitly
- **       dispatched into the UI event loop. The external facade interfaces are defined in a way
- **       to ensure this constraint is met.
+ **       dispatched into the UI event loop. The external façade interfaces are constructed
+ **       appropriately to ensure this constraint is regarded.
  ** 
  ** @see notification-service.hpp
  ** @see ui-manager.hpp

@@ -120,7 +120,7 @@ namespace ctrl {
       virtual bool
       doMsg (string text)  override
         {
-          getWidget().addMsg (text);
+          getWidget().addInfo (text);
           return false; // logging is no persistent state
         }
       
@@ -136,7 +136,6 @@ namespace ctrl {
       doErr (string text)  override
         {
           getWidget().addError (text);
-          widget_->expand (true);
           return false;
         }
       
@@ -146,6 +145,17 @@ namespace ctrl {
           if (widget_)
             widget_->turnError_into_InfoMsg();
           return false; // not persistent (sticky)
+        }
+      
+      /** adds special treatment for a state mark tagged as `"Warning"` */
+      virtual void
+      doMark (GenNode const& stateMark)  override
+        {
+          if (stateMark.idi.getSym() == "Warning")
+            getWidget().addWarn (stateMark.data.get<string>());
+          else
+            // forward to default handler
+            Controller::doMark (stateMark);
         }
       
       virtual void

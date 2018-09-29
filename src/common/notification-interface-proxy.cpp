@@ -42,6 +42,7 @@ namespace gui {
 namespace lumiera {
 namespace facade {
   using gui::ID;
+  using lib::diff::GenNode;
   using lib::diff::MutationMessage;
   
   
@@ -65,6 +66,7 @@ namespace facade {
       void displayInfo (Level level, string const& text) override  { _i_.displayInfo (level, cStr(text));   }
       void markError (ID uiElement,  string const& text) override  { _i_.markError(&uiElement, cStr(text)); }
       void markNote  (ID uiElement,  string const& text) override  { _i_.markNote (&uiElement, cStr(text)); }
+      void mark      (ID uiElement, GenNode&& stateMark) override  { _i_.mark     (&uiElement, &stateMark); }
       void mutate (ID uiElement, MutationMessage&& diff) override  { _i_.mutate   (&uiElement, &diff);      }
       void triggerGuiShutdown (string const& cause)      override  { _i_.triggerGuiShutdown (cStr(cause));  }
       

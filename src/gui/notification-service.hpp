@@ -27,11 +27,12 @@
  ** events within the lower layers, or as result of invoking commands on the session.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
- ** gui::GuiNotification#facade to access this service. This header defines the interface used
- ** to \em provide this service, not to access it.
- **
- ** @see gui::GuiFacade
- ** @see core-sevice.hpp starting this service
+ ** gui::GuiNotification#facade to access this service. This header here defines the interface
+ ** used to _provide_ this service, not to access it.
+ ** 
+ ** @see gui::GuiFacade launching the Lumiera UI
+ ** @see facade.hpp RAII holder to start this service and open the interface
+ ** @see gui::ctrl::UiManager::performMainLoop() exposes all UI façade interfaces
  */
 
 
@@ -100,10 +101,11 @@ namespace gui {
       void displayInfo (NotifyLevel,string const& text) override;
       void markError (ID uiElement, string const& text) override;
       void markNote  (ID uiElement, string const& text) override;
+      void mark      (ID uiElement, GenNode&&)          override;
       void mutate (ID uiElement, MutationMessage&&)     override;
       void triggerGuiShutdown (string const& cause)     override;
     };
-    
+  
   
   
 } // namespace gui
