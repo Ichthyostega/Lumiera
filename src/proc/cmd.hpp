@@ -76,6 +76,11 @@ namespace cmd {
   extern CommandSetup test_meta_activateContentDiff;               ////////////////////////////////TICKET #211 prefix test_ bypasses logging and immediately executes for now (2018)
   extern CommandSetup meta_deactivateContentDiff;
   
+  //--Demo-and-Development----
+  extern CommandSetup test_meta_displayInfo;
+  extern CommandSetup test_meta_markError;
+  extern CommandSetup test_meta_markNote;
+  extern CommandSetup test_meta_markAction;
   
   
 }} // namespace proc::cmd

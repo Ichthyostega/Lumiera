@@ -39,16 +39,23 @@
 #include "proc/control/command-def.hpp"
 //#include "proc/mobject/session.hpp"
 #include "include/gui-notification-facade.h"
+#include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
 //#include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/format-string.hpp"
 
-//#include <string>
+#include <string>
 
 using lib::hash::LuidH;
-//using std::string;
+using gui::ID;
+using gui::NOTE_INFO;
+using gui::NOTE_WARN;
+using gui::NOTE_ERROR;
+using gui::NotifyLevel;
+using gui::GuiNotification;
 //using util::cStr;
 //using util::_Fmt;
+using std::string;
 
 
 namespace proc {
@@ -80,7 +87,7 @@ COMMAND_DEFINITION (test_meta_activateContentDiff)
                         TODO ("send a population diff starting from scratch");
                         TODO ("activate life-update service within the session");
                         // Temporary hack to get any meaningful UI <-> Proc communication
-                        gui::GuiNotification::facade().displayInfo(gui::NOTE_INFO, "Request: population-Diff from Session.");
+                        GuiNotification::facade().displayInfo(NOTE_INFO, "Request: population-Diff from Session.");
                       })
        .captureUndo ([]() -> bool
                       {
@@ -127,6 +134,104 @@ COMMAND_DEFINITION (meta_deactivateContentDiff)
                       });
   };
   
+  
+  
+  
+  /* ===== Demo and Development ===== */
+  
+  /** DemoGuiRoundtrip: push a notification info message back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_displayInfo)
+  {
+    def.operation ([](NotifyLevel level, string message)
+                      {
+                        GuiNotification::facade().displayInfo (level, message);
+                      })
+       .captureUndo ([](NotifyLevel level, string message) -> bool
+                      {
+                        return true;
+                      })
+       .undoOperation ([](NotifyLevel level, string message, bool wasActive)
+                      {
+                        if (wasActive)
+                          {
+                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
+                          }
+                      });
+  };
+  
+  
+  /** DemoGuiRoundtrip: send a `markError` message back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_markError)
+  {
+    def.operation ([](string message)
+                      {
+                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        GuiNotification::facade().markError (errorLogID, message);
+                      })
+       .captureUndo ([](string message) -> bool
+                      {
+                        return true;
+                      })
+       .undoOperation ([](string message, bool wasActive)
+                      {
+                        if (wasActive)
+                          {
+                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
+                          }
+                      });
+  };
+  
+  
+  /** DemoGuiRoundtrip: send a `markNote` message back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_markNote)
+  {
+    def.operation ([](string message)
+                      {
+                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        GuiNotification::facade().markNote (errorLogID, message);
+                      })
+       .captureUndo ([](string message) -> bool
+                      {
+                        return true;
+                      })
+       .undoOperation ([](string message, bool wasActive)
+                      {
+                        if (wasActive)
+                          {
+                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
+                          }
+                      });
+  };
+  
+  
+  /** DemoGuiRoundtrip: send a generic `mark` message with given _action ID_ back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_markAction)
+  {
+    def.operation ([](string actionID, string message)
+                      {
+                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        UNIMPLEMENTED ("GuiNotification::facade().mark (errorLogID, actionID, message);");
+                      })
+       .captureUndo ([](string actionID, string message) -> bool
+                      {
+                        return true;
+                      })
+       .undoOperation ([](string actionID, string message, bool wasActive)
+                      {
+                        if (wasActive)
+                          {
+                            GuiNotification::facade().displayInfo (NOTE_WARN, "Sorry, can't do that Dave.");
+                          }
+                      });
+  };
   
   
   
