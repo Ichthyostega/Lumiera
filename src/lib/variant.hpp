@@ -341,15 +341,16 @@ namespace lib {
           
           
           
+          static string indicateTypeMismatch (Buffer&);
+          
+          
           static Buff&
           downcast (Buffer& b)
             {
               Buff* buff = dynamic_cast<Buff*> (&b);
               
               if (!buff)
-                throw error::Logic("Variant type mismatch: "
-                                   "the given variant record does not hold "
-                                   "a value of the type requested here"
+                throw error::Logic(indicateTypeMismatch(b)
                                   ,error::LERR_(WRONG_TYPE));
               else
                return *buff;
@@ -550,6 +551,27 @@ namespace lib {
     return util::typedString (this->access());
   }
   
+  /**
+   * error message when accessing the variant content with wrong type assumptions.
+   * @remark while this diagnostics can be crucial for finding bugs, we avoid
+   *  including \ref format-string.hpp, since lib::Variant is used pervasively
+   *  as part of lib::diff::GenNode. Especially in development builds, we observed
+   *  a tangible leverage on executable size. Thus we implement the protection
+   *  against follow-up exceptions explicitly here.
+   */
+  template<typename TYPES>
+  template<typename TY>
+  inline string
+  Variant<TYPES>::Buff<TY>::indicateTypeMismatch(Variant<TYPES>::Buffer& target)
+  {
+    try {
+        return "Variant type mismatch: expected value of type «"
+             + lib::meta::typeStr<TY>()+"», "
+             + "however the given variant record is "
+             + string{target};
+      }
+    catch(...) { return lib::meta::FAILURE_INDICATOR; }
+  }
   
   
 }// namespace lib

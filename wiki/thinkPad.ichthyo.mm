@@ -2911,7 +2911,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1533689255174" FOLDED="true" ID="ID_821013695" MODIFIED="1538263469674" TEXT="Aufruf via Notification_Facade">
+<node COLOR="#338800" CREATED="1533689255174" ID="ID_821013695" MODIFIED="1538281518697" TEXT="Aufruf via Notification_Facade">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537835197558" ID="ID_1477928890" MODIFIED="1538263469674" TEXT="displayInfo">
 <icon BUILTIN="button_ok"/>
@@ -2944,6 +2944,77 @@
 </node>
 <node COLOR="#338800" CREATED="1538239665856" ID="ID_518505874" MODIFIED="1538263469675" TEXT="EXPAND">
 <icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281532767" ID="ID_1335570495" MODIFIED="1538281631433" TEXT="Fehler: mu&#xdf; eigens separate GenNode bauen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil der Payload-Typ f&#252;r diesen Aufruf bool ist,
+    </p>
+    <p>
+      und nicht string wie f&#252;r alle anderen state marks
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538281608933" ID="ID_584897977" MODIFIED="1538281622963" TEXT="mu&#xdf; bool parsen...">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1538281635897" ID="ID_562945035" MODIFIED="1538281651821" TEXT="lexical_cast geht nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      k
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1538281655774" ID="ID_1847834965" MODIFIED="1538281662977" TEXT="kann nur 1 und 0"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281664349" ID="ID_1454517361" MODIFIED="1538281687765" TEXT="interessanter Folgefehler">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1538281691097" ID="ID_1911272932" MODIFIED="1538281757024" TEXT="exception killt ProcDispatcher (das ist OK)">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1538281708919" ID="ID_1611370738" MODIFIED="1538281759509" TEXT="error state ist gesetzt">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1538281715646" ID="ID_1541383645" MODIFIED="1538281762796" TEXT="emergency shutdown">
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1538281733340" ID="ID_1326729675" MODIFIED="1538281765434" TEXT="f&#xe4;hrt das GUI runter">
+<icon BUILTIN="full-4"/>
+</node>
+<node CREATED="1538281741419" ID="ID_1964821489" MODIFIED="1538281775756">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein <b>ZombieCheck</b>&#160;spricht an
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-5"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538281782245" ID="ID_888818129" MODIFIED="1538281805087" TEXT="welcher...?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281788117" ID="ID_1747014683" MODIFIED="1538281816152" TEXT="wie konnte das passieren....">
+<icon BUILTIN="help"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1537835859576" ID="ID_968868056" MODIFIED="1538263469675" TEXT="CLEAR_ERR">
 <icon BUILTIN="button_ok"/>
