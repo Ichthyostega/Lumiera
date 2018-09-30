@@ -44,12 +44,16 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "lib/depend.hpp"
-#include "lib/diff/mutation-message.hpp"
 #include "lib/idi/entry-id.hpp"
 
 #include <string>
 
 
+namespace lib {
+  namespace diff {
+    class GenNode;
+    class MutationMessage;
+} }
 namespace gui {
   
   using std::string;

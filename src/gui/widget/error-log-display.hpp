@@ -62,6 +62,7 @@
 #include "gui/gtk-base.hpp"
 #include "gui/model/expander-revealer.hpp"
 #include "include/gui-notification-facade.h"
+#include "lib/format-string.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -73,6 +74,7 @@
 namespace gui  {
 namespace widget {
   
+  using util::_Fmt;
   using lib::Literal;
   using std::vector;
   
@@ -143,10 +145,16 @@ namespace widget {
       model::Revealer reveal;
       
       
+      /** empty buffer and discard all error bookmarks */
       void
       clearAll()
         {
-          UNIMPLEMENTED ("empty buffer and discard all error bookmarks");
+          errorMarks_.clear();
+          size_t lineCnt = textLog_.get_buffer()->get_line_count();
+          string placeholder;
+          if (lineCnt > 0)
+            placeholder = _Fmt{_("───════ %d preceding lines removed ════───\n")} % lineCnt;
+          textLog_.get_buffer()->set_text (placeholder);  // discard existing content
         }
       
       /** just add normal information message to buffer,

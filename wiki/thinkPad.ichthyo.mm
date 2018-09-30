@@ -228,7 +228,7 @@
   </body>
 </html></richcontent>
 <linktarget COLOR="#51517b" DESTINATION="ID_379585622" ENDARROW="Default" ENDINCLINATION="-476;439;" ID="Arrow_ID_1616528570" SOURCE="ID_1324099152" STARTARROW="Default" STARTINCLINATION="-541;0;"/>
-<node COLOR="#338800" CREATED="1484792679322" ID="ID_426218722" MODIFIED="1522936023760" TEXT="#1047 preliminary definition of GuiNotification facade">
+<node COLOR="#338800" CREATED="1484792679322" HGAP="13" ID="ID_426218722" MODIFIED="1538267933539" TEXT="#1047 preliminary definition of GuiNotification facade" VSHIFT="-3">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -269,7 +269,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node COLOR="#5c1010" CREATED="1501776256263" ID="ID_1196529588" MODIFIED="1518487921041" TEXT="Bedeutung">
+<node COLOR="#5c1010" CREATED="1501776256263" HGAP="21" ID="ID_1196529588" MODIFIED="1538267930864" TEXT="Bedeutung" VSHIFT="-11">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1501776296394" ID="ID_1578367045" MODIFIED="1518487921041" TEXT="R&#xfc;ckpfad Proc -&gt; UI">
 <linktarget COLOR="#9292a1" DESTINATION="ID_1578367045" ENDARROW="Default" ENDINCLINATION="45;-124;" ID="Arrow_ID_1265828105" SOURCE="ID_415789885" STARTARROW="None" STARTINCLINATION="389;0;"/>
@@ -287,13 +287,58 @@
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538267608198" FOLDED="true" HGAP="39" ID="ID_181594780" MODIFIED="1538267919378" TEXT="pa&#xdf;t der Name" VSHIFT="21">
+<icon BUILTIN="help"/>
+<node COLOR="#435e98" CREATED="1533915343891" ID="ID_1650034681" MODIFIED="1538267897031" TEXT="&#xdc;berlegungen">
+<icon BUILTIN="info"/>
+<node CREATED="1533915353434" ID="ID_1231213592" MODIFIED="1533915424732" TEXT="ist mehr als &quot;notification&quot;?">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533915365545" ID="ID_892577975" MODIFIED="1538267801552" TEXT="ja -- aber vorerst nicht relevant">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1533915439279" ID="ID_285136109" MODIFIED="1533915452025" TEXT="Notification auf Architektur-Level"/>
+</node>
+<node CREATED="1533915371872" ID="ID_1003239787" MODIFIED="1533915380406" TEXT="GuiFeedback?">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1533915407171" ID="ID_728064464" MODIFIED="1533915412457" TEXT="GuiReaction">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1538263882239" ID="ID_1273122422" MODIFIED="1538263888584" TEXT="GuiResponse">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1533915454893" ID="ID_877610316" MODIFIED="1538267861452" TEXT="GuiNotification ist nicht schlecht">
+<icon BUILTIN="yes"/>
+<node CREATED="1533915472186" ID="ID_1748932158" MODIFIED="1533915479325" TEXT="GuiFeedback w&#xfc;rde auch gehen"/>
+<node CREATED="1533915480649" ID="ID_846895155" MODIFIED="1533915485628" TEXT="aber klingt nicht so sch&#xf6;n"/>
+<node CREATED="1533915486336" ID="ID_627537189" MODIFIED="1533915508660" TEXT="und ist doppeldeutig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es k&#246;nnte auch den Feedback des Users meinen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538267874378" ID="ID_1732454504" MODIFIED="1538267888571" TEXT="Umbenennen in GuiResponse">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 </node>
 <node CREATED="1484877839299" HGAP="23" ID="ID_957622878" MODIFIED="1518487921041" TEXT="Asynchrones Protokoll" VSHIFT="1">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1484877856640" ID="ID_1256835676" MODIFIED="1518487921041" TEXT="bedenke: alle Aktionen m&#xfc;ssen in den Event-Thread"/>
 <node CREATED="1484877868015" ID="ID_1612427727" MODIFIED="1518487921041" TEXT="&#xfc;ber die Rolle des GUI-Modells nachdenken!"/>
 </node>
-<node CREATED="1481502320065" ID="ID_1298358905" MODIFIED="1518487921041" TEXT="macht bisher der GuiRunner" VSHIFT="17">
+<node COLOR="#338800" CREATED="1481502305995" FOLDED="true" ID="ID_1943234904" MODIFIED="1538268138105" TEXT="direkt vom UiManager betrieben">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1481502320065" HGAP="-23" ID="ID_1298358905" MODIFIED="1538267995502" TEXT="bisher vom GuiRunner betrieben" VSHIFT="-26">
 <icon BUILTIN="info"/>
 <node CREATED="1481502327528" ID="ID_75293128" MODIFIED="1518487921041" TEXT="das ist ohnehin schlecht">
 <richcontent TYPE="NOTE"><html>
@@ -320,13 +365,11 @@
 <node CREATED="1481502335583" ID="ID_1245191241" MODIFIED="1518487921041" TEXT="Felder im GuiRunner sollten noexcept sein">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1484793048273" ID="ID_66499328" MODIFIED="1537532341697" TEXT="verschoben">
-<arrowlink COLOR="#4072ad" DESTINATION="ID_1019455888" ENDARROW="Default" ENDINCLINATION="-127;0;" ID="Arrow_ID_693735378" STARTARROW="None" STARTINCLINATION="-99;38;"/>
+<node CREATED="1484793048273" ID="ID_66499328" MODIFIED="1538268004486" TEXT="verschoben">
+<arrowlink COLOR="#4072ad" DESTINATION="ID_1019455888" ENDARROW="Default" ENDINCLINATION="6;-96;" ID="Arrow_ID_693735378" STARTARROW="None" STARTINCLINATION="-105;33;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1481502305995" ID="ID_1943234904" MODIFIED="1518487921042" TEXT="direkt vom UiManager betrieben">
-<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1484793113472" ID="ID_221612387" MODIFIED="1518487921042" TEXT="Lebenszyklus nochmal pr&#xfc;fen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1484797253856" FOLDED="true" ID="ID_226245696" MODIFIED="1538265606275" TEXT="GUI start sauber">
@@ -547,8 +590,7 @@
       Ein zu fr&#252;her bzw. zu sp&#228;ter Aufruf <i>&quot;f&#228;llt einfach hinten runter&quot;</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -562,12 +604,11 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1484793022924" ID="ID_1019455888" MODIFIED="1537532341698" TEXT="neuer Facade-Kontext">
-<linktarget COLOR="#4072ad" DESTINATION="ID_1019455888" ENDARROW="Default" ENDINCLINATION="-127;0;" ID="Arrow_ID_693735378" SOURCE="ID_66499328" STARTARROW="None" STARTINCLINATION="-99;38;"/>
+<node CREATED="1484793022924" HGAP="36" ID="ID_1019455888" MODIFIED="1538268017820" TEXT="neuer Facade-Kontext" VSHIFT="-8">
+<linktarget COLOR="#4072ad" DESTINATION="ID_1019455888" ENDARROW="Default" ENDINCLINATION="6;-96;" ID="Arrow_ID_693735378" SOURCE="ID_66499328" STARTARROW="None" STARTINCLINATION="-105;33;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1501866627055" ID="ID_1521184600" MODIFIED="1518487921045" TEXT="RAII-Stil"/>
 <node CREATED="1501866591164" ID="ID_751026549" MODIFIED="1518487921045" TEXT="&#xf6;ffnet/schlie&#xdf;t die &#xf6;ffentlichen Interfaces"/>
-</node>
 </node>
 <node CREATED="1481502251450" HGAP="96" ID="ID_1125529151" MODIFIED="1518487921045" TEXT="m&#xf6;glicher Race" VSHIFT="16">
 <icon BUILTIN="messagebox_warning"/>
@@ -621,13 +662,14 @@
 </html></richcontent>
 </node>
 </node>
+</node>
 <node COLOR="#435e98" CREATED="1484797646771" HGAP="44" ID="ID_1605520996" MODIFIED="1538263574976" TEXT="Ausgestaltung" VSHIFT="10">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1501859455212" ID="ID_751494565" MODIFIED="1518487921045" TEXT="Lebenszyklus">
 <node CREATED="1484797663121" ID="ID_134980216" MODIFIED="1518487921045" TEXT="braucht Bus-Connection">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1484797863862" ID="ID_464230340" MODIFIED="1518487921045" TEXT="zum Controller machen">
-<icon BUILTIN="help"/>
+<node CREATED="1484797863862" FOLDED="true" ID="ID_464230340" MODIFIED="1538268217733" TEXT="zum Controller machen?">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1484797872109" ID="ID_1877007933" MODIFIED="1518487921045" TEXT="Controller ist Tangible"/>
 <node CREATED="1484797878364" ID="ID_93289471" MODIFIED="1518487921045" TEXT="hat damit automatisch BusTerm"/>
 <node CREATED="1484799604429" ID="ID_1141687282" MODIFIED="1518487921045" TEXT="Design-Problem: sinnvolles Diff">
@@ -658,9 +700,11 @@
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1484875946312" ID="ID_271363232" MODIFIED="1518487921046" TEXT="ist ein BusTerm">
+<node COLOR="#338800" CREATED="1484875946312" FOLDED="true" ID="ID_271363232" MODIFIED="1538268188753" TEXT="ist ein BusTerm">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1484875959342" ID="ID_1202046492" MODIFIED="1518487921046" TEXT="nur unidirektional zum Bus verbunden"/>
+<node CREATED="1484875959342" ID="ID_1202046492" MODIFIED="1538268186367" TEXT="nur unidirektional zum Bus verbunden">
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1484875968557" ID="ID_1406569407" MODIFIED="1518487921046" TEXT="ist hier genau angemessen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -668,7 +712,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1484799525344" ID="ID_640788614" MODIFIED="1525124214729" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
+<node COLOR="#338800" CREATED="1484799525344" FOLDED="true" ID="ID_640788614" MODIFIED="1538268229556" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1518487921046" TEXT="tut es nicht">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -709,7 +753,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1484802745625" ID="ID_375871642" MODIFIED="1518487921046" TEXT="Heisenbug">
+<node CREATED="1484802745625" FOLDED="true" ID="ID_375871642" MODIFIED="1538268103533" TEXT="Heisenbug">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_375871642" ENDARROW="Default" ENDINCLINATION="-164;-16;" ID="Arrow_ID_896120556" SOURCE="ID_1922412139" STARTARROW="None" STARTINCLINATION="345;-16;"/>
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1484802752728" ID="ID_634426848" MODIFIED="1518487921046" TEXT="passiert beim Aufruf des TerminationHandle"/>
@@ -824,7 +868,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node COLOR="#338800" CREATED="1484876143949" ID="ID_558559630" MODIFIED="1531584013538" TEXT="mu&#xdf; Nachrichten explizit &#xfc;bergeben">
+<node COLOR="#338800" CREATED="1484876143949" FOLDED="true" ID="ID_558559630" MODIFIED="1538268172028" TEXT="mu&#xdf; Nachrichten explizit &#xfc;bergeben">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1531583488816" ID="ID_928145965" MODIFIED="1531583491643" TEXT="Dispatcher"/>
 <node CREATED="1531583492656" ID="ID_1195055295" MODIFIED="1531583502490" TEXT="Queue mit explizitem Mutex-Locking"/>
@@ -834,7 +878,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1484797900185" ID="ID_1895372084" MODIFIED="1518487921047" TEXT="Protokoll zum Schlie&#xdf;en">
+<node CREATED="1484797900185" FOLDED="true" ID="ID_1895372084" MODIFIED="1538268258465" TEXT="Protokoll zum Schlie&#xdf;en">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1484797920846" ID="ID_472054508" MODIFIED="1518487921047" TEXT="sollte Nachricht auf dem Bus sein">
 <icon BUILTIN="idea"/>
@@ -922,10 +966,10 @@
 <node CREATED="1503670572980" ID="ID_599888416" MODIFIED="1538263469663" TEXT="einzige Ausnahme">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1503670585794" FOLDED="true" ID="ID_1806860698" MODIFIED="1538263469663" TEXT="speziellen Hanlder verwenden">
+<node CREATED="1503670585794" ID="ID_1806860698" MODIFIED="1538268339103" TEXT="speziellen Handler verwenden">
 <arrowlink COLOR="#6d8097" DESTINATION="ID_376091136" ENDARROW="Default" ENDINCLINATION="129;8;" ID="Arrow_ID_206696117" STARTARROW="None" STARTINCLINATION="147;13;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504203543467" FOLDED="true" ID="ID_285166941" MODIFIED="1533608415749" TEXT="TODO">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504203543467" ID="ID_285166941" MODIFIED="1538268298994" TEXT="TODO">
 <icon BUILTIN="bell"/>
 <node CREATED="1504203570199" ID="ID_577706469" MODIFIED="1518487921048" TEXT="welche Fehler kann Diff-Anwendung werfen?">
 <icon BUILTIN="help"/>
@@ -1400,8 +1444,7 @@
       mehr erscheint mir nicht sinnvoll; <i>behandeln</i>&#160;kann man solche Fehler ohnehin nicht.<br /><br />
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -1557,42 +1600,6 @@
 <node CREATED="1533911897569" ID="ID_1876551933" MODIFIED="1533911919154" TEXT="ID ist somit Teil des Interface"/>
 <node CREATED="1533911919814" ID="ID_558535868" MODIFIED="1533911928937" TEXT="welches Interface?">
 <node CREATED="1533915325903" ID="ID_1053391149" MODIFIED="1533915334817" TEXT="GuiNotification">
-<node CREATED="1533915343891" ID="ID_1650034681" MODIFIED="1538263771121" TEXT="Nebengedanke: pa&#xdf;t der Name?">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1533915353434" ID="ID_1231213592" MODIFIED="1533915424732" TEXT="ist mehr als &quot;notification&quot;?">
-<icon BUILTIN="button_cancel"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533915365545" ID="ID_892577975" MODIFIED="1533915367959" TEXT="nein">
-<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1533915439279" ID="ID_285136109" MODIFIED="1533915452025" TEXT="Notification auf Architektur-Level"/>
-</node>
-<node CREATED="1533915371872" ID="ID_1003239787" MODIFIED="1533915380406" TEXT="GuiFeedback?">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1533915407171" ID="ID_728064464" MODIFIED="1533915412457" TEXT="GuiReaction">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1538263882239" ID="ID_1273122422" MODIFIED="1538263888584" TEXT="GuiResponse">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1533915454893" ID="ID_877610316" MODIFIED="1533915459256" TEXT="der Name ist ad&#xe4;quat">
-<node CREATED="1533915472186" ID="ID_1748932158" MODIFIED="1533915479325" TEXT="GuiFeedback w&#xfc;rde auch gehen"/>
-<node CREATED="1533915480649" ID="ID_846895155" MODIFIED="1533915485628" TEXT="aber klingt nicht so sch&#xf6;n"/>
-<node CREATED="1533915486336" ID="ID_627537189" MODIFIED="1533915508660" TEXT="und ist doppeldeutig">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...es k&#246;nnte auch den Feedback des Users meinen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
 <node CREATED="1533915683535" ID="ID_1976057171" MODIFIED="1533915688561" TEXT="w&#xe4;re m&#xf6;glich"/>
 <node CREATED="1533915689317" ID="ID_689429680" MODIFIED="1533915696616" TEXT="hat aber anderen Scope"/>
 </node>
@@ -1804,7 +1811,7 @@
 <node COLOR="#338800" CREATED="1504203754175" ID="ID_580465154" MODIFIED="1538263469667" TEXT="Fehler-Level erkennen">
 <arrowlink DESTINATION="ID_1459967459" ENDARROW="Default" ENDINCLINATION="-73;-253;" ID="Arrow_ID_424075973" STARTARROW="None" STARTINCLINATION="225;0;"/>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537754684692" HGAP="65" ID="ID_494305022" MODIFIED="1538263469667" TEXT="Rolle im API kl&#xe4;ren" VSHIFT="-12">
+<node COLOR="#338800" CREATED="1537754684692" HGAP="65" ID="ID_494305022" MODIFIED="1538266179499" TEXT="Rolle im API kl&#xe4;ren" VSHIFT="-12">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1818,7 +1825,10 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538266114512" ID="ID_1994199296" MODIFIED="1538266139416" TEXT="Enum nur noch im NotificationService"/>
+<node CREATED="1538266140789" ID="ID_965920969" MODIFIED="1538266163157" TEXT="Widget: drei einzelne API-Methoden"/>
+<node CREATED="1538266165305" ID="ID_318361090" MODIFIED="1538266174884" TEXT="Controller: in Protokoll integriert"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725200588" ID="ID_871562482" MODIFIED="1538263469667" TEXT="Operationen">
@@ -1847,7 +1857,7 @@
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1535563193014" FOLDED="true" ID="ID_1551506828" MODIFIED="1538263469668" TEXT="Problem: dehnt sich nicht aus">
+<node COLOR="#990000" CREATED="1535563193014" FOLDED="true" ID="ID_1551506828" MODIFIED="1538277321257" TEXT="Problem: dehnt sich nicht aus">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1535563256725" ID="ID_327777357" MODIFIED="1535563288805" TEXT="scrolled pane belegt nur minimal notwendigen Platz"/>
 <node CREATED="1535563300695" ID="ID_862867674" MODIFIED="1535563311905" TEXT="egal ob initial zugeklappt (=default) oder aufgeklappt"/>
@@ -2037,8 +2047,25 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725101578" ID="ID_974315967" MODIFIED="1538263469668" TEXT="clearAll">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1534725101578" ID="ID_974315967" MODIFIED="1538277245929" TEXT="clearAll">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538277182898" ID="ID_1432000446" MODIFIED="1538277242242" TEXT="Marker-Tabelle leeren"/>
+<node CREATED="1538277192232" ID="ID_94588950" MODIFIED="1538277241203" TEXT="Platzhalter-Zeile">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...um den Umstand zu dokumentieren,
+    </p>
+    <p>
+      da&#223; hier ## Zeilen gel&#246;scht wurden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1534725131214" ID="ID_1479834475" MODIFIED="1538263469668" TEXT="addMsg">
 <icon BUILTIN="button_ok"/>
@@ -2684,9 +2711,9 @@
 <arrowlink COLOR="#fa8074" DESTINATION="ID_1044092797" ENDARROW="Default" ENDINCLINATION="131;259;" ID="Arrow_ID_1805058492" STARTARROW="None" STARTINCLINATION="890;-197;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1538263469672" TEXT="doReset()">
-<icon BUILTIN="pencil"/>
-<node CREATED="1534120150458" ID="ID_1390376483" MODIFIED="1538263469672" TEXT="&quot;Clear log contents, collapse widget, clear error state&quot;&quot;">
+<node COLOR="#338800" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1538277265473" TEXT="doReset()">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1534120150458" ID="ID_1390376483" MODIFIED="1538277278304" TEXT="&quot;Clear log contents, collapse widget, clear error state&quot;">
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -2771,7 +2798,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1533689225658" ID="ID_662017160" MODIFIED="1538263469673" TEXT="Pling! -Button">
 <icon BUILTIN="full-5"/>
-<node COLOR="#338800" CREATED="1533689235200" ID="ID_1760873318" MODIFIED="1538263469673" TEXT="non-modal TestControl">
+<node COLOR="#338800" CREATED="1533689235200" FOLDED="true" ID="ID_1760873318" MODIFIED="1538263469673" TEXT="non-modal TestControl">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537836495530" ID="ID_182389429" MODIFIED="1538263469673" TEXT="per Men&#xfc;eintrag &#xf6;ffnen">
 <icon BUILTIN="button_ok"/>
@@ -2865,7 +2892,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1533689243871" ID="ID_1745090225" MODIFIED="1538263469674" TEXT="triggert Dummy-Command">
+<node COLOR="#338800" CREATED="1533689243871" FOLDED="true" ID="ID_1745090225" MODIFIED="1538263469674" TEXT="triggert Dummy-Command">
 <linktarget COLOR="#47ebbb" DESTINATION="ID_1745090225" ENDARROW="Default" ENDINCLINATION="119;0;" ID="Arrow_ID_372783230" SOURCE="ID_1206004" STARTARROW="None" STARTINCLINATION="-10;35;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1538220904703" HGAP="46" ID="ID_1997338106" MODIFIED="1538263469674" TEXT="definieren..." VSHIFT="31">
@@ -2884,7 +2911,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1533689255174" ID="ID_821013695" MODIFIED="1538263469674" TEXT="Aufruf via Notification_Facade">
+<node COLOR="#338800" CREATED="1533689255174" FOLDED="true" ID="ID_821013695" MODIFIED="1538263469674" TEXT="Aufruf via Notification_Facade">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537835197558" ID="ID_1477928890" MODIFIED="1538263469674" TEXT="displayInfo">
 <icon BUILTIN="button_ok"/>
@@ -3022,7 +3049,7 @@
 <arrowlink COLOR="#c19dc4" DESTINATION="ID_149796171" ENDARROW="Default" ENDINCLINATION="1300;76;" ID="Arrow_ID_451002492" STARTARROW="None" STARTINCLINATION="1509;156;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537532456004" ID="ID_1700828304" MODIFIED="1538263469676" TEXT="dokumentieren und Ticket #1102 schlie&#xdf;en">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537532456004" ID="ID_1700828304" MODIFIED="1538266369889" TEXT="dokumentieren und Ticket #1047 schlie&#xdf;en">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
