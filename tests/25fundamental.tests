@@ -257,3 +257,8 @@ return: 0
 END
 
 
+TEST "Zombie tripwire" ZombieCheck_test  <<END
+return: 0
+END
+
+

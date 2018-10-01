@@ -2944,7 +2944,7 @@
 </node>
 <node COLOR="#338800" CREATED="1538239665856" ID="ID_518505874" MODIFIED="1538263469675" TEXT="EXPAND">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281532767" ID="ID_1335570495" MODIFIED="1538281631433" TEXT="Fehler: mu&#xdf; eigens separate GenNode bauen">
+<node COLOR="#435e98" CREATED="1538281532767" ID="ID_1335570495" MODIFIED="1538365732115" TEXT="Fehler: mu&#xdf; eigens separate GenNode bauen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -2959,6 +2959,7 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538281608933" ID="ID_584897977" MODIFIED="1538281622963" TEXT="mu&#xdf; bool parsen...">
@@ -3017,7 +3018,7 @@
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1538317075985" ID="ID_712272839" MODIFIED="1538357310679" TEXT="Problem: lumiera Error-Flag &#xfc;bernimmt nur lokale description">
+<node COLOR="#338800" CREATED="1538317075985" FOLDED="true" ID="ID_712272839" MODIFIED="1538365661558" TEXT="Problem: lumiera Error-Flag &#xfc;bernimmt nur lokale description">
 <linktarget COLOR="#c4588d" DESTINATION="ID_712272839" ENDARROW="Default" ENDINCLINATION="577;63;" ID="Arrow_ID_428347507" SOURCE="ID_313278942" STARTARROW="None" STARTINCLINATION="341;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538317102405" ID="ID_1770156379" MODIFIED="1538317106320" TEXT="und die ist hier leer"/>
@@ -3055,8 +3056,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538318187819" ID="ID_870746075" MODIFIED="1538318214241" TEXT="Problem: ExecResult nicht ausgewertet">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1538318187819" FOLDED="true" ID="ID_870746075" MODIFIED="1538365651376" TEXT="Problem: ExecResult nicht ausgewertet">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1538318216016" ID="ID_1444888451" MODIFIED="1538318226226" TEXT="Exception wird nicht ausgeworfen"/>
 <node CREATED="1538318227150" ID="ID_956176289" MODIFIED="1538318230994" TEXT="Loop l&#xe4;uft weiter"/>
 <node CREATED="1538318231726" ID="ID_373021764" MODIFIED="1538318237104" TEXT="aber Error-State ist gesetzt">
@@ -3079,14 +3080,14 @@
 <node CREATED="1538319193716" ID="ID_1785359217" MODIFIED="1538319206846" TEXT="...das erkl&#xe4;rt, warum wir die Ursache nicht sehen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538319456089" ID="ID_342927310" MODIFIED="1538319493900" TEXT="Problem: Handler im ProcDispatcher behandelt nur LumieraException speziell">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1538319456089" FOLDED="true" ID="ID_342927310" MODIFIED="1538365654527" TEXT="Problem: Handler im ProcDispatcher behandelt nur LumieraException speziell">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1538319495420" ID="ID_39746243" MODIFIED="1538319501623" TEXT="das stellt zwar hier kein Problem dar"/>
 <node CREATED="1538319502331" ID="ID_1092806315" MODIFIED="1538319511413" TEXT="und es ist noch der unspezifische Handler da"/>
 <node CREATED="1538319512146" ID="ID_672632423" MODIFIED="1538319533231" TEXT="aber: problem.what() geht verloren bei std::exception">
 <icon BUILTIN="forward"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538319535006" ID="ID_403817336" MODIFIED="1538319566067" TEXT="Fix: Handler kann genausogut auf std::exception abstellen">
+<node COLOR="#338800" CREATED="1538319535006" ID="ID_403817336" MODIFIED="1538365635663" TEXT="Fix: Handler kann genausogut auf std::exception abstellen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -3098,7 +3099,7 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -3125,7 +3126,7 @@
 <node CREATED="1538281715646" ID="ID_1541383645" MODIFIED="1538281762796" TEXT="emergency shutdown">
 <icon BUILTIN="full-3"/>
 <node CREATED="1538320876787" ID="ID_1528655784" MODIFIED="1538320883630" TEXT="Subsystem-Shutdown">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538320884769" ID="ID_707965628" MODIFIED="1538357472940" TEXT="Problem: re-entrance Bug">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538320884769" FOLDED="true" ID="ID_707965628" MODIFIED="1538365685651" TEXT="Problem: re-entrance Bug">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1538320904127" ID="ID_1958182633" MODIFIED="1538320932319" TEXT="shutdownAll() ruft indirekt/rekursiv sigTerm()">
 <node COLOR="#435e98" CREATED="1538321043388" ID="ID_1860084270" MODIFIED="1538348459443" TEXT="fragt sich, warum">
@@ -3194,7 +3195,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1538322674991" ID="ID_371763142" MODIFIED="1538359354152" TEXT="Problem: triggerShutdown nicht wasserdicht">
+<node CREATED="1538322674991" FOLDED="true" ID="ID_371763142" MODIFIED="1538365689019" TEXT="Problem: triggerShutdown nicht wasserdicht">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1538322708227" ID="ID_1994833744" MODIFIED="1538322772297" TEXT="kann sterben">
 <icon BUILTIN="messagebox_warning"/>
@@ -3264,11 +3265,89 @@
 </html>
 </richcontent>
 <icon BUILTIN="full-5"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538281782245" ID="ID_888818129" MODIFIED="1538281805087" TEXT="welcher...?">
+<node COLOR="#435e98" CREATED="1538281782245" ID="ID_888818129" MODIFIED="1538365399555" TEXT="welcher...">
 <icon BUILTIN="help"/>
 <node CREATED="1538326229581" ID="ID_687910017" MODIFIED="1538326243254" TEXT="mit dem Debugger nicht zu fassen...."/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538326244075" ID="ID_362650638" MODIFIED="1538326258434" TEXT="Aufgabe: Zobmie-ID statisch speichern">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1538326244075" ID="ID_362650638" MODIFIED="1538365389966" TEXT="Aufgabe: Zobmie-ID statisch speichern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538365422252" ID="ID_1782663880" MODIFIED="1538365532058" TEXT="Offender = ClassLock&lt;gui::interact::LocationQuery&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      0000001180: INFO: subsystem-runner.hpp:208: worker_3: sigTerm: Subsystem 'Lumiera GTK GUI' terminated.
+    </p>
+    <p>
+      0000001181: NOTICE: appstate.cpp:170: thread_1: maybeWait: Shutting down Lumiera...
+    </p>
+    <p>
+      0000001182: ALERT: appstate.cpp:174: thread_1: maybeWait: Triggering emergency exit...
+    </p>
+    <p>
+      0000001243: WARNING: interfaceregistry.c:199: thread_1: lumiera_interfaceregistry_bulkremove_interfaces: ENTRY NOT FOUND in interfaceregistry at clean-up of interface lumieraorg_Gui, instance lumieraorg_GuiStarterPlugin
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:9719): Gtk-CRITICAL **: gtk_widget_is_drawable: assertion 'GTK_IS_WIDGET (widget)' failed
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:9719): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index &gt;= 0 &amp;&amp; index &lt;= layout-&gt;length' failed
+    </p>
+    <p>
+      0000001293: ERR: error-exception.cpp:185: worker_3: lumiera_unexpectedException: ### Lumiera halted due to an unexpected Error ###
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      ### Lumiera halted due to an unexpected Error ###
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      +++ Caught Exception LUMIERA_ERROR_LIFECYCLE:Lifecycle assumptions violated
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      0000001298: ERR: error-exception.cpp:196: worker_3: lumiera_unexpectedException: +++ caught error::LumieraError&lt;error::LUMIERA_ERROR_FATAL, error::LumieraError&lt;error::LUMIERA_ERROR_LOGIC, Error&gt; &gt;
+    </p>
+    <p>
+      0000001298! ERR: error-exception.cpp:196: worker_3: lumiera_unexpectedException: +++ messg: Sorry, Lumiera encountered an internal error.
+    </p>
+    <p>
+      0000001298! ERR: error-exception.cpp:196: worker_3: lumiera_unexpectedException: +++ descr: LUMIERA_ERROR_LIFECYCLE:Lifecycle assumptions violated (Already deceased object called out of order during Application shutdown. Lumiera Policy violated: Dependencies must not be used from destructors. Offender = ClassLock&lt;gui::interact::LocationQuery, s).
+    </p>
+    <p>
+      0000001299: ERR: error-exception.cpp:212: worker_3: lumiera_unexpectedException: last registered error was....
+    </p>
+    <p>
+      0000001299! ERR: error-exception.cpp:212: worker_3: lumiera_unexpectedException: LUMIERA_ERROR_LIFECYCLE:Lifecycle assumptions violated
+    </p>
+    <p>
+      Abgebrochen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1538365543884" ID="ID_534885692" MODIFIED="1538365573259" TEXT="man beachte auch die zwei GTK-Assertions nach dem GUI-Shutdown">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1538365584159" ID="ID_998255150" MODIFIED="1538365599464" TEXT="wieso l&#xe4;uft da noch GUI-code??"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281788117" ID="ID_1747014683" MODIFIED="1538281816152" TEXT="wie konnte das passieren....">

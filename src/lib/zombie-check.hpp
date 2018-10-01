@@ -30,6 +30,7 @@
  ** we may plant an automatic "zombie detector" to give a clear indication of
  ** such a policy violation (Lumiera forbids to use dependencies from dtors).
  ** 
+ ** @see ZombieCheck_test
  ** @see sync-classlock.hpp
  ** @see depend.hpp
  */
@@ -40,20 +41,38 @@
 
 #include "lib/error.hpp"
 
+#include <cstring>
+#include <string>
+
 
 
 namespace lib {
   namespace error = lumiera::error;
   
+  using std::string;
+  
   
   /**
    * Automatic lifecycle tracker, to produce an alarm when accessing objects after deletion.
+   * @warning ensure the ZombieCheck instance lives in static memory, otherwise it won't work.
    */
   class ZombieCheck
     {
       bool deceased_ = false;
+      char zombieID_[42]{};
       
     public:
+      /**
+       * install a zombie check, tagged with the given id.
+       * When invoked after death, the raised error::Fatal
+       * includes this ID in the diagnostic message.
+       * @remark recommended to use util::typeStr 
+       */
+      ZombieCheck (string id)
+        {
+          std::strncpy(zombieID_, id.c_str(), 41);
+        }
+      
       ZombieCheck() = default;
      ~ZombieCheck()
         {
@@ -69,9 +88,19 @@ namespace lib {
       operator() ()  const
         {
           if (deceased_)
-            throw error::Fatal("Already deceased object called out of order during Application shutdown. "
-                               "Lumiera Policy violated: Dependencies must not be used from destructors."
+            throw error::Fatal(buildDiagnosticMessage()
                               ,error::LUMIERA_ERROR_LIFECYCLE);
+        }
+      
+    private:
+      string
+      buildDiagnosticMessage()  const
+        {
+          string msg{"Already deceased object called out of order during Application shutdown. "
+                     "Lumiera Policy violated: Dependencies must not be used from destructors."};
+          if (zombieID_[0])
+            msg += " Offender = "+string{zombieID_};
+          return msg;
         }
     };
   

@@ -39,6 +39,7 @@
 
 #include "lib/nobug-init.hpp"
 #include "lib/zombie-check.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/sync.hpp"
 
 
@@ -72,7 +73,7 @@ namespace lib {
       getPerClassMonitor()
         {
           static PerClassMonitor classMonitor;
-          static ZombieCheck zombieCheck;
+          static ZombieCheck zombieCheck{util::typeStr(this)};
           
           zombieCheck();
           return classMonitor;
