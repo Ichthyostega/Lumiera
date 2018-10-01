@@ -116,7 +116,8 @@ namespace lumiera {
     , desc_{description}
     , cause_{extractCauseMsg(cause)}
     {
-      lumiera_error_set (this->id_, description.c_str());
+      string detailInfo{description + (isnil(cause_)? "" : " | cause = "+cause_)};
+      lumiera_error_set (this->id_, detailInfo.c_str());
     }
   
   

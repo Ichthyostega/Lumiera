@@ -2981,12 +2981,240 @@
 <icon BUILTIN="broken-line"/>
 <node CREATED="1538281691097" ID="ID_1911272932" MODIFIED="1538281757024" TEXT="exception killt ProcDispatcher (das ist OK)">
 <icon BUILTIN="full-1"/>
+<node CREATED="1538316932460" ID="ID_532178252" MODIFIED="1538317666896" TEXT="warum l&#xe4;uft das &#xfc;ber HandlingPattern?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538316947954" ID="ID_299870867" MODIFIED="1538316961132" TEXT="dachte, wir rufen Dummy-Commands direkt auf"/>
+<node CREATED="1538317636429" ID="ID_555373711" MODIFIED="1538317640326" TEXT="tun wir auch">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1538317641621" ID="ID_1808679252" MODIFIED="1538317662923" TEXT="aber proc::Command verwendet Default-Pattern">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1538316971295" ID="ID_1865988337" MODIFIED="1538316977546" TEXT="Abgreifen der Fehler-Info">
+<node CREATED="1538316982046" ID="ID_252583984" MODIFIED="1538317000205" STYLE="fork" TEXT="im std::exception-Handler">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1538317002019" ID="ID_957898086" MODIFIED="1538317225421" TEXT="lumiera::Error">
+<icon BUILTIN="forward"/>
+<node CREATED="1538356729852" FOLDED="true" ID="ID_435503551" MODIFIED="1538356803291" TEXT="wird die cause korrekt &#xfc;bernommen?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538356756336" ID="ID_342508440" MODIFIED="1538356782737" TEXT="ja... works as designed">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1538356761143" ID="ID_1729059066" MODIFIED="1538356797681">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Konzept ist <i>nicht</i>, sie gleich in die description zu &#252;bernehmen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1538317075985" ID="ID_712272839" MODIFIED="1538357310679" TEXT="Problem: lumiera Error-Flag &#xfc;bernimmt nur lokale description">
+<linktarget COLOR="#c4588d" DESTINATION="ID_712272839" ENDARROW="Default" ENDINCLINATION="577;63;" ID="Arrow_ID_428347507" SOURCE="ID_313278942" STARTARROW="None" STARTINCLINATION="341;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538317102405" ID="ID_1770156379" MODIFIED="1538317106320" TEXT="und die ist hier leer"/>
+<node CREATED="1538317107765" ID="ID_1730697631" MODIFIED="1538317122431" TEXT="sollte unsere what()-Methode nutzen"/>
+<node CREATED="1538317157966" ID="ID_600719509" MODIFIED="1538317169480" TEXT="Problem: Storage">
+<node CREATED="1538317171852" ID="ID_1284960080" MODIFIED="1538317570097" TEXT="verwende Symbol">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1538317176347" ID="ID_1919150970" MODIFIED="1538317201070" TEXT="wat soll der jeiz">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das System ist ohnehin schon anget&#246;tet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1538317544954" ID="ID_1154202054" MODIFIED="1538317573410">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      keines! Impl verwendet <b>strdup</b>()
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538318187819" ID="ID_870746075" MODIFIED="1538318214241" TEXT="Problem: ExecResult nicht ausgewertet">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1538318216016" ID="ID_1444888451" MODIFIED="1538318226226" TEXT="Exception wird nicht ausgeworfen"/>
+<node CREATED="1538318227150" ID="ID_956176289" MODIFIED="1538318230994" TEXT="Loop l&#xe4;uft weiter"/>
+<node CREATED="1538318231726" ID="ID_373021764" MODIFIED="1538318237104" TEXT="aber Error-State ist gesetzt">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538319081491" ID="ID_599527376" MODIFIED="1538319687663" TEXT="das ist ein Logik-Fehler">
+<linktarget COLOR="#e54f84" DESTINATION="ID_599527376" ENDARROW="Default" ENDINCLINATION="-9;283;" ID="Arrow_ID_1159234155" SOURCE="ID_1536519871" STARTARROW="None" STARTINCLINATION="411;-47;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1538319099993" ID="ID_1362819933" MODIFIED="1538319118146" TEXT="da Exception in einem ExecResult gespeicher ist"/>
+<node CREATED="1538319119398" ID="ID_1062993543" MODIFIED="1538319129753" TEXT="...gilt sie nicht mehr als &quot;schwebend&quot;"/>
+<node CREATED="1538319130725" ID="ID_1118929704" MODIFIED="1538319141433" TEXT="der Aufrufer hat volle Freiheit, sie zu ignorieren">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1538318997502" ID="ID_1664562023" MODIFIED="1538319007145" TEXT="wacht nach max-timeout (f&#xfc;r Builder auf)"/>
+<node CREATED="1538319008117" ID="ID_73040538" MODIFIED="1538319025223" TEXT="unser Object-Monitor pr&#xfc;ft beim Aufwachen den Error-state">
+<node CREATED="1538319150290" ID="ID_313278942" MODIFIED="1538319185279" TEXT="und wirft hier nur noch die verk&#xfc;rzte Description aus">
+<arrowlink COLOR="#c4588d" DESTINATION="ID_712272839" ENDARROW="Default" ENDINCLINATION="577;63;" ID="Arrow_ID_428347507" STARTARROW="None" STARTINCLINATION="341;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1538319193716" ID="ID_1785359217" MODIFIED="1538319206846" TEXT="...das erkl&#xe4;rt, warum wir die Ursache nicht sehen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538319456089" ID="ID_342927310" MODIFIED="1538319493900" TEXT="Problem: Handler im ProcDispatcher behandelt nur LumieraException speziell">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1538319495420" ID="ID_39746243" MODIFIED="1538319501623" TEXT="das stellt zwar hier kein Problem dar"/>
+<node CREATED="1538319502331" ID="ID_1092806315" MODIFIED="1538319511413" TEXT="und es ist noch der unspezifische Handler da"/>
+<node CREATED="1538319512146" ID="ID_672632423" MODIFIED="1538319533231" TEXT="aber: problem.what() geht verloren bei std::exception">
+<icon BUILTIN="forward"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538319535006" ID="ID_403817336" MODIFIED="1538319566067" TEXT="Fix: Handler kann genausogut auf std::exception abstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir verwenden das Lumiera-Exception-API gar nicht
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1538281708919" ID="ID_1611370738" MODIFIED="1538281759509" TEXT="error state ist gesetzt">
 <icon BUILTIN="full-2"/>
+<node CREATED="1538319670284" ID="ID_1536519871" MODIFIED="1538319694106" TEXT="gekl&#xe4;rt warum">
+<arrowlink COLOR="#e54f84" DESTINATION="ID_599527376" ENDARROW="Default" ENDINCLINATION="-9;283;" ID="Arrow_ID_1159234155" STARTARROW="None" STARTINCLINATION="411;-47;"/>
+</node>
+<node CREATED="1538319701680" ID="ID_1856422179" MODIFIED="1538319729311" TEXT="...und beim Trigger ist er schon nicht mehr gesetzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Handler im ProcDispatcher sorgt daf&#252;r
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1538281715646" ID="ID_1541383645" MODIFIED="1538281762796" TEXT="emergency shutdown">
 <icon BUILTIN="full-3"/>
+<node CREATED="1538320876787" ID="ID_1528655784" MODIFIED="1538320883630" TEXT="Subsystem-Shutdown">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538320884769" ID="ID_707965628" MODIFIED="1538357472940" TEXT="Problem: re-entrance Bug">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1538320904127" ID="ID_1958182633" MODIFIED="1538320932319" TEXT="shutdownAll() ruft indirekt/rekursiv sigTerm()">
+<node COLOR="#435e98" CREATED="1538321043388" ID="ID_1860084270" MODIFIED="1538348459443" TEXT="fragt sich, warum">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1538321059074" ID="ID_1754741024" MODIFIED="1538321069733" TEXT="Vermutung: degeneriertes Subsystem">
+<node CREATED="1538321102148" ID="ID_862751524" MODIFIED="1538321102148">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...welches keinen separaten Thread aufruft....?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1538321104964" ID="ID_990799680" MODIFIED="1538321198833" TEXT="...und daher das Lock auf dem Subsystem-Runner bekommt">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1538348464066" ID="ID_1973011292" MODIFIED="1538348489286" TEXT="genau so isses (...und ich hatte vor Jahren schon ein Ticket aufgemacht)">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538348427367" ID="ID_1696230148" MODIFIED="1538348438054" TEXT="#814 subsystem-runner: re-entrance in triggerShutdown">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1538320933291" ID="ID_573672353" MODIFIED="1538320975419" TEXT="removeall auf Collection, die grade iteriert wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich im shutdownAll() weiter oben im Stack
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1538320996027" ID="ID_1914116148" MODIFIED="1538321019772" TEXT="STL verh&#xe4;lt sich hier anscheinend gutm&#xfc;tig">
+<icon BUILTIN="idea"/>
+<node CREATED="1538348518843" ID="ID_613222856" MODIFIED="1538348551658" TEXT="zwar wird einer Iteration ggfs das aktuelle Element &quot;unter den F&#xfc;&#xdf;en&quot; weggezogen..."/>
+<node CREATED="1538348553006" ID="ID_1259043030" MODIFIED="1538348566936" TEXT="so da&#xdf; dann die n&#xe4;chste Iteration das &#xfc;bern&#xe4;chste Element bearbeitet"/>
+<node CREATED="1538348577763" ID="ID_830173416" MODIFIED="1538348597359">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber <i>genau der andere Thread,</i>&#160;der das gemacht hat...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1538348598352" ID="ID_1090786435" MODIFIED="1538348613234" TEXT="iteriert als n&#xe4;chstes ebenfalls &#xfc;ber alle Subsysteme"/>
+<node CREATED="1538348625836" ID="ID_507678251" MODIFIED="1538348638230" TEXT="Fazit: Killen bis zur ersch&#xf6;pfung"/>
+<node CREATED="1538348639034" ID="ID_1799262325" MODIFIED="1538348644065" TEXT="l&#xe4;uft">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538322674991" ID="ID_371763142" MODIFIED="1538357494258" TEXT="Problem: triggerShutdown nicht wasserdicht">
+<icon BUILTIN="pencil"/>
+<node CREATED="1538322708227" ID="ID_1994833744" MODIFIED="1538322772297" TEXT="kann sterben">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1538322737871" ID="ID_513027050" MODIFIED="1538322769742" TEXT="wenn Exceptions auftreten">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1538322751893" ID="ID_812762539" MODIFIED="1538322767299" TEXT="z.B. wenn Gui-Facade schon zu ist">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1538322721289" ID="ID_156783463" MODIFIED="1538322775541" TEXT="dann l&#xe4;uft das aufrufende sigTerm nicht zuende">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node CREATED="1538357436900" ID="ID_1015844071" MODIFIED="1538357455069" TEXT="der ganze Subsystem-Runner sollte &#xfc;berarbeitet werden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538357457297" ID="ID_1518496949" MODIFIED="1538357462577" TEXT="#1177 Subsytem-Runner design rework">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node CREATED="1538281733340" ID="ID_1326729675" MODIFIED="1538281765434" TEXT="f&#xe4;hrt das GUI runter">
 <icon BUILTIN="full-4"/>
@@ -3006,6 +3234,10 @@
 <icon BUILTIN="full-5"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538281782245" ID="ID_888818129" MODIFIED="1538281805087" TEXT="welcher...?">
 <icon BUILTIN="help"/>
+<node CREATED="1538326229581" ID="ID_687910017" MODIFIED="1538326243254" TEXT="mit dem Debugger nicht zu fassen...."/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538326244075" ID="ID_362650638" MODIFIED="1538326258434" TEXT="Aufgabe: Zobmie-ID statisch speichern">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281788117" ID="ID_1747014683" MODIFIED="1538281816152" TEXT="wie konnte das passieren....">
 <icon BUILTIN="help"/>
