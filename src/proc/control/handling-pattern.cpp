@@ -104,10 +104,14 @@ namespace control {
   /* ====== execution result state object ======= */
   
   
-  /** @note we just grab and retain the error message. */
+  /** @note just grab and retain the error message, but _clear_ the error flag.
+   *        Rationale: by packaging into the ExecResult, the excepton counts as treated.
+   */
   ExecResult::ExecResult (lumiera::Error const& problem)
     : log_(problem.what())
-  { }
+    {
+      lumiera_error(); // ensure error flag is cleared
+    }
   
   
   bool

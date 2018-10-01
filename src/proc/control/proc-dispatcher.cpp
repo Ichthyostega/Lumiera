@@ -247,8 +247,8 @@ namespace control {
                   updateState();
                 }
             }
-          catch (lumiera::Error& problem)
-            {
+          catch (std::exception& problem)
+            {  // could also be lumiera::Error
               errorMsg = problem.what();
               lumiera_error();        // clear error flag
             }
@@ -304,7 +304,8 @@ namespace control {
               if (util::startsWith (string(cmd.getID()), "test"))
                 {
                   INFO (command, "+++ -------->>> bang!");
-                  cmd();
+                  auto resultState = cmd();
+                  resultState.maybeThrow();
                 }
               //////////////////////////////////////////////////////TODO : magic to invoke commands from unit tests
             }

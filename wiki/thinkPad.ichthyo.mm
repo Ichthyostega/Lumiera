@@ -3194,8 +3194,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538322674991" ID="ID_371763142" MODIFIED="1538357494258" TEXT="Problem: triggerShutdown nicht wasserdicht">
-<icon BUILTIN="pencil"/>
+<node CREATED="1538322674991" ID="ID_371763142" MODIFIED="1538359354152" TEXT="Problem: triggerShutdown nicht wasserdicht">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1538322708227" ID="ID_1994833744" MODIFIED="1538322772297" TEXT="kann sterben">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1538322737871" ID="ID_513027050" MODIFIED="1538322769742" TEXT="wenn Exceptions auftreten">
@@ -3207,6 +3207,38 @@
 </node>
 <node CREATED="1538322721289" ID="ID_156783463" MODIFIED="1538322775541" TEXT="dann l&#xe4;uft das aufrufende sigTerm nicht zuende">
 <icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1538359359513" ID="ID_874296398" MODIFIED="1538359369128" TEXT="Nein kein Problem">
+<icon BUILTIN="forward"/>
+<node CREATED="1538359370815" ID="ID_104358783" MODIFIED="1538359518690" TEXT="das Subsystem-Protokoll verlangt noexcept">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1538359382397" ID="ID_1054464710" MODIFIED="1538359515533" TEXT="alle bekannten triggerShutdown sind so gekennzeichnet">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1538359397915" ID="ID_446614054" MODIFIED="1538359507892" TEXT="und wenn trotzdem eine Exception fliegt...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dann sind wir sofort tot und das wird billigend in Kauf genommen.
+    </p>
+    <p>
+      So ist das tats&#228;chlich implementiert im Falle vom OutputDirector.
+    </p>
+    <p>
+      Der startet n&#228;mlich einen Thread erst als Supervisor f&#252;r den Shutdown.
+    </p>
+    <p>
+      Wenn das nun <i>wirklich</i>&#160;fehlschl&#228;gt, bleibt uns sinnvollerweise nur noch die Selbstmord-Option
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 </node>
 </node>
