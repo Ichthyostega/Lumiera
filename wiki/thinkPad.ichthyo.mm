@@ -3348,11 +3348,195 @@
 <icon BUILTIN="forward"/>
 </node>
 <node CREATED="1538365584159" ID="ID_998255150" MODIFIED="1538365599464" TEXT="wieso l&#xe4;uft da noch GUI-code??"/>
+<node CREATED="1538437336885" ID="ID_1889101831" MODIFIED="1538437644906" TEXT="Beobachtung: worker_3 == GUI-Thread gewesen">
+<arrowlink COLOR="#d21052" DESTINATION="ID_1886197899" ENDARROW="Default" ENDINCLINATION="38;-127;" ID="Arrow_ID_274941451" STARTARROW="None" STARTINCLINATION="-156;4;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281788117" ID="ID_1747014683" MODIFIED="1538281816152" TEXT="wie konnte das passieren....">
+</node>
+<node COLOR="#435e98" CREATED="1538281788117" ID="ID_1747014683" MODIFIED="1538440313206" TEXT="wie konnte das passieren....">
 <icon BUILTIN="help"/>
 <icon BUILTIN="yes"/>
+<node CREATED="1538436917958" ID="ID_1974415924" MODIFIED="1538436933975" TEXT="sehr wahrscheinlich ein lib::Depend&lt;LocationQuery&gt;"/>
+<node CREATED="1538436940187" ID="ID_691937310" MODIFIED="1538436948429" TEXT="in Frage kommen....">
+<node CREATED="1538436955585" ID="ID_508170245" MODIFIED="1538436971250" TEXT="ViewLocator::locResolver_"/>
+<node CREATED="1538437006170" ID="ID_282885180" MODIFIED="1538437018876" TEXT="UILocationSolver::getLocationQuery"/>
+<node CREATED="1538437047572" ID="ID_230833452" MODIFIED="1538437051271" TEXT="LocationQuery::service">
+<node CREATED="1538437082776" ID="ID_184252441" MODIFIED="1538437093282" TEXT="lebt in ui-coord-resolver.cpp"/>
+</node>
+<node CREATED="1538437140312" ID="ID_1998433336" MODIFIED="1538437150122" TEXT="InteractionDirector::navigator_">
+<node CREATED="1538437158909" ID="ID_1706438738" MODIFIED="1538437159929" TEXT="= lib::DependInject&lt;LocationQuery&gt;::ServiceInstance&lt;Navigator&gt;"/>
+</node>
+</node>
+<node CREATED="1538437605225" ID="ID_1886197899" MODIFIED="1538440323658" TEXT="Verdacht: dtor-Race">
+<arrowlink COLOR="#e24165" DESTINATION="ID_1236741743" ENDARROW="Default" ENDINCLINATION="-145;6;" ID="Arrow_ID_1521104972" STARTARROW="None" STARTINCLINATION="-19;77;"/>
+<linktarget COLOR="#d21052" DESTINATION="ID_1886197899" ENDARROW="Default" ENDINCLINATION="38;-127;" ID="Arrow_ID_274941451" SOURCE="ID_1889101831" STARTARROW="None" STARTINCLINATION="-156;4;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1538437664345" ID="ID_1713946380" MODIFIED="1538437671196" TEXT="Szenario">
+<node CREATED="1538437672401" ID="ID_1788050505" MODIFIED="1538437844014" TEXT="Gui: sigTerm aufgerufen">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1538437682015" ID="ID_1413705214" MODIFIED="1538437846332" TEXT="letztes Subsys -&gt; r&#xe4;umt alle Subsysteme weg">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1538437706876" ID="ID_1187411887" MODIFIED="1538437848750" TEXT="main-Thread wacht auf">
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1538437715874" ID="ID_691753107" MODIFIED="1538437851846" TEXT="verl&#xe4;&#xdf;t main() und entl&#xe4;d das Plug-In">
+<icon BUILTIN="full-4"/>
+</node>
+<node CREATED="1538437741751" ID="ID_510852039" MODIFIED="1538437854073" TEXT="das zerst&#xf6;rt die statische Factory">
+<icon BUILTIN="full-5"/>
+</node>
+<node CREATED="1538437749950" ID="ID_1236741743" MODIFIED="1538440181061" TEXT="Gui-Thread kehr aus sigTerm zur&#xfc;ck und ruft ~UiManager()">
+<linktarget COLOR="#e24165" DESTINATION="ID_1236741743" ENDARROW="Default" ENDINCLINATION="-145;6;" ID="Arrow_ID_1521104972" SOURCE="ID_1886197899" STARTARROW="None" STARTINCLINATION="-19;77;"/>
+<icon BUILTIN="full-6"/>
+</node>
+<node CREATED="1538437785489" ID="ID_1853884803" MODIFIED="1538437858984" TEXT="indirekt deregistriert InteractionDirector den Service">
+<icon BUILTIN="full-7"/>
+</node>
+<node CREATED="1538437812598" ID="ID_407685604" MODIFIED="1538437861596" TEXT="DependInject::Service::shutdown() greift sich das Lock">
+<icon BUILTIN="full-8"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538437831603" ID="ID_822519118" MODIFIED="1538437839823" TEXT="BOOM">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1538440214523" HGAP="1" ID="ID_390044012" MODIFIED="1538440299089" TEXT="Umbau daraufhin" VSHIFT="21">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538440224730" ID="ID_973914173" MODIFIED="1538440241131" TEXT="sigTerm-Aufruf aus der run()-Methode herausziehen"/>
+<node CREATED="1538440242999" ID="ID_815144668" MODIFIED="1538440276578">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ..damit ~GtkLumiera() garantiert <i>vorher</i>&#160;aufgerufen wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1538440332187" HGAP="-48" ID="ID_393079011" MODIFIED="1538440345038" TEXT="Treffer, versenkt" VSHIFT="27">
+<node COLOR="#435e98" CREATED="1538440346730" ID="ID_1456330609" MODIFIED="1538440482615" TEXT="Fehler ist verschwunden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      0000001028: INFO: proc-dispatcher.cpp:301: worker_2: processCommands: +++ dispatch Command(&quot;test_meta_markAction&quot;) {exec}
+    </p>
+    <p>
+      0000001029: INFO: proc-dispatcher.cpp:306: worker_2: processCommands: +++ --------&gt;&gt;&gt; bang!
+    </p>
+    <p>
+      0000001031: WARNING: handling-pattern.cpp:90: worker_2: invoke: Invocation of Command(&quot;test_meta_markAction&quot;) {exec} failed: bad lexical cast: source type value could not be interpreted as target
+    </p>
+    <p>
+      0000001052: INFO: proc-dispatcher.cpp:159: worker_2: ~DispatcherLoop: Proc-Dispatcher stopped.
+    </p>
+    <p>
+      0000001053: INFO: subsystem-runner.hpp:208: worker_2: sigTerm: Subsystem 'Session' terminated.
+    </p>
+    <p>
+      0000001054: WARNING: subsystem-runner.hpp:209: worker_2: sigTerm: Irregular shutdown caused by: LUMIERA_ERROR_LOGIC:internal logic broken (Command execution failed: LUMIERA_ERROR_EXTERNAL:failure in external service -- caused by: bad lexical cast: source type value could not be interpreted as target).
+    </p>
+    <p>
+      0000001090: TODO: output-director.cpp:136: worker_4: bringDown: actually bring down the output generation
+    </p>
+    <p>
+      0000001091: INFO: subsystem-runner.hpp:208: worker_2: sigTerm: Subsystem 'Dummy-Player' terminated.
+    </p>
+    <p>
+      0000001092: NOTICE: notification-service.cpp:158: worker_2: triggerGuiShutdown: @GUI: shutdown triggered with explanation 'Application shutdown'....
+    </p>
+    <p>
+      0000001111: NOTICE: notification-service.cpp:158: worker_2: triggerGuiShutdown: @GUI: shutdown triggered with explanation 'Application shutdown'....
+    </p>
+    <p>
+      0000001119: INFO: subsystem-runner.hpp:208: worker_4: sigTerm: Subsystem 'PlayOut' terminated.
+    </p>
+    <p>
+      0000001120: NOTICE: notification-service.cpp:158: worker_4: triggerGuiShutdown: @GUI: shutdown triggered with explanation 'Application shutdown'....
+    </p>
+    <p>
+      0000001128: INFO: display-service.hpp:147: worker_3: ~DisplayService: Display service dying...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:12160): Gtk-CRITICAL **: gtk_widget_is_drawable: assertion 'GTK_IS_WIDGET (widget)' failed
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:12160): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index &gt;= 0 &amp;&amp; index &lt;= layout-&gt;length' failed
+    </p>
+    <p>
+      0000001160: INFO: workspace-window.cpp:53: worker_3: ~WorkspaceWindow: Closing workspace window...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:12160): Gdl-CRITICAL **: gdl_dock_master_get_controller: assertion 'master != NULL' failed
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:12160): Gdl-CRITICAL **: gdl_dock_master_get_controller: assertion 'master != NULL' failed
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:12160): Gdl-CRITICAL **: gdl_dock_master_get_controller: assertion 'master != NULL' failed
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (lumiera:12160): Gdl-CRITICAL **: gdl_dock_master_get_controller: assertion 'master != NULL' failed
+    </p>
+    <p>
+      0000001167: INFO: subsystem-runner.hpp:208: worker_3: sigTerm: Subsystem 'Lumiera GTK GUI' terminated.
+    </p>
+    <p>
+      0000001175: NOTICE: appstate.cpp:170: thread_1: maybeWait: Shutting down Lumiera...
+    </p>
+    <p>
+      0000001176: ALERT: appstate.cpp:174: thread_1: maybeWait: Triggering emergency exit...
+    </p>
+    <p>
+      0000001237: WARNING: interfaceregistry.c:199: thread_1: lumiera_interfaceregistry_bulkremove_interfaces: ENTRY NOT FOUND in interfaceregistry at clean-up of interface lumieraorg_Gui, instance lumieraorg_GuiStarterPlugin
+    </p>
+    <p>
+      (hiv)~/devel/lumi-$
+    </p>
+    <p>
+      (hiv)~/devel/lumi-$
+    </p>
+    <p>
+      (hiv)~/devel/lumi-$ echo $?
+    </p>
+    <p>
+      2
+    </p>
+    <p>
+      (hiv)~/devel/lumi-$
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
 </node>
 </node>
 </node>

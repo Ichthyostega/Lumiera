@@ -53,7 +53,7 @@
  ** followed by traversal of the coordinate spec and matching against a navigation path within the actual UI window
  ** configuration. This process might involve interpretation of some meta-symbols and interpolation of wildcards.
  ** 
- ** As indicated above, the coordinate resolver internally relies on a [context query interface](\ref LocationQuery),
+ ** As indicated above, the coordinate resolver internally relies on a [context query interface](\ref gui::interact::LocationQuery),
  ** to find out about existing windows, panels, views and tabs and to navigate the real UI structure. The actual
  ** implementation of this context query interface is backed by the \ref Navigator component exposed through the
  ** \ref InteractionDirector.
