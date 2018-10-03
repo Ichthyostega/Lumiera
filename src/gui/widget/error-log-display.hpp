@@ -238,10 +238,21 @@ namespace widget {
           addInfo (_Fmt{_("───════ %d old log lines removed ════───\n")} % (oldLines-newLines));
         }
       
+      
+      /** visit all errors and downgrade the markup; discard all bookmarks */
       void
       turnError_into_InfoMsg()
         {
-          UNIMPLEMENTED ("visit all errors and downgrade the markup; discard all bookmarks");
+          auto buff = textLog_.get_buffer();
+          for (Entry& entry : errorMarks_)
+            {
+              auto begin = entry.first->get_iter();
+              auto end = entry.second->get_iter();
+              
+              buff->remove_tag_by_name(uString{TAG_ERROR}, begin,end);
+              buff->apply_tag_by_name (uString{TAG_WARN}, begin,end);
+            }
+          errorMarks_.clear();
         }
       
       void
