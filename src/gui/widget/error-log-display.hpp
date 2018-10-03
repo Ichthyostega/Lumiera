@@ -67,6 +67,7 @@
 //#include "lib/util.hpp"
 
 //#include <memory>
+#include <utility>
 #include <vector>
 
 
@@ -76,7 +77,9 @@ namespace widget {
   
   using util::_Fmt;
   using lib::Literal;
+  using std::make_pair;
   using std::vector;
+  using std::move;
   
   namespace {
     
@@ -107,17 +110,25 @@ namespace widget {
   
   
   /**
-   * @todo WIP-WIP as of 9/2017
-   *       Just a text display box with scrollbars.
-   *       Need to add formatting etc.
+   * Widget to display log and error messages.
+   * Based on a multiline text display box with scrollbars.
+   * Warning and error messages are highlighted by special formatting.
+   * And [error entries are treated specially](\ref addError()), insofar
+   * they are tracked by an index, allowing to build additional convenience
+   * features later on...
+   * @remarks this is _just a widget_ intended for direct use. By default,
+   *   it is managed by the \ref NotificationHub, which is a controller,
+   *   attached to the UI-Bus and responding to the [UI-Element protocol]
+   *   (\ref tangible.hpp).
    */
   class ErrorLogDisplay
     : public Gtk::ScrolledWindow
     {
       
       using Mark = Glib::RefPtr<Gtk::TextBuffer::Mark>;
+      using Entry = std::pair<Mark,Mark>;
       
-      vector<Mark> errorMarks_;
+      vector<Entry> errorMarks_;
       Gtk::TextView textLog_;
 
     public:
@@ -188,10 +199,38 @@ namespace widget {
             expand (true);
         }
       
+      /**
+       * clear all mere information messages;
+       * retain just the errors with tags
+       * @remark in fact populates a new buffer
+       */
       void
       clearInfoMsg()
         {
-          UNIMPLEMENTED ("clear all mere information messages; then re-insert the errors with tags");
+          auto newBuff = Gtk::TextBuffer::create (textLog_.get_buffer()->get_tag_table());
+          vector<Entry> newMarks;
+          for (Entry& entry : errorMarks_)
+            {
+              newMarks.emplace_back(
+                make_pair (
+                    newBuff->create_mark (newBuff->end(), true),     // "left gravity": stays to the left of inserted text
+                    newBuff->create_mark (newBuff->end(), false))); //  "right gravity": sticks right behind the inserted text))
+              
+              newBuff->insert (newBuff->end()
+                              ,entry.first->get_iter()
+                              ,entry.second->get_iter()
+                              );
+            }
+           // install the reduced new buffer
+          auto oldBuff = textLog_.get_buffer();
+          textLog_.set_buffer(newBuff);
+          swap (errorMarks_, newMarks);
+          
+          // add a marker line to indicate the removed old log contents
+          int oldLines = oldBuff->get_line_count();
+          int newLines = newBuff->get_line_count();
+          ASSERT (oldLines >= newLines);
+          addInfo (_Fmt{_("───════ %d old log lines removed ════───\n")} % (oldLines-newLines));
         }
       
       void
@@ -220,19 +259,19 @@ namespace widget {
        * [GTKmm tutorial]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
        * [insert-mark]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
        */
-      Mark
+      Entry
       addEntry (string const& text, Literal markupTagName =nullptr)
         {
           auto buff = textLog_.get_buffer();
-          auto cursor = buff->get_insert();
-          buff->move_mark (cursor, buff->end());
+          auto begin = buff->create_mark (buff->end(), true);  // "left gravity": stays to the left of inserted text
+          auto after = buff->create_mark (buff->end(), false);//  "right gravity": sticks right behind the inserted text
           if (markupTagName)
             buff->insert_with_tag(buff->end(), text, cuString{markupTagName});
           else
             buff->insert (buff->end(), text);
           buff->insert (buff->end(), "\n");
-          textLog_.scroll_to (cursor);
-          return cursor;
+          textLog_.scroll_to (after);
+          return make_pair (move(begin), move(after));
         }
     };
   

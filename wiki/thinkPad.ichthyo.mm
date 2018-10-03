@@ -2063,8 +2063,7 @@
       da&#223; hier ## Zeilen gel&#246;scht wurden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1534725131214" ID="ID_1479834475" MODIFIED="1538263469668" TEXT="addMsg">
@@ -2140,6 +2139,29 @@
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537571794801" ID="ID_1255966338" MODIFIED="1538263469669" TEXT="einf&#xfc;gen">
 <icon BUILTIN="button_ok"/>
+<node CREATED="1538581675841" ID="ID_914012802" MODIFIED="1538581695036" TEXT="Problem: brauche Anfangs und Endpunkt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1538581696238" ID="ID_579972167" MODIFIED="1538581705246" TEXT="speichere ein Paar von Marken">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538581570783" ID="ID_1599117331" MODIFIED="1538581665660" TEXT="Problem: Ende wandert mit...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das liegt vermutlich daran, da&#223; ich die zweite Marke mit &quot;right gravity&quot; einf&#252;ge,
+    </p>
+    <p>
+      aber eben am absoluten Ende des Buffers. Damit wird sie hinter jeder Einf&#252;gung bleiben
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-pink"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571882918" ID="ID_620353485" MODIFIED="1538263469669" TEXT="reorganisieren">
 <icon BUILTIN="flag-yellow"/>
@@ -2190,14 +2212,17 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725142756" ID="ID_343395831" MODIFIED="1538263469669" TEXT="clearInfoMsg">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725716254" ID="ID_1648079400" MODIFIED="1538263469669" TEXT="Fehler-Texte beiseite Speichern">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1538581145248" ID="ID_643768128" MODIFIED="1538581206025" TEXT="neuen TextBuffer anlegen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725675884" ID="ID_1549487041" MODIFIED="1538263469669" TEXT="Textbuffer leeren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1538581157502" ID="ID_1715975641" MODIFIED="1538581204913" TEXT="nur die Fehler-Eintr&#xe4;ge &#xfc;bertragen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725690450" ID="ID_314460083" MODIFIED="1538263469669" TEXT="Fehler-Bookmarks erneut einsetzen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1538581168092" ID="ID_404563793" MODIFIED="1538581204032" TEXT="dabei auch einen neuen Mark-Index populieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1538581183986" ID="ID_147260284" MODIFIED="1538581203099" TEXT="Alten gegen Neuen austauschen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725160618" ID="ID_1981616896" MODIFIED="1538263469669" TEXT="turnError_into_InfoMsg">
@@ -2223,9 +2248,9 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534722011622" ID="ID_232472679" MODIFIED="1538263469670" TEXT="revealYourself">
-<linktarget COLOR="#af6a8f" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" SOURCE="ID_898428560" STARTARROW="None" STARTINCLINATION="859;27;"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1534722011622" ID="ID_232472679" MODIFIED="1538574689978" TEXT="revealYourself">
+<linktarget COLOR="#76a4ad" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" SOURCE="ID_898428560" STARTARROW="None" STARTINCLINATION="859;27;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1535726017256" ID="ID_899234988" MODIFIED="1538263469670" TEXT="default-Impl doReveal()">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1535726035309" ID="ID_1034773573" MODIFIED="1538263469670" TEXT="pr&#xfc;fen canReveal">
@@ -2263,9 +2288,9 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1535756076321" ID="ID_1044092797" MODIFIED="1538263469670" TEXT="konkret was machen, damit man die Funktion sehen kann">
-<linktarget COLOR="#fa8074" DESTINATION="ID_1044092797" ENDARROW="Default" ENDINCLINATION="131;259;" ID="Arrow_ID_1805058492" SOURCE="ID_1726008784" STARTARROW="None" STARTINCLINATION="890;-197;"/>
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1535756076321" ID="ID_1044092797" MODIFIED="1538574525101" TEXT="konkret was machen, damit man die Funktion sehen kann">
+<linktarget COLOR="#58c39d" DESTINATION="ID_1044092797" ENDARROW="Default" ENDINCLINATION="169;308;" ID="Arrow_ID_1805058492" SOURCE="ID_1726008784" STARTARROW="None" STARTINCLINATION="890;-197;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1537461362558" ID="ID_1738911844" MODIFIED="1538263469670" TEXT="Idee: ggfs minimiertes DockItem wiederherstellen">
 <icon BUILTIN="idea"/>
 </node>
@@ -2276,8 +2301,15 @@
 <node CREATED="1537499313305" ID="ID_1086105877" MODIFIED="1538263469670" TEXT="von ErrorLogDisplay"/>
 <node CREATED="1537499333798" ID="ID_57237574" MODIFIED="1538263469670" TEXT="verdrahtet in InfoboxPanel::getLog()"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537499267335" ID="ID_608745909" MODIFIED="1538263469670" TEXT="keine Ahnung ob das was bewirkt">
-<icon BUILTIN="bell"/>
+<node CREATED="1537499267335" ID="ID_608745909" MODIFIED="1538574682605" TEXT="keine Ahnung ob das was bewirkt...">
+<icon BUILTIN="help"/>
+</node>
+<node COLOR="#338800" CREATED="1538574348519" FOLDED="true" ID="ID_1605278639" MODIFIED="1538574397921" TEXT="funktioniert">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538574378707" ID="ID_1292635888" MODIFIED="1538574394169" TEXT="es erzeugt ein neues freischwebendes Panel">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1538574380386" ID="ID_1693045801" MODIFIED="1538574388709" TEXT="sofern das Panel vorher geschlossen wurde"/>
 </node>
 </node>
 </node>
@@ -2386,7 +2418,7 @@
 <linktarget COLOR="#726b86" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="232;27;" ID="Arrow_ID_246715972" SOURCE="ID_1305015272" STARTARROW="None" STARTINCLINATION="180;-21;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689125583" FOLDED="true" ID="ID_1077285383" MODIFIED="1538263469671" TEXT="mit close-signal verdrahten">
+<node COLOR="#990000" CREATED="1533689125583" FOLDED="true" ID="ID_1077285383" MODIFIED="1538574300844" TEXT="mit close-signal verdrahten">
 <icon BUILTIN="stop-sign"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534629989468" ID="ID_1497889519" MODIFIED="1534630008024" TEXT="close-Signal gibtsned">
 <icon BUILTIN="broken-line"/>
@@ -2644,8 +2676,8 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1534636369107" ID="ID_898428560" MODIFIED="1538263469671" TEXT="reveal / revealYourself">
-<arrowlink COLOR="#af6a8f" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" STARTARROW="None" STARTINCLINATION="859;27;"/>
+<node CREATED="1534636369107" ID="ID_898428560" MODIFIED="1538574657332" TEXT="reveal / revealYourself">
+<arrowlink COLOR="#76a4ad" DESTINATION="ID_232472679" ENDARROW="Default" ENDINCLINATION="94;307;" ID="Arrow_ID_634173548" STARTARROW="None" STARTINCLINATION="859;27;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1534636377938" ID="ID_64685935" MODIFIED="1538263469671" TEXT="Lumiera-Framework: Revealer">
@@ -2692,23 +2724,24 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150459" ID="ID_1466610963" MODIFIED="1538263469672" TEXT="doRevealYourself()">
-<icon BUILTIN="bell"/>
-<node CREATED="1534120150460" ID="ID_1726008784" MODIFIED="1538263469672">
+<node COLOR="#338800" CREATED="1534120150459" ID="ID_1466610963" MODIFIED="1538574630062" TEXT="doRevealYourself()">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1534120150460" ID="ID_1726008784" MODIFIED="1538574623534">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      <b><font color="#ae1414">TODO</font></b>: how can the Log-Widget be 'revealed'??
+      <b><font color="#3d51ac">L&#246;sung</font></b>: delegiere &#252;ber zwei Stufen...
     </p>
     <p>
-      Possibly allocate Widget, expand it. But how to make it visible?
+      Neue <b>Revealer</b>-Komponente bindet einen Funktor
     </p>
   </body>
-</html></richcontent>
-<arrowlink COLOR="#fa8074" DESTINATION="ID_1044092797" ENDARROW="Default" ENDINCLINATION="131;259;" ID="Arrow_ID_1805058492" STARTARROW="None" STARTINCLINATION="890;-197;"/>
+</html>
+</richcontent>
+<arrowlink COLOR="#58c39d" DESTINATION="ID_1044092797" ENDARROW="Default" ENDINCLINATION="169;308;" ID="Arrow_ID_1805058492" STARTARROW="None" STARTINCLINATION="890;-197;"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1534120150457" ID="ID_1499287865" MODIFIED="1538277265473" TEXT="doReset()">
@@ -2942,7 +2975,7 @@
 <node COLOR="#338800" CREATED="1537835848674" ID="ID_1915433481" MODIFIED="1538263469675" TEXT="REVEAL">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1538239665856" ID="ID_518505874" MODIFIED="1538263469675" TEXT="EXPAND">
+<node COLOR="#338800" CREATED="1538239665856" FOLDED="true" ID="ID_518505874" MODIFIED="1538574272012" TEXT="EXPAND">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1538281532767" ID="ID_1335570495" MODIFIED="1538365732115" TEXT="Fehler: mu&#xdf; eigens separate GenNode bauen">
 <richcontent TYPE="NOTE"><html>
@@ -2957,8 +2990,7 @@
       und nicht string wie f&#252;r alle anderen state marks
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -2974,8 +3006,7 @@
       k
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1538281655774" ID="ID_1847834965" MODIFIED="1538281662977" TEXT="kann nur 1 und 0"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281664349" FOLDED="true" ID="ID_1454517361" MODIFIED="1538441787807" TEXT="interessanter Folgefehler">
@@ -3013,8 +3044,7 @@
       Konzept ist <i>nicht</i>, sie gleich in die description zu &#252;bernehmen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -3049,8 +3079,7 @@
       keines! Impl verwendet <b>strdup</b>()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -3097,8 +3126,7 @@
       ...denn wir verwenden das Lumiera-Exception-API gar nicht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -3119,8 +3147,7 @@
       der Handler im ProcDispatcher sorgt daf&#252;r
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1538281715646" ID="ID_1541383645" MODIFIED="1538281762796" TEXT="emergency shutdown">
@@ -3143,8 +3170,7 @@
       ...welches keinen separaten Thread aufruft....?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1538321104964" ID="ID_990799680" MODIFIED="1538321198833" TEXT="...und daher das Lock auf dem Subsystem-Runner bekommt">
 <icon BUILTIN="idea"/>
@@ -3167,8 +3193,7 @@
       n&#228;mlich im shutdownAll() weiter oben im Stack
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1538320996027" ID="ID_1914116148" MODIFIED="1538321019772" TEXT="STL verh&#xe4;lt sich hier anscheinend gutm&#xfc;tig">
@@ -3185,8 +3210,7 @@
       aber <i>genau der andere Thread,</i>&#160;der das gemacht hat...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1538348598352" ID="ID_1090786435" MODIFIED="1538348613234" TEXT="iteriert als n&#xe4;chstes ebenfalls &#xfc;ber alle Subsysteme"/>
 <node CREATED="1538348625836" ID="ID_507678251" MODIFIED="1538348638230" TEXT="Fazit: Killen bis zur ersch&#xf6;pfung"/>
@@ -3236,8 +3260,7 @@
       Wenn das nun <i>wirklich</i>&#160;fehlschl&#228;gt, bleibt uns sinnvollerweise nur noch die Selbstmord-Option
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -3262,8 +3285,7 @@
       ein <b>ZombieCheck</b>&#160;spricht an
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-5"/>
 <node COLOR="#435e98" CREATED="1538281782245" ID="ID_888818129" MODIFIED="1538365399555" TEXT="welcher...">
 <icon BUILTIN="help"/>
@@ -3341,8 +3363,7 @@
       Abgebrochen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1538365543884" ID="ID_534885692" MODIFIED="1538365573259" TEXT="man beachte auch die zwei GTK-Assertions nach dem GUI-Shutdown">
 <icon BUILTIN="forward"/>
@@ -3415,8 +3436,7 @@
       ..damit ~GtkLumiera() garantiert <i>vorher</i>&#160;aufgerufen wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538440332187" HGAP="-48" ID="ID_393079011" MODIFIED="1538440532784" TEXT="Treffer, versenkt" VSHIFT="27">
@@ -3534,8 +3554,7 @@
       (hiv)~/devel/lumi-$
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node COLOR="#338800" CREATED="1538440505597" ID="ID_1015433202" MODIFIED="1538440524651" TEXT="#1178 Zombie race in GUI Subsystem shutdown">
