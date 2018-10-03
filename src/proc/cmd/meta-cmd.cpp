@@ -44,8 +44,8 @@
 #include "lib/idi/entry-id.hpp"
 #include "lib/format-string.hpp"               //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
 //#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
-#include <boost/lexical_cast.hpp>
 #include <string>
 
 using lib::hash::LuidH;
@@ -58,8 +58,8 @@ using gui::GuiNotification;
 using lib::diff::GenNode;
 //using util::cStr;
 using util::_Fmt;                              //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
+using util::isYes;
 using std::string;
-using boost::lexical_cast;
 
 
 namespace proc {
@@ -214,7 +214,7 @@ COMMAND_DEFINITION (test_meta_markAction)
                       {
                         ID errorLogID = gui::interact::Wizard::getErrorLogID();
                         GuiNotification::facade().mark (errorLogID
-                                                       ,actionID=="expand"? GenNode{actionID, lexical_cast<bool> (message)}  ///////////FIXME : lexical_cast is not suitable. We need a generic bool parse function!
+                                                       ,actionID=="expand"? GenNode{actionID, isYes(message)}
                                                                           : GenNode{actionID, message});
                       })
        .captureUndo ([](string actionID, string message) -> string

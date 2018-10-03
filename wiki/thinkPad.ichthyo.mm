@@ -2962,8 +2962,8 @@
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538281608933" ID="ID_584897977" MODIFIED="1538281622963" TEXT="mu&#xdf; bool parsen...">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1538281608933" ID="ID_584897977" MODIFIED="1538533889689" TEXT="mu&#xdf; bool parsen...">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1538281635897" ID="ID_562945035" MODIFIED="1538281651821" TEXT="lexical_cast geht nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -2978,7 +2978,7 @@
 </richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1538281655774" ID="ID_1847834965" MODIFIED="1538281662977" TEXT="kann nur 1 und 0"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281664349" ID="ID_1454517361" MODIFIED="1538281687765" TEXT="interessanter Folgefehler">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538281664349" FOLDED="true" ID="ID_1454517361" MODIFIED="1538441787807" TEXT="interessanter Folgefehler">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1538281691097" ID="ID_1911272932" MODIFIED="1538281757024" TEXT="exception killt ProcDispatcher (das ist OK)">
 <icon BUILTIN="full-1"/>
@@ -3419,7 +3419,9 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1538440332187" HGAP="-48" ID="ID_393079011" MODIFIED="1538440345038" TEXT="Treffer, versenkt" VSHIFT="27">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538440332187" HGAP="-48" ID="ID_393079011" MODIFIED="1538440532784" TEXT="Treffer, versenkt" VSHIFT="27">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1538440346730" ID="ID_1456330609" MODIFIED="1538440482615" TEXT="Fehler ist verschwunden">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -3536,10 +3538,19 @@
 </richcontent>
 <icon BUILTIN="info"/>
 </node>
+<node COLOR="#338800" CREATED="1538440505597" ID="ID_1015433202" MODIFIED="1538440524651" TEXT="#1178 Zombie race in GUI Subsystem shutdown">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1538441813086" ID="ID_431066008" MODIFIED="1538533883011" TEXT="neue Hilfsfunktion in util.hpp">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1538533891029" ID="ID_1886289594" MODIFIED="1538533896858" TEXT="Test hierf&#xfc;r">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

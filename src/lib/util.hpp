@@ -359,8 +359,8 @@ namespace util {
    "mixed    Ω   garbage"             --> 'mixed_garbage'
    "Bääääh!!"                         --> 'Bh'
 \endverbatim
-   * @see sanitised-identifier-test.cpp
-   * @see lib::meta::sanitisedSymbol()
+   * @see \ref UtilSanitizedIdentifier_test
+   * @see \ref lib::meta::sanitisedSymbol()
    */
   string sanitise (string const& org);
   
@@ -369,6 +369,23 @@ namespace util {
    * @return a trimmed copy (default locale)
    */
   string trim (string const& org);
+  
+  
+  /** interpret text representation of a boolean value.
+   * @remarks this function detects the relevant token rather strict....
+   * - yields `true` for the tokens "true", "True", "TRUE", "yes", "Yes", "YES", "1", "+"
+   * - yields `false` for the tokens "false", "False", "FALSE", "no", "No, "NO", "0", "-"
+   * - leading and trailing whitespace is ignored
+   * @throws lumiera::error::Invalid for any other text content
+   */
+  bool boolVal(string const&);
+  
+  
+  /** check the given text if it can be interpreted as affirmative answer (bool `true`).
+   * @remarks this function just fishes for the known `true` tokens and interprets
+   *  all other content as `false`, including empty strings. Never throws.
+   */
+  bool isYes(string const&) noexcept;
   
   
   
