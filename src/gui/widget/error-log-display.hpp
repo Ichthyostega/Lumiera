@@ -109,7 +109,8 @@ namespace widget {
   }
   
   
-  /**
+  
+  /*********************************************************************//**
    * Widget to display log and error messages.
    * Based on a multiline text display box with scrollbars.
    * Warning and error messages are highlighted by special formatting.
@@ -168,6 +169,7 @@ namespace widget {
           textLog_.get_buffer()->set_text (placeholder);  // discard existing content
         }
       
+      
       /** just add normal information message to buffer,
        *  without special markup and without expanding the widget */
       void
@@ -201,7 +203,7 @@ namespace widget {
       
       /**
        * clear all mere information messages;
-       * retain just the errors with tags
+       * retain just the previously tagged errors
        * @remark in fact populates a new buffer
        */
       void
@@ -211,12 +213,15 @@ namespace widget {
           vector<Entry> newMarks;
           for (Entry& entry : errorMarks_)
             {
+              newBuff->insert (newBuff->end(), "\n");
+              auto pos  = newBuff->end();
+              --pos;
               newMarks.emplace_back(
                 make_pair (
-                    newBuff->create_mark (newBuff->end(), true),     // "left gravity": stays to the left of inserted text
-                    newBuff->create_mark (newBuff->end(), false))); //  "right gravity": sticks right behind the inserted text))
+                    newBuff->create_mark (pos, true),     // "left gravity" : stays to the left of inserted text
+                    newBuff->create_mark (pos, false))); //  "right gravity": sticks right behind the inserted text))
               
-              newBuff->insert (newBuff->end()
+              newBuff->insert (pos                     //    copy from old to new buffer, complete with formatting tag
                               ,entry.first->get_iter()
                               ,entry.second->get_iter()
                               );
@@ -250,27 +255,32 @@ namespace widget {
     private:/* ===== Internals ===== */
       
       /** add message entry to the (ever growing) text buffer.
-       * @remark According to the [GTKmm tutorial], `TextView::scroll_to(iter)` is not reliable;
-       *         rather we need to use a text mark and set that text mark to the insert position.
-       *         Actually, there is always one predefined text mark [called "insert"][insert-mark],
-       *         which corresponds to the text cursor. Thus it suffices to navigate to text end,
-       *         insert and scroll into view.
+       * @return pair of anonymous marks bracketing the content added
+       * @remark an entry is content sans the following line break, which is appended automatically.
+       *         We inject the content _between_ two marks, which will adjust when content is altered.
+       * @remark According to the [API doc], `TextView::scroll_to(iter)` is not reliable; preferably
+       *         we should use a text mark and set that text mark to the [insert position][insert-mark].
+       *         The handling of marks and tags is described in the [GTKmm tutorial].
+       * @warning Each entry creates a new pair of marks. Not sure about the impact on performance...
        * 
        * [GTKmm tutorial]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
        * [insert-mark]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
+       * [API doc]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextView.html#a8412941c4da9a71a381052d6049164e4
        */
       Entry
       addEntry (string const& text, Literal markupTagName =nullptr)
         {
           auto buff = textLog_.get_buffer();
-          auto begin = buff->create_mark (buff->end(), true);  // "left gravity": stays to the left of inserted text
-          auto after = buff->create_mark (buff->end(), false);//  "right gravity": sticks right behind the inserted text
-          if (markupTagName)
-            buff->insert_with_tag(buff->end(), text, cuString{markupTagName});
-          else
-            buff->insert (buff->end(), text);
           buff->insert (buff->end(), "\n");
-          textLog_.scroll_to (after);
+          auto pos  = buff->end();
+          --pos;
+          auto begin = buff->create_mark (pos, true);  // "left gravity" : stays to the left of inserted text
+          auto after = buff->create_mark (pos, false);//  "right gravity": sticks right behind the inserted text
+          if (markupTagName)
+            buff->insert_with_tag(pos, text, cuString{markupTagName});
+          else
+            buff->insert (pos, text);
+          textLog_.scroll_to (begin);
           return make_pair (move(begin), move(after));
         }
     };
