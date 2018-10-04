@@ -60,6 +60,7 @@
 #define GUI_WIDGET_ERROR_LOG_DISPLAY_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/style-scheme.hpp"
 #include "gui/model/expander-revealer.hpp"
 #include "include/gui-notification-facade.h"
 #include "lib/format-string.hpp"
@@ -82,10 +83,6 @@ namespace widget {
   using std::move;
   
   namespace {
-    
-    const Literal TAG_ERROR{"ERROR"};           /////////////////////////////////////////////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
-    const Literal TAG_WARN{"WARN"};
-    
     
     using Tag = Glib::RefPtr<Gtk::TextBuffer::Tag>;
     

@@ -2095,11 +2095,20 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537661799354" ID="ID_758790930" MODIFIED="1538263469669" TEXT="Style-Manager vorsehen">
+<node COLOR="#338800" CREATED="1537661799354" ID="ID_758790930" MODIFIED="1538589740205" TEXT="Style-Manager vorsehen">
 <arrowlink COLOR="#8f81b2" DESTINATION="ID_407535546" ENDARROW="Default" ENDINCLINATION="3769;-2728;" ID="Arrow_ID_1203118148" STARTARROW="None" STARTINCLINATION="-1594;0;"/>
 <linktarget COLOR="#b3a9c1" DESTINATION="ID_758790930" ENDARROW="Default" ENDINCLINATION="96;-5;" ID="Arrow_ID_1283375190" SOURCE="ID_1053927695" STARTARROW="None" STARTINCLINATION="-17;39;"/>
 <linktarget COLOR="#877796" DESTINATION="ID_758790930" ENDARROW="Default" ENDINCLINATION="315;0;" ID="Arrow_ID_564282272" SOURCE="ID_951505172" STARTARROW="None" STARTINCLINATION="649;0;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538588393995" HGAP="214" ID="ID_828368967" MODIFIED="1538589740205" TEXT="#1168 : find a way to manage style of custom extended UI elements" VSHIFT="19">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#435e98" CREATED="1538588393995" FOLDED="true" HGAP="212" ID="ID_47427991" MODIFIED="1538589740205" TEXT="geeignetes Aufrufmuster schon mal angelegt" VSHIFT="-1">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538588510003" ID="ID_217668977" MODIFIED="1538588519598" TEXT="anscheinend geht hier nix per CSS"/>
+<node CREATED="1538588520377" ID="ID_178600292" MODIFIED="1538588531044" TEXT="daher: Tags per Name einf&#xfc;gen"/>
+<node CREATED="1538588531824" ID="ID_1287551637" MODIFIED="1538588544522" TEXT="Tags zentral populieren"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1537571928143" ID="ID_221069673" MODIFIED="1538263469669" TEXT="Tag f&#xfc;r Warnung">
@@ -2257,13 +2266,105 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725283337" ID="ID_1256364821" MODIFIED="1538263469669" TEXT="farbigen Rahmen">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1534725366734" ID="ID_951505172" MODIFIED="1538263469670" TEXT="vorl&#xe4;ufig feste Farbe">
+<node CREATED="1534725366734" ID="ID_951505172" MODIFIED="1538618155829" TEXT="verwende zus&#xe4;tzliche Klasse">
 <arrowlink COLOR="#877796" DESTINATION="ID_758790930" ENDARROW="Default" ENDINCLINATION="315;0;" ID="Arrow_ID_564282272" STARTARROW="None" STARTINCLINATION="649;0;"/>
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1538618157537" ID="ID_1728464265" MODIFIED="1538618167395" TEXT="Problem: kaputtes Stylesheet">
+<node CREATED="1538618179734" ID="ID_1693288014" MODIFIED="1538618198551" TEXT="das Lumiera-eigene Stylesheet funktioniert praktisch gar nicht mehr"/>
+<node CREATED="1538618201035" ID="ID_1034140537" MODIFIED="1538618349191" TEXT="...seitdem die Engine &apos;Adwaitha&apos; nicht mehr gefunden wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ca 2014 finde ich einige Blog-Eintr&#228;ge, da&#223; jetzt keine Theming-Engine mehr notwendig ist,
+    </p>
+    <p>
+      weil man alles per CSS machen kann. Seit Jessie findet GTK die Engine nicht mehr,
+    </p>
+    <p>
+      obwohl das Standard-Theme-Paket installiert ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dummerweise funktioniert nun aber auch das &#220;bersteuern mit unseren Farben nicht mehr
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725292080" ID="ID_1462887421" MODIFIED="1538263469670" TEXT="timeout setzen">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1538590120545" ID="ID_1847571040" MODIFIED="1538590128908" TEXT="Glib::timeout nutzen"/>
+<node CREATED="1538590129616" ID="ID_9828219" MODIFIED="1538590145185" TEXT="analog zum Ctor InteractionDirector">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538590112698" ID="ID_360284784" MODIFIED="1538590117466" TEXT="generisch anlegen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1538591568439" ID="ID_1863162820" MODIFIED="1538591578447" TEXT="Idee: Flasher">
+<icon BUILTIN="idea"/>
+<node CREATED="1538591875574" ID="ID_701299048" MODIFIED="1538592020697" TEXT="mu&#xdf; von Gtk::Widget erben">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1538591734386" ID="ID_1790046084" MODIFIED="1538591749203" TEXT="void flash()">
+<node CREATED="1538591895692" ID="ID_954326123" MODIFIED="1538591904679" TEXT="installiert Glib::timeout"/>
+<node CREATED="1538591905458" ID="ID_817752728" MODIFIED="1538591950857" TEXT="f&#xfc;gt CSS-Klasse hinzu"/>
+</node>
+<node CREATED="1538591750359" ID="ID_1546318660" MODIFIED="1538591768721" TEXT="void flashback()">
+<node CREATED="1538591954100" ID="ID_248197618" MODIFIED="1538591969766" TEXT="vom Timeout aufgerufen"/>
+<node CREATED="1538591970498" ID="ID_1898943385" MODIFIED="1538591977037" TEXT="entfernt CSS-Klasse"/>
+</node>
+</node>
+<node CREATED="1538592070125" ID="ID_30810203" MODIFIED="1538592411749" TEXT="Varianten">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1538592125238" ID="ID_1673239146" MODIFIED="1538592131969" TEXT="hat WLink auf target-widget">
+<node CREATED="1538592323691" ID="ID_567150569" MODIFIED="1538592333222" TEXT="lebt irgendwo als Member"/>
+<node CREATED="1538592438724" ID="ID_1623451463" MODIFIED="1538592446455" TEXT="mu&#xdf; explizit mit dem Target verbunden werden"/>
+</node>
+<node CREATED="1538592135452" ID="ID_526442862" MODIFIED="1538592170019" TEXT="freischwebende selbsterhaltende Heap-Allokation">
+<node CREATED="1538592277209" ID="ID_1333427334" MODIFIED="1538592290619" TEXT="flashback() endet mit Suizid"/>
+<node CREATED="1538592450338" ID="ID_1611670382" MODIFIED="1538592470811" TEXT="Memory-Leak wenn flashback() ausbleibt"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538592473055" ID="ID_1323523600" MODIFIED="1538592481210" TEXT="Beschlu&#xdf;: Mixin-Design">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1538606819103" ID="ID_404941112" MODIFIED="1538607019739" TEXT="Balance">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn dieses Design gibt die beste Balance zwischen den Belangen
+    </p>
+    <ul>
+      <li>
+        kein zus&#228;tzlicher Speicherbedarf
+      </li>
+      <li>
+        Callback ist automatisch abgesichert (sigc::mem_fun auf Trackable)
+      </li>
+      <li>
+        kann direkt auf das Styling des Parent zugreifen
+      </li>
+    </ul>
+    <p>
+      Einziger Nachteil ist die etwas verwirrende Schreibweise des dekorierten Typs
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1538607106686" ID="ID_1879979063" MODIFIED="1538607368158" TEXT="z.B: FlashDeco&lt;Gtk::TextView&gt;"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1534722011622" ID="ID_232472679" MODIFIED="1538574689978" TEXT="revealYourself">
@@ -5189,6 +5290,9 @@
 <node CREATED="1537661322914" ID="ID_165076190" MODIFIED="1537661331868" TEXT="per synthetisiertem Widget-Path"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538588393995" ID="ID_1149076483" MODIFIED="1538588397979" TEXT="#1168 : find a way to manage style of custom extended UI elements">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -5338,6 +5442,40 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1495234856782" ID="ID_1605922951" MODIFIED="1518487921060" TEXT="machen wir bisher nicht"/>
 <node CREATED="1495234865717" ID="ID_1261122199" MODIFIED="1518487921060" TEXT="ist das notwendig?"/>
+<node CREATED="1538588192126" ID="ID_1032145387" MODIFIED="1538588303275" TEXT="wohl nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn die GTK-Loop angehalten wird,
+    </p>
+    <p>
+      dann koppelt sich GTK anscheinend auch
+    </p>
+    <p>
+      automatisch vom Window-Manager ab.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Jedenfalls habe ich nun schon mehrfach den Shutdown &quot;von unten&quot; getriggert,
+    </p>
+    <p>
+      und es wurden alle Fenster geschlossen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Allerdings habe ich an der Stelle immer noch GTK-Assertions
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -6366,7 +6504,7 @@
 <node CREATED="1504463020913" ID="ID_808284638" MODIFIED="1518487921063" TEXT="[optional] Gruppe"/>
 <node CREATED="1504463028384" ID="ID_1928250888" MODIFIED="1518487921063" TEXT="View-ID"/>
 </node>
-<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1523746854594" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
+<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1538589849694" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
 <arrowlink COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -18612,7 +18750,7 @@
 </node>
 <node COLOR="#338800" CREATED="1532788645307" ID="ID_254810710" MODIFIED="1533325370427" TEXT="Trigger-Technik kl&#xe4;ren">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1532788681197" HGAP="336" ID="ID_32192034" MODIFIED="1533608413832" TEXT="bei GTK selber abschauen" VSHIFT="-52">
+<node CREATED="1532788681197" FOLDED="true" HGAP="336" ID="ID_32192034" MODIFIED="1538589894276" TEXT="bei GTK selber abschauen" VSHIFT="-52">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18829,7 +18967,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1532788727680" HGAP="69" ID="ID_889790361" MODIFIED="1533608413837" TEXT="Gtk::Main auf aktuellem Stand" VSHIFT="12">
+<node COLOR="#338800" CREATED="1532788727680" FOLDED="true" HGAP="69" ID="ID_889790361" MODIFIED="1538589862471" TEXT="Gtk::Main auf aktuellem Stand" VSHIFT="12">
 <linktarget COLOR="#70dcb9" DESTINATION="ID_889790361" ENDARROW="Default" ENDINCLINATION="1308;0;" ID="Arrow_ID_1988524020" SOURCE="ID_1815764983" STARTARROW="Default" STARTINCLINATION="-2084;0;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1532788737366" ID="ID_1527913663" MODIFIED="1532788745870" TEXT="aktuellen Code bereitlegen in Eclipse">
@@ -19004,7 +19142,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1532793816029" ID="ID_519518808" MODIFIED="1533608413842" TEXT="Glib::Dispatcher">
+<node CREATED="1532793816029" FOLDED="true" ID="ID_519518808" MODIFIED="1538589833848" TEXT="Glib::Dispatcher">
 <linktarget COLOR="#c1a9ad" DESTINATION="ID_519518808" ENDARROW="Default" ENDINCLINATION="70;0;" ID="Arrow_ID_985135564" SOURCE="ID_1796116534" STARTARROW="None" STARTINCLINATION="149;-223;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1532793842721" ID="ID_1258451078" MODIFIED="1532793868919" TEXT="schon integriert in unseren UiDispatcher">
@@ -19019,7 +19157,7 @@
 <node CREATED="1533310381845" ID="ID_833159461" MODIFIED="1533310389328" TEXT="setzt laufende event-Loop voraus"/>
 </node>
 </node>
-<node CREATED="1533310412185" ID="ID_968448480" MODIFIED="1533608413843" TEXT="Aktivierungs-Signal">
+<node CREATED="1533310412185" FOLDED="true" ID="ID_968448480" MODIFIED="1538589832097" TEXT="Aktivierungs-Signal">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1533310421328" ID="ID_1168151937" MODIFIED="1533310429603" TEXT="Gtk::Application macht das so"/>
 <node CREATED="1533310430167" ID="ID_1809941457" MODIFIED="1533310441873" TEXT="setzt eine GApplication (=Gio::Application) voraus"/>
@@ -19051,7 +19189,7 @@
 <node CREATED="1533221115139" ID="ID_1655397510" MODIFIED="1533221117607" TEXT="wer sonst?"/>
 <node CREATED="1533221118267" ID="ID_517862983" MODIFIED="1533221132317" TEXT="er verk&#xf6;rpert &quot;das Globale&quot;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221145295" ID="ID_45639892" MODIFIED="1533608413850" TEXT="Problem: Zugang zum NotificationService">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533221145295" FOLDED="true" ID="ID_45639892" MODIFIED="1538589835488" TEXT="Problem: Zugang zum NotificationService">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1533221554888" ID="ID_1545304194" MODIFIED="1533221603239" TEXT="wird explizit erst von UiManager::performMainLoop() installiert">
 <icon BUILTIN="broken-line"/>
@@ -19104,7 +19242,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1533223360183" ID="ID_1309454354" MODIFIED="1533608413852" TEXT="Idee">
+<node CREATED="1533223360183" FOLDED="true" ID="ID_1309454354" MODIFIED="1538589813571" TEXT="Idee: weiterer Dispatcher">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1533223371534" ID="ID_891597430" MODIFIED="1533310719489" TEXT="UiDispatcher">
 <icon BUILTIN="stop-sign"/>
@@ -19119,7 +19257,7 @@
 <node CREATED="1533252172584" ID="ID_230437417" MODIFIED="1533252187890" TEXT="setzt zwingend voraus, da&#xdf; die Event-Loop schon l&#xe4;uft"/>
 </node>
 </node>
-<node CREATED="1533221770859" ID="ID_1962039642" MODIFIED="1533608413857" TEXT="daf&#xfc;r einen dedizierten Service einbauen">
+<node CREATED="1533221770859" FOLDED="true" ID="ID_1962039642" MODIFIED="1538589780400" TEXT="daf&#xfc;r einen dedizierten Service einbauen">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1533310637466" ID="ID_1772394299" MODIFIED="1533385333187" TEXT="wo?">
 <font NAME="SansSerif" SIZE="12"/>
@@ -26017,7 +26155,7 @@
 <node CREATED="1487273377603" ID="ID_1842094630" MODIFIED="1518487921088" TEXT="SpotLocator"/>
 </node>
 <node CREATED="1487272813119" ID="ID_1794274698" MODIFIED="1518487921088" TEXT="Bezug">
-<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1523746854594" TEXT="Koordinatensystem">
+<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1538589849694" TEXT="Koordinatensystem">
 <linktarget COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" SOURCE="ID_50865654" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <node CREATED="1504462869149" ID="ID_248419130" MODIFIED="1518487921088" TEXT="beschreibt Zugangsweg">
 <icon BUILTIN="yes"/>
@@ -38031,13 +38169,28 @@
 <node CREATED="1537577874195" ID="ID_385552696" MODIFIED="1537577883741" TEXT="style-context zum Widget beziehen"/>
 <node CREATED="1537577885042" ID="ID_9820896" MODIFIED="1537577900187" TEXT="diesem Context die spezielle Klasse hinzuf&#xfc;gen"/>
 <node CREATED="1537577901032" ID="ID_1836919045" MODIFIED="1537577913426" TEXT="diese Klasse kann nun im CSS-Selektor verwendet werden"/>
-<node CREATED="1537577914422" ID="ID_1220237808" MODIFIED="1537577928192" TEXT="geht das auch via GTKmm">
-<icon BUILTIN="help"/>
-<node CREATED="1537577929540" ID="ID_644837001" MODIFIED="1537577942529" TEXT="diverse Hinweise, da&#xdf; es nur direkt in C geht">
-<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1537577914422" ID="ID_1220237808" MODIFIED="1538609593918" TEXT="geht einfach per GTKmm">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Glib::RefPtr&lt;StyleContext&gt; context = widget-&gt;get_style_context();
+    </p>
+    <p>
+      context-&gt;add_class(&quot;ohMy&quot;);
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1537577929540" ID="ID_644837001" MODIFIED="1538609519542" TEXT="fr&#xfc;her ging das nur direkt in C">
+<icon BUILTIN="ksmiletris"/>
 </node>
-<node COLOR="#803457" CREATED="1537577957752" ID="ID_36168340" LINK="https://stackoverflow.com/questions/37609381/how-to-set-a-specific-css-class-to-a-widget-in-gtk3-c" MODIFIED="1537658796933" TEXT="C-Beispiel auf Stackoverflow">
-<linktarget COLOR="#c1a9a9" DESTINATION="ID_36168340" ENDARROW="Default" ENDINCLINATION="56;152;" ID="Arrow_ID_843556021" SOURCE="ID_903275997" STARTARROW="None" STARTINCLINATION="68;8;"/>
+<node COLOR="#803457" CREATED="1537577957752" ID="ID_36168340" LINK="https://stackoverflow.com/questions/37609381/how-to-set-a-specific-css-class-to-a-widget-in-gtk3-c" MODIFIED="1538609485588" TEXT="C-Beispiel auf Stackoverflow"/>
+<node COLOR="#803457" CREATED="1537577957752" ID="ID_1015117751" LINK="https://stackoverflow.com/questions/37609381/how-to-set-a-specific-css-class-to-a-widget-in-gtk3-c" MODIFIED="1538609495664" TEXT="C++-L&#xf6;sung auf Stackoverflow">
+<linktarget COLOR="#c1a9a9" DESTINATION="ID_1015117751" ENDARROW="Default" ENDINCLINATION="56;152;" ID="Arrow_ID_1206355372" SOURCE="ID_903275997" STARTARROW="None" STARTINCLINATION="68;8;"/>
 </node>
 </node>
 </node>
@@ -38071,8 +38224,8 @@
 <node CREATED="1537658770555" ID="ID_920908371" MODIFIED="1537658777916" TEXT="nicht klar, ob das in C++ geht">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1537658785336" ID="ID_903275997" MODIFIED="1537658802879" TEXT="Beispiel">
-<arrowlink COLOR="#c1a9a9" DESTINATION="ID_36168340" ENDARROW="Default" ENDINCLINATION="56;152;" ID="Arrow_ID_843556021" STARTARROW="None" STARTINCLINATION="68;8;"/>
+<node CREATED="1537658785336" ID="ID_903275997" MODIFIED="1538609485588" TEXT="Beispiel">
+<arrowlink COLOR="#c1a9a9" DESTINATION="ID_1015117751" ENDARROW="Default" ENDINCLINATION="56;152;" ID="Arrow_ID_1206355372" STARTARROW="None" STARTINCLINATION="68;8;"/>
 </node>
 </node>
 </node>
@@ -38185,7 +38338,7 @@
 <node CREATED="1533388072628" ID="ID_1382049092" MODIFIED="1533388077743" TEXT="dieser wird on demand erzeugt"/>
 <node CREATED="1533388078595" ID="ID_1456212114" MODIFIED="1533388091037" TEXT="dieser wird von den run()-Funktionen &quot;gepullt&quot;"/>
 </node>
-<node CREATED="1533388113350" ID="ID_1546795729" MODIFIED="1533388208027" TEXT="Glib::signal_idle()">
+<node CREATED="1533388113350" FOLDED="true" ID="ID_1546795729" MODIFIED="1538589961840" TEXT="Glib::signal_idle()">
 <node CREATED="1533388147720" ID="ID_1897188155" MODIFIED="1533388158218" TEXT="&#xfc;bergebene Closure l&#xe4;uft erst in der Event-Loop"/>
 <node CREATED="1533388162662" ID="ID_1573817854" MODIFIED="1533388168352" TEXT="kann aber schon vorher hinzugef&#xfc;gt werden"/>
 <node CREATED="1533388185290" ID="ID_1158890484" MODIFIED="1533388238450" TEXT="verwendet main_context_default">
@@ -38204,7 +38357,7 @@
 </node>
 <node CREATED="1533388309295" ID="ID_775603522" MODIFIED="1533388317610" TEXT="man kann connect_once() macne"/>
 </node>
-<node CREATED="1533388128579" ID="ID_580405745" MODIFIED="1533388506937" TEXT="Glib::signal_timeout()">
+<node CREATED="1533388128579" FOLDED="true" ID="ID_580405745" MODIFIED="1538589960352" TEXT="Glib::signal_timeout()">
 <linktarget COLOR="#5568a6" DESTINATION="ID_580405745" ENDARROW="Default" ENDINCLINATION="-472;0;" ID="Arrow_ID_244184105" SOURCE="ID_1586631508" STARTARROW="None" STARTINCLINATION="-2132;-72;"/>
 <node CREATED="1533388319102" ID="ID_1118350475" MODIFIED="1533388324553" TEXT="analog wie signal_idle()"/>
 <node CREATED="1533388325053" ID="ID_1341702889" MODIFIED="1533388334672" TEXT="Timeout in Millisekunden"/>
