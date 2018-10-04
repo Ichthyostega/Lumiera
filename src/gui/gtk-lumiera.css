@@ -35,13 +35,12 @@
 
 
   * {
-    engine: adwaita;
-    
     border-width: 1px;
     border-style: outset;
     border-color: shade(@bg_color, 0.80);
     
-    color: inherit; /* by default inherit content colour from parent widget */
+    color:            inherit; /* by default inherit content colour from parent widget */
+    background-color: inherit;
 }
 
 GtkWindow {
