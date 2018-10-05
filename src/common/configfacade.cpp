@@ -35,7 +35,7 @@
  ** @todo as of 2016, this seems not to be used much, if at all.
  **       The GTK-UI, which in itself is very preliminary, retrieves
  **       some values from configuration, most notably the name of
- **       the GTK stylesheet (`gtk-lumiera.css` is the default)
+ **       the GTK stylesheet (`lumiera.css` is the default)
  */
 
 

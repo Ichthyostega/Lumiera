@@ -1,5 +1,5 @@
 /*
-  gtk-lumiera.css  -  GTK-3 style sheet for the Lumiera GUI
+  lumiera.css  -  GTK-3 style sheet for the Lumiera GUI
 
   Copyright (C)         Lumiera.org
     2014,               Hermann Vosseler <Ichthyostega@web.de>
@@ -275,3 +275,6 @@ class "gtkmm__CustomObject_TimelineRuler" style:highest "timeline_ruler"
 class "gtkmm__CustomObject_TimelineHeaderWidget" style:highest "timeline_header_widget"
 
 */
+
+
+/* ---------- Styles for special markup ---------- */

@@ -5293,6 +5293,137 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538588393995" ID="ID_1149076483" MODIFIED="1538588397979" TEXT="#1168 : find a way to manage style of custom extended UI elements">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538695838262" ID="ID_407627538" MODIFIED="1538695872693" TEXT="lumiera-(light|dark)-theme-complement.css">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1538695878400" ID="ID_1937289801" MODIFIED="1538695949316" TEXT="wir liefern Stylesheets zur Erg&#xe4;nzung des System-Themas">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1538695897046" ID="ID_382934959" MODIFIED="1538695910912" TEXT="als w&#xe4;hlbare Alternative zu unserem Applikations-Stylesheet"/>
+<node CREATED="1538695912900" ID="ID_161292075" MODIFIED="1538695941951" TEXT="diese enthalten nur die minimal notwendigen Erg&#xe4;nzungen">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538702238122" ID="ID_1439139961" MODIFIED="1538702244642" TEXT="#1170 care for interplay with light, dark and high contrast themes">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538696008591" ID="ID_441937774" MODIFIED="1538696020396" TEXT="Lumiera Stylesheet">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1538696023165" ID="ID_698985788" MODIFIED="1538696026176" TEXT="lumiera.css"/>
+<node CREATED="1538696026884" ID="ID_1880901613" MODIFIED="1538696095664" TEXT="wir liefern unser eigenes Applikations-Stylesheet">
+<icon BUILTIN="idea"/>
+<node CREATED="1538696052161" ID="ID_1715392243" MODIFIED="1538696338168" TEXT="abgeleitet vom Ardour-Stylesheet">
+<arrowlink DESTINATION="ID_1918479292" ENDARROW="Default" ENDINCLINATION="132;0;" ID="Arrow_ID_146898233" STARTARROW="None" STARTINCLINATION="74;-5;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1538696060808" ID="ID_82400982" MODIFIED="1538696104325" TEXT="seinerzeit von Joel Holdsworth">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1538696069551" ID="ID_1095339421" MODIFIED="1538696086330" TEXT="dezenter Meda-Application look">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1538696238952" ID="ID_1693017073" MODIFIED="1538696253657" TEXT="Portierung GTK2 -&gt; CSS (GTK3)">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538696262533" ID="ID_472703036" MODIFIED="1538696275863" TEXT="2014 rudiment&#xe4;r, dann steckengeblieben">
+<icon BUILTIN="bell"/>
+</node>
+<node CREATED="1538696307615" ID="ID_1918479292" MODIFIED="1538696338168" TEXT="was macht eigentlich Ardour heute?">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1918479292" ENDARROW="Default" ENDINCLINATION="132;0;" ID="Arrow_ID_146898233" SOURCE="ID_1715392243" STARTARROW="None" STARTINCLINATION="74;-5;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1538699094129" HGAP="61" ID="ID_1901117568" MODIFIED="1538699111156" TEXT="B&#xe4;&#xe4;&#xe4;h! GTK-2 verwenden" VSHIFT="3">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538702167475" ID="ID_1067979840" MODIFIED="1538702173539" TEXT="#1023 Lumiera GTK stylesheet">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1538696355832" ID="ID_1442093424" MODIFIED="1538696361515" TEXT="Probleme">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1538696365447" ID="ID_721732470" MODIFIED="1538696427312" TEXT="Theming-Engine">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1538696371086" ID="ID_1893037783" MODIFIED="1538696382523" TEXT="wir hatten Clearlooks. Gibts nicht mehr">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1538696393835" ID="ID_1157806021" MODIFIED="1538696423381" TEXT="ersatzweise Adwaita, Gibts auch nicht mehr">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538696429774" ID="ID_1862679821" LINK="https://web.archive.org/web/20180829072234/https://blogs.gnome.org/mclasen/2014/06/13/a-new-default-theme-for-gtk/" MODIFIED="1538696707146" TEXT="das ganze Konzept ist obsolet">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#338800" CREATED="1538696720743" ID="ID_50558236" MODIFIED="1538696741285" TEXT="ersatzlos entfernt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      CSS gen&#252;gt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538696756026" ID="ID_67620335" MODIFIED="1538697233933" TEXT="Interferenz mit dem System-Thema">
+<icon BUILTIN="pencil"/>
+<node CREATED="1538696777327" ID="ID_1226163317" MODIFIED="1538696787962" TEXT="Problem: repetitive Definitionen"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538696788838" ID="ID_12898010" LINK="https://stackoverflow.com/q/52655725/444796" MODIFIED="1538696916231" TEXT="auf Stackoverflow gefragt">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1538696930403" HGAP="38" ID="ID_280002018" MODIFIED="1538697125725" TEXT="Idee: &quot;inherit&quot; auf h&#xf6;chster Ebene" VSHIFT="3">
+<icon BUILTIN="idea"/>
+<node CREATED="1538696962271" ID="ID_46020871" MODIFIED="1538696986223" TEXT="unser Stylesheet hat GTK_STYLE_PROVIDER_PRIORITY_APPLICATION"/>
+<node CREATED="1538696988803" ID="ID_1662822982" MODIFIED="1538697103482">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      f&#252;ge <i>m&#246;glichst hoch</i>&#160;in der Hierarchie Regeln ein,
+    </p>
+    <p>
+      die ein property auf den Wert '<font face="Monospaced"><b>inherit</b></font>' setzten
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      z.B. in den Block mit den &quot;default-Regeln&quot;
+    </p>
+    <p>
+      &#160;&#160;* {
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;color:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;inherit; /* by default inherit content colour from parent widget */
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;background-color: inherit;
+    </p>
+    <p>
+      }
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538697207110" ID="ID_415528083" MODIFIED="1538697222628" TEXT="border korrekt/geschickt setzen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -37990,14 +38121,25 @@
 <edge COLOR="#b4a9e3"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node CREATED="1439664217489" ID="ID_104059794" MODIFIED="1518487921099" TEXT="GTK-3">
-<node CREATED="1439664230168" ID="ID_235548644" LINK="https://wiki.gnome.org/Projects/GTK%2B/Inspector" MODIFIED="1518487921099" TEXT="GKT+ Inspector">
+<node CREATED="1439664230168" ID="ID_235548644" LINK="https://wiki.gnome.org/Projects/GTK%2B/Inspector" MODIFIED="1538692325236" TEXT="GKT+ Inspector">
 <icon BUILTIN="idea"/>
 <node CREATED="1439664318604" ID="ID_1327496126" MODIFIED="1518487921099" TEXT="keyboard shortcut">
 <node CREATED="1439664330354" ID="ID_257893375" MODIFIED="1518487921099" TEXT="SHIFT-Ctrl I"/>
 <node CREATED="1439664339353" ID="ID_559550607" MODIFIED="1518487921099" TEXT="aktivieren via dconf">
+<node CREATED="1538693388521" ID="ID_1129767870" MODIFIED="1538693391989" TEXT="per Editor">
 <node CREATED="1439664358287" ID="ID_1044303564" MODIFIED="1518487921099" TEXT="apt-get install dconf-editor"/>
 <node CREATED="1439664574202" ID="ID_1254903463" MODIFIED="1518487921099" TEXT="org &gt; gtk &gt; settings &gt; debug"/>
 </node>
+<node CREATED="1538693397856" ID="ID_469176877" MODIFIED="1538693401371" TEXT="Kommandozeile">
+<node CREATED="1538693413542" ID="ID_1265168543" MODIFIED="1538693414945" TEXT="gsettings set org.gtk.Settings.Debug enable-inspector-keybinding true"/>
+</node>
+</node>
+</node>
+<node CREATED="1538693418285" ID="ID_1301334145" MODIFIED="1538693425960" TEXT="direkt mit Applikation starten">
+<node CREATED="1538693436099" MODIFIED="1538693436099" TEXT="GTK_DEBUG=interactive target/lumiera"/>
+</node>
+<node CREATED="1538693451665" ID="ID_599439426" MODIFIED="1538693472219" TEXT="seit GTK+ 3.14 in der Standard-Distro">
+<icon BUILTIN="info"/>
 </node>
 <node CREATED="1439664638857" ID="ID_1095180651" MODIFIED="1518487921099">
 <richcontent TYPE="NODE"><html>
