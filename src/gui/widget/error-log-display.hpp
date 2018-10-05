@@ -61,13 +61,12 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/style-scheme.hpp"
+#include "gui/model/flash-deco.hpp"
 #include "gui/model/expander-revealer.hpp"
 #include "include/gui-notification-facade.h"
 #include "lib/format-string.hpp"
 #include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 
-//#include <memory>
 #include <utility>
 #include <vector>
 
@@ -125,10 +124,11 @@ namespace widget {
       
       using Mark = Glib::RefPtr<Gtk::TextBuffer::Mark>;
       using Entry = std::pair<Mark,Mark>;
+      using TextWidget = model::FlashDeco<Gtk::TextView>;
       
       vector<Entry> errorMarks_;
-      Gtk::TextView textLog_;
-
+      TextWidget    textLog_;
+      
     public:
      ~ErrorLogDisplay() { };
       
@@ -154,7 +154,7 @@ namespace widget {
       model::Revealer reveal;
       
       
-      /** empty buffer and discard all error bookmarks */
+      /** empty text buffer and discard all error bookmarks */
       void
       clearAll()
         {
@@ -252,10 +252,15 @@ namespace widget {
           errorMarks_.clear();
         }
       
+      
+      /** temporarily change display style to prompt for attention;
+       *  set callback-timeout to return to normal state.
+       * @see \ref gui::CSS_CLASS_FLASH
+       */
       void
       triggerFlash()
         {
-          UNIMPLEMENTED ("paint and set callback-timeout to return to normal state");
+          textLog_.flash();
         }
       
       

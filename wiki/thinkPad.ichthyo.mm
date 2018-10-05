@@ -2077,15 +2077,29 @@
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1537571906634" ID="ID_1839759637" MODIFIED="1538263469668" TEXT="Tags anlegen">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537571917625" ID="ID_1900926418" MODIFIED="1538263469668" TEXT="k&#xe4;ren: CSS?">
+<node COLOR="#435e98" CREATED="1537571917625" ID="ID_1900926418" MODIFIED="1538707219751" TEXT="k&#xe4;ren: CSS?">
 <icon BUILTIN="help"/>
 <node COLOR="#435e98" CREATED="1535629564615" HGAP="43" ID="ID_1432671260" MODIFIED="1538263469668" TEXT="GTK-Styling, CSS f&#xfc;r Custom-Widgets" VSHIFT="-35">
 <arrowlink COLOR="#6277b2" DESTINATION="ID_1174884362" ENDARROW="Default" ENDINCLINATION="-2315;-45;" ID="Arrow_ID_380937946" STARTARROW="None" STARTINCLINATION="-7413;0;"/>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1537661752104" ID="ID_373027917" MODIFIED="1538263469668" TEXT="wohl nicht so einfach"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537661764454" ID="ID_1004400727" MODIFIED="1538263469668" TEXT="Untersuchen per Inspector">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537661764454" ID="ID_1004400727" MODIFIED="1538707271502" TEXT="Untersuchen per Inspector">
+<icon BUILTIN="info"/>
+<node CREATED="1538707192879" ID="ID_253847354" MODIFIED="1538707208726" TEXT="jedes Tag ist einzeln in der Objekt-Hierarchie vorhanden"/>
+<node CREATED="1538707176081" ID="ID_1239285032" MODIFIED="1538707284654">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erscheint <b>definitiv nicht</b>&#160;als CSS-Node
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1537661787387" ID="ID_20967740" MODIFIED="1538263469668" TEXT="vorl&#xe4;ufig hart verdrahten">
 <icon BUILTIN="button_ok"/>
@@ -2169,8 +2183,7 @@
       aber eben am absoluten Ende des Buffers. Damit wird sie hinter jeder Einf&#252;gung bleiben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538585387424" ID="ID_151756918" MODIFIED="1538585442447" TEXT="Trick: erst abschlie&#xdf;enden Zeilenumbruch">
 <icon BUILTIN="idea"/>
@@ -2185,8 +2198,7 @@
       ...dann Einf&#252;gestelle <i>davor</i>&#160;platzieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1537571882918" ID="ID_620353485" MODIFIED="1538586057629" TEXT="reorganisieren">
@@ -2262,15 +2274,35 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725180543" ID="ID_1442607312" MODIFIED="1538263469669" TEXT="triggerFlash">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725283337" ID="ID_1256364821" MODIFIED="1538263469669" TEXT="farbigen Rahmen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1534725180543" ID="ID_1442607312" MODIFIED="1538707538947" TEXT="triggerFlash">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1534725283337" ID="ID_1256364821" MODIFIED="1538707390908" TEXT="farbigen Rahmen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1534725366734" ID="ID_951505172" MODIFIED="1538618155829" TEXT="verwende zus&#xe4;tzliche Klasse">
 <arrowlink COLOR="#877796" DESTINATION="ID_758790930" ENDARROW="Default" ENDINCLINATION="315;0;" ID="Arrow_ID_564282272" STARTARROW="None" STARTINCLINATION="649;0;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1538618157537" ID="ID_1728464265" MODIFIED="1538618167395" TEXT="Problem: kaputtes Stylesheet">
+<node COLOR="#338800" CREATED="1538707399447" ID="ID_1845737933" MODIFIED="1538707478472" TEXT="Rahmen auch auf Kind-Objekte setzen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538707420444" ID="ID_334911121" MODIFIED="1538707474258" TEXT="denn nur so erscheint er z.B. bei einem TextView">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Widget hat offensichtlich keine eigene graphische Repr&#228;sentation.
+    </p>
+    <p>
+      dieser Fall d&#252;rfte h&#228;ufiger auftreten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1538618157537" ID="ID_1728464265" MODIFIED="1538707385953" TEXT="Problem: kaputtes Stylesheet">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1538618179734" ID="ID_1693288014" MODIFIED="1538618198551" TEXT="das Lumiera-eigene Stylesheet funktioniert praktisch gar nicht mehr"/>
 <node CREATED="1538618201035" ID="ID_1034140537" MODIFIED="1538618349191" TEXT="...seitdem die Engine &apos;Adwaitha&apos; nicht mehr gefunden wird">
 <richcontent TYPE="NOTE"><html>
@@ -2294,20 +2326,39 @@
       Dummerweise funktioniert nun aber auch das &#220;bersteuern mit unseren Farben nicht mehr
     </p>
   </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1538707301511" ID="ID_265456880" MODIFIED="1538707377967" TEXT="vorl&#xe4;ufig gel&#xf6;st">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538707313237" ID="ID_1871755466" MODIFIED="1538707323542" TEXT="Theming-Engine nicht mehr notwendig"/>
+<node CREATED="1538707324276" ID="ID_876477218" MODIFIED="1538707360310" TEXT="alternatives Erg&#xe4;nzungs-Stylesheet angelegt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...welches ich zusammen mit meinem
+    </p>
+    <p>
+      normalen 'light' destkop-theme verwenden kann
+    </p>
+  </body>
 </html>
 </richcontent>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534725292080" ID="ID_1462887421" MODIFIED="1538263469670" TEXT="timeout setzen">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1534725292080" ID="ID_1462887421" MODIFIED="1538707482309" TEXT="timeout setzen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1538590120545" ID="ID_1847571040" MODIFIED="1538590128908" TEXT="Glib::timeout nutzen"/>
 <node CREATED="1538590129616" ID="ID_9828219" MODIFIED="1538590145185" TEXT="analog zum Ctor InteractionDirector">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538590112698" ID="ID_360284784" MODIFIED="1538590117466" TEXT="generisch anlegen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1538590112698" ID="ID_360284784" MODIFIED="1538707536079" TEXT="generisch anlegen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1538591568439" ID="ID_1863162820" MODIFIED="1538591578447" TEXT="Idee: Flasher">
 <icon BUILTIN="idea"/>
 <node CREATED="1538591875574" ID="ID_701299048" MODIFIED="1538592020697" TEXT="mu&#xdf; von Gtk::Widget erben">
@@ -2360,8 +2411,7 @@
       Einziger Nachteil ist die etwas verwirrende Schreibweise des dekorierten Typs
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1538607106686" ID="ID_1879979063" MODIFIED="1538607368158" TEXT="z.B: FlashDeco&lt;Gtk::TextView&gt;"/>
 </node>
@@ -2447,8 +2497,8 @@
 </node>
 <node COLOR="#338800" CREATED="1533689055601" ID="ID_335901895" MODIFIED="1538263469670" TEXT="InfoboxPanel anlegen">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1534523190695" FOLDED="true" ID="ID_1941760302" MODIFIED="1538263469670" TEXT="ErrorLog bei Bedarf belegen">
-<arrowlink COLOR="#88a8b3" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="-186;-20;" ID="Arrow_ID_948128706" STARTARROW="None" STARTINCLINATION="-4;127;"/>
+<node COLOR="#338800" CREATED="1534523190695" FOLDED="true" ID="ID_1941760302" MODIFIED="1538708596522" TEXT="ErrorLog bei Bedarf belegen">
+<arrowlink COLOR="#88a8b3" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="-186;-20;" ID="Arrow_ID_948128706" STARTARROW="None" STARTINCLINATION="4;109;"/>
 <linktarget COLOR="#7ca8bc" DESTINATION="ID_1941760302" ENDARROW="Default" ENDINCLINATION="-1967;5936;" ID="Arrow_ID_192358692" SOURCE="ID_329149746" STARTARROW="None" STARTINCLINATION="670;0;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1534523686836" ID="ID_1130300208" MODIFIED="1534524660559" TEXT="per smart-ptr halten">
@@ -2468,7 +2518,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1533689065976" ID="ID_1456563113" MODIFIED="1538263469670" TEXT="NotificationController im Wizzard ansiedeln">
+<node COLOR="#435e98" CREATED="1533689065976" FOLDED="true" ID="ID_1456563113" MODIFIED="1538708587864" TEXT="NotificationController im Wizzard ansiedeln">
 <icon BUILTIN="full-1"/>
 <node CREATED="1533768795377" ID="ID_377710833" MODIFIED="1538263469670" TEXT="wirklich ein eigenst&#xe4;ndiger Controller??">
 <icon BUILTIN="help"/>
@@ -2532,8 +2582,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1533689120536" ID="ID_1806645586" MODIFIED="1538263469671" TEXT="View belegen">
-<linktarget COLOR="#88a8b3" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="-186;-20;" ID="Arrow_ID_948128706" SOURCE="ID_1941760302" STARTARROW="None" STARTINCLINATION="-4;127;"/>
+<node COLOR="#338800" CREATED="1533689120536" ID="ID_1806645586" MODIFIED="1538708596522" TEXT="View belegen">
+<linktarget COLOR="#88a8b3" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="-186;-20;" ID="Arrow_ID_948128706" SOURCE="ID_1941760302" STARTARROW="None" STARTINCLINATION="4;109;"/>
 <linktarget COLOR="#726b86" DESTINATION="ID_1806645586" ENDARROW="Default" ENDINCLINATION="232;27;" ID="Arrow_ID_246715972" SOURCE="ID_1305015272" STARTARROW="None" STARTINCLINATION="180;-21;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -2829,8 +2879,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534119979555" ID="ID_1159164748" MODIFIED="1538263469672" TEXT="Controller-Interface">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1534119979555" ID="ID_1159164748" MODIFIED="1538708532160" TEXT="Controller-Interface">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1534120150458" ID="ID_1083026482" MODIFIED="1538263469672" TEXT="Expander">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1534120150459" ID="ID_1182032725" MODIFIED="1538263469672" TEXT="&quot;Allocate Widget if necessary, expand widget&quot;">
@@ -2858,8 +2908,7 @@
       Neue <b>Revealer</b>-Komponente bindet einen Funktor
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#58c39d" DESTINATION="ID_1044092797" ENDARROW="Default" ENDINCLINATION="169;308;" ID="Arrow_ID_1805058492" STARTARROW="None" STARTINCLINATION="890;-197;"/>
 </node>
 </node>
@@ -2920,8 +2969,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534120150465" ID="ID_1862649971" MODIFIED="1538263469673" TEXT="doFlash()">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1534120150465" ID="ID_1862649971" MODIFIED="1538707824819" TEXT="doFlash()">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1534120150465" ID="ID_222097969" MODIFIED="1538263469673">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -2945,7 +2994,7 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533689164394" ID="ID_405297881" MODIFIED="1538263469673" TEXT="in NotificationService integrieren">
+<node COLOR="#435e98" CREATED="1533689164394" ID="ID_405297881" MODIFIED="1538708568344" TEXT="in NotificationService integrieren">
 <icon BUILTIN="full-4"/>
 </node>
 <node COLOR="#435e98" CREATED="1533689225658" ID="ID_662017160" MODIFIED="1538263469673" TEXT="Pling! -Button">
@@ -3757,28 +3806,28 @@
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1360416196" ENDARROW="Default" ENDINCLINATION="417;34;" ID="Arrow_ID_1337668046" SOURCE="ID_1984401497" STARTARROW="None" STARTINCLINATION="-454;-9;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531073966" ID="ID_973305985" MODIFIED="1538263469675" TEXT="Funktionen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531078757" ID="ID_605735534" MODIFIED="1538263469675" TEXT="Reset">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537531073966" ID="ID_973305985" MODIFIED="1538708635973" TEXT="Funktionen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1537531078757" ID="ID_605735534" MODIFIED="1538708629270" TEXT="Reset">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531084396" ID="ID_648584085" MODIFIED="1538263469675" TEXT="Meldung ausgeben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537531084396" ID="ID_648584085" MODIFIED="1538708616965" TEXT="Meldung ausgeben">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531543495" ID="ID_1813117782" MODIFIED="1538263469675" TEXT="Warnung anzeigen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537531543495" ID="ID_1813117782" MODIFIED="1538708618921" TEXT="Warnung anzeigen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531109361" ID="ID_1483169066" MODIFIED="1538263469675" TEXT="Fehler ausgeben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537531109361" ID="ID_1483169066" MODIFIED="1538708620397" TEXT="Fehler ausgeben">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531089012" ID="ID_1427238207" MODIFIED="1538263469675" TEXT="alle Meldungen entfernen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537531089012" ID="ID_1427238207" MODIFIED="1538708630612" TEXT="alle Meldungen entfernen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531153739" ID="ID_538123549" MODIFIED="1538263469676" TEXT="Fehler in Meldungen verwandeln">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537531153739" ID="ID_538123549" MODIFIED="1538708632010" TEXT="Fehler in Meldungen verwandeln">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1537531160298" ID="ID_1717013245" MODIFIED="1538263469676" TEXT="Flash">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1537531160298" ID="ID_1717013245" MODIFIED="1538708633930" TEXT="Flash">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -5339,6 +5388,37 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538702167475" ID="ID_1067979840" MODIFIED="1538702173539" TEXT="#1023 Lumiera GTK stylesheet">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538710332658" ID="ID_584658644" MODIFIED="1538710456511" TEXT="Bugfixes...">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538710354271" ID="ID_79614027" MODIFIED="1538710455015" TEXT="inherit verwenden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538710363741" ID="ID_1130951877" MODIFIED="1538710451743" TEXT="Widget-Namen korrekt schreiben">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1538710376229" ID="ID_806378376" MODIFIED="1538710405535" TEXT="in GTK-2 war das z.B. GtkWindow">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1538710388956" ID="ID_17203500" MODIFIED="1538710402683" TEXT="in GTK-3 entspricht das window">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1538710407602" ID="ID_1860886507" MODIFIED="1538710449384" TEXT="Regel...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      den Klassennamen ohne das Namespace-Pr&#228;fix &quot;GTK&quot;, und alles lower case.
+    </p>
+    <p>
+      Im Zweifelsfall den GTK+ Inspector verwenden!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1538696355832" ID="ID_1442093424" MODIFIED="1538696361515" TEXT="Probleme">
 <icon BUILTIN="messagebox_warning"/>
@@ -5364,8 +5444,7 @@
       CSS gen&#252;gt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -5391,8 +5470,7 @@
       die ein property auf den Wert '<font face="Monospaced"><b>inherit</b></font>' setzten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5414,8 +5492,7 @@
       }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -5604,8 +5681,7 @@
       Allerdings habe ich an der Stelle immer noch GTK-Assertions
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -38298,6 +38374,11 @@
 </node>
 <node CREATED="1537575934664" ID="ID_849901633" MODIFIED="1537575940352" TEXT="Style">
 <font NAME="SansSerif" SIZE="13"/>
+<node CREATED="1538706283719" ID="ID_311272365" MODIFIED="1538706286399" TEXT="CSS">
+<node CREATED="1538706287605" ID="ID_811190435" LINK="https://developer.gnome.org/gtk3/stable/chap-css-properties.html" MODIFIED="1538706320128" TEXT="unterst&#xfc;tzte properties">
+<icon BUILTIN="info"/>
+</node>
+</node>
 <node CREATED="1537575947102" ID="ID_161652920" MODIFIED="1537575954753" TEXT="StyleContext">
 <node CREATED="1537575960276" ID="ID_376188043" MODIFIED="1537575972287" TEXT="enth&#xe4;lt mehrere StyleProvider"/>
 </node>
@@ -38324,8 +38405,7 @@
       context-&gt;add_class(&quot;ohMy&quot;);
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1537577929540" ID="ID_644837001" MODIFIED="1538609519542" TEXT="fr&#xfc;her ging das nur direkt in C">
 <icon BUILTIN="ksmiletris"/>
@@ -39161,8 +39241,7 @@
       stets <i>zwischen </i>den Zeichen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1538583655744" ID="ID_415292974" MODIFIED="1538583682595">
 <richcontent TYPE="NODE"><html>
@@ -39174,8 +39253,7 @@
       <b>Danke</b>! endlich bekommt das mal jemand korrekt hin
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>

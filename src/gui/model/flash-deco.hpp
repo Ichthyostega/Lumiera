@@ -57,9 +57,11 @@ namespace model {
    * Decorator for a Gtk::Widget to add a visual flash action.
    * @tparam WIT type of the target widget to decorate. All ctors are passed through.
    * @remark invoke the #flash function to trigger
+   * @see \ref gui::CSS_CLASS_FLASH
    */
   template<class WIT>
   class FlashDeco
+    : public WIT
     {
       static_assert (std::is_base_of<Gtk::Widget, WIT>()
                     ,"wrapped target type required to be a Gtk::Widget");

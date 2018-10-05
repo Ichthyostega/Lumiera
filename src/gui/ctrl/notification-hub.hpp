@@ -26,8 +26,8 @@
  ** This component is addressed in order to show error, warning and notification messages
  ** in the UI. It is responsible for maintaining a local log of these messages, and to
  ** allocate an appropriate display widgets, to show such notifications asynchronously.
- ** On first use, an InfoboxPanel is allocated to hold an ErrorlogWidget for presentation
- ** of those messages
+ ** On first use, an InfoboxPanel is allocated to hold an ErrorLogDisplay widget for
+ ** presentation of those messages
  ** 
  ** # Notification Controller Behaviour
  ** 
@@ -47,7 +47,6 @@
  **   to reveal or expand the widget (but if necessary, a new widget is allocated)
  ** - error messages also set an error marker state (*TODO* reflect this in the presentation),
  **   and they cause the display widget to be expanded
- **   (*TODO* 8/18 consider also call the doRevealYourself() function)
  ** - the error state can be _cleared_, which also demotes all error messages to mere information.
  ** - information content can also be _cleared_, which removes all mere information messages,
  **   while retaining the error entries.
@@ -70,8 +69,6 @@
 #include "gui/model/w-link.hpp"
 
 #include <functional>
-//#include <memory>
-//#include <list>
 
 
 namespace gui {
@@ -188,8 +185,8 @@ namespace ctrl {
       
      ~NotificationHub() { };
       
-    private:
       
+    private:
       /** external operation to find or allocate an log display widget */
       WidgetAllocator allocateWidget_;
       
@@ -204,12 +201,7 @@ namespace ctrl {
             widget_.connect (allocateWidget_());
           return *widget_;
         }
-      
     };
-  
-  
-  
-  /** */
   
   
   
