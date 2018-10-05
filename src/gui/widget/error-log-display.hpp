@@ -66,6 +66,7 @@
 #include "include/gui-notification-facade.h"
 #include "lib/format-string.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 #include <vector>
@@ -75,6 +76,7 @@
 namespace gui  {
 namespace widget {
   
+  using util::max;
   using util::_Fmt;
   using lib::Literal;
   using std::make_pair;
@@ -164,14 +166,14 @@ namespace widget {
           bool shallNotify = not errorMarks_.empty();
           
           errorMarks_.clear();
-          size_t lineCnt = textLog_.get_buffer()->get_line_count();
+          size_t lineCnt = max (0, textLog_.get_buffer()->get_line_count() - 1);
           string placeholder;
           if (lineCnt > 0)
             placeholder = _Fmt{_("───════ %d preceding lines removed ════───\n")} % lineCnt;
           textLog_.get_buffer()->set_text (placeholder);  // discard existing content
           
           if (shallNotify)
-            errorChangedSignal_.emit (true);
+            errorChangedSignal_.emit (false);
         }
       
       
@@ -267,7 +269,7 @@ namespace widget {
           errorMarks_.clear();
           
           if (shallNotify)
-            errorChangedSignal_.emit (true);
+            errorChangedSignal_.emit (false);
         }
       
       

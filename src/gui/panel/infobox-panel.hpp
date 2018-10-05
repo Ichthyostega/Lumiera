@@ -66,13 +66,13 @@ namespace panel{
     private:
       Gtk::Box twoParts_;
       Gtk::ButtonBox buttons_;
-      Gtk::Button button_1_;
+      Gtk::Button buttonClear_, buttonClearInfo_, buttonClearErr_;
       Gtk::Frame frame_;
       Gtk::Expander logExpander_;
       
       std::unique_ptr<widget::ErrorLogDisplay> theLog_;
       
-      void experiment_1();
+      void reflect_LogErrorState (bool);
     };
   
   
