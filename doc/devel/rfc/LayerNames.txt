@@ -1,0 +1,114 @@
+LayerNames
+==========
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Fr 05 Oct 2018 15:05:58 CET_
+*Proposed by*   Ichthyostega <prg@ichthyostega.de>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+Change the names of the three Layers into _Stage, Steam_ and _Vault._
+********************************************************************************
+
+
+Description
+-----------
+//description: add a detailed description:
+The Lumiera code base is organised into three software layers, which is considered
+adequate. However, the names we use for these layers, the way they emerged during
+the early days of Lumiera, are not really convincing, given our current understanding
+of the architecture. We treat the layers as a conceptual grouping device, yet as such
+they are not entities within the architecture -- the actual entities are the subsystems.
+Each of the existing layer names is ill-guiding do some degree.
+
+Gui::
+  The graphical user interface seems an obvious pick for a desktop application.
+  However, there could be a command line interface alongside, and there will be
+  a script runner. These might even be active simultaneously. And even within
+  a classical GUI, there is more than just a bunch of widgets: there is some
+  kind of presentation model, there is presentation state and there is a
+  binding and communication facility to connect to the lower layers.
+  So clearly the ``upper layer'' is more than just a GUI,
+  it involves some kind of _backstage machinery._
+
+Proc-Layer::
+  The name implies processing; we might conclude the video is rendered here,
+  while in fact, only metadata is processed and transformed within this layer.
+  Everything revolves around the tension between two models, a user domain
+  model, and a technical processing domain model. Overall, this layer is much
+  akin to a language compiler -- and if you ever encountered the internals
+  of such a compiler, it always remains _somewhat nebulous_ where and
+  when the actual magic happened.
+
+Backend::
+  We all know database backends, distributed storage and graph processing backends.
+  The name implies the backend can be switched, and the application is meant to
+  be backend technology agnostic. And while certainly true -- Lumiera is not
+  tied to any media processing framework -- this is rather not what happens
+  in our Backend layer. Rather, you'll find a very specific processing core
+  and intricate input/output adaptation pipelines, operating within a highly
+  conditioned environment, _deep down_ and shielded from the outside world.
+
+The proposal is thus to abandon those conventional names, and replace them
+by some artificial, yet evocative terms: *Stage* -- *Steam* -- *Vault*
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+ * find convincing new names ([green]#✔ done#)
+// * second step [yellow-background]#WIP#
+// * third step [red yellow-background]#TBD#
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
