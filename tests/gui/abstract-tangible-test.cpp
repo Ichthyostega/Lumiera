@@ -180,8 +180,8 @@ namespace test {
           invokeCommand();
           markState();
           revealer();
-//          notify();
-//          mutate();
+          notify();
+          mutate();
         }
       
       

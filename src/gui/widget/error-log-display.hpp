@@ -129,6 +129,9 @@ namespace widget {
       vector<Entry> errorMarks_;
       TextWidget    textLog_;
       
+      sigc::signal<void, bool> errorChangedSignal_;
+      
+      
     public:
      ~ErrorLogDisplay() { };
       
@@ -158,12 +161,17 @@ namespace widget {
       void
       clearAll()
         {
+          bool shallNotify = not errorMarks_.empty();
+          
           errorMarks_.clear();
           size_t lineCnt = textLog_.get_buffer()->get_line_count();
           string placeholder;
           if (lineCnt > 0)
             placeholder = _Fmt{_("───════ %d preceding lines removed ════───\n")} % lineCnt;
           textLog_.get_buffer()->set_text (placeholder);  // discard existing content
+          
+          if (shallNotify)
+            errorChangedSignal_.emit (true);
         }
       
       
@@ -192,10 +200,15 @@ namespace widget {
       void
       addError (string text)
         {
+          bool shallNotify = errorMarks_.empty();
+          
           errorMarks_.emplace_back(
               addEntry ("ERROR: "+text, TAG_ERROR));
           if (not expand.isExpanded())
             expand (true);
+          
+          if (shallNotify)
+            errorChangedSignal_.emit (true);
         }
       
       /**
@@ -240,6 +253,8 @@ namespace widget {
       void
       turnError_into_InfoMsg()
         {
+          bool shallNotify = not errorMarks_.empty();
+          
           auto buff = textLog_.get_buffer();
           for (Entry& entry : errorMarks_)
             {
@@ -250,6 +265,9 @@ namespace widget {
               buff->apply_tag_by_name (uString{TAG_WARN}, begin,end);
             }
           errorMarks_.clear();
+          
+          if (shallNotify)
+            errorChangedSignal_.emit (true);
         }
       
       
@@ -261,6 +279,22 @@ namespace widget {
       triggerFlash()
         {
           textLog_.flash();
+        }
+      
+      
+      /* ======= Error-State ======= */
+      
+      bool
+      isError()  const
+        {
+          return not errorMarks_.empty();
+        }
+      
+      /** signal fired when error state changes */
+      sigc::signal<void,bool>
+      signalErrorChanged()
+        {
+          return errorChangedSignal_;
         }
       
       
