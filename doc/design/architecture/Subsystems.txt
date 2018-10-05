@@ -17,9 +17,9 @@ Layer::
   may be operated in a partial layer configuration with only some lower layers. Each layer
   deals with distinct topics and has its own style. In Lumiera, we distinguish three layers
 +
-* User Interface -> Interaction
-* Proc-Layer -> Processing
-* Backend -> Data manipulation
+* Stage Layer -> Interaction
+* Steam Layer -> Processing
+* Vault Layer -> Data manipulation
 
 Subsystem::
   A runtime entity which acts as anchor point and framework to maintain a well defined lifecycle.

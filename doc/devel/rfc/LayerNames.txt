@@ -62,8 +62,10 @@ Tasks
 ~~~~~
 // List what needs to be done to implement this Proposal:
  * find convincing new names ([green]#✔ done#)
-// * second step [yellow-background]#WIP#
-// * third step [red yellow-background]#TBD#
+ * update and add documentation [yellow-background]#WIP#
+ * adjust source folders and namespaces [red yellow-background]#TBD#
+ * adjust build system and library names [red yellow-background]#TBD#
+ * fix textual usage in code and documentation [red yellow-background]#TBD#
 
 
 Discussion
@@ -71,27 +73,67 @@ Discussion
 
 Pros
 ^^^^
-// add a fact list/enumeration which make this suitable:
-//  * foo
-//  * bar ...
+  * the new names are strange and distinct enough to stick
+  * they allude the bombastic vibes of magic, theatre and horror movie
+  * each can be linked to a quality actually present in the code base, between the lines
+  * the names are compact and of equal length (5 letters)
+  * they sort close together in the alphabet, and in proper order
+  * all names are one-syllable, and yield a smooth cadence
 
 
 
 Cons
 ^^^^
-// fact list of the known/considered bad implications:
+  * bikeshedding
+  * wasting brain cycles on mere names.
+  * changing those names now, in a code base > 100 kLOC, is a lot of work
+  * GUI, processing and backend are well established computing terms
+  * just by themselves, those new names don't imply what they are
 
 
 
 Alternatives
 ^^^^^^^^^^^^
 //alternatives: explain alternatives and tell why they are not viable:
+Instead of fancy names, we could try to find precise, descriptive names
 
+- interaction layer
+- translation layer
+- adaptation layer
+
+However, experience shows that most people perceive a repulse towards abstraction
+and prefer not to use a concept at all, over using a concept that feels involved.
+Sweet names can be used as bait to get new concepts into circulation.
+
+Another alternative would be do downgrade the importance of the layers altogether,
+and to rely primarily on the subsystems. Each subsystem would then use its own
+namespace, and reside in a separate subdirectory. The net effect would be to
+flatten the architecture hierarchy altogether.
+
+However, the author of this RfC rejects that idea, because it means to loosen
+the ``architectural grip''. Lumiera is supposed to become a heavyweight and complex
+system, and thus needs a strong presence of architecture, not just a weak pro-forma
+ordering scheme. In the extreme, we could end up with subsystems as plug-ins,
+floating in an amorphous soup where each part calls and uses what seems to fit.
+We had a battle revolving around that architectural idea, and we turned towards
+building a monolith, because building a monolith is heavy-going, not snappy.
+
+Finally, there is always the alternative not to care at all and continue with the
+detail work. This is fine, yet at some point we'll face the necessity to explain
+our structures to other people, and then the names do matter.
 
 
 Rationale
 ---------
 //rationale: Give a concise summary why it should be done *this* way:
+Better now than never; changing and readjusting such fundamental structures
+becomes harder with every line of code added. The existing names are a half-way
+misfit, and the new names at least mitigate the situation.
+
+And, after all, it is not a problem to paint the bikeshed. In fact, you should
+do so, to show you care for your stuff. The problem is to discuss the colour of
+the bikeshed. Thus I exploit the opportunity to pull this off, without having
+to consult anyone, since -- right now -- I am working alone on the code base.
 
 
 

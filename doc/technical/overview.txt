@@ -22,17 +22,19 @@ the source directory structures.
 
 This three Layers are:
 
- The User Interface::
+ The Stage Layer::
      User interfaces are implemented as plug-ins, most commonly one will see
      the default GUI. But also scripting interfaces or specialized GUI's are
      possible.
 
- The Processing layer::
-     Keeps the Session, generates the rendering graphs for sequences.
+ The Steam Layer::
+     Keeps the Session, generates the rendering graphs for sequences,
+     arranges what to do when and how.
 
- The IO and System interface Backend::
+ The Vault Layer::
      Manages thread-queues, schedules jobs, does the memory management for the
-     heavy multimedia data.
+     heavy multimedia data. Loads and delegates to external libraries for
+     media processing.
 
 The extra components are:
 
@@ -62,7 +64,7 @@ Documentation
 The central location for all design and technical documentation is the Lumiera
 website you're reading right now. Besides that, a summary and introduction
 for various components can be found in the file-level doxygen comments, while
-details are usualy explained in the class and function level comments.
+details are usually explained in the class and function level comments.
 
 ==== the TiddlyWiki
 Currently, Lumiera is still in the design- and evolution phase. Documentation
@@ -71,7 +73,7 @@ There is an embedded JavaScript wiki (TiddlyWiki) within the source tree, mostly
 used as design notebook, featuring day-to-day design sketches and notes, but also
 quite some more persistent planning. Finished documentation text is constantly
 moved over to the documentation section(s) of the Lumiera website. +
--> access the Proy-Layer link:{l}/wiki/renderengine.html[TiddlyWiki online here]
+-> access the development link:{l}/wiki/renderengine.html[TiddlyWiki online here]
 
 
 Test Driven Development
@@ -126,24 +128,24 @@ several important parts of the applications are loaded as plug-ins, starting
 with the GUI.
 
 
-User Interface(s)
------------------
+Stage: The User Interface(s)
+----------------------------
 
 The purpose of the user interface(s) is to act on the _high-level data model_
-contained within the Session, which belongs to the _processing layer_ below.
+contained within the Session, which belongs to the _steam layer_ below.
 User interfaces are implemented as plug-ins and are pulled up on demand,
 they won't contain any relevant persistent state beyond presentation.
 
-_As of 2011, the one and only interface under active development is
-the Lumiera GTK GUI,_ based on GTK-2 / gtkmm. The sources are in tree
+_As of 2018, the one and only interface under active development is
+the Lumiera GTK GUI,_ based on GTK-3 / gtkmm. The sources are in tree
 (directory 'src/gui') and it is integrated into the standard build and
 installation process. By default, running the 'lumiera' executable will
 load and start this GUI as a Lumiera module from 'modules/gtk_gui.lum'
 
 
 
-Processing Layer
-----------------
+Steam Layer
+-----------
 
 High Level Model
 ~~~~~~~~~~~~~~~~
@@ -260,8 +262,8 @@ performance critical.
 
 
 
-Backend
--------
+Vault Layer
+-----------
 
 I/O Subsystem
 ~~~~~~~~~~~~~

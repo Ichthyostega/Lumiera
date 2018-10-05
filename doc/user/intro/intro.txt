@@ -205,9 +205,9 @@ The visible Universe
 
 Lumiera consists of three major parts:
 
-- Graphical User Interface (GUI)
-- Processing layer (``Proc-layer'')
-- Backend for storage and access
+- The Stage layer for user interaction (GUI)
+- The Steam layer for translation and orchestration
+- The Vault layer for adaptation and data processing
 
 In this section, we discuss the user's perspective when working with the GUI.
 

@@ -20,11 +20,11 @@ main layers of Lumiera. You may want to read the
 link:../design/index.html[Design Documents] first to get an overview of all the
 components.
 
-* link:gui/index.html[*Graphical User Interface*] : Documents related to the GTK based Lumiera GUI
+* link:gui/index.html[*Stage Layer*] : Documents related to the GTK based Lumiera GUI
   
-* link:proc/index.html[*Processing layer*] : Documents regarding Session, models and the engine structure
+* link:proc/index.html[*Steam Layer*] : Documents regarding Session, models and the engine structure
 
-* link:backend/index.html[*Backend system*] : Documents about the data and processing backend
+* link:backend/index.html[*Vault Layer*] : Documents about the data and processing backend
 
 
 == Tools

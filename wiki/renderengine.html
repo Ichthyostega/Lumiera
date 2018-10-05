@@ -1871,6 +1871,33 @@ This is an very important external Interface, because it links together all thre
 
 </pre>
 </div>
+<div title="CoreDevelopment" modifier="Ichthyostega" created="200706190056" modified="201812071827" tags="overview" changecount="8">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Relying on system level services and retrieving raw audio and video data through [[Lumiera's Vault Layer|VaultLayer]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the SteamLayer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
+
+!About this wiki page
+|background-color:#e3f3f1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &amp;middot; &lt;&lt;tag GuiPattern&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; &amp;middot; &lt;&lt;tag Types&gt;&gt; |
+
+!~Proc-Layer Summary
+When editing, the user operates several kinds of //things,// organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[Project or Session|Session]], we can use these as &amp;raquo;[[Media Objects|MObjects]]&amp;laquo; &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the session and relative to one another.
+
+Now, from any given configuration within the session, we create sort or a frozen- and tied-down snapshot, here called &amp;raquo;[[Fixture|Fixture]]&amp;laquo;, containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //implements//&amp;nbsp; the [[Render Engine|OverviewRenderEngine]].
+
+The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
+
+
+!!see also
+&amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
+&amp;rarr; [[An Introduction|WalkThrough]] discussing the central points of this design
+&amp;rarr; [[Overview Session (high level model)|SessionOverview]]
+&amp;rarr; [[Overview Render Engine (low level model)|OverviewRenderEngine]]
+&amp;rarr; BuildProcess and RenderProcess
+&amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
+&amp;rarr; how [[Automation]] works
+&amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
+&amp;rarr; [[Concepts, Abstractions and Formalities|Concepts]]
+&amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
+</pre>
+</div>
 <div title="CoreService" creator="Ichthyostega" modifier="Ichthyostega" created="201701200045" modified="201701200052" tags="def spec GuiIntegration" changecount="2">
 <pre>''special service connected to the UI-Bus to handle all messages touching core concerns''
 Especially this service handles the {{{act}}} messages to deal with commands [[operating on the Session|CommandHandling]]. And it deals with &quot;uplink&quot; {{{note}}} messages to record ongoing PresentationState changes. For all the other UI-Element nodes connected to the bus, CoreService is just assumed to be there, yet it is not known by ID, nor can it be addressed directly, like regular ~UI-Elements can. 
@@ -1894,8 +1921,10 @@ Deliberately we avoid relying on any special knowledge regarding such data frame
 * and that some external ''media handling library'' knows to deal with the data in this frame
 </pre>
 </div>
-<div title="DefaultTiddlers" modifier="Ichthyostega" created="200706172308" modified="200802031805">
-<pre>[[ProcLayer and Engine]]
+<div title="DefaultTiddlers" modifier="Ichthyostega" created="200706172308" modified="201812071825" changecount="2">
+<pre>[[CoreDevelopment]]
+[[GuiTopLevel]]
+[[Session]]
 </pre>
 </div>
 <div title="DefaultsImplementation" modifier="Ichthyostega" created="200802200043" modified="201505310104" tags="spec impl draft" changecount="1">
@@ -4237,11 +4266,12 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 
 &amp;rarr; see ModelDependencies</pre>
 </div>
-<div title="MainMenu" modifier="Ichthyostega" created="200706172305" modified="201305200119" changecount="1">
+<div title="MainMenu" modifier="Ichthyostega" created="200706172305" modified="201812071825" changecount="3">
 <pre>''[[Lumiera|http://Lumiera.org/documentation]]''
-[[Proc-Layer|ProcLayer and Engine]]
-[[MObjects]]
+[[Dev Notepad|CoreDevelopment]]
+[[Session]]
 [[Wiring]]
+[[GUI|GuiTopLevel]]
 [[Implementation|ImplementationDetails]]
 [[Admin]]
 </pre>
@@ -5928,9 +5958,9 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" created="201012181714" modified="201501051334" tags="def spec Player img" changecount="2">
+<div title="PlayProcess" modifier="Ichthyostega" created="201012181714" modified="201812071822" tags="def spec Player img" changecount="3">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
-The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[planned|FrameDispatcher]] and [[invoked|RenderJob]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
+The play process is an conceptual entity linking together several activities in the VaultLayer and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[planned|FrameDispatcher]] and [[invoked|RenderJob]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
 ''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalcStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
 * the [[engine backbone|RenderBackbone]] is responsible for [[dispatching|FrameDispatcher]] the [[calculation stream|CalcStream]] and preparing individual calculation jobs
@@ -5946,7 +5976,7 @@ Right within the play process, there is a separation into two realms, relying on
 &amp;rarr; for overview see also OutputManagement
 </pre>
 </div>
-<div title="PlayService" modifier="Ichthyostega" created="201105221900" modified="201202010348" tags="Player spec draft">
+<div title="PlayService" modifier="Ichthyostega" created="201105221900" modified="201812071823" tags="Player spec draft" changecount="1">
 <pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at Proc-Layer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
 
 !subject of performance
@@ -5969,11 +5999,11 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :when provided with these two prerequisites, the play service is able to build a PlayProcess.
 :for clients, this process can be accessed and maintained through a PlayController, which acts as (copyable) handle and front-end.
 ;engine
-:the actual processing is done by the RenderEngine, which in itself is a compound of several services within [[Backend]] and Proc-Layer
+:the actual processing is done by the RenderEngine, which in itself is a compound of several services within VaultLayer and SteamLayer
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="Player" modifier="Ichthyostega" created="201012181700" modified="201112222246" tags="def overview">
+<div title="Player" modifier="Ichthyostega" created="201012181700" modified="201812071821" tags="def overview" changecount="1">
 <pre>Within Lumiera, &amp;raquo;Player&amp;laquo; is the name for a [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
 The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
 Yet it addresses some central concerns:
@@ -5982,7 +6012,7 @@ Yet it addresses some central concerns:
 :all playback and render processes are on equal footing, handled in a similar way.
 ;integration
 :the player cares for the necessary integration with the other subsystems
-:it consults the OutputManagement, retrieves the necessary information from the [[Session]] and coordinates the forwarding of [[Backend]] calls.
+:it consults the OutputManagement, retrieves the necessary information from the [[Session]] and coordinates the forwarding of VaultLayer calls.
 ;time quantisation
 :the player translates continuous time values into discrete frame counts.
 :to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
@@ -6089,12 +6119,6 @@ Which can be remoulded, over and over again, without breaking down.
 More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of ''Subsidiarity''. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
 </pre>
 </div>
-<div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" modified="201702101931" tags="def" changecount="1">
-<pre>The architecture of the Lumiera application separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
-
-While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.
-&amp;rarr; UI-Layer</pre>
-</div>
 <div title="ProcAsset" modifier="Ichthyostega" created="200709221343" modified="201003140233" tags="def classes img">
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Lumiera Session.
 
@@ -6155,33 +6179,6 @@ When the session is closed or dismantled, further processing in the ProcDispatch
 
 &amp;rarr; see the [[Overview]]
 
-</pre>
-</div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" created="200706190056" modified="201803102227" tags="overview" changecount="4">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Relying on system level services and retrieving raw audio and video data through [[Lumiera's Backend|Backend]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
-
-!About this wiki page
-|background-color:#e3f3f1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &amp;middot; &lt;&lt;tag GuiPattern&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; &amp;middot; &lt;&lt;tag Types&gt;&gt; |
-
-!~Proc-Layer Summary
-When editing, the user operates several kinds of //things,// organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[Project or Session|Session]], we can use these as &amp;raquo;[[Media Objects|MObjects]]&amp;laquo; &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the session and relative to one another.
-
-Now, from any given configuration within the session, we create sort or a frozen- and tied-down snapshot, here called &amp;raquo;[[Fixture|Fixture]]&amp;laquo;, containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //implements//&amp;nbsp; the [[Render Engine|OverviewRenderEngine]].
-
-The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
-
-
-!!see also
-&amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
-&amp;rarr; [[An Introduction|WalkThrough]] discussing the central points of this design
-&amp;rarr; [[Overview Session (high level model)|SessionOverview]]
-&amp;rarr; [[Overview Render Engine (low level model)|OverviewRenderEngine]]
-&amp;rarr; BuildProcess and RenderProcess
-&amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
-&amp;rarr; how [[Automation]] works
-&amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
-&amp;rarr; [[Concepts, Abstractions and Formalities|Concepts]]
-&amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
 <div title="ProcNode" modifier="Ichthyostega" created="200706220409" modified="200806211606" tags="def spec">
@@ -6675,8 +6672,8 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 
 {{red{Note 1/2015}}} several aspects regarding the relation of clips and single/multichannel media are not yet settled. There is a preliminary implementation in the code base, but it is not sure yet how multichnnel media will actually be modelled. Currently, we tend to treat the channel multiplicity rather as a property of the involved media, i.e we have //one// clip object.</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" created="200802031820" modified="201202112356" tags="def">
-<pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread out over two layers (Backend and Proc-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], the [[Scheduler]] triggers individual [[calculation jobs|RenderJob]], which in turn pull data from the render nodes, thereby relying on the [[Backend's services|Backend]] for data access and using plug-ins for the actual media calculations.
+<div title="RenderEngine" modifier="Ichthyostega" created="200802031820" modified="201812071823" tags="def" changecount="1">
+<pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread out over two layers (Backend and Proc-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], the [[Scheduler]] triggers individual [[calculation jobs|RenderJob]], which in turn pull data from the render nodes, thereby relying on the [[Backend's services|VaultLayer]] for data access and using plug-ins for the actual media calculations.
 &amp;rarr; OverviewRenderEngine
 &amp;rarr; EngineFaçade 
 </pre>
@@ -7348,6 +7345,12 @@ Shutdown is initiated by sending a message to the dispatcher loop. This causes t
 * moreover, it contains methods to communicate with other state relevant parts of the system, thereby shielding the rendering code from any complexities of state synchronisation and management if necessary. (thus the name Proxy)
 * in a future version, it may also encapsulate the communication in a distributed render farm
 </pre>
+</div>
+<div title="SteamLayer" modifier="Ichthyostega" created="200802031814" modified="201812071826" tags="def" changecount="2">
+<pre>The architecture of the Lumiera application separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
+
+While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.
+&amp;rarr; UI-Layer</pre>
 </div>
 <div title="StreamConversion" modifier="Ichthyostega" created="200810020337" modified="200810060308" tags="design spec">
 <pre>Conversion of a media stream into a stream of another type is done by a processor module (plugin). The problem of finding such a module is closely related to the StreamType and especially [[problems of querying|StreamTypeQuery]] for such. (The builder uses a special Facade, the ConManager, to access this functionality). There can be different kinds of conversions, and the existance or non-existance of such an conversion can influence the stream type classification.
@@ -8783,9 +8786,9 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" modified="201612021742" tags="def" changecount="3">
+<div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" modified="201812071820" tags="def" changecount="6">
 <pre>The Name of the Software driving this Wiki. Is is written completely in ~JavaScript and contained in one single HTML page.
-Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the [[Proc-Layer wiki|ProcLayer and Engine]] HTML is located in the Lumiera source tree, all changes will be managed and distributed via GIT. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source.
+Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the [[Engine/Development TiddlyWiki|SteamLayer]] HTML is located in the Lumiera source tree, all changes will be managed and distributed via GIT. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source.
  * see GettingStarted
  * see [[Homepage|http://tiddlywiki.org]], [[Wiki-Markup|http://tiddlywiki.org/#Markup]], [[CSS-formatting|http://tiddlywiki.org/#%5B%5BCSS%20Formatting%5D%5D]]
 </pre>
@@ -10067,6 +10070,9 @@ At the time of this writing, it is not really clear if we need such a facility a
 !Extend UICoord to an opaque concrete {{{UILocation}}} handle?
 This is a possible different turn in the design, considered as an option {{red{as of 6/2018}}}. Such would complement a symbolic coordinate specification with an opaque handle pointing to an actually existing UI widget. Access to this widget requires knowledge about its actual type -- basically a variant record tacked onto the UICoord representation, packaged into a subclass of the latter. The obvious benefit would be to avoid drilling down into the UI widget tree repeatedly, since there is now a way to pass along hidden //insider information// regarding actual UI elements. However, such a design bears a &quot;smell&quot; of being implementation driven, and undercuts the whole idea of a entirely symbolic layer of location specifications. Building such an extension can be considered sensible only under the additional assumption that this kind of //location token// is to be passed over various interfaces and indeed becomes a generic token of exchange and interaction within the UI layer implementation -- which, right now is not a given.
 </pre>
+</div>
+<div title="VaultLayer" creator="Ichthyostega" modifier="Ichthyostega" created="201812071818" modified="201812071821" tags="overview draft" changecount="4">
+<pre>//Placeholder for now....//</pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="201501091154" tags="def Model SessionLogic" changecount="3">
 <pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).
