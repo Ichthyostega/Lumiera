@@ -29,7 +29,7 @@
  ** helper routines to be hooked up easily within the UI. Actions launched from here
  ** perform within the same environment as regular user interactions.
  ** 
- ** @todo as of 9/2018, this is a first rough draft, relevant for #1099          ////////////////////////////TICKET #1074 gradually augment the self-diagnostics controls in the UI
+ ** @todo as of 9/2018, this is a first rough draft, relevant for #1099          ////////////////////////////TICKET #1140 gradually augment the self-diagnostics controls in the UI
  ** @todo this header also features a design draft how to simplify building notebook widgets.
  **       Which could be polished and moved into a separate utility header eventually.
  */

@@ -41,12 +41,11 @@
  ** The actual widget for information display is prepared, but it is actually allocated when
  ** the need for information display arises. Which means, the user may close this display
  ** widget, thereby discarding its current information content -- but when the next notification
- ** needs to be shown, the controller will ensure to allocate an appropriate widget again. Moreover,
- ** the widget can be _expanded_ or _collapsed_, without affecting its content.
+ ** needs to be shown, the controller will ensure to allocate an appropriate widget again.
+ ** Moreover, the widget can be _expanded_ or _collapsed_, without affecting its content.
  ** - information messages are just added to the buffer without much ado. No attempt is made
  **   to reveal or expand the widget (but if necessary, a new widget is allocated)
- ** - error messages also set an error marker state (*TODO* reflect this in the presentation),
- **   and they cause the display widget to be expanded
+ ** - error messages also set an error marker state, and cause expansion of the display widget.
  ** - the error state can be _cleared_, which also demotes all error messages to mere information.
  ** - information content can also be _cleared_, which removes all mere information messages,
  **   while retaining the error entries.
@@ -91,7 +90,7 @@ namespace ctrl {
     {
       
       
-      /** content population and manipulation via UI-Bus */
+      /** population and manipulation of persistent content via UI-Bus */
       void
       buildMutator (lib::diff::TreeMutator::Handle buffer)  override
         {

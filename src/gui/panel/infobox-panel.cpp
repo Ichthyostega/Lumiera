@@ -79,8 +79,8 @@ namespace panel{
       // after the UI is actually mapped to screen.
       Glib::signal_idle()
         .connect_once ( sigc::bind<bool>(
-                        sigc::mem_fun(*this, &InfoBoxPanel::reflect_LogErrorState), false
-                      ));
+                        sigc::mem_fun (*this, &InfoBoxPanel::reflect_LogErrorState), false)
+                      );
     }
   
   
@@ -98,7 +98,7 @@ namespace panel{
   
   
   /** on demand allocate display of information / error log
-   * @note we assume it stays alive forever, once allocated
+   * @note we assume it stays alive until the panel itself is closed.
    * @remark the ErrorLogDisplay widget exposes a \ref Expander functor,
    *         which is wired here with the Gtk::Expander container holding the Log.
    *         This setup allows to trigger the expand/collapse functionality and
@@ -113,7 +113,7 @@ namespace panel{
         theLog_.reset (new ErrorLogDisplay{});
         logExpander_.set_expanded (false);
         logExpander_.add (*theLog_);
-        theLog_->expand = model::Expander{[&]()         { return logExpander_.get_expanded(); }
+        theLog_->expand = model::Expander{[&]() -> bool { return logExpander_.get_expanded(); }
                                          ,[&](bool yes) { logExpander_.set_expanded (yes); }
                                          };
         theLog_->reveal = model::Revealer{[&]()         { Panel::show(true);
@@ -135,7 +135,6 @@ namespace panel{
   {
     buttonClearErr_.set_visible (isError);
     buttonClearInfo_.set_visible (isError);
-    INFO (gui, "Error = %d", isError);
   }
   
   

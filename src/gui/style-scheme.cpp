@@ -36,7 +36,10 @@ namespace gui {
   const Literal TAG_ERROR{"ERROR"};              ////////////////////////////////////////////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
   const Literal TAG_WARN{"WARN"};
   
-  cuString CSS_CLASS_FLASH{"indication_flash"};                      ///< CSS class added temporarily to make a widget "flash" in response to the corresponding UI-Bus message 
+  /** CSS class added temporarily to make a widget "flash"
+   *  in response to the corresponding UI-Bus message
+   * @see flash-deco.hpp */
+  cuString CSS_CLASS_FLASH{"indication_flash"};
   const uint STYLE_FLASH_DURATION_in_ms = 1100;
   
   

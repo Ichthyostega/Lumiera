@@ -1,0 +1,80 @@
+GUI Connection
+==============
+
+The Lumiera application is built from several segregated software layers, and the user interface, the GUI-Layer is
+optional and loaded as a plug-in. This deliberate design decision has far reaching consequences in all parts of the
+application: Anything of relevance for editing or rendering need to be _represented explicitly_ within a model, distinct
+and abstracted from the presentation for the user. For example, many media handling applications let you ``snap'' some
+entity to a ``grid'', which happens conveniently during a given user interaction, just resulting in a new position for
+the element at hand. In Lumiera, we can not follow this obvious and pragmatic approach -- rather, both the time grid
+and the fact an object as been attached and aligned to such a grid need to be represented in the session model proper,
+resulting in a `Placement`. More specifically, we can not derive behaviour of such an object from circumstantial
+state data present in the UI. Rather, we need to compute the new position based on rules within the session.
+And then we need to _communicate_ the result back into the UI -- if and when an UI is present to reflect that change.
+
+So instead of having a _»Controller«_ mediate the interplay of a _»Model«_ and the _»View«_ presentation, we end up
+with a complete _communication cycle,_ where messages are sent in both directions, and _sent asynchronously._
+
+Principles of UI / Core interaction
+-----------------------------------
+By all means, we avoid a common shared data structure as foundation for interaction. Such a _data centric_ approach
+may lean towards two extremes, both of which are problematic. A _naively written application_ starts with building
+the user interface and hinges any further internal structures directly below. For a tiny application, which is
+basically ``just some interface controls'', such an approach might be adequate -- yet maintaining the ``code behind''
+the control surface quickly becomes a nightmare. We may avoid those immediate problems by settling down on a strictly
+codified central _core data model._ And while this shift towards the other extreme of a data centric architecture
+indeed resolves the immediately pressing maintenance problems, this settlement comes with an substantial price tag.
+Since interface and core functionality are now torn apart, the code conducting even the simplest interaction is
+scattered over various parts of the system, and thus everything need to be very well defined and documented.
+Such a system becomes rigid as soon as it is built. And additionally it tends to suffer from structure duplication
+and multiplication, since cross interactions involving several parts of the core and the surface tend to be had
+to express: Interaction state need to be materialised into the core data, to allow other, distinct parts of the
+interface to collaborate.
+
+We may escape from that dichotomy when we cease to _rely on data as the fundamental substrate of our system._
+To collaborate, both parts still need to share a structure, yet it suffices for this structure to be a _common
+understanding:_ both the UI-Layer and the Proc-Layer need to share a common understanding how the parts of a editing
+session can be arranged. Yet they do not need to share a _common data representation_ of the session.
+
+The consequence is that both sides, ``the core'' and ``the UI'' remain autonomous within their realm. For some concerns, namely _the core concerns,_ that is editing, arranging, processing, the core is in charge and has absolute authority.
+On the other hand, when it comes to user interaction, especially the _mechanics and materiality of interaction,_ the UI
+is the authority; it is free to decide about what is exposed and in which way. Yet the common structural understanding
+is never fully, totally cast in concrete data structures.
+
+Rather, the core sends *diff messages* up to the UI, indicating how it sees this virtual structure to be changing.
+The UI reflects these changes into _its own understanding and representation,_ which is here a structure of display
+widgets. When the user interacts with these structures of the presentation layer, *action command messages* are generated,
+using the element-IDs to designate the arguments of the intended operation. Acting on these messages again causes reaction and change in the core, which is reflected back in the form of further diff messages.
+
+Anatomy of the Proc/GUI interface
+---------------------------------
+- the `GuiFacade` is used as a general lifecycle facade to start up the GUI and to set up the »Layer Separation
+  Interfaces«. The `GuiFacade` is implemented by a class _in Proc-Layer_ and loads the Lumiera GTK-UI as a plug-in.
+- once the UI is running, it exposes the `GuiNotificationFacade`, to allow pushing state and structure updates up into
+  the user interface.
+- in the opposite direction, for initiating actions from the UI, the Session Subsystem opens the `SessionCommandFacade`,
+  which can be considered __ ``the'' public session interface.__
+
+Both these primary interfaces operate *message based.* As immediate consequence, these interfaces are comparatively
+narrow, and interactions can easily be serialised, enqueued and dispatched. On the Proc-Layer side, the `ProcDispatcher`
+coordinates command execution and the _Builder run_ to derive the consequences of those session command invocations.
+And within the UI, the GTK-Event loop runs likewise single threaded, and the Notification facade automatically
+dispatches any invocation into the UI thread.
+
+Within the UI-Layer, we do not rely on a central ``shadow model'', rather, the backbone of the UI is a communication
+structure, the *UI-Bus*. Data within the GUI is kept very local, close to the presentation widgets. In fact, we
+identify a selection of _really important_ UI elements, which we call ``the tangible elements'' (`gui::model::Tangible`).
+Each of those primary elements within the UI _is connected to the UI-Bus,_ and can be addressed by its ID, and it
+happens to correspond and reflect an entity within the session model, there denoted by the same ID. The core can
+thus send a message towards the corresponding tangible UI element, without any knowledge as to how and where this
+element is actually attached within the widget tree of the user interface. Even diff messages are dispatched over
+the UI-Bus; it is up to the receiving tangible element to decide about the meaning of such a diff message, and
+how to reshape its internal widget state to reflect that change.
+
+When it comes to the more elaborate parts of the model and the UI -- especially for the timeline -- those tangible
+elements need not be widgets by themselves. Rather, they can be local presentation controllers, often also referred
+to as *Presenter*. These manage and control a selection of slave widgets to form the visual presentation of the
+corresponding session entity. For example, a `ClipPresenter` injects one or a conglomerate of several widgets
+into the track canvas, depending on the current zoom level and the display state of the clip (collapsed, expanded,
+abridged display).
+

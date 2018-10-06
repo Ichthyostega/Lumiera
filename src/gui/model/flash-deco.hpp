@@ -24,7 +24,7 @@
 /** @file flash-deco.hpp
  ** Decorator to add the ability to display a visual flash action to a GTK widget.
  ** The protocol for operating UI elements connected to the [UI-Bus](\ref ui-bus.hpp) includes
- ** a message to make the receiving widget flash for a short time, to mandate the users attention.
+ ** a message to make the receiving widget flash for a short time, to mandate the user's attention.
  ** The visual change itself is effected by adding a CSS class, while adding a timeout callback
  ** to revert to normal display after a short timespan. In itself, this modification sequence
  ** is entirely generic, and can thus be added by decorating the widget to affect; moreover,
@@ -44,13 +44,9 @@
 #include "gui/gtk-base.hpp"
 #include "gui/style-scheme.hpp"
 
-//#include <utility>
-
 
 namespace gui {
 namespace model {
-
-//  using std::move;
   
   
   /**
@@ -88,7 +84,6 @@ namespace model {
           styleContext->remove_class (CSS_CLASS_FLASH);
         }
     };
-  
   
   
 }} // namespace gui::model

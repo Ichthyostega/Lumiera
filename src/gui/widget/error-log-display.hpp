@@ -34,9 +34,9 @@
  ** to an ErrorLogDisplay found within the InfoBoxPanel, using it as holder for
  ** information and error messages pushed into the GUI. For that reason, it is
  ** important really _to destroy_ the ErrorLogDisplay, when it is taken out of
- ** service. Since ErrorLogDisplay inherits from `sigc::tangible`, it is
+ ** service. Since ErrorLogDisplay inherits from `sigc::trackable`, it is
  ** automatically detached from the WLink implementing this cross-attachment,
- ** when actually the dtor is called.
+ ** but only when _actually the dtor is called._
  ** @note this is a special convention; usually it is sufficient just to hide()
  **       a GTK widget, because it is then left alone by the event handling and
  **       automatically cleaned up at shutdown. Moreover, if you ` remove()` a
@@ -51,7 +51,7 @@
  **       used as receiver by the GuiNotificationService.
  ** @todo WIP-WIP and in 9/2018 this draft gradually shifts towards a prototype
  **       how to deal with custom configured widget behaviour, and how to integrate
- **       with our GUI framework                /////////////////////////////////////////////////////////////TICKET #1099 : build a prototype/dummy for UI <-> Proc integration  
+ **       with our GUI framework (#1099)
  ** 
  */
 
@@ -149,8 +149,8 @@ namespace widget {
           
           // the vertical scrollbar will always be necessary....
           set_policy (Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
-          this->add (textLog_);
           textLog_.set_editable (false);
+          this->add (textLog_);
           
           populateStandardTextTags (textLog_.get_buffer()->get_tag_table());
         }
@@ -163,7 +163,7 @@ namespace widget {
       void
       clearAll()
         {
-          bool shallNotify = not errorMarks_.empty();
+          bool shallNotify = this->isError();
           
           errorMarks_.clear();
           size_t lineCnt = max (0, textLog_.get_buffer()->get_line_count() - 1);
@@ -202,10 +202,10 @@ namespace widget {
       void
       addError (string text)
         {
-          bool shallNotify = errorMarks_.empty();
+          bool shallNotify = not this->isError();
           
           errorMarks_.emplace_back(
-              addEntry ("ERROR: "+text, TAG_ERROR));
+            addEntry ("ERROR: "+text, TAG_ERROR));
           if (not expand.isExpanded())
             expand (true);
           
@@ -226,7 +226,7 @@ namespace widget {
           for (Entry& entry : errorMarks_)
             {
               newBuff->insert (newBuff->end(), "\n");
-              auto pos  = newBuff->end();
+              auto pos = newBuff->end();
               --pos;
               newMarks.emplace_back(
                 make_pair (
@@ -255,7 +255,7 @@ namespace widget {
       void
       turnError_into_InfoMsg()
         {
-          bool shallNotify = not errorMarks_.empty();
+          if (not isError()) return;
           
           auto buff = textLog_.get_buffer();
           for (Entry& entry : errorMarks_)
@@ -264,17 +264,15 @@ namespace widget {
               auto end = entry.second->get_iter();
               
               buff->remove_tag_by_name(uString{TAG_ERROR}, begin,end);
-              buff->apply_tag_by_name (uString{TAG_WARN}, begin,end);
+              buff->apply_tag_by_name (uString{TAG_WARN},  begin,end);
             }
           errorMarks_.clear();
-          
-          if (shallNotify)
-            errorChangedSignal_.emit (false);
+          errorChangedSignal_.emit (false);
         }
       
       
       /** temporarily change display style to prompt for attention;
-       *  set callback-timeout to return to normal state.
+       *  set callback-timeout for return to normal state.
        * @see \ref gui::CSS_CLASS_FLASH
        */
       void
@@ -308,7 +306,7 @@ namespace widget {
        * @remark an entry is content sans the following line break, which is appended automatically.
        *         We inject the content _between_ two marks, which will adjust when content is altered.
        * @remark According to the [API doc], `TextView::scroll_to(iter)` is not reliable; preferably
-       *         we should use a text mark and set that text mark to the [insert position][insert-mark].
+       *         we should use a text mark, which could e.g. be the [insert position][insert-mark].
        *         The handling of marks and tags is described in the [GTKmm tutorial].
        * @warning Each entry creates a new pair of marks. Not sure about the impact on performance...
        * 
@@ -324,7 +322,7 @@ namespace widget {
           auto pos  = buff->end();
           --pos;
           auto begin = buff->create_mark (pos, true);  // "left gravity" : stays to the left of inserted text
-          auto after = buff->create_mark (pos, false);//  "right gravity": sticks right behind the inserted text
+          auto after = buff->create_mark (pos, false); // "right gravity": sticks right behind the inserted text
           if (markupTagName)
             buff->insert_with_tag(pos, text, cuString{markupTagName});
           else

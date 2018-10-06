@@ -39,10 +39,10 @@
 #include "proc/control/command-def.hpp"
 //#include "proc/mobject/session.hpp"
 #include "include/gui-notification-facade.h"
-#include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
+#include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
-#include "lib/format-string.hpp"               //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
+#include "lib/format-string.hpp"               //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
 //#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -57,7 +57,7 @@ using gui::NotifyLevel;
 using gui::GuiNotification;
 using lib::diff::GenNode;
 //using util::cStr;
-using util::_Fmt;                              //////////////////////////////////////////////////////////////TICKET #1099 : include needed temporarily
+using util::_Fmt;                              //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
 using util::isYes;
 using std::string;
 
@@ -144,7 +144,7 @@ COMMAND_DEFINITION (meta_deactivateContentDiff)
   /* ===== Demo and Development ===== */
   
   /** DemoGuiRoundtrip: push a notification info message back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
    */
 COMMAND_DEFINITION (test_meta_displayInfo)
   {
@@ -164,7 +164,7 @@ COMMAND_DEFINITION (test_meta_displayInfo)
   
   
   /** DemoGuiRoundtrip: send a `markError` message back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
    */
 COMMAND_DEFINITION (test_meta_markError)
   {
@@ -185,7 +185,7 @@ COMMAND_DEFINITION (test_meta_markError)
   
   
   /** DemoGuiRoundtrip: send a `markNote` message back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
    */
 COMMAND_DEFINITION (test_meta_markNote)
   {
@@ -206,7 +206,7 @@ COMMAND_DEFINITION (test_meta_markNote)
   
   
   /** DemoGuiRoundtrip: send a generic `mark` message with given _action ID_ back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1099 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
    */
 COMMAND_DEFINITION (test_meta_markAction)
   {
