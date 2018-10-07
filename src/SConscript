@@ -38,13 +38,12 @@ plugins = [] # currently none
 # the Lumiera GTK GUI
 envGtk = env.Clone()
 envGtk.mergeConf(['gtkmm-3.0','sigc++-2.0','gthread-2.0','cairomm-1.0','gdl','xv','x11','xext','sm'])
-envGtk.Append(LIBS=core)
 
-guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('gui'), install=True)
+guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('gui') + core, install=True)
 gui       = ( guimodule
             + icons
             + [env.GuiResource(f) for f in env.Glob('gui/*.css')]
             )
 
 
-Export('lumiera core core_lib app_lib backend_lib support_lib plugins guimodule gui')
+Export('lumiera core core_lib app_lib backend_lib support_lib plugins envGtk guimodule gui')

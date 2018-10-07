@@ -1,5 +1,5 @@
 /*
-  TimelinePanel  -  Dockable panel to hold the main timeline view
+  GtkCanvasExperiment  -  Explore capabilities of the GTK canvas widget
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file timeline-panel.cpp
- ** Implementation of the dockable panel to hold the main timeline display.
+/** @file gtk-canvas-experiment.cpp
+ ** Implementation of gtk canvas experiments.
  ** 
  ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
  ** @todo as of 10/2018 we start to build a new timeline widget, connected to the UI-Bus
@@ -31,11 +31,9 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/panel/timeline-panel.hpp"
+#include "gtk-canvas-experiment.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
-#include "gui/ui-bus.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 
@@ -63,9 +61,8 @@ namespace panel {
     
   
   
-  TimelinePanel::TimelinePanel (workspace::PanelManager& panelManager,
-                                Gdl::DockItem& dockItem)
-    : Panel(panelManager, dockItem, getTitle(), getStockID())
+  TimelinePanel::TimelinePanel ()
+    : Box{}
     , twoParts_(Gtk::ORIENTATION_VERTICAL)
     , buttons_()
     , frame_("Gtk::Layout Experiments")

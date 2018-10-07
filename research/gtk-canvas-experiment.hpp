@@ -1,5 +1,5 @@
 /*
-  TIMELINE-PANEL.hpp  -  Dockable panel to hold the main timeline view            
+  GTK-CANVAS-EXPERIMENT.hpp  -  Explore capabilities of the GTK canvas widget            
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-/** @file timeline-panel.hpp
- ** A dockable container to hold a notebook of timeline displays.
+/** @file gtk-canvas-experiment.hpp
+ ** A custom widget using a canvas to draw and to place widgets.
  ** 
  ** ## planned design 2/2017
  ** The architecture of the UI is in a state of transition right now, working towards the goal
@@ -40,10 +40,10 @@
  */
 
 
-#ifndef GUI_PANEL_TIMELINE_PANEL_H
-#define GUI_PANEL_TIMELINE_PANEL_H
+#ifndef RESEARCH_GTK_CANVAS_EXPERIMENT_H
+#define RESEARCH_GTK_CANVAS_EXPERIMENT_H
 
-#include "gui/panel/panel.hpp"
+#include "gui/gtk-base.hpp"
 
 //#include <memory>
 #include <vector>
@@ -111,7 +111,7 @@ namespace panel {
    *  1. place some simple widgets (Buttons) ✔
    *  2. learn how to draw ✔
    *  3. place a huge number of widgets, to scrutinise scrolling and performance
-   *  4. place widgets overlapping and irregularily, beyond the scrollable area ✔
+   *  4. place widgets overlapping and irregularly, beyond the scrollable area ✔
    *  5. bind signals to those widgets, to verify event dispatching ✔
    *  6. bind some further signal(s) to the ~GtkLayout container
    *  7. hide and re-show a partially and a totally overlapped widget
@@ -121,14 +121,14 @@ namespace panel {
    *  11. retrofit all preceding tests to use this "clip" widget
    */
   class TimelinePanel
-    : public Panel
+    : public Gtk::Box
     {
     public:
       /**
        * @param panel_manager The owner panel manager widget.
        * @param dock_item The GdlDockItem that will host this panel.
        */
-      TimelinePanel(workspace::PanelManager&, Gdl::DockItem&);
+      TimelinePanel();
       
       
       static const char* getTitle();
@@ -162,4 +162,4 @@ namespace panel {
   
   
 }}// namespace gui::panel
-#endif /*GUI_PANEL_TIMELINE_PANEL_H*/
+#endif /*RESEARCH_GTK_CANVAS_EXPERIMENT_H*/
