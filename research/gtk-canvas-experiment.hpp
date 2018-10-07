@@ -1,5 +1,5 @@
 /*
-  GTK-CANVAS-EXPERIMENT.hpp  -  Explore capabilities of the GTK canvas widget            
+  GTK-CANVAS-EXPERIMENT.hpp  -  Explore capabilities of the GTK canvas widget
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,20 +23,8 @@
 
 /** @file gtk-canvas-experiment.hpp
  ** A custom widget using a canvas to draw and to place widgets.
- ** 
- ** ## planned design 2/2017
- ** The architecture of the UI is in a state of transition right now, working towards the goal
- ** of interconnected layers and an operative session and engine. Within the new control structure
- ** about to be built, there is an UI top-level circle of managing entities to handle global concerns
- ** and actions. The ctrl::InteractionDirector incorporates the role of _model root_ and thus manages
- ** a collection of timelines. The timeline panel exposes this collection and allows to view and
- ** interact with one of the given timelines. The build-up of the timeline display and thus the
- ** initiative to expose a timeline comes from the interaction director -- but as usual with
- ** graphical user interfaces, any user interaction after this point is handled autonomously
- ** by the gui::timeline::TimelineWidget and gui::timeline::TimelineController
- ** 
- ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
- ** @todo as of 10/2018 we start to build a new timeline widget, connected to the UI-Bus
+ ** @remark as of 10/2018 we start to build a new timeline widget,
+ **         based on this technology demo.
  */
 
 
@@ -45,18 +33,11 @@
 
 #include "gui/gtk-base.hpp"
 
-//#include <memory>
 #include <vector>
 
 
-
-namespace gui  {
-namespace model{
-    class Sequence;
-  }
-namespace panel {
+namespace demo {
   
-//using std::shared_ptr;
   
   /**
    * "experimental" child widget for investigation of Gtk::Layout
@@ -117,10 +98,10 @@ namespace panel {
    *  7. hide and re-show a partially and a totally overlapped widget
    *  8. find a way to move a widget ✔ and delete arbitrary widgets ✔
    *  9. expand an existing widget (text change) ✔
-   *  10. build a custom "clip" widget
-   *  11. retrofit all preceding tests to use this "clip" widget
+   *  10. build a custom "clip" widget ✘
+   *  11. retrofit all preceding tests to use this "clip" widget ✘
    */
-  class TimelinePanel
+  class CanvasDemoPanel
     : public Gtk::Box
     {
     public:
@@ -128,11 +109,8 @@ namespace panel {
        * @param panel_manager The owner panel manager widget.
        * @param dock_item The GdlDockItem that will host this panel.
        */
-      TimelinePanel();
+      CanvasDemoPanel();
       
-      
-      static const char* getTitle();
-      static const gchar* getStockID();
       
       
     private:
@@ -161,5 +139,5 @@ namespace panel {
     };
   
   
-}}// namespace gui::panel
+}// namespace demo
 #endif /*RESEARCH_GTK_CANVAS_EXPERIMENT_H*/

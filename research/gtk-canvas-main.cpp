@@ -22,6 +22,10 @@
 
 /** @file gtk-canvas-main.cpp
  ** Simple GTK Application frame to explore canvas handling.
+ ** This demo application was extracted in 10/2018 to preserve
+ ** [exploration experiments](\ref demo::CanvasDemoPanel), carried
+ ** out in 2016 to decide upon the technology to support Lumiera's
+ ** gui::timeline::TimelineWidget.
  */
 
 
@@ -30,15 +34,31 @@
 #include "lib/error.hpp"
 
 
-namespace {
-}
+namespace demo {
+  
+  class Window
+    : public Gtk::Window
+    {
+      CanvasDemoPanel demoPanel_;
+      
+    public:
+      Window()
+        : demoPanel_{}
+        {
+          this->add (demoPanel_);
+        }
+    };
+}//namespace
 
 
 
 int
-main (int argc, const char* argv[])
+main (int argc, char* argv[])
 {
   NOTICE (main, "*** GTK-Canvas Experiment ***");
   
-  return 0;
+  auto guiApp = Gtk::Application::create (argc, argv);
+  
+  demo::Window window;
+  return guiApp->run(window);
 }

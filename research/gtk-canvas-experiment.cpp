@@ -24,8 +24,8 @@
 /** @file gtk-canvas-experiment.cpp
  ** Implementation of gtk canvas experiments.
  ** 
- ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
- ** @todo as of 10/2018 we start to build a new timeline widget, connected to the UI-Bus
+ ** @remark as of 10/2018 we start to build a new timeline widget,
+ **         based on this technology demo.
  ** @see timeline-widget.hpp
  ** 
  */
@@ -33,11 +33,10 @@
 
 #include "gtk-canvas-experiment.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 
-//#include "lib/util.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <string>
@@ -45,9 +44,7 @@
 
 
 using util::_Fmt;
-//using std::shared_ptr;
-//using std::weak_ptr;
-//using util::contains;
+using util::isnil;
 using Gtk::Widget;
 using sigc::mem_fun;
 using sigc::ptr_fun;
@@ -56,12 +53,10 @@ using std::rand;
 using std::max;
 
 
-namespace gui {
-namespace panel {
-    
+namespace demo {
   
   
-  TimelinePanel::TimelinePanel ()
+  CanvasDemoPanel::CanvasDemoPanel ()
     : Box{}
     , twoParts_(Gtk::ORIENTATION_VERTICAL)
     , buttons_()
@@ -79,35 +74,35 @@ namespace panel {
       button_1_.set_use_underline();
       button_1_.set_tooltip_markup("<b>Experiment 1</b>:\nplace new child widget\nat random position on the canvas");
       button_1_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_1));
+                  mem_fun(*this, &CanvasDemoPanel::experiment_1));
       buttons_.add(button_1_);
       
       button_2_.set_label("_move");
       button_2_.set_use_underline();
       button_2_.set_tooltip_markup("<b>Experiment 2</b>:\nmove all child widgets randomly");
       button_2_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_2));
+                  mem_fun(*this, &CanvasDemoPanel::experiment_2));
       buttons_.add(button_2_);
       
       button_3_.set_label("a_lign");
       button_3_.set_use_underline();
       button_3_.set_tooltip_markup("<b>Experiment 3</b>:\nalign all child widgets in a row\nwith silight random vertical offset");
       button_3_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_3));
+                  mem_fun(*this, &CanvasDemoPanel::experiment_3));
       buttons_.add(button_3_);
       
       button_4_.set_label("_grow");
       button_4_.set_use_underline();
       button_4_.set_tooltip_markup("<b>Experiment 4</b>:\nextend arbitrary child widget's text");
       button_4_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_4));
+                  mem_fun(*this, &CanvasDemoPanel::experiment_4));
       buttons_.add(button_4_);
       
       button_5_.set_label("_kill");
       button_5_.set_use_underline();
       button_5_.set_tooltip_markup("<b>Experiment 5</b>:\nkill arbitrary child widget");
       button_5_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_5));
+                  mem_fun(*this, &CanvasDemoPanel::experiment_5));
       buttons_.add(button_5_);
       
       toggleDraw_.set_label("draw");
@@ -121,7 +116,8 @@ namespace panel {
       frame_.add(scroller_);
       frame_.set_border_width(5);
       
-      scroller_.set_shadow_type(Gtk::SHADOW_NONE);
+      scroller_.set_shadow_type(Gtk::SHADOW_IN);
+      scroller_.property_expand() = true;    // dynamically grab any available additional space
       scroller_.set_border_width(10);
       scroller_.add(canvas_);
       
@@ -132,22 +128,9 @@ namespace panel {
       this->show_all();
     }
   
-  const char*
-  TimelinePanel::getTitle()
-  {
-    return _("Timeline");
-  }
-  
-  const gchar*
-  TimelinePanel::getStockID()
-  {
-    return "panel_timeline";
-  }
-  
-  
   
   void
-  TimelinePanel::experiment_1()
+  CanvasDemoPanel::experiment_1()
   {
     frame_.set_label("Experiment 1... PLACE");
     
@@ -162,7 +145,7 @@ namespace panel {
   
   
   void
-  TimelinePanel::experiment_2()
+  CanvasDemoPanel::experiment_2()
   {
     frame_.set_label("Experiment 2... MOVE");
     for (Widget* chld : childz_)
@@ -181,7 +164,7 @@ namespace panel {
   
   
   void
-  TimelinePanel::experiment_3()
+  CanvasDemoPanel::experiment_3()
   {
     frame_.set_label("Experiment 3... ALIGN");
     uint pos=0;
@@ -198,9 +181,14 @@ namespace panel {
   
   
   void
-  TimelinePanel::experiment_4()
+  CanvasDemoPanel::experiment_4()
   {
     frame_.set_label("Experiment 4... GROW");
+    if (isnil (childz_))
+      {
+        ERROR (test, "need to fabricate more childz before you can grow 'em...");
+        return;
+      }
     uint selector = rand() % childz_.size();
     ChildEx& toGrow = *childz_[selector];
     toGrow.set_label ("***"+toGrow.get_label()+"***");
@@ -208,9 +196,14 @@ namespace panel {
   
   
   void
-  TimelinePanel::experiment_5()
+  CanvasDemoPanel::experiment_5()
   {
     frame_.set_label("Experiment 5... KILL");
+    if (isnil (childz_))
+      {
+        WARN (test, "no children to kill. so sad.");
+        return;
+      }
     uint killPos = rand() % childz_.size();
     ChildV::iterator killThat(&childz_[killPos]);
     ChildEx* victim = *killThat;
@@ -339,7 +332,7 @@ namespace panel {
   
   
   ChildEx*
-  TimelinePanel::makeChld()
+  CanvasDemoPanel::makeChld()
   {
     return Gtk::manage(new ChildEx);
   }
@@ -372,4 +365,4 @@ namespace panel {
   
   
   
-}}   // namespace gui::panel
+}   // namespace demo
