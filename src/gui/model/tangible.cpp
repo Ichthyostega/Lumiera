@@ -33,6 +33,7 @@
 #include "gui/model/tangible.hpp"
 #include "gui/model/widget.hpp"
 #include "gui/model/controller.hpp"
+#include "include/ui-protocol.hpp"
 #include "lib/diff/gen-node.hpp"
 
 
@@ -60,7 +61,7 @@ namespace model {
   Tangible::reset()
     {
       if (this->doReset())
-        uiBus_.note (GenNode{"reset", true});
+        uiBus_.note (GenNode{string{MARK_reset}, true});
     }
   
   
@@ -82,7 +83,7 @@ namespace model {
   Tangible::clearErr()
     {
       if (this->doClearErr())
-        uiBus_.note (GenNode{"clearErr", true});
+        uiBus_.note (GenNode{string{MARK_clearErr}, true});
     }
   
   
@@ -93,7 +94,7 @@ namespace model {
   Tangible::clearMsg()
     {
       if (this->doClearMsg())
-        uiBus_.note (GenNode{"clearMsg", true});
+        uiBus_.note (GenNode{string{MARK_clearMsg}, true});
     }
   
   
@@ -125,7 +126,7 @@ namespace model {
   Tangible::markMsg (string message)
     {
       if (this->doMsg (message))
-        uiBus_.note (GenNode{"Message", message});
+        uiBus_.note (GenNode{string{MARK_Message}, message});
     }
   
   
@@ -136,7 +137,7 @@ namespace model {
   Tangible::markErr (string error)
     {
       if (this->doErr (error))
-        uiBus_.note (GenNode("Error", error));
+        uiBus_.note (GenNode{string{MARK_Error}, error});
     }
   
   
@@ -156,7 +157,7 @@ namespace model {
   Tangible::slotExpand()
   {
     if (this->doExpand(true))
-      uiBus_.note (GenNode("expand", true));
+      uiBus_.note (GenNode{string{MARK_expand}, true});
   }
   
   
@@ -168,7 +169,7 @@ namespace model {
   Tangible::slotCollapse()
   {
     if (this->doExpand(false))
-      uiBus_.note (GenNode("expand", false));
+      uiBus_.note (GenNode{string{MARK_expand}, false});
   }
   
   
@@ -192,9 +193,9 @@ namespace model {
    * Cause the element to be brought into sight.
    * This is a generic Slot to connect UI signals against;
    * the same action can also be triggered by sending a **mark**
-   * message over the UI-Bus with the symbol "`revealYourself`".
+   * message over the UI-Bus with the symbol "`reveal`".
    * @note this is an optional feature and requires the actual widget or controller
-   *       either to override the ::doRevealYourself() extension point, or to
+   *       either to override the ::doReveal() extension point, or to
    *       [install a suitable closure](\ref installRevealer()). Typically this
    *       is not in itself a persistent state change; however, it might incur
    *       expanding some widgets, which is recorded as persistent UI state.
@@ -207,7 +208,7 @@ namespace model {
   void
   Tangible::slotReveal()
   {
-    this->doRevealYourself();
+    this->doReveal();
   }
   
   
@@ -217,7 +218,7 @@ namespace model {
    * explicitly to enable this functionality.
    */
   void
-  Tangible::doRevealYourself()
+  Tangible::doReveal()
   {
     if (reveal_.canReveal())
       reveal_();
@@ -245,13 +246,13 @@ namespace model {
   void
   Tangible::mark (GenNode const& stateMark)
   {
-    if (stateMark.idi.getSym() == "Flash")
+    if (stateMark.idi.getSym() == MARK_Flash)
       this->doFlash();
     else
-    if (stateMark.idi.getSym() == "Error")
+    if (stateMark.idi.getSym() == MARK_Error)
       this->markErr (stateMark.data.get<string>());
     else
-    if (stateMark.idi.getSym() == "Message")
+    if (stateMark.idi.getSym() == MARK_Message)
       this->markMsg (stateMark.data.get<string>());
     else
       this->doMark(stateMark);
@@ -267,10 +268,10 @@ namespace model {
    *   It is up to the concrete element to give this a tangible meaning, e.g. a track
    *   might switch to detail view and a clip might reveal attached effects.
    * - *reset* restores the element to the hard wired default, by invoking `doReset()`
-   * - *revealYourself* prompts the element to take the necessary actions to bring
-   *   itself into view. There is no requirement for an element to even implement
-   *   this call, but those which do typically know some kind of _"parent object"_
-   *   to forward this request, by invoking `doReveal(myID)` on this parent.
+   * - *reveal* prompts the element to take the necessary actions to bring itself
+   *   into view. There is no requirement for an element to even implement this call,
+   *   but those which do typically know some kind of _"parent object"_ to forward
+   *   this request, by invoking `doReveal(myID)` on this parent.
    *   For instance, a clip might ask the enclosing track, which in turn might
    *   call the enclosing timeline display for help, resulting in a scroll action
    *   to bring the clip into sight.
@@ -280,23 +281,23 @@ namespace model {
   void
   Tangible::doMark (GenNode const& stateMark)
   {
-    if (stateMark.idi.getSym() == "expand")
+    if (stateMark.idi.getSym() == MARK_expand)
       {
         if (this->doExpand (stateMark.data.get<bool>()))
-          uiBus_.note (GenNode("expand", true));    // possibly reentrant (yet harmless)
+          uiBus_.note (GenNode(string{MARK_expand}, true));    // possibly reentrant (yet harmless)
       }
     else
-    if (stateMark.idi.getSym() == "reset")
+    if (stateMark.idi.getSym() == MARK_reset)
       this->reset();
     else
-    if (stateMark.idi.getSym() == "clearMsg")
+    if (stateMark.idi.getSym() == MARK_clearMsg)
       this->clearMsg();
     else
-    if (stateMark.idi.getSym() == "clearErr")
+    if (stateMark.idi.getSym() == MARK_clearErr)
       this->clearErr();
     else
-    if (stateMark.idi.getSym() == "revealYourself")
-      this->doRevealYourself();
+    if (stateMark.idi.getSym() == MARK_reveal)
+      this->doReveal();
   }
   
   

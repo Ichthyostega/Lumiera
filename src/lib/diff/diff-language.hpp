@@ -33,7 +33,8 @@
  ** Such an architecture allows for tight cooperation between strictly separated
  ** components, without the need of a fixed, predefined and shared data structure.
  ** 
- ** \par Basic Assumptions
+ ** # Basic Assumptions
+ ** 
  ** While the \em linearisation folds knowledge about the underlying data structure
  ** down into the actual diff, we deliberately assume that the data to be diffed is
  ** \em structured data. Moreover, we'll assume implicitly that this data is \em typed,
@@ -44,7 +45,8 @@
  ** send the actual content data this way, or to serve as redundancy to verify
  ** proper application of the changes at the diff receiver downstream.
  ** 
- ** \par Solution Pattern
+ ** # Solution Pattern
+ ** 
  ** The representation of this linearised diff language relies on a specialised form
  ** of the <b>visitor pattern</b>: We assume the vocabulary of the diff language to be
  ** relatively fixed, while the actual effect when consuming the stream of diff tokens

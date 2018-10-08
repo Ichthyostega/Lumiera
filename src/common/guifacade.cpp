@@ -150,7 +150,7 @@ namespace gui {
             ERROR_LOG_AND_IGNORE (guifacade, "trigger shutdown of the GUI");
           }
         
-        bool 
+        bool
         checkRunningState ()  noexcept override
           {
             return bool(facade);
@@ -210,15 +210,6 @@ namespace gui {
   {
     return bool(facade);
   }
-
-
-
+  
+  
 } // namespace gui
-
-/*
-// Local Variables:
-// mode: C++
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/

@@ -39,6 +39,7 @@
 
 
 #include "gui/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "gui/timeline/track-presenter.hpp"
 #include "gui/timeline/marker-widget.hpp"
@@ -155,12 +156,12 @@ namespace timeline {
                     target->buildMutator (buff);               //  - delegate to child to build nested TreeMutator
                     return true;
                   }))
-        .mutateAttrib("fork", [&](TreeMutator::Handle buff)
+        .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
             {                                                  // »Attribute Mutator« : how enter an object field as nested scope
               REQUIRE (fork_);
               fork_->buildMutator(buff);
             })
-        .change("name", [&](string val)
+        .change(ATTR_name, [&](string val)
             {                                                  // »Attribute Setter« : how assign a new value to some object field
               name_ = val;
             }));

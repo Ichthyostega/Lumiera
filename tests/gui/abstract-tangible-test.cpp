@@ -470,7 +470,7 @@ namespace test {
         }
       
       
-      /** @test configure a handler for the (optional) "revealYourself" functionality.
+      /** @test configure a handler for the (optional) "reveal yourself" functionality.
        * We install a lambda to supply the actual implementation action, which can then
        * either be triggered by a signal/slot invocation, or by sending a "state mark".
        */
@@ -494,7 +494,7 @@ namespace test {
           
           bool revealed = false;
           mock.installRevealer([&]()
-                                  {                        // NOTE: our mock "implementation" of the revealYourself functionality
+                                  {                        // NOTE: our mock "implementation" of the »reveal yourself« functionality
                                     mock.slotExpand();     //       explicitly prompts the element to expand itself,
                                     revealed = true;       //       and then via closure sets a flag we can verify.
                                   });
@@ -504,7 +504,7 @@ namespace test {
           CHECK (true == revealed);
           CHECK (mock.isExpanded());
           CHECK (mock.verifyEvent("create","target")
-                     .beforeCall("revealYourself")
+                     .beforeCall("reveal")
                      .beforeCall("expand").arg(true)
                      .beforeEvent("expanded"));
           
@@ -515,28 +515,28 @@ namespace test {
           
           // second test: the same can be achieved via UI-Bus message...
           revealed = false;
-          auto stateMark = GenNode{"revealYourself", 47};  // (payload argument irrelevant)
+          auto stateMark = GenNode{"reveal", 47};  // (payload argument irrelevant)
           auto& uiBus = gui::test::Nexus::testUI();
-          CHECK (nexusLog.ensureNot("revealYourself"));
+          CHECK (nexusLog.ensureNot("reveal"));
           
           uiBus.mark (targetID, stateMark);                // send the state mark message to reveal the element
           
           CHECK (true == revealed);
-          CHECK (mock.verifyMark("revealYourself", 47)
+          CHECK (mock.verifyMark("reveal", 47)
                      .afterEvent("expanded")
-                     .beforeCall("revealYourself")
+                     .beforeCall("reveal")
                      .beforeCall("expand").arg(true));
           
           CHECK (nexusLog.verifyCall("mark").arg(targetID, stateMark)
                          .after("handling state-mark")
-                         .before("revealYourself")
+                         .before("reveal")
                          .beforeEvent("delivered mark"));
           
           // Note the fine point: the target element /was/ already expanded
           // and thus there is no second "expanded" event, nor is there a
           // second state mark emitted into the UI-Bus...
           CHECK (mock.ensureNot("expanded")
-                     .afterCall("revealYourself")
+                     .afterCall("reveal")
                      .afterEvent("expanded"));
           CHECK (nexusLog.ensureNot("note")
                          .afterCall("mark").arg(targetID, stateMark)

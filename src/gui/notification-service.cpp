@@ -56,6 +56,7 @@
 #include "gui/ctrl/ui-dispatcher.hpp"
 #include "gui/notification-service.hpp"
 #include "gui/interact/wizard.hpp"
+#include "include/ui-protocol.hpp"
 
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/gen-node.hpp"
@@ -113,7 +114,7 @@ namespace gui {
         markNote (errorLogID, text);
         break;
       case NOTE_WARN:
-        mark (errorLogID, GenNode{"Warning", text});
+        mark (errorLogID, GenNode{string{MARK_Warning}, text});
         break;
       default:
         throw lumiera::error::Logic (_Fmt{"UI Notification with invalid severity %d encountered. "
@@ -124,14 +125,14 @@ namespace gui {
   void
   NotificationService::markError (ID uiElement, string const& text)
   {
-    dispatchMsg (uiElement, GenNode{"Error", text});
+    dispatchMsg (uiElement, GenNode{string{MARK_Error}, text});
   }
   
   
   void
   NotificationService::markNote (ID uiElement, string const& text)
   {
-    dispatchMsg (uiElement, GenNode{"Message", text});
+    dispatchMsg (uiElement, GenNode{string{MARK_Message}, text});
   }
   
   

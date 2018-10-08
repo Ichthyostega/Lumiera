@@ -38,6 +38,7 @@
 #include "proc/cmd.hpp"
 #include "proc/control/command-def.hpp"
 //#include "proc/mobject/session.hpp"
+#include "include/ui-protocol.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : verify if this include is required
 #include "include/gui-notification-facade.h"
 #include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
 #include "lib/diff/gen-node.hpp"
@@ -54,6 +55,7 @@ using gui::NOTE_INFO;
 using gui::NOTE_WARN;
 using gui::NOTE_ERROR;
 using gui::NotifyLevel;
+using gui::MARK_expand;
 using gui::GuiNotification;
 using lib::diff::GenNode;
 //using util::cStr;
@@ -214,8 +216,8 @@ COMMAND_DEFINITION (test_meta_markAction)
                       {
                         ID errorLogID = gui::interact::Wizard::getErrorLogID();
                         GuiNotification::facade().mark (errorLogID
-                                                       ,actionID=="expand"? GenNode{actionID, isYes(message)}
-                                                                          : GenNode{actionID, message});
+                                                       ,actionID==MARK_expand? GenNode{actionID, isYes(message)}
+                                                                             : GenNode{actionID, message});
                       })
        .captureUndo ([](string actionID, string message) -> string
                       {

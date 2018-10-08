@@ -217,7 +217,7 @@ namespace model {
       virtual bool doClearMsg()        =0;
       virtual bool doClearErr()        =0;
       virtual bool doExpand (bool yes);
-      virtual void doRevealYourself();
+      virtual void doReveal ();
       
       virtual bool doMsg (string)          =0;
       virtual bool doErr (string)          =0;
@@ -287,9 +287,9 @@ namespace model {
   /**
    * Configure the (optional) functionality to bring the UI-Element into sight.
    * @param how_to_uncover_the_element a lambda or function<void()> to actually cause the necessary actions.
-   * @note unless this setup function is invoked, the "`revealYourself`" functionality remains disabled.
+   * @note unless this setup function is invoked, the "`reveal`" functionality remains disabled.
    *       Typically this setup will be done by an owning parent container, binding to some internals
-   *       and also recursively invoking the "`revealYourself`" action on the container.
+   *       and also recursively invoking the "`reveal`" action on the container.
    */
   inline void
   Tangible::installRevealer (Revealer::RevealeItFun how_to_uncover_the_element)

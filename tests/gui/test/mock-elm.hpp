@@ -61,6 +61,7 @@
 
 
 #include "lib/error.hpp"
+#include "include/ui-protocol.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/model/tangible.hpp"
 #include "lib/diff/record.hpp"
@@ -126,7 +127,7 @@ namespace test{
       virtual bool
       doReset()  override
         {
-          log_.call(this->identify(), "reset");
+          log_.call(this->identify(), string{MARK_reset});
           if (virgin_)
             return false; // there was nothing to reset
           
@@ -134,22 +135,22 @@ namespace test{
           message_ = "";
           expanded_ = false;
           virgin_ = true;
-          log_.event("reset");
+          log_.event(string{MARK_reset});
           return true; // we did indeed reset something
         }             //  and thus a state mark should be captured
       
       virtual bool
       doExpand (bool yes)  override
         {
-          log_.call(this->identify(), "expand", yes);
+          log_.call(this->identify(), string{MARK_expand}, yes);
           return Tangible::doExpand (yes);
         }
       
       virtual void
-      doRevealYourself()  override
+      doReveal()  override
         {
-          log_.call(this->identify(), "revealYourself");
-          Tangible::doRevealYourself();  // NOTE: without specific configuration this is NOP
+          log_.call(this->identify(), string{MARK_reveal});
+          Tangible::doReveal();  // NOTE: without specific configuration this is NOP
         }
       
       virtual bool

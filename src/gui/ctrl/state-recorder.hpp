@@ -59,6 +59,7 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/state-manager.hpp"
 #include "gui/ctrl/state-map-grouping-storage.hpp"
+#include "include/ui-protocol.hpp"
 
 #include <string>
 
@@ -174,14 +175,14 @@ namespace ctrl {
       void
       recordState (ID uiElm, StateMark stateMark)
         {
-          if ("reset" == stateMark.idi.getSym())
+          if (MARK_reset == stateMark.idi.getSym())
             storage_.clearState (uiElm);
           else
-          if ("clearErr" == stateMark.idi.getSym())
-            storage_.clearProperty (uiElm, "Error");
+          if (MARK_clearErr == stateMark.idi.getSym())
+            storage_.clearProperty (uiElm, string{MARK_Error});
           else
-          if ("clearMsg" == stateMark.idi.getSym())
-            storage_.clearProperty (uiElm, "Message");
+          if (MARK_clearMsg == stateMark.idi.getSym())
+            storage_.clearProperty (uiElm, string{MARK_Message});
           else
             storage_.record (uiElm, stateMark);
         }

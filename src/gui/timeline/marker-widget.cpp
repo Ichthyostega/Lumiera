@@ -31,6 +31,7 @@
 
 
 #include "gui/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
 #include "gui/timeline/marker-widget.hpp"
 
 //#include "gui/ui-bus.hpp"
@@ -82,11 +83,11 @@ namespace timeline {
   {
     buffer.create (
       TreeMutator::build()
-        .change("name", [&](string val)
+        .change(ATTR_name, [&](string val)
             {
               name_ = val;
             })
-        .change("kind", [&](string val)
+        .change(META_kind, [&](string val)
             {
               if (val == "LOOP") kind_ = LOOP;
               else               kind_ = MARK;

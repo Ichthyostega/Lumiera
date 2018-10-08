@@ -147,7 +147,7 @@ namespace ctrl {
       virtual void
       doMark (GenNode const& stateMark)  override
         {
-          if (stateMark.idi.getSym() == "Warning")
+          if (stateMark.idi.getSym() == MARK_Warning)
             getWidget().addWarn (stateMark.data.get<string>());
           else
             // forward to default handler

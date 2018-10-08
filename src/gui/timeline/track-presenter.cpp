@@ -31,6 +31,7 @@
 
 
 #include "gui/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
 #include "gui/timeline/track-presenter.hpp"
 #include "gui/timeline/clip-presenter.hpp"
 #include "gui/timeline/marker-widget.hpp"
@@ -104,7 +105,7 @@ namespace timeline {
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Marker"
-                    return "Marker" == spec.data.recordType();
+                    return TYPE_Marker == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
@@ -123,7 +124,7 @@ namespace timeline {
         .attach (collection(clips_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Clip"
-                    return "Clip" == spec.data.recordType();
+                    return TYPE_Clip == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PClip const& elm) -> bool
                   {
@@ -142,7 +143,7 @@ namespace timeline {
         .attach (collection(subFork_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Fork"
-                    return "Fork" == spec.data.recordType();
+                    return TYPE_Fork == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PFork const& elm) -> bool
                   {

@@ -44,6 +44,7 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/model/tangible.hpp"
 #include "proc/cmd.hpp"
+#include "include/ui-protocol.hpp"
 #include "include/gui-notification-facade.h"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/diff/gen-node.hpp"
@@ -225,12 +226,12 @@ namespace dialog {
               trig_4_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
                                             "sends an <b>state mark</b> message, using\n"
                                             "the message action-ID from the combobox"));
-              actionID_.append ("Flash");
-              actionID_.append ("revealYourself");
-              actionID_.append ("clearErr");
-              actionID_.append ("clearMsg");
-              actionID_.append ("expand");
-              actionID_.append ("reset");
+              actionID_.append (cuString{MARK_Flash});
+              actionID_.append (cuString{MARK_reveal});
+              actionID_.append (cuString{MARK_clearErr});
+              actionID_.append (cuString{MARK_clearMsg});
+              actionID_.append (cuString{MARK_expand});
+              actionID_.append (cuString{MARK_reset});
               actionID_.set_active(1);
               actionID_.set_tooltip_markup("select the specific action-ID\n"
                                            "when sending a <b>mark</b> message.\n"

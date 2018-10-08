@@ -36,7 +36,7 @@
  ** 
  ** The base class of all [tangible UI elements](\ref Tangible) provides a default implementation
  ** for these generic interaction mechanisms: It offers slots to connect UI signals against, and
- ** it understands the \em `mark` messages `"expand"` and `"revealYourself"`. These are implemented
+ ** it understands the \em `mark` messages `"expand"` and `"reveal"`. These are implemented
  ** by delegating to the \ref Expander and \ref Revealer functors respectively. Moreover, this
  ** default implementation automatically detects a resulting state change and emits an appropriate
  ** \em `note` message on the UI-Bus, so to make those state changes persistent. However, in order

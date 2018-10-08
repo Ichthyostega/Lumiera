@@ -30,6 +30,7 @@
 #include "lib/sync.hpp"
 #include "lib/sync-classlock.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "include/ui-protocol.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/state-manager.hpp"
 #include "proc/control/command.hpp"
@@ -190,8 +191,8 @@ namespace test {
           CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "GenNode-ID(\"expand\")-DataCap|«bool»|true"));
           
           // send a state mark down to the mock element
-          gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 23));
-          CHECK (nexusLog.verifyCall("mark").on("TestNexus").arg(elmID, "Flash")
+          gui::test::Nexus::testUI().mark (elmID, GenNode(string{MARK_Flash}, 23));
+          CHECK (nexusLog.verifyCall("mark").on("TestNexus").arg(elmID, MARK_Flash)
                          .beforeEvent("TestNexus", "mark to bID-zeitgeist"));
           CHECK (elmLog.verifyCall("doFlash").on("zeitgeist"));
           
@@ -202,9 +203,9 @@ namespace test {
           CHECK (nexusLog.verifyCall("routeDetach").on("TestNexus").arg(elmID)
                          .beforeEvent("TestNexus", "removed route to bID-zeitgeist"));
           
-          gui::test::Nexus::testUI().mark (elmID, GenNode("Flash", 88));
+          gui::test::Nexus::testUI().mark (elmID, GenNode({MARK_Flash}, 88));
           CHECK (nexusLog.verify("removed route to bID-zeitgeist")
-                         .beforeCall("mark").on("TestNexus").arg(elmID, "Flash")
+                         .beforeCall("mark").on("TestNexus").arg(elmID, MARK_Flash)
                          .beforeEvent("warn","discarding mark to unknown bID-zeitgeist"));
           CHECK (elmLog.ensureNot("Flash")
                        .afterEvent("destroy","zeitgeist"));
@@ -367,8 +368,8 @@ namespace test {
           CHECK (not mockB.isTouched());
           CHECK (not mockC.isTouched());
           
-          uiBus.mark (alpha, GenNode{"Message", "Centauri"});
-          uiBus.mark (bravo, GenNode{"Flash", true});
+          uiBus.mark (alpha,  GenNode{"Message", "Centauri"});
+          uiBus.mark (bravo,  GenNode{"Flash", true});
           uiBus.mark (charly, GenNode{"Message", "Delta"});
           uiBus.mark (charly, GenNode{"Error", "Echo"});
           
@@ -497,8 +498,8 @@ namespace test {
           auto& stateManager = gui::test::Nexus::getMockStateManager();
           CHECK (stateManager.currentState(alpha, "expand") == GenNode("expand", false ));
           CHECK (stateManager.currentState(bravo, "expand") == GenNode("expand", true ));
-          CHECK (stateManager.currentState(charly, "expand") == Ref::NO);
-          CHECK (stateManager.currentState(charly, "Error")  == GenNode("Error", "Echo"));  // sticky error state was recorded
+          CHECK (stateManager.currentState(charly,"expand") == Ref::NO);
+          CHECK (stateManager.currentState(charly, "Error") == GenNode("Error", "Echo"));  // sticky error state was recorded
           
           // reset error state(s)
           uiBus.markAll (GenNode{"clearErr", true});
@@ -509,9 +510,9 @@ namespace test {
           
           CHECK (stateManager.currentState(alpha, "expand") == GenNode("expand", false ));
           CHECK (stateManager.currentState(bravo, "expand") == GenNode("expand", true ));
-          CHECK (stateManager.currentState(charly, "expand") == Ref::NO);
-          CHECK (stateManager.currentState(charly, "Error")  == Ref::NO); // sticky error state was cleared,
-                                                                         //  because charly sent a clearErr state mark notification back
+          CHECK (stateManager.currentState(charly,"expand") == Ref::NO);
+          CHECK (stateManager.currentState(charly, "Error") == Ref::NO); // sticky error state was cleared,
+                                                                        //  because charly sent a clearErr state mark notification back
           
           // send global sweeping reset
           uiBus.markAll (GenNode{"reset", true});
