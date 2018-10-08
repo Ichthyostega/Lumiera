@@ -1997,7 +1997,7 @@ Some observations:
 * Optimisation achieves access times around ≈ 1ns
 </pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
+<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201810071730" tags="decision design discuss Concepts" changecount="6">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; yes of course, that's a //no-brainer,// todays. Rather, important is to note what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -2010,6 +2010,8 @@ We ''separate'' processing (rendering) and configuration (building). The [[Build
 
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[&quot;Tracks&quot; (forks)|Fork]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
+
+The model in Proc-Layer is rather an //internal model.// What is exposed globally, is a structural understanding of this model. In this structural understanding, there are Assets and ~MObjects, which both represent the flip side of the same coin: Assets relate to bookkeeping, while ~MObjects relate to building and manipulation of the model. In the actual data represntation within the HighLevelModel, we settled upon some internal reductions, preferring either the //Asset side// or the //~MObject side// to represent some relevant entities. See &amp;rarr; AssetModelConnection.
 
 Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with [[multichannel|MultichannelMedia]] mixed-typed media natively.
 
@@ -2686,7 +2688,7 @@ As starting point, {{red{in winter 2016/17}}} the old (broken) timeline panel wa
 After that initial experiments, my focus shifted to the still unsatisfactory top-level UI structure, and I am working towards an initial integration with Proc-Layer since then.
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201708311414" tags="GuiPattern design draft" changecount="25">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201810071842" tags="GuiPattern design draft" changecount="27">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels)
@@ -2720,7 +2722,7 @@ Starting from the architecture as predetermined by the UI-Bus, it is clear that 
 !!!how to carry out the clip appearances
 Initially, one could think that we'd need to build several widgets to realise the wide variety of clip appearances. But in fact it turns out that we're able to reshape a single base widget to encompass all the necessary presentation styles. This base widget is a simple, one-element container, with {{{Gtk::Frame}}} being the most obvious pick. This gives us already a rectangular covered space, and the ability to add a label widget, optionally with controlled alignment of the label. All the more elaborate presentation styles can be achieved by adding a canvas widget into this frame and then placing additional stuff on top of that. The only tricky part arises in overview display, when just some clip rectangle can stand-in for a whole series of clips, which themselves remain hidden as UI elements.
 
-A prime consideration regarding this whole clip presentation strategy is the performance concern. It is quite common for movie edits to encompass several hundred individual clips. Combined with several tracks and an elaborate audio edit, it may well happen that we end up with thousands of individual UI objects. If treated naively, this load might seriously degrade the responsiveness of the interface. Thus we need to care for the relevant infrastructure to enable optimisation of the display. For that reason, the memory footprint of the ClipPresenter and the basic widget has to be kept as small as possible. And moreover, since we do our own layout management in the timeline display, in theory it is possible any time just to add those widgets to the enclosing GTK container, which are actually about to become visible. (if we follow this approach, a problem yet to be solved is how to remove widgets falling out of sight, since removing N widgets easily turns into a quadratic operation).
+A prime consideration regarding this whole clip presentation strategy is the performance concern. It is quite common for movie edits to encompass several hundred individual clips. Combined with several tracks and an elaborate audio edit, it may well happen that we end up with thousands of individual UI objects. If treated naively, this load might seriously degrade the responsiveness of the interface. Thus we need to care for the relevant infrastructure to enable optimisation of the display. For that reason, the memory footprint of the ClipPresenter and the basic widget has to be kept as small as possible. And moreover, since we do our own layout management in the timeline display, in theory it is possible //only to add// those widgets to the enclosing GTK container, which are //actually about to become visible.// (if we follow this approach, a problem yet to be solved is how to remove widgets falling out of sight, since removing N widgets easily turns into a quadratic operation).
 
 !clip content rendering
 In a typical editing application, the user can expect to get some visual clue regarding the media content of a clip. For example, sound clips can be visualised as waveform, while movie clips might feature a sequence of images taken from the video. Our intention is to ''use our own rendering engine'' to produce these thumbnails. In fact, our engine is perfectly suited for this task: it has precisely the necessary media decoding and rendering abilities, plus it offers an elaborate system of priorities and deadlines, allowing to throttle the load produced by thumbnail generation. In addition to all those qualities, our engine is planned to be complemented by an &quot;intelligent&quot; frame cache, which, given proper parametrisation, ensures the frequently requested thumbnails will be available for quick display. For this approach to work, we need to provide some infrastructure
@@ -2730,7 +2732,7 @@ In a typical editing application, the user can expect to get some visual clue re
 * we still need to work out how buffer management for this task will be handled; it should be a derivative of typical buffer management for display rendering.
 * the clip widget needs to provide a simple placeholder drawing to mark the respective space in the interface, until the actual preview arrives.
 
-To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
+To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. Seemingly, the proper place to hose that display strategy is ''within the session model'', not within the UI. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
 <div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704171822" tags="spec draft GuiPattern GuiIntegration" changecount="22">
@@ -3423,7 +3425,7 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201803102227" tags="GuiPattern design decision draft img" changecount="50">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201810071735" tags="GuiPattern design decision draft img" changecount="51">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3436,7 +3438,7 @@ Several timeline views may be present at the same time -- and there is not neces
 Session, Binding and Sequence are the mandatory ingredients.
 
 !Basic layout
-[&gt;img[Clip presentation control|draw/UI-TimelineLayout-1.png]]The representation is split into a ''Header pane'' exposing structure and configuration, and a ''Content pane'' extending in time. The ''Time ruler'' running alongside the top of the content pane represents the //position in time.// Beyond this temporal dimension, the content area is conceived as a flexible working space. This working space //can// be structured hierarchically -- when interacting with the GUI, hierarchical nesting will be created and collapsed on demand. Contrast this with conventional editing applications which are built upon the rigid notion of &quot;Tracks&quot;: Lumiera is based on //Pipes// rather than Tracks.
+[&gt;img[Clip presentation control|draw/UI-TimelineLayout-1.png]]The representation is split into a ''Header pane'' exposing structure and configuration, and a ''Content pane'' extending in time. The ''Time ruler'' running alongside the top of the content pane represents the //position in time.// Beyond this temporal dimension, the content area is conceived as a flexible working space. This working space //can// be structured hierarchically -- when interacting with the GUI, hierarchical nesting will be created and collapsed on demand. Contrast this with conventional editing applications which are built upon the rigid notion of &quot;Tracks&quot;: Lumiera is based on //Pipes// and //Scopes// rather than Tracks.
 
 In the temporal dimension, there is the usual scrolling and zooming of content, and possibly a selected time range, and after establishing a ViewerPlayConnection, there is an effective playback location featured as a &quot;Playhead&quot;
 The workspace dimension (vertical layout) is more like a ''Fork'', which can be expanded recursively. More specifically, each strip or layer or &quot;track&quot; can be featured in //collapsed// or //expanded state.//
@@ -3469,7 +3471,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201808311806" tags="GuiPattern discuss decision impl" changecount="86">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201810071821" tags="GuiPattern discuss decision impl" changecount="87">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -3514,7 +3516,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 * when a model element happens to be destructed, the corresponding display element has to be removed.
 * such might be triggered indirectly, by clean-up of leftovers, since the {{{DiffApplicator}}} re-orders and deletes by leaving some data behind
 * the diff also re-orders model elements, which does not have an immediate effect on the display, but needs to be interpreted separately.
-Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
+Wrapping this together we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
 <div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201708311555" tags="GuiPattern spec draft" changecount="12">
@@ -3545,7 +3547,7 @@ Together, these entities form a cohesive circle of collaborating global managers
 Within the UI-Layer, we distinguish between //core concerns and UI concerns,// the latter encompassing anything related to UI mechanics, presentation state, interaction state and InteractionControl. Core concerns are delegated and handled by the lower layers of the architecture, while the UI plays a passive role. This is a fundamental decision and leads to a dichotomy, where -- depending on the context -- a given part might operate as a slave related to core concerns, while taking a leading or controlling position when it comes to UI concerns. Deliberately, both sides are bridged by being interwoven into the same entities, and any entity of relevance to core concerns is also attached to the UI-Bus. Regarding the build-up of the UI, parts and elements are made visible and accessible through widgets, but widgets are created, installed and operated by controllers. The top-level circle defines global actions, which are passed through the relevant controller to come into effect.
 </pre>
 </div>
-<div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">
+<div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201810071649" tags="Model spec design discuss img" changecount="3">
 <pre>While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in &amp;raquo;headless mode&amp;laquo;). Its building blocks and combination rules determine largely what structures can be created within the [[Session]].
 On the whole, it is a collection of [[media objects|MObjects]] stuck together and arranged by [[placements|Placement]].
 
@@ -3577,12 +3579,12 @@ Within Lumiera, &quot;tracks&quot; (actually implemented as [[forks|Fork]]) are 
 
 As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a fork (&quot;track&quot;) is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an ~MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an sequence's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this sequence wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
 
-Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of ~Seq-2 as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within ~Seq-1. Thus, within ~Seq-1, the contents of ~Seq-2 appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
+Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of 'Seq-2' as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within 'Seq-1'. Thus, within 'Seq-1', the contents of 'Seq-2' appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
 
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201712101756" tags="overview" changecount="6">
+<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201810071720" tags="overview" changecount="8">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the years, while building the Lumiera application.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -3619,6 +3621,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * how to shape the GuiConnection: with the help of a mediating GuiModel, which acts as UI-Bus, exchanging TreeDiffModel messages for GuiModelUpdate
 * shape the Backbone of the UI, the UI-Bus and the GuiTopLevel
 * build a framework for InteractionControl in the User Interface
+* establish a flexible layout structure for the GuiTimelineView
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" created="200711210531" modified="201310132316" tags="Concepts design discuss" changecount="1">
@@ -5950,7 +5953,7 @@ The backbone of the Lumiera UI is arranged such as to produce a data feed with s
 Run as part of the UiCoreServices, it is attached to the UI-Bus and listens to all ''state mark messages'' to distil the notion of relevant current state.
 On a basic level, the task is to group and store those messages in a way as to overwrite previous messages with new updates on the level of individual properties. Beyond that, there is the sensitivity to context, presentation perspective and work site, which means to impose an additional structure on this basic ''state snapshot'', to extract and replicate structured sets of state information.</pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201602162247" tags="design discuss" changecount="7">
+<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201810071724" tags="design discuss" changecount="9">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -5987,9 +5990,10 @@ We need to work out guidelines for dealing with operations going on simultaneous
 
 !!the perils of data representation
 In software development, there is a natural inclination to cast &quot;reality&quot; into data, the structure of which has to be nailed down first. Then, everyone might &quot;access reality&quot; and work on it. Doing so might sounds rational, natural, even self-evident and sound, yet as compelling as it might be, this approach is fundamentally flawed. It is known to work well only for small, &quot;handsome&quot; projects, where you clearly know up-front what you're up to: namely to get away, after being paid, before anyone realises the fact you've built something that looks nice but does not fit.
-So the challenge of any major undertaking in software construction is //not to build an universal model.// Rather, we want to arrive at something that can be made to fit. Over and over again.
+So the challenge of any major undertaking in software construction is //not to build an universal model of truth.// Rather, we want to arrive at something that can be made to fit.
+Which can be remoulded, over and over again, without breaking down.
 
-More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
+More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of ''Subsidiarity''. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
 </pre>
 </div>
 <div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" modified="201702101931" tags="def" changecount="1">
@@ -6895,7 +6899,7 @@ The concurrent nature of the problem is what makes this simple task somewhat mor
 * referrals to already known sequence points might be added later, and also from different threads ({{red{WIP 3/14}}} not sure if we need to expand on this observation -- see CalcStream &amp;hArr; Segment)
 This structure looks like requiring a message passing approach: we can arrange for determining the actual dependencies and fulfillment state late, within a single consumer, which is responsible for invoking the triggers. The other clients (threads) just pass messages into a possibly lock-free messageing channel.</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201612150345" tags="def SessionLogic" changecount="4">
+<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201810071709" tags="def SessionLogic" changecount="7">
 <pre>The Session contains all information, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
 &amp;rarr; [[Session design overview|SessionOverview]]
 &amp;rarr; Structure of the SessionInterface
@@ -6910,6 +6914,7 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * the [[Asset subsystem|AssetManager]] is tightly integrated; besides, there are some SessionServices for internal use
 
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
+&amp;rarr; see //clarification of some fine points// regarding [[relation of Assets and MObjects|AssetModelConnection]]
 
 
 !Session lifecycle
@@ -6962,7 +6967,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201701140715" tags="SessionLogic GuiIntegration design draft discuss" changecount="9">
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201810071716" tags="SessionLogic GuiIntegration design draft discuss" changecount="12">
 <pre>&quot;Session Interface&quot; has several meanings, depending on the context.
 ;application global
 :the session is a data structure, which can be saved and loaded, and manipulated by [[sending commands|CommandHandling]]
@@ -7005,6 +7010,10 @@ To the contrary, the ''generic'' API is related to a //current location (state),
 ** all contained
 * to add
 * to destroy
+
+!!relation of [[Assets|Asset]] and MObjects
+{{red{WARNING -- still under construction 10/2018}}}. Basically these segments represent the flip sides of the same coin. //Assets relate to the bookkeeping view.// However, we build a data model, and thus use representations for the involved entities. This creates some redundancy at times; we made an effort to reduce this redundancy and minimise the necessary data model representation. This means, some things are rather handled and represented as Assets, while other stuff is primarily dealt with as ~MObject.
+&amp;rarr; see //discussion of some fine points// regarding [[relation of Assets and MObjects|AssetModelConnection]]
 
 !!exploring session contents
 Typically, the list of timelines serves as starting point for exploring the model. Basically, any kind of object could be attached everywhere, but both the GUI and the Builder rely on assumptions regarding the [[overall model structure|HighLevelModel]] &amp;mdash; silently ignoring content not in line. This corresponds to the //dedicated API functions// on specific kinds of objects, which allow to retrieve content according to this assumed structure conveniently and with strong typing. From the timeline and the associated sequence you'll get the root track, and from there the sub-tracks and the clips located on them, which in turn may have attachments (effects, transitions, labels).

@@ -32,7 +32,7 @@
  ** - thus we get a rather simple mapping, with some fixed attributes and no
  **   flexible child collection. The root track is implemented as TrackPresenter.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** @see TimelineWidget
  ** 
  */

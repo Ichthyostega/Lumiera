@@ -47,7 +47,7 @@
  ** is `sigc::trackable`, which means after destruction any further signals
  ** will be silently ignored.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 a complete rework of the timeline display is underway
  ** 
  */
 

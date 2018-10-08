@@ -24,7 +24,7 @@
 /** @file timeline/timeline-widget.cpp
  ** Implementation details of Lumiera's timeline display widget.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 a complete rework of the timeline display is underway
  ** @see timeline-controller.cpp
  ** 
  */

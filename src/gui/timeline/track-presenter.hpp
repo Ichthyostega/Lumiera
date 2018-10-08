@@ -24,7 +24,7 @@
 /** @file track-presenter.hpp
  ** Presentation control element to model and manage a track within the timeline UI.
  ** In the Lumiera timeline UI, we are mixing two different scope of concerns: For one,
- ** we have the globally tangible scope of actual session elements an operations performed
+ ** we have the globally tangible scope of actual session elements and operations performed
  ** on those. And then there are more local considerations regarding the "mechanics" of the
  ** UI elements, their state and immediate feedback to user interactions. The _Presenter_ --
  ** as known from the [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) --
@@ -36,9 +36,10 @@
  ** part of layout building, delegating to a mostly passive GTK widget for the actual display.
  ** This way it becomes possible to manage the actual UI resources on a global level, avoiding to
  ** represent potentially several thousand individual elements as GTK entities, while at any time
- ** only several can be visible and active as far as user interaction is concerned.
+ ** only a small number of elements can be visible and active as far as user interaction is concerned.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 

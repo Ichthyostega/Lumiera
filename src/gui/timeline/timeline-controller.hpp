@@ -45,7 +45,7 @@
  ** - these in turn manage a set of ClipPresenter entities
  ** - and those presenters care for injecting suitable widgets into the TimelineWidget's parts.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 

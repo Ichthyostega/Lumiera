@@ -25,6 +25,7 @@
  ** Implementation details of track presentation management.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 
@@ -85,10 +86,11 @@ namespace timeline {
   
   /**
    * @note we distinguish between the contents of our three nested child collections
-   *       based on the symbolic type field send in the Record type within the diff representation
+   *       based on the symbolic type field sent in the Record type within the diff representation
    *       - "Marker" designates a Marker object
    *       - "Clip" designates a Clip placed on this track
    *       - "Fork" designates a nested sub-track
+   * @see TimelineController::buildMutator() for a basic explanation of the data binding mechanism
    */
   void
   TrackPresenter::buildMutator (TreeMutator::Handle buffer)
