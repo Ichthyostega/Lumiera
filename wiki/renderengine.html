@@ -2082,6 +2082,10 @@ The Method of pushing frames to the Viewer widget is changed fundamentally durin
 
 </pre>
 </div>
+<div title="DiffConstituent" creator="Ichthyostega" modifier="Ichthyostega" created="201810100342" tags="Model Concepts design draft" changecount="1">
+<pre>//A self referential intermediary, used to collect and consolidate structural information about some element.//
+This structural information can then be emanated as ''population diff'' and is thus the foundation to build a further representation of the same structure //&quot;elsewhere&quot;.// This //further representation// could be a model entity within the session's HighLevelModel, or it could be a widget tree in the UI. And, to close the circle, this other representation resulting from that diff could in turn again be a DiffConstituent.</pre>
+</div>
 <div title="DispatcherTables" creator="Ichthyostega" modifier="Ichthyostega" created="201305212334" tags="Player Rendering design draft" changecount="1">
 <pre>The Dispatcher Tables are hosted within the [[Segmentation]] and serve as a ''strategy'' governing the play process.
 For each [[calculation stream|CalcStream]] there is a concrete implementation of the [[dispatcher|FrameDispatcher]] interface, based on a specific configuration of dispatcher tables.</pre>
@@ -3243,7 +3247,7 @@ More specifically, the integration is based on ''messaging''. To start with, the
 ----
 In a preliminary attempt to establish an integration between the GUI and the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget. This highlighted the problems we're about to encounter and made us think about the more radically decoupled approach we followed thereafter...</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201808312301" tags="GuiIntegration design draft" changecount="24">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201810100334" tags="GuiIntegration design draft" changecount="25">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
@@ -3257,6 +3261,11 @@ The GUI model is largely comprised of immutable ID elements, which can be treate
 The whole Idea to have a &quot;UI model&quot; appears more questionable than ever. It leads to tight coupling with the session and a lot of thread synchronisation headaches, without any clear benefit -- beyond just being the obvious no-brainer solution. During the last months, step by step, several presentation related structures emerged, which //indeed are structured to parallel the outline of the session.// But those structures are widgets and controllers, and it might well be that we do not need a model, beyond the data already present within the widget implementation. Rather it seems we'll get a nested structure of //presenters,// which are linked to the session with the help of the UI-Bus and the [[diff framework|TreeDiffModel]].
 * {{red{as of 8/2018}}}, matters on a large scale converge towards a structure //without a classical UI model.// Seemingly we can do without...
 * there is a working demonstration in {{{BusTerm_test}}}, which pushes mutation diffs against a mock UI-Element. The immediate response to receiving such a diff notification via the UI-Bus has now been coded; it incurs invoking a passed callback (functor), which performs within the originating context, but within the ~UI-Thread, and produces the actual diff //on-demand.// (&quot;pull principle&quot;)
+
+!!!building the model structures
+A fundamental decision within the Lumiera UI is to build every model-like structure as immediate response to receiving a diff message pushed up into the UI.
+* either this happens when some change occured, which is directly reflected into the UI by a local diff
+* or a whole subtree of elements is built up step wise in response to a ''population diff''. This is an systematic description of a complete sub-structure in current shape, and is produced as emanation from a DiffConstituent.
 
 !synchronisation guarantees
 We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the responsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Proc-Layer, with the help of the ProcDispatcher.
@@ -3425,7 +3434,7 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201810071735" tags="GuiPattern design decision draft img" changecount="51">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201810100316" tags="GuiPattern design decision draft img" changecount="52">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3459,7 +3468,7 @@ This collapsed, expanded and possibly nested workspace structure is always exact
 !!!lifecycle and instances
 A given instance of the {{{TimelineWidget}}} is always dedicated to render the contents of //one specific timeline.// We never switch the data model while retaining the UI entities. This also means, a given instance is tied to one conversation with the core; it is created when the core tells us about this timeline with an initial population diff, and it lives until either this timeline is discarded in the core model, or the whole session is shut down.
 
-The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} instances, allowing to make one of them visible for interaction. Yet those instances are managed by the InteractionDirector, who incorporates the role of representing the [[model root|ModelRootMO]]. Aside of the timeline display, there is also an ''asset pannel''; display of and interaction with those asset views is handled by dedicated widgets, backed by the {{{AssetControler}}} -- which is also a child of and managed by the InteractionDirector, since assets are modelled as global part of the [[Session]].
+The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} instances, allowing to make one of them visible for interaction. Yet the timeline itself is represented by the {{{TimelineControler}}}, which lives //within this widget,// and is attached to and managed by the InteractionDirector, who incorporates the role of representing the [[model root|ModelRootMO]]. Aside of the timeline display, there is also an ''asset pannel''; display of and interaction with those asset views is handled by dedicated widgets, backed by the {{{AssetControler}}} -- which is also a child of and managed by the InteractionDirector, since assets are modelled as global part of the [[Session]].
 
 In case the UI starts with no session present in the core, an //empty timeline placeholder// will be displayed, which provides UI for creating a new session...
 
@@ -3471,7 +3480,7 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201810071821" tags="GuiPattern discuss decision impl" changecount="87">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201810100337" tags="GuiPattern discuss decision impl" changecount="89">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
 
@@ -3509,6 +3518,12 @@ The structure of the display is extended or altered under two circumstances:
 Here, the &quot;component&quot; relevant for such structural changes is always the UI representation of a track. Beyond that, the layout can also be changed //without changing the display structure,// when some embedded component, be it placement (in the track heads / the patchbay) or a clip, effect or transition, is expanded or collapsed. In such a case, a resizing challenge needs to be directed towards the next enclosing track container.
 
 From these observations we can draw the conclusion, that we'll build a ''local structural model'', to reflect the logical relations between the parts comprising the timeline display. More precisely, these structuring components are not mere model objects, rather they are mediating entities used to guide and organise the actual view entities, which in turn are passive. They are more like a view model, while also bearing some local controller responsibilities. For this reason, we prefer to term these as ''presenters'' -- i.e. TrackPresenter and ClipPresenter. And each of these local representation components holds onto a display context, which generally links it into two different display widget stacks in the two parts of the actual timeline display. Adding a child component thus becomes a rather tricky operation, involving to link possibly two child widgets into two disjoint parent widgets, thereby forming a similar display context for the child presenter. Overall, the guiding idea is that of self similarity: on each level, we have to reproduce the same relations and collaborations as present in the parent level.
+
+!!!building the timeline representation structure
+It is a fundamental decision within the Lumiera UI that any structure as to be injected as diff by the core. We do not hold a structure or data model within some UI entity and then &quot;interpret&quot; that model into a widget structure -- rather we build the widget structure itself in response to a diff message describing the structure. Especially in the case of timelines, the receiver of those messages is the InteractionDirector, which corresponds to the model root. On being prompted to set up a timeline, it will allocate a {{{TimelineWidget}}} within a suitable timeline docking panel and then attach to the {{{TimelineController}}} embedded within the widget.
+{{red{Problem 10/2018}}} how can the InteractionDirector //manage// a timeline while the timeline widget physically resides within the panel? Can we exploit a simliar structure as we did for the error log?
+
+The diff describing and thus assembling the UI representation of a timeline is typically a ''population diff'' -- which means, it is a consolidated complete description of the whole sub-structure rooted below that timeline. Such a population diff is generated as emanation from the respective DiffConstituent.
 
 !!!interplay with diff mutation
 Applying a diff changes the structure, that is, the structure of the local model, not the structure of the display widgets. Because the latter are an entirely private concern of the UI and their structure is controlled by the model components in conjunction with the display manager. And since diff application effects the contents of the model such as to make the intended structural changes happen (indirectly), we are well advised to tie the display control and the widgets very closely to those local model elements, such as to //adjust the display automatically.//

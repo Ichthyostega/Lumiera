@@ -80,6 +80,7 @@ namespace workspace {
 }
 namespace interact {
   
+  using lib::diff::GenNode;
 //using std::string;
   using std::unique_ptr;
   
@@ -113,7 +114,8 @@ namespace interact {
       unique_ptr<FocusTracker>  tracker_;
       
       // == Model globals ==
-      using Timelines = std::vector<unique_ptr<timeline::TimelineController>>;
+      using PTimelineCtrl = unique_ptr<timeline::TimelineController>;
+      using Timelines = std::vector<PTimelineCtrl>;
       using Assets = unique_ptr<setting::AssetController>;
       using State = unique_ptr<ctrl::UiState>;
       
@@ -150,6 +152,7 @@ namespace interact {
       
     private:
       workspace::WorkspaceWindow& getWorkspaceWindow();
+      PTimelineCtrl injectTimeline (GenNode const&);
     };
   
   

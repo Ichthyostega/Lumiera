@@ -74,6 +74,7 @@ namespace gui {
   
   extern const Symbol ATTR_name;
   extern const Symbol ATTR_fork;
+  extern const Symbol ATTR_assets;
   
   
   /* ======== UI-Element protocol ======== */

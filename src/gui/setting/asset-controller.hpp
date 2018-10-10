@@ -77,13 +77,13 @@ namespace setting {
     : public model::Controller
     {
       ///////TODO create UI representation for the asset subsections
-      
-      /** content population and manipulation via UI-Bus */
-      void buildMutator (lib::diff::TreeMutator::Handle)  override;
     
     public:
       AssetController (ID identity, ctrl::BusTerm& nexus);
      ~AssetController();
+      
+      /** content population and manipulation via UI-Bus */
+      void buildMutator (lib::diff::TreeMutator::Handle)  override;
       
     private:
       

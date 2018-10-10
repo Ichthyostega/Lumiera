@@ -41,6 +41,7 @@ namespace gui {
   
   const Symbol ATTR_name{"name"};
   const Symbol ATTR_fork{"fork"};
+  const Symbol ATTR_assets{"assets"};
   
   
   /* ======== UI-Element protocol ======== */

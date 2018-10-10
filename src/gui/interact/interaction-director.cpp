@@ -42,6 +42,7 @@
 #include "gui/ctrl/ui-state.hpp"
 #include "gui/setting/asset-controller.hpp"
 #include "gui/timeline/timeline-controller.hpp"
+#include "include/ui-protocol.hpp"
 #include "proc/mobject/session/root.hpp"
 #include "proc/asset/sequence.hpp"                ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
 #include "proc/mobject/session/fork.hpp"          ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
@@ -61,6 +62,8 @@
 using lib::idi::EntryID;
 using lib::hash::LuidH;
 using lib::diff::TreeMutator;
+using lib::diff::collection;
+using std::make_unique;
 using util::toString;
 
 
@@ -128,8 +131,30 @@ namespace interact {
   {
     buffer.create (
       TreeMutator::build()
-    );
-    unimplemented ("create a sensible binding between root-controller and root-model element");
+        .attach (collection(timelines_)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope
+                    return spec.data.isNested();
+                  })
+               .matchElement ([&](GenNode const& spec, PTimelineCtrl const& elm) -> bool
+                  {                                            // »Matcher« : how to know we're dealing with the right timeline object
+                    return spec.idi == ID(elm);
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PTimelineCtrl
+                  {                                            // »Constructor« : what to do when the diff mentions a new entity
+                    return injectTimeline (spec);
+                  })
+               .buildChildMutator ([&](PTimelineCtrl& targetTimeline, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {                                            // »Mutator« : how to apply the diff recursively to a nested scope
+                    if (ID(targetTimeline) != subID) return false;
+                    targetTimeline->buildMutator (buff);       //  - delegate to child(Timeline) to build nested TreeMutator
+                    return true;
+                  }))
+        .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
+            {                                                  // »Attribute Mutator« : how enter an object field as nested scope
+              REQUIRE (assets_);
+              assets_->buildMutator(buff);
+            }));
   }
   
   
@@ -280,6 +305,15 @@ namespace interact {
   {
     return globalCtx_.windowLoc_.findActiveWindow();
   }
+  
+  
+  /** @internal allocate a new TimelineWidget and attach it as child */
+  InteractionDirector::PTimelineCtrl
+  InteractionDirector::injectTimeline (GenNode const& spec)
+  {
+    unimplemented ("allocate a TimelineWidget in some TimelinePanel and attach it's controller as child entity");
+  }
+
 
   
   

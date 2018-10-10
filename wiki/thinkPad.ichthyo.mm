@@ -45,7 +45,7 @@
 <node CREATED="1501940632871" ID="ID_189611570" MODIFIED="1518487921039" TEXT="Dummy Proc-Command"/>
 <node CREATED="1501940639479" ID="ID_1314787910" MODIFIED="1518487921039" TEXT="komplettes Ping-Pong"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481320590214" ID="ID_635303062" MODIFIED="1538939700299" TEXT="#1042 DummySessionConnection">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1481320590214" ID="ID_635303062" MODIFIED="1539135672542" TEXT="#1042 DummySessionConnection">
 <arrowlink COLOR="#f9b709" DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-36;-73;" ID="Arrow_ID_1867016690" STARTARROW="None" STARTINCLINATION="-34;70;"/>
 <arrowlink COLOR="#f9b709" DESTINATION="ID_330280074" ENDARROW="Default" ENDINCLINATION="-37;-88;" ID="Arrow_ID_779644313" STARTARROW="None" STARTINCLINATION="-34;70;"/>
 <arrowlink COLOR="#f9b709" DESTINATION="ID_791449946" ENDARROW="Default" ENDINCLINATION="-842;-559;" ID="Arrow_ID_1347689482" STARTARROW="None" STARTINCLINATION="-81;124;"/>
@@ -5246,6 +5246,10 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538940061190" ID="ID_1231562526" MODIFIED="1538942179606" TEXT="Timeline Panel bauen">
 <arrowlink COLOR="#fec680" DESTINATION="ID_712786561" ENDARROW="Default" ENDINCLINATION="-1077;-98;" ID="Arrow_ID_433721169" STARTARROW="None" STARTINCLINATION="860;206;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538940061190" ID="ID_1375216048" MODIFIED="1539141015314" TEXT="verankern im InteractonDirector">
+<arrowlink COLOR="#fec680" DESTINATION="ID_810032444" ENDARROW="Default" ENDINCLINATION="-451;-531;" ID="Arrow_ID_1378803021" STARTARROW="None" STARTINCLINATION="335;22;"/>
+<icon BUILTIN="pencil"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538941158698" ID="ID_513093052" MODIFIED="1538941168250" TEXT="vorl&#xe4;ufiger Allokator">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -5256,7 +5260,7 @@
 <arrowlink COLOR="#fec680" DESTINATION="ID_1992201258" ENDARROW="Default" ENDINCLINATION="-784;-81;" ID="Arrow_ID_126634995" STARTARROW="None" STARTINCLINATION="651;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538940061190" ID="ID_977311190" MODIFIED="1538942745433" TEXT="Aktion re-Populate">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538940061190" ID="ID_977311190" MODIFIED="1539140874752" TEXT="Aktion re-Populate">
 <arrowlink COLOR="#fec680" DESTINATION="ID_501539344" ENDARROW="Default" ENDINCLINATION="-1280;-81;" ID="Arrow_ID_938812574" STARTARROW="None" STARTINCLINATION="335;22;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -16475,7 +16479,62 @@
 <node CREATED="1488566452538" ID="ID_1569803797" MODIFIED="1518487921075" TEXT="werden transient gebilet"/>
 </node>
 </node>
-<node CREATED="1486763376960" ID="ID_1618020758" MODIFIED="1518487921075" TEXT="Zugang zu den Timelines"/>
+<node CREATED="1486763376960" ID="ID_1618020758" MODIFIED="1518487921075" TEXT="Zugang zu den Timelines">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694550601" ID="ID_810032444" MODIFIED="1539140992471" TEXT="Timeline injizieren">
+<linktarget COLOR="#fec680" DESTINATION="ID_810032444" ENDARROW="Default" ENDINCLINATION="-451;-531;" ID="Arrow_ID_1378803021" SOURCE="ID_1375216048" STARTARROW="None" STARTINCLINATION="335;22;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1539141031692" ID="ID_224638279" MODIFIED="1539141042494" TEXT="Aufruf aus dem TreeMutator-Binding"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539141043842" ID="ID_1475393315" MODIFIED="1539141098932" TEXT="brauche Allocator f&#xfc;r Timelines">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539141064760" ID="ID_807914812" MODIFIED="1539141075481" TEXT="wo Service ansiedeln">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539141076630" ID="ID_399959646" MODIFIED="1539141095892" TEXT="Auspr&#xe4;gung / Platzierung festlegen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539141115961" ID="ID_50363803" MODIFIED="1539141166595" TEXT="TimelineWidget installieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539141131742" ID="ID_1557130599" MODIFIED="1539141165195" TEXT="von diesem den Controller beziehen (WLink)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1539141189855" ID="ID_1121710933" MODIFIED="1539141214858" TEXT="Problem: wenn WLink inaktiv wird">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1539141846463" ID="ID_1385425726" MODIFIED="1539141861324" TEXT="Design-Problem">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539141862533" ID="ID_122593910" MODIFIED="1539141927201">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      how can the InteractionDirector <i>manage</i>&#160;a timeline
+    </p>
+    <p>
+      &#160;while the timeline widget physically resides within the panel?
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Can we exploit a simliar structure as we did for the error log?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1486763385591" ID="ID_6651258" MODIFIED="1518487921076" TEXT="Zugang zum Asset-Management"/>
 <node CREATED="1486763391862" ID="ID_1568245541" MODIFIED="1518487921076" TEXT="Zugang zur Konfiguration"/>
 <node CREATED="1486763408780" ID="ID_520762274" MODIFIED="1518487921076" TEXT="Zugang zum persistenten Interface-State"/>
@@ -19857,11 +19916,102 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1531423784657" ID="ID_1434932428" MODIFIED="1531423792205" TEXT="Inhalts-Empfang wieder deaktivieren">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694550601" ID="ID_501539344" MODIFIED="1538942745433" TEXT="re-populate Content">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694550601" ID="ID_501539344" MODIFIED="1539140884766" TEXT="re-populate Content">
 <linktarget COLOR="#fec680" DESTINATION="ID_501539344" ENDARROW="Default" ENDINCLINATION="-1280;-81;" ID="Arrow_ID_938812574" SOURCE="ID_977311190" STARTARROW="None" STARTINCLINATION="335;22;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1538942086509" ID="ID_1492693885" MODIFIED="1538942121013" TEXT="wenn ein UI-Element f&#xfc;r eine bestehende Entit&#xe4;t wiederaufgebaut wird">
 <icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1539134153912" ID="ID_311986051" MODIFIED="1539134172715" TEXT="Grundsatzentscheidung: re-populate">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1539134197011" ID="ID_1798515652" MODIFIED="1539134282852" TEXT="m&#xf6;gliche Modelle">
+<icon BUILTIN="idea"/>
+<node CREATED="1539134201394" ID="ID_1071210666" MODIFIED="1539134350067" TEXT="UI-Komponente realisiert sich selbst">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Komponente hat eine interne Struktur-Repr&#228;sentation
+      </li>
+      <li>
+        traversiert diese Struktur-Beschreibung
+      </li>
+      <li>
+        und &#252;bersetzt sie in UI-Widgets
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1539134224759" ID="ID_766070060" MODIFIED="1539134461591" TEXT="Struktur und Realisierung gemeinsam gepusht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        jedes Teilelement wird per Push injiziert
+      </li>
+      <li>
+        es wird in dem Moment sofort und ausschlie&#223;lich als Widget realisiert
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1539134474262" ID="ID_1194066582" MODIFIED="1539134609868" TEXT="Begr&#xfc;ndung">
+<icon BUILTIN="yes"/>
+<node CREATED="1539134479525" ID="ID_11375493" MODIFIED="1539134499526" TEXT="Selbst-&quot;Verdoppelung&quot; vermeiden"/>
+<node CREATED="1539134556931" ID="ID_876466376" MODIFIED="1539134566101" TEXT="Widgets selber sind &quot;die Struktur&quot;"/>
+</node>
+</node>
+<node CREATED="1539134621210" ID="ID_1536657208" MODIFIED="1539134646091" TEXT="Konsequenz: &#xbb;populier-mich&#xab;">
+<icon BUILTIN="forward"/>
+<node CREATED="1539134702831" ID="ID_250983627" MODIFIED="1539134713209" TEXT="Objekt als leere H&#xfc;lle vorausgesetzt"/>
+<node CREATED="1539134713846" ID="ID_1404883972" MODIFIED="1539134732663" TEXT="schickt alle Details und Inhalte als Diff"/>
+<node CREATED="1539134733747" ID="ID_353086867" MODIFIED="1539135903394">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Basis: <b>DiffConstituent</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        ein selbstbez&#252;glicher substanzloser Strukturkern
+      </li>
+      <li>
+        DiffConstituent -&gt; emanation as diff
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#4e31e2" DESTINATION="ID_1189184036" ENDARROW="Default" ENDINCLINATION="-767;-123;" ID="Arrow_ID_156898929" STARTARROW="None" STARTINCLINATION="-1608;-84;"/>
+<node CREATED="1539138549468" ID="ID_1203696589" MODIFIED="1539138556062" TEXT="existiert &quot;irgendwo&quot;"/>
+<node CREATED="1539138556651" ID="ID_1265568834" MODIFIED="1539138562997" TEXT="per Command ansprechbar"/>
+<node CREATED="1539138563657" ID="ID_1727875453" MODIFIED="1539138578875" TEXT="antwortet mit Emanation in Diff-Form"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1477784813895" ID="ID_791449946" MODIFIED="1538939608849">
@@ -34875,7 +35025,19 @@
 </node>
 </node>
 <node CREATED="1482524498822" ID="ID_431883229" MODIFIED="1518487921096" TEXT="Datenstrom"/>
-<node CREATED="1482524516371" ID="ID_396707258" MODIFIED="1518487921096" TEXT="Event-Sourcing"/>
+<node CREATED="1482524516371" ID="ID_396707258" MODIFIED="1518487921096" TEXT="Event-Sourcing">
+<node CREATED="1539135156755" ID="ID_1302245670" MODIFIED="1539135342488" TEXT="vermittelnder Tr&#xe4;ger">
+<node CREATED="1539134733747" ID="ID_1189184036" MODIFIED="1539135710166" TEXT="DiffConstituent">
+<linktarget COLOR="#4e31e2" DESTINATION="ID_1189184036" ENDARROW="Default" ENDINCLINATION="-767;-123;" ID="Arrow_ID_156898929" SOURCE="ID_353086867" STARTARROW="None" STARTINCLINATION="-1608;-84;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1539134841549" ID="ID_818387120" MODIFIED="1539134847147" TEXT="neues Konzept">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1539134848420" ID="ID_4911843" MODIFIED="1539134870669" TEXT="ein selbstbez&#xfc;glicher substanzloser Strukturkern"/>
+<node CREATED="1539134911707" ID="ID_847488848" MODIFIED="1539134930189" TEXT="DiffConstituent -&gt; emanation as diff"/>
+</node>
+</node>
+</node>
 <node COLOR="#435e98" CREATED="1482524530842" FOLDED="true" ID="ID_606738640" MODIFIED="1538868972458" TEXT="Dependency-Injection">
 <icon BUILTIN="wizard"/>
 <node CREATED="1515975589922" ID="ID_367021032" MODIFIED="1538868806804" TEXT="Architektur">
@@ -37790,7 +37952,7 @@
 <icon BUILTIN="hourglass"/>
 <node CREATED="1538939499138" ID="ID_367201519" MODIFIED="1538939505629" TEXT="open Session">
 <node CREATED="1538939507425" ID="ID_389830085" MODIFIED="1538939511341" TEXT="new Session">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1477784813895" ID="ID_1478381189" MODIFIED="1538939638255">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1477784813895" ID="ID_1478381189" MODIFIED="1539135672542">
 <richcontent TYPE="NODE"><html>
   <head>
     
