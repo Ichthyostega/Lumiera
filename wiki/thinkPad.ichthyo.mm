@@ -16549,6 +16549,66 @@
 </node>
 <node CREATED="1539270808827" ID="ID_1352270227" MODIFIED="1539270817730" TEXT="f&#xfc;r TimelineGui">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1352270227" ENDARROW="Default" ENDINCLINATION="117;0;" ID="Arrow_ID_1672775567" SOURCE="ID_1624846094" STARTARROW="None" STARTINCLINATION="117;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539294555064" HGAP="45" ID="ID_1365984217" MODIFIED="1539294575340" TEXT="Problem: diff ignorieren" VSHIFT="23">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1539294576338" ID="ID_485684974" MODIFIED="1539294587881" TEXT="kann das auftreten....?">
+<icon BUILTIN="help"/>
+<node CREATED="1539294589200" ID="ID_1206613848" MODIFIED="1539294592657" TEXT="ja">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1539294594367" ID="ID_451112886" MODIFIED="1539294672397" TEXT="wenn InteractionDirector selber ein Diff empf&#xe4;ngt...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...welches in eine Kind-Timeline absteigt,
+    </p>
+    <p>
+      welche gegenw&#228;rtig im GUI nicht existiert
+    </p>
+    <p>
+      und daher auf &quot;inaktiv&quot; geschaltet ist.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1539294678444" ID="ID_934706379" MODIFIED="1539294693604" TEXT="TreeMutator scheitert per Default">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539294698801" ID="ID_1533611583" MODIFIED="1539294720527" TEXT="also brauche ich einen /dev/null-Mutator">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539294727470" ID="ID_1958316881" MODIFIED="1539294738485" TEXT="speziellen Binding-Layer fabrizieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1539294807066" ID="ID_1137741867" MODIFIED="1539294809654" TEXT="wie?"/>
+<node CREATED="1539294812306" ID="ID_1564927840" MODIFIED="1539294826763" TEXT="mu&#xdf; das Standard-Mapping anschauen"/>
+<node CREATED="1539294846845" ID="ID_1839295475" MODIFIED="1539294935855" TEXT="TreeDiffMutatorBinding">
+<icon BUILTIN="info"/>
+<node CREATED="1539294859537" ID="ID_637091190" MODIFIED="1539294928138" TEXT="__expect_further_elements -&gt; immer true">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1539294892879" ID="ID_642349797" MODIFIED="1539294931009" TEXT="__expect_end_of_scope -&gt; auch immer true">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1539294909749" ID="ID_1965063755" MODIFIED="1539294918319" TEXT="Impl in tree-diff.cpp">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1539294950567" ID="ID_1321971857" MODIFIED="1539294956088" TEXT="alle F&#xe4;lle durchklappern">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1539294743739" ID="ID_1596076772" MODIFIED="1539294758145" TEXT="Builder().ignoreAll()">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539294760464" ID="ID_1376112641" MODIFIED="1539294792408" TEXT="DiffIgnoreChanges_test">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

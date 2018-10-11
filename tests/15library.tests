@@ -122,6 +122,11 @@ return: 0
 END
 
 
+TEST "Diff: accept and ignore arbitrary diff" DiffIgnoreChanges_test <<END
+return: 0
+END
+
+
 TEST "A Digxel (numeric component)" Digxel_test <<END
 out-lit: empty____## +0.0 ##
 out-lit: value____##-88.8 ##

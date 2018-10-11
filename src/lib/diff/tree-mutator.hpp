@@ -156,7 +156,7 @@ namespace diff{
       
       /** initialisation immediately before start of diff application
        * @remark allows for setup of state which is dependent on memory location,
-       *         like e.g. iterators. Due to the invokation via Builder DSL, the
+       *         like e.g. iterators. Due to the invocation via Builder DSL, the
        *         implementation object may be moved after construction, but prior
        *         to invoking this hook
        */
@@ -439,6 +439,9 @@ namespace diff{
          */
         auto attachDummy (TestMutationTarget& dummy);
         
+        
+        /** set up a catch-all and ignore-everything layer */
+        auto ignoreAllChanges();
       };
     
   }//(END) Mutator-Builder...
@@ -460,4 +463,5 @@ namespace diff{
 #include "lib/diff/tree-mutator-gen-node-binding.hpp"
 #include "lib/diff/tree-mutator-attribute-binding.hpp"
 #include "lib/diff/tree-mutator-collection-binding.hpp"
+#include "lib/diff/tree-mutator-noop-binding.hpp"
 
