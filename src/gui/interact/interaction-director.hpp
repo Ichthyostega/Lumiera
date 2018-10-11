@@ -54,6 +54,7 @@
 #define GUI_INTERACT_INTERACTION_DIRECTOR_H
 
 #include "gui/model/controller.hpp"
+#include "gui/timeline/timeline-gui.hpp"
 #include "lib/depend-inject.hpp"
 
 //#include <string>
@@ -92,6 +93,8 @@ namespace interact {
   class FocusTracker;
   class ViewLocator;
   
+  using timeline::TimelineGui;
+  
   
   
   /**
@@ -114,8 +117,7 @@ namespace interact {
       unique_ptr<FocusTracker>  tracker_;
       
       // == Model globals ==
-      using PTimelineCtrl = unique_ptr<timeline::TimelineController>;
-      using Timelines = std::vector<PTimelineCtrl>;
+      using Timelines = std::vector<TimelineGui>;
       using Assets = unique_ptr<setting::AssetController>;
       using State = unique_ptr<ctrl::UiState>;
       
@@ -152,7 +154,7 @@ namespace interact {
       
     private:
       workspace::WorkspaceWindow& getWorkspaceWindow();
-      PTimelineCtrl injectTimeline (GenNode const&);
+      TimelineGui injectTimeline (GenNode const&);
     };
   
   

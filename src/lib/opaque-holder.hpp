@@ -704,9 +704,10 @@ namespace lib {
    * handle to allow for safe _»remote implantation«_
    * of an unknown subclass into a given opaque InPlaceBuffer,
    * without having to disclose the concrete buffer type or size.
-   * @remarks this is especially geared towards use in APIs, allowing
-   *    a not yet known implementation to implant an agent or collaboration
-   *    partner into the likewise undisclosed innards of the exposed service.
+   * @remarks this copyable value object is especially geared towards use
+   *    as handle in APIs, allowing a not yet known implementation to implant
+   *    an agent or collaboration partner into the likewise undisclosed innards
+   *    of the service exposed.
    * @warning the type BA must expose a virtual dtor, since the targeted
    *    InPlaceBuffer has to take ownership of the implanted object.
    */

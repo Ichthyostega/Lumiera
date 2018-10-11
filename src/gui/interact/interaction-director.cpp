@@ -41,7 +41,8 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ctrl/ui-state.hpp"
 #include "gui/setting/asset-controller.hpp"
-#include "gui/timeline/timeline-controller.hpp"
+#include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/timeline-controller.hpp"   /////////////////TODO still required?
 #include "include/ui-protocol.hpp"
 #include "proc/mobject/session/root.hpp"
 #include "proc/asset/sequence.hpp"                ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
@@ -61,6 +62,7 @@
 //using std::shared_ptr;
 using lib::idi::EntryID;
 using lib::hash::LuidH;
+using lib::diff::Rec;
 using lib::diff::TreeMutator;
 using lib::diff::collection;
 using std::make_unique;
@@ -136,18 +138,18 @@ namespace interact {
                   {                                            // »Selector« : require object-like sub scope
                     return spec.data.isNested();
                   })
-               .matchElement ([&](GenNode const& spec, PTimelineCtrl const& elm) -> bool
+               .matchElement ([&](GenNode const& spec, TimelineGui const& elm) -> bool
                   {                                            // »Matcher« : how to know we're dealing with the right timeline object
                     return spec.idi == ID(elm);
                   })
-               .constructFrom ([&](GenNode const& spec) -> PTimelineCtrl
+               .constructFrom ([&](GenNode const& spec) -> TimelineGui
                   {                                            // »Constructor« : what to do when the diff mentions a new entity
                     return injectTimeline (spec);
                   })
-               .buildChildMutator ([&](PTimelineCtrl& targetTimeline, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+               .buildChildMutator ([&](TimelineGui& targetTimeline, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {                                            // »Mutator« : how to apply the diff recursively to a nested scope
                     if (ID(targetTimeline) != subID) return false;
-                    targetTimeline->buildMutator (buff);       //  - delegate to child(Timeline) to build nested TreeMutator
+                    targetTimeline.buildMutator (buff);        //  - delegate to child(Timeline) to build nested TreeMutator
                     return true;
                   }))
         .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
@@ -307,11 +309,23 @@ namespace interact {
   }
   
   
-  /** @internal allocate a new TimelineWidget and attach it as child */
-  InteractionDirector::PTimelineCtrl
+  /** @internal allocate a new TimelineWidget and attach it as child.
+   * @todo is it really necessary to make such strong assumptions
+   *       regarding the format of the diff spec provided for
+   *       "element construction"?
+   */
+  TimelineGui
   InteractionDirector::injectTimeline (GenNode const& spec)
   {
     unimplemented ("allocate a TimelineWidget in some TimelinePanel and attach it's controller as child entity");
+    
+    REQUIRE (spec.data.isNested());
+    REQUIRE (spec.data.get<Rec>().hasAttribute(string{ATTR_fork}));
+    REQUIRE (TYPE_Fork == spec.data.get<Rec>().get(string{ATTR_fork}).data.recordType());
+    
+    TimelineGui anchorProxy{spec.idi, spec.data.get<Rec>().get(string{ATTR_fork}).idi};
+    anchorProxy.buildTimelineWidget (this->uiBus_);  ///////////////////////////////////////////TODO really create it right here?
+    return anchorProxy;
   }
 
 

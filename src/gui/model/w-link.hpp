@@ -78,14 +78,15 @@ namespace model {
    * Managed link to a `sigc::trackable` UI widget, without taking ownership.
    * Automatically installs a callback to switch this link into detached state
    * when the target (widget) is destroyed.
+   * @tparam TAR the actual target widget type, which can be forward declared,
+   *         until the point where the widget is actually constructed or attached.
+   *         This target type must derive from `sigc::trackable`
    * @warning _not_ threadsafe
    * @note only EX_SANE, since attaching, detaching and swapping might throw.
    */
   template<class TAR>
   class WLink
     {
-      static_assert (std::is_base_of<sigc::trackable, TAR>()
-                    ,"target type required to be sigc::trackable");
       
       TAR* widget_;
       
@@ -208,6 +209,9 @@ namespace model {
       TAR*
       attachTo (TAR& target)
         {
+          static_assert (std::is_base_of<sigc::trackable, TAR>()
+                        ,"target type required to be sigc::trackable");
+          
           try {
               target.add_destroy_notify_callback (&widget_
                                                  ,[](void* p)
