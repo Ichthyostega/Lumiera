@@ -3434,7 +3434,22 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201810100316" tags="GuiPattern design decision draft img" changecount="52">
+<div title="GuiTimelineSlave" creator="Ichthyostega" modifier="Ichthyostega" created="201810111210" tags="GuiPattern design decision draft" changecount="1">
+<pre>There are various reasons why we might want to offer multiple equivalent UI representations of the same Timeline...
+* the user might want to see several remote parts of the same timeline simultaneously, in focussed display
+* we allow several indeptendent top-level windows (think several desktops), so it might just happen that the same timeline is selected in several windows
+* we might want to introduce a focussed view on a nested sequence or virtual clip
+
+Now, since we build our UI on the notion of mapping session contents via a messaging system onto suitable presenters in the UI, we get a conceptual mismatch. Basically we need to cut at some point and duplicate some connections. Either we need the ability within a timeline presentation entity to serve several sets of slave widgets, or we need the ability for those presentation entities to collaborate, where one of them becomes the leader and automatically forwards all notifications to the other members of the cluster. Or, alternatively, we could think of pushing that duplication down into the session, in which case we get a TimelineClone entity, and the Builder then needs to be aware of this situation and generate duplicated responses to be sent to the UI.
+
+{{red{While reconsidering this topic in 10/2018}}}, it looks like I am leaning towards the most systematic option, which is to represent this duplication already within the session as TimelineClone. The rationale is
+* splitting this way is likely to produce the least accidental complexity -- at that point we are forced to cross-cut only a small number of other concerns. Were we to cut and duplicate within the UI, we'd be forced to carry care for slave entities into a huge number of entirely unrelated UI concerns, like layout management or media display feedback.
+* in the case of a focussed view on a nested sequence we are even forced to go that route, since doing otherwise would carry over core session responsibilities into the presentation layer. Consequently, any other solution scheme causes duplicating of functionality.
+* however -- if we implement slave timelines already within the session, we still need to make the UI counterpart basically aware of the situation. Thus the {{{TimelineControler}}} needs the ability to delegate some behaviour to another primary controller. That being said -- I still confirm the decision to postpone that topic altogether...
+
+In any case, this is an advanced topic, and nowhere near trivial. It seems reasonable to reject opening duplicate timeline presentations as a first step, and then address this topic way later, when we've gained sufficient knowledge regarding all the subtleties of timeline presentation and editing.</pre>
+</div>
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201810111203" tags="GuiPattern design decision draft img" changecount="55">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3472,6 +3487,10 @@ The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} in
 
 In case the UI starts with no session present in the core, an //empty timeline placeholder// will be displayed, which provides UI for creating a new session...
 
+
+!!!slave Timelines
+It is reasonable to expect the ability to have multiple [[slave timeline presentations|GuiTimelineSlave]] to access the same underlying timeline structure.
+Currently {{red{as of 10/2018}}} there is a preference to deal with that problem on session level -- but for now we decide to postpone this topic &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
 
 !!!nesting
 By principle, this workspace structure is //not a list of &quot;Tracks&quot;// -- it is a system of ''nested scopes''. The nesting emerges on demand.
@@ -9030,7 +9049,7 @@ Currently (1/11), the strategy is implemented according to (1) and (4) above, le
 Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect {{red{Question 4/11 -- isn't this done and fixed by now??}}}
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201612030116" tags="def" changecount="4">
+<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201810111211" tags="def SessionLogic" changecount="5">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a [[timeline view in the GUI|GuiTimelineView]] and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
@@ -9048,6 +9067,15 @@ Within the Project, there may be ''multiple timelines'', to be viewed and render
 Actually, Timeline is both an interface and acts as façade. Its an interface, because we'll need &quot;timeline views&quot; ({{red{really? is that a reason to create a hierarchy right here, or shouldn't that be rather conceptual?}}}. It is a façade to the raw structures in the model, in this case a {{{Placement&lt;BindingMO&gt;}}} attached immediately below the [[root scope|ModelRootMO]]. The implementation of the timeline(s) is maintained as StructAsset within the AssetManager, managed by shared-ptr. It always depends on a [[Sequence]], which might be created automatically as empty container when referring to a timeline.
 
 Besides building on the asset management, implementing Timeline (and Sequence) as StructAsset yields another benefit: ~StructAssets can be retrieved by query, allowing to specify more details of the configuration immediately on creation. //But on the short term, this approach causes problems:// there is no real inference engine integrated into Lumiera yet (as of 2/2010 the plan is to get an early alpha working end to end first). For now we're bound to use the {{{fake-configrules}}} and to rely on a hard wired simulation of the intended behaviour of a real query resolution. Just some special magic queries will work for now, but that's enough to get ahead.
+</pre>
+</div>
+<div title="TimelineClone" creator="Ichthyostega" modifier="Ichthyostega" created="201810111219" tags="SessionLogic draft" changecount="1">
+<pre>As [[detailed here|GuiTimelineSlave]], there are various good reasons to provide several UI views onto the same timeline. Yet taking an architectural viewpoint, we prefer representing such a slave display attachment as first-class citizen, right within the session model. Some further problems remain to be settled
+* the primary Timeline entity need to be aware of the clone's presence, since any effects of a Builder run must be propagated through the latter
+* we need a way to duplicate the diff feed, so the UI element representing the clone gets notified appropriately
+* and even when following this design approach with a //materialised duplication,// we still need some awareness and collaboration among the UI elements involved
+
+This topic is {{red{postponed as of 10/2018}}} &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
 </pre>
 </div>
 <div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="201612011740" tags="spec GuiPattern img" changecount="4">

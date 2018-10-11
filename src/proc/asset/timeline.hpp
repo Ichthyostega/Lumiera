@@ -47,6 +47,9 @@
  **       was no opportunity to set this system really into motion; this is
  **       not necessarily a bad thing, since meanwhile we understand way
  **       better in which way the Session will actually be accessed...
+ ** @todo looks like we'll represent a secondary, attached slave display of the
+ **       same Timeline rather by materialising it into a TimelineClone within
+ **       the session. This topic has been postponed as of 10/2018     //////////////////////////////////////TICKET #1083
  ** @see Session
  ** @see Sequence
  ** @see StructFactory
