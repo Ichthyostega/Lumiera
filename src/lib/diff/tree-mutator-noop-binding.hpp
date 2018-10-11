@@ -70,18 +70,34 @@ namespace diff{
      * Diff binding for black holes, happily accepting anything.
      * @note absorbs and silently ignores any diff verb.
      */
-    template<class PAR>
     class BlackHoleMutation
-      : public PAR
+      : public TreeMutator
       {
         
-        
       public:
-        BlackHoleMutation (PAR&& chain)
-          : PAR{std::forward<PAR>(chain)}
-          { }
+        BlackHoleMutation () = default;
         
         
+        /* ==== TreeMutator API ==== */
+        
+        using Elm  = GenNode const&;
+        using Buff = TreeMutator::Handle;
+        
+        bool hasSrc()                override { return true; }  ///< always keen to do yet more
+        
+        bool injectNew (Elm)         override { return true; }  ///< pretend to inject a new element
+        bool matchSrc (Elm)          override { return true; }  ///< purport suitable element is waiting
+        bool acceptSrc (Elm)         override { return true; }  ///< claim to handle any diff task
+        bool accept_until (Elm)      override { return true; }  ///< profess to forward anywhere
+        bool findSrc (Elm)           override { return true; }  ///< sham to find anything
+        bool assignElm (Elm)         override { return true; }  ///< accept any assignment
+        
+        bool
+        mutateChild (Elm, Buff buff) override                   ///< bluff to care for children, while just reproducing ourselves
+          {
+            buff.create (BlackHoleMutation());
+            return true;
+          }
       };
     
     
@@ -91,7 +107,7 @@ namespace diff{
     inline auto
     Builder<PAR>::ignoreAllChanges()
     {
-      return chainedBuilder<BlackHoleMutation<PAR>>();
+      return Builder<BlackHoleMutation> (BlackHoleMutation{});
     }
     
     
