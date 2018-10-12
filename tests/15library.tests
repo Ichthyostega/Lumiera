@@ -713,7 +713,7 @@ out-lit: 'trailing Withespace
 out-lit:        	' --> 'trailing_Withespace'
 out-lit: 'with    a  	 lot
 out-lit:   of Whitespace' --> 'with_a_lot_of_Whitespace'
-out-lit: 'with"much (punctuation)[]!' --> 'withmuch_(punctuation)'
+out-lit: '@with".'much (\$punctuation)[]!' --> '@with.much_(\$punctuation)'
 out-lit: '§&Ω%€  leading garbage' --> 'leading_garbage'
 out-lit: 'mixed    Ω   garbage' --> 'mixed_garbage'
 out-lit: 'Bääääh!!' --> 'Bh'

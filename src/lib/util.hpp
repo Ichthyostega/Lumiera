@@ -336,8 +336,8 @@ namespace util {
   inline bool
   isSameObject (A const& a, B const& b)
   {
-    return static_cast<const void*> (&a)
-        == static_cast<const void*> (&b);
+    return static_cast<const void*> (std::addressof(a))
+        == static_cast<const void*> (std::addressof(b));
   }
   
   
@@ -350,14 +350,14 @@ namespace util {
    * 
    * @par Example Conversions
 \verbatim
-   "Word"                             --> 'Word'
-   "a Sentence"                       --> 'a_Sentence'
-   "trailing Withespace  \t \n"       --> 'trailing_Withespace'
-   "with    a   lot  \nof Whitespace" --> 'with_a_lot_of_Whitespace'
-   "with\"much (punctuation)[]!"      --> 'withmuch_(punctuation)'
-   "§&Ω%€  leading garbage"           --> 'leading_garbage'
-   "mixed    Ω   garbage"             --> 'mixed_garbage'
-   "Bääääh!!"                         --> 'Bh'
+   "Word"                             --> "Word"
+   "a Sentence"                       --> "a_Sentence"
+   "trailing Withespace  \t \n"       --> "trailing_Withespace"
+   "with    a   lot  \nof Whitespace" --> "with_a_lot_of_Whitespace"
+   "@with\".\'much ($punctuation)[]!" --> "@with.much_($punctuation)"
+   "§&Ω%€  leading garbage"           --> "leading_garbage"
+   "mixed    Ω   garbage"             --> "mixed_garbage"
+   "Bääääh!!"                         --> "Bh"
 \endverbatim
    * @see \ref UtilSanitizedIdentifier_test
    * @see \ref lib::meta::sanitisedSymbol()
