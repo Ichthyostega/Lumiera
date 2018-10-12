@@ -144,7 +144,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {                                            // »Matcher« : how to know we're dealing with the right object
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {                                            // »Constructor« : what to do when the diff mentions a new entity
@@ -152,7 +152,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {                                            // »Mutator« : how to apply the diff recursively to a nested scope
-                    if (ID(target) != subID) return false;     //  - require match on already existing child object
+                    if (ID{*target} != subID) return false;    //  - require match on already existing child object
                     target->buildMutator (buff);               //  - delegate to child to build nested TreeMutator
                     return true;
                   }))

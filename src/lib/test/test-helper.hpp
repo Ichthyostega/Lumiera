@@ -147,6 +147,13 @@ namespace test{
       static_assert (not sizeof(X), "### Type Debugging ###");
     };
   
+  template<typename X>
+  void
+  typeDebugger(X&& x)
+  {
+    static_assert (not sizeof(X), "### Type Debugging ###");
+  }
+  
   
   
   namespace { // helper for printing type diagnostics

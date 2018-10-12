@@ -56,6 +56,8 @@ namespace timeline {
     , rootTrackID_{trackID}
     { }
   
+  TimelineGui::~TimelineGui() { }
+  
   
   /**
    * actually build a TimelineWidget to enact the role

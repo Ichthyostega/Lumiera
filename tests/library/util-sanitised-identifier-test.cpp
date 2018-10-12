@@ -46,7 +46,7 @@ namespace test {
           print_clean ("a Sentence");
           print_clean ("trailing Withespace\n       \t");
           print_clean ("with    a  \t lot\n  of Whitespace");
-          print_clean ("with\"much (punctuation)[]!");
+          print_clean ("@with\".\'much ($punctuation)[]!");
           print_clean ("§&Ω%€  leading garbage");
           print_clean ("mixed    Ω   garbage");
           print_clean ("Bääääh!!");

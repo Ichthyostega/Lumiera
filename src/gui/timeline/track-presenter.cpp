@@ -109,15 +109,15 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
-                    return make_unique<MarkerWidget>(spec.idi, this->uiBus_);
+                    return make_unique<MarkerWidget> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
@@ -128,15 +128,15 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PClip const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
-                    return make_unique<ClipPresenter>(spec.idi, this->uiBus_);
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
@@ -147,15 +147,15 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PFork const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PFork
                   {
-                    return make_unique<TrackPresenter>(spec.idi, this->uiBus_);
+                    return make_unique<TrackPresenter> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PFork& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   })));

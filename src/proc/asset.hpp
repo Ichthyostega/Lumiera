@@ -347,7 +347,7 @@ namespace asset {
   
   /** marker constant denoting a NIL asset */
   template<class KIND>
-  ID<KIND> ID<KIND>::INVALID = ID(0);
+  ID<KIND> ID<KIND>::INVALID = ID{0};
   
   
 }} // namespace proc::asset

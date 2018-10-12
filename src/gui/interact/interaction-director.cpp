@@ -140,7 +140,7 @@ namespace interact {
                   })
                .matchElement ([&](GenNode const& spec, TimelineGui const& elm) -> bool
                   {                                            // »Matcher« : how to know we're dealing with the right timeline object
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> TimelineGui
                   {                                            // »Constructor« : what to do when the diff mentions a new entity
@@ -148,7 +148,7 @@ namespace interact {
                   })
                .buildChildMutator ([&](TimelineGui& targetTimeline, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {                                            // »Mutator« : how to apply the diff recursively to a nested scope
-                    if (ID(targetTimeline) != subID) return false;
+                    if (ID{targetTimeline} != subID) return false;
                     targetTimeline.buildMutator (buff);        //  - delegate to child(Timeline) to build nested TreeMutator
                     return true;
                   }))

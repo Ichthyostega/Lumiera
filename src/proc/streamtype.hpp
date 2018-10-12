@@ -75,7 +75,7 @@ namespace proc {
       class ImplFacade;
       class ImplConstraint;
       
-      typedef lib::idi::EntryID<StreamType> ID;
+      using ID = lib::idi::EntryID<StreamType>;
       
       
       Prototype const& prototype;

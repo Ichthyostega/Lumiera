@@ -39,11 +39,14 @@
 // 03/18 - Dependency Injection / Singleton initialisation / double checked locking
 // 04/18 - investigate construction of static template members
 // 08/18 - Segfault when compiling some regular expressions for EventLog search
+// 10/18 - investigate insidious reinterpret cast
 
 
 /** @file try.cpp
- * Heisenbug hunt: random crashes in BusTerm_test, seemingly emerging from regular expression compilation.
- * Not able to reproduce the crash, unfortunately. //////////////////////////////////////////////////////////TICKET #1158
+ * Document an insidious wild cast, caused by the syntax `Type(arg)`.
+ * I was under the wrong assumption this would be handled equivalent to a constructor invocation.
+ * Seemingly it is rather handled as a C-style cast, i.e. equivalent to `(Type)arg`.
+ * @see [Question on Stackoverflow](https://stackoverflow.com/q/52782967/444796)
  */
 
 typedef unsigned int uint;
@@ -52,12 +55,10 @@ typedef unsigned int uint;
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
-#include <regex>
 #include <string>
-#include <vector>
 
 using std::string;
-using VecS = std::vector<string>;
+using util::isSameObject;
 
 
 
@@ -69,25 +70,32 @@ using VecS = std::vector<string>;
 
   
 
+class Wau
+  {
+    int i = -1;
+  };
+
+class Miau
+  {
+  public:
+    uint u = 1;
+  };
+
+
+
+
+
 
 int
 main (int, char**)
   {
-    VecS rexs{{"after.+_ATTRIBS_.+ins.+1 of 62 ≺293.gen029≻.+mut.+1 of 62 ≺293.gen029≻.+ins.+borgID.+293.+emu.+1 of 62 ≺293.gen029≻"
-              ,"after.+_ATTRIBS_.+ins.+1 of 64 ≺251.gen019≻.+mut.+1 of 64 ≺251.gen019≻.+ins.+borgID.+251.+emu.+1 of 64 ≺251.gen019≻"
-              ,"after.+_ATTRIBS_.+ins.+1 of 8 ≺203.gen036≻.+mut.+1 of 8 ≺203.gen036≻.+ins.+borgID.+203.+emu.+1 of 8 ≺203.gen036≻"
-              ,"after.+?_ATTRIBS_.+?ins.+?53 of 57 ≺358.gen010≻.+?mut.+?53 of 57 ≺358.gen010≻.+?ins.+?borgID.+?358.+?emu.+?53 of 57 ≺358.gen010≻"
-              ,"after.+?_ATTRIBS_.+?ins.+?53 of 63 ≺178.gen028≻.+?mut.+?53 of 63 ≺178.gen028≻.+?ins.+?borgID.+?178.+?emu.+?53 of 63 ≺178.gen028≻"
-              ,"after.+?_ATTRIBS_.+?ins.+?53 of 59 ≺498.gen038≻.+?mut.+?53 of 59 ≺498.gen038≻.+?ins.+?borgID.+?498.+?emu.+?53 of 59 ≺498.gen038≻"
-              ,"after.+?_ATTRIBS_.+?ins.+?53 of 60 ≺223.gen003≻.+?mut.+?53 of 60 ≺223.gen003≻.+?ins.+?borgID.+?223.+?emu.+?53 of 60 ≺223.gen003≻"
-              ,"after.+?_ATTRIBS_.+?ins.+?53 of 78 ≺121.gen015≻.+?mut.+?53 of 78 ≺121.gen015≻.+?ins.+?borgID.+?121.+?emu.+?53 of 78 ≺121.gen015≻"
-             }};
-    for (auto const& str : rexs)
-      {
-        auto rex = std::regex{str};
-        SHOW_EXPR (std::regex_search(str, rex));
-      }
+    Wau wau;
+    using ID = Miau &;
+    ID wuff = ID(wau);
     
+    cout << "Miau=" << wuff.u
+         << " ref to same object: " << isSameObject (wau, wuff)
+         << endl;
     
     cout <<  "\n.gulp.\n";
     

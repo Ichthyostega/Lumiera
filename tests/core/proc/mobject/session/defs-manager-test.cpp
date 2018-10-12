@@ -128,16 +128,16 @@ namespace test    {
       retrieveConstrainedDefault (string pID, string sID)
         {
           PPipe pipe1 = Pipe::query (""); // "the default pipe"
-          CHECK ( pipe1->getStreamID() != StreamType::ID(sID),
+          CHECK ( pipe1->getStreamID() != StreamType::ID{sID},
                   "stream-ID \"%s\" not suitable for test, because "
                   "the default-pipe \"%s\" happens to have the same "
                   "stream-ID. We need it to be different",
                   sID.c_str(), pID.c_str()
                  );
           
-          string query_for_sID ("stream("+sID+")");
+          string query_for_sID{"stream("+sID+")"};
           PPipe pipe2 = Pipe::query (query_for_sID);
-          CHECK (pipe2->getStreamID() == StreamType::ID(sID));
+          CHECK (pipe2->getStreamID() == StreamType::ID{sID});
           CHECK (pipe2 != pipe1);
           CHECK (pipe2 == Pipe::query (query_for_sID));   // reproducible
         }
@@ -146,13 +146,13 @@ namespace test    {
       void
       failureCreatesNewDefault()
         {
-          PPipe pipe1 = Session::current->defaults(Query<Pipe> ("")); // "the default pipe"
+          PPipe pipe1 = Session::current->defaults(Query<Pipe>{""}); // "the default pipe"
           
           string new_pID = _Fmt{"dummy_%s_%i"}
                                % pipe1->getPipeID()
                                % std::rand()
                                ;  // make random new pipeID
-          Query<Pipe> query_for_new ("pipe("+new_pID+")");
+          Query<Pipe> query_for_new{"pipe("+new_pID+")"};
           
           CHECK (!find (query_for_new));                              // check it doesn't exist
           PPipe pipe2 = Session::current->defaults (query_for_new);   // triggers creation
@@ -170,13 +170,13 @@ namespace test    {
       void
       verifyRemoval()
         {
-          Symbol pID ("some_pipe");
-          Query<Pipe> query_for_pID ("pipe("+pID+")");
+          Symbol pID{"some_pipe"};
+          Query<Pipe> query_for_pID{"pipe("+pID+")"};
           size_t hash;
             {
               // create new pipe and declare it to be a default
               PPipe pipe1 = Struct::retrieve.newInstance<Pipe> (pID);
-              Session::current->defaults.define(pipe1);
+              Session::current->defaults.define (pipe1);
               
               CHECK (2 == pipe1.use_count());                         // the pipe1 smart-ptr and the AssetManager
               hash = pipe1->getID();

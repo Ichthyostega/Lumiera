@@ -81,8 +81,12 @@ namespace timeline {
       
     public:
       TimelineGui (ID identity, ID trackID);
+      virtual ~TimelineGui();
       
-      // standard copy operations aceptable
+      // standard copy operations acceptable
+      
+      
+      operator ID()  const { return timelineID_; }
       
       
       /** actually build a TimelineWidget to enact the role

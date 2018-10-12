@@ -224,6 +224,7 @@ namespace diff{
             { }
           
         public:
+          explicit
           ID (GenNode const& node)
             : ID(node.idi)
             { }
