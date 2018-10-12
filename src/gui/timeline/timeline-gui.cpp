@@ -81,8 +81,12 @@ namespace timeline {
   void
   TimelineGui::buildMutator (lib::diff::TreeMutator::Handle buffer)
   {
-    if (*this)
-      UNIMPLEMENTED ("actually delegate diff application to the target");
+    if (this->isActive())
+      operator*().buildMutator (buffer);  // delegate to TimelineController
+    else                                 //  else when no widget exists...
+      buffer.create(
+        TreeMutator::build()
+          .ignoreAllChanges());       //     ...consume and ignore diff
   }
   
   

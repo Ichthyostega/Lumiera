@@ -113,11 +113,14 @@ namespace timeline {
        */
       TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus);
       
-     ~TimelineWidget();  
+     ~TimelineWidget();
       
       
       
     public: /* ===== Control interface ===== */
+      
+      /** allow for diff mutation (delegated to TimelineController */
+      void buildMutator (lib::diff::TreeMutator::Handle);
       
     public: /* ===== Signals ===== */
       

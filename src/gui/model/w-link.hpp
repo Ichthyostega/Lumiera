@@ -149,7 +149,7 @@ namespace model {
       explicit
       operator bool()  const
         {
-          return bool(widget_);
+          return bool{widget_};
         }
       
       TAR&
@@ -165,6 +165,10 @@ namespace model {
           __ensureAlive();
           return widget_;
         }
+      
+      
+      bool isValid()  const { return bool{*this}; }
+      bool isActive() const { return bool{*this}; }
       
       
       /** detach and deactivate this link

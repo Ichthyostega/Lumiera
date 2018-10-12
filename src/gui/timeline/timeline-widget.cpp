@@ -73,12 +73,14 @@ namespace timeline {
       UNIMPLEMENTED ("build the timeline UI");
     }
   
+  TimelineWidget::~TimelineWidget() { }
   
-  TimelineWidget::~TimelineWidget()
+  
+  void
+  TimelineWidget::buildMutator (lib::diff::TreeMutator::Handle buff)
   {
+    control_->buildMutator (buff);
   }
-  
-  
   
   
   
