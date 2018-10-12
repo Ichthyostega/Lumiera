@@ -16549,7 +16549,7 @@
 </node>
 <node CREATED="1539270808827" ID="ID_1352270227" MODIFIED="1539270817730" TEXT="f&#xfc;r TimelineGui">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1352270227" ENDARROW="Default" ENDINCLINATION="117;0;" ID="Arrow_ID_1672775567" SOURCE="ID_1624846094" STARTARROW="None" STARTINCLINATION="117;0;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539294555064" HGAP="45" ID="ID_1365984217" MODIFIED="1539299038616" TEXT="Problem: diff ignorieren" VSHIFT="23">
+<node COLOR="#435e98" CREATED="1539294555064" HGAP="45" ID="ID_1365984217" MODIFIED="1539302548248" TEXT="Problem: diff ignorieren" VSHIFT="23">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1539294576338" ID="ID_485684974" MODIFIED="1539294587881" TEXT="kann das auftreten....?">
 <icon BUILTIN="help"/>
@@ -16579,12 +16579,14 @@
 <node CREATED="1539294678444" ID="ID_934706379" MODIFIED="1539294693604" TEXT="TreeMutator scheitert per Default">
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539294698801" ID="ID_1533611583" MODIFIED="1539299026168" TEXT="also brauche ich einen /dev/null-Mutator">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1539294698801" ID="ID_1533611583" MODIFIED="1539302545239" TEXT="also brauche ich einen /dev/null-Mutator">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1539294727470" ID="ID_1958316881" MODIFIED="1539299017213" TEXT="speziellen Binding-Layer fabrizieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539294807066" ID="ID_1137741867" MODIFIED="1539294809654" TEXT="wie?"/>
-<node CREATED="1539294812306" ID="ID_1564927840" MODIFIED="1539294826763" TEXT="mu&#xdf; das Standard-Mapping anschauen"/>
+<node CREATED="1539294812306" ID="ID_1564927840" MODIFIED="1539302566302" TEXT="mu&#xdf; das Standard-Mapping anschauen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
 <node CREATED="1539294846845" ID="ID_1839295475" MODIFIED="1539294935855" TEXT="TreeDiffMutatorBinding">
 <icon BUILTIN="info"/>
 <node CREATED="1539294859537" ID="ID_637091190" MODIFIED="1539294928138" TEXT="__expect_further_elements -&gt; immer true">
@@ -16600,20 +16602,46 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1539302456636" ID="ID_809868228" MODIFIED="1539302478177" TEXT="Idee: mit anderen Layern kombinieren...">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1539302481080" ID="ID_126724611" MODIFIED="1539302542052" TEXT="static_assertion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit es nicht versehentlich &#252;ber einen anderen Layer gelegt wird,
+    </p>
+    <p>
+      welchen es dann &#252;berdecken und au&#223;er Gefecht setzen w&#252;rde.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Habe verifiziert, da&#223; diese Assertion tats&#228;chlich greift
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1539294743739" ID="ID_1596076772" MODIFIED="1539294758145" TEXT="Builder().ignoreAll()">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539294760464" ID="ID_1376112641" MODIFIED="1539294792408" TEXT="DiffIgnoreChanges_test">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1539294760464" ID="ID_1376112641" MODIFIED="1539302371782" TEXT="DiffIgnoreChanges_test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1539298953819" ID="ID_1706428916" MODIFIED="1539298972769" TEXT="leerer TreeMutator produziert Fehler">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1539298974312" ID="ID_986781359" MODIFIED="1539298992271" TEXT="BlackHoleMutation fri&#xdf;t alles">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539298993222" ID="ID_647799125" MODIFIED="1539299007509" TEXT="Kombinieren mit speziellem Overlay">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1539298993222" ID="ID_647799125" MODIFIED="1539302373522" TEXT="Kombinieren mit speziellem Overlay">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

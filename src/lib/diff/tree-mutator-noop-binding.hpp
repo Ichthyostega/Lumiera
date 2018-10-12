@@ -51,14 +51,10 @@
 
 
 #include "lib/error.hpp"
-#include "lib/symbol.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/tree-mutator.hpp"
-#include "lib/format-string.hpp"
-#include "lib/idi/entry-id.hpp"
 
-#include <utility>
-
+#include <type_traits>
 
 namespace lib {
 namespace diff{
@@ -85,7 +81,7 @@ namespace diff{
         
         bool hasSrc()                override { return true; }  ///< always keen to do yet more
         
-        bool injectNew (Elm)         override { return true; }  ///< pretend to inject a new element
+        bool injectNew (Elm)         override { return true; }  ///< pretend to inject something new
         bool matchSrc (Elm)          override { return true; }  ///< purport suitable element is waiting
         bool acceptSrc (Elm)         override { return true; }  ///< claim to handle any diff task
         bool accept_until (Elm)      override { return true; }  ///< profess to forward anywhere
@@ -93,7 +89,7 @@ namespace diff{
         bool assignElm (Elm)         override { return true; }  ///< accept any assignment
         
         bool
-        mutateChild (Elm, Buff buff) override                   ///< bluff to care for children, while just reproducing ourselves
+        mutateChild (Elm, Buff buff) override                   ///< ignore inferiors, yet reproduce yourself
           {
             buff.create (BlackHoleMutation());
             return true;
@@ -102,11 +98,21 @@ namespace diff{
     
     
     
-    /** Entry point for DSL builder */
+    /** Entry point for DSL builder: create a binding which consumes any diff without effect.
+     * @warning must be used as bottom most layer in a custom TreeMutator, since it would
+     *          otherwise shadow and disable any binding layer below.
+     * @note however it is possible to add a (typically selective) binding layer on top;
+     *          any diff verb _not handled_ by such a top layer will fall through and
+     *          be silently ignored. Such a setup can be used to "fish" for some specific
+     *          attributes within a diff stream.
+     */
     template<class PAR>
     inline auto
     Builder<PAR>::ignoreAllChanges()
     {
+      static_assert (std::is_same<PAR, TreeMutator>()
+                    ,"ignoreAllChanges() must be used as bottom layer.");
+      
       return Builder<BlackHoleMutation> (BlackHoleMutation{});
     }
     
