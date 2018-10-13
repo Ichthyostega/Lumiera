@@ -50,6 +50,7 @@
 #include "proc/cmd.hpp"
 #include "backend/real-clock.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/util.hpp"
@@ -58,6 +59,7 @@
 //#include <list>
 
 //using util::isnil;
+using util::_Fmt;
 //using std::list;
 //using std::shared_ptr;
 using lib::idi::EntryID;
@@ -65,6 +67,7 @@ using lib::hash::LuidH;
 using lib::diff::Rec;
 using lib::diff::TreeMutator;
 using lib::diff::collection;
+using lib::diff::LUMIERA_ERROR_DIFF_STRUCTURE;
 using std::make_unique;
 using util::toString;
 
@@ -309,6 +312,38 @@ namespace interact {
   }
   
   
+  namespace {
+    /**
+     * The timeline is actually a front-end to a binding to a root track.
+     * For that reason, we always create the root-track representation alongside
+     * the timeline, and thus we need a very special INS message to create a timeline:
+     * - it must be a record (an "object")
+     * - a nested attribute with key ATTR_fork is mandatory
+     * - this nested attribute likewise needs to be a record
+     * - and must be tagged with TYPE_Fork
+     * More specifically, the usual way to deliver such a structure is not allowed here,
+     * which would be first to send an empty record and then to open and populate it.
+     * All the elements mentioned above need to be present right within the payload
+     * value of the INS message creating the timeline. This non-standard format is
+     * perfectly legal in our tree diff language (just requires a heap allocation
+     * behind the scenes to hold the nested data, but who cares?)
+     */
+    ID
+    verifyDiffStructure_and_extract_RootTrack (GenNode const& spec)
+    {
+      if (not (spec.data.isNested()
+               and spec.data.get<Rec>().hasAttribute(string{ATTR_fork})
+               and TYPE_Fork == spec.data.get<Rec>().get(string{ATTR_fork}).data.recordType()
+         )    )
+        throw error::State (_Fmt{"When populating a new Timeline, a root track must be given immediately"
+                                 "nested into INS message. We got the following initialisation payload: %s"}
+                                % spec                      
+                           , LERR_(DIFF_STRUCTURE));
+      
+      return spec.data.get<Rec>().get(string{ATTR_fork}).idi;
+    }
+  }
+  
   /** @internal allocate a new TimelineWidget and attach it as child.
    * @todo is it really necessary to make such strong assumptions
    *       regarding the format of the diff spec provided for
@@ -319,11 +354,8 @@ namespace interact {
   {
     unimplemented ("allocate a TimelineWidget in some TimelinePanel and attach it's controller as child entity");
     
-    REQUIRE (spec.data.isNested());
-    REQUIRE (spec.data.get<Rec>().hasAttribute(string{ATTR_fork}));
-    REQUIRE (TYPE_Fork == spec.data.get<Rec>().get(string{ATTR_fork}).data.recordType());
-    
-    TimelineGui anchorProxy{spec.idi, spec.data.get<Rec>().get(string{ATTR_fork}).idi};
+    ID rootTrack = verifyDiffStructure_and_extract_RootTrack (spec);
+    TimelineGui anchorProxy{spec.idi, rootTrack};
     anchorProxy.buildTimelineWidget (this->uiBus_);  ///////////////////////////////////////////TODO really create it right here?
     return anchorProxy;
   }

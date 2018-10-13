@@ -157,12 +157,12 @@ namespace timeline {
                     return true;
                   }))
         .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
-            {                                                  // »Attribute Mutator« : how enter an object field as nested scope
+            {                                                  // »Attribute Mutator« : how to enter an object field as nested scope
               REQUIRE (fork_);
               fork_->buildMutator(buff);
             })
         .change(ATTR_name, [&](string val)
-            {                                                  // »Attribute Setter« : how assign a new value to some object field
+            {                                                  // »Attribute Setter« : how to assign a new value to some object field
               name_ = val;
             }));
   }

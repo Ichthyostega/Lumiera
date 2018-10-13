@@ -39,6 +39,7 @@
 namespace lib {
 namespace diff{
   
+  LUMIERA_ERROR_DEFINE(DIFF_STRUCTURE, "Invalid diff structure: implicit rules and assumptions violated.");
   LUMIERA_ERROR_DEFINE(DIFF_CONFLICT, "Collision in diff application: contents of target not as expected.");
   
   
