@@ -44,16 +44,17 @@
 #define GUI_PANEL_TIMELINE_PANEL_H
 
 #include "gui/panel/panel.hpp"
+#include "gui/timeline/timeline-widget.hpp"
 
-//#include <memory>
+#include <memory>
 #include <vector>
 
 
 
 namespace gui  {
 namespace model{
-    class Sequence;
-  }
+  class Sequence;
+}
 namespace panel {
   
 //using std::shared_ptr;
@@ -134,8 +135,11 @@ namespace panel {
       static const char* getTitle();
       static const gchar* getStockID();
       
+      /////////////////////////////////////////////////////////////TODO WIP
+      void addTimeline (std::unique_ptr<timeline::TimelineWidget>&&);
       
     private:
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1016 : WIP kill everything below....  
       Gtk::Box twoParts_;
       Gtk::ButtonBox buttons_;
       Gtk::Button button_1_;

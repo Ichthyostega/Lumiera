@@ -55,6 +55,7 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/model/w-link.hpp"
 #include "lib/diff/diff-mutable.hpp"
+#include "lib/nocopy.hpp"
 
 #include <memory>
 
@@ -73,6 +74,7 @@ namespace timeline {
   class TimelineGui
     : public model::WLink<TimelineWidget>
     , public lib::diff::DiffMutable
+    , util::Cloneable
     {
       using ID = BusTerm::ID;
       
@@ -83,8 +85,8 @@ namespace timeline {
       TimelineGui (ID identity, ID trackID);
       virtual ~TimelineGui();
       
-      // standard copy operations acceptable
-      
+      TimelineGui (TimelineGui const&);
+      TimelineGui (TimelineGui &&);
       
       operator ID()  const { return timelineID_; }
       

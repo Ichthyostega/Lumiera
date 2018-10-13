@@ -41,8 +41,9 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ctrl/ui-state.hpp"
 #include "gui/setting/asset-controller.hpp"
-#include "gui/timeline/timeline-widget.hpp"
-#include "gui/timeline/timeline-controller.hpp"   /////////////////TODO still required?
+#include "gui/panel/timeline-panel.hpp"
+//#include "gui/timeline/timeline-widget.hpp"
+//#include "gui/timeline/timeline-controller.hpp"   /////////////////TODO still required?
 #include "include/ui-protocol.hpp"
 #include "proc/mobject/session/root.hpp"
 #include "proc/asset/sequence.hpp"                ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
@@ -344,19 +345,25 @@ namespace interact {
     }
   }
   
-  /** @internal allocate a new TimelineWidget and attach it as child.
-   * @todo is it really necessary to make such strong assumptions
-   *       regarding the format of the diff spec provided for
-   *       "element construction"?
+  /**
+   * @internal allocate a new TimelineWidget and attach it as child.
+   * @remarks assuming the structure of the diff is adequate, we'll first create a proxy
+   *    to manage this timeline. Then we use some service to find a suitable location to house
+   *    a TimelineWidget. And finally we trigger creation of the widget, which in turn creates
+   *    a TimelineController attached to the UI-Bus
    */
   TimelineGui
   InteractionDirector::injectTimeline (GenNode const& spec)
   {
-    unimplemented ("allocate a TimelineWidget in some TimelinePanel and attach it's controller as child entity");
-    
     ID rootTrack = verifyDiffStructure_and_extract_RootTrack (spec);
     TimelineGui anchorProxy{spec.idi, rootTrack};
-    anchorProxy.buildTimelineWidget (this->uiBus_);  ///////////////////////////////////////////TODO really create it right here?
+    
+    globalCtx_.windowLoc_
+              .locatePanel()
+              .find_or_create<panel::TimelinePanel>()
+              .addTimeline (
+                  anchorProxy.buildTimelineWidget (this->uiBus_));
+    
     return anchorProxy;
   }
 

@@ -38,6 +38,7 @@
 #include "gui/timeline/timeline-gui.hpp"
 #include "gui/timeline/timeline-widget.hpp"
 
+#include <utility>
 
 using lib::diff::TreeMutator;
 using std::make_unique;
@@ -54,6 +55,22 @@ namespace timeline {
   TimelineGui::TimelineGui (ID identity, ID trackID)
     : timelineID_{identity}
     , rootTrackID_{trackID}
+    { }
+  
+  /**
+   * @remark basically the default, just defined here explicitly
+   *  to allow using TimelineGui without the need to include timeline-widget.hpp
+   */
+  TimelineGui::TimelineGui (TimelineGui const& r)
+    : WLink{r}, util::Cloneable{}
+    , timelineID_{r.timelineID_}
+    , rootTrackID_{r.rootTrackID_}
+    { }
+  
+  TimelineGui::TimelineGui (TimelineGui && rr)
+    : WLink{std::move (rr)}
+    , timelineID_{rr.timelineID_}
+    , rootTrackID_{rr.rootTrackID_}
     { }
   
   TimelineGui::~TimelineGui() { }

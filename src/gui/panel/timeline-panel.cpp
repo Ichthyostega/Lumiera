@@ -150,6 +150,13 @@ namespace panel {
   
   
   void
+  TimelinePanel::addTimeline (std::unique_ptr<timeline::TimelineWidget>&& widget)
+  {
+    UNIMPLEMENTED ("take ownership of the widget and place it into a new tab");
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1016 : WIP kill everything below....  
+  void
   TimelinePanel::experiment_1()
   {
     frame_.set_label("Experiment 1... PLACE");

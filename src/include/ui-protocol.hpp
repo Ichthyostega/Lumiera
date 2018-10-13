@@ -51,9 +51,14 @@
 #define GUI_INTERFACE_UI_PROTOCOL_H
 
 
+#include "lib/error.hpp"
 #include "lib/symbol.hpp"
 
 
+namespace lib {
+namespace diff{
+  LUMIERA_ERROR_DECLARE(DIFF_STRUCTURE); ///< Invalid diff structure: implicit rules and assumptions violated.
+}}
 namespace Glib {
 //class ustring;  /////////////////////////////TODO needed?
 }
@@ -62,6 +67,7 @@ namespace gui {
 //using lib::Literal;
   using lib::Symbol;
 //using cuString = const Glib::ustring;
+  using lib::diff::LERR_(DIFF_STRUCTURE);
   
   
   extern const Symbol META_kind;
