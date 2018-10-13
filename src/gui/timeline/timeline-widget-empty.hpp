@@ -38,6 +38,7 @@
 
 #include "gui/gtk-base.hpp"
 
+#include "gui/timeline/timeline-widget.hpp"
 #include "lib/time/timevalue.hpp"
 
 //#include <memory>
@@ -56,6 +57,7 @@ namespace timeline {
    *     and a scrollable timeline body (right). The layout of both parts is aligned.
    */
   class TimelineWidgetEmpty
+    : public TimelinePage
     {
     public:
       /**

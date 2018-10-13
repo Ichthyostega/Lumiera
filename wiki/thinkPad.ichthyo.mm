@@ -19053,11 +19053,17 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694550601" ID="ID_712786561" MODIFIED="1538942194204" TEXT="Timeline-Panel">
 <linktarget COLOR="#fec680" DESTINATION="ID_712786561" ENDARROW="Default" ENDINCLINATION="-1077;-98;" ID="Arrow_ID_433721169" SOURCE="ID_1231562526" STARTARROW="None" STARTINCLINATION="860;206;"/>
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539394757429" ID="ID_376064530" MODIFIED="1539394763517" TEXT="wegr&#xe4;umen des Testcodes">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1539394757429" ID="ID_376064530" MODIFIED="1539459391069" TEXT="wegr&#xe4;umen des Testcodes">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539394765628" ID="ID_308731527" MODIFIED="1539394778891" TEXT="Widget-Struktur anlegen">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1539459412979" ID="ID_1273129379" MODIFIED="1539459441106" TEXT="leere Platzhalter-Timeline">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539459428928" ID="ID_1156538064" MODIFIED="1539459436200" TEXT="best&#xfc;cken">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1539394779490" ID="ID_1710199928" MODIFIED="1539394784490" TEXT="Verwalten der Tabs">
 <icon BUILTIN="flag-yellow"/>
@@ -35312,6 +35318,46 @@
 </node>
 <node CREATED="1539134848420" ID="ID_4911843" MODIFIED="1539134870669" TEXT="ein selbstbez&#xfc;glicher substanzloser Strukturkern"/>
 <node CREATED="1539134911707" ID="ID_847488848" MODIFIED="1539134930189" TEXT="DiffConstituent -&gt; emanation as diff"/>
+<node CREATED="1539395579133" ID="ID_589161293" MODIFIED="1539395583088" TEXT="Anforderungen">
+<node CREATED="1539395591547" ID="ID_1807468145" MODIFIED="1539395602517" TEXT="Population-Diff erzeugen"/>
+<node CREATED="1539395603034" ID="ID_1342955865" MODIFIED="1539395608301" TEXT="Delta-Diff erzeugen">
+<node CREATED="1539395609169" ID="ID_1189203662" MODIFIED="1539395616803" TEXT="mu&#xdf; exakt den vorherigen Stand kennen"/>
+<node CREATED="1539395620120" ID="ID_1953087376" MODIFIED="1539395775000" TEXT="Stichwort: asynchrone Kommunkiation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      GUI und Session schicken Nachrichten.
+    </p>
+    <p>
+      W&#228;hrend der Builder l&#228;uft, kann das GUI schon weitere Nachrichten geschickt haben,
+    </p>
+    <p>
+      die dann noch in der ProcDispatcher-Queue h&#228;ngen. Daher kann sich die Antwort
+    </p>
+    <p>
+      als Resultat auf einen Builder-Lauf noch auf einen vorherigen Zustand beziehen.
+    </p>
+    <p>
+      Es kann aber auch ein Builder-Lauf die kummulierten Ergebnisse von mehreren Commands behandeln.
+    </p>
+    <p>
+      In jedem Fall mu&#223; der DiffConstituent genau wissen, was der zuletzt geschickte Stand war,
+    </p>
+    <p>
+      damit er einen Diff erzeugt, der garantiert auf der anderen Seite anwendbar ist.
+    </p>
+    <p>
+      Denn letzteres ist bei uns eine Grundannahme. Es gibt keine ungef&#228;hren Diffs!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1539270491013" ID="ID_1435731309" MODIFIED="1539388289807" TEXT="Problem der korrekten Diff-Struktur">
 <arrowlink COLOR="#d47366" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="590;-127;" ID="Arrow_ID_308349501" STARTARROW="None" STARTINCLINATION="915;0;"/>

@@ -41,7 +41,7 @@
 #include <utility>
 
 using lib::diff::TreeMutator;
-using std::make_unique;
+using std::unique_ptr;
 
 
 namespace gui {
@@ -77,15 +77,24 @@ namespace timeline {
   
   
   /**
-   * actually build a TimelineWidget to enact the role
-   * represented by this smart-handle
+   * actually build a TimelineWidget to enact the role represented by this smart-handle.
+   * @remark some implementation twist involved here, since TimelinePanel manages a collection
+   *    of `unique_ptr<TimelinePage>`, in order to be able to hold an empty placeholder page.
+   *    Since C++ unfortunately does not support _Covariance_ proper, we need to fabricate a
+   *    unique_ptr<TimelinePage> right here, which can than be handed over to TimelinePanel,
+   *    yet still we _do inherit_ from WLink<TimelineWidget>, i.e. expose the subclass.
+   *    The `unque_ptr` owns and manages the TimelineWidget, which is itself non-copyable
+   *    and stays at a fixed location in heap memory, as is required by gui::ctrl::Nexus
+   *    to maintain a registration of the UI-Bus connection. WLink to the contrary
+   *    just connects to the widget, and is automatically disconnected when it dies.
    */
-  std::unique_ptr<TimelineWidget>
+  unique_ptr<TimelinePage>
   TimelineGui::buildTimelineWidget (BusTerm& nexus)
   {
-    auto widget = std::make_unique<TimelineWidget> (timelineID_, rootTrackID_, nexus);
+    TimelineWidget* widget;
+    unique_ptr<TimelinePage> pageHandle {widget = new TimelineWidget{timelineID_, rootTrackID_, nexus}};
     this->connect (*widget);
-    return widget;
+    return pageHandle;
   }
   
   

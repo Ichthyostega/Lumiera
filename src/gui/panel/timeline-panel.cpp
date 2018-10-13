@@ -33,105 +33,48 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/panel/timeline-panel.hpp"
+#include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/timeline-widget-empty.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
-#include "gui/ui-bus.hpp"
-#include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"
+//#include "gui/ui-bus.hpp"
+//#include "lib/format-string.hpp"
+//#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
-#include <algorithm>
-#include <cstdlib>
-#include <string>
+//#include <algorithm>
+//#include <cstdlib>
+//#include <string>
 
 
 
-using util::_Fmt;
+//using util::_Fmt;
 //using std::shared_ptr;
-//using std::weak_ptr;
+using std::make_unique;
 //using util::contains;
-using Gtk::Widget;
-using sigc::mem_fun;
-using sigc::ptr_fun;
-using std::string;
-using std::rand;
-using std::max;
+//using Gtk::Widget;
+//using sigc::mem_fun;
+//using sigc::ptr_fun;
+//using std::string;
 
 
 namespace gui {
 namespace panel {
-    
+  
+  using timeline::TimelineWidget;
+  using timeline::TimelineWidgetEmpty;
   
   
   TimelinePanel::TimelinePanel (workspace::PanelManager& panelManager,
                                 Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
-    , twoParts_(Gtk::ORIENTATION_VERTICAL)
-    , buttons_()
-    , frame_("Gtk::Layout Experiments")
-    , scroller_()
-    , canvas_()
+    , tabs_{}
+    , pages_{}
     {
-      twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
-      twoParts_.pack_start(frame_);
-      
-      buttons_.set_layout(Gtk::BUTTONBOX_START);
-      
-      // buttons to trigger experiments
-      button_1_.set_label("_place");
-      button_1_.set_use_underline();
-      button_1_.set_tooltip_markup("<b>Experiment 1</b>:\nplace new child widget\nat random position on the canvas");
-      button_1_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_1));
-      buttons_.add(button_1_);
-      
-      button_2_.set_label("_move");
-      button_2_.set_use_underline();
-      button_2_.set_tooltip_markup("<b>Experiment 2</b>:\nmove all child widgets randomly");
-      button_2_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_2));
-      buttons_.add(button_2_);
-      
-      button_3_.set_label("a_lign");
-      button_3_.set_use_underline();
-      button_3_.set_tooltip_markup("<b>Experiment 3</b>:\nalign all child widgets in a row\nwith silight random vertical offset");
-      button_3_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_3));
-      buttons_.add(button_3_);
-      
-      button_4_.set_label("_grow");
-      button_4_.set_use_underline();
-      button_4_.set_tooltip_markup("<b>Experiment 4</b>:\nextend arbitrary child widget's text");
-      button_4_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_4));
-      buttons_.add(button_4_);
-      
-      button_5_.set_label("_kill");
-      button_5_.set_use_underline();
-      button_5_.set_tooltip_markup("<b>Experiment 5</b>:\nkill arbitrary child widget");
-      button_5_.signal_clicked().connect(
-                  mem_fun(*this, &TimelinePanel::experiment_5));
-      buttons_.add(button_5_);
-      
-      toggleDraw_.set_label("draw");
-      toggleDraw_.signal_clicked().connect(
-                  [this]() {
-                             canvas_.enableDraw (this->toggleDraw_.get_active());
-                           });
-      buttons_.add(toggleDraw_);
-      //(End)buttons...
-      
-      frame_.add(scroller_);
-      frame_.set_border_width(5);
-      
-      scroller_.set_shadow_type(Gtk::SHADOW_NONE);
-      scroller_.set_border_width(10);
-      scroller_.add(canvas_);
-      
-      canvas_.adjustSize();
+      pages_.emplace_back (new TimelineWidgetEmpty{});
       
       // show everything....
-      this->add(twoParts_);
+      this->add(tabs_);
       this->show_all();
     }
   
@@ -150,236 +93,10 @@ namespace panel {
   
   
   void
-  TimelinePanel::addTimeline (std::unique_ptr<timeline::TimelineWidget>&& widget)
+  TimelinePanel::addTimeline (PageHandle&& pTimelineWidget)
   {
     UNIMPLEMENTED ("take ownership of the widget and place it into a new tab");
   }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1016 : WIP kill everything below....  
-  void
-  TimelinePanel::experiment_1()
-  {
-    frame_.set_label("Experiment 1... PLACE");
-    
-    ChildEx* chld = makeChld();
-    childz_.push_back(chld);
-    uint x = rand() % 1000;
-    uint y = rand() % 500;
-    canvas_.put(*chld, x, y);
-    chld->show();
-    canvas_.adjustSize();
-  }
-  
-  
-  void
-  TimelinePanel::experiment_2()
-  {
-    frame_.set_label("Experiment 2... MOVE");
-    for (Widget* chld : childz_)
-      {
-        uint x = canvas_.child_property_x(*chld);
-        uint y = canvas_.child_property_y(*chld);
-        int deltaX = -20 + rand() % 41;
-        int deltaY = -15 + rand() % 31;
-        x = uint(max (0, int(x) + deltaX));
-        y = uint(max (0, int(y) + deltaY));
-        
-        canvas_.move (*chld, x,y);
-      }
-    canvas_.adjustSize();
-  }
-  
-  
-  void
-  TimelinePanel::experiment_3()
-  {
-    frame_.set_label("Experiment 3... ALIGN");
-    uint pos=0;
-    for (Widget* chld : childz_)
-      {
-        uint y = rand() % 30;
-        canvas_.move (*chld, pos, y);
-        
-        int width = chld->get_allocated_width();
-        pos += 0.6 * width;
-      }
-    canvas_.adjustSize();
-  }
-  
-  
-  void
-  TimelinePanel::experiment_4()
-  {
-    frame_.set_label("Experiment 4... GROW");
-    uint selector = rand() % childz_.size();
-    ChildEx& toGrow = *childz_[selector];
-    toGrow.set_label ("***"+toGrow.get_label()+"***");
-  }
-  
-  
-  void
-  TimelinePanel::experiment_5()
-  {
-    frame_.set_label("Experiment 5... KILL");
-    uint killPos = rand() % childz_.size();
-    ChildV::iterator killThat(&childz_[killPos]);
-    ChildEx* victim = *killThat;
-    childz_.erase (killThat);
-    canvas_.remove (*victim);
-    delete victim;
-  }
-  
-  
-  void
-  Canvas::enableDraw (bool yes)
-  {
-    shallDraw_ = yes;
-    
-    // force redrawing of the visible area...
-    auto win = get_window();
-    if (win)
-      {
-        int w = get_allocation().get_width();
-        int h = get_allocation().get_height();
-        Gdk::Rectangle rect{0, 0, w, h};
-        win->invalidate_rect(rect, false);
-      }
-  }
-  
-  
-  
-  void
-  Canvas::adjustSize()
-  {
-    recalcExtension_ = true;
-  }
-  
-  void
-  Canvas::determineExtension()
-  {
-      if (not recalcExtension_) return;
-      
-      uint extH=20, extV=20;
-      Gtk::Container::ForeachSlot callback
-        = [&](Gtk::Widget& chld)
-                {
-                  auto alloc = chld.get_allocation();
-                  uint x = alloc.get_x();
-                  uint y = alloc.get_y();
-                  x += alloc.get_width();
-                  y += alloc.get_height();
-                  extH = max (extH, x);
-                  extV = max (extV, y);
-                };
-      foreach(callback);
-      recalcExtension_ = false;
-      set_size (extH, extV);
-  }
-  
-  
-  bool
-  Canvas::on_draw(Cairo::RefPtr<Cairo::Context> const& cox)
-  {
-    if (shallDraw_)
-      {
-        uint extH, extV;
-        determineExtension();
-        get_size (extH, extV);
-        
-        auto adjH = get_hadjustment();
-        auto adjV = get_vadjustment();
-        double offH = adjH->get_value();
-        double offV = adjV->get_value();
-        
-        cox->save();
-        cox->translate(-offH, -offV);
-        
-        // draw red diagonal line
-        cox->set_source_rgb(0.8, 0.0, 0.0);
-        cox->set_line_width (10.0);
-        cox->move_to(0, 0);
-        cox->line_to(extH, extV);
-        cox->stroke();
-        cox->restore();
-        
-        // cause child widgets to be redrawn
-        bool event_is_handled = Gtk::Layout::on_draw(cox);
-        
-        // any drawing which follows happens on top of child widgets...
-        cox->save();
-        cox->translate(-offH, -offV);
-        
-        cox->set_source_rgb(0.2, 0.4, 0.9);
-        cox->set_line_width (2.0);
-        cox->rectangle(0,0, extH, extV);
-        cox->stroke();
-        cox->restore();
-        
-        return event_is_handled;
-      }
-    else
-      return Gtk::Layout::on_draw(cox);
-  }
-
-  
-  /* === Support for Investigation === */
-  
-  namespace {
-    _Fmt childID("Chld-%02d");
-    
-    int instanceCnt = 0;
-  }
-  
-  
-  uint ChildEx::childNo = 0;
-  
-  
-  ChildEx::ChildEx()
-    : Gtk::Button(string (childID % childNo++))
-    {
-      ++instanceCnt;
-    }
-  
-  
-  void
-  ChildEx::on_clicked()
-  {
-    cout << "|=="<<get_label()<<endl;
-  }
-  
-  
-  ChildEx*
-  TimelinePanel::makeChld()
-  {
-    return Gtk::manage(new ChildEx);
-  }
-
-  
-  ////////////////////////////////////////////////////////////////////TICKET #1020 : verification code for instance management
-  ChildEx::~ChildEx()
-    {
-      --instanceCnt;
-      if (instanceCnt > 0)
-        cout << "  ↯↯  still "<<instanceCnt<<" children to kill..."<<endl;
-      else
-      if (instanceCnt == 0)
-        cout << "+++ Success: all children are dead..."<<endl;
-      else
-        cout << "### ALARM ###"<<endl
-             << "instanceCnt == "<<instanceCnt <<endl;
-    }
-  
-  void
-  __verifyDeadChildren()
-    {
-      if (instanceCnt == 0)
-        cout << "+++ Success: all children are dead..."<<endl;
-      else
-        cout << "### ALARM ###"<<endl
-             << "instanceCnt == "<<instanceCnt <<endl;
-    }
-  ////////////////////////////////////////////////////////////////////TICKET #1020 : verification code for instance management
-  
   
   
 }}   // namespace gui::panel

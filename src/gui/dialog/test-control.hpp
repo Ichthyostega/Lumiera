@@ -105,7 +105,7 @@ namespace dialog {
   /**
    * Helper widget to simplify construction and wiring of a [Notebook] widget.
    * Gtk::Notebook is quite powerful container foundation to build complex dialog widgets with
-   * multiple pages on tabs. However, the construction, wiring an setup is notoriously tedious,
+   * multiple pages on tabs. However, the construction, wiring and setup is notoriously tedious,
    * due to the repetitiveness and the sheer amount of child widgets spread over various pages.
    * 
    * This design draft is an attempt to mitigate the required boilerplate, without overly much
@@ -157,10 +157,10 @@ namespace dialog {
       
       /**
        * Ticket #1099 : perform a dummy round-trip to verify Proc-GUI integration.
-       * This routine invokes the command `test_meta_displayInfo` down in Proc-Layer, passing the settings
-       * from the radio buttons to select the flavour of feedback, and the text for feedback content.
-       * The expected behaviour is for the invoked command to send a feedback via UI-Bus towards
-       * the ErrorLogDisplay within the InfoboxPanel.
+       * This routine invokes the command `test_meta_displayInfo` and friends down in Proc-Layer,
+       * passing the settings from the radio buttons to select the flavour of feedback, and the text
+       * for feedback content. The expected behaviour is for the invoked command to send a feedback
+       * via UI-Bus towards the ErrorLogDisplay within the InfoboxPanel.
        */
       struct Page1 : Page
         {

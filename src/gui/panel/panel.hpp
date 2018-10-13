@@ -36,18 +36,18 @@
 #include <gdlmm.h>
 
 namespace gui {
-  namespace workspace {
-    class PanelManager;
-    class WorkspaceWindow;
-  }
-  namespace panel {
+namespace workspace {
+  class PanelManager;
+  class WorkspaceWindow;
+}
+namespace panel {
   
   
   /**
    * The base class for all dockable panels.
    */
   class Panel
-    : public Gtk::VBox
+    : public Gtk::Box
     {
     protected:
       

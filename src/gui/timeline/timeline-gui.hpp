@@ -63,6 +63,7 @@
 namespace gui  {
 namespace timeline {
   
+  class TimelinePage;
   class TimelineWidget;
   using ctrl::BusTerm;
   
@@ -93,7 +94,7 @@ namespace timeline {
       
       /** actually build a TimelineWidget to enact the role
        *  represented by this smart-handle */
-      std::unique_ptr<TimelineWidget> buildTimelineWidget (BusTerm&);
+      std::unique_ptr<TimelinePage> buildTimelineWidget (BusTerm&);
       
       /** @internal this method is invoked by the UI-Bus when dispatching a MutationMessage... */
       void buildMutator (lib::diff::TreeMutator::Handle buffer)  override;

@@ -66,7 +66,7 @@ namespace timeline {
   
   
   TimelineWidget::TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus)
-    : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+    : TimelinePage{}
     , control_{new TimelineController{identity, trackID, nexus}}
     , layout_{new LayoutManager}
     {

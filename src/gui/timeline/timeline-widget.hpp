@@ -79,6 +79,20 @@ namespace timeline {
   using ctrl::BusTerm;
   
   /**
+   * Interface: GUI page holding a timeline display
+   */
+  class TimelinePage
+    : public Gtk::Paned
+    {
+    public:
+      virtual ~TimelinePage() { }   ///< this is an interface
+      
+      TimelinePage()
+        : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+        { }
+    };
+  
+  /**
    * Core timeline display (custom widget).
    * Top level entry point to the timeline display component.
    * @todo WIP-WIP-rewrite as of 12/2016
@@ -86,7 +100,7 @@ namespace timeline {
    *     and a scrollable timeline body (right). The layout of both parts is aligned.
    */
   class TimelineWidget
-    : public Gtk::Paned
+    : public TimelinePage
     {
       std::unique_ptr<TimelineController> control_;
       std::unique_ptr<LayoutManager>      layout_;

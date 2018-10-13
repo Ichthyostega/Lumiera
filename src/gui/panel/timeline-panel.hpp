@@ -46,122 +46,44 @@
 #include "gui/panel/panel.hpp"
 #include "gui/timeline/timeline-widget.hpp"
 
+#include <gtkmm/notebook.h>
 #include <memory>
 #include <vector>
 
 
 
 namespace gui  {
-namespace model{
-  class Sequence;
-}
-namespace panel {
-  
-//using std::shared_ptr;
-  
-  /**
-   * "experimental" child widget for investigation of Gtk::Layout
-   */
-  class ChildEx
-    : public Gtk::Button
-    {
-      static uint childNo;
-      
-    public:
-      ChildEx();
-     ~ChildEx();
-      
-    private:
-      void on_clicked()  override;
-    };
-  
-  void __verifyDeadChildren();
-  
-  
-  
-  /**
-   * "experimental" custom canvas, based on Gtk::Layout.
-   * In addition this customised widget supports direct drawing
-   */
-  class Canvas
-    : public Gtk::Layout
-    {
-      bool shallDraw_;
-      bool recalcExtension_ = false;
-      
-    public:
-      void enableDraw (bool);
-      void adjustSize();
-      
-    private:
-      virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
-      
-      void determineExtension();
-    };
-  
+namespace panel{
   
   
   /**
    * Dockable panel to hold timeline widget(s).
-   * @todo build the actual implementation, after finishing the investigation
-   * 
-   * ## Investigation of gtk::GtkLayout
-   * As of 10/2016, we start this task with an exploration of GTK behaviour
-   * 
-   * \par Plan of investigation
-   *  1. place some simple widgets (Buttons) ✔
-   *  2. learn how to draw ✔
-   *  3. place a huge number of widgets, to scrutinise scrolling and performance
-   *  4. place widgets overlapping and irregularily, beyond the scrollable area ✔
-   *  5. bind signals to those widgets, to verify event dispatching ✔
-   *  6. bind some further signal(s) to the ~GtkLayout container
-   *  7. hide and re-show a partially and a totally overlapped widget
-   *  8. find a way to move a widget ✔ and delete arbitrary widgets ✔
-   *  9. expand an existing widget (text change) ✔
-   *  10. build a custom "clip" widget
-   *  11. retrofit all preceding tests to use this "clip" widget
+   * @todo WIP 10/2018 the actual re-implementation of Lumiera's Timeline display
    */
   class TimelinePanel
     : public Panel
     {
+      using PageHandle = std::unique_ptr<timeline::TimelinePage>;
+      using Timelines = std::vector<PageHandle>;
+      
+      Gtk::Notebook tabs_;
+      Timelines pages_;
+      
     public:
       /**
        * @param panel_manager The owner panel manager widget.
        * @param dock_item The GdlDockItem that will host this panel.
        */
-      TimelinePanel(workspace::PanelManager&, Gdl::DockItem&);
+      TimelinePanel (workspace::PanelManager&, Gdl::DockItem&);
       
       
       static const char* getTitle();
       static const gchar* getStockID();
       
       /////////////////////////////////////////////////////////////TODO WIP
-      void addTimeline (std::unique_ptr<timeline::TimelineWidget>&&);
+      void addTimeline (PageHandle &&);
       
     private:
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1016 : WIP kill everything below....  
-      Gtk::Box twoParts_;
-      Gtk::ButtonBox buttons_;
-      Gtk::Button button_1_;
-      Gtk::Button button_2_;
-      Gtk::Button button_3_;
-      Gtk::Button button_4_;
-      Gtk::Button button_5_;
-      Gtk::CheckButton toggleDraw_;
-      Gtk::Frame frame_;
-      Gtk::ScrolledWindow scroller_;
-      Canvas canvas_;
-      
-      ChildEx* makeChld();
-      
-      using ChildV = std::vector<ChildEx*>;
-      ChildV childz_;
-      
-      void experiment_1();
-      void experiment_2();
-      void experiment_3();
-      void experiment_4();
-      void experiment_5();
     };
   
   
