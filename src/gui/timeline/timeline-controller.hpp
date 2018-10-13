@@ -99,7 +99,7 @@ namespace timeline {
        */
       TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus);
       
-     ~TimelineController();  
+     ~TimelineController();
       
       
       /** set up a binding to respond to mutation messages via UiBus */
@@ -107,6 +107,12 @@ namespace timeline {
       
       
     public: /* ===== Control interface ===== */
+      
+      string const&
+      getName()  const
+        {
+          return name_;
+        }
       
     public: /* ===== Signals ===== */
       

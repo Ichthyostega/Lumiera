@@ -85,10 +85,13 @@ namespace timeline {
     : public Gtk::Paned
     {
     public:
-      virtual ~TimelinePage() { }   ///< this is an interface
+      virtual ~TimelinePage() { }           ///< this is an interface
+      
+      virtual cuString getLabel()  const    =0;
+      
       
       TimelinePage()
-        : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
+        : Gtk::Paned{Gtk::ORIENTATION_HORIZONTAL}
         { }
     };
   
@@ -135,6 +138,9 @@ namespace timeline {
       
       /** allow for diff mutation (delegated to TimelineController */
       void buildMutator (lib::diff::TreeMutator::Handle);
+      
+      cuString getLabel()  const override;
+      
       
     public: /* ===== Signals ===== */
       

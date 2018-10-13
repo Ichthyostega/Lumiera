@@ -36,31 +36,13 @@
 #include "gui/timeline/timeline-widget.hpp"
 #include "gui/timeline/timeline-widget-empty.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
-//#include "gui/ui-bus.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
-
-//#include "lib/util.hpp"
-//#include <algorithm>
-//#include <cstdlib>
-//#include <string>
-
-
-
-//using util::_Fmt;
-//using std::shared_ptr;
 using std::make_unique;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::string;
 
 
 namespace gui {
 namespace panel {
   
+  using timeline::TimelinePage;
   using timeline::TimelineWidget;
   using timeline::TimelineWidgetEmpty;
   
@@ -71,7 +53,7 @@ namespace panel {
     , tabs_{}
     , pages_{}
     {
-      pages_.emplace_back (new TimelineWidgetEmpty{});
+      addTimeline (PageHandle{new TimelineWidgetEmpty{}});
       
       // show everything....
       this->add(tabs_);
@@ -91,11 +73,26 @@ namespace panel {
   }
   
   
+  namespace {
+    bool
+    isEmptyTimeline (auto& pages)
+    {
+      return 1 == pages.size()
+         and dynamic_cast<TimelineWidgetEmpty*> (pages[0].get());
+    }
+  }
   
   void
   TimelinePanel::addTimeline (PageHandle&& pTimelineWidget)
   {
-    UNIMPLEMENTED ("take ownership of the widget and place it into a new tab");
+    if (isEmptyTimeline (pages_))
+      {
+        tabs_.remove_page();
+        pages_.clear();
+      }
+    pages_.push_back (move (pTimelineWidget));
+    TimelinePage& addedPage = *pages_.back();
+    tabs_.append_page (addedPage, addedPage.getLabel());
   }
   
   

@@ -83,5 +83,13 @@ namespace timeline {
   }
   
   
+  cuString
+  TimelineWidget::getLabel()  const
+  {
+    control_->getName();
+  }
+
+  
+  
   
 }}// namespace gui::timeline

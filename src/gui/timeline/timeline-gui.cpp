@@ -58,7 +58,7 @@ namespace timeline {
     { }
   
   /**
-   * @remark basically the default, just defined here explicitly
+   * @remark basically the default copy ctor, just redefined here explicitly
    *  to allow using TimelineGui without the need to include timeline-widget.hpp
    */
   TimelineGui::TimelineGui (TimelineGui const& r)

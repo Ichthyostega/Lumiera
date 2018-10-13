@@ -24,16 +24,14 @@
 /** @file timeline-panel.hpp
  ** A dockable container to hold a notebook of timeline displays.
  ** 
- ** ## planned design 2/2017
- ** The architecture of the UI is in a state of transition right now, working towards the goal
- ** of interconnected layers and an operative session and engine. Within the new control structure
- ** about to be built, there is an UI top-level circle of managing entities to handle global concerns
- ** and actions. The ctrl::InteractionDirector incorporates the role of _model root_ and thus manages
- ** a collection of timelines. The timeline panel exposes this collection and allows to view and
- ** interact with one of the given timelines. The build-up of the timeline display and thus the
- ** initiative to expose a timeline comes from the interaction director -- but as usual with
- ** graphical user interfaces, any user interaction after this point is handled autonomously
- ** by the gui::timeline::TimelineWidget and gui::timeline::TimelineController
+ ** ## Management of Timeline display
+ ** Within the Lumiera GTK UI, there is an UI top-level circle of managing entities to handle global
+ ** concerns and actions. The ctrl::InteractionDirector incorporates the role of _model root_ and thus
+ ** manages a collection of timelines. The timeline panel exposes this collection and allows to view and
+ ** interact with one of the given timelines. The build-up of the timeline display and thus the initiative
+ ** to expose a timeline comes from the interaction director -- but as usual with graphical user interfaces,
+ ** any user interaction after this point is handled autonomously by the gui::timeline::TimelineWidget and
+ ** gui::timeline::TimelineController
  ** 
  ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
  ** @todo as of 10/2018 we start to build a new timeline widget, connected to the UI-Bus
@@ -80,7 +78,7 @@ namespace panel{
       static const char* getTitle();
       static const gchar* getStockID();
       
-      /////////////////////////////////////////////////////////////TODO WIP
+      /** take ownership of the widget and place it into a new tab */
       void addTimeline (PageHandle &&);
       
     private:
