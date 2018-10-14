@@ -43,12 +43,19 @@
 #include "gui/dialog/dialog.hpp"
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/model/tangible.hpp"
-#include "proc/cmd.hpp"
 #include "include/ui-protocol.hpp"
+
+#include "proc/cmd.hpp"
 #include "include/gui-notification-facade.h"
-#include "lib/scoped-ptrvect.hpp"
+#include "proc/mobject/session/dummy-session-connection.hpp"
+
+#include "lib/test/test-helper.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/scoped-ptrvect.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 #include <string>
@@ -59,6 +66,8 @@ namespace dialog {
   using std::string;
   using std::forward;
   using lib::diff::GenNode;
+  using util::sanitise;
+  using util::_Fmt;
   
   
   /**
@@ -202,6 +211,7 @@ namespace dialog {
                                              "it will be passed down and sent back</i>"));
               trig_1_.set_use_underline();
               trig_1_.set_label ("_display text");
+              trig_1_.property_xalign() = 0;
               trig_1_.set_tooltip_markup (_("Trigger Proc-GUI <b>roundtrip</b>\n"
                                             "Proc invokes GuiNotification::displayInfo"));
               
@@ -223,6 +233,7 @@ namespace dialog {
               
               trig_4_.set_use_underline();
               trig_4_.set_label ("_mark");
+              trig_4_.property_xalign() = 0;
               trig_4_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
                                             "sends an <b>state mark</b> message, using\n"
                                             "the message action-ID from the combobox"));
@@ -249,9 +260,9 @@ namespace dialog {
               seg_2_.pack_start (trig_3_);
               seg_2_.pack_start (markParam_);
               
-              pack_start (content_);
-              pack_start (seg_1_);
-              pack_start (seg_2_);
+              pack_start (content_, Gtk::PACK_SHRINK);
+              pack_start (seg_1_,   Gtk::PACK_SHRINK);
+              pack_start (seg_2_,   Gtk::PACK_SHRINK);
               
               // define the action triggers...
               trig_1_.signal_clicked().connect(
@@ -262,6 +273,67 @@ namespace dialog {
                           [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markNote,    getContent()));                });
               trig_4_.signal_clicked().connect(
                           [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markAction,  getActionID(), getContent())); });
+            }
+        };
+      
+      
+      /**
+       * Ticket #1014 : populate the Timeline in the GUI.
+       * This page allows to send various diff messages up into the UI, to provide timeline content.
+       */
+      struct Page2 : Page
+        {
+          Gtk::Entry dummy_;
+          FrameBox part_1_{_("populate"), Gtk::ORIENTATION_HORIZONTAL},
+                   part_2_{_("modify content")};
+          Gtk::Button seq_1_, seq_2_;
+          Gtk::Button mut_1_;
+          
+          string
+          getDummyID()
+            {
+              string dummyID = sanitise (dummy_.get_text());
+              dummy_.set_text (dummyID);
+              return dummyID;
+            }
+          
+          
+          Page2 (Bus bus)
+            {
+              seq_1_.set_label ("Sequence 1");
+              seq_1_.set_tooltip_markup (_("Push <b>population diff</b> up into the UI\n"
+                                           "provides the typical simple default timeline structure"));
+              
+              seq_2_.set_label ("Sequence 2");
+              seq_2_.set_tooltip_markup (_("Push <b>population diff</b> up into the UI\n"
+                                           "provides a complex nested timeline structure"));
+              
+              dummy_.set_tooltip_markup (_("<i>dummy ID value</i>\n"
+                                           "used to build names in the generated content"));
+              dummy_.set_text (string{_Fmt{"d%s%02d"} % lib::test::randStr(2) % (1 + rand() % 99)});
+              dummy_.set_max_width_chars(12);
+              
+              part_1_.pack_start (seq_1_, Gtk::PACK_SHRINK);
+              part_1_.pack_start (seq_2_, Gtk::PACK_SHRINK);
+              part_1_.pack_start (dummy_, Gtk::PACK_EXPAND_WIDGET);
+              
+              
+              mut_1_.set_label ("move elements");
+              mut_1_.set_tooltip_markup (_("randomly manipulate temporal position of dummy elements"));
+              
+              part_2_.pack_start (mut_1_);
+              
+              pack_start (part_1_, Gtk::PACK_SHRINK);
+              pack_start (part_2_, Gtk::PACK_SHRINK);
+              
+              // define the action triggers...
+              seq_1_.signal_clicked().connect(
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_1, getDummyID())); });
+              seq_2_.signal_clicked().connect(
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_2, getDummyID())); });
+              
+              mut_1_.signal_clicked().connect(
+                          [&]{ cerr << "gelldaschaugst..." <<endl; });
             }
         };
       
@@ -278,6 +350,8 @@ namespace dialog {
           
           // construct and wire the pages...
           notebook_.buildPage<Page1> (_("#1099"), uiBus_);
+          notebook_.buildPage<Page2> (_("Populate"), uiBus_);
+          notebook_.set_current_page(-1);
           
           show_all();
         }
