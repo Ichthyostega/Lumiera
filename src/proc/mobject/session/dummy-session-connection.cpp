@@ -29,7 +29,7 @@
  ** - some session content
  ** - commands to be invoked
  ** 
- ** @todo WIP as of 12/2016                         ///////////////////////TICKET #1042
+ ** @todo WIP as of 10/2018                         ///////////////////////TICKET #1042
  ** 
  ** @see DummySessionConnection_test
  ** 
@@ -39,11 +39,27 @@
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
 #include "proc/mobject/session/dummy-session-connection.hpp"
+#include "proc/control/command-def.hpp"
+#include "include/ui-protocol.hpp"
+#include "include/gui-notification-facade.h"
+#include "lib/diff/gen-node.hpp"
+//#include "lib/idi/entry-id.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
+//#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <string>
-#include <map>
+//#include <map>
 
-using std::map;
+using lib::diff::GenNode;
+//using util::cStr;
+using util::_Fmt;
+using std::string;
+
+#include <string>
+
+//using std::map;
 using std::string;
 
 using util::contains;
@@ -57,13 +73,11 @@ namespace session {
   
   } //(End)Implementation details....
   
-  DummySessionConnection::DummySessionConnection ( )
-    {
-    }
   
-  DummySessionConnection::~DummySessionConnection ( )
+  DummySessionConnection::~DummySessionConnection() { }
+  
+  DummySessionConnection::DummySessionConnection()
     {
-      // ////TODO Auto-generated destructor stub
     }
   
   
@@ -78,4 +92,91 @@ namespace session {
    */
   
   
-}}} // namespace proc::mobject::session
+}}// namespace proc::mobject::session
+
+namespace cmd {
+  
+  using lib::hash::LuidH;
+  using gui::ID;
+  using gui::NOTE_INFO;
+  using gui::NOTE_WARN;
+  using gui::NOTE_ERROR;
+//  using gui::NotifyLevel;
+//  using gui::MARK_expand;
+  using gui::GuiNotification;
+//  using util::isYes;
+  
+  
+  /* ============ dedicated Fake-Commands ============ */
+  
+  /** Populate the Timeline in the UI with a typical simple Dummy sequence.
+   *  This Proc-Layer command script fabricates a faked "population diff", which not
+   *  corresponds to any existing session data structure, but looks as if emanated while
+   *  loading current session state.
+   *  - one single Timeline
+   *  - just the root track
+   *  - two clips placed on that track
+   * @todo use this to establish basic Timeline display in the UI                          //////////////////TICKET #1014 : produce Dummy content to populate timeline
+   */
+COMMAND_DEFINITION (test_fake_injectSequence_1)
+  {
+    def.operation ([](string dummyID)
+                      {
+                        string message{_Fmt{"fabricate Sequence_1 (dummyID='%s')"} % dummyID};
+                        GuiNotification::facade().displayInfo (NOTE_INFO, message);
+                      })
+       .captureUndo ([](string dummyID) -> string
+                      {
+                        return _Fmt{"fabricateSequence_1('%s')"} % dummyID;
+                      })
+       .undoOperation ([](string, string memento)
+                      {
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO Dummy-Action: "+memento);
+                      });
+  };
+  
+  
+  /** Populate the Timeline in the UI with a rather complex Dummy sequence.
+   *  This command script fabricates a faked convoluted "population diff"...
+   * @todo use this to enact a complex layout structure in the Timeline-UI                 //////////////////TICKET #1014 : produce Dummy content to populate timeline
+   */
+COMMAND_DEFINITION (test_fake_injectSequence_2)
+  {
+    def.operation ([](string dummyID)
+                      {
+                        string message{_Fmt{"fabricate Sequence_2 (dummyID='%s')"} % dummyID};
+                        GuiNotification::facade().displayInfo (NOTE_INFO, message);
+                      })
+       .captureUndo ([](string dummyID) -> string
+                      {
+                        return _Fmt{"fabricateSequence_2('%s')"} % dummyID;
+                      })
+       .undoOperation ([](string, string memento)
+                      {
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO Dummy-Action: "+memento);
+                      });
+  };
+  
+  
+  /** Template for dummy-code....
+   * @todo use this to enact a complex layout structure in the Timeline-UI                 //////////////////TICKET #1042 : further the DummySessionConnection
+   */
+COMMAND_DEFINITION (test_fake_blubb)
+  {
+    def.operation ([](string dummyID)
+                      {
+                        string message{_Fmt{"fabricate gulp (dummyID='%s')"} % dummyID};
+                        GuiNotification::facade().displayInfo (NOTE_INFO, message);
+                      })
+       .captureUndo ([](string dummyID) -> string
+                      {
+                        return _Fmt{"fabricateGulp('%s')"} % dummyID;
+                      })
+       .undoOperation ([](string, string memento)
+                      {
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO Dummy-Action: "+memento);
+                      });
+  };
+  
+  
+}} // namespace proc::mobject::session

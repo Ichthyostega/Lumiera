@@ -26,14 +26,14 @@
  ** parts of the application, which are to defined in the very attempt this placeholder
  ** is used for...
  ** - it can fake some session content
- ** - it may expose some fake command implementations
+ ** - it exposes some fake command implementations
  ** - and all this together with suitable diagnostic facilities
  ** 
  ** The plan is to push this helper along, as we proceed from the UI down towards the session.
  ** In the end, this placeholder service may be inserted into the session implementation proper,
  ** until we have the ability to load a persistent session from storage.
  ** 
- ** @todo WIP as of 12/2016         //////////////////////////////////////////////////////////////////////TICKET #1042
+ ** @todo WIP as of 10/2018         //////////////////////////////////////////////////////////////////////TICKET #1042
  ** 
  ** @see ui-bus.hpp
  ** @see dummy-session-connection.cpp implementation
@@ -48,9 +48,23 @@
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
+#include "proc/control/command-setup.hpp"
+
 #include <string>
 
 namespace proc {
+namespace cmd {
+  
+  using control::Command;
+  using control::CommandDef;
+  using control::CommandSetup;
+  
+  /* ============ dedicated Fake-Commands ============ */
+  
+  extern CommandSetup test_fake_injectSequence_1;
+  extern CommandSetup test_fake_injectSequence_2;
+  
+}
 namespace mobject {
 namespace session {
   
@@ -58,10 +72,15 @@ namespace session {
   using std::string;
   
   /**
-   * Basic (abstracted) view of...
+   * Scaffolding to drive the evolution of the Lumiera application.
+   * @todo as of 2018, the most pressing problem is to establish the interplay between
+   *    GUI-Layer and Proc-Layer, so the software gains some tangible functionality...
+   * @note readily-available singleton to enact prototypical behaviour as appropriate.
    * 
-   * @see SomeSystem
    * @see DummySessionConnection_test
+   * @see gui::interact::InteractionDirector::buildMutator
+   * @see gui::interact::InteractionDirector::injectTimeline
+   * @see gui::timeline::TimelineController
    */
   class DummySessionConnection
     : util::NonCopyable
@@ -80,9 +99,9 @@ namespace session {
       static lib::Depend<DummySessionConnection> instance;
       
       
-      /* == X interface for == */
+      /* == do X  == */
 
-      /* == Adapter interface for == */
+      /* == forget Y == */
 
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1042
       void setSolution (string const& solution = "")
