@@ -39,9 +39,12 @@
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
 #include "proc/mobject/session/dummy-session-connection.hpp"
+#include "proc/mobject/session/root.hpp"
 #include "proc/control/command-def.hpp"
 #include "include/ui-protocol.hpp"
 #include "include/gui-notification-facade.h"
+#include "lib/diff/tree-diff-application.hpp"
+#include "lib/diff/mutation-message.hpp"
 #include "lib/diff/gen-node.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/format-string.hpp"
@@ -53,6 +56,8 @@
 //#include <map>
 
 using lib::diff::GenNode;
+using lib::diff::MakeRec;
+using lib::diff::MutationMessage;
 //using util::cStr;
 using util::_Fmt;
 using std::string;
@@ -71,6 +76,16 @@ namespace session {
   
   namespace { //Implementation details....
   
+    GenNode
+    emptyTimeline (string baseID)
+    {
+      return MakeRec()
+               .set(string{gui::ATTR_fork}
+                   ,MakeRec()
+                      .type(string{gui::TYPE_Fork})
+                   )
+             .genNode(baseID);
+    }
   } //(End)Implementation details....
   
   
@@ -86,10 +101,21 @@ namespace session {
   
   
   /**
-   * 
-   * @param id
-   * @return
+   * Build a population diff message to describe a specific session structure to add
    */
+  MutationMessage
+  DummySessionConnection::fabricateSeq1 (string baseID)
+  {
+    return MutationMessage{ ins (emptyTimeline (baseID))
+                          };
+  }
+  
+  
+  void
+  DummySessionConnection::applyCopy (MutationMessage const& diff)
+  {
+    TODO ("build internal diagnostic data structure, apply a copy of the message");
+  }
   
   
 }}// namespace proc::mobject::session
@@ -105,6 +131,10 @@ namespace cmd {
 //  using gui::MARK_expand;
   using gui::GuiNotification;
 //  using util::isYes;
+
+  namespace session = proc::mobject::session;
+  
+  using DummySess = session::DummySessionConnection;
   
   
   /* ============ dedicated Fake-Commands ============ */
@@ -124,6 +154,10 @@ COMMAND_DEFINITION (test_fake_injectSequence_1)
                       {
                         string message{_Fmt{"fabricate Sequence_1 (dummyID='%s')"} % dummyID};
                         GuiNotification::facade().displayInfo (NOTE_INFO, message);
+                        auto popuDiff = DummySess::instance().fabricateSeq1 (dummyID);
+                        DummySess::instance().applyCopy (popuDiff);
+                        auto rootID = session::Root::getID();
+                        GuiNotification::facade().mutate (rootID, move(popuDiff));
                       })
        .captureUndo ([](string dummyID) -> string
                       {

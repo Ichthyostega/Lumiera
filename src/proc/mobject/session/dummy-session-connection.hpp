@@ -48,10 +48,15 @@
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
+#include "lib/diff/tree-diff.hpp"
 #include "proc/control/command-setup.hpp"
 
 #include <string>
 
+namespace lib {
+namespace diff{
+  class MutationMessage;
+}}
 namespace proc {
 namespace cmd {
   
@@ -70,6 +75,7 @@ namespace session {
   
 //using util::isnil;
   using std::string;
+  using lib::diff::MutationMessage;
   
   /**
    * Scaffolding to drive the evolution of the Lumiera application.
@@ -83,7 +89,8 @@ namespace session {
    * @see gui::timeline::TimelineController
    */
   class DummySessionConnection
-    : util::NonCopyable
+    : lib::diff::TreeDiffLanguage
+    , util::NonCopyable
     {
       string nothing_;
 
@@ -102,6 +109,11 @@ namespace session {
       /* == do X  == */
 
       /* == forget Y == */
+      
+      MutationMessage fabricateSeq1 (string baseID);
+      
+      void applyCopy (MutationMessage const&);
+
 
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1042
       void setSolution (string const& solution = "")

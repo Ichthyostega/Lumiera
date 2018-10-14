@@ -1,5 +1,5 @@
 /*
-  MutationMessage(Test)  -  demonstrate the basics of tree diff representation
+  MutationMessage(Test)  -  verify diff mutation message container
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>

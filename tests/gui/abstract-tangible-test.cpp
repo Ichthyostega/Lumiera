@@ -641,8 +641,10 @@ namespace test {
        * For this to work, the receiver needs to create a custom _diff binding_.
        * Thus, each subclass of Tangible has to implement the virtual function
        * Tangible::buildMutator() and hook up those internal structures, which
-       * are exposed to changes via diff message. Note especially how child
-       * UI elements are added this way, to populate the contents of the UI.
+       * are exposed to changes via diff message. This is what we then call a
+       * "diff binding" (and MockElement is already outfitted this way). Note
+       * especially how child UI elements can be added recursively, allowing
+       * gradually to populate the contents of the UI.
        * 
        * The diff itself is an iterable sequence of _diff verbs_.
        * Typically, such a diff is generated as the result of some operation
