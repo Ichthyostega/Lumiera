@@ -42,7 +42,7 @@ DAMAGE.
 " />
 <!--PRE-HEAD-START-->
 <!--{{{-->
-<link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/>
+<link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml' />
 <!--}}}-->
 
 <!--PRE-HEAD-END-->
@@ -64,8 +64,6 @@ DAMAGE.
 <body onload="main();" onunload="if(window.unload) unload();">
 <!--PRE-BODY-START-->
 
-<style type="text/css">#contentWrapper {display:none;}</style>
-<div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Serif; background-color:#eee;">loading <b>Lumiera</b> development notes ...<br/><br/><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-BODY-END-->
 <div id="copyright">
 Welcome to TiddlyWiki created by Jeremy Ruston; Copyright &copy; 2004-2007 Jeremy Ruston, Copyright &copy; 2007-2011 UnaMesa Association
@@ -4206,17 +4204,6 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 __10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
 </div>
-<div title="MarkupPreBody" modifier="Ichthyostega" created="201810200151" modified="201810200212" changecount="2">
-<pre>
-&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;
-&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Serif; background-color:#eee;&quot;&gt;loading &lt;b&gt;Lumiera&lt;/b&gt; development notes ...&lt;br/&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
-</div>
-<div title="MarkupPreHead" modifier="Ichthyostega" created="200706172303" modified="201810200212" changecount="1">
-<pre>&lt;!--{{{--&gt;
-&lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
-&lt;!--}}}--&gt;
-</pre>
-</div>
 <div title="MediaAsset" modifier="Ichthyostega" created="200709021530" modified="201003140236" tags="def classes img">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, like every Asset kind, it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[model|HighLevelModel]] or the [[render nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
 [img[Asset Classess|uml/fig130437.png]]
@@ -7283,64 +7270,6 @@ Shutdown is initiated by sending a message to the dispatcher loop. This causes t
 </div>
 <div title="SplashScreen" modifier="just me" created="200706220430">
 <pre>{{red{killme}}}</pre>
-</div>
-<div title="SplashScreenPlugin" modifier="Ichthyostega" created="200607191631" modified="201810200148" tags="lewcidExtension systemConfig" changecount="1">
-<pre>/***
-
-''Inspired by [[TiddlyPom|http://www.warwick.ac.uk/~tuspam/tiddlypom.html]]''
-
-|Name|SplashScreenPlugin|
-|Created by|SaqImtiaz|
-|Location|http://tw.lewcid.org/#SplashScreenPlugin|
-|Version|0.21 |
-|Requires|~TW2.08+|
-!Description:
-Provides a simple splash screen that is visible while the TW is loading.
-
-!Installation
-Copy the source text of this tiddler to your TW in a new tiddler, tag it with systemConfig and save and reload. The SplashScreen will now be installed and will be visible the next time you reload your TW.
-
-!Customizing
-Once the SplashScreen has been installed and you have reloaded your TW, the splash screen html will be present in the MarkupPreHead tiddler. You can edit it and customize to your needs.
-
-!History
-* 20-07-06 : version 0.21, modified to hide contentWrapper while SplashScreen is displayed.
-* 26-06-06 : version 0.2, first release
-
-!Code
-***/
-//{{{
-var old_lewcid_splash_restart=restart;
-
-restart = function()
-{   if (document.getElementById(&quot;SplashScreen&quot;))
-        document.getElementById(&quot;SplashScreen&quot;).style.display = &quot;none&quot;;
-      if (document.getElementById(&quot;contentWrapper&quot;))
-        document.getElementById(&quot;contentWrapper&quot;).style.display = &quot;block&quot;;
-    
-    old_lewcid_splash_restart();
-   
-    if (splashScreenInstall)
-       {if(config.options.chkAutoSave)
-			{saveChanges();}
-        displayMessage(&quot;TW SplashScreen has been installed, please save and refresh your TW.&quot;);
-        }
-}
-
-
-var oldText = store.getTiddlerText(&quot;MarkupPreBody&quot;) || '';
-if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
-   {var siteTitle = store.getTiddlerText(&quot;SiteTitle&quot;);
-   var splasher='\n\n&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;'+siteTitle +'&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;';
-   if (! store.tiddlerExists(&quot;MarkupPreBody&quot;))
-       {var myTiddler = store.createTiddler(&quot;MarkupPreBody&quot;);}
-   else
-      {var myTiddler = store.getTiddler(&quot;MarkupPreBody&quot;);}
-      myTiddler.set(myTiddler.title,oldText+splasher,config.options.txtUserName,null,null);
-      store.setDirty(true);
-      var splashScreenInstall = true;
-}
-//}}}</pre>
 </div>
 <div title="StateAdapter" modifier="Ichthyostega" created="200806261912" modified="201109151535" tags="Rendering impl def">
 <pre>A small (in terms of storage) and specifically configured StateProxy object which is created on the stack {{red{Really on the stack? 9/11}}} for each individual {{{pull()}}} call. It is part of the invocation state of such a call and participates in the buffer management. Thus, in a calldown sequence of {{{pull()}}} calls we get a corresponding sequence of &quot;parent&quot; states. At each level, the &amp;rarr; WiringDescriptor of the respective node defines a Strategy how the call is passed on.</pre>
