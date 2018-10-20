@@ -6261,6 +6261,16 @@ var loadOptionsCookie = loadOptions;
 
 function getCookies()
 {
+	if (typeof(Storage) !== "undefined") {
+		// modern browser: use HTML5 web storage
+		var storedData = {};
+		for (var n = window.localStorage.length || 0; --n >= 0; ) {
+			var key = window.localStorage.key(n);
+			storedData[key] = window.localStorage[key];
+		}
+		return storedData;
+	}
+	// else: use old-style cookie storage
 	var cookieList = document.cookie.split(';');
 	var i,cookies = {};
 	for(i=0; i<cookieList.length; i++) {
@@ -6325,7 +6335,13 @@ var saveOptionCookie = saveOption;
 
 function removeCookie(name)
 {
-	document.cookie = name + '=; expires=Thu, 01-Jan-1970 00:00:01 UTC; path=/;';
+	if (typeof(Storage) !== "undefined") {
+		// modern browser: use HTML5 web storage
+		window.localStorage.removeItem(name);
+	} else {
+		// use old-style cookie storage
+		document.cookie = name + '=; expires=Thu, 01-Jan-1970 00:00:01 UTC; path=/;';
+	}
 }
 
 function saveCookie(name)
@@ -6336,10 +6352,18 @@ function saveCookie(name)
 		value = value == null ? 'false' : value;
 		cookies[key] = value;
 	}
-	// TW291 and later (#159)
-	document.cookie = 'TiddlyWikiClassicOptions='
-		+ String.encodeHashMap(cookies).replace(/%/g,'%25').replace(/"/g,'%22')
+	var encodedCookie = String.encodeHashMap(cookies).replace(/%/g,'%25').replace(/"/g,'%22')
+	// Modern browsers (e.g. Firefox Quantum) do not support Cookies for file:/// anymore
+	if (typeof(Storage) !== "undefined") {
+		// modern browser: use HTML5 web storage
+		window.localStorage.TiddlyWikiClassicOptions = encodedCookie;
+	} else {
+		// use old-style cookie storage
+		// TW291 and later (#159)
+		document.cookie = 'TiddlyWikiClassicOptions='
+		+ encodedCookie
 		+ '; expires=Fri, 1 Jan 2038 12:00:00 UTC; path=/';
+	}
 	cookies = getCookies();
 	var c;
 	for(c in cookies) {
