@@ -45,7 +45,6 @@ DAMAGE.
 <link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/>
 <!--}}}-->
 
-<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;">loading <b>Proc-Layer</b> devel doku<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
 <title> Engine - Building a Render Nodes Network from Objects in the Session </title>
 <style id="styleArea" type="text/css">
@@ -65,6 +64,8 @@ DAMAGE.
 <body onload="main();" onunload="if(window.unload) unload();">
 <!--PRE-BODY-START-->
 
+<style type="text/css">#contentWrapper {display:none;}</style>
+<div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Serif; background-color:#eee;">loading <b>Lumiera</b> development notes ...<br/><br/><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-BODY-END-->
 <div id="copyright">
 Welcome to TiddlyWiki created by Jeremy Ruston; Copyright &copy; 2004-2007 Jeremy Ruston, Copyright &copy; 2007-2011 UnaMesa Association
@@ -4205,12 +4206,16 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 __10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
 </div>
-<div title="MarkupPreHead" modifier="Ichthyostega" created="200706172303" modified="200802030405">
+<div title="MarkupPreBody" modifier="Ichthyostega" created="201810200151" modified="201810200212" changecount="2">
+<pre>
+&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;
+&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Serif; background-color:#eee;&quot;&gt;loading &lt;b&gt;Lumiera&lt;/b&gt; development notes ...&lt;br/&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+</div>
+<div title="MarkupPreHead" modifier="Ichthyostega" created="200706172303" modified="201810200212" changecount="1">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
-
-&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Proc-Layer&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+</pre>
 </div>
 <div title="MediaAsset" modifier="Ichthyostega" created="200709021530" modified="201003140236" tags="def classes img">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, like every Asset kind, it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[model|HighLevelModel]] or the [[render nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
@@ -7279,7 +7284,7 @@ Shutdown is initiated by sending a message to the dispatcher loop. This causes t
 <div title="SplashScreen" modifier="just me" created="200706220430">
 <pre>{{red{killme}}}</pre>
 </div>
-<div title="SplashScreenPlugin" modifier="Saq" created="200607191631" modified="200607202048" tags="lewcidExtension systemConfig">
+<div title="SplashScreenPlugin" modifier="Ichthyostega" created="200607191631" modified="201810200148" tags="lewcidExtension systemConfig" changecount="1">
 <pre>/***
 
 ''Inspired by [[TiddlyPom|http://www.warwick.ac.uk/~tuspam/tiddlypom.html]]''
@@ -7323,14 +7328,14 @@ restart = function()
 }
 
 
-var oldText = store.getTiddlerText(&quot;MarkupPreHead&quot;);
+var oldText = store.getTiddlerText(&quot;MarkupPreBody&quot;) || '';
 if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
    {var siteTitle = store.getTiddlerText(&quot;SiteTitle&quot;);
    var splasher='\n\n&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;'+siteTitle +'&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;';
-   if (! store.tiddlerExists(&quot;MarkupPreHead&quot;))
-       {var myTiddler = store.createTiddler(&quot;MarkupPreHead&quot;);}
+   if (! store.tiddlerExists(&quot;MarkupPreBody&quot;))
+       {var myTiddler = store.createTiddler(&quot;MarkupPreBody&quot;);}
    else
-      {var myTiddler = store.getTiddler(&quot;MarkupPreHead&quot;);}
+      {var myTiddler = store.getTiddler(&quot;MarkupPreBody&quot;);}
       myTiddler.set(myTiddler.title,oldText+splasher,config.options.txtUserName,null,null);
       store.setDirty(true);
       var splashScreenInstall = true;
@@ -10964,7 +10969,7 @@ merge(config.shadowTiddlers,{
 	SiteUrl: "",
 	SideBarOptions: '<<search>><<closeAll>><<permaview>><<newTiddler>><<newJournal "DD MMM YYYY" "journal">><<saveChanges>><<slider chkSliderOptionsPanel OptionsPanel "options \u00bb" "Change TiddlyWiki advanced options">>',
 	SideBarTabs: '<<tabs txtMainTab "Timeline" "Timeline" TabTimeline "All" "All tiddlers" TabAll "Tags" "All tags" TabTags "More" "More lists" TabMore>>',
-	TabMore: '<<tabs txtMoreTab "Missing" "Missing tiddlers" TabMoreMissing "Orphan" "Orphaned tiddlers" TabMoreOrphans "Shadowed" "Shadowed tiddlers" TabMoreShadowed>>'
+	TabMore: '<<tabs txtMoreTab "Missing" "Missing tiddlers" TabMoreMissing "Orphan" "Orphaned tiddlers" TabMoreOrphans "Shadow" "Shadowed tiddlers" TabMoreShadowed>>'
 	});
 
 merge(config.annotations,{
