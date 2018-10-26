@@ -33,8 +33,6 @@
 #include "gui/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
 #include "gui/timeline/track-presenter.hpp"
-#include "gui/timeline/clip-presenter.hpp"
-#include "gui/timeline/marker-widget.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -66,16 +64,6 @@ namespace timeline {
   
   
   
-  TrackPresenter::TrackPresenter (ID identity, ctrl::BusTerm& nexus)
-    : Controller{identity, nexus}
-    , subFork_{}
-    , markers_{}
-    , clips_{}
-    , head_{}
-    , body_{}
-    {
-      UNIMPLEMENTED ("how to attach the TrackPresenter into the two relevant GTK display contexts");
-    }
   
   
   TrackPresenter::~TrackPresenter()
@@ -151,7 +139,12 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PFork
                   {
-                    return make_unique<TrackPresenter> (spec.idi, this->uiBus_);
+                    return make_unique<TrackPresenter> (spec.idi
+                                                       ,this->uiBus_
+                                                       ,[&](TrackHeadWidget& head,TrackBody& body)
+                                                          {
+                                                            display_.injectSubTrack (head, body); 
+                                                          });
                   })
                .buildChildMutator ([&](PFork& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {

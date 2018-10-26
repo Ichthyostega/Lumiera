@@ -49,12 +49,16 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
+#include "gui/timeline/marker-widget.hpp"
+#include "gui/timeline/clip-presenter.hpp"
 #include "gui/timeline/track-head-widget.hpp"
 #include "gui/timeline/track-body.hpp"
 
+#include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
 //#include <memory>
+#include <utility>
 #include <vector>
 
 
@@ -65,8 +69,31 @@ namespace timeline {
   using std::vector;
   using std::unique_ptr;
   
-  class ClipPresenter;
-  class MarkerWidget;
+  
+  /**
+   * Reference frame to organise the display related to a specific Track in the Timeline-GUI.
+   */
+  struct DisplayFrame
+    : util::NonCopyable
+    {
+      TrackHeadWidget head;
+      TrackBody       body;
+      
+      template<class FUN>
+      DisplayFrame (FUN anchorDisplay)
+        : head{}
+        , body{}
+        {
+          anchorDisplay (head, body);
+        }
+      
+      void
+      injectSubTrack (TrackHeadWidget& head, TrackBody& body)
+        {
+          UNIMPLEMENTED ("inject the widgets to represent a nested sub-track within this timeline track display frame");
+        }
+    };
+  
   
   /**
    * @todo WIP-WIP as of 12/2016
@@ -74,22 +101,28 @@ namespace timeline {
   class TrackPresenter
     : public model::Controller
     {
+      DisplayFrame display_;
+      
       vector<unique_ptr<TrackPresenter>> subFork_;
       vector<unique_ptr<MarkerWidget>>   markers_;
       vector<unique_ptr<ClipPresenter>>  clips_;
       
-      TrackHeadWidget head_;
-      TrackBody       body_;
-      
       
     public:
+     ~TrackPresenter();
+      
       /**
        * @param identity used to refer to a corresponding session::Fork in the Session
        * @param nexus a way to connect this Controller to the UI-Bus.
        */
-      TrackPresenter (ID identity, ctrl::BusTerm& nexus);
-      
-     ~TrackPresenter();
+      template<class FUN>
+      TrackPresenter (ID identity, ctrl::BusTerm& nexus, FUN anchorDisplay)
+        : Controller{identity, nexus}
+        , display_{anchorDisplay}
+        , subFork_{}
+        , markers_{}
+        , clips_{}
+        { }
       
       
       /** set up a binding to respond to mutation messages via UiBus */

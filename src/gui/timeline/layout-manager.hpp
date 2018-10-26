@@ -40,11 +40,12 @@
  ** # Architecture
  ** 
  ** A naive approach would have a global layout manager drill down into some model storage
- ** and reach into the components to manipulate and adjust the layout to fit. Doing so can
- ** be considered, since this links together details scattered all over the model into a
- ** huge global process carried out at a single code location. Any further extension or
- ** evolution of details of the UI presentation are bound to be worked into this core
- ** global piece of code, which soon becomes brittle, hard to understand and generally
+ ** and reach into the components to manipulate and adjust the layout to fit. Yet however
+ ** straight forward and adequate this might seem, following this routine is a recipe for
+ ** disaster, since this procedure now ties and links together details scattered all over
+ ** the model into a huge global process, carried out at a single code location. Any further
+ ** extension or evolution of details of the UI presentation are bound to be worked into this
+ ** core global piece of code, which soon becomes brittle, hard to understand and generally
  ** a liability and maintenance burden. We have seen this happen in numerous existing
  ** code bases (and in fact even our own initial approach started to go down that route).
  ** Thus we strive to break up the whole process of controlling the layout into several
@@ -58,12 +59,13 @@
  ** Whenever the layout of timeline contents has to be (re)established, we trigger a recursive
  ** evaluation pass, which in fact is a tree walk. The layout manager creates a DisplayEvaluation
  ** record, which is passed to the [Element's allocate function](\ref Element::allocate). The element
- ** in turn has the liability to walks its children and recursively initiate a nested evaluation
+ ** in turn has the liability to walk its children and recursively initiate a nested evaluation
  ** by invoking DisplayEvaluation::evaluateChild(Element), which in turn calls back to
  ** LayoutManager::evaluate() to initiate a recursive evaluation pass. Within the recursively
  ** created DisplayEvaluation elements, we are able to transport and aggregate information
  ** necessary to give each element it' screen allocation. And this in turn allows us to
- ** decide upon a suitable display strategy for each individual element.
+ ** decide upon a suitable display strategy for each individual element, within a local
+ ** and self-contained context.
  ** 
  ** For this to work, the _element_ can not be the actual widget, since the result of this whole
  ** process might be to create or retract an actual GTK widget. For this reason, the timeline
@@ -92,6 +94,9 @@
 namespace gui  {
 namespace timeline {
   
+  class TrackHeadWidget;
+  class TrackBody;
+  
   
   /**
    * @todo WIP-WIP as of 12/2016
@@ -101,7 +106,9 @@ namespace timeline {
     public:
       LayoutManager ();
      ~LayoutManager();
-     
+      
+      void installRootTrack(TrackHeadWidget&,TrackBody&);
+      
     private:/* ===== Internals ===== */
      
     };

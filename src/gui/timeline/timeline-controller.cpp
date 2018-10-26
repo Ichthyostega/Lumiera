@@ -40,6 +40,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
+#include "gui/timeline/layout-manager.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "gui/timeline/track-presenter.hpp"
 #include "gui/timeline/marker-widget.hpp"
@@ -75,15 +76,20 @@ namespace timeline {
 //const int TimelineWidget::TrackPadding = 1;
 //const int TimelineWidget::HeaderWidth = 150;
 //const int TimelineWidget::HeaderIndentWidth = 10;
+  class TrackHeadWidget;
+  class TrackBody;
   
   
   
   
-  TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus)
+  TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus, LayoutManager& layoutManager)
     : Controller{identity, nexus}
+    , name_{identity.getSym()}         // fallback initialise name from human-readable ID symbol 
     , markers_{}
-    , fork_{new TrackPresenter{trackID, nexus}}
-    , name_{identity.getSym()}              // fallback initialise name from human-readable ID symbol 
+    , fork_{new TrackPresenter{trackID, nexus, [&](TrackHeadWidget& head,TrackBody& body)
+                                                 {
+                                                   layoutManager.installRootTrack (head, body); 
+                                                 }}}
     {
       UNIMPLEMENTED ("how to make the controller operative...");
     }

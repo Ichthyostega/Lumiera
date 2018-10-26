@@ -56,8 +56,8 @@
 #define GUI_TIMELINE_TIMELINE_WIDGET_H
 
 #include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
-#include "gui/timeline/layout-manager.hpp"
+//#include "gui/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
+//#include "gui/timeline/layout-manager.hpp"
 #include "gui/ctrl/bus-term.hpp"
 
 #include "lib/time/timevalue.hpp"
@@ -77,6 +77,8 @@ namespace gui  {
 namespace timeline {
   
   using ctrl::BusTerm;
+  class TimelineController;
+  class LayoutManager;
   
   /**
    * Interface: GUI page holding a timeline display
@@ -105,8 +107,8 @@ namespace timeline {
   class TimelineWidget
     : public TimelinePage
     {
-      std::unique_ptr<TimelineController> control_;
       std::unique_ptr<LayoutManager>      layout_;
+      std::unique_ptr<TimelineController> control_;
       
     public:
       /** build a new timeline display and attach it to the UI-Bus.

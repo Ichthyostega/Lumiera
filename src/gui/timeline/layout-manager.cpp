@@ -59,15 +59,20 @@ namespace timeline {
   
   
   
+  LayoutManager::~LayoutManager() { }
   
   LayoutManager::LayoutManager ()
     {
     }
   
   
-  LayoutManager::~LayoutManager()
+  void
+  LayoutManager::installRootTrack(TrackHeadWidget& head, TrackBody& body)
   {
+    UNIMPLEMENTED ("attach the widgets for the root track display");
   }
+  
+
   
   
   

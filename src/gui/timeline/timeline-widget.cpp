@@ -32,6 +32,8 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/timeline-controller.hpp"
+#include "gui/timeline/layout-manager.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
@@ -67,8 +69,8 @@ namespace timeline {
   
   TimelineWidget::TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus)
     : TimelinePage{}
-    , control_{new TimelineController{identity, trackID, nexus}}
     , layout_{new LayoutManager}
+    , control_{new TimelineController{identity, trackID, nexus, *layout_}}
     {
       UNIMPLEMENTED ("build the timeline UI");
     }
@@ -86,7 +88,7 @@ namespace timeline {
   cuString
   TimelineWidget::getLabel()  const
   {
-    control_->getName();
+    return control_->getName();
   }
 
   

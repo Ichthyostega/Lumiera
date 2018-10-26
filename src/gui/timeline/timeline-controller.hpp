@@ -72,6 +72,7 @@ namespace timeline {
   using std::string;
   
   class TrackPresenter;
+  class LayoutManager;
   class MarkerWidget;
   
   
@@ -86,10 +87,11 @@ namespace timeline {
   class TimelineController
     : public model::Controller
     {
+      string name_;
+      
       vector<unique_ptr<MarkerWidget>> markers_;
       std::unique_ptr<TrackPresenter>  fork_;
       
-      string name_;
       
     public:
       /**
@@ -97,7 +99,7 @@ namespace timeline {
        * @param trackID the mandatory root track used in the associated Sequence
        * @param nexus some established connection to the UI-Bus, used for registration.
        */
-      TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus);
+      TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus, LayoutManager&);
       
      ~TimelineController();
       
