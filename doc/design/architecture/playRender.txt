@@ -26,7 +26,7 @@ discussions and brainstorming sessions.
    
    - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2116[Timecode Widget and Framerates]
    - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2109[Time, Time-spans, Quatisation and Timecode]
-   - link:http://lumiera.org/wiki/renderengine.html#TimeQuant[Definition of Time entities]
+   - link:{l}/wiki/renderengine.html#TimeQuant[Definition of Time entities]
      from the implementation notes in the TiddlyWiki
 
 

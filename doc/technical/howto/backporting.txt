@@ -75,8 +75,8 @@ Transcript from a build session on a ``pristine'' Mint 17.2 installation:
  * add the following to your `/etc/apt/sources.list`
 +   
 ----
-deb http://lumiera.org/debian/ rafaela experimental
-deb-src http://lumiera.org/debian/ rafaela experimental
+deb https://lumiera.org/debian/ rafaela experimental
+deb-src https://lumiera.org/debian/ rafaela experimental
 ----
 
  * install _Ichthyo's_ DEB signing key

@@ -96,7 +96,7 @@ _Ichthyo_ points out that he uses some reports frequently, and considers some
 others nice-to-have. Finally it turns out that only Report #5 isn't used by
 anyone and can be dropped.
 
-_Cehteh_ points out that the http://issues.lumiera.org/tags[TracTags] macro
+_Cehteh_ points out that the https://issues.lumiera.org/tags[TracTags] macro
 is a convenient feature -- for example it allows to tag tickets by required skill.
 
 

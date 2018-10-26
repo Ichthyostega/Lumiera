@@ -12,7 +12,7 @@ The situation focussed by this concept is when an API needs to expose a
 sequence of results, values or objects, instead of just yielding a function
 result value. As the naive solution of passing an pointer or array creates
 coupling to internals, it was superseded by the GoF
-http://en.wikipedia.org/wiki/Iterator[Iterator pattern]. Iteration can be
+https://en.wikipedia.org/wiki/Iterator[Iterator pattern]. Iteration can be
 implemented by convention, polymorphically or by generic programming; we use
 the latter approach.
 
@@ -94,7 +94,7 @@ relies on that interface for discovering session contents. Besides that, we
 need more implementation experience.
 
 Some existing iterators or collection-style interfaces should be retro-fitted.
-See http://issues.lumiera.org/ticket/349[Ticket #349]. +
+See https://issues.lumiera.org/ticket/349[Ticket #349]. +
 Moreover, we need to 
 gain experience about mapping this concept down into a flat C-style API.
 

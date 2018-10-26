@@ -18,7 +18,7 @@ level. We should
 ''not'' define ''Features'' to go into a certain level.
 
 ''the following text is copied from the Lumiera
-  http://issues.lumiera.org/roadmap[Trac]''
+  https://issues.lumiera.org/roadmap[Trac]''
 
 
 Description: Milestones up to first Release

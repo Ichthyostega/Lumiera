@@ -327,7 +327,7 @@ Conclusion
 
 Trac spam
 ---------
-After an increasing amount of Spam tickets in the link:http://issues.lumiera.org[Trac],
+After an increasing amount of Spam tickets in the link:https://issues.lumiera.org[Trac],
 _Ichthyo_ installed the Trac antispam plugin (which required an upgrade to Trac 0.12,
 actually repackaging a current version into an pre-release debian package, as the
 official debian package isn't on the required level). After a bit of training,
@@ -354,7 +354,7 @@ revisit the relevant design process entries in each developer meeting.
 .-- the Application Install proposal --
 [caption="☉Transcript☉ "]
 ----------------------------
-[2011-04-14 00:48:25] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/ApplicationInstall.html
+[2011-04-14 00:48:25] <cehteh> link:{ldoc}/devel/rfc_pending/ApplicationInstall.html
 [2011-04-14 00:48:40] <ichthyo> maybe only pick out some interestin ones or some which are quick to decide
 [2011-04-14 00:49:06] <cehteh> well i want to go over all pending .. then we can put notes there "boring for the next meeting"
 [2011-04-14 00:49:42] <cehteh> for example this application install .. is boring .. you did a lot work, imo you can finalize it
@@ -421,7 +421,7 @@ Design the Render Nodes interface
 
 Developer Documentation Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---> see link:http://issues.lumiera.org/ticket/763[Ticket #763]
+--> see link:https://issues.lumiera.org/ticket/763[Ticket #763]
 
 .-- Discussion of details --
 [caption="☉Transcript☉ "]
@@ -498,12 +498,12 @@ While it needs more work, it's a bit out of focus right now, so _park it.
 
 Proc High Level Model and Placement concept
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-That's rather final by now. This link:http://lumiera.org/documentation/devel/rfc/ProcHighLevelModel.html[proposal]
+That's rather final by now. This link:{rfc}/ProcHighLevelModel.html[proposal]
 meanwhile documents the existing design; it's up to date and didn't see significant
 additions since almost two years. Generally agreed upon, so it's _final_ now.
 
 The same holds true for the 
-link:http://lumiera.org/documentation/devel/rfc/ProcPlacementMetaphor.html[Placement] proposal
+link:{rfc}/ProcPlacementMetaphor.html[Placement] proposal
 
 
 
@@ -545,7 +545,7 @@ Render Optimizer, Resource Management and Profiling
 
 Roadmap
 ~~~~~~~
-The link:http://lumiera.org/documentation/devel/rfc/Roadmap-first.html[Roadmap document]
+The link:{rfc}/rfc/Roadmap-first.html[Roadmap document]
 was erroneously not marked as final; +
 Seemingly it was decided upon in 2009 already ...
 
@@ -614,7 +614,7 @@ Threads Signals and important management tasks
 
 Session structure -- Timelines, Sequences, Output
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This link:http://lumiera.org/documentation/devel/rfc_pending/TimelineSequenceOutput.html[proposal]
+This link:{rfc}/TimelineSequenceOutput.html[proposal]
 can be considered definitively final. Key point is: we have multiple timelines and a sequence can be used
 in multiple timelines. We pretty much agree on that, thus it counts as _finalised_ now.
 
@@ -627,7 +627,7 @@ in charge of that right now. Thus _park_ it for the time being.
 
 Version Number Scheme
 ~~~~~~~~~~~~~~~~~~~~~
-The proposal for link:http://lumiera.org/documentation/devel/rfc_pending/VersionNumberScheme.html[Version numbering]
+The proposal for link:{rfc}/VersionNumberScheme.html[Version numbering]
 is _accepted_ -- it's considered close to common practice and _ichthyo_ relied on it for the debian
 package already.
 

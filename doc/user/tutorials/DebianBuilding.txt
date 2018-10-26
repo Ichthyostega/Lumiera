@@ -37,7 +37,7 @@ should _not_ be done as root.
 . add a suitable source line to your *Apt configuration* ('/etc/apt/sources.lst')
 +
 ----
-deb-src http://lumiera.org/debian/ jessie experimental
+deb-src https://lumiera.org/debian/ jessie experimental
 ----
 . get all the *build dependencies*
 +
@@ -145,8 +145,8 @@ prefix, which matches the 'official' package name and version.
 Quite frequently, a given source package generates several binary packages, e.g. the
 main program, maybe a library and a documentation bundle. Because of this, often the
 source package is named slightly different then the binary package, which can be a
-problem sometimes. If in doubt, use the link:http://packages.debian.org[Debian package
-search] or the link:http://packages.ubuntu.com[equivalent for Ubuntu] to locate packages,
+problem sometimes. If in doubt, use the link:https://packages.debian.org[Debian package
+search] or the link:https://packages.ubuntu.com[equivalent for Ubuntu] to locate packages,
 versions, even individual files, or to get at the bug tracker for a package.
 
 interesting files in the debian subdirectory

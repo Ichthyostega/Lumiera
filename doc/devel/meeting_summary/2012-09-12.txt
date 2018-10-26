@@ -20,7 +20,7 @@ RFCs
 ----
 
 It was not clear what state
-http://lumiera.org/documentation/devel/rfc.html[RFCs] have in our
+link:{ldoc}/devel/rfc.html[RFCs] have in our
 documentation structure. The question was if they should, after
 becoming finalized integrated into some other document or stay first
 class and be referenced from other documents.
@@ -101,7 +101,7 @@ A complete rewrite of Builddrone (a continuous integration system) is
 now (almost) finished and will be deployed on our build server within
 the next days. It has numerous improvements over the old one. More
 information and documentation will appear at
-http://builddrone.pipapo.org/ soon. Stay tuned.
+https://builddrone.pipapo.org/ soon. Stay tuned.
 
 Thanks to Lenny for helping with the documentation and Simon for the
 Logo.

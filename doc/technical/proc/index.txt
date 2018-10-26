@@ -21,7 +21,7 @@ While additions to the TiddlyWiki generally propagate to Lumiera/Master through
 the normal merges, we've put up a rsynced version of the TiddlyWiki online for
 direct access (of course read-only).
 
--> access the Proy-Layer link:http://lumiera.org/wiki/renderengine.html[TiddlyWiki online here]
+-> access the Proy-Layer link:{l}/wiki/renderengine.html[TiddlyWiki online here]
 
 
 

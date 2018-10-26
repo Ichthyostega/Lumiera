@@ -31,13 +31,13 @@ used as design notebook, featuring day-to-day design sketches, notes but also
 quite some more persistent planning. Finished documentation text is constantly
 moved over to the documentation section(s) of the Lumiera website.
 
--> access the Proc-Layer link:http://lumiera.org/wiki/renderengine.html[TiddlyWiki online here]
+-> access the Proc-Layer link:{l}/wiki/renderengine.html[TiddlyWiki online here]
 
 === API Documentation ===
-We use the link:http://www.doxygen.org/index.html[Doxygen] tool to extract
+We use the link:http://doxygen.org[Doxygen] tool to extract
 code comments and generate code level API and reference documentation.
 
--> link:http://lumiera.org/doxy/index.html[Doxygen generated documentation]
+-> link:/doxy/index.html[Doxygen generated documentation]
 
 == Media and Presentations ==
 

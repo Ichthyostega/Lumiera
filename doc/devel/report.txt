@@ -18,7 +18,7 @@ Statistics and Reports
 ++++++++++++++++++++++++++++++++++++++
 
 ''''
-^Statistics generated automatically by *OpenHub* based on Git master footnote:[»http://blog.openhub.net/about/[OpenHub]«,
+^Statistics generated automatically by *OpenHub* based on Git master footnote:[»link:https://blog.openhub.net/about/[OpenHub]«,
 formerly known as »Ohloh« is a public directory and networking site for free and open source software (FOSS),
 offering analytics and search services for evaluating and comparing open source projects.]^
 
@@ -33,10 +33,10 @@ image:http://gmane.org/plot-rate.php?group=gmane.comp.video.lumiera.general[Lumi
 Tickets
 -------
 
- * link:http://issues.lumiera.org/query?group=status&milestone=0integration[report: Milestone Integration]
- * link:http://issues.lumiera.org/report/14[recently changed tickets]
- * link:http://issues.lumiera.org/report/13[blocked tickets]
- * link:http://issues.lumiera.org/report/5[stalled tickets]
+ * link:https://issues.lumiera.org/query?group=status&milestone=0integration[report: Milestone Integration]
+ * link:https://issues.lumiera.org/report/14[recently changed tickets]
+ * link:https://issues.lumiera.org/report/13[blocked tickets]
+ * link:https://issues.lumiera.org/report/5[stalled tickets]
 
-See the link:http://issues.lumiera.org/report[Trac overview] for more ticket reports.
+See the link:https://issues.lumiera.org/report[Trac overview] for more ticket reports.
 

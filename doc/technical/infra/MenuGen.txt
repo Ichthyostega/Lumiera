@@ -6,7 +6,7 @@ Website Navigation Generator
 
 This page contains documentation and notes regarding the +menugen.py+ --
 written 2/2011 during our attempt to get the new Lumiera website online finally.
-The link::http://git.lumiera.org/gitweb?p=website-staging;a=blob;f=menugen.lua;h=aad2129d7f4ed3f3b35b2fc3ac2a63a9f1bfb62d;hb=menugen[initial draft version] was written by _cehteh_ in Lua
+The link::https://git.lumiera.org/gitweb?p=website-staging;a=blob;f=menugen.lua;h=aad2129d7f4ed3f3b35b2fc3ac2a63a9f1bfb62d;hb=menugen[initial draft version] was written by _cehteh_ in Lua
 
 
 **************************************************************************
@@ -141,7 +141,7 @@ def addPredefined():
     proj.putChildLast ('press')
     proj.putChildAfter('faq', refPoint=Node('screenshots'))                # <4>
     
-    proj.link('http://issues.lumiera.org/roadmap', label="Roadmap (Trac)") # <5>
+    proj.link('https://issues.lumiera.org/roadmap',label="Roadmap (Trac)") # <5>
     Node('rfc').sortChildren()
 --------------------------------------------------------------------------
 <1> the _root node_ by convention uses a special ID token. Additional
