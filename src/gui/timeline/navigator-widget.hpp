@@ -58,6 +58,7 @@ namespace timeline {
    * @todo WIP-WIP as of 12/2016
    */
   class NavigatorWidget
+    : public Gtk::Grid
     {
     public:
       NavigatorWidget ();

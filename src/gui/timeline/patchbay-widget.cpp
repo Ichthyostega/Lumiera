@@ -60,14 +60,12 @@ namespace timeline {
   
   
   
+  PatchbayWidget::~PatchbayWidget() { }
+  
+  
   PatchbayWidget::PatchbayWidget ()
-    {
-    }
-  
-  
-  PatchbayWidget::~PatchbayWidget()
-  {
-  }
+    : Gtk::Grid{}
+    { }
   
   
   

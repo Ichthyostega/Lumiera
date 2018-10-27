@@ -60,14 +60,13 @@ namespace timeline {
   
   
   
+  
+  NavigatorWidget::~NavigatorWidget() { }
+  
+  
   NavigatorWidget::NavigatorWidget ()
-    {
-    }
-  
-  
-  NavigatorWidget::~NavigatorWidget()
-  {
-  }
+    : Gtk::Grid{}
+    { }
   
   
   

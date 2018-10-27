@@ -59,9 +59,14 @@ namespace timeline {
   
   
   /**
+   * Header pane control area corresponding to a Track with nested child Tracks.
+   * This structure is used recursively to build up the Fork of nested Tracks.
+   * - first row: Placement + Property pane
+   * - second row: content or nested tracks.
    * @todo WIP-WIP as of 12/2016
    */
   class PatchbayWidget
+    : public Gtk::Grid
     {
     public:
       PatchbayWidget ();

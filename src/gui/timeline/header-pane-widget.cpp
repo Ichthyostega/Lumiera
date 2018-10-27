@@ -61,9 +61,13 @@ namespace timeline {
   HeaderPaneWidget::~HeaderPaneWidget() { }
   
   
-  HeaderPaneWidget::HeaderPaneWidget ()
+  HeaderPaneWidget::HeaderPaneWidget()
     : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
+    , navigator_{}
+    , patchbay_{}
     {
+      this->pack_start (navigator_, Gtk::PACK_SHRINK);
+      this->pack_start (patchbay_, Gtk::PACK_EXPAND_WIDGET);
     }
   
   

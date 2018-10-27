@@ -35,6 +35,12 @@
  ** with the timeline::LayoutManager to work out the space available for each individual track head
  ** and to keep these parts aligned with the tracks in the [timeline body](\ref BodyCanvasWidget).
  ** 
+ ** The header area is shown at the left side of the timeline display, always visible.
+ ** At the top of the header area, corresponding to the time ruler within the body at the right,
+ ** we place a compact navigation control, including also the timecode display. The space below
+ ** is kept in sync with the respective track entries of the timeline, and is itself built as
+ ** a nested structure of PatchbayWidget entries.
+ ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 
  */
@@ -44,6 +50,8 @@
 #define GUI_TIMELINE_HEADER_PANE_WIDGET_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/timeline/navigator-widget.hpp"
+#include "gui/timeline/patchbay-widget.hpp"
 
 //#include "lib/util.hpp"
 
@@ -62,6 +70,9 @@ namespace timeline {
   class HeaderPaneWidget
     : public Gtk::Box
     {
+      NavigatorWidget navigator_;
+      PatchbayWidget patchbay_;
+      
     public:
       HeaderPaneWidget();
      ~HeaderPaneWidget();
