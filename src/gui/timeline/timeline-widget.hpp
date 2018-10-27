@@ -62,6 +62,7 @@
 
 #include "lib/time/timevalue.hpp"
 #include "lib/diff/diff-mutable.hpp"
+#include "lib/nocopy.hpp"
 
 //#include <memory>
 //#include <vector>
@@ -78,7 +79,7 @@ namespace timeline {
   
   using ctrl::BusTerm;
   class TimelineController;
-  class LayoutManager;
+  class TimelineLayout;
   
   /**
    * Interface: GUI page holding a timeline display
@@ -106,8 +107,9 @@ namespace timeline {
    */
   class TimelineWidget
     : public TimelinePage
+    , util::NonCopyable
     {
-      std::unique_ptr<LayoutManager>      layout_;
+      std::unique_ptr<TimelineLayout>     layout_;
       std::unique_ptr<TimelineController> control_;
       
     public:

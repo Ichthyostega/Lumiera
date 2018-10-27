@@ -73,7 +73,11 @@ namespace timeline {
     , rootTrackID_{rr.rootTrackID_}
     { }
   
-  TimelineGui::~TimelineGui() { }
+  TimelineGui::~TimelineGui()
+    {
+      if (this->isActive())
+        TODO ("cascading destruction of the TimelineWidget");   /////////////////////////////////////////////TICKET 1016 : implement sane unwinding
+    }
   
   
   /**

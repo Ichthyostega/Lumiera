@@ -1,5 +1,5 @@
 /*
-  LayoutManager  -  global timeline layout management and display control
+  TimelineLayout  -  global timeline layout management and display control
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file layout-manager.cpp
+/** @file timeline-layout.cpp
  ** Implementation details of global timeline layout management. 
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
@@ -31,7 +31,7 @@
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/timeline/layout-manager.hpp"
+#include "gui/timeline/timeline-layout.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -59,15 +59,17 @@ namespace timeline {
   
   
   
-  LayoutManager::~LayoutManager() { }
+  TimelineLayout::~TimelineLayout() { }
   
-  LayoutManager::LayoutManager ()
+  TimelineLayout::TimelineLayout ()
+    : headerPane_{}
+    , bodyCanvas_{}
     {
     }
   
   
   void
-  LayoutManager::installRootTrack(TrackHeadWidget& head, TrackBody& body)
+  TimelineLayout::installRootTrack(TrackHeadWidget& head, TrackBody& body)
   {
     UNIMPLEMENTED ("attach the widgets for the root track display");
   }

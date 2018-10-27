@@ -33,7 +33,7 @@
 #include "gui/gtk-base.hpp"
 #include "gui/timeline/timeline-widget.hpp"
 #include "gui/timeline/timeline-controller.hpp"
-#include "gui/timeline/layout-manager.hpp"
+#include "gui/timeline/timeline-layout.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
@@ -69,7 +69,7 @@ namespace timeline {
   
   TimelineWidget::TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus)
     : TimelinePage{}
-    , layout_{new LayoutManager}
+    , layout_{new TimelineLayout}
     , control_{new TimelineController{identity, trackID, nexus, *layout_}}
     {
       UNIMPLEMENTED ("build the timeline UI");

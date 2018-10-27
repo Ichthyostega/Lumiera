@@ -40,7 +40,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
-#include "gui/timeline/layout-manager.hpp"
+#include "gui/timeline/timeline-layout.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "gui/timeline/track-presenter.hpp"
 #include "gui/timeline/marker-widget.hpp"
@@ -82,7 +82,7 @@ namespace timeline {
   
   
   
-  TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus, LayoutManager& layoutManager)
+  TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus, TimelineLayout& layoutManager)
     : Controller{identity, nexus}
     , name_{identity.getSym()}         // fallback initialise name from human-readable ID symbol 
     , markers_{}

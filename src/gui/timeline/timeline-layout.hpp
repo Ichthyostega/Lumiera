@@ -1,5 +1,5 @@
 /*
-  LAYOUT-MANAGER.hpp  -  global timeline layout management and display control
+  TIMELINE-LAYOUT.hpp  -  global timeline layout management and display control
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file layout-manager.hpp
+/** @file timeline-layout.hpp
  ** A core service of the timeline UI to ensure consistent display and layout
  ** of all components within the timeline. The content of the timeline is organised
  ** into several nested collections, possibly holding several thousand individual elements.
@@ -79,10 +79,12 @@
  */
 
 
-#ifndef GUI_TIMELINE_LAYOUT_MANAGER_H
-#define GUI_TIMELINE_LAYOUT_MANAGER_H
+#ifndef GUI_TIMELINE_TIMELINE_LAYOUT_H
+#define GUI_TIMELINE_TIMELINE_LAYOUT_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/timeline/header-pane-widget.hpp"
+#include "gui/timeline/body-canvas-widget.hpp"
 
 //#include "lib/util.hpp"
 
@@ -101,11 +103,14 @@ namespace timeline {
   /**
    * @todo WIP-WIP as of 12/2016
    */
-  class LayoutManager
+  class TimelineLayout
     {
+      HeaderPaneWidget headerPane_;
+      BodyCanvasWidget bodyCanvas_;
+      
     public:
-      LayoutManager ();
-     ~LayoutManager();
+      TimelineLayout ();
+     ~TimelineLayout();
       
       void installRootTrack(TrackHeadWidget&,TrackBody&);
       
@@ -115,4 +120,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_LAYOUT_MANAGER_H*/
+#endif /*GUI_TIMELINE_TIMELINE_LAYOUT_H*/
