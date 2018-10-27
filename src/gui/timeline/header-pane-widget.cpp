@@ -58,15 +58,14 @@ namespace timeline {
   
   
   
+  HeaderPaneWidget::~HeaderPaneWidget() { }
+  
   
   HeaderPaneWidget::HeaderPaneWidget ()
+    : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
     {
     }
   
-  
-  HeaderPaneWidget::~HeaderPaneWidget()
-  {
-  }
   
   
   

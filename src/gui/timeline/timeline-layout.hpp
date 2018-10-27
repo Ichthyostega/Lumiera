@@ -105,14 +105,17 @@ namespace timeline {
    */
   class TimelineLayout
     {
+      Glib::PropertyProxy<int> paneSplitPosition_;
+      
       HeaderPaneWidget headerPane_;
       BodyCanvasWidget bodyCanvas_;
       
+      
     public:
-      TimelineLayout ();
+      TimelineLayout (Gtk::Paned&);
      ~TimelineLayout();
       
-      void installRootTrack(TrackHeadWidget&,TrackBody&);
+      void installRootTrack (TrackHeadWidget&,TrackBody&);
       
     private:/* ===== Internals ===== */
      

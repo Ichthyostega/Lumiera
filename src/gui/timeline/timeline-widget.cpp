@@ -69,7 +69,7 @@ namespace timeline {
   
   TimelineWidget::TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus)
     : TimelinePage{}
-    , layout_{new TimelineLayout}
+    , layout_{new TimelineLayout{*this}}
     , control_{new TimelineController{identity, trackID, nexus, *layout_}}
     {
       UNIMPLEMENTED ("build the timeline UI");

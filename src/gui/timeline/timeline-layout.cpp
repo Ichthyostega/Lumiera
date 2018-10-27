@@ -61,10 +61,13 @@ namespace timeline {
   
   TimelineLayout::~TimelineLayout() { }
   
-  TimelineLayout::TimelineLayout ()
-    : headerPane_{}
+  TimelineLayout::TimelineLayout (Gtk::Paned& topLevelContainer)
+    : paneSplitPosition_{topLevelContainer.property_position()}
+    , headerPane_{}
     , bodyCanvas_{}
     {
+      topLevelContainer.add1 (headerPane_);
+      topLevelContainer.add2 (bodyCanvas_);
     }
   
   

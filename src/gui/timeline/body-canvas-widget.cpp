@@ -57,16 +57,24 @@ namespace timeline {
   
   
   
+  BodyCanvasWidget::~BodyCanvasWidget() { }
   
   
   BodyCanvasWidget::BodyCanvasWidget ()
+    : Gtk::ScrolledWindow{}
+    , canvas_{}
     {
+      this->set_shadow_type(Gtk::SHADOW_IN);
+      this->set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_AUTOMATIC);  // always need a horizontal scrollbar
+      this->property_expand() = true;                               //  dynamically grab any available additional space
+      this->add(canvas_);
+      
+//    canvas_.adjustSize();
+      
+      // show everything....
+      this->show_all();
     }
   
-  
-  BodyCanvasWidget::~BodyCanvasWidget()
-  {
-  }
   
   
   

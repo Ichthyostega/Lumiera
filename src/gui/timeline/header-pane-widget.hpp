@@ -60,6 +60,7 @@ namespace timeline {
    * @todo WIP-WIP as of 12/2016
    */
   class HeaderPaneWidget
+    : public Gtk::Box
     {
     public:
       HeaderPaneWidget();

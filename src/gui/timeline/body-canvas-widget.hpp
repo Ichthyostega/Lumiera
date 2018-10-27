@@ -70,17 +70,27 @@ namespace gui  {
 namespace timeline {
   
   
+  class TimelineCanvas
+    : public Gtk::Layout
+    {
+      
+    };
+  
+  
   /**
    * @todo WIP-WIP as of 12/2016
    */
   class BodyCanvasWidget
+    : public Gtk::ScrolledWindow
     {
+      TimelineCanvas canvas_;
+      
     public:
       BodyCanvasWidget();
      ~BodyCanvasWidget();
-     
+      
     private:/* ===== Internals ===== */
-     
+      
     };
   
   
