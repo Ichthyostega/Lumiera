@@ -71,10 +71,19 @@ namespace timeline {
     }
   
   
+  /**
+   * This function is invoked once for each new TimelineWidget, in order to build the
+   * starting point for the track widget structure, which then can be extended recursively
+   * to add further nested tracks. The central problem for this widget hierarchy is that
+   * we have to build two matching structures in parallel...
+   * - the track header area ("patchbay")
+   * - the corresponding track body with actual content (clips)
+   */
   void
   TimelineLayout::installRootTrack(TrackHeadWidget& head, TrackBody& body)
   {
-    UNIMPLEMENTED ("attach the widgets for the root track display");
+    headerPane_.installForkRoot (head);
+    bodyCanvas_.installForkRoot (body);
   }
   
 

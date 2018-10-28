@@ -69,6 +69,8 @@
 namespace gui  {
 namespace timeline {
   
+  class TrackBody;
+  
   
   class TimelineCanvas
     : public Gtk::Layout
@@ -88,6 +90,9 @@ namespace timeline {
     public:
       BodyCanvasWidget();
      ~BodyCanvasWidget();
+      
+      /** @internal Initially install the contents corresponding to the root track fork */
+      void installForkRoot (TrackBody& rootTrackBody);
       
     private:/* ===== Internals ===== */
       

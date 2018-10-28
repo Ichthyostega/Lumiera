@@ -63,6 +63,8 @@
 namespace gui  {
 namespace timeline {
   
+  class TrackHeadWidget;
+  
   
   /**
    * @todo WIP-WIP as of 12/2016
@@ -74,9 +76,28 @@ namespace timeline {
       PatchbayWidget patchbay_;
       
     public:
-      HeaderPaneWidget();
-     ~HeaderPaneWidget();
-     
+     ~HeaderPaneWidget() { }
+      
+      HeaderPaneWidget()
+        : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
+        , navigator_{}
+        , patchbay_{}
+        {
+          this->pack_start (navigator_, Gtk::PACK_SHRINK);
+          this->pack_start (patchbay_, Gtk::PACK_EXPAND_WIDGET);
+        }
+      
+      /**
+       * Initially install the root node of the track fork,
+       * which later can be extended recursively by adding nested
+       * sub-forks ("Sub-Tracks").
+       */
+      void
+      installForkRoot (TrackHeadWidget& rootTrackHead)
+        {
+          patchbay_.installFork (rootTrackHead);
+        }
+      
     private:/* ===== Internals ===== */
      
     };

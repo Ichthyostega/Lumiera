@@ -101,7 +101,10 @@ namespace timeline {
   
   
   /**
-   * @todo WIP-WIP as of 12/2016
+   * Top-level anchor point for the timeline display (widgets).
+   * The central entity to organise concerns relevant for the presentation of the
+   * Timeline as a whole, as opposed to rendering individual tracks as part of the Timeline.
+   * @todo WIP-WIP as of 10/2018
    */
   class TimelineLayout
     {
@@ -115,6 +118,7 @@ namespace timeline {
       TimelineLayout (Gtk::Paned&);
      ~TimelineLayout();
       
+      /** @internal anchor the display of the root track into the two display panes */
       void installRootTrack (TrackHeadWidget&,TrackBody&);
       
     private:/* ===== Internals ===== */

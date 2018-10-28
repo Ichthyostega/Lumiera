@@ -56,7 +56,9 @@
 
 namespace gui  {
 namespace timeline {
-  
+    
+  class TrackHeadWidget;
+
   
   /**
    * Header pane control area corresponding to a Track with nested child Tracks.
@@ -69,9 +71,12 @@ namespace timeline {
     : public Gtk::Grid
     {
     public:
-      PatchbayWidget ();
+      PatchbayWidget();
      ~PatchbayWidget();
-     
+      
+      /** @internal Initially install the contents corresponding to this track fork */
+      void installFork (TrackHeadWidget& rootTrackHead);
+      
     private:/* ===== Internals ===== */
      
     };

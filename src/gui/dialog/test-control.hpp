@@ -351,9 +351,9 @@ namespace dialog {
           // construct and wire the pages...
           notebook_.buildPage<Page1> (_("#1099"), uiBus_);
           notebook_.buildPage<Page2> (_("Populate"), uiBus_);
-          notebook_.set_current_page(-1);
           
           show_all();
+          notebook_.set_current_page(-1);
         }
     };
   
