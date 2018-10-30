@@ -22,22 +22,14 @@
 
 
 /** @file patchbay-widget.hpp
- ** Widget to control the placement parameters of a fork within the timeline header pane UI.
+ ** Widget to hold the track head controls within the timeline header pane UI.
  ** [The fork](\ref session::Fork), a recursively nested system of scopes, is rendered within
- ** the timeline display as a system of nested tracks. Each of these tracks possibly holds some
- ** child tracks plus some actual media clips, which all inherit parameters of placement from
- ** this fork ("track"). These parameters address various aspects of how content is attached
- ** ("placed") into the model at large, examples being
- ** - how to route the output
- ** - how to "place" this content into an _output space_, like e.g.
- **   + sound panning
- **   + video overlay parameters (additive, opaque, transparent)
- **   + video or audio _level_ (=fader)
- ** - how to locate this content in time (e.g. relative to some marker)
- ** For each track, we show a patchbay in the timeline header pane, which serves to control
- ** such aspects relevant for all content contained within the scope of this track. 
+ ** the timeline display as a system of nested tracks. For each of these tracks we get a header
+ ** section, allowing to control its placement parameters, including start time, output routing
+ ** level and panning. The _Patch Bay_ is the container holding all those track header controls,
+ ** arranged into a recursively nested structure.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 10/2018
  ** 
  */
 
@@ -56,7 +48,9 @@
 
 namespace gui  {
 namespace timeline {
-    
+  
+  using PAdjustment = Glib::RefPtr<Gtk::Adjustment>;
+  
   class TrackHeadWidget;
 
   
@@ -68,13 +62,13 @@ namespace timeline {
    * @todo WIP-WIP as of 12/2016
    */
   class PatchbayWidget
-    : public Gtk::Grid
+    : public Gtk::Viewport
     {
     public:
-      PatchbayWidget();
+      PatchbayWidget (PAdjustment const& vScroll);
      ~PatchbayWidget();
       
-      /** @internal Initially install the contents corresponding to this track fork */
+      /** @internal Initially install the contents corresponding to the track fork root */
       void installFork (TrackHeadWidget& rootTrackHead);
       
     private:/* ===== Internals ===== */

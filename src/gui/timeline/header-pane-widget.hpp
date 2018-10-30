@@ -63,6 +63,9 @@
 namespace gui  {
 namespace timeline {
   
+  using PAdjustment = Glib::RefPtr<Gtk::Adjustment>;
+  
+  
   class TrackHeadWidget;
   
   
@@ -78,10 +81,10 @@ namespace timeline {
     public:
      ~HeaderPaneWidget() { }
       
-      HeaderPaneWidget()
+      HeaderPaneWidget (PAdjustment const& vScroll)
         : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
         , navigator_{}
-        , patchbay_{}
+        , patchbay_{vScroll}
         {
           this->pack_start (navigator_, Gtk::PACK_SHRINK);
           this->pack_start (patchbay_, Gtk::PACK_EXPAND_WIDGET);

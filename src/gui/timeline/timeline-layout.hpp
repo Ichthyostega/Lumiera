@@ -110,8 +110,8 @@ namespace timeline {
     {
       Glib::PropertyProxy<int> paneSplitPosition_;
       
-      HeaderPaneWidget headerPane_;
       BodyCanvasWidget bodyCanvas_;
+      HeaderPaneWidget headerPane_;
       
       
     public:

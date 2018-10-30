@@ -63,8 +63,8 @@ namespace timeline {
   
   TimelineLayout::TimelineLayout (Gtk::Paned& topLevelContainer)
     : paneSplitPosition_{topLevelContainer.property_position()}
-    , headerPane_{}
     , bodyCanvas_{}
+    , headerPane_{bodyCanvas_.get_vadjustment()}   // wire the header pane (Gtk::Viewport) to follow the body vertical scroll movement
     {
       topLevelContainer.add1 (headerPane_);
       topLevelContainer.add2 (bodyCanvas_);

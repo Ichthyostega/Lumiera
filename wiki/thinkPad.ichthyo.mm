@@ -19088,9 +19088,12 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1540747470806" HGAP="97" ID="ID_831752558" MODIFIED="1540747508242" TEXT="Frage: wieviel Indirektion?" VSHIFT="5">
+<node COLOR="#435e98" CREATED="1540747470806" HGAP="97" ID="ID_831752558" MODIFIED="1540866703223" TEXT="Frage: Patchbay vs TrackHead?" VSHIFT="5">
 <icon BUILTIN="help"/>
-<node CREATED="1540747516509" ID="ID_1965076800" MODIFIED="1540747526726" TEXT="ist TimelineHeaderWidget &#xfc;berfl&#xfc;ssig?"/>
+<node CREATED="1540747516509" ID="ID_1965076800" MODIFIED="1540862756644" TEXT="ist TrackHeadWidget &#xfc;berfl&#xfc;ssig?">
+<arrowlink COLOR="#6ba7db" DESTINATION="ID_415092517" ENDARROW="Default" ENDINCLINATION="-390;0;" ID="Arrow_ID_1346421423" STARTARROW="None" STARTINCLINATION="445;0;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
 <node CREATED="1540747533463" ID="ID_1845120165" MODIFIED="1540747546555" TEXT="dann w&#xe4;re TimelineHeader == PatchbayWidget"/>
 <node CREATED="1540747550734" ID="ID_843399235" MODIFIED="1540748388723" TEXT="macht Sinn...">
 <richcontent TYPE="NOTE"><html>
@@ -19107,6 +19110,31 @@
   </body>
 </html>
 </richcontent>
+</node>
+<node CREATED="1540862631576" ID="ID_136673309" MODIFIED="1540862656534" TEXT="aber: Patchbay ist mehr als ein TrackHead">
+<icon BUILTIN="yes"/>
+<node CREATED="1540862657930" ID="ID_505897358" MODIFIED="1540862669986" TEXT="das Scrollen nicht vergessen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1540862671211" ID="ID_1297724441" MODIFIED="1540862683893" TEXT="brauche eine Scroll-Pane ohne Scrolbar">
+<node CREATED="1540862789523" ID="ID_1163137569" MODIFIED="1540862795073" TEXT="geht das?">
+<icon BUILTIN="help"/>
+<node CREATED="1540863135984" ID="ID_1095034635" MODIFIED="1540863144583" TEXT="wohl nicht direkt"/>
+<node CREATED="1540863146507" ID="ID_1788133857" MODIFIED="1540863181887" TEXT="ScrolledWindow verwendet Gtk::Viewport">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1540863578545" ID="ID_1986597218" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-adjustments-easy.html.en" MODIFIED="1540863596133" TEXT="Tutorial: separate Scrollbar f&#xfc;r TextView"/>
+<node CREATED="1540863719920" ID="ID_1675657033" MODIFIED="1540863737439" TEXT="analog: das Adjustment von der BodyPane verwenden"/>
+<node CREATED="1540863740331" ID="ID_432547471" MODIFIED="1540863760988" TEXT="und ein (passives) Adjustment f&#xfc;r horizontal"/>
+<node COLOR="#338800" CREATED="1540866723618" ID="ID_943818911" MODIFIED="1540866732106" TEXT="sofort im ctor verdrahten">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1540862691920" ID="ID_415092517" MODIFIED="1540862773212" TEXT="das ist dann sinnvollerweise die Patchbay als Ganzes">
+<linktarget COLOR="#6ba7db" DESTINATION="ID_415092517" ENDARROW="Default" ENDINCLINATION="-390;0;" ID="Arrow_ID_1346421423" SOURCE="ID_1965076800" STARTARROW="None" STARTINCLINATION="445;0;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

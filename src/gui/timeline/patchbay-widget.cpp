@@ -32,7 +32,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/timeline/patchbay-widget.hpp"
-
+#include "gui/timeline/track-head-widget.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
@@ -46,6 +46,7 @@
 
 //using util::_Fmt;
 //using util::contains;
+using Gtk::Adjustment;
 //using Gtk::Widget;
 //using sigc::mem_fun;
 //using sigc::ptr_fun;
@@ -63,25 +64,29 @@ namespace timeline {
   PatchbayWidget::~PatchbayWidget() { }
   
   
-  PatchbayWidget::PatchbayWidget ()
-    : Gtk::Grid{}
+  /**
+   * Set up the patchbay area of the timeline UI.
+   * The patchbay is a container to hold the actual placement control widgets
+   * arranged alongside with each track, according to the nested track structure.
+   * The header pane and thus especially the patchbay needs to follow as a slave
+   * to the vertical scrolling adjustments of the Timeline display; if the users
+   * scrolls up or down over the more or less expanded tree of tracks, the header
+   * has to follow this scrolled display in sync. Thus the implementation of the
+   * patchbay is based on a Gtk::Viewport, which is attached to the vertical
+   * Gtk::Adjustment, as exposed by the Gtk::ScrolledWindow holding the
+   * timeline body canvas on the right side of the Timeline UI.
+   * @note the Patchbay is not scrollable in horizontal direction,
+   *       thus we create a disabled Adjustment for this parameter.
+   */
+  PatchbayWidget::PatchbayWidget (PAdjustment const& vScroll)
+    : Gtk::Viewport{Gtk::Adjustment::create (0,0,0,0,0,0), vScroll}
     { }
   
   
-  /**
-   * The Lumiera Timeline model does not rely on a list of tracks, as most conventional
-   * video editing software does -- rather, each sequence holds a _fork of nested scopes._
-   * This recursively nested structure is reflected in the patchbay area corresponding to
-   * each track in the _header pane_ of the timeline display, located to the left. The
-   * patchbay for each track is a grid with four quadrants, and the 4th quadrant is the
-   * _content area,_ which is recursively extended to hold nested PatchbayWidget elements,
-   * corresponding to the child tracks of this track. To _fund_ this recursively extensible
-   * structure, we need to set up the first four quadrants
-   */
   void
   PatchbayWidget::installFork (TrackHeadWidget& rootTrackHead)
   {
-    UNIMPLEMENTED ("how actually to represent the track in the patchbay");
+    this->add (rootTrackHead);
   }
   
   
