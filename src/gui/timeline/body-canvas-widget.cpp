@@ -58,6 +58,13 @@ namespace timeline {
   
   
   
+  TimelineCanvas::TimelineCanvas()
+    : Gtk::Layout{}
+    , rootBody_{nullptr}
+    { }
+  
+  
+  
   BodyCanvasWidget::~BodyCanvasWidget() { }
   
   
@@ -87,9 +94,9 @@ namespace timeline {
    * of a Timeline, will also prepare the grounding for any other nested entities to be drawn on top.
    */
   void
-  BodyCanvasWidget::installForkRoot (TrackBody& rootTrackHead)
+  BodyCanvasWidget::installForkRoot (TrackBody& rootTrackBody)
   {
-    UNIMPLEMENTED ("how actually to represent the track bode on the canvas");
+    canvas_.rootBody_ = &rootTrackBody;
   }
 
   

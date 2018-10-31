@@ -45,7 +45,7 @@
 //#include "lib/util.hpp"
 
 //#include <memory>
-//#include <vector>
+#include <vector>
 
 
 
@@ -54,14 +54,32 @@ namespace timeline {
   
   
   /**
-   * @todo WIP-WIP as of 12/2016
+   * Helper to organise and draw the space allocated for a fork of sub-tracks.
+   * TrackBody units work together with the TimelineCanvas, which arranges all
+   * elements placed into the tracks and performs custom drawing to mark the
+   * working space available for placing those elements (Clips, Effects, Markers).
+   * A given TrackBody works with coordinates relative to its vertical starting point;
+   * coordinates on the TimelineCanvas operate from top downwards. The fundamental
+   * task of a TrackBody is to find out about its own overall height, including the
+   * overall height require by all its nesting children. Moreover, the height of
+   * the content area needs to be negotiated with the actual content elements.
+   * @todo WIP-WIP as of 10/2018
    */
   class TrackBody
     {
+      uint overviewHeight_;
+      uint contentHeight_;
+      
+      using SubTracks = std::vector<TrackBody*>;
+      
+      SubTracks subTracks_;
+      
     public:
       TrackBody ();
      ~TrackBody();
-     
+      
+      uint calcHeight();
+      
     private:/* ===== Internals ===== */
      
     };

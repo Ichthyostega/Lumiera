@@ -87,6 +87,11 @@ namespace timeline {
           anchorDisplay (head, body);
         }
       
+     ~DisplayFrame()
+        {
+          TODO ("cause the managed presentation elements to detach from their parents");
+        }
+      
       void
       injectSubTrack (TrackHeadWidget& head, TrackBody& body)
         {

@@ -75,7 +75,10 @@ namespace timeline {
   class TimelineCanvas
     : public Gtk::Layout
     {
+    public:
+      TrackBody* rootBody_;
       
+      TimelineCanvas();
     };
   
   
