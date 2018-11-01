@@ -3,4 +3,13 @@ user/**/*.html
 devel/rfc*/**/*.html
 devel/draw/**/*.png
 user/**/*.html
+/broken_links
+/documentation
+/css
+/js
+/page.conf
+/images
+/menu.html
+.*
+*~
 
