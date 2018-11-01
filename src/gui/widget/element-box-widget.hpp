@@ -1,8 +1,8 @@
 /*
-  LABEL-WIDGET.hpp  -  display an ID label, possibly with icon
+  ELEMENT-BOX-WIDGET.hpp  -  fundamental UI building block to represent a placed element
 
   Copyright (C)         Lumiera.org
-    2016,               Hermann Vosseler <Ichthyostega@web.de>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,7 +21,7 @@
 */
 
 
-/** @file label-widget.hpp
+/** @file element-box-widget.hpp
  ** Widget to render an ID label with associated icon.
  ** This is a UI building block used at various places, e.g. to show
  ** the name of a clip in the media bins or in the timeline, to indicate
@@ -32,13 +32,13 @@
  ** support for picking the icon and the indicator style based on some
  ** notion of _"type"._ 
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 11/2018   ///////////////////////////////////////////////////////////////////////TICKET #1185
  ** 
  */
 
 
-#ifndef GUI_WIDGET_LABEL_WIDGET_H
-#define GUI_WIDGET_LABEL_WIDGET_H
+#ifndef GUI_WIDGET_ELEMENT_BOX_WIDGET_H
+#define GUI_WIDGET_ELEMENT_BOX_WIDGET_H
 
 #include "gui/gtk-base.hpp"
 
@@ -56,11 +56,11 @@ namespace widget {
   /**
    * @todo WIP-WIP as of 12/2016
    */
-  class LabelWidget
+  class ElementBoxWidget
     {
     public:
-      LabelWidget ();
-     ~LabelWidget();
+      ElementBoxWidget ();
+     ~ElementBoxWidget();
      
     private:/* ===== Internals ===== */
      
@@ -68,4 +68,4 @@ namespace widget {
   
   
 }}// namespace gui::widget
-#endif /*GUI_WIDGET_LABEL_WIDGET_H*/
+#endif /*GUI_WIDGET_ELEMENT_BOX_WIDGET_H*/

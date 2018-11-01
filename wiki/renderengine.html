@@ -2691,7 +2691,7 @@ As starting point, {{red{in winter 2016/17}}} the old (broken) timeline panel wa
 After that initial experiments, my focus shifted to the still unsatisfactory top-level UI structure, and I am working towards an initial integration with Proc-Layer since then.
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201810281742" tags="GuiPattern design draft" changecount="29">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201811011859" tags="GuiPattern design draft" changecount="30">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels, a processing function)
@@ -2723,7 +2723,7 @@ This creates a tension related to the kind of architecture we want to build with
 Starting from the architecture as predetermined by the UI-Bus, it is clear that we have to add a UI-Element for every tangible child entity represented in the (abstracted) model. And the parent entity receiving a diff and adding such a child element is also in charge of that element, controlling its lifecycle. Yet this child element is not necessarily bound to be a widget. This is our chance here: what &quot;adding&quot; means is completely within the scope of the parent element and basically an implementation detail. So the parent may create and own a tracker or controller object to stand for the clip, and the latter may create and adjust the actual widget in negotiation with a display strategy. So effectively we're introducing a //mediator,// which represents the clip (as far as the modelling is concerned) and which at the same time communicates with a global display manager. We call this mediating entity a ClipPresenter
 
 !!!how to carry out the clip appearances
-Initially, one could think that we'd need to build several widgets to realise the wide variety of clip appearances. But in fact it turns out that we're able to reshape a single base widget to encompass all the necessary presentation styles. This base widget is a simple, one-element container, with {{{Gtk::Frame}}} being the most obvious pick. This gives us already a rectangular covered space, and the ability to add a label widget, optionally with controlled alignment of the label. All the more elaborate presentation styles can be achieved by adding a canvas widget into this frame and then placing additional stuff on top of that. The only tricky part arises in overview display, when just some clip rectangle can stand-in for a whole series of clips, which themselves remain hidden as UI elements.
+Initially, one could think that we'd need to build several widgets to realise the wide variety of clip appearances. But in fact it turns out that we're able to reshape a single base widget to encompass all the presentation styles. Almost all of the necessary styles, to be more precise, omitting the mere overview drawing where several entities are combined into a single box. However, this basic [[element-box-widget|GuiElementBoxWidget]] can be generalised, and even used beyond the clip display itself. It is a simple, one-element container, with an Icon and a textual label. This gives us already a rectangular covered space, and the ability to include a menu and to control the alignment of the label. All the more elaborate presentation styles can be achieved by adding a canvas widget into this frame and then placing additional stuff on top of that. The only tricky part arises in overview display, when just some clip rectangle can stand-in for a whole series of clips, which themselves remain hidden as UI elements.
 
 A prime consideration regarding this whole clip presentation strategy is the performance concern. It is quite common for movie edits to encompass several hundred individual clips. Combined with several tracks and an elaborate audio edit, it may well happen that we end up with thousands of individual UI objects. If treated naively, this load might seriously degrade the responsiveness of the interface. Thus we need to care for the relevant infrastructure to enable optimisation of the display. For that reason, the memory footprint of the ClipPresenter and the basic widget has to be kept as small as possible. And moreover, since we do our own layout management in the timeline display, in theory it is possible //only to add// those widgets to the enclosing GTK container, which are //actually about to become visible.// (if we follow this approach, a problem yet to be solved is how to remove widgets falling out of sight, since removing N widgets easily turns into a quadratic operation).
 
@@ -3233,6 +3233,48 @@ In accordance with this structure, we introduce a central component, the {{{Pane
 
 </pre>
 </div>
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="201811011920" tags="GuiPattern spec draft" changecount="4">
+<pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
+This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
+* an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
+* a //Menu Button// -- in fact a small downward arrow, which can be flipped upwards (expand/collapse)
+* a //Text Label// designating the element
+
+This characteristic cadence of elements gives us a horizontal box with distinct extension, and an arrangement to attach menu actions and a possibly extended display style. This arrangement can be used for...
+* Markers
+* Elements in the Bins (Clips, Media, Effects, Assets....)
+* abridged display of Clips (and Effects)
+* the Effect-bar to mark the presence of an Effect
+* for the Track heads in the Timeline Header pane
+* for ~Clip-Placement and name
+
+&amp;rarr; see also [[Ticket #1185|https://issues.lumiera.org/ticket/1185]].
+
+!Properties
+* the Icon shall be easily configurable (from the coding view point, of course this is all hard wired in the code or the theme)
+** the default is to configure the ''Placement Icon''
+** alternatively a ~Stock-ID can be given
+* the horizontal extension is easy to control, through several options
+** natural extension; don't give any ''size request'', let GTK figure out the extension rather
+** set a fixed length-limit, causing the text label to be abridged eventually
+** proportional head-placement
+* the body may optionally hold another GTK widget, in which case the head-triplet aligns to the upper side
+
+We offer pre-arranged options for standard wiring of interaction response
+* when the Icon is a Placement, it will launch the [[Placement-Pop-up|GuiPlacementDisplay]] -- which in turn can be de-modalised, thereby allocating a place in the [[Property grid pane|GuiPropertyPane]]. When such a placement control already is open and allocated, the click to the placement icon will lead there.
+* in the most basic case, there is only one common binding, which is a signal, emitted when clicking on the icon or the menu button
+* yet there can be two distinct bindings (signals) for the icon and the button
+* the ''Expander'' (which is part of the UI-Element protocol) is pre-wired with the arrow on the menu button, to yield a visible clue for the expand/collapse state
+* each of the bindings can be easily replaced by a [[pop-up menu|GuiPopupMenu]]
+
+!!!proportional Head placement
+This behaviour pattern (see [[#1186|https://issues.lumiera.org/ticket/1186]]) is a distinguishing trait of the Lumiera timeline display. It indicates elements with a temporal extension surpassing the current display window. Such elements are typically represented by an {{{ElementBoxWidget}}} with an large horizontal extension. Yet when scrolling, the head-triplet shall always remain within the visible area, but it will slowly glide from one side to the other, thereby indicating the our relative position. This pattern of behaviour matters, since, together with the scolled content display, it creates the dominant movement when scrolling an extended timeline
+
+''Technically'', this has to be build as a self-contained component, which can be unit-tested. The input and reference is a &quot;Window&quot; (in fact an interval) together with its start position //relative// to the element's own start position. The component has to derive from this input the actual relational configuration of the window's extension with respect to its own extension. For context, the //window// corresponds to the visible area, which can be larger, smaller disjoint, partially overlapping and fully contained. Please note that ''handling the relations of intervals is a notoriously challenging problem.''
+
+Especially when the component determines a placement of the //window// within its own extension, it has to derive a proportional placement position, which can be used to arrange the head-triplet of the {{{EventBoxWidget}}}. This proportional placement needs to reflect the location of the window within the overall extension, similar to the hand of a scrollbar. However, when the extension of the head-triplet, together with its placement disallows to show the the triplet unclipped, the triplets shall just be clipped naturally. Ideally, there would be a soft graceful transition between those two representation modes.
+</pre>
+</div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">
 <pre>special LayerSeparationInterface which serves the main purpose to load the GuiStarterPlugin, thus bringing up the Lumiera GTK UI at application start.
 
@@ -3393,14 +3435,23 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiPlacementDisplay" creator="Ichthyostega" modifier="Ichthyostega" created="201810281744" modified="201810281751" tags="spec GuiPattern draft" changecount="2">
+<div title="GuiPlacementDisplay" creator="Ichthyostega" modifier="Ichthyostega" created="201810281744" modified="201811011910" tags="spec GuiPattern draft" changecount="3">
 <pre>A cross-cutting and somewhat tricky concern is how to represent and expose the [[MObject Placements|Placement]] within the UI.
 For one, a Placement is a set of rules picked up from enclosing scopes -- and it is one of the most fundamental traits of Lumiera that the user is able to edit those placement rules. Yet the combination and final application of those rules also materialises itself into actual properties of the objects of the edit session -- most notably the time position of any element. Consequently, parts of the Placement are unfolded to appear as properties of the placed object, as far as the UI representation is concerned. However, Placement as a generic building block is prominently exposed, insofar pretty much every entity you'll see in the UI has the ability to &quot;edit its placement&quot;. This is indicated by a characteristic Icon decoration, leading to a common placement editor, where the user can
 * see all the explicitly given locating pins
 * see the effective, resulting ExplicitPlacement
 * add and manipulate existing rules
 To support this generic setup, pretty much every UI element needs to be outfitted with a &quot;placement&quot; attribute, to reflect those distinct information to be exposed in aforementioned placement edit UI.
+&amp;rarr; see also [[Ticket #1188|https://issues.lumiera.org/ticket/1188]].
 </pre>
+</div>
+<div title="GuiPopupMenu" creator="Ichthyostega" modifier="Ichthyostega" created="201811011924" tags="GuiPattern design draft" changecount="1">
+<pre>//Organisation of Pop-up menus in the Lumiera UI.//
+A pop-up is created on right click on the associated element, which thereby exposes its //methods for manipulation.// As such this arrangement incorporates the principle of ''object orientation'' into the interactive user interface.
+
+The foundation of population and display of pop-up menues is provided by GTK -- however the //»object orientation«// is our actual design concern here.
+
+{{red{OMG 11/2018 -- I have no idea where to start here...}}}</pre>
 </div>
 <div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201808070201" tags="GuiIntegration GuiPattern" changecount="9">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.

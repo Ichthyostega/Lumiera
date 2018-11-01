@@ -1,5 +1,5 @@
 /*
-  LabelWidget  -  display an ID label, possibly with icon
+  ElementBoxWidget  -  fundamental UI building block to represent a placed element
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,13 +24,13 @@
 /** @file label-widget.cpp
  ** Implementation details of the UI building block to display an ID label.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 11/2018   ///////////////////////////////////////////////////////////////////////TICKET #1185
  ** 
  */
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/widget/label-widget.hpp"
+#include "gui/widget/element-box-widget.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -59,12 +59,12 @@ namespace widget {
   
   
   
-  LabelWidget::LabelWidget ()
+  ElementBoxWidget::ElementBoxWidget ()
     {
     }
   
   
-  LabelWidget::~LabelWidget()
+  ElementBoxWidget::~ElementBoxWidget()
   {
   }
   

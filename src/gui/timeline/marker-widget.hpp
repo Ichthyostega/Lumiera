@@ -40,7 +40,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/model/widget.hpp"
-#include "gui/widget/label-widget.hpp"
+#include "gui/widget/element-box-widget.hpp"
 
 //#include "lib/util.hpp"
 
@@ -65,7 +65,7 @@ namespace timeline {
    */
   class MarkerWidget
     : public model::Widget
-    , public widget::LabelWidget
+    , public widget::ElementBoxWidget
     {
       MarkerKind kind_;
       string     name_;
