@@ -72,7 +72,7 @@ namespace timeline {
     , layout_{new TimelineLayout{*this}}
     , control_{new TimelineController{identity, trackID, nexus, *layout_}}
     {
-      UNIMPLEMENTED ("build the timeline UI");
+      show_all();
     }
   
   TimelineWidget::~TimelineWidget() { }

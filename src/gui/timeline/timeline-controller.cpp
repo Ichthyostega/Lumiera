@@ -90,9 +90,7 @@ namespace timeline {
                                                  {
                                                    layoutManager.installRootTrack (head, body); 
                                                  }}}
-    {
-      UNIMPLEMENTED ("how to make the controller operative...");
-    }
+    { }
   
   
   TimelineController::~TimelineController()
