@@ -290,10 +290,10 @@ namespace dialog {
           Gtk::Button mut_1_;
           
           string
-          getDummyID()
+          pickDummyID()
             {
               string dummyID = sanitise (dummy_.get_text());
-              dummy_.set_text (dummyID);
+              dummy_.set_text (string{_Fmt{"d%s%02d"} % lib::test::randStr(2) % (1 + rand() % 99)});
               return dummyID;
             }
           
@@ -310,8 +310,8 @@ namespace dialog {
               
               dummy_.set_tooltip_markup (_("<i>dummy ID value</i>\n"
                                            "used to build names in the generated content"));
-              dummy_.set_text (string{_Fmt{"d%s%02d"} % lib::test::randStr(2) % (1 + rand() % 99)});
               dummy_.set_max_width_chars(12);
+              pickDummyID();
               
               part_1_.pack_start (seq_1_, Gtk::PACK_SHRINK);
               part_1_.pack_start (seq_2_, Gtk::PACK_SHRINK);
@@ -328,9 +328,9 @@ namespace dialog {
               
               // define the action triggers...
               seq_1_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_1, getDummyID())); });
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_1, pickDummyID())); });
               seq_2_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_2, getDummyID())); });
+                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_2, pickDummyID())); });
               
               mut_1_.signal_clicked().connect(
                           [&]{ cerr << "gelldaschaugst..." <<endl; });
