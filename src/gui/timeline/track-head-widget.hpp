@@ -46,6 +46,7 @@
 #define GUI_TIMELINE_TRACK_HEAD_WIDGET_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/ctrl/bus-term.hpp"
 
 //#include "lib/util.hpp"
 
@@ -57,6 +58,7 @@
 namespace gui  {
 namespace timeline {
   
+  using ID = ctrl::BusTerm::ID;
   
   /**
    * Header pane control area corresponding to a Track with nested child Tracks.
@@ -68,8 +70,11 @@ namespace timeline {
   class TrackHeadWidget
     : public Gtk::Grid
     {
+      Gtk::Label nameTODO_;
+      Gtk::Label treeTODO_;
+      
     public:
-      TrackHeadWidget ();
+      TrackHeadWidget (ID identity);
      ~TrackHeadWidget();
       
       /** Integrate the control area for a nested sub track fork. */

@@ -80,9 +80,9 @@ namespace timeline {
       TrackBody       body;
       
       template<class FUN>
-      DisplayFrame (FUN anchorDisplay)
-        : head{}
-        , body{}
+      DisplayFrame (ID id, FUN anchorDisplay)
+        : head{id}
+        , body{id}
         {
           anchorDisplay (head, body);
         }
@@ -121,9 +121,9 @@ namespace timeline {
        * @param nexus a way to connect this Controller to the UI-Bus.
        */
       template<class FUN>
-      TrackPresenter (ID identity, ctrl::BusTerm& nexus, FUN anchorDisplay)
-        : Controller{identity, nexus}
-        , display_{anchorDisplay}
+      TrackPresenter (ID id, ctrl::BusTerm& nexus, FUN anchorDisplay)
+        : Controller{id, nexus}
+        , display_{id, anchorDisplay}
         , subFork_{}
         , markers_{}
         , clips_{}

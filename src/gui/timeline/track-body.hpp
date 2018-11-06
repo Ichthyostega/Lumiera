@@ -41,6 +41,7 @@
 #define GUI_TIMELINE_TRACK_BODY_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/ctrl/bus-term.hpp"
 
 //#include "lib/util.hpp"
 
@@ -51,6 +52,8 @@
 
 namespace gui  {
 namespace timeline {
+  
+  using ID = ctrl::BusTerm::ID;
   
   
   /**
@@ -75,7 +78,7 @@ namespace timeline {
       SubTracks subTracks_;
       
     public:
-      TrackBody ();
+      TrackBody (ID identity);
      ~TrackBody();
       
       uint calcHeight();
