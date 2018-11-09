@@ -52,6 +52,16 @@
  ** addressable by-name and an (ordered) collection of elements treated
  ** as children within the scope of the given record.
  ** 
+ ** ## The GenNode ID
+ ** 
+ ** Each GenNode holds an ID tag, allowing to establish _identical_ and _distinct_
+ ** elements within a scope. This ID is based on lib::idi::BareEntryID, thereby
+ ** providing a human readable symbolic part, and a hash value. By default, these
+ ** GenNode IDs are fabricated such as to hold a non-reproducible, random hash
+ ** value -- however, there are construction flavours allowing to pass in an
+ ** pre-existing distinct Entry-ID.
+ ** 
+ ** 
  ** # Requirements
  ** 
  ** GenNode elements are to be used in the diff detection and implementation.
@@ -66,7 +76,7 @@
  **   typed context, either based on some kind of embedded type tag, or
  **   alternatively by visitation and matching
  ** - finally, the handling of changes prompts us to support installation
- **   of a specifically typed <i>change handling closure</i>.
+ **   of a specifically typed _change handling closure_.
  ** 
  ** ## monadic nature?
  ** 
@@ -221,6 +231,10 @@ namespace diff{
           ID (X*, string const& symbolicID)
             : idi::BareEntryID (symbolicID,
                                 idi::getTypeHash<X>())
+            { }
+          
+          ID (string const& symbolicID, HashVal seed)
+            : idi::BareEntryID (symbolicID, seed)
             { }
           
         public:
@@ -433,7 +447,15 @@ namespace diff{
             }
         };
       
-    
+      template<typename X>
+      static GenNode
+      forAttribute (string const& key, X&& payload)
+        {
+          return GenNode{ID(key, std::rand())   // NOTE: random hash seed
+                        ,DataCap(forward<X> (payload))};
+        }
+      
+      
     protected:
       /** @internal for dedicated builder subclasses */
       GenNode (ID&& id, DataCap&& d)
@@ -845,7 +867,7 @@ namespace diff{
   inline GenNode
   Rec::buildAttribute (string const& key, X&& payload)
   {
-    return GenNode(key, std::forward<X>(payload));
+    return GenNode::forAttribute (key, forward<X>(payload));
   }
   
   

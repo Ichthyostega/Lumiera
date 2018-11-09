@@ -6671,11 +6671,11 @@
 <node CREATED="1487034180712" ID="ID_1371598611" MODIFIED="1518487921063" TEXT="und jedes genau wei&#xdf;, was die andern k&#xf6;nnen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1504393149140" FOLDED="true" HGAP="38" ID="ID_48107354" MODIFIED="1538942531699" TEXT="Addressierung" VSHIFT="55">
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1504393149140" FOLDED="true" HGAP="38" ID="ID_48107354" MODIFIED="1541547323971" TEXT="Addressierung" VSHIFT="55">
 <arrowlink COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" STARTARROW="None" STARTINCLINATION="-597;127;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="pencil"/>
-<node CREATED="1504393160466" ID="ID_450547493" MODIFIED="1518487921063" TEXT="globales ID-Schema">
+<node CREATED="1504393160466" ID="ID_450547493" MODIFIED="1541547317746" TEXT="globales Addre&#xdf;-Schema">
 <node CREATED="1504393168946" ID="ID_390425361" MODIFIED="1518487921063" TEXT="Model-Typen"/>
 <node CREATED="1504393177712" ID="ID_1686403667" MODIFIED="1518487921063" TEXT="View-Deskriptor">
 <node CREATED="1504393184608" ID="ID_792210197" MODIFIED="1518487921063" TEXT="Strategy"/>
@@ -6703,7 +6703,9 @@
 <node CREATED="1519356887367" ID="ID_1139603062" MODIFIED="1519356897033" TEXT="wie findet man den Ort einer Komponente?"/>
 <node CREATED="1519356901933" ID="ID_596521684" MODIFIED="1519356913407" TEXT="Verh&#xe4;ltnis ID / Ort">
 <node CREATED="1519356920083" ID="ID_723456910" MODIFIED="1519356926342" TEXT="sind orthogonale Schemata">
-<node CREATED="1519357047993" ID="ID_1706134856" MODIFIED="1519357059979" TEXT="ID = globale Identit&#xe4;t"/>
+<node CREATED="1519357047993" ID="ID_1706134856" MODIFIED="1541547248389" TEXT="ID = globale Identit&#xe4;t">
+<arrowlink COLOR="#6b83a8" DESTINATION="ID_1585676322" ENDARROW="Default" ENDINCLINATION="738;0;" ID="Arrow_ID_174361092" STARTARROW="None" STARTINCLINATION="1067;-74;"/>
+</node>
 <node CREATED="1519357060599" ID="ID_975802429" MODIFIED="1519357070810" TEXT="Ort = Topologie + Typ">
 <node CREATED="1519357081868" ID="ID_1484266304" MODIFIED="1519357090975" TEXT="Ortsnamen sind generisch"/>
 <node CREATED="1519357091795" ID="ID_68008128" MODIFIED="1519357096374" TEXT="sie werden lokal verstanden"/>
@@ -20098,7 +20100,7 @@
 <node CREATED="1533400281627" ID="ID_1248361340" MODIFIED="1533400375591" TEXT="geht noch nicht --  logging-Strategy fehlt">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533400377118" ID="ID_1072134705" MODIFIED="1539388435770" TEXT="#211 handling pattern for dispatch">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533400377118" ID="ID_1072134705" MODIFIED="1541547696433" TEXT="#211 handling pattern for dispatch">
 <arrowlink COLOR="#ca91c2" DESTINATION="ID_1192893155" ENDARROW="Default" ENDINCLINATION="1415;0;" ID="Arrow_ID_207842771" STARTARROW="None" STARTINCLINATION="2581;0;"/>
 <icon BUILTIN="hourglass"/>
 </node>
@@ -20979,6 +20981,10 @@
 </node>
 </node>
 </node>
+<node CREATED="1541547600640" ID="ID_787025622" MODIFIED="1541547663157" TEXT="Element-IDs m&#xfc;ssen eindeutig sein">
+<arrowlink COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="49;-155;" ID="Arrow_ID_1571993328" STARTARROW="None" STARTINCLINATION="-11;173;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>
@@ -21032,6 +21038,128 @@
 <node CREATED="1523019501198" ID="ID_531041967" MODIFIED="1523019517194" TEXT="Systematisches UI-Modell">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="info"/>
+</node>
+<node CREATED="1541545653978" ID="ID_1534432315" MODIFIED="1541545660929" TEXT="UI-Element - Identit&#xe4;t">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541545674669" ID="ID_1585676322" MODIFIED="1541547248389" TEXT="UI-Elemente sind global eindeutig">
+<arrowlink COLOR="#7894b4" DESTINATION="ID_189279804" ENDARROW="Default" ENDINCLINATION="272;-358;" ID="Arrow_ID_540125984" STARTARROW="None" STARTINCLINATION="-618;10;"/>
+<linktarget COLOR="#6b83a8" DESTINATION="ID_1585676322" ENDARROW="Default" ENDINCLINATION="738;0;" ID="Arrow_ID_174361092" SOURCE="ID_1706134856" STARTARROW="None" STARTINCLINATION="1067;-74;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1541545696185" ID="ID_1907010009" MODIFIED="1541545798109" TEXT="Grund: UI-Bus - Routing">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1541545933006" ID="ID_1850412206" MODIFIED="1541547731516" TEXT="t&#xfc;ckisches Problem">
+<linktarget COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="49;-155;" ID="Arrow_ID_1571993328" SOURCE="ID_787025622" STARTARROW="None" STARTINCLINATION="-11;173;"/>
+<linktarget COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="369;179;" ID="Arrow_ID_1229280605" SOURCE="ID_659707505" STARTARROW="None" STARTINCLINATION="586;-203;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1541545944079" ID="ID_1737663580" MODIFIED="1541545963000" TEXT="ein Duplikat ersetzt stillschweigend die Registrierung"/>
+<node CREATED="1541545963822" ID="ID_1562348206" MODIFIED="1541546016778" TEXT="Identit&#xe4;t beruht auf EntryID (Hash)"/>
+<node CREATED="1541545975779" ID="ID_1748214927" MODIFIED="1541546024401" TEXT="diese(r) wird aber systematisch gebildet"/>
+<node CREATED="1541546204541" ID="ID_1625379453" MODIFIED="1541546208976" TEXT="speziell...">
+<node CREATED="1541546209896" ID="ID_1049660229" MODIFIED="1541546245931" TEXT="Kind: _CHILD_&lt;typ&gt;.&lt;cnt&gt;">
+<node CREATED="1541546489419" ID="ID_282481336" MODIFIED="1541546548022" TEXT="automatisch global eindeutig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil wir einen Mechanismus haben, die &lt;cnt&gt;-Dekoration pro Typ global hochzuz&#228;hlen (treadsafe)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1541546556994" ID="ID_35993355" MODIFIED="1541546573135" TEXT="hash-seed: der &lt;typ&gt;-Hash"/>
+</node>
+<node CREATED="1541546415736" ID="ID_1483102981" MODIFIED="1541546432862" TEXT="Attribut: key">
+<node CREATED="1541546579096" ID="ID_728290559" MODIFIED="1541546602798">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: key nur <i>innerhalb</i>&#160;des Objektes eindeutig
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1541547820403" ID="ID_1229228521" MODIFIED="1541775004416" TEXT="L&#xf6;sung: Hash-Chaining">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1541547837646" ID="ID_508395323" MODIFIED="1541547854627" TEXT="&#xe4;hnlich wie im Merkle-Tree">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1541547855766" ID="ID_1691211097" MODIFIED="1541547867017" TEXT="Hash des Vaters als seed">
+<node CREATED="1541552824556" ID="ID_42859602" MODIFIED="1541552831542" TEXT="geht nicht">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1541552832731" ID="ID_346770424" MODIFIED="1541552877349" TEXT="bricht die Subsidiarit&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn dann m&#252;&#223;te das Attribut
+    </p>
+    <p>
+      von dem Container (GenNode) wissen, der es zwei Ebenen h&#246;her enth&#228;lt und umschlie&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1541774981285" ID="ID_1038144488" MODIFIED="1541774996472" TEXT="ist letzten Endes auch blo&#xdf; random()"/>
+</node>
+</node>
+<node CREATED="1541775187418" ID="ID_1058458763" MODIFIED="1541789739897" TEXT="Frage: Reproduzierbarkeit irrelevant?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es kommt (vielleicht) &#252;berhaupt nicht darauf an,
+    </p>
+    <p>
+      da&#223; der Hash einer Attribut-ID <i>reproduzierbar</i>&#160;ist (auf Basis der symbilschen ID).
+    </p>
+    <p>
+      Der Hash kann genausogut eine Zufallszahl sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1541775381760" ID="ID_681940327" MODIFIED="1541775392922" TEXT="denn: get sucht per Symbol"/>
+<node CREATED="1541775428125" ID="ID_1569956089" MODIFIED="1541775485774" TEXT="und: einige Attribute haben notwendig eine extern definierte ID">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...n&#228;mlich diejenigen, die <i>selber </i>Modell-Elemente sind.
+    </p>
+    <p>
+      Und genau diese speziellen Objekt-Attribute sind der Anla&#223;,
+    </p>
+    <p>
+      sich &#252;ber dieses Problem Gedanken zu machen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1523021670034" ID="ID_1102842396" MODIFIED="1523021676897" TEXT="Einstiegspunkte">
 <icon BUILTIN="idea"/>
@@ -21253,7 +21381,7 @@
 <node CREATED="1448070559466" ID="ID_182430638" MODIFIED="1518487921085" TEXT="Controller"/>
 </node>
 <node CREATED="1448070583679" HGAP="69" ID="ID_1248152908" MODIFIED="1538871387818" TEXT="Protokoll" VSHIFT="-1">
-<node CREATED="1448078263344" FOLDED="true" ID="ID_1136748666" MODIFIED="1535638754133" TEXT="Verhaltensweisen">
+<node CREATED="1448078263344" FOLDED="true" ID="ID_1136748666" MODIFIED="1541546653282" TEXT="Verhaltensweisen">
 <cloud COLOR="#e0d6ba"/>
 <icon BUILTIN="info"/>
 <node CREATED="1448078268223" ID="ID_1027574047" MODIFIED="1518487921085" TEXT="Lebenszyklus">
@@ -21414,7 +21542,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1448658633478" FOLDED="true" HGAP="99" ID="ID_314439240" MODIFIED="1538871380938" TEXT="Design" VSHIFT="13">
+<node CREATED="1448658633478" FOLDED="true" HGAP="99" ID="ID_314439240" MODIFIED="1541547787225" TEXT="Design" VSHIFT="13">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1448658692023" ID="ID_339186676" MODIFIED="1518487921085">
 <richcontent TYPE="NODE"><html>
@@ -21528,6 +21656,22 @@
 </node>
 </node>
 </node>
+<node CREATED="1541546692289" ID="ID_189279804" MODIFIED="1541546864673">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Identit&#228;t</b>&#160;== Bus-ID
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#7894b4" DESTINATION="ID_189279804" ENDARROW="Default" ENDINCLINATION="272;-358;" ID="Arrow_ID_540125984" SOURCE="ID_1585676322" STARTARROW="None" STARTINCLINATION="-618;10;"/>
+<node CREATED="1541546715849" ID="ID_503690063" MODIFIED="1541546722489" TEXT="sollte global eindeutig sein"/>
+<node CREATED="1541546733765" ID="ID_1010323480" MODIFIED="1541546741208" TEXT="wird per Diff &#xfc;bermittelt"/>
+</node>
 <node CREATED="1448658696638" ID="ID_1235910089" MODIFIED="1518487921086" TEXT="slots">
 <node CREATED="1451177440022" ID="ID_1603816152" MODIFIED="1518487921086" TEXT="expand">
 <icon BUILTIN="button_ok"/>
@@ -21615,7 +21759,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1535639028984" FOLDED="true" ID="ID_316446199" MODIFIED="1538871369730" TEXT="hilfs-Abstraktionen">
+<node CREATED="1535639028984" FOLDED="true" ID="ID_316446199" MODIFIED="1541545385363" TEXT="hilfs-Abstraktionen">
 <linktarget COLOR="#709eaf" DESTINATION="ID_316446199" ENDARROW="Default" ENDINCLINATION="-354;-490;" ID="Arrow_ID_1105268233" SOURCE="ID_447101734" STARTARROW="None" STARTINCLINATION="-3385;0;"/>
 <node CREATED="1535639151330" ID="ID_301022990" MODIFIED="1535639159958" TEXT="mix-in">
 <icon BUILTIN="yes"/>
@@ -39273,7 +39417,7 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1539270417847" ID="ID_1555798999" MODIFIED="1539388406968" TEXT="korrekte Diff-Struktur">
+<node CREATED="1539270417847" ID="ID_1555798999" MODIFIED="1541547682934" TEXT="korrekte Diff-Struktur">
 <linktarget COLOR="#cbada9" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="1069;-129;" ID="Arrow_ID_46239762" SOURCE="ID_1136748343" STARTARROW="None" STARTINCLINATION="-474;40;"/>
 <linktarget COLOR="#d47366" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="713;-263;" ID="Arrow_ID_971172326" SOURCE="ID_1387553695" STARTARROW="None" STARTINCLINATION="-1999;120;"/>
 <linktarget COLOR="#d47366" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="590;-127;" ID="Arrow_ID_308349501" SOURCE="ID_1435731309" STARTARROW="None" STARTINCLINATION="915;0;"/>
@@ -39304,6 +39448,12 @@
 </node>
 </node>
 </node>
+<node CREATED="1541547600640" HGAP="79" ID="ID_659707505" MODIFIED="1541547731516" TEXT="Element-IDs m&#xfc;ssen eindeutig sein" VSHIFT="10">
+<arrowlink COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="369;179;" ID="Arrow_ID_1229280605" STARTARROW="None" STARTINCLINATION="586;-203;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1541547743885" ID="ID_1112550435" MODIFIED="1541547750312" TEXT="wegen UI-Bus-Routing"/>
+<node CREATED="1541547751020" ID="ID_566590492" MODIFIED="1541547764950" TEXT="Aber: Attribute werden lokal erzeugt"/>
+</node>
 </node>
 <node CREATED="1539270417847" ID="ID_946219609" MODIFIED="1539388465978" TEXT="Reaktion auf Diff-Fehler">
 <linktarget COLOR="#d47366" DESTINATION="ID_946219609" ENDARROW="Default" ENDINCLINATION="713;-263;" ID="Arrow_ID_1085344706" SOURCE="ID_19523487" STARTARROW="Default" STARTINCLINATION="-1999;120;"/>
@@ -39319,7 +39469,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533400707072" ID="ID_1192893155" MODIFIED="1539388435770" TEXT="#211 handling pattern for dispatch">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533400707072" ID="ID_1192893155" MODIFIED="1541547696433" TEXT="#211 handling pattern for dispatch">
 <linktarget COLOR="#ca91c2" DESTINATION="ID_1192893155" ENDARROW="Default" ENDINCLINATION="1415;0;" ID="Arrow_ID_207842771" SOURCE="ID_1072134705" STARTARROW="None" STARTINCLINATION="2581;0;"/>
 <icon BUILTIN="hourglass"/>
 </node>
