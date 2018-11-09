@@ -138,6 +138,7 @@ namespace timeline {
   TimelineController::buildMutator (TreeMutator::Handle buffer)
   {
     using PMarker = unique_ptr<MarkerWidget>;
+    auto rootForkID = ID{*fork_};
     
     buffer.create (
       TreeMutator::build()
@@ -160,13 +161,13 @@ namespace timeline {
                     target->buildMutator (buff);               //  - delegate to child to build nested TreeMutator
                     return true;
                   }))
-        .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
-            {                                                  // »Attribute Mutator« : how to enter an object field as nested scope
+        .mutateAttrib(rootForkID, [&](TreeMutator::Handle buff)
+            {                                                  // »Attribute Mutator« : how to enter the track-fork-object field as nested scope
               REQUIRE (fork_);
               fork_->buildMutator(buff);
             })
         .change(ATTR_name, [&](string val)
-            {                                                  // »Attribute Setter« : how to assign a new value to some object field
+            {                                                  // »Attribute Setter« : how to assign a new value to the name field (object member)
               name_ = val;
             }));
   }

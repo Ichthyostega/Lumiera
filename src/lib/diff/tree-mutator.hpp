@@ -373,7 +373,12 @@ namespace diff{
         template<typename CLO>
         auto mutateAttrib (Symbol attributeID, CLO mutatorBuilderClosure);
         
-        ///////////////////////////////////////TODO define variant taking a GenNode::ID ??
+        /**
+         * @param rawID the explicitly given ID of an attribute object,
+         *              used literally to match the attribute in question
+         */
+        template<typename CLO>
+        auto mutateAttrib (idi::BareEntryID const& rawID, CLO mutatorBuilderClosure);
         
         
         /** set up a binding to a structure of "child objects",
