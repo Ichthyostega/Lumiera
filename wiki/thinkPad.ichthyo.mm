@@ -21056,7 +21056,12 @@
 <node CREATED="1541545944079" ID="ID_1737663580" MODIFIED="1541545963000" TEXT="ein Duplikat ersetzt stillschweigend die Registrierung"/>
 <node CREATED="1541545963822" ID="ID_1562348206" MODIFIED="1541546016778" TEXT="Identit&#xe4;t beruht auf EntryID (Hash)"/>
 <node CREATED="1541545975779" ID="ID_1748214927" MODIFIED="1541546024401" TEXT="diese(r) wird aber systematisch gebildet"/>
-<node CREATED="1541546204541" ID="ID_1625379453" MODIFIED="1541546208976" TEXT="speziell...">
+<node CREATED="1541790406153" ID="ID_966273732" MODIFIED="1541790408357" TEXT="relevant in Record&lt;GenNode&gt;">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1541546204541" FOLDED="true" HGAP="30" ID="ID_1625379453" MODIFIED="1541790892949" TEXT="speziell..." VSHIFT="3">
+<arrowlink COLOR="#677dde" DESTINATION="ID_1099820897" ENDARROW="Default" ENDINCLINATION="-64;0;" ID="Arrow_ID_791650338" STARTARROW="None" STARTINCLINATION="18;42;"/>
+<icon BUILTIN="info"/>
 <node CREATED="1541546209896" ID="ID_1049660229" MODIFIED="1541546245931" TEXT="Kind: _CHILD_&lt;typ&gt;.&lt;cnt&gt;">
 <node CREATED="1541546489419" ID="ID_282481336" MODIFIED="1541546548022" TEXT="automatisch global eindeutig">
 <richcontent TYPE="NOTE"><html>
@@ -21155,6 +21160,85 @@
   </body>
 </html>
 </richcontent>
+</node>
+<node CREATED="1541790399905" ID="ID_552609912" MODIFIED="1541790483789">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber: zuf&#228;llige ID macht Objekt-builder <i>stateful</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#f63025" DESTINATION="ID_791385927" ENDARROW="Default" ENDINCLINATION="142;6;" ID="Arrow_ID_1321696116" STARTARROW="None" STARTINCLINATION="7;68;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541790451266" ID="ID_791385927" MODIFIED="1541790474148" TEXT="Problem auf dieser Ebene nicht l&#xf6;sbar">
+<linktarget COLOR="#f63025" DESTINATION="ID_791385927" ENDARROW="Default" ENDINCLINATION="142;6;" ID="Arrow_ID_1321696116" SOURCE="ID_552609912" STARTARROW="None" STARTINCLINATION="7;68;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541790539737" HGAP="19" ID="ID_620633727" MODIFIED="1541790562981" TEXT="explizit zur handhaben" VSHIFT="9">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1541790564379" ID="ID_1099820897" MODIFIED="1541790869503" TEXT="das Problem l&#xe4;&#xdf;t sich nicht implizit l&#xf6;sen">
+<linktarget COLOR="#677dde" DESTINATION="ID_1099820897" ENDARROW="Default" ENDINCLINATION="-64;0;" ID="Arrow_ID_791650338" SOURCE="ID_1625379453" STARTARROW="None" STARTINCLINATION="18;42;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1541790588022" ID="ID_1242220321" MODIFIED="1541790627427" TEXT="Fazit: auf dem ETD-level ignorieren"/>
+<node CREATED="1541790631410" ID="ID_1544767080" MODIFIED="1541790641506" TEXT="geh&#xf6;rt in den Domain-level"/>
+<node CREATED="1541790656124" ID="ID_279205741" MODIFIED="1541791424072" TEXT="Domain-IDs eindeutig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t.
+    </p>
+    <p>
+      die Konstruktion des Domain-Modelles ist daf&#252;r zust&#228;ndig
+    </p>
+    <p>
+      f&#252;r global eindeutige IDs an den relevanten Stellen zu sorgen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1541790717726" ID="ID_1884395735" MODIFIED="1541790738652" TEXT="explizites Attribut-Binding">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dem man eine EntryID geben kann
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1541790780342" ID="ID_683694576" MODIFIED="1541798900109" TEXT="DSL-Syntax">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1541790752619" ID="ID_826540621" MODIFIED="1541798905126" TEXT="in ETD-Objekt-Notation">
+<node CREATED="1541791692837" ID="ID_1036110919" MODIFIED="1541791708256" TEXT="set() geht ohnehin schon mit GenNode-Argument">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1541791710149" ID="ID_1280894882" MODIFIED="1541798914030" TEXT="MakeRec().genNode(ID) erm&#xf6;glichen!">
+<arrowlink COLOR="#71cbc9" DESTINATION="ID_80733797" ENDARROW="Default" ENDINCLINATION="49;1;" ID="Arrow_ID_237980791" STARTARROW="None" STARTINCLINATION="22;30;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1541790797595" ID="ID_80733797" MODIFIED="1541798902638" TEXT="f&#xfc;r SET / INS Diff-Verben">
+<linktarget COLOR="#71cbc9" DESTINATION="ID_80733797" ENDARROW="Default" ENDINCLINATION="49;1;" ID="Arrow_ID_237980791" SOURCE="ID_1280894882" STARTARROW="None" STARTINCLINATION="22;30;"/>
 </node>
 </node>
 </node>

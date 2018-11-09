@@ -233,8 +233,8 @@ namespace diff{
                                 idi::getTypeHash<X>())
             { }
           
-          ID (string const& symbolicID, HashVal seed)
-            : idi::BareEntryID (symbolicID, seed)
+          ID (idi::BareEntryID&& rawD)
+            : idi::BareEntryID{move (rawD)}
             { }
           
         public:
@@ -447,12 +447,12 @@ namespace diff{
             }
         };
       
+      /** fabricate a GenNode with the literally given ID */
       template<typename X>
       static GenNode
-      forAttribute (string const& key, X&& payload)
+      asAttribute (idi::BareEntryID && rawID, X&& payload)
         {
-          return GenNode{ID(key, std::rand())   // NOTE: random hash seed
-                        ,DataCap(forward<X> (payload))};
+          return GenNode{ID{move (rawID)}, DataCap{forward<X> (payload)}};
         }
       
       
@@ -794,14 +794,21 @@ namespace diff{
   inline GenNode
   MakeRec::genNode()
   {
-    return GenNode(std::move(record_));
+    return GenNode{std::move(record_)};
   }
   
   template<>
   inline GenNode
-  MakeRec::genNode(string const& symbolicID)
+  MakeRec::genNode (idi::BareEntryID rawID)
   {
-    return GenNode(symbolicID, std::move(record_));
+    return GenNode::asAttribute (std::move(rawID), std::move(record_));
+  }
+  
+  template<>
+  inline GenNode
+  MakeRec::genNode (string const& symbolicID)
+  {
+    return GenNode{symbolicID, std::move(record_)};
   }
   
   
@@ -867,7 +874,7 @@ namespace diff{
   inline GenNode
   Rec::buildAttribute (string const& key, X&& payload)
   {
-    return GenNode::forAttribute (key, forward<X>(payload));
+    return GenNode{key, forward<X>(payload)};
   }
   
   

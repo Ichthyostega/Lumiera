@@ -211,6 +211,15 @@ namespace test{
           // but while o4 was based on o2,
           // adding all the additional contents didn't mutate o2
           CHECK (isnil(o2.data.get<Rec>()));
+          
+          // special case: can create an (Attribute) GenNode with specifically crafted ID
+          idi::EntryID<uint8_t> veryspecialID{"quasi niente"};
+          auto o5 = MakeRec().genNode(veryspecialID);
+          CHECK (o5 != MakeRec().genNode());
+          CHECK (o5 != MakeRec().genNode("quasi niente"));
+          CHECK (o5 == MakeRec().genNode(veryspecialID));
+          CHECK (name(o5) == "quasi_niente");             // Note: EntryID sanitised the string
+          CHECK (o5.idi == veryspecialID);
         }
       
       

@@ -112,7 +112,9 @@ namespace lib {
   template<class BA>
   class PlantingHandle;
   
-  
+namespace idi {
+  class BareEntryID;
+}
 namespace diff{
   
   namespace error = lumiera::error;
@@ -562,6 +564,7 @@ namespace diff{
        */
       
       VAL genNode();
+      VAL genNode(idi::BareEntryID rawID);
       VAL genNode(string const& symbolicID);
       
       template<typename X, typename...ARGS>
