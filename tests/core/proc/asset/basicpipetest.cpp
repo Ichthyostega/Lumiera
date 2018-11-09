@@ -96,7 +96,7 @@ namespace test  {
           Asset::Ident idi = thePipe->ident;
           CHECK (idi.org == "lumi");
           CHECK (contains (idi.name, thePipe->getPipeID()));
-          CHECK (contains (idi.name, thePipe->getStreamID()));
+          CHECK (contains (idi.name, string{thePipe->getStreamID()}));
           
           Category cat{idi.category};
           Category refcat{STRUCT,"pipes"};
@@ -146,7 +146,7 @@ namespace test  {
           pipe2 = asset::Struct::retrieve (Query<Pipe>{"pipe(default)"});
           CHECK (pipe2 == pipe1);
           
-          string sID = pipe1->getStreamID(); // sort of a "default stream type"
+          auto sID = string{pipe1->getStreamID()}; // sort of a "default stream type"
           PPipe pipe3 = Pipe::query ("stream("+sID+")");
           CHECK (pipe3);
           CHECK (pipe3->getStreamID() == StreamType::ID{sID});

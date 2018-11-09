@@ -265,7 +265,7 @@ namespace idi {
           return static_cast<EntryID const&> (bID);
         }
       
-      
+      explicit
       operator string()  const;
       
       friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  < i2.getSym(); }
