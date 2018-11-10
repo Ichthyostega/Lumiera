@@ -74,8 +74,10 @@ namespace timeline {
       Gtk::Label treeTODO_;
       
     public:
-      TrackHeadWidget (cuString& trackName);
+      TrackHeadWidget();
      ~TrackHeadWidget();
+      
+      void setTrackName (cuString&);
       
       /** Integrate the control area for a nested sub track fork. */
       void injectSubFork (TrackHeadWidget& subForkHead);

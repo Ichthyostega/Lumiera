@@ -80,9 +80,9 @@ namespace timeline {
       TrackBody       body;
       
       template<class FUN>
-      DisplayFrame (cuString& name, FUN anchorDisplay)
-        : head{name}
-        , body{name}
+      DisplayFrame (FUN anchorDisplay)
+        : head{}
+        , body{}
         {
           anchorDisplay (head, body);
         }
@@ -92,6 +92,13 @@ namespace timeline {
           TODO ("cause the managed presentation elements to detach from their parents");
         }
       
+      void
+      setTrackName (cuString& name)
+        {
+          head.setTrackName (name);
+          body.setTrackName (name);  ///////////////////////////////////TICKET #1017 -- TODO 11/18 : not clear yet if TrackBody needs to know its name
+        }
+
       void
       injectSubTrack (TrackHeadWidget& head, TrackBody& body)
         {
@@ -106,7 +113,6 @@ namespace timeline {
   class TrackPresenter
     : public model::Controller
     {
-      string name_;
       DisplayFrame display_;
       
       vector<unique_ptr<TrackPresenter>> subFork_;
@@ -124,12 +130,13 @@ namespace timeline {
       template<class FUN>
       TrackPresenter (ID id, ctrl::BusTerm& nexus, FUN anchorDisplay)
         : Controller{id, nexus}
-        , name_{id.getSym()}         // fallback initialise track-name from human-readable ID symbol 
-        , display_{name_, anchorDisplay}
+        , display_{anchorDisplay}
         , subFork_{}
         , markers_{}
         , clips_{}
-        { }
+        { 
+          setTrackName (id.getSym());  // fallback initialise track-name from human-readable ID symbol 
+        }
       
       
       /** set up a binding to respond to mutation messages via UiBus */
@@ -137,6 +144,13 @@ namespace timeline {
       
       
     private:/* ===== Internals ===== */
+      
+      /** invoked via diff to show a (changed) track name */
+      void
+      setTrackName (string name)
+        {
+          display_.setTrackName (name);
+        }
     };
   
   

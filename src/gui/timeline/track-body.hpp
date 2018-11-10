@@ -78,8 +78,10 @@ namespace timeline {
       SubTracks subTracks_;
       
     public:
-      TrackBody (cuString trackName);
+      TrackBody();
      ~TrackBody();
+      
+      void setTrackName (cuString&);
       
       uint calcHeight();
       

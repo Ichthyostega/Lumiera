@@ -62,9 +62,9 @@ namespace timeline {
   
   
   
-  TrackHeadWidget::TrackHeadWidget (cuString& trackName)
+  TrackHeadWidget::TrackHeadWidget()
     : Gtk::Grid{}
-    , nameTODO_{trackName}
+    , nameTODO_{"?"}
     , treeTODO_{"↳"}
     {
       this->attach (nameTODO_, 0,0, 2,1);
@@ -73,6 +73,12 @@ namespace timeline {
       this->show_all();
     }
   
+  
+  void
+  TrackHeadWidget::setTrackName (cuString& trackName)
+    {
+      nameTODO_.set_label (trackName);
+    }
   
   /**
    * @remark The Lumiera Timeline model does not rely on a list of tracks, as most conventional

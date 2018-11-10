@@ -64,7 +64,7 @@ namespace timeline {
   
   
   
-  TrackBody::TrackBody (cuString trackName)
+  TrackBody::TrackBody()
     : overviewHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
     , contentHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
     , subTracks_{}
@@ -74,6 +74,13 @@ namespace timeline {
   TrackBody::~TrackBody()
   {
     TODO ("detach from parent; store a functor or backreference");
+  }
+  
+  
+  void
+  TrackBody::setTrackName (cuString& trackName)
+  {
+    TODO ("is the track name of any relevance for the TrackBody widget?");
   }
   
   

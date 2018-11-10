@@ -109,9 +109,9 @@ namespace session {
   DummySessionConnection::fabricateSeq1 (string baseID)
   {
     const RandID forkRootID{gui::ATTR_fork};
-    const GenNode timeline = emptyTimeline (baseID, forkRootID);
-    const GenNode rootTrackName{string{gui::ATTR_name}, "Track-"+baseID}
-                , FORK_ROOT = MakeRec().genNode(forkRootID)
+    const GenNode timeline      = emptyTimeline (baseID, forkRootID)
+                , rootTrackName = GenNode{string{gui::ATTR_name}, "Track-"+baseID}
+                , FORK_ROOT     = MakeRec().genNode(forkRootID)
                 ;
     
     return MutationMessage{ ins (timeline)

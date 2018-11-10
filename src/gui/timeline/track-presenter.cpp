@@ -152,7 +152,7 @@ namespace timeline {
                   }))
         .change(ATTR_name, [&](string val)
             {                                                  // »Attribute Setter« : receive a new value for the track name field
-              name_ = val;
+              this->setTrackName (val);
             }));
   }
   
