@@ -62,10 +62,10 @@ namespace timeline {
   
   
   
-  TrackHeadWidget::TrackHeadWidget (ID identity)
+  TrackHeadWidget::TrackHeadWidget (cuString& trackName)
     : Gtk::Grid{}
-    , nameTODO_{identity.getSym()}
-    , treeTODO_{"X"}
+    , nameTODO_{trackName}
+    , treeTODO_{"↳"}
     {
       this->attach (nameTODO_, 0,0, 2,1);
       this->attach (treeTODO_, 0,1, 1,1);

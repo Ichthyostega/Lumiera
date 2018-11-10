@@ -64,7 +64,7 @@ namespace timeline {
   
   
   
-  TrackBody::TrackBody (ID identity)
+  TrackBody::TrackBody (cuString trackName)
     : overviewHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
     , contentHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
     , subTracks_{}

@@ -74,7 +74,7 @@ namespace timeline {
       Gtk::Label treeTODO_;
       
     public:
-      TrackHeadWidget (ID identity);
+      TrackHeadWidget (cuString& trackName);
      ~TrackHeadWidget();
       
       /** Integrate the control area for a nested sub track fork. */

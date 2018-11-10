@@ -66,9 +66,7 @@ namespace timeline {
   
   
   
-  TrackPresenter::~TrackPresenter()
-  {
-  }
+  TrackPresenter::~TrackPresenter() { }
   
   
   
@@ -151,7 +149,11 @@ namespace timeline {
                     if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
-                  })));
+                  }))
+        .change(ATTR_name, [&](string val)
+            {                                                  // »Attribute Setter« : receive a new value for the track name field
+              name_ = val;
+            }));
   }
   
   

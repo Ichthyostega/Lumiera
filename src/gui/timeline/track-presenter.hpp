@@ -80,9 +80,9 @@ namespace timeline {
       TrackBody       body;
       
       template<class FUN>
-      DisplayFrame (ID id, FUN anchorDisplay)
-        : head{id}
-        , body{id}
+      DisplayFrame (cuString& name, FUN anchorDisplay)
+        : head{name}
+        , body{name}
         {
           anchorDisplay (head, body);
         }
@@ -106,6 +106,7 @@ namespace timeline {
   class TrackPresenter
     : public model::Controller
     {
+      string name_;
       DisplayFrame display_;
       
       vector<unique_ptr<TrackPresenter>> subFork_;
@@ -123,7 +124,8 @@ namespace timeline {
       template<class FUN>
       TrackPresenter (ID id, ctrl::BusTerm& nexus, FUN anchorDisplay)
         : Controller{id, nexus}
-        , display_{id, anchorDisplay}
+        , name_{id.getSym()}         // fallback initialise track-name from human-readable ID symbol 
+        , display_{name_, anchorDisplay}
         , subFork_{}
         , markers_{}
         , clips_{}
