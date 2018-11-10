@@ -205,7 +205,7 @@ namespace diff{
   void
   TreeDiffMutatorBinding::mut (GenNode const& n)
   {
-    TreeMutator::Handle buffHandle = scopeManger_->openScope();
+    TreeMutator::Handle buffHandle = scopeManger_->openScope();      // hint: treeMutatorSize(...)
     if (not treeMutator_->mutateChild(n, buffHandle))
       __failMismatch("enter nested scope", n);
     

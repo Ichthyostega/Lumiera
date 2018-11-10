@@ -158,7 +158,7 @@ namespace diff{
     public:
       virtual ~ScopeManager();  ///< this is an interface
       
-      virtual TreeMutator::Handle openScope()   =0;
+      virtual TreeMutator::Handle openScope()   =0;      ///< @remark picks up `treeMutatorSize(...)`
       virtual TreeMutator&        closeScope()  =0;
       virtual void                clear()       =0;
       

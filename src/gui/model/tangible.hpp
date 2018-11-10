@@ -235,7 +235,7 @@ namespace model {
       friend constexpr size_t
       treeMutatorSize (const Tangible*)
       {
-        return 256;
+        return 512;
       }
     };
   

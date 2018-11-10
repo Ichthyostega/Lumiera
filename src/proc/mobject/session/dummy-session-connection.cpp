@@ -55,9 +55,11 @@
 #include <string>
 //#include <map>
 
+using lib::diff::MutationMessage;
 using lib::diff::GenNode;
 using lib::diff::MakeRec;
-using lib::diff::MutationMessage;
+using lib::diff::Ref;
+using lib::idi::RandID;
 //using util::cStr;
 using util::_Fmt;
 using std::string;
@@ -77,12 +79,12 @@ namespace session {
   namespace { //Implementation details....
   
     GenNode
-    emptyTimeline (string baseID)
+    emptyTimeline (string baseID, RandID const& forkRootID)
     {
       return MakeRec()
-               .set(string{gui::ATTR_fork}
-                   ,MakeRec()
-                      .type(string{gui::TYPE_Fork})
+               .set(MakeRec()
+                      .type (string{gui::TYPE_Fork})
+                    .genNode(forkRootID)
                    )
              .genNode(baseID);
     }
@@ -106,7 +108,18 @@ namespace session {
   MutationMessage
   DummySessionConnection::fabricateSeq1 (string baseID)
   {
-    return MutationMessage{ ins (emptyTimeline (baseID))
+    const RandID forkRootID{gui::ATTR_fork};
+    const GenNode timeline = emptyTimeline (baseID, forkRootID);
+    const GenNode rootTrackName{string{gui::ATTR_name}, "Track-"+baseID}
+                , FORK_ROOT = MakeRec().genNode(forkRootID)
+                ;
+    
+    return MutationMessage{ ins (timeline)
+                          , mut (timeline)
+                            , mut (FORK_ROOT)
+                              , set (rootTrackName)
+                            , emu (FORK_ROOT)
+                          , emu (timeline)
                           };
   }
   

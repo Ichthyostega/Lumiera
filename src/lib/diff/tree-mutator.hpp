@@ -83,6 +83,7 @@
  ** 
  ** @see tree-mutator-test.cpp
  ** @see tree-mutator-binding-test.cpp
+ ** @see [usage for tree diff application](\ref tree-diff-application.hpp)
  ** @see diff-language.hpp
  ** @see DiffDetector
  ** 
