@@ -61,6 +61,7 @@
 
 
 #include "lib/error.hpp"
+#include "include/ui-protocol.hpp"
 #include "lib/test/event-log.hpp"
 #include "gui/model/tangible.hpp"
 #include "lib/diff/record.hpp"
@@ -101,7 +102,7 @@ namespace test{
    * on the [Tangible] interface, which we mock here for unit testing.
    * This special implementation is instrumented to [log](\ref lib::test::EventLog)
    * any invocation and any messages sent or received through the UI Backbone,
-   * which is formed by the [UI-Bus](ui-bus.hpp).
+   * which is formed by the [UI-Bus](\ref ui-bus.hpp).
    * 
    * @todo some usage details
    * @see abstract-tangible-test.cpp
@@ -126,7 +127,7 @@ namespace test{
       virtual bool
       doReset()  override
         {
-          log_.call(this->identify(), "reset");
+          log_.call(this->identify(), string{MARK_reset});
           if (virgin_)
             return false; // there was nothing to reset
           
@@ -134,33 +135,22 @@ namespace test{
           message_ = "";
           expanded_ = false;
           virgin_ = true;
-          log_.event("reset");
+          log_.event(string{MARK_reset});
           return true; // we did indeed reset something
         }             //  and thus a state mark should be captured
       
       virtual bool
       doExpand (bool yes)  override
         {
-          log_.call(this->identify(), "expand", yes);
-          if (expanded_ == yes)
-            return false; // nothing to change
-          
-          virgin_ = false;
-          expanded_ = yes;
-          log_.event (expanded_? "expanded" : "collapsed");
-          return true; // record a state change
+          log_.call(this->identify(), string{MARK_expand}, yes);
+          return Tangible::doExpand (yes);
         }
       
       virtual void
-      doReveal (ID child)  override
+      doReveal()  override
         {
-          UNIMPLEMENTED ("mock doReveal");
-        }
-      
-      virtual void
-      doRevealYourself()  override
-        {
-          UNIMPLEMENTED ("mock doRevealYourself");
+          log_.call(this->identify(), string{MARK_reveal});
+          Tangible::doReveal();  // NOTE: without specific configuration this is NOP
         }
       
       virtual bool
@@ -281,14 +271,14 @@ namespace test{
                         {
                           string key{spec.idi.getSym()},
                                  val{render(spec.data)};
-                          log_.event("diff", "++Attib++ "+key+" = "+val);
+                          log_.event("diff", "++Attrib++ "+key+" = "+val);
                           return {key, val};
                         })
                      .assignElement ([&](Attrib& target, GenNode const& spec) -> bool
                         {
                           string key{spec.idi.getSym()},
                                  newVal{render (spec.data)};
-                          log_.event("diff", "set Attib "+key+" <-"+newVal);
+                          log_.event("diff", "set Attrib "+key+" <-"+newVal);
                           target.second = newVal;
                           return true;
                         })));
@@ -317,6 +307,13 @@ namespace test{
         {
           log_.call (this->identify(), "ctor", identity, string(nexus));
           log_.create (getID().getSym());
+          installExpander ([&](){ return this->expanded_; }
+                          ,[&](bool yes)
+                                {
+                                  virgin_ = false;
+                                  expanded_ = yes;
+                                  log_.event (expanded_? "expanded" : "collapsed");
+                                });
         }
       
       

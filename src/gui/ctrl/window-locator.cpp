@@ -116,7 +116,7 @@ namespace ctrl {
   }
   
   
-  /** similar to #findFocusWindow(), for the 'has_focus' property
+  /** similar to #findActiveWindow(), for the 'has_focus' property
    * @note likewise we return the first window in list, in case no window
    *       has keyboard focus. This may very well be the case.
    */
@@ -174,6 +174,32 @@ namespace ctrl {
   {
     globalCtx_.uiManager_.allowCloseWindow ( 1 < windowList_.size());
   }
+  
+  
+  /**
+   * @internal preliminary implementation of docking panel lookup and allocation.
+   * @todo 8/2018 the actual implementation shall eventually be provided by the ViewLocator
+   *       on a higher abstraction level, and configurable through the ViewSpec-DSL.
+   *       For now we use a braindead iterate-through-all-windows approach.
+   */
+  panel::Panel&
+  PanelLocator::preliminary_impl_PanelLookup (int typeID)
+  {
+    REQUIRE (not isnil(windowList_));
+    
+    for (auto window : windowList_)
+      if (window->getPanelManager().hasPanel (typeID))
+        return window->getPanelManager().showPanel (typeID);
+    
+    // no instance of the desired panel type exists yet...
+    for (auto window : windowList_)
+      if (window->is_active())
+        return window->getPanelManager().showPanel (typeID);
+    
+    // use the first window in list when none is active
+    return windowList_.front()->getPanelManager().showPanel (typeID);
+  }
+
   
   
   

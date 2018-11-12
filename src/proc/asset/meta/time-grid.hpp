@@ -22,7 +22,7 @@
 
 
 /** @file time-grid.hpp
- ** Establishing a reference scale for quantised time values.
+ ** To establish a reference scale for quantised time values.
  ** Contrary to the continuous Time values (Lumiera internal time scale),
  ** quantised time can only take on some discrete values corresponding
  ** to blocks or frames, according to the respective \em timecode format.
@@ -34,7 +34,8 @@
  ** Time grid specifications are integrated into Lumiera's framework
  ** for meta assets, automation, configuration and similar metadata.
  ** 
- ** \par using time grids
+ ** ## using time grids
+ ** 
  ** TimeGrid is an interface (ABC), but provides some actual factory
  ** functions, which can be used as a convenience shortcut to fabricate
  ** the kind of simple time grid used most often.
@@ -103,17 +104,17 @@ namespace meta {
   template<>
   struct Builder<TimeGrid>
     {
-      string id_;
+      string id;
       
-      FrameRate fps_;
-      TimeVar origin_;
+      FrameRate fps;
+      TimeVar origin;
       
       /** when building a compound or variable grid,
-       *  the predecessor is the grid active \em before
+       *  the predecessor is the grid active _before_
        *  the origin of this (local) grid.
        * @todo currently not supported (as of 12/2010)
        */
-      lib::P<TimeGrid> predecessor_;
+      lib::P<TimeGrid> predecessor;
       
       /** 
        * initialise to blank (zero).
@@ -121,10 +122,10 @@ namespace meta {
        * in order to create a usable TimeGrid
        */
       Builder(string const& nameID  ="")
-        : id_(nameID)
-        , fps_(1)
-        , origin_(TimeValue(0))
-        , predecessor_()
+        : id {nameID}
+        , fps{1}
+        , origin{TimeValue(0)}
+        , predecessor{}
         { }
       
       /** create a time grid

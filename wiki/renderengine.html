@@ -3,7 +3,7 @@
 <head>
 <script id="versionArea" type="text/javascript">
 //<![CDATA[
-var version = {title: "TiddlyWiki", major: 2, minor: 8, revision: 1, date: new Date("June 23, 2013"), extensions: {}};
+var version = {title: "TiddlyWiki", major: 2, minor: 9, revision: 1, date: new Date("April 12, 2018"), extensions: {}};
 
 //]]>
 </script>
@@ -42,10 +42,9 @@ DAMAGE.
 " />
 <!--PRE-HEAD-START-->
 <!--{{{-->
-<link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/>
+<link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml' />
 <!--}}}-->
 
-<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;">loading <b>Proc-Layer</b> devel doku<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
 <title> Engine - Building a Render Nodes Network from Objects in the Session </title>
 <style id="styleArea" type="text/css">
@@ -454,7 +453,7 @@ table.listView th, table.listView td, table.listView tr {padding:0 3px 0 3px;}
 .viewer code {font-size:1.2em; line-height:1.4em;}
 
 .editor {font-size:1.1em;}
-.editor input, .editor textarea {display:block; width:100%; font:inherit;}
+.editor input, .editor textarea {display:block; width:100%; box-sizing: border-box; font:inherit;}
 .editorFooter {padding:0.25em 0; font-size:.9em;}
 .editorFooter .button {padding-top:0; padding-bottom:0;}
 
@@ -860,7 +859,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" created="200708100337" modified="201505310058" tags="def classes img" changecount="1">
+<div title="Asset" modifier="Ichthyostega" created="200708100337" modified="201808111601" tags="def classes img" changecount="4">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property information to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -888,7 +887,7 @@ Some of the building blocks providing the framework for the objects placed into 
 &amp;rarr; StructAsset {{red{still a bit vague...}}}
 
 !Meta Asset
-Any resources related to the //reflective recurse of the application on itself,// including parametrisation and customisation aspects and similar metadata, are categorised and tracked apart of the primary entities. Examples being types, scales and quantisation grids, decision rules, control data stores (automation data), annotations attached to labels, inventory entities etc.
+Any resources related to the //reflective recurse of the application on itself,// including parametrisation and customisation aspects and similar metadata, are categorised and tracked apart of the primary entities. Examples being types, scales and quantisation grids, decision rules, control data stores (automation data), annotations attached to labels, inventory entities, error items etc.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; MetaAsset {{red{just emerging as of 12/2010}}}
@@ -900,6 +899,8 @@ is how to implement the relationship between [[MObject]]s and Assets. Do we use 
 
   //9/07: currently implementing it as follows: use a refcounting-ptr from Clip-~MObject to asset::Media while maintaining a dependency network between Asset objects. We'll see if this approach is viable//
 
+{{red{NOTE 8/2018}}} there seems to be a fuzziness surrounding the distinction between StructAsset and MetaAsset.
+I am suspicious this is a distinction //merely derived from first principles...// &amp;rarr; {{red{Ticket #1156}}}
 </pre>
 </div>
 <div title="AssetCreation" modifier="Ichthyostega" created="200709040307" modified="201002272321" tags="operational impl">
@@ -1521,10 +1522,10 @@ Lumiera agrees to this common understanding (of most film editing and sound hand
 &amp;rarr; PipeHandling
 </pre>
 </div>
-<div title="ClipPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611200101" modified="201611280204" tags="def GuiPattern img" changecount="10">
+<div title="ClipPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611200101" modified="201808311828" tags="def GuiPattern img" changecount="11">
 <pre>//mediating entity used to guide and control the presentation of a clip in the UI.//
 
-The clip representation in the UI links together two distinct realms and systems of concerns. For one, there are the properties and actions performed on the clip for sake of editing a movie. Everything which has a tangible effect on the resulting render. These information and operations are embodied into the HighLevelModel and can be manipulated script driven, without relying on an UI. But beyond that, there is also the local mechanics of the interface, everything which makes working on the edit and interacting with the model into a smooth experience and workflow. With respect to this concerns, a clip is a self-contained entity which owns its own state and behaviour. The ClipPresenter is the pivotal element to link together those two realms.
+The clip representation in the UI links together two distinct realms and systems of concerns. For one, there are the properties and actions performed on the clip for sake of editing a movie. Everything which has a tangible effect on the resulting render. These information and operations are embodied into the HighLevelModel and can be manipulated script driven, without relying on an UI. But beyond that, there is also the local mechanics of the interface, everything which makes working on the edit and interacting with the model into a smooth experience and workflow. With respect to these concerns, a clip is a self-contained entity which owns its own state and behaviour. The ClipPresenter is the pivotal element to link together those two realms.
 
 [&gt;img[Clip presentation control|uml/Timeline-clip-display.png]]
 Regarding the global angle, the ClipPresenter is an UI-Element connected to the UI-Bus, and it is added as child element to some parent entity, a TrackPresenter, which likewise serves as UI representation of a [[fork (&quot;track&quot;)|Fork]], and controls widgets to render a track like working scope (in the header pane and in the timeline contents pane). Commands manipulating the clip can be sent via the embedded bus terminal, and status regarding clip properties and nested child elements (effects, transitions) is received as messages via the bus, which insofar plays the role of model and controller.
@@ -1995,7 +1996,7 @@ Some observations:
 * Optimisation achieves access times around ≈ 1ns
 </pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201505310104" tags="decision design discuss Concepts" changecount="5">
+<div title="DesignDecisions" modifier="Ichthyostega" created="200801062209" modified="201810071730" tags="decision design discuss Concepts" changecount="6">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; yes of course, that's a //no-brainer,// todays. Rather, important is to note what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -2008,6 +2009,8 @@ We ''separate'' processing (rendering) and configuration (building). The [[Build
 
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[&quot;Tracks&quot; (forks)|Fork]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
+
+The model in Proc-Layer is rather an //internal model.// What is exposed globally, is a structural understanding of this model. In this structural understanding, there are Assets and ~MObjects, which both represent the flip side of the same coin: Assets relate to bookkeeping, while ~MObjects relate to building and manipulation of the model. In the actual data represntation within the HighLevelModel, we settled upon some internal reductions, preferring either the //Asset side// or the //~MObject side// to represent some relevant entities. See &amp;rarr; AssetModelConnection.
 
 Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with [[multichannel|MultichannelMedia]] mixed-typed media natively.
 
@@ -2022,18 +2025,18 @@ Deliberately there is an limitaion on the flexibility of what can be added to th
 A strong emphaisis is placed on ''Separation of Concerns'' and especially on ''Open Closed'' design. We resist the temptation to build an //universal model.// Rather, we understand our whole unterdaking a ''transformation of metadata'' -- which, as a whole, remains conceptual and is only ever implemented partially  within context. A [[language of diff exchanges|TreeDiffFundamentals]] serves as integrating backbone. It works against a rather symbolic representation of strucutred matters, conceived as an ExternalTreeDescription. In fact, this desctiption is only materialised in parts, if at all.
 </pre>
 </div>
-<div title="DesignGoals" modifier="Ichthyostega" created="200706210557" modified="200805300046" tags="design">
-<pre>This __proc-Layer__ and ~Render-Engine implementation started out as a design-draft by [[Ichthyo|mailto:Ichthyostega@web.de]] in summer 2007. The key idea of this design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
+<div title="DesignGoals" modifier="Ichthyostega" created="200706210557" modified="201811092250" tags="design" changecount="3">
+<pre>This ~Proc-Layer and ~Render-Engine implementation started out as a design-draft by [[Ichthyo|mailto:Ichthyostega@web.de]] in summer 2007. The key idea of this design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
 
 !Why doesn't the current Cinelerra-2 Design succeed?
-The design of Cinelerra-2 basically follows a similar design, but __fails because of two reasons__
-# too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br&gt;This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
+The design of Cinelerra-2 basically follows a similar design, but [[fails because of two reasons...|https://lumiera.org/project/background/history/CinelerraWoes.html]]
+# too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br/&gt;This causes overly heavy use of virtual functions, intricate implementation dependencies, and -- in order to mitigate this -- falling back to hard wired branching in the end.
 # far too much coupling and back-coupling to the internals of the »EDL«, forcing a overly rigid structure on the latter
 
 !Try to learn from the Problems of the current Cinelerra-2 codebase
-* build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recure on the actual object type
+* build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recur on the actual object type
 * need to redesign the internals of the Session in a far more open manner. Everything is an [[M-Object|MObjects]] which is [[placed|Placement]] in some manner
-* strive at a StrongSeparation between Session and Render Engine, encapsulate and allways implement against interfaces
+* strive at a StrongSeparation between Session and Render Engine, encapsulate and always implement against interfaces
 
 
 !Design Goals
@@ -2041,7 +2044,7 @@ As always, the main goal is //to cut down complexity// by the usual approach to 
 
 To achieve this, here we try to separate ''Configuration'' from ''Processing''. Further, in Configuration we try to separate the ''high level view'' (users view when editing) from the ''low level view'' (the actual configuration effective for the calculations). Finally, we try to factor out and encapsulate ''State'' in order to make State explicit.
 
-The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. All decisions, tests and conditional operations are factored out of the render process and handled as configuration of the pipeline, which is done by the Builder. The actual color model and number of ports is configured in by a pre-built wiring descriptor. All Nodes are of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. OpenGL and renderfarm support can be configured in as an alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering. We introduce separate control data connections for the [[automation data|Automation]], separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or the case of two nodes using the same automation data).
+The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. All decisions, tests and conditional operations are factored out of the render process and handled as configuration of the pipeline, which is done by the Builder. The actual colour model and number of ports is configured in by a pre-built wiring descriptor. All Nodes are of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. OpenGL and renderfarm support can be configured in as an alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering. We introduce separate control data connections for the [[automation data|Automation]], separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or the case of two nodes using the same automation data).
 
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
@@ -2077,6 +2080,10 @@ Reworking the dummy player into the [[Player subsystem|PlayService]] is a larger
 The Method of pushing frames to the Viewer widget is changed fundamentally during that transition: while previously, in the PlayerDummy design study, the GUI opened a Display-façade interface -- now rather the GUI has to register an OutputSlot implementation with the global OutputManager. Such a registration requires an explicit deregistration on shutdown, and this can be made to block, until no further data will be delivered. Using this approach we hope to circumvent problems with occasional crashes on closing the application, due to dispatching frame output signals in the event thread while shutdown is already in progress.
 
 </pre>
+</div>
+<div title="DiffConstituent" creator="Ichthyostega" modifier="Ichthyostega" created="201810100342" tags="Model Concepts design draft" changecount="1">
+<pre>//A self referential intermediary, used to collect and consolidate structural information about some element.//
+This structural information can then be emanated as ''population diff'' and is thus the foundation to build a further representation of the same structure //&quot;elsewhere&quot;.// This //further representation// could be a model entity within the session's HighLevelModel, or it could be a widget tree in the UI. And, to close the circle, this other representation resulting from that diff could in turn again be a DiffConstituent.</pre>
 </div>
 <div title="DispatcherTables" creator="Ichthyostega" modifier="Ichthyostega" created="201305212334" tags="Player Rendering design draft" changecount="1">
 <pre>The Dispatcher Tables are hosted within the [[Segmentation]] and serve as a ''strategy'' governing the play process.
@@ -2662,7 +2669,7 @@ Typically, when starting the draw operation, we retrieve our //allocation.// Thi
 Thus, if we want to use absolute canvas coordinates for our drawing, we need to adjust the cairo context prior to any drawing operations: we translate it in the opposite direction of the values retrieved from the scrollbar {{{Gtk::Adjustment}}}s. This causes the //user coordinates// to coincede with the absolute canvas coordinates.
 </pre>
 </div>
-<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201611012211" tags="GuiPattern impl" changecount="4">
+<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201808301543" tags="GuiPattern impl" changecount="6">
 <pre>//This is the canvas widget of ~GTK-3//
 It allows not only custom drawing, but also to embed other widgets at defined coordinates.
 
@@ -2679,14 +2686,17 @@ we need a test setup for this investigation.
 * easy to launch
 * don't waste much time, it is disposable
 * realistic: shall reflect the situation in our actual UI
+As starting point, {{red{in winter 2016/17}}} the old (broken) timeline panel was moved aside and a new panel was attached for GTK experiments. These basically confirmed the envisioned approach; it is possible to place widgets freely onto the canvas; they are drawn in insert order, which allows for overlapped widgets (and mouse events are dispatched properly, as you'd expect). Moreover, it is also possible to draw directly onto the canvas, by overriding the {{{on_draw()}}}-function. However, some (rather trivial) adjustments need to be done to get a virtual canvas, which moves along with the placed widgets. That is, GtkLayoutWidget handles scrolling of embedded widgets automatically, but you need to adjust the Cairo drawing context manually to move along. The aforementioned experimental code shows how.
+
+After that initial experiments, my focus shifted to the still unsatisfactory top-level UI structure, and I am working towards an initial integration with Proc-Layer since then.
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201708311414" tags="GuiPattern design draft" changecount="25">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201811011859" tags="GuiPattern design draft" changecount="30">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
-* we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels)
+* we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels, a processing function)
 * like anything within a timeline, a clip has a temporal extension (but not necessarily finite; it can //not be zero,// but it can be infinite)
-* by virtue of [[Placement]], a clip acquires a time position.
+* by virtue of [[Placement]], a clip acquires a time position. (&amp;rarr; GuiPlacementDisplay)
 Due to this unspecific nature, a clip might take on various //appearances// within the UI.
 
 !clip appearances
@@ -2713,9 +2723,9 @@ This creates a tension related to the kind of architecture we want to build with
 Starting from the architecture as predetermined by the UI-Bus, it is clear that we have to add a UI-Element for every tangible child entity represented in the (abstracted) model. And the parent entity receiving a diff and adding such a child element is also in charge of that element, controlling its lifecycle. Yet this child element is not necessarily bound to be a widget. This is our chance here: what &quot;adding&quot; means is completely within the scope of the parent element and basically an implementation detail. So the parent may create and own a tracker or controller object to stand for the clip, and the latter may create and adjust the actual widget in negotiation with a display strategy. So effectively we're introducing a //mediator,// which represents the clip (as far as the modelling is concerned) and which at the same time communicates with a global display manager. We call this mediating entity a ClipPresenter
 
 !!!how to carry out the clip appearances
-Initially, one could think that we'd need to build several widgets to realise the wide variety of clip appearances. But in fact it turns out that we're able to reshape a single base widget to encompass all the necessary presentation styles. This base widget is a simple, one-element container, with {{{Gtk::Frame}}} being the most obvious pick. This gives us already a rectangular covered space, and the ability to add a label widget, optionally with controlled alignment of the label. All the more elaborate presentation styles can be achieved by adding a canvas widget into this frame and then placing additional stuff on top of that. The only tricky part arises in overview display, when just some clip rectangle can stand-in for a whole series of clips, which themselves remain hidden as UI elements.
+Initially, one could think that we'd need to build several widgets to realise the wide variety of clip appearances. But in fact it turns out that we're able to reshape a single base widget to encompass all the presentation styles. Almost all of the necessary styles, to be more precise, omitting the mere overview drawing where several entities are combined into a single box. However, this basic [[element-box-widget|GuiElementBoxWidget]] can be generalised, and even used beyond the clip display itself. It is a simple, one-element container, with an Icon and a textual label. This gives us already a rectangular covered space, and the ability to include a menu and to control the alignment of the label. All the more elaborate presentation styles can be achieved by adding a canvas widget into this frame and then placing additional stuff on top of that. The only tricky part arises in overview display, when just some clip rectangle can stand-in for a whole series of clips, which themselves remain hidden as UI elements.
 
-A prime consideration regarding this whole clip presentation strategy is the performance concern. It is quite common for movie edits to encompass several hundred individual clips. Combined with several tracks and an elaborate audio edit, it may well happen that we end up with thousands of individual UI objects. If treated naively, this load might seriously degrade the responsiveness of the interface. Thus we need to care for the relevant infrastructure to enable optimisation of the display. For that reason, the memory footprint of the ClipPresenter and the basic widget has to be kept as small as possible. And moreover, since we do our own layout management in the timeline display, in theory it is possible any time just to add those widgets to the enclosing GTK container, which are actually about to become visible. (if we follow this approach, a problem yet to be solved is how to remove widgets falling out of sight, since removing N widgets easily turns into a quadratic operation).
+A prime consideration regarding this whole clip presentation strategy is the performance concern. It is quite common for movie edits to encompass several hundred individual clips. Combined with several tracks and an elaborate audio edit, it may well happen that we end up with thousands of individual UI objects. If treated naively, this load might seriously degrade the responsiveness of the interface. Thus we need to care for the relevant infrastructure to enable optimisation of the display. For that reason, the memory footprint of the ClipPresenter and the basic widget has to be kept as small as possible. And moreover, since we do our own layout management in the timeline display, in theory it is possible //only to add// those widgets to the enclosing GTK container, which are //actually about to become visible.// (if we follow this approach, a problem yet to be solved is how to remove widgets falling out of sight, since removing N widgets easily turns into a quadratic operation).
 
 !clip content rendering
 In a typical editing application, the user can expect to get some visual clue regarding the media content of a clip. For example, sound clips can be visualised as waveform, while movie clips might feature a sequence of images taken from the video. Our intention is to ''use our own rendering engine'' to produce these thumbnails. In fact, our engine is perfectly suited for this task: it has precisely the necessary media decoding and rendering abilities, plus it offers an elaborate system of priorities and deadlines, allowing to throttle the load produced by thumbnail generation. In addition to all those qualities, our engine is planned to be complemented by an &quot;intelligent&quot; frame cache, which, given proper parametrisation, ensures the frequently requested thumbnails will be available for quick display. For this approach to work, we need to provide some infrastructure
@@ -2725,7 +2735,7 @@ In a typical editing application, the user can expect to get some visual clue re
 * we still need to work out how buffer management for this task will be handled; it should be a derivative of typical buffer management for display rendering.
 * the clip widget needs to provide a simple placeholder drawing to mark the respective space in the interface, until the actual preview arrives.
 
-To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
+To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. Seemingly, the proper place to hose that display strategy is ''within the session model'', not within the UI. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
 <div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704171822" tags="spec draft GuiPattern GuiIntegration" changecount="22">
@@ -2906,14 +2916,14 @@ Command instances are like prototypes -- thus each additional level of different
 see the description in &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201804150106" tags="def GuiPattern design" changecount="56">
+<div title="GuiComponentView" creator="Ichthyostega" modifier="Ichthyostega" created="201709021521" modified="201808070208" tags="def GuiPattern design" changecount="57">
 <pre>//A view within the UI, featuring some component of relevance to »the model«.//
 While any UI is comprised of numerous widgets acting as //view of something,// only some of those views play the prominent role to act as //building block component// of the user interface.
 Such UI component views exhibit some substantial traits
 * they conform to a built-in fixed list of view types, each of which is unique and dedicated to a very specific purpose: //''Timeline'', ''Viewer'', (Asset)''Bin'', ''Infobox'', ''Playcontrol'',...//
 * each component view has a distinguishable identity and is connected to and addressable through the UI-Bus
 * it can be hosted only at a dedicated location within one or several specific [[docking panels|GuiDockingPanel]].
-* multiplicity (one, one per window, many) depends on the type of view and needs to be managed.
+* multiplicity (only one, one per window, many) depends on the type of view and needs to be managed.
 * such a view is not just //created// -- rather it needs to be //allocated//
 
 !Allocation of UI component views
@@ -3186,7 +3196,7 @@ In order to build a sensible plan for our timeline structure, we need to investi
 }}}
 </pre>
 </div>
-<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201806171308" tags="design GuiPattern draft" changecount="10">
+<div title="GuiDockingPanel" creator="Ichthyostega" modifier="Ichthyostega" created="201708311617" modified="201808070252" tags="design GuiPattern draft" changecount="11">
 <pre>//Management of dockable content panes//
 Within each top level application window, the usable screen real estate can be split and arranged into a number of standard view building blocks. Each of this //panels// follows a specific preconfigured basic layout -- these are hard coded, yet customisable in detail. There is a finite list of such panel types available:
 * the [[timeline display|GuiTimelineView]]
@@ -3197,6 +3207,20 @@ Within the preconfigured layout it is a panel's role to host and incorporate Gui
 Please note the distinction between UI component view and panel; in many cases there is one of each for a given kind, and these need to be distinguished: e.g. there is the [[timeline view|GuiTimelineView]] and there is the timeline panel, which houses several timelines (as tabs). Or there is the viewer component, which is located within a dedicated viewer panel each.
 
 !Instantiation
+A panel as such is //an identifiable, named, delineated space within the UI.//
+* since it is just a space, instantiation of any panel //implies the creation of its content// -- at least in minimal or default form.
+* the type of the panel determines, what the possible content of such a panel might be, and what need to be created to allow the panel to exist.
+Consequently, there are two distinct ways to instantiate a panel
+;by view allocation
+:some process or action requires a specific GuiComponentView, and requests access or allocation through the ViewLocator.
+:in this case, the panel holding this view is created on demand as a by-product
+;by explicit setup
+:initiated through user interaction, or caused by default wiring, a certain panel is made to exist somewhere in the UI
+:in this case, the type of the panel determines what content view(s) need to be present to allow the panel to exist
+
+!!!requirements and consequences for panel instantiation
+Based on these considerations, and based on the fact that any GuiComponentView needs an ID and an UI-Bus connection, we can conclude that the actual panel creation need to be carried out by some core component directly related to the GuiTopLevel (to get UI-Bus access). And we need to ensure that the ID of any created or allocated view is //predictable,// since other parts need to be able to talk to this component via the bus, without any direct way to discover and retrieve the ID beforehand.
+
 !Placing and addressing of embedded contents
 A specific problem arises insofar other parts of the UI need to create, address and control some UI entities, which at the same time exist as part of a docking panel. This is a problem of crosscutting concerns: UI control and interaction structure should not be mingled with the generic concern to maintain a component as part of a screen layout. Unfortunately, the design of standard UI toolkit sets is incredibly naive when it comes to interaction design, and the only available alternative is to rely on frameworks, which come with a hard-wired philosophy.
 As a result, we're forced to build our UI from components which fall short on the distinction between //ownership and control.//
@@ -3207,6 +3231,48 @@ Each top-level window //holds a single dock,// which in turn might hold several 
 !!!Panel Locator
 In accordance with this structure, we introduce a central component, the {{{PanelLocator}}} -- to keep track of all {{{DockArea}}} elements within the UI. The latter are responsible for managing the docking panels //within a specific// top-level {{{WorkspaceWindow}}}.
 
+</pre>
+</div>
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="201811011920" tags="GuiPattern spec draft" changecount="4">
+<pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
+This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
+* an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
+* a //Menu Button// -- in fact a small downward arrow, which can be flipped upwards (expand/collapse)
+* a //Text Label// designating the element
+
+This characteristic cadence of elements gives us a horizontal box with distinct extension, and an arrangement to attach menu actions and a possibly extended display style. This arrangement can be used for...
+* Markers
+* Elements in the Bins (Clips, Media, Effects, Assets....)
+* abridged display of Clips (and Effects)
+* the Effect-bar to mark the presence of an Effect
+* for the Track heads in the Timeline Header pane
+* for ~Clip-Placement and name
+
+&amp;rarr; see also [[Ticket #1185|https://issues.lumiera.org/ticket/1185]].
+
+!Properties
+* the Icon shall be easily configurable (from the coding view point, of course this is all hard wired in the code or the theme)
+** the default is to configure the ''Placement Icon''
+** alternatively a ~Stock-ID can be given
+* the horizontal extension is easy to control, through several options
+** natural extension; don't give any ''size request'', let GTK figure out the extension rather
+** set a fixed length-limit, causing the text label to be abridged eventually
+** proportional head-placement
+* the body may optionally hold another GTK widget, in which case the head-triplet aligns to the upper side
+
+We offer pre-arranged options for standard wiring of interaction response
+* when the Icon is a Placement, it will launch the [[Placement-Pop-up|GuiPlacementDisplay]] -- which in turn can be de-modalised, thereby allocating a place in the [[Property grid pane|GuiPropertyPane]]. When such a placement control already is open and allocated, the click to the placement icon will lead there.
+* in the most basic case, there is only one common binding, which is a signal, emitted when clicking on the icon or the menu button
+* yet there can be two distinct bindings (signals) for the icon and the button
+* the ''Expander'' (which is part of the UI-Element protocol) is pre-wired with the arrow on the menu button, to yield a visible clue for the expand/collapse state
+* each of the bindings can be easily replaced by a [[pop-up menu|GuiPopupMenu]]
+
+!!!proportional Head placement
+This behaviour pattern (see [[#1186|https://issues.lumiera.org/ticket/1186]]) is a distinguishing trait of the Lumiera timeline display. It indicates elements with a temporal extension surpassing the current display window. Such elements are typically represented by an {{{ElementBoxWidget}}} with an large horizontal extension. Yet when scrolling, the head-triplet shall always remain within the visible area, but it will slowly glide from one side to the other, thereby indicating the our relative position. This pattern of behaviour matters, since, together with the scolled content display, it creates the dominant movement when scrolling an extended timeline
+
+''Technically'', this has to be build as a self-contained component, which can be unit-tested. The input and reference is a &quot;Window&quot; (in fact an interval) together with its start position //relative// to the element's own start position. The component has to derive from this input the actual relational configuration of the window's extension with respect to its own extension. For context, the //window// corresponds to the visible area, which can be larger, smaller disjoint, partially overlapping and fully contained. Please note that ''handling the relations of intervals is a notoriously challenging problem.''
+
+Especially when the component determines a placement of the //window// within its own extension, it has to derive a proportional placement position, which can be used to arrange the head-triplet of the {{{EventBoxWidget}}}. This proportional placement needs to reflect the location of the window within the overall extension, similar to the hand of a scrollbar. However, when the extension of the head-triplet, together with its placement disallows to show the the triplet unclipped, the triplets shall just be clipped naturally. Ideally, there would be a soft graceful transition between those two representation modes.
 </pre>
 </div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">
@@ -3222,7 +3288,7 @@ More specifically, the integration is based on ''messaging''. To start with, the
 ----
 In a preliminary attempt to establish an integration between the GUI and the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget. This highlighted the problems we're about to encounter and made us think about the more radically decoupled approach we followed thereafter...</pre>
 </div>
-<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201702190021" tags="GuiIntegration design draft" changecount="13">
+<div title="GuiModel" creator="Ichthyostega" modifier="Ichthyostega" created="201410170142" modified="201810100334" tags="GuiIntegration design draft" changecount="25">
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
@@ -3234,11 +3300,34 @@ The GUI model is largely comprised of immutable ID elements, which can be treate
 
 !{{red{WARNING 2/2017}}} more questionable than ever
 The whole Idea to have a &quot;UI model&quot; appears more questionable than ever. It leads to tight coupling with the session and a lot of thread synchronisation headaches, without any clear benefit -- beyond just being the obvious no-brainer solution. During the last months, step by step, several presentation related structures emerged, which //indeed are structured to parallel the outline of the session.// But those structures are widgets and controllers, and it might well be that we do not need a model, beyond the data already present within the widget implementation. Rather it seems we'll get a nested structure of //presenters,// which are linked to the session with the help of the UI-Bus and the [[diff framework|TreeDiffModel]].
+* {{red{as of 8/2018}}}, matters on a large scale converge towards a structure //without a classical UI model.// Seemingly we can do without...
+* there is a working demonstration in {{{BusTerm_test}}}, which pushes mutation diffs against a mock UI-Element. The immediate response to receiving such a diff notification via the UI-Bus has now been coded; it incurs invoking a passed callback (functor), which performs within the originating context, but within the ~UI-Thread, and produces the actual diff //on-demand.// (&quot;pull principle&quot;)
+
+!!!building the model structures
+A fundamental decision within the Lumiera UI is to build every model-like structure as immediate response to receiving a diff message pushed up into the UI.
+* either this happens when some change occured, which is directly reflected into the UI by a local diff
+* or a whole subtree of elements is built up step wise in response to a ''population diff''. This is an systematic description of a complete sub-structure in current shape, and is produced as emanation from a DiffConstituent.
 
 !synchronisation guarantees
 We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the responsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Proc-Layer, with the help of the ProcDispatcher.
 
-The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. This callback will be scheduled by the  widgets to perform in the GUI event  thread.
+The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. The notification will be dispatched into the GUI event thread (by the {{{GuiNotification}}} façade), which implies that also the callback embedded within the notification will be invoked by the  widgets to perform within the GUI  thread.
+
+!generic model tree building blocks
+According {{red{to the current plan (2018)}}}, the GuiModel will not be a dedicated and isolated data structure -- rather it will be interwoven with the actual structure of the widgets and controllers. Some controllers and also some widgets additionally implement the {{{gui::model::Tangible}}}-interface and thus act as &quot;tangible&quot; UI-Element, where each such &quot;tangible element&quot; directly corresponds to a component within the session model. The interface UI-Element requires such elements to provide an attachment point to receive mutations in the form of diff messages, while it remains a local implementation detail within each such element //how actually to respond and reflect// the changes indicated by the diff message. Typically the adding of child elements will result in creation of several GTK widgets, some of which are in turn also again UI-Element implementations, and only the latter count conceptually as &quot;children&quot;.
+
+While most actual details are abstracted away by this approach, it can be expected that the handling of typical diff changes is somewhat similar in most actual widgets. For this reason we provide a selection of generic adapters and building blocks to simplify the assembly of actual widget implementations.
+
+!!!expanding and collapsing
+Several UI elements offer the ability to be collapsed into a minimal representation to save screen real estate. The UI-Element protocol defines this to happen either by invoking a dedicated signal slot on the element, or by sending an appropriate message over the UI-Bus. The actual implementation is quite simple, but unfortunately requires knowledge regarding the specific widget configuration. A commonly used approach is to wrap the expandable/collapsible element into a {{{Gtk::Expandable}}}, but there are notable exceptions, where the widget is bound to handle the expanding or reducing of information display all by itself. We bridge this discrepancy by introducing an {{{Expander}}} interface to act as adapter.
+* the default implementation holds an {{{Expander}}} functor. In default state, this functor as well as expanding / collapsing functionality remains disabled
+* to enable it, two lambdas need to be provided, to configure
+** how to find out about the expansion state of the widget
+** how to change this expansion state (i.e. how to expand or collapse the widget)
+
+!!!revealing an element
+The UI-Element protocol also includes the ability to //reveal an element// -- which means actively to bring this element into sight, in case it is hidden, collapsed or obscured by scrolling away.
+{{red{As of 8/2018 this is just an idea}}}, and many details still need to be considered. Yet at least one point is clear: implementing such a feature requires the help of the container widget actually holding the element to be revealed. It might even happen that also the collaboration of the container holding aforementioned immediate parent container is necessary -- indicating a recursive implementation scheme. The default implementation is based on a similar scheme as the expand/collapse functionality: here we embed a {{{Revealer}}} functor, which then needs to be outfitted with a lambda binding into the internals of the parent container to effect the necessary presentation changes.
 </pre>
 </div>
 <div title="GuiModelElements" creator="Ichthyostega" modifier="Ichthyostega" created="201501061138" modified="201703170201" tags="GuiIntegration design draft img" changecount="47">
@@ -3321,7 +3410,7 @@ This treatment ensures each nested diff is consumed within a properly typed cont
 &amp;rarr; this is the purpose of the {{{DataCap}}} within our [[generic node element|GenNode]]
 </pre>
 </div>
-<div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" modified="201708222311" tags="spec" changecount="12">
+<div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" modified="201809300130" tags="spec" changecount="13">
 <pre>LayerSeparationInterface provided by the GUI.
 Access point for the lower layers to push information and state changes (asynchronously) to the GUI. Most operations within Lumiera are in fact initiated by the user through the GUI. In the course of such actions, the GUI uses the services of the lower layer and typically receives an immediate synchronous response to indicate the change was noted. Yet often, these operations may cause additional changes to happen asynchronously from the GUI's perspective. For example, an edit operation might trigger a re-build of the low-level model, which then detects an error. Any such consequences and notifications can be &quot;cast&quot; up into the UI, using the {{{NotificationService}}} described here.
 
@@ -3333,7 +3422,7 @@ The GuiNotificationFacade is installed as part of and managed by the ''UI Manage
 A dedicated ''activation state'' is necessary for this reason -- which within the implementation translates into a queuing and dispatching facility to reschedule any calls into the UI event thread ''asynchronously''.
 
 !Addressing of UI elements
-Most calls in this interface require to specify a receiver or target, in the form of an element ID. It is assumed the caller effectively just knows these ~IDs, typically because the same ~IDs are also used as element ~IDs for the corresponding session entities. And, to start with, the whole UI representation of the session was at some point generated by //population diff messages,// which used the same ~IDs to indicate the creation of the corresponding UI representation elements.
+Most calls in this interface require to specify a receiver or target, in the form of an element ID. It is assumed the caller effectively just knows these ~IDs, typically because the same ~IDs are also used as element ~IDs for the corresponding session entities. Even more so, since the whole UI representation of the session was at some point generated by //population diff messages,// which used the same ~IDs to indicate the creation of the corresponding UI representation elements.
 </pre>
 </div>
 <div title="GuiPattern" creator="Ichthyostega" modifier="Ichthyostega" created="201410160054" modified="201612021723" tags="overview" changecount="4">
@@ -3346,9 +3435,27 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201807141734" tags="GuiIntegration GuiPattern" changecount="8">
+<div title="GuiPlacementDisplay" creator="Ichthyostega" modifier="Ichthyostega" created="201810281744" modified="201811011910" tags="spec GuiPattern draft" changecount="3">
+<pre>A cross-cutting and somewhat tricky concern is how to represent and expose the [[MObject Placements|Placement]] within the UI.
+For one, a Placement is a set of rules picked up from enclosing scopes -- and it is one of the most fundamental traits of Lumiera that the user is able to edit those placement rules. Yet the combination and final application of those rules also materialises itself into actual properties of the objects of the edit session -- most notably the time position of any element. Consequently, parts of the Placement are unfolded to appear as properties of the placed object, as far as the UI representation is concerned. However, Placement as a generic building block is prominently exposed, insofar pretty much every entity you'll see in the UI has the ability to &quot;edit its placement&quot;. This is indicated by a characteristic Icon decoration, leading to a common placement editor, where the user can
+* see all the explicitly given locating pins
+* see the effective, resulting ExplicitPlacement
+* add and manipulate existing rules
+To support this generic setup, pretty much every UI element needs to be outfitted with a &quot;placement&quot; attribute, to reflect those distinct information to be exposed in aforementioned placement edit UI.
+&amp;rarr; see also [[Ticket #1188|https://issues.lumiera.org/ticket/1188]].
+</pre>
+</div>
+<div title="GuiPopupMenu" creator="Ichthyostega" modifier="Ichthyostega" created="201811011924" tags="GuiPattern design draft" changecount="1">
+<pre>//Organisation of Pop-up menus in the Lumiera UI.//
+A pop-up is created on right click on the associated element, which thereby exposes its //methods for manipulation.// As such this arrangement incorporates the principle of ''object orientation'' into the interactive user interface.
+
+The foundation of population and display of pop-up menues is provided by GTK -- however the //»object orientation«// is our actual design concern here.
+
+{{red{OMG 11/2018 -- I have no idea where to start here...}}}</pre>
+</div>
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201808070201" tags="GuiIntegration GuiPattern" changecount="9">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
-* main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
+* main and {{{lumiera::AppState}}} activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
 * loading a GuiStarterPlugin actually
 ** loads the GUI (shared lib)
 ** creates instances of all the GUI services available through LayerSeparationInterfaces
@@ -3386,7 +3493,22 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201803102227" tags="GuiPattern design decision draft img" changecount="50">
+<div title="GuiTimelineSlave" creator="Ichthyostega" modifier="Ichthyostega" created="201810111210" tags="GuiPattern design decision draft" changecount="1">
+<pre>There are various reasons why we might want to offer multiple equivalent UI representations of the same Timeline...
+* the user might want to see several remote parts of the same timeline simultaneously, in focussed display
+* we allow several indeptendent top-level windows (think several desktops), so it might just happen that the same timeline is selected in several windows
+* we might want to introduce a focussed view on a nested sequence or virtual clip
+
+Now, since we build our UI on the notion of mapping session contents via a messaging system onto suitable presenters in the UI, we get a conceptual mismatch. Basically we need to cut at some point and duplicate some connections. Either we need the ability within a timeline presentation entity to serve several sets of slave widgets, or we need the ability for those presentation entities to collaborate, where one of them becomes the leader and automatically forwards all notifications to the other members of the cluster. Or, alternatively, we could think of pushing that duplication down into the session, in which case we get a TimelineClone entity, and the Builder then needs to be aware of this situation and generate duplicated responses to be sent to the UI.
+
+{{red{While reconsidering this topic in 10/2018}}}, it looks like I am leaning towards the most systematic option, which is to represent this duplication already within the session as TimelineClone. The rationale is
+* splitting this way is likely to produce the least accidental complexity -- at that point we are forced to cross-cut only a small number of other concerns. Were we to cut and duplicate within the UI, we'd be forced to carry care for slave entities into a huge number of entirely unrelated UI concerns, like layout management or media display feedback.
+* in the case of a focussed view on a nested sequence we are even forced to go that route, since doing otherwise would carry over core session responsibilities into the presentation layer. Consequently, any other solution scheme causes duplicating of functionality.
+* however -- if we implement slave timelines already within the session, we still need to make the UI counterpart basically aware of the situation. Thus the {{{TimelineControler}}} needs the ability to delegate some behaviour to another primary controller. That being said -- I still confirm the decision to postpone that topic altogether...
+
+In any case, this is an advanced topic, and nowhere near trivial. It seems reasonable to reject opening duplicate timeline presentations as a first step, and then address this topic way later, when we've gained sufficient knowledge regarding all the subtleties of timeline presentation and editing.</pre>
+</div>
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201810281754" tags="GuiPattern design decision draft img" changecount="58">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3399,7 +3521,7 @@ Several timeline views may be present at the same time -- and there is not neces
 Session, Binding and Sequence are the mandatory ingredients.
 
 !Basic layout
-[&gt;img[Clip presentation control|draw/UI-TimelineLayout-1.png]]The representation is split into a ''Header pane'' exposing structure and configuration, and a ''Content pane'' extending in time. The ''Time ruler'' running alongside the top of the content pane represents the //position in time.// Beyond this temporal dimension, the content area is conceived as a flexible working space. This working space //can// be structured hierarchically -- when interacting with the GUI, hierarchical nesting will be created and collapsed on demand. Contrast this with conventional editing applications which are built upon the rigid notion of &quot;Tracks&quot;: Lumiera is based on //Pipes// rather than Tracks.
+[&gt;img[Clip presentation control|draw/UI-TimelineLayout-1.png]]The representation is split into a ''Header pane'' exposing structure and configuration, and a ''Content pane'' extending in time. The ''Time ruler'' running alongside the top of the content pane represents the //position in time.// Beyond this temporal dimension, the content area is conceived as a flexible working space. This working space //can// be structured hierarchically -- when interacting with the GUI, hierarchical nesting will be created and collapsed on demand. Contrast this with conventional editing applications which are built upon the rigid notion of &quot;Tracks&quot;: Lumiera is based on //Pipes// and //Scopes// rather than Tracks.
 
 In the temporal dimension, there is the usual scrolling and zooming of content, and possibly a selected time range, and after establishing a ViewerPlayConnection, there is an effective playback location featured as a &quot;Playhead&quot;
 The workspace dimension (vertical layout) is more like a ''Fork'', which can be expanded recursively. More specifically, each strip or layer or &quot;track&quot; can be featured in //collapsed// or //expanded state.//
@@ -3420,10 +3542,17 @@ This collapsed, expanded and possibly nested workspace structure is always exact
 !!!lifecycle and instances
 A given instance of the {{{TimelineWidget}}} is always dedicated to render the contents of //one specific timeline.// We never switch the data model while retaining the UI entities. This also means, a given instance is tied to one conversation with the core; it is created when the core tells us about this timeline with an initial population diff, and it lives until either this timeline is discarded in the core model, or the whole session is shut down.
 
-The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} instances, allowing to make one of them visible for interaction. Yet those instances are managed by the InteractionDirector, who incorporates the role of representing the [[model root|ModelRootMO]]. Aside of the timeline display, there is also an ''asset pannel''; display of and interaction with those asset views is handled by dedicated widgets, backed by the {{{AssetControler}}} -- which is also a child of and managed by the InteractionDirector, since assets are modelled as global part of the [[Session]].
+The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} instances, allowing to make one of them visible for interaction. Yet the timeline itself is represented by the {{{TimelineControler}}}, which lives //within this widget,// and is attached to and managed by the InteractionDirector, who incorporates the role of representing the [[model root|ModelRootMO]]. To bridge this conflict of control, we introduce a {{{TimelineGui}}} proxy for each timeline. Which allows to close a timeline on widget level, thereby marking it as detached from model updates; and it enables child manipulation by the {{{InteractionDirector}}}, automatically forwarding to the respective {{{TimelineController}}} if applicable. Aside of the timeline display, there is also an ''asset pannel''; display of and interaction with those asset views is handled by dedicated widgets, backed by the {{{AssetControler}}} -- which is also a child of and managed by the InteractionDirector, since assets are modelled as global part of the [[Session]].
 
 In case the UI starts with no session present in the core, an //empty timeline placeholder// will be displayed, which provides UI for creating a new session...
 
+!!!Placements
+As indicated in the drawing above, pretty much every UI element exposes a button to //edit its placement.// &amp;rarr; GuiPlacementDisplay
+
+
+!!!slave Timelines
+It is reasonable to expect the ability to have multiple [[slave timeline presentations|GuiTimelineSlave]] to access the same underlying timeline structure.
+Currently {{red{as of 10/2018}}} there is a preference to deal with that problem on session level -- but for now we decide to postpone this topic &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
 
 !!!nesting
 By principle, this workspace structure is //not a list of &quot;Tracks&quot;// -- it is a system of ''nested scopes''. The nesting emerges on demand.
@@ -3432,16 +3561,16 @@ In the most general case, there can be per-track content and nested content at t
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611280229" tags="GuiPattern discuss decision impl" changecount="85">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201810281438" tags="GuiPattern discuss decision impl" changecount="105">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
-Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also means to write one or several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 Gui, as implemented currently, did already take some steps along this route, yet this kind of decision should be cast and documented explicitly (be it after the fact).
+Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also involves to build several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 UI, as implemented during the initial years of the Lumiera project, did already take some steps along this route, which was was valuable as foundation for assessment and further planning.
 
-Right away, this topic touches a tricky design and architectural challenge: the → question [[how to organise custom widgets|GuiCustomWidget]].
+As it stands, this topic touches a tricky design and architectural challenge: the → question [[how to organise custom widgets|GuiCustomWidget]].
 
 In a nutshell, ~GTKmm offers several degrees of customisation, namely to build a custom widget class, to build a custom container widget, and to use the [[Gtk::Layout &quot;canvas widget&quot;|GtkLayoutWidget]], possibly combined with //custom drawing.// In addition to assembling a timeline widget class by combining several nested panes, the timeline display needs to rely on the latter approach to allow for the necessary flexible arrangement of [[clip widgets|GuiClipWidget]] within the [[track fork|Fork]].
 
 !the header pane problem
-From general considerations we draw the conclusion to have an track header pane area always visible to the left. For one this means that our top level widget organisation in the timeline will be a horizontal split. And then this means that we get two distinct sub widgets, whose vertical layout needs to be kept in sync. And even more so, it is likely the most adequate implementation technique is different in both parts: the header pane looks like a classical fit for the paradigm of nested boxes and grid layout within those boxes, while the right part, the actual track contents impose very specific layout constraints not served by any of the pre-existing layout containers, which means we have to resort to custom drawing on a canvas widget. Following this line of thought, we need an overarching layout manager to coordinate these two disjoint technologies. Any viable alternatives?
+Based on principles of //conventional UI design,// we derive the necessity to have a track header pane area, always visible to the left, and scrolling vertically in sync with the actual track display to the right of the timeline area. This insight brings about several consequences. For one this means that our top level widget organisation in the timeline will be a horizontal split. And furthermore this means that we get two distinct sub widgets, whose vertical layout needs to be kept in sync. And even more so, presumably the most adequate implementation technique is different in both parts: the header pane looks like a classical fit for the paradigm of nested boxes and grid layout within those boxes, while the right part -- the actual track contents -- impose very specific layout constraints, not served by any of the pre-existing layout containers -- which means we have to resort to custom drawing on a canvas widget. Following this line of thought, we need an overarching layout manager to coordinate these two disjoint technologies. Any viable alternatives?
 
 !!!considering a table grid layout
 The layout mechanics we try to establish here by explicit implementation would be more or less a given, if instead we'd build the whole timeline display from one base widget, which needs to be a table layout, i.e. {{{Gtk::Grid}}}. We'd use two columns, one for the header pane area, one for the timeline display, and we'd use N+1 rows, with the head row holding the time ruler and the additional rows holding individual tracks. But to get the specific UI mechanics desirable for a timeline display, we had to introduce some twists:
@@ -3456,20 +3585,30 @@ On the other hand, what would be the //obvious benefits...?//
 While the special setup for scrolling doesn't really count (since it is necessary anyway), after this initial investigation it seems clear that a global grid layout doesn't yield enough benefit to justify all the quirks and limitations its use would impose.
 
 !!!follow-up to the obvious choices
-We came to this point of re-considering the overall organisation of widgets, after having to re-write the initial version of our timeline widget. This initial version was developed by Joel Holdsworth, and it followed a similar reasoning, involving a global timeline layout manager. The distinction between the two panes was not so clear though, and the access to the model code was awkward at places, so the necessity to re-write the timeline widget due to the transition to ~GTK-3 looks like a good opportunity to re-do the same basic reasoning a second time, verify decisions taken and improve matters turning out as difficult on first attempt.
+We came to this point of re-considering the overall organisation of widgets, after having to re-write the initial version of our timeline widget. This initial version was developed until 2011 by Joel Holdsworth, and it followed a similar reasoning, involving a global timeline layout manager. The distinction between the two panes was not so clear though, and the access to the model code was awkward at places, so the necessity to re-write the timeline widget due to the transition to ~GTK-3 looks like a good opportunity to re-do the same basic reasoning a second time, verify decisions taken and improve matters turning out as difficult on first attempt.
 
-So we get a timeline custom widget, which at top level establishes this two-part layout, provides the global scrollbars and integrates custom widget components for both parts. And this top-level timeline widget owns a layout manager, plus it exposes a common view management interface, to be used both from internal components (e.g. zoom widgets within the UI) and from external actors controlling the timeline display from a global level. Also at this global level, we get to define a layout control interface, the TimelineDisplayManager, which has to be implemented within the recursively structured parts of the timeline display, and which is used by the global layout manager to execute its control over the layout as a whole. {{red{Note (11/2016)}}}: if this layout control interface works push or pull style is a decision yet to be worked out during the course of the implementation.
+So we get a timeline custom widget, which at top level establishes this two-part layout, provides the global scrollbars and integrates custom widget components for both parts. And this top-level timeline widget owns a layout manager, plus it exposes a common view management interface, to be used both from internal components (e.g. zoom widgets within the UI) and from external actors controlling the timeline display from a global level. Also at this global level, we get to define a layout control interface, the TimelineDisplayManager, which has to be implemented within the recursively structured parts of the timeline display, and which is used by the top-level structure to exert control over the layout as a whole. {{red{Note (11/2016)}}}: if this layout control interface works push or pull style is a decision yet to be worked out during the course of the implementation.
 
 
 !dealing with nested structures
-The handling of objects structured into nested scopes is a hallmark of the very specific approach taken by Lumiera when it comes to attaching, arranging and relating media objects. But here in the UI display of the timeline, this approach creates a special architectural challenge: the only sane way to deal with nested structures without exploding complexity is to find some way to exploit the ''recursive self similarity'' inherent in any tree structure. But the problematic consequence of this assessment is the tension, even contradiction it creates to the necessities of GUI programming, which forces us to come up with one single, definitive widget representation of what is going on eventually. The conclusion is that we need to come up with an interface such as to allow building and remoulding of the UI display through incremental steps -- where each of this incremental steps relies solely on relative, context based information. Because this is the only way we can deal with building a tree structure by recursive programming. We must not demand the individual step to know its arrangement within the tree, other than indicating a &quot;current&quot; or a &quot;parent&quot; reference point.
+The handling of objects structured into nested scopes is a hallmark of the very specific approach taken by Lumiera when it comes to attaching, arranging and relating media objects. But here in the UI display of the timeline, this approach creates a special architectural challenge: the only sane way to deal with nested structures without exploding complexity is to find some way to exploit the ''recursive self similarity'' inherent in any tree structure. But the problematic consequence of this assessment is the tension, even contradiction it creates to the necessities of GUI programming, which forces us to come up with one single, definitive widget representation of what is going on eventually. The conclusion is that we need to come up with an interface such as to allow building and remoulding of the UI display through incremental steps -- where each of this incremental steps relies solely on relative, context based information. Because this is the only way we can deal with building a tree structure by recursive programming. We must not allow the individual step to know its arrangement within the tree, other than indicating a &quot;current&quot; or a &quot;parent&quot; reference point.
 
 The structure of the display is extended or altered under two circumstances:
 # some component receives a [[diff mutation message|MutationMessage]], prompting to add or remove a //child component.//
 # the display (style) of some component is expanded or collapsed.
 Here, the &quot;component&quot; relevant for such structural changes is always the UI representation of a track. Beyond that, the layout can also be changed //without changing the display structure,// when some embedded component, be it placement (in the track heads / the patchbay) or a clip, effect or transition, is expanded or collapsed. In such a case, a resizing challenge needs to be directed towards the next enclosing track container.
 
-From these observations we can draw the conclusion, that we'll build a ''local structural model'', to reflect the logical relations between the parts comprising the timeline display. More precisely, these structuring components are not mere model objects, rather they are mediating entities used to guide and organise the actual view entities, which in turn are passive. They are more like a view model, while also bearing some local controller responsibilities. For this reason, we prefer to term these as ''presenters'' -- i.e. TrackPresenter and ClipPresenter. And each of these local representation components holds onto a display context, which generally links it into two different display widget stacks in the two parts of the actual timeline display. Adding a child component thus becomes a rather tricky operation, involving to link possibly two child widgets into two disjoint parent widgets, thereby forming a similar display context for the child presenter. Overall, the guiding idea is that of self similarity: on each level, we have to reproduce the same relations and collaborations as present in the parent level.
+From these observations we can draw the conclusion, that we'll build a ''local structural model'', to reflect the logical relations between the parts comprising the timeline display. More precisely, these structuring components are not mere model objects, rather they are mediating entities used to guide and organise the actual view entities, which in turn are passive. They are more like a view model, while also bearing some local controller responsibilities. For this reason, we prefer to term these as ''presenters'' -- i.e. TrackPresenter and ClipPresenter. And each of these local representation components holds onto a ''display context'', which generally links it //into two different display widget stacks// within the two parts of the actual timeline display. Adding a child component thus becomes a rather tricky operation, involving to link possibly two child widgets into two disjoint parent widgets, thereby forming a similar display context for the child presenter. Overall, the guiding idea is that of self similarity: on each level, we have to reproduce the same relations and collaborations as present in the parent level.
+
+!!!building the timeline representation structure
+It is a fundamental decision within the Lumiera UI that any structure has to be injected as diff by the core. We do not hold a structure or data model within some UI entity and then &quot;interpret&quot; that model into a widget structure -- rather we build the widget structure itself in response to a diff message describing the structure. Especially in the case of timelines, the receiver of those messages is the InteractionDirector, which corresponds to the model root. On being prompted to set up a timeline, it will allocate a {{{TimelineWidget}}} within a suitable timeline docking panel and then attach to the {{{TimelineController}}} embedded within the widget.
+
+{{red{Problem 10/2018}}} how can the InteractionDirector //manage// a timeline while the timeline widget physically resides within the panel? Can we exploit a simliar structure as we did for the error log?
+* in part yes -- however we introduce a mediating entity, the {{{TimelineGui}}} proxy
+* it uses a {{{WLink}}} to refer to the actual {{{TimelineWidget}}} -- meaning the widget need not exist, and will detach automatically when destroyed by its holder, which is the {{{TimelinePanel}}}
+* {{red{TODO 11/2018}}} still need to care for removing a {{{TimelineWidget}}} when the logically managing parent, i.e. the InteractionDirector deletes the {{{TimelineGui}}} proxy
+
+The diff describing and thus assembling the UI representation of a timeline is typically a ''population diff'' -- which means, it is a consolidated complete description of the whole sub-structure rooted below that timeline. Such a population diff is generated as emanation from the respective DiffConstituent.
 
 !!!interplay with diff mutation
 Applying a diff changes the structure, that is, the structure of the local model, not the structure of the display widgets. Because the latter are an entirely private concern of the UI and their structure is controlled by the model components in conjunction with the display manager. And since diff application effects the contents of the model such as to make the intended structural changes happen (indirectly), we are well advised to tie the display control and the widgets very closely to those local model elements, such as to //adjust the display automatically.//
@@ -3477,7 +3616,7 @@ Applying a diff changes the structure, that is, the structure of the local model
 * when a model element happens to be destructed, the corresponding display element has to be removed.
 * such might be triggered indirectly, by clean-up of leftovers, since the {{{DiffApplicator}}} re-orders and deletes by leaving some data behind
 * the diff also re-orders model elements, which does not have an immediate effect on the display, but needs to be interpreted separately.
-Together this means we get a fix up stage after model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
+Wrapping this together we get a //fix up stage// after any model changes, where the display is re-adjusted to fit the new situation. This works in concert with the [[display manager|TimelineDisplayManager]] representing only those elements as actual widgets, which get a real chance to become visible. This way we can build on the assumption that the actual number of widgets to be managed any time remains so small as to get away with simple linear list processing. It remains to be seen how far this assumption can be pushed -- the problem is that the GTK container components don't support anything beyond such simple linear list processing; there isn't even a call to remove all child widgets of a container in a single pass.
 </pre>
 </div>
 <div title="GuiTopLevel" creator="Ichthyostega" modifier="Ichthyostega" created="201701261944" modified="201708311555" tags="GuiPattern spec draft" changecount="12">
@@ -3508,7 +3647,7 @@ Together, these entities form a cohesive circle of collaborating global managers
 Within the UI-Layer, we distinguish between //core concerns and UI concerns,// the latter encompassing anything related to UI mechanics, presentation state, interaction state and InteractionControl. Core concerns are delegated and handled by the lower layers of the architecture, while the UI plays a passive role. This is a fundamental decision and leads to a dichotomy, where -- depending on the context -- a given part might operate as a slave related to core concerns, while taking a leading or controlling position when it comes to UI concerns. Deliberately, both sides are bridged by being interwoven into the same entities, and any entity of relevance to core concerns is also attached to the UI-Bus. Regarding the build-up of the UI, parts and elements are made visible and accessible through widgets, but widgets are created, installed and operated by controllers. The top-level circle defines global actions, which are passed through the relevant controller to come into effect.
 </pre>
 </div>
-<div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201505310109" tags="Model spec design discuss img" changecount="2">
+<div title="HighLevelModel" modifier="Ichthyostega" created="200808152311" modified="201810071649" tags="Model spec design discuss img" changecount="3">
 <pre>While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in &amp;raquo;headless mode&amp;laquo;). Its building blocks and combination rules determine largely what structures can be created within the [[Session]].
 On the whole, it is a collection of [[media objects|MObjects]] stuck together and arranged by [[placements|Placement]].
 
@@ -3540,12 +3679,12 @@ Within Lumiera, &quot;tracks&quot; (actually implemented as [[forks|Fork]]) are 
 
 As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a fork (&quot;track&quot;) is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an ~MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an sequence's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this sequence wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
 
-Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of ~Seq-2 as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within ~Seq-1. Thus, within ~Seq-1, the contents of ~Seq-2 appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
+Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of 'Seq-2' as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within 'Seq-1'. Thus, within 'Seq-1', the contents of 'Seq-2' appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
 
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201712101756" tags="overview" changecount="6">
+<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" modified="201810071720" tags="overview" changecount="8">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the years, while building the Lumiera application.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -3582,6 +3721,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * how to shape the GuiConnection: with the help of a mediating GuiModel, which acts as UI-Bus, exchanging TreeDiffModel messages for GuiModelUpdate
 * shape the Backbone of the UI, the UI-Bus and the GuiTopLevel
 * build a framework for InteractionControl in the User Interface
+* establish a flexible layout structure for the GuiTimelineView
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" created="200711210531" modified="201310132316" tags="Concepts design discuss" changecount="1">
@@ -4131,13 +4271,6 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 __10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
 </div>
-<div title="MarkupPreHead" modifier="Ichthyostega" created="200706172303" modified="200802030405">
-<pre>&lt;!--{{{--&gt;
-&lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
-&lt;!--}}}--&gt;
-
-&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Proc-Layer&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
-</div>
 <div title="MediaAsset" modifier="Ichthyostega" created="200709021530" modified="201003140236" tags="def classes img">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, like every Asset kind, it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[model|HighLevelModel]] or the [[render nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
 [img[Asset Classess|uml/fig130437.png]]
@@ -4196,10 +4329,11 @@ For the case here in question this seems to be the __R__esource __A__llocation _
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Generally speaking, client code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in handy. Questions of setup and lifecycle should allways be delegated, typically through the usage of some [[factory|Factories]], which might return the product conveniently wrapped into a RAII style handle. Memory allocation is crucial for performance, and needs to be adapted to the actual platform -- which is impossible unless abstracted and treated as a separate concern.
 </pre>
 </div>
-<div title="MetaAsset" modifier="Ichthyostega" created="201012290320" modified="201501091121" tags="def" changecount="1">
-<pre>This category encompasses the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as opposed to the way the edited data is structured and organised (which is the realm of [[structural assets|StructAsset]]
+<div title="MetaAsset" modifier="Ichthyostega" created="201012290320" modified="201808111603" tags="def" changecount="4">
+<pre>This category encompasses the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as opposed to the way the edited data is structured and organised (which is the realm of [[structural assets|StructAsset]]) &amp;rarr; {{red{Ticket #1156}}}
 * StreamType &amp;rarr; a type system for describing and relating media data streams
 * ScaleGrid &amp;rarr; to manage time scales and frame alignment
+* {{{ErrorLog}}} &amp;rarr; collect incident records
 
 !accessing meta assets
 It turns out that all meta assets follow a distinct usage pattern: //they aren't built as individual entities.// Either, they are introduced into the system as part of a larger scale configuration activity, or they are //derived from category.// The latter fits in with a prototype-like approach; initially, the individual entry just serves to keep track of a categorisation, while at some point, such a link into a describing category may evolve into a local differentiation of some settings.
@@ -5912,7 +6046,7 @@ The backbone of the Lumiera UI is arranged such as to produce a data feed with s
 Run as part of the UiCoreServices, it is attached to the UI-Bus and listens to all ''state mark messages'' to distil the notion of relevant current state.
 On a basic level, the task is to group and store those messages in a way as to overwrite previous messages with new updates on the level of individual properties. Beyond that, there is the sensitivity to context, presentation perspective and work site, which means to impose an additional structure on this basic ''state snapshot'', to extract and replicate structured sets of state information.</pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201602162247" tags="design discuss" changecount="7">
+<div title="ProblemsTodo" modifier="Ichthyostega" created="200708050524" modified="201810071724" tags="design discuss" changecount="9">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -5949,9 +6083,10 @@ We need to work out guidelines for dealing with operations going on simultaneous
 
 !!the perils of data representation
 In software development, there is a natural inclination to cast &quot;reality&quot; into data, the structure of which has to be nailed down first. Then, everyone might &quot;access reality&quot; and work on it. Doing so might sounds rational, natural, even self-evident and sound, yet as compelling as it might be, this approach is fundamentally flawed. It is known to work well only for small, &quot;handsome&quot; projects, where you clearly know up-front what you're up to: namely to get away, after being paid, before anyone realises the fact you've built something that looks nice but does not fit.
-So the challenge of any major undertaking in software construction is //not to build an universal model.// Rather, we want to arrive at something that can be made to fit. Over and over again.
+So the challenge of any major undertaking in software construction is //not to build an universal model of truth.// Rather, we want to arrive at something that can be made to fit.
+Which can be remoulded, over and over again, without breaking down.
 
-More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of subsidiarity. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
+More specifically, we start building something, and while under way, our understanding sharpens, and we learn that actually we want something entirely different. Yet still we know what we need and  we don't want just something arbitrary. There is a constant core in what we're headed at, and we need the ability to //settle matters.// We need a backbone to work against, a skeleton to support us with its firmness, while also offering joints and links, to be bent and remoulded without breakage. The distinctive idea to make such possible is the principle of ''Subsidiarity''. The links and joints between autonomous centres can be shaped to be in fact an exchange, a handover based on common understanding of the //specific matters to deal with,// at that given joint.
 </pre>
 </div>
 <div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" modified="201702101931" tags="def" changecount="1">
@@ -6857,7 +6992,7 @@ The concurrent nature of the problem is what makes this simple task somewhat mor
 * referrals to already known sequence points might be added later, and also from different threads ({{red{WIP 3/14}}} not sure if we need to expand on this observation -- see CalcStream &amp;hArr; Segment)
 This structure looks like requiring a message passing approach: we can arrange for determining the actual dependencies and fulfillment state late, within a single consumer, which is responsible for invoking the triggers. The other clients (threads) just pass messages into a possibly lock-free messageing channel.</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201612150345" tags="def SessionLogic" changecount="4">
+<div title="Session" modifier="Ichthyostega" created="200712100525" modified="201810071709" tags="def SessionLogic" changecount="7">
 <pre>The Session contains all information, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
 &amp;rarr; [[Session design overview|SessionOverview]]
 &amp;rarr; Structure of the SessionInterface
@@ -6872,6 +7007,7 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * the [[Asset subsystem|AssetManager]] is tightly integrated; besides, there are some SessionServices for internal use
 
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
+&amp;rarr; see //clarification of some fine points// regarding [[relation of Assets and MObjects|AssetModelConnection]]
 
 
 !Session lifecycle
@@ -6924,7 +7060,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201701140715" tags="SessionLogic GuiIntegration design draft discuss" changecount="9">
+<div title="SessionInterface" modifier="Ichthyostega" created="200904242108" modified="201810071716" tags="SessionLogic GuiIntegration design draft discuss" changecount="12">
 <pre>&quot;Session Interface&quot; has several meanings, depending on the context.
 ;application global
 :the session is a data structure, which can be saved and loaded, and manipulated by [[sending commands|CommandHandling]]
@@ -6967,6 +7103,10 @@ To the contrary, the ''generic'' API is related to a //current location (state),
 ** all contained
 * to add
 * to destroy
+
+!!relation of [[Assets|Asset]] and MObjects
+{{red{WARNING -- still under construction 10/2018}}}. Basically these segments represent the flip sides of the same coin. //Assets relate to the bookkeeping view.// However, we build a data model, and thus use representations for the involved entities. This creates some redundancy at times; we made an effort to reduce this redundancy and minimise the necessary data model representation. This means, some things are rather handled and represented as Assets, while other stuff is primarily dealt with as ~MObject.
+&amp;rarr; see //discussion of some fine points// regarding [[relation of Assets and MObjects|AssetModelConnection]]
 
 !!exploring session contents
 Typically, the list of timelines serves as starting point for exploring the model. Basically, any kind of object could be attached everywhere, but both the GUI and the Builder rely on assumptions regarding the [[overall model structure|HighLevelModel]] &amp;mdash; silently ignoring content not in line. This corresponds to the //dedicated API functions// on specific kinds of objects, which allow to retrieve content according to this assumed structure conveniently and with strong typing. From the timeline and the associated sequence you'll get the root track, and from there the sub-tracks and the clips located on them, which in turn may have attachments (effects, transitions, labels).
@@ -7197,64 +7337,6 @@ Shutdown is initiated by sending a message to the dispatcher loop. This causes t
 </div>
 <div title="SplashScreen" modifier="just me" created="200706220430">
 <pre>{{red{killme}}}</pre>
-</div>
-<div title="SplashScreenPlugin" modifier="Saq" created="200607191631" modified="200607202048" tags="lewcidExtension systemConfig">
-<pre>/***
-
-''Inspired by [[TiddlyPom|http://www.warwick.ac.uk/~tuspam/tiddlypom.html]]''
-
-|Name|SplashScreenPlugin|
-|Created by|SaqImtiaz|
-|Location|http://tw.lewcid.org/#SplashScreenPlugin|
-|Version|0.21 |
-|Requires|~TW2.08+|
-!Description:
-Provides a simple splash screen that is visible while the TW is loading.
-
-!Installation
-Copy the source text of this tiddler to your TW in a new tiddler, tag it with systemConfig and save and reload. The SplashScreen will now be installed and will be visible the next time you reload your TW.
-
-!Customizing
-Once the SplashScreen has been installed and you have reloaded your TW, the splash screen html will be present in the MarkupPreHead tiddler. You can edit it and customize to your needs.
-
-!History
-* 20-07-06 : version 0.21, modified to hide contentWrapper while SplashScreen is displayed.
-* 26-06-06 : version 0.2, first release
-
-!Code
-***/
-//{{{
-var old_lewcid_splash_restart=restart;
-
-restart = function()
-{   if (document.getElementById(&quot;SplashScreen&quot;))
-        document.getElementById(&quot;SplashScreen&quot;).style.display = &quot;none&quot;;
-      if (document.getElementById(&quot;contentWrapper&quot;))
-        document.getElementById(&quot;contentWrapper&quot;).style.display = &quot;block&quot;;
-    
-    old_lewcid_splash_restart();
-   
-    if (splashScreenInstall)
-       {if(config.options.chkAutoSave)
-			{saveChanges();}
-        displayMessage(&quot;TW SplashScreen has been installed, please save and refresh your TW.&quot;);
-        }
-}
-
-
-var oldText = store.getTiddlerText(&quot;MarkupPreHead&quot;);
-if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
-   {var siteTitle = store.getTiddlerText(&quot;SiteTitle&quot;);
-   var splasher='\n\n&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;'+siteTitle +'&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;';
-   if (! store.tiddlerExists(&quot;MarkupPreHead&quot;))
-       {var myTiddler = store.createTiddler(&quot;MarkupPreHead&quot;);}
-   else
-      {var myTiddler = store.getTiddler(&quot;MarkupPreHead&quot;);}
-      myTiddler.set(myTiddler.title,oldText+splasher,config.options.txtUserName,null,null);
-      store.setDirty(true);
-      var splashScreenInstall = true;
-}
-//}}}</pre>
 </div>
 <div title="StateAdapter" modifier="Ichthyostega" created="200806261912" modified="201109151535" tags="Rendering impl def">
 <pre>A small (in terms of storage) and specifically configured StateProxy object which is created on the stack {{red{Really on the stack? 9/11}}} for each individual {{{pull()}}} call. It is part of the invocation state of such a call and participates in the buffer management. Thus, in a calldown sequence of {{{pull()}}} calls we get a corresponding sequence of &quot;parent&quot; states. At each level, the &amp;rarr; WiringDescriptor of the respective node defines a Strategy how the call is passed on.</pre>
@@ -8968,7 +9050,7 @@ Currently (1/11), the strategy is implemented according to (1) and (4) above, le
 Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect {{red{Question 4/11 -- isn't this done and fixed by now??}}}
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201612030116" tags="def" changecount="4">
+<div title="Timeline" modifier="Ichthyostega" created="200706250721" modified="201810111211" tags="def SessionLogic" changecount="5">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a [[timeline view in the GUI|GuiTimelineView]] and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
@@ -8988,13 +9070,22 @@ Actually, Timeline is both an interface and acts as façade. Its an interface, b
 Besides building on the asset management, implementing Timeline (and Sequence) as StructAsset yields another benefit: ~StructAssets can be retrieved by query, allowing to specify more details of the configuration immediately on creation. //But on the short term, this approach causes problems:// there is no real inference engine integrated into Lumiera yet (as of 2/2010 the plan is to get an early alpha working end to end first). For now we're bound to use the {{{fake-configrules}}} and to rely on a hard wired simulation of the intended behaviour of a real query resolution. Just some special magic queries will work for now, but that's enough to get ahead.
 </pre>
 </div>
-<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="201612011740" tags="spec GuiPattern img" changecount="4">
+<div title="TimelineClone" creator="Ichthyostega" modifier="Ichthyostega" created="201810111219" tags="SessionLogic draft" changecount="1">
+<pre>As [[detailed here|GuiTimelineSlave]], there are various good reasons to provide several UI views onto the same timeline. Yet taking an architectural viewpoint, we prefer representing such a slave display attachment as first-class citizen, right within the session model. Some further problems remain to be settled
+* the primary Timeline entity need to be aware of the clone's presence, since any effects of a Builder run must be propagated through the latter
+* we need a way to duplicate the diff feed, so the UI element representing the clone gets notified appropriately
+* and even when following this design approach with a //materialised duplication,// we still need some awareness and collaboration among the UI elements involved
+
+This topic is {{red{postponed as of 10/2018}}} &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
+</pre>
+</div>
+<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="201810281443" tags="spec GuiPattern img" changecount="5">
 <pre>//guide and control the concrete display properties of the various sub components (tracks, clips) comprising a timeline display.//
 
 The TimelineDisplayManager actually is an abstraction, a control interface, revolving around the guidance individual components need in order to settle on a proper display. Those components are represented as mediating entities, the TrackPresenter and the ClipPresenter, each of which controls and manages a mostly passive GTK widget. To this end, the presenters need to know at which virtual coordinates their corresponding widgets would show up, and they need to know if these widgets need to be actually present at the moment. Also, especially the ClipPresenter needs to know which ''clip appearance style'' to choose for the corresponding slave widget.
 
 !display evaluation pass
-[&gt;img[Clip presentation control|uml/Timeline-display-evaluation.png]]Since the timeline display is formed by several nested collections of elements, a proper display layout must incorporate information from all those parts. A naive approach likely would just iterate over them and reach in to extract data -- or even worse, build a separate display data store, which then needs to be kept in sync with the component hierarchy. Any of this would lead to high coupling and turns any necessary adjustment and changes due to evolution of requirements into a liability. Such a dangerous situation can be avoided altogether by admitting the collaborative nature of the task at hand. To get there, we need to distil the abstraction shared between the global and the local concerns, and we need to shape it such as to build onto some kind of invariant, allowing that abstraction to re-emerge at several levels of locality.
+[&gt;img[Clip presentation control|uml/Timeline-display-evaluation.png]]Since the timeline display is formed by several nested collections of elements, a proper display layout must incorporate information from all those parts. A naive approach likely would just iterate over them and reach in to extract data -- or even worse, build a separate display data store, which then needs to be kept in sync with the component hierarchy. Any of these naive working styles would lead to high coupling and it turns the necessary adjustment and changes into a liability, which raises due to evolution of requirements. Over time, such a dangerous situation can only be avoided altogether by admitting the collaborative nature of the task at hand. To get there, we need to distil the abstraction shared between the global and the local concerns, and we need to shape it such as to build onto some kind of invariant, allowing that abstraction to re-emerge at several levels of locality.
 </pre>
 </div>
 <div title="TimelineSequences" modifier="Ichthyostega" created="200811011836" modified="201505310138" tags="design decision img" changecount="4">
@@ -9098,12 +9189,18 @@ Placements are __resolved__ resulting in an ExplicitPlacement. In most cases thi
 &amp;rarr; [[Definition|Pipe]] and [[handling of Pipes|PipeHandling]]
 </pre>
 </div>
-<div title="TrackPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611280207" modified="201612020050" tags="def GuiPattern" changecount="4">
+<div title="TrackPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611280207" modified="201810281454" tags="def GuiPattern" changecount="11">
 <pre>//mediating entity used to guide and control the track-like nested working space in the timeline display of the UI.//
 
-Similar to the ClipPresenter, from a global angle this element fulfils a model like role, while also guiding and controlling a mostly passive view component implemented as GTK widget. Here, the authority of the presenter over the widget must be total, since display management //needs to work automatically,// due to model updates and mutations arriving as [[diff messages|MutationMessage]]. In addition, this structure is prerequisite for (possibly) implementing UI rendering optimisations, since it allows us to leave out widgets entirely, when it is clear they won't become visible: A ''display evaluation pass'', which is effectively a //tree walk,// consecutively visits each part of the timeline structure, to negotiate its concrete display properties in collaboration with a global TimelineDisplayManager. As a result, the presenter knows where to show its corresponding view, and it knows if to show it at all, allowing to either adjust, create or destroy actual GTK widgets within its local reference frame.
+Similar to the ClipPresenter, judged from a global angle, this element fulfils a model-like role, while at the same time guiding and controlling a mostly passive view component, implemented as GTK widget. Here, the authority of the presenter over the widget must be total, since display management //needs to work automatically,// due to model updates and mutations arriving as [[diff messages|MutationMessage]]. In addition, this structure is prerequisite for (possibly) implementing UI rendering optimisations, since it allows us to leave out widgets entirely, when it is clear they won't become visible: A ''display evaluation pass'', which is effectively a //tree walk,// consecutively visits each part of the timeline structure, to negotiate its concrete display properties in collaboration with a global TimelineDisplayManager. As a result, the presenter knows where to show its corresponding view, and it knows if to show it at all, allowing to either adjust, create or destroy actual GTK widgets within its local reference frame.
 
 A special twist arises from the fact that track display has to happen aligned and in sync within the two display panes of the timeline at the same time. This means that each TrackPresenter has to hold and manage //two slave display elements,// each of which is inserted within a disjoint hierarchy of display elements. For one, there is the {{{timeline::TrackHeadWidget}}} which in turn renders a {{{PatchbayWidget}}}, and on the other side there is a {{{TrackBody}}} element, which is not strictly a widget of itself, but inserted into our custom drawing {{{timeline::BodyCanvasWidget}}} to manage the custom drawing of the respective track working area.
+
+To deal with this typical problem of recursive programming, we introduce a binding element, the {{{DisplayFrame}}}
+* the TrackPresenter holds a {{{DisplayFrame}}} member, which in turn houses the two head and body widgets. So basically the widgets are allocated within the presenter.
+* however, after constructing the {{{DisplayFrame}}}, it invokes an anchor functor, which is passed in from the recursive outer scope, and which does the actual work of installing those widgets into the apropriate parent widgets
+* but the {{{DisplayFrame}}} itself also exposes such an anchor functor, which can be passed down when (recursively) creating a TrackPresenter for a sub-Track
+* obviously, at top-level, we need to digress from that general pattern -- here it is the {{{timeline::TimelineLayout}}} responsible for the display structure of the whole timeline which exposes the necessary anchor function to attach the root track for a timeline.
 </pre>
 </div>
 <div title="TransitionsHandling" modifier="Ichthyostega" created="200712080417" modified="200805300100" tags="def design">
@@ -9765,7 +9862,7 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201704171603" tags="GuiPattern Concepts def design draft" changecount="22">
+<div title="UI-Bus" creator="Ichthyostega" modifier="Ichthyostega" created="201501061115" modified="201809300133" tags="GuiPattern Concepts def design draft" changecount="24">
 <pre>Abstraction used in the Backbone of Lumiera's GTK User Interface
 The UI-Bus is a ''Mediator'' -- impersonating the role of the //Model// and the //Controler// in the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]] in common UI architecture.
 
@@ -9773,10 +9870,10 @@ The ~MVC-Pattern as such is fine, and probably the best we know for construction
 
 !!!rationale
 This way, we separate between immediate local control of UI state and the more global, generic [[interaction control|InteractionControl]] and [[command binding|GuiCommandBinding]].
-And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns and the state management related to the UI toolkit set in use. Any element //of more than local relevance// -- be it a controller or be it a widget, representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element to invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without precisely knowing where and how to reach the relevant presentation entities.
+And we arrive at a backbone like structure, which can be wired, programmed and reasoned about while abstracting from the local concerns and the state management related to the UI toolkit set in use. Any element //of more than local relevance// -- be it a controller or be it a widget, representing some entity from the model -- will be attached to the UI-Bus by virtue of a ''bus terminal'', establishing a bi-directional connection. This enables any UI element to invoke commands and persist presentation state (by sending //&quot;state mark&quot; mesages//), and in turn this allows the session and engine core to &quot;cast&quot; state updates towards the UI, without knowing in detail where and how to reach the relevant presentation entities.
 
 !!!topology
-The UI-Bus has a simple star shaped topology without hierarchical nesting and forwarding. It is not necessarily connected this way, since protocol and contracts do not assume any topology explicitly -- and the topology may be subject to change without further notice. We'll only assume there is a central hub somewhere in the bus, which maintains a routing table. Actually this hub represents the centre of the star and is known as ''Nexus''. Whenever an UI element connects to the bus, a routing entry is added, which allows the element to be directly invoked to receive messages. For that reason, every element connected this way must be at a fixed memory location.
+The UI-Bus has a simple star shaped topology without hierarchical nesting and forwarding. It is not necessarily connected this way, since protocol and contracts do not assume any topology explicitly -- and the topology may be subject to change without further notice. We'll only assume there is a central hub somewhere in the bus, which maintains a routing table. Actually this hub represents the centre of the star and is known as ''Nexus''. Whenever an UI element connects to the bus, a routing entry is added, which allows the element to be directly invoked to receive messages. For that reason, every element connected this way must stay put, at a fixed memory location.
 
 !!!degree of connectedness
 A connection point to the UI-Bus is called a ''Bus Terminal'' and implemented by class {{{BusTerm}}}. In fact, this class is the foundation of the ~UI-Bus network, with the Nexus being a specialisation. The //contract// involved with this connection requires the connected entity to respond to several messages, which effectively also means that this connected entity is a tangible UI-Element ({{{gui::model::Tangible}}} implements the necessary functions). But this pertains only to fully bidirectional bus connections, where the connected entity can receive messages addressed by it's ID. Beyond that, it is very much possible to operate a &quot;free standing&quot; bus terminal, which allows just to send &quot;uplink&quot; messages into the bus, without the need to add this terminal itself to the central routing table.
@@ -9800,7 +9897,7 @@ The UI-Bus has a star shaped topology, with a central &quot;bus master&quot; hub
 :direct a MutationMessage towards the designated UI-Element, causing the latter to build a TreeMutator to receive the embedded [[diff-sequence|TreeDiffModel]]
 </pre>
 </div>
-<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201704171607" tags="GuiPattern design draft decision" changecount="54">
+<div title="UI-Element" creator="Ichthyostega" modifier="Ichthyostega" created="201511210307" modified="201808301533" tags="GuiPattern design draft decision" changecount="57">
 <pre>While our UI widgets are implemented the standard way as proposed by [[GTKmm|http://www.gtkmm.org/en/documentation.html]], some key elements -- which are especially relevant for the anatomy and mechanics of the interface at a whole -- are made to conform to a common interface and behaviour protocol. {{red{WIP 11/15 work out gradually what this protocol is all about}}}. #975
 As a starting point, we know
 * there is a backbone structure known as the UI-Bus
@@ -9873,7 +9970,7 @@ It is clear by now (9/2016) how shape and content changes are to be represented 
 !!!questions
 * how to integrate &quot;diff calls&quot; into UI-Bus and {{{Tangible}}}
 * how to ensure that diff processing happens within the event thread
-* what is the exact relation to the GuiModel -- this remained nebulous up to now
+* what is the exact relation to the GuiModel -- this remained nebulous up to now ({{red{8/2018}}} &amp;rArr; seems to be obsolete)
 
 !!!Diff messages
 The dispatch of //diff messages// is directly integrated into the UI-Bus -- which is not just some abstract messaging system, but deliberately made to act as backbone for the kind of operations and collaborations detailed here. This seamless integration helps to overcome several technical (detail) problems. For one, the diff framework itself is //generic,// which allows to apply diff sequences to a wide variety of different target data structures. And, secondly, choose the whole approach of diff messages delivered over a bus system for a very specific, architectural reason: we want to decouple from internal structures, while still allowing low-level collaboration over this abstracted interconnection channel. On both counts, we are thus bound to encapsulate the actual diff at interface level. So the MutationMessage marks the purpose to alter the designated {{{Tangible}}}, while offering an embedded, generic implementation to apply the (hidden) diff message, relying in turn on the interface {{{DiffMutatble}}}, which -- surprise -- is offered by {{{Tangible}}}. Basically this means that each tangible interface element offers the ability to be reshaped, by creating a TreeMutator on demand, internally wired to effect the changes inscribed within the diff.
@@ -10257,6 +10354,7 @@ config.options = {
 	chkInsertTabs: false,
 	chkUsePreForStorage: true, // Whether to use <pre> format for storage
 	chkDisplayInstrumentation: false,
+	chkRemoveExtraMarkers: false, // #162
 	txtBackupFolder: "",
 	txtEditorFocus: "text",
 	txtMainTab: "tabTimeline",
@@ -10373,7 +10471,7 @@ if(!((new RegExp("[\u0150\u0170]","g")).test("\u0150"))) {
 }
 config.textPrimitives.sliceSeparator = "::";
 config.textPrimitives.sectionSeparator = "##";
-config.textPrimitives.urlPattern = "(?:file|http|https|mailto|ftp|irc|news|data):[^\\s'\"]+(?:/|\\b)";
+config.textPrimitives.urlPattern = "(?:file|http|https|mailto|ftp|irc|news|data):[^\\s'\"]+(?:/|\\b|\\[|\\])"; // #132
 config.textPrimitives.unWikiLink = "~";
 config.textPrimitives.wikiLink = "(?:(?:" + config.textPrimitives.upperLetter + "+" +
 	config.textPrimitives.lowerLetter + "+" +
@@ -10420,7 +10518,7 @@ config.shadowTiddlers = {
 	AdvancedOptions: '<<options>>',
 	PluginManager: '<<plugins>>',
 	SystemSettings: '',
-	ToolbarCommands: '|~ViewToolbar|closeTiddler closeOthers +editTiddler > fields syncing permalink references jump|\n|~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|',
+	ToolbarCommands: '|~ViewToolbar|closeTiddler closeOthers +editTiddler > fields permalink references jump|\n|~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|', // #160
 	WindowTitle: '<<tiddler SiteTitle>> - <<tiddler SiteSubtitle>>'
 };
 
@@ -10488,6 +10586,7 @@ merge(config.optionsDesc,{
 	chkForceMinorUpdate: "Don't update modifier username and date when editing tiddlers",
 	chkConfirmDelete: "Require confirmation before deleting tiddlers",
 	chkInsertTabs: "Use the tab key to insert tab characters instead of moving between fields",
+	chkRemoveExtraMarkers: "Replace unused transclusion markers with blanks", // #162
 	txtBackupFolder: "Name of folder to use for backups",
 	txtMaxEditRows: "Maximum number of rows in edit boxes",
 	txtTheme: "Name of the theme to use",
@@ -10872,7 +10971,7 @@ merge(config.shadowTiddlers,{
 	SiteUrl: "",
 	SideBarOptions: '<<search>><<closeAll>><<permaview>><<newTiddler>><<newJournal "DD MMM YYYY" "journal">><<saveChanges>><<slider chkSliderOptionsPanel OptionsPanel "options \u00bb" "Change TiddlyWiki advanced options">>',
 	SideBarTabs: '<<tabs txtMainTab "Timeline" "Timeline" TabTimeline "All" "All tiddlers" TabAll "Tags" "All tags" TabTags "More" "More lists" TabMore>>',
-	TabMore: '<<tabs txtMoreTab "Missing" "Missing tiddlers" TabMoreMissing "Orphans" "Orphaned tiddlers" TabMoreOrphans "Shadowed" "Shadowed tiddlers" TabMoreShadowed>>'
+	TabMore: '<<tabs txtMoreTab "Missing" "Missing tiddlers" TabMoreMissing "Orphan" "Orphaned tiddlers" TabMoreOrphans "Shadow" "Shadowed tiddlers" TabMoreShadowed>>'
 	});
 
 merge(config.annotations,{
@@ -12328,7 +12427,7 @@ config.macros.tiddler.handler = function(place,macroName,params,wikifier,paramSt
 		refresh: "content", tiddler: tiddlerName
 	});
 	if(args!==undefined)
-		wrapper.setAttribute("args","[["+args.join("]] [[")+"]]");
+		wrapper.macroArgs=args; // #154
 	this.transclude(wrapper,tiddlerName,args);
 };
 
@@ -12350,6 +12449,12 @@ config.macros.tiddler.transclude = function(wrapper,tiddlerName,args)
 			var placeholderRE = new RegExp("\\$" + (i + 1),"mg");
 			text = text.replace(placeholderRE,args[i]);
 		}
+		// #162 start
+		if (n && config.options.chkRemoveExtraMarkers) for(i=n; i<9; i++) {
+			var placeholderRE = new RegExp("\\$" + (i + 1),"mg");
+			text = text.replace(placeholderRE,"");
+		}
+		// #162 end
 		config.macros.tiddler.renderText(wrapper,text,tiddlerName);
 	} finally {
 		stack.pop();
@@ -12728,7 +12833,7 @@ config.macros.newTiddler.onClickNewTiddler = function()
 	var customFields = this.getAttribute("customFields");
 	if(!customFields && !store.isShadowTiddler(title))
 		customFields = String.encodeHashMap(config.defaultCustomFields);
-	story.displayTiddler(null,title,template,false,null,null);
+	story.displayTiddler(this,title,template,false,null,null); // #161
 	var tiddlerElem = story.getTiddler(title);
 	if(customFields)
 		story.addCustomFields(tiddlerElem,customFields);
@@ -13549,7 +13654,7 @@ TiddlyWiki.prototype.getRecursiveTiddlerText = function(title,defaultText,depth)
 };
 
 //TiddlyWiki.prototype.slicesRE = /(?:^([\'\/]{0,2})~?([\.\w]+)\:\1[\t\x20]*([^\n]+)[\t\x20]*$)|(?:^\|([\'\/]{0,2})~?([\.\w]+)\:?\4\|[\t\x20]*([^\n]+)[\t\x20]*\|$)/gm;
-TiddlyWiki.prototype.slicesRE = /(?:^([\'\/]{0,2})~?([\.\w]+)\:\1[\t\x20]*([^\n]*)[\t\x20]*$)|(?:^\|([\'\/]{0,2})~?([\.\w]+)\:?\4\|[\t\x20]*([^\|\n]*)[\t\x20]*\|$)/gm;
+TiddlyWiki.prototype.slicesRE = /(?:^([\'\/]{0,2})~?([\.\w]+)\:\1[\t\x20]*([^\n]+)[\t\x20]*$)|(?:^\|\x20?([\'\/]{0,2})~?([^\|\s\:\~\'\/]|(?:[^\|\s~\'\/][^\|\n\f\r]*[^\|\s\:\'\/]))\:?\4[\x20\t]*\|[\t\x20]*([^\n\t\x20](?:[^\n]*[^\n\t\x20])?)[\t\x20]*\|$)/gm; // #112
 // @internal
 TiddlyWiki.prototype.calcAllSlices = function(title)
 {
@@ -14040,11 +14145,11 @@ config.filters = {
 };
 
 // Filter a list of tiddlers
-TiddlyWiki.prototype.filterTiddlers = function(filter)
+TiddlyWiki.prototype.filterTiddlers = function(filter,results)
 {
 	var re = /([^\s\[\]]+)|(?:\[([ \w\.\-]+)\[([^\]]+)\]\])|(?:\[\[([^\]]+)\]\])/mg;
 
-	var results = [];
+	results = results || [];
 	if(filter) {
 		var match = re.exec(filter);
 		while(match) {
@@ -14418,7 +14523,7 @@ Story.prototype.refreshTiddler = function(title,template,force,customFields,defa
 					var tags = [];
 					tiddler.set(title,store.getTiddlerText(title),config.views.wikified.shadowModifier,version.date,tags,version.date);
 				} else {
-					var text = template=="EditTemplate" ?
+					var text = template==config.tiddlerTemplates[DEFAULT_EDIT_TEMPLATE] ? // #166
 								config.views.editor.defaultText.format([title]) :
 								config.views.wikified.defaultText.format([title]);
 					text = defaultText || text;
@@ -15711,6 +15816,7 @@ config.refreshers = {
 
 	tiddler: function(e,changeList)
 		{
+		if (startingUp) return true; // #147
 		var title = e.getAttribute("tiddler");
 		var template = e.getAttribute("template");
 		if(changeList && (changeList.indexOf && changeList.indexOf(title) != -1) && !story.isDirty(title))
@@ -15724,7 +15830,7 @@ config.refreshers = {
 		{
 		var title = e.getAttribute("tiddler");
 		var force = e.getAttribute("force");
-		var args = e.getAttribute("args");
+		var args = e.macroArgs; // #154
 		if(force != null || changeList == null || (changeList.indexOf && changeList.indexOf(title) != -1)) {
 			jQuery(e).empty();
 			config.macros.tiddler.transclude(e,title,args);
@@ -15907,6 +16013,16 @@ var loadOptionsCookie = loadOptions;
 
 function getCookies()
 {
+	if (typeof(Storage) !== "undefined") {
+		// modern browser: use HTML5 web storage
+		var storedData = {};
+		for (var n = window.localStorage.length || 0; --n >= 0; ) {
+			var key = window.localStorage.key(n);
+			storedData[key] = window.localStorage[key];
+		}
+		return storedData;
+	}
+	// else: use old-style cookie storage
 	var cookieList = document.cookie.split(';');
 	var i,cookies = {};
 	for(i=0; i<cookieList.length; i++) {
@@ -15923,9 +16039,12 @@ function getCookies()
 function loadCookies()
 {
 	var i,cookies = getCookies();
-	if(cookies['TiddlyWiki']) {
+	if(cookies['TiddlyWikiClassicOptions']) // TW291 and later //#159
+		cookies = cookies['TiddlyWikiClassicOptions'].replace(/%22/g,'"').replace(/%25/g,'%').decodeHashMap(); // #159
+	else if(cookies['TiddlyWikiOptions']) // TW290 beta //#159
+		cookies = cookies['TiddlyWikiOptions'].replace(/%25/g,'%').decodeHashMap(); // #159
+	else if(cookies['TiddlyWiki']) // TW281 and earlier
 		cookies = cookies['TiddlyWiki'].decodeHashMap();
-	}
 	for(i in cookies) {
 		if(config.optionsSource[i] != 'setting') {
 			setOption(i,cookies[i]);
@@ -15968,7 +16087,13 @@ var saveOptionCookie = saveOption;
 
 function removeCookie(name)
 {
-	document.cookie = name + '=; expires=Thu, 01-Jan-1970 00:00:01 UTC; path=/;';
+	if (typeof(Storage) !== "undefined") {
+		// modern browser: use HTML5 web storage
+		window.localStorage.removeItem(name);
+	} else {
+		// use old-style cookie storage
+		document.cookie = name + '=; expires=Thu, 01-Jan-1970 00:00:01 UTC; path=/;';
+	}
 }
 
 function saveCookie(name)
@@ -15979,7 +16104,18 @@ function saveCookie(name)
 		value = value == null ? 'false' : value;
 		cookies[key] = value;
 	}
-	document.cookie = 'TiddlyWiki=' + String.encodeHashMap(cookies) + '; expires=Fri, 1 Jan 2038 12:00:00 UTC; path=/';
+	var encodedCookie = String.encodeHashMap(cookies).replace(/%/g,'%25').replace(/"/g,'%22')
+	// Modern browsers (e.g. Firefox Quantum) do not support Cookies for file:/// anymore
+	if (typeof(Storage) !== "undefined") {
+		// modern browser: use HTML5 web storage
+		window.localStorage.TiddlyWikiClassicOptions = encodedCookie;
+	} else {
+		// use old-style cookie storage
+		// TW291 and later (#159)
+		document.cookie = 'TiddlyWikiClassicOptions='
+		+ encodedCookie
+		+ '; expires=Fri, 1 Jan 2038 12:00:00 UTC; path=/';
+	}
 	cookies = getCookies();
 	var c;
 	for(c in cookies) {
@@ -16294,7 +16430,7 @@ function recreateOriginal()
 	content=content.replace(/<div id="saveTest">savetest<\/div>/,'<div id="saveTest"></div>');
 	content=content.replace(/script><applet [^\>]*><\/applet>/g,'script>');
 	content=content.replace(/><head>/,'>\n<head>');
-	content=content.replace(/\n\n<\/body><\/html>$/,'</body>\n</html>\n');
+	content=content.replace(/\n\n<\/body><\/html>$/,'</'+'body>\n</'+'html>\n'); // #170
 	content=content.replace(/(<(meta) [^\>]*[^\/])>/g,'$1 />');
 	content=content.replace(/<noscript>[^\<]*<\/noscript>/,
 		function(m){return m.replace(/&lt;/g,'<').replace(/&gt;/g,'>');});
@@ -16698,7 +16834,7 @@ function javaDebugInformation () {
 	var applet = document.applets['TiddlySaver'];
 	var what = [
 		["Java Version", applet.getJavaVersion],
-		["Last Exception", applet.getLastErrorMessage],
+		["Last Exception", applet.getLastErrorMsg], // #156
 		["Last Exception Stack Trace", applet.getLastErrorStackTrace],
 		["System Properties", applet.getSystemProperties] ];
 
@@ -18369,11 +18505,7 @@ String.prototype.format = function(s)
 // Escape any special RegExp characters with that character preceded by a backslash
 String.prototype.escapeRegExp = function()
 {
-	var s = "\\^$*+?()=!|,{}[].";
-	var t,c = this;
-	for(t=0; t<s.length; t++)
-		c = c.replace(new RegExp("\\" + s.substr(t,1),"g"),"\\" + s.substr(t,1));
-	return c;
+    return this.replace(/[\-\/\\\^\$\*\+\?\.\(\)\|\[\]\{\}]/g, '\\$&'); // #157
 };
 
 // Convert "\" to "\s", newlines to "\n" (and remove carriage returns)

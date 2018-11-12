@@ -41,13 +41,17 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/ctrl/ui-state.hpp"
 #include "gui/setting/asset-controller.hpp"
-#include "gui/timeline/timeline-controller.hpp"
+#include "gui/panel/timeline-panel.hpp"
+//#include "gui/timeline/timeline-widget.hpp"
+//#include "gui/timeline/timeline-controller.hpp"   /////////////////TODO still required?
+#include "include/ui-protocol.hpp"
 #include "proc/mobject/session/root.hpp"
 #include "proc/asset/sequence.hpp"                ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
 #include "proc/mobject/session/fork.hpp"          ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
 #include "proc/cmd.hpp"
 #include "backend/real-clock.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/util.hpp"
@@ -56,11 +60,16 @@
 //#include <list>
 
 //using util::isnil;
+using util::_Fmt;
 //using std::list;
 //using std::shared_ptr;
 using lib::idi::EntryID;
 using lib::hash::LuidH;
+using lib::diff::Rec;
 using lib::diff::TreeMutator;
+using lib::diff::collection;
+using lib::diff::LUMIERA_ERROR_DIFF_STRUCTURE;
+using std::make_unique;
 using util::toString;
 
 
@@ -126,13 +135,32 @@ namespace interact {
   void
   InteractionDirector::buildMutator (TreeMutator::Handle buffer)
   {
-//  using Attrib = std::pair<const string,string>;
-//  using lib::diff::collection;
-    
     buffer.create (
       TreeMutator::build()
-    );
-    unimplemented ("create a sensible binding between root-controller and root-model element");
+        .attach (collection(timelines_)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope
+                    return spec.data.isNested();
+                  })
+               .matchElement ([&](GenNode const& spec, TimelineGui const& elm) -> bool
+                  {                                            // »Matcher« : how to know we're dealing with the right timeline object
+                    return spec.idi == ID{elm};
+                  })
+               .constructFrom ([&](GenNode const& spec) -> TimelineGui
+                  {                                            // »Constructor« : what to do when the diff mentions a new entity
+                    return injectTimeline (spec);
+                  })
+               .buildChildMutator ([&](TimelineGui& targetTimeline, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {                                            // »Mutator« : how to apply the diff recursively to a nested scope
+                    if (ID{targetTimeline} != subID) return false;
+                    targetTimeline.buildMutator (buff);        //  - delegate to child(Timeline) to build nested TreeMutator
+                    return true;
+                  }))
+        .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
+            {                                                  // »Attribute Mutator« : how enter an object field as nested scope
+              REQUIRE (assets_);
+              assets_->buildMutator(buff);
+            }));
   }
   
   
@@ -283,6 +311,62 @@ namespace interact {
   {
     return globalCtx_.windowLoc_.findActiveWindow();
   }
+  
+  
+  namespace {
+    /**
+     * The timeline is actually a front-end to a binding to a root track.
+     * For that reason, we always create the root-track representation alongside
+     * the timeline, and thus we need a very special INS message to create a timeline:
+     * - it must be a record (an "object")
+     * - a nested attribute with key ATTR_fork is mandatory
+     * - this nested attribute likewise needs to be a record
+     * - and must be tagged with TYPE_Fork
+     * More specifically, the usual way to deliver such a structure is not allowed here,
+     * which would be first to send an empty record and then to open and populate it.
+     * All the elements mentioned above need to be present right within the payload
+     * value of the INS message creating the timeline. This non-standard format is
+     * perfectly legal in our tree diff language (just requires a heap allocation
+     * behind the scenes to hold the nested data, but who cares?)
+     */
+    ID
+    verifyDiffStructure_and_extract_RootTrack (GenNode const& spec)
+    {
+      if (not (spec.data.isNested()
+               and spec.data.get<Rec>().hasAttribute(string{ATTR_fork})
+               and TYPE_Fork == spec.data.get<Rec>().get(string{ATTR_fork}).data.recordType()
+         )    )
+        throw error::State (_Fmt{"When populating a new Timeline, a root track must be given immediately"
+                                 "nested into INS message. We got the following initialisation payload: %s"}
+                                % spec                      
+                           , LERR_(DIFF_STRUCTURE));
+      
+      return spec.data.get<Rec>().get(string{ATTR_fork}).idi;
+    }
+  }
+  
+  /**
+   * @internal allocate a new TimelineWidget and attach it as child.
+   * @remarks assuming the structure of the diff is adequate, we'll first create a proxy
+   *    to manage this timeline. Then we use some service to find a suitable location to house
+   *    a TimelineWidget. And finally we trigger creation of the widget, which in turn creates
+   *    a TimelineController attached to the UI-Bus
+   */
+  TimelineGui
+  InteractionDirector::injectTimeline (GenNode const& spec)
+  {
+    ID rootTrack = verifyDiffStructure_and_extract_RootTrack (spec);
+    TimelineGui anchorProxy{spec.idi, rootTrack};
+    
+    globalCtx_.windowLoc_
+              .locatePanel()
+              .find_or_create<panel::TimelinePanel>()
+              .addTimeline (
+                  anchorProxy.buildTimelineWidget (this->uiBus_));
+    
+    return anchorProxy;
+  }
+
 
   
   

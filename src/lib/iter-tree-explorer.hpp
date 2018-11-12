@@ -46,7 +46,7 @@
  ** calculations with exception handling but also simple data structures like lists or trees). The key point with any
  ** monad is the ability to _bind a function_ into the monad; this function will work on the _contained base values_
  ** and produce a modified new monad instance. In the simple case of a list, "binding" a function basically means
- ** to _map the function onto_ the elements in the list.
+ ** to _map the function onto_ the elements in the list. (actually it means the `flatMap` operation)
  ** 
  ** ## Rationale
  ** The primary benefit of using the monad pattern is to separate the transforming operation completely from
@@ -166,6 +166,13 @@ namespace lib {
        // standard copy operations acceptable
       };
     
+    template<class CON>
+    struct StlRange<CON &>
+      : StlRange<CON>
+      {
+        using StlRange<CON>::StlRange;
+      };
+    
     
     /**
      * Decorate a state or logic core to treat it as Lumiera Forward Iterator.
@@ -180,6 +187,7 @@ namespace lib {
         COR &      _core()       { return static_cast<COR&>       (*this); }
         COR const& _core() const { return static_cast<COR const&> (*this); }
         
+      protected:
         void
         __throw_if_empty()  const
           {
@@ -438,6 +446,8 @@ namespace lib {
   
   namespace iter_explorer { // Implementation of Iterator decorating layers...
     
+    constexpr auto ACCEPT_ALL = [](auto){return true;};
+    
     /**
      * @internal technical details of binding a functor into the TreeExplorer.
      * Notably, this happens when adapting an _"expansion functor"_ to allow expanding a given element
@@ -456,15 +466,18 @@ namespace lib {
      *   accepts the iterator or state core itself (the "opaque state manipulation" usage pattern).
      * - we generate a suitable argument accessor function and build the function composition
      *   of this accessor and the provided _expansion functor_.
-     * - the resulting, combined functor is stored into a std::function, but wired in a way to
-     *   keep the argument-accepting front-end still generic (templated `operator()`). This
-     *   special adapter supports the case when the _expansion functor_ yields a child sequence
-     *   type different but compatible to the original source sequence embedded in TreeExplorer.
-     * @tparam FUN something _"function-like"_ passed as functor to be bound
-     * @tparam SRC the source iterator type to apply when attempting to use a generic lambda as functor
+     * - the resulting, combined functor is stored into a std::function, thereby abstracting
+     *   from the actual adapting mechanism. This allows to combine different kinds of functors
+     *   within the same processing step; and in addition, it allows the processing step to
+     *   remain agnostic with respect to the adaptation and concrete type of the functor/lambda.
+     * @tparam FUN either the signature, or something _"function-like"_ passed as functor to be bound
+     * @tparam SRC (optional) but need to specify the source iterator type to apply when passing
+     *             a generic lambda or template as FUN. Such a generic functor will be _instantiated_
+     *             passing the type `SRC&` as argument. This instantiation may fail (and abort compilation),
+     *             but when it succeeds, we can infer the result type `Res` from the generic lambda
      */
-    template<class FUN, typename SRC>
-    struct _BoundFunctor
+    template<class FUN, typename SRC =void>
+    struct _FunTraits
       {
         /** handle all regular "function-like" entities */
         template<typename F, typename SEL =void>
@@ -491,49 +504,64 @@ namespace lib {
         
         /** adapt to a functor, which accesses the source iterator or embedded "state core" */
         template<class ARG, class SEL =void>
-        struct ArgAccessor
+        struct ArgAdapter
           {
             using FunArgType = remove_reference_t<Arg>;
             static_assert (std::is_convertible<ARG, FunArgType>::value,
                            "the bound functor must accept the source iterator or state core as parameter");
             
-            static auto build() { return [](ARG& arg) -> ARG& { return arg; }; }
+            static decltype(auto)
+            wrap (FUN&& rawFunctor)  ///< actually pass-through the raw functor unaltered
+              {
+                return forward<FUN> (rawFunctor);
+              }
           };
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
         template<class IT>
-        struct ArgAccessor<IT,   enable_if<is_convertible<typename IT::value_type, Arg>>>
-          {
-            static auto build() { return [](auto& iter) { return *iter; }; }
+        struct ArgAdapter<IT,   enable_if<__and_<is_convertible<typename IT::value_type, Arg>
+                                                 ,__not_<is_convertible<IT, Arg>>>>>        // need to exclude the latter, since IterableDecorator
+          {                                                                                //  often seems to accept IT::value_type (while in fact it doesn't)
+            static auto
+            wrap (function<Sig> rawFun)          ///< adapt by dereferencing the source iterator
+              {
+                return [rawFun](IT& srcIter) -> Res { return rawFun(*srcIter); };
+              }
           };
         
         /** adapt to a functor collaborating with an IterSource based iterator pipeline */
         template<class IT>
-        struct ArgAccessor<IT,   enable_if<__and_< is_base_of<IterSource<typename IT::value_type>, typename IT::Source>
+        struct ArgAdapter<IT,   enable_if<__and_< is_base_of<IterSource<typename IT::value_type>, typename IT::Source>
                                                  , is_base_of<IterSource<typename IT::value_type>, remove_reference_t<Arg>>
                                                  > >>
           {
             using Source = typename IT::Source;
             
-            static auto build() { return [](auto& iter) -> Source& { return iter.source(); }; }
-          };
-        
-        
-        /** holder for the suitably adapted _expansion functor_ */
-        struct Functor
-          {
-            function<Sig> boundFunction;
-            
-            template<typename ARG>
-            Res
-            operator() (ARG& arg)
+            static auto
+            wrap (function<Sig> rawFun)       ///< extract the (abstracted) IterSource
               {
-                auto accessArg = ArgAccessor<ARG>::build();
-                
-                return boundFunction (accessArg (arg));
+                return [rawFun](IT& iter) -> Res { return rawFun(iter.source()); };
               }
           };
+        
+        
+        
+        /** builder to create a nested/wrapping functor, suitably adapting the arguments */
+        static auto
+        adaptFunctor (FUN&& rawFunctor)
+          {
+            return function<Res(SRC&)> {ArgAdapter<SRC>::wrap (forward<FUN> (rawFunctor))};
+          }
       };
+    
+    
+    template<typename FUN, typename SRC>
+    inline void
+    static_assert_isPredicate()
+    {
+      using Res = typename _FunTraits<FUN,SRC>::Res;
+      static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
+    }
     
     
     
@@ -557,8 +585,8 @@ namespace lib {
       : SRC
       {
         BaseAdapter() = default;
-        BaseAdapter(SRC const& src) : SRC(src) { }
-        BaseAdapter(SRC && src)     : SRC(src) { }
+        BaseAdapter(SRC const& src) : SRC{src}                { }
+        BaseAdapter(SRC && src)     : SRC{forward<SRC> (src)} { }
         
         void expandChildren() { }
         size_t depth()  const { return 0; }
@@ -574,7 +602,7 @@ namespace lib {
      * yielding a compatible value type). Now, this _sequence of children_ effectively
      * replaces the expanded source element in the overall resulting sequence; which
      * means, the nested sequence was _flattened_ into the results. Since this expand()
-     * operation can again invoked on the results, the implementation of such an evaluation
+     * operation can again be invoked on the results, the implementation of such an evaluation
      * requires a stack datastructure, so the nested iterator from each expand() invocation
      * can be pushed to become the new active source for iteration. Thus the primary purpose
      * of this Expander (decorator) is to integrate those "nested child iterators" seamlessly
@@ -583,34 +611,43 @@ namespace lib {
      * the source iterator wrapped by this decorator.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
      *         _expansion functor_, there is a lot of minute technical details, mostly confined
-     *         within the _BoundFunctorTraits.
+     *         within the _FunTraits traits. For the same reason, we need to prepare two different
+     *         bindings of the passed raw functor, one to work on the source sequence, and the other
+     *         one to work on the result sequence of a recursive child expansions; these two sequences
+     *         need not be implemented in the same way, which simplifies the definition of algorithms.
      * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
-    template<class SRC, class FUN>
+    template<class SRC, class RES>
     class Expander
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctor<FUN,SRC>;
-        using ExpandFunctor = typename _Traits::Functor;
         
-        using ResIter = typename _DecoratorTraits<typename _Traits::Res>::SrcIter;
-        static_assert (std::is_convertible<typename ResIter::value_type, typename SRC::value_type>::value,
+        using ResIter = typename _DecoratorTraits<RES>::SrcIter;
+        static_assert (std::is_convertible<typename ResIter::value_type, typename SRC::value_type>(),
                        "the iterator from the expansion must yield compatible values");
         
-        ExpandFunctor expandChildren_;
+        using RootExpandFunctor = function<RES(SRC&)>;
+        using ChldExpandFunctor = function<RES(ResIter&)>;
+        
+        RootExpandFunctor expandRoot_;
+        ChldExpandFunctor expandChild_;
+        
         IterStack<ResIter> expansions_;
         
       public:
         Expander() =default;
         // inherited default copy operations
         
+        template<typename FUN>
         Expander (SRC&& parentExplorer, FUN&& expandFunctor)
-          : SRC{move (parentExplorer)}                           // NOTE: slicing move to strip TreeExplorer (Builder)
-          , expandChildren_{forward<FUN> (expandFunctor)}
+          : SRC{move (parentExplorer)}                   // NOTE: slicing move to strip TreeExplorer (Builder)
+          , expandRoot_ {_FunTraits<FUN,SRC>    ::adaptFunctor (forward<FUN> (expandFunctor))}  // adapt to accept SRC&
+          , expandChild_{_FunTraits<FUN,ResIter>::adaptFunctor (forward<FUN> (expandFunctor))}  // adapt to accept RES&
           , expansions_{}
           { }
+        
         
         
         /** core operation: expand current head element */
@@ -619,8 +656,8 @@ namespace lib {
           {
             REQUIRE (this->checkPoint(), "attempt to expand an empty explorer");
             
-            ResIter expanded{ hasChildren()? expandChildren_(*expansions_)
-                                           : expandChildren_(*this)};
+            ResIter expanded{ hasChildren()? expandChild_(*expansions_)
+                                           : expandRoot_(*this)};
             incrementCurrent();   // consume current head element (but don't clean-up)
             if (not isnil(expanded))
               expansions_.push (move(expanded));
@@ -635,6 +672,19 @@ namespace lib {
         depth()  const
           {
             return expansions_.size();
+          }
+        
+        /** lock into the current child sequence.
+         * This special feature turns the current child sequence into the new root,
+         * thereby discarding everything else in the expansions stack, including the
+         * original root sequence.
+         */
+        void
+        rootCurrent()
+          {
+            if (not hasChildren()) return;
+            static_cast<SRC&> (*this) = move (*expansions_);
+            expansions_.clear();
           }
         
         
@@ -669,13 +719,7 @@ namespace lib {
         invariant()  const
           {
             return not hasChildren()
-                or *expansions_;
-          }
-        
-        bool
-        hasChildren()  const
-          {
-            return 0 < depth();
+                or expansions_->isValid();
           }
         
         void
@@ -687,11 +731,27 @@ namespace lib {
               ++(*this);
           }
         
+        
+      protected:
+        /** @internal accessor for downstream layers to allow close collaboration */
+        ResIter&
+        accessCurrentChildIter()
+          {
+            REQUIRE (hasChildren());
+            return *expansions_;
+          }
+        
         void
         dropExhaustedChildren()
           {
             while (not invariant())
               ++expansions_;
+          }
+        
+        bool
+        hasChildren()  const
+          {
+            return 0 < depth();
           }
       };
     
@@ -718,6 +778,7 @@ namespace lib {
         void
         iterNext()
           {
+            SRC::__throw_if_empty();
             SRC::expandChildren();
           }
       };
@@ -725,7 +786,7 @@ namespace lib {
     
     
     /**
-     * @internal extension to the Expander decorator to perform expansion delayed on next iteration. 
+     * @internal extension to the Expander decorator to perform expansion delayed on next iteration.
      */
     template<class SRC>
     class ScheduledExpander
@@ -750,6 +811,7 @@ namespace lib {
           {
             if (shallExpand_)
               {
+                SRC::__throw_if_empty();
                 SRC::expandChildren();
                 shallExpand_ = false;
               }
@@ -767,32 +829,31 @@ namespace lib {
      * is adapted in a similar way as the "expand functor", so to detect and convert the
      * expected input on invocation.
      */
-    template<class SRC, class FUN>
+    template<class SRC, class RES>
     class Transformer
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctor<FUN,SRC>;
-        using Res = typename _Traits::Res;
         
-        using TransformFunctor = typename _Traits::Functor;
-        using TransformedItem = wrapper::ItemWrapper<Res>;
+        using TransformFunctor = function<RES(SRC&)>;
+        using TransformedItem = wrapper::ItemWrapper<RES>;
         
         TransformFunctor trafo_;
         TransformedItem treated_;
         
       public:
-        using value_type = typename meta::TypeBinding<Res>::value_type;
-        using reference  = typename meta::TypeBinding<Res>::reference;
-        using pointer    = typename meta::TypeBinding<Res>::pointer;
+        using value_type = typename meta::TypeBinding<RES>::value_type;
+        using reference  = typename meta::TypeBinding<RES>::reference;
+        using pointer    = typename meta::TypeBinding<RES>::pointer;
         
         
         Transformer() =default;
         // inherited default copy operations
         
+        template<typename FUN>
         Transformer (SRC&& dataSrc, FUN&& transformFunctor)
-          : SRC{move (dataSrc)}
-          , trafo_{forward<FUN> (transformFunctor)}
+          : SRC{move (dataSrc)}                            // NOTE: slicing move to strip TreeExplorer (Builder)
+          , trafo_{_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (transformFunctor))}
           { }
         
         
@@ -854,16 +915,14 @@ namespace lib {
      * The filter predicate and thus the source iterator is evaluated _eagerly_, to establish the
      * *invariant* of this class: _if a "current element" exists, it has already been approved._
      */
-    template<class SRC, class FUN>
+    template<class SRC>
     class Filter
       : public SRC
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
-        using _Traits = _BoundFunctor<FUN,SRC>;
-        using Res = typename _Traits::Res;
-        static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
         
-        using FilterPredicate = typename _Traits::Functor;
+      protected:
+        using FilterPredicate = function<bool(SRC&)>;
         
         FilterPredicate predicate_;
         
@@ -872,9 +931,10 @@ namespace lib {
         Filter() =default;
         // inherited default copy operations
         
+        template<typename FUN>
         Filter (SRC&& dataSrc, FUN&& filterFun)
           : SRC{move (dataSrc)}
-          , predicate_{forward<FUN> (filterFun)}
+          , predicate_{_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (filterFun))}
           {
             pullFilter(); // initially pull to establish the invariant
           }
@@ -885,8 +945,8 @@ namespace lib {
         void
         expandChildren()
           {
-            pullFilter();
             SRC::expandChildren();
+            pullFilter();
           }
         
       public: /* === Iteration control API for IterableDecorator === */
@@ -910,11 +970,18 @@ namespace lib {
             pullFilter();
           }
         
-      private:
+        
+      protected:
         SRC&
         srcIter()  const
           {
             return unConst(*this);
+          }
+        
+        bool
+        isDisabled()  const
+          {
+            return not bool{predicate_};
           }
         
         /** @note establishes the invariant:
@@ -923,10 +990,185 @@ namespace lib {
         void
         pullFilter ()
           {
+            if (isDisabled()) return;
             while (srcIter() and not predicate_(srcIter()))
               ++srcIter();
           }
       };
+    
+    
+    
+    /**
+     * @internal Special variant of the \ref Filter Decorator to allow for dynamic remoulding.
+     * This covers a rather specific use case, where we want to remould or even exchange the
+     * Filter predicate in the middle of an ongoing iteration. Such a remoulding can be achieved
+     * by binding the existing (opaque) filter predicate into a new combined lambda, thereby
+     * capturing it _by value._ After building, this remoulded version can be assigned to the
+     * original filter functor, under the assumption that both are roughly compatible. Moreover,
+     * since we wrap the actual lambda into an adapter, allowing for generic lambdas to be used
+     * as filter predicates, this setup allows for a lot of leeway regarding the concrete predicates.
+     * @note whenever the filter is remoulded, the invariant is immediately
+     *       [re-established](\ref Filter::pullFilter() ), possibly forwarding the sequence
+     *       to the next element approved by the new version of the filter.
+     * @remarks filter predicates can be specified in a wide variety of forms, and will be adapted
+     *       automatically. This flexibility also holds for any of the additional clauses provided
+     *       for remoulding the filter. Especially this means that functors of different kinds can
+     *       be mixed and combined.
+     */
+    template<class SRC>
+    class MutableFilter
+      : public Filter<SRC>
+      {
+        using _Filter = Filter<SRC>;
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        
+      public:
+        MutableFilter() =default;
+        // inherited default copy operations
+        
+        template<typename FUN>
+        MutableFilter (SRC&& dataSrc, FUN&& filterFun)
+          : _Filter{move (dataSrc), forward<FUN> (filterFun)}
+          { }
+        
+        
+      public: /* === API to Remould the Filter condition underway === */
+        
+        /** remould existing predicate to require in addition the given clause to hold */
+        template<typename COND>
+        void
+        andFilter (COND&& conjunctiveClause)
+          {
+            remouldFilter (forward<COND> (conjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto& val)
+                                         {
+                                           return first(val)
+                                              and chain(val);
+                                         };
+                             });
+          }
+        
+        /** remould existing predicate to require in addition the negation of the given clause to hold */
+        template<typename COND>
+        void
+        andNotFilter (COND&& conjunctiveClause)
+          {
+            remouldFilter (forward<COND> (conjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto& val)
+                                         {
+                                           return first(val)
+                                              and not chain(val);
+                                         };
+                             });
+          }
+        
+        /** remould existing predicate to require either the old _OR_ the given new clause to hold */
+        template<typename COND>
+        void
+        orFilter (COND&& disjunctiveClause)
+          {
+            remouldFilter (forward<COND> (disjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto& val)
+                                         {
+                                           return first(val)
+                                               or chain(val);
+                                         };
+                             });
+          }
+        
+        /** remould existing predicate to require either the old _OR_ the negation of a new clause to hold */
+        template<typename COND>
+        void
+        orNotFilter (COND&& disjunctiveClause)
+          {
+            remouldFilter (forward<COND> (disjunctiveClause)
+                          ,[](auto first, auto chain)
+                             {
+                               return [=](auto& val)
+                                         {
+                                           return first(val)
+                                               or not chain(val);
+                                         };
+                             });
+          }
+        
+        /** remould existing predicate to negate the meaning of the existing clause */
+        void
+        flipFilter()
+          {
+            auto dummy = [](auto){ return false; };
+            remouldFilter (dummy
+                          ,[](auto currentFilter, auto)
+                             {
+                               return [=](auto& val)
+                                         {
+                                           return not currentFilter(val);
+                                         };
+                             });
+          }
+        
+        /** replace the existing predicate with the given, entirely different predicate */
+        template<typename COND>
+        void
+        setNewFilter (COND&& entirelyDifferentPredicate)
+          {
+            remouldFilter (forward<COND> (entirelyDifferentPredicate)
+                          ,[](auto, auto chain)
+                             {
+                               return [=](auto& val)
+                                         {
+                                           return chain(val);
+                                         };
+                             });
+          }
+        
+        /** discard filter predicates and disable any filtering */
+        void
+        disableFilter()
+          {
+            _Filter::predicate_ = nullptr;
+          }
+        
+        
+      private:
+        /** @internal boilerplate to remould the filter predicate in-place
+         * @param additionalClause additional functor object to combine
+         * @param buildCombinedClause a _generic lambda_ (important!) to define
+         *        how exactly the old and the new predicate are to be combined
+         * @note the actual combination logic is handed in as generic lambda, which
+         *       essentially is a template class, and this allows to bind to any kind
+         *       of function objects or lambdas. This combination closure requires a
+         *       specific setup: when invoked with the existing and the new functor
+         *       as argument, it needs to build a new _likewise generic_ lambda
+         *       to perform the combined evaluation.
+         * @warning the handed-in lambda `buildCombinedClause` must capture its
+         *       arguments, the existing functors _by value._ This is the key piece
+         *       in the puzzle, since it effectively moves the existing functor into
+         *       a new heap allocated storage.
+         */
+        template<typename COND, class COMB>
+        void
+        remouldFilter (COND&& additionalClause, COMB buildCombinedClause)
+          {
+            static_assert_isPredicate<COND,SRC>();
+            
+            if (_Filter::isDisabled())
+              _Filter::predicate_ = ACCEPT_ALL;
+            
+            _Filter::predicate_ = buildCombinedClause (_Filter::predicate_   // pick up the existing filter predicate
+                                                      ,_FunTraits<COND,SRC>::adaptFunctor (forward<COND> (additionalClause))
+                                                      );                   //   wrap the extension predicate in a similar way
+            _Filter::pullFilter();                                        //    then pull to re-establish the Invariant
+          }
+      };
+    
+    
     
     
     /**
@@ -966,6 +1208,7 @@ namespace lib {
         using Parent = WrappedLumieraIter<SRC>;
         using Val = typename SRC::value_type;                             ///////////////////////////////////TICKET #1125 : get rid of Val
         
+       ~PackagedTreeExplorerSource() { }
       public:
         using Parent::Parent;
         
@@ -1070,10 +1313,14 @@ namespace lib {
    * This allows to separate the mechanics of evaluation and result combination
    * from the actual processing and thus to define tree structured computations
    * based on an opaque source data structure not further disclosed.
+   * @tparam SRC a suitably adapted _source iterator_ or _state core_, wrapped
+   *             into an instance of the iter_explorer::BaseAdapter template
    * 
-   * \param usage
+   * \par usage
+   * TreeExplorer is meant to be used as *Builder* for a processing pipeline.
+   * For this to work, it is essential to pick the `SRC` baseclass properly.
    *        - to build a TreeExplorer, use the treeExplore() free function,
-   *          which cares to pick up an possibly adapt the given iteration source
+   *          which cares to pick up and possibly adapt the given iteration source
    *        - to add processing layers, invoke the builder operations on TreeExplorer
    *          in a chained fashion, thereby binding functors or lambdas. Capture the
    *          final result with an auto variable.
@@ -1108,7 +1355,7 @@ namespace lib {
       /* ==== Builder functions ==== */
       
       /** preconfigure this TreeExplorer to allow for _"expansion of children"_.
-       * The resulting iterator exposes an `expand()` function, which consumes
+       * The resulting iterator exposes an `expandChildren()` function, which consumes
        * the current head element of this iterator and feeds it through the
        * _expansion functor_, which was provided to this builder function here.
        * The _expansion functor_ is expected to yield a sequence of "child" elements,
@@ -1139,12 +1386,15 @@ namespace lib {
        *       typed argument. Obviously, argument and result type should also make sense for
        *       the desired evaluation pattern, otherwise you'll get all kinds of nasty
        *       template compilation failures (have fun!)
+       * @return processing pipeline with attached [Expander](\ref iter_explorer::Expander) decorator
        */
       template<class FUN>
       auto
       expand (FUN&& expandFunctor)
         {
-          using ResCore = iter_explorer::Expander<SRC, FUN>;
+          using ExpandedChildren = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
+          
+          using ResCore = iter_explorer::Expander<SRC, ExpandedChildren>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
@@ -1156,6 +1406,7 @@ namespace lib {
        * necessary to invoke `expandChildren()` (and doing so would have no further effect than
        * just iterating). Thus, on iteration, each current element will be fed to the _expand functor_
        * and the results will be integrated depth first.
+       * @return processing pipeline with attached [AutoExpander](\ref iter_explorer::AutoExpander) decorator
        * @warning iteration will be infinite, unless the _expand functor_ provides some built-in
        *       termination condition, returning an empty child sequence at that point. This would
        *       then be the signal for the internal combination mechanism to return to visiting the
@@ -1171,7 +1422,7 @@ namespace lib {
         }
       
       
-      /** extension functionality to be used on top of expand(), to perform expansion on next iteration. 
+      /** extension functionality to be used on top of expand(), to perform expansion on next iteration.
        * When configured, an expandChildren() call will not happen immediately, but rather in place of
        * the next iteration step. Basically child expansion _is kind of a special iteration step,_ and
        * thus all we need to do is add another layer with a boolean state flag, which catches the
@@ -1198,12 +1449,15 @@ namespace lib {
        * functor supports the same definition styles as described for #expand
        * - it can be pure functional, src -> res
        * - it can accept the underlying source iterator and exploit side-effects
+       * @return processing pipeline with attached [Transformer](\ref iter_explorer::Transformer) decorator
        */
       template<class FUN>
       auto
       transform (FUN&& transformFunctor)
         {
-          using ResCore = iter_explorer::Transformer<SRC, FUN>;
+          using Product = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
+          
+          using ResCore = iter_explorer::Transformer<SRC, Product>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});
@@ -1214,28 +1468,104 @@ namespace lib {
        * The previously created source layers will be "pulled" to fast-forward immediately to the
        * next element confirmed this way by the bound functor. If none of the source elements
        * is acceptable, the iterator will transition to exhausted state immediately.
+       * @return processing pipeline with attached [Filter](\ref iter_explorer::Filter) decorator
        */
       template<class FUN>
       auto
       filter (FUN&& filterPredicate)
         {
-          using ResCore = iter_explorer::Filter<SRC, FUN>;
+          iter_explorer::static_assert_isPredicate<FUN,SRC>();
+          
+          using ResCore = iter_explorer::Filter<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
         }
       
       
+      /** attach a special filter adapter, allowing to change the filter predicate while iterating.
+       * While otherwise this filter layer behaves exactly like the [standard version](\ref #filter),
+       * it exposes a special API to augment or even completely switch the filter predicate while
+       * in the middle of iterator evaluation. Of course, the underlying iterator is not re-evaluated
+       * from start (our iterators can not be reset), and so the new filter logic takes effect starting
+       * from the current element. Whenever the filter is remoulded, it is immediately re-evaluated,
+       * possibly causing the underlying iterator to be pulled until an element matching the condition
+       * is found.
+       * @return processing pipeline with attached [special MutableFilter](\ref iter_explorer::MutableFilter) decorator
+       * @see \ref IterTreeExplorer_test::verify_FilterChanges()
+       * @see \ref iter_explorer::MutableFilter::andFilter()
+       * @see \ref iter_explorer::MutableFilter::andNotFilter()
+       * @see \ref iter_explorer::MutableFilter::orFilter()
+       * @see \ref iter_explorer::MutableFilter::orNotFilter()
+       * @see \ref iter_explorer::MutableFilter::flipFilter()
+       * @see \ref iter_explorer::MutableFilter::setNewFilter()
+       */
+      template<class FUN>
+      auto
+      mutableFilter (FUN&& filterPredicate)
+        {
+          iter_explorer::static_assert_isPredicate<FUN,SRC>();
+          
+          using ResCore = iter_explorer::MutableFilter<SRC>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
+        }
+      
+      
+      auto
+      mutableFilter()
+        {
+          return mutableFilter (iter_explorer::ACCEPT_ALL);
+        }
+      
+      
+      
+      /** builder function to attach a _custom extension layer._
+       * Any template in compliance with the general construction scheme can be injected through the template parameter.
+       * - it must take a first template parameter SRC and inherit from this source iterator
+       * - towards layers on top, it must behave like a _state core,_ either by redefining the state core API functions,
+       *   as defined by \ref IterStateWrapper, or by inheriting them from a lower layer.
+       * - it is bound to play well with the other layers; especially it needs to be aware of `expandChildren()` calls,
+       *   which for the consumer side behave like `iterNext()` calls. If a layer needs to do something special for
+       *   `iterNext()`, it needs to perform a similar action for `expandChildren()`.
+       * - it must be behave like a default-constructible, copyable value object
+       * @return augmented TreeExplorer, incorporating and adpting the injected layer
+       */
+      template<template<class> class LAY>
+      auto
+      processingLayer()
+        {
+          using ResCore = LAY<SRC>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this)});
+        }
+      
+      
+      
       /** _terminal builder_ to package the processing pipeline as IterSource.
        * Invoking this function moves the whole iterator compound, as assembled by the preceding
-       * builder calls, into heap allocated memory and returns a [iterator front-end](\ref IterExploreSource).
+       * builder calls, into heap allocated memory and returns an [iterator front-end](\ref IterExploreSource).
        * Any iteration and manipulation on that front-end is passed through virtual function calls into
        * the back-end, thereby concealing all details of the processing pipeline.
+       * @return an front-end handle object, which is an "Lumiera Forward Iterator",
+       *         while holding onto a heap allocated [abstracted data source](\ref lib::IterExplorer).
        */
       IterExploreSource<value_type>
       asIterSource()
         {
           return IterExploreSource<value_type> {move(*this)};
+        }
+      
+      
+      /** _terminal builder_ to strip the TreeExplorer and expose the built Pipeline.
+       * @return a »Lumiera Forward iterator« incorporating the complete pipeline logic.
+       */
+      SRC
+      asIterator()
+        {
+          return SRC {move(*this)};
         }
     };
   
@@ -1256,6 +1586,44 @@ namespace lib {
    *         be sure to understand that invoking any further builder operation on
    *         TreeExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
+   * 
+   * ## usage
+   * 
+   * This function starts a *Builder* expression. It picks up the given source,
+   * which can be something "sequence-like" or "iterable", and will automatically
+   * wrapped and adapted.
+   * - from a STL container, we retrieve a pair of STL iterators (`begin()`, `end()`)
+   * - a "Lumiera Forward Iterator" is copied or moved into the wrapper and used as
+   *   data source, pulling results on demand until exhaustion
+   * - a _State Core_ object is copied or moved into the wrapper and adapted to
+   *   be iterated as "Lumiera Forward Iterator". Any object with suitable extension
+   *   points and behaviour can be used, as explained [here](\ref lib::IterStateWrapper).
+   * 
+   * The resulting TreeExplorer instance can be directly used as "Lumiera Forward Iterator".
+   * However, typically you might want to invoke the builder functions to configure further
+   * processing steps in a processing pipeline...
+   * - to [filter](\ref TreeExplorer::filter) the results with a predicate (functor)
+   * - to [transform](\ref TreeExplorer::transform) the yielded results
+   * - to bind and configure a [child expansion operation](\ref TreeExplorer::expand), which
+   *   can then be triggered by explicitly invoking [.expandChildren()](\ref iter_explorer::Expander::expandChildren)
+   *   on the resulting pipeline; the generated child sequence is "flat mapped" into the results
+   *   (a *Monad* style usage).
+   * - to [package](\ref TreeExplorer::asIterSource) the pipeline built thus far behind an opaque
+   *   interface and move the implementation into heap memory.
+   * 
+   * A typical usage might be...
+   * \code
+   * auto multiply  = [](int v){ return 2*v; };
+   * 
+   * auto ii = treeExplore (CountDown{7,4})
+   *             .transform(multiply);
+   * 
+   * CHECK (14 == *ii);
+   * ++ii;
+   * CHECK (12 == *ii);
+   * ++ii;
+   * \endcode
+   * In this example, a `CountDown` _state core_ is used, as defined in iter-tree-explorer-test.cpp
    */
   template<class IT>
   inline auto

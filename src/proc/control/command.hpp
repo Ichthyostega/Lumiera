@@ -37,8 +37,8 @@
  ** stored definition backend.
  ** 
  ** # Command definition, argument types and UNDO operation
- ** For a command to be usable at all, a concrete [command definition](command-def.hpp) need to be supplied
- ** somewhere in the code base. Typically this is done through static [command-setup bindings](command-setup.hpp).
+ ** For a command to be usable at all, a concrete [command definition](\ref command-def.hpp) need to be supplied
+ ** somewhere in the code base. Typically this is done through static [command-setup bindings](\ref command-setup.hpp).
  ** Such a command definition links three functions with the name-ID of the command
  ** - the actual command operation
  ** - a function to capture state

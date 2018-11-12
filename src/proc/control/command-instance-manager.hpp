@@ -88,7 +88,7 @@ namespace control {
    * #getInstance. It represents an _anonymous instance_ kept alive solely by the CommandInstanceManager
    * (i.e. there is no registration of a command under that instanceID in the global CommandRegistry).
    * When done with the parametrisation, by calling #dispatch, this anonymous instance will be handed
-   * over to the [Dispatcher](CommandDispatch) (installed on construction). Typically, this will in fact
+   * over to the [Dispatcher](\ref CommandDispatch) (installed on construction). Typically, this will in fact
    * be the proc::control::ProcDispatcher, which runs in a dedicated thread ("session loop thread") and
    * maintains a queue of commands to be dispatched towards the current session. Since Command is a smart
    * handle, the enqueued instance will stay alive until execution and then go out of scope. But, after

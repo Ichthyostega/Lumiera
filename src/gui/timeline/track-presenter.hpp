@@ -24,7 +24,7 @@
 /** @file track-presenter.hpp
  ** Presentation control element to model and manage a track within the timeline UI.
  ** In the Lumiera timeline UI, we are mixing two different scope of concerns: For one,
- ** we have the globally tangible scope of actual session elements an operations performed
+ ** we have the globally tangible scope of actual session elements and operations performed
  ** on those. And then there are more local considerations regarding the "mechanics" of the
  ** UI elements, their state and immediate feedback to user interactions. The _Presenter_ --
  ** as known from the [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) --
@@ -36,9 +36,10 @@
  ** part of layout building, delegating to a mostly passive GTK widget for the actual display.
  ** This way it becomes possible to manage the actual UI resources on a global level, avoiding to
  ** represent potentially several thousand individual elements as GTK entities, while at any time
- ** only several can be visible and active as far as user interaction is concerned.
+ ** only a small number of elements can be visible and active as far as user interaction is concerned.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 
@@ -48,12 +49,16 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/model/controller.hpp"
+#include "gui/timeline/marker-widget.hpp"
+#include "gui/timeline/clip-presenter.hpp"
 #include "gui/timeline/track-head-widget.hpp"
 #include "gui/timeline/track-body.hpp"
 
+#include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
 //#include <memory>
+#include <utility>
 #include <vector>
 
 
@@ -64,8 +69,43 @@ namespace timeline {
   using std::vector;
   using std::unique_ptr;
   
-  class ClipPresenter;
-  class MarkerWidget;
+  
+  /**
+   * Reference frame to organise the display related to a specific Track in the Timeline-GUI.
+   */
+  struct DisplayFrame
+    : util::NonCopyable
+    {
+      TrackHeadWidget head;
+      TrackBody       body;
+      
+      template<class FUN>
+      DisplayFrame (FUN anchorDisplay)
+        : head{}
+        , body{}
+        {
+          anchorDisplay (head, body);
+        }
+      
+     ~DisplayFrame()
+        {
+          TODO ("cause the managed presentation elements to detach from their parents");
+        }
+      
+      void
+      setTrackName (cuString& name)
+        {
+          head.setTrackName (name);
+          body.setTrackName (name);  ///////////////////////////////////TICKET #1017 -- TODO 11/18 : not clear yet if TrackBody needs to know its name
+        }
+
+      void
+      injectSubTrack (TrackHeadWidget& head, TrackBody& body)
+        {
+          UNIMPLEMENTED ("inject the widgets to represent a nested sub-track within this timeline track display frame");
+        }
+    };
+  
   
   /**
    * @todo WIP-WIP as of 12/2016
@@ -73,22 +113,30 @@ namespace timeline {
   class TrackPresenter
     : public model::Controller
     {
+      DisplayFrame display_;
+      
       vector<unique_ptr<TrackPresenter>> subFork_;
       vector<unique_ptr<MarkerWidget>>   markers_;
       vector<unique_ptr<ClipPresenter>>  clips_;
       
-      TrackHeadWidget head_;
-      TrackBody       body_;
-      
       
     public:
+     ~TrackPresenter();
+      
       /**
        * @param identity used to refer to a corresponding session::Fork in the Session
        * @param nexus a way to connect this Controller to the UI-Bus.
        */
-      TrackPresenter (ID identity, ctrl::BusTerm& nexus);
-      
-     ~TrackPresenter();
+      template<class FUN>
+      TrackPresenter (ID id, ctrl::BusTerm& nexus, FUN anchorDisplay)
+        : Controller{id, nexus}
+        , display_{anchorDisplay}
+        , subFork_{}
+        , markers_{}
+        , clips_{}
+        { 
+          setTrackName (id.getSym());  // fallback initialise track-name from human-readable ID symbol 
+        }
       
       
       /** set up a binding to respond to mutation messages via UiBus */
@@ -96,6 +144,13 @@ namespace timeline {
       
       
     private:/* ===== Internals ===== */
+      
+      /** invoked via diff to show a (changed) track name */
+      void
+      setTrackName (string name)
+        {
+          display_.setTrackName (name);
+        }
     };
   
   

@@ -85,12 +85,12 @@ namespace test {
           GridID myGrID (randStr(8));
           GridBuilder spec = asset::Meta::create (myGrID);
           
-          CHECK ( spec.fps_    == 1);
-          CHECK ( spec.origin_ == TimeValue(0));
-          CHECK (!spec.predecessor_);
+          CHECK ( spec.fps    == 1);
+          CHECK ( spec.origin == TimeValue(0));
+          CHECK (!spec.predecessor);
           
-          spec.fps_    = testFps;
-          spec.origin_ = testOrigin;
+          spec.fps    = testFps;
+          spec.origin = testOrigin;
           
           PGrid myGrid = spec.commit();
           CHECK (myGrid);

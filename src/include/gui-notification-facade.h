@@ -44,15 +44,20 @@
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "lib/depend.hpp"
-#include "lib/diff/mutation-message.hpp"
 #include "lib/idi/entry-id.hpp"
 
 #include <string>
 
 
+namespace lib {
+  namespace diff {
+    class GenNode;
+    class MutationMessage;
+} }
 namespace gui {
   
   using std::string;
+  using lib::diff::GenNode;
   using lib::diff::MutationMessage;
   
   using ID = lib::idi::BareEntryID const&;
@@ -69,7 +74,7 @@ namespace gui {
    * from the lower layers into the Lumiera GUI. Typically, this happens
    * asynchronously and triggered by events within the lower layers.
    * 
-   * This is a layer separation facade interface. Clients should use
+   * This is a layer separation façade interface. Clients should use
    * the embedded #facade factory, which yields a proxy routing any
    * calls through the lumieraorg_GuiNotification interface
    * @throws lumiera::error::State when interface is not opened
@@ -92,6 +97,9 @@ namespace gui {
       
       /** attach an warning or state information element */
       virtual void markNote  (ID uiElement, string const& text)  =0;
+      
+      /** send a generic _state mark_ message to some element */
+      virtual void mark      (ID uiElement, GenNode&& stateMark) =0;
       
       /** push a diff message up into the user interface.
        * @remark this is the intended way how to populate or
@@ -129,9 +137,10 @@ extern "C" {
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (uint, const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, markError,          (LumieraUid, const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, markNote,           (LumieraUid, const char*)),
-                           LUMIERA_INTERFACE_SLOT (void, mutate,             (LumieraUid, void*)),
+                           LUMIERA_INTERFACE_SLOT (void, markError,          (const void*, const char*)),  ////////////TICKET #1175 : need a way to pass EntryID
+                           LUMIERA_INTERFACE_SLOT (void, markNote,           (const void*, const char*)),
+                           LUMIERA_INTERFACE_SLOT (void, mark,               (const void*, void*)),
+                           LUMIERA_INTERFACE_SLOT (void, mutate,             (const void*, void*)),
                            LUMIERA_INTERFACE_SLOT (void, triggerGuiShutdown, (const char*)),
 );
 

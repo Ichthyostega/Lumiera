@@ -63,6 +63,10 @@
 namespace proc {
   namespace asset {
     class Timeline;
+    
+    namespace meta {
+      class ErrorLog;
+    }
   }
 }
 
@@ -71,7 +75,7 @@ namespace gui {
     class TimelineController;
   }
   namespace widget {
-    class ErrorLogWidget;
+    class ErrorLogDisplay;
   }
   namespace idi {
     
@@ -84,7 +88,7 @@ namespace gui {
     
     /* === primary component view types === */
     using TimelineView = timeline::TimelineController;
-    using ErrorLogView = widget::ErrorLogWidget;
+    using ErrorLogView = widget::ErrorLogDisplay;
     
     
     /**
@@ -103,7 +107,7 @@ namespace gui {
     template<>
     struct Descriptor<ErrorLogView>
       {
-        ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : need a model placeholder to represent UI specific global entities
+        using Model = proc::asset::meta::ErrorLog;
         
         ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : consider use of a DSL to configure component view access 
         //

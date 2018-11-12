@@ -23,7 +23,7 @@
 
 /** @file list-diff.hpp
  ** A token language to represent changes in a list of elements.
- ** In combination with the [DiffLanguage framework](diff-langue.hpp), this building
+ ** In combination with the [DiffLanguage framework](\ref diff-langue.hpp), this building
  ** block defines the set of operations to express changes in a given list of elements.
  ** By implementing the lib::diff::ListDiffInterpreter interface (visitor), a concrete
  ** usage can receive such a diff description and e.g. apply it to a target data structure.

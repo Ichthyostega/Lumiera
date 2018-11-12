@@ -38,17 +38,30 @@
 #include "proc/cmd.hpp"
 #include "proc/control/command-def.hpp"
 //#include "proc/mobject/session.hpp"
+#include "include/ui-protocol.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : verify if this include is required
 #include "include/gui-notification-facade.h"
-//#include "lib/symbol.hpp"
+#include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
+#include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
-//#include "lib/format-string.hpp"
+#include "lib/format-string.hpp"               //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
+//#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
-//#include <string>
+#include <string>
 
 using lib::hash::LuidH;
-//using std::string;
+using gui::ID;
+using gui::NOTE_INFO;
+using gui::NOTE_WARN;
+using gui::NOTE_ERROR;
+using gui::NotifyLevel;
+using gui::MARK_expand;
+using gui::GuiNotification;
+using lib::diff::GenNode;
 //using util::cStr;
-//using util::_Fmt;
+using util::_Fmt;                              //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
+using util::isYes;
+using std::string;
 
 
 namespace proc {
@@ -80,7 +93,7 @@ COMMAND_DEFINITION (test_meta_activateContentDiff)
                         TODO ("send a population diff starting from scratch");
                         TODO ("activate life-update service within the session");
                         // Temporary hack to get any meaningful UI <-> Proc communication
-                        gui::GuiNotification::facade().displayInfo(gui::NOTE_INFO, "Request: population-Diff from Session.");
+                        GuiNotification::facade().displayInfo(NOTE_INFO, "Request: population-Diff from Session.");
                       })
        .captureUndo ([]() -> bool
                       {
@@ -127,6 +140,94 @@ COMMAND_DEFINITION (meta_deactivateContentDiff)
                       });
   };
   
+  
+  
+  
+  /* ===== Demo and Development ===== */
+  
+  /** DemoGuiRoundtrip: push a notification info message back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_displayInfo)
+  {
+    def.operation ([](int level, string message)
+                      {
+                        GuiNotification::facade().displayInfo (static_cast<NotifyLevel>(level), message);
+                      })
+       .captureUndo ([](int level, string message) -> string
+                      {
+                        return _Fmt{"displayInfo(%d, '%s')"} % level % message;
+                      })
+       .undoOperation ([](int, string, string uiAction)
+                      {
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
+                      });
+  };
+  
+  
+  /** DemoGuiRoundtrip: send a `markError` message back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_markError)
+  {
+    def.operation ([](string message)
+                      {
+                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        GuiNotification::facade().markError (errorLogID, message);
+                      })
+       .captureUndo ([](string message) -> string
+                      {
+                        return _Fmt{"GUI::errorLog <- markError('%s')"} % message;
+                      })
+       .undoOperation ([](string, string uiAction)
+                      {
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
+                      });
+  };
+  
+  
+  /** DemoGuiRoundtrip: send a `markNote` message back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_markNote)
+  {
+    def.operation ([](string message)
+                      {
+                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        GuiNotification::facade().markNote (errorLogID, message);
+                      })
+       .captureUndo ([](string message) -> string
+                      {
+                        return _Fmt{"GUI::errorLog <- markNote('%s')"} % message;
+                      })
+       .undoOperation ([](string, string uiAction)
+                      {
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
+                      });
+  };
+  
+  
+  /** DemoGuiRoundtrip: send a generic `mark` message with given _action ID_ back up into the UI.
+   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   */
+COMMAND_DEFINITION (test_meta_markAction)
+  {
+    def.operation ([](string actionID, string message)
+                      {
+                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        GuiNotification::facade().mark (errorLogID
+                                                       ,actionID==MARK_expand? GenNode{actionID, isYes(message)}
+                                                                             : GenNode{actionID, message});
+                      })
+       .captureUndo ([](string actionID, string message) -> string
+                      {
+                        return _Fmt{"GUI::errorLog <- mark(%s, '%s')"} % actionID % message;
+                      })
+       .undoOperation ([](string, string, string uiAction)
+                      {
+                        GuiNotification::facade().displayInfo (NOTE_WARN, "can not UNDO UI-Action: "+uiAction);
+                      });
+  };
   
   
   

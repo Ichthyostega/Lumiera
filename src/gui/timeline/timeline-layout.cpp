@@ -1,5 +1,5 @@
 /*
-  LayoutManager  -  global timeline layout management and display control
+  TimelineLayout  -  global timeline layout management and display control
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,16 +21,17 @@
 * *****************************************************/
 
 
-/** @file layout-manager.cpp
+/** @file timeline-layout.cpp
  ** Implementation details of global timeline layout management. 
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/timeline/layout-manager.hpp"
+#include "gui/timeline/timeline-layout.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -58,15 +59,34 @@ namespace timeline {
   
   
   
+  TimelineLayout::~TimelineLayout() { }
   
-  LayoutManager::LayoutManager ()
+  TimelineLayout::TimelineLayout (Gtk::Paned& topLevelContainer)
+    : paneSplitPosition_{topLevelContainer.property_position()}
+    , bodyCanvas_{}
+    , headerPane_{bodyCanvas_.get_vadjustment()}   // wire the header pane (Gtk::Viewport) to follow the body vertical scroll movement
     {
+      topLevelContainer.add1 (headerPane_);
+      topLevelContainer.add2 (bodyCanvas_);
     }
   
   
-  LayoutManager::~LayoutManager()
+  /**
+   * This function is invoked once for each new TimelineWidget, in order to build the
+   * starting point for the track widget structure, which then can be extended recursively
+   * to add further nested tracks. The central problem for this widget hierarchy is that
+   * we have to build two matching structures in parallel...
+   * - the track header area ("patchbay")
+   * - the corresponding track body with actual content (clips)
+   */
+  void
+  TimelineLayout::installRootTrack(TrackHeadWidget& head, TrackBody& body)
   {
+    headerPane_.installForkRoot (head);
+    bodyCanvas_.installForkRoot (body);
   }
+  
+
   
   
   

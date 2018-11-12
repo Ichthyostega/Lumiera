@@ -1,8 +1,10 @@
 Lumiera GUI style and theming
 =============================
 
+//Menu: label Theme/Style
 
-'this page collects some pieces of information regarding the visual appearance of the Lumiera GTK GUI'
+_this page collects some pieces of information regarding the visual appearance of the Lumiera GTK UI_
+
 
 GTK-3 styles
 ------------
@@ -15,7 +17,9 @@ introduce additional engine specific styles and settings.
 
 GTK-3 supports the powerful 'cascading' and 'contextual selectors' from CSS. Thus the nesting of elements
 in the GUI forms the base for creating styling rules. Hereby, widget class names translate into ``tag'' names
-in the CSS selectors. Widgets may also expose CSS classes for styling -- the standard widgets define a generic set
+in the CSS selectors.footnote:[The ``tag'' name is the widget's class name without the `Gtk::` prefix, and transformed
+into all lower caps, single word, no underscores. E.g. `Gtk::TextView` -> `textview`]
+Widgets may also expose CSS classes for styling -- the standard widgets define a generic set
 of https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined CSS style classes],
 which can be used to establish the foundation for theming. Obviously it is preferable to keep styling rules as
 concise, generic and systematic as possible; yet we may still refer to individual gui elements by name (`#ID`) though.
@@ -27,6 +31,8 @@ Recommended reading
    and
    https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined style classes]
    in the GTK-3 reference manual.
+ * there is an https://developer.gnome.org/gtk3/stable/chap-css-overview.html[overview page in the developer manual],
+   and a https://developer.gnome.org/gtk3/stable/chap-css-properties.html[reference of supported properties].
  * to start, look at this http://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/[introductory text],
    or the more http://worldofgnome.org/making-gtk3-themes-part-1-basics/[hands-on series of articles from world of gnome]
  * this http://forums.fedoraforum.org/showthread.php?t=281568[post from fedora forum] features a conciese description
@@ -48,6 +54,15 @@ redundantly at different levels, we can never be sure as to _which_ change actua
 A good recommendation is really to ``probe'' settings by changing them temporarily to a really obvious value
 (e.g. `background-color: red`). It is just too easy to learn wrong techniques based on false conclusions.
 
+
+the GTK+ inspector
+~~~~~~~~~~~~~~~~~~
+An essential tool when working with styles and Gtk widgets in general is the
+https://wiki.gnome.org/Projects/GTK%2B/Inspector[GTK+ inspector], which is part of the standard GTK distribution.
+It allows to inspect all GTK objects with their properties, and to see the actual tree of CSS nodes and the
+corresponding selectors. You can even add a style class or state flag (like ``hover'') dynamically, and you
+may add style rules and verify the effect on the application immediately. To use this ispector, launch the
+application like `GTK_DEBUG=interactive target/lumiera`
 
 
 binary themes

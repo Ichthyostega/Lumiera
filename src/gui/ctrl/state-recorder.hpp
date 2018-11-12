@@ -59,6 +59,7 @@
 #include "gui/ctrl/bus-term.hpp"
 #include "gui/ctrl/state-manager.hpp"
 #include "gui/ctrl/state-map-grouping-storage.hpp"
+#include "include/ui-protocol.hpp"
 
 #include <string>
 
@@ -174,19 +175,27 @@ namespace ctrl {
       void
       recordState (ID uiElm, StateMark stateMark)
         {
-          if ("reset" == stateMark.idi.getSym())
+          if (MARK_reset == stateMark.idi.getSym())
             storage_.clearState (uiElm);
           else
-          if ("clearErr" == stateMark.idi.getSym())
-            storage_.clearProperty (uiElm, "Error");
+          if (MARK_clearErr == stateMark.idi.getSym())
+            storage_.clearProperty (uiElm, string{MARK_Error});
           else
-          if ("clearMsg" == stateMark.idi.getSym())
-            storage_.clearProperty (uiElm, "Message");
+          if (MARK_clearMsg == stateMark.idi.getSym())
+            storage_.clearProperty (uiElm, string{MARK_Message});
           else
             storage_.record (uiElm, stateMark);
         }
       
     private:
+      /** @remark depending on the response of the notified element,
+       *   this might lead to a reentrant record() call, because the
+       *   element might chose to send a _note_ message immediately,
+       *   to record a state change, since it can not know this _is_
+       *   already the replay of a stored state note. However, this
+       *   reentrant call is harmless, it just updates the existing
+       *   entry with identical content.
+       */
       void
       replayPropertiesOf (Record entry)
         {

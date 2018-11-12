@@ -84,6 +84,10 @@ General Code Arrangement and Layout
   The primary author(s) and the year of the initial copyright claim should be mentioned.
 - Each header should be focused on a specific purpose. Preferably it starts with a file-level
   doxygen comment explaining the intention and anything not obvious from reading the code.
+  At lest a `@file` tag with one line of classification in a doxygen comment at the top of every
+  file is mandatory.footnote:[this rule stands simply because, without such a file-level doxygen
+  comment, doxygen will _ignore all contents_ of this file (really, might be surprising, yet it is
+  the way it is...)]
 - when arranging headers and compilation units, please take care of the compilation times and the
   code size. Avoid unnecessary includes. Use forward declarations where applicable.
   Yet still, _all immediately required direct dependencies should be mentioned_, even if already
@@ -91,11 +95,20 @@ General Code Arrangement and Layout
   link:{ldoc}/technical/code/linkingStructure.html#_imports_and_import_order[issues of code organisation]
 - The include block starts with our own dependencies, followed by a second block with the library
   dependencies. After that, optionally some symbols may be brought into scope (through +using+ clauses).
-  Avoid cluttering top-level namespaces. Never import full namespaces (no +using namespace boost;+ please!)
+  Avoid cluttering top-level namespaces. Never import full namespaces.footnote:[no `using namespace gtk;`
+  or `using namespace boost` please! Experience shows, in the end you'll be using 5 names or so, but
+  pull in all the others just for sake of laziness. Just type the f**g `using` clause for every
+  import individually, and we'll all be better off...]
 - the includes for our own dependencies shall be given relative to source-root (or test root). Don't use
   relative includes for headers located in the same directory, or -- worse still -- in the parent directory.
-- sometimes, the actual translation units will combine several facilities for technical reasons, e.g.
-  when sharing an implementation-level class or even singleton instance.
+- sometimes, the actual translation units will combine several facilities for technical reasons.footnote:
+  [this means, there can be ``headers'', which are actually only be intended for inclusion on one or two
+  distinct places. This should be mentioned in the file-level comment, but generally is an acceptable
+  practice, and better then lumping everything into a 1000 lines header. As a guideline, if you expect
+  a rather technical concern not to be of much interest for most readers of a header, then better
+  extract it into a separate self-contained header and include it. E.g., you might be sharing an
+  an implementation-level class or even singleton instance and some constant definitions. Just
+  be sure not to include definitions several times.]
   Anonymous namespaces should be used liberally to avoid unnecessary exports.
 - template code mostly needs to reside in headers. (same for metaprogramming code).
   We employ the simple inclusion model (``Borland model'') for template instantiation.

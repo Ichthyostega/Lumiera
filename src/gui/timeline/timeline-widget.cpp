@@ -24,7 +24,7 @@
 /** @file timeline/timeline-widget.cpp
  ** Implementation details of Lumiera's timeline display widget.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 a complete rework of the timeline display is underway
  ** @see timeline-controller.cpp
  ** 
  */
@@ -32,6 +32,8 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/timeline/timeline-widget.hpp"
+#include "gui/timeline/timeline-controller.hpp"
+#include "gui/timeline/timeline-layout.hpp"
 
 //#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
@@ -66,19 +68,29 @@ namespace timeline {
   
   
   TimelineWidget::TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus)
-    : Gtk::Paned{Gtk::ORIENTATION_VERTICAL}
-    , control_{new TimelineController{identity, trackID, nexus}}
-    , layout_{new LayoutManager}
+    : TimelinePage{}
+    , layout_{new TimelineLayout{*this}}
+    , control_{new TimelineController{identity, trackID, nexus, *layout_}}
     {
-      UNIMPLEMENTED ("build the timeline UI");
+      show_all();
     }
   
+  TimelineWidget::~TimelineWidget() { }
   
-  TimelineWidget::~TimelineWidget()
+  
+  void
+  TimelineWidget::buildMutator (lib::diff::TreeMutator::Handle buff)
   {
+    control_->buildMutator (buff);
   }
   
   
+  cuString
+  TimelineWidget::getLabel()  const
+  {
+    return control_->getName();
+  }
+
   
   
   

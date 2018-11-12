@@ -64,9 +64,10 @@ namespace test  {
    */
   class BasicPipe_test : public Test
     {
-      virtual void run(Arg arg) 
+      virtual void
+      run (Arg arg)
         {
-          string pipeID   = isnil(arg)?  "Black Hole" : arg[1];
+          string pipeID   = isnil (arg)?  "Black Hole" : arg[1];
           string streamID = 2>arg.size()? "teststream" : arg[2] ;
           
           createExplicit (pipeID,streamID);
@@ -80,7 +81,7 @@ namespace test  {
       
       void createExplicit (string pID, string sID)
         { 
-          string pID_sane (pID);
+          string pID_sane{pID};
           normaliseID (pID_sane);
           CHECK (pID_sane != pID);
           
@@ -89,17 +90,17 @@ namespace test  {
           CHECK (thePipe);
           CHECK (thePipe->getProcPatt());
           CHECK (thePipe->getPipeID() == pID_sane);
-          CHECK (thePipe->getStreamID() == StreamType::ID(sID));
+          CHECK (thePipe->getStreamID() == StreamType::ID{sID});
           CHECK (thePipe->shortDesc == pID_sane);
           
           Asset::Ident idi = thePipe->ident;
           CHECK (idi.org == "lumi");
           CHECK (contains (idi.name, thePipe->getPipeID()));
-          CHECK (contains (idi.name, thePipe->getStreamID()));
+          CHECK (contains (idi.name, string{thePipe->getStreamID()}));
           
-          Category cat (idi.category);
-          Category refcat (STRUCT,"pipes");
-          CHECK ( cat.hasKind(STRUCT) );
+          Category cat{idi.category};
+          Category refcat{STRUCT,"pipes"};
+          CHECK ( cat.hasKind (STRUCT) );
           CHECK ( cat.isWithin(refcat) );
         }
       
@@ -131,25 +132,25 @@ namespace test  {
           PPipe pipe1 = Pipe::query (""); // "the default pipe"
           PPipe pipe2;
           CHECK (pipe1);
-          CHECK (pipe1 == Session::current->defaults (Query<Pipe>()));
+          CHECK (pipe1 == Session::current->defaults (Query<Pipe>{}));
           CHECK (pipe1->ident.category.hasKind(VIDEO));
           CHECK (pipe1->getProcPatt());
-          PProcPatt propa = Session::current->defaults (Query<const ProcPatt>("pipe(default)"));
+          PProcPatt propa = Session::current->defaults (Query<const ProcPatt>{"pipe(default)"});
           CHECK (propa == pipe1->getProcPatt());
           
           // several variants to query for "the default pipe"
-          pipe2 = Session::current->defaults(Query<Pipe> ());
+          pipe2 = Session::current->defaults(Query<Pipe>{});
           CHECK (pipe2 == pipe1);
-          pipe2 = asset::Struct::retrieve (Query<Pipe> ());
+          pipe2 = asset::Struct::retrieve (Query<Pipe>{});
           CHECK (pipe2 == pipe1);
-          pipe2 = asset::Struct::retrieve (Query<Pipe> ("pipe(default)"));
+          pipe2 = asset::Struct::retrieve (Query<Pipe>{"pipe(default)"});
           CHECK (pipe2 == pipe1);
           
-          string sID = pipe1->getStreamID(); // sort of a "default stream type"
+          auto sID = string{pipe1->getStreamID()}; // sort of a "default stream type"
           PPipe pipe3 = Pipe::query ("stream("+sID+")");
           CHECK (pipe3);
-          CHECK (pipe3->getStreamID() == StreamType::ID(sID));
-          CHECK (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>("stream("+sID+")")));
+          CHECK (pipe3->getStreamID() == StreamType::ID{sID});
+          CHECK (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>{"stream("+sID+")"}));
         }
       
       
@@ -174,7 +175,7 @@ namespace test  {
           //         default pipe for this pattern automatically
           PPipe pipe2x = Pipe::query ("pattern(another)");
           CHECK (pattern2 == pipe2x->getProcPatt());
-          CHECK (pipe2x == Session::current->defaults (Query<Pipe>("pattern(another)")));
+          CHECK (pipe2x == Session::current->defaults (Query<Pipe>{"pattern(another)"}));
           
           thePipe->switchProcPatt(pattern2);
           CHECK ( dependencyCheck (thePipe, pattern2));
@@ -197,7 +198,7 @@ namespace test  {
           PPipe pipe3x = Pipe::query ("pattern(another)");
           pattern3 = pipe3x->getProcPatt();                                              /////TODO: transition to P<>
           CHECK (pattern3 != pattern2);  // because pattern2 is already unlinked...
-          CHECK (pipe3x == Session::current->defaults (Query<Pipe>("pattern(another)")));
+          CHECK (pipe3x == Session::current->defaults (Query<Pipe>{"pattern(another)"}));
           CHECK (pipe3x != pipe2x);                 // ..we got a new default pipe for "pattern(another)" too!
           
           

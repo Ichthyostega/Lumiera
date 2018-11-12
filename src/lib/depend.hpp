@@ -141,7 +141,7 @@ namespace lib {
       Deleter deleter_;
       
     public:
-      ZombieCheck zombieCheck;
+      ZombieCheck zombieCheck{util::typeStr<OBJ>()};
       
       DependencyFactory() = default;
      ~DependencyFactory()

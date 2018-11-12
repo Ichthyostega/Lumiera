@@ -68,24 +68,6 @@ namespace model {
         }
       
       virtual bool
-      doExpand (bool yes)  override
-        {
-          UNIMPLEMENTED ("Widget doExpand");
-        }
-      
-      virtual void
-      doReveal (ID child)  override
-        {
-          UNIMPLEMENTED ("Widget doReveal");
-        }
-      
-      virtual void
-      doRevealYourself()  override
-        {
-          UNIMPLEMENTED ("Widget doRevealYourself");
-        }
-      
-      virtual bool
       doMsg (string text)  override
         {
           UNIMPLEMENTED ("Widget doMsg");

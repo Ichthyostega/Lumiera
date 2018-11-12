@@ -1,5 +1,5 @@
 /*
-  TimelineWidgetEmpty  -  placeholder widget for a missing timeline
+  ElementBoxWidget  -  fundamental UI building block to represent a placed element
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,31 +21,29 @@
 * *****************************************************/
 
 
-/** @file timeline-widget-empty.cpp
- ** Implementation of an empty timeline placeholder.
+/** @file label-widget.cpp
+ ** Implementation details of the UI building block to display an ID label.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo WIP-WIP-WIP as of 11/2018   ///////////////////////////////////////////////////////////////////////TICKET #1185
  ** 
  */
 
 
 #include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-widget-empty.hpp"
+#include "gui/widget/element-box-widget.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
+
 //#include <algorithm>
-//#include <cstdlib>
+//#include <vector>
 
 
 
 //using util::_Fmt;
-//using std::shared_ptr;
-//using std::weak_ptr;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -55,26 +53,22 @@
 
 
 namespace gui {
-namespace timeline {
-  
-//const int TimelineWidget::TrackPadding = 1;
-//const int TimelineWidget::HeaderWidth = 150;
-//const int TimelineWidget::HeaderIndentWidth = 10;
+namespace widget {
   
   
   
   
-  TimelineWidgetEmpty::TimelineWidgetEmpty ()
+  
+  ElementBoxWidget::ElementBoxWidget ()
     {
     }
   
   
-  TimelineWidgetEmpty::~TimelineWidgetEmpty()
+  ElementBoxWidget::~ElementBoxWidget()
   {
   }
   
   
   
   
-  
-}}// namespace gui::timeline
+}}// namespace gui::widget

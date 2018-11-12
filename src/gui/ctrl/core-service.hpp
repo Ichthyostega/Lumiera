@@ -39,6 +39,11 @@
  ** since both CoreService and Nexus are mutually interdependent from an
  ** operational perspective, since they exchange messages in both directions.
  ** 
+ ** In fact, the CoreService even _holds and thus manages_ the Nexus as a
+ ** private member, while the latter controls and connects all nodes attached
+ ** to the bus at runtime, including CoreService. This crisscross arrangement
+ ** ensures sane start-up and shutdown of the whole UI-Bus compound.
+ ** 
  ** ## Bus connection and topology
  ** The CoreService plays a central role within the UI, since it represents
  ** _»the application core«_ from the UI layer's viewpoint. But it is not
@@ -47,8 +52,8 @@
  ** routing table in Nexus, can be addressed as a _first class citizen,_
  ** that is, we're able to direct messages towards such an element, knowing
  ** only it's ID. But there is a twist: all connections to the Bus are made
- ** from [bus terminals](ctrl::BusTerm), and each _node_, i.e. each
- ** [tangible model element](model::Tangible) has a BusTerm member and
+ ** from [bus terminals](\ref ctrl::BusTerm), and each _node_, i.e. each
+ ** [tangible model element](\ref model::Tangible) has a BusTerm member and
  ** thus inherits the ability to talk to the bus. But only when _actively_
  ** connected to the bus, a full link and entry in the routing table is
  ** established. The constructor of model::Tangible indeed makes such
@@ -65,8 +70,8 @@
  ** for the Nexus, and thus gains the ability to respond to those few special
  ** messages, which can not be handled in a generic way on the Nexus:
  ** - *act* handles command invocation within the Session core, and
- **   is treated by [forwarding](command-handler.hpp) it over the
- **   SessionCommand facade to the [Proc-Dispatcher](proc-dispatcher.hpp)
+ **   is treated by [forwarding](\ref command-handler.hpp) it over the
+ **   SessionCommand facade to the [Proc-Dispatcher](\ref proc-dispatcher.hpp)
  ** - *note* observes and captures presentation state note messages, which
  **   are to be handled by a central presentation state manager (TODO 1/17).
  ** 
@@ -103,6 +108,8 @@ namespace ctrl{
    * handles those messages to be processed by centralised services:
    * - commands need to be sent down to Proc-Layer
    * - presentation state messages need to be recorded and acted upon.
+   * As an object, CoreService encases the heart of the UI-Bus, the
+   * \ref Nexus, and acts as "PImpl" for the gui::UiBus front-end.
    */
   class CoreService
     : public BusTerm

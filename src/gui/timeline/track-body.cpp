@@ -56,19 +56,46 @@
 namespace gui {
 namespace timeline {
   
+  namespace {
+    const uint DEFAULT_OVERVIEW_HEIGHT_px = 20;
+    const uint DEFAULT_CONTENT_HEIGHT_px = 80;
+  }
   
   
   
   
-  TrackBody::TrackBody ()
-    {
-    }
+  TrackBody::TrackBody()
+    : overviewHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
+    , contentHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
+    , subTracks_{}
+    { }
   
   
   TrackBody::~TrackBody()
   {
+    TODO ("detach from parent; store a functor or backreference");
   }
   
+  
+  void
+  TrackBody::setTrackName (cuString& trackName)
+  {
+    TODO ("is the track name of any relevance for the TrackBody widget?");
+  }
+  
+  
+  /**
+   * recursively calculate the height in pixels to display this track,
+   * including all nested sub-tracks
+   */
+  uint
+  TrackBody::calcHeight()
+  {
+    uint heightSum = overviewHeight_ + contentHeight_;
+    for (TrackBody* subTrack : subTracks_)
+      heightSum += subTrack->calcHeight();
+    return heightSum;
+  }
   
   
   

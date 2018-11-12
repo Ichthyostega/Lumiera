@@ -33,13 +33,13 @@
  ** to a single session::Timeline, known by its ID. The widget creates a TimelineController
  ** right away, which takes initiative to populate the display with that Timeline's contents.
  ** 
- ** #Lifecycle
+ ** # Lifecycle
  ** The assumption is that any element creation and deletion is triggered through messages over
  ** the [UI-Bus](\ref ui-bus.hpp). So there will be a _parent element,_ corresponding to the
- ** ["model root"](\ref session::Root), and this parent, in response to some mutation message,
- ** will create a TimelineWidget, add it into the appropriate GTK display setup and manage it
- ** as child element; the [construction parameters](TimelineWidget::TimelineWidget] ensure
- ** it gets connected to the bus as well. Incidentally, this assumption also implies that
+ ** [model root](\ref proc::mobject::session::Root), and this parent, in response to some
+ ** mutation message, will create a TimelineWidget, add it into the appropriate GTK display setup
+ ** and manage it as child element; the [construction parameters](\ref TimelineWidget::TimelineWidget)
+ ** ensure it gets connected to the bus as well. Incidentally, this assumption also implies that
  ** this parent element has set up a _binding for diff mutation,_ typically by implementing
  ** model::Tangible::buildMutator. And further on this means that the parent will also
  ** destroy the TimelineWidget, prompted by a message to that end. All deregistration
@@ -47,7 +47,7 @@
  ** is `sigc::trackable`, which means after destruction any further signals
  ** will be silently ignored.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 a complete rework of the timeline display is underway
  ** 
  */
 
@@ -56,12 +56,13 @@
 #define GUI_TIMELINE_TIMELINE_WIDGET_H
 
 #include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
-#include "gui/timeline/layout-manager.hpp"
+//#include "gui/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
+//#include "gui/timeline/layout-manager.hpp"
 #include "gui/ctrl/bus-term.hpp"
 
 #include "lib/time/timevalue.hpp"
 #include "lib/diff/diff-mutable.hpp"
+#include "lib/nocopy.hpp"
 
 //#include <memory>
 //#include <vector>
@@ -77,6 +78,25 @@ namespace gui  {
 namespace timeline {
   
   using ctrl::BusTerm;
+  class TimelineController;
+  class TimelineLayout;
+  
+  /**
+   * Interface: GUI page holding a timeline display
+   */
+  class TimelinePage
+    : public Gtk::Paned
+    {
+    public:
+      virtual ~TimelinePage() { }           ///< this is an interface
+      
+      virtual cuString getLabel()  const    =0;
+      
+      
+      TimelinePage()
+        : Gtk::Paned{Gtk::ORIENTATION_HORIZONTAL}
+        { }
+    };
   
   /**
    * Core timeline display (custom widget).
@@ -86,10 +106,11 @@ namespace timeline {
    *     and a scrollable timeline body (right). The layout of both parts is aligned.
    */
   class TimelineWidget
-    : public Gtk::Paned
+    : public TimelinePage
+    , util::NonCopyable
     {
+      std::unique_ptr<TimelineLayout>     layout_;
       std::unique_ptr<TimelineController> control_;
-      std::unique_ptr<LayoutManager>      layout_;
       
     public:
       /** build a new timeline display and attach it to the UI-Bus.
@@ -113,11 +134,17 @@ namespace timeline {
        */
       TimelineWidget (BusTerm::ID identity, BusTerm::ID trackID, BusTerm& nexus);
       
-     ~TimelineWidget();  
+     ~TimelineWidget();
       
       
       
     public: /* ===== Control interface ===== */
+      
+      /** allow for diff mutation (delegated to TimelineController */
+      void buildMutator (lib::diff::TreeMutator::Handle);
+      
+      cuString getLabel()  const override;
+      
       
     public: /* ===== Signals ===== */
       

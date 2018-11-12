@@ -1,0 +1,94 @@
+Coding Policies within UI-Layer
+===============================
+:Toc:
+
+NOTE: for the time being, this is a loose collection of
+      Conventions and Policies deemed adequate for work
+      on the Lumiera UI-Layer
+
+
+Architecture
+------------
+
+The UI is loaded as Plug-In, which instantiates a `GtkLumiera` object.
+All of the UI activity happens within the blocking function `GtkLumiera::run()`.
+This UI activity boils down to run the GTK event loop; we use a dedicated thread,
+and all of the GUI thus performs single-threaded and need not be thread-safe.
+All UI activities thus need to be short running and with deterministic outcome.
+It is strictly prohibited to spawn other threads from within the event loop.
+
+We hold up a strict distinction between the _UI mechanics_ and the _core editing
+concerns_. The latter _must not be implemented within the UI-Layer._ Rather, you need
+to send an `act(CommandID)` message over the UI-Bus, which causes the corresponding
+Proc-Layer command script to be dispatched within the Session thread. It is good
+practice to give an immediate visual clue regarding the fact of sending such
+a command (e.g. pressing a button). But be prepared that the actual feedback
+of invoking a command happens asynchronously.
+
+UI-Model
+~~~~~~~~
+In short: _there is no dedicated UI-Model._ Stateful working data goes directly
+into the widgets. However, some widgets or controllers are special, insofar they
+correspond to and reflect some entities within the _Session model._ These special
+entities must be implemented as subclasses of `gui::model::Tangible`. These are
+always connected to the UI-Bus, and they are populated and mutated by receiving
+diff messages pushed up from the Proc-Layer.
+
+There is an _inner circle_ of UI backbone services. These are all mutually dependent
+on each other and their start-up sequence is intricate. Implement global and cross-cutting
+concerns here. In case some widget or controller needs access to such a service, then you
+should prefer using `lib::Depend<ServiceInterface>`, and install the corresponding service
+via `lib::DependInject<ServiceInterface>::ServiceInstance<ServiceImpl>`.
+
+
+Behaviour patterns
+------------------
+
+Parent Containers
+~~~~~~~~~~~~~~~~~
+A _Parent Container_ is an object managing a collection of children, with respect to
+the structure of _tangible UI elements._ Irrespective if this container is also a
+`Gtk::Container` widget, or ``just'' a controller. The key point to turn something
+into a _Parent Container_ is the fact that this entity creates the children
+in response to a (population) diff message.
+
+.Responsibilities
+- a _Parent Container_ has to wire each child properly, so to enable the adequate
+  use of the UI element protocol. This includes
+
+  ** to ensure the child is attached to the UI-Bus (usually enforced by ctor call)
+  ** to install a suitable `Expander` functor if the child supports expand/collapse
+  ** to install a suitable `Revealer` when it is relevant for the child to be brought
+     into sight in response to some message (e.g. to indicate error state).
+
+- whenever a child is detached from the container, you need to _ensure it is destroyed_
+  right away, before there is any chance of processing some other UI event.footnote:[
+  Invoking the destructor triggers a lot of magic here, especially it causes the child
+  to be properly detached from signals. We want to ensure this happens as soon as the
+  child is taken out of service. Do not use an ``can collect garbage later'' approach.]
+
+Error handling
+~~~~~~~~~~~~~~
+Be aware that GTK is written in C. And while GTKmm has some safeguards in place,
+better be sure no exception can emanate from event handling code.
+
+WARNING: [red]#TODO#: probably we'll need a common wrapper to do so...
+
+
+Code organisation
+-----------------
+GTK is massive and compilation times tend to be problematic in the UI-Layer.
+Thus you should be diligent with the organisation of includes. Try to confine the
+more heavyweight includes within the implementation translation units. Use forward
+declarations and PImpl if possible. However, it is fine to write a mere implementation
+widget in header-only fashion, in case this improves the locality and readability of code.
+
+NOTE: `using namespace Gtk` and similar wildcard includes are prohibited.
+
+We are forced to observe a tricky include sequence, due to NoBug's `ERROR` macro,
+and also in order to get I18N right.
+Thus any actual translation unit should ensure that effectively the first include
+is that of 'gui/gtk-base.hpp'.footnote:[you need not include it literally. It is
+perfectly fine if you can be sure the first included header somehow drags in
+'gtk-base.hpp' before any other header.]
+

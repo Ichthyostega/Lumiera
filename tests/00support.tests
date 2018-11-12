@@ -34,6 +34,12 @@ err-lit: ..before match("beans") @ Rec(EventLogHeader| this = baked beans )
 err-lit: ..before match("spam") @ Rec(event|{spam})
 err-lit: ..after HEAD baked beans
 err-lit: __Log_condition_violated__
+err-lit: FAILED to match("spam")
+err-lit: ..before match("spam") @ Rec(event|{spam})
+err-lit: ..before match("ham") @ Rec(event|{ham})
+err-lit: ..before match("beans") @ Rec(EventLogHeader| this = baked beans )
+err-lit: ..after HEAD baked beans
+err-lit: __Log_condition_violated__
 err-lit: FOUND at least match("ham") @ Rec(event|{ham})
 err-lit: ..after match("eggs") @ Rec(EventLogHeader| this = eggs )
 err-lit: ..before match("spam") @ Rec(event|{spam})

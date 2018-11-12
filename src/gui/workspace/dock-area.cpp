@@ -42,6 +42,7 @@
 #include "gui/panel/timeline-panel-obsolete.hpp"
 
 #include "include/logging.h"
+#include "lib/util-foreach.hpp"
 
 using namespace boost;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace std;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
@@ -143,7 +144,16 @@ namespace workspace {
   }
   
   
-  void
+  bool
+  DockArea::hasPanel (const int description_index)
+  {
+    return util::has_any (panels_, [=](panel::Panel* panel)
+                                    {
+                                      return getPanelType(panel) == description_index;
+                                    });
+  }
+
+  panel::Panel&
   DockArea::showPanel (const int description_index)
   {
     // Try and find the panel and present it if possible
@@ -158,7 +168,8 @@ namespace workspace {
             Gdl::DockItem &dock_item = panel->getDockItem();
          // ENSURE(dock_item);
             dock_item.present(dock_);
-            return;
+            ENSURE (panel);
+            return *panel;
           }
       }
     
@@ -167,6 +178,9 @@ namespace workspace {
     
     // Dock the item
     dock_.add_item(new_panel->getDockItem(), Gdl::DOCK_FLOATING);
+    
+    ENSURE (new_panel);
+    return *new_panel;
   }
   
   
@@ -256,7 +270,7 @@ namespace workspace {
   
   
   int
-  DockArea::findPanelDescription (const char* class_name)  const
+  DockArea::findPanelDescription (const char* class_name)
   {
     REQUIRE(class_name);
     

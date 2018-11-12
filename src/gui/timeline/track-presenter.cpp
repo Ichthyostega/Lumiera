@@ -25,14 +25,14 @@
  ** Implementation details of track presentation management.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 
 
 #include "gui/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
 #include "gui/timeline/track-presenter.hpp"
-#include "gui/timeline/clip-presenter.hpp"
-#include "gui/timeline/marker-widget.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -64,31 +64,20 @@ namespace timeline {
   
   
   
-  TrackPresenter::TrackPresenter (ID identity, ctrl::BusTerm& nexus)
-    : Controller{identity, nexus}
-    , subFork_{}
-    , markers_{}
-    , clips_{}
-    , head_{}
-    , body_{}
-    {
-      UNIMPLEMENTED ("how to attach the TrackPresenter into the two relevant GTK display contexts");
-    }
   
   
-  TrackPresenter::~TrackPresenter()
-  {
-  }
+  TrackPresenter::~TrackPresenter() { }
   
   
   
   
   /**
    * @note we distinguish between the contents of our three nested child collections
-   *       based on the symbolic type field send in the Record type within the diff representation
+   *       based on the symbolic type field sent in the Record type within the diff representation
    *       - "Marker" designates a Marker object
    *       - "Clip" designates a Clip placed on this track
    *       - "Fork" designates a nested sub-track
+   * @see TimelineController::buildMutator() for a basic explanation of the data binding mechanism
    */
   void
   TrackPresenter::buildMutator (TreeMutator::Handle buffer)
@@ -102,60 +91,69 @@ namespace timeline {
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Marker"
-                    return "Marker" == spec.data.recordType();
+                    return TYPE_Marker == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
-                    return make_unique<MarkerWidget>(spec.idi, this->uiBus_);
+                    return make_unique<MarkerWidget> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
         .attach (collection(clips_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Clip"
-                    return "Clip" == spec.data.recordType();
+                    return TYPE_Clip == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PClip const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
-                    return make_unique<ClipPresenter>(spec.idi, this->uiBus_);
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
         .attach (collection(subFork_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Fork"
-                    return "Fork" == spec.data.recordType();
+                    return TYPE_Fork == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PFork const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PFork
                   {
-                    return make_unique<TrackPresenter>(spec.idi, this->uiBus_);
+                    return make_unique<TrackPresenter> (spec.idi
+                                                       ,this->uiBus_
+                                                       ,[&](TrackHeadWidget& head,TrackBody& body)
+                                                          {
+                                                            display_.injectSubTrack (head, body); 
+                                                          });
                   })
                .buildChildMutator ([&](PFork& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
-                  })));
+                  }))
+        .change(ATTR_name, [&](string val)
+            {                                                  // »Attribute Setter« : receive a new value for the track name field
+              this->setTrackName (val);
+            }));
   }
   
   

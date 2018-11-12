@@ -1,8 +1,8 @@
 /*
-  LabelWidget  -  display an ID label, possibly with icon
+  StyleScheme  -  magic keys to access uniform styling scheme
 
   Copyright (C)         Lumiera.org
-    2016,               Hermann Vosseler <Ichthyostega@web.de>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,54 +21,27 @@
 * *****************************************************/
 
 
-/** @file label-widget.cpp
- ** Implementation details of the UI building block to display an ID label.
+/** @file style-scheme.hpp
+ ** Definition of access keys for uniform UI styling.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @see gui::workspace::UiStyle
  ** 
  */
 
-
 #include "gui/gtk-base.hpp"
-#include "gui/widget/label-widget.hpp"
-
-//#include "gui/ui-bus.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
-
-//#include "lib/util.hpp"
-
-//#include <algorithm>
-//#include <vector>
-
-
-
-//using util::_Fmt;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::cout;
-//using std::endl;
-
+#include "gui/style-scheme.hpp"
 
 namespace gui {
-namespace widget {
+  
+  const Literal TAG_ERROR{"ERROR"};              ////////////////////////////////////////////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
+  const Literal TAG_WARN{"WARN"};
+  
+  /** CSS class added temporarily to make a widget "flash"
+   *  in response to the corresponding UI-Bus message
+   * @see flash-deco.hpp */
+  cuString CSS_CLASS_FLASH{"indication_flash"};
+  const uint STYLE_FLASH_DURATION_in_ms = 1100;
   
   
   
-  
-  
-  LabelWidget::LabelWidget ()
-    {
-    }
-  
-  
-  LabelWidget::~LabelWidget()
-  {
-  }
-  
-  
-  
-  
-}}// namespace gui::widget
+}// namespace gui

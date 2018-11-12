@@ -45,7 +45,7 @@
  ** - these in turn manage a set of ClipPresenter entities
  ** - and those presenters care for injecting suitable widgets into the TimelineWidget's parts.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 
@@ -72,12 +72,13 @@ namespace timeline {
   using std::string;
   
   class TrackPresenter;
+  class TimelineLayout;
   class MarkerWidget;
   
   
   /**
    * Controller to supervise the timeline display.
-   * As a [tangible element](model::Tangible), it is attached to the UI-Bus.
+   * As a [tangible element](\ref model::Tangible), it is attached to the UI-Bus.
    * @todo WIP-WIP-rewrite as of 12/2016
    * @remarks a Timeline always has an attached Sequence, which in turn has
    *     a single mandatory root track. This in turn might hold further child tracks,
@@ -86,10 +87,11 @@ namespace timeline {
   class TimelineController
     : public model::Controller
     {
+      string name_;
+      
       vector<unique_ptr<MarkerWidget>> markers_;
       std::unique_ptr<TrackPresenter>  fork_;
       
-      string name_;
       
     public:
       /**
@@ -97,9 +99,9 @@ namespace timeline {
        * @param trackID the mandatory root track used in the associated Sequence
        * @param nexus some established connection to the UI-Bus, used for registration.
        */
-      TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus);
+      TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus, TimelineLayout&);
       
-     ~TimelineController();  
+     ~TimelineController();
       
       
       /** set up a binding to respond to mutation messages via UiBus */
@@ -107,6 +109,12 @@ namespace timeline {
       
       
     public: /* ===== Control interface ===== */
+      
+      string const&
+      getName()  const
+        {
+          return name_;
+        }
       
     public: /* ===== Signals ===== */
       

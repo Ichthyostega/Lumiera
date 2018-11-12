@@ -111,7 +111,7 @@ namespace test{
    *       - re-access the instances just by symbolic ID
    *       - verify the registration is cleaned up automatically.
    * 
-   * @todo partially unimplemented and thus commented out ////////////////////TICKET #599
+   * @todo draft from 2010 -- partially unimplemented and thus commented out //////////////////////////////////////////STICKET #599
    * 
    * @see typed-id.hpp interface covered here
    * @see typed-lookup.cpp implementation

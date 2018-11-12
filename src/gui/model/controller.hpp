@@ -25,6 +25,8 @@
  ** Common Abstraction of all sub-controller, coordinated by the UI-Bus.
  ** 
  ** @todo as of 1/2015 this is complete WIP-WIP-WIP
+ ** @todo as of 8/2018 we should consider to distill a common default implementation usable for most controllers.
+ **       especially, there might be a default (NOP) implementation of the diff mutator builder
  ** 
  ** @see model::Tangible
  ** @see gui::UIBus
@@ -69,24 +71,6 @@ namespace model {
         }
       
       virtual bool
-      doExpand (bool yes)  override
-        {
-          UNIMPLEMENTED ("Controller doExpand");
-        }
-      
-      virtual void
-      doReveal (ID child)  override
-        {
-          UNIMPLEMENTED ("Controller doReveal");
-        }
-      
-      virtual void
-      doRevealYourself()  override
-        {
-          UNIMPLEMENTED ("Controller doRevealYourself");
-        }
-      
-      virtual bool
       doMsg (string text)  override
         {
           UNIMPLEMENTED ("Controller doMsg");
@@ -116,10 +100,16 @@ namespace model {
           UNIMPLEMENTED ("Controller doFlash");
         }
       
+    protected:
+      /** default handler for all generic mark messages. Forwards to Tangible::doMark
+       * @todo is there any default implementation for special messages,
+       *       which might be eligible as a base class implementation??
+       */
       virtual void
       doMark (GenNode const& mark)  override
         {
-          UNIMPLEMENTED ("Controller doMark");
+          // forward to default handler
+          Tangible::doMark (mark);
         }
       
       

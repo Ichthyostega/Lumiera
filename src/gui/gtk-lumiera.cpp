@@ -99,8 +99,8 @@ namespace gui {
           { }
         
         
-        void
-        run (Subsys::SigTerm reportOnTermination)
+        string
+        run()
           {
             string errorMsgBuff;
             try
@@ -122,18 +122,21 @@ namespace gui {
             if (lumiera_error_peek())
               errorMsgBuff = string{lumiera_error()};
             
-            reportOnTermination(&errorMsgBuff);        // inform main thread that the GUI has been shut down. 
+            return errorMsgBuff;
           }
       };
     
     
     void
-    runGUI (Subsys::SigTerm& reportOnTermination)
+    runGUI (Subsys::SigTerm reportOnTermination)
     {
-      GtkLumiera{}.run (reportOnTermination);
-    }
+      string shutdownLog = GtkLumiera{}.run();
+      
+       // inform main thread that the GUI has been shut down...
+      reportOnTermination (&shutdownLog);
+    }//(End) GUI-Thread.
     
-  } // (End) impl details
+  }//(End) impl details
   
   
   

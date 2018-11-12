@@ -25,6 +25,7 @@
  ** MObject in session to represent the top-level binding of a sequence
  ** @todo stalled effort towards a session implementation from 2010
  ** @todo 2016 likely to stay, but expect some extensive rework
+ ** @todo Also consider timeline-slave, a topic postponed as of 10/2018     /////////////////////////////////TICKET #1083
  */
 
 

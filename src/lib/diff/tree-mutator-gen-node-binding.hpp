@@ -23,7 +23,7 @@
 
 /** @file tree-mutator-gen-node-binding.hpp
  ** Special binding implementation for TreeMutator, allowing to map
- ** tree diff operations onto an »External Tree Description«. Such is is a
+ ** tree diff operations onto an »External Tree Description«. This term denotes a
  ** DOM like representation of tree like structures, comprised of GenNode elements.
  ** TreeMutator is a customisable intermediary, which enables otherwise opaque
  ** implementation data structures to receive and respond to generic structural

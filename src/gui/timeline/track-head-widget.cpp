@@ -22,8 +22,7 @@
 
 
 /** @file track-head-widget.cpp
- ** Implementation details regarding display of the track heads
- ** within the timeline UI.
+ ** Implementation details regarding display of the track heads within the timeline UI.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 
@@ -59,16 +58,43 @@ namespace timeline {
   
   
   
+  TrackHeadWidget::~TrackHeadWidget() { }
   
-  TrackHeadWidget::TrackHeadWidget ()
+  
+  
+  TrackHeadWidget::TrackHeadWidget()
+    : Gtk::Grid{}
+    , nameTODO_{"?"}
+    , treeTODO_{"↳"}
     {
+      this->attach (nameTODO_, 0,0, 2,1);
+      this->attach (treeTODO_, 0,1, 1,1);
+      
+      this->show_all();
     }
   
   
-  TrackHeadWidget::~TrackHeadWidget()
-  {
-  }
+  void
+  TrackHeadWidget::setTrackName (cuString& trackName)
+    {
+      nameTODO_.set_label (trackName);
+    }
   
+  /**
+   * @remark The Lumiera Timeline model does not rely on a list of tracks, as most conventional
+   * video editing software does -- rather, each sequence holds a _fork of nested scopes._
+   * This recursively nested structure is reflected in the patchbay area corresponding to
+   * each track in the _header pane_ of the timeline display, located to the left. The
+   * patchbay for each track is a grid with four quadrants, and the 4th quadrant is the
+   * _content area,_ which is recursively extended to hold nested PatchbayWidget elements,
+   * corresponding to the child tracks of this track. To _fund_ this recursively extensible
+   * structure, we need to set up the first four quadrants
+   */
+  void
+  TrackHeadWidget::injectSubFork (TrackHeadWidget& subForkHead)
+  {
+    UNIMPLEMENTED ("how actually to represent the track in the patchbay");
+  }
   
   
   

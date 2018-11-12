@@ -4,7 +4,7 @@
 ##                Things defined here usuall won't be installed
 ##
 
-Import('env core support_lib')
+Import('env envGtk core support_lib')
 
 
 
@@ -12,9 +12,14 @@ envR = env.Clone()
 envR.Append(CPPPATH='research')
 # envR.Append(CCFLAGS=' -O3 ')
 
+envRGtk = envGtk.Clone()
+envRGtk.Append(CPPPATH='research')
+
 # build additional test and administrative tools....
 experiments = [ envR.Program('try', ['try.cpp'] + core)          #### to try out some feature...
-              , envR.Program('clang-static-init', ['clang-static-init-1.cpp', 'clang-static-init-2.cpp'])  
+              , envR.Program('clang-static-init', ['clang-static-init-1.cpp', 'clang-static-init-2.cpp'])
+              
+              , envRGtk.Program('gtk-canvas-experiment', ['gtk-canvas-experiment.cpp', 'gtk-canvas-main.cpp'] + core)
               ]
 
 #

@@ -108,7 +108,16 @@ namespace test{
           CHECK (log.verify("ham").after("spam").after("beans"));
           CHECK (log.verify("ham").after("beans").before("spam").before("ham"));
           CHECK (not log.verify("spam").after("beans").after("ham"));
-        }
+          
+          log.event("beans");
+          CHECK (log.verify("beans").after("spam"));   // Note: Backtracking! The first match on beans fails,
+                                                       //       only the match on second beans succeeds.
+          
+          // consecutive matches always move by at least one step
+          CHECK (    log.verify("beans").after("ham").after("spam")              .after("baked"));
+          CHECK (not log.verify("beans").after("ham").after("spam").after("spam").after("baked"));
+          CHECK (    log.verify("beans").after("ham").after("spam").locate("spam").locate("spam").after("baked"));
+        }                                                        // ^^^^^^ locate re-applies at current pos without moving
       
       
       void
@@ -339,14 +348,12 @@ namespace test{
                     "with shallots and aubergines garnished with truffle pate, brandy and with a fried egg on top and spam");
           
           CHECK (log.verify("spam").before("(spam|").before("egg on top and spam"));
+          CHECK (log.verify("and spam").after("(spam|").after("spam!").before("bacon"));
           CHECK (log.ensureNot("and spam").after("(spam|").after("spam!").after("bacon"));
-          
-          // note: each consecutive match starts with the same element, on which the previous one succeeded
-          CHECK (log.verify("spam").before("spam").before("spam").before("spam").before("spam").before("bacon"));
           
           // RegExp on full String representation
           CHECK (log.verifyMatch("spam.+spam"));
-          CHECK (log.verifyMatch("spam.+spam").beforeMatch("spam(?!spam)"));
+          CHECK (log.verifyMatch("spam.+spam").beforeMatch("spam(?!.+spam)"));
           CHECK (log.verifyEvent("fatal","spam").afterMatch("(spam.*){15}"));
           
           // Cover all arguments with sequence of regular expressions

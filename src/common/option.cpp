@@ -56,7 +56,7 @@ namespace lumiera {
    *  @todo describe the actual options
    */
   Option::Option (lib::Cmdline& cmdline)
-    : syntax("Lumiera, the non linear video editor. Supported parameters"),
+    : syntax("Lumiera, the non linear video editor.\nSupported parameters"),
       parameters()
     {
       syntax.add_options()
@@ -64,7 +64,7 @@ namespace lumiera {
         ("session,f",   op::value<string>(),
                         "session file to load (UNIMPLEMENTED)")
         ("script,s",    op::value<VectS>(),
-                        "execute the given LUA script (UNIMPLEMENTED)")
+                        "execute the given script (UNIMPLEMENTED)")
         ("headless",    op::bool_switch(),
                         "start without GUI")
         ("port,p",      op::value<int>(),

@@ -48,8 +48,8 @@ namespace asset {
   /**
    * Placeholder Asset for unknown or unavailable media source.
    * @todo maybe do special handling of the media length, allowing
-   *       it to support existing clips even if the media length 
-   *       is not known? 
+   *       it to support existing clips even if the media length
+   *       is not known?
    */
   class Unknown : public Media
     {

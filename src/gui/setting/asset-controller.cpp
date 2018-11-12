@@ -63,9 +63,6 @@ namespace setting {
   void
   AssetController::buildMutator (TreeMutator::Handle buffer)
   {
-//  using Attrib = std::pair<const string,string>;
-//  using lib::diff::collection;
-    
     buffer.create (
       TreeMutator::build()
     );

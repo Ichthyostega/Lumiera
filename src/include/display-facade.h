@@ -33,7 +33,7 @@
  **  by a better design, where rather the \em provider of an output facility
  **  registers with the OutputManager in the core.
  ** 
- ** @see [corresponding implementation](display-service.hpp)
+ ** @see [corresponding implementation](\ref display-service.hpp)
  ** @see gui::GuiFacade
  ** @see dummy-player-facade.h
  ** 

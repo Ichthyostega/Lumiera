@@ -25,11 +25,13 @@
  ** Implementation details of clip presentation management.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 
 
 #include "gui/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
 #include "gui/timeline/clip-presenter.hpp"
 #include "gui/timeline/marker-widget.hpp"
 
@@ -93,57 +95,57 @@ namespace timeline {
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Marker"
-                    return "Marker" == spec.data.recordType();
+                    return TYPE_Marker == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
-                    return make_unique<MarkerWidget>(spec.idi, this->uiBus_);
+                    return make_unique<MarkerWidget> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
         .attach (collection(effects_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Effect"
-                    return "Effect" == spec.data.recordType();
+                    return TYPE_Effect == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PEffect const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PEffect
                   {
-                    return make_unique<ClipPresenter>(spec.idi, this->uiBus_);
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PEffect& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
         .attach (collection(channels_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Channel"
-                    return "Channel" == spec.data.recordType();
+                    return TYPE_Channel == spec.data.recordType();
                   })
                .matchElement ([&](GenNode const& spec, PChannel const& elm) -> bool
                   {
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PChannel
                   {
-                    return make_unique<ClipPresenter>(spec.idi, this->uiBus_);
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PChannel& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID(target) != subID) return false;
+                    if (ID{*target} != subID) return false;
                     target->buildMutator (buff);
                     return true;
                   })));

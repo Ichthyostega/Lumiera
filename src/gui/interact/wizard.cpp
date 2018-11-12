@@ -33,6 +33,9 @@
 #include "gui/interact/wizard.hpp"
 #include "gui/interact/spot-locator.hpp"
 #include "gui/workspace/workspace-window.hpp"
+#include "gui/panel/infobox-panel.hpp"
+#include "gui/dialog/test-control.hpp"
+#include "gui/ctrl/notification-hub.hpp"
 #include "gui/ctrl/global-ctx.hpp"
 #include "lib/format-string.hpp"
 //#include "lib/util.hpp"
@@ -55,6 +58,7 @@ namespace interact {
   using boost::algorithm::is_any_of;
   using boost::algorithm::split;
   using workspace::WorkspaceWindow;
+  using ctrl::NotificationHub;
   using ctrl::GlobalCtx;
   using Gtk::AboutDialog;
   
@@ -66,6 +70,14 @@ namespace interact {
   
   Wizard::Wizard (GlobalCtx& globals)
     : globalCtx_{globals}
+    , notificationHub_{new NotificationHub{getErrorLogID()
+                                          ,globals.uiBus_.getAccessPoint()
+                                          ,[&]() -> widget::ErrorLogDisplay&
+                                             {
+                                               return globalCtx_.windowLoc_.locatePanel()
+                                                         .find_or_create<panel::InfoBoxPanel>()
+                                                         .getLog();
+                                          }} }
     { }
   
   
@@ -102,6 +114,24 @@ namespace interact {
     // Show the about dialog
     dialog.run();
   }
+  
+  
+  /**
+   * Launch a non modal child window to trigger self-test actions.
+   * This is a tool for diagnostics and development. The operations exposed here
+   * allow to launch some hard wired actions and test routines, performing within
+   * the regular UI environment and on equal footing with user operated controls.
+   */
+  void
+  Wizard::launchTestCtrl()
+  {
+    if (testControlWindow_)
+      testControlWindow_->present(); // just (re)show the existing window
+    else
+      testControlWindow_ = std::make_unique<dialog::TestControl> (globalCtx_.uiBus_.getAccessPoint(),
+                                                                  globalCtx_.windowLoc_.findActiveWindow());
+  }
+  
   
   
 }}// namespace gui::interact

@@ -101,6 +101,8 @@ namespace asset {
    * @see AssetManager#getID generating ID values
    * @see asset::Media
    * @see ID<asset::Media>
+   * 
+   * @todo it would be desirable to use EntryID instead ///////////////////////////////////////////TICKET #739 : make identification schemes compatible 
    */
   template<class KIND>
   class ID
@@ -345,7 +347,7 @@ namespace asset {
   
   /** marker constant denoting a NIL asset */
   template<class KIND>
-  ID<KIND> ID<KIND>::INVALID = ID(0);
+  ID<KIND> ID<KIND>::INVALID = ID{0};
   
   
 }} // namespace proc::asset

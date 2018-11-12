@@ -22,10 +22,22 @@
 
 
 /** @file track-head-widget.hpp
- ** Widget to represent a track head with placement control patchbay
- ** within Lumiera's timeline UI.
+ ** Widget to represent a track head with placement parameters, within the timeline header pane.
+ ** [The fork](\ref session::Fork), a recursively nested system of scopes, is rendered within
+ ** the timeline display as a system of nested tracks. Each of these tracks possibly holds some
+ ** child tracks plus some actual media clips, which all inherit parameters of placement from
+ ** this fork ("track"). These parameters address various aspects of how content is attached
+ ** ("placed") into the model at large, examples being
+ ** - how to route the output
+ ** - how to "place" this content into an _output space_, like e.g.
+ **   + sound panning
+ **   + video overlay parameters (additive, opaque, transparent)
+ **   + video or audio _level_ (=fader)
+ ** - how to locate this content in time (e.g. relative to some marker)
+ ** For each track, we show a patchbay in the timeline header pane, which serves to control
+ ** such aspects relevant for all content contained within the scope of this track.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 10/2018
  ** 
  */
 
@@ -34,6 +46,7 @@
 #define GUI_TIMELINE_TRACK_HEAD_WIDGET_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/ctrl/bus-term.hpp"
 
 //#include "lib/util.hpp"
 
@@ -45,16 +58,30 @@
 namespace gui  {
 namespace timeline {
   
+  using ID = ctrl::BusTerm::ID;
   
   /**
+   * Header pane control area corresponding to a Track with nested child Tracks.
+   * This structure is used recursively to build up the Fork of nested Tracks.
+   * - first row: Placement + Property pane
+   * - second row: content or nested tracks.
    * @todo WIP-WIP as of 12/2016
    */
   class TrackHeadWidget
+    : public Gtk::Grid
     {
+      Gtk::Label nameTODO_;
+      Gtk::Label treeTODO_;
+      
     public:
-      TrackHeadWidget ();
+      TrackHeadWidget();
      ~TrackHeadWidget();
-     
+      
+      void setTrackName (cuString&);
+      
+      /** Integrate the control area for a nested sub track fork. */
+      void injectSubFork (TrackHeadWidget& subForkHead);
+
     private:/* ===== Internals ===== */
      
     };

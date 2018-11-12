@@ -22,12 +22,13 @@
 
 
 /** @file subsystem-runner.hpp
- ** Manage execution of the independend [Subsystems](\ref subsys.hpp)
+ ** Manage execution of the independent [Subsystems](\ref subsys.hpp)
  ** of the Lumiera application. The SubsystemRunner is used by
  ** lumiera::AppState::init() for actually "performing" the various subsystems,
  ** as defined by their [Subsystem descriptors](\ref lumiera::Subsys). Together
  ** these parts define the lifecycle protocol.
  ** 
+ ** @todo   as of 2018, a design rework seems indicated eventually                  /////////////////////////TICKET #1177
  ** @remark While this facility is still pretty much the first implementation draft
  **         from 2008, it fulfilled our needs to express simple dependencies and to
  **         conduct a controlled shutdown in case of fatal problems. The operations

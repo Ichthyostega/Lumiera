@@ -303,7 +303,7 @@ namespace test{
       
       
       
-      /** @test instance creation can be preconfigured with a closure
+      /** @test instance creation can be preconfigured with a closure.
        * Both Singleton and Test-Mock creation can optionally be performed through a
        * user provided Lambda or Functor. To demonstrate this, we use a `Veryspecial` local class,
        * which takes an `int&` as constructor parameter -- and we create the actual instance through

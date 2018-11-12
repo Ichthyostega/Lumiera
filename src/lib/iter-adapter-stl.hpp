@@ -72,11 +72,15 @@ namespace iter_stl {
       DistinctIter()            : i_(), prev_() { }
       DistinctIter(IT const& i) : i_(i),prev_() { memorise(); }
       
-      pointer   operator->() const { return i_; }
-      reference operator*()  const { return *i_;}
-      bool      isValid()    const { return i_; }
+      pointer   operator->()  const { return i_;  }
+      reference operator*()   const { return *i_; }
+      bool      isValid()     const { return i_;  }
       
-      operator bool()        const { return i_; }
+      explicit
+      operator bool() const
+        {
+          return bool{i_};
+        }
       
       
       DistinctIter&
@@ -472,8 +476,17 @@ namespace iter_stl {
       IterSnapshot& operator= (IterSnapshot const&) = default;
       IterSnapshot& operator= (IterSnapshot &&)     = default;
       
-      operator bool() const { return isValid(); }
-      size_t size()   const { return buffer_.size(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
+      
+      size_t
+      size()  const
+        {
+          return buffer_.size();
+        }
       
       
       

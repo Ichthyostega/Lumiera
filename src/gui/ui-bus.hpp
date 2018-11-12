@@ -64,11 +64,11 @@
  ** We distinguish between _up-link messages,_ directed towards some central service
  ** (presentation state management or command invocation) and _down-link messages,_
  ** directed towards individual elements. The interactions at the bus are closely interrelated
- ** with the [elementary UI-Element operations](tangible.hpp).
+ ** with the [elementary UI-Element operations](\ref tangible.hpp).
  ** 
  ** - *act*: send a [GenNode] representing the action
  **   - the ID is either a globally registered command-ID or an explicitly
- **     ["opened"](proc::control::SessionCommand::cycle(Symbol,string)) command instance ID.
+ **     ["opened"](\ref proc::control::SessionCommand::cycle(Symbol,string)) command instance ID.
  **   - the payload is a Record<GenNode> holding the actual command arguments
  **   - on reception, an _instance_ (anonymous clone copy) of the command is created, bound
  **     with the arguments and handed over to the ProcDispatcher to be enqueued for execution.

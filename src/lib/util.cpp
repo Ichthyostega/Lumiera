@@ -29,7 +29,9 @@
  */
 
 
+#include "error.hpp"
 #include "lib/util.hpp"
+#include "lib/format-string.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <functional>
@@ -40,16 +42,22 @@ using boost::algorithm::is_any_of;
 using boost::algorithm::is_alnum;
 using boost::algorithm::is_space;
 
+#include <regex>
+
+using std::regex;
+using std::regex_match;
+
+using std::function;
+using util::_Fmt;
 
 namespace util {
 
-  using std::function;
   
-  typedef function<bool(string::value_type)> ChPredicate;
+  using ChPredicate = function<bool(string::value_type)>;
   ChPredicate operator! (ChPredicate p) { return not bind(p,_1); }
 
   // character classes used for sanitising a string
-  ChPredicate isValid (is_alnum() or is_any_of("-_.+$'()@"));               ///< characters to be retained
+  ChPredicate isValid (is_alnum() or is_any_of("-_.+$()@"));                ///< characters to be retained
   ChPredicate isPunct (is_space() or is_any_of(",;:#*~´`?\\=/&%![]{}<>")); ///<  punctuation to be replaced by '_'
 
   
@@ -63,12 +71,12 @@ namespace util {
     while ( i != e )
       {
         while ( i != e && !isValid (*i) )   ++i;
-        while ( i != e && isValid  (*i) )   *(j++) = *(i++); 
-        if    ( i != e && isPunct  (*i) ) 
+        while ( i != e && isValid  (*i) )   *(j++) = *(i++);
+        if    ( i != e && isPunct  (*i) )
           {
             *j++ = '_';
             do  ++i;
-            while ( i != e && isPunct (*i));  
+            while ( i != e && isPunct (*i));
           }
       }
     res.erase(j,res.end());
@@ -79,12 +87,35 @@ namespace util {
   /**
    * @remarks this function just forwards to boost::algorithm::trim_copy.
    *          Use this call when boost header inclusion is an issue, otherwise
-   *          a direct invocation is likely to perform better, due to inlining.  
+   *          a direct invocation is likely to perform better, due to inlining.
    */
   string
   trim (string const& org)
   {
     return boost::algorithm::trim_copy (org);
+  }
+  
+  
+  
+  
+  namespace {
+    regex trueTokens{ "\\s*(true|True|TRUE|yes|Yes|YES|1|\\+)\\s*",  regex::ECMAScript | regex::optimize};
+    regex falseTokens{"\\s*(false|False|FALSE|no|No|NO|0|\\-)\\s*",  regex::ECMAScript | regex::optimize};
+  }
+  
+  bool
+  boolVal (string const& textForm)
+  {
+    if (regex_match (textForm, trueTokens))  return true;
+    if (regex_match (textForm, falseTokens)) return false;
+    throw lumiera::error::Invalid(_Fmt{"String '%s' can not be interpreted as bool value"} % textForm);
+  }
+  
+  
+  bool
+  isYes (string const& textForm) noexcept
+  {
+    return regex_match (textForm, trueTokens);
   }
   
 

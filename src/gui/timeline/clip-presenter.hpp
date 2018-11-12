@@ -44,6 +44,7 @@
  ** clips, just to indicate some content is actually present in this part of the timeline.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 

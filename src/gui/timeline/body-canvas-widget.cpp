@@ -31,6 +31,7 @@
 
 #include "gui/gtk-base.hpp"
 #include "gui/timeline/body-canvas-widget.hpp"
+#include "gui/timeline/track-body.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -57,17 +58,47 @@ namespace timeline {
   
   
   
+  TimelineCanvas::TimelineCanvas()
+    : Gtk::Layout{}
+    , rootBody_{nullptr}
+    { }
+  
+  
+  
+  BodyCanvasWidget::~BodyCanvasWidget() { }
   
   
   BodyCanvasWidget::BodyCanvasWidget ()
+    : Gtk::ScrolledWindow{}
+    , canvas_{}
     {
+      this->set_shadow_type(Gtk::SHADOW_IN);
+      this->set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_AUTOMATIC);  // always need a horizontal scrollbar
+      this->property_expand() = true;                               //  dynamically grab any available additional space
+      this->add(canvas_);
+      
+//    canvas_.adjustSize();
+      
+      // show everything....
+      this->show_all();
     }
   
   
-  BodyCanvasWidget::~BodyCanvasWidget()
-  {
-  }
   
+  /**
+   * The Lumiera Timeline model does not rely on a list of tracks, as most conventional video editing software does --
+   * rather, each sequence holds a _fork of nested scopes._ This recursively nested structure is reflected in the way
+   * we organise and draw the timeline representation onto the TimelineCanvas: we use an intermediary entity, the TrackBody
+   * as an organisational grouping device, even while we draw _all of the timeline representation_ onto a single global
+   * ::canvas_ within the (scrollable) BodyCanvasWidget. Thus, adding the first TrackBody to represent the root track
+   * of a Timeline, will also prepare the grounding for any other nested entities to be drawn on top.
+   */
+  void
+  BodyCanvasWidget::installForkRoot (TrackBody& rootTrackBody)
+  {
+    canvas_.rootBody_ = &rootTrackBody;
+  }
+
   
   
   

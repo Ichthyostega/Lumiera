@@ -205,7 +205,11 @@ namespace lib {
           hasData();
         }
       
-      operator bool() const { return isValid(); }
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       

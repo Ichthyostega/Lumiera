@@ -359,6 +359,15 @@ namespace diff{
       return chainedBuilder<MutationOperation<PAR,CLO>> (key, mutatorBuilderClosure);
     }
     
+    /** Entry point for DSL builder; variation to handle an attribute-object with given ID */
+    template<class PAR>
+    template<typename CLO>
+    inline auto
+    Builder<PAR>::mutateAttrib (idi::BareEntryID const& rawID, CLO mutatorBuilderClosure)
+    {
+      return chainedBuilder<MutationOperation<PAR,CLO>> (rawID, mutatorBuilderClosure);
+    }
+    
     
     
   }//(END)Mutator-Builder decorator components...

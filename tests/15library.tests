@@ -122,6 +122,11 @@ return: 0
 END
 
 
+TEST "Diff: accept and ignore arbitrary diff" DiffIgnoreChanges_test <<END
+return: 0
+END
+
+
 TEST "A Digxel (numeric component)" Digxel_test <<END
 out-lit: empty____## +0.0 ##
 out-lit: value____##-88.8 ##
@@ -493,22 +498,6 @@ return: 0
 END
 
 
-TEST "create sanitised identifiers" SanitizedIdentifier_test <<END
-out-lit: 'Word' --> 'Word'
-out-lit: 'a Sentence' --> 'a_Sentence'
-out-lit: 'trailing Withespace
-out-lit:        	' --> 'trailing_Withespace'
-out-lit: 'with    a  	 lot
-out-lit:   of Whitespace' --> 'with_a_lot_of_Whitespace'
-out-lit: 'with"much (punctuation)[]!' --> 'withmuch_(punctuation)'
-out-lit: '§&Ω%€  leading garbage' --> 'leading_garbage'
-out-lit: 'mixed    Ω   garbage' --> 'mixed_garbage'
-out-lit: 'Bääääh!!' --> 'Bh'
-out-lit: '§&Ω%€' --> ''
-return: 0
-END
-
-
 TEST "ScopedHolder_test" ScopedHolder_test <<END
 out: checking ScopedHolder<Dummy>...
 out: checking ScopedPtrHolder<Dummy>...
@@ -584,6 +573,11 @@ out: verify...
 out: Elements in hashtable: 3
 out: verify...
 out: Elements in hashtable: 5
+return: 0
+END
+
+
+TEST "ownership of malloced data" UniqueMallocOwner_test <<END
 return: 0
 END
 
@@ -702,12 +696,28 @@ return: 0
 END
 
 
-TEST "ownership of malloced data" UniqueMallocOwner_test <<END
+TEST "collection utils" UtilCollection_test <<END
 return: 0
 END
 
 
-TEST "collection utils" UtilCollection_test <<END
+TEST "util: parse text to bool" UtilParseBool_test <<END
+return: 0
+END
+
+
+TEST "util: sanitised identifier" UtilSanitizedIdentifier_test <<END
+out-lit: 'Word' --> 'Word'
+out-lit: 'a Sentence' --> 'a_Sentence'
+out-lit: 'trailing Withespace
+out-lit:        	' --> 'trailing_Withespace'
+out-lit: 'with    a  	 lot
+out-lit:   of Whitespace' --> 'with_a_lot_of_Whitespace'
+out-lit: '@with".'much (\$punctuation)[]!' --> '@with.much_(\$punctuation)'
+out-lit: '§&Ω%€  leading garbage' --> 'leading_garbage'
+out-lit: 'mixed    Ω   garbage' --> 'mixed_garbage'
+out-lit: 'Bääääh!!' --> 'Bh'
+out-lit: '§&Ω%€' --> ''
 return: 0
 END
 

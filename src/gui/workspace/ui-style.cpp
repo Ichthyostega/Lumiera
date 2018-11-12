@@ -96,7 +96,7 @@ namespace workspace {
       }
     
     Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
-                                                GTK_STYLE_PROVIDER_PRIORITY_USER);
+                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
   
   

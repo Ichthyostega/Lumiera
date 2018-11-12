@@ -30,7 +30,7 @@
  **         through our [generic string conversion](\ref util::toString)
  ** 
  ** @see FormatHelper_test
- ** @see [frontend for boost::format, printf-style](format-string.hpp)
+ ** @see [frontend for boost::format, printf-style](\ref format-string.hpp)
  ** 
  */
 

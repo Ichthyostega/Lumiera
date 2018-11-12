@@ -28,13 +28,14 @@
  ** works with. Lumiera exposes this self-referential control and customisation
  ** aspects as a special kind of Asset. Examples being types, scales and quantisation
  ** grids, decision rules, control data stores (automation data), annotations attached
- ** to labels, inventory entities etc. 
+ ** to labels, inventory entities etc.
  ** 
- ** For the different <i>Kinds</i> of Assets, we use sub-interfaces inheriting
+ ** For the different _Kinds_ of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Meta instances
  ** directly from the AssetManager, we define a specialisation of the Asset ID.
  ** 
- ** \par using meta assets
+ ** ## using meta assets
+ ** 
  ** The usage pattern of asset::Meta entities differs from the other assets,
  ** insofar they aren't created as individual entries, rather added as part
  ** of a larger scale configuration activity, or they are derived from category.
@@ -47,7 +48,7 @@
  ** They are created from a descriptor, which stands for a category or sub-category
  ** and can be another already existing asset::Meta (inheriting from meta::Descriptor)
  ** Generally this yields a Builder object, which can be used for outfitting the new
- ** or changed metadata entry, finally \em committing this builder to yield a new
+ ** or changed metadata entry, finally *committing* this builder to yield a new
  ** asset::Meta (which, in case of a mutation, might supersede an existing one).
  ** 
  ** @ingroup asset
@@ -60,6 +61,7 @@
 #define ASSET_META_H
 
 #include "proc/asset.hpp"
+#include "proc/asset/struct-scheme.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/nocopy.hpp"
 
@@ -97,9 +99,9 @@ namespace asset {
        * thus, on creation or when changing / superseding a
        * meta asset, the client gets a special builder instance,
        * which is a value object for configuring the specific details
-       * to set. When done, the client invokes a \c commit() function,
+       * to set. When done, the client invokes a `commit()` function,
        * which yields a smart-ptr to the new meta asset.
-       * Individual meta asset subclasses are bound to define a 
+       * Individual meta asset subclasses are bound to define a
        * specialisation of this Builder template, which will then be
        * instantiated and provided by the MetaFactory.
        */
@@ -111,6 +113,7 @@ namespace asset {
   /**
    * key abstraction: metadata, parametrisation, customisation and similar organisational traits.
    * @todo just a stub, still have to figure out the distinctive properties of asset::Meta
+   *                                                             //////////////////////////////////TICKET #1156 : do we need the distinction between STRUCT and META?
    */
   class Meta
     : public Asset
@@ -120,13 +123,20 @@ namespace asset {
       static MetaFactory create;
       
       /** @return ID of kind Meta */
-      virtual const ID<Meta>& getID()  const 
-        { 
+      virtual const ID<Meta>& getID()  const
+        {
           return static_cast<const ID<Meta>& > (Asset::getID());
         }
       
     protected:
-      Meta (Asset::Ident const& idi) : Asset(idi) {}  //////////////TODO
+      Meta (Asset::Ident const& idi)
+        : Asset{idi}
+        { }
+      
+      template<typename TY>
+      Meta (lib::idi::EntryID<TY> const& nameID)
+        : Meta{idi::getAssetIdent (nameID, META)}
+        { }
       
 //    friend class MetaFactory;  ///////////////////////////////////TODO still necessary?
     };
@@ -142,9 +152,9 @@ namespace asset {
   
   
   
-  /** 
+  /**
    * Factory specialised for creating Metadata Asset objects.
-   */ 
+   */
   class MetaFactory
     : util::NonCopyable
     {

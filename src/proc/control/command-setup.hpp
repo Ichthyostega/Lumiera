@@ -24,7 +24,7 @@
 /** @file command-setup.hpp
  ** Provision for setup of concrete commands for use by the UI.
  ** A *Proc-Layer command* is a functor, which can be parametrised with actual arguments.
- ** It needs to be [defined](command-def.hpp) beforehand, which means to establish an unique
+ ** It needs to be [defined](\ref command-def.hpp) beforehand, which means to establish an unique
  ** name and to supply three functions, one for the actual command operation, one to capture
  ** state and one to _undo_ the effect of the command invocation. CommandSetup allows to create
  ** series of such definitions with minimal effort. Since any access and mutation from the UI into

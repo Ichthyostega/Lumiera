@@ -1,0 +1,33 @@
+/*
+  lumiera-light-theme-complement.css  -  minimal supplement for GTK-3 light style sheet
+
+  Copyright (C)         Lumiera.org
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
+
+  Styles and Graphics of the Lumiera GUI can be used and redistributed
+  under the the terms of the GNU General Public License version 2 or
+  above, or (at your option) under Creative Commons CC-By-SA.
+
+* ********************************************************/
+
+
+/* CSS stylesheet to provide the additional definitions
+ * required to run the Lumiera GTK UI with a typical
+ * "light" standard system theme
+ */
+
+
+
+
+/* ---------- Styles for Lumiera Widgets ---------- */
+
+
+/* ---------- Styles for special markup ---------- */
+
+  .indication_flash,
+  .indication_flash * {
+    background-color: LightYellow;
+}
+  .indication_flash text {
+    border: 4px solid red;
+}

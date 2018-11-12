@@ -254,6 +254,7 @@ namespace asset {
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/meta/time-grid.hpp"
+#include "proc/asset/meta/error-log.hpp"
 
 namespace proc {
 namespace asset {
@@ -278,7 +279,9 @@ namespace asset {
   template P<Sequence> AssetManager::wrap (const Sequence& asset);
   
   using meta::TimeGrid;
+  using meta::ErrorLog;
   template P<TimeGrid> AssetManager::wrap (const TimeGrid& asset);
+  template P<ErrorLog> AssetManager::wrap (const ErrorLog& asset);
   
   
 }} // namespace proc::asset

@@ -17,6 +17,16 @@ return: 0
 END
 
 
+PLANNED "low-level widget access" ElementAccess_test <<END
+return: 0
+END
+
+
+TEST "managed link to widget" WLink_test <<END
+return: 0
+END
+
+
 TEST "storage record for captured UI state" StateMapGroupingStorage_test <<END
 return: 0
 END

@@ -112,9 +112,9 @@ namespace lib {
     size_t hash=0;
     if (literal)
       {
+        size_t cnt = 1;
         const char *pos = literal;
-        size_t maxpos = STRING_MAX_RELEVANT;
-        for ( ; *pos && --maxpos; ++pos)
+        for ( ; cnt <= STRING_MAX_RELEVANT and *pos ; ++cnt, ++pos )
           hash_combine(hash, *pos);
       }
     

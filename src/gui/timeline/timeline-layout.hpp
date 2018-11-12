@@ -1,5 +1,5 @@
 /*
-  LAYOUT-MANAGER.hpp  -  global timeline layout management and display control
+  TIMELINE-LAYOUT.hpp  -  global timeline layout management and display control
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file layout-manager.hpp
+/** @file timeline-layout.hpp
  ** A core service of the timeline UI to ensure consistent display and layout
  ** of all components within the timeline. The content of the timeline is organised
  ** into several nested collections, possibly holding several thousand individual elements.
@@ -40,11 +40,12 @@
  ** # Architecture
  ** 
  ** A naive approach would have a global layout manager drill down into some model storage
- ** and reach into the components to manipulate and adjust the layout to fit. Doing so can
- ** be considered, since this links together details scattered all over the model into a
- ** huge global process carried out at a single code location. Any further extension or
- ** evolution of details of the UI presentation are bound to be worked into this core
- ** global piece of code, which soon becomes brittle, hard to understand and generally
+ ** and reach into the components to manipulate and adjust the layout to fit. Yet however
+ ** straight forward and adequate this might seem, following this routine is a recipe for
+ ** disaster, since this procedure now ties and links together details scattered all over
+ ** the model into a huge global process, carried out at a single code location. Any further
+ ** extension or evolution of details of the UI presentation are bound to be worked into this
+ ** core global piece of code, which soon becomes brittle, hard to understand and generally
  ** a liability and maintenance burden. We have seen this happen in numerous existing
  ** code bases (and in fact even our own initial approach started to go down that route).
  ** Thus we strive to break up the whole process of controlling the layout into several
@@ -57,13 +58,14 @@
  ** 
  ** Whenever the layout of timeline contents has to be (re)established, we trigger a recursive
  ** evaluation pass, which in fact is a tree walk. The layout manager creates a DisplayEvaluation
- ** record, which is passed to the [Element's allocate function](Element::allocate). The element
- ** in turn has the liability to walks its children and recursively initiate a nested evaluation
+ ** record, which is passed to the [Element's allocate function](\ref Element::allocate). The element
+ ** in turn has the liability to walk its children and recursively initiate a nested evaluation
  ** by invoking DisplayEvaluation::evaluateChild(Element), which in turn calls back to
  ** LayoutManager::evaluate() to initiate a recursive evaluation pass. Within the recursively
  ** created DisplayEvaluation elements, we are able to transport and aggregate information
  ** necessary to give each element it' screen allocation. And this in turn allows us to
- ** decide upon a suitable display strategy for each individual element.
+ ** decide upon a suitable display strategy for each individual element, within a local
+ ** and self-contained context.
  ** 
  ** For this to work, the _element_ can not be the actual widget, since the result of this whole
  ** process might be to create or retract an actual GTK widget. For this reason, the timeline
@@ -72,14 +74,17 @@
  ** [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) here.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** 
  */
 
 
-#ifndef GUI_TIMELINE_LAYOUT_MANAGER_H
-#define GUI_TIMELINE_LAYOUT_MANAGER_H
+#ifndef GUI_TIMELINE_TIMELINE_LAYOUT_H
+#define GUI_TIMELINE_TIMELINE_LAYOUT_H
 
 #include "gui/gtk-base.hpp"
+#include "gui/timeline/header-pane-widget.hpp"
+#include "gui/timeline/body-canvas-widget.hpp"
 
 //#include "lib/util.hpp"
 
@@ -91,20 +96,35 @@
 namespace gui  {
 namespace timeline {
   
+  class TrackHeadWidget;
+  class TrackBody;
+  
   
   /**
-   * @todo WIP-WIP as of 12/2016
+   * Top-level anchor point for the timeline display (widgets).
+   * The central entity to organise concerns relevant for the presentation of the
+   * Timeline as a whole, as opposed to rendering individual tracks as part of the Timeline.
+   * @todo WIP-WIP as of 10/2018
    */
-  class LayoutManager
+  class TimelineLayout
     {
+      Glib::PropertyProxy<int> paneSplitPosition_;
+      
+      BodyCanvasWidget bodyCanvas_;
+      HeaderPaneWidget headerPane_;
+      
+      
     public:
-      LayoutManager ();
-     ~LayoutManager();
-     
+      TimelineLayout (Gtk::Paned&);
+     ~TimelineLayout();
+      
+      /** @internal anchor the display of the root track into the two display panes */
+      void installRootTrack (TrackHeadWidget&,TrackBody&);
+      
     private:/* ===== Internals ===== */
      
     };
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_LAYOUT_MANAGER_H*/
+#endif /*GUI_TIMELINE_TIMELINE_LAYOUT_H*/

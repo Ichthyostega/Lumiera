@@ -25,17 +25,22 @@
  ** Special collection to represent object-like data.
  ** To be used in a context where introspection, open, extensible definitions
  ** and loose coupling of data representation matters. Typically, structures
- ** defined in terms of Record elements are linked to the actual \em core
+ ** defined in terms of Record elements are linked to the _actual core_
  ** representation of the same entities relying on [diff messages](\ref diff-language.hpp).
  ** Record is one of the supported flavours within the DataCap of GenNode elements,
  ** which in turn serve as the standard handle to refer to other elements, entities,
  ** attributes or references within the "backbone" of the Lumiera GUI.
  ** 
+ ** A Record holds
+ ** - (optionally) a type-ID string
+ ** - a collection of _named attributes_ (key-value data)
+ ** - a list of _enclosed children_ (contents within the "scope" of this Record)
+ ** 
  ** ## design decisions
  ** The Record type is shaped from its intended use: It serves to symbolically represent
- ** _objects_ in the "external tree description". Here, "objects" means objects _for real_,
- ** i.e. with types, fields and an enclosed scope. But \em external means that we do not work
- ** on these objects right here, we only represent them, for later referral, _symbolically_.
+ ** *objects* in the "external tree description". Here, "objects" means objects _for real_,
+ ** i.e. with types, fields and an enclosed scope. Yet the term *external* means that we do not
+ ** work on these objects right here, we only represent them, for later referral, _symbolically_.
  ** 
  ** \par rationale
  ** The underlying theme and motivation of this design is negative: we do not want
@@ -107,7 +112,9 @@ namespace lib {
   template<class BA>
   class PlantingHandle;
   
-  
+namespace idi {
+  class BareEntryID;
+}
 namespace diff{
   
   namespace error = lumiera::error;
@@ -557,6 +564,7 @@ namespace diff{
        */
       
       VAL genNode();
+      VAL genNode(idi::BareEntryID rawID);
       VAL genNode(string const& symbolicID);
       
       template<typename X, typename...ARGS>

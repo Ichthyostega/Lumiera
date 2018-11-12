@@ -114,8 +114,12 @@ namespace workspace {
       /**
        * Shows a panel given a description index.
        * @param description_index The index of the panel type to show.
+       * @return existing or new Panel, docked within the realm of this PanelManager.
        */
-      void showPanel (const int description_index);
+      panel::Panel& showPanel (const int description_index);
+      
+      /** was the indicated panel already allocated within this PanelManager's realm? */
+      bool hasPanel (const int description_index);
       
       /**
        * Switches a panel from one type to another,
@@ -135,6 +139,14 @@ namespace workspace {
       
       
     public:
+      /**
+       * retrieve the internal type-ID corresponding to the given panel implementation type.
+       * @return internal index into the #panelDescriptionList, or `-1` if not found.
+       * @deprecated the whole concept of panel identification needs overhaul 8/2018
+       */
+      template<class P>
+      static int findPanelID();
+      
       /** Gets the number of panel descriptions. */
       static int getPanelDescriptionCount();
       
@@ -163,7 +175,7 @@ namespace workspace {
        * @return Returns the index of the panel description found, or -1
        * if no description was found for this type.
        */
-      int findPanelDescription (const char* class_name)  const;
+      static int findPanelDescription (const char* class_name);
       
       /**
        * Creates a panel by description index.
@@ -332,6 +344,17 @@ namespace workspace {
       /** The list of panel descriptions */
       static const PanelDescription panelDescriptionList[];
     };
+  
+  
+  
+  
+  template<class P>
+  inline int
+  PanelManager::findPanelID()
+  {
+    return PanelManager::findPanelDescription (typeid(P).name());
+  }
+  
   
   
 }}// namespace gui::workspace

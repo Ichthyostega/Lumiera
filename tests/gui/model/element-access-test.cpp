@@ -79,7 +79,7 @@ namespace test {
    *       rather than on the real UI topology.
    * @see GenNodeLocationQuery
    * 
-   * @see [Mock testing support](test-element-access.hpp)
+   * @see [Mock testing support](\ref test-element-access.hpp)
    * @see id-scheme.hpp
    * @see ViewLocator
    * @see ViewSpecDSL_test

@@ -32,13 +32,15 @@
  ** - thus we get a rather simple mapping, with some fixed attributes and no
  **   flexible child collection. The root track is implemented as TrackPresenter.
  ** 
- ** @todo as of 12/2016 a complete rework of the timeline display is underway
+ ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** @see TimelineWidget
  ** 
  */
 
 
 #include "gui/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
+#include "gui/timeline/timeline-layout.hpp"
 #include "gui/timeline/timeline-controller.hpp"
 #include "gui/timeline/track-presenter.hpp"
 #include "gui/timeline/marker-widget.hpp"
@@ -74,18 +76,21 @@ namespace timeline {
 //const int TimelineWidget::TrackPadding = 1;
 //const int TimelineWidget::HeaderWidth = 150;
 //const int TimelineWidget::HeaderIndentWidth = 10;
+  class TrackHeadWidget;
+  class TrackBody;
   
   
   
   
-  TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus)
+  TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus, TimelineLayout& layoutManager)
     : Controller{identity, nexus}
+    , name_{identity.getSym()}    // fallback initialise name from human-readable ID symbol 
     , markers_{}
-    , fork_{new TrackPresenter{trackID, nexus}}
-    , name_{identity.getSym()}              // fallback initialise name from human-readable ID symbol 
-    {
-      UNIMPLEMENTED ("how to make the controller operative...");
-    }
+    , fork_{new TrackPresenter{trackID, nexus, [&](TrackHeadWidget& head,TrackBody& body)
+                                                 {
+                                                   layoutManager.installRootTrack (head, body); 
+                                                 }}}
+    { }
   
   
   TimelineController::~TimelineController()
@@ -133,6 +138,7 @@ namespace timeline {
   TimelineController::buildMutator (TreeMutator::Handle buffer)
   {
     using PMarker = unique_ptr<MarkerWidget>;
+    auto rootForkID = ID{*fork_};
     
     buffer.create (
       TreeMutator::build()
@@ -143,7 +149,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {                                            // »Matcher« : how to know we're dealing with the right object
-                    return spec.idi == ID(elm);
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {                                            // »Constructor« : what to do when the diff mentions a new entity
@@ -151,17 +157,17 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {                                            // »Mutator« : how to apply the diff recursively to a nested scope
-                    if (ID(target) != subID) return false;     //  - require match on already existing child object
+                    if (ID{*target} != subID) return false;    //  - require match on already existing child object
                     target->buildMutator (buff);               //  - delegate to child to build nested TreeMutator
                     return true;
                   }))
-        .mutateAttrib("fork", [&](TreeMutator::Handle buff)
-            {                                                  // »Attribute Mutator« : how enter an object field as nested scope
+        .mutateAttrib(rootForkID, [&](TreeMutator::Handle buff)
+            {                                                  // »Attribute Mutator« : how to enter the track-fork-object field as nested scope
               REQUIRE (fork_);
               fork_->buildMutator(buff);
             })
-        .change("name", [&](string val)
-            {                                                  // »Attribute Setter« : how assign a new value to some object field
+        .change(ATTR_name, [&](string val)
+            {                                                  // »Attribute Setter« : how to assign a new value to the name field (object member)
               name_ = val;
             }));
   }

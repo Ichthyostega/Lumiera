@@ -295,8 +295,8 @@ namespace control {
    * opened instance, which will then be bound and dispatched likewise.
    * @param instanceID global commandID or previously opened local instanceID
    * @param argSeq command argument tuple packaged as Record<GenNode>, which
-   *               is the standard format [sent](BusTerm::act(GenNode)) for
-   *               command execution via [UI-bus](ui-bus.hpp)
+   *               is the standard format [sent](\ref BusTerm::act(GenNode)) for
+   *               command execution via [UI-bus](\ref ui-bus.hpp)
    */
   void
   CommandInstanceManager::bindAndDispatch (Symbol instanceID, Rec const& argSeq)

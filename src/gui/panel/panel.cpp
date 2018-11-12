@@ -42,7 +42,8 @@ namespace panel{
                ,Gdl::DockItem& dockItem
                ,const gchar* longName
                ,const gchar* stockID)
-    : panelManager_(panelManager)
+    : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
+    , panelManager_(panelManager)
     , dockItem_(dockItem)
     , panelBar_(*this, stockID)
     {

@@ -256,7 +256,7 @@ namespace diff{
    * becomes the new generator and the old generator object is released,
    * since the assignment of the new backend typically removes the last
    * reference in the smart-ptr managing the generation backend. This
-   * process can be repeated and then the [diagnostics](operator string())
+   * process can be repeated and then the [diagnostics](\ref operator string())
    * will show the remainder of the sequence _left at that point._
    */
   inline MutationMessage&

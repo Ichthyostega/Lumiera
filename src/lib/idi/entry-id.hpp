@@ -32,6 +32,13 @@
  ** @note as of 3/2010 this is an experimental setup and exists somewhat in parallel
  **       to the assets. We're still in the process of finding out what's really required
  **       to keep track of all the various kinds of objects.                 ///////////////////TICKET #739
+ ** @todo as of 11/2018 the basic design seems adequate, but the actual solution looks fishy.
+ **       Even more so, since we now use subclasses of BareEntryID
+ **       - as identity tag within lib::diff::GenNode
+ **       - as identity tag for all [tangible UI elements](\ref gui::model::Tangible)
+ **       There are various quirks and hacks to make all of this happen, and especially
+ **       the hashed-in type information feels gratuitous at places, when all we actually
+ **       need is a distinct identity plus a human readable symbol.
  ** 
  ** @see asset::Asset::Ident
  ** @see entry-id-test.cpp
@@ -101,7 +108,7 @@ namespace idi {
      *        which would require both to yield the same hash values....
      *  @warning there is a weakness in boost::hash for strings of running numbers,
      *        causing collisions already for a small set with less than 100000 entries.
-     *        To ameliorate the problem, we hash in the trailing digits, and
+     *        To mitigate the problem, we hash in the trailing digits, and
      *        spread them by the #KNUTH_MAGIC                                            /////////TICKET #865
      *  @warning this code isn't portable and breaks if sizeof(size_t) < sizeof(void*)
      *  @see HashGenerator_test#verify_Knuth_workaround
@@ -146,9 +153,16 @@ namespace idi {
        * encoded into a hash seed. Thus even the same symbolicID
        * generates differing hash-IDs for different type parameters
        */
-      BareEntryID (string const& symbolID, HashVal seed =0)
+      BareEntryID (string const& symbolID, HashVal seed)
         : symbol_(symbolID)
         , hash_(buildHash (symbol_, seed))
+        { }
+      
+      /** store the symbol but use a random hash part */
+      explicit
+      BareEntryID (string const& symbolID)
+        : symbol_(symbolID)
+        , hash_{} // random
         { }
       
     public:
@@ -265,7 +279,7 @@ namespace idi {
           return static_cast<EntryID const&> (bID);
         }
       
-      
+      explicit
       operator string()  const;
       
       friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  < i2.getSym(); }
@@ -279,6 +293,26 @@ namespace idi {
   }
   
   
+  
+  
+  /**
+   * Entry-ID with a symbolic tag but just a plain random hash part.
+   * @remarks use this flavour when it is _not relevant_ to tag with
+   *    some type information nor to reproduce the hash value. 
+   */
+  struct RandID
+    : BareEntryID
+    {
+      RandID (string const& symbolID)
+        : BareEntryID{util::sanitise (symbolID)}
+        { }
+      RandID (const char* symbolID)
+        : BareEntryID{util::sanitise (symbolID)}
+        { }
+      RandID (Symbol const& internalSymbol)
+        : BareEntryID{string{internalSymbol}}
+        { }
+    };
   
   
   /** try to upcast this BareEntryID to a fully typed EntryID.

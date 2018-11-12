@@ -179,6 +179,7 @@ namespace test {
           verify_mockManipulation();
           invokeCommand();
           markState();
+          revealer();
           notify();
           mutate();
         }
@@ -196,7 +197,7 @@ namespace test {
        * the occurrence of expected events, invocations and responses.
        * 
        * ### connectivity
-       * Any mock element will automatically connect against the [Test-Nexus](test/test-nexus.hpp),
+       * Any mock element will automatically connect against the [Test-Nexus](\ref test/test-nexus.hpp),
        * so to be suitably rigged for unit testing. This means, there is no _live connection_
        * to the session, but any command- or other messages will be captured and can be
        * retrieved or verified from the test code. Since lifecycle and robustness in
@@ -362,10 +363,6 @@ namespace test {
        * 
        * The second part of this test _replays_ such a state mark, which causes
        * the`doMark()` operation on the UI element to be invoked.
-       * @todo maybe we'll even provide a default implementation for expand/collapse
-       *       which then means that, by replaying the mentioned state marks, the
-       *       `doExpand()` or `doCollapse()` should be re-invoked, of course
-       *       without issuing a further notification
        * @note this test does not cover or even emulate the operation of the
        *       "state manager", since the goal is to cover the _UI element_
        *       protocol. We'll just listen at the bus and replay messages.
@@ -473,6 +470,90 @@ namespace test {
         }
       
       
+      /** @test configure a handler for the (optional) "reveal yourself" functionality.
+       * We install a lambda to supply the actual implementation action, which can then
+       * either be triggered by a signal/slot invocation, or by sending a "state mark".
+       */
+      void
+      revealer ()
+        {
+          MARK_TEST_FUN
+          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          
+          MockElm mock("target");
+          ID targetID = mock.getID();
+          
+          sigc::signal<void> trigger_reveal;
+          trigger_reveal.connect   (sigc::mem_fun(mock, &Tangible::slotReveal));
+          
+          CHECK (not mock.isTouched());
+          CHECK (not mock.isExpanded());
+          CHECK (mock.ensureNot("reveal"));
+          CHECK (mock.ensureNot("expanded"));
+          CHECK (nexusLog.ensureNot("state-mark"));
+          
+          bool revealed = false;
+          mock.installRevealer([&]()
+                                  {                        // NOTE: our mock "implementation" of the »reveal yourself« functionality
+                                    mock.slotExpand();     //       explicitly prompts the element to expand itself,
+                                    revealed = true;       //       and then via closure sets a flag we can verify.
+                                  });
+          
+          trigger_reveal();
+          
+          CHECK (true == revealed);
+          CHECK (mock.isExpanded());
+          CHECK (mock.verifyEvent("create","target")
+                     .beforeCall("reveal")
+                     .beforeCall("expand").arg(true)
+                     .beforeEvent("expanded"));
+          
+          // invoking the slotExpand() also emitted a state mark to persist that expansion state...
+          CHECK (nexusLog.verifyCall("note").arg(targetID, GenNode{"expand", true})
+                         .before("handling state-mark"));
+          
+          
+          // second test: the same can be achieved via UI-Bus message...
+          revealed = false;
+          auto stateMark = GenNode{"reveal", 47};  // (payload argument irrelevant)
+          auto& uiBus = gui::test::Nexus::testUI();
+          CHECK (nexusLog.ensureNot("reveal"));
+          
+          uiBus.mark (targetID, stateMark);                // send the state mark message to reveal the element
+          
+          CHECK (true == revealed);
+          CHECK (mock.verifyMark("reveal", 47)
+                     .afterEvent("expanded")
+                     .beforeCall("reveal")
+                     .beforeCall("expand").arg(true));
+          
+          CHECK (nexusLog.verifyCall("mark").arg(targetID, stateMark)
+                         .after("handling state-mark")
+                         .before("reveal")
+                         .beforeEvent("delivered mark"));
+          
+          // Note the fine point: the target element /was/ already expanded
+          // and thus there is no second "expanded" event, nor is there a
+          // second state mark emitted into the UI-Bus...
+          CHECK (mock.ensureNot("expanded")
+                     .afterCall("reveal")
+                     .afterEvent("expanded"));
+          CHECK (nexusLog.ensureNot("note")
+                         .afterCall("mark").arg(targetID, stateMark)
+                         .after("handling state-mark"));
+          
+          
+          
+          cout << "____Event-Log_________________\n"
+               << util::join(mock.getLog(), "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+          
+          cout << "____Nexus-Log_________________\n"
+               << util::join(nexusLog, "\n")
+               << "\n───╼━━━━━━━━━╾────────────────"<<endl;
+        }
+      
+      
       /** @test receive various kinds of notifications.
        * Send message, error and flash messages via Bus to the element
        * and verify the doMsg, doErr or doFlash handlers were invoked.
@@ -560,8 +641,10 @@ namespace test {
        * For this to work, the receiver needs to create a custom _diff binding_.
        * Thus, each subclass of Tangible has to implement the virtual function
        * Tangible::buildMutator() and hook up those internal structures, which
-       * are exposed to changes via diff message. Note especially how child
-       * UI elements are added this way, to populate the contents of the UI.
+       * are exposed to changes via diff message. This is what we then call a
+       * "diff binding" (and MockElement is already outfitted this way). Note
+       * especially how child UI elements can be added recursively, allowing
+       * gradually to populate the contents of the UI.
        * 
        * The diff itself is an iterable sequence of _diff verbs_.
        * Typically, such a diff is generated as the result of some operation
@@ -639,11 +722,11 @@ namespace test {
                          .beforeEvent("create", "a")
                          .beforeEvent("diff","create child \"b\"")              // insert second child
                          .beforeEvent("create", "b")
-                         .beforeEvent("diff","set Attib α <-quadrant")          // assign value to existing attribute α
+                         .beforeEvent("diff","set Attrib α <-quadrant")         // assign value to existing attribute α
                          .beforeCall("buildMutator").on(&childB)                // establish nested mutator for second child
                          .beforeEvent("diff","b accepts mutation...")
                          .beforeEvent("diff",">>Scope>> b")                     // recursively mutate second child
-                         .beforeEvent("diff","++Attib++ π = 3.1415927"));       // insert new attribute π within nested scope
+                         .beforeEvent("diff","++Attrib++ π = 3.1415927"));      // insert new attribute π within nested scope
           
           
           CHECK (nexusLog.verifyCall("routeAdd").arg(rootMock.getID(), memLocation(rootMock))      // rootMock was attached to Nexus

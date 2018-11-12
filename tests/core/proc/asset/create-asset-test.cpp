@@ -27,18 +27,24 @@
 
 #include "include/logging.h"
 #include "lib/test/run.hpp"
-#include "lib/util.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/proc.hpp"
+#include "proc/asset/meta/time-grid.hpp"
+#include "proc/asset/meta/error-log.hpp"
 
 #include "proc/asset/asset-diagnostics.hpp"
 #include "backend/media-access-mock.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/depend-inject.hpp"
+#include "lib/util.hpp"
 
 using util::isnil;
 using std::string;
+using lib::time::FrameRate;
+using lib::test::randStr;
 
 
 namespace proc {
@@ -63,6 +69,7 @@ namespace test {
           
           createMedia();
           factoryVariants();
+          createMetaAssets();
 
           if (!isnil (arg))
             dumpAssetManager();
@@ -71,7 +78,7 @@ namespace test {
 
 
                                                           ////////////////////////////////////TICKET #589
-      typedef lib::P<Media> PM;                                                          /////TODO: transition to P<>
+      using PM = lib::P<Media>;
 
       /** @test Creating and automatically registering Asset instances.
        *        Re-Retrieving the newly created objects from AssetManager.
@@ -79,7 +86,8 @@ namespace test {
        *        different kinds of Assets by ID, querying with the
        *        wrong Category and querying unknown IDs.
        */
-      void createMedia()
+      void
+      createMedia()
         {
           Category cat(VIDEO,"bin1");
           Asset::Ident key("test-1", cat, "ichthyo", 5);
@@ -89,7 +97,7 @@ namespace test {
 
           // Assets have been registered and can be retrieved by ID
           AssetManager& aMang = AssetManager::instance();
-          PM registered;                                                         /////TODO: transition to P<>
+          PM registered;
           registered = aMang.getAsset (mm1->getID());
           CHECK (registered == mm1);
           registered = aMang.getAsset (mm2->getID());
@@ -167,7 +175,8 @@ namespace test {
        *        creation machinery. Covers filling out Asset's
        *        datafields, amending missing pieces of information.
        */
-      void factoryVariants()
+      void
+      factoryVariants()
         {
           PM candi;
 
@@ -185,25 +194,55 @@ namespace test {
 
           candi = asset::Media::create(string("test-3.wav"), Category(AUDIO));
           CHECK ( checkProperties (candi, Asset::Ident("test-3", Category(AUDIO), "lumi", 1)
-                                         , "test-3.wav"));
+                                        , "test-3.wav"));
 
           candi = asset::Media::create("some/path/test-4.wav", Category(AUDIO));
           CHECK ( checkProperties (candi, Asset::Ident("test-4", Category(AUDIO), "lumi", 1)
-                                         , "some/path/test-4.wav"));
+                                        , "some/path/test-4.wav"));
 
           candi = asset::Media::create("", Category(AUDIO,"sub/bin"));
           CHECK ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO,"sub/bin"), "lumi", 1)
-                                         , ""));
+                                        , ""));
 
           candi = asset::Media::create("", AUDIO);
           CHECK ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO), "lumi", 1)
-                                         , ""));
+                                        , ""));
         }
 
       bool checkProperties (PM object, Asset::Ident identity, string filename)
         {
           return identity == object->ident
               && filename == object->getFilename();
+        }
+      
+      
+      void
+      createMetaAssets()
+        {
+          using asset::meta::GridID;
+          using asset::meta::PGrid;
+          
+          GridID myGrID (randStr(8));
+          auto gridSpec = asset::Meta::create (myGrID);
+          gridSpec.fps = FrameRate{23};
+          PGrid myGrid = gridSpec.commit();
+          
+          CHECK (myGrid);
+          CHECK (myGrid->ident.name == myGrID.getSym());                    ////////////////////////////////TICKET #739 : assets should use EntryID instead of asset::ID
+          
+          CHECK (AssetManager::instance().known (myGrid->getID()));
+          CHECK (myGrid == AssetManager::instance().getAsset (myGrid->getID()));
+          
+          // for the ErrorLog assert, as of 8/2018 there is just one single global placeholder entity available
+          asset::meta::PLog globalLog = asset::meta::ErrorLog::global();    /////////////////////////////////TICKET #1157 : what's the purpose of this ErrorLog Asset after all??
+          
+          CHECK (globalLog->ident.name == meta::theErrorLog_ID.getSym());
+          CHECK (AssetManager::instance().known (globalLog->getID()));
+          CHECK (2 == globalLog.use_count()); // AssetManager also holds a reference
+          
+          PAsset furtherRef = asset::meta::ErrorLog::global();
+          CHECK (3 == globalLog.use_count());
+          CHECK (furtherRef == globalLog);
         }
     };
 

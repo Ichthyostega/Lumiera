@@ -1,5 +1,5 @@
 /*
-  SanitizedIdentifier(Test)  -  remove non-standard-chars and punctuation
+  UtilSanitizedIdentifier(Test)  -  remove non-standard-chars and punctuation
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file sanitised-identifier-test.cpp
- ** unit test \ref SanitizedIdentifier_test
+/** @file util-sanitised-identifier-test.cpp
+ ** unit test \ref UtilSanitizedIdentifier_test
  */
 
 
@@ -38,7 +38,7 @@ namespace util {
 namespace test {
   
   
-  class SanitizedIdentifier_test : public Test
+  class UtilSanitizedIdentifier_test : public Test
     {
       virtual void run (Arg)
         {
@@ -46,7 +46,7 @@ namespace test {
           print_clean ("a Sentence");
           print_clean ("trailing Withespace\n       \t");
           print_clean ("with    a  \t lot\n  of Whitespace");
-          print_clean ("with\"much (punctuation)[]!");
+          print_clean ("@with\".\'much ($punctuation)[]!");
           print_clean ("§&Ω%€  leading garbage");
           print_clean ("mixed    Ω   garbage");
           print_clean ("Bääääh!!");
@@ -60,7 +60,7 @@ namespace test {
       }
     };
   
-  LAUNCHER (SanitizedIdentifier_test, "unit common");
+  LAUNCHER (UtilSanitizedIdentifier_test, "unit common");
   
   
 }} // namespace util::test

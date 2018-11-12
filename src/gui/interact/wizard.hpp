@@ -42,23 +42,36 @@
 #ifndef GUI_INTERACT_WIZARD_H
 #define GUI_INTERACT_WIZARD_H
 
-#include "gui/gtk-base.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/idi/entry-id.hpp"
 
 //#include <string>
-//#include <memory>
+#include <memory>
 
+
+namespace proc {
+  namespace asset {
+    namespace meta {
+      class ErrorLog;
+      
+      extern lib::idi::EntryID<ErrorLog> theErrorLog_ID;
+} } }
 
 namespace gui {
+  using ID = lib::idi::BareEntryID const&;
+  
 namespace ctrl {
   class GlobalCtx;
+  class NotificationHub;
+}
+namespace dialog {
+  class TestControl;
 }
 namespace interact {
   
-//  using std::unique_ptr;
+  using std::unique_ptr;
 //  using std::string;
   
-//  class GlobalCtx;
 //  class SpotLocator;
   
   
@@ -73,14 +86,19 @@ namespace interact {
     : util::NonCopyable
     {
       ctrl::GlobalCtx& globalCtx_;
+      unique_ptr<ctrl::NotificationHub> notificationHub_;
+      unique_ptr<dialog::TestControl> testControlWindow_;
     
     public:
       Wizard (ctrl::GlobalCtx&);
      ~Wizard ();
       
       void show_HelpAbout();
-    private:
+      void launchTestCtrl();
       
+      static ID getErrorLogID() { return proc::asset::meta::theErrorLog_ID; }
+      
+    private:
     };
   
   

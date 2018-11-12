@@ -34,7 +34,7 @@
  ** which it will be wired. Moreover, each BusTerm bears a distinct
  ** [identity](\ref BusTerm::endpointID_), which is used as _implicit subject_
  ** for emanating messages, or as explicit destination for routing.
- ** The whole [UI-Bus](ui-bus.hpp) is built to perform within the
+ ** The whole [UI-Bus](\ref ui-bus.hpp) is built to perform within the
  ** UI event thread and thus is _not threadsafe_. For that reason,
  ** the automatic detachment built into each BusTerm's dtor is
  ** sufficient to ensure sane connectivity.

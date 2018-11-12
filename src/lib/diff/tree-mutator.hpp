@@ -83,6 +83,7 @@
  ** 
  ** @see tree-mutator-test.cpp
  ** @see tree-mutator-binding-test.cpp
+ ** @see [usage for tree diff application](\ref tree-diff-application.hpp)
  ** @see diff-language.hpp
  ** @see DiffDetector
  ** 
@@ -156,7 +157,7 @@ namespace diff{
       
       /** initialisation immediately before start of diff application
        * @remark allows for setup of state which is dependent on memory location,
-       *         like e.g. iterators. Due to the invokation via Builder DSL, the
+       *         like e.g. iterators. Due to the invocation via Builder DSL, the
        *         implementation object may be moved after construction, but prior
        *         to invoking this hook
        */
@@ -373,7 +374,12 @@ namespace diff{
         template<typename CLO>
         auto mutateAttrib (Symbol attributeID, CLO mutatorBuilderClosure);
         
-        ///////////////////////////////////////TODO define variant taking a GenNode::ID ??
+        /**
+         * @param rawID the explicitly given ID of an attribute object,
+         *              used literally to match the attribute in question
+         */
+        template<typename CLO>
+        auto mutateAttrib (idi::BareEntryID const& rawID, CLO mutatorBuilderClosure);
         
         
         /** set up a binding to a structure of "child objects",
@@ -439,6 +445,9 @@ namespace diff{
          */
         auto attachDummy (TestMutationTarget& dummy);
         
+        
+        /** set up a catch-all and ignore-everything layer */
+        auto ignoreAllChanges();
       };
     
   }//(END) Mutator-Builder...
@@ -460,4 +469,5 @@ namespace diff{
 #include "lib/diff/tree-mutator-gen-node-binding.hpp"
 #include "lib/diff/tree-mutator-attribute-binding.hpp"
 #include "lib/diff/tree-mutator-collection-binding.hpp"
+#include "lib/diff/tree-mutator-noop-binding.hpp"
 

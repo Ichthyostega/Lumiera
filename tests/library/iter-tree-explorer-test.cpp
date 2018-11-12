@@ -218,42 +218,46 @@ namespace test{
   
   /*******************************************************************//**
    * @test use a simple source iterator yielding numbers
-   *       to build various functional evaluation structures,
-   *       based on the \ref IterExplorer template.
-   *       - the [state adapter](\ref verifyStateAdapter() )
-   *          iterator construction pattern
-   *       - helper to [chain iterators](\ref verifyChainedIterators() )
-   *       - building [tree exploring structures](\ref verifyDepthFirstExploration())
-   *       - the [monadic nature](\ref verifyMonadOperator()) of IterExplorer
-   *       - a [recursively self-integrating](\ref verifyRecrusiveSelfIntegration())
-   *         evaluation pattern
+   *       to build various functional evaluation pipelines,
+   *       based on the \ref TreeExplorer template.
+   *       - the adapter to wrap the source, which can either
+   *         [be a state core](\ref verify_wrappedState() ), or can
+   *         [be a Lumiera Forward Iterator](\ref verify_wrappedIterator() )
+   *       - the defining use case for TreeExplorer is to build a
+   *         [pipeline for depth-first exploration](\ref verify_expandOperation() )
+   *         of a (functional) tree structure. This "tree" is  created by invoking
+   *         a "expand functor", which can be defined in various ways.
+   *       - the usual building blocks for functional evaluation pipelines, that is
+   *         [filtering](\ref verify_FilterIterator() ) and
+   *         [transforming](\ref verify_transformOperation() ) of
+   *         the elements yielded by the wrapped source iterator.
+   *       - building complex pipelines by combining the aforementioned building blocks
+   *       - using an opaque source, hidden behind the IterSource interface, and
+   *         an extension (sub interface) to allow for "tree exploration" without
+   *         any knowledge regarding the concrete implementation of the data source.
    * 
    * ## Explanation
    * 
-   * Both this test and the IterExplorer template might be bewildering
-   * and cryptic, unless you know the *Monad design pattern*. »Monads«
-   * are heavily used in functional programming, actually they originate
-   * from Category Theory. Basically, Monad is a pattern where we combine
-   * several computation steps in a specific way; but instead of intermingling
-   * the individual computation steps and their combination, the goal is to
-   * isolate and separate the _mechanics of combination_, so we can focus on
-   * the actual _computation steps:_ The mechanics of combination are embedded
-   * into the Monad type, which acts as a kind of container, holding some entities
-   * to be processed. The actual processing steps are then attached to the monad as
-   * "function object" parameters. It is up to the monad to decide if, and when
-   * those processing steps are applied to the embedded values and how to combine
-   * the results into a new monad.
+   * These tests build a evaluation pipeline by _wrapping_ some kind of data source
+   * and then layering some evaluation stages on top. There are two motivations why
+   * one might want to build such a _filter pipeline:_
+   * - on demand processing ("pull principle")
+   * - separation of source computation and "evaluation mechanics"
+   *   when building complex search and backtracking algorithms.
    * 
-   * Using the monad pattern is well suited when both the mechanics of
-   * combination and the individual computation steps tend to be complex.
-   * In such a situation, it is beneficial to develop and test both
-   * in isolation. The IterExplorer template applies this pattern
-   * to the task of processing a source sequence. Typically we use
-   * this in situations where we can't afford building elaborate
-   * data structures in (global) memory, but rather strive at
-   * doing everything on-the-fly. A typical example is the
-   * processing of a variably sized data set without
-   * using heap memory for intermediary results.
+   * This usage style is inspired from the *Monad design pattern*. In our case here,
+   * the Iterator pipeline would be the monad, and can be augmented and reshaped by
+   * attaching further processing steps. How those processing steps are to be applied
+   * remains an internal detail, defined by the processing pipeline. »Monads« are heavily
+   * used in functional programming, actually they originate from Category Theory. Basically,
+   * Monad is a pattern where we combine several computation steps in a specific way; but
+   * instead of intermingling the individual computation steps and their combination,
+   * the goal is to isolate and separate the _mechanics of combination_, so we can focus
+   * on the actual _computation steps:_ The mechanics of combination are embedded into the
+   * Monad type, which acts as a kind of container, holding some entities to be processed.
+   * The actual processing steps are then attached to the monad as "function object" parameters.
+   * It is up to the monad to decide if, and when those processing steps are applied to the
+   * embedded values and how to combine the results into a new monad.
    * 
    * @see TreeExplorer
    * @see IterAdapter
@@ -268,10 +272,13 @@ namespace test{
           verify_wrappedIterator();
           
           verify_expandOperation();
+          verify_expand_rootCurrent();
           verify_transformOperation();
           verify_combinedExpandTransform();
+          verify_customProcessingLayer();
           verify_scheduledExpansion();
           verify_FilterIterator();
+          verify_FilterChanges();
           verify_asIterSource();
           verify_IterSource();
           
@@ -423,8 +430,6 @@ namespace test{
                       .expand([](CountDown core){ return NumberSequence{ core.yield() - 1}; })        // expand-functor: StateCore -> Iter
                       );
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
-          /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : Generated code works just fine and passes Test though
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](auto & it){ return CountDown{ *it - 1}; })                           // generic Lambda: Iter& -> StateCore
@@ -434,13 +439,12 @@ namespace test{
                     treeExplore(CountDown{5})
                       .expand([](auto it){ return decltype(it){ *it - 1}; })                          // generic Lambda: Iter -> Iter
                       );
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1118 : GDB Segfault on loading the inferior
         }
       
       
       template<class EXP>
       void
-      verify_treeExpandingIterator(EXP ii)
+      verify_treeExpandingIterator (EXP ii)
         {
           CHECK (!isnil (ii));
           CHECK (5 == *ii);
@@ -484,6 +488,53 @@ namespace test{
         }
       
       
+      /** @test special feature of the Expander to lock into current child sequence.
+       * This feature was added to support a specific use-case in the IterChainSearch component.
+       * After expanding several levels deep into a tree, it allows to turn the _current child sequence_
+       * into a new root sequence and discard the whole rest of the tree, including the original root sequence.
+       * It is implemented by moving the current child sequence down into the root sequence. We demonstrate
+       * this behaviour with the simple standard setup from #verify_expandOperation()
+       */
+      void
+      verify_expand_rootCurrent()
+        {
+          auto tree = treeExplore(CountDown{25})
+                        .expand([](uint j){ return CountDown{j-1}; });
+          
+          CHECK (materialise(tree) == "25-24-23-22-21-20-19-18-17-16-15-14-13-12-11-10-9-8-7-6-5-4-3-2-1");
+          
+          CHECK (0 == tree.depth());
+          CHECK (25 == *tree);
+          ++tree;
+          ++tree;
+          ++tree;
+          ++tree;
+          CHECK (21 == *tree);
+          tree.expandChildren();
+          CHECK (1 == tree.depth());
+          ++tree;
+          ++tree;
+          ++tree;
+          ++tree;
+          ++tree;
+          CHECK (15 == *tree);
+          tree.expandChildren();
+          ++tree;
+          ++tree;
+          CHECK (2 == tree.depth());
+          CHECK (materialise(tree) == "12-11-10-9-8-7-6-5-4-3-2-1-"                          // this is the level-2 child sequence
+                                      "14-13-12-11-10-9-8-7-6-5-4-3-2-1-"                    // ...returning to the rest of the level-1 sequence
+                                      "20-19-18-17-16-15-14-13-12-11-10-9-8-7-6-5-4-3-2-1"); // ...followed by the rest of the original root sequence
+          CHECK (12 == *tree);
+          
+          tree.rootCurrent();
+          CHECK (12 == *tree);
+          CHECK (materialise(tree) == "12-11-10-9-8-7-6-5-4-3-2-1");  // note: level-2 continues unaltered, but level-1 and the original root are gone.
+          CHECK (0 == tree.depth());
+        }
+      
+      
+      
       /** @test pipe each result through a transformation function.
        * The _transforming iterator_ is added as a decorator, wrapping the original iterator,
        * TreeEplorer or state core. As you'd expect, the given functor is required to accept
@@ -512,6 +563,7 @@ namespace test{
                       .transform(multiply)
                       ;
           
+          CHECK (14 == *ii);
           CHECK (14 == *ii);
           ++ii;
           CHECK (12 == *ii);
@@ -620,7 +672,7 @@ namespace test{
        * matching algorithms. Even more so, when other operations like filtering are intermingled;
        * in that case it might even happen that the downstream consumer does not even see the
        * items resulting from child expansion, because they are evaluated and then filtered
-       * away by a transformer and filter placed in between.
+       * away by transformers and filters placed in between.
        * @note as a consequence of the flexible automatic adapting of bound functors, it is
        *       possible for bound functors within different "layers" to collaborate, based on
        *       additional knowledge regarding the embedded data source internals. This test
@@ -666,6 +718,50 @@ namespace test{
                       .transform([](float f){ return 0.055 + f/2; })
                  )
                  == "5.055-4.055-20.055-1.055-2.055-1.055" );
+        }
+      
+      
+      /**
+       * demo of a custom processing layer
+       * interacting directly with the iteration mechanism.
+       * @note we can assume `SRC` is itself a Lumiera Iterator
+       */
+      template<class SRC>
+      struct MagicTestRubbish
+        : public SRC
+        {
+          using SRC::SRC;
+          
+          void
+          iterNext()
+            {
+              ++(*this);
+              if (*this)
+                ++(*this);
+            }
+        };
+      
+      /** @test extension point to inject a client-defined custom processing layer
+       * This special builder function allows to install a template, which needs to wrap
+       * a source iterator and expose a _state core like_ interface. We demonstrate this
+       * extension mechanism here by defining a processing layer which skips each other element.
+       */
+      void
+      verify_customProcessingLayer()
+        {
+          CHECK (materialise(
+                    treeExplore(CountDown{7})
+                      .processingLayer<MagicTestRubbish>()
+                )
+                == "7-5-3-1");
+          
+          CHECK (materialise(
+                    treeExplore(CountDown{7})
+                      .transform([](uint v){ return 2*v; })
+                      .processingLayer<MagicTestRubbish>()
+                      .filter([](int v){ return v % 3; })
+                )
+                == "14-10-2");
         }
       
       
@@ -779,6 +875,18 @@ namespace test{
           
           
           
+          // contrived example to verify interplay of filtering and child expansion;
+          // especially note that the filter is re-evaluated after expansion happened.
+          CHECK (materialise (
+                    treeExplore(CountDown{10})
+                      .expand([](uint i){ return CountDown{i%4==0? i-1 : 0}; })      // generate subtree at 8 and 4 ==> 10-9-8-7-6-5-4-3-2-1-3-2-1-7-6-5-4-3-2-1-3-2-1
+                      .filter([](uint i){ return i%2 == 0; })
+                      .expandAll()                                                   // Note: sends the expandChildren down through the filter
+                    )
+                 == "10-8-6-4-2-2-6-4-2-2");
+          
+          
+          
           // another convoluted example to demonstrate
           // - a filter predicate with side-effect
           // - and moreover the predicate is a generic lambda
@@ -828,6 +936,94 @@ namespace test{
           // WARNING: kk is now defunct, since we moved it into the builder expression
           //          and then moved the resulting extended iterator into materialise!
         }
+      
+      
+      
+      /** @test a special filter layer which can be re-configured on the fly */
+      void
+      verify_FilterChanges()
+        {
+          auto seq = treeExplore(CountDown{20})
+                       .mutableFilter();
+          
+          auto takeEve = [](uint i){ return i%2 == 0; };
+          auto takeTrd = [](uint i){ return i%3 == 0; };
+          
+          CHECK (20 == *seq);
+          ++seq;
+          CHECK (19 == *seq);
+          CHECK (19 == *seq);
+          
+          seq.andFilter (takeEve);
+          CHECK (18 == *seq);
+          ++seq;
+          CHECK (16 == *seq);
+          
+          seq.andFilter (takeTrd);
+          CHECK (12 == *seq);   //  is divisible (by 2 AND by 3)
+          
+          seq.flipFilter();
+          CHECK (11 == *seq);   // not divisible (by 2 AND by 3)
+          ++seq;
+          CHECK (10 == *seq);
+          
+          seq.setNewFilter (takeTrd);
+          CHECK ( 9 == *seq);
+          ++seq;
+          CHECK ( 6 == *seq);
+          
+          seq.orNotFilter (takeEve);
+          CHECK ( 6 == *seq);
+          ++seq;
+          CHECK ( 5 == *seq);   // disjunctive condition actually weakens the filter
+          ++seq;
+          CHECK ( 3 == *seq);
+          
+          // NOTE: arbitrary functors can be used/combined,
+          //       since they are adapted individually.
+          // To demonstrate this, we use a functor accessing and
+          // manipulating the state core by side effect...
+          string buff{"."};
+          seq.andNotFilter ([&](CountDown& core)
+                              {
+                                buff += util::toString(core.p) + ".";
+                                --core.p;                              // manipulate state core
+                                return core.p % 2;                     // return a number, not bool
+                              });
+          
+          CHECK ( 2 == *seq);                   // value in the core has been manipulated
+          CHECK (".3." == buff);                // the filter has been invoked once, and saw core == 3
+          
+          ++seq;                                // core == 2 is filtered by the existing other filter (== not take even)
+          CHECK (".3.1." == buff);              // the filter has been invoked again, and saw core == 1
+          CHECK (0 == seq.p);                   // ...which he manipulated, so that core == 0
+          CHECK (isnil (seq));                  // .....and thus iteration end is detected
+          VERIFY_ERROR (ITER_EXHAUST, *seq );
+          
+          
+          // verify enabling and disabling...
+          seq = treeExplore(CountDown{10})
+                  .mutableFilter(takeTrd);
+          
+          CHECK (9 == *seq);
+          seq.disableFilter();
+          CHECK (9 == *seq);
+          ++seq;
+          CHECK (8 == *seq);
+          seq.andNotFilter (takeEve);
+          CHECK (7 == *seq);
+          ++seq;
+          CHECK (5 == *seq);
+          seq.disableFilter();
+          CHECK (5 == *seq);
+          ++seq;
+          CHECK (4 == *seq);
+          ++seq;
+          CHECK (3 == *seq);
+          seq.flipFilter();  // everything rejected
+          CHECK (isnil (seq));
+        }
+      
       
       
       
@@ -1106,7 +1302,7 @@ namespace test{
               bool
               checkPoint()  const
                 {
-                  return src;
+                  return bool{src};
                 }
               
               State&

@@ -24,7 +24,7 @@
 /** @file tangible.hpp
  ** Abstraction: a tangible element of the User Interface.
  ** This is a generic foundation for any elements of more than local relevance
- ** within the Lumiera UI.<br/> Any such element is connected to the [UI-Bus](ui-bus.hpp).
+ ** within the Lumiera UI.<br/> Any such element is connected to the [UI-Bus](\ref ui-bus.hpp).
  ** 
  ** ## rationale
  ** 
@@ -96,7 +96,7 @@
  ** 
  ** And finally, there are the _essential updates_ -- any changes in the model _for real._
  ** These are sent as notifications just to some relevant top level element, expecting this element
- ** to request a [diff](tree-diff.hpp) and to mutate contents into shape recursively.
+ ** to request a [diff](\ref tree-diff.hpp) and to mutate contents into shape recursively.
  ** 
  ** ## Interactions
  ** 
@@ -105,7 +105,7 @@
  ** - **act**: send a \ref GenNode representing the action
  ** - **note**: _send_ a GenNode representing the _state mark_
  ** - **mark**: _receive_ a GenNode representing the _feedback,_ a replayed _state mark_ or _generic message._
- ** - **diff**: ask to retrieve a diff, which
+ ** - **diff**: prompt the element to retrieve a diff, which
  **   - either is an incremental status update
  **   - or is a from-scratch reconfiguration
  ** 
@@ -133,6 +133,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "gui/ctrl/bus-term.hpp"
+#include "gui/model/expander-revealer.hpp"
 #include "lib/diff/diff-mutable.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"
@@ -153,9 +154,9 @@ namespace model {
    * Interface common to all UI elements of relevance for the Lumiera application.
    * Any non-local and tangible interface interaction will at some point pass through
    * this foundation element, which forms the joint and attachment to the UI backbone,
-   * which is the [UI-Bus](ui-bus.hpp). Any tangible element acquires a distinct identity
+   * which is the [UI-Bus](\ref ui-bus.hpp). Any tangible element acquires a distinct identity
    * and has to be formed starting from an already existing bus nexus.
-   * @see [explanation of the basic interactions](tangible.hpp)
+   * @see [explanation of the basic interactions](\ref tangible.hpp)
    * @warning Tangible is `NonCopyable` for good reason: the UI-Bus Nexus adds a direct
    *          reference into the routing table, tied to the given Tangible's ID (identity.
    *          Consequently you must not store tangibles in STL containers, since these
@@ -175,9 +176,14 @@ namespace model {
       
       ctrl::BusTerm uiBus_;
       
+      Expander expand_;
+      Revealer reveal_;
+      
       
       Tangible(ID identity, ctrl::BusTerm& nexus)
         : uiBus_{nexus.attach(identity, *this)}
+        , expand_{}
+        , reveal_{}
         { }
       
     public:
@@ -196,21 +202,22 @@ namespace model {
       
       void slotExpand();
       void slotCollapse();
-      
-      void slotReveal(ID child);
+      void slotReveal();
       
       void markFlash();
       void markMsg (string message);
       void markErr (string error);
       void mark(GenNode const&);
       
+      void installExpander (Expander::ProbeFun, Expander::ChangeFun);
+      void installRevealer (Revealer::RevealeItFun);
+      
     protected:
       virtual bool doReset()           =0;
       virtual bool doClearMsg()        =0;
       virtual bool doClearErr()        =0;
-      virtual bool doExpand (bool yes) =0;
-      virtual void doReveal (ID child) =0;
-      virtual void doRevealYourself () =0;
+      virtual bool doExpand (bool yes);
+      virtual void doReveal ();
       
       virtual bool doMsg (string)          =0;
       virtual bool doErr (string)          =0;
@@ -222,16 +229,35 @@ namespace model {
       
       
       /** override default size traits for diff application.
-       * @remarks this value here is hard coded, base on what
+       * @remarks this value here is hard coded, based on what
        *  can be expected for diff application to UI elements.
        */
       friend constexpr size_t
       treeMutatorSize (const Tangible*)
       {
-        return 256;
+        return 512;
       }
     };
   
+  
+  
+  /** convenience shortcut to build a message suitable for command invocation
+   * @param args... sequence of arguments to be packaged into a lib::diff::Rec for invocation
+   */
+  template<typename...ARGS>
+  inline lib::diff::GenNode
+  commandMessage (Symbol cmdID, ARGS&&... args)
+  {
+    using lib::diff::Rec;
+    using lib::diff::GenNode;
+    using GenNodeIL = std::initializer_list<GenNode>;
+    
+    
+    return GenNode (string{cmdID},
+                    Rec(Rec::TYPE_NIL_SYM
+                       ,GenNodeIL{}
+                       ,GenNodeIL {std::forward<ARGS> (args)...}));
+  }                  // not typed, no attributes, all arguments as children
   
   
   /** convenience shortcut to issue a command with several arguments */
@@ -239,13 +265,38 @@ namespace model {
   inline void
   Tangible::invoke (Symbol cmdID, ARGS&&... args)
   {
-    using GenNodeIL = std::initializer_list<GenNode>;
-    
-    invoke (cmdID,
-            Rec(Rec::TYPE_NIL_SYM
-               ,GenNodeIL{}
-               ,GenNodeIL {std::forward<ARGS> (args)...}));
-  }           // not typed, no attributes, all arguments as children
+    uiBus_.act (commandMessage (cmdID, std::forward<ARGS> (args)...));
+  }
+  
+  
+  /**
+   * Configure the (optional) functionality to expand or collapse the UI-Element.
+   * @param detectCurrExpansionState a lambda or function<bool()> to retrieve if the element is currently expanded
+   * @param howto_expand_collapse a lambda or function<void(bool)> to switch the element's expansion state
+   * @note unless this setup function is invoked, the expand/collapse functionality remains disabled;
+   *       invoking the #slotExpand() or sending **mark** "`expand`" messages via UI-Bus has no effect then.
+   */
+  inline void
+  Tangible::installExpander (Expander::ProbeFun detectCurrExpansionState,
+                             Expander::ChangeFun howto_expand_collapse)
+  {
+    expand_ = Expander{move (detectCurrExpansionState), move (howto_expand_collapse)};
+  }
+  
+  
+  /**
+   * Configure the (optional) functionality to bring the UI-Element into sight.
+   * @param how_to_uncover_the_element a lambda or function<void()> to actually cause the necessary actions.
+   * @note unless this setup function is invoked, the "`reveal`" functionality remains disabled.
+   *       Typically this setup will be done by an owning parent container, binding to some internals
+   *       and also recursively invoking the "`reveal`" action on the container.
+   */
+  inline void
+  Tangible::installRevealer (Revealer::RevealeItFun how_to_uncover_the_element)
+  {
+    reveal_ = Revealer{move (how_to_uncover_the_element)};
+  }
+
   
   
   

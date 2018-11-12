@@ -257,7 +257,7 @@ namespace lib {
             return *this;
           }
         
-        operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
+        explicit operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
       };
     
     
@@ -368,7 +368,7 @@ namespace lib {
           }
         
         void setTimeout(ulong relative) {timeout_.setOffset(relative);}
-        bool isTimedWait()              {return (timeout_);}
+        bool isTimedWait()              {return bool{timeout_};}
       };
     
     typedef Mutex<Wrapped_ExclusiveMutex> NonrecursiveLock_NoWait;

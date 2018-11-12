@@ -151,13 +151,13 @@ namespace asset{
      *  The remaining fields are filled in with hardwired defaults.
      * @note there is a twist, as this asset identity tuple generates
      *       a different hash as the EntryID. It would be desirable
-     *       to make those two addressing systems interchangeable.      /////////////TICKET #739
+     *       to make those two addressing systems interchangeable. ////////////////////////////////TICKET #739 : make identification schemes compatible
      */
     template<typename TY>
     inline Asset::Ident
-    getAssetIdent (lib::idi::EntryID<TY> const& entryID)
-    {
-      Category cat (STRUCT, idi::StructTraits<TY>::catFolder());
+    getAssetIdent (lib::idi::EntryID<TY> const& entryID, asset::Kind assetKind =STRUCT)
+    {                                                    //////////////////////////////////////////TICKET #1156 : do we need the distinction between STRUCT and META?
+      Category cat (assetKind, idi::StructTraits<TY>::catFolder());
       return Asset::Ident (entryID.getSym(), cat);
     }
     
