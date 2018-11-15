@@ -279,7 +279,7 @@ namespace test    {
   
   /***************************************************************************//**
    * Verify the access mechanism both to the pubic session API and
-   * to implementation level APIs used by Proc-Layer internals.
+   * to implementation level APIs used by Steam-Layer internals.
    * 
    * Actually, this test uses a simulated setup of the real session,
    * complete with interfaces, implementation and session manager frontend.
@@ -323,7 +323,7 @@ namespace test    {
       
       
       /** example of an one-liner, as it might be used
-       *  internally by implementation code within Proc-Layer */
+       *  internally by implementation code within Steam-Layer */
       uint magic() { return InternalAPI_1::access().getMagic(); }
       
       /** @test accessing implementation-level APIs */

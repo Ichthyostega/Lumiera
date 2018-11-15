@@ -250,8 +250,8 @@ type we get), or an custom condition or tag.
 
 Thus, generally the price to pay would be a more elaborate track head area,
 which actually is a collection of advice. Besides, of course it causes a lot
-more work in the Proc Layer (which obviously I am willing to take or already try
-to implement). And, finally, one price to pay is a steeper learning curve for
+more work in the ``Proc Layer'' (which obviously I am willing to take or already
+try to implement). And, finally, one price to pay is a steeper learning curve for
 anyone accustomed to the conventional approach.
 
 
@@ -364,7 +364,7 @@ produce a strip of images taken from the footage, or just a single image (pivot
 image), or a colouring derived from motion detection etc. This way, all clip
 displays could be made to fit the same space in the GUI.
 
-Regarding transitions, the Proc-Layer (with the use of the type information) has
+Regarding transitions, the Steam-Layer (with the use of the type information) has
 to find out if an transition is applicable to a given pair of clips. If it is
 not, it will be flagged as error. Besides, we need an editor for tweaking the
 transition curve. Now we could consider differentiating this transition curve
@@ -397,7 +397,7 @@ natively, without the need of a special "multicam-feature". Some thoughts:
 When a clip contains multiple media streams, we build an pipe for every stream
 actually sent to some output. Now the question is, what happens when attaching
 an effect (either attaching it directly to the clip, or placing the effect on a
-track/trackgroup in a timerange touching this clip). Basically, Proc-Layer will
+track/trackgroup in a timerange touching this clip). Basically, Steam-Layer will
 be able to determine if an effect is applicable at all. It won't try to wire in
 an sound effect into a video pipe. It won't wire an stereo reverb into a mono
 sound pipe. Thus, I would propose a pragmatic approach to this problem: Let the
@@ -416,5 +416,5 @@ This page sumarises the state of the GUI Discussion in early 2009 +
 Since end of 2009, Gui development is mostly stalled (Joel left the project
 due to other obligations). Meanwhile we had a bit of discussion here and there,
 and personally I got a somewhat clearer understanding of what the Model in
-Proc-Layer can / will provide. But basically that's along the lines of what
+Steam-Layer can / will provide. But basically that's along the lines of what
 I wrote in my last comment at the bottom of this page

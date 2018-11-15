@@ -149,7 +149,7 @@ instance, several life switching and reconfiguration operations might happen at 
 the _model port_ (the place where data is retrieved from calculation), the output characteristics
 (framerate, direction) and the delivery goals (playback position, loop playing, scrubbing)
 all may be changed during playback -- we need a way for the player to ``cancel'' and
-reconfigure the backend services.
+reconfigure the vault layer services.
 
 Frame quantisation
 ^^^^^^^^^^^^^^^^^^
@@ -165,9 +165,9 @@ Thus, there are three fundamental guidelines when it comes to rounding:
 These may guide the process of finding the right place for the Quantiser(s) to
 apply. We need some information flows to be joined in order to be able to do
 the quantisation, which leaves us with just a few possible junction points
-where to place quantisation: the backend, the GUI, the player and the session.
+where to place quantisation: the Vault, the GUI, the player and the session.
 
-- putting it into the backend seems to be the most reasonable at first sight:
+- putting it into the vault layer seems to be the most reasonable at first sight:
   we can ``do away'' with nasty things soon, especially if they are technicalities,
   ``get a clean state soon'' -- and hasn't frame quantisation something to do
   with media data, which is handled in the backend?
@@ -177,7 +177,7 @@ cleanliness, well, sigh! Doing rounding soon will leave us with a huge
 amount of degraded information flows throughout the whole system; as a
 consequence,  the general rule is to do it as late as possible. Uncrippled
 information is an enablement. And last but not least: the frame quantisation is connected
-to the _output_ format -- and the backend is likely within the whole
+to the _output_ format -- and the vault layer is likely within the whole
 application the subsystem most remote and unaware of output requirements.
 
 - rounding/quantising in the GUI is extremely common within media applications;

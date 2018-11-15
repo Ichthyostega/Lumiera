@@ -33,7 +33,7 @@ interface to collaborate.
 
 We may escape from that dichotomy when we cease to _rely on data as the fundamental substrate of our system._
 To collaborate, both parts still need to share a structure, yet it suffices for this structure to be a _common
-understanding:_ both the UI-Layer and the Proc-Layer need to share a common understanding how the parts of a editing
+understanding:_ both the UI-Layer and the Steam-Layer need to share a common understanding how the parts of a editing
 session can be arranged. Yet they do not need to share a _common data representation_ of the session.
 
 The consequence is that both sides, ``the core'' and ``the UI'' remain autonomous within their realm. For some concerns, namely _the core concerns,_ that is editing, arranging, processing, the core is in charge and has absolute authority.
@@ -46,17 +46,17 @@ The UI reflects these changes into _its own understanding and representation,_ w
 widgets. When the user interacts with these structures of the presentation layer, *action command messages* are generated,
 using the element-IDs to designate the arguments of the intended operation. Acting on these messages again causes reaction and change in the core, which is reflected back in the form of further diff messages.
 
-Anatomy of the Proc/GUI interface
----------------------------------
+Anatomy of the Steam/Stage interface
+------------------------------------
 - the `GuiFacade` is used as a general lifecycle facade to start up the GUI and to set up the »Layer Separation
-  Interfaces«. The `GuiFacade` is implemented by a class _in Proc-Layer_ and loads the Lumiera GTK-UI as a plug-in.
+  Interfaces«. The `GuiFacade` is implemented by a class _in Steam-Layer_ and loads the Lumiera GTK-UI as a plug-in.
 - once the UI is running, it exposes the `GuiNotificationFacade`, to allow pushing state and structure updates up into
   the user interface.
 - in the opposite direction, for initiating actions from the UI, the Session Subsystem opens the `SessionCommandFacade`,
   which can be considered __ ``the'' public session interface.__
 
 Both these primary interfaces operate *message based.* As immediate consequence, these interfaces are comparatively
-narrow, and interactions can easily be serialised, enqueued and dispatched. On the Proc-Layer side, the `ProcDispatcher`
+narrow, and interactions can easily be serialised, enqueued and dispatched. On the Steam-Layer side, the `ProcDispatcher`
 coordinates command execution and the _Builder run_ to derive the consequences of those session command invocations.
 And within the UI, the GTK-Event loop runs likewise single threaded, and the Notification facade automatically
 dispatches any invocation into the UI thread.

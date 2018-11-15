@@ -111,14 +111,14 @@ namespace gui {
   
   /** The Lumiera GTK-GUI uses a thin proxy layer data model
    *  on top of the actual "high-level-model", which lives in the
-   *  Proc-Layer below. GUI operations interact with these proxy model
-   *  entities, which in turn forward the calls to the actual objects
-   *  in the Proc-Layer, through the Command system (which enables UNDO).
+   *  Steam-Layer below. Stage operations interact with these proxy
+   *  model entities, which in turn forward the calls to the actual objects
+   *  in the Steam-Layer, through the Command system (which enables UNDO).
    *  
    *  @todo: as of 1/2011 this connection between the GUI proxy model and
-   *         the Proc-Layer model needs to be set up. Currently, the GUI model
+   *         the Steam-Layer model needs to be set up. Currently, the GUI model
    *         entities are just created standalone and thus dysfunctional.
-   *  @todo: as of 11/2015 this connection between UI and Proc-Layer is actually
+   *  @todo: as of 11/2015 this connection between UI and Steam-Layer is actually
    *         in the works, and it is clear by now that we won't use proxy objects,
    *         but rather a generic bus-like connection and symbolic IDs to designate
    *         the model elements

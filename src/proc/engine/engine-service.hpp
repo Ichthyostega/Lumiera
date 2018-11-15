@@ -22,8 +22,8 @@
 
 /** @file engine-service.hpp
  ** Access point for the (core) calculation service of the render engine.
- ** This Proc-Layer internal service is provided for use by the Player subsystem.
- ** The actual implementation is forwarded to backend services (especially the scheduler).
+ ** This Steam-Layer internal service is provided for use by the Player subsystem.
+ ** The actual implementation is forwarded to Vault services (especially the scheduler).
  ** The EngineService singleton has no state beyond the jobs currently managed by the
  ** scheduler; when the latter isn't available, any invocation will throw.
  ** 
@@ -31,7 +31,7 @@
  ** This represents a series of calculations, expected to happen in a timely fashion and in order
  ** to deliver a frame data stream into an opened output connection. On the implementation side,
  ** a calculation stream will be translated into a series of jobs to invoke render nodes;
- ** these jobs are to be executed through the scheduler in the backend layer.
+ ** these jobs are to be executed through the scheduler in the Vault Layer.
  ** 
  ** While the individual CalcStram is simple, linear and unmodifiable, any CalcStream may be
  ** _superseded_ by a new definition. In this case, the engine will care for a seamless
@@ -92,7 +92,7 @@ namespace engine{
    * sink in a timely fashion. Actually the CalculationStream
    * instances provided through this (facade) interface are
    * backed by jobs executed through the scheduler in the
-   * backend layer. The implementation of this service is
+   * vault layer. The implementation of this service is
    * responsible for creating the right job entries in the
    * correct order and to enqueue these into the scheduler.
    * @ingroup engine

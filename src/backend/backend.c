@@ -1,5 +1,5 @@
 /*
-  Backend  -  common lumiera backend facilities
+  Backend  -  common lumiera vault layer facilities
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -22,7 +22,7 @@
 
 
 /** @file backend.c
- ** Lumiera Backend: implementation of global initialisation and services.
+ ** Lumiera Vault-Layer: implementation of global initialisation and services.
  */
 
 

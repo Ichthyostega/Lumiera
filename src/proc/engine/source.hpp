@@ -48,7 +48,7 @@ namespace engine
   /**
    * Source Node: represents a media source to pull data from.
    * Source is special, because it has no predecessor nodes,
-   * but rather makes calls down to the data backend internally
+   * but rather makes calls down to the vault layer internally
    * to get at the raw data.
    */
   class Source : public ProcNode

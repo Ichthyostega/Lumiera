@@ -39,7 +39,7 @@ triggering small atomic chunks of work in a ``just in time'' manner -- there is 
 and built-in buffering beyond the low-level double buffering mechanisms utilised by most
 output facilities. Generally speaking, we prefer precise beforehand planning and discarding
 of untimely results over demand-driven and possibly blocking operations. Yet the buffer
-management and frame cache provided by the backend for storing and passing of intermediary
+management and frame cache provided by the vault for storing and passing of intermediary
 and final results allows for a certain amount of leeway.
 
 

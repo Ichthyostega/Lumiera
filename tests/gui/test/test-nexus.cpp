@@ -402,7 +402,7 @@ namespace test{
    * in the test-UI-Bus. In the real Lumiera-UI, the UI-Bus
    * is wired with a [core service handler](\ref core-service.hpp),
    * which processes command messages by actually triggering
-   * command invocation on the Session within Proc-Layer
+   * command invocation on the Session within Steam-Layer
    * @note when called without arguments, a default handler
    *       will be installed, which just logs and discards
    *       any command invocation message.

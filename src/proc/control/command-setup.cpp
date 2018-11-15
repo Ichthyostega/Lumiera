@@ -85,7 +85,7 @@ namespace control {
   
   CommandSetup::~CommandSetup() { }
   
-  /** Start a command setup for defining a Proc-Layer command with the given cmdID
+  /** Start a command setup for defining a Steam-Layer command with the given cmdID
    * @param cmdID the ID under with the new command will be registered
    * @note after defining a static variable of type CommandSetup,
    *       a functor or lambda should be assigned, which then

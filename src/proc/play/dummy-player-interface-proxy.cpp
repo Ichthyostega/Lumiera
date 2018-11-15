@@ -41,7 +41,7 @@
  **          proxy used by the client code to access the interface).
  ** 
  ** @see dummy-player-facade.hpp
- ** @see dummy-player-service.hpp actual implementation within the Proc-Layer
+ ** @see dummy-player-service.hpp actual implementation within the Steam-Layer
  ** @deprecated obsolete early design draft from 2009;
  **             as of 2018 only kept in source to compile some likewise obsolete UI widgets.
  */

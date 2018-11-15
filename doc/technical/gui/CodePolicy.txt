@@ -20,7 +20,7 @@ It is strictly prohibited to spawn other threads from within the event loop.
 We hold up a strict distinction between the _UI mechanics_ and the _core editing
 concerns_. The latter _must not be implemented within the UI-Layer._ Rather, you need
 to send an `act(CommandID)` message over the UI-Bus, which causes the corresponding
-Proc-Layer command script to be dispatched within the Session thread. It is good
+Steam-Layer command script to be dispatched within the Session thread. It is good
 practice to give an immediate visual clue regarding the fact of sending such
 a command (e.g. pressing a button). But be prepared that the actual feedback
 of invoking a command happens asynchronously.
@@ -32,7 +32,7 @@ into the widgets. However, some widgets or controllers are special, insofar they
 correspond to and reflect some entities within the _Session model._ These special
 entities must be implemented as subclasses of `gui::model::Tangible`. These are
 always connected to the UI-Bus, and they are populated and mutated by receiving
-diff messages pushed up from the Proc-Layer.
+diff messages pushed up from the Steam-Layer.
 
 There is an _inner circle_ of UI backbone services. These are all mutually dependent
 on each other and their start-up sequence is intricate. Implement global and cross-cutting

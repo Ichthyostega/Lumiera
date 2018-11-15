@@ -1,5 +1,5 @@
 /*
-  SessionServices  -  accessing Proc-Layer internal session implementation services
+  SessionServices  -  accessing Steam-Layer internal session implementation services
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

@@ -22,7 +22,7 @@
 
 
 /** @file memento-tie.hpp
- ** A special binding used by Proc-Layer commands for capturing UNDO state information.
+ ** A special binding used by Steam-Layer commands for capturing UNDO state information.
  ** The UndoMutation, which is the functor object created and configured by the Command
  ** for handling UNDO, utilises a MementoTie (as ctor parameter) for binding together
  ** the "undo capture function" and the actual "undo function", by retrieving the

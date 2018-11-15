@@ -1,5 +1,5 @@
 /*
-  RenderSegment(Test)  -  Proc-Layer integration test
+  RenderSegment(Test)  -  Steam-Layer integration test
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -42,9 +42,9 @@ namespace test {
   /****************************************************************//**
    * @test create a render process from a given segment of the Session.
    *       Basically this includes cooperation of all parts of the
-   *       Lumiera Proc Layer. For a prepared test-Session we invoke the
+   *       Lumiera Steam Layer. For a prepared test-Session we invoke the
    *       controller to create a render process. This includes building
-   *       the render pipeline. Finally, we analyze all the created 
+   *       the render pipeline. Finally, we analyse all the created 
    *       Structures. 
    * @note this test doesn't cover the actual rendering.
    * @see  proc_interface::ControllerFacade

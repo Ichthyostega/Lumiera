@@ -51,7 +51,7 @@ namespace engine {
    * @todo this was planned to become the frontend
    * to the render node network, which can be considered
    * at the lower end of the middle layer; the actual 
-   * render operations are mostly implemented by the backend
+   * render operations are mostly implemented by the vault layer
    * ////////TODO WIP as of 12/2010
    */
   class RenderEngine
@@ -59,7 +59,7 @@ namespace engine {
     {
     public:
        ///// TODO: find out about the public operations
-       // note: the play controller lives in the proc-layer,
+       // note: the play controller lives in the steam-layer,
        //       but is a subsystem separate of the session.
       RenderEngine();
       

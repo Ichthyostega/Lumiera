@@ -112,7 +112,7 @@ individual Extension point to define when a Feature Bundle is fully usable,
 partially usable or to be rejected. For example, an
 "Effect" Feature Bundle may be partially usable, even if we can't load any
  "ProcFunction" for
-the current platform, but it will be unusable (rejected) if the proc layer
+the current platform, but it will be unusable (rejected) if the steam layer
 can't access the properties describing the media stream type this effect is
 supposed to handle.
 

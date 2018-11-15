@@ -1,5 +1,5 @@
 /*
-  MetaCmd  -  actual proc command scripts for internal meta and control activities
+  MetaCmd  -  actual steam command scripts for internal meta and control activities
 
   Copyright (C)         Lumiera.org
     2018,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file meta-cmd.cpp
- ** Actual definition of Proc-Layer command scripts for meta/ctrl actions.
+ ** Actual definition of Steam-Layer command scripts for meta/ctrl actions.
  ** Any actions issued by the UI-Layer to control internal application state
  ** @todo WIP 8/2018 early draft
  ** 
@@ -92,7 +92,7 @@ COMMAND_DEFINITION (test_meta_activateContentDiff)
                       {
                         TODO ("send a population diff starting from scratch");
                         TODO ("activate life-update service within the session");
-                        // Temporary hack to get any meaningful UI <-> Proc communication
+                        // Temporary hack to get any meaningful UI <-> Steam communication
                         GuiNotification::facade().displayInfo(NOTE_INFO, "Request: population-Diff from Session.");
                       })
        .captureUndo ([]() -> bool
@@ -146,7 +146,7 @@ COMMAND_DEFINITION (meta_deactivateContentDiff)
   /* ===== Demo and Development ===== */
   
   /** DemoGuiRoundtrip: push a notification info message back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Steam-Stage integration     //////////////TICKET #1140 : prototypical Steam-Stage communication
    */
 COMMAND_DEFINITION (test_meta_displayInfo)
   {
@@ -166,7 +166,7 @@ COMMAND_DEFINITION (test_meta_displayInfo)
   
   
   /** DemoGuiRoundtrip: send a `markError` message back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Steam-Stage integration     //////////////TICKET #1140 : prototypical Steam-Stage communication
    */
 COMMAND_DEFINITION (test_meta_markError)
   {
@@ -187,7 +187,7 @@ COMMAND_DEFINITION (test_meta_markError)
   
   
   /** DemoGuiRoundtrip: send a `markNote` message back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Steam-Stage integration     //////////////TICKET #1140 : prototypical Steam-Stage communication
    */
 COMMAND_DEFINITION (test_meta_markNote)
   {
@@ -208,7 +208,7 @@ COMMAND_DEFINITION (test_meta_markNote)
   
   
   /** DemoGuiRoundtrip: send a generic `mark` message with given _action ID_ back up into the UI.
-   * @todo this is a demo mock setup to further development of the Proc-UI integration     //////////////////TICKET #1140 : prototypical Proc-GUI communication
+   * @todo this is a demo mock setup to further development of the Steam-Stage integration     //////////////TICKET #1140 : prototypical Steam-Stage communication
    */
 COMMAND_DEFINITION (test_meta_markAction)
   {

@@ -41,7 +41,7 @@ namespace backend {
   
   
   /**************************************************************//**
-   * Interface to the backend layer (renderfarm node):
+   * Interface to the vault layer (renderfarm node):
    * Global access point for starting a server listening on a TCP port
    * and accepting render tasks. Possibly such a server could also
    * use the backend file/media access functions to provide a media

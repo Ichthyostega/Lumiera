@@ -1,5 +1,5 @@
 /*
-  COMMON.hpp  -  global definitions and common types for the Proc-Layer
+  COMMON.hpp  -  global definitions and common types for the Steam-Layer
  
 
   Copyright (C)         Lumiera.org
@@ -25,9 +25,9 @@
 /** @file proc/common.hpp
  ** Basic set of definitions and includes commonly used together.
  ** Including common.hpp gives you a common set of elementary declarations
- ** widely used within the C++ code of the Proc-Layer. Besides that, this
+ ** widely used within the C++ code of the Steam-Layer. Besides that, this
  ** header is used to attach the doxygen documentation comments for all
- ** the primary Proc-Layer namespaces
+ ** the primary Stean-Layer namespaces
  ** 
  ** @see main.cpp
  ** 
@@ -53,26 +53,26 @@
 
 
 /**
- * Proc-Layer implementation namespace root.
+ * Steam-Layer implementation namespace root.
  * Lumiera's middle layer contains the core models, both
  * high-level (session) and low-level (render nodes), together with
  * the Builder to translate between those two models, the command frontend,
  * session support system, the playback-and-render-control subsystem and
  * the API and backbone of the renderengine. Most render implementation
- * code resides in the backend or is loaded from plug-ins though.
+ * code resides in the vault layer or is loaded from plug-ins though.
  */
 namespace proc { 
   
   
   
   /**
-   * The asset subsystem of the Proc-Layer.
+   * The asset subsystem of the Steam-Layer.
    */
   namespace asset { }
   
   
   /**
-   * Proc-Layer dispatcher, controller and administrative facilities.
+   * Steam-Layer dispatcher, controller and administrative facilities.
    */
   namespace control { }
   
@@ -80,7 +80,7 @@ namespace proc {
   /**
    * Playback and rendering control subsystem.
    * The so called "player" combines and orchestrates services from
-   * the engine, session and backend to perform playback or rendering
+   * the engine, session and vault to perform playback or rendering
    */
   namespace play { 
     
@@ -88,10 +88,10 @@ namespace proc {
   
   
   /**
-   * Render engine code as part of the Proc-Layer.
+   * Render engine code as part of the Steam-Layer.
    * Backbone of the engine, render nodes base and cooperation.
    * A good deal of the active engine code is outside the scope of the
-   * Proc-Layer, e.g. code located in backend services and plugins.
+   * Steam-Layer, e.g. code located in vault services and plugins.
    */
   namespace engine {
     

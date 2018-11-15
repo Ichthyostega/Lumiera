@@ -74,7 +74,7 @@ NOBUG_CPP_DEFINE_FLAG           (all);
 NOBUG_CPP_DEFINE_FLAG_PARENT    ( debugging,                    all);
 /** debug logging for the main application starter */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  main_dbg,                    debugging);
-/** base of debug logging for the backend */
+/** base of debug logging for the vault layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  backend_dbg,                 debugging);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   file_dbg,                   backend_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   filehandle_dbg,             backend_dbg);
@@ -88,13 +88,13 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    threads_dbg,               thread_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    threadpool_dbg,            thread_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   fileheader_dbg,             backend_dbg);
 
-/** base of debug logging for the proc layer */
+/** base of debug logging for the steam layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  proc_dbg,                    debugging);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   command_dbg,                proc_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   session_dbg,                proc_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   player_dbg,                 proc_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   engine_dbg,                 proc_dbg);
-/** base of debug logging for the gui */
+/** base of debug logging for the stage layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  gui_dbg,                     debugging);
 /** base if debug logging for the support library */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  library_dbg,                 debugging);
@@ -123,7 +123,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    ( logging,                      all);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  progress,                    logging);
 /** progress log for the main starter */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   main,                       progress);
-/** progress log for the backend */
+/** progress log for the vault layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   backend,                    progress);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    file,                      backend);       //opening/closing files etc
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    mmap,                      backend);       //mmap errors
@@ -131,9 +131,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    backend);       
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     threads,                  thread);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     threadpool,               thread);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    fileheader,                backend);
-/** progress log for the proc layer */
+/** progress log for the steam layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc,                       progress);
-/** progress log for proc-layer command dispatch */
+/** progress log for steam-layer command dispatch */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    command,                   proc);
 /** progress log for session datastructure */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    session,                   proc);
@@ -181,7 +181,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   mutex_sync,                 sync);          
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   cond_sync,                  sync);          //waiting and signalling condition vars
 /** base flag for memory related logging */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  memory,                      logging);
-/** proc layer memory handling */
+/** steam layer memory handling */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc_mem,                   memory);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    mobject_mem,               proc_mem);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    builder_mem,               proc_mem);

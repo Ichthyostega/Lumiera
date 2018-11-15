@@ -41,7 +41,7 @@ Render Process
 ~~~~~~~~~~~~~~
 The render process brackets an ongoing calculation as a whole. It is not to be
 confused with a operating system process or thread; rather it is a point of
-reference for the relevant entities in the GUI and Proc-Layer in need to
+reference for the relevant entities in the GUI and Steam-Layer in need to
 connect to such a "rendering", and it holds the specific definitions for this
 calculation series. A render process
 _corresponds to a single data stream_ to be rendered. Thus, when the play

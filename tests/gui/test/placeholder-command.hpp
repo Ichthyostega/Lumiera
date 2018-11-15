@@ -24,7 +24,7 @@
 /** @file placeholder-command.hpp
  ** Generate fake commands with stub operations and the ability to verify invocation.
  ** This helper for unit testing of UI interactions might serve as dummy placeholder,
- ** or be used to mock some operation expected to happen within Proc-Layer. The test::Nexus
+ ** or be used to mock some operation expected to happen within Steam-Layer. The test::Nexus
  ** offers a convenience front-end to install such an placeholder operation and use it
  ** as counterpart for some tested elements connected to the UI-bus.
  ** 
@@ -64,7 +64,7 @@ namespace test{
   /**
    * Set of stub command operations.
    * This is a typed definition frame with some operations,
-   * suitably to be bound into a Proc-Layer command. The actual
+   * suitably to be bound into a Steam-Layer command. The actual
    * command "operation" just logs invocation into a statically
    * obtained [Event-Log](\ref EventLog) instance.
    * @note by design, in Lumiera the actual command functions are stateless.

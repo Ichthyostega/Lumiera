@@ -73,7 +73,7 @@ namespace mobject {
   SessManager& Session::current = theSessionManager();
   
   
-  /** special access point allowing Proc-Layer internals
+  /** special access point allowing Steam-Layer internals
    *  to cooperate with session implementation level APIs
    */
   template<>

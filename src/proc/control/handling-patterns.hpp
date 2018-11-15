@@ -24,7 +24,7 @@
 /** @file handling-patterns.hpp
  ** A hard wired collection of predefined command handling patterns.
  ** There is a small number of different possibilities to handle execution
- ** and UNDO of proc-Layer commands. Each of these is defined as a subclass
+ ** and UNDO of Steam-Layer commands. Each of these is defined as a subclass
  ** in this header and then hard wired into a small table. Handling patterns
  ** are stateless singleton objects, thus we build using multiple Singleton
  ** factory objects and configure them hard wired with the respective

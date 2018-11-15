@@ -79,7 +79,7 @@ PlayController:: coordinating playback, cueing and rewinding of a
  _PlayheadCursor_ (or multiple in case there are multiple views and or
  monitors), and at the same time directing a render process to deliver the
  media data needed for playback. Actually, the implementation of the
- PlayController(s) is assumed to live in the backend.
+ PlayController(s) is assumed to live in the application core.
 
 RenderTask:: basically a !PlayController, but collecting output
  directly, without moving a !PlayheadCursor (maybe a progress indicator) and
@@ -148,7 +148,7 @@ image:{imgd}/ProjectTimelineSequenceUML.png[UML: Relation of Project, Timeline, 
 
 Tasks
 ^^^^^
- * Interfaces on the GUI and Proc level need to be fully specified.
+ * Interfaces on the Stage and Steam level need to be fully specified.
    Especially, "Timeline" is now promoted to be a new top-level entity within
    the Session
  * communication between the PlayController(s) and the GUI need to be worked

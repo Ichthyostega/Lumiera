@@ -22,7 +22,7 @@
 
 
 /** @file config-resolver.cpp
- ** Implementation of bindings between Proc-Layer objects and rules-based configuration.
+ ** Implementation of bindings between Steam-Layer objects and rules-based configuration.
  ** @todo draft from the early design phase of the Lumiera application. As of 2016, nothing
  **       was done on behalf of rules-based configuration, other then preparing the whole architecture
  **       for this capability. So this remains one of the most relevant goals of the Project.

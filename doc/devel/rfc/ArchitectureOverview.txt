@@ -20,11 +20,12 @@ link:http://www.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.
 
 Description
 ~~~~~~~~~~~
- * the Application has three Layers: Backend, Proc and GUI
+ * the Application has three Layers: Vault, Steam and Stage.footnote:[at the
+   time of this writing, those three layers were named ``Backend'', ``Proc'' and ``GUI'']
  * the Application shall be completely functional without GUI (script-driven)
  * all IO, media data fetching, processing and bookkeeping falls within the
-   realm of the Backend
- * all media object manipulation, deciding and configuration is the Proc
+   realm of the Vault Layer
+ * all media object manipulation, deciding and configuration is the Steam
    Layer's job
  * extensible by plugins on all levels, highly configurable, but not totally
    componentized (micro kernel) architecture

@@ -36,9 +36,9 @@
  ** so that multiple output or rendering operations can use differing time origins
  ** and frame rates simultaneously on the same model.
  ** 
- ** The Lumiera backend functions mostly operate on raw frame counts, which in this
- ** model are defined to be a special kind of timecode, and thus dependent on a
- ** preceding time quantisation.
+ ** The Lumiera Vault Layer functions mostly operate on raw frame counts, which in
+ ** this model are defined to be a special kind of timecode, and thus dependent on
+ ** a preceding time quantisation.
  ** 
  ** 
  ** @see lib::time::Time

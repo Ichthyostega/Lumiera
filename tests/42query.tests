@@ -1,4 +1,4 @@
-TESTING "Proc Layer config rules Test Suite" ./test-suite --group=query
+TESTING "Steam Layer config rules Test Suite" ./test-suite --group=query
 
 
 

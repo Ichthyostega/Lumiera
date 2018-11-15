@@ -47,14 +47,14 @@ namespace test {
   
   /*******************************************************************//**
    * This test documents the Interface used by MediaFactory when loading
-   * media files for querying Lumiera's backend layer for information
+   * media files for querying Lumiera's vault layer for information
    * on how the media file is structured.
    */
   class MediaStructureQuery_test : public Test
     {
       virtual void run(Arg) 
         {
-          UNIMPLEMENTED ("querying media file structure from backend");
+          UNIMPLEMENTED ("querying media file structure from vault");
         }
       
       

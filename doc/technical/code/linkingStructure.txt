@@ -245,12 +245,12 @@ to comply to that contract superficially. Dealing with the entities involved in 
 effectively involves the internal functions of both sides. Which is in contradiction to a
 ``clean'' layer hierarchy.
 
-For a more tangible example, lets assume our backend has to do some work on behalf of the GUI;
-so the backend offers a contract to outline the properties of stuff it can work on. In compliance
-with this contract, the GUI hands over some data entities to the backend to work on -- but by their
-very nature, these data entities are and always remain GUI entities. When the backend invokes compliant
+For a more tangible example, lets assume our vault layer has to do some work on behalf of the GUI;
+so the vault offers a contract to outline the properties of stuff it can work on. In compliance
+with this contract, the GUI hands over some data entities to the vault to work on -- but by their
+very nature, these data entities are and always remain GUI entities. When the vault invokes compliant
 operations on these entities, it effectively invokes functionality implemented in the GUI. Which
-makes the backend _binary dependent on the GUI_.
+makes the vault layer _binary dependent on the GUI_.
 
 While this problem can not be resolved in principle, there are ways to work around it, to the degree
 necessary to get hierarchically ordered binary dependencies -- which is what we need to make a lower
@@ -519,19 +519,19 @@ Relative dependency location
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Locating binary dependencies relative to the executable (as described above) gets complicated when several
 of _our own dynamically linked modules_ depend on each other transitively. For example, a plug-in might
-depend on `liblumierabackend.so`, which in turn depends on `liblumierasupport.so`. Now, when we link
+depend on `liblumieravault.so`, which in turn depends on `liblumierasupport.so`. Now, when we link
 `--as-needed`, the linker will add the direct dependency, but omit the transitive dependency on the
 support library. Which means, at runtime, that we'd need to find the support library _when we are
-about to load the backend library_. With the typical, external libraries already installed to the
+about to load the vault layer library_. With the typical, external libraries already installed to the
 system this works, since the linker has built-in ``magic'' knowledge about the standard installation
 locations of system libraries. Not so for our own loadable components -- recall, the idea was to provide
 a self-contained directory tree, which can be relocated in the file system as appropriate, without the
 need to ``install'' the package officially. The GNU dynamic linker can handle this requirement, though,
 if we supply an additional, relative search information _with the library pulling in the transitive
-dependency_. In our example, `liblumierabackend.so` needs an additional search path to locate
-`liblumierasupport.so` _relative_ to the backend lib (and not relative to the executable). For this
-reason, our build system by default supplies such a search hint with every Lumiera lib or dynamic
-module -- assuming that our own shared libraries are installed into a subdirectory `modules` below
+dependency_. In our example, `liblumieravault.so` needs an additional search path to locate
+`liblumierasupport.so` _relative_ to the vault layer lib (and not relative to the executable).
+For this reason, our build system by default supplies such a search hint with every Lumiera lib or
+dynamic module -- assuming that our own shared libraries are installed into a subdirectory `modules` below
 the location of the executable; other dynamic modules (plug-ins) may be placed in sibling directories.
 So, to summarise, our build defines the following `RPATH` and `RUNPATH` specs:
 

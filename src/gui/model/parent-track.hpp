@@ -22,7 +22,7 @@
 /** @file parent-track.hpp
  ** Preliminary UI-model: Definition of ParentTrack, a class which
  ** represents a base functionality for tracks and sequences which
- ** are also track parents. This class was intended to wraps proc layer data.
+ ** are also track parents. This class was intended to wraps steam layer data.
  ** @warning as of 2016 this UI model is known to be a temporary workaround
  **          and will be replaced in entirety by UI-Bus and diff framework.
  ** @deprecated the existing timeline implementation will be completely rewritten

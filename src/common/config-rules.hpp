@@ -53,7 +53,7 @@
  ** @see lumiera::Query
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory 
- ** @see config-resolver.hpp specialised setup for the Proc-Layer
+ ** @see config-resolver.hpp specialised setup for the Steam-Layer
  ** @see fake-configrules.hpp currently used dummy-implementation
  **
  */
@@ -146,7 +146,7 @@ namespace lumiera {
       };
     
     /** 
-     * the "front side" interface: the Proc-Layer code can
+     * the "front side" interface: the Steam-Layer code can
      * use this QueryHandler to retrieve instances of the
      * type TY fulfilling the given Query. To start with,
      * we use a mock implementation. 

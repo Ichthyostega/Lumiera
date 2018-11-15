@@ -22,7 +22,7 @@
 
 /** @file real-clock.hpp
  ** Front-end for simplified access to the current wall clock time.
- ** The implementation relies on Lumiera backend functions to access the
+ ** The implementation relies on Lumiera vault functions to access the
  ** system clock with a sufficient level of precision. The result is
  ** delivered in lumiera's internal \link lib::time::Time time format \endlink
  **   

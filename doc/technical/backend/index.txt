@@ -1,7 +1,7 @@
-Technical Documentation: Backend
-================================
+Technical Documentation: Vault
+==============================
 
-Here we collect bits of technical documentation for the Backend.
+Here we collect bits of technical documentation for the Vault-Layer.
 
 For now, we have:
 

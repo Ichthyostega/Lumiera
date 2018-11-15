@@ -1,5 +1,5 @@
 /*
-  COMMAND-INVOCATION.hpp  -  shortcuts and helpers for calling Proc-Layer commands
+  COMMAND-INVOCATION.hpp  -  shortcuts and helpers for calling Steam-Layer commands
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>

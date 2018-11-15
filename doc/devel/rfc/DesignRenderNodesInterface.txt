@@ -9,7 +9,7 @@
 Design the Render Nodes interface
 ---------------------------------
 In the current design, the low-level model is comprised of "Render Nodes";
-Proc-Layer and Backend carry out some colaboration based on this node network.
+Stean-Layer and Vault carry out some colaboration based on this node network.
  +
 Three different interfaces can be identified
  * the node wiring interface
@@ -19,8 +19,8 @@ Three different interfaces can be identified
 
 Description
 ~~~~~~~~~~~
-Render Nodes are created and wired by the Builder in the Proc-Layer. On the
-other hand, the rendering process is controlled by the backend, which also
+Render Nodes are created and wired by the Builder in the Steam-Layer. On the
+other hand, the rendering process is controlled by the vault layer, which also
 provides the implementation for the individual data processing tasks. To create
 a result, output nodes are ''pulled'' via the invocation interface, resulting
 in the affected nodes to recursively pull their predecessor(s). In the course
@@ -28,8 +28,8 @@ of this call sequence, the nodes activate their processing function to work on
 a given set of buffers. Moreover, we plan to use the render network also for
 gathering statistics.
 
-'''Note''': Render Node is an internal interface used by Proc-Layer and
-   activated by the Backend. Plugins are planned to be added via Adapter nodes.
+'''Note''': Render Node is an internal interface used by Steam-Layer and
+   activated by the Vault. Plugins are planned to be added via Adapter nodes.
    Thus the Render Node interface needs ''not'' to be exported.
 
 
@@ -73,8 +73,8 @@ the processing interface
 the individual nodes are configured to call a plain-C {{{process()}}} function
 and provide an array of buffer pointers to be used within this function. For
 the purpose of invoking actual data processing, it is irrelevant if this
-function is implemented somewhere in the backend or provided by a plugin. At
-this point, no type- and other meta-information is passed, rather the
+function is implemented somewhere in the vault layer or provided by a plugin.
+At this point, no type- and other meta-information is passed, rather the
 processing function is supposed to do The Right Thing ^TM^
 
 
@@ -84,7 +84,7 @@ Tasks
  * What services do we expect from Render Nodes. What do we plan to do with a
    render node?
  * What different kinds (if any) of Render Nodes can be foreseen?
- * order the required functionality by Proc / Backend. Find out specific
+ * order the required functionality by Steam / Vault. Find out specific
    implementation constraints.
  * work out a design based on this informations
 
@@ -102,10 +102,9 @@ The purpose of this Design Entry is to give a summary; the questions and the
 details of carrying out the operations are much more involved.
  +
 Please see the
-http://www.lumiera.org/wiki/renderengine.html#Rendering[Proc-Layer impl
-documentation (TiddlyWiki)] and the
-http://www.lumiera.org/gitweb?p=lumiera/ichthyo;a=blob;f=src/proc/engine/procnod
-.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=refs/heads/proc[Source Code]
+http://www.lumiera.org/wiki/renderengine.html#Rendering[Development internal doc (TiddlyWiki)]
+and the
+http://www.lumiera.org/gitweb?p=lumiera/ichthyo;a=blob;f=src/proc/engine/procnod.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=refs/heads/proc[Source Code]
 for details
 (and/or contact Ichthyo for in-depth discussion of those technical details)
 

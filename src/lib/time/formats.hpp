@@ -74,8 +74,8 @@ namespace time {
      * Frame count as timecode format.
      * An integral number used to count frames
      * can be used as a simple from of time code.
-     * Indeed the Lumiera backend mostly relies on
-     * these frame counts. As with any timecode, the
+     * Indeed the Lumiera vault layer mostly relies
+     * on these frame counts. As with any timecode, the
      * underlying framerate/quantisation remains implicit.
      */
     struct Frames

@@ -54,10 +54,10 @@ namespace backend {
   
   
   /**************************************************************//**
-   * Interface to the backend layer:
+   * Interface to the vault layer:
    * provides functions for querying (opening) a media file,
    * detecting the channels or streams found within this file etc. 
-   * Implementation delegating to the actual backend functions.
+   * Implementation delegating to the actual vault layer functions.
    * 
    * convention: data passed by pointer is owned by the originator;
    * it should be copied if needed beyond the control flow 

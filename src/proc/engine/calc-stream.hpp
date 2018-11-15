@@ -94,7 +94,7 @@ namespace engine{
    * calculation jobs, delivering frames into the configured
    * OutputSlot in a timely fashion. Behind the scenes, this
    * "stream of calculations" will be translated into several
-   * jobs enqueued with the scheduler in the backend layer.
+   * jobs enqueued with the scheduler in the Vault Layer.
    * The implementation of the \link Dispatcher frame dispatch
    * step \endlink cares to create and configure these jobs
    * and to manage the necessary dependencies and callbacks.

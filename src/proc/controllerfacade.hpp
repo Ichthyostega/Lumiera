@@ -1,5 +1,5 @@
 /*
-  CONTROLLERFACADE.hpp  -  Facade and service access point for the Proc Layer Controller
+  CONTROLLERFACADE.hpp  -  Facade and service access point for the Steam Layer Controller
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file controllerfacade.hpp
- ** unfinished draft for a "Proc-Layer Controller"
+ ** unfinished draft for a "Steam-Layer Controller"
  ** @todo as of 2016 it very much looks like there wont'be any such thing...
  */
 
@@ -37,7 +37,7 @@ namespace proc_interface
 
 
   /**
-   * Interface providing unified access to the Proc-Subsystem Controller.
+   * Interface providing unified access to the Steam-Subsystem Controller.
    * Especially, this Facade class exports the functions to get a render
    * engine for carrying out actual renderings.
    */

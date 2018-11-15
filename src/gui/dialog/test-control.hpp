@@ -165,8 +165,8 @@ namespace dialog {
       
       
       /**
-       * Ticket #1099 : perform a dummy round-trip to verify Proc-GUI integration.
-       * This routine invokes the command `test_meta_displayInfo` and friends down in Proc-Layer,
+       * Ticket #1099 : perform a dummy round-trip to verify Steam-Stage integration.
+       * This routine invokes the command `test_meta_displayInfo` and friends down in Steam-Layer,
        * passing the settings from the radio buttons to select the flavour of feedback, and the text
        * for feedback content. The expected behaviour is for the invoked command to send a feedback
        * via UI-Bus towards the ErrorLogDisplay within the InfoboxPanel.
@@ -212,8 +212,8 @@ namespace dialog {
               trig_1_.set_use_underline();
               trig_1_.set_label ("_display text");
               trig_1_.property_xalign() = 0;
-              trig_1_.set_tooltip_markup (_("Trigger Proc-GUI <b>roundtrip</b>\n"
-                                            "Proc invokes GuiNotification::displayInfo"));
+              trig_1_.set_tooltip_markup (_("Trigger Steam-Stage <b>roundtrip</b>\n"
+                                            "Steam invokes GuiNotification::displayInfo"));
               
               level_warn_.join_group(level_info_);
               level_erro_.join_group(level_info_);
@@ -222,19 +222,19 @@ namespace dialog {
               trig_2_.set_use_underline();
               trig_2_.property_xalign() = 0;
               trig_2_.set_label ("mark _error");
-              trig_2_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
+              trig_2_.set_tooltip_markup (_("trigger Steam-command, which in turn\n"
                                             "sends an error state mark via UI-Bus"));
               
               trig_3_.set_use_underline();
               trig_3_.property_xalign() = 0;
               trig_3_.set_label ("mark _info");
-              trig_3_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
+              trig_3_.set_tooltip_markup (_("trigger Steam-command, which in turn\n"
                                             "sends an info state mark via UI-Bus"));
               
               trig_4_.set_use_underline();
               trig_4_.set_label ("_mark");
               trig_4_.property_xalign() = 0;
-              trig_4_.set_tooltip_markup (_("trigger Proc-command, which in turn\n"
+              trig_4_.set_tooltip_markup (_("trigger Steam-command, which in turn\n"
                                             "sends an <b>state mark</b> message, using\n"
                                             "the message action-ID from the combobox"));
               actionID_.append (cuString{MARK_Flash});

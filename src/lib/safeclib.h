@@ -37,7 +37,7 @@ LUMIERA_ERROR_DECLARE(NO_MEMORY);
  * initialised and removed from it before shut down. Without resourcecollector
  * failed allocations will abort().
  * @param hook pointer to the resourcecollector_run function, must be of type
- *        lumiera_resourcecollector_run_fn but we don't want a dependency on backend in this header
+ *        lumiera_resourcecollector_run_fn but we don't want a dependency on vault in this header
  */
 void
 lumiera_safeclib_set_resourcecollector (void* hook);

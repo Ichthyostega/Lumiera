@@ -59,7 +59,7 @@
  **       obviously this is the foundation of a more generic system to deal with predicate terms.
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
- **       at various places within proc-layer.
+ **       at various places within steam-layer.
  ** @todo for now, \em only the case of a completely constant (ground) pattern is implemented.
  **       Later we may consider to extend the binding patterns to allow variables, which, on match
  **       could be fed as parameters to the bound advice. But this extension requires to extend

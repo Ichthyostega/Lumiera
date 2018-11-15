@@ -14,7 +14,7 @@ Stream Type System
 
 ********************************************************************************
 .Abstract
-Especially in the Proc-Layer, within the Builder and at the interface to the
+Especially in the Steam-Layer, within the Builder and at the interface to the
 Engine we need sort of a framework to deal with different »kinds« of
 media streams. +
 This is the foundation to be able to define what can be connected and to
@@ -98,9 +98,9 @@ _library_ routines, which also yield a _type classification system_ suitable
 for their intended use. Most notably, for raw sound and video data we use the
 http://gmerlin.sourceforge.net/[GAVL] library, which defines a fairly complete
 classification system for buffers and streams. For the relevant operations in
-the Proc-Layer, we access each such library by means of a Façade; it may sound
+the Steam-Layer, we access each such library by means of a Façade; it may sound
 surprising, but actually we just need to access a very limited set of
-operations, like allocating a buffer. _Within_ the Proc-Layer, the actual
+operations, like allocating a buffer. _Within_ the Steam-Layer, the actual
 implementation type is mostly opaque; all we need to know is if we can connect
 two streams and get an conversion plugin.
 
@@ -220,7 +220,7 @@ Comments
 --------
 //comments: append below
 As usual, see the
-http://www.lumiera.org/wiki/renderengine.html#StreamType[Proc-Layer impl doku]
+http://www.lumiera.org/wiki/renderengine.html#StreamType[Development internal doc]
 for more information and implementation details.
 
 Practical implementation related note: I found I was blocked by this one in
@@ -249,7 +249,7 @@ number, plus adding the capabilitiy of per frame metadata. This indices get
 abstracted by "indexing engines" it will be possible to have different kinds of
 indices over one file (for example, one enumerating single frames, one
 enumerating keyframes or gops). Such a indexing engine would be also the place
-to attach per media metadata. From the proc layer it can then look like `struct
+to attach per media metadata. From the steam layer it can then look like `struct
 frameinfo* get_frame(unsigned num)` where `struct frameinfo` (not yet defined)
 is something like `{ void* data; size_t size; struct metadata* meta; ...}` +
  -- link:ct[] 2008-10-06

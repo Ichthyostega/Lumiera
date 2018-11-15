@@ -32,7 +32,7 @@
  ** of a test rigged mock interface backbone remains an implementation detail. The purpose
  ** of this setup is to capture messages sent from elements operated within a test setup
  ** and directed at "core services" (that is, towards a presentation state manager or
- ** towards the Proc-Layer for command invocation). Test code may then verify the
+ ** towards the Steam-Layer for command invocation). Test code may then verify the
  ** proper shape and incidence of these messages.
  ** 
  ** @see [abstract-tangible-test.cpp]
@@ -121,9 +121,9 @@ namespace test{
   
   
   /**
-   * Setup of test fixture: prepare a mocked Proc-Layer command,
+   * Setup of test fixture: prepare a mocked Steam-Layer command,
    * which accepts arguments with the denoted types.
-   * @note this call installs the command mock into the Proc-Layer
+   * @note this call installs the command mock into the Steam-Layer
    *       command registry, where it remains in place until shutdown.
    *       The can be accessed through the generated command ID. Besides,
    *       this call also installs a command handler into the Test-Nexus,

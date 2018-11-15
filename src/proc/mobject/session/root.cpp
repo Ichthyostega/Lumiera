@@ -51,7 +51,7 @@ namespace session {
    * @return an embedded LUID tagged with the type of the session::Root.
    *         This ID is suitable to be used in model diff and as ID on
    *         the UI-Bus to address the corresponding representations
-   *         in Proc-Layer and UI-Layer
+   *         in Steam-Layer and Stage-Layer
    */
   lib::idi::EntryID<Root>
   Root::getID()

@@ -36,7 +36,7 @@
  ** we close the circle by allowing Symbol instances to be created from strings at runtime.
  ** 
  ** @remark this started on occasion 11/2008, just with a typedef to mark assumption on interfaces
- **   for rules based configuration in the Proc-Layer. Over time, conversions, comparison and
+ **   for rules based configuration in the Steam-Layer. Over time, conversions, comparison and
  **   hashcode implementation were added. It turned out that the most smooth integration in
  **   coding practice is achieved when allowing transparent conversion for Literal, but not
  **   for Symbol or std::string.

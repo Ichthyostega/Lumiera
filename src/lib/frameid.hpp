@@ -71,7 +71,7 @@ namespace lumiera {
    * Identification tuple for addressing frames unambiguously.
    * 
    * @todo currently (7/08) this is a dummy implementation to find out
-   *       what interface the Proc layer needs. Probably the backend will
+   *       what interface the Steam layer needs. Probably the vault layer will
    *       later on define what is actually needed; this header should then
    *       be replaced by a combined C/C++ header
    */

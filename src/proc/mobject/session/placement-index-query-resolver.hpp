@@ -26,7 +26,7 @@
  ** This wrapper adds a service to resolve queries for exploring the contents or
  ** the parent path of a given scope; the actual implementation relies on the 
  ** basic operations provided by the PlacementIndex; usually this wrapper is
- ** instantiated as one of the SessionServices for use by Proc-Layer internals.
+ ** instantiated as one of the SessionServices for use by Steam-Layer internals.
  ** The PlacementIndex to use for the implementation is handed in to the ctor.
  ** 
  ** As any of the QueryResolver services, the actual resolution is completely

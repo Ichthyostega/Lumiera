@@ -21,7 +21,7 @@
 */
 
 /** @file dummy-player-service.hpp
- ** A public service provided by the Proc-Layer, implementing a dummy/mockup playback process.
+ ** A public service provided by the Steam-Layer, implementing a dummy/mockup playback process.
  ** This is a design sketch; Lumiera isn't able to generate rendered output as of 2/2009. The
  ** idea is, that for each ongoing calculation process, there is a ProcessImpl instance holding
  ** the necessary handles and allocations and providing an uniform API to the client side.

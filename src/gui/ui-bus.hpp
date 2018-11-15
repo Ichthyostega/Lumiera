@@ -123,7 +123,7 @@ namespace gui {
   namespace controller { 
     
     /**
-     * @todo needs to be reshaped for communication with Proc-Layer /////////////////TICKET #959
+     * @todo needs to be reshaped for communication with Steam-Layer ////////////////TICKET #959
      */
     class Controller
       {

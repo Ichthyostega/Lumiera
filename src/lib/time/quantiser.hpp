@@ -136,7 +136,7 @@ namespace time {
    * Simple stand-alone Quantiser implementation based on a constant sized gird.
    * This is a self-contained quantiser implementation without any implicit referral
    * to the Lumiera session. As such it is suited for simplified unit testing.
-   * @warning real GUI and Proc-Layer code should always fetch a quantiser from the
+   * @warning real GUI and Steam-Layer code should always fetch a quantiser from the
    * Session, referring to a pre defined TimeGrid. Basically, the overall purpose of
    * the time-quantisation framework is to enforce such a link to a distinct time scale
    * and quantisation, so to prevent "wild and uncoordinated" rounding attempts.

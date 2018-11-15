@@ -57,12 +57,12 @@
 //#include <boost/operators.hpp>
 #include <memory>
 
-namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or proc?
+namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or steam?
 namespace query  {
   
   /**
    * Adapter for using this type as a \em primary type
-   * within Lumiera's Proc-Layer. Any such type is expected
+   * within Lumiera's Steam-Layer. Any such type is expected
    * to provide a specialisation, filling in the actual details
    * necessary to deal with objects of this type.
    * 

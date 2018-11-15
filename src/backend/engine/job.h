@@ -23,7 +23,7 @@
 
 /** @file job.h
  ** Definition of a render job.
- ** Jobs are defined within Proc-Layer and passed to the scheduler in the Back-end
+ ** Jobs are defined within Steam-Layer and passed to the scheduler in the Back-end
  ** for time bound invocation. This header defines the data structures used to describe
  ** a job, and the basic data structures used by the scheduler to keep track of individual
  ** jobs. Moreover, within the C++ part of this header, some classes are layered on top
@@ -147,16 +147,16 @@ typedef lumiera_jobDefinition* LumieraJobDefinition;
 
 
 /**
- * Description of a job. Jobs are passed by the Proc-Layer to the Back-End. 
+ * Description of a job. Jobs are passed by the Steam-Layer to the Back-End. 
  * 
  * This descriptor record is used by the scheduler to organise job invocation.
  * The actual job's definition, i.e. the invocation parameter and the closure
  * necessary to invoke the job as a function is embedded (by value)
  * into this descriptor.
  * 
- * @remarks all fields of interest only to the backend,
+ * @remarks all fields of interest only to the vault layer,
  *       except #jobDefinition, which is provided by and of
- *       interest to the Proc-Layer
+ *       interest to the Steam-Layer
  * @note while this descriptor as such is self-contained,
  *       the referred LumieraJobClosure needs to be allocated
  *       and managed separately. Indeed, this closure happens
@@ -167,7 +167,7 @@ struct lumiera_jobDescriptor_struct
     gavl_time_t deadline;                ///< given in real wall clock time
     JobState jobState;
     
-    lumiera_jobDefinition jobDefinition; ///< of interest only to Proc-Layer
+    lumiera_jobDefinition jobDefinition; ///< of interest only to Steam-Layer
     
     /* == Job prerequisites == */
     LList waiting;

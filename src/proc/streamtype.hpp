@@ -22,7 +22,7 @@
 
 /** @file streamtype.hpp
  ** Framework for classification of media streams.
- ** Besides the actual implementation type of a media stream, the Proc-Layer
+ ** Besides the actual implementation type of a media stream, the Steam-Layer
  ** needs a more general way for accessing, comparing and manipulating media streams
  ** based on type information.
  ** 

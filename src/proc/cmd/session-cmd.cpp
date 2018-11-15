@@ -1,5 +1,5 @@
 /*
-  SessionCmd  -  actual proc command scripts for session-global actions
+  SessionCmd  -  actual steam command scripts for session-global actions
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file session-cmd.cpp
- ** Actual definition of Proc-Layer command scripts for session-global actions.
+ ** Actual definition of Steam-Layer command scripts for session-global actions.
  ** @todo WIP 3/2017 early draft
  ** 
  ** @see cmd.hpp

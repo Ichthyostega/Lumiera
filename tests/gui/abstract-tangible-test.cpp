@@ -315,7 +315,7 @@ namespace test {
           MARK_TEST_FUN
           EventLog nexusLog = gui::test::Nexus::startNewLog();
           
-          // Setup test stage: define a command/action "in Proc"
+          // Setup test stage: define a command/action "in Steam"
           CommandDef (DUMMY_CMD_ID)
               .operation (operate)
               .captureUndo (capture)

@@ -1,5 +1,5 @@
 /*
-  SESSION-SERVICES.hpp  -  accessing Proc-Layer internal session implementation services
+  SESSION-SERVICES.hpp  -  accessing Steam-Layer internal session implementation services
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,9 +25,9 @@
  ** A mechanism for exposing and accessing implementation level
  ** services of the session. While any client code should always
  ** use the public Session API, some implementation level facilities
- ** within Proc-Layer need to cooperate with a wider SessionImpl API.
+ ** within Steam-Layer need to cooperate with a wider SessionImpl API.
  ** On the other hand, we don't want to create coupling between the
- ** mentioned Proc internals and the session implementation. Another
+ ** mentioned Steam internals and the session implementation. Another
  ** concern addressed by this mechanism is to assure consistency
  ** across all those implementation APIs. New APIs can be added
  ** just by extending a template definition and will automatically
@@ -36,11 +36,11 @@
  ** 
  ** \par structure of session implementation-level services
  ** 
- ** Assumed any part of the Proc implementation needs to cooperate
+ ** Assumed any part of the Steam implementation needs to cooperate
  ** with the session implementation; the necessary link has to be
  ** abstracted into an implementation level API. Typically, this
  ** API provides an static access function, which is to be implemented
- ** "somewhere else", so the Proc implementation isn't required to 
+ ** "somewhere else", so the Steam implementation isn't required to 
  ** include anything of the session implementation level
  ** 
  ** In order to actually provide such a service, an specialisation of
@@ -107,7 +107,7 @@ namespace session {
    * to provide by the Session. An instance of this template
    * is created on top of SessionImpl, configured such as
    * to inherit from all the concrete services to be
-   * exposed for use by Proc-Lyer's internals.
+   * exposed for use by Steam-Layer's internals.
    * 
    * @param APIS  sequence of API types to implement
    * @param FRONT type of the frontend used for access

@@ -23,7 +23,7 @@
 
 /** @file command-instance-manager.hpp
  ** Service to support forming and invocation of command instances for use by the UI.
- ** A *Proc-Layer command* is a functor, which can be parametrised with concrete arguments.
+ ** A *Steam-Layer command* is a functor, which can be parametrised with concrete arguments.
  ** Typically, these arguments are to be picked up from the actual usage context in the GUI.
  ** This creates the specific twist that possible command instances for invocation can and will
  ** be formed during an extended time period, non-deterministically -- since the actual context
@@ -40,7 +40,7 @@
  ** \par lifecycle
  ** There CommandInstanceManager is maintained by the SessionCommandService, which in turn is
  ** installed and removed by the implementation within ProcDispatcher. Its lifecycle is thus tied
- ** to the opening / closing of the Proc-Layer interface, as dictated by the Session lifecycle.
+ ** to the opening / closing of the Steam-Layer interface, as dictated by the Session lifecycle.
  ** When the current session is closed, all command instances "underway" will thus be discarded.
  ** 
  ** @see command-setup.cpp service implementation

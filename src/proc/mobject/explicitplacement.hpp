@@ -28,7 +28,7 @@
  ** together. However, placements are typically only defined in parts, and what
  ** is left out in the definition is assumed to be _"obvious from the context"._
  ** 
- ** The core operation within Proc-Layer is the Builder run, which walks the Session model
+ ** The core operation within Steam-Layer is the Builder run, which walks the Session model
  ** to resolve and fill in all the contextual information. The result is a completely resolved
  ** Placement for each actually visible and relevant entity. Such is represented as ExplicitPlacement.
  ** These are arranged into the backbone structure, the Fixture, and the actual render node network

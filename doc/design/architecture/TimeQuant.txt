@@ -188,7 +188,7 @@ context an object is encountered in. This solution might be too general and
 heavy weight at times though. Thus, for important special cases, the accessors
 should return tagged values, preferably even with differing static type. Time
 codes can be integrated this way, but most notably the *frame numbers* used
-for addressing throughout the backend, can be implemented as such specifically
+for addressing throughout the vault, can be implemented as such specifically
 typed tagged values; the tag here denotes the quantiser and thus the underlying
 grid -- it should be implemented as hash-ID for smooth integration with code
 written in plain C.

@@ -22,12 +22,12 @@
 */
 
 /** @file threadpool-init.hpp
- ** Automatically bring up the threading management and threadpool in the backend.
+ ** Automatically bring up the threading management and threadpool in the vault layer.
  ** This works by registering a lifecycle callback, which is activated at the start
  ** of main or when running the testsuite. Similarly, a shutdown hook is registered.
  ** 
  ** @todo as of 1/10 it is not clear if this will be the final solution.
- **       Alternatively, we may rely on a subsystem "backend" or "threadpool"
+ **       Alternatively, we may rely on a subsystem "vault" or "threadpool"
  ** 
  ** @see threads.h
  ** @see thread-wrapper.hpp

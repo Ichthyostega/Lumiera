@@ -63,7 +63,7 @@
  ** @see lumiera::QueryResolver
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory 
- ** @see config-resolver.hpp specialised setup for the Proc-Layer
+ ** @see config-resolver.hpp specialised setup for the Steam-Layer
  ** @see fake-configrules.hpp currently used dummy-implementation
  ** @see SessionServiceExploreScope
  ** @see PlacementIndexQueryResolver 

@@ -63,8 +63,8 @@ namespace engine {
   
   /**
    * emit the VTable for JobClosure within this compilation unit,
-   * which is still part of the backend. The actual job implementation
-   * classes are defined in the Proc-Layer
+   * which is still part of the Vault. The actual job implementation
+   * classes are defined in the Steam-Layer
    */
   JobClosure::~JobClosure() { }
   

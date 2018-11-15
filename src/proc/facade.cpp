@@ -1,5 +1,5 @@
 /*
-  Facade  -  access point for communicating with the Proc-Interface
+  Facade  -  access point for communicating with the Steam-Interface
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file facade.cpp
- ** Implementation of subsystem lifecycle behaviour for the core parts of Proc-Layer.
+ ** Implementation of subsystem lifecycle behaviour for the core parts of Steam-Layer.
  ** - The »session subsystem« is responsible for accepting operations to work on the
  **   session datastructure, and it will trigger the Builder to reflect those changes
  **   into a suitable render nodes network

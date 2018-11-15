@@ -64,7 +64,7 @@ namespace gui {
        *
        * @note This must be called when the track list changes
        * to synchronise the headers with the timeline body and
-       * the backend.
+       * the core data.
        */
       void update_headers();
       

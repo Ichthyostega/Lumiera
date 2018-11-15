@@ -64,10 +64,10 @@ namespace test_format {
   /***************************************************************//**
    * @test check the stream type registration lifecycle. 
    *       Any internal or external component (plugin) can extend
-   *       the Proc Layer's registry of media stream types.
+   *       the Steam Layer's registry of media stream types.
    *       There is a basic pristine set of type information, which is
-   *       restored automatically everytime the STypeManager is reset,
-   *       which in turn happenes before loading a (new) Session.
+   *       restored automatically every time the STypeManager is reset,
+   *       which in turn happens before loading a (new) Session.
    */
   class StreamTypeLifecycle_test : public Test
     {
@@ -81,7 +81,7 @@ namespace test_format {
       
       
       /** @test this test defines a new (dummy) type info
-       *  and schedules it for setop in the pristine state;
+       *  and schedules it for setup in the pristine state;
        *  check this info is actually present after resetting
        *  the stream type manager, while other additional info
        *  \em not scheduled in this manner is not present 

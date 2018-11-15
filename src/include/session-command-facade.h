@@ -32,7 +32,7 @@
  ** the structure of binding and invocation messages. This goes so far as to
  ** accept the command arguments for binding packaged as `Record<GenNode>`.
  ** For each command, there needs to be a registration record within the
- ** Proc-Layer implementation. The service implementation backing this
+ ** Steam-Layer implementation. The service implementation backing this
  ** facade indeed retrieves the corresponding proc::control::Command
  ** handles to perform the binding operation and hands them over
  ** to the ProcDispatcher for invocation.

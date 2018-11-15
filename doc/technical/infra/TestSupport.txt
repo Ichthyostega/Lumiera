@@ -48,7 +48,7 @@ difficulties with tainted state.
 Test classes are organised into a tree closely mirroring the main application source
 code tree. Large sections of this test tree are linked together into *test libraries*.
 Some of these are linked against a specific (sub)scope of the application, like e.g.
-only against the support library, the application framework or the backend. Since we
+only against the support library, the application framework or the vault. Since we
 use _strict dependencies_, this linking step will spot code not being placed at the
 correct scope within the whole system. As a final step, the build system creates a
 *test runner* application (`target/test-suite`), which links dynamically against _all_
@@ -188,7 +188,7 @@ Options for running the Test Script
 
   (cd target; TESTSUITES=41 VALGRINDFLAGS=DISABLE TESTMODE=FAST+FIRSTFAIL ../tests/test.sh)
   
-. invoking the buildsystem, rebuilding if necessary, then invoking just the proc-layer test collections::  
+. invoking the buildsystem, rebuilding if necessary, then invoking just the steam-layer test collections::  
 
   scons VALGRIND=false TESTSUITES=4 check
 
@@ -239,9 +239,9 @@ The currently employed numbering scheme is as follows
 |01 |Infrastructure, package consistency
 |10 |Basic support library functionality
 |20 |Higher level support library services
-|30 |Backend Unit tests
-|40 |Proc Layer Unit tests
-|50 |User interface Unit tests (Gui, Scripting)
+|30 |Vault Layer Unit tests
+|40 |Steam Layer Unit tests
+|50 |Stage Layer Unit tests (Gui, Scripting)
 |60 |Component integration tests
 |70 |Functionality tests on the complete application
 |80 |Reported bugs which can be expressed in a test case

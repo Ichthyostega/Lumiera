@@ -88,7 +88,7 @@ namespace config {
       BuffHandle
       getSource (Invocation& ivo, uint chanNo)
         {
-          UNIMPLEMENTED ("retrieve source data provided by the backend/scheduler");
+          UNIMPLEMENTED ("retrieve source data provided by the vault/scheduler");
         }
       
       BuffHandle

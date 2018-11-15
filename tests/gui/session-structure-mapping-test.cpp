@@ -24,7 +24,7 @@
 /** @file session-structure-mapping-test.cpp
  ** This test is a concept study how to organise the proxy model
  ** in the Lumiera GUI. This mediating model shields access to the
- ** actual "high-level model" in Proc-Layer, it translates signals
+ ** actual "high-level model" in Steam-Layer, it translates signals
  ** into command invocations and helps to push structure changes
  ** up to the timeline display.
  ** 

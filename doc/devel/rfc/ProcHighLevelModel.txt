@@ -6,14 +6,14 @@
 -------------------------------------
 
 
-High-level model in the Proc-Layer
-----------------------------------
+High-level model in the Steam-Layer
+-----------------------------------
 
 The purpose of this link:DesignProcess[] entry is to collect together
 informations regarding the design and structure of the high-level model of
-Lumiera's Proc-Layer. Most of the information presented here is already written
+Lumiera's Steam-Layer. Most of the information presented here is already written
 down somewhere, in the
-http://www.lumiera.org/wiki/renderengine.html#SessionOverview[Proc-Layer
+http://www.lumiera.org/wiki/renderengine.html#SessionOverview[Development
 TiddlyWiki] and in source code comments. This summer, we had quite some
 discussions regarding meta-clips, a *container* concept and the arrangement of
 tracks, which further helped to shape the model as presented here.
@@ -195,7 +195,7 @@ Pros
 Cons
 ^^^^
 
- * very tightly coupled to the general design of the Proc-Layer. Doesn't make
+ * very tightly coupled to the general design of the Steam-Layer. Doesn't make
    much sense without a Builder and a Rules-based configuration
  * not all semantic constraints are enforced structurally. Rather, it is
    assumed that the builder will follow certain patterns and ignore non

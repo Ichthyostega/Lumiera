@@ -214,7 +214,7 @@ integration::
  The player cares for the necessary integration with the other subsystems
 + 
 it consults the _Output Management,_ retrieves the necessary informations from the _Session_
-and coordinates the forwarding of Backend calls.
+and coordinates the forwarding of Vault-Layer calls.
  
 time quantisation::
  The player translates continuous time values into discrete frame counts.
@@ -244,7 +244,7 @@ and notifies any attached _change listeners_.
 
 .play process
 Ongoing effort to calculate a stream of frames for playback or rendering. +
-The play process is an conceptual entity linking together several activities in the backend
+The play process is an conceptual entity linking together several activities in the vault
 and the render engine. It maintains a registration entry for the process to keep track of
 associated entities, resources allocated and calls dispatched as a consequence. Besides
 each play process is wired to at leas one play-controller acting as frontend interface
@@ -255,7 +255,7 @@ necessary to make the stream of calculations actually happen. The play process c
 within the player subsystem is largely comprised of organisational concerns and not especially
 performance critical.
 
-- the backend is responsible for dispatching the calculation stream and scheduling calculation jobs
+- the vault is responsible for dispatching the calculation stream and scheduling calculation jobs
 - the render engine has the ability to carry out individual frame calculations
 - the OutputSlot exposed by the output manager is responsible for accepting timed frame delivery
 
@@ -300,8 +300,8 @@ dumb. Higher level management will be done by the Schedulers and Jobs.
 Engine Interface
 ~~~~~~~~~~~~~~~~
 While on itself just a thin interface and adaptation layer forwarding calls to
-the primary backend facilities, the Engine Interface is the primary point of service
-accessed by Proc-Layer to use the backend services for rendering content.
+the primary vault facilities, the Engine Interface is the primary point of service
+accessed by Steam-Layer to use the vault layer services for rendering content.
 
 .Calculation Streams
 The Engine Interface is cast in terms of an _calculation stream_ entity. This is
@@ -1008,7 +1008,7 @@ CLib wrappers
 
 Some wrapers for the C memory management functions malloc, calloc, realloc and
 free which never fail. In case of an error the resourcecollector in the
-backend is invoked to free resources or doing an emergency shutdown.
+vault is invoked to free resources or doing an emergency shutdown.
 
 Safe wrapers for some string functions from the C-library which also never
 fail. NULL strings are propagated to "" empty strings.

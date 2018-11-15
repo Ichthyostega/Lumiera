@@ -23,7 +23,7 @@
 
 /** @file command-closure.hpp
  ** A closure enabling self-contained execution of commands within the ProcDispatcher.
- ** After defining a proc-layer command, at some point the function arguments
+ ** After defining a steam-layer command, at some point the function arguments
  ** of the contained operation are "closed" by storing concrete argument values.
  ** These values will be fed later on to the operation when the command is invoked.
  ** 

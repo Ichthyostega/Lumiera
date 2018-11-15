@@ -24,7 +24,7 @@
 
 /** @file thread-wrapper.hpp
  ** Convenience front-end for basic thread handling needs.
- ** The Lumiera backend contains a dedicated low-level thread handling framework,
+ ** The Lumiera vault contains a dedicated low-level thread handling framework,
  ** which is relevant for scheduling render activities to make best use of parallelisation
  ** abilities of the given system. Typically, the upper layers should not have to deal much
  ** with thread handling, yet at some point there is the need to implement a self contained
@@ -68,7 +68,7 @@ namespace backend {
   
   /************************************************************************//**
    * A thin convenience wrapper for dealing with threads,
-   * as implemented by the threadpool in the backend (based on pthread).
+   * as implemented by the threadpool in the vault (based on pthread).
    * Using this wrapper...
    * - helps with passing data to the function executed in the new thread
    * - allows to bind to various kinds of functions including member functions

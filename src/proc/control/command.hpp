@@ -1,5 +1,5 @@
 /*
-  COMMAND.hpp  -  Key abstraction for proc/edit operations and UNDO management
+  COMMAND.hpp  -  Key abstraction for steam/edit operations and UNDO management
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file command.hpp
- ** Proc-Layer command frontend.
+ ** Steam-Layer command frontend.
  ** A *command* is a functor, which can be invoked according to a pre-defined HandlingPattern.
  ** Most notably, command invocation can be scheduled and logged with the serialiser, and the effect
  ** of any command invocation can be _undone_ later on by invoking the "undo operation" defined

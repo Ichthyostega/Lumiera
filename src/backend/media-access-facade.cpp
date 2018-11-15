@@ -50,14 +50,14 @@ namespace backend {
     if (isnil (name))
       throw Invalid ("empty filename passed to MediaAccessFacade.");
     
-    UNIMPLEMENTED ("delegate to backend: query accessability of file");
+    UNIMPLEMENTED ("delegate to vault: query accessability of file");
   }
   
   
   ChanDesc 
   MediaAccessFacade::queryChannel (MediaDesc& mHandle, uint chanNo)  const
   {
-    UNIMPLEMENTED ("delegate to backend: query channel information");
+    UNIMPLEMENTED ("delegate to vault: query channel information");
     ChanDesc nix;
     return nix;
   }

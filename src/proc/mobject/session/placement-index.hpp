@@ -25,7 +25,7 @@
  ** Core of the session implementation datastructure.
  ** The PlacementIndex is attached to and controlled by the SessionImpl.
  ** Client code is not intended to interface directly to this API. Even
- ** Proc-Layer internal facilities use the session datastructure through
+ ** Steam-Layer internal facilities use the session datastructure through
  ** SessionServices. Embedded within the implementation of PlacementIndex
  ** is a flat table structure holding all the Placement instances \em contained
  ** in the session. Any further structuring exists on the logical level only.
@@ -36,7 +36,7 @@
  ** "the object instance" within the session. As long as this instance isn't removed from
  ** the session / PlacementIndex, a direct (language) reference can be used to work with
  ** "the object instance"; accessing this way is adequate for implementation code living
- ** within Lumiera's Proc-Layer.
+ ** within Lumiera's Steam-Layer.
  ** 
  ** To avoid the dangerous dependency on a direct reference, external code would rather
  ** rely on the Placement-ID. Moreover, being a simple value, such an ID can be passed
@@ -74,7 +74,7 @@
  ** The reverse operation is also possible: given a scope-defining Placement, we can
  ** \em discover all the other Placements directly contained within this scope:
  ** \c getReferrers(ID) returns an (possibly empty) "Lumiera Forward Iterator",
- ** allowing to enumerate the nested elements. Client code within Lumiera's Proc-Layer
+ ** allowing to enumerate the nested elements. Client code within Lumiera's Steam-Layer
  ** typically uses this functionality through a ScopeQuery passed to the SessionServices,
  ** while external client code would use either QueryFocus and the Scope wrapper objects,
  ** or the specific query functions available on the facade objects accessible through
@@ -87,7 +87,7 @@
  ** be casted into a more specifically typed Placement, thus allowing to re-gain
  ** the fully typed context. This technique plays an important role when it comes
  ** to generic processing of the session contents by a visitor, and especially
- ** within the Builder. This is a fundamental design decision within Proc-Layer:
+ ** within the Builder. This is a fundamental design decision within Steam-Layer:
  ** code should not operate on MObjects and do type/capability queries -- rather
  ** any processing is assumed to happen in a suitable typed context. Consequently,
  ** client code will never need to fetch Placements directly from the index. This

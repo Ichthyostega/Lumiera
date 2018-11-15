@@ -1,5 +1,5 @@
 /*
-  COMMAND-MUTATION.hpp  -  functor encapsulating the actual operation of proc-Command
+  COMMAND-MUTATION.hpp  -  functor encapsulating the actual operation of steam-Command
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file command-mutation.hpp
- ** Core of a Proc-Layer command: functor containing the operation to be executed.
+ ** Core of a Steam-Layer command: functor containing the operation to be executed.
  ** Each command holds two of these functors: one representing the actual operation
  ** and one to undo the effect of this operation. The latter involves the capturing
  ** and storing of a "memento" value behind the scenes. But towards Command, the
@@ -57,7 +57,7 @@ namespace control {
   
   
   /**
-   * Unspecific command functor for implementing Proc-Layer Command.
+   * Unspecific command functor for implementing Steam-Layer Command.
    * To be created from an std::function object, which later on gets
    * any necessary arguments from a closure passed in on invocation.
    * The concrete type of the function  and the arguments is

@@ -22,7 +22,7 @@
 
 /** @file asset.hpp
  ** @ingroup asset
- ** Proc-Layer Interface: Assets.
+ ** Steam-Layer Interface: Assets.
  ** Declares the Asset top level Interface, the Asset::Ident identification tuple
  ** and the asset::ID primary key wrapper. Normally, Assets should be handled
  ** using asset::PAsset, a ref counting smart pointer.

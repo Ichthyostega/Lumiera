@@ -1,5 +1,5 @@
 /*
-  ProcDispatcher  -  Proc-Layer command dispatch and execution
+  ProcDispatcher  -  Steam-Layer command dispatch and execution
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -145,7 +145,7 @@ namespace control {
                     })
         {
           Thread::sync(); // done with setup; loop may run now....
-          INFO (session, "Proc-Dispatcher running...");
+          INFO (session, "Steam-Dispatcher running...");
             {
               Lock(this);     // open public session interface:
               commandService_.createInstance(*this);
@@ -156,9 +156,9 @@ namespace control {
         {
           try {
               commandService_.shutdown();  // redundant call, to ensure session interface is closed reliably 
-              INFO (session, "Proc-Dispatcher stopped.");
+              INFO (session, "Steam-Dispatcher stopped.");
             }
-          ERROR_LOG_AND_IGNORE(session, "Stopping the Proc-Dispatcher");
+          ERROR_LOG_AND_IGNORE(session, "Stopping the Steam-Dispatcher");
         }
       
       void
@@ -314,7 +314,7 @@ namespace control {
       void
       startBuilder()
         {
-          TODO ("+++ start the Proc-Builder...");
+          TODO ("+++ start the Steam-Builder...");
         }
     };
   

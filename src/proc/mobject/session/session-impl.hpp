@@ -30,7 +30,7 @@
  ** This file contains the implementation level API, it should never
  ** be included by client code. Besides the actual SessionImpl, a set
  ** of further implementation level services is provided for use by
- ** Proc-Layer's internals. These additional SessionServices are to be
+ ** Steam-Layer's internals. These additional SessionServices are to be
  ** accessed through dedicated headers and interface classes (typically
  ** through static access functions), thereby abstracting from the actual
  ** session implementation. Within this file, the implementation of these
@@ -110,7 +110,7 @@ namespace session {
   
   
   
-  /* ===== providing internal services for Proc ===== */
+  /* ===== providing internal services for Steam ===== */
   
   template<class IMPL>
   struct ServiceAccessPoint<SessionServiceFetch, IMPL>

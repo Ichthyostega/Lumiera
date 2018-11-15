@@ -25,7 +25,7 @@
  ** OutputSlot is the central metaphor for the organisation of actual (system level) outputs;
  ** using this concept allows to separate and abstract the data calculation and the organisation
  ** of playback and rendering from the specifics of the actual output sink. Actual output
- ** possibilities can be added and removed dynamically from various components (backend, GUI),
+ ** possibilities can be added and removed dynamically from various components (vault, stage),
  ** all using the same resolution and mapping mechanisms
  **
  ** Each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an

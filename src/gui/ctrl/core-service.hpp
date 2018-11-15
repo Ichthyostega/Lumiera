@@ -71,7 +71,7 @@
  ** messages, which can not be handled in a generic way on the Nexus:
  ** - *act* handles command invocation within the Session core, and
  **   is treated by [forwarding](\ref command-handler.hpp) it over the
- **   SessionCommand facade to the [Proc-Dispatcher](\ref proc-dispatcher.hpp)
+ **   SessionCommand facade to the [Steam-Dispatcher](\ref proc-dispatcher.hpp)
  ** - *note* observes and captures presentation state note messages, which
  **   are to be handled by a central presentation state manager (TODO 1/17).
  ** 
@@ -106,7 +106,7 @@ namespace ctrl{
    * Attachment point to »central services« within the UI-Bus.
    * This special implementation of the [BusTerm] interface receives and
    * handles those messages to be processed by centralised services:
-   * - commands need to be sent down to Proc-Layer
+   * - commands need to be sent down to Steam-Layer
    * - presentation state messages need to be recorded and acted upon.
    * As an object, CoreService encases the heart of the UI-Bus, the
    * \ref Nexus, and acts as "PImpl" for the gui::UiBus front-end.

@@ -101,7 +101,7 @@ Tasks
  * make locked-together transports work
    * in the GUI (transport controls)
    * for coordinating the corresponding playback/render schedules (playback
-     controller, which is located in the backend according to our current
+     controller, which is located in the core according to our current
      planning)
 
 

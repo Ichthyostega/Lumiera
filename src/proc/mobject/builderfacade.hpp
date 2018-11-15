@@ -22,7 +22,7 @@
 
 
 /** @file builderfacade.hpp
- ** Proc-Layer Facade: access to the Builder.
+ ** Steam-Layer Facade: access to the Builder.
  ** The Builder walks the Session model to compile a corresponding render node network.
  ** 
  ** @todo as of 2016 the builder, as the most crucial component within the architecture,

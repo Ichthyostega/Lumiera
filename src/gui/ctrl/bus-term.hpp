@@ -25,7 +25,7 @@
  ** Attachment point to the UI-Bus.
  ** Every gui::model::Tangible holds a BusTerm, which is linked
  ** to the Tangible's identity, and serves to relay interface actions
- ** towards the Proc-Layer, to remember state changes and to broadcast
+ ** towards the Steam-Layer, to remember state changes and to broadcast
  ** notifications. Moreover, the BusTerm is the service point
  ** to receive structural change messages.
  ** 
@@ -98,7 +98,7 @@ namespace ctrl{
    * intended for routing, broadcasting or forwarding. Effectively,
    * routing is determined from the context and meaning of a message,
    * where the _act_ and _note_ messages have an implicit receiver
-   * (either the Proc-Layer or the UI state manager), while the
+   * (either the Steam-Layer or the UI state manager), while the
    * _mark_ messages are always directed _downstream_ towards
    * some element.
    */

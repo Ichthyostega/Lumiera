@@ -54,7 +54,7 @@ namespace lumiera {
     
     
     /**************************************************************//**
-     * Experimental Interface Proc-Layer (or maybe the backend?): 
+     * Experimental Interface Steam-Layer (or maybe the vault?): 
      * Global access point for starting a dummy playback, generating
      * some test image data for the GUI to display in a viewer window.
      * 
@@ -108,9 +108,9 @@ namespace lumiera {
          * the Process implementation via the Process handle,
          * without having to map each implementation-level function
          * into the dummy player interface. We can't access the
-         * implementation in Proc-Layer without this indirection
+         * implementation in Steam-Layer without this indirection
          * through a VTable, since a direct call would require
-         * us to link against liblumieraproc.so
+         * us to link against liblumierasteam.so
          */
         class ProcessImplementationLink
           : public lumiera_playprocess

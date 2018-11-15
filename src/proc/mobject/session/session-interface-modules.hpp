@@ -56,7 +56,7 @@
  ** In any case, ctor and dtor of Timeline and Sequence have to care for proper
  ** registration into the SessionInterfaceModules for timelines and sequences
  ** respectively. This is accomplished by using kind-of a backdoor, a SessionServices (???)
- ** (proc internal API) definition, allowing direct communication on implementation
+ ** (steam internal API) definition, allowing direct communication on implementation
  ** level, without the need to expose this access point on the public session API.
  ** The lib::ElementTracker configured in ( ??? ) receives these  
  ** calls to maintain a list of asset smart-ptrs

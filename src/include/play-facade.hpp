@@ -66,7 +66,7 @@ namespace lumiera {
     
     
     /**************************************************************//**
-     * Interface to the Player subsystem of Lumiera (Proc-Layer).
+     * Interface to the Player subsystem of Lumiera (Steam-Layer).
      * Global access point for starting playback and render processes,
      * calculating media data by running the render engine.
      * 

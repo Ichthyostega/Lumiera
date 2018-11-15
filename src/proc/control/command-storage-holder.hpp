@@ -68,11 +68,11 @@ namespace control {
    * This is "the" top level CmdClosure implementation.
    * It is a specifically typed CmdClosure, which serves for
    * actually allocating storage to hold the command arguments
-   * and the UNDO state (memento) for Proc-Layer commands.
+   * and the UNDO state (memento) for Steam-Layer commands.
    * Both the contained components within StorageHolder
    * can be in \em empty state; there are no distinct
    * lifecycle limitations. StorageHolder is part
-   * of Proc-Layer command's implementation
+   * of Steam-Layer command's implementation
    * and should not be used standalone.
    */
   template<typename SIG, typename MEM>

@@ -1,5 +1,5 @@
 /*
-  CMD.hpp  -  Proc Command definition keys
+  CMD.hpp  -  Steam Command definition keys
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,9 +22,9 @@
 
 
 /** @file cmd.hpp
- ** Common ID definitions for Proc-Layer commands.
+ ** Common ID definitions for Steam-Layer commands.
  ** This header is included when defining the actual command scripts, but also
- ** from all those UI elements to use and invoke the defined Proc-Layer commands.
+ ** from all those UI elements to use and invoke the defined Steam-Layer commands.
  ** @todo WIP 3/2017 early draft
  ** 
  ** @see command.hpp

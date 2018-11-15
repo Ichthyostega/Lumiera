@@ -67,7 +67,7 @@ namespace test {
   
 }}}}
 
-namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or proc?
+namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or steam?
 namespace query  {
   
   /**

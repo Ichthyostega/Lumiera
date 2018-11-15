@@ -1,5 +1,5 @@
 /*
-  COMMAND-INSTANCE-SETUP.hpp  -  Key abstraction for proc/edit operations and UNDO management
+  COMMAND-INSTANCE-SETUP.hpp  -  Key abstraction for steam/edit operations and UNDO management
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,7 +23,7 @@
 
 /** @file command-setup.hpp
  ** Provision for setup of concrete commands for use by the UI.
- ** A *Proc-Layer command* is a functor, which can be parametrised with actual arguments.
+ ** A *Steam-Layer command* is a functor, which can be parametrised with actual arguments.
  ** It needs to be [defined](\ref command-def.hpp) beforehand, which means to establish an unique
  ** name and to supply three functions, one for the actual command operation, one to capture
  ** state and one to _undo_ the effect of the command invocation. CommandSetup allows to create
@@ -76,7 +76,7 @@ namespace control {
   
   
   /**
-   * Marker and Helper for writing Proc-Layer Command definitions.
+   * Marker and Helper for writing Steam-Layer Command definitions.
    * Together with the Macro #COMMAND_DEFINITION, such definitions
    * may be written statically, in DSL-style:
    * - statically define a variable of type CommandSetup,

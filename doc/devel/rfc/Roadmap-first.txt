@@ -32,8 +32,8 @@ designed, the most important interfaces between the parts of the application
 exist in a first usable version, and all the facilities on the rendering code
 path are provided at least in a dummy version and are '''capable of cooperating
 to create output'''. Based on Lumiera's design, this also means that the basic
-frame cache in the backend is working. And it means that a media asset and a
-clip can be added to the internal session representation, which is then handed
+frame cache in the vault layer is working. And it means that a media asset and
+a clip can be added to the internal session representation, which is then handed
 over to the builder. Probably it's a good idea to include basic
 playback/display of the rendered frames within the GUI while they are created.
 

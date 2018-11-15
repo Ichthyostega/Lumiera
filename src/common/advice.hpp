@@ -76,7 +76,7 @@
  ** 
  ** @note as of 6/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces and gain practical usage experiences. Ichthyo expects this collaboration
- **       service to play a central role at various places within proc-layer.
+ **       service to play a central role at various places within steam-layer.
  ** @todo allow variables in binding patterns
  ** @todo use the lumiera MPool instead of heap allocations
  ** @todo consider to provide variations of the basic behaviour by policy classes

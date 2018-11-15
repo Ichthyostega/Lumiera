@@ -153,7 +153,7 @@ namespace cmd {
   /* ============ dedicated Fake-Commands ============ */
   
   /** Populate the Timeline in the UI with a typical simple Dummy sequence.
-   *  This Proc-Layer command script fabricates a faked "population diff", which not
+   *  This Steam-Layer command script fabricates a faked "population diff", which not
    *  corresponds to any existing session data structure, but looks as if emanated while
    *  loading current session state.
    *  - one single Timeline

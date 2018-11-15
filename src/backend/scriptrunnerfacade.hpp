@@ -41,7 +41,7 @@ namespace backend {
   
   
   /*******************************************************************//**
-   * Interface to the backend layer (script runner):
+   * Interface to the vault layer (TODO 2018 really?) (script runner):
    * Global access point for starting a script within Lumiera application
    * context. 
    * 

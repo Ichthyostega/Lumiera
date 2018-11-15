@@ -24,7 +24,7 @@
 /** @file enginefacade.hpp
  ** Global control interface for the render engine subsystem.
  ** The render engine, as implemented in an combined effort by the
- ** Lumiera backend and some parts of Proc-Layer, can be started and
+ ** Lumiera Vault-Layer and some parts of Steam-Layer, can be started and
  ** stopped as a [Subsystem](\ref subsys.hpp) of the whole application.
  */
 
@@ -41,15 +41,15 @@ namespace backend {
   
   
   /**************************************************************//**
-   * Interface to the backend layer (render engine subsystem):
+   * Interface to the vault layer (render engine subsystem):
    * Global access point for starting the render engine subsystem and
    * for defining the public interface(s) for talking with the engine.
    * 
-   * While the engine is partially implemented relying on Proc-Layer 
+   * While the engine is partially implemented relying on steam-Layer 
    * operations, the general access point and the playback/render
-   * controller is considered part of the backend. This results in
-   * a "W"-shaped control flow: from GUI to backend to proc to
-   * backend, feeding resulting data to output.
+   * controller is considered part of the vault. This results in
+   * a "W"-shaped control flow: from stage to vault to steam to
+   * vault, feeding resulting data to output.
    * 
    */
   struct EngineFacade

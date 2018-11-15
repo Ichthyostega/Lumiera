@@ -1,5 +1,5 @@
 /*
-  ScopeCmd  -  actual proc command scripts for actions within model scope
+  ScopeCmd  -  actual steam command scripts for actions within model scope
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file scope-cmd.cpp
- ** Actual definition of Proc-Layer command scripts for actions within scope.
+ ** Actual definition of Steam-Layer command scripts for actions within scope.
  ** Here "scope" means a scope within the high-level model, which could be
  ** - a track or media bin
  ** - a clip

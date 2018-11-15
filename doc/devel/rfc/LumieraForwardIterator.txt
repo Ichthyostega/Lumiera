@@ -115,7 +115,7 @@ APIs should be written such as not tie them to the current implementation.
 Exposing iterators is known to create a strong incentive in this direction and
 thus furthers the creation of clean APIs.
 
-Especially in Proc-Layer we utilise already several iterator implementations,
+Especially in Steam-Layer we utilise already several iterator implementations,
 but without an uniform concept, these remain just slightly disguised
 implementation types of a specific container. Moreover, the STL defines various
 and very elaborate iterator concepts. Ichthyo considers most of these an

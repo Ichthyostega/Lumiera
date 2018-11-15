@@ -1,5 +1,5 @@
-Design Process: Builder within the Proc-Layer
-=============================================
+Design Process: Builder within the Steam-Layer
+==============================================
 
 [grid="all"]
 `------------`-----------------------
@@ -8,15 +8,15 @@ Design Process: Builder within the Proc-Layer
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
 
-Builder within the Proc-Layer
------------------------------
-One of the core ideas of the Proc-Layer (as being implemented since summer '07
+Builder within the Steam-Layer
+------------------------------
+One of the core ideas of the Steam-Layer (as being implemented since summer '07
 by Ichthyo) is the use of the Builder-pattern to achieve a separation between
 high-level view and low-level view.
 
 Description
 ~~~~~~~~~~~
-The Proc-Layer differentiates into a high-level view, which models the
+The Steam-Layer differentiates into a high-level view, which models the
 properties of the problem domain (manipulating media objects), and a low-level
 model, which is a network of render nodes and will be optimized for processing
 efficiency.

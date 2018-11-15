@@ -1,5 +1,5 @@
 /*
-  SequenceCmd  -  actual proc command scripts for actions operating within a sequence
+  SequenceCmd  -  actual steam command scripts for actions operating within a sequence
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file sequence-cmd.cpp
- ** Actual definition of Proc-Layer command scripts for actions within a sequence.
+ ** Actual definition of Steam-Layer command scripts for actions within a sequence.
  ** Especially all those actions working within the track tree go into this file
  ** @todo WIP 4/2017 early draft
  ** 

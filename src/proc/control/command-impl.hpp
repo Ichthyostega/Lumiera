@@ -1,5 +1,5 @@
 /*
-  COMMAND-IMPL.hpp  -  Proc-Layer command implementation (top level)
+  COMMAND-IMPL.hpp  -  Steam-Layer command implementation (top level)
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,7 +24,7 @@
 /** @file command-impl.hpp
  ** Top level of the command implementation. CommandImpl holds together
  ** the various data and sub-objects involved into the inner workings of a
- ** Proc-Layer command. It serves to implement a "command definition" (prototype)
+ ** Steam-Layer command. It serves to implement a "command definition" (prototype)
  ** as well as a concrete command instance. It is a data holder with a well defined
  ** identity and usually located within the (pooled) storage managed by the
  ** CommandRegistry. Client code gets access to a specific CommandImpl through
@@ -62,7 +62,7 @@ namespace control {
   
   
   /**
-   * Proc-Layer Command implementation.
+   * Steam-Layer Command implementation.
    * Data record holding together the parts necessary for command execution
    * - command operation functor
    * - a functor to UNDO the command effect

@@ -25,7 +25,7 @@ def linkContext(id):
     if id.startswith('lib'):
         return app_lib              # tests in 'lib*' subdirs only linked against application framework
     elif id.startswith('back'):
-        return backend_lib          # tests in 'back*' subdirs only linked against backend layer
+        return backend_lib          # tests in 'back*' subdirs only linked against vault layer
     elif id.startswith('gui'):
         return guimodule+core_lib   # tests in 'gui*' are additionally linked against the GTK GUI module
     else:

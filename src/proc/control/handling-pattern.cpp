@@ -23,7 +23,7 @@
 
 /** @file handling-pattern.cpp
  ** Implementation of pre-defined command handling patterns
- ** @internal detail of the Proc-Layer command handling framework.
+ ** @internal detail of the Steam-Layer command handling framework.
  */
 
 

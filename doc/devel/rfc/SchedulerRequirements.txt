@@ -159,13 +159,13 @@ Rationale
 ---------
 //rationale: Give a concise summary why it should be done *this* way:
 We use a scheduler to gain flexibility in controlling various aspects of computation and I/O usage.
-Moreover, we turn the scheduler into an interface between Backend and Proc-Layer; while the exact
+Moreover, we turn the scheduler into an interface between the Vault and Steam-Layer; while the exact
 outfitting of the individual jobs highly depends on internals of the Session and Engine models,
 the properties of _actual job execution_, closely related to system programming are akin
-to the Backend. The actual requirements outlined in this RfC are derived from the internals
+to the Vault. The actual requirements outlined in this RfC are derived from the internals
 of the player implementation, while _the way_ these requirements are defined, and especially
 the aspects _omitted_ from specification are derived from knowledge regarding the possible
-scheduler and backend implementation.
+scheduler and vault layer implementation.
 
 
 //Conclusion

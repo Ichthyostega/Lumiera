@@ -80,7 +80,7 @@ namespace session {
   /**
    * Scaffolding to drive the evolution of the Lumiera application.
    * @todo as of 2018, the most pressing problem is to establish the interplay between
-   *    GUI-Layer and Proc-Layer, so the software gains some tangible functionality...
+   *    Stage-Layer and Steam-Layer, so the software gains some tangible functionality...
    * @note readily-available singleton to enact prototypical behaviour as appropriate.
    * 
    * @see DummySessionConnection_test

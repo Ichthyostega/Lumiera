@@ -1,4 +1,4 @@
-TESTING "Proc Layer combined operations Test Suite" ./test-suite --group=operate
+TESTING "Steam Layer combined operations Test Suite" ./test-suite --group=operate
 
 
 

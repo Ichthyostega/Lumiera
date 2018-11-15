@@ -73,7 +73,7 @@ enum lumiera_thread_class
 
     // .. various thread flags follow
     /**
-     * flag to let the decision to run the function in a thread open to the backend.
+     * flag to let the decision to run the function in a thread open to the vault.
      * depending on load it might decide to run it sequentially.
      * This has some constraints:
      * The Thread must be very careful with locking, better don't.

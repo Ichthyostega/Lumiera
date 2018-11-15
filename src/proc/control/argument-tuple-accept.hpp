@@ -27,7 +27,7 @@
  ** accept a specifically typed binding or function call, as specified by the
  ** template parameters, or alternatively it can inherit a complete set of
  ** templated argument binding functions, assuming that the matching signature
- ** can be detected at runtime. These templates are used for the Proc-Layer
+ ** can be detected at runtime. These templates are used for the Steam-Layer
  ** command frontend, to bind to the actual command arguments.
  **   
  ** The AcceptArgumentBinding template allows to mix in a `bind(...)` function.
@@ -531,7 +531,7 @@ namespace control {
     { };
   
   
-  /** Helper Template for Proc-Layer control::Command : mix in a \c bind(...) function
+  /** Helper Template for Steam-Layer control::Command : mix in a \c bind(...) function
    *  @param SIG  function signature to mimic (regarding the arguments and return type)
    *  @param TAR  the target class providing a function \c bindArg(Tuple<Types<T1...> >)
    *  @param BASE the base class for inheritance chaining

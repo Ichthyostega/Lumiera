@@ -28,7 +28,7 @@
  ** include to create explicit template instantiations with the concrete types to be used
  ** for definition and retrieval of default-configured objects.
  ** 
- ** For the standard use-case within the session / Proc-Layer, this is performed for the
+ ** For the standard use-case within the session / Steam-Layer, this is performed for the
  ** core MObject types, alongside with the definition of the generic config-query-resolver.
  ** 
  ** @see config-resolver.cpp definition of the explicit specialisations for the session 

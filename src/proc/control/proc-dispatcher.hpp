@@ -1,5 +1,5 @@
 /*
-  PROC-DISPATCHER.hpp  -  Proc-Layer command dispatch and execution
+  PROC-DISPATCHER.hpp  -  Steam-Layer command dispatch and execution
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>

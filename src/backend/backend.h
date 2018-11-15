@@ -1,5 +1,5 @@
 /*
-  BACKEND.h  -  common lumiera backend definitions
+  BACKEND.h  -  common lumiera vault definitions
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -22,7 +22,7 @@
 
 
 /** @file backend.h
- ** Lumiera Backend: global initialisation and definitions.
+ ** Lumiera Vault-Layer: global initialisation and definitions.
  */
 
 

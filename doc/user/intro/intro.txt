@@ -215,7 +215,7 @@ In this section, we discuss the user's perspective when working with the GUI.
 Although Lumiera will initially ship with a standard, default GUI, we do not presume that this GUI will be suitable for all uses.
 We expect there to be multiple, different GUIs, each designed for different
 kinds of tasks.  We expect that some of these will be written by users, and the
-proc-layer is designed to facilitate this easily.
+steam-layer is designed to facilitate this easily.
 
 Indeed, Lumiera can even work
 satisfactorily without a GUI, for example, for special purposes
@@ -360,8 +360,8 @@ The material in this section provides a cursory view of features not required by
 a typical user, but of more importance to people looking under the hood
 (advanced users, software developers)
 
-Most of the material in this section is to be found in the Proc-layer and in the
-Backend.
+Most of the material in this section is to be found in the Steam-Layer and in the
+Vault.
 
 
 
@@ -449,11 +449,11 @@ Input-Output Subsystem
 
 Lumiera will process large quantities of data and it is of critical importance
 to perform this efficiently.  The input and output subsystem are all processed
-in the backend, in fact, this is one very important function provided by the
+in the vault layer, in fact, this is one very important function provided by the
 back end.
 
 The typical Lumiera user will have many clips, in various configurations located
-at various places.  All this data will have to be stored by the backend,
+at various places.  All this data will have to be stored by the vault layer,
 moreover all this data will have to be rapidly retrieved from storage and
 provided to the user. The demands on memory are high: huge chunks of data,
 that can be quickly stored and equally quickly fetched, even if stored over
@@ -465,11 +465,11 @@ Lumiera will break down processes that need to be processed into smaller units
 called _frame job_. Typically, there will be many hundreds of jobs waiting for
 processing at any one time. These jobs are queued for processing and the order
 in which this is performed is managed by the _scheduler_.
-This is all done in the backend.
+This is all done in the vault layer.
 
-Apart from memory, the backend will be responsible for accessing and saving
+Apart from memory, the vault will be responsible for accessing and saving
 files. It is essential to do this efficiently. This will be carried out
-in the backend using low-level mechanisms.
+in the vault layer using low-level mechanisms.
 
 // file handling
 //  vault, work, cache

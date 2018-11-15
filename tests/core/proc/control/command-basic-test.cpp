@@ -75,7 +75,7 @@ namespace test    {
   
   
   /***********************************************************************//**
-   * @test basic usage of the Proc-Layer command dispatch system.
+   * @test basic usage of the Steam-Layer command dispatch system.
    *       Shows how to define a simple command inline and how to
    *       trigger execution and UNDO. Verifies the command action
    *       takes place and is reverted again by the UNDO function.

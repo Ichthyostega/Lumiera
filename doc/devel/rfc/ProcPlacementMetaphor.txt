@@ -6,16 +6,16 @@
 -------------------------------------
 
 
-Placement Metaphor used within the high-level view of Proc-Layer
-----------------------------------------------------------------
+Placement Metaphor used within the high-level view of Steam-Layer
+-----------------------------------------------------------------
 besides the [wiki:self:../ProcBuilder Builder], one of the core ideas of the
-Proc-Layer (as being currently implemented by Ichthyo) is to utilize
+``Proc-Layer'' (as being currently implemented by Ichthyo) is to utilize
 _Placement_ as a single central metaphor for object association, location and
 configuration within the high-level model. The intention is to prefer _rules_
 over fixed _values._ Instead of ``having'' a property for this and that, we
 query for information when it is needed.
 
-The proposed use of *Placement* within the proc layer spans several,
+The proposed use of *Placement* within the steam layer spans several,
 closely related ideas:
 
  * use the placement as a universal means to stick the "media objects" together

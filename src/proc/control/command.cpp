@@ -1,5 +1,5 @@
 /*
-  Command  -  Key abstraction for proc/edit operations and UNDO management
+  Command  -  Key abstraction for steam/edit operations and UNDO management
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>

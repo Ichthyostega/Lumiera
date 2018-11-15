@@ -59,7 +59,7 @@ namespace lumiera {
     /******************************************************//**
      * Some aspects of C++ exception handling.
      * Not to be confused with the basic C-style error value
-     * mechanism used by the low-level parts of the backend.
+     * mechanism used by the low-level parts of the vault.
      * Both approaches are largely orthogonal, but the
      * C++ exception handling uses the C-style error constants.
      * 

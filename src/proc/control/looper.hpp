@@ -1,5 +1,5 @@
 /*
-  LOOPER.hpp  -  proc dispatcher loop and timing control logic
+  LOOPER.hpp  -  steam dispatcher loop and timing control logic
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>

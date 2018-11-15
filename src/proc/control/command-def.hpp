@@ -1,5 +1,5 @@
 /*
-  COMMAND-DEF.hpp  -  defining and binding a Proc-Layer command
+  COMMAND-DEF.hpp  -  defining and binding a Steam-Layer command
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>

@@ -21,7 +21,7 @@
 */
 
 /** @file assetmanager.hpp
- ** Proc-Layer Interface: Asset Lookup and Organisation.
+ ** Steam-Layer Interface: Asset Lookup and Organisation.
  ** Declares the AssetManager interface used to access individual 
  ** Asset instances.
  ** 

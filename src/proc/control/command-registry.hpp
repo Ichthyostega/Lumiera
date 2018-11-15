@@ -1,5 +1,5 @@
 /*
-  COMMAND-REGISTRY.hpp  -  proc-Command object registration and storage management
+  COMMAND-REGISTRY.hpp  -  steam-Command object registration and storage management
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>

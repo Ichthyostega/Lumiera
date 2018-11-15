@@ -115,7 +115,7 @@ namespace proc  {
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (brief,
                                                              const char*, (LumieraInterface ifa),
-                                                               { (void)ifa;  return "Proc Interface: dummy player to test integration with the GUI"; }
+                                                               { (void)ifa;  return "Steam Interface: dummy player to test integration with the GUI"; }
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (homepage,
                                                              const char*, (LumieraInterface ifa),

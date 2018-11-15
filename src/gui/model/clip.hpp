@@ -22,7 +22,7 @@
 
 /** @file gui/model/clip.hpp
  ** Preliminary UI-model: a Proxy Clip object to base the GUI implementation on.
- ** Later this Clip object will be connected to the underlying model in Proc-Layer.
+ ** Later this Clip object will be connected to the underlying model in Steam-Layer.
  ** @warning as of 2016 this UI model is known to be a temporary workaround
  **          and will be replaced in entirety by UI-Bus and diff framework.
  */

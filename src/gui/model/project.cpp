@@ -23,7 +23,7 @@
 
 /** @file project.cpp
  ** Preliminary UI-model: Implementation of Project, a class which
- ** stores project data, and wraps proc layer data.
+ ** stores project data, and wraps steam layer data.
  ** @warning as of 2016 this UI model is known to be a temporary workaround
  **          and will be replaced in entirety by UI-Bus and diff framework.
  ** 

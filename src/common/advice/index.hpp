@@ -65,7 +65,7 @@
  ** 
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
- **       later at various places within proc-layer.
+ **       later at various places within steam-layer.
  ** @note for now, _only_ the case of a completely constant (ground) pattern is implemented.
  **       Later we may consider to extend the binding patterns to allow variables. The mechanics
  **       of the index are designed right from start to support this case (and indeed the index

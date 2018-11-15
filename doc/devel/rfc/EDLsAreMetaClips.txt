@@ -105,7 +105,7 @@ Comments
   for sure. We always used the term '''meta-clip''' for this feature, thus I
   edited the headline (I hope you don't mind).
 * Regarding the implementation, I choose a slightly different approach for the
-  proc layer (actually, it's not yet there, but planned right from start, as I
+  ``proc layer'' (actually, it's not yet there, but planned right from start, as I
   consider this meta-clip feature to be of uttermost importance): I'd prefer to
   add it at the level of the media source which is used by a clip. The
   rationale is, that at the level of the clip, there is no (or almost no)
@@ -139,7 +139,7 @@ Comments
    This is a real threat (see Cinelerra), but not limited to meta-clips. It is
    especially important, as you can expect users to work for months or years
    with a single session. Thus the integrity of the session is a value to be
-   protected. That's the rationale why I put up the constraint in the proc
+   protected. That's the rationale why I put up the constraint in the steam
    layer that all important objects can only be created or re-created by some
    specialized factory, which in turn has the responsibility of never creating
    a corrupted object.

@@ -1,11 +1,11 @@
-Technical Documentation: Proc-Layer
-===================================
+Technical Documentation: Steam-Layer
+====================================
 
-Eventually, this section will hold technical documentation for the Proc-Layer.
+Eventually, this section will hold technical documentation for the Steam-Layer.
 
-Proc-Layer TiddlyWiki
----------------------
-Hermann Voßeler, core developer of the Proc-Layer uses an separate embedded wiki
+Development Scrapbook TiddlyWiki
+--------------------------------
+Hermann Voßeler, core developer of the Steam-Layer uses an separate embedded wiki
 for his day-to-day design sketches, notes and also for the more persistent planning.
 This *TiddlyWiki* is a nifty JavaScript wiki embedded in a single HTML page; as such
 it lives right within the source tree, where it can be worked on alongside with the

@@ -81,7 +81,7 @@ namespace session {
       
       
     public:
-      /* ==== proc layer internal API ==== */
+      /* ==== steam layer internal API ==== */
       
       virtual SessionImplAPI* operator-> ()  noexcept override;
       

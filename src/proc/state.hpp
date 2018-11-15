@@ -49,8 +49,8 @@ namespace engine {
   
   /**
    * Abstraction to access the state of a currently ongoing render/calculation process,
-   * as it is tied to the supporting facilities of the backend. An State (subclass) instance
-   * is the sole connection for the render node to invoke services of the backend needed
+   * as it is tied to the supporting facilities of the vault layer. An State (subclass) instance
+   * is the sole connection for the render node to invoke services of the vault needed
    * to carry out the calculations.
    * 
    * @see engine::RenderInvocation top-level entrance point

@@ -45,8 +45,8 @@ namespace engine {
   
   /**
    * Access point to the scheduler service provided by the back-end.
-   * Proc-Layer uses this service as the primary means of instructing
-   * the backend; suitably prepared and wired frame render jobs are
+   * Steam-Layer uses this service as the primary means of instructing
+   * the vault; suitably prepared and wired frame render jobs are
    * handed over to the scheduler for time-bound or bandwidth-controlled
    * execution
    * 
@@ -55,7 +55,7 @@ namespace engine {
    * @todo this is planned to become the frontend
    * to the render node network, which can be considered
    * at the lower end of the middle layer; the actual 
-   * render operations are mostly implemented by the backend
+   * render operations are mostly implemented by the vault layer
    * @todo define the low-level scheduler interface and hook in
    *       the necessary calls to implement this frontend.
    * ////////TODO WIP as of 9/2013

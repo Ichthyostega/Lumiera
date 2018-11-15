@@ -22,7 +22,7 @@
 
 
 /** @file argument-erasure.hpp
- ** Implementation helper to bind Proc-Layer commands with arbitrary argument tuples
+ ** Implementation helper to bind Steam-Layer commands with arbitrary argument tuples
  ** @internal details of the [command handling framework](\ref command.hpp).
  */
 

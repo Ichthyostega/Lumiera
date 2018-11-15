@@ -1,5 +1,5 @@
-Design Documents: Backend
-=========================
+Design Documents: Vault
+=======================
 
 What follows is a summary of Lumiera's *Data Handling Backend*
 
@@ -11,17 +11,17 @@ data access. Within Lumiera, there are two main kinds of data handling:
   especially logging, replaying and ``Undo'' of all ongoing modifications..
 * Media data is handled _frame wise_ -- as described below.
 
-The backend uses *memory mapping* to make data available to the program.
+The vault layer (backend) uses *memory mapping* to make data available to the program.
 This is somewhat different to the more common open/read/write/close file access,
 while giving superior performance and much better memory utilization.
-The data backend must be able to handle more data than will fit into the memory
+The Vault-Layer must be able to handle more data than will fit into the memory
 or even address space on 32 bit architectures. Moreover, a project might access more files
-than the OS can keep open simultaneously, thus the for _Files used by the Backend,_ it needs a
+than the OS can keep open simultaneously, thus the for _Files used by the Vault,_ it needs a
 *FilehandleCache* to manage file handle dynamically.
 
 Which parts of a file are actually mapped to physical RAM is managed by the kernel;
 it keeps a *FileMapCache* to manage the *FileMaps* we've set up.
-In the End, the application itself only requests *Data Frames* from the Backend.
+In the End, the application itself only requests *Data Frames* from the Vault.
 
 To minimize latency and optimize CPU utilization we have a *Prefetch thread* which operates
 a *Scheduler* to render and cache frames which are _expected to be consumed soon_. The intention
@@ -62,7 +62,7 @@ low level File Descriptor and access
 
 Frames
 ~~~~~~
-+Frames+ are the smallest datablocks handled by the Backend. The application tells the Backend to make
++Frames+ are the smallest datablocks handled by the Vault. The application tells the Vault Layer to make
 Files available and from then on just requests Frames. Actually, those Frames are (references to) blocks
 of continuous memory. They can be anything depending on the usage of the File (Video frames, encoder frames,
 blocks of sound samples). Frames are referenced by a smart-pointer like object which manages the lifetime
@@ -81,7 +81,7 @@ weak::
   try to transform a weak reference into a readonly or readwrite reference
 
 
-Frames can be addressed uniquely whenever a frame is not available. The backend can't serve a cached
+Frames can be addressed uniquely whenever a frame is not available. The vault can't serve a cached
 version of the frame, a (probably recursive) rendering request will be issued.
 
 Prefetching
@@ -92,9 +92,9 @@ There are 2 important points when we want to access data with low latency:
   The data which is backed in files has to be paged in and available when needed.
   The +Prefetch+ Thread manages page hinting to the kernel (posix_madvise()..)
 . Intermediate Frames must eventually be rendered to the cache.
-  The Backend will send +Renderjobs+ to the +Scheduler+.
+  The Vault Layer will send +Renderjobs+ to the +Scheduler+.
 
-Whenever something queries a +Frame+ from the backend it provides hints about what it is doing.
+Whenever something queries a +Frame+ from the vault it provides hints about what it is doing.
 These hints contain:
 
 * Timing constraints
@@ -104,7 +104,7 @@ These hints contain:
 * action (Playing forward, playing backward, tweaking, playback speed, recursive rendering of dependent frames)
 
 .Notes
-* The Backend will try to render related frames in groups.
+* The Vault Layer will try to render related frames in groups.
 * This means that following frames are scheduled with lower priority.
 * Whenever the program really requests them the priority will be adjusted.
  

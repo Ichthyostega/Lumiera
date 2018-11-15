@@ -1,5 +1,5 @@
 /*
-  FACADE.hpp  -  access point for communicating with the Proc-Interface
+  FACADE.hpp  -  access point for communicating with the Steam-Interface
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 /** @file facade.hpp
- ** Top level entrance point and facade for the Proc-Layer.
+ ** Top level entrance point and facade for the Steam-Layer.
  ** The middle layer of the application holds a session with the high-level model,
  ** to be translated by the Builder into a node network, which can be _performed_
  ** by the Engine to render output.
@@ -44,12 +44,12 @@
 namespace proc {
   
   
-  /*****************************************************************//**
-   * Global access point for the services implemented by the Proc-Layer.
+  /******************************************************************//**
+   * Global access point for the services implemented by the Steam-Layer.
    * 
    * @todo this is a dummy placeholder as of 1/2009. Currently, there
-   *       is only implementation-level code within the Proc-Layer and
-   *       the interfaces need to be worked out.
+   *       is only implementation-level code within the Steam-Layer
+   *       and the interfaces need to be worked out.
    * @todo at least the Play/Output subsystem slowly turns into
    *       something real, as of 6/2011
    * @todo and as of 1/2017, the Session subsystem is basically
@@ -74,7 +74,7 @@ namespace proc {
       static lumiera::Subsys& getPlayOutDescriptor();
       
       
-      //////////////////TODO: define the global access interfaces for the Proc-Layer
+      //////////////////TODO: define the global access interfaces for the Steam-Layer
       //////////////////TODO: provide a function for accessing this interface
       //////////////////TODO: register similar proxy/facade interfaces for the GUI
       

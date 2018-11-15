@@ -37,7 +37,7 @@ Credits for many further implementation ideas go to
 
 /** @file visitor.hpp
  ** A library implementation of the *Visitor Pattern* tailored specifically
- ** to Lumiera's needs within the Proc Layer. Visitor enables *double dispatch*
+ ** to Lumiera's needs within the Steam Layer. Visitor enables *double dispatch*
  ** calls, based both on the concrete type of some target object and the concrete type of
  ** a tool object being applied to this target. The code carrying out this tool application
  ** (and thus triggering the double dispatch) need not know any of these concrete types and is
