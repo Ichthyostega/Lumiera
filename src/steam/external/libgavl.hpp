@@ -38,7 +38,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace external {
   
   
@@ -93,5 +93,5 @@ namespace external {
   
   
   
-}} // namespace proc::external
+}} // namespace steam::external
 #endif

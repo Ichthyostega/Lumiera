@@ -44,7 +44,7 @@ using util::isSameObject;
 using std::string;
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -340,4 +340,4 @@ namespace test    {
   LAUNCHER (PlacementIndex_test, "unit session");
   
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test

@@ -42,7 +42,7 @@
 
 //////////TODO for the "real" engine API: look at engine-serivce.hpp
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   using std::list;
@@ -68,5 +68,5 @@ namespace engine {
       
     };
 
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif /*STEAM_ENGINE_RENDERENGINE_H*/

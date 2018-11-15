@@ -61,7 +61,7 @@
 #include <map>
 
 
-namespace proc {
+namespace steam {
 namespace engine {
 namespace config {
   
@@ -230,5 +230,5 @@ namespace config {
   
   
   
-}}} // namespace proc::engine::config
+}}} // namespace steam::engine::config
 #endif

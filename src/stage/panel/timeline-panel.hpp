@@ -50,7 +50,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace panel{
   
   
@@ -85,5 +85,5 @@ namespace panel{
     };
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel
 #endif /*STAGE_PANEL_TIMELINE_PANEL_H*/

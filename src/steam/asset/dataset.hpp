@@ -35,7 +35,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   
@@ -45,5 +45,5 @@ namespace asset {
   class Dataset : public Meta
     {};
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

@@ -44,7 +44,7 @@
 #include "vault/engine/scheduler-frontend.hpp"
 
 
-namespace backend{
+namespace vault{
 namespace engine {
 
 //    using std::string;
@@ -141,5 +141,5 @@ namespace engine {
   
   
   
-}} // namespace backend::engine
+}} // namespace vault::engine
 #endif

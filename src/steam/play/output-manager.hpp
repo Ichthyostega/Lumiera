@@ -41,7 +41,7 @@
 #include <memory>
 
 
-namespace proc {
+namespace steam {
 namespace play {
   
 //using std::string;
@@ -78,5 +78,5 @@ namespace play {
   typedef shared_ptr<OutputManager> POutputManager;
   
   
-}} // namespace proc::play
+}} // namespace steam::play
 #endif

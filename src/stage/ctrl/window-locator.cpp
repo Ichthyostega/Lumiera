@@ -42,7 +42,7 @@ using util::isnil;
 using std::list;
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using workspace::WorkspaceWindow;
@@ -204,4 +204,4 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl

@@ -39,7 +39,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   
@@ -64,5 +64,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*STEAM_CONTROL_COMMAND_DISPATCH_H*/

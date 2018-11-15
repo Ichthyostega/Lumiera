@@ -33,7 +33,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset { class Pipe; }
 
 namespace mobject {
@@ -50,5 +50,5 @@ namespace session {
       
     };
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

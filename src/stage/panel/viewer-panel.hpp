@@ -33,7 +33,7 @@
 #include "stage/widget/video-display-widget.hpp"
 #include "stage/ctrl/playback-controller.hpp"
 
-namespace gui  {
+namespace stage  {
 namespace panel{
   
   /**
@@ -60,5 +60,5 @@ namespace panel{
       widget::VideoDisplayWidget display_;
     };
   
-}}// namespace gui::panel
+}}// namespace stage::panel
 #endif /*STAGE_PANEL_VIEWER_PANEL_H*/

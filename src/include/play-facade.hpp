@@ -51,7 +51,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace play {
   
   class PlayProcess;

@@ -33,7 +33,7 @@
 
 using std::shared_ptr;
 
-namespace gui {
+namespace stage {
 namespace model {
 
 ParentTrack::ParentTrack()
@@ -96,4 +96,4 @@ ParentTrack::find_descendant_track_parent(shared_ptr<Track> child)
 }
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage

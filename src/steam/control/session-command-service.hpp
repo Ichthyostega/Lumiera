@@ -53,7 +53,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::diff::Rec;
@@ -105,5 +105,5 @@ namespace control {
     
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*STEAM_CONTROL_SESSION_COMMAND_SERVICE_H*/

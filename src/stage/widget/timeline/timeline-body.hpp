@@ -34,7 +34,7 @@
 
 #include <memory>
 
-namespace gui {
+namespace stage {
 
 namespace model {
 class Track;
@@ -213,5 +213,5 @@ private:
 };
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_BODY_H*/

@@ -75,7 +75,7 @@ namespace query  {
   
 }}
 
-namespace proc {
+namespace steam {
 namespace asset {
   
 //  using std::string;
@@ -133,5 +133,5 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

@@ -62,7 +62,7 @@
 #include <memory>
 
 
-namespace gui {
+namespace stage {
   
   class UiBus;
 
@@ -159,5 +159,5 @@ namespace interact {
   
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace
 #endif /*STAGE_INTERACT_INTERACTION_DIRECTOR_H*/

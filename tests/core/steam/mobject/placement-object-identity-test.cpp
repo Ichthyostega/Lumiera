@@ -41,7 +41,7 @@
 
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace test    {
   
@@ -155,4 +155,4 @@ namespace test    {
   LAUNCHER (PlacementObjectIdentity_test, "function session");
   
   
-}}} // namespace proc::mobject::test
+}}} // namespace steam::mobject::test

@@ -37,7 +37,7 @@ using util::contains;
 //using std::string;
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
 namespace test {
@@ -71,4 +71,4 @@ namespace test {
   
   
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test

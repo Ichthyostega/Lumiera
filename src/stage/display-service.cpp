@@ -40,7 +40,7 @@ extern "C" {
 }
 
 
-namespace gui {
+namespace stage {
   
   
   
@@ -259,4 +259,4 @@ namespace gui {
   }
   
   
-} // namespace proc
+} // namespace stage

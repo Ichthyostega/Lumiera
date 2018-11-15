@@ -37,7 +37,7 @@ using std::bind;
 using test::Test;
 
 
-namespace backend {
+namespace vault {
   namespace test  {
   
     namespace { // private test classes and data...
@@ -145,4 +145,4 @@ namespace backend {
     
     
     
-}} // namespace backend::test
+}} // namespace vault::test

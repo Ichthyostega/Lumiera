@@ -29,7 +29,7 @@
 #include "steam/mobject/session/plug.hpp"
 #include "steam/asset/pipe.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -37,4 +37,4 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session

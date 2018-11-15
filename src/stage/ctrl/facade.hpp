@@ -49,7 +49,7 @@
 
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   
@@ -86,5 +86,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_FACADE_H*/

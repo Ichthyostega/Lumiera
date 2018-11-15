@@ -34,7 +34,7 @@
 //#include <cstdlib>
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test    {
   
@@ -157,4 +157,4 @@ namespace test    {
   LAUNCHER (CommandQueue_test, "unit controller");
   
   
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test

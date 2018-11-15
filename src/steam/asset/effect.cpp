@@ -29,7 +29,7 @@
 
 #include "steam/asset/effect.hpp"
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   Proc::ProcFunc*

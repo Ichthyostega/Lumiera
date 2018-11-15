@@ -69,7 +69,7 @@
 //#include <string>
 
 
-namespace proc  {
+namespace steam  {
 namespace engine{
 
 //    using std::string;
@@ -174,5 +174,5 @@ namespace engine{
   
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif /*STEAM_ENGINE_ENGINE_SERVICE_H*/

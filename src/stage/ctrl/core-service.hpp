@@ -95,7 +95,7 @@
 #include "stage/ctrl/nexus.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace ctrl{
   
   using proc::control::SessionCommand;
@@ -156,5 +156,5 @@ namespace ctrl{
   
   
   
-}} // namespace gui::ctrl
+}} // namespace stage::ctrl
 #endif /*STAGE_CTRL_CORE_SERVICE_H*/

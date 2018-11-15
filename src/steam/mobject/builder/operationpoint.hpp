@@ -45,7 +45,7 @@
 #include <string>
 
 
-namespace proc {
+namespace steam {
 
 namespace asset { class Proc; }
 namespace asset { class Media; }
@@ -91,5 +91,5 @@ namespace builder {
   
   
   
-}}} // namespace proc::mobject::builder
+}}} // namespace steam::mobject::builder
 #endif /*MOBJECT_BUILDER_OPERATIONPOINT_H*/

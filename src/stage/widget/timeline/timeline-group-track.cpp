@@ -33,7 +33,7 @@
 using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace sigc;        ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
   
@@ -63,4 +63,4 @@ namespace timeline {
   }
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline

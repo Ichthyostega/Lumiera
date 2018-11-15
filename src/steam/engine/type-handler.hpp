@@ -50,7 +50,7 @@
 #include <boost/functional/hash.hpp>
 
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   using lib::HashVal;
@@ -180,5 +180,5 @@ namespace engine {
   
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif

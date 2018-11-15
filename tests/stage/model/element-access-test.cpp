@@ -50,7 +50,7 @@ using util::isSameObject;
 //using util::isnil;
 
 
-namespace gui  {
+namespace stage  {
 namespace model{
 namespace test {
   
@@ -160,4 +160,4 @@ namespace test {
   LAUNCHER (ElementAccess_test, "unit gui");
   
   
-}}} // namespace gui::model::test
+}}} // namespace stage::model::test

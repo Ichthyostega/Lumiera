@@ -64,7 +64,7 @@ using util::isYes;
 using std::string;
 
 
-namespace proc {
+namespace steam {
 namespace cmd {
   namespace error = lumiera::error;
   
@@ -235,4 +235,4 @@ COMMAND_DEFINITION (test_meta_markAction)
   
   
   
-}} // namespace proc::cmd
+}} // namespace steam::cmd

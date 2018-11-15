@@ -39,7 +39,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   class ExplicitPlacement; //TODO trac #100
@@ -73,5 +73,5 @@ namespace mobject {
     
     
     
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

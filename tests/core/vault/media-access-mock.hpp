@@ -38,7 +38,7 @@
 
 
 
-namespace backend {
+namespace vault {
 namespace test {
   
   /**
@@ -53,5 +53,5 @@ namespace test {
     };
   
   
-}} // namespace backend::test
+}} // namespace vault::test
 #endif

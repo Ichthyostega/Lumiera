@@ -78,7 +78,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using boost::hash;
@@ -276,5 +276,5 @@ namespace control {
     };
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

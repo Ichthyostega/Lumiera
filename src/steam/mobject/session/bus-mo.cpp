@@ -30,7 +30,7 @@
 
 #include "steam/mobject/session/bus-mo.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -55,4 +55,4 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session

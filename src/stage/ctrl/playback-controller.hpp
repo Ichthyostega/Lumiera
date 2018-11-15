@@ -46,7 +46,7 @@
 
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   
@@ -86,6 +86,6 @@ namespace ctrl {
     };
   
   
-}} // namespace gui::ctrl
+}} // namespace stage::ctrl
 #endif // PLAYBACK_CONTROLLER_HPP
 

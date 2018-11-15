@@ -47,7 +47,7 @@ extern "C" {
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::Symbol;
@@ -252,4 +252,4 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control

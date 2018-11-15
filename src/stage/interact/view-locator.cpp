@@ -58,7 +58,7 @@ using lib::Symbol;
 using gui::model::ElementAccess;
 
 
-namespace gui {
+namespace stage {
   namespace error = lumiera::error;
   
   
@@ -108,4 +108,4 @@ namespace gui {
     
     
     
-}}// namespace gui::interact
+}}// namespace stage::interact

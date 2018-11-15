@@ -35,7 +35,7 @@
 #include "include/gui-notification-facade.h"
 #include "include/interfaceproxy.hpp"
 
-namespace gui {
+namespace stage {
   /** static storage for the facade access front-end */
   lib::Depend<GuiNotification> GuiNotification::facade;
 }

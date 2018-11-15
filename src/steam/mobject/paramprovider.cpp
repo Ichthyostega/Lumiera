@@ -32,7 +32,7 @@
 #include "steam/mobject/parameter.hpp"
 #include "steam/mobject/interpolator.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
 
 
@@ -43,4 +43,4 @@ namespace mobject {
 
 
 
-}} // namespace proc::mobject
+}} // namespace steam::mobject

@@ -30,7 +30,7 @@
 #include "stage/widget/error-log-display.hpp"
 
 
-namespace gui  {
+namespace stage  {
 namespace panel{
   
   using widget::ErrorLogDisplay;
@@ -138,4 +138,4 @@ namespace panel{
   }
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel

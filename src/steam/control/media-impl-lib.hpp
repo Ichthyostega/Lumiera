@@ -41,7 +41,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::Symbol;
@@ -63,5 +63,5 @@ namespace control {
     };
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*STEAM_CONTROL_MEDIA_IMPL_LIB_H*/

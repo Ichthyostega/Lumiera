@@ -36,7 +36,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace model {
   
   using std::string;
@@ -103,5 +103,5 @@ namespace model {
     };
   
   
-}}   // namespace gui::model
+}}   // namespace stage::model
 #endif // CLIP_HPP

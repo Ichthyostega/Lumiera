@@ -98,7 +98,7 @@
 #include <vector>
 
 
-namespace proc {
+namespace steam {
 namespace play {
 
 //    using std::string;
@@ -275,5 +275,5 @@ namespace play {
   
   
   
-}} // namespace proc::play
+}} // namespace steam::play
 #endif /*STEAM_PLAY_DUMMY_PLAY_CONNECTION_H*/

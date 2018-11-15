@@ -77,7 +77,7 @@ using std::vector;
 using std::set;
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   namespace error = lumiera::error;
@@ -350,7 +350,7 @@ namespace asset {
   ID<KIND> ID<KIND>::INVALID = ID{0};
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 
 
 

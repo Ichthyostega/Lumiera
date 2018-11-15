@@ -39,7 +39,7 @@
 #include "steam/mobject/placement.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   /** */
@@ -53,4 +53,4 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject

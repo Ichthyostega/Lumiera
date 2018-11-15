@@ -28,7 +28,7 @@
 
 #include "stage/widget/timeline/timeline-clip.hpp"
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
   
@@ -75,4 +75,4 @@ namespace timeline {
   }
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline

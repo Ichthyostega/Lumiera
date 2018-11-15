@@ -56,7 +56,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::time::Time;
@@ -268,5 +268,5 @@ namespace control {
 
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*STEAM_CONTROL_LOOPER_H*/

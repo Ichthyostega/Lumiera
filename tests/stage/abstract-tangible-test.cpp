@@ -80,7 +80,7 @@ using proc::control::CommandDef;
 
 
 
-namespace gui  {
+namespace stage  {
 namespace model{
 namespace test {
   
@@ -760,4 +760,4 @@ namespace test {
   LAUNCHER (AbstractTangible_test, "unit gui");
   
   
-}}} // namespace gui::model::test
+}}} // namespace stage::model::test

@@ -35,7 +35,7 @@
 
 
 
-namespace gui {
+namespace stage {
 namespace workspace {
   
   using ctrl::UiManager;
@@ -100,4 +100,4 @@ namespace workspace {
   
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace

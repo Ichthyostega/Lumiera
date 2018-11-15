@@ -40,7 +40,7 @@
 #include "stage/timeline/timeline-widget.hpp"
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   
@@ -94,5 +94,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_TIMELINE_WIDGET_EMPTY_H*/

@@ -55,7 +55,7 @@ using std::vector;
 using std::map;
 
 
-namespace backend {
+namespace vault {
 namespace test {
   
   typedef MediaAccessFacade::ChanHandle ChanHandle;
@@ -156,4 +156,4 @@ namespace test {
   }
   
   
-}} // namespace backend::test
+}} // namespace vault::test

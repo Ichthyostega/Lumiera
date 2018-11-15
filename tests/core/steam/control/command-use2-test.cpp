@@ -48,7 +48,7 @@ extern "C" {
 #include <string>
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test    {
 
@@ -268,4 +268,4 @@ namespace test    {
   LAUNCHER (CommandUse2_test, "function controller");
       
       
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test

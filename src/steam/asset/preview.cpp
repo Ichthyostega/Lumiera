@@ -28,7 +28,7 @@
 
 #include "steam/asset/preview.hpp"
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   

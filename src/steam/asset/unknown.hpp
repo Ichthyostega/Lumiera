@@ -37,7 +37,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   using lib::time::FSecs;
@@ -67,5 +67,5 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

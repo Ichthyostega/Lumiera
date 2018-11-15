@@ -60,7 +60,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace widget {
   
   
@@ -78,5 +78,5 @@ namespace widget {
     };
   
   
-}}// namespace gui::widget
+}}// namespace stage::widget
 #endif /*STAGE_WIDGET_MIXER_WIDGET_H*/

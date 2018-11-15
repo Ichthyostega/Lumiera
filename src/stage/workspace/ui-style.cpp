@@ -45,7 +45,7 @@ using Gtk::IconFactory;
 using util::cStr;
 
 
-namespace gui {
+namespace stage {
 namespace workspace {
   
   namespace fsys = boost::filesystem;
@@ -304,4 +304,4 @@ namespace workspace {
   
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace

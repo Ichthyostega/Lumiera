@@ -36,7 +36,7 @@
 #include <ctime>
 
 
-namespace backend {
+namespace vault {
   
 #define MICRO_TICS_PER_NANOSECOND (1000*1000*1000 / GAVL_TIME_SCALE)
   
@@ -60,4 +60,4 @@ namespace backend {
   
   
   
-} // namespace backend
+} // namespace vault

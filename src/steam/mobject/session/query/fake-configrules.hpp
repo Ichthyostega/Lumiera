@@ -59,7 +59,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   namespace query {
@@ -303,5 +303,5 @@ namespace session {
     
     
   } // namespace query
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

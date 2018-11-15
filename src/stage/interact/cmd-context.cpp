@@ -43,7 +43,7 @@
 //using util::contains;
 //using util::isnil;
 
-namespace gui {
+namespace stage {
 namespace interact {
   
   namespace { // internal details
@@ -80,4 +80,4 @@ namespace interact {
   
   /** nonsense */
 
-}} // namespace gui::interact
+}} // namespace stage::interact

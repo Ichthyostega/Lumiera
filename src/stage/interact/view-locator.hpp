@@ -77,7 +77,7 @@
 #include <memory>
 
 
-namespace gui {
+namespace stage {
 namespace ctrl{
   class PanelLocator;
 }
@@ -137,5 +137,5 @@ namespace interact {
   }
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact
 #endif /*STAGE_INTERACT_VIEW_LOCATOR_H*/

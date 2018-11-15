@@ -37,7 +37,7 @@
 
 
 
-namespace backend {
+namespace vault {
   
   
   /*******************************************************************//**
@@ -63,5 +63,5 @@ namespace backend {
     
   
   
-} // namespace backend
+} // namespace vault
 #endif

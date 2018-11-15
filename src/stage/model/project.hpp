@@ -37,7 +37,7 @@
 #include "stage/model/sequence.hpp"
 #include "lib/observable-list.hpp"
 
-namespace gui {
+namespace stage {
 namespace model {
   
 /**
@@ -61,6 +61,6 @@ private:
 };
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage
 
 #endif // PROJECT_HPP

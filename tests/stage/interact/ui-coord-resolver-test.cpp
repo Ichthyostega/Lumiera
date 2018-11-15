@@ -46,7 +46,7 @@ using util::join;
 
 
 
-namespace gui  {
+namespace stage  {
 namespace interact {
 namespace test {
   
@@ -752,4 +752,4 @@ namespace test {
   LAUNCHER (UICoordResolver_test, "unit gui");
   
   
-}}} // namespace gui::interact::test
+}}} // namespace stage::interact::test

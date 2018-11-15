@@ -40,7 +40,7 @@
 
 
 
-namespace proc {
+namespace steam {
   
   using lib::Symbol;
 
@@ -192,7 +192,7 @@ namespace proc {
   
   
   
-} // namespace proc
+} // namespace steam
 
 
 namespace lumiera {

@@ -38,7 +38,7 @@
 #include "steam/mobject/builder/buildertool.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset { 
   
   class Pipe;
@@ -82,5 +82,5 @@ namespace session {
   template class Placement<session::BusMO, session::Meta>;
   typedef Placement<session::BusMO, session::Meta> PBus;
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

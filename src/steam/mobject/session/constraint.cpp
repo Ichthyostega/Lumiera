@@ -28,7 +28,7 @@
 
 #include "steam/mobject/session/constraint.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   

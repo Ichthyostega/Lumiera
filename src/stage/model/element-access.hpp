@@ -67,7 +67,7 @@
 namespace Gtk {
   class Widget;
 }
-namespace gui {
+namespace stage {
 namespace model {
   namespace error = lumiera::error;
   
@@ -198,5 +198,5 @@ namespace model {
   
   
   
-}} // namespace gui::model
+}} // namespace stage::model
 #endif /*STAGE_MODEL_ELEMENT_ACCESS_H*/

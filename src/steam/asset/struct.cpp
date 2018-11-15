@@ -59,7 +59,7 @@ using proc::ConfigResolver;
 using util::contains;
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   /****** NOTE: not fully implemented yet. What follows is partially a hack to build simple tests *******/
@@ -190,7 +190,7 @@ namespace asset {
 #include "steam/asset/sequence.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   using PPipe = lib::P<Pipe>;
   

@@ -52,7 +52,7 @@ namespace Gtk {
   class Widget;
 }
 
-namespace gui {
+namespace stage {
 namespace output {
   
   /**
@@ -135,5 +135,5 @@ namespace output {
     };
   
   
-}}   // namespace gui::output
+}}   // namespace stage::output
 #endif // XVDISPLAYER_HPP

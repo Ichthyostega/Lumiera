@@ -45,7 +45,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   class Clip;
@@ -164,5 +164,5 @@ namespace asset {
     
     
     
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

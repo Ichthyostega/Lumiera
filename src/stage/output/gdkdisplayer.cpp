@@ -42,7 +42,7 @@ using std::cerr;
 using std::endl;
 
 
-namespace gui {
+namespace stage {
 namespace output {
   
   GdkDisplayer::GdkDisplayer (Gtk::Widget *drawing_area,
@@ -100,4 +100,4 @@ namespace output {
   }
   
   
-}}   // namespace gui::output
+}}   // namespace stage::output

@@ -31,7 +31,7 @@
 
 using util::_Fmt;
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   LUMIERA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media referred by placeholder not found");

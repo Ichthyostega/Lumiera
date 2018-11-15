@@ -62,7 +62,7 @@
 #include <vector>
 
 
-namespace gui {
+namespace stage {
   
   using std::string;
   using std::vector;
@@ -185,5 +185,5 @@ namespace gui {
   
   
   
-} // namespace gui
+} // namespace stage
 #endif

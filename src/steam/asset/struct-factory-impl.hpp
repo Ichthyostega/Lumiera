@@ -61,7 +61,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   using lib::Symbol;
@@ -247,5 +247,5 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

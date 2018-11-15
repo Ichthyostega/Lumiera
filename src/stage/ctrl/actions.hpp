@@ -52,7 +52,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   namespace error = lumiera::error;
   
@@ -374,5 +374,5 @@ namespace ctrl {
     };
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_ACTIONS_H*/

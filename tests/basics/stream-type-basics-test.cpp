@@ -35,7 +35,7 @@ using ::test::Test;
 using util::isnil;
 
 
-namespace proc {
+namespace steam {
 namespace test_format {
   
   using control::STypeManager;
@@ -117,5 +117,5 @@ namespace test_format {
   LAUNCHER (StreamTypeBasics_test, "unit common");
   
   
-}} // namespace proc::test_format
+}} // namespace steam::test_format
 

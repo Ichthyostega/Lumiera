@@ -37,7 +37,7 @@
 #include "stage/model/clip-track.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace model {
 
 
@@ -85,4 +85,4 @@ Sequence::print_track()
 }
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage

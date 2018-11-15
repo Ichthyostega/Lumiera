@@ -39,7 +39,7 @@
 #include "steam/mobject/builder/common.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   namespace session {
     class Fixture;
@@ -61,5 +61,5 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif /*STEAM_MOBJECT_BUILDERFACADE_H*/

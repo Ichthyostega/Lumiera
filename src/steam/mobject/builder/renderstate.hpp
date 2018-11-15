@@ -37,7 +37,7 @@
 
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace builder {
   
@@ -59,5 +59,5 @@ namespace builder {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif /*MOBJECT_BUILDER_RENDERSTATE_H*/

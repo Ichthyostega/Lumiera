@@ -60,7 +60,7 @@
 #include "steam/mobject/explicitplacement.hpp"
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
   
   class Buildable;
@@ -204,5 +204,5 @@ namespace mobject {
     }
   
   
-}}} // namespace proc::mobject::builder
+}}} // namespace steam::mobject::builder
 #endif

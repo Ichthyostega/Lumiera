@@ -36,7 +36,7 @@
 #define STAGE_OUTPUT_DISPLAYER_H
 
 
-namespace gui {
+namespace stage {
 namespace output {
   
   /** Supported Displayer formats */
@@ -123,5 +123,5 @@ namespace output {
     
     
   
-}} // namespace gui::output
+}} // namespace stage::output
 #endif /*STAGE_OUTPUT_DISPLAYER_H*/

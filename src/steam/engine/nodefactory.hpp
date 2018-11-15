@@ -41,7 +41,7 @@
 
 namespace lib { class AllocationCluster; }
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -84,5 +84,5 @@ namespace engine {
         
     };
 
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif

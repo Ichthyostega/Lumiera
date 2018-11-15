@@ -54,7 +54,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::InPlaceBuffer;
@@ -232,5 +232,5 @@ namespace control {
     
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*CONTROL_COMMAND_SIMPLE_CLOSURE_H*/

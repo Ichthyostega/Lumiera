@@ -38,7 +38,7 @@
 using util::isSameObject;
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -201,4 +201,4 @@ namespace test    {
   LAUNCHER (PlacementScope_test, "function session");
   
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test

@@ -40,7 +40,7 @@ using lib::Literal;
 using std::string;
 
 
-namespace backend {
+namespace vault {
 namespace test {
   
   
@@ -92,4 +92,4 @@ namespace test {
   
   
   
-}} // namespace backend::test
+}} // namespace vault::test

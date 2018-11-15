@@ -31,7 +31,7 @@
 
 #include "stage/gtk-base.hpp"
 
-namespace gui {
+namespace stage {
 namespace draw {
   
   /** determine whether point is within the bounding box of a rectangle */
@@ -42,5 +42,5 @@ namespace draw {
   bool rects_overlap(Gdk::Rectangle const& a, Gdk::Rectangle const& b);
   
   
-}}// namespace gui::draw
+}}// namespace stage::draw
 #endif /*STAGE_DRAW_RECTANGLE_H*/

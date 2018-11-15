@@ -47,7 +47,7 @@ namespace query {
   class DefsManager;
 }}
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
     
@@ -99,5 +99,5 @@ namespace session {
   template class Placement<session::Root, session::Meta>;
   typedef Placement<session::Root, session::Meta> PRoot;
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

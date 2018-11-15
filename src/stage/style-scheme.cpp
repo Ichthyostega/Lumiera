@@ -31,7 +31,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/style-scheme.hpp"
 
-namespace gui {
+namespace stage {
   
   const Literal TAG_ERROR{"ERROR"};              ////////////////////////////////////////////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
   const Literal TAG_WARN{"WARN"};
@@ -44,4 +44,4 @@ namespace gui {
   
   
   
-}// namespace gui
+}// namespace stage

@@ -65,7 +65,7 @@
 #include <sigc++/trackable.h>
 
 
-namespace gui {
+namespace stage {
 namespace model {
   
   namespace error = lumiera::error;
@@ -240,5 +240,5 @@ namespace model {
     };
   
   
-}} // namespace gui::model
+}} // namespace stage::model
 #endif /*STAGE_MODEL_W_LINK_H*/

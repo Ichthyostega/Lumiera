@@ -49,7 +49,7 @@
 #include <memory>
 
 
-namespace proc {
+namespace steam {
   namespace asset {
     namespace meta {
       class ErrorLog;
@@ -57,7 +57,7 @@ namespace proc {
       extern lib::idi::EntryID<ErrorLog> theErrorLog_ID;
 } } }
 
-namespace gui {
+namespace stage {
   using ID = lib::idi::BareEntryID const&;
   
 namespace ctrl {
@@ -103,5 +103,5 @@ namespace interact {
   
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact
 #endif /*STAGE_INTERACT_WIZARD_H*/

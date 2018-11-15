@@ -47,7 +47,7 @@
 #include <string>
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test    {
   
@@ -165,5 +165,5 @@ namespace test    {
   extern CommandSetup test_Dummy_command3;
   
   
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test
 #endif

@@ -36,7 +36,7 @@
 #include "lib/time/timevalue.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   class Media;
   class Clip;
@@ -94,5 +94,5 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

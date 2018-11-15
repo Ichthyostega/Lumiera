@@ -83,7 +83,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using std::string;
@@ -334,5 +334,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

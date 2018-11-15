@@ -42,7 +42,7 @@ extern "C" {
 
 
 
-namespace proc  {
+namespace steam  {
   namespace play{
   
     using std::string;
@@ -366,7 +366,7 @@ namespace proc  {
   
   } // namespace play
   
-} // namespace proc
+} // namespace steam
 
 
 

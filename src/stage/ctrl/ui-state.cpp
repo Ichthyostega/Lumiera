@@ -37,7 +37,7 @@
 //using util::isnil;
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using interact::FocusTracker;
@@ -66,4 +66,4 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl

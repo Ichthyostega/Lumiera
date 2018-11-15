@@ -28,7 +28,7 @@
 
 #include "steam/engine/source.hpp"
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   Source::Source (WiringDescriptor const& wd)

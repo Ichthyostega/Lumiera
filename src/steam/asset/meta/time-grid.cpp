@@ -43,7 +43,7 @@ using util::isnil;
 using std::string;
 
 
-namespace proc {
+namespace steam {
 namespace asset {
 namespace meta {
   

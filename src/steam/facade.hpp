@@ -41,7 +41,7 @@
 
 
 
-namespace proc {
+namespace steam {
   
   
   /******************************************************************//**
@@ -82,5 +82,5 @@ namespace proc {
     
   
   
-} // namespace proc
+} // namespace steam
 #endif

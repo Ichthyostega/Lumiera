@@ -39,7 +39,7 @@
 
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -148,4 +148,4 @@ namespace test    {
   LAUNCHER (ScopeQuery_test, "unit session");
   
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test

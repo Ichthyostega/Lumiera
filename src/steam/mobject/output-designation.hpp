@@ -46,7 +46,7 @@
 #include "lib/meta/typelist-manip.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   namespace mp = lib::meta;
@@ -133,5 +133,5 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif /*STEAM_MOBJECT_OUTPUT_DESIGNATION_H*/

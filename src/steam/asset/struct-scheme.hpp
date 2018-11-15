@@ -46,7 +46,7 @@
 
 
 
-namespace proc {
+namespace steam {
   struct StreamType;
   
 namespace mobject {

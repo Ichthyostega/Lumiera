@@ -73,7 +73,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace widget {
   
   using util::max;
@@ -333,5 +333,5 @@ namespace widget {
     };
   
   
-}}// namespace gui::widget
+}}// namespace stage::widget
 #endif /*STAGE_WIDGET_ERROR_LOG_DISPLAY_H*/

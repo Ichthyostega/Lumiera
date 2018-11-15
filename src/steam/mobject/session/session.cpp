@@ -41,7 +41,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   using lib::Symbol;
@@ -153,4 +153,4 @@ namespace mobject {
 
 
 
-}} // namespace proc::mobject
+}} // namespace steam::mobject

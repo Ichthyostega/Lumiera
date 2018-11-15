@@ -80,7 +80,7 @@
 #include <memory>
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   namespace session{ class MObjectFactory; }
@@ -287,5 +287,5 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

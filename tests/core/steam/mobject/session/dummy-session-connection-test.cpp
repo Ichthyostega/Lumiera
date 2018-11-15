@@ -40,7 +40,7 @@ using std::string;
 //using std::cout;
 //using std::endl;
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -84,4 +84,4 @@ namespace test    {
   /** Register this test class... */
   LAUNCHER(DummySessionConnection_test, "unit session");
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test

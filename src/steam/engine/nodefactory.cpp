@@ -35,7 +35,7 @@
 
 #include "steam/engine/nodewiring.hpp"
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   namespace { // Details of node fabrication

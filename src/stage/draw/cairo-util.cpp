@@ -28,7 +28,7 @@
 
 #include "stage/draw/cairo-util.hpp"
 
-namespace gui {
+namespace stage {
 namespace draw {
   
   RefPtr<SolidPattern>
@@ -83,4 +83,4 @@ namespace draw {
     return Cairo::SolidPattern::create_rgba (red, blue, green, alpha);
   }
   
-}}// namespace gui::draw
+}}// namespace stage::draw

@@ -53,7 +53,7 @@
 //using std::endl;
 
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   
@@ -72,4 +72,4 @@ namespace widget {
   
   
   
-}}// namespace gui::widget
+}}// namespace stage::widget

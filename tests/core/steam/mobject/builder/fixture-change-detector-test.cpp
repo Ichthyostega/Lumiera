@@ -34,7 +34,7 @@
 #include "lib/util.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace builder {
 namespace test  {
@@ -116,4 +116,4 @@ namespace test  {
   
   
   
-}}}} // namespace proc::mobject::builder::test
+}}}} // namespace steam::mobject::builder::test

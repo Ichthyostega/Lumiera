@@ -66,7 +66,7 @@
 #include "lib/nocopy.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   class Meta;
@@ -172,5 +172,5 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

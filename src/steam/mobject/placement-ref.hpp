@@ -72,7 +72,7 @@
 
 
 
-namespace proc {
+namespace steam {
   namespace error = lumiera::error;
   
   namespace mobject {
@@ -292,5 +292,5 @@ namespace proc {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

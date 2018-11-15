@@ -40,7 +40,7 @@
 #include <memory>
 
 
-namespace gui {
+namespace stage {
   namespace model {
     class Sequence;
   }  
@@ -225,5 +225,5 @@ namespace gui {
     };
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_STATE_H*/

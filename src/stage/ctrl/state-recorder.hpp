@@ -64,7 +64,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using gui::ctrl::BusTerm;
@@ -207,5 +207,5 @@ namespace ctrl {
   
   
   
-}} // namespace gui::ctrl
+}} // namespace stage::ctrl
 #endif /*STAGE_CTRL_STATE_RECORDER_H*/

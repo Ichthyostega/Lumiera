@@ -38,7 +38,7 @@
 #include <string>
 
 
-namespace backend {
+namespace vault {
 
   using std::string;
   using lumiera::Subsys;
@@ -93,4 +93,4 @@ namespace backend {
 
 
 
-} // namespace backend
+} // namespace vault

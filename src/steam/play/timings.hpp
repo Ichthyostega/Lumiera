@@ -61,7 +61,7 @@ namespace time{
   typedef std::shared_ptr<const Quantiser> PQuant;
 }}
 
-namespace proc {
+namespace steam {
 namespace play {
 
   using lib::time::FrameCnt;
@@ -199,5 +199,5 @@ namespace play {
   
   
   
-}} // namespace proc::play
+}} // namespace steam::play
 #endif

@@ -85,7 +85,7 @@
 /* ======= Namespace Definitions ======= */
 
 /** Lumiera GTK UI implementation root. */
-namespace gui {
+namespace stage {
   
   typedef Glib::ustring uString;
   typedef const uString cuString;
@@ -158,5 +158,5 @@ namespace gui {
   namespace idi {}
   
   
-}// namespace gui
+}// namespace stage
 #endif /*STAGE_GTK_BASE_H*/

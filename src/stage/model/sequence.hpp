@@ -39,7 +39,7 @@
 
 #include <string>
 
-namespace gui {
+namespace stage {
 namespace model {
 
 class Track;
@@ -75,6 +75,6 @@ class Sequence
 
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage
 
 #endif // SEQUENCE_HPP

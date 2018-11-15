@@ -42,7 +42,7 @@ namespace query {
   class DefsManager;
 }}
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   class Clip;
@@ -88,5 +88,5 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

@@ -45,7 +45,7 @@
 #include "stage/style-scheme.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace model {
   
   
@@ -86,5 +86,5 @@ namespace model {
     };
   
   
-}} // namespace gui::model
+}} // namespace stage::model
 #endif /*STAGE_MODEL_FLASH_DECO_H*/

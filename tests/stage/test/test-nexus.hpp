@@ -58,7 +58,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace test{
   
   
@@ -205,5 +205,5 @@ namespace test{
   
   
   
-}} // namespace gui::test
+}} // namespace stage::test
 #endif /*STAGE_TEST_TEST_NEXUS_H*/

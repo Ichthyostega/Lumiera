@@ -54,7 +54,7 @@ namespace lib {
     class GenNode;
     class MutationMessage;
 } }
-namespace gui {
+namespace stage {
   
   using std::string;
   using lib::diff::GenNode;
@@ -124,7 +124,7 @@ namespace gui {
   
   
   
-} // namespace gui
+} // namespace stage
 
 
 extern "C" {

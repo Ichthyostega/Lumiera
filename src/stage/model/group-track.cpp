@@ -30,7 +30,7 @@
 
 #include "group-track.hpp"
 
-namespace gui {
+namespace stage {
 namespace model {
   
 GroupTrack::GroupTrack()
@@ -48,4 +48,4 @@ GroupTrack::print_track()
 }
   
 }   // namespace model
-}   // namespace gui
+}   // namespace stage

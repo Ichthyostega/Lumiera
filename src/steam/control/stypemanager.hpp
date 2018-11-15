@@ -38,7 +38,7 @@
 #include <memory>
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::Symbol;
@@ -110,7 +110,7 @@ namespace control {
   }
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 
 
 namespace proc_interface {

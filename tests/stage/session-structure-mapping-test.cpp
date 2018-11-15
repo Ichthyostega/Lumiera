@@ -58,7 +58,7 @@
 //using std::string;
 
 
-namespace gui  {
+namespace stage  {
 namespace model{
 namespace test {
   
@@ -114,4 +114,4 @@ namespace test {
   LAUNCHER (SessionStructureMapping_test, "unit gui");
   
   
-}}} // namespace gui::model::test
+}}} // namespace stage::model::test

@@ -34,7 +34,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   template<class VAL> class ParamProvider;
@@ -58,5 +58,5 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif /*STEAM_PROC_MOBJECT_PARAMETER_H*/

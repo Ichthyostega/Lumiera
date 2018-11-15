@@ -37,7 +37,7 @@
 #include <string>
 #include <list>
 
-namespace gui {
+namespace stage {
 namespace model {
   
 using std::list;
@@ -156,4 +156,4 @@ Track::print_branch_recursive (const unsigned int indentation)
 }
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage

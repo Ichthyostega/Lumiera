@@ -34,7 +34,7 @@
 #include "vault/engine/dummy-job.hpp"
 
 
-namespace backend {
+namespace vault {
 namespace engine {
 namespace test {
   
@@ -195,4 +195,4 @@ namespace test {
   /** Register this test class... */
   LAUNCHER(SchedulerInterface_test, "unit engine");
   
-}}} // namespace backend::engine::test
+}}} // namespace vault::engine::test

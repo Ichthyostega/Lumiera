@@ -75,7 +75,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using std::shared_ptr;
@@ -330,5 +330,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

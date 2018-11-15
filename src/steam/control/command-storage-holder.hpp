@@ -54,7 +54,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::InPlaceBuffer;
@@ -284,5 +284,5 @@ namespace control {
     
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*CONTROL_COMMAND_STORAGE_HOLDER_H*/

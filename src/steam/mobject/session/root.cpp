@@ -33,7 +33,7 @@
 using lumiera::query::DefsManager;
 using lib::idi::EntryID;
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -82,4 +82,4 @@ namespace session {
   /////////////////////////////////TODO more to come.....
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session

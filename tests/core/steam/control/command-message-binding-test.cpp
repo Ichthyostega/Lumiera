@@ -32,7 +32,7 @@
 #include "lib/diff/gen-node.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test    {
   
@@ -133,4 +133,4 @@ namespace test    {
   LAUNCHER (CommandMessageBinding_test, "unit controller");
   
   
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test

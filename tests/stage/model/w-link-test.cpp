@@ -39,7 +39,7 @@ using std::make_unique;
 using std::move;
 
 
-namespace gui  {
+namespace stage  {
 namespace model{
 namespace test {
   
@@ -216,4 +216,4 @@ namespace test {
   LAUNCHER (WLink_test, "unit gui");
   
   
-}}} // namespace gui::model::test
+}}} // namespace stage::model::test

@@ -66,7 +66,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   class TrackBody;
@@ -102,5 +102,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_BODY_CANVAS_WIDGET_H*/

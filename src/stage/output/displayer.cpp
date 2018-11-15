@@ -40,7 +40,7 @@
 #include "stage/output/xvdisplayer.hpp"
 #include "stage/output/gdkdisplayer.hpp"
 
-namespace gui {
+namespace stage {
 namespace output {
   
   bool
@@ -94,4 +94,4 @@ namespace output {
   }
   
   
-}} // namespace gui::output
+}} // namespace stage::output

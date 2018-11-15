@@ -48,7 +48,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
 //  using lib::HashVal;
@@ -73,5 +73,5 @@ namespace interact {
   
   
   
-}} // namespace gui::interact
+}} // namespace stage::interact
 #endif /*STAGE_INTERACT_INTERACTION_STATE_H*/

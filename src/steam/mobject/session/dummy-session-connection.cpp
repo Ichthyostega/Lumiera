@@ -72,7 +72,7 @@ using std::string;
 using util::contains;
 using util::isnil;
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -131,7 +131,7 @@ namespace session {
   }
   
   
-}}// namespace proc::mobject::session
+}}// namespace steam::mobject::session
 
 namespace cmd {
   
@@ -226,4 +226,4 @@ COMMAND_DEFINITION (test_fake_blubb)
   };
   
   
-}} // namespace proc::mobject::session
+}} // namespace steam::mobject::session

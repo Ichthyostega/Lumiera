@@ -28,7 +28,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/panel/assets-panel.hpp"
 
-namespace gui  {
+namespace stage  {
 namespace panel{
   
   AssetsPanel::AssetsPanel(workspace::PanelManager& panelManager, Gdl::DockItem& dockItem)
@@ -55,4 +55,4 @@ namespace panel{
   }
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel

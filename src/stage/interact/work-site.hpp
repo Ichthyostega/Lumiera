@@ -52,7 +52,7 @@
 //#include <memory>
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
 //  using std::unique_ptr;
@@ -83,5 +83,5 @@ namespace interact {
   
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact
 #endif /*STAGE_INTERACT_WORK_SITE_H*/

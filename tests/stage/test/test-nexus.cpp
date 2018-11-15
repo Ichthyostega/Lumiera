@@ -81,7 +81,7 @@ using proc::control::CommandImpl;
 using proc::control::HandlingPattern;
 using util::_Fmt;
 
-namespace gui {
+namespace stage {
 namespace test{
   
   
@@ -601,4 +601,4 @@ namespace test{
     testNexus().getLog().event(lateName + " successfully zombificated.");
   }
 
-}} // namespace gui::test
+}} // namespace stage::test

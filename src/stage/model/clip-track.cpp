@@ -32,7 +32,7 @@
 #include "clip.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace model {
 
   ClipTrack::ClipTrack()
@@ -63,4 +63,4 @@ namespace model {
   }
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage

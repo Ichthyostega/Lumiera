@@ -43,7 +43,7 @@
 #include "steam/mobject/model-port.hpp"
 #include "steam/mobject/builder/model-port-registry.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
   namespace builder {
     
@@ -300,4 +300,4 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject

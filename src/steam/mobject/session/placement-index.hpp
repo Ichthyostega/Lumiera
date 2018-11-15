@@ -133,7 +133,7 @@ namespace std {
 }
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   class MObject;
@@ -344,5 +344,5 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

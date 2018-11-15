@@ -35,9 +35,9 @@
 
 using namespace Gtk;         //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace sigc;
-using namespace gui::widget;
-using namespace gui::widget::timeline;
-using namespace gui::model;
+using namespace stage::widget;
+using namespace stage::widget::timeline;
+using namespace stage::model;
 
 using gui::controller::Controller;
 using gui::ctrl::PlaybackController;
@@ -46,7 +46,7 @@ using std::weak_ptr;
 using util::contains;
 
 
-namespace gui {
+namespace stage {
 namespace panel {
     
   const int TimelinePanelObsolete::ZoomToolSteps = 2; // 2 seems comfortable
@@ -408,4 +408,4 @@ namespace panel {
     return shared_ptr<TimelineState>();
   }
   
-}}   // namespace gui::panel
+}}   // namespace stage::panel

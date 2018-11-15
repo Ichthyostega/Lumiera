@@ -36,7 +36,7 @@ extern "C" {
 }
 
 
-namespace proc {
+namespace steam {
 namespace external {
     
     using control::STypeManager;
@@ -72,4 +72,4 @@ namespace external {
   
   
   
-}} // namespace proc::external
+}} // namespace steam::external

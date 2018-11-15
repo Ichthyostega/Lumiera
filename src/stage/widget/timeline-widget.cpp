@@ -42,9 +42,9 @@ using std::dynamic_pointer_cast;
 using namespace Gtk;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using namespace util;        ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::widget::timeline;       ////////////TODO OK this one looks more sensible, but why do we need to refer to such a nested space so much?
+using namespace stage::widget::timeline;       ////////////TODO OK this one looks more sensible, but why do we need to refer to such a nested space so much?
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   const int TimelineWidget::TrackPadding = 1;

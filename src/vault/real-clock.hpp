@@ -59,7 +59,7 @@
 //  typedef std::shared_ptr<const Quantiser> PQuant;
 //}}
 
-namespace backend {
+namespace vault {
 
   using lib::time::Time;
   using lib::time::TimeValue;
@@ -91,5 +91,5 @@ namespace backend {
   
   
   
-} // namespace backend
+} // namespace vault
 #endif

@@ -37,7 +37,7 @@ using namespace sigc;     //////////////////////////////////////////////////////
 #define POPUP_SLUG "TheMenu"
 #define POPUP_PATH "/" POPUP_SLUG
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   namespace {

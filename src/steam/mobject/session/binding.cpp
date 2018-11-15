@@ -31,7 +31,7 @@
 #include "steam/mobject/session/binding.hpp"
 #include "steam/asset/sequence.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -57,4 +57,4 @@ namespace session {
   
 
 
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session

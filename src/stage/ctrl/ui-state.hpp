@@ -61,7 +61,7 @@
 //#include <memory>
 
 
-namespace gui {
+namespace stage {
 namespace interact { class FocusTracker; }
 namespace ctrl {
   
@@ -97,5 +97,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace
 #endif /*STAGE_CTRL_UI_MANAGER_H*/

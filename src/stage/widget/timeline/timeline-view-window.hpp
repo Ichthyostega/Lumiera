@@ -34,7 +34,7 @@
 #include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
 
-namespace gui {
+namespace stage {
 namespace widget {
   class TimelineWidget;
   
@@ -167,5 +167,5 @@ namespace widget {
     };
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_VIEW_WINDOW_H*/

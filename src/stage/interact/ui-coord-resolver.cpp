@@ -36,7 +36,7 @@ using lib::Symbol;
 using lib::treeExplore;
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
   // emit typeinfo and VTables here....
@@ -205,4 +205,4 @@ namespace interact {
   
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact

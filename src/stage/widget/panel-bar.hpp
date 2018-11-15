@@ -38,7 +38,7 @@
 #include <gtkmm.h>
 
 
-namespace gui {
+namespace stage {
   namespace panel {
     class Panel;
   }

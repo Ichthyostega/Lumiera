@@ -32,7 +32,7 @@
 
 #include "stage/config-keys.hpp"
 
-namespace gui {
+namespace stage {
   
   
   Literal KEY_TITLE      = "Lumiera.title";
@@ -47,4 +47,4 @@ namespace gui {
   
   
   
-}// namespace gui
+}// namespace stage

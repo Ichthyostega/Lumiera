@@ -45,7 +45,7 @@ using namespace lumiera;     ///////////////////////////////////////////////////
 using gui::draw::CairoUtil;
 using std::shared_ptr;
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
 
@@ -543,4 +543,4 @@ TimelineBody::read_styles()
 }
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline

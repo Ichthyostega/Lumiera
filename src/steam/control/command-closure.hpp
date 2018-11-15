@@ -78,7 +78,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::meta::FunErasure;
@@ -125,5 +125,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*CONTROL_COMMAND_CLOSURE_H*/

@@ -35,7 +35,7 @@
 #include "stage/gtk-base.hpp"
 #include "timeline-layout-helper.hpp"
 
-namespace gui {
+namespace stage {
   namespace model {
     class Track;
   }
@@ -272,6 +272,6 @@ namespace gui {
     };
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_HEADER_CONTAINER_H*/
 

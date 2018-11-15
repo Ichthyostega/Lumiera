@@ -44,7 +44,7 @@
 #include "include/display-facade.h"
 
 
-namespace proc {
+namespace steam {
 namespace node {
 
       
@@ -84,6 +84,6 @@ namespace node {
   
   
   
-}} // namespace proc::node
+}} // namespace steam::node
 #endif
 

@@ -45,9 +45,9 @@ using std::dynamic_pointer_cast;
 using namespace Gtk;           ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace lumiera;       ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace util;          ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::draw;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::draw;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
   
@@ -706,4 +706,4 @@ namespace timeline {
   }
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline

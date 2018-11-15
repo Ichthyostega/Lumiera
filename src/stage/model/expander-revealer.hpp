@@ -69,7 +69,7 @@
 #include <utility>
 
 
-namespace gui {
+namespace stage {
 namespace model {
 
   using std::move;
@@ -185,5 +185,5 @@ namespace model {
   
   
   
-}} // namespace gui::model
+}} // namespace stage::model
 #endif /*STAGE_MODEL_EXPANDER_REVEALER_H*/

@@ -34,7 +34,7 @@
 using lib::time::Time;
 using util::isnil;
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   

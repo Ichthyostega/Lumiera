@@ -73,7 +73,7 @@ using std::make_unique;
 using util::toString;
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
   namespace session = proc::mobject::session;
@@ -370,4 +370,4 @@ namespace interact {
 
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact

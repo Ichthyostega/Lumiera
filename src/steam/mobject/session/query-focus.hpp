@@ -55,7 +55,7 @@
 #include <boost/intrusive_ptr.hpp>
 #include <string>
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -218,5 +218,5 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

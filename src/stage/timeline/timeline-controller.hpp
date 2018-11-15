@@ -64,7 +64,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   using std::unique_ptr;
@@ -124,5 +124,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_TIMELINE_CONTROLLER_H*/

@@ -48,7 +48,7 @@ using namespace boost;       ///////////////////////////////////////////////////
 using namespace std;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace Gtk;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace workspace {
   
   const DockArea::PanelDescription
@@ -388,4 +388,4 @@ namespace workspace {
   
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace

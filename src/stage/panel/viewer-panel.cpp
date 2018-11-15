@@ -34,10 +34,10 @@
 
 
 using namespace Gtk;                   ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::widget;           ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::controller;       ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::widget;           ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::controller;       ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace panel {
   
   ViewerPanel::ViewerPanel (workspace::PanelManager& panelManager
@@ -74,4 +74,4 @@ namespace panel {
   }
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel

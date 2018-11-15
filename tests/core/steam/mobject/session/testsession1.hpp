@@ -41,7 +41,7 @@
 //using std::string;
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -73,5 +73,5 @@ namespace session {
   const string SESSION1_CLIP("TODO: some sensible way to refer to a clip");
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif

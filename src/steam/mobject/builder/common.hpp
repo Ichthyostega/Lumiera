@@ -33,7 +33,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace builder {
     

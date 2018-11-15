@@ -42,7 +42,7 @@ using lib::diff::Rec;
 using util::isnil;
 
 
-namespace gui  {
+namespace stage  {
 namespace interact {
 namespace test {
   
@@ -484,4 +484,4 @@ namespace test {
   LAUNCHER (UILocationSolver_test, "unit gui");
   
   
-}}} // namespace gui::interact::test
+}}} // namespace stage::interact::test

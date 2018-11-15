@@ -32,7 +32,7 @@
 #include "steam/asset/typed-id.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   LUMIERA_ERROR_DEFINE (MISSING_INSTANCE, "Existing ID registration without associated instance");

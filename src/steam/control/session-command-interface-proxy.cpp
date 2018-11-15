@@ -35,7 +35,7 @@
 #include "include/session-command-facade.h"
 #include "include/interfaceproxy.hpp"
 
-namespace proc {
+namespace steam {
 namespace control{
   /** static storage for the facade access front-end */
   lib::Depend<SessionCommand> SessionCommand::facade;

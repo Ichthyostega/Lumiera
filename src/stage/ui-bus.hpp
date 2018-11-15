@@ -114,7 +114,7 @@ using std::unique_ptr;
 
 
 
-namespace gui {
+namespace stage {
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
   namespace model {
     class Project;
@@ -136,7 +136,7 @@ namespace gui {
         ctrl::PlaybackController& get_playback_controller();
       };
   
-}// namespace gui::controller
+}// namespace stage::controller
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
   
   namespace ctrl {
@@ -171,6 +171,6 @@ namespace gui {
   
   
   
-}// namespace gui
+}// namespace stage
 #endif /*STAGE_UI_BUS_H*/
 

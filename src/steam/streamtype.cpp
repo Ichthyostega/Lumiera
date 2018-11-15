@@ -29,7 +29,7 @@
 #include "steam/streamtype.hpp"
 
 
-namespace proc {
+namespace steam {
 
    /** @internal defined here non-inline place the vtable in this object file.*/
    StreamType::ImplFacade::ImplFacade (Symbol libID)
@@ -38,4 +38,4 @@ namespace proc {
 
   
 
-} // namespace proc
+} // namespace steam

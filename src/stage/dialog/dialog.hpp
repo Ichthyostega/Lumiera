@@ -29,7 +29,7 @@
 #ifndef STAGE_DIALOG_DIALOG_H
 #define STAGE_DIALOG_DIALOG_H
 
-namespace gui {
+namespace stage {
 namespace dialog {
   
   /**
@@ -43,5 +43,5 @@ namespace dialog {
   static const int BoxSpacing = 6;
   
   
-}} // namespace gui::dialog
+}} // namespace stage::dialog
 #endif /*STAGE_DIALOG_DIALOG_H*/

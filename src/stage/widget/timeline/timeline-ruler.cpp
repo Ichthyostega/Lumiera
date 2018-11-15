@@ -38,9 +38,9 @@
 
 using namespace Gtk;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace Cairo;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::widget;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace gui::widget::timeline;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::widget;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::widget::timeline;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using std::shared_ptr;
 using gui::draw::CairoUtil;
@@ -48,7 +48,7 @@ using lib::time::Time;
 using lib::time::TimeVar;
 
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
   
@@ -707,4 +707,4 @@ namespace timeline {
   }
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline

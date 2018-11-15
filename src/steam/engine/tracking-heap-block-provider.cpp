@@ -44,7 +44,7 @@ using lib::ScopedPtrVect;
 
 
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   namespace error = lumiera::error;

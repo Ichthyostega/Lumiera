@@ -32,7 +32,7 @@
 #include "stage/gtk-base.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace dialog {
   
   /**
@@ -69,5 +69,5 @@ namespace dialog {
     };
   
   
-}} // namespace gui::dialog
+}} // namespace stage::dialog
 #endif /*STAGE_DIALOG_NAME_CHOOSER_H*/

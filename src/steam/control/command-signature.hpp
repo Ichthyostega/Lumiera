@@ -56,7 +56,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using std::function;
@@ -152,5 +152,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

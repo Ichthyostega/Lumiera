@@ -42,9 +42,9 @@
 #include <memory>
 #include <map>
 
-using namespace gui::widget;      /////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::widget;      /////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui  {
+namespace stage  {
 namespace model{
     class Sequence;
   }
@@ -206,5 +206,5 @@ namespace model{
     };
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel
 #endif /*STAGE_PANEL_TIMELINE_PANEL_OBSOLETE_H*/

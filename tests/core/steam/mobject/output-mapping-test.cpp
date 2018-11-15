@@ -39,7 +39,7 @@ using util::isnil;
 using std::string;
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace test {
   
@@ -184,4 +184,4 @@ namespace test {
   
   
   
-}}} // namespace proc::mobject::test
+}}} // namespace steam::mobject::test

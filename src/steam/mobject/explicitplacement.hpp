@@ -43,7 +43,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   
@@ -99,5 +99,5 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif /*STEAM_MOBJECT_EXPLICITPLACEMENT_H*/

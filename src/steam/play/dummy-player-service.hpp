@@ -50,7 +50,7 @@
 #include <string>
 
 
-namespace proc {
+namespace steam {
   namespace node {
     class DummyImageGenerator;
     class TickService;
@@ -158,6 +158,6 @@ namespace proc {
     
   } // namespace play
 
-} // namespace proc
+} // namespace steam
 #endif
 

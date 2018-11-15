@@ -71,7 +71,7 @@
 namespace lib {
   namespace diff { class MutationMessage; }
 }
-namespace gui {
+namespace stage {
 namespace model {
   class Tangible;
 }
@@ -177,5 +177,5 @@ namespace ctrl{
   
   
   
-}} // namespace gui::ctrl
+}} // namespace stage::ctrl
 #endif /*STAGE_CTRL_BUS_TERM_H*/

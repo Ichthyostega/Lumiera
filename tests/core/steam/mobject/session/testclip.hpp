@@ -38,7 +38,7 @@ using std::shared_ptr;
 using std::string;
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -86,5 +86,5 @@ namespace test    {
   extern const lib::time::Duration LENGTH_TestClip;
   
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test
 #endif

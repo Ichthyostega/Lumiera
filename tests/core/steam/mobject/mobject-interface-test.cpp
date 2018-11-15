@@ -48,7 +48,7 @@
 
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace test    {
   
@@ -132,4 +132,4 @@ namespace test    {
   LAUNCHER (MObjectInterface_test, "unit session");
   
   
-}}} // namespace proc::mobject::test
+}}} // namespace steam::mobject::test

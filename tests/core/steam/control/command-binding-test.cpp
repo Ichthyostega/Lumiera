@@ -31,7 +31,7 @@
 #include "lib/format-cout.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test    {
   
@@ -122,4 +122,4 @@ namespace test    {
   LAUNCHER (CommandBinding_test, "function controller");
   
   
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test

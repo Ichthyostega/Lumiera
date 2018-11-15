@@ -36,7 +36,7 @@
 using util::isnil;
 using lumiera::error::Invalid;
 
-namespace backend {
+namespace vault {
   
   /** storage for the SingletonFactory 
    *  (actually a lumiera::test::MockInjector) */
@@ -64,4 +64,4 @@ namespace backend {
 
 
 
-} // namespace backend
+} // namespace vault

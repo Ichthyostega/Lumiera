@@ -33,7 +33,7 @@
 #include "stage/gtk-base.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   /**

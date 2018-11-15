@@ -54,7 +54,7 @@
 #include "lib/scoped-ptrvect.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace node { class DummyTick; }  
   
 namespace engine{
@@ -97,5 +97,5 @@ namespace engine{
   
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif

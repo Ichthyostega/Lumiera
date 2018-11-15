@@ -43,7 +43,7 @@ using std::string;
 
 using std::static_pointer_cast; //TODO only temporarily;
 
-namespace proc {
+namespace steam {
 namespace asset{
 namespace test {
   
@@ -94,4 +94,4 @@ TODO ("implement Processing Pattern!!!");
   
   
   
-}}} // namespace proc::asset::test
+}}} // namespace steam::asset::test

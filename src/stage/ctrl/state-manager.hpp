@@ -60,7 +60,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using std::string;
@@ -109,5 +109,5 @@ namespace ctrl {
   
   
   
-}} // namespace gui::ctrl
+}} // namespace stage::ctrl
 #endif /*STAGE_CTRL_STATE_MANAGER_H*/

@@ -33,7 +33,7 @@
 #include "stage/widget/timeline/draw-strategy.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
   
@@ -50,5 +50,5 @@ namespace timeline {
            ,TimelineViewWindow* const window)  const;
     };
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H*/

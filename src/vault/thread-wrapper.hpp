@@ -55,7 +55,7 @@ extern "C" {
 #include <utility>
 
 
-namespace backend {
+namespace vault {
   
   using lib::Literal;
   namespace error = lumiera::error;
@@ -294,5 +294,5 @@ namespace backend {
   
   
   
-} // namespace backend
+} // namespace vault
 #endif /*LIB_THREADWRAPPER_H*/

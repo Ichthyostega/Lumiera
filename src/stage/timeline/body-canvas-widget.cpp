@@ -53,7 +53,7 @@
 //using std::endl;
 
 
-namespace gui {
+namespace stage {
 namespace timeline {
   
   
@@ -102,4 +102,4 @@ namespace timeline {
   
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline

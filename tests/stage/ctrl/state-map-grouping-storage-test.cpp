@@ -42,7 +42,7 @@ using util::isSameObject;
 using util::isnil;
 
 
-namespace gui  {
+namespace stage  {
 namespace ctrl {
 namespace test {
   
@@ -162,4 +162,4 @@ namespace test {
   LAUNCHER (StateMapGroupingStorage_test, "unit gui");
   
   
-}}} // namespace gui::ctrl::test
+}}} // namespace stage::ctrl::test

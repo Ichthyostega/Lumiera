@@ -48,7 +48,7 @@ using util::cStr;
 using util::_Fmt;
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   
@@ -208,4 +208,4 @@ namespace asset {
   }
 
   
-}} // namespace proc::asset
+}} // namespace steam::asset

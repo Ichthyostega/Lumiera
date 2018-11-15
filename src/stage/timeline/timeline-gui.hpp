@@ -60,7 +60,7 @@
 #include <memory>
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   class TimelinePage;
@@ -102,5 +102,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_TIMELINE_GUI_H*/

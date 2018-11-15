@@ -36,7 +36,7 @@
 using util::_Fmt;
 using lib::meta::typeStr;
 
-namespace proc {
+namespace steam {
 namespace mobject {
 
 
@@ -85,4 +85,4 @@ namespace mobject {
   
 
 
-}} // namespace proc::mobject
+}} // namespace steam::mobject

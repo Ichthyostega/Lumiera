@@ -39,7 +39,7 @@
 
 #include "stage/panel/panel.hpp"
 
-namespace gui  {
+namespace stage  {
 namespace panel{
   
   class AssetsPanel
@@ -67,5 +67,5 @@ namespace panel{
     };
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel
 #endif /*STAGE_PANEL_ASSETS_PANEL_H*/

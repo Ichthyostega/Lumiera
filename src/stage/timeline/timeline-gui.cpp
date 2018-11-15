@@ -44,7 +44,7 @@ using lib::diff::TreeMutator;
 using std::unique_ptr;
 
 
-namespace gui {
+namespace stage {
 namespace timeline {
   
   
@@ -120,4 +120,4 @@ namespace timeline {
   }
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline

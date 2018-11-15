@@ -43,7 +43,7 @@
 #include <boost/utility.hpp>
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   using std::static_pointer_cast;
@@ -190,5 +190,5 @@ namespace asset {
     };
   
     
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

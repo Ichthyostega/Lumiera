@@ -33,7 +33,7 @@
 #include "steam/engine/job-ticket.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   namespace { // Details...
@@ -104,4 +104,4 @@ using backend::engine::JobClosure;
   
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine

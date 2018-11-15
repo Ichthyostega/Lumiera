@@ -32,7 +32,7 @@
 
 using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace widget {
 
 class TimelineWidget;
@@ -156,4 +156,4 @@ namespace timeline {
   }
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline

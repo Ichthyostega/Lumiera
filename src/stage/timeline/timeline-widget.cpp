@@ -57,7 +57,7 @@
 //using std::endl;
 
 
-namespace gui {
+namespace stage {
 namespace timeline {
   
 //const int TimelineWidget::TrackPadding = 1;
@@ -94,4 +94,4 @@ namespace timeline {
   
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline

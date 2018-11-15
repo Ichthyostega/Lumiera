@@ -69,7 +69,7 @@
 #include "steam/asset/pipe.hpp"
 #include "steam/streamtype.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   LUMIERA_ERROR_DECLARE (INVALID_MODEL_PORT);     ///< Referral to unknown model port
@@ -152,5 +152,5 @@ namespace mobject {
   
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

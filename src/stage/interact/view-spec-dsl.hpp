@@ -111,7 +111,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
   using std::forward;
@@ -287,5 +287,5 @@ namespace idi {
   }
   
   
-}}// namespace gui::idi
+}}// namespace stage::idi
 #endif /*STAGE_INTERACT_VIEW_SPEC_DSL_H*/

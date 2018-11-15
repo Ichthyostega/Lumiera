@@ -62,7 +62,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   class Timeline;    typedef lib::P<Timeline> PTimeline;
   class Sequence;    typedef lib::P<Sequence> PSequence;
@@ -210,5 +210,5 @@ namespace mobject {
 
   } // namespace mobject::session
 
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

@@ -63,7 +63,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   namespace { // Helper to extract and rebind definition types
@@ -413,5 +413,5 @@ namespace mobject {
   }
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

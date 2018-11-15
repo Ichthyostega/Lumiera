@@ -40,7 +40,7 @@ namespace Gtk {
   class Widget;
 }
 
-namespace gui {
+namespace stage {
 namespace output {
 
 /**
@@ -93,5 +93,5 @@ class GdkDisplayer
   
   
   
-}}   // namespace gui::output
+}}   // namespace stage::output
 #endif /*STAGE_OUTPUT_GDKDISPLAYER_H*/

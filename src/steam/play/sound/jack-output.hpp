@@ -45,10 +45,10 @@
 //#include <vector>
 
 
-namespace proc {
+namespace steam {
 namespace play {
 namespace sound {
   
   
-}}} // namespace proc::play::sound
+}}} // namespace steam::play::sound
 #endif

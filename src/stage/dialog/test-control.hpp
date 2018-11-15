@@ -60,7 +60,7 @@
 #include <utility>
 #include <string>
 
-namespace gui {
+namespace stage {
 namespace dialog {
   
   using std::string;
@@ -358,5 +358,5 @@ namespace dialog {
     };
   
   
-}} // namespace gui::dialog
+}} // namespace stage::dialog
 #endif /*STAGE_DIALOG_TEST_CONTROL_H*/

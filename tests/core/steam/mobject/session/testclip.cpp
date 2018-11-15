@@ -34,7 +34,7 @@
 #include "lib/depend.hpp"
 #include "lib/time/timevalue.hpp"
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -97,4 +97,4 @@ namespace test    {
   const Duration LENGTH_TestClip(Time(0,25,0,0));   //////TODO hard wired as of (1/10). See MediaFactory::operator()  in media.cpp / mediaaccessmock.cpp
   
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test

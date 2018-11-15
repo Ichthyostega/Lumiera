@@ -30,7 +30,7 @@
 #include "steam/mobject/builder/conmanager.hpp"
 #include "steam/control/stypemanager.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace builder {
   
@@ -46,4 +46,4 @@ namespace builder {
   }
   
   
-}}} // namespace proc::mobject::builder
+}}} // namespace steam::mobject::builder

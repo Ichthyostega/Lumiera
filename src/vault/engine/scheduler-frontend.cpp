@@ -29,7 +29,7 @@
 #include "lib/error.h"
 #include "vault/engine/scheduler-frontend.hpp"
 
-namespace backend{
+namespace vault{
 namespace engine {
   
   
@@ -60,4 +60,4 @@ namespace engine {
   
   
   
-}} // namespace backend::engine
+}} // namespace vault::engine

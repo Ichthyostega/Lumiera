@@ -35,7 +35,7 @@
 
 /////////////////////////TODO: 1/2010 very likely the handling of the clip-asset needs to be rewritten
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   /**
@@ -67,5 +67,5 @@ namespace asset {
   
   
   
-}} // namespace proc:asset
+}} // namespace steam:asset
 #endif

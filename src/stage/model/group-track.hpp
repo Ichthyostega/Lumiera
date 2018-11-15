@@ -34,7 +34,7 @@
 #include "stage/model/parent-track.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace model {
 
 /**
@@ -58,6 +58,6 @@ public:
 };
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage
 
 #endif // GROUP_TRACK_HPP

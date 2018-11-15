@@ -40,7 +40,7 @@
 #include "lib/p.hpp"
 
 
-namespace proc {
+namespace steam {
   namespace asset   { class Asset; }
   namespace mobject { class MObject; }
   

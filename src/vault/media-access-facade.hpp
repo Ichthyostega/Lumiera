@@ -44,7 +44,7 @@
 
 
 
-namespace backend {
+namespace vault {
   
   using lib::time::Duration;
   using std::string;
@@ -145,7 +145,7 @@ namespace backend {
         { }
     };
   
-} // namespace backend
+} // namespace vault
 
 
 namespace backend_interface {

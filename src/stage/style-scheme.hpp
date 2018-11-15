@@ -40,7 +40,7 @@
 namespace Glib {
   class ustring;
 }
-namespace gui {
+namespace stage {
   
   using lib::Literal;
   using cuString = const Glib::ustring;
@@ -54,5 +54,5 @@ namespace gui {
   
   
   
-}// namespace gui
+}// namespace stage
 #endif /*STAGE_STYLE_SCHEME_H*/

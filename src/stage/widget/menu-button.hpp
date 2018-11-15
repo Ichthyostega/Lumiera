@@ -33,7 +33,7 @@
 
 
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   using namespace Gtk;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

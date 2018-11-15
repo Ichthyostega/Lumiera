@@ -55,7 +55,7 @@
 
 
   
-namespace gui  {
+namespace stage  {
 namespace test {
   namespace error = lumiera::error;
   
@@ -151,5 +151,5 @@ namespace test {
   
   
   
-}} // namespace gui::test
+}} // namespace stage::test
 #endif /*STAGE_TEST_ELEMENT_ACCESS_H*/

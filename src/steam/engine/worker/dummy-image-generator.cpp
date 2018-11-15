@@ -31,7 +31,7 @@
 #include "steam/engine/worker/dummy-image-generator.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace node {
 
   
@@ -171,4 +171,4 @@ namespace node {
 
 
 
-}} // namespace proc::node
+}} // namespace steam::node

@@ -32,7 +32,7 @@
 using std::static_pointer_cast;
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   namespace {
@@ -111,4 +111,4 @@ namespace asset {
 
 
 
-}} // namespace proc::asset
+}} // namespace steam::asset

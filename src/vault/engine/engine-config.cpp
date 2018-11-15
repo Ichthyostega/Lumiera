@@ -37,7 +37,7 @@ using lib::time::FrameRate;
 using lib::time::FSecs;
 
 
-namespace backend{
+namespace vault{
 namespace engine {
   
   namespace { // Hard wired placeholder settings...
@@ -82,7 +82,7 @@ namespace engine {
     return DEFAULT_JOB_PLANNING_TURNOVER;
   }
   
-}} // namespace backend::engine
+}} // namespace vault::engine
 
 namespace {
   using backend::engine::EngineConfig;

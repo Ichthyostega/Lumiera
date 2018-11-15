@@ -39,7 +39,7 @@
 
 #include <gdk/gdkx.h>
 
-namespace gui {
+namespace stage {
 namespace output {
   
   XvDisplayer::XvDisplayer(Gtk::Widget *drawing_area,
@@ -242,4 +242,4 @@ namespace output {
   }
   
   
-}}   // namespace gui::output
+}}   // namespace stage::output

@@ -44,7 +44,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
   
   using std::string;
   using std::unique_ptr;
@@ -212,4 +212,4 @@ namespace gui {
   }
   
   
-} // namespace gui
+} // namespace stage

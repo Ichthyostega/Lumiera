@@ -69,7 +69,7 @@
 
 ///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   namespace error = lumiera::error;
@@ -391,5 +391,5 @@ namespace mobject {
   }
   
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

@@ -35,7 +35,7 @@
 
 #include <gdlmm.h>
 
-namespace gui {
+namespace stage {
 namespace workspace {
   class PanelManager;
   class WorkspaceWindow;
@@ -113,5 +113,5 @@ namespace panel {
     };
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel
 #endif /*STAGE_PANEL_PANEL_H*/

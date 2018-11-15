@@ -143,7 +143,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace model {
   
   using std::string;
@@ -300,5 +300,5 @@ namespace model {
   
   
   
-}} // namespace gui::model
+}} // namespace stage::model
 #endif /*STAGE_MODEL_TANGIBLE_H*/

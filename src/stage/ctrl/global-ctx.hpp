@@ -62,7 +62,7 @@
 #include "lib/nocopy.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using interact::InteractionDirector;
@@ -106,5 +106,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_GLOBAL_CTX_H*/

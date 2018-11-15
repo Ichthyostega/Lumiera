@@ -34,7 +34,7 @@
 #include <boost/functional/hash.hpp>
 
 
-namespace backend {
+namespace vault {
 namespace engine {
 namespace test {
   
@@ -129,4 +129,4 @@ namespace test {
   /** Register this test class... */
   LAUNCHER(JobHash_test, "unit engine");
   
-}}} // namespace backend::engine::test
+}}} // namespace vault::engine::test

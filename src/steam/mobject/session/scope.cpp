@@ -53,7 +53,7 @@ using std::vector;
 using lib::IterSource;
 using lib::iter_source::wrapIter;
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -255,4 +255,4 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session

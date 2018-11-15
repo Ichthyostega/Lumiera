@@ -60,7 +60,7 @@
 #include <list>
 
 
-namespace gui {
+namespace stage {
 namespace workspace {
   class WorkspaceWindow;
 }
@@ -133,5 +133,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_PANEL_LOCATOR_H*/

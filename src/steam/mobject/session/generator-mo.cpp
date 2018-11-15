@@ -37,7 +37,7 @@
 //using lib::time::Mutation;
 //using util::isnil;
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
 

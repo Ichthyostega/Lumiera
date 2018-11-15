@@ -35,7 +35,7 @@ using Cairo::RefPtr;
 using Cairo::SolidPattern;
 
 
-namespace gui {
+namespace stage {
 namespace draw {
   
   /**
@@ -78,5 +78,5 @@ namespace draw {
     };
   
   
-}}// namespace gui::draw
+}}// namespace stage::draw
 #endif /*STAGE_DRAW_CAIRO_H*/

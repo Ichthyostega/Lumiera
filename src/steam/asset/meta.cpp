@@ -32,7 +32,7 @@
 
 using lib::idi::EntryID;
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   using meta::Descriptor;
@@ -86,7 +86,7 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 
 
 
@@ -99,7 +99,7 @@ namespace asset {
 #include "steam/asset/meta/error-log.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   using meta::Descriptor;
@@ -114,4 +114,4 @@ namespace asset {
   template Builder<ErrorLog>  MetaFactory::operator() (EntryID<ErrorLog>);
   template Builder<ErrorLog>  MetaFactory::operator() (Descriptor const&, EntryID<ErrorLog>);
   
-}} // namespace proc::asset
+}} // namespace steam::asset

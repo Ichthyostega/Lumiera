@@ -55,7 +55,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   using ID = ctrl::BusTerm::ID;
@@ -87,5 +87,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_TRACK_HEAD_WIDGET_H*/

@@ -56,7 +56,7 @@
 #include "steam/streamtype.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -181,5 +181,5 @@ namespace engine {
   
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif

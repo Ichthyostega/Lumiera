@@ -47,7 +47,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace cmd {
   
 //  using std::string;
@@ -83,5 +83,5 @@ namespace cmd {
   extern CommandSetup test_meta_markAction;
   
   
-}} // namespace proc::cmd
+}} // namespace steam::cmd
 #endif /*STEAM_CMD_H*/

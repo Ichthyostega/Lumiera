@@ -45,7 +45,7 @@ using lib::Depend;
 using lib::Sync;
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   namespace error = lumiera::error;
   
@@ -235,7 +235,7 @@ namespace asset {
   }
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 
 
 
@@ -256,7 +256,7 @@ namespace asset {
 #include "steam/asset/meta/time-grid.hpp"
 #include "steam/asset/meta/error-log.hpp"
 
-namespace proc {
+namespace steam {
 namespace asset {
   using lib::P;
   
@@ -284,4 +284,4 @@ namespace asset {
   template P<ErrorLog> AssetManager::wrap (const ErrorLog& asset);
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset

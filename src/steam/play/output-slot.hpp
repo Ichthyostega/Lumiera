@@ -77,7 +77,7 @@
 #include <memory>
 
 
-namespace proc {
+namespace steam {
 namespace play {
   
   using proc::engine::BuffHandle;
@@ -181,5 +181,5 @@ namespace play {
   
   
   
-}} // namespace proc::play
+}} // namespace steam::play
 #endif

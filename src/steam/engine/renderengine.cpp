@@ -29,7 +29,7 @@
 #include "lib/error.hpp"
 #include "steam/engine/renderengine.hpp"
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   

@@ -31,7 +31,7 @@
 
 #include "stage/widget/mini-button.hpp"
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   /**

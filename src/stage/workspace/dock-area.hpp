@@ -45,9 +45,9 @@
 #include <typeinfo>
 
 
-using namespace gui::panel;       ///////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::panel;       ///////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace workspace {
   
   
@@ -365,5 +365,5 @@ namespace workspace {
   
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace
 #endif /*STAGE_WORKSPACE_DOCK_AREA_H*/

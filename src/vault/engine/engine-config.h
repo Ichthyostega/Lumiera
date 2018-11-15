@@ -40,7 +40,7 @@
 #include "lib/depend.hpp"
 
 
-namespace backend{
+namespace vault{
 namespace engine {
   
   using lib::time::Duration;
@@ -100,7 +100,7 @@ namespace engine {
       Duration currentJobPlanningRhythm()  const;
     };
 
-}} // namespace backend::engine
+}} // namespace vault::engine
 
 
 

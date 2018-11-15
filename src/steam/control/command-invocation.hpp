@@ -54,7 +54,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using namespace lib::meta;
@@ -152,5 +152,5 @@ namespace control {
   }
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

@@ -39,7 +39,7 @@
 using std::make_unique;
 
 
-namespace gui {
+namespace stage {
 namespace panel {
   
   using timeline::TimelinePage;
@@ -96,4 +96,4 @@ namespace panel {
   }
   
   
-}}   // namespace gui::panel
+}}   // namespace stage::panel

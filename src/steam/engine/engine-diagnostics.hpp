@@ -54,7 +54,7 @@
 //#include <string>
 
 
-namespace proc  {
+namespace steam  {
 namespace engine{
 
 //    using std::string;
@@ -111,5 +111,5 @@ namespace engine{
   
   
 } // namespace engine
-} // namespace proc
+} // namespace steam
 #endif

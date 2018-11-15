@@ -60,7 +60,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   using PAdjustment = Glib::RefPtr<Gtk::Adjustment>;
@@ -106,5 +106,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_HEADER_PANE_WIDGET_H*/

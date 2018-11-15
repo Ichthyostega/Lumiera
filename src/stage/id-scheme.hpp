@@ -60,7 +60,7 @@
 
 
 /* === forward declarations === */
-namespace proc {
+namespace steam {
   namespace asset {
     class Timeline;
     
@@ -70,7 +70,7 @@ namespace proc {
   }
 }
 
-namespace gui {
+namespace stage {
   namespace timeline {
     class TimelineController;
   }
@@ -166,6 +166,6 @@ locate = currentWindow().panel(infobox)
 */    
     
     
-  }//namespace gui::idi
-} // namespace gui
+  }//namespace stage::idi
+} // namespace stage
 #endif /*STAGE_ID_SCHEME_H*/

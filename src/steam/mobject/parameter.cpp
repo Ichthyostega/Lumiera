@@ -32,7 +32,7 @@
 #include "steam/mobject/parameter.hpp"
 #include "steam/mobject/paramprovider.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   

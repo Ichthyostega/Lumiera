@@ -37,7 +37,7 @@
 #include <cstddef>
 
 
-namespace proc {
+namespace steam {
 namespace engine { 
   
   using lumiera::FrameID;
@@ -115,7 +115,7 @@ namespace engine {
       friend class engine::StateAdapter;
     };
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 
 
 

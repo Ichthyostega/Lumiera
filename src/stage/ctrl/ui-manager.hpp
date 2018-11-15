@@ -55,7 +55,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
   
   class UiBus;
   
@@ -152,5 +152,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_UI_MANAGER_H*/

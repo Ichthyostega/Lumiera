@@ -52,7 +52,7 @@
 #include "lib/nocopy.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::TypedAllocationManager;
@@ -178,5 +178,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

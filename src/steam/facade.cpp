@@ -52,7 +52,7 @@
 #include <string>
 
 
-namespace proc {
+namespace steam {
   
   using std::string;
   using std::unique_ptr;
@@ -164,4 +164,4 @@ namespace proc {
 
 
 
-} // namespace proc
+} // namespace steam

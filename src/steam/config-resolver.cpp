@@ -39,7 +39,7 @@ using lumiera::LifecycleHook;
 using lumiera::ON_GLOBAL_INIT;
 
 
-namespace proc {
+namespace steam {
   namespace {
     
     /**
@@ -66,7 +66,7 @@ namespace proc {
    */
   lib::Depend<ConfigResolver> ConfigResolver::instance;
   
-} // namespace proc
+} // namespace steam
 
 
 

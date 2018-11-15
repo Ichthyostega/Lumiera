@@ -36,7 +36,7 @@
 
 using namespace Gtk;         //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace dialog {
   
   Render::Render (Window& parent)
@@ -108,4 +108,4 @@ namespace dialog {
   }
   
   
-}} // namespace gui::dialog
+}} // namespace stage::dialog

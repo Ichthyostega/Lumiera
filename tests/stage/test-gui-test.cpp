@@ -31,7 +31,7 @@
 #include "lib/format-cout.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace test{
   
   /************************************************************************************//**
@@ -58,4 +58,4 @@ namespace test{
   
   
   
-}} // namespace gui::test
+}} // namespace stage::test

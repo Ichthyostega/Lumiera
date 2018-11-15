@@ -83,7 +83,7 @@
 #include <utility>
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using std::move;
@@ -154,5 +154,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_UI_DISPATCHER_H*/

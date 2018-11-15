@@ -60,7 +60,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {     //////////////////////////////////////////////////////TICKET #637
   
@@ -141,5 +141,5 @@ namespace session {     //////////////////////////////////////////////////////TI
   template class Placement<session::Fork, session::Meta>;
   typedef Placement<session::Fork, session::Meta> PFork;
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif /*MOBJECT_SESSION_FORK_H*/

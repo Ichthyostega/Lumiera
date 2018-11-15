@@ -82,7 +82,7 @@ namespace lib{
     class TimeValue;
     class Duration;
 }}
-namespace proc {
+namespace steam {
 namespace mobject{
   template<class X, class B>  class Placement;
 }}

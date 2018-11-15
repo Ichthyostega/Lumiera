@@ -52,7 +52,7 @@ using lib::diff::Rec;
 using util::contains;
 
 
-namespace gui {
+namespace stage {
 namespace idi { //------Mock ViewSpec definitions for component test
   
   
@@ -231,4 +231,4 @@ namespace test {
   LAUNCHER (ViewSpecDSL_test, "unit gui");
   
   
-}}} // namespace gui::interact::test
+}}} // namespace stage::interact::test

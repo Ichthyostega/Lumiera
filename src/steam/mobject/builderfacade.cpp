@@ -30,7 +30,7 @@
 #include "steam/mobject/builderfacade.hpp"
 #include "steam/mobject/session/fixture.hpp"
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   using session::Fixture;

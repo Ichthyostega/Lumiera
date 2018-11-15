@@ -47,7 +47,7 @@ extern "C" {
 
 
 
-namespace gui {
+namespace stage {
   
   
   
@@ -101,5 +101,5 @@ namespace gui {
   );
   
   
-} // namespace gui
+} // namespace stage
 #endif

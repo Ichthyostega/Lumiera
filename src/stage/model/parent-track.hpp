@@ -34,7 +34,7 @@
 #include "stage/model/track.hpp"
 #include "lib/observable-list.hpp"
 
-namespace gui {
+namespace stage {
 namespace model {
 
 /**
@@ -98,6 +98,6 @@ protected:
 };
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage
 
 #endif // PARENT_TRACK_HPP

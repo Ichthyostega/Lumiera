@@ -64,7 +64,7 @@ using util::isnil;
 using util::_Fmt;
 
 
-namespace gui  {
+namespace stage  {
 namespace model{
 namespace test {
   
@@ -791,4 +791,4 @@ namespace test {
   LAUNCHER (BusTerm_test, "unit gui");
   
   
-}}} // namespace gui::model::test
+}}} // namespace stage::model::test

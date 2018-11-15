@@ -57,7 +57,7 @@ namespace lib {
 namespace diff{
   class MutationMessage;
 }}
-namespace proc {
+namespace steam {
 namespace cmd {
   
   using control::Command;
@@ -127,5 +127,5 @@ namespace session {
   
   
   
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session
 #endif /*SRC_PROC_MOBJECT_SESSION_DUMMY_SESSION_CONNECTION_HPP_*/

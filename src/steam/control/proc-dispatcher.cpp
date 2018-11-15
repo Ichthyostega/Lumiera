@@ -99,7 +99,7 @@ using lib::RecursiveLock_Waitable;
 using backend::Thread;
 using std::unique_ptr;
 
-namespace proc {
+namespace steam {
 namespace control {
   
   namespace error = lumiera::error;
@@ -484,4 +484,4 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control

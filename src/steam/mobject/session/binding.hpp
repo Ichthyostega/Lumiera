@@ -36,7 +36,7 @@
 #include "steam/mobject/builder/buildertool.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset { 
   class Sequence;
   
@@ -80,5 +80,5 @@ namespace session {
   template class Placement<session::Binding, session::Meta>;
   typedef Placement<session::Binding, session::Meta> PBinding;
   
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif

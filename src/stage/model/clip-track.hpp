@@ -34,7 +34,7 @@
 #include "stage/model/track.hpp"
 #include "lib/observable-list.hpp"
 
-namespace gui {
+namespace stage {
 namespace model {
 
   class Clip;
@@ -66,6 +66,6 @@ namespace model {
   };
 
 }   // namespace timeline
-}   // namespace gui
+}   // namespace stage
 
 #endif // CLIP_TRACK_HPP

@@ -44,7 +44,7 @@
 #include <list>
 
 
-namespace gui {
+namespace stage {
   
   namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
@@ -123,5 +123,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_WINDOW_LOCATOR_H*/

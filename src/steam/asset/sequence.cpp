@@ -32,7 +32,7 @@
 //#include "steam/mobject/placement.hpp"
 //#include "steam/mobject/session/mobjectfactory.hpp"
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   using lib::AutoRegistered;

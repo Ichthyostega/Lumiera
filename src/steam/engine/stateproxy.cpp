@@ -29,7 +29,7 @@
 
 #include "steam/engine/stateproxy.hpp"
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   

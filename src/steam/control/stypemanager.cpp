@@ -32,7 +32,7 @@
 #include "include/lifecycle.h"
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::Symbol;
@@ -119,7 +119,7 @@ namespace control {
     UNIMPLEMENTED ("STypeManager basic functionality: wire up implementation facade (impl type) from given raw type of the library");
   }
   
-}} // namespace proc::control
+}} // namespace steam::control
 
 
 // ==== C interface for registering setup of basic stream type configuration =======

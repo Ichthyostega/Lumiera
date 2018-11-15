@@ -39,7 +39,7 @@
 using std::list;
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   

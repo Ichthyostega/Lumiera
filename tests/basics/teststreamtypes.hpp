@@ -39,7 +39,7 @@ extern "C" {
 }
 
 
-namespace proc {
+namespace steam {
 namespace test_format {
   
   namespace { // constants used to parametrise tests
@@ -94,5 +94,5 @@ namespace test_format {
   
   
   
-}} // namespace proc::test_format
+}} // namespace steam::test_format
 #endif

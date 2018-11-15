@@ -37,7 +37,7 @@
 #include <limits>
 
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   using mobject::ModelPort;
@@ -124,5 +124,5 @@ namespace engine {
   
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif

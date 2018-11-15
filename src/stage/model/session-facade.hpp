@@ -46,7 +46,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace model {
   
 //  using lib::HashVal;
@@ -87,5 +87,5 @@ namespace model {
   
   
   
-}} // namespace gui::model
+}} // namespace stage::model
 #endif /*SESSION_FACADE_H*/

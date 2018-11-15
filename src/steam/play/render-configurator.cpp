@@ -41,7 +41,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace play {
   
   namespace error = lumiera::error;
@@ -167,4 +167,4 @@ namespace play {
   
  
   
-}} // namespace proc::play
+}} // namespace steam::play

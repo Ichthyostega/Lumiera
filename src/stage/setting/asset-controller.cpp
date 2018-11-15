@@ -39,7 +39,7 @@ using lib::diff::TreeMutator;
 //using util::isnil;
 
 
-namespace gui {
+namespace stage {
 namespace setting {
   
   
@@ -74,4 +74,4 @@ namespace setting {
   
   
   
-}}// namespace gui::setting
+}}// namespace stage::setting

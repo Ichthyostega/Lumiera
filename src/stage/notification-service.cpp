@@ -85,7 +85,7 @@ using std::string;
 using std::move;
 
 
-namespace gui {
+namespace stage {
   
   
   /** @internal helper to _move_ a given UI-Bus message (GenNode)
@@ -328,4 +328,4 @@ namespace gui {
   NotificationService::~NotificationService() { } // emit dtors of embedded objects here...
   
   
-} // namespace gui
+} // namespace stage

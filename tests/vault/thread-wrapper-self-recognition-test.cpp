@@ -31,7 +31,7 @@ using test::Test;
 
 
 
-namespace backend {
+namespace vault {
 namespace test {
   
   namespace {
@@ -86,4 +86,4 @@ namespace test {
   
   
   
-}} // namespace backend::test
+}} // namespace vault::test

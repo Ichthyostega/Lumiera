@@ -47,7 +47,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   using lib::time::Time;

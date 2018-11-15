@@ -41,7 +41,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   
@@ -59,5 +59,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_TRANSITION_WIDGET_H*/

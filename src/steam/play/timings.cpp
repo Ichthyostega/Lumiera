@@ -37,7 +37,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace play {
   
   using backend::engine::EngineConfig;
@@ -215,4 +215,4 @@ namespace play {
   
   
   
-}} // namespace proc::play
+}} // namespace steam::play

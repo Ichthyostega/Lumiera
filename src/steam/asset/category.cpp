@@ -35,7 +35,7 @@
 using boost::algorithm::starts_with;
 using util::isnil;
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   /** human readable representation of the asset::Category.

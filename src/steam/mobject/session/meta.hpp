@@ -34,7 +34,7 @@
 #include "steam/mobject/session/abstractmo.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   

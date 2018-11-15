@@ -37,7 +37,7 @@
 #include <boost/optional.hpp>
 
 
-namespace gui {
+namespace stage {
   
   namespace model {
     class Track;
@@ -432,5 +432,5 @@ namespace gui {
     };
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_LAYOUT_HELPER_H*/

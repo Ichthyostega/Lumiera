@@ -62,7 +62,7 @@ namespace diff{
 namespace Glib {
 //class ustring;  /////////////////////////////TODO needed?
 }
-namespace gui {
+namespace stage {
   
 //using lib::Literal;
   using lib::Symbol;
@@ -96,5 +96,5 @@ namespace gui {
   extern const Symbol MARK_Message;
   
   
-}// namespace gui
+}// namespace stage
 #endif /*STAGE_INTERFACE_UI_PROTOCOL_H*/

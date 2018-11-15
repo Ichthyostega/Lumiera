@@ -54,7 +54,7 @@ using util::isnil;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #710 : to be removed entirely in Alpha
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -308,4 +308,4 @@ namespace session {
   
   
   } // namespace query
-}}} // namespace proc::mobject::session
+}}} // namespace steam::mobject::session

@@ -40,7 +40,7 @@
 #include <typeinfo>
 
 
-namespace backend {
+namespace vault {
 namespace engine {
   
   namespace { // Details...
@@ -143,7 +143,7 @@ namespace engine {
     }
   
   
-}} // namespace backend::engine
+}} // namespace vault::engine
 
 namespace {
   using backend::engine::Job;

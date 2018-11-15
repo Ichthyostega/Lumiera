@@ -49,7 +49,7 @@
 
 
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   using std::string;
@@ -87,5 +87,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_MARKER_WIDGET_H*/

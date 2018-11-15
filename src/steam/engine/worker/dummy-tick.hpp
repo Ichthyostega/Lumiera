@@ -45,7 +45,7 @@
 #include <limits>
 
 
-namespace proc {
+namespace steam {
 namespace node {
 
   using std::function;
@@ -121,6 +121,6 @@ namespace node {
   
   
   
-}} // namespace proc::node
+}} // namespace steam::node
 #endif
 

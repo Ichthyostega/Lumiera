@@ -48,7 +48,7 @@
 //#include <memory>
 
 
-namespace proc {
+namespace steam {
 namespace control {
 
   
@@ -80,5 +80,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

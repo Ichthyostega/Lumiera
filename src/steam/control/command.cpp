@@ -61,7 +61,7 @@ using util::cStr;
 using util::_Fmt;
 
 
-namespace proc {
+namespace steam {
 namespace control {
   namespace error = lumiera::error;
   
@@ -486,4 +486,4 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control

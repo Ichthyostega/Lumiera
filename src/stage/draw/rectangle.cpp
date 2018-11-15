@@ -32,7 +32,7 @@
 using std::max;
 using std::min;
 
-namespace gui {
+namespace stage {
 namespace draw{
   
   bool
@@ -57,4 +57,4 @@ namespace draw{
   }
   
   
-}}// namespace gui::draw
+}}// namespace stage::draw

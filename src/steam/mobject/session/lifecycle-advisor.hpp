@@ -56,7 +56,7 @@
 #include "lib/symbol.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   

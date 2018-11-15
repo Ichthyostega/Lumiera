@@ -44,7 +44,7 @@
 ////////////////////////////////WARNING: ...just left in tree to keep it compiling
 ////////////////////////////////TICKET   #826  need to be reworked entirely
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   using std::pair;
@@ -190,5 +190,5 @@ namespace engine {
   
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif

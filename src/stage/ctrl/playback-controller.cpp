@@ -35,7 +35,7 @@
 #include "include/logging.h"
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   namespace error = lumiera::error;
@@ -119,5 +119,5 @@ namespace ctrl {
   }
   
   
-}} // namespace gui::ctrl
+}} // namespace stage::ctrl
 

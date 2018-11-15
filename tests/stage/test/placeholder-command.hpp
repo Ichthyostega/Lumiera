@@ -52,7 +52,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace test{
   
   using std::string;
@@ -133,5 +133,5 @@ namespace test{
   
   
   
-}} // namespace gui::test
+}} // namespace stage::test
 #endif /*STAGE_TEST_PLACEHOLDER_COMMAND_H*/

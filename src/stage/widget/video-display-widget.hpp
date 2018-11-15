@@ -36,9 +36,9 @@
 #include "stage/output/displayer.hpp"
 
 
-using namespace gui::output;  ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::output;  ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui {
+namespace stage {
 namespace widget {
 
   /**

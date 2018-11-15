@@ -36,7 +36,7 @@
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
-namespace gui {
+namespace stage {
 namespace model {
   
 using std::shared_ptr;
@@ -209,6 +209,6 @@ private:
 };
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage
 
 #endif // TRACK_HPP

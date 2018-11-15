@@ -49,7 +49,7 @@ using util::cStr;
 using util::isnil;
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using Gtk::IconSize;
@@ -190,4 +190,4 @@ namespace ctrl {
   }
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl

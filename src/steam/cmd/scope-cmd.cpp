@@ -53,7 +53,7 @@ using lib::hash::LuidH;
 //using util::_Fmt;
 
 
-namespace proc {
+namespace steam {
 namespace cmd {
   namespace error = lumiera::error;
   
@@ -91,4 +91,4 @@ namespace cmd {
   
   
   
-}} // namespace proc::cmd
+}} // namespace steam::cmd

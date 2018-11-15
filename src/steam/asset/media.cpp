@@ -55,7 +55,7 @@ using std::dynamic_pointer_cast;
 
 namespace error = lumiera::error;
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   namespace { // Implementation details

@@ -44,7 +44,7 @@ using util::isnil;
 using std::string;
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -181,4 +181,4 @@ lumiera::query::setFakeBypass(pipeWithSpecificStream); /////////////////////////
   
   
   
-}}}} // namespace proc::mobject::session::test
+}}}} // namespace steam::mobject::session::test

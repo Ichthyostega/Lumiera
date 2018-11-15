@@ -40,7 +40,7 @@
 
 using lumiera::query::DefsManager;
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
     ////////////////////////////////////////////////////////////////////////////////TICKET #414

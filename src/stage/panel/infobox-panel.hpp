@@ -39,7 +39,7 @@
 
 #include <memory>
 
-namespace gui  {
+namespace stage  {
 namespace widget {
   class ErrorLogDisplay;
 }
@@ -77,5 +77,5 @@ namespace panel{
     };
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel
 #endif /*STAGE_PANEL_INFOBOX_PANEL_H*/

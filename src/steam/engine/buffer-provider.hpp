@@ -53,7 +53,7 @@
 #include <memory>
 
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   using lib::Literal;
@@ -167,5 +167,5 @@ namespace engine {
   }
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine
 #endif

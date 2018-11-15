@@ -39,7 +39,7 @@
 #include <boost/functional/hash.hpp>
 
 
-namespace backend{
+namespace vault{
 namespace engine {
   
   namespace { // DummyJob implementation details...
@@ -191,4 +191,4 @@ namespace engine {
   }
   
   
-}} // namespace backend::engine
+}} // namespace vault::engine

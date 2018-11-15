@@ -64,7 +64,7 @@
 //#include <string>
 
 
-namespace proc {
+namespace steam {
 namespace play {
 
   using std::string;
@@ -120,5 +120,5 @@ namespace play {
   
   
   
-}} // namespace proc::play
+}} // namespace steam::play
 #endif

@@ -94,7 +94,7 @@
 #include <utility>
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
   namespace error = lumiera::error;
@@ -767,5 +767,5 @@ namespace interact {
   
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact
 #endif /*STAGE_INTERACT_UI_COORD_H*/

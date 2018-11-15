@@ -51,7 +51,7 @@
 namespace lib {
   namespace diff { class GenNode; }
 }
-namespace gui {
+namespace stage {
   
   namespace ctrl {
     class UiManager;
@@ -108,5 +108,5 @@ namespace gui {
   
   
   
-} // namespace gui
+} // namespace stage
 #endif

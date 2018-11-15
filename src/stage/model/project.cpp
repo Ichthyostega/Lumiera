@@ -36,7 +36,7 @@
 #include <memory>
 
 
-namespace gui {
+namespace stage {
 namespace model {
 
 Project::Project()
@@ -66,4 +66,4 @@ Project::add_new_sequence(uString name)
 }
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage

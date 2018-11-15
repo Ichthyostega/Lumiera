@@ -37,7 +37,7 @@ using std::bind;
 using std::rand;
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test    {
   
@@ -185,4 +185,4 @@ namespace test    {
   LAUNCHER (MementoTie_test, "unit controller");
   
   
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test

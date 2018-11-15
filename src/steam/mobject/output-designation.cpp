@@ -59,7 +59,7 @@ using proc::ConfigResolver;
 using lib::HashVal;
 using util::uNum;
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   typedef OutputDesignation::PPipe PPipe;

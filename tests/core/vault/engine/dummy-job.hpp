@@ -34,7 +34,7 @@
 #include "lib/time/timevalue.hpp"
 
 
-namespace backend{
+namespace vault{
 namespace engine {
   
   using lib::time::Time;
@@ -56,5 +56,5 @@ namespace engine {
     };
   
 
-}} // namespace backend::engine
+}} // namespace vault::engine
 #endif

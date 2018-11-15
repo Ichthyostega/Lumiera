@@ -35,7 +35,7 @@
 
 using namespace Gtk;         //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
-namespace gui  {
+namespace stage  {
 namespace panel{
   
   Panel::Panel (workspace::PanelManager& panelManager
@@ -169,4 +169,4 @@ namespace panel{
   }
   
   
-}}// namespace gui::panel
+}}// namespace stage::panel

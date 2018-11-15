@@ -33,7 +33,7 @@
 
 #include "video-display-widget.hpp"
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   VideoDisplayWidget::VideoDisplayWidget()

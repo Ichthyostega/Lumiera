@@ -42,7 +42,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
   using lumiera::Query;
@@ -135,5 +135,5 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

@@ -34,7 +34,7 @@
 using backend::Thread;
 
 
-namespace proc {
+namespace steam {
 namespace play {
   
   
@@ -153,4 +153,4 @@ namespace play {
       }
   }
 
-}} // namespace proc::play
+}} // namespace steam::play

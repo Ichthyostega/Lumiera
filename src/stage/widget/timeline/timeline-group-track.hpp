@@ -34,7 +34,7 @@
 #include "stage/widget/timeline/timeline-track.hpp"
 #include "stage/model/group-track.hpp"
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
   
@@ -54,5 +54,5 @@ namespace timeline {
     };
     
     
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_GROUP_TRACK_H*/

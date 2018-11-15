@@ -37,7 +37,7 @@
 #include "stage/widget/timeline/timeline-entity.hpp"
 #include "stage/widget/timeline/timeline-view-window.hpp"
 
-namespace gui {
+namespace stage {
 namespace widget {
 namespace timeline {
   
@@ -66,5 +66,5 @@ namespace timeline {
     };
   
   
-}}}// namespace gui::widget::timeline
+}}}// namespace stage::widget::timeline
 #endif /*STAGE_WIDGET_TIMELINE_DRAW_STRATEGY_HPP*/

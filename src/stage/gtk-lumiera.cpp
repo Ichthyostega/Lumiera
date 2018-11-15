@@ -73,7 +73,7 @@ using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 using std::string;
 
 
-namespace gui {
+namespace stage {
   
   namespace { // implementation details
     
@@ -157,7 +157,7 @@ namespace gui {
       }           // note: lumiera_error state remains set
   }
 
-} // namespace gui
+} // namespace stage
 
 
 

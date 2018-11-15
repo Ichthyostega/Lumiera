@@ -36,7 +36,7 @@
 #include "stage/workspace/panel-manager.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   class UiManager;
 }
@@ -72,5 +72,5 @@ namespace workspace {
     };
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace
 #endif /*STAGE_WORKSPACE_WORKSPACE_WINDOW_H*/

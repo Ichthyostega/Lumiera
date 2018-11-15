@@ -37,7 +37,7 @@ namespace lumiera {
 }
 
 
-namespace proc {
+namespace steam {
 namespace engine {
   
   /** */

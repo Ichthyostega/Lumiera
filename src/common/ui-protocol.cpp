@@ -29,7 +29,7 @@
 #include "include/ui-protocol.hpp"
 
 
-namespace gui {
+namespace stage {
   
   const Symbol META_kind{"kind"};
   
@@ -60,4 +60,4 @@ namespace gui {
   
   
   
-}// namespace gui
+}// namespace stage

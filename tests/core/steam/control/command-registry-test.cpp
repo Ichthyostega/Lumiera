@@ -37,7 +37,7 @@
 #include <functional>
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test    {
   
@@ -241,4 +241,4 @@ namespace test    {
   LAUNCHER (CommandRegistry_test, "function controller");
   
   
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test

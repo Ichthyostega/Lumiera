@@ -51,7 +51,7 @@
 
 
 
-namespace gui {
+namespace stage {
   
   using lib::Literal;
   using lumiera::Config;
@@ -67,5 +67,5 @@ namespace gui {
   extern Literal KEY_ICON_PATH;
   
   
-}// namespace gui
+}// namespace stage
 #endif /*STAGE_CONFIG_KEYS_H*/

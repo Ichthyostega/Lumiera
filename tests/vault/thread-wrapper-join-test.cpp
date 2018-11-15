@@ -38,7 +38,7 @@ using test::Test;
 
 
 
-namespace backend {
+namespace vault {
 namespace test {
   
   using lumiera::error::LUMIERA_ERROR_LOGIC;
@@ -139,4 +139,4 @@ namespace test {
   
   
   
-}} // namespace backend::test
+}} // namespace vault::test

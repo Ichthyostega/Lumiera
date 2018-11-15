@@ -52,7 +52,7 @@ using util::isnil;
 using std::string;
 
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace test    {
   
@@ -385,4 +385,4 @@ namespace test    {
   LAUNCHER (MObjectRef_test, "unit session");
   
   
-}}} // namespace proc::mobject::test
+}}} // namespace steam::mobject::test

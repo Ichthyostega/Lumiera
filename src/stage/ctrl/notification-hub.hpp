@@ -70,7 +70,7 @@
 #include <functional>
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using lib::diff::TreeMutator;
@@ -204,5 +204,5 @@ namespace ctrl {
   
   
   
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl
 #endif /*STAGE_CTRL_NOTIFICATION_HUB_H*/

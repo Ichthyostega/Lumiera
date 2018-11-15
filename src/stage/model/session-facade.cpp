@@ -51,7 +51,7 @@
 //using util::isnil;
 
 
-namespace gui {
+namespace stage {
 namespace model {
   
   namespace { // internal details
@@ -91,4 +91,4 @@ namespace model {
   
   
   
-}} // namespace gui::model
+}} // namespace stage::model

@@ -58,7 +58,7 @@
 //#include <memory>
 
 
-namespace gui {
+namespace stage {
 namespace setting {
   
 //  using std::unique_ptr;
@@ -91,5 +91,5 @@ namespace setting {
   
   
   
-}}// namespace gui::setting
+}}// namespace stage::setting
 #endif /*STAGE_SETTING_ASSET_CONTROLLER_H*/

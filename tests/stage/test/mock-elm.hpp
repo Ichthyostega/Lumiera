@@ -78,7 +78,7 @@
 #include <map>
 
 
-namespace gui {
+namespace stage {
   namespace error = lumiera::error;
   using error::LUMIERA_ERROR_ASSERTION;
   using lib::test::EventLog;
@@ -489,5 +489,5 @@ namespace test{
   
   
   
-}} // namespace gui::test
+}} // namespace stage::test
 #endif /*STAGE_TEST_MOCK_ELM_H*/

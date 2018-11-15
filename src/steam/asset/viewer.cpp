@@ -35,7 +35,7 @@
 //#include "steam/assetmanager.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace asset {
   
 //  using lib::AutoRegistered;
@@ -74,4 +74,4 @@ namespace asset {
   
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset

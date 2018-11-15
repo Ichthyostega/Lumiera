@@ -36,7 +36,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace test_format {
   
   using mobject::Session;
@@ -112,5 +112,5 @@ namespace test_format {
   LAUNCHER (StreamTypeLifecycle_test, "unit common");
   
   
-}} // namespace proc::test_format
+}} // namespace steam::test_format
 

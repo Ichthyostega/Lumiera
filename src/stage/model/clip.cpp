@@ -36,7 +36,7 @@ using lib::time::FSecs;
 using lib::time::Mutation;
 
 
-namespace gui {
+namespace stage {
 namespace model {
 
   Clip::Clip()
@@ -72,5 +72,5 @@ namespace model {
   }
 
 }   // namespace model
-}   // namespace gui
+}   // namespace stage
 

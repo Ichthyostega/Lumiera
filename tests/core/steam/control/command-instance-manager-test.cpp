@@ -40,7 +40,7 @@
 #include <deque>
 
 
-namespace proc {
+namespace steam {
 namespace control {
 namespace test {
   
@@ -416,4 +416,4 @@ namespace test {
   LAUNCHER (CommandInstanceManager_test, "unit controller");
   
   
-}}} // namespace proc::control::test
+}}} // namespace steam::control::test

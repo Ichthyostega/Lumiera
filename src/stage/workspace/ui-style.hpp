@@ -43,7 +43,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
   
   namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
@@ -198,5 +198,5 @@ namespace workspace {
   
   
   
-}}// namespace gui::workspace
+}}// namespace stage::workspace
 #endif /*STAGE_WORKSPACE_UI_STYLE_H*/

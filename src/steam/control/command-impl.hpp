@@ -52,7 +52,7 @@
 #include <functional>
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using util::_Fmt;
@@ -272,5 +272,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

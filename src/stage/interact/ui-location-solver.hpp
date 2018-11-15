@@ -80,7 +80,7 @@
 #include <string>
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
   using lib::Literal;
@@ -323,5 +323,5 @@ namespace interact {
   
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact
 #endif /*STAGE_INTERACT_UI_LOCATION_SOLVER_H*/

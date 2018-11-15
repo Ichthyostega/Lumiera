@@ -30,7 +30,7 @@
 #include "include/logging.h"
 
 
-namespace gui {
+namespace stage {
 namespace widget {
   
   ButtonBar::ButtonBar()

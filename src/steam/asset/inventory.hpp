@@ -35,7 +35,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset {
 
 
@@ -51,5 +51,5 @@ namespace asset {
   typedef lib::P<Inventory> PInv;
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

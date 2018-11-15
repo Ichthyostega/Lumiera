@@ -35,7 +35,7 @@
 #include "lib/meta/typelist-manip.hpp"
 
 
-namespace proc {
+namespace steam {
 namespace engine {
 
   namespace config {
@@ -155,4 +155,4 @@ namespace engine {
   }
   
   
-}} // namespace proc::engine
+}} // namespace steam::engine

@@ -48,7 +48,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset{
 namespace meta {
   
@@ -109,5 +109,5 @@ namespace meta {
       
     };
   
-}}} // namespace proc::asset::meta
+}}} // namespace steam::asset::meta
 #endif /*ASSET_META_ERROR_LOG_H*/

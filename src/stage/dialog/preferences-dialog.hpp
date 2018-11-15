@@ -36,7 +36,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/dialog/dialog.hpp"
 
-namespace gui {
+namespace stage {
 namespace dialog {
   
   
@@ -79,5 +79,5 @@ namespace dialog {
     };
   
   
-}} // namespace gui::dialog
+}} // namespace stage::dialog
 #endif /*STAGE_DIALOG_PREFERENCES_DIALOG_H*/

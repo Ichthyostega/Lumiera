@@ -62,7 +62,7 @@
 //using std::vector;
 //using std::string;
 
-namespace proc {
+namespace steam {
 namespace mobject {
 namespace session {
   
@@ -103,5 +103,5 @@ namespace asset {
 ///////////////////////////TODO currently just fleshing the API
   
   
-}} // namespace proc::asset
+}} // namespace steam::asset
 #endif

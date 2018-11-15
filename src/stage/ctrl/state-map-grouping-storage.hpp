@@ -48,7 +48,7 @@
 #include <set>
 
 
-namespace gui {
+namespace stage {
 namespace ctrl {
   
   using lib::idi::BareEntryID;
@@ -222,5 +222,5 @@ namespace ctrl {
   
   
   
-}} // namespace gui::ctrl
+}} // namespace stage::ctrl
 #endif /*STAGE_CTRL_STATE_MAP_GROUPING_STORAGE_H*/

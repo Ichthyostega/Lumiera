@@ -51,7 +51,7 @@
 
 //#include <map>
 
-namespace proc    {
+namespace steam    {
 namespace mobject {
 namespace builder {
   
@@ -78,5 +78,5 @@ namespace builder {
   
   
   
-}}} // namespace proc::mobject::builder
+}}} // namespace steam::mobject::builder
 #endif

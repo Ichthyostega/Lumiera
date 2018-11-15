@@ -37,7 +37,7 @@
 #include "lib/diff/gen-node.hpp"
 
 
-namespace gui {
+namespace stage {
 namespace model {
   
   
@@ -302,4 +302,4 @@ namespace model {
   
   
   
-}} // namespace gui::model
+}} // namespace stage::model

@@ -40,7 +40,7 @@
 #include "stage/ctrl/core-service.hpp"
 
 
-namespace gui {
+namespace stage {
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
 namespace controller {
     
@@ -56,7 +56,7 @@ namespace controller {
     return playback_;
   }
   
-}// namespace gui::controller
+}// namespace stage::controller
   ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
   
   
@@ -245,4 +245,4 @@ namespace ctrl {
     
     
     
-}}// namespace gui::ctrl
+}}// namespace stage::ctrl

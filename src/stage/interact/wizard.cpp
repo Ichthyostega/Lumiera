@@ -52,7 +52,7 @@ using std::vector;
 using std::string;
 
 
-namespace gui {
+namespace stage {
 namespace interact {
   
   using boost::algorithm::is_any_of;
@@ -134,4 +134,4 @@ namespace interact {
   
   
   
-}}// namespace gui::interact
+}}// namespace stage::interact

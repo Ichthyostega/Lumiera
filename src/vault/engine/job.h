@@ -189,7 +189,7 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 
 
-namespace backend {
+namespace vault {
 namespace engine {
   
   using lib::time::TimeValue;
@@ -304,7 +304,7 @@ namespace engine {
   
   
   
-}} // namespace backend::engine
+}} // namespace vault::engine
 
 
 

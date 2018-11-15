@@ -56,7 +56,7 @@ using proc_interface::IDA;                   //TODO finally not needed?
 //using proc_interface::PAsset;              //TODO: only temporarily
 using proc_interface::AssetManager;
 
-namespace proc {
+namespace steam {
 namespace mobject {
   
   using std::string;
@@ -121,5 +121,5 @@ namespace mobject {
   typedef Placement<MObject> PMO;
 
 
-}} // namespace proc::mobject
+}} // namespace steam::mobject
 #endif /*STEAM_MOBJECT_MOBJECT_H*/

@@ -49,7 +49,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
 
   namespace { // concrete command handling patterns 
@@ -208,5 +208,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif

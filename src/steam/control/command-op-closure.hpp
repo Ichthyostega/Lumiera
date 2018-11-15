@@ -54,7 +54,7 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace control {
   
   using lib::meta::_Fun;
@@ -228,5 +228,5 @@ namespace control {
   
   
   
-}} // namespace proc::control
+}} // namespace steam::control
 #endif /*CONTROL_COMMAND_OP_CLOSURE_H*/

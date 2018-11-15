@@ -69,12 +69,12 @@
 
 
 
-namespace proc {
+namespace steam {
 namespace asset{
   class Timeline;
 }}
 
-namespace gui  {
+namespace stage  {
 namespace timeline {
   
   using ctrl::BusTerm;
@@ -155,5 +155,5 @@ namespace timeline {
     };
   
   
-}}// namespace gui::timeline
+}}// namespace stage::timeline
 #endif /*STAGE_TIMELINE_TIMELINE_WIDGET_H*/
