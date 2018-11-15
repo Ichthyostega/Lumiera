@@ -43,7 +43,7 @@
  ** to reconfigure the ongoing or planned calculations.
  ** 
  ** @see lumiera::DummyPlayer
- ** @see gui::PlaybackController usage example 
+ ** @see stage::PlaybackController usage example 
  */
 
 
@@ -75,7 +75,7 @@ namespace play {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
   using util::isnil;
-  using proc::mobject::ModelPort;
+  using steam::mobject::ModelPort;
   using std::function;
   
   typedef lib::IterSource<ModelPort>::iterator ModelPorts;

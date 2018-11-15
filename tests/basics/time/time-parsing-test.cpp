@@ -41,7 +41,7 @@ namespace lib {
 namespace time{
 namespace test{
   
-  using proc::asset::meta::TimeGrid;
+  using steam::asset::meta::TimeGrid;
   using format::LERR_(INVALID_TIMECODE);
   
   

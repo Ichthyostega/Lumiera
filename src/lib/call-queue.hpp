@@ -29,7 +29,7 @@
  **       based on std::function; should use a lock-fee queue and should have an eye
  **       on the impact of managing argument storage
  ** 
- ** @see gui::NotificationService usage example
+ ** @see stage::NotificationService usage example
  */
 
 

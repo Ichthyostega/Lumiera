@@ -27,7 +27,7 @@
  ** to organise various "things", like clips, media, effect plugins, labels
  ** sequences, processing patterns and also other nested bins. In the Lumiera
  ** session model, media bins and tracks are visual renderings of the same entity,
- ** a [grouping fork](\ref proc::mobject::session::Fork). This wide array of
+ ** a [grouping fork](\ref steam::mobject::session::Fork). This wide array of
  ** possible usage gives rise to some complexity and several display styles, ranging
  ** from a simple list to a working area to arrange elements, with drag-n-drop
  ** support, searching and establishing of an element order. The generality

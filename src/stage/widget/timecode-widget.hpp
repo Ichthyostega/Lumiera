@@ -217,5 +217,5 @@ namespace widget {
   
   
   
-}}// gui::widget
+}}// stage::widget
 #endif /*STAGE_WIDGET_TIMECODE_WIDGET_H*/

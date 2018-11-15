@@ -42,7 +42,7 @@
  ** thus relies on a framework for default configuration, and a matching mechanism to determine the location and
  ** creation modes of such views. This matching mechanism in turn requires an abstracted view on the UI seen as
  ** a topological tree structure of relevant entities (windows, panels, views,...) -- which is basically the
- ** service provided by the Navigator; yet this Navigator service can be abstracted into the gui::interact::LocationQuery
+ ** service provided by the Navigator; yet this Navigator service can be abstracted into the stage::interact::LocationQuery
  ** API, and this abstraction allows to keep all the intricacies of navigating concrete UI widgets confined within the
  ** implementation of the Navigator service.
  ** 

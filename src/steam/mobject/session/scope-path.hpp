@@ -98,7 +98,7 @@
 namespace lib {
 namespace meta{
 
-  using proc::mobject::session::Scope;
+  using steam::mobject::session::Scope;
 
   /**
    * this explicit specialisation allows to build a RangeIter

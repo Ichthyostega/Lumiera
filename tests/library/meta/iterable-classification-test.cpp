@@ -46,8 +46,8 @@ namespace lib  {
 namespace meta {
 namespace test {
   
-  using proc::mobject::session::Effect;
-  using proc::mobject::session::ScopeQuery;
+  using steam::mobject::session::Effect;
+  using steam::mobject::session::ScopeQuery;
   typedef lib::time::TimeVar Time;
   
   using std::cout;

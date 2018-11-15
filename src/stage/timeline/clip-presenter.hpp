@@ -30,7 +30,7 @@
  ** as known from the [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) --
  ** serves as link between both levels. For the global angle of view, it is a model::Tangible and thus
  ** plays the role of the _View_, while the _Model_ and _Controler_ roles are mediated through the
- ** gui::UiBus, exchanging command, state and mutation messages. On the other hand, for the local
+ ** stage::UiBus, exchanging command, state and mutation messages. On the other hand, for the local
  ** angle of view, the _Presenter_ is a structural model element, kind of a _view model_, and corresponds
  ** to the respective element within the session. In addition, it manages actively the collaborative
  ** part of layout building, delegating to a mostly passive GTK widget for the actual display.

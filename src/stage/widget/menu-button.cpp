@@ -206,4 +206,4 @@ namespace widget {
   }
   
   
-}}// gui::widget
+}}// stage::widget

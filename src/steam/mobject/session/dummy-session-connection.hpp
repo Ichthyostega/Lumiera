@@ -84,9 +84,9 @@ namespace session {
    * @note readily-available singleton to enact prototypical behaviour as appropriate.
    * 
    * @see DummySessionConnection_test
-   * @see gui::interact::InteractionDirector::buildMutator
-   * @see gui::interact::InteractionDirector::injectTimeline
-   * @see gui::timeline::TimelineController
+   * @see stage::interact::InteractionDirector::buildMutator
+   * @see stage::interact::InteractionDirector::injectTimeline
+   * @see stage::timeline::TimelineController
    */
   class DummySessionConnection
     : lib::diff::TreeDiffLanguage

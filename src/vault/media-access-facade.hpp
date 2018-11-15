@@ -150,9 +150,9 @@ namespace vault {
 
 namespace backend_interface {
   
-  using backend::MediaAccessFacade;
-  using backend::MediaDesc;
-  using backend::ChanDesc;
+  using vault::MediaAccessFacade;
+  using vault::MediaDesc;
+  using vault::ChanDesc;
   
 } // namespace backend_interface
 #endif

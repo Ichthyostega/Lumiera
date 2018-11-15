@@ -26,7 +26,7 @@
  ** The Lumiera GTK GUI is built around a generic backbone structure known as **UI-Bus**.
  ** This is a messaging system and taps into any widget of more than local relevance.
  ** To that end, any globally relevant (custom) widget, and all secondary controllers
- ** inherit from the gui::model::Tangible base. The top-level gui::UiBus element is
+ ** inherit from the stage::model::Tangible base. The top-level stage::UiBus element is
  ** a front-end and framework component managed by the [GTK-main](\ref GtkLumiera::main).
  ** 
  ** @warning as of 12/2016, this is still totally a mess. This \em will remain
@@ -68,7 +68,7 @@
  ** 
  ** - *act*: send a [GenNode] representing the action
  **   - the ID is either a globally registered command-ID or an explicitly
- **     ["opened"](\ref proc::control::SessionCommand::cycle(Symbol,string)) command instance ID.
+ **     ["opened"](\ref steam::control::SessionCommand::cycle(Symbol,string)) command instance ID.
  **   - the payload is a Record<GenNode> holding the actual command arguments
  **   - on reception, an _instance_ (anonymous clone copy) of the command is created, bound
  **     with the arguments and handed over to the ProcDispatcher to be enqueued for execution.

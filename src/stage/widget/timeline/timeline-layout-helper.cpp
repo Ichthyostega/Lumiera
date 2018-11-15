@@ -119,7 +119,7 @@ namespace timeline {
     BOOST_FOREACH( pair, headerBoxes )
       {
         // Hit test the rectangle      
-        if (gui::draw::pt_in_rect (point, pair.second))
+        if (stage::draw::pt_in_rect (point, pair.second))
           return shared_ptr<timeline::Track>(pair.first);
       }
     

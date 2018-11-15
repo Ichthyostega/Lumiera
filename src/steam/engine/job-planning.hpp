@@ -34,7 +34,7 @@
  ** - JobPlanningSequence is the entry point for client code: it allows to generate a sequence of jobs
  ** - JobPlanning is a view on top of all the collected planning information for a single job
  ** - PlanningState is an iterator, successively exposing a sequence of JobPlanning views
- ** - proc::engine::expandPrerequisites(JobPlanning const&) is the operation to explore further prerequisite Jobs recursively
+ ** - steam::engine::expandPrerequisites(JobPlanning const&) is the operation to explore further prerequisite Jobs recursively
  ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
  ** 
  ** ## how the PlanningState (sequence) is advanced

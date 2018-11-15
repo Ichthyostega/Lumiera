@@ -30,8 +30,8 @@
  ** manages a collection of timelines. The timeline panel exposes this collection and allows to view and
  ** interact with one of the given timelines. The build-up of the timeline display and thus the initiative
  ** to expose a timeline comes from the interaction director -- but as usual with graphical user interfaces,
- ** any user interaction after this point is handled autonomously by the gui::timeline::TimelineWidget and
- ** gui::timeline::TimelineController
+ ** any user interaction after this point is handled autonomously by the stage::timeline::TimelineWidget and
+ ** stage::timeline::TimelineController
  ** 
  ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
  ** @todo as of 10/2018 we start to build a new timeline widget, connected to the UI-Bus

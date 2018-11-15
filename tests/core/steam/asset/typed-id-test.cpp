@@ -76,7 +76,7 @@ namespace query  {
    * Of course this is a test/dummy/demonstration.
    */
   template<>
-  struct TypeHandlerXX<proc::mobject::session::test::DummyEntity>
+  struct TypeHandlerXX<steam::mobject::session::test::DummyEntity>
     {
       static Symbol getID() { return "typed-id-test-dummy"; }
       
@@ -90,8 +90,8 @@ namespace lib {
 namespace idi {
 namespace test{
   
-  using proc::mobject::session::test::DummyEntity;
-  using proc::mobject::session::test::PDum;
+  using steam::mobject::session::test::DummyEntity;
+  using steam::mobject::session::test::PDum;
   
   using DummyID = EntryID<DummyEntity>;
   

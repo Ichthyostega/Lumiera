@@ -76,8 +76,8 @@ namespace asset {
       
     public:
       using PMedia = lib::P<Media>;
-      using PClipAsset  = lib::P<proc::asset::Clip>;
-      using PProcPatt = lib::P<proc::asset::ProcPatt>;
+      using PClipAsset  = lib::P<steam::asset::Clip>;
+      using PProcPatt = lib::P<steam::asset::ProcPatt>;
       using PClip = mobject::Placement<mobject::session::Clip>;
      
       
@@ -123,7 +123,7 @@ namespace asset {
        *  @return pointer to parent, or `null`
        */
       virtual PMedia checkCompound ()  const;
-      friend class proc::asset::Clip;    ////////////////////////TODO better interface!!!
+      friend class steam::asset::Clip;    ////////////////////////TODO better interface!!!
 
     };
     

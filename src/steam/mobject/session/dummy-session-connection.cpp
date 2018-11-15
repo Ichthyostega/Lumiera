@@ -83,7 +83,7 @@ namespace session {
     {
       return MakeRec()
                .set(MakeRec()
-                      .type (string{gui::TYPE_Fork})
+                      .type (string{stage::TYPE_Fork})
                     .genNode(forkRootID)
                    )
              .genNode(baseID);
@@ -108,9 +108,9 @@ namespace session {
   MutationMessage
   DummySessionConnection::fabricateSeq1 (string baseID)
   {
-    const RandID forkRootID{gui::ATTR_fork};
+    const RandID forkRootID{stage::ATTR_fork};
     const GenNode timeline      = emptyTimeline (baseID, forkRootID)
-                , rootTrackName = GenNode{string{gui::ATTR_name}, "Track-"+baseID}
+                , rootTrackName = GenNode{string{stage::ATTR_name}, "Track-"+baseID}
                 , FORK_ROOT     = MakeRec().genNode(forkRootID)
                 ;
     
@@ -136,16 +136,16 @@ namespace session {
 namespace cmd {
   
   using lib::hash::LuidH;
-  using gui::ID;
-  using gui::NOTE_INFO;
-  using gui::NOTE_WARN;
-  using gui::NOTE_ERROR;
-//  using gui::NotifyLevel;
-//  using gui::MARK_expand;
-  using gui::GuiNotification;
+  using stage::ID;
+  using stage::NOTE_INFO;
+  using stage::NOTE_WARN;
+  using stage::NOTE_ERROR;
+//  using stage::NotifyLevel;
+//  using stage::MARK_expand;
+  using stage::GuiNotification;
 //  using util::isYes;
 
-  namespace session = proc::mobject::session;
+  namespace session = steam::mobject::session;
   
   using DummySess = session::DummySessionConnection;
   

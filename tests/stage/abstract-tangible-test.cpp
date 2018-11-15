@@ -24,8 +24,8 @@
 /** @file abstract-tangible-test.cpp
  ** Verify the common base shared by all interface elements of relevance.
  ** This test is not so much a test, than a test of the test support for testing
- ** [primary elements](\ref gui::model::Tangible) of the Lumiera GTK UI. Any such element
- ** is connected to the [UI-Bus](\ref gui::UiBus) and responds to some generic actions and
+ ** [primary elements](\ref stage::model::Tangible) of the Lumiera GTK UI. Any such element
+ ** is connected to the [UI-Bus](\ref stage::UiBus) and responds to some generic actions and
  ** interaction patterns. This is the foundation of any presentation state recording
  ** and restoration, and it serves to invoke any persistent action on the
  ** [Session] through a single channel and access point.
@@ -39,7 +39,7 @@
  ** @todo WIP  ///////////////////////TICKET #956 : model diff representation
  ** @todo WIP  ///////////////////////TICKET #961 : tests to pass...
  ** 
- ** @see gui::UiBus
+ ** @see stage::UiBus
  ** 
  */
 
@@ -67,7 +67,7 @@ using lib::Symbol;
 using util::isnil;
 using util::toString;
 using lib::time::Time;
-using gui::test::MockElm;
+using stage::test::MockElm;
 using lib::test::EventLog;
 using lib::idi::EntryID;
 using lib::diff::Rec;
@@ -75,8 +75,8 @@ using lib::diff::MakeRec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
 using lib::diff::MutationMessage;
-using proc::control::Command;
-using proc::control::CommandDef;
+using steam::control::Command;
+using steam::control::CommandDef;
 
 
 
@@ -202,7 +202,7 @@ namespace test {
        * to the session, but any command- or other messages will be captured and can be
        * retrieved or verified from the test code. Since lifecycle and robustness in
        * "post mortem" situations tend to be tricky for UI code, we provide a dedicated
-       * ["zombification" feature](\ref gui::test::TestNexus::zombificate): a \ref MockElm can be
+       * ["zombification" feature](\ref stage::test::TestNexus::zombificate): a \ref MockElm can be
        * turned into an _almost dead_ state, while still hanging around. It will be detached from
        * the "living" Test-Nexus and re-wired to some special, hidden "Zombie Nexus", causing any
        * further messaging activity to be logged and ignored.
@@ -288,7 +288,7 @@ namespace test {
                     .beforeCall("doMsg").on("foo"));
           
           // Access the log on the Test-Nexus hub
-          EventLog nexusLog = gui::test::Nexus::getLog();
+          EventLog nexusLog = stage::test::Nexus::getLog();
           CHECK (nexusLog.verifyEvent("destroy","dummy")
                          .beforeEvent("dummy successfully zombificated"));
           
@@ -303,7 +303,7 @@ namespace test {
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
           cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
+               << util::join(stage::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
@@ -313,7 +313,7 @@ namespace test {
       invokeCommand ()
         {
           MARK_TEST_FUN
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           // Setup test stage: define a command/action "in Steam"
           CommandDef (DUMMY_CMD_ID)
@@ -321,7 +321,7 @@ namespace test {
               .captureUndo (capture)
               .undoOperation (undoIt);
           
-          gui::test::Nexus::setCommandHandler (&processCommandInvocation);
+          stage::test::Nexus::setCommandHandler (&processCommandInvocation);
           
           // the UI element to trigger this command invocation
           MockElm mock("uiElm");
@@ -349,7 +349,7 @@ namespace test {
           
           
           // reset to default (NOP) handler
-          gui::test::Nexus::setCommandHandler();
+          stage::test::Nexus::setCommandHandler();
         }
       
       
@@ -371,7 +371,7 @@ namespace test {
       markState ()
         {
           MARK_TEST_FUN
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           sigc::signal<void> trigger_expand;
           sigc::signal<void> trigger_collapse;
@@ -427,7 +427,7 @@ namespace test {
           
           // Second part: replay of a state mark via UI-Bus....
           auto stateMark = GenNode{"expand", true};
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           
           CHECK (not mock.isExpanded());
           CHECK (mock.ensureNot("mark"));
@@ -478,7 +478,7 @@ namespace test {
       revealer ()
         {
           MARK_TEST_FUN
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           MockElm mock("target");
           ID targetID = mock.getID();
@@ -516,7 +516,7 @@ namespace test {
           // second test: the same can be achieved via UI-Bus message...
           revealed = false;
           auto stateMark = GenNode{"reveal", 47};  // (payload argument irrelevant)
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           CHECK (nexusLog.ensureNot("reveal"));
           
           uiBus.mark (targetID, stateMark);                // send the state mark message to reveal the element
@@ -562,11 +562,11 @@ namespace test {
       notify ()
         {
           MARK_TEST_FUN
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           MockElm mock("target");
           ID targetID = mock.getID();
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           
           CHECK (mock.ensureNot("Flash"));
           CHECK (mock.ensureNot("Error"));
@@ -660,7 +660,7 @@ namespace test {
       mutate ()
         {
           MARK_TEST_FUN
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           MockElm rootMock("root");
           ID rootID = rootMock.getID();
@@ -697,7 +697,7 @@ namespace test {
               diffSrc;
           
           
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           
           
           // send a Diff message via UI-Bus to the rootMock

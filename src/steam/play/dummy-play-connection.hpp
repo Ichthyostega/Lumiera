@@ -70,7 +70,7 @@
  **       able to address this topic again. At the moment, the UI-Session connection is more urgent.
  ** 
  ** @see lumiera::DummyPlayer
- ** @see gui::PlaybackController usage example 
+ ** @see stage::PlaybackController usage example 
  */
 
 

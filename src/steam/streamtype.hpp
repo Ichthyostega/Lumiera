@@ -196,7 +196,7 @@ namespace steam {
 
 
 namespace lumiera {
-  using proc::StreamType;
+  using steam::StreamType;
 }
 
 #endif /*STEAM_STREAMTYPE_H*/

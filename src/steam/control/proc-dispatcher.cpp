@@ -96,7 +96,7 @@
   
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
-using backend::Thread;
+using vault::Thread;
 using std::unique_ptr;
 
 namespace steam {

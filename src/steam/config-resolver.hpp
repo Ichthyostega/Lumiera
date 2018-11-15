@@ -26,7 +26,7 @@
  ** Definition of the concrete frontend for rule based configuration within the session.
  ** 
  ** @remarks This code will act as a hub to pull in, instrument and activate a lot of further code.
- **          All the types mentioned in the proc::InterfaceTypes typelist will be prepared to be used
+ **          All the types mentioned in the steam::InterfaceTypes typelist will be prepared to be used
  **          in rules based setup and configuration; this definition will drive the generation of
  **          all the necessary bindings and registration entries to make this work. This is in
  **          accordance with the principle of *generic programming*: Instead of making things
@@ -70,11 +70,11 @@ namespace steam {
    *  the list of all concrete types participating in the
    *  rule based config query system
    */
-  typedef lib::meta::Types < proc::mobject::session::Fork
-                           , proc::asset::Pipe
-                           , const proc::asset::ProcPatt
-                           , proc::asset::Timeline
-                           , proc::asset::Sequence
+  typedef lib::meta::Types < steam::mobject::session::Fork
+                           , steam::asset::Pipe
+                           , const steam::asset::ProcPatt
+                           , steam::asset::Timeline
+                           , steam::asset::Sequence
                            > ::List
                              InterfaceTypes;
   

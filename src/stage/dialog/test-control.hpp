@@ -128,7 +128,7 @@ namespace dialog {
    * - define the wiring of the components within a page in the page's ctor
    * - possibly pass external dependencies for wiring into that ctor
    * @note the page widgets are actually heap allocated and managed automatically
-   * @see gui::dialog::TestControl as a usage example
+   * @see stage::dialog::TestControl as a usage example
    * 
    * [Notebook]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-multi-item-containers.html.en#sec-notebook
    */
@@ -266,13 +266,13 @@ namespace dialog {
               
               // define the action triggers...
               trig_1_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_displayInfo, getLogLevel(), getContent())); });
+                          [&]{ bus.act (model::commandMessage (steam::cmd::test_meta_displayInfo, getLogLevel(), getContent())); });
               trig_2_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markError,   getContent()));                });
+                          [&]{ bus.act (model::commandMessage (steam::cmd::test_meta_markError,   getContent()));                });
               trig_3_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markNote,    getContent()));                });
+                          [&]{ bus.act (model::commandMessage (steam::cmd::test_meta_markNote,    getContent()));                });
               trig_4_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_meta_markAction,  getActionID(), getContent())); });
+                          [&]{ bus.act (model::commandMessage (steam::cmd::test_meta_markAction,  getActionID(), getContent())); });
             }
         };
       
@@ -328,9 +328,9 @@ namespace dialog {
               
               // define the action triggers...
               seq_1_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_1, pickDummyID())); });
+                          [&]{ bus.act (model::commandMessage (steam::cmd::test_fake_injectSequence_1, pickDummyID())); });
               seq_2_.signal_clicked().connect(
-                          [&]{ bus.act (model::commandMessage (proc::cmd::test_fake_injectSequence_2, pickDummyID())); });
+                          [&]{ bus.act (model::commandMessage (steam::cmd::test_fake_injectSequence_2, pickDummyID())); });
               
               mut_1_.signal_clicked().connect(
                           [&]{ cerr << "gelldaschaugst..." <<endl; });

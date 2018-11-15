@@ -80,8 +80,8 @@
 namespace steam {
 namespace play {
   
-  using proc::engine::BuffHandle;
-  using proc::engine::BufferProvider;
+  using steam::engine::BuffHandle;
+  using steam::engine::BufferProvider;
   using lib::time::FrameCnt;
   using lib::time::TimeValue;
   using lib::time::Time;

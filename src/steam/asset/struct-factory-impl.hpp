@@ -73,14 +73,14 @@ namespace asset {
   using lumiera::query::LERR_(CAPABILITY_QUERY);
   using lib::query::extractID;
   
-  using proc::mobject::Session;
-  using proc::mobject::MObject;
-  using proc::mobject::session::Scope;
-  using proc::mobject::session::match_specificFork;
-  using proc::mobject::session::RBinding;
-  using proc::mobject::session::ForkID;
-  using proc::mobject::session::RFork;
-  using proc::mobject::session::Fork;
+  using steam::mobject::Session;
+  using steam::mobject::MObject;
+  using steam::mobject::session::Scope;
+  using steam::mobject::session::match_specificFork;
+  using steam::mobject::session::RBinding;
+  using steam::mobject::session::ForkID;
+  using steam::mobject::session::RFork;
+  using steam::mobject::session::Fork;
   
   using idi::StructTraits;
   

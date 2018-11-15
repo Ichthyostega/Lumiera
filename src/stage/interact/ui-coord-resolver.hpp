@@ -43,7 +43,7 @@
  **   the next level of child iteration at its place, similar to the `flatMap`
  **   operation known from functional programming.
  ** Together, these two capabilities allow us to build exploring and backtracking evaluations,
- ** which is enough to build a secondary helper component on top, the gui::interact::UICoordResolver
+ ** which is enough to build a secondary helper component on top, the stage::interact::UICoordResolver
  ** 
  ** 
  ** # UI coordinate path evaluation
@@ -53,7 +53,7 @@
  ** followed by traversal of the coordinate spec and matching against a navigation path within the actual UI window
  ** configuration. This process might involve interpretation of some meta-symbols and interpolation of wildcards.
  ** 
- ** As indicated above, the coordinate resolver internally relies on a [context query interface](\ref gui::interact::LocationQuery),
+ ** As indicated above, the coordinate resolver internally relies on a [context query interface](\ref stage::interact::LocationQuery),
  ** to find out about existing windows, panels, views and tabs and to navigate the real UI structure. The actual
  ** implementation of this context query interface is backed by the \ref Navigator component exposed through the
  ** \ref InteractionDirector.

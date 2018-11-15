@@ -67,7 +67,7 @@
 namespace stage {
 namespace ctrl {
   
-  using gui::ctrl::BusTerm;
+  using stage::ctrl::BusTerm;
   using lib::diff::GenNode;
   using lib::diff::Ref;
   using std::string;
@@ -81,7 +81,7 @@ namespace ctrl {
    * Requires a permanent connection to the UI-Bus,
    * which is given as reference at construction.
    * The intention is to use such an implementation
-   * embedded within the gui::ctrl::CoreService,
+   * embedded within the stage::ctrl::CoreService,
    * which in turn then manages the lifecycle of
    * this UI-Bus connection. Besides, a derived
    * mock implementation is available through

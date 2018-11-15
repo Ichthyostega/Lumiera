@@ -80,7 +80,7 @@ namespace model {
   /**
    * Interface: access UI elements by navigating the UI topology.
    * 
-   * @see gui::interact::Navigator
+   * @see stage::interact::Navigator
    * @see ElementAccess_test
    */
   class ElementAccess

@@ -86,5 +86,5 @@ namespace widget {
   
   
   
-}}// gui::widget
+}}// stage::widget
 #endif /*STAGE_WIDGET_MINI_BUTTON_H*/

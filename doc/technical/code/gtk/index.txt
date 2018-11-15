@@ -72,7 +72,7 @@ tend to get into our way of working. For this reason
 Consequently, none of the services offered by `Gtk::Application` is of much use for us. After reading
 the source code, we came to the conclusion that it is perfectly valid to sidestep all those aspects
 of GTK, and just perform those small number of toolkit initialisation steps -- previously invoked
-by `Gtk::Main` -- directly from our application code. Basically Lumiera's `gui::ctrl::UiManager`
+by `Gtk::Main` -- directly from our application code. Basically Lumiera's `stage::ctrl::UiManager`
 replaces `Gtk::Main`, invokes `gtk_init` and enters the blocking event loop by calling `gtk_main`.
 
 

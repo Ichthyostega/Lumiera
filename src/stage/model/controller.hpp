@@ -29,7 +29,7 @@
  **       especially, there might be a default (NOP) implementation of the diff mutator builder
  ** 
  ** @see model::Tangible
- ** @see gui::UIBus
+ ** @see stage::UIBus
  ** @see ////TODO_test usage example
  ** 
  */

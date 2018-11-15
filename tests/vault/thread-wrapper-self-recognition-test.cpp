@@ -63,7 +63,7 @@ namespace test {
    *       executing within the thread itself.
    * 
    * @see Thread::invokedWithinThread()
-   * @see proc::control::DispatcherLoop::stateIsSynched()
+   * @see steam::control::DispatcherLoop::stateIsSynched()
    */
   class ThreadWrapperSelfRecognitionTest_test : public Test
     {

@@ -35,7 +35,7 @@
  ** of the implementation class the handle points at is necessary only in the
  ** translation unit implementing such an extended handle.
  **
- ** @see proc::control::Command usage example
+ ** @see steam::control::Command usage example
  ** 
  */
 

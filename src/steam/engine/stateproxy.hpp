@@ -28,7 +28,7 @@
  ** into this recursive evaluation, beyond the data in the local call stack. Such
  ** additional statefull dependencies are problematic (regarding concurrency and
  ** throughput) and are thus abstracted from the actual processing operations
- ** with the help of the proc::engine::State interface
+ ** with the help of the steam::engine::State interface
  ** @todo unfinished draft from 2009 regarding the render process
  */
 

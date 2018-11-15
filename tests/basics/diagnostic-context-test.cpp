@@ -55,7 +55,7 @@ namespace test{
     
   } // (End) test setup....
   
-  using backend::ThreadJoinable;
+  using vault::ThreadJoinable;
   using error::LERR_(LOGIC);
   using std::rand;
   
@@ -83,7 +83,7 @@ namespace test{
    * 
    * @see lib::DiagnosticContext
    * @see lib::ThreadLocal
-   * @see backend::Thread
+   * @see vault::Thread
    */
   class DiagnosticContext_test : public Test
     {

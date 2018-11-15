@@ -64,12 +64,12 @@ namespace mobject {
 namespace session {
   namespace query {
     
-    namespace asset = proc::asset;
+    namespace asset = steam::asset;
     
     using asset::Pipe;
     using asset::ProcPatt;
     using asset::PProcPatt;
-    using proc::mobject::Session;
+    using steam::mobject::Session;
     using lib::meta::InstantiateChained;
     using lib::P;
     
@@ -128,7 +128,7 @@ namespace session {
      * in automatically managed heap memory. 
      */
     class MockTable
-      : public proc::ConfigResolver
+      : public steam::ConfigResolver
       {
         typedef std::map<QueryKey,any> Tab;
         
@@ -284,7 +284,7 @@ namespace session {
      * values for some types of interest for testing and debugging.
      */
     class MockConfigRules 
-      : public InstantiateChained < proc::InterfaceTypes           
+      : public InstantiateChained < steam::InterfaceTypes           
                                   , LookupPreconfigured  // building block used for each of the types
                                   , MockTable           //  for implementing the base class (interface) 
                                   >

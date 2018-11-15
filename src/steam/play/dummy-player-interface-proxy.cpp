@@ -81,7 +81,7 @@ namespace lumiera {
       {
         //----Proxy-Implementation-of-DummyPlayer--------
         typedef lumiera::DummyPlayer::Process Process;
-        typedef proc::play::ProcessImpl ProcessImpl;
+        typedef steam::play::ProcessImpl ProcessImpl;
         
         /** @note as an optimisation we hand out a direct reference
          *  to the implementing process object. While this ref could

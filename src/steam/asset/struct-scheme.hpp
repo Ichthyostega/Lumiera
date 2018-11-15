@@ -104,7 +104,7 @@ namespace asset{
         static Symbol catFolder()  { return "pipes";}
         static Symbol idSymbol()   { return "pipe"; }
       };
-    template<> struct StructTraits<proc::StreamType>
+    template<> struct StructTraits<steam::StreamType>
       {
         static Symbol namePrefix() { return "type"; }
         static Symbol catFolder()  { return "stream-types";}

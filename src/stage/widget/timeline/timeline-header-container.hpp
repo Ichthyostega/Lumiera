@@ -56,7 +56,7 @@ namespace stage {
     : public Gtk::Container
     {
     public:
-      TimelineHeaderContainer(gui::widget::TimelineWidget &timeline_widget);
+      TimelineHeaderContainer(stage::widget::TimelineWidget &timeline_widget);
       
       /**
        * Attaches the header all the header widgets of root
@@ -216,7 +216,7 @@ namespace stage {
       /**
        * The owner TimelineWidget of which this class is a helper
        */
-      gui::widget::TimelineWidget &timelineWidget;
+      stage::widget::TimelineWidget &timelineWidget;
       
       /**
        * The widget's window object. 
@@ -267,7 +267,7 @@ namespace stage {
        */
       static const int ScrollSlideEventInterval;
       
-      friend class gui::widget::TimelineWidget;
+      friend class stage::widget::TimelineWidget;
       friend class timeline::Track;
     };
   

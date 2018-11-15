@@ -25,7 +25,7 @@
  ** Implementation of a fake UI backbone for testing.
  ** This compilation unit provides the actual setup for running a faked
  ** user interface from unit tests. Test code is assumed to access those
- ** features through the [front-end](\ref gui::test::TestNexus), while the
+ ** features through the [front-end](\ref stage::test::TestNexus), while the
  ** actual implementation instances are placed [as singletons](\ref depend.hpp)
  ** 
  ** This test setup will mostly treat messages similar to the [real UI-Bus hub](\ref nexus.hpp),
@@ -73,12 +73,12 @@ using lib::diff::DataCap;
 using lib::diff::MutationMessage;
 using lib::idi::instanceTypeID;
 using lib::test::EventLog;
-using gui::ctrl::BusTerm;
-using gui::ctrl::StateManager;
-using gui::ctrl::StateRecorder;
-using proc::control::Command;
-using proc::control::CommandImpl;
-using proc::control::HandlingPattern;
+using stage::ctrl::BusTerm;
+using stage::ctrl::StateManager;
+using stage::ctrl::StateRecorder;
+using steam::control::Command;
+using steam::control::CommandImpl;
+using steam::control::HandlingPattern;
 using util::_Fmt;
 
 namespace stage {
@@ -87,14 +87,14 @@ namespace test{
   
   namespace { // internal details
     
-    using BusHub = gui::ctrl::Nexus;
+    using BusHub = stage::ctrl::Nexus;
     
     /**
      * @internal fake interface backbone and unit test rig
      * for simulated command and presentation state handling.
      * This implementation embodies the routing functionality
-     * as found in the [real nexus](\ref gui::ctrl::Nexus), and additionally
-     * also implements the handler functions of the [gui::ctrl::CoreService].
+     * as found in the [real nexus](\ref stage::ctrl::Nexus), and additionally
+     * also implements the handler functions of the [stage::ctrl::CoreService].
      * The latter allows us to intercept command invocations and presentation
      * state messages
      */

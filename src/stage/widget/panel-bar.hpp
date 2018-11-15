@@ -113,5 +113,5 @@ namespace stage {
   
   
   
-}}// gui::widget
+}}// stage::widget
 #endif /*STAGE_WIDGET_PANEL_BAR_H*/

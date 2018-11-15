@@ -22,7 +22,7 @@
 
 
 /** @file gen-node-location-query.hpp
- ** Implementation of the gui::interact::LocationQuery interface to work on a GenNode tree.
+ ** Implementation of the stage::interact::LocationQuery interface to work on a GenNode tree.
  ** The interface allows to pose queries against a concrete structure to verify and reshape some
  ** [UI Coordinate specification](\ref UICoord); basically it offers methods to navigate within a
  ** tree-like structure. While in the actual implementation, such a query interface would be backed

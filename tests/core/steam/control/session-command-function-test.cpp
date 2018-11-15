@@ -100,7 +100,7 @@ namespace test    {
   
   using boost::lexical_cast;
   using lib::test::randTime;
-  using proc::control::SessionCommand;
+  using steam::control::SessionCommand;
   using lib::diff::GenNode;
   using lib::diff::Rec;
   using lib::time::Time;
@@ -174,12 +174,12 @@ namespace test    {
    *       - operate lifecycle of the supporting components,
    *         similar to activating the »session subsystem«
    *       - generate command messages similar to what is received from the UI-Bus
-   *       - us the handler mechanism from gui::ctrl::CoreService to talk to the facade
+   *       - us the handler mechanism from stage::ctrl::CoreService to talk to the facade
    *       - have a specially rigged command function to observe invocation
    *       - wait for the session loop thread to dispatch this command
    *       - verify that commands are really executed single-threaded
    * 
-   * @see proc::SessionSubsystem
+   * @see steam::SessionSubsystem
    * @see ProcDispatcher
    * @see CommandQueue_test
    * @see AbstractTangible_test::invokeCommand()
@@ -284,7 +284,7 @@ namespace test    {
       /** @test invoke a command in the same way as CoreService does
        *        when handling command messages from the UI-Bus
        *        - build a command message, similar to what the
-       *          [generic UI element](\ref gui::model::Tangible) does
+       *          [generic UI element](\ref stage::model::Tangible) does
        *        - use the contents of this message at the SessionCommand
        *          facade, similar to what CoreService does
        */
@@ -323,7 +323,7 @@ namespace test    {
           
           // we'll run several instances of the following thread....
           class InvocationProducer
-            : backend::ThreadJoinable
+            : vault::ThreadJoinable
             {
               FamilyMember<InvocationProducer> id_;
               vector<string> cmdIDs_;

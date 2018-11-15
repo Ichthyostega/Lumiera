@@ -122,10 +122,10 @@ namespace std {
   
   /////////////////////////////////////////////////////////////////////////TICKET #722 : should provide a generic bridge to use hash_value
   template<>
-  struct hash<proc::mobject::PlacementMO::ID>
+  struct hash<steam::mobject::PlacementMO::ID>
   {
     size_t
-    operator() (proc::mobject::PlacementMO::ID const& val)  const noexcept
+    operator() (steam::mobject::PlacementMO::ID const& val)  const noexcept
       {
         return hash_value(val);
       }

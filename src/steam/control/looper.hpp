@@ -63,7 +63,7 @@ namespace control {
   using lib::time::TimeVar;
   using lib::time::Offset;
   using lib::time::Duration;
-  using backend::RealClock;
+  using vault::RealClock;
   
   namespace {
     /**

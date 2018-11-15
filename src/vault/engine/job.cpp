@@ -146,7 +146,7 @@ namespace engine {
 }} // namespace vault::engine
 
 namespace {
-  using backend::engine::Job;
+  using vault::engine::Job;
     
   inline Job& 
   forwardInvocation (lumiera_jobDefinition& jobDef)

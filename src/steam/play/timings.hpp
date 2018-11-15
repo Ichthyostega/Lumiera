@@ -132,7 +132,7 @@ namespace play {
        * @note since the Timings don't contain any information relating the
        *       nominal time scale to wall clock time, this result is just
        *       a relative offset, but expressed in real time scale values
-       * @see proc::engine::TimeAnchor for an absolutely anchored conversion
+       * @see steam::engine::TimeAnchor for an absolutely anchored conversion
        */
       Offset getRealOffset (FrameCnt frameOffset)  const;
       

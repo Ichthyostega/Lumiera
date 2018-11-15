@@ -46,8 +46,8 @@
  **          for sake of compilation times and (debug) executable size.
  ** 
  ** @see gtk-lumiera.cpp the plugin to pull up this GUI
- ** @see gui::GuiFacade access point for starting the GUI
- ** @see gui::GuiNotification interface for communication with the gui from the lower layers
+ ** @see stage::GuiFacade access point for starting the GUI
+ ** @see stage::GuiNotification interface for communication with the gui from the lower layers
  ** @see lumiera::Config
  ** @see lumiera::BasicSetup definition of the acceptable configuration values
  ** @see lumiera::AppState general Lumiera application main

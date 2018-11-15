@@ -43,7 +43,7 @@ using namespace stage::widget;     /////////////////////////////////////////////
 using namespace stage::widget::timeline;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 using std::shared_ptr;
-using gui::draw::CairoUtil;
+using stage::draw::CairoUtil;
 using lib::time::Time;
 using lib::time::TimeVar;
 

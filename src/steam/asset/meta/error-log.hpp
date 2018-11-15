@@ -28,11 +28,11 @@
  **       in order to mark the corresponding receiver widget in the UI. The idea is eventually
  **       to persist relevant messages, filtering them out as time passes. Such an incident log
  **       would be part of the session model, thus replicating its contents into the corresponding
- **       gui::widget::ErrorLogView -- which displays notifications without blocking the UI.
+ **       stage::widget::ErrorLogView -- which displays notifications without blocking the UI.
  ** 
  ** @see MetaFactory creating concrete asset::Meta instances
- ** @see gui::ctrl::NotificationHub corresponding UI controller
- ** @see gui::interact::Wizard information service in the UI
+ ** @see stage::ctrl::NotificationHub corresponding UI controller
+ ** @see stage::interact::Wizard information service in the UI
  **
  */
 

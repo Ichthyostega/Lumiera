@@ -501,7 +501,7 @@ namespace test{
        *          where the "Explorer" function works together with a specific implementation
        *          and exploits knowledge about specifically tailored additional properties of
        *          the input sequence elements, in order to yield the desired overall effect.
-       *          Actually this is what we use in the proc::engine::Dispatcher to generate
+       *          Actually this is what we use in the steam::engine::Dispatcher to generate
        *          a series of frame render jobs, including all prerequisite jobs
        */
       void

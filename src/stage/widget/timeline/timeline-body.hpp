@@ -68,7 +68,7 @@ public:
    * @param timeline_widget A reference to the owner widget of this
    * ruler.
    */
-  TimelineBody(gui::widget::TimelineWidget &timeline_widget);
+  TimelineBody(stage::widget::TimelineWidget &timeline_widget);
   
   virtual ~TimelineBody();
   
@@ -203,7 +203,7 @@ private:
   float selectionAlpha;
   Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   
-  gui::widget::TimelineWidget &timelineWidget;
+  stage::widget::TimelineWidget &timelineWidget;
   shared_ptr<TimelineState> timelineState;
   
 

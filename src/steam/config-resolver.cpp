@@ -92,16 +92,16 @@ namespace steam {
 namespace lumiera{
 namespace query  {
   
-  using proc::asset::Pipe;
-  using proc::asset::PPipe;
-  using proc::asset::ProcPatt;
-  using proc::asset::PProcPatt;
-  using proc::asset::Timeline;
-  using proc::asset::PTimeline;
-  using proc::asset::Sequence;
-  using proc::asset::PSequence;
+  using steam::asset::Pipe;
+  using steam::asset::PPipe;
+  using steam::asset::ProcPatt;
+  using steam::asset::PProcPatt;
+  using steam::asset::Timeline;
+  using steam::asset::PTimeline;
+  using steam::asset::Sequence;
+  using steam::asset::PSequence;
   
-  using proc::mobject::session::Fork;
+  using steam::mobject::session::Fork;
   using PFork = lib::P<Fork>;
   
   template PPipe       DefsManager::operator() (Query<Pipe>     const&);

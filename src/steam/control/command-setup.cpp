@@ -107,7 +107,7 @@ namespace control {
    *          The assumption is that this _definition closure_ will care to define the command,
    *          state capturing and undo operations for the command definition in question. Thus,
    *          the result of invoking this closure will be to store a complete command prototype
-   *          into the proc::control::CommandRegistry.
+   *          into the steam::control::CommandRegistry.
    * @note this operation works by side-effect; the given argument is fed into a hidden static
    *          queue, but not stored within the object instance.
    * @warning invoking this assignment _several times on the same CommandSetup object_ will likely

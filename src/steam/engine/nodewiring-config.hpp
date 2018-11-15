@@ -40,7 +40,7 @@
  ** ProcNode subclasses), but parts of this configuration assembly is done already at
  ** compile time, allowing for additional checks by typing and for possible optimisation.
  ** 
- ** @see proc::engine::config::Strategy
+ ** @see steam::engine::config::Strategy
  ** @see nodewiring.hpp
  ** @see configflags.hpp
  ** @see config-flags-test.cpp

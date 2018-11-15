@@ -30,8 +30,8 @@
  ** dummy playback service.
  ** 
  ** @todo obsolete since 2010, can be removed once we have a real player in the UI
- ** @see gui::controller::PlaybackController
- ** @see proc::play::DummyPlayerService
+ ** @see stage::controller::PlaybackController
+ ** @see steam::play::DummyPlayerService
  **  
  */
 

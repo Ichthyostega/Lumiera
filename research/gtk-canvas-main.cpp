@@ -25,7 +25,7 @@
  ** This demo application was extracted in 10/2018 to preserve
  ** [exploration experiments](\ref demo::CanvasDemoPanel), carried
  ** out in 2016 to decide upon the technology to support Lumiera's
- ** gui::timeline::TimelineWidget.
+ ** stage::timeline::TimelineWidget.
  */
 
 

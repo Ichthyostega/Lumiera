@@ -130,7 +130,7 @@ namespace timeline {
    *   as a nested scope.
    * For both cases we prepare a way to build a _nested mutator_, and in both cases this
    * is simply achieved by relying on the common interface of all those "elements", which
-   * is gui::model::Tangible and just happens to require each such "tangible" to offer
+   * is stage::model::Tangible and just happens to require each such "tangible" to offer
    * a mutation building method, just like this one here. Simple recursive programming.
    * @see DiffComplexApplication_test
    */

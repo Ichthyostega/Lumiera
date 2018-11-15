@@ -23,8 +23,8 @@
 
 
 /** @file session-command-interface-proxy.cpp
- ** Interface-Proxy for the proc::control::SessionCommand facade.
- ** The purpose is to define a proxy implementation of proc::control::SessionCommand, in order to
+ ** Interface-Proxy for the steam::control::SessionCommand facade.
+ ** The purpose is to define a proxy implementation of steam::control::SessionCommand, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_SessionCommand"
  ** 
  ** @see session-command-facade.hpp
@@ -48,7 +48,7 @@ namespace facade {
   /* ==================== SessionCommand =================================== */
   
   using Interface = LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0);
-  using Facade    = proc::control::SessionCommand;
+  using Facade    = steam::control::SessionCommand;
   
   using IHandle   = InstanceHandle<Interface, Facade>;
   

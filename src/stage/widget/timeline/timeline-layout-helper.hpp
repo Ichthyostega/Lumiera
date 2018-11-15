@@ -58,7 +58,7 @@ namespace stage {
    * A helper class for the TimelineWidget. TimelineLayoutHelper
    * is a class which calculates the layout of tracks in the timeline
    * track tree.
-   * @see gui::widget::TimelineWidget
+   * @see stage::widget::TimelineWidget
    */
   class TimelineLayoutHelper
     : util::NonCopyable

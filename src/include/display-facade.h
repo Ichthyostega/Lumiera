@@ -34,7 +34,7 @@
  **  registers with the OutputManager in the core.
  ** 
  ** @see [corresponding implementation](\ref display-service.hpp)
- ** @see gui::GuiFacade
+ ** @see stage::GuiFacade
  ** @see dummy-player-facade.h
  ** 
  */
@@ -80,7 +80,7 @@ namespace lumiera {
    *       considerably if we get at devising the real player.
    * 
    * @see dummy-player-facade.hpp
-   * @see gui::PlaybackController 
+   * @see stage::PlaybackController 
    * 
    */
   class Display

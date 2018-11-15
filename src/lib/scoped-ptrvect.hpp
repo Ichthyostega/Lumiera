@@ -39,7 +39,7 @@
  ** 
  ** @see scoped-ptrvect-test.cpp
  ** @see scoped-holder.hpp
- ** @see gui::DisplayService usage example
+ ** @see stage::DisplayService usage example
  */
 
 

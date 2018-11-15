@@ -55,7 +55,7 @@ using lumiera::Symbol;
 using lumiera::query::QueryHandler;
 using lib::query::removeTerm;
 using lib::query::extractID;
-using proc::ConfigResolver;
+using steam::ConfigResolver;
 using lib::HashVal;
 using util::uNum;
 

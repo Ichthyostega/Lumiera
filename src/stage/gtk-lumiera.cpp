@@ -27,7 +27,7 @@
  ** Start up the Lumiera GTK GUI when loading it as dynamic module.
  ** This plugin is linked together with the Lumiera GUI code; when loaded as
  ** Lumiera plugin, it allows to kick off the GTK main event loop and thus to bring
- ** up the GUI. The loading and shutdown process is carried out by gui::GuiFacade and
+ ** up the GUI. The loading and shutdown process is carried out by stage::GuiFacade and
  ** controlled by lumiera::AppState, which in turn is activated by Lumiera main().
  ** 
  ** After successfully loading this module, a call to GuiFacade::launchUI is expected to
@@ -38,10 +38,10 @@
  ** the main GTK event loop. Before entering this loop, the CoreService of the GUI and
  ** especially the [UI-Bus](\ref ui-bus.hpp) is started see \ref GtkLumiera::run().
  ** This entails also to open the primary "business" interface(s) of the GUI
- ** (currently as of 1/16 this is the interface gui::GuiNotification.)
+ ** (currently as of 1/16 this is the interface stage::GuiNotification.)
  ** 
  ** @see lumiera::AppState
- ** @see gui::GuiFacade
+ ** @see stage::GuiFacade
  ** @see guifacade.cpp
  ** @see ui-manager.hpp
  */
@@ -65,10 +65,10 @@ extern "C" {
 
 
 
-using backend::Thread;
+using vault::Thread;
 using lumiera::Subsys;
 using lumiera::error::LUMIERA_ERROR_STATE;
-using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
+using stage::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 
 using std::string;
 
@@ -246,7 +246,7 @@ extern "C" { /* ================== define a lumieraorg_Gui instance ============
                                           , LUMIERA_INTERFACE_INLINE (launchUI,
                                                                       bool, (void* termSig),
                                                                         {
-                                                                          return gui::launchUI (*reinterpret_cast<Subsys::SigTerm *> (termSig));
+                                                                          return stage::launchUI (*reinterpret_cast<Subsys::SigTerm *> (termSig));
                                                                         }
                                                                      )
                                           )

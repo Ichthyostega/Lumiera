@@ -40,7 +40,7 @@
  ** 
  ** @see PathArray_test
  ** @see UICoord_test
- ** @see gui::interact::UICoord
+ ** @see stage::interact::UICoord
  ** @see view-spec-dsl.hpp
  */
 

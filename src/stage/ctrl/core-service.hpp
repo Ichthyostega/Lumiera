@@ -35,7 +35,7 @@
  ** CoreService is a PImpl to manage all the technical parts of actual
  ** service provision. When it goes down, all services are decommissioned.
  ** A part of these lifecycle technicalities is to manage the setup of the
- ** [UI-Bus main hub](\ref gui::ctrl::Nexus), which requires some trickery,
+ ** [UI-Bus main hub](\ref stage::ctrl::Nexus), which requires some trickery,
  ** since both CoreService and Nexus are mutually interdependent from an
  ** operational perspective, since they exchange messages in both directions.
  ** 
@@ -98,7 +98,7 @@
 namespace stage {
 namespace ctrl{
   
-  using proc::control::SessionCommand;
+  using steam::control::SessionCommand;
   using lib::diff::Rec;
   
   
@@ -109,7 +109,7 @@ namespace ctrl{
    * - commands need to be sent down to Steam-Layer
    * - presentation state messages need to be recorded and acted upon.
    * As an object, CoreService encases the heart of the UI-Bus, the
-   * \ref Nexus, and acts as "PImpl" for the gui::UiBus front-end.
+   * \ref Nexus, and acts as "PImpl" for the stage::UiBus front-end.
    */
   class CoreService
     : public BusTerm

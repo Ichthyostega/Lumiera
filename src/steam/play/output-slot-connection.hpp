@@ -60,8 +60,8 @@
 namespace steam {
 namespace play {
 
-  using proc::engine::BuffHandle;
-//using proc::engine::BufferProvider;
+  using steam::engine::BuffHandle;
+//using steam::engine::BufferProvider;
 //using lib::time::Time;
 //using std::string;
   using lib::iter_stl::eachElm;

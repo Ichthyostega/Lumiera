@@ -29,7 +29,7 @@
  ** @todo 1/2012 until the real render engine is usable, this mock implementation
  **       will stand-in, allowing us to develop the other parts of the play/render subsystem.
  ** 
- ** @see proc::engine::EngineService "the real thing"
+ ** @see steam::engine::EngineService "the real thing"
  ** @see render-configurator.cpp (activating the mock or the real engine)
  ** @see DummyPlayConnection       
  ** @see EngineInterface_test
@@ -64,7 +64,7 @@ namespace engine{
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
   using mobject::ModelPort;
-  using proc::play::Timings;
+  using steam::play::Timings;
   
   typedef EngineService::Quality Quality;
   

@@ -30,7 +30,7 @@ UI-Model
 In short: _there is no dedicated UI-Model._ Stateful working data goes directly
 into the widgets. However, some widgets or controllers are special, insofar they
 correspond to and reflect some entities within the _Session model._ These special
-entities must be implemented as subclasses of `gui::model::Tangible`. These are
+entities must be implemented as subclasses of `stage::model::Tangible`. These are
 always connected to the UI-Bus, and they are populated and mutated by receiving
 diff messages pushed up from the Steam-Layer.
 

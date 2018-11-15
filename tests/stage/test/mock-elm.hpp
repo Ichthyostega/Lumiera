@@ -24,16 +24,16 @@
 /** @file mock-elm.hpp
  ** A generic interface element instrumented for unit testing.
  ** All relevant building blocks within the Lumiera GTK UI are based on
- ** gui::model::Tangible, meaning that any generic effect of interface interactions
+ ** stage::model::Tangible, meaning that any generic effect of interface interactions
  ** can be expressed in terms of this interface contract. As far as the UI participates
  ** in interactions with the lower layers, like e.g. command invocation, structure updates
  ** and state notifications, these processes can be modelled and verified with the help
- ** of a specially prepared Tangible instance. This gui::test::MockElm provides the
+ ** of a specially prepared Tangible instance. This stage::test::MockElm provides the
  ** necessary instrumentation to observe what has been invoked and received.
  ** 
  ** Since the purpose of a mock interface element is to test interactions and responses
  ** targeted at a generic interface element, the MockElm incorporates an implementation
- ** independent from the real gui::model::Widget or gui::model::Controller. This
+ ** independent from the real stage::model::Widget or stage::model::Controller. This
  ** mock implementation is basically NOP, while logging any invocation. Matters get
  ** a bit fuzzy, when it comes to the distinction between _widget_ and _controller_.
  ** Yet we should note that the purpose of this setup is to cover the connectivity
@@ -48,7 +48,7 @@
  ** built with a distinct core, the UI should not contain anything not tangible enough
  ** as just to be verified by watching it in action. The push of a button should just
  ** invoke an action, and the action itself should be self contained enough to be
- ** tested in isolation. The UI-Bus and the [generic widget base](\ref gui::model::Tangible)
+ ** tested in isolation. The UI-Bus and the [generic widget base](\ref stage::model::Tangible)
  ** was built to serve as a foundation to achieve that goal.
  ** 
  ** @see abstract-tangible-test.cpp
@@ -108,9 +108,9 @@ namespace test{
    * @see abstract-tangible-test.cpp
    */
   class MockElm
-    : public gui::model::Tangible
+    : public stage::model::Tangible
     {
-      using _Par = gui::model::Tangible;
+      using _Par = stage::model::Tangible;
       
       EventLog log_{this->identify()};
       
@@ -303,7 +303,7 @@ namespace test{
       
       explicit
       MockElm(ID identity, ctrl::BusTerm& nexus  =Nexus::testUI())
-        : gui::model::Tangible(identity, nexus)
+        : stage::model::Tangible(identity, nexus)
         {
           log_.call (this->identify(), "ctor", identity, string(nexus));
           log_.create (getID().getSym());

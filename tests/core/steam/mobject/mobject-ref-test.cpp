@@ -83,8 +83,8 @@ namespace test    {
   using session::SessionServiceMockIndex;
   using session::PPIdx;
   
-  using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
-                                ::Local<backend::test::MediaAccessMock>;
+  using MediaAccessMock = lib::DependInject<vault::MediaAccessFacade>
+                                ::Local<vault::test::MediaAccessMock>;
   
   
   

@@ -85,7 +85,7 @@ namespace engine {
 }} // namespace vault::engine
 
 namespace {
-  using backend::engine::EngineConfig;
+  using vault::engine::EngineConfig;
   
   // any C adapter functions go here...
   

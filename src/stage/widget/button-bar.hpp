@@ -60,5 +60,5 @@ namespace widget {
     };
   
   
-}}// gui::widget
+}}// stage::widget
 #endif /*STAGE_WIDGET_BUTTON_BAR_H*/

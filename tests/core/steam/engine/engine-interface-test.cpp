@@ -50,8 +50,8 @@ namespace test  {
   using asset::Pipe;
   using asset::PPipe;
   using mobject::ModelPort;
-  using proc::play::OutputSlot;
-  using proc::play::DiagnosticOutputSlot;
+  using steam::play::OutputSlot;
+  using steam::play::DiagnosticOutputSlot;
   using lib::time::FrameRate;
   
   typedef asset::ID<Pipe> PID;

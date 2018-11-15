@@ -31,7 +31,7 @@
 #include "vault/thread-wrapper.hpp"
 
 using test::Test;
-using backend::ThreadJoinable;
+using vault::ThreadJoinable;
 
 namespace lib {
 namespace test {

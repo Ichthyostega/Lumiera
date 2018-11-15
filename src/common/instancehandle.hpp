@@ -29,7 +29,7 @@
  ** out of scope. Additionally, access via an (existing) interface proxy
  ** may be enabled and disabled alongside with the loading and unloading.
  **
- ** @see gui::GuiFacade usage example
+ ** @see stage::GuiFacade usage example
  ** @see interface.h
  ** @see interfaceproxy.hpp (more explanations)
  ** @see session-command-interface-proxy.cpp (Proxy implementation example)

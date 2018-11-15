@@ -36,7 +36,7 @@
  ** to make these dependencies explicit and opaque for the scheduler. The actual
  ** job invocation is forwarded to a virtual function JobClosure#invokeJobOperation(JobParameter),
  ** which is defined "somewhere" in a subclass and remains opaque for the scheduler;
- ** the \link proc::engine::Dispatcher frame dispatcher \endlink takes care to configure
+ ** the \link steam::engine::Dispatcher frame dispatcher \endlink takes care to configure
  ** each job descriptor with the correct pointer to a concrete closure prior to handing
  ** the job over to the scheduler.
  ** 

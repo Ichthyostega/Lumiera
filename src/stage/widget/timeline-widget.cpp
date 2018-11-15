@@ -24,7 +24,7 @@
 /** @file widget/timeline-widget.cpp
  ** 
  ** @deprecated as of 11/2016, a complete rework of the timeline display is underway
- ** @see gui::timeline::TimelineWidget new timeline display
+ ** @see stage::timeline::TimelineWidget new timeline display
  ** 
  */
 
@@ -556,4 +556,4 @@ namespace widget {
   }
   
   
-}}// gui::widget
+}}// stage::widget

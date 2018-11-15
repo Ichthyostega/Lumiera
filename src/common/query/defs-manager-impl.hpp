@@ -32,7 +32,7 @@
  ** core MObject types, alongside with the definition of the generic config-query-resolver.
  ** 
  ** @see config-resolver.cpp definition of the explicit specialisations for the session 
- ** @see proc::ConfigResolver
+ ** @see steam::ConfigResolver
  **
  */
 
@@ -51,7 +51,7 @@
 
 using util::_Fmt;
 
-using proc::ConfigResolver;
+using steam::ConfigResolver;
 using lumiera::query::QueryHandler;                    ///////TODO preliminary interface defined in config-rules.hpp
 using lumiera::query::LERR_(CAPABILITY_QUERY);
 

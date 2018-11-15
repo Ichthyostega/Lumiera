@@ -50,7 +50,7 @@
  **    by providing an explicit specialisation of lib::NullValue for this type.
  ** 
  ** @see ReplaceableIterm_test
- ** @see proc::control::MementoTie
+ ** @see steam::control::MementoTie
  ** 
  */
 

@@ -46,7 +46,7 @@ namespace test    {
   using PM = shared_ptr<asset::Media>;
   using MAF = backend_interface::MediaAccessFacade;
   
-  using MediaAccessMock = lib::DependInject<MAF>::Local<backend::test::MediaAccessMock>;
+  using MediaAccessMock = lib::DependInject<MAF>::Local<vault::test::MediaAccessMock>;
   
   
   

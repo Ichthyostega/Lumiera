@@ -76,8 +76,8 @@ extern "C" {
 using lib::diff::GenNode;
 using lib::diff::TreeMutator;
 using lib::diff::MutationMessage;
-using gui::ctrl::UiDispatcher;
-using gui::ctrl::BusTerm;
+using stage::ctrl::UiDispatcher;
+using stage::ctrl::BusTerm;
 using util::cStr;
 using util::_Fmt;
 

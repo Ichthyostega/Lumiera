@@ -35,7 +35,7 @@
  ** @todo as of 11/2018 the basic design seems adequate, but the actual solution looks fishy.
  **       Even more so, since we now use subclasses of BareEntryID
  **       - as identity tag within lib::diff::GenNode
- **       - as identity tag for all [tangible UI elements](\ref gui::model::Tangible)
+ **       - as identity tag for all [tangible UI elements](\ref stage::model::Tangible)
  **       There are various quirks and hacks to make all of this happen, and especially
  **       the hashed-in type information feels gratuitous at places, when all we actually
  **       need is a distinct identity plus a human readable symbol.

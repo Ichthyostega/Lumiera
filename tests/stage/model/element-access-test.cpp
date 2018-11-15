@@ -57,10 +57,10 @@ namespace test {
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 //  using lib::test::showSizeof;
   using interact::UICoord;
-  using gui::test::TestElementAccess;
-  using gui::test::DummyWidget;
-  using gui::test::DummyView;
-  using gui::test::DummyTab;
+  using stage::test::TestElementAccess;
+  using stage::test::DummyWidget;
+  using stage::test::DummyView;
+  using stage::test::DummyTab;
   
   using MockAccess = lib::DependInject<ElementAccess>::Local<TestElementAccess>;
   using AccessAPI = lib::Depend<ElementAccess>;

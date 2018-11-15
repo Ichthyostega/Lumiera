@@ -89,10 +89,10 @@ namespace timeline {
   }
   
   
-  gui::widget::TimelineWidget&
+  stage::widget::TimelineWidget&
   Tool::get_timeline_widget()  const
   {
-    gui::widget::TimelineWidget &timeline_widget =
+    stage::widget::TimelineWidget &timeline_widget =
       timelineBody.timelineWidget;
     return timeline_widget;
   }

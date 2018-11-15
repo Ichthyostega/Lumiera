@@ -27,7 +27,7 @@
  ** running an asynchronous communication protocol.
  ** - the [UI-Bus](\ref ui-bus.hpp) allows for some specific kinds of messages to be
  **   sent either "upstream" (towards the CoreService) or "downstream" to individual
- **   [UI-Elements](\ref gui::model::Tangible) known by ID.
+ **   [UI-Elements](\ref stage::model::Tangible) known by ID.
  ** - these ["tangible interface elements"](\ref tangible.hpp) themselves define a
  **   basic set of actions and "state mark" messages, known as the "element protocol"
  ** - and changes to the structure of tangible elements exposed through the UI are

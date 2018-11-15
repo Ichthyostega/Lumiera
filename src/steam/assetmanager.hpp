@@ -140,7 +140,7 @@ namespace asset {
 
 namespace proc_interface
   {
-  using proc::asset::AssetManager;
+  using steam::asset::AssetManager;
 }
 
 #endif

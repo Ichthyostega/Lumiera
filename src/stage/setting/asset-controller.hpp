@@ -40,8 +40,8 @@
  ** 
  ** @todo WIP 2/2017 early draft / a new UI backbone
  ** 
- ** @see proc::mobject::Session
- ** @see proc::asset::Asset
+ ** @see steam::mobject::Session
+ ** @see steam::asset::Asset
  ** @see timeline-controller.hpp
  ** @see interaction-director.hpp
  ** @see ui-bus.hpp

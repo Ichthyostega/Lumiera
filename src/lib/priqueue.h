@@ -35,7 +35,7 @@
  **       any but the topmost element. The idea is to let expired elements sink to the top
  **       and just detect and remove them on next access.
  ** 
- ** @see backend::engine::SchedulerFrontend
+ ** @see vault::engine::SchedulerFrontend
  ** 
  */
 

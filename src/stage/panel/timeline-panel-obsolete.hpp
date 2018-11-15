@@ -114,7 +114,7 @@ namespace model{
       
       bool is_playing();
       
-      void setTool (gui::widget::timeline::ToolType tool);
+      void setTool (stage::widget::timeline::ToolType tool);
       
       void showTime (Time);
         
@@ -188,13 +188,13 @@ namespace model{
       
       MiniButton zoomIn;
       MiniButton zoomOut;
-      gui::widget::timeline::TimelineZoomScale zoomScale;
+      stage::widget::timeline::TimelineZoomScale zoomScale;
       
       Gtk::SeparatorToolItem separator2;
       
       // Internals
       bool updatingToolbar;
-      gui::widget::timeline::ToolType currentTool;
+      stage::widget::timeline::ToolType currentTool;
       
     private:
       // TEST CODE

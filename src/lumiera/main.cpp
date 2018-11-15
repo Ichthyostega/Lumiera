@@ -44,13 +44,13 @@ using lumiera::Subsys;
 using lumiera::AppState;
 
 namespace {
-  Subsys& engine  = backend::EngineFacade::getDescriptor();
-  Subsys& netNode = backend::NetNodeFacade::getDescriptor();
-  Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
+  Subsys& engine  = vault::EngineFacade::getDescriptor();
+  Subsys& netNode = vault::NetNodeFacade::getDescriptor();
+  Subsys& script  = vault::ScriptRunnerFacade::getDescriptor();
   Subsys& player  = lumiera::DummyPlayer::getDescriptor();        ///////TODO: just a dummy, until we're able to render
-  Subsys& session = proc::Facade::getSessionDescriptor();
-  Subsys& playOut = proc::Facade::getPlayOutDescriptor();
-  Subsys& lumigui = gui::GuiFacade::getDescriptor();
+  Subsys& session = steam::Facade::getSessionDescriptor();
+  Subsys& playOut = steam::Facade::getPlayOutDescriptor();
+  Subsys& lumigui = stage::GuiFacade::getDescriptor();
 }
 
 

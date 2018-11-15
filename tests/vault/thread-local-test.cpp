@@ -33,7 +33,7 @@
 #include <cstdlib>
 
 using test::Test;
-using backend::ThreadJoinable;
+using vault::ThreadJoinable;
 using std::rand;
 
 
@@ -91,7 +91,7 @@ namespace test{
    *       Create some threads, each referring to another piece of data
    *       through the "same" wrapper instance.
    * 
-   * @see backend::Thread
+   * @see vault::Thread
    * @see lib::ThreadLocal
    */
   class ThreadLocal_test : public Test

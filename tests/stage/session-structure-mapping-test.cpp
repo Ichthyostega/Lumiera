@@ -85,7 +85,7 @@ namespace test {
    *         corrupted by concurrent session mutation operations.
    *       
    * @see SessionElementQuery_test
-   * @see gui::model::SessionFacade
+   * @see stage::model::SessionFacade
    */
   class SessionStructureMapping_test : public Test
     {
@@ -93,7 +93,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-          gui::model::Diagnostics lock(TEST_SESSION_1);
+          stage::model::Diagnostics lock(TEST_SESSION_1);
           retrieveSessionStructure();
         }
       

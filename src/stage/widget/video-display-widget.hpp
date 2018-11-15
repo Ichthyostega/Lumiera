@@ -69,5 +69,5 @@ namespace widget {
     };
   
   
-}}// gui::widget
+}}// stage::widget
 #endif /*STAGE_WIDGET_VIDEO_DISPLAY_WIDGET_H*/

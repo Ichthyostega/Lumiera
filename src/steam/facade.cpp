@@ -33,7 +33,7 @@
  ** large scale building blocks of the whole application to be started and terminated.
  ** Typically this entails to create a dedicated thread to manage the top level concerns
  ** for the given subsystem, and to create registration and services for public access:
- ** - to operate on the session, use the proc::control::SessionCommand facade
+ ** - to operate on the session, use the steam::control::SessionCommand facade
  ** - playback and render operations can be operated by the lumiera::Play facade
  ** 
  ** @see ProcDispatcher
@@ -58,7 +58,7 @@ namespace steam {
   using std::unique_ptr;
   using lumiera::Subsys;
   using lumiera::Option;
-  using proc::control::ProcDispatcher;
+  using steam::control::ProcDispatcher;
   
   
   class SessionSubsystem

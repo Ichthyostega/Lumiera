@@ -24,7 +24,7 @@
 /** @file style-scheme.hpp
  ** Definition of access keys for uniform UI styling.
  ** 
- ** @see gui::workspace::UiStyle
+ ** @see stage::workspace::UiStyle
  ** 
  */
 

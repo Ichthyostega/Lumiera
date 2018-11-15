@@ -53,7 +53,7 @@ namespace timeline {
   
   // ===== Implementation ===== //
   
-  TimelineHeaderContainer::TimelineHeaderContainer(gui::widget::TimelineWidget &timeline_widget)
+  TimelineHeaderContainer::TimelineHeaderContainer(stage::widget::TimelineWidget &timeline_widget)
     : Glib::ObjectBase("TimelineHeaderContainer")
     , timelineWidget(timeline_widget)
     {

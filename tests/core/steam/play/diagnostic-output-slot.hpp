@@ -62,12 +62,12 @@ namespace play {
   using util::unConst;
   using util::contains;
   using lib::time::FrameRate;
-  using proc::asset::meta::PGrid;
-  using proc::asset::meta::TimeGrid;
-  using proc::engine::BufferDescriptor;
-  using proc::engine::test::TestFrame;
-  using proc::engine::TrackingHeapBlockProvider;
-  namespace diagn = proc::engine::diagn;
+  using steam::asset::meta::PGrid;
+  using steam::asset::meta::TimeGrid;
+  using steam::engine::BufferDescriptor;
+  using steam::engine::test::TestFrame;
+  using steam::engine::TrackingHeapBlockProvider;
+  namespace diagn = steam::engine::diagn;
 
 //using std::vector;
   using std::shared_ptr;

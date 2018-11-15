@@ -23,7 +23,7 @@
 
 /** @file bus-term.hpp
  ** Attachment point to the UI-Bus.
- ** Every gui::model::Tangible holds a BusTerm, which is linked
+ ** Every stage::model::Tangible holds a BusTerm, which is linked
  ** to the Tangible's identity, and serves to relay interface actions
  ** towards the Steam-Layer, to remember state changes and to broadcast
  ** notifications. Moreover, the BusTerm is the service point
@@ -107,7 +107,7 @@ namespace ctrl{
     {
     protected:
       using EntryID = lib::idi::BareEntryID;
-      using Tangible = gui::model::Tangible;
+      using Tangible = stage::model::Tangible;
       
       EntryID endpointID_;
       BusTerm& theBus_;

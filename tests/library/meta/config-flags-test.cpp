@@ -57,7 +57,7 @@ namespace lib  {
 namespace meta {
 namespace test {
   
-  using proc::engine::config::Instantiation;
+  using steam::engine::config::Instantiation;
   
   namespace { // internal definitions
   
@@ -292,7 +292,7 @@ cout << "__________________________\n" \
           typedef Filter<ListAllConfigs::List,Instantiation<Maybe>::Test> Possible_Configs;
           DISPLAY (Possible_Configs);
           
-          using proc::engine::config::ConfigSelector;
+          using steam::engine::config::ConfigSelector;
           typedef ConfigSelector< TestFactory  // Factory template
                                 , uint(void)  //  Factory function type
                                 , long       //   common ctor argument

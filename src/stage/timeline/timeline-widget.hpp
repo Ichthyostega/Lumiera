@@ -36,7 +36,7 @@
  ** # Lifecycle
  ** The assumption is that any element creation and deletion is triggered through messages over
  ** the [UI-Bus](\ref ui-bus.hpp). So there will be a _parent element,_ corresponding to the
- ** [model root](\ref proc::mobject::session::Root), and this parent, in response to some
+ ** [model root](\ref steam::mobject::session::Root), and this parent, in response to some
  ** mutation message, will create a TimelineWidget, add it into the appropriate GTK display setup
  ** and manage it as child element; the [construction parameters](\ref TimelineWidget::TimelineWidget)
  ** ensure it gets connected to the bus as well. Incidentally, this assumption also implies that
@@ -128,7 +128,7 @@ namespace timeline {
        *          the one that created it, typically also in response to a message.
        *          Non the less it is possible just to delete a TimelineWidget, since
        *          it is a Gtk::Widget, and the controller is also `sigc::trackable`
-       *          and additionally, as a gui::model::Tangible, it will deregister
+       *          and additionally, as a stage::model::Tangible, it will deregister
        *          automatically from the UI-Bus. After that, any further messages
        *          towards this element will be dropped silently.
        */

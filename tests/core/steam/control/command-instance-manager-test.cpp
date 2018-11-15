@@ -110,7 +110,7 @@ namespace test {
    *       actual arguments and finally handed over to the ProcDispatcher
    *       for invocation.
    * 
-   * @see proc::control::CommandInstanceManager
+   * @see steam::control::CommandInstanceManager
    */
   class CommandInstanceManager_test : public Test
     {

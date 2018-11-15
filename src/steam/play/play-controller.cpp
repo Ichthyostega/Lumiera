@@ -31,7 +31,7 @@
  ** situations
  **
  ** @see lumiera::DummyPlayer
- ** @see gui::PlaybackController usage example 
+ ** @see stage::PlaybackController usage example 
  */
 
 
@@ -48,7 +48,7 @@ namespace lumiera {
   using lib::time::Time;
   using lib::time::Duration;
   using lib::time::TimeSpan;
-  using proc::play::PlayProcess;
+  using steam::play::PlayProcess;
   
   
   

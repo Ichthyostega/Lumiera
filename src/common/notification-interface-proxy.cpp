@@ -23,8 +23,8 @@
 
 
 /** @file notification-interface-proxy.cpp
- ** Interface-Proxy for the gui::GuiNotification facade.
- ** The purpose is to define a proxy implementation of gui::GuiNotification, in order to
+ ** Interface-Proxy for the stage::GuiNotification facade.
+ ** The purpose is to define a proxy implementation of stage::GuiNotification, in order to
  ** redirect any calls through the associated C Language Interface "lumieraorg_GuiNotification"
  ** 
  ** @see gui-notification-facade.hpp
@@ -41,7 +41,7 @@ namespace stage {
 }
 namespace lumiera {
 namespace facade {
-  using gui::ID;
+  using stage::ID;
   using lib::diff::GenNode;
   using lib::diff::MutationMessage;
   
@@ -50,7 +50,7 @@ namespace facade {
   /* ==================== SessionCommand =================================== */
   
   using Interface = LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0);
-  using Facade    = gui::GuiNotification;
+  using Facade    = stage::GuiNotification;
   
   using IHandle   = InstanceHandle<Interface, Facade>;
   
@@ -59,7 +59,7 @@ namespace facade {
   class Proxy<IHandle>
     : public Binding<IHandle>
     {
-      using Level = gui::NotifyLevel;
+      using Level = stage::NotifyLevel;
       
       //----Proxy-Implementation-of-GuiNotification--------
       

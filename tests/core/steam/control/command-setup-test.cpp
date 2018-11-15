@@ -101,7 +101,7 @@ namespace test {
    * 
    * @see cmd.hpp
    * @see session-cmd.cpp actual usage example
-   * @see proc::control::CommandSetup
+   * @see steam::control::CommandSetup
    */
   class CommandSetup_test : public Test
     {
@@ -220,7 +220,7 @@ namespace test {
        *        - static CommandSetup instances are created "somewhere"
        *        - when the ON_GLOBAL_INIT [lifecycle event](\ref lifecycle.h) is
        *          issued, all command definitions collected thus far are invoked
-       *          and thus inserted into the proc::control::CommandRegistry
+       *          and thus inserted into the steam::control::CommandRegistry
        *        - from this point on, we may access a control::Command handle
        *          corresponding to these definitions, and we may create derived
        *          instances to bind parameters and invoke the operation.

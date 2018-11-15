@@ -26,7 +26,7 @@
  ** Implementation of the UI backbone service for messaging.
  ** Any globally relevant widget or controller within the Lumiera UI
  ** is connected to the [UI-Bus](\ref ui-bus.hpp), which is essentially implemented
- ** within this compilation unit. [Clients](\ref gui::model::Tangible) typically
+ ** within this compilation unit. [Clients](\ref stage::model::Tangible) typically
  ** use the [BusTerm-Interface](\ref bus-term.hpp) to route generic actions and
  ** receive notifications, state changes and mutations.
  ** 
@@ -123,7 +123,7 @@ namespace ctrl {
      * @remarks some commands can simply be invoked right away, but
      *          in the general case, a command needs to be prepared with
      *          suitable arguments prior to being invoked, which can be
-     *          a multi-step process. The gui::interact::InteractionState
+     *          a multi-step process. The stage::interact::InteractionState
      *          is used to conduct this argument binding process from within
      *          the UI. Here, at the UI-Bus interface, we're just interested
      *          in the fact _that_ some command is to be bound and invoked.
@@ -132,8 +132,8 @@ namespace ctrl {
      * @note no information regarding the _origin_ of this command invocation
      *          is captured. If a command needs a _subject_, this has to be
      *          bound as an command argument beforehand.
-     * @see gui::model::Tangible::issueCommand()
-     * @see proc::control::SessionCommand
+     * @see stage::model::Tangible::issueCommand()
+     * @see steam::control::SessionCommand
      */
     void
     BusTerm::act (GenNode const& command)
@@ -164,9 +164,9 @@ namespace ctrl {
     /** route a state update or notification to the given subject.
      * @param subject the [endpoint-ID](\ref BusTerm::endpointID_) of the element to address
      * @param mark the actual state update or notification message to be delivered
-     * @remarks each addressed "subject" is a gui::model::Tangible, and as such holds
+     * @remarks each addressed "subject" is a stage::model::Tangible, and as such holds
      *          a BusTerm of its own, which in turn ensures a registration and connection
-     *          from the [central routing hub](\ref gui::ctrl::Nexus) down to the element. Thus,
+     *          from the [central routing hub](\ref stage::ctrl::Nexus) down to the element. Thus,
      *          the default implementation is just to pass the given state mark "up",
      *          assuming that it will reach the hub eventually, which in turn knows
      *          how to reach the element, and invoke the Tangible::mark() operation.

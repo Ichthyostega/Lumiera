@@ -62,9 +62,9 @@ namespace play {
 //    using lumiera::DummyPlayer;
 //  using util::isnil;
   using std::function;
-  using proc::mobject::ModelPort;
+  using steam::mobject::ModelPort;
   
-//  typedef proc::play::POutputManager POutputManager;
+//  typedef steam::play::POutputManager POutputManager;
 //  typedef lib::IterSource<ModelPort>::iterator ModelPorts;
   
   namespace error = lumiera::error;

@@ -276,7 +276,7 @@ namespace idi {
    * These are (singleton) instances of idi::Descriptor<V>, and assumed to expose
    * - a member `viewSpec.locate`, which solves for the actual view location within UI topology
    * - a member `viewSpec.alloc`, which actually claims / allocates an existing or new view instance
-   * @see gui::ctrl::ViewLocator::get
+   * @see stage::ctrl::ViewLocator::get
    */
   template<class VIEW>
   inline Descriptor<VIEW>&

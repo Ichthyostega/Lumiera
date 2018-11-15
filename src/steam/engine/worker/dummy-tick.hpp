@@ -29,7 +29,7 @@
  ** setup, used to verify the construction of engine components. As an integration
  ** test, we build a "dummy player", delivering some test data frames to the Gui.
  ** 
- ** @see proc::play::DummyPlayerService
+ ** @see steam::play::DummyPlayerService
  **  
  */
 
@@ -58,7 +58,7 @@ namespace node {
    * with adjustable frequency. Quick'n dirty implementation!
    */
   class DummyTick
-    : backend::ThreadJoinable
+    : vault::ThreadJoinable
     {
       typedef function<void(void)> Tick;
       volatile uint timespan_;

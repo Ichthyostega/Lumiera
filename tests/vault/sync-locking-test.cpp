@@ -126,7 +126,7 @@ namespace test{
      */
     class HavocThread
       {
-        backend::ThreadJoinable thread_;
+        vault::ThreadJoinable thread_;
         
         void
         doIt ()

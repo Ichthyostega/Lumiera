@@ -105,7 +105,7 @@ namespace lumiera {
          * @see player-service.cpp implementation
          */
         class Controller
-          : public lib::Handle<proc::play::PlayProcess>
+          : public lib::Handle<steam::play::PlayProcess>
           {
           public:
             void play(bool);          ///< play/pause toggle
@@ -126,17 +126,17 @@ namespace lumiera {
             uint getQuality()   const;
             bool usesProxy()    const;
             
-            operator weak_ptr<proc::play::PlayProcess>()  const;
+            operator weak_ptr<steam::play::PlayProcess>()  const;
           };
         
         
-        using ModelPorts = lib::IterSource<proc::mobject::ModelPort>::iterator;
-        using Pipes      = lib::IterSource<proc::mobject::OutputDesignation>::iterator;
-        using Output     = proc::play::POutputManager;
-        using Clip       = proc::mobject::session::PClip;
-        using Fork       = proc::mobject::PFork;
-        using Timeline   = proc::asset::PTimeline;
-        using Viewer     = proc::asset::PViewer;
+        using ModelPorts = lib::IterSource<steam::mobject::ModelPort>::iterator;
+        using Pipes      = lib::IterSource<steam::mobject::OutputDesignation>::iterator;
+        using Output     = steam::play::POutputManager;
+        using Clip       = steam::mobject::session::PClip;
+        using Fork       = steam::mobject::PFork;
+        using Timeline   = steam::asset::PTimeline;
+        using Viewer     = steam::asset::PViewer;
         
         
         /* ==== convenience shortcuts for common use cases ==== */

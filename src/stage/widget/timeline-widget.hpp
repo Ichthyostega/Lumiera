@@ -30,7 +30,7 @@
  **       Moreover, this class is designed way to monolithic.
  **       It will never be able to scale to the full planned
  **       timeline and editing functionality of Lumiera
- ** @see gui::timeline::TimelineWidget new timeline display
+ ** @see stage::timeline::TimelineWidget new timeline display
  */
 
 
@@ -63,7 +63,7 @@ namespace widget {
   
   /** namespace of timeline widget helper classes.
    * @deprecated as of 11/2016, a complete rework of the timeline display is underway
-   * @see (\ref gui::timeline) namespace of the new timeline display
+   * @see (\ref stage::timeline) namespace of the new timeline display
    */
   namespace timeline {}
   
@@ -310,5 +310,5 @@ namespace widget {
     };
   
   
-}}// gui::widget
+}}// stage::widget
 #endif /*STAGE_WIDGET_TIMELINE_WIDGET_H*/

@@ -121,7 +121,7 @@ namespace vault {
      *       lumiera::Thread wrapper for binding to an arbitrary operation
      *       and passing the appropriate context.
      * 
-     * @see backend::Thread
+     * @see vault::Thread
      * @see threads.h
      */
     class ThreadWrapper_test : public Test

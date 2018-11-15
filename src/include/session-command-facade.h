@@ -33,14 +33,14 @@
  ** accept the command arguments for binding packaged as `Record<GenNode>`.
  ** For each command, there needs to be a registration record within the
  ** Steam-Layer implementation. The service implementation backing this
- ** facade indeed retrieves the corresponding proc::control::Command
+ ** facade indeed retrieves the corresponding steam::control::Command
  ** handles to perform the binding operation and hands them over
  ** to the ProcDispatcher for invocation.
  ** 
  ** @see command.hpp
  ** @see session-command-service.hpp implementation
- ** @see proc::control::ProcDispatcher
- ** @see gui::ctrl::CoreService
+ ** @see steam::control::ProcDispatcher
+ ** @see stage::ctrl::CoreService
  */
 
 
@@ -68,7 +68,7 @@ namespace control {
   /**********************************************************************//**
    * Global access point to invoke commands and cause edit operations within
    * the Session. Any changes to the session are effected by prepared functors
-   * bound into a proc::control::Command registration. A command instance will
+   * bound into a steam::control::Command registration. A command instance will
    * first be outfitted with suitable parameters to define the target and to
    * qualify and elaborate the action, before it can be actually triggered.
    * Commands then go through a queue to be invoked one by one.

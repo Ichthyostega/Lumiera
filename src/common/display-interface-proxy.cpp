@@ -54,7 +54,7 @@ namespace facade {
   
   
   
-  /* ==================== gui::Display ====================================== */
+  /* ==================== stage::Display ====================================== */
   
   using Interface = LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0);
   using Facade    = lumiera::Display;

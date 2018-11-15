@@ -76,8 +76,8 @@ using util::toString;
 namespace stage {
 namespace interact {
   
-  namespace session = proc::mobject::session;
-  namespace cmd = proc::cmd;
+  namespace session = steam::mobject::session;
+  namespace cmd = steam::cmd;
   
   using ctrl::GlobalCtx;
   using ctrl::UiState;
@@ -188,7 +188,7 @@ namespace interact {
   void
   InteractionDirector::saveSnapshot()
   {
-    string snapshotID{"snap-" + toString(backend::RealClock::now())};
+    string snapshotID{"snap-" + toString(vault::RealClock::now())};
     invoke (cmd::session_saveSnapshot, snapshotID);
   }
   
@@ -277,7 +277,7 @@ namespace interact {
   InteractionDirector::newSequence()
   {
     LuidH anchor{*this};                    /////////////////////////////////////////////////////////////////TICKET #1082 : actually access the interaction state to get "current scope"
-    LuidH newSeqID{EntryID<proc::asset::Sequence>().getHash()};  ////////////////////////////////////////////TICKET #1096 : a better Idea what to send over the wire?
+    LuidH newSeqID{EntryID<steam::asset::Sequence>().getHash()};  ////////////////////////////////////////////TICKET #1096 : a better Idea what to send over the wire?
     invoke (cmd::session_newSequence, anchor, newSeqID);
   }
   
@@ -301,7 +301,7 @@ namespace interact {
   InteractionDirector::newTrack()
   {
     LuidH anchor{*this};                    /////////////////////////////////////////////////////////////////TICKET #1082 : actually access the interaction state to get "current scope"
-    LuidH newTrackID{EntryID<proc::mobject::session::Fork>().getHash()};  ///////////////////////////////////TICKET #1096 : a better Idea what to send over the wire?
+    LuidH newTrackID{EntryID<steam::mobject::session::Fork>().getHash()};  ///////////////////////////////////TICKET #1096 : a better Idea what to send over the wire?
     invoke (cmd::sequence_newTrack, anchor, newTrackID);
   }
   

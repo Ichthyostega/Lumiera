@@ -42,7 +42,7 @@ namespace lib {
 namespace test{
   
   using lib::Sync;
-  using backend::ThreadJoinable;
+  using vault::ThreadJoinable;
   
   using util::isnil;
   using std::string;
@@ -106,7 +106,7 @@ namespace test{
    *       - multithreaded stress test
    *       
    * @see lib::CallQueue
-   * @see gui::NotificationService usage example
+   * @see stage::NotificationService usage example
    * @see [DemoGuiRoundtrip](http://issues.lumiera.org/ticket/1099 "Ticket #1099")
    */
   class CallQueue_test : public Test

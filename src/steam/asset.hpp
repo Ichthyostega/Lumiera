@@ -356,11 +356,11 @@ namespace asset {
 
 namespace proc_interface {
   
-  using proc::asset::Asset;
-  using proc::asset::Category;
-  using proc::asset::ID;
-  using proc::asset::IDA;
-  using proc::asset::PAsset;
+  using steam::asset::Asset;
+  using steam::asset::Category;
+  using steam::asset::ID;
+  using steam::asset::IDA;
+  using steam::asset::PAsset;
 }
 
 #endif

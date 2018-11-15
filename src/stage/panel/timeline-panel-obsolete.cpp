@@ -39,8 +39,8 @@ using namespace stage::widget;
 using namespace stage::widget::timeline;
 using namespace stage::model;
 
-using gui::controller::Controller;
-using gui::ctrl::PlaybackController;
+using stage::controller::Controller;
+using stage::ctrl::PlaybackController;
 using std::shared_ptr;
 using std::weak_ptr;
 using util::contains;
@@ -70,7 +70,7 @@ namespace panel {
     , zoomOut(Stock::ZOOM_OUT)
     , zoomScale()
     , updatingToolbar(false)
-    , currentTool(gui::widget::timeline::Arrow)
+    , currentTool(stage::widget::timeline::Arrow)
     {
       // Hook up notifications
       obsoleteProject_.get_sequences().signal_changed().connect(mem_fun(this,
@@ -184,13 +184,13 @@ namespace panel {
   void
   TimelinePanelObsolete::on_arrow_tool()
   {
-    setTool(gui::widget::timeline::Arrow);
+    setTool(stage::widget::timeline::Arrow);
   }
   
   void
   TimelinePanelObsolete::on_ibeam_tool()
   {  
-    setTool(gui::widget::timeline::IBeam);
+    setTool(stage::widget::timeline::IBeam);
   }
   
   void
@@ -329,8 +329,8 @@ namespace panel {
     if (!updatingToolbar)
       {
         updatingToolbar = true;
-        arrowTool.set_active (currentTool == gui::widget::timeline::Arrow);
-        iBeamTool.set_active (currentTool == gui::widget::timeline::IBeam);
+        arrowTool.set_active (currentTool == stage::widget::timeline::Arrow);
+        iBeamTool.set_active (currentTool == stage::widget::timeline::IBeam);
         updatingToolbar = false;
       }
   }

@@ -24,7 +24,7 @@
  ** Opaque handles and similar typedefs used to communicate via the
  ** lumiera::Display and lumiera::DummyPlayer facade interfaces.
  **
- ** @see gui::DisplayService
+ ** @see stage::DisplayService
  ** 
  */
 

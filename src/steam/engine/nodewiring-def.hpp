@@ -29,7 +29,7 @@
  ** the desired operation mode of this node need to be available. Thus we use this temporary
  ** information record to assemble all these pieces of information.
  ** 
- ** @see proc::engine::NodeFactory
+ ** @see steam::engine::NodeFactory
  ** @see nodewiring.hpp
  ** @see node-basic-test.cpp
  ** 

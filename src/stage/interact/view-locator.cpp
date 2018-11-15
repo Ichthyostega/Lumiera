@@ -53,9 +53,9 @@
 //using util::cStr;
 //using util::isnil;
 using lib::Symbol;
-//using gui::ctrl::PanelLocator;
-//using gui::ctrl::WindowLocator;
-using gui::model::ElementAccess;
+//using stage::ctrl::PanelLocator;
+//using stage::ctrl::WindowLocator;
+using stage::model::ElementAccess;
 
 
 namespace stage {

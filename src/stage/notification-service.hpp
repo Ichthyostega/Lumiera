@@ -21,18 +21,18 @@
 */
 
 /** @file notification-service.hpp
- ** A public service provided by the GUI, implementing the gui::GuiNotification facade interface.
+ ** A public service provided by the GUI, implementing the stage::GuiNotification facade interface.
  ** The purpose of this service is to push state update and notification of events from the lower
  ** layers into the Lumiera GUI. Typically, this happens asynchronously and triggered either by
  ** events within the lower layers, or as result of invoking commands on the session.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
- ** gui::GuiNotification#facade to access this service. This header here defines the interface
+ ** stage::GuiNotification#facade to access this service. This header here defines the interface
  ** used to _provide_ this service, not to access it.
  ** 
- ** @see gui::GuiFacade launching the Lumiera UI
+ ** @see stage::GuiFacade launching the Lumiera UI
  ** @see facade.hpp RAII holder to start this service and open the interface
- ** @see gui::ctrl::UiManager::performMainLoop() exposes all UI façade interfaces
+ ** @see stage::ctrl::UiManager::performMainLoop() exposes all UI façade interfaces
  */
 
 

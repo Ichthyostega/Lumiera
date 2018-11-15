@@ -63,7 +63,7 @@ dispatches any invocation into the UI thread.
 
 Within the UI-Layer, we do not rely on a central ``shadow model'', rather, the backbone of the UI is a communication
 structure, the *UI-Bus*. Data within the GUI is kept very local, close to the presentation widgets. In fact, we
-identify a selection of _really important_ UI elements, which we call ``the tangible elements'' (`gui::model::Tangible`).
+identify a selection of _really important_ UI elements, which we call ``the tangible elements'' (`stage::model::Tangible`).
 Each of those primary elements within the UI _is connected to the UI-Bus,_ and can be addressed by its ID, and it
 happens to correspond and reflect an entity within the session model, there denoted by the same ID. The core can
 thus send a message towards the corresponding tangible UI element, without any knowledge as to how and where this

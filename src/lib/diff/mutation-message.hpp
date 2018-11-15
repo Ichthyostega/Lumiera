@@ -40,7 +40,7 @@
  ** and transported through the message -- since a diff sequence as such is always concrete and relates to a
  ** a specific context, we can not represent it directly as a type on interface level. Rather, the receiver
  ** of a diff sequence must offer the ability to be reshaped through diff messages, which is expressed through
- ** the interface DiffMutable. In the case at question here, gui::model::Tangible offers this interface and thus
+ ** the interface DiffMutable. In the case at question here, stage::model::Tangible offers this interface and thus
  ** the ability to construct a concrete lib::diff::TreeMutator, which in turn is bound to the internals of the
  ** actual UI-Element. In this framework, a diff is actually represented as a sequence of _diff verbs,_ which
  ** can be ``pulled'' one by one from the MutationMessage, and then applied to the target data structure

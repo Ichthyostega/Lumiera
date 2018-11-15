@@ -48,7 +48,7 @@ namespace test {
   namespace { // test fixture: scheduling a dummy job operation...
     
     
-    Time TEST_START_TIME (backend::RealClock::now());
+    Time TEST_START_TIME (vault::RealClock::now());
     const Duration TEST_FRAME_DURATION(FSecs(1,2));
     
     inline Offset

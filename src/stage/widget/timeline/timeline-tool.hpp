@@ -126,7 +126,7 @@ namespace timeline {
        * Helper function which retrieves the pointer to owner timeline
        * widget object, which is the owner of the timeline body.
        */
-      gui::widget::TimelineWidget &get_timeline_widget()  const;
+      stage::widget::TimelineWidget &get_timeline_widget()  const;
       
       /**
        * Helper function which retrieves the rectangle of the timeline

@@ -59,7 +59,7 @@ namespace lib {
 namespace test{
   
   
-  using backend::ThreadJoinable;
+  using vault::ThreadJoinable;
   using util::for_each;
   using util::isnil;
   using std::placeholders::_1;

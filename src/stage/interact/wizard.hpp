@@ -96,7 +96,7 @@ namespace interact {
       void show_HelpAbout();
       void launchTestCtrl();
       
-      static ID getErrorLogID() { return proc::asset::meta::theErrorLog_ID; }
+      static ID getErrorLogID() { return steam::asset::meta::theErrorLog_ID; }
       
     private:
     };

@@ -31,7 +31,7 @@
  ** to happen in the UI in response to the reception of these messages.
  **
  ** @see notification-service.hpp implementation
- ** @see gui::GuiFacade
+ ** @see stage::GuiFacade
  ** @see main.cpp
  */
 

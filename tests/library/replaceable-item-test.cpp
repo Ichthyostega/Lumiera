@@ -92,7 +92,7 @@ namespace test{
    *       - compare by delegating to element comparison
    * 
    * @see replaceable-item.hpp
-   * @see proc::control::MementoTie
+   * @see steam::control::MementoTie
    */
   class ReplaceableItem_test : public Test
     {

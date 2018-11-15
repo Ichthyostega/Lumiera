@@ -53,15 +53,15 @@ to the plain-C type `GApplication`.] Thus, we leave out the third stage and deal
 application global aspects through means appropriate to our specific purpose.
 
 - our link:{ldoc}/design/architecture/Subsystems.html[Subsystem runner] boots the UI subsystem
-  (`gui::GuiFacade`), which in turn loads the UI-plug-in ('target/modules/gtk_gui.lum').
-- within this plug-in, the class `gui::GtkLumiera` governs the complete UI lifecycle.
-- this class holds a member `gui::ctl::UiManager` -- which is our ``UI main object'' and mimics
+  (`stage::GuiFacade`), which in turn loads the UI-plug-in ('target/modules/gtk_gui.lum').
+- within this plug-in, the class `stage::GtkLumiera` governs the complete UI lifecycle.
+- this class holds a member `stage::ctl::UiManager` -- which is our ``UI main object'' and mimics
   the design of the late `Gtk::Main`.
-- we inherit from our own `gui::ctrl::ApplicationBase` class, to ensure invocation of all the
+- we inherit from our own `stage::ctrl::ApplicationBase` class, to ensure invocation of all the
   initialisation and clean-up functions required by GTK
-- we instantiate a class `gui::ctrl::GlobalCtx` to hold and provide all global services used
+- we instantiate a class `stage::ctrl::GlobalCtx` to hold and provide all global services used
   throughout the UI layer, including population of the menu and global actions
-- within the global context, there is also `gui::ctrl::WindowLocator`, to keep track of all
+- within the global context, there is also `stage::ctrl::WindowLocator`, to keep track of all
   top-level application windows, and to support direct navigation to relevant entities within
   the UI, based on _abstracted UI-coordinates_.
 - finally, `GtkLumiera` invokes the functions
@@ -138,7 +138,7 @@ Shutdown
 --------
 The GTK main loop terminates after invocation of `gtk_main_quit()` (or in case of serious internal errors).
 Typically, this function is somehow bound to a widget interaction, like clicking on the ``close'' button.
-In Lumiera, this concern is managed by the `gui::ctrl::WindowLocator`, which keeps track of all top-level
+In Lumiera, this concern is managed by the `stage::ctrl::WindowLocator`, which keeps track of all top-level
 windows and terminates the UI when the last one is closed. Moreover, the UI can deliberately be closed
 by sending an event over the `GuiNotification::triggerGuiShutdown(message)' call.
 

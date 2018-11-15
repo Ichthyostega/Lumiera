@@ -60,7 +60,7 @@ namespace test    {
   using lumiera::query::QueryHandler;
   using lib::query::normaliseID;
   
-  using proc::ConfigResolver;
+  using steam::ConfigResolver;
   
   
   namespace { // test fixture...

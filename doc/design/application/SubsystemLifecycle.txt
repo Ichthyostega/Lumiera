@@ -48,7 +48,7 @@ for the code referred in the following discussion.
   additionally the services of +lumiera::AppState+ (+common/appstate.hpp+)
 - AppState represents the state as relevant for the "application realm", i.e.
   it performs global initialisation and shutdown. See especially +AppState::init()+
-- see +backend/enginefacade.hpp|cpp+ as an (unimplemented) façade skeleton. +backend::EngineFacade::getDescriptor()+
+- see +vault/enginefacade.hpp|cpp+ as an (unimplemented) façade skeleton. +vault::EngineFacade::getDescriptor()+
   yields the subsystem interface
 - the GuiFacade is somewhat special, because we want to load the GUI from a
   shared library. This façade is basically completed and working, but it currently
@@ -61,7 +61,7 @@ for the code referred in the following discussion.
   separation interfaces are considered part of the public Lumiera API, thus the
   headers go into +src/include/**+
   * include/guinotification.h (C/C++ combined header) defines an C++ interface (abstract class) and a CLI interface. 
-  * embedded into the interface is a factory, i.e. by  gui::GuiNotification::facade() you get an instance...
+  * embedded into the interface is a factory, i.e. by  stage::GuiNotification::facade() you get an instance...
   * which actually is a proxy and routes any call through the instance of the
     accompanying CLI interface which is defined within the interface/plugin system
   * this in turn forwards to the implementation class in

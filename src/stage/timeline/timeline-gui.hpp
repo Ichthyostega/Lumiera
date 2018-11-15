@@ -43,8 +43,8 @@
  ** initially, or in answer to a population request originating from within the UI, prompted by the
  ** need to expose some timeline at a given place within the interface.
  ** 
- ** @see gui::interact::InteractionDirector::buildMutator
- ** @see gui::timeline::TimelineWidget
+ ** @see stage::interact::InteractionDirector::buildMutator
+ ** @see stage::timeline::TimelineWidget
  ** 
  */
 

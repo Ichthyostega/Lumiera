@@ -37,9 +37,9 @@ namespace steam {
 namespace play {
 namespace test {
   
-  using proc::engine::BuffHandle;
-  using proc::engine::test::testData;
-  using proc::engine::test::TestFrame;
+  using steam::engine::BuffHandle;
+  using steam::engine::test::testData;
+  using steam::engine::test::TestFrame;
   
   
   

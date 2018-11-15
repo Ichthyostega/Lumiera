@@ -62,7 +62,7 @@
  ** - the more low-level RecursiveSelfIntegration combinator strategy actually
  **   delegates to the result set iterator implementation to perform the collecting
  **   and re-integrating of intermediary results. This approach is what we actually
- **   use in the proc::engine::Dispatcher
+ **   use in the steam::engine::Dispatcher
  ** 
  ** Alternatively, just the basic IterExplorer template can be used together with a custom
  ** "combinator strategy" and typically even a specific iterator or sequence to implement very specific

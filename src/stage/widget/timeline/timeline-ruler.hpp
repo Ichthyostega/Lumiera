@@ -54,7 +54,7 @@ namespace widget {
     : public Gtk::DrawingArea
     {
     public:
-      TimelineRuler (gui::widget::TimelineWidget& timeline_widget);
+      TimelineRuler (stage::widget::TimelineWidget& timeline_widget);
       
       /**
        * Sets offset of the mouse chevron
@@ -235,7 +235,7 @@ namespace widget {
       /**
        * The owner widget
        */
-      gui::widget::TimelineWidget &timelineWidget;
+      stage::widget::TimelineWidget &timelineWidget;
       
       /**
        * the currently active timeline state object 

@@ -95,7 +95,7 @@ namespace test    {
    *       - detection and handling of work states
    *       - management of builder run triggers
    * 
-   * @see proc::control::Looper
+   * @see steam::control::Looper
    * @see DispatcherLoop
    * @see CommandQueue_test
    */

@@ -29,7 +29,7 @@
  ** an UNDO function.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
- ** proc::control::SessionCommand::facade to access this service. This header defines the interface
+ ** steam::control::SessionCommand::facade to access this service. This header defines the interface
  ** used to _provide_ this service, not to access it.
  ** 
  ** @see session-command-facade.h

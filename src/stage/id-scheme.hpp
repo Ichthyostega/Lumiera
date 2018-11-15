@@ -97,7 +97,7 @@ namespace stage {
     template<>
     struct Descriptor<TimelineView>
       {
-        using Model = proc::asset::Timeline;
+        using Model = steam::asset::Timeline;
       };
     
     
@@ -107,7 +107,7 @@ namespace stage {
     template<>
     struct Descriptor<ErrorLogView>
       {
-        using Model = proc::asset::meta::ErrorLog;
+        using Model = steam::asset::meta::ErrorLog;
         
         ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : consider use of a DSL to configure component view access 
         //

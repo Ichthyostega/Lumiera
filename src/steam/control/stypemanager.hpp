@@ -115,7 +115,7 @@ namespace control {
 
 namespace proc_interface {
   
-  using proc::control::STypeManager;
+  using steam::control::STypeManager;
 
 
 } // namespace proc_interface

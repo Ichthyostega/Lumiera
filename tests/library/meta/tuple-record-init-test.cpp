@@ -76,7 +76,7 @@ namespace test {
    * @see ElementExtractor
    * @see GenNodeAccessor
    * @see BusTerm_test::commandInvocation
-   * @see gui::test::Nexus::prepareDiagnosticCommandHandler
+   * @see stage::test::Nexus::prepareDiagnosticCommandHandler
    * @see ui-bus.hpp UI-Bus
    */
   class TupleRecordInit_test : public Test

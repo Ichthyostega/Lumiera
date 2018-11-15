@@ -114,11 +114,11 @@ namespace test{
       
       
     public:
-      static proc::control::Command
+      static steam::control::Command
       fabricateNewInstance (lib::test::EventLog const& invocationLog)
         {
           log_ = invocationLog;
-          return proc::control::CommandDef{Symbol{uniqueTypeInstance()}}
+          return steam::control::CommandDef{Symbol{uniqueTypeInstance()}}
                                  .operation(PlaceholderCommand::operate)
                                  .captureUndo(PlaceholderCommand::capture)
                                  .undoOperation(PlaceholderCommand::undo);

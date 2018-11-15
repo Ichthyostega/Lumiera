@@ -378,7 +378,7 @@ namespace lumiera {
   lumiera::Subsys&
   DummyPlayer::getDescriptor()
   {
-    return proc::play::theDummyPlayerDescriptor();
+    return steam::play::theDummyPlayerDescriptor();
   }
   
   

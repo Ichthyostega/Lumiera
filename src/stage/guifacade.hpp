@@ -55,7 +55,7 @@ namespace stage {
    * Global access point for loading and starting up the Lumiera GTK GUI
    * and for controlling the GUI lifecycle. The implementation part of
    * this class also is responsible for making the "business" interface
-   * of the GUI available, i.e. gui::GuiNotification
+   * of the GUI available, i.e. stage::GuiNotification
    * 
    * When running Lumiera with a GUI is required (the default case),
    * it is loaded as dynamic module, thus defining the interface(s) 
@@ -69,11 +69,11 @@ namespace stage {
    * is somewhat special, as its sole purpose is to expose the subsystem
    * descriptor, which, when started, loads the GUI as a plugin and
    * invokes `launchUI(term)` there. For the implementation see
-   * gui::GuiRunner (guifacade.cpp) and gtk-lumiera.cpp (the plugin).
+   * stage::GuiRunner (guifacade.cpp) and gtk-lumiera.cpp (the plugin).
    * 
    * @note this facade is intended to be used by Lumiera main solely.
    *       client code should always use the "business" interface(s):
-   *       - gui::GuiNotification
+   *       - stage::GuiNotification
    * 
    */
   class GuiFacade

@@ -72,11 +72,11 @@ namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   using lib::test::showSizeof;
-  using gui::model::ElementAccess;
-  using gui::test::TestElementAccess;
-  using gui::test::DummyWidget;
-  using gui::test::DummyView;
-  using gui::test::DummyTab;
+  using stage::model::ElementAccess;
+  using stage::test::TestElementAccess;
+  using stage::test::DummyWidget;
+  using stage::test::DummyView;
+  using stage::test::DummyTab;
   
   using MockLoationSolver = lib::DependInject<UILocationSolver>::Local<>;
   using MockElementAccess = lib::DependInject<ElementAccess>::Local<TestElementAccess>;

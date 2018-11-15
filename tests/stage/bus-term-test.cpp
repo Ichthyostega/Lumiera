@@ -54,7 +54,7 @@ using boost::lexical_cast;
 
 using lib::Sync;
 using lib::ClassLock;
-using backend::ThreadJoinable;
+using vault::ThreadJoinable;
 using lib::iter_stl::dischargeToSnapshot;
 using lib::IterQueue;
 using lib::IterStack;
@@ -70,10 +70,10 @@ namespace test {
   
   using lib::idi::EntryID;
   using lib::idi::BareEntryID;
-  using proc::control::Command;
-  using gui::ctrl::StateManager;
-  using gui::ctrl::BusTerm;
-  using gui::test::MockElm;
+  using steam::control::Command;
+  using stage::ctrl::StateManager;
+  using stage::ctrl::BusTerm;
+  using stage::test::MockElm;
   using lib::diff::MutationMessage;
   using lib::diff::TreeDiffLanguage;
   using lib::diff::DiffSource;
@@ -88,7 +88,7 @@ namespace test {
   using lib::test::EventLog;
   using lib::CallQueue;
   
-  using proc::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
+  using steam::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
   using ID = lib::idi::BareEntryID const&;
@@ -129,8 +129,8 @@ namespace test {
    * - multithreaded integration test of diff mutation
    * 
    * @see AbstractTangible_test
-   * @see gui::model::Tangible
-   * @see gui::ctrl::BusTerm
+   * @see stage::model::Tangible
+   * @see stage::ctrl::BusTerm
    */
   class BusTerm_test : public Test
     {
@@ -167,7 +167,7 @@ namespace test {
           BareEntryID elmID = EntryID<MockElm>{"zeitgeist"};
           
           // Access the log on the Test-Nexus hub
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           CHECK (nexusLog.ensureNot("zeitgeist"));
           
           MockElm mock(elmID);
@@ -191,7 +191,7 @@ namespace test {
           CHECK (nexusLog.verifyCall("note").on("TestNexus").arg(elmID, "GenNode-ID(\"expand\")-DataCap|«bool»|true"));
           
           // send a state mark down to the mock element
-          gui::test::Nexus::testUI().mark (elmID, GenNode(string{MARK_Flash}, 23));
+          stage::test::Nexus::testUI().mark (elmID, GenNode(string{MARK_Flash}, 23));
           CHECK (nexusLog.verifyCall("mark").on("TestNexus").arg(elmID, MARK_Flash)
                          .beforeEvent("TestNexus", "mark to bID-zeitgeist"));
           CHECK (elmLog.verifyCall("doFlash").on("zeitgeist"));
@@ -203,7 +203,7 @@ namespace test {
           CHECK (nexusLog.verifyCall("routeDetach").on("TestNexus").arg(elmID)
                          .beforeEvent("TestNexus", "removed route to bID-zeitgeist"));
           
-          gui::test::Nexus::testUI().mark (elmID, GenNode({MARK_Flash}, 88));
+          stage::test::Nexus::testUI().mark (elmID, GenNode({MARK_Flash}, 88));
           CHECK (nexusLog.verify("removed route to bID-zeitgeist")
                          .beforeCall("mark").on("TestNexus").arg(elmID, MARK_Flash)
                          .beforeEvent("warn","discarding mark to unknown bID-zeitgeist"));
@@ -216,7 +216,7 @@ namespace test {
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
           cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
+               << util::join(stage::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
@@ -226,8 +226,8 @@ namespace test {
       commandInvocation()
         {
           MARK_TEST_FUN
-          gui::test::Nexus::startNewLog();
-          Symbol cmd = gui::test::Nexus::prepareMockCmd<string, TimeSpan, LuidH>();
+          stage::test::Nexus::startNewLog();
+          Symbol cmd = stage::test::Nexus::prepareMockCmd<string, TimeSpan, LuidH>();
           
           MockElm mock("uiElm");
           
@@ -249,27 +249,27 @@ namespace test {
           mock.invoke (cmd, text, clip, luid);
           
           CHECK (Command::canExec(cmd));
-          CHECK (gui::test::Nexus::wasBound(cmd, text, clip, luid));
-          CHECK (not gui::test::Nexus::wasBound(cmd, "lololo"));
-          CHECK (gui::test::Nexus::wasInvoked(cmd));
-          CHECK (gui::test::Nexus::wasInvoked(cmd, text, clip, luid));
-          CHECK (not gui::test::Nexus::wasInvoked(cmd, " huh ", clip, luid));
-          CHECK (not gui::test::Nexus::wasInvoked(cmd, text, clip));
+          CHECK (stage::test::Nexus::wasBound(cmd, text, clip, luid));
+          CHECK (not stage::test::Nexus::wasBound(cmd, "lololo"));
+          CHECK (stage::test::Nexus::wasInvoked(cmd));
+          CHECK (stage::test::Nexus::wasInvoked(cmd, text, clip, luid));
+          CHECK (not stage::test::Nexus::wasInvoked(cmd, " huh ", clip, luid));
+          CHECK (not stage::test::Nexus::wasInvoked(cmd, text, clip));
           
           // Mock commands are automatically unique
-          auto cmdX = gui::test::Nexus::prepareMockCmd<>();
-          auto cmdY = gui::test::Nexus::prepareMockCmd<>();
+          auto cmdX = stage::test::Nexus::prepareMockCmd<>();
+          auto cmdY = stage::test::Nexus::prepareMockCmd<>();
           CHECK (cmd != cmdX);
           CHECK (cmd != cmdY);
           
-          CHECK (not gui::test::Nexus::wasInvoked(cmdX));
-          CHECK (not gui::test::Nexus::wasInvoked(cmdY));
+          CHECK (not stage::test::Nexus::wasInvoked(cmdX));
+          CHECK (not stage::test::Nexus::wasInvoked(cmdY));
           
           cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
+               << util::join(stage::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
-          gui::test::Nexus::setCommandHandler(); // deinstall custom command handler
+          stage::test::Nexus::setCommandHandler(); // deinstall custom command handler
         }
       
       
@@ -280,8 +280,8 @@ namespace test {
       captureStateMark()
         {
           MARK_TEST_FUN
-          gui::test::Nexus::startNewLog();
-          StateManager& stateManager = gui::test::Nexus::useMockStateManager();
+          stage::test::Nexus::startNewLog();
+          StateManager& stateManager = stage::test::Nexus::useMockStateManager();
           
           MockElm mockA("alpha");   BareEntryID alpha = mockA.getID();
           MockElm mockB("bravo");   BareEntryID bravo = mockB.getID();
@@ -314,7 +314,7 @@ namespace test {
           
           
           cout << "____Nexus-Log_________________\n"
-               << util::join(gui::test::Nexus::getLog(), "\n")
+               << util::join(stage::test::Nexus::getLog(), "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
         }
       
@@ -324,7 +324,7 @@ namespace test {
       replayStateMark()
         {
           MARK_TEST_FUN
-          StateManager& stateManager = gui::test::Nexus::getMockStateManager();
+          StateManager& stateManager = stage::test::Nexus::getMockStateManager();
           
           MockElm mockA("alpha");
           // no "bravo" this time
@@ -337,7 +337,7 @@ namespace test {
           stateManager.replayState (alpha, "expand");
           CHECK (mockA.isExpanded());
           
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           uiBus.mark (mockA.getID(), GenNode{"expand", false});
           
           CHECK (not mockA.isExpanded());
@@ -356,13 +356,13 @@ namespace test {
       verifyNotifications()
         {
           MARK_TEST_FUN
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           MockElm mockA("alpha");   BareEntryID alpha = mockA.getID();   mockA.joinLog (nexusLog);
           MockElm mockB("bravo");   BareEntryID bravo = mockB.getID();   mockB.joinLog (nexusLog);
           MockElm mockC("charly");  BareEntryID charly = mockC.getID();  mockC.joinLog (nexusLog);
           
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           
           CHECK (not mockA.isTouched());
           CHECK (not mockB.isTouched());
@@ -461,13 +461,13 @@ namespace test {
       clearStates()
         {
           MARK_TEST_FUN
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           MockElm mockA("alpha");   BareEntryID alpha = mockA.getID();   mockA.joinLog (nexusLog);
           MockElm mockB("bravo");   BareEntryID bravo = mockB.getID();   mockB.joinLog (nexusLog);
           MockElm mockC("charly");  BareEntryID charly = mockC.getID();  mockC.joinLog (nexusLog);
           
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           
           CHECK (not mockA.isTouched());
           CHECK (not mockB.isTouched());
@@ -495,7 +495,7 @@ namespace test {
           mockA.slotExpand();
           mockA.slotCollapse();
           
-          auto& stateManager = gui::test::Nexus::getMockStateManager();
+          auto& stateManager = stage::test::Nexus::getMockStateManager();
           CHECK (stateManager.currentState(alpha, "expand") == GenNode("expand", false ));
           CHECK (stateManager.currentState(bravo, "expand") == GenNode("expand", true ));
           CHECK (stateManager.currentState(charly,"expand") == Ref::NO);
@@ -538,7 +538,7 @@ namespace test {
                << util::join(nexusLog, "\n")
                << "\n───╼━━━━━━━━━╾────────────────"<<endl;
           
-          gui::test::Nexus::setStateMarkHandler(); // deinstall custom state mark handler
+          stage::test::Nexus::setStateMarkHandler(); // deinstall custom state mark handler
         }
       
       
@@ -683,7 +683,7 @@ namespace test {
           
           
           
-          EventLog nexusLog = gui::test::Nexus::startNewLog();
+          EventLog nexusLog = stage::test::Nexus::startNewLog();
           
           MockElm rootMock("alpha zero");
           ID rootID = rootMock.getID();
@@ -699,7 +699,7 @@ namespace test {
           // In the real application, this operation is provided by the NotificationService.
           // It has access to the UI-Bus, but has to ensure all bus operations are actually
           // performed on the UI event thread.
-          auto& uiBus = gui::test::Nexus::testUI();
+          auto& uiBus = stage::test::Nexus::testUI();
           CallQueue uiDispatcher;
           auto notifyGUI = [&](DiffSource* diffGenerator)
                               {
@@ -735,7 +735,7 @@ namespace test {
           uint generatedBorgs = rootMock.scope.size();
           
           // root and all Borg child nodes are connected to the UI-Bus
-          CHECK (1 + generatedBorgs == gui::test::Nexus::size());
+          CHECK (1 + generatedBorgs == stage::test::Nexus::size());
           
           uint64_t borgChecksum = 0;
           for (uint i=0; i<generatedBorgs; ++i)

@@ -26,7 +26,7 @@
  ** 
  ** @todo as of 1/2015 this is complete WIP-WIP-WIP
  ** 
- ** @see gui::model::Tangible
+ ** @see stage::model::Tangible
  ** @see ////TODO_test usage example
  ** 
  */

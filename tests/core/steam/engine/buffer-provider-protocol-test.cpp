@@ -45,7 +45,7 @@ namespace test  {
   
   using lib::test::Dummy;
   
-  using proc::engine::BuffHandle;
+  using steam::engine::BuffHandle;
   using error::LERR_(LOGIC);
   using error::LERR_(LIFECYCLE);
   

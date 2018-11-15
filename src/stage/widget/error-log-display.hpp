@@ -273,7 +273,7 @@ namespace widget {
       
       /** temporarily change display style to prompt for attention;
        *  set callback-timeout for return to normal state.
-       * @see \ref gui::CSS_CLASS_FLASH
+       * @see \ref stage::CSS_CLASS_FLASH
        */
       void
       triggerFlash()

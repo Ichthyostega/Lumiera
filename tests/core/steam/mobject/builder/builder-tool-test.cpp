@@ -52,8 +52,8 @@ namespace test    {
       using session::AbstractMO;
       using namespace mobject::test;
   
-      using MediaAccessMock = lib::DependInject<backend::MediaAccessFacade>
-                                    ::Local<backend::test::MediaAccessMock>;
+      using MediaAccessMock = lib::DependInject<vault::MediaAccessFacade>
+                                    ::Local<vault::test::MediaAccessMock>;
       
       
       

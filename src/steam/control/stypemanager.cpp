@@ -127,5 +127,5 @@ namespace control {
 void 
 lumiera_StreamType_registerInitFunction (void setupFun(void))
 {
-  lumiera::LifecycleHook (proc::control::ON_STREAMTYPES_RESET, setupFun);
+  lumiera::LifecycleHook (steam::control::ON_STREAMTYPES_RESET, setupFun);
 }

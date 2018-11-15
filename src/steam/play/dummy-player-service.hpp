@@ -29,11 +29,11 @@
  ** it uses an output handle (functor) to push the generated frames up.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
- ** proc::play::DummyPlayer#facade to access this service. This header defines the interface used
+ ** steam::play::DummyPlayer#facade to access this service. This header defines the interface used
  ** to \em provide this service, not to access it.
  ** 
  ** @see lumiera::DummyPlayer
- ** @see gui::PlaybackController usage example 
+ ** @see stage::PlaybackController usage example 
  */
 
 
@@ -63,8 +63,8 @@ namespace steam {
     using lumiera::Display;
     using lumiera::DummyPlayer;
     
-    using proc::node::DummyImageGenerator;
-    using proc::node::TickService;
+    using steam::node::DummyImageGenerator;
+    using steam::node::TickService;
     
     
     

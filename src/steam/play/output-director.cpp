@@ -31,7 +31,7 @@
 #include "steam/play/output-director.hpp"
 #include "vault/thread-wrapper.hpp"
 
-using backend::Thread;
+using vault::Thread;
 
 
 namespace steam {

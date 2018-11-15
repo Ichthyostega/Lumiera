@@ -56,8 +56,8 @@ namespace test{
     struct Space { };
     
     auto CHALLENGE_1 = "some::arbitrary::BullShit<oh::RLY>*";
-    auto CHALLENGE_2 = "lib::Contrived<lib::meta::Barely,true>::ClusterFuck<const std::string& (const std::vector<proc::mobject::oh::RLY* const>)>";
-    auto CHALLENGE_3 = "std::function<special::(anonymous namespace)::Shit(lib::P<proc::asset::Clip, std::shared_ptr<proc::asset::Clip>>)>";
+    auto CHALLENGE_2 = "lib::Contrived<lib::meta::Barely,true>::ClusterFuck<const std::string& (const std::vector<steam::mobject::oh::RLY* const>)>";
+    auto CHALLENGE_3 = "std::function<special::(anonymous namespace)::Shit(lib::P<steam::asset::Clip, std::shared_ptr<steam::asset::Clip>>)>";
     
   }//(end)fixture
   
@@ -75,7 +75,7 @@ namespace test{
    *    * strip some frequent namespace prefixes
    *      ** `std::`
    *      ** `lib::meta::`
-   *      ** `proc::mobject::`
+   *      ** `steam::mobject::`
    *    * omit the standard allocator from STL containers
    *  - the third example demonstrates an embedded function signature
    *    * the primary type component is "`function`"

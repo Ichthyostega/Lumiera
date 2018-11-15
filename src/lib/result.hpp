@@ -30,7 +30,7 @@
  ** valid or failure state, which can be tested. Any attempt to get the value
  ** of an invalid result token will cause an exception to be thrown.
  ** 
- ** @see backend::ThreadJoinable usage example
+ ** @see vault::ThreadJoinable usage example
  */
 
 

@@ -25,7 +25,7 @@
  ** Implementation of the GUI loader. Code generated from this
  ** translation unit is linked into the core application, where it implements
  ** the [Subsystem descriptor](\ref subsys.hpp) for the _UI Subsystem._ When main()
- ** activates and starts this subsystem, an instance of gui::GuiRunner will be
+ ** activates and starts this subsystem, an instance of stage::GuiRunner will be
  ** created, which causes the Lumiera UI plug-in to be loaded and a new thread
  ** to be spawned, which launches the UI and performs the event loop.
  */

@@ -42,8 +42,8 @@
  ** @todo draft from 2013, stalled, but still relevant and to be continued eventually
  ** @see EngineInterface_test
  ** @see CalcStream_test
- ** @see proc::play::PlayerService
- ** @see backend::engine::EngineConfig
+ ** @see steam::play::PlayerService
+ ** @see vault::engine::EngineConfig
  ** 
  */
 
@@ -78,9 +78,9 @@ namespace engine{
 //    using lumiera::DummyPlayer;
 //  using std::function;
   using mobject::ModelPort;
-  using proc::play::Timings;
+  using steam::play::Timings;
   
-  typedef proc::play::OutputSlot::Allocation OutputConnection;
+  typedef steam::play::OutputSlot::Allocation OutputConnection;
   
   
   

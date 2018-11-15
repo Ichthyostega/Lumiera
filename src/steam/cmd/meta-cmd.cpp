@@ -50,13 +50,13 @@
 #include <string>
 
 using lib::hash::LuidH;
-using gui::ID;
-using gui::NOTE_INFO;
-using gui::NOTE_WARN;
-using gui::NOTE_ERROR;
-using gui::NotifyLevel;
-using gui::MARK_expand;
-using gui::GuiNotification;
+using stage::ID;
+using stage::NOTE_INFO;
+using stage::NOTE_WARN;
+using stage::NOTE_ERROR;
+using stage::NotifyLevel;
+using stage::MARK_expand;
+using stage::GuiNotification;
 using lib::diff::GenNode;
 //using util::cStr;
 using util::_Fmt;                              //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
@@ -172,7 +172,7 @@ COMMAND_DEFINITION (test_meta_markError)
   {
     def.operation ([](string message)
                       {
-                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        ID errorLogID = stage::interact::Wizard::getErrorLogID();
                         GuiNotification::facade().markError (errorLogID, message);
                       })
        .captureUndo ([](string message) -> string
@@ -193,7 +193,7 @@ COMMAND_DEFINITION (test_meta_markNote)
   {
     def.operation ([](string message)
                       {
-                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        ID errorLogID = stage::interact::Wizard::getErrorLogID();
                         GuiNotification::facade().markNote (errorLogID, message);
                       })
        .captureUndo ([](string message) -> string
@@ -214,7 +214,7 @@ COMMAND_DEFINITION (test_meta_markAction)
   {
     def.operation ([](string actionID, string message)
                       {
-                        ID errorLogID = gui::interact::Wizard::getErrorLogID();
+                        ID errorLogID = stage::interact::Wizard::getErrorLogID();
                         GuiNotification::facade().mark (errorLogID
                                                        ,actionID==MARK_expand? GenNode{actionID, isYes(message)}
                                                                              : GenNode{actionID, message});

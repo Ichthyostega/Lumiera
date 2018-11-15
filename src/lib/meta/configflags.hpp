@@ -38,8 +38,8 @@
  ** which would lead to more and more code bloat with growing number of possible
  ** combinations.
  ** 
- ** @see proc::engine::config::Strategy usage example
- ** @see proc::engine::config::ConfigSelector 
+ ** @see steam::engine::config::Strategy usage example
+ ** @see steam::engine::config::ConfigSelector 
  ** @see typelist.hpp
  ** 
  */

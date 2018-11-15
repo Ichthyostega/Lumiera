@@ -87,7 +87,7 @@ namespace test{
   inline double
   microbenchmark(FUN const& subject, const size_t nRepeat = DEFAULT_RUNS)
   {
-    using backend::ThreadJoinable;
+    using vault::ThreadJoinable;
     using std::chrono::system_clock;
     
     using Dur = std::chrono::duration<double>;

@@ -47,7 +47,7 @@ using util::cStr;
 using test::Test;
 using lib::Literal;
 using lib::query::extractID;
-using backend::Thread;
+using vault::Thread;
 
 
 namespace lumiera {

@@ -63,8 +63,8 @@ namespace test{
   }
   
   using DummyID = EntryID<Dummy>;
-  using ForkID = EntryID<proc::mobject::session::Fork>;
-  using ClipID = EntryID<proc::mobject::session::Clip>;
+  using ForkID = EntryID<steam::mobject::session::Fork>;
+  using ClipID = EntryID<steam::mobject::session::Clip>;
   
   
   
@@ -135,10 +135,10 @@ namespace test{
       void
       checkBasicProperties ()
         {
-          using proc::asset::Asset;
-          using proc::asset::STRUCT;
-          using proc::asset::Category;
-          using proc::asset::idi::getAssetIdent;
+          using steam::asset::Asset;
+          using steam::asset::STRUCT;
+          using steam::asset::Category;
+          using steam::asset::idi::getAssetIdent;
           
           ForkID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
           
@@ -233,8 +233,8 @@ namespace test{
           CHECK (bIDf.getSym()  == bIDc.getSym());
           CHECK ("suspicious"  == bIDc.getSym());
           
-          using proc::mobject::session::Fork;
-          using proc::mobject::session::Clip;
+          using steam::mobject::session::Fork;
+          using steam::mobject::session::Clip;
           ForkID tIDnew = bIDf.recast<Fork>();
           ClipID cIDnew = bIDc.recast<Clip>();
           CHECK (tIDnew == fID);

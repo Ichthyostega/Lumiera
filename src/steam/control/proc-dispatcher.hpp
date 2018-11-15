@@ -79,7 +79,7 @@ namespace control {
    * class is the _»session loop thread«_ to perform any session mutation
    * commands and to operate the Builder, which translates the session
    * contents into a render nodes network. Also embedded herein is
-   * the implementation of proc::control::SessionCommandService
+   * the implementation of steam::control::SessionCommandService
    */
   class ProcDispatcher
     : public lib::Sync<>

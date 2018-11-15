@@ -199,9 +199,9 @@ apologies for that."
                                 "|lib::diff::"
                                 "|lib::"
                                 "|util::"
-                                "|proc::(asset::|mobject::(session::)?|play::)?"
-                                "|gui::model"
-                                "|gui::ctrl"
+                                "|steam::(asset::|mobject::(session::)?|play::)?"
+                                "|stage::model"
+                                "|stage::ctrl"
                                 "|lumiera::"
                                 , regex::ECMAScript | regex::optimize};
     

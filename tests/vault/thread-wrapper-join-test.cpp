@@ -54,7 +54,7 @@ namespace test {
    * @test use the Lumiera backend to create some new threads, additionally
    *       synchronising with these child threads and waiting for termination.
    * 
-   * @see backend::Thread
+   * @see vault::Thread
    * @see threads.h
    */
   class ThreadWrapperJoin_test : public Test

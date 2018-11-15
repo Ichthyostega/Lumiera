@@ -40,7 +40,7 @@
 namespace steam {
 namespace play {
   
-  using backend::engine::EngineConfig;
+  using vault::engine::EngineConfig;
   using lib::time::PQuant;
   using lib::time::Time;
   using lib::time::TimeVar;

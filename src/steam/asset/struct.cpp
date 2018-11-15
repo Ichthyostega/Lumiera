@@ -54,7 +54,7 @@ using util::_Fmt;
 using lib::Symbol;
 using lib::query::normaliseID;
 using lumiera::query::QueryHandler;
-using proc::ConfigResolver;
+using steam::ConfigResolver;
 
 using util::contains;
 
