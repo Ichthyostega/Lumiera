@@ -2,9 +2,9 @@ Technical Documentation
 =======================
 
 // Menu :  prepend child library
-// Menu :  prepend child backend
-// Menu :  prepend child proc
-// Menu :  prepend child gui
+// Menu :  prepend child vault
+// Menu :  prepend child steam
+// Menu :  prepend child stage
 // Menu :  prepend child howto
 // Menu :  prepend child overview
 
@@ -20,11 +20,11 @@ main layers of Lumiera. You may want to read the
 link:../design/index.html[Design Documents] first to get an overview of all the
 components.
 
-* link:gui/index.html[*Stage Layer*] : Documents related to the GTK based Lumiera GUI
+* link:stage/index.html[*Stage Layer*] : Documents related to the GTK based Lumiera GUI
   
-* link:proc/index.html[*Steam Layer*] : Documents regarding Session, models and the engine structure
+* link:steam/index.html[*Steam Layer*] : Documents regarding Session, models and the engine structure
 
-* link:backend/index.html[*Vault Layer*] : Documents about the data and processing backend
+* link:vault/index.html[*Vault Layer*] : Documents about the data and processing backend
 
 
 == Tools
