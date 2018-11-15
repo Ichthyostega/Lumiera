@@ -31,8 +31,8 @@
  */
 
 
-#ifndef PROC_INTERFACE_PLAY_H
-#define PROC_INTERFACE_PLAY_H
+#ifndef STEAM_INTERFACE_PLAY_H
+#define STEAM_INTERFACE_PLAY_H
 
 
 
@@ -155,4 +155,4 @@ namespace lumiera {
     
     
 } // namespace lumiera
-#endif /*PROC_INTERFACE_PLAY_H*/
+#endif /*STEAM_INTERFACE_PLAY_H*/

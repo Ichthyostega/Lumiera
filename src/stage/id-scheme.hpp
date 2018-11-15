@@ -50,8 +50,8 @@
  ** 
  */
 
-#ifndef GUI_ID_SCHEME_H
-#define GUI_ID_SCHEME_H
+#ifndef STAGE_ID_SCHEME_H
+#define STAGE_ID_SCHEME_H
 
 
 #include "lib/symbol.hpp"
@@ -168,4 +168,4 @@ locate = currentWindow().panel(infobox)
     
   }//namespace gui::idi
 } // namespace gui
-#endif /*GUI_ID_SCHEME_H*/
+#endif /*STAGE_ID_SCHEME_H*/

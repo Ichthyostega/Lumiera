@@ -25,8 +25,8 @@
  ** Manage the mmap objects of a file.
  */
 
-#ifndef BACKEND_MMAPINGS_H
-#define BACKEND_MMAPINGS_H
+#ifndef VAULT_MMAPINGS_H
+#define VAULT_MMAPINGS_H
 
 #include "lib/mutex.h"
 #include "lib/llist.h"
@@ -108,7 +108,7 @@ lumiera_mmapings_release_mmap (LumieraMMapings self, LumieraMMap map);
 
 
 
-#endif /*BACKEND_MMAPINGS_H*/
+#endif /*VAULT_MMAPINGS_H*/
 /*
 // Local Variables:
 // mode: C

@@ -33,8 +33,8 @@
  */
 
 
-#ifndef GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H
-#define GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H
+#ifndef STAGE_TIMELINE_TIMELINE_WIDGET_EMPTY_H
+#define STAGE_TIMELINE_TIMELINE_WIDGET_EMPTY_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/timeline-widget.hpp"
@@ -95,4 +95,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H*/
+#endif /*STAGE_TIMELINE_TIMELINE_WIDGET_EMPTY_H*/

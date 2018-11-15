@@ -59,8 +59,8 @@
  */
 
 
-#ifndef GUI_MODEL_EXPANDER_REVEALER_H
-#define GUI_MODEL_EXPANDER_REVEALER_H
+#ifndef STAGE_MODEL_EXPANDER_REVEALER_H
+#define STAGE_MODEL_EXPANDER_REVEALER_H
 
 
 #include "lib/error.hpp"
@@ -186,4 +186,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_EXPANDER_REVEALER_H*/
+#endif /*STAGE_MODEL_EXPANDER_REVEALER_H*/

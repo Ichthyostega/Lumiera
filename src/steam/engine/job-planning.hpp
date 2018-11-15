@@ -61,8 +61,8 @@
  */
 
 
-#ifndef PROC_ENGINE_JOB_PLANNING_H
-#define PROC_ENGINE_JOB_PLANNING_H
+#ifndef STEAM_ENGINE_JOB_PLANNING_H
+#define STEAM_ENGINE_JOB_PLANNING_H
 
 #include "steam/common.hpp"
 #include "vault/engine/job.h"

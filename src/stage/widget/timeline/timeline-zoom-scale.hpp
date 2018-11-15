@@ -28,8 +28,8 @@
 
 
 
-#ifndef GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
-#define GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
+#ifndef STAGE_WIDGET_TIMELINE_ZOOM_SCALE_H
+#define STAGE_WIDGET_TIMELINE_ZOOM_SCALE_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/widget/mini-button.hpp"
@@ -98,4 +98,4 @@ namespace timeline {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_ZOOM_SCALE_H*/
+#endif /*STAGE_WIDGET_TIMELINE_ZOOM_SCALE_H*/

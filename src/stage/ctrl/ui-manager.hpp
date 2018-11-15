@@ -44,8 +44,8 @@
  */
 
 
-#ifndef GUI_CTRL_UI_MANAGER_H
-#define GUI_CTRL_UI_MANAGER_H
+#ifndef STAGE_CTRL_UI_MANAGER_H
+#define STAGE_CTRL_UI_MANAGER_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
@@ -153,4 +153,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_UI_MANAGER_H*/
+#endif /*STAGE_CTRL_UI_MANAGER_H*/

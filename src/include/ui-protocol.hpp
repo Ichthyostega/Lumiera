@@ -47,8 +47,8 @@
  */
 
 
-#ifndef GUI_INTERFACE_UI_PROTOCOL_H
-#define GUI_INTERFACE_UI_PROTOCOL_H
+#ifndef STAGE_INTERFACE_UI_PROTOCOL_H
+#define STAGE_INTERFACE_UI_PROTOCOL_H
 
 
 #include "lib/error.hpp"
@@ -97,4 +97,4 @@ namespace gui {
   
   
 }// namespace gui
-#endif /*GUI_INTERFACE_UI_PROTOCOL_H*/
+#endif /*STAGE_INTERFACE_UI_PROTOCOL_H*/

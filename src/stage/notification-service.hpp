@@ -36,8 +36,8 @@
  */
 
 
-#ifndef GUI_NOTIFICATION_SERVICE_H
-#define GUI_NOTIFICATION_SERVICE_H
+#ifndef STAGE_NOTIFICATION_SERVICE_H
+#define STAGE_NOTIFICATION_SERVICE_H
 
 
 #include "include/gui-notification-facade.h"

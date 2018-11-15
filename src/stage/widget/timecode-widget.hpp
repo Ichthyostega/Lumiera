@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_WIDGET_TIMECODE_WIDGET_H
-#define GUI_WIDGET_TIMECODE_WIDGET_H
+#ifndef STAGE_WIDGET_TIMECODE_WIDGET_H
+#define STAGE_WIDGET_TIMECODE_WIDGET_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
@@ -218,4 +218,4 @@ namespace widget {
   
   
 }}// gui::widget
-#endif /*GUI_WIDGET_TIMECODE_WIDGET_H*/
+#endif /*STAGE_WIDGET_TIMECODE_WIDGET_H*/

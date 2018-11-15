@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GUI_WIDGET_TIMELINE_CLIP_TRACK_H
-#define GUI_WIDGET_TIMELINE_CLIP_TRACK_H
+#ifndef STAGE_WIDGET_TIMELINE_CLIP_TRACK_H
+#define STAGE_WIDGET_TIMELINE_CLIP_TRACK_H
 
 #include "stage/widget/timeline/basic-draw-strategy.hpp"
 #include "stage/widget/timeline/timeline-track.hpp"
@@ -110,4 +110,4 @@ namespace timeline {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_CLIP_TRACK_H*/
+#endif /*STAGE_WIDGET_TIMELINE_CLIP_TRACK_H*/

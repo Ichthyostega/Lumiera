@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PROC_INTERFACE_STATE_H
-#define PROC_INTERFACE_STATE_H
+#ifndef STEAM_INTERFACE_STATE_H
+#define STEAM_INTERFACE_STATE_H
 
 
 #include "lib/error.hpp"

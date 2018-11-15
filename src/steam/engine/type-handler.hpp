@@ -38,8 +38,8 @@
  ** @see BufferMetadataKey_test#verifyTypeHandler unit-test
  */
 
-#ifndef PROC_ENGINE_TYPE_HANDLER_H
-#define PROC_ENGINE_TYPE_HANDLER_H
+#ifndef STEAM_ENGINE_TYPE_HANDLER_H
+#define STEAM_ENGINE_TYPE_HANDLER_H
 
 
 #include "lib/error.hpp"

@@ -49,8 +49,8 @@
  */
 
 
-#ifndef GUI_TIMELINE_TIMELINE_GUI_H
-#define GUI_TIMELINE_TIMELINE_GUI_H
+#ifndef STAGE_TIMELINE_TIMELINE_GUI_H
+#define STAGE_TIMELINE_TIMELINE_GUI_H
 
 #include "stage/ctrl/bus-term.hpp"
 #include "stage/model/w-link.hpp"
@@ -103,4 +103,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_TIMELINE_GUI_H*/
+#endif /*STAGE_TIMELINE_TIMELINE_GUI_H*/

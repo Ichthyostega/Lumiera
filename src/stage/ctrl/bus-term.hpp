@@ -55,8 +55,8 @@
  */
 
 
-#ifndef GUI_CTRL_BUS_TERM_H
-#define GUI_CTRL_BUS_TERM_H
+#ifndef STAGE_CTRL_BUS_TERM_H
+#define STAGE_CTRL_BUS_TERM_H
 
 
 #include "lib/error.hpp"
@@ -178,4 +178,4 @@ namespace ctrl{
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_BUS_TERM_H*/
+#endif /*STAGE_CTRL_BUS_TERM_H*/

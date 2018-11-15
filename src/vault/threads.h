@@ -29,8 +29,8 @@
  */
 
 
-#ifndef BACKEND_THREADS_H
-#define BACKEND_THREADS_H
+#ifndef VAULT_THREADS_H
+#define VAULT_THREADS_H
 
 #include "lib/condition.h"
 
@@ -282,7 +282,7 @@ lumiera_thread_sync (void);
 lumiera_err
 lumiera_thread_join (LumieraThread thread);
 
-#endif /*BACKEND_THREADS_H*/
+#endif /*VAULT_THREADS_H*/
 /*
 // Local Variables:
 // mode: C

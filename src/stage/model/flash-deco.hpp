@@ -37,8 +37,8 @@
  */
 
 
-#ifndef GUI_MODEL_FLASH_DECO_H
-#define GUI_MODEL_FLASH_DECO_H
+#ifndef STAGE_MODEL_FLASH_DECO_H
+#define STAGE_MODEL_FLASH_DECO_H
 
 
 #include "stage/gtk-base.hpp"
@@ -87,4 +87,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_FLASH_DECO_H*/
+#endif /*STAGE_MODEL_FLASH_DECO_H*/

@@ -35,8 +35,8 @@
 
 
 
-#ifndef PROC_CMD_H
-#define PROC_CMD_H
+#ifndef STEAM_CMD_H
+#define STEAM_CMD_H
 
 #include "steam/control/command-setup.hpp"
 //#include "lib/symbol.hpp"
@@ -84,4 +84,4 @@ namespace cmd {
   
   
 }} // namespace proc::cmd
-#endif /*PROC_CMD_H*/
+#endif /*STEAM_CMD_H*/

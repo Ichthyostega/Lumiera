@@ -112,8 +112,8 @@
  */
 
 
-#ifndef GUI_INTERACT_UI_COORD_RESOLVER_H
-#define GUI_INTERACT_UI_COORD_RESOLVER_H
+#ifndef STAGE_INTERACT_UI_COORD_RESOLVER_H
+#define STAGE_INTERACT_UI_COORD_RESOLVER_H
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
@@ -598,4 +598,4 @@ namespace interact {
   
   
 }}// namespace gui::interact
-#endif /*GUI_INTERACT_UI_COORD_RESOLVER_H*/
+#endif /*STAGE_INTERACT_UI_COORD_RESOLVER_H*/

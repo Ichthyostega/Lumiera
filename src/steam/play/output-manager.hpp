@@ -27,8 +27,8 @@
  */
 
 
-#ifndef PROC_PLAY_OUTPUT_MANAGER_H
-#define PROC_PLAY_OUTPUT_MANAGER_H
+#ifndef STEAM_PLAY_OUTPUT_MANAGER_H
+#define STEAM_PLAY_OUTPUT_MANAGER_H
 
 
 #include "lib/error.hpp"

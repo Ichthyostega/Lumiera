@@ -54,8 +54,8 @@
  */
 
 
-#ifndef GUI_MODEL_W_LINK_H
-#define GUI_MODEL_W_LINK_H
+#ifndef STAGE_MODEL_W_LINK_H
+#define STAGE_MODEL_W_LINK_H
 
 
 #include "lib/error.hpp"
@@ -241,4 +241,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_W_LINK_H*/
+#endif /*STAGE_MODEL_W_LINK_H*/

@@ -29,8 +29,8 @@
  */
 
 
-#ifndef PROC_ENGINE_JOB_TICKET_H
-#define PROC_ENGINE_JOB_TICKET_H
+#ifndef STEAM_ENGINE_JOB_TICKET_H
+#define STEAM_ENGINE_JOB_TICKET_H
 
 #include "steam/common.hpp"
 //#include "steam/state.hpp"

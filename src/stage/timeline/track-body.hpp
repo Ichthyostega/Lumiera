@@ -37,8 +37,8 @@
  */
 
 
-#ifndef GUI_TIMELINE_TRACK_BODY_H
-#define GUI_TIMELINE_TRACK_BODY_H
+#ifndef STAGE_TIMELINE_TRACK_BODY_H
+#define STAGE_TIMELINE_TRACK_BODY_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/ctrl/bus-term.hpp"
@@ -91,4 +91,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_TRACK_BODY_H*/
+#endif /*STAGE_TIMELINE_TRACK_BODY_H*/

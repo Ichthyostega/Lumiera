@@ -36,8 +36,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_MOBJECT_H
-#define PROC_MOBJECT_MOBJECT_H
+#ifndef STEAM_MOBJECT_MOBJECT_H
+#define STEAM_MOBJECT_MOBJECT_H
 
 #include "steam/common.hpp"
 #include "steam/mobject/builder/buildertool.hpp"
@@ -122,4 +122,4 @@ namespace mobject {
 
 
 }} // namespace proc::mobject
-#endif /*PROC_MOBJECT_MOBJECT_H*/
+#endif /*STEAM_MOBJECT_MOBJECT_H*/

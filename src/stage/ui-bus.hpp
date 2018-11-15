@@ -99,8 +99,8 @@
  */
 
 
-#ifndef GUI_UI_BUS_H
-#define GUI_UI_BUS_H
+#ifndef STAGE_UI_BUS_H
+#define STAGE_UI_BUS_H
 
 
 #include "stage/gtk-base.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
@@ -172,5 +172,5 @@ namespace gui {
   
   
 }// namespace gui
-#endif /*GUI_UI_BUS_H*/
+#endif /*STAGE_UI_BUS_H*/
 

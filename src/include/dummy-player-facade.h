@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PROC_INTERFACE_DUMMYPLAYER_H
-#define PROC_INTERFACE_DUMMYPLAYER_H
+#ifndef STEAM_INTERFACE_DUMMYPLAYER_H
+#define STEAM_INTERFACE_DUMMYPLAYER_H
 
 #include "include/display-facade.h"
 #include "include/display-handles.h"

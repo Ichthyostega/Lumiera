@@ -30,8 +30,8 @@
  */
 
 
-#ifndef PROC_EXTERNAL_LIBGAVL_H
-#define PROC_EXTERNAL_LIBGAVL_H
+#ifndef STEAM_EXTERNAL_LIBGAVL_H
+#define STEAM_EXTERNAL_LIBGAVL_H
 
 
 #include "steam/control/media-impl-lib.hpp"

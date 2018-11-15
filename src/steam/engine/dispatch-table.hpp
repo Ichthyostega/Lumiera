@@ -27,8 +27,8 @@
  */
 
 
-#ifndef PROC_ENGINE_DISPATCH_TABLE_H
-#define PROC_ENGINE_DISPATCH_TABLE_H
+#ifndef STEAM_ENGINE_DISPATCH_TABLE_H
+#define STEAM_ENGINE_DISPATCH_TABLE_H
 
 #include "steam/common.hpp"
 #include "steam/engine/dispatcher.hpp"

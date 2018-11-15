@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PROC_ENGINE_BUFFR_LOCAL_KEY_H
-#define PROC_ENGINE_BUFFR_LOCAL_KEY_H
+#ifndef STEAM_ENGINE_BUFFR_LOCAL_KEY_H
+#define STEAM_ENGINE_BUFFR_LOCAL_KEY_H
 
 
 #include "lib/error.hpp"

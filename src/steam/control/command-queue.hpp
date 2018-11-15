@@ -39,8 +39,8 @@
 
 
 
-#ifndef PROC_CONTROL_COMMAND_QUEUE_H
-#define PROC_CONTROL_COMMAND_QUEUE_H
+#ifndef STEAM_CONTROL_COMMAND_QUEUE_H
+#define STEAM_CONTROL_COMMAND_QUEUE_H
 
 #include "steam/control/command.hpp"
 #include "lib/iter-stack.hpp"
@@ -92,4 +92,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*PROC_CONTROL_COMMAND_QUEUE_H*/
+#endif /*STEAM_CONTROL_COMMAND_QUEUE_H*/

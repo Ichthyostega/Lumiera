@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GUI_DIALOG_DIALOG_H
-#define GUI_DIALOG_DIALOG_H
+#ifndef STAGE_DIALOG_DIALOG_H
+#define STAGE_DIALOG_DIALOG_H
 
 namespace gui {
 namespace dialog {
@@ -44,4 +44,4 @@ namespace dialog {
   
   
 }} // namespace gui::dialog
-#endif /*GUI_DIALOG_DIALOG_H*/
+#endif /*STAGE_DIALOG_DIALOG_H*/

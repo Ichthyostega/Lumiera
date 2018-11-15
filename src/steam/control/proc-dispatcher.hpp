@@ -51,8 +51,8 @@
 
 
 
-#ifndef PROC_CONTROL_PROC_DISPATCHER_H
-#define PROC_CONTROL_PROC_DISPATCHER_H
+#ifndef STEAM_CONTROL_PROC_DISPATCHER_H
+#define STEAM_CONTROL_PROC_DISPATCHER_H
 
 #include "common/subsys.hpp"
 #include "lib/depend.hpp"
@@ -113,4 +113,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*PROC_CONTROL_PROC_DISPATCHER_H*/
+#endif /*STEAM_CONTROL_PROC_DISPATCHER_H*/

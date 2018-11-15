@@ -48,8 +48,8 @@
  */
 
 
-#ifndef GUI_SETTING_ASSET_CONTROLLER_H
-#define GUI_SETTING_ASSET_CONTROLLER_H
+#ifndef STAGE_SETTING_ASSET_CONTROLLER_H
+#define STAGE_SETTING_ASSET_CONTROLLER_H
 
 //#include "stage/gtk-base.hpp"
 #include "stage/model/controller.hpp"
@@ -92,4 +92,4 @@ namespace setting {
   
   
 }}// namespace gui::setting
-#endif /*GUI_SETTING_ASSET_CONTROLLER_H*/
+#endif /*STAGE_SETTING_ASSET_CONTROLLER_H*/

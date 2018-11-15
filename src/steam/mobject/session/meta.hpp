@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_META_H
-#define PROC_MOBJECT_SESSION_META_H
+#ifndef STEAM_MOBJECT_SESSION_META_H
+#define STEAM_MOBJECT_SESSION_META_H
 
 #include "steam/mobject/session/abstractmo.hpp"
 

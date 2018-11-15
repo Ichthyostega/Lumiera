@@ -27,8 +27,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_ALLOCATION_H
-#define PROC_MOBJECT_SESSION_ALLOCATION_H
+#ifndef STEAM_MOBJECT_SESSION_ALLOCATION_H
+#define STEAM_MOBJECT_SESSION_ALLOCATION_H
 
 #include "steam/mobject/session/locatingpin.hpp"
 

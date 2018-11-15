@@ -33,8 +33,8 @@
  */
 
 
-#ifndef PROC_ENGINE_CALC_PLAN_CONTINUATION_H
-#define PROC_ENGINE_CALC_PLAN_CONTINUATION_H
+#ifndef STEAM_ENGINE_CALC_PLAN_CONTINUATION_H
+#define STEAM_ENGINE_CALC_PLAN_CONTINUATION_H
 
 #include "steam/common.hpp"
 #include "steam/mobject/model-port.hpp"

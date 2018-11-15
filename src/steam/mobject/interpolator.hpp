@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_INTERPOLATOR_H
-#define PROC_MOBJECT_INTERPOLATOR_H
+#ifndef STEAM_MOBJECT_INTERPOLATOR_H
+#define STEAM_MOBJECT_INTERPOLATOR_H
 
 
 
@@ -50,4 +50,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif /*PROC_MOBJECT_INTERPOLATOR_H*/
+#endif /*STEAM_MOBJECT_INTERPOLATOR_H*/

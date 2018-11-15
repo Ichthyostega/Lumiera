@@ -37,8 +37,8 @@
  */
 
 
-#ifndef GUI_TEST_PLACEHOLDER_COMMAND_H
-#define GUI_TEST_PLACEHOLDER_COMMAND_H
+#ifndef STAGE_TEST_PLACEHOLDER_COMMAND_H
+#define STAGE_TEST_PLACEHOLDER_COMMAND_H
 
 
 #include "lib/error.hpp"
@@ -134,4 +134,4 @@ namespace test{
   
   
 }} // namespace gui::test
-#endif /*GUI_TEST_PLACEHOLDER_COMMAND_H*/
+#endif /*STAGE_TEST_PLACEHOLDER_COMMAND_H*/

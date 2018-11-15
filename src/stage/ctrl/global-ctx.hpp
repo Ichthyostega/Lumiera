@@ -50,8 +50,8 @@
  */
 
 
-#ifndef GUI_CTRL_GLOBAL_CTX_H
-#define GUI_CTRL_GLOBAL_CTX_H
+#ifndef STAGE_CTRL_GLOBAL_CTX_H
+#define STAGE_CTRL_GLOBAL_CTX_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/ui-bus.hpp"
@@ -107,4 +107,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_GLOBAL_CTX_H*/
+#endif /*STAGE_CTRL_GLOBAL_CTX_H*/

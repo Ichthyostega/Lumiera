@@ -33,8 +33,8 @@
  */
 
 
-#ifndef GUI_CTRL_STATE_MAP_GROUPING_STORAGE_H
-#define GUI_CTRL_STATE_MAP_GROUPING_STORAGE_H
+#ifndef STAGE_CTRL_STATE_MAP_GROUPING_STORAGE_H
+#define STAGE_CTRL_STATE_MAP_GROUPING_STORAGE_H
 
 
 #include "lib/error.hpp"
@@ -223,4 +223,4 @@ namespace ctrl {
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_STATE_MAP_GROUPING_STORAGE_H*/
+#endif /*STAGE_CTRL_STATE_MAP_GROUPING_STORAGE_H*/

@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_OUTPUT_XVDISPLAYER_H
-#define GUI_OUTPUT_XVDISPLAYER_H
+#ifndef STAGE_OUTPUT_XVDISPLAYER_H
+#define STAGE_OUTPUT_XVDISPLAYER_H
 
 
 #include "stage/output/displayer.hpp"

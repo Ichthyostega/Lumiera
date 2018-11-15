@@ -46,8 +46,8 @@
  */
 
 
-#ifndef GUI_DISPLAY_SERVICE_H
-#define GUI_DISPLAY_SERVICE_H
+#ifndef STAGE_DISPLAY_SERVICE_H
+#define STAGE_DISPLAY_SERVICE_H
 
 
 #include "include/display-facade.h"

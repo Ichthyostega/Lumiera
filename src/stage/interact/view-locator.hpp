@@ -61,8 +61,8 @@
  */
 
 
-#ifndef GUI_INTERACT_VIEW_LOCATOR_H
-#define GUI_INTERACT_VIEW_LOCATOR_H
+#ifndef STAGE_INTERACT_VIEW_LOCATOR_H
+#define STAGE_INTERACT_VIEW_LOCATOR_H
 
 #include "lib/depend-inject.hpp"
 #include "stage/id-scheme.hpp"
@@ -138,4 +138,4 @@ namespace interact {
   
   
 }}// namespace gui::interact
-#endif /*GUI_INTERACT_VIEW_LOCATOR_H*/
+#endif /*STAGE_INTERACT_VIEW_LOCATOR_H*/

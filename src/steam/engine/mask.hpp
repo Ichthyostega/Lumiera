@@ -30,8 +30,8 @@
  */
 
 
-#ifndef PROC_ENGINE_MASK_H
-#define PROC_ENGINE_MASK_H
+#ifndef STEAM_ENGINE_MASK_H
+#define STEAM_ENGINE_MASK_H
 
 #include "steam/engine/procnode.hpp"
 
@@ -51,4 +51,4 @@ namespace engine{
   
   
 }} // namespace proc::engine
-#endif /*PROC_ENGINE_MASK_H*/
+#endif /*STEAM_ENGINE_MASK_H*/

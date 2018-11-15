@@ -52,8 +52,8 @@
  */
 
 
-#ifndef PROC_INTERFACE_ASSET_H
-#define PROC_INTERFACE_ASSET_H
+#ifndef STEAM_INTERFACE_ASSET_H
+#define STEAM_INTERFACE_ASSET_H
 
 
 #include "lib/error.hpp"

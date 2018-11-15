@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_WIDGET_TIMELINE_WIDGET_H
-#define GUI_WIDGET_TIMELINE_WIDGET_H
+#ifndef STAGE_WIDGET_TIMELINE_WIDGET_H
+#define STAGE_WIDGET_TIMELINE_WIDGET_H
 
 #include "stage/widget/timeline/timeline-state.hpp"
 #include "stage/widget/timeline/timeline-header-container.hpp"
@@ -311,4 +311,4 @@ namespace widget {
   
   
 }}// gui::widget
-#endif /*GUI_WIDGET_TIMELINE_WIDGET_H*/
+#endif /*STAGE_WIDGET_TIMELINE_WIDGET_H*/

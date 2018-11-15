@@ -25,8 +25,8 @@
  ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
-#ifndef GUI_WIDGET_TIMELINE_ARROW_TOOL_H
-#define GUI_WIDGET_TIMELINE_ARROW_TOOL_H
+#ifndef STAGE_WIDGET_TIMELINE_ARROW_TOOL_H
+#define STAGE_WIDGET_TIMELINE_ARROW_TOOL_H
 
 
 #include "stage/gtk-base.hpp"
@@ -90,4 +90,4 @@ namespace timeline {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_ARROW_TOOL_H*/
+#endif /*STAGE_WIDGET_TIMELINE_ARROW_TOOL_H*/

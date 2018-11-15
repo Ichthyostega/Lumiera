@@ -29,8 +29,8 @@
  */
 
 
-#ifndef GUI_WIDGET_PANEL_BAR_H
-#define GUI_WIDGET_PANEL_BAR_H
+#ifndef STAGE_WIDGET_PANEL_BAR_H
+#define STAGE_WIDGET_PANEL_BAR_H
 
 
 #include "stage/widget/menu-button.hpp"
@@ -114,4 +114,4 @@ namespace gui {
   
   
 }}// gui::widget
-#endif /*GUI_WIDGET_PANEL_BAR_H*/
+#endif /*STAGE_WIDGET_PANEL_BAR_H*/

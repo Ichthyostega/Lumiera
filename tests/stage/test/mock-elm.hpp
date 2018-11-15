@@ -56,8 +56,8 @@
  */
 
 
-#ifndef GUI_TEST_MOCK_ELM_H
-#define GUI_TEST_MOCK_ELM_H
+#ifndef STAGE_TEST_MOCK_ELM_H
+#define STAGE_TEST_MOCK_ELM_H
 
 
 #include "lib/error.hpp"
@@ -490,4 +490,4 @@ namespace test{
   
   
 }} // namespace gui::test
-#endif /*GUI_TEST_MOCK_ELM_H*/
+#endif /*STAGE_TEST_MOCK_ELM_H*/

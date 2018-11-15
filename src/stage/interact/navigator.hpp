@@ -35,8 +35,8 @@
  */
 
 
-#ifndef GUI_INTERACT_NAVIGATOR_H
-#define GUI_INTERACT_NAVIGATOR_H
+#ifndef STAGE_INTERACT_NAVIGATOR_H
+#define STAGE_INTERACT_NAVIGATOR_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/interact/ui-coord-resolver.hpp"
@@ -87,4 +87,4 @@ namespace interact {
   
   
 }}// namespace gui::interact
-#endif /*GUI_INTERACT_NAVIGATOR_H*/
+#endif /*STAGE_INTERACT_NAVIGATOR_H*/

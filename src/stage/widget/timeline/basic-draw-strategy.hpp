@@ -27,8 +27,8 @@
 
 
 
-#ifndef GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
-#define GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
+#ifndef STAGE_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
+#define STAGE_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
 
 #include "stage/widget/timeline/draw-strategy.hpp"
 
@@ -51,4 +51,4 @@ namespace timeline {
     };
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H*/
+#endif /*STAGE_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H*/

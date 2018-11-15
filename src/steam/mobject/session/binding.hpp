@@ -29,8 +29,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_BINDING_H
-#define PROC_MOBJECT_SESSION_BINDING_H
+#ifndef STEAM_MOBJECT_SESSION_BINDING_H
+#define STEAM_MOBJECT_SESSION_BINDING_H
 
 #include "steam/mobject/session/meta.hpp"
 #include "steam/mobject/builder/buildertool.hpp"

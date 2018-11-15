@@ -25,8 +25,8 @@
  ** All information associated with managing a file is kept here.
  */
 
-#ifndef BACKEND_FILEDESCRIPTOR_H
-#define BACKEND_FILEDESCRIPTOR_H
+#ifndef VAULT_FILEDESCRIPTOR_H
+#define VAULT_FILEDESCRIPTOR_H
 
 #include "lib/mutex.h"
 #include "lib/rwlock.h"
@@ -150,4 +150,4 @@ lumiera_filedescriptor_unlock (LumieraFiledescriptor self);
 
 
 
-#endif /*BACKEND_FILEDESCRIPTOR_H*/
+#endif /*VAULT_FILEDESCRIPTOR_H*/

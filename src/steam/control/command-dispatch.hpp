@@ -32,8 +32,8 @@
 
 
 
-#ifndef PROC_CONTROL_COMMAND_DISPATCH_H
-#define PROC_CONTROL_COMMAND_DISPATCH_H
+#ifndef STEAM_CONTROL_COMMAND_DISPATCH_H
+#define STEAM_CONTROL_COMMAND_DISPATCH_H
 
 #include "steam/control/command.hpp"
 
@@ -65,4 +65,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*PROC_CONTROL_COMMAND_DISPATCH_H*/
+#endif /*STEAM_CONTROL_COMMAND_DISPATCH_H*/

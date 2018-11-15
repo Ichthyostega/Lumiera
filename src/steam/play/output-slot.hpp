@@ -62,8 +62,8 @@
  */
 
 
-#ifndef PROC_PLAY_OUTPUT_SLOT_H
-#define PROC_PLAY_OUTPUT_SLOT_H
+#ifndef STEAM_PLAY_OUTPUT_SLOT_H
+#define STEAM_PLAY_OUTPUT_SLOT_H
 
 
 #include "lib/error.hpp"

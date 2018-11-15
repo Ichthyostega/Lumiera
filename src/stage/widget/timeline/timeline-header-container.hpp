@@ -29,8 +29,8 @@
  */
 
 
-#ifndef GUI_WIDGET_TIMELINE_HEADER_CONTAINER_H
-#define GUI_WIDGET_TIMELINE_HEADER_CONTAINER_H
+#ifndef STAGE_WIDGET_TIMELINE_HEADER_CONTAINER_H
+#define STAGE_WIDGET_TIMELINE_HEADER_CONTAINER_H
 
 #include "stage/gtk-base.hpp"
 #include "timeline-layout-helper.hpp"
@@ -273,5 +273,5 @@ namespace gui {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_HEADER_CONTAINER_H*/
+#endif /*STAGE_WIDGET_TIMELINE_HEADER_CONTAINER_H*/
 

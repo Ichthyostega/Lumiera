@@ -36,8 +36,8 @@
  */
 
 
-#ifndef GUI_INTERACT_SPOT_LOCATOR_H
-#define GUI_INTERACT_SPOT_LOCATOR_H
+#ifndef STAGE_INTERACT_SPOT_LOCATOR_H
+#define STAGE_INTERACT_SPOT_LOCATOR_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
@@ -76,4 +76,4 @@ namespace interact {
   
   
 }}// namespace gui::interact
-#endif /*GUI_INTERACT_SPOT_LOCATOR_H*/
+#endif /*STAGE_INTERACT_SPOT_LOCATOR_H*/

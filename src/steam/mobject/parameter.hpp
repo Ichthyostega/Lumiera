@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_PROC_MOBJECT_PARAMETER_H
-#define PROC_PROC_MOBJECT_PARAMETER_H
+#ifndef STEAM_PROC_MOBJECT_PARAMETER_H
+#define STEAM_PROC_MOBJECT_PARAMETER_H
 
 
 
@@ -59,4 +59,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif /*PROC_PROC_MOBJECT_PARAMETER_H*/
+#endif /*STEAM_PROC_MOBJECT_PARAMETER_H*/

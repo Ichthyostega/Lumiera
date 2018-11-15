@@ -29,8 +29,8 @@
  */
 
 
-#ifndef BACKEND_TEST_MEDIA_ACCESS_MOCK_H
-#define BACKEND_TEST_MEDIA_ACCESS_MOCK_H
+#ifndef VAULT_TEST_MEDIA_ACCESS_MOCK_H
+#define VAULT_TEST_MEDIA_ACCESS_MOCK_H
 
 
 #include "vault/media-access-facade.hpp"

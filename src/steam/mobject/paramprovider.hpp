@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_PARAMPROVIDER_H
-#define PROC_MOBJECT_PARAMPROVIDER_H
+#ifndef STEAM_MOBJECT_PARAMPROVIDER_H
+#define STEAM_MOBJECT_PARAMPROVIDER_H
 
 
 
@@ -59,4 +59,4 @@ namespace mobject {
 
 
 }} // namespace proc::mobject
-#endif /*PROC_MOBJECT_PARAMPROVIDER_H*/
+#endif /*STEAM_MOBJECT_PARAMPROVIDER_H*/

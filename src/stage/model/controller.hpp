@@ -35,8 +35,8 @@
  */
 
 
-#ifndef GUI_MODEL_CONTROLLER_H
-#define GUI_MODEL_CONTROLLER_H
+#ifndef STAGE_MODEL_CONTROLLER_H
+#define STAGE_MODEL_CONTROLLER_H
 
 
 #include "lib/error.hpp"
@@ -121,4 +121,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_CONTROLLER_H*/
+#endif /*STAGE_MODEL_CONTROLLER_H*/

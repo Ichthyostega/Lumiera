@@ -72,8 +72,8 @@
  */
 
 
-#ifndef GUI_CTRL_UI_DISPATCHER_H
-#define GUI_CTRL_UI_DISPATCHER_H
+#ifndef STAGE_CTRL_UI_DISPATCHER_H
+#define STAGE_CTRL_UI_DISPATCHER_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/call-queue.hpp"
@@ -155,4 +155,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_UI_DISPATCHER_H*/
+#endif /*STAGE_CTRL_UI_DISPATCHER_H*/

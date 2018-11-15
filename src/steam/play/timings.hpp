@@ -39,8 +39,8 @@
  */
 
 
-#ifndef PROC_PLAY_TIMINGS_H
-#define PROC_PLAY_TIMINGS_H
+#ifndef STEAM_PLAY_TIMINGS_H
+#define STEAM_PLAY_TIMINGS_H
 
 
 #include "lib/error.hpp"

@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PROC_ENGINE_RENDERGRAPH_H
-#define PROC_ENGINE_RENDERGRAPH_H
+#ifndef STEAM_ENGINE_RENDERGRAPH_H
+#define STEAM_ENGINE_RENDERGRAPH_H
 
 #include "steam/common.hpp"
 #include "steam/state.hpp"
@@ -71,4 +71,4 @@ namespace engine {
   
   
 }} // namespace proc::engine
-#endif /*PROC_ENGINE_RENDERGRAPH_H*/
+#endif /*STEAM_ENGINE_RENDERGRAPH_H*/

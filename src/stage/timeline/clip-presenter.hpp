@@ -49,8 +49,8 @@
  */
 
 
-#ifndef GUI_TIMELINE_CLIP_PRESENTER_H
-#define GUI_TIMELINE_CLIP_PRESENTER_H
+#ifndef STAGE_TIMELINE_CLIP_PRESENTER_H
+#define STAGE_TIMELINE_CLIP_PRESENTER_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/model/controller.hpp"
@@ -103,4 +103,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_CLIP_PRESENTER_H*/
+#endif /*STAGE_TIMELINE_CLIP_PRESENTER_H*/

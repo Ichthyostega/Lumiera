@@ -27,8 +27,8 @@
  */
 
 
-#ifndef GUI_WIDGET_TIMELINE_RULER_H
-#define GUI_WIDGET_TIMELINE_RULER_H
+#ifndef STAGE_WIDGET_TIMELINE_RULER_H
+#define STAGE_WIDGET_TIMELINE_RULER_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
@@ -254,5 +254,5 @@ namespace widget {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_RULER_H*/
+#endif /*STAGE_WIDGET_TIMELINE_RULER_H*/
 

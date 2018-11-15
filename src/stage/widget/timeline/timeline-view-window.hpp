@@ -28,8 +28,8 @@
 
 
 
-#ifndef GUI_WIDGET_TIMELINE_VIEW_WINDOW_H
-#define GUI_WIDGET_TIMELINE_VIEW_WINDOW_H
+#ifndef STAGE_WIDGET_TIMELINE_VIEW_WINDOW_H
+#define STAGE_WIDGET_TIMELINE_VIEW_WINDOW_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
@@ -168,4 +168,4 @@ namespace widget {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_VIEW_WINDOW_H*/
+#endif /*STAGE_WIDGET_TIMELINE_VIEW_WINDOW_H*/

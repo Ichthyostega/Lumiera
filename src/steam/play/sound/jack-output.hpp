@@ -30,8 +30,8 @@
  */
 
 
-#ifndef PROC_PLAY_SOUND_JACK_OUTPUT_H
-#define PROC_PLAY_SOUND_JACK_OUTPUT_H
+#ifndef STEAM_PLAY_SOUND_JACK_OUTPUT_H
+#define STEAM_PLAY_SOUND_JACK_OUTPUT_H
 
 
 //#include "include/display-facade.h"

@@ -36,8 +36,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_EXPLICITPLACEMENT_H
-#define PROC_MOBJECT_EXPLICITPLACEMENT_H
+#ifndef STEAM_MOBJECT_EXPLICITPLACEMENT_H
+#define STEAM_MOBJECT_EXPLICITPLACEMENT_H
 
 #include "steam/mobject/placement.hpp"
 
@@ -100,4 +100,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif /*PROC_MOBJECT_EXPLICITPLACEMENT_H*/
+#endif /*STEAM_MOBJECT_EXPLICITPLACEMENT_H*/

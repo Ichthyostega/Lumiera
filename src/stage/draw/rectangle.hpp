@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GUI_DRAW_RECTANGLE_H
-#define GUI_DRAW_RECTANGLE_H
+#ifndef STAGE_DRAW_RECTANGLE_H
+#define STAGE_DRAW_RECTANGLE_H
 
 #include "stage/gtk-base.hpp"
 
@@ -43,4 +43,4 @@ namespace draw {
   
   
 }}// namespace gui::draw
-#endif /*GUI_DRAW_RECTANGLE_H*/
+#endif /*STAGE_DRAW_RECTANGLE_H*/

@@ -41,8 +41,8 @@
  */
 
 
-#ifndef GUI_TEST_TEST_NEXUS_H
-#define GUI_TEST_TEST_NEXUS_H
+#ifndef STAGE_TEST_TEST_NEXUS_H
+#define STAGE_TEST_TEST_NEXUS_H
 
 
 #include "lib/error.hpp"
@@ -206,4 +206,4 @@ namespace test{
   
   
 }} // namespace gui::test
-#endif /*GUI_TEST_TEST_NEXUS_H*/
+#endif /*STAGE_TEST_TEST_NEXUS_H*/

@@ -282,8 +282,8 @@ namespace config {
                                               ///////////////////////////: but BufferProvider selection is going to be solved differently anyway, see Ticket #249
   template<class CONF>
   struct SelectBuffProvider                                          { typedef AllocBufferFromParent Type; };
-  template<uint PROC_ign, uint INPLA_ign>
-  struct SelectBuffProvider< Config<CACHING, PROC_ign, INPLA_ign>>   { typedef AllocBufferFromCache  Type; };
+  template<uint STEAM_ign, uint INPLA_ign>
+  struct SelectBuffProvider< Config<CACHING, STEAM_ign, INPLA_ign>>   { typedef AllocBufferFromCache  Type; };
   
   
   template<class Config>

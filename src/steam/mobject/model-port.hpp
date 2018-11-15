@@ -63,8 +63,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_MODEL_PORT_H
-#define PROC_MOBJECT_MODEL_PORT_H
+#ifndef STEAM_MOBJECT_MODEL_PORT_H
+#define STEAM_MOBJECT_MODEL_PORT_H
 
 #include "steam/asset/pipe.hpp"
 #include "steam/streamtype.hpp"

@@ -49,8 +49,8 @@
  */
 
 
-#ifndef GUI_CTRL_STATE_RECORDER_H
-#define GUI_CTRL_STATE_RECORDER_H
+#ifndef STAGE_CTRL_STATE_RECORDER_H
+#define STAGE_CTRL_STATE_RECORDER_H
 
 
 #include "lib/error.hpp"
@@ -208,4 +208,4 @@ namespace ctrl {
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_STATE_RECORDER_H*/
+#endif /*STAGE_CTRL_STATE_RECORDER_H*/

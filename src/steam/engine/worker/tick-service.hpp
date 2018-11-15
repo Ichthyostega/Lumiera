@@ -34,8 +34,8 @@
  */
 
 
-#ifndef PROC_PLAY_TICKSERVICE_H
-#define PROC_PLAY_TICKSERVICE_H
+#ifndef STEAM_PLAY_TICKSERVICE_H
+#define STEAM_PLAY_TICKSERVICE_H
 
 
 #include "lib/error.hpp"

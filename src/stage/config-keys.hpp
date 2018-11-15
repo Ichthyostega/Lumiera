@@ -42,8 +42,8 @@
  ** 
  */
 
-#ifndef GUI_CONFIG_KEYS_H
-#define GUI_CONFIG_KEYS_H
+#ifndef STAGE_CONFIG_KEYS_H
+#define STAGE_CONFIG_KEYS_H
 
 
 #include "lib/symbol.hpp"
@@ -68,4 +68,4 @@ namespace gui {
   
   
 }// namespace gui
-#endif /*GUI_CONFIG_KEYS_H*/
+#endif /*STAGE_CONFIG_KEYS_H*/

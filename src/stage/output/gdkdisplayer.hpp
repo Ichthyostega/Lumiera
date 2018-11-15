@@ -30,8 +30,8 @@
  ** @see displayer.hpp
  */
 
-#ifndef GUI_OUTPUT_GDKDISPLAYER_H
-#define GUI_OUTPUT_GDKDISPLAYER_H
+#ifndef STAGE_OUTPUT_GDKDISPLAYER_H
+#define STAGE_OUTPUT_GDKDISPLAYER_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/output/displayer.hpp"
@@ -94,4 +94,4 @@ class GdkDisplayer
   
   
 }}   // namespace gui::output
-#endif /*GUI_OUTPUT_GDKDISPLAYER_H*/
+#endif /*STAGE_OUTPUT_GDKDISPLAYER_H*/

@@ -39,8 +39,8 @@
  */
 
 
-#ifndef GUI_CTRL_FACADE_H
-#define GUI_CTRL_FACADE_H
+#ifndef STAGE_CTRL_FACADE_H
+#define STAGE_CTRL_FACADE_H
 
 #include "stage/notification-service.hpp"
 #include "stage/display-service.hpp"
@@ -87,4 +87,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_FACADE_H*/
+#endif /*STAGE_CTRL_FACADE_H*/

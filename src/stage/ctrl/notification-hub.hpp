@@ -59,8 +59,8 @@
  */
 
 
-#ifndef GUI_CTRL_NOTIFICATION_HUB_H
-#define GUI_CTRL_NOTIFICATION_HUB_H
+#ifndef STAGE_CTRL_NOTIFICATION_HUB_H
+#define STAGE_CTRL_NOTIFICATION_HUB_H
 
 #include "stage/widget/error-log-display.hpp"
 #include "lib/diff/tree-mutator.hpp"
@@ -205,4 +205,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_NOTIFICATION_HUB_H*/
+#endif /*STAGE_CTRL_NOTIFICATION_HUB_H*/

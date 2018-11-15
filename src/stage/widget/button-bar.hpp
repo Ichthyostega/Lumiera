@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GUI_WIDGET_BUTTON_BAR_H
-#define GUI_WIDGET_BUTTON_BAR_H
+#ifndef STAGE_WIDGET_BUTTON_BAR_H
+#define STAGE_WIDGET_BUTTON_BAR_H
 
 #include "stage/widget/mini-button.hpp"
 
@@ -61,4 +61,4 @@ namespace widget {
   
   
 }}// gui::widget
-#endif /*GUI_WIDGET_BUTTON_BAR_H*/
+#endif /*STAGE_WIDGET_BUTTON_BAR_H*/

@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_CTRL_WINDOW_LOCATOR_H
-#define GUI_CTRL_WINDOW_LOCATOR_H
+#ifndef STAGE_CTRL_WINDOW_LOCATOR_H
+#define STAGE_CTRL_WINDOW_LOCATOR_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/ctrl/panel-locator.hpp"
@@ -124,4 +124,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_WINDOW_LOCATOR_H*/
+#endif /*STAGE_CTRL_WINDOW_LOCATOR_H*/

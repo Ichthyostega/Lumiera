@@ -27,8 +27,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_CONSTRAINT_H
-#define PROC_MOBJECT_SESSION_CONSTRAINT_H
+#ifndef STEAM_MOBJECT_SESSION_CONSTRAINT_H
+#define STEAM_MOBJECT_SESSION_CONSTRAINT_H
 
 #include "steam/mobject/session/allocation.hpp"
 

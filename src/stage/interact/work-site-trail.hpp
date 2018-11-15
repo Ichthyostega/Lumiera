@@ -37,8 +37,8 @@
  */
 
 
-#ifndef GUI_INTERACT_WORK_SITE_TRAIL_H
-#define GUI_INTERACT_WORK_SITE_TRAIL_H
+#ifndef STAGE_INTERACT_WORK_SITE_TRAIL_H
+#define STAGE_INTERACT_WORK_SITE_TRAIL_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
@@ -77,4 +77,4 @@ namespace interact {
   
   
 }}// namespace gui::interact
-#endif /*GUI_INTERACT_WORK_SITE_H*/
+#endif /*STAGE_INTERACT_WORK_SITE_H*/

@@ -28,8 +28,8 @@
  ** @see actions.hpp
  */
 
-#ifndef GUI_WORKSPACE_WORKSPACE_WINDOW_H
-#define GUI_WORKSPACE_WORKSPACE_WINDOW_H
+#ifndef STAGE_WORKSPACE_WORKSPACE_WINDOW_H
+#define STAGE_WORKSPACE_WORKSPACE_WINDOW_H
 
 
 #include "stage/gtk-base.hpp"
@@ -73,4 +73,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_WORKSPACE_WINDOW_H*/
+#endif /*STAGE_WORKSPACE_WORKSPACE_WINDOW_H*/

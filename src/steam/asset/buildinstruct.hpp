@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_ASSET_BUILDINSTRUCT_H
-#define PROC_ASSET_BUILDINSTRUCT_H
+#ifndef STEAM_ASSET_BUILDINSTRUCT_H
+#define STEAM_ASSET_BUILDINSTRUCT_H
 
 
 #include "lib/symbol.hpp"

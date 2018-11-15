@@ -33,8 +33,8 @@
 
 
 
-#ifndef GUI_PANEL_ASSETS_PANEL_H
-#define GUI_PANEL_ASSETS_PANEL_H
+#ifndef STAGE_PANEL_ASSETS_PANEL_H
+#define STAGE_PANEL_ASSETS_PANEL_H
 
 
 #include "stage/panel/panel.hpp"
@@ -68,4 +68,4 @@ namespace panel{
   
   
 }}// namespace gui::panel
-#endif /*GUI_PANEL_ASSETS_PANEL_H*/
+#endif /*STAGE_PANEL_ASSETS_PANEL_H*/

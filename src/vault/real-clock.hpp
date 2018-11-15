@@ -37,8 +37,8 @@
  */
 
 
-#ifndef BACKEND_REAL_CLOCK_H
-#define BACKEND_REAL_CLOCK_H
+#ifndef VAULT_REAL_CLOCK_H
+#define VAULT_REAL_CLOCK_H
 
 
 #include "lib/error.hpp"

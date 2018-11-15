@@ -52,8 +52,8 @@
  */
 
 
-#ifndef PROC_PLAY_PLAY_SERVICE_H
-#define PROC_PLAY_PLAY_SERVICE_H
+#ifndef STEAM_PLAY_PLAY_SERVICE_H
+#define STEAM_PLAY_PLAY_SERVICE_H
 
 
 #include "lib/error.hpp"

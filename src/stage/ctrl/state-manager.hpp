@@ -49,8 +49,8 @@
  */
 
 
-#ifndef GUI_CTRL_STATE_MANAGER_H
-#define GUI_CTRL_STATE_MANAGER_H
+#ifndef STAGE_CTRL_STATE_MANAGER_H
+#define STAGE_CTRL_STATE_MANAGER_H
 
 
 #include "lib/idi/entry-id.hpp"
@@ -110,4 +110,4 @@ namespace ctrl {
   
   
 }} // namespace gui::ctrl
-#endif /*GUI_CTRL_STATE_MANAGER_H*/
+#endif /*STAGE_CTRL_STATE_MANAGER_H*/

@@ -30,8 +30,8 @@
 
 
 
-#ifndef GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
-#define GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
+#ifndef STAGE_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
+#define STAGE_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
 
 #include "stage/gtk-base.hpp"
 #include "stage/widget/timeline/timeline-entity.hpp"
@@ -67,4 +67,4 @@ namespace timeline {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP*/
+#endif /*STAGE_WIDGET_TIMELINE_DRAW_STRATEGY_HPP*/

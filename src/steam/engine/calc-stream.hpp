@@ -41,8 +41,8 @@
 
 
 
-#ifndef PROC_ENGINE_CALC_STREAM_H
-#define PROC_ENGINE_CALC_STREAM_H
+#ifndef STEAM_ENGINE_CALC_STREAM_H
+#define STEAM_ENGINE_CALC_STREAM_H
 
 
 #include "lib/error.hpp"
@@ -157,4 +157,4 @@ namespace engine{
   
   
 }}// namespace proc::engine
-#endif /*PROC_ENGINE_CALC_STREAM_H*/
+#endif /*STEAM_ENGINE_CALC_STREAM_H*/

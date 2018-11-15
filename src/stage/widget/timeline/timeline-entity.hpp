@@ -26,8 +26,8 @@
  ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
-#ifndef GUI_WIDGET_TIMELINE_ENTITY_H
-#define GUI_WIDGET_TIMELINE_ENTITY_H
+#ifndef STAGE_WIDGET_TIMELINE_ENTITY_H
+#define STAGE_WIDGET_TIMELINE_ENTITY_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
@@ -89,4 +89,4 @@ namespace timeline {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_ENTITY_H*/
+#endif /*STAGE_WIDGET_TIMELINE_ENTITY_H*/

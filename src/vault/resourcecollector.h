@@ -27,8 +27,8 @@
  */
 
 
-#ifndef BACKEND_RESOURCECOLLECTOR_H
-#define BACKEND_RESOURCECOLLECTOR_H
+#ifndef VAULT_RESOURCECOLLECTOR_H
+#define VAULT_RESOURCECOLLECTOR_H
 
 #include <nobug.h>
 
@@ -181,7 +181,7 @@ lumiera_resourcecollector_handler_find (enum lumiera_resource resource, lumiera_
 
 
 
-#endif /*BACKEND_RESOURCECOLLECTOR_H*/
+#endif /*VAULT_RESOURCECOLLECTOR_H*/
 /*
 // Local Variables:
 // mode: C

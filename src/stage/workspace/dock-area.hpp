@@ -36,8 +36,8 @@
  ** @see actions.hpp
  */
 
-#ifndef GUI_WORKSPACE_DOCK_AREA_H
-#define GUI_WORKSPACE_DOCK_AREA_H
+#ifndef STAGE_WORKSPACE_DOCK_AREA_H
+#define STAGE_WORKSPACE_DOCK_AREA_H
 
 #include "stage/panel/panel.hpp"
 
@@ -366,4 +366,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_DOCK_AREA_H*/
+#endif /*STAGE_WORKSPACE_DOCK_AREA_H*/

@@ -32,8 +32,8 @@
  */
 
 
-#ifndef GUI_OUTPUT_DISPLAYER_H
-#define GUI_OUTPUT_DISPLAYER_H
+#ifndef STAGE_OUTPUT_DISPLAYER_H
+#define STAGE_OUTPUT_DISPLAYER_H
 
 
 namespace gui {
@@ -124,4 +124,4 @@ namespace output {
     
   
 }} // namespace gui::output
-#endif /*GUI_OUTPUT_DISPLAYER_H*/
+#endif /*STAGE_OUTPUT_DISPLAYER_H*/

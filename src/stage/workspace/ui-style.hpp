@@ -33,8 +33,8 @@
  */
 
 
-#ifndef GUI_WORKSPACE_UI_STYLE_H
-#define GUI_WORKSPACE_UI_STYLE_H
+#ifndef STAGE_WORKSPACE_UI_STYLE_H
+#define STAGE_WORKSPACE_UI_STYLE_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
@@ -199,4 +199,4 @@ namespace workspace {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_WORKSPACE_UI_STYLE_H*/
+#endif /*STAGE_WORKSPACE_UI_STYLE_H*/

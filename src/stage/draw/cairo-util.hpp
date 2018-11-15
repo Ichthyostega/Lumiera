@@ -28,8 +28,8 @@
 
 #include <cairomm/cairomm.h>
 
-#ifndef GUI_DRAW_CAIRO_H
-#define GUI_DRAW_CAIRO_H
+#ifndef STAGE_DRAW_CAIRO_H
+#define STAGE_DRAW_CAIRO_H
 
 using Cairo::RefPtr;
 using Cairo::SolidPattern;
@@ -79,4 +79,4 @@ namespace draw {
   
   
 }}// namespace gui::draw
-#endif /*GUI_DRAW_CAIRO_H*/
+#endif /*STAGE_DRAW_CAIRO_H*/

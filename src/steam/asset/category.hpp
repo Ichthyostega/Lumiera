@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PROC_ASSET_CATEGORY_H
-#define PROC_ASSET_CATEGORY_H
+#ifndef STEAM_ASSET_CATEGORY_H
+#define STEAM_ASSET_CATEGORY_H
 
 #include "lib/symbol.hpp"
 #include "lib/hash-standard.hpp"

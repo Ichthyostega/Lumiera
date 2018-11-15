@@ -37,8 +37,8 @@
  */
 
 
-#ifndef PROC_DUMMYPLAYER_SERVICE_H
-#define PROC_DUMMYPLAYER_SERVICE_H
+#ifndef STEAM_DUMMYPLAYER_SERVICE_H
+#define STEAM_DUMMYPLAYER_SERVICE_H
 
 
 #include "include/dummy-player-facade.h"

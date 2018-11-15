@@ -26,8 +26,8 @@
  */
 
 
-#ifndef BACKEND_THREADPOOL_H
-#define BACKEND_THREADPOOL_H
+#ifndef VAULT_THREADPOOL_H
+#define VAULT_THREADPOOL_H
 
 #include "lib/condition.h"
 #include "lib/llist.h"
@@ -85,7 +85,7 @@ void
 lumiera_threadpool_destroy(void);
 
 
-#endif /*BACKEND_THREADPOOL_H*/
+#endif /*VAULT_THREADPOOL_H*/
 /*
 // Local Variables:
 // mode: C

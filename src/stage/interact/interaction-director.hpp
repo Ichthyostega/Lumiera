@@ -50,8 +50,8 @@
  */
 
 
-#ifndef GUI_INTERACT_INTERACTION_DIRECTOR_H
-#define GUI_INTERACT_INTERACTION_DIRECTOR_H
+#ifndef STAGE_INTERACT_INTERACTION_DIRECTOR_H
+#define STAGE_INTERACT_INTERACTION_DIRECTOR_H
 
 #include "stage/model/controller.hpp"
 #include "stage/timeline/timeline-gui.hpp"
@@ -160,4 +160,4 @@ namespace interact {
   
   
 }}// namespace gui::workspace
-#endif /*GUI_INTERACT_INTERACTION_DIRECTOR_H*/
+#endif /*STAGE_INTERACT_INTERACTION_DIRECTOR_H*/

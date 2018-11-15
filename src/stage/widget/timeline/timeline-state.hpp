@@ -29,8 +29,8 @@
 
 
 
-#ifndef GUI_WIDGET_TIMELINE_STATE_H
-#define GUI_WIDGET_TIMELINE_STATE_H
+#ifndef STAGE_WIDGET_TIMELINE_STATE_H
+#define STAGE_WIDGET_TIMELINE_STATE_H
 
 #include "stage/widget/timeline/timeline-view-window.hpp"
 
@@ -226,4 +226,4 @@ namespace gui {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_STATE_H*/
+#endif /*STAGE_WIDGET_TIMELINE_STATE_H*/

@@ -94,8 +94,8 @@
  */
 
 
-#ifndef GUI_INTERACT_VIEW_SPEC_DSL_H
-#define GUI_INTERACT_VIEW_SPEC_DSL_H
+#ifndef STAGE_INTERACT_VIEW_SPEC_DSL_H
+#define STAGE_INTERACT_VIEW_SPEC_DSL_H
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
@@ -288,4 +288,4 @@ namespace idi {
   
   
 }}// namespace gui::idi
-#endif /*GUI_INTERACT_VIEW_SPEC_DSL_H*/
+#endif /*STAGE_INTERACT_VIEW_SPEC_DSL_H*/

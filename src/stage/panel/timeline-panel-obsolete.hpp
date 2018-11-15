@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H
-#define GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H
+#ifndef STAGE_PANEL_TIMELINE_PANEL_OBSOLETE_H
+#define STAGE_PANEL_TIMELINE_PANEL_OBSOLETE_H
 
 #include "stage/panel/panel.hpp"
 #include "stage/widget/timecode-widget.hpp"
@@ -207,4 +207,4 @@ namespace model{
   
   
 }}// namespace gui::panel
-#endif /*GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H*/
+#endif /*STAGE_PANEL_TIMELINE_PANEL_OBSOLETE_H*/

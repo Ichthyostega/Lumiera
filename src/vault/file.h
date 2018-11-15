@@ -32,8 +32,8 @@
  **    managed in a 'lumiera_filehandlecache'
  */
 
-#ifndef BACKEND_FILE_H
-#define BACKEND_FILE_H
+#ifndef VAULT_FILE_H
+#define VAULT_FILE_H
 
 
 #include "lib/mutex.h"
@@ -278,4 +278,4 @@ lumiera_file_unlock (LumieraFile self);
 
 
 
-#endif /*BACKEND_FILE_H*/
+#endif /*VAULT_FILE_H*/

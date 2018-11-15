@@ -26,8 +26,8 @@
  ** @see buffer-provider-protocol-test.cpp
  */
 
-#ifndef PROC_ENGINE_DIAGNOSTIC_BUFFR_PROVIDER_H
-#define PROC_ENGINE_DIAGNOSTIC_BUFFR_PROVIDER_H
+#ifndef STEAM_ENGINE_DIAGNOSTIC_BUFFR_PROVIDER_H
+#define STEAM_ENGINE_DIAGNOSTIC_BUFFR_PROVIDER_H
 
 
 #include "lib/error.hpp"

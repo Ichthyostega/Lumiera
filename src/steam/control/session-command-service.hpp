@@ -38,8 +38,8 @@
  */
 
 
-#ifndef PROC_CONTROL_SESSION_COMMAND_SERVICE_H
-#define PROC_CONTROL_SESSION_COMMAND_SERVICE_H
+#ifndef STEAM_CONTROL_SESSION_COMMAND_SERVICE_H
+#define STEAM_CONTROL_SESSION_COMMAND_SERVICE_H
 
 
 #include "include/session-command-facade.h"
@@ -106,4 +106,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*PROC_CONTROL_SESSION_COMMAND_SERVICE_H*/
+#endif /*STEAM_CONTROL_SESSION_COMMAND_SERVICE_H*/

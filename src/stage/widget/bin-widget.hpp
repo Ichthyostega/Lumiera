@@ -45,8 +45,8 @@
  */
 
 
-#ifndef GUI_WIDGET_BIN_WIDGET_H
-#define GUI_WIDGET_BIN_WIDGET_H
+#ifndef STAGE_WIDGET_BIN_WIDGET_H
+#define STAGE_WIDGET_BIN_WIDGET_H
 
 #include "stage/gtk-base.hpp"
 
@@ -76,4 +76,4 @@ namespace widget {
   
   
 }}// namespace gui::widget
-#endif /*GUI_WIDGET_BIN_WIDGET_H*/
+#endif /*STAGE_WIDGET_BIN_WIDGET_H*/

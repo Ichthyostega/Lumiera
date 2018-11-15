@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PROC_ENGINE_FRAME_COORD_H
-#define PROC_ENGINE_FRAME_COORD_H
+#ifndef STEAM_ENGINE_FRAME_COORD_H
+#define STEAM_ENGINE_FRAME_COORD_H
 
 #include "steam/common.hpp"
 #include "steam/mobject/model-port.hpp"

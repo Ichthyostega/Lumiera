@@ -50,8 +50,8 @@
  */
 
 
-#ifndef GUI_INTERACT_CMD_CONTEXT_H
-#define GUI_INTERACT_CMD_CONTEXT_H
+#ifndef STAGE_INTERACT_CMD_CONTEXT_H
+#define STAGE_INTERACT_CMD_CONTEXT_H
 
 
 #include "lib/error.hpp"
@@ -138,4 +138,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_CMD_CONTEXT_H*/
+#endif /*STAGE_INTERACT_CMD_CONTEXT_H*/

@@ -50,8 +50,8 @@
  ** @see BufferProviderProtocol_test
  */
 
-#ifndef PROC_ENGINE_BUFFR_METADATA_H
-#define PROC_ENGINE_BUFFR_METADATA_H
+#ifndef STEAM_ENGINE_BUFFR_METADATA_H
+#define STEAM_ENGINE_BUFFR_METADATA_H
 
 
 #include "lib/error.hpp"

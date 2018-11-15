@@ -46,8 +46,8 @@
 
 
 
-#ifndef PROC_CONTROL_LOOPER_H
-#define PROC_CONTROL_LOOPER_H
+#ifndef STEAM_CONTROL_LOOPER_H
+#define STEAM_CONTROL_LOOPER_H
 
 #include "lib/time/timevalue.hpp"
 #include "vault/real-clock.hpp"
@@ -74,7 +74,7 @@ namespace control {
      * @todo this value should be retrieved from configuration                  ////////////////////////////////TICKET #1052 : access application configuration
      * @see Looper::establishWakeTimeout()
      */
-    const uint PROC_DISPATCHER_BUILDER_DELAY_ms = 50;
+    const uint STEAM_DISPATCHER_BUILDER_DELAY_ms = 50;
     
     /**
      * Factor to slow down the latency when the command queue is not empty.
@@ -84,7 +84,7 @@ namespace control {
      * are still waiting in the queue.
      * @todo this value should be retrieved from configuration                  ////////////////////////////////TICKET #1052 : access application configuration
      */
-    const uint PROC_DISPATCHER_BUSY_SLOWDOWN_FACTOR = 15;
+    const uint STEAM_DISPATCHER_BUSY_SLOWDOWN_FACTOR = 15;
   }
   
   
@@ -239,13 +239,13 @@ namespace control {
   inline uint
   Looper::wakeTimeout_ms()
   {
-    return PROC_DISPATCHER_BUILDER_DELAY_ms;
+    return STEAM_DISPATCHER_BUILDER_DELAY_ms;
   }
   
   inline uint
   Looper::slowdownFactor()
   {
-    return PROC_DISPATCHER_BUSY_SLOWDOWN_FACTOR;
+    return STEAM_DISPATCHER_BUSY_SLOWDOWN_FACTOR;
   }
   
   inline void
@@ -269,4 +269,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*PROC_CONTROL_LOOPER_H*/
+#endif /*STEAM_CONTROL_LOOPER_H*/

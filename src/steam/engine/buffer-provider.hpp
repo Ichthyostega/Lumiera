@@ -38,8 +38,8 @@
  ** @see output-slot.hpp
  */
 
-#ifndef PROC_ENGINE_BUFFR_PROVIDER_H
-#define PROC_ENGINE_BUFFR_PROVIDER_H
+#ifndef STEAM_ENGINE_BUFFR_PROVIDER_H
+#define STEAM_ENGINE_BUFFR_PROVIDER_H
 
 
 #include "lib/error.hpp"

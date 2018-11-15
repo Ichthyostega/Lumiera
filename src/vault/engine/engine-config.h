@@ -26,8 +26,8 @@
  */
 
 
-#ifndef BACKEND_ENGINE_ENGINE_CONFIG_H
-#define BACKEND_ENGINE_ENGINE_CONFIG_H
+#ifndef VAULT_ENGINE_ENGINE_CONFIG_H
+#define VAULT_ENGINE_ENGINE_CONFIG_H
 
 
 
@@ -118,4 +118,4 @@ gavl_time_t lumiera_engine_get_latency  ();
 #ifdef __cplusplus
 }
 #endif
-#endif/*BACKEND_ENGINE_ENGINE_CONFIG_H*/
+#endif/*VAULT_ENGINE_ENGINE_CONFIG_H*/

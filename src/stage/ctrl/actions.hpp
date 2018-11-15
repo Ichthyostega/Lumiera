@@ -38,8 +38,8 @@
  */
 
 
-#ifndef GUI_CTRL_ACTIONS_H
-#define GUI_CTRL_ACTIONS_H
+#ifndef STAGE_CTRL_ACTIONS_H
+#define STAGE_CTRL_ACTIONS_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/ctrl/global-ctx.hpp"
@@ -375,4 +375,4 @@ namespace ctrl {
   
   
 }}// namespace gui::ctrl
-#endif /*GUI_CTRL_ACTIONS_H*/
+#endif /*STAGE_CTRL_ACTIONS_H*/

@@ -39,8 +39,8 @@
  */
 
 
-#ifndef GUI_TEST_ELEMENT_ACCESS_H
-#define GUI_TEST_ELEMENT_ACCESS_H
+#ifndef STAGE_TEST_ELEMENT_ACCESS_H
+#define STAGE_TEST_ELEMENT_ACCESS_H
 
 
 #include "lib/error.hpp"
@@ -152,4 +152,4 @@ namespace test {
   
   
 }} // namespace gui::test
-#endif /*GUI_TEST_ELEMENT_ACCESS_H*/
+#endif /*STAGE_TEST_ELEMENT_ACCESS_H*/

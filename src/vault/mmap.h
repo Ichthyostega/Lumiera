@@ -26,8 +26,8 @@
  ** They are managed through a global mmap registry/cache.
  */
 
-#ifndef BACKEND_MMAP_H
-#define BACKEND_MMAP_H
+#ifndef VAULT_MMAP_H
+#define VAULT_MMAP_H
 
 #include "lib/llist.h"
 
@@ -125,7 +125,7 @@ void*
 lumiera_mmap_destroy_node (LList node);
 
 
-#endif /*BACKEND_MMAP_H*/
+#endif /*VAULT_MMAP_H*/
 /*
 // Local Variables:
 // mode: C

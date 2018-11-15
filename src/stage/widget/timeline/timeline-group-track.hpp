@@ -28,8 +28,8 @@
  */
 
 
-#ifndef GUI_WIDGET_TIMELINE_GROUP_TRACK_H
-#define GUI_WIDGET_TIMELINE_GROUP_TRACK_H
+#ifndef STAGE_WIDGET_TIMELINE_GROUP_TRACK_H
+#define STAGE_WIDGET_TIMELINE_GROUP_TRACK_H
 
 #include "stage/widget/timeline/timeline-track.hpp"
 #include "stage/model/group-track.hpp"
@@ -55,4 +55,4 @@ namespace timeline {
     
     
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_GROUP_TRACK_H*/
+#endif /*STAGE_WIDGET_TIMELINE_GROUP_TRACK_H*/

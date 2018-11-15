@@ -30,8 +30,8 @@
  ** 
  */
 
-#ifndef GUI_STYLE_SCHEME_H
-#define GUI_STYLE_SCHEME_H
+#ifndef STAGE_STYLE_SCHEME_H
+#define STAGE_STYLE_SCHEME_H
 
 
 #include "lib/symbol.hpp"
@@ -55,4 +55,4 @@ namespace gui {
   
   
 }// namespace gui
-#endif /*GUI_STYLE_SCHEME_H*/
+#endif /*STAGE_STYLE_SCHEME_H*/

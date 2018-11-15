@@ -32,8 +32,8 @@
  **
  */
 
-#ifndef BACKEND_FILEHEADER_H
-#define BACKEND_FILEHEADER_H
+#ifndef VAULT_FILEHEADER_H
+#define VAULT_FILEHEADER_H
 
 #include "lib/error.h"
 
@@ -192,7 +192,7 @@ LumieraFileheader
 lumiera_fileheader_flags_clear (LumieraFileheader self, const char* flags);
 
 
-#endif /*BACKEND_FILEHEADER_H*/
+#endif /*VAULT_FILEHEADER_H*/
 /*
 // Local Variables:
 // mode: C

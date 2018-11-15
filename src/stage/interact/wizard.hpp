@@ -39,8 +39,8 @@
  */
 
 
-#ifndef GUI_INTERACT_WIZARD_H
-#define GUI_INTERACT_WIZARD_H
+#ifndef STAGE_INTERACT_WIZARD_H
+#define STAGE_INTERACT_WIZARD_H
 
 #include "lib/nocopy.hpp"
 #include "lib/idi/entry-id.hpp"
@@ -104,4 +104,4 @@ namespace interact {
   
   
 }}// namespace gui::interact
-#endif /*GUI_INTERACT_WIZARD_H*/
+#endif /*STAGE_INTERACT_WIZARD_H*/

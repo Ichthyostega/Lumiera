@@ -33,8 +33,8 @@
  */
 
 
-#ifndef PROC_ENGINE_TIME_ANCHOR_H
-#define PROC_ENGINE_TIME_ANCHOR_H
+#ifndef STEAM_ENGINE_TIME_ANCHOR_H
+#define STEAM_ENGINE_TIME_ANCHOR_H
 
 #include "steam/common.hpp"
 #include "vault/real-clock.hpp"

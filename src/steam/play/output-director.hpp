@@ -31,8 +31,8 @@
  */
 
 
-#ifndef PROC_PLAY_OUTPUT_DIRECTOR_H
-#define PROC_PLAY_OUTPUT_DIRECTOR_H
+#ifndef STEAM_PLAY_OUTPUT_DIRECTOR_H
+#define STEAM_PLAY_OUTPUT_DIRECTOR_H
 
 
 #include "lib/error.hpp"

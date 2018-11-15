@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_PLAY_PLAY_CONTROLLER_H
-#define PROC_PLAY_PLAY_CONTROLLER_H
+#ifndef STEAM_PLAY_PLAY_CONTROLLER_H
+#define STEAM_PLAY_PLAY_CONTROLLER_H
 
 
 #include "steam/play/play-service.hpp"

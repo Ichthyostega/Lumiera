@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_MODEL_DIAGNOSTICS_H
-#define GUI_MODEL_DIAGNOSTICS_H
+#ifndef STAGE_MODEL_DIAGNOSTICS_H
+#define STAGE_MODEL_DIAGNOSTICS_H
 
 
 #include "lib/error.hpp"
@@ -117,4 +117,4 @@ namespace model {
   
   
 }} // namespace gui::model
-#endif /*GUI_MODEL_DIAGNOSTICS_H*/
+#endif /*STAGE_MODEL_DIAGNOSTICS_H*/

@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_FACADE_H
-#define GUI_FACADE_H
+#ifndef STAGE_FACADE_H
+#define STAGE_FACADE_H
 
 
 #include "common/subsys.hpp"

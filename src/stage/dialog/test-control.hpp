@@ -35,8 +35,8 @@
  */
 
 
-#ifndef GUI_DIALOG_TEST_CONTROL_H
-#define GUI_DIALOG_TEST_CONTROL_H
+#ifndef STAGE_DIALOG_TEST_CONTROL_H
+#define STAGE_DIALOG_TEST_CONTROL_H
 
 
 #include "stage/gtk-base.hpp"
@@ -359,4 +359,4 @@ namespace dialog {
   
   
 }} // namespace gui::dialog
-#endif /*GUI_DIALOG_TEST_CONTROL_H*/
+#endif /*STAGE_DIALOG_TEST_CONTROL_H*/

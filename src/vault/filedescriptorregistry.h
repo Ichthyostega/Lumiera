@@ -27,8 +27,8 @@
  ** they will be freed when not referenced anymore.
  */
 
-#ifndef BACKEND_FILEDESCRIPTORREGISTRY_H
-#define BACKEND_FILEDESCRIPTORREGISTRY_H
+#ifndef VAULT_FILEDESCRIPTORREGISTRY_H
+#define VAULT_FILEDESCRIPTORREGISTRY_H
 
 #include "vault/filedescriptor.h"
 
@@ -64,4 +64,4 @@ lumiera_filedescriptorregistry_remove (LumieraFiledescriptor self);
 
 
 
-#endif /*BACKEND_FILEDESCRIPTORREGISTRY_H*/
+#endif /*VAULT_FILEDESCRIPTORREGISTRY_H*/

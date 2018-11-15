@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
-#define PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
+#ifndef STEAM_MOBJECT_SESSION_SCOPE_LOCATOR_H
+#define STEAM_MOBJECT_SESSION_SCOPE_LOCATOR_H
 
 #include "steam/mobject/session/scope.hpp"
 #include "steam/mobject/session/scope-query.hpp"

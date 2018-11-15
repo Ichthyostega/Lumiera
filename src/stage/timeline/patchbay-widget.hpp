@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_TIMELINE_PATCHBAY_WIDGET_H
-#define GUI_TIMELINE_PATCHBAY_WIDGET_H
+#ifndef STAGE_TIMELINE_PATCHBAY_WIDGET_H
+#define STAGE_TIMELINE_PATCHBAY_WIDGET_H
 
 #include "stage/gtk-base.hpp"
 
@@ -77,4 +77,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_PATCHBAY_WIDGET_H*/
+#endif /*STAGE_TIMELINE_PATCHBAY_WIDGET_H*/

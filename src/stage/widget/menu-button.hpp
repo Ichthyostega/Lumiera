@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GUI_WIDGET_MENU_BUTTON_H
-#define GUI_WIDGET_MENU_BUTTON_H
+#ifndef STAGE_WIDGET_MENU_BUTTON_H
+#define STAGE_WIDGET_MENU_BUTTON_H
 
 #include "stage/gtk-base.hpp"
 
@@ -170,4 +170,4 @@ namespace widget {
   
   
 }}// gui::widget
-#endif /*GUI_WIDGET_MENU_BUTTON_H*/
+#endif /*STAGE_WIDGET_MENU_BUTTON_H*/

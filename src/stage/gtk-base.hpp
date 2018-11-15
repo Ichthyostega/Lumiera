@@ -54,8 +54,8 @@
  */
 
 
-#ifndef GUI_GTK_BASE_H
-#define GUI_GTK_BASE_H
+#ifndef STAGE_GTK_BASE_H
+#define STAGE_GTK_BASE_H
 
 //--------------------tricky special Include sequence
 #include "lib/hash-standard.hpp"
@@ -159,4 +159,4 @@ namespace gui {
   
   
 }// namespace gui
-#endif /*GUI_GTK_BASE_H*/
+#endif /*STAGE_GTK_BASE_H*/

@@ -29,8 +29,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_GENERATOR_MO_H
-#define PROC_MOBJECT_SESSION_GENERATOR_MO_H
+#ifndef STEAM_MOBJECT_SESSION_GENERATOR_MO_H
+#define STEAM_MOBJECT_SESSION_GENERATOR_MO_H
 
 #include "steam/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"

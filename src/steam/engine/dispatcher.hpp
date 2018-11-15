@@ -32,8 +32,8 @@
  */
 
 
-#ifndef PROC_ENGINE_DISPATCHER_H
-#define PROC_ENGINE_DISPATCHER_H
+#ifndef STEAM_ENGINE_DISPATCHER_H
+#define STEAM_ENGINE_DISPATCHER_H
 
 #include "steam/common.hpp"
 #include "steam/mobject/model-port.hpp"

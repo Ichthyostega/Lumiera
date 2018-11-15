@@ -28,8 +28,8 @@
  ** Access to filehandles is locked from elsewhere (filedescriptor, filehandlecache)
  */
 
-#ifndef BACKEND_FILEHANDLE_H
-#define BACKEND_FILEHANDLE_H
+#ifndef VAULT_FILEHANDLE_H
+#define VAULT_FILEHANDLE_H
 
 #include "lib/error.h"
 #include "lib/llist.h"
@@ -98,4 +98,4 @@ lumiera_filehandle_get (LumieraFilehandle self)
   return self->fd;
 }
 
-#endif /*BACKEND_FILEHANDLE_H*/
+#endif /*VAULT_FILEHANDLE_H*/

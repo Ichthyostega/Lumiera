@@ -74,8 +74,8 @@
  */
 
 
-#ifndef PROC_PLAY_DUMMY_PLAY_CONNECTION_H
-#define PROC_PLAY_DUMMY_PLAY_CONNECTION_H
+#ifndef STEAM_PLAY_DUMMY_PLAY_CONNECTION_H
+#define STEAM_PLAY_DUMMY_PLAY_CONNECTION_H
 
 
 //#include "include/dummy-player-facade.h"
@@ -276,4 +276,4 @@ namespace play {
   
   
 }} // namespace proc::play
-#endif /*PROC_PLAY_DUMMY_PLAY_CONNECTION_H*/
+#endif /*STEAM_PLAY_DUMMY_PLAY_CONNECTION_H*/

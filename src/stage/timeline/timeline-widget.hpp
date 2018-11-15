@@ -52,8 +52,8 @@
  */
 
 
-#ifndef GUI_TIMELINE_TIMELINE_WIDGET_H
-#define GUI_TIMELINE_TIMELINE_WIDGET_H
+#ifndef STAGE_TIMELINE_TIMELINE_WIDGET_H
+#define STAGE_TIMELINE_TIMELINE_WIDGET_H
 
 #include "stage/gtk-base.hpp"
 //#include "stage/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
@@ -156,4 +156,4 @@ namespace timeline {
   
   
 }}// namespace gui::timeline
-#endif /*GUI_TIMELINE_TIMELINE_WIDGET_H*/
+#endif /*STAGE_TIMELINE_TIMELINE_WIDGET_H*/

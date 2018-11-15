@@ -37,8 +37,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_OUTPUT_DESIGNATION_H
-#define PROC_MOBJECT_OUTPUT_DESIGNATION_H
+#ifndef STEAM_MOBJECT_OUTPUT_DESIGNATION_H
+#define STEAM_MOBJECT_OUTPUT_DESIGNATION_H
 
 #include "steam/asset/pipe.hpp"
 #include "lib/hash-value.h"
@@ -134,4 +134,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif /*PROC_MOBJECT_OUTPUT_DESIGNATION_H*/
+#endif /*STEAM_MOBJECT_OUTPUT_DESIGNATION_H*/

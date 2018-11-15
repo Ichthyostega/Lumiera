@@ -35,8 +35,8 @@
  */
 
 
-#ifndef BACKEND_THREADPOOL_INIT_H
-#define BACKEND_THREADPOOL_INIT_H
+#ifndef VAULT_THREADPOOL_INIT_H
+#define VAULT_THREADPOOL_INIT_H
 
 #include "include/lifecycle.h"
 
@@ -56,4 +56,4 @@ namespace lumiera {
 } }
 
 
-#endif /* BACKEND_THREADPOOL_INIT_H */
+#endif /* VAULT_THREADPOOL_INIT_H */

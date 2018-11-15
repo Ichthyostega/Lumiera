@@ -49,8 +49,8 @@
 
 
 
-#ifndef PROC_MOBJECT_OUTPUT_MAPPING_H
-#define PROC_MOBJECT_OUTPUT_MAPPING_H
+#ifndef STEAM_MOBJECT_OUTPUT_MAPPING_H
+#define STEAM_MOBJECT_OUTPUT_MAPPING_H
 
 #include "lib/error.hpp"
 #include "lib/util.hpp"

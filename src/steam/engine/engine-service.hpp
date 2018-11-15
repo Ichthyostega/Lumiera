@@ -48,8 +48,8 @@
  */
 
 
-#ifndef PROC_ENGINE_ENGINE_SERVICE_H
-#define PROC_ENGINE_ENGINE_SERVICE_H
+#ifndef STEAM_ENGINE_ENGINE_SERVICE_H
+#define STEAM_ENGINE_ENGINE_SERVICE_H
 
 
 #include "lib/error.hpp"
@@ -175,4 +175,4 @@ namespace engine{
   
   
 }} // namespace proc::engine
-#endif /*PROC_ENGINE_ENGINE_SERVICE_H*/
+#endif /*STEAM_ENGINE_ENGINE_SERVICE_H*/

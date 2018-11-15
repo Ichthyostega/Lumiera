@@ -56,8 +56,8 @@
  */
 
 
-#ifndef GUI_WIDGET_ERROR_LOG_DISPLAY_H
-#define GUI_WIDGET_ERROR_LOG_DISPLAY_H
+#ifndef STAGE_WIDGET_ERROR_LOG_DISPLAY_H
+#define STAGE_WIDGET_ERROR_LOG_DISPLAY_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/style-scheme.hpp"
@@ -334,4 +334,4 @@ namespace widget {
   
   
 }}// namespace gui::widget
-#endif /*GUI_WIDGET_ERROR_LOG_DISPLAY_H*/
+#endif /*STAGE_WIDGET_ERROR_LOG_DISPLAY_H*/

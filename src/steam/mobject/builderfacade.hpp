@@ -32,8 +32,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_BUILDERFACADE_H
-#define PROC_MOBJECT_BUILDERFACADE_H
+#ifndef STEAM_MOBJECT_BUILDERFACADE_H
+#define STEAM_MOBJECT_BUILDERFACADE_H
 
 #include "lib/error.hpp"
 #include "steam/mobject/builder/common.hpp"
@@ -62,4 +62,4 @@ namespace mobject {
   
   
 }} // namespace proc::mobject
-#endif /*PROC_MOBJECT_BUILDERFACADE_H*/
+#endif /*STEAM_MOBJECT_BUILDERFACADE_H*/

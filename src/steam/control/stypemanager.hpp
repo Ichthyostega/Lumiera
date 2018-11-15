@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_CONTROL_STYPEMANAGER_H
-#define PROC_CONTROL_STYPEMANAGER_H
+#ifndef STEAM_CONTROL_STYPEMANAGER_H
+#define STEAM_CONTROL_STYPEMANAGER_H
 
 
 #include "steam/streamtype.hpp"

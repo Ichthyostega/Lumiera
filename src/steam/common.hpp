@@ -35,8 +35,8 @@
 
 
 
-#ifndef PROC_COMMON_H
-#define PROC_COMMON_H
+#ifndef STEAM_COMMON_H
+#define STEAM_COMMON_H
 
 
 

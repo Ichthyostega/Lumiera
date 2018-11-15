@@ -26,8 +26,8 @@
  */
 
 
-#ifndef BACKEND_BACKEND_H
-#define BACKEND_BACKEND_H
+#ifndef VAULT_BACKEND_H
+#define VAULT_BACKEND_H
 
 #include "lib/mutex.h"
 
@@ -51,4 +51,4 @@ lumiera_backend_init (void);
 void
 lumiera_backend_destroy (void);
 
-#endif /*BACKEND_BACKEND_H*/
+#endif /*VAULT_BACKEND_H*/

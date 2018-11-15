@@ -29,8 +29,8 @@
  */
 
 
-#ifndef GUI_DIALOG_PREFERENCES_DIALOG_H
-#define GUI_DIALOG_PREFERENCES_DIALOG_H
+#ifndef STAGE_DIALOG_PREFERENCES_DIALOG_H
+#define STAGE_DIALOG_PREFERENCES_DIALOG_H
 
 
 #include "stage/gtk-base.hpp"
@@ -80,4 +80,4 @@ namespace dialog {
   
   
 }} // namespace gui::dialog
-#endif /*GUI_DIALOG_PREFERENCES_DIALOG_H*/
+#endif /*STAGE_DIALOG_PREFERENCES_DIALOG_H*/

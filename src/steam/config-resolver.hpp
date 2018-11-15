@@ -43,8 +43,8 @@
  */
 
 
-#ifndef PROC_CONFIG_RESOLVER
-#define PROC_CONFIG_RESOLVER
+#ifndef STEAM_CONFIG_RESOLVER
+#define STEAM_CONFIG_RESOLVER
 
 #include "common/query.hpp"
 #include "common/config-rules.hpp"

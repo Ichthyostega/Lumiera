@@ -27,8 +27,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_SCOPE_H
-#define PROC_MOBJECT_SESSION_SCOPE_H
+#ifndef STEAM_MOBJECT_SESSION_SCOPE_H
+#define STEAM_MOBJECT_SESSION_SCOPE_H
 
 #include "steam/mobject/placement.hpp"
 #include "steam/mobject/placement-ref.hpp"

@@ -36,8 +36,8 @@
  */
 
 
-#ifndef GUI_GUI_NOTIFICATION_H
-#define GUI_GUI_NOTIFICATION_H
+#ifndef STAGE_GUI_NOTIFICATION_H
+#define STAGE_GUI_NOTIFICATION_H
 
 
 
@@ -148,4 +148,4 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
 #ifdef __cplusplus
 }// extern "C"
 #endif
-#endif /*GUI_GUI_NOTIFICATION_H*/
+#endif /*STAGE_GUI_NOTIFICATION_H*/

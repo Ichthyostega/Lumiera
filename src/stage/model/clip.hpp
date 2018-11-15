@@ -27,8 +27,8 @@
  **          and will be replaced in entirety by UI-Bus and diff framework.
  */
 
-#ifndef GUI_MODEL_CLIP_H
-#define GUI_MODEL_CLIP_H
+#ifndef STAGE_MODEL_CLIP_H
+#define STAGE_MODEL_CLIP_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"

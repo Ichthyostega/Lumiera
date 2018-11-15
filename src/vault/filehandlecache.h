@@ -29,8 +29,8 @@
  ** The filehandle cache defined here protects all operations on the cache with a mutex.
  */
 
-#ifndef BACKEND_FILEHANDLECACHE_H
-#define BACKEND_FILEHANDLECACHE_H
+#ifndef VAULT_FILEHANDLECACHE_H
+#define VAULT_FILEHANDLECACHE_H
 
 #include "lib/error.h"
 #include "lib/mrucache.h"
@@ -96,4 +96,4 @@ lumiera_filehandlecache_checkin (LumieraFilehandle handle);
 
 
 
-#endif /*BACKEND_FILEHANDLECACHE_H*/
+#endif /*VAULT_FILEHANDLECACHE_H*/

@@ -27,8 +27,8 @@
  */
 
 
-#ifndef PROC_ENGINE_RENDERENGINE_H
-#define PROC_ENGINE_RENDERENGINE_H
+#ifndef STEAM_ENGINE_RENDERENGINE_H
+#define STEAM_ENGINE_RENDERENGINE_H
 
 #include "steam/engine/rendergraph.hpp"
 
@@ -69,4 +69,4 @@ namespace engine {
     };
 
 }} // namespace proc::engine
-#endif /*PROC_ENGINE_RENDERENGINE_H*/
+#endif /*STEAM_ENGINE_RENDERENGINE_H*/

@@ -33,8 +33,8 @@
 
 
 
-#ifndef PROC_INTERFACE_FACADE_H
-#define PROC_INTERFACE_FACADE_H
+#ifndef STEAM_INTERFACE_FACADE_H
+#define STEAM_INTERFACE_FACADE_H
 
 
 #include "common/subsys.hpp"

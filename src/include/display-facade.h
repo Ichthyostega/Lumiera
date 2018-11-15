@@ -40,8 +40,8 @@
  */
 
 
-#ifndef GUI_INTERFACE_DISPLAY_H
-#define GUI_INTERFACE_DISPLAY_H
+#ifndef STAGE_INTERFACE_DISPLAY_H
+#define STAGE_INTERFACE_DISPLAY_H
 
 #include "include/display-handles.h"
 

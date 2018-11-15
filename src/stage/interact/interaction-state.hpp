@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_INTERACT_INTERACTION_STATE_H
-#define GUI_INTERACT_INTERACTION_STATE_H
+#ifndef STAGE_INTERACT_INTERACTION_STATE_H
+#define STAGE_INTERACT_INTERACTION_STATE_H
 
 
 #include "lib/error.hpp"
@@ -74,4 +74,4 @@ namespace interact {
   
   
 }} // namespace gui::interact
-#endif /*GUI_INTERACT_INTERACTION_STATE_H*/
+#endif /*STAGE_INTERACT_INTERACTION_STATE_H*/

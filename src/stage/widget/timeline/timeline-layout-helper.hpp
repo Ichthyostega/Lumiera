@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GUI_WIDGET_TIMELINE_LAYOUT_HELPER_H
-#define GUI_WIDGET_TIMELINE_LAYOUT_HELPER_H
+#ifndef STAGE_WIDGET_TIMELINE_LAYOUT_HELPER_H
+#define STAGE_WIDGET_TIMELINE_LAYOUT_HELPER_H
 
 #include "stage/gtk-base.hpp"
 #include "lib/util-coll.hpp"
@@ -433,4 +433,4 @@ namespace gui {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_LAYOUT_HELPER_H*/
+#endif /*STAGE_WIDGET_TIMELINE_LAYOUT_HELPER_H*/

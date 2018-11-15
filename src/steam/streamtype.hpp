@@ -31,8 +31,8 @@
  */
 
 
-#ifndef PROC_STREAMTYPE_H
-#define PROC_STREAMTYPE_H
+#ifndef STEAM_STREAMTYPE_H
+#define STEAM_STREAMTYPE_H
 
 #include "lib/symbol.hpp"
 //#include "common/query.hpp"
@@ -199,4 +199,4 @@ namespace lumiera {
   using proc::StreamType;
 }
 
-#endif /*PROC_STREAMTYPE_H*/
+#endif /*STEAM_STREAMTYPE_H*/

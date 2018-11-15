@@ -38,8 +38,8 @@
  */
 
 
-#ifndef GUI_PANEL_TIMELINE_PANEL_H
-#define GUI_PANEL_TIMELINE_PANEL_H
+#ifndef STAGE_PANEL_TIMELINE_PANEL_H
+#define STAGE_PANEL_TIMELINE_PANEL_H
 
 #include "stage/panel/panel.hpp"
 #include "stage/timeline/timeline-widget.hpp"
@@ -86,4 +86,4 @@ namespace panel{
   
   
 }}// namespace gui::panel
-#endif /*GUI_PANEL_TIMELINE_PANEL_H*/
+#endif /*STAGE_PANEL_TIMELINE_PANEL_H*/

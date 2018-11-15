@@ -39,8 +39,8 @@
  ** @see buffer-provider-protocol-test.cpp
  */
 
-#ifndef PROC_ENGINE_TRACKING_HEAP_BLOCK_PROVIDER_H
-#define PROC_ENGINE_TRACKING_HEAP_BLOCK_PROVIDER_H
+#ifndef STEAM_ENGINE_TRACKING_HEAP_BLOCK_PROVIDER_H
+#define STEAM_ENGINE_TRACKING_HEAP_BLOCK_PROVIDER_H
 
 
 #include "lib/error.hpp"

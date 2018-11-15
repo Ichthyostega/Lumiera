@@ -25,8 +25,8 @@
  */
 
 
-#ifndef PROC_ENGINE_TESTFRAME_H
-#define PROC_ENGINE_TESTFRAME_H
+#ifndef STEAM_ENGINE_TESTFRAME_H
+#define STEAM_ENGINE_TESTFRAME_H
 
 
 #include <cstdlib>

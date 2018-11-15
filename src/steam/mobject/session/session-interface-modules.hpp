@@ -67,8 +67,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_INTERFACE_MODULES_H
-#define PROC_MOBJECT_SESSION_INTERFACE_MODULES_H
+#ifndef STEAM_MOBJECT_SESSION_INTERFACE_MODULES_H
+#define STEAM_MOBJECT_SESSION_INTERFACE_MODULES_H
 
 #include "lib/element-tracker.hpp"
 #include "steam/asset/timeline.hpp"

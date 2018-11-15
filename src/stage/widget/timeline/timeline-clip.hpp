@@ -25,8 +25,8 @@
  ** @warning as of 2016 the entire timeline display is planned to be reworked
  */
 
-#ifndef GUI_WIDGET_TIMELINE_CLIP_H
-#define GUI_WIDGET_TIMELINE_CLIP_H
+#ifndef STAGE_WIDGET_TIMELINE_CLIP_H
+#define STAGE_WIDGET_TIMELINE_CLIP_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/model/clip.hpp"
@@ -72,4 +72,4 @@ namespace timeline {
   
   
 }}}// namespace gui::widget::timeline
-#endif /*GUI_WIDGET_TIMELINE_CLIP_H*/
+#endif /*STAGE_WIDGET_TIMELINE_CLIP_H*/

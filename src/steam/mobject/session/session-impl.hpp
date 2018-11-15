@@ -43,8 +43,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_SESSIONIMPL_H
-#define PROC_MOBJECT_SESSION_SESSIONIMPL_H
+#ifndef STEAM_MOBJECT_SESSION_SESSIONIMPL_H
+#define STEAM_MOBJECT_SESSION_SESSIONIMPL_H
 
 #include "steam/mobject/session.hpp"
 #include "steam/mobject/session/fixture.hpp"

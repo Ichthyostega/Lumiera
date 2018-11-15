@@ -33,8 +33,8 @@
  */
 
 
-#ifndef PROC_CONTROL_MEDIA_IMPL_LIB_H
-#define PROC_CONTROL_MEDIA_IMPL_LIB_H
+#ifndef STEAM_CONTROL_MEDIA_IMPL_LIB_H
+#define STEAM_CONTROL_MEDIA_IMPL_LIB_H
 
 
 #include "steam/streamtype.hpp"
@@ -64,4 +64,4 @@ namespace control {
   
   
 }} // namespace proc::control
-#endif /*PROC_CONTROL_MEDIA_IMPL_LIB_H*/
+#endif /*STEAM_CONTROL_MEDIA_IMPL_LIB_H*/

@@ -28,8 +28,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_CLIP_H
-#define PROC_MOBJECT_SESSION_CLIP_H
+#ifndef STEAM_MOBJECT_SESSION_CLIP_H
+#define STEAM_MOBJECT_SESSION_CLIP_H
 
 #include "steam/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"

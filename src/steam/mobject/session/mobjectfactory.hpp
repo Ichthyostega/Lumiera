@@ -29,8 +29,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
-#define PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
+#ifndef STEAM_MOBJECT_SESSION_MOBJECTFACTORY_H
+#define STEAM_MOBJECT_SESSION_MOBJECTFACTORY_H
 
 #include "steam/mobject/mobject.hpp"
 #include "lib/idi/entry-id.hpp"

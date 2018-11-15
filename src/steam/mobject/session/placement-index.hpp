@@ -103,8 +103,8 @@
 
 
 
-#ifndef PROC_MOBJECT_PLACEMENT_INDEX_H
-#define PROC_MOBJECT_PLACEMENT_INDEX_H
+#ifndef STEAM_MOBJECT_PLACEMENT_INDEX_H
+#define STEAM_MOBJECT_PLACEMENT_INDEX_H
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"

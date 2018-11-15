@@ -46,8 +46,8 @@
  */
 
 
-#ifndef BACKEND_ENGINE_JOB_H
-#define BACKEND_ENGINE_JOB_H
+#ifndef VAULT_ENGINE_JOB_H
+#define VAULT_ENGINE_JOB_H
 
 
 #include "lib/llist.h"
@@ -332,4 +332,4 @@ size_t lumiera_job_get_hash (LumieraJobDefinition);
 #ifdef __cplusplus
 }
 #endif
-#endif /*BACKEND_ENGINE_JOB_H*/
+#endif /*VAULT_ENGINE_JOB_H*/

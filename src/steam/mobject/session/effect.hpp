@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PROC_MOBJECT_SESSION_EFFECT_H
-#define PROC_MOBJECT_SESSION_EFFECT_H
+#ifndef STEAM_MOBJECT_SESSION_EFFECT_H
+#define STEAM_MOBJECT_SESSION_EFFECT_H
 
 
 #include "steam/mobject/session/abstractmo.hpp"

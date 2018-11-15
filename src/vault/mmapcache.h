@@ -26,8 +26,8 @@
  ** The mmapcache also manages the upper limit about how much memory can be mmaped.
  */
 
-#ifndef BACKEND_MMAPCACHE_H
-#define BACKEND_MMAPCACHE_H
+#ifndef VAULT_MMAPCACHE_H
+#define VAULT_MMAPCACHE_H
 
 #include "lib/error.h"
 #include "lib/mrucache.h"
@@ -121,7 +121,7 @@ void
 lumiera_mmapcache_checkin (LumieraMMap handle);
 
 
-#endif /*BACKEND_MMAPCACHE_H*/
+#endif /*VAULT_MMAPCACHE_H*/
 /*
 // Local Variables:
 // mode: C
