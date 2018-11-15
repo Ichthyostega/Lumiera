@@ -39,15 +39,15 @@
 #define GUI_DIALOG_TEST_CONTROL_H
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/dialog/dialog.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/model/tangible.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/dialog/dialog.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/model/tangible.hpp"
 #include "include/ui-protocol.hpp"
 
-#include "proc/cmd.hpp"
+#include "steam/cmd.hpp"
 #include "include/gui-notification-facade.h"
-#include "proc/mobject/session/dummy-session-connection.hpp"
+#include "steam/mobject/session/dummy-session-connection.hpp"
 
 #include "lib/test/test-helper.hpp"
 #include "lib/diff/gen-node.hpp"

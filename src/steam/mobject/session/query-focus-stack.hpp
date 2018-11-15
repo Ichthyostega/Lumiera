@@ -31,7 +31,7 @@
 #ifndef MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 #define MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 
-#include "proc/mobject/session/scope-path.hpp"
+#include "steam/mobject/session/scope-path.hpp"
 #include "lib/nocopy.hpp"
 
 #include <list>

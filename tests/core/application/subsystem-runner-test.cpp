@@ -32,7 +32,7 @@
 #include "common/option.hpp"
 
 #include "lib/symbol.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "lib/query-util.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/error.hpp"

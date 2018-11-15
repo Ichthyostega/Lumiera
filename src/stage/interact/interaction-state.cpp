@@ -32,7 +32,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/interact/interaction-state.hpp"
+#include "stage/interact/interaction-state.hpp"
 
 //#include <string>
 //#include <map>

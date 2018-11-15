@@ -32,7 +32,7 @@
 #ifndef GUI_WIDGET_TIMELINE_TOOL_H
 #define GUI_WIDGET_TIMELINE_TOOL_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 #include <memory>
 

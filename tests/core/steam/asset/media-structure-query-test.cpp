@@ -28,11 +28,11 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "proc/assetmanager.hpp"
-#include "proc/asset/media.hpp"
-#include "proc/asset/proc.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/asset/media.hpp"
+#include "steam/asset/proc.hpp"
 
-#include "proc/asset/asset-diagnostics.hpp"
+#include "steam/asset/asset-diagnostics.hpp"
 
 using util::isnil;
 using std::string;

@@ -30,8 +30,8 @@
  */
 
 
-#include "proc/play/timings.hpp"
-#include "backend/engine/engine-config.h"
+#include "steam/play/timings.hpp"
+#include "vault/engine/engine-config.h"
 #include "lib/time/formats.hpp"
 #include "lib/time/timequant.hpp"
 

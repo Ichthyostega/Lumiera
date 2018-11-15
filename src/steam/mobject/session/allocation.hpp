@@ -30,7 +30,7 @@
 #ifndef PROC_MOBJECT_SESSION_ALLOCATION_H
 #define PROC_MOBJECT_SESSION_ALLOCATION_H
 
-#include "proc/mobject/session/locatingpin.hpp"
+#include "steam/mobject/session/locatingpin.hpp"
 
 #include <string>
 using std::string;

@@ -39,9 +39,9 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "lib/sync-classlock.hpp"
-#include "proc/mobject/builderfacade.hpp"
-#include "proc/mobject/model-port.hpp"
-#include "proc/mobject/builder/model-port-registry.hpp"
+#include "steam/mobject/builderfacade.hpp"
+#include "steam/mobject/model-port.hpp"
+#include "steam/mobject/builder/model-port-registry.hpp"
 
 namespace proc {
 namespace mobject {

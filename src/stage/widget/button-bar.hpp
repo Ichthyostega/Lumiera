@@ -29,7 +29,7 @@
 #ifndef GUI_WIDGET_BUTTON_BAR_H
 #define GUI_WIDGET_BUTTON_BAR_H
 
-#include "gui/widget/mini-button.hpp"
+#include "stage/widget/mini-button.hpp"
 
 namespace gui {
 namespace widget {

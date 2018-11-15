@@ -22,14 +22,14 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/control/command-queue.hpp"
-#include "proc/control/command-def.hpp"
-//#include "proc/control/command-registry.hpp"
+#include "steam/control/command-queue.hpp"
+#include "steam/control/command-def.hpp"
+//#include "steam/control/command-registry.hpp"
 //#include "lib/test/event-log.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include "proc/control/test-dummy-commands.hpp"
+#include "steam/control/test-dummy-commands.hpp"
 
 //#include <cstdlib>
 

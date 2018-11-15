@@ -26,8 +26,8 @@
  */
 
 
-#include "proc/asset/pipe.hpp"
-#include "proc/assetmanager.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/assetmanager.hpp"
 #include "lib/util.hpp"
 
 using util::isnil;

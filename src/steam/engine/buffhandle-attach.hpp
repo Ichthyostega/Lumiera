@@ -46,8 +46,8 @@
 
 
 #include "lib/error.hpp"
-#include "proc/engine/buffer-provider.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "steam/engine/buffer-provider.hpp"
+#include "steam/engine/buffhandle.hpp"
 
 
 namespace proc {

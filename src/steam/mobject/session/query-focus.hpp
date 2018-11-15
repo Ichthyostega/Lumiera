@@ -47,10 +47,10 @@
 #ifndef MOBJECT_SESSION_QUERY_FOCUS_H
 #define MOBJECT_SESSION_QUERY_FOCUS_H
 
-#include "proc/mobject/session/scope-path.hpp"
-#include "proc/mobject/session/scope-query.hpp"
-#include "proc/mobject/session/scope-locator.hpp"
-#include "proc/mobject/placement-ref.hpp"
+#include "steam/mobject/session/scope-path.hpp"
+#include "steam/mobject/session/scope-query.hpp"
+#include "steam/mobject/session/scope-locator.hpp"
+#include "steam/mobject/placement-ref.hpp"
 
 #include <boost/intrusive_ptr.hpp>
 #include <string>

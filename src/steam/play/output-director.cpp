@@ -26,10 +26,10 @@
  */
 
 
-#include "proc/play/play-service.hpp"
-#include "proc/play/output-manager.hpp"
-#include "proc/play/output-director.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "steam/play/play-service.hpp"
+#include "steam/play/output-manager.hpp"
+#include "steam/play/output-director.hpp"
+#include "vault/thread-wrapper.hpp"
 
 using backend::Thread;
 

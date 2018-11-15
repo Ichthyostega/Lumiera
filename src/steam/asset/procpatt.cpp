@@ -26,10 +26,10 @@
  */
 
 
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/proc.hpp"
-#include "proc/assetmanager.hpp"
-#include "proc/asset/buildinstruct.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/asset/proc.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/asset/buildinstruct.hpp"
 #include "lib/util.hpp"
 
 using util::isnil;

@@ -27,7 +27,7 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "proc/mobject/session/dummy-session-connection.hpp"
+#include "steam/mobject/session/dummy-session-connection.hpp"
 
 //#include <boost/lexical_cast.hpp>
 //#include <iostream>

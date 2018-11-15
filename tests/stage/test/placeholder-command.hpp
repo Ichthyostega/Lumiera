@@ -45,7 +45,7 @@
 #include "lib/symbol.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "lib/test/event-log.hpp"
-#include "proc/control/command-def.hpp"
+#include "steam/control/command-def.hpp"
 #include "lib/format-util.hpp"
 
 #include <vector>

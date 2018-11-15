@@ -39,7 +39,7 @@
 #ifndef ASSET_META_ERROR_LOG_H
 #define ASSET_META_ERROR_LOG_H
 
-#include "proc/asset/meta.hpp"
+#include "steam/asset/meta.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/symbol.hpp"

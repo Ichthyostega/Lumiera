@@ -37,7 +37,7 @@
 #define PROC_CONTROL_MEDIA_IMPL_LIB_H
 
 
-#include "proc/streamtype.hpp"
+#include "steam/streamtype.hpp"
 
 
 

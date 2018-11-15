@@ -27,9 +27,9 @@
  */
 
 
-#include "proc/common.hpp"
-#include "proc/external/libgavl.hpp"
-#include "proc/control/stypemanager.hpp"
+#include "steam/common.hpp"
+#include "steam/external/libgavl.hpp"
+#include "steam/control/stypemanager.hpp"
 
 extern "C" {
 #include <gavl/gavl.h>

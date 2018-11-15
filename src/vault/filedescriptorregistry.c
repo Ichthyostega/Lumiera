@@ -32,9 +32,9 @@
 #include "lib/mutex.h"
 #include "lib/psplay.h"
 
-#include "backend/file.h"
-#include "backend/filedescriptor.h"
-#include "backend/filedescriptorregistry.h"
+#include "vault/file.h"
+#include "vault/filedescriptor.h"
+#include "vault/filedescriptorregistry.h"
 
 
 /**

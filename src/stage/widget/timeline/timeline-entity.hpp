@@ -29,7 +29,7 @@
 #ifndef GUI_WIDGET_TIMELINE_ENTITY_H
 #define GUI_WIDGET_TIMELINE_ENTITY_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <string>

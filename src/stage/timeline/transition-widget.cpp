@@ -29,10 +29,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/transition-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/transition-widget.hpp"
 
-//#include "gui/ui-bus.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

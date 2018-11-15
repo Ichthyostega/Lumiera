@@ -26,8 +26,8 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/cmd.hpp"
-#include "proc/control/command-def.hpp"
+#include "steam/cmd.hpp"
+#include "steam/control/command-def.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"

@@ -27,8 +27,8 @@
  */
 
 #include "lib/error.hpp"
-#include "proc/mobject/session/segmentation.hpp"
-#include "proc/mobject/builder/fixture-change-detector.hpp"
+#include "steam/mobject/session/segmentation.hpp"
+#include "steam/mobject/builder/fixture-change-detector.hpp"
 
 
 

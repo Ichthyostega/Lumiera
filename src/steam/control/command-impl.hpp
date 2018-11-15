@@ -42,9 +42,9 @@
 #ifndef CONTROL_COMMAND_IMPL_H
 #define CONTROL_COMMAND_IMPL_H
 
-#include "proc/control/command.hpp"
-#include "proc/control/command-closure.hpp"
-#include "proc/control/command-mutation.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/command-closure.hpp"
+#include "steam/control/command-mutation.hpp"
 #include "lib/format-string.hpp"
 #include "lib/nocopy.hpp"
 

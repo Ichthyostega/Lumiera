@@ -28,8 +28,8 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "backend/real-clock.hpp"
-#include "backend/engine/dummy-job.hpp"
+#include "vault/real-clock.hpp"
+#include "vault/engine/dummy-job.hpp"
 
 #include <boost/functional/hash.hpp>
 

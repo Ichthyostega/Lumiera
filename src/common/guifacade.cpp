@@ -31,7 +31,7 @@
  */
 
 
-#include "gui/guifacade.hpp"
+#include "stage/guifacade.hpp"
 #include "include/gui-notification-facade.h"
 #include "lib/sync.hpp"
 #include "lib/error.hpp"

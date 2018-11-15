@@ -28,7 +28,7 @@
  */
 
 
-#include "proc/control/pathmanager.hpp"
+#include "steam/control/pathmanager.hpp"
 
 namespace proc {
 namespace control {

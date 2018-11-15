@@ -36,12 +36,12 @@
 #ifndef PROC_ENGINE_CALC_PLAN_CONTINUATION_H
 #define PROC_ENGINE_CALC_PLAN_CONTINUATION_H
 
-#include "proc/common.hpp"
-#include "proc/mobject/model-port.hpp"
-#include "proc/engine/time-anchor.hpp"
-#include "proc/engine/dispatcher.hpp"
-#include "proc/play/timings.hpp"
-#include "backend/engine/job.h"
+#include "steam/common.hpp"
+#include "steam/mobject/model-port.hpp"
+#include "steam/engine/time-anchor.hpp"
+#include "steam/engine/dispatcher.hpp"
+#include "steam/play/timings.hpp"
+#include "vault/engine/job.h"
 
 
 namespace proc {

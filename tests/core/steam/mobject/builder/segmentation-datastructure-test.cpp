@@ -27,9 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/mobject/builder/fixture-change-detector.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/pipe.hpp"
+#include "steam/mobject/builder/fixture-change-detector.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/pipe.hpp"
 #include "common/query.hpp"
 #include "lib/util.hpp"
 

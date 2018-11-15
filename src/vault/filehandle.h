@@ -37,7 +37,7 @@
 typedef struct lumiera_filehandle_struct lumiera_filehandle;
 typedef lumiera_filehandle* LumieraFilehandle;
 
-#include "backend/filedescriptor.h"
+#include "vault/filedescriptor.h"
 
 //NOBUG_DECLARE_FLAG (filehandle);
 

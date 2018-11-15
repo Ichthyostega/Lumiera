@@ -29,7 +29,7 @@
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
-#include "gui/interact/cmd-context.hpp"
+#include "stage/interact/cmd-context.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/util.hpp"

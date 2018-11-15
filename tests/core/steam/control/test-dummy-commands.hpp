@@ -40,7 +40,7 @@
 
 #include "lib/error.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/command-setup.hpp"
+#include "steam/control/command-setup.hpp"
 
 #include <functional>
 #include <sstream>

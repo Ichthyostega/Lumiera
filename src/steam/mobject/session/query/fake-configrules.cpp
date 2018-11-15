@@ -36,12 +36,12 @@
  */
 
 
-#include "proc/mobject/session/query/fake-configrules.hpp"
+#include "steam/mobject/session/query/fake-configrules.hpp"
 
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/fork.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/pipe.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/fork.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/asset/pipe.hpp"
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 

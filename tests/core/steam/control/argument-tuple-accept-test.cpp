@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/argument-tuple-accept.hpp"
+#include "steam/control/argument-tuple-accept.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/format-cout.hpp"

@@ -44,8 +44,8 @@
 
 #include "lib/error.hpp"
 #include "lib/multifact.hpp"
-#include "proc/control/handling-pattern.hpp"
-#include "proc/control/command-impl.hpp"
+#include "steam/control/handling-pattern.hpp"
+#include "steam/control/command-impl.hpp"
 
 
 

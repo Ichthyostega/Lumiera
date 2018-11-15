@@ -29,7 +29,7 @@
 #define ASSET_TESTASSET_H
 
 
-#include "proc/asset.hpp"
+#include "steam/asset.hpp"
 #include "lib/format-string.hpp"
 
 

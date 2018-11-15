@@ -30,7 +30,7 @@
 #ifndef GUI_WIDGET_MINI_BUTTON_H
 #define GUI_WIDGET_MINI_BUTTON_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 
 namespace gui {

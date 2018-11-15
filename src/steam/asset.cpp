@@ -26,8 +26,8 @@
  */
 
 
-#include "proc/asset.hpp"
-#include "proc/assetmanager.hpp"
+#include "steam/asset.hpp"
+#include "steam/assetmanager.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"

@@ -32,8 +32,8 @@
 #include "lib/error.hpp"
 #include "lib/meta/function.hpp"
 
-#include "proc/engine/diagnostic-buffer-provider.hpp"
-#include "proc/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "steam/engine/tracking-heap-block-provider.hpp"
 
 
 namespace proc {

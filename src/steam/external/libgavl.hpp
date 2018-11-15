@@ -34,7 +34,7 @@
 #define PROC_EXTERNAL_LIBGAVL_H
 
 
-#include "proc/control/media-impl-lib.hpp"
+#include "steam/control/media-impl-lib.hpp"
 
 
 

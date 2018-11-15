@@ -43,10 +43,10 @@
 #ifndef MOBJECT_SESSION_FIXTURE_H
 #define MOBJECT_SESSION_FIXTURE_H
 
-#include "proc/mobject/session/segmentation.hpp"
-#include "proc/mobject/session/fork.hpp"
-#include "proc/mobject/explicitplacement.hpp"
-#include "proc/mobject/session/auto.hpp"
+#include "steam/mobject/session/segmentation.hpp"
+#include "steam/mobject/session/fork.hpp"
+#include "steam/mobject/explicitplacement.hpp"
+#include "steam/mobject/session/auto.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>

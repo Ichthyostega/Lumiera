@@ -30,7 +30,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/mutation.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>

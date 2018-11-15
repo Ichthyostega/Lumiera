@@ -71,9 +71,9 @@
 #define PROC_MOBJECT_SESSION_INTERFACE_MODULES_H
 
 #include "lib/element-tracker.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
-#include "proc/mobject/session/element-query.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
+#include "steam/mobject/session/element-query.hpp"
 #include "common/query/defs-manager.hpp"
 
 

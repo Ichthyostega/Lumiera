@@ -66,8 +66,8 @@
 #ifndef PROC_MOBJECT_MODEL_PORT_H
 #define PROC_MOBJECT_MODEL_PORT_H
 
-#include "proc/asset/pipe.hpp"
-#include "proc/streamtype.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/streamtype.hpp"
 
 namespace proc {
 namespace mobject {

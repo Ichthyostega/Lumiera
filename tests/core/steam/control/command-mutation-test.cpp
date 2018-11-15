@@ -27,9 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/command-mutation.hpp"
-#include "proc/control/command-simple-closure.hpp"
-#include "proc/control/memento-tie.hpp"
+#include "steam/control/command-mutation.hpp"
+#include "steam/control/command-simple-closure.hpp"
+#include "steam/control/memento-tie.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/format-cout.hpp"

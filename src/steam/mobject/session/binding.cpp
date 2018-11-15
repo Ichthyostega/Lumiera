@@ -28,8 +28,8 @@
  */
 
 
-#include "proc/mobject/session/binding.hpp"
-#include "proc/asset/sequence.hpp"
+#include "steam/mobject/session/binding.hpp"
+#include "steam/asset/sequence.hpp"
 
 namespace proc {
 namespace mobject {

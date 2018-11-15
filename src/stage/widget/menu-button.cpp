@@ -26,7 +26,7 @@
  */
 
 
-#include "gui/widget/menu-button.hpp"
+#include "stage/widget/menu-button.hpp"
 
 
 using namespace Gtk;      ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

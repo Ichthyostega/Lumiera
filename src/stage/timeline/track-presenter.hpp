@@ -47,12 +47,12 @@
 #ifndef GUI_TIMELINE_TRACK_PRESENTER_H
 #define GUI_TIMELINE_TRACK_PRESENTER_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/model/controller.hpp"
-#include "gui/timeline/marker-widget.hpp"
-#include "gui/timeline/clip-presenter.hpp"
-#include "gui/timeline/track-head-widget.hpp"
-#include "gui/timeline/track-body.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/model/controller.hpp"
+#include "stage/timeline/marker-widget.hpp"
+#include "stage/timeline/clip-presenter.hpp"
+#include "stage/timeline/track-head-widget.hpp"
+#include "stage/timeline/track-body.hpp"
 
 #include "lib/nocopy.hpp"
 //#include "lib/util.hpp"

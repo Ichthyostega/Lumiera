@@ -25,8 +25,8 @@
  */
 
 
-#include "backend/media-access-facade.hpp"
-#include "backend/media-access-mock.hpp"
+#include "vault/media-access-facade.hpp"
+#include "vault/media-access-mock.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 

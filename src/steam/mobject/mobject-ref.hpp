@@ -60,9 +60,9 @@
 #define MOBJECT_MOBJECT_REF_H
 
 #include "lib/handle.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/session/session-service-mutate.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/placement-ref.hpp"
+#include "steam/mobject/session/session-service-mutate.hpp"
 
 #include <string>
 

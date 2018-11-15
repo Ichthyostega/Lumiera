@@ -31,9 +31,9 @@
 #include "lib/llist.h"
 #include "lib/safeclib.h"
 
-#include "backend/file.h"
-#include "backend/filehandle.h"
-#include "backend/filedescriptor.h"
+#include "vault/file.h"
+#include "vault/filehandle.h"
+#include "vault/filedescriptor.h"
 
 #include <unistd.h>
 

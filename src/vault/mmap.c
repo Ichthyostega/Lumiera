@@ -30,8 +30,8 @@
 #include "include/logging.h"
 #include "lib/safeclib.h"
 
-#include "backend/mmap.h"
-#include "backend/mmapcache.h"
+#include "vault/mmap.h"
+#include "vault/mmapcache.h"
 #include "common/config.h"
 
 #include <unistd.h>

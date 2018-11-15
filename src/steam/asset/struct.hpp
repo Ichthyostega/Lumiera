@@ -62,7 +62,7 @@
 #define ASSET_STRUCT_H
 
 #include "lib/symbol.hpp"
-#include "proc/asset.hpp"
+#include "steam/asset.hpp"
 #include "common/query.hpp"
 #include "lib/nocopy.hpp"
 

@@ -38,7 +38,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/model/session-facade.hpp"
+#include "stage/model/session-facade.hpp"
 #include "lib/depend.hpp"
 
 //#include <string>

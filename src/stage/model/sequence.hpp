@@ -34,7 +34,7 @@
 #ifndef SEQUENCE_HPP
 #define SEQUENCE_HPP
 
-#include "gui/model/parent-track.hpp"
+#include "stage/model/parent-track.hpp"
 #include "lib/hash-indexed.hpp"
 
 #include <string>

@@ -38,11 +38,11 @@
  */
 
 
-#include "proc/mobject/session/scope.hpp"
-#include "proc/mobject/session/scope-locator.hpp"
-#include "proc/mobject/session/query-focus-stack.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
-#include "proc/mobject/mobject.hpp"
+#include "steam/mobject/session/scope.hpp"
+#include "steam/mobject/session/scope-locator.hpp"
+#include "steam/mobject/session/query-focus-stack.hpp"
+#include "steam/mobject/session/session-service-explore-scope.hpp"
+#include "steam/mobject/mobject.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource wrapIter adapter here
 #include "common/query/query-resolver.hpp"
 

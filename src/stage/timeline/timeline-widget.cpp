@@ -30,13 +30,13 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-widget.hpp"
-#include "gui/timeline/timeline-controller.hpp"
-#include "gui/timeline/timeline-layout.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/timeline-widget.hpp"
+#include "stage/timeline/timeline-controller.hpp"
+#include "stage/timeline/timeline-layout.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
-//#include "gui/ui-bus.hpp"
+//#include "stage/workspace/workspace-window.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

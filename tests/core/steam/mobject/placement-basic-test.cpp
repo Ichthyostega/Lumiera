@@ -26,12 +26,12 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/asset/media.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/testclip.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/explicitplacement.hpp"
-#include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
+#include "steam/asset/media.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/testclip.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/explicitplacement.hpp"
+#include "steam/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 #include "lib/time/timevalue.hpp"
 //#include "lib/util.hpp"
 

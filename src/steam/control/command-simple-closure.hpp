@@ -47,7 +47,7 @@
 #define CONTROL_COMMAND_SIMPLE_CLOSURE_H
 
 #include "lib/typed-allocation-manager.hpp"
-#include "proc/control/command-op-closure.hpp"
+#include "steam/control/command-op-closure.hpp"
 #include "lib/opaque-holder.hpp"
 
 #include <string>

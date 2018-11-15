@@ -50,9 +50,9 @@
  */
 
 
-#include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/session-impl.hpp"
-#include "proc/mobject/session/scope.hpp"
+#include "steam/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/session-impl.hpp"
+#include "steam/mobject/session/scope.hpp"
 #include "lib/typed-allocation-manager.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util-foreach.hpp"

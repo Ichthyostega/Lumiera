@@ -41,11 +41,11 @@
 #include "lib/symbol.hpp"
 #include "lib/query-util.hpp"
 #include "common/query/query-resolver.hpp"
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/output-designation.hpp"
-#include "proc/mobject/output-mapping.hpp"
-#include "proc/config-resolver.hpp"
+#include "steam/mobject/mobject.hpp"
+#include "steam/mobject/placement-ref.hpp"
+#include "steam/mobject/output-designation.hpp"
+#include "steam/mobject/output-mapping.hpp"
+#include "steam/config-resolver.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>

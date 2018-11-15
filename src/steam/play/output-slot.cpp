@@ -27,8 +27,8 @@
 
 
 #include "lib/error.hpp"
-#include "proc/play/output-slot.hpp"
-#include "proc/play/output-slot-connection.hpp"
+#include "steam/play/output-slot.hpp"
+#include "steam/play/output-slot-connection.hpp"
 
 #include <vector>
 

@@ -110,8 +110,8 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/itertools.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/placement-ref.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/placement-ref.hpp"
 #include "lib/nocopy.hpp"
 
 #include <unordered_map>

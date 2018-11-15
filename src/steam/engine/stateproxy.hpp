@@ -37,7 +37,7 @@
 #define ENGINE_STATEPROXY_H
 
 
-#include "proc/state.hpp"
+#include "steam/state.hpp"
 
 
 namespace proc {

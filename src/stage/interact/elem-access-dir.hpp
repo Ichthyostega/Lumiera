@@ -43,9 +43,9 @@
 
 
 #include "lib/error.hpp"
-#include "gui/model/element-access.hpp"
-#include "gui/ctrl/window-locator.hpp"
-#include "gui/ctrl/panel-locator.hpp"
+#include "stage/model/element-access.hpp"
+#include "stage/ctrl/window-locator.hpp"
+#include "stage/ctrl/panel-locator.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 

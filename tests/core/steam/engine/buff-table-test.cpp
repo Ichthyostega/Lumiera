@@ -28,8 +28,8 @@
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"
 
-#include "proc/engine/procnode.hpp"
-#include "proc/engine/bufftable-obsolete.hpp"
+#include "steam/engine/procnode.hpp"
+#include "steam/engine/bufftable-obsolete.hpp"
 #include "lib/ref-array.hpp"
 #include "lib/format-cout.hpp"
 

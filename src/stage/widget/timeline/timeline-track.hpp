@@ -33,14 +33,14 @@
 #define GUI_WIDGET_TIMELINE_TRACK_H
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/model/track.hpp"
-#include "gui/widget/menu-button.hpp"
-#include "gui/widget/mini-button.hpp"
-#include "gui/widget/button-bar.hpp"
-#include "gui/widget/timeline/timeline-clip.hpp"
-#include "gui/widget/timeline/timeline-header-container.hpp"
-#include "gui/widget/timeline/timeline-header-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/model/track.hpp"
+#include "stage/widget/menu-button.hpp"
+#include "stage/widget/mini-button.hpp"
+#include "stage/widget/button-bar.hpp"
+#include "stage/widget/timeline/timeline-clip.hpp"
+#include "stage/widget/timeline/timeline-header-container.hpp"
+#include "stage/widget/timeline/timeline-header-widget.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <memory>

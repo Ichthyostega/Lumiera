@@ -28,15 +28,15 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/config-keys.hpp"
-#include "gui/interact/wizard.hpp"
-#include "gui/interact/spot-locator.hpp"
-#include "gui/workspace/workspace-window.hpp"
-#include "gui/panel/infobox-panel.hpp"
-#include "gui/dialog/test-control.hpp"
-#include "gui/ctrl/notification-hub.hpp"
-#include "gui/ctrl/global-ctx.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/config-keys.hpp"
+#include "stage/interact/wizard.hpp"
+#include "stage/interact/spot-locator.hpp"
+#include "stage/workspace/workspace-window.hpp"
+#include "stage/panel/infobox-panel.hpp"
+#include "stage/dialog/test-control.hpp"
+#include "stage/ctrl/notification-hub.hpp"
+#include "stage/ctrl/global-ctx.hpp"
 #include "lib/format-string.hpp"
 //#include "lib/util.hpp"
 

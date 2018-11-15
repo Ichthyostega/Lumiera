@@ -27,16 +27,16 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/scope.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/asset/media.hpp"
+#include "steam/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/scope.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/asset/media.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include "proc/mobject/session/testclip.hpp"
-#include "proc/mobject/session/testroot.hpp"
+#include "steam/mobject/session/testclip.hpp"
+#include "steam/mobject/session/testroot.hpp"
 
 
 using util::_Fmt;

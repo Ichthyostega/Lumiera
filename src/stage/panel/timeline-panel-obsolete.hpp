@@ -29,12 +29,12 @@
 #ifndef GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H
 #define GUI_PANEL_TIMELINE_PANEL_OBSOLETE_H
 
-#include "gui/panel/panel.hpp"
-#include "gui/widget/timecode-widget.hpp"
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/widget/timeline/timeline-zoom-scale.hpp"
-#include "gui/model/project.hpp"
-#include "gui/ui-bus.hpp"   ////////////TODO for the obsolete Controller
+#include "stage/panel/panel.hpp"
+#include "stage/widget/timecode-widget.hpp"
+#include "stage/widget/timeline-widget.hpp"
+#include "stage/widget/timeline/timeline-zoom-scale.hpp"
+#include "stage/model/project.hpp"
+#include "stage/ui-bus.hpp"   ////////////TODO for the obsolete Controller
 
 #include "lib/time/timevalue.hpp"
 #include "lib/util-coll.hpp"

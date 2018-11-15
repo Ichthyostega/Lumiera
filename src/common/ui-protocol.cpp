@@ -25,7 +25,7 @@
  ** Storage for key constants and basic definitions used for interfacing with the GUI.
  */
 
-//#include "gui/gtk-base.hpp"    /////////////////////TODO necessary?
+//#include "stage/gtk-base.hpp"    /////////////////////TODO necessary?
 #include "include/ui-protocol.hpp"
 
 

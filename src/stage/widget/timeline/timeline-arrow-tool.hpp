@@ -29,11 +29,11 @@
 #define GUI_WIDGET_TIMELINE_ARROW_TOOL_H
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/widget/timeline/timeline-tool.hpp"
-#include "gui/widget/timeline/timeline-body.hpp"
-#include "gui/widget/timeline/timeline-track.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/widget/timeline-widget.hpp"
+#include "stage/widget/timeline/timeline-tool.hpp"
+#include "stage/widget/timeline/timeline-body.hpp"
+#include "stage/widget/timeline/timeline-track.hpp"
 
 #include "lib/time/timevalue.hpp"
 

@@ -41,7 +41,7 @@
 #include "include/lifecycle.h"
 
 extern "C" {
-#include "backend/threads.h"
+#include "vault/threads.h"
 }
 
 

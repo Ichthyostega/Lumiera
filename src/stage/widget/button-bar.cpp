@@ -26,7 +26,7 @@
  */
 
 
-#include "gui/widget/button-bar.hpp"
+#include "stage/widget/button-bar.hpp"
 #include "include/logging.h"
 
 

@@ -31,7 +31,7 @@
 #ifndef RESEARCH_GTK_CANVAS_EXPERIMENT_H
 #define RESEARCH_GTK_CANVAS_EXPERIMENT_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 #include <vector>
 

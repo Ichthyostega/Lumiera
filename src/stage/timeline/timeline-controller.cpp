@@ -38,15 +38,15 @@
  */
 
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
-#include "gui/timeline/timeline-layout.hpp"
-#include "gui/timeline/timeline-controller.hpp"
-#include "gui/timeline/track-presenter.hpp"
-#include "gui/timeline/marker-widget.hpp"
+#include "stage/timeline/timeline-layout.hpp"
+#include "stage/timeline/timeline-controller.hpp"
+#include "stage/timeline/track-presenter.hpp"
+#include "stage/timeline/marker-widget.hpp"
 
-//#include "gui/workspace/workspace-window.hpp"
-//#include "gui/ui-bus.hpp"
+//#include "stage/workspace/workspace-window.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

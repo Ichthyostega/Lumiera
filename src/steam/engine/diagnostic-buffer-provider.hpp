@@ -33,8 +33,8 @@
 #include "lib/error.hpp"
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
-#include "proc/engine/type-handler.hpp"
-#include "proc/engine/buffer-provider.hpp"
+#include "steam/engine/type-handler.hpp"
+#include "steam/engine/buffer-provider.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>

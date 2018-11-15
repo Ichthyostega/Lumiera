@@ -42,9 +42,9 @@
 
 #include "lib/test/run.hpp"
 
-#include "proc/mobject/builder/buildertool.hpp"
-#include "proc/mobject/session/abstractmo.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/builder/buildertool.hpp"
+#include "steam/mobject/session/abstractmo.hpp"
+#include "steam/mobject/placement.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"

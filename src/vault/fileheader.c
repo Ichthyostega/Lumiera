@@ -30,8 +30,8 @@
 
 #include "lib/tmpbuf.h"
 
-#include "backend/fileheader.h"
-#include "backend/file.h"
+#include "vault/fileheader.h"
+#include "vault/file.h"
 #include "include/logging.h"
 
 #include <errno.h>

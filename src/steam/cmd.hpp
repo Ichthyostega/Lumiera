@@ -38,9 +38,9 @@
 #ifndef PROC_CMD_H
 #define PROC_CMD_H
 
-#include "proc/control/command-setup.hpp"
+#include "steam/control/command-setup.hpp"
 //#include "lib/symbol.hpp"
-//#include "proc/common.hpp"
+//#include "steam/common.hpp"
 
 //#include <string>
 

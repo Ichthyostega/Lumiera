@@ -39,10 +39,10 @@
 #ifndef PROC_MOBJECT_MOBJECT_H
 #define PROC_MOBJECT_MOBJECT_H
 
-#include "proc/common.hpp"
-#include "proc/mobject/builder/buildertool.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/asset.hpp"                    //TODO finally not needed?
+#include "steam/common.hpp"
+#include "steam/mobject/builder/buildertool.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/asset.hpp"                    //TODO finally not needed?
 #include "lib/p.hpp"
 #include "lib/time/timevalue.hpp"
 
@@ -51,7 +51,7 @@
 
 
 
-#include "proc/assetmanager.hpp"
+#include "steam/assetmanager.hpp"
 using proc_interface::IDA;                   //TODO finally not needed?
 //using proc_interface::PAsset;              //TODO: only temporarily
 using proc_interface::AssetManager;

@@ -29,7 +29,7 @@
 #ifndef MOBJECT_BUILDER_ASSEMBLER_H
 #define MOBJECT_BUILDER_ASSEMBLER_H
 
-#include "proc/engine/renderengine.hpp"
+#include "steam/engine/renderengine.hpp"
 
 
 namespace proc    {

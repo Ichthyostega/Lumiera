@@ -37,7 +37,7 @@
 
 
 #include "lib/symbol.hpp"
-#include "proc/asset.hpp"
+#include "steam/asset.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/format-string.hpp"

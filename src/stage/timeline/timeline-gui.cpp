@@ -33,10 +33,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
-#include "gui/timeline/timeline-gui.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "stage/timeline/timeline-gui.hpp"
+#include "stage/timeline/timeline-widget.hpp"
 
 #include <utility>
 

@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/scoped-collection.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "lib/sync.hpp"
 #include "lib/util.hpp"
 

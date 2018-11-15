@@ -27,8 +27,8 @@
 
 #include "lib/test/run.hpp"
 
-#include "proc/mobject/session/scope-query.hpp"
-#include "proc/mobject/session/effect.hpp"
+#include "steam/mobject/session/scope-query.hpp"
+#include "steam/mobject/session/effect.hpp"
 #include "lib/meta/duck-detector.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/util-foreach.hpp"

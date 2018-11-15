@@ -54,7 +54,7 @@
 #ifndef GUI__H
 #define GUI__H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
 
 //#include <string>

@@ -29,7 +29,7 @@
 #ifndef GUI_DIALOG_RENDER_H
 #define GUI_DIALOG_RENDER_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 
 namespace gui {

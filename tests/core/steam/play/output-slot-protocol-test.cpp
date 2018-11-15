@@ -27,9 +27,9 @@
 
 #include "lib/test/run.hpp"
 
-#include "proc/play/diagnostic-output-slot.hpp"
-#include "proc/engine/buffhandle.hpp"
-#include "proc/engine/testframe.hpp"
+#include "steam/play/diagnostic-output-slot.hpp"
+#include "steam/engine/buffhandle.hpp"
+#include "steam/engine/testframe.hpp"
 
 
 

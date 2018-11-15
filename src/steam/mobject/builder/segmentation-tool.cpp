@@ -27,7 +27,7 @@
  */
 
 
-#include "proc/mobject/builder/segmentation-tool.hpp"
+#include "steam/mobject/builder/segmentation-tool.hpp"
 
 
 namespace proc {

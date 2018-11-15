@@ -56,8 +56,8 @@
 #include "lib/wrapperptr.hpp"
 
 #include "lib/p.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/explicitplacement.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/explicitplacement.hpp"
 
 
 namespace proc    {

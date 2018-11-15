@@ -26,7 +26,7 @@
  */
 
 
-#include "gui/draw/cairo-util.hpp"
+#include "stage/draw/cairo-util.hpp"
 
 namespace gui {
 namespace draw {

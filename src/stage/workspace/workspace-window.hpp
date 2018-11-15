@@ -32,8 +32,8 @@
 #define GUI_WORKSPACE_WORKSPACE_WINDOW_H
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/workspace/panel-manager.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/workspace/panel-manager.hpp"
 
 
 namespace gui {

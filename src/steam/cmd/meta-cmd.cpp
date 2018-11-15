@@ -35,12 +35,12 @@
  */
 
 
-#include "proc/cmd.hpp"
-#include "proc/control/command-def.hpp"
-//#include "proc/mobject/session.hpp"
+#include "steam/cmd.hpp"
+#include "steam/control/command-def.hpp"
+//#include "steam/mobject/session.hpp"
 #include "include/ui-protocol.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : verify if this include is required
 #include "include/gui-notification-facade.h"
-#include "gui/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
+#include "stage/interact/wizard.hpp"             //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily
 #include "lib/diff/gen-node.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/format-string.hpp"               //////////////////////////////////////////////////////////////TICKET #1140 : include needed temporarily

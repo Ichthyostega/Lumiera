@@ -40,7 +40,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "gui/ctrl/bus-term.hpp"
+#include "stage/ctrl/bus-term.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"

@@ -27,9 +27,9 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/dialog/name-chooser.hpp"
-#include "gui/dialog/dialog.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/dialog/name-chooser.hpp"
+#include "stage/dialog/dialog.hpp"
 
 using namespace Gtk;         //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace Glib;        //////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

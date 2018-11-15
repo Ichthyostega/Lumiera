@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/play/play-process.hpp"
-#include "proc/play/play-service.hpp"
-#include "proc/play/render-configurator.hpp"
+#include "steam/play/play-process.hpp"
+#include "steam/play/play-service.hpp"
+#include "steam/play/render-configurator.hpp"
 #include "lib/itertools.hpp"
 
 //#include <string>

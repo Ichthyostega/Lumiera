@@ -66,9 +66,9 @@
 #define MOBJECT_PLACEMENT_REF_H
 
 #include "lib/error.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/explicitplacement.hpp"  /////////////TODO this is ugly! Why can't placement::resolve() return a reference??
-#include "proc/mobject/session/session-service-fetch.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/explicitplacement.hpp"  /////////////TODO this is ugly! Why can't placement::resolve() return a reference??
+#include "steam/mobject/session/session-service-fetch.hpp"
 
 
 

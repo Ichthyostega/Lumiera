@@ -30,8 +30,8 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/output/gdkdisplayer.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/output/gdkdisplayer.hpp"
 
 #if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 #include <gdk/gdkx.h>

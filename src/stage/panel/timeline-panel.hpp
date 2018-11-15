@@ -41,8 +41,8 @@
 #ifndef GUI_PANEL_TIMELINE_PANEL_H
 #define GUI_PANEL_TIMELINE_PANEL_H
 
-#include "gui/panel/panel.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "stage/panel/panel.hpp"
+#include "stage/timeline/timeline-widget.hpp"
 
 #include <gtkmm/notebook.h>
 #include <memory>

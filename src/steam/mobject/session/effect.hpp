@@ -30,8 +30,8 @@
 #define PROC_MOBJECT_SESSION_EFFECT_H
 
 
-#include "proc/mobject/session/abstractmo.hpp"
-#include "proc/asset/effect.hpp"
+#include "steam/mobject/session/abstractmo.hpp"
+#include "steam/asset/effect.hpp"
 
 #include <string>
 

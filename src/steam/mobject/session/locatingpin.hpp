@@ -47,7 +47,7 @@
 #define PROC_MOBJECT_SESSION_LOCATINGPIN_H
 
 
-#include "proc/common.hpp"
+#include "steam/common.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <utility>

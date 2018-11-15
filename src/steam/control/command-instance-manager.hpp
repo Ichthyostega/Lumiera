@@ -59,8 +59,8 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "proc/control/command.hpp"
-#include "proc/control/command-dispatch.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/command-dispatch.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/symbol.hpp"
 

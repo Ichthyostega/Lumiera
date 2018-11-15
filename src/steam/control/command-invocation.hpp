@@ -46,9 +46,9 @@
 #ifndef CONTROL_COMMAND_INVOCACTION_H
 #define CONTROL_COMMAND_INVOCACTION_H
 
-#include "proc/control/command.hpp"
-#include "proc/control/handling-pattern.hpp"
-#include "proc/control/argument-tuple-accept.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/handling-pattern.hpp"
+#include "steam/control/argument-tuple-accept.hpp"
 
 #include <utility>
 

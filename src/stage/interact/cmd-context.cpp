@@ -32,7 +32,7 @@
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
-#include "gui/interact/cmd-context.hpp"
+#include "stage/interact/cmd-context.hpp"
 
 //#include <string>
 //#include <map>

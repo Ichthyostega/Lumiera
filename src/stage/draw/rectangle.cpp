@@ -25,7 +25,7 @@
  ** Implementation of functions to work with rectangular screen ranges
  */
 
-#include "gui/draw/rectangle.hpp"
+#include "stage/draw/rectangle.hpp"
 #include <algorithm>
 
 

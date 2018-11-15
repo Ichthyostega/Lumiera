@@ -29,7 +29,7 @@
 #ifndef MOBJECT_SESSION_PLUG_H
 #define MOBJECT_SESSION_PLUG_H
 
-#include "proc/mobject/session/wish.hpp"
+#include "steam/mobject/session/wish.hpp"
 
 
 

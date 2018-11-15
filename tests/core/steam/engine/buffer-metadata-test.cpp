@@ -29,8 +29,8 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
-#include "proc/engine/buffer-metadata.hpp"
-#include "proc/engine/testframe.hpp"
+#include "steam/engine/buffer-metadata.hpp"
+#include "steam/engine/testframe.hpp"
 
 #include <cstdlib>
 #include <cstring>

@@ -29,8 +29,8 @@
 #ifndef PROC_ENGINE_FRAME_COORD_H
 #define PROC_ENGINE_FRAME_COORD_H
 
-#include "proc/common.hpp"
-#include "proc/mobject/model-port.hpp"
+#include "steam/common.hpp"
+#include "steam/mobject/model-port.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 

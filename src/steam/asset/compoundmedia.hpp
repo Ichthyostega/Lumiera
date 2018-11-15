@@ -31,7 +31,7 @@
 #ifndef ASSET_COMPOUNDMEDIA_H
 #define ASSET_COMPOUNDMEDIA_H
 
-#include "proc/asset/media.hpp"
+#include "steam/asset/media.hpp"
 
 #include <vector>
 

@@ -36,7 +36,7 @@
 #ifndef PROC_MOBJECT_SESSION_LABEL_H
 #define PROC_MOBJECT_SESSION_LABEL_H
 
-#include "proc/mobject/session/meta.hpp"
+#include "steam/mobject/session/meta.hpp"
 #include "lib/symbol.hpp"
 
 

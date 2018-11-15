@@ -26,8 +26,8 @@
  */
 
 
-#include "proc/assetmanager.hpp"
-#include "proc/asset/meta.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/asset/meta.hpp"
 #include "lib/util.hpp"
 
 using lib::idi::EntryID;
@@ -95,8 +95,8 @@ namespace asset {
    /* explicit instantiations of the factory methods */
    /**************************************************/
 
-#include "proc/asset/meta/time-grid.hpp"
-#include "proc/asset/meta/error-log.hpp"
+#include "steam/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/error-log.hpp"
 
 
 namespace proc {

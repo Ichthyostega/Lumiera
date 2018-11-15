@@ -27,12 +27,12 @@
  */
 
 
-#include "proc/mobject/builder/operationpoint.hpp"
-#include "proc/engine/procnode.hpp"
-#include "proc/asset/media.hpp"
-#include "proc/asset/proc.hpp"
-#include "proc/engine/nodefactory.hpp"
-#include "proc/streamtype.hpp"
+#include "steam/mobject/builder/operationpoint.hpp"
+#include "steam/engine/procnode.hpp"
+#include "steam/asset/media.hpp"
+#include "steam/asset/proc.hpp"
+#include "steam/engine/nodefactory.hpp"
+#include "steam/streamtype.hpp"
 //#include "common/util.hpp"
 
 //#include <boost/ptr_container/ptr_vector.hpp>

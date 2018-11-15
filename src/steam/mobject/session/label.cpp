@@ -26,7 +26,7 @@
  */
 
 
-#include "proc/mobject/session/label.hpp"
+#include "steam/mobject/session/label.hpp"
 #include "lib/util.hpp"
 
 using util::isnil;

@@ -42,7 +42,7 @@
 
 #include "lib/meta/maybe-compare.hpp"
 #include "lib/meta/function-closure.hpp"
-#include "proc/control/command-signature.hpp"
+#include "steam/control/command-signature.hpp"
 #include "lib/replaceable-item.hpp"
 #include "lib/functor-util.hpp"
 #include "lib/format-obj.hpp"

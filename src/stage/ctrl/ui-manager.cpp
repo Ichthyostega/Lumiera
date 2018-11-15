@@ -33,13 +33,13 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/config-keys.hpp"
-#include "gui/ctrl/ui-manager.hpp"
-#include "gui/ctrl/global-ctx.hpp"
-#include "gui/ctrl/actions.hpp"
-#include "gui/ctrl/facade.hpp"
-#include "gui/workspace/ui-style.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/config-keys.hpp"
+#include "stage/ctrl/ui-manager.hpp"
+#include "stage/ctrl/global-ctx.hpp"
+#include "stage/ctrl/actions.hpp"
+#include "stage/ctrl/facade.hpp"
+#include "stage/workspace/ui-style.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 

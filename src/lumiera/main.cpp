@@ -32,12 +32,12 @@
 #include "common/appstate.hpp"
 #include "common/option.hpp"
 
-#include "backend/enginefacade.hpp"
-#include "backend/netnodefacade.hpp"
-#include "backend/scriptrunnerfacade.hpp"
+#include "vault/enginefacade.hpp"
+#include "vault/netnodefacade.hpp"
+#include "vault/scriptrunnerfacade.hpp"
 #include "include/dummy-player-facade.h"
-#include "proc/facade.hpp"
-#include "gui/guifacade.hpp"
+#include "steam/facade.hpp"
+#include "stage/guifacade.hpp"
 
 using lib::Cmdline;
 using lumiera::Subsys;

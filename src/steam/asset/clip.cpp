@@ -26,8 +26,8 @@
  */
 
 
-#include "proc/asset/clip.hpp"
-#include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
+#include "steam/asset/clip.hpp"
+#include "steam/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 
 using std::static_pointer_cast;
 

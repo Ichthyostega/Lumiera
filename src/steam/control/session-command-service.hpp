@@ -43,8 +43,8 @@
 
 
 #include "include/session-command-facade.h"
-#include "proc/control/command-dispatch.hpp"
-#include "proc/control/command-instance-manager.hpp"
+#include "steam/control/command-dispatch.hpp"
+#include "steam/control/command-instance-manager.hpp"
 #include "common/instancehandle.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/nocopy.hpp"

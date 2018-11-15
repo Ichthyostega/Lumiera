@@ -32,12 +32,12 @@
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 
-#include "proc/asset.hpp"
-#include "proc/asset/pipe.hpp"
-#include "proc/asset/struct.hpp"
-#include "proc/assetmanager.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/streamtype.hpp"
+#include "steam/asset.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/asset/struct.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/streamtype.hpp"
 
 using util::_Fmt;
 using util::isnil;

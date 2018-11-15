@@ -35,7 +35,7 @@
 #define GUI_PANEL_INFOBOX_PANEL_H
 
 
-#include "gui/panel/panel.hpp"
+#include "stage/panel/panel.hpp"
 
 #include <memory>
 

@@ -37,7 +37,7 @@
 #define GUI_PANEL_ASSETS_PANEL_H
 
 
-#include "gui/panel/panel.hpp"
+#include "stage/panel/panel.hpp"
 
 namespace gui  {
 namespace panel{

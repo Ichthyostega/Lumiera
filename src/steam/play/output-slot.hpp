@@ -69,8 +69,8 @@
 #include "lib/error.hpp"
 #include "lib/handle.hpp"
 #include "lib/time/timevalue.hpp"
-#include "proc/engine/buffer-provider.hpp"
-#include "proc/play/timings.hpp"
+#include "steam/engine/buffer-provider.hpp"
+#include "steam/play/timings.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/nocopy.hpp"
 

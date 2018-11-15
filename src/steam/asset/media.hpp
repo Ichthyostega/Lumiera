@@ -36,10 +36,10 @@
 #ifndef ASSET_MEDIA_H
 #define ASSET_MEDIA_H
 
-#include "proc/asset.hpp"
+#include "steam/asset.hpp"
 #include "lib/time/timevalue.hpp"
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/session/clip.hpp"
+#include "steam/mobject/mobject.hpp"
+#include "steam/mobject/session/clip.hpp"
 #include "lib/nocopy.hpp"
 
 

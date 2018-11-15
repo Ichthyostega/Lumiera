@@ -29,7 +29,7 @@
  */
 
 
-#include "gui/widget/timeline-widget.hpp"
+#include "stage/widget/timeline-widget.hpp"
 
 #include <boost/foreach.hpp>
 #include <typeinfo>

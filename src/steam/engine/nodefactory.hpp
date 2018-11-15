@@ -32,9 +32,9 @@
 #ifndef ENGINE_NODEFACTORY_H
 #define ENGINE_NODEFACTORY_H
 
-#include "proc/engine/procnode.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/engine/nodewiring.hpp"
+#include "steam/engine/procnode.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/engine/nodewiring.hpp"
 
 
   ////////////////////////////////////TODO: make inclusions / forward definitions a bit more orthogonal....

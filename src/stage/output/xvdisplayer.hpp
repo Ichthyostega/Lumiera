@@ -38,8 +38,8 @@
 #define GUI_OUTPUT_XVDISPLAYER_H
 
 
-#include "gui/output/displayer.hpp"
-#include "gui/gtk-base.hpp"
+#include "stage/output/displayer.hpp"
+#include "stage/gtk-base.hpp"
 
 #include <X11/Xlib.h>
 #include <sys/ipc.h>

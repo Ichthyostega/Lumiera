@@ -55,10 +55,10 @@
 #define ENGINE_NODEINVOCATION_H
 
 
-#include "proc/state.hpp"
-#include "proc/engine/procnode.hpp"
-#include "proc/engine/channel-descriptor.hpp"
-#include "proc/engine/bufftable-obsolete.hpp"
+#include "steam/state.hpp"
+#include "steam/engine/procnode.hpp"
+#include "steam/engine/channel-descriptor.hpp"
+#include "steam/engine/bufftable-obsolete.hpp"
 
 
 

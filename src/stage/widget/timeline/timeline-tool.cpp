@@ -27,8 +27,8 @@
  */
 
 
-#include "gui/widget/timeline/timeline-tool.hpp"
-#include "gui/widget/timeline-widget.hpp"
+#include "stage/widget/timeline/timeline-tool.hpp"
+#include "stage/widget/timeline-widget.hpp"
 
 using namespace Gdk;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using std::shared_ptr;

@@ -25,7 +25,7 @@
  */
 
 
-#include "proc/engine/testframe.hpp"
+#include "steam/engine/testframe.hpp"
 #include "lib/error.hpp"
 
 #include <boost/random/linear_congruential.hpp>

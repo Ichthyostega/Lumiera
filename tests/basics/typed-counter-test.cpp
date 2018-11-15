@@ -45,7 +45,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/scoped-ptrvect.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/sync.hpp"
 

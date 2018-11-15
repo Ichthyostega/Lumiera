@@ -31,8 +31,8 @@
 #ifndef GUI_WIDGET_TIMELINE_GROUP_TRACK_H
 #define GUI_WIDGET_TIMELINE_GROUP_TRACK_H
 
-#include "gui/widget/timeline/timeline-track.hpp"
-#include "gui/model/group-track.hpp"
+#include "stage/widget/timeline/timeline-track.hpp"
+#include "stage/model/group-track.hpp"
 
 namespace gui {
 namespace widget {

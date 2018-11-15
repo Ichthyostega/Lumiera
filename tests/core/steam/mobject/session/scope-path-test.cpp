@@ -27,10 +27,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/scope-path.hpp"
-#include "proc/mobject/session/test-scope-invalid.hpp"
+#include "steam/mobject/session/test-scopes.hpp"
+#include "steam/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/scope-path.hpp"
+#include "steam/mobject/session/test-scope-invalid.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 

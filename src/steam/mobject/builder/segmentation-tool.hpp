@@ -35,10 +35,10 @@
 #define MOBJECT_BUILDER_SEGMENTATION_TOOL_H
 
 
-#include "proc/mobject/builder/applicable-builder-target-types.hpp"
+#include "steam/mobject/builder/applicable-builder-target-types.hpp"
 
-#include "proc/mobject/session/segmentation.hpp"
-#include "proc/mobject/session/fixture.hpp"   //////TODO really on the header??
+#include "steam/mobject/session/segmentation.hpp"
+#include "steam/mobject/session/fixture.hpp"   //////TODO really on the header??
 
 
 #include <list>

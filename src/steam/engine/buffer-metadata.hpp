@@ -59,8 +59,8 @@
 #include "lib/hash-value.h"
 #include "lib/util-foreach.hpp"
 #include "include/logging.h"
-#include "proc/engine/type-handler.hpp"
-#include "proc/engine/buffer-local-key.hpp"
+#include "steam/engine/type-handler.hpp"
+#include "steam/engine/buffer-local-key.hpp"
 #include "lib/nocopy.hpp"
 
 #include <unordered_map>

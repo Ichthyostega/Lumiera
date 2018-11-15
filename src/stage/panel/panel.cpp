@@ -26,10 +26,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/panel/panel.hpp"
-#include "gui/workspace/panel-manager.hpp"
-#include "gui/workspace/workspace-window.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/panel/panel.hpp"
+#include "stage/workspace/panel-manager.hpp"
+#include "stage/workspace/workspace-window.hpp"
 
 #include <gdl/gdl-dock-item-grip.h>
 

@@ -103,8 +103,8 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function-closure.hpp"
-#include "gui/interact/ui-location-solver.hpp"
-#include "gui/interact/ui-coord.hpp"
+#include "stage/interact/ui-location-solver.hpp"
+#include "stage/interact/ui-coord.hpp"
 
 #include <functional>
 #include <utility>

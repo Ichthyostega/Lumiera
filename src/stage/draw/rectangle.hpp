@@ -29,7 +29,7 @@
 #ifndef GUI_DRAW_RECTANGLE_H
 #define GUI_DRAW_RECTANGLE_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 namespace gui {
 namespace draw {

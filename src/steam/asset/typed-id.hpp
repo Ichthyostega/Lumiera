@@ -48,8 +48,8 @@
 
 
 #include "lib/error.hpp"
-//#include "proc/asset.hpp"
-//#include "proc/asset/struct-scheme.hpp"
+//#include "steam/asset.hpp"
+//#include "steam/asset/struct-scheme.hpp"
 //#include "lib/hash-indexed.hpp"
 //#include "lib/util.hpp"
 #include "lib/symbol.hpp"

@@ -34,9 +34,9 @@
  */
 
 
-#include "proc/mobject/mobject-ref.hpp"
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/mobject-ref.hpp"
+#include "steam/mobject/mobject.hpp"
+#include "steam/mobject/placement.hpp"
 
 
 namespace proc {

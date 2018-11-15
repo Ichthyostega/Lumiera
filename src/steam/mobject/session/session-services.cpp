@@ -41,17 +41,17 @@
  */
 
 
-#include "proc/mobject/session/session-service-fetch.hpp"
-#include "proc/mobject/session/session-service-mutate.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
-#include "proc/mobject/session/session-service-mock-index.hpp"
-#include "proc/mobject/session/session-service-defaults.hpp"
+#include "steam/mobject/session/session-service-fetch.hpp"
+#include "steam/mobject/session/session-service-mutate.hpp"
+#include "steam/mobject/session/session-service-explore-scope.hpp"
+#include "steam/mobject/session/session-service-mock-index.hpp"
+#include "steam/mobject/session/session-service-defaults.hpp"
 
-#include "proc/mobject/session/session-services.hpp"
-#include "proc/mobject/session/session-impl.hpp"
-#include "proc/mobject/session/sess-manager-impl.hpp"
+#include "steam/mobject/session/session-services.hpp"
+#include "steam/mobject/session/session-impl.hpp"
+#include "steam/mobject/session/sess-manager-impl.hpp"
 
-#include "proc/mobject/session/mobjectfactory.hpp"
+#include "steam/mobject/session/mobjectfactory.hpp"
 #include "lib/symbol.hpp"
 
 using lib::Symbol;

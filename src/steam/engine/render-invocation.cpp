@@ -28,8 +28,8 @@
  */
 
 
-#include "proc/engine/render-invocation.hpp"
-#include "proc/engine/stateproxy.hpp"
+#include "steam/engine/render-invocation.hpp"
+#include "steam/engine/stateproxy.hpp"
 
 
 namespace proc {

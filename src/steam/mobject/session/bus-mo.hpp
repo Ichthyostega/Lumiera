@@ -34,8 +34,8 @@
 #ifndef PROC_MOBJECT_SESSION_BUS_MO_H
 #define PROC_MOBJECT_SESSION_BUS_MO_H
 
-#include "proc/mobject/session/meta.hpp"
-#include "proc/mobject/builder/buildertool.hpp"
+#include "steam/mobject/session/meta.hpp"
+#include "steam/mobject/builder/buildertool.hpp"
 
 
 namespace proc {

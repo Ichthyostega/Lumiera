@@ -42,7 +42,7 @@
 #ifndef PROC_CONTROL_COMMAND_QUEUE_H
 #define PROC_CONTROL_COMMAND_QUEUE_H
 
-#include "proc/control/command.hpp"
+#include "steam/control/command.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"

@@ -25,12 +25,12 @@
  */
 
 
-#include "proc/mobject/session/testclip.hpp"
-#include "backend/media-access-facade.hpp"
-#include "backend/media-access-mock.hpp"
+#include "steam/mobject/session/testclip.hpp"
+#include "vault/media-access-facade.hpp"
+#include "vault/media-access-mock.hpp"
 #include "lib/depend-inject.hpp"
-#include "proc/asset/media.hpp"
-#include "proc/asset/clip.hpp"
+#include "steam/asset/media.hpp"
+#include "steam/asset/clip.hpp"
 #include "lib/depend.hpp"
 #include "lib/time/timevalue.hpp"
 

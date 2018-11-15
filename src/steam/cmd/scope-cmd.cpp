@@ -38,9 +38,9 @@
  */
 
 
-#include "proc/cmd.hpp"
-#include "proc/control/command-def.hpp"
-//#include "proc/mobject/session.hpp"
+#include "steam/cmd.hpp"
+#include "steam/control/command-def.hpp"
+//#include "steam/mobject/session.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/format-string.hpp"

@@ -28,8 +28,8 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "proc/asset/meta.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"

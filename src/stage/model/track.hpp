@@ -28,7 +28,7 @@
  */
 
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 #include <memory>
 #include <list>

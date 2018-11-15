@@ -42,8 +42,8 @@
 #ifndef GUI_CTRL_FACADE_H
 #define GUI_CTRL_FACADE_H
 
-#include "gui/notification-service.hpp"
-#include "gui/display-service.hpp"
+#include "stage/notification-service.hpp"
+#include "stage/display-service.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/nocopy.hpp"
 

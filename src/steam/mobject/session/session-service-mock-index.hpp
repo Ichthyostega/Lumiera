@@ -44,7 +44,7 @@
 #ifndef MOBJECT_SESSION_SESSION_SERVICE_MOCK_INDEX_H
 #define MOBJECT_SESSION_SESSION_SERVICE_MOCK_INDEX_H
 
-#include "proc/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/placement-index.hpp"
 
 #include <memory>
 

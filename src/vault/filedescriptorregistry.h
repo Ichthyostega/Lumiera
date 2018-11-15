@@ -30,7 +30,7 @@
 #ifndef BACKEND_FILEDESCRIPTORREGISTRY_H
 #define BACKEND_FILEDESCRIPTORREGISTRY_H
 
-#include "backend/filedescriptor.h"
+#include "vault/filedescriptor.h"
 
 
 /**

@@ -29,9 +29,9 @@
 #ifndef GUI_WIDGET_TIMELINE_CLIP_TRACK_H
 #define GUI_WIDGET_TIMELINE_CLIP_TRACK_H
 
-#include "gui/widget/timeline/basic-draw-strategy.hpp"
-#include "gui/widget/timeline/timeline-track.hpp"
-#include "gui/model/clip-track.hpp"
+#include "stage/widget/timeline/basic-draw-strategy.hpp"
+#include "stage/widget/timeline/timeline-track.hpp"
+#include "stage/model/clip-track.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <vector>

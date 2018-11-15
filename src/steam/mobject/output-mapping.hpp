@@ -55,7 +55,7 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "lib/hash-value.h"
-#include "proc/asset/pipe.hpp"
+#include "steam/asset/pipe.hpp"
 #include "common/query.hpp"
 
 #include <boost/operators.hpp>

@@ -30,8 +30,8 @@
  */
 
 
-#include "gui/model/project.hpp"
-#include "gui/model/sequence.hpp"
+#include "stage/model/project.hpp"
+#include "stage/model/sequence.hpp"
 
 #include <memory>
 

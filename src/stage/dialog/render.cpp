@@ -27,10 +27,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
-#include "gui/dialog/render.hpp"
-#include "gui/dialog/dialog.hpp"
+#include "stage/dialog/render.hpp"
+#include "stage/dialog/dialog.hpp"
 #include "include/logging.h"
 
 

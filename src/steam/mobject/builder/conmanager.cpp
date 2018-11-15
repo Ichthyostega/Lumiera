@@ -27,8 +27,8 @@
 
 
 #include "lib/error.hpp"
-#include "proc/mobject/builder/conmanager.hpp"
-#include "proc/control/stypemanager.hpp"
+#include "steam/mobject/builder/conmanager.hpp"
+#include "steam/control/stypemanager.hpp"
 
 namespace proc {
 namespace mobject {

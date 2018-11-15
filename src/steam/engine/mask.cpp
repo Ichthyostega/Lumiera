@@ -28,7 +28,7 @@
 
 
 #include "lib/error.hpp"
-#include "proc/engine/mask.hpp"
+#include "steam/engine/mask.hpp"
 
 namespace proc {
 namespace engine {

@@ -79,10 +79,10 @@ extern "C" {
 #include "common/interfaceregistry.h"
 }
 
-#include "proc/control/proc-dispatcher.hpp"
-#include "proc/control/command-def.hpp"
+#include "steam/control/proc-dispatcher.hpp"
+#include "steam/control/command-def.hpp"
 #include "include/session-command-facade.h"
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/format-string.hpp"
 #include "lib/symbol.hpp"

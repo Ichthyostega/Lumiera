@@ -30,7 +30,7 @@
 #ifndef PROC_MOBJECT_SESSION_CONSTRAINT_H
 #define PROC_MOBJECT_SESSION_CONSTRAINT_H
 
-#include "proc/mobject/session/allocation.hpp"
+#include "steam/mobject/session/allocation.hpp"
 
 
 

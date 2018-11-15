@@ -28,9 +28,9 @@
  */
 
 
-#include "proc/mobject/paramprovider.hpp"
-#include "proc/mobject/parameter.hpp"
-#include "proc/mobject/interpolator.hpp"
+#include "steam/mobject/paramprovider.hpp"
+#include "steam/mobject/parameter.hpp"
+#include "steam/mobject/interpolator.hpp"
 
 namespace proc {
 namespace mobject {

@@ -33,10 +33,10 @@
 #define PROC_MOBJECT_SESSION_ELEMENT_QUERY_H
 
 
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/mobject-ref.hpp"
-#include "proc/mobject/session/specific-contents-query.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/mobject-ref.hpp"
+#include "steam/mobject/session/specific-contents-query.hpp"
+#include "steam/mobject/session/session-service-explore-scope.hpp"
 #include "lib/nocopy.hpp"
 
 #include <functional>

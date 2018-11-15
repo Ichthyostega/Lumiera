@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "proc/control/stypemanager.hpp"
+#include "steam/control/stypemanager.hpp"
 #include "teststreamtypes.hpp"
 
 using ::test::Test;

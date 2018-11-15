@@ -31,10 +31,10 @@
 #ifndef GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
 #define GUI_WIDGET_TIMELINE_ZOOM_SCALE_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/widget/mini-button.hpp"
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/widget/timeline/timeline-state.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/widget/mini-button.hpp"
+#include "stage/widget/timeline-widget.hpp"
+#include "stage/widget/timeline/timeline-state.hpp"
 
 using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 using namespace gui::widget;    ////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

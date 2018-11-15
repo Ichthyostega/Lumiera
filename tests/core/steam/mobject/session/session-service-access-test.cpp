@@ -26,7 +26,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session.hpp"
+#include "steam/mobject/session.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/depend.hpp"

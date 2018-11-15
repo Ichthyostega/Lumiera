@@ -25,12 +25,12 @@
  ** Implementation of a dockable panel to hold the video viewers
  */
 
-#include "gui/gtk-base.hpp"
-#include "gui/panel/viewer-panel.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/panel/viewer-panel.hpp"
 
-#include "gui/workspace/workspace-window.hpp"
-#include "gui/ui-bus.hpp"  ///////////////////////////////////TODO why are we forced to include this after workspace-window.hpp ??  Ambiguity between std::ref and boost::reference_wrapper
-#include "gui/display-service.hpp"
+#include "stage/workspace/workspace-window.hpp"
+#include "stage/ui-bus.hpp"  ///////////////////////////////////TODO why are we forced to include this after workspace-window.hpp ??  Ambiguity between std::ref and boost::reference_wrapper
+#include "stage/display-service.hpp"
 
 
 using namespace Gtk;                   ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

@@ -52,7 +52,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "include/lifecycle.h"
-#include "proc/mobject/session.hpp"
+#include "steam/mobject/session.hpp"
 #include "lib/symbol.hpp"
 
 

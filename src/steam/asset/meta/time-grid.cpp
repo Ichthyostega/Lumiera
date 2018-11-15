@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/asset/meta/time-grid.hpp"
-#include "proc/asset/struct-scheme.hpp"
-#include "proc/assetmanager.hpp"
+#include "steam/asset/meta/time-grid.hpp"
+#include "steam/asset/struct-scheme.hpp"
+#include "steam/assetmanager.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"

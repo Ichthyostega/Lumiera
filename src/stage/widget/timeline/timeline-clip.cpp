@@ -26,7 +26,7 @@
  */
 
 
-#include "gui/widget/timeline/timeline-clip.hpp"
+#include "stage/widget/timeline/timeline-clip.hpp"
 
 namespace gui {
 namespace widget {

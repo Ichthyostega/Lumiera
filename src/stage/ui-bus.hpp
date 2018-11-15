@@ -103,8 +103,8 @@
 #define GUI_UI_BUS_H
 
 
-#include "gui/gtk-base.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
-#include "gui/ctrl/playback-controller.hpp"
+#include "stage/gtk-base.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
+#include "stage/ctrl/playback-controller.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>

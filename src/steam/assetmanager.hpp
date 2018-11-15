@@ -44,7 +44,7 @@
 #define PROC_INTERFACE_ASSETMANAGER_H
 
 
-#include "proc/asset.hpp"
+#include "steam/asset.hpp"
 #include "lib/error.hpp"
 #include "lib/depend.hpp"
 

@@ -26,7 +26,7 @@
  */
 
 
-#include "proc/asset/category.hpp"
+#include "steam/asset/category.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
 

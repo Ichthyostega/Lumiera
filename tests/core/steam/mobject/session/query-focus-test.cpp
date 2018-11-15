@@ -26,10 +26,10 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/query-focus.hpp"
-#include "proc/mobject/session/scope.hpp"
+#include "steam/mobject/session/test-scopes.hpp"
+#include "steam/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/query-focus.hpp"
+#include "steam/mobject/session/scope.hpp"
 #include "lib/format-cout.hpp"
 
 

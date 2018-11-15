@@ -27,19 +27,19 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/command.hpp"
-#include "proc/control/command-def.hpp"
-#include "proc/control/handling-pattern.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/command-def.hpp"
+#include "steam/control/handling-pattern.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
-#include "proc/control/test-dummy-commands.hpp"
+#include "steam/control/test-dummy-commands.hpp"
 
 extern "C" {
 #include "common/interfaceregistry.h"
 }
-#include "proc/control/proc-dispatcher.hpp"
+#include "steam/control/proc-dispatcher.hpp"
 #include "include/session-command-facade.h"
 
 #include <functional>

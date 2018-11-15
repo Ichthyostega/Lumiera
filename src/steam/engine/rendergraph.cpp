@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/engine/rendergraph.hpp"
+#include "steam/engine/rendergraph.hpp"
 #include "lib/frameid.hpp"
-#include "proc/state.hpp"
+#include "steam/state.hpp"
 
 namespace lumiera {
   

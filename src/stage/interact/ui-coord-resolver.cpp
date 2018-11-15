@@ -28,7 +28,7 @@
  */
 
 
-#include "gui/interact/ui-coord-resolver.hpp"
+#include "stage/interact/ui-coord-resolver.hpp"
 #include "lib/util.hpp"
 
 using util::isnil;

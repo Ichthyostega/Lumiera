@@ -29,7 +29,7 @@
 #include "lib/error.h"
 #include "lib/safeclib.h"
 
-#include "backend/resourcecollector.h"
+#include "vault/resourcecollector.h"
 
 #include <string.h>
 #include <stdlib.h>

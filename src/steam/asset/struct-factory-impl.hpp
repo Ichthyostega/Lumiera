@@ -36,20 +36,20 @@
 #define ASSET_STRUCT_FACTORY_IMPL_H
 
 
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/binding.hpp"
-#include "proc/mobject/session/mobjectfactory.hpp"
-#include "proc/mobject/session/element-query.hpp"
-#include "proc/mobject/session/session-query.hpp"
-#include "proc/mobject/session/scope.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/binding.hpp"
+#include "steam/mobject/session/mobjectfactory.hpp"
+#include "steam/mobject/session/element-query.hpp"
+#include "steam/mobject/session/session-query.hpp"
+#include "steam/mobject/session/scope.hpp"
 #include "common/config-rules.hpp"
 #include "common/query.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/pipe.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/asset/pipe.hpp"
 
-#include "proc/asset/struct-scheme.hpp"
+#include "steam/asset/struct-scheme.hpp"
 
 #include "lib/format-string.hpp"
 #include "lib/query-util.hpp"

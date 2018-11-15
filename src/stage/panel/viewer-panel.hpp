@@ -29,9 +29,9 @@
 #define GUI_PANEL_VIEWER_PANEL_H
 
 
-#include "gui/panel/panel.hpp"
-#include "gui/widget/video-display-widget.hpp"
-#include "gui/ctrl/playback-controller.hpp"
+#include "stage/panel/panel.hpp"
+#include "stage/widget/video-display-widget.hpp"
+#include "stage/ctrl/playback-controller.hpp"
 
 namespace gui  {
 namespace panel{

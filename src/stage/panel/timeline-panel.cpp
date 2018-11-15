@@ -31,10 +31,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/panel/timeline-panel.hpp"
-#include "gui/timeline/timeline-widget.hpp"
-#include "gui/timeline/timeline-widget-empty.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/panel/timeline-panel.hpp"
+#include "stage/timeline/timeline-widget.hpp"
+#include "stage/timeline/timeline-widget-empty.hpp"
 
 using std::make_unique;
 

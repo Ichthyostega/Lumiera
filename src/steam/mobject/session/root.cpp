@@ -27,7 +27,7 @@
  */
 
 
-#include "proc/mobject/session/root.hpp"
+#include "steam/mobject/session/root.hpp"
 #include "common/query/defs-manager.hpp"
 
 using lumiera::query::DefsManager;

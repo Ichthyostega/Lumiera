@@ -47,7 +47,7 @@
 #define MOBJECT_SESSION_SEGMENTATION_H
 
 
-#include "proc/mobject/session/segment.hpp"
+#include "steam/mobject/session/segment.hpp"
 
 #include <list>
 

@@ -27,10 +27,10 @@
  */
 
 
-#include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/session/session-service-mock-index.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
-#include "proc/mobject/session/scope-query.hpp"
+#include "steam/mobject/session/test-scopes.hpp"
+#include "steam/mobject/session/session-service-mock-index.hpp"
+#include "steam/mobject/session/session-service-explore-scope.hpp"
+#include "steam/mobject/session/scope-query.hpp"
 
 
 namespace proc    {

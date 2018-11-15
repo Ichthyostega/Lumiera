@@ -33,9 +33,9 @@
 #ifndef GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
 #define GUI_WIDGET_TIMELINE_DRAW_STRATEGY_HPP
 
-#include "gui/gtk-base.hpp"
-#include "gui/widget/timeline/timeline-entity.hpp"
-#include "gui/widget/timeline/timeline-view-window.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/widget/timeline/timeline-entity.hpp"
+#include "stage/widget/timeline/timeline-view-window.hpp"
 
 namespace gui {
 namespace widget {

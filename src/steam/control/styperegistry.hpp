@@ -37,7 +37,7 @@
 #define CONTROL_STYPEREGISTRY_H
 
 
-#include "proc/control/stypemanager.hpp"
+#include "steam/control/stypemanager.hpp"
 #include "lib/nocopy.hpp"
 //#include "common/query.hpp"
 //#include "lib/util.hpp"

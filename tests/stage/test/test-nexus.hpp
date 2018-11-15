@@ -47,9 +47,9 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/model/tangible.hpp"
-#include "gui/ctrl/state-manager.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/model/tangible.hpp"
+#include "stage/ctrl/state-manager.hpp"
 #include "test/placeholder-command.hpp"
 #include "lib/test/event-log.hpp"
 #include "lib/diff/gen-node.hpp"

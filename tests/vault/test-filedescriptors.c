@@ -29,8 +29,8 @@
 #include "lib/safeclib.h"
 
 #include "common/config.h"
-#include "backend/backend.h"
-#include "backend/filedescriptor.h"
+#include "vault/backend.h"
+#include "vault/filedescriptor.h"
 
 #include "lib/test/test.h"
 

@@ -56,8 +56,8 @@
 #ifndef MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 #define MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 
-#include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/scope-query.hpp"
+#include "steam/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/scope-query.hpp"
 
 #include "common/query.hpp"
 

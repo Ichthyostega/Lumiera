@@ -28,7 +28,7 @@
  */
 
 
-#include "proc/engine/worker/dummy-image-generator.hpp"
+#include "steam/engine/worker/dummy-image-generator.hpp"
 
 
 namespace proc {

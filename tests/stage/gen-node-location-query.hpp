@@ -63,7 +63,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "gui/interact/ui-coord-resolver.hpp"
+#include "stage/interact/ui-coord-resolver.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-string.hpp"
 #include "lib/iter-tree-explorer.hpp"

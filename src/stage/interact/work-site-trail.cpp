@@ -28,8 +28,8 @@
  */
 
 
-#include "gui/interact/work-site-trail.hpp"
-//#include "gui/ctrl/global-ctx.hpp"
+#include "stage/interact/work-site-trail.hpp"
+//#include "stage/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
 
 //using util::cStr;

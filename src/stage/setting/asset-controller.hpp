@@ -51,8 +51,8 @@
 #ifndef GUI_SETTING_ASSET_CONTROLLER_H
 #define GUI_SETTING_ASSET_CONTROLLER_H
 
-//#include "gui/gtk-base.hpp"
-#include "gui/model/controller.hpp"
+//#include "stage/gtk-base.hpp"
+#include "stage/model/controller.hpp"
 
 //#include <string>
 //#include <memory>

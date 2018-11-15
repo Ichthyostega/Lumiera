@@ -36,8 +36,8 @@
 #ifndef GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H
 #define GUI_TIMELINE_TIMELINE_WIDGET_EMPTY_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/timeline-widget.hpp"
 
 
 namespace gui  {

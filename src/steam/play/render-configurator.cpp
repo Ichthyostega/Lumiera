@@ -29,9 +29,9 @@
 
 
 #include "lib/error.hpp"
-#include "proc/play/render-configurator.hpp"
-#include "proc/play/output-manager.hpp"
-#include "proc/engine/engine-service.hpp"
+#include "steam/play/render-configurator.hpp"
+#include "steam/play/output-manager.hpp"
+#include "steam/engine/engine-service.hpp"
 //#include "lib/itertools.hpp"
 
 //#include <string>

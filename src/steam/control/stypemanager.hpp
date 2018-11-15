@@ -32,7 +32,7 @@
 #define PROC_CONTROL_STYPEMANAGER_H
 
 
-#include "proc/streamtype.hpp"
+#include "steam/streamtype.hpp"
 #include "lib/depend.hpp"
 
 #include <memory>

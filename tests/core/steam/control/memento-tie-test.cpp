@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/memento-tie.hpp"
+#include "steam/control/memento-tie.hpp"
 
 #include <functional>
 #include <cstdlib>

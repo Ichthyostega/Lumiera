@@ -52,9 +52,9 @@
 #ifndef GUI_TIMELINE_CLIP_PRESENTER_H
 #define GUI_TIMELINE_CLIP_PRESENTER_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/model/controller.hpp"
-#include "gui/timeline/clip-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/model/controller.hpp"
+#include "stage/timeline/clip-widget.hpp"
 
 //#include "lib/util.hpp"
 

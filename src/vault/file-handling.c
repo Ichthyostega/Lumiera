@@ -30,8 +30,8 @@
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
-#include "backend/file.h"
-#include "backend/filehandlecache.h"
+#include "vault/file.h"
+#include "vault/filehandlecache.h"
 
 #include <limits.h>
 #include <unistd.h>

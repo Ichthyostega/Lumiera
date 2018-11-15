@@ -33,9 +33,9 @@
 #ifndef ASSET_PIPE_H
 #define ASSET_PIPE_H
 
-#include "proc/asset/struct.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/streamtype.hpp"
+#include "steam/asset/struct.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/streamtype.hpp"
 #include "common/query.hpp"
 
 #include <string>

@@ -42,9 +42,9 @@ typedef struct lumiera_filedescriptor_struct lumiera_filedescriptor;
 typedef lumiera_filedescriptor* LumieraFiledescriptor;
 
 
-#include "backend/filehandle.h"
-#include "backend/file.h"
-#include "backend/mmapings.h"
+#include "vault/filehandle.h"
+#include "vault/file.h"
+#include "vault/mmapings.h"
 
 
 struct lumiera_filedescriptor_struct

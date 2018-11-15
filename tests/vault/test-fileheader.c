@@ -26,12 +26,12 @@
  */
 
 
-#include "backend/backend.h"
-#include "backend/fileheader.h"
+#include "vault/backend.h"
+#include "vault/fileheader.h"
 
 #include "lib/test/test.h"
 
-#include "backend/filehandlecache.h"
+#include "vault/filehandlecache.h"
 extern LumieraFilehandlecache lumiera_fhcache;
 
 TESTS_BEGIN

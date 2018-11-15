@@ -34,7 +34,7 @@
 
 #include "lib/sync.hpp"
 #include "lib/error.hpp"
-#include "proc/asset.hpp"
+#include "steam/asset.hpp"
 #include "lib/depend-inject.hpp"
 
 #include <memory>

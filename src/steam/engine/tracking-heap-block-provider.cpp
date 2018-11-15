@@ -32,7 +32,7 @@
 #include "lib/scoped-holder.hpp"
 #include "lib/util-foreach.hpp"
 
-#include "proc/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/tracking-heap-block-provider.hpp"
 
 #include <algorithm>
 #include <vector>

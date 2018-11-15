@@ -39,7 +39,7 @@
 
 
 #include "lib/error.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 
 #include <functional>
 #include <limits>

@@ -41,11 +41,11 @@
 #define ENGINE_PROCNODE_H
 
 #include "lib/error.hpp"
-#include "proc/common.hpp"
-#include "proc/state.hpp"
-#include "proc/asset/proc.hpp"
-#include "proc/mobject/parameter.hpp"
-#include "proc/engine/channel-descriptor.hpp"
+#include "steam/common.hpp"
+#include "steam/state.hpp"
+#include "steam/asset/proc.hpp"
+#include "steam/mobject/parameter.hpp"
+#include "steam/engine/channel-descriptor.hpp"
 #include "lib/frameid.hpp"
 #include "lib/ref-array.hpp"
 

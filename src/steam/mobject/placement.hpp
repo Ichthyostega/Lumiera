@@ -73,9 +73,9 @@
 #include "lib/error.hpp"
 #include "lib/hash-indexed.hpp"
 #include "lib/time/timevalue.hpp"
-#include "proc/mobject/session/locatingpin.hpp"
+#include "steam/mobject/session/locatingpin.hpp"
 
-#include "proc/asset/pipe.hpp"   //////////////TICKET #109 : get rid of this
+#include "steam/asset/pipe.hpp"   //////////////TICKET #109 : get rid of this
 
 #include <memory>
 

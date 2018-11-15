@@ -76,7 +76,7 @@
 #ifndef MOBJECT_SESSION_SESSION_SERVICES_H
 #define MOBJECT_SESSION_SESSION_SERVICES_H
 
-#include "proc/mobject/session.hpp"
+#include "steam/mobject/session.hpp"
 #include "lib/meta/generator.hpp"
 
 

@@ -34,7 +34,7 @@
 #define PROJECT_HPP
 
 
-#include "gui/model/sequence.hpp"
+#include "stage/model/sequence.hpp"
 #include "lib/observable-list.hpp"
 
 namespace gui {

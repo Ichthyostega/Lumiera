@@ -41,14 +41,14 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "proc/play/output-slot.hpp"
+#include "steam/play/output-slot.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/handle.hpp"
 //#include "lib/time/timevalue.hpp"
-//#include "proc/engine/buffer-provider.hpp"
-//#include "proc/play/timings.hpp"
+//#include "steam/engine/buffer-provider.hpp"
+//#include "steam/play/timings.hpp"
 //#include "lib/sync.hpp"
 
 //#include <string>

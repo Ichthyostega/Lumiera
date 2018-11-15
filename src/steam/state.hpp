@@ -32,7 +32,7 @@
 
 #include "lib/error.hpp"
 #include "lib/frameid.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "steam/engine/buffhandle.hpp"
 
 #include <cstddef>
 

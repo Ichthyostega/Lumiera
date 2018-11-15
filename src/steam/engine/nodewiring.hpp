@@ -31,9 +31,9 @@
 #define ENGINE_NODEWIRING_H
 
 
-#include "proc/engine/procnode.hpp"
+#include "steam/engine/procnode.hpp"
 #include "lib/allocation-cluster.hpp"
-#include "proc/engine/nodewiring-def.hpp"
+#include "steam/engine/nodewiring-def.hpp"
 
 #include <memory>
 

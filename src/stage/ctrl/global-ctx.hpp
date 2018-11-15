@@ -53,12 +53,12 @@
 #ifndef GUI_CTRL_GLOBAL_CTX_H
 #define GUI_CTRL_GLOBAL_CTX_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/ui-bus.hpp"
-#include "gui/ctrl/ui-manager.hpp"
-#include "gui/ctrl/window-locator.hpp"
-#include "gui/interact/wizard.hpp"
-#include "gui/interact/interaction-director.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/ui-bus.hpp"
+#include "stage/ctrl/ui-manager.hpp"
+#include "stage/ctrl/window-locator.hpp"
+#include "stage/interact/wizard.hpp"
+#include "stage/interact/interaction-director.hpp"
 #include "lib/nocopy.hpp"
 
 

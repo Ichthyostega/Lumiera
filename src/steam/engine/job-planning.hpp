@@ -64,10 +64,10 @@
 #ifndef PROC_ENGINE_JOB_PLANNING_H
 #define PROC_ENGINE_JOB_PLANNING_H
 
-#include "proc/common.hpp"
-#include "backend/engine/job.h"
-#include "proc/engine/job-ticket.hpp"
-#include "proc/engine/frame-coord.hpp"
+#include "steam/common.hpp"
+#include "vault/engine/job.h"
+#include "steam/engine/job-ticket.hpp"
+#include "steam/engine/frame-coord.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/iter-adapter.hpp"

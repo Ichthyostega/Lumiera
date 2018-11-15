@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/control/looper.hpp"
+#include "steam/control/looper.hpp"
 
 #include <chrono>
 #include <thread>

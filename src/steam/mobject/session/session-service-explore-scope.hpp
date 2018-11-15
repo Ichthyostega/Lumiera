@@ -46,7 +46,7 @@
 #ifndef MOBJECT_SESSION_SESSION_SERVICE_EXPLORE_SCOPE_H
 #define MOBJECT_SESSION_SESSION_SERVICE_EXPLORE_SCOPE_H
 
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/placement.hpp"
 #include "common/query/query-resolver.hpp"
 
 

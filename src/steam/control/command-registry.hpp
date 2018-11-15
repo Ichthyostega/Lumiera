@@ -65,9 +65,9 @@
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
-#include "proc/control/command.hpp"
-#include "proc/control/command-signature.hpp"
-#include "proc/control/command-storage-holder.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/command-signature.hpp"
+#include "steam/control/command-storage-holder.hpp"
 #include "lib/typed-allocation-manager.hpp"
 
 #include <boost/functional/hash.hpp>

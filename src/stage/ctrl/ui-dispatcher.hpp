@@ -75,7 +75,7 @@
 #ifndef GUI_CTRL_UI_DISPATCHER_H
 #define GUI_CTRL_UI_DISPATCHER_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/call-queue.hpp"
 #include "lib/format-string.hpp"
 #include "lib/nocopy.hpp"

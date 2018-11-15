@@ -26,14 +26,14 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/control/command.hpp"
-#include "proc/control/command-impl.hpp"
-#include "proc/control/command-registry.hpp"
-#include "proc/control/argument-erasure.hpp"
-#include "proc/control/handling-pattern.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/command-impl.hpp"
+#include "steam/control/command-registry.hpp"
+#include "steam/control/argument-erasure.hpp"
+#include "steam/control/handling-pattern.hpp"
 #include "lib/test/event-log.hpp"
 
-#include "proc/control/test-dummy-commands.hpp"
+#include "steam/control/test-dummy-commands.hpp"
 
 #include <cstdlib>
 

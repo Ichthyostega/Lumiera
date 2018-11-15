@@ -44,8 +44,8 @@
 
 
 #include "lib/error.hpp"
-#include "gui/model/element-access.hpp"
-#include "gui/interact/ui-coord.hpp"
+#include "stage/model/element-access.hpp"
+#include "stage/interact/ui-coord.hpp"
 #include "test/mock-elm.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"

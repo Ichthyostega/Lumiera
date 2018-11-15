@@ -39,12 +39,12 @@
 
 
 #include "lib/error.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/sess-manager-impl.hpp"
-#include "proc/mobject/session/lifecycle-advisor.hpp"
-#include "proc/control/proc-dispatcher.hpp"
-#include "proc/config-resolver.hpp"
-#include "proc/asset/timeline.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/sess-manager-impl.hpp"
+#include "steam/mobject/session/lifecycle-advisor.hpp"
+#include "steam/control/proc-dispatcher.hpp"
+#include "steam/config-resolver.hpp"
+#include "steam/asset/timeline.hpp"
 #include "common/query/defs-manager.hpp"
 #include "common/query.hpp"
 

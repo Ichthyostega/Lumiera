@@ -31,9 +31,9 @@
 #define MOBJECT_BUILDER_NODECREATORTOOL_H
 
 
-#include "proc/mobject/builder/applicable-builder-target-types.hpp"
+#include "steam/mobject/builder/applicable-builder-target-types.hpp"
 
-#include "proc/engine/rendergraph.hpp"
+#include "steam/engine/rendergraph.hpp"
 
 
 

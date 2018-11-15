@@ -26,8 +26,8 @@
  */
 
 
-#include "gui/widget/timeline/timeline-ibeam-tool.hpp"
-#include "gui/widget/timeline-widget.hpp"
+#include "stage/widget/timeline/timeline-ibeam-tool.hpp"
+#include "stage/widget/timeline-widget.hpp"
 #include "lib/time/mutation.hpp"
 
 using namespace gui::widget;     ///////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

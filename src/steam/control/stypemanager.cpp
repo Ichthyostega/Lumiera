@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/common.hpp"
-#include "proc/control/stypemanager.hpp"
-#include "proc/control/styperegistry.hpp"
+#include "steam/common.hpp"
+#include "steam/control/stypemanager.hpp"
+#include "steam/control/styperegistry.hpp"
 #include "include/lifecycle.h"
 
 

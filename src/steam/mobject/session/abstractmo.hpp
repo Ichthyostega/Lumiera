@@ -29,7 +29,7 @@
 #ifndef MOBJECT_SESSION_ABSTRACTMO_H
 #define MOBJECT_SESSION_ABSTRACTMO_H
 
-#include "proc/mobject/mobject.hpp"
+#include "steam/mobject/mobject.hpp"
 #include "lib/symbol.hpp"
 
 

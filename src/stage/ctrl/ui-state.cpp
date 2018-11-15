@@ -27,10 +27,10 @@
  */
 
 
-#include "gui/ctrl/ui-state.hpp"
-#include "gui/ctrl/state-manager.hpp"
-#include "gui/interact/focus-tracker.hpp"
-//#include "gui/ctrl/global-ctx.hpp"
+#include "stage/ctrl/ui-state.hpp"
+#include "stage/ctrl/state-manager.hpp"
+#include "stage/interact/focus-tracker.hpp"
+//#include "stage/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
 
 //using util::cStr;

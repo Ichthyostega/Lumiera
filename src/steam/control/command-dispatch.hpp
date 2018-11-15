@@ -35,7 +35,7 @@
 #ifndef PROC_CONTROL_COMMAND_DISPATCH_H
 #define PROC_CONTROL_COMMAND_DISPATCH_H
 
-#include "proc/control/command.hpp"
+#include "steam/control/command.hpp"
 
 
 

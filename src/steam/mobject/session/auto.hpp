@@ -29,8 +29,8 @@
 #ifndef PROC_MOBJECT_SESSION_AUTO_H
 #define PROC_MOBJECT_SESSION_AUTO_H
 
-#include "proc/mobject/session/meta.hpp"
-#include "proc/mobject/paramprovider.hpp"
+#include "steam/mobject/session/meta.hpp"
+#include "steam/mobject/paramprovider.hpp"
 
 
 

@@ -27,7 +27,7 @@
 
 
 #include "lib/error.hpp"
-#include "proc/mobject/builder/assembler.hpp"
+#include "steam/mobject/builder/assembler.hpp"
 
 namespace proc {
 namespace mobject {

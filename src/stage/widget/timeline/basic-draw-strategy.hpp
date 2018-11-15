@@ -30,7 +30,7 @@
 #ifndef GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
 #define GUI_WIDGET_TIMELINE_BASIC_DRAW_STRATEGY_H
 
-#include "gui/widget/timeline/draw-strategy.hpp"
+#include "stage/widget/timeline/draw-strategy.hpp"
 
 
 namespace gui {

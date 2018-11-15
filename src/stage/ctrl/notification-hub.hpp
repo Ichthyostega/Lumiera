@@ -62,10 +62,10 @@
 #ifndef GUI_CTRL_NOTIFICATION_HUB_H
 #define GUI_CTRL_NOTIFICATION_HUB_H
 
-#include "gui/widget/error-log-display.hpp"
+#include "stage/widget/error-log-display.hpp"
 #include "lib/diff/tree-mutator.hpp"
-#include "gui/model/controller.hpp"
-#include "gui/model/w-link.hpp"
+#include "stage/model/controller.hpp"
+#include "stage/model/w-link.hpp"
 
 #include <functional>
 

@@ -36,8 +36,8 @@
 #define MOBJECT_BUILDER_MOULD_H
 
 
-#include "proc/asset/procpatt.hpp"
-#include "proc/mobject/builder/operationpoint.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/mobject/builder/operationpoint.hpp"
 
 #include <vector>
 

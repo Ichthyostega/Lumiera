@@ -29,7 +29,7 @@
 #ifndef GUI_WIDGET_MENU_BUTTON_H
 #define GUI_WIDGET_MENU_BUTTON_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 
 

@@ -25,9 +25,9 @@
  ** Implementation of a (dockable) panel to display and manipulate parameters.
  */
 
-#include "gui/gtk-base.hpp"
-#include "gui/panel/infobox-panel.hpp"
-#include "gui/widget/error-log-display.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/panel/infobox-panel.hpp"
+#include "stage/widget/error-log-display.hpp"
 
 
 namespace gui  {

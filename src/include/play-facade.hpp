@@ -41,13 +41,13 @@
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource base interface here
 #include "lib/time/control.hpp"
 #include "lib/time/timevalue.hpp"
-#include "proc/mobject/model-port.hpp"
-#include "proc/mobject/output-designation.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/fork.hpp"
-#include "proc/play/output-manager.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/viewer.hpp"
+#include "steam/mobject/model-port.hpp"
+#include "steam/mobject/output-designation.hpp"
+#include "steam/mobject/session/clip.hpp"
+#include "steam/mobject/session/fork.hpp"
+#include "steam/play/output-manager.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/viewer.hpp"
 
 
 

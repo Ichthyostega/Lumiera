@@ -132,8 +132,8 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/model/expander-revealer.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/model/expander-revealer.hpp"
 #include "lib/diff/diff-mutable.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"

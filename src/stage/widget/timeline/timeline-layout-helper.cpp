@@ -27,10 +27,10 @@
  */
 
 
-#include "gui/widget/timeline/timeline-layout-helper.hpp"
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/model/sequence.hpp"
-#include "gui/draw/rectangle.hpp"
+#include "stage/widget/timeline/timeline-layout-helper.hpp"
+#include "stage/widget/timeline-widget.hpp"
+#include "stage/model/sequence.hpp"
+#include "stage/draw/rectangle.hpp"
 
 #include <boost/foreach.hpp>
 #include <memory>

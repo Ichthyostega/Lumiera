@@ -54,7 +54,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "proc/control/command.hpp"
+#include "steam/control/command.hpp"
 #include "lib/symbol.hpp"
 
 #include <functional>

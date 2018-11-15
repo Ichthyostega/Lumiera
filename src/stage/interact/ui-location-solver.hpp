@@ -71,8 +71,8 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/format-util.hpp"
-#include "gui/interact/ui-coord.hpp"
-#include "gui/interact/ui-coord-resolver.hpp"
+#include "stage/interact/ui-coord.hpp"
+#include "stage/interact/ui-coord-resolver.hpp"
 #include "lib/nocopy.hpp"
 
 #include <utility>

@@ -49,9 +49,9 @@
 #ifndef GUI_TIMELINE_HEADER_PANE_WIDGET_H
 #define GUI_TIMELINE_HEADER_PANE_WIDGET_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/navigator-widget.hpp"
-#include "gui/timeline/patchbay-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/navigator-widget.hpp"
+#include "stage/timeline/patchbay-widget.hpp"
 
 //#include "lib/util.hpp"
 

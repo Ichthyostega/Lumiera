@@ -31,7 +31,7 @@
 #ifndef PROC_MOBJECT_SESSION_CLIP_H
 #define PROC_MOBJECT_SESSION_CLIP_H
 
-#include "proc/mobject/session/abstractmo.hpp"
+#include "steam/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/p.hpp"
 

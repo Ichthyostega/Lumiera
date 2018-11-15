@@ -34,9 +34,9 @@
  */
 
 
-#include "gui/interact/navigator.hpp"
-#include "gui/interact/spot-locator.hpp"
-//#include "gui/ctrl/global-ctx.hpp"
+#include "stage/interact/navigator.hpp"
+#include "stage/interact/spot-locator.hpp"
+//#include "stage/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
 
 //using util::cStr;

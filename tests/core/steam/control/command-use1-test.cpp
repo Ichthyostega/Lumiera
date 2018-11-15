@@ -27,12 +27,12 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/command-invocation.hpp"
-#include "proc/control/command-def.hpp"
+#include "steam/control/command-invocation.hpp"
+#include "steam/control/command-def.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include "proc/control/test-dummy-commands.hpp"
+#include "steam/control/test-dummy-commands.hpp"
 
 
 namespace proc {

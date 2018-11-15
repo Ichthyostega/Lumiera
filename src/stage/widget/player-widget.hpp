@@ -50,7 +50,7 @@
 #ifndef GUI_WIDGET_PLAYER_WIDGET_H
 #define GUI_WIDGET_PLAYER_WIDGET_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 //#include "lib/util.hpp"
 

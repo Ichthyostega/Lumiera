@@ -26,11 +26,11 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/engine/nodefactory.hpp"
-#include "proc/engine/nodewiring.hpp"
-#include "proc/engine/stateproxy.hpp"
-#include "proc/engine/channel-descriptor.hpp"
-#include "proc/mobject/session/effect.hpp"
+#include "steam/engine/nodefactory.hpp"
+#include "steam/engine/nodewiring.hpp"
+#include "steam/engine/stateproxy.hpp"
+#include "steam/engine/channel-descriptor.hpp"
+#include "steam/mobject/session/effect.hpp"
 #include "lib/allocation-cluster.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"

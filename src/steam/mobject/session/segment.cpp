@@ -26,8 +26,8 @@
  ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
-#include "proc/mobject/session/segment.hpp"
-#include "proc/mobject/explicitplacement.hpp"
+#include "steam/mobject/session/segment.hpp"
+#include "steam/mobject/explicitplacement.hpp"
 
 
 

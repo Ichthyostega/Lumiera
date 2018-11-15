@@ -27,9 +27,9 @@
 
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
-#include "proc/engine/tracking-heap-block-provider.hpp"
-#include "proc/engine/buffhandle-attach.hpp"
-#include "proc/engine/testframe.hpp"
+#include "steam/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/buffhandle-attach.hpp"
+#include "steam/engine/testframe.hpp"
 
 #include <cstdlib>
 #include <vector>

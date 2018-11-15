@@ -31,8 +31,8 @@
 
 #include "lib/error.hpp"
 #include "include/lifecycle.h"
-#include "proc/config-resolver.hpp"
-#include "proc/mobject/session/query/fake-configrules.hpp"
+#include "steam/config-resolver.hpp"
+#include "steam/mobject/session/query/fake-configrules.hpp"
 #include "lib/depend-inject.hpp"
 
 using lumiera::LifecycleHook;
@@ -83,11 +83,11 @@ namespace proc {
    /* explicit template instantiations for querying various Types */
    /***************************************************************/
 
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/pipe.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
-#include "proc/mobject/session/fork.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
+#include "steam/mobject/session/fork.hpp"
 
 namespace lumiera{
 namespace query  {

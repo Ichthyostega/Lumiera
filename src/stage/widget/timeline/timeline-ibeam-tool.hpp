@@ -29,7 +29,7 @@
 #ifndef GUI_WIDGET_TIMELINE_IBEAM_TOOL_H
 #define GUI_WIDGET_TIMELINE_IBEAM_TOOL_H
 
-#include "gui/widget/timeline/timeline-tool.hpp"
+#include "stage/widget/timeline/timeline-tool.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/control.hpp"

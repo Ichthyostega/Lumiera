@@ -29,7 +29,7 @@
  */
 
 
-#include "gui/model/clip.hpp"
+#include "stage/model/clip.hpp"
 #include "lib/time/mutation.hpp"
 
 using lib::time::FSecs;

@@ -57,7 +57,7 @@
 #ifndef GUI_TIMELINE_BODY_CANVAS_WIDGET_H
 #define GUI_TIMELINE_BODY_CANVAS_WIDGET_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 //#include "lib/util.hpp"
 

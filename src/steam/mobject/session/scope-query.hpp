@@ -42,7 +42,7 @@
 #define PROC_MOBJECT_SESSION_SCOPE_QUERY_H
 
 
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/placement.hpp"
 #include "common/query/query-resolver.hpp"
 #include "lib/format-string.hpp"
 

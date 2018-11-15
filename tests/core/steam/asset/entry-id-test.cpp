@@ -29,9 +29,9 @@
 #include "lib/test/test-helper.hpp"
 
 #include "lib/idi/entry-id.hpp"
-#include "proc/asset/struct-scheme.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/fork.hpp"
+#include "steam/asset/struct-scheme.hpp"
+#include "steam/mobject/session/clip.hpp"
+#include "steam/mobject/session/fork.hpp"
 #include "lib/meta/trait-special.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/format-cout.hpp"

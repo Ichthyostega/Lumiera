@@ -33,7 +33,7 @@
 #define GUI_WIDGET_PANEL_BAR_H
 
 
-#include "gui/widget/menu-button.hpp"
+#include "stage/widget/menu-button.hpp"
 
 #include <gtkmm.h>
 

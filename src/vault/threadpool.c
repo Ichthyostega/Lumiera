@@ -30,7 +30,7 @@
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
-#include "backend/threadpool.h"
+#include "vault/threadpool.h"
 
 #include <pthread.h>
 

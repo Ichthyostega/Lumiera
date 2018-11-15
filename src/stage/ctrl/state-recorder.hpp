@@ -56,9 +56,9 @@
 #include "lib/error.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/ctrl/state-manager.hpp"
-#include "gui/ctrl/state-map-grouping-storage.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/ctrl/state-manager.hpp"
+#include "stage/ctrl/state-map-grouping-storage.hpp"
 #include "include/ui-protocol.hpp"
 
 #include <string>

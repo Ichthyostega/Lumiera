@@ -46,8 +46,8 @@
 #ifndef MOBJECT_SESSION_QUERY_FAKECONFIGRULES_H
 #define MOBJECT_SESSION_QUERY_FAKECONFIGRULES_H
 
-#include "proc/mobject/session.hpp"
-#include "proc/config-resolver.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/config-resolver.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/query-util.hpp"
 #include "lib/util.hpp"

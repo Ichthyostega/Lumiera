@@ -39,13 +39,13 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/interact/view-locator.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
-#include "gui/interact/ui-location-solver.hpp"
-#include "gui/ctrl/panel-locator.hpp"
-#include "gui/model/element-access.hpp"
-#include "gui/interact/ui-coord-resolver.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/interact/view-locator.hpp"
+#include "stage/interact/view-spec-dsl.hpp"
+#include "stage/interact/ui-location-solver.hpp"
+#include "stage/ctrl/panel-locator.hpp"
+#include "stage/model/element-access.hpp"
+#include "stage/interact/ui-coord-resolver.hpp"
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"

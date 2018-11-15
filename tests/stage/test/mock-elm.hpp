@@ -63,7 +63,7 @@
 #include "lib/error.hpp"
 #include "include/ui-protocol.hpp"
 #include "lib/test/event-log.hpp"
-#include "gui/model/tangible.hpp"
+#include "stage/model/tangible.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "test/test-nexus.hpp"

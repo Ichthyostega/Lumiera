@@ -27,15 +27,15 @@
  */
 
 
-#include "proc/mobject/session/mobjectfactory.hpp"
-#include "proc/mobject/session/root.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/fork.hpp"
-#include "proc/mobject/session/effect.hpp"
-#include "proc/mobject/session/label.hpp"
-#include "proc/mobject/session/binding.hpp"
-#include "proc/asset/clip.hpp"
-#include "proc/asset/effect.hpp"
+#include "steam/mobject/session/mobjectfactory.hpp"
+#include "steam/mobject/session/root.hpp"
+#include "steam/mobject/session/clip.hpp"
+#include "steam/mobject/session/fork.hpp"
+#include "steam/mobject/session/effect.hpp"
+#include "steam/mobject/session/label.hpp"
+#include "steam/mobject/session/binding.hpp"
+#include "steam/asset/clip.hpp"
+#include "steam/asset/effect.hpp"
 #include "common/query/defs-manager.hpp"
 
 using lumiera::query::DefsManager;

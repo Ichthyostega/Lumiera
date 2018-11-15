@@ -27,13 +27,13 @@
  */
 
 
-#include "proc/mobject/session/placement-index-query-resolver.hpp"
-#include "proc/mobject/session/scope-query.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/effect.hpp"
+#include "steam/mobject/session/placement-index-query-resolver.hpp"
+#include "steam/mobject/session/scope-query.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/session/clip.hpp"
+#include "steam/mobject/session/effect.hpp"
 
-#include "proc/mobject/test-dummy-mobject.hpp"  /////////////////////////////////////TICKET #532
+#include "steam/mobject/test-dummy-mobject.hpp"  /////////////////////////////////////TICKET #532
 
 #include <memory>
 #include <stack>

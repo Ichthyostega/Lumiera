@@ -36,7 +36,7 @@
 #define PROC_MOBJECT_BUILDERFACADE_H
 
 #include "lib/error.hpp"
-#include "proc/mobject/builder/common.hpp"
+#include "steam/mobject/builder/common.hpp"
 
 
 namespace proc {

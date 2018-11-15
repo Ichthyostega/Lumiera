@@ -28,7 +28,7 @@
  */
 
 
-#include "proc/mobject/session/bus-mo.hpp"
+#include "steam/mobject/session/bus-mo.hpp"
 
 namespace proc {
 namespace mobject {

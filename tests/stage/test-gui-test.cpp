@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
-#include "gui/model/session-facade.hpp"
+#include "stage/model/session-facade.hpp"
 #include "lib/format-cout.hpp"
 
 

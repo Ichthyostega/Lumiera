@@ -45,9 +45,9 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
-#include "proc/engine/buffhandle.hpp"
-#include "proc/engine/type-handler.hpp"
-#include "proc/engine/buffer-local-key.hpp"
+#include "steam/engine/buffhandle.hpp"
+#include "steam/engine/type-handler.hpp"
+#include "steam/engine/buffer-local-key.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>

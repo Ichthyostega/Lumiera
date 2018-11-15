@@ -40,8 +40,8 @@
 #ifndef GUI_TIMELINE_TRACK_BODY_H
 #define GUI_TIMELINE_TRACK_BODY_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/ctrl/bus-term.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/ctrl/bus-term.hpp"
 
 //#include "lib/util.hpp"
 

@@ -87,7 +87,7 @@
 #ifndef PROC_MOBJECT_SESSION_SCOPE_PATH_H
 #define PROC_MOBJECT_SESSION_SCOPE_PATH_H
 
-#include "proc/mobject/session/scope.hpp"
+#include "steam/mobject/session/scope.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
 

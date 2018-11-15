@@ -29,8 +29,8 @@
 #ifndef PROC_ENGINE_RENDERGRAPH_H
 #define PROC_ENGINE_RENDERGRAPH_H
 
-#include "proc/common.hpp"
-#include "proc/state.hpp"
+#include "steam/common.hpp"
+#include "steam/state.hpp"
 #include "lib/time/timevalue.hpp"
 
 

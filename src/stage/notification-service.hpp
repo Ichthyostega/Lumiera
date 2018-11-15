@@ -42,7 +42,7 @@
 
 #include "include/gui-notification-facade.h"
 #include "common/instancehandle.hpp"
-#include "gui/ctrl/bus-term.hpp"
+#include "stage/ctrl/bus-term.hpp"
 
 #include <memory>
 

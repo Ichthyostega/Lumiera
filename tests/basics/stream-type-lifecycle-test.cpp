@@ -28,8 +28,8 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "proc/control/stypemanager.hpp"
-#include "proc/mobject/session.hpp"
+#include "steam/control/stypemanager.hpp"
+#include "steam/mobject/session.hpp"
 //#include "teststreamtypes.hpp"
 #include "include/lifecycle.h"
 

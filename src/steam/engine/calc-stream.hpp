@@ -46,9 +46,9 @@
 
 
 #include "lib/error.hpp"
-#include "proc/play/timings.hpp"
-#include "proc/play/output-slot.hpp"
-#include "proc/engine/calc-plan-continuation.hpp"
+#include "steam/play/timings.hpp"
+#include "steam/play/output-slot.hpp"
+#include "steam/engine/calc-plan-continuation.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"

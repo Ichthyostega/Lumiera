@@ -29,7 +29,7 @@
 #define MOBJECT_SESSION_TESTCLIP_H
 
 
-#include "proc/mobject/session/clip.hpp"
+#include "steam/mobject/session/clip.hpp"
 #include "lib/time/timevalue.hpp"
 
 

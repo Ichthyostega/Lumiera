@@ -55,10 +55,10 @@
 #ifndef GUI_TIMELINE_TIMELINE_WIDGET_H
 #define GUI_TIMELINE_TIMELINE_WIDGET_H
 
-#include "gui/gtk-base.hpp"
-//#include "gui/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
-//#include "gui/timeline/layout-manager.hpp"
-#include "gui/ctrl/bus-term.hpp"
+#include "stage/gtk-base.hpp"
+//#include "stage/timeline/timeline-controller.hpp"   /////TODO possible to push that into the implementation?
+//#include "stage/timeline/layout-manager.hpp"
+#include "stage/ctrl/bus-term.hpp"
 
 #include "lib/time/timevalue.hpp"
 #include "lib/diff/diff-mutable.hpp"

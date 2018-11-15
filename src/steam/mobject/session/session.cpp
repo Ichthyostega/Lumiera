@@ -31,9 +31,9 @@
  */
 
 
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/session-impl.hpp"
-#include "proc/mobject/session/sess-manager-impl.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/session-impl.hpp"
+#include "steam/mobject/session/sess-manager-impl.hpp"
 //#include "common/query/defs-manager.hpp"
 
 #include "lib/symbol.hpp"

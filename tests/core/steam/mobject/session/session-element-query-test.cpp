@@ -26,11 +26,11 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/session/element-query.hpp"
-#include "proc/mobject/session/scope-path.hpp"
-#include "proc/mobject/session/scope.hpp"
-#include "proc/mobject/mobject-ref.hpp"
+#include "steam/mobject/session/test-scopes.hpp"
+#include "steam/mobject/session/element-query.hpp"
+#include "steam/mobject/session/scope-path.hpp"
+#include "steam/mobject/session/scope.hpp"
+#include "steam/mobject/mobject-ref.hpp"
 #include "lib/util.hpp"
 
 #include <functional>

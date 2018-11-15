@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "lib/error.hpp"
 
 #include <functional>

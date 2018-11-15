@@ -49,7 +49,7 @@
 #include "lib/util.hpp"
 
 #include "lib/diff/tree-diff.hpp"
-#include "proc/control/command-setup.hpp"
+#include "steam/control/command-setup.hpp"
 
 #include <string>
 

@@ -34,8 +34,8 @@
  */
 
 
-#include "backend/media-access-mock.hpp"
-#include "proc/mobject/session/testclip.hpp"
+#include "vault/media-access-mock.hpp"
+#include "steam/mobject/session/testclip.hpp"
 
 #include "lib/util.hpp"
 #include "lib/depend.hpp"

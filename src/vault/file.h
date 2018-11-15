@@ -49,10 +49,10 @@ typedef struct lumiera_file_struct lumiera_file;
 typedef lumiera_file* LumieraFile;
 
 
-#include "backend/filedescriptor.h"
-#include "backend/filehandle.h"
-#include "backend/mmapings.h"
-#include "backend/mmap.h"
+#include "vault/filedescriptor.h"
+#include "vault/filehandle.h"
+#include "vault/mmapings.h"
+#include "vault/mmap.h"
 
 /**
  * File modes:

@@ -31,9 +31,9 @@
 #ifndef PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
 #define PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
 
-#include "proc/mobject/session/scope.hpp"
-#include "proc/mobject/session/scope-query.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/session/scope.hpp"
+#include "steam/mobject/session/scope-query.hpp"
+#include "steam/mobject/placement.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : the bare interface would be sufficient here
 #include "lib/depend.hpp"
 

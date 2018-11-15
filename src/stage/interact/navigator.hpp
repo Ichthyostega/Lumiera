@@ -38,8 +38,8 @@
 #ifndef GUI_INTERACT_NAVIGATOR_H
 #define GUI_INTERACT_NAVIGATOR_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/interact/ui-coord-resolver.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/interact/ui-coord-resolver.hpp"
 #include "lib/nocopy.hpp"
 
 //#include <string>

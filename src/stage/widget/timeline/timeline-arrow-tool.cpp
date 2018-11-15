@@ -26,7 +26,7 @@
  */
 
 
-#include "gui/widget/timeline/timeline-arrow-tool.hpp"
+#include "stage/widget/timeline/timeline-arrow-tool.hpp"
 
 namespace gui {
 namespace widget {

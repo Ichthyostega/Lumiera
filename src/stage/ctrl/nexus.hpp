@@ -45,8 +45,8 @@
 #include "lib/idi/genfunc.hpp"
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/model/tangible.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/model/tangible.hpp"
 #include "lib/idi/entry-id.hpp"
 
 #include <unordered_map>

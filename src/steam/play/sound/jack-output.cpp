@@ -28,7 +28,7 @@
  */
 
 
-#include "proc/play/sound/jack-output.hpp"
+#include "steam/play/sound/jack-output.hpp"
   
 namespace proc {
 namespace play {

@@ -59,7 +59,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
-#include "proc/asset/category.hpp"
+#include "steam/asset/category.hpp"
 #include "lib/hash-value.h"
 #include "lib/p.hpp"
 

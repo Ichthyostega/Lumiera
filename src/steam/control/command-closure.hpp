@@ -69,7 +69,7 @@
 #define CONTROL_COMMAND_CLOSURE_H
 
 #include "lib/meta/function-erasure.hpp"
-#include "proc/control/argument-erasure.hpp"
+#include "steam/control/argument-erasure.hpp"
 #include "lib/diff/gen-node.hpp"
 
 #include <memory>

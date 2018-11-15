@@ -38,9 +38,9 @@
 #ifndef GUI_TIMELINE_MARKER_WIDGET_H
 #define GUI_TIMELINE_MARKER_WIDGET_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/model/widget.hpp"
-#include "gui/widget/element-box-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/model/widget.hpp"
+#include "stage/widget/element-box-widget.hpp"
 
 //#include "lib/util.hpp"
 

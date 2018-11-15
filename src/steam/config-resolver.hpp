@@ -51,11 +51,11 @@
 #include "lib/depend.hpp"
 
 // types for explicit specialisations....
-#include "proc/mobject/session/fork.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/pipe.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
+#include "steam/mobject/session/fork.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
 
 
 

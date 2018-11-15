@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "gui/model/w-link.hpp"
+#include "stage/model/w-link.hpp"
 #include "lib/util.hpp"
 
 #include <utility>

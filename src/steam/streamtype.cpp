@@ -26,7 +26,7 @@
  */
 
 
-#include "proc/streamtype.hpp"
+#include "steam/streamtype.hpp"
 
 
 namespace proc {

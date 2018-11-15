@@ -26,10 +26,10 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/assetmanager.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/testsession1.hpp"
-#include "proc/mobject/session/clip.hpp"              // TODO: really neded?
+#include "steam/assetmanager.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/testsession1.hpp"
+#include "steam/mobject/session/clip.hpp"              // TODO: really neded?
 #include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 

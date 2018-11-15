@@ -38,7 +38,7 @@
 #include "lib/error.hpp"
 #include "lib/depend.hpp"
 #include "lib/depend-inject.hpp"
-#include "proc/play/output-manager.hpp"
+#include "steam/play/output-manager.hpp"
 #include "common/subsys.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/sync.hpp"

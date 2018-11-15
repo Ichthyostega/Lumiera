@@ -26,8 +26,8 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/control/test-dummy-commands.hpp"
-#include "proc/control/command-instance-manager.hpp"
+#include "steam/control/test-dummy-commands.hpp"
+#include "steam/control/command-instance-manager.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/iter-stack.hpp"

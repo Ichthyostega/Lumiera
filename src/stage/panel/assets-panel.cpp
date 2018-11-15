@@ -25,8 +25,8 @@
  ** Implementation of a (dockable) panel to organise the assets of a project.
  */
 
-#include "gui/gtk-base.hpp"
-#include "gui/panel/assets-panel.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/panel/assets-panel.hpp"
 
 namespace gui  {
 namespace panel{

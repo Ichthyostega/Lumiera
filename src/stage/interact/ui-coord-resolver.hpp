@@ -118,7 +118,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/format-string.hpp"
-#include "gui/interact/ui-coord.hpp"
+#include "stage/interact/ui-coord.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/depend.hpp"

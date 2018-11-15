@@ -45,9 +45,9 @@
 #define CONTROL_COMMAND_STORAGE_HOLDER_H
 
 #include "lib/typed-allocation-manager.hpp"
-#include "proc/control/command-op-closure.hpp"
-#include "proc/control/memento-tie.hpp"
-#include "proc/control/command-impl-clone-builder.hpp"
+#include "steam/control/command-op-closure.hpp"
+#include "steam/control/memento-tie.hpp"
+#include "steam/control/command-impl-clone-builder.hpp"
 #include "lib/opaque-holder.hpp"
 
 #include <string>

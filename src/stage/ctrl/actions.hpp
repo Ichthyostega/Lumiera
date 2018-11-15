@@ -41,11 +41,11 @@
 #ifndef GUI_CTRL_ACTIONS_H
 #define GUI_CTRL_ACTIONS_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/ctrl/global-ctx.hpp"
-#include "gui/ctrl/window-locator.hpp"
-#include "gui/workspace/workspace-window.hpp"
-#include "gui/workspace/panel-manager.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/ctrl/global-ctx.hpp"
+#include "stage/ctrl/window-locator.hpp"
+#include "stage/workspace/workspace-window.hpp"
+#include "stage/workspace/panel-manager.hpp"
 #include "lib/format-string.hpp"
 #include "lib/nocopy.hpp"
 

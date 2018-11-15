@@ -57,12 +57,12 @@
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/symbol.hpp"
-#include "proc/control/command.hpp"
-#include "proc/control/command-impl.hpp"                // note: at command definition site we need to know the full type
-#include "proc/control/command-registry.hpp"
-#include "proc/control/command-signature.hpp"
-#include "proc/control/command-mutation.hpp"
-#include "proc/control/argument-tuple-accept.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/command-impl.hpp"                // note: at command definition site we need to know the full type
+#include "steam/control/command-registry.hpp"
+#include "steam/control/command-signature.hpp"
+#include "steam/control/command-mutation.hpp"
+#include "steam/control/argument-tuple-accept.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"

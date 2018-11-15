@@ -31,8 +31,8 @@
 
 //#include "lib/util.hpp"
 
-#include "proc/streamtype.hpp"
-#include "proc/control/stypemanager.hpp"
+#include "steam/streamtype.hpp"
+#include "steam/control/stypemanager.hpp"
 
 extern "C" {
 #include <gavl/gavl.h>

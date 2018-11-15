@@ -28,10 +28,10 @@
 
 
 #include "include/logging.h"
-#include "proc/mobject/session/scope-path.hpp"
-#include "proc/mobject/session/scope-locator.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
-#include "proc/mobject/mobject.hpp"
+#include "steam/mobject/session/scope-path.hpp"
+#include "steam/mobject/session/scope-locator.hpp"
+#include "steam/mobject/session/session-service-explore-scope.hpp"
+#include "steam/mobject/mobject.hpp"
 #include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"

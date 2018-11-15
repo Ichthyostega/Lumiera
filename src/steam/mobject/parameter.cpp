@@ -29,8 +29,8 @@
 
 
 #include "lib/error.hpp"
-#include "proc/mobject/parameter.hpp"
-#include "proc/mobject/paramprovider.hpp"
+#include "steam/mobject/parameter.hpp"
+#include "steam/mobject/paramprovider.hpp"
 
 namespace proc {
 namespace mobject {

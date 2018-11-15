@@ -46,7 +46,7 @@
 #ifndef CONTROL_COMMAND_IMPL_CLONE_BUILDER_H
 #define CONTROL_COMMAND_IMPL_CLONE_BUILDER_H
 
-#include "proc/control/command-mutation.hpp"
+#include "steam/control/command-mutation.hpp"
 #include "lib/typed-allocation-manager.hpp"
 #include "lib/opaque-holder.hpp"
 #include "lib/nocopy.hpp"

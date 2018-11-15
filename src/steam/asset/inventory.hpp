@@ -31,7 +31,7 @@
 #ifndef ASSET_INVENTORY_H
 #define ASSET_INVENTORY_H
 
-#include "proc/asset/meta.hpp"
+#include "steam/asset/meta.hpp"
 
 
 

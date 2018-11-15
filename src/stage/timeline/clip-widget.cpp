@@ -34,10 +34,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/clip-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/clip-widget.hpp"
 
-//#include "gui/ui-bus.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

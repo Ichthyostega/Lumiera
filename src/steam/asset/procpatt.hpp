@@ -32,7 +32,7 @@
 #ifndef ASSET_PROCPATT_H
 #define ASSET_PROCPATT_H
 
-#include "proc/asset/struct.hpp"
+#include "steam/asset/struct.hpp"
 
 #include <vector>
 

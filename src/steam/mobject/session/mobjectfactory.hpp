@@ -32,7 +32,7 @@
 #ifndef PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
 #define PROC_MOBJECT_SESSION_MOBJECTFACTORY_H
 
-#include "proc/mobject/mobject.hpp"
+#include "steam/mobject/mobject.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/symbol.hpp"
 

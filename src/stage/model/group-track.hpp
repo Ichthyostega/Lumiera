@@ -31,7 +31,7 @@
 #ifndef GROUP_TRACK_HPP
 #define GROUP_TRACK_HPP
 
-#include "gui/model/parent-track.hpp"
+#include "stage/model/parent-track.hpp"
 
 
 namespace gui {

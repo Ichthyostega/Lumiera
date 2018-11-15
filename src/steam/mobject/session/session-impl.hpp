@@ -46,18 +46,18 @@
 #ifndef PROC_MOBJECT_SESSION_SESSIONIMPL_H
 #define PROC_MOBJECT_SESSION_SESSIONIMPL_H
 
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/fixture.hpp"
-#include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/session-services.hpp"
-#include "proc/mobject/session/session-interface-modules.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/fixture.hpp"
+#include "steam/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/session-services.hpp"
+#include "steam/mobject/session/session-interface-modules.hpp"
 
-#include "proc/mobject/session/session-service-fetch.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
-#include "proc/mobject/session/session-service-mock-index.hpp"
-#include "proc/mobject/session/session-service-defaults.hpp"
+#include "steam/mobject/session/session-service-fetch.hpp"
+#include "steam/mobject/session/session-service-explore-scope.hpp"
+#include "steam/mobject/session/session-service-mock-index.hpp"
+#include "steam/mobject/session/session-service-defaults.hpp"
 
-#include "proc/mobject/session/placement-index-query-resolver.hpp"
+#include "steam/mobject/session/placement-index-query-resolver.hpp"
 
 
 

@@ -29,11 +29,11 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/body-canvas-widget.hpp"
-#include "gui/timeline/track-body.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/body-canvas-widget.hpp"
+#include "stage/timeline/track-body.hpp"
 
-//#include "gui/ui-bus.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

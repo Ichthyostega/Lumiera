@@ -29,7 +29,7 @@
  */
 
 
-#include "backend/netnodefacade.hpp"
+#include "vault/netnodefacade.hpp"
 #include "lib/depend.hpp"
 
 #include <string>

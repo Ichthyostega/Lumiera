@@ -35,12 +35,12 @@
 #ifndef PROC_ENGINE_DISPATCHER_H
 #define PROC_ENGINE_DISPATCHER_H
 
-#include "proc/common.hpp"
-#include "proc/mobject/model-port.hpp"
-#include "proc/engine/time-anchor.hpp"
-#include "proc/engine/frame-coord.hpp"
-#include "proc/engine/job-ticket.hpp"
-#include "proc/engine/job-planning.hpp"
+#include "steam/common.hpp"
+#include "steam/mobject/model-port.hpp"
+#include "steam/engine/time-anchor.hpp"
+#include "steam/engine/frame-coord.hpp"
+#include "steam/engine/job-ticket.hpp"
+#include "steam/engine/job-planning.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <functional>

@@ -29,8 +29,8 @@
 
 
 #include "lib/error.hpp"
-#include "proc/control/handling-pattern.hpp"
-#include "proc/control/handling-patterns.hpp"
+#include "steam/control/handling-pattern.hpp"
+#include "steam/control/handling-patterns.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 

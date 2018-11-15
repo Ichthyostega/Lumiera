@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/asset/meta/error-log.hpp"
-#include "proc/asset/struct-scheme.hpp"
-#include "proc/assetmanager.hpp"
+#include "steam/asset/meta/error-log.hpp"
+#include "steam/asset/struct-scheme.hpp"
+#include "steam/assetmanager.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/util.hpp"

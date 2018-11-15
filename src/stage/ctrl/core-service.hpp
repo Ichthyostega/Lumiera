@@ -90,9 +90,9 @@
 #include "lib/idi/entry-id.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "include/session-command-facade.h"
-#include "gui/ctrl/state-recorder.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/ctrl/nexus.hpp"
+#include "stage/ctrl/state-recorder.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/ctrl/nexus.hpp"
 
 
 namespace gui {

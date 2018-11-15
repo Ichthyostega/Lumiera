@@ -26,7 +26,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/control/command-def.hpp"
+#include "steam/control/command-def.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/p.hpp"
 

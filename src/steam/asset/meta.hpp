@@ -60,8 +60,8 @@
 #ifndef ASSET_META_H
 #define ASSET_META_H
 
-#include "proc/asset.hpp"
-#include "proc/asset/struct-scheme.hpp"
+#include "steam/asset.hpp"
+#include "steam/asset/struct-scheme.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/nocopy.hpp"
 

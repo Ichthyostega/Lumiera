@@ -56,10 +56,10 @@
 #define ASSET_SEQUENCE_H
 
 
-#include "proc/asset/struct.hpp"
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
-#include "proc/mobject/mobject-ref.hpp"
+#include "steam/asset/struct.hpp"
+//#include "steam/mobject/mobject.hpp"
+//#include "steam/mobject/placement.hpp"
+#include "steam/mobject/mobject-ref.hpp"
 #include "lib/p.hpp"
 #include "lib/element-tracker.hpp"
 

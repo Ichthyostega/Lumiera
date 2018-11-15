@@ -59,7 +59,7 @@
 #include "lib/variant.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "lib/access-casted.hpp"
-#include "gui/interact/ui-coord.hpp"
+#include "stage/interact/ui-coord.hpp"
 
 #include <string>
 

@@ -28,8 +28,8 @@
  ** 
  */
 
-#include "gui/gtk-base.hpp"
-#include "gui/style-scheme.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/style-scheme.hpp"
 
 namespace gui {
   

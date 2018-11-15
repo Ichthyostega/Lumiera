@@ -47,8 +47,8 @@
 
 
 #include "lib/test/run.hpp"
-#include "gui/model/session-facade.hpp"
-#include "gui/model/diagnostics.hpp"
+#include "stage/model/session-facade.hpp"
+#include "stage/model/diagnostics.hpp"
 //#include "lib/util.hpp"
 
 

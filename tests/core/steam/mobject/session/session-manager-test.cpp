@@ -26,8 +26,8 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/testsession1.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/testsession1.hpp"
 //#include "lib/util.hpp"
 
 //using std::string;

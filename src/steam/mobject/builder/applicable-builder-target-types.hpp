@@ -51,14 +51,14 @@
 #ifndef MOBJECT_BUILDER_APPLICABLEBUILDERTARGETTYPES_H
 #define MOBJECT_BUILDER_APPLICABLEBUILDERTARGETTYPES_H
 
-#include "proc/mobject/builder/buildertool.hpp"
+#include "steam/mobject/builder/buildertool.hpp"
 
 // NOTE:  need to include *all* classes using DEFINE_PROCESSABLE_BY(BuilderTool)
-#include "proc/mobject/session/root.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/effect.hpp"
-#include "proc/mobject/session/auto.hpp"
-#include "proc/mobject/session/binding.hpp"
+#include "steam/mobject/session/root.hpp"
+#include "steam/mobject/session/clip.hpp"
+#include "steam/mobject/session/effect.hpp"
+#include "steam/mobject/session/auto.hpp"
+#include "steam/mobject/session/binding.hpp"
 
                                         /////////////////////////////////TICKET #414
 

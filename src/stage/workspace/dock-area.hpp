@@ -39,7 +39,7 @@
 #ifndef GUI_WORKSPACE_DOCK_AREA_H
 #define GUI_WORKSPACE_DOCK_AREA_H
 
-#include "gui/panel/panel.hpp"
+#include "stage/panel/panel.hpp"
 
 #include <gdlmm.h>
 #include <typeinfo>

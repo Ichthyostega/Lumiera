@@ -27,8 +27,8 @@
  */
 
 
-#include "proc/engine/engine-service-mock.hpp"
-#include "proc/engine/worker/dummy-tick.hpp"
+#include "steam/engine/engine-service-mock.hpp"
+#include "steam/engine/worker/dummy-tick.hpp"
 
 //#include <string>
 //#include <memory>

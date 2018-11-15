@@ -40,7 +40,7 @@
 #ifndef GUI_INTERACT_WORK_SITE_TRAIL_H
 #define GUI_INTERACT_WORK_SITE_TRAIL_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
 
 //#include <string>

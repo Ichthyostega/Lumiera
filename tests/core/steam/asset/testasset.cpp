@@ -25,8 +25,8 @@
  */
 
 
-#include "proc/asset/testasset.hpp"
-#include "proc/assetmanager.hpp"
+#include "steam/asset/testasset.hpp"
+#include "steam/assetmanager.hpp"
 
 using std::static_pointer_cast;
 
@@ -102,7 +102,7 @@ namespace test {
    /* explicit template instantiations for some Asset Kinds */
    /*********************************************************/
 
-#include "proc/asset/unknown.hpp"
+#include "steam/asset/unknown.hpp"
 
 
 namespace proc {

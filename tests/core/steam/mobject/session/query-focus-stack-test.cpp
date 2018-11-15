@@ -27,9 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/session/query-focus-stack.hpp"
-#include "proc/mobject/session/test-scope-invalid.hpp"
+#include "steam/mobject/session/test-scopes.hpp"
+#include "steam/mobject/session/query-focus-stack.hpp"
+#include "steam/mobject/session/test-scope-invalid.hpp"
 #include "lib/util.hpp"
 
 

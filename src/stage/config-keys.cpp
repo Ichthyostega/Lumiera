@@ -30,7 +30,7 @@
  ** 
  */
 
-#include "gui/config-keys.hpp"
+#include "stage/config-keys.hpp"
 
 namespace gui {
   

@@ -31,8 +31,8 @@
 #define MOBJECT_SESSION_TESTROOT_H
 
 
-#include "proc/mobject/session/label.hpp"
-#include "proc/mobject/session/mobjectfactory.hpp"
+#include "steam/mobject/session/label.hpp"
+#include "steam/mobject/session/mobjectfactory.hpp"
 #include "lib/symbol.hpp"
 
 using lib::Symbol;

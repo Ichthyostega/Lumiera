@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/asset/timeline.hpp"
-#include "proc/mobject/session/binding.hpp"
-#include "proc/assetmanager.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/mobject/session/binding.hpp"
+#include "steam/assetmanager.hpp"
 
 
 namespace proc {

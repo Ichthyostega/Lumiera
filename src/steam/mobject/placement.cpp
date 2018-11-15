@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/explicitplacement.hpp"
-#include "proc/mobject/mobject.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/explicitplacement.hpp"
+#include "steam/mobject/mobject.hpp"
 #include "lib/format-string.hpp"
 
 #include <typeinfo>

@@ -40,9 +40,9 @@
 #ifndef MOBJECT_SESSION_SESSION_QUERY_H
 #define MOBJECT_SESSION_SESSION_QUERY_H
 
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/fork.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/session/fork.hpp"
 
 #include <functional>
 

@@ -31,7 +31,7 @@
 #ifndef CLIP_TRACK_HPP
 #define CLIP_TRACK_HPP
 
-#include "gui/model/track.hpp"
+#include "stage/model/track.hpp"
 #include "lib/observable-list.hpp"
 
 namespace gui {

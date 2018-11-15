@@ -30,8 +30,8 @@
 #ifndef MOBJECT_SESSION_RELATIVELOCATION_H
 #define MOBJECT_SESSION_RELATIVELOCATION_H
 
-#include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/session/locatingpin.hpp"
+#include "steam/mobject/placement-ref.hpp"
+#include "steam/mobject/session/locatingpin.hpp"
 
 
 

@@ -36,8 +36,8 @@
  */
 
 
-#include "gui/ui-bus.hpp"
-#include "gui/ctrl/core-service.hpp"
+#include "stage/ui-bus.hpp"
+#include "stage/ctrl/core-service.hpp"
 
 
 namespace gui {

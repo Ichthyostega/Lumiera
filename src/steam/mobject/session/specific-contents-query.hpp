@@ -35,8 +35,8 @@
 #define MOBJECT_SESSION_SPECIFIC_CONTENTS_QUERY_H
 
 
-#include "proc/mobject/session/scope-query.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/session/scope-query.hpp"
+#include "steam/mobject/placement.hpp"
 #include "common/query/query-resolver.hpp"
 
 #include <functional>

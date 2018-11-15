@@ -27,9 +27,9 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/output/xvdisplayer.hpp"
-#include "gui/output/gdkdisplayer.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/output/xvdisplayer.hpp"
+#include "stage/output/gdkdisplayer.hpp"
 
 #include "video-display-widget.hpp"
 

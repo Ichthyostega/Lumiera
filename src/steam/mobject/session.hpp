@@ -50,8 +50,8 @@
 #ifndef MOBJECT_SESSION_H
 #define MOBJECT_SESSION_H
 
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/mobject-ref.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/mobject-ref.hpp"
 #include "common/query/defs-manager.hpp"               ////////////////////////////TICKET #643  forward declare this?
 #include "lib/ref-array.hpp"
 #include "lib/depend.hpp"

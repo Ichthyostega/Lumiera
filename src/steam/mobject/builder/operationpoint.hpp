@@ -36,7 +36,7 @@
 #ifndef MOBJECT_BUILDER_OPERATIONPOINT_H
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
-//#include "proc/engine/procnode.hpp"         /////TODO can we get rid of this header here?
+//#include "steam/engine/procnode.hpp"         /////TODO can we get rid of this header here?
 //#include "common/query.hpp"
 #include "lib/hash-standard.hpp"
 

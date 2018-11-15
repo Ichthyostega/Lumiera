@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/play/dummy-player-service.hpp"
-#include "proc/engine/worker/dummy-image-generator.hpp"
-#include "proc/engine/worker/tick-service.hpp"
+#include "steam/play/dummy-player-service.hpp"
+#include "steam/engine/worker/dummy-image-generator.hpp"
+#include "steam/engine/worker/tick-service.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/depend.hpp"
 

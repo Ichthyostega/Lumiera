@@ -31,7 +31,7 @@
 #ifndef ASSET_CODEC_H
 #define ASSET_CODEC_H
 
-#include "proc/asset/proc.hpp"
+#include "steam/asset/proc.hpp"
 
 
 

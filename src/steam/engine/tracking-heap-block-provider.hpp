@@ -45,7 +45,7 @@
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
-#include "proc/engine/buffer-provider.hpp"
+#include "steam/engine/buffer-provider.hpp"
 #include "lib/scoped-ptrvect.hpp"
 
 #include <unordered_map>

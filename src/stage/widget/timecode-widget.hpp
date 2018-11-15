@@ -35,7 +35,7 @@
 #ifndef GUI_WIDGET_TIMECODE_WIDGET_H
 #define GUI_WIDGET_TIMECODE_WIDGET_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <gtkmm/box.h>

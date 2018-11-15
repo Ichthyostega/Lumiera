@@ -37,9 +37,9 @@
 #ifndef MOBJECT_SESSION_SESSION_SERVICE_FETCH_H
 #define MOBJECT_SESSION_SESSION_SERVICE_FETCH_H
 
-//#include "proc/mobject/session.hpp"
+//#include "steam/mobject/session.hpp"
 //#include "lib/meta/generator.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/placement.hpp"
 
 
 

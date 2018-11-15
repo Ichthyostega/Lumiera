@@ -29,11 +29,11 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "proc/asset/category.hpp"
-#include "proc/asset/pipe.hpp"
-#include "proc/assetmanager.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/asset/asset-diagnostics.hpp"
+#include "steam/asset/category.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/asset/asset-diagnostics.hpp"
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
 

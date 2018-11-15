@@ -29,7 +29,7 @@
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
-#include "backend/threads.h"
+#include "vault/threads.h"
 
 #include <pthread.h>
 #include <time.h>

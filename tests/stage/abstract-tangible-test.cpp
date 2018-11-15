@@ -51,7 +51,7 @@
 #include "test/test-nexus.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "lib/idi/entry-id.hpp"
-#include "proc/control/command-def.hpp"
+#include "steam/control/command-def.hpp"
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff.hpp"
 #include "lib/time/timevalue.hpp"

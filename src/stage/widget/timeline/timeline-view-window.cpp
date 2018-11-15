@@ -27,8 +27,8 @@
  */
 
 
-#include "gui/widget/timeline/timeline-view-window.hpp"
-#include "gui/widget/timeline-widget.hpp"
+#include "stage/widget/timeline/timeline-view-window.hpp"
+#include "stage/widget/timeline-widget.hpp"
 
 
 using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

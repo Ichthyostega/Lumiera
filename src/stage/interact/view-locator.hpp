@@ -65,9 +65,9 @@
 #define GUI_INTERACT_VIEW_LOCATOR_H
 
 #include "lib/depend-inject.hpp"
-#include "gui/id-scheme.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
-#include "gui/model/element-access.hpp"
+#include "stage/id-scheme.hpp"
+#include "stage/interact/view-spec-dsl.hpp"
+#include "stage/model/element-access.hpp"
 #include "lib/idi/genfunc.hpp"
 #include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"

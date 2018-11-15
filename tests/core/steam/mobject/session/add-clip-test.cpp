@@ -26,9 +26,9 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/testclip.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/testclip.hpp"
+#include "steam/mobject/placement.hpp"
 //#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 

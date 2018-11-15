@@ -33,8 +33,8 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "proc/play/output-slot.hpp"
-#include "proc/mobject/model-port.hpp"
+#include "steam/play/output-slot.hpp"
+#include "steam/mobject/model-port.hpp"
 
 //#include <string>
 //#include <vector>

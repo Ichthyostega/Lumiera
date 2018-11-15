@@ -30,10 +30,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/navigator-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/navigator-widget.hpp"
 
-//#include "gui/ui-bus.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

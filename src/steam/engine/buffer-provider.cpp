@@ -27,8 +27,8 @@
 
 
 #include "lib/error.hpp"
-#include "proc/engine/buffer-provider.hpp"
-#include "proc/engine/buffer-metadata.hpp"
+#include "steam/engine/buffer-provider.hpp"
+#include "steam/engine/buffer-metadata.hpp"
 #include "lib/util.hpp"
 
 using util::isSameObject;

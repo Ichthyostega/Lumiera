@@ -30,11 +30,11 @@
 #include "lib/util.hpp"
 
 #include "lib/time/timevalue.hpp"
-#include "proc/assetmanager.hpp"
-#include "proc/asset/media.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/asset/asset-diagnostics.hpp"
-#include "backend/media-access-mock.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/asset/media.hpp"
+#include "steam/mobject/session/clip.hpp"
+#include "steam/asset/asset-diagnostics.hpp"
+#include "vault/media-access-mock.hpp"
 #include "lib/depend-inject.hpp"
 
 using util::contains;

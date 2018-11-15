@@ -30,8 +30,8 @@
 #define MOBJECT_SESSION_TEST_SCOPE_INVALID_H
 
 
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/scope.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/session/scope.hpp"
 
 
 

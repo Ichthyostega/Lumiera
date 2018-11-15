@@ -30,10 +30,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/timeline-layout.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/timeline-layout.hpp"
 
-//#include "gui/ui-bus.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

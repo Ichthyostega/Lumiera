@@ -54,7 +54,7 @@
 #ifndef GUI_INTERACT_FOCUS_TRACKER_H
 #define GUI_INTERACT_FOCUS_TRACKER_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
 
 //#include <string>

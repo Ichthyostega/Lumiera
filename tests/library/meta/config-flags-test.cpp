@@ -43,7 +43,7 @@
 #include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/configflags.hpp"
 #include "meta/typelist-diagnostics.hpp"
-#include "proc/engine/nodewiring-config.hpp"
+#include "steam/engine/nodewiring-config.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 

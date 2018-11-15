@@ -27,7 +27,7 @@
  */
 
 
-#include "gui/widget/timeline/basic-draw-strategy.hpp"
+#include "stage/widget/timeline/basic-draw-strategy.hpp"
 
 namespace gui {
 namespace widget {

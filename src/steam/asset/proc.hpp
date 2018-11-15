@@ -36,8 +36,8 @@
 #ifndef ASSET_PROC_H
 #define ASSET_PROC_H
 
-#include "proc/asset.hpp"
-#include "proc/streamtype.hpp"
+#include "steam/asset.hpp"
+#include "steam/streamtype.hpp"
 #include "lib/nocopy.hpp"
 
 

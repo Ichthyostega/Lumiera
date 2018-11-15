@@ -36,7 +36,7 @@
 
 #include "include/logging.h"
 #include "lib/mutex.h"
-#include "backend/threads.h"
+#include "vault/threads.h"
 #include "lib/test/test.h"
 
 #include <unistd.h>

@@ -46,8 +46,8 @@
 #define CONTROL_COMMAND_MUTATION_H
 
 #include "lib/error.hpp"
-#include "proc/control/command-closure.hpp"
-#include "proc/control/memento-tie.hpp"
+#include "steam/control/command-closure.hpp"
+#include "steam/control/memento-tie.hpp"
 
 
 

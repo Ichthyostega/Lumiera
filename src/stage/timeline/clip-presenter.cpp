@@ -30,12 +30,12 @@
  */
 
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
-#include "gui/timeline/clip-presenter.hpp"
-#include "gui/timeline/marker-widget.hpp"
+#include "stage/timeline/clip-presenter.hpp"
+#include "stage/timeline/marker-widget.hpp"
 
-//#include "gui/ui-bus.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

@@ -31,8 +31,8 @@
  ** 
  */
 
-#include "proc/control/session-command-service.hpp"
-#include "proc/control/command.hpp"
+#include "steam/control/session-command-service.hpp"
+#include "steam/control/command.hpp"
 #include "include/logging.h"
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"

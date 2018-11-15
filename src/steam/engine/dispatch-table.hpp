@@ -30,8 +30,8 @@
 #ifndef PROC_ENGINE_DISPATCH_TABLE_H
 #define PROC_ENGINE_DISPATCH_TABLE_H
 
-#include "proc/common.hpp"
-#include "proc/engine/dispatcher.hpp"
+#include "steam/common.hpp"
+#include "steam/engine/dispatcher.hpp"
 
 
 

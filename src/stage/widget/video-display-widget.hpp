@@ -32,8 +32,8 @@
 #ifndef GUI_WIDGET_VIDEO_DISPLAY_WIDGET_H
 #define GUI_WIDGET_VIDEO_DISPLAY_WIDGET_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/output/displayer.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/output/displayer.hpp"
 
 
 using namespace gui::output;  ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

@@ -29,7 +29,7 @@
  */
 
 
-#include "proc/asset/typed-id.hpp"
+#include "steam/asset/typed-id.hpp"
 
 
 namespace proc {

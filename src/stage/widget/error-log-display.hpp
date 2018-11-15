@@ -59,10 +59,10 @@
 #ifndef GUI_WIDGET_ERROR_LOG_DISPLAY_H
 #define GUI_WIDGET_ERROR_LOG_DISPLAY_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/style-scheme.hpp"
-#include "gui/model/flash-deco.hpp"
-#include "gui/model/expander-revealer.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/style-scheme.hpp"
+#include "stage/model/flash-deco.hpp"
+#include "stage/model/expander-revealer.hpp"
 #include "include/gui-notification-facade.h"
 #include "lib/format-string.hpp"
 #include "lib/symbol.hpp"

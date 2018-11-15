@@ -40,7 +40,7 @@
 #ifndef MOBJECT_SESSION_SESS_MANAGER_IMPL_H
 #define MOBJECT_SESSION_SESS_MANAGER_IMPL_H
 
-#include "proc/mobject/session/session-impl.hpp"
+#include "steam/mobject/session/session-impl.hpp"
 #include "lib/sync.hpp"
 
 

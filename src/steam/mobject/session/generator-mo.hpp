@@ -32,7 +32,7 @@
 #ifndef PROC_MOBJECT_SESSION_GENERATOR_MO_H
 #define PROC_MOBJECT_SESSION_GENERATOR_MO_H
 
-#include "proc/mobject/session/abstractmo.hpp"
+#include "steam/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"
 
 

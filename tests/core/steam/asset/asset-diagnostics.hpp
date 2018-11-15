@@ -33,7 +33,7 @@
 #define ASSET_ASSET_DIAGNOSTICS_H
 
 
-#include "proc/assetmanager.hpp"
+#include "steam/assetmanager.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util-foreach.hpp"

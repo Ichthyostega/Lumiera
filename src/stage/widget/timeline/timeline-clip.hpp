@@ -28,13 +28,13 @@
 #ifndef GUI_WIDGET_TIMELINE_CLIP_H
 #define GUI_WIDGET_TIMELINE_CLIP_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/model/clip.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/model/clip.hpp"
 #include "include/logging.h"
 #include "lib/time/timevalue.hpp"
 
-#include "gui/widget/timeline/draw-strategy.hpp"
-#include "gui/widget/timeline/timeline-entity.hpp"
+#include "stage/widget/timeline/draw-strategy.hpp"
+#include "stage/widget/timeline/timeline-entity.hpp"
 
 #include <string>
 

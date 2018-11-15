@@ -82,13 +82,13 @@
 
 #include "lib/error.hpp"
 #include "include/logging.h"
-#include "proc/control/proc-dispatcher.hpp"
-#include "proc/control/command-dispatch.hpp"
-#include "proc/control/command-queue.hpp"
-#include "proc/control/looper.hpp"
-#include "proc/control/session-command-service.hpp"
-#include "proc/mobject/session.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "steam/control/proc-dispatcher.hpp"
+#include "steam/control/command-dispatch.hpp"
+#include "steam/control/command-queue.hpp"
+#include "steam/control/looper.hpp"
+#include "steam/control/session-command-service.hpp"
+#include "steam/mobject/session.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/util.hpp"                ///////////////TODO for test command invocation
 

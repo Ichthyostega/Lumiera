@@ -29,10 +29,10 @@
 
 #include "lib/element-tracker.hpp"
 
-#include "proc/assetmanager.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
 #include "common/query.hpp"
 #include "lib/p.hpp"
 

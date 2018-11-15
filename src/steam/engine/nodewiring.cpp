@@ -27,10 +27,10 @@
  */
 
 
-#include "proc/engine/procnode.hpp"
-#include "proc/engine/nodewiring.hpp"
-#include "proc/engine/nodeoperation.hpp"
-#include "proc/engine/nodewiring-config.hpp"
+#include "steam/engine/procnode.hpp"
+#include "steam/engine/nodewiring.hpp"
+#include "steam/engine/nodeoperation.hpp"
+#include "steam/engine/nodewiring-config.hpp"
 
 #include "lib/meta/typelist-manip.hpp"
 

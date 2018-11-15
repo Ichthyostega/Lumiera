@@ -33,8 +33,8 @@
 #ifndef GUI_OUTPUT_GDKDISPLAYER_H
 #define GUI_OUTPUT_GDKDISPLAYER_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/output/displayer.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/output/displayer.hpp"
 
 namespace Gtk {
   class Widget;

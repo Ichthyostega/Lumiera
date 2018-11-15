@@ -37,7 +37,7 @@
 typedef struct lumiera_mmapcache_struct lumiera_mmapcache;
 typedef lumiera_mmapcache* LumieraMMapcache;
 
-#include "backend/mmap.h"
+#include "vault/mmap.h"
 
 #include <nobug.h>
 

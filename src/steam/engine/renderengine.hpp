@@ -30,7 +30,7 @@
 #ifndef PROC_ENGINE_RENDERENGINE_H
 #define PROC_ENGINE_RENDERENGINE_H
 
-#include "proc/engine/rendergraph.hpp"
+#include "steam/engine/rendergraph.hpp"
 
 #include <list>
 

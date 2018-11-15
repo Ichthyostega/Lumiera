@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/play/dummy-play-connection.hpp"
-//#include "proc/play/dummy-image-generator.hpp"
-//#include "proc/play/tick-service.hpp"
+#include "steam/play/dummy-play-connection.hpp"
+//#include "steam/play/dummy-image-generator.hpp"
+//#include "steam/play/tick-service.hpp"
 //#include "lib/depend.hpp"
 
 //#include <string>

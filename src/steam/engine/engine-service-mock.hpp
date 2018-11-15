@@ -44,13 +44,13 @@
 #include "lib/error.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
-#include "proc/engine/calc-stream.hpp"
-#include "proc/mobject/model-port.hpp"
-#include "proc/play/timings.hpp"
-#include "proc/play/output-slot.hpp"
+#include "steam/engine/calc-stream.hpp"
+#include "steam/mobject/model-port.hpp"
+#include "steam/play/timings.hpp"
+#include "steam/play/output-slot.hpp"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
-#include "proc/engine/engine-service.hpp"
+#include "steam/engine/engine-service.hpp"
 #include "lib/scoped-ptrvect.hpp"
 
 

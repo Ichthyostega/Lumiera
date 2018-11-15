@@ -36,8 +36,8 @@ typedef struct lumiera_mmap_struct lumiera_mmap;
 typedef lumiera_mmap* LumieraMMap;
 
 
-#include "backend/file.h"
-#include "backend/filedescriptor.h"
+#include "vault/file.h"
+#include "vault/filedescriptor.h"
 
 
 #include <nobug.h>

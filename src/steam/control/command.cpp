@@ -43,12 +43,12 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/format-string.hpp"
-#include "proc/control/command.hpp"
-#include "proc/control/command-def.hpp"
-#include "proc/control/command-impl.hpp"
-#include "proc/control/command-registry.hpp"
-#include "proc/control/command-impl-clone-builder.hpp"
-#include "proc/control/handling-pattern.hpp"
+#include "steam/control/command.hpp"
+#include "steam/control/command-def.hpp"
+#include "steam/control/command-impl.hpp"
+#include "steam/control/command-registry.hpp"
+#include "steam/control/command-impl-clone-builder.hpp"
+#include "steam/control/handling-pattern.hpp"
 
 #include <utility>
 #include <sstream>

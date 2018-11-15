@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "lib/sync.hpp"
 #include "lib/symbol.hpp"
 

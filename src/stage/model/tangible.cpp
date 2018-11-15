@@ -30,9 +30,9 @@
  */
 
 
-#include "gui/model/tangible.hpp"
-#include "gui/model/widget.hpp"
-#include "gui/model/controller.hpp"
+#include "stage/model/tangible.hpp"
+#include "stage/model/widget.hpp"
+#include "stage/model/controller.hpp"
 #include "include/ui-protocol.hpp"
 #include "lib/diff/gen-node.hpp"
 

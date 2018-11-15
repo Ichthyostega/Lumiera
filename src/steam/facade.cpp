@@ -44,10 +44,10 @@
  */
 
 
-#include "proc/facade.hpp"
+#include "steam/facade.hpp"
 #include "lib/depend.hpp"
-#include "proc/control/proc-dispatcher.hpp"
-#include "proc/play/output-director.hpp"
+#include "steam/control/proc-dispatcher.hpp"
+#include "steam/play/output-director.hpp"
 
 #include <string>
 

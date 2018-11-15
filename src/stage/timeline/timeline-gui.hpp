@@ -52,8 +52,8 @@
 #ifndef GUI_TIMELINE_TIMELINE_GUI_H
 #define GUI_TIMELINE_TIMELINE_GUI_H
 
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/model/w-link.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/model/w-link.hpp"
 #include "lib/diff/diff-mutable.hpp"
 #include "lib/nocopy.hpp"
 

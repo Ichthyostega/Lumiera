@@ -54,7 +54,7 @@
 #ifndef MOBJECT_SESSION_FORK_H
 #define MOBJECT_SESSION_FORK_H
 
-#include "proc/mobject/session/meta.hpp"
+#include "steam/mobject/session/meta.hpp"
 #include "lib/idi/entry-id.hpp"
 #include "lib/time/timevalue.hpp"
 

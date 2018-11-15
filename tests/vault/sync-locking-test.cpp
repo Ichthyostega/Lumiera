@@ -29,7 +29,7 @@
 #include "lib/error.hpp"
 
 #include "lib/sync.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 
 #include <iostream>
 #include <functional>

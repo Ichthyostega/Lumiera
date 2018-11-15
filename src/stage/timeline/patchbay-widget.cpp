@@ -30,10 +30,10 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/patchbay-widget.hpp"
-#include "gui/timeline/track-head-widget.hpp"
-//#include "gui/ui-bus.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/patchbay-widget.hpp"
+#include "stage/timeline/track-head-widget.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 

@@ -27,7 +27,7 @@
  */
 
 
-#include "proc/asset/effect.hpp"
+#include "steam/asset/effect.hpp"
 
 namespace proc {
 namespace asset {

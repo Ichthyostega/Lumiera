@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/sync-classlock.hpp"
 #include "lib/scoped-collection.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "vault/thread-wrapper.hpp"
 
 using test::Test;
 using backend::ThreadJoinable;

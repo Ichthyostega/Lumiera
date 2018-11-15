@@ -37,18 +37,18 @@
 #ifndef GUI_WIDGET_TIMELINE_WIDGET_H
 #define GUI_WIDGET_TIMELINE_WIDGET_H
 
-#include "gui/widget/timeline/timeline-state.hpp"
-#include "gui/widget/timeline/timeline-header-container.hpp"
-#include "gui/widget/timeline/timeline-body.hpp"
-#include "gui/widget/timeline/timeline-ruler.hpp"
-#include "gui/widget/timeline/timeline-tool.hpp"
-#include "gui/widget/timeline/timeline-arrow-tool.hpp"
-#include "gui/widget/timeline/timeline-ibeam-tool.hpp"
-#include "gui/widget/timeline/timeline-group-track.hpp"
-#include "gui/widget/timeline/timeline-clip-track.hpp"
-#include "gui/widget/timeline/timeline-layout-helper.hpp"
+#include "stage/widget/timeline/timeline-state.hpp"
+#include "stage/widget/timeline/timeline-header-container.hpp"
+#include "stage/widget/timeline/timeline-body.hpp"
+#include "stage/widget/timeline/timeline-ruler.hpp"
+#include "stage/widget/timeline/timeline-tool.hpp"
+#include "stage/widget/timeline/timeline-arrow-tool.hpp"
+#include "stage/widget/timeline/timeline-ibeam-tool.hpp"
+#include "stage/widget/timeline/timeline-group-track.hpp"
+#include "stage/widget/timeline/timeline-clip-track.hpp"
+#include "stage/widget/timeline/timeline-layout-helper.hpp"
 
-#include "gui/model/sequence.hpp"
+#include "stage/model/sequence.hpp"
 
 #include "lib/time/timevalue.hpp"
 

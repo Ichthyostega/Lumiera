@@ -26,8 +26,8 @@
  */
 
 
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/session/mobjectfactory.hpp"
+#include "steam/mobject/mobject.hpp"
+#include "steam/mobject/session/mobjectfactory.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 

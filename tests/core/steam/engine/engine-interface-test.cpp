@@ -28,13 +28,13 @@
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"
 
-#include "proc/engine/calc-stream.hpp"
-#include "proc/engine/engine-service.hpp"
-#include "proc/engine/engine-diagnostics.hpp"
-#include "proc/play/output-slot.hpp"
-#include "proc/play/diagnostic-output-slot.hpp"
-#include "proc/mobject/model-port.hpp"
-#include "proc/asset/pipe.hpp"
+#include "steam/engine/calc-stream.hpp"
+#include "steam/engine/engine-service.hpp"
+#include "steam/engine/engine-diagnostics.hpp"
+#include "steam/play/output-slot.hpp"
+#include "steam/play/diagnostic-output-slot.hpp"
+#include "steam/mobject/model-port.hpp"
+#include "steam/asset/pipe.hpp"
 #include "lib/time/timevalue.hpp"
 
 //#include <ctime>

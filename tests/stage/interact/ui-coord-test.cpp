@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "gui/interact/ui-coord.hpp"
+#include "stage/interact/ui-coord.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
 

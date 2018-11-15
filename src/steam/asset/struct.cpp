@@ -37,11 +37,11 @@
  */
 
 
-#include "proc/asset/struct.hpp"
-#include "proc/assetmanager.hpp"
-#include "proc/config-resolver.hpp"
+#include "steam/asset/struct.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/config-resolver.hpp"
 
-#include "proc/asset/struct-factory-impl.hpp"
+#include "steam/asset/struct-factory-impl.hpp"
 
 #include "lib/util.hpp"
 #include "lib/symbol.hpp"
@@ -184,10 +184,10 @@ namespace asset {
    /* explicit instantiations of the factory methods */
    /**************************************************/
 
-#include "proc/asset/pipe.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
 
 
 namespace proc {

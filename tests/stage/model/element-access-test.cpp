@@ -27,9 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "gui/interact/view-spec-dsl.hpp"
+//#include "stage/interact/view-spec-dsl.hpp"
 #include "test/test-element-access.hpp"
-#include "gui/interact/ui-coord.hpp"
+#include "stage/interact/ui-coord.hpp"
 //#include "gen-node-location-query.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"

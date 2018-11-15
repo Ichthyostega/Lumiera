@@ -30,8 +30,8 @@
 #include "lib/tmpbuf.h"
 #include "common/config.h"
 
-#include "backend/backend.h"
-#include "backend/filehandlecache.h"
+#include "vault/backend.h"
+#include "vault/filehandlecache.h"
 
 #include "lib/test/test.h"
 

@@ -36,7 +36,7 @@
 #ifndef TESTHELPER_RUN_H
 #define TESTHELPER_RUN_H
 
-#include "proc/common.hpp"
+#include "steam/common.hpp"
 #include "include/logging.h"
 
 #include "lib/test/suite.hpp"

@@ -30,8 +30,8 @@
 #ifndef PROC_MOBJECT_SESSION_SCOPE_H
 #define PROC_MOBJECT_SESSION_SCOPE_H
 
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/placement-ref.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/placement-ref.hpp"
 #include "lib/error.hpp"
 
 #include <string>

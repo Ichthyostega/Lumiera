@@ -27,10 +27,10 @@
  */
 
 
-#include "proc/mobject/session/generator-mo.hpp"
-//#include "proc/assetmanager.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/asset/clip.hpp"
+#include "steam/mobject/session/generator-mo.hpp"
+//#include "steam/assetmanager.hpp"
+//#include "steam/asset/media.hpp"
+//#include "steam/asset/clip.hpp"
 //#include "lib/time/mutation.hpp"
 //#include "lib/util.hpp"
 

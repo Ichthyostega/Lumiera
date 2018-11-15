@@ -28,13 +28,13 @@
  */
 
 
-#include "gui/workspace/panel-manager.hpp"
+#include "stage/workspace/panel-manager.hpp"
 
-#include "gui/panel/assets-panel.hpp"
-#include "gui/panel/viewer-panel.hpp"
-#include "gui/panel/infobox-panel.hpp"
-#include "gui/panel/timeline-panel.hpp"
-#include "gui/panel/timeline-panel-obsolete.hpp"
+#include "stage/panel/assets-panel.hpp"
+#include "stage/panel/viewer-panel.hpp"
+#include "stage/panel/infobox-panel.hpp"
+#include "stage/panel/timeline-panel.hpp"
+#include "stage/panel/timeline-panel-obsolete.hpp"
 
 #include "include/logging.h"
 #include "lib/util-foreach.hpp"

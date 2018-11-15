@@ -27,8 +27,8 @@
  */
 
 
-#include "proc/mobject/session/query-focus.hpp"
-#include "proc/mobject/mobject.hpp"
+#include "steam/mobject/session/query-focus.hpp"
+#include "steam/mobject/mobject.hpp"
 #include "lib/format-string.hpp"
 
 using util::_Fmt;

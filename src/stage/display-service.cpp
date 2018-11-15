@@ -32,7 +32,7 @@
  */
 
 
-#include "gui/display-service.hpp"
+#include "stage/display-service.hpp"
 #include "lib/depend.hpp"
 
 extern "C" {

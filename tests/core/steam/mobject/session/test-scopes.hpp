@@ -32,10 +32,10 @@
 #define MOBJECT_SESSION_TEST_TEST_SCOPES_H
 
 
-#include "proc/mobject/test-dummy-mobject.hpp"
-#include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/scope-query.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/test-dummy-mobject.hpp"
+#include "steam/mobject/session/placement-index.hpp"
+#include "steam/mobject/session/scope-query.hpp"
+#include "steam/mobject/placement.hpp"
 
 #include <memory>
 

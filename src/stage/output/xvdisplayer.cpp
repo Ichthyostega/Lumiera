@@ -33,8 +33,8 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/output/xvdisplayer.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/output/xvdisplayer.hpp"
 #include "include/logging.h"
 
 #include <gdk/gdkx.h>

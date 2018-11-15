@@ -36,7 +36,7 @@
 #ifndef GUI_WORKSPACE_UI_STYLE_H
 #define GUI_WORKSPACE_UI_STYLE_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
 
 #include <cairomm/cairomm.h>

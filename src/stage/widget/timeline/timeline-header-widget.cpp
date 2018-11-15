@@ -26,8 +26,8 @@
  */
 
 
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/draw/rectangle.hpp"
+#include "stage/widget/timeline-widget.hpp"
+#include "stage/draw/rectangle.hpp"
 
 #include <boost/foreach.hpp>
 

@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"

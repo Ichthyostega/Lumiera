@@ -27,9 +27,9 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/widget/timeline/timeline-entity.hpp"
-#include "gui/widget/timeline/draw-strategy.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/widget/timeline/timeline-entity.hpp"
+#include "stage/widget/timeline/draw-strategy.hpp"
 
 namespace gui {
 namespace widget {

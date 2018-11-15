@@ -29,11 +29,11 @@
  */
 
 
-#include "proc/engine/nodefactory.hpp"
-#include "proc/mobject/session/effect.hpp"
+#include "steam/engine/nodefactory.hpp"
+#include "steam/mobject/session/effect.hpp"
 #include "lib/allocation-cluster.hpp"
 
-#include "proc/engine/nodewiring.hpp"
+#include "steam/engine/nodewiring.hpp"
 
 namespace proc {
 namespace engine {

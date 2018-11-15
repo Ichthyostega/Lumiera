@@ -21,13 +21,13 @@
 * *****************************************************/
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/panel/timeline-panel-obsolete.hpp"
-#include "gui/widget/timeline/timeline-zoom-scale.hpp"
-#include "gui/workspace/workspace-window.hpp"
-#include "gui/ctrl/playback-controller.hpp"
-#include "gui/model/project.hpp"
-#include "gui/ui-bus.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/panel/timeline-panel-obsolete.hpp"
+#include "stage/widget/timeline/timeline-zoom-scale.hpp"
+#include "stage/workspace/workspace-window.hpp"
+#include "stage/ctrl/playback-controller.hpp"
+#include "stage/model/project.hpp"
+#include "stage/ui-bus.hpp"
 
 #include "lib/util.hpp"
 

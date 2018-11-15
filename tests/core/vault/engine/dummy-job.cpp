@@ -25,11 +25,11 @@
  */
 
 
-#include "backend/engine/dummy-job.hpp"
+#include "vault/engine/dummy-job.hpp"
 
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-#include "backend/real-clock.hpp"
+#include "vault/real-clock.hpp"
 #include "lib/null-value.hpp"
 #include "lib/hash-value.h"
 #include "lib/util.hpp"

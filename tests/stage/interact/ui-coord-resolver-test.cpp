@@ -27,8 +27,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "gui/interact/ui-coord.hpp"
-#include "gui/interact/ui-coord-resolver.hpp"
+#include "stage/interact/ui-coord.hpp"
+#include "stage/interact/ui-coord-resolver.hpp"
 #include "gen-node-location-query.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-util.hpp"

@@ -46,13 +46,13 @@
  ** @see ui-manager.hpp
  */
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 
 #include "lib/error.hpp"
-#include "gui/ui-bus.hpp"
-#include "gui/guifacade.hpp"
-#include "gui/ctrl/ui-manager.hpp"
-#include "backend/thread-wrapper.hpp"
+#include "stage/ui-bus.hpp"
+#include "stage/guifacade.hpp"
+#include "stage/ctrl/ui-manager.hpp"
+#include "vault/thread-wrapper.hpp"
 #include "common/subsys.hpp"
 #include "lib/nocopy.hpp"
 

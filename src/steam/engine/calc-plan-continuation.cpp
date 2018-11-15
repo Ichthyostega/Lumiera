@@ -27,12 +27,12 @@
  */
 
 
-#include "proc/engine/calc-plan-continuation.hpp"
-#include "proc/engine/frame-coord.hpp"
-#include "proc/engine/job-ticket.hpp"
+#include "steam/engine/calc-plan-continuation.hpp"
+#include "steam/engine/frame-coord.hpp"
+#include "steam/engine/job-ticket.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/frameid.hpp"
-//#include "proc/state.hpp"
+//#include "steam/state.hpp"
 
 #include <boost/functional/hash.hpp>
 

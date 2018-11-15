@@ -39,7 +39,7 @@
 typedef struct lumiera_filehandlecache_struct lumiera_filehandlecache;
 typedef lumiera_filehandlecache* LumieraFilehandlecache;
 
-#include "backend/filehandle.h"
+#include "vault/filehandle.h"
 
 
 

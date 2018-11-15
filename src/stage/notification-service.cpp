@@ -52,10 +52,10 @@
 
 
 
-#include "gui/ctrl/ui-manager.hpp"
-#include "gui/ctrl/ui-dispatcher.hpp"
-#include "gui/notification-service.hpp"
-#include "gui/interact/wizard.hpp"
+#include "stage/ctrl/ui-manager.hpp"
+#include "stage/ctrl/ui-dispatcher.hpp"
+#include "stage/notification-service.hpp"
+#include "stage/interact/wizard.hpp"
 #include "include/ui-protocol.hpp"
 
 #include "lib/diff/mutation-message.hpp"

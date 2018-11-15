@@ -30,10 +30,10 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/test/testdummy.hpp"
 #include "lib/util-foreach.hpp"
-#include "proc/engine/testframe.hpp"
-#include "proc/engine/diagnostic-buffer-provider.hpp"
-#include "proc/engine/buffhandle-attach.hpp"
-#include "proc/engine/bufftable.hpp"
+#include "steam/engine/testframe.hpp"
+#include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "steam/engine/buffhandle-attach.hpp"
+#include "steam/engine/bufftable.hpp"
 
 using util::isSameObject;
 using util::for_each;

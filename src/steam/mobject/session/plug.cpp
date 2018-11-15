@@ -26,8 +26,8 @@
  */
 
 
-#include "proc/mobject/session/plug.hpp"
-#include "proc/asset/pipe.hpp"
+#include "steam/mobject/session/plug.hpp"
+#include "steam/asset/pipe.hpp"
 
 namespace proc {
 namespace mobject {

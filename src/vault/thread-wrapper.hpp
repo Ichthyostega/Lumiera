@@ -47,9 +47,9 @@
 #include "lib/result.hpp"
 
 extern "C" {
-#include "backend/threads.h"
+#include "vault/threads.h"
 }
-#include "backend/threadpool-init.hpp"
+#include "vault/threadpool-init.hpp"
 
 #include <type_traits>
 #include <utility>

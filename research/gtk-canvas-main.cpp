@@ -29,7 +29,7 @@
  */
 
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "gtk-canvas-experiment.hpp"
 #include "lib/error.hpp"
 

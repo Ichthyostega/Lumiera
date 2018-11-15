@@ -29,8 +29,8 @@
  */
 
 
-#include "gui/model/track.hpp"
-#include "gui/model/parent-track.hpp"
+#include "stage/model/track.hpp"
+#include "stage/model/parent-track.hpp"
 
 #include <boost/foreach.hpp>
 #include <memory>

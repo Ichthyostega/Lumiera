@@ -47,11 +47,11 @@
 #ifndef ASSET_VIEWER_H
 #define ASSET_VIEWER_H
 
-#include "proc/asset/struct.hpp"
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
-#include "proc/mobject/mobject-ref.hpp"
-//#include "proc/mobject/session/binding.hpp"         ////TODO avoidable??
+#include "steam/asset/struct.hpp"
+//#include "steam/mobject/mobject.hpp"
+//#include "steam/mobject/placement.hpp"
+#include "steam/mobject/mobject-ref.hpp"
+//#include "steam/mobject/session/binding.hpp"         ////TODO avoidable??
 #include "lib/p.hpp"
 #include "lib/element-tracker.hpp"
 

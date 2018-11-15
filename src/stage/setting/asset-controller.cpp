@@ -29,8 +29,8 @@
  */
 
 
-#include "gui/setting/asset-controller.hpp"
-//#include "gui/ctrl/global-ctx.hpp"
+#include "stage/setting/asset-controller.hpp"
+//#include "stage/ctrl/global-ctx.hpp"
 #include "lib/diff/tree-mutator.hpp"
 //#include "lib/util.hpp"
 

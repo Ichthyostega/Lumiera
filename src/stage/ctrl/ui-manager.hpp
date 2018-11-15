@@ -47,7 +47,7 @@
 #ifndef GUI_CTRL_UI_MANAGER_H
 #define GUI_CTRL_UI_MANAGER_H
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/nocopy.hpp"
 
 #include <functional>

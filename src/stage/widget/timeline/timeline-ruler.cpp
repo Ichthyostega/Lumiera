@@ -27,10 +27,10 @@
  */
 
 
-#include "gui/widget/timeline/timeline-ruler.hpp"
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/workspace/ui-style.hpp"
-#include "gui/draw/cairo-util.hpp"
+#include "stage/widget/timeline/timeline-ruler.hpp"
+#include "stage/widget/timeline-widget.hpp"
+#include "stage/workspace/ui-style.hpp"
+#include "stage/draw/cairo-util.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time.h"
 

@@ -29,9 +29,9 @@
  */
 
 
-#include "gui/interact/focus-tracker.hpp"
-#include "gui/interact/navigator.hpp"
-//#include "gui/ctrl/global-ctx.hpp"
+#include "stage/interact/focus-tracker.hpp"
+#include "stage/interact/navigator.hpp"
+//#include "stage/ctrl/global-ctx.hpp"
 //#include "lib/util.hpp"
 
 //using util::cStr;

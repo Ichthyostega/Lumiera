@@ -32,7 +32,7 @@
 #ifndef GUI_WIDGET_TIMELINE_STATE_H
 #define GUI_WIDGET_TIMELINE_STATE_H
 
-#include "gui/widget/timeline/timeline-view-window.hpp"
+#include "stage/widget/timeline/timeline-view-window.hpp"
 
 #include "lib/time/mutation.hpp"
 #include "lib/time/control.hpp"

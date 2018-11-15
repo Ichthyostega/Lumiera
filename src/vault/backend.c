@@ -31,14 +31,14 @@
 #include "lib/tmpbuf.h"
 #include "lib/mpool.h"
 
-#include "backend/backend.h"
+#include "vault/backend.h"
 #include "common/config.h"
-#include "backend/filehandlecache.h"
-#include "backend/filedescriptor.h"
-#include "backend/filedescriptorregistry.h"
-#include "backend/mmapcache.h"
-#include "backend/threadpool.h"
-#include "backend/resourcecollector.h"
+#include "vault/filehandlecache.h"
+#include "vault/filedescriptor.h"
+#include "vault/filedescriptorregistry.h"
+#include "vault/mmapcache.h"
+#include "vault/threadpool.h"
+#include "vault/resourcecollector.h"
 
 #include <unistd.h>
 #include <sys/resource.h>

@@ -56,7 +56,7 @@
 
 #include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
-#include "gui/interact/view-spec-dsl.hpp"
+#include "stage/interact/view-spec-dsl.hpp"
 
 
 /* === forward declarations === */

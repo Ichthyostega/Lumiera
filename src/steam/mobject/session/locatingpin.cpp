@@ -30,11 +30,11 @@
  */
 
 
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/locatingpin.hpp"
-#include "proc/mobject/session/fixedlocation.hpp"
-#include "proc/mobject/session/relativelocation.hpp"
+#include "steam/mobject/mobject.hpp"
+#include "steam/mobject/placement.hpp"
+#include "steam/mobject/session/locatingpin.hpp"
+#include "steam/mobject/session/fixedlocation.hpp"
+#include "steam/mobject/session/relativelocation.hpp"
 
 using std::unique_ptr;
 

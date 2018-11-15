@@ -33,11 +33,11 @@
 #ifndef MOBJECT_BUILDER_TOOLFACTORY_H
 #define MOBJECT_BUILDER_TOOLFACTORY_H
 
-#include "proc/mobject/session/fixture.hpp"
-#include "proc/mobject/builder/segmentation-tool.hpp"
-#include "proc/mobject/builder/nodecreatortool.hpp"
-#include "proc/mobject/builder/mould.hpp"
-#include "proc/engine/rendergraph.hpp"
+#include "steam/mobject/session/fixture.hpp"
+#include "steam/mobject/builder/segmentation-tool.hpp"
+#include "steam/mobject/builder/nodecreatortool.hpp"
+#include "steam/mobject/builder/mould.hpp"
+#include "steam/engine/rendergraph.hpp"
 
 #include <memory>
 

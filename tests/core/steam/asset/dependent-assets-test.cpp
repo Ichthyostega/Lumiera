@@ -26,12 +26,12 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/asset/testasset.hpp"
-#include "proc/asset/asset-diagnostics.hpp"
-#include "backend/media-access-mock.hpp"
+#include "steam/asset/testasset.hpp"
+#include "steam/asset/asset-diagnostics.hpp"
+#include "vault/media-access-mock.hpp"
 #include "lib/depend-inject.hpp"
-#include "proc/asset/media.hpp"
-#include "proc/asset/clip.hpp"
+#include "steam/asset/media.hpp"
+#include "steam/asset/clip.hpp"
 #include "lib/util.hpp"
 
 using util::contains;

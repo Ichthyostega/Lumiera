@@ -26,34 +26,34 @@
  */
 
 
-#include "gui/gtk-base.hpp"
-#include "gui/ui-bus.hpp"
-#include "gui/ctrl/bus-term.hpp"
-#include "gui/ctrl/global-ctx.hpp"
-#include "gui/interact/interaction-director.hpp"
-#include "gui/interact/view-locator.hpp"
-#include "gui/interact/spot-locator.hpp"
-#include "gui/interact/navigator.hpp"
-#include "gui/interact/focus-tracker.hpp"
-#include "gui/interact/ui-coord-resolver.hpp"
-#include "gui/dialog/preferences-dialog.hpp"
-#include "gui/dialog/render.hpp"
-#include "gui/workspace/workspace-window.hpp"
-#include "gui/ctrl/ui-state.hpp"
-#include "gui/setting/asset-controller.hpp"
-#include "gui/panel/timeline-panel.hpp"
-//#include "gui/timeline/timeline-widget.hpp"
-//#include "gui/timeline/timeline-controller.hpp"   /////////////////TODO still required?
+#include "stage/gtk-base.hpp"
+#include "stage/ui-bus.hpp"
+#include "stage/ctrl/bus-term.hpp"
+#include "stage/ctrl/global-ctx.hpp"
+#include "stage/interact/interaction-director.hpp"
+#include "stage/interact/view-locator.hpp"
+#include "stage/interact/spot-locator.hpp"
+#include "stage/interact/navigator.hpp"
+#include "stage/interact/focus-tracker.hpp"
+#include "stage/interact/ui-coord-resolver.hpp"
+#include "stage/dialog/preferences-dialog.hpp"
+#include "stage/dialog/render.hpp"
+#include "stage/workspace/workspace-window.hpp"
+#include "stage/ctrl/ui-state.hpp"
+#include "stage/setting/asset-controller.hpp"
+#include "stage/panel/timeline-panel.hpp"
+//#include "stage/timeline/timeline-widget.hpp"
+//#include "stage/timeline/timeline-controller.hpp"   /////////////////TODO still required?
 #include "include/ui-protocol.hpp"
-#include "proc/mobject/session/root.hpp"
-#include "proc/asset/sequence.hpp"                ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
-#include "proc/mobject/session/fork.hpp"          ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
-#include "proc/cmd.hpp"
-#include "backend/real-clock.hpp"
+#include "steam/mobject/session/root.hpp"
+#include "steam/asset/sequence.hpp"                ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
+#include "steam/mobject/session/fork.hpp"          ///////////////////////////////////////////////////////////TICKET #1096 : avoid direct inclusion to reduce compile times
+#include "steam/cmd.hpp"
+#include "vault/real-clock.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"
-//#include "gui/ui-bus.hpp"
+//#include "stage/ui-bus.hpp"
 //#include "lib/util.hpp"
 
 //#include <memory>

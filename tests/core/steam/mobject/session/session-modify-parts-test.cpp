@@ -26,16 +26,16 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session.hpp"
-#include "proc/mobject/session/fixture.hpp"             // TODO only temporarily needed
-//#include "proc/assetmanager.hpp"          //////??
-//#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
+#include "steam/mobject/session.hpp"
+#include "steam/mobject/session/fixture.hpp"             // TODO only temporarily needed
+//#include "steam/assetmanager.hpp"          //////??
+//#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util-foreach.hpp"
-#include "proc/mobject/session/testclip.hpp"
-#include "proc/mobject/mobject-ref.hpp"
-#include "proc/mobject/placement.hpp"
+#include "steam/mobject/session/testclip.hpp"
+#include "steam/mobject/mobject-ref.hpp"
+#include "steam/mobject/placement.hpp"
 #include "common/query.hpp"
 
 #include <functional>

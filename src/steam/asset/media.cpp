@@ -27,12 +27,12 @@
 
 
 #include "lib/error.hpp"
-#include "proc/common.hpp"
-#include "proc/assetmanager.hpp"
-#include "proc/asset/media.hpp"
-#include "proc/asset/clip.hpp"
-#include "proc/asset/unknown.hpp"
-#include "backend/media-access-facade.hpp"
+#include "steam/common.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/asset/media.hpp"
+#include "steam/asset/clip.hpp"
+#include "steam/asset/unknown.hpp"
+#include "vault/media-access-facade.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"

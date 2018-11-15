@@ -32,11 +32,11 @@
 #include "lib/llist.h"
 #include "common/config.h"
 
-#include "backend/backend.h"
-#include "backend/file.h"
-#include "backend/filedescriptor.h"
-#include "backend/mmapings.h"
-#include "backend/mmap.h"
+#include "vault/backend.h"
+#include "vault/file.h"
+#include "vault/filedescriptor.h"
+#include "vault/mmapings.h"
+#include "vault/mmap.h"
 
 #include "lib/test/test.h"
 

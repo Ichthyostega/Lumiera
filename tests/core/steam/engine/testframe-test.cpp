@@ -26,7 +26,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/engine/testframe.hpp"
+#include "steam/engine/testframe.hpp"
 #include "lib/util.hpp"
 
 #include <cstdlib>

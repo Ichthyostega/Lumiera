@@ -27,11 +27,11 @@
  */
 
 
-#include "gui/widget/panel-bar.hpp"
-#include "gui/workspace/workspace-window.hpp"
-#include "gui/workspace/panel-manager.hpp"
-#include "gui/panel/panel.hpp"
-#include "gui/draw/rectangle.hpp"
+#include "stage/widget/panel-bar.hpp"
+#include "stage/workspace/workspace-window.hpp"
+#include "stage/workspace/panel-manager.hpp"
+#include "stage/panel/panel.hpp"
+#include "stage/draw/rectangle.hpp"
 #include "include/logging.h"
 
 #include <boost/foreach.hpp>

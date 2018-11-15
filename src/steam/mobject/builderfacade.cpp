@@ -26,9 +26,9 @@
  */
 
 
-#include "proc/mobject/builder/common.hpp"
-#include "proc/mobject/builderfacade.hpp"
-#include "proc/mobject/session/fixture.hpp"
+#include "steam/mobject/builder/common.hpp"
+#include "steam/mobject/builderfacade.hpp"
+#include "steam/mobject/session/fixture.hpp"
 
 namespace proc {
 namespace mobject {

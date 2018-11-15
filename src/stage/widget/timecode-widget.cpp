@@ -30,7 +30,7 @@
  */
 
 
-#include "gui/widget/timecode-widget.hpp"
+#include "stage/widget/timecode-widget.hpp"
 
 #include "lib/time/diagnostics.hpp"  ////////////TODO: temporary solution to get H:M:S components. Use TimeCode instead!
 

@@ -32,7 +32,7 @@
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
-#include "backend/resourcecollector.h"
+#include "vault/resourcecollector.h"
 
 #include <unistd.h>
 

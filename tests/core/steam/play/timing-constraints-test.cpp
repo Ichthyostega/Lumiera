@@ -27,10 +27,10 @@
 
 #include "lib/test/run.hpp"
 
-#include "proc/play/timings.hpp"
+#include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "proc/engine/buffhandle.hpp"
-//#include "proc/engine/testframe.hpp"
+//#include "steam/engine/buffhandle.hpp"
+//#include "steam/engine/testframe.hpp"
 //#include "lib/time/control.hpp"
 
 

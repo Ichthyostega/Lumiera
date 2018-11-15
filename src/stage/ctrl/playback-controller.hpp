@@ -39,7 +39,7 @@
 #ifndef PLAYBACK_CONTROLLER_HPP
 #define PLAYBACK_CONTROLLER_HPP
 
-#include "gui/gtk-base.hpp"
+#include "stage/gtk-base.hpp"
 #include "include/dummy-player-facade.h"
 #include "include/display-facade.h"
 #include "lib/nocopy.hpp"

@@ -82,9 +82,9 @@
 #ifndef GUI_TIMELINE_TIMELINE_LAYOUT_H
 #define GUI_TIMELINE_TIMELINE_LAYOUT_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/timeline/header-pane-widget.hpp"
-#include "gui/timeline/body-canvas-widget.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/timeline/header-pane-widget.hpp"
+#include "stage/timeline/body-canvas-widget.hpp"
 
 //#include "lib/util.hpp"
 

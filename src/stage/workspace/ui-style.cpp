@@ -31,8 +31,8 @@
  */
 
 
-#include "gui/workspace/ui-style.hpp"
-#include "gui/config-keys.hpp"
+#include "stage/workspace/ui-style.hpp"
+#include "stage/config-keys.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
 

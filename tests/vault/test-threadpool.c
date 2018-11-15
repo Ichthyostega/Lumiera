@@ -27,7 +27,7 @@
 
 #include "lib/test/test.h"
 
-#include "backend/threadpool.h"
+#include "vault/threadpool.h"
 #include "include/logging.h"
 
 #include <stdio.h>

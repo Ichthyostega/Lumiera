@@ -35,8 +35,8 @@
 #ifndef GUI_CTRL_WINDOW_LOCATOR_H
 #define GUI_CTRL_WINDOW_LOCATOR_H
 
-#include "gui/gtk-base.hpp"
-#include "gui/ctrl/panel-locator.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/ctrl/panel-locator.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/nocopy.hpp"
 

@@ -34,7 +34,7 @@
 #ifndef GUI_WORKSPACE_PANEL_MANAGER_H
 #define GUI_WORKSPACE_PANEL_MANAGER_H
 
-#include "gui/panel/panel.hpp"
+#include "stage/panel/panel.hpp"
 
 #include <gdlmm.h>
 #include <typeinfo>

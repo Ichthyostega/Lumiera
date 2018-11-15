@@ -30,7 +30,7 @@
 #ifndef MOBJECT_SESSION_WISH_H
 #define MOBJECT_SESSION_WISH_H
 
-#include "proc/mobject/session/allocation.hpp"
+#include "steam/mobject/session/allocation.hpp"
 
 
 

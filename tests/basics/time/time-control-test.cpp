@@ -32,7 +32,7 @@
 #include "lib/time/control.hpp"
 
 #include "lib/meta/generator-combinations.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"

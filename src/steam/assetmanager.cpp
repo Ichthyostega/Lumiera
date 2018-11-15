@@ -26,8 +26,8 @@
  */
 
 
-#include "proc/assetmanager.hpp"
-#include "proc/asset/db.hpp"
+#include "steam/assetmanager.hpp"
+#include "steam/asset/db.hpp"
 
 #include "lib/sync.hpp"
 #include "lib/util-foreach.hpp"
@@ -244,17 +244,17 @@ namespace asset {
    /* explicit template instantiations for various Asset Kinds */
    /************************************************************/
 
-#include "proc/asset/media.hpp"
-#include "proc/asset/clip.hpp"
-#include "proc/asset/proc.hpp"
-#include "proc/asset/struct.hpp"
-#include "proc/asset/pipe.hpp"
-#include "proc/asset/meta.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/timeline.hpp"
-#include "proc/asset/sequence.hpp"
-#include "proc/asset/meta/time-grid.hpp"
-#include "proc/asset/meta/error-log.hpp"
+#include "steam/asset/media.hpp"
+#include "steam/asset/clip.hpp"
+#include "steam/asset/proc.hpp"
+#include "steam/asset/struct.hpp"
+#include "steam/asset/pipe.hpp"
+#include "steam/asset/meta.hpp"
+#include "steam/asset/procpatt.hpp"
+#include "steam/asset/timeline.hpp"
+#include "steam/asset/sequence.hpp"
+#include "steam/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/error-log.hpp"
 
 namespace proc {
 namespace asset {

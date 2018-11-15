@@ -32,10 +32,10 @@
 #ifndef PROC_ENGINE_JOB_TICKET_H
 #define PROC_ENGINE_JOB_TICKET_H
 
-#include "proc/common.hpp"
-//#include "proc/state.hpp"
-#include "backend/engine/job.h"
-#include "proc/engine/frame-coord.hpp"
+#include "steam/common.hpp"
+//#include "steam/state.hpp"
+#include "vault/engine/job.h"
+#include "steam/engine/frame-coord.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 #include "lib/hierarchy-orientation-indicator.hpp"

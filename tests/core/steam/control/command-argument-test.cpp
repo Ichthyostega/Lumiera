@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/control/command-storage-holder.hpp"
+#include "steam/control/command-storage-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"

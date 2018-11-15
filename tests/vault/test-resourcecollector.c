@@ -26,7 +26,7 @@
  */
 
 
-#include "backend/resourcecollector.h"
+#include "vault/resourcecollector.h"
 
 #include "lib/test/test.h"
 

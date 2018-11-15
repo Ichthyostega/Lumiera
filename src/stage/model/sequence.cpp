@@ -27,14 +27,14 @@
  **          and will be replaced in entirety by UI-Bus and diff framework.
  */
 
-#include "gui/model/sequence.hpp"
+#include "stage/model/sequence.hpp"
 #include "include/logging.h"
 
 #include <memory>
 
 // TEST CODE
-#include "gui/model/group-track.hpp"
-#include "gui/model/clip-track.hpp"
+#include "stage/model/group-track.hpp"
+#include "stage/model/clip-track.hpp"
 
 
 namespace gui {

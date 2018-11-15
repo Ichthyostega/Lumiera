@@ -28,10 +28,10 @@
  */
 
 
-#include "gui/widget/timeline/timeline-track.hpp"
-#include "gui/widget/timeline-widget.hpp"
-#include "gui/workspace/ui-style.hpp"
-#include "gui/dialog/name-chooser.hpp"
+#include "stage/widget/timeline/timeline-track.hpp"
+#include "stage/widget/timeline-widget.hpp"
+#include "stage/workspace/ui-style.hpp"
+#include "stage/dialog/name-chooser.hpp"
 #include "include/logging.h"
 
 using namespace Gtk;          ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

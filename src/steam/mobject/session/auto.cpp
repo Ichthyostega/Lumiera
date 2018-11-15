@@ -26,7 +26,7 @@
  */
 
 
-#include "proc/mobject/session/auto.hpp"
+#include "steam/mobject/session/auto.hpp"
 
 namespace proc {
 namespace mobject {

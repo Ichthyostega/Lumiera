@@ -25,11 +25,11 @@
  ** Implementation of base functionality for workspace windows.
  */
 
-#include "gui/gtk-base.hpp"
-#include "gui/config-keys.hpp"
-#include "gui/workspace/workspace-window.hpp"
-#include "gui/workspace/panel-manager.hpp"
-#include "gui/ctrl/ui-manager.hpp"
+#include "stage/gtk-base.hpp"
+#include "stage/config-keys.hpp"
+#include "stage/workspace/workspace-window.hpp"
+#include "stage/workspace/panel-manager.hpp"
+#include "stage/ctrl/ui-manager.hpp"
 #include "include/logging.h"
 
 

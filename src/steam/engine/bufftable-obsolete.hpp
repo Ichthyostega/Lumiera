@@ -33,8 +33,8 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "proc/engine/channel-descriptor.hpp"
-#include "proc/engine/procnode.hpp"
+#include "steam/engine/channel-descriptor.hpp"
+#include "steam/engine/procnode.hpp"
 
 #include <vector>
 #include <utility>

@@ -36,11 +36,11 @@
 #ifndef PROC_ENGINE_TIME_ANCHOR_H
 #define PROC_ENGINE_TIME_ANCHOR_H
 
-#include "proc/common.hpp"
-#include "backend/real-clock.hpp"
+#include "steam/common.hpp"
+#include "vault/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
-#include "proc/play/timings.hpp"
-#include "proc/engine/frame-coord.hpp"
+#include "steam/play/timings.hpp"
+#include "steam/engine/frame-coord.hpp"
 
 
 

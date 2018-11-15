@@ -53,8 +53,8 @@
 #ifndef GUI_INTERACT_INTERACTION_DIRECTOR_H
 #define GUI_INTERACT_INTERACTION_DIRECTOR_H
 
-#include "gui/model/controller.hpp"
-#include "gui/timeline/timeline-gui.hpp"
+#include "stage/model/controller.hpp"
+#include "stage/timeline/timeline-gui.hpp"
 #include "lib/depend-inject.hpp"
 
 //#include <string>

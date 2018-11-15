@@ -35,8 +35,8 @@
  */
 
 
-#include "proc/play/play-controller.hpp"
-#include "proc/play/play-process.hpp"
+#include "steam/play/play-controller.hpp"
+#include "steam/play/play-process.hpp"
 #include "lib/time/timevalue.hpp"
 
 //#include <string>

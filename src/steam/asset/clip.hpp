@@ -29,7 +29,7 @@
 #ifndef ASSET_CLIP_H
 #define ASSET_CLIP_H
 
-#include "proc/asset/media.hpp"
+#include "steam/asset/media.hpp"
 
 
 

@@ -26,7 +26,7 @@
  */
 
 
-#include "proc/mobject/session/effect.hpp"
+#include "steam/mobject/session/effect.hpp"
 
 namespace proc {
 namespace mobject {

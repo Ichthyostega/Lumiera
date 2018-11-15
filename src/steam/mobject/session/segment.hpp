@@ -33,8 +33,8 @@
 
 #include <list>
 
-#include "proc/common.hpp"
-#include "proc/mobject/explicitplacement.hpp"
+#include "steam/common.hpp"
+#include "steam/mobject/explicitplacement.hpp"
 #include "lib/time/timevalue.hpp"
 
 using std::list;

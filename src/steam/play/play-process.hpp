@@ -57,8 +57,8 @@
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
-#include "proc/mobject/model-port.hpp"
-#include "proc/engine/calc-stream.hpp"
+#include "steam/mobject/model-port.hpp"
+#include "steam/engine/calc-stream.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource base feature here
 #include "lib/util.hpp"
 
