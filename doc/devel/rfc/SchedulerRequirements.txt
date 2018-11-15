@@ -12,13 +12,13 @@ SchedulerRequirements
 
 ********************************************************************************
 .Abstract
+Define the expected core properties and requirements of the Scheduler service.
+********************************************************************************
+
 The rendering and playback subsystem relies on a Scheduler component to invoke
 individual frame rendering and resource fetching jobs. This RfC summarises the
 general assumptions and requirements other parts of the application are relying
 on
-********************************************************************************
-
-Define core properties and requirements of the Scheduler service.
 
 Description
 -----------

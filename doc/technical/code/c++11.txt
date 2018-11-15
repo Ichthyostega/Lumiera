@@ -284,7 +284,7 @@ notorious techniques for detecting a function work well on conventional lambdas,
 And it is not possible to ``probe'' a template with SFINAE: If you instantiate a template, and the result is not
 valid, you've produced a _compilation failure_, not a _substitution failure._ Which means, the compilation aborts,
 instead of just trying the next argument substitution (as you'd might expect). Another consequence is that you
-can not _just accept a generic lambda as argument and put it into a `std::function` (which otherwise is the
+can not _just accept a generic lambda as argument_ and put it into a `std::function` (which otherwise is the
 idiomatic way of ``just accepting anything function-like''). In order to place a generic lambda into a `std::function`,
 you must decide upon the concrete argument and return type(s) and thus instantiate the template at that point.
 

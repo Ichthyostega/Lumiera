@@ -5,7 +5,7 @@ LayerNames
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _Fr 05 Oct 2018 15:05:58 CET_
 *Proposed by*   Ichthyostega <prg@ichthyostega.de>
 -------------------------------------
@@ -62,8 +62,8 @@ Tasks
 ~~~~~
 // List what needs to be done to implement this Proposal:
  * find convincing new names ([green]#✔ done#)
- * update and add documentation [yellow-background]#WIP#
- * adjust source folders and namespaces [red yellow-background]#TBD#
+ * update and add documentation ([green]#✔ done#)
+ * adjust source folders and namespaces [yellow-background]#WIP#
  * adjust build system and library names [red yellow-background]#TBD#
  * fix textual usage in code and documentation [red yellow-background]#TBD#
 
@@ -149,8 +149,60 @@ Comments
 --------
 //comments: append below
 
+.Mail Thread
+[quote]
+____
+
+ Subject: Re: Aw: Re: Session
+ Date: Sat, 15 Sep 2018 10:29:11 +0200
+ From: Benny Lyons <benny.lyons@gmx.net>
+ To: Ichthyostega <prg@ichthyostega.de>
+
+ > On 14.09.2018 22:37, Ichthyostega wrote:
+ > Du bringst hier einen Punkt zur Sprache, der mir auch schon länger durch den
+ > Kopf geht, Benny. Eigentlich sind die Namen für unsere Layer etwas "daneben".
+ > Sie sind nicht wirklich gut. Zum einen klingen sie etwas dröge (vor allem
+ > "Proc"), und etwas, mit dem man so viel arbeitet, sollte doch auch inspirieren ;-)
+...
+ > Ein anderer Ansatz, der mit auch immer mal wieder durch den Kopf geht,
+ > ist, ob wir nicht sogar metaphorische, oder symbolische Namen wählen sollten.
+ > Etwas, was man vielleicht auch nicht gleich versteht, was aber die Phantasie
+ > anregt. Meine Favoriten wären da (Du weißt, was für Filme ich mag....)
+ > 
+ > - Stage
+ > - Steam
+ > - Vault
+
+Die finde ich sogar gut, sogar sehr gut. Warum nicht!
+Wenn wir die Meinug sind, dass wir keine zutreffende Beschreibung in
+einem Wort finden können!
+``Stage'' wurde erfogreich in Git von ``Index Area'' umgenannt. 'Stage' und
+'Vault' sind sehr gut, 'Steam' obwohl gut, erreicht nicht die Hohe von 'Stage'
+und 'Vault', meiner Meingung nach.  Können wir etwas finden die eine
+Verbindung zwischen Stage und Vault  herstellt, sowas wie Backstage
+(wollen wir natürlich nicht), Make-up, Props, ... alles natürlich nicht
+gut, aber Du weisst was ich meine.
+
+Aber Du sprichst eine sehr guten Punkt an. Mit ``Backend'' könnte jeder
+etwas darunter vorstellen, aber ``Proc Layer'' war nicht besonders gut.
+Hmm! ist aber wichtig, das können wir nicht nur hier machen. ABER übliche Namen,
+die im alten Schneiderraum benutzt wurden, müssen
+immer fanatisch eingesetzt werden. Alte Profis müssen sich sofort wohl
+finden.
+____
+
+
+.State -> Final
+//add reason
+This is not really a ``RfC'', to be honest. Rather I am pulling this off now.
+I am working solitary on the coding, which has the benefit that I can settle
+such global matters without much further ado...
+
+Ichthyostega:: '2018-11-15 19:38:32 +0100' ~<prg@ichthyostega.de>~
+
 
 //endof_comments:
 
 ''''
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+
