@@ -452,7 +452,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (UICoord_test, "unit gui");
+  LAUNCHER (UICoord_test, "unit stage");
   
   
 }}} // namespace stage::interact::test

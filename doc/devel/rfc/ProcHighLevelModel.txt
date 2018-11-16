@@ -201,9 +201,9 @@ Cons
    assumed that the builder will follow certain patterns and ignore non
    conforming parts
  * allows to create patterns which go beyond the abilities of current GUI
-   technology. Thus the interface to the GUI layer needs extra care an won't be
-   a simple as it could be with a more conventional approach. Also, the GUI
-   needs to be prepared that objects can move in response to some edit
+   technology. Thus the interface to the stage layer (GUI) needs extra care and
+   won't be a simple as it could be with a more conventional approach. Also,
+   the GUI needs to be prepared that objects can move in response to some edit
    operation.
 
 

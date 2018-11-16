@@ -117,7 +117,7 @@ namespace vault {
     
     
     /**********************************************************************//**
-     * @test use the Lumiera backend to create some new threads, utilising the
+     * @test use the Lumiera Vault to create some new threads, utilising the
      *       lumiera::Thread wrapper for binding to an arbitrary operation
      *       and passing the appropriate context.
      * 

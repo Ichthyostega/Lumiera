@@ -54,7 +54,7 @@ namespace test{
   
   
   /** Register this test class to be invoked in some test groups */
-  LAUNCHER (TestGui_test, "unit gui");
+  LAUNCHER (TestGui_test, "unit stage");
   
   
   

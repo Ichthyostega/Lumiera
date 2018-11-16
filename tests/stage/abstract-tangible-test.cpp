@@ -757,7 +757,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (AbstractTangible_test, "unit gui");
+  LAUNCHER (AbstractTangible_test, "unit stage");
   
   
 }}} // namespace stage::model::test

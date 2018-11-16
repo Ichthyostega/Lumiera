@@ -186,7 +186,7 @@ namespace ctrl{
      ~Nexus()
         {
           if (0 < size())
-            ERROR (gui, "Some UI components are still connected to the backbone.");
+            ERROR (stage, "Some UI components are still connected to the backbone.");
         }
     };
   

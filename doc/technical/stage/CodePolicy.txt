@@ -88,7 +88,7 @@ NOTE: `using namespace Gtk` and similar wildcard includes are prohibited.
 We are forced to observe a tricky include sequence, due to NoBug's `ERROR` macro,
 and also in order to get I18N right.
 Thus any actual translation unit should ensure that effectively the first include
-is that of 'gui/gtk-base.hpp'.footnote:[you need not include it literally. It is
+is that of 'stage/gtk-base.hpp'.footnote:[you need not include it literally. It is
 perfectly fine if you can be sure the first included header somehow drags in
 'gtk-base.hpp' before any other header.]
 

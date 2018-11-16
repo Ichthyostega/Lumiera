@@ -500,7 +500,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (PathArray_test, "unit gui");
+  LAUNCHER (PathArray_test, "unit stage");
   
   
 }} // namespace lib::test

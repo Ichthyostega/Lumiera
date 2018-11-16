@@ -126,7 +126,7 @@ namespace interact {
     inline void
     unimplemented (const char* todo)
     {
-      WARN (gui, "%s is not yet implemented. So sorry.", todo);
+      WARN (stage, "%s is not yet implemented. So sorry.", todo);
     }
   }
   

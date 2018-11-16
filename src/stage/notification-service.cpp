@@ -156,7 +156,7 @@ namespace stage {
   void
   NotificationService::triggerGuiShutdown (string const& cause)
   {
-    NOTICE (gui, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
+    NOTICE (stage, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
     displayInfo (NOTE_ERROR, cause);
     dispatch_->event ([this]()
                       {
@@ -180,7 +180,7 @@ namespace stage {
                                                           )
                                , LUMIERA_INTERFACE_INLINE (brief,
                                                            const char*, (LumieraInterface ifa),
-                                                             { (void)ifa;  return "GUI Interface: push state update and notification of events into the GUI"; }
+                                                             { (void)ifa;  return "Stage Interface: push state update and notification of events into the GUI"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (homepage,
                                                            const char*, (LumieraInterface ifa),
@@ -321,7 +321,7 @@ namespace stage {
     , uiManager_{uiManager}
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationService))
     {
-      INFO (gui, "GuiNotification Facade opened.");
+      INFO (stage, "GuiNotification Facade opened.");
     }
   
   

@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: GUI Control Facilities" ./test-suite --group=gui
+TESTING "Component Test Suite: GUI Control Facilities" ./test-suite --group=stage
 
 
 

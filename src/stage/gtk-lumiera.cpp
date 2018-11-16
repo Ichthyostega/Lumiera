@@ -81,7 +81,7 @@ namespace stage {
     
     
     /**************************************************************************//**
-     * Implement the necessary steps for actually making the Lumiera Gui available.
+     * Implement the necessary steps for actually making the Lumiera UI available.
      * Establish the UI backbone services and start up the GTK GUI main event loop.
      * @warning to ensure reliable invocation of the termination signal,
      *          any members should be failsafe on initialisation
@@ -152,7 +152,7 @@ namespace stage {
     catch(...)
       {
         if (!lumiera_error_peek())
-          LUMIERA_ERROR_SET (gui, STATE, "unexpected error when starting the GUI thread");
+          LUMIERA_ERROR_SET (stage, STATE, "unexpected error when starting the GUI thread");
         return false;
       }           // note: lumiera_error state remains set
   }

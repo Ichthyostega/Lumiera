@@ -53,7 +53,7 @@ namespace test    {
   asset::Media & 
   createTestMedia ()
   {
-    // install Mock-Interface to Lumiera backend
+    // install Mock-Interface to Lumiera Vault
     MediaAccessMock useMockMedia;
     
     return *asset::Media::create("test-2", VIDEO); // query magic filename

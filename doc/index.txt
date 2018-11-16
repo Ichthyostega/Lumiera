@@ -31,7 +31,7 @@ used as design notebook, featuring day-to-day design sketches, notes but also
 quite some more persistent planning. Finished documentation text is constantly
 moved over to the documentation section(s) of the Lumiera website.
 
--> access the Proc-Layer link:{l}/wiki/renderengine.html[TiddlyWiki online here]
+-> access the Development link:{l}/wiki/renderengine.html[TiddlyWiki online here]
 
 === API Documentation ===
 We use the link:http://doxygen.org[Doxygen] tool to extract

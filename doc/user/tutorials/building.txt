@@ -5,7 +5,7 @@ Building Lumiera from source
 
 At the moment you can build Lumiera, start the standard Lumiera GUI and run the
 Lumiera test suite. The GUI you start might look like a mockup, but in fact is
-_is_ the real application; just there isn't any wiring between GUI, model and
+_is_ the real application; just there isn't much wiring between GUI, model and
 core yet. This will remain the state of affairs for the foreseeable future, since
 we're developing core components against a test suite with unit and integration
 tests. Thus, the growth of our test suite is the only visible indication of

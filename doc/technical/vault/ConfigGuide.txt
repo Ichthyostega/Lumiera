@@ -95,7 +95,7 @@ File handling
 
 How many filehandles the backend shall use [approx 2/3 of all available]
 
- backend.file.max_handles
+ vault.file.max_handles
 
 
 
@@ -107,15 +107,15 @@ Defaults:
 3GiB on 32 bit arch
 192TiB on 64 bit arch
 
- backend.mmap.as_limit
+ vault.mmap.as_limit
 
 Default start size for mmaping windows.
 128MB on 32 bit arch
 2GB on 64 bit arch
 
- backend.mmap.window_size
+ vault.mmap.window_size
 
 How many memory mappings shall be established at most
 Default 60000
 
- backend.mmap.max_maps
+ vault.mmap.max_maps

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 /** @file test-resourcecollector.c
- ** C unit test to cover management of low-level resources for the backend
+ ** C unit test to cover management of low-level resources for the Vault
  ** @see resourcecollector.h
  */
 

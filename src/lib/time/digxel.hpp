@@ -32,7 +32,7 @@
  ** properties to support building such display widgets. It doesn't contain any GUI code, but
  ** can be wrapped up to build a custom widget.
  ** 
- ** \par properties of a "Digxel"
+ ** # properties of a "Digxel"
  ** 
  ** Semantically, it's a number or number component. It holds an internal numeric representation
  ** and is implicitly convertible back to the underlying numeric type (usually int or double).
@@ -53,7 +53,8 @@
  ** this mutation functor should invoke some internal recalculations, maybe resulting in a new
  ** value being pushed to the Digxel for display.
  ** 
- ** \par configuration
+ ** # configuration
+ ** 
  ** the Digxel template can be configured to some degree to adjust the stored numeric data
  ** and the actual format to be applied
  ** 

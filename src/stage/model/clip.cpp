@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file gui/model/clip.cpp
+/** @file stage/model/clip.cpp
  ** Preliminary UI-model: implementation of a Clip object as placeholder to
  ** base the GUI implementation on.
  ** @warning as of 2016 this UI model is known to be a temporary workaround

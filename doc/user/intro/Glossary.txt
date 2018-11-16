@@ -34,9 +34,9 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
 
  anchor:ControllerGui[] link:#ControllerGui[->]Controller Gui::
         This can be either a full Software implementation for a Transport
-        control (Widgets for Start/Stop/Rev/Ffw etc) or some Gui managing an
+        control (Widgets for Start/Stop/Rev/Ffw etc) or some GUI managing an
         Input Device. They share some feature to attach them to controllable
-        gui-entities (Viewers, Timeline Views)
+        GUI-entities (Viewers, Timeline Views)
 
  anchor:Cursor[] link:#Cursor[->]Cursor::
         Playback- or edit position

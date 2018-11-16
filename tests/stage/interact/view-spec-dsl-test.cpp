@@ -228,7 +228,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (ViewSpecDSL_test, "unit gui");
+  LAUNCHER (ViewSpecDSL_test, "unit stage");
   
   
 }}} // namespace stage::interact::test

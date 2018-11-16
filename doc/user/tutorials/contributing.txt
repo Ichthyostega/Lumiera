@@ -245,7 +245,7 @@ fact, many user interfaces should be possible.
   * we need a concept for pen based handling
 
 
-Proc Layer::
+Steam Layer::
 - external connection systems
 
   * investigate good ways to output video, both in-window and full screen.
@@ -280,9 +280,9 @@ Proc Layer::
 
 
 /////////////////
-Backend::
+Vault::
 
-TODO: where to contribute to the backend??
+TODO: where to contribute to the backend / the vault??
 
 /////////////////
 

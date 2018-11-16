@@ -64,8 +64,8 @@ operation initiated by the user is actually _executed_ in the context of the ses
 after each change, a component known as _the Builder_ assembles the contents of this session model
 to transform them into a network of nodes, which can be efficiently _performed_ for rendering.
 Often, we refer to this node structure as the ``low-level model''. On rendering or
-playback, the Proc-layer is responsible for accessing this low-level node structure to 
-generate individual _frame render jobs,_ ready to be handed over to the backend, which
+playback, the Steam-layer is responsible for accessing this low-level node structure to
+generate individual _frame render jobs,_ ready to be handed over to the Vault, which
 finally initiates the actual rendering calculations. +
 -> more about the link:model/index.html[Model] +
 -> design of the link:engine/index.html[Engine] subsystem
@@ -79,7 +79,7 @@ The Vault Layer attaches to  the low-level model and the _render jobs_ generated
 It actually conducts the rendering operations and makes heavy use of the
 Input/Output System for accessing media content and sending generated data to
 the screen or to external output. +
--> link:lowlevel/index.html[Backend design level documents] +
+-> link:lowlevel/index.html[Lumiera Vault design level documents] +
 -> link:{ldoc}/technical/vault/index.html[technical documentation] +
 
 
@@ -104,6 +104,6 @@ heavily on current FLOSS implementations and external libraries. Moreover, the
 application will be configurable and can be extended in various
 ways; whenever some extension isn't permanent or will be used only on demand, it
 is packaged as a separate module into a plug-in. For example, the GUI of Lumiera
-is a plugin. + 
+is a plugin. +
 -> design documents regarding the link:plugins/index.html[Plugins]
 

@@ -49,7 +49,7 @@ def testCases(env,dir):
     env = env.Clone()
     env.Append(CPPPATH=dir) # add subdir to Includepath
     if dir.startswith('stage'):
-        # additional libs used from gui tests
+        # additional libs used from GUI tests
         env.mergeConf(['sigc++-2.0'])
     
     # pick up all test classes and link them shared

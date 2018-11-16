@@ -96,7 +96,7 @@ some system facilities, in case the need arises. It is desirable for headers to 
 in a way independent of the include order. But in some, rare cases we need to rely on a
 specific order of include. In such cases, it is a good idea to encode this specific order
 right into some very fundamental header, so it gets fixed and settled early in the include
-processing chain. Our 'gui/gtk-base.hpp', as used by 'gui/gtk-lumiera.hpp' is a good example.
+processing chain. Our 'stage/gtk-base.hpp', as used by 'stage/gtk-lumiera.hpp' is a good example.
 
 Forward declarations
 ^^^^^^^^^^^^^^^^^^^^
@@ -351,7 +351,7 @@ actively step by step
   Gui.resourcepath:: the place where the GTK-UI looks for further resources, most notably...
 
   Gui.stylesheet:: the name of the CSS-stylesheet for GTK-3, which defines the
-    application specific look, link:{ldoc}/technical/gui/guiTheme.html[skinning and theme].
+    application specific look, link:{ldoc}/technical/stage/guiTheme.html[skinning and theme].
 
 While the first two steps, the relative locations `$ORIGIN/modules` and `$ORIGIN/setup.ini`
 are hard-wired, the further resolution steps rely on the contents of 'setup.ini' and are

@@ -22,8 +22,7 @@
 
 
 /** @file fileheader.c
- ** Implementation of a common header format for working data files created
- ** by the lumiera backend.
+ ** Implementation of a common header format for working data files created by the Lumiera Vault.
  ** @todo development in this area is stalled since 2010
  */
 

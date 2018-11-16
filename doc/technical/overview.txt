@@ -138,7 +138,7 @@ they won't contain any relevant persistent state beyond presentation.
 
 _As of 2018, the one and only interface under active development is
 the Lumiera GTK GUI,_ based on GTK-3 / gtkmm. The sources are in tree
-(directory 'src/gui') and it is integrated into the standard build and
+(directory 'src/stage') and it is integrated into the standard build and
 installation process. By default, running the 'lumiera' executable will
 load and start this GUI as a Lumiera module from 'modules/gtk_gui.lum'
 
@@ -513,7 +513,7 @@ and disjunction.
 Locking
 ~~~~~~~
 General purpose Locking is based on object monitors. Performance critical code
-in the backend uses mutexes, condition vars and rwlocks direcly.
+in the Vault uses mutexes, condition vars and rwlocks direcly.
 Intentionally no semaphores.
 
 - C++ locks are managed by scoped automatic variables

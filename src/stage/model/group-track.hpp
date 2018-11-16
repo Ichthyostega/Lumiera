@@ -20,7 +20,7 @@
 
 */
 
-/** @file gui/model/group-track.hpp
+/** @file stage/model/group-track.hpp
  ** Preliminary UI-model: Definition of group track timeline objects.
  ** @warning as of 2016 this UI model is known to be a temporary workaround
  **          and will be replaced in entirety by UI-Bus and diff framework.

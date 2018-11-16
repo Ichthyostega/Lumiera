@@ -151,7 +151,7 @@ Use the conventional approach
  * layering and pan are hard wired additional properties
  * implement an additional auto-link macro facility to attach sound to video
  * implement a magnetic snap-to for attaching clips seamless after each other
- * implement a splicing/sliding/shuffling mode in the gui
+ * implement a splicing/sliding/shuffling mode in the UI
  * provide a output wiring tool in the GUI
  * provide macro features for this and that....
 

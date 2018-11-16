@@ -75,7 +75,7 @@ TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
 
 TimelineBody::~TimelineBody()
 {
-  WARN_IF(!tool, gui, "An invalid tool pointer is unexpected here");
+  WARN_IF(!tool, stage, "An invalid tool pointer is unexpected here");
 }
 
 TimelineViewWindow&

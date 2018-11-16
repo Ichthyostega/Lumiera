@@ -749,7 +749,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (UICoordResolver_test, "unit gui");
+  LAUNCHER (UICoordResolver_test, "unit stage");
   
   
 }}} // namespace stage::interact::test

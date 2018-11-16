@@ -213,7 +213,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (WLink_test, "unit gui");
+  LAUNCHER (WLink_test, "unit stage");
   
   
 }}} // namespace stage::model::test

@@ -52,7 +52,7 @@ namespace output {
       REQUIRE(width > 0);
       REQUIRE(height > 0);
       
-      INFO(gui, "Trying XVideo at %d x %d", width, height);
+      INFO(stage, "Trying XVideo at %d x %d", width, height);
     
       imageWidth = width;
       imageHeight = height;
@@ -69,11 +69,11 @@ namespace output {
     
       if (XvQueryAdaptors (display, window, &count, &adaptorInfo) == Success)
         {
-          INFO(gui, "XvQueryAdaptors count: %d", count);
+          INFO(stage, "XvQueryAdaptors count: %d", count);
           for (unsigned int n = 0; gotPort == false && n < count; ++n )
             {
               // Diagnostics
-              INFO(gui, "%s, %lu, %lu", adaptorInfo[ n ].name,
+              INFO(stage, "%s, %lu, %lu", adaptorInfo[ n ].name,
                 adaptorInfo[ n ].base_id, adaptorInfo[ n ].num_ports - 1);
     
               for ( unsigned int port = adaptorInfo[ n ].base_id;
@@ -87,11 +87,11 @@ namespace output {
     
                       list = XvListImageFormats( display, port, &formats );
     
-                      INFO(gui, "formats supported: %d", formats);
+                      INFO(stage, "formats supported: %d", formats);
     
                       for ( int i = 0; i < formats; i ++ )
                         {
-                          INFO(gui, "0x%x (%c%c%c%c) %s",
+                          INFO(stage, "0x%x (%c%c%c%c) %s",
                                    list[ i ].id,
                                    ( list[ i ].id ) & 0xff,
                                    ( list[ i ].id >> 8 ) & 0xff,
@@ -124,11 +124,11 @@ namespace output {
               XvQueryEncodings( display, grabbedPort, &unum, &enc );
               for ( unsigned int index = 0; index < unum; index ++ )
                 {
-                  INFO (gui, "%d: %s, %ldx%ld rate = %d/%d",
-                             index, enc->name,
-                             enc->width, enc->height,
-                             enc->rate.numerator,
-                             enc->rate.denominator);
+                  INFO (stage, "%d: %s, %ldx%ld rate = %d/%d"
+                             , index, enc->name
+                             , enc->width, enc->height
+                             , enc->rate.numerator
+                             , enc->rate.denominator);
                 }
               
               XvAttribute *xvattr = XvQueryPortAttributes (display, grabbedPort, &num);
@@ -140,13 +140,13 @@ namespace output {
                         {
                           Atom val_atom = XInternAtom( display, xvattr[k].name, False );
                           if (XvSetPortAttribute(display, grabbedPort, val_atom, 1 ) != Success )
-                            NOBUG_ERROR(gui, "Couldn't set Xv attribute %s\n", xvattr[k].name);
+                            NOBUG_ERROR(stage, "Couldn't set Xv attribute %s\n", xvattr[k].name);
                         }
                       else if (  strcmp( xvattr[k].name, "XV_COLORKEY") == 0 )
                         {
                           Atom val_atom = XInternAtom( display, xvattr[k].name, False );
                           if ( XvSetPortAttribute( display, grabbedPort, val_atom, 0x010102 ) != Success )
-                            NOBUG_ERROR(gui, "Couldn't set Xv attribute %s\n", xvattr[k].name);
+                            NOBUG_ERROR(stage, "Couldn't set Xv attribute %s\n", xvattr[k].name);
                         }
                     }
                 }
@@ -190,7 +190,7 @@ namespace output {
   
   XvDisplayer::~XvDisplayer()
   {
-    NOBUG_ERROR(gui, "Destroying XV Displayer");
+    NOBUG_ERROR(stage, "Destroying XV Displayer");
   
     if ( gotPort )
       {

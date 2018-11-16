@@ -141,7 +141,7 @@ namespace ctrl{
         , uiBusBackbone_{*this}
         , stateRecorder_{*this}
         {
-          INFO (gui, "UI-Backbone operative.");
+          INFO (stage, "UI-Backbone operative.");
         }
       
      ~CoreService();

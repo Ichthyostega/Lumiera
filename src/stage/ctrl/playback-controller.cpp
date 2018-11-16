@@ -83,7 +83,7 @@ namespace ctrl {
         }
       catch (lumiera::error::State& err)
         {
-          WARN (gui, "failed to start playback: %s" ,err.what());
+          WARN (stage, "failed to start playback: %s" ,err.what());
           lumiera_error();
           playing_ = false;
         }

@@ -61,7 +61,7 @@ namespace control {
   
   
   
-  namespace com { ///< Proc-Layer command implementation details
+  namespace com { ///< Steam-Layer command implementation details
                  //    define transient invoker objects, to allow for arbitrary bindings
     
     template<typename SIG>

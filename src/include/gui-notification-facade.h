@@ -27,7 +27,7 @@
  ** changes in the session, which result in notification and structure change messages
  ** being pushed up asynchronously back into the UI. The GuiNotification interface
  ** abstracts this ability of the UI to receive such update messages. It is implemented
- ** by the NotificationService within the GUI Layer, which causes actual tangible changes
+ ** by the NotificationService within the Stage-Layer, which causes actual tangible changes
  ** to happen in the UI in response to the reception of these messages.
  **
  ** @see notification-service.hpp implementation

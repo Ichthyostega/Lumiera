@@ -30,7 +30,7 @@
  ** declarations are to be kept in one central location. Subsystems
  ** are free to define and use additional flags for local use. Typically,
  ** this header will be included via some of the basic headers like error.hpp,
- ** which in turn gets included e.g. by proc/common.hpp
+ ** which in turn gets included e.g. by steam/common.hpp
  ** 
  ** This header can thus be assumed to be effectively global. It should contain
  ** only declarations of global relevance, as any change causes the whole project
@@ -124,27 +124,27 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (  progress,                    logging);
 /** progress log for the main starter */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   main,                       progress);
 /** progress log for the vault layer */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (   backend,                    progress);
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    file,                      backend);       //opening/closing files etc
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    mmap,                      backend);       //mmap errors
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    backend);       //starting/stopping threads
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   vault,                      progress);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    file,                      vault);         //opening/closing files etc
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    mmap,                      vault);         //mmap errors
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    vault);         //starting/stopping threads
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     threads,                  thread);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     threadpool,               thread);
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    fileheader,                backend);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    fileheader,                vault);
 /** progress log for the steam layer */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc,                       progress);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   steam,                      progress);
 /** progress log for steam-layer command dispatch */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    command,                   proc);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    command,                   steam);
 /** progress log for session datastructure */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    session,                   proc);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    session,                   steam);
 /** progress log for the builder and build process */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    builder,                   proc);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    builder,                   steam);
 /** progress log for running the engine */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    engine,                    proc);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    engine,                    steam);
 /** progress log for play- and render subsystem */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    play,                      proc);
-/** progress log for the gui */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (   gui,                        progress);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    play,                      steam);
+/** progress log for the stage layer (GUI) */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   stage,                      progress);
 /** progress log for the support lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   library,                    progress);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    resourcecollector,         library);

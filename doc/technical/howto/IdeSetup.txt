@@ -39,7 +39,7 @@ was able to see the right files with the right locations
  * visit the _Indexer_ tab and ensure the full indexer is enabled. Maybe change a setting and hit ``apply'' to
    force re-building of the index. Depending on your computer, this indexing might take quite some time initially
  * if the indexing process was onece interrupted by a crash or force shutdown of the IDE, the index database might
-   be corrupted. Try to remove it, either through the Gui, or try to locate the raw data and kill it while Eclipse
+   be corrupted. Try to remove it, either through the GUI, or try to locate the raw data and kill it while Eclipse
    is not running. +
    It is located in `<workspace-dir>/.metadata/.plugins/org.eclipse.cdt.core/`...
  * at some point in the past, I had problems with a lacking definiton of our own library

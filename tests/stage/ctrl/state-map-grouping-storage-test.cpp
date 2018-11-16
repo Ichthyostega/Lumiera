@@ -159,7 +159,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (StateMapGroupingStorage_test, "unit gui");
+  LAUNCHER (StateMapGroupingStorage_test, "unit stage");
   
   
 }}} // namespace stage::ctrl::test

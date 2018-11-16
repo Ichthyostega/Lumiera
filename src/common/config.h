@@ -36,7 +36,7 @@
  ** @todo as of 2016, this code is not in any meaningful use
  ** 
  ** @see lumiera::BasicSetup simple start-up configuration
- ** @see http://lumiera.org/documentation/technical/backend/ConfigLoader.html ConfigLoader draft from 2008
+ ** @see http://lumiera.org/documentation/technical/vault/ConfigLoader.html ConfigLoader draft from 2008
  */
 
 #ifndef COMMON_CONFIG_H

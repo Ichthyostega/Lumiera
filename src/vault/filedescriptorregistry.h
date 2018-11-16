@@ -37,7 +37,7 @@
  * Initialise the global file descriptor registry.
  * Opening hard linked files will be targeted to the same file descriptor.
  * This function never fails but dies on error.
- * @todo proper backend/subsystem failure
+ * @todo proper vault/subsystem failure
  */
 void
 lumiera_filedescriptorregistry_init (void);

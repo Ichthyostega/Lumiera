@@ -226,7 +226,7 @@ namespace ctrl {
             }
           catch(Glib::Error& ex)
             {
-              ERROR (gui, "Building menus failed: %s", ex.what().data());
+              ERROR (stage, "Building menus failed: %s", ex.what().data());
               throw error::Config(_Fmt("global menu definition rejected: %s") % ex.what());
             }
           
@@ -354,7 +354,7 @@ namespace ctrl {
       void
       unimplemented (const char* todo)
         {
-          WARN (gui, "%s is not yet implemented. So sorry.", todo);
+          WARN (stage, "%s is not yet implemented. So sorry.", todo);
         }
       
       

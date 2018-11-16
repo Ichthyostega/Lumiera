@@ -22,7 +22,7 @@
 
 
 /** @file render.cpp
- ** Implementation of gui:dialog::Render, which is a Dialog
+ ** Implementation of stage:dialog::Render, which is a Dialog
  ** to set up a renter process and define output name and format.
  */
 
@@ -102,9 +102,9 @@ namespace dialog {
     dialog.add_button (Gtk::Stock::SAVE, Gtk::RESPONSE_OK);
     
     int result = dialog.run();
-    INFO (gui, "%d", result);
+    INFO (stage, "%d", result);
     if (result == RESPONSE_OK)
-      INFO(gui, "%s", "RESPONSE_OK");
+      INFO(stage, "%s", "RESPONSE_OK");
   }
   
   

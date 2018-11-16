@@ -33,7 +33,7 @@
  ** used to _provide_ this service, not to access it.
  ** 
  ** @see session-command-facade.h
- ** @see facade.hpp subsystems for the Proc-Layer
+ ** @see facade.hpp subsystems for the Steam-Layer
  ** @see guifacade.cpp starting this service 
  */
 

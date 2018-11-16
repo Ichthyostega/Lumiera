@@ -151,7 +151,7 @@ Alternatives
 We do not want (1), since it is tied to an obsolete hardware model and lacks the ability to be
 adapted to the new kinds of hardware available today or to be expected in near future. We do not
 want (2) since it essentially doesn't solve any problem, but rather pushes complexity into the
-higher layers (Session, GUI), which are lacking the information about individual jobs and timing.
+higher layers (Session, Stage), which are lacking the information about individual jobs and timing.
 
 
 

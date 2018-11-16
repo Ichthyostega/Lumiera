@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file gui/model/sequence.cpp
+/** @file stage/model/sequence.cpp
  ** Preliminary UI-model: implementation of an editable sequence.
  ** @warning as of 2016 this UI model is known to be a temporary workaround
  **          and will be replaced in entirety by UI-Bus and diff framework.
@@ -74,7 +74,7 @@ Sequence::populateDummySequence()
   
   // END TEST CODE
   
-  INFO(gui, "\n%s", print_branch().c_str());
+  INFO(stage, "\n%s", print_branch().c_str());
 }
 
 

@@ -190,10 +190,10 @@ Hi Joel, I'll summarize some of my thoughts here. Maybe we should split of this
 discussion to a separate page? Maybe we should carry over more detailed
 discussions to the Mailinglist? First of all -- I really like your work and the
 effort to get the GUI reasonable complete but simple. Next, when I choose to
-take a certain approach for implementing a basic feature in the Proc-Layer, this
+take a certain approach for implementing a basic feature in some lower layer, this
 doesn't bind the GUI to present it exactly the way it's implemented. Of course,
 in many cases the GUI will be reasonable close to the actual underlying
-implementation, but it's an independent layer after all. The Proc I am building
+implementation, but it's an independent layer after all. The Session I am building
 is very flexible, and I take it for guaranteed that the GUI has the freedom of
 using some of those possibilities always in one certain limited way. And,
 finally, please don't take my arguments as general criticism -- I am just

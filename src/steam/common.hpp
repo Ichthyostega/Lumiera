@@ -22,7 +22,7 @@
 
 */
 
-/** @file proc/common.hpp
+/** @file steam/common.hpp
  ** Basic set of definitions and includes commonly used together.
  ** Including common.hpp gives you a common set of elementary declarations
  ** widely used within the C++ code of the Steam-Layer. Besides that, this
@@ -126,6 +126,6 @@ namespace steam {
   
   }
   
-} // proc
+} //(End)namespace steam
 
-#endif /*LUMIERA_H*/
+#endif /*STEAM_COMMON_H*/

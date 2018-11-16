@@ -111,7 +111,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (SessionStructureMapping_test, "unit gui");
+  LAUNCHER (SessionStructureMapping_test, "unit stage");
   
   
 }}} // namespace stage::model::test

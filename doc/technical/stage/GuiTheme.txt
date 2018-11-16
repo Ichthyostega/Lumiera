@@ -22,7 +22,7 @@ into all lower caps, single word, no underscores. E.g. `Gtk::TextView` -> `textv
 Widgets may also expose CSS classes for styling -- the standard widgets define a generic set
 of https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined CSS style classes],
 which can be used to establish the foundation for theming. Obviously it is preferable to keep styling rules as
-concise, generic and systematic as possible; yet we may still refer to individual gui elements by name (`#ID`) though.
+concise, generic and systematic as possible; yet we may still refer to individual GUI elements by name (`#ID`) though.
 
 Recommended reading
 ~~~~~~~~~~~~~~~~~~~

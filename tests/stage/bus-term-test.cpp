@@ -788,7 +788,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (BusTerm_test, "unit gui");
+  LAUNCHER (BusTerm_test, "unit stage");
   
   
 }}} // namespace stage::model::test

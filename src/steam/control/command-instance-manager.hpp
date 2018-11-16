@@ -79,7 +79,7 @@ namespace control {
   
   /**
    * Maintain a _current command instance_ for parametrisation.
-   * The definition of a *Proc-Layer command* is used like a prototype.
+   * The definition of a *Steam-Layer command* is used like a prototype.
    * For invocation, an anonymous clone copy is created from the definition
    * by calling #newInstance. Several competing usages of the same command can be
    * kept apart with the help of the `invocationID`, which is used to decorate the basic

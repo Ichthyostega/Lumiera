@@ -20,7 +20,7 @@
 
 */
 
-/** @file gui/model/sequence.hpp
+/** @file stage/model/sequence.hpp
  ** Preliminary UI-model: representation of an editable sequence.
  ** @warning as of 2016 this UI model is known to be a temporary workaround
  **          and will be replaced in entirety by UI-Bus and diff framework.

@@ -97,7 +97,7 @@ namespace model {
           try {
             this->clear();
           }
-          ERROR_LOG_AND_IGNORE (gui, "Detaching managed WLink from Widget")
+          ERROR_LOG_AND_IGNORE (stage, "Detaching managed WLink from Widget")
         }
       WLink()  noexcept
         : widget_{nullptr}
@@ -233,7 +233,7 @@ namespace model {
             }
           catch (...)
             {
-              ERROR (gui, "Unknown exception while attaching WLink");
+              ERROR (stage, "Unknown exception while attaching WLink");
               throw error::External (_Fmt{"WLink could not attach to %s due to unidentified Problems"} % target);
             }
         }

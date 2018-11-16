@@ -62,7 +62,7 @@ comments about possible signals.
  SIGINT::
         This is the CTRL-C case from terminal, in most cases this means that a
         user wants to break the application immediately. We trigger an
-        emergency shutdown. Recents actions are be logged already, so no work
+        emergency shutdown. Recent actions are be logged already, so no work
         gets lost, but no checkpoint in the log gets created so one has to
         explicitly recover the interrupted state.
 

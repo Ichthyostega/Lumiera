@@ -222,7 +222,7 @@ namespace workspace {
         break;
       
       default:
-        ERROR(gui, "Unknown split_direction: %d", split_direction);
+        ERROR(stage, "Unknown split_direction: %d", split_direction);
         return;
         break;
       }
@@ -281,7 +281,7 @@ namespace workspace {
           return i;
       }
     
-    ERROR (gui, "Unable to find a description with class name %s", class_name);
+    ERROR (stage, "Unable to find a description with class name %s", class_name);
     return -1;
   }
   
@@ -342,7 +342,7 @@ namespace workspace {
           return i;
       }
     
-    ERROR(gui, "Unable to find a description with with this class type");
+    ERROR(stage, "Unable to find a description with with this class type");
     return -1;
   }
   

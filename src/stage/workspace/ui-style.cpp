@@ -92,7 +92,7 @@ namespace workspace {
       }
     catch(Glib::Error const& failure)
       {
-        WARN(gui, "Failure while loading stylesheet '%s': %s", cStr(stylesheetName), cStr(failure.what()));
+        WARN (stage, "Failure while loading stylesheet '%s': %s", cStr(stylesheetName), cStr(failure.what()));
       }
     
     Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
@@ -122,7 +122,7 @@ namespace workspace {
       }
     else
       {
-        WARN(gui, "%s style value failed to load", property_name);
+        WARN (stage, "%s style value failed to load", property_name);
         
         pattern = Cairo::SolidPattern::create_rgb ( red, green, blue );
       }
@@ -194,7 +194,7 @@ namespace workspace {
     if(no_icons)
       {
         // No icons were loaded
-        ERROR (gui, "Unable to load icon '%s'", cStr(icon_name));
+        ERROR (stage, "Unable to load icon '%s'", cStr(icon_name));
         return false;
       }
     
@@ -297,7 +297,7 @@ namespace workspace {
     
     catch(Glib::Exception const& ex)
       {
-        WARN (gui, "Failure when accessing icon '%s'. Problem: %s", cStr(path), cStr(ex.what()));
+        WARN (stage, "Failure when accessing icon '%s'. Problem: %s", cStr(path), cStr(ex.what()));
         return false;
       }
   }

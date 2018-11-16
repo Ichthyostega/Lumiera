@@ -244,7 +244,7 @@ namespace timeline {
           return EXPANDER_SEMI_COLLAPSED;
       }
     
-    NOBUG_ERROR(gui, "Track::get_expander_style() final return reached");
+    NOBUG_ERROR(stage, "Track::get_expander_style() final return reached");
     
     return EXPANDER_COLLAPSED;   // This should never happen
   }

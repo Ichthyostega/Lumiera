@@ -246,7 +246,7 @@ namespace control {
     , instanceManager_{dispatcher_}
     , serviceInstance_{ LUMIERA_INTERFACE_REF (lumieraorg_SessionCommand, 0, lumieraorg_SessionCommandService)}
     {
-      INFO (gui, "SessionCommand Facade opened.");
+      INFO (stage, "SessionCommand Facade opened.");
     }
   
   

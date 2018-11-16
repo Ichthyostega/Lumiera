@@ -241,7 +241,7 @@ The currently employed numbering scheme is as follows
 |20 |Higher level support library services
 |30 |Vault Layer Unit tests
 |40 |Steam Layer Unit tests
-|50 |Stage Layer Unit tests (Gui, Scripting)
+|50 |Stage Layer Unit tests (UI binding, Scripting)
 |60 |Component integration tests
 |70 |Functionality tests on the complete application
 |80 |Reported bugs which can be expressed in a test case

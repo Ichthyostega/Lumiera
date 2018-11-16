@@ -71,7 +71,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (CmdContext_test, "unit gui");
+  LAUNCHER (CmdContext_test, "unit stage");
   
   
 }}} // namespace stage::interact::test

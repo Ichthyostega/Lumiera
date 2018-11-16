@@ -481,7 +481,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (UILocationSolver_test, "unit gui");
+  LAUNCHER (UILocationSolver_test, "unit stage");
   
   
 }}} // namespace stage::interact::test

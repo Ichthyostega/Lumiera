@@ -27,7 +27,7 @@
  ** drive the frame "creation" of a player dummy (the render engine is not 
  ** ready yet). The intention is to use this service as part of a mock engine
  ** setup, used to verify the construction of engine components. As an integration
- ** test, we build a "dummy player", delivering some test data frames to the Gui.
+ ** test, we build a "dummy player", delivering some test data frames to the GUI.
  ** 
  ** @see steam::play::DummyPlayerService
  **  
@@ -72,7 +72,7 @@ namespace node {
                         , bind (&DummyTick::timerLoop, this, callback)
                         )
         { 
-          INFO (proc, "TickService started.");
+          INFO (steam, "TickService started.");
         }
       
      ~DummyTick ()
@@ -81,7 +81,7 @@ namespace node {
           this->join();
           usleep (200000);    // additional delay allowing GTK to dispatch the last output
           
-          INFO (proc, "TickService shutdown.");
+          INFO (steam, "TickService shutdown.");
         }
       
       

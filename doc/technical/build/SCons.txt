@@ -100,9 +100,9 @@ library `liblumieracommon.so`, as is the collection of helper classes and suppor
 our 'support library' `liblumierasupport.so`. Besides, there is a sub-tree for core plug-ins and helper tools.
 
 .the GTK Gui
-one of the sub-trees, residing in `src/gui` forms the _upper layer_ or _user-interaction layer_. Contrary to
-the lower layers, the GUI is _optional_ and the application is fully operational _without Gui._ Thus, the
-GTK Gui is built and loaded as Lumiera a plug-in.
+one of the sub-trees, residing in `src/stage` forms the _upper layer_ or _user-interaction layer_. Contrary to
+the lower layers, the Stage Layer (GUI) is _optional_ and the application is fully operational _without GUI._
+Thus, the GTK Gui is built and loaded as Lumiera a plug-in.
 
 .unit tests
 Since our development is test-driven, about half of the overall code can be found in unit- and integration
@@ -122,7 +122,7 @@ There is a separate subtree for research and experiments. The rationale being to
 of the core application when it comes to experimenting and trying out new technologies.
 
 .icons and resources
-the +data/+ subtree holds resources, configuration files and icons for the Gui. Most of our icons
+the +data/+ subtree holds resources, configuration files and icons for the GUI. Most of our icons
 are defined as SVG graphics. The build process creates a helper executable (+rsvg_convert+) to render
 these vector graphics with the help of lib Cairo into icon collections of various sizes.
 
@@ -154,7 +154,7 @@ prints a summary of all custom options, targets and toggles defined for our buil
 
 Targets
 ^^^^^^^
-- *build* is the default target: it creates the shared libs, the application, core plug-ins and the Gui.
+- *build* is the default target: it creates the shared libs, the application, core plug-ins and the GUI.
 - *testcode* additionally builds the research and unit test code
 - *check* builds test code and runs our test-suites
 - *research* builds just the research tree

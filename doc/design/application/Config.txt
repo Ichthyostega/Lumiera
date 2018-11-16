@@ -10,6 +10,6 @@ The Lumiera application uses two quite different sources for configuration
   to be resolve employing a rules based system '(planned)'. Configuration rules will be provided by the
   application (defaults), a session template and rules stored in the actual session.
 
--> see also the link:{ldoc}/technical/backend/ConfigLoader.html[Config Loader brainstorming from 2008] (implementation details)
+-> see also the link:{ldoc}/technical/vault/ConfigLoader.html[Config Loader brainstorming from 2008] (implementation details)
 
 

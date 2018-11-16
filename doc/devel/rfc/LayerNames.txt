@@ -65,7 +65,7 @@ Tasks
  * update and add documentation ([green]#✔ done#)
  * adjust source folders and namespaces ([green]#✔ done#)
  * adjust build system and library names ([green]#✔ done#)
- * fix textual usage in code and documentation [red yellow-background]#TBD#
+ * fix textual usage in code and documentation ([green]#✔ done#)
 
 
 Discussion

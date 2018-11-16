@@ -90,20 +90,20 @@ lumiera_backend_init (void)
 
 
   const char* filehandles = lumiera_tmpbuf_snprintf (SIZE_MAX,
-                                                     "backend.file.max_handles = %d",
-                                                     /* roughly 2/3 of all available filehandles are managed by the backend */
+                                                     "vault.file.max_handles = %d",
+                                                     /* roughly 2/3 of all available filehandles are managed by the Lumiera Vault */
                                                      (sysconf (_SC_OPEN_MAX)-10)*2/3);
 
   lumiera_config_setdefault (filehandles);
 
   long long max_entries;
-  lumiera_config_number_get ("backend.file.max_handles", &max_entries);
+  lumiera_config_number_get ("vault.file.max_handles", &max_entries);
   lumiera_filehandlecache_new (max_entries);
 
 #if SIZE_MAX <= 4294967295UL
-  lumiera_config_setdefault ("backend.mmap.as_limit = 3221225469");
+  lumiera_config_setdefault ("vault.mmap.as_limit = 3221225469");
 #else
-  lumiera_config_setdefault ("backend.mmap.as_limit = 211106232532992");
+  lumiera_config_setdefault ("vault.mmap.as_limit = 211106232532992");
 #endif
 
   struct rlimit as_rlimit;
@@ -112,11 +112,11 @@ lumiera_backend_init (void)
   long long as_limit = (long long)as_rlimit.rlim_cur;
   if (as_rlimit.rlim_cur == RLIM_INFINITY)
     {
-      lumiera_config_number_get ("backend.mmap.as_limit", &as_limit);
+      lumiera_config_number_get ("vault.mmap.as_limit", &as_limit);
     }
   else
     {
-      INFO (backend, "address space limited to %luMiB", as_rlimit.rlim_cur/1024/1024);
+      INFO (vault, "address space limited to %luMiB", as_rlimit.rlim_cur/1024/1024);
     }
 
   lumiera_mmapcache_new (as_limit);

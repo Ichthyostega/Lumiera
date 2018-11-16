@@ -96,7 +96,7 @@ namespace ctrl {
     {
       static _Fmt messageTemplate{"asynchronous UI response failed: %s (error flag was: %s)"};
       string response{messageTemplate % problem % lumiera_error()};
-      WARN (gui, "%s", response.c_str());
+      WARN (stage, "%s", response.c_str());
       return response;
     }
   }

@@ -78,7 +78,7 @@ namespace ctrl {
         : notificationService_{bus.getAccessPoint(), manager}   // opens the GuiNotificationService instance
         , displayService_{}                                     // opens the DisplayService instance ////////TICKET #82 obsolete
         {
-          INFO (gui, "UI-Facade Interfaces activated.");
+          INFO (stage, "UI-Facade Interfaces activated.");
         }
       
     private:

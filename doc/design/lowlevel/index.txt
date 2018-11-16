@@ -11,7 +11,7 @@ data access. Within Lumiera, there are two main kinds of data handling:
   especially logging, replaying and ``Undo'' of all ongoing modifications..
 * Media data is handled _frame wise_ -- as described below.
 
-The vault layer (backend) uses *memory mapping* to make data available to the program.
+The vault layer (``backend'') uses *memory mapping* to make data available to the program.
 This is somewhat different to the more common open/read/write/close file access,
 while giving superior performance and much better memory utilization.
 The Vault-Layer must be able to handle more data than will fit into the memory

@@ -157,7 +157,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (ElementAccess_test, "unit gui");
+  LAUNCHER (ElementAccess_test, "unit stage");
   
   
 }}} // namespace stage::model::test

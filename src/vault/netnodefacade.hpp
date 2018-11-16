@@ -44,7 +44,7 @@ namespace vault {
    * Interface to the vault layer (renderfarm node):
    * Global access point for starting a server listening on a TCP port
    * and accepting render tasks. Possibly such a server could also
-   * use the backend file/media access functions to provide a media
+   * use the Vault file/media access functions to provide a media
    * data access service. 
    * 
    * @todo define the services provided by such a node. 

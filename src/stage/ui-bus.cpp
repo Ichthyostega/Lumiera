@@ -128,7 +128,7 @@ namespace ctrl {
      *          the UI. Here, at the UI-Bus interface, we're just interested
      *          in the fact _that_ some command is to be bound and invoked.
      *          This information is forwarded to the command receiver service,
-     *          which in turn talks to the proc dispatcher.
+     *          which in turn talks to the steam dispatcher.
      * @note no information regarding the _origin_ of this command invocation
      *          is captured. If a command needs a _subject_, this has to be
      *          bound as an command argument beforehand.

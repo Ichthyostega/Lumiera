@@ -1,7 +1,7 @@
 GUI Connection
 ==============
 
-The Lumiera application is built from several segregated software layers, and the user interface, the GUI-Layer is
+The Lumiera application is built from several segregated software layers, and the user interface, the Stage-Layer is
 optional and loaded as a plug-in. This deliberate design decision has far reaching consequences in all parts of the
 application: Anything of relevance for editing or rendering need to be _represented explicitly_ within a model, distinct
 and abstracted from the presentation for the user. For example, many media handling applications let you ``snap'' some

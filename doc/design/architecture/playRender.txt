@@ -170,7 +170,7 @@ where to place quantisation: the Vault, the GUI, the player and the session.
 - putting it into the vault layer seems to be the most reasonable at first sight:
   we can ``do away'' with nasty things soon, especially if they are technicalities,
   ``get a clean state soon'' -- and hasn't frame quantisation something to do
-  with media data, which is handled in the backend?
+  with media data, which is handled in the vault?
 +  
 Well, actually, all of those are pitfalls to trap the unwary. About
 cleanliness, well, sigh! Doing rounding soon will leave us with a huge
