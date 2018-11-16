@@ -16,11 +16,12 @@ lApp   = env.SharedLibrary('lumieracommon',  srcSubtree('common'), addLibs=lLib,
 lVault = env.SharedLibrary('lumieravault',   srcSubtree('vault'),  addLibs=lLib+lApp,       install=True)
 lSteam = env.SharedLibrary('lumierasteam',   srcSubtree('steam'),  addLibs=lLib+lApp+lVault,install=True)
 
-core        = lSteam+lVault+lApp+lLib    # in reverse dependency order
-support_lib = lLib
-app_lib     = lApp+support_lib
-vault_lib   = lVault+app_lib
-core_lib    = core
+            # in reverse dependency order
+core        = lSteam+lVault+lApp+lLib    # used to build the core application
+app_lib     = lApp+lLib                  # use to link against the platform
+core_lib    = core                       # use to link against the core application
+vault_lib   = lVault+app_lib             # use to link against the low-level backend
+support_lib = lLib                       # use to link against the support lib only
 
 lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
           + config
@@ -40,9 +41,11 @@ envGtk = env.Clone()
 envGtk.mergeConf(['gtkmm-3.0','sigc++-2.0','gthread-2.0','cairomm-1.0','gdl','xv','x11','xext','sm'])
 
 guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('stage') + core, install=True)
+resources = ( [env.GuiResource(f) for f in scanSubtree('stage', ['*.css'])]         # note: collected into one target dir
+            )
 gui       = ( guimodule
+            + resources
             + icons
-            + [env.GuiResource(f) for f in env.Glob('stage/*.css')]
             )
 
 

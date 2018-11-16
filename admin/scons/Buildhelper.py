@@ -63,8 +63,7 @@ def scanSubtree(roots, patterns=SRCPATTERNS):
     """
     for root in globRootdirs(roots):
         for (d,_,files) in os.walk(root):
-            if d.startswith('./'):
-                d = d[2:]
+            d = stripPrefix(d, './')
             for p in patterns:
                 for f in fnmatch.filter(files, p):
                     yield os.path.join(d,f)
@@ -136,12 +135,17 @@ def getDirname (d, basePrefix=None):
         d,_ = os.path.split(d)
     if basePrefix:
         basePrefix = os.path.realpath(basePrefix)
-        name = str(d)
-        if str(d).startswith(basePrefix):
-            name = name[len(basePrefix):]
+        name = stripPrefix(str(d), basePrefix)
     else:
         _, name = os.path.split(d)
     return name
+
+
+
+def stripPrefix(path, prefix):
+    if path.startswith(prefix):
+        path = path[len(prefix):]
+    return path
 
 
 

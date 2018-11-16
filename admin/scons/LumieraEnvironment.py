@@ -157,7 +157,7 @@ def register_LumieraResourceBuilder(env):
         return (generateTargets, source)
     
     def IconResource(env, source):
-        """Copy icon pixmap to corresponding icon dir. """
+        """ copy icon pixmap to corresponding icon dir. """
         subdir = getDirname(str(source))
         toBuild = env.path.buildIcon+subdir
         toInstall = env.path.installIcon+subdir
@@ -165,9 +165,11 @@ def register_LumieraResourceBuilder(env):
         return env.Install(toBuild, source)
     
     def GuiResource(env, source):
-        subdir = getDirname(str(source))
-        toBuild = env.path.buildUIRes+subdir
-        toInstall = env.path.installUIRes+subdir
+        """ pick up giben source resource and install
+            them (flat) into the configured target
+        """
+        toBuild = env.path.buildUIRes
+        toInstall = env.path.installUIRes
         env.Install (toInstall, source)
         return env.Install(toBuild, source)
     

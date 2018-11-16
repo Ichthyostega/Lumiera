@@ -28,11 +28,11 @@
 # Read more about the SCons build system at: http://www.scons.org
 
 
-# SCons plugins and extension modules
-#------------------------------------------------
+# NOTE: Lumiera SCons extension modules and plugins
+#--------------------------------------------------
 import sys
 sys.path.append('./admin/scons')
-#------------------------------------------------
+#--------------------------------------------------
 
 
 import Setup
