@@ -12,7 +12,7 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env core_lib app_lib backend_lib guimodule tools config')
+Import('env core_lib app_lib vault_lib guimodule tools config')
 env = env.Clone()
 env.Append(CPPPATH='include')  # additional headers for tests
 
@@ -24,10 +24,10 @@ sharedTestLibs = {}
 def linkContext(id):
     if id.startswith('lib'):
         return app_lib              # tests in 'lib*' subdirs only linked against application framework
-    elif id.startswith('back'):
-        return backend_lib          # tests in 'back*' subdirs only linked against vault layer
-    elif id.startswith('gui'):
-        return guimodule+core_lib   # tests in 'gui*' are additionally linked against the GTK GUI module
+    elif id.startswith('vault'):
+        return vault_lib            # tests in 'vault*' subdirs only linked against vault layer
+    elif id.startswith('stage'):
+        return guimodule+core_lib   # tests in 'stage*' are additionally linked against the GTK GUI module
     else:
         return core_lib             # all other tests linked against complete application core
 
@@ -48,7 +48,7 @@ def testCases(env,dir):
     """
     env = env.Clone()
     env.Append(CPPPATH=dir) # add subdir to Includepath
-    if dir.startswith('gui'):
+    if dir.startswith('stage'):
         # additional libs used from gui tests
         env.mergeConf(['sigc++-2.0'])
     

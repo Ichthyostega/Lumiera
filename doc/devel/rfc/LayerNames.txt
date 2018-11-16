@@ -63,8 +63,8 @@ Tasks
 // List what needs to be done to implement this Proposal:
  * find convincing new names ([green]#✔ done#)
  * update and add documentation ([green]#✔ done#)
- * adjust source folders and namespaces [yellow-background]#WIP#
- * adjust build system and library names [red yellow-background]#TBD#
+ * adjust source folders and namespaces ([green]#✔ done#)
+ * adjust build system and library names ([green]#✔ done#)
  * fix textual usage in code and documentation [red yellow-background]#TBD#
 
 
