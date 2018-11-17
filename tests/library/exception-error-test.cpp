@@ -208,7 +208,7 @@ namespace lumiera {
          *        invoked, which gives additional diagnostics.*/
         void terminateUnknown ()  noexcept
         {
-          throw Error("You'll never get me, won't you?");
+          throw Error{"Catch the hedgehog..."};
         }
         
         

@@ -33,6 +33,7 @@
 
 #include "steam/streamtype.hpp"
 #include "steam/control/stypemanager.hpp"
+#include "lib/time/timevalue.hpp"
 
 extern "C" {
 #include <gavl/gavl.h>
@@ -42,12 +43,14 @@ extern "C" {
 namespace steam {
 namespace test_format {
   
+  using lib::time::TimeValue;
+  
   namespace { // constants used to parametrise tests
   
     const int TEST_IMG_WIDTH = 40;
     const int TEST_IMG_HEIGHT = 30;
     
-    const int TEST_FRAME_DUR = GAVL_TIME_SCALE / 25;
+    const int TEST_FRAME_DUR = TimeValue::SCALE / 25;
   }
   
   Symbol GAVL = "GAVL";
@@ -72,11 +75,11 @@ namespace test_format {
     type.frame_width  = TEST_IMG_WIDTH;   // Width of the frame buffer in pixels, might be larger than image_width 
     type.frame_height = TEST_IMG_WIDTH;   // Height of the frame buffer in pixels, might be larger than image_height
     
-    type.pixel_width  = 1;              // Relative width of a pixel (pixel aspect ratio is pixel_width/pixel_height)
-    type.pixel_height = 1;             // Relative height of a pixel (pixel aspect ratio is pixel_width/pixel_height)
+    type.pixel_width  = 1;                // Relative width of a pixel  (pixel aspect ratio is pixel_width/pixel_height)
+    type.pixel_height = 1;                // Relative height of a pixel (pixel aspect ratio is pixel_width/pixel_height)
     
-    type.frame_duration = TEST_FRAME_DUR; // Duration of a frame in timescale tics. 
-    type.timescale = GAVL_TIME_SCALE;     // Timescale in tics per second  (is defined to be 1000000 as of 9/2008)
+    type.frame_duration = TEST_FRAME_DUR; // Duration of a frame in timescale ticks.
+    type.timescale = TimeValue::SCALE;    // Timescale in ticks per second  (is defined to be 1000000 as of 9/2008)
     
     return type;
   }

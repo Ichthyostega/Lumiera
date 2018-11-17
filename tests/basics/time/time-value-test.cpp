@@ -171,20 +171,20 @@ namespace test{
           
           // time in seconds
           Time t1(FSecs(1));
-          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
+          CHECK (t1 == TimeValue(TimeValue::SCALE));
           
           // create from fractional seconds
           FSecs halve(1,2);
           CHECK (0.5 == boost::rational_cast<double> (halve));
           Time th(halve);
-          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
+          CHECK (th == TimeValue(TimeValue::SCALE/2));
           
           Time tx1(500,0);
           CHECK (tx1 == th);
           Time tx2(1,2);
-          CHECK (tx2 == TimeValue(2.001*GAVL_TIME_SCALE));
+          CHECK (tx2 == TimeValue(2.001*TimeValue::SCALE));
           Time tx3(1,1,1,1);
-          CHECK (tx3 == TimeValue(GAVL_TIME_SCALE*(0.001 + 1 + 60 + 60*60)));
+          CHECK (tx3 == TimeValue(TimeValue::SCALE*(0.001 + 1 + 60 + 60*60)));
           
           CHECK ("1:01:01.001" == string(tx3));
           
@@ -195,8 +195,8 @@ namespace test{
           CHECK (th-th == TimeValue(0));
           
           // that was indeed a temporary and didn't affect the originals
-          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
-          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
+          CHECK (t1 == TimeValue(TimeValue::SCALE));
+          CHECK (th == TimeValue(TimeValue::SCALE/2));
         }
       
       

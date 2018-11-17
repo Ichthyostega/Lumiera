@@ -70,15 +70,13 @@ namespace error = lumiera::error;
 
 
 
-/* GAVL_TIME_SCALE is the correct factor or dividend when using gavl_time_t for
- * units of whole seconds from gavl_time_t.  Since we want to use milliseconds,
- * we need to multiply or divide by 1000 to get correct results. */
-#define GAVL_TIME_SCALE_MS (GAVL_TIME_SCALE / 1000)
 
 
 namespace lib {
 namespace time {
   
+  
+  const gavl_time_t TimeValue::SCALE = GAVL_TIME_SCALE;
   
   
   /** @note the allowed time range is explicitly limited to help overflow protection */
@@ -90,7 +88,13 @@ namespace time {
   const Time Time::NEVER  (Time::MAX);
   
   const Offset Offset::ZERO (Time::ZERO);
+
   
+/** scale factor _used locally within this implementation header_.
+ *  GAVL_TIME_SCALE rsp. TimeValue::SCALE is the correct factor or dividend when using gavl_time_t
+ *  for units of whole seconds from gavl_time_t.  Since we want to use milliseconds,
+ *  we need to multiply or divide by 1000 to get correct results. */
+#define TIME_SCALE_MS (lib::time::TimeValue::SCALE / 1000)
   
   
   /** convenience constructor to build an
@@ -143,7 +147,7 @@ namespace time {
     bool negative = (time < 0);
     
     if (negative) time = -time;
-    time /= GAVL_TIME_SCALE_MS;
+    time /= TIME_SCALE_MS;
     millis = time % 1000;
     seconds = time / 1000;
     
@@ -262,7 +266,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   if (negative)
       time = -time;
   
-  time /= GAVL_TIME_SCALE_MS;
+  time /= TIME_SCALE_MS;
   milliseconds = time % 1000;
   time /= 1000;
   seconds = time % 60;
@@ -281,7 +285,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 gavl_time_t
 lumiera_rational_to_time (FSecs const& fractionalSeconds)
 {
-  return rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
+  return rational_cast<gavl_time_t> (lib::time::TimeValue::SCALE * fractionalSeconds);
 }
 
 gavl_time_t
@@ -290,7 +294,7 @@ lumiera_framecount_to_time (uint64_t frameCount, FrameRate const& fps)
   // convert to 64bit
   boost::rational<uint64_t> framerate (fps.numerator(), fps.denominator());
   
-  return rational_cast<gavl_time_t> (GAVL_TIME_SCALE * frameCount / framerate);
+  return rational_cast<gavl_time_t> (lib::time::TimeValue::SCALE * frameCount / framerate);
 }
 
 gavl_time_t
@@ -322,7 +326,7 @@ namespace { // implementation: basic frame quantisation....
     
     const int64_t limit_num = std::numeric_limits<gavl_time_t>::max() / framerate;
     const int64_t limit_den = std::numeric_limits<gavl_time_t>::max() / framerate_divisor;
-    const int64_t microScale(GAVL_TIME_SCALE);
+    const int64_t microScale {lib::time::TimeValue::SCALE};
     
     // protect against numeric overflow 
     if (abs(time) < limit_num && microScale < limit_den)
@@ -377,7 +381,7 @@ lumiera_build_time(long millis, uint secs, uint mins, uint hours)
                    + 1000 * secs
                    + 1000 * 60 * mins
                    + 1000 * 60 * 60 * hours;
-  time *= GAVL_TIME_SCALE_MS;
+  time *= TIME_SCALE_MS;
   return time;
 }
 
@@ -388,39 +392,39 @@ lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours)
                    + 1000 * secs
                    + 1000 * 60 * mins
                    + 1000 * 60 * 60 * hours;
-  time *= GAVL_TIME_SCALE_MS;
+  time *= TIME_SCALE_MS;
   return time;
 }
 
 int
 lumiera_time_hours (gavl_time_t time)
 {
-  return time / GAVL_TIME_SCALE_MS / 1000 / 60 / 60;
+  return time / TIME_SCALE_MS / 1000 / 60 / 60;
 }
 
 int
 lumiera_time_minutes (gavl_time_t time)
 {
-  return (time / GAVL_TIME_SCALE_MS / 1000 / 60) % 60;
+  return (time / TIME_SCALE_MS / 1000 / 60) % 60;
 }
 
 int
 lumiera_time_seconds (gavl_time_t time)
 {
-  return (time / GAVL_TIME_SCALE_MS / 1000) % 60;
+  return (time / TIME_SCALE_MS / 1000) % 60;
 }
 
 int
 lumiera_time_millis (gavl_time_t time)
 {
-  return (time / GAVL_TIME_SCALE_MS) % 1000;
+  return (time / TIME_SCALE_MS) % 1000;
 }
 
 int
 lumiera_time_frames (gavl_time_t time, uint fps)
 {
   REQUIRE (fps < uint(std::numeric_limits<int>::max()));
-  return floordiv (lumiera_time_millis(time) * int(fps), GAVL_TIME_SCALE_MS);
+  return floordiv<int> (lumiera_time_millis(time) * int(fps), TIME_SCALE_MS);
 }
 
 

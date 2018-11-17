@@ -38,7 +38,7 @@
 
 namespace vault {
   
-#define MICRO_TICS_PER_NANOSECOND (1000*1000*1000 / GAVL_TIME_SCALE)
+#define MICRO_TICS_PER_NANOSECOND (1000*1000*1000 / TimeValue::SCALE)
   
   
   
@@ -51,7 +51,7 @@ namespace vault {
                                       ////////////////////////////////////////////TODO (what happens on ntp adjustments?)
                                       ////////////////////////////////////////////TICKET #886
     
-    gavl_time_t ticksSince1970 = now.tv_sec * GAVL_TIME_SCALE
+    gavl_time_t ticksSince1970 = now.tv_sec * TimeValue::SCALE
                                + now.tv_nsec / MICRO_TICS_PER_NANOSECOND; 
     
     ENSURE (ticksSince1970 == Time::limited (ticksSince1970));

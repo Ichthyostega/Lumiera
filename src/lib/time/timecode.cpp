@@ -101,13 +101,13 @@ namespace time {
      * In any case, the actual number is required to end with a trailing \c 'sec'
      * @par Example specifications
 \verbatim
-       12sec       -->  12     * GAVL_TIME_SCALE
-       -4sec       --> -4      * GAVL_TIME_SCALE
-       5/4sec      -->  1.25   * GAVL_TIME_SCALE
-       -5/25sec    --> -0.2    * GAVL_TIME_SCALE
-       1+1/2sec    -->  1.5    * GAVL_TIME_SCALE
-       1-1/25sec   -->  0.96   * GAVL_TIME_SCALE
-       -12-1/4sec  --> -11.75  * GAVL_TIME_SCALE
+       12sec       -->  12     * TimeValue::SCALE
+       -4sec       --> -4      * TimeValue::SCALE
+       5/4sec      -->  1.25   * TimeValue::SCALE
+       -5/25sec    --> -0.2    * TimeValue::SCALE
+       1+1/2sec    -->  1.5    * TimeValue::SCALE
+       1-1/25sec   -->  0.96   * TimeValue::SCALE
+       -12-1/4sec  --> -11.75  * TimeValue::SCALE
 \endverbatim
      * @param seconds string containing a time spec in seconds
      * @param grid coordinate system the parsed value is based on

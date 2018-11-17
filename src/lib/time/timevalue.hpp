@@ -100,12 +100,15 @@ namespace time {
       friend class Mutation;
       
     public:
+      /** Lumiera uses micro ticks (µs) as basic time scale */
+      static const gavl_time_t SCALE;
+      
       /** explicit limit of allowed time range */
       static gavl_time_t limited (gavl_time_t raw);
       
       
       explicit 
-      TimeValue (gavl_time_t val=0)
+      TimeValue (gavl_time_t val=0)       ///< time given in µ ticks here
         : t_(limited (val))
         { }
       

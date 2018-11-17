@@ -136,7 +136,7 @@ namespace test{
       random_or_get (string arg)
         {
           if (isnil(arg))
-            return gavl_time_t (1 + (rand() % 100000)) * GAVL_TIME_SCALE;
+            return gavl_time_t (1 + (rand() % 100000)) * TimeValue::SCALE;
           else
             return lexical_cast<gavl_time_t> (arg);
         }

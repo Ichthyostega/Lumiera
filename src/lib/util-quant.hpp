@@ -81,7 +81,7 @@ namespace util {
   
   /** floor function for integer arithmetics.
    *  Unlike the built-in integer division, this function
-   *  always rounds towards the next \em smaller integer,
+   *  always rounds towards the _next smaller integer,_
    *  even for negative numbers.
    * @warning floor on doubles performs way better
    * @see UtilFloordiv_test
@@ -103,7 +103,7 @@ namespace util {
   /** scale wrapping operation.
    *  Quantises the numerator value into the scale given by the denominator.
    *  Unlike the built-in integer division, this function always rounds towards
-   *  the next \em smaller integer and also relates the remainder (=modulo) to
+   *  the _next smaller integer_ and also relates the remainder (=modulo) to
    *  this next lower scale grid point.
    * @return quotient and remainder packed into a struct
    * @see UtilFloorwarp_test

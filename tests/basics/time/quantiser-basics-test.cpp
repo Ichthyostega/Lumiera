@@ -112,7 +112,7 @@ namespace test{
         : FixedFrameQuantiser
         {
           TestQuant (int origin=0)
-            : FixedFrameQuantiser( FrameRate(GAVL_TIME_SCALE, 3 ), TimeValue(origin))
+            : FixedFrameQuantiser( FrameRate(TimeValue::SCALE, 3 ), TimeValue(origin))
             { }
           
           int
@@ -210,7 +210,7 @@ namespace test{
           CHECK (hugeFrame == not_really_larger);
           
           // frame sizes below the time micro grid get trapped
-          long subAtomic = 2*GAVL_TIME_SCALE;                           // too small for this universe...
+          long subAtomic = 2*TimeValue::SCALE;                          // too small for this universe...
           VERIFY_ERROR (BOTTOM_VALUE, FixedFrameQuantiser quark(subAtomic) );
           VERIFY_ERROR (BOTTOM_VALUE, FixedFrameQuantiser quark(Duration (FSecs (1,subAtomic))) );
         }
