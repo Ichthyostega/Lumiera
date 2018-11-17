@@ -86,8 +86,8 @@ namespace time {
   const Time Time::MIN ( TimeValue::buildRaw_(-_raw(Time::MAX)                             ) );
   const Time Time::ZERO;
   
-  const Time Time::ANYTIME(Time::MAX);
-  const Time Time::NEVER  (Time::MIN);
+  const Time Time::ANYTIME(Time::MIN);
+  const Time Time::NEVER  (Time::MAX);
   
   const Offset Offset::ZERO (Time::ZERO);
   

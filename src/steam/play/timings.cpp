@@ -147,7 +147,7 @@ namespace play {
   Duration
   Timings::constantFrameTimingsInterval (TimeValue)  const
   {
-    return Duration (Time::ANYTIME);
+    return Duration (Time::MAX);
   }
   
   

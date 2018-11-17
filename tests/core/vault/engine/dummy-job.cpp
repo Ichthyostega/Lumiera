@@ -86,7 +86,7 @@ namespace engine {
         bool
         verify (Time nominalJobTime, InvocationInstanceID invoKey)  const
           {
-            return Time::NEVER < nominalJobTime
+            return Time::ANYTIME < nominalJobTime
                 && 0 <= invoKey.metaInfo.a
                 && invoKey.metaInfo.a < MAX_PARAM_A
                 && -MAX_PARAM_B <= invoKey.metaInfo.b
@@ -116,8 +116,8 @@ namespace engine {
               { }
             
             Invocation()
-              : nominal(Time::NEVER)
-              , real(Time::ANYTIME)
+              : nominal(Time::ANYTIME)
+              , real(Time::NEVER)
               , a(MAX_PARAM_A), b(0)
               { }
           };
@@ -178,7 +178,7 @@ namespace engine {
   {
     REQUIRE (job.usesClosure (dummyClosure));
     
-    return Time::NEVER != dummyClosure.queryInvocation(job.parameter).nominal;
+    return Time::NEVER != dummyClosure.queryInvocation(job.parameter).real;
   }
   
   
