@@ -238,7 +238,9 @@ namespace lib {
     struct Timeout
       : timespec
       {
-        Timeout() { tv_sec=tv_nsec=0; }
+        Timeout() { reset(); }
+        
+        void reset() { tv_sec=tv_nsec=0; }
         
         /** initialise to NOW() + offset (in milliseconds) */
         Timeout&
@@ -254,6 +256,8 @@ namespace lib {
                     tv_sec += tv_nsec / 1000000000;
                     tv_nsec %= 1000000000;
               }   }
+            else
+              reset();
             return *this;
           }
         

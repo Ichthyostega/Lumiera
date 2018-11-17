@@ -44602,17 +44602,31 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544310988414" ID="ID_134908056" MODIFIED="1544311003084" TEXT="ProcDispatcher macht idle-Loop">
+<node COLOR="#435e98" CREATED="1544310988414" FOLDED="true" ID="ID_134908056" MODIFIED="1544320824720" TEXT="ProcDispatcher macht idle-Loop">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1544311004661" ID="ID_1064987345" MODIFIED="1544311012720" TEXT="Symptom: CPU-Last im Ruhezustand"/>
-<node CREATED="1544311014140" ID="ID_392351205" MODIFIED="1544311027390" TEXT="Grund: f&#xe4;llt sofort wieder aus timed wait"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544311029042" ID="ID_15647077" MODIFIED="1544311046170" TEXT="Ursache: Sync.hpp -- Timeout-Struct nicht korrekt initialisiert">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1544311014140" ID="ID_392351205" MODIFIED="1544320819468" TEXT="Grund: f&#xe4;llt sofort wieder aus timed wait">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1544311029042" ID="ID_15647077" MODIFIED="1544320803272" TEXT="Ursache: Sync.hpp -- Timeout-Struct nicht korrekt initialisiert">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1544311051503" ID="ID_1872128038" MODIFIED="1544311082817" TEXT="bool-Operator vergleicht auf 0">
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1544311064725" ID="ID_1179966941" MODIFIED="1544311079804" TEXT="finde aber im Debugger irgendwelche Werte.">
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1544320706921" ID="ID_50250235" MODIFIED="1544320717897" TEXT="genauer: Werte werden nicht aufger&#xe4;umt">
+<node CREATED="1544320719053" ID="ID_1185228058" MODIFIED="1544320755043" TEXT="Konvention ist: sekunden == 0  ==&gt; kein Timeout">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1544320761671" ID="ID_1421942136" MODIFIED="1544320772577" TEXT="pthread findet timeout in der Vergangenheit"/>
+<node CREATED="1544320773286" ID="ID_256879540" MODIFIED="1544320782737" TEXT="...und kehr damit sofort zur&#xfc;ck aus dem wait">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1544320791339" ID="ID_536822312" MODIFIED="1544320800480" TEXT="Fix: else-Zweig, reset()">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
