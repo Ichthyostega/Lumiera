@@ -347,7 +347,7 @@ namespace meta {
    * convenience function to dump a given tuple's contents.
    * Using the BuildTupleAccessor, we layer a stack of Instantiations of
    * the TupleElementDisplayer temporarily on top of the given tuple,
-   * just to invoke a recursive call chain through this layers
+   * just to invoke a recursive call chain through these layers
    * and get a string representation of each element in the
    * tuple.
    */

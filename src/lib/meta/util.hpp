@@ -107,21 +107,32 @@ namespace meta {
   
   
   /** detect possibility of a conversion to string.
-   *  Naive implementation just trying the direct conversion.
-   *  The embedded constant #value will be true in case this succeeds.
+   *  Naive implementation, which first attempts to build a string instance by
+   *  implicit conversion, and then tries to invoke an explicit string conversion.
+   *  The embedded constant #value will be true in case any of this succeeds.
    *  Might fail in more tricky situations (references, const, volatile)
    * @see \ref format-obj.hpp more elaborate solution including lexical_cast
    */
   template<typename X>
   struct can_convertToString
     {
-      static X & probe();
       
-      static Yes_t check(std::string);
-      static No_t  check(...);
+      static Yes_t check_implicit(std::string);
+      static No_t  check_implicit(...);
+      
+      
+      template<class XX, int i = sizeof(&XX::operator std::string)>
+      struct Probe
+      { };
+      
+      template <class XX>
+      static Yes_t check_explicit(Probe<XX> * );
+      template <class>
+      static No_t  check_explicit(...);
       
     public:
-      static const bool value = (sizeof(Yes_t)==sizeof(check(probe())));
+      static const bool value = (sizeof(Yes_t)==sizeof(check_implicit (std::declval<X>())))
+                             or (sizeof(Yes_t)==sizeof(check_explicit<X>(0)));
     };
   
   /** toggle for explicit specialisations */
