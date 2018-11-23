@@ -32,9 +32,9 @@
  ** invoke the CommandImpl API directly. 
  **
  ** @todo it is not clear what's the difference between "throw" and "no-throw" pattern
- ** @todo any integration with the (yet undefined as of 9/09) ProcDispatcher is missing.
+ ** @todo any integration with the (yet undefined as of 9/09) SteamDispatcher is missing.
  **
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  ** @see Session
  **
  */
@@ -90,7 +90,7 @@ namespace control {
    * Interface: Operation Skeleton how to invoke or undo a command.
    * Concrete implementations may be retrieved by ID; they range
    * from just invoking the command operations straight forward
-   * to dispatching with the ProcDispatcher or running the command
+   * to dispatching with the SteamDispatcher or running the command
    * asynchronously in a background thread.
    */
   class HandlingPattern

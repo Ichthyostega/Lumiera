@@ -71,7 +71,7 @@
  **     ["opened"](\ref steam::control::SessionCommand::cycle(Symbol,string)) command instance ID.
  **   - the payload is a Record<GenNode> holding the actual command arguments
  **   - on reception, an _instance_ (anonymous clone copy) of the command is created, bound
- **     with the arguments and handed over to the ProcDispatcher to be enqueued for execution.
+ **     with the arguments and handed over to the SteamDispatcher to be enqueued for execution.
  ** - *note*: send a [GenNode] representing the _state mark;_
  **   some (abstracted) presentation state manager is expected to listen to these messages,
  **   possibly recording state to be restored later. The contents of the _state mark_ message

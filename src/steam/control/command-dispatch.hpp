@@ -22,9 +22,9 @@
 
 
 /** @file command-dispatch.hpp
- ** Interface to abstract the ProcDispatcher's ability to handle command messages.
+ ** Interface to abstract the SteamDispatcher's ability to handle command messages.
  ** 
- ** @see proc-dispatcher.hpp
+ ** @see steam-dispatcher.hpp
  ** @see session-command-service.hpp
  ** @see DispatcherLoop
  **

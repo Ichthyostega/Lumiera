@@ -1,5 +1,5 @@
 /*
-  DispatcherLooper(Test)  -  verify loop control and timing functionality of ProcDispatcher
+  DispatcherLooper(Test)  -  verify loop control and timing functionality of SteamDispatcher
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -90,7 +90,7 @@ namespace test    {
   
   
   /******************************************************************************//**
-   * @test verify encapsulated control logic of ProcDispatcher.
+   * @test verify encapsulated control logic of SteamDispatcher.
    *       - fusing of conditions for the pthread waiting condition
    *       - detection and handling of work states
    *       - management of builder run triggers

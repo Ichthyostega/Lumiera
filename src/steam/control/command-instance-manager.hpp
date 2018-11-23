@@ -35,11 +35,11 @@
  ** and provides dedicated instance IDs, which can be stored in the UI and later used to retrieve
  ** those instances for invocation. These IDs are created by decorating a base command ID, allowing
  ** for several competing invocations to exist at the same time. When finally a given invocation is
- ** about to happen, a corresponding registration handle is transfered to the ProcDispatcher, where
+ ** about to happen, a corresponding registration handle is transfered to the SteamDispatcher, where
  ** it is enqueued for execution.
  ** \par lifecycle
  ** There CommandInstanceManager is maintained by the SessionCommandService, which in turn is
- ** installed and removed by the implementation within ProcDispatcher. Its lifecycle is thus tied
+ ** installed and removed by the implementation within SteamDispatcher. Its lifecycle is thus tied
  ** to the opening / closing of the Steam-Layer interface, as dictated by the Session lifecycle.
  ** When the current session is closed, all command instances "underway" will thus be discarded.
  ** 
@@ -89,7 +89,7 @@ namespace control {
    * (i.e. there is no registration of a command under that instanceID in the global CommandRegistry).
    * When done with the parametrisation, by calling #dispatch, this anonymous instance will be handed
    * over to the [Dispatcher](\ref CommandDispatch) (installed on construction). Typically, this will in fact
-   * be the steam::control::ProcDispatcher, which runs in a dedicated thread ("session loop thread") and
+   * be the steam::control::SteamDispatcher, which runs in a dedicated thread ("session loop thread") and
    * maintains a queue of commands to be dispatched towards the current session. Since Command is a smart
    * handle, the enqueued instance will stay alive until execution and then go out of scope. But, after
    * #dispatch, it is no longer accessible from the CommandInstanceManger, and while it is still waiting

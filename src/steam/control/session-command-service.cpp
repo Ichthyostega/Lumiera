@@ -240,7 +240,7 @@ namespace control {
   
   
   
-  /** @remark actual instance created from within ProcDispatcher */
+  /** @remark actual instance created from within SteamDispatcher */
   SessionCommandService::SessionCommandService (CommandDispatch& dispatcherLoopInterface)
     : dispatcher_{dispatcherLoopInterface}
     , instanceManager_{dispatcher_}

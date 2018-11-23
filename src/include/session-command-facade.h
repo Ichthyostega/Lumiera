@@ -35,11 +35,11 @@
  ** Steam-Layer implementation. The service implementation backing this
  ** facade indeed retrieves the corresponding steam::control::Command
  ** handles to perform the binding operation and hands them over
- ** to the ProcDispatcher for invocation.
+ ** to the SteamDispatcher for invocation.
  ** 
  ** @see command.hpp
  ** @see session-command-service.hpp implementation
- ** @see steam::control::ProcDispatcher
+ ** @see steam::control::SteamDispatcher
  ** @see stage::ctrl::CoreService
  */
 

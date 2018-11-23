@@ -1,5 +1,5 @@
 /*
-  ProcDispatcher  -  Steam-Layer command dispatch and execution
+  SteamDispatcher  -  Steam-Layer command dispatch and execution
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,15 +21,15 @@
 * *****************************************************/
 
 
-/** @file proc-dispatcher.cpp
+/** @file steam-dispatcher.cpp
  ** Implementation details of running commands and the builder.
- ** The ProcDispatcher is at the heart of the session subsystem and implements a
+ ** The SteamDispatcher is at the heart of the session subsystem and implements a
  ** (single) session thread to perform commands and trigger builder runs. New commands
  ** can be enqueued with a dedicated CommandQueue, while the details of operation control
  ** logic are encapsulated in a [logic component](\ref Looper).
  ** 
  ** # Operational Semantics
- ** We need to distinguish between the ProcDispatcher itself, which is a static (singleton) service,
+ ** We need to distinguish between the SteamDispatcher itself, which is a static (singleton) service,
  ** and the »Session Subsystem« plus the _Session proper._ The subsystem has an application-global lifecycle,
  ** while the Session itself is a data structure and can be closed, opened or re-loaded. There is a singular
  ** transactional access point to the Session datastructure, which can be switched to new session contents.
@@ -62,7 +62,7 @@
  **   finished, without interrupt
  ** 
  ** ## Locking
- ** The ProcDispatcher uses an "inner and outer capsule" design, and both layers are locked independently.
+ ** The SteamDispatcher uses an "inner and outer capsule" design, and both layers are locked independently.
  ** On the outer layer, locking ensures sanity of the control data structures, while locking on the inner
  ** layer guards the communication with the Session Loop Thread, and coordinates sleep wait and notification.
  ** As usual with Lumiera's Thread wrapper, the management of the thread's lifecycle itself, hand-over of
@@ -73,7 +73,7 @@
  **       is a private detail of the performing thread. The lock is acquired solely for checking or leaving
  **       the wait state and when fetching the next command from queue.
  ** 
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  ** @see DispatcherLooper_test
  ** @see CommandQueue_test
  **
@@ -82,7 +82,7 @@
 
 #include "lib/error.hpp"
 #include "include/logging.h"
-#include "steam/control/proc-dispatcher.hpp"
+#include "steam/control/steam-dispatcher.hpp"
 #include "steam/control/command-dispatch.hpp"
 #include "steam/control/command-queue.hpp"
 #include "steam/control/looper.hpp"
@@ -106,7 +106,7 @@ namespace control {
   
   
   /********************************************************************//**
-   * PImpl within ProcDispatcher to implement the _Session Loop Thread._
+   * PImpl within SteamDispatcher to implement the _Session Loop Thread._
    * During the lifetime of this object...
    * - the SessionCommandService is offered to enqueue commands
    * - the Session Loop thread dispatches commands and triggers the Builder
@@ -324,15 +324,15 @@ namespace control {
   
   
   /** storage for Singleton access */
-  lib::Depend<ProcDispatcher> ProcDispatcher::instance;
+  lib::Depend<SteamDispatcher> SteamDispatcher::instance;
   
   
-  /* ======== ProcDispatcher implementation ======== */
+  /* ======== SteamDispatcher implementation ======== */
   
-  ProcDispatcher::ProcDispatcher()  { }
-  ProcDispatcher::~ProcDispatcher() { }
+  SteamDispatcher::SteamDispatcher()  { }
+  SteamDispatcher::~SteamDispatcher() { }
   
-  /** starting the ProcDispatcher means to start the session subsystem.
+  /** starting the SteamDispatcher means to start the session subsystem.
    * @return `false` when _starting_ failed since it is already running...
    * @remark this function implements the start operation for the »session subsystem«.
    *         More specifically, this operation starts a new thread to perform the
@@ -341,7 +341,7 @@ namespace control {
    *         while opening the SessionCommand facade.
    */
   bool
-  ProcDispatcher::start (Subsys::SigTerm termNotification)
+  SteamDispatcher::start (Subsys::SigTerm termNotification)
   {
     Lock sync(this);
     if (runningLoop_) return false;
@@ -350,7 +350,7 @@ namespace control {
       new DispatcherLoop (
             [=] (string* problemMessage)
                 {
-                  ProcDispatcher::endRunningLoopState();
+                  SteamDispatcher::endRunningLoopState();
                   termNotification(problemMessage);
                 }));
     
@@ -365,7 +365,7 @@ namespace control {
    *         started and is not (yet) completely terminated.
    */
   bool
-  ProcDispatcher::isRunning()
+  SteamDispatcher::isRunning()
   {
     Lock sync(this);
     return bool(runningLoop_);
@@ -376,7 +376,7 @@ namespace control {
    * @note the immediate consequence is to close SessionCommandService
    */
   void
-  ProcDispatcher::requestStop()  noexcept
+  SteamDispatcher::requestStop()  noexcept
   {
     try {
       Lock sync(this);
@@ -390,21 +390,21 @@ namespace control {
   /** @internal clean-up when leaving the session loop thread.
    *  This function is hooked up in to the termination callback,
    *  and is in fact the only one to delete the loop PImpl. We
-   *  take the (outer) lock on ProcDispatcher to ensure no one
+   *  take the (outer) lock on SteamDispatcher to ensure no one
    *  commits anything to the DispatcherLoop object while being
    *  deleted. The call itself, while technically originating
    *  from within DispatcherLoop::runSessionThread(), relies
    *  solely on stack based context data and is a tail call.
    */
   void
-  ProcDispatcher::endRunningLoopState()
+  SteamDispatcher::endRunningLoopState()
   {
     Lock sync(this);
     if (runningLoop_)
       runningLoop_.reset();  // delete DispatcherLoop object
     else
       WARN (command, "clean-up of DispatcherLoop invoked, "
-                     "while ProcDispatcher is not marked as 'running'. "
+                     "while SteamDispatcher is not marked as 'running'. "
                      "Likely an error in lifecycle logic, as the only one "
                      "intended to delete this object is the loop thread itself.");
   }
@@ -419,7 +419,7 @@ namespace control {
    *  is stored and applied accordingly later, when the loop is fired up.
    */
   void
-  ProcDispatcher::activate()
+  SteamDispatcher::activate()
   {
     Lock sync(this);
     active_ = true;
@@ -435,7 +435,7 @@ namespace control {
    *  about to dismantled, it is mandatory to awaitDeactivation()
    */
   void
-  ProcDispatcher::deactivate()
+  SteamDispatcher::deactivate()
   {
     Lock sync(this);
     active_ = false;
@@ -451,7 +451,7 @@ namespace control {
    * @throw error::Fatal when a deadlock due to such a recursive call can be detected
    */
   void
-  ProcDispatcher::awaitDeactivation()
+  SteamDispatcher::awaitDeactivation()
   {
     Lock sync(this);
     if (runningLoop_)
@@ -461,7 +461,7 @@ namespace control {
   
   /** discard any commands waiting in the dispatcher queue */
   void
-  ProcDispatcher::clear()
+  SteamDispatcher::clear()
   {
     Lock sync(this);
     if (not empty())
@@ -474,7 +474,7 @@ namespace control {
   
   
   bool
-  ProcDispatcher::empty()  const
+  SteamDispatcher::empty()  const
   {
     Lock sync(this);
     return not runningLoop_

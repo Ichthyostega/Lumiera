@@ -43,7 +43,7 @@
  ** @see Command
  ** @see Mutation
  ** @see CommandClosure
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  ** @see CommandBasic_test simple usage example
  **
  */
@@ -264,7 +264,7 @@ namespace control {
    * The basic idea is for the user to create a disposable instance of this definition helper,
    * only for calling a chain of definition functions, which internally build the actual Command object.
    * Finally, the created Command object will be stored into a registry or handed over to the
-   * ProcDispatcher. To give an example:
+   * SteamDispatcher. To give an example:
    * \code
    *    CommandDefinition ("test.command1")
    *           .operation (command1::operate)          // provide the function to be executed as command

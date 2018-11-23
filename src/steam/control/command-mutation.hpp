@@ -35,7 +35,7 @@
  ** 
  ** 
  ** @see Command
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  ** @see MementoTie binding memento state
  **
  */

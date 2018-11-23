@@ -1,5 +1,5 @@
 /*
-  CommandBasic(Test)  -  checking simple ProcDispatcher command definition and execution
+  CommandBasic(Test)  -  checking simple SteamDispatcher command definition and execution
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -88,7 +88,7 @@ namespace test    {
    * 
    * @see  control::Command
    * @see  control::CommandDef
-   * @see  mobject::ProcDispatcher
+   * @see  control::SteamDispatcher
    */
   class CommandBasic_test : public Test
     {

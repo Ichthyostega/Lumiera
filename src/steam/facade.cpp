@@ -36,7 +36,7 @@
  ** - to operate on the session, use the steam::control::SessionCommand facade
  ** - playback and render operations can be operated by the lumiera::Play facade
  ** 
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  ** @see OutputDirector
  ** @see subsys.hpp
  ** @see main.cpp
@@ -46,7 +46,7 @@
 
 #include "steam/facade.hpp"
 #include "lib/depend.hpp"
-#include "steam/control/proc-dispatcher.hpp"
+#include "steam/control/steam-dispatcher.hpp"
 #include "steam/play/output-director.hpp"
 
 #include <string>
@@ -58,7 +58,7 @@ namespace steam {
   using std::unique_ptr;
   using lumiera::Subsys;
   using lumiera::Option;
-  using steam::control::ProcDispatcher;
+  using steam::control::SteamDispatcher;
   
   
   class SessionSubsystem
@@ -78,19 +78,19 @@ namespace steam {
       bool
       start (Option&, Subsys::SigTerm termNotification)  override
         {
-          return ProcDispatcher::instance().start (termNotification);
+          return SteamDispatcher::instance().start (termNotification);
         }
       
       void
       triggerShutdown()  noexcept override
         {
-          ProcDispatcher::instance().requestStop();
+          SteamDispatcher::instance().requestStop();
         }
       
       bool 
       checkRunningState()  noexcept override
         {
-          return ProcDispatcher::instance().isRunning();
+          return SteamDispatcher::instance().isRunning();
         }
     };
   

@@ -56,7 +56,7 @@ Anatomy of the Steam/Stage interface
   which can be considered __ ``the'' public session interface.__
 
 Both these primary interfaces operate *message based.* As immediate consequence, these interfaces are comparatively
-narrow, and interactions can easily be serialised, enqueued and dispatched. On the Steam-Layer side, the `ProcDispatcher`
+narrow, and interactions can easily be serialised, enqueued and dispatched. On the Steam-Layer side, the `SteamDispatcher`
 coordinates command execution and the _Builder run_ to derive the consequences of those session command invocations.
 And within the UI, the GTK-Event loop runs likewise single threaded, and the Notification facade automatically
 dispatches any invocation into the UI thread.

@@ -85,7 +85,7 @@ namespace session {
    *  @param placementID hash-ID, typically from a PlacementRef
    *  @throw error::Invalid if the ID isn't resolvable
    *  @note the returned ref is guaranteed to be valid and usable
-   *        only \em now, which means, by virtue of the ProcDispatcher
+   *        only \em now, which means, by virtue of the SteamDispatcher
    *        and command processing, during this operation. It can be
    *        used to invoke an operation, but should never be stored;
    *        rather, client code should create an MObjectRef, if 

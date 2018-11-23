@@ -58,7 +58,7 @@
  ** @see command-use1-test.cpp
  ** @see command-use2-test.cpp
  ** @see command-use3-test.cpp
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  ** @see Session
  **
  */
@@ -112,7 +112,7 @@ namespace control {
    *  a CommandDef somewhere to specify the actual operation and to define, how the
    *  effect of the command can be undone. Moreover, the command's definition 
    *  refers to a HandlingPattern, which describes how the command is actually
-   *  to be executed (the default is scheduling it within the ProcDispatcher)
+   *  to be executed (the default is scheduling it within the SteamDispatcher)
    *  
    *  Client code usually just
    *  - creates a command instance by referring to a command ID

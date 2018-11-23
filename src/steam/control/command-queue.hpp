@@ -1,5 +1,5 @@
 /*
-  COMMAND-QUEUE.hpp  -  organise ordering of commands within ProcDispatcher
+  COMMAND-QUEUE.hpp  -  organise ordering of commands within SteamDispatcher
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 /** @file command-queue.hpp
- ** Implementation building block of ProcDispatcher to organise commands.
+ ** Implementation building block of SteamDispatcher to organise commands.
  ** This is the actual implementation of the command queue to allow for
  ** strictly sequential dispatch of commands to work on the session.
  ** 
@@ -30,7 +30,7 @@
  **       some further management functions like purging of expired commands
  ** 
  ** @see CommandQueue_test
- ** @see proc-dispatcher.hpp
+ ** @see steam-dispatcher.hpp
  ** @see session-command-service.hpp
  ** @see DispatcherLoop
  ** @see Looper

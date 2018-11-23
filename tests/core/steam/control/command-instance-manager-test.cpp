@@ -107,7 +107,7 @@ namespace test {
   /***********************************************************************//**
    * @test CommandInstanceManager is responsible for providing individual
    *       clone copies from a basic command definition, to be bound with
-   *       actual arguments and finally handed over to the ProcDispatcher
+   *       actual arguments and finally handed over to the SteamDispatcher
    *       for invocation.
    * 
    * @see steam::control::CommandInstanceManager
@@ -201,7 +201,7 @@ namespace test {
       /** @test relation of command, instanceID and concrete instance
        * The CommandInstanceManager provides the notion of a _current instance,_
        * which can then be used to bind arguments. When done, it will be _dispatched,_
-       * and then go through the ProcDispatcher's CommandQueue (in this test, we use
+       * and then go through the SteamDispatcher's CommandQueue (in this test, we use
        * just a dummy Fixture, which only enqueues the dispatched commands.
        * 
        * The following notions need to be kept apart

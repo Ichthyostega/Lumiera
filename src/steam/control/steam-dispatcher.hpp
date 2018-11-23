@@ -1,5 +1,5 @@
 /*
-  PROC-DISPATCHER.hpp  -  Steam-Layer command dispatch and execution
+  STEAM-DISPATCHER.hpp  -  Steam-Layer command dispatch and execution
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,9 +21,9 @@
 */
 
 
-/** @file proc-dispatcher.hpp
+/** @file steam-dispatcher.hpp
  ** Dispatch and execute mutation operations on the High-level model.
- ** The ProcDispatcher is the application facility to back and support working
+ ** The SteamDispatcher is the application facility to back and support working
  ** on the Session. While the session itself is just a data structure, _operating_
  ** the session means to process commands changing that data structure and it means
  ** to evaluate the _session model_ and _build_ a render nodes network in accordance
@@ -31,11 +31,11 @@
  ** and this is what we call the "session subsystem" within the application. When this is
  ** running, the SessionCommand facade is opened, accepting commands to work on the session.
  ** Such commands are passed through a dispatch queue to ensure consistent session state
- ** and to force strictly sequential processing of commands. Moreover, the ProcDispatcher's
+ ** and to force strictly sequential processing of commands. Moreover, the SteamDispatcher's
  ** responsibility is to care for triggering the Builder after any changes induced by those
  ** commands. The Builder is guaranteed to run _eventually_, yet with some leeway.
  ** 
- ** Talking of state, independent of the lifecycle running state, the ProcDispatcher can be
+ ** Talking of state, independent of the lifecycle running state, the SteamDispatcher can be
  ** _activated or deactivated_. In active state, commands are dequeued and processed, while
  ** in inactive state commands are just accepted and queued, assuming the SessionCommand
  ** interface is currently opened. This activation state is controlled by the session
@@ -45,7 +45,7 @@
  **
  ** @see Command
  ** @see Session
- ** @see proc-dispatcher.cpp for details of operational semantics
+ ** @see steam-dispatcher.cpp for details of operational semantics
  **
  */
 
@@ -81,14 +81,14 @@ namespace control {
    * contents into a render nodes network. Also embedded herein is
    * the implementation of steam::control::SessionCommandService
    */
-  class ProcDispatcher
+  class SteamDispatcher
     : public lib::Sync<>
     {
       unique_ptr<DispatcherLoop> runningLoop_;
       bool active_{false};
       
     public:
-      static lib::Depend<ProcDispatcher> instance;
+      static lib::Depend<SteamDispatcher> instance;
       
       bool start (Subsys::SigTerm);
       bool isRunning();
@@ -104,9 +104,9 @@ namespace control {
     private:
       void endRunningLoopState();
       
-     ~ProcDispatcher();
-      ProcDispatcher();
-      friend class lib::DependencyFactory<ProcDispatcher>;
+     ~SteamDispatcher();
+      SteamDispatcher();
+      friend class lib::DependencyFactory<SteamDispatcher>;
     };
   
   

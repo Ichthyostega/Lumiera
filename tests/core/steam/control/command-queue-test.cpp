@@ -1,5 +1,5 @@
 /*
-  CommandQueue(Test)  -  verify functionality of ProcDispatcher queue component
+  CommandQueue(Test)  -  verify functionality of SteamDispatcher queue component
 
   Copyright (C)         Lumiera.org
     2016,               Hermann Vosseler <Ichthyostega@web.de>
@@ -61,13 +61,13 @@ namespace test    {
   
   
   /******************************************************************************//**
-   * @test verify proper working of queue management used within ProcDispatcher.
+   * @test verify proper working of queue management used within SteamDispatcher.
    *       - can enqueue and dequeue command messages
    *       - handling of priority messages
    * 
    * @see CommandQueue
    * @see DispatcherLoop
-   * @see ProcDispatcher
+   * @see SteamDispatcher
    * @see DispatcherLooper_test
    */
   class CommandQueue_test : public Test

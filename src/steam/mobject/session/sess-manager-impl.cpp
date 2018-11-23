@@ -42,7 +42,7 @@
 #include "steam/mobject/session.hpp"
 #include "steam/mobject/session/sess-manager-impl.hpp"
 #include "steam/mobject/session/lifecycle-advisor.hpp"
-#include "steam/control/proc-dispatcher.hpp"
+#include "steam/control/steam-dispatcher.hpp"
 #include "steam/config-resolver.hpp"
 #include "steam/asset/timeline.hpp"
 #include "common/query/defs-manager.hpp"
@@ -148,14 +148,14 @@ namespace session {
         void
         openSessionInterface()  override
           {
-            control::ProcDispatcher::instance().activate();
+            control::SteamDispatcher::instance().activate();
           }
         
         
         void
         closeSessionInterface()  override
           {
-            control::ProcDispatcher::instance().deactivate();
+            control::SteamDispatcher::instance().deactivate();
           }
         
         
@@ -173,7 +173,7 @@ namespace session {
         void
         commandLogCheckpoint()  override
           {                            //////////////////////////////////////// TICKET #697
-            control::ProcDispatcher::instance().awaitDeactivation();
+            control::SteamDispatcher::instance().awaitDeactivation();
             INFO (command, " Session shutdown. Command processing stopped.");
           }
         

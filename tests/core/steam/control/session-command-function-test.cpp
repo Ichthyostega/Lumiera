@@ -26,7 +26,7 @@
  ** This is a test combining several components to operate similar as in the real application,
  ** while still relying upon an unit-test like setup. The goal is to cover how _session commands_
  ** are issued from an access point (CoreService) in the UI backbone, passed on through an
- ** abstraction interface (the SessionCommand facade), handed over to the ProcDispatcher,
+ ** abstraction interface (the SessionCommand facade), handed over to the SteamDispatcher,
  ** which, running within a dedicated thread (the »session loop thread«), enqueues all
  ** these commands and dispatches them one by one.
  ** 
@@ -60,7 +60,7 @@
  ** tuned to work satisfactory in practice. This whole approach can only work, because each
  ** Posix locking call actually requires the runtime system to issue a read/write barrier,
  ** which are known to have global effects on the relevant platforms (x86 and x86_64).
- ** And because the production relevant code in ProcDispatcher uses sufficient (in fact
+ ** And because the production relevant code in SteamDispatcher uses sufficient (in fact
  ** even excessive) locking, the state variables of the test fixture are properly synced
  ** by sideeffect.
  ** 
@@ -79,7 +79,7 @@ extern "C" {
 #include "common/interfaceregistry.h"
 }
 
-#include "steam/control/proc-dispatcher.hpp"
+#include "steam/control/steam-dispatcher.hpp"
 #include "steam/control/command-def.hpp"
 #include "include/session-command-facade.h"
 #include "vault/thread-wrapper.hpp"
@@ -180,7 +180,7 @@ namespace test    {
    *       - verify that commands are really executed single-threaded
    * 
    * @see steam::SessionSubsystem
-   * @see ProcDispatcher
+   * @see SteamDispatcher
    * @see CommandQueue_test
    * @see AbstractTangible_test::invokeCommand()
    */
@@ -233,15 +233,15 @@ namespace test    {
       void
       startDispatcher()
         {
-          CHECK (not ProcDispatcher::instance().isRunning());
+          CHECK (not SteamDispatcher::instance().isRunning());
           
-          ProcDispatcher::instance().start ([&] (string* problemMessage)
-                                                {
-                                                  CHECK (isnil (*problemMessage));
-                                                  thread_has_ended = true;
-                                                });
+          SteamDispatcher::instance().start ([&] (string* problemMessage)
+                                                 {
+                                                   CHECK (isnil (*problemMessage));
+                                                   thread_has_ended = true;
+                                                 });
           
-          CHECK (ProcDispatcher::instance().isRunning());
+          CHECK (SteamDispatcher::instance().isRunning());
           CHECK (not thread_has_ended);
         }
       bool thread_has_ended{false};
@@ -251,11 +251,11 @@ namespace test    {
       void
       stopDispatcher()
         {
-          CHECK (ProcDispatcher::instance().isRunning());
-          ProcDispatcher::instance().requestStop();
+          CHECK (SteamDispatcher::instance().isRunning());
+          SteamDispatcher::instance().requestStop();
           
           __DELAY__
-          CHECK (not ProcDispatcher::instance().isRunning());
+          CHECK (not SteamDispatcher::instance().isRunning());
           CHECK (thread_has_ended);
         }
       
@@ -395,14 +395,14 @@ namespace test    {
           usleep(MAX_RAND_DELAY_us * NUM_INVOC_PER_THRED / 2);
           
           // stop the dispatching to cause the queue to build up...
-          ProcDispatcher::instance().deactivate();
-          ProcDispatcher::instance().awaitDeactivation();
+          SteamDispatcher::instance().deactivate();
+          SteamDispatcher::instance().awaitDeactivation();
           
           __DELAY__
-          ProcDispatcher::instance().activate();
+          SteamDispatcher::instance().activate();
           
           __DELAY__
-          while (not ProcDispatcher::instance().empty());
+          while (not SteamDispatcher::instance().empty());
           
           __DELAY__
           CHECK (testCommandState - prevState == Time(expectedOffset));

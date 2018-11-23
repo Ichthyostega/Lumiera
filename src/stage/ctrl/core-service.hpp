@@ -71,7 +71,7 @@
  ** messages, which can not be handled in a generic way on the Nexus:
  ** - *act* handles command invocation within the Session core, and
  **   is treated by [forwarding](\ref command-handler.hpp) it over the
- **   SessionCommand facade to the [Steam-Dispatcher](\ref proc-dispatcher.hpp)
+ **   SessionCommand facade to the [Steam-Dispatcher](\ref steam-dispatcher.hpp)
  ** - *note* observes and captures presentation state note messages, which
  **   are to be handled by a central presentation state manager (TODO 1/17).
  ** 

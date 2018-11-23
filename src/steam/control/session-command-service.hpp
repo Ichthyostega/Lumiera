@@ -68,7 +68,7 @@ namespace control {
    * proxy within the application core to route calls through this interface.
    * 
    * This service is backed by implementation facilities embedded within
-   * the ProcDispatcher, exposed through the CommandDispatch interface.
+   * the SteamDispatcher, exposed through the CommandDispatch interface.
    * Additionally, it operates a CommandInstanceManager to allow the
    * creation of local instances "opened" for argument binding.
    * In fact, this is the standard "command cycle" and the

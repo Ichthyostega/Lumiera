@@ -32,7 +32,7 @@
  ** the sequence within the enum HandlingPattern::ID; all of this
  ** is done hard wired and without any dynamic configuration.
  **
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  ** @see Session
  **
  */

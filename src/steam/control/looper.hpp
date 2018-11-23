@@ -22,12 +22,12 @@
 
 
 /** @file looper.hpp
- ** Implementation building block of ProcDispatcher to control waiting and timing.
+ ** Implementation building block of SteamDispatcher to control waiting and timing.
  ** This helper encapsulates the loop control logic to separate it from actual
  ** implementation of timing and waiting (per pthread condition variables).
  ** It exposes a combined condition (to be used for waiting) plus any further
  ** state predicates necessary to manage the state transitions regarding the
- ** ProcDispatcher implementation:
+ ** SteamDispatcher implementation:
  ** - detect working state, based on a closure to detect an non empty CommandQueue
  ** - handle the disabling and shutdown of the dispatching task
  ** - detect an idle state to allow the DispatcherLoop to go to sleep
@@ -38,7 +38,7 @@
  **   used as a synchronisation point to halt the loop.
  ** 
  ** @see DispatcherLooper_test
- ** @see proc-dispatcher.hpp
+ ** @see steam-dispatcher.hpp
  ** @see DispatcherLoop
  ** @see CommandQueue
  **
@@ -228,7 +228,7 @@ namespace control {
   
   
   /** @internal establish the typical timeout for idle sleep.
-   * When the ProcDispatcher has no work to do, it needs to wake up regularly
+   * When the SteamDispatcher has no work to do, it needs to wake up regularly
    * for a checkpoint, to determine if the Builder needs to be triggered or
    * the shutdown-flag be checked. So the period established here defines
    * some kind of minimal reaction especially for the builder, so to ensure

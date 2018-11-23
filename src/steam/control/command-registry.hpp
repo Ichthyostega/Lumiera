@@ -49,7 +49,7 @@
  ** until de-registered explicitly, or until application shutdown.
  ** 
  ** @see Command
- ** @see ProcDispatcher
+ ** @see SteamDispatcher
  **
  */
 

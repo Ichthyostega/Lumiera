@@ -39,7 +39,7 @@
 extern "C" {
 #include "common/interfaceregistry.h"
 }
-#include "steam/control/proc-dispatcher.hpp"
+#include "steam/control/steam-dispatcher.hpp"
 #include "include/session-command-facade.h"
 
 #include <functional>
@@ -214,24 +214,24 @@ namespace test    {
       /** @test simplified integration test of command dispatch
        *        - performs the minimal actions necessary to start the session loop thread
        *        - then issues a test command, which will be queued and dispatched
-       *          by the ProcDispatcher. Like in the real application, the command
+       *          by the SteamDispatcher. Like in the real application, the command
        *          executions happens in the dedicated session loop thread, and thus
        *          we have to wait a moment, after which execution can be verified.
-       *        - finally the ProcDispatcher is signalled to shut down.
+       *        - finally the SteamDispatcher is signalled to shut down.
        *  @see SessionCommandFunction_test for much more in-depth coverage of this aspect
        */
       void
       check_DispatcherInvocation()
         {
-          CHECK (not ProcDispatcher::instance().isRunning());
+          CHECK (not SteamDispatcher::instance().isRunning());
           lumiera_interfaceregistry_init();
           lumiera::throwOnError();
 #define __DELAY__ usleep(10000);
           
           bool thread_has_ended{false};
-          ProcDispatcher::instance().start ([&] (string*) { thread_has_ended = true; });
+          SteamDispatcher::instance().start ([&] (string*) { thread_has_ended = true; });
           
-          CHECK (ProcDispatcher::instance().isRunning());
+          CHECK (SteamDispatcher::instance().isRunning());
           CHECK (not thread_has_ended);
           
           //----Session-Loop-Thread-is-running------------------------
@@ -251,12 +251,12 @@ namespace test    {
           
           //----Session-Loop-Thread-is-running------------------------
           
-          // shut down the ProcDispatcher...
-          CHECK (ProcDispatcher::instance().isRunning());
-          ProcDispatcher::instance().requestStop();
+          // shut down the SteamDispatcher...
+          CHECK (SteamDispatcher::instance().isRunning());
+          SteamDispatcher::instance().requestStop();
           
           __DELAY__  // wait a moment for the other thread to terminate...
-          CHECK (not ProcDispatcher::instance().isRunning());
+          CHECK (not SteamDispatcher::instance().isRunning());
           CHECK (thread_has_ended);
           
           lumiera_interfaceregistry_destroy();
