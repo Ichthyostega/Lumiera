@@ -191,7 +191,7 @@ namespace control {
       void
       awaitStateProcessed()  const
         {
-          Lock blockWaiting(unConst(this), &DispatcherLoop::stateIsSynched);       ///////////////////////TICKET #1057 : const correctness on wait predicate
+          Lock blockWaiting(unConst(this), &DispatcherLoop::isStateSynched);       ///////////////////////TICKET #1057 : const correctness on wait predicate
             // wake-up typically by updateState()
         }
       
@@ -242,8 +242,8 @@ namespace control {
                   if (looper_.runBuild())
                     startBuilder();
                   else
-                  if (looper_.isWorking())
-                    processCommands();
+                    if (looper_.isWorking())
+                      processCommands();
                   updateState();
                 }
             }
@@ -277,7 +277,7 @@ namespace control {
         }
       
       bool
-      stateIsSynched()
+      isStateSynched()
         {
           if (this->invokedWithinThread())
             throw error::Fatal("Possible Deadlock. "
@@ -314,7 +314,7 @@ namespace control {
       void
       startBuilder()
         {
-          TODO ("+++ start the Steam-Builder...");
+          INFO (builder, "+++ start the Steam-Builder...");
         }
     };
   

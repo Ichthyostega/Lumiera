@@ -116,11 +116,12 @@ namespace control {
       bool shutdown_ = false;
       bool disabled_ = false;
       bool inChange_ = false;
+      bool hasWork_  = false;
+      bool isDirty_  = false;
+      
+      TimeVar gotDirty_ = Time::NEVER;
       
       Predicate hasCommandsPending_;
-      
-      uint dirty_ = 0;
-      TimeVar gotDirty_ = Time::NEVER;
       
         
     public:
@@ -136,8 +137,9 @@ namespace control {
       
       bool isDying()    const  { return shutdown_; }
       bool isDisabled() const  { return disabled_ or isDying(); }
-      bool isWorking()  const  { return hasCommandsPending_() and not isDisabled(); }
-      bool idleBuild()  const  { return dirty_ and not hasCommandsPending_(); }
+      bool useTimeout() const  { return isDirty_ and not isDisabled(); }
+      bool isWorking()  const  { return hasWork_ and not isDisabled(); }
+      bool idleBuild()  const  { return isDirty_ and not hasWork_; }
       bool runBuild()   const  { return (idleBuild() or forceBuild()) and not isDisabled(); }
       bool isIdle()     const  { return not (isWorking() or runBuild() or isDisabled()); }
       
@@ -170,13 +172,12 @@ namespace control {
       markStateProcessed()
         {
           inChange_ = false;
-          if (idleBuild() or forceBuild())
-            --dirty_;
-          ENSURE (dirty_ <= 2);
+          if (runBuild())
+            isDirty_ = false; // assume the builder has been triggered in the loop body
         }
       
       bool
-      hasPendingChanges()  const
+      hasPendingChanges()  const  ///< "check point"
         {
           return inChange_;
         }
@@ -185,16 +186,17 @@ namespace control {
       bool
       requireAction()
         {
-          inChange_ = true;
-          if (isWorking() and not dirty_)
-            {
-              dirty_ = 2;
+          hasWork_ = hasCommandsPending_();
+          bool proceedImmediately = isWorking() or forceBuild() or isDying();
+          inChange_ = proceedImmediately or useTimeout();
+          
+          if (isWorking() and not isDirty_)
+            { // schedule Builder run after timeout
               startBuilderTimeout();
+              isDirty_ = true;
             }
           
-          return isWorking()
-              or forceBuild()
-              or isDying();
+          return proceedImmediately;
         }
       
       /** state fusion to control looping */
@@ -207,11 +209,11 @@ namespace control {
       ulong                                        /////////////////////////////////////////////TICKET #1056 : better return a std::chrono value here 
       getTimeout()  const
         {
-          if (isDisabled() or not dirty_)
+          if (not useTimeout())
             return 0;
           else
             return wakeTimeout_ms()
-                 * (dirty_ and not isWorking()? 1 : slowdownFactor());
+                 * (isDirty_ and not isWorking()? 1 : slowdownFactor());
         }
       
       
@@ -262,7 +264,7 @@ namespace control {
   {
     static Duration maxBuildTimeout{Time(wakeTimeout_ms() * slowdownFactor(), 0)};
     
-    return dirty_
+    return isDirty_
        and maxBuildTimeout < Offset(gotDirty_, RealClock::now());
   }                                                                          ///////////////////TICKET #1055 : likely to become more readable when Lumiera Time has std::chrono integration 
 

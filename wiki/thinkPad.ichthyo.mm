@@ -6706,7 +6706,7 @@
 </node>
 <node CREATED="1504833678189" ID="ID_173722644" MODIFIED="1518487921063" TEXT="Einstiegspunkt">
 <arrowlink COLOR="#717686" DESTINATION="ID_65709251" ENDARROW="Default" ENDINCLINATION="-8;-209;" ID="Arrow_ID_1510990213" STARTARROW="None" STARTINCLINATION="92;95;"/>
-<node CREATED="1504833683333" ID="ID_583036636" MODIFIED="1518487921063" TEXT="Component View">
+<node CREATED="1504833683333" ID="ID_583036636" MODIFIED="1544329029063" TEXT="Component View">
 <arrowlink COLOR="#92a9df" DESTINATION="ID_1717772756" ENDARROW="Default" ENDINCLINATION="-1346;-3359;" ID="Arrow_ID_1986148222" STARTARROW="None" STARTINCLINATION="385;845;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -20207,7 +20207,7 @@
 <node CREATED="1504833487359" ID="ID_1631525475" MODIFIED="1518487921084" TEXT="UI-Frame: Fenster"/>
 <node CREATED="1504833498453" ID="ID_815439481" MODIFIED="1518487921084" TEXT="Perspektive"/>
 <node CREATED="1504833508516" ID="ID_1973916831" MODIFIED="1518487921084" TEXT="einzelne Panel"/>
-<node CREATED="1504833540720" ID="ID_1717772756" MODIFIED="1518487921084" TEXT="Component View">
+<node CREATED="1504833540720" ID="ID_1717772756" MODIFIED="1544329029063" TEXT="Component View">
 <linktarget COLOR="#92a9df" DESTINATION="ID_1717772756" ENDARROW="Default" ENDINCLINATION="-1346;-3359;" ID="Arrow_ID_1986148222" SOURCE="ID_583036636" STARTARROW="None" STARTINCLINATION="385;845;"/>
 <linktarget COLOR="#929fdf" DESTINATION="ID_1717772756" ENDARROW="Default" ENDINCLINATION="-34;-71;" ID="Arrow_ID_1343685046" SOURCE="ID_349655067" STARTARROW="None" STARTINCLINATION="-79;76;"/>
 <node CREATED="1504833565425" ID="ID_529173859" MODIFIED="1518487921084" TEXT="Timeline"/>
@@ -44602,7 +44602,8 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1544310988414" FOLDED="true" ID="ID_134908056" MODIFIED="1544320824720" TEXT="ProcDispatcher macht idle-Loop">
+<node COLOR="#435e98" CREATED="1544310988414" FOLDED="true" ID="ID_134908056" MODIFIED="1544329969857" TEXT="ProcDispatcher macht idle-Loop">
+<arrowlink COLOR="#ce3649" DESTINATION="ID_71855569" ENDARROW="Default" ENDINCLINATION="105;0;" ID="Arrow_ID_1871191743" STARTARROW="None" STARTINCLINATION="181;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1544311004661" ID="ID_1064987345" MODIFIED="1544311012720" TEXT="Symptom: CPU-Last im Ruhezustand"/>
 <node CREATED="1544311014140" ID="ID_392351205" MODIFIED="1544320819468" TEXT="Grund: f&#xe4;llt sofort wieder aus timed wait">
@@ -44628,6 +44629,165 @@
 <node COLOR="#338800" CREATED="1544320791339" ID="ID_536822312" MODIFIED="1544320800480" TEXT="Fix: else-Zweig, reset()">
 <icon BUILTIN="button_ok"/>
 </node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1544328974221" FOLDED="true" ID="ID_71855569" MODIFIED="1544386435837" TEXT="ProcDispatcher bleibt h&#xe4;ngen">
+<linktarget COLOR="#ce3649" DESTINATION="ID_71855569" ENDARROW="Default" ENDINCLINATION="105;0;" ID="Arrow_ID_1871191743" SOURCE="ID_134908056" STARTARROW="None" STARTINCLINATION="181;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1544329099419" ID="ID_1105978437" MODIFIED="1544329164023" TEXT="SessionCommandFunction_test">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sporadich, nicht bei jedem Lauf, aber reproduzierbar.
+    </p>
+    <p>
+      Bleibt h&#228;ngen an der Stelle, wo der Test den Dispatcher vor&#252;bergehend deaktiviert,
+    </p>
+    <p>
+      und dann auf den Deaktiviert-Zustand <b>wartet</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1544329167436" ID="ID_739717124" MODIFIED="1544329363509" TEXT="Problem mit der Zustands-Logik">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1544329192703" ID="ID_1013421079" MODIFIED="1544329202330" TEXT="deaktivert bedeutet requireAction() == false"/>
+<node CREATED="1544329202903" ID="ID_1019916123" MODIFIED="1544329356857" TEXT="und dadurch warten wir ohne Timeout">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1544329280619" ID="ID_1784122176" MODIFIED="1544329348875" TEXT="und durch den Bug in lib::Sync wurde das nicht wirksam">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil der Objekt-Monitor nicht mehr bedingungslos gewartet hat,
+    </p>
+    <p>
+      nachdem <i>einmal</i>&#160;ein wait mit Timeout verwendet worden war
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1544329216228" ID="ID_422426535" MODIFIED="1544329234043">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber <b>inChange</b>&#160;bleibt <b>true</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1544329235934" ID="ID_605336452" MODIFIED="1544329273933" TEXT="...und darauf wartet die &#xe4;u&#xdf;ere H&#xfc;lle">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1544329367261" ID="ID_50498392" MODIFIED="1544386159034" TEXT="L&#xf6;sungen" VGAP="15">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1544329727165" FOLDED="true" ID="ID_1043095728" MODIFIED="1544386423962" TEXT="requireAction() == true auch wenn disabled">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1544329753698" ID="ID_1588685067" MODIFIED="1544329760502" TEXT="geht nicht.">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1544329764640" ID="ID_706638200" MODIFIED="1544329781788" TEXT="denn dann kommen wir nicht mehr in den wait-state">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1544329793943" ID="ID_1668546000" MODIFIED="1544329822612" TEXT="requireAction wird ja als Condition f&#xfc;r den Wait verwendet">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1544329372318" FOLDED="true" ID="ID_88425113" MODIFIED="1544386423070" TEXT="inChange nur setzen wenn requireAction() == true">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544329663574" ID="ID_565123980" MODIFIED="1544332799520" TEXT="Verdacht: kann dann trotzdem per Timeout aufwachen">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1544329684707" ID="ID_651175391" MODIFIED="1544329708068" TEXT="und dann w&#xe4;re inChange == false, obwohl wir arbeiten (Builder l&#xe4;uft)"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544332821150" ID="ID_484338481" MODIFIED="1544332874097" TEXT="fatale Konsequenzen....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es k&#246;nnte dann n&#228;mlich die Session geschlossen und freigegeben werden,
+    </p>
+    <p>
+      obwohl noch der Builder l&#228;uft
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1544332907967" ID="ID_760793562" MODIFIED="1544332932033" TEXT="Analyse: kann das passieren?">
+<icon BUILTIN="help"/>
+<node CREATED="1544332934619" ID="ID_558823055" MODIFIED="1544333038537" TEXT="Fall: disabled-setzen w&#xe4;hrend dem Timeout">
+<node CREATED="1544333050044" ID="ID_318735401" MODIFIED="1544333066940" TEXT="Timeout eingetreten ==&gt; requireAction war false"/>
+<node CREATED="1544333069881" ID="ID_555896336" MODIFIED="1544333084882" TEXT="nach ge&#xe4;nderter Logik w&#xe4;re dann auch inChange == false"/>
+<node CREATED="1544333087958" ID="ID_1209619554" MODIFIED="1544333108407" TEXT="Folglich wird f&#xe4;lschlicherweise nicht gewartet"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544333135104" ID="ID_549018822" MODIFIED="1544333155423" TEXT="Antwort: ja das kann passieren">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1544333313167" ID="ID_1694353778" MODIFIED="1544333323414" TEXT="damit ist diese L&#xf6;sung hinf&#xe4;llig">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1544333328341" FOLDED="true" ID="ID_349762653" MODIFIED="1544386421940" TEXT="inChange unabh&#xe4;ngig von requireAction() machen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1544333344379" ID="ID_1647118494" MODIFIED="1544333369026" TEXT="eigene Methode, die aufgerufen wird, wenn wir aus dem wait() rauskommen"/>
+<node CREATED="1544333456987" ID="ID_585691817" MODIFIED="1544333897248" TEXT="k&#xf6;nnte gehen, erscheint mir aber gef&#xe4;hrlich">
+<icon BUILTIN="help"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1544333510982" ID="ID_1431407168" MODIFIED="1544333516439" TEXT="was ist wenn....">
+<node CREATED="1544333517379" ID="ID_689738064" MODIFIED="1544333533684" TEXT="disabled gesetzt wird, w&#xe4;hrend wir im wait() sind?">
+<node CREATED="1544333550151" ID="ID_100143787" MODIFIED="1544333556410" TEXT="dann ist inChange == false"/>
+<node CREATED="1544333610495" ID="ID_942332687" MODIFIED="1544333626888" TEXT="aber deactivateCommandProecssing() -&gt; notifyAll()"/>
+<node CREATED="1544333630018" ID="ID_1936407440" MODIFIED="1544333636367" TEXT="noch w&#xe4;hrend er das Lock hat"/>
+<node CREATED="1544333723957" ID="ID_1134715607" MODIFIED="1544333742040" TEXT="sobald er das Lock aufgibt, wacht der Loop-Thread auf"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544333778756" ID="ID_705117923" MODIFIED="1544333804986" TEXT="gibt dann aber auch das Lock auf, bevor er inChange setzen kann">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544333809035" ID="ID_1284134914" MODIFIED="1544333881455" TEXT="m&#xf6;glicher Race">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1284134914" ENDARROW="Default" ENDINCLINATION="-26;57;" ID="Arrow_ID_662106184" SOURCE="ID_151622227" STARTARROW="None" STARTINCLINATION="159;0;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+<node CREATED="1544333819034" ID="ID_151622227" MODIFIED="1544333881455" TEXT="L&#xf6;sung hinf&#xe4;llig, wegen potentiellem Race">
+<arrowlink DESTINATION="ID_1284134914" ENDARROW="Default" ENDINCLINATION="-26;57;" ID="Arrow_ID_662106184" STARTARROW="None" STARTINCLINATION="159;0;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1544333909701" ID="ID_328876957" MODIFIED="1544386156765" STYLE="fork" TEXT="inChange in requireAction() setzen, aber logisch pr&#xe4;zise">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1544333933346" ID="ID_593273191" MODIFIED="1544386155027" TEXT="d.h. nur wenn nicht warten und kein Timeout"/>
+<node CREATED="1544381554267" ID="ID_193163875" MODIFIED="1544386155027" TEXT="Zustand nur einmal in die Flags &#xfc;bernhmen, zu Beginn"/>
+<node CREATED="1544382733514" ID="ID_1386275063" MODIFIED="1544386155027" TEXT="Trick mit dem Countdown auf isDirty_ zur&#xfc;ckbauen"/>
+</node>
+</node>
+<node CREATED="1544386177470" ID="ID_1764197819" MODIFIED="1544386413663" TEXT="erst jetzt sehe ich das erwartete Builder-Verhalten">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1544386386938" ID="ID_1316391277" MODIFIED="1544386416510" TEXT="und der SessionCommandFunction_test bleibt nicht mehr h&#xe4;ngen">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1544386406767" ID="ID_789739914" MODIFIED="1544386410583" TEXT="problem solved">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
