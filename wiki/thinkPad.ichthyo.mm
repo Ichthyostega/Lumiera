@@ -17901,7 +17901,8 @@
       <i>Standard</i>&#160;UI-Mechanik &#252;berlassen wir GTK
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17917,7 +17918,8 @@
       Aus Gr&#252;nden der Konsistenz und Zukunftsf&#228;higkeit
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1541858088132" ID="ID_303565989" MODIFIED="1541858326966">
 <richcontent TYPE="NODE"><html>
@@ -17929,7 +17931,8 @@
       unser <b>InteractionControl</b>&#160;ist eine Zwischenschicht
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17950,7 +17953,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -19089,7 +19093,7 @@
 <node CREATED="1541857340976" ID="ID_433103364" MODIFIED="1541857347211" TEXT="Lumiera Time Framework">
 <node CREATED="1541857349526" ID="ID_1259099260" MODIFIED="1541857355010" TEXT="bietet Konzept &quot;Grid&quot;"/>
 </node>
-<node CREATED="1541861495569" ID="ID_1949450244" MODIFIED="1542309879488" TEXT="generische ZoomWindow-Komponente">
+<node CREATED="1541861495569" ID="ID_1949450244" MODIFIED="1541861631284" TEXT="generische ZoomWindow-Komponente">
 <arrowlink COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" STARTARROW="None" STARTINCLINATION="490;0;"/>
 </node>
 <node CREATED="1541857367446" ID="ID_34718193" MODIFIED="1541857371325" TEXT="Anfragen">
@@ -19461,7 +19465,7 @@
 </node>
 <node CREATED="1541861481967" ID="ID_1316730142" MODIFIED="1541861716241" TEXT="Feststellen der Canvas-Position">
 <arrowlink COLOR="#2a79c1" DESTINATION="ID_1038931568" ENDARROW="Default" ENDINCLINATION="-511;19;" ID="Arrow_ID_1052516165" STARTARROW="None" STARTINCLINATION="-253;-12;"/>
-<node CREATED="1541862243012" ID="ID_400560063" MODIFIED="1542309934167" TEXT="Canvas kennt seine eigene Ausdehnung (in Pixeln)">
+<node CREATED="1541862243012" ID="ID_400560063" MODIFIED="1541862257541" TEXT="Canvas kennt seine eigene Ausdehnung (in Pixeln)">
 <linktarget COLOR="#60749f" DESTINATION="ID_400560063" ENDARROW="Default" ENDINCLINATION="-46;0;" ID="Arrow_ID_449772156" SOURCE="ID_1283622298" STARTARROW="None" STARTINCLINATION="-13;18;"/>
 </node>
 <node CREATED="1541861743088" ID="ID_1696653468" MODIFIED="1541865199414" TEXT="Display-Manager">
@@ -21295,8 +21299,8 @@
 <node CREATED="1488423493014" ID="ID_64529473" MODIFIED="1518487921085" TEXT="Navigation"/>
 <node CREATED="1488423514355" ID="ID_917891687" MODIFIED="1518487921085" TEXT="Steuerelemente">
 <node CREATED="1541858529489" ID="ID_838803024" MODIFIED="1541861634012" TEXT="ZoomWindow">
-<linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" SOURCE="ID_1949450244" STARTARROW="None" STARTINCLINATION="490;0;"/>
 <linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-499;-1329;" ID="Arrow_ID_842684168" SOURCE="ID_1828075998" STARTARROW="None" STARTINCLINATION="490;0;"/>
+<linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" SOURCE="ID_1949450244" STARTARROW="None" STARTINCLINATION="490;0;"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541858541550" ID="ID_1912142591" MODIFIED="1541858559935" TEXT="generische Abstraktionskomponente">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -21325,7 +21329,7 @@
 <node CREATED="1541859280000" ID="ID_1932782561" MODIFIED="1541859283008" TEXT="playhead"/>
 <node CREATED="1541859284069" ID="ID_299608050" MODIFIED="1541859293743" TEXT="mouse"/>
 </node>
-<node CREATED="1541859608646" ID="ID_412475230" MODIFIED="1542384357227" TEXT="time translation anchor point">
+<node CREATED="1541859608646" ID="ID_412475230" MODIFIED="1541859614182" TEXT="time translation anchor point">
 <node CREATED="1542384728240" ID="ID_538080146" MODIFIED="1542384737841" TEXT="nicht der Nullpunkt derZeitskala"/>
 <node CREATED="1542384738364" ID="ID_922112299" MODIFIED="1542384750313" TEXT="sondern der Bezugspunkt f&#xfc;r die &#xdc;bersetzung Zeit -&gt; Pixel"/>
 </node>
@@ -21418,7 +21422,7 @@
 <node CREATED="1541860828603" ID="ID_111513506" MODIFIED="1541860839002" TEXT="Zeit"/>
 <node CREATED="1541860831875" ID="ID_1775831703" MODIFIED="1541860835311" TEXT="Extension"/>
 </node>
-<node CREATED="1541860818012" FOLDED="true" ID="ID_814200290" MODIFIED="1544127129504" TEXT="vertikale Dimension stets topologisch">
+<node CREATED="1541860818012" FOLDED="true" ID="ID_814200290" MODIFIED="1541860825864" TEXT="vertikale Dimension stets topologisch">
 <node CREATED="1544127119809" ID="ID_431805088" MODIFIED="1544127122858" TEXT="nicht immer...."/>
 <node CREATED="1544127123803" ID="ID_1360167609" MODIFIED="1544127127665" TEXT="Ausnahme: Kurven"/>
 </node>
@@ -21466,7 +21470,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1541860985526" ID="ID_640984391" MODIFIED="1541861006543" TEXT="Struct mit Methoden"/>
-<node CREATED="1541861314456" ID="ID_267107783" MODIFIED="1544310842808" TEXT="generisch">
+<node CREATED="1541861314456" ID="ID_267107783" MODIFIED="1541861376398" TEXT="generisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     

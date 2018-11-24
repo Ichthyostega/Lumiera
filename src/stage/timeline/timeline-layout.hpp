@@ -83,6 +83,7 @@
 #define STAGE_TIMELINE_TIMELINE_LAYOUT_H
 
 #include "stage/gtk-base.hpp"
+#include "stage/timeline/display-manager.hpp"
 #include "stage/timeline/header-pane-widget.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
 
@@ -107,6 +108,7 @@ namespace timeline {
    * @todo WIP-WIP as of 10/2018
    */
   class TimelineLayout
+    : public DisplayManager
     {
       Glib::PropertyProxy<int> paneSplitPosition_;
       
@@ -120,6 +122,8 @@ namespace timeline {
       
       /** @internal anchor the display of the root track into the two display panes */
       void installRootTrack (TrackHeadWidget&,TrackBody&);
+      
+    protected:/* ==== Interface: LayoutManager===== */
       
     private:/* ===== Internals ===== */
      

@@ -111,14 +111,14 @@ namespace session {
     const RandID forkRootID{stage::ATTR_fork};
     const GenNode timeline      = emptyTimeline (baseID, forkRootID)
                 , rootTrackName = GenNode{string{stage::ATTR_name}, "Track-"+baseID}
-                , FORK_ROOT     = MakeRec().genNode(forkRootID)
+                , forkRoot      = MakeRec().genNode(forkRootID)
                 ;
     
     return MutationMessage{ ins (timeline)
                           , mut (timeline)
-                            , mut (FORK_ROOT)
+                            , mut (forkRoot)
                               , set (rootTrackName)
-                            , emu (FORK_ROOT)
+                            , emu (forkRoot)
                           , emu (timeline)
                           };
   }

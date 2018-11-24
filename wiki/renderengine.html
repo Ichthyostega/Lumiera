@@ -9078,13 +9078,18 @@ Besides building on the asset management, implementing Timeline (and Sequence) a
 This topic is {{red{postponed as of 10/2018}}} &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
 </pre>
 </div>
-<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="201810281443" tags="spec GuiPattern img" changecount="5">
+<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="201811101600" tags="spec GuiPattern img" changecount="8">
 <pre>//guide and control the concrete display properties of the various sub components (tracks, clips) comprising a timeline display.//
 
 The TimelineDisplayManager actually is an abstraction, a control interface, revolving around the guidance individual components need in order to settle on a proper display. Those components are represented as mediating entities, the TrackPresenter and the ClipPresenter, each of which controls and manages a mostly passive GTK widget. To this end, the presenters need to know at which virtual coordinates their corresponding widgets would show up, and they need to know if these widgets need to be actually present at the moment. Also, especially the ClipPresenter needs to know which ''clip appearance style'' to choose for the corresponding slave widget.
 
 !display evaluation pass
 [&gt;img[Clip presentation control|uml/Timeline-display-evaluation.png]]Since the timeline display is formed by several nested collections of elements, a proper display layout must incorporate information from all those parts. A naive approach likely would just iterate over them and reach in to extract data -- or even worse, build a separate display data store, which then needs to be kept in sync with the component hierarchy. Any of these naive working styles would lead to high coupling and it turns the necessary adjustment and changes into a liability, which raises due to evolution of requirements. Over time, such a dangerous situation can only be avoided altogether by admitting the collaborative nature of the task at hand. To get there, we need to distil the abstraction shared between the global and the local concerns, and we need to shape it such as to build onto some kind of invariant, allowing that abstraction to re-emerge at several levels of locality.
+
+!translation service for the widgets
+Another, closely related topic, handled within this context, is the translation from model structures and units in to display layout coordinates. Within the model, we can distinguish several dimensions (degrees of freedom). For one, there is the topology, the ''location or part'' of the model to expose through the UI. Moreover, there is the ''degree of detail'' for this UI representation. And then, there is the ''temporal position and extension'' to represent.
+
+By principle, //widgets always work exclusively in pixel coordinates// -- thus we need the help of a coordinating entity to find out where some entity shall be located on the GTK drawing canvas. This becomes especially relevant for the timeline body, since there we're relying on a GuiCustomWidget to perform and control some of the UI drawing by specific custom rules and procedures.
 </pre>
 </div>
 <div title="TimelineSequences" modifier="Ichthyostega" created="200811011836" modified="201505310138" tags="design decision img" changecount="4">
