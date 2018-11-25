@@ -77,7 +77,10 @@ namespace timeline {
       this->property_expand() = true;                               //  dynamically grab any available additional space
       this->add(canvas_);
       
-//    canvas_.adjustSize();
+      { // for the initial empty canvas -- use space the enclosing scrolled window got.
+        auto currSize = get_allocation();
+        canvas_.set_size (currSize.get_width(), currSize.get_height());
+      }
       
       // show everything....
       this->show_all();
