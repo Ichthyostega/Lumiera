@@ -66,7 +66,7 @@ namespace timeline {
   
   TrackBody::TrackBody()
     : overviewHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
-    , contentHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
+    , contentHeight_{DEFAULT_CONTENT_HEIGHT_px}
     , subTracks_{}
     { }
   

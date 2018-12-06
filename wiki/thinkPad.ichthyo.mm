@@ -19423,8 +19423,7 @@
       ...in dem der Timeline body-canvas n&#228;mlich liegt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -19577,7 +19576,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1540640109628" ID="ID_147809215" MODIFIED="1540640128945" TEXT="TODO: TimelineGui (proxy) mu&#xdf; kaskadieren">
 <icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544135984042" ID="ID_429363053" MODIFIED="1544310842213" TEXT="Grund f&#xfc;r den Fehler im Nexus?">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544135984042" ID="ID_429363053" MODIFIED="1544136004274" TEXT="Grund f&#xfc;r den Fehler im Nexus?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21297,7 +21296,7 @@
 <node CREATED="1541860174509" ID="ID_983216306" MODIFIED="1541860194622" TEXT="position within window">
 <node CREATED="1541860195426" ID="ID_1143510761" MODIFIED="1541860197638" TEXT="relative"/>
 <node CREATED="1541860198222" ID="ID_847832000" MODIFIED="1541860200197" TEXT="absolute">
-<node CREATED="1544126105472" ID="ID_1636490570" MODIFIED="1544310842664" TEXT="relative-absolute">
+<node CREATED="1544126105472" ID="ID_1636490570" MODIFIED="1544126149549" TEXT="relative-absolute">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21319,7 +21318,7 @@
 </node>
 <node CREATED="1542384160498" ID="ID_1252241860" MODIFIED="1542384163677" TEXT="TimeWindow">
 <node CREATED="1542384165737" ID="ID_705415129" MODIFIED="1542384177115" TEXT="die konkret sichbare TimeSpan"/>
-<node CREATED="1542384188438" ID="ID_444895141" MODIFIED="1544310842677" TEXT="stets in realem relativem Zeitma&#xdf;">
+<node CREATED="1542384188438" ID="ID_444895141" MODIFIED="1542384280140" TEXT="stets in realem relativem Zeitma&#xdf;">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21334,8 +21333,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1541859633805" ID="ID_304890799" MODIFIED="1541859637628" TEXT="Scale">
@@ -21383,7 +21381,7 @@
 <node CREATED="1541860828603" ID="ID_111513506" MODIFIED="1541860839002" TEXT="Zeit"/>
 <node CREATED="1541860831875" ID="ID_1775831703" MODIFIED="1541860835311" TEXT="Extension"/>
 </node>
-<node CREATED="1541860818012" FOLDED="true" ID="ID_814200290" MODIFIED="1541860825864" TEXT="vertikale Dimension stets topologisch">
+<node CREATED="1541860818012" FOLDED="true" ID="ID_814200290" MODIFIED="1544127129504" TEXT="vertikale Dimension stets topologisch">
 <node CREATED="1544127119809" ID="ID_431805088" MODIFIED="1544127122858" TEXT="nicht immer...."/>
 <node CREATED="1544127123803" ID="ID_1360167609" MODIFIED="1544127127665" TEXT="Ausnahme: Kurven"/>
 </node>
@@ -40734,8 +40732,7 @@
       ...also <i>abz&#252;glich</i>&#160;Dekoration und Margin
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1542308990570" ID="ID_1371068296" MODIFIED="1542309000371" TEXT="stets komplett in der zugewiesenen Allocation enthalten"/>
 </node>

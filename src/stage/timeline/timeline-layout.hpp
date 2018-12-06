@@ -51,8 +51,8 @@
  ** Thus we strive to break up the whole process of controlling the layout into several
  ** local concerns, each of which can be made self contained. The backbone is formed by
  ** a recursive collaboration between two abstractions (interfaces)
- ** - the building blocks of the timeline expose the interface timeline::Element
- ** - the global timeline widget implements a timeline::LayoutManager interface
+ ** - the building blocks of the timeline expose the interface timeline::Element (TODO 12/18 really?)
+ ** - the global timeline widget implements a timeline::LayoutManager interface (TODO 12/18 work out the crucial point of that interface!)
  ** 
  ** ## Display evaluation pass
  ** 

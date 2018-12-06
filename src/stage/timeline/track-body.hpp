@@ -64,7 +64,7 @@ namespace timeline {
    * A given TrackBody works with coordinates relative to its vertical starting point;
    * coordinates on the TimelineCanvas operate from top downwards. The fundamental
    * task of a TrackBody is to find out about its own overall height, including the
-   * overall height require by all its nesting children. Moreover, the height of
+   * overall height required by all its nested children. Moreover, the height of
    * the content area needs to be negotiated with the actual content elements.
    * @todo WIP-WIP as of 10/2018
    */

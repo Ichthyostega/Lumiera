@@ -31,13 +31,13 @@
  ** on top of Gtk::Layout, allows to combine _custom drawing_ with the placement of
  ** embedded child widgets, where the latter's layout is again managed automatically
  ** by the toolkit set. This approach allows us to circumvent some of the perils of
- ** custom drawing, where we might forfeit several of the benefits of using a toolkit
- ** unintentionally, and create an UI which feels foreign and brittle in comparison
- ** to standard software.
+ ** custom drawing, where we might forfeit several of the benefits of using a toolkit,
+ ** unintentionally of course, and create an UI which feels foreign and brittle
+ ** in comparison to standard software.
  ** 
  ** # Layout management
  ** 
- ** To create a consistent layout of the timeline, header pane and body need to react
+ ** To create a consistent timeline layout, the header pane and body need to react
  ** to the same scrolling adjustments, and use the same vertical size allocations for
  ** each embedded track. Such a consistent global layout needs to be built up in a
  ** *display evaluation pass*, carried out collaboratively between the building blocks
@@ -45,8 +45,8 @@
  ** as (view) model entities, visited by the timeline::LayoutManager to establish
  ** coherent display parameters. From within this evaluation pass, the individual
  ** presenters communicate with their _slave widgets,_ which are inserted into the
- ** display context of the track header pane or this body widget respectively. As
- ** a result, some new widgets may be injected, existing widgets may be removed or
+ ** display context of the track header pane or into this body widget respectively.
+ ** As result, some new widgets may be injected, existing widgets might be removed or
  ** hidden, and other widgets may be relocated to different virtual canvas coordinates.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
@@ -79,6 +79,15 @@ namespace timeline {
       TrackBody* rootBody_;
       
       TimelineCanvas();
+      
+    private:
+      virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
+      
+      void openCanvas (Cairo::RefPtr<Cairo::Context> const&);
+      void closeCanvas (Cairo::RefPtr<Cairo::Context> const&);
+      
+      void drawGrounding (Cairo::RefPtr<Cairo::Context> const&);
+      void drawOverlays (Cairo::RefPtr<Cairo::Context> const&);
     };
   
   
