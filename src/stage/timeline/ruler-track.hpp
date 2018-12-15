@@ -1,8 +1,8 @@
 /*
-  TRACK-BODY.hpp  -  track body area within the timeline display canvas
+  RULER-TRACK.hpp  -  track body area to show overview and timecode and markers
 
   Copyright (C)         Lumiera.org
-    2016,               Hermann Vosseler <Ichthyostega@web.de>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,9 +21,16 @@
 */
 
 
-/** @file track-body.hpp
- ** This helper class serves to manage the layout and display of the
- ** horizontally extended space of a "track" within the timeline.
+/** @file ruler-track.hpp
+ ** Timeline presentation helper to organise drawing of the time overview ruler.
+ ** The scrollable body part of the timeline display relies on custom drawing onto
+ ** a ["widget canvas"](\ref TimelineCanvas) for the nested track content; above
+ ** this area we build a horizontal ruler to show the timecode and frame count
+ ** references plus any markers, ranges and locators. Since these need to be
+ ** aligned precisely with the content, we employ custom drawing for this
+ ** part as well. The TimelineRuler helper -- like any parts of the coordinated
+ ** TimelineLayout, are referred to from and used by the BodyCanvasWidget for
+ ** offloading specific parts of the drawing routines.
  ** Actually, this space is just a working area and created by custom
  ** drawing on the [timeline canvas](\ref timeline::BodyCanvasWidget);
  ** yet for coordination of a globally consistent timeline layout, each
@@ -32,13 +39,13 @@
  ** in the [header pane](\ref timeline::HeaderPaneWidget) and the display of the
  ** timeline body, which is actually a canvas for custom drawing.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 12/2018
  ** 
  */
 
 
-#ifndef STAGE_TIMELINE_TRACK_BODY_H
-#define STAGE_TIMELINE_TRACK_BODY_H
+#ifndef STAGE_TIMELINE_RULER_TRACK_H
+#define STAGE_TIMELINE_RULER_TRACK_H
 
 #include "stage/gtk-base.hpp"
 
@@ -52,9 +59,16 @@
 namespace stage  {
 namespace timeline {
   
+  struct RulerScale
+    {
+      
+    };
+  
   
   /**
-   * Helper to organise and draw the space allocated for a fork of sub-tracks.
+   * Helper to organise and draw the time overview ruler at the top of the
+   * timeline BodyCanvasWidget. Support custom drawing onto the TimelineCanvas
+   * to show the timecode or frame count ticks plus any markers, ranges and locators...
    * TrackBody units work together with the TimelineCanvas, which arranges all
    * elements placed into the tracks and performs custom drawing to mark the
    * working space available for placing those elements (Clips, Effects, Markers).
@@ -65,20 +79,15 @@ namespace timeline {
    * the content area needs to be negotiated with the actual content elements.
    * @todo WIP-WIP as of 10/2018
    */
-  class TrackBody
+  class RulerTrack
     {
-      uint overviewHeight_;
-      uint contentHeight_;
+      using Scales = std::vector<RulerScale>;
       
-      using SubTracks = std::vector<TrackBody*>;
-      
-      SubTracks subTracks_;
+      Scales scales_;
       
     public:
-      TrackBody();
-     ~TrackBody();
-      
-      void setTrackName (cuString&);
+      RulerTrack();
+     ~RulerTrack();
       
       uint calcHeight();
       
@@ -88,4 +97,4 @@ namespace timeline {
   
   
 }}// namespace stage::timeline
-#endif /*STAGE_TIMELINE_TRACK_BODY_H*/
+#endif /*STAGE_TIMELINE_RULER_TRACK_H*/

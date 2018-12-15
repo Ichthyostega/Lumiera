@@ -1,8 +1,8 @@
 /*
-  TrackBody  -  track body area within the timeline display canvas
+  RulerTrack  -  track body area to show overview and timecode and markers
 
   Copyright (C)         Lumiera.org
-    2016,               Hermann Vosseler <Ichthyostega@web.de>
+    2018,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,9 +21,9 @@
 * *****************************************************/
 
 
-/** @file track-body.cpp
- ** Implementation details regarding display management of the
- ** track body area within the timeline display canvas.
+/** @file ruler-track.cpp
+ ** Implementation details regarding custom drawing of timeline and
+ ** frame count ticks at the top of the TimelineCanvas.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 
@@ -31,10 +31,11 @@
 
 
 #include "stage/gtk-base.hpp"
-#include "stage/timeline/track-body.hpp"
+#include "stage/timeline/ruler-track.hpp"
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
+//#include "lib/format-cout.hpp"
 
 //#include "lib/util.hpp"
 
@@ -56,28 +57,27 @@ namespace stage {
 namespace timeline {
   
   namespace {
-    const uint DEFAULT_OVERVIEW_HEIGHT_px = 20;
-    const uint DEFAULT_CONTENT_HEIGHT_px = 80;
+    uint TIMERULER_SCALE_HEIGHT_px = 20;
+    uint TIMERULER_LARGE_TICK_WEIGHT_px = 2;
+    uint TIMERULER_SMALL_TICK_WEIGHT_px = 2;
   }
   
   
   
   
-  TrackBody::TrackBody()
-    : overviewHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
-    , contentHeight_{DEFAULT_CONTENT_HEIGHT_px}
-    , subTracks_{}
+  RulerTrack::RulerTrack()
+    : scales_{}
     { }
   
   
-  TrackBody::~TrackBody()
+  RulerTrack::~RulerTrack()
   {
     TODO ("detach from parent; store a functor or backreference");
   }
   
   
   void
-  TrackBody::setTrackName (cuString& trackName)
+  RulerTrack::setTrackName (cuString& trackName)
   {
     TODO ("is the track name of any relevance for the TrackBody widget?");
   }
@@ -88,7 +88,7 @@ namespace timeline {
    * including all nested sub-tracks
    */
   uint
-  TrackBody::calcHeight()
+  RulerTrack::calcHeight()
   {
     uint heightSum = overviewHeight_ + contentHeight_;
     for (TrackBody* subTrack : subTracks_)
