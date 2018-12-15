@@ -85,9 +85,29 @@ namespace timeline {
     using PFork   = unique_ptr<TrackPresenter>;
     using PClip   = unique_ptr<ClipPresenter>;
     using PMarker = unique_ptr<MarkerWidget>;
+    using PRuler  = unique_ptr<RulerTrack>;
     
     buffer.create (
       TreeMutator::build()
+        .attach (collection(display_.body.bindRulers())
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope with type-field "Ruler"
+                    return TYPE_Ruler == spec.data.recordType();
+                  })
+               .matchElement ([&](GenNode const& spec, PRuler const& elm) -> bool
+                  {
+//                  return spec.idi == ID{*elm}; ////////////////////////////////////////////////////////////TICKET #1193 : shall RulerTrack be a Tangible?
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PRuler
+                  {
+//                  return make_unique<RulerTrack> (spec.idi, this->uiBus_);  ///////////////////////////////TICKET #1193 : how to construct a RulerTrack?
+                  })
+               .buildChildMutator ([&](PRuler& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {                                                           ///////////////////////////////TICKET #1193 : do we even want to "mutate" a ruler?
+//                  if (ID{*target} != subID) return false;
+//                  target->buildMutator (buff);
+//                  return true;
+                  }))
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Marker"

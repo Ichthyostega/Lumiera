@@ -124,8 +124,9 @@ namespace timeline {
      ~TrackPresenter();
       
       /**
-       * @param identity used to refer to a corresponding session::Fork in the Session
+       * @param id identity used to refer to a corresponding session::Fork
        * @param nexus a way to connect this Controller to the UI-Bus.
+       * @param anchorDisplay a one-way closure to attach into the display fabric
        */
       template<class FUN>
       TrackPresenter (ID id, ctrl::BusTerm& nexus, FUN anchorDisplay)

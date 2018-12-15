@@ -35,6 +35,7 @@ namespace stage {
   
   const Symbol TYPE_Fork{"Fork"};
   const Symbol TYPE_Clip{"Clip"};
+  const Symbol TYPE_Ruler{"Ruler"};
   const Symbol TYPE_Marker{"Marker"};
   const Symbol TYPE_Channel{"Channel"};
   const Symbol TYPE_Effect{"Effect"};

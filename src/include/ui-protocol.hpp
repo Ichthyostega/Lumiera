@@ -74,6 +74,7 @@ namespace stage {
   
   extern const Symbol TYPE_Fork;
   extern const Symbol TYPE_Clip;
+  extern const Symbol TYPE_Ruler;
   extern const Symbol TYPE_Marker;
   extern const Symbol TYPE_Channel;
   extern const Symbol TYPE_Effect;

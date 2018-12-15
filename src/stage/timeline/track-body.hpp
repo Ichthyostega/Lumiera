@@ -41,16 +41,19 @@
 #define STAGE_TIMELINE_TRACK_BODY_H
 
 #include "stage/gtk-base.hpp"
+#include "stage/timeline/ruler-track.hpp"
 
 //#include "lib/util.hpp"
 
-//#include <memory>
+#include <memory>
 #include <vector>
 
 
 
 namespace stage  {
 namespace timeline {
+  
+  class TrackPresenter;
   
   
   /**
@@ -70,8 +73,12 @@ namespace timeline {
       uint overviewHeight_;
       uint contentHeight_;
       
+      using PRuler    = std::unique_ptr<RulerTrack>;
+      using Rulers    = std::vector<PRuler>;
+      
       using SubTracks = std::vector<TrackBody*>;
       
+      Rulers    rulers_;
       SubTracks subTracks_;
       
     public:
@@ -82,8 +89,26 @@ namespace timeline {
       
       uint calcHeight();
       
+      
     private:/* ===== Internals ===== */
-     
+      
+      /**
+       * Allow the TrackPresenter to manage the rulers
+       * The collection of rulers is part of the systematic UI model
+       * and thus formally a direct child of the TrackPresenter; however they
+       * are only relevant for the immediate display and interaction mechanics,
+       * thus we store them right here, close to usage site.
+       * @note Ruler entries can be added and removed by diff message, but since
+       *       the UI is performed single threaded, these mutations never interfer
+       *       with display evaluation passes.
+       */ 
+      Rulers&
+      bindRulers()
+        {
+          return rulers_;
+        }
+      
+      friend class TrackPresenter;
     };
   
   

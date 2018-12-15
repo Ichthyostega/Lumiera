@@ -22,10 +22,10 @@
 
 
 /** @file ruler-track.cpp
- ** Implementation details regarding custom drawing of timeline and
- ** frame count ticks at the top of the TimelineCanvas.
+ ** Implementation details regarding custom drawing of track overview
+ ** and time code ticks and markers onto the TimelineCanvas.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 12/2018
  ** 
  */
 
@@ -76,13 +76,6 @@ namespace timeline {
   }
   
   
-  void
-  RulerTrack::setTrackName (cuString& trackName)
-  {
-    TODO ("is the track name of any relevance for the TrackBody widget?");
-  }
-  
-  
   /**
    * recursively calculate the height in pixels to display this track,
    * including all nested sub-tracks
@@ -90,10 +83,7 @@ namespace timeline {
   uint
   RulerTrack::calcHeight()
   {
-    uint heightSum = overviewHeight_ + contentHeight_;
-    for (TrackBody* subTrack : subTracks_)
-      heightSum += subTrack->calcHeight();
-    return heightSum;
+    UNIMPLEMENTED ("calculate display height of the overview ruler in pixels");
   }
   
   

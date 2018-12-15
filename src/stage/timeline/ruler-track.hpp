@@ -22,22 +22,17 @@
 
 
 /** @file ruler-track.hpp
- ** Timeline presentation helper to organise drawing of the time overview ruler.
+ ** Timeline presentation helper to organise drawing of the overview rulers.
  ** The scrollable body part of the timeline display relies on custom drawing onto
  ** a ["widget canvas"](\ref TimelineCanvas) for the nested track content; above
- ** this area we build a horizontal ruler to show the timecode and frame count
- ** references plus any markers, ranges and locators. Since these need to be
- ** aligned precisely with the content, we employ custom drawing for this
- ** part as well. The TimelineRuler helper -- like any parts of the coordinated
- ** TimelineLayout, are referred to from and used by the BodyCanvasWidget for
- ** offloading specific parts of the drawing routines.
- ** Actually, this space is just a working area and created by custom
- ** drawing on the [timeline canvas](\ref timeline::BodyCanvasWidget);
- ** yet for coordination of a globally consistent timeline layout, each
- ** track display is coordinated by a TrackPresenter, which corresponds
- ** to a session::Fork and directly controls the respective display elements
- ** in the [header pane](\ref timeline::HeaderPaneWidget) and the display of the
- ** timeline body, which is actually a canvas for custom drawing.
+ ** this track content area we build a horizontal ruler to show the timecode or
+ ** frame count references plus any markers, ranges and locators. In case of
+ ** group tracks or collapsed tracks, a synopsis of the content may be rendered
+ ** into this overview bar. Since any of these display elements need to be aligned
+ ** precisely with the content, we employ custom drawing for the rulers as well.
+ ** The RulerTrack -- like any parts of the coordinated TimelineLayout, will be
+ ** referred to from and used by the BodyCanvasWidget for offloading specific
+ ** parts of the drawing routines.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2018
  ** 
@@ -66,17 +61,9 @@ namespace timeline {
   
   
   /**
-   * Helper to organise and draw the time overview ruler at the top of the
-   * timeline BodyCanvasWidget. Support custom drawing onto the TimelineCanvas
-   * to show the timecode or frame count ticks plus any markers, ranges and locators...
-   * TrackBody units work together with the TimelineCanvas, which arranges all
-   * elements placed into the tracks and performs custom drawing to mark the
-   * working space available for placing those elements (Clips, Effects, Markers).
-   * A given TrackBody works with coordinates relative to its vertical starting point;
-   * coordinates on the TimelineCanvas operate from top downwards. The fundamental
-   * task of a TrackBody is to find out about its own overall height, including the
-   * overall height required by all its nested children. Moreover, the height of
-   * the content area needs to be negotiated with the actual content elements.
+   * Helper to organise and draw the time or content overview ruler at the top of the
+   * timeline track display. The purpose is to support custom drawing onto the TimelineCanvas
+   * to show rendered content, timecode or frame count ticks plus any markers, ranges and locators...
    * @todo WIP-WIP as of 10/2018
    */
   class RulerTrack
