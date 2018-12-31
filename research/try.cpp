@@ -161,7 +161,7 @@ class TrinomialPRNG
             uint32_t val = *fptr += uint32_t(*rptr);
             uint32_t result = val >> 1;  // Chucking least random bit.
                                          // Rationale: it has a less-then optimal repetition cycle.
-            int32_t *end = &state[62];
+            int32_t *end = &state[63];
             ++fptr;
             if (fptr >= end)
               {
@@ -199,7 +199,7 @@ main (int, char**)
     StdlibPRNG oldGen;
     TrinomialPRNG newGen;
     
-    for (uint64_t seed=0; seed <= UINT32_MAX; ++seed)
+    for (uint64_t seed=INT32_MAX-100; seed <= UINT32_MAX; ++seed)
       {
         oldGen.init(seed);
         newGen.init(seed);
