@@ -110,7 +110,7 @@ namespace timeline {
    * including tags and markers, indicators, locators (edit point and playhead) and (semi-transparent) range selections.
    * @todo according to the documentation for `signal_draw()`, the framework passes the actually visible area as clipping
    *       region. In theory, this information could be used to reduce the load of canvas painting and repainting, which
-   *       becomes crucial for responsiveness on large sessions          ////////////////////////////////////TICKET #1191   
+   *       becomes crucial for responsiveness on large sessions          ////////////////////////////////////TICKET #1191
    */
   bool
   TimelineCanvas::on_draw (Cairo::RefPtr<Cairo::Context> const& cox)
@@ -154,7 +154,7 @@ namespace timeline {
   
   /**
    * Finish and close the virtual drawing canvas established by #openCanvas().
-   * Discard any coordinate offsets, stroke and drawing settings applied within. 
+   * Discard any coordinate offsets, stroke and drawing settings applied within.
    */
   void
   TimelineCanvas::closeCanvas (Cairo::RefPtr<Cairo::Context> const& cox)
@@ -170,12 +170,12 @@ namespace timeline {
   void
   TimelineCanvas::drawGrounding (Cairo::RefPtr<Cairo::Context> const& cox)
   {
-    /////////////////////////////////////////////TICKET #1139 : placeholder drawing
+    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     cox->set_source_rgb(0.8, 0.0, 0.0);
     cox->set_line_width (5.0);
     cox->rectangle(0,0, 80, 40);
     cox->stroke();
-    /////////////////////////////////////////////TICKET #1139 : placeholder drawing 
+    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
   }
   
   
@@ -186,7 +186,7 @@ namespace timeline {
   void
   TimelineCanvas::drawOverlays (Cairo::RefPtr<Cairo::Context> const& cox)
   {
-    /////////////////////////////////////////////TICKET #1139 : placeholder drawing
+    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     auto alloc = get_allocation();
     int w = alloc.get_width();
     int h = alloc.get_height();
@@ -196,7 +196,7 @@ namespace timeline {
     cox->set_line_width (2.0);
     cox->arc(rad, rad, rad, 0.0, 2.0*M_PI); // full circle
     cox->stroke();
-    /////////////////////////////////////////////TICKET #1139 : placeholder drawing 
+    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
   }
   
   

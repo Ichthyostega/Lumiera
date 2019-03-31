@@ -78,8 +78,8 @@ namespace timeline {
       
       using SubTracks = std::vector<TrackBody*>;
       
-      Rulers    rulers_;
       SubTracks subTracks_;
+      Rulers    rulers_;
       
     public:
       TrackBody();
@@ -99,7 +99,7 @@ namespace timeline {
        * are only relevant for the immediate display and interaction mechanics,
        * thus we store them right here, close to usage site.
        * @note Ruler entries can be added and removed by diff message, but since
-       *       the UI is performed single threaded, these mutations never interfer
+       *       the UI is performed single threaded, these mutations never interfere
        *       with display evaluation passes.
        */ 
       Rulers&

@@ -27,7 +27,9 @@
  ** the timeline display as a system of nested tracks. For each of these tracks we get a header
  ** section, allowing to control its placement parameters, including start time, output routing
  ** level and panning. The _Patch Bay_ is the container holding all those track header controls,
- ** arranged into a recursively nested structure.
+ ** arranged into a recursively nested structure. Besides that, the Patch Bay serves a secondary
+ ** concern, namely to present this nested structure with proper vertical scrolling, so to keep
+ ** each Track Head aligned with the display of the corresponding track's content.
  ** 
  ** @todo WIP-WIP-WIP as of 10/2018
  ** 
@@ -55,11 +57,15 @@ namespace timeline {
 
   
   /**
-   * Header pane control area corresponding to a Track with nested child Tracks.
-   * This structure is used recursively to build up the Fork of nested Tracks.
-   * - first row: Placement + Property pane
-   * - second row: content or nested tracks.
-   * @todo WIP-WIP as of 12/2016
+   * Header pane control area corresponding to fork of nested tracks.
+   * The structure of child tracks is built up recursively, starting with a single
+   * top level TrackHeadWidget corresponding to the »fork root«. The actual controls
+   * for the individual tracks are managed by those TrackHeadWidget elements, while
+   * the PatchbayWidget corresponds to the whole structure and is responsible for
+   * presenting the proper vertical scrolling, as dictated by the actual track
+   * content within the BodyCanvasWidget sitting at the right side of the
+   * HeaderPaneWidget (which is the enclosing container of this PatchbayWidget).
+   * @todo WIP-WIP as of 4/2019
    */
   class PatchbayWidget
     : public Gtk::Viewport

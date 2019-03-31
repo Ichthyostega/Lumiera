@@ -67,6 +67,7 @@ namespace timeline {
     : overviewHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
     , contentHeight_{DEFAULT_CONTENT_HEIGHT_px}
     , subTracks_{}
+    , rulers_{}
     { }
   
   

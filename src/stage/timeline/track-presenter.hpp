@@ -72,6 +72,9 @@ namespace timeline {
   
   /**
    * Reference frame to organise the display related to a specific Track in the Timeline-GUI.
+   * With the help of such a common frame of reference, we solve the problem that each individual
+   * track display needs to hook into two distinct UI presentation structures: the track head controls
+   * and the presentation of track contents on the BodyCanvasWidget.
    */
   struct DisplayFrame
     : util::NonCopyable

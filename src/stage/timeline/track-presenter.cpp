@@ -72,11 +72,12 @@ namespace timeline {
   
   
   /**
-   * @note we distinguish between the contents of our three nested child collections
+   * @note we distinguish between the contents of our four nested child collections
    *       based on the symbolic type field sent in the Record type within the diff representation
    *       - "Marker" designates a Marker object
    *       - "Clip" designates a Clip placed on this track
    *       - "Fork" designates a nested sub-track
+   *       - "Ruler" designates a nested ruler (timescale, overview,....) belonging to this track
    * @see TimelineController::buildMutator() for a basic explanation of the data binding mechanism
    */
   void

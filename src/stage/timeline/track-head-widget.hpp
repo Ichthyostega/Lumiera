@@ -35,7 +35,8 @@
  **   + video or audio _level_ (=fader)
  ** - how to locate this content in time (e.g. relative to some marker)
  ** For each track, we show a patchbay in the timeline header pane, which serves to control
- ** such aspects relevant for all content contained within the scope of this track.
+ ** such aspects relevant for all content contained within the scope of this track, including
+ ** the sub-tracks nested therein.
  ** 
  ** @todo WIP-WIP-WIP as of 10/2018
  ** 
