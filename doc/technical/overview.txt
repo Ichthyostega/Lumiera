@@ -23,16 +23,17 @@ the source directory structures.
 This three Layers are:
 
  The Stage Layer::
-     User interfaces are implemented as plug-ins, most commonly one will see
-     the default GUI. But also scripting interfaces or specialized GUI's are
-     possible.
+     Interaction and presentation. User interfaces are implemented as plug-ins,
+     and while most commonly one will see the GTK UI, it would be possible to
+     construct a entirely different user interface, a CLI intereface, or even
+     operate the application ``headless'', script driven.
 
  The Steam Layer::
      Keeps the Session, generates the rendering graphs for sequences,
      arranges what to do when and how.
 
  The Vault Layer::
-     Manages thread-queues, schedules jobs, does the memory management for the
+     Manages worker pools, schedules jobs, does the memory management for the
      heavy multimedia data. Loads and delegates to external libraries for
      media processing.
 

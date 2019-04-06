@@ -31,6 +31,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
+#include "stage/timeline/track-profile.hpp"
 #include "stage/timeline/track-body.hpp"
 
 //#include "stage/ui-bus.hpp"

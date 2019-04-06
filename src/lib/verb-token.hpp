@@ -38,7 +38,7 @@
  ** the concrete receiver, e.g. `VERB_doit (receiver, arg1, arg2)`
  ** results in the invocation of \c receiver.doit(arg1,arg2)
  ** 
- ** @see ...TODO
+ ** @see [prominent usage: the Diff system](\ref lib::diff::DiffLanguage)
  ** @see VerbFunctionDispatch_test
  ** 
  */
@@ -66,6 +66,9 @@ namespace lib {
    * as defined in the "receiver" interface (parameter \c REC).
    * The token is typically part of a DSL and can be applied
    * to a concrete receiver subclass.
+   * @tparam REC the type receiving the verb invocations
+   * @tparam SIG signature of the actual verb function, expected
+   *             to exist on the receiver (REC) interface
    * @remarks while the included ID Literal is mostly for diagnostics,
    *       it also serves as identity for comparisons. Conceptually what
    *       we want is to compare the function "offset", but this leads
@@ -101,22 +104,18 @@ namespace lib {
         , token_(token)
         { }
       
-      VerbToken() : token_("NIL") { }
+      VerbToken()
+        : handler_{}
+        , token_("NIL")
+        { }
       
       /* default copyable */
       
-      
-      bool
-      operator== (VerbToken const& o)  const     ///< @remarks member pointers to virtual functions aren't comparable, for good reason
-        {
-          return token_ == o.token_;
-        }
-      
-      bool
-      operator!= (VerbToken const& o)  const
-        {
-          return token_ != o.token_;
-        }
+      /** equality of VerbToken, based on equality of the #token_ Literal
+       * @remarks member pointers to virtual functions aren't comparable, for good reason
+       */
+      bool operator== (VerbToken const& o)  const { return token_ == o.token_; }
+      bool operator!= (VerbToken const& o)  const { return token_ != o.token_; }
     };
   
 #define VERB(RECEIVER, FUN) VERB_##FUN (&RECEIVER::FUN, STRINGIFY(FUN))

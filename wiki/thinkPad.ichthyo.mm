@@ -19674,14 +19674,36 @@
 <node CREATED="1554516172112" ID="ID_1550870826" MODIFIED="1554516185068" TEXT="leeren zum Invalidieren"/>
 </node>
 <node CREATED="1554516191248" ID="ID_379475221" MODIFIED="1554516205420" TEXT="on_draw() ist h&#xe4;ufiger als Struktur&#xe4;nderungen"/>
+<node CREATED="1554567390096" ID="ID_611611667" MODIFIED="1554567398590" TEXT="Liste nicht verbergen">
+<icon BUILTIN="yes"/>
+<node CREATED="1554567399523" ID="ID_139156989" MODIFIED="1554567408216" TEXT="der draw-Code darf durchaus die Liste sehen"/>
+<node CREATED="1554567408804" ID="ID_1274839361" MODIFIED="1554567445051" TEXT="ggfs mu&#xdf; er n&#xe4;mlich den Kontext beachten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...zum Beispiel um einen &quot;Wall&quot; auch expressiv zu schattieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node CREATED="1554516243633" ID="ID_386714682" MODIFIED="1554516245860" TEXT="Verben">
 <node CREATED="1554516247416" ID="ID_711078188" MODIFIED="1554516251040" TEXT="ruler"/>
 <node CREATED="1554516251688" ID="ID_24688004" MODIFIED="1554516256283" TEXT="gap"/>
 <node CREATED="1554516257065" ID="ID_389097560" MODIFIED="1554516261186" TEXT="content"/>
 <node CREATED="1554516438055" ID="ID_1490793853" MODIFIED="1554516446110" TEXT="open / close"/>
+<node CREATED="1554567321239" FOLDED="true" ID="ID_1638157583" MODIFIED="1554567367842" TEXT="prelude / coda">
+<node CREATED="1554567338981" ID="ID_1124816442" MODIFIED="1554567365787" TEXT="damit der Display-Code da was Spezielles machen kann..."/>
 </node>
-<node CREATED="1554516547904" ID="ID_229346999" MODIFIED="1554516552054" TEXT="Implementierung">
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1554516547904" ID="ID_229346999" MODIFIED="1554567309965" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
 <node CREATED="1554516552951" ID="ID_600745992" MODIFIED="1554516555251" TEXT="Festlegungen">
 <node CREATED="1554516555943" ID="ID_1554446719" MODIFIED="1554516577129" TEXT="Argument = vertikal in Pixeln"/>
 <node CREATED="1554516578588" ID="ID_520338948" MODIFIED="1554516923727" TEXT="Spannen inklusive Dekoration">

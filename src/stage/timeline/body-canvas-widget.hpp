@@ -61,7 +61,7 @@
 
 //#include "lib/util.hpp"
 
-//#include <memory>
+#include <memory>
 //#include <vector>
 
 
@@ -69,14 +69,18 @@
 namespace stage  {
 namespace timeline {
   
+  class TrackProfile;
   class TrackBody;
   
   
   class TimelineCanvas
     : public Gtk::Layout
     {
+      using TProfile = std::unique_ptr<TrackProfile>;
+      
     public:
       TrackBody* rootBody_;
+      TProfile profile_;
       
       TimelineCanvas();
       

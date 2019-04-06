@@ -3517,7 +3517,7 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201904060157" tags="GuiPattern spec impl img draft" changecount="48">
+<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201904061546" tags="GuiPattern spec impl img draft" changecount="90">
 <pre>The presentation of the track body area relies on the [[Gtk::Layout &quot;canvas widget&quot;|GtkLayoutWidget]], thus allowing for a mixture of custom drawing with embedded custom Gtk widgets. The actual drawing routine is activated in response to the {{{on_draw}}} signal -- and invoking the inherited handler function will initiate the standard drawing for the embedded child widgets. This partitions the additional, specific drawing activities into a pre-widget drawing phase to prepare the background and framework structure of the track area, and a post-widget drawing phase to show all kinds of overlays, markers cursors and similar UI indicators. A nested structure of {{{TrackBody}}} objects serves as organisational device to structure these custom drawing activities in accordance with the nested structure of the track fork.
 
 !Building a nested 3D structure
@@ -3526,16 +3526,18 @@ In accordance with the Lumiera application architecture in general, the UI is no
 In Lumiera, the //tracks// represent an organisational device, a nested set of //scopes,//  which -- for the UI representation -- is paralleled by nested insets holding the media content. One or several //rulers// as guiding devices run alongside the top of each scope, either representing the scope as a whole, or introducing the working area of this scope similar to a side walk running alongside a channel. A system of increasingly deeper nested scopes thus becomes a cadence of insets in the way of a lateral staircase.
 
 Each individual track contributes a similar sequence of structure elements to this overall ''track profile'':
-* a set of rulers, where each ruler may optionally inject a small additional //gap//
+* a set of rulers
+** where each ruler may optionally inject a small additional //gap//
 * a content area
-* the self similar recursive child track fork
+* an inset
+** holding the self similar recursive child track fork
 
 !!!Assembling the track profile
-The actual expression of these elements depends on the content, which is injected via diff message pushed up from the steam layer; additionally, some presentation state like collapsing of elements need to be taken into account. Assembling the complete profile of the track structure thus incurs a tree walk over the nested track body objects, which in turn communicate with the track presenters for layout state. At this point, it is advisable to separate the actual graphics drawing code from the content and state discovery scattered over the nested structure. Thus we produce a ''verb sequence'' as result of the tree walk, which can be stored into a (heap allocated) list for repeated evaluation when handling the actual draw events. Whenever the overall layout has been invalidated, this structure description has to be rebuilt by yet another tree walk. To illustrate this concept, with {{{r(#)}}} ruler, {{{g}}} gap, {{{c(#)}}} content and ''⤵⤴'' direction verbs, the profile above might yield a sequence
-|&gt;|&gt;|&gt;|&gt;|!__Track-1__ |
-| | !__Track-11__ |&gt;|&gt;|!__Track-12__ |
-|&gt;|&gt;| |!__Track-121__ |!__Track-122__ |
-|r(1),r(1),g,''c''(2)|⤵r(1),g,''c''(3)|r(1),g,r(1)|⤵r(1),''c''(2)|r(1),''c''(1)⤴⤴|
+The actual expression of these elements depends on the content, which is injected via diff message pushed up from the steam layer; additionally, some presentation state like collapsing of elements need to be taken into account. Assembling the complete profile of the track structure thus incurs a tree walk over the nested track body objects, which in turn communicate with the track presenters for layout state. At this point, it is advisable to separate the actual graphics drawing code from the content and state discovery scattered over the nested structure. Thus we produce a ''verb sequence'' as result of the tree walk, which can be stored into a (heap allocated) list for repeated evaluation when handling the actual draw events. Whenever the overall layout has been invalidated, this structure description has to be rebuilt by yet another tree walk. To illustrate this concept, with {{{r(#)}}} ruler, {{{g}}} gap, {{{c(#)}}} content and ''⤵⤴'' direction verbs, the profile above might yield the sequence...
+|&gt;|&gt;|&gt;|&gt;|&gt;|&gt;|&gt;|&gt;|!__Track-1__ |
+| | | !__Track-11__ |&gt;|&gt;|&gt;|&gt;|!__Track-12__ | |
+|~|~|&gt;|  | |!__Track-121__ |!__Track-122__ | |~|
+|r(1),r(1),g,''c''(2)|⤵|r(1),g,''c''(3)|r(1),g,r(1)|⤵|r(1),''c''(2)  |r(1),''c''(1)|⤴|⤴|
 </pre>
 </div>
 <div title="GuiTimelineSlave" creator="Ichthyostega" modifier="Ichthyostega" created="201810111210" tags="GuiPattern design decision draft" changecount="1">
