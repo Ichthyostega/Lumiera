@@ -81,8 +81,10 @@ namespace lib {
   template<class REC, class RET, typename... ARGS>
   class VerbToken<REC, RET(ARGS...)>
     {
+    public:
       typedef RET (REC::*Handler) (ARGS...);
       
+    private:
       Handler handler_;
       Literal token_;
       

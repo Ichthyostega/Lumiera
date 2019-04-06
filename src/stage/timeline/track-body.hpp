@@ -41,7 +41,6 @@
 #define STAGE_TIMELINE_TRACK_BODY_H
 
 #include "stage/gtk-base.hpp"
-#include "stage/timeline/track-profile.hpp"
 #include "stage/timeline/ruler-track.hpp"
 
 //#include "lib/util.hpp"

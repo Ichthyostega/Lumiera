@@ -41,7 +41,8 @@
 #include "stage/gtk-base.hpp"
 #include "lib/verb-token.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 //#include <memory>
 #include <vector>
@@ -51,6 +52,21 @@
 namespace stage  {
 namespace timeline {
   
+  using lib::Literal;
+  
+  class ProfileInterpreter
+    {
+      public:
+       ~ProfileInterpreter() { }            ///< this is an interface
+        
+        virtual void ruler(uint h)   =0;    ///< represent a overview/ruler track with the given height
+        virtual void gap(uint h)     =0;    ///< represent a gap to structure the display
+        virtual void content(uint h) =0;    ///< represent a content area with the given vertical extension
+        virtual void open(uint n)    =0;    ///< indicate entering a nested structure, typically as 3D inset (`n` is always 1)
+        virtual void close(uint n)   =0;    ///< indicate the end of `n` nested structures, typically by ascending back `n` levels
+        virtual void prelude(uint f) =0;    ///< start rack presentation at top of the timeline, with `f` pinned (always visible) elements
+        virtual void coda(uint pad)  =0;    ///< the closing part of the timeline at the bottom of the track display, with `pad` additional padding
+    };
   
   /**
    * Description of the structure and arrangement of tracks for display in the UI.
@@ -61,13 +77,44 @@ namespace timeline {
    * we let the individual TrackBody elements just emit these structure description.
    * @todo WIP-WIP as of 4/2019
    */
-  class TrackProfile
+  struct TrackProfile
     {
+      using SlopeVerb = lib::VerbToken<ProfileInterpreter, void(uint)>;
+      using SlopeElm =  std::tuple<SlopeVerb, uint>;
+      using Elements =  std::vector<SlopeElm>;
+      
+      Elements elements;
+      
+      // default constructible, standard copy operations
+      
+      explicit
+      operator bool()  const
+        {
+          return not util::isnil (elements);
+        }
+      
+    private:/* ===== Internals: handling tokens ===== */
+      void
+      append (SlopeVerb::Handler handler, Literal token, uint param)
+        {
+          elements.emplace_back (SlopeVerb{handler, token}, param);
+        }
+      
+#define TOKEN_BUILDER(_TOK_)     \
+      void                        \
+      append_ ## _TOK_ (uint param)\
+        {                           \
+          this->append (&ProfileInterpreter::_TOK_, STRINGIFY(_TOK_), param);\
+        }
       
     public:
-      
-      
-    private:/* ===== Internals ===== */
+      TOKEN_BUILDER (ruler)
+      TOKEN_BUILDER (gap)
+      TOKEN_BUILDER (content)
+      TOKEN_BUILDER (open)
+      TOKEN_BUILDER (close)
+      TOKEN_BUILDER (prelude)
+      TOKEN_BUILDER (coda)
     };
   
   
