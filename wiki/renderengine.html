@@ -1863,7 +1863,7 @@ The fake implementation should follow the general pattern planned for the Prolog
 
 </pre>
 </div>
-<div title="CoreDevelopment" modifier="Ichthyostega" created="200706190056" modified="201812092306" tags="overview" changecount="9">
+<div title="CoreDevelopment" modifier="Ichthyostega" created="200706190056" modified="201904060134" tags="overview" changecount="12">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Relying on system level services and retrieving raw audio and video data through [[Lumiera's Vault Layer|VaultLayer]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Steam-Layer, spans the area between these two extremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
 !About this wiki page
@@ -1888,6 +1888,9 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
 &amp;rarr; [[Concepts, Abstractions and Formalities|Concepts]]
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
+
+&amp;rarr; ''Help''/Documentation of [[TiddlyWiki-Markup|https://classic.tiddlywiki.com/#HelloThere%20%5B%5BHeadings%20Formatting%5D%5D%20%5B%5BBasic%20Formatting%5D%5D%20%5B%5BCode%20Formatting%5D%5D%20%5B%5BCSS%20Formatting%5D%5D%20%5B%5BHorizontal%20Rule%20Formatting%5D%5D%20%5B%5BHTML%20Entities%20Formatting%5D%5D%20%5B%5BHTML%20Formatting%5D%5D%20HtmlEntities%20%5B%5BImage%20Formatting%5D%5D%20%5B%5BLine%20Break%20Formatting%5D%5D%20%5B%5BLink%20Formatting%5D%5D%20%5B%5BList%20Formatting%5D%5D%20PeriodicTable%20PlainText%20PluginFormatting%20%5B%5BQuotations%20Formatting%5D%5D%20%5B%5BSuppressing%20Formatting%5D%5D%20%5B%5BTables%20Formatting%5D%5D%20TiddlerComments]]
+
 </pre>
 </div>
 <div title="CoreService" creator="Ichthyostega" modifier="Ichthyostega" created="201701200045" modified="201701200052" tags="def spec GuiIntegration" changecount="2">
@@ -3514,6 +3517,27 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
+<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201904060157" tags="GuiPattern spec impl img draft" changecount="48">
+<pre>The presentation of the track body area relies on the [[Gtk::Layout &quot;canvas widget&quot;|GtkLayoutWidget]], thus allowing for a mixture of custom drawing with embedded custom Gtk widgets. The actual drawing routine is activated in response to the {{{on_draw}}} signal -- and invoking the inherited handler function will initiate the standard drawing for the embedded child widgets. This partitions the additional, specific drawing activities into a pre-widget drawing phase to prepare the background and framework structure of the track area, and a post-widget drawing phase to show all kinds of overlays, markers cursors and similar UI indicators. A nested structure of {{{TrackBody}}} objects serves as organisational device to structure these custom drawing activities in accordance with the nested structure of the track fork.
+
+!Building a nested 3D structure
+[&gt;img[3D structure of track drawing|draw/UI-TimelineTrackProfile-1.png]]A proficient UI design often relies on subtle cues to guide the user intuitively -- which includes shading of boundary areas to structure the interface space. Both the space and the means to give such unambiguous visual clues are limited, and it would be unwise to forgo such possibilities to follow some stylish fad. Rather, we strive at some degree of internal coherency within the application of these stylistic means.
+
+In Lumiera, the //tracks// represent an organisational device, a nested set of //scopes,//  which -- for the UI representation -- is paralleled by nested insets holding the media content. One or several //rulers// as guiding devices run alongside the top of each scope, either representing the scope as a whole, or introducing the working area of this scope similar to a side walk running alongside a channel. A system of increasingly deeper nested scopes thus becomes a cadence of insets in the way of a lateral staircase.
+
+Each individual track contributes a similar sequence of structure elements to this overall ''track profile'':
+* a set of rulers, where each ruler may optionally inject a small additional //gap//
+* a content area
+* the self similar recursive child track fork
+
+!!!Assembling the track profile
+The actual expression of these elements depends on the content, which is injected via diff message pushed up from the steam layer; additionally, some presentation state like collapsing of elements need to be taken into account. Assembling the complete profile of the track structure thus incurs a tree walk over the nested track body objects, which in turn communicate with the track presenters for layout state. At this point, it is advisable to separate the actual graphics drawing code from the content and state discovery scattered over the nested structure. Thus we produce a ''verb sequence'' as result of the tree walk, which can be stored into a (heap allocated) list for repeated evaluation when handling the actual draw events. Whenever the overall layout has been invalidated, this structure description has to be rebuilt by yet another tree walk. To illustrate this concept, with {{{r(#)}}} ruler, {{{g}}} gap, {{{c(#)}}} content and ''⤵⤴'' direction verbs, the profile above might yield a sequence
+|&gt;|&gt;|&gt;|&gt;|!__Track-1__ |
+| | !__Track-11__ |&gt;|&gt;|!__Track-12__ |
+|&gt;|&gt;| |!__Track-121__ |!__Track-122__ |
+|r(1),r(1),g,''c''(2)|⤵r(1),g,''c''(3)|r(1),g,r(1)|⤵r(1),''c''(2)|r(1),''c''(1)⤴⤴|
+</pre>
+</div>
 <div title="GuiTimelineSlave" creator="Ichthyostega" modifier="Ichthyostega" created="201810111210" tags="GuiPattern design decision draft" changecount="1">
 <pre>There are various reasons why we might want to offer multiple equivalent UI representations of the same Timeline...
 * the user might want to see several remote parts of the same timeline simultaneously, in focussed display
@@ -3529,7 +3553,7 @@ Now, since we build our UI on the notion of mapping session contents via a messa
 
 In any case, this is an advanced topic, and nowhere near trivial. It seems reasonable to reject opening duplicate timeline presentations as a first step, and then address this topic way later, when we've gained sufficient knowledge regarding all the subtleties of timeline presentation and editing.</pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201810281754" tags="GuiPattern design decision draft img" changecount="58">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201904052201" tags="GuiPattern design decision draft img" changecount="60">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3558,6 +3582,7 @@ The workspace dimension (vertical layout) is more like a ''Fork'', which can be 
 * the second track has a global effect attached; it shows up in the scope ruler
 @@
 This collapsed, expanded and possibly nested workspace structure is always exactly paralleled in the header pane. In addition, it allows to configure specific placement properties for each nested scope, which especially means to display faders and some toggles, depending on what kind of placement was added. Of course, this placement configuration needs to be collapsible too. Effects and markers can appear at various different scopes, sometimes requiring an abridged display
+&amp;rarr; more about [[the actual drawing code|GuiTimelineDraw]]
 
 
 !!!lifecycle and instances
@@ -3580,9 +3605,11 @@ By principle, this workspace structure is //not a list of &quot;Tracks&quot;// -
 In the most general case, there can be per-track content and nested content at the same point in time. The GUI is able to represent this state. But, due to the semantics of Lumiera's HighLevelModel,  top-level content and nested content are siblings //within the same scope.// Thus, at a suitable point {{red{to be defined}}}, an equivalence transformation is applied to the GUI model, by prepending a new sibling track and moving top-level content there.
 
 &amp;rarr; important question: how to [[organise the widgets|GuiTimelineWidgetStructure]]
+&amp;rarr; details of the actual [[timeline drawing code|GuiTimelineDraw]]
+
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201810281438" tags="GuiPattern discuss decision impl" changecount="105">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201904052200" tags="GuiPattern discuss decision impl" changecount="106">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also involves to build several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 UI, as implemented during the initial years of the Lumiera project, did already take some steps along this route, which was was valuable as foundation for assessment and further planning.
 
@@ -3620,6 +3647,9 @@ The structure of the display is extended or altered under two circumstances:
 Here, the &quot;component&quot; relevant for such structural changes is always the UI representation of a track. Beyond that, the layout can also be changed //without changing the display structure,// when some embedded component, be it placement (in the track heads / the patchbay) or a clip, effect or transition, is expanded or collapsed. In such a case, a resizing challenge needs to be directed towards the next enclosing track container.
 
 From these observations we can draw the conclusion, that we'll build a ''local structural model'', to reflect the logical relations between the parts comprising the timeline display. More precisely, these structuring components are not mere model objects, rather they are mediating entities used to guide and organise the actual view entities, which in turn are passive. They are more like a view model, while also bearing some local controller responsibilities. For this reason, we prefer to term these as ''presenters'' -- i.e. TrackPresenter and ClipPresenter. And each of these local representation components holds onto a ''display context'', which generally links it //into two different display widget stacks// within the two parts of the actual timeline display. Adding a child component thus becomes a rather tricky operation, involving to link possibly two child widgets into two disjoint parent widgets, thereby forming a similar display context for the child presenter. Overall, the guiding idea is that of self similarity: on each level, we have to reproduce the same relations and collaborations as present in the parent level.
+
+Another aspect related to the nesting of scopes is the question how to organise the &amp;rarr; [[actual timeline drawing code|GuiTimelineDraw]].
+We may exploit the nested structure of the UI representation objects by letting them emit intermediary instructions towards the actual Cairo drawing code.
 
 !!!building the timeline representation structure
 It is a fundamental decision within the Lumiera UI that any structure has to be injected as diff by the core. We do not hold a structure or data model within some UI entity and then &quot;interpret&quot; that model into a widget structure -- rather we build the widget structure itself in response to a diff message describing the structure. Especially in the case of timelines, the receiver of those messages is the InteractionDirector, which corresponds to the model root. On being prompted to set up a timeline, it will allocate a {{{TimelineWidget}}} within a suitable timeline docking panel and then attach to the {{{TimelineController}}} embedded within the widget.
@@ -8782,11 +8812,12 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" modified="201812092307" tags="def" changecount="7">
+<div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" modified="201904060131" tags="def" changecount="11">
 <pre>The Name of the Software driving this Wiki. Is is written completely in ~JavaScript and contained in one single HTML page.
 Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the [[Engine/Development TiddlyWiki|CoreDevelopment]] HTML is located in the Lumiera source tree, all changes will be managed and distributed via GIT. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source.
  * see GettingStarted
- * see [[Homepage|http://tiddlywiki.org]], [[Wiki-Markup|http://tiddlywiki.org/#Markup]], [[CSS-formatting|http://tiddlywiki.org/#%5B%5BCSS%20Formatting%5D%5D]]
+ * see [[Wiki-Markup|https://classic.tiddlywiki.com/#HelloThere%20%5B%5BHeadings%20Formatting%5D%5D%20%5B%5BBasic%20Formatting%5D%5D%20%5B%5BCode%20Formatting%5D%5D%20%5B%5BCSS%20Formatting%5D%5D%20%5B%5BHorizontal%20Rule%20Formatting%5D%5D%20%5B%5BHTML%20Entities%20Formatting%5D%5D%20%5B%5BHTML%20Formatting%5D%5D%20HtmlEntities%20%5B%5BImage%20Formatting%5D%5D%20%5B%5BLine%20Break%20Formatting%5D%5D%20%5B%5BLink%20Formatting%5D%5D%20%5B%5BList%20Formatting%5D%5D%20PeriodicTable%20PlainText%20PluginFormatting%20%5B%5BQuotations%20Formatting%5D%5D%20%5B%5BSuppressing%20Formatting%5D%5D%20%5B%5BTables%20Formatting%5D%5D%20TiddlerComments]], [[CSS-formatting|https://classic.tiddlywiki.com/#%5B%5BCSS%20Formatting%5D%5D]]
+__note__: This is  a //Tiddly Wiki »classic«// -- the version prior to the complete rewrite known as [[TiddlyWiki-5|http://five.tiddlywiki.com/]]
 </pre>
 </div>
 <div title="TimeMutation" modifier="Ichthyostega" created="201101231344" modified="201506032222" tags="spec discuss draft" changecount="1">

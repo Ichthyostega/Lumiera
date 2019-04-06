@@ -19663,9 +19663,63 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node CREATED="1554480448693" ID="ID_1659558780" MODIFIED="1554480460401" TEXT="Struktur-Pull">
+<node CREATED="1554480448693" ID="ID_1659558780" MODIFIED="1554516103872" STYLE="fork" TEXT="Struktur-Profil">
 <icon BUILTIN="forward"/>
-<node CREATED="1554480470481" ID="ID_936706731" MODIFIED="1554480489202" TEXT="Canvas bezieht vom Root-Body eine Verb-Sequenz"/>
+<node CREATED="1554480470481" ID="ID_936706731" MODIFIED="1554516082320" TEXT="Canvas bezieht vom Root-Body eine Verb-Sequenz"/>
+<node CREATED="1554516114006" ID="ID_1074831376" MODIFIED="1554516126660" TEXT="diese Verb-Sequenz wird rekursiv aufgebaut"/>
+<node CREATED="1554516233179" ID="ID_659430585" MODIFIED="1554516241478" TEXT="der draw()-Code interpretiert sie"/>
+<node CREATED="1554516127873" ID="ID_134859232" MODIFIED="1554516133060" TEXT="heap-allozierte Liste">
+<node CREATED="1554516153981" ID="ID_683878349" MODIFIED="1554516163104" TEXT="Lazy">
+<node CREATED="1554516163980" ID="ID_151765359" MODIFIED="1554516171510" TEXT="neu bauen wenn leer"/>
+<node CREATED="1554516172112" ID="ID_1550870826" MODIFIED="1554516185068" TEXT="leeren zum Invalidieren"/>
+</node>
+<node CREATED="1554516191248" ID="ID_379475221" MODIFIED="1554516205420" TEXT="on_draw() ist h&#xe4;ufiger als Struktur&#xe4;nderungen"/>
+</node>
+<node CREATED="1554516243633" ID="ID_386714682" MODIFIED="1554516245860" TEXT="Verben">
+<node CREATED="1554516247416" ID="ID_711078188" MODIFIED="1554516251040" TEXT="ruler"/>
+<node CREATED="1554516251688" ID="ID_24688004" MODIFIED="1554516256283" TEXT="gap"/>
+<node CREATED="1554516257065" ID="ID_389097560" MODIFIED="1554516261186" TEXT="content"/>
+<node CREATED="1554516438055" ID="ID_1490793853" MODIFIED="1554516446110" TEXT="open / close"/>
+</node>
+<node CREATED="1554516547904" ID="ID_229346999" MODIFIED="1554516552054" TEXT="Implementierung">
+<node CREATED="1554516552951" ID="ID_600745992" MODIFIED="1554516555251" TEXT="Festlegungen">
+<node CREATED="1554516555943" ID="ID_1554446719" MODIFIED="1554516577129" TEXT="Argument = vertikal in Pixeln"/>
+<node CREATED="1554516578588" ID="ID_520338948" MODIFIED="1554516923727" TEXT="Spannen inklusive Dekoration">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      warum?
+    </p>
+    <p>
+      weil sonst der TrackBody um die Dekoration wissen m&#252;&#223;te,
+    </p>
+    <p>
+      wenn er mit der HeaderPane den ben&#246;tigten Platz aushandelt
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1554516626163" ID="ID_1427792739" MODIFIED="1554516662980" TEXT="d.h. der Zeichencode mu&#xdf; seine Dekoration innen einf&#xfc;gen"/>
+<node CREATED="1554516850759" ID="ID_361309913" MODIFIED="1554516863201" TEXT="content mu&#xdf; mit ausreichend Padding platziert werden"/>
+</node>
+</node>
+<node CREATED="1554516928332" ID="ID_874621550" MODIFIED="1554516935111" TEXT="Verben definieren"/>
+<node CREATED="1554516938851" ID="ID_1733864099" MODIFIED="1554516951053" TEXT="Verb-Sequenz speichern"/>
+<node CREATED="1554516951713" ID="ID_318462518" MODIFIED="1554516961692" TEXT="Verben (rekursiv) generieren">
+<node CREATED="1554516977204" ID="ID_305770947" MODIFIED="1554516978849" TEXT="Ruler"/>
+<node CREATED="1554516979454" ID="ID_508239889" MODIFIED="1554516983920" TEXT="Gaps handhaben"/>
+<node CREATED="1554516984485" ID="ID_351302473" MODIFIED="1554516987376" TEXT="Content"/>
+</node>
+<node CREATED="1554517013770" ID="ID_1565362810" MODIFIED="1554517019643" TEXT="Verb-Sequenz konsolidieren"/>
+<node CREATED="1554517023983" ID="ID_582840262" MODIFIED="1554517030946" TEXT="Verb-Sequenz interpretieren">
+<node CREATED="1554517097141" ID="ID_1017084418" MODIFIED="1554517107334" TEXT="&#xdc;bersichts-Ruler handhaben"/>
+<node CREATED="1554517044045" ID="ID_520113686" MODIFIED="1554517048007" TEXT="Farben bereitstellen"/>
+<node CREATED="1554517048572" ID="ID_389539875" MODIFIED="1554517070773" TEXT="Rampen zeichnen"/>
+</node>
+</node>
 </node>
 </node>
 </node>
