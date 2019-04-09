@@ -80,7 +80,7 @@ namespace timeline {
   struct TrackProfile
     {
       using SlopeVerb = lib::VerbToken<ProfileInterpreter, void(uint)>;
-      using SlopeElm =  std::tuple<SlopeVerb, uint>;
+      using SlopeElm =  std::pair<SlopeVerb, uint>;
       using Elements =  std::vector<SlopeElm>;
       
       Elements elements;
@@ -91,6 +91,13 @@ namespace timeline {
       operator bool()  const
         {
           return not util::isnil (elements);
+        }
+      
+      void
+      performWith (ProfileInterpreter& interpreter)
+        {
+          for (auto& slopeElm : elements)
+              slopeElm.first.applyTo (interpreter, uint(slopeElm.second));
         }
       
     private:/* ===== Internals: handling tokens ===== */
