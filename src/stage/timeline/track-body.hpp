@@ -54,6 +54,7 @@ namespace stage  {
 namespace timeline {
   
   class TrackPresenter;
+  class TrackProfile;
   
   
   /**
@@ -88,6 +89,8 @@ namespace timeline {
       void setTrackName (cuString&);
       
       uint calcHeight();
+      
+      void establishTrackSpace (TrackProfile&);
       
       
     private:/* ===== Internals ===== */

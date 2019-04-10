@@ -32,6 +32,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/track-body.hpp"
+#include "stage/timeline/track-profile.hpp"
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -95,6 +96,18 @@ namespace timeline {
     for (TrackBody* subTrack : subTracks_)
       heightSum += subTrack->calcHeight();
     return heightSum;
+  }
+  
+  
+  /**
+   * recursively establish the screen space allocation for this structure of nested tracks.
+   * The TrackProfile is an abstracted description of the sequence of track elements,
+   * which constitute a vertical cross section through the track bodies
+   */
+  void
+  TrackBody::establishTrackSpace (TrackProfile& profile)
+  {
+    UNIMPLEMENTED ("recursively build the TrackProfile");
   }
   
   

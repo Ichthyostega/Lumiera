@@ -57,6 +57,81 @@
 namespace stage {
 namespace timeline {
   
+  using CairoC = Cairo::RefPtr<Cairo::Context> const&;
+  
+  namespace { // details of track background painting
+    
+    class TrackGroundingRenderer
+      : public ProfileInterpreter
+      {
+        CairoC cox;
+        
+        
+        /** paint the top of the track body area
+           @param f number of consecutive track elements
+                    to keep pinned (always visible) at top */
+        void
+        prelude (uint f)  override
+          {
+            UNIMPLEMENTED ("draw timeline top");
+          }
+        
+        /** finish painting the track body area
+            @param pad additional padding to add at bottom */
+        void
+        coda (uint pad)  override
+          {
+            UNIMPLEMENTED ("draw bottom");
+          }
+        
+        /** draw grounding of a overview/ruler track
+            with the given height */
+        void
+        ruler (uint h)  override
+          {
+            UNIMPLEMENTED ("draw ruler");
+          }
+        
+        /** render additional padding/gap */
+        void
+        gap (uint h)  override
+          {
+            UNIMPLEMENTED ("draw gap");
+          }
+        
+        /** fill background of track content area
+            with the given vertical extension */
+        void
+        content (uint h)  override
+          {
+            UNIMPLEMENTED ("paint background of content area");
+          }
+        
+        /** paint opening slope to enter nested sub tracks
+           @note we only ever open one level deep a time */
+        void
+        open (uint n)  override
+          {
+            UNIMPLEMENTED ("paint downward slope");
+          }
+        
+        /** paint closing slope to finish nested sub tracks
+           @param n number of nested levels to close */
+        void
+        close (uint n)  override
+          {
+            UNIMPLEMENTED ("paint upward slope");
+          }
+        
+        
+      public:
+        TrackGroundingRenderer (CairoC currentDrawContext)
+          : cox{currentDrawContext}
+          { }
+      };
+  }
+  
+  
   
   
   TimelineCanvas::TimelineCanvas()
@@ -114,7 +189,7 @@ namespace timeline {
    *       becomes crucial for responsiveness on large sessions          ////////////////////////////////////TICKET #1191
    */
   bool
-  TimelineCanvas::on_draw (Cairo::RefPtr<Cairo::Context> const& cox)
+  TimelineCanvas::on_draw (CairoC const& cox)
   {
     // draw track structure behind all widgets
     openCanvas (cox);
@@ -141,7 +216,7 @@ namespace timeline {
    *   only for the child widgets on the canvas, not for any custom painting.
    */
   void
-  TimelineCanvas::openCanvas (Cairo::RefPtr<Cairo::Context> const& cox)
+  TimelineCanvas::openCanvas (CairoC const& cox)
   {
     auto adjH = get_hadjustment();
     auto adjV = get_vadjustment();
@@ -158,7 +233,7 @@ namespace timeline {
    * Discard any coordinate offsets, stroke and drawing settings applied within.
    */
   void
-  TimelineCanvas::closeCanvas (Cairo::RefPtr<Cairo::Context> const& cox)
+  TimelineCanvas::closeCanvas (CairoC const& cox)
   {
     cox->restore();
   }
@@ -169,8 +244,16 @@ namespace timeline {
    * @param cox cairo drawing context for custom drawing, adjusted for our virtual canvas.
    */
   void
-  TimelineCanvas::drawGrounding (Cairo::RefPtr<Cairo::Context> const& cox)
+  TimelineCanvas::drawGrounding (CairoC const& cox)
   {
+    if (rootBody_)
+      {
+        if (not profile_)
+          rootBody_->establishTrackSpace (profile_);
+        
+        TrackGroundingRenderer renderer{cox};
+        profile_.performWith (renderer);
+      }
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     cox->set_source_rgb(0.8, 0.0, 0.0);
     cox->set_line_width (5.0);
@@ -181,11 +264,11 @@ namespace timeline {
   
   
   /**
-   * 
+   *
    * @param cox cairo drawing context of the virtual canvas for custom drawing.
    */
   void
-  TimelineCanvas::drawOverlays (Cairo::RefPtr<Cairo::Context> const& cox)
+  TimelineCanvas::drawOverlays (CairoC const& cox)
   {
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     auto alloc = get_allocation();
