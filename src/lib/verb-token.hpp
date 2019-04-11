@@ -96,11 +96,6 @@ namespace lib {
           return (receiver.*handler_)(std::forward<ARGS>(args)...);
         }
       
-      operator string()  const
-        {
-          return string(token_);
-        }
-      
       VerbToken(Handler handlerFunction, Literal token)
         : handler_(handlerFunction)
         , token_(token)
@@ -112,6 +107,17 @@ namespace lib {
         { }
       
       /* default copyable */
+      
+      operator string()  const
+        {
+          return string(token_);
+        }
+      
+      Literal const&
+      getID()
+        {
+          return token_;
+        }
       
       /** equality of VerbToken, based on equality of the #token_ Literal
        * @remarks member pointers to virtual functions aren't comparable, for good reason

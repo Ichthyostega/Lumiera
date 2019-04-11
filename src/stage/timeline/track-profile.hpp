@@ -122,6 +122,36 @@ namespace timeline {
       TOKEN_BUILDER (close)
       TOKEN_BUILDER (prelude)
       TOKEN_BUILDER (coda)
+      
+      void
+      addSlopeDown()
+        {
+          this->append_open (1);
+        }
+      
+      void
+      addSlopeUp()
+        {
+          if (lastEntryIs("close"))
+            incrementLastCloseSlope();
+          else
+            append_close (1);
+        }
+      
+    private:
+      bool
+      lastEntryIs (Literal expectedToken)
+        {
+          return util::isnil (elements)
+              or elements.back().first.getID() == expectedToken;
+        }
+      
+      void
+      incrementLastCloseSlope()
+        {
+          REQUIRE (lastEntryIs ("close"));
+          ++ elements.back().second;
+        }
     };
   
   

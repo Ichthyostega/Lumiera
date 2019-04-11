@@ -37,7 +37,7 @@
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -45,6 +45,7 @@
 
 
 //using util::_Fmt;
+using util::isnil;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -57,7 +58,6 @@ namespace stage {
 namespace timeline {
   
   namespace {
-    const uint DEFAULT_OVERVIEW_HEIGHT_px = 20;
     const uint DEFAULT_CONTENT_HEIGHT_px = 80;
   }
   
@@ -65,8 +65,7 @@ namespace timeline {
   
   
   TrackBody::TrackBody()
-    : overviewHeight_{DEFAULT_OVERVIEW_HEIGHT_px}
-    , contentHeight_{DEFAULT_CONTENT_HEIGHT_px}
+    : contentHeight_{DEFAULT_CONTENT_HEIGHT_px}
     , subTracks_{}
     , rulers_{}
     { }
@@ -92,7 +91,13 @@ namespace timeline {
   uint
   TrackBody::calcHeight()
   {
-    uint heightSum = overviewHeight_ + contentHeight_;
+    uint overviewHeight = 0;
+    for (auto& ruler : rulers_)
+      {
+        overviewHeight += ruler->calcHeight();
+                        + ruler->getGapHeight();
+      }
+    uint heightSum = overviewHeight + contentHeight_;
     for (TrackBody* subTrack : subTracks_)
       heightSum += subTrack->calcHeight();
     return heightSum;
@@ -103,11 +108,28 @@ namespace timeline {
    * recursively establish the screen space allocation for this structure of nested tracks.
    * The TrackProfile is an abstracted description of the sequence of track elements,
    * which constitute a vertical cross section through the track bodies
+   * - pre: the given profile is built and complete up to the (upper side) start of this timeline
+   * - post: the profile is elaborated for this track and its children, down to the lower end.
+   * 
    */
   void
   TrackBody::establishTrackSpace (TrackProfile& profile)
   {
-    UNIMPLEMENTED ("recursively build the TrackProfile");
+    for (auto& ruler : rulers_)
+      {
+        profile.append_ruler (ruler->calcHeight());
+        uint gapHeight = ruler->getGapHeight();
+        if (gapHeight > 0)
+          profile.append_gap (gapHeight);
+      }
+    profile.append_content (this->contentHeight_);
+    if (not isnil(subTracks_))
+      {
+        profile.addSlopeDown();
+        for (TrackBody* subTrack : subTracks_)
+          subTrack->establishTrackSpace (profile);
+        profile.addSlopeUp();
+      }
   }
   
   

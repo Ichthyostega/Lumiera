@@ -26,6 +26,7 @@
  ** and time code ticks and markers onto the TimelineCanvas.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2018
+ ** @todo this is more or less preliminary/placeholder code as of 4/2019
  ** 
  */
 
@@ -37,7 +38,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -45,6 +46,7 @@
 
 
 //using util::_Fmt;
+using util::isnil;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -57,9 +59,12 @@ namespace stage {
 namespace timeline {
   
   namespace {
-    uint TIMERULER_SCALE_HEIGHT_px = 20;
-    uint TIMERULER_LARGE_TICK_WEIGHT_px = 2;
-    uint TIMERULER_SMALL_TICK_WEIGHT_px = 2;
+    const uint DEFAULT_OVERVIEW_HEIGHT_px = 20;
+    
+    const uint TIMERULER_SCALE_HEIGHT_px = 20;
+    const uint TIMERULER_LARGE_TICK_WEIGHT_px = 2;
+    const uint TIMERULER_SMALL_TICK_WEIGHT_px = 2;
+    const uint TIMERULE_GAP_BELOW_px = 5;
   }
   
   
@@ -77,14 +82,47 @@ namespace timeline {
   
   
   /**
-   * recursively calculate the height in pixels to display this track,
-   * including all nested sub-tracks
+   * recursively calculate the height in pixels to display this ruler track.
+   * @todo this is more or less braindead placeholder code as of 4/2019
    */
   uint
   RulerTrack::calcHeight()
   {
-    UNIMPLEMENTED ("calculate display height of the overview ruler in pixels");
+    if (isnil (scales_))
+      return DEFAULT_OVERVIEW_HEIGHT_px;
+    else 
+      { // handle time ruler                                 ////////////////////////////////////////////////TICKET #1194 : proper handling of ruler tracks
+        uint combinedScaleHeight = 0;
+        for (auto& scale : scales_)
+          combinedScaleHeight += scale.calcHeight();
+        return combinedScaleHeight;
+      }
   }
+  
+  /**
+   * possibly cause the display of an additional padding gap below this ruler track
+   * @return `0` when no gap shall be displayed, _otherwise_ the gap height in pixels.
+   * @todo this is more or less braindead placeholder code as of 4/2019
+   */
+  uint
+  RulerTrack::getGapHeight()
+    {
+      if (not isnil (scales_))
+        return TIMERULE_GAP_BELOW_px;
+      else
+        return 0; // no Gap
+      
+    }
+  
+  /**
+   * get vertical extension of this scale on the time(code) overview ruler
+   * @todo this is more or less braindead placeholder code as of 4/2019
+   */
+  uint
+  RulerScale::calcHeight()
+    {                                                        ////////////////////////////////////////////////TICKET #1194 : proper handling of ruler tracks
+      return TIMERULER_SCALE_HEIGHT_px;
+    }
   
   
   

@@ -71,7 +71,6 @@ namespace timeline {
    */
   class TrackBody
     {
-      uint overviewHeight_;
       uint contentHeight_;
       
       using PRuler    = std::unique_ptr<RulerTrack>;

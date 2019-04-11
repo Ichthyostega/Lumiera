@@ -54,9 +54,10 @@
 namespace stage  {
 namespace timeline {
   
+                                         ////////////////////////////////////////////////////////////////////TICKET #1195 : Timecode Ruler presentation
   struct RulerScale
     {
-      
+      uint calcHeight();
     };
   
   
@@ -64,7 +65,7 @@ namespace timeline {
    * Helper to organise and draw the time or content overview ruler at the top of the
    * timeline track display. The purpose is to support custom drawing onto the TimelineCanvas
    * to show rendered content, timecode or frame count ticks plus any markers, ranges and locators...
-   * @todo WIP-WIP as of 10/2018
+   * @todo this is more or less preliminary/placeholder code as of 4/2019            ////////////////////////TICKET #1194 : proper handling of ruler tracks
    */
   class RulerTrack
     {
@@ -77,6 +78,7 @@ namespace timeline {
      ~RulerTrack();
       
       uint calcHeight();
+      uint getGapHeight();
       
     private:/* ===== Internals ===== */
      
