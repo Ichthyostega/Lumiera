@@ -58,7 +58,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <memory>
 //#include <vector>
@@ -68,8 +68,28 @@
 namespace stage  {
 namespace timeline {
   
+  using util::max;
+  
 //  class TrackHeadWidget;
   
+  
+  /** @todo quick-n-dirty hack. Should consider the Range TR (C++20) */
+  struct PixSpan
+    {
+      int b = 0;
+      int e = 0;
+      
+      PixSpan() { }
+      PixSpan(int begin, int end)
+        : b{begin}, e{max (begin,end)}
+        { }
+      
+      bool
+      empty()  const
+        {
+          return e <= b;
+        }
+    };
   
   /**
    * Interface used by the widgets to translate themselves into screen layout.
@@ -84,6 +104,8 @@ namespace timeline {
     public:
       virtual ~DisplayManager();    ///< this is an interface
       
+      /** the overall horizontal pixel span to cover by this timeline */
+      virtual PixSpan getPixSpan()         =0;
       
     private:/* ===== Internals ===== */
      

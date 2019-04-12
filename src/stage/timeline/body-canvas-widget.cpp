@@ -31,6 +31,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
+#include "stage/timeline/display-manager.hpp"
 #include "stage/timeline/track-profile.hpp"
 #include "stage/timeline/track-body.hpp"
 
@@ -42,16 +43,19 @@
 
 //#include <algorithm>
 //#include <vector>
+#include <utility>
 
 
 
 //using util::_Fmt;
 //using util::contains;
 //using Gtk::Widget;
+using Gdk::Rectangle;
 //using sigc::mem_fun;
 //using sigc::ptr_fun;
 //using std::cout;
 //using std::endl;
+using std::move;
 
 
 namespace stage {
@@ -64,7 +68,8 @@ namespace timeline {
     class TrackGroundingRenderer
       : public ProfileInterpreter
       {
-        CairoC cox;
+        CairoC cox_;
+        PixSpan display_;
         
         
         /** paint the top of the track body area
@@ -125,18 +130,23 @@ namespace timeline {
         
         
       public:
-        TrackGroundingRenderer (CairoC currentDrawContext)
-          : cox{currentDrawContext}
+        TrackGroundingRenderer (CairoC currentDrawContext, PixSpan toShow)
+          : cox_{currentDrawContext}
+          , display_{move (toShow)}
           { }
+        
+        virtual ~TrackGroundingRenderer() { }
       };
   }
   
   
   
   
-  TimelineCanvas::TimelineCanvas()
+  TimelineCanvas::TimelineCanvas (DisplayManager& displayManager)
     : Gtk::Layout{}
+    , layout_{displayManager}
     , rootBody_{nullptr}
+    , profile_{}
     { }
   
   
@@ -144,9 +154,9 @@ namespace timeline {
   BodyCanvasWidget::~BodyCanvasWidget() { }
   
   
-  BodyCanvasWidget::BodyCanvasWidget ()
+  BodyCanvasWidget::BodyCanvasWidget (DisplayManager& displayManager)
     : Gtk::ScrolledWindow{}
-    , canvas_{}
+    , canvas_{displayManager}
     {
       this->set_shadow_type(Gtk::SHADOW_IN);
       this->set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_AUTOMATIC);  // always need a horizontal scrollbar
@@ -251,7 +261,7 @@ namespace timeline {
         if (not profile_)
           rootBody_->establishTrackSpace (profile_);
         
-        TrackGroundingRenderer renderer{cox};
+        TrackGroundingRenderer renderer{cox, layout_.getPixSpan()};
         profile_.performWith (renderer);
       }
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing

@@ -70,17 +70,20 @@
 namespace stage  {
 namespace timeline {
   
+  class DisplayManager;
   class TrackBody;
   
   
   class TimelineCanvas
     : public Gtk::Layout
     {
+      DisplayManager& layout_;
+      
     public:
       TrackBody* rootBody_;
       TrackProfile profile_;
       
-      TimelineCanvas();
+      TimelineCanvas (DisplayManager&);
       
     private:
       virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
@@ -102,7 +105,7 @@ namespace timeline {
       TimelineCanvas canvas_;
       
     public:
-      BodyCanvasWidget();
+      BodyCanvasWidget (DisplayManager&);
      ~BodyCanvasWidget();
       
       /** @internal Initially install the contents corresponding to the root track fork */

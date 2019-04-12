@@ -115,6 +115,7 @@ namespace timeline {
       BodyCanvasWidget bodyCanvas_;
       HeaderPaneWidget headerPane_;
       
+      /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1019 : need a "ZoomWindow" here to manage the visible area
       
     public:
       TimelineLayout (Gtk::Paned&);
@@ -124,6 +125,8 @@ namespace timeline {
       void installRootTrack (TrackHeadWidget&,TrackBody&);
       
     protected:/* ==== Interface: LayoutManager===== */
+      
+      PixSpan getPixSpan()  override;
       
     private:/* ===== Internals ===== */
      

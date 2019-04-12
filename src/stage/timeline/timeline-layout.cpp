@@ -63,8 +63,8 @@ namespace timeline {
   
   TimelineLayout::TimelineLayout (Gtk::Paned& topLevelContainer)
     : paneSplitPosition_{topLevelContainer.property_position()}
-    , bodyCanvas_{}
-    , headerPane_{bodyCanvas_.get_vadjustment()}   // wire the header pane (Gtk::Viewport) to follow the body vertical scroll movement
+    , bodyCanvas_{*this}                           // inject (as interface DisplayManager)
+    , headerPane_{bodyCanvas_.get_vadjustment()}  //  wire the header pane (Gtk::Viewport) to follow the body vertical scroll movement
     {
       topLevelContainer.add1 (headerPane_);
       topLevelContainer.add2 (bodyCanvas_);
@@ -86,7 +86,17 @@ namespace timeline {
     bodyCanvas_.installForkRoot (body);
   }
   
-
+  
+  /* ==== Interface: LayoutManager===== */
+      
+  PixSpan
+  TimelineLayout::getPixSpan()
+  {
+                                           ////////////////////////////////////////////////////////TICKET 1019 : need a "ZoomWindow" here to manage the visible area
+                                           ////////////////////////////////////////////////////////TICKET 1039 : "somehow" wire with the TimelineController to find out the covered span
+    return PixSpan {0, 2048}; ////////////////Lalala Lalü
+  }
+  
   
   
   
