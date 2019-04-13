@@ -19448,7 +19448,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1480607035712" ID="ID_1405339006" MODIFIED="1518487921082" TEXT="Rumpf">
+<node CREATED="1480607035712" ID="ID_1405339006" MODIFIED="1518487921082" TEXT="Rumpf" VGAP="5">
 <node CREATED="1544835109183" ID="ID_1598364198" MODIFIED="1554996128177" TEXT="Konzept: RulerTrack">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544849233126" ID="ID_665765482" MODIFIED="1554996286114" TEXT="#1194 Handling of Ruler Tracks">
 <icon BUILTIN="flag-yellow"/>
@@ -19513,6 +19513,46 @@
 <node CREATED="1544838027901" ID="ID_519696967" MODIFIED="1544839199767" TEXT="Header-Pane: Platz &quot;geschickt&quot; nutzen">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1555082395840" ID="ID_104473939" MODIFIED="1555082419611" TEXT="ABER trotzdem separat darzustellen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1555082433635" ID="ID_1213306272" MODIFIED="1555082440982" TEXT="Time-Ruler &quot;allways on top&quot;"/>
+<node CREATED="1555082442705" ID="ID_497245117" MODIFIED="1555082597140">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Unterscheidung <b>verschoben</b>&#160;in die Darstellung
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      anstatt (konventionell) den Time-Ruler separat explizit auszuprogrammieren,
+    </p>
+    <p>
+      bekommen wir nun eine gemeinsame Darstellungs-Mechanik,
+    </p>
+    <p>
+      welche dann aber in zwei getrennten Bereichen jeweils anders parametrisiert
+    </p>
+    <p>
+      zur Anwendung kommt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1555082487012" ID="ID_217824628" MODIFIED="1555082508617" TEXT="trotzdem sinnvolles Potential zur Vereinheitlichung">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node CREATED="1544839243971" ID="ID_1000231823" MODIFIED="1544839267628" TEXT="Ausf&#xfc;hrung obliegt der Session"/>
 </node>
@@ -19525,10 +19565,73 @@
 <node CREATED="1554996306756" ID="ID_1619835790" MODIFIED="1554996324416" TEXT="auf spezielle Konfig eines &quot;Ruler-Tracks&quot; zur&#xfc;ckf&#xfc;hren">
 <arrowlink DESTINATION="ID_80922465" ENDARROW="Default" ENDINCLINATION="343;0;" ID="Arrow_ID_630173444" STARTARROW="None" STARTINCLINATION="376;0;"/>
 </node>
+<node CREATED="1555080526516" ID="ID_1733081392" MODIFIED="1555080551834">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: <i><font color="#bb4444">mu&#223; immer sichtbar sein</font></i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1555080572765" ID="ID_577805455" MODIFIED="1555080639983" TEXT="im Detail etwas komplexer...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber es bleibt bei diesem Prinzip.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Des Genaueren, es gibt eine jeweils festgesetzte Menge von Elementen
+    </p>
+    <p>
+      am Anfang des Track-Profils, welche immer sichtbar bleiben soll
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1555082672083" ID="ID_1185653910" MODIFIED="1555082799559" TEXT="BodyCanvasWidget">
+<node CREATED="1555082682753" ID="ID_1277383747" MODIFIED="1555082692560" TEXT="verwaltet und organisiert die Struktur"/>
+<node CREATED="1555082693273" ID="ID_723726755" MODIFIED="1555082702200" TEXT="hat zwei konkrete TimelineCanvas">
+<node CREATED="1555082703199" ID="ID_81861736" MODIFIED="1555082709649" TEXT="oben f&#xfc;r den Time-Ruler"/>
+<node CREATED="1555082710728" ID="ID_676334326" MODIFIED="1555082731805" TEXT="unten f&#xfc;r die Track-Struktur"/>
+</node>
+<node CREATED="1555084648375" ID="ID_483631091" MODIFIED="1555084698950" TEXT="organisiert das Struktur-Profil">
+<arrowlink COLOR="#2e66db" DESTINATION="ID_1659558780" ENDARROW="Default" ENDINCLINATION="-889;0;" ID="Arrow_ID_1691760775" STARTARROW="None" STARTINCLINATION="828;0;"/>
+</node>
 </node>
 <node CREATED="1540641317386" ID="ID_151954769" MODIFIED="1554996384127" TEXT="Canvas">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_151954769" ENDARROW="Default" ENDINCLINATION="263;-88;" ID="Arrow_ID_1923805019" SOURCE="ID_18552766" STARTARROW="None" STARTINCLINATION="93;24;"/>
-<node CREATED="1540951718734" HGAP="56" ID="ID_179159881" MODIFIED="1540951729689" TEXT="TrackBody" VSHIFT="11">
+<node CREATED="1554480347233" HGAP="-16" ID="ID_1408962662" MODIFIED="1555082780585" VSHIFT="-10">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>grunds&#228;tzlich</u>: <i>es zeichnet der Canvas</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#a07373" STYLE="linear"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1555082815168" ID="ID_1445154694" MODIFIED="1555082846519" TEXT="er entscheidet aber nicht &#xfc;ber die Struktur"/>
+<node CREATED="1555082847183" ID="ID_822850985" MODIFIED="1555082856733" TEXT="sondern bekommt Struktur-Info hereingereicht"/>
+</node>
+<node CREATED="1540951718734" HGAP="69" ID="ID_179159881" MODIFIED="1555082878628" TEXT="TrackBody" VSHIFT="-42">
 <node CREATED="1540951732747" ID="ID_879954288" MODIFIED="1540951770897" TEXT="kein Widget, sondern eine Hilfs-Struktur"/>
 <node CREATED="1540951833141" ID="ID_387631457" MODIFIED="1540951859869" TEXT="erledigt f&#xfc;r den Canvas das Zeichnen f&#xfc;r einen Track"/>
 <node CREATED="1540951862399" ID="ID_708158546" MODIFIED="1540951902567" TEXT="relative Koordinaten (und sowiso nur vertikal)"/>
@@ -19575,8 +19678,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1544839288936" ID="ID_43593052" MODIFIED="1554996355955" TEXT="zwei Ruler-Konfigs in das systematische UI-Modell">
-<arrowlink COLOR="#5f84b0" DESTINATION="ID_1083901292" ENDARROW="Default" ENDINCLINATION="-756;-82;" ID="Arrow_ID_1167484185" STARTARROW="None" STARTINCLINATION="-942;0;"/>
+<node CREATED="1544839288936" ID="ID_43593052" MODIFIED="1555082891874" TEXT="zwei Ruler-Konfigs in das systematische UI-Modell">
+<arrowlink COLOR="#5f84b0" DESTINATION="ID_1083901292" ENDARROW="Default" ENDINCLINATION="-756;-82;" ID="Arrow_ID_1167484185" STARTARROW="None" STARTINCLINATION="-981;0;"/>
 <node COLOR="#338800" CREATED="1544849869166" ID="ID_1025477379" MODIFIED="1553911646237" TEXT="Frage: wo ansiedeln?">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1544849875744" ID="ID_27673928" MODIFIED="1553911580738" TEXT="im TrackPresenter">
@@ -19611,20 +19714,6 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-</node>
-<node CREATED="1554480347233" HGAP="56" ID="ID_1408962662" MODIFIED="1554480377458" VSHIFT="12">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <u>grunds&#228;tzlich</u>: <i>es zeichnet der Canvas</i>
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="yes"/>
 </node>
 <node CREATED="1541861473496" ID="ID_457526663" MODIFIED="1541861480149" TEXT="draw">
 <node CREATED="1542309666407" ID="ID_1721729181" MODIFIED="1542309670065" TEXT="initial....">
@@ -19765,7 +19854,8 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node CREATED="1554480448693" ID="ID_1659558780" MODIFIED="1554516103872" STYLE="fork" TEXT="Struktur-Profil">
+<node CREATED="1554480448693" ID="ID_1659558780" MODIFIED="1555084698950" STYLE="fork" TEXT="Struktur-Profil">
+<linktarget COLOR="#2e66db" DESTINATION="ID_1659558780" ENDARROW="Default" ENDINCLINATION="-889;0;" ID="Arrow_ID_1691760775" SOURCE="ID_483631091" STARTARROW="None" STARTINCLINATION="828;0;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1554480470481" ID="ID_936706731" MODIFIED="1554516082320" TEXT="Canvas bezieht vom Root-Body eine Verb-Sequenz"/>
 <node CREATED="1554516114006" ID="ID_1074831376" MODIFIED="1554516126660" TEXT="diese Verb-Sequenz wird rekursiv aufgebaut"/>
@@ -22093,8 +22183,8 @@
 <node CREATED="1538956802701" ID="ID_840384156" MODIFIED="1538956809576" TEXT="Sequence{Marker}">
 <node CREATED="1538957049292" ID="ID_1955645432" MODIFIED="1538957077700" TEXT="if typeID = &quot;Marker&quot;"/>
 </node>
-<node CREATED="1544839585279" ID="ID_1083901292" MODIFIED="1554996355955" TEXT="Sequence{Ruler}">
-<linktarget COLOR="#5f84b0" DESTINATION="ID_1083901292" ENDARROW="Default" ENDINCLINATION="-756;-82;" ID="Arrow_ID_1167484185" SOURCE="ID_43593052" STARTARROW="None" STARTINCLINATION="-942;0;"/>
+<node CREATED="1544839585279" ID="ID_1083901292" MODIFIED="1555082891874" TEXT="Sequence{Ruler}">
+<linktarget COLOR="#5f84b0" DESTINATION="ID_1083901292" ENDARROW="Default" ENDINCLINATION="-756;-82;" ID="Arrow_ID_1167484185" SOURCE="ID_43593052" STARTARROW="None" STARTINCLINATION="-981;0;"/>
 <node CREATED="1544846037083" ID="ID_667362504" MODIFIED="1544846061300" TEXT="if typeID = &quot;Ruler&quot;"/>
 <node CREATED="1544846062288" ID="ID_855083299" MODIFIED="1544846101674" TEXT="storage direkt (nested) im TrackBody"/>
 </node>

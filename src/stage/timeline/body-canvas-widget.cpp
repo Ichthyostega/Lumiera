@@ -39,7 +39,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -48,6 +48,7 @@
 
 
 //using util::_Fmt;
+using util::max;
 //using util::contains;
 //using Gtk::Widget;
 using Gdk::Rectangle;
@@ -64,6 +65,9 @@ namespace timeline {
   using CairoC = Cairo::RefPtr<Cairo::Context> const&;
   
   namespace { // details of track background painting
+    
+    const int INITIAL_TIMERULER_HEIGHT_px = 30;
+    
     
     class TrackGroundingRenderer
       : public ProfileInterpreter
@@ -142,11 +146,10 @@ namespace timeline {
   
   
   
-  TimelineCanvas::TimelineCanvas (DisplayManager& displayManager)
+  TimelineCanvas::TimelineCanvas (_RenderFactory groundingFac, _RenderFactory overlayFac)
     : Gtk::Layout{}
-    , layout_{displayManager}
-    , rootBody_{nullptr}
-    , profile_{}
+    , getGroundingRenderer_{groundingFac}
+    , getOverlayRenderer_{overlayFac}
     { }
   
   
@@ -155,17 +158,29 @@ namespace timeline {
   
   
   BodyCanvasWidget::BodyCanvasWidget (DisplayManager& displayManager)
-    : Gtk::ScrolledWindow{}
-    , canvas_{displayManager}
+    : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
+    , contentArea_{}
+    , rulerCanvas_{std::function<Renderer&()>(), std::function<Renderer&()>()}  ///////////TODO dummy placeholder factories.... need to build the real thing
+    , mainCanvas_{std::function<Renderer&()>(), std::function<Renderer&()>()}
+    , layout_{displayManager}
+    , profile_{}
+    , rootBody_{nullptr}
     {
-      this->set_shadow_type(Gtk::SHADOW_IN);
-      this->set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_AUTOMATIC);  // always need a horizontal scrollbar
-      this->property_expand() = true;                               //  dynamically grab any available additional space
-      this->add(canvas_);
+      this->set_border_width (0);
+      this->property_expand() = true;       // dynamically grab any available additional space
+      this->pack_start (rulerCanvas_);
+      this->pack_start (contentArea_);
+      
+      contentArea_.set_shadow_type (Gtk::SHADOW_NONE);
+      contentArea_.set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_AUTOMATIC);  // always need a horizontal scrollbar
+      contentArea_.property_expand() = true;                               //  dynamically grab additional space
+      contentArea_.add (mainCanvas_);
       
       { // for the initial empty canvas -- use all space the enclosing scrolled window got.
         auto currSize = get_allocation();
-        canvas_.set_size (currSize.get_width(), currSize.get_height());
+        int height = currSize.get_height();
+        rulerCanvas_.set_size (currSize.get_width(), INITIAL_TIMERULER_HEIGHT_px);
+        mainCanvas_.set_size (currSize.get_width(), max(0, height-INITIAL_TIMERULER_HEIGHT_px));
       }
       
       // realise all initially configured elements....
@@ -185,7 +200,23 @@ namespace timeline {
   void
   BodyCanvasWidget::installForkRoot (TrackBody& rootTrackBody)
   {
-    canvas_.rootBody_ = &rootTrackBody;
+    rootBody_ = &rootTrackBody;
+  }
+  
+  
+  /**
+   * 
+   */
+  TrackProfile&
+  BodyCanvasWidget::establishTrackProfile()
+  {
+    if (rootBody_)
+      {
+        if (not profile_)
+          rootBody_->establishTrackSpace (profile_);
+        
+//      TrackGroundingRenderer renderer{cox, layout_.getPixSpan()};  //////////TODO TOD-oh
+      }
   }
   
   
@@ -256,14 +287,7 @@ namespace timeline {
   void
   TimelineCanvas::drawGrounding (CairoC const& cox)
   {
-    if (rootBody_)
-      {
-        if (not profile_)
-          rootBody_->establishTrackSpace (profile_);
-        
-        TrackGroundingRenderer renderer{cox, layout_.getPixSpan()};
-        profile_.performWith (renderer);
-      }
+//  profile_.performWith (renderer);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     cox->set_source_rgb(0.8, 0.0, 0.0);
     cox->set_line_width (5.0);

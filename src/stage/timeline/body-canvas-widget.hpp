@@ -64,6 +64,7 @@
 
 //#include <memory>
 //#include <vector>
+#include <functional>
 
 
 
@@ -72,18 +73,27 @@ namespace timeline {
   
   class DisplayManager;
   class TrackBody;
+  class TimelineCanvas;
+  
+  class Renderer
+    {
+    public:
+      virtual ~Renderer() { }  ///< this is an interface
+      
+      virtual void drawTo (TimelineCanvas&)  =0;
+    };
   
   
   class TimelineCanvas
     : public Gtk::Layout
     {
-      DisplayManager& layout_;
+      using _RenderFactory = std::function<Renderer&()>;
+      
+      _RenderFactory getGroundingRenderer_;
+      _RenderFactory getOverlayRenderer_;
       
     public:
-      TrackBody* rootBody_;
-      TrackProfile profile_;
-      
-      TimelineCanvas (DisplayManager&);
+      TimelineCanvas (_RenderFactory groundingFac, _RenderFactory overlayFac);
       
     private:
       virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
@@ -100,9 +110,15 @@ namespace timeline {
    * @todo WIP-WIP as of 12/2016
    */
   class BodyCanvasWidget
-    : public Gtk::ScrolledWindow
+    : public Gtk::Box
     {
-      TimelineCanvas canvas_;
+      Gtk::ScrolledWindow contentArea_;
+      TimelineCanvas rulerCanvas_;
+      TimelineCanvas mainCanvas_;
+      
+      DisplayManager& layout_;
+      TrackProfile profile_;
+      TrackBody* rootBody_;
       
     public:
       BodyCanvasWidget (DisplayManager&);
@@ -111,8 +127,16 @@ namespace timeline {
       /** @internal Initially install the contents corresponding to the root track fork */
       void installForkRoot (TrackBody& rootTrackBody);
       
+      /** @internal allow the header pane to follow our vertical scrolling movement */
+      auto
+      get_vadjustment()
+        {
+          return contentArea_.get_vadjustment();
+        }
+      
     private:/* ===== Internals ===== */
       
+      TrackProfile& establishTrackProfile();
     };
   
   
