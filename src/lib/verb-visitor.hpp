@@ -1,8 +1,8 @@
 /*
-  VERB-TOKEN.hpp  -  double dispatch based on DSL tokens
+  VERB-VISITOR.hpp  -  double dispatch to arbitrary functions on a common interface
 
   Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+    2019,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,31 +21,31 @@
 */
 
 
-/** @file verb-token.hpp
- ** Building blocks for a simple DSL using double dispatch to a handler function.
- ** Actually this is a specialised variation of the visitor pattern, where the
- ** "verb tokens" of the language are the domain objects accepting a "receiver"
- ** (visitor) to provide the concrete implementation function for each "verb".
+/** @file verb-visitor.hpp
+ ** A specific double dispatch variation for function invocation.
+ ** While the classic visitor invokes a common `handle` function with varying arguments,
+ ** here we allow for pre-binding of arbitrary functions on an interface with individual
+ ** suitable arguments. Yet similar to the classic visitor, the actual receiver can be a
+ ** subclass of the target interface, which causes the _second_ indirection in the dispatch
+ ** chain. Since the actually distinguishing factor is not so much a type, but a specific
+ ** operation, we refer to the delayed invocation handles created by this binding as
+ ** _verb token_ on a _receiver_ object (which is the concrete visitor).
  ** 
- ** The intended usage is to set up a language comprised of several abstract actions ("verbs"),
- ** but to defer the concrete implementation to a specific set of handler functions, which
- ** is provided late, at application time. This way, we can send a sequence of verbs towards
- ** an unknown receiver, which supplies the actual meaning within the target context. In
- ** the end, there is a double-dispatch based both on the individual verb given and the
- ** concrete receiver, which needs to implement the interface used in the definition
- ** of the verb tokens. The handler functions defined within this interface may
- ** take additional arguments, which are passed through on application to
- ** the concrete receiver, e.g. `VERB_doit (receiver, arg1, arg2)`
- ** results in the invocation of \c receiver.doit(arg1,arg2)
+ ** This setup is an extension or derivative of the [generic verb token](\ref verb-token-hpp)
+ ** used for the diff system and similar applications; likewise the intended usage is to establish
+ ** a language comprised of several abstract actions ("verbs"), but to allow the concrete operation
+ ** to be supplied later, at application time, and within a different code context. The most notable
+ ** use case is for the drawing of track contents in the user interface, where this pattern allows
+ ** the separation of actual drawing code from the nested track controller structure.
  ** 
- ** @see [prominent usage: the Diff system](\ref lib::diff::DiffLanguage)
- ** @see VerbFunctionDispatch_test
+ ** @see [drawing on the track canvas](\ref body-canvas-widget.cpp)
+ ** @see VerbVisitorDispatch_test
  ** 
  */
 
 
-#ifndef LIB_VERB_TOKEN_H
-#define LIB_VERB_TOKEN_H
+#ifndef LIB_VERB_VISITOR_H
+#define LIB_VERB_VISITOR_H
 
 
 #include "lib/symbol.hpp"
@@ -63,7 +63,7 @@ namespace lib {
   
   /**
    * Action token implemented by double dispatch to a handler function,
-   * as defined in the "receiver" interface (parameter `REC`).
+   * as defined in the "receiver" interface (parameter \c REC).
    * The token is typically part of a DSL and can be applied
    * to a concrete receiver subclass.
    * @tparam REC the type receiving the verb invocations
@@ -133,4 +133,4 @@ namespace lib {
   
   
 } // namespace lib  
-#endif /*LIB_VERB_TOKEN_H*/
+#endif /*LIB_VERB_VISITOR_H*/

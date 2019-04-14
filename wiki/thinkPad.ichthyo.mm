@@ -19578,7 +19578,7 @@
 </html>
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1555080572765" ID="ID_577805455" MODIFIED="1555080639983" TEXT="im Detail etwas komplexer...">
+<node CREATED="1555080572765" ID="ID_577805455" MODIFIED="1555198544043" TEXT="im Detail etwas komplexer...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19599,6 +19599,7 @@
   </body>
 </html>
 </richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_577805455" ENDARROW="Default" ENDINCLINATION="146;-10;" ID="Arrow_ID_228489961" SOURCE="ID_447173098" STARTARROW="Default" STARTINCLINATION="110;0;"/>
 </node>
 </node>
 </node>
@@ -19607,6 +19608,83 @@
 <node CREATED="1555082693273" ID="ID_723726755" MODIFIED="1555082702200" TEXT="hat zwei konkrete TimelineCanvas">
 <node CREATED="1555082703199" ID="ID_81861736" MODIFIED="1555082709649" TEXT="oben f&#xfc;r den Time-Ruler"/>
 <node CREATED="1555082710728" ID="ID_676334326" MODIFIED="1555082731805" TEXT="unten f&#xfc;r die Track-Struktur"/>
+</node>
+<node CREATED="1555198475915" ID="ID_216668392" MODIFIED="1555198483009" TEXT="Koordinieren der draw-Aktivit&#xe4;t">
+<node CREATED="1555198484257" ID="ID_447173098" MODIFIED="1555198544043" TEXT="Problem: Aufteilung">
+<arrowlink DESTINATION="ID_577805455" ENDARROW="Default" ENDINCLINATION="146;-10;" ID="Arrow_ID_228489961" STARTARROW="Default" STARTINCLINATION="110;0;"/>
+<node CREATED="1555198495266" ID="ID_118142711" MODIFIED="1555198505789" TEXT="was kommt in den (immer sichtbaren) oberen Teil?"/>
+<node CREATED="1555198558887" ID="ID_1718337163" MODIFIED="1555198578064" TEXT="Beide Canvas-Instanzen verwenden das gleiche Koordinatensystem">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1555198633466" ID="ID_780787053" MODIFIED="1555198646314" TEXT="Auf Interpretieren des Struktur-Profils zur&#xfc;ckgef&#xfc;hrt">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247298877" ID="ID_1739468610" MODIFIED="1555247319224" TEXT="das mu&#xdf; dann aber verallgemeinert wertden">
+<icon BUILTIN="yes"/>
+<node CREATED="1555247361420" ID="ID_1263829263" MODIFIED="1555247495149" TEXT="warum?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil Verallgemeinern einer einzigen Aktion
+    </p>
+    <p>
+      stets besser ist, als repetitives aufdoppeln und variieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1555247377809" ID="ID_281745763" MODIFIED="1555247439373" TEXT="Erwartete Anforderungen...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        content renderer
+      </li>
+      <li>
+        vom speziellen Track abh&#228;ngige Bereichsmarkierungen
+      </li>
+      <li>
+        lokale und spezielle Overlays sind zu zeichnen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247320686" ID="ID_1896093043" MODIFIED="1555247351638" TEXT="brauche Visitor mit flexiblen Argumenten">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555247502178" ID="ID_297247554" MODIFIED="1555247730526" TEXT="Anforderung">
+<icon BUILTIN="yes"/>
+<node CREATED="1555247509182" ID="ID_184476156" MODIFIED="1555247526066" TEXT="funktioniert genauso wie Visitor im Diff, mit Verb-Tokens"/>
+<node CREATED="1555247526934" ID="ID_679986589" MODIFIED="1555247540296" TEXT="aber jedes Verb nimmt andere Argumente"/>
+<node CREATED="1555247545556" ID="ID_425297916" MODIFIED="1555247558405" TEXT="brauche in-Place Storage (wie ein union)"/>
+<node CREATED="1555247559370" ID="ID_1379389656" MODIFIED="1555247576787" TEXT="soll insgesamt typsicher bleiben"/>
+<node CREATED="1555247580247" ID="ID_54654021" MODIFIED="1555247599368" TEXT="aber nur 2 Indirektionen (double dispatch)"/>
+</node>
+<node CREATED="1555247609372" ID="ID_984933888" MODIFIED="1555247727312" TEXT="Konzept/Ansatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1555247614626" ID="ID_279811814" MODIFIED="1555247631405" TEXT="das Verb-Token mit einem Union-Argument verwenden"/>
+<node CREATED="1555247635823" ID="ID_893471557" MODIFIED="1555247654952" TEXT="und dieses Setup in einen Adapter / Builder verpacken"/>
+<node CREATED="1555247665396" ID="ID_1210108422" MODIFIED="1555247677598" TEXT="vermutlich werden Lambdas eine Rolle spielen"/>
+<node CREATED="1555247678988" ID="ID_1615700205" MODIFIED="1555247695891" TEXT="aber ich m&#xf6;chte Heap-Storage vermeiden"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247704342" ID="ID_929740643" MODIFIED="1555247723589" TEXT="Entwurf/Test">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247713060" ID="ID_1159666241" MODIFIED="1555247718108" TEXT="proof-of-concept">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555247744121" ID="ID_1280520595" MODIFIED="1555247751428" TEXT="ausgehend von Kopie des VerbToken"/>
+<node CREATED="1555247757037" ID="ID_1249615365" MODIFIED="1555247774360" TEXT="(optional) vielleicht letztlich in eine L&#xf6;sung verschmelzen?"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1555084648375" ID="ID_483631091" MODIFIED="1555084698950" TEXT="organisiert das Struktur-Profil">
 <arrowlink COLOR="#2e66db" DESTINATION="ID_1659558780" ENDARROW="Default" ENDINCLINATION="-889;0;" ID="Arrow_ID_1691760775" STARTARROW="None" STARTINCLINATION="828;0;"/>
@@ -19842,7 +19920,7 @@
 </node>
 </node>
 <node CREATED="1554480402297" ID="ID_1456965488" MODIFIED="1554480404805" TEXT="wie?">
-<node CREATED="1542388995969" ID="ID_343346390" MODIFIED="1542389006282" TEXT="konkreter Ablauf">
+<node CREATED="1542388995969" ID="ID_343346390" MODIFIED="1555197135775" TEXT="Ablauf-Plan">
 <icon BUILTIN="idea"/>
 <node CREATED="1542389054873" ID="ID_1270989660" MODIFIED="1542389072647" TEXT="Ausl&#xf6;ser: draw-Signal an Canvas">
 <icon BUILTIN="full-1"/>

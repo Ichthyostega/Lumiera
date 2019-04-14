@@ -1,8 +1,8 @@
 /*
-  VerbFunctionDispatch(Test)  -  Concept to dispatch according to the verbs of a DSL
+  VerbVisitorDispatch(Test)  -  Setup to dispatch to arbitrary functions on a receiver interface
 
   Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+    2019,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,14 +20,14 @@
 
 * *****************************************************/
 
-/** @file verb-function-dispatch-test.cpp
- ** Demonstrate the concept of a _verb language_ based on double dispatch.
- ** @see diff-language.hpp
+/** @file verb-visitor-dispatch-test.cpp
+ ** Demonstrate the extended concept of a _verb language_ based on double dispatch.
+ ** @see body-canvas-widget.hpp
  */
 
 
 #include "lib/test/run.hpp"
-#include "lib/verb-token.hpp"
+#include "lib/verb-visitor.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 
@@ -118,7 +118,7 @@ namespace test{
   
   
   
-  /**********************************************************************//**
+  /***********************************************************************//**
    * @test Demonstration/Concept: dispatch a specific function
    *       based on the given verbs of an embedded custom language.
    *       Actually what we want to achieve here is a specific form
@@ -127,7 +127,7 @@ namespace test{
    *       
    * @see DiffListApplication_test
    */
-  class VerbFunctionDispatch_test : public Test
+  class VerbVisitorDispatch_test : public Test
     {
       
       virtual void
@@ -188,7 +188,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (VerbFunctionDispatch_test, "unit common");
+  LAUNCHER (VerbVisitorDispatch_test, "unit common");
   
   
   

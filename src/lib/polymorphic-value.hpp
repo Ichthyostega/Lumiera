@@ -1,5 +1,5 @@
 /*
-  POLYMORPHIC-VALUE.hpp  -  building opaque polymorphic value objects 
+  POLYMORPHIC-VALUE.hpp  -  building opaque polymorphic value objects
 
   Copyright (C)         Lumiera.org
     2011,               Hermann Vosseler <Ichthyostega@web.de>
@@ -77,38 +77,38 @@
  ** of these virtual functions can be assumed to know the real type and thus be
  ** able to invoke the correct copy ctor or assignment operator. For this to
  ** work, the interface needs to expose those copy and clone operations somehow
- ** as virtual functions. There are two alternatives to get at this point:
+ ** as virtual functions. There are two alternatives to fulfil this requirement:
  ** - in the general case, the common base interface doesn't expose such operations.
- **   Thus we need to <i>mix in</i> an additional \em management interface; this
- **   can be done by \em subclassing the desired implementation type, because
+ **   Thus we need to _mix in_ an additional _management_ interface; this
+ **   can be done by _subclassing_ the desired implementation type, because
  **   this concrete type is irrelevant after finishing the placement constructor.
  **   In order to re-access this management interface, so to be able to invoke
  **   the copy or clone operations, we need to do an elaborate re-cast operation,
  **   first going down to the leaf type and then back up into the mixed-in
  **   management interface. Basically this operation is performed by using
- **   a \c dynamic_cast<CopyAPI&>(bufferContents)
+ **   a `dynamic_cast<CopyAPI&>(bufferContents)`
  ** - but when the used client types provide some collaboration and implement
  **   this management interface either directly on the API or as an immediate
  **   sub-interface, then this copy/management interface is located within the
- **   direct inheritance chain and can be reached by a simple \c static_cast.
+ **   direct inheritance chain and can be reached by a simple `static_cast`.
  **   Indeed, as we're just using a different meaning of the VTable, only a
  **   single indirection (virtual function call) is required at runtime in
  **   this case to invoke the copy ctor or assignment operator.
  ** Thus, in this latter (optimal) case, the fact that PolymorphicValue allows
  ** to conceal the actual implementation type comes with zero runtime overhead,
- ** compared with direct usage of a family of polymorphic types (with VTable).
+ ** compared to direct usage of a family of polymorphic types (with VTable).
  ** 
  ** So, how can the implementation of copy or assignment know the actual type
  ** to be copied? Basically we exploit the fact that the actual instance lives
- ** in an opaque buffer within the "outer" container. More specifically, \em we
+ ** in an opaque buffer within the "outer" container. More specifically, _we_
  ** place it into that buffer -- thus we're able to control the actual type used.
  ** This way, the actual copy operations reside in an Adapter type, which lives
  ** at the absolute leaf end of the inheritance chain. It even inherits from
  ** the "implementation type" specified by the client. Thus, within the
- ** context of the copy operation, we know all the concrete types.  
+ ** context of the copy operation, we know all the concrete types.
  ** 
  ** 
- ** \par using polymorphic value objects
+ ** # using polymorphic value objects
  ** 
  ** To start with, we need a situation where polymorphic treatment and type erasure
  ** might be applicable. That is, we use a public API, and only that, in any client
@@ -140,7 +140,7 @@
  ** - define the implementation types to inherit from the public API
  ** - implement the mentioned factory function, based on the static build
  **   PolymorphicValue#build functions, using the actual implementation type
- **   as parameter. 
+ **   as parameter.
  ** 
  ** @see polymorphic-value-test.cpp
  ** @see opaque-holder.hpp other similar opaque inline buffer templates
@@ -171,12 +171,12 @@ namespace lib {
     /**
      * Interface for active support of copy operations
      * by the embedded client objects. When inserted into the
-     * inheritance chain \em above the concrete implementation objects,
+     * inheritance chain _above_ the concrete implementation objects,
      * PolymorphicValue is able to perform copy operations trivially and
-     * without any \c dynamic_cast and other run time overhead besides a
+     * without any `dynamic_cast` and other run time overhead besides a
      * simple indirection through the VTable. To enable this support, the
-     * implementation objects should inherit from \c CopySupport<Interface>
-     * (where \c Interface would be the public API for all these embedded
+     * implementation objects should inherit from `CopySupport<Interface>`
+     * (where `Interface` would be the public API for all these embedded
      * implementation objects).
      * Alternatively, it's also possible to place this CopySupport API as parent
      * to the public API (it might even be completely absent, but then you'd need
@@ -251,7 +251,7 @@ namespace lib {
     struct AssignmentPolicy
       {
         template<class IMP>
-        static void 
+        static void
         assignEmbedded(IMP& dest,IMP const& src)
           {
             dest = src;
@@ -269,7 +269,7 @@ namespace lib {
     struct AssignmentPolicy<API,      enable_if< allow_Clone_but_no_Copy<API> >>
       {
         template<class IMP>
-        static void 
+        static void
         assignEmbedded(IMP&,IMP const&)
           {
             throw error::Logic("attempt to overwrite unmodifiable value");
@@ -286,7 +286,7 @@ namespace lib {
      * level of the concrete implementation class and later on
      * accessed through a \c dynamic_cast
      */
-    template <class TY, class YES = void> 
+    template <class TY, class YES = void>
     struct Trait
       {
         typedef CopySupport<TY,EmptyBase> CopyAPI;
@@ -306,10 +306,10 @@ namespace lib {
     
     /**
      * Special case when the embedded types support copying
-     * on the API level, e.g. there is a sub-API exposing a \c cloneInto
+     * on the API level, e.g. there is a sub-API exposing a `cloneInto`
      * function. In this case, the actual implementation classes can be
      * instantiated as-is and the copy operations can be accessed by a
-     * simple \c static_cast without runtime overhead.
+     * simple `static_cast` without runtime overhead.
      */
     template <class TY>
     struct Trait<TY,      enable_if< exposes_CloneFunction<TY> >>
@@ -348,8 +348,8 @@ namespace lib {
    * buffer through a builder function; later, this buffer may be copied
    * and passed on without knowing the actual contained type.
    * 
-   * For using PolymorphicValue, several \b assumptions need to be fulfilled
-   * - any instance placed into OpaqueHolder is below the specified maximum size
+   * For using PolymorphicValue, several *assumptions* need to be fulfilled
+   * - any instance placed into the opaque buffer is below the specified maximum size
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
    * 
    * @warning when a create or copy-into operation fails with exception, the whole
@@ -366,8 +366,8 @@ namespace lib {
       typedef polyvalue::Trait<CPY>     _Traits;
       typedef typename _Traits::CopyAPI _CopyHandlingAdapter;
       typedef typename _Traits::Assignment _AssignmentPolicy;
-      enum{ 
-        siz = storage + _Traits::ADMIN_OVERHEAD 
+      enum{
+        siz = storage + _Traits::ADMIN_OVERHEAD
       };
       
       
@@ -420,14 +420,14 @@ namespace lib {
       
       
       /**
-       * Implementation Helper: supporting copy operations.
+       * Implementation Helper: add support for copy operations.
        * Actually instances of this Adapter template are placed
        * into the internal buffer, such that they both inherit
-       * from the desired implementation type and the copy 
+       * from the desired implementation type and the copy
        * support interface. The implementation of the
        * concrete copy operations is provided here
-       * forwarding to the copy operations
-       * of the implementation object. 
+       * as forwarding to the copy operations
+       * of the implementation object.
        */
       template<class IMP>
       class Adapter
@@ -446,7 +446,7 @@ namespace lib {
               REQUIRE (INSTANCEOF (Adapter, &targetBase));
               Adapter& target = static_cast<Adapter&> (targetBase);
               _AssignmentPolicy::assignEmbedded(target,*this);
-            }                                   // forward to assignment operator 
+            }                                   // forward to assignment operator
           
         public: /* == forwarding ctor to implementation type == */
           

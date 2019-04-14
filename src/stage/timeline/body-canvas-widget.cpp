@@ -160,8 +160,8 @@ namespace timeline {
   BodyCanvasWidget::BodyCanvasWidget (DisplayManager& displayManager)
     : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
     , contentArea_{}
-    , rulerCanvas_{std::function<Renderer&()>(), std::function<Renderer&()>()}  ///////////TODO dummy placeholder factories.... need to build the real thing
-    , mainCanvas_{std::function<Renderer&()>(), std::function<Renderer&()>()}
+    , rulerCanvas_{std::function<Renderer&(CairoC)>(), std::function<Renderer&(CairoC)>()}  ///////////TODO dummy placeholder factories.... need to build the real thing
+    , mainCanvas_{std::function<Renderer&(CairoC)>(), std::function<Renderer&(CairoC)>()}
     , layout_{displayManager}
     , profile_{}
     , rootBody_{nullptr}

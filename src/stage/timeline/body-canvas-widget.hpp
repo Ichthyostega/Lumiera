@@ -71,6 +71,8 @@
 namespace stage  {
 namespace timeline {
   
+  using CairoC = Cairo::RefPtr<Cairo::Context> const&;
+  
   class DisplayManager;
   class TrackBody;
   class TimelineCanvas;
@@ -87,7 +89,7 @@ namespace timeline {
   class TimelineCanvas
     : public Gtk::Layout
     {
-      using _RenderFactory = std::function<Renderer&()>;
+      using _RenderFactory = std::function<Renderer&(CairoC)>;
       
       _RenderFactory getGroundingRenderer_;
       _RenderFactory getOverlayRenderer_;

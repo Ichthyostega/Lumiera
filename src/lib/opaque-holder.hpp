@@ -1,5 +1,5 @@
 /*
-  OPAQUE-HOLDER.hpp  -  buffer holding an object inline while hiding the concrete type 
+  OPAQUE-HOLDER.hpp  -  buffer holding an object inline while hiding the concrete type
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -35,7 +35,7 @@
  ** exposes a neutral interface, the inner container keeps track of the actual
  ** type by means of a vtable. OpaqueHolder is built on top of InPlaceAnyHolder
  ** additionally to support a "common base interface" and re-access of the
- ** embedded object through this interface. For this to work, all of the 
+ ** embedded object through this interface. For this to work, all of the
  ** stored types need to be derived from this common base interface.
  ** OpaqueHolder then may be even used like a smart-ptr, exposing this
  ** base interface. To the contrary, InPlaceAnyHolder has lesser requirements
@@ -59,7 +59,7 @@
  ** 
  ** @see opaque-holder-test.cpp
  ** @see function-erasure.hpp usage example
- ** @see variant.hpp 
+ ** @see variant.hpp
  */
 
 
@@ -118,7 +118,7 @@ namespace lib {
   /* ==== Policy classes controlling re-Access ==== */
   
   /**
-   * Standard policy for accessing the contents via 
+   * Standard policy for accessing the contents via
    * a common base class interface. Using this policy
    * causes static or dynamic casts or direct conversion
    * to be employed as appropriate.
@@ -134,7 +134,7 @@ namespace lib {
         {
           SUB* oPtr = &obj;
           BA* asBase = util::AccessCasted<BA*>::access (oPtr);
-          if (asBase) 
+          if (asBase)
             return asBase;
           
           throw error::Logic ("Unable to convert concrete object to Base interface"
@@ -146,13 +146,13 @@ namespace lib {
   /**
    * Alternative policy for accessing the contents without
    * a common interface; use this policy if the intention is
-   * to use OpaqueHolder with a family of similar classes, 
-   * \em without requiring all of them to be derived from
-   * a common base class. (E.g. std::function objects).
+   * to use OpaqueHolder with a family of similar classes,
+   * _without requiring all of them_ to be derived from
+   * a _common base_ class. (E.g. std::function objects).
    * In this case, the "Base" type will be defined to void*
    * As a consequence, we loose all type information and
    * no conversions are possible on re-access. You need
-   * to know the \em exact type to get back at the object.
+   * to know the _exact_ type to get back at the object.
    */
   struct InPlaceAnyHolder_unrelatedTypes
     {
@@ -180,7 +180,7 @@ namespace lib {
    * as a template parameter. InPlaceAnyHolder may be created empty
    * or cleared afterwards, and this #empty() state may be detected
    * at runtime. In a similar vein, when the stored object has a
-   * \c bool validity check, this can be accessed though #isValid().
+   * `bool` validity check, this can be accessed though #isValid().
    * Moreover `!empty() && isValid()` may be tested as by `bool`
    * conversion of the Holder object. The whole compound
    * is copyable if and only if the contained object is copyable.
@@ -327,7 +327,7 @@ namespace lib {
       
       
       void
-      killBuffer()                          
+      killBuffer()
         {
           buff().~Buffer();
         }
@@ -378,7 +378,7 @@ namespace lib {
       
       
       InPlaceAnyHolder()
-        { 
+        {
           make_emptyBuff();
         }
       
@@ -396,7 +396,7 @@ namespace lib {
       InPlaceAnyHolder&
       operator= (InPlaceAnyHolder const& ref)
         {
-          if (!isSameObject (*this, ref))
+          if (not isSameObject (*this, ref))
             {
               killBuffer();
               try
@@ -416,8 +416,8 @@ namespace lib {
       InPlaceAnyHolder&
       operator= (SUB const& newContent)
         {
-          if (  empty() 
-             || !isSameObject (*buff().getBase(), newContent)
+          if (empty()
+             or not isSameObject (*buff().getBase(), newContent)
              )
             {
               killBuffer();
@@ -511,7 +511,7 @@ namespace lib {
    * - when knowing the exact type to access, the templated #get might be an option
    * - the empty state of the container and a `isValid()` on the target may be checked
    * - a combination of both is available as a `bool` check on the OpaqueHolder instance.
-   *  
+   * 
    * For using OpaqueHolder, several *assumptions* need to be fulfilled
    * - any instance placed into OpaqueHolder is below the specified maximum size
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
@@ -555,7 +555,7 @@ namespace lib {
           return *InPlaceHolder::buff().getBase();
         }
       
-      BA* 
+      BA*
       operator-> ()  const
         {
           ASSERT (!InPlaceHolder::empty());
@@ -577,7 +577,7 @@ namespace lib {
    * allows to place new objects there. It has no way to keep track of the
    * actual object living currently in the buffer. Thus, using InPlaceBuffer
    * requires the placed class(es) themselves to maintain their lifecycle,
-   * and especially it is mandatory for the base class to provide a 
+   * and especially it is mandatory for the base class to provide a
    * virtual dtor. On the other hand, just the (alignment rounded)
    * storage for the object(s) placed into the buffer is required.
    * @remarks as a complement, PlantingHandle may be used on APIs to offer
@@ -652,7 +652,7 @@ namespace lib {
       static auto embedType() { return (SUB*) nullptr; }
 
       
-      /** Abbreviation for placement new */ 
+      /** Abbreviation for placement new */
       template<class TY, typename...ARGS>
       TY&
       create (ARGS&& ...args)
@@ -681,7 +681,7 @@ namespace lib {
           return getObj();
         }
       
-      BA* 
+      BA*
       operator-> ()  const
         {
           return &getObj();
