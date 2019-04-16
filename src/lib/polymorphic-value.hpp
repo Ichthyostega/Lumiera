@@ -389,36 +389,6 @@ namespace lib {
         }
       
       
-      template<class IMP>
-      PolymorphicValue (IMP*)
-        {
-          static_assert (siz >= sizeof(IMP), "insufficient inline buffer size");
-          
-          new(&buf_) IMP();
-        }
-      
-      template<class IMP, typename A1>
-      PolymorphicValue (IMP*, A1 a1)
-        {
-          REQUIRE (siz >= sizeof(IMP));
-          new(&buf_) IMP (a1);
-        }
-      
-      template<class IMP, typename A1, typename A2>
-      PolymorphicValue (IMP*, A1 a1, A2 a2)
-        {
-          REQUIRE (siz >= sizeof(IMP));
-          new(&buf_) IMP (a1,a2);
-        }
-      
-      template<class IMP, typename A1, typename A2, typename A3>
-      PolymorphicValue (IMP*, A1 a1, A2 a2, A3 a3)
-        {
-          REQUIRE (siz >= sizeof(IMP));
-          new(&buf_) IMP (a1,a2,a3);
-        }
-      
-      
       /**
        * Implementation Helper: add support for copy operations.
        * Actually instances of this Adapter template are placed
@@ -450,19 +420,16 @@ namespace lib {
           
         public: /* == forwarding ctor to implementation type == */
           
-          Adapter() : IMP() { }
-          
-          template<typename A1>
-          Adapter (A1 a1) : IMP(a1) { }
-          
-          template<typename A1, typename A2>
-          Adapter (A1 a1, A2 a2) : IMP(a1,a2) { }
-          
-          template<typename A1, typename A2, typename A3>
-          Adapter (A1 a1, A2 a2, A3 a3) : IMP(a1,a2,a3) { }
+          template<typename...ARGS>
+          Adapter (ARGS&&... args)
+            : IMP(std::forward<ARGS>(args)...)
+            { }
           
           /* using default copy and assignment */
         };
+      
+      template<typename IMP>
+      using TypeSelector = Adapter<IMP>*;
       
       
       _CopyHandlingAdapter&
@@ -471,6 +438,31 @@ namespace lib {
           IFA& bufferContents = accessEmbedded();
           return _Traits::accessCopyHandlingInterface (bufferContents);
         }
+      
+      /**
+       * @internal this is the actual working ctor, which must care to decorate
+       *  the desired impl type with an additional adapter to support copy operations.
+       */
+      template<class IMP, typename...ARGS>
+      PolymorphicValue (TypeSelector<IMP>, ARGS&&... args)
+        {
+          static_assert (siz >= sizeof(Adapter<IMP>), "insufficient inline buffer size");
+          new(&buf_) Adapter<IMP> (std::forward<ARGS>(args)...);
+        }
+      
+      
+    protected:
+      /**
+       * @internal ctor for subclasses and builder functions.
+       *  The constructor requires an additional type-selector argument.
+       *  On invocation, the desired subclass/implementation object is immediately
+       *  planted into the embedded buffer, passing through the given ctor arguments.
+       * @see [factory functions for public use](\ref PolymorphicValue::build)
+       */
+      template<class IMP, typename...ARGS>
+      PolymorphicValue (IMP*, ARGS&&... args)
+        : PolymorphicValue (TypeSelector<IMP>(), std::forward<ARGS>(args)...)
+        { }
       
       
     public: /* === PolymorphicValue public API === */
@@ -510,36 +502,12 @@ namespace lib {
       
       /* === static factory functions === */
       
-      template<class IMP>
+      template<class IMP, typename...ARGS>
       static PolymorphicValue
-      build ()
+      build (ARGS&&... args)
         {
           Adapter<IMP>* type_to_build_in_buffer(0);
-          return PolymorphicValue (type_to_build_in_buffer);
-        }
-      
-      template<class IMP, typename A1>
-      static PolymorphicValue
-      build (A1 a1)
-        {
-          Adapter<IMP>* type_to_build_in_buffer(0);
-          return PolymorphicValue (type_to_build_in_buffer, a1);
-        }
-      
-      template<class IMP, typename A1, typename A2>
-      static PolymorphicValue
-      build (A1 a1, A2 a2)
-        {
-          Adapter<IMP>* type_to_build_in_buffer(0);
-          return PolymorphicValue (type_to_build_in_buffer, a1,a2);
-        }
-      
-      template<class IMP, typename A1, typename A2, typename A3>
-      static PolymorphicValue
-      build (A1 a1, A2 a2, A3 a3)
-        {
-          Adapter<IMP>* type_to_build_in_buffer(0);
-          return PolymorphicValue (type_to_build_in_buffer, a1,a2,a3);
+          return PolymorphicValue (type_to_build_in_buffer, std::forward<ARGS>(args)...);
         }
       
       
