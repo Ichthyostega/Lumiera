@@ -48,12 +48,15 @@
 #define LIB_VERB_VISITOR_H
 
 
+#include "lib/meta/variadic-helper.hpp"
+#include "lib/polymorphic-value.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
 #include <string>
 #include <array>
+#include <tuple>
 
 
 namespace lib {
@@ -127,6 +130,79 @@ namespace lib {
     };
   
 #define VERB(RECEIVER, FUN) VERB_##FUN (&RECEIVER::FUN, STRINGIFY(FUN))
+  
+  using JustSomeIrrelvantType = struct{};
+  const size_t VERB_TOKEN_SIZE = sizeof(VerbToken<JustSomeIrrelvantType, void(void)>);
+  
+  template<class REC, class RET>
+  struct Hook
+    {
+      virtual ~Hook() { }
+      
+      virtual RET applyTo (REC&)  =0;
+    };
+  
+  template<class REC, class SIG>
+  struct Holder;
+  
+  template<class REC, class RET, typename... ARGS>
+  struct Holder<REC, RET(ARGS...)>
+    : polyvalue::CopySupport<                   // mix-in virtual copy/move support
+        Hook<REC,RET>>                         //  ...the common interface to use
+    {
+      using Verb = VerbToken<REC,RET(ARGS...)>;
+      using Args = std::tuple<ARGS...>;
+      
+      /** meta-sequence to pick argument values from the storage tuple */
+      using SequenceIterator = typename meta::BuildIdxIter<ARGS...>::Ascending;
+      
+      Verb verb_;
+      Args args_;
+      
+      Holder (typename Verb::Handler handlerRef, Literal verbID, ARGS... args)
+        : verb_{handlerRef, verbID}
+        , args_{std::forward<ARGS> (args)...}
+        { }
+      
+      RET
+      applyTo (REC& receiver)  override
+        {
+          return invokeVerb (receiver, SequenceIterator());
+        }
+      
+      template<size_t...idx>
+      RET
+      invokeVerb (REC& receiver, meta::IndexSeq<idx...>)
+        {
+          return verb_.applyTo (receiver, std::get<idx> (args_)...);
+        }
+    };
+  
+  static constexpr size_t
+  storageOverhead(size_t argStorage)
+  {
+    return argStorage + VERB_TOKEN_SIZE;
+  }
+  
+  
+  template<class REC, class RET, size_t arg_storage>
+  class VerbPack
+    : public PolymorphicValue<Hook<REC,RET>, storageOverhead(arg_storage)>
+    {
+      using PolyHolder = PolymorphicValue<Hook<REC,RET>, storageOverhead(arg_storage)>;
+      
+      template<typename...ARGS>
+      using PayloadType = Holder<REC, RET(ARGS...)>*;
+      
+      template<typename...ARGS>
+      using Handler = typename VerbToken<REC, RET(ARGS...)>::Handler;
+      
+    public:
+      template<typename...ARGS>
+      VerbPack (Handler<ARGS...> handler, Literal verbID, ARGS&&... args)
+        : PolyHolder(PayloadType<ARGS...>(), handler, verbID, std::forward<ARGS>(args)...)
+        { }
+    };
   
   
   

@@ -27,6 +27,7 @@
 
 
 #include "lib/test/run.hpp"
+//#include "lib/verb-token.hpp"
 #include "lib/verb-visitor.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -136,6 +137,10 @@ namespace test{
           VerbSeq tokens = build_test_feed();
           render_verbose (tokens);
           verify_dispatch (tokens);
+          
+          VerbPack<Receiver, string, sizeof(void*)> woof(&Receiver::woof, "woof");
+          
+//        profile.append_woof(1, 2);
         }
       
       
