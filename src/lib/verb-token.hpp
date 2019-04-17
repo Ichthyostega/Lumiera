@@ -53,7 +53,6 @@
 
 #include <utility>
 #include <string>
-#include <array>
 
 
 namespace lib {

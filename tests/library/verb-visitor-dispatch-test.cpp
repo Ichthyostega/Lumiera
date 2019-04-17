@@ -27,16 +27,17 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/verb-token.hpp"
 #include "lib/verb-visitor.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 
 #include <string>
 #include <vector>
 
 using std::string;
 using util::_Fmt;
+using util::join;
 using std::vector;
 
 
@@ -49,23 +50,15 @@ namespace test{
     public:
       virtual ~Receiver() { } ///< this is an interface
       
-      virtual string woof()   =0;
-      virtual string honk()   =0;
-      virtual string moo()    =0;
-      virtual string meh()    =0;
+      virtual string woof (bool huge, uint cnt) =0;
+      virtual string honk (string)              =0;
+      virtual string moo (size_t num)           =0;
+      virtual string meh ()                     =0;
     };
   
   namespace {
-    const string BEGINNING("silence");
-    
-    using Verb = VerbToken<Receiver, string(void)>;
-    using VerbSeq = vector<Verb>;
-    
-    
-    Verb VERB(Receiver, woof);
-    Verb VERB(Receiver, honk);
-    Verb VERB(Receiver, moo);
-    Verb VERB(Receiver, meh);
+    using Token = VerbPack<Receiver, string, sizeof(string)>;
+    using TokenSeq = vector<Token>;
   }
   
   
@@ -76,43 +69,31 @@ namespace test{
   class VerboseRenderer
     : public Receiver
     {
-      string woof() { return "Woof-Woof!"; }
-      string honk() { return "Honk-Honk!"; }
-      string moo()  { return "Moo-Moo!";   }
-      string meh()  { return "Meh!";       }
-    };
-  
-  
-  /**
-   * Statefull receiver of verb-tokens.
-   */
-  class RecollectingReceiver
-    : public Receiver
-    {
-      string verb_;
-      _Fmt fmt_;
-      
       string
-      buildResultTerm (string nextToken)
+      woof (bool huge, uint cnt)  override
         {
-          string resultExpression (fmt_ % verb_ % nextToken);
-          verb_ = nextToken;
-          return resultExpression;
+          string woof{huge? "Woof..":"haw-haw"};
+          while (0 < cnt--)
+            woof += woof;
+          return woof;
         }
-      
-      
-      string woof() { return buildResultTerm (VERB_woof); }
-      string honk() { return buildResultTerm (VERB_honk); }
-      string moo()  { return buildResultTerm (VERB_moo);  }
-      string meh()  { return buildResultTerm (VERB_meh);  }
-      
-      
-    public:
-      RecollectingReceiver()
-        : verb_(BEGINNING)
-        , fmt_("%s followed by %s")
-        { }
+      string
+      honk (string theHonk)  override
+        {
+          return theHonk+"-"+theHonk+"!";
+        }
+      string
+      moo (size_t num)  override
+        {
+          return join (vector<string>{num, "Moo"}, "__");
+        }
+      string
+      meh()  override
+        {
+          return "Meh!";
+        }
     };
+  
   
   
   
@@ -134,19 +115,15 @@ namespace test{
       virtual void
       run (Arg)
         {
-          VerbSeq tokens = build_test_feed();
+          TokenSeq tokens = build_and_copy_tokens();
           render_verbose (tokens);
-          verify_dispatch (tokens);
-          
-          VerbPack<Receiver, string, sizeof(void*)> woof(&Receiver::woof, "woof");
-          
 //        profile.append_woof(1, 2);
         }
       
       
       /** prepare a sequence of verbs
        *  for the actual tests to work on */
-      VerbSeq
+/*    VerbSeq
       build_test_feed()
         {
           return {
@@ -156,7 +133,24 @@ namespace test{
             VERB_meh
           };
         }
+*/      
       
+      /** @test verify the correct individual dispatch
+       *  through a computation specific for the given verb
+       */
+      TokenSeq
+      build_and_copy_tokens ()
+        {
+          Token bigWoof(&Receiver::woof, "woof", true, 2u);
+          Token littleWoof(&Receiver::woof, "woof", false, 3u);
+          Token quack(&Receiver::honk, "honk", string{"quaack"});
+          Token honk(&Receiver::honk, "honk", string{"Hoonk"});
+          Token moo(&Receiver::moo, "moo", size_t(3));
+          Token meh(&Receiver::meh, "meh");
+          
+          
+          return TokenSeq{{littleWoof, quack,honk, bigWoof, moo, meh}};
+        }
       
       /** @test demonstrate the dispatching
        *  based on the concrete verb token.
@@ -164,31 +158,16 @@ namespace test{
        *  the name of the invoked verb
        */
       void
-      render_verbose (VerbSeq tokens)
+      render_verbose (TokenSeq& tokens)
         {
           VerboseRenderer receiver;
-          for (Verb verb : tokens)
-              cout << "consuming " << verb
-                   << " ->  '"
-                   << verb.applyTo(receiver)
-                   << "'\n";
+//          for (Token tok : tokens)
+//              cout << "dispatching " << tok
+//                   << " ->  '"
+//                   << tok.applyTo(receiver)
+//                   << "'\n";
         }
       
-      
-      /** @test verify the correct individual dispatch
-       *  through a computation specific for the given verb
-       */
-      void
-      verify_dispatch (VerbSeq tokens)
-        {
-          RecollectingReceiver receiver;
-          string previous = BEGINNING;
-          for (Verb verb : tokens)
-            {
-              CHECK (previous+" followed by "+string(verb) == verb.applyTo(receiver));
-              previous = string(verb);
-            }
-        }
     };
   
   
