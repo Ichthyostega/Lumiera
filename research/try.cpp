@@ -41,12 +41,12 @@
 // 08/18 - Segfault when compiling some regular expressions for EventLog search
 // 10/18 - investigate insidious reinterpret cast
 // 12/18 - investigate the trinomial random number algorithm from the C standard lib
+// 04/19 - forwarding tuple element(s) to function invocation
 
 
 /** @file try.cpp
- * Investigate the trinomial random number algorithm from the C standard library (actually GLibc 2.28).
- * Actually this is work for the yoshimi project; we try there to build an in-tree version of the PRNG,
- * in order to reduce dependencies to external libraries, which might change the sound of existing synth patches.
+ * Research how to apply a tuple to a varargs function forwarder.
+ * The recent stadard library has a std::apply, which we can not yet use, unfortunately.
  */
 
 typedef unsigned int uint;
@@ -55,11 +55,14 @@ typedef unsigned int uint;
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
+#include "lib/meta/variadic-helper.hpp"
+
+#include <utility>
 #include <string>
-#include <boost/lexical_cast.hpp>
+#include <tuple>
 
 using std::string;
-using boost::lexical_cast;
+using std::tuple;
 
 
 
@@ -68,153 +71,53 @@ using boost::lexical_cast;
 #define SHOW_EXPR(_XX_) \
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
-namespace {
-  
-class StdlibPRNG
+template<typename FUN, typename...ARGS>
+void
+forwardInvoker (FUN fun, ARGS&&... args)
 {
-        char random_state[256];
-        struct random_data random_buf;
-
-    public:
-        StdlibPRNG()
-        {
-            memset(&random_state, 0, sizeof(random_state));
-        }
-
-        bool init(uint32_t seed)
-        {
-            memset(random_state, 0, sizeof(random_state));
-            memset(&random_buf, 0, sizeof(random_buf));
-            return 0 == initstate_r(seed, random_state, sizeof(random_state), &random_buf);
-        }
-
-        uint32_t prngval()
-        {
-            int32_t random_result;
-            random_r(&random_buf, &random_result);
-            // can not fail, since &random_buf can not be NULL
-            // random_result holds number 0...INT_MAX
-            return random_result;
-        }
-
-        float numRandom()
-        {
-            return prngval() / float(INT32_MAX);
-        }
-
-        // random number in the range 0...INT_MAX
-        uint32_t randomINT()
-        {
-            return prngval();
-        }
-};
-
-class TrinomialPRNG
-{
-        int32_t state[63];
-        int32_t *fptr;      /* Front pointer.  */
-        int32_t *rptr;      /* Rear pointer.  */
-
-    public:
-        TrinomialPRNG() : fptr(NULL), rptr(NULL) { }
-
-        bool init(uint32_t seed)
-        {
-            int kc = 63; /* random generation uses this trinomial: x**63 + x + 1.  */
-
-            /* We must make sure the seed is not 0.  Take arbitrarily 1 in this case.  */
-            if (seed == 0)
-              seed = 1;
-            state[0] = seed;
-
-            int32_t *dst = state;
-            int32_t word = seed;  // must be signed, see below
-            for (int i = 1; i < kc; ++i)
-            {
-                /* This does:
-                   state[i] = (16807 * state[i - 1]) % 2147483647;
-                   but avoids overflowing 31 bits. */
-                // Ichthyo 12/2018 : the above comment is only true for seed <= INT_MAX
-                //                   for INT_MAX < seed <= UINT_MAX the calculation diverges from correct
-                //                   modulus result, however, its values show a similar distribution pattern.
-                //                   Moreover the original code used long int for 'hi' and 'lo'.
-                //                   It behaves identical when using uint32_t, but not with int32_t
-                uint32_t hi = word / 127773;
-                uint32_t lo = word % 127773;
-                word = 16807 * lo - 2836 * hi;
-                if (word < 0)
-                    word += 2147483647;
-                *++dst = word;
-            }
-
-            fptr = &state[1];
-            rptr = &state[0];
-            kc *= 10;
-            while (--kc >= 0)
-                prngval();
-            return true;
-        }
-
-
-        uint32_t prngval()
-        {
-            uint32_t val = *fptr += uint32_t(*rptr);
-            uint32_t result = val >> 1;  // Chucking least random bit.
-                                         // Rationale: it has a less-then optimal repetition cycle.
-            int32_t *end = &state[63];
-            ++fptr;
-            if (fptr >= end)
-              {
-                fptr = state;
-                ++rptr;
-              }
-            else
-              {
-                ++rptr;
-                if (rptr >= end)
-                  rptr = state;
-              }
-            // random_result holds number 0...INT_MAX
-            return result;
-        }
-
-
-        float numRandom()
-        {
-            return prngval() / float(INT32_MAX);
-        }
-
-        // random number in the range 0...INT_MAX
-        uint32_t randomINT()
-        {
-            return prngval();
-        }
-};
-
+  cout << "forwardInvoker...\n"
+       << lib::test::showVariadicTypes(args...)
+       << endl;
+  fun (std::forward<ARGS>(args)...);
 }
+
+template<typename FUN, class TUP, size_t...idx>
+void
+unpack_and_forward (FUN&& fun, TUP& tup, lib::meta::IndexSeq<idx...>)
+{
+  cout << "unpack_and_forward...\n";
+  SHOW_TYPE (TUP)
+  
+  forwardInvoker (std::forward<FUN>(fun), std::get<idx> (std::forward<TUP>(tup))...);
+}
+
+template<typename FUN, typename...ARGS>
+void
+applyTuple (FUN&& fun, tuple<ARGS...>& args)
+{
+  using Tup = tuple<ARGS...>;
+  cout << "applyTuple...\n";
+  SHOW_TYPE (Tup)
+  
+  using SequenceIterator = typename lib::meta::BuildIdxIter<ARGS...>::Ascending;
+  
+  unpack_and_forward (std::forward<FUN>(fun), args, SequenceIterator());
+}
+
+
+
 
 int
 main (int, char**)
   {
-    StdlibPRNG oldGen;
-    TrinomialPRNG newGen;
+    auto tup = std::make_tuple(1,2,3u);
+    auto fun = [](int a, int b, int c)
+                  {
+                    cout << a<<"+"<<b<<"+"<<c<<"="<<(a+b+c)<<endl;
+                  };
     
-    for (uint64_t seed=INT32_MAX-100; seed <= UINT32_MAX; ++seed)
-      {
-        oldGen.init(seed);
-        newGen.init(seed);
-        
-        for (uint i=0; i < 5*48000; ++i)
-          {
-            uint32_t oval = oldGen.prngval();
-            uint32_t nval = newGen.prngval();
-            if (oval != nval)
-              cout << "seed="<<seed << " i="<<i<< " \t "<<oval<< " != "<<nval<<endl;
-          }
-      }
-    
+    applyTuple (fun, tup);
     
     cout <<  "\n.gulp.\n";
-    
     return 0;
   }
