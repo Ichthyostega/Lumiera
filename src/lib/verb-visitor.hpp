@@ -70,21 +70,6 @@ namespace lib {
     {
       return argStorage + VERB_TOKEN_SIZE;
     }
-    
-    /**
-     * Helper: pass a reference to an tuple element into a "perfect forwarding" call
-     * This is the equivalent of calling std::forward<TY> (TY&)
-     * ////////////////////////////////////////////////////////////////////TODO verify this reasoning is sound!!
-     */
-    template<size_t idx, typename...ARGS>
-    decltype(auto) constexpr
-    get_ref (std::tuple<ARGS...>& tuple)
-    {
-      using Elm = std::remove_reference_t<
-                    std::tuple_element_t<idx, std::tuple<ARGS...>>>;
-      
-      return static_cast<Elm&&> (std::get<idx> (tuple));
-    }
   }
   
   template<class REC, class RET>
@@ -126,8 +111,8 @@ namespace lib {
       template<size_t...idx>
       RET
       invokeVerb (REC& receiver, meta::IndexSeq<idx...>)
-        {
-          return verb_.applyTo (receiver, get_ref<idx> (args_)...);
+        {                                                //////////////////////////////////////////TICKET #1006 | TICKET #1184 why do we need std::forward here? the target is a "perfect forwarding" function, which should be able to receive a LValue reference to the tuple element just fine...
+          return verb_.applyTo (receiver, std::get<idx> (std::forward<Args>(args_))...);
         }
     };
   
@@ -150,6 +135,13 @@ namespace lib {
       VerbPack (Handler<ARGS...> handler, Literal verbID, ARGS&&... args)
         : PolyHolder(PayloadType<ARGS...>(), handler, verbID, std::forward<ARGS>(args)...)
         { }
+      
+      RET
+      applyTo (REC& receiver)
+        {
+          VerbInvoker<REC,RET>& dispatch(*this);
+          return dispatch.applyTo (receiver);
+        }
     };
   
   

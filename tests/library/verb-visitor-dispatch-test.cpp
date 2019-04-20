@@ -161,11 +161,11 @@ namespace test{
       render_verbose (TokenSeq& tokens)
         {
           VerboseRenderer receiver;
-//          for (Token tok : tokens)
-//              cout << "dispatching " << tok
-//                   << " ->  '"
-//                   << tok.applyTo(receiver)
-//                   << "'\n";
+          for (Token tok : tokens)
+              cout << "dispatching " << tok
+                   << " ->  '"
+                   << tok.applyTo(receiver)
+                   << "'\n";
         }
       
     };

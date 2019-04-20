@@ -46,7 +46,14 @@
 
 /** @file try.cpp
  * Research how to apply a tuple to a varargs function forwarder.
- * The recent stadard library has a std::apply, which we can not yet use, unfortunately.
+ * The recent standard library has a std::apply, which we can not yet use, unfortunately.
+ * @note this research remains inconclusive. As far as I can see, the simplified setup
+ *       exactly mimics the problematic call situation; however, in the real use case,
+ *       we need to std::forward<Args> the argument tuple object field while here in
+ *       this simplified case, it compiles just fine without -- as it should after all,
+ *       since that is the whole point of perfect forwarding; std::get should expose
+ *       a LValue reference to the tuple element, and we pass that through a forwarding
+ *       function into the double dispatch to the receiving visitor.
  */
 
 typedef unsigned int uint;
@@ -73,7 +80,7 @@ using std::tuple;
 
 template<typename FUN, typename...ARGS>
 void
-forwardInvoker (FUN fun, ARGS&&... args)
+forwardInvoker (FUN& fun, ARGS&&... args)
 {
   cout << "forwardInvoker...\n"
        << lib::test::showVariadicTypes(args...)
@@ -81,28 +88,39 @@ forwardInvoker (FUN fun, ARGS&&... args)
   fun (std::forward<ARGS>(args)...);
 }
 
-template<typename FUN, class TUP, size_t...idx>
+template<typename FUN, typename...ARGS>
+struct Holder
+  {
+    using Tup = tuple<ARGS...>;
+    
+    Tup tup;
+    
+    Holder (Tup& tup)
+      : tup{tup}
+      { }
+    
+template<size_t...idx>
 void
-unpack_and_forward (FUN&& fun, TUP& tup, lib::meta::IndexSeq<idx...>)
+unpack_and_forward (FUN& fun, lib::meta::IndexSeq<idx...>)
 {
   cout << "unpack_and_forward...\n";
-  SHOW_TYPE (TUP)
+  SHOW_TYPE (Tup)
   
-  forwardInvoker (std::forward<FUN>(fun), std::get<idx> (std::forward<TUP>(tup))...);
+  forwardInvoker (fun, std::get<idx> (tup)...);
 }
 
-template<typename FUN, typename...ARGS>
 void
-applyTuple (FUN&& fun, tuple<ARGS...>& args)
+applyTuple (FUN& fun)
 {
-  using Tup = tuple<ARGS...>;
   cout << "applyTuple...\n";
   SHOW_TYPE (Tup)
   
   using SequenceIterator = typename lib::meta::BuildIdxIter<ARGS...>::Ascending;
   
-  unpack_and_forward (std::forward<FUN>(fun), args, SequenceIterator());
+  unpack_and_forward (fun, SequenceIterator());
 }
+  };
+
 
 
 
@@ -110,13 +128,15 @@ applyTuple (FUN&& fun, tuple<ARGS...>& args)
 int
 main (int, char**)
   {
-    auto tup = std::make_tuple(1,2,3u);
+    auto tup = std::make_tuple(1,2,3);
     auto fun = [](int a, int b, int c)
                   {
                     cout << a<<"+"<<b<<"+"<<c<<"="<<(a+b+c)<<endl;
                   };
     
-    applyTuple (fun, tup);
+    using Hol = Holder<decltype(fun), int, int, int>;
+    Hol holder(tup);
+    holder.applyTuple (fun);
     
     cout <<  "\n.gulp.\n";
     return 0;
