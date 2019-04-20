@@ -43,6 +43,39 @@ using std::vector;
 
 namespace lib {
 namespace test{
+  ///////////////////////////TODO : Debugging
+  struct Trackr
+    {
+      size_t num;
+      
+      Trackr (size_t val)
+        : num(val)
+        {
+          cout <<"Trackr("<<val<<")"<<endl;
+        }
+     ~Trackr()
+        {
+          cout <<"~Trackr()"<<endl;
+        }
+      Trackr (Trackr const& lval)
+        : num(lval.num)
+        {
+          cout <<"Trackr()<<-LVal"<<endl;
+        }
+      Trackr (Trackr && rval)
+        : num(rval.num)
+        {
+          cout <<"Trackr()<<-RVal"<<endl;
+        }
+      Trackr&
+      operator= (Trackr const& orig)
+        {
+          cout <<"Tracker = orig"<<endl;
+          num = orig.num;
+          return *this;
+        }
+    };
+  ///////////////////////////TODO : Debugging
   
   
   class Receiver
@@ -52,7 +85,7 @@ namespace test{
       
       virtual string woof (bool huge, uint cnt) =0;
       virtual string honk (string)              =0;
-      virtual string moo (size_t num)           =0;
+      virtual string moo (Trackr num)           =0;
       virtual string meh ()                     =0;
     };
   
@@ -83,9 +116,9 @@ namespace test{
           return theHonk+"-"+theHonk+"!";
         }
       string
-      moo (size_t num)  override
+      moo (Trackr num)  override
         {
-          return join (vector<string>{num, "Moo"}, "__");
+          return join (vector<string>{num.num, "Moo"}, "__");
         }
       string
       meh()  override
@@ -145,7 +178,7 @@ namespace test{
           Token littleWoof(&Receiver::woof, "woof", false, 3u);
           Token quack(&Receiver::honk, "honk", string{"quaack"});
           Token honk(&Receiver::honk, "honk", string{"Hoonk"});
-          Token moo(&Receiver::moo, "moo", size_t(3));
+          Token moo(&Receiver::moo, "moo", Trackr(3));
           Token meh(&Receiver::meh, "meh");
           
           

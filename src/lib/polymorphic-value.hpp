@@ -50,7 +50,7 @@
  ** from a factory or configuration function <i>by value</i> would open a lot of
  ** straight forward design possibilities and concise formulations.
  ** 
- ** \par how to build a copyable value without knowing it's layout in detail
+ ** # how to build a copyable value without knowing it's layout in detail
  ** 
  ** So the goal is to build a copyable and assignable type with value semantics,
  ** without disclosing the actual implementation and object layout at the usage site.
@@ -107,6 +107,16 @@
  ** the "implementation type" specified by the client. Thus, within the
  ** context of the copy operation, we know all the concrete types.
  ** 
+ ** @todo the actual implementation for copy support basically achieves this goal,
+ **       but it is somewhat confusing and muddled, and not entirely correct in some
+ **       corner cases (esp. when the target type does _not collaborate_ but also
+ **       does _only support copy construction_, but no assignment.
+ **       In fact, part of the solution implemented here is known as "virtual copy
+ **       support"; meanwhile we use a generic version of that pattern in our
+ **       [Variant container](\ref variant.hpp). Thus, at some point, we should
+ **       rework this aspect of the solution to make it more orthogonal, clearer
+ **       to understand and more correct.             /////////////////////////////////////////////TICKET #1197
+ **       
  ** 
  ** # using polymorphic value objects
  ** 
@@ -209,7 +219,7 @@ namespace lib {
         virtual ~CloneValueSupport() { };
         virtual void cloneInto (void* targetBuffer)  const   =0;
       };
-    
+                                                    ///////////////////////////////////////////////TICKET #1197 : this should be a full "virtual copy support" to cover all possible cases
     
     
     /**
@@ -285,11 +295,12 @@ namespace lib {
      * In this case, the CopySupport interface is mixed in at the
      * level of the concrete implementation class and later on
      * accessed through a \c dynamic_cast
+     * @todo this whole decision logic works but is confusingly written     ///////////////////////TICKET #1197 : improve design of copy support
      */
     template <class TY, class YES = void>
     struct Trait
       {
-        typedef CopySupport<TY,EmptyBase> CopyAPI;
+        typedef CopySupport<TY,EmptyBase> CopyAPI;                      ///////////////////////////TICKET #1197 : this is naive, we do not know if the target really has full copy support...
         enum{   ADMIN_OVERHEAD = 2 * sizeof(void*) };
         
         static CopyAPI&
@@ -365,7 +376,7 @@ namespace lib {
       
       typedef polyvalue::Trait<CPY>     _Traits;
       typedef typename _Traits::CopyAPI _CopyHandlingAdapter;
-      typedef typename _Traits::Assignment _AssignmentPolicy;
+      typedef typename _Traits::Assignment _AssignmentPolicy;                     /////////////////TICKET #1197 : confusingly indirect decision logic
       enum{
         siz = storage + _Traits::ADMIN_OVERHEAD
       };

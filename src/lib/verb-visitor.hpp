@@ -74,6 +74,7 @@ namespace lib {
   
   template<class REC, class RET>
   struct VerbInvoker
+    : polyvalue::CloneValueSupport<polyvalue::EmptyBase> // mark and mix-in virtual copy construction support
     {
       virtual ~VerbInvoker() { }
       
@@ -85,8 +86,7 @@ namespace lib {
   
   template<class REC, class RET, typename... ARGS>
   struct Holder<REC, RET(ARGS...)>
-    : polyvalue::CopySupport<                   // mix-in virtual copy/move support
-        VerbInvoker<REC,RET>>                  //  ...the common interface to use
+    : VerbInvoker<REC,RET>
     {
       using Verb = VerbToken<REC,RET(ARGS...)>;
       using Args = std::tuple<ARGS...>;

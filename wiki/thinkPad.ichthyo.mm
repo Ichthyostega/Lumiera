@@ -19681,6 +19681,285 @@
 <node CREATED="1555247744121" ID="ID_1280520595" MODIFIED="1555247751428" TEXT="ausgehend von Kopie des VerbToken"/>
 <node CREATED="1555247757037" ID="ID_1249615365" MODIFIED="1555247774360" TEXT="(optional) vielleicht letztlich in eine L&#xf6;sung verschmelzen?"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806526685" ID="ID_192016641" MODIFIED="1555806690486" TEXT="L&#xf6;sungsansatz: PolymorphicValue">
+<icon BUILTIN="pencil"/>
+<node CREATED="1555806541914" ID="ID_1260020116" MODIFIED="1555806660375" TEXT="der bietet genau den flexiblen inline-Buffer, den ich hier brauche">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich mit minimalem Admin-Overhead,
+    </p>
+    <p>
+      indem er sich auf die VTable des einzubettenden Typs abst&#252;tzt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die andere Alternative, der OpaqueHolder, verwendet selber nochmal einen zust&#228;zlichen virtuellen Holder,
+    </p>
+    <p>
+      und Variant pa&#223;t auch nicht, da ich ja mit Template-generierten Subklassen arbeite,
+    </p>
+    <p>
+      und daher nicht a priori die Liste aller einzubettenden Varianten kenne
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806670026" ID="ID_604641822" MODIFIED="1555806695925" TEXT="Probleme bei der Umsetzung">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555807073875" ID="ID_1971528084" MODIFIED="1555807225299" TEXT="std::apply verwenden">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1555807086938" ID="ID_354296634" MODIFIED="1555807098052" TEXT="gitbts noch nicht auf Debian-Stretch"/>
+<node CREATED="1555807099280" ID="ID_1984270952" MODIFIED="1555807109994" TEXT="nachprogrammieren / extrahieren...?"/>
+<node CREATED="1555807110911" ID="ID_1729201379" MODIFIED="1555807230565" TEXT="Ist auch nicht ohne Weiteres anwendbar auf den vorliegenden Fall">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1555807137136" ID="ID_1357571620" MODIFIED="1555807171527" TEXT="wir haben ein zus&#xe4;tzliches erstes Argument">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich hier der Visitor, der den Aufruf letztlich emfp&#228;ngt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1555807172534" ID="ID_473316032" MODIFIED="1555807180977" TEXT="das m&#xfc;&#xdf;te man dann in das Tupel reinfrickeln"/>
+<node CREATED="1555807181534" ID="ID_484250647" MODIFIED="1555807202821" TEXT="und dann auch noch den double-Dispatcher (hier das VerbToken) in einen Funktor wickeln"/>
+<node CREATED="1555807203432" ID="ID_1628579018" MODIFIED="1555807210371" TEXT="dann besser direkt ausprogrammieren">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1555806696990" ID="ID_1464210384" MODIFIED="1555806729401" TEXT="kann nicht Tuple-Element per std::forward weitergeben">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1555806733962" ID="ID_1424612840" MODIFIED="1555806749379" TEXT="Compiler m&#xf6;chte eine RValue-Referenz"/>
+<node CREATED="1555806760125" ID="ID_1741677842" MODIFIED="1555806781118" TEXT="workaround: das Tuple selber per std::forward an std::get &#xfc;bergeben">
+<node CREATED="1555806782283" ID="ID_1783286457" MODIFIED="1555806788797" TEXT="das machen andere anscheinend auch so"/>
+<node CREATED="1555806792065" ID="ID_1773083646" MODIFIED="1555806806755" TEXT="Beispiel: die Textbook-Implementierung von std::apply"/>
+<node CREATED="1555806824441" ID="ID_948993908" MODIFIED="1555806837435" TEXT="Resultat: aus dem std::get f&#xe4;llt eine rvalue-Referenz raus"/>
+<node CREATED="1555806920309" ID="ID_1549876372" MODIFIED="1555807062290" TEXT="das k&#xf6;nnte sogar das Standard-Baumuster f&#xfc;r &quot;perfect forwarding&quot; sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es handelt sich hierbei um einen Konstruktionstrick.
+    </p>
+    <p>
+      Scott Meyers spricht deshalb auch immer von &quot;unverersal references&quot; und unterscheidet
+    </p>
+    <p>
+      diese von einer expliziten RValue-Referenz.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Demnach w&#228;re das Standard-Baumuster, da&#223; alle Glieder <b>in</b>&#160; der perfect-forwarding-Kette
+    </p>
+    <p>
+      per universal-Reference miteinander verbunden sind. Und im Konkreten fall mu&#223; man
+    </p>
+    <p>
+      das so hintricksen, indem man die std::get-Funktion passend best&#252;ckt...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Au weia
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806839235" ID="ID_1636335140" MODIFIED="1555806914250" TEXT="ist der workaround gef&#xe4;hrlich?">
+<icon BUILTIN="help"/>
+<node CREATED="1555806851177" ID="ID_1212118219" MODIFIED="1555806866323" TEXT="d.h. kommt am Ende nicht doch ein RValue an?"/>
+<node CREATED="1555806866887" ID="ID_815971236" MODIFIED="1555806883289" TEXT="auch dann nicht: wenn die Funktion einen RValue verlangt??"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555806884936" ID="ID_1433427722" MODIFIED="1555806896802" TEXT="per Experiment verifizieren">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+<node CREATED="1555807238238" ID="ID_383098394" MODIFIED="1555807261859" TEXT="Copy-Support von PolymorphicValue ist &quot;komisch&quot;">
+<node CREATED="1555807266221" ID="ID_262959695" MODIFIED="1555807278396" TEXT="nach heutigem Stand: unbeholfen implementiert"/>
+<node CREATED="1555807285055" ID="ID_1456730365" MODIFIED="1555807297103" TEXT="braucht expliziten Support vom Payload typ"/>
+<node CREATED="1555807297726" ID="ID_1905059435" MODIFIED="1555807304816" TEXT="das w&#xe4;re heute gar nicht mehr notwendig"/>
+<node CREATED="1555807489204" ID="ID_1385287282" MODIFIED="1555807633730" TEXT="Ausf&#xfc;hrung ist l&#xfc;ckenhaft, und teilweise nicht korrekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel: Wenn der Typ selber keinen Support anbietet,
+    </p>
+    <p>
+      dann nehmen wir immer das volle CopySupport-API, und differenzieren nicht
+    </p>
+    <p>
+      mehr nach Typen mit reinem clone-support. Was dann tats&#228;chlich dazu f&#252;hrt,
+    </p>
+    <p>
+      da&#223; der Compiler verucht, den Zuweisungsoperator zu verwernden!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807646555" ID="ID_84342308" MODIFIED="1555807746266" TEXT="CloneValueSupport nicht (korrekt) erkannt">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555807666086" ID="ID_1670738915" MODIFIED="1555807723294" TEXT="offensichtlich wird die falsche Trait-Variante gew&#xe4;hlt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich diejenige f&#252;r Typen ohne Support auf dem API.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1555807724232" ID="ID_1817680115" MODIFIED="1555807744748" TEXT="und das, obwohl ich CloneValueSupport als Basis verwendet habe"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555807747713" ID="ID_341140224" MODIFIED="1555807752169" TEXT="aufzukl&#xe4;ren">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+<node CREATED="1555807305357" ID="ID_1511870599" MODIFIED="1555807322414" TEXT="Plan: PolymorphicValue &#xfc;berarbeiten">
+<node CREATED="1555807415718" ID="ID_639233049" MODIFIED="1555807439478" TEXT="mit &quot;VirtualCopySupport&quot; von meiner Variant-Implementierung zusammenf&#xfc;hren"/>
+<node CREATED="1555807443642" ID="ID_90620144" MODIFIED="1555807458413" TEXT="sollte selbst&#xe4;ndig erkennen, ob der Zieltyp kopierbar ist"/>
+<node CREATED="1555807464657" ID="ID_1089528099" MODIFIED="1555807476065" TEXT="diese meta-Intelligenz sollte komplett in dem Adapter stecken"/>
+</node>
+</node>
+<node CREATED="1555807762543" ID="ID_1645640007" MODIFIED="1555807777516" TEXT="Problem: Puffergr&#xf6;&#xdf;e">
+<node CREATED="1555807778751" ID="ID_1563586526" MODIFIED="1555807801996" TEXT="PolymorphicValue verlangt, da&#xdf; man die Puffergr&#xf6;&#xdf;e als Template-Argument definiert"/>
+<node CREATED="1555807802562" ID="ID_1845631121" MODIFIED="1555807822507" TEXT="hier h&#xe4;ngt diese aber von der Storage f&#xfc;r die Funktionsargumente ab."/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807833997" ID="ID_1153160392" MODIFIED="1555807958411" TEXT="Idealfall: das m&#xfc;&#xdf;te automatisch funktionieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555807861314" ID="ID_352919826" MODIFIED="1555807866077" TEXT="geht das &#xfc;berhaupt?"/>
+<node CREATED="1555807866689" ID="ID_1851833268" MODIFIED="1555807946327" TEXT="w&#xfc;rde vermutlich auf ein Builder-Konstrukt hinauslaufen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...etwas analog zu meinem TreeMutator.
+    </p>
+    <p>
+      D.h. man mu&#223; alle verwendeten Signaturen auf dem Receiver
+    </p>
+    <p>
+      erst mal in einem Builder-Konstrukt gewisserma&#223;en &quot;registrieren&quot;, um dann den passenden
+    </p>
+    <p>
+      VerbPack-Typ konstruiert zu bekommen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1555807962932" ID="ID_378229584" MODIFIED="1555808017855" TEXT="bisher hat meine L&#xf6;sung aber grade den einen Vorteil, komplet &quot;ad hoc&quot; zu sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. man erzeugt in einem einzigen Aufruf den VerbPack f&#252;r eine Zielfunktion
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807845319" ID="ID_1999765895" MODIFIED="1555807959734" TEXT="Halbe L&#xf6;sung: wenigstens eine Hilfsfunktion bereitstellen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808026434" ID="ID_1634107778" MODIFIED="1555808049833" TEXT="automatische Konversionen f&#xfc;r konkrete Argumente">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555808055328" ID="ID_1683773555" MODIFIED="1555808098743" TEXT="der VerbPack - Konstruktor sollte sich genau so verhalten wie die Zielfunktion">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1555808100082" ID="ID_1008688397" MODIFIED="1555808121930" TEXT="Beispiel: Zielfunktion nimmt einen std::string, gegeben ist ein C-String-Literal"/>
+<node CREATED="1555808124882" ID="ID_364451047" MODIFIED="1555808137896" TEXT="aktuell wird exakt der korrekte Typ erwartet"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808138474" ID="ID_847234596" MODIFIED="1555808161273" TEXT="Grund: Funktionsweise der Teplate-Argument-Inferenz">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555808184873" ID="ID_804931772" MODIFIED="1555808194813" TEXT="sinnvoller Workaround">
+<icon BUILTIN="help"/>
+<node CREATED="1555808201687" ID="ID_191950649" MODIFIED="1555808251007" TEXT="&quot;Zwiebelschalen-Konstrukt&quot;??">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zwei verschachtelte, delegierende Konstruktoren,
+    </p>
+    <p>
+      von denen der zweite, innere die eigentliche Typinferenz macht
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808280478" ID="ID_59896827" MODIFIED="1555808285065" TEXT="Testabdeckung">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808288856" ID="ID_1931717111" MODIFIED="1555808422559" TEXT="Frage: ist das Design gut?">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555808300703" ID="ID_621465643" MODIFIED="1555808419535" TEXT="kann/sollte die L&#xf6;song mehr integriert sein?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sollten z.B. die Konstruktor-Funktionen nicht unmittelbar mit definiert werden?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1555808311417" ID="ID_1932269477" MODIFIED="1555808361842" TEXT="oder ist es grade ein Vorteil, wenn sie ein roher Baustein ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil man stets noch einen Layer dar&#252;bersetzt?
+    </p>
+    <p>
+      Wie auch im konkreten Fall das TrackProfile, was dann ein vector&lt;VerbPack&gt; werden w&#252;rde?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
