@@ -97,7 +97,7 @@ namespace lib {
       Verb verb_;
       Args args_;
       
-      Holder (typename Verb::Handler handlerRef, Literal verbID, ARGS... args)
+      Holder (typename Verb::Handler handlerRef, Literal verbID, ARGS&&... args)
         : verb_{handlerRef, verbID}
         , args_{std::forward<ARGS> (args)...}
         { }

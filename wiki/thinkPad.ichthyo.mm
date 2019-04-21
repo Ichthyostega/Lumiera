@@ -19790,6 +19790,13 @@
 <node CREATED="1555806866887" ID="ID_815971236" MODIFIED="1555806883289" TEXT="auch dann nicht: wenn die Funktion einen RValue verlangt??"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555806884936" ID="ID_1433427722" MODIFIED="1555806896802" TEXT="per Experiment verifizieren">
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1555895525635" ID="ID_1402481371" MODIFIED="1555895541157" TEXT="(verwende eine ctor-tracking-Klasse)"/>
+<node COLOR="#338800" CREATED="1555895463799" ID="ID_1147400949" MODIFIED="1555895487068" TEXT="Fehler entdeckt: ctor gibt Args per Value an das Tupel">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555895488721" ID="ID_1447172232" MODIFIED="1555895516594" TEXT="JA! Es passiert eine move-Initialisierung">
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 </node>
 </node>
