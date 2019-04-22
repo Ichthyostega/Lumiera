@@ -123,6 +123,39 @@ applyTuple (FUN& fun)
 
 
 
+  ///////////////////////////TODO : Debugging
+  struct Trackr
+    {
+      size_t num;
+      
+      Trackr (size_t val)
+        : num(val)
+        {
+          cout <<"Trackr("<<val<<")"<<endl;
+        }
+     ~Trackr()
+        {
+          cout <<"~Trackr()"<<endl;
+        }
+      Trackr (Trackr const& lval)
+        : num(lval.num)
+        {
+          cout <<"Trackr()<<-LVal"<<endl;
+        }
+      Trackr (Trackr && rval)
+        : num(rval.num)
+        {
+          cout <<"Trackr()<<-RVal"<<endl;
+        }
+      Trackr&
+      operator= (Trackr const& orig)
+        {
+          cout <<"Tracker = orig"<<endl;
+          num = orig.num;
+          return *this;
+        }
+    };
+  ///////////////////////////TODO : Debugging
 
 
 int
@@ -137,6 +170,17 @@ main (int, char**)
     using Hol = Holder<decltype(fun), int, int, int>;
     Hol holder(tup);
     holder.applyTuple (fun);
+    
+    
+    auto trp = std::make_tuple(2u,Trackr(3));
+    auto frn = [](uint& x, Trackr y)
+                  {
+                    cout << x<<"*Trckr("<<y.num<<")="<<(x*y.num)<<endl;
+                  };
+    using Hrl = Holder<decltype(frn), uint, Trackr>;
+    Hrl hrlder(trp);
+    hrlder.applyTuple (frn);
+    
     
     cout <<  "\n.gulp.\n";
     return 0;

@@ -19799,6 +19799,82 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555947349235" ID="ID_599059144" MODIFIED="1555947358288" TEXT="L&#xf6;sung gesucht....">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555947359783" ID="ID_1366291443" MODIFIED="1555947366938" TEXT="noch schlimmer...">
+<node CREATED="1555947367949" ID="ID_1145455475" MODIFIED="1555947477936" TEXT="auch die Textbook-Impl von std::apply funktioiniert genauso">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. std::get&lt;idx&gt; (std::forward&lt;TUP&gt; (tuple))
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1555947482051" ID="ID_814853878" MODIFIED="1555947512633" TEXT="...und produziert den gleichen Compiler-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn ich das Tupel als Referenz anliefere
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555947514403" ID="ID_1459759406" MODIFIED="1555947533813" TEXT="Kann den Fehler isoliert nicht nachstellen">
+<icon BUILTIN="forward"/>
+<node CREATED="1555947535499" ID="ID_218400480" MODIFIED="1555947537990" TEXT="try.cpp"/>
+<node CREATED="1555947538554" ID="ID_1700362760" MODIFIED="1555947549232" TEXT="&quot;sinngem&#xe4;&#xdf;&quot; nachgebaut"/>
+<node CREATED="1555947549617" ID="ID_386072993" MODIFIED="1555947560899" TEXT="das compiliert problemlos"/>
+<node CREATED="1555947561535" ID="ID_858467762" MODIFIED="1555947660539" TEXT="und macht LValue-Initialisierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sichtbar wenn man ein Trackr-Objekt
+    </p>
+    <p>
+      als value-Parameter auf der Zielfunktion verwendet.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Im extrahierten Beispiel wird das LValue-copy-initialisiert
+    </p>
+    <p>
+      wohingegen im realen code, wo auch das std::forward(tuple) dabei ist,
+    </p>
+    <p>
+      der betreffende Wert dann RValue-Initialisiert wird, d.h. dabei das betreffende Tupel-Element konsumiert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555947661358" ID="ID_917133929" MODIFIED="1555947677634" TEXT="Ich seh den Unterschied nicht">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1555947705866" ID="ID_139554682" MODIFIED="1555947737849" TEXT="warum akzeptiert der Compiler die korrekte variante im realen Code nicht??"/>
+<node CREATED="1555947747068" ID="ID_1646796994" MODIFIED="1555947794848" TEXT="f&#xfc;r micht sind beide Varianten (try.cpp und verb-visitor.hpp) &#xe4;quivaltent"/>
+<node CREATED="1555947795281" ID="ID_1250854173" MODIFIED="1555947806627" TEXT="f&#xfc;r den Compiler anscheinend nicht">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555947814658" ID="ID_1580965808" MODIFIED="1555947822428" TEXT="das k&#xf6;nne ein Ansatzpunkt sein">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1555807238238" ID="ID_383098394" MODIFIED="1555807261859" TEXT="Copy-Support von PolymorphicValue ist &quot;komisch&quot;">
 <node CREATED="1555807266221" ID="ID_262959695" MODIFIED="1555807278396" TEXT="nach heutigem Stand: unbeholfen implementiert"/>
