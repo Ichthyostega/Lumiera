@@ -61,6 +61,7 @@ typedef unsigned int uint;
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
+#include "lib/verb-visitor.hpp"
 
 #include "lib/meta/variadic-helper.hpp"
 
@@ -68,6 +69,7 @@ typedef unsigned int uint;
 #include <string>
 #include <tuple>
 
+using lib::Literal;
 using std::string;
 using std::tuple;
 
@@ -91,11 +93,11 @@ forwardInvoker (FUN& fun, ARGS&&... args)
 template<typename FUN, typename...ARGS>
 struct Holder
   {
-    using Tup = tuple<ARGS...>;
+    using Args = tuple<ARGS...>;
     
-    Tup tup;
+    Args tup;
     
-    Holder (Tup& tup)
+    Holder (Args& tup)
       : tup{tup}
       { }
     
@@ -104,7 +106,7 @@ void
 unpack_and_forward (FUN& fun, lib::meta::IndexSeq<idx...>)
 {
   cout << "unpack_and_forward...\n";
-  SHOW_TYPE (Tup)
+  SHOW_TYPE (Args)
   
   forwardInvoker (fun, std::get<idx> (tup)...);
 }
@@ -113,7 +115,7 @@ void
 applyTuple (FUN& fun)
 {
   cout << "applyTuple...\n";
-  SHOW_TYPE (Tup)
+  SHOW_TYPE (Args)
   
   using SequenceIterator = typename lib::meta::BuildIdxIter<ARGS...>::Ascending;
   
@@ -135,7 +137,7 @@ applyTuple (FUN& fun)
         }
      ~Trackr()
         {
-          cout <<"~Trackr()"<<endl;
+          cout <<"~Trackr("<<num<<")"<<endl;
         }
       Trackr (Trackr const& lval)
         : num(lval.num)
@@ -157,6 +159,91 @@ applyTuple (FUN& fun)
     };
   ///////////////////////////TODO : Debugging
 
+  struct Receiver
+    {
+      void
+      grrrn (uint& x, Trackr y)
+        {
+          cout <<"grrrn()..."<< x<<"*Trckr("<<y.num<<")="<<(x*y.num)<<endl;
+        }
+    };
+  
+  template<class REC, class SIG>
+  struct Hodler;
+  
+  template<class REC, class RET, typename... ARGS>
+  struct Hodler<REC, RET(ARGS...)>
+    {
+      typedef RET (REC::*Handler) (ARGS...);
+      
+      Handler handler_;
+      using Verb = lib::VerbToken<REC,RET(ARGS...)>;
+      using Args = std::tuple<ARGS...>;
+      
+      /** meta-sequence to pick argument values from the storage tuple */
+      using SequenceIterator = typename lib::meta::BuildIdxIter<ARGS...>::Ascending;
+      
+      Verb verb_;
+      Args args_;
+      
+//    Hodler (typename Verb::Handler handlerRef, Literal verbID, ARGS&&... args)
+      Hodler (Handler handlerRef, Literal verbID, ARGS&&... args)
+        : handler_{handlerRef} 
+        , verb_{handlerRef, verbID}
+        , args_{std::forward<ARGS> (args)...}
+        { }
+      
+      RET
+      applyTo (REC& receiver)
+        {
+          return invokeVerb (receiver, SequenceIterator());
+        }
+      
+      template<size_t...idx>
+      RET
+      invokeVerb (REC& receiver, lib::meta::IndexSeq<idx...>)
+        {                                                //////////////////////////////////////////TICKET #1006 | TICKET #1184 why do we need std::forward here? the target is a "perfect forwarding" function, which should be able to receive a LValue reference to the tuple element just fine...
+//          lib::test::TypeDebugger<Args> buggy;
+//          return verb_.applyTo (receiver, std::get<idx> (std::forward<Args>(args_))...);  /// <<------------this compiles, but consumes the tuple's content (move init)
+//          return verb_.applyTo (receiver, std::get<idx> (args_)...);
+//          return (receiver.*handler_)(std::get<idx> (args_)...);                          /// <<------------this works
+//          return applyToVerb (receiver, std::get<idx> (args_)...);
+//          return getVerbFun(receiver) (std::get<idx> (args_)...);                         /// <<------------this compiles, but creates a spurious copy
+          return verb_.applyTo (receiver, forwardElm<idx> (args_)...);                    /// <<------------this compiles, but consumes the tuple's content (move init)
+        }
+
+      template<size_t idx>
+      using TupleElmType = typename std::tuple_element<idx, Args>::type;
+      
+      template<size_t idx>
+//      std::remove_reference_t<decltype(std::get<idx> (args))>&&
+      TupleElmType<idx>&&      
+      forwardElm (Args& args)
+        {
+          using ElmRef = decltype(std::get<idx> (args));
+          using Elm = std::remove_reference_t<TupleElmType<idx>>;
+          
+          return std::forward<TupleElmType<idx>> (std::get<idx> (args));
+        }
+      
+      RET
+      applyToVerb (REC& receiver, ARGS&& ...args)
+        {
+//        REQUIRE ("NIL" != token_);
+          return (receiver.*handler_)(std::forward<ARGS>(args)...);
+        }
+      
+//      std::function<RET(ARGS...)>
+      decltype(auto)
+      getVerbFun(REC& receiver)
+        {
+          return [&](ARGS...args) -> RET
+                    {
+                      return (receiver.*handler_)(std::forward<ARGS>(args)...);
+                    };
+        }
+    };
+
 
 int
 main (int, char**)
@@ -172,15 +259,21 @@ main (int, char**)
     holder.applyTuple (fun);
     
     
-    auto trp = std::make_tuple(2u,Trackr(3));
+    uint zwo{2};
+    std::tuple<uint&, Trackr> trp{zwo,Trackr(3)};
     auto frn = [](uint& x, Trackr y)
                   {
                     cout << x<<"*Trckr("<<y.num<<")="<<(x*y.num)<<endl;
                   };
-    using Hrl = Holder<decltype(frn), uint, Trackr>;
+    using Hrl = Holder<decltype(frn), uint&, Trackr>;
     Hrl hrlder(trp);
     hrlder.applyTuple (frn);
+    cout <<  "\n.ulps.\n";
     
+    Hodler<Receiver, void(uint&,Trackr)> holyh(&Receiver::grrrn, "holyhandgrenade", zwo, Trackr(5));
+    Receiver recy;
+//    recy.grrrn (std::get<0>(trp), Trackr(5));
+    holyh.applyTo (recy);
     
     cout <<  "\n.gulp.\n";
     return 0;

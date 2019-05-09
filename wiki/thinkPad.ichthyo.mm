@@ -19126,8 +19126,7 @@
       weil ein Layout-Manager immer nur im Bereich eines TimelineWidget relevant ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555023446038" ID="ID_858959830" MODIFIED="1555023448646" TEXT="clients">
 <node CREATED="1555023449597" ID="ID_1228634821" MODIFIED="1555023475298" TEXT="TimelineCanvas">
@@ -19526,8 +19525,7 @@
       Unterscheidung <b>verschoben</b>&#160;in die Darstellung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19546,8 +19544,7 @@
       zur Anwendung kommt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#435e98" CREATED="1555082487012" ID="ID_217824628" MODIFIED="1555082508617" TEXT="trotzdem sinnvolles Potential zur Vereinheitlichung">
 <icon BUILTIN="yes"/>
@@ -19575,8 +19572,7 @@
       Problem: <i><font color="#bb4444">mu&#223; immer sichtbar sein</font></i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1555080572765" ID="ID_577805455" MODIFIED="1555198544043" TEXT="im Detail etwas komplexer...">
 <richcontent TYPE="NOTE"><html>
@@ -19597,8 +19593,7 @@
       am Anfang des Track-Profils, welche immer sichtbar bleiben soll
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_577805455" ENDARROW="Default" ENDINCLINATION="146;-10;" ID="Arrow_ID_228489961" SOURCE="ID_447173098" STARTARROW="Default" STARTINCLINATION="110;0;"/>
 </node>
 </node>
@@ -19632,8 +19627,7 @@
       stets besser ist, als repetitives aufdoppeln und variieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555247377809" ID="ID_281745763" MODIFIED="1555247439373" TEXT="Erwartete Anforderungen...">
 <richcontent TYPE="NOTE"><html>
@@ -19653,8 +19647,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247320686" ID="ID_1896093043" MODIFIED="1555247351638" TEXT="brauche Visitor mit flexiblen Argumenten">
@@ -19708,8 +19701,7 @@
       und daher nicht a priori die Liste aller einzubettenden Varianten kenne
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806670026" ID="ID_604641822" MODIFIED="1555806695925" TEXT="Probleme bei der Umsetzung">
 <icon BUILTIN="flag-yellow"/>
@@ -19729,8 +19721,7 @@
       n&#228;mlich hier der Visitor, der den Aufruf letztlich emfp&#228;ngt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555807172534" ID="ID_473316032" MODIFIED="1555807180977" TEXT="das m&#xfc;&#xdf;te man dann in das Tupel reinfrickeln"/>
 <node CREATED="1555807181534" ID="ID_484250647" MODIFIED="1555807202821" TEXT="und dann auch noch den double-Dispatcher (hier das VerbToken) in einen Funktor wickeln"/>
@@ -19780,8 +19771,7 @@
       Au weia
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806839235" ID="ID_1636335140" MODIFIED="1555806914250" TEXT="ist der workaround gef&#xe4;hrlich?">
@@ -19812,8 +19802,7 @@
       d.h. std::get&lt;idx&gt; (std::forward&lt;TUP&gt; (tuple))
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555947482051" ID="ID_814853878" MODIFIED="1555947512633" TEXT="...und produziert den gleichen Compiler-Fehler">
 <richcontent TYPE="NOTE"><html>
@@ -19825,8 +19814,7 @@
       wenn ich das Tupel als Referenz anliefere
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555947514403" ID="ID_1459759406" MODIFIED="1555947533813" TEXT="Kann den Fehler isoliert nicht nachstellen">
@@ -19859,19 +19847,61 @@
       der betreffende Wert dann RValue-Initialisiert wird, d.h. dabei das betreffende Tupel-Element konsumiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555947661358" ID="ID_917133929" MODIFIED="1555947677634" TEXT="Ich seh den Unterschied nicht">
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1555947705866" ID="ID_139554682" MODIFIED="1555947737849" TEXT="warum akzeptiert der Compiler die korrekte variante im realen Code nicht??"/>
-<node CREATED="1555947747068" ID="ID_1646796994" MODIFIED="1555947794848" TEXT="f&#xfc;r micht sind beide Varianten (try.cpp und verb-visitor.hpp) &#xe4;quivaltent"/>
+<node CREATED="1555947747068" ID="ID_1646796994" MODIFIED="1557355033762" TEXT="f&#xfc;r mich sind beide Varianten (try.cpp und verb-visitor.hpp) &#xe4;quivaltent"/>
 <node CREATED="1555947795281" ID="ID_1250854173" MODIFIED="1555947806627" TEXT="f&#xfc;r den Compiler anscheinend nicht">
 <icon BUILTIN="idea"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555947814658" ID="ID_1580965808" MODIFIED="1555947822428" TEXT="das k&#xf6;nne ein Ansatzpunkt sein">
 <icon BUILTIN="flag-pink"/>
 </node>
+<node CREATED="1557414354359" ID="ID_961298704" MODIFIED="1557414395987" TEXT="Problem ist die aufgerufene Ziel-Funktion">
+<node CREATED="1557414397598" ID="ID_1788944843" MODIFIED="1557414441737" TEXT="der std::apply-Mechanismus funktioniert nur direkt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h er funktioniert nur, wenn man das std::get&lt;idx&gt; (tuple) unmittelbar an den jeweiligen Ziel-Parameter bindet
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
+<node CREATED="1557414442871" ID="ID_501615874" MODIFIED="1557414482662" TEXT="dagegen std::forward w&#xe4;hlt flexibel einen von zwei overloads">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich einen, der einen LValue entgegennimmt
+    </p>
+    <p>
+      und einen, der einen RValue entgegennimmt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557414483962" ID="ID_656447545" MODIFIED="1557414501662" TEXT="und dies kann ich hier nicht nachbilden">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1557414503009" ID="ID_1020774626" MODIFIED="1557414518978" TEXT="hab schon dutzend Varianten versucht"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1557414529997" ID="ID_45981411" MODIFIED="1557414627988" TEXT="m&#xf6;gliche Workarounds...">
+<icon BUILTIN="idea"/>
+<node CREATED="1557414537652" ID="ID_1792457460" MODIFIED="1557414563259" TEXT="VerbToken k&#xf6;nnte Tuple akzeptieren"/>
+<node CREATED="1557414564399" ID="ID_1249046596" MODIFIED="1557414588759" TEXT="VerbToken k&#xf6;nnte den Holder als friend deklarieren">
+<node CREATED="1557414591836" ID="ID_1605277239" MODIFIED="1557414608709" TEXT="dieser w&#xfc;rde dann auf den verb.handler_ zugreifen"/>
+<node CREATED="1557414609249" ID="ID_1627303905" MODIFIED="1557414624347" TEXT="und den Aufruf direkt an&apos;s Ziel bringen"/>
 </node>
 </node>
 </node>
@@ -19899,8 +19929,7 @@
       da&#223; der Compiler verucht, den Zuweisungsoperator zu verwernden!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807646555" ID="ID_84342308" MODIFIED="1555807746266" TEXT="CloneValueSupport nicht (korrekt) erkannt">
@@ -19915,8 +19944,7 @@
       n&#228;mlich diejenige f&#252;r Typen ohne Support auf dem API.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555807724232" ID="ID_1817680115" MODIFIED="1555807744748" TEXT="und das, obwohl ich CloneValueSupport als Basis verwendet habe"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555807747713" ID="ID_341140224" MODIFIED="1555807752169" TEXT="aufzukl&#xe4;ren">
@@ -19954,8 +19982,7 @@
       VerbPack-Typ konstruiert zu bekommen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555807962932" ID="ID_378229584" MODIFIED="1555808017855" TEXT="bisher hat meine L&#xf6;sung aber grade den einen Vorteil, komplet &quot;ad hoc&quot; zu sein">
 <richcontent TYPE="NOTE"><html>
@@ -19967,8 +19994,7 @@
       d.h. man erzeugt in einem einzigen Aufruf den VerbPack f&#252;r eine Zielfunktion
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807845319" ID="ID_1999765895" MODIFIED="1555807959734" TEXT="Halbe L&#xf6;sung: wenigstens eine Hilfsfunktion bereitstellen">
@@ -20000,8 +20026,7 @@
       von denen der zweite, innere die eigentliche Typinferenz macht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -20023,8 +20048,7 @@
       sollten z.B. die Konstruktor-Funktionen nicht unmittelbar mit definiert werden?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555808311417" ID="ID_1932269477" MODIFIED="1555808361842" TEXT="oder ist es grade ein Vorteil, wenn sie ein roher Baustein ist">
 <richcontent TYPE="NOTE"><html>
@@ -20039,8 +20063,7 @@
       Wie auch im konkreten Fall das TrackProfile, was dann ein vector&lt;VerbPack&gt; werden w&#252;rde?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -20064,8 +20087,7 @@
       <u>grunds&#228;tzlich</u>: <i>es zeichnet der Canvas</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge COLOR="#a07373" STYLE="linear"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1555082815168" ID="ID_1445154694" MODIFIED="1555082846519" TEXT="er entscheidet aber nicht &#xfc;ber die Struktur"/>
@@ -20109,8 +20131,7 @@
       <i>das </i>ist ein reiner (pesistent) presentation state
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1554995841966" ID="ID_1443277448" MODIFIED="1554995854985" TEXT="genaue Rolle der Session??">
@@ -20250,8 +20271,7 @@
       wir k&#246;nnen nicht von 0 bis MAXINT zeichnen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1555023959073" ID="ID_118083348" MODIFIED="1555023989547" TEXT="auf Pixel-Window zur&#xfc;ckfallen">
 <arrowlink COLOR="#677e9a" DESTINATION="ID_1781062229" ENDARROW="Default" ENDINCLINATION="230;6;" ID="Arrow_ID_733563643" STARTARROW="None" STARTINCLINATION="296;77;"/>
@@ -20319,8 +20339,7 @@
       ...zum Beispiel um einen &quot;Wall&quot; auch expressiv zu schattieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -20364,8 +20383,7 @@
       wenn er mit der HeaderPane den ben&#246;tigten Platz aushandelt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1554516626163" ID="ID_1427792739" MODIFIED="1554516662980" TEXT="d.h. der Zeichencode mu&#xdf; seine Dekoration innen einf&#xfc;gen"/>
 <node CREATED="1554516850759" ID="ID_361309913" MODIFIED="1554516863201" TEXT="content mu&#xdf; mit ausreichend Padding platziert werden"/>
 </node>
@@ -22212,8 +22230,7 @@
       where 1 tick unit depends on the current zoom level
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
