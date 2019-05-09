@@ -19733,7 +19733,8 @@
 <node CREATED="1555806696990" ID="ID_1464210384" MODIFIED="1555806729401" TEXT="kann nicht Tuple-Element per std::forward weitergeben">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1555806733962" ID="ID_1424612840" MODIFIED="1555806749379" TEXT="Compiler m&#xf6;chte eine RValue-Referenz"/>
-<node CREATED="1555806760125" ID="ID_1741677842" MODIFIED="1555806781118" TEXT="workaround: das Tuple selber per std::forward an std::get &#xfc;bergeben">
+<node CREATED="1555806760125" ID="ID_1741677842" MODIFIED="1557437788471" TEXT="workaround: das Tuple selber per std::forward an std::get &#xfc;bergeben">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1555806782283" ID="ID_1783286457" MODIFIED="1555806788797" TEXT="das machen andere anscheinend auch so"/>
 <node CREATED="1555806792065" ID="ID_1773083646" MODIFIED="1555806806755" TEXT="Beispiel: die Textbook-Implementierung von std::apply"/>
 <node CREATED="1555806824441" ID="ID_948993908" MODIFIED="1555806837435" TEXT="Resultat: aus dem std::get f&#xe4;llt eine rvalue-Referenz raus"/>
@@ -19773,13 +19774,19 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1557437798675" ID="ID_474705115" MODIFIED="1557437855537" TEXT="aus letztlich nicht gekl&#xe4;rten Gr&#xfc;nden ist mir das nicht gelungen...">
+<arrowlink COLOR="#f05859" DESTINATION="ID_656447545" ENDARROW="Default" ENDINCLINATION="45;-420;" ID="Arrow_ID_1477395313" STARTARROW="None" STARTINCLINATION="649;0;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="stop-sign"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806839235" ID="ID_1636335140" MODIFIED="1555806914250" TEXT="ist der workaround gef&#xe4;hrlich?">
 <icon BUILTIN="help"/>
 <node CREATED="1555806851177" ID="ID_1212118219" MODIFIED="1555806866323" TEXT="d.h. kommt am Ende nicht doch ein RValue an?"/>
 <node CREATED="1555806866887" ID="ID_815971236" MODIFIED="1555806883289" TEXT="auch dann nicht: wenn die Funktion einen RValue verlangt??"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555806884936" ID="ID_1433427722" MODIFIED="1555806896802" TEXT="per Experiment verifizieren">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#3a0099" CREATED="1555806884936" ID="ID_1433427722" MODIFIED="1557437773633" TEXT="per Experiment verifizieren">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1555895525635" ID="ID_1402481371" MODIFIED="1555895541157" TEXT="(verwende eine ctor-tracking-Klasse)"/>
 <node COLOR="#338800" CREATED="1555895463799" ID="ID_1147400949" MODIFIED="1555895487068" TEXT="Fehler entdeckt: ctor gibt Args per Value an das Tupel">
 <icon BUILTIN="button_ok"/>
@@ -19789,8 +19796,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555947349235" ID="ID_599059144" MODIFIED="1555947358288" TEXT="L&#xf6;sung gesucht....">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1555947349235" ID="ID_599059144" MODIFIED="1557437741482" TEXT="L&#xf6;sung gesucht....">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555947359783" ID="ID_1366291443" MODIFIED="1555947366938" TEXT="noch schlimmer...">
 <node CREATED="1555947367949" ID="ID_1145455475" MODIFIED="1555947477936" TEXT="auch die Textbook-Impl von std::apply funktioiniert genauso">
 <richcontent TYPE="NOTE"><html>
@@ -19855,10 +19862,11 @@
 <node CREATED="1555947747068" ID="ID_1646796994" MODIFIED="1557355033762" TEXT="f&#xfc;r mich sind beide Varianten (try.cpp und verb-visitor.hpp) &#xe4;quivaltent"/>
 <node CREATED="1555947795281" ID="ID_1250854173" MODIFIED="1555947806627" TEXT="f&#xfc;r den Compiler anscheinend nicht">
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555947814658" ID="ID_1580965808" MODIFIED="1555947822428" TEXT="das k&#xf6;nne ein Ansatzpunkt sein">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555947814658" ID="ID_1580965808" MODIFIED="1557435515717" TEXT="das k&#xf6;nne ein Ansatzpunkt sein">
+<icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1557414354359" ID="ID_961298704" MODIFIED="1557414395987" TEXT="Problem ist die aufgerufene Ziel-Funktion">
+<node CREATED="1557414354359" ID="ID_961298704" MODIFIED="1557435586133" TEXT="Problem ist die aufgerufene Ziel-Funktion">
+<icon BUILTIN="info"/>
 <node CREATED="1557414397598" ID="ID_1788944843" MODIFIED="1557414441737" TEXT="der std::apply-Mechanismus funktioniert nur direkt">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -19888,20 +19896,51 @@
 </html>
 </richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557414483962" ID="ID_656447545" MODIFIED="1557414501662" TEXT="und dies kann ich hier nicht nachbilden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557414483962" ID="ID_656447545" MODIFIED="1557437837340" TEXT="und dies kann ich hier nicht nachbilden">
+<linktarget COLOR="#f05859" DESTINATION="ID_656447545" ENDARROW="Default" ENDINCLINATION="45;-420;" ID="Arrow_ID_1477395313" SOURCE="ID_474705115" STARTARROW="None" STARTINCLINATION="649;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1557414503009" ID="ID_1020774626" MODIFIED="1557414518978" TEXT="hab schon dutzend Varianten versucht"/>
+<node CREATED="1557435536324" ID="ID_13398656" MODIFIED="1557435547861" TEXT="Overload-Resolution hilft hier nicht"/>
+<node CREATED="1557435548361" ID="ID_1786798505" MODIFIED="1557435558036" TEXT="w&#xfc;rde enable_if  brauchen"/>
+<node CREATED="1557435559616" ID="ID_17287871" MODIFIED="1557435572751" TEXT="Stop">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      steht in keinem Verh&#228;ltnis zum Zweck
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
 </node>
 </node>
 </node>
+</node>
+</node>
+<node CREATED="1557435595988" ID="ID_1773619805" MODIFIED="1557435615382" TEXT="abgebrochen, da unverh&#xe4;ltnism&#xe4;&#xdf;ig">
+<icon BUILTIN="stop-sign"/>
 </node>
 </node>
 <node CREATED="1557414529997" ID="ID_45981411" MODIFIED="1557414627988" TEXT="m&#xf6;gliche Workarounds...">
 <icon BUILTIN="idea"/>
-<node CREATED="1557414537652" ID="ID_1792457460" MODIFIED="1557414563259" TEXT="VerbToken k&#xf6;nnte Tuple akzeptieren"/>
-<node CREATED="1557414564399" ID="ID_1249046596" MODIFIED="1557414588759" TEXT="VerbToken k&#xf6;nnte den Holder als friend deklarieren">
+<node CREATED="1557414537652" ID="ID_1792457460" MODIFIED="1557435447674" TEXT="VerbToken k&#xf6;nnte Tuple akzeptieren">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1557435467103" ID="ID_1297559972" MODIFIED="1557435475420" TEXT="separation of concerns">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1557414564399" ID="ID_1249046596" MODIFIED="1557435481628" TEXT="VerbToken k&#xf6;nnte den Holder als friend deklarieren">
+<icon BUILTIN="forward"/>
 <node CREATED="1557414591836" ID="ID_1605277239" MODIFIED="1557414608709" TEXT="dieser w&#xfc;rde dann auf den verb.handler_ zugreifen"/>
 <node CREATED="1557414609249" ID="ID_1627303905" MODIFIED="1557414624347" TEXT="und den Aufruf direkt an&apos;s Ziel bringen"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557435436241" ID="ID_1083947599" MODIFIED="1557435493264" TEXT="Alternative: erben">
+<icon BUILTIN="idea"/>
+<node CREATED="1557437869440" ID="ID_1916606467" MODIFIED="1557437879916" TEXT="das ist elegant"/>
+<node CREATED="1557437880426" ID="ID_548782535" MODIFIED="1557437886906" TEXT="und logisch konsistent"/>
+</node>
 </node>
 </node>
 </node>

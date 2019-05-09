@@ -174,8 +174,8 @@ namespace test{
       TokenSeq
       build_and_copy_tokens ()
         {
-          Token bigWoof(&Receiver::woof, "woof", true, 2u);
           Token littleWoof(&Receiver::woof, "woof", false, 3u);
+          Token bigWoof(&Receiver::woof, "woof", true, 2u);
           Token quack(&Receiver::honk, "honk", string{"quaack"});
           Token honk(&Receiver::honk, "honk", string{"Hoonk"});
           Token moo(&Receiver::moo, "moo", Trackr(3));

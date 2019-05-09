@@ -87,6 +87,7 @@ namespace lib {
   template<class REC, class RET, typename... ARGS>
   struct Holder<REC, RET(ARGS...)>
     : VerbInvoker<REC,RET>
+    , VerbToken<REC,RET(ARGS...)>
     {
       using Verb = VerbToken<REC,RET(ARGS...)>;
       using Args = std::tuple<ARGS...>;
@@ -94,11 +95,10 @@ namespace lib {
       /** meta-sequence to pick argument values from the storage tuple */
       using SequenceIterator = typename meta::BuildIdxIter<ARGS...>::Ascending;
       
-      Verb verb_;
       Args args_;
       
       Holder (typename Verb::Handler handlerRef, Literal verbID, ARGS&&... args)
-        : verb_{handlerRef, verbID}
+        : Verb{handlerRef, verbID}
         , args_{std::forward<ARGS> (args)...}
         { }
       
@@ -108,11 +108,12 @@ namespace lib {
           return invokeVerb (receiver, SequenceIterator());
         }
       
+    private:
       template<size_t...idx>
       RET
       invokeVerb (REC& receiver, meta::IndexSeq<idx...>)
         {                                                //////////////////////////////////////////TICKET #1006 | TICKET #1184 why do we need std::forward here? the target is a "perfect forwarding" function, which should be able to receive a LValue reference to the tuple element just fine...
-          return verb_.applyTo (receiver, std::get<idx> (std::forward<Args>(args_))...);
+          return (receiver.*Verb::handler_)(std::get<idx> (args_)...);
         }
     };
   

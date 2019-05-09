@@ -83,7 +83,7 @@ namespace lib {
     public:
       typedef RET (REC::*Handler) (ARGS...);
       
-    private:
+    protected:
       Handler handler_;
       Literal token_;
       
