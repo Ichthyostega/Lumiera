@@ -43,7 +43,7 @@
  ** of the programming language, we may try to pull some (template based) trickery
  ** to make polymorphic objects fit better with the handling of small copyable
  ** value objects. Especially, C++ gives a special meaning to passing parameters
- ** as \c const& -- typically constructing an anonymous temporary object conveniently
+ ** as `const&` -- typically constructing an anonymous temporary object conveniently
  ** just for passing an abstraction barrier (while the optimiser can be expected to
  ** remove this barrier and the accompanying nominal copy operations altogether in
  ** the generated code). Consequently the ability to return a polymorphic object
@@ -68,7 +68,7 @@
  ** Moreover, the PolymorphicValue container provides static builder functions,
  ** allowing to place a concrete instance of a subclass into the content buffer.
  ** After construction, the actual type of this instance will be forgotten
- ** (``type erasure''), but because of the embedded vtable, on access, the
+ ** ("type erasure"), but because of the embedded vtable, on access, the
  ** proper implementation functions will be invoked.
  ** 
  ** Expanding on that pattern, the copying and cloning operations of the whole
@@ -289,19 +289,20 @@ namespace lib {
     
     
     /**
-     * traits template to deal with
-     * different ways to support copy operations.
+     * trait template to deal with different ways to support copy operations.
      * Default is no support by the API and implementation types.
-     * In this case, the CopySupport interface is mixed in at the
-     * level of the concrete implementation class and later on
-     * accessed through a \c dynamic_cast
+     * In this case, the CopySupport interface is mixed-in at the
+     * level of the concrete implementation class and will be
+     * accessed later on through a `dynamic_cast<CopyAPI&>`
      * @todo this whole decision logic works but is confusingly written     ///////////////////////TICKET #1197 : improve design of copy support
      */
     template <class TY, class YES = void>
     struct Trait
       {
-        typedef CopySupport<TY,EmptyBase> CopyAPI;                      ///////////////////////////TICKET #1197 : this is naive, we do not know if the target really has full copy support...
-        enum{   ADMIN_OVERHEAD = 2 * sizeof(void*) };
+        using CopyAPI = CopySupport<TY,EmptyBase>;                      ///////////////////////////TICKET #1197 : this is naive, we do not know if the target really has full copy support...
+        using Assignment = AssignmentPolicy<CopyAPI>;
+        using AdapterAttachment = CopyAPI;
+        enum{ ADMIN_OVERHEAD = 2 * sizeof(void*) };              // need second VTable for CopyAPI mix-in
         
         static CopyAPI&
         accessCopyHandlingInterface (TY& bufferContents)
@@ -309,9 +310,6 @@ namespace lib {
             REQUIRE (INSTANCEOF (CopyAPI, &bufferContents));
             return dynamic_cast<CopyAPI&> (bufferContents);
           }
-        
-        typedef CopyAPI AdapterAttachment;
-        typedef AssignmentPolicy<CopyAPI> Assignment;
       };
     
     
@@ -325,8 +323,10 @@ namespace lib {
     template <class TY>
     struct Trait<TY,      enable_if< exposes_CloneFunction<TY> >>
       {
-        typedef TY CopyAPI;
-        enum{   ADMIN_OVERHEAD = 1 * sizeof(void*) };
+        using CopyAPI = TY;
+        using Assignment = AssignmentPolicy<CopyAPI>;
+        using AdapterAttachment = struct{ /* irrelevant */ };
+        enum{ ADMIN_OVERHEAD = 1 * sizeof(void*) };              // just the VTable of the payload
         
         template<class IFA>
         static CopyAPI&
@@ -335,9 +335,6 @@ namespace lib {
             REQUIRE (INSTANCEOF (CopyAPI, &bufferContents));
             return static_cast<CopyAPI&> (bufferContents);
           }
-        
-        typedef EmptyBase AdapterAttachment;
-        typedef AssignmentPolicy<CopyAPI> Assignment;
       };
     
   }//(End)implementation details
@@ -373,7 +370,7 @@ namespace lib {
     >
   class PolymorphicValue
     {
-    public:
+    private:
       typedef polyvalue::Trait<CPY>     _Traits;
       typedef typename _Traits::CopyAPI _CopyHandlingAdapter;
       typedef typename _Traits::Assignment _AssignmentPolicy;                     /////////////////TICKET #1197 : confusingly indirect decision logic

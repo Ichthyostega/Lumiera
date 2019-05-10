@@ -155,22 +155,6 @@ namespace test{
           TokenSeq tokens = build_and_copy_tokens();
           render_verbose (tokens);
 //        profile.append_woof(1, 2);
-    
-          using IrrelvantType = struct{};
-          const size_t VERB_TOK_SIZE = sizeof(lib::VerbToken<IrrelvantType, void(void)>);
-          using HoldL = Holder<Receiver, string(string)>;
-          const size_t VERB_TOK_SIZ2 = sizeof(HoldL::Verb);
-          const size_t HOLDER_SIZE = sizeof(HoldL);
-          const size_t ARG_TUP_SIZE = sizeof(std::tuple<string>);
-          
-          SHOW_EXPR (VERB_TOK_SIZE);
-          SHOW_EXPR (VERB_TOK_SIZ2);
-          SHOW_EXPR (HOLDER_SIZE);
-          SHOW_EXPR (ARG_TUP_SIZE);
-          SHOW_EXPR (sizeof(string));
-          using AdapT = Token::Adapter<HoldL>;
-          SHOW_TYPE (AdapT);
-          SHOW_EXPR (sizeof(AdapT));
         }
       
       

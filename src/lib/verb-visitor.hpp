@@ -24,12 +24,13 @@
 /** @file verb-visitor.hpp
  ** A specific double dispatch variation for function invocation.
  ** While the classic visitor invokes a common `handle` function with varying arguments,
- ** here we allow for pre-binding of arbitrary functions on an interface with individual
- ** suitable arguments. Yet similar to the classic visitor, the actual receiver can be a
- ** subclass of the target interface, which causes the _second_ indirection in the dispatch
- ** chain. Since the actually distinguishing factor is not so much a type, but a specific
- ** operation, we refer to the delayed invocation handles created by this binding as
- ** _verb token_ on a _receiver_ object (which is the concrete visitor).
+ ** here we allow for pre-binding of arbitrary _handler functions_ on an interface with
+ ** together with individual, suitable arguments. Yet similar to the classic visitor, the
+ ** _actual receiver_ can be a subclass of the visitor target interface, which causes the
+ ** _second_ indirection in the dispatch chain, thus completing a full double-dispatch.
+ ** Since the actually distinguishing factor is not so much a type, but a specific operation,
+ ** we refer to the delayed invocation handles created by this binding as _verb token_
+ ** on a _receiver_ object (which is the concrete visitor).
  ** 
  ** This setup is an extension or derivative of the [generic verb token](\ref verb-token-hpp)
  ** used for the diff system and similar applications; likewise the intended usage is to establish
@@ -37,6 +38,43 @@
  ** to be supplied later, at application time, and within a different code context. The most notable
  ** use case is for the drawing of track contents in the user interface, where this pattern allows
  ** the separation of actual drawing code from the nested track controller structure.
+ ** 
+ ** 
+ ** ## implementation technique
+ ** 
+ ** The actual foundation is quite simple: we store a [member pointer]. Typically, this embedded
+ ** pointer-to-member shall be bound to an abstract virtual function on the _visitor interface._
+ ** So basically the "verb" boils down to storing an offset into the VTable on the interface.
+ ** Later, on invocation, a reference to the actual _receiver_ is passed in, typically a concrete
+ ** subclass of the visitor interface. The invocation then combines this receiver reference with
+ ** the offset (the member pointer) to invoke the desired virtual function.
+ ** 
+ ** However, the complications and technicalities arise from the ability to bind arbitrary
+ ** function signatures, even together with the actual arguments to use at invocation. Those
+ ** function arguments are supplied when creating the "packaged verb", and thus need to be stored
+ ** within this package, together with the member-pointer. The result is a _materialised_ and
+ ** _delayed_ invocation of an abstract (interface) function, while the actual concrete function
+ ** implementation shall be supplied later. Obviously, such a ["verb pack"](\ref VerbPack) has
+ ** _value semantics_ -- we want to store it, copy it and pass it along, often even within a
+ ** sequence of "verbs". And even more: we do not want to pass "hidden references" and we
+ ** do not want to rely on some management service and heap allocations. Rather, each
+ ** VerbPack shall be a self-contained value object. Within certain limitations,
+ ** this is possible in C++ by using an opaque buffer embedded within the
+ ** outer value object; basically the pre-defined buffer size must be
+ ** sufficient to hold all possible argument tuples to bind.
+ ** 
+ ** The actual implementation here relies on two other components from the Lumiera library:
+ ** - the lib::VerbToken provides us with the dispatch through a stored member pointer
+ ** - the lib::PolymorphicValue allows to embed a subclass within an opaque inline buffer,
+ **   just exposing the common interface.
+ ** Yet another challenge is the necessity to unpack the argument values from the storage
+ ** tuple and pass them to an (at this point abstracted) function with arbitrary signature.
+ ** Here we rely on the common implementation technique from [std::apply], here with the
+ ** special twist that we don't use a pre-bound function, but rather need to combine the
+ ** actual invocation target at the moment of the invocation.
+ ** 
+ ** [member pointer]: https://en.cppreference.com/w/cpp/language/pointer
+ ** [std::apply]: https://en.cppreference.com/w/cpp/utility/apply
  ** 
  ** @see [drawing on the track canvas](\ref body-canvas-widget.cpp)
  ** @see VerbVisitorDispatch_test
@@ -72,11 +110,10 @@ namespace lib {
     }
   }
   
-  using EmptyBasE = struct { };
   
   template<class REC, class RET>
   struct VerbInvoker
-    : polyvalue::CloneValueSupport<EmptyBasE> // mark and mix-in virtual copy construction support
+    : polyvalue::CloneValueSupport<polyvalue::EmptyBase> // mark and mix-in virtual copy construction support
     {
       virtual ~VerbInvoker() { }
       
@@ -84,10 +121,10 @@ namespace lib {
     };
   
   template<class REC, class SIG>
-  struct Holder;
+  struct VerbHolder;
   
   template<class REC, class RET, typename... ARGS>
-  struct Holder<REC, RET(ARGS...)>
+  struct VerbHolder<REC, RET(ARGS...)>
     : VerbInvoker<REC,RET>
     , VerbToken<REC,RET(ARGS...)>
     {
@@ -99,7 +136,7 @@ namespace lib {
       
       Args args_;
       
-      Holder (typename Verb::Handler handlerRef, Literal verbID, ARGS&&... args)
+      VerbHolder (typename Verb::Handler handlerRef, Literal verbID, ARGS&&... args)
         : Verb{handlerRef, verbID}
         , args_{std::forward<ARGS> (args)...}
         { }
@@ -128,7 +165,7 @@ namespace lib {
       using PolyHolder = PolymorphicValue<VerbInvoker<REC,RET>, storageOverhead(arg_storage)>;
       
       template<typename...ARGS>
-      using PayloadType = Holder<REC, RET(ARGS...)>*;
+      using PayloadType = VerbHolder<REC, RET(ARGS...)>*;
       
       template<typename...ARGS>
       using Handler = typename VerbToken<REC, RET(ARGS...)>::Handler;
