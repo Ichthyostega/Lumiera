@@ -244,6 +244,12 @@ applyTuple (FUN& fun)
         }
     };
 
+using lib::meta::Yes_t;
+using lib::meta::No_t;
+
+META_DETECT_FUNCTION(void, cloneInto, (void*) const);
+META_DETECT_FUNCTION_NAME(cloneInto);
+
 
 int
 main (int, char**)
@@ -274,6 +280,19 @@ main (int, char**)
     Receiver recy;
 //    recy.grrrn (std::get<0>(trp), Trackr(5));
     holyh.applyTo (recy);
+    
+    cout << "---Types---"<<endl;
+    using BussI = lib::VerbInvoker<Receiver, void>;
+    using CloneI = lib::polyvalue::CloneValueSupport<lib::polyvalue::EmptyBase>;
+    SHOW_TYPE(BussI);
+    SHOW_EXPR (lib::polyvalue::exposes_CloneFunction<BussI>::value)
+    SHOW_EXPR (HasFunSig_cloneInto<BussI>::value)
+    SHOW_EXPR (HasFunSig_cloneInto<CloneI>::value)
+    SHOW_EXPR (HasFunName_cloneInto<BussI>::value)
+    SHOW_EXPR (HasFunName_cloneInto<CloneI>::value)
+    using BussP = decltype(&BussI::cloneInto);
+    SHOW_TYPE(BussP)
+    
     
     cout <<  "\n.gulp.\n";
     return 0;

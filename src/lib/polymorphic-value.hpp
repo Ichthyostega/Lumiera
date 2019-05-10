@@ -68,7 +68,7 @@
  ** Moreover, the PolymorphicValue container provides static builder functions,
  ** allowing to place a concrete instance of a subclass into the content buffer.
  ** After construction, the actual type of this instance will be forgotten
- ** (``type erasure''), but because of the embedded vtable, on access the
+ ** (``type erasure''), but because of the embedded vtable, on access, the
  ** proper implementation functions will be invoked.
  ** 
  ** Expanding on that pattern, the copying and cloning operations of the whole
@@ -230,11 +230,11 @@ namespace lib {
     class exposes_CloneFunction
       {
         
-        META_DETECT_FUNCTION(void, cloneInto, (void*) const);
+        META_DETECT_FUNCTION_NAME(cloneInto);
         
       public:
-        enum{ value = HasFunSig_cloneInto<T>::value
-            };
+        enum{ value = HasFunName_cloneInto<T>::value
+            };        // warning: match on the function name only
       };
     
     /**
@@ -373,7 +373,7 @@ namespace lib {
     >
   class PolymorphicValue
     {
-      
+    public:
       typedef polyvalue::Trait<CPY>     _Traits;
       typedef typename _Traits::CopyAPI _CopyHandlingAdapter;
       typedef typename _Traits::Assignment _AssignmentPolicy;                     /////////////////TICKET #1197 : confusingly indirect decision logic

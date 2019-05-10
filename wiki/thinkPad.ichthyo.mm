@@ -19971,8 +19971,8 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807646555" ID="ID_84342308" MODIFIED="1555807746266" TEXT="CloneValueSupport nicht (korrekt) erkannt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1555807646555" ID="ID_84342308" MODIFIED="1557446814390" TEXT="CloneValueSupport nicht (korrekt) erkannt">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555807666086" ID="ID_1670738915" MODIFIED="1555807723294" TEXT="offensichtlich wird die falsche Trait-Variante gew&#xe4;hlt">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -19986,14 +19986,135 @@
 </html></richcontent>
 </node>
 <node CREATED="1555807724232" ID="ID_1817680115" MODIFIED="1555807744748" TEXT="und das, obwohl ich CloneValueSupport als Basis verwendet habe"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555807747713" ID="ID_341140224" MODIFIED="1555807752169" TEXT="aufzukl&#xe4;ren">
+<node CREATED="1557446452899" ID="ID_454930922" MODIFIED="1557446811594" TEXT="META_DETECT_FUNCTION erkennt keine geerbten Methoden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn diese Duck-Detector-Metafunktion bildet den <b>Typ</b>&#160;eines Member-Pointers,
+    </p>
+    <p>
+      und dieser Typ enth&#228;lt explizit den statischen Namen der Klasse, welche die gew&#252;nschte Methode tr&#228;gt.
+    </p>
+    <p>
+      Und wenn man eine Methode blo&#223; erbt, dann existiert diese Methode, statisch, nur auf der Basisklasse.
+    </p>
+    <p>
+      Also ist das sogar das korrekte Verhalten.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1557446482447" ID="ID_835188518" MODIFIED="1557446493804" TEXT="L&#xf6;sung: Duck-Detector f&#xfc;r Methoden-Name">
+<node CREATED="1557446494679" ID="ID_1259664145" MODIFIED="1557446574477" TEXT="verzichtet auf Signatur-Check">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. wenn zuf&#228;llig das Interface auch eine Methode CloneInto() enth&#228;lt, aber mit einer unpassenden Signatur
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1557446561925" ID="ID_1267977919" MODIFIED="1557446571295" TEXT="ist ohnehin keine wirkliche Sicherheit"/>
+<node CREATED="1557446503084" ID="ID_1518606339" MODIFIED="1557446523133" TEXT="w&#xfc;rde ohnehin sp&#xe4;ter beim Compilieren scheitern"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1557446627092" ID="ID_805659416" MODIFIED="1557446697850" TEXT="mit #1197 hinf&#xe4;llig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil ich dann explizit ein bestimmtes Basis-Interface verlangen werde,
+    </p>
+    <p>
+      n&#228;mlich VirtualCopySupport&lt;IFA&gt;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      das ist auch gut so, zu viel Flexibilit&#228;t schadet (besonders, wenn man sie dann gar nicht unterst&#252;tzt)
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557446881265" ID="ID_743886485" MODIFIED="1557446897772" TEXT="Folgeproblem: ambiguous base class">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1557446902070" ID="ID_1511315997" MODIFIED="1557447072957" TEXT="kommt davon, wenn man mehrfach polyvalue::EmptyBase verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil n&#228;mlich der Trait, f&#252;r den optimalen Fall, ebenfalls die EmptyBase verwendet, um den Mix-In zu deaktivieren.
+    </p>
+    <p>
+      Leider haben wir dann zweimal die gleiche Basisklasse in beiden Zweigen der multiple inheritance...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1557446924907" ID="ID_1029661613" MODIFIED="1557446979586" TEXT="...was hier absolut naheliegend ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich immer dann, wenn man tats&#228;chlich den CopySupport oder CloneSupport als Basis des Interfaces verwendet...
+    </p>
+    <p>
+      (was ich bisher in der Praxis so noch nie gemacht habe)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1557447075623" ID="ID_1422873677" MODIFIED="1557447148035" TEXT="dummerweise kann dann der GCC die EmptyBase nicht wegoptimieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was sich dann in einer Static-Assertion-Failure &#228;u&#223;ert.
+    </p>
+    <p>
+      hab das ganz explizit ausgeknobelt, es fehlt hier genau dieser eine zus&#228;tzliche &quot;Slot&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1557447159900" ID="ID_691196423" MODIFIED="1557447167364" TEXT="L&#xf6;sung: anderen Namen verwenden">
 <icon BUILTIN="flag-pink"/>
 </node>
 </node>
-<node CREATED="1555807305357" ID="ID_1511870599" MODIFIED="1555807322414" TEXT="Plan: PolymorphicValue &#xfc;berarbeiten">
+</node>
+<node CREATED="1555807305357" ID="ID_1511870599" MODIFIED="1557446848388" TEXT="Plan: PolymorphicValue &#xfc;berarbeiten">
+<arrowlink COLOR="#1a64bc" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-129;0;" ID="Arrow_ID_884404467" STARTARROW="None" STARTINCLINATION="-284;0;"/>
 <node CREATED="1555807415718" ID="ID_639233049" MODIFIED="1555807439478" TEXT="mit &quot;VirtualCopySupport&quot; von meiner Variant-Implementierung zusammenf&#xfc;hren"/>
 <node CREATED="1555807443642" ID="ID_90620144" MODIFIED="1555807458413" TEXT="sollte selbst&#xe4;ndig erkennen, ob der Zieltyp kopierbar ist"/>
 <node CREATED="1555807464657" ID="ID_1089528099" MODIFIED="1555807476065" TEXT="diese meta-Intelligenz sollte komplett in dem Adapter stecken"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557446611550" ID="ID_596556632" MODIFIED="1557446843936" TEXT="Ticket #1197 : rationalise copy support in PolymorphicValue">
+<linktarget COLOR="#1a64bc" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-129;0;" ID="Arrow_ID_884404467" SOURCE="ID_1511870599" STARTARROW="None" STARTINCLINATION="-284;0;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node CREATED="1555807762543" ID="ID_1645640007" MODIFIED="1555807777516" TEXT="Problem: Puffergr&#xf6;&#xdf;e">

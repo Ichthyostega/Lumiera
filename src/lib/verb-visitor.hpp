@@ -72,9 +72,11 @@ namespace lib {
     }
   }
   
+  using EmptyBasE = struct { };
+  
   template<class REC, class RET>
   struct VerbInvoker
-    : polyvalue::CloneValueSupport<polyvalue::EmptyBase> // mark and mix-in virtual copy construction support
+    : polyvalue::CloneValueSupport<EmptyBasE> // mark and mix-in virtual copy construction support
     {
       virtual ~VerbInvoker() { }
       
