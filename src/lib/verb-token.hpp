@@ -113,7 +113,7 @@ namespace lib {
         }
       
       Literal const&
-      getID()
+      getID()  const
         {
           return token_;
         }

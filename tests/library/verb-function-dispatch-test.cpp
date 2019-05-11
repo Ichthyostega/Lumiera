@@ -43,18 +43,20 @@ namespace lib {
 namespace test{
   
   
-  class Receiver
-    {
-    public:
-      virtual ~Receiver() { } ///< this is an interface
-      
-      virtual string woof()   =0;
-      virtual string honk()   =0;
-      virtual string moo()    =0;
-      virtual string meh()    =0;
-    };
-  
-  namespace {
+  namespace { // Test Fixture
+    
+    /** the "visitor" interface to invoke */
+    class Receiver
+      {
+      public:
+        virtual ~Receiver() { } ///< this is an interface
+        
+        virtual string woof()   =0;
+        virtual string honk()   =0;
+        virtual string moo()    =0;
+        virtual string meh()    =0;
+      };
+    
     const string BEGINNING("silence");
     
     using Verb = VerbToken<Receiver, string(void)>;
@@ -65,53 +67,54 @@ namespace test{
     Verb VERB(Receiver, honk);
     Verb VERB(Receiver, moo);
     Verb VERB(Receiver, meh);
-  }
-  
-  
-  /**
-   * a receiver of verb-tokens,
-   * which renders them verbosely
-   */
-  class VerboseRenderer
-    : public Receiver
-    {
-      string woof() { return "Woof-Woof!"; }
-      string honk() { return "Honk-Honk!"; }
-      string moo()  { return "Moo-Moo!";   }
-      string meh()  { return "Meh!";       }
-    };
-  
-  
-  /**
-   * Statefull receiver of verb-tokens.
-   */
-  class RecollectingReceiver
-    : public Receiver
-    {
-      string verb_;
-      _Fmt fmt_;
-      
-      string
-      buildResultTerm (string nextToken)
-        {
-          string resultExpression (fmt_ % verb_ % nextToken);
-          verb_ = nextToken;
-          return resultExpression;
-        }
-      
-      
-      string woof() { return buildResultTerm (VERB_woof); }
-      string honk() { return buildResultTerm (VERB_honk); }
-      string moo()  { return buildResultTerm (VERB_moo);  }
-      string meh()  { return buildResultTerm (VERB_meh);  }
-      
-      
-    public:
-      RecollectingReceiver()
-        : verb_(BEGINNING)
-        , fmt_("%s followed by %s")
-        { }
-    };
+    
+    
+    /**
+     * a receiver of verb-tokens,
+     * which renders them verbosely
+     */
+    class VerboseRenderer
+      : public Receiver
+      {
+        string woof() { return "Woof-Woof!"; }
+        string honk() { return "Honk-Honk!"; }
+        string moo()  { return "Moo-Moo!";   }
+        string meh()  { return "Meh!";       }
+      };
+    
+    
+    /**
+     * Statefull receiver of verb-tokens.
+     */
+    class RecollectingReceiver
+      : public Receiver
+      {
+        string verb_;
+        _Fmt fmt_;
+        
+        string
+        buildResultTerm (string nextToken)
+          {
+            string resultExpression (fmt_ % verb_ % nextToken);
+            verb_ = nextToken;
+            return resultExpression;
+          }
+        
+        
+        string woof() { return buildResultTerm (VERB_woof); }
+        string honk() { return buildResultTerm (VERB_honk); }
+        string moo()  { return buildResultTerm (VERB_moo);  }
+        string meh()  { return buildResultTerm (VERB_meh);  }
+        
+        
+      public:
+        RecollectingReceiver()
+          : verb_(BEGINNING)
+          , fmt_("%s followed by %s")
+          { }
+      };
+    
+  }//(End) Test fixture
   
   
   

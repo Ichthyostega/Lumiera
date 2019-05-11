@@ -111,18 +111,28 @@ namespace lib {
   }
   
   
+  /** Building block: the Interface to cause the invocation */
   template<class REC, class RET>
   struct VerbInvoker
     : polyvalue::CloneValueSupport<polyvalue::EmptyBase> // mark and mix-in virtual copy construction support
     {
       virtual ~VerbInvoker() { }
       
-      virtual RET applyTo (REC&)  =0;
+      virtual RET applyTo (REC&)    =0;
+      virtual Literal getID() const =0;
+      
+      bool operator== (VerbInvoker const& o)  const { return getID() == o.getID(); }
+      bool operator!= (VerbInvoker const& o)  const { return getID() != o.getID(); }
     };
+  
   
   template<class REC, class SIG>
   struct VerbHolder;
   
+  /**
+   * Building block: actual storage for a "verb" (function pointer),
+   * together with the pre-bound invocation arguments for this specific operation.
+   */
   template<class REC, class RET, typename... ARGS>
   struct VerbHolder<REC, RET(ARGS...)>
     : VerbInvoker<REC,RET>
@@ -134,12 +144,20 @@ namespace lib {
       /** meta-sequence to pick argument values from the storage tuple */
       using SequenceIterator = typename meta::BuildIdxIter<ARGS...>::Ascending;
       
+      /** Storage for the argument tuple */
       Args args_;
       
-      VerbHolder (typename Verb::Handler handlerRef, Literal verbID, ARGS&&... args)
+      template<typename...PARS>
+      VerbHolder (typename Verb::Handler handlerRef, Literal verbID, PARS&&... args)
         : Verb{handlerRef, verbID}
-        , args_{std::forward<ARGS> (args)...}
+        , args_{std::forward<PARS> (args)...}
         { }
+      
+      Literal
+      getID()  const override
+        {
+          return Verb::getID();
+        }
       
       RET
       applyTo (REC& receiver)  override
@@ -148,45 +166,88 @@ namespace lib {
         }
       
     private:
+      /** @internal actual function invocation, thereby unpacking the argument tuple */
       template<size_t...idx>
       RET
       invokeVerb (REC& receiver, meta::IndexSeq<idx...>)
-        {                                                //////////////////////////////////////////TICKET #1006 | TICKET #1184 why do we need std::forward here? the target is a "perfect forwarding" function, which should be able to receive a LValue reference to the tuple element just fine...
-          return (receiver.*Verb::handler_)(std::get<idx> (args_)...);
+        {
+          return (receiver.*Verb::handler_) (std::get<idx> (args_)...);
         }
     };
   
   
   
+  /******************************************************************************************//**
+   * A self-contained token to embody a specific yet abstracted operation,
+   * together with a concrete set of suitable arguments. The concrete operation
+   * is suppled on invocation, when the VerbPack is combined with an actual _receiver_
+   * object, implementing the interface `REC` and thus providing the function implementation.
+   * VerbPack represents a kind of double-dispatch, flexible both on the actual operation
+   * (embodied into the given VerbPack object) and also flexible in the concrete receiver.
+   * @tparam REC the "visitor interface" to invoke operations on
+   * @tparam RET expected (common) return value of the bound operations (can be `void`)
+   * @tparam arg_storage maximum storage size to reserve as buffer for actual function parameters.
+   * @remarks
+   *   - binding an operation with arguments exceeding `arg_storage` triggers a static assertion
+   *   - the resulting VerbPack object has value semantics and is copyable, to the extent any
+   *     embedded function arguments are copyable by themselves.
+   */
   template<class REC, class RET, size_t arg_storage>
   class VerbPack
     : public PolymorphicValue<VerbInvoker<REC,RET>, storageOverhead(arg_storage)>
     {
-      using PolyHolder = PolymorphicValue<VerbInvoker<REC,RET>, storageOverhead(arg_storage)>;
+      using Dispatcher = VerbInvoker<REC,RET>; // the interface to talk to our payload
+      using PolyHolder = PolymorphicValue<Dispatcher, storageOverhead(arg_storage)>;
       
+      template<typename FUN>
+      struct HandlerTypeDetector
+        {
+          static_assert (!sizeof(FUN), "handler must be a function member pointer for the given receiver");
+        };
       template<typename...ARGS>
-      using PayloadType = VerbHolder<REC, RET(ARGS...)>*;
+      struct HandlerTypeDetector<RET (REC::*) (ARGS...)>
+        {
+          using Verb    = VerbToken<REC, RET(ARGS...)>;
+          using Payload = VerbHolder<REC, RET(ARGS...)>;
+        };
       
-      template<typename...ARGS>
-      using Handler = typename VerbToken<REC, RET(ARGS...)>::Handler;
+      template<typename FUN>
+      using PayloadType = typename HandlerTypeDetector<FUN>::Payload *;
+      
       
     public:
-      template<typename...ARGS>
-      VerbPack (Handler<ARGS...> handler, Literal verbID, ARGS&&... args)
-        : PolyHolder(PayloadType<ARGS...>(), handler, verbID, std::forward<ARGS>(args)...)
+      /** setup a VerbPack for a given operation on the interface `REC`
+       * @param handler function member-pointer to define the operation
+       * @param verbID  unique ID to designate the token; equality is based
+       *                on this `verbID`, all tokens with same ID count as equal
+       * @param args arbitrary (yet suitable) arguments to pre-bind and use later
+       *                when actually invoking the operation on a concrete receiver
+       */
+      template<typename FUN, typename...ARGS>
+      VerbPack (FUN handler, Literal verbID, ARGS&&... args)
+        : PolyHolder(PayloadType<FUN>(), handler, verbID, std::forward<ARGS>(args)...)
         { }
       
+      /**
+       * Core operation: invoke the operation for this "verb" with the pre-bound parameters
+       * @param receiver a subclass of `REC`, providing the function to invoke
+       * @return result of performing the actual operation
+       */
       RET
       applyTo (REC& receiver)
         {
-          VerbInvoker<REC,RET>& dispatch(*this);
-          return dispatch.applyTo (receiver);
+          return PolyHolder::getPayload().applyTo (receiver);
+        }
+      
+      operator string()  const
+        {
+          return "VerbPack("
+               + string{util::unConst(this)->getPayload().getID()}
+               + ")";
         }
     };
   
   
   
-  
-  
-} // namespace lib  
+} // namespace lib
 #endif /*LIB_VERB_VISITOR_H*/

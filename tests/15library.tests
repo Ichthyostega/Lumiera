@@ -740,6 +740,17 @@ return: 0
 END
 
 
+TEST "verb token with embedded arguments" VerbVisitorDispatch_test <<END
+out-lit: dispatching VerbPack(woof) ->  'haw-hawhaw-hawhaw-hawhaw-haw'
+out-lit: dispatching VerbPack(honk) ->  'quaack-quaack!'
+out-lit: dispatching VerbPack(honk) ->  'Hoonk-Hoonk!'
+out-lit: dispatching VerbPack(woof) ->  'Woof..Woof..'
+out-lit: dispatching VerbPack(moo) ->  'Moo__Moo__Moo'
+out-lit: dispatching VerbPack(meh) ->  'Meh?'
+return: 0
+END
+
+
 TEST "VectorTransfer_test" VectorTransfer_test <<END
 return: 0
 END

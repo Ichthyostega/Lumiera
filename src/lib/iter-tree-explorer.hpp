@@ -1530,7 +1530,7 @@ namespace lib {
        *   which for the consumer side behave like `iterNext()` calls. If a layer needs to do something special for
        *   `iterNext()`, it needs to perform a similar action for `expandChildren()`.
        * - it must be behave like a default-constructible, copyable value object
-       * @return augmented TreeExplorer, incorporating and adpting the injected layer
+       * @return augmented TreeExplorer, incorporating and adapting the injected layer
        */
       template<template<class> class LAY>
       auto

@@ -19650,8 +19650,8 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247320686" ID="ID_1896093043" MODIFIED="1557498707228" TEXT="brauche Visitor mit flexiblen Argumenten">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247320686" ID="ID_1896093043" MODIFIED="1557590822696" TEXT="brauche Visitor mit flexiblen Argumenten">
+<icon BUILTIN="pencil"/>
 <node CREATED="1555247502178" ID="ID_297247554" MODIFIED="1557498707228" TEXT="Anforderung">
 <icon BUILTIN="yes"/>
 <node CREATED="1555247509182" ID="ID_184476156" MODIFIED="1557498707228" TEXT="funktioniert genauso wie Visitor im Diff, mit Verb-Tokens"/>
@@ -19667,15 +19667,19 @@
 <node CREATED="1555247665396" ID="ID_1210108422" MODIFIED="1557498707228" TEXT="vermutlich werden Lambdas eine Rolle spielen"/>
 <node CREATED="1555247678988" ID="ID_1615700205" MODIFIED="1557498707228" TEXT="aber ich m&#xf6;chte Heap-Storage vermeiden"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247704342" ID="ID_929740643" MODIFIED="1557498707228" TEXT="Entwurf/Test">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247713060" ID="ID_1159666241" MODIFIED="1557498707228" TEXT="proof-of-concept">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1555247704342" ID="ID_929740643" MODIFIED="1557590585181" TEXT="Entwurf/Test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1555247713060" ID="ID_1159666241" MODIFIED="1557590555065" TEXT="proof-of-concept">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555247744121" ID="ID_1280520595" MODIFIED="1557498707228" TEXT="ausgehend von Kopie des VerbToken"/>
-<node CREATED="1555247757037" ID="ID_1249615365" MODIFIED="1557498707228" TEXT="(optional) vielleicht letztlich in eine L&#xf6;sung verschmelzen?"/>
+<node CREATED="1555247757037" ID="ID_1249615365" MODIFIED="1557590532864" TEXT="(optional) vielleicht letztlich in eine L&#xf6;sung verschmelzen?">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1557590535366" ID="ID_568258701" MODIFIED="1557590538950" TEXT="vermutlich ehr nicht"/>
+<node CREATED="1557590539635" ID="ID_1843674392" MODIFIED="1557590549256" TEXT="da PolymorphicValue doch recht komplex ist"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806526685" ID="ID_192016641" MODIFIED="1557498707228" TEXT="L&#xf6;sungsansatz: PolymorphicValue">
-<icon BUILTIN="pencil"/>
+</node>
+<node COLOR="#338800" CREATED="1555806526685" ID="ID_192016641" MODIFIED="1557590525234" TEXT="L&#xf6;sungsansatz: PolymorphicValue">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555806541914" ID="ID_1260020116" MODIFIED="1557498707228" TEXT="der bietet genau den flexiblen inline-Buffer, den ich hier brauche">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -19703,8 +19707,8 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555806670026" ID="ID_604641822" MODIFIED="1557498707228" TEXT="Probleme bei der Umsetzung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1555806670026" ID="ID_604641822" MODIFIED="1557590449417" TEXT="Probleme bei der Umsetzung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555807073875" ID="ID_1971528084" MODIFIED="1557498707228" TEXT="std::apply verwenden">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1555807086938" ID="ID_354296634" MODIFIED="1557498707228" TEXT="gitbts noch nicht auf Debian-Stretch"/>
@@ -19730,7 +19734,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1555806696990" ID="ID_1464210384" MODIFIED="1557498707228" TEXT="kann nicht Tuple-Element per std::forward weitergeben">
+<node CREATED="1555806696990" FOLDED="true" ID="ID_1464210384" MODIFIED="1557590459821" TEXT="kann nicht Tuple-Element per std::forward weitergeben">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1555806733962" ID="ID_1424612840" MODIFIED="1557498707228" TEXT="Compiler m&#xf6;chte eine RValue-Referenz"/>
 <node CREATED="1555806760125" ID="ID_1741677842" MODIFIED="1557498707228" TEXT="workaround: das Tuple selber per std::forward an std::get &#xfc;bergeben">
@@ -19945,7 +19949,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1555807238238" ID="ID_383098394" MODIFIED="1557498707229" TEXT="Copy-Support von PolymorphicValue ist &quot;komisch&quot;">
+<node CREATED="1555807238238" FOLDED="true" ID="ID_383098394" MODIFIED="1557590514367" TEXT="Copy-Support von PolymorphicValue ist &quot;komisch&quot;">
+<arrowlink COLOR="#829ebf" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-282;0;" ID="Arrow_ID_1622655110" STARTARROW="None" STARTINCLINATION="-74;193;"/>
+<icon BUILTIN="hourglass"/>
 <node CREATED="1555807266221" ID="ID_262959695" MODIFIED="1557498707229" TEXT="nach heutigem Stand: unbeholfen implementiert"/>
 <node CREATED="1555807285055" ID="ID_1456730365" MODIFIED="1557498707229" TEXT="braucht expliziten Support vom Payload typ"/>
 <node CREATED="1555807297726" ID="ID_1905059435" MODIFIED="1557498707229" TEXT="das w&#xe4;re heute gar nicht mehr notwendig"/>
@@ -20112,16 +20118,17 @@
 <node CREATED="1555807443642" ID="ID_90620144" MODIFIED="1557498707229" TEXT="sollte selbst&#xe4;ndig erkennen, ob der Zieltyp kopierbar ist"/>
 <node CREATED="1555807464657" ID="ID_1089528099" MODIFIED="1557498707229" TEXT="diese meta-Intelligenz sollte komplett in dem Adapter stecken"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557446611550" ID="ID_596556632" MODIFIED="1557498707229" TEXT="Ticket #1197 : rationalise copy support in PolymorphicValue">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557446611550" ID="ID_596556632" MODIFIED="1557590501784" TEXT="Ticket #1197 : rationalise copy support in PolymorphicValue">
 <linktarget COLOR="#1a64bc" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-129;0;" ID="Arrow_ID_884404467" SOURCE="ID_1511870599" STARTARROW="None" STARTINCLINATION="-284;0;"/>
+<linktarget COLOR="#829ebf" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-282;0;" ID="Arrow_ID_1622655110" SOURCE="ID_383098394" STARTARROW="None" STARTINCLINATION="-74;193;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node CREATED="1555807762543" ID="ID_1645640007" MODIFIED="1557498707229" TEXT="Problem: Puffergr&#xf6;&#xdf;e">
 <node CREATED="1555807778751" ID="ID_1563586526" MODIFIED="1557498707229" TEXT="PolymorphicValue verlangt, da&#xdf; man die Puffergr&#xf6;&#xdf;e als Template-Argument definiert"/>
 <node CREATED="1555807802562" ID="ID_1845631121" MODIFIED="1557498707229" TEXT="hier h&#xe4;ngt diese aber von der Storage f&#xfc;r die Funktionsargumente ab."/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807833997" ID="ID_1153160392" MODIFIED="1557498707229" TEXT="Idealfall: das m&#xfc;&#xdf;te automatisch funktionieren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807833997" ID="ID_1153160392" MODIFIED="1557590273404" TEXT="Idealfall: das m&#xfc;&#xdf;te automatisch funktionieren">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1555807861314" ID="ID_352919826" MODIFIED="1557498707229" TEXT="geht das &#xfc;berhaupt?"/>
 <node CREATED="1555807866689" ID="ID_1851833268" MODIFIED="1557498707229" TEXT="w&#xfc;rde vermutlich auf ein Builder-Konstrukt hinauslaufen">
 <richcontent TYPE="NOTE"><html>
@@ -20156,22 +20163,26 @@
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1557590275193" ID="ID_756824768" MODIFIED="1557590280062" TEXT="YAGNI">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555807845319" ID="ID_1999765895" MODIFIED="1557498707229" TEXT="Halbe L&#xf6;sung: wenigstens eine Hilfsfunktion bereitstellen">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1555807845319" ID="ID_1999765895" MODIFIED="1557590260752" TEXT="Halbe L&#xf6;sung: wenigstens eine Hilfsfunktion bereitstellen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808026434" ID="ID_1634107778" MODIFIED="1557498707229" TEXT="automatische Konversionen f&#xfc;r konkrete Argumente">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1555808026434" ID="ID_1634107778" MODIFIED="1557590425363" TEXT="automatische Konversionen f&#xfc;r konkrete Argumente">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555808055328" ID="ID_1683773555" MODIFIED="1557498707229" TEXT="der VerbPack - Konstruktor sollte sich genau so verhalten wie die Zielfunktion">
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1555808100082" ID="ID_1008688397" MODIFIED="1557498707229" TEXT="Beispiel: Zielfunktion nimmt einen std::string, gegeben ist ein C-String-Literal"/>
 <node CREATED="1555808124882" ID="ID_364451047" MODIFIED="1557498707229" TEXT="aktuell wird exakt der korrekte Typ erwartet"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808138474" ID="ID_847234596" MODIFIED="1557498707229" TEXT="Grund: Funktionsweise der Teplate-Argument-Inferenz">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1555808138474" ID="ID_847234596" MODIFIED="1557590439076" TEXT="Grund: Funktionsweise der Teplate-Argument-Inferenz">
+<icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1555808184873" ID="ID_804931772" MODIFIED="1557498707229" TEXT="sinnvoller Workaround">
+<node COLOR="#435e98" CREATED="1555808184873" ID="ID_804931772" MODIFIED="1557590291568" TEXT="sinnvoller Workaround">
 <icon BUILTIN="help"/>
 <node CREATED="1555808201687" ID="ID_191950649" MODIFIED="1557498707229" TEXT="&quot;Zwiebelschalen-Konstrukt&quot;??">
 <richcontent TYPE="NOTE"><html>
@@ -20189,15 +20200,70 @@
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1557590299574" ID="ID_1634972448" MODIFIED="1557590314138" TEXT="rein zuf&#xe4;llig delegiere ich bereits &#xfc;ber zwei Konstrukturen"/>
+<node COLOR="#338800" CREATED="1557590314884" ID="ID_1086686390" MODIFIED="1557590420718" TEXT="also einfach die Argument-Typen vom Funktions-Handler nehmen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      anstatt, wie es die bisherige (naive) implementierung macht,
+    </p>
+    <p>
+      die typename ARGS... auch daf&#252;r zu verwenden, den Handler-Typ zu konstruieren.
+    </p>
+    <p>
+      Mit diesem einfachen Kniff passiert die Konvertierung dann in dem Moment,
+    </p>
+    <p>
+      wo wir die konkreten Argumente in den vorbereiteten Argument-Tupel im Holder schieben
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808280478" ID="ID_59896827" MODIFIED="1557498707229" TEXT="Testabdeckung">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1555808280478" ID="ID_59896827" MODIFIED="1557590523471" TEXT="Testabdeckung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1557590726512" ID="ID_1345932776" MODIFIED="1557590812617" TEXT="mehrere verschiedene Receiver">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1557590733137" ID="ID_297834334" MODIFIED="1557590812186" TEXT="Kopier-Verhalten im Detail untersucht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...jeodch nicht eigens im Test dokumentiert
+    </p>
+    <ul>
+      <li>
+        weil das sehr aufwendig w&#228;re und den kompletten Test dominieren w&#252;rde
+      </li>
+      <li>
+        weil die Implementierung (in dieser Hinsicht) letztlich banal ist: Anwenden eines Tupel auf eine Funktion
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1557590794163" ID="ID_497379433" MODIFIED="1557590811601" TEXT="Werte kopiert und verglichen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1557590805129" ID="ID_158433397" MODIFIED="1557590810851" TEXT="ausf&#xfc;hrlich kommentiert">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555808288856" ID="ID_1931717111" MODIFIED="1557498707229" TEXT="Frage: ist das Design gut?">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#435e98" CREATED="1555808288856" ID="ID_1931717111" MODIFIED="1557590603605" TEXT="Frage: ist das Design gut?">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555808300703" ID="ID_621465643" MODIFIED="1557498707229" TEXT="kann/sollte die L&#xf6;song mehr integriert sein?">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -20210,7 +20276,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1555808311417" ID="ID_1932269477" MODIFIED="1557498707229" TEXT="oder ist es grade ein Vorteil, wenn sie ein roher Baustein ist">
+<node CREATED="1555808311417" ID="ID_1932269477" MODIFIED="1557590690950" TEXT="oder ist es grade ein Vorteil, wenn sie ein roher Baustein ist">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20224,8 +20290,37 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#fcda04" DESTINATION="ID_1932269477" ENDARROW="Default" ENDINCLINATION="290;0;" ID="Arrow_ID_742389536" SOURCE="ID_128501904" STARTARROW="None" STARTINCLINATION="187;8;"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1557590616683" ID="ID_128501904" MODIFIED="1557590701982" TEXT="ich halte es jetzt f&#xfc;r gelungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil ich es geschafft habe,
+    </p>
+    <p>
+      den gesamten Auswahl-Mechanismus in einen einzigen Konstruktur-Aufruf zu packen.
+    </p>
+    <p>
+      Man kann also nach Belieben VerbPacks in allen Varianten bauen,
+    </p>
+    <p>
+      und es obliegt der n&#228;chst h&#246;heren Schicht, dies auch in sinnvollem Rahmen zu tun...
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#fcda04" DESTINATION="ID_1932269477" ENDARROW="Default" ENDINCLINATION="290;0;" ID="Arrow_ID_742389536" STARTARROW="None" STARTINCLINATION="187;8;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557590586650" ID="ID_1348312855" MODIFIED="1557590595855" TEXT="den (neu gebauten) VerbPack integrieren">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

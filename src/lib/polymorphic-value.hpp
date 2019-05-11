@@ -477,6 +477,12 @@ namespace lib {
       
       typedef IFA Interface;
       
+      Interface&
+      getPayload()
+        {
+          return accessEmbedded();
+        }
+      
       operator Interface& ()
         {
           return accessEmbedded();

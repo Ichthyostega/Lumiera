@@ -125,8 +125,8 @@ namespace test {
       /* == ElementAccess interface == */
       
       RawResult
-      performAccessTo (UICoord::Builder & target, size_t limitCreation)  override
-        {
+      performAccessTo (UICoord::Builder & target, size_t)  override
+        {                                         /////////////////////////////////////////////////TICKET #1134 : use a mock component access scheme here instead of some hardwired responses
           UICoord const& location = target.uiCoord();
           
           CHECK (existingPath >= location);
