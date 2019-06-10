@@ -118,7 +118,7 @@ namespace timeline {
        * @param trackID the mandatory root track used in the associated Sequence
        * @param nexus some established connection to the UI-Bus, will be used
        *          to register the embedded TimelineController as communication
-       *          partner to respond under the given ID.
+       *          partner to respond under the given timeline ID.
        * @remarks after creation, the widget can just be hooked up and wired like
        *          any ordinary GTK element; it becomes passive and just responds to
        *          signals. The active role is played by the controller, which also

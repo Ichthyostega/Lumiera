@@ -49,7 +49,7 @@
  ** As result, some new widgets may be injected, existing widgets might be removed or
  ** hidden, and other widgets may be relocated to different virtual canvas coordinates.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
 
@@ -98,18 +98,18 @@ namespace timeline {
       TimelineCanvas (_RenderFactory groundingFac, _RenderFactory overlayFac);
       
     private:
-      virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
+      virtual bool on_draw (CairoC)  override;
       
-      void openCanvas (Cairo::RefPtr<Cairo::Context> const&);
-      void closeCanvas (Cairo::RefPtr<Cairo::Context> const&);
+      void openCanvas (CairoC);
+      void closeCanvas (CairoC);
       
-      void drawGrounding (Cairo::RefPtr<Cairo::Context> const&);
-      void drawOverlays (Cairo::RefPtr<Cairo::Context> const&);
+      void drawGrounding (CairoC);
+      void drawOverlays (CairoC);
     };
   
   
   /**
-   * @todo WIP-WIP as of 12/2016
+   * @todo WIP-WIP as of 6/2019
    */
   class BodyCanvasWidget
     : public Gtk::Box

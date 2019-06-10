@@ -24,7 +24,7 @@
 /** @file body-canvas-widget.cpp
  ** Implementation details of timeline custom drawing.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
 
@@ -77,8 +77,8 @@ namespace timeline {
         
         
         /** paint the top of the track body area
-           @param f number of consecutive track elements
-                    to keep pinned (always visible) at top */
+         * @param f number of consecutive track elements
+         *          to keep pinned (always visible) at top */
         void
         prelude (uint f)  override
           {
@@ -86,7 +86,7 @@ namespace timeline {
           }
         
         /** finish painting the track body area
-            @param pad additional padding to add at bottom */
+         *  @param pad additional padding to add at bottom */
         void
         coda (uint pad)  override
           {
@@ -94,7 +94,7 @@ namespace timeline {
           }
         
         /** draw grounding of a overview/ruler track
-            with the given height */
+         *  with the given height */
         void
         ruler (uint h)  override
           {
@@ -109,7 +109,7 @@ namespace timeline {
           }
         
         /** fill background of track content area
-            with the given vertical extension */
+         *  with the given vertical extension */
         void
         content (uint h)  override
           {
@@ -117,7 +117,7 @@ namespace timeline {
           }
         
         /** paint opening slope to enter nested sub tracks
-           @note we only ever open one level deep a time */
+         * @note we only ever open one level deep a time */
         void
         open (uint n)  override
           {
@@ -125,7 +125,7 @@ namespace timeline {
           }
         
         /** paint closing slope to finish nested sub tracks
-           @param n number of nested levels to close */
+         * @param n number of nested levels to close */
         void
         close (uint n)  override
           {
@@ -194,7 +194,7 @@ namespace timeline {
    * rather, each sequence holds a _fork of nested scopes._ This recursively nested structure is reflected in the way
    * we organise and draw the timeline representation onto the TimelineCanvas: we use an intermediary entity, the TrackBody
    * as an organisational grouping device, even while we draw _all of the timeline representation_ onto a single global
-   * ::canvas_ within the (scrollable) BodyCanvasWidget. Thus, adding the first TrackBody to represent the root track
+   * #mainCanvas_ within the (scrollable) #contentArea_. Thus, adding the first TrackBody to represent the root track
    * of a Timeline, will also prepare the grounding for any other nested entities to be drawn on top.
    */
   void

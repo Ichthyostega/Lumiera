@@ -25,7 +25,7 @@
  ** Implementation details regarding custom drawing of track overview
  ** and time code ticks and markers onto the TimelineCanvas.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2018
+ ** @todo WIP-WIP-WIP as of 6/2019
  ** @todo this is more or less preliminary/placeholder code as of 4/2019
  ** 
  */

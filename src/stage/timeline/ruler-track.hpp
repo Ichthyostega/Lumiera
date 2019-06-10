@@ -28,13 +28,15 @@
  ** this track content area we build a horizontal ruler to show the timecode or
  ** frame count references plus any markers, ranges and locators. In case of
  ** group tracks or collapsed tracks, a synopsis of the content may be rendered
- ** into this overview bar. Since any of these display elements need to be aligned
+ ** into this overview bar. However, similar ruler tracks can also be used _within_
+ ** the actual fork of tracks, to represent a sub-scope or a similar kind of overview
+ ** or summarising display. Since any of these display elements need to be aligned
  ** precisely with the content, we employ custom drawing for the rulers as well.
  ** The RulerTrack -- like any parts of the coordinated TimelineLayout, will be
  ** referred to from and used by the BodyCanvasWidget for offloading specific
  ** parts of the drawing routines.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2018
+ ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
 

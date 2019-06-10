@@ -25,7 +25,7 @@
  ** Implementation details regarding display management of the
  ** track body area within the timeline display canvas.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
 

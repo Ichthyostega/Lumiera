@@ -69,7 +69,7 @@
  ** 
  ** For this to work, the _element_ can not be the actual widget, since the result of this whole
  ** process might be to create or retract an actual GTK widget. For this reason, the timeline
- ** layout management relies on a _Presenter_ entity, which in turn controls a mostly passive
+ ** layout management relies on _Presenter_ entities, which in turn control a mostly passive
  ** view -- our solution in fact relies on some flavour of the
  ** [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) here.
  ** 

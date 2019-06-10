@@ -19667,7 +19667,7 @@
 <node CREATED="1555247665396" ID="ID_1210108422" MODIFIED="1557498707228" TEXT="vermutlich werden Lambdas eine Rolle spielen"/>
 <node CREATED="1555247678988" ID="ID_1615700205" MODIFIED="1557498707228" TEXT="aber ich m&#xf6;chte Heap-Storage vermeiden"/>
 </node>
-<node COLOR="#338800" CREATED="1555247704342" ID="ID_929740643" MODIFIED="1557590585181" TEXT="Entwurf/Test">
+<node COLOR="#338800" CREATED="1555247704342" FOLDED="true" ID="ID_929740643" MODIFIED="1560172875969" TEXT="Entwurf/Test">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1555247713060" ID="ID_1159666241" MODIFIED="1557590555065" TEXT="proof-of-concept">
 <icon BUILTIN="button_ok"/>
@@ -19881,8 +19881,7 @@
       d.h er funktioniert nur, wenn man das std::get&lt;idx&gt; (tuple) unmittelbar an den jeweiligen Ziel-Parameter bindet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1557414442871" ID="ID_501615874" MODIFIED="1557498707228" TEXT="dagegen std::forward w&#xe4;hlt flexibel einen von zwei overloads">
 <richcontent TYPE="NOTE"><html>
@@ -19897,8 +19896,7 @@
       und einen, der einen RValue entgegennimmt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557414483962" ID="ID_656447545" MODIFIED="1557498707228" TEXT="und dies kann ich hier nicht nachbilden">
 <linktarget COLOR="#f05859" DESTINATION="ID_656447545" ENDARROW="Default" ENDINCLINATION="45;-420;" ID="Arrow_ID_1477395313" SOURCE="ID_474705115" STARTARROW="None" STARTINCLINATION="649;0;"/>
@@ -19916,8 +19914,7 @@
       steht in keinem Verh&#228;ltnis zum Zweck
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
@@ -20011,8 +20008,7 @@
       Also ist das sogar das korrekte Verhalten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1557446482447" ID="ID_835188518" MODIFIED="1557498707229" TEXT="L&#xf6;sung: Duck-Detector f&#xfc;r Methoden-Name">
 <node CREATED="1557446494679" ID="ID_1259664145" MODIFIED="1557498707229" TEXT="verzichtet auf Signatur-Check">
@@ -20025,8 +20021,7 @@
       d.h. wenn zuf&#228;llig das Interface auch eine Methode CloneInto() enth&#228;lt, aber mit einer unpassenden Signatur
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1557446561925" ID="ID_1267977919" MODIFIED="1557498707229" TEXT="ist ohnehin keine wirkliche Sicherheit"/>
@@ -20050,8 +20045,7 @@
       das ist auch gut so, zu viel Flexibilit&#228;t schadet (besonders, wenn man sie dann gar nicht unterst&#252;tzt)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -20071,8 +20065,7 @@
       Leider haben wir dann zweimal die gleiche Basisklasse in beiden Zweigen der multiple inheritance...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1557446924907" ID="ID_1029661613" MODIFIED="1557498707229" TEXT="...was hier absolut naheliegend ist">
 <richcontent TYPE="NOTE"><html>
@@ -20087,8 +20080,7 @@
       (was ich bisher in der Praxis so noch nie gemacht habe)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1557447075623" ID="ID_1422873677" MODIFIED="1557498707229" TEXT="dummerweise kann dann der GCC die EmptyBase nicht wegoptimieren">
 <richcontent TYPE="NOTE"><html>
@@ -20103,8 +20095,7 @@
       hab das ganz explizit ausgeknobelt, es fehlt hier genau dieser eine zus&#228;tzliche &quot;Slot&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node COLOR="#338800" CREATED="1557447159900" ID="ID_691196423" MODIFIED="1557498722522" TEXT="L&#xf6;sung: anderen Namen verwenden">
@@ -20119,8 +20110,8 @@
 <node CREATED="1555807464657" ID="ID_1089528099" MODIFIED="1557498707229" TEXT="diese meta-Intelligenz sollte komplett in dem Adapter stecken"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557446611550" ID="ID_596556632" MODIFIED="1557590501784" TEXT="Ticket #1197 : rationalise copy support in PolymorphicValue">
-<linktarget COLOR="#1a64bc" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-129;0;" ID="Arrow_ID_884404467" SOURCE="ID_1511870599" STARTARROW="None" STARTINCLINATION="-284;0;"/>
 <linktarget COLOR="#829ebf" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-282;0;" ID="Arrow_ID_1622655110" SOURCE="ID_383098394" STARTARROW="None" STARTINCLINATION="-74;193;"/>
+<linktarget COLOR="#1a64bc" DESTINATION="ID_596556632" ENDARROW="Default" ENDINCLINATION="-129;0;" ID="Arrow_ID_884404467" SOURCE="ID_1511870599" STARTARROW="None" STARTINCLINATION="-284;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -20220,8 +20211,7 @@
       wo wir die konkreten Argumente in den vorbereiteten Argument-Tupel im Holder schieben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -20250,8 +20240,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1557590794163" ID="ID_497379433" MODIFIED="1557590811601" TEXT="Werte kopiert und verglichen">
@@ -20311,8 +20300,7 @@
       und es obliegt der n&#228;chst h&#246;heren Schicht, dies auch in sinnvollem Rahmen zu tun...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#fcda04" DESTINATION="ID_1932269477" ENDARROW="Default" ENDINCLINATION="290;0;" ID="Arrow_ID_742389536" STARTARROW="None" STARTINCLINATION="187;8;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -20321,7 +20309,60 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557590586650" ID="ID_1348312855" MODIFIED="1557590595855" TEXT="den (neu gebauten) VerbPack integrieren">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1560175373902" ID="ID_1956293405" MODIFIED="1560175561475" TEXT="bestehendes TrackProfile sinngem&#xe4;&#xdf; umbauen">
+<icon BUILTIN="yes"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175492578" ID="ID_1159091213" MODIFIED="1560175557813" TEXT="Verb + explizite Storage -&gt; VerbPack">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175383722" ID="ID_107500239" MODIFIED="1560175568187" TEXT="Problem: addSlopeUp()">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1560175410857" ID="ID_1553338375" MODIFIED="1560175429772" TEXT="bisher konnten wir einfach das Argument manipulieren"/>
+<node CREATED="1560175430998" ID="ID_125919592" MODIFIED="1560175477371" TEXT="...aber jetzt gibt es nicht mehr &quot;das&quot; Argument">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sondern die Argumente sind in einem Tuple eingewickelt,
+    </p>
+    <p>
+      und befinden sich tief vergraben in der Implementierungsklasse,
+    </p>
+    <p>
+      innerhalb eines PolymorphicValue.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1560175478468" ID="ID_105401193" MODIFIED="1560175566685" TEXT="Hilfe... was tun?">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175529230" ID="ID_914166338" MODIFIED="1560175635885">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Verh&#228;ltnis zum Inteface <b>Renderer</b>&#160;kl&#228;ren
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" STARTARROW="None" STARTINCLINATION="-91;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1560175579123" ID="ID_678068478" MODIFIED="1560175590213" TEXT="in generische draw()-Routine einbinden">
+<node CREATED="1560175593361" ID="ID_1592949721" MODIFIED="1560175631513" TEXT="wo kommt der Renderer ins Spiel?">
+<linktarget COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" SOURCE="ID_914166338" STARTARROW="None" STARTINCLINATION="-91;0;"/>
+</node>
+<node CREATED="1560175646834" ID="ID_585934033" MODIFIED="1560175663115" TEXT="wo wird entschieden, was in den Ruler-Teil kommt?"/>
 </node>
 </node>
 </node>
@@ -20421,6 +20462,15 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560173474830" ID="ID_351544133" MODIFIED="1560173496890" TEXT="sind es &quot;zwei&quot; oder sind es N Konfigs?">
+<icon BUILTIN="help"/>
+<node COLOR="#ba568c" CREATED="1560173511341" ID="ID_637775069" MODIFIED="1560173529984" TEXT="Monate sp&#xe4;ter...">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1560173498827" ID="ID_553759798" MODIFIED="1560173508018" TEXT="und was meint hier &quot;Konfig&quot;...?">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -20464,7 +20514,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1541862804070" ID="ID_430268635" MODIFIED="1557498707230" TEXT="Display-Manager == Abstraktion">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1541862816104" FOLDED="true" ID="ID_1545586243" MODIFIED="1557498707230" TEXT="lokal injiziert beim Aufbau">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1541862816104" FOLDED="true" ID="ID_1545586243" MODIFIED="1560173642952" TEXT="lokal injiziert beim Aufbau">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1554475687257" ID="ID_908192712" MODIFIED="1554475728633" TEXT="das hei&#xdf;t: separates Thema">
 <icon BUILTIN="yes"/>
@@ -22667,7 +22717,7 @@
 <node CREATED="1541545696185" ID="ID_1907010009" MODIFIED="1557498707234" TEXT="Grund: UI-Bus - Routing">
 <icon BUILTIN="info"/>
 </node>
-<node COLOR="#435e98" CREATED="1541545933006" FOLDED="true" ID="ID_1850412206" MODIFIED="1557498707234" TEXT="t&#xfc;ckisches Problem">
+<node COLOR="#435e98" CREATED="1541545933006" FOLDED="true" ID="ID_1850412206" MODIFIED="1560172942629" TEXT="t&#xfc;ckisches Problem">
 <linktarget COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="49;-155;" ID="Arrow_ID_1571993328" SOURCE="ID_787025622" STARTARROW="None" STARTINCLINATION="-11;173;"/>
 <linktarget COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="369;179;" ID="Arrow_ID_1229280605" SOURCE="ID_659707505" STARTARROW="None" STARTINCLINATION="586;-203;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -22879,10 +22929,13 @@
 </node>
 <node CREATED="1538956703435" ID="ID_275497582" MODIFIED="1557498707234" TEXT="Timeline">
 <node CREATED="1538956945754" ID="ID_1216887436" MODIFIED="1557498707234" TEXT="&quot;name&quot;"/>
-<node CREATED="1538956717369" ID="ID_21520084" MODIFIED="1557498707234" TEXT="&quot;fork&quot; = Track"/>
+<node CREATED="1538956717369" ID="ID_21520084" MODIFIED="1560172967031" TEXT="&quot;fork&quot; = Track">
+<arrowlink DESTINATION="ID_1319425167" ENDARROW="Default" ENDINCLINATION="-1;-52;" ID="Arrow_ID_1260691192" STARTARROW="None" STARTINCLINATION="-79;17;"/>
+</node>
 <node CREATED="1538956709026" ID="ID_326010297" MODIFIED="1557498707234" TEXT="Sequence{Marker}"/>
 </node>
-<node CREATED="1538956769298" ID="ID_1319425167" MODIFIED="1557498707234" TEXT="Track">
+<node CREATED="1538956769298" ID="ID_1319425167" MODIFIED="1560172967031" TEXT="Track">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1319425167" ENDARROW="Default" ENDINCLINATION="-1;-52;" ID="Arrow_ID_1260691192" SOURCE="ID_21520084" STARTARROW="None" STARTINCLINATION="-79;17;"/>
 <node CREATED="1538956775249" ID="ID_1811758034" MODIFIED="1557498707234" TEXT="Sequence{Track}">
 <node CREATED="1538957049292" ID="ID_1618683787" MODIFIED="1557498707234" TEXT="if typeID = &quot;Fork&quot;"/>
 <node CREATED="1544846114433" ID="ID_1306886572" MODIFIED="1557498707234" TEXT="die Sub-Tracks">
@@ -22895,7 +22948,8 @@
 <node CREATED="1538956802701" ID="ID_840384156" MODIFIED="1557498707234" TEXT="Sequence{Marker}">
 <node CREATED="1538957049292" ID="ID_1955645432" MODIFIED="1557498707234" TEXT="if typeID = &quot;Marker&quot;"/>
 </node>
-<node CREATED="1544839585279" ID="ID_1083901292" MODIFIED="1557498707234" TEXT="Sequence{Ruler}">
+<node CREATED="1544839585279" ID="ID_1083901292" MODIFIED="1560173044668" TEXT="Sequence{Ruler}">
+<arrowlink DESTINATION="ID_433238862" ENDARROW="Default" ENDINCLINATION="-37;-96;" ID="Arrow_ID_472987279" STARTARROW="None" STARTINCLINATION="-69;14;"/>
 <linktarget COLOR="#5f84b0" DESTINATION="ID_1083901292" ENDARROW="Default" ENDINCLINATION="-756;-82;" ID="Arrow_ID_1167484185" SOURCE="ID_43593052" STARTARROW="None" STARTINCLINATION="-981;0;"/>
 <node CREATED="1544846037083" ID="ID_667362504" MODIFIED="1557498707234" TEXT="if typeID = &quot;Ruler&quot;"/>
 <node CREATED="1544846062288" ID="ID_855083299" MODIFIED="1557498707234" TEXT="storage direkt (nested) im TrackBody"/>
@@ -22912,8 +22966,9 @@
 <node CREATED="1538957049292" ID="ID_98299428" MODIFIED="1557498707234" TEXT="if typeID = &quot;Marker&quot;"/>
 </node>
 </node>
-<node CREATED="1544840312839" ID="ID_433238862" MODIFIED="1557498707234" TEXT="Ruler">
+<node CREATED="1544840312839" ID="ID_433238862" MODIFIED="1560173044668" TEXT="Ruler">
 <linktarget COLOR="#3e63c5" DESTINATION="ID_433238862" ENDARROW="Default" ENDINCLINATION="-612;-125;" ID="Arrow_ID_1858329997" SOURCE="ID_1391546845" STARTARROW="None" STARTINCLINATION="-747;0;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_433238862" ENDARROW="Default" ENDINCLINATION="-37;-96;" ID="Arrow_ID_472987279" SOURCE="ID_1083901292" STARTARROW="None" STARTINCLINATION="-69;14;"/>
 <node CREATED="1544840455429" ID="ID_1283986005" MODIFIED="1557498707234" TEXT="&quot;timecode&quot; = formatID"/>
 <node CREATED="1544840496225" ID="ID_230755841" MODIFIED="1557498707234" TEXT="&quot;contentFormat&quot; = formatID (none|pivot|frames|wave|synopsis)"/>
 <node CREATED="1544840634822" ID="ID_1138129422" MODIFIED="1557498707234" TEXT="Sequence{Marker.kind}">
@@ -41262,7 +41317,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1541547600640" HGAP="79" ID="ID_659707505" MODIFIED="1557498707237" TEXT="Element-IDs m&#xfc;ssen eindeutig sein" VSHIFT="10">
+<node CREATED="1541547600640" HGAP="79" ID="ID_659707505" MODIFIED="1560172942629" TEXT="Element-IDs m&#xfc;ssen eindeutig sein" VSHIFT="10">
 <arrowlink COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="369;179;" ID="Arrow_ID_1229280605" STARTARROW="None" STARTINCLINATION="586;-203;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1541547743885" ID="ID_1112550435" MODIFIED="1557498707237" TEXT="wegen UI-Bus-Routing"/>

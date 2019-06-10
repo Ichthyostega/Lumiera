@@ -22,7 +22,7 @@
 
 
 /** @file track-profile.hpp
- ** Abstraction build the layout for the track spaces for timeline display.
+ ** Abstraction to build the layout for the track spaces within timeline display.
  ** In Lumiera, tracks are arranged into a fork of nested shapes, which structure
  ** is parallelled into nested structure of TrackBody elements. A tree walk over
  ** this structure yields a sequence of adjacent timeline elements, like overview
@@ -30,7 +30,7 @@
  ** be transformed into suitable drawing instructions to create a 3D shaded
  ** display, clearly highlighting the complex structure of the track arrangement.
  ** 
- ** @todo WIP-WIP-WIP as of 4/2019
+ ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
 
@@ -53,11 +53,12 @@ namespace stage  {
 namespace timeline {
   
   using lib::Literal;
+  using util::isnil;
   
   class ProfileInterpreter
     {
       public:
-       ~ProfileInterpreter() { }            ///< this is an interface
+        virtual ~ProfileInterpreter() { }   ///< this is an interface
         
         virtual void ruler(uint h)   =0;    ///< represent a overview/ruler track with the given height
         virtual void gap(uint h)     =0;    ///< represent a gap to structure the display
@@ -90,7 +91,7 @@ namespace timeline {
       explicit
       operator bool()  const
         {
-          return not util::isnil (elements);
+          return not isnil (elements);
         }
       
       void
