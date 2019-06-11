@@ -39,12 +39,13 @@
 #define STAGE_TIMELINE_TRACK_PROFILE_H
 
 #include "stage/gtk-base.hpp"
-#include "lib/verb-token.hpp"
+#include "lib/verb-visitor.hpp"
 
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 //#include <memory>
+#include <utility>
 #include <vector>
 
 
@@ -54,19 +55,22 @@ namespace timeline {
   
   using lib::Literal;
   using util::isnil;
+  using std::forward;
   
   class ProfileInterpreter
     {
       public:
         virtual ~ProfileInterpreter() { }   ///< this is an interface
         
-        virtual void ruler(uint h)   =0;    ///< represent a overview/ruler track with the given height
+        virtual void ruler(uint h)   =0;    ///< represent an overview/ruler track with the given height
         virtual void gap(uint h)     =0;    ///< represent a gap to structure the display
         virtual void content(uint h) =0;    ///< represent a content area with the given vertical extension
-        virtual void open(uint n)    =0;    ///< indicate entering a nested structure, typically as 3D inset (`n` is always 1)
+        virtual void open()          =0;    ///< indicate entering a nested structure, typically as 3D inset
         virtual void close(uint n)   =0;    ///< indicate the end of `n` nested structures, typically by ascending back `n` levels
         virtual void prelude(uint f) =0;    ///< start rack presentation at top of the timeline, with `f` pinned (always visible) elements
         virtual void coda(uint pad)  =0;    ///< the closing part of the timeline at the bottom of the track display, with `pad` additional padding
+        
+        static const size_t MAX_ARG_SIZE = sizeof(size_t);
     };
   
   /**
@@ -80,9 +84,8 @@ namespace timeline {
    */
   struct TrackProfile
     {
-      using SlopeVerb = lib::VerbToken<ProfileInterpreter, void(uint)>;
-      using SlopeElm =  std::pair<SlopeVerb, uint>;
-      using Elements =  std::vector<SlopeElm>;
+      using SlopeVerb = lib::VerbPack<ProfileInterpreter, void, ProfileInterpreter::MAX_ARG_SIZE>;
+      using Elements =  std::vector<SlopeVerb>;
       
       Elements elements;
       
@@ -97,22 +100,25 @@ namespace timeline {
       void
       performWith (ProfileInterpreter& interpreter)
         {
-          for (auto& slopeElm : elements)
-              slopeElm.first.applyTo (interpreter, uint(slopeElm.second));
+          for (auto& slopeVerb : elements)
+              slopeVerb.applyTo (interpreter);
         }
       
     private:/* ===== Internals: handling tokens ===== */
+      
+      template<typename FUN, typename...ARGS>
       void
-      append (SlopeVerb::Handler handler, Literal token, uint param)
+      append (FUN&& handler, Literal token, ARGS&&... params)
         {
-          elements.emplace_back (SlopeVerb{handler, token}, param);
+          elements.emplace_back (forward<FUN>(handler), token, forward<ARGS>(params)...);
         }
       
-#define TOKEN_BUILDER(_TOK_)     \
-      void                        \
-      append_ ## _TOK_ (uint param)\
-        {                           \
-          this->append (&ProfileInterpreter::_TOK_, STRINGIFY(_TOK_), param);\
+#define TOKEN_BUILDER(_TOK_)          \
+      template<typename...ARGS>        \
+      void                              \
+      append_ ## _TOK_ (ARGS&&... params)\
+        {                                 \
+          this->append (&ProfileInterpreter::_TOK_, STRINGIFY(_TOK_), forward<ARGS>(params)...); \
         }
       
     public:
@@ -127,7 +133,7 @@ namespace timeline {
       void
       addSlopeDown()
         {
-          this->append_open (1);
+          this->append_open();
         }
       
       void
@@ -143,15 +149,19 @@ namespace timeline {
       bool
       lastEntryIs (Literal expectedToken)
         {
-          return util::isnil (elements)
-              or elements.back().first.getID() == expectedToken;
+          return not isnil(elements)
+             and elements.back()->getID() == expectedToken;
         }
       
       void
       incrementLastCloseSlope()
         {
           REQUIRE (lastEntryIs ("close"));
-          ++ elements.back().second;
+          using EmbeddedPayload = lib::VerbHolder<ProfileInterpreter, void(uint)>;
+          EmbeddedPayload& embedded = static_cast<EmbeddedPayload&>(elements.back().getPayload()); 
+          uint& slopeDepth = std::get<0> (embedded.args_);
+          
+          ++ slopeDepth;
         }
     };
   

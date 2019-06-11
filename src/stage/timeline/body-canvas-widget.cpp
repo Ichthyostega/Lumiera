@@ -119,7 +119,7 @@ namespace timeline {
         /** paint opening slope to enter nested sub tracks
          * @note we only ever open one level deep a time */
         void
-        open (uint n)  override
+        open()  override
           {
             UNIMPLEMENTED ("paint downward slope");
           }

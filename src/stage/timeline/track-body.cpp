@@ -94,7 +94,7 @@ namespace timeline {
     uint overviewHeight = 0;
     for (auto& ruler : rulers_)
       {
-        overviewHeight += ruler->calcHeight();
+        overviewHeight += ruler->calcHeight()
                         + ruler->getGapHeight();
       }
     uint heightSum = overviewHeight + contentHeight_;

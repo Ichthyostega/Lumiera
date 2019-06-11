@@ -20307,18 +20307,22 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557590586650" ID="ID_1348312855" MODIFIED="1557590595855" TEXT="den (neu gebauten) VerbPack integrieren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557590586650" ID="ID_1348312855" MODIFIED="1560213524736" TEXT="den (neu gebauten) VerbPack integrieren">
+<icon BUILTIN="pencil"/>
 <node CREATED="1560175373902" ID="ID_1956293405" MODIFIED="1560175561475" TEXT="bestehendes TrackProfile sinngem&#xe4;&#xdf; umbauen">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175492578" ID="ID_1159091213" MODIFIED="1560175557813" TEXT="Verb + explizite Storage -&gt; VerbPack">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1560175492578" ID="ID_1159091213" MODIFIED="1560213489122" TEXT="Verb + explizite Storage -&gt; VerbPack">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1560213502726" ID="ID_1476369075" MODIFIED="1560213516539" TEXT="l&#xe4;&#xdf;t sich 1:1 umschreiben"/>
+<node COLOR="#338800" CREATED="1560213581507" ID="ID_691911700" MODIFIED="1560213594489" TEXT="habe die Argumente sofort komplett flexibel gemacht">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175383722" ID="ID_107500239" MODIFIED="1560175568187" TEXT="Problem: addSlopeUp()">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1560175383722" ID="ID_107500239" MODIFIED="1560213484696" TEXT="Problem: addSlopeUp()">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1560175410857" ID="ID_1553338375" MODIFIED="1560175429772" TEXT="bisher konnten wir einfach das Argument manipulieren"/>
-<node CREATED="1560175430998" ID="ID_125919592" MODIFIED="1560175477371" TEXT="...aber jetzt gibt es nicht mehr &quot;das&quot; Argument">
+<node CREATED="1560175430998" ID="ID_125919592" MODIFIED="1560213396570" TEXT="...aber jetzt gibt es nicht mehr &quot;das&quot; Argument">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20337,8 +20341,24 @@
 </html>
 </richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1560175478468" ID="ID_105401193" MODIFIED="1560175566685" TEXT="Hilfe... was tun?">
-<icon BUILTIN="flag-pink"/>
+<node CREATED="1560213397573" ID="ID_1416770885" MODIFIED="1560213473607" TEXT="und dann mu&#xdf; man eben explizit casten und auspacken!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist nur technisch und etwas h&#228;slich,
+    </p>
+    <p>
+      aber durchaus sauber (unter der Annahme, da&#223; wir uns unsere Token
+    </p>
+    <p>
+      stets selbst erzeugen und daher auf das korrekte Literal Verla&#223; ist)
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175529230" ID="ID_914166338" MODIFIED="1560175635885">
@@ -20351,8 +20371,7 @@
       Verh&#228;ltnis zum Inteface <b>Renderer</b>&#160;kl&#228;ren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" STARTARROW="None" STARTINCLINATION="-91;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
