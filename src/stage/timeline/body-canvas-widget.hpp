@@ -83,8 +83,8 @@ namespace timeline {
     {
       using _Renderer = std::function<void(CairoC)>;
       
-      _Renderer getGroundingRenderer_;
-      _Renderer getOverlayRenderer_;
+      _Renderer renderGrounding_;
+      _Renderer renderOverlay_;
       
     public:
       TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac);

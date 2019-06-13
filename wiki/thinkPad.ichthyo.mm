@@ -19608,11 +19608,14 @@
 <node CREATED="1555198484257" ID="ID_447173098" MODIFIED="1557498707228" TEXT="Problem: Aufteilung">
 <arrowlink DESTINATION="ID_577805455" ENDARROW="Default" ENDINCLINATION="146;-10;" ID="Arrow_ID_228489961" STARTARROW="Default" STARTINCLINATION="110;0;"/>
 <node CREATED="1555198495266" ID="ID_118142711" MODIFIED="1557498707228" TEXT="was kommt in den (immer sichtbaren) oberen Teil?"/>
-<node CREATED="1555198558887" ID="ID_1718337163" MODIFIED="1557498707228" TEXT="Beide Canvas-Instanzen verwenden das gleiche Koordinatensystem">
+<node CREATED="1555198558887" ID="ID_1718337163" MODIFIED="1560442514142" TEXT="Beide Canvas-Instanzen verwenden das gleiche Koordinatensystem">
+<arrowlink DESTINATION="ID_1220970686" ENDARROW="Default" ENDINCLINATION="-532;0;" ID="Arrow_ID_1730442283" STARTARROW="None" STARTINCLINATION="377;0;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1555198633466" ID="ID_780787053" MODIFIED="1557498707228" TEXT="Auf Interpretieren des Struktur-Profils zur&#xfc;ckgef&#xfc;hrt">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247298877" ID="ID_1739468610" MODIFIED="1557498707228" TEXT="das mu&#xdf; dann aber verallgemeinert wertden">
+<node COLOR="#338800" CREATED="1555198633466" ID="ID_780787053" MODIFIED="1560442064470" TEXT="Auf Interpretieren des Struktur-Profils zur&#xfc;ckgef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1555247298877" ID="ID_1739468610" MODIFIED="1560442477849" TEXT="das mu&#xdf; dann aber verallgemeinert wertden">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1555247361420" ID="ID_1263829263" MODIFIED="1557498707228" TEXT="warum?">
 <richcontent TYPE="NOTE"><html>
@@ -19650,8 +19653,8 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1555247320686" ID="ID_1896093043" MODIFIED="1557590822696" TEXT="brauche Visitor mit flexiblen Argumenten">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1555247320686" FOLDED="true" ID="ID_1896093043" MODIFIED="1560442052440" TEXT="brauche Visitor mit flexiblen Argumenten">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1555247502178" ID="ID_297247554" MODIFIED="1557498707228" TEXT="Anforderung">
 <icon BUILTIN="yes"/>
 <node CREATED="1555247509182" ID="ID_184476156" MODIFIED="1557498707228" TEXT="funktioniert genauso wie Visitor im Diff, mit Verb-Tokens"/>
@@ -20307,8 +20310,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1557590586650" ID="ID_1348312855" MODIFIED="1560213524736" TEXT="den (neu gebauten) VerbPack integrieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1557590586650" ID="ID_1348312855" MODIFIED="1560442031421" TEXT="den (neu gebauten) VerbPack integrieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1560175373902" ID="ID_1956293405" MODIFIED="1560175561475" TEXT="bestehendes TrackProfile sinngem&#xe4;&#xdf; umbauen">
 <icon BUILTIN="yes"/>
 </node>
@@ -20361,7 +20364,7 @@
 </richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175529230" ID="ID_914166338" MODIFIED="1560175635885">
+<node COLOR="#338800" CREATED="1560175529230" ID="ID_914166338" MODIFIED="1560441859516">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -20373,7 +20376,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" STARTARROW="None" STARTINCLINATION="-91;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1560303652840" ID="ID_1947607603" MODIFIED="1560303667034" TEXT="Konsequenz des generischen &#xbb;Ruler&#xab;-Konzepts"/>
 <node CREATED="1560303597884" ID="ID_1906099403" MODIFIED="1560303739318" TEXT="wurde notwendig wegen der Aufteilung in zwei Canvas">
 <richcontent TYPE="NOTE"><html>
@@ -20400,10 +20403,14 @@
 </node>
 </node>
 </node>
-<node CREATED="1560175579123" ID="ID_678068478" MODIFIED="1560175590213" TEXT="in generische draw()-Routine einbinden">
-<node CREATED="1560175593361" ID="ID_1592949721" MODIFIED="1560175631513" TEXT="wo kommt der Renderer ins Spiel?">
+<node COLOR="#435e98" CREATED="1560175579123" ID="ID_678068478" MODIFIED="1560442081244" TEXT="in generische draw()-Routine einbinden">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1560175593361" ID="ID_1592949721" MODIFIED="1560442019836" TEXT="wo kommt der Renderer ins Spiel?">
 <linktarget COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" SOURCE="ID_914166338" STARTARROW="None" STARTINCLINATION="-91;0;"/>
-<node CREATED="1560303801546" ID="ID_1150937962" MODIFIED="1560303835713" TEXT="Renderer verkapselt das Profil"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1560303801546" ID="ID_1150937962" MODIFIED="1560442045382" TEXT="Renderer verkapselt das Profil">
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1560303861175" ID="ID_1281704590" MODIFIED="1560303882272" TEXT="Renderer ist ein einmal-wegwerf-Objekt">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -20417,7 +20424,7 @@
 </html>
 </richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560303951038" ID="ID_353953611" MODIFIED="1560304077463" TEXT="Frage: wirklich zweistufig konstruieren??">
+<node COLOR="#435e98" CREATED="1560303951038" ID="ID_353953611" MODIFIED="1560441877245" TEXT="Frage: wirklich zweistufig konstruieren??">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20442,7 +20449,8 @@
 <node CREATED="1560428585872" ID="ID_1746909203" MODIFIED="1560428593856" TEXT="CairoContext: da zeichnet man konkret"/>
 </node>
 </node>
-<node CREATED="1560304378008" ID="ID_1402776173" MODIFIED="1560304394553" TEXT="vereinfachen...?">
+<node COLOR="#435e98" CREATED="1560304378008" ID="ID_1402776173" MODIFIED="1560441942501" TEXT="vereinfachen...?">
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1560304395781" ID="ID_1496832477" MODIFIED="1560428268414" TEXT="_RenderFactory f&#xe4;llt weg">
 <icon BUILTIN="idea"/>
 </node>
@@ -20460,9 +20468,14 @@
 </richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1560304535209" ID="ID_1225485882" MODIFIED="1560304560890" TEXT="void(TimelineCanvas&amp;)"/>
-<node CREATED="1560428691244" ID="ID_1126064182" MODIFIED="1560428708235" TEXT="Konsequenz: TimelineCanvas wird zum Interface"/>
+<node CREATED="1560428691244" ID="ID_1126064182" MODIFIED="1560441982757" TEXT="Konsequenz: TimelineCanvas wird zum Interface">
+<icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1560304868565" ID="ID_471873086" MODIFIED="1560304898970" TEXT="brauchen wir &#xfc;berhaupt einen Funktor als weitere Indirektion?">
+<node COLOR="#338800" CREATED="1560441983792" ID="ID_998159430" MODIFIED="1560442009273" TEXT="nein: alles Ben&#xf6;tigte mu&#xdf; als Argument &#xfc;bergeben werden">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1560304868565" ID="ID_471873086" MODIFIED="1560441928610" TEXT="brauchen wir &#xfc;berhaupt einen Funktor als weitere Indirektion?">
 <icon BUILTIN="help"/>
 <node CREATED="1560304911496" ID="ID_241280957" MODIFIED="1560305044856" TEXT="macht n&#xe4;mlich drei Indirektionen">
 <richcontent TYPE="NOTE"><html>
@@ -20487,11 +20500,42 @@
 </node>
 <node CREATED="1560305049471" ID="ID_1228128138" MODIFIED="1560305059543" TEXT="k&#xf6;nnte man 1) und 2) zusammenlegen?"/>
 <node CREATED="1560305069484" ID="ID_488264100" MODIFIED="1560305090839" TEXT="d.h. der Renderer w&#xe4;re zugleich ein Profil-Interpreter"/>
+<node CREATED="1560441903171" ID="ID_220479717" MODIFIED="1560441921539" TEXT="nein: der Renderer konstruiert einen transienten Profil-Interpreter">
+<icon BUILTIN="button_cancel"/>
 </node>
 </node>
 </node>
-<node CREATED="1560175646834" ID="ID_585934033" MODIFIED="1560175663115" TEXT="wo wird entschieden, was in den Ruler-Teil kommt?"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560175646834" ID="ID_585934033" MODIFIED="1560442420666" TEXT="Selektor f&#xfc;r den relevanten Teil des Profils">
+<linktarget COLOR="#235691" DESTINATION="ID_585934033" ENDARROW="Default" ENDINCLINATION="-259;-8;" ID="Arrow_ID_975721855" SOURCE="ID_1448105245" STARTARROW="Default" STARTINCLINATION="168;-53;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1560442117286" ID="ID_1565882906" MODIFIED="1560442234529" TEXT="wir haben jetzt zwei Canvas">
+<icon BUILTIN="info"/>
+<node CREATED="1560442238349" ID="ID_1013135995" MODIFIED="1560442245202" TEXT="Overview-Ruler (always on top)"/>
+<node CREATED="1560442245898" ID="ID_1189464925" MODIFIED="1560442253375" TEXT="Track Body (scrollable)"/>
+</node>
+<node CREATED="1560442129908" ID="ID_410132191" MODIFIED="1560442196351" TEXT="jeder mu&#xdf; nur den f&#xfc;r ihn relevanten Teil rendern"/>
+<node CREATED="1560442220007" ID="ID_92028891" MODIFIED="1560442229810" TEXT="ist nur eine Preformance-Optimierung">
+<icon BUILTIN="idea"/>
+<node CREATED="1560442262544" ID="ID_1220970686" MODIFIED="1560442514142" TEXT="wir verwenden einheitliche Koordinaten">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1220970686" ENDARROW="Default" ENDINCLINATION="-532;0;" ID="Arrow_ID_1730442283" SOURCE="ID_1718337163" STARTARROW="None" STARTINCLINATION="377;0;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1560442275246" ID="ID_1464324660" MODIFIED="1560442286901" TEXT="deshalb ist auch nur jeweils der relevante Teil sichtbar"/>
+<node CREATED="1560442288690" ID="ID_106486844" MODIFIED="1560442318651" TEXT="trotzdem kann man hier die H&#xe4;lfte der draw-Anweisungen einsparen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1560442439507" ID="ID_1072410115" MODIFIED="1560442445776" TEXT="Implementierung">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560442383281" ID="ID_1448105245" MODIFIED="1560442425362" TEXT="Festlegen der horizontalen Ausdehnung der Teil-Widgets">
+<arrowlink COLOR="#235691" DESTINATION="ID_585934033" ENDARROW="Default" ENDINCLINATION="-259;-8;" ID="Arrow_ID_975721855" STARTARROW="Default" STARTINCLINATION="168;-53;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

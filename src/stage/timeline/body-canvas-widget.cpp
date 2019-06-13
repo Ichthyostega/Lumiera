@@ -86,7 +86,7 @@ namespace timeline {
           }
         
         /** finish painting the track body area
-         *  @param pad additional padding to add at bottom */
+         * @param pad additional padding to add at bottom */
         void
         coda (uint pad)  override
           {
@@ -138,8 +138,78 @@ namespace timeline {
           : cox_{currentDrawContext}
           , display_{move (toShow)}
           { }
+      };
+    
+    
+    
+    class TrackOverlayRenderer
+      : public ProfileInterpreter
+      {
+        CairoC cox_;
+        PixSpan display_;
         
-        virtual ~TrackGroundingRenderer() { }
+        
+        /** overlays to show at top of the track body area
+         * @param f number of consecutive track elements
+         *          to keep pinned (always visible) at top */
+        void
+        prelude (uint f)  override
+          {
+            UNIMPLEMENTED ("overlays for timeline top");
+          }
+        
+        /** finish painting overlays a the bottom of the track body area
+         * @param pad additional padding to add at bottom */
+        void
+        coda (uint pad)  override
+          {
+            UNIMPLEMENTED ("overlays for bottom");
+          }
+        
+        /** draw overlays on top of overview/ruler track
+         * @param h ruler track height */
+        void
+        ruler (uint h)  override
+          {
+            UNIMPLEMENTED ("overlays for ruler");
+          }
+        
+        /** render overlays on top of padding/gap */
+        void
+        gap (uint h)  override
+          {
+            UNIMPLEMENTED ("overlays for gap");
+          }
+        
+        /** place overlays on top of of track content area,
+         * @remark anything to show semi-transparent
+         *         on top of the content clips */
+        void
+        content (uint h)  override
+          {
+            UNIMPLEMENTED ("overlays for content area");
+          }
+        
+        /** render overlays covering the opening slope towards nested tracks */
+        void
+        open()  override
+          {
+            UNIMPLEMENTED ("overlays for downward slope");
+          }
+        
+        /** render overlays covering the closing slope towards nested tracks */
+        void
+        close (uint n)  override
+          {
+            UNIMPLEMENTED ("overlays for upward slope");
+          }
+        
+        
+      public:
+        TrackOverlayRenderer (CairoC currentDrawContext, PixSpan toShow)
+          : cox_{currentDrawContext}
+          , display_{move (toShow)}
+          { }
       };
     
     template<class PINT>
@@ -149,6 +219,7 @@ namespace timeline {
         return [&profile, isHeadPart](CairoC cox)
                 {
                   PINT concreteRenderScheme{cox, PixSpan{}};    ///////////////////////////////////TICKET #1019 : do we actually need to know the covered virtual area (PixSpan)?
+                  /////////////////////////////////////////////////////////////////////////////////TICKET #1039 : find out a way how to select the header/body part of the profile!
                   profile.performWith (concreteRenderScheme);
                 };
       }
@@ -159,8 +230,8 @@ namespace timeline {
   
   TimelineCanvas::TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac)
     : Gtk::Layout{}
-    , getGroundingRenderer_{groundingFac}
-    , getOverlayRenderer_{overlayFac}
+    , renderGrounding_{groundingFac}
+    , renderOverlay_{overlayFac}
     { }
   
   
@@ -174,8 +245,8 @@ namespace timeline {
     , profile_{}
     , rootBody_{nullptr}
     , contentArea_{}
-    , rulerCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, true), makeRenderer<TrackGroundingRenderer>(profile_, true)}
-    , mainCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, false), makeRenderer<TrackGroundingRenderer>(profile_, false)}
+    , rulerCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, true), makeRenderer<TrackOverlayRenderer>(profile_, true)}
+    , mainCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, false), makeRenderer<TrackOverlayRenderer>(profile_, false)}
     {
       this->set_border_width (0);
       this->property_expand() = true;       // dynamically grab any available additional space
@@ -297,7 +368,7 @@ namespace timeline {
   void
   TimelineCanvas::drawGrounding (CairoC const& cox)
   {
-    getGroundingRenderer_(cox);
+    renderGrounding_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     cox->set_source_rgb(0.8, 0.0, 0.0);
     cox->set_line_width (5.0);
@@ -314,7 +385,7 @@ namespace timeline {
   void
   TimelineCanvas::drawOverlays (CairoC const& cox)
   {
-    getOverlayRenderer_(cox);
+    renderOverlay_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     auto alloc = get_allocation();
     int w = alloc.get_width();
