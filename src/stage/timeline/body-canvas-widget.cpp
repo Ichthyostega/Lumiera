@@ -93,7 +93,7 @@ namespace timeline {
             UNIMPLEMENTED ("draw bottom");
           }
         
-        /** draw grounding of a overview/ruler track
+        /** draw grounding of an overview/ruler track
          *  with the given height */
         void
         ruler (uint h)  override
@@ -141,12 +141,23 @@ namespace timeline {
         
         virtual ~TrackGroundingRenderer() { }
       };
+    
+    template<class PINT>
+    auto
+    makeRenderer (TrackProfile& profile, bool isHeadPart)
+      {
+        return [&profile, isHeadPart](CairoC cox)
+                {
+                  PINT concreteRenderScheme{cox, PixSpan{}};    ///////////////////////////////////TICKET #1019 : do we actually need to know the covered virtual area (PixSpan)?
+                  profile.performWith (concreteRenderScheme);
+                };
+      }
   }
   
   
   
   
-  TimelineCanvas::TimelineCanvas (_RenderFactory groundingFac, _RenderFactory overlayFac)
+  TimelineCanvas::TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac)
     : Gtk::Layout{}
     , getGroundingRenderer_{groundingFac}
     , getOverlayRenderer_{overlayFac}
@@ -159,12 +170,12 @@ namespace timeline {
   
   BodyCanvasWidget::BodyCanvasWidget (DisplayManager& displayManager)
     : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
-    , contentArea_{}
-    , rulerCanvas_{std::function<Renderer&(CairoC)>(), std::function<Renderer&(CairoC)>()}  ///////////TODO dummy placeholder factories.... need to build the real thing
-    , mainCanvas_{std::function<Renderer&(CairoC)>(), std::function<Renderer&(CairoC)>()}
     , layout_{displayManager}
     , profile_{}
     , rootBody_{nullptr}
+    , contentArea_{}
+    , rulerCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, true), makeRenderer<TrackGroundingRenderer>(profile_, true)}
+    , mainCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, false), makeRenderer<TrackGroundingRenderer>(profile_, false)}
     {
       this->set_border_width (0);
       this->property_expand() = true;       // dynamically grab any available additional space
@@ -214,9 +225,8 @@ namespace timeline {
       {
         if (not profile_)
           rootBody_->establishTrackSpace (profile_);
-        
-//      TrackGroundingRenderer renderer{cox, layout_.getPixSpan()};  //////////TODO TOD-oh
       }
+    return profile_;   //////////////////////////////////////////////////////////////////////////////////////TICKET #1039 : who actually invokes this function? what if not(rootBody_)?
   }
   
   
@@ -287,7 +297,7 @@ namespace timeline {
   void
   TimelineCanvas::drawGrounding (CairoC const& cox)
   {
-//  profile_.performWith (renderer);
+    getGroundingRenderer_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     cox->set_source_rgb(0.8, 0.0, 0.0);
     cox->set_line_width (5.0);
@@ -304,6 +314,7 @@ namespace timeline {
   void
   TimelineCanvas::drawOverlays (CairoC const& cox)
   {
+    getOverlayRenderer_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
     auto alloc = get_allocation();
     int w = alloc.get_width();

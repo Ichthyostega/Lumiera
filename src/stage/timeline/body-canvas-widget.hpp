@@ -77,25 +77,17 @@ namespace timeline {
   class TrackBody;
   class TimelineCanvas;
   
-  class Renderer
-    {
-    public:
-      virtual ~Renderer() { }  ///< this is an interface
-      
-      virtual void drawTo (TimelineCanvas&)  =0;
-    };
-  
   
   class TimelineCanvas
     : public Gtk::Layout
     {
-      using _RenderFactory = std::function<Renderer&(CairoC)>;
+      using _Renderer = std::function<void(CairoC)>;
       
-      _RenderFactory getGroundingRenderer_;
-      _RenderFactory getOverlayRenderer_;
+      _Renderer getGroundingRenderer_;
+      _Renderer getOverlayRenderer_;
       
     public:
-      TimelineCanvas (_RenderFactory groundingFac, _RenderFactory overlayFac);
+      TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac);
       
     private:
       virtual bool on_draw (CairoC)  override;
@@ -114,13 +106,13 @@ namespace timeline {
   class BodyCanvasWidget
     : public Gtk::Box
     {
-      Gtk::ScrolledWindow contentArea_;
-      TimelineCanvas rulerCanvas_;
-      TimelineCanvas mainCanvas_;
-      
       DisplayManager& layout_;
       TrackProfile profile_;
       TrackBody* rootBody_;
+      
+      Gtk::ScrolledWindow contentArea_;
+      TimelineCanvas rulerCanvas_;
+      TimelineCanvas mainCanvas_;
       
     public:
       BodyCanvasWidget (DisplayManager&);

@@ -20374,12 +20374,121 @@
 </html></richcontent>
 <arrowlink COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" STARTARROW="None" STARTINCLINATION="-91;0;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1560303652840" ID="ID_1947607603" MODIFIED="1560303667034" TEXT="Konsequenz des generischen &#xbb;Ruler&#xab;-Konzepts"/>
+<node CREATED="1560303597884" ID="ID_1906099403" MODIFIED="1560303739318" TEXT="wurde notwendig wegen der Aufteilung in zwei Canvas">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vorher war n&#228;mlich das Profil im Canvas selber.
+    </p>
+    <p>
+      Jetzt ist das Profil in das BodyCanvasWidget hochgewandert,
+    </p>
+    <p>
+      und soll von beiden sub-Canvas gleicherma&#223;en jeweils passend interpretiert werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1560303745209" ID="ID_202529970" MODIFIED="1560303777782" TEXT="es ergeben sich 4 verschiedene Interpretierungen eines einzigen Profils">
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 </node>
 <node CREATED="1560175579123" ID="ID_678068478" MODIFIED="1560175590213" TEXT="in generische draw()-Routine einbinden">
 <node CREATED="1560175593361" ID="ID_1592949721" MODIFIED="1560175631513" TEXT="wo kommt der Renderer ins Spiel?">
 <linktarget COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" SOURCE="ID_914166338" STARTARROW="None" STARTINCLINATION="-91;0;"/>
+<node CREATED="1560303801546" ID="ID_1150937962" MODIFIED="1560303835713" TEXT="Renderer verkapselt das Profil"/>
+<node CREATED="1560303861175" ID="ID_1281704590" MODIFIED="1560303882272" TEXT="Renderer ist ein einmal-wegwerf-Objekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...daher die Factory
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560303951038" ID="ID_353953611" MODIFIED="1560304077463" TEXT="Frage: wirklich zweistufig konstruieren??">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ol>
+      <li>
+        getXxxRenderer(CairoC) -&gt; packt Profil ein
+      </li>
+      <li>
+        Renderer.drawTo(canvas)
+      </li>
+    </ol>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1560428273738" ID="ID_149938310" MODIFIED="1560428299172" TEXT="was hab ich mir vor ein paar Monaten wohl gedacht??!"/>
+<node CREATED="1560428302521" ID="ID_616331969" MODIFIED="1560428322828" TEXT="Anla&#xdf; war wohl der Unterschied zwischen Canvas und CairoContext">
+<icon BUILTIN="idea"/>
+<node CREATED="1560428573068" ID="ID_1838989620" MODIFIED="1560428581790" TEXT="Canvas == Container f&#xfc;r &quot;Zukunft&quot;"/>
+<node CREATED="1560428585872" ID="ID_1746909203" MODIFIED="1560428593856" TEXT="CairoContext: da zeichnet man konkret"/>
+</node>
+</node>
+<node CREATED="1560304378008" ID="ID_1402776173" MODIFIED="1560304394553" TEXT="vereinfachen...?">
+<node CREATED="1560304395781" ID="ID_1496832477" MODIFIED="1560428268414" TEXT="_RenderFactory f&#xe4;llt weg">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1560304412203" ID="ID_1976247827" MODIFIED="1560304477152">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Renderer <i>ist</i>&#160;bereits der Funktor
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1560304535209" ID="ID_1225485882" MODIFIED="1560304560890" TEXT="void(TimelineCanvas&amp;)"/>
+<node CREATED="1560428691244" ID="ID_1126064182" MODIFIED="1560428708235" TEXT="Konsequenz: TimelineCanvas wird zum Interface"/>
+</node>
+<node CREATED="1560304868565" ID="ID_471873086" MODIFIED="1560304898970" TEXT="brauchen wir &#xfc;berhaupt einen Funktor als weitere Indirektion?">
+<icon BUILTIN="help"/>
+<node CREATED="1560304911496" ID="ID_241280957" MODIFIED="1560305044856" TEXT="macht n&#xe4;mlich drei Indirektionen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ol>
+      <li>
+        der Renderer. Abstrahiert welcher Interpreter wie genau zum Einsatz kommen soll (Hintergrund/Overla sowie Ruler/Content)
+      </li>
+      <li>
+        der konkrete Interpreter
+      </li>
+      <li>
+        die einzelnen Verben im Profil
+      </li>
+    </ol>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1560305049471" ID="ID_1228128138" MODIFIED="1560305059543" TEXT="k&#xf6;nnte man 1) und 2) zusammenlegen?"/>
+<node CREATED="1560305069484" ID="ID_488264100" MODIFIED="1560305090839" TEXT="d.h. der Renderer w&#xe4;re zugleich ein Profil-Interpreter"/>
+</node>
+</node>
 </node>
 <node CREATED="1560175646834" ID="ID_585934033" MODIFIED="1560175663115" TEXT="wo wird entschieden, was in den Ruler-Teil kommt?"/>
 </node>

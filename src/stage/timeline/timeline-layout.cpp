@@ -92,8 +92,8 @@ namespace timeline {
   PixSpan
   TimelineLayout::getPixSpan()
   {
-                                           ////////////////////////////////////////////////////////TICKET 1019 : need a "ZoomWindow" here to manage the visible area
-                                           ////////////////////////////////////////////////////////TICKET 1039 : "somehow" wire with the TimelineController to find out the covered span
+                                           ////////////////////////////////////////////////////////TICKET #1019 : need a "ZoomWindow" here to manage the visible area
+                                           ////////////////////////////////////////////////////////TICKET #1039 : "somehow" wire with the TimelineController to find out the covered span
     return PixSpan {0, 2048}; ////////////////Lalala Lalü
   }
   
