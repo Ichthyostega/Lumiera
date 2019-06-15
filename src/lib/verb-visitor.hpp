@@ -245,6 +245,17 @@ namespace lib {
                + string{util::unConst(this)->getPayload().getID()}
                + ")";
         }
+      
+      /** unsafe downcast and access to an embedded payload argument value */
+      template<typename ARG>
+      ARG&
+      accessArg ()
+        {
+          using EmbeddedPayload = lib::VerbHolder<REC, RET(ARG)>;
+          REQUIRE (INSTANCEOF (EmbeddedPayload, &this->getPayload()));
+          EmbeddedPayload& embedded = static_cast<EmbeddedPayload&>(this->getPayload());
+          return std::get<0> (embedded.args_);
+        }
     };
   
   

@@ -67,7 +67,7 @@ namespace timeline {
         virtual void content(uint h) =0;    ///< represent a content area with the given vertical extension
         virtual void open()          =0;    ///< indicate entering a nested structure, typically as 3D inset
         virtual void close(uint n)   =0;    ///< indicate the end of `n` nested structures, typically by ascending back `n` levels
-        virtual void prelude(uint f) =0;    ///< start rack presentation at top of the timeline, with `f` pinned (always visible) elements
+        virtual void prelude(uint f) =0;    ///< start track presentation at top of the timeline, with `f` pinned (always visible) elements
         virtual void coda(uint pad)  =0;    ///< the closing part of the timeline at the bottom of the track display, with `pad` additional padding
         
         static const size_t MAX_ARG_SIZE = sizeof(size_t);
@@ -145,7 +145,20 @@ namespace timeline {
             append_close (1);
         }
       
+      uint
+      getPinnedPrefixCnt()
+        {
+          return firstEntryIs("prelude")? elements.front().accessArg<uint>() : 0;
+        }
+      
     private:
+      bool
+      firstEntryIs (Literal expectedToken)
+        {
+          return not isnil(elements)
+             and elements.front()->getID() == expectedToken;
+        }
+      
       bool
       lastEntryIs (Literal expectedToken)
         {
@@ -157,9 +170,7 @@ namespace timeline {
       incrementLastCloseSlope()
         {
           REQUIRE (lastEntryIs ("close"));
-          using EmbeddedPayload = lib::VerbHolder<ProfileInterpreter, void(uint)>;
-          EmbeddedPayload& embedded = static_cast<EmbeddedPayload&>(elements.back().getPayload()); 
-          uint& slopeDepth = std::get<0> (embedded.args_);
+          uint& slopeDepth = elements.back().accessArg<uint>();
           
           ++ slopeDepth;
         }
