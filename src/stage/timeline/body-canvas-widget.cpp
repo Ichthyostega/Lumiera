@@ -73,7 +73,7 @@ namespace timeline {
       : public ProfileInterpreter
       {
         CairoC cox_;
-        PixSpan display_;
+        PixSpan visible_;
         
         
         /** paint the top of the track body area
@@ -134,9 +134,9 @@ namespace timeline {
         
         
       public:
-        TrackGroundingRenderer (CairoC currentDrawContext, PixSpan toShow)
+        TrackGroundingRenderer (CairoC currentDrawContext, DisplayManager& layout)
           : cox_{currentDrawContext}
-          , display_{move (toShow)}
+          , visible_{layout.getPixSpan()}
           { }
       };
     
@@ -146,7 +146,7 @@ namespace timeline {
       : public ProfileInterpreter
       {
         CairoC cox_;
-        PixSpan display_;
+        PixSpan visible_;
         
         
         /** overlays to show at top of the track body area
@@ -206,23 +206,29 @@ namespace timeline {
         
         
       public:
-        TrackOverlayRenderer (CairoC currentDrawContext, PixSpan toShow)
+        TrackOverlayRenderer (CairoC currentDrawContext, DisplayManager& layout)
           : cox_{currentDrawContext}
-          , display_{move (toShow)}
+          , visible_{layout.getPixSpan()}
           { }
       };
     
-    template<class PINT>
+    template<class PINT, bool isRuler>
     auto
-    makeRenderer (TrackProfile& profile, bool isHeadPart)
+    makeRenderer (DisplayManager& layout, TrackProfile& profile)
       {
-        return [&profile, isHeadPart](CairoC cox)
+        return [&](CairoC cox)
                 {
-                  PINT concreteRenderScheme{cox, PixSpan{}};    ///////////////////////////////////TICKET #1019 : do we actually need to know the covered virtual area (PixSpan)?
+                  PINT concreteRenderScheme{cox, layout};
                   /////////////////////////////////////////////////////////////////////////////////TICKET #1039 : find out a way how to select the header/body part of the profile!
                   profile.performWith (concreteRenderScheme);
                 };
       }
+    
+    // abbreviations for readability
+    using Grounding = TrackGroundingRenderer;
+    using Overlay   = TrackOverlayRenderer;
+    const bool RULER = true;
+    const bool BODY  = false;
   }
   
   
@@ -245,8 +251,8 @@ namespace timeline {
     , profile_{}
     , rootBody_{nullptr}
     , contentArea_{}
-    , rulerCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, true), makeRenderer<TrackOverlayRenderer>(profile_, true)}
-    , mainCanvas_{makeRenderer<TrackGroundingRenderer>(profile_, false), makeRenderer<TrackOverlayRenderer>(profile_, false)}
+    , rulerCanvas_{makeRenderer<Grounding, RULER>(layout_,profile_), makeRenderer<Overlay, RULER>(layout_,profile_)}
+    , mainCanvas_ {makeRenderer<Grounding, BODY>(layout_,profile_),  makeRenderer<Overlay, BODY>(layout_,profile_)}
     {
       this->set_border_width (0);
       this->property_expand() = true;       // dynamically grab any available additional space
