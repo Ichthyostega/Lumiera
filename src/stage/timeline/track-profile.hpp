@@ -91,10 +91,10 @@ namespace timeline {
       
       // default constructible, standard copy operations
       
-      explicit
-      operator bool()  const
+      bool
+      empty()  const
         {
-          return not isnil (elements);
+          return elements.empty();
         }
       
       void

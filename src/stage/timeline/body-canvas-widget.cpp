@@ -49,6 +49,7 @@
 
 //using util::_Fmt;
 using util::max;
+using util::isnil;
 //using util::contains;
 //using Gtk::Widget;
 using Gdk::Rectangle;
@@ -300,7 +301,7 @@ namespace timeline {
   {
     if (rootBody_)
       {
-        if (not profile_)
+        if (isnil (profile_))
           rootBody_->establishTrackSpace (profile_);
       }
     return profile_;   //////////////////////////////////////////////////////////////////////////////////////TICKET #1039 : who actually invokes this function? what if not(rootBody_)?

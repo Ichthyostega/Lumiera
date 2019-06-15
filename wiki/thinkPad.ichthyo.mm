@@ -19151,7 +19151,12 @@
 </node>
 </node>
 </node>
-<node CREATED="1480639473324" ID="ID_191170582" MODIFIED="1557498707226" TEXT="eval pass"/>
+<node CREATED="1480639473324" ID="ID_191170582" MODIFIED="1560627749713" TEXT="eval pass">
+<linktarget COLOR="#921d48" DESTINATION="ID_191170582" ENDARROW="Default" ENDINCLINATION="1918;0;" ID="Arrow_ID_982561049" SOURCE="ID_624999649" STARTARROW="None" STARTINCLINATION="185;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560627720011" HGAP="35" ID="ID_322949413" MODIFIED="1560627732292" TEXT="brauchen wir den??" VSHIFT="23">
+<icon BUILTIN="help"/>
+</node>
+</node>
 <node CREATED="1555022703032" ID="ID_13722484" MODIFIED="1557498707226" TEXT="Verdrahtung">
 <node CREATED="1555022710839" ID="ID_1166296639" MODIFIED="1557498707226" TEXT="mu&#xdf; in alle Nutzer injiziert werden"/>
 <node CREATED="1555022761189" ID="ID_640769952" MODIFIED="1560612965105" TEXT="wie? geht wohl nur direkte Referenz">
@@ -20618,6 +20623,37 @@
 <node CREATED="1560612942381" ID="ID_1967930581" MODIFIED="1560612949943" TEXT="und das w&#xe4;re etwa die gleiche Menge Code"/>
 <node CREATED="1560612951033" ID="ID_850127059" MODIFIED="1560612963343" TEXT="und auch etwa gleicherma&#xdf;en lesbar"/>
 </node>
+<node CREATED="1560613101287" ID="ID_4285270" MODIFIED="1560613236377" TEXT="Beschlu&#xdf;: sofern die Prelude/Coda-Stukur da ist, kann man sie auch so nutzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil genau an der Stelle, an der diese Klammer erzeugt wird, auch diese Info &#252;ber die Pr&#228;fix-Tracks angelegt werden mu&#223;.
+    </p>
+    <p>
+      Es macht also durchaus Sinn, das als eine Einheit zu betrachten.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Sollte sich dagegen <i>l&#228;ngerfristig</i>&#160;herausstellen, da&#223; diese Prelude/Coda-Struktur sinnfrei bleibt,
+    </p>
+    <p>
+      dann w&#228;re ein dediziertes Feld f&#252;r das fixierte Track-Pr&#228;fix wohl besser
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1560618427589" ID="ID_713762696" MODIFIED="1560618436168" TEXT="wer generiert diese Info?">
+<node CREATED="1560618449106" ID="ID_450355502" MODIFIED="1560618479666" TEXT="undurchdringbar verworren">
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 </node>
 </node>
@@ -20632,8 +20668,55 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1555084648375" ID="ID_483631091" MODIFIED="1557498707229" TEXT="organisiert das Struktur-Profil">
+<node CREATED="1560618609627" ID="ID_506564995" MODIFIED="1560618618079" TEXT="ben&#xf6;tigt ein Struktur-Profil der Spuren">
+<node CREATED="1555084648375" ID="ID_483631091" MODIFIED="1560618638500" TEXT="was ist dieses TrackProfil?">
 <arrowlink COLOR="#2e66db" DESTINATION="ID_1659558780" ENDARROW="Default" ENDINCLINATION="-889;0;" ID="Arrow_ID_1691760775" STARTARROW="None" STARTINCLINATION="828;0;"/>
+</node>
+<node CREATED="1560618654038" ID="ID_1561447255" MODIFIED="1560618660841" TEXT="wie wird es aufgebaut?">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560618662829" ID="ID_799744277" MODIFIED="1560618668613" TEXT="Rahmen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1560619599886" ID="ID_1652576901" MODIFIED="1560619609798" TEXT="Problem: Fixierte Overview-Ruler">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1560619612613" ID="ID_1255750107" MODIFIED="1560619622751" TEXT="die sind etwas Globales"/>
+<node CREATED="1560619623251" ID="ID_1890187732" MODIFIED="1560619628318" TEXT="aber die Info liegt nur indirekt vor">
+<node CREATED="1560619663110" ID="ID_994568218" MODIFIED="1560619675632" TEXT="die Ruler des top-level-TrackBody"/>
+<node CREATED="1560619676228" ID="ID_1236432450" MODIFIED="1560619685013" TEXT="genauer: die Anzahl dieser Ruler"/>
+</node>
+</node>
+</node>
+<node CREATED="1560618669419" ID="ID_930843555" MODIFIED="1560618693061" TEXT="Inhalt: durch Traversieren...">
+<node CREATED="1560618694269" ID="ID_1133842596" MODIFIED="1560618694932" TEXT="der TrackBody-Struktur"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1560618715494" ID="ID_453891028" MODIFIED="1560618729609" TEXT="wer verwaltet das TrackProfil?">
+<icon BUILTIN="help"/>
+<node CREATED="1560618780573" ID="ID_1295221704" MODIFIED="1560619724431" TEXT="naheliegend: das BodyCanvasWidget selber">
+<icon BUILTIN="forward"/>
+<node CREATED="1560618821911" ID="ID_1127517536" MODIFIED="1560619559162" TEXT="mu&#xdf; aber irgendwie an die TrackBody-Struktur delegiert werden">
+<linktarget COLOR="#297bdb" DESTINATION="ID_1127517536" ENDARROW="Default" ENDINCLINATION="118;0;" ID="Arrow_ID_1683662279" SOURCE="ID_2106254" STARTARROW="Default" STARTINCLINATION="118;0;"/>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1560618895535" ID="ID_1309792012" MODIFIED="1560618913282" TEXT="jedes Struktur-Update mu&#xdf; das Profil neu generieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1560618799458" ID="ID_1264363118" MODIFIED="1560618820650" TEXT="f&#xfc;hrt zu einem Gestr&#xfc;pp der Abh&#xe4;ngigkeiten">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1560619493205" ID="ID_630720873" MODIFIED="1560619542216" TEXT="logisch w&#xfc;rde es irgendwie zum Layout passen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1560619504005" ID="ID_342347780" MODIFIED="1560619513182" TEXT="aber das Layout hat nicht die notwendigen Infos"/>
+<node CREATED="1560619513934" ID="ID_2106254" MODIFIED="1560619564904" TEXT="praktisch alle Infos sind in der TrackBody-Struktur">
+<arrowlink COLOR="#297bdb" DESTINATION="ID_1127517536" ENDARROW="Default" ENDINCLINATION="118;0;" ID="Arrow_ID_1683662279" STARTARROW="Default" STARTINCLINATION="118;0;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560627625383" ID="ID_269248332" MODIFIED="1560627650483" TEXT="noch nicht recht gl&#xfc;cklich mit dieser L&#xf6;sung....">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1560627658092" ID="ID_624999649" MODIFIED="1560627749713" TEXT="wo bleibt der Display Evaluation Pass?">
+<arrowlink COLOR="#921d48" DESTINATION="ID_191170582" ENDARROW="Default" ENDINCLINATION="1918;0;" ID="Arrow_ID_982561049" STARTARROW="None" STARTINCLINATION="185;0;"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1540641317386" ID="ID_151954769" MODIFIED="1557498707229" TEXT="Canvas">

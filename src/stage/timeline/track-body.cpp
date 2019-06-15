@@ -59,6 +59,7 @@ namespace timeline {
   
   namespace {
     const uint DEFAULT_CONTENT_HEIGHT_px = 80;
+    const uint TIMELINE_BOTTOM_PADDING_px = 5;
   }
   
   
@@ -110,11 +111,17 @@ namespace timeline {
    * which constitute a vertical cross section through the track bodies
    * - pre: the given profile is built and complete up to the (upper side) start of this timeline
    * - post: the profile is elaborated for this track and its children, down to the lower end.
-   * 
+   * @todo 6/19 this very much looks like the "display evaluation pass" envisioned for the timeline::DisplayManager.
+   *            Need to find out if we'll need a dedicated evaluation pass and how to interconnect both. 
    */
   void
   TrackBody::establishTrackSpace (TrackProfile& profile)
   {
+    bool topLevel = isnil (profile);
+    
+    if (topLevel)
+      profile.append_prelude(rulers_.size());
+    
     for (auto& ruler : rulers_)
       {
         profile.append_ruler (ruler->calcHeight());
@@ -130,6 +137,9 @@ namespace timeline {
           subTrack->establishTrackSpace (profile);
         profile.addSlopeUp();
       }
+    
+    if (topLevel)
+      profile.append_coda(TIMELINE_BOTTOM_PADDING_px);
   }
   
   
