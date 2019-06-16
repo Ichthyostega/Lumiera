@@ -23,6 +23,10 @@
 
 /** @file track-presenter.cpp
  ** Implementation details of track presentation management.
+ ** Especially here we define the model binding of all sub-elements belonging
+ ** to a given track. The TrackPresenter::buildMutator() implementation hooks up
+ ** the necessary callbacks, to allow adding and removing of sub elements and properties
+ ** of a track, by sending appropriate _mutation messages_ over the stage::UiBus.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture

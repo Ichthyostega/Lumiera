@@ -235,13 +235,6 @@ namespace timeline {
   
   
   
-  TimelineCanvas::TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac)
-    : Gtk::Layout{}
-    , renderGrounding_{groundingFac}
-    , renderOverlay_{overlayFac}
-    { }
-  
-  
   
   BodyCanvasWidget::~BodyCanvasWidget() { }
   
@@ -306,6 +299,15 @@ namespace timeline {
       }
     return profile_;   //////////////////////////////////////////////////////////////////////////////////////TICKET #1039 : who actually invokes this function? what if not(rootBody_)?
   }
+  
+  
+  
+  
+  TimelineCanvas::TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac)
+    : Gtk::Layout{}
+    , renderGrounding_{groundingFac}
+    , renderOverlay_{overlayFac}
+    { }
   
   
   /**

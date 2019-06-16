@@ -93,7 +93,7 @@ namespace timeline {
      ~DisplayFrame()
         {
           TODO ("cause the managed presentation elements to detach from their parents");
-        }
+        }                            ///////////////////////////////////TICKET #1198 -- clarify to what extent esp. the header widgets need to be actively removed from the display structure. Is it sufficient just to kill the TrackHeadWidget 
       
       void
       setTrackName (cuString& name)

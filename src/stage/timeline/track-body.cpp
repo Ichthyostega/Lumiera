@@ -118,9 +118,8 @@ namespace timeline {
   TrackBody::establishTrackSpace (TrackProfile& profile)
   {
     bool topLevel = isnil (profile);
-    
     if (topLevel)
-      profile.append_prelude(rulers_.size());
+      profile.append_prelude (rulers_.size());
     
     for (auto& ruler : rulers_)
       {
@@ -130,7 +129,7 @@ namespace timeline {
           profile.append_gap (gapHeight);
       }
     profile.append_content (this->contentHeight_);
-    if (not isnil(subTracks_))
+    if (not isnil (subTracks_))
       {
         profile.addSlopeDown();
         for (TrackBody* subTrack : subTracks_)
@@ -139,7 +138,7 @@ namespace timeline {
       }
     
     if (topLevel)
-      profile.append_coda(TIMELINE_BOTTOM_PADDING_px);
+      profile.append_coda (TIMELINE_BOTTOM_PADDING_px);
   }
   
   
