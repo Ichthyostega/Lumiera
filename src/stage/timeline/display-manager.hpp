@@ -60,6 +60,8 @@
 
 #include "lib/util.hpp"
 
+#include <sigc++/signal.h>
+
 //#include <memory>
 //#include <vector>
 
@@ -106,6 +108,16 @@ namespace timeline {
       
       /** the overall horizontal pixel span to cover by this timeline */
       virtual PixSpan getPixSpan()         =0;
+      
+      using SignalStructureChange = sigc::signal<void>;
+      
+      /**
+       * signal to be invoked whenever the virtual structure of the
+       * corresponding timeline changes, thus necessitating a new
+       * arrangement of the timeline layout.
+       */
+      SignalStructureChange signalStructureChange_;
+      
       
     private:/* ===== Internals ===== */
      

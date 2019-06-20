@@ -18447,7 +18447,10 @@
 <node CREATED="1480124145476" ID="ID_1268974326" MODIFIED="1557498707225" TEXT="f&#xfc;r einen ganzen Scope"/>
 <node CREATED="1480124153979" ID="ID_887707794" MODIFIED="1557498707225" TEXT="stellt fest, was gezeigt werden mu&#xdf;"/>
 <node CREATED="1480124174144" ID="ID_1145067443" MODIFIED="1557498707225" TEXT="synthetisiert Anzeige-Parameter (z.B: Koordinaten, Z-Ordnung)"/>
-<node CREATED="1480124235128" ID="ID_162610711" MODIFIED="1557498707225" TEXT="mu&#xdf; inkrementell arbeiten und bestehende Widgets anpassen"/>
+<node CREATED="1480124235128" ID="ID_162610711" MODIFIED="1561047428001" TEXT="mu&#xdf; inkrementell arbeiten und bestehende Widgets anpassen">
+<arrowlink COLOR="#d6677c" DESTINATION="ID_1660005887" ENDARROW="Default" ENDINCLINATION="130;-668;" ID="Arrow_ID_1942101483" STARTARROW="None" STARTINCLINATION="613;0;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
@@ -19139,9 +19142,10 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560698483596" ID="ID_368409585" MODIFIED="1560698492402" TEXT="Infrastruktur f&#xfc;r Status-&#xc4;nderungen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1560698506599" ID="ID_1679016153" MODIFIED="1560698513827" TEXT="notwendig">
+<node COLOR="#338800" CREATED="1560698483596" ID="ID_368409585" MODIFIED="1561048727700" TEXT="Infrastruktur f&#xfc;r Status-&#xc4;nderungen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1560698506599" ID="ID_1679016153" MODIFIED="1561048713811" TEXT="notwendig">
+<icon BUILTIN="info"/>
 <node CREATED="1560698514618" ID="ID_424874311" MODIFIED="1560698517787" TEXT="Benachrichtigung">
 <node CREATED="1560698522830" ID="ID_771595987" MODIFIED="1560698534464" TEXT="initial..."/>
 <node CREATED="1560698535135" ID="ID_499624854" MODIFIED="1560698542403" TEXT="bei neuen Elementen"/>
@@ -19150,8 +19154,9 @@
 </node>
 <node CREATED="1560698518159" ID="ID_625626693" MODIFIED="1560698521434" TEXT="Aktionen"/>
 </node>
-<node CREATED="1560698568536" ID="ID_1734037059" MODIFIED="1560698572183" TEXT="Mechanismen">
-<node CREATED="1560698573838" ID="ID_546774892" MODIFIED="1560698581946" TEXT="Call-chain bauen">
+<node COLOR="#435e98" CREATED="1560698568536" ID="ID_1734037059" MODIFIED="1561048706720" TEXT="Mechanismen">
+<node CREATED="1560698573838" ID="ID_546774892" MODIFIED="1561042610462" TEXT="Call-chain bauen">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1560698613458" ID="ID_1618171484" MODIFIED="1560698618101" TEXT="direkte Parent-Links">
 <node CREATED="1560698643705" ID="ID_1904845397" MODIFIED="1560698651645" TEXT="eine Menge Aufwand"/>
 <node CREATED="1560698652882" ID="ID_314410558" MODIFIED="1560698659496" TEXT="komplex instand zu halten"/>
@@ -19160,7 +19165,7 @@
 <node CREATED="1560698618689" ID="ID_231185798" MODIFIED="1560698625444" TEXT="notification-Callbacks">
 <node CREATED="1560698764250" ID="ID_926915515" MODIFIED="1560698770146" TEXT="Publisher-Subscriber"/>
 <node CREATED="1560698668089" ID="ID_1609727906" MODIFIED="1560698674278" TEXT="ebenso problematisch"/>
-<node CREATED="1560698675226" ID="ID_1528720357" MODIFIED="1560698750879" TEXT="Signale sind aber Callbacks....">
+<node CREATED="1560698675226" ID="ID_1528720357" MODIFIED="1561042754690" TEXT="Signale sind aber Callbacks....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19172,28 +19177,79 @@
   </body>
 </html>
 </richcontent>
-<arrowlink COLOR="#fcc76b" DESTINATION="ID_64926941" ENDARROW="Default" ENDINCLINATION="15;-34;" ID="Arrow_ID_1800480673" STARTARROW="None" STARTINCLINATION="-57;0;"/>
+<arrowlink COLOR="#fcc76b" DESTINATION="ID_64926941" ENDARROW="Default" ENDINCLINATION="24;-35;" ID="Arrow_ID_1800480673" STARTARROW="None" STARTINCLINATION="-57;0;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
-<node CREATED="1560698625944" ID="ID_64926941" MODIFIED="1560698753534" TEXT="ein spezielles Signal hierf&#xfc;r">
-<linktarget COLOR="#fcc76b" DESTINATION="ID_64926941" ENDARROW="Default" ENDINCLINATION="15;-34;" ID="Arrow_ID_1800480673" SOURCE="ID_1528720357" STARTARROW="None" STARTINCLINATION="-57;0;"/>
-<node CREATED="1560698805704" ID="ID_1490359824" MODIFIED="1560698813328" TEXT="wer tr&#xe4;gt es?"/>
-<node CREATED="1560698814327" ID="ID_44788176" MODIFIED="1560698819234" TEXT="wie wird es zug&#xe4;nglich?"/>
+<node COLOR="#435e98" CREATED="1560698625944" ID="ID_64926941" MODIFIED="1561048698955" TEXT="ein spezielles Signal hierf&#xfc;r">
+<linktarget COLOR="#fcc76b" DESTINATION="ID_64926941" ENDARROW="Default" ENDINCLINATION="24;-35;" ID="Arrow_ID_1800480673" SOURCE="ID_1528720357" STARTARROW="None" STARTINCLINATION="-57;0;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1560698805704" ID="ID_1490359824" MODIFIED="1561042627539" TEXT="wer tr&#xe4;gt es?">
+<arrowlink DESTINATION="ID_1799554074" ENDARROW="Default" ENDINCLINATION="93;0;" ID="Arrow_ID_576839005" STARTARROW="None" STARTINCLINATION="169;0;"/>
+</node>
+<node CREATED="1560698814327" ID="ID_44788176" MODIFIED="1561048694418" TEXT="wie wird es zug&#xe4;nglich?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        per direktem Zugriff via Interface DisplayManager
+      </li>
+      <li>
+        per Zuweisung an die einzelnen TrackBody (signal == smart-ptr!)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1561036803347" ID="ID_281948392" MODIFIED="1561036824656" TEXT="Sigc-Signal ist ein (ref-counting) smart-ptr">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1561036911418" ID="ID_1948376179" MODIFIED="1561036913846" TEXT="Struktur">
-<node CREATED="1561036914961" ID="ID_318008470" MODIFIED="1561036944385" TEXT="der DisplayManager tr&#xe4;gt das &quot;Anker&quot;-Signal">
-<node CREATED="1561036987264" ID="ID_1799554074" MODIFIED="1561037495245" TEXT="signalStructureChange"/>
+<node COLOR="#338800" CREATED="1561036911418" ID="ID_1948376179" MODIFIED="1561048719567" TEXT="Struktur">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1561036914961" ID="ID_318008470" MODIFIED="1561042586692" TEXT="der DisplayManager tr&#xe4;gt das &quot;Anker&quot;-Signal">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1561036987264" ID="ID_1799554074" MODIFIED="1561042627539" TEXT="signalStructureChange">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1799554074" ENDARROW="Default" ENDINCLINATION="93;0;" ID="Arrow_ID_576839005" SOURCE="ID_1490359824" STARTARROW="None" STARTINCLINATION="169;0;"/>
+<icon BUILTIN="info"/>
 </node>
-<node CREATED="1561036945238" ID="ID_932981139" MODIFIED="1561036956895" TEXT="Nutzer kopieren es sich hiervon"/>
-<node CREATED="1561037513769" ID="ID_1240081490" MODIFIED="1561037547694" TEXT="das BodyCanvasWidget h&#xe4;ngt daran seinen Slot">
-<node CREATED="1561037555636" ID="ID_830580579" MODIFIED="1561037559431" TEXT="slotStructureChange"/>
 </node>
+<node COLOR="#338800" CREATED="1561036945238" ID="ID_932981139" MODIFIED="1561047017981" TEXT="Nutzer kopieren es sich hiervon">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1561037513769" ID="ID_1240081490" MODIFIED="1561042582058" TEXT="das BodyCanvasWidget h&#xe4;ngt daran seinen Slot">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1561037555636" ID="ID_830580579" MODIFIED="1561042600545" TEXT="slotStructureChange">
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561047296781" ID="ID_1660005887" MODIFIED="1561047428001" TEXT="Neuberechnung / Reihenfolge">
+<linktarget COLOR="#d6677c" DESTINATION="ID_1660005887" ENDARROW="Default" ENDINCLINATION="130;-668;" ID="Arrow_ID_1942101483" SOURCE="ID_162610711" STARTARROW="None" STARTINCLINATION="613;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1561047320822" ID="ID_652813348" MODIFIED="1561047325927" TEXT="Grunds&#xe4;tzliches">
+<node CREATED="1561047326773" ID="ID_455856045" MODIFIED="1561047353557" TEXT="wie wird die Reihenfolge der Tracks festgelegt?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561047338983" ID="ID_608382986" MODIFIED="1561047362267" TEXT="wie werden &#xc4;nderungen dieser realisiert?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1561048744043" ID="ID_1401239177" MODIFIED="1561048756692" TEXT="Konzept kl&#xe4;ren">
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561048792468" ID="ID_638394722" MODIFIED="1561048797689" TEXT="#1199 handle Timeline layout changes">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561047369284" ID="ID_488158262" MODIFIED="1561047377394" TEXT="Implementierung">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
@@ -20889,6 +20945,9 @@
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1541814988759" ID="ID_327310802" MODIFIED="1557498707230" TEXT="mu&#xdf; der TrackBody seinen Namen kennen?">
 <icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1561047126901" ID="ID_376833399" MODIFIED="1561047145040" TEXT="Ordnung und Entfernen von sub-Track Bodies!!">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>

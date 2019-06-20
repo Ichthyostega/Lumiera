@@ -73,8 +73,8 @@ namespace timeline {
   
   
   TrackBody::~TrackBody()
-  {
-    TODO ("detach from parent; store a functor or backreference");
+  { // indicate change of the global track structure
+    signalStructureChange_();
   }
   
   
@@ -82,6 +82,18 @@ namespace timeline {
   TrackBody::setTrackName (cuString& trackName)
   {
     TODO ("is the track name of any relevance for the TrackBody widget?");
+  }
+  
+  
+  void
+  TrackBody::attachSubTrack (TrackBody* subBody)
+  {
+    REQUIRE (subBody);
+    subTracks_.push_back (subBody);           /////////////////////////////////////////////////////TICKET #1199 : this can not possibly work; we need a way to retain the order of tracks, and we need to detach tracks...
+    
+    // detect changes of the track structure
+    subBody->signalStructureChange_ = signalStructureChange_;
+    signalStructureChange_(); // this _is_ such a change
   }
   
   

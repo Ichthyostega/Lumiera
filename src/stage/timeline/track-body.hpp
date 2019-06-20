@@ -42,6 +42,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/ruler-track.hpp"
+#include "stage/timeline/timeline-layout.hpp"
 
 //#include "lib/util.hpp"
 
@@ -86,10 +87,11 @@ namespace timeline {
      ~TrackBody();
       
       void setTrackName (cuString&);
-      
+      void establishTrackSpace (TrackProfile&);
+      void attachSubTrack (TrackBody*);
       uint calcHeight();
       
-      void establishTrackSpace (TrackProfile&);
+      DisplayManager::SignalStructureChange signalStructureChange_;
       
       
     private:/* ===== Internals ===== */

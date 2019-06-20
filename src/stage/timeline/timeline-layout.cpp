@@ -32,6 +32,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/timeline-layout.hpp"
+#include "stage/timeline/track-body.hpp"
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -84,6 +85,10 @@ namespace timeline {
   {
     headerPane_.installForkRoot (head);
     bodyCanvas_.installForkRoot (body);
+    
+    // detect changes of the track structure
+    body.signalStructureChange_ = signalStructureChange_;
+    signalStructureChange_(); // this _is_ such a change
   }
   
   

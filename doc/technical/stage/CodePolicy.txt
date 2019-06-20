@@ -67,6 +67,30 @@ in response to a (population) diff message.
   to be properly detached from signals. We want to ensure this happens as soon as the
   child is taken out of service. Do not use an ``can collect garbage later'' approach.]
 
+Signals
+~~~~~~~
+Basically, Signals are just typed callback functors. However, the *Sigc\++* library
+helps to deal with the inherent danger of _dangling references,_ and it allows to
+manage and disconnect signal attachments. Thus, whenever cross wiring beyond the
+given model structure can be expected within the UI, usage of `sigc::signal<..>`
+should be preferred.
+
+NOTE: by itself, `sigc::signal` is a lightweight ref-counting smart-pointer.
+
+.Conventions
+- the names of signals are prefixed by the word `signal`.
+- whenever a signal is used over several widgets and components,
+  there should be a _typedef_ for the signal type,
+  e.g. `using SignalBarf = sigc::signal<bool,Booh&>;`
+- it is perfectly fine for a signal to be just a public member of some component,
+  especially when the sole purpose of that signal is for someone else to connect
+  or invoke it. However, when a signal is meant to be an internal implementation
+  detail, then better make it private, optinally exposing it via accessor function.
+- a function intended to be connected to a signal is termed as ``Slot'', and its
+  name should be prefixed by the word `slot`, e.g. `bool slotBarf (Booh& moo);`
+- such a slot function should be `noexcept`
+
+
 Error handling
 ~~~~~~~~~~~~~~
 Be aware that GTK is written in C. And while GTKmm has some safeguards in place,

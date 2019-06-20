@@ -128,10 +128,12 @@ namespace widget {
       using Entry = std::pair<Mark,Mark>;
       using TextWidget = model::FlashDeco<Gtk::TextView>;
       
+      using SignalErrorChanged = sigc::signal<void, bool>;
+      
       vector<Entry> errorMarks_;
       TextWidget    textLog_;
       
-      sigc::signal<void, bool> errorChangedSignal_;
+      SignalErrorChanged errorChangedSignal_;
       
       
     public:
@@ -291,7 +293,7 @@ namespace widget {
         }
       
       /** signal fired when error state changes */
-      sigc::signal<void,bool>
+      SignalErrorChanged
       signalErrorChanged()
         {
           return errorChangedSignal_;

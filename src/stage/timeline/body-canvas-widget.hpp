@@ -130,6 +130,7 @@ namespace timeline {
       
     private:/* ===== Internals ===== */
       
+      void slotStructureChange()  noexcept;
       TrackProfile& establishTrackProfile();
     };
   

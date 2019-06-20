@@ -70,7 +70,10 @@ namespace timeline {
   
   
   
-  TrackPresenter::~TrackPresenter() { }
+  TrackPresenter::~TrackPresenter()
+  {
+    TODO ("find a way how to detach from parent tracks");        ////////////////////////////////////////////TICKET #1199 : how to deal with re-ordering of tracks?
+  }
   
   
   

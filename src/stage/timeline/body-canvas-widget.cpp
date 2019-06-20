@@ -248,6 +248,9 @@ namespace timeline {
     , rulerCanvas_{makeRenderer<Grounding, RULER>(layout_,profile_), makeRenderer<Overlay, RULER>(layout_,profile_)}
     , mainCanvas_ {makeRenderer<Grounding, BODY>(layout_,profile_),  makeRenderer<Overlay, BODY>(layout_,profile_)}
     {
+      // respond to any structure changes of the timeline by recomputing the TrackProfile
+      layout_.signalStructureChange_.connect (sigc::mem_fun (*this, &BodyCanvasWidget::slotStructureChange));
+      
       this->set_border_width (0);
       this->property_expand() = true;       // dynamically grab any available additional space
       this->pack_start (rulerCanvas_);
@@ -283,6 +286,14 @@ namespace timeline {
   BodyCanvasWidget::installForkRoot (TrackBody& rootTrackBody)
   {
     rootBody_ = &rootTrackBody;
+  }
+  
+  
+  /** force rebuilding of theTrackProfile whenever the global timeline structure changes */
+  void
+  BodyCanvasWidget::slotStructureChange()  noexcept
+  {
+    profile_.clear();
   }
   
   

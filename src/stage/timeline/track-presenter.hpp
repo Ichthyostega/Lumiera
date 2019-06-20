@@ -92,6 +92,7 @@ namespace timeline {
       
      ~DisplayFrame()
         {
+          // Note: ~TrackBody triggers DisplayManager::signalStructureChange_()
           TODO ("cause the managed presentation elements to detach from their parents");
         }                            ///////////////////////////////////TICKET #1198 -- clarify to what extent esp. the header widgets need to be actively removed from the display structure. Is it sufficient just to kill the TrackHeadWidget 
       
@@ -103,8 +104,9 @@ namespace timeline {
         }
 
       void
-      injectSubTrack (TrackHeadWidget& head, TrackBody& body)
+      injectSubTrack (TrackHeadWidget& subHead, TrackBody& subBody)
         {
+          body.attachSubTrack (&subBody);
           UNIMPLEMENTED ("inject the widgets to represent a nested sub-track within this timeline track display frame");
         }
     };

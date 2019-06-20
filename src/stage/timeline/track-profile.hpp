@@ -98,6 +98,12 @@ namespace timeline {
         }
       
       void
+      clear()  noexcept
+        {
+          elements.clear();
+        }
+      
+      void
       performWith (ProfileInterpreter& interpreter)
         {
           for (auto& slopeVerb : elements)
