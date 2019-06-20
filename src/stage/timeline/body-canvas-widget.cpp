@@ -222,6 +222,7 @@ namespace timeline {
                   PINT concreteRenderScheme{cox, layout};
                   /////////////////////////////////////////////////////////////////////////////////TICKET #1039 : find out a way how to select the header/body part of the profile!
                   profile.performWith (concreteRenderScheme);
+                  //^^^^^//////////////////////////////////////////////////TODO: need accessor-function here; attach it somehow to establishTrackProfile()
                 };
       }
     
