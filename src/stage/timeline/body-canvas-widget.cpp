@@ -220,8 +220,7 @@ namespace timeline {
         return [&](CairoC cox)
                 {
                   PINT concreteRenderScheme{cox, layout};
-                  /////////////////////////////////////////////////////////////////////////////////TICKET #1039 : find out a way how to select the header/body part of the profile!
-                  getProfile().performWith (concreteRenderScheme);
+                  getProfile().performWith (concreteRenderScheme, isRuler);
                 };
       }
     

@@ -41,6 +41,7 @@
 #include "stage/gtk-base.hpp"
 #include "lib/verb-visitor.hpp"
 
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -110,6 +111,10 @@ namespace timeline {
               slopeVerb.applyTo (interpreter);
         }
       
+      void performWith (ProfileInterpreter& interpreter, bool selectRuler);
+      
+      
+      
     private:/* ===== Internals: handling tokens ===== */
       
       template<typename FUN, typename...ARGS>
@@ -151,12 +156,6 @@ namespace timeline {
             append_close (1);
         }
       
-      uint
-      getPinnedPrefixCnt()
-        {
-          return firstEntryIs("prelude")? elements.front().accessArg<uint>() : 0;
-        }
-      
     private:
       bool
       firstEntryIs (Literal expectedToken)
@@ -180,7 +179,56 @@ namespace timeline {
           
           ++ slopeDepth;
         }
+      
+      int
+      getPinnedPrefixCnt()
+        {
+          return firstEntryIs("prelude")? elements.front().accessArg<uint>() : 0;
+        }
+      
+      auto
+      filterSegment(bool selectPrefixPart)
+        {
+                struct CountingFilter
+                  {
+                    int cnt;
+                    bool selectPrefix;
+                    
+                    bool
+                    operator() (...)
+                      {
+                        bool isPrefixPart = 0 < cnt--;
+                        return selectPrefix? isPrefixPart : not isPrefixPart;
+                      }
+                  };
+          
+          
+          return lib::treeExplore(elements)
+                     .filter(CountingFilter{getPinnedPrefixCnt(), selectPrefixPart});
+        }
     };
+  
+  
+  /**
+   * A variation of standard evaluation, only rendering one segment of the profile.
+   * The `prelude` verb defines a special _prefix part_ of the track profile, which
+   * is assumed to correspond to the timecode ruler tracks. These special _overview_
+   * tracks are rendered _always visible_ at the top of the timeline, even when scrolling
+   * down on large arrangements with several tracks. Effectively this means we have to
+   * split the TrackProfile into two segments, which are to be rendered within two
+   * distinct TimelineCanvas widgets (the first one always on top, while the second one
+   * with the actual track content is shown within pane with scrollbars).
+   * @param selectRuler decide if this evaluation shall render the overview rulers
+   *                    (when given `true`) or alternatively the remaining standard body
+   *                    part of the timeline (when given `false`).
+   */
+  inline void
+  TrackProfile::performWith (ProfileInterpreter& interpreter, bool selectRuler)
+  {
+    for (auto& slopeVerb : filterSegment(selectRuler))
+      slopeVerb.applyTo (interpreter);
+  }
+  
   
   
 }}// namespace stage::timeline

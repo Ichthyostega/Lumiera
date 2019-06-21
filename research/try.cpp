@@ -42,18 +42,15 @@
 // 10/18 - investigate insidious reinterpret cast
 // 12/18 - investigate the trinomial random number algorithm from the C standard lib
 // 04/19 - forwarding tuple element(s) to function invocation
+// 06/19 - use a statefull counting filter in a treeExplorer pipeline
 
 
 /** @file try.cpp
- * Research how to apply a tuple to a varargs function forwarder.
- * The recent standard library has a std::apply, which we can not yet use, unfortunately.
- * @note this research remains inconclusive. As far as I can see, the simplified setup
- *       exactly mimics the problematic call situation; however, in the real use case,
- *       we need to std::forward<Args> the argument tuple object field while here in
- *       this simplified case, it compiles just fine without -- as it should after all,
- *       since that is the whole point of perfect forwarding; std::get should expose
- *       a LValue reference to the tuple element, and we pass that through a forwarding
- *       function into the double dispatch to the receiving visitor.
+ * How to pick a configurable prefix segment from an iterable sequence.
+ * Instead of using a classic indexed for loop, the same effect can be achieved
+ * through a statefull filter functor in a `treeExplore()`-pipeline; after full
+ * optimisation I'd expect even to get the same assembly as from an equivalent
+ * hand written for loop. (Caveat: debug builds will be bloated)
  */
 
 typedef unsigned int uint;
@@ -61,17 +58,13 @@ typedef unsigned int uint;
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
-#include "lib/verb-visitor.hpp"
-
-#include "lib/meta/variadic-helper.hpp"
+#include "lib/iter-tree-explorer.hpp"
 
 #include <utility>
 #include <string>
-#include <tuple>
+#include <vector>
 
-using lib::Literal;
 using std::string;
-using std::tuple;
 
 
 
@@ -80,219 +73,37 @@ using std::tuple;
 #define SHOW_EXPR(_XX_) \
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
-template<typename FUN, typename...ARGS>
-void
-forwardInvoker (FUN& fun, ARGS&&... args)
+template<class IT>
+auto
+selectSeg(IT&& it, bool useFirst)
 {
-  cout << "forwardInvoker...\n"
-       << lib::test::showVariadicTypes(args...)
-       << endl;
-  fun (std::forward<ARGS>(args)...);
-}
-
-template<typename FUN, typename...ARGS>
-struct Holder
-  {
-    using Args = tuple<ARGS...>;
-    
-    Args tup;
-    
-    Holder (Args& tup)
-      : tup{tup}
-      { }
-    
-template<size_t...idx>
-void
-unpack_and_forward (FUN& fun, lib::meta::IndexSeq<idx...>)
-{
-  cout << "unpack_and_forward...\n";
-  SHOW_TYPE (Args)
-  
-  forwardInvoker (fun, std::get<idx> (tup)...);
-}
-
-void
-applyTuple (FUN& fun)
-{
-  cout << "applyTuple...\n";
-  SHOW_TYPE (Args)
-  
-  using SequenceIterator = typename lib::meta::BuildIdxIter<ARGS...>::Ascending;
-  
-  unpack_and_forward (fun, SequenceIterator());
-}
-  };
-
-
-
-  ///////////////////////////TODO : Debugging
-  struct Trackr
-    {
-      size_t num;
-      
-      Trackr (size_t val)
-        : num(val)
+      struct CountingFilter
         {
-          cout <<"Trackr("<<val<<")"<<endl;
-        }
-     ~Trackr()
-        {
-          cout <<"~Trackr("<<num<<")"<<endl;
-        }
-      Trackr (Trackr const& lval)
-        : num(lval.num)
-        {
-          cout <<"Trackr()<<-LVal"<<endl;
-        }
-      Trackr (Trackr && rval)
-        : num(rval.num)
-        {
-          cout <<"Trackr()<<-RVal"<<endl;
-        }
-      Trackr&
-      operator= (Trackr const& orig)
-        {
-          cout <<"Tracker = orig"<<endl;
-          num = orig.num;
-          return *this;
-        }
-    };
-  ///////////////////////////TODO : Debugging
-
-  struct Receiver
-    {
-      void
-      grrrn (uint& x, Trackr y)
-        {
-          cout <<"grrrn()..."<< x<<"*Trckr("<<y.num<<")="<<(x*y.num)<<endl;
-        }
-    };
-  
-  template<class REC, class SIG>
-  struct Hodler;
-  
-  template<class REC, class RET, typename... ARGS>
-  struct Hodler<REC, RET(ARGS...)>
-    {
-      typedef RET (REC::*Handler) (ARGS...);
-      
-      Handler handler_;
-      using Verb = lib::VerbToken<REC,RET(ARGS...)>;
-      using Args = std::tuple<ARGS...>;
-      
-      /** meta-sequence to pick argument values from the storage tuple */
-      using SequenceIterator = typename lib::meta::BuildIdxIter<ARGS...>::Ascending;
-      
-      Verb verb_;
-      Args args_;
-      
-//    Hodler (typename Verb::Handler handlerRef, Literal verbID, ARGS&&... args)
-      Hodler (Handler handlerRef, Literal verbID, ARGS&&... args)
-        : handler_{handlerRef} 
-        , verb_{handlerRef, verbID}
-        , args_{std::forward<ARGS> (args)...}
-        { }
-      
-      RET
-      applyTo (REC& receiver)
-        {
-          return invokeVerb (receiver, SequenceIterator());
-        }
-      
-      template<size_t...idx>
-      RET
-      invokeVerb (REC& receiver, lib::meta::IndexSeq<idx...>)
-        {                                                //////////////////////////////////////////TICKET #1006 | TICKET #1184 why do we need std::forward here? the target is a "perfect forwarding" function, which should be able to receive a LValue reference to the tuple element just fine...
-//          lib::test::TypeDebugger<Args> buggy;
-//          return verb_.applyTo (receiver, std::get<idx> (std::forward<Args>(args_))...);  /// <<------------this compiles, but consumes the tuple's content (move init)
-//          return verb_.applyTo (receiver, std::get<idx> (args_)...);
-//          return (receiver.*handler_)(std::get<idx> (args_)...);                          /// <<------------this works
-//          return applyToVerb (receiver, std::get<idx> (args_)...);
-//          return getVerbFun(receiver) (std::get<idx> (args_)...);                         /// <<------------this compiles, but creates a spurious copy
-          return verb_.applyTo (receiver, forwardElm<idx> (args_)...);                    /// <<------------this compiles, but consumes the tuple's content (move init)
-        }
-
-      template<size_t idx>
-      using TupleElmType = typename std::tuple_element<idx, Args>::type;
-      
-      template<size_t idx>
-//      std::remove_reference_t<decltype(std::get<idx> (args))>&&
-      TupleElmType<idx>&&      
-      forwardElm (Args& args)
-        {
-          using ElmRef = decltype(std::get<idx> (args));
-          using Elm = std::remove_reference_t<TupleElmType<idx>>;
+          int cnt;
+          bool useFirst;
           
-          return std::forward<TupleElmType<idx>> (std::get<idx> (args));
-        }
-      
-      RET
-      applyToVerb (REC& receiver, ARGS&& ...args)
-        {
-//        REQUIRE ("NIL" != token_);
-          return (receiver.*handler_)(std::forward<ARGS>(args)...);
-        }
-      
-//      std::function<RET(ARGS...)>
-      decltype(auto)
-      getVerbFun(REC& receiver)
-        {
-          return [&](ARGS...args) -> RET
-                    {
-                      return (receiver.*handler_)(std::forward<ARGS>(args)...);
-                    };
-        }
-    };
-
-using lib::meta::Yes_t;
-using lib::meta::No_t;
-
-META_DETECT_FUNCTION(void, cloneInto, (void*) const);
-META_DETECT_FUNCTION_NAME(cloneInto);
+          bool
+          operator() (...)
+            {
+              bool isPrefixPart = 0 < cnt--;
+              return useFirst? isPrefixPart : not isPrefixPart;
+            }
+        };
+  return lib::treeExplore(std::forward<IT> (it))
+                .filter(CountingFilter{50, useFirst});
+}
 
 
 int
 main (int, char**)
   {
-    auto tup = std::make_tuple(1,2,3);
-    auto fun = [](int a, int b, int c)
-                  {
-                    cout << a<<"+"<<b<<"+"<<c<<"="<<(a+b+c)<<endl;
-                  };
+    using VecN = std::vector<int>;
+    VecN numz{1,1,2,3,5,8,13,21};
     
-    using Hol = Holder<decltype(fun), int, int, int>;
-    Hol holder(tup);
-    holder.applyTuple (fun);
-    
-    
-    uint zwo{2};
-    std::tuple<uint&, Trackr> trp{zwo,Trackr(3)};
-    auto frn = [](uint& x, Trackr y)
-                  {
-                    cout << x<<"*Trckr("<<y.num<<")="<<(x*y.num)<<endl;
-                  };
-    using Hrl = Holder<decltype(frn), uint&, Trackr>;
-    Hrl hrlder(trp);
-    hrlder.applyTuple (frn);
-    cout <<  "\n.ulps.\n";
-    
-    Hodler<Receiver, void(uint&,Trackr)> holyh(&Receiver::grrrn, "holyhandgrenade", zwo, Trackr(5));
-    Receiver recy;
-//    recy.grrrn (std::get<0>(trp), Trackr(5));
-    holyh.applyTo (recy);
-    
-    cout << "---Types---"<<endl;
-    using BussI = lib::VerbInvoker<Receiver, void>;
-    using CloneI = lib::polyvalue::CloneValueSupport<lib::polyvalue::EmptyBase>;
-    SHOW_TYPE(BussI);
-    SHOW_EXPR (lib::polyvalue::exposes_CloneFunction<BussI>::value)
-    SHOW_EXPR (HasFunSig_cloneInto<BussI>::value)
-    SHOW_EXPR (HasFunSig_cloneInto<CloneI>::value)
-    SHOW_EXPR (HasFunName_cloneInto<BussI>::value)
-    SHOW_EXPR (HasFunName_cloneInto<CloneI>::value)
-    using BussP = decltype(&BussI::cloneInto);
-    SHOW_TYPE(BussP)
-    
+    for (auto& elm : selectSeg(numz, false))
+      cout << elm<<"::";
+    for (auto& elm : selectSeg(numz, true))
+      cout << elm<<"::";
     
     cout <<  "\n.gulp.\n";
     return 0;
