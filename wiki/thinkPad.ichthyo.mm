@@ -20806,7 +20806,33 @@
 <node CREATED="1561049205709" ID="ID_87098848" MODIFIED="1561049213673" TEXT="bisher direkte Referenz">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561049214764" ID="ID_1962267741" MODIFIED="1561049222012" TEXT="neue L&#xf6;sung gesucht">
+<node COLOR="#338800" CREATED="1561049214764" ID="ID_1962267741" MODIFIED="1561139793452" TEXT="neue L&#xf6;sung: getter-Funktion">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1561139816451" ID="ID_1820580687" MODIFIED="1561139824487" TEXT="gef&#xe4;llt mir aber noch nicht">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1561139829332" ID="ID_730637336" MODIFIED="1561139839310" TEXT="rein logisch geh&#xf6;rt das Profil ja schon hier her"/>
+<node CREATED="1561139846988" ID="ID_565918975" MODIFIED="1561139974752" TEXT="aber der ganze Update-Mechanismus ist ein in sich abgekapselter Belang">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und macht sich aber hier im Quellcode &#252;ber mehrere Funktionen verteilt breit,
+    </p>
+    <p>
+      ohne da&#223; man ihn hier komplett &#252;berblicken kann. Dazu kommt, da&#223; die ganze Verdrahterei
+    </p>
+    <p>
+      &#252;ber zwei Lambdas hinweg auch nicht besonders <i>geradlinig</i>&#160;und verst&#228;ndlich ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561139978982" ID="ID_1098160043" MODIFIED="1561139990042" TEXT="doch in den Layout-Manager verschieben?">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>

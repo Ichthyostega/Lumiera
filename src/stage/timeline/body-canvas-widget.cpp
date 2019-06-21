@@ -215,14 +215,13 @@ namespace timeline {
     
     template<class PINT, bool isRuler>
     auto
-    makeRenderer (DisplayManager& layout, TrackProfile& profile)
+    makeRenderer (DisplayManager& layout, BodyCanvasWidget::ProfileGetter& getProfile)
       {
         return [&](CairoC cox)
                 {
                   PINT concreteRenderScheme{cox, layout};
                   /////////////////////////////////////////////////////////////////////////////////TICKET #1039 : find out a way how to select the header/body part of the profile!
-                  profile.performWith (concreteRenderScheme);
-                  //^^^^^//////////////////////////////////////////////////TODO: need accessor-function here; attach it somehow to establishTrackProfile()
+                  getProfile().performWith (concreteRenderScheme);
                 };
       }
     
@@ -246,11 +245,19 @@ namespace timeline {
     , profile_{}
     , rootBody_{nullptr}
     , contentArea_{}
-    , rulerCanvas_{makeRenderer<Grounding, RULER>(layout_,profile_), makeRenderer<Overlay, RULER>(layout_,profile_)}
-    , mainCanvas_ {makeRenderer<Grounding, BODY>(layout_,profile_),  makeRenderer<Overlay, BODY>(layout_,profile_)}
+    , rulerCanvas_{makeRenderer<Grounding, RULER>(layout_,getProfile), makeRenderer<Overlay, RULER>(layout_,getProfile)}
+    , mainCanvas_ {makeRenderer<Grounding, BODY>(layout_,getProfile),  makeRenderer<Overlay, BODY>(layout_,getProfile)}
     {
       // respond to any structure changes of the timeline by recomputing the TrackProfile
       layout_.signalStructureChange_.connect (sigc::mem_fun (*this, &BodyCanvasWidget::slotStructureChange));
+      
+      // access and possible (re)establish the current "profile" of the tracks on demand...
+      getProfile = [this]() -> TrackProfile&
+                        {
+                          if (rootBody_ and isnil (profile_))
+                            rootBody_->establishTrackSpace (profile_);
+                          return profile_;
+                        };
       
       this->set_border_width (0);
       this->property_expand() = true;       // dynamically grab any available additional space
@@ -277,7 +284,7 @@ namespace timeline {
   
   /**
    * The Lumiera Timeline model does not rely on a list of tracks, as most conventional video editing software does --
-   * rather, each sequence holds a _fork of nested scopes._ This recursively nested structure is reflected in the way
+   * rather, each sequence holds a _fork of nested scopes._ This recursively nested structure is parallelled in the way
    * we organise and draw the timeline representation onto the TimelineCanvas: we use an intermediary entity, the TrackBody
    * as an organisational grouping device, even while we draw _all of the timeline representation_ onto a single global
    * #mainCanvas_ within the (scrollable) #contentArea_. Thus, adding the first TrackBody to represent the root track
@@ -295,21 +302,6 @@ namespace timeline {
   BodyCanvasWidget::slotStructureChange()  noexcept
   {
     profile_.clear();
-  }
-  
-  
-  /**
-   * 
-   */
-  TrackProfile&
-  BodyCanvasWidget::establishTrackProfile()
-  {
-    if (rootBody_)
-      {
-        if (isnil (profile_))
-          rootBody_->establishTrackSpace (profile_);
-      }
-    return profile_;   //////////////////////////////////////////////////////////////////////////////////////TICKET #1039 : who actually invokes this function? what if not(rootBody_)?
   }
   
   

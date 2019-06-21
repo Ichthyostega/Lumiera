@@ -128,10 +128,13 @@ namespace timeline {
           return contentArea_.get_vadjustment();
         }
       
+      /** a way to get and possibly (re)compute the current TrackProfile */
+      using ProfileGetter = std::function<TrackProfile&()>;
+      ProfileGetter getProfile;
+      
     private:/* ===== Internals ===== */
       
       void slotStructureChange()  noexcept;
-      TrackProfile& establishTrackProfile();
     };
   
   
