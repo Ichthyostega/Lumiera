@@ -583,7 +583,7 @@ namespace time {
     inline NUM
     __ensure_nonzero (NUM n)
     {
-      if (n == 0)
+      if (n == NUM{0})
         throw error::Logic ("Degenerated frame grid not allowed"
                            , error::LERR_(BOTTOM_VALUE));
       return n;
