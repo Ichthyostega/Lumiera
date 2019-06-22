@@ -572,6 +572,13 @@ namespace time {
       operator std::string() const;
     };
   
+  /** convenient conversion to duration in fractional seconds */
+  inline FSecs
+  operator/ (int n, FrameRate rate)
+  {
+    return n / boost::rational_cast<FSecs> (rate);
+  }
+  
   
   
   
