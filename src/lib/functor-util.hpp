@@ -178,12 +178,12 @@ namespace std {
    * @note   use with caution. Hash is calculated
    *         relying on undocumented boost internals.
    */
-  template<typename SIG>
-  inline lib::HashVal
-  hash_value (function<SIG> const& fun)
-  {
-    return util::rawHashValue (fun);
-  }
+//  template<typename SIG>
+//  inline lib::HashVal
+//  hash_value (function<SIG> const& fun)
+//  {
+//    return util::rawHashValue (fun);
+//  }
   
 }
 

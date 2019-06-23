@@ -46127,6 +46127,42 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1561305344531" ID="ID_1797228597" MODIFIED="1561308173677" TEXT="Funktion hash_value aufgeben">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1561305360584" ID="ID_503655811" MODIFIED="1561308153571" TEXT="TypeHandler f&#xfc;r BufferMetadata">
+<node CREATED="1561305394029" ID="ID_1225221352" MODIFIED="1561305409873" TEXT="definiert eine Art Buffer-Typ"/>
+<node CREATED="1561305410256" ID="ID_1164668948" MODIFIED="1561305416889" TEXT="basiert bisher auf dem konkreten Handler"/>
+<node CREATED="1561305428408" ID="ID_1356896886" MODIFIED="1561305452650" TEXT="kann man hier auch das Identit&#xe4;gs-Argument anwenden?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. wir brauchen keine &#196;quivalenz?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1561305463577" ID="ID_1519337489" MODIFIED="1561305477381" TEXT="folglich w&#xe4;re jeder TypeHandler ein Unikat"/>
+</node>
+<node COLOR="#338800" CREATED="1561308051917" ID="ID_914530129" MODIFIED="1561308171779" TEXT="pragmatische L&#xf6;sung: Type-ID">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1561308061204" ID="ID_1554244425" MODIFIED="1561308168325" TEXT="verwende die typeid(TY) der Funktoren">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561308078902" ID="ID_430150773" MODIFIED="1561308091311" TEXT="kann in&apos;s Auge gehn">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1561308093797" ID="ID_553457078" MODIFIED="1561308135247" TEXT="wenn jemand eine std::function&lt;void(void)&gt; direkt speichert">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1561308115205" ID="ID_1743532708" MODIFIED="1561308132530" TEXT="Regel ist aber TypeHandler::create&lt;TY&gt;()">
+<icon BUILTIN="back"/>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561296009625" ID="ID_617134183" MODIFIED="1561296050381" TEXT="alle Vergleichs-Operatoren auf Command-Funktor-Ebene zur&#xfc;ckbauen">
 <icon BUILTIN="flag-yellow"/>
 </node>
