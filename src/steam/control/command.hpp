@@ -32,8 +32,8 @@
  ** function arguments need to be provided (this is called "binding" or "closing the function arguments").
  ** These function arguments are stored within the command definition and remain opaque to the client code
  ** actually invoking the command. Behind the scenes, there is a CommandRegistry, holding an index of the
- ** registered commands and managing the storage for command definitions and arguments. The actual 
- ** Command object used by client code is a small, copyable and ref-counting handle to this 
+ ** registered commands and managing the storage for command definitions and arguments. The actual
+ ** Command object used by client code is a small, copyable and ref-counting handle to this
  ** stored definition backend.
  ** 
  ** # Command definition, argument types and UNDO operation
@@ -110,7 +110,7 @@ namespace control {
    *  Handle object representing a single Command instance to be used by client code.
    *  Commands are accessed \link #get through a symbolic ID \endlink; there needs to be
    *  a CommandDef somewhere to specify the actual operation and to define, how the
-   *  effect of the command can be undone. Moreover, the command's definition 
+   *  effect of the command can be undone. Moreover, the command's definition
    *  refers to a HandlingPattern, which describes how the command is actually
    *  to be executed (the default is scheduling it within the SteamDispatcher)
    *  
@@ -312,9 +312,7 @@ namespace control {
   operator== (Command const& c1, Command const& c2)
   {
     return (!c1 && !c2)
-        || ( c1 &&  c2  && ( &c1.impl() == &c2.impl()
-                           || Command::equivalentImpl (c1,c2)
-                           )); 
+        || ( c1 &&  c2  && (&c1.impl() == &c2.impl()));
   }
   
   inline bool
@@ -328,7 +326,7 @@ namespace control {
   operator< (Command const& c1, Command const& c2)
   {
     return (!c1 && c2)
-        || ( c1 && c2 && (&c1.impl() < &c2.impl())); 
+        || ( c1 && c2 && (&c1.impl() < &c2.impl()));
   }
   
   
