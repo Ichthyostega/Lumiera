@@ -64,7 +64,6 @@ namespace control {
   using lib::meta::NullType;
   using lib::meta::buildTuple;
   
-  using lib::meta::equals_safeInvoke;
   using lib::TypedAllocationManager;
   using std::function;
   using std::ostream;
@@ -96,19 +95,10 @@ namespace control {
       
       /////////////////////////////////////////////////////////////TICKET #798 : we need to pick up arguments from a lib::diff::Record.
       
-      
       ostream&
       dump (ostream& output)  const
         {
           return BASE::dump (output << element() << ',');
-        }
-      
-      friend bool
-      compare (ParamAccessor const& p1, ParamAccessor const& p2)
-        {
-          return equals_safeInvoke (p1.element(), p2.element())
-              && compare ( static_cast<BASE>(p1)
-                         , static_cast<BASE>(p2) );
         }
     };
     
@@ -134,12 +124,6 @@ namespace control {
       dump (ostream& output)  const
         { 
           return output;
-        }
-      
-      friend bool
-      compare (ParamAccessor const&, ParamAccessor const&)
-        {
-          return true;
         }
     };
   
@@ -218,11 +202,6 @@ namespace control {
           else
             return dumped+")";
         }
-      
-      
-      /// Supporting equality comparisons...
-      friend bool operator== (OpClosure const& c1, OpClosure const& c2)  { return compare (c1.params_, c2.params_); }
-      friend bool operator!= (OpClosure const& c1, OpClosure const& c2)  { return not (c1 == c2); }
     };
   
   

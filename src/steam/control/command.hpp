@@ -223,7 +223,6 @@ namespace control {
     private:
       void setArguments (Arguments&);
       void setArguments (lib::diff::Rec const&);
-      static bool equivalentImpl (Command const&, Command const&);
     };
   
   

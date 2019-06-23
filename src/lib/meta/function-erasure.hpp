@@ -58,7 +58,6 @@
 #include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/opaque-holder.hpp"
-#include "lib/functor-util.hpp"
 
 #include <functional>
 
@@ -140,14 +139,6 @@ namespace meta{
         {
           return get<function<SIG>>();
         }
-      
-      
-      friend bool
-      operator== (StoreFunction const& o1,
-                  StoreFunction const& o2)
-        {
-          return util::rawComparison (o1.asBase(),o2.asBase());
-        }
     };
   
   
@@ -178,16 +169,6 @@ namespace meta{
           SIG *fun = get<SIG*>();
           REQUIRE (fun);
           return *fun;
-        }
-      
-      
-      friend bool
-      operator== (StoreFunPtr const& o1,
-                  StoreFunPtr const& o2)
-        {
-          void * *fun1 = reinterpret_cast<void**> (o1.asBase());
-          void * *fun2 = reinterpret_cast<void**> (o2.asBase());
-          return *fun1 == *fun2;
         }
     };
   
@@ -224,12 +205,6 @@ namespace meta{
       explicit operator bool() const { return funP_; }
       bool isValid()           const { return funP_; }
       
-      friend bool
-      operator== (StoreUncheckedFunPtr const& o1,
-                  StoreUncheckedFunPtr const& o2)
-        {
-          return unConst(o1).funP_ == unConst(o2).funP_;
-        }
     };
   
   

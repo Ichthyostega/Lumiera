@@ -44,7 +44,6 @@
 #include "lib/meta/function-closure.hpp"
 #include "steam/control/command-signature.hpp"
 #include "lib/replaceable-item.hpp"
-#include "lib/functor-util.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
@@ -202,20 +201,6 @@ namespace control {
       /** for diagnostics: include format-util.hpp */
       operator std::string()  const;
       
-      
-      /// Supporting equality comparisons...
-      friend bool
-      operator== (MementoTie const& m1, MementoTie const& m2)
-        {
-          return ((!m1.undo_ && !m2.undo_ && !m1.capture_ && !m2.capture_) // either no valid functions 
-                  || ( util::rawComparison(m1.undo_,   m2.undo_    )      //  or identical functions
-                    && util::rawComparison(m1.capture_,m2.capture_ )
-                     )
-                 )
-              && (m1.isCaptured_  == m2.isCaptured_)  // either both not captured or identical state
-              && (!m1.isCaptured_
-                  || equals_safeInvoke (m1.memento_, m2.memento_));
-        }
     };
   
 

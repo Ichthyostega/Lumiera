@@ -217,7 +217,6 @@ namespace test    {
           CHECK (2+cnt_inst == registry.instance_count());
           
           CHECK (!isSameObject (*pImpl, *clone));
-          CHECK (*pImpl == *clone);
           
           CHECK (!pImpl->canExec());
           typedef Types<int> ArgType;
@@ -226,12 +225,10 @@ namespace test    {
           CHECK (pImpl->canExec());
           
           CHECK (!clone->canExec()); // this proves the clone has indeed a separate identity
-          CHECK (*pImpl != *clone);
           
           // discard the first clone and overwrite with a new one
           clone = registry.createCloneImpl(*pImpl);
           CHECK (2+cnt_inst == registry.instance_count());
-          CHECK (*pImpl == *clone);
           CHECK (clone->canExec());
           
           clone.reset();

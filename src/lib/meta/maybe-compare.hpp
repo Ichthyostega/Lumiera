@@ -30,15 +30,11 @@
 #define LIB_META_MAYBE_COMPARE_H
 
 
-#include "lib/functor-util.hpp"
-
-#include <functional>
 
 
 namespace lib {
 namespace meta{
   
-  using std::function;
   
   /**
    * Trait template for invoking equality comparison.
@@ -54,19 +50,7 @@ namespace meta{
         }
     };
   
-  /** while the boost function implementation doesn't provide comparison,
-   *  we'll use our private hack, which at least detects equivalence 
-   *  in \em some cases... */
-  template<typename SIG>
-  struct Comparator<function<SIG>>
-    {
-      static bool
-      equals (function<SIG> const& f1, function<SIG> const& f2)
-        { 
-          return util::rawComparison(f1,f2);
-        }
-        
-    };
+  /* == add specialisations here == */
   
   
   template<typename X>

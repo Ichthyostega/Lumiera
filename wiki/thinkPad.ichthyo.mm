@@ -44930,7 +44930,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446505444775" HGAP="106" ID="ID_721807850" MODIFIED="1557498707242" TEXT="Buildsystem" VSHIFT="-5">
+<node CREATED="1446505444775" FOLDED="true" HGAP="106" ID="ID_721807850" MODIFIED="1561311686974" TEXT="Buildsystem" VSHIFT="-5">
+<icon BUILTIN="go"/>
 <node CREATED="1446505367113" ID="ID_335245102" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -45162,8 +45163,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1557498707242" TEXT="Compiler" VSHIFT="-10">
-<icon BUILTIN="prepare"/>
+<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1561311589295" TEXT="Compiler" VSHIFT="-10">
+<icon BUILTIN="go"/>
 <node CREATED="1447978472591" ID="ID_281213456" MODIFIED="1557498707243" TEXT="GCC-4.9">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -45255,11 +45256,11 @@
 </richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561237831168" ID="ID_1760455064" MODIFIED="1561237839865" TEXT="Juni 2019">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561237841287" ID="ID_1588960225" MODIFIED="1561238702212" TEXT="Probleme mit libboost 1.65">
-<arrowlink COLOR="#c64162" DESTINATION="ID_584004962" ENDARROW="Default" ENDINCLINATION="295;-171;" ID="Arrow_ID_1368108105" STARTARROW="None" STARTINCLINATION="247;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1561237831168" ID="ID_1760455064" MODIFIED="1561311488940" TEXT="Juni 2019">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1561237841287" ID="ID_1588960225" MODIFIED="1561311497905" TEXT="Probleme mit libboost 1.65">
+<arrowlink COLOR="#37aea5" DESTINATION="ID_584004962" ENDARROW="Default" ENDINCLINATION="295;-171;" ID="Arrow_ID_1368108105" STARTARROW="None" STARTINCLINATION="247;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -45731,7 +45732,8 @@
 </node>
 <node CREATED="1446356359992" HGAP="9" ID="ID_1850896628" MODIFIED="1557498707243" POSITION="left" TEXT="QA" VSHIFT="69">
 <icon BUILTIN="prepare"/>
-<node CREATED="1447985496639" ID="ID_1191711297" MODIFIED="1557498707243" TEXT="untersuchen">
+<node CREATED="1447985496639" ID="ID_1191711297" MODIFIED="1561311638128" TEXT="untersuchen">
+<icon BUILTIN="yes"/>
 <node CREATED="1447985501798" ID="ID_732609615" MODIFIED="1557498707243" TEXT="std::hash-Spezialisierung">
 <node CREATED="1447985531602" ID="ID_515281257" LINK="http://issues.lumiera.org/ticket/722" MODIFIED="1557498707243">
 <richcontent TYPE="NODE"><html>
@@ -45763,7 +45765,7 @@
 </node>
 <node CREATED="1447567187010" ID="ID_1008538054" MODIFIED="1557498707243" TEXT="sp&#xe4;ter...">
 <icon BUILTIN="bell"/>
-<node CREATED="1447567193361" ID="ID_661445245" MODIFIED="1557498707243" TEXT="preliminary optimization">
+<node CREATED="1447567193361" FOLDED="true" ID="ID_661445245" MODIFIED="1561311629097" TEXT="premature optimization">
 <icon BUILTIN="ksmiletris"/>
 <node CREATED="1447566743461" ID="ID_1971297499" LINK="http://issues.lumiera.org/ticket/973" MODIFIED="1557498707243">
 <richcontent TYPE="NODE"><html>
@@ -45779,7 +45781,7 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1477665256799" ID="ID_685276209" MODIFIED="1557498707243" TEXT="&#xc4;rger">
+<node CREATED="1477665256799" FOLDED="true" ID="ID_685276209" MODIFIED="1561311615971" TEXT="&#xc4;rger">
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1477665276421" ID="ID_714740974" MODIFIED="1557498707243" TEXT="dlclose #1034">
 <node CREATED="1477665304137" ID="ID_65862146" MODIFIED="1557498707243" TEXT="Assertion, da Library nicht entladen werden kann">
@@ -45793,8 +45795,6 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" ID="ID_768449868" MODIFIED="1557498707243" TEXT="Au Au">
-<icon BUILTIN="broken-line"/>
 <node CREATED="1521963965164" FOLDED="true" ID="ID_1027875371" MODIFIED="1561238596029" TEXT="komplexe Probleme">
 <icon BUILTIN="go"/>
 <node COLOR="#435e98" CREATED="1522025948980" ID="ID_295336770" MODIFIED="1557498707243" TEXT="3/2018">
@@ -45939,11 +45939,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1561238618311" ID="ID_1197206022" MODIFIED="1561238624422" TEXT="Plattform-Evolution">
-<icon BUILTIN="prepare"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561238627847" ID="ID_776424925" MODIFIED="1561238634217" TEXT="Juni 2019">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561238635358" ID="ID_584004962" MODIFIED="1561238732841" TEXT="Ubuntu/Bionic - libboost 1.65">
+<node CREATED="1561238618311" ID="ID_1197206022" MODIFIED="1561311521089" TEXT="Plattform-Evolution">
+<icon BUILTIN="go"/>
+<node COLOR="#435e98" CREATED="1561238627847" ID="ID_776424925" MODIFIED="1561311477641" TEXT="Juni 2019">
+<node COLOR="#338800" CREATED="1561238635358" FOLDED="true" ID="ID_584004962" MODIFIED="1561311515592" TEXT="Ubuntu/Bionic - libboost 1.65">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45956,10 +45955,9 @@
       er wollte &quot;versuchen, Lumiera zu bauen&quot;
     </p>
   </body>
-</html>
-</richcontent>
-<linktarget COLOR="#c64162" DESTINATION="ID_584004962" ENDARROW="Default" ENDINCLINATION="295;-171;" ID="Arrow_ID_1368108105" SOURCE="ID_1588960225" STARTARROW="None" STARTINCLINATION="247;0;"/>
-<icon BUILTIN="pencil"/>
+</html></richcontent>
+<linktarget COLOR="#37aea5" DESTINATION="ID_584004962" ENDARROW="Default" ENDINCLINATION="295;-171;" ID="Arrow_ID_1368108105" SOURCE="ID_1588960225" STARTARROW="None" STARTINCLINATION="247;0;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1561237854717" FOLDED="true" ID="ID_682831433" MODIFIED="1561237893434" TEXT="boost::rational">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1561237861421" ID="ID_575082452" MODIFIED="1561237891854" TEXT="erlaubt keine implizite signed/unsigned-conversion mehr">
@@ -45988,8 +45986,7 @@
       wann sind Funktoren <i>&#228;quivalent</i>&#160;??
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46008,8 +46005,7 @@
       <i>sei die Dose offen...</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1561293746047" ID="ID_1685820592" MODIFIED="1561293763727" TEXT="ich hatte da einen Hack im Einsatz">
 <icon BUILTIN="clanbomber"/>
@@ -46042,8 +46038,7 @@
       aber ansonsten alle <i>validen definierten</i>&#160;Funktionen untereinander verschieden sind.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1561293905972" ID="ID_1691379411" MODIFIED="1561294054085" TEXT="Fazit: std::function ist nur partiell geordnet">
@@ -46053,9 +46048,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561294009342" ID="ID_1015641085" MODIFIED="1561294046278" TEXT="#294 re-evaluate command equality comparisons">
+<node COLOR="#338800" CREATED="1561294009342" ID="ID_1015641085" MODIFIED="1561311468701" TEXT="#294 re-evaluate command equality comparisons">
 <linktarget COLOR="#3044e4" DESTINATION="ID_1015641085" ENDARROW="Default" ENDINCLINATION="51;-54;" ID="Arrow_ID_44253813" SOURCE="ID_1691379411" STARTARROW="None" STARTINCLINATION="-282;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1561294074429" ID="ID_1155061172" MODIFIED="1561294082271" TEXT="sinnvoller use-case?">
 <node CREATED="1561294111368" ID="ID_550692627" MODIFIED="1561294116011" TEXT="bisher nur isValid()">
 <node CREATED="1561294121390" ID="ID_1554085271" MODIFIED="1561294146172" TEXT="&#xbb;ist aktiviert und beruht auf dem &quot;gleichen&quot; backend&#xab;">
@@ -46073,8 +46068,7 @@
       sonst auf <i>&#196;quivalenz</i>&#160;getestet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1561294190088" ID="ID_1198524028" MODIFIED="1561294221209">
@@ -46087,8 +46081,7 @@
       und genau das Letztere ist nicht <b>garantiert korrekt</b>&#160;implementierbar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1561294330073" ID="ID_608542803" MODIFIED="1561294340821" TEXT="Commands haben Referenz-Symantik">
@@ -46110,12 +46103,11 @@
       Selbst verschiedene Closures haben selbst die noch eine eindeutige <b>Identit&#228;t</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561294470021" ID="ID_1846241113" MODIFIED="1561303698905" TEXT="totmachen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1561294470021" FOLDED="true" ID="ID_1846241113" MODIFIED="1561311466135" TEXT="totmachen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1561295990811" ID="ID_224001495" MODIFIED="1561296000279" TEXT="&#xc4;quivalenz-Check abklemmen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -46142,8 +46134,7 @@
       d.h. wir brauchen keine &#196;quivalenz?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1561305463577" ID="ID_1519337489" MODIFIED="1561305477381" TEXT="folglich w&#xe4;re jeder TypeHandler ein Unikat"/>
 </node>
@@ -46163,20 +46154,23 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561296009625" ID="ID_617134183" MODIFIED="1561296050381" TEXT="alle Vergleichs-Operatoren auf Command-Funktor-Ebene zur&#xfc;ckbauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1561296009625" ID="ID_617134183" MODIFIED="1561311456970" TEXT="alle Vergleichs-Operatoren auf Command-Funktor-Ebene zur&#xfc;ckbauen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561296029622" ID="ID_696325144" MODIFIED="1561296050004" TEXT="die rawComparison zur&#xfc;ckbauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1561296029622" ID="ID_696325144" MODIFIED="1561311458435" TEXT="die rawComparison zur&#xfc;ckbauen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561296041852" ID="ID_1450999034" MODIFIED="1561296049476" TEXT="Doku aktualisieren">
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
+<node COLOR="#338800" CREATED="1561296041852" ID="ID_1450999034" MODIFIED="1561311460017" TEXT="Doku aktualisieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1446356368070" HGAP="42" ID="ID_768449868" MODIFIED="1561311570056" TEXT="Au Au" VSHIFT="78">
+<edge COLOR="#c14b4b" STYLE="sharp_bezier"/>
+<icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544239377061" ID="ID_1224449803" MODIFIED="1557498707243" TEXT="GUI-Start not yet failsafe">
 <icon BUILTIN="broken-line"/>
 <node COLOR="#435e98" CREATED="1544239394777" ID="ID_626803835" MODIFIED="1557498707243" TEXT="aufgedeckt durch fehlende UI-Resourcen">

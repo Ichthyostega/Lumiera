@@ -137,7 +137,6 @@ namespace test    {
           CHECK (orig && copy);
           CHECK (orig->canExec());
           CHECK (copy->canExec());
-          CHECK (orig == copy);
           
           
           // prepare for command invocation on implementation level....
@@ -151,13 +150,11 @@ namespace test    {
           long state_after_exec1 = command1::check_;
           CHECK (command1::check_ > 0);
           CHECK (orig->canUndo());
-          CHECK (orig != copy);
           
           CHECK (!copy->canUndo());
           testExec.exec (*copy, "Execute clone");        // EXEC 2
           CHECK (command1::check_ != state_after_exec1);
           CHECK (copy->canUndo());
-          CHECK (copy != orig);
           
           // invoke UNDO on the clone
           testExec.undo (*copy, "Undo clone");           // UNDO 2
@@ -166,8 +163,6 @@ namespace test    {
           // invoke UNDO on original
           testExec.undo (*orig, "Undo original");        // UNDO 1
           CHECK (command1::check_ ==0);
-          
-          CHECK (copy != orig);
         }
       
     };

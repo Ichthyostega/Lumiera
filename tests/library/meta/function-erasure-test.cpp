@@ -88,27 +88,6 @@ namespace test {
           check_FunctPtrHolder(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
           check_VoidPtrHolder(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
           
-          check_Comparisons (Efun(testFunc), Efun(bindFunc));
-          check_Comparisons (Efun(testFunc), Efun(pAplFunc));
-          check_Comparisons (Efun(testFunc), Efun(membFunc));
-          check_Comparisons (Efun(testFunc), Efun(getterFunc));
-          check_Comparisons (Efun(bindFunc), Efun(pAplFunc));
-          check_Comparisons (Efun(bindFunc), Efun(membFunc));
-          check_Comparisons (Efun(bindFunc), Efun(getterFunc));
-          check_Comparisons (Efun(pAplFunc), Efun(membFunc));
-          check_Comparisons (Efun(pAplFunc), Efun(getterFunc));
-          check_Comparisons (Efun(membFunc), Efun(getterFunc));
-          
-          check_Comparisons (Efp(testFunc),   Efp(returnIt));
-          check_Comparisons (Evoid(testFunc), Evoid(returnIt));
-          
-          CHECK ( detect_Clone (Efun(testFunc)));
-          CHECK (!detect_Clone (Efun(bindFunc)));  //note equality not detected when cloning a bind term
-          CHECK (!detect_Clone (Efun(pAplFunc)));  //similarly
-          CHECK (!detect_Clone (Efun(membFunc)));  //analogous for bound member function
-          CHECK ( detect_Clone (Efp(testFunc) ));
-          CHECK ( detect_Clone (Evoid(testFunc)));
-          
           detect_unboundFunctor(Efun(testFunc), Efun(getterFunc), Efun(membFunc));
           detect_unboundFunctor(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
           detect_unboundFunctor(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
@@ -194,11 +173,6 @@ namespace test {
           CHECK (_sum_ == 10+'a'+20+'b'+30+'c');
           
           CHECK (_sum_ == (f3.getFun<int(void)>()) () );
-          
-#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
-          VERIFY_ERROR (ASSERTION, f1.getFun<int(int)>() );
-#endif////////////////////////////////////////////////////////////
-          
         }
       
       
@@ -229,27 +203,6 @@ namespace test {
           
         //(*bad_fun) (11, 'x');  // The compiler would accept this line!
         }                       //  likely to result in heap corruption or SEGV
-      
-      
-      template<class HOL>
-      void
-      check_Comparisons (HOL h1, HOL h2)
-        {
-          CHECK (h1 == h1); CHECK (!(h1 != h1));
-          CHECK (h2 == h2); CHECK (!(h2 != h2));
-          
-          CHECK (h1 != h2);
-          CHECK (h2 != h1);
-        }
-      
-      
-      template<class HOL>
-      bool
-      detect_Clone (HOL const& h1)
-        {
-          HOL clone (h1);
-          return (clone == h1);
-        }
       
       
       template<class HOL>

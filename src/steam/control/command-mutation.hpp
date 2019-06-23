@@ -83,21 +83,6 @@ namespace control {
                                          LERR_(UNBOUND_ARGUMENTS));
           clo.invoke (func_);
         }
-      
-      
-      
-      /// Supporting equality comparisons...
-      friend bool
-      operator== (Mutation const& m1, Mutation const& m2)
-        {
-          return (m1.func_ == m2.func_);
-        }
-      
-      friend bool
-      operator!= (Mutation const& m1, Mutation const& m2)
-        {
-          return not (m1==m2);
-        }
     };
   
   
