@@ -36,16 +36,16 @@
 
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/regex.hpp>
+#include <regex>
 
 
 using lib::Literal;
 using util::isnil;
 
-using boost::regex;
-using boost::smatch;
-using boost::sregex_iterator;
-using boost::match_continuous;
+using std::regex;
+using std::smatch;
+using std::sregex_iterator;
+using std::regex_constants::match_continuous;
 using boost::hash_combine;
 using boost::lexical_cast;
 

@@ -1,5 +1,5 @@
-Dependencies
-============
+Build Dependencies
+==================
 :Author: core-devs
 :Date: 11/2015
 :toc:
@@ -66,7 +66,6 @@ Languages and Tools
  - libboost-program-options-dev
  - libboost-program-options-dev
  - libboost-filesystem-dev
- - libboost-regex-dev
 
 * Script languages
  - Python (*2.7*) for build scripts

@@ -38,7 +38,7 @@
 #include "lib/util.hpp"
 #include "include/logging.h"
 
-#include <boost/regex.hpp>
+#include <regex>
 
 
 using util::_Fmt;
@@ -48,9 +48,9 @@ using lib::time::Duration;
 using backend_interface::MediaDesc;
 using backend_interface::MediaAccessFacade;
 
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
+using std::regex;
+using std::smatch;
+using std::regex_search;
 using std::dynamic_pointer_cast;
 
 namespace error = lumiera::error;
@@ -66,10 +66,10 @@ namespace asset {
      */
     string extractName (const string& path)
     {
-      regex pathname_pattern("([^/\\.]+)(\\.\\w+)?$");
+      static regex PATHNAME_PATTERN("([^/\\.]+)(\\.\\w+)?$");
       smatch match;
       
-      if (regex_search (path, match, pathname_pattern))
+      if (regex_search (path, match, PATHNAME_PATTERN))
         return util::sanitise (string (match[1]));
       else
         return "";

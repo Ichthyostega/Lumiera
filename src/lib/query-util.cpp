@@ -31,14 +31,15 @@
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <boost/regex.hpp>
+#include <functional>
+#include <regex>
 #include <map>
 
 using std::map;
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
-using boost::sregex_iterator;
+using std::regex;
+using std::smatch;
+using std::regex_search;
+using std::sregex_iterator;
 
 using util::contains;
 using util::isnil;
@@ -49,7 +50,7 @@ namespace lib {
     
     namespace { // local definitions
       
-      typedef boost::function<bool(string::value_type)> ChPredicate;
+      using ChPredicate = std::function<bool(string::value_type)> ;
       
       ChPredicate is_alpha = boost::algorithm::is_alpha();    
       ChPredicate is_upper = boost::algorithm::is_upper();    
@@ -79,14 +80,14 @@ namespace lib {
       
       map<Symbol, regex> regexTable;
       
-      Literal matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\),?\\s*"; 
-      regex findPredicate (string("(\\w+)")+matchArgument);
+      Literal MATCH_ARGUMENT = R"~(\(\s*([\w_\.\-]+)\s*\),?\s*)~";
+      const regex FIND_PREDICATE{string{"(\\w+)"} + MATCH_ARGUMENT};
       
       inline regex&
       getTermRegex (Symbol sym)
       {
         if (!contains (regexTable, sym))
-          regexTable[sym] = regex (string(sym)+matchArgument);
+          regexTable[sym] = regex (string(sym)+MATCH_ARGUMENT);
         return regexTable[sym];
       }
     }
@@ -146,7 +147,7 @@ namespace lib {
     {
       uint cnt (0);
       sregex_iterator end;
-      for (sregex_iterator i (q.begin(),q.end(), findPredicate); 
+      for (sregex_iterator i (q.begin(),q.end(), FIND_PREDICATE); 
            i != end; ++i)
         ++cnt;
       return cnt;

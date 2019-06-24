@@ -27,6 +27,7 @@
  ** the referred data into a vector of strings. Thus `Cmdline` is a way to
  ** express explicitly on APIs that we are consuming commandline contents,
  ** and, moreover, it offers a way more sane interface to deal with those.
+ ** @see CmdlineWrapper_test
  */
 
 
