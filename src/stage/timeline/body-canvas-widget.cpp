@@ -39,6 +39,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
+#include "common/advice.hpp"
 #include "lib/util.hpp"
 
 //#include <algorithm>
@@ -63,17 +64,22 @@ using std::move;
 namespace stage {
 namespace timeline {
   
-  using CairoC = Cairo::RefPtr<Cairo::Context> const&;
+  using CairoC = PCairoContext const&;
+  using StyleC = PStyleContext const&;
   
   namespace { // details of track background painting
     
     const int INITIAL_TIMERULER_HEIGHT_px = 30;
+    
+    /** request a pre-defined CSS style context for the track body */
+    lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
     
     
     class TrackGroundingRenderer
       : public ProfileInterpreter
       {
         CairoC cox_;
+        StyleC style_;
         PixSpan visible_;
         
         
@@ -137,6 +143,7 @@ namespace timeline {
       public:
         TrackGroundingRenderer (CairoC currentDrawContext, DisplayManager& layout)
           : cox_{currentDrawContext}
+          , style_{trackBodyStyle.getAdvice()}
           , visible_{layout.getPixSpan()}
           { }
       };

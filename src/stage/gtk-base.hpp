@@ -87,8 +87,11 @@
 /** Lumiera GTK UI implementation root. */
 namespace stage {
   
-  typedef Glib::ustring uString;
-  typedef const uString cuString;
+  using uString =  Glib::ustring;
+  using cuString = const uString;
+  
+  using PStyleContext = Glib::RefPtr<Gtk::StyleContext>;
+  using PCairoContext = Cairo::RefPtr<Cairo::Context>;
   
   
   

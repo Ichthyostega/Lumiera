@@ -38,6 +38,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
+#include "common/advice.hpp"
 //#include "lib/util.hpp"
 
 //#include <algorithm>
@@ -56,6 +57,16 @@
 
 namespace stage {
 namespace timeline {
+  namespace { /////////////////////////////////////////////////////////////////////////////////////TICKET #1168 : doesn't this rather belong into the global UiStyle manager? 
+    void
+    provideStyleContextAdvice (Gtk::Widget const& anchorWidget)
+    {
+      lumiera::advice::Provision<PStyleContext> styleAdvice{"style(trackBody)"};
+      
+      Gtk::WidgetPath path = anchorWidget.get_path();
+                       ////////////////////////////////////////////////////////////////////////////TICKET #1201 : add code here to build a virtual path and construct a StyleContext. See gtk_widget_path_append_for_widget() in gtkwidget.c, 16413
+    }
+  }
   
   
   
@@ -69,6 +80,8 @@ namespace timeline {
     {
       topLevelContainer.add1 (headerPane_);
       topLevelContainer.add2 (bodyCanvas_);
+      
+      provideStyleContextAdvice (bodyCanvas_);
     }
   
   
@@ -99,7 +112,7 @@ namespace timeline {
   {
                                            ////////////////////////////////////////////////////////TICKET #1019 : need a "ZoomWindow" here to manage the visible area
                                            ////////////////////////////////////////////////////////TICKET #1039 : "somehow" wire with the TimelineController to find out the covered span
-    return PixSpan {0, 2048}; ////////////////Lalala Lalü
+    return PixSpan {0, 248}; ////////////////Lalala Lalü
   }
   
   

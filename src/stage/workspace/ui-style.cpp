@@ -109,6 +109,7 @@ namespace workspace {
     REQUIRE (property_name);
     
     // TODO: Can we get rid of the GdkColor completely here?
+    ///////////////////////////////////////////////////////////TICKET #1168 : yes we can. Gdk::Cairo::set_source_rgba(cr, cxStyle->get_background_color(Gtk::STATE_FLAG_SELECTED));  --> gtkmm3.0-3.22.2/gdk/gdkmm/general.cc
     GdkColor *color;
     gtk_widget_style_get(widget.gobj(), property_name, &color, NULL);
     

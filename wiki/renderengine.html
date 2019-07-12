@@ -815,23 +815,30 @@ Combining all these requirements and properties provides the foundation for the 
 
 </pre>
 </div>
-<div title="AdviceSituations" modifier="Ichthyostega" created="201004052316" modified="201004100124" tags="Concepts spec design">
-<pre>[[Advice]] is a pattern extracted from several otherwise unrelated constellations
+<div title="AdviceSituations" modifier="Ichthyostega" created="201004052316" modified="201907121338" tags="Concepts spec design" changecount="1">
+<pre>[[Advice]] is a pattern extracted from several otherwise unrelated constellations.
+For the initial analysis in 2010, several use cases were investigated -- ironically, as of 2019, none of these initial use cases became actually relevant. Non the less, the AdviceImplementation turned out to be viable as a ''whiteboard system'' to exchange dynamic facts without coupling.
 
-!Proxy media in the engine
+!Actual usages of the Advice System
+* for access to time grid and timecode format definitions
+* for access to custom defined UI style elements
+
+!Historical / Theoretical use-cases
+
+!!!Proxy media in the engine
 Without rebuilding the engine network, we need the ability to reconfigure some parts to adapt to low resolution place-holder media temporarily. The collaboration required to make this happen seems to ''cross-cut'' the normal processing logic. Indeed, the nature of the adjustments is highly context dependent &amp;mdash; not every processing node needs to be adjusted. There is a dangerous interference with the ongoing render processes, prompting for the possibility to pick up this information synchronously.
 * the addressing and delivery of the advice is based on a mix of static (type) and dynamic information
 * it is concievable that the actual matching may even include a token present in the direct invocation context (but this possibility was ruled out by later decision)
 * the attempt to recieve and pick up advice needs to be failsafe
 * locking should be avoided by design
 
-!Dependency injection for testing
+!!!Dependency injection for testing
 While inversion of control is a guiding principle on all levels, the design of the Lumiera application deliberately stays just below the level of employing a dependency injection container. Instead, common services are accessible //by type// and the builder pattern is used more explicitly at places. Interestingly, the impact on writing unit tests was by far not so serious as one might expect, based on the usual reasoning of D.I. proponents. But there remain some situations, where sharing a common test fixture would come in handy
 * here the test depending on a fixture puts up a hard requirement for the actual advice to be there.
 * thus, the advice support system can be used to communicate a need for advice
 * but it seems unreasonable to extend it actually to transmitt a control flow
 
-!properties of placement
+!!!properties of placement
 The placement concept plays a fundamental role within Lumiera's HighLevelModel. Besides just being a way of sticking objects together and defining the common properties of //temporal position and output destination,// we try to push this approach to enable a more general, open and generic use. &quot;Placement&quot; is understood as locating within a grid comprised of various degrees of freedom &amp;mdash; where locating in a specific way might create additional dimensions to be included into the placement. The standard example is an output connection creating additional adjustable parameters controlling the way the connected object is embedded into a given presentation space (consider e.g. a sound object, which &amp;mdash; just by connection, gains the ability of being //panned// by azimuth, elevation and distance)
 * in this case, obviously the colaboration is n:m, while each partner preferrably should only see a single advice link.
 * advice is used here to negotiate a direct colaboration, which is then handed off to another facility (wiring a control connection)
@@ -3517,7 +3524,7 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201906101247" tags="GuiPattern spec impl img draft" changecount="92">
+<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201906291535" tags="GuiPattern spec impl img draft" changecount="93">
 <pre>The presentation of the track body area relies on the [[Gtk::Layout &quot;canvas widget&quot;|GtkLayoutWidget]], thus allowing for a mixture of custom drawing with embedded custom Gtk widgets. The actual drawing routine is activated in response to the {{{on_draw}}} signal -- and invoking the inherited handler function will initiate the standard drawing for the embedded child widgets. This partitions the additional, specific drawing activities into a pre-widget drawing phase to prepare the background and framework structure of the track area, and a post-widget drawing phase to show all kinds of overlays, markers cursors and similar UI indicators. A nested structure of {{{TrackBody}}} objects serves as organisational device to structure these custom drawing activities in accordance with the nested structure of the track fork.
 
 !Building a nested 3D structure

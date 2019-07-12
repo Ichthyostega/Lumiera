@@ -27,18 +27,22 @@
  ** is a system wide singleton service, but clients never talk directly to this singleton; rather they
  ** use advice::Provision and advice::Request as access point.
  ** 
- ** \par Advice collaboration pattern
- ** Advice collaboration is a special pattern of interaction extracted from multiple use cases within
- ** Lumiera. Creating this abstraction was partially inspired by aspect oriented programming, especially
- ** the idea of cross-cutting the primary dependency hierarchy. Another source of inspiration where the
- ** various incarnations of properties with dynamic binding. For defining the actual binding, we rely
- ** on predicate notation and matching (planned: unification) as known from rule based systems.
+ ** # Advice collaboration pattern
  ** 
- ** <b>Definition</b>: Advice is an optional, mediated collaboration between entities taking on
- ** the roles of advisor and advised, thereby passing a custom piece of advice data, managed by
- ** the advice support system. The possibility of advice is created by both of the collaborators
- ** entering the system, where the advised entity exposes a point of advice, while the advising
- ** entity provides an actual advice value.
+ ** \par rationale
+ ** Advice collaboration is a special pattern of interaction extracted from multiple use cases within
+ ** Lumiera. Advice can be used as a *Whiteboard System* for exchange of dynamic facts, without imposing
+ ** any direct relationship onto the participants. Initially, this abstraction was to some degree inspired
+ ** by aspect oriented programming, especially the idea of cross-cutting the primary dependency hierarchy.
+ ** Another source of inspiration where the various incarnations of properties with dynamic binding.
+ ** For defining the actual binding, we rely on predicate notation and matching (planned: unification)
+ ** as known from rule based systems.
+ ** 
+ ** *Definition*: Advice is an optional, mediated collaboration between entities taking on
+ ** the roles of _Advisor_ and _Advised_, thereby passing a custom piece of advice data, managed
+ ** by the advice support system. The possibility of advice is created by both of the collaborators
+ ** entering the system, in any order, where the advised entity exposes a point of advice, while the
+ ** advising entity provides an actual advice value.
  ** 
  ** \par Collaborators
  ** - the advised entity
@@ -48,35 +52,36 @@
  ** - the binding
  ** - the advice
  ** 
- ** Usually, the \em advised entity opens the collaboration by requesting an advice. The \em advice itself
- ** is a piece of data of a custom type, which needs to be copyable. Obviously, both the advised and the
- ** advisor need to share knowledge about the meaning of this advice data. The actual advice collaboration
- ** happens at a \em point-of-advice, which needs to be derived first. To this end, the advised puts up an
- ** \em request by providing his \em binding, which is a pattern for matching. An entity about to give advice
- ** opens possible advice \em channels by putting up an advisor binding, which similarly is a pattern. The
- ** advice \em system as mediator resolves both sides, by matching (which in the most general case could be
- ** an unification). This process creates an advice point \em solution -- allowing the advisor to fed the
- ** piece of advice into the advice channel, causing it to be placed into the point of advice. After passing
- ** a certain (implementation defined) break point, the advice leaves the influence of the advisor and gets
+ ** Usually, the _advised entity_ opens the collaboration by requesting an advice. The _advice_ itself
+ ** is a _piece of data_ of a custom type, which needs to be _copyable_. Obviously, both the advised and
+ ** the advisor need to share knowledge about the meaning of this advice data. The actual advice collaboration
+ ** happens at a _point-of-advice_, which needs to be derived first. To this end, the advised puts up an
+ ** _request_ by providing his _binding_, which is a pattern for matching. An entity about to give advice
+ ** opens possible _advice channels_ by putting up an _advisor binding_, which similarly is a pattern. The
+ ** _advice system_ as mediator resolves both sides, by matching (which in the most general case could be
+ ** an unification). This matching process creates an advice point _solution_ -- the advisor is now able to fed
+ ** the piece of advice into the advice channel, causing it to be placed into the point of advice. After passing
+ ** a certain (implementation defined) barrier point, the advice leaves the influence of the advisor and gets
  ** exposed to the advised entities. Especially this involves copying the advice data into a location managed
  ** by the advice system. In the standard case, the advised entity accesses the advice synchronously and
  ** non-blocking. Typically, the advice data type is default constructible and thus there is always a basic
  ** form of advice available, thereby completely decoupling the advised entity from the timings related
  ** to this collaboration.
  ** 
- ** \par interfaces and implementation
+ ** # Interfaces and implementation
+ ** 
  ** Client code is assumed to interface solely through the advice::Request and advice::Provision classes,
  ** which both can be instantiated and copied freely, may be used as member or mixed in as baseclass.
  ** The AdviceSystem on the other hand is an implementation facility (actually a singleton) and lives
- ** in the advice.cpp translation unit. The interface entities inherit protected from AdviceLink,
- ** which is implemented in the same scope as the AdviceSystem and thus allowed to talk to it
- ** directly. The AdviceSystem in turn uses advice::Index to keep track of the collaboration
+ ** in the advice.cpp translation unit. The interface entities mix-in the protected implementation from
+ ** AdviceLink, which is implemented in the same scope as the AdviceSystem and thus is allowed to talk
+ ** to it directly. The AdviceSystem in turn uses advice::Index to keep track of the collaboration
  ** partners, which, for this purpose, are handled as type-erased PointOfAdvice elements.
- ** The latter class contains 4 API functions used by the index to manage solutions. 
+ ** The latter class contains 4 API functions used by the index to manage solutions.
  ** 
  ** @note as of 6/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces and gain practical usage experiences. Ichthyo expects this collaboration
- **       service to play a central role at various places within steam-layer.
+ **       service to gain relevance over time for several use cases within steam-layer.
  ** @todo allow variables in binding patterns
  ** @todo use the lumiera MPool instead of heap allocations
  ** @todo consider to provide variations of the basic behaviour by policy classes
@@ -115,7 +120,7 @@ namespace advice {
    * as used internally by the AdviceSystem to manage the participants.
    * Each PointOfAdvice is characterised by a binding pattern, used to
    * pair up advice::Request and advice::Provision entries. Moreover,
-   * each PointOfAdvice can refer to an existing advice solution 
+   * each PointOfAdvice can refer to an existing advice solution
    * provided elsewhere in the system. The specific type of advice
    * (and thus the storage requirements) are abstracted away,
    * as is the distinction between Request and Provision.
@@ -219,8 +224,8 @@ namespace advice {
   /**
    * Access point for the advising entity (server).
    * This is the interface intended for client code to set and provide
-   * concrete advice information of a specific type AD. Instantiating 
-   * automatically creates a \em type-guard binding pattern, but client code
+   * concrete advice information of a specific type AD. Instantiating
+   * automatically creates a _type-guard_ binding pattern, but client code
    * can (and typically should) provide additional predicates to define the
    * "topic" this advice belongs to. This allows advice::Request entries
    * to attach to the suitable advice "channels" and get the specific
@@ -228,9 +233,9 @@ namespace advice {
    * 
    * Any advice::Provision remains inactive and thus invisible, until
    * \link #setAdvice setting the concrete advice data.\endlink After that,
-   * the provided data is \em copied into the AdviceSystem and remains available
-   * even after the original Provision goes out of scope. Consequently, it isn't
-   * possible to \em modify advice data once set. But client code may retract
+   * the provided data is _copied_ into the AdviceSystem and remains available
+   * even after the original Provision goes out of scope. Consequently, it is
+   * _not possible to modify_ advice data once set. But client code may _retract_
    * the provision or change the binding pattern.
    * 
    * @see AdviceBasics_test usage example
@@ -243,7 +248,7 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      void deregistrate() { /* NOP */ }
+      void deregister() { /* NOP */ }
       
       
     public:
@@ -254,7 +259,7 @@ namespace advice {
       
      ~Provision()
         {
-          this->deregistrate();
+          this->deregister();
         }
       
       Provision (Provision const& o)
@@ -308,7 +313,7 @@ namespace advice {
    * any requests which happen to match the binding.
    * 
    * @note the ptr-to-solution in the inherited PointOfAdvice
-   *       is currently (5/10) not used, because this \em is
+   *       is currently (5/10) not used, because this _is_
    *       already the solution.
    */
   template<class AD>
@@ -393,7 +398,7 @@ namespace advice {
     typedef const ActiveProvision<AD> AdviceProvision;
     AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution());
     
-    if (solution)    // create copy of the data holder, using the new binding 
+    if (solution)    // create copy of the data holder, using the new binding
       publishProvision(
         storeCopy (solution->getAdvice()));
   }

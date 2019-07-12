@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file advice.cpp 
+/** @file advice.cpp
  ** Implementation of the AdviceSystem, to support the advice collaboration.
  ** The AdviceSystem is implemented as singleton, but is never accessed directly
  ** by clients participating in an advice collaboration. Rather, they use the
@@ -57,7 +57,7 @@
  ** The problem with copying and incorporating the ActiveProvision objects is the undetermined
  ** size of these value holders, because the frontend objects are templated on the advice type,
  ** while the AdviceSystem doesn't have any knowledge of the specific advice type. This advice
- ** type is used to set a type guard predicate into each binding, but there is no way to 
+ ** type is used to set a type guard predicate into each binding, but there is no way to
  ** re-discover the specifically typed context; the type guards can only be checked for a match.
  ** Thus we need the help of the frontend objects, which need to provide a deleter function
  ** when providing concrete advice data; this deleter function will be saved as function pointer
@@ -113,11 +113,11 @@ namespace advice {
   
   namespace { // ======= implementation of the AdviceSystem ============
     
-    /** 
+    /**
      * the system-wide service to support the implementation
-     * of \em advice collaborations. Manages storage for 
+     * of _advice collaborations_. Manages storage for
      * provided advice data and maintains an index table
-     * to determine the advice solutions on request. 
+     * to determine the advice solutions on request.
      */
     class AdviceSystem
       : public lib::Sync<>
@@ -149,7 +149,7 @@ namespace advice {
          *           by the  AdviceSystem monitor. Currently we don't need
          *           locking (heap allocation), but any custom allocator
          *           will have to care for its own locking!
-         */ 
+         */
         void*
         allocateBuffer(size_t siz)
           {
@@ -165,8 +165,8 @@ namespace advice {
         
         void
         releaseBuffer (void* buff, size_t)                                   /////////////////////////////////TICKET #609
-          { 
-            delete[] (char*)buff; 
+          {
+            delete[] (char*)buff;
           }
         
         void
@@ -293,7 +293,7 @@ namespace advice {
    *  which information is available initially, when the advice data is
    *  copied into the system. The knowledge about the size of the allocation
    *  is embodied into the deleter function. This allows later to discard
-   *  entries without needing to know their exact type. 
+   *  entries without needing to know their exact type.
    */
   void
   AdviceLink::manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
@@ -314,7 +314,7 @@ namespace advice {
    *          which the caller then needs to de-allocate.
    *          The caller is assumed to know the actual type
    *          and thus the size of the entry to deallocate.
-   *          Returning \c NULL in case no old entry exists.
+   *          Returning `NULL` in case no old entry exists.
    */
   void
   AdviceLink::publishProvision (PointOfAdvice* newProvision)
@@ -329,7 +329,7 @@ namespace advice {
   /** when advice is retracted explicitly,
    *  after removing the provision index entry
    *  we also need to re-process any requests
-   *  which happen to match our binding... 
+   *  which happen to match our binding...
    *  @return pointer to the existing provision entry,
    *          to be deallocated by the caller, which
    *          is assumed to know it's exact type.
