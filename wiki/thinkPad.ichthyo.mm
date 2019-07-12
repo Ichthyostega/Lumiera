@@ -21492,6 +21492,70 @@
 </node>
 </node>
 </node>
+<node CREATED="1562947149512" ID="ID_1788757764" MODIFIED="1562947168297" TEXT="was/wie kann man an den Pfad anh&#xe4;ngen?">
+<node CREATED="1562947206390" ID="ID_858425792" MODIFIED="1562947209292" TEXT="WidgetPath::path_append_type(GType)"/>
+<node CREATED="1562947226168" ID="ID_1423368720" MODIFIED="1562947248239" TEXT="wie kann ich einen GType konstruieren, wenn es das Widget garnicht gibt??">
+<node CREATED="1562948746502" ID="ID_1583179714" MODIFIED="1562968161548" TEXT="statische Typ-Funktion des jeweiligen Widget nutzen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1562948800171" ID="ID_191911870" MODIFIED="1562968152931" TEXT="static GType &#x9;get_type ()">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1562947895737" ID="ID_1560270353" MODIFIED="1562947901380" TEXT="zur Referenz...">
+<node CREATED="1562947912197" ID="ID_613381518" MODIFIED="1562948067345" TEXT="gtk_widget_path_append_type()  -- gtkwidgetpath.c, 410">
+<node CREATED="1562947977945" ID="ID_612431307" MODIFIED="1562947981836" TEXT="macht eine GtkCssNodeDeclaration"/>
+<node CREATED="1562947983729" ID="ID_608086934" MODIFIED="1562947991697" TEXT="setzt in dieser den gegebenen GType"/>
+<node CREATED="1562947992640" ID="ID_1261874584" MODIFIED="1562948009009" TEXT="h&#xe4;ngt sie an das Path-Array an"/>
+</node>
+<node CREATED="1562948055919" ID="ID_282921775" MODIFIED="1562948098526" TEXT="gtk_widget_path_append_for_widget --  gtkwidget.c, 16413">
+<node CREATED="1562948290392" ID="ID_1190594021" MODIFIED="1562948299890" TEXT="macht append_type(GType)"/>
+<node CREATED="1562948303278" ID="ID_859838875" MODIFIED="1562948308633" TEXT="set object name">
+<node CREATED="1562948491524" ID="ID_405796973" MODIFIED="1562948504665" TEXT="&#xfc;berschreibt den Typ beim CSS-Match"/>
+</node>
+<node CREATED="1562948312341" ID="ID_707638809" MODIFIED="1562948314536" TEXT="set name"/>
+<node CREATED="1562948324645" ID="ID_1760607712" MODIFIED="1562948327590" TEXT="set state"/>
+<node CREATED="1562948334875" ID="ID_1415018307" MODIFIED="1562948338037" TEXT="add classes"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1562969880923" ID="ID_1675178851" MODIFIED="1562969892966" TEXT="damit einen Gtk::StyleContext konfigurieren">
+<node CREATED="1562969894183" ID="ID_1066073394" MODIFIED="1562969914243" TEXT="StyleContext per Factory erzeugen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      StyleContext::create()
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1562970409637" ID="ID_156221819" MODIFIED="1562970782190" STYLE="fork" TEXT="ihm den Pfad zuweisen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#160;void set_path(const WidgetPath&amp; path);
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      As a&#160;consequence, the style will be regenerated to match&#160;the new given path.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>

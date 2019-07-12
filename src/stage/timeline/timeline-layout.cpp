@@ -64,7 +64,21 @@ namespace timeline {
       lumiera::advice::Provision<PStyleContext> styleAdvice{"style(trackBody)"};
       
       Gtk::WidgetPath path = anchorWidget.get_path();
-                       ////////////////////////////////////////////////////////////////////////////TICKET #1201 : add code here to build a virtual path and construct a StyleContext. See gtk_widget_path_append_for_widget() in gtkwidget.c, 16413
+      // build a "virtual" CSS node to represent the track scope
+      GType scopeNode = Gtk::Box::get_type();
+      int pos = path.path_append_type (scopeNode);
+      // override the generic node name with a custom widget type
+      gtk_widget_path_iter_set_object_name (path.gobj(), pos, "TrackScope");
+      // deliberately we don't invoke path.iter_set_name(pos, "id") add an #ID
+      path.iter_add_class(pos, "timeline");
+      // for reference, see gtk_widget_path_append_for_widget() in in gtkwidget.c, line 16413
+      
+      // create a new style context and configure it according to the defined path
+      PStyleContext style = Gtk::StyleContext::create();
+      style->set_path (path);
+      // publish as Advice "style(trackBody)"
+      styleAdvice.setAdvice (style);
+      INFO (stage, "Body-CSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
     }
   }
   
