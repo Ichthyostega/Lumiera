@@ -50,8 +50,8 @@ namespace workspace {
   
   namespace fsys = boost::filesystem;
   
-  IconSize UIStyle::GiantIconSize = Gtk::ICON_SIZE_INVALID;
-  IconSize UIStyle::MenuIconSize = Gtk::ICON_SIZE_INVALID;
+  IconSize UiStyle::GiantIconSize = Gtk::ICON_SIZE_INVALID;
+  IconSize UiStyle::MenuIconSize = Gtk::ICON_SIZE_INVALID;
   
   
   
@@ -64,7 +64,7 @@ namespace workspace {
    * 
    * @see lumiera::Config
    */
-  UIStyle::UIStyle()
+  UiStyle::UiStyle()
     : Gtk::UIManager()
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
@@ -80,7 +80,7 @@ namespace workspace {
   
   
   void
-  UIStyle::setTheme (string const& stylesheetName)
+  UiStyle::setTheme (string const& stylesheetName)
   {
     auto screen = Gdk::Screen::get_default();
     auto css_provider = Gtk::CssProvider::create();
@@ -102,7 +102,7 @@ namespace workspace {
   
   
   Cairo::RefPtr<Cairo::SolidPattern>
-  UIStyle::readStyleColourProperty (Gtk::Widget& widget
+  UiStyle::readStyleColourProperty (Gtk::Widget& widget
                                    ,const gchar * property_name
                                    ,guint16 red, guint16 green, guint16 blue)
   {
@@ -133,7 +133,7 @@ namespace workspace {
   
   
   void
-  UIStyle::registerAppIconSizes()
+  UiStyle::registerAppIconSizes()
   {
     if(GiantIconSize == Gtk::ICON_SIZE_INVALID)
       GiantIconSize = IconSize::register_new ("giant", 48, 48);
@@ -147,7 +147,7 @@ namespace workspace {
    * icons and labels associated with IDs
    */
   void
-  UIStyle::registerStockItems()
+  UiStyle::registerStockItems()
   {
     Glib::RefPtr<IconFactory> factory = Gtk::IconFactory::create();
     
@@ -172,7 +172,7 @@ namespace workspace {
   
   
   bool
-  UIStyle::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
+  UiStyle::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
                            ,cuString& icon_name
                            ,cuString& id
                            ,cuString& label)
@@ -208,7 +208,7 @@ namespace workspace {
   
   
   bool
-  UIStyle::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
+  UiStyle::addStockIcon (Glib::RefPtr<Gtk::IconSet> const& icon_set
                         ,cuString& icon_name
                         ,Gtk::IconSize size
                         ,bool wildcard)
@@ -232,7 +232,7 @@ namespace workspace {
   
   
   bool
-  UIStyle::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+  UiStyle::addThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
                               ,cuString& icon_name
                               ,Gtk::IconSize size
                               ,bool wildcard)
@@ -258,7 +258,7 @@ namespace workspace {
   
   
   bool
-  UIStyle::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
+  UiStyle::addNonThemeIconSource (Glib::RefPtr<Gtk::IconSet> const& icon_set
                                  ,cuString& base_dir
                                  ,cuString& icon_name
                                  ,Gtk::IconSize size
@@ -278,7 +278,7 @@ namespace workspace {
   
   
   bool
-  UIStyle::addStockIconFromPath (string path
+  UiStyle::addStockIconFromPath (string path
                                 ,Glib::RefPtr<Gtk::IconSet> const& icon_set
                                 ,Gtk::IconSize size
                                 ,bool wildcard)

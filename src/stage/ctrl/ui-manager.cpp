@@ -55,7 +55,7 @@ namespace ctrl {
   using Gtk::IconSize;
   using Gtk::IconFactory;
   
-  using workspace::UIStyle;
+  using workspace::UiStyle;
   
   
   
@@ -106,7 +106,7 @@ namespace ctrl {
     : ApplicationBase()
     , Gtk::UIManager()
     , globals_{new GlobalCtx{bus, *this}}
-    , uiStyle_{new UIStyle{}}
+    , uiStyle_{new UiStyle{}}
     , actions_{new Actions{*globals_}}
     , facade_{} // note: not activated yet
     {

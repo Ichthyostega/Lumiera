@@ -96,10 +96,10 @@ namespace ctrl {
     : public ApplicationBase
     , public Gtk::UIManager
     {
-      using UIStyle = workspace::UIStyle;
+      using UiStyle = workspace::UiStyle;
       
       unique_ptr<GlobalCtx> globals_;
-      unique_ptr<UIStyle>   uiStyle_;
+      unique_ptr<UiStyle>   uiStyle_;
       unique_ptr<Actions>   actions_;
       unique_ptr<Facade>    facade_;
       

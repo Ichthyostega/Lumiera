@@ -62,7 +62,7 @@ namespace workspace {
    * further global services to create workspace windows, to bind
    * menu / command actions and to enter the top-level model parts.
    */
-  class UIStyle
+  class UiStyle
     : public Gtk::UIManager
     , util::NonCopyable
     {
@@ -88,17 +88,16 @@ namespace workspace {
     public:
       /**
        * Set up a coherent theming and styling for the application.
-       * Based on the Gtk::UIManager, the UIStyle service allows to access some
+       * Based on the Gtk::UIManager, the UiStyle service allows to access some
        * style related resources, but mostly its task is to configure the GTK toolkit
        * appropriately during startup.
        */
-      UIStyle();
+      UiStyle();
       
       /**
        * Sets the theme to use for the Lumiera GUI.
        * @param stylesheetName GTK CSS stylesheet to load from the resourceSearchPath_
        * @throw error::Config if this stylesheet can't be resolved on the searchpath
-       * @see #init
        * @see lumiera::Config
        */
       void setTheme (string const& stylesheetName);
