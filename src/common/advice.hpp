@@ -148,7 +148,7 @@ namespace advice {
       explicit
       PointOfAdvice (Binding const& binding)
         : pattern_(binding.buildMatcher())
-        , resolution_(0)
+        , resolution_(nullptr)
         { }
       
       // using default copy/assignment
@@ -291,6 +291,12 @@ namespace advice {
           discardSolutions();
         }
       
+      bool
+      isGiven()  const
+        {
+          return bool{this->getSolution()};
+        }
+      
       void
       defineBinding (Literal topic)
         {
@@ -413,7 +419,7 @@ namespace advice {
    * Access point for the advised entity (client).
    * This is the interface intended for client code to request advice
    * of a specific type and optionally limited to a special topic (binding).
-   * Instantiating an \c Request<AD> object automatically entails a registration
+   * Instantiating an `Request<AD>` object automatically entails a registration
    * with the AdviceSystem behind the scenes, and deleting it causes deregistration.
    * Request objects may be instantiated and copied freely, and the binding pattern
    * may be changed. The actual advice is accessed through the member function
@@ -470,6 +476,18 @@ namespace advice {
         }
       
       
+      /**
+       * @return `true` if this request retrieves a piece of information specifically set
+       *         by an Advisor, as opposed to just delivering a default fallback result.
+       */
+      bool
+      isMatched()  const
+        {
+          return bool{this->getSolution()};
+        }
+      
+      
+      /** set and possibly change the binding term used to retrieve Advice */
       void
       defineBinding (Literal topic)
         {

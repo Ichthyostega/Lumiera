@@ -30,28 +30,6 @@
 
 #include "common/advice.hpp"
 
-//#include "lib/p.hpp"
-//#include "steam/assetmanager.hpp"
-//#include "steam/asset/inventory.hpp"
-//#include "steam/mobject/session/clip.hpp"
-//#include "steam/mobject/session/fork.hpp"
-//#include "lib/meta/trait-special.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "lib/symbol.hpp"
-
-//#include <string>
-
-//using lib::test::showSizeof;
-//using lib::test::randStr;
-//using util::isSameObject;
-//using util::and_all;
-//using util::for_each;
-//using util::isnil;
-//using lib::Literal;
-//using lib::Symbol;
-//using liab::P;
-//using std::string;
-
 
 
 namespace lumiera {
@@ -67,7 +45,7 @@ namespace test {
    * @test documentation of the fundamental usage scenarios envisioned in the Advice concept.
    *       This test will be augmented and completed as the Lumiera application matures.
    * 
-   * @todo partially unimplemented and thus commented out ////////////////////TICKET #335
+   * @todo yet more use cases to come....  ////////////////////////////////////////////////////////TICKET #335
    * 
    * @see advice.hpp
    * @see AdviceBasics_test
@@ -79,30 +57,84 @@ namespace test {
       virtual void
       run (Arg)
         {
-          check_ProxyRenderingAdvice();
-          check_DependencyInjection();
+          pattern01_justPickAndBeHappy();
+          pattern02_pickIfPresent();
+          pattern03_installOnlyOnce();
           TODO ("more advice usage scenarios.....?");
         }
       
       
-      /** @test usage scenario: switch a processing node into proxy mode. */
+      /** @test usage pattern 01: simply consume Advice -- irrespective if set explicitly. */
       void
-      check_ProxyRenderingAdvice()
+      pattern01_justPickAndBeHappy()
         {
-          UNIMPLEMENTED ("anything regarding proxy rendering");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #335
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #335
+          Request<int> generic{"solution(life_and_universe_and_everything)"};
+          CHECK (0 == generic.getAdvice());  // the early bird gets the worm...
+          
+          Provision<int> universal{"solution(life_and_universe_and_everything)"};
+          universal.setAdvice(5);
+          CHECK (5 == generic.getAdvice());  // ...while the bad girls go everywhere
+          
+          universal.retractAdvice();
+          CHECK (0 == generic.getAdvice());  // nothing to see here, just move on
         }
       
       
-      /** @test usage scenario: dependency injection for tests */
+      /** @test usage pattern 01: detect if specific advice was given. */
       void
-      check_DependencyInjection()
+      pattern02_pickIfPresent()
         {
-          UNIMPLEMENTED ("suitable advice to request and transfer test dependencies");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #335
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #335
+          Request<int> request{"something(special)"};
+          CHECK (not request.isMatched());
+          
+          Provision<int> info{"something(special)"};
+          info.setAdvice(55);
+          CHECK (request.isMatched());
+          CHECK (55 == request.getAdvice());
+          
+          info.retractAdvice();
+          CHECK (not request.isMatched());
         }
+      
+      
+      /** @test usage pattern 01: . */
+      void
+      pattern03_installOnlyOnce()
+        {
+          Provision<int> info{"something(special)"};
+          CHECK (not info.isGiven());
+
+          Request<int> question{"something(special)"};
+          CHECK (0 == question.getAdvice());
+          CHECK (not question.isMatched());
+          
+          auto publish = [&](int i)
+                            {
+                              if (not info.isGiven())
+                                info.setAdvice (i);
+                            };
+          
+          for (uint i=0; i<5; ++i)
+            if (i % 2)
+              publish (i);
+          
+          CHECK (1 == question.getAdvice());
+          CHECK (question.isMatched());
+          
+          info.retractAdvice();
+          CHECK (not info.isGiven());
+          CHECK (not question.isMatched());
+        }
+      
+      
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #335
+      /** @test usage pattern ∞ : somewhat literally fantastic */
+      void
+      check_SevenMoreWondersOfTheWorld()
+        {
+          UNIMPLEMENTED ("suitable advice to save the world");
+        }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #335
       
       // more to come.....
        

@@ -12,7 +12,7 @@ return: 0
 END
 
 
-PLANNED "Advice constellations" AdviceSituations_test <<END
+TEST "Advice constellations" AdviceSituations_test <<END
 return: 0
 END
 
