@@ -97,5 +97,12 @@ namespace stage {
   extern const Symbol MARK_Message;
   
   
+  /* ======== CSS selector names ======== */
+  
+  extern const Symbol NODE_fork;
+  
+  extern const Symbol CLASS_timeline;
+  
+  
 }// namespace stage
 #endif /*STAGE_INTERFACE_UI_PROTOCOL_H*/

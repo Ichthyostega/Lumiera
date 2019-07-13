@@ -90,6 +90,12 @@ namespace timeline {
   {
     return control_->getName();
   }
+  
+  Gtk::WidgetPath
+  TimelineWidget::getBodyWidgetPath()  const
+  {
+    return layout_->getBodyWidgetPath();
+  }
 
   
   

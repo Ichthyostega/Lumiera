@@ -364,6 +364,7 @@ namespace interact {
               .addTimeline (
                   anchorProxy.buildTimelineWidget (this->uiBus_));
     
+    globalCtx_.uiManager_.configureStyle (*anchorProxy);
     return anchorProxy;
   }
 

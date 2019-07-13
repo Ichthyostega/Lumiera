@@ -37,6 +37,7 @@
 #define STAGE_WORKSPACE_UI_STYLE_H
 
 #include "stage/gtk-base.hpp"
+#include "common/advice.hpp"
 #include "lib/nocopy.hpp"
 
 #include <cairomm/cairomm.h>
@@ -47,12 +48,16 @@ namespace stage {
   
   namespace model      { class Project; }           ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
   namespace controller { class Controller; }        ////////////////////////////////////////////////////TICKET #1048 : rectify UI lifecycle
+  namespace timeline { class TimelineWidget; }
 
   class UiBus;
 
 namespace workspace {
   
   using std::string;
+  
+  using StyleAdvice = lumiera::advice::Provision<PStyleContext>;
+
   
   
   
@@ -69,6 +74,8 @@ namespace workspace {
       
       string iconSearchPath_;
       string resourceSerachPath_;
+      
+      StyleAdvice styleAdvice_;
       
     public:
       
@@ -101,6 +108,23 @@ namespace workspace {
        * @see lumiera::Config
        */
       void setTheme (string const& stylesheetName);
+      
+      /**
+       * Use the existing TimelineWidget's GTK-WidgetPath to establish a systematic
+       * CSS styling context, which can be used for theming and styling of Lumiera's
+       * custom UI elements within the timeline display. Especially, this allows us
+       * to anchor those custom elements at a dedicated point in the hierarchy, the
+       * way it is visible for CSS selectors. Thus, either standard CSS rules and
+       * inheritance take effect on our custom elements, or the GTK stylesheet
+       * may add dedicated style rules for elements within the timeline display,
+       * most notably the system of nested scopes in the track fork and the
+       * display of clips and overlays.
+       * 
+       * Especially the following selector path can be used
+       * - `paned.timeline-page > body.timeline > fork.timeline`
+       */
+      void prepareStyleContext (timeline::TimelineWidget const&);
+      
       
       /**
        * A utility function which reads a colour style from the GTK Style.

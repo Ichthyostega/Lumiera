@@ -57,6 +57,14 @@ namespace stage {
   const Symbol MARK_Warning{"Warning"};
   const Symbol MARK_Message{"Message"};
   
+  
+  /* ======== CSS selector names ======== */
+  
+  const Symbol NODE_fork{"fork"};
+  
+  const Symbol CLASS_timeline{"timeline"};
+  
+  
   /**  */
   
   

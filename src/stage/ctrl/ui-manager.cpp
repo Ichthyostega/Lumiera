@@ -190,4 +190,12 @@ namespace ctrl {
   }
   
   
+  void
+  UiManager::configureStyle (timeline::TimelineWidget const& timeline)
+  {
+    uiStyle_->prepareStyleContext (timeline);
+  }
+
+  
+  
 }}// namespace stage::ctrl

@@ -145,6 +145,8 @@ namespace timeline {
       
       cuString getLabel()  const override;
       
+      Gtk::WidgetPath getBodyWidgetPath()  const;
+      
       
     public: /* ===== Signals ===== */
       

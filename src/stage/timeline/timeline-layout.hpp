@@ -124,6 +124,9 @@ namespace timeline {
       /** @internal anchor the display of the root track into the two display panes */
       void installRootTrack (TrackHeadWidget&,TrackBody&);
       
+      Gtk::WidgetPath getBodyWidgetPath()  const;
+      
+      
     protected:/* ==== Interface: LayoutManager===== */
       
       PixSpan getPixSpan()  override;

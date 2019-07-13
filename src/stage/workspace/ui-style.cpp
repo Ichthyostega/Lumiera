@@ -32,9 +32,12 @@
 
 
 #include "stage/workspace/ui-style.hpp"
+#include "stage/timeline/timeline-widget.hpp"
 #include "stage/config-keys.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
+
+#include "include/ui-protocol.hpp"
 
 #include <gtkmm/stylecontext.h>
 #include <boost/filesystem.hpp>
@@ -68,6 +71,7 @@ namespace workspace {
     : Gtk::UIManager()
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
+    , styleAdvice_{"style(trackBody)"}
     {
       Glib::set_application_name (Config::get (KEY_TITLE));
       
@@ -98,6 +102,46 @@ namespace workspace {
     Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
+  
+  
+  
+  /**
+   * @remarks some implementation notes....
+   *   - GTK defines for each widget a _widget path_, to describe the path
+   *     of widget parent relationships down from the top-level window
+   *   - this Gtk::WidgetPath is then used to match against CSS selectors of the GTK stylesheet,
+   *     either the global system theme, or (with precedence) an application stylesheet (`lumiera.css`)
+   *   - but the Gtk::StyleContext and (and should) also be used outside of the core GTK framework to
+   *     carry out custom drawing tasks, which allows custom drawing to "blend in" with the desktop theme.
+   *   - to support this usage, we construct a "virtual widget" and place it at a systematically correct
+   *     position in the widget hierarchy, causing the corresponding style context to pick up the appropriate
+   *     standard CSS definitions in effect at that point in the hierarchy. Moreover, users may (and shall)
+   *     add custom styling rules in a way to match and affect this "virtual" CSS node.
+   *   - the resulting Gtk::StyleContext is constructed only once, at initialisation. It is used from drawing
+   *     code "deep down" within the TimelineWidget's implementation. The [Advice System](\ref advice.hpp)
+   *     allows to pass such information without the need of a direct relation between provider and consumer.
+   *   - for technical reference how to manage and populate GTK WidgetPath nodes, see the implementation
+   *     of the C-function `gtk_widget_path_append_for_widget()` in in GTK 3.x, gtkwidget.c, line 16413
+   */
+  void
+  UiStyle::prepareStyleContext (timeline::TimelineWidget const& timeline)
+  {
+    // the first Timeline triggers initialisation
+    if (styleAdvice_.isGiven()) return;
+    
+    Gtk::WidgetPath path = timeline.getBodyWidgetPath();
+    GType scopeNode = Gtk::Box::get_type();
+    int pos = path.path_append_type (scopeNode);                         // build a "virtual" CSS node to represent the track scope
+    
+    gtk_widget_path_iter_set_object_name (path.gobj(), pos, NODE_fork);  // override the generic node name with a custom widget type "fork"
+    path.iter_add_class(pos, cuString{CLASS_timeline});                  // decorate this CSS node with a CSS class ".timeline" (distinguish it from asset bins)
+                                                                         // deliberately we *do not* invoke path.iter_set_name(pos, "id") to add an #ID
+    PStyleContext style = Gtk::StyleContext::create();                   // create a new style context and configure it according to the path defined thus far
+    style->set_path (path);
+    styleAdvice_.setAdvice (style);                                      // publish as Advice "style(trackBody)"
+    INFO (stage, "Body-CSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
+  }
+  
   
   
   

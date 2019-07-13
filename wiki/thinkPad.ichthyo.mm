@@ -21534,11 +21534,12 @@
 </node>
 </node>
 </node>
-<node CREATED="1562844175946" HGAP="53" ID="ID_770758065" MODIFIED="1562844190795" TEXT="dedizierten StyleContext konstruieren" VSHIFT="4">
+<node COLOR="#338800" CREATED="1562844175946" HGAP="53" ID="ID_770758065" MODIFIED="1563033494619" TEXT="dedizierten StyleContext konstruieren" VSHIFT="4">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562844888515" ID="ID_1004783054" MODIFIED="1562844917833" TEXT="#1171 investigate virtual widget path">
 <icon BUILTIN="forward"/>
 </node>
-<node CREATED="1562845117699" ID="ID_1145993487" MODIFIED="1562845214506" TEXT="kann man einen WidgetPath k&#xfc;nstlich konstruieren?">
+<node COLOR="#435e98" CREATED="1562845117699" FOLDED="true" ID="ID_1145993487" MODIFIED="1563033476487" TEXT="kann man einen WidgetPath k&#xfc;nstlich konstruieren?">
 <arrowlink COLOR="#3766bc" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="-654;0;" ID="Arrow_ID_711737555" STARTARROW="None" STARTINCLINATION="-2487;0;"/>
 <node CREATED="1562845842871" ID="ID_119822604" MODIFIED="1562845853198" TEXT="widget-&gt;get_path()"/>
 <node CREATED="1562854489102" ID="ID_1789577981" MODIFIED="1562854522386" TEXT="der erzeugte WidgetPath ist bereits eine Kopie">
@@ -21607,7 +21608,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1562947149512" ID="ID_1788757764" MODIFIED="1562947168297" TEXT="was/wie kann man an den Pfad anh&#xe4;ngen?">
+<node COLOR="#435e98" CREATED="1562947149512" ID="ID_1788757764" MODIFIED="1563033443796" TEXT="was/wie kann man an den Pfad anh&#xe4;ngen?">
 <node CREATED="1562947206390" ID="ID_858425792" MODIFIED="1562947209292" TEXT="WidgetPath::path_append_type(GType)"/>
 <node CREATED="1562947226168" ID="ID_1423368720" MODIFIED="1562947248239" TEXT="wie kann ich einen GType konstruieren, wenn es das Widget garnicht gibt??">
 <node CREATED="1562948746502" ID="ID_1583179714" MODIFIED="1562968161548" TEXT="statische Typ-Funktion des jeweiligen Widget nutzen">
@@ -21634,13 +21635,15 @@
 </node>
 </node>
 </node>
-<node CREATED="1562972564394" ID="ID_47205096" MODIFIED="1562972572357" TEXT="scheint zu funktionieren...">
+<node COLOR="#338800" CREATED="1562972564394" ID="ID_47205096" MODIFIED="1563033473194" TEXT="scheint zu funktionieren...">
+<arrowlink DESTINATION="ID_1632267547" ENDARROW="Default" ENDINCLINATION="502;0;" ID="Arrow_ID_211374997" STARTARROW="None" STARTINCLINATION="255;50;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1562972574838" ID="ID_425700528" MODIFIED="1562972585258" TEXT="bekomme den Pfad: &quot;paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline&quot;"/>
 <node CREATED="1562972605077" ID="ID_1232397111" MODIFIED="1562972636996" TEXT="das w&#xe4;re das TimelineWidget, dann der BodyCanvas, und die neue virtuelle CSS-Node"/>
 </node>
 </node>
 <node CREATED="1562969880923" ID="ID_1675178851" MODIFIED="1562969892966" TEXT="damit einen Gtk::StyleContext konfigurieren">
-<node CREATED="1562969894183" ID="ID_1066073394" MODIFIED="1562969914243" TEXT="StyleContext per Factory erzeugen">
+<node COLOR="#338800" CREATED="1562969894183" ID="ID_1066073394" MODIFIED="1563033488691" TEXT="StyleContext per Factory erzeugen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21652,8 +21655,9 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1562970409637" ID="ID_156221819" MODIFIED="1562970782190" STYLE="fork" TEXT="ihm den Pfad zuweisen">
+<node COLOR="#338800" CREATED="1562970409637" ID="ID_156221819" MODIFIED="1563033490587" TEXT="ihm den Pfad zuweisen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21674,6 +21678,7 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -21685,7 +21690,7 @@
 <node CREATED="1562878948640" ID="ID_1131723159" MODIFIED="1562878968203" TEXT="wer erstellt den zugeh&#xf6;rigen StyleContext, und wann?"/>
 <node CREATED="1562878977278" ID="ID_115944776" MODIFIED="1562878981971" TEXT="was genau wird &#xfc;bergeben"/>
 </node>
-<node CREATED="1562878987389" ID="ID_1874620900" MODIFIED="1562878995857" TEXT="Idee: das Advice-System nutzen">
+<node COLOR="#435e98" CREATED="1562878987389" FOLDED="true" ID="ID_1874620900" MODIFIED="1563033512000" TEXT="Idee: das Advice-System nutzen">
 <icon BUILTIN="idea"/>
 <node CREATED="1562879000849" ID="ID_1256390103" MODIFIED="1562879051816" TEXT="sieht nach einem perfekten Anwendungsfall aus">
 <node CREATED="1562879123963" ID="ID_1855893476" MODIFIED="1562879144620" TEXT="&quot;irgendjemand&quot; fragt nach einem symbolisch identifizierten StyleContext"/>
@@ -21716,14 +21721,46 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562972719033" ID="ID_1528071219" MODIFIED="1563020034710" TEXT="kl&#xe4;ren: ist der Style-Pfad sinnvoll / korrekt?">
 <linktarget COLOR="#46558a" DESTINATION="ID_1528071219" ENDARROW="Default" ENDINCLINATION="-639;0;" ID="Arrow_ID_1602346272" SOURCE="ID_678877446" STARTARROW="None" STARTINCLINATION="564;0;"/>
 <icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562972742894" ID="ID_340313615" MODIFIED="1562972762823" TEXT="man sollte die custom-widgets explizit benennen">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562972764593" ID="ID_315266947" MODIFIED="1562972781566" TEXT="warum beginnt der Pfad mit dem Timeline-Widget?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1562972764593" ID="ID_315266947" MODIFIED="1563033166705" TEXT="warum beginnt der Pfad mit dem Timeline-Widget?">
 <node CREATED="1562972783861" ID="ID_284818197" MODIFIED="1562972793575" TEXT="ist das nicht korrekt veranktert?"/>
 <node CREATED="1562972794679" ID="ID_522042066" MODIFIED="1562972802573" TEXT="liegt das an der lib GDL?"/>
-<node CREATED="1562972821550" ID="ID_440374994" MODIFIED="1562972834594" TEXT="oder liegt das am Zeitpunkt des Aufrufs?"/>
+<node CREATED="1562972821550" ID="ID_440374994" MODIFIED="1563033154868" TEXT="oder liegt das am Zeitpunkt des Aufrufs?">
+<icon BUILTIN="forward"/>
+</node>
+<node COLOR="#338800" CREATED="1563033192867" ID="ID_243229354" MODIFIED="1563033251713" TEXT="besser erst dann aufrufen, wenn das TimelineWidget schon eingeh&#xe4;ngt ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. dann aus dem InteractionDirector heraus
+    </p>
+    <p>
+      -- <i>ja dann </i>kann man auch gleich direkt an den UiManager delegieren!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1563033292565" ID="ID_1632267547" MODIFIED="1563033473194" TEXT="aktuell ist der Pfad schon sinnvoll (aber noch nicht ideal)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      window:backdrop:dir-ltr.background box:backdrop:dir-ltr.vertical box:backdrop:dir-ltr[2/3].horizontal widget:backdrop:dir-ltr[2/2] widget:backdrop:dir-ltr paned:backdrop:dir-ltr.vertical widget:backdrop:dir-ltr box:backdrop:dir-ltr.vertical notebook:backdrop:dir-ltr[1/1].frame paned:backdrop:dir-ltr.horizontal box:backdrop:dir-ltr.vertical fork.timeline
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1632267547" ENDARROW="Default" ENDINCLINATION="502;0;" ID="Arrow_ID_211374997" SOURCE="ID_47205096" STARTARROW="None" STARTINCLINATION="255;50;"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562972742894" ID="ID_340313615" MODIFIED="1563033187300" TEXT="man sollte die custom-widgets explizit benennen">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

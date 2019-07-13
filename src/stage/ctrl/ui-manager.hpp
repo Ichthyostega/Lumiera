@@ -59,7 +59,8 @@ namespace stage {
   
   class UiBus;
   
-namespace workspace { class UIStyle; }
+namespace workspace { class UiStyle; }
+namespace timeline { class TimelineWidget; }
 namespace ctrl {
   
   using std::unique_ptr;
@@ -145,6 +146,8 @@ namespace ctrl {
       void updateWindowFocusRelatedActions();
       
       void allowCloseWindow (bool yes);
+      
+      void configureStyle (timeline::TimelineWidget const&);
       
     private:
       

@@ -57,30 +57,6 @@
 
 namespace stage {
 namespace timeline {
-  namespace { /////////////////////////////////////////////////////////////////////////////////////TICKET #1168 : doesn't this rather belong into the global UiStyle manager? 
-    void
-    provideStyleContextAdvice (Gtk::Widget const& anchorWidget)
-    {
-      lumiera::advice::Provision<PStyleContext> styleAdvice{"style(trackBody)"};
-      
-      Gtk::WidgetPath path = anchorWidget.get_path();
-      // build a "virtual" CSS node to represent the track scope
-      GType scopeNode = Gtk::Box::get_type();
-      int pos = path.path_append_type (scopeNode);
-      // override the generic node name with a custom widget type
-      gtk_widget_path_iter_set_object_name (path.gobj(), pos, "TrackScope");
-      // deliberately we don't invoke path.iter_set_name(pos, "id") add an #ID
-      path.iter_add_class(pos, "timeline");
-      // for reference, see gtk_widget_path_append_for_widget() in in gtkwidget.c, line 16413
-      
-      // create a new style context and configure it according to the defined path
-      PStyleContext style = Gtk::StyleContext::create();
-      style->set_path (path);
-      // publish as Advice "style(trackBody)"
-      styleAdvice.setAdvice (style);
-      INFO (stage, "Body-CSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
-    }
-  }
   
   
   
@@ -94,8 +70,6 @@ namespace timeline {
     {
       topLevelContainer.add1 (headerPane_);
       topLevelContainer.add2 (bodyCanvas_);
-      
-      provideStyleContextAdvice (bodyCanvas_);
     }
   
   
@@ -117,6 +91,13 @@ namespace timeline {
     body.signalStructureChange_ = signalStructureChange_;
     signalStructureChange_(); // this _is_ such a change
   }
+  
+  Gtk::WidgetPath
+  TimelineLayout::getBodyWidgetPath()  const
+  {
+    return bodyCanvas_.get_path();
+  }
+  
   
   
   /* ==== Interface: LayoutManager===== */
