@@ -34,6 +34,7 @@
 #include "stage/timeline/timeline-widget.hpp"
 #include "stage/timeline/timeline-controller.hpp"
 #include "stage/timeline/timeline-layout.hpp"
+#include "include/ui-protocol.hpp"
 
 //#include "stage/workspace/workspace-window.hpp"
 //#include "stage/ui-bus.hpp"
@@ -72,6 +73,7 @@ namespace timeline {
     , layout_{new TimelineLayout{*this}}
     , control_{new TimelineController{identity, trackID, nexus, *layout_}}
     {
+      get_style_context()->add_class(cuString{CLASS_timeline_page});
       show_all();
     }
   

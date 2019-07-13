@@ -102,6 +102,8 @@ namespace stage {
   extern const Symbol NODE_fork;
   
   extern const Symbol CLASS_timeline;
+  extern const Symbol CLASS_timeline_page;
+  extern const Symbol CLASS_timeline_body;
   
   
 }// namespace stage

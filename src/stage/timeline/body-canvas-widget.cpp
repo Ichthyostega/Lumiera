@@ -39,6 +39,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
+#include "include/ui-protocol.hpp"
 #include "common/advice.hpp"
 #include "lib/util.hpp"
 
@@ -246,7 +247,8 @@ namespace timeline {
   
   
   BodyCanvasWidget::BodyCanvasWidget (DisplayManager& displayManager)
-    : Gtk::Box{Gtk::ORIENTATION_VERTICAL}
+    : Glib::ObjectBase("body")    // enables use of custom CSS properties (on 'gtkmm__CustomObject_body') 
+    , Gtk::Box{Gtk::ORIENTATION_VERTICAL}
     , layout_{displayManager}
     , profile_{}
     , rootBody_{nullptr}
@@ -254,6 +256,9 @@ namespace timeline {
     , rulerCanvas_{makeRenderer<Grounding, RULER>(layout_,getProfile), makeRenderer<Overlay, RULER>(layout_,getProfile)}
     , mainCanvas_ {makeRenderer<Grounding, BODY>(layout_,getProfile),  makeRenderer<Overlay, BODY>(layout_,getProfile)}
     {
+      get_style_context()->add_class(cuString{CLASS_timeline});
+      get_style_context()->add_class(cuString{CLASS_timeline_body});
+      
       // respond to any structure changes of the timeline by recomputing the TrackProfile
       layout_.signalStructureChange_.connect (sigc::mem_fun (*this, &BodyCanvasWidget::slotStructureChange));
       

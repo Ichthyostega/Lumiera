@@ -7095,7 +7095,7 @@
 <node CREATED="1504463020913" ID="ID_808284638" MODIFIED="1518487921063" TEXT="[optional] Gruppe"/>
 <node CREATED="1504463028384" ID="ID_1928250888" MODIFIED="1518487921063" TEXT="View-ID"/>
 </node>
-<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1538589849694" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
+<node CREATED="1504479185405" HGAP="50" ID="ID_50865654" MODIFIED="1563035910945" TEXT="abgeleitet aus Fokus-Koordinaten" VSHIFT="15">
 <arrowlink COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -18219,7 +18219,8 @@
 <node CREATED="1563019380597" ID="ID_7366061" MODIFIED="1563019384050" TEXT="Kontrollstruktur"/>
 </node>
 <node CREATED="1563019137720" ID="ID_1085825572" MODIFIED="1563019142563" TEXT="systematisch">
-<node CREATED="1563019146591" ID="ID_105242868" MODIFIED="1563019178642" TEXT="&quot;auf was k&#xf6;nnen CSS-Selektoren aufbauen&quot;?">
+<node CREATED="1563019146591" ID="ID_105242868" MODIFIED="1563036084505" TEXT="&quot;auf was k&#xf6;nnen CSS-Selektoren aufbauen&quot;?">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_105242868" ENDARROW="Default" ENDINCLINATION="1295;0;" ID="Arrow_ID_708537872" SOURCE="ID_180592409" STARTARROW="None" STARTINCLINATION="825;-325;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1563019196947" ID="ID_1289853928" MODIFIED="1563019204755" TEXT="Ankerpunkt">
@@ -18251,8 +18252,9 @@
   </body>
 </html>
 </richcontent>
-<node CREATED="1563019476308" ID="ID_83481977" MODIFIED="1563021613503" TEXT=".timeline-page &gt; body.timeline fork.timeline">
+<node COLOR="#435e98" CREATED="1563019476308" ID="ID_83481977" MODIFIED="1563044164753" TEXT=".timeline-page &gt; box.timeline-body fork.timeline">
 <linktarget COLOR="#419bcf" DESTINATION="ID_83481977" ENDARROW="Default" ENDINCLINATION="666;0;" ID="Arrow_ID_1386111155" SOURCE="ID_1803180287" STARTARROW="None" STARTINCLINATION="-787;0;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 </node>
@@ -18611,6 +18613,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480606888860" HGAP="25" ID="ID_899101975" MODIFIED="1557498707225" TEXT="Implementierung" VGAP="11" VSHIFT="14">
 <icon BUILTIN="pencil"/>
 <node CREATED="1480606950372" ID="ID_1502878943" MODIFIED="1557498707225" TEXT="Grundstruktur">
+<node CREATED="1563036503676" ID="ID_274320987" MODIFIED="1563036508677" TEXT="visuell/Layout">
 <node CREATED="1480639404070" ID="ID_506539007" MODIFIED="1557498707225" TEXT="HeaderPane">
 <node CREATED="1480639435010" ID="ID_892799964" MODIFIED="1557498707225" TEXT="Navigator"/>
 <node CREATED="1480639438921" ID="ID_1668884794" MODIFIED="1557498707225" TEXT="Baum">
@@ -18621,6 +18624,67 @@
 <node CREATED="1480639411109" ID="ID_520199505" MODIFIED="1557498707225" TEXT="ScrolledPane">
 <node CREATED="1480639423116" ID="ID_1226894709" MODIFIED="1557498707225" TEXT="Ruler"/>
 <node CREATED="1480639429307" ID="ID_1922498247" MODIFIED="1557498707225" TEXT="Canvas"/>
+</node>
+</node>
+<node CREATED="1563036487350" ID="ID_1370107301" MODIFIED="1563036492008" TEXT="custom-Widgets">
+<node COLOR="#338800" CREATED="1562972742894" ID="ID_50010456" MODIFIED="1563044193887" TEXT="Namen f&#xfc;r die custom-widgets">
+<linktarget COLOR="#3f4a94" DESTINATION="ID_50010456" ENDARROW="Default" ENDINCLINATION="-1046;66;" ID="Arrow_ID_1862548348" SOURCE="ID_340313615" STARTARROW="None" STARTINCLINATION="-1895;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1563035885483" ID="ID_180592409" MODIFIED="1563036084505" TEXT="Wunsch/Konzept">
+<arrowlink DESTINATION="ID_105242868" ENDARROW="Default" ENDINCLINATION="1295;0;" ID="Arrow_ID_708537872" STARTARROW="None" STARTINCLINATION="825;-325;"/>
+<node CREATED="1563036553387" ID="ID_1889445008" MODIFIED="1563036560952" TEXT="TimelineWidget selber?">
+<node CREATED="1563036568256" ID="ID_1816733755" MODIFIED="1563036596587" TEXT="sollte besser ein &quot;paned&quot; bleiben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil dies ggfs vom Theme her schon gestyled wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1563036619140" ID="ID_1483549704" MODIFIED="1563037392573" TEXT="aber Klasse: .timeline-page">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1563019287444" ID="ID_1624037692" MODIFIED="1563043796072" TEXT="body.timeline">
+<icon BUILTIN="stop-sign"/>
+<node COLOR="#338800" CREATED="1563019321399" ID="ID_1793367255" MODIFIED="1563043799284" TEXT="fork.timeline">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1563019330262" ID="ID_36986369" MODIFIED="1563043802584" TEXT="canvas.timeline">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1563043807392" ID="ID_994687888" MODIFIED="1563044102751" TEXT="Wunsch nur teilweise realisierbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn die CSS-Node-Namen von Custom-Widgets kann man via GTKmm nicht &#228;ndern.
+    </p>
+    <p>
+      Das geht nur, wenn man das Custom-Widget direkt per C erzeugt,
+    </p>
+    <p>
+      weil der betreffende Aufruf gtk_widget_class_set_css_name (GTK_WIDGET_GET_CLASS(gobj()), &quot;my-node&quot;)
+    </p>
+    <p>
+      in der C &quot;class init function&quot; passieren mu&#223;
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#bc86a6" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-1901;31;" ID="Arrow_ID_1120129058" STARTARROW="None" STARTINCLINATION="-2128;-72;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1480606954115" ID="ID_1178000371" MODIFIED="1557498707225" TEXT="Struktur-Modell">
@@ -21718,7 +21782,7 @@
 <node CREATED="1562938985427" ID="ID_1430350400" MODIFIED="1562939000802" TEXT="und das Advice-System bietet hierf&#xfc;r die ad&#xe4;quate Infrastruktur"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562972719033" ID="ID_1528071219" MODIFIED="1563020034710" TEXT="kl&#xe4;ren: ist der Style-Pfad sinnvoll / korrekt?">
+<node COLOR="#435e98" CREATED="1562972719033" FOLDED="true" ID="ID_1528071219" MODIFIED="1563044223514" TEXT="kl&#xe4;ren: ist der Style-Pfad sinnvoll / korrekt?">
 <linktarget COLOR="#46558a" DESTINATION="ID_1528071219" ENDARROW="Default" ENDINCLINATION="-639;0;" ID="Arrow_ID_1602346272" SOURCE="ID_678877446" STARTARROW="None" STARTINCLINATION="564;0;"/>
 <icon BUILTIN="help"/>
 <node COLOR="#435e98" CREATED="1562972764593" ID="ID_315266947" MODIFIED="1563033166705" TEXT="warum beginnt der Pfad mit dem Timeline-Widget?">
@@ -21758,9 +21822,73 @@
 </html>
 </richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1632267547" ENDARROW="Default" ENDINCLINATION="502;0;" ID="Arrow_ID_211374997" SOURCE="ID_47205096" STARTARROW="None" STARTINCLINATION="255;50;"/>
+<node COLOR="#435e98" CREATED="1563035526845" ID="ID_1747578312" MODIFIED="1563037376560" TEXT="warum haben die alle die Pseudo-Klasse :backdrop?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;Widget is in a background toplevel window&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#8aafdb" DESTINATION="ID_422408673" ENDARROW="Default" ENDINCLINATION="-430;209;" ID="Arrow_ID_384398411" STARTARROW="None" STARTINCLINATION="-1700;-117;"/>
+<node CREATED="1563035800955" ID="ID_1644301957" MODIFIED="1563035821169" TEXT="vmt. wegen dem Zeitpunkt, an dem der Pfad konstruiert wird"/>
+<node CREATED="1563035791620" ID="ID_1471340967" MODIFIED="1563035834509" TEXT="unsch&#xf6;n, aber nicht relevant">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nur der letzte Node wird gegen pseudo-Klassen gematcht
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562972742894" ID="ID_340313615" MODIFIED="1563033187300" TEXT="man sollte die custom-widgets explizit benennen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1563037328957" ID="ID_1150753033" MODIFIED="1563039434820" TEXT="man kann es aber (zur&#xfc;ck)setzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#160;&#160;&#160;&#160;for (uint i=0; i&lt;pos; ++i)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;gtk_widget_path_iter_set_state(path.gobj(), i, GTK_STATE_FLAG_NORMAL);
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1563043712231" ID="ID_680778611" MODIFIED="1563043724620" TEXT="&#xfc;berarbeitete Version">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      window.background box.vertical box[2/3].horizontal widget[2/2] widget paned.vertical widget box.vertical notebook[1/1].frame paned.horizontal.timeline-page box.vertical.timeline.timeline-body fork.timeline
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1562972742894" ID="ID_340313615" MODIFIED="1563043738908" TEXT="man sollte die custom-widgets explizit benennen">
+<arrowlink COLOR="#3f4a94" DESTINATION="ID_50010456" ENDARROW="Default" ENDINCLINATION="-1046;66;" ID="Arrow_ID_1862548348" STARTARROW="None" STARTINCLINATION="-1895;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1563043742703" ID="ID_1008105312" MODIFIED="1563043747776" TEXT="soweit es &#xfc;berhaupt ging"/>
+<node CREATED="1563043748625" ID="ID_1963576119" MODIFIED="1563043767189" TEXT="C++ Custom-Widgets k&#xf6;nnen nicht ihren CSS-Node-Namen &#xe4;ndern">
+<icon BUILTIN="smily_bad"/>
+</node>
 </node>
 </node>
 </node>
@@ -30976,7 +31104,7 @@
 <node CREATED="1487273377603" ID="ID_1842094630" MODIFIED="1518487921088" TEXT="SpotLocator"/>
 </node>
 <node CREATED="1487272813119" ID="ID_1794274698" MODIFIED="1518487921088" TEXT="Bezug">
-<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1538589849694" TEXT="Koordinatensystem">
+<node CREATED="1504460091831" ID="ID_150523428" MODIFIED="1563035910945" TEXT="Koordinatensystem">
 <linktarget COLOR="#a9a5cd" DESTINATION="ID_150523428" ENDARROW="Default" ENDINCLINATION="1440;-3055;" ID="Arrow_ID_1485937133" SOURCE="ID_50865654" STARTARROW="None" STARTINCLINATION="1109;-37;"/>
 <node CREATED="1504462869149" ID="ID_248419130" MODIFIED="1518487921088" TEXT="beschreibt Zugangsweg">
 <icon BUILTIN="yes"/>
@@ -43517,6 +43645,24 @@
 </node>
 <node CREATED="1538706287605" ID="ID_811190435" LINK="https://developer.gnome.org/gtk3/stable/chap-css-properties.html" MODIFIED="1557498707238" TEXT="unterst&#xfc;tzte properties">
 <icon BUILTIN="info"/>
+<node CREATED="1563035652060" ID="ID_1461845755" MODIFIED="1563035657162" TEXT="State / Pseudo-Klassen">
+<node CREATED="1563035659642" ID="ID_1776634695" MODIFIED="1563035663793" TEXT=":backdrop">
+<node CREATED="1563035576188" ID="ID_422408673" LINK="https://developer.gnome.org/gtk3/stable/gtk3-Standard-Enumerations.html#GtkStateFlags" MODIFIED="1563035773257" TEXT="GtkStateFlags::GTK_STATE_FLAG_BACKDROP">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;Widget is in a background toplevel window&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#8aafdb" DESTINATION="ID_422408673" ENDARROW="Default" ENDINCLINATION="-430;209;" ID="Arrow_ID_384398411" SOURCE="ID_1747578312" STARTARROW="None" STARTINCLINATION="-1700;-117;"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1537575947102" ID="ID_161652920" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html" MODIFIED="1561741931982" TEXT="StyleContext">
@@ -43604,7 +43750,93 @@
 </node>
 </node>
 <node CREATED="1537658818388" ID="ID_1554071957" MODIFIED="1537658827087" TEXT="M&#xf6;glichkeiten">
-<node CREATED="1537577389028" ID="ID_1690083237" MODIFIED="1537577400334" TEXT="k&#xf6;nnen einen eigenen Widget-Namen setzen"/>
+<node CREATED="1537577389028" ID="ID_1690083237" MODIFIED="1563037767739" TEXT="k&#xf6;nnen einen eigenen Widget-Namen setzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      this-&gt;set_name(&quot;my-widget&quot;)
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1563038427512" ID="ID_887791641" MODIFIED="1563038432987" TEXT="Vorsicht: das ist die #id"/>
+<node CREATED="1563038460235" ID="ID_1245820640" MODIFIED="1563043928806" TEXT="GTKmm-definierte custom-Widgets k&#xf6;nnen nicht ihren CSS-node-Namen &#xe4;ndern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (2019 / Debian-Stretch)
+    </p>
+    <p>
+      Das schlie&#223;e ich aus einem Kommentar im GTKmm-Tutorial
+    </p>
+    <p>
+      &#160;&#160;// Set the widget name to use in the CSS file.
+    </p>
+    <p>
+      &#160;&#160;set_name(&quot;my-widget&quot;);
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;// If you make a custom widget in C code, based on gtk+'s GtkWidget, there is
+    </p>
+    <p>
+      &#160;&#160;// an alternative to gtk_widget_set_name(): Set a CSS name for your custom
+    </p>
+    <p>
+      &#160;&#160;// class (instead of the widget instance) with gtk_widget_class_set_css_name()
+    </p>
+    <p>
+      &#160;&#160;// (new in gtk+ 3.19.1). That's not possible for custom widgets defined in gtkmm.
+    </p>
+    <p>
+      &#160;&#160;// gtk_widget_class_set_css_name() must be called in the class init function,
+    </p>
+    <p>
+      &#160;&#160;// which can't be customized, when the widget is based on gtkmm's Gtk::Widget.
+    </p>
+    <p>
+      &#160;&#160;//
+    </p>
+    <p>
+      &#160;&#160;// Another alternative: The custom widget inherits the CSS name &quot;widget&quot; from
+    </p>
+    <p>
+      &#160;&#160;// GtkWidget. That name can be used in the CSS file. This is not a very good
+    </p>
+    <p>
+      &#160;&#160;// alternative. GtkWidget's CSS name is not documented. It can probably be
+    </p>
+    <p>
+      &#160;&#160;// changed or removed in the future.
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#bc86a6" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-1901;31;" ID="Arrow_ID_1120129058" SOURCE="ID_994687888" STARTARROW="None" STARTINCLINATION="-2128;-72;"/>
+<node CREATED="1563042271596" ID="ID_60542269" MODIFIED="1563042285395" TEXT="man kann zwar aufrufen...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gtk_widget_class_set_css_name (GTK_WIDGET_GET_CLASS(gobj()), &quot;body&quot;);
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563042287071" ID="ID_1579813090" MODIFIED="1563042298109" TEXT="aber das kommt zu sp&#xe4;t und bleibt wirkungslos f&#xfc;r das CSS"/>
+</node>
+</node>
 <node CREATED="1537577364840" ID="ID_927285198" MODIFIED="1537577379929" TEXT="k&#xf6;nnen custom-Properties haben">
 <node CREATED="1537577410065" ID="ID_1611025546" MODIFIED="1537577422244" TEXT="das ist ein Proxy-Member"/>
 <node CREATED="1537577424000" ID="ID_742914876" MODIFIED="1537577434658" TEXT="onRealize kann der Wert abgeholt werden"/>
@@ -43615,6 +43847,23 @@
 </node>
 <node CREATED="1537658785336" ID="ID_903275997" MODIFIED="1538609485588" TEXT="Beispiel">
 <arrowlink COLOR="#c1a9a9" DESTINATION="ID_1015117751" ENDARROW="Default" ENDINCLINATION="56;152;" ID="Arrow_ID_1206355372" STARTARROW="None" STARTINCLINATION="68;8;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1563042875607" ID="ID_1514342953" MODIFIED="1563042880140" TEXT="Interna">
+<node CREATED="1563042881862" ID="ID_96389801" MODIFIED="1563042882948" TEXT="GtkWidgetClass">
+<node CREATED="1563042885675" ID="ID_1605857107" MODIFIED="1563042893560" TEXT="ziemlich obskures internes Detail">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1563042941749" ID="ID_1890840480" MODIFIED="1563042972361" TEXT="wohl eine GLib &quot;subklasse&quot; der Widget-&quot;klasse&quot;"/>
+<node CREATED="1563042901556" ID="ID_252353292" MODIFIED="1563043017352" TEXT="man bekommt sie so: GTK_WIDGET_GET_CLASS(gobj())">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1563042990783" ID="ID_987465821" MODIFIED="1563043007260" TEXT="Verh&#xe4;ltnis zur C++ Widget_Class?">
+<icon BUILTIN="help"/>
+<node CREATED="1563043008460" ID="ID_30159127" MODIFIED="1563043013198" TEXT="ist mir nicht klar">
+<icon BUILTIN="smily_bad"/>
 </node>
 </node>
 </node>

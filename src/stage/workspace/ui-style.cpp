@@ -136,6 +136,8 @@ namespace workspace {
     gtk_widget_path_iter_set_object_name (path.gobj(), pos, NODE_fork);  // override the generic node name with a custom widget type "fork"
     path.iter_add_class(pos, cuString{CLASS_timeline});                  // decorate this CSS node with a CSS class ".timeline" (distinguish it from asset bins)
                                                                          // deliberately we *do not* invoke path.iter_set_name(pos, "id") to add an #ID
+    for (int i=0; i<pos; ++i)                                            // reset any state flags accidentally set (resulting in pseudo classes like ":backdrop")
+      gtk_widget_path_iter_set_state(path.gobj(), i, GTK_STATE_FLAG_NORMAL);
     PStyleContext style = Gtk::StyleContext::create();                   // create a new style context and configure it according to the path defined thus far
     style->set_path (path);
     styleAdvice_.setAdvice (style);                                      // publish as Advice "style(trackBody)"

@@ -63,6 +63,8 @@ namespace stage {
   const Symbol NODE_fork{"fork"};
   
   const Symbol CLASS_timeline{"timeline"};
+  const Symbol CLASS_timeline_page{"timeline-page"};
+  const Symbol CLASS_timeline_body{"timeline-body"};
   
   
   /**  */
