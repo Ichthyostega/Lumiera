@@ -68,8 +68,8 @@ namespace timeline {
         virtual void content(uint h) =0;    ///< represent a content area with the given vertical extension
         virtual void open()          =0;    ///< indicate entering a nested structure, typically as 3D inset
         virtual void close(uint n)   =0;    ///< indicate the end of `n` nested structures, typically by ascending back `n` levels
-        virtual void prelude(uint f) =0;    ///< start track presentation at top of the timeline, with `f` pinned (always visible) elements  @todo argument doesn't belong here
-        virtual void coda(uint pad)  =0;    ///< the closing part of the timeline at the bottom of the track display, with `pad` additional padding
+        virtual void prelude()       =0;    ///< start the track presentation at top of the timeline
+        virtual void coda(uint pad)  =0;    ///< closing part of the timeline below track display, with `pad` additional padding
         
         static const size_t MAX_ARG_SIZE = sizeof(size_t);
     };
@@ -90,6 +90,8 @@ namespace timeline {
       using Elements =  std::vector<SlopeVerb>;
       
       Elements elements;
+      
+      uint pinnedPrefixCnt = 0;
       
       // default constructible, standard copy operations
       
@@ -159,13 +161,6 @@ namespace timeline {
       
     private:
       bool
-      firstEntryIs (Literal expectedToken)
-        {
-          return not isnil(elements)
-             and elements.front()->getID() == expectedToken;
-        }
-      
-      bool
       lastEntryIs (Literal expectedToken)
         {
           return not isnil(elements)
@@ -179,12 +174,6 @@ namespace timeline {
           uint& slopeDepth = elements.back().accessArg<uint>();
           
           ++ slopeDepth;
-        }
-      
-      int
-      getPinnedPrefixCnt()
-        {
-          return firstEntryIs("prelude")? elements.front().accessArg<uint>() : 0;
         }
       
       auto
@@ -205,7 +194,7 @@ namespace timeline {
           
           
           return lib::treeExplore(elements)
-                     .filter(CountingFilter{getPinnedPrefixCnt(), selectPrefixPart});
+                     .filter(CountingFilter{pinnedPrefixCnt, selectPrefixPart});
         }
     };
   

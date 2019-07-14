@@ -20872,35 +20872,24 @@
 <node CREATED="1560612790659" ID="ID_977261236" MODIFIED="1560612827353" STYLE="fork" TEXT="und f&#xfc;r die up-Slope habe ich einen solchen Zugriff auch akzeptabel befunden">
 <icon BUILTIN="smiley-neutral"/>
 </node>
-<node CREATED="1560612863371" FOLDED="true" ID="ID_161592739" MODIFIED="1561827482929" TEXT="alternativ k&#xf6;nnte man ein Feld im Profil selber machen">
+<node CREATED="1560612863371" FOLDED="true" ID="ID_161592739" MODIFIED="1563141484962" TEXT="alternativ k&#xf6;nnte man ein Feld im Profil selber machen">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1560612942381" ID="ID_1967930581" MODIFIED="1560612949943" TEXT="und das w&#xe4;re etwa die gleiche Menge Code"/>
 <node CREATED="1560612951033" ID="ID_850127059" MODIFIED="1560612963343" TEXT="und auch etwa gleicherma&#xdf;en lesbar"/>
 </node>
-<node CREATED="1560613101287" ID="ID_4285270" MODIFIED="1563118082873" TEXT="Beschlu&#xdf;: sofern die Prelude/Coda-Stukur da ist, kann man sie auch so nutzen">
+<node CREATED="1560613101287" ID="ID_4285270" MODIFIED="1563141611597" TEXT="einen Monat sp&#xe4;ter fand ich dann doch ein dediziertes Feld im Profil-Objekt besser">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      weil genau an der Stelle, an der diese Klammer erzeugt wird, auch diese Info &#252;ber die Pr&#228;fix-Tracks angelegt werden mu&#223;.
-    </p>
-    <p>
-      Es macht also durchaus Sinn, das als eine Einheit zu betrachten.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Sollte sich dagegen <i>l&#228;ngerfristig</i>&#160;herausstellen, da&#223; diese Prelude/Coda-Struktur sinnfrei bleibt,
-    </p>
-    <p>
-      dann w&#228;re ein dediziertes Feld f&#252;r das fixierte Track-Pr&#228;fix wohl besser
+      ...ist klarer, und erlaubt nebenbei auch noch, zwei Methoden einzusparen
     </p>
   </body>
-</html></richcontent>
-<linktarget COLOR="#304ed9" DESTINATION="ID_4285270" ENDARROW="Default" ENDINCLINATION="751;409;" ID="Arrow_ID_1197384474" SOURCE="ID_189142395" STARTARROW="None" STARTINCLINATION="603;0;"/>
+</html>
+</richcontent>
+<linktarget COLOR="#304ed9" DESTINATION="ID_4285270" ENDARROW="None" ENDINCLINATION="751;409;" ID="Arrow_ID_1197384474" SOURCE="ID_189142395" STARTARROW="Default" STARTINCLINATION="603;0;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -20960,9 +20949,9 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563118329642" ID="ID_337327442" MODIFIED="1563118375106" TEXT="Denkfehler: prelude() mu&#xdf; mitgez&#xe4;hlt werden">
-<linktarget COLOR="#d7476c" DESTINATION="ID_337327442" ENDARROW="Default" ENDINCLINATION="523;0;" ID="Arrow_ID_376180455" SOURCE="ID_1599825097" STARTARROW="Default" STARTINCLINATION="1063;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1563118329642" ID="ID_337327442" MODIFIED="1563141708284" TEXT="Denkfehler: prelude() mu&#xdf; mitgez&#xe4;hlt werden">
+<linktarget COLOR="#25e58e" DESTINATION="ID_337327442" ENDARROW="Default" ENDINCLINATION="523;0;" ID="Arrow_ID_376180455" SOURCE="ID_1599825097" STARTARROW="Default" STARTINCLINATION="1063;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -21996,36 +21985,58 @@
 <linktarget COLOR="#44437f" DESTINATION="ID_1017084418" ENDARROW="Default" ENDINCLINATION="1682;-201;" ID="Arrow_ID_187242024" SOURCE="ID_1267787629" STARTARROW="None" STARTINCLINATION="1913;158;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563117568795" ID="ID_1179051544" MODIFIED="1563117587278" TEXT="Unterscheidung realisieren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1563117596397" ID="ID_925319859" MODIFIED="1563117602323" TEXT="pinned-elements">
-<node CREATED="1563117603629" ID="ID_760190185" MODIFIED="1563117609774" TEXT="im prelude()-Verb">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1563117613147" ID="ID_1413963999" MODIFIED="1563117625089" TEXT="keine Gute Idee">
+<node COLOR="#435e98" CREATED="1563117596397" ID="ID_925319859" MODIFIED="1563141882354" TEXT="pinned-elements...">
+<node COLOR="#338800" CREATED="1563117655125" FOLDED="true" ID="ID_764471994" MODIFIED="1563141879178" TEXT="in das Profil speichern">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1563117603629" ID="ID_760190185" MODIFIED="1563141837891" TEXT="war im prelude()-Verb">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+<node CREATED="1563117613147" ID="ID_1413963999" MODIFIED="1563141844997" TEXT="keine Gute Idee">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563117630103" ID="ID_251975498" MODIFIED="1563117644348" TEXT="sollte in ein Objekt-Feld im Profil">
-<icon BUILTIN="bell"/>
+<node COLOR="#435e98" CREATED="1563117630103" ID="ID_251975498" MODIFIED="1563141856315" TEXT="sollte in ein Objekt-Feld im Profil"/>
 </node>
-</node>
-<node CREATED="1563117655125" ID="ID_764471994" MODIFIED="1563118116587" TEXT="in das Profil speichern">
-<icon BUILTIN="hourglass"/>
 <node CREATED="1563118014245" ID="ID_336436751" MODIFIED="1563118086917" TEXT="ja...nein...ja...??">
 <icon BUILTIN="smiley-angry"/>
 </node>
-<node CREATED="1563118023721" ID="ID_189142395" MODIFIED="1563118124539" TEXT="hatte da vor 1 Monat schon mal dar&#xfc;ber nachgedacht">
-<arrowlink COLOR="#304ed9" DESTINATION="ID_4285270" ENDARROW="Default" ENDINCLINATION="751;409;" ID="Arrow_ID_1197384474" STARTARROW="None" STARTINCLINATION="603;0;"/>
+<node CREATED="1563118023721" ID="ID_189142395" MODIFIED="1563141663430" TEXT="hatte da vor 1 Monat schon mal dar&#xfc;ber nachgedacht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und seinerzeit beschlossen, es vorerst im prelude() zu belassen...
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#304ed9" DESTINATION="ID_4285270" ENDARROW="None" ENDINCLINATION="751;409;" ID="Arrow_ID_1197384474" STARTARROW="Default" STARTINCLINATION="603;0;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1563118092858" ID="ID_1331508927" MODIFIED="1563118108338" TEXT="und beschlossen, es vorerst im prelude() zu belassen">
+<node COLOR="#435e98" CREATED="1563118092858" ID="ID_1331508927" MODIFIED="1563141685957" TEXT="jetzt doch ein separates, Feld -- ist doch sauberer">
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563117670147" ID="ID_1912884721" MODIFIED="1563117681947" TEXT="Filter realisieren">
-<icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1563117686001" ID="ID_698759785" MODIFIED="1563117694625" TEXT="prefix-Filter implementiert">
+<node COLOR="#338800" CREATED="1563117670147" ID="ID_1912884721" MODIFIED="1563141879178" TEXT="Filter realisieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1563117686001" ID="ID_698759785" MODIFIED="1563141879178" TEXT="prefix-Filter implementiert">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563117696328" ID="ID_1599825097" MODIFIED="1563118375105" TEXT="Konzeptioneller Fehler beim Z&#xe4;hlen">
-<arrowlink COLOR="#d7476c" DESTINATION="ID_337327442" ENDARROW="Default" ENDINCLINATION="523;0;" ID="Arrow_ID_376180455" STARTARROW="Default" STARTINCLINATION="1063;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1563117696328" ID="ID_1599825097" MODIFIED="1563141879178" TEXT="Konzeptioneller Fehler beim Z&#xe4;hlen gefixt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nicht nur die Ruler, auch das Prelude selber ist ein solches gePinntes Element (selbst wenn es leer ist)
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#25e58e" DESTINATION="ID_337327442" ENDARROW="Default" ENDINCLINATION="523;0;" ID="Arrow_ID_376180455" STARTARROW="Default" STARTINCLINATION="1063;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

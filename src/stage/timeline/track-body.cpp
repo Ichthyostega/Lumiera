@@ -131,7 +131,14 @@ namespace timeline {
   {
     bool topLevel = isnil (profile);
     if (topLevel)
-      profile.append_prelude (rulers_.size());
+      {
+        // global setup for the profile
+        profile.append_prelude();
+        
+        // Profile elements are always visible on top:
+        // Top-level rules and one additionally for the prelude
+        profile.pinnedPrefixCnt = 1 + rulers_.size();
+      }
     
     for (auto& ruler : rulers_)
       {

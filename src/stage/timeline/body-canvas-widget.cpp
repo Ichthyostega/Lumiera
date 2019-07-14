@@ -89,12 +89,9 @@ namespace timeline {
         
         
         /** paint the top of the track body area
-         * @param f number of consecutive track elements
-         *          to keep pinned (always visible) at top
-         * @todo argument doesn't belong here
          */
         void
-        prelude (uint)  override
+        prelude()  override
           {
             int topMargin = style_->get_margin().get_top();
             style_->render_background (cox_
@@ -190,12 +187,9 @@ namespace timeline {
         
         
         /** overlays to show at top of the track body area
-         * @param f number of consecutive track elements
-         *          to keep pinned (always visible) at top
-         * @todo argument doesn't belong here
          */
         void
-        prelude (uint)  override
+        prelude()  override
           {
             /* nothing to paint */
             line_ += style_->get_margin().get_top();
