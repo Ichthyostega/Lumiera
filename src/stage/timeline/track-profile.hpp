@@ -68,7 +68,7 @@ namespace timeline {
         virtual void content(uint h) =0;    ///< represent a content area with the given vertical extension
         virtual void open()          =0;    ///< indicate entering a nested structure, typically as 3D inset
         virtual void close(uint n)   =0;    ///< indicate the end of `n` nested structures, typically by ascending back `n` levels
-        virtual void prelude(uint f) =0;    ///< start track presentation at top of the timeline, with `f` pinned (always visible) elements
+        virtual void prelude(uint f) =0;    ///< start track presentation at top of the timeline, with `f` pinned (always visible) elements  @todo argument doesn't belong here
         virtual void coda(uint pad)  =0;    ///< the closing part of the timeline at the bottom of the track display, with `pad` additional padding
         
         static const size_t MAX_ARG_SIZE = sizeof(size_t);
@@ -82,6 +82,7 @@ namespace timeline {
    * To decouple the drawing code -- thus allowing for later customisations --
    * we let the individual TrackBody elements just emit these structure description.
    * @todo WIP-WIP as of 4/2019
+   * @todo the number of pinned elements should be a member field, instead of sneaking it into the prelude element...
    */
   struct TrackProfile
     {

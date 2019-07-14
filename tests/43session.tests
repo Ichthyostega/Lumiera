@@ -33,11 +33,6 @@ return: 0
 END
 
 
-PLANNED "Scaffolding to develop the UI-Session connection" DummySessionConnection_test <<END
-return: 0
-END
-
-
 TEST "SessionElementTracker_test" SessionElementTracker_test <<END
 return: 0
 END

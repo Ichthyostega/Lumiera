@@ -31,7 +31,7 @@
  ** 
  ** @todo WIP as of 10/2018                         ///////////////////////TICKET #1042
  ** 
- ** @see DummySessionConnection_test
+ ** @see [corresponding UI](\ref stage::dialog::TestControl)
  ** 
  */
 
@@ -109,10 +109,9 @@ namespace session {
   DummySessionConnection::fabricateSeq1 (string baseID)
   {
     const RandID forkRootID{stage::ATTR_fork};
-    const GenNode timeline      = emptyTimeline (baseID, forkRootID)
-                , rootTrackName = GenNode{string{stage::ATTR_name}, "Track-"+baseID}
-                , forkRoot      = MakeRec().genNode(forkRootID)
-                ;
+    const GenNode timeline      = emptyTimeline (baseID, forkRootID);
+    const GenNode rootTrackName = GenNode{string{stage::ATTR_name}, "Track-"+baseID};
+    const GenNode forkRoot      = MakeRec().genNode(forkRootID);
     
     return MutationMessage{ ins (timeline)
                           , mut (timeline)

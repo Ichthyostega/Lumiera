@@ -91,6 +91,12 @@ namespace timeline {
         {
           return e <= b;
         }
+      
+      int
+      delta()  const
+        {
+          return e - b;
+        }
     };
   
   /**

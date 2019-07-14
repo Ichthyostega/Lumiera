@@ -83,14 +83,28 @@ namespace timeline {
         StyleC style_;
         PixSpan visible_;
         
+        /** the current "water level".
+         * To be updated while drawing top-down */
+        int line_ = 0;
+        
         
         /** paint the top of the track body area
          * @param f number of consecutive track elements
-         *          to keep pinned (always visible) at top */
+         *          to keep pinned (always visible) at top
+         * @todo argument doesn't belong here
+         */
         void
-        prelude (uint f)  override
+        prelude (uint)  override
           {
-            UNIMPLEMENTED ("draw timeline top");
+            int topMargin = style_->get_margin().get_top();
+            style_->render_background (cox_
+                                      ,visible_.b       // left start of the rectangle
+                                      ,line_            // top of the rectangle
+                                      ,visible_.delta() // width of the area
+                                      ,topMargin        // height to fill
+                                      );
+            line_ += topMargin;
+            line_ += 5; //////////////////////////////////////////////////////////////////TODO: visual debugging
           }
         
         /** finish painting the track body area
@@ -98,7 +112,14 @@ namespace timeline {
         void
         coda (uint pad)  override
           {
-            UNIMPLEMENTED ("draw bottom");
+            int bottomPad = pad + style_->get_margin().get_bottom();
+            style_->render_background (cox_
+                                      ,visible_.b       // left start of the rectangle
+                                      ,line_            // top of the rectangle
+                                      ,visible_.delta() // width of the area
+                                      ,bottomPad        // height to fill
+                                      );
+            line_ += bottomPad;
           }
         
         /** draw grounding of an overview/ruler track
@@ -121,7 +142,14 @@ namespace timeline {
         void
         content (uint h)  override
           {
-            UNIMPLEMENTED ("paint background of content area");
+            style_->render_background (cox_
+                                      ,visible_.b       // left start of the rectangle
+                                      ,line_            // top of the rectangle
+                                      ,visible_.delta() // width of the area
+                                      ,h                // height to fill
+                                      );
+            line_ += h;
+            line_ += 8; //////////////////////////////////////////////////////////////////TODO: visual debugging
           }
         
         /** paint opening slope to enter nested sub tracks
@@ -155,16 +183,22 @@ namespace timeline {
       : public ProfileInterpreter
       {
         CairoC cox_;
+        StyleC style_;
         PixSpan visible_;
+        
+        int line_ = 0;
         
         
         /** overlays to show at top of the track body area
          * @param f number of consecutive track elements
-         *          to keep pinned (always visible) at top */
+         *          to keep pinned (always visible) at top
+         * @todo argument doesn't belong here
+         */
         void
-        prelude (uint f)  override
+        prelude (uint)  override
           {
-            UNIMPLEMENTED ("overlays for timeline top");
+            /* nothing to paint */
+            line_ += style_->get_margin().get_top();
           }
         
         /** finish painting overlays a the bottom of the track body area
@@ -172,7 +206,8 @@ namespace timeline {
         void
         coda (uint pad)  override
           {
-            UNIMPLEMENTED ("overlays for bottom");
+            /* nothing to paint */
+            line_ += pad + style_->get_margin().get_bottom();
           }
         
         /** draw overlays on top of overview/ruler track
@@ -196,7 +231,8 @@ namespace timeline {
         void
         content (uint h)  override
           {
-            UNIMPLEMENTED ("overlays for content area");
+            /* nothing to paint */
+            line_ += h;
           }
         
         /** render overlays covering the opening slope towards nested tracks */
@@ -217,6 +253,7 @@ namespace timeline {
       public:
         TrackOverlayRenderer (CairoC currentDrawContext, DisplayManager& layout)
           : cox_{currentDrawContext}
+          , style_{trackBodyStyle.getAdvice()}
           , visible_{layout.getPixSpan()}
           { }
       };

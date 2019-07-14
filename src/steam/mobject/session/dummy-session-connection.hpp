@@ -83,7 +83,6 @@ namespace session {
    *    Stage-Layer and Steam-Layer, so the software gains some tangible functionality...
    * @note readily-available singleton to enact prototypical behaviour as appropriate.
    * 
-   * @see DummySessionConnection_test
    * @see stage::interact::InteractionDirector::buildMutator
    * @see stage::interact::InteractionDirector::injectTimeline
    * @see stage::timeline::TimelineController
