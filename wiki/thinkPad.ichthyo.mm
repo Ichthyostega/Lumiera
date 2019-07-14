@@ -22040,6 +22040,15 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143002107" ID="ID_1177786099" MODIFIED="1563143014910" TEXT="verschiedene Ruler-Arten">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143025272" ID="ID_31825370" MODIFIED="1563143052140" TEXT="Anzeige-H&#xf6;he steuern">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143033085" ID="ID_149529437" MODIFIED="1563143047761" TEXT="woher kommt die Info?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node CREATED="1554517044045" ID="ID_520113686" MODIFIED="1557498707230" TEXT="Farben bereitstellen">

@@ -76,31 +76,61 @@ namespace timeline {
     lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
     
     
-    class TrackGroundingRenderer
+    /**
+     * @internal drawing routines to paint the nested system
+     *  of insets and rulers in the track content display
+     * @remarks the actual sequence of elements to draw is established by
+     *  [evaluating](\ref TrackBody::establishTrackSpace (TrackProfile&))
+     *  the nested widget structure; this results in a sequence of drawing
+     *  "verbs", which we call the \ref TrackProfile. This class here
+     *  implements a \ref ProfileInterpreter, which is a double-dispatch
+     *  mechanism to call a set of (virtual) drawing primitives, the
+     *  actual drawing code is in the two following subclasses,
+     *  for the background and for drawing overlays.
+     */
+    class AbstractTrackRenderer
       : public ProfileInterpreter
       {
+      protected:
         CairoC cox_;
         StyleC style_;
         PixSpan visible_;
         
-        /** the current "water level".
-         * To be updated while drawing top-down */
+        /** the current painting "water level".
+         *  To be updated while drawing top-down */
         int line_ = 0;
         
-        
-        /** paint the top of the track body area
-         */
         void
-        prelude()  override
+        fillBackground (int height)
           {
-            int topMargin = style_->get_margin().get_top();
             style_->render_background (cox_
                                       ,visible_.b       // left start of the rectangle
                                       ,line_            // top of the rectangle
                                       ,visible_.delta() // width of the area
-                                      ,topMargin        // height to fill
+                                      ,height           // height to fill
                                       );
-            line_ += topMargin;
+            line_ += height;
+          }
+        
+      public:
+        AbstractTrackRenderer (CairoC currentDrawContext, DisplayManager& layout)
+          : cox_{currentDrawContext}
+          , style_{trackBodyStyle.getAdvice()}
+          , visible_{layout.getPixSpan()}
+          { }
+      };
+    
+    
+    class TrackGroundingRenderer
+      : public AbstractTrackRenderer
+      {
+        
+        /** paint the top of the track body area */
+        void
+        prelude()  override
+          {
+            int topMargin = style_->get_margin().get_top();
+            fillBackground (topMargin);
             line_ += 5; //////////////////////////////////////////////////////////////////TODO: visual debugging
           }
         
@@ -110,13 +140,7 @@ namespace timeline {
         coda (uint pad)  override
           {
             int bottomPad = pad + style_->get_margin().get_bottom();
-            style_->render_background (cox_
-                                      ,visible_.b       // left start of the rectangle
-                                      ,line_            // top of the rectangle
-                                      ,visible_.delta() // width of the area
-                                      ,bottomPad        // height to fill
-                                      );
-            line_ += bottomPad;
+            fillBackground (bottomPad);
           }
         
         /** draw grounding of an overview/ruler track
@@ -139,13 +163,7 @@ namespace timeline {
         void
         content (uint h)  override
           {
-            style_->render_background (cox_
-                                      ,visible_.b       // left start of the rectangle
-                                      ,line_            // top of the rectangle
-                                      ,visible_.delta() // width of the area
-                                      ,h                // height to fill
-                                      );
-            line_ += h;
+            fillBackground (h);
             line_ += 8; //////////////////////////////////////////////////////////////////TODO: visual debugging
           }
         
@@ -165,29 +183,17 @@ namespace timeline {
             UNIMPLEMENTED ("paint upward slope");
           }
         
-        
       public:
-        TrackGroundingRenderer (CairoC currentDrawContext, DisplayManager& layout)
-          : cox_{currentDrawContext}
-          , style_{trackBodyStyle.getAdvice()}
-          , visible_{layout.getPixSpan()}
-          { }
+        using AbstractTrackRenderer::AbstractTrackRenderer;
       };
     
     
     
     class TrackOverlayRenderer
-      : public ProfileInterpreter
+      : public AbstractTrackRenderer
       {
-        CairoC cox_;
-        StyleC style_;
-        PixSpan visible_;
         
-        int line_ = 0;
-        
-        
-        /** overlays to show at top of the track body area
-         */
+        /** overlays to show at top of the track body area */
         void
         prelude()  override
           {
@@ -243,14 +249,10 @@ namespace timeline {
             UNIMPLEMENTED ("overlays for upward slope");
           }
         
-        
       public:
-        TrackOverlayRenderer (CairoC currentDrawContext, DisplayManager& layout)
-          : cox_{currentDrawContext}
-          , style_{trackBodyStyle.getAdvice()}
-          , visible_{layout.getPixSpan()}
-          { }
+        using AbstractTrackRenderer::AbstractTrackRenderer;
       };
+    
     
     template<class PINT, bool isRuler>
     auto
