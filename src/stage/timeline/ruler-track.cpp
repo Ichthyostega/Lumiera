@@ -32,7 +32,9 @@
 
 
 #include "stage/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
 #include "stage/timeline/ruler-track.hpp"
+#include "stage/timeline/track-presenter.hpp"
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -44,6 +46,7 @@
 //#include <vector>
 
 
+using lib::diff::TreeMutator;
 
 //using util::_Fmt;
 using util::isnil;
@@ -70,14 +73,26 @@ namespace timeline {
   
   
   
-  RulerTrack::RulerTrack()
-    : scales_{}
+  RulerTrack::RulerTrack (ID id, ctrl::BusTerm& nexus, TrackPresenter& parent)
+    : Controller{id, nexus}
+    , track_{parent}
+    , scales_ {}
     { }
   
   
-  RulerTrack::~RulerTrack()
+  RulerTrack::~RulerTrack() { }
+  
+  void
+  RulerTrack::buildMutator (TreeMutator::Handle buffer)
   {
-    TODO ("detach from parent; store a functor or backreference");
+    UNIMPLEMENTED ("what can actually be manipulated on a RulerTrack by diff message?");
+    
+//  buffer.create (
+//    TreeMutator::build()
+//      .change(ATTR_name, [&](string val)
+//          {                                                  // »Attribute Setter« : receive a new value for the track name field
+//            this->setTrackName (val);
+//          }));
   }
   
   

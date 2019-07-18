@@ -3562,7 +3562,7 @@ Now, since we build our UI on the notion of mapping session contents via a messa
 
 In any case, this is an advanced topic, and nowhere near trivial. It seems reasonable to reject opening duplicate timeline presentations as a first step, and then address this topic way later, when we've gained sufficient knowledge regarding all the subtleties of timeline presentation and editing.</pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201904052201" tags="GuiPattern design decision draft img" changecount="60">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201907192238" tags="GuiPattern design decision draft img" changecount="62">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3575,13 +3575,13 @@ Several timeline views may be present at the same time -- and there is not neces
 Session, Binding and Sequence are the mandatory ingredients.
 
 !Basic layout
-[&gt;img[Clip presentation control|draw/UI-TimelineLayout-1.png]]The representation is split into a ''Header pane'' exposing structure and configuration, and a ''Content pane'' extending in time. The ''Time ruler'' running alongside the top of the content pane represents the //position in time.// Beyond this temporal dimension, the content area is conceived as a flexible working space. This working space //can// be structured hierarchically -- when interacting with the GUI, hierarchical nesting will be created and collapsed on demand. Contrast this with conventional editing applications which are built upon the rigid notion of &quot;Tracks&quot;: Lumiera is based on //Pipes// and //Scopes// rather than Tracks.
+[&gt;img[Clip presentation control|draw/UI-TimelineLayout-1.png]]The representation is split into a ''Header pane'' exposing structure and configuration, and a ''Content pane'' extending in time. The ''Time ruler'' ( &amp;rarr; [[Rulers|TrackRuler]]) running alongside the top of the content pane represents the //position in time.// Beyond this temporal dimension, the content area is conceived as a flexible working space. This working space //can// be structured hierarchically -- when interacting with the GUI, hierarchical nesting will be created and collapsed on demand. Contrast this with conventional editing applications which are built upon the rigid notion of &quot;Tracks&quot;: Lumiera is based on //Pipes// and //Scopes// rather than Tracks.
 
 In the temporal dimension, there is the usual scrolling and zooming of content, and possibly a selected time range, and after establishing a ViewerPlayConnection, there is an effective playback location featured as a &quot;Playhead&quot;
 The workspace dimension (vertical layout) is more like a ''Fork'', which can be expanded recursively. More specifically, each strip or layer or &quot;track&quot; can be featured in //collapsed// or //expanded state.//
 * the collapsed state features a condensed representation (&quot;the tip of the iceberg&quot;). It exposes just the topmost entity, and might show a rendered (pre)view. Elements might be stacked on top, but any element visible here //is still accessible.//
 * when expanding, the content unfolds into...
-** a ''scope ruler'' to represent the whole sub-scope. This is rendered as a small pane, extending horizontally, holding any locally attached labels and track-wide or temporally scoped effects
+** a ''scope ruler'' to represent the whole sub-scope.&lt;br/&gt;A [[Ruler|TrackRuler]] is rendered as a small pane, extending horizontally, to hold any locally attached labels and track-wide or temporally scoped effects
 ** the content stack, comprised of [[clip widgets|GuiClipWidget]], attached effects and transitions
 ** a stack of nested sub-scopes (recursive).
 
@@ -9233,7 +9233,7 @@ Placements are __resolved__ resulting in an ExplicitPlacement. In most cases thi
 &amp;rarr; [[Definition|Pipe]] and [[handling of Pipes|PipeHandling]]
 </pre>
 </div>
-<div title="TrackPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611280207" modified="201810281454" tags="def GuiPattern" changecount="11">
+<div title="TrackPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611280207" modified="201907192301" tags="def GuiPattern" changecount="12">
 <pre>//mediating entity used to guide and control the track-like nested working space in the timeline display of the UI.//
 
 Similar to the ClipPresenter, judged from a global angle, this element fulfils a model-like role, while at the same time guiding and controlling a mostly passive view component, implemented as GTK widget. Here, the authority of the presenter over the widget must be total, since display management //needs to work automatically,// due to model updates and mutations arriving as [[diff messages|MutationMessage]]. In addition, this structure is prerequisite for (possibly) implementing UI rendering optimisations, since it allows us to leave out widgets entirely, when it is clear they won't become visible: A ''display evaluation pass'', which is effectively a //tree walk,// consecutively visits each part of the timeline structure, to negotiate its concrete display properties in collaboration with a global TimelineDisplayManager. As a result, the presenter knows where to show its corresponding view, and it knows if to show it at all, allowing to either adjust, create or destroy actual GTK widgets within its local reference frame.
@@ -9245,7 +9245,28 @@ To deal with this typical problem of recursive programming, we introduce a bindi
 * however, after constructing the {{{DisplayFrame}}}, it invokes an anchor functor, which is passed in from the recursive outer scope, and which does the actual work of installing those widgets into the apropriate parent widgets
 * but the {{{DisplayFrame}}} itself also exposes such an anchor functor, which can be passed down when (recursively) creating a TrackPresenter for a sub-Track
 * obviously, at top-level, we need to digress from that general pattern -- here it is the {{{timeline::TimelineLayout}}} responsible for the display structure of the whole timeline which exposes the necessary anchor function to attach the root track for a timeline.
+
+!Organisation of track profile and rulers
+Related to the problem of building the nested track structure is the problem of proper graphical representation of this nested structure -- especially within the right pane, //the body part,// where the actual track content will be shown. Due to various limitations of typical UI frameworks, we prefer to handle this body part by [[custom drawing|GuiCustomWidget]] onto a canvas widget. Which places us into the situation to generate suitable graphical elements based on the effective nested structure of the tracks. We solve this challenge by performing an //evaluation pass// over the actual {{{TrackBody}}} structure, which is built starting from the {{{DisplayFrame}}} for each track. The {{{TrackBody}}} elements are helper objects, and serve the sole purpose of getting this drawing and display control requirements settled; basically they mirror the track structure, and the corresponding structure of GTK widgets in the header pane, and they likewise form a tree structure, which can be traversed to collect information. Which is what we, for building up a &quot;track profile&quot;, which can then later be &amp;rarr; [[rendered consistently onto the body canvas|GuiTimelineDraw]].
+
+Another related concern are the [[track rulers|TrackRuler]]. These are overview panes running alongside the track time axis. As UI model entities, they are attached to the corresponding {{{TrackBody}}} element, while collaborating with the {{{TrackPresenter}}} to retrieve the actual content to be shown in the overview. The purpose of track rulers is to show effects or selection states; and especially in the top-level track the ''time ruler'' indicates the current time and frame position.
 </pre>
+</div>
+<div title="TrackRuler" creator="Ichthyostega" modifier="Ichthyostega" created="201907192310" modified="201907192322" tags="def spec GuiPattern" changecount="2">
+<pre>//A small overview pane running alongside a track in the timeline display.//
+The presence and specific configuration of a ruler is governed by the [[Session model|HighLevelModel]], while the actual content is derived from the context appropriately by the presentation code in the UI. Rulers can be used for various purposes
+* the ''time ruler'' at the top of the timeline display indicates the time axis position in various formats.
+* an ''overview ruler'' shows the effective content of a track in condensed form
+* location- and range markers can be shown on top of a ruler
+* selection- and processing state may likewise be visualised.
+
+!Organisation of track ruler presentation
+The actual presentation of ruler elements is a fusion of parametrisation, track content and (persistent) UI state.
+* The fact that a ruler is present, and also its presentation style is controlled by the Session. {{red{7/19 not clear yet in which form they are represented in the model}}}
+* Rulers are sensitive to the expanded/collapsed state of their corresponding track; there is a distinct parametrisation for three distinct cases
+** the ruler of a //collapsed// track can either be hidden, or shown in condensed form
+** the ruler of an //expanded fork// (a track with nested child tracks) will typically give a summary of effective content, but can also be hidden, or feature other content
+** the ruler of an //expanded leaf track// (no child tracks) will typically be hidden, but can likewise be configured to show specific data</pre>
 </div>
 <div title="TransitionsHandling" modifier="Ichthyostega" created="200712080417" modified="200805300100" tags="def design">
 <pre>Transitions combine the data from at least two processing chains and do this combining in a time varying fashion. So, any transition has

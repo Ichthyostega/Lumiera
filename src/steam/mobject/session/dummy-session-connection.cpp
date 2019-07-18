@@ -88,6 +88,20 @@ namespace session {
                    )
              .genNode(baseID);
     }
+  
+    GenNode
+    emptyTrack (string trackID)
+    {
+      return MakeRec()
+               .type (string{stage::TYPE_Fork})
+             .genNode(trackID);
+    }
+  
+    GenNode
+    ruler()
+    {
+      UNIMPLEMENTED("send diff to constitute a new ruler track");
+    }
   } //(End)Implementation details....
   
   
@@ -123,6 +137,31 @@ namespace session {
   }
   
   
+  /**
+   * Build another population diff message for a way more contrived timeline structure
+   */
+  MutationMessage
+  DummySessionConnection::fabricateSeq2 (string baseID)
+  {
+    const RandID forkRootID{stage::ATTR_fork};
+    const GenNode timeline      = emptyTimeline (baseID, forkRootID);
+    const GenNode rootTrackName = GenNode{string{stage::ATTR_name}, "Fork-Root"};
+    const GenNode forkRoot      = MakeRec().genNode(forkRootID);
+    
+    return MutationMessage{ ins (timeline)
+                          , mut (timeline)
+                            , mut (forkRoot)
+                              , set (rootTrackName)
+                              , ins (emptyTrack ("Track-1"))
+                              , ins (emptyTrack ("Track-2"))
+                              , ins (ruler())
+                            , emu (forkRoot)
+                          , emu (timeline)
+                          };
+  }
+  
+  
+  /** @todo build an internal "shadow data structure" and apply all diffs there as well...*/
   void
   DummySessionConnection::applyCopy (MutationMessage const& diff)
   {
@@ -192,6 +231,10 @@ COMMAND_DEFINITION (test_fake_injectSequence_2)
                       {
                         string message{_Fmt{"fabricate Sequence_2 (dummyID='%s')"} % dummyID};
                         GuiNotification::facade().displayInfo (NOTE_INFO, message);
+                        auto popuDiff = DummySess::instance().fabricateSeq2 (dummyID);
+                        DummySess::instance().applyCopy (popuDiff);
+                        auto rootID = session::Root::getID();
+                        GuiNotification::facade().mutate (rootID, move(popuDiff));
                       })
        .captureUndo ([](string dummyID) -> string
                       {

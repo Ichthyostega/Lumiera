@@ -110,6 +110,7 @@ namespace session {
       /* == forget Y == */
       
       MutationMessage fabricateSeq1 (string baseID);
+      MutationMessage fabricateSeq2 (string baseID);
       
       void applyCopy (MutationMessage const&);
 

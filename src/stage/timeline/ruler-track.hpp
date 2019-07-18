@@ -45,6 +45,7 @@
 #define STAGE_TIMELINE_RULER_TRACK_H
 
 #include "stage/gtk-base.hpp"
+#include "stage/model/controller.hpp"
 
 //#include "lib/util.hpp"
 
@@ -55,6 +56,8 @@
 
 namespace stage  {
 namespace timeline {
+  
+  class TrackPresenter;
   
                                          ////////////////////////////////////////////////////////////////////TICKET #1195 : Timecode Ruler presentation
   struct RulerScale
@@ -70,17 +73,28 @@ namespace timeline {
    * @todo this is more or less preliminary/placeholder code as of 4/2019            ////////////////////////TICKET #1194 : proper handling of ruler tracks
    */
   class RulerTrack
+    : public model::Controller
     {
       using Scales = std::vector<RulerScale>;
       
+      TrackPresenter& track_;
       Scales scales_;
       
     public:
-      RulerTrack();
      ~RulerTrack();
+      
+      /**
+       * @param id identity used to refer to a corresponding session::Fork
+       * @param nexus a way to connect this Controller to the UI-Bus.
+       * @param anchorDisplay a one-way closure to attach into the display fabric
+       */
+      RulerTrack (ID id, ctrl::BusTerm& nexus, TrackPresenter& parent);
       
       uint calcHeight();
       uint getGapHeight();
+      
+      /** set up a binding to respond to mutation messages via UiBus */
+      virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
       
     private:/* ===== Internals ===== */
      

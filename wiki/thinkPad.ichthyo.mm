@@ -4946,7 +4946,7 @@
 <node CREATED="1483921070115" ID="ID_398046799" MODIFIED="1518487921058" TEXT="Prototyp-Service"/>
 <node CREATED="1483921132114" ID="ID_1652398711" MODIFIED="1518487921058" TEXT="liefert dekorierte Command-ID"/>
 <node CREATED="1483921149368" ID="ID_1028150245" MODIFIED="1518487921058" TEXT="im GUI nur noch Command-IDs"/>
-<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1538838665321">
+<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1563145261726">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -19417,13 +19417,21 @@
 <node CREATED="1561047326773" ID="ID_455856045" MODIFIED="1561047353557" TEXT="wie wird die Reihenfolge der Tracks festgelegt?">
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561047338983" ID="ID_608382986" MODIFIED="1561047362267" TEXT="wie werden &#xc4;nderungen dieser realisiert?">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561047338983" ID="ID_608382986" MODIFIED="1563466559242" TEXT="wie werden &#xc4;nderungen dieser realisiert?">
+<linktarget COLOR="#b05d76" DESTINATION="ID_608382986" ENDARROW="Default" ENDINCLINATION="-409;0;" ID="Arrow_ID_114040217" SOURCE="ID_1798080753" STARTARROW="None" STARTINCLINATION="215;14;"/>
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1561048744043" ID="ID_1401239177" MODIFIED="1561140347286" TEXT="Konzept kl&#xe4;ren">
 <linktarget COLOR="#b13064" DESTINATION="ID_1401239177" ENDARROW="Default" ENDINCLINATION="363;61;" ID="Arrow_ID_807164253" SOURCE="ID_1143074852" STARTARROW="None" STARTINCLINATION="1263;0;"/>
 <icon BUILTIN="flag-pink"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561048792468" ID="ID_638394722" MODIFIED="1561048797689" TEXT="#1199 handle Timeline layout changes">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1563466591056" ID="ID_1728979524" MODIFIED="1563467328284" TEXT="L&#xf6;sungsidee: re-Konstruktion">
+<linktarget COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" SOURCE="ID_737072989" STARTARROW="None" STARTINCLINATION="410;0;"/>
+<node CREATED="1563466616693" ID="ID_316217409" MODIFIED="1563466626054" TEXT="vom root-DisplayFrame ausgehend..."/>
+<node CREATED="1563466626931" ID="ID_1475248081" MODIFIED="1563466639074" TEXT="top-down neu aufbauen">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>
@@ -19481,6 +19489,10 @@
 <node CREATED="1540260106675" ID="ID_432321502" MODIFIED="1557498707226" TEXT="aus sub-Frame kann man sub-TrackPresenter bauen"/>
 </node>
 </node>
+<node CREATED="1563466520522" ID="ID_1798080753" MODIFIED="1563466559242" TEXT="Struktur-&#xc4;nderungen sind problematisch">
+<arrowlink COLOR="#b05d76" DESTINATION="ID_608382986" ENDARROW="Default" ENDINCLINATION="-409;0;" ID="Arrow_ID_114040217" STARTARROW="None" STARTINCLINATION="215;14;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1540346398887" ID="ID_1953592630" MODIFIED="1557498707226" TEXT="DisplayFrame">
 <node CREATED="1540346412629" ID="ID_1434445651" MODIFIED="1557498707226">
@@ -19496,7 +19508,7 @@
 </html></richcontent>
 </node>
 <node CREATED="1540346455423" ID="ID_535248075" MODIFIED="1557498707226" TEXT="schafft die invariante Struktur im Verh&#xe4;ltnis zu den Kindern"/>
-<node CREATED="1540505441706" HGAP="28" ID="ID_1492670388" MODIFIED="1560695026994" TEXT="Lebenszyklus" VSHIFT="20">
+<node CREATED="1540505441706" HGAP="28" ID="ID_1492670388" MODIFIED="1563466899646" TEXT="Lebenszyklus" VSHIFT="20">
 <linktarget COLOR="#ac8396" DESTINATION="ID_1492670388" ENDARROW="Default" ENDINCLINATION="-473;37;" ID="Arrow_ID_1838431568" SOURCE="ID_1349567495" STARTARROW="None" STARTINCLINATION="-428;36;"/>
 <node CREATED="1540505464975" ID="ID_195276443" MODIFIED="1557498707226" TEXT="DisplayFrame (als Member) an TrackPresenter gebunden"/>
 <node CREATED="1540505481022" ID="ID_1566437478" MODIFIED="1557498707226" TEXT="konkrete Widgets leben im DisplayFrame"/>
@@ -19663,6 +19675,112 @@
 <arrowlink COLOR="#14409c" DESTINATION="ID_1634888629" ENDARROW="Default" ENDINCLINATION="-255;27;" ID="Arrow_ID_797597310" STARTARROW="None" STARTINCLINATION="224;-18;"/>
 </node>
 </node>
+<node CREATED="1563467223350" ID="ID_16819001" MODIFIED="1563467230773" TEXT="Problem: neu-Anordnung">
+<node CREATED="1563467236241" ID="ID_711529393" MODIFIED="1563467248187" TEXT="wenn sich die Reihenfolge der Spuren &#xe4;ndert"/>
+<node CREATED="1563467263669" ID="ID_1535368629" MODIFIED="1563467269910" TEXT="wenn eine Spur wegf&#xe4;llt"/>
+<node CREATED="1563467279931" ID="ID_563915021" MODIFIED="1563467289047" TEXT="...dann m&#xfc;ssen">
+<node CREATED="1563467290138" ID="ID_568668070" MODIFIED="1563467296500" TEXT="bestehende Verankerungen beseitigt werden"/>
+<node CREATED="1563467297369" ID="ID_737072989" MODIFIED="1563467493149" TEXT="alle Verankerungen neu re-Konstruiert werden">
+<arrowlink COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" STARTARROW="None" STARTINCLINATION="410;0;"/>
+<arrowlink COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" STARTARROW="None" STARTINCLINATION="-8;6;"/>
+</node>
+</node>
+</node>
+<node CREATED="1563467398036" ID="ID_828698459" MODIFIED="1563467403607" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467405665" ID="ID_1989047133" MODIFIED="1563467413034" TEXT="Ausdehnung berechnen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1563467415158" ID="ID_29134005" MODIFIED="1563467420585" TEXT="Profil generieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467424456" ID="ID_1723744174" MODIFIED="1563467445803" TEXT="collapsed/hidden ber&#xfc;cksichtigen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1563467451739" ID="ID_1414960950" MODIFIED="1563468442808" TEXT="(re)Konstruieren">
+<linktarget COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" SOURCE="ID_737072989" STARTARROW="None" STARTINCLINATION="-8;6;"/>
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1563467519263" ID="ID_497587608" MODIFIED="1563467555485" TEXT="anders als der initiale Aufbau">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beim initialen Aufbau sitzen wir in einem ctor-Aufruf,
+    </p>
+    <p>
+      und zwar der ctor-TrackPresenter
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563467588351" ID="ID_1224899798" MODIFIED="1563467595841" TEXT="Unterscheidung root/nested">
+<node CREATED="1563467597287" ID="ID_1571128409" MODIFIED="1563467674647" TEXT="beim ctor-Aufruf implizit/automatisch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      insofern der ctor f&#252;r den root-Track (fork-root) vom TimelineController aufgerufen wird,
+    </p>
+    <p>
+      alle anderen verschachtelten ctors aber von den TrackPresentern
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563467604327" ID="ID_175300386" MODIFIED="1563467621867" TEXT="nur sub-Tracks werden re-Konstruiert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1563467848565" ID="ID_1150018491" MODIFIED="1563467900286" TEXT="re-Konstruieren m&#xfc;ssen die TrackPresenter machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil nur sie sowohl durch ihren Display-Frame die beiden Kind-Widgets kennen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467916708" ID="ID_568904515" MODIFIED="1563468426983" TEXT="kl&#xe4;ren: Kind-Widget managen/entfernen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      inwiefern gibt es Beschr&#228;nkungen, wenn man ein Kind-Widget von einem Container entfernt?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1563468083453" ID="ID_988508640" MODIFIED="1563468091984" TEXT="Gtk::Container ist nur f&#xfc;r single-Child">
+<node CREATED="1563468845867" ID="ID_1400714108" MODIFIED="1563468859195" TEXT="aber: Gtk::Container hat iterative Methoden">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1563468094444" ID="ID_638941576" MODIFIED="1563468103423" TEXT="multi-Widget Container haben spezielle Methoden">
+<node CREATED="1563468293265" ID="ID_1078909584" MODIFIED="1563468329357" TEXT="bei uns: PatchbayWidget::installFork (TrackHeadWidget&amp; rootTrackHead)">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1563468335579" ID="ID_1427740391" MODIFIED="1563468353099" TEXT="PatchbayWidget ist ein Gtk::Viewport (a scrollable pane)"/>
+<node CREATED="1563468377867" ID="ID_1246261771" MODIFIED="1563468568509" TEXT="TrackHeadWidget is a Gtk::Grid">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1563468411262" ID="ID_738452608" MODIFIED="1563468413323" TEXT="TrackHeadWidget::injectSubFork (TrackHeadWidget&amp; subForkHead)"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694550601" ID="ID_1999928728" MODIFIED="1557498707227" TEXT="Track-Anzeige">
@@ -19702,8 +19820,26 @@
 <node CREATED="1540683900716" ID="ID_212914080" MODIFIED="1557498707227" TEXT="1.Quadrant == Controls"/>
 <node CREATED="1540683916490" ID="ID_191999039" MODIFIED="1557498707227" TEXT="3.Quadrant : leer (Fork)"/>
 <node CREATED="1540683829267" ID="ID_828415712" MODIFIED="1557498707227" TEXT="in 4.Quadrant kommt">
-<node CREATED="1540683866753" ID="ID_616355214" MODIFIED="1557498707227" TEXT="entweder content control"/>
-<node CREATED="1540683879103" ID="ID_96481889" MODIFIED="1557498707227" TEXT="oder ein nested HeaderPane"/>
+<node CREATED="1540683879103" ID="ID_96481889" MODIFIED="1563469343918" TEXT="eine nested HeaderPane"/>
+</node>
+<node CREATED="1563469351023" ID="ID_805950777" MODIFIED="1563469358660" TEXT="weitere Zeilen nach Bedarf....">
+<node CREATED="1563469368703" ID="ID_856512794" MODIFIED="1563469385040" TEXT="jeder weitere Sub-Track h&#xe4;ngt eine Zeile an"/>
+<node CREATED="1563469415896" ID="ID_307382994" MODIFIED="1563469442614">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber verschachtelte sub-Tracks werden <i>in</i>&#160;dieser gehandhabt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563469388316" ID="ID_312880827" MODIFIED="1563469409266" TEXT="beim re-Konstruieren alle platt machen und neu besetzen">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
@@ -19755,7 +19891,28 @@
 </node>
 <node CREATED="1553907064499" HGAP="11" ID="ID_1688412302" MODIFIED="1557498707227" TEXT="Fazit" VSHIFT="5">
 <node CREATED="1553907073255" ID="ID_1710444282" MODIFIED="1557498707227" TEXT="Patchbay ist ein Container f&#xfc;r die Track Heads"/>
-<node CREATED="1553907087204" ID="ID_752287871" MODIFIED="1557498707227" TEXT="zust&#xe4;ndig f&#xfc;r das Einh&#xe4;ngen und das vertikale scrolling"/>
+<node CREATED="1553907087204" ID="ID_752287871" MODIFIED="1563469756375" TEXT="zust&#xe4;ndig f&#xfc;r das Einh&#xe4;ngen und das vertikale Scrolling"/>
+</node>
+</node>
+</node>
+<node CREATED="1563469593872" HGAP="84" ID="ID_1533093205" MODIFIED="1563469604196" TEXT="sub-Navigation" VSHIFT="1">
+<node CREATED="1563469608318" ID="ID_174979019" MODIFIED="1563469619520" TEXT="zus&#xe4;tzliche sub-Tracks resultieren in zus&#xe4;tzlichen Zeilen">
+<node CREATED="1563469770472" ID="ID_1252550324" MODIFIED="1563469775934" TEXT="einf&#xfc;gen"/>
+<node CREATED="1563469790905" ID="ID_1917094772" MODIFIED="1563469795921" TEXT="re-Konstruieren">
+<node CREATED="1563469797573" ID="ID_615107402" MODIFIED="1563469801027" TEXT="platt machen"/>
+<node CREATED="1563469807081" ID="ID_1454613932" MODIFIED="1563469830842" TEXT="auf erneutes Einf&#xfc;gen warten"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469620357" ID="ID_530086217" MODIFIED="1563469636091" TEXT="Fork-Anzeige passend malen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469686644" ID="ID_467394520" MODIFIED="1563469732788" TEXT="gar nicht wenn es nur einen Kind-Track gibt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469700651" ID="ID_478580800" MODIFIED="1563469729247" TEXT="auf die richtige H&#xf6;he zielen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1563469741153" TEXT="Selection-State zeigen">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -19805,15 +19962,113 @@
 </node>
 </node>
 <node CREATED="1553911718090" ID="ID_612121351" MODIFIED="1557498707227" TEXT="praktische Ausgestalutng">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1553911730196" ID="ID_1967793006" MODIFIED="1557498707227" TEXT="offene Fragen">
-<icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1553911737751" ID="ID_669315030" MODIFIED="1557498707227" TEXT="ist RulerTrack ein Tangible?">
+<node CREATED="1553911730196" ID="ID_1967793006" MODIFIED="1563457386787" TEXT="grunds&#xe4;tzlich....">
+<node COLOR="#435e98" CREATED="1553911737751" ID="ID_669315030" MODIFIED="1563457397449" TEXT="ist RulerTrack ein Tangible?">
 <icon BUILTIN="help"/>
-<node CREATED="1553911756429" ID="ID_1273721468" MODIFIED="1557498707227" TEXT="pro">
+<node CREATED="1563456133616" ID="ID_1546021764" MODIFIED="1563456136468" TEXT="Diskussion">
+<node CREATED="1553911756429" ID="ID_1273721468" MODIFIED="1563457417610" TEXT="pro">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1553911764980" ID="ID_258039981" MODIFIED="1557498707227" TEXT="Diff-Binding nach Schema-F"/>
 </node>
-<node CREATED="1553911796208" ID="ID_1254226888" MODIFIED="1557498707227" TEXT="con">
+<node CREATED="1553911796208" ID="ID_1254226888" MODIFIED="1563457414715" TEXT="con">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1553911798428" ID="ID_1946109008" MODIFIED="1557498707227" TEXT="es bietet nur teilweise die Aktionen eines Tangible"/>
+<node CREATED="1563466370058" ID="ID_863187721" MODIFIED="1563466405438" TEXT="automatisches Management k&#xf6;nnte schwierig werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil der Ruler ja in die Pr&#228;sentation mit einbezogen ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1563456143402" ID="ID_1942744457" MODIFIED="1563456147693" TEXT="Entscheidung: ja">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1563456157904" ID="ID_1376003516" MODIFIED="1563456166179" TEXT="der Ruler hat gen&#xfc;gend Substanz">
+<node CREATED="1563456222184" ID="ID_506318259" MODIFIED="1563456232299" TEXT="er hat eine Parametrisierung"/>
+<node CREATED="1563456234334" ID="ID_792066760" MODIFIED="1563456245693" TEXT="er ist expanded/collapsed"/>
+<node CREATED="1563456255701" ID="ID_1379712635" MODIFIED="1563456262198" TEXT="mit jeweils spezieller Ausstattung"/>
+</node>
+<node CREATED="1563456167140" ID="ID_197035076" MODIFIED="1563456180345" TEXT="der Repr&#xe4;sentant ist ein Controller">
+<node CREATED="1563456268098" ID="ID_1014911371" MODIFIED="1563456278940" TEXT="tats&#xe4;chliche Darstellung auf dem Canvas"/>
+<node CREATED="1563456280732" ID="ID_350277942" MODIFIED="1563456296145" TEXT="mu&#xdf; sich ggfs. Marker / Selections &quot;holen&quot;"/>
+</node>
+</node>
+</node>
+<node CREATED="1563457330971" ID="ID_1988056497" MODIFIED="1563457395240" STYLE="fork" TEXT="hat ein RulerTrack eigenen Content?">
+<icon BUILTIN="help"/>
+<node CREATED="1563457346678" ID="ID_1336854031" MODIFIED="1563457395240" TEXT="7/2019 ich denke: nein">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1563457361836" ID="ID_32790322" MODIFIED="1563457395240" TEXT="k&#xf6;nnte aber sp&#xe4;ter noch kommen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1563466422079" ID="ID_1950304840" MODIFIED="1563466425634" TEXT="Lebenszyklus">
+<node CREATED="1563466427030" ID="ID_1041447231" MODIFIED="1563466444920" TEXT="per vector&lt;unique_ptr&lt;RulerTrack&gt;&gt;"/>
+<node CREATED="1563466447828" ID="ID_1400466075" MODIFIED="1563466455230" TEXT="erscheint weitgehend unproblematisch"/>
+</node>
+<node CREATED="1563456327642" ID="ID_216416376" MODIFIED="1563456331648" TEXT="Zustand">
+<node CREATED="1563456332965" ID="ID_1615333919" MODIFIED="1563456339250" TEXT="expanded/collapsed">
+<node CREATED="1563456339836" ID="ID_1625370236" MODIFIED="1563456343779" TEXT="persistent UI state"/>
+<node CREATED="1563456817269" ID="ID_682486820" MODIFIED="1563456831249" TEXT="reiner UI-State"/>
+<node CREATED="1563456880459" ID="ID_774164712" MODIFIED="1563456884053" TEXT="zweistufig">
+<node CREATED="1563456835400" ID="ID_939422947" MODIFIED="1563456900080" TEXT="zugeh&#xf6;riger Track expanded/collapsed?"/>
+<node CREATED="1563456901155" ID="ID_1889421343" MODIFIED="1563456935400" TEXT="Ruler selber expanded/collapsed?">
+<node CREATED="1563456985129" ID="ID_1822723040" MODIFIED="1563457050520" TEXT="nur wenn sein presentationStyle &quot;extended&quot; ist">
+<arrowlink COLOR="#5794dc" DESTINATION="ID_1218032977" ENDARROW="Default" ENDINCLINATION="23;-49;" ID="Arrow_ID_477709565" STARTARROW="None" STARTINCLINATION="-54;23;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1563457226008" ID="ID_104997878" MODIFIED="1563457229476" TEXT="rulerKind"/>
+<node CREATED="1563456345999" ID="ID_411877946" MODIFIED="1563456383198" TEXT="presentationBinding">
+<node CREATED="1563456386610" ID="ID_1590625879" MODIFIED="1563456393668" TEXT="wie erscheint der Ruler">
+<node CREATED="1563456477213" ID="ID_214170046" MODIFIED="1563456480985" TEXT="sichtbar?"/>
+<node CREATED="1563456482333" ID="ID_1117291877" MODIFIED="1563456499676" TEXT="presentationStyle">
+<node CREATED="1563456501722" ID="ID_342624302" MODIFIED="1563456515812" TEXT="kompakt">
+<node CREATED="1563456569224" ID="ID_1752795491" MODIFIED="1563456573692" TEXT="alles in einem Overlay"/>
+</node>
+<node CREATED="1563456518864" ID="ID_1218032977" MODIFIED="1563457050520" TEXT="erweitert/Gr&#xf6;&#xdf;e">
+<linktarget COLOR="#5794dc" DESTINATION="ID_1218032977" ENDARROW="Default" ENDINCLINATION="23;-49;" ID="Arrow_ID_477709565" SOURCE="ID_1822723040" STARTARROW="None" STARTINCLINATION="-54;23;"/>
+<node CREATED="1563456575488" ID="ID_1884743688" MODIFIED="1563456585226" TEXT="verschiedene Spuren/Skalen"/>
+</node>
+</node>
+</node>
+<node CREATED="1563456394449" ID="ID_1897645470" MODIFIED="1563456399763" TEXT="wenn expanded">
+<node CREATED="1563456435059" ID="ID_927353995" MODIFIED="1563456442622" TEXT="h&#xe4;ngt von Struktur ab">
+<node CREATED="1563456443867" ID="ID_1809491279" MODIFIED="1563456449319" TEXT="Leaf or Fork?"/>
+<node CREATED="1563456450468" ID="ID_1604151454" MODIFIED="1563456461931" TEXT="generisch vorprogrammiert"/>
+<node CREATED="1563456462928" ID="ID_443423813" MODIFIED="1563456468426" TEXT="aber trotzdem dynamisches Verhalten"/>
+</node>
+<node CREATED="1563456726268" ID="ID_1768365080" MODIFIED="1563456735534" TEXT="au&#xdf;erdem sichtbar oder verborgen?">
+<node CREATED="1563456762562" ID="ID_968633527" MODIFIED="1563456775217" TEXT="Leaf: h&#xe4;ufig verborgen"/>
+<node CREATED="1563456781637" ID="ID_1656158229" MODIFIED="1563456804956" TEXT="Fork: kommt darauf an....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....ob es was sinnvolles in einem Overview-Ruler anzuzeigen gibt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1563456400751" ID="ID_508263117" MODIFIED="1563456404235" TEXT="wenn collapsed">
+<node CREATED="1563456707526" ID="ID_1191444122" MODIFIED="1563456715230" TEXT="verborgen oder kompakt?"/>
+<node CREATED="1563456694616" ID="ID_119245095" MODIFIED="1563456705916" TEXT="nur 1-dimensionale Unterscheidung"/>
 </node>
 </node>
 </node>
@@ -19926,6 +20181,13 @@
 <node CREATED="1555198558887" ID="ID_1718337163" MODIFIED="1560442514142" TEXT="Beide Canvas-Instanzen verwenden das gleiche Koordinatensystem">
 <arrowlink DESTINATION="ID_1220970686" ENDARROW="Default" ENDINCLINATION="-532;0;" ID="Arrow_ID_1730442283" STARTARROW="None" STARTINCLINATION="377;0;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143974534" HGAP="122" ID="ID_130702763" MODIFIED="1563143992633" TEXT="TODO: wirklich?" VSHIFT="-39">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1563143996702" ID="ID_1893904282" MODIFIED="1563144019155" TEXT="im Momment (7/2019) verwende ich eine laufende (pixel)-Zeile"/>
+<node CREATED="1563144020688" ID="ID_1371868080" MODIFIED="1563144028227" TEXT="die startet jeweils bei 0"/>
+<node CREATED="1563144029219" ID="ID_738243832" MODIFIED="1563144048228" TEXT="und wird f&#xfc;r jedes Struktur-Element mit dem Offset beaufschlagt"/>
+<node CREATED="1563144049378" ID="ID_1567458686" MODIFIED="1563144067157" TEXT="Konsequenz: jeder Canvas hat seine eigenen Koordinaten"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1555198633466" ID="ID_780787053" MODIFIED="1560442064470" TEXT="Auf Interpretieren des Struktur-Profils zur&#xfc;ckgef&#xfc;hrt">
 <icon BUILTIN="button_ok"/>
@@ -20835,8 +21097,8 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560442439507" ID="ID_1072410115" MODIFIED="1560612658066" TEXT="Implementierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1560442439507" ID="ID_1072410115" MODIFIED="1563143925265" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1560612664570" ID="ID_487480098" MODIFIED="1563117887785" TEXT="wo steckt diese Info?">
 <node CREATED="1560612681316" ID="ID_1320073999" MODIFIED="1560612835546" TEXT="bisher im Argument des Prelude-Verbs">
 <icon BUILTIN="info"/>
@@ -21154,7 +21416,7 @@
 </node>
 <node CREATED="1540951718734" HGAP="69" ID="ID_179159881" MODIFIED="1557498707229" TEXT="TrackBody" VSHIFT="-42">
 <node CREATED="1540951732747" ID="ID_879954288" MODIFIED="1557498707229" TEXT="kein Widget, sondern eine Hilfs-Struktur"/>
-<node CREATED="1540951833141" ID="ID_387631457" MODIFIED="1557498707229" TEXT="erledigt f&#xfc;r den Canvas das Zeichnen f&#xfc;r einen Track"/>
+<node CREATED="1540951833141" ID="ID_387631457" MODIFIED="1563143876501" TEXT="steuert f&#xfc;r den Canvas das Zeichnen f&#xfc;r einen Track"/>
 <node CREATED="1540951862399" ID="ID_708158546" MODIFIED="1557498707229" TEXT="relative Koordinaten (und sowiso nur vertikal)"/>
 <node CREATED="1540951873159" ID="ID_1843757439" MODIFIED="1557498707229" TEXT="kennt aber seine eigene H&#xf6;he"/>
 <node CREATED="1540951934151" ID="ID_1702719060" MODIFIED="1557498707229" TEXT="Bestandteile">
@@ -21205,7 +21467,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1544839288936" ID="ID_43593052" MODIFIED="1560686299759" TEXT="zwei Ruler-Konfigs in das systematische UI-Modell">
+<node CREATED="1544839288936" ID="ID_43593052" MODIFIED="1563143640658" TEXT="Ruler-Konfigs in das systematische UI-Modell">
 <arrowlink COLOR="#5f84b0" DESTINATION="ID_1083901292" ENDARROW="Default" ENDINCLINATION="-746;-75;" ID="Arrow_ID_1167484185" STARTARROW="None" STARTINCLINATION="-981;0;"/>
 <node COLOR="#338800" CREATED="1544849869166" ID="ID_1025477379" MODIFIED="1557498707229" TEXT="Frage: wo ansiedeln?">
 <icon BUILTIN="button_ok"/>
@@ -21232,13 +21494,18 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560173474830" ID="ID_351544133" MODIFIED="1560173496890" TEXT="sind es &quot;zwei&quot; oder sind es N Konfigs?">
+<node COLOR="#435e98" CREATED="1560173474830" ID="ID_351544133" MODIFIED="1563143676190" TEXT="wie viele sind es?">
 <icon BUILTIN="help"/>
 <node COLOR="#ba568c" CREATED="1560173511341" ID="ID_637775069" MODIFIED="1560173529984" TEXT="Monate sp&#xe4;ter...">
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1560173498827" ID="ID_553759798" MODIFIED="1560173508018" TEXT="und was meint hier &quot;Konfig&quot;...?">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1563143678330" ID="ID_343908242" MODIFIED="1563143681001" TEXT="Antwort">
+<node CREATED="1563143682350" ID="ID_1332243622" MODIFIED="1563143690248" TEXT="beliebig viele, und verschachtelt"/>
+<node CREATED="1563143691380" ID="ID_1703343523" MODIFIED="1563143697157" TEXT="Jeder Track kann Ruler haben"/>
+<node CREATED="1563143698199" ID="ID_1437895403" MODIFIED="1563143711781" TEXT="die Ruler des top-level-Track werden gePinnt dargestellt"/>
 </node>
 </node>
 </node>
@@ -21779,8 +22046,8 @@
 <node CREATED="1562938985427" ID="ID_1430350400" MODIFIED="1562939000802" TEXT="und das Advice-System bietet hierf&#xfc;r die ad&#xe4;quate Infrastruktur"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1562972719033" FOLDED="true" ID="ID_1528071219" MODIFIED="1563044223514" TEXT="kl&#xe4;ren: ist der Style-Pfad sinnvoll / korrekt?">
-<linktarget COLOR="#46558a" DESTINATION="ID_1528071219" ENDARROW="Default" ENDINCLINATION="-639;0;" ID="Arrow_ID_1602346272" SOURCE="ID_678877446" STARTARROW="None" STARTINCLINATION="564;0;"/>
+<node COLOR="#435e98" CREATED="1562972719033" FOLDED="true" ID="ID_1528071219" MODIFIED="1563143772159" TEXT="kl&#xe4;ren: ist der Style-Pfad sinnvoll / korrekt?">
+<linktarget COLOR="#46558a" DESTINATION="ID_1528071219" ENDARROW="Default" ENDINCLINATION="-297;0;" ID="Arrow_ID_1602346272" SOURCE="ID_678877446" STARTARROW="None" STARTINCLINATION="646;20;"/>
 <icon BUILTIN="help"/>
 <node COLOR="#435e98" CREATED="1562972764593" ID="ID_315266947" MODIFIED="1563033166705" TEXT="warum beginnt der Pfad mit dem Timeline-Widget?">
 <node CREATED="1562972783861" ID="ID_284818197" MODIFIED="1562972793575" TEXT="ist das nicht korrekt veranktert?"/>
@@ -21919,8 +22186,8 @@
 </node>
 <node CREATED="1562237138185" ID="ID_677602530" MODIFIED="1562237172328" TEXT="vermutlich eine Misch-L&#xf6;sung, mit Erg&#xe4;nzungen nach dem ersten Ansatz"/>
 </node>
-<node CREATED="1563019888259" HGAP="51" ID="ID_678877446" MODIFIED="1563020041476" TEXT="systematischen CSS-Pfad bereitstellen" VSHIFT="12">
-<arrowlink COLOR="#46558a" DESTINATION="ID_1528071219" ENDARROW="Default" ENDINCLINATION="-639;0;" ID="Arrow_ID_1602346272" STARTARROW="None" STARTINCLINATION="564;0;"/>
+<node CREATED="1563019888259" HGAP="51" ID="ID_678877446" MODIFIED="1563143772159" TEXT="systematischen CSS-Pfad bereitstellen" VSHIFT="12">
+<arrowlink COLOR="#46558a" DESTINATION="ID_1528071219" ENDARROW="Default" ENDINCLINATION="-297;0;" ID="Arrow_ID_1602346272" STARTARROW="None" STARTINCLINATION="646;20;"/>
 <linktarget COLOR="#4b31cd" DESTINATION="ID_678877446" ENDARROW="Default" ENDINCLINATION="-711;38;" ID="Arrow_ID_643305825" SOURCE="ID_331912016" STARTARROW="Default" STARTINCLINATION="-237;18;"/>
 </node>
 </node>
@@ -22048,6 +22315,75 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143033085" ID="ID_149529437" MODIFIED="1563143047761" TEXT="woher kommt die Info?">
 <icon BUILTIN="help"/>
+<node CREATED="1563144390094" ID="ID_1352488414" MODIFIED="1563144414266" TEXT="Quelle-1: zusammen mit dem Track-Head &quot;ausgehandelt&quot;"/>
+<node CREATED="1563144448477" ID="ID_545543746" MODIFIED="1563144464040" TEXT="Quelle-2: man kann die TrackBody-Struktur (rekursiv) fragen"/>
+<node CREATED="1563144415950" ID="ID_264748187" MODIFIED="1563144447096" TEXT="Quelle-3: wenn der Zeichen-Code fertig ist, wei&#xdf; man was rauskommt">
+<node CREATED="1563144486739" ID="ID_933628775" MODIFIED="1563144505714" TEXT="die line_ wird hochgez&#xe4;hlt"/>
+<node CREATED="1563144507398" ID="ID_231636632" MODIFIED="1563144515788" TEXT="der Renderer k&#xf6;nnte die zur&#xfc;ckgeben">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1563144536346" ID="ID_681708047" MODIFIED="1563144548269" TEXT="wo mu&#xdf; sie gesetzt werden?">
+<node CREATED="1563144549497" ID="ID_1704331189" MODIFIED="1563144560069" TEXT="jeweils in jedem der beiden Canvas-Widgets">
+<node CREATED="1563144627773" ID="ID_215614628" MODIFIED="1563144635638" TEXT="siehe gtk-canvas-experiment.cpp"/>
+<node CREATED="1563144650777" ID="ID_1603192919" MODIFIED="1563144652311" TEXT="Canvas::determineExtension()"/>
+<node CREATED="1563144669172" ID="ID_1489838072" MODIFIED="1563144675523" TEXT="Gtk::Layout::set_size(w,h)"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563144591112" ID="ID_1777300285" MODIFIED="1563145103711" TEXT="mu&#xdf; das vor dem Zeichnen passieren?">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1563144864662" ID="ID_1195404065" MODIFIED="1563144993000" TEXT="vermutlich nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      meine Einsch&#228;tzung, basiert auf dem gtk-canvas-experiment.cpp
+    </p>
+    <ul>
+      <li>
+        zeichnen kann man &quot;irgendwie&quot; auf dem Canvas.
+      </li>
+      <li>
+        au&#223;erdem hat das Gtk::Layout ein hadjustment() / vadjustment()
+      </li>
+      <li>
+        diese k&#246;nnen (optional) an eine Scrolled-Pane angekoppelt sein
+      </li>
+      <li>
+        die tats&#228;chliche size-Allocation ist ein davon unabh&#228;ngiges Thema
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563145010348" ID="ID_1404407551" MODIFIED="1563145095624">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>rein gef&#252;hlsm&#228;&#223;ig</i>&#160;w&#228;re aber vorher wohl geschickter
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn was passiert, wenn sich durch das Setzen einer neuen Gr&#246;&#223;e der sichtbare Bereich &#228;ndert? L&#246;st das dann nicht erneut einen draw()-Aufruf aus??
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -22388,7 +22724,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560694757109" ID="ID_46205088" MODIFIED="1560694763764" TEXT="TODO kl&#xe4;ren">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1560694764824" ID="ID_358602712" MODIFIED="1560694782260" TEXT="inwiefern m&#xfc;ssen Kind-Widgets aktiv entfernt werden?"/>
-<node CREATED="1560694869833" ID="ID_1349567495" MODIFIED="1560695026994" TEXT="im Besonderen der DisplayFrame">
+<node CREATED="1560694869833" ID="ID_1349567495" MODIFIED="1563466899646" TEXT="im Besonderen der DisplayFrame">
 <arrowlink COLOR="#ac8396" DESTINATION="ID_1492670388" ENDARROW="Default" ENDINCLINATION="-473;37;" ID="Arrow_ID_1838431568" STARTARROW="None" STARTINCLINATION="-428;36;"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1560695202385" ID="ID_1396137041" MODIFIED="1560695217396" TEXT="experimentell kl&#xe4;ren">
 <icon BUILTIN="yes"/>
@@ -31875,7 +32211,7 @@
 <node CREATED="1492205732389" ID="ID_1080697951" MODIFIED="1518487921090" TEXT="wir k&#xf6;nnen stets gleich triggern"/>
 </node>
 <node CREATED="1492205741483" ID="ID_1132272888" MODIFIED="1518487921090" TEXT="Command wird sofort nach dem Binden getriggert"/>
-<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1538838665321" TEXT="Protokoll-Erweiterung" VSHIFT="8">
+<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1563145261726" TEXT="Protokoll-Erweiterung" VSHIFT="8">
 <arrowlink COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-944;1604;" ID="Arrow_ID_1617518648" STARTARROW="None" STARTINCLINATION="3617;-1097;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1483925298713" ID="ID_347702585" MODIFIED="1518487921090" TEXT="Command-Prototyp forken"/>
