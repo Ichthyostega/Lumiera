@@ -66,6 +66,7 @@ namespace timeline {
     : Gtk::Grid{}
     , nameTODO_{"?"}
     , treeTODO_{"↳"}
+    , childCnt_{0}
     {
       this->attach (nameTODO_, 0,0, 2,1);
       this->attach (treeTODO_, 0,1, 1,1);
@@ -85,15 +86,29 @@ namespace timeline {
    * video editing software does -- rather, each sequence holds a _fork of nested scopes._
    * This recursively nested structure is reflected in the patchbay area corresponding to
    * each track in the _header pane_ of the timeline display, located to the left. The
-   * patchbay for each track is a grid with four quadrants, and the 4th quadrant is the
-   * _content area,_ which is recursively extended to hold nested PatchbayWidget elements,
-   * corresponding to the child tracks of this track. To _fund_ this recursively extensible
-   * structure, we need to set up the first four quadrants
+   * patchbay for each track is a grid with initially four quadrants, and the 4th quadrant
+   * holds the _content area,_ which is again a TrackHeadWidget. Additional sub-Tracks
+   * are added as additional lines to the grid, while nested sub-Tracks will be handled
+   * recursively by the corresponding nested TrackHeadWidget.
+   * @note Child tracks are always appended. When tracks are reordered or deleted,
+   *       the whole structure has to be re-built accordingly.
    */
   void
   TrackHeadWidget::injectSubFork (TrackHeadWidget& subForkHead)
   {
-    UNIMPLEMENTED ("how actually to represent the track in the patchbay");
+    ++childCnt_;
+    this->attach (subForkHead, 0, childCnt_, 1,1);
+  }
+  
+  
+  void
+  TrackHeadWidget::clearSubFork()
+  {
+    while (childCnt_ > 0)
+      {
+        this->remove_row (childCnt_);
+        --childCnt_;
+      }
   }
   
   

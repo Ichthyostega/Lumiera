@@ -34,9 +34,9 @@
  **   + video overlay parameters (additive, opaque, transparent)
  **   + video or audio _level_ (=fader)
  ** - how to locate this content in time (e.g. relative to some marker)
- ** For each track, we show a patchbay in the timeline header pane, which serves to control
- ** such aspects relevant for all content contained within the scope of this track, including
- ** the sub-tracks nested therein.
+ ** For each track, we display a "patchbay"-like content control in the timeline header pane,
+ ** which serves to control such aspects relevant for all content contained within the scope
+ ** of this track, including the sub-tracks nested therein.
  ** 
  ** @todo WIP-WIP-WIP as of 10/2018
  ** 
@@ -74,6 +74,8 @@ namespace timeline {
       Gtk::Label nameTODO_;
       Gtk::Label treeTODO_;
       
+      uint childCnt_;
+      
     public:
       TrackHeadWidget();
      ~TrackHeadWidget();
@@ -82,6 +84,9 @@ namespace timeline {
       
       /** Integrate the control area for a nested sub track fork. */
       void injectSubFork (TrackHeadWidget& subForkHead);
+      
+      /** Discard all nested sub track display widgets. */
+      void clearSubFork();
 
     private:/* ===== Internals ===== */
      

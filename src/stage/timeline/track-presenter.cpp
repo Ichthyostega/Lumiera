@@ -104,17 +104,17 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PRuler const& elm) -> bool
                   {
-//                  return spec.idi == ID{*elm}; ////////////////////////////////////////////////////////////TICKET #1193 : shall RulerTrack be a Tangible?
+                    return spec.idi == ID{*elm};
                   })
                .constructFrom ([&](GenNode const& spec) -> PRuler
-                  {
-//                  return make_unique<RulerTrack> (spec.idi, this->uiBus_);  ///////////////////////////////TICKET #1193 : how to construct a RulerTrack?
+                  {                                            // »Constructor« : how to attach a new ruler track
+                    return make_unique<RulerTrack> (spec.idi, this->uiBus_, *this);
                   })
                .buildChildMutator ([&](PRuler& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {                                                           ///////////////////////////////TICKET #1193 : do we even want to "mutate" a ruler?
-//                  if (ID{*target} != subID) return false;
-//                  target->buildMutator (buff);
-//                  return true;
+                  {
+                    if (ID{*target} != subID) return false;
+                    target->buildMutator (buff);
+                    return true;
                   }))
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool

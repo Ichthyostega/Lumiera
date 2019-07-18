@@ -106,8 +106,8 @@ namespace timeline {
       void
       injectSubTrack (TrackHeadWidget& subHead, TrackBody& subBody)
         {
+          head.injectSubFork (subHead);
           body.attachSubTrack (&subBody);
-          UNIMPLEMENTED ("inject the widgets to represent a nested sub-track within this timeline track display frame");
         }
     };
   
