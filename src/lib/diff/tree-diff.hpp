@@ -108,7 +108,7 @@ namespace diff{
    *          to the first child element, while \c after(Ref::END) means to accept
    *          all of the existing data contents as-is (presumably to append further
    *          elements beyond that point).
-   * - \c set assign a new value to the element designated element.
+   * - \c set assign a new value to the designated element.
    *          This is primarily intended for primitive data values and requires
    *          the payload type to be assignable, without changing the element's
    *          identity. The element is identified by the payload's ID and needs

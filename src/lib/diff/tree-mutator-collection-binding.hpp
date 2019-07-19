@@ -253,6 +253,14 @@ namespace diff{
      * compound is able to consume tree diff messages and apply the respective
      * changes and mutations to an otherwise opaque implementation data structure.
      * @remarks in practice, this is the most relevant and typical `TreeMutator` setup.
+     * @tparam PAR base implementation TreeMutator; anything not implemented within
+     *             this current "onion layer", is delegated down to the parent. This way,
+     *             a complete TreeMutator implementation is assembled from several layers.
+     * @tparam BIN binding adapter to the actual target collection. This implementation
+     *             of TreeMutator operations does not directly manipulate the attached
+     *             collection, but rather uses the primitive operation building blocks
+     *             provided through the binding; typically these building blocks are
+     *             in fact lambdas, provided when setting up this binding to the target.
      */
     template<class PAR, class BIN>
     class ChildCollectionMutator

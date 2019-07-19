@@ -283,26 +283,48 @@ verb `emu(ID)`::
          made at the generation side.] At this point, this child scope is left
          and the parent scope with all existing diff state is _popped from an
          internal stack._
+verb `set(GenNode)`::
+         assign a new value to the designated element. This is primarily intended
+         for primitive data values and requires the payload type to be assignable,
+         without changing the element's identity. The element is identified by the
+         payload's ID and -- similar as with the `mut()` verb -- needs to be present
+         already, i.e. it has to be mentioned by preceding order defining verbs.
+
+In practical application, a diff thus is typically comprised of two parts or ``phases'':
+In a first pass, we have to mention, confirm or supply all the elements, and as second step
+we may assign new values or enter recursive mutation for some child elements. However, it is
+possible to deviate from that general scheme, as long as all elements are _confirmed_ prior to
+mutation. Some typical ``degenerated'' patterns of spelling out a diff are as follows:
+
+- just a ``population diff'' without any `set` or `mut` verbs
+- on the other hand, if we just want to mutate something, with the first verb `after(Ref::END)`
+  we accept all of the content as-is, while the next verbs may mutate some selected elements
+- however, single assignment- or mutation operations can be interspersed into the first phase
+  of sequence confirmation (or re-ordering): because, whenever an element has just been mentioned,
+  it can (in fact without further search) be mutated right away. Thus, e.g. a `pick(ID)` verb can
+  immediately followed by a `set(GenNode)` to assign changed payload data without altering the
+  position or the identity of the element.
 
 
 representation of objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-While we are talking about _structured data,_ in fact what are about to handle are *objects*, understood in the standard
-flavour of object orientation, where an object is the instance of a type and offers a contract. Incidentally, this is
-not the original, ``pure'' meaning of object orientation, but the one that became prolific in brining our daily practice
-closer to the inherent structuring of modern human organisation. And in dealing with this kind of object, we sometimes
-get into conflict with the essentially open and permissive nature of structured data. So we need to establish a
-mapping rule, which translates into additional conventions about how to spell out matters in the diff language.
+While we are talking about _structured data,_ in fact the entities we are about to handle are *objects*, understood in
+the standard flavour of object orientation, where an object is the instance of a type and offers a contract. Incidentally,
+this is not the original, ``pure'' meaning of object orientation, but the one that became prolific to bring our daily
+practice closer to the inherent structuring of modern human organisation. And in dealing with this kind of object, we
+sometimes get into conflict with the essentially open and permissive nature of structured data. So we need to establish
+a mapping rule, which translates into additional conventions about how to spell out matters in the diff language.
 
 We choose to leave this largely on the level of stylistic rules, thus stressing the language nature of the diff.
 Even when this bears the danger to produce an exception very late, when it comes to applying the diff to a target
 data structure. The intention behind this whole diff approach is to transform tight coupling with strict rules
 into a loose collaboration based on a common understanding. So generally we'll assume the diff is just right,
 and if not, we'll get what we deserve.footnote:[This gives rise to a tricky discussion about loss of strictness
-and the costs incurred by that happening. We should not treat this topic in isolation, but rather consider that
-loose coupling was chosen to avoid far more serious problems caused by tight coupling, and especially the poisoning
-and dire consequences of a global fixed common data model, when used in a large, not homogeneous system.
-But when a system indeed is not homogeneous, we better try to make each part open-closed, open for change
+and the costs incurred by that happening. We should not treat this topic in isolation; we should recall that
+loose coupling was chosen to avoid far more serious problems caused by tight coupling, and especially the
+deteriorating and poisoning effect on architecture and the further dire consequences of a global fixed common
+data model -- which become prdominant when used in a large, not homogeneous system.
+And _when a system indeed is not homogeneous,_ we better try to make each part open-closed, open for change
 but closed against extension. This is especially true in the case of the UI.]
 
 

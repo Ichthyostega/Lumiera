@@ -100,7 +100,17 @@ namespace session {
     GenNode
     ruler()
     {
-      UNIMPLEMENTED("send diff to constitute a new ruler track");
+      return MakeRec()
+               .type (string{stage::TYPE_Ruler})
+             .genNode("Ruler");
+    }
+    
+    /** fabricate an attribute node based on the
+     * human-readable part of the given elemen's ID */
+    GenNode
+    makeName (GenNode const& elm)
+    {
+      return GenNode{string{stage::ATTR_name}, elm.idi.getSym() };
     }
   } //(End)Implementation details....
   
@@ -147,14 +157,51 @@ namespace session {
     const GenNode timeline      = emptyTimeline (baseID, forkRootID);
     const GenNode rootTrackName = GenNode{string{stage::ATTR_name}, "Fork-Root"};
     const GenNode forkRoot      = MakeRec().genNode(forkRootID);
+    const GenNode track1        = emptyTrack ("Track-1");
+    const GenNode track2        = emptyTrack ("Track-2");
+    const GenNode track21       = emptyTrack ("Track-21");
+    const GenNode track22       = emptyTrack ("Track-22");
+    const GenNode track221      = emptyTrack ("Track-221");
+    const GenNode track222      = emptyTrack ("Track-222");
+    const GenNode timeRuler     = ruler();
+    const GenNode scopeRuler0   = ruler();
+    const GenNode scopeRuler2   = ruler();
+    const GenNode scopeRuler22  = ruler();
+    const GenNode scopeRuler221 = ruler();
     
     return MutationMessage{ ins (timeline)
                           , mut (timeline)
                             , mut (forkRoot)
-                              , set (rootTrackName)
-                              , ins (emptyTrack ("Track-1"))
-                              , ins (emptyTrack ("Track-2"))
-                              , ins (ruler())
+                              , ins (rootTrackName)
+                              , ins (track1)
+                              , ins (track2)
+                              , ins (timeRuler)
+                              , ins (scopeRuler0)
+                              , mut (track1)
+                                , ins (makeName(track1))
+                              , emu (track1)
+                              , mut (track2)
+                                , ins (makeName(track2))
+                                , ins (track21)
+                                , ins (track22)
+                                , ins (scopeRuler2)
+                                , mut (track21)
+                                  , ins (makeName(track21))
+                                , emu (track21)
+                                , mut (track22)
+                                  , ins (makeName(track22))
+                                  , ins (track221)
+                                  , ins (track222)
+                                  , ins (scopeRuler22)
+                                  , mut (track221)
+                                    , ins (makeName(track221))
+                                    , ins (scopeRuler221)
+                                  , emu (track221)
+                                  , mut (track222)
+                                    , ins (makeName(track222))
+                                  , emu (track222)
+                                , emu (track22)
+                              , emu (track2)
                             , emu (forkRoot)
                           , emu (timeline)
                           };
