@@ -61,7 +61,9 @@ namespace stage {
   /* ======== CSS selector names ======== */
   
   const Symbol NODE_fork{"fork"};
+  const Symbol NODE_frame{"frame"};
   
+  const Symbol CLASS_ruler{"ruler"};
   const Symbol CLASS_timeline{"timeline"};
   const Symbol CLASS_timeline_page{"timeline-page"};
   const Symbol CLASS_timeline_body{"timeline-body"};

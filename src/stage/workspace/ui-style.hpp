@@ -75,7 +75,8 @@ namespace workspace {
       string iconSearchPath_;
       string resourceSerachPath_;
       
-      StyleAdvice styleAdvice_;
+      StyleAdvice styleAdviceTrackBody_;
+      StyleAdvice styleAdviceTrackRuler_;
       
     public:
       

@@ -100,7 +100,9 @@ namespace stage {
   /* ======== CSS selector names ======== */
   
   extern const Symbol NODE_fork;
+  extern const Symbol NODE_frame;
   
+  extern const Symbol CLASS_ruler;
   extern const Symbol CLASS_timeline;
   extern const Symbol CLASS_timeline_page;
   extern const Symbol CLASS_timeline_body;

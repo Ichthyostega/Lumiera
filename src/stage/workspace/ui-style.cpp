@@ -71,7 +71,8 @@ namespace workspace {
     : Gtk::UIManager()
     , iconSearchPath_{Config::get (KEY_ICON_PATH)}
     , resourceSerachPath_{Config::get (KEY_UIRES_PATH)}
-    , styleAdvice_{"style(trackBody)"}
+    , styleAdviceTrackBody_{"style(trackBody)"}
+    , styleAdviceTrackRuler_{"style(trackRuler)"}
     {
       Glib::set_application_name (Config::get (KEY_TITLE));
       
@@ -127,7 +128,7 @@ namespace workspace {
   UiStyle::prepareStyleContext (timeline::TimelineWidget const& timeline)
   {
     // the first Timeline triggers initialisation
-    if (styleAdvice_.isGiven()) return;
+    if (styleAdviceTrackBody_.isGiven()) return;
     
     Gtk::WidgetPath path = timeline.getBodyWidgetPath();
     GType scopeNode = Gtk::Box::get_type();
@@ -140,8 +141,18 @@ namespace workspace {
       gtk_widget_path_iter_set_state(path.gobj(), i, GTK_STATE_FLAG_NORMAL);
     PStyleContext style = Gtk::StyleContext::create();                   // create a new style context and configure it according to the path defined thus far
     style->set_path (path);
-    styleAdvice_.setAdvice (style);                                      // publish as Advice "style(trackBody)"
+    styleAdviceTrackBody_.setAdvice (style);                             // publish as Advice "style(trackBody)"
     INFO (stage, "Body-CSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
+     
+    pos = path.path_append_type (scopeNode);                             // append another nested "virtual" CSS node to represent the a ruler track
+    gtk_widget_path_iter_set_object_name (path.gobj(), pos, NODE_frame); // ...but this time we explicitly use the conventional Name "frame" (hard wired default by GTK)
+                                                                         // note: the node is deliberately left as 'frame' to pick up existing styling
+    path.iter_add_class(pos, cuString{CLASS_timeline});                  // decorate with CSS class ".timeline" and ".ruler"
+    path.iter_add_class(pos, cuString{CLASS_ruler});                     // ... and ".ruler"
+    style = Gtk::StyleContext::create();                                 // create another style context...
+    style->set_path (path);                                              // ...for this nested path. (Note: Gtk takes a copy of the path, see gtk_style_context_set_path(), line 1120)
+    styleAdviceTrackRuler_.setAdvice (style);                            // publish as Advice "style(trackRuler)"
+    INFO (stage, "RulerCSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
   }
   
   

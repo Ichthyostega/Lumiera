@@ -44,3 +44,8 @@
     border: 5px inset;
     background-color: lime;
 }
+  fork.timeline frame.timeline.ruler {
+    margin: 3ex 0;
+    border: 3px outset;
+    background-color: DarkCyan ;
+}

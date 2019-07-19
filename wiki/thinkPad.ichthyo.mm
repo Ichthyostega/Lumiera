@@ -21867,7 +21867,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1562844888515" ID="ID_1004783054" MODIFIED="1562844917833" TEXT="#1171 investigate virtual widget path">
 <icon BUILTIN="forward"/>
 </node>
-<node COLOR="#435e98" CREATED="1562845117699" FOLDED="true" ID="ID_1145993487" MODIFIED="1563033476487" TEXT="kann man einen WidgetPath k&#xfc;nstlich konstruieren?">
+<node COLOR="#435e98" CREATED="1562845117699" ID="ID_1145993487" MODIFIED="1563556963512" TEXT="kann man einen WidgetPath k&#xfc;nstlich konstruieren?">
 <arrowlink COLOR="#3766bc" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="-654;0;" ID="Arrow_ID_711737555" STARTARROW="None" STARTINCLINATION="-2487;0;"/>
 <node CREATED="1562845842871" ID="ID_119822604" MODIFIED="1562845853198" TEXT="widget-&gt;get_path()"/>
 <node CREATED="1562854489102" ID="ID_1789577981" MODIFIED="1562854522386" TEXT="der erzeugte WidgetPath ist bereits eine Kopie">
@@ -44122,6 +44122,67 @@
 </node>
 </node>
 </node>
+<node CREATED="1563557082887" ID="ID_1375283498" MODIFIED="1563557089708" TEXT="CSS node Namen">
+<node CREATED="1563557091053" ID="ID_1694938996" MODIFIED="1563557119660" TEXT="werden explizit in der XXX_class_init()-Funktion gesetzt"/>
+<node CREATED="1563557121848" ID="ID_920321676" MODIFIED="1563557129943" TEXT="sind in der API-Dok dokumentiert">
+<node CREATED="1563557131952" ID="ID_286084554" MODIFIED="1563557140589" TEXT="manche Widgets konstruieren einen ganzen Baum"/>
+</node>
+<node CREATED="1563557146126" ID="ID_541393362" MODIFIED="1563557156289" TEXT="Fallback: Name des GType">
+<node CREATED="1563557158442" ID="ID_1858830455" MODIFIED="1563557164659" TEXT="Unterschiedlich f&#xfc;r C und C++"/>
+<node CREATED="1563557179170" ID="ID_245445009" MODIFIED="1563557183623" TEXT="Gtk::Frame::get_type()">
+<node CREATED="1563557202959" ID="ID_171572665" MODIFIED="1563557207820" TEXT="liefert gtkmm__GtkFrame"/>
+</node>
+<node CREATED="1563557217956" ID="ID_1703813951" MODIFIED="1563557221296" TEXT="gtk_frame_get_type()">
+<node CREATED="1563557232764" ID="ID_1095076986" MODIFIED="1563557233612" TEXT="GtkFrame"/>
+</node>
+<node CREATED="1563557235763" ID="ID_149384360" MODIFIED="1563557243823" TEXT="korrekt ist aber &quot;frame&quot;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1563557245954" ID="ID_1216219394" MODIFIED="1563557373091" TEXT="CSS Node-Namen will man normalerweise nicht &#xe4;ndern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Warum?
+    </p>
+    <p>
+      Weil man normalerweise das bestehende Styling vom System-Theme abgreifen m&#246;chte,
+    </p>
+    <p>
+      und das baut auf den bekannten Node-Namen auf, wie z.B &quot;fame&quot;, &quot;box&quot;, &quot;notebook&quot;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und das erkl&#228;rt wohl auch, warum man diesen CSS-Node-Namen nur direkt in C &#228;ndern kann,
+    </p>
+    <p>
+      indem man eine eigene XXX_class_init() - Funktion schreibt
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-18;-274;" ID="Arrow_ID_1242464259" STARTARROW="None" STARTINCLINATION="309;8;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1563557421449" ID="ID_1549555929" MODIFIED="1563557458599" TEXT="es gibt (wohl) kein API, um diesen Namen zu erhalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in den F&#228;llen, die ich mir angeschaut habe, steht dieser String hart codiert in der XXXX_class_init()-Funktion
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 <node CREATED="1537575947102" ID="ID_161652920" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html" MODIFIED="1561741931982" TEXT="StyleContext">
 <linktarget COLOR="#3d73d3" DESTINATION="ID_161652920" ENDARROW="Default" ENDINCLINATION="-1637;0;" ID="Arrow_ID_990523511" SOURCE="ID_73927449" STARTARROW="None" STARTINCLINATION="-2361;0;"/>
@@ -44221,7 +44282,7 @@
 </html>
 </richcontent>
 <node CREATED="1563038427512" ID="ID_887791641" MODIFIED="1563038432987" TEXT="Vorsicht: das ist die #id"/>
-<node CREATED="1563038460235" ID="ID_1245820640" MODIFIED="1563043928806" TEXT="GTKmm-definierte custom-Widgets k&#xf6;nnen nicht ihren CSS-node-Namen &#xe4;ndern">
+<node CREATED="1563038460235" ID="ID_1245820640" MODIFIED="1563557278002" TEXT="GTKmm-definierte custom-Widgets k&#xf6;nnen nicht ihren CSS-node-Namen &#xe4;ndern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44279,6 +44340,7 @@
 </html>
 </richcontent>
 <linktarget COLOR="#bc86a6" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-1901;31;" ID="Arrow_ID_1120129058" SOURCE="ID_994687888" STARTARROW="None" STARTINCLINATION="-2128;-72;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-18;-274;" ID="Arrow_ID_1242464259" SOURCE="ID_1216219394" STARTARROW="None" STARTINCLINATION="309;8;"/>
 <node CREATED="1563042271596" ID="ID_60542269" MODIFIED="1563042285395" TEXT="man kann zwar aufrufen...">
 <richcontent TYPE="NOTE"><html>
   <head>

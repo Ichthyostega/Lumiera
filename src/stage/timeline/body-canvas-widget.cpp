@@ -74,6 +74,7 @@ namespace timeline {
     
     /** request a pre-defined CSS style context for the track body */
     lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
+    lumiera::advice::Request<PStyleContext> trackRulerStyle{"style(trackRuler)"};
     
     
     /**
@@ -94,6 +95,7 @@ namespace timeline {
       protected:
         CairoC cox_;
         StyleC style_;
+        StyleC styleR_;
         PixSpan visible_;
         
         /** the current painting "water level".
@@ -116,6 +118,7 @@ namespace timeline {
         AbstractTrackRenderer (CairoC currentDrawContext, DisplayManager& layout)
           : cox_{currentDrawContext}
           , style_{trackBodyStyle.getAdvice()}
+          , styleR_{trackRulerStyle.getAdvice()}
           , visible_{layout.getPixSpan()}
           { }
       };
@@ -280,7 +283,7 @@ namespace timeline {
   
   
   BodyCanvasWidget::BodyCanvasWidget (DisplayManager& displayManager)
-    : Glib::ObjectBase("body")    // enables use of custom CSS properties (on 'gtkmm__CustomObject_body') 
+    : Glib::ObjectBase("body")    // enables use of custom CSS properties (on 'gtkmm__CustomObject_body')
     , Gtk::Box{Gtk::ORIENTATION_VERTICAL}
     , layout_{displayManager}
     , profile_{}
