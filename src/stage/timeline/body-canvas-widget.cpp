@@ -134,7 +134,6 @@ namespace timeline {
           {
             int topMargin = style_->get_margin().get_top();
             fillBackground (topMargin);
-            line_ += 5; //////////////////////////////////////////////////////////////////TODO: visual debugging
           }
         
         /** finish painting the track body area
@@ -151,14 +150,29 @@ namespace timeline {
         void
         ruler (uint h)  override
           {
-            UNIMPLEMENTED ("draw ruler");
+            int frameT = styleR_->get_border().get_top();
+            int frameB = styleR_->get_border().get_bottom();
+            styleR_->render_frame (cox_
+                                  ,visible_.b
+                                            +20   ////////////////////////////////////////TODO: visual debugging
+                                  ,line_
+                                  ,visible_.delta()
+                                  ,h + frameT + frameB
+                                  );
+            styleR_->render_background (cox_
+                                       ,visible_.b       // left start of the rectangle
+                                       ,line_+frameT     // top of the rectangle
+                                       ,visible_.delta() // width of the area
+                                       ,h                // height to fill
+                                       );
+            line_ += h + frameT + frameB;
           }
         
         /** render additional padding/gap */
         void
         gap (uint h)  override
           {
-            UNIMPLEMENTED ("draw gap");
+            fillBackground (h);
           }
         
         /** fill background of track content area
@@ -167,7 +181,6 @@ namespace timeline {
         content (uint h)  override
           {
             fillBackground (h);
-            line_ += 8; //////////////////////////////////////////////////////////////////TODO: visual debugging
           }
         
         /** paint opening slope to enter nested sub tracks
@@ -175,7 +188,14 @@ namespace timeline {
         void
         open()  override
           {
-            UNIMPLEMENTED ("paint downward slope");
+            int slopeWidth = style_->get_border().get_top();
+            style_->render_frame (cox_
+                                 ,visible_.b
+                                 ,line_
+                                 ,visible_.delta()
+                                 ,2*slopeWidth
+                                 );
+            line_ += slopeWidth;
           }
         
         /** paint closing slope to finish nested sub tracks
@@ -183,7 +203,21 @@ namespace timeline {
         void
         close (uint n)  override
           {
-            UNIMPLEMENTED ("paint upward slope");
+            int frameB = style_->get_border().get_bottom();
+            int slopeWidth = n * style_->get_border().get_bottom();
+            style_->get_border().set_bottom(slopeWidth);
+            style_->render_frame_gap(cox_
+                                 ,visible_.b
+                                            +20   ////////////////////////////////////////TODO: visual debugging
+                                 ,line_ 
+                                 ,visible_.delta()
+                                 ,slopeWidth
+                                 ,Gtk::PositionType::POS_TOP
+                                 ,visible_.b
+                                 ,visible_.e
+                                 );
+            line_ += slopeWidth;
+            style_->get_border().set_bottom(frameB);
           }
         
       public:
@@ -218,7 +252,7 @@ namespace timeline {
         void
         ruler (uint h)  override
           {
-            UNIMPLEMENTED ("overlays for ruler");
+            line_ += h;
           }
         
         /** render overlays on top of padding/gap */
@@ -242,14 +276,16 @@ namespace timeline {
         void
         open()  override
           {
-            UNIMPLEMENTED ("overlays for downward slope");
+            int slopeWidth = style_->get_border().get_top();
+            line_ += slopeWidth;
           }
         
         /** render overlays covering the closing slope towards nested tracks */
         void
         close (uint n)  override
           {
-            UNIMPLEMENTED ("overlays for upward slope");
+            int slopeWidth = n * style_->get_border().get_bottom();
+            line_ += slopeWidth;
           }
         
       public:

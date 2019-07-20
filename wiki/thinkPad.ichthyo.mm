@@ -18250,8 +18250,7 @@
       auf der rechten Seite, wo der Content angezeigt wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node COLOR="#435e98" CREATED="1563019476308" ID="ID_83481977" MODIFIED="1563044164753" TEXT=".timeline-page &gt; box.timeline-body fork.timeline">
 <linktarget COLOR="#419bcf" DESTINATION="ID_83481977" ENDARROW="Default" ENDINCLINATION="666;0;" ID="Arrow_ID_1386111155" SOURCE="ID_1803180287" STARTARROW="None" STARTINCLINATION="-787;0;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -18643,8 +18642,7 @@
       weil dies ggfs vom Theme her schon gestyled wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1563036619140" ID="ID_1483549704" MODIFIED="1563037392573" TEXT="aber Klasse: .timeline-page">
 <icon BUILTIN="button_ok"/>
@@ -18678,8 +18676,7 @@
       in der C &quot;class init function&quot; passieren mu&#223;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#bc86a6" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-1901;31;" ID="Arrow_ID_1120129058" STARTARROW="None" STARTINCLINATION="-2128;-72;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
@@ -19713,8 +19710,7 @@
       und zwar der ctor-TrackPresenter
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563467588351" ID="ID_1224899798" MODIFIED="1563467595841" TEXT="Unterscheidung root/nested">
 <node CREATED="1563467597287" ID="ID_1571128409" MODIFIED="1563467674647" TEXT="beim ctor-Aufruf implizit/automatisch">
@@ -19730,8 +19726,7 @@
       alle anderen verschachtelten ctors aber von den TrackPresentern
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563467604327" ID="ID_175300386" MODIFIED="1563467621867" TEXT="nur sub-Tracks werden re-Konstruiert">
 <icon BUILTIN="idea"/>
@@ -19747,8 +19742,7 @@
       weil nur sie sowohl durch ihren Display-Frame die beiden Kind-Widgets kennen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467916708" ID="ID_568904515" MODIFIED="1563468426983" TEXT="kl&#xe4;ren: Kind-Widget managen/entfernen">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -19759,8 +19753,7 @@
       inwiefern gibt es Beschr&#228;nkungen, wenn man ein Kind-Widget von einem Container entfernt?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1563468083453" ID="ID_988508640" MODIFIED="1563468091984" TEXT="Gtk::Container ist nur f&#xfc;r single-Child">
 <node CREATED="1563468845867" ID="ID_1400714108" MODIFIED="1563468859195" TEXT="aber: Gtk::Container hat iterative Methoden">
@@ -19834,8 +19827,7 @@
       aber verschachtelte sub-Tracks werden <i>in</i>&#160;dieser gehandhabt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563469388316" ID="ID_312880827" MODIFIED="1563469409266" TEXT="beim re-Konstruieren alle platt machen und neu besetzen">
 <icon BUILTIN="yes"/>
@@ -19983,8 +19975,7 @@
       weil der Ruler ja in die Pr&#228;sentation mit einbezogen ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -20061,8 +20052,7 @@
       ....ob es was sinnvolles in einem Overview-Ruler anzuzeigen gibt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -21149,8 +21139,7 @@
       ...ist klarer, und erlaubt nebenbei auch noch, zwei Methoden einzusparen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#304ed9" DESTINATION="ID_4285270" ENDARROW="None" ENDINCLINATION="751;409;" ID="Arrow_ID_1197384474" SOURCE="ID_189142395" STARTARROW="Default" STARTINCLINATION="603;0;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -21770,8 +21759,7 @@
       ...jedenfalls nicht ohne Code-&#196;nderung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -21790,8 +21778,7 @@
       ...welches aber lokal auf die Anwendung angewendet wird, mit h&#246;herer Priorit&#228;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1562236839544" ID="ID_1376635418" MODIFIED="1562236846612" TEXT="pro">
@@ -21850,8 +21837,7 @@
       widget-&gt;get_style_context();
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1562843984716" ID="ID_307424732" MODIFIED="1562843987923" TEXT="dieser bietet">
 <node CREATED="1562844021015" ID="ID_1207023648" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html#gtk-render-background" MODIFIED="1562844091117" TEXT="Hintergrund f&#xfc;llen: gtk-render-background">
@@ -21880,8 +21866,7 @@
       es ruft den Konstruktor WidgetPath(gobject, make_copy=true) auf
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1562854560779" ID="ID_1139882401" MODIFIED="1562854560779" TEXT="gobject_ ((make_a_copy &amp;&amp; gobject) ? gtk_widget_path_copy(gobject) : gobject)"/>
 <node CREATED="1562854618581" ID="ID_1356580321" MODIFIED="1562854656348" TEXT="gtk_widget_path_copy (const GtkWidgetPath *path)">
 <richcontent TYPE="NOTE"><html>
@@ -21898,8 +21883,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1562854695808" ID="ID_928822856" MODIFIED="1562854704117" TEXT="GTKmm-default-ctor">
@@ -21931,8 +21915,7 @@
       }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -21981,8 +21964,7 @@
       StyleContext::create()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1562970409637" ID="ID_156221819" MODIFIED="1563033490587" TEXT="ihm den Pfad zuweisen">
@@ -22004,8 +21986,7 @@
       As a&#160;consequence, the style will be regenerated to match&#160;the new given path.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -22068,8 +22049,7 @@
       -- <i>ja dann </i>kann man auch gleich direkt an den UiManager delegieren!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -22083,8 +22063,7 @@
       window:backdrop:dir-ltr.background box:backdrop:dir-ltr.vertical box:backdrop:dir-ltr[2/3].horizontal widget:backdrop:dir-ltr[2/2] widget:backdrop:dir-ltr paned:backdrop:dir-ltr.vertical widget:backdrop:dir-ltr box:backdrop:dir-ltr.vertical notebook:backdrop:dir-ltr[1/1].frame paned:backdrop:dir-ltr.horizontal box:backdrop:dir-ltr.vertical fork.timeline
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1632267547" ENDARROW="Default" ENDINCLINATION="502;0;" ID="Arrow_ID_211374997" SOURCE="ID_47205096" STARTARROW="None" STARTINCLINATION="255;50;"/>
 <node COLOR="#435e98" CREATED="1563035526845" ID="ID_1747578312" MODIFIED="1563037376560" TEXT="warum haben die alle die Pseudo-Klasse :backdrop?">
 <richcontent TYPE="NOTE"><html>
@@ -22096,8 +22075,7 @@
       &quot;Widget is in a background toplevel window&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#8aafdb" DESTINATION="ID_422408673" ENDARROW="Default" ENDINCLINATION="-430;209;" ID="Arrow_ID_384398411" STARTARROW="None" STARTINCLINATION="-1700;-117;"/>
 <node CREATED="1563035800955" ID="ID_1644301957" MODIFIED="1563035821169" TEXT="vmt. wegen dem Zeitpunkt, an dem der Pfad konstruiert wird"/>
 <node CREATED="1563035791620" ID="ID_1471340967" MODIFIED="1563035834509" TEXT="unsch&#xf6;n, aber nicht relevant">
@@ -22110,8 +22088,7 @@
       nur der letzte Node wird gegen pseudo-Klassen gematcht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1563037328957" ID="ID_1150753033" MODIFIED="1563039434820" TEXT="man kann es aber (zur&#xfc;ck)setzen">
 <richcontent TYPE="NOTE"><html>
@@ -22126,8 +22103,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;gtk_widget_path_iter_set_state(path.gobj(), i, GTK_STATE_FLAG_NORMAL);
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -22141,8 +22117,7 @@
       window.background box.vertical box[2/3].horizontal widget[2/2] widget paned.vertical widget box.vertical notebook[1/1].frame paned.horizontal.timeline-page box.vertical.timeline.timeline-body fork.timeline
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -22167,8 +22142,7 @@
       spezielle Regel gesetzt auf: <b>.timeline-page &gt; .timeline-body fork.timeline</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node COLOR="#338800" CREATED="1563117430347" ID="ID_374547857" MODIFIED="1563117529819" TEXT="bekomme die Hintergrundfarbe aus dem CSS">
@@ -22276,8 +22250,7 @@
       und seinerzeit beschlossen, es vorerst im prelude() zu belassen...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#304ed9" DESTINATION="ID_4285270" ENDARROW="None" ENDINCLINATION="751;409;" ID="Arrow_ID_1197384474" STARTARROW="Default" STARTINCLINATION="603;0;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
@@ -22300,8 +22273,7 @@
       nicht nur die Ruler, auch das Prelude selber ist ein solches gePinntes Element (selbst wenn es leer ist)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#25e58e" DESTINATION="ID_337327442" ENDARROW="Default" ENDINCLINATION="523;0;" ID="Arrow_ID_376180455" STARTARROW="Default" STARTINCLINATION="1063;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -22356,8 +22328,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563145010348" ID="ID_1404407551" MODIFIED="1563145095624">
 <richcontent TYPE="NODE"><html>
@@ -22369,8 +22340,7 @@
       <i>rein gef&#252;hlsm&#228;&#223;ig</i>&#160;w&#228;re aber vorher wohl geschickter
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22380,8 +22350,7 @@
       denn was passiert, wenn sich durch das Setzen einer neuen Gr&#246;&#223;e der sichtbare Bereich &#228;ndert? L&#246;st das dann nicht erneut einen draw()-Aufruf aus??
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -22438,8 +22407,7 @@
       speziell die Antwort von <b>ebassi</b>&#160;beachten...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22449,8 +22417,7 @@
       Core-Entwickler von GTK
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1561740889255" ID="ID_388774572" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html#gtk-render-background" MODIFIED="1561740901097" TEXT="gtk-render-background()"/>
 </node>
@@ -22478,13 +22445,12 @@
       Nein. Es ist ein G<b>D</b>K-Wrapper/Adapter
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1561737180408" ID="ID_1186274034" MODIFIED="1561737202377" TEXT="gtkmm3.0-3.22.2/gdk/gdkmm/general.cc"/>
 <node CREATED="1561737220687" ID="ID_1404441515" MODIFIED="1562843746132" TEXT="void set_source_color(Cairo::RefPtr&lt;Cairo::Context&gt; const&amp;, Gdk::Color const&amp;)">
-<linktarget COLOR="#1f8ff9" DESTINATION="ID_1404441515" ENDARROW="Default" ENDINCLINATION="-57;55;" ID="Arrow_ID_401362992" SOURCE="ID_248226991" STARTARROW="None" STARTINCLINATION="421;-12;"/>
 <linktarget COLOR="#7890ac" DESTINATION="ID_1404441515" ENDARROW="Default" ENDINCLINATION="1;-116;" ID="Arrow_ID_1920767689" SOURCE="ID_608213389" STARTARROW="None" STARTINCLINATION="256;0;"/>
+<linktarget COLOR="#1f8ff9" DESTINATION="ID_1404441515" ENDARROW="Default" ENDINCLINATION="-57;55;" ID="Arrow_ID_401362992" SOURCE="ID_248226991" STARTARROW="None" STARTINCLINATION="421;-12;"/>
 </node>
 </node>
 </node>
@@ -22587,6 +22553,12 @@
 </node>
 </node>
 </node>
+<node CREATED="1563636831797" ID="ID_506277754" MODIFIED="1563636834809" TEXT="Rahmen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563636836517" ID="ID_391875364" MODIFIED="1563637097379" TEXT="Problem: Rahmen werden solid gezeichnet">
+<linktarget COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-54;21;" ID="Arrow_ID_1840813206" SOURCE="ID_362681600" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 <node CREATED="1561742203636" ID="ID_1959492243" MODIFIED="1561742205504" TEXT="Rampen">
 <node CREATED="1563112435603" ID="ID_957636184" MODIFIED="1563112566794" TEXT="Idee-1">
 <icon BUILTIN="smiley-neutral"/>
@@ -22597,6 +22569,13 @@
 <icon BUILTIN="forward"/>
 <node CREATED="1563112482359" ID="ID_100127081" MODIFIED="1563112487856" TEXT="Rahmen mit Gap zeichnen"/>
 <node CREATED="1563112489001" ID="ID_1802227725" MODIFIED="1563112511333" TEXT="...und dadurch die Oberseite verdecken"/>
+<node CREATED="1563636755968" ID="ID_145032855" MODIFIED="1563636768594" TEXT="funktioniert... aber zwei Probleme">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1563636771101" ID="ID_273130535" MODIFIED="1563636785063" TEXT="kann die Rahmenst&#xe4;rke nicht manipulieren"/>
+<node CREATED="1563636787971" ID="ID_362681600" MODIFIED="1563636865542" TEXT="Rahmen wird solid gezeichnet, nicht outset">
+<arrowlink COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-54;21;" ID="Arrow_ID_1840813206" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
+</node>
+</node>
 </node>
 <node CREATED="1563112523511" ID="ID_1881724639" MODIFIED="1563112555503" TEXT="Idee-3">
 <icon BUILTIN="button_cancel"/>
@@ -42710,8 +42689,7 @@
       das &#171;<b>Regel</b>-System&#187;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1563029003092" ID="ID_1788007006" MODIFIED="1563029014836" TEXT="...ist bisher nicht mehr als eine Schnappsidee">
 <icon BUILTIN="smiley-oh"/>
 </node>
@@ -42726,8 +42704,7 @@
       das &#171;<b>Advice</b>-System&#187;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1563022363974" ID="ID_290527164" MODIFIED="1563022368517" TEXT="Konzept">
 <node CREATED="1563022369373" ID="ID_201969563" MODIFIED="1563022372857" TEXT="von 2010"/>
 <node CREATED="1563022373578" ID="ID_1190645627" MODIFIED="1563022412089" TEXT="immer noch experimentell">
@@ -42748,8 +42725,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563022416308" ID="ID_1045079282" MODIFIED="1563022427519">
 <richcontent TYPE="NODE"><html>
@@ -42761,8 +42737,7 @@
       ein <b>Whiteboard-System</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563022428253" ID="ID_488828433" MODIFIED="1563022438478" TEXT="geplante Erweiterung: Unifikation">
 <icon BUILTIN="hourglass"/>
@@ -42804,8 +42779,7 @@
       ....denn es gibt die default-L&#246;sung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1563023660812" ID="ID_1579367227" MODIFIED="1563028899851" TEXT="Implementierung">
@@ -42833,8 +42807,7 @@
       blo&#223; jetzt etwas abstrakter
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -44115,8 +44088,7 @@
       &quot;Widget is in a background toplevel window&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#8aafdb" DESTINATION="ID_422408673" ENDARROW="Default" ENDINCLINATION="-430;209;" ID="Arrow_ID_384398411" SOURCE="ID_1747578312" STARTARROW="None" STARTINCLINATION="-1700;-117;"/>
 </node>
 </node>
@@ -44164,8 +44136,7 @@
       indem man eine eigene XXX_class_init() - Funktion schreibt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-18;-274;" ID="Arrow_ID_1242464259" STARTARROW="None" STARTINCLINATION="309;8;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
@@ -44179,8 +44150,49 @@
       in den F&#228;llen, die ich mir angeschaut habe, steht dieser String hart codiert in der XXXX_class_init()-Funktion
     </p>
   </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1563631851881" ID="ID_1732615721" MODIFIED="1563631854580" TEXT="Erfahrungen">
+<node CREATED="1563631855781" ID="ID_1599365177" MODIFIED="1563631858795" TEXT="Frames">
+<node CREATED="1563631859864" ID="ID_1388716276" MODIFIED="1563631888891" TEXT="werden nach innen gezeichnet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. die angegebenen Abmessungen entsprechen der bounding box
+    </p>
+  </body>
 </html>
 </richcontent>
+</node>
+<node CREATED="1563631918721" ID="ID_545245141" MODIFIED="1563631986632" TEXT="partielle / Gesamt-Definitionen sind jeweils komplett incl Farbe">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es geht also nicht, da&#223; man sagt
+    </p>
+    <p>
+      border: solid yellow;
+    </p>
+    <p>
+      border-left: 2px
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      in diesem Falle w&#252;rde die linke Border mit der geerben Farbe gezeichnet, und nicht gelb
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -44200,8 +44212,7 @@
       d.h. wir haben Referenz-Semantik
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1562855174618" ID="ID_687255786" MODIFIED="1562855190810" TEXT="statische Factory-Funktion: StyleContext::create">
 <icon BUILTIN="back"/>
@@ -44279,8 +44290,7 @@
       this-&gt;set_name(&quot;my-widget&quot;)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1563038427512" ID="ID_887791641" MODIFIED="1563038432987" TEXT="Vorsicht: das ist die #id"/>
 <node CREATED="1563038460235" ID="ID_1245820640" MODIFIED="1563557278002" TEXT="GTKmm-definierte custom-Widgets k&#xf6;nnen nicht ihren CSS-node-Namen &#xe4;ndern">
 <richcontent TYPE="NOTE"><html>
@@ -44337,8 +44347,7 @@
       &#160;&#160;// changed or removed in the future.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#bc86a6" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-1901;31;" ID="Arrow_ID_1120129058" SOURCE="ID_994687888" STARTARROW="None" STARTINCLINATION="-2128;-72;"/>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-18;-274;" ID="Arrow_ID_1242464259" SOURCE="ID_1216219394" STARTARROW="None" STARTINCLINATION="309;8;"/>
 <node CREATED="1563042271596" ID="ID_60542269" MODIFIED="1563042285395" TEXT="man kann zwar aufrufen...">
@@ -44351,8 +44360,7 @@
       gtk_widget_class_set_css_name (GTK_WIDGET_GET_CLASS(gobj()), &quot;body&quot;);
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563042287071" ID="ID_1579813090" MODIFIED="1563042298109" TEXT="aber das kommt zu sp&#xe4;t und bleibt wirkungslos f&#xfc;r das CSS"/>
 </node>
@@ -44389,38 +44397,9 @@
 </node>
 </node>
 </node>
-</node>
-<node CREATED="1535632661385" ID="ID_1021079796" MODIFIED="1557498707238" TEXT="Hierarchie">
-<node CREATED="1535632673655" ID="ID_849385989" MODIFIED="1557498707238" TEXT="Gdk::Window">
-<node CREATED="1535632686045" ID="ID_20909674" MODIFIED="1557498707238">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ein Widget <i>kann</i>&#160;einem G<b>D</b>K-Window zugeordnet sein
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1535632728343" ID="ID_1087443097" MODIFIED="1557498707238" TEXT="dieses repr&#xe4;sentiert den low-level Screen-Space"/>
-<node CREATED="1535632754900" ID="ID_1804383493" MODIFIED="1557498707238" TEXT="diese Zuordnung hei&#xdf;t &quot;mapping&quot;"/>
-<node CREATED="1535632903512" ID="ID_653149380" MODIFIED="1557498707238" TEXT="Gtk::Widget::get_parent_window ()">
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node CREATED="1535632766298" ID="ID_651213437" MODIFIED="1557498707238" TEXT="Container">
-<node CREATED="1535632771490" ID="ID_54072996" MODIFIED="1557498707238" TEXT="machen sich beim Hinzuf&#xfc;gen den Kindern bekannt"/>
-<node CREATED="1535632789207" ID="ID_1814287136" MODIFIED="1557498707238" TEXT="Gtk::Widget::get_parent ()">
-<node CREATED="1535632854135" ID="ID_1093554517" MODIFIED="1557498707238" TEXT="Gtk::Container *"/>
-<node CREATED="1535632860126" ID="ID_710254808" MODIFIED="1557498707238" TEXT="kann NULL sein"/>
-</node>
-<node CREATED="1535633353996" ID="ID_1722614856" MODIFIED="1557498707238" TEXT="Gtk::Widget::get_toplevel ()"/>
-<node CREATED="1535633447375" ID="ID_1390203707" LINK="https://developer.gnome.org/gtkmm/3.22/classGtk_1_1Widget.html#ad65bedf64acfd0401abbe489312fba8e" MODIFIED="1557498707238" TEXT="Widget *  Gtk::Widget::get_ancestor(GType widget_type)"/>
-</node>
-<node CREATED="1535633140424" ID="ID_293762905" MODIFIED="1562845214506" TEXT="WidgetPath">
+<node CREATED="1535633140424" ID="ID_293762905" MODIFIED="1563630924934" TEXT="WidgetPath">
 <linktarget COLOR="#3766bc" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="-654;0;" ID="Arrow_ID_711737555" SOURCE="ID_1145993487" STARTARROW="None" STARTINCLINATION="-2487;0;"/>
+<linktarget COLOR="#76a5de" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="109;127;" ID="Arrow_ID_1149853107" SOURCE="ID_222380322" STARTARROW="None" STARTINCLINATION="-391;0;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535633147295" ID="ID_14373153" MODIFIED="1560612967799" TEXT="Konzept ist mir nicht klar">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -44515,8 +44494,7 @@
       apply styles to that specific widget their gtkrc file.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -44545,8 +44523,7 @@
       mit automatischem Refcounting
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1562854931311" ID="ID_1401731034" MODIFIED="1562854940509" TEXT="kann mit dem default-Ctor leer erzeugt werden"/>
 <node CREATED="1562854942971" ID="ID_395952844" MODIFIED="1562854961042" TEXT="wenn man es vom Widget explizit bezieht, wird der Pfad kopiert">
@@ -44564,13 +44541,45 @@
       As a consequence, the style will be regenerated to match the new given path.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1562847303783" ID="ID_803278574" LINK="https://stackoverflow.com/a/56415144/444796" MODIFIED="1562847334090" TEXT="man Kann WidetPath &quot;frei stehend&quot; verwenden (SO)">
 <icon BUILTIN="back"/>
 </node>
 </node>
+</node>
+</node>
+<node CREATED="1535632661385" ID="ID_1021079796" MODIFIED="1557498707238" TEXT="Hierarchie">
+<node CREATED="1535632673655" ID="ID_849385989" MODIFIED="1557498707238" TEXT="Gdk::Window">
+<node CREATED="1535632686045" ID="ID_20909674" MODIFIED="1557498707238">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein Widget <i>kann</i>&#160;einem G<b>D</b>K-Window zugeordnet sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1535632728343" ID="ID_1087443097" MODIFIED="1557498707238" TEXT="dieses repr&#xe4;sentiert den low-level Screen-Space"/>
+<node CREATED="1535632754900" ID="ID_1804383493" MODIFIED="1557498707238" TEXT="diese Zuordnung hei&#xdf;t &quot;mapping&quot;"/>
+<node CREATED="1535632903512" ID="ID_653149380" MODIFIED="1557498707238" TEXT="Gtk::Widget::get_parent_window ()">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1535632766298" ID="ID_651213437" MODIFIED="1557498707238" TEXT="Container">
+<node CREATED="1535632771490" ID="ID_54072996" MODIFIED="1557498707238" TEXT="machen sich beim Hinzuf&#xfc;gen den Kindern bekannt"/>
+<node CREATED="1535632789207" ID="ID_1814287136" MODIFIED="1557498707238" TEXT="Gtk::Widget::get_parent ()">
+<node CREATED="1535632854135" ID="ID_1093554517" MODIFIED="1557498707238" TEXT="Gtk::Container *"/>
+<node CREATED="1535632860126" ID="ID_710254808" MODIFIED="1557498707238" TEXT="kann NULL sein"/>
+</node>
+<node CREATED="1535633353996" ID="ID_1722614856" MODIFIED="1557498707238" TEXT="Gtk::Widget::get_toplevel ()"/>
+<node CREATED="1535633447375" ID="ID_1390203707" LINK="https://developer.gnome.org/gtkmm/3.22/classGtk_1_1Widget.html#ad65bedf64acfd0401abbe489312fba8e" MODIFIED="1557498707238" TEXT="Widget *  Gtk::Widget::get_ancestor(GType widget_type)"/>
+</node>
+<node CREATED="1563630894868" ID="ID_222380322" MODIFIED="1563630929426" TEXT="WidgeqPath: die Sequenz von Top zum konkreten Widget">
+<arrowlink COLOR="#76a5de" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="109;127;" ID="Arrow_ID_1149853107" STARTARROW="None" STARTINCLINATION="-391;0;"/>
 </node>
 </node>
 <node CREATED="1477523681978" HGAP="14" ID="ID_400257229" MODIFIED="1557498707238" TEXT="Richtlinien" VSHIFT="11">
@@ -44607,8 +44616,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#627292" DESTINATION="ID_185528211" ENDARROW="Default" ENDINCLINATION="22;-122;" ID="Arrow_ID_390519319" STARTARROW="None" STARTINCLINATION="-31;42;"/>
 </node>
 </node>
@@ -44617,7 +44625,7 @@
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-981;-106;" ID="Arrow_ID_1912776282" SOURCE="ID_1636078216" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-1088;-39;" ID="Arrow_ID_234165792" SOURCE="ID_433225506" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-652;20;" ID="Arrow_ID_315633048" SOURCE="ID_1894791438" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
-<node CREATED="1533388030963" ID="ID_1973994334" MODIFIED="1561827466204" TEXT="main context">
+<node CREATED="1533388030963" FOLDED="true" ID="ID_1973994334" MODIFIED="1563630809180" TEXT="main context">
 <node CREATED="1533388053839" ID="ID_970610402" MODIFIED="1533388063674" TEXT="abstrahierte &quot;main loop&quot;">
 <node CREATED="1533388065237" ID="ID_1853196275" MODIFIED="1533388071944" TEXT="es gibt einen default_main_context"/>
 <node CREATED="1533388072628" ID="ID_1382049092" MODIFIED="1533388077743" TEXT="dieser wird on demand erzeugt"/>
@@ -44651,7 +44659,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1495221242285" ID="ID_185528211" MODIFIED="1557498707238" TEXT="Applikation">
+<node CREATED="1495221242285" FOLDED="true" ID="ID_185528211" MODIFIED="1563630800179" TEXT="Applikation">
 <linktarget COLOR="#627292" DESTINATION="ID_185528211" ENDARROW="Default" ENDINCLINATION="22;-122;" ID="Arrow_ID_390519319" SOURCE="ID_654535915" STARTARROW="None" STARTINCLINATION="-31;42;"/>
 <node CREATED="1495221272545" ID="ID_624250153" MODIFIED="1561827466206" TEXT="Gtk::Application">
 <node CREATED="1495222327564" ID="ID_175461027" MODIFIED="1518487921099" TEXT="initialisiert Gio::Application"/>
@@ -44844,7 +44852,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1495224577105" HGAP="33" ID="ID_1924897671" MODIFIED="1561827466216" TEXT="Gtk::Main" VSHIFT="10">
+<node CREATED="1495224577105" FOLDED="true" HGAP="33" ID="ID_1924897671" MODIFIED="1563630803380" TEXT="Gtk::Main" VSHIFT="10">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1495224595638" ID="ID_1774384379" MODIFIED="1518487921099" TEXT="@deprecated">
 <icon BUILTIN="messagebox_warning"/>
 </node>
