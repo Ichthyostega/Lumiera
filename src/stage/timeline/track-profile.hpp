@@ -91,7 +91,7 @@ namespace timeline {
       
       Elements elements;
       
-      uint pinnedPrefixCnt = 0;
+      int pinnedPrefixCnt = 0;
       
       // default constructible, standard copy operations
       

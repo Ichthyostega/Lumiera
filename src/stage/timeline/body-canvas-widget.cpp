@@ -59,6 +59,7 @@ using Gdk::Rectangle;
 //using sigc::ptr_fun;
 //using std::cout;
 //using std::endl;
+using std::string;
 using std::move;
 
 
@@ -75,6 +76,19 @@ namespace timeline {
     /** request a pre-defined CSS style context for the track body */
     lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
     lumiera::advice::Request<PStyleContext> trackRulerStyle{"style(trackRuler)"};
+    
+    string
+    slopeClassName(int depth)
+    {
+      switch (depth)
+        {
+          case 1: return "track-slope-deep1";
+          case 2: return "track-slope-deep2";
+          case 3: return "track-slope-deep3";
+          case 4: return "track-slope-deep4";
+          default:return "track-slope-verydeep";
+        }
+    }
     
     
     /**
@@ -203,9 +217,15 @@ namespace timeline {
         void
         close (uint n)  override
           {
-            int frameB = style_->get_border().get_bottom();
-            int slopeWidth = n * style_->get_border().get_bottom();
-            style_->get_border().set_bottom(slopeWidth);
+//            style_->context_save();
+            style_->add_class(slopeClassName(n));
+//            style_->invalidate();
+//            string clzzs;
+//            for (auto& clzz : style_->list_classes())
+//              clzzs += "."+clzz;
+//            string path = style_->get_path().to_string();
+            int slopeWidth = 5*style_->get_border().get_bottom();
+            INFO(stage, "n=%d class=%s  -->slopeWidth=%d", n, util::cStr(slopeClassName(n)), slopeWidth);
             style_->render_frame_gap(cox_
                                  ,visible_.b
                                             +20   ////////////////////////////////////////TODO: visual debugging
@@ -216,8 +236,9 @@ namespace timeline {
                                  ,visible_.b
                                  ,visible_.e
                                  );
+            style_->remove_class(slopeClassName(n));
+//            style_->context_restore();
             line_ += slopeWidth;
-            style_->get_border().set_bottom(frameB);
           }
         
       public:
@@ -284,8 +305,11 @@ namespace timeline {
         void
         close (uint n)  override
           {
-            int slopeWidth = n * style_->get_border().get_bottom();
+            style_->context_save();
+            style_->add_class(slopeClassName(n));
+            int slopeWidth = style_->get_border().get_bottom();
             line_ += slopeWidth;
+            style_->context_restore();
           }
         
       public:

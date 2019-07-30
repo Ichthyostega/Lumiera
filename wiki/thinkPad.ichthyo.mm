@@ -1131,7 +1131,7 @@
 <node CREATED="1502454601603" ID="ID_384770680" MODIFIED="1538263469664" TEXT="nein: MutationMessage wird &#xfc;berfl&#xfc;ssig">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1502401987033" ID="ID_1584846573" MODIFIED="1538263469664" TEXT="erfordert Festlegung der Natur der Diff Message">
+<node CREATED="1502401987033" ID="ID_1584846573" MODIFIED="1564495786621" TEXT="erfordert Festlegung der Natur der Diff Message">
 <arrowlink COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="600;-1189;" ID="Arrow_ID_554743885" STARTARROW="None" STARTINCLINATION="1459;870;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1502402004383" ID="ID_1491065212" MODIFIED="1538263469664" TEXT="generisch bleiben?">
@@ -22362,22 +22362,7 @@
 <node CREATED="1561412301303" ID="ID_813337683" MODIFIED="1561412307145" TEXT="wie werden Farben definiert?"/>
 <node CREATED="1561412312496" ID="ID_1285620209" MODIFIED="1561412338113" TEXT="Anscheinend will Cairo Werte (red, green, blue)"/>
 <node CREATED="1561737420041" ID="ID_620483728" MODIFIED="1562843377740" TEXT="Recherche...">
-<node CREATED="1561412911257" FOLDED="true" ID="ID_1173541827" LINK="https://www.cairographics.org/tutorial/#L1draw" MODIFIED="1562843576977" TEXT="Cairo-Konzepte">
-<node CREATED="1561412945044" FOLDED="true" ID="ID_1336013492" MODIFIED="1561827469138" TEXT="Source">
-<node CREATED="1561412970112" ID="ID_358371042" MODIFIED="1561412984826" TEXT="Colour"/>
-<node CREATED="1561412985423" ID="ID_761624981" MODIFIED="1561412991540" TEXT="Gradient"/>
-<node CREATED="1561412992114" ID="ID_457063785" MODIFIED="1561412994561" TEXT="Image"/>
-</node>
-<node CREATED="1561412948428" FOLDED="true" ID="ID_66649578" MODIFIED="1561827469138" TEXT="Mask">
-<node CREATED="1561412996428" ID="ID_621110720" MODIFIED="1561413006567" TEXT="stroke, fill, text, set_mask()"/>
-<node CREATED="1561413034863" ID="ID_1207183549" MODIFIED="1561413051569" TEXT="die Source wird durch die Mask durch &quot;gestempelt&quot;"/>
-</node>
-<node CREATED="1561412961226" FOLDED="true" ID="ID_670962008" MODIFIED="1561827469138" TEXT="Destination">
-<node CREATED="1561413010338" ID="ID_773980893" MODIFIED="1561413014990" TEXT="Ausgabeformat"/>
-<node CREATED="1561413017945" ID="ID_362589945" MODIFIED="1561413025642" TEXT="auf dieses wird &quot;gestempelt&quot;"/>
-</node>
-</node>
-<node CREATED="1561413519712" ID="ID_1263142656" LINK="https://stackoverflow.com/a/29000648" MODIFIED="1562843377743" TEXT="Hinweis auf Stackoverflow">
+<node CREATED="1561413519712" ID="ID_1263142656" LINK="https://stackoverflow.com/a/29000648" MODIFIED="1564505543120" TEXT="Hinweis auf Stackoverflow">
 <linktarget COLOR="#4587d6" DESTINATION="ID_1263142656" ENDARROW="Default" ENDINCLINATION="-80;5;" ID="Arrow_ID_1541352493" SOURCE="ID_1417021403" STARTARROW="None" STARTINCLINATION="-203;0;"/>
 <node CREATED="1561734458294" ID="ID_73927449" MODIFIED="1562843967076">
 <richcontent TYPE="NODE"><html>
@@ -22420,6 +22405,21 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1561740889255" ID="ID_388774572" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html#gtk-render-background" MODIFIED="1561740901097" TEXT="gtk-render-background()"/>
+</node>
+</node>
+<node CREATED="1561412911257" FOLDED="true" ID="ID_1173541827" LINK="https://www.cairographics.org/tutorial/#L1draw" MODIFIED="1562843576977" TEXT="Cairo-Konzepte">
+<node CREATED="1561412945044" FOLDED="true" ID="ID_1336013492" MODIFIED="1561827469138" TEXT="Source">
+<node CREATED="1561412970112" ID="ID_358371042" MODIFIED="1561412984826" TEXT="Colour"/>
+<node CREATED="1561412985423" ID="ID_761624981" MODIFIED="1561412991540" TEXT="Gradient"/>
+<node CREATED="1561412992114" ID="ID_457063785" MODIFIED="1561412994561" TEXT="Image"/>
+</node>
+<node CREATED="1561412948428" FOLDED="true" ID="ID_66649578" MODIFIED="1561827469138" TEXT="Mask">
+<node CREATED="1561412996428" ID="ID_621110720" MODIFIED="1561413006567" TEXT="stroke, fill, text, set_mask()"/>
+<node CREATED="1561413034863" ID="ID_1207183549" MODIFIED="1561413051569" TEXT="die Source wird durch die Mask durch &quot;gestempelt&quot;"/>
+</node>
+<node CREATED="1561412961226" FOLDED="true" ID="ID_670962008" MODIFIED="1561827469138" TEXT="Destination">
+<node CREATED="1561413010338" ID="ID_773980893" MODIFIED="1561413014990" TEXT="Ausgabeformat"/>
+<node CREATED="1561413017945" ID="ID_362589945" MODIFIED="1561413025642" TEXT="auf dieses wird &quot;gestempelt&quot;"/>
 </node>
 </node>
 <node CREATED="1561414516226" ID="ID_824931972" LINK="https://stackoverflow.com/a/28004070" MODIFIED="1561414534852" TEXT="Hexagonale Cusotm_Buttons zeichen (Python-Beispiel)"/>
@@ -22554,9 +22554,274 @@
 </node>
 </node>
 <node CREATED="1563636831797" ID="ID_506277754" MODIFIED="1563636834809" TEXT="Rahmen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563636836517" ID="ID_391875364" MODIFIED="1563637097379" TEXT="Problem: Rahmen werden solid gezeichnet">
-<linktarget COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-54;21;" ID="Arrow_ID_1840813206" SOURCE="ID_362681600" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563636836517" ID="ID_391875364" MODIFIED="1564495425061" TEXT="Problem: Rahmen werden solid gezeichnet">
+<arrowlink COLOR="#d12e54" DESTINATION="ID_543934966" ENDARROW="Default" ENDINCLINATION="-135;0;" ID="Arrow_ID_1613504887" STARTARROW="None" STARTINCLINATION="44;-40;"/>
+<linktarget COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-88;45;" ID="Arrow_ID_1840813206" SOURCE="ID_362681600" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
 <icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564495382717" HGAP="86" ID="ID_543934966" MODIFIED="1564495517616" TEXT="weiteres Problem: CSS-Effekte" VSHIFT="-9">
+<linktarget COLOR="#d12e54" DESTINATION="ID_543934966" ENDARROW="Default" ENDINCLINATION="-135;0;" ID="Arrow_ID_1613504887" SOURCE="ID_391875364" STARTARROW="None" STARTINCLINATION="44;-40;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1564495427327" ID="ID_406875347" MODIFIED="1564495439363" TEXT="die werden von den Designern zunehmend genutzt"/>
+<node CREATED="1564495440430" ID="ID_1276162602" MODIFIED="1564495463606" TEXT="..oft mit dem Ziel, einen &quot;3D-Look&quot; zu vermeiden. Einfach nur noch krank"/>
+<node CREATED="1564495472129" ID="ID_515864254" MODIFIED="1564495483412" TEXT="speziell box-shadow wird extrem viel verwendet"/>
+<node CREATED="1564495485155" ID="ID_1813223564" MODIFIED="1564495495979" TEXT="Problem: der wird auf die Umgebung gezeichnet">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1564495497382" ID="ID_1356685969" MODIFIED="1564495509046" TEXT="pa&#xdf;t das mit meinem Zeichen-Konzept zusammen?">
+<icon BUILTIN="help"/>
+<node CREATED="1564495532593" ID="ID_352639036" MODIFIED="1564495537476" TEXT="gtkrenderbackround.c">
+<node CREATED="1564495545861" ID="ID_627648239" MODIFIED="1564495549842" TEXT="gtk_css_style_render_background()">
+<node CREATED="1564495616991" ID="ID_1929404948" MODIFIED="1564495626248" TEXT="zeichnet zuerst die outset-shadows"/>
+<node CREATED="1564495628068" ID="ID_1140731188" MODIFIED="1564495634422" TEXT="dann den HIntergrund"/>
+<node CREATED="1564495635347" ID="ID_155287620" MODIFIED="1564495641294" TEXT="dann die inset-shadows"/>
+</node>
+</node>
+<node CREATED="1564495699205" ID="ID_266196506" MODIFIED="1564495717300" TEXT="Problem: das ist im Widerspruch zu dem abschnittsweisen zeichnen"/>
+</node>
+</node>
+<node CREATED="1563637202035" ID="ID_681324395" MODIFIED="1563637205854" TEXT="Auswege?">
+<node CREATED="1563637219445" ID="ID_1413699114" MODIFIED="1563637246012" TEXT="Reverse-Engineering">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      den Zeichenvorgang f&#252;r ein normales Frame-Widget analysieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1563736122461" ID="ID_1095800644" MODIFIED="1563736127792" TEXT="Gtk::Frame">
+<node CREATED="1563736130164" ID="ID_276564599" MODIFIED="1563736139623" TEXT="erbt von Bin, dieses von Container..."/>
+<node CREATED="1563736141579" ID="ID_1238316490" MODIFIED="1563736165824" TEXT="gtk_frame_draw()  (gtkframe.c, 716)">
+<node CREATED="1563736411493" ID="ID_959872815" MODIFIED="1563736413201" TEXT="gtk_frame_draw">
+<node CREATED="1563736675878" ID="ID_1380030936" MODIFIED="1563736675878" TEXT="gtk_css_gadget_draw">
+<node CREATED="1563736680910" ID="ID_1193299161" MODIFIED="1563736686803" TEXT="bekommt einen Cairo-Context"/>
+<node CREATED="1563736687680" ID="ID_476120936" MODIFIED="1563736720837" TEXT="setzt zus&#xe4;tzlich eine genau passende size-Allocation vorraus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Kommentar sagt: it is your responsibility that these two coordinates match
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563736622722" HGAP="54" ID="ID_1395291863" MODIFIED="1564493283947" TEXT="gtk_css_style_render_border" VSHIFT="20">
+<icon BUILTIN="forward"/>
+<node CREATED="1563737125953" ID="ID_1641342904" MODIFIED="1563737128853" TEXT="Taddaa!"/>
+<node CREATED="1563737130259" ID="ID_64703621" MODIFIED="1563737146677" TEXT="die wird auch von styleContxt-&gt;render_border() aufgerufen"/>
+<node CREATED="1563737169230" ID="ID_1548155605" MODIFIED="1563737173151" TEXT="Fallunterscheidung">
+<node CREATED="1563737174965" ID="ID_1060512211" MODIFIED="1563737176769" TEXT="if (gtk_border_image_init (&amp;border_image, style))">
+<node CREATED="1564493480688" ID="ID_55682569" MODIFIED="1564493486989" TEXT="gtk_border_image_render">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1563737180869" ID="ID_1595726725" MODIFIED="1563737186103" TEXT="sonst: solid zeichnen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563831385422" ID="ID_1366222565" MODIFIED="1563831397212" TEXT="in vivo beobachten">
+<icon BUILTIN="yes"/>
+<node CREATED="1563831400868" ID="ID_99440407" MODIFIED="1563831412589" TEXT="was liefert das Theme?">
+<icon BUILTIN="help"/>
+<node CREATED="1563831414186" ID="ID_1993035073" MODIFIED="1563831443895" TEXT="wo?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      /home/hiv/.local/share/themes/PanRosewoodHIV/gtk-3.0/gtk-contained.css
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1563831422209" ID="ID_79374511" MODIFIED="1563831422209" TEXT="/home/hiv/.local/share/themes/PanRosewoodHIV/gtk-3.0/gtk-contained.css"/>
+<node CREATED="1563831443895" ID="ID_1181589291" MODIFIED="1563831674186" TEXT="frames: werden flach gezeichnet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      frame &gt; border,
+    </p>
+    <p>
+      .frame {
+    </p>
+    <p>
+      &#160;&#160;box-shadow: none;
+    </p>
+    <p>
+      &#160;&#160;margin: 0;
+    </p>
+    <p>
+      &#160;&#160;padding: 0;
+    </p>
+    <p>
+      &#160;&#160;border-radius: 0;
+    </p>
+    <p>
+      &#160;&#160;border: 1px solid @borders; }
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563831978878" ID="ID_1798339852" MODIFIED="1563832006629" TEXT="buttons: verwenden box-shadow">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#160;&#160;box-shadow: inset 0px 0px 0px 1px shade (@theme_bg_color, 1.15), 0px 1px 2px rgba(0, 0, 0, 0.1); }
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563832107140" ID="ID_132078838" MODIFIED="1563832115635" TEXT="&quot;outset&quot; wird &#xfc;berhaupt nicht verwendet"/>
+<node CREATED="1563832501752" ID="ID_804764675" MODIFIED="1563832525842" TEXT="box-shadow == CSS3 special FX overlay rendering">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563832552048" ID="ID_1098912429" MODIFIED="1563832581748" TEXT="kann man das via Gtk::StyleContext &#xfc;berhaupt bekommen?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1563832588867" ID="ID_1957263564" MODIFIED="1563832601172" TEXT="ggfs. box-shadow: inset"/>
+<node CREATED="1563832602381" ID="ID_1407285230" MODIFIED="1563832622838" TEXT="k&#xf6;nnte auf den background wirken">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1563832147919" ID="ID_219847738" MODIFIED="1563832160686" TEXT="brauche zun&#xe4;chst Referenzpunkt">
+<node CREATED="1563832161893" ID="ID_1492294459" MODIFIED="1563832182991" TEXT="etwas, was regul&#xe4;r wie gew&#xfc;nscht gezeichnet wird"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1564495803795" ID="ID_936454608" MODIFIED="1564495828952">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      herausfinden, <i>warum </i>er solid gezeichnet wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1564496514126" ID="ID_1346070750" MODIFIED="1564496520743" TEXT="suche nach &quot;outline&quot;">
+<node CREATED="1564496521875" ID="ID_1983337712" MODIFIED="1564496542962" TEXT="Treffer in den GTK-Tests">
+<node CREATED="1564496527957" ID="ID_1175363915" MODIFIED="1564496537133" TEXT="da werden CSS-Files geparst">
+<node CREATED="1564496635695" ID="ID_118189793" MODIFIED="1564496644342" TEXT="outline-style: outset">
+<node CREATED="1564497490473" ID="ID_758595365" MODIFIED="1564497508338" TEXT="outline ist ein zus&#xe4;tzlicher Rahmen, der keinen Platz einnimmt"/>
+<node CREATED="1564497509220" ID="ID_44303071" MODIFIED="1564497575901" TEXT="typischerweise wird er verwendet f&#xfc;r Zugriff via TAB-Key auf Links oder Form-Controls"/>
+<node CREATED="1564497583437" ID="ID_351582783" MODIFIED="1564497684260" TEXT="viele Designer setzten die Outline irrt&#xfc;mlicherwesise auf 0">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      irrt&#252;mlich, denn
+    </p>
+    <ul>
+      <li>
+        per default ist outline:none
+      </li>
+      <li>
+        outline wird nur gesetzt, wenn ein Element fokus bekommt
+      </li>
+      <li>
+        Outline liegt um die Border, nimmt aber selber <i>keinen</i>&#160;Platz ein (sondern ist ein overlay)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1564497610951" ID="ID_1607000015" MODIFIED="1564497691853" TEXT="flat-style Wahn">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+</node>
+<node CREATED="1564496645266" ID="ID_1195524517" MODIFIED="1564496648014" TEXT="aber">
+<node CREATED="1564496671939" ID="ID_447845332" MODIFIED="1564496677574">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      g {
+    </p>
+    <p>
+      &#160;&#160;border-bottom-style: outset;
+    </p>
+    <p>
+      &#160;&#160;border-left-style: outset;
+    </p>
+    <p>
+      &#160;&#160;border-right-style: outset;
+    </p>
+    <p>
+      &#160;&#160;border-top-style: outset;
+    </p>
+    <p>
+      }
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1564498530277" ID="ID_58219828" MODIFIED="1564498535936" TEXT="gtkrenderborder.c">
+<node CREATED="1564498554598" ID="ID_956944933" MODIFIED="1564498559099" TEXT="render_border()"/>
+<node CREATED="1564498579543" ID="ID_1385373992" MODIFIED="1564498592608" TEXT="hart getcodete Logik, ziemlich brachial"/>
+<node CREATED="1564498560001" ID="ID_621726316" MODIFIED="1564498730015" TEXT="macht bei outset/inset jewils 2 Seiten um den Faktor 1.8 heller">
+<arrowlink COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="120;7;" ID="Arrow_ID_1051090636" STARTARROW="None" STARTINCLINATION="-30;75;"/>
+</node>
+</node>
+</node>
+<node CREATED="1564497891485" ID="ID_1183787016" MODIFIED="1564498763570" TEXT="Ha! man mu&#xdf; irgendwo eine Farbe angeben">
+<linktarget COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="120;7;" ID="Arrow_ID_1051090636" SOURCE="ID_621726316" STARTARROW="None" STARTINCLINATION="-30;75;"/>
+<linktarget COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="278;16;" ID="Arrow_ID_1462879108" SOURCE="ID_1801143265" STARTARROW="None" STARTINCLINATION="344;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1564497939401" ID="ID_1944950668" MODIFIED="1564497957953" TEXT="...dann wird das outset/inset durchaus sichtbar"/>
+</node>
+<node CREATED="1563637262355" ID="ID_1832765583" MODIFIED="1563637269566" TEXT="mehrere Rahmen zeichnen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1563637271393" ID="ID_1653388358" MODIFIED="1563637278534" TEXT="bringt nix und ist zweifelhaft"/>
+<node CREATED="1563637280568" ID="ID_1565457661" MODIFIED="1563637293442" TEXT="denn die sind trotzedem solid"/>
+</node>
+<node CREATED="1563637301028" ID="ID_1115957778" MODIFIED="1563637311488" TEXT="dann doch komplett selber zeichnen">
+<node CREATED="1563637334256" ID="ID_366744106" MODIFIED="1563637366006" TEXT="CSS kann dann aber den Slope-Stil nicht mehr steuern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil er dann mehr oder weniger hartverdrahtet ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1563734827469" ID="ID_1948656771" MODIFIED="1563734843479" TEXT="man k&#xf6;nnte allerdings das Verhalten von GTK im eigenen Code nachahmen"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1561742203636" ID="ID_1959492243" MODIFIED="1561742205504" TEXT="Rampen">
@@ -22571,9 +22836,84 @@
 <node CREATED="1563112489001" ID="ID_1802227725" MODIFIED="1563112511333" TEXT="...und dadurch die Oberseite verdecken"/>
 <node CREATED="1563636755968" ID="ID_145032855" MODIFIED="1563636768594" TEXT="funktioniert... aber zwei Probleme">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1563636771101" ID="ID_273130535" MODIFIED="1563636785063" TEXT="kann die Rahmenst&#xe4;rke nicht manipulieren"/>
-<node CREATED="1563636787971" ID="ID_362681600" MODIFIED="1563636865542" TEXT="Rahmen wird solid gezeichnet, nicht outset">
-<arrowlink COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-54;21;" ID="Arrow_ID_1840813206" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
+<node CREATED="1563636787971" ID="ID_362681600" MODIFIED="1564499261298" TEXT="Rahmen wird solid gezeichnet, nicht outset">
+<arrowlink COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-88;45;" ID="Arrow_ID_1840813206" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
+<node CREATED="1564498321121" ID="ID_277450056" MODIFIED="1564498326722" TEXT="stimmt gar nicht">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1564498328208" ID="ID_1075781781" MODIFIED="1564498334513" TEXT="man mu&#xdf; nur eine Farbe setzen"/>
+<node CREATED="1564498560001" ID="ID_1801143265" MODIFIED="1564498763570" TEXT="man mu&#xdf; nur eine Farbe setzen">
+<arrowlink COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="278;16;" ID="Arrow_ID_1462879108" STARTARROW="None" STARTINCLINATION="344;0;"/>
+</node>
+</node>
+<node CREATED="1563636771101" ID="ID_273130535" MODIFIED="1563636785063" TEXT="kann die Rahmenst&#xe4;rke nicht manipulieren">
+<node CREATED="1564499265111" ID="ID_1439210086" MODIFIED="1564499270258" TEXT="ist wohl nicht vorgesehen">
+<node CREATED="1564499271812" ID="ID_287796510" MODIFIED="1564499291455" TEXT="getBorder() macht eine Kopie des Rect"/>
+<node CREATED="1564500049627" ID="ID_422878118" MODIFIED="1564500092094" TEXT="auch die unterliegenden CssValues sind immutable">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und mehrfach gekapselt.
+    </p>
+    <p>
+      Schaut alles so aus, als sollte man da nicht rumpfuschen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1564499293683" ID="ID_1091998085" MODIFIED="1564499307564" TEXT="vmtl. sollte man einen CssProvider hinzuf&#xfc;gen">
+<node CREATED="1564499312280" ID="ID_596172178" MODIFIED="1564499349741" TEXT="StyleContext::add_provider"/>
+</node>
+</node>
+<node CREATED="1564500098305" ID="ID_1609602378" MODIFIED="1564500104383" TEXT="sehe 2 L&#xf6;sungen">
+<node CREATED="1564500107072" ID="ID_1324066228" MODIFIED="1564500523208" TEXT="CssProvider on-the-fly hinzuf&#xfc;gen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1564500128300" ID="ID_1227815048" MODIFIED="1564500135869" TEXT="mit berechneter border-size"/>
+</node>
+<node CREATED="1564500138401" ID="ID_1779259370" MODIFIED="1564500527159" TEXT="spezielle Klassen definieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1564500156340" ID="ID_813184011" MODIFIED="1564500184980" TEXT="track-slope-deep2"/>
+<node CREATED="1564500156340" ID="ID_901585189" MODIFIED="1564500203009" TEXT="track-slope-deep3"/>
+<node CREATED="1564500156340" ID="ID_1965249671" MODIFIED="1564500208577" TEXT="track-slope-deep4"/>
+<node CREATED="1564500220303" ID="ID_1305054039" MODIFIED="1564500229334" TEXT="track-slope-verydeep"/>
+</node>
+</node>
+<node CREATED="1564500530497" ID="ID_552810958" MODIFIED="1564500541248" TEXT="die 2.L&#xf6;sung erscheint mir angemessener">
+<node CREATED="1564500542648" ID="ID_1923715160" MODIFIED="1564500554477" TEXT="weil damit der Designer freie Hand hat"/>
+<node CREATED="1564500576627" ID="ID_979278974" MODIFIED="1564500613622" TEXT="weil das Hinzuf&#xfc;gen von Klassen eine vorgesehene Operation ist"/>
+<node CREATED="1564500614693" ID="ID_178343581" MODIFIED="1564500683747" TEXT="Hinzuf&#xfc;gen eines CssProvider ist eine aufwendige Sache">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da wird ggfs eine neue CSS-Kaskade erstellt, oder die bestehende Kaskade erweitert.
+    </p>
+    <p>
+      Hierf&#252;r werden Eintr&#228;ge in Arrays verschoben.
+    </p>
+    <p>
+      Schlie&#223;lich wird &#252;ber die ganze Kaskade iteriert, und die Werte werden aufgesammelt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564506897338" ID="ID_76451655" MODIFIED="1564506907193" TEXT="Funktioniert(noch) nicht">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1564506908498" ID="ID_1703067003" MODIFIED="1564507000794" TEXT="mit style-&gt;context_save() bekomme ich einen leeren Kontext">
+<node CREATED="1564507004091" ID="ID_919457962" MODIFIED="1564507008436" TEXT="wirklich?"/>
+<node CREATED="1564507009226" ID="ID_922446522" MODIFIED="1564507020458" TEXT="jedenfalls ist nun border-with = 0"/>
+</node>
+<node CREATED="1564507022462" ID="ID_517812512" MODIFIED="1564507041555" TEXT="mit style-&gt;add_class() &#xe4;ndert sich die border-with nicht"/>
+</node>
 </node>
 </node>
 </node>
@@ -30925,7 +31265,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1502453753155" ID="ID_89098030" MODIFIED="1533303965804" TEXT="Schritt-2">
+<node CREATED="1502453753155" ID="ID_89098030" MODIFIED="1564495786621" TEXT="Schritt-2">
 <linktarget COLOR="#bdbad3" DESTINATION="ID_89098030" ENDARROW="Default" ENDINCLINATION="600;-1189;" ID="Arrow_ID_554743885" SOURCE="ID_1584846573" STARTARROW="None" STARTINCLINATION="1459;870;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1502453814499" ID="ID_727706359" MODIFIED="1533608413997" TEXT="Puffer-Ansatz...">

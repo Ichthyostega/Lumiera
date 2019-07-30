@@ -41,11 +41,23 @@
  */
   .timeline-page > .timeline-body fork.timeline {
     margin: 2ex 0;
-    border: 5px inset;
-    background-color: lime;
+    border: 5px inset IndianRed;
+    background-color: Lime;
 }
   fork.timeline frame.timeline.ruler {
     margin: 3ex 0;
-    border: 3px outset;
-    background-color: DarkCyan ;
+    border: 3px outset GoldenRod;
+    background-color: DarkCyan;
+}
+  .track-slope-deep2 {
+    border-width: 10px;
+}
+  .track-slope-deep3 {
+    border-width: 14px;
+}
+  .track-slope-deep4 {
+    border-width: 17px;
+}
+  .track-slope-verydeep {
+    border-width: 20px;
 }
