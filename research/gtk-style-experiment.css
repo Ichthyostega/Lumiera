@@ -1,0 +1,51 @@
+/*
+  gtk-style-experiment.css  -  investigate GTKs CSS implementation
+
+  Copyright (C)         Lumiera.org
+    2019,               Hermann Vosseler <Ichthyostega@web.de>
+
+  Styles and Graphics of the Lumiera GUI can be used and redistributed
+  under the the terms of the GNU General Public License version 2 or
+  above, or (at your option) under Creative Commons CC-By-SA.
+
+* ********************************************************/
+
+
+/* CSS stylesheet loaded by gtk-style-experiment.cpp on top of
+ * the system theme, with GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+ */
+
+
+
+
+/* ---------- Styles for Lumiera Widgets ---------- */
+
+
+/* ---------- Styles for special markup ---------- */
+
+
+/* special styling for the frame widget within the main window....
+ * This styling will be picked up by our custom drawing code
+ */
+  frame.experiment {
+    margin: 2ex 0;
+    border: 5px inset IndianRed;
+    background-color: Lime;
+}
+  fork.timeline frame.timeline.ruler {
+    margin: 3ex 0;
+    border: 3px outset GoldenRod;
+    background-color: DarkCyan;
+}
+  .track-slope-deep2 {
+    border-width: 10px;
+}
+  .track-slope-deep3 {
+    border-width: 14px;
+}
+  .track-slope-deep4 {
+    border-width: 17px;
+}
+  .track-slope-verydeep {
+    border-width: 20px;
+}

@@ -30,19 +30,43 @@
 
 
 #include "stage/gtk-base.hpp"
+#include "lib/searchpath.hpp"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
 
+#include <string>
+
+using util::cStr;
+using std::string;
 
 namespace research {
+  
+  namespace {
+    const string STYLESHEET_NAME{"gtk-style-experiment.css"};
+    const string RESOURCE_PATH{"$ORIGIN/gui"};
+    
+    const string CLASS_experiment{"experiment"};
+  }
+  
+  using CairoC = stage::PCairoContext const&;
+  using StyleC = stage::PStyleContext const&;
+  
+  using stage::PStyleContext;
   
   
   class Canvas
     : public Gtk::Layout
     {
-      bool shallDraw_;
+      bool shallDraw_       = false;
       bool recalcExtension_ = false;
       
+      StyleC style_;
+      
     public:
+      Canvas(StyleC refStyle)
+        : style_{refStyle}
+      { }
+      
       void adjustSize();
       void enableDraw (bool);
       
@@ -67,7 +91,11 @@ namespace research {
       Gtk::CheckButton toggleDraw_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
+      
+      PStyleContext pStyle_;
       Canvas canvas_;
+      
+      PStyleContext setupStyle();
       
       void experiment_1();
       void experiment_2();
@@ -78,11 +106,12 @@ namespace research {
   
   StyleTestPanel::StyleTestPanel()
     : Box{}
-    , twoParts_(Gtk::ORIENTATION_VERTICAL)
-    , buttons_()
-    , frame_("Gtk::StyleContext Experiments")
-    , scroller_()
-    , canvas_()
+    , twoParts_{Gtk::ORIENTATION_VERTICAL}
+    , buttons_{}
+    , frame_{"Gtk::StyleContext Experiments"}
+    , scroller_{}
+    , pStyle_{}
+    , canvas_{pStyle_}
     {
       twoParts_.pack_start(buttons_, Gtk::PACK_SHRINK);
       twoParts_.pack_start(frame_);
@@ -120,12 +149,38 @@ namespace research {
       scroller_.set_border_width(10);
       scroller_.add(canvas_);
       
+      frame_.get_style_context()->add_class(CLASS_experiment);
+      pStyle_ = setupStyle();
+      
       canvas_.adjustSize();
       
       // show everything....
       this->add(twoParts_);
       this->show_all();
     }
+  
+  
+  
+  PStyleContext
+  StyleTestPanel::setupStyle()
+  {
+    auto screen = Gdk::Screen::get_default();
+    auto css_provider = Gtk::CssProvider::create();
+    try
+      {
+        css_provider->load_from_path (lib::resolveModulePath (STYLESHEET_NAME, RESOURCE_PATH));
+      }
+    catch(Glib::Error const& failure)
+      {
+        WARN (stage, "Failure while loading stylesheet '%s': %s", cStr(STYLESHEET_NAME), cStr(failure.what()));
+      }
+    
+    Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
+                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    
+    return PStyleContext{};
+  }
+  
   
   
   void
@@ -183,7 +238,7 @@ namespace research {
   
   
   bool
-  Canvas::on_draw(Cairo::RefPtr<Cairo::Context> const& cox)
+  Canvas::on_draw(CairoC cox)
   {
     if (shallDraw_)
       {

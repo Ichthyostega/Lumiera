@@ -21,6 +21,7 @@ experiments = [ envR.Program('try', ['try.cpp'] + core)          #### to try out
               
               , envRGtk.Program('gtk-canvas-experiment', ['gtk-canvas-experiment.cpp', 'gtk-canvas-main.cpp'] + core)
               , envRGtk.Program('gtk-style-experiment',  ['gtk-style-experiment.cpp'] + core)
+              , env.GuiResource('gtk-style-experiment.css')
               ]
 
 #
