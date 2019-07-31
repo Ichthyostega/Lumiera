@@ -20,6 +20,7 @@ experiments = [ envR.Program('try', ['try.cpp'] + core)          #### to try out
               , envR.Program('clang-static-init', ['clang-static-init-1.cpp', 'clang-static-init-2.cpp'])
               
               , envRGtk.Program('gtk-canvas-experiment', ['gtk-canvas-experiment.cpp', 'gtk-canvas-main.cpp'] + core)
+              , envRGtk.Program('gtk-style-experiment',  ['gtk-style-experiment.cpp'] + core)
               ]
 
 #

@@ -22554,7 +22554,7 @@
 </node>
 </node>
 <node CREATED="1563636831797" ID="ID_506277754" MODIFIED="1563636834809" TEXT="Rahmen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563636836517" ID="ID_391875364" MODIFIED="1564495425061" TEXT="Problem: Rahmen werden solid gezeichnet">
+<node COLOR="#435e98" CREATED="1563636836517" ID="ID_391875364" MODIFIED="1564610494395" TEXT="Problem: Rahmen werden solid gezeichnet">
 <arrowlink COLOR="#d12e54" DESTINATION="ID_543934966" ENDARROW="Default" ENDINCLINATION="-135;0;" ID="Arrow_ID_1613504887" STARTARROW="None" STARTINCLINATION="44;-40;"/>
 <linktarget COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-88;45;" ID="Arrow_ID_1840813206" SOURCE="ID_362681600" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -22707,7 +22707,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1564495803795" ID="ID_936454608" MODIFIED="1564495828952">
+<node COLOR="#435e98" CREATED="1564495803795" ID="ID_936454608" MODIFIED="1564610487669">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -22719,6 +22719,7 @@
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="forward"/>
 <node CREATED="1564496514126" ID="ID_1346070750" MODIFIED="1564496520743" TEXT="suche nach &quot;outline&quot;">
 <node CREATED="1564496521875" ID="ID_1983337712" MODIFIED="1564496542962" TEXT="Treffer in den GTK-Tests">
 <node CREATED="1564496527957" ID="ID_1175363915" MODIFIED="1564496537133" TEXT="da werden CSS-Files geparst">
@@ -22805,7 +22806,8 @@
 <node CREATED="1563637271393" ID="ID_1653388358" MODIFIED="1563637278534" TEXT="bringt nix und ist zweifelhaft"/>
 <node CREATED="1563637280568" ID="ID_1565457661" MODIFIED="1563637293442" TEXT="denn die sind trotzedem solid"/>
 </node>
-<node CREATED="1563637301028" ID="ID_1115957778" MODIFIED="1563637311488" TEXT="dann doch komplett selber zeichnen">
+<node CREATED="1563637301028" ID="ID_1115957778" MODIFIED="1564610481386" TEXT="dann doch komplett selber zeichnen">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1563637334256" ID="ID_366744106" MODIFIED="1563637366006" TEXT="CSS kann dann aber den Slope-Stil nicht mehr steuern">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -22836,8 +22838,9 @@
 <node CREATED="1563112489001" ID="ID_1802227725" MODIFIED="1563112511333" TEXT="...und dadurch die Oberseite verdecken"/>
 <node CREATED="1563636755968" ID="ID_145032855" MODIFIED="1563636768594" TEXT="funktioniert... aber zwei Probleme">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1563636787971" ID="ID_362681600" MODIFIED="1564499261298" TEXT="Rahmen wird solid gezeichnet, nicht outset">
+<node COLOR="#435e98" CREATED="1563636787971" ID="ID_362681600" MODIFIED="1564610470751" TEXT="Rahmen wird solid gezeichnet, nicht outset">
 <arrowlink COLOR="#e04b45" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-88;45;" ID="Arrow_ID_1840813206" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1564498321121" ID="ID_277450056" MODIFIED="1564498326722" TEXT="stimmt gar nicht">
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -22846,7 +22849,26 @@
 <arrowlink COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="278;16;" ID="Arrow_ID_1462879108" STARTARROW="None" STARTINCLINATION="344;0;"/>
 </node>
 </node>
-<node CREATED="1563636771101" ID="ID_273130535" MODIFIED="1563636785063" TEXT="kann die Rahmenst&#xe4;rke nicht manipulieren">
+<node CREATED="1563636771101" ID="ID_273130535" MODIFIED="1564610460909" TEXT="kann die Rahmenst&#xe4;rke nicht manipulieren">
+<arrowlink COLOR="#cb487a" DESTINATION="ID_155787836" ENDARROW="Default" ENDINCLINATION="86;-182;" ID="Arrow_ID_1682426231" STARTARROW="None" STARTINCLINATION="187;-5;"/>
+</node>
+</node>
+</node>
+<node CREATED="1563112523511" ID="ID_1881724639" MODIFIED="1563112555503" TEXT="Idee-3">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1563112528094" ID="ID_1162030446" MODIFIED="1563112536377" TEXT="zu zeichnende Rahmen in einem Stack sammeln"/>
+<node CREATED="1563112537602" ID="ID_1896039320" MODIFIED="1563112551944" TEXT="...und dann am Ende auf einmal alle zeichnen"/>
+</node>
+</node>
+<node CREATED="1564610290631" HGAP="17" ID="ID_1710961419" MODIFIED="1564610301366" TEXT="Probleme bei der Umsetzung" VSHIFT="12">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610302597" ID="ID_840104433" MODIFIED="1564610324548" TEXT="sollte so zeichnen, da&#xdf; CSS3-Effekte wie box-shadow nutzbar sind">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1564610350719" ID="ID_1592146108" MODIFIED="1564610368016" TEXT="brauche L&#xf6;sung zum Steuern der Rahmenst&#xe4;rke">
+<node CREATED="1564610376639" ID="ID_1472226314" MODIFIED="1564610394741" TEXT="...weil sich diese dynamisch aus der Tiefe der Verschachtelung ergibt"/>
+<node CREATED="1564610401372" ID="ID_155787836" MODIFIED="1564610460909" TEXT="geht nicht numittelbar">
+<linktarget COLOR="#cb487a" DESTINATION="ID_155787836" ENDARROW="Default" ENDINCLINATION="86;-182;" ID="Arrow_ID_1682426231" SOURCE="ID_273130535" STARTARROW="None" STARTINCLINATION="187;-5;"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1564499265111" ID="ID_1439210086" MODIFIED="1564499270258" TEXT="ist wohl nicht vorgesehen">
 <node CREATED="1564499271812" ID="ID_287796510" MODIFIED="1564499291455" TEXT="getBorder() macht eine Kopie des Rect"/>
 <node CREATED="1564500049627" ID="ID_422878118" MODIFIED="1564500092094" TEXT="auch die unterliegenden CssValues sind immutable">
@@ -22862,8 +22884,7 @@
       Schaut alles so aus, als sollte man da nicht rumpfuschen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1564499293683" ID="ID_1091998085" MODIFIED="1564499307564" TEXT="vmtl. sollte man einen CssProvider hinzuf&#xfc;gen">
 <node CREATED="1564499312280" ID="ID_596172178" MODIFIED="1564499349741" TEXT="StyleContext::add_provider"/>
@@ -22901,8 +22922,7 @@
       Schlie&#223;lich wird &#252;ber die ganze Kaskade iteriert, und die Werte werden aufgesammelt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
@@ -22915,12 +22935,15 @@
 <node CREATED="1564507022462" ID="ID_517812512" MODIFIED="1564507041555" TEXT="mit style-&gt;add_class() &#xe4;ndert sich die border-with nicht"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610513626" ID="ID_387755678" MODIFIED="1564610522406" TEXT="Verhalten des Gtk::StyleContext">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610523846" ID="ID_1167026908" MODIFIED="1564610546918" TEXT="verh&#xe4;lt sich komisch, und anders als dokumentiert">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610549788" ID="ID_1115307821" MODIFIED="1564610567313" TEXT="Fokussierte Untersuchung (Research)">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1563112523511" ID="ID_1881724639" MODIFIED="1563112555503" TEXT="Idee-3">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1563112528094" ID="ID_1162030446" MODIFIED="1563112536377" TEXT="zu zeichnende Rahmen in einem Stack sammeln"/>
-<node CREATED="1563112537602" ID="ID_1896039320" MODIFIED="1563112551944" TEXT="...und dann am Ende auf einmal alle zeichnen"/>
 </node>
 </node>
 </node>

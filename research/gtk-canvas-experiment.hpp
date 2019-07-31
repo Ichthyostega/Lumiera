@@ -105,10 +105,6 @@ namespace demo {
     : public Gtk::Box
     {
     public:
-      /**
-       * @param panel_manager The owner panel manager widget.
-       * @param dock_item The GdlDockItem that will host this panel.
-       */
       CanvasDemoPanel();
       
       
