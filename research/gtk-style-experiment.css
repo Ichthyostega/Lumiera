@@ -28,14 +28,9 @@
  * This styling will be picked up by our custom drawing code
  */
   frame.experiment {
-    margin: 2ex 0;
+    margin: 4ex 0;
     border: 5px inset IndianRed;
     background-color: Lime;
-}
-  fork.timeline frame.timeline.ruler {
-    margin: 3ex 0;
-    border: 3px outset GoldenRod;
-    background-color: DarkCyan;
 }
   .track-slope-deep2 {
     border-width: 10px;

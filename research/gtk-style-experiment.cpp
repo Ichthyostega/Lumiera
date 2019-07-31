@@ -25,6 +25,14 @@
  ** Especially the goal is to _grab some existing CSS styling_ with a Gtk::StyleContext
  ** and use this for custom drawing. Within Lumiera, we use custom drawing for some parts
  ** of the Timeline UI presentation.
+ ** 
+ ** ## Setup for investigation
+ ** - add a separate dummy Gtk::Frame widget as `testFrame_`
+ ** - apply custom styling to that frame, by virtue of a CSS class '.experiment'
+ ** - pick up the Gtk::StyleContext of that `testFrame_`
+ ** - use this style context to draw a custom frame onto the canvas
+ ** - control extension of that custom drawing through the top margin CSS setting of testFrame_
+ ** 
  ** @see stage::timeline::BodyCanvasWidget
  */
 
@@ -89,13 +97,14 @@ namespace research {
       Gtk::Button button_1_;
       Gtk::Button button_2_;
       Gtk::CheckButton toggleDraw_;
+      Gtk::Frame testFrame_;
       Gtk::Frame frame_;
       Gtk::ScrolledWindow scroller_;
       
       PStyleContext pStyle_;
       Canvas canvas_;
       
-      PStyleContext setupStyle();
+      PStyleContext setupStyle(Gtk::Widget const&);
       
       void experiment_1();
       void experiment_2();
@@ -108,6 +117,7 @@ namespace research {
     : Box{}
     , twoParts_{Gtk::ORIENTATION_VERTICAL}
     , buttons_{}
+    , testFrame_{"testFrame"}
     , frame_{"Gtk::StyleContext Experiments"}
     , scroller_{}
     , pStyle_{}
@@ -133,6 +143,10 @@ namespace research {
                   mem_fun(*this, &StyleTestPanel::experiment_2));
       buttons_.add(button_2_);
       
+      // a Gtk::Frame widget used as source for our StyleContext
+      testFrame_.get_style_context()->add_class(CLASS_experiment);
+      buttons_.add(testFrame_);
+      
       toggleDraw_.set_label("draw");
       toggleDraw_.signal_clicked().connect(
                   [this]() {
@@ -149,8 +163,7 @@ namespace research {
       scroller_.set_border_width(10);
       scroller_.add(canvas_);
       
-      frame_.get_style_context()->add_class(CLASS_experiment);
-      pStyle_ = setupStyle();
+      pStyle_ = setupStyle (testFrame_);
       
       canvas_.adjustSize();
       
@@ -162,7 +175,7 @@ namespace research {
   
   
   PStyleContext
-  StyleTestPanel::setupStyle()
+  StyleTestPanel::setupStyle (Gtk::Widget const& srcWidget)
   {
     auto screen = Gdk::Screen::get_default();
     auto css_provider = Gtk::CssProvider::create();
@@ -178,7 +191,7 @@ namespace research {
     Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     
-    return PStyleContext{};
+    return srcWidget.get_style_context();
   }
   
   
@@ -261,6 +274,18 @@ namespace research {
         cox->line_to(extH, extV);
         cox->stroke();
         cox->restore();
+        
+        //////////////////TEST drawing via Gtk::StyleContext
+        {
+          int marT = style_->get_margin().get_top();
+          style_->render_frame (cox
+                               ,20    // left start of the rectangle
+                               ,20    // top of the rectangle
+                               ,50    // width of the area
+                               ,marT  // height to fill
+                               );
+        }
+        //////////////////TEST drawing via Gtk::StyleContext
         
         // cause child widgets to be redrawn
         bool event_is_handled = Gtk::Layout::on_draw(cox);
