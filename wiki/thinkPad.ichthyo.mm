@@ -22942,6 +22942,90 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610549788" ID="ID_1115307821" MODIFIED="1564610567313" TEXT="Fokussierte Untersuchung (Research)">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1564838802098" ID="ID_529304410" MODIFIED="1564838822103" TEXT="gtk-canvas-eperiment kopiert und zusammengedampft">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1564838825559" ID="ID_325876038" MODIFIED="1564838846585" TEXT="greife aber hier einen StyleContext von einem real existierenden Widget ab!">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1564838864770" ID="ID_1455456623" MODIFIED="1564838879910" TEXT="Erkenntnis: es war ein Cascading-Problem">
+<icon BUILTIN="forward"/>
+<node CREATED="1564838892422" ID="ID_1063402707" MODIFIED="1564838910760" TEXT="Expliziter Selektor wiegt mehr als generischer Selektor"/>
+<node CREATED="1564838932673" ID="ID_1845439133" MODIFIED="1564839843544" TEXT="Einsicht nebeinbei: sehe schon, warum die Designer immer CSS vergewaltigen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Idee mit dem Cascading funktioniert n&#228;mlich nur, wenn man die Oberfl&#228;che <i>explizit</i>&#160;und <i>bewu&#223;t</i>
+    </p>
+    <p>
+      nach einem Struktur-Schema aufbaut. Dies erfordert eine gewisse zus&#228;tzliche geistige Spannkraft.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Typisches Beispiel f&#252;r mich ist eine Barocke Fassade (mit denen ich mich
+    </p>
+    <p>
+      in einem anderen Projekt grade besch&#228;ftige): Auf den ersten Blick sehen die &#252;berbordend
+    </p>
+    <p>
+      und &#252;berwuchert aus, aber wenn man genau hinschaut, ist jedes kleinste Detail
+    </p>
+    <p>
+      aus einem System abgeleitet -- genau wie es dem damaligen Zeitgeist der Aufkl&#228;rung entspricht.
+    </p>
+    <p>
+      Ein barocker Baumeister w&#252;rde niemals an einem einzelnen Fenster herum-tweaken, weil es sich irgendwie besser anf&#252;hlt.
+    </p>
+    <p>
+      Wenn etwas nicht ausgewogen rauskommt, dann wird eben das gesamte System nachjustiert.
+    </p>
+    <p>
+      Und genau das ist es, was die geistige Spannweite erfordert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Der Pragmatiger sagt, dann mach halt das verfickte Klofenster hinten links breiter und gut is.
+    </p>
+    <p>
+      Das w&#252;rde zwar ein lokales Problem praktisch l&#246;sen, w&#228;re aber unorganisch,
+    </p>
+    <p>
+      weil es nicht mehr aus dem Flu&#223; des Systems im Ganzen folgt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und mit CSS-Selektoren und dem Cascading verh&#228;lt es sich genau entsprechend.
+    </p>
+    <p>
+      Wenn man einmal anf&#228;ngt, an irgend einem Detail herumzufummeln, weil es sich irgendewie so anf&#252;hlt,
+    </p>
+    <p>
+      oder der Kunde es so will, dann ist man ganz schnell an dem Punk, wo Selektoren nicht mehr greifen,
+    </p>
+    <p>
+      und nur noch !important hilft. Und an der Stelle kommt dann der Praktiker, und pflastert eben
+    </p>
+    <p>
+      jedes Element mit einem eigenen Selektor zu, so da&#223; man ungestraft &#252;berall herumfummeln kan.
+    </p>
+    <p>
+      Und der Oberpragmatiker generiert den ganzen M&#252;llhaufen dann per SASS order SCSS
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -44582,6 +44666,63 @@
 </node>
 <node CREATED="1562855132568" ID="ID_936625427" MODIFIED="1562855138585" TEXT="kann nicht kopiert werden">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1564838378949" ID="ID_680016998" MODIFIED="1564838383463" TEXT="Zeichenfunktionen">
+<node CREATED="1564838405138" ID="ID_366839977" MODIFIED="1564838405138" TEXT="render_background"/>
+<node CREATED="1564838414079" ID="ID_1075533829" MODIFIED="1564838414079" TEXT="render_frame">
+<node CREATED="1564838433119" ID="ID_803718694" MODIFIED="1564838440607" TEXT="Parameter definieren die Bounding-Box"/>
+<node CREATED="1564838441724" ID="ID_924305582" MODIFIED="1564838548784" TEXT="gezeichnet wird mit der effektiven border-width">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...die sich aus den CSS-Selektoren ergibt, gem&#228;&#223; dem StylePath f&#252;r diesen StyleContext,
+    </p>
+    <p>
+      <i>plus zuz&#252;glich</i>&#160;den lokal, explizit hinzugef&#252;gten Classes und Modifiers, welche auch
+    </p>
+    <p>
+      automatisch eine h&#246;here Priorit&#228;t haben, als das, was sich aus den Path-match ergibt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1564838554448" ID="ID_1827131254" MODIFIED="1564838782372" TEXT="M&#xfc;ll, wenn die gegebene Bounding-Box zu klein ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Bounding-Box meint ja, den effektiven &#228;u&#223;eren Umfang.
+    </p>
+    <p>
+      GTK zeichnet also von diesem ausgehend nach Innen.
+    </p>
+    <p>
+      Wenn die Bounding-Box kleiner ist als die effektiven border-width, und zwar jeweils zweimal pro Richtung
+    </p>
+    <p>
+      (oben+unten == H&#246;he..), dann zeichnet GTK ggfs &#252;ber die BoundingBox hinaus,
+    </p>
+    <p>
+      typischerweise nach Oben. Und nat&#252;rlich sieht das Ganze dann auch nicht mehr wie ein frame aus.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Man mu&#223; also gen&#252;gend Platz allozieren f&#252;r border-top-width + border-bottom-width + gew&#252;nschter Content!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1537575973946" ID="ID_1131360657" MODIFIED="1557498707238" TEXT="StyleProvider">

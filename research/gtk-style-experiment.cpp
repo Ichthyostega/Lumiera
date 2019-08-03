@@ -40,12 +40,14 @@
 #include "stage/gtk-base.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 
 using util::cStr;
+using util::join;
 using std::string;
 
 namespace research {
@@ -55,6 +57,7 @@ namespace research {
     const string RESOURCE_PATH{"$ORIGIN/gui"};
     
     const string CLASS_experiment{"experiment"};
+    const string CLASS_slopeDeep1{"track-slope-deep1"};
     
     string
     slopeClassName(int depth)
@@ -95,6 +98,7 @@ namespace research {
       int xBorderSiz = 1;
       int xObservedSize = -1;
       string xObservedPath;
+      string xObservedClzz;
       
     private:
       virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
@@ -163,6 +167,7 @@ namespace research {
       
       // a Gtk::Frame widget used as source for our StyleContext
       testFrame_.get_style_context()->add_class(CLASS_experiment);
+      testFrame_.get_style_context()->add_class(CLASS_slopeDeep1);
       buttons_.add(testFrame_);
       
       toggleDraw_.set_label("draw");
@@ -209,7 +214,9 @@ namespace research {
     Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     
-    return srcWidget.get_style_context();
+    auto style = srcWidget.get_style_context();
+//  style->add_class(slopeClassName(2));
+    return style;
   }
   
   
@@ -228,8 +235,8 @@ namespace research {
   {
     frame_.set_label("Experiment 2... DUMP");
     
-    cout << "xBorderSize = "<<canvas_.xBorderSiz <<endl;
-    cout << "xClass      = "<<slopeClassName(canvas_.xBorderSiz) <<endl;
+    cout << "xBorderSize = "<<canvas_.xBorderSiz    <<endl;
+    cout << "xClass      = "<<canvas_.xObservedClzz <<endl;
     cout << "style.path: " << canvas_.xObservedPath <<endl;
     cout << "style.border.top = " << canvas_.xObservedSize <<endl;
     cout << "................\n\n";
@@ -313,11 +320,14 @@ namespace research {
           
           xObservedSize = style_->get_border().get_top();
           xObservedPath = string{style_->get_path().to_string()};
+          xObservedClzz = join(style_->list_classes(), " ");
+          
+          int height = marT + 2 * xObservedSize;
           style_->render_frame (cox
-                               ,20    // left start of the rectangle
-                               ,20    // top of the rectangle
-                               ,50    // width of the area
-                               ,marT  // height to fill
+                               ,20     // left start of the rectangle
+                               ,20     // top of the rectangle
+                               ,50     // width of the area
+                               ,height // height to fill
                                );
           
           if (xBorderSiz > 1) {

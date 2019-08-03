@@ -174,10 +174,10 @@ namespace timeline {
                                   ,h + frameT + frameB
                                   );
             styleR_->render_background (cox_
-                                       ,visible_.b       // left start of the rectangle
-                                       ,line_+frameT     // top of the rectangle
-                                       ,visible_.delta() // width of the area
-                                       ,h                // height to fill
+                                       ,visible_.b       // Left Start Of The Rectangle
+                                       ,line_+frameT     // Top Of The Rectangle
+                                       ,visible_.delta() // Width Of The Area
+                                       ,h                // Height To Fill
                                        );
             line_ += h + frameT + frameB;
           }
@@ -204,10 +204,10 @@ namespace timeline {
           {
             int slopeWidth = style_->get_border().get_top();
             style_->render_frame (cox_
-                                 ,visible_.b
-                                 ,line_
-                                 ,visible_.delta()
-                                 ,2*slopeWidth
+                                 ,visible_.b       // left start of the rectangle
+                                 ,line_            // top of the rectangle
+                                 ,visible_.delta() // width of the area
+                                 ,2*slopeWidth     // height to fill
                                  );
             line_ += slopeWidth;
           }

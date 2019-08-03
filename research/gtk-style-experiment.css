@@ -29,8 +29,12 @@
  */
   frame.experiment {
     margin: 4ex 0;
-    border: 5px inset IndianRed;
+    border-style: inset;
+    border-color: IndianRed;
     background-color: Lime;
+}
+  .track-slope-deep1 {
+    border-width: 5px;
 }
   .track-slope-deep2 {
     border-width: 10px;
