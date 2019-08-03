@@ -39,6 +39,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "lib/searchpath.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
@@ -54,6 +55,19 @@ namespace research {
     const string RESOURCE_PATH{"$ORIGIN/gui"};
     
     const string CLASS_experiment{"experiment"};
+    
+    string
+    slopeClassName(int depth)
+    {
+      switch (depth)
+        {
+          case 1: return "track-slope-deep1";
+          case 2: return "track-slope-deep2";
+          case 3: return "track-slope-deep3";
+          case 4: return "track-slope-deep4";
+          default:return "track-slope-verydeep";
+        }
+    }
   }
   
   using CairoC = stage::PCairoContext const&;
@@ -77,6 +91,10 @@ namespace research {
       
       void adjustSize();
       void enableDraw (bool);
+      
+      int xBorderSiz = 1;
+      int xObservedSize = -1;
+      string xObservedPath;
       
     private:
       virtual bool on_draw (Cairo::RefPtr<Cairo::Context> const&)  override;
@@ -200,7 +218,7 @@ namespace research {
   StyleTestPanel::experiment_1()
   {
     frame_.set_label("Experiment 1... GROW");
-    
+    canvas_.xBorderSiz += 1;
     canvas_.adjustSize();
   }
   
@@ -209,6 +227,13 @@ namespace research {
   StyleTestPanel::experiment_2()
   {
     frame_.set_label("Experiment 2... DUMP");
+    
+    cout << "xBorderSize = "<<canvas_.xBorderSiz <<endl;
+    cout << "xClass      = "<<slopeClassName(canvas_.xBorderSiz) <<endl;
+    cout << "style.path: " << canvas_.xObservedPath <<endl;
+    cout << "style.border.top = " << canvas_.xObservedSize <<endl;
+    cout << "................\n\n";
+    
 //    canvas_.adjustSize();
   }
 
@@ -245,6 +270,8 @@ namespace research {
       if (not recalcExtension_) return;
       
       uint extH=200, extV=200;
+      // ADD HERE: Code do find extension of the canvas dynamically...
+      //
       recalcExtension_ = false;
       set_size (extH, extV);
   }
@@ -278,12 +305,24 @@ namespace research {
         //////////////////TEST drawing via Gtk::StyleContext
         {
           int marT = style_->get_margin().get_top();
+          
+          if (xBorderSiz > 1) {
+            style_->context_save();
+            style_->add_class(slopeClassName(xBorderSiz));            
+          }
+          
+          xObservedSize = style_->get_border().get_top();
+          xObservedPath = string{style_->get_path().to_string()};
           style_->render_frame (cox
                                ,20    // left start of the rectangle
                                ,20    // top of the rectangle
                                ,50    // width of the area
                                ,marT  // height to fill
                                );
+          
+          if (xBorderSiz > 1) {
+            style_->context_restore();
+          }
         }
         //////////////////TEST drawing via Gtk::StyleContext
         
