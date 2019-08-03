@@ -214,7 +214,11 @@ namespace research {
     Gtk::StyleContext::add_provider_for_screen (screen, css_provider,
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     
-    auto style = srcWidget.get_style_context();
+//  auto style = srcWidget.get_style_context();
+    
+    Gtk::WidgetPath path = srcWidget.get_path();
+    PStyleContext style = Gtk::StyleContext::create();
+    style->set_path(path);
 //  style->add_class(slopeClassName(2));
     return style;
   }
