@@ -22866,7 +22866,7 @@
 </node>
 <node CREATED="1564610350719" ID="ID_1592146108" MODIFIED="1564610368016" TEXT="brauche L&#xf6;sung zum Steuern der Rahmenst&#xe4;rke">
 <node CREATED="1564610376639" ID="ID_1472226314" MODIFIED="1564610394741" TEXT="...weil sich diese dynamisch aus der Tiefe der Verschachtelung ergibt"/>
-<node CREATED="1564610401372" ID="ID_155787836" MODIFIED="1564610460909" TEXT="geht nicht numittelbar">
+<node CREATED="1564610401372" ID="ID_155787836" MODIFIED="1564840644957" TEXT="geht nicht unmittelbar">
 <linktarget COLOR="#cb487a" DESTINATION="ID_155787836" ENDARROW="Default" ENDINCLINATION="86;-182;" ID="Arrow_ID_1682426231" SOURCE="ID_273130535" STARTARROW="None" STARTINCLINATION="187;-5;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1564499265111" ID="ID_1439210086" MODIFIED="1564499270258" TEXT="ist wohl nicht vorgesehen">
@@ -22940,8 +22940,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610523846" ID="ID_1167026908" MODIFIED="1564610546918" TEXT="verh&#xe4;lt sich komisch, und anders als dokumentiert">
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610549788" ID="ID_1115307821" MODIFIED="1564610567313" TEXT="Fokussierte Untersuchung (Research)">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610549788" ID="ID_1115307821" MODIFIED="1564840577531" TEXT="Fokussierte Untersuchung (Research)">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1564838802098" ID="ID_529304410" MODIFIED="1564838822103" TEXT="gtk-canvas-eperiment kopiert und zusammengedampft">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -23026,6 +23026,22 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841527588" ID="ID_1377435126" MODIFIED="1564841582490" TEXT="TODO: Untersuchung context_save() auf einem kopierten / frei konstruierten StyleContext">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841584180" ID="ID_1444331441" MODIFIED="1564841601195" TEXT="TODO: Untersuchung wie box-shadow gerendert wird">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1564840511187" ID="ID_1756129968" MODIFIED="1564840563824" TEXT="Fazit-1">
+<icon BUILTIN="forward"/>
+<node CREATED="1564840516803" ID="ID_1696178790" MODIFIED="1564840530729" TEXT="Steuerung der Rahmenbreite &#xfc;ber klassen funktioniert durchaus"/>
+<node CREATED="1564840531905" ID="ID_1757725296" MODIFIED="1564840552442" TEXT="man mu&#xdf; nur die Klassen sinnvoll strukturieren, so da&#xdf; der Selektor greift"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564840587025" ID="ID_1659624942" MODIFIED="1564840662973" TEXT="style-&gt;context_save() funktioneriert dennoch nicht">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1564840675682" ID="ID_1503353101" MODIFIED="1564840686319" TEXT="border-width == 0"/>
+<node CREATED="1564840688620" ID="ID_1175662942" MODIFIED="1564840695486" TEXT="Rahmen wird nicht mehr gezeichnet"/>
 </node>
 </node>
 </node>

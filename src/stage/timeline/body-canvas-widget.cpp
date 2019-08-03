@@ -82,11 +82,11 @@ namespace timeline {
     {
       switch (depth)
         {
-          case 1: return "track-slope-deep1";
-          case 2: return "track-slope-deep2";
-          case 3: return "track-slope-deep3";
-          case 4: return "track-slope-deep4";
-          default:return "track-slope-verydeep";
+          case 1: return string{CLASS_slope_deep1};
+          case 2: return string{CLASS_slope_deep2};
+          case 3: return string{CLASS_slope_deep3};
+          case 4: return string{CLASS_slope_deep4};
+          default:return string{CLASS_slope_verydeep};
         }
     }
     
@@ -202,6 +202,7 @@ namespace timeline {
         void
         open()  override
           {
+            style_->add_class (slopeClassName (1));
             int slopeWidth = style_->get_border().get_top();
             style_->render_frame (cox_
                                  ,visible_.b       // left start of the rectangle
@@ -209,6 +210,7 @@ namespace timeline {
                                  ,visible_.delta() // width of the area
                                  ,2*slopeWidth     // height to fill
                                  );
+            style_->remove_class (slopeClassName(1));
             line_ += slopeWidth;
           }
         
@@ -218,13 +220,9 @@ namespace timeline {
         close (uint n)  override
           {
 //            style_->context_save();
-            style_->add_class(slopeClassName(n));
-//            style_->invalidate();
-//            string clzzs;
-//            for (auto& clzz : style_->list_classes())
-//              clzzs += "."+clzz;
-//            string path = style_->get_path().to_string();
-            int slopeWidth = 5*style_->get_border().get_bottom();
+            style_->add_class (slopeClassName(n));
+            style_->invalidate();
+            int slopeWidth = style_->get_border().get_bottom();
             INFO(stage, "n=%d class=%s  -->slopeWidth=%d", n, util::cStr(slopeClassName(n)), slopeWidth);
             style_->render_frame_gap(cox_
                                  ,visible_.b
@@ -232,11 +230,12 @@ namespace timeline {
                                  ,line_ 
                                  ,visible_.delta()
                                  ,slopeWidth
+                                            * 5   ////////////////////////////////////////TODO: visual debugging
                                  ,Gtk::PositionType::POS_TOP
                                  ,visible_.b
                                  ,visible_.e
                                  );
-            style_->remove_class(slopeClassName(n));
+            style_->remove_class (slopeClassName(n));
 //            style_->context_restore();
             line_ += slopeWidth;
           }
