@@ -42,15 +42,33 @@ namespace Glib {
 }
 namespace stage {
   
-  using lib::Literal;
+  using lib::Literal;  ///////TODO clarify if we want to use Symbol (interned string constant) here.
+  using lib::Symbol;
   using cuString = const Glib::ustring;
   
   
   extern const Literal TAG_ERROR;                    ////////////////////////////////////////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
   extern const Literal TAG_WARN;
   
-  extern cuString CSS_CLASS_FLASH;
+  extern cuString CLASS_indication_flash;
   extern const uint STYLE_FLASH_DURATION_in_ms;
+  
+  
+  /* ======== CSS selector names ======== */
+  
+  extern const Symbol NODE_fork;
+  extern const Symbol NODE_frame;
+  
+  extern cuString CLASS_timeline;
+  extern cuString CLASS_timeline_page;
+  extern cuString CLASS_timeline_body;
+  extern cuString CLASS_timeline_fork;
+  extern cuString CLASS_timeline_ruler;
+  extern cuString CLASS_slope_deep1;
+  extern cuString CLASS_slope_deep2;
+  extern cuString CLASS_slope_deep3;
+  extern cuString CLASS_slope_deep4;
+  extern cuString CLASS_slope_verydeep;
   
   
   

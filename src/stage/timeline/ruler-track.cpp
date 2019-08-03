@@ -32,7 +32,7 @@
 
 
 #include "stage/gtk-base.hpp"
-#include "include/ui-protocol.hpp"
+#include "stage/style-scheme.hpp"  /////////////////////TODO needed?
 #include "stage/timeline/ruler-track.hpp"
 #include "stage/timeline/track-presenter.hpp"
 

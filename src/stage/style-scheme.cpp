@@ -39,8 +39,25 @@ namespace stage {
   /** CSS class added temporarily to make a widget "flash"
    *  in response to the corresponding UI-Bus message
    * @see flash-deco.hpp */
-  cuString CSS_CLASS_FLASH{"indication_flash"};
+  cuString CLASS_indication_flash{"indication-flash"};
   const uint STYLE_FLASH_DURATION_in_ms = 1100;
+  
+  
+  /* ======== CSS selector names ======== */
+  
+  const Symbol NODE_fork{"fork"};
+  const Symbol NODE_frame{"frame"};
+  
+  cuString CLASS_timeline      {"timeline"};
+  cuString CLASS_timeline_page {"timeline__page"};
+  cuString CLASS_timeline_body {"timeline__body"};
+  cuString CLASS_timeline_fork {"timeline__fork"};
+  cuString CLASS_timeline_ruler{"timeline__ruler"};
+  cuString CLASS_slope_deep1   {"track-slope--deep1"};
+  cuString CLASS_slope_deep2   {"track-slope--deep2"};
+  cuString CLASS_slope_deep3   {"track-slope--deep3"};
+  cuString CLASS_slope_deep4   {"track-slope--deep4"};
+  cuString CLASS_slope_verydeep{"track-slope--verydeep"};
   
   
   

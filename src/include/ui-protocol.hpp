@@ -43,7 +43,7 @@
  ** At various levels, magic ID-Values are used to initiate specific interactions.
  ** This header supplies the hard wired key constants and IDs thereby employed.
  ** 
- ** @see common/ui-protocol.cpp (translation unit backing those constants)  
+ ** @see common/ui-protocol.cpp (translation unit backing those constants)
  */
 
 
@@ -95,17 +95,6 @@ namespace stage {
   extern const Symbol MARK_Error;
   extern const Symbol MARK_Warning;
   extern const Symbol MARK_Message;
-  
-  
-  /* ======== CSS selector names ======== */
-  
-  extern const Symbol NODE_fork;
-  extern const Symbol NODE_frame;
-  
-  extern const Symbol CLASS_ruler;
-  extern const Symbol CLASS_timeline;
-  extern const Symbol CLASS_timeline_page;
-  extern const Symbol CLASS_timeline_body;
   
   
 }// namespace stage

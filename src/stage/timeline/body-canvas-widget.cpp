@@ -34,12 +34,12 @@
 #include "stage/timeline/display-manager.hpp"
 #include "stage/timeline/track-profile.hpp"
 #include "stage/timeline/track-body.hpp"
+#include "stage/style-scheme.hpp"
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
-#include "include/ui-protocol.hpp"
 #include "common/advice.hpp"
 #include "lib/util.hpp"
 
@@ -77,16 +77,16 @@ namespace timeline {
     lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
     lumiera::advice::Request<PStyleContext> trackRulerStyle{"style(trackRuler)"};
     
-    string
+    cuString
     slopeClassName(int depth)
     {
       switch (depth)
         {
-          case 1: return string{CLASS_slope_deep1};
-          case 2: return string{CLASS_slope_deep2};
-          case 3: return string{CLASS_slope_deep3};
-          case 4: return string{CLASS_slope_deep4};
-          default:return string{CLASS_slope_verydeep};
+          case 1: return CLASS_slope_deep1;
+          case 2: return CLASS_slope_deep2;
+          case 3: return CLASS_slope_deep3;
+          case 4: return CLASS_slope_deep4;
+          default:return CLASS_slope_verydeep;
         }
     }
     
@@ -227,7 +227,7 @@ namespace timeline {
             style_->render_frame_gap(cox_
                                  ,visible_.b
                                             +20   ////////////////////////////////////////TODO: visual debugging
-                                 ,line_ 
+                                 ,line_
                                  ,visible_.delta()
                                  ,slopeWidth
                                             * 5   ////////////////////////////////////////TODO: visual debugging
@@ -351,8 +351,8 @@ namespace timeline {
     , rulerCanvas_{makeRenderer<Grounding, RULER>(layout_,getProfile), makeRenderer<Overlay, RULER>(layout_,getProfile)}
     , mainCanvas_ {makeRenderer<Grounding, BODY>(layout_,getProfile),  makeRenderer<Overlay, BODY>(layout_,getProfile)}
     {
-      get_style_context()->add_class(cuString{CLASS_timeline});
-      get_style_context()->add_class(cuString{CLASS_timeline_body});
+      get_style_context()->add_class(CLASS_timeline);
+      get_style_context()->add_class(CLASS_timeline_body);
       
       // respond to any structure changes of the timeline by recomputing the TrackProfile
       layout_.signalStructureChange_.connect (sigc::mem_fun (*this, &BodyCanvasWidget::slotStructureChange));

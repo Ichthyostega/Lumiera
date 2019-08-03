@@ -33,11 +33,10 @@
 
 #include "stage/workspace/ui-style.hpp"
 #include "stage/timeline/timeline-widget.hpp"
+#include "stage/style-scheme.hpp"
 #include "stage/config-keys.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/util.hpp"
-
-#include "include/ui-protocol.hpp"
 
 #include <gtkmm/stylecontext.h>
 #include <boost/filesystem.hpp>
@@ -135,7 +134,7 @@ namespace workspace {
     int pos = path.path_append_type (scopeNode);                         // build a "virtual" CSS node to represent the track scope
     
     gtk_widget_path_iter_set_object_name (path.gobj(), pos, NODE_fork);  // override the generic node name with a custom widget type "fork"
-    path.iter_add_class(pos, cuString{CLASS_timeline});                  // decorate this CSS node with a CSS class ".timeline" (distinguish it from asset bins)
+    path.iter_add_class(pos, CLASS_timeline_fork);                       // decorate this CSS node with a CSS class ".timeline__fork" (distinguish it from asset bins)
                                                                          // deliberately we *do not* invoke path.iter_set_name(pos, "id") to add an #ID
     for (int i=0; i<pos; ++i)                                            // reset any state flags accidentally set (resulting in pseudo classes like ":backdrop")
       gtk_widget_path_iter_set_state(path.gobj(), i, GTK_STATE_FLAG_NORMAL);
@@ -143,12 +142,11 @@ namespace workspace {
     style->set_path (path);
     styleAdviceTrackBody_.setAdvice (style);                             // publish as Advice "style(trackBody)"
     INFO (stage, "Body-CSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
-     
+    
     pos = path.path_append_type (scopeNode);                             // append another nested "virtual" CSS node to represent the a ruler track
     gtk_widget_path_iter_set_object_name (path.gobj(), pos, NODE_frame); // ...but this time we explicitly use the conventional Name "frame" (hard wired default by GTK)
                                                                          // note: the node is deliberately left as 'frame' to pick up existing styling
-    path.iter_add_class(pos, cuString{CLASS_timeline});                  // decorate with CSS class ".timeline" and ".ruler"
-    path.iter_add_class(pos, cuString{CLASS_ruler});                     // ... and ".ruler"
+    path.iter_add_class(pos, CLASS_timeline_ruler);                      // decorate with CSS class ".timeline__ruler" to identify position within the system
     style = Gtk::StyleContext::create();                                 // create another style context...
     style->set_path (path);                                              // ...for this nested path. (Note: Gtk takes a copy of the path, see gtk_style_context_set_path(), line 1120)
     styleAdviceTrackRuler_.setAdvice (style);                            // publish as Advice "style(trackRuler)"
@@ -270,7 +268,7 @@ namespace workspace {
                         ,Gtk::IconSize size
                         ,bool wildcard)
   {
-    // Try the icon theme  
+    // Try the icon theme
     if (addThemeIconSource(icon_set, icon_name, size, wildcard))
       return true;
     
@@ -329,7 +327,7 @@ namespace workspace {
     
     // Try to load the icon
     cuString path(Glib::ustring::compose("%1/%2x%3/%4.png",
-      base_dir, width, height, icon_name)); 
+      base_dir, width, height, icon_name));
     return addStockIconFromPath(path, icon_set, size, wildcard);
   }
   

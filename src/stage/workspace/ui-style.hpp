@@ -122,7 +122,7 @@ namespace workspace {
        * display of clips and overlays.
        * 
        * Especially the following selector path can be used
-       * - `paned.timeline-page > body.timeline > fork.timeline`
+       * - `paned.timeline__page > timeline__body > fork.timeline__fork`
        */
       void prepareStyleContext (timeline::TimelineWidget const&);
       

@@ -68,7 +68,7 @@ namespace model {
       flash()
         {
           auto styleContext = this->get_style_context();
-          styleContext->add_class (CSS_CLASS_FLASH);
+          styleContext->add_class (CLASS_indication_flash);
           
           Glib::signal_timeout()
             .connect_once (sigc::mem_fun(*this, &FlashDeco::flashback)
@@ -81,7 +81,7 @@ namespace model {
       flashback()
         {
           auto styleContext = this->get_style_context();
-          styleContext->remove_class (CSS_CLASS_FLASH);
+          styleContext->remove_class (CLASS_indication_flash);
         }
     };
   
