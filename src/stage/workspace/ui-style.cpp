@@ -139,6 +139,7 @@ namespace workspace {
     for (int i=0; i<pos; ++i)                                            // reset any state flags accidentally set (resulting in pseudo classes like ":backdrop")
       gtk_widget_path_iter_set_state(path.gobj(), i, GTK_STATE_FLAG_NORMAL);
     PStyleContext style = Gtk::StyleContext::create();                   // create a new style context and configure it according to the path defined thus far
+    style->set_screen(Gdk::Screen::get_default());
     style->set_path (path);
     styleAdviceTrackBody_.setAdvice (style);                             // publish as Advice "style(trackBody)"
     INFO (stage, "Body-CSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"

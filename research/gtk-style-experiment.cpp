@@ -44,6 +44,7 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
+#include <gtk/gtk.h> ////////////////////TODO WIP
 #include <string>
 
 using util::cStr;
@@ -218,6 +219,7 @@ namespace research {
     
     Gtk::WidgetPath path = srcWidget.get_path();
     PStyleContext style = Gtk::StyleContext::create();
+    style->set_screen(Gdk::Screen::get_default());
     style->set_path(path);
 //  style->add_class(slopeClassName(2));
     return style;
@@ -317,8 +319,14 @@ namespace research {
         {
           int marT = style_->get_margin().get_top();
           
+          auto path = style_->get_path();
+          
           if (xBorderSiz > 1) {
-            style_->context_save();
+//          style_->invalidate();
+//          style_->context_save();
+//          style_->set_screen(Gdk::Screen::get_default());
+//          style_->set_path(path);
+//          style_->invalidate();
             style_->add_class(slopeClassName(xBorderSiz));            
           }
           
@@ -335,7 +343,8 @@ namespace research {
                                );
           
           if (xBorderSiz > 1) {
-            style_->context_restore();
+//          style_->context_restore();
+            style_->remove_class(slopeClassName(xBorderSiz));
           }
         }
         //////////////////TEST drawing via Gtk::StyleContext

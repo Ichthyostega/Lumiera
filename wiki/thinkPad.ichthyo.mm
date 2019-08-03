@@ -23026,10 +23026,58 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841527588" ID="ID_1377435126" MODIFIED="1564841582490" TEXT="TODO: Untersuchung context_save() auf einem kopierten / frei konstruierten StyleContext">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841527588" ID="ID_1377435126" MODIFIED="1564868164039" TEXT="Untersuchung context_save() auf einem kopierten / frei konstruierten StyleContext">
+<icon BUILTIN="pencil"/>
+<node CREATED="1564868166273" ID="ID_945377761" MODIFIED="1564868267923" TEXT="kann das problematische Verhalten reproduzieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wenn man einen neuen Gtk::StyleContext erzeugt,
+    </p>
+    <p>
+      und (wie in der Doku beschrieben) den path und den screen manuell setzt,
+    </p>
+    <p>
+      dann f&#252;hrt ein context_save() dazu, da&#223; pl&#246;tzlich die CSS-Werte auf Defaults zur&#252;ckspringen
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841584180" ID="ID_1444331441" MODIFIED="1564841601195" TEXT="TODO: Untersuchung wie box-shadow gerendert wird">
+<node CREATED="1564868280687" ID="ID_593595518" MODIFIED="1564871156101" TEXT="es hilft nichts, wenn man den Screen (nochmal) setzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und ja, den Screen sollte man generell setzten.<br />Steht auch so in der Doku.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Allerdings hat es bisher auch ohne das bei mir funktioniert.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1564868338325" ID="ID_1826179725" MODIFIED="1564871159899" TEXT="es hilft nichts, wenn man den Pfad erneut setzt">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1564868348236" ID="ID_1509661918" MODIFIED="1564871163619" TEXT="es hilft nichts, wenn man den Context invalidiert">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564871053125" HGAP="30" ID="ID_1611854805" LINK="https://stackoverflow.com/q/57342478/444796" MODIFIED="1564871092888" TEXT="habe auf Stackoverflow gefragt" VSHIFT="16">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841584180" ID="ID_1444331441" MODIFIED="1564866024773" TEXT="TODO: Untersuchung wie box-shadow gerendert wird">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>

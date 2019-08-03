@@ -219,7 +219,7 @@ namespace timeline {
         void
         close (uint n)  override
           {
-//            style_->context_save();
+//          style_->context_save();                // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
             style_->add_class (slopeClassName(n));
             style_->invalidate();
             int slopeWidth = style_->get_border().get_bottom();
@@ -235,8 +235,8 @@ namespace timeline {
                                  ,visible_.b
                                  ,visible_.e
                                  );
+//          style_->context_restore();             // <<<---does not work...
             style_->remove_class (slopeClassName(n));
-//            style_->context_restore();
             line_ += slopeWidth;
           }
         
