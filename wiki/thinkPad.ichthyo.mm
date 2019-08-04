@@ -22861,10 +22861,8 @@
 </node>
 </node>
 <node CREATED="1564610290631" HGAP="17" ID="ID_1710961419" MODIFIED="1564610301366" TEXT="Probleme bei der Umsetzung" VSHIFT="12">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610302597" ID="ID_840104433" MODIFIED="1564610324548" TEXT="sollte so zeichnen, da&#xdf; CSS3-Effekte wie box-shadow nutzbar sind">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node CREATED="1564610350719" ID="ID_1592146108" MODIFIED="1564610368016" TEXT="brauche L&#xf6;sung zum Steuern der Rahmenst&#xe4;rke">
+<node COLOR="#338800" CREATED="1564610350719" ID="ID_1592146108" MODIFIED="1564929462484" TEXT="brauche L&#xf6;sung zum Steuern der Rahmenst&#xe4;rke">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1564610376639" ID="ID_1472226314" MODIFIED="1564610394741" TEXT="...weil sich diese dynamisch aus der Tiefe der Verschachtelung ergibt"/>
 <node CREATED="1564610401372" ID="ID_155787836" MODIFIED="1564840644957" TEXT="geht nicht unmittelbar">
 <linktarget COLOR="#cb487a" DESTINATION="ID_155787836" ENDARROW="Default" ENDINCLINATION="86;-182;" ID="Arrow_ID_1682426231" SOURCE="ID_273130535" STARTARROW="None" STARTINCLINATION="187;-5;"/>
@@ -22903,7 +22901,9 @@
 <node CREATED="1564500220303" ID="ID_1305054039" MODIFIED="1564500229334" TEXT="track-slope-verydeep"/>
 </node>
 </node>
-<node CREATED="1564500530497" ID="ID_552810958" MODIFIED="1564500541248" TEXT="die 2.L&#xf6;sung erscheint mir angemessener">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1564500530497" ID="ID_552810958" MODIFIED="1564929446246" TEXT="die 2.L&#xf6;sung erscheint mir angemessener">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1564500542648" ID="ID_1923715160" MODIFIED="1564500554477" TEXT="weil damit der Designer freie Hand hat"/>
 <node CREATED="1564500576627" ID="ID_979278974" MODIFIED="1564500613622" TEXT="weil das Hinzuf&#xfc;gen von Klassen eine vorgesehene Operation ist"/>
 <node CREATED="1564500614693" ID="ID_178343581" MODIFIED="1564500683747" TEXT="Hinzuf&#xfc;gen eines CssProvider ist eine aufwendige Sache">
@@ -22926,22 +22926,15 @@
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564506897338" ID="ID_76451655" MODIFIED="1564506907193" TEXT="Funktioniert(noch) nicht">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1564506908498" ID="ID_1703067003" MODIFIED="1564507000794" TEXT="mit style-&gt;context_save() bekomme ich einen leeren Kontext">
-<node CREATED="1564507004091" ID="ID_919457962" MODIFIED="1564507008436" TEXT="wirklich?"/>
-<node CREATED="1564507009226" ID="ID_922446522" MODIFIED="1564507020458" TEXT="jedenfalls ist nun border-with = 0"/>
 </node>
-<node CREATED="1564507022462" ID="ID_517812512" MODIFIED="1564507041555" TEXT="mit style-&gt;add_class() &#xe4;ndert sich die border-with nicht"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610513626" ID="ID_387755678" MODIFIED="1564610522406" TEXT="Verhalten des Gtk::StyleContext">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610523846" ID="ID_1167026908" MODIFIED="1564610546918" TEXT="verh&#xe4;lt sich komisch, und anders als dokumentiert">
+<node COLOR="#338800" CREATED="1564610513626" ID="ID_387755678" MODIFIED="1564929424675" TEXT="Verhalten des Gtk::StyleContext">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1564610523846" ID="ID_1167026908" MODIFIED="1564929420074" TEXT="verh&#xe4;lt sich komisch, und anders als dokumentiert">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610549788" ID="ID_1115307821" MODIFIED="1564840577531" TEXT="Fokussierte Untersuchung (Research)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1564610549788" ID="ID_1115307821" MODIFIED="1564929404069" TEXT="Fokussierte Untersuchung (Research)">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1564838802098" ID="ID_529304410" MODIFIED="1564838822103" TEXT="gtk-canvas-eperiment kopiert und zusammengedampft">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -23026,8 +23019,8 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841527588" ID="ID_1377435126" MODIFIED="1564868164039" TEXT="Untersuchung context_save() auf einem kopierten / frei konstruierten StyleContext">
-<icon BUILTIN="pencil"/>
+<node CREATED="1564841527588" ID="ID_1377435126" MODIFIED="1564924272221" TEXT="Untersuchung context_save() auf einem kopierten / frei konstruierten StyleContext">
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1564868166273" ID="ID_945377761" MODIFIED="1564868267923" TEXT="kann das problematische Verhalten reproduzieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -23077,8 +23070,19 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564841584180" ID="ID_1444331441" MODIFIED="1564866024773" TEXT="TODO: Untersuchung wie box-shadow gerendert wird">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1564841584180" ID="ID_1444331441" MODIFIED="1564928490168" TEXT="Untersuchung wie box-shadow gerendert wird">
+<linktarget COLOR="#5590d5" DESTINATION="ID_1444331441" ENDARROW="Default" ENDINCLINATION="-449;0;" ID="Arrow_ID_1759102712" SOURCE="ID_840104433" STARTARROW="None" STARTINCLINATION="98;-3;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1564926637294" ID="ID_1488276378" MODIFIED="1564926753815" TEXT="box-shadow Definitionen / Varianten">
+<arrowlink COLOR="#405ecf" DESTINATION="ID_240623877" ENDARROW="Default" ENDINCLINATION="-838;0;" ID="Arrow_ID_1124667032" STARTARROW="None" STARTINCLINATION="-522;0;"/>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1564927139265" ID="ID_1929004588" MODIFIED="1564927154012" TEXT="Hintergrund zus&#xe4;tzlich auf den Canvas rendern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1564927155326" ID="ID_678866276" MODIFIED="1564928463921" TEXT="box-shadow im Test-CSS definieren">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1564840511187" ID="ID_1756129968" MODIFIED="1564840563824" TEXT="Fazit-1">
@@ -23091,7 +23095,67 @@
 <node CREATED="1564840675682" ID="ID_1503353101" MODIFIED="1564840686319" TEXT="border-width == 0"/>
 <node CREATED="1564840688620" ID="ID_1175662942" MODIFIED="1564840695486" TEXT="Rahmen wird nicht mehr gezeichnet"/>
 </node>
+<node COLOR="#435e98" CREATED="1564840511187" ID="ID_1777041743" MODIFIED="1564928522581" TEXT="Fazit-2">
+<icon BUILTIN="forward"/>
+<node CREATED="1564928528971" ID="ID_1722803144" MODIFIED="1564928579769" TEXT="CSS3-Effekte werden angewendet bei render_background"/>
+<node CREATED="1564928584153" ID="ID_495635427" MODIFIED="1564928597882" TEXT="und zwar alle Effekte. Und nicht in render_frame">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1564928904423" ID="ID_1736699496" MODIFIED="1564929052148" TEXT="das ist m&#xe4;&#xdf;ig prickelnd....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Gut ist es insofern, da&#223; man mit einem render_background bereits alles bekommt
+      </li>
+      <li>
+        allerdings mu&#223; der Rahmen dann ganz genau passend dar&#252;ber gezeichnet werden
+      </li>
+      <li>
+        man kann damit weder den Rahmen schattieren, noch den enthaltenen Content
+      </li>
+    </ul>
+    <p>
+      allerdings verh&#228;lt sich das normale Zeichnen ganz genauso; das sind allgemeine Einschr&#228;nkungen (von CSS? GTK?)
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-neutral"/>
 </node>
+</node>
+<node CREATED="1564928617821" ID="ID_1534709178" MODIFIED="1564928886905" TEXT="des Genaueren">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1564928649329" ID="ID_1625957291" MODIFIED="1564928810213" TEXT="box-shadow (normal) wird au&#xdf;erhalb des angegebenen Rechtecks gezeichnet">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1564928674942" ID="ID_75369854" MODIFIED="1564928812685" TEXT="angegebenes Rechteck wird mit der Hintergrundfarbe gef&#xfc;llt">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1564928700616" ID="ID_835151696" MODIFIED="1564928815890">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      box-shadow (inset) innerhalb des Rechteckss, <i>und innerhalb</i>&#160;der (gedachten) border
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610302597" ID="ID_840104433" MODIFIED="1564926629989" TEXT="sollte so zeichnen, da&#xdf; CSS3-Effekte wie box-shadow nutzbar sind">
+<arrowlink COLOR="#5590d5" DESTINATION="ID_1444331441" ENDARROW="Default" ENDINCLINATION="-449;0;" ID="Arrow_ID_1759102712" STARTARROW="None" STARTINCLINATION="98;-3;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -44705,6 +44769,37 @@
 </richcontent>
 </node>
 </node>
+<node CREATED="1564926426614" ID="ID_240623877" MODIFIED="1564926740793" TEXT="box-shadow">
+<linktarget COLOR="#405ecf" DESTINATION="ID_240623877" ENDARROW="Default" ENDINCLINATION="-838;0;" ID="Arrow_ID_1124667032" SOURCE="ID_1488276378" STARTARROW="None" STARTINCLINATION="-522;0;"/>
+<node CREATED="1564926431517" ID="ID_1620722736" LINK="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Background_and_Borders/Box-shadow_generator" MODIFIED="1564926458324" TEXT="interaktives box-shadow-Tool bei Mozilla">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1564926468217" ID="ID_1021621147" MODIFIED="1564926476805" TEXT="ein CSS3-Effekt"/>
+<node CREATED="1564926773320" ID="ID_1461042373" LINK="https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow" MODIFIED="1564926869230" TEXT="CSS-Syntax">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &lt;offX&gt; &lt;offY&gt; [&lt;blur&gt; [&lt;spread&gt;]] &lt;colour&gt;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1564926477387" ID="ID_1307917529" MODIFIED="1564926492175" TEXT="wird zus&#xe4;tzlich zum Element in Z-Order gerendert">
+<node CREATED="1564926496242" ID="ID_1998030818" MODIFIED="1564929104275" TEXT="backdrop: below and outside background frame"/>
+<node CREATED="1564926502241" ID="ID_1213868388" MODIFIED="1564929115263" TEXT="inset: on top of backround and inside the border"/>
+<node CREATED="1564929121202" ID="ID_321264842" MODIFIED="1564929258246" TEXT="Note">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1564929129077" ID="ID_1739609367" MODIFIED="1564929143403" TEXT="effect spreads over other content outside the bounding box"/>
+<node CREATED="1564929150870" ID="ID_237587547" MODIFIED="1564929178639" TEXT="what other drawing it precisely covers is implementation-defined"/>
+<node CREATED="1564929179711" ID="ID_74068953" MODIFIED="1564929197683" TEXT="inset box-shadow does not affect the border"/>
+<node CREATED="1564929235683" ID="ID_792222700" MODIFIED="1564929255468" TEXT="effects not rendered on top of content"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1537575947102" ID="ID_161652920" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html" MODIFIED="1561741931982" TEXT="StyleContext">
@@ -46191,8 +46286,8 @@
 <node CREATED="1476375715644" ID="ID_1233704735" MODIFIED="1557498707239" TEXT="scrollable"/>
 <node CREATED="1476375723915" ID="ID_72518723" MODIFIED="1557498707239" TEXT="can place sub-widgets"/>
 <node CREATED="1476375733298" ID="ID_1024321268" MODIFIED="1557498707239" TEXT="allows custom drawing"/>
-<node CREATED="1476468254712" HGAP="64" ID="ID_1424353399" MODIFIED="1557498707239" TEXT="Eigenschaften" VSHIFT="45">
-<icon BUILTIN="pencil"/>
+<node CREATED="1476468254712" HGAP="64" ID="ID_1424353399" MODIFIED="1564926360754" TEXT="Eigenschaften" VSHIFT="45">
+<icon BUILTIN="info"/>
 <node CREATED="1476468265399" HGAP="2" ID="ID_257790579" MODIFIED="1557498707239" TEXT="Test-Setup schaffen" VSHIFT="-15">
 <node CREATED="1476468390830" ID="ID_1922633406" MODIFIED="1557498707239" TEXT="soll">
 <icon BUILTIN="yes"/>
@@ -46201,7 +46296,7 @@
 <node CREATED="1476468402085" ID="ID_1171941848" MODIFIED="1557498707239" TEXT="realistisch sein"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1476468272510" ID="ID_150722005" MODIFIED="1561827466236" TEXT="Untersuchung">
+<node COLOR="#338800" CREATED="1476468272510" FOLDED="true" ID="ID_150722005" MODIFIED="1564926351238" TEXT="Untersuchung">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1477595404814" HGAP="37" ID="ID_1078486680" MODIFIED="1518487921100" TEXT="Goals" VSHIFT="-12">
 <icon BUILTIN="yes"/>
@@ -46508,17 +46603,26 @@
 <icon BUILTIN="full-9"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1477595418670" ID="ID_700977265" MODIFIED="1518487921101" TEXT="# build a custom &quot;&apos;&apos;clip&apos;&apos;&quot; widget">
+<node CREATED="1477595418670" ID="ID_700977265" MODIFIED="1564926307003" TEXT="# build a custom &quot;&apos;&apos;clip&apos;&apos;&quot; widget">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="full-0"/>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1564926319100" ID="ID_1730630443" MODIFIED="1564926336261" TEXT="unn&#xf6;tig! gleich im richtigen UI bauen!">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1477595418670" ID="ID_1708640864" MODIFIED="1518487921101" TEXT="# retrofit all preceding tests to use this &quot;&apos;&apos;clip&apos;&apos;&quot; widget">
+</node>
+<node CREATED="1477595418670" ID="ID_1708640864" MODIFIED="1564926313799" TEXT="# retrofit all preceding tests to use this &quot;&apos;&apos;clip&apos;&apos;&quot; widget">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="full-1"/>
+<icon BUILTIN="stop-sign"/>
 </node>
 </node>
+</node>
+<node COLOR="#435e98" CREATED="1564926367453" ID="ID_943270007" MODIFIED="1564926396554" TEXT="research/gtk-canvas-experiment">
+<icon BUILTIN="back"/>
 </node>
 </node>
 </node>

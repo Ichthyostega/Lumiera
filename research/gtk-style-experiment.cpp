@@ -29,9 +29,23 @@
  ** ## Setup for investigation
  ** - add a separate dummy Gtk::Frame widget as `testFrame_`
  ** - apply custom styling to that frame, by virtue of a CSS class '.experiment'
- ** - pick up the Gtk::StyleContext of that `testFrame_`
- ** - use this style context to draw a custom frame onto the canvas
+ ** - pick up the Gtk::StyleContext of that `testFrame_` to get the CSS path
+ ** - build a "free standing" new Gtk::StyleContext and apply the CSS path found
+ ** - use this style context to draw a custom frame and background onto the canvas
  ** - control extension of that custom drawing through the top margin CSS setting of testFrame_
+ ** 
+ ** ## Findings
+ ** - it works as intended
+ ** - however, care must be taken to apply CSS cascading properly (generic vs specific selectors)
+ ** - the context_save/restore functionality seems to be broken on a "free standing" style context;
+ **   however it works as expected on a style context associated to an existing and realised widget.
+ ** - workaround is to add / remove classes explicitly.
+ ** - CSS3 effects like box-shadow are applied with the StyleContext::render_background() function
+ **   * first, an outset box-shadow is rendered _outside_ the box given as parameter to `render_background()`
+ **   * then the box is filled with the background colour
+ **   * and last, an inset box-shadow is rendered _inside_ the area of a would-be border,
+ **     without rendering the border itself.
+ **   * consequently we can not shade the border itself and we can not shade the content
  ** 
  ** @see stage::timeline::BodyCanvasWidget
  */
@@ -44,7 +58,6 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <gtk/gtk.h> ////////////////////TODO WIP
 #include <string>
 
 using util::cStr;
@@ -55,7 +68,7 @@ namespace research {
   
   namespace {
     const string STYLESHEET_NAME{"gtk-style-experiment.css"};
-    const string RESOURCE_PATH{"$ORIGIN/gui"};
+    const string RESOURCE_PATH  {"$ORIGIN/gui"};
     
     const string CLASS_experiment{"experiment"};
     const string CLASS_slopeDeep1{"track-slope-deep1"};
@@ -221,7 +234,6 @@ namespace research {
     PStyleContext style = Gtk::StyleContext::create();
     style->set_screen(Gdk::Screen::get_default());
     style->set_path(path);
-//  style->add_class(slopeClassName(2));
     return style;
   }
   
@@ -246,10 +258,9 @@ namespace research {
     cout << "style.path: " << canvas_.xObservedPath <<endl;
     cout << "style.border.top = " << canvas_.xObservedSize <<endl;
     cout << "................\n\n";
-    
-//    canvas_.adjustSize();
   }
-
+  
+  
   
   /* === Canvas drawing code === */
   
@@ -268,8 +279,6 @@ namespace research {
         win->invalidate_rect(rect, false);
       }
   }
-  
-  
   
   void
   Canvas::adjustSize()
@@ -319,15 +328,10 @@ namespace research {
         {
           int marT = style_->get_margin().get_top();
           
-          auto path = style_->get_path();
           
           if (xBorderSiz > 1) {
-//          style_->invalidate();
-//          style_->context_save();
-//          style_->set_screen(Gdk::Screen::get_default());
-//          style_->set_path(path);
-//          style_->invalidate();
-            style_->add_class(slopeClassName(xBorderSiz));            
+//          style_->context_save();                      // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
+            style_->add_class(slopeClassName(xBorderSiz));
           }
           
           xObservedSize = style_->get_border().get_top();
@@ -341,6 +345,13 @@ namespace research {
                                ,50     // width of the area
                                ,height // height to fill
                                );
+          // NOTE: all box-shadow effects are rendered *here*
+          style_->render_background (cox
+                                    ,40
+                                    ,60
+                                    ,80
+                                    ,height
+                                    );
           
           if (xBorderSiz > 1) {
 //          style_->context_restore();
