@@ -348,8 +348,8 @@ namespace timeline {
     , profile_{}
     , rootBody_{nullptr}
     , contentArea_{}
-    , rulerCanvas_{makeRenderer<Grounding, RULER>(layout_,getProfile), makeRenderer<Overlay, RULER>(layout_,getProfile)}
-    , mainCanvas_ {makeRenderer<Grounding, BODY>(layout_,getProfile),  makeRenderer<Overlay, BODY>(layout_,getProfile)}
+    , rulerCanvas_{makeRenderer<Grounding,RULER>(layout_,getProfile), makeRenderer<Overlay,RULER>(layout_,getProfile)}
+    , mainCanvas_ {makeRenderer<Grounding,BODY> (layout_,getProfile), makeRenderer<Overlay,BODY> (layout_,getProfile)}
     {
       get_style_context()->add_class(CLASS_timeline);
       get_style_context()->add_class(CLASS_timeline_body);
@@ -360,8 +360,7 @@ namespace timeline {
       // access and possible (re)establish the current "profile" of the tracks on demand...
       getProfile = [this]() -> TrackProfile&
                         {
-                          if (rootBody_ and isnil (profile_))
-                            rootBody_->establishTrackSpace (profile_);
+                          maybeRebuildLayout();
                           return profile_;
                         };
       
@@ -409,6 +408,23 @@ namespace timeline {
   {
     profile_.clear();
   }
+  
+  
+  /**
+   * Possibly (re)build the allocation and distribution of layout space.
+   * Check the internal trigger flag and recalculate the extension of relevant parts.
+   * @remark this function will be called on demand right before actual drawing.
+   */
+  void
+  BodyCanvasWidget::maybeRebuildLayout()
+  {
+    if (rootBody_ and isnil (profile_))
+      {
+        layout_.triggerDisplayEvaluation();
+        rootBody_->establishTrackSpace (profile_);
+      }
+  }
+  
   
   
   

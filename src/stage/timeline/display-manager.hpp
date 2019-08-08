@@ -115,6 +115,9 @@ namespace timeline {
       /** the overall horizontal pixel span to cover by this timeline */
       virtual PixSpan getPixSpan()         =0;
       
+      /** cause a re-allocation of the complete layout */
+      virtual void triggerDisplayEvaluation() =0;
+      
       using SignalStructureChange = sigc::signal<void>;
       
       /**

@@ -130,6 +130,7 @@ namespace timeline {
     protected:/* ==== Interface: LayoutManager===== */
       
       PixSpan getPixSpan()  override;
+      void triggerDisplayEvaluation()  override;
       
     private:/* ===== Internals ===== */
      

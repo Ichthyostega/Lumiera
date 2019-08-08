@@ -111,6 +111,16 @@ namespace timeline {
   }
   
   
+  /**
+   * Perform a complete recursive pass over all elements relevant for layout,
+   * reestablish size allocation and negotiate distribution of available space.
+   * @remark this is the entry point to the so called *display evaluation pass*.
+   */
+  void
+  TimelineLayout::triggerDisplayEvaluation()
+  {
+    TODO ("actually visit all parts and negotiate the Layout");
+  }
   
   
   

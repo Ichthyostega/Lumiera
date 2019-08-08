@@ -135,6 +135,7 @@ namespace timeline {
     private:/* ===== Internals ===== */
       
       void slotStructureChange()  noexcept;
+      void maybeRebuildLayout();
     };
   
   
