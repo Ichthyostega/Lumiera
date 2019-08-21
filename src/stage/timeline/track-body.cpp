@@ -121,7 +121,7 @@ namespace timeline {
    * recursively establish the screen space allocation for this structure of nested tracks.
    * The TrackProfile is an abstracted description of the sequence of track elements,
    * which constitute a vertical cross section through the track bodies
-   * - pre: the given profile is built and complete up to the (upper side) start of this timeline
+   * - pre: the given profile is built and complete up to the (upper side) start of the current track.
    * - post: the profile is elaborated for this track and its children, down to the lower end.
    * @todo 6/19 this very much looks like the "display evaluation pass" envisioned for the timeline::DisplayManager.
    *            Need to find out if we'll need a dedicated evaluation pass and how to interconnect both. 
@@ -135,7 +135,7 @@ namespace timeline {
         // global setup for the profile
         profile.append_prelude();
         
-        // Profile elements are always visible on top:
+        // The first Profile elements are always visible on top:
         // Top-level rules and one additionally for the prelude
         profile.pinnedPrefixCnt = 1 + rulers_.size();
       }

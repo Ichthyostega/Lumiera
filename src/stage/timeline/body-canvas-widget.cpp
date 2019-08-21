@@ -377,8 +377,7 @@ namespace timeline {
       { // for the initial empty canvas -- use all space the enclosing scrolled window got.
         auto currSize = get_allocation();
         int height = currSize.get_height();
-        rulerCanvas_.set_size (currSize.get_width(), INITIAL_TIMERULER_HEIGHT_px);
-        mainCanvas_.set_size (currSize.get_width(), max(0, height-INITIAL_TIMERULER_HEIGHT_px));
+        adjustCanvasHeight(currSize.get_width(), height, INITIAL_TIMERULER_HEIGHT_px);
       }
       
       // realise all initially configured elements....
@@ -421,9 +420,27 @@ namespace timeline {
     if (rootBody_ and isnil (profile_))
       {
         layout_.triggerDisplayEvaluation();
+        TODO("retrieve the vertical extension established by the triggerDisplayEvaluation() ");
+//      adjustCanvasHeight(currSize.get_width(), height, INITIAL_TIMERULER_HEIGHT_px); //////////////////////////TODO
         rootBody_->establishTrackSpace (profile_);
       }
   }
+  
+  
+  /**
+   * After the (recent) [display evaluation pass](\ref DisplayManager::triggerDisplayEvaluation() )
+   * has negotiated the required space for the currently presented content, this function adjusts
+   * the actual Gtk::Layout canvas extension to match. Note that we use two Gtk::Layout controls,
+   * one to show the always visible overview rules, while the second one is placed into a scrollable
+   * pane to accommodate an arbitrary numbers of tracks
+   */
+  void
+  BodyCanvasWidget::adjustCanvasHeight(int canvasWidth, int totalHeight, int rulerHeight)
+  {
+    rulerCanvas_.set_size (canvasWidth, rulerHeight);
+    mainCanvas_.set_size (canvasWidth, max(0, totalHeight-rulerHeight));
+  }
+  
   
   
   

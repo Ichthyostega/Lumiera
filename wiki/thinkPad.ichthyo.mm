@@ -19392,8 +19392,8 @@
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1561036987264" ID="ID_1799554074" MODIFIED="1565283189044" TEXT="signalStructureChange">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1799554074" ENDARROW="Default" ENDINCLINATION="93;0;" ID="Arrow_ID_576839005" SOURCE="ID_1490359824" STARTARROW="None" STARTINCLINATION="169;0;"/>
-<linktarget COLOR="#89adc8" DESTINATION="ID_1799554074" ENDARROW="Default" ENDINCLINATION="340;0;" ID="Arrow_ID_19787354" SOURCE="ID_1865072728" STARTARROW="None" STARTINCLINATION="1589;0;"/>
 <linktarget COLOR="#8db7cd" DESTINATION="ID_1799554074" ENDARROW="Default" ENDINCLINATION="816;264;" ID="Arrow_ID_1531606207" SOURCE="ID_833580972" STARTARROW="None" STARTINCLINATION="627;37;"/>
+<linktarget COLOR="#89adc8" DESTINATION="ID_1799554074" ENDARROW="Default" ENDINCLINATION="340;0;" ID="Arrow_ID_19787354" SOURCE="ID_1865072728" STARTARROW="None" STARTINCLINATION="1589;0;"/>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -19453,8 +19453,7 @@
       aber die tats&#228;chliche Neuberechnung erfolgt erst sp&#228;t, und bei Bedarf
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#8c9ca5" DESTINATION="ID_666349818" ENDARROW="Default" ENDINCLINATION="472;-18;" ID="Arrow_ID_1928094034" STARTARROW="Default" STARTINCLINATION="-298;0;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -19470,8 +19469,7 @@
       mu&#223; <i>nach</i>&#160;GTK's Behandlung gemacht werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1565272231130" ID="ID_1494587769" MODIFIED="1565272239670" TEXT="erst mu&#xdf; GTK nach seinem System den Platz belegen"/>
 <node CREATED="1565272267647" ID="ID_435131169" MODIFIED="1565272278457" TEXT="dann k&#xf6;nnen wir endg&#xfc;ltig unseren Platz festlegen"/>
 <node CREATED="1565272555130" ID="ID_1371436208" MODIFIED="1565272584772" TEXT="und als Konsequenz auch dynamisch vergr&#xf6;&#xdf;ern m&#xfc;ssen">
@@ -19488,8 +19486,7 @@
       Grundlagen m&#252;ssen <i>vor</i>&#160;GTK's Behandlung erfolgen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1565272503600" ID="ID_1427250696" MODIFIED="1565272509745" TEXT="aber nur mit Einschr&#xe4;nkung"/>
 <node CREATED="1565272510615" ID="ID_329997818" MODIFIED="1565272532607" TEXT="es gen&#xfc;gt, sinnvolle Minimalwerte zu setzen"/>
 <node CREATED="1565272533522" ID="ID_851047389" MODIFIED="1565272589897" TEXT="denn wir werden sp&#xe4;ter immer noch vergr&#xf6;&#xdf;ern m&#xfc;ssen">
@@ -19514,8 +19511,7 @@
       die Teilelements <i>speichern</i>&#160;ihren Wert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1565272972192" ID="ID_1941959455" MODIFIED="1565272983357">
 <richcontent TYPE="NODE"><html>
@@ -19527,8 +19523,7 @@
       Zeichencode <i>verwendet</i>&#160;diesen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1565269919314" ID="ID_128780255" MODIFIED="1565269921729" TEXT="Struktur">
@@ -21867,6 +21862,98 @@
 </node>
 </node>
 </node>
+<node CREATED="1566394354106" HGAP="46" ID="ID_1805397888" MODIFIED="1566394373770" TEXT="Zeichen-Strategie" VSHIFT="-10">
+<icon BUILTIN="forward"/>
+<node CREATED="1566394375643" ID="ID_597592953" MODIFIED="1566394385458" TEXT="was soll bewirkt werden?">
+<node CREATED="1566394398396" ID="ID_235154852" MODIFIED="1566394410975" TEXT="Bereiche / Zonen sollen erkennbar getrennt sein"/>
+<node CREATED="1566394429448" ID="ID_1545751655" MODIFIED="1566394461896" TEXT="zueinander geh&#xf6;rige Elemente sollen deutlich werden"/>
+<node CREATED="1566394412259" ID="ID_1529404821" MODIFIED="1566394427263" TEXT="System verschachtelter Scopes soll sich unmittelbar mitteilen"/>
+</node>
+<node CREATED="1566394484401" ID="ID_45833911" MODIFIED="1566394488525" TEXT="Darstellungs-Ansatz">
+<node CREATED="1566394489985" ID="ID_130800194" MODIFIED="1566394503171" TEXT="durch ein 3D-Profil darstellen">
+<node CREATED="1566394504879" ID="ID_106666528" MODIFIED="1566394519122" TEXT="Diskussion 90er-Look vs flat design"/>
+<node CREATED="1566394541001" ID="ID_878559119" MODIFIED="1566394556367">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>manchmal</i>&#160;ist die alte L&#246;sung besser
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1566394596499" ID="ID_1873797848" MODIFIED="1566394621437" TEXT="Fortschritts-Proze&#xdf; vs. Erfassen einer Idee"/>
+<node CREATED="1566394624791" ID="ID_328891828" MODIFIED="1566395136616" TEXT="das gilt auch f&#xfc;r graphische Oberfl&#xe4;chen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Idee einer graphischen Benutzeroberfl&#228;che hat sich &#252;ber die 60er / 70er-Jahre herausgebildet.
+    </p>
+    <p>
+      Nachdem die Idee einmal gefa&#223;t ist, gibt es nur noch Oberfl&#228;chendifferenzierung.
+    </p>
+    <p>
+      Und letztere neigt stets zur &quot;Verschlimmbesserung&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1566395139227" ID="ID_744743691" MODIFIED="1566395149200" TEXT="grunds&#xe4;tzliche Eigenschaften einer 3D-Schattierung">
+<node CREATED="1566395154793" ID="ID_1344119568" MODIFIED="1566395168947" TEXT="sie ben&#xf6;tigt eine vergleichsweise einfache Struktur"/>
+<node CREATED="1566395170922" ID="ID_953629359" MODIFIED="1566395187520" TEXT="sie arbeitet am Besten im mittleren Helligkeitsbereich"/>
+<node CREATED="1566395188597" ID="ID_1901821236" MODIFIED="1566395201759" TEXT="Tiefenstaffelung wirkt stets nur lokal"/>
+</node>
+<node CREATED="1566395244949" ID="ID_1286928751" MODIFIED="1566395284757" TEXT="Ziel ist daher: lokal ein Gef&#xe4;lle zu vermitteln">
+<icon BUILTIN="yes"/>
+<node CREATED="1566395269617" ID="ID_214269730" MODIFIED="1566395275117" TEXT="&quot;hier ist eine Barriere&quot;"/>
+<node CREATED="1566395276021" ID="ID_890095997" MODIFIED="1566395280113" TEXT="&quot;hier geh&apos;ts rein&quot;"/>
+</node>
+</node>
+<node CREATED="1566395368540" ID="ID_901032552" MODIFIED="1566395373199" TEXT="Konsequenz">
+<node CREATED="1566395374251" ID="ID_770036633" MODIFIED="1566395383792" TEXT="wir arbeiten ein Profil ab"/>
+<node CREATED="1566395384746" ID="ID_869767169" MODIFIED="1566395414266" TEXT="wir zeichnen nicht einen Stapel"/>
+<node CREATED="1566395415590" ID="ID_719677480" MODIFIED="1566395476449" TEXT="warum? Weil unsere Strukturen f&#xfc;r letzteres zu komplex sind">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gestapelte Strukturen dieser Komplexit&#228;t lassen sich nicht durch Schattierung vermitteln.
+    </p>
+    <p>
+      Wohl aber lassen sich lokale Nachbarschafts-Beziehungen (h&#246;he / tiefer) durch Schattierung hervorheben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1566395532950" ID="ID_9111832" MODIFIED="1566395610743" TEXT="die CSS-Effekten spielen daher nur eine begrenzte Rolle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar im Wesentliche zur Schattierung der Flanken.
+    </p>
+    <p>
+      Die Inhalts-Fl&#228;chen selber sind zu gro&#223; und zu strukturiert, um sie per Schattierung zu verdeutlichen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 <node CREATED="1554480402297" ID="ID_1456965488" MODIFIED="1557498707230" TEXT="wie?">
 <node CREATED="1542388995969" ID="ID_343346390" MODIFIED="1557498707230" TEXT="Ablauf-Plan">
 <icon BUILTIN="idea"/>
@@ -22604,6 +22691,13 @@
 </html></richcontent>
 </node>
 </node>
+<node CREATED="1566401468573" ID="ID_636590903" MODIFIED="1566401510213" TEXT="Beschlu&#xdf;: direkt nach dem Display-Evaluation-Pass">
+<icon BUILTIN="yes"/>
+<node CREATED="1566401506391" ID="ID_116486175" MODIFIED="1566401506391" TEXT="BodyCanvasWidget::maybeRebuildLayout()"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566401515511" ID="ID_1551253495" MODIFIED="1566401521816" TEXT="neue Funktion hierf&#xfc;r">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -22848,8 +22942,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#9a85e1" DESTINATION="ID_321264842" ENDARROW="Default" ENDINCLINATION="-618;56;" ID="Arrow_ID_852851809" STARTARROW="None" STARTINCLINATION="-805;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -22865,14 +22958,49 @@
       der GTK-Zeichencode achtet sogar explizit darauf, einen CSS-Effekt mit dem korrekten Mischmodus &#252;ber den bereits auf den CairoCanvas gezeichneten Content zu legen
     </p>
   </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1564932484393" ID="ID_1092949064" MODIFIED="1566401015548">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar f&#252;r bestimmte Elemente (<b>Konvention</b>)
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1028;-57;" ID="Arrow_ID_77023730" STARTARROW="None" STARTINCLINATION="106;39;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1566401020977" ID="ID_1373829097" MODIFIED="1566401070383" TEXT="siehe Definition im TiddlyWiki (&quot;#GuiTimelineDraw&quot;)"/>
+<node CREATED="1566401126813" ID="ID_651523098" MODIFIED="1566401134027" TEXT="Ruler">
+<node CREATED="1566401134943" ID="ID_432602619" MODIFIED="1566401141050" TEXT="box-shadow ist nutzbar">
+<node CREATED="1566401142268" ID="ID_1379290604" MODIFIED="1566401160495" TEXT="outset nur im Rahmen des Margin">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil &#252;ber alles andere dar&#252;bergezeichnet wird
+    </p>
+  </body>
 </html>
 </richcontent>
 </node>
+<node CREATED="1566401161862" ID="ID_1835446713" MODIFIED="1566401166385" TEXT="inset voll nutzbar"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1564932484393" ID="ID_1092949064" MODIFIED="1564932638610" TEXT="man mu&#xdf; also das korrekte, vollst&#xe4;ndige Rechteck f&#xfc;r render_background() angeben">
-<arrowlink COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1028;-57;" ID="Arrow_ID_77023730" STARTARROW="None" STARTINCLINATION="106;39;"/>
-<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="yes"/>
+<node CREATED="1566401169187" ID="ID_268392618" MODIFIED="1566401182383" TEXT="hier kommt der Background zum Tragen"/>
+</node>
+<node CREATED="1566401187384" ID="ID_270883580" MODIFIED="1566401194797" TEXT="Track-Content">
+<node CREATED="1566401195834" ID="ID_929024694" MODIFIED="1566401218274" TEXT="hier wird der generelle &quot;fork&quot;-Style angewendet"/>
+<node CREATED="1566401219318" ID="ID_1029868633" MODIFIED="1566401230601" TEXT="box-shadow nur inset nutzbar"/>
+</node>
+<node CREATED="1566401236332" ID="ID_457183290" MODIFIED="1566401252542" TEXT="die Borders/Slopes werden nur per Gradient/Shading realisiert"/>
 </node>
 </node>
 </node>
@@ -22887,8 +23015,7 @@
       den Zeichenvorgang f&#252;r ein normales Frame-Widget analysieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1563736122461" ID="ID_1095800644" MODIFIED="1563736127792" TEXT="Gtk::Frame">
 <node CREATED="1563736130164" ID="ID_276564599" MODIFIED="1563736139623" TEXT="erbt von Bin, dieses von Container..."/>
 <node CREATED="1563736141579" ID="ID_1238316490" MODIFIED="1563736165824" TEXT="gtk_frame_draw()  (gtkframe.c, 716)">
@@ -22905,8 +23032,7 @@
       Kommentar sagt: it is your responsibility that these two coordinates match
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563736622722" HGAP="54" ID="ID_1395291863" MODIFIED="1564493283947" TEXT="gtk_css_style_render_border" VSHIFT="20">
 <icon BUILTIN="forward"/>
@@ -22934,8 +23060,7 @@
       /home/hiv/.local/share/themes/PanRosewoodHIV/gtk-3.0/gtk-contained.css
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1563831422209" ID="ID_79374511" MODIFIED="1563831422209" TEXT="/home/hiv/.local/share/themes/PanRosewoodHIV/gtk-3.0/gtk-contained.css"/>
 <node CREATED="1563831443895" ID="ID_1181589291" MODIFIED="1563831674186" TEXT="frames: werden flach gezeichnet">
 <richcontent TYPE="NOTE"><html>
@@ -22965,8 +23090,7 @@
       &#160;&#160;border: 1px solid @borders; }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563831978878" ID="ID_1798339852" MODIFIED="1563832006629" TEXT="buttons: verwenden box-shadow">
 <richcontent TYPE="NOTE"><html>
@@ -22978,8 +23102,7 @@
       &#160;&#160;box-shadow: inset 0px 0px 0px 1px shade (@theme_bg_color, 1.15), 0px 1px 2px rgba(0, 0, 0, 0.1); }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563832107140" ID="ID_132078838" MODIFIED="1563832115635" TEXT="&quot;outset&quot; wird &#xfc;berhaupt nicht verwendet"/>
 <node CREATED="1563832501752" ID="ID_804764675" MODIFIED="1563832525842" TEXT="box-shadow == CSS3 special FX overlay rendering">
@@ -23014,8 +23137,7 @@
       herausfinden, <i>warum </i>er solid gezeichnet wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="forward"/>
 <node CREATED="1564496514126" ID="ID_1346070750" MODIFIED="1564496520743" TEXT="suche nach &quot;outline&quot;">
 <node CREATED="1564496521875" ID="ID_1983337712" MODIFIED="1564496542962" TEXT="Treffer in den GTK-Tests">
@@ -23044,8 +23166,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1564497610951" ID="ID_1607000015" MODIFIED="1564497691853" TEXT="flat-style Wahn">
 <icon BUILTIN="smiley-angry"/>
 </node>
@@ -23077,8 +23198,7 @@
       }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -23115,8 +23235,7 @@
       weil er dann mehr oder weniger hartverdrahtet ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563734827469" ID="ID_1948656771" MODIFIED="1563734843479" TEXT="man k&#xf6;nnte allerdings das Verhalten von GTK im eigenen Code nachahmen"/>
 </node>
@@ -23311,8 +23430,7 @@
       Und der Oberpragmatiker generiert den ganzen M&#252;llhaufen dann per SASS order SCSS
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -23334,8 +23452,7 @@
       dann f&#252;hrt ein context_save() dazu, da&#223; pl&#246;tzlich die CSS-Werte auf Defaults zur&#252;ckspringen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1564868280687" ID="ID_593595518" MODIFIED="1564871156101" TEXT="es hilft nichts, wenn man den Screen (nochmal) setzt">
 <richcontent TYPE="NOTE"><html>
@@ -23353,8 +23470,7 @@
       Allerdings hat es bisher auch ohne das bei mir funktioniert.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1564868338325" ID="ID_1826179725" MODIFIED="1564871159899" TEXT="es hilft nichts, wenn man den Pfad erneut setzt">
@@ -23418,8 +23534,7 @@
       allerdings verh&#228;lt sich das normale Zeichnen ganz genauso; das sind allgemeine Einschr&#228;nkungen (von CSS? GTK?)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-neutral"/>
 </node>
@@ -23442,8 +23557,7 @@
       box-shadow (inset) innerhalb des Rechteckss, <i>und innerhalb</i>&#160;der (gedachten) border
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-3"/>
 </node>
 </node>
@@ -23456,8 +23570,30 @@
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932652482" ID="ID_1330271110" MODIFIED="1564934138367" TEXT="alle render_background mit vollst&#xe4;ndigem Rechteck versorgen">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1565268879772" ID="ID_261041772" MODIFIED="1565268974506" TEXT="brauche berechnete H&#xf6;he(n)">
+<node CREATED="1565268879772" ID="ID_261041772" MODIFIED="1566401288902" TEXT="brauche berechnete H&#xf6;he(n)">
 <arrowlink COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1566401334135" ID="ID_688081615" MODIFIED="1566401385045" TEXT="doch nicht so schlimm">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil die CSS-box-shadow-Effekte zum Zeichnen komplexerer Strukturen nur bedingt n&#252;tzlich sind.
+    </p>
+    <p>
+      Daher verzichte ich global (f&#252;r die Slopes) darauf, wende sie aber <b>lokal</b>&#160; an
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1566401295806" ID="ID_1604746709" MODIFIED="1566401306583" TEXT="es gen&#xfc;gt die lokale H&#xf6;he">
+<node CREATED="1566401307715" ID="ID_927850679" MODIFIED="1566401323333" TEXT="f&#xfc;r den Track-Content"/>
+<node CREATED="1566401324073" ID="ID_1089116245" MODIFIED="1566401328764" TEXT="f&#xfc;r die Track-Ruler"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932680606" ID="ID_695299880" MODIFIED="1564934141564" TEXT="Rahmen pa&#xdf;genau einsetzen">
@@ -45084,8 +45220,7 @@
       d.h. die angegebenen Abmessungen entsprechen der bounding box
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1563631918721" ID="ID_545245141" MODIFIED="1563631986632" TEXT="partielle / Gesamt-Definitionen sind jeweils komplett incl Farbe">
 <richcontent TYPE="NOTE"><html>
@@ -45109,8 +45244,7 @@
       in diesem Falle w&#252;rde die linke Border mit der geerben Farbe gezeichnet, und nicht gelb
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1564926426614" ID="ID_240623877" MODIFIED="1564926740793" TEXT="box-shadow">
@@ -45129,8 +45263,7 @@
       &lt;offX&gt; &lt;offY&gt; [&lt;blur&gt; [&lt;spread&gt;]] &lt;colour&gt;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1564926477387" ID="ID_1307917529" MODIFIED="1564926492175" TEXT="wird zus&#xe4;tzlich zum Element in Z-Order gerendert">
 <node CREATED="1564926496242" ID="ID_1998030818" MODIFIED="1564929104275" TEXT="backdrop: below and outside background frame"/>
@@ -45191,8 +45324,7 @@
       automatisch eine h&#246;here Priorit&#228;t haben, als das, was sich aus den Path-match ergibt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1564838554448" ID="ID_1827131254" MODIFIED="1564838782372" TEXT="M&#xfc;ll, wenn die gegebene Bounding-Box zu klein ist">
 <richcontent TYPE="NOTE"><html>
@@ -45222,8 +45354,7 @@
       Man mu&#223; also gen&#252;gend Platz allozieren f&#252;r border-top-width + border-bottom-width + gew&#252;nschter Content!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -46404,8 +46535,7 @@
       This function is only used by Gtk::Container subclasses, to assign a size, position and (optionally) baseline to their child widgets.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#1d47b3" DESTINATION="ID_1813983433" ENDARROW="Default" ENDINCLINATION="124;0;" ID="Arrow_ID_416269388" STARTARROW="None" STARTINCLINATION="58;0;"/>
 </node>
 <node CREATED="1540647190676" ID="ID_1813983433" MODIFIED="1557498707239" TEXT="on_size_allocate (Allocation&amp;)">

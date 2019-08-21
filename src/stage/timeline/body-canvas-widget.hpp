@@ -136,6 +136,7 @@ namespace timeline {
       
       void slotStructureChange()  noexcept;
       void maybeRebuildLayout();
+      void adjustCanvasHeight(int canvasWidth, int totalHeight, int rulerHeight);
     };
   
   
