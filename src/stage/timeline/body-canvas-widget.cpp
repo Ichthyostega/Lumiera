@@ -72,6 +72,8 @@ namespace timeline {
   namespace { // details of track background painting
     
     const int INITIAL_TIMERULER_HEIGHT_px = 30;
+    const int INITIAL_CONTENT_HEIGHT_px = 100;
+    const int INITIAL_CONTENT_WIDTH_px = 200;
     
     /** request a pre-defined CSS style context for the track body */
     lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
@@ -364,21 +366,18 @@ namespace timeline {
                           return profile_;
                         };
       
+      // initially set up some dummy space. Will be updated to match on first draw() call...
+      adjustCanvasHeight(INITIAL_CONTENT_WIDTH_px, INITIAL_CONTENT_HEIGHT_px, INITIAL_TIMERULER_HEIGHT_px);
+      
       this->set_border_width (0);
-      this->property_expand() = true;       // dynamically grab any available additional space
-      this->pack_start (rulerCanvas_);
-      this->pack_start (contentArea_);
+      this->property_expand() = true;   // dynamically grab any available additional space
+      this->pack_start (rulerCanvas_, Gtk::PACK_SHRINK);
+      this->pack_start (contentArea_, Gtk::PACK_EXPAND_WIDGET);
       
       contentArea_.set_shadow_type (Gtk::SHADOW_NONE);
       contentArea_.set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_AUTOMATIC);  // always need a horizontal scrollbar
       contentArea_.property_expand() = true;                               //  dynamically grab additional space
       contentArea_.add (mainCanvas_);
-      
-      { // for the initial empty canvas -- use all space the enclosing scrolled window got.
-        auto currSize = get_allocation();
-        int height = currSize.get_height();
-        adjustCanvasHeight(currSize.get_width(), height, INITIAL_TIMERULER_HEIGHT_px);
-      }
       
       // realise all initially configured elements....
       this->show_all();
@@ -420,9 +419,10 @@ namespace timeline {
     if (rootBody_ and isnil (profile_))
       {
         layout_.triggerDisplayEvaluation();
-        TODO("retrieve the vertical extension established by the triggerDisplayEvaluation() ");
-//      adjustCanvasHeight(currSize.get_width(), height, INITIAL_TIMERULER_HEIGHT_px); //////////////////////////TODO
         rootBody_->establishTrackSpace (profile_);
+        adjustCanvasHeight(layout_.getPixSpan().delta(),
+                           rootBody_->calcHeight(),
+                           rootBody_->calcRulerHeight());
       }
   }
   
@@ -437,8 +437,16 @@ namespace timeline {
   void
   BodyCanvasWidget::adjustCanvasHeight(int canvasWidth, int totalHeight, int rulerHeight)
   {
-    rulerCanvas_.set_size (canvasWidth, rulerHeight);
-    mainCanvas_.set_size (canvasWidth, max(0, totalHeight-rulerHeight));
+    auto adjust = [](Gtk::Layout& canvas, guint newWidth, guint newHeight) -> void
+                    {
+                      guint currWidth{0}, currHeight{0};
+                      canvas.get_size(currWidth, currHeight);
+                      if (currWidth != newWidth or currHeight != newHeight)
+                        canvas.set_size(newWidth, newHeight);
+                    };
+    
+    adjust (rulerCanvas_, canvasWidth, rulerHeight);
+    adjust (mainCanvas_, canvasWidth, max(0, totalHeight-rulerHeight));
   }
   
   

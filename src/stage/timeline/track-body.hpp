@@ -89,6 +89,7 @@ namespace timeline {
       void setTrackName (cuString&);
       void establishTrackSpace (TrackProfile&);
       void attachSubTrack (TrackBody*);
+      uint calcRulerHeight();
       uint calcHeight();
       
       DisplayManager::SignalStructureChange signalStructureChange_;

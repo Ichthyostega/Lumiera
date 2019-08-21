@@ -104,16 +104,27 @@ namespace timeline {
   uint
   TrackBody::calcHeight()
   {
+    uint heightSum = calcRulerHeight() + contentHeight_;
+    for (TrackBody* subTrack : subTracks_)
+      heightSum += subTrack->calcHeight();
+    return heightSum;
+  }
+  
+  
+  /**
+   * sum up the vertical extension required by all overview rulers.
+   * @return height in pixels, including all gap space
+   */
+  uint
+  TrackBody::calcRulerHeight()
+  {
     uint overviewHeight = 0;
     for (auto& ruler : rulers_)
       {
         overviewHeight += ruler->calcHeight()
                         + ruler->getGapHeight();
       }
-    uint heightSum = overviewHeight + contentHeight_;
-    for (TrackBody* subTrack : subTracks_)
-      heightSum += subTrack->calcHeight();
-    return heightSum;
+    return overviewHeight;
   }
   
   
