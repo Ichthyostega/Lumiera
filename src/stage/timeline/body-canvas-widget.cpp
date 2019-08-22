@@ -442,7 +442,10 @@ namespace timeline {
                       guint currWidth{0}, currHeight{0};
                       canvas.get_size(currWidth, currHeight);
                       if (currWidth != newWidth or currHeight != newHeight)
-                        canvas.set_size(newWidth, newHeight);
+                        {
+                          canvas.set_size(newWidth, newHeight);
+                          canvas.set_size_request(newWidth, newHeight);  //////TODO the width might be more than actually is available. Better do this with precise spacing, and do it for the rulerCanvas only!!
+                        }
                     };
     
     adjust (rulerCanvas_, canvasWidth, rulerHeight);

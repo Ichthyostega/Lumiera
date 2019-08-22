@@ -88,7 +88,7 @@
 </node>
 </node>
 <node CREATED="1538938685096" HGAP="138" ID="ID_511824194" MODIFIED="1557498707215" TEXT="gr&#xfc;nden" VSHIFT="42">
-<node CREATED="1477784793993" ID="ID_1868522177" MODIFIED="1560688124346" TEXT="Umbau">
+<node CREATED="1477784793993" ID="ID_1868522177" MODIFIED="1566487594554" TEXT="Umbau">
 <linktarget COLOR="#bc4930" DESTINATION="ID_1868522177" ENDARROW="Default" ENDINCLINATION="221;282;" ID="Arrow_ID_600425644" SOURCE="ID_707273464" STARTARROW="None" STARTINCLINATION="1984;197;"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1477784813895" ID="ID_1343270939" MODIFIED="1557498707215" TEXT="Model durch UI-Bus ersetzen">
@@ -21447,9 +21447,9 @@
 </node>
 <node COLOR="#338800" CREATED="1566407055894" ID="ID_982642970" MODIFIED="1566407059861" TEXT="&#xc4;nderungen erkennen">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566407136811" ID="ID_832049284" MODIFIED="1566407183538" TEXT="ge&#xe4;nderte Gr&#xf6;&#xdf;e wird nicht sichtbar">
-<arrowlink COLOR="#df2014" DESTINATION="ID_1463503563" ENDARROW="Default" ENDINCLINATION="186;-101;" ID="Arrow_ID_29417298" STARTARROW="None" STARTINCLINATION="-60;173;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1566407136811" ID="ID_832049284" MODIFIED="1566487620033" TEXT="ge&#xe4;nderte Gr&#xf6;&#xdf;e wird nicht sichtbar">
+<arrowlink COLOR="#16d17f" DESTINATION="ID_489535600" ENDARROW="Default" ENDINCLINATION="-80;-272;" ID="Arrow_ID_1038229013" STARTARROW="None" STARTINCLINATION="-102;166;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -21462,14 +21462,158 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566406980688" ID="ID_196847136" MODIFIED="1566406988165" TEXT="Layout-Anpsassungen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566407065037" ID="ID_548414744" MODIFIED="1566407093353" TEXT="Scrollbar anpassen nach Gr&#xf6;&#xdf;en&#xe4;nderung">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1566407096905" ID="ID_1463503563" MODIFIED="1566407183538" TEXT="reagiert noch nicht">
-<linktarget COLOR="#df2014" DESTINATION="ID_1463503563" ENDARROW="Default" ENDINCLINATION="186;-101;" ID="Arrow_ID_29417298" SOURCE="ID_832049284" STARTARROW="None" STARTINCLINATION="-60;173;"/>
-<icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566407104280" ID="ID_1989341591" MODIFIED="1566407127648" TEXT="was hab ich seinerzeit beim Gtk-Canvas-Experiment gemacht?">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566407065037" ID="ID_548414744" MODIFIED="1566487490014" TEXT="Scrollbar anpassen nach Gr&#xf6;&#xdf;en&#xe4;nderung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1566407096905" ID="ID_1463503563" MODIFIED="1566487536944" TEXT="reagiert noch nicht...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1566407104280" ID="ID_1989341591" MODIFIED="1566421808796" TEXT="was hab ich seinerzeit beim Gtk-Canvas-Experiment gemacht?">
 <icon BUILTIN="help"/>
+<node CREATED="1566421664831" ID="ID_1051378925" MODIFIED="1566421671379" TEXT="exakt das Gleiche"/>
+<node CREATED="1566421672116" ID="ID_343684790" MODIFIED="1566421796558" TEXT="nur noch zus&#xe4;tzlich ein Window-&gt;win-&gt;invalidate_rect">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alledings nur, nachdem man das drawing ein/ausgeschaltet hat....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;void
+    </p>
+    <p>
+      &#160;&#160;Canvas::enableDraw (bool yes)
+    </p>
+    <p>
+      &#160;&#160;{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;shallDraw_ = yes;
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;// force redrawing of the visible area...
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;auto win = get_window();
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;if (win)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;int w = get_allocation().get_width();
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;int h = get_allocation().get_height();
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Gdk::Rectangle rect{0, 0, w, h};
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;win-&gt;invalidate_rect(rect, false);
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;}
+    </p>
+    <p>
+      &#160;&#160;}
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1566421823243" ID="ID_351645581" MODIFIED="1566421928690" TEXT="doch es funktioniert!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nur stimmen die Zahlenwerte im Moment nicht;
+    </p>
+    <p>
+      wir malen viel mehr auf den Canvas, als seine Gr&#246;&#223;e erlauben w&#252;rde.
+    </p>
+    <p>
+      Macht trotzdem nix
+    </p>
+  </body>
+</html>
+</richcontent>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1566421888123" ID="ID_1319951362" MODIFIED="1566421905961" TEXT="sogar die Header-Pane scrollt mit">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1566407096905" ID="ID_489535600" MODIFIED="1566487612828" TEXT="Problem: rePack- der umschlie&#xdf;enden Box">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn man PACK_SHRINK setzt, dann weist die umschlie&#223;ende Box initial
+    </p>
+    <p>
+      dem Canvas die Gr&#246;&#223;e 0 zu (weil er zu diesem Zeitpunkt noch nicht realisiert ist).
+    </p>
+    <p>
+      Problem ist aber, da&#223; diese Zuweisung sp&#228;ter, nach einem set_size auf dem Canvas nicht revidiert wird.
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#16d17f" DESTINATION="ID_489535600" ENDARROW="Default" ENDINCLINATION="-80;-272;" ID="Arrow_ID_1038229013" SOURCE="ID_832049284" STARTARROW="None" STARTINCLINATION="-102;166;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1566487213692" ID="ID_617175720" MODIFIED="1566487280895" TEXT="sollte eigentlich automatisch funktionieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Funktionen zum expliziten Setzen und re-Sizing sind deprecated.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1566487282848" ID="ID_771271362" MODIFIED="1566487296971" TEXT="Workaround: jeweils erneut set_size_request">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566487379550" ID="ID_272047983" MODIFIED="1566487471467" TEXT="TODO: genauer machen, und nur f&#xfc;r den Ruler-Canvas">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im Moment setze ich einen brachialen Size-Request auf die gesamte Canvas-Gr&#246;&#223;e.
+    </p>
+    <p>
+      Die umschlie&#223;ende Box handhabt das aber anscheinend korrekt, und kappt die &#252;berm&#228;&#223;ige Weite
+    </p>
+    <p>
+      auf den Platz, der ihr selber zugewiesen wurde. Aber das erscheint mir fragil;
+    </p>
+    <p>
+      ich sollte diese Logik besser selber explizit ausprogrammieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -24361,7 +24505,7 @@
 <node CREATED="1487464480872" ID="ID_830603607" MODIFIED="1557498707232" TEXT="bestehende Strukturen stillegen"/>
 <node CREATED="1487464489143" ID="ID_1990719718" MODIFIED="1557498707232" TEXT="noch erhalten als Bezugspunkt"/>
 <node CREATED="1487464495494" ID="ID_1238357229" MODIFIED="1557498707232" TEXT="daneben neue Controller-Backbone hochziehen"/>
-<node CREATED="1487464505469" ID="ID_707273464" MODIFIED="1560688124346" TEXT="Umbau in neuen top-level">
+<node CREATED="1487464505469" ID="ID_707273464" MODIFIED="1566487594554" TEXT="Umbau in neuen top-level">
 <arrowlink COLOR="#bc4930" DESTINATION="ID_1868522177" ENDARROW="Default" ENDINCLINATION="221;282;" ID="Arrow_ID_600425644" STARTARROW="None" STARTINCLINATION="1984;197;"/>
 </node>
 </node>
