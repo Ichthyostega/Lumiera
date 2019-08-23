@@ -23817,8 +23817,8 @@
 <arrowlink COLOR="#5590d5" DESTINATION="ID_1444331441" ENDARROW="Default" ENDINCLINATION="-449;0;" ID="Arrow_ID_1759102712" STARTARROW="None" STARTINCLINATION="98;-3;"/>
 <linktarget COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1035;-107;" ID="Arrow_ID_77023730" SOURCE="ID_1092949064" STARTARROW="Default" STARTINCLINATION="106;39;"/>
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932652482" ID="ID_1330271110" MODIFIED="1564934138367" TEXT="alle render_background mit vollst&#xe4;ndigem Rechteck versorgen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1564932652482" ID="ID_1330271110" MODIFIED="1566525299678" TEXT="alle render_background mit vollst&#xe4;ndigem Rechteck versorgen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1565268879772" ID="ID_261041772" MODIFIED="1566401288902" TEXT="brauche berechnete H&#xf6;he(n)">
 <arrowlink COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
 <icon BUILTIN="button_cancel"/>
@@ -23847,6 +23847,9 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932680606" ID="ID_695299880" MODIFIED="1564934141564" TEXT="Rahmen pa&#xdf;genau einsetzen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566525274854" ID="ID_1976574053" MODIFIED="1566525289358" TEXT="Vorsicht: auch horizontal gen&#xfc;gend Platz schaffen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932712545" ID="ID_756463948" MODIFIED="1564934128901" TEXT="(optional) zus&#xe4;tzliche Schattierung im Overlay-Pass zeichnen">
 <linktarget COLOR="#7255d4" DESTINATION="ID_756463948" ENDARROW="Default" ENDINCLINATION="-507;0;" ID="Arrow_ID_1335568264" SOURCE="ID_909641864" STARTARROW="None" STARTINCLINATION="576;29;"/>
@@ -23866,13 +23869,34 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1566518998190" ID="ID_284079883" MODIFIED="1566519017050" TEXT="Stylesheet bestimmt zus&#xe4;tzlichen Margin + Padding"/>
 <node CREATED="1566519017878" ID="ID_30554429" MODIFIED="1566519029065" TEXT="diese m&#xfc;ssen mit den Werten im TrackBody verrechnet werden">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566522092555" ID="ID_293262823" MODIFIED="1566522110192" TEXT="Konsequenz: TrackBody mu&#xdf; auch den Style abfragen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1566522092555" ID="ID_293262823" MODIFIED="1566524848312" TEXT="Konsequenz: TrackBody mu&#xdf; auch den Style abfragen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1566524821779" ID="ID_447136717" MODIFIED="1566524894982" TEXT="L&#xf6;sung: via statische Funktion setzen"/>
+<node CREATED="1566524850167" ID="ID_1119976379" MODIFIED="1566524885730" TEXT="kann dann aus body-canvas-widget.cpp passieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wo parktischerweise der Style-Advice in einer lokalen statischen Variablen liegt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1566524901403" ID="ID_950799052" MODIFIED="1566524918407" TEXT="TODO: pr&#xfc;fen ... stimmen die Werte">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 <node CREATED="1566519037996" ID="ID_57629359" MODIFIED="1566519094001" TEXT="der zus&#xe4;tzliche Platz wird u.A. f&#xfc;r den box-shadow ben&#xf6;tigt">
 <arrowlink COLOR="#2b75cc" DESTINATION="ID_1092949064" ENDARROW="Default" ENDINCLINATION="286;83;" ID="Arrow_ID_1686979270" STARTARROW="None" STARTINCLINATION="572;0;"/>
 <icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566524922429" ID="ID_1618879281" MODIFIED="1566524941579" TEXT="f&#xfc;r den Overlay-Pass genau analoge Berechnungen machen">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

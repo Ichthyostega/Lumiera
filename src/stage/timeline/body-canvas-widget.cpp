@@ -94,6 +94,31 @@ namespace timeline {
     
     
     /**
+     * Adjust the vertical space to accommodate for additional decorations
+     * as required by the CSS style rules. Our custom drawing code observes
+     * the same adjustments when drawing background and frame borders.
+     */
+    void
+    setupAdditionalTrackPadding_fromCSS()
+    {
+      StyleC styleRuler{trackRulerStyle.getAdvice()};
+      StyleC styleBody {trackBodyStyle.getAdvice()};
+      
+      int decorationRuler = styleRuler->get_margin().get_top()
+                          + styleRuler->get_margin().get_bottom()
+                          + styleRuler->get_border().get_top()
+                          + styleRuler->get_border().get_bottom()
+                          + styleRuler->get_padding().get_top()
+                          + styleRuler->get_padding().get_bottom()
+                          ;
+      int decorationBody  = styleBody->get_padding().get_top()
+                          + styleBody->get_padding().get_bottom()
+                          ;
+      TrackBody::setupDecoration(decorationBody, decorationRuler);
+    }
+    
+    
+    /**
      * @internal drawing routines to paint the nested system
      *  of insets and rulers in the track content display
      * @remarks the actual sequence of elements to draw is established by
@@ -431,6 +456,7 @@ namespace timeline {
   {
     if (rootBody_ and isnil (profile_))
       {
+        setupAdditionalTrackPadding_fromCSS();
         layout_.triggerDisplayEvaluation();
         rootBody_->establishTrackSpace (profile_);
         adjustCanvasHeight(layout_.getPixSpan().delta(),

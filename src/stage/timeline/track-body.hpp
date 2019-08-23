@@ -73,6 +73,8 @@ namespace timeline {
   class TrackBody
     {
       uint contentHeight_;
+      static uint contentDecoration;
+      static uint rulerDecoration;
       
       using PRuler    = std::unique_ptr<RulerTrack>;
       using Rulers    = std::vector<PRuler>;
@@ -87,6 +89,7 @@ namespace timeline {
      ~TrackBody();
       
       void setTrackName (cuString&);
+      static void setupDecoration (uint content, uint ruler);
       void establishTrackSpace (TrackProfile&);
       void attachSubTrack (TrackBody*);
       uint calcRulerHeight();

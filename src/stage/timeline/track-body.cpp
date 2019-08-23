@@ -78,6 +78,11 @@ namespace timeline {
   }
   
   
+  /** storage for common style/padding settings */
+  uint TrackBody::contentDecoration = 0;
+  uint TrackBody::rulerDecoration   = 0;
+  
+  
   void
   TrackBody::setTrackName (cuString& trackName)
   {
@@ -98,13 +103,29 @@ namespace timeline {
   
   
   /**
+   * Setup additional vertical padding for the decorations added through CSS.
+   * Our drawing code retrieves the margin, padding and border size settings from the
+   * appropriate CSS rules and adds the necessary additional space to the drawing coordinates;
+   * however, since one purpose of TrackBody is to calculate overall space requirements, we also
+   * need to account for this additional space. This call allows to pass in those values, which
+   * will be stored in static (class) variables.
+   */
+  void
+  TrackBody::setupDecoration (uint content, uint ruler)
+  {
+    contentDecoration = content;
+    rulerDecoration = ruler;
+  }
+  
+  
+  /**
    * recursively calculate the height in pixels to display this track,
    * including all nested sub-tracks
    */
   uint
   TrackBody::calcHeight()
   {
-    uint heightSum = calcRulerHeight() + contentHeight_;
+    uint heightSum = calcRulerHeight() + contentHeight_ + contentDecoration;
     for (TrackBody* subTrack : subTracks_)
       heightSum += subTrack->calcHeight();
     return heightSum;
@@ -122,7 +143,8 @@ namespace timeline {
     for (auto& ruler : rulers_)
       {
         overviewHeight += ruler->calcHeight()
-                        + ruler->getGapHeight();
+                        + ruler->getGapHeight()
+                        + rulerDecoration;
       }
     return overviewHeight;
   }
