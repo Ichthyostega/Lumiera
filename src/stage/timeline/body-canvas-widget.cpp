@@ -119,15 +119,14 @@ namespace timeline {
         int line_ = 0;
         
         void
-        fillBackground (int height)
+        fillBackground (StyleC& style, int height)
           {
-            style_->render_background (cox_
-                                      ,visible_.b       // left start of the rectangle
-                                      ,line_            // top of the rectangle
-                                      ,visible_.delta() // width of the area
-                                      ,height           // height to fill
-                                      );
-            line_ += height;
+            style->render_background (cox_
+                                     ,visible_.b       // left start of the rectangle
+                                     ,line_            // top of the rectangle
+                                     ,visible_.delta() // width of the area
+                                     ,height           // height to fill
+                                     );
           }
         
       public:
@@ -144,12 +143,12 @@ namespace timeline {
       : public AbstractTrackRenderer
       {
         
-        /** paint the top of the track body area */
+        /** create spacing at the top of the track body area */
         void
         prelude()  override
           {
             int topMargin = style_->get_margin().get_top();
-            fillBackground (topMargin);
+            line_ += topMargin;
           }
         
         /** finish painting the track body area
@@ -158,45 +157,53 @@ namespace timeline {
         coda (uint pad)  override
           {
             int bottomPad = pad + style_->get_margin().get_bottom();
-            fillBackground (bottomPad);
+            line_ += bottomPad;
           }
         
         /** draw grounding of an overview/ruler track
          *  with the given height */
         void
-        ruler (uint h)  override
+        ruler (uint contentHeight)  override
           {
+            int marTop = styleR_->get_margin().get_top();
+            int marBot = styleR_->get_margin().get_bottom();
+            int padTop = styleR_->get_padding().get_top();
+            int padBot = styleR_->get_padding().get_bottom();
             int frameT = styleR_->get_border().get_top();
             int frameB = styleR_->get_border().get_bottom();
+            
+            int heightWithFrame = contentHeight + padTop+padBot + frameT+frameB;
+            
+            line_ += marTop;
+            fillBackground(styleR_, heightWithFrame);
             styleR_->render_frame (cox_
                                   ,visible_.b
                                             +20   ////////////////////////////////////////TODO: visual debugging
                                   ,line_
                                   ,visible_.delta()
-                                  ,h + frameT + frameB
+                                  ,heightWithFrame
                                   );
-            styleR_->render_background (cox_
-                                       ,visible_.b       // Left Start Of The Rectangle
-                                       ,line_+frameT     // Top Of The Rectangle
-                                       ,visible_.delta() // Width Of The Area
-                                       ,h                // Height To Fill
-                                       );
-            line_ += h + frameT + frameB;
+            line_ += heightWithFrame;
+            line_ += marBot;
           }
         
-        /** render additional padding/gap */
+        /** insert additional padding/gap (typically below a ruler) */
         void
         gap (uint h)  override
           {
-            fillBackground (h);
+            line_ += h;
           }
         
         /** fill background of track content area
          *  with the given vertical extension */
         void
-        content (uint h)  override
+        content (uint contentHeight)  override
           {
-            fillBackground (h);
+            int padTop = style_->get_padding().get_top();
+            int padBot = style_->get_padding().get_bottom();
+            int heightWithPadding = contentHeight + padTop+padBot;
+            fillBackground (style_, heightWithPadding);
+            line_ += heightWithPadding;
           }
         
         /** paint opening slope to enter nested sub tracks
@@ -204,14 +211,21 @@ namespace timeline {
         void
         open()  override
           {
+//          style_->context_save();                // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
             style_->add_class (slopeClassName (1));
             int slopeWidth = style_->get_border().get_top();
-            style_->render_frame (cox_
-                                 ,visible_.b       // left start of the rectangle
-                                 ,line_            // top of the rectangle
-                                 ,visible_.delta() // width of the area
-                                 ,2*slopeWidth     // height to fill
+            style_->render_frame_gap(cox_
+                                 ,visible_.b
+                                            +25   ////////////////////////////////////////TODO: visual debugging
+                                 ,line_
+                                 ,visible_.delta()
+                                 ,2*slopeWidth
+                                 //_______________________________we only need the top side of the frame
+                                 ,Gtk::PositionType::POS_BOTTOM
+                                 ,visible_.b
+                                 ,visible_.e
                                  );
+//          style_->context_restore();             // <<<---does not work...
             style_->remove_class (slopeClassName(1));
             line_ += slopeWidth;
           }
@@ -223,23 +237,22 @@ namespace timeline {
           {
 //          style_->context_save();                // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
             style_->add_class (slopeClassName(n));
-            style_->invalidate();
             int slopeWidth = style_->get_border().get_bottom();
-            INFO(stage, "n=%d class=%s  -->slopeWidth=%d", n, util::cStr(slopeClassName(n)), slopeWidth);
+            line_ -= slopeWidth;  // set back to create room for the (invisible) top side of the frame 
             style_->render_frame_gap(cox_
                                  ,visible_.b
-                                            +20   ////////////////////////////////////////TODO: visual debugging
+                                            +30   ////////////////////////////////////////TODO: visual debugging
                                  ,line_
                                  ,visible_.delta()
-                                 ,slopeWidth
-                                            * 5   ////////////////////////////////////////TODO: visual debugging
+                                 ,2*slopeWidth
+                                 //_______________________________we only need the bottom side of the frame
                                  ,Gtk::PositionType::POS_TOP
                                  ,visible_.b
                                  ,visible_.e
                                  );
 //          style_->context_restore();             // <<<---does not work...
             style_->remove_class (slopeClassName(n));
-            line_ += slopeWidth;
+            line_ += 2*slopeWidth;
           }
         
       public:

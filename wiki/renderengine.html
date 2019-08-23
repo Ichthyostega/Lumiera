@@ -3524,7 +3524,7 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201908211521" tags="GuiPattern spec impl img draft" changecount="100">
+<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201908230100" tags="GuiPattern spec impl img draft" changecount="103">
 <pre>The presentation of the track body area relies on the [[Gtk::Layout &quot;canvas widget&quot;|GtkLayoutWidget]], thus allowing for a mixture of custom drawing with embedded custom Gtk widgets. The actual drawing routine is activated in response to the {{{on_draw}}} signal -- and invoking the inherited handler function will initiate the standard drawing for the embedded child widgets. This partitions the additional, specific drawing activities into a pre-widget drawing phase to prepare the background and framework structure of the track area, and a post-widget drawing phase to show all kinds of overlays, markers cursors and similar UI indicators. A nested structure of {{{TrackBody}}} objects serves as organisational device to structure these custom drawing activities in accordance with the nested structure of the track fork.
 
 !Building a nested 3D structure
@@ -3553,7 +3553,7 @@ Once the fundamental decision towards a 3D structure is taken, there still is so
 * shading can indicate a //slope// up or down.
 An immediate consequence to draw from this observation is that ~CSS3 effects are only of limited use for this purpose. They are more helpful to highlight compact and local structures, like a menu button, or some element or handle on the clips. We can (and likely will) use CSS shading for the [[track overview rulers|TrackRuler]] though. We possibly could use a slight inset box shadow within the actual track content area. However, it is rather pointless to use a box shadow to paint the nested track scope insets -- we rather need to rely on gradients and direct colour shading for that purpose.
 
-Another consequence  is that we do not need to apply an overall &quot;stacked boxes&quot; approach -- there is not much to gain from doing so (and we would do a lot of unnecessary filling operations, most of which will actually clipped away). For that reason, we define our ''track profile'' to represent a vertical //top-down drawing sweep.// Non the less, the actual colours and shades can be defined completely through CSS rules. To achieve this, we apply some tricks
+Another consequence  is that we do not need to apply an overall &quot;stacked boxes&quot; approach -- there is not much to gain from doing so (and we would do a lot of unnecessary filling operations, most of which will actually be clipped away). For that reason, we define our ''track profile'' to represent a vertical //top-down drawing sweep.// Non the less, the actual colours and shades can be defined completely through CSS rules. To achieve this, we apply some tricks
 * we define //virtual widgets,// which are only used to match against selectors and pick up the attached CSS styles
 ** the virtual element {{{fork}}} represents &quot;a timeline track&quot;
 ** and a virtual {{{frame}}} element nested therein represents &quot;a ruler on top of a timeline track&quot;
@@ -3564,11 +3564,18 @@ Another consequence  is that we do not need to apply an overall &quot;stacked bo
 *:* a {{{margin}}} at top will add additional space between consecutive tracks
 *:* while the {{{padding}}} will be used within the track content area -- &lt;br/&gt; of course only in vertical direction, since the horizontal extension is ruled by the time position of elements within the track
 *:* please note that {{{background}}} stylings apply to the //content area// and not the track space at a whole.
+*:* especially a {{{box shadow}}} will be drawn when filling the background of the content area -- however, only an {{{inset}}} makes sense here,&lt;br/&gt;since a regular (outer) box shadow will be covered by consecutive drawing actions...
 *;track ruler
 *:attach rules to the selector{{{fork.timeline__fork frame.timeline__ruler}}}
 *:* again the {{{border top}}} and {{{border bottom}}} settings will delimit the ruler form the other track content
 *:* while {{{margin}}} and {{{padding}}} apply as usual outside and within the border
-*:* here the {{{box shadow}}} will be drawn with the background -- however, only an {{{inset}}} makes sense here,&lt;br/&gt;since a regular (outer) box shadow will be covered by consecutive drawing actions, unless it sticks within the limits of the {{{margin}}}
+*:* here the {{{box shadow}}} will be drawn with the background and aligned with the frame -- and again, only an {{{inset}}} really makes sense,&lt;br/&gt;while a regular (outer) box shadow must be small enough to stick within the limits of the {{{margin}}}
+*;slopes
+*:we use several classes to define the effect of consecutive nested frames forming a common slope; however, we perform this combination effect only 5 steps deep
+*:* we use class {{{.track-slope--deep1}}} for a simple slope (inset by one nested level)
+*:* class {{{.track-slope--deep2}}} for two consecutive nested steps combined. Note this only ever happens on closing (upward) slopes
+*:* likewise class {{{.track-slope--deep3}}} for three and class {{{.track-slope--deep4}}} for four combined slopes
+*:* finally, class {{{.track-slope--verydeep}}} is used for five and more combined upward (closing) slopes
 
 Please note also that our drawing code operates in several ''passes''. First, a ''background'' pass is used to fill the area, then GTK is invoked recursively for any widgets on the dawing canvas, most notably the ''clips''. Then, a final ''overlay'' pass allows to paint range markers, selections and indicators on top.
 </pre>

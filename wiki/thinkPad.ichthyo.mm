@@ -21912,6 +21912,9 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1566406763774" ID="ID_764785834" MODIFIED="1566406772229" TEXT="verwende bisher Platzhalter-Konstanten">
 <icon BUILTIN="flag-pink"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566518895896" ID="ID_1389016008" MODIFIED="1566518921254" TEXT="Achtung: Margin+Padding gem&#xe4;&#xdf; Stylesheet mit ber&#xfc;cksichtigen">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1566406773325" ID="ID_1516897126" MODIFIED="1566406830389" TEXT="soll einmal aus dem systematischen UI-Modell bzw Session-Modell kommen">
 <arrowlink COLOR="#5287c5" DESTINATION="ID_43593052" ENDARROW="Default" ENDINCLINATION="-197;439;" ID="Arrow_ID_350259030" STARTARROW="None" STARTINCLINATION="-244;0;"/>
 <icon BUILTIN="bell"/>
@@ -22723,7 +22726,11 @@
 <node COLOR="#338800" CREATED="1554516928332" ID="ID_874621550" MODIFIED="1557498707230" TEXT="Verben definieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1554571992025" ID="ID_1074099376" MODIFIED="1557498707230" TEXT="Anwendung der Verben"/>
+<node COLOR="#338800" CREATED="1554571992025" FOLDED="true" ID="ID_1074099376" MODIFIED="1566517833423" TEXT="Anwendung der Verben">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1566517815129" ID="ID_914599141" MODIFIED="1566517824939" TEXT="Funktionsaufruf via VTable"/>
+<node CREATED="1566517825863" ID="ID_1111586723" MODIFIED="1566517831729" TEXT="Argumente aus embedded Tuple"/>
+</node>
 <node COLOR="#338800" CREATED="1554516938851" ID="ID_1733864099" MODIFIED="1557498707230" TEXT="Verb-Sequenz speichern">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -22750,7 +22757,25 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1554517013770" ID="ID_1565362810" MODIFIED="1557498707230" TEXT="Verb-Sequenz konsolidieren"/>
+<node CREATED="1554517013770" ID="ID_1565362810" MODIFIED="1557498707230" TEXT="Verb-Sequenz konsolidieren">
+<node CREATED="1566517520897" ID="ID_1585833997" MODIFIED="1566517533715" TEXT="nur beim abschlie&#xdf;enden Slope"/>
+<node CREATED="1566517544022" ID="ID_1083102048" MODIFIED="1566517598107" TEXT="f&#xfc;gt dem jeweils letzten hinzu">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...anstatt f&#252;r jeden schlie&#223;enden nested scope noch ein weiteres Verb hinzuzuf&#252;gen.
+    </p>
+    <p>
+      Damit werden effektiv die &quot;schlie&#223;enden Klammern&quot; in eine einzige zusammengefa&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 <node CREATED="1554517023983" ID="ID_582840262" MODIFIED="1557498707230" TEXT="Verb-Sequenz interpretieren">
 <node CREATED="1554517097141" ID="ID_1017084418" MODIFIED="1563118296821" TEXT="&#xdc;bersichts-Ruler handhaben">
 <linktarget COLOR="#44437f" DESTINATION="ID_1017084418" ENDARROW="Default" ENDINCLINATION="1682;-201;" ID="Arrow_ID_187242024" SOURCE="ID_1267787629" STARTARROW="None" STARTINCLINATION="1913;158;"/>
@@ -22890,6 +22915,23 @@
 <node CREATED="1566401506391" ID="ID_116486175" MODIFIED="1566401506391" TEXT="BodyCanvasWidget::maybeRebuildLayout()"/>
 <node COLOR="#338800" CREATED="1566401515511" ID="ID_1551253495" MODIFIED="1566406332332" TEXT="neue Funktion hierf&#xfc;r">
 <icon BUILTIN="button_ok"/>
+<node CREATED="1566517643320" ID="ID_30150585" MODIFIED="1566517660194" TEXT="fragt den TrackBody"/>
+<node CREATED="1566517661707" ID="ID_1225415802" MODIFIED="1566517709271" TEXT="dieser summiert im Moment einfach nochmal">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ist ineffizient, aber der Code ist so klarer
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1566517682169" ID="ID_1110086285" MODIFIED="1566517691543" TEXT="...so oft wird das nicht gebraucht">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>
@@ -23090,6 +23132,10 @@
 <node CREATED="1563112611511" ID="ID_1116374684" MODIFIED="1563112636155" TEXT="man kann sich Margin/Padding besorgen">
 <icon BUILTIN="idea"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566518952575" ID="ID_183446100" MODIFIED="1566519139547" TEXT="mu&#xdf; die sinngem&#xe4;&#xdf; mit den vom TrackBody verwalteten Spannen verrechnen">
+<arrowlink COLOR="#779be7" DESTINATION="ID_35592741" ENDARROW="Default" ENDINCLINATION="109;-329;" ID="Arrow_ID_66200016" STARTARROW="None" STARTINCLINATION="479;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node CREATED="1563636831797" ID="ID_506277754" MODIFIED="1563636834809" TEXT="Rahmen">
@@ -23155,7 +23201,7 @@
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1564932484393" ID="ID_1092949064" MODIFIED="1566401015548">
+<node COLOR="#435e98" CREATED="1564932484393" ID="ID_1092949064" MODIFIED="1566519094002">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -23167,7 +23213,8 @@
   </body>
 </html>
 </richcontent>
-<arrowlink COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1028;-57;" ID="Arrow_ID_77023730" STARTARROW="None" STARTINCLINATION="106;39;"/>
+<arrowlink COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1035;-107;" ID="Arrow_ID_77023730" STARTARROW="Default" STARTINCLINATION="106;39;"/>
+<linktarget COLOR="#2b75cc" DESTINATION="ID_1092949064" ENDARROW="Default" ENDINCLINATION="286;83;" ID="Arrow_ID_1686979270" SOURCE="ID_57629359" STARTARROW="None" STARTINCLINATION="572;0;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1566401020977" ID="ID_1373829097" MODIFIED="1566401070383" TEXT="siehe Definition im TiddlyWiki (&quot;#GuiTimelineDraw&quot;)"/>
@@ -23459,8 +23506,16 @@
 <arrowlink COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="278;16;" ID="Arrow_ID_1462879108" STARTARROW="None" STARTINCLINATION="344;0;"/>
 </node>
 </node>
-<node CREATED="1563636771101" ID="ID_273130535" MODIFIED="1564610460909" TEXT="kann die Rahmenst&#xe4;rke nicht manipulieren">
+<node COLOR="#435e98" CREATED="1563636771101" ID="ID_273130535" MODIFIED="1566518058000" TEXT="kann die Rahmenst&#xe4;rke nicht manipulieren">
 <arrowlink COLOR="#cb487a" DESTINATION="ID_155787836" ENDARROW="Default" ENDINCLINATION="86;-182;" ID="Arrow_ID_1682426231" STARTARROW="None" STARTINCLINATION="187;-5;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1566517976980" ID="ID_1144490151" MODIFIED="1566518051558" TEXT="L&#xf6;sung: CSS-Klassen verwenden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1566517991290" ID="ID_139839934" MODIFIED="1566518025089" TEXT="eine fixe Anzahl">
+<node CREATED="1566518027596" ID="ID_1002340632" MODIFIED="1566518034807" TEXT="eins zwei drei vier viele"/>
+</node>
+<node CREATED="1566518038233" ID="ID_160319279" MODIFIED="1566518048501" TEXT="auf der letzten Klasse stehenbleiben"/>
 </node>
 </node>
 </node>
@@ -23758,9 +23813,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610302597" ID="ID_840104433" MODIFIED="1564932647891" TEXT="sollte so zeichnen, da&#xdf; CSS3-Effekte wie box-shadow nutzbar sind">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564610302597" ID="ID_840104433" MODIFIED="1566517956971" TEXT="sollte so zeichnen, da&#xdf; CSS3-Effekte wie box-shadow nutzbar sind">
 <arrowlink COLOR="#5590d5" DESTINATION="ID_1444331441" ENDARROW="Default" ENDINCLINATION="-449;0;" ID="Arrow_ID_1759102712" STARTARROW="None" STARTINCLINATION="98;-3;"/>
-<linktarget COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1028;-57;" ID="Arrow_ID_77023730" SOURCE="ID_1092949064" STARTARROW="None" STARTINCLINATION="106;39;"/>
+<linktarget COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1035;-107;" ID="Arrow_ID_77023730" SOURCE="ID_1092949064" STARTARROW="Default" STARTINCLINATION="106;39;"/>
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932652482" ID="ID_1330271110" MODIFIED="1564934138367" TEXT="alle render_background mit vollst&#xe4;ndigem Rechteck versorgen">
 <icon BUILTIN="flag-yellow"/>
@@ -23804,6 +23859,20 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1564955099331" ID="ID_1171928927" MODIFIED="1564955111013" TEXT="Wechselspiel mit der Gr&#xf6;&#xdf;en-Steuerung beachten"/>
 <node CREATED="1564955112027" ID="ID_1010819780" MODIFIED="1564955123894" TEXT="Integration in Zeichenvorgang insgesamt beachten"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566518983355" ID="ID_35592741" MODIFIED="1566519139548" TEXT="Zusammenspiel zw. H&#xf6;he und CSS">
+<linktarget COLOR="#779be7" DESTINATION="ID_35592741" ENDARROW="Default" ENDINCLINATION="109;-329;" ID="Arrow_ID_66200016" SOURCE="ID_183446100" STARTARROW="None" STARTINCLINATION="479;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1566518998190" ID="ID_284079883" MODIFIED="1566519017050" TEXT="Stylesheet bestimmt zus&#xe4;tzlichen Margin + Padding"/>
+<node CREATED="1566519017878" ID="ID_30554429" MODIFIED="1566519029065" TEXT="diese m&#xfc;ssen mit den Werten im TrackBody verrechnet werden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566522092555" ID="ID_293262823" MODIFIED="1566522110192" TEXT="Konsequenz: TrackBody mu&#xdf; auch den Style abfragen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1566519037996" ID="ID_57629359" MODIFIED="1566519094001" TEXT="der zus&#xe4;tzliche Platz wird u.A. f&#xfc;r den box-shadow ben&#xf6;tigt">
+<arrowlink COLOR="#2b75cc" DESTINATION="ID_1092949064" ENDARROW="Default" ENDINCLINATION="286;83;" ID="Arrow_ID_1686979270" STARTARROW="None" STARTINCLINATION="572;0;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
