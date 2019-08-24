@@ -20088,7 +20088,8 @@
 <node CREATED="1563469807081" ID="ID_1454613932" MODIFIED="1563469830842" TEXT="auf erneutes Einf&#xfc;gen warten"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469620357" ID="ID_530086217" MODIFIED="1563469636091" TEXT="Fork-Anzeige passend malen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469620357" ID="ID_530086217" MODIFIED="1566689354431" TEXT="Fork-Anzeige passend malen">
+<linktarget COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" SOURCE="ID_1366095324" STARTARROW="None" STARTINCLINATION="634;20;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469686644" ID="ID_467394520" MODIFIED="1563469732788" TEXT="gar nicht wenn es nur einen Kind-Track gibt">
 <icon BUILTIN="flag-yellow"/>
@@ -23887,8 +23888,20 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1566524901403" ID="ID_950799052" MODIFIED="1566524918407" TEXT="TODO: pr&#xfc;fen ... stimmen die Werte">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#006699" CREATED="1566524901403" ID="ID_950799052" MODIFIED="1566689174782" TEXT="pr&#xfc;fen ... stimmen die Werte">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1566685513662" ID="ID_1558375892" MODIFIED="1566685638105" TEXT="stimmt  mit dem Diff aus DummySessionConnection &#xfc;berein">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1566685609906" ID="ID_474487470" MODIFIED="1566685621646" TEXT="unter der Annahme, da&#xdf; jeder Track eine Content-Area bekommt"/>
+<node CREATED="1566685622613" ID="ID_231064198" MODIFIED="1566685632616" TEXT="...und man noch nichts ein/ausklappen kann"/>
+</node>
+<node CREATED="1566685563043" ID="ID_1475468086" MODIFIED="1566685580320" TEXT="(Anmerkung: das Diff ist anders als das Beispiel im TiddlyWiki)"/>
+<node COLOR="#338800" CREATED="1566689127609" ID="ID_479226069" MODIFIED="1566689147622" TEXT="Fehler in der Platzierung im Track-Head behoben">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1566689183161" ID="ID_1366095324" MODIFIED="1566689354431" TEXT="Layout im Track-Head immer noch etwas komisch">
+<arrowlink COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" STARTARROW="None" STARTINCLINATION="634;20;"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1566519037996" ID="ID_57629359" MODIFIED="1566519094001" TEXT="der zus&#xe4;tzliche Platz wird u.A. f&#xfc;r den box-shadow ben&#xf6;tigt">

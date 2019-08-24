@@ -97,7 +97,7 @@ namespace timeline {
   TrackHeadWidget::injectSubFork (TrackHeadWidget& subForkHead)
   {
     ++childCnt_;
-    this->attach (subForkHead, 0, childCnt_, 1,1);
+    this->attach (subForkHead, 1, childCnt_, 1,1);
   }
   
   
