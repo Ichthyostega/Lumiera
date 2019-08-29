@@ -74,8 +74,8 @@ namespace timeline {
       uint topMar = 0;
       uint botMar = 0;
       
-      using Borders = std::array<uint, 5>;
-      Borders borders{0,0,0,0,0};
+      using Borders = std::array<uint, 6>;
+      Borders borders{0,0,0,0,0,0};
     };
   
   
@@ -110,7 +110,7 @@ namespace timeline {
      ~TrackBody();
       
       void setTrackName (cuString&);
-      void establishTrackSpace (TrackProfile&);
+      uint establishTrackSpace (TrackProfile&);
       void attachSubTrack (TrackBody*);
       uint calcRulerHeight();
       uint calcHeight();

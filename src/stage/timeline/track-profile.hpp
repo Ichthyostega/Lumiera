@@ -159,6 +159,14 @@ namespace timeline {
             append_close (1);
         }
       
+      uint
+      getPrecedingSlopeUp()
+        {
+          if (lastEntryIs("close"))
+            return elements.back().accessArg<uint>();
+          return 0;
+        }
+      
     private:
       bool
       lastEntryIs (Literal expectedToken)

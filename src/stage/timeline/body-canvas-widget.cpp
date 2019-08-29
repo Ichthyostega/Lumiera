@@ -472,10 +472,9 @@ namespace timeline {
       {
         setupAdditionalTrackPadding_fromCSS();
         layout_.triggerDisplayEvaluation();
-        rootBody_->establishTrackSpace (profile_);
-        adjustCanvasHeight(layout_.getPixSpan().delta(),
-                           rootBody_->calcHeight(),
-                           rootBody_->calcRulerHeight());
+        uint overallHeight = rootBody_->establishTrackSpace (profile_);
+        uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
+        adjustCanvasHeight(layout_.getPixSpan().delta(), overallHeight, rulerHeight);
       }
   }
   

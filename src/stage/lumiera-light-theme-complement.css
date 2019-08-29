@@ -40,13 +40,14 @@
  *  background is used within the track scopes
  */
   .timeline__page > .timeline__body fork.timeline__fork {
-    margin: 2ex 0;
+    margin: 2ex;
+    padding: 10px;
     border-style: inset;
     border-color: IndianRed;
     background-color: Lime;
 }
   fork.timeline__fork frame.timeline__ruler {
-    margin: 3ex 0;
+    margin: 1ex;
     border: 3px outset GoldenRod;
     background-color: DarkCyan;
 }

@@ -46,6 +46,7 @@
 
 //using util::_Fmt;
 using util::isnil;
+using util::min;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -134,47 +135,98 @@ namespace timeline {
   }
   
   
+  namespace {
+    /** helper to get the width of combined slope borders.
+     * Upwards slopes are combined up to a certain level;
+     * however, the actual width of such a combined border
+     * is defined through a class in the CSS stylesheet.
+     * The TrackBody::decoration.borders array holds the
+     * actual values read from the CSS.
+     */
+    inline uint
+    combinedSlopeHeight (uint depth)
+    {
+      if (depth==0) return 0;
+      depth = min (depth, TrackBody::decoration.borders.size() - 1);
+      return TrackBody::decoration.borders[depth];
+    }
+  }
+  
+  
   /**
    * recursively establish the screen space allocation for this structure of nested tracks.
-   * The TrackProfile is an abstracted description of the sequence of track elements,
-   * which constitute a vertical cross section through the track bodies
+   * For one, we'll have to find out about the total vertical space for each track, so to
+   * establish the vertical starting position, which is required to place clips onto the canvas.
+   * 
+   * Moreover we have to build the TrackProfile, which is an abstracted description of the sequence
+   * of track elements, akin to a vertical cross section through the track bodies. This profile is
+   * repeatedly "played back" to paint the background and overlays corresponding to each track.
+   * 
+   * This function recursively processes the tree of track bodies...
    * - pre: the given profile is built and complete up to the (upper side) start of the current track.
    * - post: the profile is elaborated for this track and its children, down to the lower end.
-   * @todo 6/19 this very much looks like the "display evaluation pass" envisioned for the timeline::DisplayManager.
-   *            Need to find out if we'll need a dedicated evaluation pass and how to interconnect both. 
+   * @return total vertical extension required for this track with all its nested sub tracks.
    */
-  void
+  uint
   TrackBody::establishTrackSpace (TrackProfile& profile)
   {
+    uint line=0;
     bool topLevel = isnil (profile);
     if (topLevel)
       {
         // global setup for the profile
+        line += decoration.topMar;
         profile.append_prelude();
         
         // The first Profile elements are always visible on top:
         // Top-level rules and one additionally for the prelude
         profile.pinnedPrefixCnt = 1 + rulers_.size();
       }
+    // adjust if preceded by a combined up-slope
+    line += combinedSlopeHeight (profile.getPrecedingSlopeUp());
     
+    // reserve space for the overview rulers
     for (auto& ruler : rulers_)
       {
-        profile.append_ruler (ruler->calcHeight());
+        uint rulerHeight = ruler->calcHeight();
         uint gapHeight = ruler->getGapHeight();
+        line += rulerHeight+gapHeight + decoration.ruler;
+        profile.append_ruler (rulerHeight);
         if (gapHeight > 0)
           profile.append_gap (gapHeight);
       }
+    ////////TODO: store the current line as start-offset of the content area
+    
+    // allocate space for the track content
+    line += this->contentHeight_ + decoration.content;
     profile.append_content (this->contentHeight_);
+    
+    // account for the space required by nested sub-tracks
     if (not isnil (subTracks_))
       {
+        // account for a single slope one step down
+        line += decoration.borders[0]; // (downward slopes are never combined)
         profile.addSlopeDown();
+        
         for (TrackBody* subTrack : subTracks_)
-          subTrack->establishTrackSpace (profile);
-        profile.addSlopeUp();
-      }
+          {
+            ////////TODO: store the current line as start-offset for this track
+            line += subTrack->establishTrackSpace (profile);
+          }
+        
+        profile.addSlopeUp(); // note: up-slopes might be combined
+      }                      //        thus we'll add them one level higher
     
     if (topLevel)
-      profile.append_coda (TIMELINE_BOTTOM_PADDING_px);
+      {
+        // adjust when reaching top-level after a combined up-slope
+        line += combinedSlopeHeight (profile.getPrecedingSlopeUp());
+        
+        line += decoration.botMar + TIMELINE_BOTTOM_PADDING_px;
+        profile.append_coda (TIMELINE_BOTTOM_PADDING_px);
+      }
+    
+    return line;
   }
   
   
