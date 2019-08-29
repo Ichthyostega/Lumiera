@@ -91,6 +91,7 @@ namespace timeline {
           default:return CLASS_slope_verydeep;
         }
     }
+    const uint SLOPE_CAP_DEPTH = 5;
     
     
     /**
@@ -104,17 +105,30 @@ namespace timeline {
       StyleC styleRuler{trackRulerStyle.getAdvice()};
       StyleC styleBody {trackBodyStyle.getAdvice()};
       
-      int decorationRuler = styleRuler->get_margin().get_top()
-                          + styleRuler->get_margin().get_bottom()
-                          + styleRuler->get_border().get_top()
-                          + styleRuler->get_border().get_bottom()
-                          + styleRuler->get_padding().get_top()
-                          + styleRuler->get_padding().get_bottom()
-                          ;
-      int decorationBody  = styleBody->get_padding().get_top()
-                          + styleBody->get_padding().get_bottom()
-                          ;
-      TrackBody::setupDecoration(decorationBody, decorationRuler);
+      TrackBody::decoration.ruler = styleRuler->get_margin().get_top()
+                                  + styleRuler->get_margin().get_bottom()
+                                  + styleRuler->get_border().get_top()
+                                  + styleRuler->get_border().get_bottom()
+                                  + styleRuler->get_padding().get_top()
+                                  + styleRuler->get_padding().get_bottom()
+                                  ;
+      TrackBody::decoration.content = styleBody->get_padding().get_top()
+                                    + styleBody->get_padding().get_bottom()
+                                    ;
+      TrackBody::decoration.topMar = styleBody->get_margin().get_top();
+      TrackBody::decoration.botMar = styleBody->get_margin().get_bottom();
+      
+      for (uint depth=SLOPE_CAP_DEPTH; depth>0; --depth)
+        {
+//        styleBody->context_save();                // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
+          styleBody->add_class (slopeClassName(depth));
+          
+          TrackBody::decoration.borders[depth] = styleBody->get_border().get_bottom();
+          TrackBody::decoration.borders[0]     = styleBody->get_border().get_top();   // Note: we use a common size for all opening borders  
+          
+          styleBody->remove_class (slopeClassName(depth));
+//        styleBody->context_restore();             // <<<---does not work...
+        }
     }
     
     
@@ -572,9 +586,13 @@ namespace timeline {
   {
     renderGrounding_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
+    //
+    guint w, h;
+    this->get_size(w, h); // mark the currently configured canvas size
     cox->set_source_rgb(0.8, 0.0, 0.0);
     cox->set_line_width (5.0);
-    cox->rectangle(0,0, 80, 40);
+    cox->move_to(0, 0);
+    cox->line_to(w, h);
     cox->stroke();
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
   }
@@ -589,7 +607,8 @@ namespace timeline {
   {
     renderOverlay_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
-    auto alloc = get_allocation();
+    //
+    auto alloc = get_allocation(); // mark the current space allocation by GTK
     int w = alloc.get_width();
     int h = alloc.get_height();
     int rad = MIN (w,h) / 2;

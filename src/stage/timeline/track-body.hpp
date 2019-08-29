@@ -48,6 +48,7 @@
 
 #include <memory>
 #include <vector>
+#include <array>
 
 
 
@@ -56,6 +57,26 @@ namespace timeline {
   
   class TrackPresenter;
   class TrackProfile;
+  
+  
+  /**
+   * Configure additional vertical padding for the decorations added through CSS.
+   * Our drawing code retrieves the margin, padding and border size settings from the
+   * appropriate CSS rules and adds the necessary additional space to the drawing coordinates;
+   * however, since one purpose of TrackBody is to calculate overall space requirements, we also
+   * need to account for this additional space. These common amounts are stored into a static
+   * field and (re)configured when [establishing the track spacing](\ref TrackBody::establishTrackSpace).
+   */
+  struct Decoration
+    {
+      uint content = 0;
+      uint ruler  = 0;
+      uint topMar = 0;
+      uint botMar = 0;
+      
+      using Borders = std::array<uint, 5>;
+      Borders borders{0,0,0,0,0};
+    };
   
   
   /**
@@ -73,8 +94,6 @@ namespace timeline {
   class TrackBody
     {
       uint contentHeight_;
-      static uint contentDecoration;
-      static uint rulerDecoration;
       
       using PRuler    = std::unique_ptr<RulerTrack>;
       using Rulers    = std::vector<PRuler>;
@@ -85,11 +104,12 @@ namespace timeline {
       Rulers    rulers_;
       
     public:
+      static Decoration decoration;
+      
       TrackBody();
      ~TrackBody();
       
       void setTrackName (cuString&);
-      static void setupDecoration (uint content, uint ruler);
       void establishTrackSpace (TrackProfile&);
       void attachSubTrack (TrackBody*);
       uint calcRulerHeight();

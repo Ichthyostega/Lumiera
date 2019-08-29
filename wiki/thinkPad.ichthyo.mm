@@ -16629,7 +16629,7 @@
 <node CREATED="1488566356774" ID="ID_969011841" MODIFIED="1557498707220" TEXT="Ankerpunkt zum Bilden der Commands">
 <arrowlink COLOR="#706a9a" DESTINATION="ID_1461875887" ENDARROW="Default" ENDINCLINATION="-923;-789;" ID="Arrow_ID_457540370" STARTARROW="None" STARTINCLINATION="806;300;"/>
 <node CREATED="1488566405248" ID="ID_355508260" MODIFIED="1557498707220" TEXT="auffinden der Command-IDs">
-<node CREATED="1489191528425" ID="ID_1331796226" MODIFIED="1557498707220" TEXT="Neuer Service hierf&#xfc;r in Proc">
+<node CREATED="1489191528425" ID="ID_1331796226" MODIFIED="1566956320222" TEXT="Neuer Service hierf&#xfc;r in Proc">
 <arrowlink COLOR="#584d79" DESTINATION="ID_341428100" ENDARROW="Default" ENDINCLINATION="1995;-1317;" ID="Arrow_ID_879741123" STARTARROW="None" STARTINCLINATION="334;-13;"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488677809297" ID="ID_1520540731" MODIFIED="1557498707220" TEXT="Problem: Zugang / Wiring">
@@ -16951,7 +16951,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1488419854029" ID="ID_932507511" MODIFIED="1518487921076" TEXT="erst mal: Konzept">
+<node CREATED="1488419854029" ID="ID_932507511" MODIFIED="1566955621428" TEXT="erst mal: Konzept">
 <arrowlink COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" STARTARROW="None" STARTINCLINATION="1555;-260;"/>
 <icon BUILTIN="help"/>
 </node>
@@ -20088,8 +20088,8 @@
 <node CREATED="1563469807081" ID="ID_1454613932" MODIFIED="1563469830842" TEXT="auf erneutes Einf&#xfc;gen warten"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469620357" ID="ID_530086217" MODIFIED="1566689354431" TEXT="Fork-Anzeige passend malen">
-<linktarget COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" SOURCE="ID_1366095324" STARTARROW="None" STARTINCLINATION="634;20;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469620357" ID="ID_530086217" MODIFIED="1566956124941" TEXT="Fork-Anzeige passend malen">
+<linktarget COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" SOURCE="ID_1366095324" STARTARROW="None" STARTINCLINATION="644;37;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469686644" ID="ID_467394520" MODIFIED="1563469732788" TEXT="gar nicht wenn es nur einen Kind-Track gibt">
 <icon BUILTIN="flag-yellow"/>
@@ -20101,6 +20101,12 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+</node>
+</node>
+<node CREATED="1566955554876" ID="ID_1903815723" MODIFIED="1566955559495" TEXT="Layout-Steuerung">
+<node CREATED="1566955560666" ID="ID_1506262956" MODIFIED="1566955573502" TEXT="mit Body-Canvas koordinieren"/>
+<node CREATED="1566955574281" ID="ID_1649819002" MODIFIED="1566955652259" TEXT="mu&#xdf; gemeinsam mit unterem Body-Canvas scrollen">
+<arrowlink COLOR="#327dd5" DESTINATION="ID_1718751102" ENDARROW="Default" ENDINCLINATION="-1329;-302;" ID="Arrow_ID_1962173714" STARTARROW="None" STARTINCLINATION="631;0;"/>
 </node>
 </node>
 </node>
@@ -21529,8 +21535,7 @@
       &#160;&#160;}
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1566421823243" ID="ID_351645581" MODIFIED="1566421928690" TEXT="doch es funktioniert!">
@@ -21549,8 +21554,7 @@
       Macht trotzdem nix
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -21574,8 +21578,7 @@
       Problem ist aber, da&#223; diese Zuweisung sp&#228;ter, nach einem set_size auf dem Canvas nicht revidiert wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#16d17f" DESTINATION="ID_489535600" ENDARROW="Default" ENDINCLINATION="-80;-272;" ID="Arrow_ID_1038229013" SOURCE="ID_832049284" STARTARROW="None" STARTINCLINATION="-102;166;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
@@ -21934,6 +21937,33 @@
 </node>
 </node>
 </node>
+<node CREATED="1566955479862" HGAP="37" ID="ID_933224238" MODIFIED="1566955502545" TEXT="Koordinaten &amp; Position" VSHIFT="-9">
+<node CREATED="1566955505470" ID="ID_1718751102" MODIFIED="1566955652259" TEXT="unterer Canvas mu&#xdf; zusammen mit Header-Pane scrollen">
+<linktarget COLOR="#327dd5" DESTINATION="ID_1718751102" ENDARROW="Default" ENDINCLINATION="-1329;-302;" ID="Arrow_ID_1962173714" SOURCE="ID_1649819002" STARTARROW="None" STARTINCLINATION="631;0;"/>
+<node COLOR="#338800" CREATED="1566955655903" ID="ID_652481986" MODIFIED="1566955664590" TEXT="gemeinsames Adjustment verdrahten">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955668964" ID="ID_125473464" MODIFIED="1566955828220" TEXT="Problem: Koordinaten m&#xfc;ssen zusammenpassen">
+<arrowlink COLOR="#b84775" DESTINATION="ID_337498242" ENDARROW="Default" ENDINCLINATION="89;0;" ID="Arrow_ID_1188180583" STARTARROW="None" STARTINCLINATION="159;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1566955690993" ID="ID_1222461806" MODIFIED="1566955699971" TEXT="Koordinaten auf dem Canvas">
+<node CREATED="1566955702936" ID="ID_43945835" MODIFIED="1566955720226" TEXT="Idee: gemeinsam normieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1566955722421" ID="ID_337498242" MODIFIED="1566955828220" TEXT="Problem: gekoppelte Scrollbar">
+<linktarget COLOR="#b84775" DESTINATION="ID_337498242" ENDARROW="Default" ENDINCLINATION="89;0;" ID="Arrow_ID_1188180583" SOURCE="ID_125473464" STARTARROW="None" STARTINCLINATION="159;0;"/>
+</node>
+<node CREATED="1566955756437" ID="ID_572662558" MODIFIED="1566955768492" TEXT="Problem: steuern der Zeichen-Aktivit&#xe4;t"/>
+<node CREATED="1566955769779" ID="ID_1433989024" MODIFIED="1566955904369" TEXT="Vorteil: Positionieren der Widgets">
+<arrowlink COLOR="#524b74" DESTINATION="ID_1316730142" ENDARROW="Default" ENDINCLINATION="530;-50;" ID="Arrow_ID_1561193123" STARTARROW="Default" STARTINCLINATION="424;0;"/>
+</node>
+</node>
+<node CREATED="1566955786323" ID="ID_1411864272" MODIFIED="1566956092402" TEXT="Alternative: jeder sub-Canvas hat seinen eigenen Origin">
+<linktarget COLOR="#9675ba" DESTINATION="ID_1411864272" ENDARROW="Default" ENDINCLINATION="-1041;0;" ID="Arrow_ID_1078761950" SOURCE="ID_309596538" STARTARROW="None" STARTINCLINATION="-507;-27;"/>
+</node>
+</node>
+</node>
 <node CREATED="1541861473496" ID="ID_457526663" MODIFIED="1557498707230" TEXT="draw">
 <node CREATED="1542309666407" ID="ID_1721729181" MODIFIED="1557498707230" TEXT="initial....">
 <node CREATED="1542309671333" ID="ID_1283622298" MODIFIED="1557498707230" TEXT="Gr&#xf6;&#xdf;e des leeren Canvas">
@@ -21953,8 +21983,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1541861481967" ID="ID_1316730142" MODIFIED="1557498707230" TEXT="Feststellen der Canvas-Position">
+<node CREATED="1541861481967" ID="ID_1316730142" MODIFIED="1566955904369" TEXT="Feststellen der Canvas-Position">
 <arrowlink COLOR="#2a79c1" DESTINATION="ID_1038931568" ENDARROW="Default" ENDINCLINATION="-511;19;" ID="Arrow_ID_1052516165" STARTARROW="None" STARTINCLINATION="-253;-12;"/>
+<linktarget COLOR="#524b74" DESTINATION="ID_1316730142" ENDARROW="Default" ENDINCLINATION="530;-50;" ID="Arrow_ID_1561193123" SOURCE="ID_1433989024" STARTARROW="Default" STARTINCLINATION="424;0;"/>
 <node CREATED="1541862243012" ID="ID_400560063" MODIFIED="1557498707230" TEXT="Canvas kennt seine eigene Ausdehnung (in Pixeln)">
 <linktarget COLOR="#60749f" DESTINATION="ID_400560063" ENDARROW="Default" ENDINCLINATION="-46;0;" ID="Arrow_ID_449772156" SOURCE="ID_1283622298" STARTARROW="None" STARTINCLINATION="-13;18;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1554418097774" ID="ID_49602168" MODIFIED="1557498707230" STYLE="fork" TEXT="TODO in welcher Form?">
@@ -22079,8 +22110,7 @@
       <i>manchmal</i>&#160;ist die alte L&#246;sung besser
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1566394596499" ID="ID_1873797848" MODIFIED="1566394621437" TEXT="Fortschritts-Proze&#xdf; vs. Erfassen einer Idee"/>
 <node CREATED="1566394624791" ID="ID_328891828" MODIFIED="1566395136616" TEXT="das gilt auch f&#xfc;r graphische Oberfl&#xe4;chen">
 <richcontent TYPE="NOTE"><html>
@@ -22098,8 +22128,7 @@
       Und letztere neigt stets zur &quot;Verschlimmbesserung&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -22130,8 +22159,7 @@
       Wohl aber lassen sich lokale Nachbarschafts-Beziehungen (h&#246;he / tiefer) durch Schattierung hervorheben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1566395532950" ID="ID_9111832" MODIFIED="1566395610743" TEXT="die CSS-Effekten spielen daher nur eine begrenzte Rolle">
 <richcontent TYPE="NOTE"><html>
@@ -22146,8 +22174,7 @@
       Die Inhalts-Fl&#228;chen selber sind zu gro&#223; und zu strukturiert, um sie per Schattierung zu verdeutlichen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -22773,8 +22800,7 @@
       Damit werden effektiv die &quot;schlie&#223;enden Klammern&quot; in eine einzige zusammengefa&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1554517023983" ID="ID_582840262" MODIFIED="1557498707230" TEXT="Verb-Sequenz interpretieren">
@@ -22840,8 +22866,9 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143025272" ID="ID_31825370" MODIFIED="1565268965251" TEXT="Anzeige-H&#xf6;he steuern">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143025272" ID="ID_31825370" MODIFIED="1566956325489" TEXT="Anzeige-H&#xf6;he steuern">
 <linktarget COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" SOURCE="ID_261041772" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
+<linktarget COLOR="#b75674" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="178;986;" ID="Arrow_ID_1663311989" SOURCE="ID_1608124774" STARTARROW="None" STARTINCLINATION="-248;-11;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143033085" ID="ID_149529437" MODIFIED="1563143047761" TEXT="woher kommt die Info?">
 <icon BUILTIN="help"/>
@@ -22927,8 +22954,7 @@
       ist ineffizient, aber der Code ist so klarer
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1566517682169" ID="ID_1110086285" MODIFIED="1566517691543" TEXT="...so oft wird das nicht gebraucht">
 <icon BUILTIN="idea"/>
@@ -23212,8 +23238,7 @@
       und zwar f&#252;r bestimmte Elemente (<b>Konvention</b>)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1035;-107;" ID="Arrow_ID_77023730" STARTARROW="Default" STARTINCLINATION="106;39;"/>
 <linktarget COLOR="#2b75cc" DESTINATION="ID_1092949064" ENDARROW="Default" ENDINCLINATION="286;83;" ID="Arrow_ID_1686979270" SOURCE="ID_57629359" STARTARROW="None" STARTINCLINATION="572;0;"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -23231,8 +23256,7 @@
       weil &#252;ber alles andere dar&#252;bergezeichnet wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1566401161862" ID="ID_1835446713" MODIFIED="1566401166385" TEXT="inset voll nutzbar"/>
 </node>
@@ -23820,8 +23844,9 @@
 <icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1564932652482" ID="ID_1330271110" MODIFIED="1566525299678" TEXT="alle render_background mit vollst&#xe4;ndigem Rechteck versorgen">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1565268879772" ID="ID_261041772" MODIFIED="1566401288902" TEXT="brauche berechnete H&#xf6;he(n)">
+<node CREATED="1565268879772" ID="ID_261041772" MODIFIED="1566956248932" TEXT="brauche berechnete H&#xf6;he(n)">
 <arrowlink COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
+<linktarget COLOR="#9f91a7" DESTINATION="ID_261041772" ENDARROW="Default" ENDINCLINATION="-490;-44;" ID="Arrow_ID_462162449" SOURCE="ID_1608124774" STARTARROW="None" STARTINCLINATION="345;14;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1566401334135" ID="ID_688081615" MODIFIED="1566401385045" TEXT="doch nicht so schlimm">
 <richcontent TYPE="NOTE"><html>
@@ -23836,8 +23861,7 @@
       Daher verzichte ich global (f&#252;r die Slopes) darauf, wende sie aber <b>lokal</b>&#160; an
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -23883,8 +23907,7 @@
       ...wo parktischerweise der Style-Advice in einer lokalen statischen Variablen liegt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -23898,8 +23921,8 @@
 <node CREATED="1566685563043" ID="ID_1475468086" MODIFIED="1566685580320" TEXT="(Anmerkung: das Diff ist anders als das Beispiel im TiddlyWiki)"/>
 <node COLOR="#338800" CREATED="1566689127609" ID="ID_479226069" MODIFIED="1566689147622" TEXT="Fehler in der Platzierung im Track-Head behoben">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1566689183161" ID="ID_1366095324" MODIFIED="1566689354431" TEXT="Layout im Track-Head immer noch etwas komisch">
-<arrowlink COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" STARTARROW="None" STARTINCLINATION="634;20;"/>
+<node CREATED="1566689183161" ID="ID_1366095324" MODIFIED="1566956124941" TEXT="Layout im Track-Head immer noch etwas komisch">
+<arrowlink COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" STARTARROW="None" STARTINCLINATION="644;37;"/>
 </node>
 </node>
 </node>
@@ -23909,6 +23932,152 @@
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566524922429" ID="ID_1618879281" MODIFIED="1566524941579" TEXT="f&#xfc;r den Overlay-Pass genau analoge Berechnungen machen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566956214907" ID="ID_1608124774" MODIFIED="1566956325489" TEXT="Gr&#xf6;&#xdf;en-Berechnung">
+<arrowlink COLOR="#9f91a7" DESTINATION="ID_261041772" ENDARROW="Default" ENDINCLINATION="-490;-44;" ID="Arrow_ID_462162449" STARTARROW="None" STARTINCLINATION="345;14;"/>
+<arrowlink COLOR="#b75674" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="178;986;" ID="Arrow_ID_1663311989" STARTARROW="None" STARTINCLINATION="-248;-11;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1566956340002" ID="ID_1472575231" MODIFIED="1566956344957" TEXT="stimmen die Werte?">
+<node CREATED="1566957803903" ID="ID_474929251" MODIFIED="1566957807116" TEXT="beobachtet">
+<node CREATED="1566957808335" ID="ID_1187167099" MODIFIED="1566957813234" TEXT="Gr&#xf6;&#xdf;enberechnung">
+<node CREATED="1566957814421" ID="ID_600013220" MODIFIED="1566957837743" TEXT="total 860"/>
+<node CREATED="1566957818757" ID="ID_425842490" MODIFIED="1566957843334" TEXT="ruler 120"/>
+<node CREATED="1566957823804" ID="ID_491575402" MODIFIED="1566957855700" TEXT="delta 740"/>
+</node>
+<node CREATED="1566957857592" ID="ID_1807195803" MODIFIED="1566957863234" TEXT="Line nach Zeichnen">
+<node CREATED="1566957864220" ID="ID_661651528" MODIFIED="1566957880817" TEXT="Body: 785">
+<node CREATED="1566957882024" ID="ID_405967084" MODIFIED="1566957886807" TEXT="das ist ohne">
+<node CREATED="1566957887930" ID="ID_1485316992" MODIFIED="1566957890959" TEXT="prelude"/>
+<node CREATED="1566957891764" ID="ID_1384744243" MODIFIED="1566957895151" TEXT="zwei Ruler"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566957944718" ID="ID_629892163" MODIFIED="1566957974050" TEXT="Befund: Zeichencode verbraucht zus&#xe4;tzlichen Platz">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1566958520767" ID="ID_350091895" MODIFIED="1567088347393" TEXT="diagnostisches Hilfs-drawing sollte Canvas-Gr&#xf6;&#xdf;e als Bezug verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....f&#252;r den Kreis
+    </p>
+    <p>
+      Und nicht die sichtbare Gr&#246;&#223;e
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1566958287015" ID="ID_1587873335" MODIFIED="1566958313029" TEXT="Verdacht: es fehlen die Slope-Borders">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1566958323689" ID="ID_604642616" MODIFIED="1566958330665" TEXT="TrackBody::calcHeight()"/>
+<node CREATED="1566958579858" ID="ID_1841811096" MODIFIED="1566958601472" TEXT="diese h&#xe4;ngen n&#xe4;mlich von der Schachtelungstiefe ab"/>
+<node CREATED="1566958602561" ID="ID_106882219" MODIFIED="1566958625572" TEXT="Diskrepanz (45 Pixel) sieht plausibel aus"/>
+<node CREATED="1566958775500" ID="ID_754575723" MODIFIED="1566958796157" TEXT="kommt aber auch nicht genau hin: (5+10+14)*2">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1567085396760" ID="ID_13253702" MODIFIED="1567085405481" TEXT="da stimmt eine Menge nicht">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1567085409503" ID="ID_1398765924" MODIFIED="1567085420521" TEXT="Differenzierung der Slopes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567085421366" ID="ID_1248743095" MODIFIED="1567085439678" TEXT="Slopes k&#xf6;nnen auch zwischendurch zusammengefa&#xdf;t werden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1567085476174" ID="ID_745197382" MODIFIED="1567085485153" TEXT="Prelude und Coda fehlen ebenfalls"/>
+</node>
+<node CREATED="1567085499035" ID="ID_1732362754" MODIFIED="1567085511005" TEXT="wir brauchen Einzel-Offsets f&#xfc;r jeden Track">
+<node CREATED="1567085512476" ID="ID_1140063837" MODIFIED="1567085514964" TEXT="warum?"/>
+<node CREATED="1567085515823" ID="ID_224781783" MODIFIED="1567085620489" TEXT="weil wir sp&#xe4;ter Clips in den Track platzieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. wir m&#252;ssen...
+    </p>
+    <ul>
+      <li>
+        die Clips b&#252;ndig in einen Track legen k&#246;nnen
+      </li>
+      <li>
+        feststellen, ob ein Mausklick in einen bestimmten Track f&#228;llt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#5595df" DESTINATION="ID_224781783" ENDARROW="Default" ENDINCLINATION="-463;12;" ID="Arrow_ID_1285897355" SOURCE="ID_675568693" STARTARROW="None" STARTINCLINATION="40;-81;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1567085534629" ID="ID_543607936" MODIFIED="1567085541209" TEXT="Einzel-Offsets pro Track">
+<node CREATED="1567085546180" ID="ID_675568693" MODIFIED="1567085627922" TEXT="sp&#xe4;ter ben&#xf6;tigt">
+<arrowlink COLOR="#5595df" DESTINATION="ID_224781783" ENDARROW="Default" ENDINCLINATION="-463;12;" ID="Arrow_ID_1285897355" STARTARROW="None" STARTINCLINATION="40;-81;"/>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567085637546" ID="ID_682932701" MODIFIED="1567085645880" TEXT="sind im TrackBody zu speichern">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1567085650636" ID="ID_394868232" MODIFIED="1567088360350" TEXT="brauche elaboriertere Storage f&#xfc;r Dekorationen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567085662725" ID="ID_1234980335" MODIFIED="1567085677794" TEXT="beim Profile-building pass mit berechnen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567085681514" ID="ID_1776230312" MODIFIED="1567085692842" TEXT="line-Variable rekursiv mitf&#xfc;hren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567085696585" ID="ID_104428046" MODIFIED="1567085711316" TEXT="Hilfsfunktion f&#xfc;r Border-width">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567085713758" ID="ID_1794483413" MODIFIED="1567085728336" TEXT="Profil: vorausgehende border abfragen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1566956347881" ID="ID_1434222749" MODIFIED="1566956359141" TEXT="Koordinaten beachten">
+<node CREATED="1566956361471" ID="ID_1879544719" MODIFIED="1566956417944" TEXT="Vorsicht bei gemeinsam genormten Koordinaten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil dann der Platz f&#252;r den &quot;pinned&quot; Ruler redundant im Body-Canvas vorhanden ist!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1566955936904" ID="ID_925495886" MODIFIED="1566955942099" TEXT="vertikale Koordinaten">
+<node CREATED="1566955943327" ID="ID_309596538" MODIFIED="1566956102609" TEXT="&quot;nat&#xfc;rlich&quot; ist es, wenn jeder Canvas eigene Koordinaten hat">
+<arrowlink COLOR="#9675ba" DESTINATION="ID_1411864272" ENDARROW="Default" ENDINCLINATION="-1041;0;" ID="Arrow_ID_1078761950" STARTARROW="None" STARTINCLINATION="-507;-27;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1566955975338" ID="ID_1779775058" MODIFIED="1566955999837">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die gekoppelten Scrollbars funktionieren dann <i>&quot;von selber&quot;</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1566956005927" ID="ID_1438858393" MODIFIED="1566956013610" TEXT="Gr&#xf6;&#xdf;enberechnung wird einfach"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955956741" ID="ID_1266359061" MODIFIED="1566956109092" TEXT="wie k&#xf6;nnen wir dann aber Clips korrekt positionieren?">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -32756,7 +32925,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1448669332204" HGAP="76" ID="ID_329609486" MODIFIED="1561827465626" TEXT="InteractionControl">
+<node CREATED="1448669332204" HGAP="76" ID="ID_329609486" MODIFIED="1566955621429" TEXT="InteractionControl">
 <arrowlink COLOR="#b694bf" DESTINATION="ID_430949603" ENDARROW="Default" ENDINCLINATION="178;425;" ID="Arrow_ID_1062305149" STARTARROW="Default" STARTINCLINATION="-629;-2354;"/>
 <linktarget COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" SOURCE="ID_932507511" STARTARROW="None" STARTINCLINATION="1555;-260;"/>
 <linktarget COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" SOURCE="ID_1009169288" STARTARROW="None" STARTINCLINATION="-315;0;"/>
@@ -34294,7 +34463,7 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1489191229098" ID="ID_341428100" MODIFIED="1561827465705" TEXT="#1089 Command instance management">
+<node COLOR="#338800" CREATED="1489191229098" ID="ID_341428100" MODIFIED="1566956320222" TEXT="#1089 Command instance management">
 <linktarget COLOR="#584d79" DESTINATION="ID_341428100" ENDARROW="Default" ENDINCLINATION="1995;-1317;" ID="Arrow_ID_879741123" SOURCE="ID_1331796226" STARTARROW="None" STARTINCLINATION="334;-13;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1489196572055" ID="ID_339289633" MODIFIED="1489196577154" TEXT="Command-ID">
