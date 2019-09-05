@@ -45,11 +45,16 @@
     border-style: inset;
     border-color: IndianRed;
     background-color: Lime;
+    box-shadow: inset 2px 2px 5px 1px DeepSkyBlue,
+                      5px 5px 2px 1px ForestGreen;
 }
   fork.timeline__fork frame.timeline__ruler {
     margin: 1ex;
+    padding: 5px;
     border: 3px outset GoldenRod;
     background-color: DarkCyan;
+    box-shadow: inset 2px 2px 5px 1px DeepSkyBlue,
+                      5px 5px 2px 10px DarkGoldenRod;
 }
   .track-slope--deep1 {
     border-width: 5px;

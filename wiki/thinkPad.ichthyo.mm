@@ -22867,8 +22867,8 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1563143025272" ID="ID_31825370" MODIFIED="1567112213024" TEXT="Anzeige-H&#xf6;he steuern">
-<linktarget COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" SOURCE="ID_261041772" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
 <linktarget COLOR="#b75674" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="178;986;" ID="Arrow_ID_1663311989" SOURCE="ID_1608124774" STARTARROW="None" STARTINCLINATION="-248;-11;"/>
+<linktarget COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" SOURCE="ID_261041772" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1563143033085" ID="ID_149529437" MODIFIED="1567112222516" TEXT="woher kommt die Info?">
 <icon BUILTIN="help"/>
@@ -23853,6 +23853,9 @@
 <arrowlink COLOR="#5590d5" DESTINATION="ID_1444331441" ENDARROW="Default" ENDINCLINATION="-449;0;" ID="Arrow_ID_1759102712" STARTARROW="None" STARTINCLINATION="98;-3;"/>
 <linktarget COLOR="#02ab84" DESTINATION="ID_840104433" ENDARROW="Default" ENDINCLINATION="1035;-107;" ID="Arrow_ID_77023730" SOURCE="ID_1092949064" STARTARROW="Default" STARTINCLINATION="106;39;"/>
 <icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932712545" ID="ID_756463948" MODIFIED="1567683952857" TEXT="korrekt zeichnen gem&#xe4;&#xdf; Konzept">
+<linktarget COLOR="#7255d4" DESTINATION="ID_756463948" ENDARROW="Default" ENDINCLINATION="-507;0;" ID="Arrow_ID_1335568264" SOURCE="ID_909641864" STARTARROW="None" STARTINCLINATION="576;29;"/>
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1564932652482" ID="ID_1330271110" MODIFIED="1566525299678" TEXT="alle render_background mit vollst&#xe4;ndigem Rechteck versorgen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1565268879772" ID="ID_261041772" MODIFIED="1566956248932" TEXT="brauche berechnete H&#xf6;he(n)">
@@ -23881,23 +23884,28 @@
 <node CREATED="1566401324073" ID="ID_1089116245" MODIFIED="1566401328764" TEXT="f&#xfc;r die Track-Ruler"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932680606" ID="ID_695299880" MODIFIED="1564934141564" TEXT="Rahmen pa&#xdf;genau einsetzen">
+<node COLOR="#338800" CREATED="1564932680606" ID="ID_695299880" MODIFIED="1567684005651" TEXT="Rahmen pa&#xdf;genau einsetzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567683988131" ID="ID_290005683" MODIFIED="1567683998152" TEXT="Margin und Padding ber&#xfc;cksichtigen">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1567683913947" ID="ID_704534518" MODIFIED="1567683929324" TEXT="(optional) zus&#xe4;tzliche Schattierung im Overlay-Pass zeichnen">
+<icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566525274854" ID="ID_1976574053" MODIFIED="1566525289358" TEXT="Vorsicht: auch horizontal gen&#xfc;gend Platz schaffen">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564932712545" ID="ID_756463948" MODIFIED="1564934128901" TEXT="(optional) zus&#xe4;tzliche Schattierung im Overlay-Pass zeichnen">
-<linktarget COLOR="#7255d4" DESTINATION="ID_756463948" ENDARROW="Default" ENDINCLINATION="-507;0;" ID="Arrow_ID_1335568264" SOURCE="ID_909641864" STARTARROW="None" STARTINCLINATION="576;29;"/>
-<icon BUILTIN="hourglass"/>
-<node CREATED="1564932755431" ID="ID_1619593832" MODIFIED="1564932779996" TEXT="diese k&#xf6;nnte von einer separaten Klasse abgenommen werden"/>
-<node CREATED="1564932781110" ID="ID_161957404" MODIFIED="1564932799377" TEXT="und w&#xfc;rde deren Hintergrund + box-shadow &#xfc;ber den Content legen"/>
 </node>
 <node CREATED="1564955071015" ID="ID_773991524" MODIFIED="1564955085381" TEXT="(vorerst) nicht zu viel Aufwand hier investieren">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1564955099331" ID="ID_1171928927" MODIFIED="1564955111013" TEXT="Wechselspiel mit der Gr&#xf6;&#xdf;en-Steuerung beachten"/>
-<node CREATED="1564955112027" ID="ID_1010819780" MODIFIED="1564955123894" TEXT="Integration in Zeichenvorgang insgesamt beachten"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564955099331" ID="ID_1171928927" MODIFIED="1567683978468" TEXT="Wechselspiel mit der Gr&#xf6;&#xdf;en-Steuerung beachten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564955112027" ID="ID_1010819780" MODIFIED="1567683979713" TEXT="Integration in Zeichenvorgang insgesamt beachten">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566518983355" ID="ID_35592741" MODIFIED="1567112324220" TEXT="Zusammenspiel zw. H&#xf6;he und CSS">
@@ -23946,8 +23954,8 @@
 <icon BUILTIN="flag-pink"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566956214907" ID="ID_1608124774" MODIFIED="1567112316137" TEXT="Gr&#xf6;&#xdf;en-Berechnung">
-<arrowlink COLOR="#9f91a7" DESTINATION="ID_261041772" ENDARROW="Default" ENDINCLINATION="-490;-44;" ID="Arrow_ID_462162449" STARTARROW="None" STARTINCLINATION="345;14;"/>
 <arrowlink COLOR="#b75674" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="178;986;" ID="Arrow_ID_1663311989" STARTARROW="None" STARTINCLINATION="-248;-11;"/>
+<arrowlink COLOR="#9f91a7" DESTINATION="ID_261041772" ENDARROW="Default" ENDINCLINATION="-490;-44;" ID="Arrow_ID_462162449" STARTARROW="None" STARTINCLINATION="345;14;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1566956340002" ID="ID_1472575231" MODIFIED="1566956344957" TEXT="stimmen die Werte?">
 <node CREATED="1566957803903" ID="ID_474929251" MODIFIED="1566957807116" TEXT="beobachtet">
@@ -24057,7 +24065,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567112357515" ID="ID_921918885" MODIFIED="1567112439946" TEXT="man k&#xf6;nnte noch einen Margin pro Track einarbeiten">
+<node COLOR="#338800" CREATED="1567112357515" ID="ID_921918885" MODIFIED="1567747075783" TEXT="man k&#xf6;nnte noch einen Margin pro Track einarbeiten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24077,7 +24085,72 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1567684868730" ID="ID_1174805630" MODIFIED="1567747074910" TEXT="drei Modelle denkbar">
+<node CREATED="1567684881240" ID="ID_1903584153" MODIFIED="1567747074910" TEXT="Modell-1">
+<icon BUILTIN="forward"/>
+<node CREATED="1567685108272" ID="ID_152637722" MODIFIED="1567747074910" TEXT="um den track-content legen"/>
+<node CREATED="1567685355920" ID="ID_1515797651" MODIFIED="1567747074910" STYLE="fork" TEXT="ganz einfach zu implementieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1567685388541" ID="ID_1586460223" MODIFIED="1567747074910">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      macht ggfs <i>ganz nat&#252;rlich</i>&#160;einen box-shadow sichtbar
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1567685491918" ID="ID_1425797539" MODIFIED="1567747074910" TEXT="Ruler sind nicht eingeschlossen">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1567685534377" ID="ID_312263870" MODIFIED="1567747074910" TEXT="zwischen zwei einfachen Tracks sto&#xdf;en margin-bottom und -top zusammen">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1567685577387" ID="ID_1532038020" MODIFIED="1567747074910" TEXT="margin-bottom liegt zwischen content und nested slope">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node CREATED="1567685154244" ID="ID_1373037444" MODIFIED="1567747074910" TEXT="Modell-2">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1567685158411" ID="ID_1980021492" MODIFIED="1567747074910" TEXT="um die nested slopes legen"/>
+<node CREATED="1567685637512" ID="ID_1953351205" MODIFIED="1567747074910" TEXT="vergleichsweise einfach zu implementieren"/>
+<node CREATED="1567685682643" ID="ID_1706892095" MODIFIED="1567747074910" TEXT="ohne Kentnis des Codes erscheint dieses Modell nicht logisch">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1567685731534" ID="ID_1106992346" MODIFIED="1567747074910" TEXT="ganz am Ende sto&#xdf;en zwei margin-bottom zusammen">
+<node CREATED="1567685769667" ID="ID_862016071" MODIFIED="1567747074910" TEXT="es sei denn, man l&#xe4;&#xdf;t den margin aus der Coda weg"/>
+<node CREATED="1567685784107" ID="ID_1885651108" MODIFIED="1567747074910" TEXT="dann ist aber der margin im prelude irgendwie unlogisch"/>
+</node>
+</node>
+<node CREATED="1567685252758" ID="ID_1605614339" MODIFIED="1567747074910" TEXT="Model-3">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1567685258966" ID="ID_1030733863" MODIFIED="1567747074910" TEXT="au&#xdf;en herum legen">
+<node CREATED="1567685272913" ID="ID_1989912863" MODIFIED="1567747074910" TEXT="vor den ersten Ruler"/>
+<node CREATED="1567685289794" ID="ID_739347906" MODIFIED="1567747074910" TEXT="hinter den closing slope"/>
+</node>
+<node CREATED="1567685824058" ID="ID_162145047" MODIFIED="1567747074910" TEXT="ehr aufwendig zu implementieren">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1567685842827" ID="ID_181167044" MODIFIED="1567747074910" TEXT="das TrackProfile mu&#xdf; helfen"/>
+<node CREATED="1567685860069" ID="ID_795679603" MODIFIED="1567747074911" TEXT="zus&#xe4;tzliches Argument withTopMargin"/>
+</node>
+<node CREATED="1567687928863" ID="ID_1146414337" MODIFIED="1567747074911" TEXT="aus Nutzer-Sicht formal die am meisten logische Variante"/>
+<node CREATED="1567687943708" ID="ID_1755668453" MODIFIED="1567747074911" TEXT="bringt aber nichts im Hinblick auf einen box-shadow">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1567687981599" ID="ID_1859353136" MODIFIED="1567747074911" TEXT="im Gegenzug m&#xfc;&#xdf;te der Margin aus Prelude/Coda raus"/>
+</node>
+</node>
+<node CREATED="1567688151519" ID="ID_1115827550" MODIFIED="1567747074911" TEXT="Beschlu&#xdf;: er wirkt auf den Content-Bereich">
+<icon BUILTIN="yes"/>
+<node CREATED="1567688183723" ID="ID_571433100" MODIFIED="1567747074911" TEXT="damit wird ein box-shadow auch hier voll nutzbar"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566956347881" ID="ID_1434222749" MODIFIED="1567112111879" TEXT="Koordinaten beachten">
@@ -24148,6 +24221,51 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1567689612779" HGAP="9" ID="ID_1142611198" MODIFIED="1567689628166" TEXT="Probleme" VSHIFT="2">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1567689637751" ID="ID_1333933230" MODIFIED="1567689647034" TEXT="Scrollbar verschwindet nach Fokus-Verlust">
+<node CREATED="1567689657945" ID="ID_243238670" MODIFIED="1567689670071" TEXT="wird durch Gr&#xf6;&#xdf;en&#xe4;nderung wieder sichtbar"/>
+<node CREATED="1567689911283" ID="ID_1726946456" MODIFIED="1567689930883" TEXT="auch das Mausrad wirkt erst wieder nach Gr&#xf6;&#xdf;en&#xe4;nderung"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567689931927" ID="ID_974682979" MODIFIED="1567689942119" TEXT="das deutet auf einen Fehler in der Allokation hin">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1567689738430" ID="ID_335898798" MODIFIED="1567689747264" TEXT="feine Zeichenfehler an der Sto&#xdf;fl&#xe4;che">
+<node CREATED="1567689750410" ID="ID_1517735190" MODIFIED="1567689771647" TEXT="...von zwei Bereichen mit box-shadow"/>
+<node CREATED="1567689772565" ID="ID_1542367602" MODIFIED="1567689843619" TEXT="...sofern der box-shadow den im Zeichenvorgang abgedeckten Bereich &#xfc;berschreitet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      er wird von GTK eigentlich korrekt &#252;ber die Nachbarbereiche dar&#252;ber gezeichnet.
+    </p>
+    <p>
+      Aber an der Nahtstelle entsteht ein helle Linie von 1/2 Pixel Breite,
+    </p>
+    <p>
+      die sich nur beim Scrollen bemerkbar macht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1567689845067" ID="ID_1441909594" MODIFIED="1567689874457" TEXT="ich betrachte das Problem als eigentlich irrelevant">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man soll ohnehin keinen so gro&#223;en box-shadow verwenden
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>

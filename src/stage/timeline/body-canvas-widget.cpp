@@ -112,7 +112,9 @@ namespace timeline {
                                   + styleRuler->get_padding().get_top()
                                   + styleRuler->get_padding().get_bottom()
                                   ;
-      TrackBody::decoration.content = styleBody->get_padding().get_top()
+      TrackBody::decoration.content = styleBody->get_margin().get_top()
+                                    + styleBody->get_margin().get_bottom()
+                                    + styleBody->get_padding().get_top()
                                     + styleBody->get_padding().get_bottom()
                                     ;
       TrackBody::decoration.topMar = styleBody->get_margin().get_top();
@@ -191,7 +193,7 @@ namespace timeline {
           }
         
         /** finish painting the track body area
-         * @param pad additional padding to add at bottom */
+         * @param pad additional padding (in px) to add at bottom */
         void
         coda (uint pad)  override
           {
@@ -238,11 +240,16 @@ namespace timeline {
         void
         content (uint contentHeight)  override
           {
+            int marTop = style_->get_margin().get_top();
+            int marBot = style_->get_margin().get_bottom();
             int padTop = style_->get_padding().get_top();
             int padBot = style_->get_padding().get_bottom();
             int heightWithPadding = contentHeight + padTop+padBot;
+            
+            line_ += marTop;
             fillBackground (style_, heightWithPadding);
             line_ += heightWithPadding;
+            line_ += marBot;
           }
         
         /** paint opening slope to enter nested sub tracks

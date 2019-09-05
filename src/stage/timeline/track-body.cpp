@@ -105,7 +105,7 @@ namespace timeline {
   
   /**
    * recursively calculate the height in pixels to display this track,
-   * including all nested sub-tracks
+   * including all nested sub-tracks and possibly decoration/padding from CSS
    */
   uint
   TrackBody::calcHeight()
