@@ -44,6 +44,9 @@
 #include "stage/timeline/timeline-controller.hpp"
 #include "stage/timeline/track-presenter.hpp"
 #include "stage/timeline/marker-widget.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+#include "stage/timeline/body-canvas-widget.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
 //#include "stage/workspace/workspace-window.hpp"
 //#include "stage/ui-bus.hpp"
@@ -90,6 +93,9 @@ namespace timeline {
                                                  {
                                                    layoutManager.installRootTrack (head, body); 
                                                  }}}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+    , DEBUG_canvas_{layoutManager.exposeCanvasForDebug()}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
     { }
   
   
@@ -97,7 +103,19 @@ namespace timeline {
   {
   }
   
-  
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+  void
+  TimelineController::doMark (GenNode const& mark)
+  {
+    if (mark.idi.getSym() == "test" && this->fork_)
+      {
+        this->fork_->injectDebugTrackLabels(DEBUG_canvas_);
+      }
+    else // forward to default handler
+      model::Controller::doMark (mark);
+  }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**
    * @internal this method is invoked by the UI-Bus when dispatching a MutationMessage...
    * @remarks this is likely the first occasion a casual reader sees such a binding function,

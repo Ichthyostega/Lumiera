@@ -66,6 +66,9 @@
 namespace stage  {
 namespace timeline {
   
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+  class BodyCanvasWidget;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   using std::vector;
   using std::unique_ptr;
   
@@ -140,14 +143,16 @@ namespace timeline {
         , subFork_{}
         , markers_{}
         , clips_{}
-        { 
-          setTrackName (id.getSym());  // fallback initialise track-name from human-readable ID symbol 
+        {
+          setTrackName (id.getSym());  // fallback initialise track-name from human-readable ID symbol
         }
       
       
       /** set up a binding to respond to mutation messages via UiBus */
       virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
-      
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+      void injectDebugTrackLabels(BodyCanvasWidget&);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       
     private:/* ===== Internals ===== */
       

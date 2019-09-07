@@ -37,6 +37,9 @@
 #include "stage/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
 #include "stage/timeline/track-presenter.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+#include "stage/timeline/body-canvas-widget.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -78,6 +81,15 @@ namespace timeline {
   
   
   
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+  void
+  TrackPresenter::injectDebugTrackLabels(BodyCanvasWidget& bodyCanvas)
+  {
+    bodyCanvas.DEBUG_injectTrackLabel (display_.body.TODO_trackName_, display_.body.startLine_ + display_.body.contentOffset_);
+    for (auto& subTrack : subFork_)
+      subTrack->injectDebugTrackLabels (bodyCanvas);
+  }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**
    * @note we distinguish between the contents of our four nested child collections
    *       based on the symbolic type field sent in the Record type within the diff representation

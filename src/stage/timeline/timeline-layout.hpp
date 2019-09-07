@@ -125,6 +125,9 @@ namespace timeline {
       void installRootTrack (TrackHeadWidget&,TrackBody&);
       
       Gtk::WidgetPath getBodyWidgetPath()  const;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+      BodyCanvasWidget& exposeCanvasForDebug() { return bodyCanvas_; }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       
       
     protected:/* ==== Interface: LayoutManager===== */

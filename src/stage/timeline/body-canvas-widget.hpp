@@ -131,6 +131,9 @@ namespace timeline {
       /** a way to get and possibly (re)compute the current TrackProfile */
       using ProfileGetter = std::function<TrackProfile&()>;
       ProfileGetter getProfile;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+      void DEBUG_injectTrackLabel(cuString const& trackName, int startLine);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       
     private:/* ===== Internals ===== */
       
