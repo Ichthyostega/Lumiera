@@ -94,6 +94,8 @@ namespace timeline {
   class TrackBody
     {
       uint contentHeight_;
+      uint contentOffset_;
+      uint startLine_;
       
       using PRuler    = std::unique_ptr<RulerTrack>;
       using Rulers    = std::vector<PRuler>;

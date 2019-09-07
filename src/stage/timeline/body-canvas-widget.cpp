@@ -426,7 +426,7 @@ namespace timeline {
                         };
       
       // initially set up some dummy space. Will be updated to match on first draw() call...
-      adjustCanvasHeight(INITIAL_CONTENT_WIDTH_px, INITIAL_CONTENT_HEIGHT_px, INITIAL_TIMERULER_HEIGHT_px);
+      adjustCanvasSize(INITIAL_CONTENT_WIDTH_px, INITIAL_CONTENT_HEIGHT_px, INITIAL_TIMERULER_HEIGHT_px);
       
       this->set_border_width (0);
       this->property_expand() = true;   // dynamically grab any available additional space
@@ -481,7 +481,7 @@ namespace timeline {
         layout_.triggerDisplayEvaluation();
         uint overallHeight = rootBody_->establishTrackSpace (profile_);
         uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
-        adjustCanvasHeight(layout_.getPixSpan().delta(), overallHeight, rulerHeight);
+        adjustCanvasSize(layout_.getPixSpan().delta(), overallHeight, rulerHeight);
       }
   }
   
@@ -494,7 +494,7 @@ namespace timeline {
    * pane to accommodate an arbitrary numbers of tracks
    */
   void
-  BodyCanvasWidget::adjustCanvasHeight(int canvasWidth, int totalHeight, int rulerHeight)
+  BodyCanvasWidget::adjustCanvasSize(int canvasWidth, int totalHeight, int rulerHeight)
   {
     auto adjust = [](Gtk::Layout& canvas, guint newWidth, guint newHeight) -> void
                     {

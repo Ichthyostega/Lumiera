@@ -68,6 +68,8 @@ namespace timeline {
   
   TrackBody::TrackBody()
     : contentHeight_{DEFAULT_CONTENT_HEIGHT_px}
+    , contentOffset_{0}
+    , startLine_{0}
     , subTracks_{}
     , rulers_{}
     { }
@@ -165,7 +167,7 @@ namespace timeline {
    * This function recursively processes the tree of track bodies...
    * - pre: the given profile is built and complete up to the (upper side) start of the current track.
    * - post: the profile is elaborated for this track and its children, down to the lower end.
-   * @return total vertical extension required for this track with all its nested sub tracks.
+   * @return total vertical extension required for this track with all its nested sub tracks, in pixels.
    */
   uint
   TrackBody::establishTrackSpace (TrackProfile& profile)
@@ -195,7 +197,8 @@ namespace timeline {
         if (gapHeight > 0)
           profile.append_gap (gapHeight);
       }
-    ////////TODO: store the current line as start-offset of the content area
+    // mark offset of the content area relative to this track's top
+    this->contentOffset_ = line;
     
     // allocate space for the track content
     line += this->contentHeight_ + decoration.content;
@@ -210,13 +213,15 @@ namespace timeline {
         
         for (TrackBody* subTrack : subTracks_)
           {
-            ////////TODO: store the current line as start-offset for this track
+            // (re)set the subTrack's start coordinates
+            // to reflect the allocation calculation done thus far
+            subTrack->startLine_ = this->startLine_ + line;
             line += subTrack->establishTrackSpace (profile);
           }
         
         profile.addSlopeUp(); // note: up-slopes might be combined
-      }                      //        thus we'll add them one level higher
-    
+      }                      //        thus we'll add their contribution
+                            //         at the calling function one level higher
     if (topLevel)
       {
         // adjust when reaching top-level after a combined up-slope

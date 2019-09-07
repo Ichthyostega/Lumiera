@@ -19418,7 +19418,9 @@
 <icon BUILTIN="forward"/>
 <node CREATED="1565270170764" ID="ID_1485295868" MODIFIED="1565270177943" TEXT="on realize()"/>
 <node CREATED="1565270179930" ID="ID_184642245" MODIFIED="1565270190161" TEXT="wenn die Gr&#xf6;&#xdf;e ge&#xe4;ndert wurde">
-<node CREATED="1565270944290" ID="ID_842897291" LINK="https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget-configure-event" MODIFIED="1565270965974" TEXT="the &quot;configure-event&quot;"/>
+<node CREATED="1565270944290" ID="ID_842897291" LINK="https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget-configure-event" MODIFIED="1567869662204" TEXT="the &quot;configure-event&quot;">
+<linktarget COLOR="#819eaf" DESTINATION="ID_842897291" ENDARROW="Default" ENDINCLINATION="1085;0;" ID="Arrow_ID_704507451" SOURCE="ID_244849159" STARTARROW="None" STARTINCLINATION="2673;-176;"/>
+</node>
 <node CREATED="1565272115020" ID="ID_1493844829" MODIFIED="1565272125236" TEXT="size_allocate?"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565272130826" ID="ID_1758102270" MODIFIED="1565276547287" TEXT="sonst? Expermient machen">
 <linktarget COLOR="#d44574" DESTINATION="ID_1758102270" ENDARROW="Default" ENDINCLINATION="161;13;" ID="Arrow_ID_533711629" SOURCE="ID_841565553" STARTARROW="None" STARTINCLINATION="663;0;"/>
@@ -22867,8 +22869,8 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1563143025272" ID="ID_31825370" MODIFIED="1567112213024" TEXT="Anzeige-H&#xf6;he steuern">
-<linktarget COLOR="#b75674" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="178;986;" ID="Arrow_ID_1663311989" SOURCE="ID_1608124774" STARTARROW="None" STARTINCLINATION="-248;-11;"/>
 <linktarget COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" SOURCE="ID_261041772" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
+<linktarget COLOR="#b75674" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="178;986;" ID="Arrow_ID_1663311989" SOURCE="ID_1608124774" STARTARROW="None" STARTINCLINATION="-248;-11;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1563143033085" ID="ID_149529437" MODIFIED="1567112222516" TEXT="woher kommt die Info?">
 <icon BUILTIN="help"/>
@@ -23986,8 +23988,7 @@
       Und nicht die sichtbare Gr&#246;&#223;e
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1566957944718" ID="ID_629892163" MODIFIED="1567112025398" TEXT="Befund: der reale Zeichencode verbraucht zus&#xe4;tzlichen Platz">
@@ -24033,8 +24034,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#5595df" DESTINATION="ID_224781783" ENDARROW="Default" ENDINCLINATION="-573;42;" ID="Arrow_ID_1285897355" SOURCE="ID_675568693" STARTARROW="None" STARTINCLINATION="47;-43;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -24047,8 +24047,11 @@
 <arrowlink COLOR="#5595df" DESTINATION="ID_224781783" ENDARROW="Default" ENDINCLINATION="-573;42;" ID="Arrow_ID_1285897355" STARTARROW="None" STARTINCLINATION="47;-43;"/>
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567085637546" ID="ID_682932701" MODIFIED="1567085645880" TEXT="sind im TrackBody zu speichern">
+<node COLOR="#338800" CREATED="1567085637546" ID="ID_682932701" MODIFIED="1567870091954" TEXT="sind im TrackBody zu speichern">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567870083327" ID="ID_400610372" MODIFIED="1567870089365" TEXT="dieses auch testen">
 <icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1567085650636" ID="ID_394868232" MODIFIED="1567088360350" TEXT="brauche elaboriertere Storage f&#xfc;r Dekorationen">
 <icon BUILTIN="button_ok"/>
@@ -24083,8 +24086,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1567684868730" ID="ID_1174805630" MODIFIED="1567747074910" TEXT="drei Modelle denkbar">
 <node CREATED="1567684881240" ID="ID_1903584153" MODIFIED="1567747074910" TEXT="Modell-1">
@@ -24103,8 +24105,7 @@
       macht ggfs <i>ganz nat&#252;rlich</i>&#160;einen box-shadow sichtbar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1567685491918" ID="ID_1425797539" MODIFIED="1567747074910" TEXT="Ruler sind nicht eingeschlossen">
@@ -24165,8 +24166,7 @@
       weil dann der Platz f&#252;r den &quot;pinned&quot; Ruler redundant im Body-Canvas vorhanden ist!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -24232,6 +24232,10 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567689931927" ID="ID_974682979" MODIFIED="1567689942119" TEXT="das deutet auf einen Fehler in der Allokation hin">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node CREATED="1567869494614" ID="ID_244849159" MODIFIED="1567869662204" TEXT="m&#xf6;glicher Workaround: auf das &quot;configureEvent&quot; reagieren">
+<arrowlink COLOR="#819eaf" DESTINATION="ID_842897291" ENDARROW="Default" ENDINCLINATION="1085;0;" ID="Arrow_ID_704507451" STARTARROW="None" STARTINCLINATION="2673;-176;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1567689738430" ID="ID_335898798" MODIFIED="1567689747264" TEXT="feine Zeichenfehler an der Sto&#xdf;fl&#xe4;che">
 <node CREATED="1567689750410" ID="ID_1517735190" MODIFIED="1567689771647" TEXT="...von zwei Bereichen mit box-shadow"/>
@@ -24251,8 +24255,7 @@
       die sich nur beim Scrollen bemerkbar macht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1567689845067" ID="ID_1441909594" MODIFIED="1567689874457" TEXT="ich betrachte das Problem als eigentlich irrelevant">
 <richcontent TYPE="NOTE"><html>
@@ -24264,8 +24267,7 @@
       man soll ohnehin keinen so gro&#223;en box-shadow verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
