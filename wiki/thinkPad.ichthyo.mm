@@ -5658,8 +5658,7 @@
       <b>TestControl</b>&#160;Dialogbox
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#57b762" DESTINATION="ID_1760873318" ENDARROW="Default" ENDINCLINATION="-989;0;" ID="Arrow_ID_782679142" STARTARROW="None" STARTINCLINATION="-756;-143;"/>
 <node CREATED="1567875290021" ID="ID_286133902" MODIFIED="1567875757319" TEXT="ein non-modaler Dialog"/>
 <node CREATED="1567875314411" ID="ID_26242186" MODIFIED="1567875341444" TEXT="erreichbar im Wizard | Men&#xfc; &quot;help&quot; &gt; &quot;self tests...&quot;"/>
@@ -6720,7 +6719,7 @@
 <linktarget COLOR="#8e2a4d" DESTINATION="ID_1909730752" ENDARROW="Default" ENDINCLINATION="190;-96;" ID="Arrow_ID_1543429248" SOURCE="ID_1507239589" STARTARROW="None" STARTINCLINATION="-103;109;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1518487921062" TEXT="globale Aktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485549081728" ID="ID_1122969153" MODIFIED="1569711933024" TEXT="globale Aktionen">
 <arrowlink COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" STARTARROW="Default" STARTINCLINATION="877;262;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1488419973349" ID="ID_1855791702" MODIFIED="1518487921062" TEXT="brauche ein Konzept">
@@ -18266,6 +18265,33 @@
 </node>
 </node>
 </node>
+<node CREATED="1569711492828" HGAP="32" ID="ID_1144480887" MODIFIED="1569711513200" TEXT="Zustands- und Darstellungs-Steuerung" VSHIFT="-15">
+<node CREATED="1569711514311" ID="ID_966535115" MODIFIED="1569711525152" TEXT="kniffeliges strukturelles Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1569711527039" ID="ID_492957941" MODIFIED="1569711539256" TEXT="Zustand wird lokal, in den Widgets verwaltet"/>
+<node CREATED="1569711540189" ID="ID_1641306694" MODIFIED="1569711676522" TEXT="diese brauchen jedoch Zugang zu zentralen Strukuren, speziell f&#xfc;r die Pr&#xe4;sentation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wichtigstes Beispiel: wir verwenden einen gemeinsamen <b>Canvas</b>&#160; (Gtk::Layout) zur Darstellung.
+    </p>
+    <p>
+      Das bedeutet: viele Kind-Widgets werden auf diesem Canvas platziert und m&#252;ssen daher mit ihm interagieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1569711684335" ID="ID_1964864197" MODIFIED="1569711950196" TEXT="verwende eine Beziehungs-Entit&#xe4;t &quot;ViewHook&quot;">
+<linktarget COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_465735263" SOURCE="ID_27191288" STARTARROW="None" STARTINCLINATION="-717;0;"/>
+<linktarget COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_756780463" SOURCE="ID_1246108677" STARTARROW="None" STARTINCLINATION="-717;0;"/>
+<linktarget COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_992148976" SOURCE="ID_1031858777" STARTARROW="None" STARTINCLINATION="-717;0;"/>
+</node>
+</node>
 <node CREATED="1563019044455" ID="ID_1947863751" MODIFIED="1563019051553" TEXT="Style / CSS-Struktur">
 <node CREATED="1563019065682" ID="ID_277910782" MODIFIED="1563019083259" TEXT="grunds&#xe4;tzlich durch Widget im UI definiert"/>
 <node CREATED="1563019091550" ID="ID_342336016" MODIFIED="1563019113940" TEXT="Struktur im TimelineWidget">
@@ -19343,6 +19369,9 @@
 <node CREATED="1541857411462" ID="ID_1874282992" MODIFIED="1557498707226" TEXT="Pixel-Intervall -&gt; TimeSpan">
 <node CREATED="1541857482489" ID="ID_524756641" MODIFIED="1557498707226" TEXT="timeline custom drawing"/>
 </node>
+<node CREATED="1568578895020" ID="ID_561665068" MODIFIED="1568578911701" TEXT="Time point -&gt; Pixel-Offset">
+<node CREATED="1568578913193" ID="ID_1111880749" MODIFIED="1568578935234" TEXT="placing a Clip"/>
+</node>
 </node>
 </node>
 </node>
@@ -19931,6 +19960,20 @@
 <arrowlink COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" STARTARROW="None" STARTINCLINATION="-8;6;"/>
 </node>
 </node>
+</node>
+<node CREATED="1569711798770" ID="ID_27191288" MODIFIED="1569711950196">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erm&#246;glicht (abstrahierten) Zugang zum Canvas &#252;ber einen <b>ViewHook</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_465735263" STARTARROW="None" STARTINCLINATION="-717;0;"/>
 </node>
 <node CREATED="1563467398036" ID="ID_828698459" MODIFIED="1563467403607" TEXT="Implementierung">
 <icon BUILTIN="pencil"/>
@@ -21818,7 +21861,17 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1560618715494" ID="ID_453891028" MODIFIED="1561140513713" TEXT="wer verwaltet das TrackProfil?">
 <linktarget COLOR="#9a6ea1" DESTINATION="ID_453891028" ENDARROW="Default" ENDINCLINATION="227;0;" ID="Arrow_ID_1574621169" SOURCE="ID_1827462767" STARTARROW="None" STARTINCLINATION="227;0;"/>
 <icon BUILTIN="help"/>
-<node CREATED="1560618780573" ID="ID_1295221704" MODIFIED="1560619724431" TEXT="naheliegend: das BodyCanvasWidget selber">
+<node CREATED="1560618780573" ID="ID_1295221704" MODIFIED="1568577629019">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      naheliegend: das <b>BodyCanvasWidget</b>&#160;selber
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="forward"/>
 <node CREATED="1560618821911" ID="ID_1127517536" MODIFIED="1560619559162" TEXT="mu&#xdf; aber irgendwie an die TrackBody-Struktur delegiert werden">
 <linktarget COLOR="#297bdb" DESTINATION="ID_1127517536" ENDARROW="Default" ENDINCLINATION="118;0;" ID="Arrow_ID_1683662279" SOURCE="ID_2106254" STARTARROW="Default" STARTINCLINATION="118;0;"/>
@@ -21830,6 +21883,7 @@
 </node>
 <node CREATED="1560618799458" ID="ID_1264363118" MODIFIED="1560618820650" TEXT="f&#xfc;hrt zu einem Gestr&#xfc;pp der Abh&#xe4;ngigkeiten">
 <icon BUILTIN="stop-sign"/>
+<node CREATED="1568577642375" ID="ID_1566841384" MODIFIED="1568577650307" TEXT="naja geht doch"/>
 </node>
 </node>
 <node CREATED="1560619493205" ID="ID_630720873" MODIFIED="1560619542216" TEXT="logisch w&#xfc;rde es irgendwie zum Layout passen">
@@ -21865,6 +21919,57 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1555082815168" ID="ID_1445154694" MODIFIED="1557498707229" TEXT="er entscheidet aber nicht &#xfc;ber die Struktur"/>
 <node CREATED="1555082847183" ID="ID_822850985" MODIFIED="1557498707229" TEXT="sondern bekommt Struktur-Info hereingereicht"/>
+</node>
+<node CREATED="1569709553921" ID="ID_578594394" MODIFIED="1569711340989" TEXT="Zugang zum Canvas">
+<linktarget COLOR="#2245a8" DESTINATION="ID_578594394" ENDARROW="Default" ENDINCLINATION="-218;1468;" ID="Arrow_ID_1185551045" SOURCE="ID_892450390" STARTARROW="None" STARTINCLINATION="-1702;0;"/>
+<node CREATED="1569709570975" ID="ID_743741751" MODIFIED="1569709577189" TEXT="strukturelles Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1569709579218" ID="ID_1213846218" MODIFIED="1569709593626" TEXT="der Canvas ist effektiv global (f&#xfc;r eine Timeline)"/>
+<node CREATED="1569709599619" ID="ID_195478308" MODIFIED="1569709628435" TEXT="aber die hierarchisch verschachtelten Komponenten sind auf ihn angewiesen"/>
+<node CREATED="1569709651932" ID="ID_1646518205" MODIFIED="1569709872231" TEXT="und es soll nicht...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i><font color="#b4288e">everyone and my grandma does it this way... </font></i>
+    </p>
+    <p>
+      Kein Wunder da&#223; die meisten UIs aus Sicht des Programmierers ein Albtraum sind
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1569709659444" ID="ID_5126624" MODIFIED="1569709680337" TEXT="eine globale Gott-Klasse die Widgets und Zeichenaktionen zentral fernsteuern"/>
+<node CREATED="1569709681558" ID="ID_1351310565" MODIFIED="1569709748956" TEXT="die Einzelkomponente ihre Position in der Struktur kennen, navigieren und manipulieren"/>
+<node CREATED="1569709700341" ID="ID_150824940" MODIFIED="1569709726454" TEXT="die Einzelkomponente direkt in den (zentralen/globalen) Canvas reingreifen"/>
+</node>
+</node>
+<node CREATED="1569711798770" ID="ID_1246108677" MODIFIED="1569712021835">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Abstraktion: <b>ViewHook</b>&#160;(-&gt;Canvas)
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_756780463" STARTARROW="None" STARTINCLINATION="-717;0;"/>
+<node CREATED="1569710397111" ID="ID_1086691958" MODIFIED="1569710431481" TEXT="verk&#xf6;rpert die Beziehung zwischen Timeline-Element und Canvas"/>
+<node CREATED="1569710432506" ID="ID_284533518" MODIFIED="1569710437509" TEXT="hat einen Lebenszyklus">
+<node CREATED="1569710516577" ID="ID_674995195" MODIFIED="1569710530825" TEXT="wird durch Anbinden des Elements (z.B. Widget) erstellt"/>
+<node CREATED="1569710531677" ID="ID_1914994523" MODIFIED="1569710563476" TEXT="l&#xf6;st und entfernt am Ende das Element aus der Anzeige"/>
+</node>
+<node CREATED="1569710950218" ID="ID_303793411" MODIFIED="1569710958668" TEXT="kann &quot;nach Hause telefonieren&quot;">
+<node CREATED="1569710965394" ID="ID_208711007" MODIFIED="1569710983588" TEXT="und abstrahiert damit die direkte Verbindung zum Canvas/DisplayManager weg"/>
+<node CREATED="1569710984776" ID="ID_1613132645" MODIFIED="1569711005893" TEXT="kann dadurch weitere Sub-Hooks installieren"/>
+</node>
+</node>
 </node>
 <node CREATED="1540951718734" HGAP="69" ID="ID_179159881" MODIFIED="1557498707229" TEXT="TrackBody" VSHIFT="-42">
 <node CREATED="1540951732747" ID="ID_879954288" MODIFIED="1557498707229" TEXT="kein Widget, sondern eine Hilfs-Struktur"/>
@@ -22001,14 +22106,14 @@
 <node COLOR="#338800" CREATED="1566955655903" ID="ID_652481986" MODIFIED="1566955664590" TEXT="gemeinsames Adjustment verdrahten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955668964" ID="ID_125473464" MODIFIED="1566955828220" TEXT="Problem: Koordinaten m&#xfc;ssen zusammenpassen">
+<node CREATED="1566955668964" ID="ID_125473464" MODIFIED="1568577727577" TEXT="Vorsicht: Koordinaten m&#xfc;ssen zusammenpassen">
 <arrowlink COLOR="#b84775" DESTINATION="ID_337498242" ENDARROW="Default" ENDINCLINATION="89;0;" ID="Arrow_ID_1188180583" STARTARROW="None" STARTINCLINATION="159;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1566955690993" ID="ID_1222461806" MODIFIED="1566955699971" TEXT="Koordinaten auf dem Canvas">
-<node CREATED="1566955702936" ID="ID_43945835" MODIFIED="1566955720226" TEXT="Idee: gemeinsam normieren">
-<icon BUILTIN="idea"/>
+<node CREATED="1566955702936" ID="ID_43945835" MODIFIED="1568577526756" TEXT="Idee: gemeinsam normieren">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1566955722421" ID="ID_337498242" MODIFIED="1566955828220" TEXT="Problem: gekoppelte Scrollbar">
 <linktarget COLOR="#b84775" DESTINATION="ID_337498242" ENDARROW="Default" ENDINCLINATION="89;0;" ID="Arrow_ID_1188180583" SOURCE="ID_125473464" STARTARROW="None" STARTINCLINATION="159;0;"/>
 </node>
@@ -22017,8 +22122,25 @@
 <arrowlink COLOR="#524b74" DESTINATION="ID_1316730142" ENDARROW="Default" ENDINCLINATION="530;-50;" ID="Arrow_ID_1561193123" STARTARROW="Default" STARTINCLINATION="424;0;"/>
 </node>
 </node>
-<node CREATED="1566955786323" ID="ID_1411864272" MODIFIED="1566956092402" TEXT="Alternative: jeder sub-Canvas hat seinen eigenen Origin">
+<node CREATED="1566955786323" ID="ID_1411864272" MODIFIED="1568577537819" TEXT="Alternative: jeder sub-Canvas hat seinen eigenen Origin">
 <linktarget COLOR="#9675ba" DESTINATION="ID_1411864272" ENDARROW="Default" ENDINCLINATION="-1041;0;" ID="Arrow_ID_1078761950" SOURCE="ID_309596538" STARTARROW="None" STARTINCLINATION="-507;-27;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1568384149932" ID="ID_364410899" MODIFIED="1568384171032" TEXT="inzwischen erscheint mit diese L&#xf6;sung immer attraktiver...">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1568577545755" ID="ID_752815491" MODIFIED="1568577574366">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil dann <i>innerhalb </i>des Canvas alles konsistent ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1568577575631" ID="ID_1451371313" MODIFIED="1568577585114" TEXT="..und &#xfc;bersetzt werden mu&#xdf; ohnehin"/>
 </node>
 </node>
 </node>
@@ -24227,7 +24349,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566956347881" ID="ID_1434222749" MODIFIED="1567876387739" TEXT="Koordinaten beachten">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566956347881" ID="ID_1434222749" MODIFIED="1568382936751" TEXT="Koordinaten beachten">
+<arrowlink COLOR="#da5073" DESTINATION="ID_309596538" ENDARROW="Default" ENDINCLINATION="40;-34;" ID="Arrow_ID_46419716" STARTARROW="None" STARTINCLINATION="58;33;"/>
 <linktarget COLOR="#c25c5f" DESTINATION="ID_1434222749" ENDARROW="Default" ENDINCLINATION="-123;0;" ID="Arrow_ID_1862539064" SOURCE="ID_764240247" STARTARROW="None" STARTINCLINATION="-876;0;"/>
 <icon BUILTIN="bell"/>
 <node CREATED="1566956361471" ID="ID_1879544719" MODIFIED="1566956417944" TEXT="Vorsicht bei gemeinsam genormten Koordinaten">
@@ -24255,8 +24378,9 @@
 </node>
 </node>
 <node CREATED="1566955936904" ID="ID_925495886" MODIFIED="1566955942099" TEXT="vertikale Koordinaten">
-<node CREATED="1566955943327" ID="ID_309596538" MODIFIED="1566956102609" TEXT="&quot;nat&#xfc;rlich&quot; ist es, wenn jeder Canvas eigene Koordinaten hat">
+<node CREATED="1566955943327" ID="ID_309596538" MODIFIED="1568384224104" TEXT="&quot;nat&#xfc;rlich&quot; ist es, wenn jeder Canvas eigene Koordinaten hat">
 <arrowlink COLOR="#9675ba" DESTINATION="ID_1411864272" ENDARROW="Default" ENDINCLINATION="-1041;0;" ID="Arrow_ID_1078761950" STARTARROW="None" STARTINCLINATION="-507;-27;"/>
+<linktarget COLOR="#da5073" DESTINATION="ID_309596538" ENDARROW="Default" ENDINCLINATION="40;-34;" ID="Arrow_ID_46419716" SOURCE="ID_1434222749" STARTARROW="None" STARTINCLINATION="58;33;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1566955975338" ID="ID_1779775058" MODIFIED="1566955999837">
 <richcontent TYPE="NODE"><html>
@@ -24270,10 +24394,30 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1566956005927" ID="ID_1438858393" MODIFIED="1566956013610" TEXT="Gr&#xf6;&#xdf;enberechnung wird einfach"/>
+<node CREATED="1566956005927" ID="ID_1438858393" MODIFIED="1566956013610" TEXT="Gr&#xf6;&#xdf;enberechnung wird einfach">
+<node CREATED="1568384121791" ID="ID_1073937095" MODIFIED="1568384131713" TEXT="ich neige immer mehr dieser L&#xf6;sung zu">
+<icon BUILTIN="smiley-neutral"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955956741" ID="ID_1266359061" MODIFIED="1566956109092" TEXT="wie k&#xf6;nnen wir dann aber Clips korrekt positionieren?">
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955956741" ID="ID_1266359061" MODIFIED="1568383460511" TEXT="wie k&#xf6;nnen wir dann aber Clips korrekt positionieren?">
+<arrowlink COLOR="#4943a0" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="954;-120;" ID="Arrow_ID_1809237545" STARTARROW="None" STARTINCLINATION="-271;0;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1568383045628" ID="ID_557151257" MODIFIED="1568383089234" TEXT="daf&#xfc;r brauchen wir ohnehin eine access-Funtkion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil die Canvas-Controls tief eingewickelt in der Struktur liegen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1568383095404" ID="ID_393689214" MODIFIED="1568383114645" TEXT="Ausl&#xf6;sen wird das der ClipPresenter"/>
+<node CREATED="1568383358860" ID="ID_619192777" LINK="#ID_633007604" MODIFIED="1568384041962" TEXT="den tats&#xe4;chlichen Zugriff k&#xf6;nnte der DisplayFrame haben"/>
+</node>
+<node CREATED="1568383386424" ID="ID_610235776" MODIFIED="1568383405042" TEXT="dieser Accessor k&#xf6;nnte eine Koordinaten-Transformation machen"/>
 </node>
 </node>
 </node>
@@ -24318,6 +24462,12 @@
 <node CREATED="1567869494614" ID="ID_244849159" MODIFIED="1567869662204" TEXT="m&#xf6;glicher Workaround: auf das &quot;configureEvent&quot; reagieren">
 <arrowlink COLOR="#819eaf" DESTINATION="ID_842897291" ENDARROW="Default" ENDINCLINATION="1085;0;" ID="Arrow_ID_704507451" STARTARROW="None" STARTINCLINATION="2673;-176;"/>
 <icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1568383963154" ID="ID_1080514398" MODIFIED="1568383975298" TEXT="hab ich da schon was gemacht?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1568383976601" ID="ID_120892436" MODIFIED="1568383991832" TEXT="besteht das Problem noch?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node CREATED="1567689738430" ID="ID_335898798" MODIFIED="1567689747264" TEXT="feine Zeichenfehler an der Sto&#xdf;fl&#xe4;che">
@@ -24361,10 +24511,83 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694550601" ID="ID_834517953" MODIFIED="1557498707230" TEXT="ClipPresenter">
 <linktarget COLOR="#fec680" DESTINATION="ID_834517953" ENDARROW="Default" ENDINCLINATION="-1077;-98;" ID="Arrow_ID_483670351" SOURCE="ID_1570849604" STARTARROW="None" STARTINCLINATION="407;0;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1568579757736" ID="ID_1709509664" MODIFIED="1568579767971" TEXT="Bedeutung/Aufgaben">
+<node CREATED="1568579769886" ID="ID_512050563" MODIFIED="1568579787568" TEXT="vermittelt zwischen Modell und Anzeigesteuerung"/>
+<node CREATED="1568579788436" ID="ID_339334267" MODIFIED="1568579815948" TEXT="ClipPresenter ist &quot;der Clip&quot; im Bezug auf Diff und UI-Bus"/>
+<node CREATED="1568579817151" ID="ID_1136229909" MODIFIED="1568579839085" TEXT="ClipPresenter betreibt das tats&#xe4;chliche ClipWidget als Slave"/>
+<node CREATED="1568579939879" ID="ID_685143843" MODIFIED="1568580005060" TEXT="ClipPresenter kennt einen Display-Frame f&#xfc;r die Anzeige">
+<arrowlink COLOR="#598cc8" DESTINATION="ID_633007604" ENDARROW="Default" ENDINCLINATION="-292;0;" ID="Arrow_ID_290509509" STARTARROW="None" STARTINCLINATION="42;220;"/>
+</node>
+</node>
 <node CREATED="1480741362389" ID="ID_328415412" MODIFIED="1557498707230" TEXT="ClipWidget">
 <node CREATED="1480741370347" ID="ID_1275685315" MODIFIED="1557498707230" TEXT="erzeugen"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480741374451" ID="ID_1270677756" MODIFIED="1557498707230" TEXT="in Display injizieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480741374451" ID="ID_1270677756" MODIFIED="1568383447744" TEXT="in Display injizieren">
+<linktarget COLOR="#4943a0" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="954;-120;" ID="Arrow_ID_1809237545" SOURCE="ID_1266359061" STARTARROW="None" STARTINCLINATION="-271;0;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1568383480998" ID="ID_263963478" MODIFIED="1568383491356" TEXT="Problem: Zugang zum Canvas">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1568383512509" ID="ID_1358982564" MODIFIED="1568383526344" TEXT="durchschneidet die hierarchische Ordnung">
+<node CREATED="1568383534499" ID="ID_608263529" MODIFIED="1568383545165" TEXT="denn der Canvas ist inh&#xe4;rent global"/>
+<node CREATED="1568383546005" ID="ID_1965015990" MODIFIED="1568383556367" TEXT="(tats&#xe4;chlich geh&#xf6;rt er dem DisplayManager)"/>
+</node>
+<node CREATED="1568383561002" ID="ID_1707558582" MODIFIED="1568383593930" TEXT="L&#xf6;ungsans&#xe4;tze">
+<icon BUILTIN="idea"/>
+<node CREATED="1568383568950" ID="ID_1484652442" MODIFIED="1568383577835" TEXT="&#xfc;ber den Display-Manager gehen">
+<node CREATED="1568383620427" ID="ID_879415775" MODIFIED="1568383626685" TEXT="gef&#xe4;llt mir nicht...."/>
+<node CREATED="1568383627722" ID="ID_1387232403" MODIFIED="1568383684206" TEXT="Gefahr: Display-Manager wird Gott-Klasse">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1568383578647" ID="ID_633007604" MODIFIED="1568579999196" TEXT="den lokalen Display-Frame zur Abstraktion ausbauen">
+<linktarget COLOR="#598cc8" DESTINATION="ID_633007604" ENDARROW="Default" ENDINCLINATION="-292;0;" ID="Arrow_ID_290509509" SOURCE="ID_685143843" STARTARROW="None" STARTINCLINATION="42;220;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1568581076086" ID="ID_536195735" MODIFIED="1568581089407" TEXT="Problem: der ist seinerseits eine Sackgasse">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1568581102059" ID="ID_172612190" MODIFIED="1568581104782" TEXT="brauche....">
+<node CREATED="1568581105914" ID="ID_1022292144" MODIFIED="1568581117148" TEXT="Zugang zum BodyCanvasWidget"/>
+<node CREATED="1568581118403" ID="ID_1096266089" MODIFIED="1568581131471" TEXT="Zugang zum DisplayManater (bzw. Timeline Layout)"/>
+<node CREATED="1568587312669" ID="ID_178738138" MODIFIED="1568587332282" TEXT="die vertikalen Start-Offsets aus dem passenden Display-Frame"/>
+</node>
+</node>
+<node CREATED="1569711798770" ID="ID_1031858777" MODIFIED="1569712082881" TEXT="baut auf dem ViewHook auf">
+<arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_992148976" STARTARROW="None" STARTINCLINATION="-717;0;"/>
+<node CREATED="1569711218032" ID="ID_892450390" MODIFIED="1569711340989" TEXT="bietet abstrahierten Zugang zum Canvas">
+<arrowlink COLOR="#2245a8" DESTINATION="ID_578594394" ENDARROW="Default" ENDINCLINATION="-218;1468;" ID="Arrow_ID_1185551045" STARTARROW="None" STARTINCLINATION="-1702;0;"/>
+</node>
+<node CREATED="1569711228399" ID="ID_370497060" MODIFIED="1569711249152" TEXT="&quot;klinkt&quot; dieses ClipWidget in den Canvas ein"/>
+<node CREATED="1569711251268" ID="ID_251536360" MODIFIED="1569711265483" TEXT="dadurch wir des Kind, und zeichnet sich selbst auf den Canvas"/>
+</node>
+</node>
+</node>
+<node CREATED="1568580048464" ID="ID_297402706" MODIFIED="1568580056499" TEXT="&#xdc;bersetzung Zeit -&gt; Pixel">
+<node CREATED="1568580066766" ID="ID_382441114" MODIFIED="1568580080675" TEXT="letztlich Aufgabe des Display-Managers">
+<node CREATED="1568580086251" ID="ID_965746340" LINK="#ID_1038931568" MODIFIED="1568580147307" TEXT="siehe: Thema Zeit-Darstellung und -&#xdc;bersetzung">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1568580161555" ID="ID_117814603" MODIFIED="1568580189881" TEXT="sollte aus dem ClipPresenter herausgehalten werden"/>
+</node>
+</node>
+</node>
+<node CREATED="1568580210235" ID="ID_36042409" MODIFIED="1568580212814" TEXT="Verhalten">
+<node CREATED="1568580214139" ID="ID_461989100" MODIFIED="1568580217102" TEXT="passiv....">
+<node CREATED="1568580218145" ID="ID_1698735124" MODIFIED="1568580229519" TEXT="im Hinblick auf die Wahl des Darstellungsformats"/>
+<node CREATED="1568580230888" ID="ID_384933602" MODIFIED="1568580242882" TEXT="im Hinblick auf die Layout- und Anzeigesteuerung"/>
+</node>
+<node CREATED="1568587417811" ID="ID_525225515" MODIFIED="1568587421270" TEXT="Beziehungen">
+<node CREATED="1568587422690" ID="ID_1184376218" MODIFIED="1568587435748" TEXT="vollkommene Herrschaft &#xfc;ber das ClipWidget"/>
+<node CREATED="1568587448231" ID="ID_1753498057" MODIFIED="1568587484879" TEXT="DisplayManager bestimmt &#xfc;ber den Darstellungs-Stil">
+<node CREATED="1568587486002" ID="ID_983778450" MODIFIED="1568587492401" TEXT="bidirektionale Beziehung!"/>
+<node CREATED="1568587493345" ID="ID_1580477403" MODIFIED="1568587506515" TEXT="ClipPresenter mu&#xdf; Darstellungsstil kennen"/>
+<node CREATED="1568587508479" ID="ID_846594106" MODIFIED="1568587523871" TEXT="DisplayManager mu&#xdf; Darstellungsstil auch nachtr&#xe4;glich &#xe4;ndern k&#xf6;nnen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1568587562714" ID="ID_178330712" MODIFIED="1568587573965" TEXT="mu&#xdf; er den zugeh&#xf6;rigen Track kennen?">
+<icon BUILTIN="help"/>
+<node CREATED="1568587576213" ID="ID_1892967536" MODIFIED="1568587597423" TEXT="Clip-Widget mu&#xdf; letztlich an die richtige Position kommen"/>
+</node>
 </node>
 </node>
 <node CREATED="1480741386769" ID="ID_1808095573" MODIFIED="1557498707230" TEXT="Kinder">
@@ -33757,7 +33980,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548830035" HGAP="5" ID="ID_1295711115" MODIFIED="1518487921090" TEXT="Nutzen" VSHIFT="17">
 <icon BUILTIN="bell"/>
 <node CREATED="1485548856639" ID="ID_1677281474" MODIFIED="1518487921090" TEXT="spezifische Aktionen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" ID="ID_826011549" MODIFIED="1518487921090" TEXT="Problem: globale Aktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" ID="ID_826011549" MODIFIED="1569711933024" TEXT="Problem: globale Aktionen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
