@@ -18290,6 +18290,81 @@
 <linktarget COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_465735263" SOURCE="ID_27191288" STARTARROW="None" STARTINCLINATION="-717;0;"/>
 <linktarget COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_756780463" SOURCE="ID_1246108677" STARTARROW="None" STARTINCLINATION="-717;0;"/>
 <linktarget COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_992148976" SOURCE="ID_1031858777" STARTARROW="None" STARTINCLINATION="-717;0;"/>
+<node CREATED="1569796860718" ID="ID_1579412894" MODIFIED="1569796865185" TEXT="Eigenschaften">
+<node CREATED="1569796881999" ID="ID_1495741440" MODIFIED="1569796893280" TEXT="ist nie leer"/>
+<node CREATED="1569796899453" ID="ID_665830244" MODIFIED="1569797486161" TEXT="hat eine eindeutige Identit&#xe4;t (&#xfc;bertragbar, aber nicht duplizierbar)"/>
+<node CREATED="1569796925567" ID="ID_737561546" MODIFIED="1569796955277" TEXT="wird erzeugt durch &quot;Einf&#xfc;gen&quot; eines Elementes in die Anzeige"/>
+<node CREATED="1569796959970" ID="ID_894452722" MODIFIED="1569797075899" TEXT="beim Zerst&#xf6;ren &quot;entfernt&quot; es dieses Element aus der Anzeige"/>
+<node CREATED="1569797018132" ID="ID_609962345" MODIFIED="1569797053014" TEXT="w&#xe4;hrend der Lebensdauer erlaubt es dieses Element in der Anzeige zu repositionieren"/>
+<node CREATED="1569797689767" ID="ID_454948151" MODIFIED="1569798007505" TEXT="kann Kind-ViewHook relativ zum platzierten Element erzeugen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. das durch diesen ViewHook eingef&#252;gte Element definiert auch ein lokales Koordinatensystem.
+    </p>
+    <p>
+      Allerdings lebt der erzeugte Kind-ViewHook danach eigenst&#228;ndig und es gibt keine weitere Beziehung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1569798407650" ID="ID_1008276733" MODIFIED="1569798417575" TEXT="Konsequenzen">
+<node CREATED="1569798611601" ID="ID_1075698833" MODIFIED="1569798622052" TEXT="zwei Pointer notwendig">
+<node CREATED="1569798623199" ID="ID_97526784" MODIFIED="1569798641033" TEXT="R&#xfc;ck-Pointer auf die eingef&#xfc;gte Entit&#xe4;t"/>
+<node CREATED="1569798642005" ID="ID_463960789" MODIFIED="1569798703836" TEXT="Ziel-Pointer auf den Anzeigerahmen/Canvas"/>
+</node>
+<node CREATED="1569799685975" ID="ID_1899453702" MODIFIED="1569799698129" TEXT="zun&#xe4;chst einmal ziemlich festgelegt">
+<node CREATED="1569799719906" ID="ID_201546085" MODIFIED="1569799991905" TEXT="Lambdas w&#xfc;rden einen Ziel-Pointer pro Lambda erfordern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Erl&#228;uterung: man k&#246;nnte auf die Idee kommen, die vier notwendigen Operationen auf dem Ziel durch Lambdas zu verkapseln. Wenn man dann aber nicht aufpa&#223;t, resultiert das in einer Closure f&#252;r jedes dieser vier Lamdas, und diese Closure h&#228;lt zumindest einen Pointer auf das Zielobjekt. <i>Der Vorteil eines solchen Ansatzes </i>w&#228;re nat&#252;rlich, da&#223; der konkrete Typ von Quelle und Ziel aus der Definition des ViewHook verschwindet (allerdings auch nur, wenn diese Lambdas in std::function-Objekte gewickelt sind)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1569800105842" ID="ID_403274133" MODIFIED="1569800125569" TEXT="w&#xfc;nschenswert w&#xe4;re, den konkreten Zieltyp zu entkoppeln"/>
+<node CREATED="1569800749930" ID="ID_1631103689" MODIFIED="1569800858846" TEXT="w&#xfc;nschenswer w&#xe4;re aber auch Quer-Beweglichkeit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      von Element-Typ A nach Element-Typ B...
+    </p>
+    <p>
+      Konkret:
+    </p>
+    <ul>
+      <li>
+        gegeben ein ViewHook&lt;TrackBody&gt;
+      </li>
+      <li>
+        kann ich daraus einen ViewHook&lt;Gtk::Widget&gt; gewinnen?
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1569800892774" ID="ID_513027776" MODIFIED="1569800904118" TEXT="Idee: halb-generisches Design">
+<icon BUILTIN="idea"/>
+<node CREATED="1569800905877" ID="ID_49362333" MODIFIED="1569800929374" TEXT="Richtung Ziel(Canvas) wird &#xfc;ber ein OO-Interface abstrahiert"/>
+<node CREATED="1569800980203" ID="ID_1663628523" MODIFIED="1569801006667" TEXT="das Element dagegen ist ein Typ-Parameter"/>
+<node CREATED="1569800938265" ID="ID_501232684" MODIFIED="1569800973086" TEXT="die typische Doppelkapsel: Generische H&#xfc;lle, polymorphe Innereien"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1563019044455" ID="ID_1947863751" MODIFIED="1563019051553" TEXT="Style / CSS-Struktur">

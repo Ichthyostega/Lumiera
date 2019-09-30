@@ -37,17 +37,18 @@
  ** is deregistered from the central canvas. Widgets thus may want to store the
  ** `ViewHook` as member.
  ** 
+ ** @see ViewHook_test
  ** @todo WIP-WIP-WIP as of 9/2019
  ** 
  */
 
 
-#ifndef STAGE_TIMELINE_VIEW_HOOK_H
-#define STAGE_TIMELINE_VIEW_HOOK_H
+#ifndef STAGE_MODEL_VIEW_HOOK_H
+#define STAGE_MODEL_VIEW_HOOK_H
 
 //#include "stage/gtk-base.hpp"
 //#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <memory>
 //#include <utility>
@@ -56,7 +57,7 @@
 
 
 namespace stage  {
-namespace timeline {
+namespace model {
   
 //  using lib::Literal;
 //  using util::isnil;
@@ -78,9 +79,15 @@ namespace timeline {
    * @todo WIP-WIP as of 4/2019
    * @todo the number of pinned elements should be a member field, instead of sneaking it into the prelude element...
    */
+  template<class ELM>
   class ViewHook
     {
       public:
+      ELM&
+      operator* ()  const
+        {
+          UNIMPLEMENTED ("mart-ptr like access to the attached Element");
+        }
     };
   
   
@@ -94,5 +101,5 @@ namespace timeline {
   
   
   
-}}// namespace stage::timeline
-#endif /*STAGE_TIMELINE_VIEW_HOOK_H*/
+}}// namespace model::timeline
+#endif /*STAGE_MODEL_VIEW_HOOK_H*/
