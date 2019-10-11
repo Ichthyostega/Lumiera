@@ -50316,7 +50316,7 @@
 </node>
 <node CREATED="1447567187010" ID="ID_1008538054" MODIFIED="1557498707243" TEXT="sp&#xe4;ter...">
 <icon BUILTIN="bell"/>
-<node CREATED="1447567193361" ID="ID_661445245" MODIFIED="1557498707243" TEXT="preliminary optimization">
+<node CREATED="1447567193361" ID="ID_661445245" MODIFIED="1570817462086" TEXT="premature optimization">
 <icon BUILTIN="ksmiletris"/>
 <node CREATED="1447566743461" ID="ID_1971297499" LINK="http://issues.lumiera.org/ticket/973" MODIFIED="1557498707243">
 <richcontent TYPE="NODE"><html>
@@ -50343,6 +50343,99 @@
 <icon BUILTIN="bell"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1570812024592" ID="ID_1371102521" MODIFIED="1570812029189" TEXT="immerwieder...">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1570815474222" ID="ID_678448874" MODIFIED="1570815485479" TEXT="#1204 Alignment issues">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1570817474883" ID="ID_1779912405" MODIFIED="1570817537392" TEXT="#1205 Advice data possibly misaligned">
+<linktarget COLOR="#cd4467" DESTINATION="ID_1779912405" ENDARROW="Default" ENDINCLINATION="296;20;" ID="Arrow_ID_1125835000" SOURCE="ID_711013238" STARTARROW="None" STARTINCLINATION="462;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1570817544291" ID="ID_1212317534" MODIFIED="1570817544291" TEXT="try { return new char[siz]; }"/>
+<node CREATED="1570817565257" ID="ID_872374381" MODIFIED="1570817571504" TEXT="auf x86 harmlos"/>
+<node CREATED="1570817572097" ID="ID_942342414" MODIFIED="1570817577917" TEXT="aber nicht portabel"/>
+</node>
+</node>
+<node CREATED="1570812031118" ID="ID_1018321072" MODIFIED="1570812037369" TEXT="Alignment bei placement-new">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1570812038974" ID="ID_716754107" MODIFIED="1570812068335" TEXT="der Buffer mu&#xdf; passendes Alignment f&#xfc;r das Target aufweisen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1570812070369" ID="ID_490799733" MODIFIED="1570812089910" TEXT="der Compiler kann das (meist/immer) nicht verifizieren">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1570812097734" ID="ID_649573793" MODIFIED="1570812117119" TEXT="da man die Storage oft weit durchreicht, ist das eine potentielle Falle"/>
+</node>
+<node CREATED="1570812123998" ID="ID_1852853548" MODIFIED="1570812393065" TEXT="2019-10 Codebasis durchgepr&#xfc;ft">
+<node CREATED="1570812138224" ID="ID_499341259" MODIFIED="1570812146355" TEXT="alle Placement-New-Aufrufe"/>
+<node CREATED="1570812148917" ID="ID_1136640650" MODIFIED="1570812152826" TEXT="einzeln abgekl&#xe4;rt"/>
+<node CREATED="1570812156154" ID="ID_1286349242" MODIFIED="1570812160201" TEXT="potentiell gef&#xe4;hrlich">
+<node CREATED="1570812168060" ID="ID_572329221" MODIFIED="1570812347609" TEXT="buffhandle.hpp">
+<linktarget COLOR="#6997ce" DESTINATION="ID_572329221" ENDARROW="Default" ENDINCLINATION="-312;0;" ID="Arrow_ID_558667540" SOURCE="ID_587624101" STARTARROW="None" STARTINCLINATION="241;-25;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1570812177483" ID="ID_684960114" MODIFIED="1570812180566" TEXT="im Moment sauber">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1570812266492" ID="ID_156871602" MODIFIED="1570812291142">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Aber Vorsicht: es <b>wird noch gar nicht verwendet</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+<node CREATED="1570812221861" ID="ID_1839888193" MODIFIED="1570812227638" TEXT="siehe: usages of BufferProvider::buildHandle">
+<node CREATED="1570812246800" ID="ID_447651236" MODIFIED="1570812246800" TEXT="TrackingHeapBlockProvider::provideLockedBuffer(HashVal typeID)">
+<node CREATED="1570812260534" ID="ID_101354449" MODIFIED="1570812260534" TEXT="diagn::Block&amp; newBlock = blocks.createBlock()"/>
+</node>
+</node>
+</node>
+<node CREATED="1570812625135" ID="ID_688046161" MODIFIED="1570815492913" TEXT="typed-allocation-manager.hpp">
+<linktarget COLOR="#ec5b9a" DESTINATION="ID_688046161" ENDARROW="Default" ENDINCLINATION="-281;28;" ID="Arrow_ID_789772576" SOURCE="ID_126301727" STARTARROW="None" STARTINCLINATION="117;-5;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1570812637077" ID="ID_1674717962" MODIFIED="1570812642972" TEXT="nicht fertig implementiert"/>
+<node CREATED="1570812643428" ID="ID_1631975143" MODIFIED="1570812899021" TEXT="die gegenw&#xe4;rtige dummy-Implementierung ist nicht korrekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      typed-allocation-manager.hpp 217
+    </p>
+    <p>
+      dumme Heap-Allokation eines char[]
+    </p>
+    <p>
+      !!!!!11!!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1570812308345" ID="ID_595212266" MODIFIED="1570812311915" TEXT="Review">
+<icon BUILTIN="bell"/>
+<node CREATED="1570812319615" ID="ID_587624101" MODIFIED="1570812352560" TEXT="buffhandle.hpp">
+<arrowlink COLOR="#6997ce" DESTINATION="ID_572329221" ENDARROW="Default" ENDINCLINATION="-312;0;" ID="Arrow_ID_558667540" STARTARROW="None" STARTINCLINATION="241;-25;"/>
+<node CREATED="1570812358786" ID="ID_1531404447" MODIFIED="1570812369421" TEXT="2019-10">
+<node CREATED="1570812369993" ID="ID_1647231897" MODIFIED="1570812373524" TEXT="noch nicht verwendet"/>
+<node CREATED="1570812373920" ID="ID_1210803090" MODIFIED="1570812385603" TEXT="Testcode (TrackingHeapBlockProvider) sauber"/>
+</node>
+</node>
+<node CREATED="1570812625135" ID="ID_126301727" MODIFIED="1570815492913" TEXT="typed-allocation-manager.hpp">
+<arrowlink COLOR="#ec5b9a" DESTINATION="ID_688046161" ENDARROW="Default" ENDINCLINATION="-281;28;" ID="Arrow_ID_789772576" STARTARROW="None" STARTINCLINATION="117;-5;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1570812925966" ID="ID_1900314792" MODIFIED="1570812931345" TEXT="2019-10">
+<node CREATED="1570812637077" ID="ID_971741566" MODIFIED="1570812642972" TEXT="nicht fertig implementiert"/>
 </node>
 </node>
 </node>
@@ -50694,6 +50787,10 @@
 <node COLOR="#338800" CREATED="1544386406767" ID="ID_789739914" MODIFIED="1544386410583" TEXT="problem solved">
 <icon BUILTIN="button_ok"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1570817474883" ID="ID_711013238" MODIFIED="1570817537392" TEXT="#1205 Advice data possibly misaligned">
+<arrowlink COLOR="#cd4467" DESTINATION="ID_1779912405" ENDARROW="Default" ENDINCLINATION="296;20;" ID="Arrow_ID_1125835000" STARTARROW="None" STARTINCLINATION="462;0;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

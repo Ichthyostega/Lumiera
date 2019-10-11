@@ -147,7 +147,7 @@ namespace wrapper {
           new(&content_) X{forward<Z> (otherValue)};
         } 
         catch(...) {
-          NullValue<X>::build (&content_);
+          new(&content_) X{NullValue<X>::get()};
         }
       
       template<typename Z>

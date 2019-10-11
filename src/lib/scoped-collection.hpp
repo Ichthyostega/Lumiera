@@ -29,7 +29,8 @@
  ** The storage holding all those child objects is allocated in one chunk
  ** and never adjusted.
  ** 
- ** \par usage patterns
+ ** ## usage patterns
+ ** 
  ** The common ground for all usage of this container is to hold some elements
  ** with exclusive ownership; when the enclosing container goes out of scope,
  ** all the dtors of the embedded objects will be invoked. Frequently this

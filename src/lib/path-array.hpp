@@ -122,7 +122,7 @@ namespace lib {
         template<typename...ELMS>
         explicit
         Extension (ELMS&& ...elms)
-          : storage_{new Literal[1 + sizeof...(ELMS)]}
+          : storage_{new Literal[1 + sizeof...(ELMS)]}                        // proper alignment maintained here (TICKET #1204)
           {
             size(storage_) = sizeof...(ELMS);
             new(storage_+1) Literal[sizeof...(ELMS)] {forward<ELMS>(elms)...};

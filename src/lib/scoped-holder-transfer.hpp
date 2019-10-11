@@ -120,7 +120,7 @@ namespace lib {
       void 
       construct (pointer p, const TY& ref)
         {
-          new(p) TY();
+          new(p) TY();   /////////////////////TICKET #1204
           ASSERT (p);
           ASSERT (!(*p), "protocol violation: target already manages another object.");
           if (ref)

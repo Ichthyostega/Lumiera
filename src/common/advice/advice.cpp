@@ -153,7 +153,7 @@ namespace advice {
         void*
         allocateBuffer(size_t siz)
           {
-            try { return new char[siz]; }
+            try { return new char[siz]; } /////////////////////////////////////////////////////////////////////TICKET #1204 potentially misaligned
             
             catch(std::bad_alloc&)
               {

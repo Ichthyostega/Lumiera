@@ -40,6 +40,12 @@
  ** to an actual buffer provided and managed behind the scenes. There is no automatic
  ** resource management; clients are responsible to invoke BuffHandle#release when done.
  ** 
+ ** @warning buffer management via BuffHandle and BufferDescriptor does _not automatically
+ **          maintain proper alignment._ Rather, it relies on the storage allocator to provide
+ **          a buffer suitably aligned for the target type to hold. In most cases, this target
+ **          location will actually be storage maintained on heap through some STL collection;
+ **          this topic is a possible subtle pitfall non the less.
+ ** 
  ** @see BufferProvider
  ** @see BufferProviderProtocol_test usage demonstration
  ** @see OutputSlot

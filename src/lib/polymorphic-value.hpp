@@ -377,6 +377,7 @@ namespace lib {
       enum{
         siz = storage + _Traits::ADMIN_OVERHEAD
       };
+      // WARNING: never add any member fields here                                /////////////////TICKET #1204
       
       
       /* === embedded object in buffer === */

@@ -222,6 +222,8 @@ namespace lib {
   template<typename TYPES>
   class Variant
     {
+      // WARNING: never add any member field before the storage_ array    /////////////////////////TICKET #1204
+      
     public:
       enum { SIZ = meta::maxSize<typename TYPES::List>::value };
       

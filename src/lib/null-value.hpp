@@ -65,8 +65,7 @@ namespace lib {
   /** 
    * Singleton holder for NIL or default value objects.
    * Implemented as a cluster of Meyer's singletons, maintaining
-   * a single value per type. As an extension point for specialisation,
-   * a function to emplace a "default" object is also provided.
+   * a single value per type. Specialisation is intended.
    */
   template<class TY>
   struct NullValue
@@ -76,12 +75,6 @@ namespace lib {
         {
           static TY nilValue;
           return nilValue;
-        }
-      
-      static TY&
-      build (void* storage)
-        {
-          return *new(storage) TY{};
         }
     };
   

@@ -55,6 +55,7 @@
  ** 
  ** @todo using a quick-n-dirty heap allocation implementation for now (8/09),
  **       but should write a custom allocator based on cehteh's mpool!
+ ** @warning this quick-n-dirty heap allocation might produce misaligned storage!!
  ** 
  ** @see CommandRegistry
  ** @see AllocationCluster (another custom allocation scheme, which could be united)
@@ -214,7 +215,7 @@ namespace lib {
         {
           ////////////////////////////////////////////////TICKET #231 :redirect to the corresponding pool allocator
           TRACE (memory, "release «%s»", util::typeStr<XX>().c_str());
-          typedef char Storage[sizeof(XX)];
+          typedef char Storage[sizeof(XX)]; //////////////TICKET #1204 : WARNING this might produce misaligned storage when the array does not start on a "void* boundary"
           delete[] reinterpret_cast<Storage*> (entry);
           allocCnt_.dec<XX>();
         }

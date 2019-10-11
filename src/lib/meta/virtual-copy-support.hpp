@@ -101,6 +101,7 @@
  **          copies. Additionally, if you \em really need multiple level deep inheritance,
  **          you need to mix in the copy implementations on \em every level \em again, and
  **          you need to provide custom copy operations on every level.
+ ** @warning please ensure the target storage for copy/clone is properly aligned. TICKET #1204
  ** 
  ** @see VirtualCopySupport_test
  ** @see lib::Variant usage example

@@ -95,6 +95,8 @@
  **          using a bit of type traits and boost lexical_cast, but no boost::format.
  ** @warning not suited for performance critical code. About 10 times slower than printf.
  ** 
+ ** TICKET #1204 : proper alignment verified 10/2019
+ ** 
  ** @see FormatString_test
  ** @see format-util.hpp
  ** @see format-obj.hpp

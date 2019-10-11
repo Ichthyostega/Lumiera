@@ -57,6 +57,8 @@
  ** and you need to re-discover their concrete type, then maybe
  ** a visitor or variant record might be a better solution.
  ** 
+ ** TICKET #1204 : proper alignment verified 10/2019
+ ** 
  ** @see opaque-holder-test.cpp
  ** @see function-erasure.hpp usage example
  ** @see variant.hpp
