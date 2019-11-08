@@ -34,6 +34,7 @@
 //#include <utility>
 //#include <memory>
 #include <forward_list>
+#include <vector>
 
 
 using util::isSameObject;
@@ -41,7 +42,7 @@ using util::contains;
 //using util::isnil;
 //using std::make_unique;
 //using std::move;
-//using std::vector;
+using std::vector;
 using std::forward_list;
 
 
@@ -61,9 +62,7 @@ namespace test {
         friend bool
         operator== (DummyWidget const& wa, DummyWidget const& wb)
         {
-          return wa.x == wb.x
-             and wa.y == wb.y
-             and wa.i == wb.i;
+          return wa.i == wb.i; // compare identity
         }
       };
     
@@ -97,6 +96,14 @@ namespace test {
                                     }); 
           }
         
+        auto
+        findEntry (DummyWidget const& someWidget)
+          {
+            return std::find_if (widgets_.begin()
+                                ,widgets_.end()
+                                , [&](Attachment const& a) { return a.widget == someWidget; });
+          }
+        
       public:
         
         bool
@@ -109,6 +116,16 @@ namespace test {
         testContains (DummyWidget const& someWidget)
           {
             return util::linearSearch (allWidgets(), someWidget);
+          }
+        
+        bool
+        testVerifyPos (DummyWidget const& someWidget, int x_expected, int y_expected)
+          {
+            auto end = widgets_.end();
+            auto pos = findEntry (someWidget);
+            return pos != end
+               and pos->posX == x_expected
+               and pos->posY == y_expected;
           }
         
         
@@ -124,7 +141,13 @@ namespace test {
         void
         move (DummyWidget& elm, int xPos, int yPos)  override
           {
-            UNIMPLEMENTED ("move it");
+            auto end = widgets_.end();
+            auto pos = findEntry (elm);
+            if (pos != end)
+              {
+                pos->posX = xPos;
+                pos->posY = yPos;
+              }
           }
         
         void
@@ -152,6 +175,7 @@ namespace test {
       run (Arg)
         {
           verify_standardUsage();
+          relocateWidget();
         }
       
       
@@ -170,6 +194,33 @@ namespace test {
           }// hook goes out of scope...
           CHECK (not canvas.testContains (widget));
           CHECK (canvas.empty());
+        }
+      
+      
+      /** @test relocate a widget on the canvas through the ViewHook handle
+       */
+      void
+      relocateWidget()
+        {
+          FakeCanvas canvas;
+          DummyWidget w1, w2, w3;
+          WidgetViewHook h1 = canvas.hook (w1, w1.x,w1.y);
+          WidgetViewHook h3 = canvas.hook (w3, w3.x,w3.y);
+          {
+            WidgetViewHook h2 = canvas.hook (w2, w2.x,w2.y);
+            CHECK (canvas.testVerifyPos (w2, w2.x,w2.y));
+            
+            int newX = ++w2.x;
+            int newY = --w2.y;
+            h2.moveTo (newX,newY);
+            
+            CHECK (canvas.testVerifyPos (w2, newX,newY));
+            CHECK (canvas.testVerifyPos (w1, w1.x,w1.y));
+            CHECK (canvas.testVerifyPos (w3, w3.x,w3.y));
+          }
+          CHECK (canvas.testVerifyPos (w1, w1.x,w1.y));
+          CHECK (canvas.testVerifyPos (w3, w3.x,w3.y));
+          CHECK (not canvas.testContains (w2));
         }
       
       
