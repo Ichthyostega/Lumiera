@@ -29,7 +29,7 @@
  **         separate headers.
  ** @warning be sure to understand the ramifications of including _anything_ here...
  ** @see util-coll.hpp
- ** @see uitl-foreach.hpp
+ ** @see util-foreach.hpp
  ** @see util-quant.hpp
  */
 
@@ -137,20 +137,20 @@ namespace util {
   inline bool
   isnil (const CONT* pContainer)
   {
-    return !pContainer || pContainer->empty();
+    return !pContainer or pContainer->empty();
   }
   
   template <class CONT>
   inline bool
   isnil (CONT* pContainer)
   {
-    return !pContainer || pContainer->empty();
+    return !pContainer or pContainer->empty();
   }
   
   inline bool
   isnil (const char* pCStr)
   {
-    return !pCStr || !(*pCStr);
+    return !pCStr or !(*pCStr);
   }
   
   
@@ -235,6 +235,15 @@ namespace util {
     return end != std::find(begin,end, val);
   }
   
+  /** use (and exhaust) a »Lumiera Forward Iterator« for linear search */
+  template <class IT>
+  inline bool
+  linearSearch (IT iter, typename IT::value_type const& val)
+  {
+    IT end{};
+    return end != std::find (std::move (iter), end, val);
+  }
+  
   /** fetch value from a Map, or return a default if not found */
   template <typename MAP>
   inline typename MAP::mapped_type
@@ -281,8 +290,8 @@ namespace util {
   /** remove all elements fulfilling a given predicate
    *  from a (sorted) set.
    *  @return true if anything has been removed. */
-  template<class SET, typename PRD>
-  bool remove_if (SET& set, PRD test)
+  template<class SET, typename FUN>
+  bool remove_if (SET& set, FUN test)
     {
       typedef typename SET::iterator Itor;
       bool found = false;
@@ -291,7 +300,8 @@ namespace util {
       Itor   pos = begin;
       while (pos!=end)
         {
-          if (!test (*pos)) ++pos;
+          if (not test(*pos))
+            ++pos;
           else
             {
               found = true;
@@ -378,14 +388,14 @@ namespace util {
    * - leading and trailing whitespace is ignored
    * @throws lumiera::error::Invalid for any other text content
    */
-  bool boolVal(string const&);
+  bool boolVal (string const&);
   
   
   /** check the given text if it can be interpreted as affirmative answer (bool `true`).
    * @remarks this function just fishes for the known `true` tokens and interprets
    *  all other content as `false`, including empty strings. Never throws.
    */
-  bool isYes(string const&) noexcept;
+  bool isYes (string const&) noexcept;
   
   
   

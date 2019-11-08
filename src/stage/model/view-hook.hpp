@@ -46,23 +46,29 @@
 #ifndef STAGE_MODEL_VIEW_HOOK_H
 #define STAGE_MODEL_VIEW_HOOK_H
 
-//#include "stage/gtk-base.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
-
-//#include <memory>
-//#include <utility>
-//#include <vector>
-
 
 
 namespace stage  {
 namespace model {
   
-//  using lib::Literal;
-//  using util::isnil;
-//  using std::forward;
-
+  
+  template<class ELM>
+  class ViewHook;
+  
+  template<class ELM>
+  class ViewHookable
+    {
+    public:
+      virtual ~ViewHookable() { }    ///< this is an interface
+      
+      virtual ViewHook<ELM> hook (ELM& elm, int xPos, int yPos)  =0;
+      virtual void move (ELM& elm, int xPos, int yPos)           =0;
+      virtual void remove (ELM& elm)   noexcept                  =0;
+    };
+  
+  
   
   /**
    * Abstracted attachment onto a display canvas or similar central presentation context.
@@ -76,30 +82,52 @@ namespace model {
    * elements into the appropriate display region for this track, without exposing the actual
    * stage::timeline::BodyCanvasWidget to each and every Clip or Label widget.
    * 
-   * @todo WIP-WIP as of 4/2019
-   * @todo the number of pinned elements should be a member field, instead of sneaking it into the prelude element...
+   * @remark since ViewHook represents one distinct attachment to some view or canvas,
+   *         is has a clear-cut identity and thus may be moved, but not copied.
+   * @todo WIP-WIP as of 11/2019
    */
   template<class ELM>
   class ViewHook
+    : util::MoveOnly
     {
-      public:
+      using View = ViewHookable<ELM>;
+      
+      ELM* widget_;
+      View& view_;
+      
+    public:
+      ViewHook (ELM& elm, View& view)
+        : widget_{&elm}
+        , view_{view}
+        { }
+      
+      ViewHook (ViewHook&& existing)
+        : widget_{nullptr}
+        , view_{existing.view_}
+        {
+          std::swap (widget_, existing.widget_);
+        }
+      
+     ~ViewHook()  noexcept
+        {
+          if (widget_)
+            view_.remove (*widget_);
+        }
+      
       ELM&
       operator* ()  const
         {
-          UNIMPLEMENTED ("mart-ptr like access to the attached Element");
+          return *widget_;
+        }
+      
+      void
+      moveTo (int xPos, int yPos)
+        {
+          view_.move (*widget_, xPos,yPos);
         }
     };
   
   
   
-  /**
-   */
-//inline void
-//TrackProfile::performWith ()
-//{
-//}
-  
-  
-  
-}}// namespace model::timeline
+}}// namespace stage::model
 #endif /*STAGE_MODEL_VIEW_HOOK_H*/

@@ -18282,8 +18282,7 @@
       Das bedeutet: viele Kind-Widgets werden auf diesem Canvas platziert und m&#252;ssen daher mit ihm interagieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1569711684335" ID="ID_1964864197" MODIFIED="1569711950196" TEXT="verwende eine Beziehungs-Entit&#xe4;t &quot;ViewHook&quot;">
@@ -18294,9 +18293,9 @@
 <node CREATED="1569796881999" ID="ID_1495741440" MODIFIED="1569796893280" TEXT="ist nie leer"/>
 <node CREATED="1569796899453" ID="ID_665830244" MODIFIED="1569797486161" TEXT="hat eine eindeutige Identit&#xe4;t (&#xfc;bertragbar, aber nicht duplizierbar)"/>
 <node CREATED="1569796925567" ID="ID_737561546" MODIFIED="1569796955277" TEXT="wird erzeugt durch &quot;Einf&#xfc;gen&quot; eines Elementes in die Anzeige"/>
-<node CREATED="1569796959970" ID="ID_894452722" MODIFIED="1569797075899" TEXT="beim Zerst&#xf6;ren &quot;entfernt&quot; es dieses Element aus der Anzeige"/>
-<node CREATED="1569797018132" ID="ID_609962345" MODIFIED="1569797053014" TEXT="w&#xe4;hrend der Lebensdauer erlaubt es dieses Element in der Anzeige zu repositionieren"/>
-<node CREATED="1569797689767" ID="ID_454948151" MODIFIED="1569798007505" TEXT="kann Kind-ViewHook relativ zum platzierten Element erzeugen">
+<node CREATED="1569796959970" ID="ID_894452722" MODIFIED="1573241985243" STYLE="fork" TEXT="beim Zerst&#xf6;ren &quot;entfernt&quot; es dieses Element aus der Anzeige"/>
+<node CREATED="1569797018132" ID="ID_609962345" MODIFIED="1573241988838" STYLE="fork" TEXT="w&#xe4;hrend der Lebensdauer erlaubt es dieses Element in der Anzeige zu repositionieren"/>
+<node CREATED="1569797689767" ID="ID_454948151" MODIFIED="1573241990438" STYLE="fork" TEXT="kann Kind-ViewHook relativ zum platzierten Element erzeugen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18309,8 +18308,7 @@
       Allerdings lebt der erzeugte Kind-ViewHook danach eigenst&#228;ndig und es gibt keine weitere Beziehung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1569798407650" ID="ID_1008276733" MODIFIED="1569798417575" TEXT="Konsequenzen">
@@ -18329,8 +18327,7 @@
       Erl&#228;uterung: man k&#246;nnte auf die Idee kommen, die vier notwendigen Operationen auf dem Ziel durch Lambdas zu verkapseln. Wenn man dann aber nicht aufpa&#223;t, resultiert das in einer Closure f&#252;r jedes dieser vier Lamdas, und diese Closure h&#228;lt zumindest einen Pointer auf das Zielobjekt. <i>Der Vorteil eines solchen Ansatzes </i>w&#228;re nat&#252;rlich, da&#223; der konkrete Typ von Quelle und Ziel aus der Definition des ViewHook verschwindet (allerdings auch nur, wenn diese Lambdas in std::function-Objekte gewickelt sind)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1569800105842" ID="ID_403274133" MODIFIED="1569800125569" TEXT="w&#xfc;nschenswert w&#xe4;re, den konkreten Zieltyp zu entkoppeln"/>
 <node CREATED="1569800749930" ID="ID_1631103689" MODIFIED="1569800858846" TEXT="w&#xfc;nschenswer w&#xe4;re aber auch Quer-Beweglichkeit">
@@ -18354,8 +18351,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1569800892774" ID="ID_513027776" MODIFIED="1569800904118" TEXT="Idee: halb-generisches Design">
@@ -18363,6 +18359,57 @@
 <node CREATED="1569800905877" ID="ID_49362333" MODIFIED="1569800929374" TEXT="Richtung Ziel(Canvas) wird &#xfc;ber ein OO-Interface abstrahiert"/>
 <node CREATED="1569800980203" ID="ID_1663628523" MODIFIED="1569801006667" TEXT="das Element dagegen ist ein Typ-Parameter"/>
 <node CREATED="1569800938265" ID="ID_501232684" MODIFIED="1569800973086" TEXT="die typische Doppelkapsel: Generische H&#xfc;lle, polymorphe Innereien"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242004064" ID="ID_1106243162" MODIFIED="1573242256230" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1573242012238" ID="ID_870466825" MODIFIED="1573242115695" TEXT="halb generisch, halb OO"/>
+<node COLOR="#990000" CREATED="1573242085554" ID="ID_1566257148" MODIFIED="1573242111268" TEXT="Ctor auf Friend limitiert">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1573242119197" ID="ID_1160468015" MODIFIED="1573242160694" TEXT="geht nicht ohne Weiteres">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;the children of your friends ain't your friends&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1573242125353" ID="ID_1681214217" MODIFIED="1573242247243" TEXT="KISS">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst m&#252;&#223;te man das Einf&#252;gen als eine weitere (protected)-Operation auf dem ViewHookable ausdr&#252;cken und k&#246;nnte dann die Erzeugung des ViewHook fest in den ViewHookable ABC implementieren....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1573242026324" ID="ID_760500508" MODIFIED="1573242047152" TEXT="verkapselte Ptr / Referenz">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1573242048514" ID="ID_1803806630" MODIFIED="1573242060330" TEXT="automatische Deregistrierung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242259267" ID="ID_1903570032" MODIFIED="1573242269170" TEXT="Test">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1573242271641" ID="ID_226481127" MODIFIED="1573242355581" TEXT="Basisfall">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242278975" ID="ID_1541691410" MODIFIED="1573242369229" TEXT="Verschieben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242357830" ID="ID_1431447719" MODIFIED="1573242368189" TEXT="relatives Kind-Hook">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -20046,8 +20093,7 @@
       erm&#246;glicht (abstrahierten) Zugang zum Canvas &#252;ber einen <b>ViewHook</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_465735263" STARTARROW="None" STARTINCLINATION="-717;0;"/>
 </node>
 <node CREATED="1563467398036" ID="ID_828698459" MODIFIED="1563467403607" TEXT="Implementierung">
@@ -22014,8 +22060,7 @@
       Kein Wunder da&#223; die meisten UIs aus Sicht des Programmierers ein Albtraum sind
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1569709659444" ID="ID_5126624" MODIFIED="1569709680337" TEXT="eine globale Gott-Klasse die Widgets und Zeichenaktionen zentral fernsteuern"/>
 <node CREATED="1569709681558" ID="ID_1351310565" MODIFIED="1569709748956" TEXT="die Einzelkomponente ihre Position in der Struktur kennen, navigieren und manipulieren"/>
@@ -22032,8 +22077,7 @@
       Abstraktion: <b>ViewHook</b>&#160;(-&gt;Canvas)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_756780463" STARTARROW="None" STARTINCLINATION="-717;0;"/>
 <node CREATED="1569710397111" ID="ID_1086691958" MODIFIED="1569710431481" TEXT="verk&#xf6;rpert die Beziehung zwischen Timeline-Element und Canvas"/>
 <node CREATED="1569710432506" ID="ID_284533518" MODIFIED="1569710437509" TEXT="hat einen Lebenszyklus">
@@ -24621,7 +24665,7 @@
 </node>
 <node CREATED="1568581102059" ID="ID_172612190" MODIFIED="1568581104782" TEXT="brauche....">
 <node CREATED="1568581105914" ID="ID_1022292144" MODIFIED="1568581117148" TEXT="Zugang zum BodyCanvasWidget"/>
-<node CREATED="1568581118403" ID="ID_1096266089" MODIFIED="1568581131471" TEXT="Zugang zum DisplayManater (bzw. Timeline Layout)"/>
+<node CREATED="1568581118403" ID="ID_1096266089" MODIFIED="1573162562425" TEXT="Zugang zum DisplayManager (bzw. Timeline Layout)"/>
 <node CREATED="1568587312669" ID="ID_178738138" MODIFIED="1568587332282" TEXT="die vertikalen Start-Offsets aus dem passenden Display-Frame"/>
 </node>
 </node>
@@ -24631,7 +24675,7 @@
 <arrowlink COLOR="#2245a8" DESTINATION="ID_578594394" ENDARROW="Default" ENDINCLINATION="-218;1468;" ID="Arrow_ID_1185551045" STARTARROW="None" STARTINCLINATION="-1702;0;"/>
 </node>
 <node CREATED="1569711228399" ID="ID_370497060" MODIFIED="1569711249152" TEXT="&quot;klinkt&quot; dieses ClipWidget in den Canvas ein"/>
-<node CREATED="1569711251268" ID="ID_251536360" MODIFIED="1569711265483" TEXT="dadurch wir des Kind, und zeichnet sich selbst auf den Canvas"/>
+<node CREATED="1569711251268" ID="ID_251536360" MODIFIED="1573162551740" TEXT="dadurch wird es Kind, und zeichnet sich selbst auf den Canvas"/>
 </node>
 </node>
 </node>
@@ -39426,7 +39470,8 @@
 </node>
 </node>
 <node CREATED="1535890757430" ID="ID_3793753" MODIFIED="1557498707235" TEXT="Iterator">
-<node CREATED="1535890775651" ID="ID_333704322" MODIFIED="1557498707235" TEXT="Lumiera Forward Iterator">
+<node CREATED="1535890775651" ID="ID_333704322" MODIFIED="1573230435834" TEXT="Lumiera Forward Iterator">
+<linktarget COLOR="#3f76e9" DESTINATION="ID_333704322" ENDARROW="Default" ENDINCLINATION="-542;0;" ID="Arrow_ID_1390962202" SOURCE="ID_1939609996" STARTARROW="None" STARTINCLINATION="331;0;"/>
 <node CREATED="1535890788898" ID="ID_474606436" MODIFIED="1557498707235" TEXT="IterAdapter"/>
 <node CREATED="1535891020739" ID="ID_7899831" MODIFIED="1557498707235" TEXT="IterStateWrapper">
 <node CREATED="1535891026946" ID="ID_958757780" MODIFIED="1557498707235" TEXT="sehr wichtiges Konzept"/>
@@ -39463,7 +39508,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1535891065189" ID="ID_1233342893" MODIFIED="1561827465900" TEXT="Iterator-Monade">
+<node CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1573230141495" TEXT="Iterator-Monade">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -39611,7 +39656,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1512925334501" ID="ID_409327286" MODIFIED="1561827465904" TEXT="IterExplorer-Design">
+<node CREATED="1512925334501" FOLDED="true" ID="ID_409327286" MODIFIED="1573229967374" TEXT="IterExplorer-Design">
 <linktarget COLOR="#625975" DESTINATION="ID_409327286" ENDARROW="Default" ENDINCLINATION="-843;1771;" ID="Arrow_ID_86323098" SOURCE="ID_185594200" STARTARROW="None" STARTINCLINATION="-493;-1123;"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1512925397741" ID="ID_1352590559" MODIFIED="1518487921098" TEXT="Design">
@@ -39709,7 +39754,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1514328717684" ID="ID_137835978" MODIFIED="1561827465907" TEXT="neuer Anlauf IterExplorer II">
+<node COLOR="#338800" CREATED="1514328717684" FOLDED="true" ID="ID_137835978" MODIFIED="1573229989029" TEXT="neuer Anlauf IterExplorer II">
 <arrowlink COLOR="#8ad3a5" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-230;134;" ID="Arrow_ID_253437970" STARTARROW="None" STARTINCLINATION="-387;0;"/>
 <linktarget COLOR="#27998e" DESTINATION="ID_137835978" ENDARROW="Default" ENDINCLINATION="-521;-801;" ID="Arrow_ID_1873000120" SOURCE="ID_1860662881" STARTARROW="None" STARTINCLINATION="-1866;98;"/>
 <icon BUILTIN="button_ok"/>
@@ -39739,7 +39784,7 @@
 </node>
 <node CREATED="1536410175049" ID="ID_1439541143" MODIFIED="1536516072058" TEXT="Erg&#xe4;nzungen">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1535894221015" ID="ID_977007729" MODIFIED="1561827465907" TEXT="Bug im Filter-Layer">
+<node COLOR="#338800" CREATED="1535894221015" FOLDED="true" ID="ID_977007729" MODIFIED="1573229640628" TEXT="Bug im Filter-Layer">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535894239308" ID="ID_1809452702" MODIFIED="1535894251655" TEXT="Reihenfolge des Parent-Aufrufes in expandChildren()"/>
 <node CREATED="1535894252195" ID="ID_373085595" MODIFIED="1535894291490" TEXT="kommt mir komisch vor; pullFilter() sollte doch danach kommen"/>
@@ -39776,7 +39821,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535893707036" ID="ID_650057716" MODIFIED="1561827465910" TEXT="Aufgabe: Filter erweiterbar machen">
+<node COLOR="#338800" CREATED="1535893707036" FOLDED="true" ID="ID_650057716" MODIFIED="1573229642317" TEXT="Aufgabe: Filter erweiterbar machen">
 <linktarget COLOR="#62909b" DESTINATION="ID_650057716" ENDARROW="Default" ENDINCLINATION="99;93;" ID="Arrow_ID_1700598512" SOURCE="ID_257876647" STARTARROW="None" STARTINCLINATION="-240;-19;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535893718194" ID="ID_177803317" MODIFIED="1535893743691" TEXT="analog zum Filter in den Itertools"/>
@@ -40124,7 +40169,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1536409170928" ID="ID_1850744645" MODIFIED="1536515953937" TEXT="Design-Probleme">
 <icon BUILTIN="go"/>
-<node COLOR="#338800" CREATED="1535919506060" ID="ID_1587572708" MODIFIED="1561827465915" TEXT="heterogene Pr&#xe4;dikat-Typen">
+<node COLOR="#338800" CREATED="1535919506060" FOLDED="true" ID="ID_1587572708" MODIFIED="1573229614688" TEXT="heterogene Pr&#xe4;dikat-Typen">
 <linktarget COLOR="#616f95" DESTINATION="ID_1587572708" ENDARROW="Default" ENDINCLINATION="49;-142;" ID="Arrow_ID_346491515" SOURCE="ID_1859852045" STARTARROW="None" STARTINCLINATION="-143;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535919549942" ID="ID_270773242" MODIFIED="1536409271272" TEXT="das zu Beginn verwendete Filter-Pr&#xe4;dikat legt den Typ fest">
@@ -40200,7 +40245,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1536409302285" ID="ID_913930564" MODIFIED="1561827466004" TEXT="extrem komplexe Typen">
+<node COLOR="#338800" CREATED="1536409302285" FOLDED="true" ID="ID_913930564" MODIFIED="1573229616333" TEXT="extrem komplexe Typen">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_913930564" ENDARROW="Default" ENDINCLINATION="-274;-41;" ID="Arrow_ID_1572610374" SOURCE="ID_1397772054" STARTARROW="None" STARTINCLINATION="-127;28;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1536409316172" ID="ID_1468538186" MODIFIED="1536409340127" TEXT="Call-Traces sind nahezu unlesbar">
@@ -40311,7 +40356,7 @@
 <node CREATED="1536441367354" ID="ID_1778093460" MODIFIED="1536441424596" TEXT="welcher eine gegebene Funktion in eine vorgegebene function&lt;SIG&gt; einpasst"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1536451222025" HGAP="9" ID="ID_389572303" MODIFIED="1536515885403" TEXT="Umbau" VSHIFT="5">
+<node COLOR="#338800" CREATED="1536451222025" FOLDED="true" HGAP="9" ID="ID_389572303" MODIFIED="1573229603386" TEXT="Umbau" VSHIFT="5">
 <linktarget COLOR="#3163b8" DESTINATION="ID_389572303" ENDARROW="Default" ENDINCLINATION="1208;0;" ID="Arrow_ID_1470957358" SOURCE="ID_821501153" STARTARROW="None" STARTINCLINATION="627;32;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536451240308" ID="ID_241157222" MODIFIED="1536451273762" TEXT="den SRC-Parameter optional machen">
@@ -40522,7 +40567,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1535893231835" ID="ID_637460742" MODIFIED="1535893326431" TEXT="Such-Pr&#xe4;dikate auf EventLog">
+<node CREATED="1535893231835" FOLDED="true" ID="ID_637460742" MODIFIED="1573229918492" TEXT="Such-Pr&#xe4;dikate auf EventLog">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40595,7 +40640,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535938028929" ID="ID_1910123172" MODIFIED="1537320149375" TEXT="Backtracking Search-Engine einbauen">
+<node COLOR="#338800" CREATED="1535938028929" FOLDED="true" ID="ID_1910123172" MODIFIED="1573229808484" TEXT="Backtracking Search-Engine einbauen">
 <arrowlink COLOR="#23408f" DESTINATION="ID_1801538785" ENDARROW="Default" ENDINCLINATION="20;-55;" ID="Arrow_ID_1048873840" STARTARROW="None" STARTINCLINATION="-120;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535939763441" ID="ID_132867774" MODIFIED="1535939780642" TEXT="mu&#xdf; &quot;nur noch&quot; Cursor gegen neue State-Core austauschen"/>
@@ -40845,7 +40890,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1536368106394" ID="ID_1324169393" MODIFIED="1561827466029" TEXT="in eigene Translation-Unit verschieben">
+<node COLOR="#338800" CREATED="1536368106394" FOLDED="true" ID="ID_1324169393" MODIFIED="1573229781539" TEXT="in eigene Translation-Unit verschieben">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1537059357301" ID="ID_1501687281" MODIFIED="1537059360761" TEXT="Beobachtungen">
 <node CREATED="1536368121224" ID="ID_684768731" MODIFIED="1536368139195">
@@ -40985,7 +41030,7 @@
 <node CREATED="1536018293535" ID="ID_361886715" MODIFIED="1536018315757" TEXT="Abk&#xfc;rzung f&#xfc;r direkten Wert-equality-Match"/>
 <node CREATED="1536018276593" ID="ID_1222260775" MODIFIED="1536018287299" TEXT="prekonfigurierte Builder-Funktionen f&#xfc;r Standardf&#xe4;lle"/>
 </node>
-<node COLOR="#338800" CREATED="1536018364845" ID="ID_1351452920" MODIFIED="1537050037422" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1536018364845" FOLDED="true" ID="ID_1351452920" MODIFIED="1573229908166" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536018375244" ID="ID_1906913554" MODIFIED="1536717634181" TEXT="Kern: Explore-Mechanismus">
 <icon BUILTIN="button_ok"/>
@@ -41097,7 +41142,7 @@
 <linktarget COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" SOURCE="ID_1532889609" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#435e98" CREATED="1536857187385" ID="ID_1180686110" MODIFIED="1561827466036" TEXT="Bug! Referenz auf *this">
+<node COLOR="#435e98" CREATED="1536857187385" FOLDED="true" ID="ID_1180686110" MODIFIED="1573229874089" TEXT="Bug! Referenz auf *this">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1536857213605" ID="ID_1051501156" MODIFIED="1536857238050" TEXT="...und dann moved man *this aus dem Builder!!!">
 <icon BUILTIN="broken-line"/>
@@ -41170,7 +41215,7 @@
 </node>
 <node COLOR="#338800" CREATED="1536018406232" ID="ID_1330264339" MODIFIED="1561827466037" TEXT="Schritte als Funktoren">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1536018684754" ID="ID_1076606298" MODIFIED="1561827466039" TEXT="geeignete Signatur f&#xfc;r die Schritt-Funktoren">
+<node COLOR="#338800" CREATED="1536018684754" FOLDED="true" ID="ID_1076606298" MODIFIED="1573229877554" TEXT="geeignete Signatur f&#xfc;r die Schritt-Funktoren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1536184281271" ID="ID_1736323474" MODIFIED="1536184299802" TEXT="Problem: Funktor-Signatur zu Beginn nicht bekannt">
 <icon BUILTIN="messagebox_warning"/>
@@ -41374,7 +41419,7 @@
 </node>
 <node COLOR="#338800" CREATED="1536018923378" ID="ID_1163666446" MODIFIED="1561827466043" TEXT="Pipeline konstruieren">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1536018931433" ID="ID_1532889609" MODIFIED="1536717484882" TEXT="treeExplorer-Konfiguration">
+<node COLOR="#338800" CREATED="1536018931433" FOLDED="true" ID="ID_1532889609" MODIFIED="1573229882688" TEXT="treeExplorer-Konfiguration">
 <arrowlink COLOR="#65a7b1" DESTINATION="ID_1044555993" ENDARROW="Default" ENDINCLINATION="70;92;" ID="Arrow_ID_575633930" STARTARROW="None" STARTINCLINATION="149;-3;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536353107155" HGAP="33" ID="ID_1163131751" MODIFIED="1561827466043" TEXT="Problem: Basis-Layer" VSHIFT="37">
@@ -41504,7 +41549,7 @@
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1536357878006" ID="ID_1225195123" MODIFIED="1537050011562" TEXT="Aufr&#xe4;umen und nachr&#xfc;sten">
+<node COLOR="#338800" CREATED="1536357878006" FOLDED="true" ID="ID_1225195123" MODIFIED="1573229898167" TEXT="Aufr&#xe4;umen und nachr&#xfc;sten">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536357891412" ID="ID_942897075" MODIFIED="1561827466050" TEXT="den Basis-Layer eliminieren">
 <linktarget COLOR="#4471b4" DESTINATION="ID_942897075" ENDARROW="Default" ENDINCLINATION="37;-79;" ID="Arrow_ID_537236489" SOURCE="ID_1163131751" STARTARROW="None" STARTINCLINATION="30;44;"/>
@@ -41827,6 +41872,10 @@
 </node>
 </node>
 </node>
+<node CREATED="1573230287134" ID="ID_1958309835" MODIFIED="1573230291318" TEXT="Concepts">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1573230307678" ID="ID_1856823830" MODIFIED="1573230336518" TEXT="&#xbb;Lumiera Forward Iterator&#xab; integrieren"/>
+</node>
 <node CREATED="1540682664865" ID="ID_1702211999" MODIFIED="1557498707236" TEXT="Metaprogramming">
 <node CREATED="1540682674455" ID="ID_1625152878" MODIFIED="1557498707236" TEXT="Typliste filtern">
 <node CREATED="1540682680286" ID="ID_1172485112" MODIFIED="1557498707236" TEXT="nach canConvert">
@@ -41852,6 +41901,47 @@
 </html></richcontent>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1573230375839" ID="ID_270568302" MODIFIED="1573230382276" TEXT="policies">
+<node CREATED="1573230393523" ID="ID_1929317164" MODIFIED="1573230398694" TEXT="wie viel const-correctness?">
+<node CREATED="1573230673519" ID="ID_269010776" MODIFIED="1573230690445" TEXT="prefer immutable over const-correct">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1573230399348" ID="ID_963172794" MODIFIED="1573230404213" TEXT="Rolle der Iteration">
+<node CREATED="1573230406221" ID="ID_1939609996" MODIFIED="1573230435834" TEXT="als funktionale Quelle">
+<arrowlink COLOR="#3f76e9" DESTINATION="ID_333704322" ENDARROW="Default" ENDINCLINATION="-542;0;" ID="Arrow_ID_1390962202" STARTARROW="None" STARTINCLINATION="331;0;"/>
+</node>
+</node>
+<node CREATED="1573230456930" ID="ID_1636521851" MODIFIED="1573230459836" TEXT="utils">
+<node CREATED="1573230461194" ID="ID_225640230" MODIFIED="1573230465260" TEXT="knapp halten">
+<icon BUILTIN="yes"/>
+<node CREATED="1573230469672" ID="ID_1095270711" MODIFIED="1573230478491" TEXT="minimale Includes haben absolute Priorit&#xe4;t"/>
+<node CREATED="1573230497284" ID="ID_1008077184" MODIFIED="1573230520598" TEXT="Subgruppen">
+<node CREATED="1573230502540" ID="ID_1611372107" MODIFIED="1573230505064" TEXT="meta/util"/>
+<node CREATED="1573230513506" ID="ID_197961459" MODIFIED="1573230516350" TEXT="ID-Helper"/>
+</node>
+</node>
+<node CREATED="1573230535302" ID="ID_1413538720" MODIFIED="1573230598322" TEXT="&quot;contains&quot; / Suche nur &#xfc;ber Container">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        kein allgemeines Such-Framework bauen!
+      </li>
+      <li>
+        den Begriff des &quot;Containers&quot; knapp halten: was keine const_reference bietet, ist kein Container
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -42020,7 +42110,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1482524530842" ID="ID_606738640" MODIFIED="1561827466061" TEXT="Dependency-Injection">
+<node COLOR="#435e98" CREATED="1482524530842" FOLDED="true" ID="ID_606738640" MODIFIED="1573230611958" TEXT="Dependency-Injection">
 <icon BUILTIN="wizard"/>
 <node CREATED="1515975589922" ID="ID_367021032" MODIFIED="1538868806804" TEXT="Architektur">
 <icon BUILTIN="yes"/>
@@ -50413,8 +50503,7 @@
       !!!!!11!!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>

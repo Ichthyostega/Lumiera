@@ -259,7 +259,7 @@ namespace iter {
         {
           addStep ([predicate{forward<FUN> (filterPredicate)}]
                    (Filter& filter)
-                     {        // manipulte current filter configuration
+                     {        // manipulate current filter configuration
                        filter.setNewFilter (predicate);
                      });
           return move(*this);

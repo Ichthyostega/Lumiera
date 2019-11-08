@@ -31,7 +31,7 @@
  ** we deem it crucial to reduce the inherent complexity in such algorithms by clearly
  ** separate the _mechanics of evaluation_ from the actual logic of the target domain.
  ** 
- ** Similar to IterExplorer_test, the his test relies on a demonstration setup featuring
+ ** Similar to IterExplorer_test, this test relies on a demonstration setup featuring
  ** a custom encapsulated state type: we rely on a counter with start and end value,
  ** embedded into an iterator. Basically, this running counter, when iterated, generates
  ** a descending sequence of numbers start ... end.

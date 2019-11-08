@@ -28,19 +28,21 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "stage/model/view-hook.hpp"
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
 //#include <memory>
-#include <vector>
+#include <forward_list>
 
 
 using util::isSameObject;
 using util::contains;
-using util::isnil;
+//using util::isnil;
 //using std::make_unique;
 //using std::move;
-using std::vector;
+//using std::vector;
+using std::forward_list;
 
 
 namespace stage{
@@ -50,52 +52,64 @@ namespace test {
   
   namespace { // Test fixture...
     
-//  template<typename X>
     struct DummyWidget
-//    : public sigc::trackable
       {
         int x = rand() % 100;
         int y = rand() % 100;
+        int i = rand(); // "identity"
         
         friend bool
         operator== (DummyWidget const& wa, DummyWidget const& wb)
         {
           return wa.x == wb.x
-             and wa.y == wb.y;
+             and wa.y == wb.y
+             and wa.i == wb.i;
         }
       };
     
     using WidgetViewHook = ViewHook<DummyWidget>;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : TODO actually implement this generic for ViewHook
-    template<class ELM>
-    class ViewHookable
-      {
-      public:
-        virtual ~ViewHookable() { }    ///< this is an interface
-        
-        virtual ViewHook<ELM> hook (ELM& elm, int xPos, int yPos)  =0;
-      };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : TODO actually implement this generic for ViewHook
-
+    
+    
+    
     class FakeCanvas
       : public ViewHookable<DummyWidget>
       {
-        vector<DummyWidget> widgets_;
+        struct Attachment
+          {
+            DummyWidget& widget;
+            int posX, posY;
+          };
+        forward_list<Attachment> widgets_;
         
         void
         addDummy(DummyWidget& widget, int x, int y)
           {
-            UNIMPLEMENTED ("add widget at given position");
+            widgets_.push_front (Attachment{widget, x,y});
+          }
+        
+        auto
+        allWidgets()  const
+          {
+            return lib::treeExplore(widgets_)
+                       .transform([](Attachment const& entry)
+                                    {
+                                      return entry.widget;
+                                    }); 
           }
         
       public:
-        using const_reference = DummyWidget const&;
-        using const_iterator = vector<DummyWidget>::const_iterator;
         
-        bool           empty() const { return widgets_.empty(); }
-        const_iterator begin() const { return widgets_.begin(); }
-        const_iterator end()   const { return widgets_.end(); }
+        bool
+        empty()  const
+          {
+            return widgets_.empty();
+          }
+        
+        bool
+        testContains (DummyWidget const& someWidget)
+          {
+            return util::linearSearch (allWidgets(), someWidget);
+          }
         
         
         /* === Interface ViewHookable === */
@@ -104,8 +118,19 @@ namespace test {
         hook (DummyWidget& elm, int xPos, int yPos)  override
           {
             addDummy(elm, xPos,yPos);
-            TODO ("actually do something to hook it up...");
-            return WidgetViewHook{};
+            return WidgetViewHook{elm, *this};
+          }
+        
+        void
+        move (DummyWidget& elm, int xPos, int yPos)  override
+          {
+            UNIMPLEMENTED ("move it");
+          }
+        
+        void
+        remove (DummyWidget& elm)  noexcept override
+          {
+            widgets_.remove_if ([&](Attachment const& a) { return a.widget == elm; });
           }
       };
   }
@@ -138,13 +163,13 @@ namespace test {
           FakeCanvas canvas;
           DummyWidget widget;
           {
-            WidgetViewHook hook = canvas.hook(widget, widget.x, widget.y);
+            WidgetViewHook hook = canvas.hook (widget, widget.x, widget.y);
             CHECK (isSameObject (*hook, widget));
-            CHECK (contains (canvas, widget));
-            CHECK (not isnil (canvas));
+            CHECK (canvas.testContains (widget));
+            CHECK (not canvas.empty());
           }// hook goes out of scope...
-          CHECK (not contains (canvas, widget));
-          CHECK (isnil (canvas));
+          CHECK (not canvas.testContains (widget));
+          CHECK (canvas.empty());
         }
       
       

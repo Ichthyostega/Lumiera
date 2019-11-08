@@ -1591,15 +1591,15 @@ namespace lib {
    * 
    * This function starts a *Builder* expression. It picks up the given source,
    * which can be something "sequence-like" or "iterable", and will automatically
-   * wrapped and adapted.
+   * be wrapped and adapted.
    * - from a STL container, we retrieve a pair of STL iterators (`begin()`, `end()`)
    * - a "Lumiera Forward Iterator" is copied or moved into the wrapper and used as
-   *   data source, pulling results on demand until exhaustion
+   *   data source, when pulling results on demand, until exhaustion
    * - a _State Core_ object is copied or moved into the wrapper and adapted to
    *   be iterated as "Lumiera Forward Iterator". Any object with suitable extension
    *   points and behaviour can be used, as explained [here](\ref lib::IterStateWrapper).
    * 
-   * The resulting TreeExplorer instance can be directly used as "Lumiera Forward Iterator".
+   * The resulting TreeExplorer instance can directly be used as "Lumiera Forward Iterator".
    * However, typically you might want to invoke the builder functions to configure further
    * processing steps in a processing pipeline...
    * - to [filter](\ref TreeExplorer::filter) the results with a predicate (functor)
