@@ -163,7 +163,7 @@ namespace timeline {
         int line_ = 0;
         
         void
-        fillBackground (StyleC& style, int height)
+        fillBackground (StyleC style, int height)
           {
             style->render_background (cox_
                                      ,visible_.b       // left start of the rectangle
@@ -176,7 +176,7 @@ namespace timeline {
       public:
         AbstractTrackRenderer (CairoC currentDrawContext, DisplayManager& layout)
           : cox_{currentDrawContext}
-          , style_{trackBodyStyle.getAdvice()}
+          , style_{trackBodyStyle.getAdvice()}                                 // storing a const& to the advice is potentially dangerous, but safe here, since it is not long-lived
           , styleR_{trackRulerStyle.getAdvice()}
           , visible_{layout.getPixSpan()}
           { }
@@ -485,6 +485,7 @@ namespace timeline {
         uint overallHeight = rootBody_->establishTrackSpace (profile_);
         uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
         adjustCanvasSize(layout_.getPixSpan().delta(), overallHeight, rulerHeight);
+        ENSURE (not isnil (profile_));
       }
   }
   
@@ -494,7 +495,7 @@ namespace timeline {
    * has negotiated the required space for the currently presented content, this function adjusts
    * the actual Gtk::Layout canvas extension to match. Note that we use two Gtk::Layout controls,
    * one to show the always visible overview rules, while the second one is placed into a scrollable
-   * pane to accommodate an arbitrary numbers of tracks
+   * pane to accommodate an arbitrary number of tracks
    */
   void
   BodyCanvasWidget::adjustCanvasSize(int canvasWidth, int totalHeight, int rulerHeight)
@@ -506,7 +507,7 @@ namespace timeline {
                       if (currWidth != newWidth or currHeight != newHeight)
                         {
                           canvas.set_size(newWidth, newHeight);
-                          canvas.set_size_request(newWidth, newHeight);  //////TODO the width might be more than actually is available. Better do this with precise spacing, and do it for the rulerCanvas only!!
+                          canvas.set_size_request(newWidth, newHeight);  //////TODO the width might be more than actually is available. Better do this with precisely the dimensions we need, and do it for the rulerCanvas only!!
                         }
                     };
     
@@ -551,7 +552,7 @@ namespace timeline {
    *       becomes crucial for responsiveness on large sessions          ////////////////////////////////////TICKET #1191
    */
   bool
-  TimelineCanvas::on_draw (CairoC const& cox)
+  TimelineCanvas::on_draw (CairoC cox)
   {
     // draw track structure behind all widgets
     openCanvas (cox);
@@ -578,7 +579,7 @@ namespace timeline {
    *   only for the child widgets on the canvas, not for any custom painting.
    */
   void
-  TimelineCanvas::openCanvas (CairoC const& cox)
+  TimelineCanvas::openCanvas (CairoC cox)
   {
     auto adjH = get_hadjustment();
     auto adjV = get_vadjustment();
@@ -595,7 +596,7 @@ namespace timeline {
    * Discard any coordinate offsets, stroke and drawing settings applied within.
    */
   void
-  TimelineCanvas::closeCanvas (CairoC const& cox)
+  TimelineCanvas::closeCanvas (CairoC cox)
   {
     cox->restore();
   }
@@ -606,7 +607,7 @@ namespace timeline {
    * @param cox cairo drawing context for custom drawing, adjusted for our virtual canvas.
    */
   void
-  TimelineCanvas::drawGrounding (CairoC const& cox)
+  TimelineCanvas::drawGrounding (CairoC cox)
   {
     renderGrounding_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
@@ -627,7 +628,7 @@ namespace timeline {
    * @param cox cairo drawing context of the virtual canvas for custom drawing.
    */
   void
-  TimelineCanvas::drawOverlays (CairoC const& cox)
+  TimelineCanvas::drawOverlays (CairoC cox)
   {
     renderOverlay_(cox);
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing

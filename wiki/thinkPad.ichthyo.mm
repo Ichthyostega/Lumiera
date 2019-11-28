@@ -4948,7 +4948,7 @@
 <node CREATED="1483921070115" ID="ID_398046799" MODIFIED="1518487921058" TEXT="Prototyp-Service"/>
 <node CREATED="1483921132114" ID="ID_1652398711" MODIFIED="1518487921058" TEXT="liefert dekorierte Command-ID"/>
 <node CREATED="1483921149368" ID="ID_1028150245" MODIFIED="1518487921058" TEXT="im GUI nur noch Command-IDs"/>
-<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1563145261726">
+<node CREATED="1483924872930" ID="ID_242219866" MODIFIED="1575063775187">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -6179,8 +6179,8 @@
 <node CREATED="1563020504983" ID="ID_743553538" MODIFIED="1563020535783" TEXT="Topics">
 <node CREATED="1563020586598" MODIFIED="1563020586598" TEXT="style(trackBody)"/>
 </node>
-<node CREATED="1563020595314" HGAP="39" ID="ID_517868337" MODIFIED="1563021744134" TEXT="CSS-Pfad initial">
-<linktarget COLOR="#3976e4" DESTINATION="ID_517868337" ENDARROW="Default" ENDINCLINATION="-1204;103;" ID="Arrow_ID_1481718697" SOURCE="ID_1653425334" STARTARROW="None" STARTINCLINATION="1024;21;"/>
+<node CREATED="1563020595314" HGAP="39" ID="ID_517868337" MODIFIED="1575052603900" TEXT="CSS-Pfad initial">
+<linktarget COLOR="#3976e4" DESTINATION="ID_517868337" ENDARROW="Default" ENDINCLINATION="-1204;103;" ID="Arrow_ID_1481718697" SOURCE="ID_1653425334" STARTARROW="None" STARTINCLINATION="1057;84;"/>
 <node CREATED="1563020651779" ID="ID_64689753" MODIFIED="1563020660375" TEXT="wenn sich das erste TimelineWidget meldet"/>
 <node CREATED="1563020662916" ID="ID_87556518" MODIFIED="1563020678127" TEXT="von diesem den konkreten Pfad zum BodyCanvasWidget beziehen"/>
 <node CREATED="1563020681159" ID="ID_1474481449" MODIFIED="1563020687466" TEXT="diesen Pfad virtuell ausbauen">
@@ -6461,7 +6461,7 @@
 <node COLOR="#338800" CREATED="1488422770096" HGAP="56" ID="ID_53463593" MODIFIED="1561827464731" TEXT="#1085 solve setup of top-level menu actions" VSHIFT="-17">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1488423688763" ID="ID_1950800234" MODIFIED="1518487921061" TEXT="UI-Komponenten">
-<node CREATED="1488423702977" ID="ID_292894978" MODIFIED="1518487921061" TEXT="TimelinePane">
+<node CREATED="1488423702977" ID="ID_292894978" MODIFIED="1575050390351" TEXT="TimelinePane">
 <arrowlink COLOR="#a1543e" DESTINATION="ID_1753722831" ENDARROW="Default" ENDINCLINATION="1150;-267;" ID="Arrow_ID_912757548" STARTARROW="None" STARTINCLINATION="496;-77;"/>
 </node>
 <node CREATED="1488423705729" ID="ID_610872163" MODIFIED="1518487921061" TEXT="AssetPane"/>
@@ -18330,7 +18330,7 @@
 </html></richcontent>
 </node>
 <node CREATED="1569800105842" ID="ID_403274133" MODIFIED="1569800125569" TEXT="w&#xfc;nschenswert w&#xe4;re, den konkreten Zieltyp zu entkoppeln"/>
-<node CREATED="1569800749930" ID="ID_1631103689" MODIFIED="1569800858846" TEXT="w&#xfc;nschenswer w&#xe4;re aber auch Quer-Beweglichkeit">
+<node CREATED="1569800749930" ID="ID_1631103689" MODIFIED="1573314959152" TEXT="w&#xfc;nschenswer w&#xe4;re aber auch Quer-Beweglichkeit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18352,6 +18352,7 @@
     </ul>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#61a5df" DESTINATION="ID_1550703494" ENDARROW="Default" ENDINCLINATION="-57;2;" ID="Arrow_ID_1915156143" STARTARROW="None" STARTINCLINATION="-615;17;"/>
 </node>
 </node>
 <node CREATED="1569800892774" ID="ID_513027776" MODIFIED="1569800904118" TEXT="Idee: halb-generisches Design">
@@ -18360,24 +18361,36 @@
 <node CREATED="1569800980203" ID="ID_1663628523" MODIFIED="1569801006667" TEXT="das Element dagegen ist ein Typ-Parameter"/>
 <node CREATED="1569800938265" ID="ID_501232684" MODIFIED="1569800973086" TEXT="die typische Doppelkapsel: Generische H&#xfc;lle, polymorphe Innereien"/>
 </node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242004064" ID="ID_1106243162" MODIFIED="1573242256230" TEXT="Implementierung">
-<icon BUILTIN="pencil"/>
-<node COLOR="#435e98" CREATED="1573242012238" ID="ID_870466825" MODIFIED="1573242115695" TEXT="halb generisch, halb OO"/>
-<node COLOR="#990000" CREATED="1573242085554" ID="ID_1566257148" MODIFIED="1573242111268" TEXT="Ctor auf Friend limitiert">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1573242119197" ID="ID_1160468015" MODIFIED="1573242160694" TEXT="geht nicht ohne Weiteres">
+<node CREATED="1573744962237" ID="ID_1240251301" MODIFIED="1573745142836" TEXT="&#xbb;Dreiecks-Anordnung&#xab; erscheint sinnvoll">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      &quot;the children of your friends ain't your friends&quot;
+      da der ViewHook schon zwei Pointer zu zwei Entit&#228;ten halten mu&#223;, kann man Redundanzen vermeiden, indem man ihn <i>an einem dritten Ort</i>&#160;anbringt. N&#228;mlich an einem Ort, an dem ohnehin schon eine Dreiecksbeziehung mit diesen beiden Elementen besteht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242004064" ID="ID_1106243162" MODIFIED="1573745183411" TEXT="Lib-Implementierung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1573242012238" ID="ID_870466825" MODIFIED="1573242115695" TEXT="halb generisch, halb OO"/>
+<node COLOR="#990000" CREATED="1573242085554" ID="ID_1566257148" MODIFIED="1573242111268" TEXT="Ctor auf Friend limitiert">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1573242119197" ID="ID_1160468015" MODIFIED="1573745207122" TEXT="geht nicht ohne Weiteres">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;the children of your friends ain't necessarily your friends&quot;
+    </p>
+  </body>
+</html></richcontent>
 </node>
 <node CREATED="1573242125353" ID="ID_1681214217" MODIFIED="1573242247243" TEXT="KISS">
 <richcontent TYPE="NOTE"><html>
@@ -18389,8 +18402,7 @@
       ...sonst m&#252;&#223;te man das Einf&#252;gen als eine weitere (protected)-Operation auf dem ViewHookable ausdr&#252;cken und k&#246;nnte dann die Erzeugung des ViewHook fest in den ViewHookable ABC implementieren....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1573242026324" ID="ID_760500508" MODIFIED="1573242047152" TEXT="verkapselte Ptr / Referenz">
@@ -18398,6 +18410,240 @@
 </node>
 <node COLOR="#338800" CREATED="1573242048514" ID="ID_1803806630" MODIFIED="1573242060330" TEXT="automatische Deregistrierung">
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573314915266" ID="ID_1550703494" MODIFIED="1573314959153" TEXT="Quer-Beweglichkeit zwischen Typen">
+<linktarget COLOR="#61a5df" DESTINATION="ID_1550703494" ENDARROW="Default" ENDINCLINATION="-57;2;" ID="Arrow_ID_1915156143" SOURCE="ID_1631103689" STARTARROW="None" STARTINCLINATION="-615;17;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573314974409" ID="ID_1458279581" MODIFIED="1573315247762" TEXT="konzeptionelle Erweiterung auf einen douple-Dispatch (?)">
+<linktarget COLOR="#684be4" DESTINATION="ID_1458279581" ENDARROW="Default" ENDINCLINATION="-1681;0;" ID="Arrow_ID_1672277618" SOURCE="ID_1957325688" STARTARROW="None" STARTINCLINATION="788;-76;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1573315038764" ID="ID_343459571" MODIFIED="1573315057034" TEXT="TrackBody -&gt; ClipWidget"/>
+<node CREATED="1573315059821" ID="ID_1755997468" MODIFIED="1573315069992" TEXT="weitere F&#xe4;lle?"/>
+<node CREATED="1573751565872" ID="ID_274573678" MODIFIED="1573751574123" TEXT="RLY?"/>
+</node>
+<node CREATED="1573315274074" ID="ID_1371762683" MODIFIED="1573315282925" TEXT="ggfs auch Manipulations-Operationen pro Typ">
+<node CREATED="1573315287336" ID="ID_270346811" MODIFIED="1573315294042" TEXT="Widget: auf Canvas repositionieren"/>
+<node CREATED="1573315295318" ID="ID_557973678" MODIFIED="1573935809890" TEXT="TrackBody: Reihenfolge umordnen">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1573935984203" ID="ID_1150598318" MODIFIED="1573936001642" TEXT="TrackHeadWidget: Reihenfolge der Kind-Header">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1573937032136" ID="ID_1315004509" MODIFIED="1573937056873" TEXT="des Genaueren: es handelt sich um Vater-Kinder-Manipulation">
+<icon BUILTIN="idea"/>
+<node CREATED="1573937096058" ID="ID_1596055753" MODIFIED="1573937265818" TEXT="bisher habe ich das durch eine Konstruktor-Closure gel&#xf6;st">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Jeder neue TrackPresenter bekommt zur Erzeugung einen Funktor, mit dem sich der von ihm gehaltene DisplayFrame in einen Vater-Kontext &quot;einh&#228;keln&quot; kann...
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#63bcba" DESTINATION="ID_709169542" ENDARROW="Default" ENDINCLINATION="648;-124;" ID="Arrow_ID_1775236750" STARTARROW="None" STARTINCLINATION="661;33;"/>
+</node>
+<node CREATED="1573937269636" ID="ID_1582747384" MODIFIED="1573937284837" TEXT="Analyse: ben&#xf6;tigte Operationen">
+<node CREATED="1573937286849" ID="ID_1940401544" MODIFIED="1573937327296" TEXT="neuen Kind-ViewHook einh&#xe4;ngen"/>
+<node CREATED="1573937348618" ID="ID_1592677163" MODIFIED="1573937358756" TEXT="(Kind-ViewHook zerst&#xf6;rt sich selbst)"/>
+<node CREATED="1573937496810" ID="ID_1178421844" MODIFIED="1573937511202" TEXT="Reihenfolge der Kind-Hooks aktualisieren"/>
+</node>
+<node CREATED="1573937563111" ID="ID_587192425" MODIFIED="1573937570371" TEXT="Kritik: unn&#xf6;tig indirekt">
+<node CREATED="1573937575410" ID="ID_1241025784" MODIFIED="1573937584696" TEXT="direkt w&#xfc;rde auch gehen">
+<node CREATED="1573937594363" ID="ID_1916446916" MODIFIED="1573937626786" TEXT="TrackHeadWidget wird unter TrackHeadWidget eingeh&#xe4;ngt"/>
+<node CREATED="1573937632100" ID="ID_1460511973" MODIFIED="1573937642417" TEXT="TrackBody wird unter TrackBody eingeh&#xe4;ngt"/>
+<node CREATED="1573937750100" ID="ID_280534075" MODIFIED="1573937761305" TEXT="nur f&#xfc;r Clip-Widgets gibt es ein Problem"/>
+</node>
+<node CREATED="1573937803628" ID="ID_1368972121" MODIFIED="1573937832776" TEXT="Schlu&#xdf;folgerung: es geht um das Strukturieren ohnehin vorhandener Operationen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1573937928747" ID="ID_1387457475" MODIFIED="1573937967254" TEXT="demnach w&#xe4;re &#xbb;ViewHookable&#xab; bedeutender denn &#xbb;ViewHook&#xab;"/>
+<node CREATED="1573940988387" ID="ID_173071400" MODIFIED="1573941008242" TEXT="was st&#xf6;rt an diesem Design?">
+<icon BUILTIN="help"/>
+<node CREATED="1573941015368" ID="ID_1975430834" MODIFIED="1573941024610" TEXT="die &#xbb;move&#xab;-Operation">
+<node CREATED="1573941030461" ID="ID_1374594092" MODIFIED="1573941049700" TEXT="sie macht nur Sinn f&#xfc;r Widget-an-Canvas"/>
+</node>
+<node CREATED="1573941080479" ID="ID_311245443" MODIFIED="1573941090601" TEXT="generell die Proxy-Rolle von ViewHook">
+<node CREATED="1573941092749" ID="ID_1895119352" MODIFIED="1575055282173" TEXT="auch sie ist notwendig f&#xfc;r Widget-an-Canvas"/>
+<node CREATED="1573941102985" ID="ID_463060333" MODIFIED="1573941123933" TEXT="und &#xfc;berfl&#xfc;ssig f&#xfc;r TrackBody und TrackHeadWidget"/>
+</node>
+<node CREATED="1573944816092" ID="ID_1520827984" MODIFIED="1575057093965" TEXT="k&#xf6;nnte man auf diese Design-Elemente verzichten?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wohl ehr nicht, aber sie sind nicht allgemeing&#252;ltig, das ist das Problem
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1573940830088" ID="ID_31747089" MODIFIED="1573941010957" TEXT="wo / wie mu&#xdf; ViewHookable flexibel sein?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575057316383" ID="ID_1565606328" MODIFIED="1575059474003" TEXT="relatives Verankern">
+<linktarget COLOR="#146b9a" DESTINATION="ID_1565606328" ENDARROW="Default" ENDINCLINATION="-105;-7;" ID="Arrow_ID_1877360800" SOURCE="ID_827160586" STARTARROW="None" STARTINCLINATION="-62;-17;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575057178202" ID="ID_1208770677" MODIFIED="1575057185555" TEXT="relatives Positionieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1575057198430" ID="ID_1171619130" MODIFIED="1575057213917" TEXT="neuer ViewHook relativ zu einem Bezugs-ViewHook">
+<node CREATED="1575057268873" ID="ID_827160586" MODIFIED="1575059474003" TEXT="das k&#xf6;nnte Quer-Beweglichkeit zwischen Typen implizieren">
+<arrowlink COLOR="#146b9a" DESTINATION="ID_1565606328" ENDARROW="Default" ENDINCLINATION="-105;-7;" ID="Arrow_ID_1877360800" STARTARROW="None" STARTINCLINATION="-62;-17;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1575057228579" ID="ID_795117396" MODIFIED="1575057255185" TEXT="Frage: ist diese Relation nur transient (pro Aufruf)?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575057172259" ID="ID_1193961919" MODIFIED="1575057186451" TEXT="Umordnen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1575057384974" ID="ID_1385277309" MODIFIED="1575057397107" TEXT="komplexe Interation, die den ViewHook nur involviert">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1575057402196" ID="ID_876005200" MODIFIED="1575057410423" TEXT="auch eine Vater-Kinder-Manipulation"/>
+<node CREATED="1575057430215" ID="ID_581733037" MODIFIED="1575062500354" TEXT="Ablauf einer Umordnung">
+<node CREATED="1575057417551" ID="ID_1701493626" MODIFIED="1575057429828" TEXT="Vater wird &#xfc;ber Struktur-&#xc4;nderung der Kinder informiert"/>
+<node CREATED="1575059512193" ID="ID_921856520" MODIFIED="1575062511751" TEXT="zwei L&#xf6;sungswege">
+<node CREATED="1575059518703" ID="ID_1764144586" MODIFIED="1575059524142" TEXT="Ansatz-1">
+<node CREATED="1575059530358" ID="ID_404301157" MODIFIED="1575059537927" TEXT="Vater iteriert &#xfc;ber Kinder in neuer Reihenfolge"/>
+<node CREATED="1575059541155" ID="ID_610399981" MODIFIED="1575059580051" TEXT="Vater f&#xfc;gt jedes Kind neu ein">
+<node CREATED="1575059581239" ID="ID_754785544" MODIFIED="1575059601896" TEXT="Variante-a: an einer explizit angegebnen Stelle"/>
+<node CREATED="1575059611327" ID="ID_459563354" MODIFIED="1575059649370" TEXT="Variante-b: an einer generischen (mitwandernden) Einf&#xfc;gestelle">
+<node CREATED="1575059653776" ID="ID_619380343" MODIFIED="1575059668559" TEXT="OutputIterator"/>
+<node CREATED="1575060060671" ID="ID_489178340" MODIFIED="1575060070529" TEXT="nat&#xfc;rlicherweise (implizit) am Ende"/>
+</node>
+</node>
+</node>
+<node CREATED="1575059691448" ID="ID_420302373" MODIFIED="1575059695411" TEXT="Ansatz-2">
+<node CREATED="1575059732675" ID="ID_719030510" MODIFIED="1575059745812" TEXT="Vater teilt einem geeigneten API die neue Reihenfolge mit"/>
+<node CREATED="1575059756079" ID="ID_1636730345" MODIFIED="1575059762339" TEXT="hier zu kl&#xe4;ren...">
+<node CREATED="1575059763481" ID="ID_550480062" MODIFIED="1575059844065" TEXT="wer tr&#xe4;gt das &quot;geeignete API&quot;?">
+<icon BUILTIN="help"/>
+<node CREATED="1575059772989" ID="ID_1511886975" MODIFIED="1575059778050" TEXT="der ViewHook?"/>
+<node CREATED="1575059778756" ID="ID_649016277" MODIFIED="1575059786031" TEXT="das ViewHookable?"/>
+<node CREATED="1575059787307" ID="ID_358129647" MODIFIED="1575059818627" TEXT="ein globaler Service?"/>
+<node CREATED="1575059827654" ID="ID_1326854368" MODIFIED="1575059833698" TEXT="ein sonstwie bekannter Partner?"/>
+</node>
+<node CREATED="1575059851539" ID="ID_1623871336" MODIFIED="1575059862540" TEXT="wie ist die Reihenfolge gegeben?">
+<icon BUILTIN="help"/>
+<node CREATED="1575059874351" ID="ID_1396733200" MODIFIED="1575059902344" TEXT="als Index-Nummern der alten Ordnungs-Sequenz?">
+<node CREATED="1575059903491" ID="ID_1689949230" MODIFIED="1575059908027" TEXT="d.h. als Permutation"/>
+</node>
+<node CREATED="1575059916074" ID="ID_186282838" MODIFIED="1575059947348" TEXT="als neue Positionsnummer auf dem jeweiligen Kind (=ViewHook)?"/>
+<node CREATED="1575059954461" ID="ID_469326705" MODIFIED="1575059965348" TEXT="als Iterator&lt;ViewHook&gt;"/>
+</node>
+<node CREATED="1575062320101" ID="ID_1222751501" MODIFIED="1575062382290" TEXT="wer treibt das neu-Einf&#xfc;gen?">
+<icon BUILTIN="help"/>
+<node CREATED="1575062383956" ID="ID_886243501" MODIFIED="1575062394950" TEXT="der Vater (push)?"/>
+<node CREATED="1575062395713" ID="ID_1131423486" MODIFIED="1575062416276" TEXT="der Empf&#xe4;nger der neuen Ordnung (pull)?"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1575062926828" ID="ID_1755767601" MODIFIED="1575062944928" TEXT="geeignete Form finden">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1575062976413" ID="ID_332468301" MODIFIED="1575062979193" TEXT="Diskussion">
+<node CREATED="1575062980979" ID="ID_1034492398" MODIFIED="1575062997550" TEXT="Ansatz-1 Variante-b">
+<node CREATED="1575063012169" ID="ID_1112616431" MODIFIED="1575063016956" TEXT="erscheint nat&#xfc;rlich"/>
+<node CREATED="1575063075462" ID="ID_1658596486" MODIFIED="1575063094666" TEXT="zwei Auspr&#xe4;gungen m&#xf6;glich">
+<node CREATED="1575063095757" ID="ID_1339415707" MODIFIED="1575063137739" TEXT="Auspr&#xe4;gung &#x3b1;">
+<node CREATED="1575063150438" ID="ID_1366830537" MODIFIED="1575063158185" TEXT="Vater hat Zugang zum ViewHookable"/>
+<node CREATED="1575063163433" ID="ID_275623631" MODIFIED="1575063202833" TEXT="was grunds&#xe4;tzlich der Fall sein mu&#xdf;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil der Vater ja auch neue Kinder &quot;hooken&quot;&#160;kann
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1575063138735" ID="ID_1205459588" MODIFIED="1575063142611" TEXT="Auspr&#xe4;gung &#x3b2;">
+<node CREATED="1575063213437" ID="ID_45088920" MODIFIED="1575063230879" TEXT="ViewHook bietet eine rehook()-Operation an"/>
+<node CREATED="1575063249066" ID="ID_1247469918" MODIFIED="1575063284828" TEXT="das l&#xf6;st das Problem des atomaren Umh&#xe4;ngens">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. zugleich wird die alte Verbindung gel&#246;st und die neue konstruiert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1575063323319" ID="ID_1005995191" MODIFIED="1575063331122" TEXT="Ansatz-2 Iterator-Variante">
+<node CREATED="1575063332677" ID="ID_502498553" MODIFIED="1575063341072" TEXT="erscheint architektonisch geradlinig">
+<node CREATED="1575063400796" ID="ID_247534963" MODIFIED="1575063415462" TEXT="nur der Vater kennt die konkrete Kind-Collection"/>
+<node CREATED="1575063417093" ID="ID_540147437" MODIFIED="1575063426861" TEXT="das Umh&#xe4;ngen ist dann aber eine einzige Operation"/>
+</node>
+<node CREATED="1575063438812" ID="ID_867929873" MODIFIED="1575063465918" TEXT="das Umh&#xe4;ngen ist dann vom ViewHookable zu leisten"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1575063488816" ID="ID_1685904360" MODIFIED="1575063652942" TEXT="Entscheidung">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1575063493532" ID="ID_1153540378" MODIFIED="1575063501539" TEXT="neige der Iterator-Variante zu"/>
+<node CREATED="1575063552664" ID="ID_485217910" MODIFIED="1575063567290" TEXT="mit einer reHook()-Operation auf dem ViewHookable"/>
+</node>
+</node>
+<node CREATED="1575062533708" ID="ID_246125405" MODIFIED="1575062538774" TEXT="Effekt am Ende">
+<node CREATED="1575062539783" ID="ID_1502077216" MODIFIED="1575062550138" TEXT="die bestehenden, angebundenen Entit&#xe4;ten..."/>
+<node CREATED="1575062551054" ID="ID_472742450" MODIFIED="1575062580390" TEXT="bestehen weiter, einschlie&#xdf;lich aller iherer Kinder"/>
+<node CREATED="1575062582191" ID="ID_1988970307" MODIFIED="1575062609909" TEXT="wurde jedoch mit dem Anf&#xfc;ge-Mechanismus erneut platziert"/>
+<node CREATED="1575062611574" ID="ID_1786392621" MODIFIED="1575062625733" TEXT="und au&#xdf;erdem (vorher/nachher) aus der alten Platzierung herausgel&#xf6;st"/>
+</node>
+</node>
+<node CREATED="1575062654000" ID="ID_491999909" MODIFIED="1575062874337" TEXT="Fehlerbehandlung">
+<icon BUILTIN="yes"/>
+<node CREATED="1575062659140" ID="ID_1145995477" MODIFIED="1575062707239" TEXT="im Regelfall ist die Umordnung erfolgreich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gibt keinen prinzipiellen Grund, warum sie scheitern k&#246;nnte
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575062711080" ID="ID_883309689" MODIFIED="1575062740669" TEXT="die Umordnung findet in einer UI-Aktion statt"/>
+<node CREATED="1575062743864" ID="ID_1277056906" MODIFIED="1575062754750" TEXT="alle anderen UI-Aktionen ruhen w&#xe4;hrenddessen"/>
+<node CREATED="1575062772988" ID="ID_1056250153" MODIFIED="1575062785175" TEXT="alle Seiteneffekte und Nebenl&#xe4;ufigkeiten k&#xf6;nnen ignoriert werden"/>
+<node CREATED="1575062787206" ID="ID_41541395" MODIFIED="1575062803994" TEXT="alle Konsequenzen der neu-Einf&#xfc;gung wirken sich erst nach Abschlu&#xdf; der Umordnung aus"/>
+<node CREATED="1575062831427" ID="ID_147124730" MODIFIED="1575062863316" TEXT="auftretende Probleme sind fatal, korrumpieren das UI und beenden daher die Applikation">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063747039" ID="ID_46486640" MODIFIED="1575063906798" TEXT="versuchsweise (im Test) zu implementieren">
+<arrowlink COLOR="#4983c7" DESTINATION="ID_1374959238" ENDARROW="Default" ENDINCLINATION="-33;-5;" ID="Arrow_ID_463400867" STARTARROW="None" STARTINCLINATION="-260;-10;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063819852" ID="ID_1018000905" MODIFIED="1575064280500" TEXT="versuchsweise f&#xfc;r Track-Head und Track-Body zu konkretisieren">
+<arrowlink COLOR="#261eb7" DESTINATION="ID_237283777" ENDARROW="Default" ENDINCLINATION="396;-703;" ID="Arrow_ID_119083900" STARTARROW="None" STARTINCLINATION="-962;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242259267" ID="ID_1903570032" MODIFIED="1573242269170" TEXT="Test">
 <icon BUILTIN="pencil"/>
@@ -18408,6 +18654,10 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242357830" ID="ID_1431447719" MODIFIED="1573242368189" TEXT="relatives Kind-Hook">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063870245" ID="ID_1374959238" MODIFIED="1575063906798" TEXT="Umordnen">
+<linktarget COLOR="#4983c7" DESTINATION="ID_1374959238" ENDARROW="Default" ENDINCLINATION="-33;-5;" ID="Arrow_ID_463400867" SOURCE="ID_46486640" STARTARROW="None" STARTINCLINATION="-260;-10;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -18468,6 +18718,19 @@
 </node>
 <node CREATED="1479688633483" ID="ID_1301490505" MODIFIED="1557498707224" TEXT="Elemente in diesem halten einen display-context"/>
 <node CREATED="1479688653913" ID="ID_1435784278" MODIFIED="1557498707224" TEXT="dieser wiederum mu&#xdf; f&#xfc;r jede Erweiterung konsultiert werden"/>
+<node CREATED="1573408604958" ID="ID_1376892828" MODIFIED="1573408686650" TEXT="Vorsicht: Struktur ist teilsweise in der Display-Implentierung aufgedoppelt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das mu&#223; auch so sein, denn sonst w&#228;re das systematische Modell und die Controller zu eng mit dem Display-Code verwoben. Der Nachteil ist aber, da&#223; derart aufgedoppelte Struktur bei jeder Struktur&#228;nderung invalide wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1487465759930" HGAP="19" ID="ID_923619509" MODIFIED="1557498707224" VSHIFT="26">
 <richcontent TYPE="NODE"><html>
@@ -18733,6 +18996,18 @@
 <node CREATED="1480123330521" ID="ID_255024472" MODIFIED="1557498707225" TEXT="Reihenfolge der Tracks wird im UI realisiert"/>
 <node CREATED="1480123353030" ID="ID_871730723" MODIFIED="1557498707225" TEXT="Reihenfolge der Clips wird redundant (durch Position) gegeben"/>
 </node>
+<node COLOR="#bd304f" CREATED="1573408400309" ID="ID_240517447" MODIFIED="1573411462228" TEXT="Vorsicht: parallel gebaute Strukturen sind gef&#xe4;hrlich">
+<arrowlink COLOR="#774779" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-1429;-736;" ID="Arrow_ID_1394313218" STARTARROW="None" STARTINCLINATION="-692;36;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1573408424206" ID="ID_210523305" MODIFIED="1573408436104" TEXT="diese sind oftmals notwendig, um den Code wartbar zu halten"/>
+<node CREATED="1573408436949" ID="ID_429179986" MODIFIED="1573409776349" TEXT="Beispiel: TrackBody - Struktur">
+<linktarget COLOR="#73618d" DESTINATION="ID_429179986" ENDARROW="Default" ENDINCLINATION="502;276;" ID="Arrow_ID_635099577" SOURCE="ID_101081525" STARTARROW="None" STARTINCLINATION="278;11;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1573408465433" ID="ID_1549970410" MODIFIED="1573408481827" TEXT="diese doppelt die Kontroll-Struktur der Track(Presenter) auf"/>
+<node CREATED="1573408515992" ID="ID_1316818344" MODIFIED="1573408548407" TEXT="sie ist notwendig, um den TrackPresenter vom reinen Display-Code zu trennen"/>
+<node CREATED="1573408487478" ID="ID_758564014" MODIFIED="1573408506255" TEXT="nach jeder Struktur-&#xc4;nderung der Tracks ist diese Struktur invalide geworden"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1480123881912" HGAP="6" ID="ID_1550301342" MODIFIED="1557498707225" TEXT="Schlu&#xdf;folgerung" VSHIFT="3">
@@ -18758,8 +19033,8 @@
 <node CREATED="1480124145476" ID="ID_1268974326" MODIFIED="1557498707225" TEXT="f&#xfc;r einen ganzen Scope"/>
 <node CREATED="1480124153979" ID="ID_887707794" MODIFIED="1557498707225" TEXT="stellt fest, was gezeigt werden mu&#xdf;"/>
 <node CREATED="1480124174144" ID="ID_1145067443" MODIFIED="1557498707225" TEXT="synthetisiert Anzeige-Parameter (z.B: Koordinaten, Z-Ordnung)"/>
-<node CREATED="1480124235128" ID="ID_162610711" MODIFIED="1561047428001" TEXT="mu&#xdf; inkrementell arbeiten und bestehende Widgets anpassen">
-<arrowlink COLOR="#d6677c" DESTINATION="ID_1660005887" ENDARROW="Default" ENDINCLINATION="130;-668;" ID="Arrow_ID_1942101483" STARTARROW="None" STARTINCLINATION="613;0;"/>
+<node CREATED="1480124235128" ID="ID_162610711" MODIFIED="1575053313157" TEXT="mu&#xdf; inkrementell arbeiten und bestehende Widgets an neue Reihenfolge anpassen">
+<arrowlink COLOR="#d6677c" DESTINATION="ID_1660005887" ENDARROW="Default" ENDINCLINATION="130;-668;" ID="Arrow_ID_1942101483" STARTARROW="None" STARTINCLINATION="718;23;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -18943,6 +19218,14 @@
 <node CREATED="1540640074705" ID="ID_181154970" MODIFIED="1557498707225" TEXT="Kinder zuerst...">
 <icon BUILTIN="ksmiletris"/>
 </node>
+</node>
+</node>
+<node CREATED="1573409624900" ID="ID_1959987638" MODIFIED="1573409630695" TEXT="ver&#xe4;ndern">
+<node CREATED="1573409632189" ID="ID_1780072285" MODIFIED="1573409639158" TEXT="hier wird&apos;s gef&#xe4;hrlich...."/>
+<node CREATED="1573409642343" ID="ID_1221373403" MODIFIED="1573409653748" TEXT="das Diff-System handhabt die eigentliche Mutation"/>
+<node CREATED="1573409655220" ID="ID_101081525" MODIFIED="1573409776349" TEXT="aber wenn wir Strukturen lokal aufdoppeln, bekommen wir ein Problem">
+<arrowlink COLOR="#73618d" DESTINATION="ID_429179986" ENDARROW="Default" ENDINCLINATION="502;276;" ID="Arrow_ID_635099577" STARTARROW="None" STARTINCLINATION="278;11;"/>
+<icon BUILTIN="clanbomber"/>
 </node>
 </node>
 <node CREATED="1480725377994" ID="ID_172881069" MODIFIED="1557498707226" TEXT="verwalten">
@@ -19807,8 +20090,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561047296781" ID="ID_1660005887" MODIFIED="1561047428001" TEXT="Neuberechnung / Reihenfolge">
-<linktarget COLOR="#d6677c" DESTINATION="ID_1660005887" ENDARROW="Default" ENDINCLINATION="130;-668;" ID="Arrow_ID_1942101483" SOURCE="ID_162610711" STARTARROW="None" STARTINCLINATION="613;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561047296781" ID="ID_1660005887" MODIFIED="1575053313157" TEXT="Neuberechnung / Reihenfolge">
+<linktarget COLOR="#d6677c" DESTINATION="ID_1660005887" ENDARROW="Default" ENDINCLINATION="130;-668;" ID="Arrow_ID_1942101483" SOURCE="ID_162610711" STARTARROW="None" STARTINCLINATION="718;23;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1561047320822" ID="ID_652813348" MODIFIED="1561047325927" TEXT="Grunds&#xe4;tzliches">
 <node CREATED="1561047326773" ID="ID_455856045" MODIFIED="1561047353557" TEXT="wie wird die Reihenfolge der Tracks festgelegt?">
@@ -19823,11 +20106,26 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561048792468" ID="ID_638394722" MODIFIED="1561048797689" TEXT="#1199 handle Timeline layout changes">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1563466591056" ID="ID_1728979524" MODIFIED="1563467328284" TEXT="L&#xf6;sungsidee: re-Konstruktion">
-<linktarget COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" SOURCE="ID_737072989" STARTARROW="None" STARTINCLINATION="410;0;"/>
+<node CREATED="1573411517071" ID="ID_1735372634" MODIFIED="1573411532925" TEXT="L&#xf6;sungsidee: neu bauen statt umbauen"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563466591056" ID="ID_1728979524" MODIFIED="1573411731540" TEXT="re-Konstruktion der Struktur">
+<linktarget COLOR="#774779" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-1429;-736;" ID="Arrow_ID_1394313218" SOURCE="ID_240517447" STARTARROW="None" STARTINCLINATION="-692;36;"/>
+<linktarget COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" SOURCE="ID_737072989" STARTARROW="None" STARTINCLINATION="398;25;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1563466616693" ID="ID_316217409" MODIFIED="1563466626054" TEXT="vom root-DisplayFrame ausgehend..."/>
 <node CREATED="1563466626931" ID="ID_1475248081" MODIFIED="1563466639074" TEXT="top-down neu aufbauen">
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1563467297369" ID="ID_283854399" MODIFIED="1573411760423" TEXT="spezielles Problem: verschachtelte DisplayFrame-Struktur">
+<arrowlink COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="699;-94;" ID="Arrow_ID_1514395934" STARTARROW="None" STARTINCLINATION="236;12;"/>
+</node>
+<node CREATED="1575052534983" ID="ID_642649820" MODIFIED="1575052546569" TEXT="Verallgemeinerung: verschachtelte sub-Collections"/>
+<node CREATED="1575052815130" ID="ID_216264810" MODIFIED="1575053021221" TEXT="Prinzip">
+<icon BUILTIN="forward"/>
+<node CREATED="1575052820289" ID="ID_1240730647" MODIFIED="1575052843042" TEXT="Trigger &#xbb;Struktur-&#xc4;nderung&#xab;"/>
+<node CREATED="1575052859764" ID="ID_1345880697" MODIFIED="1575052895211" TEXT="L&#xf6;schungen/Hinzuf&#xfc;gungen sind schon durchgef&#xfc;hrt -- aber noch nicht &quot;realisiert&quot;"/>
+<node CREATED="1575052900360" ID="ID_447463518" MODIFIED="1575052923936" TEXT="Sortier-Ordnung f&#xfc;r die Sub-Struktur bereitstellen"/>
+<node CREATED="1575052925155" ID="ID_1405182366" MODIFIED="1575052948612" TEXT="Sub-Struktur atomar auseinandernehmen und neu aufbauen"/>
+<node CREATED="1575052952855" ID="ID_1489113924" MODIFIED="1575053002685" TEXT="Umordnen der Teilb&#xe4;ume als Ganzes ist erforderlich"/>
 </node>
 </node>
 </node>
@@ -19847,8 +20145,8 @@
 </node>
 <node CREATED="1563021522198" HGAP="84" ID="ID_349220035" MODIFIED="1563021584919" TEXT="erg&#xe4;nzt um virtuelle Knoten" VSHIFT="-9">
 <icon BUILTIN="idea"/>
-<node CREATED="1563020900138" ID="ID_1653425334" MODIFIED="1563021712946" TEXT="implementiert im UiManger / UiStyle">
-<arrowlink COLOR="#3976e4" DESTINATION="ID_517868337" ENDARROW="Default" ENDINCLINATION="-1204;103;" ID="Arrow_ID_1481718697" STARTARROW="None" STARTINCLINATION="1024;21;"/>
+<node CREATED="1563020900138" ID="ID_1653425334" MODIFIED="1575052603899" TEXT="implementiert im UiManger / UiStyle">
+<arrowlink COLOR="#3976e4" DESTINATION="ID_517868337" ENDARROW="Default" ENDINCLINATION="-1204;103;" ID="Arrow_ID_1481718697" STARTARROW="None" STARTINCLINATION="1057;84;"/>
 </node>
 <node CREATED="1563021556105" ID="ID_629948451" MODIFIED="1563021569720" TEXT="publiziert via Avice &quot;style(trackBody)&quot;"/>
 </node>
@@ -19891,7 +20189,10 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1540346398887" ID="ID_1953592630" MODIFIED="1557498707226" TEXT="DisplayFrame">
+<node CREATED="1540346398887" ID="ID_1953592630" MODIFIED="1573929021565" TEXT="DisplayFrame">
+<linktarget COLOR="#2769d6" DESTINATION="ID_1953592630" ENDARROW="Default" ENDINCLINATION="-300;1096;" ID="Arrow_ID_928857904" SOURCE="ID_1389602122" STARTARROW="None" STARTINCLINATION="-1987;53;"/>
+<font NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="forward"/>
 <node CREATED="1540346412629" ID="ID_1434445651" MODIFIED="1557498707226">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -20043,7 +20344,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1540512486974" ID="ID_709169542" MODIFIED="1553910607360" TEXT="Funktor">
+<node CREATED="1540512486974" ID="ID_709169542" MODIFIED="1573937202960" TEXT="Funktor">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20057,6 +20358,7 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#63bcba" DESTINATION="ID_709169542" ENDARROW="Default" ENDINCLINATION="648;-124;" ID="Arrow_ID_1775236750" SOURCE="ID_1596055753" STARTARROW="None" STARTINCLINATION="661;33;"/>
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -20077,9 +20379,9 @@
 <node CREATED="1563467263669" ID="ID_1535368629" MODIFIED="1563467269910" TEXT="wenn eine Spur wegf&#xe4;llt"/>
 <node CREATED="1563467279931" ID="ID_563915021" MODIFIED="1563467289047" TEXT="...dann m&#xfc;ssen">
 <node CREATED="1563467290138" ID="ID_568668070" MODIFIED="1563467296500" TEXT="bestehende Verankerungen beseitigt werden"/>
-<node CREATED="1563467297369" ID="ID_737072989" MODIFIED="1563467493149" TEXT="alle Verankerungen neu re-Konstruiert werden">
-<arrowlink COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" STARTARROW="None" STARTINCLINATION="410;0;"/>
-<arrowlink COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" STARTARROW="None" STARTINCLINATION="-8;6;"/>
+<node CREATED="1563467297369" ID="ID_737072989" MODIFIED="1575053380683" TEXT="alle Verankerungen neu re-Konstruiert werden">
+<arrowlink COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" STARTARROW="None" STARTINCLINATION="398;25;"/>
+<arrowlink COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" STARTARROW="None" STARTINCLINATION="2;57;"/>
 </node>
 </node>
 </node>
@@ -20095,6 +20397,13 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_465735263" STARTARROW="None" STARTINCLINATION="-717;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573315138011" ID="ID_1957325688" MODIFIED="1573315247762" TEXT="brauche hier spezielle Erweiterung...">
+<arrowlink COLOR="#684be4" DESTINATION="ID_1458279581" ENDARROW="Default" ENDINCLINATION="-1681;0;" ID="Arrow_ID_1672277618" STARTARROW="None" STARTINCLINATION="788;-76;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575065263201" ID="ID_1640997956" MODIFIED="1575065274457" TEXT="zu kl&#xe4;ren: Zugang zu diesem ViewHook">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node CREATED="1563467398036" ID="ID_828698459" MODIFIED="1563467403607" TEXT="Implementierung">
 <icon BUILTIN="pencil"/>
@@ -20109,8 +20418,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467424456" ID="ID_1723744174" MODIFIED="1563467445803" TEXT="collapsed/hidden ber&#xfc;cksichtigen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1563467451739" ID="ID_1414960950" MODIFIED="1563468442808" TEXT="(re)Konstruieren">
-<linktarget COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" SOURCE="ID_737072989" STARTARROW="None" STARTINCLINATION="-8;6;"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1563467451739" ID="ID_1414960950" MODIFIED="1575053380683" TEXT="(re)Konstruieren">
+<linktarget COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="699;-94;" ID="Arrow_ID_1514395934" SOURCE="ID_283854399" STARTARROW="None" STARTINCLINATION="236;12;"/>
+<linktarget COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" SOURCE="ID_737072989" STARTARROW="None" STARTINCLINATION="2;57;"/>
 <icon BUILTIN="flag-pink"/>
 <node CREATED="1563467519263" ID="ID_497587608" MODIFIED="1563467555485" TEXT="anders als der initiale Aufbau">
 <richcontent TYPE="NOTE"><html>
@@ -20170,7 +20480,17 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1563468083453" ID="ID_988508640" MODIFIED="1563468091984" TEXT="Gtk::Container ist nur f&#xfc;r single-Child">
+<node CREATED="1563468083453" ID="ID_988508640" MODIFIED="1573743922169" TEXT="Interface Gtk::Container ist nur f&#xfc;r single-Child">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;This interface is used for all single item holding containers. Multi-item containers provide their own unique interface as their items are generally more complex. The methods of the derived classes should be prefered over these...&quot;
+    </p>
+  </body>
+</html></richcontent>
 <node CREATED="1563468845867" ID="ID_1400714108" MODIFIED="1563468859195" TEXT="aber: Gtk::Container hat iterative Methoden">
 <icon BUILTIN="idea"/>
 </node>
@@ -20185,6 +20505,196 @@
 </node>
 <node CREATED="1563468411262" ID="ID_738452608" MODIFIED="1563468413323" TEXT="TrackHeadWidget::injectSubFork (TrackHeadWidget&amp; subForkHead)"/>
 </node>
+</node>
+<node CREATED="1573412013164" ID="ID_1135588379" MODIFIED="1573412018931" TEXT="Analyse der Situation">
+<node CREATED="1573412027270" ID="ID_333121233" MODIFIED="1573412030884" TEXT="Fall-1">
+<node CREATED="1573412032669" ID="ID_1928241145" MODIFIED="1573412064854" TEXT="neuer Track">
+<node CREATED="1573424510571" ID="ID_1970637049" MODIFIED="1573424545467" TEXT="Header-Widget wird angeh&#xe4;ngt, mithin ggfs an der falschen Stelle"/>
+<node CREATED="1573424546799" ID="ID_1600792539" MODIFIED="1573424566536" TEXT="Root-Body wird ebenfalls angeh&#xe4;ngt, und damit ebenso ggfs an der falschen Stelle"/>
+</node>
+</node>
+<node CREATED="1573412072736" ID="ID_1432670869" MODIFIED="1573412077919" TEXT="Fall-2">
+<node CREATED="1573412078991" ID="ID_1620957397" MODIFIED="1573412086433" TEXT="Track f&#xe4;llt weg">
+<node CREATED="1573424479816" ID="ID_1733070752" MODIFIED="1573424490530" TEXT="Header-Widget wird obsolet und mu&#xdf; weg"/>
+<node CREATED="1573424491747" ID="ID_735914292" MODIFIED="1573744342118" TEXT="Track-Body ist schon gel&#xf6;scht -&gt; dangling Pointer in der Kinder-Collection des Vaters"/>
+</node>
+</node>
+<node CREATED="1573412088422" ID="ID_1809192896" MODIFIED="1573412091217" TEXT="Fall-3">
+<node CREATED="1573412092916" ID="ID_5252596" MODIFIED="1573412100336" TEXT="Umordnung (auch indirekt)"/>
+<node CREATED="1573412128366" ID="ID_518244916" MODIFIED="1573412148434" TEXT="es besteht eine Verkn&#xfc;pfung...">
+<node CREATED="1573412149566" ID="ID_920888107" MODIFIED="1573412159121" TEXT="die nicht mehr valide ist"/>
+<node CREATED="1573412162340" ID="ID_1639454562" MODIFIED="1573412170495" TEXT="die aber als Solche garantiert bestehen bleibt">
+<node CREATED="1573742980812" ID="ID_701589566" MODIFIED="1573743018643" TEXT="sofern wir Fall-1|2 ausschlie&#xdf;en k&#xf6;nnen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1573742994843" ID="ID_427824389" MODIFIED="1573743021381" TEXT="Trennung der F&#xe4;lle ist essentiell">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1573424578050" ID="ID_1381344686" MODIFIED="1573424594636" TEXT="alle Elemente m&#xfc;&#xdf;ten entfernt und erneut angeh&#xe4;ngt werden">
+<node CREATED="1575051390743" ID="ID_734317772" MODIFIED="1575052370826">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es l&#228;uft auf eine <b>Sortier-Operation</b>&#160;hinaus
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_734317772" ENDARROW="Default" ENDINCLINATION="13;48;" ID="Arrow_ID_1113611998" SOURCE="ID_936490073" STARTARROW="None" STARTINCLINATION="86;7;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1573424733614" ID="ID_1581320485" MODIFIED="1573424740820" TEXT="Idee: Reparatur-Durchgang">
+<node CREATED="1573424745836" ID="ID_1099334229" MODIFIED="1573424761824" TEXT="Aufruf mit dem Element, welches als n&#xe4;chstes kommen m&#xfc;&#xdf;te"/>
+<node CREATED="1573424763026" ID="ID_187176618" MODIFIED="1573424866527" TEXT="sobald etwas anderes als dieses Element ansteht...">
+<node CREATED="1573424867525" ID="ID_184724441" MODIFIED="1573424867525" TEXT="wird der gesamte Rest weggeworfen"/>
+<node CREATED="1573424869699" ID="ID_1553301411" MODIFIED="1573424884797" TEXT="oder zumindest solange weggeworfen, bis es wieder pa&#xdf;t"/>
+<node CREATED="1575051446848" ID="ID_936490073" MODIFIED="1575052370825" TEXT="Stop. Das ist ein &#xbb;bubble sort&#xab;">
+<arrowlink DESTINATION="ID_734317772" ENDARROW="Default" ENDINCLINATION="13;48;" ID="Arrow_ID_1113611998" STARTARROW="None" STARTINCLINATION="86;7;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1573424888306" ID="ID_1069769655" MODIFIED="1573424917681" TEXT="Problem: verf&#xfc;gbares API f&#xfc;r Kind-Widgets im Gtk::Container">
+<node CREATED="1573425004589" ID="ID_182890491" MODIFIED="1573425028633" TEXT="man m&#xfc;&#xdf;te sich mit get_children die Liste aller Widget* geben lassen"/>
+<node CREATED="1573425320822" ID="ID_697283629" MODIFIED="1573425373163" TEXT="Umschichten ist nicht so ohne Weiteres m&#xf6;glich"/>
+</node>
+<node COLOR="#435e98" CREATED="1573425072103" ID="ID_263082856" MODIFIED="1573425312415" TEXT="Frage: wer verwendet eigentlich die TrackBody-Objekte?">
+<node CREATED="1573425179133" ID="ID_1985243477" MODIFIED="1573425187274" TEXT="subTracks_ ist private"/>
+<node CREATED="1573425238895" ID="ID_1011487695" MODIFIED="1573425238895" TEXT="TrackBody::calcHeight()"/>
+<node CREATED="1573425269964" ID="ID_719978190" MODIFIED="1573425269964" TEXT="TrackBody::establishTrackSpace (TrackProfile&amp; profile)"/>
+<node COLOR="#435e98" CREATED="1573425287886" ID="ID_1908598157" MODIFIED="1573425307155" TEXT="Fazit: nur iterativer Zugriff (und nil-Check)">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1573425401827" ID="ID_1879825231" MODIFIED="1573425405599" TEXT="Zwischenstand">
+<node CREATED="1573425406826" ID="ID_1838031996" MODIFIED="1573425425244" TEXT="TrackBody ist gar nicht so schlimm">
+<node CREATED="1573425438222" ID="ID_224907016" MODIFIED="1573425443506" TEXT="die Objekte bleiben bestehen"/>
+<node CREATED="1573425444286" ID="ID_714582673" MODIFIED="1573425466462" TEXT="f&#xfc;ge sie lediglich in der richtigen Reihenfolge wieder ein"/>
+<node CREATED="1573425467578" ID="ID_855524059" MODIFIED="1573425476468" TEXT="gefolgt von einem neuen evaluation pass"/>
+<node CREATED="1573425575308" ID="ID_1100592812" MODIFIED="1573425584283" TEXT="man m&#xfc;&#xdf;te ggfs einige Werte zur&#xfc;cksetzen">
+<node CREATED="1573425585442" ID="ID_683130698" MODIFIED="1575052398117" TEXT="startLine_ = 0"/>
+</node>
+</node>
+<node CREATED="1573425775929" ID="ID_385747502" MODIFIED="1573425793245" TEXT="dagegen Gtk::Grid ist aufwendiger">
+<node CREATED="1573425794934" ID="ID_1806364197" MODIFIED="1573425808512" TEXT="man kann zwar indirekt die Kind-Elemente enumerieren"/>
+<node CREATED="1573425814356" ID="ID_684750058" MODIFIED="1573425893995" TEXT="und man kann per Container::remove() ein Widget entfernen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und m&#252;&#223;te es danach explizit manuell l&#246;schen!!
+    </p>
+    <p>
+      d.h. es wird dann nicht mehr gemanaged (was in diesem Fall hilfreich ist)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1573425898969" ID="ID_278841451" MODIFIED="1573425910100" TEXT="aber unser Aufbau ist ehr komplex">
+<node CREATED="1573425919742" ID="ID_914009908" MODIFIED="1575052422466" TEXT="d.h. wir m&#xfc;&#xdf;ten Sub-Grids und sonstigen Content erhalten"/>
+<node CREATED="1575052437324" ID="ID_719843409" MODIFIED="1575052451208" TEXT="und insgesamt als Widget an der richtigen Stelle wieder einf&#xfc;gen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1575063986126" ID="ID_237283777" MODIFIED="1575064280500" TEXT="konkretisiert: als ViewHook-Mechanismus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist zun&#228;chst ein Versuch, ein m&#252;hsam errungenes Design zu verifizieren...
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#261eb7" DESTINATION="ID_237283777" ENDARROW="Default" ENDINCLINATION="396;-703;" ID="Arrow_ID_119083900" SOURCE="ID_1018000905" STARTARROW="None" STARTINCLINATION="-962;0;"/>
+<node CREATED="1575064318098" ID="ID_293965279" MODIFIED="1575064328652" TEXT="Fall Track-Head">
+<node CREATED="1575064338701" ID="ID_415507995" MODIFIED="1575064375893" TEXT="DisplayFrame hat einen ViewHook in das korrespondierende TrackHeadWidget"/>
+<node CREATED="1575064401006" ID="ID_1441033648" MODIFIED="1575064462745" TEXT="nach Struktur-&#xc4;nderung dekoriert der TrackPresenter einen Subtrack-Iterator"/>
+<node CREATED="1575064464430" ID="ID_312804063" MODIFIED="1575064465801" TEXT="mit Zugriff auf alle diese Track-Head ViewHooks"/>
+<node CREATED="1575064550915" ID="ID_240478975" MODIFIED="1575064563346" TEXT="und gibt ihn an welches ViewHookable?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575064564486" ID="ID_1865914633" MODIFIED="1575064570216" TEXT="TODO kl&#xe4;ren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1575064581374" ID="ID_1196434993" MODIFIED="1575064594600" TEXT="dieses ViewHookable ist in der Tat ein TrackHeadWidget"/>
+<node CREATED="1575064653804" ID="ID_448564345" MODIFIED="1575064688635" TEXT="und es pullt den Iterator und ruft f&#xfc;r jedes Element (ViewHook&amp;) auf..."/>
+<node CREATED="1575064679128" ID="ID_1963787462" MODIFIED="1575064684603" TEXT="reHook()">
+<node CREATED="1575064711612" ID="ID_1603635315" MODIFIED="1575064721990" TEXT="sucht die passende Grid-Zeile">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575064723058" ID="ID_1911416938" MODIFIED="1575064727154" TEXT="TODO wie geht das?">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1575064734265" ID="ID_332197090" MODIFIED="1575064749715" TEXT="nimmt das Widget heraus und l&#xf6;scht die Zeile"/>
+<node CREATED="1575064751217" ID="ID_292440090" MODIFIED="1575064765089" TEXT="f&#xfc;gt das Widget ganz regul&#xe4;r als neue Zeile am Ende an"/>
+</node>
+</node>
+<node CREATED="1575064805462" ID="ID_731805099" MODIFIED="1575064810107" TEXT="Fall Track-Body">
+<node CREATED="1575064815198" ID="ID_1801360702" MODIFIED="1575064827177" TEXT="DisplayFrame hat einen ViewHook in den TrackBodyCanvas"/>
+<node CREATED="1575064833095" ID="ID_593172418" MODIFIED="1575064854765" TEXT="nach Struktur-&#xc4;nderung dekoriert der TrackPresenter einen Subtrack-Iterator"/>
+<node CREATED="1575064855544" ID="ID_1131024510" MODIFIED="1575064916996" TEXT="mit Zugriff auf alle diese TrackBody ViewHooks">
+<node CREATED="1575064918904" ID="ID_562010334" MODIFIED="1575064937486" TEXT="Vorsicht: nicht irritieren lassen">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1575064939788" ID="ID_896603255" MODIFIED="1575064952071" TEXT="die TrackBody-Objekte selber liegen im DisplayFrame"/>
+<node CREATED="1575064953275" ID="ID_1410573489" MODIFIED="1575064968229" TEXT="aber der Canvas / DisplayManager hat eine Liste von TrackBody*"/>
+</node>
+<node CREATED="1575065001141" ID="ID_1381752265" MODIFIED="1575065027911" TEXT="wiederum die Frage: wie erfolgt der Zugang zum ViewHookable?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575064564486" ID="ID_1502992527" MODIFIED="1575064570216" TEXT="TODO kl&#xe4;ren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1575065047103" ID="ID_949577790" MODIFIED="1575065064472" TEXT="dieses pullt und ruft auf jedem ViewHook...."/>
+<node CREATED="1575065065436" ID="ID_870630036" MODIFIED="1575065068376" TEXT="reHook()">
+<node CREATED="1575065071619" ID="ID_868399500" MODIFIED="1575065084870" TEXT="findet die passende Sub-Liste von TrackBody*">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575064723058" ID="ID_640324891" MODIFIED="1575064727154" TEXT="TODO wie geht das?">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1575065153720" ID="ID_542989067" MODIFIED="1575065164547" TEXT="nimmt den TrackBody* heraus"/>
+<node CREATED="1575065165679" ID="ID_1342524311" MODIFIED="1575065176156" TEXT="f&#xfc;gt den TrackBody* hinten neu an"/>
+<node CREATED="1575065178531" ID="ID_1083347222" MODIFIED="1575065192431" TEXT="der sp&#xe4;ter folgende Display-Evaluation-Pass">
+<node CREATED="1575065193925" ID="ID_964654254" MODIFIED="1575065208561" TEXT="ausgel&#xf6;st durch das nun geleerte TrackProfile"/>
+<node CREATED="1575065210080" ID="ID_984570817" MODIFIED="1575065223586" TEXT="iteriert &#xfc;ber diese und bauch die Zeichen-Struktur neu auf"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1575050224708" ID="ID_1911321905" MODIFIED="1575050229199" TEXT="Trigger">
+<node CREATED="1575050232723" ID="ID_1373278767" MODIFIED="1575050241511" TEXT="Struktur-&#xc4;nderung">
+<node CREATED="1575050261439" ID="ID_1211501481" MODIFIED="1575050408505" TEXT="Sequenz der unmittelbaren Kinder ge&#xe4;ndert">
+<linktarget COLOR="#1252d1" DESTINATION="ID_1211501481" ENDARROW="Default" ENDINCLINATION="54;39;" ID="Arrow_ID_407564614" SOURCE="ID_1445748451" STARTARROW="None" STARTINCLINATION="-41;-50;"/>
+<node CREATED="1575050290679" ID="ID_1523080748" MODIFIED="1575050294573" TEXT="Reihenfolge"/>
+<node CREATED="1575050279796" ID="ID_997158526" MODIFIED="1575050282831" TEXT="neues Kind"/>
+<node CREATED="1575050283587" ID="ID_173333062" MODIFIED="1575050286863" TEXT="totes Kind"/>
+</node>
+<node CREATED="1575050302522" ID="ID_1068694513" MODIFIED="1575050313251" TEXT="mittelbar im Kind-Baum">
+<node CREATED="1575050317354" ID="ID_1445748451" MODIFIED="1575050408504" TEXT="rekursiv zur&#xfc;ckgef&#xfc;hrt">
+<arrowlink COLOR="#1252d1" DESTINATION="ID_1211501481" ENDARROW="Default" ENDINCLINATION="54;39;" ID="Arrow_ID_407564614" STARTARROW="None" STARTINCLINATION="-41;-50;"/>
+</node>
+<node CREATED="1575050424190" ID="ID_1324169888" MODIFIED="1575050472496" TEXT="Voraussetzungen">
+<node CREATED="1575050474252" ID="ID_1248517025" MODIFIED="1575050474252" TEXT="Rekonstruktion ist lokal"/>
+<node CREATED="1575050476163" ID="ID_389515387" MODIFIED="1575050496236" TEXT="Rekunstruktion wirkt nur auf einen Teilbaum abw&#xe4;rts"/>
+</node>
+</node>
+</node>
+<node CREATED="1575050510878" ID="ID_350484232" MODIFIED="1575050807364" TEXT="Basis ist vom Diff-System zu leisten">
+<arrowlink COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_1277214644" STARTARROW="None" STARTINCLINATION="2973;244;"/>
 </node>
 </node>
 </node>
@@ -24663,6 +25173,9 @@
 <node CREATED="1568581076086" ID="ID_536195735" MODIFIED="1568581089407" TEXT="Problem: der ist seinerseits eine Sackgasse">
 <icon BUILTIN="broken-line"/>
 </node>
+<node CREATED="1573926191124" ID="ID_1389602122" MODIFIED="1573928984092" TEXT="Display-Frame geh&#xf6;rt eigentlich zum Track">
+<arrowlink COLOR="#2769d6" DESTINATION="ID_1953592630" ENDARROW="Default" ENDINCLINATION="-300;1096;" ID="Arrow_ID_928857904" STARTARROW="None" STARTINCLINATION="-1987;53;"/>
+</node>
 <node CREATED="1568581102059" ID="ID_172612190" MODIFIED="1568581104782" TEXT="brauche....">
 <node CREATED="1568581105914" ID="ID_1022292144" MODIFIED="1568581117148" TEXT="Zugang zum BodyCanvasWidget"/>
 <node CREATED="1568581118403" ID="ID_1096266089" MODIFIED="1573162562425" TEXT="Zugang zum DisplayManager (bzw. Timeline Layout)"/>
@@ -26440,7 +26953,7 @@
 <node CREATED="1488423436478" ID="ID_1037695008" MODIFIED="1557498707233" TEXT="Einstieg">
 <node CREATED="1488423440629" ID="ID_1295897045" MODIFIED="1561151251774" TEXT="in Timeline">
 <linktarget COLOR="#8d8ba5" DESTINATION="ID_1295897045" ENDARROW="Default" ENDINCLINATION="296;-456;" ID="Arrow_ID_150397161" SOURCE="ID_839909208" STARTARROW="None" STARTINCLINATION="1056;0;"/>
-<node CREATED="1488423569203" ID="ID_1753722831" MODIFIED="1557498707233" TEXT="TimelinePane anzeigen">
+<node CREATED="1488423569203" ID="ID_1753722831" MODIFIED="1575050390351" TEXT="TimelinePane anzeigen">
 <linktarget COLOR="#a1543e" DESTINATION="ID_1753722831" ENDARROW="Default" ENDINCLINATION="1150;-267;" ID="Arrow_ID_912757548" SOURCE="ID_292894978" STARTARROW="None" STARTINCLINATION="496;-77;"/>
 </node>
 <node CREATED="1488423579514" ID="ID_1433755621" MODIFIED="1557498707233" TEXT="TimelineWidget erzeugen"/>
@@ -34298,7 +34811,7 @@
 <node CREATED="1492205732389" ID="ID_1080697951" MODIFIED="1518487921090" TEXT="wir k&#xf6;nnen stets gleich triggern"/>
 </node>
 <node CREATED="1492205741483" ID="ID_1132272888" MODIFIED="1518487921090" TEXT="Command wird sofort nach dem Binden getriggert"/>
-<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1563145261726" TEXT="Protokoll-Erweiterung" VSHIFT="8">
+<node COLOR="#338800" CREATED="1483925280108" HGAP="30" ID="ID_1479669922" MODIFIED="1575063775187" TEXT="Protokoll-Erweiterung" VSHIFT="8">
 <arrowlink COLOR="#e9ba2d" DESTINATION="ID_242219866" ENDARROW="Default" ENDINCLINATION="-944;1604;" ID="Arrow_ID_1617518648" STARTARROW="None" STARTINCLINATION="3617;-1097;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1483925298713" ID="ID_347702585" MODIFIED="1518487921090" TEXT="Command-Prototyp forken"/>
@@ -36814,13 +37327,14 @@
 <node CREATED="1434128092877" ID="ID_105246595" MODIFIED="1518487921094" TEXT="Applikator">
 <node CREATED="1434128115462" ID="ID_1299653797" MODIFIED="1518487921094" TEXT="Tree-Mutator"/>
 </node>
-<node CREATED="1434128083878" ID="ID_937754899" MODIFIED="1518487921094" TEXT="Format">
+<node BACKGROUND_COLOR="#c9cfe1" COLOR="#435e98" CREATED="1434128083878" FOLDED="true" ID="ID_937754899" MODIFIED="1573834757669" TEXT="Format">
+<icon BUILTIN="yes"/>
 <node CREATED="1434128153773" ID="ID_1289483934" MODIFIED="1518487921094" TEXT="Objekt-Repr&#xe4;s">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1434128243334" ID="ID_1828331212" MODIFIED="1518487921094" TEXT="Typ-Darstellung"/>
 <node CREATED="1434128239517" ID="ID_1886740948" MODIFIED="1518487921094" TEXT="Mapping"/>
-<node CREATED="1434128170381" ID="ID_976705384" MODIFIED="1561827465792" TEXT="GenNode">
-<linktarget COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="-36;39;" ID="Arrow_ID_1285375088" SOURCE="ID_553361956" STARTARROW="Default" STARTINCLINATION="-5;-77;"/>
+<node CREATED="1434128170381" ID="ID_976705384" MODIFIED="1573834546731" TEXT="GenNode">
+<linktarget COLOR="#4f7ffc" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="-55;132;" ID="Arrow_ID_1285375088" SOURCE="ID_553361956" STARTARROW="Default" STARTINCLINATION="-5;-77;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1435421658394" ID="ID_1938259420" MODIFIED="1518487921094" TEXT="ID">
 <node CREATED="1435421670349" ID="ID_1358247529" MODIFIED="1561827465793" TEXT="verwende EntryID">
@@ -36899,7 +37413,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1434128217645" ID="ID_1790054544" MODIFIED="1561827465797" TEXT="Monade">
+<node CREATED="1434128217645" FOLDED="true" ID="ID_1790054544" MODIFIED="1573834533842" TEXT="Monade">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1435932580854" ID="ID_1307223527" MODIFIED="1512926192300" TEXT="Daten einwickeln">
 <node CREATED="1435932589853" ID="ID_180643071" MODIFIED="1435932595665" TEXT="ctor forward"/>
@@ -37461,7 +37975,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1436042774669" ID="ID_714336641" MODIFIED="1561827465818" TEXT="Implementierung">
+<node CREATED="1436042774669" FOLDED="true" ID="ID_714336641" MODIFIED="1573834498253" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1436042783700" ID="ID_381817780" MODIFIED="1436042788584" TEXT="zwei Collections"/>
 <node CREATED="1436042814044" ID="ID_1455779230" MODIFIED="1436042818312" TEXT="aber semantisch eine Liste"/>
@@ -37661,8 +38175,8 @@
 </node>
 </node>
 <node CREATED="1434128128869" ID="ID_244966341" MODIFIED="1518487921095" TEXT="Verben">
-<node CREATED="1434128134508" ID="ID_553361956" MODIFIED="1538870787739" TEXT="ID-Repr&#xe4;s">
-<arrowlink COLOR="#ff0033" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="-36;39;" ID="Arrow_ID_1285375088" STARTARROW="Default" STARTINCLINATION="-5;-77;"/>
+<node CREATED="1434128134508" ID="ID_553361956" MODIFIED="1573834578527" TEXT="ID-Repr&#xe4;s">
+<arrowlink COLOR="#4f7ffc" DESTINATION="ID_976705384" ENDARROW="Default" ENDINCLINATION="-55;132;" ID="Arrow_ID_1285375088" STARTARROW="Default" STARTINCLINATION="-5;-77;"/>
 <node CREATED="1434128393429" ID="ID_1275202366" MODIFIED="1518487921095" TEXT="mu&#xdf; GenNode sein">
 <icon BUILTIN="idea"/>
 </node>
@@ -37861,7 +38375,80 @@
 </node>
 </node>
 </node>
-<node CREATED="1443733567706" HGAP="325" ID="ID_143203937" MODIFIED="1561827465844" TEXT="Diff-Language" VSHIFT="41">
+<node CREATED="1573834946400" ID="ID_1344414345" MODIFIED="1573834960224" TEXT="Erg&#xe4;nzungen/Weiterungen">
+<icon BUILTIN="stop"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573834997505" ID="ID_358670935" MODIFIED="1573835010544" TEXT="Diagnose">
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573834982323" ID="ID_1326387627" MODIFIED="1573834995669" TEXT="Hilfen zur Erzeugung">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573835265349" ID="ID_352943196" MODIFIED="1573835276049" TEXT="Diff-Anwendung einbinden">
+<icon BUILTIN="pencil"/>
+<node CREATED="1573835763482" ID="ID_1220310042" MODIFIED="1573837704113" TEXT="Problem: Slave-Collection">
+<arrowlink COLOR="#d67771" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-53;-3;" ID="Arrow_ID_115955006" STARTARROW="None" STARTINCLINATION="38;141;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1573835793926" ID="ID_13734498" MODIFIED="1573835796913" TEXT="Situation">
+<node CREATED="1573835798165" ID="ID_71062099" MODIFIED="1573835827477" TEXT="Diff-System verwaltet eine Master-Collection (Node-Children)"/>
+<node CREATED="1573835830889" ID="ID_866446286" MODIFIED="1573835845435" TEXT="jedes Element in dieser hat einen/mehrere Delegates"/>
+<node CREATED="1573835848966" ID="ID_1735677052" MODIFIED="1573835898353">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      diese Delegates sind <i>anderswo </i>in eine Collection eingebunden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1573835862988" ID="ID_1733434217" MODIFIED="1573835890810">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und deren Reihenfolge <i>ist dort </i>von Bedeutung
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573837634757" ID="ID_101148427" MODIFIED="1575050807364" TEXT="Aufgabe: Ordnung (re)Konstruieren">
+<linktarget COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_1277214644" SOURCE="ID_350484232" STARTARROW="None" STARTINCLINATION="2973;244;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1573837829595" ID="ID_613778773" MODIFIED="1573837833320" TEXT="immer wenn...">
+<node CREATED="1573837834482" ID="ID_980057100" MODIFIED="1573837839549" TEXT="ein Element hinzugekommen ist"/>
+<node CREATED="1573837840543" ID="ID_749166782" MODIFIED="1573837845620" TEXT="ein Element entfernt wurde"/>
+<node CREATED="1573837847552" ID="ID_1255347678" MODIFIED="1573837852995" TEXT="Element umgeordnet wurden"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1573835063441" ID="ID_1630863893" MODIFIED="1573835079773" TEXT="Architektur-Anpassungen">
+<icon BUILTIN="forward"/>
+<node CREATED="1573835082117" ID="ID_1921828362" MODIFIED="1573835086169" TEXT="Konsequenzen">
+<node CREATED="1573835152100" ID="ID_31277125" MODIFIED="1573835175700" TEXT="Spannungen mit einem konvetionellen Datenmodell"/>
+</node>
+<node CREATED="1573835389094" ID="ID_1063481542" MODIFIED="1573835396665" TEXT="Protokoll-Adapter">
+<node CREATED="1573837337894" ID="ID_414910178" MODIFIED="1573837342377" TEXT="Observer">
+<node CREATED="1573837508831" ID="ID_1332948192" MODIFIED="1573837531855" TEXT="onChangeLocal">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1573837514565" ID="ID_1974559184" MODIFIED="1573837528817" TEXT="onChangeSubtree">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573837592850" ID="ID_727500820" MODIFIED="1573837704113" TEXT="onSeqChange">
+<linktarget COLOR="#d67771" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-53;-3;" ID="Arrow_ID_115955006" SOURCE="ID_1220310042" STARTARROW="None" STARTINCLINATION="38;141;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1443733567706" FOLDED="true" HGAP="325" ID="ID_143203937" MODIFIED="1573834336766" TEXT="Diff-Language" VSHIFT="41">
 <cloud COLOR="#cfba9d"/>
 <linktarget COLOR="#a9acc1" DESTINATION="ID_143203937" ENDARROW="Default" ENDINCLINATION="115;-2033;" ID="Arrow_ID_136706418" SOURCE="ID_1091994004" STARTARROW="None" STARTINCLINATION="1656;0;"/>
 <font NAME="SansSerif" SIZE="14"/>
@@ -38064,7 +38651,7 @@
 <node CREATED="1443736626731" ID="ID_600165347" MODIFIED="1443736652396" TEXT="keine Attribut-Duplikate"/>
 <node CREATED="1443736388180" ID="ID_435516555" MODIFIED="1443736666538" TEXT="Attribute strikt vor Kindern"/>
 </node>
-<node CREATED="1443736354800" ID="ID_1024688383" MODIFIED="1512926192355" TEXT="locker">
+<node CREATED="1443736354800" FOLDED="true" ID="ID_1024688383" MODIFIED="1573834317454" TEXT="locker">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1443735740907" ID="ID_1103250008" MODIFIED="1443735747902" TEXT="Meta-Attribute sind magisch"/>
 <node CREATED="1473353076877" ID="ID_1936057196" MODIFIED="1561827465846" TEXT="2-Layer binding">
@@ -38451,7 +39038,8 @@
 <node CREATED="1443741905157" HGAP="342" ID="ID_1960988662" MODIFIED="1561827465879" TEXT="Diff-Implementierung" VSHIFT="91">
 <font NAME="SansSerif" SIZE="16"/>
 <icon BUILTIN="go"/>
-<node CREATED="1444522932841" HGAP="52" ID="ID_48288704" MODIFIED="1444522994078" TEXT="Architektur" VSHIFT="-5">
+<node CREATED="1444522932841" HGAP="-19" ID="ID_48288704" MODIFIED="1573834426834" TEXT="Architektur" VSHIFT="-52">
+<edge STYLE="linear"/>
 <node CREATED="1444522939928" ID="ID_490994681" MODIFIED="1444522986895" TEXT="destruktiv?">
 <icon BUILTIN="help"/>
 </node>
@@ -38550,7 +39138,7 @@
 <node CREATED="1443741923547" ID="ID_1978439060" MODIFIED="1443741930738" TEXT="Listen-Diff">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1443741931858" ID="ID_484829805" MODIFIED="1512926192375" TEXT="Baum-Diff">
+<node CREATED="1443741931858" FOLDED="true" ID="ID_484829805" MODIFIED="1573834363682" TEXT="Baum-Diff">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1445295424277" ID="ID_1084177503" MODIFIED="1525124215397">
 <richcontent TYPE="NODE"><html>
@@ -38894,7 +39482,7 @@
 <icon BUILTIN="flag"/>
 </node>
 </node>
-<node CREATED="1502452581379" HGAP="11" ID="ID_1651893758" MODIFIED="1502453059637" TEXT="Darstellung" VSHIFT="17">
+<node CREATED="1502452581379" HGAP="3" ID="ID_1651893758" MODIFIED="1573834393141" TEXT="Darstellung" VSHIFT="31">
 <linktarget COLOR="#afb1bd" DESTINATION="ID_1651893758" ENDARROW="Default" ENDINCLINATION="-1257;0;" ID="Arrow_ID_1786455458" SOURCE="ID_1500100371" STARTARROW="None" STARTINCLINATION="1858;0;"/>
 <node CREATED="1502452597604" ID="ID_172363215" MODIFIED="1512926192454" TEXT="MutationMessage">
 <icon BUILTIN="button_ok"/>
@@ -39023,7 +39611,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1443740566042" ID="ID_632827470" MODIFIED="1518487921095" TEXT="Baum-Diff">
+<node CREATED="1443740566042" FOLDED="true" ID="ID_632827470" MODIFIED="1573834793531" TEXT="Baum-Diff">
 <icon BUILTIN="prepare"/>
 <node CREATED="1443740576744" ID="ID_335386387" MODIFIED="1525124215410" TEXT="Anwenden">
 <icon BUILTIN="button_ok"/>
@@ -41939,8 +42527,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>

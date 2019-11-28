@@ -142,7 +142,7 @@ namespace timeline {
   
   namespace {
     /** helper to get the width of combined slope borders.
-     * Upwards slopes are combined up to a certain level;
+     * Upwards slopes are combined up to a certain degree;
      * however, the actual width of such a combined border
      * is defined through a class in the CSS stylesheet.
      * The TrackBody::decoration.borders array holds the

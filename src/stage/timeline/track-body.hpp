@@ -30,7 +30,7 @@
  ** track display is coordinated by a TrackPresenter, which corresponds
  ** to a session::Fork and directly controls the respective display elements
  ** in the [header pane](\ref timeline::HeaderPaneWidget) and the display of the
- ** timeline body, which is actually a canvas for custom drawing.
+ ** timeline body; the latter is actually a canvas for custom drawing.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 
@@ -75,7 +75,7 @@ namespace timeline {
       uint botMar = 0;
       
       using Borders = std::array<uint, 6>;
-      Borders borders{0,0,0,0,0,0};
+      Borders borders{0,0,0,0,0,0};    ///< width of up to 6 levels of combined upward slope borders (defined in CSS)
     };
   
   
