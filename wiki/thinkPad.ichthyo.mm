@@ -18626,8 +18626,8 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575057316383" ID="ID_1565606328" MODIFIED="1575059474003" TEXT="relatives Verankern">
-<linktarget COLOR="#146b9a" DESTINATION="ID_1565606328" ENDARROW="Default" ENDINCLINATION="-105;-7;" ID="Arrow_ID_1877360800" SOURCE="ID_827160586" STARTARROW="None" STARTINCLINATION="-62;-17;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575057316383" ID="ID_1565606328" MODIFIED="1575218072363" TEXT="relatives Verankern">
+<linktarget COLOR="#146b9a" DESTINATION="ID_1565606328" ENDARROW="Default" ENDINCLINATION="-183;22;" ID="Arrow_ID_1877360800" SOURCE="ID_827160586" STARTARROW="None" STARTINCLINATION="-42;-98;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1575134071522" ID="ID_1625046942" MODIFIED="1575137022510" TEXT="bekannte F&#xe4;lle">
 <linktarget COLOR="#3457ce" DESTINATION="ID_1625046942" ENDARROW="Default" ENDINCLINATION="-227;8;" ID="Arrow_ID_534191130" SOURCE="ID_1755997468" STARTARROW="None" STARTINCLINATION="309;5;"/>
@@ -18662,8 +18662,8 @@
 <node CREATED="1575137069638" ID="ID_1052180334" MODIFIED="1575137136027" TEXT="...und es verlangt nach einem double-Dispatch">
 <linktarget COLOR="#73117e" DESTINATION="ID_1052180334" ENDARROW="Default" ENDINCLINATION="84;-157;" ID="Arrow_ID_352116559" SOURCE="ID_691795394" STARTARROW="None" STARTINCLINATION="-209;11;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575137161390" HGAP="117" ID="ID_836172889" MODIFIED="1575137186381" TEXT="wo steckt der Visitor?" VSHIFT="-18">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1575137161390" HGAP="117" ID="ID_836172889" MODIFIED="1575216227850" TEXT="wo steckt der Visitor?" VSHIFT="-18">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1575137194277" ID="ID_553288287" MODIFIED="1575137207031" TEXT="im konkreten ViewHookable&lt;X&gt;"/>
 <node CREATED="1575137218682" ID="ID_1616234672" MODIFIED="1575137239795" TEXT="dieses bietet freiwillig zus&#xe4;tzliche Methoden zur Quer-Verankerung"/>
 <node CREATED="1575137261020" ID="ID_1063963760" MODIFIED="1575137323290" TEXT="ist dazu eine explizite Spezialisierung erforderlich?">
@@ -18730,12 +18730,12 @@
 <node CREATED="1575138045842" ID="ID_799349707" MODIFIED="1575138054270" TEXT="undefinierte Template-Methoden">
 <node CREATED="1575138061353" ID="ID_1984732238" MODIFIED="1575138085281" TEXT="ViewHookable&lt;T&gt;.getChildHookable&lt;U&gt;(T elm)"/>
 <node CREATED="1575138103780" ID="ID_1710088811" MODIFIED="1575138116855" TEXT="konkret werden die zusammen mit TrackBody implementiert">
-<node CREATED="1575138118295" ID="ID_1373735987" MODIFIED="1575138163535" TEXT="ViewHookable&lt;TrackBody&gt;.getChildHookable&lt;Clip&gt;(TrackBody elm)"/>
-<node CREATED="1575138118295" ID="ID_704904358" MODIFIED="1575138177926" TEXT="ViewHookable&lt;TrackBody&gt;.getChildHookable&lt;Marker&gt;(TrackBody elm)"/>
+<node CREATED="1575138118295" ID="ID_1373735987" MODIFIED="1575150501923" TEXT="ViewHookable&lt;TrackBody&gt;::getChildHookable&lt;Clip&gt;(TrackBody elm)"/>
+<node CREATED="1575138118295" ID="ID_704904358" MODIFIED="1575150496404" TEXT="ViewHookable&lt;TrackBody&gt;::getChildHookable&lt;Marker&gt;(TrackBody elm)"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575138190691" ID="ID_773972977" MODIFIED="1575138205137" TEXT="und diese Implementierung...">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1575138206253" ID="ID_655738081" MODIFIED="1575138215055" TEXT="mu&#xdf; einen dynamic_cast machen">
+<node CREATED="1575138206253" ID="ID_655738081" MODIFIED="1575150462624" TEXT="mu&#xdf; einen static_cast machen">
 <node CREATED="1575138216103" ID="ID_1538804684" MODIFIED="1575138222839" TEXT="ViewHookable&lt;TrackBody&gt;"/>
 <node CREATED="1575138223763" ID="ID_1581544549" MODIFIED="1575138245579" TEXT="auf die konkrete Implementierung (=TrackBody selber)"/>
 </node>
@@ -18749,6 +18749,307 @@
 </node>
 </node>
 </node>
+<node CREATED="1575215636577" ID="ID_1948387656" MODIFIED="1575215647790" TEXT="neige ehr dem &quot;generischen Visitor&quot; zu">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#435e98" CREATED="1575215649416" ID="ID_1591288650" MODIFIED="1575216005833" TEXT="also den undefinierten Template-Methoden">
+<icon BUILTIN="info"/>
+<node CREATED="1575215660550" ID="ID_34068201" MODIFIED="1575215996537" TEXT="pro">
+<icon BUILTIN="up"/>
+<node CREATED="1575215791195" ID="ID_398909879" MODIFIED="1575215821034" TEXT="wenig Code-Overhead">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man mu&#223; nicht eine explizite Spezialisierung des ganzen Interfaces schreiben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575215838399" ID="ID_859406608" MODIFIED="1575215879417" TEXT="nat&#xfc;rliche Code-Organisation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man schreibt die konkrete Implementierung direkt bei der Implementierung des Zieltyps mit
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575215924451" ID="ID_643524989" MODIFIED="1575215973324" TEXT="weniger implizite Konventionen"/>
+</node>
+<node CREATED="1575215663190" ID="ID_906295451" MODIFIED="1575215991848" TEXT="con">
+<icon BUILTIN="down"/>
+<node CREATED="1575215665957" ID="ID_1196326876" MODIFIED="1575215723907" TEXT="Kein Interface"/>
+<node CREATED="1575215724926" ID="ID_134909462" MODIFIED="1575215743342" TEXT="fehlende Implementierung wird erst bei Verwendung ersichtlich"/>
+<node CREATED="1575215758830" ID="ID_550543628" MODIFIED="1575215766856" TEXT="static_cast (Insider-Wissen)"/>
+</node>
+</node>
+<node CREATED="1575216033496" ID="ID_1987929560" MODIFIED="1575216053261" TEXT="double-dispatch wird also durch die Verwendung eines konkreten Typs angetrieben">
+<node CREATED="1575216082111" ID="ID_606766126" MODIFIED="1575216098040" TEXT="Dimension-1: das konkrete ViewHookable"/>
+<node CREATED="1575216098994" ID="ID_548123128" MODIFIED="1575216156142" TEXT="Dimension-2: konkrete Unterst&#xfc;tzung f&#xfc;r einen bestimmten Widget-Typ in jenem"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575216188742" HGAP="334" ID="ID_1821357488" MODIFIED="1575219124387" TEXT="bleibt der Zugang zum Canvas zu l&#xf6;sen" VSHIFT="46">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1575216248349" ID="ID_512721194" MODIFIED="1575216253000" TEXT="bisheriger Stand">
+<node CREATED="1575216253845" ID="ID_587308673" MODIFIED="1575216292655" TEXT="Problem ist nicht wirklich gel&#xf6;st">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir k&#246;nnten zwar Widgets aufbauen, diese aber dann sp&#228;ter nicht umordnen oder zerst&#246;ren
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1575216303885" ID="ID_715859179" MODIFIED="1575216335980" TEXT="top-Level (TimelineController) bietete den Ankerpunkt im DisplayManager"/>
+<node CREATED="1575216337106" ID="ID_661291056" MODIFIED="1575216352962" TEXT="TrackPresenter bekommt jeweils einen Ankerpunkt bei der Erstellung"/>
+<node CREATED="1575216354061" ID="ID_1311913961" MODIFIED="1575216373533" TEXT="TrackPresenter gibt sich selber als Ankerpunkt bei der Erstellung der Kinder mit"/>
+</node>
+<node CREATED="1575216544532" ID="ID_1540315113" MODIFIED="1575216549799" TEXT="warum w&#xfc;nschenswert?">
+<node CREATED="1575216551690" ID="ID_935473263" MODIFIED="1575216559964" TEXT="one concept to rule them all"/>
+<node CREATED="1575216581519" ID="ID_887541808" MODIFIED="1575216601256" TEXT="Komponentenzugriff in komplexen GUIs ist notorisch verworren"/>
+</node>
+<node CREATED="1575216399512" ID="ID_507337771" MODIFIED="1575216403380" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1575216670419" ID="ID_702645692" MODIFIED="1575217442829" TEXT="anderweitig l&#xf6;sen">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1575216681761" ID="ID_1830792442" MODIFIED="1575220615843" TEXT="die Presenter kennen typischerweise den DisplayManager">
+<icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1575220602792" ID="ID_1011365806" MODIFIED="1575220612560" TEXT="STOP! das stimmt gar nicht">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1575220620374" ID="ID_1278909200" MODIFIED="1575220767695" TEXT="genau das hab ich trickreich vermieden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      durch die L&#246;sung mit dem &quot;Einh&#228;keln&quot; via tempor&#228;r durchgereichtem Lambda!
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#688bdc" DESTINATION="ID_1278909200" ENDARROW="Default" ENDINCLINATION="604;42;" ID="Arrow_ID_268017738" SOURCE="ID_1816173955" STARTARROW="None" STARTINCLINATION="182;25;"/>
+</node>
+</node>
+<node CREATED="1575216724123" ID="ID_1691573472" MODIFIED="1575216735670" TEXT="dieser h&#xe4;tte dann ein API &quot;getWidgetHookable&quot;"/>
+<node CREATED="1575216766414" ID="ID_1123775276" MODIFIED="1575216777744" TEXT="der Vater m&#xfc;&#xdf;te seine eigenen Koordinaten kennen"/>
+<node CREATED="1575216778548" ID="ID_1190748757" MODIFIED="1575216796416" TEXT="er w&#xfc;rde dann bei der Erstellung die relativen Kind-Koordinaten ausrechnen und mitgeben"/>
+<node CREATED="1575216835596" ID="ID_629102178" MODIFIED="1575216885510" TEXT="die Template-Visitor-Methode wird mit einem static_fail implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      um zu dokumentieren, da&#223; wir in diesem Visitor-Mischfall am Konzept vorbei implementieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1575217033169" ID="ID_1460431220" MODIFIED="1575217050486" TEXT="f&#xfc;r Timelines h&#xe4;tten wir einen Dienst pro Timeline"/>
+<node CREATED="1575217051398" ID="ID_1214822231" MODIFIED="1575217061441" TEXT="und Clips m&#xfc;&#xdf;ten ebenfalls einen lokalen Dienst bieten"/>
+<node CREATED="1575216926792" ID="ID_1215187417" MODIFIED="1575220655549" TEXT="die Implementierung ist aber auch tats&#xe4;chlich flach">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und nicht hierarchisch! Letzten Endes geht es nur darum, Widgets an einen gemeinsamen Canvas zu heften
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1575217471564" ID="ID_1483844411" MODIFIED="1575223136572" TEXT="nach Schema-f umsetzen">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1575217494446" ID="ID_1143595794" MODIFIED="1575217521744" TEXT="Implementiere: ViewHookable&lt;TrackBody&gt;::getChildHookable&lt;Clip&gt;(TrackBody elm)"/>
+<node CREATED="1575217549604" ID="ID_280485004" MODIFIED="1575217592722" TEXT="ViewHookable&lt;TrackBody&gt; ist de-facto selber ein TrackBody">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      n&#228;mlich der Vater-TrackBody
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575219131000" ID="ID_1060211288" MODIFIED="1575219133937" TEXT="TrackBody">
+<node CREATED="1575219136371" ID="ID_1651052012" MODIFIED="1575219154957" TEXT="h&#xe4;lt eine Liste der Sub-Body*"/>
+<node CREATED="1575219156445" ID="ID_1566022490" MODIFIED="1575219175060" TEXT="managed (unique_ptr) eine Liste der Ruler-Tracks">
+<node CREATED="1575219179824" ID="ID_1534908547" MODIFIED="1575219188210" TEXT="RulerTrack ist ein Tangible"/>
+<node CREATED="1575219189014" ID="ID_911375667" MODIFIED="1575219209368" TEXT="diese Liste ist vom TrackPresnter her in den Diff eingeh&#xe4;ngt"/>
+</node>
+<node CREATED="1575219217817" ID="ID_1289207727" MODIFIED="1575219235893" TEXT="kennt seine eigene startLine_ auf dem Canvas"/>
+<node CREATED="1575219240879" ID="ID_1411296086" MODIFIED="1575219249858" TEXT="plus einige weitere Render-Parameter"/>
+</node>
+<node CREATED="1575219314942" ID="ID_1292453963" MODIFIED="1575219334463" TEXT="TrackBody m&#xfc;&#xdf;te nun ViewHookable&lt;Clip&gt; implementieren">
+<node CREATED="1575219336874" ID="ID_1662726515" MODIFIED="1575219344931" TEXT="und zwar durch Delegation/Dekoration">
+<node CREATED="1575219383148" ID="ID_1184072772" MODIFIED="1575219395047" TEXT="auf den top-level ViewHookable&lt;Widget&gt;"/>
+<node CREATED="1575219396781" ID="ID_141339762" MODIFIED="1575219406522" TEXT="welches vom DisplayManager bereitgestellt wird"/>
+<node CREATED="1575219409161" ID="ID_820984223" MODIFIED="1575219425490" TEXT="und (vermutl) vom Canvas selber zu implementieren ist"/>
+<node CREATED="1575219434581" ID="ID_1020948818" MODIFIED="1575219474436" TEXT="die Dekoration dabei justiert den Y-offset anhand der startLine_"/>
+</node>
+<node CREATED="1575219354624" ID="ID_1863458674" MODIFIED="1575219365787" TEXT="oder alternativ via direkt-Zugriff auf den Canvas">
+<node CREATED="1575219523764" ID="ID_1012093929" MODIFIED="1575219544539" TEXT="das w&#xe4;re eine (indirekt) zirkul&#xe4;re Beziehung zwischen Implementierungs-Enit&#xe4;ten"/>
+<node CREATED="1575219832435" ID="ID_1357635182" MODIFIED="1575219937587" TEXT="die aber effektiv (noch) nicht realisiert wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      will sagen: es gibt keinen Zugriff, der vom Canvas ausgeht, durch die TrackBodies durchsteigt, und dann indirekt in den Cavas zur&#252;ck greift. Denn -- zumindest im Moment -- handelt es sich um zwei klar geschiedene Belange: einmal das Rendern der Track-Struktur, und andererseits das platzieren von Clips auf dem Canvas
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1575219941761" ID="ID_1070253348" MODIFIED="1575220419798" TEXT="das einzige Verbindungsglied ist die startLine_">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn diese wird von der Auswertung der Track-Struktur (vor dem Zeichnen) etabliert, und andererseits beim Platzieren eines Clip genutzt.
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#439be7" DESTINATION="ID_1070253348" ENDARROW="Default" ENDINCLINATION="-100;6;" ID="Arrow_ID_406976845" SOURCE="ID_378686648" STARTARROW="None" STARTINCLINATION="235;7;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node CREATED="1575220057456" ID="ID_1106262862" MODIFIED="1575220073987" TEXT="die leidige Konsequenz...">
+<node CREATED="1575220074975" ID="ID_29395675" MODIFIED="1575220102936" TEXT="jeder TrackBody hat einen (R&#xfc;ck)Zeiger auf den Canvas oder DisplayManager"/>
+<node CREATED="1575220114002" ID="ID_840603253" MODIFIED="1575220144732">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und diese Info ist komplett <b>redundant</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575220123929" ID="ID_830381506" MODIFIED="1575220138837">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alle anderen Daten in TrackBody sind <b>nicht redundant</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1575220252783" ID="ID_972301426" MODIFIED="1575223142078" TEXT="Belange auseinandernehmen?">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1575220262166" ID="ID_378686648" MODIFIED="1575220419798" TEXT="kann man diese (anscheinend) nahezu vollst&#xe4;ndig geschiedenen Belange nicht auftrennen?">
+<arrowlink COLOR="#439be7" DESTINATION="ID_1070253348" ENDARROW="Default" ENDINCLINATION="-100;6;" ID="Arrow_ID_406976845" STARTARROW="None" STARTINCLINATION="235;7;"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1575220439150" ID="ID_1245542782" MODIFIED="1575220514498" TEXT="warum mu&#xdf; der TrackBody das ViewHookable&lt;Clip&gt; sein?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1575220534273" ID="ID_1963867099" MODIFIED="1575220684466" TEXT="der TrackPresenter selber h&#xe4;lt ebenfalls diese redundante Info">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1575220686308" ID="ID_1816173955" MODIFIED="1575220767695" TEXT="nein, tut er nicht">
+<arrowlink COLOR="#688bdc" DESTINATION="ID_1278909200" ENDARROW="Default" ENDINCLINATION="604;42;" ID="Arrow_ID_268017738" STARTARROW="None" STARTINCLINATION="182;25;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1575221690053" ID="ID_391530319" MODIFIED="1575221756022" TEXT="genau diese Info aber brauche ich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn der Display/Manager bzw Canvas ist zwar &quot;quasi global&quot;, aber eben nicht wirklich, denn er ist f&#252;r eine Timeline zust&#228;ndig. Also genau die Art Relation, f&#252;r die man typischerweise DI macht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1575220914655" ID="ID_646969276" MODIFIED="1575220994424" TEXT="nur TrackPresenter oder DisplayFrame k&#xe4;men in Frage">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil nach hier etablierter Policy diesen erlaubt w&#228;re, &quot;von oben&quot; in den trackPresenter.displayFrame.trackBody reinzugreifen f&#252;r die startLine_
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575222540955" ID="ID_1068095065" MODIFIED="1575222555271" TEXT="in den sauren Apfel bei&#xdf;en?">
+<icon BUILTIN="help"/>
+<node CREATED="1575222560056" ID="ID_1526676047" MODIFIED="1575222576688" TEXT="DisplayFrame h&#xe4;lt eine Referenz auf ViewHookable&lt;Widget&gt;"/>
+<node CREATED="1575222583789" ID="ID_1835575914" MODIFIED="1575222601128" TEXT="und implementiert selber ViewHookable&lt;Clip&gt; und ViewHookable&lt;Marker&gt;"/>
+<node CREATED="1575222608314" ID="ID_1403410704" MODIFIED="1575222624827" TEXT="und zieht zur Dekoration die trackBody.startLine_ heran"/>
+</node>
+</node>
+</node>
+<node CREATED="1575223154399" ID="ID_1681994818" MODIFIED="1575223169210" TEXT="also wird der DisplayFrame ausgebaut">
+<node CREATED="1575223172838" ID="ID_1606686104" MODIFIED="1575223181392" TEXT="zum gro&#xdf;en ViewHook">
+<node CREATED="1575223418428" ID="ID_463428688" MODIFIED="1575223429207" TEXT="h&#xe4;lt einen ViewHook&lt;TrackBody&gt;"/>
+<node CREATED="1575223430819" ID="ID_1357751249" MODIFIED="1575223441611" TEXT="h&#xe4;lt einen ViewHook&lt;TrackHeaderWidget&gt;"/>
+<node CREATED="1575223465392" ID="ID_260241369" MODIFIED="1575223488960" TEXT="h&#xe4;lt eine Referenz auf ViewHookable&lt;Widget&gt;"/>
+<node CREATED="1575223491827" ID="ID_130394978" MODIFIED="1575223504573" TEXT="implementiert selber ViewHookable&lt;Clip&gt;"/>
+<node CREATED="1575223505705" ID="ID_405837155" MODIFIED="1575223520899" TEXT="implementiert selber ViewHookable&lt;Marker&gt;"/>
+</node>
+<node CREATED="1575223585142" ID="ID_436178463" MODIFIED="1575223590265" TEXT="so einige Redundanzen">
+<node CREATED="1575223603060" ID="ID_1419915992" MODIFIED="1575223619285" TEXT="Referenz auf ViewHookable&lt;Widget&gt; ist unvermeidbar">
+<node CREATED="1575223624281" ID="ID_1458214193" MODIFIED="1575223647750" TEXT="weil die dahinter stehende Impl (der Canvas) nicht global ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sondern zur Timeline geh&#246;rt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575223656716" ID="ID_1189941110" MODIFIED="1575223672718" TEXT="weil sonst keine der angeschlossenen Strukturen einen aufw&#xe4;rts-Link hat"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -18756,8 +19057,8 @@
 <linktarget COLOR="#4f94d2" DESTINATION="ID_1208770677" ENDARROW="Default" ENDINCLINATION="207;339;" ID="Arrow_ID_1505912691" SOURCE="ID_802422598" STARTARROW="None" STARTINCLINATION="-349;-21;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1575057198430" ID="ID_1171619130" MODIFIED="1575057213917" TEXT="neuer ViewHook relativ zu einem Bezugs-ViewHook">
-<node CREATED="1575057268873" ID="ID_827160586" MODIFIED="1575059474003" TEXT="das k&#xf6;nnte Quer-Beweglichkeit zwischen Typen implizieren">
-<arrowlink COLOR="#146b9a" DESTINATION="ID_1565606328" ENDARROW="Default" ENDINCLINATION="-105;-7;" ID="Arrow_ID_1877360800" STARTARROW="None" STARTINCLINATION="-62;-17;"/>
+<node CREATED="1575057268873" ID="ID_827160586" MODIFIED="1575218072363" TEXT="das k&#xf6;nnte Quer-Beweglichkeit zwischen Typen implizieren">
+<arrowlink COLOR="#146b9a" DESTINATION="ID_1565606328" ENDARROW="Default" ENDINCLINATION="-183;22;" ID="Arrow_ID_1877360800" STARTARROW="None" STARTINCLINATION="-42;-98;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
