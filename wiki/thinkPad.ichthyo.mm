@@ -6247,8 +6247,8 @@
 <node CREATED="1563022011347" ID="ID_1677449627" MODIFIED="1563022020514" TEXT="nur beim ersten Mal">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#338800" CREATED="1563022850037" ID="ID_1908316447" MODIFIED="1563028947984" TEXT="kann das Advice-System das?">
-<arrowlink COLOR="#1dba57" DESTINATION="ID_1996378025" ENDARROW="Default" ENDINCLINATION="3933;-460;" ID="Arrow_ID_1546347584" STARTARROW="None" STARTINCLINATION="2657;0;"/>
+<node COLOR="#338800" CREATED="1563022850037" ID="ID_1908316447" MODIFIED="1575240116524" TEXT="kann das Advice-System das?">
+<arrowlink COLOR="#1dba57" DESTINATION="ID_1996378025" ENDARROW="Default" ENDINCLINATION="3933;-460;" ID="Arrow_ID_1546347584" STARTARROW="None" STARTINCLINATION="2685;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -18603,7 +18603,8 @@
 <node CREATED="1573941015368" ID="ID_1975430834" MODIFIED="1573941024610" TEXT="die &#xbb;move&#xab;-Operation">
 <node CREATED="1573941030461" ID="ID_1374594092" MODIFIED="1573941049700" TEXT="sie macht nur Sinn f&#xfc;r Widget-an-Canvas"/>
 </node>
-<node CREATED="1573941080479" ID="ID_311245443" MODIFIED="1573941090601" TEXT="generell die Proxy-Rolle von ViewHook">
+<node CREATED="1573941080479" ID="ID_311245443" MODIFIED="1575240030260" TEXT="generell die Proxy-Rolle von ViewHook">
+<linktarget COLOR="#3f8a72" DESTINATION="ID_311245443" ENDARROW="Default" ENDINCLINATION="693;198;" ID="Arrow_ID_1560507426" SOURCE="ID_1632364154" STARTARROW="None" STARTINCLINATION="647;33;"/>
 <node CREATED="1573941092749" ID="ID_1895119352" MODIFIED="1575055282173" TEXT="auch sie ist notwendig f&#xfc;r Widget-an-Canvas"/>
 <node CREATED="1573941102985" ID="ID_463060333" MODIFIED="1573941123933" TEXT="und &#xfc;berfl&#xfc;ssig f&#xfc;r TrackBody und TrackHeadWidget"/>
 </node>
@@ -19047,6 +19048,86 @@
 </richcontent>
 </node>
 <node CREATED="1575223656716" ID="ID_1189941110" MODIFIED="1575223672718" TEXT="weil sonst keine der angeschlossenen Strukturen einen aufw&#xe4;rts-Link hat"/>
+</node>
+<node CREATED="1575223786739" ID="ID_926999216" MODIFIED="1575223802333" TEXT="aber ViewHook&lt;TrackBody&gt; hat einen TrackBody*"/>
+<node CREATED="1575223803377" ID="ID_1526084839" MODIFIED="1575223813779" TEXT="auf das direkt daneben stehende TrackBody-Objekt"/>
+</node>
+<node CREATED="1575239328453" ID="ID_1096729219" MODIFIED="1575239453843" TEXT="Idee: ViewHooked&lt;Widget&gt;">
+<icon BUILTIN="idea"/>
+<node CREATED="1575239353279" ID="ID_1137161464" MODIFIED="1575239358488" TEXT="statt ViewHook"/>
+<node CREATED="1575239360140" ID="ID_1769045218" MODIFIED="1575239745292" TEXT="also direkt an die Lebensdauer des Widget gekoppelt"/>
+<node CREATED="1575239401247" ID="ID_1821251711" MODIFIED="1575239410178" TEXT="dann geht der hook()-Vorkang anders herum"/>
+<node CREATED="1575239411717" ID="ID_1412083065" MODIFIED="1575239472817" TEXT="ViewHooked braucht als ctor-Parameter ein ViewHookable&amp;"/>
+<node CREATED="1575239483404" ID="ID_397271082" MODIFIED="1575239488770" TEXT="und wird noncopyable">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#435e98" CREATED="1575239505442" ID="ID_907757822" MODIFIED="1575240706224" TEXT="lassen sich damit alle Operationen durchf&#xfc;hren?">
+<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1575239796865" ID="ID_1427807363" MODIFIED="1575240713921" TEXT="move... warum nicht?">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1575239815831" ID="ID_129305740" MODIFIED="1575240715198" TEXT="destroy: geht v&#xf6;llig analog">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1575239830833" ID="ID_475200834" MODIFIED="1575240716553" TEXT="Lebenszyklus">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1575239835573" ID="ID_1985812443" MODIFIED="1575239849286" TEXT="das Widget mu&#xdf; vor dem ViewHooked existieren"/>
+<node CREATED="1575239850434" ID="ID_28316843" MODIFIED="1575239862705" TEXT="das ist realisierbar...">
+<node CREATED="1575239863536" ID="ID_1456405590" MODIFIED="1575239869276" TEXT="indem man von dem Widget erbt">
+<node CREATED="1575239905163" ID="ID_1933259507" MODIFIED="1575239950041" TEXT="h&#xe4;tte den Charme, da&#xdf; das smart-ptr/prox-Verhalten sich er&#xfc;brigt"/>
+<node CREATED="1575239958334" ID="ID_1632364154" MODIFIED="1575240030260" TEXT="...welches mir ohnehin nicht so besonders gut gefallen hat">
+<arrowlink COLOR="#3f8a72" DESTINATION="ID_311245443" ENDARROW="Default" ENDINCLINATION="693;198;" ID="Arrow_ID_1560507426" STARTARROW="None" STARTINCLINATION="647;33;"/>
+</node>
+</node>
+<node CREATED="1575239889645" ID="ID_1523224980" MODIFIED="1575239896424" TEXT="indem man das Widget als Member hat"/>
+</node>
+<node CREATED="1575240151529" ID="ID_75365412" MODIFIED="1575240172988" TEXT="Umordnen">
+<node CREATED="1575240174231" ID="ID_109571586" MODIFIED="1575240188790" TEXT="Referenz bleibt Referenz"/>
+<node CREATED="1575240189724" ID="ID_1392238474" MODIFIED="1575240203713" TEXT="und ein dekorierender Iterator ist davon auch nicht betroffen"/>
+<node CREATED="1575240210241" ID="ID_213831335" MODIFIED="1575240228387" TEXT="es wird damit sogar viel sch&#xf6;ner...."/>
+<node CREATED="1575240229191" ID="ID_1613381810" MODIFIED="1575240275180" TEXT="weil ja nun eigentlich &quot;die Widgets&quot; per generischem Handle geliefert werden"/>
+<node CREATED="1575240261155" ID="ID_767586605" MODIFIED="1575240266665" TEXT="in neuer Reihenfolge ">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1575240305717" ID="ID_1992149674" MODIFIED="1575240717518" TEXT="relatives Verankern">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1575240328218" ID="ID_154585759" MODIFIED="1575240345695">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ViewHooked wird nun zum <b>eigentlichen Front-End</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575240582411" ID="ID_333144229" MODIFIED="1575240611444" TEXT="das ViewHookable mu&#xdf; weiterhin die double-dispatch-Funktion (generisch) implementieren"/>
+<node CREATED="1575240613131" ID="ID_1177550523" MODIFIED="1575240641147" TEXT="und es bleibt das gleiche Zugriffs-Problem bestehen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d8ce8e" COLOR="#435e98" CREATED="1575240647678" ID="ID_356124839" MODIFIED="1575240690707" TEXT="also das ist jetz mal ein Design, das mir richtig gut gef&#xe4;llt">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575240723741" HGAP="-92" ID="ID_1311566312" MODIFIED="1575240747571" TEXT="damit bleibt (wieder nur) das Zugriffs-Problem" VSHIFT="73">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1575240751305" ID="ID_1522311652" MODIFIED="1575240770023" TEXT="ich habe also jetzt ViewHookable&lt;Clip&gt; eine Ebene hochgeschoben"/>
+<node CREATED="1575240786532" ID="ID_1787997117" MODIFIED="1575240818729" TEXT="demnach m&#xfc;&#xdf;te nun der TrackBody an seinen Parent (=DisplayFrame rankommen)">
+<icon BUILTIN="closed"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1575240824295" ID="ID_895299596" MODIFIED="1575240844874" TEXT="AUA">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1575243069122" ID="ID_1544444255" MODIFIED="1575243101578" TEXT="mu&#xdf; ich jetzt auch das ViewHookable&lt;TrackBody&gt; in den DisplayFrame hochschieben??">
+<icon BUILTIN="help"/>
 </node>
 </node>
 </node>
@@ -46476,8 +46557,8 @@
 <node COLOR="#338800" CREATED="1563022576324" ID="ID_756916431" MODIFIED="1563022581713" TEXT="Advice zur&#xfc;ckziehen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1563022612700" FOLDED="true" ID="ID_1996378025" MODIFIED="1563028914778" TEXT="Vorliegen von Advice feststellen">
-<linktarget COLOR="#1dba57" DESTINATION="ID_1996378025" ENDARROW="Default" ENDINCLINATION="3933;-460;" ID="Arrow_ID_1546347584" SOURCE="ID_1908316447" STARTARROW="None" STARTINCLINATION="2657;0;"/>
+<node COLOR="#338800" CREATED="1563022612700" FOLDED="true" ID="ID_1996378025" MODIFIED="1575240116524" TEXT="Vorliegen von Advice feststellen">
+<linktarget COLOR="#1dba57" DESTINATION="ID_1996378025" ENDARROW="Default" ENDINCLINATION="3933;-460;" ID="Arrow_ID_1546347584" SOURCE="ID_1908316447" STARTARROW="None" STARTINCLINATION="2685;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1563023237085" ID="ID_1601131217" MODIFIED="1563023251307" TEXT="genauer: ein dediziertes Binding"/>
 <node CREATED="1563023252134" ID="ID_1294314783" MODIFIED="1563023257630" TEXT="nicht die default-L&#xf6;sung"/>
