@@ -66,6 +66,9 @@ namespace model {
       virtual ViewHook<ELM> hook (ELM& elm, int xPos, int yPos)  =0;
       virtual void move (ELM& elm, int xPos, int yPos)           =0;
       virtual void remove (ELM& elm)   noexcept                  =0;
+      
+      template<class IT>
+      void reOrder (IT newOrder);
     };
   
   
@@ -93,25 +96,25 @@ namespace model {
       using View = ViewHookable<ELM>;
       
       ELM* widget_;
-      View& view_;
+      View* view_;
       
     public:
       ViewHook (ELM& elm, View& view)
         : widget_{&elm}
-        , view_{view}
+        , view_{&view}
         { }
       
-      ViewHook (ViewHook&& existing)
+      ViewHook (ViewHook&& existing)  noexcept
         : widget_{nullptr}
-        , view_{existing.view_}
+        , view_{nullptr}
         {
-          std::swap (widget_, existing.widget_);
+          swap (*this, existing);
         }
       
      ~ViewHook()  noexcept
         {
-          if (widget_)
-            view_.remove (*widget_);
+          if (widget_ and view_)
+            view_->remove (*widget_);
         }
       
       ELM&
@@ -123,9 +126,27 @@ namespace model {
       void
       moveTo (int xPos, int yPos)
         {
-          view_.move (*widget_, xPos,yPos);
+          view_->move (*widget_, xPos,yPos);
         }
+      
+      
+      friend void
+      swap (ViewHook& a, ViewHook& b)  noexcept
+      {
+        std::swap (a.widget_, b.widget_);
+        std::swap (a.view_, b.view_);
+      }
     };
+  
+  
+  
+  template<class ELM>
+  template<class IT>
+  void
+  ViewHookable<ELM>::reOrder (IT newOrder)
+  {
+    UNIMPLEMENTED ("generic mechanism for re-attachment in given order");
+  }
   
   
   

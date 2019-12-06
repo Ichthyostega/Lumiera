@@ -19332,7 +19332,7 @@
 </node>
 </node>
 <node CREATED="1575063138735" ID="ID_1205459588" MODIFIED="1575063142611" TEXT="Auspr&#xe4;gung &#x3b2;">
-<node CREATED="1575063213437" ID="ID_45088920" MODIFIED="1575063230879" TEXT="ViewHook bietet eine rehook()-Operation an"/>
+<node CREATED="1575063213437" ID="ID_45088920" MODIFIED="1575653931186" TEXT="ViewHook bietet eine rehook()-Operation an"/>
 <node CREATED="1575063249066" ID="ID_1247469918" MODIFIED="1575063284828" TEXT="das l&#xf6;st das Problem des atomaren Umh&#xe4;ngens">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -19360,7 +19360,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1575063493532" ID="ID_1153540378" MODIFIED="1575063501539" TEXT="neige der Iterator-Variante zu"/>
-<node CREATED="1575063552664" ID="ID_485217910" MODIFIED="1575063567290" TEXT="mit einer reHook()-Operation auf dem ViewHookable"/>
+<node CREATED="1575063552664" ID="ID_485217910" MODIFIED="1575653993146" TEXT="mit PULL durch das ViewHookable"/>
 </node>
 </node>
 <node CREATED="1575062533708" ID="ID_246125405" MODIFIED="1575062538774" TEXT="Effekt am Ende">
@@ -19393,8 +19393,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063747039" ID="ID_46486640" MODIFIED="1575063906798" TEXT="versuchsweise (im Test) zu implementieren">
-<arrowlink COLOR="#4983c7" DESTINATION="ID_1374959238" ENDARROW="Default" ENDINCLINATION="-33;-5;" ID="Arrow_ID_463400867" STARTARROW="None" STARTINCLINATION="-260;-10;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063747039" ID="ID_46486640" MODIFIED="1575660470554" TEXT="versuchsweise (im Test) zu implementieren">
+<arrowlink COLOR="#4983c7" DESTINATION="ID_1374959238" ENDARROW="Default" ENDINCLINATION="-123;-10;" ID="Arrow_ID_463400867" STARTARROW="None" STARTINCLINATION="-428;25;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063819852" ID="ID_1018000905" MODIFIED="1575132493276" TEXT="versuchsweise f&#xfc;r Track-Head und Track-Body zu konkretisieren">
@@ -19426,7 +19426,7 @@
 </html></richcontent>
 </node>
 <node CREATED="1575132576721" ID="ID_386992526" MODIFIED="1575132611477" TEXT="der Canvas-Fall ist n&#xe4;mlich ehr die Ausnahme: hier brauche ich nur den Zugang"/>
-<node CREATED="1575132621739" ID="ID_1654720759" MODIFIED="1575132628265" TEXT="ViewHook mu&#xdf; anh&#xe4;ngen k&#xf6;nnen">
+<node CREATED="1575132621739" ID="ID_1654720759" MODIFIED="1575654907535" TEXT="ViewHookable mu&#xdf; anh&#xe4;ngen k&#xf6;nnen">
 <node CREATED="1575132630180" ID="ID_1788883872" MODIFIED="1575132645504" TEXT="daher mu&#xdf; es auf der jeweilgen Vater-Ebene liegen"/>
 <node CREATED="1575132646516" ID="ID_252396856" MODIFIED="1575132656503" TEXT="und damit das Korrelat der Kinder als Collection halten"/>
 </node>
@@ -19486,11 +19486,31 @@
 <node COLOR="#338800" CREATED="1573242048514" ID="ID_1803806630" MODIFIED="1573242060330" TEXT="automatische Deregistrierung">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575580315474" ID="ID_543063249" MODIFIED="1575580354406" TEXT="Neuordnung Namen und Interfaces (nach Analyse)">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575580315474" ID="ID_543063249" MODIFIED="1575660707464" TEXT="Neuordnung Namen und Interfaces (nach Analyse)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...hab mich davon &#252;berzeugt, da&#223; die Namen <i>anders herum </i>verwendet werden sollten.
+    </p>
+    <p>
+      Das h&#228;ngt auch damit zusammen, da&#223; in der Praxsis die ursp&#252;nglich konzipierte &#187;Beziehungs-Entit&#228;t&#171; niemals eigens und eigenst&#228;ndig auftretend wird; vielmehr bekommen wir es mit einem speziellen Dekorator zu tun. Und dieser wird besser <b>ViewHooked</b>&lt;X&gt; hei&#223;en. Damit ist das bisher schon verwirrend benannte &quot;ViewHookable&quot; komplett daneben, und es erscheint viel sinnvoller, diesem den titelgebenenden Namen <b>ViewHook</b>&#160; zu zuzuordnen
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575580366411" ID="ID_1747264667" MODIFIED="1575580428083" TEXT="API f&#xfc;r Umordnen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575580366411" ID="ID_1747264667" MODIFIED="1575660718766" TEXT="API f&#xfc;r Umordnen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1575660738481" ID="ID_316759979" MODIFIED="1575660770786" TEXT="einfachst m&#xf6;gliche Iterator-L&#xf6;sung">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575660751327" ID="ID_1263771356" MODIFIED="1575660762658" TEXT="generische Standard-Implementierung mit entwerfen">
 <icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242259267" ID="ID_1903570032" MODIFIED="1573242269170" TEXT="Test">
 <icon BUILTIN="pencil"/>
@@ -19503,8 +19523,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242357830" ID="ID_1431447719" MODIFIED="1573242368189" TEXT="relatives Kind-Hook">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063870245" ID="ID_1374959238" MODIFIED="1575063906798" TEXT="Umordnen">
-<linktarget COLOR="#4983c7" DESTINATION="ID_1374959238" ENDARROW="Default" ENDINCLINATION="-33;-5;" ID="Arrow_ID_463400867" SOURCE="ID_46486640" STARTARROW="None" STARTINCLINATION="-260;-10;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575063870245" ID="ID_1374959238" MODIFIED="1575660470554" TEXT="Umordnen">
+<linktarget COLOR="#4983c7" DESTINATION="ID_1374959238" ENDARROW="Default" ENDINCLINATION="-123;-10;" ID="Arrow_ID_463400867" SOURCE="ID_46486640" STARTARROW="None" STARTINCLINATION="-428;25;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -21283,12 +21303,40 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_465735263" STARTARROW="None" STARTINCLINATION="-717;0;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573315138011" ID="ID_1957325688" MODIFIED="1573315247762" TEXT="brauche hier spezielle Erweiterung...">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573315138011" ID="ID_1957325688" MODIFIED="1575652920080" TEXT="brauchen wir hier eine Erweiterung auf mehrere Typen...?">
 <arrowlink COLOR="#684be4" DESTINATION="ID_1458279581" ENDARROW="Default" ENDINCLINATION="-1681;0;" ID="Arrow_ID_1672277618" STARTARROW="None" STARTINCLINATION="788;-76;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="help"/>
+<node CREATED="1575652924086" ID="ID_996829512" MODIFIED="1575653116780" TEXT="Antwort: im Prinzip ja">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1575652931295" ID="ID_1649360599" MODIFIED="1575653108558" TEXT="aber ein voller double-dispatch-Mechanismus ist nicht durchf&#xfc;hrbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn er erzwingt entweder....
+    </p>
+    <ul>
+      <li>
+        die relevante Implementierung in einm einzigen Objekt zu konzentrieren -- was dann den double-dispatch &#252;berfl&#252;ssig macht, denn dann kann man direkt die bekannte andere Methode aufrufen
+      </li>
+      <li>
+        oder, wenn man die verschiedenen Belange auf getrennte Objekte verteilt, m&#252;ssen sich diese gegenseitig erreichen k&#246;nnen, und die hierf&#252;r notwendigen R&#252;ckreferenzen untergraben die Trennung
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1575653121588" ID="ID_46973905" MODIFIED="1575653151603" TEXT="also bleibt nur, die Typisierung in den Funktions-Signaturen explizit auszudr&#xfc;cken"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575065263201" ID="ID_1640997956" MODIFIED="1575065274457" TEXT="zu kl&#xe4;ren: Zugang zu diesem ViewHook">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1575653188938" ID="ID_619809248" MODIFIED="1575653206332" TEXT="es l&#xe4;uft darauf hinaus, den Zugang in den DisplayFrames zusammenzufassen"/>
+<node CREATED="1575653207328" ID="ID_1942901156" MODIFIED="1575653233600" TEXT="diese m&#xfc;ssen daher eine Referenz auf einen &quot;irgendwo vorhandenen&quot; Timeline-ViewHool haben"/>
 </node>
 </node>
 <node CREATED="1563467398036" ID="ID_828698459" MODIFIED="1563467403607" TEXT="Implementierung">
@@ -21345,7 +21393,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1563467848565" ID="ID_1150018491" MODIFIED="1575579973990" TEXT="re-Konstruieren m&#xfc;ssen die TrackPresenter machen">
+<node CREATED="1563467848565" ID="ID_1150018491" MODIFIED="1575652853580" TEXT="re-Konstruieren m&#xfc;ssen letztlich die TrackPresenter machen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21357,7 +21405,7 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467916708" ID="ID_568904515" MODIFIED="1575133305254" TEXT="kl&#xe4;ren: Kind-Widget managen/entfernen">
 <richcontent TYPE="NOTE"><html>
   <head>

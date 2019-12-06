@@ -29,21 +29,26 @@
 #include "lib/test/test-helper.hpp"
 #include "stage/model/view-hook.hpp"
 #include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
 //#include <memory>
-#include <forward_list>
 #include <vector>
+#include <forward_list>
+#include <algorithm>
+#include <random>
 
 
-using util::isSameObject;
 using util::contains;
+using util::isSameObject;
+using lib::iter_stl::eachElm;
 //using util::isnil;
 //using std::make_unique;
 //using std::move;
 using std::vector;
 using std::forward_list;
+using std::shuffle;
 
 
 namespace stage{
@@ -105,7 +110,7 @@ namespace test {
           }
         
       public:
-        
+        /* === diagnostic functions for the test === */
         bool
         empty()  const
           {
@@ -126,6 +131,13 @@ namespace test {
             return pos != end
                and pos->posX == x_expected
                and pos->posY == y_expected;
+          }
+        
+        template<class CON>
+        bool
+        testContainsSequence (CON const& refSeq)
+          {
+            UNIMPLEMENTED("compare our internal sequence with the given one");
           }
         
         
@@ -176,6 +188,7 @@ namespace test {
         {
           verify_standardUsage();
           relocateWidget();
+          reOrderHooked();
         }
       
       
@@ -221,6 +234,33 @@ namespace test {
           CHECK (canvas.testVerifyPos (w1, w1.x,w1.y));
           CHECK (canvas.testVerifyPos (w3, w3.x,w3.y));
           CHECK (not canvas.testContains (w2));
+        }
+      
+      
+      /** @test a mechanism to re-attach elements in changed order.
+       */
+      void
+      reOrderHooked()
+        {
+          using WidgetVec = vector<DummyWidget>;
+          using HookVec = vector<WidgetViewHook>;
+          
+          // create 20 (random) widgets and hook them onto the canvas
+          WidgetVec widgets{20};
+          FakeCanvas canvas;
+          HookVec hooks;
+          for (auto& w : widgets)
+            hooks.emplace_back (canvas.hook (w, w.x,w.y));
+          
+          CHECK (canvas.testContainsSequence (hooks));
+          
+          // now lets assume the relevant order of the widgets has been altered
+          shuffle (hooks.begin(),hooks.end(), std::random_device());
+          CHECK (not canvas.testContainsSequence (hooks));
+          
+          // so we need to re-construct the canvas attachments in the new order
+          canvas.reOrder (eachElm (hooks));
+          CHECK (canvas.testContainsSequence (hooks));
         }
       
       
