@@ -32,8 +32,6 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
-//#include <memory>
 #include <vector>
 #include <forward_list>
 #include <algorithm>
@@ -43,9 +41,6 @@
 using util::contains;
 using util::isSameObject;
 using lib::iter_stl::eachElm;
-//using util::isnil;
-//using std::make_unique;
-//using std::move;
 using std::vector;
 using std::forward_list;
 using std::shuffle;
@@ -98,7 +93,7 @@ namespace test {
                        .transform([](Attachment const& entry)
                                     {
                                       return entry.widget;
-                                    }); 
+                                    });
           }
         
         auto
@@ -133,11 +128,21 @@ namespace test {
                and pos->posY == y_expected;
           }
         
+        /** verify our internal sequence matches the given one */
         template<class CON>
         bool
         testContainsSequence (CON const& refSeq)
           {
-            UNIMPLEMENTED("compare our internal sequence with the given one");
+            // NOTE the implementation twist of using a std::forward_list,
+            //      which causes reversed order of our internal elements
+            auto iRef = refSeq.crbegin();
+            auto eRef = refSeq.crend();
+            auto iInt = widgets_.cbegin();
+            auto eInt = widgets_.cend();
+            for ( ; iRef != eRef and iInt != eInt; ++iRef, ++iInt)
+              if (not (iInt->widget == **iRef)) return false;
+            return iRef == eRef
+               and iInt == eInt;
           }
         
         
@@ -167,6 +172,17 @@ namespace test {
           {
             widgets_.remove_if ([&](Attachment const& a) { return a.widget == elm; });
           }
+        
+        
+        void
+        rehook (WidgetViewHook& existingHook)  noexcept override
+          {
+            auto pos = findEntry (*existingHook);
+            REQUIRE (pos != widgets_.end(), "the given iterator must yield previously hooked-up elements");
+            Attachment existing{*pos};
+            this->remove (existing.widget);
+            this->addDummy(existing.widget, existing.posX,existing.posY);
+          }
       };
   }
   
@@ -175,9 +191,13 @@ namespace test {
   
   /*************************************************************************************//**
    * @test verify the mechanism to attach widgets to a canvas, while keeping the
-   *       canvas widget itself opaque.
-   *       - bla
-   *       - blubb
+   *       canvas implementation itself opaque.
+   *       - manage the attachment and detach automatically
+   *       - ability to adjust the location parameter of an existing attachment
+   *       - ability to re-attach existing attachments in a new sequence order
+   * @remark this test focuses on the concepts and the API, and thus uses a
+   *         dummy implementation of the "Canvas", which just registers a
+   *         list of widgets with a dedicated "position" for each.
    * @see view-hook.hpp
    */
   class ViewHook_test : public Test

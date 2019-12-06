@@ -57,6 +57,17 @@ namespace model {
   template<class ELM>
   class ViewHook;
   
+  
+  /**
+   * Interface to represent _"some presentation layout entity",_
+   * with the ability to _attach_ widgets managed elsewhere, to
+   * relocate those widgets to another position, and to re-establish
+   * a different sequence of the widgets (whatever this means).
+   * @remark some typical examples for the kind of facility modelled here:
+   *         - a _canvas widget,_ (e.g. `Gtk::Layout`), allowing to attach
+   *           child widgets at specific positions, together with custom drawing.
+   *         - a tree or grid control, allowing to populate some lines a given widget.
+   */
   template<class ELM>
   class ViewHookable
     {
@@ -66,6 +77,7 @@ namespace model {
       virtual ViewHook<ELM> hook (ELM& elm, int xPos, int yPos)  =0;
       virtual void move (ELM& elm, int xPos, int yPos)           =0;
       virtual void remove (ELM& elm)   noexcept                  =0;
+      virtual void rehook (ViewHook<ELM>& hook)  noexcept        =0;
       
       template<class IT>
       void reOrder (IT newOrder);
@@ -140,12 +152,26 @@ namespace model {
   
   
   
+  /**
+   * re-attach elements in a given, new order.
+   * @param newOrder a Lumiera Forward Iterator to yield a reference to
+   *        all attached elements, and in the new order to be established.
+   * @remark this operation becomes relevant, when "attaching an element" also
+   *        constitutes some kind of arrangement in the visual presentation, like
+   *        e.g. a stacking order, or by populating some table cells in sequence.
+   *        The expected semantics is for this operation to detach each given element,
+   *        and then immediately re-attach it _at the "beginning"_ (whatever this means).
+   *        The element as such, and all associated presentation entities are not destroyed,
+   *        but continue to exist with the same identity (and possibly all signal wirings).
+   *        Just they now appear as if attached with the new ordering.
+   */
   template<class ELM>
   template<class IT>
   void
   ViewHookable<ELM>::reOrder (IT newOrder)
   {
-    UNIMPLEMENTED ("generic mechanism for re-attachment in given order");
+    for (ViewHook<ELM>& existingHook : newOrder)
+      this->rehook (existingHook);
   }
   
   
