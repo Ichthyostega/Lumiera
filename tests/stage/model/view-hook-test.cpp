@@ -55,8 +55,6 @@ namespace test {
     
     struct DummyWidget
       {
-        int x = rand() % 100;
-        int y = rand() % 100;
         int i = rand(); // "identity"
         
         friend bool
@@ -66,7 +64,7 @@ namespace test {
         }
       };
     
-    using WidgetViewHook = ViewHook<DummyWidget>;
+    using HookedWidget = ViewHook<DummyWidget>;
     
     
     
@@ -87,12 +85,12 @@ namespace test {
           }
         
         auto
-        allWidgets()  const
+        allWidgetIDs()  const
           {
             return lib::treeExplore(widgets_)
                        .transform([](Attachment const& entry)
                                     {
-                                      return entry.widget;
+                                      return entry.widget.i;
                                     });
           }
         
@@ -113,9 +111,9 @@ namespace test {
           }
         
         bool
-        testContains (DummyWidget const& someWidget)
+        testContains (int someWidgetID)
           {
-            return util::linearSearch (allWidgets(), someWidget);
+            return util::linearSearch (allWidgetIDs(), someWidgetID);
           }
         
         bool
@@ -148,11 +146,11 @@ namespace test {
         
         /* === Interface ViewHookable === */
         
-        WidgetViewHook
+        HookedWidget
         hook (DummyWidget& elm, int xPos, int yPos)  override
           {
             addDummy(elm, xPos,yPos);
-            return WidgetViewHook{elm, *this};
+            return HookedWidget{elm, *this};
           }
         
         void
@@ -175,7 +173,7 @@ namespace test {
         
         
         void
-        rehook (WidgetViewHook& existingHook)  noexcept override
+        rehook (HookedWidget& existingHook)  noexcept override
           {
             auto pos = findEntry (*existingHook);
             REQUIRE (pos != widgets_.end(), "the given iterator must yield previously hooked-up elements");
@@ -207,6 +205,7 @@ namespace test {
       run (Arg)
         {
           verify_standardUsage();
+          verify_multiplicity();
           relocateWidget();
           reOrderHooked();
         }
@@ -218,42 +217,80 @@ namespace test {
       verify_standardUsage()
         {
           FakeCanvas canvas;
-          DummyWidget widget;
+          CHECK (canvas.empty());
           {
-            WidgetViewHook hook = canvas.hook (widget, widget.x, widget.y);
-            CHECK (isSameObject (*hook, widget));
-            CHECK (canvas.testContains (widget));
+            HookedWidget widget{canvas};
+            CHECK (canvas.testContains (widget.i));
             CHECK (not canvas.empty());
           }// hook goes out of scope...
-          CHECK (not canvas.testContains (widget));
           CHECK (canvas.empty());
         }
       
       
-      /** @test relocate a widget on the canvas through the ViewHook handle
+      /** @test each hooking has a distinct identity and is managed on its own.
+       */
+      void
+      verify_multiplicity()
+        {
+          FakeCanvas canvas;
+          CHECK (canvas.empty());
+          
+          HookedWidget widget{canvas};
+          CHECK (canvas.testContains (widget.i));
+          CHECK (not canvas.empty());
+          
+          int someID;
+          {
+            HookedWidget otherWidget{canvas};
+            someID = otherWidget.i;
+            CHECK (canvas.testContains (someID));
+            CHECK (canvas.testContains (widget.i));
+          }// hook goes out of scope...
+          CHECK (not canvas.testContains (someID));
+          CHECK (canvas.testContains (widget.i));
+          CHECK (not canvas.empty());
+          
+          DummyWidget cloneWidget{std::move (widget)};
+          CHECK (not canvas.testContains (cloneWidget.i));
+          CHECK (canvas.empty());
+        }
+      
+      
+      /** @test hook a widget at a specific position and then later
+       *   relocate it on the canvas through the ViewHookable front-end.
        */
       void
       relocateWidget()
         {
+          int x1 = rand() % 100;
+          int y1 = rand() % 100;
+          int x2 = rand() % 100;
+          int y2 = rand() % 100;
+          int x3 = rand() % 100;
+          int y3 = rand() % 100;
+          
           FakeCanvas canvas;
-          DummyWidget w1, w2, w3;
-          WidgetViewHook h1 = canvas.hook (w1, w1.x,w1.y);
-          WidgetViewHook h3 = canvas.hook (w3, w3.x,w3.y);
+          HookedWidget w1{canvas.hookedAt(x1,y1)};
+          HookedWidget w3{canvas.hookedAt(x3,y3)};
+          
+          int id2;
           {
-            WidgetViewHook h2 = canvas.hook (w2, w2.x,w2.y);
-            CHECK (canvas.testVerifyPos (w2, w2.x,w2.y));
+            HookedWidget w2{canvas.hookedAt(x2,y2)};
+            id2 = w2.i;
+            CHECK (canvas.testContains (id2));
+            CHECK (canvas.testVerifyPos (w2, x2,y2));
             
-            int newX = ++w2.x;
-            int newY = --w2.y;
-            h2.moveTo (newX,newY);
+            int newX = ++x2;
+            int newY = --y2;
+            w2.moveTo (newX,newY);
             
             CHECK (canvas.testVerifyPos (w2, newX,newY));
-            CHECK (canvas.testVerifyPos (w1, w1.x,w1.y));
-            CHECK (canvas.testVerifyPos (w3, w3.x,w3.y));
+            CHECK (canvas.testVerifyPos (w1, x1,y1));
+            CHECK (canvas.testVerifyPos (w3, x3,y3));
           }
-          CHECK (canvas.testVerifyPos (w1, w1.x,w1.y));
-          CHECK (canvas.testVerifyPos (w3, w3.x,w3.y));
-          CHECK (not canvas.testContains (w2));
+          CHECK (not canvas.testContains (id2));
+          CHECK (canvas.testVerifyPos (w1, x1,y1));
+          CHECK (canvas.testVerifyPos (w3, x3,y3));
         }
       
       
@@ -262,29 +299,24 @@ namespace test {
       void
       reOrderHooked()
         {
-          using WidgetVec = vector<DummyWidget>;
-          using HookVec = vector<WidgetViewHook>;
+          using WidgetVec = vector<HookedWidget>;
           
           // create 20 (random) widgets and hook them onto the canvas
-          WidgetVec widgets{20};
+          WidgetVec widgets;
           FakeCanvas canvas;
-          HookVec hooks;
-          for (auto& w : widgets)
-            hooks.emplace_back (canvas.hook (w, w.x,w.y));
+          for (uint i=0; i<10; ++i)
+            widgets.emplace_back (canvas);
           
-          CHECK (canvas.testContainsSequence (hooks));
+          CHECK (canvas.testContainsSequence (widgets));
           
           // now lets assume the relevant order of the widgets has been altered
-          shuffle (hooks.begin(),hooks.end(), std::random_device());
-          CHECK (not canvas.testContainsSequence (hooks));
+          shuffle (widgets.begin(),widgets.end(), std::random_device());
+          CHECK (not canvas.testContainsSequence (widgets));
           
           // so we need to re-construct the canvas attachments in the new order
-          canvas.reOrder (eachElm (hooks));
-          CHECK (canvas.testContainsSequence (hooks));
+          canvas.reOrder (eachElm (widgets));
+          CHECK (canvas.testContainsSequence (widgets));
         }
-      
-      
-      /** @test  */
     };
   
   

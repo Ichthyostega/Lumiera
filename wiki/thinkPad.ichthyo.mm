@@ -19507,9 +19507,9 @@
 </richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575667886287" ID="ID_1416159951" MODIFIED="1575667946076" TEXT="Umbau auf ein ViewHooked&lt;W&gt;">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575667886287" ID="ID_1416159951" MODIFIED="1575835656408" TEXT="Umbau auf ein ViewHooked&lt;W&gt;">
 <arrowlink COLOR="#e79332" DESTINATION="ID_1096729219" ENDARROW="Default" ENDINCLINATION="-1237;46;" ID="Arrow_ID_1348207622" STARTARROW="None" STARTINCLINATION="2421;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1575239353279" HGAP="53" ID="ID_777015627" MODIFIED="1575668026370" TEXT="statt frei stehendem ViewHook" VSHIFT="32">
 <icon BUILTIN="info"/>
 <node CREATED="1575239360140" ID="ID_1324997848" MODIFIED="1575239745292" TEXT="also direkt an die Lebensdauer des Widget gekoppelt"/>
@@ -19517,6 +19517,35 @@
 <node CREATED="1575239411717" ID="ID_1117119564" MODIFIED="1575239472817" TEXT="ViewHooked braucht als ctor-Parameter ein ViewHookable&amp;">
 <node CREATED="1575667806989" ID="ID_553544414" MODIFIED="1575667821044" TEXT="ViewHookable::hook() wird eine void-Operation"/>
 <node CREATED="1575667821800" ID="ID_394226309" MODIFIED="1575667833698" TEXT="aber der ctor garantiert (RAII) da&#xdf; sie aufgerufen wurde"/>
+</node>
+</node>
+<node CREATED="1575833524632" HGAP="120" ID="ID_231779182" MODIFIED="1575833541157" TEXT="Problem ctor" VSHIFT="1">
+<node CREATED="1575833555676" ID="ID_737726791" MODIFIED="1575833614784" TEXT="keine zwingende Verkn&#xfc;pfung mehr m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil nun ViewHooked schon als ctor-Parameter einen ViewHook bekommen mu&#223;...
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1575833618837" ID="ID_887542907" MODIFIED="1575833631133" TEXT="ist aber auch nicht schlecht"/>
+<node CREATED="1575833632321" ID="ID_1044442678" MODIFIED="1575833656034" TEXT="denn andererseits ist ja jetzt ein Ctor-Parameter (ViewHook) Pflicht"/>
+</node>
+<node CREATED="1575833658571" ID="ID_655849348" MODIFIED="1575833684255" TEXT="Organisieren der zus&#xe4;tzlichen ctor-Parameter">
+<node CREATED="1575833685238" ID="ID_82723715" MODIFIED="1575833692549" TEXT="das Widget kann beliebige Parameter haben"/>
+<node CREATED="1575833693396" ID="ID_277553736" MODIFIED="1575833711002" TEXT="(optional) kann der Hook sofort mit Koordinaten gemacht werden"/>
+<node CREATED="1575833718110" ID="ID_1601089341" MODIFIED="1575833729995" TEXT="das wird eine problematische Signatur...">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1575833751257" ID="ID_1701112838" MODIFIED="1575833756633" TEXT="L&#xf6;sung">
+<icon BUILTIN="idea"/>
+<node CREATED="1575833758080" ID="ID_1219297677" MODIFIED="1575833762271" TEXT="zwei overloads"/>
+<node CREATED="1575833763086" ID="ID_1612844126" MODIFIED="1575833769762" TEXT="mit einem Parameter-Objekt"/>
+</node>
 </node>
 </node>
 </node>
@@ -19536,6 +19565,9 @@
 </node>
 <node COLOR="#338800" CREATED="1573242278975" ID="ID_1541691410" MODIFIED="1573245310701" TEXT="Verschieben">
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575835636260" ID="ID_586282311" MODIFIED="1575835646635" TEXT="umgebautes API">
+<icon BUILTIN="pencil"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242357830" ID="ID_1431447719" MODIFIED="1573242368189" TEXT="relatives Kind-Hook">
 <icon BUILTIN="flag-yellow"/>
