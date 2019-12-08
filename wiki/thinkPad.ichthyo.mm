@@ -19507,9 +19507,9 @@
 </richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575667886287" ID="ID_1416159951" MODIFIED="1575835656408" TEXT="Umbau auf ein ViewHooked&lt;W&gt;">
+<node COLOR="#338800" CREATED="1575667886287" ID="ID_1416159951" MODIFIED="1575845508415" TEXT="Umbau auf ein ViewHooked&lt;W&gt;">
 <arrowlink COLOR="#e79332" DESTINATION="ID_1096729219" ENDARROW="Default" ENDINCLINATION="-1237;46;" ID="Arrow_ID_1348207622" STARTARROW="None" STARTINCLINATION="2421;0;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1575239353279" HGAP="53" ID="ID_777015627" MODIFIED="1575668026370" TEXT="statt frei stehendem ViewHook" VSHIFT="32">
 <icon BUILTIN="info"/>
 <node CREATED="1575239360140" ID="ID_1324997848" MODIFIED="1575239745292" TEXT="also direkt an die Lebensdauer des Widget gekoppelt"/>
@@ -19519,7 +19519,8 @@
 <node CREATED="1575667821800" ID="ID_394226309" MODIFIED="1575667833698" TEXT="aber der ctor garantiert (RAII) da&#xdf; sie aufgerufen wurde"/>
 </node>
 </node>
-<node CREATED="1575833524632" HGAP="120" ID="ID_231779182" MODIFIED="1575833541157" TEXT="Problem ctor" VSHIFT="1">
+<node COLOR="#338800" CREATED="1575833524632" HGAP="120" ID="ID_231779182" MODIFIED="1575835599586" TEXT="Problem ctor" VSHIFT="1">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1575833555676" ID="ID_737726791" MODIFIED="1575833614784" TEXT="keine zwingende Verkn&#xfc;pfung mehr m&#xf6;glich">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -19548,6 +19549,47 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1575845525564" HGAP="47" ID="ID_960595364" MODIFIED="1575845553029" VSHIFT="2">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entscheidung: <b>NonCopoyable</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1575845555959" ID="ID_525736994" MODIFIED="1575845568687" TEXT="auch wenn manches dadurch etwas m&#xfc;hsam wird">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1575845569870" ID="ID_1676564226" MODIFIED="1575845646540" TEXT="es kann niemals in Ordnung sein, wenn ein ViewHooked-Widget irgendwohin verschoben wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn vern&#252;nftigerweise mu&#223; man davon ausgehen, da&#223; der Canvas (oder wo auch immer das element platziert wird) sich einen Pointer speichert, und diesen sp&#228;ter auch aktiv verwenden wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1575845652221" ID="ID_421248587" MODIFIED="1575845662717" TEXT="Probleme mit dem Diff?">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#338800" CREATED="1575845663683" ID="ID_1462842573" MODIFIED="1575845666297" TEXT="Nein">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1575845667928" ID="ID_1075657908" MODIFIED="1575845691162" TEXT="genau deshalb verwenden wir vector&lt;unique_ptr&lt;XYZ&gt;&gt;">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1575580366411" ID="ID_1747264667" MODIFIED="1575670501324" TEXT="API f&#xfc;r Umordnen">
 <icon BUILTIN="button_ok"/>
@@ -19568,6 +19610,26 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575835636260" ID="ID_586282311" MODIFIED="1575835646635" TEXT="umgebautes API">
 <icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1575845706047" ID="ID_648457397" MODIFIED="1575845715823" TEXT="Bugs im Test">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575845717980" ID="ID_1253092913" MODIFIED="1575845810414" TEXT="Move-Construction does not detach automatically">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575845743838" ID="ID_1827383151" MODIFIED="1575845811598" TEXT="testContainsSequence()-predicate does not work properly in the initial base check">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...meaning the predicate itself must be broken
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573242357830" ID="ID_1431447719" MODIFIED="1573242368189" TEXT="relatives Kind-Hook">
 <icon BUILTIN="flag-yellow"/>

@@ -94,9 +94,7 @@ namespace lib {
       typedef typename RemovePtr<pointer>::Type value_type;
       typedef value_type&                       reference;
       
-      // for use with STL algorithms
-      typedef void difference_type;
-      typedef std::forward_iterator_tag iterator_category;
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (PtrDerefIter);
       
       
       // the purpose of the following typedefs is to ease building a correct "const iterator"
@@ -116,7 +114,11 @@ namespace lib {
        */
       explicit
       PtrDerefIter (IT srcIter)
-        : i_(srcIter)
+        : i_{srcIter}
+        { }
+      
+      PtrDerefIter()
+        : i_{}
         { }
       
       
@@ -223,6 +225,14 @@ namespace lib {
   bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return not (il == ir); }
   
   
+  /// Convenience shortcut to dereference pointers yielded from the wrapped iterator
+  template<class IT>
+  auto
+  ptrDeref (IT iter)
+  {
+    return PtrDerefIter<IT>{iter};
+  }
+  
   
   
   
@@ -258,6 +268,8 @@ namespace lib {
       typedef typename IT::pointer const* pointer;
       typedef typename IT::pointer const& reference;
       typedef typename IT::pointer const  value_type;
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (AddressExposingIter);
       
       
       /** AddressExposingIter is always created 

@@ -49,13 +49,15 @@
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
+#include <utility>
+
 
 namespace stage  {
 namespace model {
   
   
-  template<class ELM>
-  class ViewHook;
+  template<class WID>
+  class ViewHooked;
   
   
   /**
@@ -68,86 +70,91 @@ namespace model {
    *           child widgets at specific positions, together with custom drawing.
    *         - a tree or grid control, allowing to populate some lines a given widget.
    */
-  template<class ELM>
+  template<class WID>
   class ViewHookable
     {
     public:
       virtual ~ViewHookable() { }    ///< this is an interface
       
-      virtual ViewHook<ELM> hook (ELM& elm, int xPos, int yPos)  =0;
-      virtual void move (ELM& elm, int xPos, int yPos)           =0;
-      virtual void remove (ELM& elm)   noexcept                  =0;
-      virtual void rehook (ViewHook<ELM>& hook)  noexcept        =0;
+      virtual void hook (WID& widget, int xPos=0, int yPos=0)  =0;
+      virtual void move (WID& widget, int xPos, int yPos)      =0;
+      virtual void remove (WID& widget)              noexcept  =0;
+      virtual void rehook (ViewHooked<WID>& widget)  noexcept  =0;
       
       template<class IT>
       void reOrder (IT newOrder);
+      
+      struct Pos
+        {
+          ViewHookable& view;
+          int x,y;
+        };
+      
+      Pos
+      hookedAt (int x, int y)
+        {
+          return Pos{*this, x,y};
+        }
     };
   
   
   
   /**
-   * Abstracted attachment onto a display canvas or similar central presentation context.
-   * A `ViewHook` represents the connection of a Widget into the presentation facility, like
-   * e.g. placing the widget onto a _canvas_ (`Gtk::Layout`). This way, the widget may control
-   * details of its placements, while remaining agnostic regarding the implementation details
-   * of the presentation context.
+   * A widget attached onto a display canvas or similar central presentation context.
+   * This decorator for one inherits from the widget to be attached, i.e. the widget itself
+   * is embedded; moreover, the attachment is immediately performed at construction time and
+   * managed automatically thereafter. When the `ViewHooked` element goes out of scope, it is
+   * automatically detached from presentation. With the help of ViewHooked, a widget (or similar
+   * entity) may control some aspects of its presentation placement, typically the coordinates
+   * on some kind of _canvas_ (-> `Gtk::Layout`), while remaining agnostic regarding the
+   * implementation details of the canvas and its placement thereon.
    * 
-   * The prominent example for using a `ViewHook` is the stage::timeline::DisplayFrame maintained
+   * The prominent example of a `ViewHooked` element is the stage::timeline::DisplayFrame, maintained
    * by the TrackPresenter within the timeline UI. This connection entity allows to place ClipWidget
    * elements into the appropriate display region for this track, without exposing the actual
    * stage::timeline::BodyCanvasWidget to each and every Clip or Label widget.
    * 
+   * @tparam WID type of the embedded widget, which is to be hooked-up into the view/canvas.
    * @remark since ViewHook represents one distinct attachment to some view or canvas,
    *         is has a clear-cut identity and thus may be moved, but not copied.
    * @todo WIP-WIP as of 11/2019
    */
-  template<class ELM>
-  class ViewHook
-    : util::MoveOnly
+  template<class WID>
+  class ViewHooked
+    : public WID
+    , util::NonCopyable
     {
-      using View = ViewHookable<ELM>;
+      using View = ViewHookable<WID>;
       
-      ELM* widget_;
       View* view_;
       
     public:
-      ViewHook (ELM& elm, View& view)
-        : widget_{&elm}
+      template<typename...ARGS>
+      ViewHooked (View& view, ARGS&& ...args)
+        : WID{std::forward<ARGS>(args)...}
         , view_{&view}
-        { }
-      
-      ViewHook (ViewHook&& existing)  noexcept
-        : widget_{nullptr}
-        , view_{nullptr}
-        {
-          swap (*this, existing);
+        { 
+          view_->hook (*this);
+        }
+      template<typename...ARGS>
+      ViewHooked (typename View::Pos viewPos, ARGS&& ...args)
+        : WID{std::forward<ARGS>(args)...}
+        , view_{&viewPos.view}
+        { 
+          view_->hook (*this, viewPos.x, viewPos.y);
         }
       
-     ~ViewHook()  noexcept
+     ~ViewHooked()  noexcept
         {
-          if (widget_ and view_)
-            view_->remove (*widget_);
-        }
-      
-      ELM&
-      operator* ()  const
-        {
-          return *widget_;
+          if (view_)
+            view_->remove (*this);
         }
       
       void
       moveTo (int xPos, int yPos)
         {
-          view_->move (*widget_, xPos,yPos);
+          view_->move (*this, xPos,yPos);
         }
-      
-      
-      friend void
-      swap (ViewHook& a, ViewHook& b)  noexcept
-      {
-        std::swap (a.widget_, b.widget_);
-        std::swap (a.view_, b.view_);
-      }
     };
   
   
@@ -165,12 +172,12 @@ namespace model {
    *        but continue to exist with the same identity (and possibly all signal wirings).
    *        Just they now appear as if attached with the new ordering.
    */
-  template<class ELM>
+  template<class WID>
   template<class IT>
   void
-  ViewHookable<ELM>::reOrder (IT newOrder)
+  ViewHookable<WID>::reOrder (IT newOrder)
   {
-    for (ViewHook<ELM>& existingHook : newOrder)
+    for (ViewHooked<WID>& existingHook : newOrder)
       this->rehook (existingHook);
   }
   

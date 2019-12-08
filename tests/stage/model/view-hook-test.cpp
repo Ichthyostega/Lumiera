@@ -28,6 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "stage/model/view-hook.hpp"
+#include "lib/scoped-collection.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util.hpp"
@@ -38,6 +39,7 @@
 #include <random>
 
 
+using util::isnil;
 using util::contains;
 using util::isSameObject;
 using lib::iter_stl::eachElm;
@@ -64,7 +66,7 @@ namespace test {
         }
       };
     
-    using HookedWidget = ViewHook<DummyWidget>;
+    using HookedWidget = ViewHooked<DummyWidget>;
     
     
     
@@ -77,12 +79,7 @@ namespace test {
             int posX, posY;
           };
         forward_list<Attachment> widgets_;
-        
-        void
-        addDummy(DummyWidget& widget, int x, int y)
-          {
-            widgets_.push_front (Attachment{widget, x,y});
-          }
+
         
         auto
         allWidgetIDs()  const
@@ -127,30 +124,27 @@ namespace test {
           }
         
         /** verify our internal sequence matches the given one */
-        template<class CON>
+        template<class IT>
         bool
-        testContainsSequence (CON const& refSeq)
+        testContainsSequence (IT refSeq)
           {
             // NOTE the implementation twist of using a std::forward_list,
             //      which causes reversed order of our internal elements
-            auto iRef = refSeq.crbegin();
-            auto eRef = refSeq.crend();
             auto iInt = widgets_.cbegin();
             auto eInt = widgets_.cend();
-            for ( ; iRef != eRef and iInt != eInt; ++iRef, ++iInt)
-              if (not (iInt->widget == **iRef)) return false;
-            return iRef == eRef
+            for (DummyWidget& widget : refSeq)
+              if (iInt==eInt or (widget.i != iInt->widget.i)) return false;
+            return isnil(refSeq)
                and iInt == eInt;
           }
         
         
         /* === Interface ViewHookable === */
         
-        HookedWidget
+        void
         hook (DummyWidget& elm, int xPos, int yPos)  override
           {
-            addDummy(elm, xPos,yPos);
-            return HookedWidget{elm, *this};
+            widgets_.push_front (Attachment{elm, xPos,yPos});
           }
         
         void
@@ -175,11 +169,11 @@ namespace test {
         void
         rehook (HookedWidget& existingHook)  noexcept override
           {
-            auto pos = findEntry (*existingHook);
+            auto pos = findEntry (existingHook);
             REQUIRE (pos != widgets_.end(), "the given iterator must yield previously hooked-up elements");
             Attachment existing{*pos};
             this->remove (existing.widget);
-            this->addDummy(existing.widget, existing.posX,existing.posY);
+            this->hook (existing.widget, existing.posX,existing.posY);
           }
       };
   }
@@ -295,27 +289,41 @@ namespace test {
       
       
       /** @test a mechanism to re-attach elements in changed order.
+       * @remarks this test looks somewhat convoluted, because `ViewHooked<W>` is defined
+       *          to be non-copyable (for good reason, since we can assume that the canvas
+       *          somehow maintains a pointer to each widget added, so we can not allow the
+       *          attached widgets to move in memory). However, in practice the "order sequence"
+       *          is typically defined as a delegating iterator over some sequence of model elements,
+       *          which themselves are managed as a STL container of `std::unique_ptr`; thus it is
+       *          very much possible to alter the sequence of the model elements, without actually
+       *          touching the memory location of the slave widgets used for presentation.
        */
       void
       reOrderHooked()
         {
-          using WidgetVec = vector<HookedWidget>;
+          using Widgets = lib::ScopedCollection<HookedWidget>;
+          using OrderIdx  = vector<HookedWidget*>;
           
           // create 20 (random) widgets and hook them onto the canvas
-          WidgetVec widgets;
+          Widgets widgets{20};
+          OrderIdx orderIdx;
           FakeCanvas canvas;
-          for (uint i=0; i<10; ++i)
-            widgets.emplace_back (canvas);
+          for (uint i=0; i<20; ++i)
+            orderIdx.push_back (& widgets.emplace<HookedWidget>(canvas));
           
-          CHECK (canvas.testContainsSequence (widgets));
+          // helper: use the orderIdx to generate sequence of widget refs (not pointers)
+          auto orderSequence = [&] { return lib::ptrDeref(eachElm(orderIdx)); };
+          
+          CHECK (canvas.testContainsSequence (eachElm(widgets)));
+          CHECK (canvas.testContainsSequence (orderSequence()));
           
           // now lets assume the relevant order of the widgets has been altered
-          shuffle (widgets.begin(),widgets.end(), std::random_device());
-          CHECK (not canvas.testContainsSequence (widgets));
+          shuffle (orderIdx.begin(),orderIdx.end(), std::random_device());
+          CHECK (not canvas.testContainsSequence (orderSequence()));
           
           // so we need to re-construct the canvas attachments in the new order
-          canvas.reOrder (eachElm (widgets));
-          CHECK (canvas.testContainsSequence (widgets));
+          canvas.reOrder (eachElm(widgets));
+          CHECK (canvas.testContainsSequence (orderSequence()));
         }
     };
   
