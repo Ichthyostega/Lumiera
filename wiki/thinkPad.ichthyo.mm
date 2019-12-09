@@ -19608,26 +19608,30 @@
 <node COLOR="#338800" CREATED="1573242278975" ID="ID_1541691410" MODIFIED="1573245310701" TEXT="Verschieben">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575835636260" ID="ID_586282311" MODIFIED="1575835646635" TEXT="umgebautes API">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1575845706047" ID="ID_648457397" MODIFIED="1575845715823" TEXT="Bugs im Test">
+<node COLOR="#338800" CREATED="1575835636260" ID="ID_586282311" MODIFIED="1575850911796" TEXT="umgebautes API">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1575845706047" ID="ID_648457397" MODIFIED="1575850810943" TEXT="Bugs im Test">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575845717980" ID="ID_1253092913" MODIFIED="1575845810414" TEXT="Move-Construction does not detach automatically">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1575845717980" ID="ID_1253092913" MODIFIED="1575850755101" TEXT="Move-Construction does not detach automatically">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1575850756523" ID="ID_1734105343" MODIFIED="1575850759529" TEXT="well...."/>
+<node CREATED="1575850759950" ID="ID_355300034" MODIFIED="1575850769568" TEXT="it can not possibly be expected to do so">
+<icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575845743838" ID="ID_1827383151" MODIFIED="1575845811598" TEXT="testContainsSequence()-predicate does not work properly in the initial base check">
+</node>
+<node COLOR="#338800" CREATED="1575845743838" ID="ID_1827383151" MODIFIED="1575850908391" TEXT="testContainsSequence()-predicate does not work properly in the initial base check">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      ...meaning the predicate itself must be broken
+      again the problem with the reversed order due to forward_list
     </p>
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

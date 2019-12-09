@@ -31,11 +31,22 @@
  ** access to those shared central structures, especially if they need to "draw themselves".
  ** A widget must be able to attach itself to a presentation canvas, and it must be able
  ** to control its position thereon. As usual, we solve this problem by abstracting away
- ** the actual implementation of the central facility. So widgets get a stage::timeline::ViewHook
- ** as access point, which also manages the _lifecycle of this attachment:_ whenever the
- ** `ViewHook` is destroyed, the attachment is automatically untied and the widget
- ** is deregistered from the central canvas. Widgets thus may want to store the
- ** `ViewHook` as member.
+ ** the actual implementation of the central facility. The attachment of a widget is thus
+ ** modelled by a smart-handle stage::timeline::ViewHooked, which -- on destruction --
+ ** automatically detaches the widget from the presentation.
+ ** 
+ ** As it turns out in practice, such a "hooked" widget will never exist apart from its
+ ** attachment. Consequently, we locate the widget within the smart-handle itself, thus
+ ** tightly linking together the lifecycle of the widget and the presentation attachment.
+ ** However, this combined memory layout has some consequences:
+ ** - the combined ViewHooked<W> must be non-copyable, since it can be expected
+ **   for the canvas to store some pointer to the attached widget.
+ ** - moreover, the canvas/presentation need to be available and activated when
+ **   constructing the widget(s) due to the interwoven lifecycle.
+ ** - and, most notably, the presentation/canvas (the ViewHook) must be arranged to
+ **   outlive the attached widgets, since they call back on destruction.
+ ** In the typical usage situation these points can be ensured naturally by housing
+ ** the widgets in some detail data structure owned by the top level presentation frame.
  ** 
  ** @see ViewHook_test
  ** @todo WIP-WIP-WIP as of 9/2019
@@ -69,6 +80,7 @@ namespace model {
    *         - a _canvas widget,_ (e.g. `Gtk::Layout`), allowing to attach
    *           child widgets at specific positions, together with custom drawing.
    *         - a tree or grid control, allowing to populate some lines a given widget.
+   * @warning please ensure the ViewHookable outlives any attached ViewHooked.
    */
   template<class WID>
   class ViewHookable
@@ -78,7 +90,7 @@ namespace model {
       
       virtual void hook (WID& widget, int xPos=0, int yPos=0)  =0;
       virtual void move (WID& widget, int xPos, int yPos)      =0;
-      virtual void remove (WID& widget)              noexcept  =0;
+      virtual void remove (WID& widget)                        =0;
       virtual void rehook (ViewHooked<WID>& widget)  noexcept  =0;
       
       template<class IT>
@@ -117,6 +129,10 @@ namespace model {
    * @tparam WID type of the embedded widget, which is to be hooked-up into the view/canvas.
    * @remark since ViewHook represents one distinct attachment to some view or canvas,
    *         is has a clear-cut identity and thus may be moved, but not copied.
+   * @warning since ViewHooked entities call back into the ViewHookable on destruction,
+   *         the latter still needs to be alive at that point. Which basically means
+   *         you must ensure the ViewHooked "Widgets" are destroyed prior to the "Canvas".
+   * 
    * @todo WIP-WIP as of 11/2019
    */
   template<class WID>
@@ -146,8 +162,11 @@ namespace model {
       
      ~ViewHooked()  noexcept
         {
-          if (view_)
-            view_->remove (*this);
+          try {
+              if (view_)
+                view_->remove (*this);
+            }
+          ERROR_LOG_AND_IGNORE (progress, "Detaching of ViewHooked widgets from the presentation")
         }
       
       void

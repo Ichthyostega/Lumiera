@@ -130,12 +130,13 @@ namespace test {
           {
             // NOTE the implementation twist of using a std::forward_list,
             //      which causes reversed order of our internal elements
-            auto iInt = widgets_.cbegin();
-            auto eInt = widgets_.cend();
-            for (DummyWidget& widget : refSeq)
-              if (iInt==eInt or (widget.i != iInt->widget.i)) return false;
+            lib::IterStack<int> ids;
+            for (auto& entry : widgets_)
+              ids.push (entry.widget.i);
+            for ( ; refSeq and ids; ++refSeq, ++ids)
+              if (refSeq->i != *ids) break;
             return isnil(refSeq)
-               and iInt == eInt;
+               and isnil(ids);
           }
         
         
@@ -160,7 +161,7 @@ namespace test {
           }
         
         void
-        remove (DummyWidget& elm)  noexcept override
+        remove (DummyWidget& elm)  override
           {
             widgets_.remove_if ([&](Attachment const& a) { return a.widget == elm; });
           }
@@ -243,10 +244,6 @@ namespace test {
           CHECK (not canvas.testContains (someID));
           CHECK (canvas.testContains (widget.i));
           CHECK (not canvas.empty());
-          
-          DummyWidget cloneWidget{std::move (widget)};
-          CHECK (not canvas.testContains (cloneWidget.i));
-          CHECK (canvas.empty());
         }
       
       
@@ -304,10 +301,11 @@ namespace test {
           using Widgets = lib::ScopedCollection<HookedWidget>;
           using OrderIdx  = vector<HookedWidget*>;
           
+          FakeCanvas canvas; // WARNING: Canvas must outlive the widgets!
+          
           // create 20 (random) widgets and hook them onto the canvas
           Widgets widgets{20};
           OrderIdx orderIdx;
-          FakeCanvas canvas;
           for (uint i=0; i<20; ++i)
             orderIdx.push_back (& widgets.emplace<HookedWidget>(canvas));
           
@@ -322,7 +320,7 @@ namespace test {
           CHECK (not canvas.testContainsSequence (orderSequence()));
           
           // so we need to re-construct the canvas attachments in the new order
-          canvas.reOrder (eachElm(widgets));
+          canvas.reOrder (orderSequence());
           CHECK (canvas.testContainsSequence (orderSequence()));
         }
     };
