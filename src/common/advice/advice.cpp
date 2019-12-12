@@ -131,12 +131,12 @@ namespace advice {
         AdviceSystem()
           : index_()
           {
-            INFO (library, "Initialising Advice Index tables.");
+            TRACE (library, "Initialising Advice Index tables.");
           }
         
        ~AdviceSystem()
           {
-            INFO (library, "Shutting down Advice system.");
+            TRACE (library, "Shutting down Advice system.");
           }
         
         
