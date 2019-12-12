@@ -124,7 +124,7 @@
  ** @see DiffTreeApplication_test
  ** @see DiffComplexApplication_test
  ** @see DiffListApplication_test
- ** @see GenNodeBasic_test
+ ** @see GenNode_test
  ** @see tree-diff.hpp
  ** 
  */

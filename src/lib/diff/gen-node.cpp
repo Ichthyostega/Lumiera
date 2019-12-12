@@ -36,7 +36,7 @@
  ** cases actually of interest. All other cases invoke the default handling, which
  ** returns \c false.
  ** 
- ** @see gen-node-basic-test.cpp
+ ** @see gen-node-test.cpp
  ** 
  */
 

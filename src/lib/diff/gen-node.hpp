@@ -92,7 +92,7 @@
  ** To begin with, for the task of diff detection and application, it is sufficient
  ** to get the children as traversable collection and to offer a depth-first expansion.
  ** 
- ** @see GenNodeBasic_test
+ ** @see GenNode_test
  ** @see diff-list-generation-test.cpp
  ** @see DiffDetector
  ** 

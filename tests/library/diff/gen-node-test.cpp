@@ -1,5 +1,5 @@
 /*
-  GenNodeBasic(Test)  -  fundamental properties of a generic tree node element
+  GenNode(Test)  -  fundamental properties of a generic tree node element
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file gen-node-basic-test.cpp
- ** unit test \ref GenNodeBasic_test
+/** @file gen-node-test.cpp
+ ** unit test \ref GenNode_test
  */
 
 
@@ -88,7 +88,7 @@ namespace test{
    * @see IndexTable
    * @see DiffListApplication_test
    */
-  class GenNodeBasic_test : public Test
+  class GenNode_test : public Test
     {
       
       virtual void
@@ -951,7 +951,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (GenNodeBasic_test, "unit common");
+  LAUNCHER (GenNode_test, "unit common");
   
   
   

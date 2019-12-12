@@ -29,7 +29,7 @@
  ** In a nutshell, if some private data structure wants to receive
  ** mutation diff messages...
  ** - it must either implement the interface DiffMutable
- ** - or provide the function point `void buildMutator(TreeMutator::Handle)`
+ ** - or provide the extension point `void buildMutator(TreeMutator::Handle)`
  ** Additionally, when the size of the custom TreeMutator object exceeds some
  ** hard wired limit (200 bytes), then the target type also needs to define
  ** the extension point `size_t treeMutatorSize(TargetType)`
@@ -41,7 +41,7 @@
  ** @see DiffComplexApplication_test
  ** @see DiffTreeApplication_test
  ** @see DiffListApplication_test
- ** @see GenNodeBasic_test
+ ** @see GenNode_test
  ** @see tree-diff.hpp
  ** 
  */

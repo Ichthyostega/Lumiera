@@ -82,7 +82,7 @@
  **    of Record entities as tree nodes within a GenNode monad, such a
  **    more elaborate approach was deemed unnecessary for the time being.
  ** 
- ** @see GenericRecordRepresentation_test
+ ** @see GenericRecord_test
  ** 
  */
 

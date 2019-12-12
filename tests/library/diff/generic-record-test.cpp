@@ -1,5 +1,5 @@
 /*
-  GenericRecordRepresentation(Test)  -  introspective representation of object-like data
+  GenericRecord(Test)  -  introspective representation of object-like data
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file generic-record-representation-test.cpp
- ** unit test \ref GenericRecordRepresentation_test
+/** @file generic-record-test.cpp
+ ** unit test \ref GenericRecord_test
  */
 
 
@@ -121,10 +121,10 @@ namespace test{
    *       do not normalise the content in any way; content is meant to reflect
    *       other data structures, which are normalised and maintained by their owner. 
    *       
-   * @see GenNodeBasic_test
+   * @see GenNode_test
    * @see tree-diff.cpp
    */
-  class GenericRecordRepresentation_test : public Test
+  class GenericRecord_test : public Test
     {
       
       virtual void
@@ -375,7 +375,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (GenericRecordRepresentation_test, "unit common");
+  LAUNCHER (GenericRecord_test, "unit common");
   
   
   

@@ -23,9 +23,10 @@
 /** @file diff-complex-application-test.cpp
  ** unit test \ref DiffComplexApplication_test.
  ** Demonstrates the concept of tree mutation by diff messages.
- ** This is an elaborate demonstration setup to highlight some
- ** of the more intricate, the flexibility and support for
- ** and complex opaque implementation variations.
+ ** This is an elaborate demonstration setup to show how a binding
+ ** is setup in practice and to highlight some of the more intricate
+ ** implementation corner cases, allowing for much flexibility when
+ ** binding to otherwise opaque target data structures.
  */
 
 

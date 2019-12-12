@@ -62,8 +62,8 @@ namespace test{
    *       
    * @see TreeMutator
    * @see DiffComplexApplication_test a way more complex usage scenario
-   * @see GenNodeBasic_test
-   * @see GenericRecordRepresentation_test
+   * @see GenNode_test
+   * @see GenericRecord_test
    */
   class TreeMutator_test : public Test
     {

@@ -31,9 +31,9 @@
  ** Each concrete TreeMutator instance will be configured differently, and this
  ** adaptation is done by implementing binding templates, in the way of building
  ** blocks, attached and customised through lambdas. It is possible to layer
- ** several bindings on top of a single TreeMutator -- and this header defines
- ** a building block for one such layer, especially for binding to a representation
- ** of "child objects" managed within a typical STL container.
+ ** several bindings on top of a single TreeMutator -- and especially this header
+ ** defines a building block for one such layer, especially for binding to a
+ ** representation of "child objects" managed within a typical STL container.
  ** 
  ** As a _special case_, binding to a STL map is supported, while this usage is rather
  ** discouraged, since it contradicts the diff semantics due to intrinsic ordering.
@@ -398,7 +398,7 @@ namespace diff{
                       binding_.inject (move(*pos_));
                       ++pos_;
                     }
-                  if (binding_.matches (spec, *pos_))
+                  if (pos_ and binding_.matches (spec, *pos_))
                     {
                       binding_.inject (move(*pos_));
                       ++pos_;
@@ -681,7 +681,7 @@ namespace diff{
      * This function shall be used right within Builder::attach()
      * and wrap a language reference to the concrete collection
      * implementing the "object children". The result is a default configured
-     * binding, which should be further adapted with the builder functions,
+     * binding, which could be further adapted with the builder functions,
      * using lambdas as callback into the otherwise opaque implementation code.
      */
     template<class COLL>

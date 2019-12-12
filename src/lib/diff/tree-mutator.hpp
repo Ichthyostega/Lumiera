@@ -400,8 +400,8 @@ namespace diff{
          *     allows to limit applicability of this whole binding (layer) to only some
          *     diff specs. E.g., we may set up a binding for elements with value semantics
          *     and another binding layer on top to deal with object like children (sub scopes).
-         *     Please note that this selector also gets to judge the Ref::ATTRIBS spec, which
-         *     means this layer's contents can be considered "attributes".
+         *     Please note that this selector also gets to judge upon the Ref::ATTRIBS spec,
+         *     which indicates if this layer's contents can be considered "attributes".
          *   - the optional _setter closure_ (CollectionBindingBuilder::assignElement) accepts
          *     a diff spec (GenNode) and should assign an equivalent value to the internal
          *     data representation of the corresponding element (typically by constructing

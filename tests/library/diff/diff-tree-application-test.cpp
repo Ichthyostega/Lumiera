@@ -1,5 +1,5 @@
 /*
-  DiffTreeApplication(Test)  -  demonstrate the basics of tree diff representation
+  DiffTreeApplication(Test)  -  demonstrate the main features of tree diff representation
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,8 +22,11 @@
 
 /** @file diff-tree-application-test.cpp
  ** unit test \ref DiffTreeApplication_test.
- ** Demonstrates the basic concept of reshaping structured data
- ** through a tree-diff sequence.
+ ** Demonstrates the most relevant operations for reshaping structured data
+ ** through a tree-diff sequence. Here, we use a lib::diff:Record<GenNode>
+ ** as target data, and the test focuses on demonstrating the possible operations.
+ ** @see [Introductory demonstration](\ref diff-tree-application-simple-test.cpp)
+ ** @see [More complex setup with opaque data](\ref diff-complex-application-test.cpp)
  */
 
 
@@ -89,19 +92,20 @@ namespace test{
    *         and a nested child-Record.
    *       - the second step demonstrates various diff language constructs
    *         to alter, reshape and mutate this data structure
-   *       After applying those two diff sequences, we verify the data
-   *       is indeed in the expected shape.
+   *       After applying those two diff sequences, we verify that
+   *       the mutated data is indeed in the reordered shape.
    * @remarks to follow this test, you should be familiar both with our
    *       [generic data record](\ref diff::Record), as well as with the
    *       [variant data node](\ref diff::GenNode). The key point to note
    *       is the usage of Record elements as payload within GenNode, which
-   *       allows to represent tree shaped object like data structures.
+   *       allows to represent tree shaped object-like data structures.
    * @note literally the same test case is repeated in MutationMessage_test,
    *       just there the diff is transported in a MutationMessage capsule,
-   *       as is the case in the real application as well.
+   *       as would be the case in the real application.
    * @see DiffComplexApplication_test handling arbitrary data structures
-   * @see GenericRecordRepresentation_test
-   * @see GenNodeBasic_test
+   * @see DiffTreeApplicationSimple_test introductory example demonstration
+   * @see GenericRecord_test
+   * @see GenNode_test
    * @see DiffListApplication_test
    * @see diff-tree-application.hpp
    * @see tree-diff.hpp

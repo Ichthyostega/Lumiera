@@ -343,7 +343,7 @@ return: 0
 END
 
 
-TEST "Generic Object Record" GenericRecordRepresentation_test <<END
+TEST "Generic Object Record" GenericRecord_test <<END
 out-lit: enterprise = Rec(starship| Name = USS Enterprise, Registry = NCC-1701-D, Class = Galaxy, Owner = United Federation of Planets, Operator = Starfleet, built = 2363 |{Picard, Riker, Data, Troi, Worf, Crusher, La Forge})
 out-lit: Name = USS Enterprise
 out-lit: Registry = NCC-1701-D
@@ -372,7 +372,7 @@ return: 0
 END
 
 
-TEST "Generic Record data node" GenNodeBasic_test <<END
+TEST "Generic Record data node" GenNode_test <<END
 out: GenNode.+_CHILD_Record.+Rec.spam..ham = DataCap.+eggs
 out-lit: --spam--
 out: GenNode.+"baked beans".+Rec...hasSpam = DataCap.«bool».true.+«char».+«string».*«double».+GenNode.+"spam".+«Record<GenNode>».+«string».eggs.+«string».spam.+«string».spam

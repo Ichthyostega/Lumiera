@@ -148,7 +148,7 @@ namespace test{
    * @see TreeMutator
    * @see TreeMutator_test
    * @see DiffTreeApplication_test
-   * @see GenNodeBasic_test
+   * @see GenNode_test
    * @see AbstractTangible_test::mutate()
    */
   class TreeMutatorBinding_test : public Test
