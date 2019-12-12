@@ -38,8 +38,8 @@
  ** As it turns out in practice, such a "hooked" widget will never exist apart from its
  ** attachment. Consequently, we locate the widget within the smart-handle itself, thus
  ** tightly linking together the lifecycle of the widget and the presentation attachment.
- ** However, this combined memory layout has some consequences:
- ** - the combined ViewHooked<W> must be non-copyable, since it can be expected
+ ** However, this combined memory layout incurs some liabilities:
+ ** - the combined `ViewHooked<W>` must be non-copyable, since it can be expected
  **   for the canvas to store some pointer to the attached widget.
  ** - moreover, the canvas/presentation need to be available and activated when
  **   constructing the widget(s) due to the interwoven lifecycle.
@@ -49,7 +49,6 @@
  ** the widgets in some detail data structure owned by the top level presentation frame.
  ** 
  ** @see ViewHook_test
- ** @todo WIP-WIP-WIP as of 9/2019
  ** 
  */
 
@@ -73,20 +72,20 @@ namespace model {
   
   /**
    * Interface to represent _"some presentation layout entity",_
-   * with the ability to _attach_ widgets managed elsewhere, to
+   * with the ability to _attach_ widgets (managed elsewhere), to
    * relocate those widgets to another position, and to re-establish
    * a different sequence of the widgets (whatever this means).
-   * @remark some typical examples for the kind of facility modelled here:
+   * @remark some typical examples for the kind of collaboration modelled here:
    *         - a _canvas widget,_ (e.g. `Gtk::Layout`), allowing to attach
    *           child widgets at specific positions, together with custom drawing.
-   *         - a tree or grid control, allowing to populate some lines a given widget.
-   * @warning please ensure the ViewHookable outlives any attached ViewHooked.
+   *         - a tree or grid control, allowing to populate some row with a given widget.
+   * @warning please ensure the ViewHook outlives any attached ViewHooked.
    */
   template<class WID>
-  class ViewHookable
+  class ViewHook
     {
     public:
-      virtual ~ViewHookable() { }    ///< this is an interface
+      virtual ~ViewHook() { }    ///< this is an interface
       
       virtual void hook (WID& widget, int xPos=0, int yPos=0)  =0;
       virtual void move (WID& widget, int xPos, int yPos)      =0;
@@ -98,7 +97,7 @@ namespace model {
       
       struct Pos
         {
-          ViewHookable& view;
+          ViewHook& view;
           int x,y;
         };
       
@@ -113,8 +112,8 @@ namespace model {
   
   /**
    * A widget attached onto a display canvas or similar central presentation context.
-   * This decorator for one inherits from the widget to be attached, i.e. the widget itself
-   * is embedded; moreover, the attachment is immediately performed at construction time and
+   * This decorator inherits from the widget to be attached, i.e. the widget itself becomes
+   * embedded; moreover, the attachment is immediately performed at construction time and
    * managed automatically thereafter. When the `ViewHooked` element goes out of scope, it is
    * automatically detached from presentation. With the help of ViewHooked, a widget (or similar
    * entity) may control some aspects of its presentation placement, typically the coordinates
@@ -127,20 +126,18 @@ namespace model {
    * stage::timeline::BodyCanvasWidget to each and every Clip or Label widget.
    * 
    * @tparam WID type of the embedded widget, which is to be hooked-up into the view/canvas.
-   * @remark since ViewHook represents one distinct attachment to some view or canvas,
+   * @remark since ViewHooked represents one distinct attachment to some view or canvas,
    *         is has a clear-cut identity and thus may be moved, but not copied.
-   * @warning since ViewHooked entities call back into the ViewHookable on destruction,
+   * @warning since ViewHooked entities call back into the ViewHook on destruction,
    *         the latter still needs to be alive at that point. Which basically means
    *         you must ensure the ViewHooked "Widgets" are destroyed prior to the "Canvas".
-   * 
-   * @todo WIP-WIP as of 11/2019
    */
   template<class WID>
   class ViewHooked
     : public WID
     , util::NonCopyable
     {
-      using View = ViewHookable<WID>;
+      using View = ViewHook<WID>;
       
       View* view_;
       
@@ -149,14 +146,14 @@ namespace model {
       ViewHooked (View& view, ARGS&& ...args)
         : WID{std::forward<ARGS>(args)...}
         , view_{&view}
-        { 
+        {
           view_->hook (*this);
         }
       template<typename...ARGS>
       ViewHooked (typename View::Pos viewPos, ARGS&& ...args)
         : WID{std::forward<ARGS>(args)...}
         , view_{&viewPos.view}
-        { 
+        {
           view_->hook (*this, viewPos.x, viewPos.y);
         }
       
@@ -194,7 +191,7 @@ namespace model {
   template<class WID>
   template<class IT>
   void
-  ViewHookable<WID>::reOrder (IT newOrder)
+  ViewHook<WID>::reOrder (IT newOrder)
   {
     for (ViewHooked<WID>& existingHook : newOrder)
       this->rehook (existingHook);

@@ -71,7 +71,7 @@ namespace test {
     
     
     class FakeCanvas
-      : public ViewHookable<DummyWidget>
+      : public ViewHook<DummyWidget>
       {
         struct Attachment
           {
@@ -140,7 +140,7 @@ namespace test {
           }
         
         
-        /* === Interface ViewHookable === */
+        /* === Interface ViewHook === */
         
         void
         hook (DummyWidget& elm, int xPos, int yPos)  override
@@ -248,7 +248,7 @@ namespace test {
       
       
       /** @test hook a widget at a specific position and then later
-       *   relocate it on the canvas through the ViewHookable front-end.
+       *   relocate it on the canvas through the ViewHook front-end.
        */
       void
       relocateWidget()
