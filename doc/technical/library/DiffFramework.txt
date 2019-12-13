@@ -316,7 +316,7 @@ sometimes get into conflict with the essentially open and permissive nature of s
 a mapping rule, which translates into additional conventions about how to spell out matters in the diff language.
 
 We choose to leave this largely on the level of stylistic rules, thus stressing the language nature of the diff.
-Even when this bears the danger to produce an exception very late, when it comes to applying the diff to a target
+Even when this bears the danger to raise failures rather late, when it comes to applying the diff to a target
 data structure. The intention behind this whole diff approach is to transform tight coupling with strict rules
 into a loose collaboration based on a common understanding. So generally we'll assume the diff is just right,
 and if not, we'll get what we deserve.footnote:[This gives rise to a tricky discussion about loss of strictness

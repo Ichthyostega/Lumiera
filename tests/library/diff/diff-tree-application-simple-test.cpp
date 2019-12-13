@@ -63,6 +63,12 @@ namespace test{
                                            ,[](GenNode const& n) { return n.data.get<string>(); }
                                            ));
     }
+    
+    string
+    contents (vector<string> const& strings)
+    {
+      return util::join (strings);
+    }
   }//(End)Test fixture
   
   
@@ -104,7 +110,7 @@ namespace test{
       run (Arg)
         {
           demo_one();
-//          demo_two();
+          demo_two();
         }
       
       /**
@@ -132,11 +138,42 @@ namespace test{
       demo_one()
         {
           Rec::Mutator subject;
-          subject.scope(VAL_A, VAL_B, VAL_C);
+          subject.scope (VAL_A, VAL_B, VAL_C);
           
           CHECK ("a, b, c" == contents(subject));
           
           DiffApplicator<Rec::Mutator>{subject}.consume (someDiff());
+          
+          CHECK ("a, d, c" == contents(subject));
+        }
+      
+      
+      /** @test mutate a STL collection opaquely by applying the sample diff */
+      void
+      demo_two()
+        {
+                  struct Opaque
+                    : DiffMutable
+                    , std::vector<string>
+                    {
+                      using std::vector<string>::vector;
+                      
+                      void
+                      buildMutator (TreeMutator::Handle buff)  override
+                        {
+                          buff.create (
+                            TreeMutator::build()
+                              .attach (collection (static_cast<vector<string>&> (*this))
+                                      ));
+                        }
+                      
+                    };
+          
+          
+          Opaque subject{"a","b","c"};
+          CHECK ("a, b, c" == contents(subject));
+          
+          DiffApplicator<Opaque>{subject}.consume (someDiff());
           
           CHECK ("a, d, c" == contents(subject));
         }
