@@ -163,7 +163,7 @@ namespace test{
                         {
                           buff.create (
                             TreeMutator::build()
-                              .attach (collection (static_cast<vector<string>&> (*this))
+                              .attach (collection (*this)
                                       ));
                         }
                       

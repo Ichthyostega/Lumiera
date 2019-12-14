@@ -75,8 +75,75 @@ namespace diff{
     using lib::iter_stl::eachElm;
     
     
+    /* === Technicalities of container access === */
     
+    template<class C>
+    using _AsVector = std::vector<typename C::value_type>;
+    template<class C>
+    using _AsMap    = std::map<typename C::key_type, typename C::mapped_type>;
+    
+    template<class C>
+    using IF_is_vector = lib::meta::enable_if< std::is_base_of<_AsVector<C>, C>>;
+    template<class C>
+    using IF_is_map    = lib::meta::enable_if< std::is_base_of<_AsMap<C>, C>>;
+    
+    
+    /** Helper for uniform treatment of various STL containers */
+    template<class C,  typename SEL =void>
+    struct ContainerTraits
+      {
+        static_assert (not sizeof(C), "unable to determine any supported container type for C");
+      };
+    
+    template<typename V>
+    struct ContainerTraits<V,  IF_is_vector<V> >
+      {
+        using Vec = _AsVector<V>;
+        using Elm = typename Vec::value_type;
+        using Itr = typename Vec::iterator;
         
+        static Itr
+        recentElmRawIter (Vec& vec)
+          {
+            return Itr{&vec.back()};
+          }
+        
+        static void
+        append (Vec& vec, Elm&& elm)
+          {
+            vec.emplace_back (forward<Elm> (elm));
+          }
+      };
+    
+    template<typename M>
+    struct ContainerTraits<M,  IF_is_map<M> >
+      {
+        using Map = _AsMap<M>;
+        using Key = typename Map::key_type;
+        using Val = typename Map::mapped_type;
+        using Elm = std::pair<const Key, Val>;
+        
+        /** heuristic for `std::map`: lookup via reverse iterator.
+         * Since std::map iterates in key order, the most recently inserted
+         * element is likely also the largest element. If this guess fails,
+         * there will always be a second try by searching over all elements.
+         */
+        static auto
+        recentElmRawIter (Map& map)
+          {
+            auto& recentPos = ++map.rend();
+            return map.find (recentPos->first);
+          }
+        
+        static void
+        append (Map& map, Elm&& elm)
+          {
+            map.emplace (forward<Elm> (elm));
+          }
+      };
+    
+    
+    
     /**
      * Attach to collection: Concrete binding setup.
      * This record holds all the actual binding and closures
@@ -101,6 +168,7 @@ namespace diff{
       {
         using Coll = typename Strip<COLL>::TypeReferred;
         using Elm  = typename Coll::value_type;
+        using Trait = ContainerTraits<Coll>;
         
         using iterator       = typename lib::iter_stl::_SeqT<Coll>::Range;
         using const_iterator = typename lib::iter_stl::_SeqT<const Coll>::Range;
@@ -150,7 +218,7 @@ namespace diff{
         void
         inject (Elm&& elm)
           {
-            emplace (collection, forward<Elm>(elm));
+            Trait::append (collection, forward<Elm>(elm));
           }
         
         iterator
@@ -161,11 +229,13 @@ namespace diff{
             return pos;
           }
         
+        /** locate element for assignment or mutation,
+         *  with special shortcut to the recently inserted element */
         iterator
         locate (GenNode const& targetSpec)
           {
             if (not collection.empty()
-                and matches (targetSpec, recentElm(collection)))
+                and matches (targetSpec, recentElm()))
               return recentElmIter();
             else
               return search (targetSpec, eachElm(collection));
@@ -182,65 +252,13 @@ namespace diff{
         iterator
         recentElmIter()
           {
-            return iterator (recentElmRawIter(collection), collection.end());
+            return iterator{Trait::recentElmRawIter (collection), std::end (collection)};
           }
         
-        template<class C>
-        static auto
-        recentElmRawIter (C& coll) ///< fallback: use first element of container
+        Elm&
+        recentElm()
           {
-            return coll.begin();
-          }
-        
-        template<typename E>
-        using Map = std::map<typename E::key_type, typename E::second_type>;
-        
-        template<typename E>
-        static auto
-        recentElmRawIter (Map<E>& map) ///< workaround for `std::Map`: lookup via reverse iterator
-          {
-            return map.find (recentElm(map).first);
-          }
-        
-        static auto
-        recentElmRawIter (std::vector<Elm>& vec)
-          {
-            return typename std::vector<Elm>::iterator (&vec.back());
-          }
-        
-        
-        template<class C>
-        static Elm&
-        recentElm (C& coll)
-          {
-            return *coll.begin();
-          }
-        
-        template<typename E>
-        static E&
-        recentElm (Map<E>& map)
-          {
-            return *++map.rend();
-          }
-        
-        static Elm&
-        recentElm (std::vector<Elm>& vec)
-          {
-            return vec.back();
-          }
-        
-        
-        template<class C>
-        static void
-        emplace (C& coll, Elm&& elm)
-          {
-            coll.emplace (forward<Elm> (elm));
-          }
-        
-        static void
-        emplace (std::vector<Elm>& coll, Elm&& elm)
-          {
-            coll.emplace_back (forward<Elm> (elm));
+            return *Trait::recentElmRawIter (collection);
           }
       };
     

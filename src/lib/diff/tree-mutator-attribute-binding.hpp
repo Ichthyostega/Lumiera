@@ -51,7 +51,7 @@
  ** On the other hand, this very notion of _ordering_ and _sequence_ is essential to the
  ** meaning of "diff", as far as collections of "children" are involved. This leaves us
  ** with the decision, either to increase complexity of the diff language's definition
- ** and concept, absorb this discrepancy within the complexity of implementation.
+ ** and concept, or to accommodate this discrepancy within the binding implementation.
  ** Deliberately, the whole concept of a "diff language" builds onto the notion of
  ** _layered semantics,_ where the precise meaning of some terms remains a private
  ** extension within specific usage context. There is a lot of leeway within the
@@ -83,6 +83,14 @@
  ** the same attribute several times in contradictory fashion. The client code
  ** constructing the concrete TreeMutator needs to have adequate understanding
  ** regarding mode of operation and "mechanics" of such a binding.
+ ** 
+ ** @remark for sake of completeness an alternative binding option should be mentioned:
+ **       Attributes could be represented as a map of `(key,value)` pairs and then bound
+ **       via the STL collection binding. This way, all the attributes of an "object"
+ **       would be treated as coherent unit, within a single "onion layer". However,
+ **       such a layout tends to run against the conventions and the protocol of the
+ **       diff language and should be confined to cover some corner cases (e.g. to
+ **       support an open ended collection of _custom properties_)
  ** 
  ** @note the header tree-mutator-attribute-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp
@@ -116,7 +124,7 @@ namespace diff{
     /**
      * Generic behaviour of any binding to object fields (attributes).
      * Since object fields as such are part of the class definition, a diff
-     * will never be able to add, insert, delted or re-order fields. Thus we
+     * will never be able to add, insert, delete or re-order fields. Thus we
      * do not need to keep track of an "old" and "new" order; rather there
      * is always one single fixed element present to work on.
      * @note consequently, several diff operations are either implemented NOP,

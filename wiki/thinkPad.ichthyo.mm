@@ -117,7 +117,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1481332888362" ID="ID_85978592" MODIFIED="1575133290731" TEXT="Nexus braucht CoreService braucht Nexus...">
+<node CREATED="1481332888362" ID="ID_85978592" MODIFIED="1576282358165" TEXT="Nexus braucht CoreService braucht Nexus...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -135,13 +135,14 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1481332999091" ID="ID_1793743943" MODIFIED="1557498707215" TEXT="Problem ist: ich wollte Nexus nicht speziell konstruieren"/>
 <node CREATED="1481338218216" ID="ID_128336616" MODIFIED="1557498707215" TEXT="L&#xf6;sung">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1481338222672" ID="ID_318056010" MODIFIED="1575133290742" TEXT="Bus-Term greift tats&#xe4;chlich nicht auf Uplink zu">
+<node CREATED="1481338222672" ID="ID_318056010" MODIFIED="1576282358165" TEXT="Bus-Term greift tats&#xe4;chlich nicht auf Uplink zu">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -160,10 +161,11 @@
       Ganz anders Model::Tangible: dieses registriert sich bei der Konstruktion
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1481338237550" ID="ID_781727426" MODIFIED="1557498707215" TEXT="kann also eine Referenz auf lokalen Speicher reinreichen"/>
-<node CREATED="1481338295614" ID="ID_1811061645" MODIFIED="1575133290751" TEXT="Folglich mu&#xdf; Nexus lokal in CoreServices angesiedelt werden">
+<node CREATED="1481338295614" ID="ID_1811061645" MODIFIED="1576282358164" TEXT="Folglich mu&#xdf; Nexus lokal in CoreServices angesiedelt werden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -176,7 +178,8 @@
       aber so herum macht es mehr Sinn
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -200,7 +203,7 @@
 <node CREATED="1481338408983" ID="ID_516483369" MODIFIED="1557498707215" TEXT="k&#xf6;nnte sp&#xe4;ter sogar eine Exception sein">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1484871442777" ID="ID_492545805" MODIFIED="1575133290764">
+<node CREATED="1484871442777" ID="ID_492545805" MODIFIED="1576282358164">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -229,7 +232,8 @@
       BusTerm, das damit Nachrichten an den Nexus schicken kann.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -256,7 +260,7 @@
 </html></richcontent>
 <linktarget COLOR="#51517b" DESTINATION="ID_379585622" ENDARROW="Default" ENDINCLINATION="-476;439;" ID="Arrow_ID_1616528570" SOURCE="ID_1324099152" STARTARROW="Default" STARTINCLINATION="-541;0;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1484792679322" HGAP="13" ID="ID_426218722" MODIFIED="1575133290782" TEXT="#1047 preliminary definition of GuiNotification facade" VSHIFT="-3">
+<node COLOR="#338800" CREATED="1484792679322" HGAP="13" ID="ID_426218722" MODIFIED="1576282358163" TEXT="#1047 preliminary definition of GuiNotification facade" VSHIFT="-3">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -269,9 +273,10 @@
       Wartet nur noch auf proof-of-concept (DemoGuiRoundtrip)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1493753178082" ID="ID_152757560" MODIFIED="1575133290794" TEXT="grunds&#xe4;tzliche Architektur gekl&#xe4;rt">
+<node COLOR="#338800" CREATED="1493753178082" ID="ID_152757560" MODIFIED="1576282358163" TEXT="grunds&#xe4;tzliche Architektur gekl&#xe4;rt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -284,7 +289,8 @@
       aber nur via einfacher &quot;uplink&quot;-Verbindung
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1493753215852" ID="ID_1971120" MODIFIED="1557498707216" TEXT="gekl&#xe4;rt: wie kann man Shutdown implementieren">
@@ -340,7 +346,7 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1533915472186" ID="ID_1748932158" MODIFIED="1533915479325" TEXT="GuiFeedback w&#xfc;rde auch gehen"/>
 <node CREATED="1533915480649" ID="ID_846895155" MODIFIED="1533915485628" TEXT="aber klingt nicht so sch&#xf6;n"/>
-<node CREATED="1533915486336" ID="ID_627537189" MODIFIED="1575133290823" TEXT="und ist doppeldeutig">
+<node CREATED="1533915486336" ID="ID_627537189" MODIFIED="1576282358162" TEXT="und ist doppeldeutig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -350,7 +356,8 @@
       ...es k&#246;nnte auch den Feedback des Users meinen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -368,7 +375,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481502320065" HGAP="-23" ID="ID_1298358905" MODIFIED="1557498707216" TEXT="bisher vom GuiRunner betrieben" VSHIFT="-26">
 <icon BUILTIN="info"/>
-<node CREATED="1481502327528" ID="ID_75293128" MODIFIED="1575133290838" TEXT="das ist ohnehin schlecht">
+<node CREATED="1481502327528" ID="ID_75293128" MODIFIED="1576282358162" TEXT="das ist ohnehin schlecht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -387,7 +394,8 @@
       Term-Signal nicht ausgesendet w&#252;rde.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1481502335583" ID="ID_1245191241" MODIFIED="1557498707216" TEXT="Felder im GuiRunner sollten noexcept sein">
@@ -460,7 +468,7 @@
 <node CREATED="1484797573701" ID="ID_162958920" MODIFIED="1557498707216" TEXT="UiBus">
 <node CREATED="1484797576972" ID="ID_1159570219" MODIFIED="1557498707216" TEXT="erzeugt CoreService">
 <node CREATED="1484871312594" ID="ID_1351400025" MODIFIED="1557498707216" TEXT="erbt zwar von BusTerm"/>
-<node CREATED="1484871321473" ID="ID_112216780" MODIFIED="1575133290865" TEXT="hat aber keine connection">
+<node CREATED="1484871321473" ID="ID_112216780" MODIFIED="1576282358161" TEXT="hat aber keine connection">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -479,9 +487,10 @@
       Anmerkung: ein &quot;frestehendes&quot; BusTerm ist valide und zugelassen, es hat halt nur eine uplink-Connection.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1484871556194" ID="ID_1978811406" MODIFIED="1575133290871" TEXT="macht Sinn so">
+<node CREATED="1484871556194" ID="ID_1978811406" MODIFIED="1576282358161" TEXT="macht Sinn so">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -494,7 +503,8 @@
       es mu&#223; dazu auch jede Menge Methoden implementieren.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1484797584483" FOLDED="true" ID="ID_1316050570" MODIFIED="1561827483824" TEXT="dieser hat Member ">
 <node CREATED="1484797623574" ID="ID_1754670675" MODIFIED="1557498707216" TEXT="Nexus"/>
@@ -604,7 +614,7 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1538264482902" ID="ID_838939814" MODIFIED="1557498707217" TEXT="Instantiiiere gui::ctrl::Facade im Stack-Frame von UiManager::performMainLoop()"/>
-<node CREATED="1538264545797" ID="ID_1760435858" MODIFIED="1575133290914" TEXT="Synchronisation qua Dispatch">
+<node CREATED="1538264545797" ID="ID_1760435858" MODIFIED="1576282358160" TEXT="Synchronisation qua Dispatch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -623,7 +633,8 @@
       Ein zu fr&#252;her bzw. zu sp&#228;ter Aufruf <i>&quot;f&#228;llt einfach hinten runter&quot;</i>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -655,7 +666,7 @@
 </node>
 <node CREATED="1501867017251" ID="ID_1980251688" MODIFIED="1557498707217" TEXT="...und der shutdown-Proze&#xdf; blockt"/>
 </node>
-<node CREATED="1481502257825" HGAP="24" ID="ID_232782099" MODIFIED="1575133290932" TEXT="Gefahr gering, aber gegeben" VSHIFT="11">
+<node CREATED="1481502257825" HGAP="24" ID="ID_232782099" MODIFIED="1576282358160" TEXT="Gefahr gering, aber gegeben" VSHIFT="11">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -692,7 +703,8 @@
       dann kann der Shutdown-Proze&#223; den Start des GUI &#252;berholen.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -717,7 +729,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1484876010871" ID="ID_175784507" MODIFIED="1575133290949" TEXT="Design-Problem: restliches Tangible-Protokoll">
+<node CREATED="1484876010871" ID="ID_175784507" MODIFIED="1576282358159" TEXT="Design-Problem: restliches Tangible-Protokoll">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -727,7 +739,8 @@
       wirkt alles mehr oder weniger beliebig...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1484875935505" ID="ID_1341415727" MODIFIED="1518487921046" TEXT="nein">
 <icon BUILTIN="button_cancel"/>
@@ -750,7 +763,7 @@
 <node COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1518487921046" TEXT="tut es nicht">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1484799551220" ID="ID_496503271" MODIFIED="1575133290964" TEXT="Fehlermeldung + Segfault">
+<node CREATED="1484799551220" ID="ID_496503271" MODIFIED="1576282358158" TEXT="Fehlermeldung + Segfault">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -763,9 +776,10 @@
       Speicherzugriffsfehler
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1484800480472" ID="ID_1441013524" MODIFIED="1575133290972" TEXT="Sanity-Check in CoreService anpassen">
+<node CREATED="1484800480472" ID="ID_1441013524" MODIFIED="1576282358158" TEXT="Sanity-Check in CoreService anpassen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -783,7 +797,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1484802745625" ID="ID_375871642" MODIFIED="1561827464537" TEXT="Heisenbug">
@@ -838,7 +853,7 @@
 </node>
 <node CREATED="1484865316147" ID="ID_687373412" MODIFIED="1518487921047" TEXT="wenn ich den Thread mit Lambda starte..."/>
 <node CREATED="1484865349366" ID="ID_652410738" MODIFIED="1518487921047" TEXT="betrifft das den term-Functor"/>
-<node CREATED="1484865513568" ID="ID_696204655" MODIFIED="1575133290994" TEXT="selbst wenn der Funktor selber per Value &#xfc;bergeben wird">
+<node CREATED="1484865513568" ID="ID_696204655" MODIFIED="1576282358157" TEXT="selbst wenn der Funktor selber per Value &#xfc;bergeben wird">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -866,7 +881,8 @@
       terminiert und dann tats&#228;chlich den Fuktor aufrufen m&#246;chte
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -922,7 +938,7 @@
 <node CREATED="1501791850068" ID="ID_1334285372" MODIFIED="1518487921047" TEXT="pa&#xdf;t aber nicht wirklich">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1501791881175" ID="ID_361179647" MODIFIED="1518487921047" TEXT="jede L&#xf6;sung willk&#xfc;rlich"/>
-<node CREATED="1501791876032" ID="ID_381137803" MODIFIED="1575133291023" TEXT="logisch unsinnig">
+<node CREATED="1501791876032" ID="ID_381137803" MODIFIED="1576282358157" TEXT="logisch unsinnig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -944,7 +960,8 @@
       und ihre <i>&quot;Methoden&quot;</i>&#160;sind Commands auf der Session!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -1093,7 +1110,7 @@
 <node COLOR="#338800" CREATED="1502410165980" ID="ID_1450795292" MODIFIED="1538263469664" TEXT="MutationMessage entfernen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1502410176619" ID="ID_1188430411" MODIFIED="1538263469664" TEXT="AbstractTangible_test umschreiben"/>
-<node CREATED="1502410190737" ID="ID_1036564813" MODIFIED="1575133291112" TEXT="operator string() in DiffMessage &#xfc;bernehmen">
+<node CREATED="1502410190737" ID="ID_1036564813" MODIFIED="1576282358156" TEXT="operator string() in DiffMessage &#xfc;bernehmen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1111,7 +1128,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1502410328279" ID="ID_1577461232" MODIFIED="1538263469664" TEXT="Tree-Diff-Aplikator direkt in Nexus verschieben"/>
@@ -1319,7 +1337,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1501850632636" ID="ID_431682708" MODIFIED="1561827464567" TEXT="technische Probleme">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1501850684373" ID="ID_1688212376" MODIFIED="1575133291172" TEXT="ein Dispatcher pro Call">
+<node CREATED="1501850684373" ID="ID_1688212376" MODIFIED="1576282358156" TEXT="ein Dispatcher pro Call">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1332,7 +1350,8 @@
       Das wird eine ganze Me
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1501850754827" ID="ID_314216229" MODIFIED="1538263469665" TEXT="jede Facade-Funktion brauch einen Dispatcher">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -1423,7 +1442,7 @@
 <node CREATED="1502404797300" ID="ID_1177399909" MODIFIED="1561827464570" TEXT="Exceptions fangen">
 <arrowlink COLOR="#84b6b7" DESTINATION="ID_1875294174" ENDARROW="Default" ENDINCLINATION="1297;-64;" ID="Arrow_ID_245240331" STARTARROW="None" STARTINCLINATION="285;0;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1522935881957" HGAP="23" ID="ID_564244010" MODIFIED="1575133291223" TEXT="4/2018 was ist hier der Stand?" VSHIFT="16">
+<node COLOR="#435e98" CREATED="1522935881957" HGAP="23" ID="ID_564244010" MODIFIED="1576282358155" TEXT="4/2018 was ist hier der Stand?" VSHIFT="16">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1439,10 +1458,11 @@
       aber noch <i>irgend ein Hund</i>&#160;begraben liegt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
-<node COLOR="#435e98" CREATED="1531584775498" ID="ID_1901801971" MODIFIED="1575133291231" TEXT="7/2018 notification-Display fehlt noch">
+<node COLOR="#435e98" CREATED="1531584775498" ID="ID_1901801971" MODIFIED="1576282358155" TEXT="7/2018 notification-Display fehlt noch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1455,11 +1475,12 @@
       Im Moment loggen wir nur ins textuelle Konsole-Log (NoBug)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#22ed6f" DESTINATION="ID_1901801971" ENDARROW="Default" ENDINCLINATION="287;0;" ID="Arrow_ID_1609281182" SOURCE="ID_1545300987" STARTARROW="None" STARTINCLINATION="83;-25;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538263118645" ID="ID_944384957" MODIFIED="1575133291242" TEXT="9/2018 hinreichend behandelt">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538263118645" ID="ID_944384957" MODIFIED="1576282358154" TEXT="9/2018 hinreichend behandelt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1480,7 +1501,8 @@
       mehr erscheint mir nicht sinnvoll; <i>behandeln</i>&#160;kann man solche Fehler ohnehin nicht.<br /><br />
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -1503,7 +1525,7 @@
 </node>
 <node COLOR="#338800" CREATED="1502375294344" ID="ID_640199096" MODIFIED="1561827464572" TEXT="Spezialbehandlung f&#xfc;r Shutdown">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1502375312469" ID="ID_1075926054" MODIFIED="1575133291264" TEXT="ironischerweise...">
+<node CREATED="1502375312469" ID="ID_1075926054" MODIFIED="1576282358153" TEXT="ironischerweise...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -1519,7 +1541,8 @@
       obwohl jener doch genau der Anla&#223; war, diesen neuen Mechanismus zu bauen.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1502390322659" ID="ID_194166182" MODIFIED="1538263469666" TEXT="den neuen Dispatcher nutzen?">
 <icon BUILTIN="help"/>
@@ -3925,7 +3948,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1484797684438" HGAP="21" ID="ID_932852399" MODIFIED="1575133291322" TEXT="GUI-Shutdown implementieren" VSHIFT="13">
+<node COLOR="#338800" CREATED="1484797684438" HGAP="21" ID="ID_932852399" MODIFIED="1576282358153" TEXT="GUI-Shutdown implementieren" VSHIFT="13">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -3938,7 +3961,8 @@
       indem wir ein GTK-Signal erzeugen, das das Hauptfenster schlie&#223;t
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1485116867963" ID="ID_1146024699" MODIFIED="1518487921054" TEXT="bisher kann man nur das Fenster schlie&#xdf;en">
 <icon BUILTIN="info"/>
@@ -3995,7 +4019,7 @@
 <node CREATED="1501792041586" ID="ID_1326580750" MODIFIED="1518487921055" TEXT="sonst geht das Niemanden was an!">
 <icon BUILTIN="yes"/>
 <node CREATED="1501792062904" ID="ID_181717876" MODIFIED="1518487921055" TEXT="Subsysteme sind autark"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501792086244" ID="ID_233471026" MODIFIED="1575133291375" TEXT="wir wollen keine globale Ebene">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1501792086244" ID="ID_233471026" MODIFIED="1576282358152" TEXT="wir wollen keine globale Ebene">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4014,7 +4038,8 @@
       eine einzige Funktion konkret durchdenkt: es l&#228;uft auf Spaghetti-Code hinaus
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -4037,7 +4062,7 @@
 <node CREATED="1502375214162" ID="ID_267170664" MODIFIED="1518487921055" TEXT="durch direkte Verdrahtung">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1502375221129" ID="ID_368784036" MODIFIED="1575133291394" TEXT="dies m&#xf6;glich machen...">
+<node CREATED="1502375221129" ID="ID_368784036" MODIFIED="1576282358152" TEXT="dies m&#xf6;glich machen...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4047,7 +4072,8 @@
       ...indem der NotificatonService nun vom UI-Manager gemanaged wird :)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -4090,7 +4116,7 @@
 <node CREATED="1485124120220" ID="ID_1639025787" MODIFIED="1533608413546" TEXT="von Application erben">
 <icon BUILTIN="help"/>
 <node CREATED="1485124129436" ID="ID_1540860407" MODIFIED="1518487921055" TEXT="laut Quellcode spricht nichts dagegen"/>
-<node CREATED="1485124142178" ID="ID_1048261084" MODIFIED="1575133291437" TEXT="man sollte aber keine Methoden &#xfc;berschreiben">
+<node CREATED="1485124142178" ID="ID_1048261084" MODIFIED="1576282358151" TEXT="man sollte aber keine Methoden &#xfc;berschreiben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4139,7 +4165,8 @@
       }
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -4308,7 +4335,7 @@
 <node CREATED="1481767553542" ID="ID_1936508244" MODIFIED="1518487921056" TEXT="Eigenschaften">
 <icon BUILTIN="info"/>
 <node CREATED="1481768183970" ID="ID_1887870402" MODIFIED="1518487921056" TEXT="ist offizielle Session-Schnittstelle"/>
-<node CREATED="1481768211951" ID="ID_287828489" MODIFIED="1575133291506">
+<node CREATED="1481768211951" ID="ID_287828489" MODIFIED="1576282358151">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -4340,9 +4367,10 @@
       Daher macht es Sinn, den Interface-Lebenszyklus ganz starr an den Disspatcher zu binden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1481768341149" ID="ID_1200042703" MODIFIED="1575133291513" TEXT="implizite Bindung an eine Session-Instanz">
+<node CREATED="1481768341149" ID="ID_1200042703" MODIFIED="1576282358150" TEXT="implizite Bindung an eine Session-Instanz">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4361,9 +4389,10 @@
       was zwar jederzeit (via statisches/internes Session-API) verifizierbar ist, jedoch nicht offensichtlich
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1481768566167" ID="ID_702026185" MODIFIED="1575133291521" TEXT="kann jederzeit asynchron geschlossen werden">
+<node CREATED="1481768566167" ID="ID_702026185" MODIFIED="1576282358149" TEXT="kann jederzeit asynchron geschlossen werden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4385,7 +4414,8 @@
       <i>jederzeit</i>&#160;wegbrechen kann, was dann hei&#223;t, da&#223; irgend ein Aufruf eine Exception wirft
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1481320847724" HGAP="42" ID="ID_545146501" MODIFIED="1561827464686" TEXT="wo ansiedeln" VSHIFT="-6">
@@ -4413,7 +4443,7 @@
 <node CREATED="1481767700299" ID="ID_1163247183" MODIFIED="1518487921056" TEXT="logisch"/>
 </node>
 <node CREATED="1481767665231" ID="ID_141423591" MODIFIED="1518487921056" TEXT="con">
-<node CREATED="1481767681797" ID="ID_1133339398" MODIFIED="1575133291534" TEXT="fragiler Lebenszyklus">
+<node CREATED="1481767681797" ID="ID_1133339398" MODIFIED="1576282358149" TEXT="fragiler Lebenszyklus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4423,7 +4453,8 @@
       meint: zwei gekoppelte Statusvariable
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1481767706906" ID="ID_815807707" MODIFIED="1518487921057" TEXT="bekomme dort Zustand"/>
 <node CREATED="1481767720576" ID="ID_714877064" MODIFIED="1518487921057" TEXT="mu&#xdf; dort Locking verwenden"/>
@@ -4452,7 +4483,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1481767831105" ID="ID_1351930491" MODIFIED="1575133291547" TEXT="fragiler Lebenszyklus">
+<node CREATED="1481767831105" ID="ID_1351930491" MODIFIED="1576282358148" TEXT="fragiler Lebenszyklus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4462,7 +4493,8 @@
       meint: zwei gekoppelte Statusvariable
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -4513,7 +4545,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1481599413419" HGAP="34" ID="ID_673133356" MODIFIED="1575133291565" TEXT="Ticket #318" VSHIFT="-7">
+<node COLOR="#338800" CREATED="1481599413419" HGAP="34" ID="ID_673133356" MODIFIED="1576282358148" TEXT="Ticket #318" VSHIFT="-7">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4529,7 +4561,8 @@
       Aber ich <i>akzeptiere</i>&#160;es und verwende es jetzt als Treiber
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1483473104426" ID="ID_1606817357" MODIFIED="1483747983243" TEXT="#701 Session interface Support facility">
 <icon BUILTIN="button_ok"/>
@@ -4588,7 +4621,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1481684383530" ID="ID_236117" MODIFIED="1512926191672" TEXT="zwei unabh&#xe4;ngige Locks">
 <icon BUILTIN="yes"/>
-<node CREATED="1481684391921" ID="ID_138369898" MODIFIED="1575133291597" TEXT="Front-End">
+<node CREATED="1481684391921" ID="ID_138369898" MODIFIED="1576282358147" TEXT="Front-End">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4598,9 +4631,10 @@
       das Lock sorgt hier f&#252;r konsistenten Zustand und Sichtbarkeit (memory barrier)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1481684394544" ID="ID_1314197501" MODIFIED="1575133291603" TEXT="Back-End">
+<node CREATED="1481684394544" ID="ID_1314197501" MODIFIED="1576282358147" TEXT="Back-End">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4610,7 +4644,8 @@
       Lock ist hier das Dispatcher-Lock
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1481599468712" ID="ID_1273965744" MODIFIED="1512926191672" TEXT="Vorsicht beim Anhalten (Deadlock-Gefahr)">
@@ -4656,7 +4691,7 @@
 </node>
 <node CREATED="1481599594399" ID="ID_1017459823" MODIFIED="1512926191674" TEXT="entscheiden, wer die Session &#xf6;ffnet">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1481686982097" ID="ID_1925999031" MODIFIED="1575133291624" TEXT="passiert on demand">
+<node CREATED="1481686982097" ID="ID_1925999031" MODIFIED="1576282358146" TEXT="passiert on demand">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4666,14 +4701,15 @@
       ...wenn jemand zugreift
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1481599603757" ID="ID_812618450" MODIFIED="1481599612320" TEXT="Operation auf dem SessionManager"/>
 <node CREATED="1481599612812" ID="ID_1970476027" MODIFIED="1481599618598" TEXT="der ist Singleton"/>
 <node CREATED="1481599626194" ID="ID_1815350592" MODIFIED="1481599638105" TEXT="wenn Session &#xf6;ffnet, wird der Dispatcher aktiviert">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1481687005813" ID="ID_1108477992" MODIFIED="1575133291635" TEXT="Entscheidung: Sesion-lifecycle und Dispatcher sind unabh&#xe4;ngig">
+<node CREATED="1481687005813" ID="ID_1108477992" MODIFIED="1576282358146" TEXT="Entscheidung: Sesion-lifecycle und Dispatcher sind unabh&#xe4;ngig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4691,7 +4727,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -4736,7 +4773,7 @@
 </node>
 <node CREATED="1481777114203" ID="ID_1156396729" MODIFIED="1518487921057" TEXT="Lock, um Deadlock zu vermeiden"/>
 <node CREATED="1481777122306" ID="ID_1506554988" MODIFIED="1518487921057" TEXT="alles im dtor  -&gt; noexcept"/>
-<node CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1575133291654" TEXT="sicherstellen da&#xdf; shutdown nicht blockt">
+<node CREATED="1481777210447" ID="ID_1392452935" MODIFIED="1576282358145" TEXT="sicherstellen da&#xdf; shutdown nicht blockt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4764,7 +4801,8 @@
       <i>Ich halte diese F&#228;lle aber f&#252;r in der Praxis nicht relevant,</i>&#160; und verzichte daher auf eine Spezialbehandlung
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#5a97df" DESTINATION="ID_1789585729" ENDARROW="Default" ENDINCLINATION="3225;0;" ID="Arrow_ID_1930701586" STARTARROW="None" STARTINCLINATION="2096;-122;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -4865,7 +4903,7 @@
 <icon BUILTIN="idea"/>
 <node CREATED="1483910047148" ID="ID_1870862761" MODIFIED="1518487921058" TEXT="Design Rec&lt;GenNode&gt;"/>
 <node CREATED="1483910056243" ID="ID_967619584" MODIFIED="1518487921058" TEXT="da Record eine Payload ist"/>
-<node CREATED="1483910117819" ID="ID_117939525" MODIFIED="1575133291693" TEXT="man k&#xf6;nnte....">
+<node CREATED="1483910117819" ID="ID_117939525" MODIFIED="1576282358145" TEXT="man k&#xf6;nnte....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -4889,7 +4927,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -4996,7 +5035,7 @@
 <node CREATED="1483924900583" ID="ID_12753464" MODIFIED="1518487921058" TEXT="banal">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1483924903190" ID="ID_1436586014" MODIFIED="1575133291734" TEXT="wenn man das Design akzeptiert">
+<node CREATED="1483924903190" ID="ID_1436586014" MODIFIED="1576282358144" TEXT="wenn man das Design akzeptiert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5009,7 +5048,8 @@
       die mehrfachen Indirektionen und das Ein-/Auspacken der Argumente
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -5050,7 +5090,7 @@
 <node CREATED="1482464676366" ID="ID_1064506750" MODIFIED="1518487921059" TEXT="bekommt Nachrichten vom UI-Bus">
 <node CREATED="1482464755404" ID="ID_213932356" MODIFIED="1518487921059" TEXT="entnimmt Argument"/>
 <node CREATED="1482464758148" ID="ID_545671857" MODIFIED="1518487921059" TEXT="triggert sofort"/>
-<node CREATED="1492205571235" ID="ID_166892291" MODIFIED="1575133291754" TEXT="Zukunft: partiell schlie&#xdf;en">
+<node CREATED="1492205571235" ID="ID_166892291" MODIFIED="1576282358143" TEXT="Zukunft: partiell schlie&#xdf;en">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5066,7 +5106,8 @@
       und die Argumente von links her zu schlie&#223;en (currying)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -5091,7 +5132,7 @@
 <node CREATED="1482466021562" ID="ID_620393388" MODIFIED="1518487921059" TEXT="dieser wird direkt mit Command erzeugt">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1482466509953" ID="ID_565604124" MODIFIED="1575133291773" TEXT="...dient der Sicherheit">
+<node CREATED="1482466509953" ID="ID_565604124" MODIFIED="1576282358143" TEXT="...dient der Sicherheit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5107,7 +5148,8 @@
       wenn in der UI ein InvocationTrail angelegt wird.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1482466104359" ID="ID_235553653" MODIFIED="1518487921059" TEXT="speichert aber eigentlich nur die Cmd-ID">
 <icon BUILTIN="idea"/>
@@ -5229,7 +5271,7 @@
 <node COLOR="#338800" CREATED="1538942872402" ID="ID_932408081" MODIFIED="1561827464711" TEXT="Panel wird erzeugt">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1553902314962" ID="ID_1100232681" MODIFIED="1553902322907" TEXT="vorl&#xe4;ufige Platzhalter-Implementierung"/>
-<node CREATED="1553902329566" ID="ID_149032705" MODIFIED="1575133291810" TEXT="PanelLocator">
+<node CREATED="1553902329566" ID="ID_149032705" MODIFIED="1576282358142" TEXT="PanelLocator">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5260,10 +5302,11 @@
       and shift the allocation logic to the aforementioned higher level.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1553902425206" ID="ID_908225698" MODIFIED="1575133291815" TEXT="verwendet im Hintergrund noch den alten PanelManager">
+<node CREATED="1553902425206" ID="ID_908225698" MODIFIED="1576282358142" TEXT="verwendet im Hintergrund noch den alten PanelManager">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5273,7 +5316,8 @@
       ...der aber irgendwann (demn&#228;chst in diesem Theater) umgebaut/zur&#252;ckgebaut werden soll
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1538942878609" ID="ID_689625343" MODIFIED="1557498707218" TEXT="Timeline-Tab wird belegt">
@@ -5438,7 +5482,7 @@
 </node>
 <node CREATED="1534336252375" HGAP="216" ID="ID_1755017021" MODIFIED="1557498707218" TEXT="Hilfsmittel" VSHIFT="6">
 <node CREATED="1534336320373" ID="ID_708892482" MODIFIED="1557498707218" TEXT="Grundbausteine">
-<node CREATED="1537659522174" ID="ID_1583657425" MODIFIED="1575133291878" TEXT="primary widgets">
+<node CREATED="1537659522174" ID="ID_1583657425" MODIFIED="1576282358141" TEXT="primary widgets">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5468,13 +5512,14 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1537659866783" ID="ID_1613745412" MODIFIED="1557498707218" TEXT="Timeline">
 <linktarget COLOR="#7d91d6" DESTINATION="ID_1613745412" ENDARROW="Default" ENDINCLINATION="-63;-32;" ID="Arrow_ID_1377777978" SOURCE="ID_1327960211" STARTARROW="None" STARTINCLINATION="-144;16;"/>
 </node>
 <node CREATED="1537659870415" ID="ID_1181375258" MODIFIED="1557498707218" TEXT="Property-Grid"/>
 </node>
-<node CREATED="1537659527741" ID="ID_856745741" MODIFIED="1575133291888" TEXT="building blocks">
+<node CREATED="1537659527741" ID="ID_856745741" MODIFIED="1576282358141" TEXT="building blocks">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5501,7 +5546,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1538583873795" ID="ID_1515056203" MODIFIED="1557498707218" TEXT="spezifisch">
 <node CREATED="1537659880597" ID="ID_1214109906" MODIFIED="1557498707218" TEXT="Timecode"/>
 <node CREATED="1537659890292" ID="ID_1230379898" MODIFIED="1557498707218" TEXT="Placement"/>
@@ -5516,7 +5562,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1537961656982" ID="ID_1251358269" MODIFIED="1575133291900" TEXT="frameworks">
+<node CREATED="1537961656982" ID="ID_1251358269" MODIFIED="1576282358140" TEXT="frameworks">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5526,7 +5572,8 @@
       vorbereitete Grundstrukturen f&#252;r immer wiederkehrende Setups
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1537961734956" ID="ID_345535043" MODIFIED="1567875424269" TEXT="Notebook-Widget">
 <linktarget COLOR="#7895b6" DESTINATION="ID_345535043" ENDARROW="Default" ENDINCLINATION="-60;247;" ID="Arrow_ID_81056795" SOURCE="ID_18019089" STARTARROW="None" STARTINCLINATION="382;0;"/>
 <node CREATED="1537961776184" ID="ID_167848646" MODIFIED="1537961791126" TEXT="Problematik">
@@ -5545,7 +5592,7 @@
 <node CREATED="1537961917592" ID="ID_591860371" MODIFIED="1537962293792" TEXT="im TestControl">
 <linktarget COLOR="#6ea8be" DESTINATION="ID_591860371" ENDARROW="Default" ENDINCLINATION="1162;51;" ID="Arrow_ID_1534615646" SOURCE="ID_1553519505" STARTARROW="None" STARTINCLINATION="-185;836;"/>
 </node>
-<node CREATED="1537961950003" ID="ID_1083792924" MODIFIED="1575133291919" TEXT="Schema &quot;managing container&quot;">
+<node CREATED="1537961950003" ID="ID_1083792924" MODIFIED="1576282358140" TEXT="Schema &quot;managing container&quot;">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5570,7 +5617,8 @@
       Und der Rest sollte so <i>vertraut</i>&#160;aussehen, da&#223; es selbsterkl&#228;rend wird.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -5662,7 +5710,7 @@
 <arrowlink COLOR="#57b762" DESTINATION="ID_1760873318" ENDARROW="Default" ENDINCLINATION="-989;0;" ID="Arrow_ID_782679142" STARTARROW="None" STARTINCLINATION="-756;-143;"/>
 <node CREATED="1567875290021" ID="ID_286133902" MODIFIED="1567875757319" TEXT="ein non-modaler Dialog"/>
 <node CREATED="1567875314411" ID="ID_26242186" MODIFIED="1567875341444" TEXT="erreichbar im Wizard | Men&#xfc; &quot;help&quot; &gt; &quot;self tests...&quot;"/>
-<node CREATED="1567875342584" ID="ID_18019089" MODIFIED="1575133291952" TEXT="hat ein Notebook mit diversen Tabs...">
+<node CREATED="1567875342584" ID="ID_18019089" MODIFIED="1576282358139" TEXT="hat ein Notebook mit diversen Tabs...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5672,7 +5720,8 @@
       ...welche ad hoc mit beil&#228;ufig geschriebenem Debug/Test-Code belegt werden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#7895b6" DESTINATION="ID_345535043" ENDARROW="Default" ENDINCLINATION="-60;247;" ID="Arrow_ID_81056795" STARTARROW="None" STARTINCLINATION="382;0;"/>
 </node>
 <node COLOR="#435e98" CREATED="1567875433443" ID="ID_1033273101" MODIFIED="1567875940590" TEXT="TestControl-Tabs">
@@ -5780,7 +5829,7 @@
 <node CREATED="1538710388956" ID="ID_17203500" MODIFIED="1557498707219" TEXT="in GTK-3 entspricht das window">
 <icon BUILTIN="forward"/>
 </node>
-<node CREATED="1538710407602" ID="ID_1860886507" MODIFIED="1575133292024" TEXT="Regel...">
+<node CREATED="1538710407602" ID="ID_1860886507" MODIFIED="1576282358138" TEXT="Regel...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5793,7 +5842,8 @@
       Im Zweifelsfall den GTK+ Inspector verwenden!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -5812,7 +5862,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="stop-sign"/>
 </node>
-<node COLOR="#338800" CREATED="1538696720743" ID="ID_50558236" MODIFIED="1575133292038" TEXT="ersatzlos entfernt">
+<node COLOR="#338800" CREATED="1538696720743" ID="ID_50558236" MODIFIED="1576282358138" TEXT="ersatzlos entfernt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5822,7 +5872,8 @@
       CSS gen&#252;gt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -5835,7 +5886,7 @@
 <node CREATED="1538696930403" HGAP="38" ID="ID_280002018" MODIFIED="1557498707219" TEXT="Idee: &quot;inherit&quot; auf h&#xf6;chster Ebene" VSHIFT="3">
 <icon BUILTIN="idea"/>
 <node CREATED="1538696962271" ID="ID_46020871" MODIFIED="1557498707219" TEXT="unser Stylesheet hat GTK_STYLE_PROVIDER_PRIORITY_APPLICATION"/>
-<node CREATED="1538696988803" ID="ID_1662822982" MODIFIED="1575133292054">
+<node CREATED="1538696988803" ID="ID_1662822982" MODIFIED="1576282358137">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -5870,7 +5921,8 @@
       }
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -5944,7 +5996,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1493853541747" ID="ID_689819683" MODIFIED="1557498707219" TEXT="TODO">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1493853548739" ID="ID_949985796" MODIFIED="1575133292098" TEXT="Project &amp; Controller restlos entfernen">
+<node CREATED="1493853548739" ID="ID_949985796" MODIFIED="1576282358137" TEXT="Project &amp; Controller restlos entfernen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5957,10 +6009,11 @@
       da&#223; die alte, obsolete Timeline zur&#252;ckgebaut ist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="hourglass"/>
 </node>
-<node CREATED="1493853590149" ID="ID_1075149702" MODIFIED="1575133292105" TEXT="Race beim triggerShutdown">
+<node CREATED="1493853590149" ID="ID_1075149702" MODIFIED="1576282358136" TEXT="Race beim triggerShutdown">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5976,7 +6029,8 @@
       bevor die Notification-Facade ge&#246;ffnet werden konnte
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -6028,7 +6082,7 @@
 <icon BUILTIN="bell"/>
 <node CREATED="1495234856782" ID="ID_1605922951" MODIFIED="1557498707220" TEXT="machen wir bisher nicht"/>
 <node CREATED="1495234865717" ID="ID_1261122199" MODIFIED="1557498707220" TEXT="ist das notwendig?"/>
-<node CREATED="1538588192126" ID="ID_1032145387" MODIFIED="1575133292139" TEXT="wohl nicht">
+<node CREATED="1538588192126" ID="ID_1032145387" MODIFIED="1576282358136" TEXT="wohl nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6059,7 +6113,8 @@
       Allerdings habe ich an der Stelle immer noch GTK-Assertions
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -6107,7 +6162,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1493768617653" ID="ID_292624709" MODIFIED="1557498707220" TEXT="f&#xe4;llt anscheinend ersatzlos weg"/>
 <node CREATED="1493768625564" ID="ID_1620270152" MODIFIED="1557498707220" TEXT="Verdacht: stattdessen Gtk::Application"/>
-<node CREATED="1495218227391" ID="ID_1156276489" MODIFIED="1575133292184" TEXT="Beschlu&#xdf;: vorerst Gtk::Action / ActionGroup weiter verwenden">
+<node CREATED="1495218227391" ID="ID_1156276489" MODIFIED="1576282358135" TEXT="Beschlu&#xdf;: vorerst Gtk::Action / ActionGroup weiter verwenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6135,7 +6190,8 @@
       ist, da&#223; Gio::Application sofort auch gleich eine dBus-Verbindung hochf&#228;hrt.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1485457105010" HGAP="49" ID="ID_202831328" MODIFIED="1557498707220" TEXT="neuer Weg" VSHIFT="21">
@@ -6283,7 +6339,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1485902945474" HGAP="-2" ID="ID_269152626" MODIFIED="1575133292291" TEXT="L&#xf6;sungs-Detail: dynamisch koppeln" VSHIFT="19">
+<node CREATED="1485902945474" HGAP="-2" ID="ID_269152626" MODIFIED="1576282358134" TEXT="L&#xf6;sungs-Detail: dynamisch koppeln" VSHIFT="19">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6308,7 +6364,8 @@
       diesen &quot;aktuellen Kontext&quot; irgendwo <i>aufzufischen</i>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1485903041262" ID="ID_997327941" MODIFIED="1518487921060" TEXT="Fokus"/>
 <node COLOR="#338800" CREATED="1485903046613" ID="ID_1041890737" MODIFIED="1518487921060" TEXT="aktuelles Fenster">
 <linktarget COLOR="#375a84" DESTINATION="ID_1041890737" ENDARROW="Default" ENDINCLINATION="177;-181;" ID="Arrow_ID_373431525" SOURCE="ID_1089795419" STARTARROW="None" STARTINCLINATION="245;-68;"/>
@@ -6370,7 +6427,7 @@
 <node COLOR="#435e98" CREATED="1486063858283" HGAP="42" ID="ID_130675776" MODIFIED="1561827464726" TEXT="ist Impl-Detail" VSHIFT="5">
 <icon BUILTIN="yes"/>
 <node CREATED="1486063886407" ID="ID_1294385692" MODIFIED="1518487921061" TEXT="sollte aus den weitverbreiteten Header-Includes raus"/>
-<node CREATED="1486063911188" ID="ID_1391435276" MODIFIED="1575133292340" TEXT="gegenw&#xe4;rtig Member im UiManager">
+<node CREATED="1486063911188" ID="ID_1391435276" MODIFIED="1576282358134" TEXT="gegenw&#xe4;rtig Member im UiManager">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6383,7 +6440,8 @@
       und verwendet, und das ist auch gut so
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#435e98" CREATED="1486063950103" ID="ID_57649689" MODIFIED="1538871966591" TEXT="zwei Modelle">
 <icon BUILTIN="info"/>
@@ -6479,7 +6537,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1488423760105" ID="ID_1527724040" MODIFIED="1518487921061" TEXT="Speichern">
 <node CREATED="1488492373919" ID="ID_1898515568" MODIFIED="1518487921061" TEXT="snapshot-Kommando an Session senden"/>
-<node CREATED="1488494870418" ID="ID_1929432332" MODIFIED="1575133292447" TEXT="TODO: InvocationTrail">
+<node CREATED="1488494870418" ID="ID_1929432332" MODIFIED="1576282358133" TEXT="TODO: InvocationTrail">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6492,7 +6550,8 @@
       InvocationTrail ist tot
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node COLOR="#338800" CREATED="1488566247742" ID="ID_254774965" MODIFIED="1518487921061" TEXT="mu&#xdf; doch die Architktur kl&#xe4;ren">
@@ -6529,7 +6588,7 @@
 <icon BUILTIN="hourglass"/>
 <node CREATED="1489461756655" ID="ID_1625364312" MODIFIED="1518487921061" TEXT="neue Sequenz">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1489461773213" ID="ID_344390825" MODIFIED="1575133292472" TEXT="als Treiber verwenden">
+<node CREATED="1489461773213" ID="ID_344390825" MODIFIED="1576282358133" TEXT="als Treiber verwenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6542,7 +6601,8 @@
       und den Teufelskreis zu durchbrechen!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1489461838228" ID="ID_283502486" MODIFIED="1518487921061" TEXT="im InteractionDirector">
@@ -6581,7 +6641,7 @@
 <node CREATED="1489544725860" ID="ID_1167910092" MODIFIED="1518487921062" TEXT="d.h. aktiviert"/>
 <node CREATED="1489544826383" ID="ID_166753518" MODIFIED="1518487921062" TEXT="zwei verschiedene Effekte">
 <icon BUILTIN="idea"/>
-<node CREATED="1489544836757" ID="ID_1543872004" MODIFIED="1575133292520" TEXT="Ausf&#xfc;hrung abweisen">
+<node CREATED="1489544836757" ID="ID_1543872004" MODIFIED="1576282358132" TEXT="Ausf&#xfc;hrung abweisen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6594,9 +6654,10 @@
       (Beispiel &quot;in-point fehlt&quot;)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1489544910395" ID="ID_82086808" MODIFIED="1575133292527" TEXT="enable Action">
+<node CREATED="1489544910395" ID="ID_82086808" MODIFIED="1576282358132" TEXT="enable Action">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6612,7 +6673,8 @@
       aber von einem externen State-Change getriggert wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -6628,7 +6690,7 @@
 </node>
 </node>
 <node CREATED="1492461179404" ID="ID_1843144262" MODIFIED="1518487921062" TEXT="die neue Sequenz">
-<node CREATED="1492461186562" ID="ID_357158955" MODIFIED="1575133292547" TEXT="ID mu&#xdf; gesendet werden">
+<node CREATED="1492461186562" ID="ID_357158955" MODIFIED="1576282358131" TEXT="ID mu&#xdf; gesendet werden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6650,7 +6712,8 @@
       und das w&#228;re unsinnig.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1492461260360" ID="ID_118202238" MODIFIED="1518487921062" TEXT="EntryID">
 <icon BUILTIN="help"/>
@@ -6662,7 +6725,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489461946997" HGAP="-10" ID="ID_1526466868" MODIFIED="1575133292560" TEXT="direkt von den Lambdas aus delegieren" VSHIFT="7">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1489461946997" HGAP="-10" ID="ID_1526466868" MODIFIED="1576282358131" TEXT="direkt von den Lambdas aus delegieren" VSHIFT="7">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6675,7 +6738,8 @@
       da es nur darum geht, via globalCtx auf den passenden Controller zuzugreifen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -6936,7 +7000,7 @@
 </node>
 <node CREATED="1506180752096" ID="ID_320263447" MODIFIED="1506180752096" TEXT="contextual predications">
 <node CREATED="1506180752096" ID="ID_837824348" MODIFIED="1506180752096" TEXT="anchorage">
-<node CREATED="1506180752097" ID="ID_456798717" MODIFIED="1575133292863" TEXT="explicitly anchored">
+<node CREATED="1506180752097" ID="ID_456798717" MODIFIED="1576282358130" TEXT="explicitly anchored">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6946,9 +7010,10 @@
       ...and this anchorage can be covered and backed by the currently existing UI configuration
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1506180752098" ID="ID_1971122985" MODIFIED="1575133292870" TEXT="can be a anchored">
+<node CREATED="1506180752098" ID="ID_1971122985" MODIFIED="1576282358130" TEXT="can be a anchored">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6958,9 +7023,10 @@
       ...by interpolation of some wildcards
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1506180752099" ID="ID_1588059901" MODIFIED="1575133292876" TEXT="incomplete">
+<node CREATED="1506180752099" ID="ID_1588059901" MODIFIED="1576282358129" TEXT="incomplete">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -6970,7 +7036,8 @@
       ...need to be extended to allow anchoring
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1506180752099" ID="ID_1331064451" MODIFIED="1506180752099" TEXT="impossible to anchor"/>
 </node>
@@ -6998,7 +7065,7 @@
 <node CREATED="1506180752101" ID="ID_888532646" MODIFIED="1506180752101" TEXT="by interpolating the given spec"/>
 <node CREATED="1506180752102" ID="ID_1762786822" MODIFIED="1506180752102" TEXT="by interpolation and extension of the given spec"/>
 </node>
-<node CREATED="1506180752102" ID="ID_478035492" MODIFIED="1575133292954" TEXT="covering">
+<node CREATED="1506180752102" ID="ID_478035492" MODIFIED="1576282358129" TEXT="covering">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7008,7 +7075,8 @@
       we may construct the covered part of a given spec, including automatic anchoring.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1506180752102" ID="ID_1444275949" MODIFIED="1506180752102" TEXT="navigating">
 <node CREATED="1506180752102" ID="ID_1839478635" MODIFIED="1506181147267" TEXT="Prereq">
@@ -7017,7 +7085,7 @@
 <node CREATED="1506180752103" ID="ID_183872472" MODIFIED="1506180752103" TEXT="needs to be anchored"/>
 <node CREATED="1506180752103" ID="ID_238142563" MODIFIED="1506180752103" TEXT="needs to be completely covered"/>
 </node>
-<node CREATED="1506180752103" ID="ID_1985524064" MODIFIED="1575133292971" TEXT="starting point">
+<node CREATED="1506180752103" ID="ID_1985524064" MODIFIED="1576282358128" TEXT="starting point">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7030,14 +7098,15 @@
       designated by the given coordinate spec
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1506180752103" ID="ID_1926205805" MODIFIED="1506180752103" TEXT="ascend"/>
 <node CREATED="1506180752103" ID="ID_1087218713" MODIFIED="1533608413555" TEXT="descend to an existing child">
 <node CREATED="1506180752103" ID="ID_908880124" MODIFIED="1506180752103" TEXT="by matching name"/>
 <node CREATED="1506180752104" ID="ID_1484420566" MODIFIED="1506180752104" TEXT="by index number"/>
 </node>
 <node CREATED="1506180752104" ID="ID_534962278" MODIFIED="1506180752104" TEXT="extend the path by  ...creates uncovered extension sequence"/>
-<node CREATED="1506180752104" ID="ID_552405160" MODIFIED="1575133292991" TEXT="create suitable children">
+<node CREATED="1506180752104" ID="ID_552405160" MODIFIED="1576282358128" TEXT="create suitable children">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7059,7 +7128,8 @@
       und dann kann man es auch extern belassen.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
@@ -7093,7 +7163,7 @@
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node CREATED="1504458255403" HGAP="41" ID="ID_246632028" MODIFIED="1575133293039" TEXT="F&#xe4;lle" VSHIFT="9">
+<node CREATED="1504458255403" HGAP="41" ID="ID_246632028" MODIFIED="1576282358127" TEXT="F&#xe4;lle" VSHIFT="9">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7106,7 +7176,8 @@
       sind denkbar und m&#252;ssen in der Strategy konfigurierbar sein?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1504458488876" ID="ID_800753364" MODIFIED="1518487921063" TEXT="Ort">
 <node CREATED="1504458802042" ID="ID_300193794" MODIFIED="1518487921063" TEXT="expliziter Ort (global)"/>
@@ -7207,7 +7278,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1507939270618" ID="ID_1505797299" MODIFIED="1518487921063" TEXT="abstrakte Struktur -&gt; konkrete Widgets"/>
 <node CREATED="1507939279761" ID="ID_250590373" MODIFIED="1518487921063" TEXT="keine nat&#xfc;rliche Introspektion gegeben"/>
-<node CREATED="1507939312860" HGAP="78" ID="ID_444535530" MODIFIED="1575133293183" TEXT="Analyse" VSHIFT="7">
+<node CREATED="1507939312860" HGAP="78" ID="ID_444535530" MODIFIED="1576282358127" TEXT="Analyse" VSHIFT="7">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7229,7 +7300,8 @@
       jedoch gen&#252;gend aufgeschlossen, um die konkrete Implementierung fortzusetzen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1507939326250" ID="ID_1890759249" MODIFIED="1518487921063" TEXT="Aufgaben">
 <node CREATED="1507939400248" ID="ID_1464418318" MODIFIED="1518487921063" TEXT="einem Pfad folgen">
@@ -7648,7 +7720,7 @@
 </node>
 <node CREATED="1509323523193" ID="ID_1088301010" MODIFIED="1533608413593" TEXT="ist nicht das gleiche">
 <icon BUILTIN="idea"/>
-<node CREATED="1509323532816" ID="ID_1206148872" MODIFIED="1575133293595" TEXT="covern kann scheitern">
+<node CREATED="1509323532816" ID="ID_1206148872" MODIFIED="1576282358126" TEXT="covern kann scheitern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7667,9 +7739,10 @@
       Grund: wir wollen vermeiden, abschlie&#223;ende Wildcards <i>blo&#223; irgendwie</i>&#160;zu binden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1509323537479" ID="ID_1638614197" MODIFIED="1575133293603" TEXT="und trotzedm einen Anker finden">
+<node CREATED="1509323537479" ID="ID_1638614197" MODIFIED="1576282358126" TEXT="und trotzedm einen Anker finden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7682,9 +7755,10 @@
       dann aber Wildcards enth&#228;lt, die nicht nach den versch&#228;rften Bedingungen gecovert werden k&#246;nnen.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1509323760466" ID="ID_446881733" MODIFIED="1575133293622" TEXT="oder eben doch komplett im Widerspruch zum UI stehen">
+<node CREATED="1509323760466" ID="ID_446881733" MODIFIED="1576282358125" TEXT="oder eben doch komplett im Widerspruch zum UI stehen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7705,7 +7779,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1514748024287" ID="ID_85844536" MODIFIED="1533608413595" TEXT="ist partielle Covfefe sinnvoll">
@@ -7786,7 +7861,7 @@
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1508540055241" ID="ID_565736574" MODIFIED="1522937702499" TEXT="Konventionen">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1508540093004" ID="ID_277252077" MODIFIED="1575133293700" TEXT="Kinder-IDs sind eindeutig">
+<node CREATED="1508540093004" ID="ID_277252077" MODIFIED="1576282358124" TEXT="Kinder-IDs sind eindeutig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7805,11 +7880,12 @@
       denn eine Verletzung kann weithin unbemerkt bleiben
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1508540106274" ID="ID_1727085652" MODIFIED="1575133293710" TEXT="ID-Literale existeren dauerhaft">
+<node CREATED="1508540106274" ID="ID_1727085652" MODIFIED="1576282358124" TEXT="ID-Literale existeren dauerhaft">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7831,11 +7907,12 @@
       daraus resultierenden Pfad zugreift
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1508540153564" ID="ID_165161640" MODIFIED="1575133293719" TEXT="UI stabil w&#xe4;hrend der Auswertung">
+<node CREATED="1508540153564" ID="ID_165161640" MODIFIED="1576282358123" TEXT="UI stabil w&#xe4;hrend der Auswertung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7851,11 +7928,12 @@
       Hierbei ist <i>aktive Lebensdauer</i>&#160;wie bei einem Iterator zu verstehen.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1508540198326" ID="ID_720643889" MODIFIED="1575133293728" TEXT="Konventionen werden nicht verifiziert">
+<node CREATED="1508540198326" ID="ID_720643889" MODIFIED="1576282358123" TEXT="Konventionen werden nicht verifiziert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7868,7 +7946,8 @@
       wenn die Auswertung aufgrund einer gebrochenen Konvention entgleist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -7877,7 +7956,7 @@
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1508539152568" ID="ID_153711822" MODIFIED="1515120963483" TEXT="Beschreibung">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1508539226014" ID="ID_1714773115" MODIFIED="1575133293762" TEXT="informell...">
+<node CREATED="1508539226014" ID="ID_1714773115" MODIFIED="1576282358122" TEXT="informell...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7893,7 +7972,8 @@
       Es gilt die erste maximal abdeckende L&#246;sung
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1508539330312" ID="ID_67492497" MODIFIED="1508539911843" TEXT="bewegt nur Suchmarken">
@@ -7904,7 +7984,7 @@
 <node CREATED="1508539582959" ID="ID_54646462" MODIFIED="1515120947568" TEXT="Anchor == Literal">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1508539633800" ID="ID_471699110" MODIFIED="1575133293782" TEXT="coverDepth (Zahl)">
+<node CREATED="1508539633800" ID="ID_471699110" MODIFIED="1576282358122" TEXT="coverDepth (Zahl)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7917,9 +7997,10 @@
       Sofern der Pfad bereits explizit ist, gen&#252;gt diese Info allein
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1508539644775" ID="ID_186144507" MODIFIED="1575133293789" TEXT="[optional] explizite Coverage">
+<node CREATED="1508539644775" ID="ID_186144507" MODIFIED="1576282358121" TEXT="[optional] explizite Coverage">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -7937,7 +8018,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -12072,7 +12154,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1514829238960" FOLDED="true" ID="ID_1556354374" MODIFIED="1575133294021" TEXT="Varianten definieren">
+<node COLOR="#990000" CREATED="1514829238960" FOLDED="true" ID="ID_1556354374" MODIFIED="1576282358121" TEXT="Varianten definieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12082,7 +12164,8 @@
       YAGNI
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#7e90a1" DESTINATION="ID_1992822141" ENDARROW="Default" ENDINCLINATION="0;56;" ID="Arrow_ID_26195276" STARTARROW="Default" STARTINCLINATION="-20;-69;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1514942095070" ID="ID_815761690" MODIFIED="1515034463169" TEXT="default: ermitteln der maximalen partiellen Coverage">
@@ -12172,7 +12255,7 @@
 <linktarget COLOR="#525e89" DESTINATION="ID_113366695" ENDARROW="Default" ENDINCLINATION="125;-4;" ID="Arrow_ID_1734399897" SOURCE="ID_1286151530" STARTARROW="None" STARTINCLINATION="-10;85;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#3b5a89" CREATED="1514292065333" FOLDED="true" ID="ID_1133433583" MODIFIED="1575133294047" TEXT="Frage: expliziter Test f&#xfc;r path resolution?">
+<node COLOR="#3b5a89" CREATED="1514292065333" FOLDED="true" ID="ID_1133433583" MODIFIED="1576282358120" TEXT="Frage: expliziter Test f&#xfc;r path resolution?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12185,7 +12268,8 @@
       oder verfangen wir uns da sofort zu sehr in der Implementierungs-Technik?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
 <node CREATED="1514329257785" ID="ID_1871812757" MODIFIED="1518487921065" TEXT="Nein">
@@ -12351,7 +12435,7 @@
 <node COLOR="#338800" CREATED="1514748463645" ID="ID_2814761" MODIFIED="1518487921066" TEXT="TODO: &#xe4;ndern">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1514748505488" ID="ID_947047856" MODIFIED="1575133294072" TEXT="TODO: API umstellen">
+<node COLOR="#338800" CREATED="1514748505488" ID="ID_947047856" MODIFIED="1576282358120" TEXT="TODO: API umstellen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12367,7 +12451,8 @@
       Also sollte <i>das</i>&#160;auf dem API der default sein
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -12410,7 +12495,7 @@
 </node>
 <node COLOR="#338800" CREATED="1508538883715" ID="ID_506584428" MODIFIED="1531584013560" TEXT="Basis: LocationQuery">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1508538979935" ID="ID_1139910958" MODIFIED="1575133294114" TEXT="immer explizit">
+<node CREATED="1508538979935" ID="ID_1139910958" MODIFIED="1576282358119" TEXT="immer explizit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12420,7 +12505,8 @@
       ...das hei&#223;t: keine Wildcards, keine pseudo-Specs (currentWindow)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1508539089208" ID="ID_1071949477" MODIFIED="1508539131769" TEXT="Query">
@@ -12428,7 +12514,7 @@
 <node COLOR="#338800" CREATED="1508619321957" ID="ID_1269390045" MODIFIED="1508717810127" TEXT="anchor">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1508619329420" ID="ID_360997488" MODIFIED="1508619334447" TEXT="in: expliziter Pfad"/>
-<node CREATED="1508619335131" ID="ID_327874233" MODIFIED="1575133294130" TEXT="out: Anker-Literal">
+<node CREATED="1508619335131" ID="ID_327874233" MODIFIED="1576282358119" TEXT="out: Anker-Literal">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12438,7 +12524,8 @@
       Zweck ist vor allem, meta-Specs wie firstWindow, currentWindow aufzul&#246;sen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1508539108398" ID="ID_681619275" MODIFIED="1509319949242" TEXT="coverage">
@@ -12453,7 +12540,7 @@
 <node CREATED="1514330179052" ID="ID_1033437899" MODIFIED="1514330186823" TEXT="mit expandChildren()-Operation"/>
 </node>
 </node>
-<node CREATED="1509319992204" HGAP="60" ID="ID_258976142" MODIFIED="1575133294181" TEXT="prototypische Implementierung...." VSHIFT="21">
+<node CREATED="1509319992204" HGAP="60" ID="ID_258976142" MODIFIED="1576282358118" TEXT="prototypische Implementierung...." VSHIFT="21">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12466,7 +12553,8 @@
       als Repr&#228;sentation des real-existierenden UI
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -12524,7 +12612,7 @@
 <node CREATED="1515885751787" ID="ID_1669926039" MODIFIED="1518487921066" TEXT="indirekt zyklisch">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1515885762754" ID="ID_657098401" MODIFIED="1575133294260" TEXT="ist OK">
+<node CREATED="1515885762754" ID="ID_657098401" MODIFIED="1576282358118" TEXT="ist OK">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12540,7 +12628,8 @@
       an einer Stelle &#252;ber eine allgemeine Abstraktion
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -12585,7 +12674,7 @@
 <arrowlink COLOR="#3b6680" DESTINATION="ID_680693474" ENDARROW="Default" ENDINCLINATION="-178;8;" ID="Arrow_ID_1157808975" STARTARROW="None" STARTINCLINATION="98;0;"/>
 </node>
 <node CREATED="1515877545642" ID="ID_1723275956" MODIFIED="1518487921066" TEXT="lebt in der Implementierung"/>
-<node CREATED="1515877577414" ID="ID_664776417" MODIFIED="1575133294326" TEXT="Bausteine sind sichtbar...">
+<node CREATED="1515877577414" ID="ID_664776417" MODIFIED="1576282358117" TEXT="Bausteine sind sichtbar...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12595,9 +12684,10 @@
       ...als Namespace-globale Variable mit externer Linkage
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node COLOR="#435e98" CREATED="1523117792890" ID="ID_1972679538" MODIFIED="1575133294337" TEXT="Effizienz m&#xe4;&#xdf;ig/unkritisch">
+<node COLOR="#435e98" CREATED="1523117792890" ID="ID_1972679538" MODIFIED="1576282358117" TEXT="Effizienz m&#xe4;&#xdf;ig/unkritisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12621,7 +12711,8 @@
       Grunds&#228;tzlich gilt hier die Einsch&#228;tzung: <b>Klarheit der Schnittstelle hat Vorrang</b>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#abc5e4" DESTINATION="ID_1210359211" ENDARROW="Default" ENDINCLINATION="-217;-87;" ID="Arrow_ID_1226100946" STARTARROW="None" STARTINCLINATION="-187;427;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -12708,7 +12799,7 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1516910710727" ID="ID_1042011734" MODIFIED="1518487921067" TEXT="warum?"/>
 <node CREATED="1516910736388" ID="ID_1267411576" MODIFIED="1518487921067" TEXT="Principle of least surprise"/>
-<node CREATED="1516910715343" ID="ID_1721041331" MODIFIED="1575133294508" TEXT="sonst default f&#xfc;r den default">
+<node CREATED="1516910715343" ID="ID_1721041331" MODIFIED="1576282358116" TEXT="sonst default f&#xfc;r den default">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -12721,7 +12812,8 @@
       zweite hart-gecodete Fallback-Konfig
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -13180,7 +13272,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
 </node>
-<node CREATED="1518658902747" FOLDED="true" ID="ID_976555378" MODIFIED="1575133294630" TEXT="entspricht der Unifikation in Logik-Programmierung">
+<node CREATED="1518658902747" FOLDED="true" ID="ID_976555378" MODIFIED="1576282358116" TEXT="entspricht der Unifikation in Logik-Programmierung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -13196,7 +13288,8 @@
       gegen den Kontext, mit dem sie matchen soll
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1518762048186" ID="ID_1857576258" MODIFIED="1518762055013" TEXT="m&#xf6;chte ich eigentlich nicht einf&#xfc;hren"/>
 <node CREATED="1518762055881" ID="ID_1976334061" MODIFIED="1518762100381" TEXT="vorerst nicht weiter verfolgt">
@@ -14582,7 +14675,7 @@
 <node CREATED="1515725713155" ID="ID_1250695567" MODIFIED="1525124215004" TEXT="w&#xfc;rde schon gehen...">
 <icon BUILTIN="idea"/>
 <node CREATED="1515725719930" ID="ID_746038986" MODIFIED="1515725729012" TEXT="Aber man bekommt komplexere AlocSpec-Typen"/>
-<node CREATED="1515726089841" ID="ID_527144420" MODIFIED="1575133295201" TEXT="der harte (technische) Teil ist bereits implementiert...">
+<node CREATED="1515726089841" ID="ID_527144420" MODIFIED="1576282358115" TEXT="der harte (technische) Teil ist bereits implementiert...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -14592,7 +14685,8 @@
       n&#228;mlich in lib::meta::func::PApply::bindBack
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1515725834771" ID="ID_403863327" MODIFIED="1515725871768" TEXT="variadisch Template-Argumente">
 <icon BUILTIN="messagebox_warning"/>
@@ -14610,7 +14704,7 @@
 <node CREATED="1515726634601" ID="ID_41891466" MODIFIED="1515726639664" TEXT="geht das?">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1515726644600" ID="ID_1701085444" MODIFIED="1575133295235" TEXT="C++14">
+<node CREATED="1515726644600" ID="ID_1701085444" MODIFIED="1576282358115" TEXT="C++14">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -14641,7 +14735,8 @@
       };
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#ef5d2b" CREATED="1515726754041" ID="ID_315893428" LINK="http://en.cppreference.com/w/cpp/language/lambda" MODIFIED="1515726793618" TEXT="cppreference..."/>
@@ -15062,7 +15157,7 @@
 <node CREATED="1508809719165" ID="ID_1506398379" MODIFIED="1509064569893" TEXT="Segfault beim Initialisieren des Ergebnisses f&#xfc;r extractKey"/>
 </node>
 <node CREATED="1508809741418" ID="ID_1013369537" MODIFIED="1509070755705" TEXT="Verdacht: irgendwo move mit dangling storage?"/>
-<node CREATED="1509070756935" ID="ID_1331980374" MODIFIED="1575133295608" TEXT="nein! Nur eine Referenz vom Temporary">
+<node CREATED="1509070756935" ID="ID_1331980374" MODIFIED="1576282358114" TEXT="nein! Nur eine Referenz vom Temporary">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15081,7 +15176,8 @@
       Daher denkt der Compiler, er kann das Ursprungsobjekt jezt wergwerfen.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -15100,7 +15196,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1509143055036" ID="ID_810015478" MODIFIED="1575133295621" TEXT="absichtlich unorthogonal repr&#xe4;sentiert">
+<node CREATED="1509143055036" ID="ID_810015478" MODIFIED="1576282358114" TEXT="absichtlich unorthogonal repr&#xe4;sentiert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15119,7 +15215,8 @@
       bei der Navigation in einem realen GUI auftreten
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1509143404342" ID="ID_708195081" MODIFIED="1533608413762" TEXT="drillDown aufbohren">
 <icon BUILTIN="ksmiletris"/>
@@ -15132,7 +15229,7 @@
 </node>
 <node CREATED="1509143469429" ID="ID_1414723485" MODIFIED="1509143481984" TEXT="keinen Abstiegs-Schritt machen"/>
 </node>
-<node CREATED="1509143542611" ID="ID_114168871" MODIFIED="1575133295651" TEXT="Schwein gehabt, rekursiv programmiert">
+<node CREATED="1509143542611" ID="ID_114168871" MODIFIED="1576282358113" TEXT="Schwein gehabt, rekursiv programmiert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15145,7 +15242,8 @@
       da&#223; ich mich wieder mal &quot;akademisch&quot; verspielt habe.... :-P
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -15164,7 +15262,7 @@
 <node CREATED="1509151305602" ID="ID_452317335" MODIFIED="1509287419861" TEXT="als IterSource verpackt">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1509151309866" ID="ID_1109789284" MODIFIED="1575133295685" TEXT="sollte es als als Basis iter implementieren">
+<node CREATED="1509151309866" ID="ID_1109789284" MODIFIED="1576282358112" TEXT="sollte es als als Basis iter implementieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15177,7 +15275,8 @@
       Schichten-Prinzip...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1509151381113" ID="ID_779657015" MODIFIED="1509151411655" TEXT="brauche ItemWrapper f&#xfc;r beliebiges Element"/>
 <node CREATED="1509151390495" ID="ID_947844248" MODIFIED="1509285129251" TEXT="Idee: TransformIter aufbohren">
@@ -15613,7 +15712,7 @@
 <node CREATED="1523727045276" ID="ID_1873415671" MODIFIED="1523727056587" TEXT="Problem: wie testen ohne UI-Context?">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1523727057907" ID="ID_465631036" MODIFIED="1575133296327" TEXT="Ausweg">
+<node CREATED="1523727057907" ID="ID_465631036" MODIFIED="1576282358112" TEXT="Ausweg">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15641,7 +15740,8 @@
       warum ViewLocator so nebul&#246;s bleibt: <b>es gibt noch kein Lumiera GUI</b>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1523746796508" ID="ID_1839059733" MODIFIED="1523746796508" TEXT="Aufruf nur nachbauen"/>
 <node CREATED="1523746798210" ID="ID_1076120435" MODIFIED="1523746818187" TEXT="Fake-DSL-Definitionen verwenden"/>
@@ -15699,7 +15799,7 @@
 <node CREATED="1523746674939" ID="ID_1008453652" MODIFIED="1523746693800" TEXT="dies erfordert, die realen WIdgets zu instantiieren">
 <icon BUILTIN="broken-line"/>
 </node>
-<node CREATED="1523746704479" ID="ID_462392796" MODIFIED="1575133296431" TEXT="...und das ist ausgeschlossen">
+<node CREATED="1523746704479" ID="ID_462392796" MODIFIED="1576282358111" TEXT="...und das ist ausgeschlossen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15709,7 +15809,8 @@
       <u>Policy</u>: Unit-Tests d&#252;rfen keine GTK-Abh&#228;ngigkeit haben
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#435e98" CREATED="1523748895111" ID="ID_613307109" MODIFIED="1523748953311" TEXT="sp&#xe4;ter mal....">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -15733,7 +15834,7 @@
 <node CREATED="1504479778086" ID="ID_1867364946" MODIFIED="1518487921072" TEXT="wichtige F&#xe4;lle abbilden"/>
 <node CREATED="1504479801683" ID="ID_1408830980" MODIFIED="1518487921072" TEXT="Implementierung">
 <node CREATED="1504479807066" ID="ID_1318651039" MODIFIED="1518487921072" TEXT="m&#xe4;&#xdf;ig komplex"/>
-<node CREATED="1504479813553" ID="ID_141842675" MODIFIED="1575133296478" TEXT="ehr effizient">
+<node CREATED="1504479813553" ID="ID_141842675" MODIFIED="1576282358111" TEXT="ehr effizient">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15754,7 +15855,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#8e79a4" DESTINATION="ID_1229791291" ENDARROW="Default" ENDINCLINATION="16;-93;" ID="Arrow_ID_277133142" STARTARROW="None" STARTINCLINATION="133;0;"/>
 </node>
 </node>
@@ -15805,7 +15907,7 @@
 <linktarget COLOR="#6b768e" DESTINATION="ID_1191902349" ENDARROW="Default" ENDINCLINATION="28;-22;" ID="Arrow_ID_1105816510" SOURCE="ID_1380298925" STARTARROW="None" STARTINCLINATION="113;3;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1504832179925" ID="ID_878950103" MODIFIED="1518487921073" TEXT="w&#xe4;re akzeptabel"/>
-<node CREATED="1504831934790" ID="ID_1800843653" MODIFIED="1575133296622" TEXT="aber etwas &#xfc;bertrieben...">
+<node CREATED="1504831934790" ID="ID_1800843653" MODIFIED="1576282358110" TEXT="aber etwas &#xfc;bertrieben...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15833,7 +15935,8 @@
       bewirkt nur eine Entkoppelung vom Implementierungs-Kontext
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1504832266793" ID="ID_1279692021" MODIFIED="1533608413774" TEXT="einfache Funktoren?">
@@ -15851,7 +15954,7 @@
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1504832413997" ID="ID_439230153" MODIFIED="1575133296642" TEXT="namentlich bekannte Definitionen">
+<node CREATED="1504832413997" ID="ID_439230153" MODIFIED="1576282358110" TEXT="namentlich bekannte Definitionen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15867,7 +15970,8 @@
       sondern interpretieren jeweils nur eine einzige feste Konfiguration
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1504832476365" ID="ID_799285654" MODIFIED="1518487921073" TEXT="mit der Implementierungsfunktion initialisiert"/>
 <node CREATED="1504832511688" ID="ID_673872785" MODIFIED="1518487921073" TEXT="Voraussetzung: sinnvolle Primitive">
@@ -15917,7 +16021,7 @@
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1504886051389" ID="ID_1177567162" MODIFIED="1518487921073" TEXT="Tupel {Fenster, Perspektive, Panel, Gruppe, Pfad}"/>
-<node CREATED="1504886084393" ID="ID_28488269" MODIFIED="1575133296720" TEXT="optionale Komponenten">
+<node CREATED="1504886084393" ID="ID_28488269" MODIFIED="1576282358109" TEXT="optionale Komponenten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -15930,7 +16034,8 @@
       um auszudr&#252;cken, da&#223; gewissen Angaben ausgelassen wurden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1504886119604" ID="ID_206635297" MODIFIED="1518487921073" TEXT="komplexes Thema">
 <icon BUILTIN="messagebox_warning"/>
@@ -16261,7 +16366,7 @@
 <node COLOR="#990000" CREATED="1517970380222" ID="ID_1663499246" MODIFIED="1561827465199" TEXT="trickreich zu implementieren">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1517970403323" ID="ID_676104700" MODIFIED="1518487921075" TEXT="...wofern &#xfc;berhaupt m&#xf6;glich"/>
-<node CREATED="1517970410690" ID="ID_1716625175" MODIFIED="1575133297197" TEXT="Problem sind die LocationClauses">
+<node CREATED="1517970410690" ID="ID_1716625175" MODIFIED="1576282358109" TEXT="Problem sind die LocationClauses">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16283,7 +16388,8 @@
       dann bekommt man einen UICoord::Builder&#160;&#160;und das ist noch keine Klausel!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node COLOR="#281977" CREATED="1517971193343" ID="ID_1413272427" MODIFIED="1518487921075" TEXT="vielleicht mit freiem OR-Operator?">
@@ -16362,7 +16468,7 @@
 <node CREATED="1523059565187" ID="ID_685856143" MODIFIED="1523059569334" TEXT="Implementierung">
 <node CREATED="1523059570619" ID="ID_1720611397" MODIFIED="1525124215025" TEXT="Problem: Typisierung">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1523059593831" ID="ID_1175935224" MODIFIED="1575133297344" TEXT="will mich nicht auf eine Basisklasse festlegen">
+<node CREATED="1523059593831" ID="ID_1175935224" MODIFIED="1576282358108" TEXT="will mich nicht auf eine Basisklasse festlegen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16381,7 +16487,8 @@
       aber es k&#246;nnte durchaus sein, da&#223; man auf sie generisch zugreifen m&#246;chte
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1523059669693" ID="ID_11075132" MODIFIED="1523227985279" STYLE="fork" TEXT="lib::AccessCasted">
 <icon BUILTIN="button_cancel"/>
@@ -16417,7 +16524,7 @@
 <node CREATED="1523224208591" ID="ID_1896914767" MODIFIED="1523225015564" TEXT="geht&apos;s noch einfacher?">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1523224222477" ID="ID_769675431" MODIFIED="1523224258636" TEXT="reinen Pointer liefern?"/>
-<node CREATED="1523224259839" ID="ID_1984912464" MODIFIED="1575133297452" TEXT="wer braucht Fehler?">
+<node CREATED="1523224259839" ID="ID_1984912464" MODIFIED="1576282358108" TEXT="wer braucht Fehler?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16438,9 +16545,10 @@
       In Fall-1 wird man eine bool-Abfrage machen wollen, und man kann auch mit einer false-Antwort umgehen. In Fall-2 dagegen bleibt nur noch der Tod. Und davon ist im Regelfall nicht auszugehen. Im Moment sehe ich Fall-2 als den <b>standard-use-Case</b>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1523224898647" ID="ID_1600596253" MODIFIED="1575133297460" TEXT="zwei nicht-kongruente F&#xe4;lle">
+<node CREATED="1523224898647" ID="ID_1600596253" MODIFIED="1576282358107" TEXT="zwei nicht-kongruente F&#xe4;lle">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16455,7 +16563,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1523224938633" ID="ID_1168693432" MODIFIED="1523225005333" TEXT="SEGFAULT droht">
 <icon BUILTIN="messagebox_warning"/>
@@ -16489,7 +16598,7 @@
 </node>
 <node COLOR="#338800" CREATED="1523222204556" ID="ID_1018012203" MODIFIED="1525124215030" TEXT="Ergebnis-Ausgabe">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1523222214579" ID="ID_1568226158" MODIFIED="1575133297529" STYLE="fork" TEXT="Feststellung: keine Status-R&#xfc;ckmeldung">
+<node CREATED="1523222214579" ID="ID_1568226158" MODIFIED="1576282358106" STYLE="fork" TEXT="Feststellung: keine Status-R&#xfc;ckmeldung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16508,7 +16617,8 @@
       Die einzig interessante Information ist, ob es <b>gelungen</b>&#160;ist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#97db97" DESTINATION="ID_1568226158" ENDARROW="Default" ENDINCLINATION="226;0;" ID="Arrow_ID_26754858" SOURCE="ID_1400754551" STARTARROW="None" STARTINCLINATION="277;-10;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -16785,7 +16895,7 @@
 <node COLOR="#338800" CREATED="1539270786646" ID="ID_1019344552" MODIFIED="1557498707221" TEXT="delegierenden Mutator implementieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539270801572" ID="ID_1535443502" MODIFIED="1557498707221" TEXT="f&#xfc;r InteractionDirector">
-<node CREATED="1539270491013" ID="ID_1136748343" MODIFIED="1565282916932" TEXT="Problem der korrekten Diff-Struktur">
+<node CREATED="1539270491013" ID="ID_1136748343" MODIFIED="1576203555715" TEXT="Problem der korrekten Diff-Struktur">
 <arrowlink COLOR="#cbada9" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="1069;-129;" ID="Arrow_ID_46239762" STARTARROW="None" STARTINCLINATION="-474;40;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -16800,7 +16910,7 @@
 <node CREATED="1539294589200" ID="ID_1206613848" MODIFIED="1557498707221" TEXT="ja">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1539294594367" ID="ID_451112886" MODIFIED="1575133298191" TEXT="wenn InteractionDirector selber ein Diff empf&#xe4;ngt...">
+<node CREATED="1539294594367" ID="ID_451112886" MODIFIED="1576282358106" TEXT="wenn InteractionDirector selber ein Diff empf&#xe4;ngt...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16816,7 +16926,8 @@
       und daher auf &quot;inaktiv&quot; geschaltet ist.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1539294678444" ID="ID_934706379" MODIFIED="1557498707221" TEXT="TreeMutator scheitert per Default">
@@ -16848,7 +16959,7 @@
 <node COLOR="#338800" CREATED="1539302456636" ID="ID_809868228" MODIFIED="1539302478177" TEXT="Idee: mit anderen Layern kombinieren...">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#435e98" CREATED="1539302481080" ID="ID_126724611" MODIFIED="1575133298256" TEXT="static_assertion">
+<node COLOR="#435e98" CREATED="1539302481080" ID="ID_126724611" MODIFIED="1576282358105" TEXT="static_assertion">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16867,7 +16978,8 @@
       Habe verifiziert, da&#223; diese Assertion tats&#228;chlich greift
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -17068,7 +17180,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1487472993439" ID="ID_310404379" MODIFIED="1518487921076" TEXT="unter der Annahme, da&#xdf; das UI wirklich single-threaded l&#xe4;uft"/>
 <node CREATED="1487473004949" ID="ID_1092623141" MODIFIED="1518487921076" TEXT="wenn wir die Garantie haben, da&#xdf; die Event-Loop nichts mehr macht"/>
-<node CREATED="1487473038377" ID="ID_393673106" MODIFIED="1575133298609" TEXT="Policy: kein Tangible darf im dtor mit dem UI-Bus reden">
+<node CREATED="1487473038377" ID="ID_393673106" MODIFIED="1576282358105" TEXT="Policy: kein Tangible darf im dtor mit dem UI-Bus reden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17081,7 +17193,8 @@
       der es selbst vom Bus abkoppelt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -17206,7 +17319,7 @@
 <node CREATED="1485126466520" ID="ID_717310004" MODIFIED="1557498707221" TEXT="WindowManager" VSHIFT="34">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1485457325724" ID="ID_1954589768" MODIFIED="1557498707221" TEXT="nur f&#xfc;r die Hauptfenster zust&#xe4;ndig"/>
-<node CREATED="1485457328043" ID="ID_1787642462" MODIFIED="1575133298954" TEXT="wir haben kein ApplicationWindow">
+<node CREATED="1485457328043" ID="ID_1787642462" MODIFIED="1576282358104" TEXT="wir haben kein ApplicationWindow">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17216,7 +17329,8 @@
       ...denn das ist das vereinfachte Setup f&#252;r &quot;einfache&quot; Applikationen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1485457370310" ID="ID_1931452525" MODIFIED="1557498707221" TEXT="GtkWindow sind v&#xf6;llig ausreichend"/>
@@ -17380,7 +17494,7 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1534519634333" ID="ID_298940282" MODIFIED="1534519643957" TEXT="vorl&#xe4;ufig">
 <icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1534519645420" ID="ID_1509280168" MODIFIED="1575133299337" TEXT="&#xfc;bernimmt Funktionen vom ViewLocator">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1534519645420" ID="ID_1509280168" MODIFIED="1576282358104" TEXT="&#xfc;bernimmt Funktionen vom ViewLocator">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17399,7 +17513,8 @@
       wenn es schon wirkliche und funktionierende Widgets im System gibt.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -17414,7 +17529,7 @@
 </node>
 <node COLOR="#338800" CREATED="1534520258251" ID="ID_634139165" MODIFIED="1534526246434" TEXT="wenn nicht gefunden, dann erzeugen">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1534520271354" ID="ID_1722998809" MODIFIED="1575133299375" TEXT="PanelManager: reine Anfrage">
+<node COLOR="#338800" CREATED="1534520271354" ID="ID_1722998809" MODIFIED="1576282358103" TEXT="PanelManager: reine Anfrage">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17424,7 +17539,8 @@
       ...bisher erzeugt die lookup-Operation automatisch
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1534520304493" ID="ID_1795676672" MODIFIED="1534522378245" TEXT="wo erzeugen?">
@@ -17565,8 +17681,8 @@
 </node>
 </node>
 <node CREATED="1486943969999" ID="ID_1823284637" MODIFIED="1557498707222" TEXT="Wizzard">
-<node CREATED="1533688038820" ID="ID_70134302" MODIFIED="1557498707222" TEXT="Fehlerlog (notification display)">
-<linktarget COLOR="#a9aac1" DESTINATION="ID_70134302" ENDARROW="Default" ENDINCLINATION="-1984;0;" ID="Arrow_ID_1885125683" SOURCE="ID_361019548" STARTARROW="None" STARTINCLINATION="803;-67;"/>
+<node CREATED="1533688038820" ID="ID_70134302" MODIFIED="1576202124808" TEXT="Fehlerlog (notification display)">
+<linktarget COLOR="#a9aac1" DESTINATION="ID_70134302" ENDARROW="Default" ENDINCLINATION="-1984;0;" ID="Arrow_ID_1885125683" SOURCE="ID_361019548" STARTARROW="None" STARTINCLINATION="807;-66;"/>
 </node>
 <node CREATED="1486943974590" ID="ID_1603501979" MODIFIED="1557498707222" TEXT="Hilfe (Website?)"/>
 <node CREATED="1486944977005" ID="ID_811162889" MODIFIED="1557498707222" TEXT="kontextsensitive Hilfe"/>
@@ -17592,7 +17708,7 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1504386527936" ID="ID_307889825" MODIFIED="1557498707222" TEXT="mu&#xdf; ID finden k&#xf6;nnen"/>
 <node CREATED="1504386535447" ID="ID_426578263" MODIFIED="1557498707222" TEXT="brauche Service zum Erzeugen/L&#xf6;schen"/>
-<node CREATED="1504386595679" ID="ID_1383687482" MODIFIED="1575133299827" TEXT="Mutation: brauche Model-Platzhalter">
+<node CREATED="1504386595679" ID="ID_1383687482" MODIFIED="1576282358103" TEXT="Mutation: brauche Model-Platzhalter">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17602,9 +17718,10 @@
       das Diff wird auf den Platzhalter angewendet
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1504386636074" ID="ID_1996752633" MODIFIED="1575133299836" TEXT="automatisches Management von&#xf6;ten">
+<node CREATED="1504386636074" ID="ID_1996752633" MODIFIED="1576282358102" TEXT="automatisches Management von&#xf6;ten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17617,7 +17734,8 @@
       dann mu&#223; dieses automatisch deregistriert werden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1504371342426" ID="ID_869653682" MODIFIED="1557498707222">
 <richcontent TYPE="NODE"><html>
@@ -17790,7 +17908,7 @@
 <node CREATED="1541089394205" ID="ID_1611263820" MODIFIED="1557498707223" TEXT="Stock"/>
 </node>
 <node CREATED="1541088360999" ID="ID_1860524548" MODIFIED="1557498707223" TEXT="horizontale Ausdehnung steuerbar">
-<node CREATED="1541088395516" ID="ID_122658669" MODIFIED="1575133300339" TEXT="nat&#xfc;rlich">
+<node CREATED="1541088395516" ID="ID_122658669" MODIFIED="1576282358102" TEXT="nat&#xfc;rlich">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17800,9 +17918,10 @@
       d.h. das Widget unternimmt selber nichts, und &#252;berl&#228;&#223;t GTK die Gr&#246;&#223;enbestimmung
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1541088402105" ID="ID_857510555" MODIFIED="1575133300349" TEXT="feste L&#xe4;ngenvorgabe">
+<node CREATED="1541088402105" ID="ID_857510555" MODIFIED="1576282358101" TEXT="feste L&#xe4;ngenvorgabe">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17815,9 +17934,10 @@
       Und sonst wird er K&#246;rper/Hintergrund ausgedehnt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1541088480846" ID="ID_6642470" MODIFIED="1575133300365" TEXT="Kopf proportional platzierbar">
+<node CREATED="1541088480846" ID="ID_6642470" MODIFIED="1576282358101" TEXT="Kopf proportional platzierbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17853,7 +17973,8 @@
       <b>Sehr wichtig</b>&#160;f&#252;r die Anzeige von <b>langen Clips</b>&#160;und Effekten.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1541095770851" ID="ID_1856155420" MODIFIED="1557498707223" TEXT="#1186 proportional Head placement">
 <icon BUILTIN="flag-yellow"/>
@@ -17982,7 +18103,7 @@
 <node COLOR="#435e98" CREATED="1477600126514" ID="ID_1433799303" MODIFIED="1561827465248" TEXT="grunds&#xe4;tzlich....">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1477600134217" ID="ID_1352260964" MODIFIED="1575133300725" TEXT="wie viel selber machen?">
+<node CREATED="1477600134217" ID="ID_1352260964" MODIFIED="1576282358100" TEXT="wie viel selber machen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -17995,7 +18116,8 @@
       und welchen Teil des Verhaltens &#252;berlassen wir GTK
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1477600216950" ID="ID_1935952349" MODIFIED="1518487921079" TEXT="focus">
@@ -18028,7 +18150,7 @@
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541858017069" HGAP="7" ID="ID_1165638730" MODIFIED="1541858026121" TEXT="Fazit" VSHIFT="5">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1541858031423" ID="ID_1183173385" MODIFIED="1575133300824">
+<node CREATED="1541858031423" ID="ID_1183173385" MODIFIED="1576282358100">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -18054,9 +18176,10 @@
       Aus Gr&#252;nden der Konsistenz und Zukunftsf&#228;higkeit
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1541858088132" ID="ID_303565989" MODIFIED="1575133300833">
+<node CREATED="1541858088132" ID="ID_303565989" MODIFIED="1576282358099">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -18087,7 +18210,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -18102,7 +18226,7 @@
 </node>
 <node CREATED="1479678484210" ID="ID_1561971595" MODIFIED="1557498707224" TEXT="Struktur">
 <node CREATED="1479678496272" ID="ID_807567871" LINK="file:///home/hiv/devel/lumi/wiki/renderengine.html#GuiTimelineWidgetStructure" MODIFIED="1557498707224" TEXT="Analyse">
-<node CREATED="1479678503071" ID="ID_806149006" MODIFIED="1575133300887" TEXT="Grid bringt nix">
+<node CREATED="1479678503071" ID="ID_806149006" MODIFIED="1576282358098" TEXT="Grid bringt nix">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18118,7 +18242,8 @@
       Details im&#160;&#160;TiddlyWiki....
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1479678634213" ID="ID_432405176" MODIFIED="1557498707224" TEXT="rekursive Struktur schaffen">
@@ -18172,7 +18297,7 @@
 <node CREATED="1480724724585" ID="ID_576219568" MODIFIED="1518487921080" TEXT="mu&#xdf; f&#xfc;r alle Struktur&#xe4;nderungen delegieren"/>
 <node CREATED="1480724738583" ID="ID_403933116" MODIFIED="1518487921080" TEXT="Achtung: Tangible is noncopyable">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1480724761876" ID="ID_335451126" MODIFIED="1575133301090" TEXT="wegen BusTerm">
+<node CREATED="1480724761876" ID="ID_335451126" MODIFIED="1576282358098" TEXT="wegen BusTerm">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18182,7 +18307,8 @@
       braucht feste Speicher-Addresse
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1480724781801" ID="ID_198046255" MODIFIED="1518487921080" TEXT="folglich: nicht in STL-Container">
 <icon BUILTIN="stop-sign"/>
@@ -18192,7 +18318,7 @@
 <node CREATED="1480724461860" ID="ID_865875607" MODIFIED="1561827465249" TEXT="Controller is Tangible">
 <linktarget COLOR="#1017b1" DESTINATION="ID_865875607" ENDARROW="Default" ENDINCLINATION="-67;4;" ID="Arrow_ID_1321400081" SOURCE="ID_1683703083" STARTARROW="Default" STARTINCLINATION="-78;4;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1480724851312" ID="ID_1653680733" MODIFIED="1575133301111" TEXT="erzeugt R&#xfc;ckbezug f&#xfc;r Notifications">
+<node CREATED="1480724851312" ID="ID_1653680733" MODIFIED="1576282358097" TEXT="erzeugt R&#xfc;ckbezug f&#xfc;r Notifications">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18205,7 +18331,8 @@
       und sei es auch blo&#223; &#252;ber ein Interface!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1480724910096" ID="ID_874781354" MODIFIED="1518487921080" TEXT="kann direkt das View-Modell manipulieren"/>
 <node CREATED="1480724927814" ID="ID_1912287440" MODIFIED="1518487921080" TEXT="ist nicht direkt erreichbar">
@@ -18221,7 +18348,7 @@
 <icon BUILTIN="idea"/>
 <node CREATED="1480724983774" ID="ID_845297603" MODIFIED="1518487921080" TEXT="hei&#xdf;t: Manipulation au&#xdf;erhalb des Diff-Systems"/>
 <node CREATED="1480725000029" ID="ID_1586514211" MODIFIED="1518487921080" TEXT="wir steigen stets auf Ebene einer Timeline ein"/>
-<node CREATED="1480725012731" ID="ID_9332776" MODIFIED="1575133301154">
+<node CREATED="1480725012731" ID="ID_9332776" MODIFIED="1576282358097">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -18255,7 +18382,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1480725106478" ID="ID_550796340" MODIFIED="1518487921080" TEXT="effektiv auch die L&#xf6;sung f&#xfc;r Alternative-2">
@@ -18269,7 +18397,7 @@
 <node CREATED="1569711514311" ID="ID_966535115" MODIFIED="1569711525152" TEXT="kniffeliges strukturelles Problem">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1569711527039" ID="ID_492957941" MODIFIED="1569711539256" TEXT="Zustand wird lokal, in den Widgets verwaltet"/>
-<node CREATED="1569711540189" ID="ID_1641306694" MODIFIED="1575133301186" TEXT="diese brauchen jedoch Zugang zu zentralen Strukuren, speziell f&#xfc;r die Pr&#xe4;sentation">
+<node CREATED="1569711540189" ID="ID_1641306694" MODIFIED="1576282358096" TEXT="diese brauchen jedoch Zugang zu zentralen Strukuren, speziell f&#xfc;r die Pr&#xe4;sentation">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18282,7 +18410,8 @@
       Das bedeutet: viele Kind-Widgets werden auf diesem Canvas platziert und m&#252;ssen daher mit ihm interagieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1569711684335" ID="ID_1964864197" MODIFIED="1569711950196" TEXT="verwende eine Beziehungs-Entit&#xe4;t &quot;ViewHook&quot;">
@@ -18295,7 +18424,7 @@
 <node CREATED="1569796925567" ID="ID_737561546" MODIFIED="1569796955277" TEXT="wird erzeugt durch &quot;Einf&#xfc;gen&quot; eines Elementes in die Anzeige"/>
 <node CREATED="1569796959970" ID="ID_894452722" MODIFIED="1573241985243" STYLE="fork" TEXT="beim Zerst&#xf6;ren &quot;entfernt&quot; es dieses Element aus der Anzeige"/>
 <node CREATED="1569797018132" ID="ID_609962345" MODIFIED="1573241988838" STYLE="fork" TEXT="w&#xe4;hrend der Lebensdauer erlaubt es dieses Element in der Anzeige zu repositionieren"/>
-<node CREATED="1569797689767" ID="ID_454948151" MODIFIED="1575133301264" STYLE="fork" TEXT="kann Kind-ViewHooked relativ zum platzierten Element erzeugen">
+<node CREATED="1569797689767" ID="ID_454948151" MODIFIED="1576282358096" STYLE="fork" TEXT="kann Kind-ViewHooked relativ zum platzierten Element erzeugen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18308,7 +18437,8 @@
       Allerdings lebt das erzeugte Kind-ViewHooked danach eigenst&#228;ndig und es gibt keine weitere Beziehung
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1569798407650" ID="ID_1008276733" MODIFIED="1569798417575" TEXT="Konsequenzen">
@@ -18317,7 +18447,7 @@
 <node CREATED="1569798642005" ID="ID_463960789" MODIFIED="1569798703836" TEXT="Ziel-Pointer auf den Anzeigerahmen/Canvas"/>
 </node>
 <node CREATED="1569799685975" ID="ID_1899453702" MODIFIED="1569799698129" TEXT="zun&#xe4;chst einmal ziemlich festgelegt">
-<node CREATED="1569799719906" ID="ID_201546085" MODIFIED="1575133301302" TEXT="Lambdas w&#xfc;rden einen Ziel-Pointer pro Lambda erfordern">
+<node CREATED="1569799719906" ID="ID_201546085" MODIFIED="1576282358095" TEXT="Lambdas w&#xfc;rden einen Ziel-Pointer pro Lambda erfordern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18327,10 +18457,11 @@
       Erl&#228;uterung: man k&#246;nnte auf die Idee kommen, die vier notwendigen Operationen auf dem Ziel durch Lambdas zu verkapseln. Wenn man dann aber nicht aufpa&#223;t, resultiert das in einer Closure f&#252;r jedes dieser vier Lamdas, und diese Closure h&#228;lt zumindest einen Pointer auf das Zielobjekt. <i>Der Vorteil eines solchen Ansatzes </i>w&#228;re nat&#252;rlich, da&#223; der konkrete Typ von Quelle und Ziel aus der Definition des ViewHook verschwindet (allerdings auch nur, wenn diese Lambdas in std::function-Objekte gewickelt sind)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1569800105842" ID="ID_403274133" MODIFIED="1569800125569" TEXT="w&#xfc;nschenswert w&#xe4;re, den konkreten Zieltyp zu entkoppeln"/>
-<node CREATED="1569800749930" ID="ID_1631103689" MODIFIED="1575579565308" TEXT="w&#xfc;nschenswer w&#xe4;re aber auch Quer-Beweglichkeit">
+<node CREATED="1569800749930" ID="ID_1631103689" MODIFIED="1576282358094" TEXT="w&#xfc;nschenswer w&#xe4;re aber auch Quer-Beweglichkeit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18351,7 +18482,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#61a5df" DESTINATION="ID_1550703494" ENDARROW="Default" ENDINCLINATION="-180;0;" ID="Arrow_ID_1915156143" STARTARROW="None" STARTINCLINATION="-615;17;"/>
 </node>
 </node>
@@ -18361,7 +18493,7 @@
 <node CREATED="1569800980203" ID="ID_1663628523" MODIFIED="1569801006667" TEXT="das Element dagegen ist ein Typ-Parameter"/>
 <node CREATED="1569800938265" ID="ID_501232684" MODIFIED="1569800973086" TEXT="die typische Doppelkapsel: Generische H&#xfc;lle, polymorphe Innereien"/>
 </node>
-<node CREATED="1573744962237" ID="ID_1240251301" MODIFIED="1575133301365" TEXT="&#xbb;Dreiecks-Anordnung&#xab; erscheint sinnvoll">
+<node CREATED="1573744962237" ID="ID_1240251301" MODIFIED="1576282358094" TEXT="&#xbb;Dreiecks-Anordnung&#xab; erscheint sinnvoll">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18371,7 +18503,8 @@
       da der ViewHook schon zwei Pointer zu zwei Entit&#228;ten halten mu&#223;, kann man Redundanzen vermeiden, indem man ihn <i>an einem dritten Ort</i>&#160;anbringt. N&#228;mlich an einem Ort, an dem ohnehin schon eine Dreiecksbeziehung mit diesen beiden Elementen besteht
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1575579594451" ID="ID_1173527513" MODIFIED="1575579601366" TEXT="Ergebnisse der Analyse">
@@ -18385,7 +18518,7 @@
 </node>
 <node CREATED="1573751565872" ID="ID_274573678" MODIFIED="1575580655106" TEXT="Vertiefte Design-Analyse">
 <linktarget COLOR="#2e1d90" DESTINATION="ID_274573678" ENDARROW="Default" ENDINCLINATION="-1890;235;" ID="Arrow_ID_1905963364" SOURCE="ID_1007243980" STARTARROW="None" STARTINCLINATION="532;69;"/>
-<node CREATED="1575580479206" ID="ID_871786644" MODIFIED="1575580528003" TEXT="Frage: kann das zu einem Konstruktionsschema ausgebaut werden">
+<node CREATED="1575580479206" ID="ID_871786644" MODIFIED="1576282358093" TEXT="Frage: kann das zu einem Konstruktionsschema ausgebaut werden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18395,7 +18528,8 @@
       Dies w&#228;re dann das R&#252;ckgrat in der View-Behandlung in der Timeline
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node COLOR="#435e98" CREATED="1573314915266" FOLDED="true" ID="ID_1550703494" MODIFIED="1575667987460" TEXT="Quer-Beweglichkeit zwischen Typen">
@@ -19188,7 +19322,7 @@
 <node CREATED="1575063075462" ID="ID_1658596486" MODIFIED="1575063094666" TEXT="zwei Auspr&#xe4;gungen m&#xf6;glich">
 <node CREATED="1575063095757" ID="ID_1339415707" MODIFIED="1575063137739" TEXT="Auspr&#xe4;gung &#x3b1;">
 <node CREATED="1575063150438" ID="ID_1366830537" MODIFIED="1575063158185" TEXT="Vater hat Zugang zum ViewHook"/>
-<node CREATED="1575063163433" ID="ID_275623631" MODIFIED="1575063202833" TEXT="was grunds&#xe4;tzlich der Fall sein mu&#xdf;">
+<node CREATED="1575063163433" ID="ID_275623631" MODIFIED="1576282358093" TEXT="was grunds&#xe4;tzlich der Fall sein mu&#xdf;">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19198,12 +19332,13 @@
       ...weil der Vater ja auch neue Kinder &quot;hooken&quot;&#160;kann
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1575063138735" ID="ID_1205459588" MODIFIED="1575063142611" TEXT="Auspr&#xe4;gung &#x3b2;">
 <node CREATED="1575063213437" ID="ID_45088920" MODIFIED="1575653931186" TEXT="ViewHooked bietet eine rehook()-Operation an"/>
-<node CREATED="1575063249066" ID="ID_1247469918" MODIFIED="1575063284828" TEXT="das l&#xf6;st das Problem des atomaren Umh&#xe4;ngens">
+<node CREATED="1575063249066" ID="ID_1247469918" MODIFIED="1576282358092" TEXT="das l&#xf6;st das Problem des atomaren Umh&#xe4;ngens">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19213,7 +19348,8 @@
       d.h. zugleich wird die alte Verbindung gel&#246;st und die neue konstruiert
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -19242,7 +19378,7 @@
 </node>
 <node CREATED="1575062654000" ID="ID_491999909" MODIFIED="1575062874337" TEXT="Fehlerbehandlung">
 <icon BUILTIN="yes"/>
-<node CREATED="1575062659140" ID="ID_1145995477" MODIFIED="1575062707239" TEXT="im Regelfall ist die Umordnung erfolgreich">
+<node CREATED="1575062659140" ID="ID_1145995477" MODIFIED="1576282358092" TEXT="im Regelfall ist die Umordnung erfolgreich">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19252,7 +19388,8 @@
       es gibt keinen prinzipiellen Grund, warum sie scheitern k&#246;nnte
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1575062711080" ID="ID_883309689" MODIFIED="1575062740669" TEXT="die Umordnung findet in einer UI-Aktion statt"/>
 <node CREATED="1575062743864" ID="ID_1277056906" MODIFIED="1575062754750" TEXT="alle anderen UI-Aktionen ruhen w&#xe4;hrenddessen"/>
@@ -19283,7 +19420,7 @@
 <node CREATED="1575132407767" ID="ID_29287629" MODIFIED="1575132523987" TEXT="ViewHook ist selber hierarchisch">
 <linktarget COLOR="#3c3061" DESTINATION="ID_29287629" ENDARROW="Default" ENDINCLINATION="-725;0;" ID="Arrow_ID_1727524131" SOURCE="ID_1273254233" STARTARROW="None" STARTINCLINATION="-243;9;"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1575132543936" ID="ID_427533687" MODIFIED="1575132573647" TEXT="im urspr&#xfc;nglichen Design hat mich der Canvas auf eine falsche Spur geschickt">
+<node CREATED="1575132543936" ID="ID_427533687" MODIFIED="1576282358091" TEXT="im urspr&#xfc;nglichen Design hat mich der Canvas auf eine falsche Spur geschickt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19293,7 +19430,8 @@
       denn auch der Canvas ist ein Gtk::Container und hat eine Liste von Widgets
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1575132576721" ID="ID_386992526" MODIFIED="1575132611477" TEXT="der Canvas-Fall ist n&#xe4;mlich ehr die Ausnahme: hier brauche ich nur den Zugang"/>
 <node CREATED="1575132621739" ID="ID_1654720759" MODIFIED="1575654907535" TEXT="ViewHook mu&#xdf; anh&#xe4;ngen k&#xf6;nnen">
@@ -19323,7 +19461,7 @@
 <node COLOR="#435e98" CREATED="1573242012238" ID="ID_870466825" MODIFIED="1573242115695" TEXT="halb generisch, halb OO"/>
 <node COLOR="#990000" CREATED="1573242085554" ID="ID_1566257148" MODIFIED="1573242111268" TEXT="Ctor auf Friend limitiert">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1573242119197" ID="ID_1160468015" MODIFIED="1575133301392" TEXT="geht nicht ohne Weiteres">
+<node CREATED="1573242119197" ID="ID_1160468015" MODIFIED="1576282358091" TEXT="geht nicht ohne Weiteres">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19333,9 +19471,10 @@
       &quot;the children of your friends ain't necessarily your friends&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1573242125353" ID="ID_1681214217" MODIFIED="1575133301402" TEXT="KISS">
+<node CREATED="1573242125353" ID="ID_1681214217" MODIFIED="1576282358091" TEXT="KISS">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19345,7 +19484,8 @@
       ...sonst m&#252;&#223;te man das Einf&#252;gen als eine weitere (protected)-Operation auf dem ViewHook ausdr&#252;cken und k&#246;nnte dann die Erzeugung des ViewHooked fest in den ViewHook ABC implementieren....
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1573242026324" ID="ID_760500508" MODIFIED="1573242047152" TEXT="verkapselte Ptr / Referenz">
@@ -19354,7 +19494,7 @@
 <node COLOR="#338800" CREATED="1573242048514" ID="ID_1803806630" MODIFIED="1573242060330" TEXT="automatische Deregistrierung">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1575580315474" ID="ID_543063249" MODIFIED="1576164578489" TEXT="Neuordnung Namen und Interfaces (nach Analyse)">
+<node COLOR="#338800" CREATED="1575580315474" ID="ID_543063249" MODIFIED="1576282358090" TEXT="Neuordnung Namen und Interfaces (nach Analyse)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19385,7 +19525,7 @@
 </node>
 <node COLOR="#338800" CREATED="1575833524632" HGAP="120" ID="ID_231779182" MODIFIED="1575835599586" TEXT="Problem ctor" VSHIFT="1">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1575833555676" ID="ID_737726791" MODIFIED="1575833614784" TEXT="keine zwingende Verkn&#xfc;pfung mehr m&#xf6;glich">
+<node CREATED="1575833555676" ID="ID_737726791" MODIFIED="1576282358089" TEXT="keine zwingende Verkn&#xfc;pfung mehr m&#xf6;glich">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19395,7 +19535,8 @@
       weil nun ViewHooked schon als ctor-Parameter einen ViewHook bekommen mu&#223;...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1575833618837" ID="ID_887542907" MODIFIED="1575833631133" TEXT="ist aber auch nicht schlecht"/>
 <node CREATED="1575833632321" ID="ID_1044442678" MODIFIED="1575833656034" TEXT="denn andererseits ist ja jetzt ein Ctor-Parameter (ViewHook) Pflicht"/>
 </node>
@@ -19429,7 +19570,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1575845569870" ID="ID_1676564226" MODIFIED="1575845646540" TEXT="es kann niemals in Ordnung sein, wenn ein ViewHooked-Widget irgendwohin verschoben wird">
+<node CREATED="1575845569870" ID="ID_1676564226" MODIFIED="1576282358089" TEXT="es kann niemals in Ordnung sein, wenn ein ViewHooked-Widget irgendwohin verschoben wird">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19439,7 +19580,8 @@
       denn vern&#252;nftigerweise mu&#223; man davon ausgehen, da&#223; der Canvas (oder wo auch immer das element platziert wird) sich einen Pointer speichert, und diesen sp&#228;ter auch aktiv verwenden wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1575845652221" ID="ID_421248587" MODIFIED="1575845662717" TEXT="Probleme mit dem Diff?">
 <icon BUILTIN="button_cancel"/>
@@ -19480,7 +19622,7 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1575845743838" ID="ID_1827383151" MODIFIED="1575850908391" TEXT="testContainsSequence()-predicate does not work properly in the initial base check">
+<node COLOR="#338800" CREATED="1575845743838" ID="ID_1827383151" MODIFIED="1576282358088" TEXT="testContainsSequence()-predicate does not work properly in the initial base check">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19490,7 +19632,8 @@
       again the problem with the reversed order due to forward_list
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -19530,7 +19673,7 @@
 </node>
 <node CREATED="1563019421405" ID="ID_985036312" MODIFIED="1563019426415" TEXT="Beispiele">
 <icon BUILTIN="idea"/>
-<node CREATED="1563019440558" ID="ID_1321598849" MODIFIED="1575133302283" TEXT="Scope-Insets">
+<node CREATED="1563019440558" ID="ID_1321598849" MODIFIED="1576282358088" TEXT="Scope-Insets">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19543,7 +19686,8 @@
       auf der rechten Seite, wo der Content angezeigt wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node COLOR="#435e98" CREATED="1563019476308" ID="ID_83481977" MODIFIED="1563044164753" TEXT=".timeline-page &gt; box.timeline-body fork.timeline">
 <linktarget COLOR="#419bcf" DESTINATION="ID_83481977" ENDARROW="Default" ENDINCLINATION="666;0;" ID="Arrow_ID_1386111155" SOURCE="ID_1803180287" STARTARROW="None" STARTINCLINATION="-787;0;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -19557,7 +19701,7 @@
 </node>
 <node CREATED="1479688633483" ID="ID_1301490505" MODIFIED="1557498707224" TEXT="Elemente in diesem halten einen display-context"/>
 <node CREATED="1479688653913" ID="ID_1435784278" MODIFIED="1557498707224" TEXT="dieser wiederum mu&#xdf; f&#xfc;r jede Erweiterung konsultiert werden"/>
-<node CREATED="1573408604958" ID="ID_1376892828" MODIFIED="1575133302321" TEXT="Vorsicht: Struktur ist teilsweise in der Display-Implentierung aufgedoppelt">
+<node CREATED="1573408604958" ID="ID_1376892828" MODIFIED="1576282358088" TEXT="Vorsicht: Struktur ist teilsweise in der Display-Implentierung aufgedoppelt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19567,7 +19711,8 @@
       Das mu&#223; auch so sein, denn sonst w&#228;re das systematische Modell und die Controller zu eng mit dem Display-Code verwoben. Der Nachteil ist aber, da&#223; derart aufgedoppelte Struktur bei jeder Struktur&#228;nderung invalide wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 <node CREATED="1575576966709" ID="ID_1527842637" MODIFIED="1575576970675" TEXT="L&#xf6;sung">
@@ -19636,7 +19781,7 @@
 <node CREATED="1487466986523" ID="ID_39632539" MODIFIED="1557498707224" TEXT="zun&#xe4;chst unterbinden">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1539258805201" ID="ID_1227431164" MODIFIED="1575133302517" TEXT="gegenw&#xe4;rtig Pr&#xe4;ferenz erkennbar....">
+<node CREATED="1539258805201" ID="ID_1227431164" MODIFIED="1576282358087" TEXT="gegenw&#xe4;rtig Pr&#xe4;ferenz erkennbar....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19646,7 +19791,8 @@
       ...f&#252;r die dritte L&#246;sung, die Repr&#228;sentation bereits in der Session
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#5793da" DESTINATION="ID_646231524" ENDARROW="Default" ENDINCLINATION="186;21;" ID="Arrow_ID_431447729" STARTARROW="None" STARTINCLINATION="26;-3;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -19734,7 +19880,7 @@
 <node CREATED="1480120531935" ID="ID_1894474191" MODIFIED="1561827465251" TEXT="Dekorator auf TreeMutator">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1480121069464" ID="ID_1707876611" MODIFIED="1557498707225" TEXT="Operationen mitlesen"/>
-<node CREATED="1480121074703" ID="ID_1346494338" MODIFIED="1575133302662" TEXT="Notifikations-Schnittstelle">
+<node CREATED="1480121074703" ID="ID_1346494338" MODIFIED="1576282358087" TEXT="Notifikations-Schnittstelle">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19750,9 +19896,10 @@
       Implementiert w&#252;rde sie vom jeweiligen Widget
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1480123478013" ID="ID_1281325973" MODIFIED="1575133302673" TEXT="eine Ebene zu tief, aber geht noch">
+<node CREATED="1480123478013" ID="ID_1281325973" MODIFIED="1576282358086" TEXT="eine Ebene zu tief, aber geht noch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19780,9 +19927,10 @@
       Der Dekorator w&#252;rde also auf dem TreeMutator sitzen...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1480121092492" ID="ID_1543810707" MODIFIED="1575133302683" TEXT="L&#xf6;schungen nur heuristisch zu erkennen">
+<node CREATED="1480121092492" ID="ID_1543810707" MODIFIED="1576282358085" TEXT="L&#xf6;schungen nur heuristisch zu erkennen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19801,9 +19949,10 @@
       Daher gibt es die matchSrc-Operation. Effektiv wird die aber nur bei einem Delete aufgerufen...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1480123741362" ID="ID_586646895" MODIFIED="1575133302702" TEXT="unsauber, h&#xe4;sslich, ungl&#xfc;cklich">
+<node CREATED="1480123741362" ID="ID_586646895" MODIFIED="1576282358085" TEXT="unsauber, h&#xe4;sslich, ungl&#xfc;cklich">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19824,7 +19973,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1480123380843" ID="ID_1717666432" MODIFIED="1557498707225" TEXT="w&#xe4;re prinzipiell machbar">
 <icon BUILTIN="forward"/>
@@ -19917,7 +20067,7 @@
 <node CREATED="1480300682256" ID="ID_1828380850" MODIFIED="1557498707225" TEXT="Presenter">
 <node CREATED="1480300690191" ID="ID_1405428387" MODIFIED="1557498707225" TEXT="sind lokales Struktur-Modell">
 <node CREATED="1480300733506" ID="ID_186466790" MODIFIED="1557498707225" TEXT="werden per Diff manipuliert"/>
-<node CREATED="1480300740537" ID="ID_1322437138" MODIFIED="1575133302943" TEXT="enthalten die Modell-Binding-Daten">
+<node CREATED="1480300740537" ID="ID_1322437138" MODIFIED="1576282358084" TEXT="enthalten die Modell-Binding-Daten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19927,7 +20077,8 @@
       d.h. eine LUID
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1480300699694" ID="ID_1686150984" MODIFIED="1557498707225" TEXT="aktiver Part der View-Steuerung"/>
@@ -19961,7 +20112,7 @@
 <node CREATED="1563035885483" ID="ID_180592409" MODIFIED="1563036084505" TEXT="Wunsch/Konzept">
 <arrowlink DESTINATION="ID_105242868" ENDARROW="Default" ENDINCLINATION="1295;0;" ID="Arrow_ID_708537872" STARTARROW="None" STARTINCLINATION="825;-325;"/>
 <node CREATED="1563036553387" ID="ID_1889445008" MODIFIED="1563036560952" TEXT="TimelineWidget selber?">
-<node CREATED="1563036568256" ID="ID_1816733755" MODIFIED="1575133303092" TEXT="sollte besser ein &quot;paned&quot; bleiben">
+<node CREATED="1563036568256" ID="ID_1816733755" MODIFIED="1576282358084" TEXT="sollte besser ein &quot;paned&quot; bleiben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19971,7 +20122,8 @@
       weil dies ggfs vom Theme her schon gestyled wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#338800" CREATED="1563036619140" ID="ID_1483549704" MODIFIED="1563037392573" TEXT="aber Klasse: .timeline-page">
 <icon BUILTIN="button_ok"/>
@@ -19986,7 +20138,7 @@
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node CREATED="1563043807392" ID="ID_994687888" MODIFIED="1575133303128" TEXT="Wunsch nur teilweise realisierbar">
+<node CREATED="1563043807392" ID="ID_994687888" MODIFIED="1576282358083" TEXT="Wunsch nur teilweise realisierbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20005,7 +20157,8 @@
       in der C &quot;class init function&quot; passieren mu&#223;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#bc86a6" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-1901;31;" ID="Arrow_ID_1120129058" STARTARROW="None" STARTINCLINATION="-2128;-72;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
@@ -20020,7 +20173,7 @@
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1480725247115" ID="ID_1533101483" MODIFIED="1557498707225" TEXT="Konstruktion erfordert...">
-<node CREATED="1480796814716" ID="ID_1742743432" MODIFIED="1575133303170" TEXT="ID einer Timeline">
+<node CREATED="1480796814716" ID="ID_1742743432" MODIFIED="1576282358083" TEXT="ID einer Timeline">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20033,7 +20186,8 @@
       Irgend eine BareEntryID gen&#252;gt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1540639615789" ID="ID_1775707565" MODIFIED="1557498707225" TEXT="ID des root-Track"/>
 <node CREATED="1480725273775" ID="ID_1495656573" MODIFIED="1557498707225" TEXT="Bus-Term-Referenz"/>
@@ -20044,7 +20198,7 @@
 <icon BUILTIN="idea"/>
 <node CREATED="1540639925885" ID="ID_1352494029" MODIFIED="1557498707225" TEXT="das wird bereits auf Diff-Ebene abgewiesen"/>
 <node CREATED="1540639934819" ID="ID_1733133201" MODIFIED="1557498707225" TEXT="...da es sich um ein Attribut-Binding handelt"/>
-<node CREATED="1540639945978" ID="ID_1136500098" MODIFIED="1575133303215" TEXT="(sollte aber auch niemals auftreten)">
+<node CREATED="1540639945978" ID="ID_1136500098" MODIFIED="1576282358082" TEXT="(sollte aber auch niemals auftreten)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20060,7 +20214,8 @@
       Daher sollte eine inkompatible Struktur&#228;nderung &#252;berhaupt nicht auftreten k&#246;nnen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1540640048428" ID="ID_838010387" MODIFIED="1557498707225" TEXT="nur das gesamte Widget insgesamt">
@@ -20110,7 +20265,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1480694557112" ID="ID_786517324" MODIFIED="1557498707226" TEXT="Widget ist Startpunkt"/>
 <node CREATED="1480694571310" ID="ID_1188786444" MODIFIED="1557498707226" TEXT="aber Controller wird Chef"/>
-<node CREATED="1480725633399" ID="ID_1475661668" MODIFIED="1575133303391" TEXT="mu&#xdf; erst mal Controller implementieren">
+<node CREATED="1480725633399" ID="ID_1475661668" MODIFIED="1576282358082" TEXT="mu&#xdf; erst mal Controller implementieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20120,13 +20275,14 @@
       ...abstraktes Interface
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1480725680713" ID="ID_448125852" MODIFIED="1557498707226" TEXT="Delegate for Notification">
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1480725704142" ID="ID_992732373" MODIFIED="1557498707226" TEXT="was bleibt abstrakt?">
-<node CREATED="1480725715916" ID="ID_890987188" MODIFIED="1575133303414" TEXT="buildMutator">
+<node CREATED="1480725715916" ID="ID_890987188" MODIFIED="1576282358081" TEXT="buildMutator">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20142,7 +20298,8 @@
       um die Bindung herzustellen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -20153,7 +20310,7 @@
 <node CREATED="1480741498930" ID="ID_1605140473" MODIFIED="1557498707226" TEXT="hat nur einen einzigen RootTrack">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1480742405505" ID="ID_1590367176" MODIFIED="1575133303437" TEXT="ACHTUNG: leere Sequenz?">
+<node CREATED="1480742405505" ID="ID_1590367176" MODIFIED="1576282358081" TEXT="ACHTUNG: leere Sequenz?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20172,7 +20329,8 @@
       und erwarten abweichend vom Standard ein vollst&#228;ndiges Skelett im INS-Verb
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1480776052551" ID="ID_431920594" MODIFIED="1518487921081" TEXT="warum">
 <node CREATED="1480742420383" ID="ID_19092812" MODIFIED="1518487921081" TEXT="kann ihn nicht gleich im ctor erzeugen"/>
@@ -20184,7 +20342,7 @@
 <icon BUILTIN="info"/>
 <node CREATED="1480776081388" ID="ID_783764544" MODIFIED="1540506788245" TEXT="via ctor">
 <icon BUILTIN="full-1"/>
-<node CREATED="1480776096665" ID="ID_1492275941" MODIFIED="1575133303491" TEXT="das hei&#xdf;t....">
+<node CREATED="1480776096665" ID="ID_1492275941" MODIFIED="1576282358080" TEXT="das hei&#xdf;t....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20205,7 +20363,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1480776313813" ID="ID_1507386991" MODIFIED="1518487921082" TEXT="Vorteil: einfache Verh&#xe4;ltnisse in der Widget-Impl"/>
@@ -20223,7 +20382,7 @@
 </node>
 </node>
 <node CREATED="1480776087027" ID="ID_132590373" MODIFIED="1518487921082" TEXT="leer zulassen">
-<node CREATED="1480778115091" ID="ID_1948130012" MODIFIED="1575133303590" TEXT="das hei&#xdf;t...">
+<node CREATED="1480778115091" ID="ID_1948130012" MODIFIED="1576282358080" TEXT="das hei&#xdf;t...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20251,7 +20410,8 @@
       typischerweise wird es das in einem Populationsdiff sofort als N&#228;chstes machen.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1480778348652" ID="ID_1249761108" MODIFIED="1518487921082" TEXT="Vorteil: Diff-Erzeugung und Aufspielen l&#xe4;uft nach Schema-F"/>
@@ -20274,7 +20434,7 @@
 <node CREATED="1480778499928" ID="ID_1466170472" MODIFIED="1518487921082" TEXT="Felder im Ctor einfach uninitialisiert lassen"/>
 <node CREATED="1480778490545" ID="ID_1228109442" MODIFIED="1540506504371" TEXT="darauf hoffen, da&#xdf; das Diff immer komplett alles populiert"/>
 <node CREATED="1480778511086" ID="ID_1612105579" MODIFIED="1518487921082" TEXT="keine Checks im Code"/>
-<node CREATED="1480778532907" ID="ID_1167492250" MODIFIED="1575133303637">
+<node CREATED="1480778532907" ID="ID_1167492250" MODIFIED="1576282358079">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -20294,7 +20454,8 @@
       <i>&quot;was kann denn schon passieren??&quot;</i>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1540506535667" ID="ID_1048222076" MODIFIED="1540506545488">
@@ -20325,7 +20486,7 @@
 </html></richcontent>
 </node>
 <node CREATED="1480778652819" ID="ID_1335924975" MODIFIED="1518487921082" TEXT="Checks und Verzweigungen im Code"/>
-<node CREATED="1480778689191" ID="ID_45333997" MODIFIED="1575133303691" TEXT="Pflanzt sich auf die Nutzer fort">
+<node CREATED="1480778689191" ID="ID_45333997" MODIFIED="1576282358078" TEXT="Pflanzt sich auf die Nutzer fort">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20346,9 +20507,10 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1480778768988" ID="ID_1385067618" MODIFIED="1575133303702" TEXT="und das alles nur f&#xfc;r....">
+<node CREATED="1480778768988" ID="ID_1385067618" MODIFIED="1576282358078" TEXT="und das alles nur f&#xfc;r....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20358,7 +20520,8 @@
       einen Fall, der <i>praktisch nie</i>&#160;auftritt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -20527,7 +20690,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1480780930115" HGAP="5" ID="ID_1156407347" MODIFIED="1575133303721" TEXT="L&#xf6;sung: per Konstruktor festlegen" VSHIFT="6">
+<node COLOR="#338800" CREATED="1480780930115" HGAP="5" ID="ID_1156407347" MODIFIED="1576282358077" TEXT="L&#xf6;sung: per Konstruktor festlegen" VSHIFT="6">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20551,7 +20714,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1156407347" ENDARROW="Default" ENDINCLINATION="57;0;" ID="Arrow_ID_665420852" SOURCE="ID_654526245" STARTARROW="None" STARTINCLINATION="11;38;"/>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="full-1"/>
@@ -20638,7 +20802,7 @@
 </node>
 <node CREATED="1555022703032" ID="ID_13722484" MODIFIED="1557498707226" TEXT="Verdrahtung">
 <node CREATED="1555022710839" ID="ID_1166296639" MODIFIED="1557498707226" TEXT="mu&#xdf; in alle Nutzer injiziert werden"/>
-<node CREATED="1555022761189" ID="ID_640769952" MODIFIED="1575133303966" TEXT="wie? geht wohl nur direkte Referenz">
+<node CREATED="1555022761189" ID="ID_640769952" MODIFIED="1576282358077" TEXT="wie? geht wohl nur direkte Referenz">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20651,7 +20815,8 @@
       weil ein Layout-Manager immer nur im Bereich eines TimelineWidget relevant ist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1555023446038" ID="ID_858959830" MODIFIED="1557498707226" TEXT="clients">
 <node CREATED="1555023449597" ID="ID_1228634821" MODIFIED="1557498707226" TEXT="TimelineCanvas">
@@ -20682,7 +20847,7 @@
 <node CREATED="1560698618689" ID="ID_231185798" MODIFIED="1560698625444" TEXT="notification-Callbacks">
 <node CREATED="1560698764250" ID="ID_926915515" MODIFIED="1560698770146" TEXT="Publisher-Subscriber"/>
 <node CREATED="1560698668089" ID="ID_1609727906" MODIFIED="1560698674278" TEXT="ebenso problematisch"/>
-<node CREATED="1560698675226" ID="ID_1528720357" MODIFIED="1575133304114" TEXT="Signale sind aber Callbacks....">
+<node CREATED="1560698675226" ID="ID_1528720357" MODIFIED="1576282358076" TEXT="Signale sind aber Callbacks....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20692,7 +20857,8 @@
       ...und f&#252;r Signale sind diese Probleme bereits gel&#246;st
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#fcc76b" DESTINATION="ID_64926941" ENDARROW="Default" ENDINCLINATION="39;-39;" ID="Arrow_ID_1800480673" STARTARROW="None" STARTINCLINATION="-57;0;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -20704,7 +20870,7 @@
 <node CREATED="1560698805704" ID="ID_1490359824" MODIFIED="1561042627539" TEXT="wer tr&#xe4;gt es?">
 <arrowlink DESTINATION="ID_1799554074" ENDARROW="Default" ENDINCLINATION="93;0;" ID="Arrow_ID_576839005" STARTARROW="None" STARTINCLINATION="169;0;"/>
 </node>
-<node CREATED="1560698814327" ID="ID_44788176" MODIFIED="1575133304136" TEXT="wie wird es zug&#xe4;nglich?">
+<node CREATED="1560698814327" ID="ID_44788176" MODIFIED="1576282358076" TEXT="wie wird es zug&#xe4;nglich?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20719,7 +20885,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1561036803347" ID="ID_281948392" MODIFIED="1561036824656" TEXT="Sigc-Signal ist ein (ref-counting) smart-ptr">
@@ -20779,7 +20946,7 @@
 <node CREATED="1565270276854" ID="ID_1536974886" MODIFIED="1565270289802" TEXT="ist also nur eine Schein-L&#xf6;sung">
 <icon BUILTIN="closed"/>
 </node>
-<node CREATED="1565273005475" ID="ID_1081606131" MODIFIED="1575133304301" TEXT="aber sinnvoll zum Triggern">
+<node CREATED="1565273005475" ID="ID_1081606131" MODIFIED="1576282358075" TEXT="aber sinnvoll zum Triggern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20795,7 +20962,8 @@
       aber die tats&#228;chliche Neuberechnung erfolgt erst sp&#228;t, und bei Bedarf
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#8c9ca5" DESTINATION="ID_666349818" ENDARROW="Default" ENDINCLINATION="472;-18;" ID="Arrow_ID_1928094034" STARTARROW="Default" STARTINCLINATION="-298;0;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -21091,7 +21259,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1540511250489" ID="ID_49278916" MODIFIED="1540511273407" TEXT="wie h&#xe4;ngt man die ganze Struktur auf?"/>
 <node CREATED="1540511274366" ID="ID_1134388060" MODIFIED="1540511281241" TEXT="L&#xf6;sungsans&#xe4;tze">
-<node CREATED="1540511304602" ID="ID_814037364" MODIFIED="1575133304980" TEXT="halb konstruierter Frame ohne Widgets">
+<node CREATED="1540511304602" ID="ID_814037364" MODIFIED="1576282358074" TEXT="halb konstruierter Frame ohne Widgets">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21109,10 +21277,11 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-1"/>
 </node>
-<node CREATED="1540511389686" ID="ID_1017315025" MODIFIED="1575133304991" TEXT="Anker-Widgets explizit &#xfc;bergeben">
+<node CREATED="1540511389686" ID="ID_1017315025" MODIFIED="1576282358074" TEXT="Anker-Widgets explizit &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21130,10 +21299,11 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-2"/>
 </node>
-<node CREATED="1540511282493" ID="ID_1902168929" MODIFIED="1575133305025" TEXT="Parent-Frame hat virtuelle Methoden">
+<node CREATED="1540511282493" ID="ID_1902168929" MODIFIED="1576282358073" TEXT="Parent-Frame hat virtuelle Methoden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21154,10 +21324,11 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-3"/>
 <node CREATED="1540511879965" ID="ID_1507237353" MODIFIED="1540511884826" TEXT="Varianten denkbar">
-<node CREATED="1540511887116" ID="ID_467242392" MODIFIED="1575133305043" TEXT="nicht-virtuelle Methode">
+<node CREATED="1540511887116" ID="ID_467242392" MODIFIED="1576282358073" TEXT="nicht-virtuelle Methode">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21176,10 +21347,11 @@
       STOP. Damit ist die virtuelle Methode nur verschoben
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1540512410629" ID="ID_1212514016" MODIFIED="1575133305056" TEXT="generisch">
+<node CREATED="1540512410629" ID="ID_1212514016" MODIFIED="1576282358072" TEXT="generisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21192,9 +21364,10 @@
       von dem nur erwartet wird, da&#223; er eine &quot;Verankerungs&quot;-Funktion bietet
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1540512486974" ID="ID_709169542" MODIFIED="1575133305066" TEXT="Funktor">
+<node CREATED="1540512486974" ID="ID_709169542" MODIFIED="1576282358072" TEXT="Funktor">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21207,7 +21380,8 @@
       welchen er aufruft, um seine neu erstellten Widgets zu verankern
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#63bcba" DESTINATION="ID_709169542" ENDARROW="Default" ENDINCLINATION="648;-124;" ID="Arrow_ID_1775236750" SOURCE="ID_1596055753" STARTARROW="None" STARTINCLINATION="661;33;"/>
 <icon BUILTIN="forward"/>
 </node>
@@ -21253,7 +21427,7 @@
 <node CREATED="1575652924086" ID="ID_996829512" MODIFIED="1575653116780" TEXT="Antwort: im Prinzip ja">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1575652931295" ID="ID_1649360599" MODIFIED="1575653108558" TEXT="aber ein voller double-dispatch-Mechanismus ist nicht durchf&#xfc;hrbar">
+<node CREATED="1575652931295" ID="ID_1649360599" MODIFIED="1576282358071" TEXT="aber ein voller double-dispatch-Mechanismus ist nicht durchf&#xfc;hrbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21271,7 +21445,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1575653121588" ID="ID_46973905" MODIFIED="1575653151603" TEXT="also bleibt nur, die Typisierung in den Funktions-Signaturen explizit auszudr&#xfc;cken"/>
@@ -21299,7 +21474,7 @@
 <linktarget COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="699;-94;" ID="Arrow_ID_1514395934" SOURCE="ID_283854399" STARTARROW="None" STARTINCLINATION="236;12;"/>
 <linktarget COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" SOURCE="ID_737072989" STARTARROW="None" STARTINCLINATION="2;57;"/>
 <icon BUILTIN="flag-pink"/>
-<node CREATED="1563467519263" ID="ID_497587608" MODIFIED="1575133305206" TEXT="anders als der initiale Aufbau">
+<node CREATED="1563467519263" ID="ID_497587608" MODIFIED="1576282358071" TEXT="anders als der initiale Aufbau">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21312,10 +21487,11 @@
       und zwar der ctor-TrackPresenter
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1563467588351" ID="ID_1224899798" MODIFIED="1563467595841" TEXT="Unterscheidung root/nested">
-<node CREATED="1563467597287" ID="ID_1571128409" MODIFIED="1575133305225" TEXT="beim ctor-Aufruf implizit/automatisch">
+<node CREATED="1563467597287" ID="ID_1571128409" MODIFIED="1576282358070" TEXT="beim ctor-Aufruf implizit/automatisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21328,13 +21504,14 @@
       alle anderen verschachtelten ctors aber von den TrackPresentern
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1563467604327" ID="ID_175300386" MODIFIED="1563467621867" TEXT="nur sub-Tracks werden re-Konstruiert">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1563467848565" ID="ID_1150018491" MODIFIED="1575652853580" TEXT="re-Konstruieren m&#xfc;ssen letztlich die TrackPresenter machen">
+<node CREATED="1563467848565" ID="ID_1150018491" MODIFIED="1576282358069" TEXT="re-Konstruieren m&#xfc;ssen letztlich die TrackPresenter machen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21344,9 +21521,10 @@
       weil nur sie sowohl durch ihren Display-Frame die beiden Kind-Widgets kennen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467916708" ID="ID_568904515" MODIFIED="1575133305254" TEXT="kl&#xe4;ren: Kind-Widget managen/entfernen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467916708" ID="ID_568904515" MODIFIED="1576282358069" TEXT="kl&#xe4;ren: Kind-Widget managen/entfernen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21356,9 +21534,10 @@
       inwiefern gibt es Beschr&#228;nkungen, wenn man ein Kind-Widget von einem Container entfernt?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1563468083453" ID="ID_988508640" MODIFIED="1575133305265" TEXT="Interface Gtk::Container ist nur f&#xfc;r single-Child">
+<node CREATED="1563468083453" ID="ID_988508640" MODIFIED="1576282358068" TEXT="Interface Gtk::Container ist nur f&#xfc;r single-Child">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21368,7 +21547,8 @@
       &quot;This interface is used for all single item holding containers. Multi-item containers provide their own unique interface as their items are generally more complex. The methods of the derived classes should be prefered over these...&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1563468845867" ID="ID_1400714108" MODIFIED="1563468859195" TEXT="aber: Gtk::Container hat iterative Methoden">
 <icon BUILTIN="idea"/>
 </node>
@@ -21489,7 +21669,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1575063986126" ID="ID_237283777" MODIFIED="1575133305693" TEXT="konkretisiert: als ViewHook-Mechanismus">
+<node CREATED="1575063986126" ID="ID_237283777" MODIFIED="1576282358068" TEXT="konkretisiert: als ViewHook-Mechanismus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21499,7 +21679,8 @@
       ...das ist zun&#228;chst ein Versuch, ein m&#252;hsam errungenes Design zu verifizieren...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#261eb7" DESTINATION="ID_237283777" ENDARROW="Default" ENDINCLINATION="396;-703;" ID="Arrow_ID_119083900" SOURCE="ID_1018000905" STARTARROW="None" STARTINCLINATION="-962;0;"/>
 <node CREATED="1575064318098" ID="ID_293965279" MODIFIED="1575064328652" TEXT="Fall Track-Head">
 <node CREATED="1575064338701" ID="ID_415507995" MODIFIED="1575064375893" TEXT="DisplayFrame hat einen ViewHook in das korrespondierende TrackHeadWidget"/>
@@ -21570,7 +21751,7 @@
 <node CREATED="1575064723058" ID="ID_640324891" MODIFIED="1575132217084" TEXT="TODO wie geht das?">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1575132218659" ID="ID_477189517" MODIFIED="1575132259899" TEXT="gar nicht notwendig, er hat sie schon">
+<node CREATED="1575132218659" ID="ID_477189517" MODIFIED="1576282358067" TEXT="gar nicht notwendig, er hat sie schon">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21580,7 +21761,8 @@
       denn, wie sich herausgestellt hat, mu&#223; das Interface ViewHook hierarchisch heruntergebrochen werden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -21713,7 +21895,7 @@
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1540747533463" ID="ID_1845120165" MODIFIED="1557498707227" TEXT="dann w&#xe4;re TimelineHeader == PatchbayWidget"/>
-<node CREATED="1540747550734" ID="ID_843399235" MODIFIED="1575133306307" TEXT="macht Sinn...">
+<node CREATED="1540747550734" ID="ID_843399235" MODIFIED="1576282358067" TEXT="macht Sinn...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21726,7 +21908,8 @@
       so z.B. sein Placement, welches <i>teilweise als Properties</i>&#160;des Track abgebildet wird.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1540862631576" ID="ID_136673309" MODIFIED="1557498707227" TEXT="aber: Patchbay ist mehr als ein TrackHead">
 <icon BUILTIN="yes"/>
@@ -21843,7 +22026,7 @@
 <node CREATED="1553911796208" ID="ID_1254226888" MODIFIED="1563457414715" TEXT="con">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1553911798428" ID="ID_1946109008" MODIFIED="1557498707227" TEXT="es bietet nur teilweise die Aktionen eines Tangible"/>
-<node CREATED="1563466370058" ID="ID_863187721" MODIFIED="1575133306751" TEXT="automatisches Management k&#xf6;nnte schwierig werden">
+<node CREATED="1563466370058" ID="ID_863187721" MODIFIED="1576282358066" TEXT="automatisches Management k&#xf6;nnte schwierig werden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21853,7 +22036,8 @@
       weil der Ruler ja in die Pr&#228;sentation mit einbezogen ist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -21922,7 +22106,7 @@
 </node>
 <node CREATED="1563456726268" ID="ID_1768365080" MODIFIED="1563456735534" TEXT="au&#xdf;erdem sichtbar oder verborgen?">
 <node CREATED="1563456762562" ID="ID_968633527" MODIFIED="1563456775217" TEXT="Leaf: h&#xe4;ufig verborgen"/>
-<node CREATED="1563456781637" ID="ID_1656158229" MODIFIED="1575133307075" TEXT="Fork: kommt darauf an....">
+<node CREATED="1563456781637" ID="ID_1656158229" MODIFIED="1576282358066" TEXT="Fork: kommt darauf an....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21932,7 +22116,8 @@
       ....ob es was sinnvolles in einem Overview-Ruler anzuzeigen gibt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -21955,7 +22140,7 @@
 <node CREATED="1555082395840" ID="ID_104473939" MODIFIED="1557498707227" TEXT="ABER trotzdem separat darzustellen">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1555082433635" ID="ID_1213306272" MODIFIED="1557498707227" TEXT="Time-Ruler &quot;allways on top&quot;"/>
-<node CREATED="1555082442705" ID="ID_497245117" MODIFIED="1575133307150">
+<node CREATED="1555082442705" ID="ID_497245117" MODIFIED="1576282358065">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -21984,7 +22169,8 @@
       zur Anwendung kommt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#435e98" CREATED="1555082487012" ID="ID_217824628" MODIFIED="1557498707228" TEXT="trotzdem sinnvolles Potential zur Vereinheitlichung">
 <icon BUILTIN="yes"/>
@@ -22014,7 +22200,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1555080572765" ID="ID_577805455" MODIFIED="1575133307211" TEXT="im Detail etwas komplexer...">
+<node CREATED="1555080572765" ID="ID_577805455" MODIFIED="1576282358065" TEXT="im Detail etwas komplexer...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22033,7 +22219,8 @@
       am Anfang des Track-Profils, welche immer sichtbar bleiben soll
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_577805455" ENDARROW="Default" ENDINCLINATION="146;-10;" ID="Arrow_ID_228489961" SOURCE="ID_447173098" STARTARROW="Default" STARTINCLINATION="110;0;"/>
 </node>
 </node>
@@ -22064,7 +22251,7 @@
 <node COLOR="#435e98" CREATED="1555247298877" ID="ID_1739468610" MODIFIED="1560442477849" TEXT="das mu&#xdf; dann aber verallgemeinert wertden">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1555247361420" ID="ID_1263829263" MODIFIED="1575133307357" TEXT="warum?">
+<node CREATED="1555247361420" ID="ID_1263829263" MODIFIED="1576282358064" TEXT="warum?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22077,9 +22264,10 @@
       stets besser ist, als repetitives aufdoppeln und variieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1555247377809" ID="ID_281745763" MODIFIED="1575133307371" TEXT="Erwartete Anforderungen...">
+<node CREATED="1555247377809" ID="ID_281745763" MODIFIED="1576282358064" TEXT="Erwartete Anforderungen...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22097,7 +22285,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1555247320686" ID="ID_1896093043" MODIFIED="1561827465264" TEXT="brauche Visitor mit flexiblen Argumenten">
@@ -22130,7 +22319,7 @@
 </node>
 <node COLOR="#338800" CREATED="1555806526685" ID="ID_192016641" MODIFIED="1557590525234" TEXT="L&#xf6;sungsansatz: PolymorphicValue">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555806541914" ID="ID_1260020116" MODIFIED="1575133307506" TEXT="der bietet genau den flexiblen inline-Buffer, den ich hier brauche">
+<node CREATED="1555806541914" ID="ID_1260020116" MODIFIED="1576282358063" TEXT="der bietet genau den flexiblen inline-Buffer, den ich hier brauche">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22155,7 +22344,8 @@
       und daher nicht a priori die Liste aller einzubettenden Varianten kenne
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#338800" CREATED="1555806670026" FOLDED="true" ID="ID_604641822" MODIFIED="1561827483833" TEXT="Probleme bei der Umsetzung">
 <icon BUILTIN="button_ok"/>
@@ -22703,7 +22893,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1555808288856" ID="ID_1931717111" MODIFIED="1557590603605" TEXT="Frage: ist das Design gut?">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555808300703" ID="ID_621465643" MODIFIED="1575133307538" TEXT="kann/sollte die L&#xf6;song mehr integriert sein?">
+<node CREATED="1555808300703" ID="ID_621465643" MODIFIED="1576282358063" TEXT="kann/sollte die L&#xf6;song mehr integriert sein?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22713,9 +22903,10 @@
       sollten z.B. die Konstruktor-Funktionen nicht unmittelbar mit definiert werden?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1555808311417" ID="ID_1932269477" MODIFIED="1575133307549" TEXT="oder ist es grade ein Vorteil, wenn sie ein roher Baustein ist">
+<node CREATED="1555808311417" ID="ID_1932269477" MODIFIED="1576282358062" TEXT="oder ist es grade ein Vorteil, wenn sie ein roher Baustein ist">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22728,10 +22919,11 @@
       Wie auch im konkreten Fall das TrackProfile, was dann ein vector&lt;VerbPack&gt; werden w&#252;rde?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#fcda04" DESTINATION="ID_1932269477" ENDARROW="Default" ENDINCLINATION="290;0;" ID="Arrow_ID_742389536" SOURCE="ID_128501904" STARTARROW="None" STARTINCLINATION="187;8;"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1557590616683" ID="ID_128501904" MODIFIED="1575133307560" TEXT="ich halte es jetzt f&#xfc;r gelungen">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1557590616683" ID="ID_128501904" MODIFIED="1576282358062" TEXT="ich halte es jetzt f&#xfc;r gelungen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22750,7 +22942,8 @@
       und es obliegt der n&#228;chst h&#246;heren Schicht, dies auch in sinnvollem Rahmen zu tun...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#fcda04" DESTINATION="ID_1932269477" ENDARROW="Default" ENDINCLINATION="290;0;" ID="Arrow_ID_742389536" STARTARROW="None" STARTINCLINATION="187;8;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -22772,7 +22965,7 @@
 <node COLOR="#338800" CREATED="1560175383722" ID="ID_107500239" MODIFIED="1560213484696" TEXT="Problem: addSlopeUp()">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1560175410857" ID="ID_1553338375" MODIFIED="1560175429772" TEXT="bisher konnten wir einfach das Argument manipulieren"/>
-<node CREATED="1560175430998" ID="ID_125919592" MODIFIED="1575133307643" TEXT="...aber jetzt gibt es nicht mehr &quot;das&quot; Argument">
+<node CREATED="1560175430998" ID="ID_125919592" MODIFIED="1576282358061" TEXT="...aber jetzt gibt es nicht mehr &quot;das&quot; Argument">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22788,9 +22981,10 @@
       innerhalb eines PolymorphicValue.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1560213397573" ID="ID_1416770885" MODIFIED="1575133307653" TEXT="und dann mu&#xdf; man eben explizit casten und auspacken!">
+<node CREATED="1560213397573" ID="ID_1416770885" MODIFIED="1576282358061" TEXT="und dann mu&#xdf; man eben explizit casten und auspacken!">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22806,7 +23000,8 @@
       stets selbst erzeugen und daher auf das korrekte Literal Verla&#223; ist)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1560175529230" ID="ID_914166338" MODIFIED="1560441859516">
@@ -22823,7 +23018,7 @@
 <arrowlink COLOR="#508bd1" DESTINATION="ID_1592949721" ENDARROW="Default" ENDINCLINATION="59;-58;" ID="Arrow_ID_1618633786" STARTARROW="None" STARTINCLINATION="-91;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1560303652840" ID="ID_1947607603" MODIFIED="1560303667034" TEXT="Konsequenz des generischen &#xbb;Ruler&#xab;-Konzepts"/>
-<node CREATED="1560303597884" ID="ID_1906099403" MODIFIED="1575133307678" TEXT="wurde notwendig wegen der Aufteilung in zwei Canvas">
+<node CREATED="1560303597884" ID="ID_1906099403" MODIFIED="1576282358060" TEXT="wurde notwendig wegen der Aufteilung in zwei Canvas">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22839,7 +23034,8 @@
       und soll von beiden sub-Canvas gleicherma&#223;en jeweils passend interpretiert werden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1560303745209" ID="ID_202529970" MODIFIED="1560303777782" TEXT="es ergeben sich 4 verschiedene Interpretierungen eines einzigen Profils">
 <icon BUILTIN="info"/>
@@ -22855,7 +23051,7 @@
 <node CREATED="1560303801546" ID="ID_1150937962" MODIFIED="1560442045382" TEXT="Renderer verkapselt das Profil">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1560303861175" ID="ID_1281704590" MODIFIED="1575133307714" TEXT="Renderer ist ein einmal-wegwerf-Objekt">
+<node CREATED="1560303861175" ID="ID_1281704590" MODIFIED="1576282358060" TEXT="Renderer ist ein einmal-wegwerf-Objekt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22865,9 +23061,10 @@
       ...daher die Factory
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node COLOR="#435e98" CREATED="1560303951038" ID="ID_353953611" MODIFIED="1575133307725" TEXT="Frage: wirklich zweistufig konstruieren??">
+<node COLOR="#435e98" CREATED="1560303951038" ID="ID_353953611" MODIFIED="1576282358059" TEXT="Frage: wirklich zweistufig konstruieren??">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22882,7 +23079,8 @@
       </li>
     </ol>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1560428273738" ID="ID_149938310" MODIFIED="1560428299172" TEXT="was hab ich mir vor ein paar Monaten wohl gedacht??!"/>
 <node CREATED="1560428302521" FOLDED="true" ID="ID_616331969" MODIFIED="1561827483833" TEXT="Anla&#xdf; war wohl der Unterschied zwischen Canvas und CairoContext">
@@ -22973,7 +23171,7 @@
 <node CREATED="1560612681316" ID="ID_1320073999" MODIFIED="1560612835546" TEXT="bisher im Argument des Prelude-Verbs">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1560612691723" ID="ID_1955365339" MODIFIED="1575133307869" TEXT="das Prelude-Verb als Solches ist sinnvoll">
+<node CREATED="1560612691723" ID="ID_1955365339" MODIFIED="1576282358059" TEXT="das Prelude-Verb als Solches ist sinnvoll">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22983,13 +23181,14 @@
       weil man damit eine generische Klammer bauen kann
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1560612721690" ID="ID_1010565828" MODIFIED="1560612804974" TEXT="das Argument so zu nutzen ist schon etwas &quot;pragmatisch&quot;">
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1560612743655" ID="ID_926510331" MODIFIED="1575133307918" TEXT="andererseits ist die Storage schon da....">
+<node CREATED="1560612743655" ID="ID_926510331" MODIFIED="1576282358058" TEXT="andererseits ist die Storage schon da....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -22999,7 +23198,8 @@
       und bleibt anderweitig ungenutzt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1560612790659" ID="ID_977261236" MODIFIED="1560612827353" STYLE="fork" TEXT="und f&#xfc;r die up-Slope habe ich einen solchen Zugriff auch akzeptabel befunden">
 <icon BUILTIN="smiley-neutral"/>
@@ -23009,7 +23209,7 @@
 <node CREATED="1560612942381" ID="ID_1967930581" MODIFIED="1560612949943" TEXT="und das w&#xe4;re etwa die gleiche Menge Code"/>
 <node CREATED="1560612951033" ID="ID_850127059" MODIFIED="1560612963343" TEXT="und auch etwa gleicherma&#xdf;en lesbar"/>
 </node>
-<node CREATED="1560613101287" ID="ID_4285270" MODIFIED="1575133307947" TEXT="einen Monat sp&#xe4;ter fand ich dann doch ein dediziertes Feld im Profil-Objekt besser">
+<node CREATED="1560613101287" ID="ID_4285270" MODIFIED="1576282358058" TEXT="einen Monat sp&#xe4;ter fand ich dann doch ein dediziertes Feld im Profil-Objekt besser">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23019,7 +23219,8 @@
       ...ist klarer, und erlaubt nebenbei auch noch, zwei Methoden einzusparen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#304ed9" DESTINATION="ID_4285270" ENDARROW="None" ENDINCLINATION="751;409;" ID="Arrow_ID_1197384474" SOURCE="ID_189142395" STARTARROW="Default" STARTINCLINATION="603;0;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -23155,7 +23356,7 @@
 <node CREATED="1566407104280" ID="ID_1989341591" MODIFIED="1566421808796" TEXT="was hab ich seinerzeit beim Gtk-Canvas-Experiment gemacht?">
 <icon BUILTIN="help"/>
 <node CREATED="1566421664831" ID="ID_1051378925" MODIFIED="1566421671379" TEXT="exakt das Gleiche"/>
-<node CREATED="1566421672116" ID="ID_343684790" MODIFIED="1575133308184" TEXT="nur noch zus&#xe4;tzlich ein Window-&gt;win-&gt;invalidate_rect">
+<node CREATED="1566421672116" ID="ID_343684790" MODIFIED="1576282358057" TEXT="nur noch zus&#xe4;tzlich ein Window-&gt;win-&gt;invalidate_rect">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23213,10 +23414,11 @@
       &#160;&#160;}
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1566421823243" ID="ID_351645581" MODIFIED="1575133308195" TEXT="doch es funktioniert!">
+<node COLOR="#435e98" CREATED="1566421823243" ID="ID_351645581" MODIFIED="1576282358056" TEXT="doch es funktioniert!">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23232,7 +23434,8 @@
       Macht trotzdem nix
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -23240,7 +23443,7 @@
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1566407096905" ID="ID_489535600" MODIFIED="1575133308213" TEXT="Problem: rePack- der umschlie&#xdf;enden Box">
+<node COLOR="#338800" CREATED="1566407096905" ID="ID_489535600" MODIFIED="1576282358056" TEXT="Problem: rePack- der umschlie&#xdf;enden Box">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23256,11 +23459,12 @@
       Problem ist aber, da&#223; diese Zuweisung sp&#228;ter, nach einem set_size auf dem Canvas nicht revidiert wird.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#16d17f" DESTINATION="ID_489535600" ENDARROW="Default" ENDINCLINATION="-80;-272;" ID="Arrow_ID_1038229013" SOURCE="ID_832049284" STARTARROW="None" STARTINCLINATION="-102;166;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1566487213692" ID="ID_617175720" MODIFIED="1575133308223" TEXT="sollte eigentlich automatisch funktionieren">
+<node CREATED="1566487213692" ID="ID_617175720" MODIFIED="1576282358055" TEXT="sollte eigentlich automatisch funktionieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23270,11 +23474,12 @@
       die Funktionen zum expliziten Setzen und re-Sizing sind deprecated.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1566487282848" ID="ID_771271362" MODIFIED="1566487296971" TEXT="Workaround: jeweils erneut set_size_request">
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566487379550" ID="ID_272047983" MODIFIED="1575133308240" TEXT="TODO: genauer machen, und nur f&#xfc;r den Ruler-Canvas">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566487379550" ID="ID_272047983" MODIFIED="1576282358055" TEXT="TODO: genauer machen, und nur f&#xfc;r den Ruler-Canvas">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23293,7 +23498,8 @@
       ich sollte diese Logik besser selber explizit ausprogrammieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -23319,7 +23525,7 @@
 <node CREATED="1560619676228" ID="ID_1236432450" MODIFIED="1560686343370" TEXT="genauer: die Anzahl dieser Ruler">
 <arrowlink COLOR="#486ebf" DESTINATION="ID_1520503504" ENDARROW="Default" ENDINCLINATION="-1443;0;" ID="Arrow_ID_312917871" STARTARROW="None" STARTINCLINATION="630;0;"/>
 </node>
-<node CREATED="1560685923962" ID="ID_1098705000" MODIFIED="1575133308351" TEXT="Alternativ k&#xf6;nnte es...">
+<node CREATED="1560685923962" ID="ID_1098705000" MODIFIED="1576282358054" TEXT="Alternativ k&#xf6;nnte es...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23329,7 +23535,8 @@
       ...im Session-Modell f&#252;r eine Timeline jeweils ein Property hierf&#252;r geben...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -23347,7 +23554,7 @@
 <node CREATED="1560688238047" ID="ID_228690289" MODIFIED="1560698414957" TEXT="L&#xf6;sung-1 : refresh/rebuild im Aufruf">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1560698339423" ID="ID_920481708" MODIFIED="1560698348162" TEXT="bequemere L&#xf6;sung"/>
-<node CREATED="1560698348724" ID="ID_867312220" MODIFIED="1575133308405" TEXT="aber l&#xf6;st das Problem &#xfc;berhaupt nicht">
+<node CREATED="1560698348724" ID="ID_867312220" MODIFIED="1576282358054" TEXT="aber l&#xf6;st das Problem &#xfc;berhaupt nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23366,7 +23573,8 @@
       Irgendjemand mu&#223; mal den M&#252;ll runtertragen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
@@ -23503,7 +23711,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1569709579218" ID="ID_1213846218" MODIFIED="1569709593626" TEXT="der Canvas ist effektiv global (f&#xfc;r eine Timeline)"/>
 <node CREATED="1569709599619" ID="ID_195478308" MODIFIED="1569709628435" TEXT="aber die hierarchisch verschachtelten Komponenten sind auf ihn angewiesen"/>
-<node CREATED="1569709651932" ID="ID_1646518205" MODIFIED="1575133308664" TEXT="und es soll nicht...">
+<node CREATED="1569709651932" ID="ID_1646518205" MODIFIED="1576282358053" TEXT="und es soll nicht...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23516,7 +23724,8 @@
       Kein Wunder da&#223; die meisten UIs aus Sicht des Programmierers ein Albtraum sind
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1569709659444" ID="ID_5126624" MODIFIED="1569709680337" TEXT="eine globale Gott-Klasse die Widgets und Zeichenaktionen zentral fernsteuern"/>
 <node CREATED="1569709681558" ID="ID_1351310565" MODIFIED="1569709748956" TEXT="die Einzelkomponente ihre Position in der Struktur kennen, navigieren und manipulieren"/>
@@ -23723,7 +23932,7 @@
 <node CREATED="1542309666407" ID="ID_1721729181" MODIFIED="1557498707230" TEXT="initial....">
 <node CREATED="1542309671333" ID="ID_1283622298" MODIFIED="1557498707230" TEXT="Gr&#xf6;&#xdf;e des leeren Canvas">
 <arrowlink COLOR="#60749f" DESTINATION="ID_400560063" ENDARROW="Default" ENDINCLINATION="-46;0;" ID="Arrow_ID_449772156" STARTARROW="None" STARTINCLINATION="-13;18;"/>
-<node CREATED="1542309689328" ID="ID_679418178" MODIFIED="1575133309331" TEXT="verwende size-Allocation des ScrolledWindow">
+<node CREATED="1542309689328" ID="ID_679418178" MODIFIED="1576282358053" TEXT="verwende size-Allocation des ScrolledWindow">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23733,7 +23942,8 @@
       ...in dem der Timeline body-canvas n&#228;mlich liegt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -23805,7 +24015,7 @@
 <node CREATED="1555021772375" ID="ID_860582416" MODIFIED="1557498707230" TEXT="gdk_cairo_get_clip_rectangle() als Vorlage"/>
 </node>
 <node CREATED="1555021797428" ID="ID_1566025774" MODIFIED="1557498707230" TEXT="Problem: Fallback">
-<node CREATED="1555021809578" ID="ID_1964178964" MODIFIED="1575133309547" TEXT="was wenn die Clip-Region nicht gesetzt ist?">
+<node CREATED="1555021809578" ID="ID_1964178964" MODIFIED="1576282358052" TEXT="was wenn die Clip-Region nicht gesetzt ist?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23815,7 +24025,8 @@
       wir k&#246;nnen nicht von 0 bis MAXINT zeichnen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1555023959073" ID="ID_118083348" MODIFIED="1557498707230" TEXT="auf Pixel-Window zur&#xfc;ckfallen">
 <arrowlink COLOR="#677e9a" DESTINATION="ID_1781062229" ENDARROW="Default" ENDINCLINATION="230;6;" ID="Arrow_ID_733563643" STARTARROW="None" STARTINCLINATION="296;77;"/>
@@ -23867,7 +24078,7 @@
   </body>
 </html></richcontent>
 <node CREATED="1566394596499" ID="ID_1873797848" MODIFIED="1566394621437" TEXT="Fortschritts-Proze&#xdf; vs. Erfassen einer Idee"/>
-<node CREATED="1566394624791" ID="ID_328891828" MODIFIED="1575133309740" TEXT="das gilt auch f&#xfc;r graphische Oberfl&#xe4;chen">
+<node CREATED="1566394624791" ID="ID_328891828" MODIFIED="1576282358052" TEXT="das gilt auch f&#xfc;r graphische Oberfl&#xe4;chen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23883,7 +24094,8 @@
       Und letztere neigt stets zur &quot;Verschlimmbesserung&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -23901,7 +24113,7 @@
 <node CREATED="1566395368540" ID="ID_901032552" MODIFIED="1566395373199" TEXT="Konsequenz">
 <node CREATED="1566395374251" ID="ID_770036633" MODIFIED="1566395383792" TEXT="wir arbeiten ein Profil ab"/>
 <node CREATED="1566395384746" ID="ID_869767169" MODIFIED="1566395414266" TEXT="wir zeichnen nicht einen Stapel"/>
-<node CREATED="1566395415590" ID="ID_719677480" MODIFIED="1575133309835" TEXT="warum? Weil unsere Strukturen f&#xfc;r letzteres zu komplex sind">
+<node CREATED="1566395415590" ID="ID_719677480" MODIFIED="1576282358051" TEXT="warum? Weil unsere Strukturen f&#xfc;r letzteres zu komplex sind">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23914,9 +24126,10 @@
       Wohl aber lassen sich lokale Nachbarschafts-Beziehungen (h&#246;he / tiefer) durch Schattierung hervorheben
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1566395532950" ID="ID_9111832" MODIFIED="1575133309846" TEXT="die CSS-Effekten spielen daher nur eine begrenzte Rolle">
+<node CREATED="1566395532950" ID="ID_9111832" MODIFIED="1576282358051" TEXT="die CSS-Effekten spielen daher nur eine begrenzte Rolle">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23929,7 +24142,8 @@
       Die Inhalts-Fl&#228;chen selber sind zu gro&#223; und zu strukturiert, um sie per Schattierung zu verdeutlichen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -23961,7 +24175,7 @@
 <node CREATED="1554567390096" ID="ID_611611667" MODIFIED="1557498707230" TEXT="Liste nicht verbergen">
 <icon BUILTIN="yes"/>
 <node CREATED="1554567399523" ID="ID_139156989" MODIFIED="1557498707230" TEXT="der draw-Code darf durchaus die Liste sehen"/>
-<node CREATED="1554567408804" ID="ID_1274839361" MODIFIED="1575133310002" TEXT="ggfs mu&#xdf; er n&#xe4;mlich den Kontext beachten">
+<node CREATED="1554567408804" ID="ID_1274839361" MODIFIED="1576282358050" TEXT="ggfs mu&#xdf; er n&#xe4;mlich den Kontext beachten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23971,7 +24185,8 @@
       ...zum Beispiel um einen &quot;Wall&quot; auch expressiv zu schattieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -24485,7 +24700,7 @@
 <icon BUILTIN="pencil"/>
 <node CREATED="1554516552951" ID="ID_600745992" MODIFIED="1557498707230" TEXT="Festlegungen">
 <node CREATED="1554516555943" ID="ID_1554446719" MODIFIED="1557498707230" TEXT="Argument = vertikal in Pixeln"/>
-<node CREATED="1554516578588" ID="ID_520338948" MODIFIED="1575133310393" TEXT="Spannen inklusive Dekoration">
+<node CREATED="1554516578588" ID="ID_520338948" MODIFIED="1576282358050" TEXT="Spannen inklusive Dekoration">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24501,7 +24716,8 @@
       wenn er mit der HeaderPane den ben&#246;tigten Platz aushandelt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1554516626163" ID="ID_1427792739" MODIFIED="1557498707230" TEXT="d.h. der Zeichencode mu&#xdf; seine Dekoration innen einf&#xfc;gen"/>
 <node CREATED="1554516850759" ID="ID_361309913" MODIFIED="1557498707230" TEXT="content mu&#xdf; mit ausreichend Padding platziert werden"/>
 </node>
@@ -24542,7 +24758,7 @@
 </node>
 <node CREATED="1554517013770" ID="ID_1565362810" MODIFIED="1557498707230" TEXT="Verb-Sequenz konsolidieren">
 <node CREATED="1566517520897" ID="ID_1585833997" MODIFIED="1566517533715" TEXT="nur beim abschlie&#xdf;enden Slope"/>
-<node CREATED="1566517544022" ID="ID_1083102048" MODIFIED="1575133310549" TEXT="f&#xfc;gt dem jeweils letzten hinzu">
+<node CREATED="1566517544022" ID="ID_1083102048" MODIFIED="1576282358049" TEXT="f&#xfc;gt dem jeweils letzten hinzu">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24555,7 +24771,8 @@
       Damit werden effektiv die &quot;schlie&#223;enden Klammern&quot; in eine einzige zusammengefa&#223;t
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1554517023983" ID="ID_582840262" MODIFIED="1557498707230" TEXT="Verb-Sequenz interpretieren">
@@ -24600,7 +24817,7 @@
 <node COLOR="#338800" CREATED="1563117686001" ID="ID_698759785" MODIFIED="1563141879178" TEXT="prefix-Filter implementiert">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1563117696328" ID="ID_1599825097" MODIFIED="1575133310627" TEXT="Konzeptioneller Fehler beim Z&#xe4;hlen gefixt">
+<node COLOR="#338800" CREATED="1563117696328" ID="ID_1599825097" MODIFIED="1576282358048" TEXT="Konzeptioneller Fehler beim Z&#xe4;hlen gefixt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24610,7 +24827,8 @@
       nicht nur die Ruler, auch das Prelude selber ist ein solches gePinntes Element (selbst wenn es leer ist)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#25e58e" DESTINATION="ID_337327442" ENDARROW="Default" ENDINCLINATION="523;0;" ID="Arrow_ID_376180455" STARTARROW="Default" STARTINCLINATION="1063;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -24647,7 +24865,7 @@
 <node CREATED="1563144669172" ID="ID_1489838072" MODIFIED="1563144675523" TEXT="Gtk::Layout::set_size(w,h)"/>
 </node>
 <node COLOR="#435e98" CREATED="1563144591112" ID="ID_1777300285" MODIFIED="1567112136542" TEXT="mu&#xdf; das vor dem Zeichnen passieren?">
-<node CREATED="1563144864662" ID="ID_1195404065" MODIFIED="1575133310778" TEXT="vermutlich nicht">
+<node CREATED="1563144864662" ID="ID_1195404065" MODIFIED="1576282358048" TEXT="vermutlich nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24671,9 +24889,10 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1563145010348" ID="ID_1404407551" MODIFIED="1575133310790">
+<node CREATED="1563145010348" ID="ID_1404407551" MODIFIED="1576282358047">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -24693,7 +24912,8 @@
       denn was passiert, wenn sich durch das Setzen einer neuen Gr&#246;&#223;e der sichtbare Bereich &#228;ndert? L&#246;st das dann nicht erneut einen draw()-Aufruf aus??
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1566401468573" ID="ID_636590903" MODIFIED="1566401510213" TEXT="Beschlu&#xdf;: direkt nach dem Display-Evaluation-Pass">
@@ -24702,7 +24922,7 @@
 <node COLOR="#338800" CREATED="1566401515511" ID="ID_1551253495" MODIFIED="1566406332332" TEXT="neue Funktion hierf&#xfc;r">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1566517643320" ID="ID_30150585" MODIFIED="1566517660194" TEXT="fragt den TrackBody"/>
-<node CREATED="1566517661707" ID="ID_1225415802" MODIFIED="1575133310841" TEXT="dieser summiert im Moment einfach nochmal">
+<node CREATED="1566517661707" ID="ID_1225415802" MODIFIED="1576282358047" TEXT="dieser summiert im Moment einfach nochmal">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24712,7 +24932,8 @@
       ist ineffizient, aber der Code ist so klarer
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1566517682169" ID="ID_1110086285" MODIFIED="1566517691543" TEXT="...so oft wird das nicht gebraucht">
 <icon BUILTIN="idea"/>
@@ -24756,7 +24977,7 @@
 <arrowlink COLOR="#7890ac" DESTINATION="ID_1404441515" ENDARROW="Default" ENDINCLINATION="1;-116;" ID="Arrow_ID_1920767689" STARTARROW="None" STARTINCLINATION="256;0;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1561737452937" ID="ID_699098078" MODIFIED="1575133310973">
+<node CREATED="1561737452937" ID="ID_699098078" MODIFIED="1576282358046">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -24776,7 +24997,8 @@
       Core-Entwickler von GTK
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 <node CREATED="1561740889255" ID="ID_388774572" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html#gtk-render-background" MODIFIED="1561740901097" TEXT="gtk-render-background()"/>
 </node>
@@ -24957,7 +25179,7 @@
 <node CREATED="1564495699205" ID="ID_266196506" MODIFIED="1564495717300" TEXT="Problem: das ist im Widerspruch zu dem abschnittsweisen zeichnen"/>
 </node>
 <node CREATED="1564932181697" ID="ID_266632545" MODIFIED="1564932191323" TEXT="l&#xe4;&#xdf;t sich aber integrieren">
-<node CREATED="1564932194424" ID="ID_1904122891" MODIFIED="1575133311432" TEXT="die N&#xfc;tzlichkeit des box-shadow ist ohnehin beschr&#xe4;nkt">
+<node CREATED="1564932194424" ID="ID_1904122891" MODIFIED="1576282358046" TEXT="die N&#xfc;tzlichkeit des box-shadow ist ohnehin beschr&#xe4;nkt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24975,13 +25197,14 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#9a85e1" DESTINATION="ID_321264842" ENDARROW="Default" ENDINCLINATION="-618;56;" ID="Arrow_ID_852851809" STARTARROW="None" STARTINCLINATION="-805;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1564932357258" ID="ID_273302886" MODIFIED="1564932385170" TEXT="aber immerhin wird er automatisch mitgezeichnet bei render_background()">
 <node CREATED="1564932387045" ID="ID_188179971" MODIFIED="1564932396736" TEXT="und zwar auch au&#xdf;erhalb der definierten Box"/>
-<node CREATED="1564932397556" ID="ID_380412267" MODIFIED="1575133311460" TEXT="und oberhalb von allem was schon gezeichnet wurde">
+<node CREATED="1564932397556" ID="ID_380412267" MODIFIED="1576282358045" TEXT="und oberhalb von allem was schon gezeichnet wurde">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -24991,7 +25214,8 @@
       der GTK-Zeichencode achtet sogar explizit darauf, einen CSS-Effekt mit dem korrekten Mischmodus &#252;ber den bereits auf den CairoCanvas gezeichneten Content zu legen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1564932484393" ID="ID_1092949064" MODIFIED="1566519094002">
@@ -25012,7 +25236,7 @@
 <node CREATED="1566401020977" ID="ID_1373829097" MODIFIED="1566401070383" TEXT="siehe Definition im TiddlyWiki (&quot;#GuiTimelineDraw&quot;)"/>
 <node CREATED="1566401126813" ID="ID_651523098" MODIFIED="1566401134027" TEXT="Ruler">
 <node CREATED="1566401134943" ID="ID_432602619" MODIFIED="1566401141050" TEXT="box-shadow ist nutzbar">
-<node CREATED="1566401142268" ID="ID_1379290604" MODIFIED="1575133311526" TEXT="outset nur im Rahmen des Margin">
+<node CREATED="1566401142268" ID="ID_1379290604" MODIFIED="1576282358045" TEXT="outset nur im Rahmen des Margin">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25022,7 +25246,8 @@
       weil &#252;ber alles andere dar&#252;bergezeichnet wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1566401161862" ID="ID_1835446713" MODIFIED="1566401166385" TEXT="inset voll nutzbar"/>
 </node>
@@ -25037,7 +25262,7 @@
 </node>
 </node>
 <node CREATED="1563637202035" ID="ID_681324395" MODIFIED="1563637205854" TEXT="Auswege?">
-<node CREATED="1563637219445" FOLDED="true" ID="ID_1413699114" MODIFIED="1575133311592" TEXT="Reverse-Engineering">
+<node CREATED="1563637219445" FOLDED="true" ID="ID_1413699114" MODIFIED="1576282358044" TEXT="Reverse-Engineering">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25047,7 +25272,8 @@
       den Zeichenvorgang f&#252;r ein normales Frame-Widget analysieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1563736122461" ID="ID_1095800644" MODIFIED="1563736127792" TEXT="Gtk::Frame">
 <node CREATED="1563736130164" ID="ID_276564599" MODIFIED="1563736139623" TEXT="erbt von Bin, dieses von Container..."/>
 <node CREATED="1563736141579" ID="ID_1238316490" MODIFIED="1563736165824" TEXT="gtk_frame_draw()  (gtkframe.c, 716)">
@@ -25257,7 +25483,7 @@
 </node>
 <node CREATED="1563637301028" ID="ID_1115957778" MODIFIED="1564610481386" TEXT="dann doch komplett selber zeichnen">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1563637334256" ID="ID_366744106" MODIFIED="1575133311655" TEXT="CSS kann dann aber den Slope-Stil nicht mehr steuern">
+<node CREATED="1563637334256" ID="ID_366744106" MODIFIED="1576282358044" TEXT="CSS kann dann aber den Slope-Stil nicht mehr steuern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25267,7 +25493,8 @@
       weil er dann mehr oder weniger hartverdrahtet ist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1563734827469" ID="ID_1948656771" MODIFIED="1563734843479" TEXT="man k&#xf6;nnte allerdings das Verhalten von GTK im eigenen Code nachahmen"/>
 </node>
@@ -25617,7 +25844,7 @@
 <arrowlink COLOR="#a37084" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="145;324;" ID="Arrow_ID_1599930326" STARTARROW="Default" STARTINCLINATION="-943;-105;"/>
 <linktarget COLOR="#9f91a7" DESTINATION="ID_261041772" ENDARROW="Default" ENDINCLINATION="-490;-44;" ID="Arrow_ID_462162449" SOURCE="ID_1608124774" STARTARROW="None" STARTINCLINATION="345;14;"/>
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1566401334135" ID="ID_688081615" MODIFIED="1575133311917" TEXT="doch nicht so schlimm">
+<node CREATED="1566401334135" ID="ID_688081615" MODIFIED="1576282358043" TEXT="doch nicht so schlimm">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25630,7 +25857,8 @@
       Daher verzichte ich global (f&#252;r die Slopes) darauf, wende sie aber <b>lokal</b>&#160; an
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -25671,7 +25899,7 @@
 <node COLOR="#338800" CREATED="1566522092555" ID="ID_293262823" MODIFIED="1566524848312" TEXT="Konsequenz: TrackBody mu&#xdf; auch den Style abfragen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1566524821779" ID="ID_447136717" MODIFIED="1566524894982" TEXT="L&#xf6;sung: via statische Funktion setzen"/>
-<node CREATED="1566524850167" ID="ID_1119976379" MODIFIED="1575133312075" TEXT="kann dann aus body-canvas-widget.cpp passieren">
+<node CREATED="1566524850167" ID="ID_1119976379" MODIFIED="1576282358043" TEXT="kann dann aus body-canvas-widget.cpp passieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25681,7 +25909,8 @@
       ...wo parktischerweise der Style-Advice in einer lokalen statischen Variablen liegt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -25728,7 +25957,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1566958520767" ID="ID_350091895" MODIFIED="1575133312289" TEXT="diagnostisches Hilfs-drawing sollte Canvas-Gr&#xf6;&#xdf;e als Bezug verwenden">
+<node COLOR="#338800" CREATED="1566958520767" ID="ID_350091895" MODIFIED="1576282358042" TEXT="diagnostisches Hilfs-drawing sollte Canvas-Gr&#xf6;&#xdf;e als Bezug verwenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25741,7 +25970,8 @@
       Und nicht die sichtbare Gr&#246;&#223;e
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1566957944718" ID="ID_629892163" MODIFIED="1567112025398" TEXT="Befund: der reale Zeichencode verbraucht zus&#xe4;tzlichen Platz">
@@ -25769,7 +25999,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1567085512476" ID="ID_1140063837" MODIFIED="1567085514964" TEXT="warum?"/>
-<node CREATED="1567085515823" ID="ID_224781783" MODIFIED="1575133312411" TEXT="weil wir sp&#xe4;ter Clips in den Track platzieren">
+<node CREATED="1567085515823" ID="ID_224781783" MODIFIED="1576282358042" TEXT="weil wir sp&#xe4;ter Clips in den Track platzieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25787,7 +26017,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#5595df" DESTINATION="ID_224781783" ENDARROW="Default" ENDINCLINATION="-573;42;" ID="Arrow_ID_1285897355" SOURCE="ID_675568693" STARTARROW="None" STARTINCLINATION="47;-43;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -25838,7 +26069,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1567112357515" ID="ID_921918885" MODIFIED="1575133312562" TEXT="man k&#xf6;nnte noch einen Margin pro Track einarbeiten">
+<node COLOR="#338800" CREATED="1567112357515" ID="ID_921918885" MODIFIED="1576282358041" TEXT="man k&#xf6;nnte noch einen Margin pro Track einarbeiten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25856,7 +26087,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1567684868730" ID="ID_1174805630" MODIFIED="1567747074910" TEXT="drei Modelle denkbar">
 <node CREATED="1567684881240" ID="ID_1903584153" MODIFIED="1567747074910" TEXT="Modell-1">
@@ -25928,7 +26160,7 @@
 <arrowlink COLOR="#da5073" DESTINATION="ID_309596538" ENDARROW="Default" ENDINCLINATION="40;-34;" ID="Arrow_ID_46419716" STARTARROW="None" STARTINCLINATION="58;33;"/>
 <linktarget COLOR="#c25c5f" DESTINATION="ID_1434222749" ENDARROW="Default" ENDINCLINATION="-123;0;" ID="Arrow_ID_1862539064" SOURCE="ID_764240247" STARTARROW="None" STARTINCLINATION="-876;0;"/>
 <icon BUILTIN="bell"/>
-<node CREATED="1566956361471" ID="ID_1879544719" MODIFIED="1575133312832" TEXT="Vorsicht bei gemeinsam genormten Koordinaten">
+<node CREATED="1566956361471" ID="ID_1879544719" MODIFIED="1576282358041" TEXT="Vorsicht bei gemeinsam genormten Koordinaten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25938,7 +26170,8 @@
       weil dann der Platz f&#252;r den &quot;pinned&quot; Ruler redundant im Body-Canvas vorhanden ist!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1567876399531" ID="ID_1578713642" MODIFIED="1567876412481" TEXT="genau.... jetzt hamma den Salat">
 <icon BUILTIN="flag-yellow"/>
@@ -25978,7 +26211,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955956741" ID="ID_1266359061" MODIFIED="1568383460511" TEXT="wie k&#xf6;nnen wir dann aber Clips korrekt positionieren?">
 <arrowlink COLOR="#4943a0" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="954;-120;" ID="Arrow_ID_1809237545" STARTARROW="None" STARTINCLINATION="-271;0;"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1568383045628" ID="ID_557151257" MODIFIED="1575133312930" TEXT="daf&#xfc;r brauchen wir ohnehin eine access-Funtkion">
+<node CREATED="1568383045628" ID="ID_557151257" MODIFIED="1576282358040" TEXT="daf&#xfc;r brauchen wir ohnehin eine access-Funtkion">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25988,7 +26221,8 @@
       weil die Canvas-Controls tief eingewickelt in der Struktur liegen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1568383095404" ID="ID_393689214" MODIFIED="1568383114645" TEXT="Ausl&#xf6;sen wird das der ClipPresenter"/>
 <node CREATED="1568383358860" ID="ID_619192777" LINK="#ID_633007604" MODIFIED="1568384041962" TEXT="den tats&#xe4;chlichen Zugriff k&#xf6;nnte der DisplayFrame haben"/>
 </node>
@@ -26047,7 +26281,7 @@
 </node>
 <node CREATED="1567689738430" ID="ID_335898798" MODIFIED="1567689747264" TEXT="feine Zeichenfehler an der Sto&#xdf;fl&#xe4;che">
 <node CREATED="1567689750410" ID="ID_1517735190" MODIFIED="1567689771647" TEXT="...von zwei Bereichen mit box-shadow"/>
-<node CREATED="1567689772565" ID="ID_1542367602" MODIFIED="1575133313172" TEXT="...sofern der box-shadow den im Zeichenvorgang abgedeckten Bereich &#xfc;berschreitet">
+<node CREATED="1567689772565" ID="ID_1542367602" MODIFIED="1576282358040" TEXT="...sofern der box-shadow den im Zeichenvorgang abgedeckten Bereich &#xfc;berschreitet">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26063,9 +26297,10 @@
       die sich nur beim Scrollen bemerkbar macht
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1567689845067" ID="ID_1441909594" MODIFIED="1575133313183" TEXT="ich betrachte das Problem als eigentlich irrelevant">
+<node CREATED="1567689845067" ID="ID_1441909594" MODIFIED="1576282358039" TEXT="ich betrachte das Problem als eigentlich irrelevant">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26075,7 +26310,8 @@
       man soll ohnehin keinen so gro&#223;en box-shadow verwenden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -26175,7 +26411,7 @@
 <node CREATED="1480741397880" ID="ID_299590632" MODIFIED="1557498707230" TEXT="Effekte werden als ClipPresenter implementiert">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1480741425668" ID="ID_826648354" MODIFIED="1575133313678" TEXT="Labels werden als eigenes Tangible MarkerWidget implementiert">
+<node CREATED="1480741425668" ID="ID_826648354" MODIFIED="1576282358039" TEXT="Labels werden als eigenes Tangible MarkerWidget implementiert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26185,7 +26421,8 @@
       ...sie verwenden dann ein LabelWidget zur Darstellung
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1480741466519" ID="ID_29080454" MODIFIED="1557498707230" TEXT="das werden zwei Collections">
 <icon BUILTIN="messagebox_warning"/>
@@ -26231,7 +26468,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1540640109628" ID="ID_147809215" MODIFIED="1557498707231" TEXT="TODO: TimelineGui (proxy) mu&#xdf; kaskadieren">
 <icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544135984042" ID="ID_429363053" MODIFIED="1575133313895" TEXT="Grund f&#xfc;r den Fehler im Nexus?">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544135984042" ID="ID_429363053" MODIFIED="1576282358038" TEXT="Grund f&#xfc;r den Fehler im Nexus?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26241,7 +26478,8 @@
       ERR: nexus.hpp:189: worker_3: ~Nexus: Some UI components are still connected to the backbone.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -26316,7 +26554,7 @@
 <node CREATED="1479434763643" HGAP="48" ID="ID_1572413636" MODIFIED="1557498707231" TEXT="Clip" VSHIFT="32">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1479434774138" ID="ID_912862507" MODIFIED="1557498707231" TEXT="Grundlagen">
-<node CREATED="1479434780105" ID="ID_239720378" MODIFIED="1575133314151" TEXT="apperances">
+<node CREATED="1479434780105" ID="ID_239720378" MODIFIED="1576282358038" TEXT="apperances">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26332,7 +26570,8 @@
       Verwende das als Leitgedanke, um das Layout zu entwickeln
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1479434831825" ID="ID_975727645" MODIFIED="1557498707231" TEXT="abridged form">
 <node CREATED="1479434845992" ID="ID_609815513" MODIFIED="1557498707231" TEXT="media bin, collapsed fork"/>
@@ -26487,7 +26726,7 @@
 <node COLOR="#338800" CREATED="1504200758920" ID="ID_19179662" MODIFIED="1561827465280" TEXT="hab ich schon mal eine InfoBox dazugebaut">
 <linktarget COLOR="#f5dd67" DESTINATION="ID_19179662" ENDARROW="Default" ENDINCLINATION="743;-1563;" ID="Arrow_ID_1195014928" SOURCE="ID_340215113" STARTARROW="None" STARTINCLINATION="-452;605;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1504200878312" ID="ID_1934842950" MODIFIED="1575133314753" TEXT="...f&#xfc;r #1099 DemoGuiRoundtrip">
+<node COLOR="#435e98" CREATED="1504200878312" ID="ID_1934842950" MODIFIED="1576282358037" TEXT="...f&#xfc;r #1099 DemoGuiRoundtrip">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26497,7 +26736,8 @@
       ...um mal was im UI anzeigen zu k&#246;nnen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1504200907356" ID="ID_1939871955" MODIFIED="1538838450291" TEXT="neues Dock">
@@ -26593,7 +26833,7 @@
 <node CREATED="1477342640932" ID="ID_950379507" MODIFIED="1518487921084" TEXT="hat Liste von WorkspaceWindow-s"/>
 <node CREATED="1477342694237" ID="ID_1913986184" MODIFIED="1518487921084" TEXT="diese deregistrieren sich beim Schlie&#xdf;en"/>
 <node CREATED="1477342711442" ID="ID_500847959" MODIFIED="1518487921084" TEXT="wenn letztes Fenster zu, dann Main-&gt;quit"/>
-<node CREATED="1477342816853" ID="ID_205499879" MODIFIED="1575133315049" TEXT="steuert Zusand von Menu&gt;Window&gt;CloseWindow">
+<node CREATED="1477342816853" ID="ID_205499879" MODIFIED="1576282358037" TEXT="steuert Zusand von Menu&gt;Window&gt;CloseWindow">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26606,7 +26846,8 @@
       mehr als ein top-level Fenster offen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1477342868574" ID="ID_679226593" MODIFIED="1518487921084" TEXT="WorkspaceWindow">
@@ -26615,7 +26856,7 @@
 <node CREATED="1477342971448" ID="ID_1574175266" MODIFIED="1518487921084" TEXT="Controller"/>
 </node>
 <node CREATED="1477343022529" ID="ID_1585028268" MODIFIED="1518487921084" TEXT="owns">
-<node CREATED="1477343030104" ID="ID_350881879" MODIFIED="1575133315136" TEXT="gtk::UiManager">
+<node CREATED="1477343030104" ID="ID_350881879" MODIFIED="1576282358036" TEXT="gtk::UiManager">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26628,7 +26869,8 @@
       which reference actions from one or more action groups.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1477343041295" ID="ID_1874325062" MODIFIED="1518487921084" TEXT="PanelManager">
 <node CREATED="1477343244428" ID="ID_513688853" MODIFIED="1518487921084" TEXT="managed die Docks"/>
@@ -26637,7 +26879,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1477345882862" ID="ID_1342647727" MODIFIED="1518487921084" TEXT="arbeitet zu viel mit Pointern ohe RAII"/>
 <node CREATED="1477345906723" ID="ID_906895860" MODIFIED="1518487921084" TEXT="&quot;poor man&apos;s reflection&quot;"/>
-<node CREATED="1477345939063" ID="ID_984848221" MODIFIED="1575133315205">
+<node CREATED="1477345939063" ID="ID_984848221" MODIFIED="1576282358035">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -26666,7 +26908,8 @@
       AUA!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1477347390430" HGAP="46" ID="ID_138529757" MODIFIED="1518487921084" TEXT="Panel" VSHIFT="31">
@@ -26688,7 +26931,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1477616970387" HGAP="56" ID="ID_786267715" MODIFIED="1518487921084" TEXT="Problem: Panel clean-up" VSHIFT="40">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1477617009766" ID="ID_205353538" MODIFIED="1575133315307" TEXT="Verdacht: dtor wird nicht aufgerufen">
+<node CREATED="1477617009766" ID="ID_205353538" MODIFIED="1576282358035" TEXT="Verdacht: dtor wird nicht aufgerufen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26710,9 +26953,10 @@
       auch nicht im Application-Shutdown!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1477617185582" ID="ID_634277803" MODIFIED="1575133315320" TEXT="PanelManager::createPanels()">
+<node CREATED="1477617185582" ID="ID_634277803" MODIFIED="1576282358034" TEXT="PanelManager::createPanels()">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26725,13 +26969,14 @@
       dock_.add_item(timelinePanel-&gt;getDockItem(),Gdl::DOCK_BOTTOM);
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
 </node>
 <node CREATED="1477343061900" ID="ID_589166101" MODIFIED="1518487921084" TEXT="Statusbar"/>
-<node CREATED="1477343071827" ID="ID_369966079" MODIFIED="1575133315344" TEXT="Actions">
+<node CREATED="1477343071827" ID="ID_369966079" MODIFIED="1576282358034" TEXT="Actions">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26741,7 +26986,8 @@
       Helper to build the menu and for&#160;registering and handling of user action events
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1477344354329" ID="ID_1683945104" MODIFIED="1518487921084" TEXT="createUi()">
@@ -26754,7 +27000,7 @@
 </node>
 </node>
 <node CREATED="1477343115357" ID="ID_213954404" MODIFIED="1518487921084" TEXT="Kritik">
-<node CREATED="1477343120660" ID="ID_1940152250" MODIFIED="1575133315446" TEXT="Multiplizit&#xe4;t unklar">
+<node CREATED="1477343120660" ID="ID_1940152250" MODIFIED="1576282358033" TEXT="Multiplizit&#xe4;t unklar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -26767,7 +27013,8 @@
       aber es kann davon mehrere geben
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1477343152288" ID="ID_1267678981" MODIFIED="1518487921084" TEXT="Vermengung von Fenster und Workspace"/>
 </node>
@@ -27076,7 +27323,7 @@
 </node>
 <node COLOR="#338800" CREATED="1532788645307" ID="ID_254810710" MODIFIED="1561827465292" TEXT="Trigger-Technik kl&#xe4;ren">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1532788681197" HGAP="336" ID="ID_32192034" MODIFIED="1575133316898" TEXT="bei GTK selber abschauen" VSHIFT="-52">
+<node CREATED="1532788681197" HGAP="336" ID="ID_32192034" MODIFIED="1576282358033" TEXT="bei GTK selber abschauen" VSHIFT="-52">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27089,7 +27336,8 @@
       die erlauben, eine Init-Aktion in die Loop zu schedulen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1532793805646" ID="ID_1917720417" MODIFIED="1532793811649" TEXT="Gtk::Application">
 <node CREATED="1532797033134" ID="ID_1310675334" MODIFIED="1532797038441" TEXT="Gio::Application">
@@ -27097,7 +27345,7 @@
 <node CREATED="1532797042628" ID="ID_868500366" MODIFIED="1532797129536" TEXT="statisches member: Application_Class">
 <icon BUILTIN="idea"/>
 <node CREATED="1532797071961" ID="ID_965723020" MODIFIED="1532797076020" TEXT="hat init-Funktionen"/>
-<node CREATED="1532797076656" ID="ID_1083316138" MODIFIED="1575133316971">
+<node CREATED="1532797076656" ID="ID_1083316138" MODIFIED="1576282358032">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -27120,7 +27368,8 @@
       sondern Sachen wie verallgemeinerte &quot;Files&quot;, D-Bus-Connection etc etc
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -27134,7 +27383,7 @@
 <node CREATED="1533309934787" ID="ID_768351523" MODIFIED="1533309939685" TEXT="signal_activate()"/>
 </node>
 <node CREATED="1532794495416" ID="ID_1267822394" MODIFIED="1532794501700" TEXT="wie wird das Fenster angezeigt?">
-<node CREATED="1533309900271" ID="ID_1679581564" MODIFIED="1575133317043" TEXT="entweder man macht es selber noch sichtbar">
+<node CREATED="1533309900271" ID="ID_1679581564" MODIFIED="1576282358032" TEXT="entweder man macht es selber noch sichtbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27149,7 +27398,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1533309913133" ID="ID_1543846508" MODIFIED="1533310043556" TEXT="oder man verwendet run(Window&amp;)">
 <arrowlink COLOR="#88cecc" DESTINATION="ID_1128899175" ENDARROW="Default" ENDINCLINATION="112;-110;" ID="Arrow_ID_117418578" STARTARROW="None" STARTINCLINATION="-22;73;"/>
@@ -27164,7 +27414,7 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1533252737995" ID="ID_763153536" MODIFIED="1533252745030" TEXT="application.cc Zeile 160"/>
-<node CREATED="1533252758840" ID="ID_346690959" MODIFIED="1575133317122" TEXT="signal_activate()">
+<node CREATED="1533252758840" ID="ID_346690959" MODIFIED="1576282358031" TEXT="signal_activate()">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27180,7 +27430,8 @@
       &#160;&#160;//registered. (At least if window is an ApplicationWindow.)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1533252809112" ID="ID_394563790" MODIFIED="1533252812836" TEXT="woot?"/>
 <node CREATED="1533252813376" ID="ID_1458058904" MODIFIED="1533252820105" TEXT="wer definiert das?">
 <icon BUILTIN="help"/>
@@ -27192,7 +27443,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1533252898732" ID="ID_28088492" MODIFIED="1575133317165" TEXT="Gio::Application::signal_activate()">
+<node CREATED="1533252898732" ID="ID_28088492" MODIFIED="1576282358030" TEXT="Gio::Application::signal_activate()">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27205,7 +27456,8 @@
       when an&#160;activation occurs. See g_application_activate().
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#224e99" DESTINATION="ID_28088492" ENDARROW="Default" ENDINCLINATION="37;-48;" ID="Arrow_ID_550550684" SOURCE="ID_1891535415" STARTARROW="None" STARTINCLINATION="-151;-4;"/>
 <node CREATED="1533252951945" ID="ID_182447520" MODIFIED="1533252955015">
 <richcontent TYPE="NODE"><html>
@@ -27226,7 +27478,7 @@
 <node CREATED="1533309175099" ID="ID_574887736" MODIFIED="1533309275410" TEXT="im Framework nur Application::run(Window&amp;)">
 <arrowlink COLOR="#6280a2" DESTINATION="ID_103827073" ENDARROW="Default" ENDINCLINATION="-1131;-99;" ID="Arrow_ID_138401663" STARTARROW="None" STARTINCLINATION="1028;-75;"/>
 </node>
-<node COLOR="#338800" CREATED="1533309280940" ID="ID_918869201" MODIFIED="1575133317223" TEXT="Stand 8/2018 verifiziert">
+<node COLOR="#338800" CREATED="1533309280940" ID="ID_918869201" MODIFIED="1576282358030" TEXT="Stand 8/2018 verifiziert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27247,7 +27499,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -27315,7 +27568,7 @@
 <node CREATED="1532789138896" ID="ID_546791531" MODIFIED="1532789188914" TEXT="deaktiviert an Gtk::Main gebundene Signale">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1532789198999" ID="ID_270727305" MODIFIED="1575133317461" TEXT="lt. Kommentar insges. ehr ein Legacy-Feature">
+<node CREATED="1532789198999" ID="ID_270727305" MODIFIED="1576282358029" TEXT="lt. Kommentar insges. ehr ein Legacy-Feature">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27325,7 +27578,8 @@
       ...f&#252;r Signale, die nicht automatisch detached werden k&#246;nnen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1532789833473" ID="ID_1171567949" MODIFIED="1532789838020" TEXT="relevant f&#xfc;r...">
 <node CREATED="1532789860594" ID="ID_1189172516" MODIFIED="1561827465306" TEXT="gtk_init_add()">
@@ -27336,7 +27590,7 @@
 </node>
 </node>
 <node CREATED="1532789869240" ID="ID_752154716" MODIFIED="1561827465307" TEXT="gtk_key_snooper_install()">
-<node CREATED="1532790015889" ID="ID_1497534470" MODIFIED="1575133317520" TEXT="@deprecated: 3.4">
+<node CREATED="1532790015889" ID="ID_1497534470" MODIFIED="1576282358029" TEXT="@deprecated: 3.4">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27346,7 +27600,8 @@
       @deprecated: 3.4: Key snooping should not be done. Events should&#160;&#160;be handled by widgets
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1532790702292" ID="ID_1501770920" MODIFIED="1532790728882" TEXT="GTKmm: KeySnooperSig in main.h / main.cpp">
 <icon BUILTIN="idea"/>
@@ -27357,7 +27612,7 @@
 <node CREATED="1532791032935" ID="ID_921226462" MODIFIED="1532791047721" TEXT="installiert eine GtkMainConnectionNode"/>
 <node CREATED="1532791048453" ID="ID_1754300511" MODIFIED="1532791066007" TEXT="packt den Deregisrierungs-callback rein"/>
 </node>
-<node CREATED="1532791334135" ID="ID_669771307" MODIFIED="1575133317575">
+<node CREATED="1532791334135" ID="ID_669771307" MODIFIED="1576282358028">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -27382,7 +27637,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -27417,7 +27673,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1533310237105" ID="ID_937500948" MODIFIED="1575133317707" TEXT="sonst nichts...">
+<node COLOR="#435e98" CREATED="1533310237105" ID="ID_937500948" MODIFIED="1576282358028" TEXT="sonst nichts...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27444,7 +27700,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="info"/>
 </node>
@@ -27536,7 +27793,7 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1533221681199" ID="ID_979914270" MODIFIED="1575133318086" TEXT="Folge unserer Architektur">
+<node CREATED="1533221681199" ID="ID_979914270" MODIFIED="1576282358027" TEXT="Folge unserer Architektur">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27549,11 +27806,12 @@
       schon vor der Loop verf&#252;gbar zu sein (?)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#990000" CREATED="1533221752837" ID="ID_583598881" MODIFIED="1533310555941" TEXT="verifizieren: ist Glib::Dispatcher die richtige Technik">
 <icon BUILTIN="stop-sign"/>
-<node CREATED="1533310564980" ID="ID_1796116534" MODIFIED="1575133318110" TEXT="ist es nicht...">
+<node CREATED="1533310564980" ID="ID_1796116534" MODIFIED="1576282358027" TEXT="ist es nicht...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27563,7 +27821,8 @@
       nur bei laufender Event-Loop
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#c1a9ad" DESTINATION="ID_519518808" ENDARROW="Default" ENDINCLINATION="70;0;" ID="Arrow_ID_985135564" STARTARROW="None" STARTINCLINATION="149;-223;"/>
 </node>
 </node>
@@ -27598,7 +27857,7 @@
 <icon BUILTIN="help"/>
 <node CREATED="1533311314709" ID="ID_277761751" MODIFIED="1533385647446" TEXT="wirklich in der Loop?">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_277761751" ENDARROW="Default" ENDINCLINATION="-48;213;" ID="Arrow_ID_1127398125" SOURCE="ID_748660217" STARTARROW="None" STARTINCLINATION="256;0;"/>
-<node CREATED="1533311322220" ID="ID_1614182663" MODIFIED="1575133318328" TEXT="Fenster-aktivieren passiert vor der Loop">
+<node CREATED="1533311322220" ID="ID_1614182663" MODIFIED="1576282358026" TEXT="Fenster-aktivieren passiert vor der Loop">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27617,7 +27876,8 @@
       Fenster gibt es gar keine Benutzer-Events.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1533311415455" ID="ID_1211339520" MODIFIED="1533311614570" TEXT="GTK-Aktivierungs-Mechanismus hat andere Gr&#xfc;nde">
 <arrowlink COLOR="#949fb4" DESTINATION="ID_1806268533" ENDARROW="Default" ENDINCLINATION="-1845;-608;" ID="Arrow_ID_1146394851" STARTARROW="None" STARTINCLINATION="-474;0;"/>
@@ -27683,7 +27943,7 @@
 <node CREATED="1533385595528" ID="ID_748660217" MODIFIED="1533385647446" TEXT="es mu&#xdf; wirklich in der Event-Loop laufen">
 <arrowlink COLOR="#a9b4c1" DESTINATION="ID_277761751" ENDARROW="Default" ENDINCLINATION="-48;213;" ID="Arrow_ID_1127398125" STARTARROW="None" STARTINCLINATION="256;0;"/>
 </node>
-<node CREATED="1533385674860" ID="ID_204825661" MODIFIED="1575133318610" TEXT="minimale Verz&#xf6;gerung nach Prgrammstart ist gut">
+<node CREATED="1533385674860" ID="ID_204825661" MODIFIED="1576282358026" TEXT="minimale Verz&#xf6;gerung nach Prgrammstart ist gut">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27705,7 +27965,8 @@
       und daher der Diff direkt und kompakt in einem Durchgang emittiert werden kann
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1533385403578" ID="ID_340344973" MODIFIED="1533388551009" TEXT="direkt im InteractionDirector">
@@ -27742,7 +28003,7 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1539134197011" ID="ID_1798515652" MODIFIED="1557498707233" TEXT="m&#xf6;gliche Modelle">
 <icon BUILTIN="idea"/>
-<node CREATED="1539134201394" ID="ID_1071210666" MODIFIED="1575133318762" TEXT="UI-Komponente realisiert sich selbst">
+<node CREATED="1539134201394" ID="ID_1071210666" MODIFIED="1576282358025" TEXT="UI-Komponente realisiert sich selbst">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27760,10 +28021,11 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1539134224759" ID="ID_766070060" MODIFIED="1575133318775" TEXT="Struktur und Realisierung gemeinsam gepusht">
+<node CREATED="1539134224759" ID="ID_766070060" MODIFIED="1576282358024" TEXT="Struktur und Realisierung gemeinsam gepusht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27778,7 +28040,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -27792,7 +28055,7 @@
 <icon BUILTIN="forward"/>
 <node CREATED="1539134702831" ID="ID_250983627" MODIFIED="1557498707233" TEXT="Objekt als leere H&#xfc;lle vorausgesetzt"/>
 <node CREATED="1539134713846" ID="ID_1404883972" MODIFIED="1557498707233" TEXT="schickt alle Details und Inhalte als Diff"/>
-<node CREATED="1539134733747" ID="ID_353086867" MODIFIED="1575133318871">
+<node CREATED="1539134733747" ID="ID_353086867" MODIFIED="1576282358024">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -27817,7 +28080,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#4e31e2" DESTINATION="ID_1189184036" ENDARROW="Default" ENDINCLINATION="-767;-123;" ID="Arrow_ID_156898929" STARTARROW="None" STARTINCLINATION="-1608;-84;"/>
 <node CREATED="1539138549468" ID="ID_1203696589" MODIFIED="1557498707233" TEXT="existiert &quot;irgendwo&quot;"/>
 <node CREATED="1539138556651" ID="ID_1265568834" MODIFIED="1557498707233" TEXT="per Command ansprechbar"/>
@@ -27959,7 +28223,7 @@
 <node CREATED="1541860174509" ID="ID_983216306" MODIFIED="1557498707233" TEXT="position within window">
 <node CREATED="1541860195426" ID="ID_1143510761" MODIFIED="1557498707233" TEXT="relative"/>
 <node CREATED="1541860198222" ID="ID_847832000" MODIFIED="1557498707233" TEXT="absolute">
-<node CREATED="1544126105472" ID="ID_1636490570" MODIFIED="1575133319641" TEXT="relative-absolute">
+<node CREATED="1544126105472" ID="ID_1636490570" MODIFIED="1576282358023" TEXT="relative-absolute">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27972,7 +28236,8 @@
       where 1 tick unit depends on the current zoom level
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -27980,7 +28245,7 @@
 </node>
 <node CREATED="1542384160498" ID="ID_1252241860" MODIFIED="1557498707233" TEXT="TimeWindow">
 <node CREATED="1542384165737" ID="ID_705415129" MODIFIED="1557498707233" TEXT="die konkret sichbare TimeSpan"/>
-<node CREATED="1542384188438" ID="ID_444895141" MODIFIED="1575133319675" TEXT="stets in realem relativem Zeitma&#xdf;">
+<node CREATED="1542384188438" ID="ID_444895141" MODIFIED="1576282358023" TEXT="stets in realem relativem Zeitma&#xdf;">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27995,12 +28260,13 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1541859633805" ID="ID_304890799" MODIFIED="1557498707233" TEXT="Scale">
 <node CREATED="1541859805246" ID="ID_1619845581" MODIFIED="1557498707233" TEXT="temporal extension of one unit"/>
-<node CREATED="1542384386446" ID="ID_1472241358" MODIFIED="1575133319731" TEXT="minval / maxval or unlimited?">
+<node CREATED="1542384386446" ID="ID_1472241358" MODIFIED="1576282358022" TEXT="minval / maxval or unlimited?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28022,7 +28288,8 @@
       Theoretisch k&#246;nnte eine Skala auf einer Seite oder auf beiden Seiten limitiert sein....?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1542384604062" ID="ID_900384720" MODIFIED="1542384632672" TEXT="grunds&#xe4;tzlich niemals beschr&#xe4;nkt">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -28090,7 +28357,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1541860985526" ID="ID_640984391" MODIFIED="1557498707234" TEXT="Struct mit Methoden"/>
-<node CREATED="1541861314456" ID="ID_267107783" MODIFIED="1575133320200" TEXT="generisch">
+<node CREATED="1541861314456" ID="ID_267107783" MODIFIED="1576282358022" TEXT="generisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28109,7 +28376,8 @@
       analog zu gui::model::Tangible
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1541861007275" ID="ID_411365171" MODIFIED="1557498707234" TEXT="zuweisbar"/>
 <node CREATED="1541861061984" HGAP="23" ID="ID_426757987" MODIFIED="1557498707234" TEXT="Anwendung" VSHIFT="10">
@@ -28168,7 +28436,7 @@
 <arrowlink COLOR="#677dde" DESTINATION="ID_1099820897" ENDARROW="Default" ENDINCLINATION="-64;0;" ID="Arrow_ID_791650338" STARTARROW="None" STARTINCLINATION="18;42;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1541546209896" ID="ID_1049660229" MODIFIED="1541546245931" TEXT="Kind: _CHILD_&lt;typ&gt;.&lt;cnt&gt;">
-<node CREATED="1541546489419" ID="ID_282481336" MODIFIED="1575133320425" TEXT="automatisch global eindeutig">
+<node CREATED="1541546489419" ID="ID_282481336" MODIFIED="1576282358021" TEXT="automatisch global eindeutig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28178,7 +28446,8 @@
       weil wir einen Mechanismus haben, die &lt;cnt&gt;-Dekoration pro Typ global hochzuz&#228;hlen (treadsafe)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1541546556994" ID="ID_35993355" MODIFIED="1541546573135" TEXT="hash-seed: der &lt;typ&gt;-Hash"/>
 </node>
@@ -28205,7 +28474,7 @@
 <node CREATED="1541552824556" ID="ID_42859602" MODIFIED="1541552831542" TEXT="geht nicht">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1541552832731" ID="ID_346770424" MODIFIED="1575133320521" TEXT="bricht die Subsidiarit&#xe4;t">
+<node CREATED="1541552832731" ID="ID_346770424" MODIFIED="1576282358021" TEXT="bricht die Subsidiarit&#xe4;t">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28218,13 +28487,14 @@
       von dem Container (GenNode) wissen, der es zwei Ebenen h&#246;her enth&#228;lt und umschlie&#223;t
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1541774981285" ID="ID_1038144488" MODIFIED="1541774996472" TEXT="ist letzten Endes auch blo&#xdf; random()"/>
 </node>
 </node>
-<node CREATED="1541775187418" ID="ID_1058458763" MODIFIED="1575133320575" TEXT="Frage: Reproduzierbarkeit irrelevant?">
+<node CREATED="1541775187418" ID="ID_1058458763" MODIFIED="1576282358020" TEXT="Frage: Reproduzierbarkeit irrelevant?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28240,10 +28510,11 @@
       Der Hash kann genausogut eine Zufallszahl sein
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1541775381760" ID="ID_681940327" MODIFIED="1541775392922" TEXT="denn: get sucht per Symbol"/>
-<node CREATED="1541775428125" ID="ID_1569956089" MODIFIED="1575133320604" TEXT="und: einige Attribute haben notwendig eine extern definierte ID">
+<node CREATED="1541775428125" ID="ID_1569956089" MODIFIED="1576282358020" TEXT="und: einige Attribute haben notwendig eine extern definierte ID">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28259,7 +28530,8 @@
       sich &#252;ber dieses Problem Gedanken zu machen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1541790399905" ID="ID_552609912" MODIFIED="1541790483789">
 <richcontent TYPE="NODE"><html>
@@ -28292,7 +28564,7 @@
 </node>
 <node CREATED="1541790588022" ID="ID_1242220321" MODIFIED="1541790627427" TEXT="Fazit: auf dem ETD-level ignorieren"/>
 <node CREATED="1541790631410" ID="ID_1544767080" MODIFIED="1541790641506" TEXT="geh&#xf6;rt in den Domain-level"/>
-<node CREATED="1541790656124" ID="ID_279205741" MODIFIED="1575133320681" TEXT="Domain-IDs eindeutig">
+<node CREATED="1541790656124" ID="ID_279205741" MODIFIED="1576282358019" TEXT="Domain-IDs eindeutig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28308,9 +28580,10 @@
       f&#252;r global eindeutige IDs an den relevanten Stellen zu sorgen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1541790717726" ID="ID_1884395735" MODIFIED="1575133320696" TEXT="explizites Attribut-Binding">
+<node COLOR="#338800" CREATED="1541790717726" ID="ID_1884395735" MODIFIED="1576282358019" TEXT="explizites Attribut-Binding">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28320,7 +28593,8 @@
       ...dem man eine EntryID geben kann
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1541790780342" ID="ID_683694576" MODIFIED="1541798900109" TEXT="DSL-Syntax">
@@ -28524,7 +28798,7 @@
 <node CREATED="1523019528770" ID="ID_880857626" MODIFIED="1557498707235" TEXT="der real existierende konkrete Inhalt des UI"/>
 <node CREATED="1523019583242" ID="ID_1200584395" MODIFIED="1557498707235" TEXT="ein Wildwuchs an nativen Komponenten"/>
 <node CREATED="1523019593833" ID="ID_770462134" MODIFIED="1557498707235" TEXT="ausschlie&#xdf;lich an das UI-Toolkit gebunden"/>
-<node CREATED="1523019635739" ID="ID_883974404" MODIFIED="1575133321604" TEXT="Einzelfall-Wissen vorausgesetzt">
+<node CREATED="1523019635739" ID="ID_883974404" MODIFIED="1576282358018" TEXT="Einzelfall-Wissen vorausgesetzt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28543,7 +28817,8 @@
       erfordert bereits Kenntnis der Innereien
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1523019753259" ID="ID_281223690" MODIFIED="1557498707235" TEXT="Einstiegspunkte">
@@ -28597,7 +28872,7 @@
 <cloud COLOR="#e0d6ba"/>
 <icon BUILTIN="info"/>
 <node CREATED="1448078268223" ID="ID_1027574047" MODIFIED="1518487921085" TEXT="Lebenszyklus">
-<node CREATED="1448078450375" ID="ID_459686936" MODIFIED="1575133321832" TEXT="zeugen">
+<node CREATED="1448078450375" ID="ID_459686936" MODIFIED="1576282358017" TEXT="zeugen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28607,9 +28882,10 @@
       hei&#223;t: Element registriert sich am UI-Bus
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1448078473068" ID="ID_510866826" MODIFIED="1575133321845" TEXT="zerst&#xf6;ren">
+<node CREATED="1448078473068" ID="ID_510866826" MODIFIED="1576282358017" TEXT="zerst&#xf6;ren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28619,11 +28895,12 @@
       hei&#223;t: Element deregistriert sich am UI-Bus
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1448078308690" ID="ID_185716114" MODIFIED="1518487921085" TEXT="Aktionen">
-<node CREATED="1448078344541" ID="ID_1781183546" MODIFIED="1575133321870" TEXT="Subjekt einer Aktion">
+<node CREATED="1448078344541" ID="ID_1781183546" MODIFIED="1576282358016" TEXT="Subjekt einer Aktion">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28633,7 +28910,8 @@
       ...ist <i>immer</i>&#160;ein <b>tangible</b>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1448078516094" ID="ID_201691188" MODIFIED="1518487921085" TEXT="Commands"/>
 <node CREATED="1448078325679" ID="ID_946047770" MODIFIED="1518487921085" TEXT="tweaks"/>
@@ -28683,7 +28961,7 @@
 <node CREATED="1448078722483" ID="ID_1661890520" MODIFIED="1518487921085" TEXT="auf default!">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1448078731130" ID="ID_1682515267" MODIFIED="1575133322102" TEXT="collapse / expand">
+<node CREATED="1448078731130" ID="ID_1682515267" MODIFIED="1576282358016" TEXT="collapse / expand">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28693,10 +28971,11 @@
       daf&#252;r gen&#252;gt der normale Reset
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1575133322117" TEXT="Nachrichten l&#xf6;schen">
+<node CREATED="1448078748448" ID="ID_1000763850" MODIFIED="1576282358015" TEXT="Nachrichten l&#xf6;schen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28706,9 +28985,10 @@
       mark &quot;clearMsg&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1575133322132" TEXT="Fehler l&#xf6;schen">
+<node CREATED="1448078778916" ID="ID_1657108949" MODIFIED="1576282358015" TEXT="Fehler l&#xf6;schen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28718,9 +28998,10 @@
       mark &quot;clearErr&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1575133322171" TEXT="komplett-Reset">
+<node CREATED="1448078798369" ID="ID_819750758" MODIFIED="1576282358014" TEXT="komplett-Reset">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28730,7 +29011,8 @@
       mark &quot;reset&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -28756,7 +29038,7 @@
 </node>
 <node CREATED="1448658633478" HGAP="99" ID="ID_314439240" MODIFIED="1561827465349" TEXT="Design" VSHIFT="13">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1448658692023" ID="ID_339186676" MODIFIED="1575133322256">
+<node CREATED="1448658692023" ID="ID_339186676" MODIFIED="1576282358014">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -28779,9 +29061,10 @@
       was haben alle UI-Elemente wirklich gemeinsam?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
-<node CREATED="1448658692023" ID="ID_888978058" MODIFIED="1575133322270" TEXT="generische Commands">
+<node CREATED="1448658692023" ID="ID_888978058" MODIFIED="1576282358013" TEXT="generische Commands">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28797,7 +29080,8 @@
       oder handelt es sich nur um ein Implementierungsdetail der UI-Bus-Anbindung?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1448659456882" ID="ID_946761955" MODIFIED="1518487921085" TEXT="Notwendig: Command-Name + Varargs"/>
 <node CREATED="1451093919426" ID="ID_56876272" MODIFIED="1518487921085" TEXT="generisch impliziert auch zentrale Definition">
@@ -28841,7 +29125,7 @@
 <node CREATED="1455236573173" HGAP="72" ID="ID_466911779" MODIFIED="1518487921086" TEXT="Bewertung" VSHIFT="16">
 <icon BUILTIN="yes"/>
 <node CREATED="1455236781242" ID="ID_674694140" MODIFIED="1518487921086" TEXT="k&#xf6;nnte interessant sein f&#xfc;r Diff"/>
-<node CREATED="1455236788424" ID="ID_1507269502" MODIFIED="1575133322529" TEXT="aber gegen das Grundkonzept">
+<node CREATED="1455236788424" ID="ID_1507269502" MODIFIED="1576282358013" TEXT="aber gegen das Grundkonzept">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28857,7 +29141,8 @@
       F&#252;r die UI-Programmierung mu&#223; man Spaghetticode akzeptieren.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1455236851592" ID="ID_1599276883" MODIFIED="1518487921086" TEXT="YAGNI">
 <icon BUILTIN="messagebox_warning"/>
@@ -28887,7 +29172,7 @@
 <node CREATED="1451177440022" ID="ID_1603816152" MODIFIED="1518487921086" TEXT="expand">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1451177449405" ID="ID_215708646" MODIFIED="1518487921086" TEXT="zun&#xe4;chst einfach auf/zu"/>
-<node CREATED="1451177459667" ID="ID_1151970636" MODIFIED="1575133322657" TEXT="wird m&#xf6;glicherweise eine Enum">
+<node CREATED="1451177459667" ID="ID_1151970636" MODIFIED="1576282358012" TEXT="wird m&#xf6;glicherweise eine Enum">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28900,10 +29185,11 @@
       Dann mu&#223;te das allerdigns jeweils f&#252;r alle Elemente sinnvoll sein
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1451177534345" ID="ID_524388510" MODIFIED="1518487921086" TEXT="impl">
-<node CREATED="1451177542256" ID="ID_980888532" MODIFIED="1575133322682" TEXT="ruft einen konkreten hook doExpand() auf">
+<node CREATED="1451177542256" ID="ID_980888532" MODIFIED="1576282358012" TEXT="ruft einen konkreten hook doExpand() auf">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28913,7 +29199,8 @@
       und der mu&#223; vom konkreten Widget implementiert werden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1451177573108" ID="ID_1154342108" MODIFIED="1518487921086" TEXT="wenn dieser true zur&#xfc;ckgibt, ist der Zustand persistent"/>
 <node CREATED="1451177584435" ID="ID_1792154974" MODIFIED="1518487921086">
@@ -28984,7 +29271,7 @@
 <node CREATED="1535639114727" ID="ID_1791716176" MODIFIED="1535725472597" TEXT="Funktions-Operator(bool expand)"/>
 </node>
 <node CREATED="1535639174623" ID="ID_1755607605" MODIFIED="1535639177466" TEXT="Revealer">
-<node CREATED="1535639368981" ID="ID_220149026" MODIFIED="1575133322935">
+<node CREATED="1535639368981" ID="ID_220149026" MODIFIED="1576282358011">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -29022,7 +29309,8 @@
       wenn es nicht sichtbar ist. Denn Sichtbarkeit geh&#246;rt zur UI-Mechanik und geht den Client nix an
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1535725591561" ID="ID_1362809449" MODIFIED="1535725594837" TEXT="canReveal()"/>
 <node CREATED="1535639517897" ID="ID_1175119585" MODIFIED="1535725607419" TEXT="Funktions-Operator(void) == reveal"/>
@@ -29037,7 +29325,7 @@
 <node CREATED="1535654895926" ID="ID_518978388" MODIFIED="1535655662803" TEXT="zwei Fliegen mit einer Klappe">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1535654884104" ID="ID_1335278492" MODIFIED="1575133323011" TEXT="k&#xf6;nnte f&#xfc;r den ViewLocator n&#xfc;tzlich sein">
+<node CREATED="1535654884104" ID="ID_1335278492" MODIFIED="1576282358011" TEXT="k&#xf6;nnte f&#xfc;r den ViewLocator n&#xfc;tzlich sein">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -29059,7 +29347,8 @@
       denn dann g&#228;be es eine Implementierung &quot;von der Stange&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1535723854290" ID="ID_333598922" MODIFIED="1535723874600" TEXT="f&#xe4;llt aus diesem Thema heraus">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -29230,7 +29519,7 @@
 </node>
 <node CREATED="1455421537717" ID="ID_562890111" MODIFIED="1518487921086" TEXT="k&#xf6;nnen per Broadcast verbreitet werden">
 <node CREATED="1455421549347" ID="ID_744479545" MODIFIED="1518487921086" TEXT="separates UI-Bus API"/>
-<node CREATED="1455421557026" ID="ID_655863988" MODIFIED="1575133324021">
+<node CREATED="1455421557026" ID="ID_655863988" MODIFIED="1576282358010">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -29265,12 +29554,13 @@
       und eine state mark &quot;reset&quot; zur&#252;ckschicken...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
-<node CREATED="1455422030995" HGAP="35" ID="ID_1455265273" MODIFIED="1561827465424" TEXT="mutation" VSHIFT="7">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1455422030995" FOLDED="true" HGAP="35" ID="ID_1455265273" MODIFIED="1576282443543" TEXT="mutation" VSHIFT="7">
+<icon BUILTIN="go"/>
 <node CREATED="1455666294927" ID="ID_373207685" MODIFIED="1518487921086" TEXT="Ausgangspunkt">
 <node CREATED="1455666301630" ID="ID_933452284" MODIFIED="1518487921086" TEXT="Element-Protokoll steht"/>
 <node CREATED="1455666310701" ID="ID_571166725" MODIFIED="1518487921086" TEXT="Bus-Semantik steht"/>
@@ -29289,7 +29579,7 @@
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node CREATED="1455668897947" HGAP="211" ID="ID_1897861223" MODIFIED="1533684811285" TEXT="Konsequenzen" VSHIFT="23">
+<node CREATED="1455668897947" FOLDED="true" HGAP="211" ID="ID_1897861223" MODIFIED="1576200713578" TEXT="Konsequenzen" VSHIFT="23">
 <node CREATED="1455668923175" ID="ID_1183550957" MODIFIED="1575133324169" TEXT="brauche passendes UI-Bus API">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -29428,7 +29718,7 @@
 <node CREATED="1455669331448" ID="ID_1852578403" MODIFIED="1455669333036" TEXT="f&#xfc;r find"/>
 </node>
 </node>
-<node COLOR="#ad014c" CREATED="1455669200945" HGAP="85" ID="ID_880765624" MODIFIED="1515978217415" TEXT="Design-Fragen" VSHIFT="-14">
+<node COLOR="#ad014c" CREATED="1455669200945" FOLDED="true" HGAP="85" ID="ID_880765624" MODIFIED="1576200677851" TEXT="Design-Fragen" VSHIFT="-14">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#4e1527" CREATED="1458408700205" ID="ID_685778920" MODIFIED="1512926191894" TEXT="Grundansatz">
@@ -29702,7 +29992,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#3a3785" CREATED="1455927009621" HGAP="148" ID="ID_153254427" MODIFIED="1561827465460" STYLE="fork" TEXT="&#xbb;generic tree diff&#xab;" VSHIFT="22">
+<node COLOR="#3a3785" CREATED="1455927009621" HGAP="148" ID="ID_153254427" MODIFIED="1576200687560" STYLE="fork" TEXT="&#xbb;generic tree diff&#xab;" VSHIFT="22">
 <cloud COLOR="#edd8ba"/>
 <font NAME="SansSerif" SIZE="15"/>
 <node CREATED="1455927154554" ID="ID_1055035778" MODIFIED="1502453320550" TEXT="Prinzip">
@@ -30117,7 +30407,7 @@
 <node CREATED="1455928846048" ID="ID_1278060510" MODIFIED="1455928856146" TEXT="TypCheck nur einmal"/>
 <node CREATED="1455928856870" ID="ID_806857541" MODIFIED="1455928878335" TEXT="ggfs Sequenz von ID-Checks"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455928805717" HGAP="76" ID="ID_496821508" MODIFIED="1561827465465" TEXT="mutator allocation" VSHIFT="-1">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1455928805717" FOLDED="true" HGAP="76" ID="ID_496821508" MODIFIED="1576200699031" TEXT="mutator allocation" VSHIFT="-1">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1455930962188" ID="ID_1435085503" MODIFIED="1455930970295" TEXT="konkreter Mutator-Typ"/>
@@ -30661,7 +30951,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1456430088803" HGAP="54" ID="ID_481518617" MODIFIED="1533684808984" TEXT="L&#xf6;sung" VSHIFT="19">
+<node CREATED="1456430088803" HGAP="129" ID="ID_481518617" MODIFIED="1576282411283" TEXT="L&#xf6;sung" VSHIFT="25">
 <icon BUILTIN="idea"/>
 <node CREATED="1456430099658" ID="ID_820279076" MODIFIED="1512926191960" TEXT="Entscheidung">
 <linktarget COLOR="#b10046" DESTINATION="ID_820279076" ENDARROW="Default" ENDINCLINATION="14;-46;" ID="Arrow_ID_103087571" SOURCE="ID_343687995" STARTARROW="None" STARTINCLINATION="-137;-20;"/>
@@ -30680,7 +30970,7 @@
 <node CREATED="1456430440196" ID="ID_1922438930" MODIFIED="1456430445551" TEXT="Attribut-Map als Getter/Setter"/>
 <node CREATED="1456430515186" ID="ID_831818012" MODIFIED="1456430519166" TEXT="Rec&lt;GenNode&gt;"/>
 </node>
-<node CREATED="1457120439360" ID="ID_1972741688" MODIFIED="1575133329073" TEXT="ID match ist Aufgabe der Implementierung">
+<node CREATED="1457120439360" ID="ID_1972741688" MODIFIED="1576282358009" TEXT="ID match ist Aufgabe der Implementierung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -30693,3642 +30983,30 @@
       durch den das Problem mit der &quot;absrakten, opaquen&quot; Position entsch&#228;rft wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1456430363599" ID="ID_1608232847" MODIFIED="1456505525321" TEXT="erlaube typ-gefilterte Kinder"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1456506101544" HGAP="165" ID="ID_133511037" MODIFIED="1525124215112" TEXT="Implementierung" VSHIFT="42">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1456506128581" HGAP="-12" ID="ID_322289358" MODIFIED="1525124215117" TEXT="Abw&#xe4;gungen" VSHIFT="184">
-<node CREATED="1456506135028" HGAP="29" ID="ID_470489868" MODIFIED="1512926191965" TEXT="Indirektionen" VSHIFT="-5">
-<node CREATED="1456506145826" ID="ID_759825167" MODIFIED="1575133329132" TEXT="kosten">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <ul>
-      <li>
-        Diff-Anwendung wird massiv und in der Breite stattfinden
-      </li>
-      <li>
-        sie wird als Reaktion auf UI-Events auftreten
-      </li>
-      <li>
-        sie dient dazu, andere UI-Operationen einzusparen
-      </li>
-      <li>
-        also mu&#223; speziell das Traversieren bis an den Anwendungsort bedacht werden
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1456506151065" ID="ID_496007561" MODIFIED="1575133329148" TEXT="bisher nur drei">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...d.h. die bis jetzt geschriebene TreeApplikator-Implementierung
-    </p>
-    <p>
-      ist erstaunlich leichtgewichtig. Zu den zwei Indirektionien der Sprache
-    </p>
-    <p>
-      kommt nur entweder ein weiterer aus der GenNode bzw stattedessen ein dynamic cast hinzu.
-    </p>
-    <p>
-      Alles andere steckt in dem <b>expliziten Mutator-Typ </b>
-    </p>
-    <p>
-      &#160;-- das gibt einen wichtigen Hinweis --
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1456506160472" ID="ID_1269579163" MODIFIED="1575133329163" TEXT="zwei sind das Minimum">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...da wir eine verb-basierte Sprache implementieren,
-    </p>
-    <p>
-      also einen double-dispatch haben
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1456506385130" ID="ID_660502308" MODIFIED="1512926191966" TEXT="f&#xfc;r generische Zieldaten">
-<node CREATED="1456506446002" ID="ID_485732185" MODIFIED="1456506470075" TEXT="kommt eine Indirektion hinzu"/>
-<node CREATED="1456506471159" ID="ID_1228778249" MODIFIED="1512926191966" TEXT="es sei denn...">
-<node CREATED="1456506475686" ID="ID_388141973" MODIFIED="1456506487232" TEXT="man tauscht jeweils den Sprach-Interpreter aus"/>
-<node CREATED="1456506487796" ID="ID_24089490" MODIFIED="1456506499239" TEXT="das setzt aber rekursives Konsumieren des Diff voraus"/>
-<node CREATED="1456506500187" ID="ID_438927454" MODIFIED="1456506511565" TEXT="und das zwingt uns, den Typ des Diff explizit zu machen"/>
-<node CREATED="1456506512721" ID="ID_1007093555" MODIFIED="1575133329277" TEXT="der nicht-explizite Typ ist im Moment von Vorteil....">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      weil wir den Anwendungs-Kontext noch &#252;berhaupt nicht kennen.
-    </p>
-    <p>
-      Man k&#246;nnte also sp&#228;ter, wenn das ganze System &quot;steht&quot;,
-    </p>
-    <p>
-      das Diff-System noch einmal reimplementieren, dann mit einem vorgegebenen Diff-Typ
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1456506607428" HGAP="31" ID="ID_448113584" MODIFIED="1456506627511" VSHIFT="8">
+<node COLOR="#338800" CREATED="1576201938680" HGAP="146" ID="ID_486184645" MODIFIED="1576202931124" VSHIFT="62">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Beschlu&#223;: <i>akzeptiert</i>
+      <font size="4">Implementierung: <b>Diff-Bindung</b></font>&#160;-&gt; Diff-System
     </p>
   </body>
-</html></richcontent>
-<icon BUILTIN="yes"/>
-</node>
-</node>
-<node CREATED="1456506647447" HGAP="32" ID="ID_399090389" MODIFIED="1512926191967" TEXT="Zielvorgabe: weitere vermeiden" VSHIFT="12">
-<node CREATED="1456506661421" ID="ID_593167689" MODIFIED="1456506689357" TEXT="d.h. nur entweder front-end oder back-end sind virtuell"/>
-<node CREATED="1456506689834" ID="ID_1393928517" MODIFIED="1456506713270">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      im Sinn von &quot;polymorpic value&quot; ist <b>das Backend virtuell</b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1456506719949" ID="ID_326439598" MODIFIED="1456506725568" TEXT="keine virtuellen Iteratoren"/>
-<node CREATED="1456506726060" ID="ID_999652076" MODIFIED="1456506738455" TEXT="Front-End mu&#xdf; Typedefs bereitstellen"/>
-<node CREATED="1456506740323" ID="ID_1961807979" MODIFIED="1456506747838" TEXT="elaboriertes Typkonstrukt notwendig"/>
-<node CREATED="1456506749234" ID="ID_957942327" MODIFIED="1575133329379" TEXT="zumindest f&#xfc;r jeden Compund-Zieltyp ein eigener Interpreter">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....wenngleich auch dieser aus einem Template generiert wird
-    </p>
-    <p>
-      (will sagen, es ist nicht sofort offensichtlich, da&#223; wir jeweils einen Interpreter generieren)
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node CREATED="1457038737878" HGAP="44" ID="ID_643190842" MODIFIED="1512926191968" TEXT="Abstraktions-Grad">
-<node CREATED="1457119812475" ID="ID_1862440484" MODIFIED="1457119817575" TEXT="Elemente bleiben opaque"/>
-<node CREATED="1457119818091" ID="ID_1097779694" MODIFIED="1512926191969">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      wir <i>verzichten</i>&#160;auf Introspektion der Elemente
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1457119990420" ID="ID_1521035606" MODIFIED="1457120011276" TEXT="...denn die m&#xfc;&#xdf;te die jeweilige Implementierung erbringen"/>
-<node CREATED="1457120011721" ID="ID_23476594" MODIFIED="1457120024027" TEXT="und das w&#xfc;rde das &#xdc;bel der Introspektion &#xfc;berall hineindr&#xfc;cken"/>
-<node CREATED="1457120026343" ID="ID_156752160" MODIFIED="1457120043288" TEXT="Nachteil: keine klare Fehlerdiagnose m&#xf6;glich"/>
-<node CREATED="1457120043925" ID="ID_1878678132" MODIFIED="1512926191970" TEXT="ist akzeptierbar...">
-<node CREATED="1457120079542" ID="ID_1809509099" MODIFIED="1457120079542">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      denn genau zu diesem Zweck haben wir die &quot;External Tree Description&quot;
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1457120084135" ID="ID_633070963" MODIFIED="1457120093706" TEXT="auf diese sollte ein Diff zuerst angewendet werden"/>
-<node CREATED="1457120094302" ID="ID_1409151619" MODIFIED="1457120105488" TEXT="und diese bietet Introspektion und klare Diagnose"/>
-<node CREATED="1457120105908" ID="ID_1245554045" MODIFIED="1457120131741" TEXT="Annahme ist also, da&#xdf; ein Diff auf real-Datenstrukturen per Konstruktion erfolgreich ist"/>
-<node CREATED="1457120134297" ID="ID_1098514912" MODIFIED="1457120154250" TEXT="und ein Fehler dabei ist zwingenderweise ein Fehler in der Programmlogik"/>
-</node>
-</node>
-<node CREATED="1457119844767" ID="ID_1648334868" MODIFIED="1457119861265" TEXT="wir bieten nur einen Match auf die Diff-Spec"/>
-<node CREATED="1457119876899" ID="ID_362462955" MODIFIED="1457119902755" TEXT="Mutations-Primitive bieten bool Erfolgs-Check"/>
-<node CREATED="1457119903391" ID="ID_1244810870" MODIFIED="1457119909602" TEXT="aber keine Exceptions"/>
-</node>
-</node>
-<node CREATED="1456506821808" ID="ID_1852134358" MODIFIED="1512926191970" TEXT="Typ-Konstrukt">
-<node CREATED="1461879209050" ID="ID_983143410" MODIFIED="1461879267131" TEXT="Kernproblem: wie gro&#xdf; mu&#xdf; der Buffer sein?">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1461879239310" ID="ID_866573163" MODIFIED="1461879260051" TEXT="wie bekomme ich diese Info von nicht a priori bekannten Typen">
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node CREATED="1456523437616" HGAP="34" ID="ID_410606899" MODIFIED="1512926191970" TEXT="Manipulations-Interface" VSHIFT="6">
-<node COLOR="#338800" CREATED="1456523455997" ID="ID_1416114013" MODIFIED="1561827465480" TEXT="Design l&#xf6;sen">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1456523507910" ID="ID_429333479" MODIFIED="1456523518005" TEXT="Henne oder Ei?"/>
-<node CREATED="1456523471851" ID="ID_1273540009" MODIFIED="1456523485597" TEXT="komm nicht vom Fleck"/>
-<node CREATED="1456523487089" ID="ID_1139978684" MODIFIED="1456523501995" TEXT="zirkul&#xe4;re Bez&#xfc;ge im Design"/>
-<node CREATED="1456523522693" ID="ID_625051251" MODIFIED="1512926191971" TEXT="abstrakter Entwurf">
-<arrowlink COLOR="#6b77a6" DESTINATION="ID_728198359" ENDARROW="Default" ENDINCLINATION="-116;0;" ID="Arrow_ID_340427685" STARTARROW="None" STARTINCLINATION="-819;487;"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1456523558304" ID="ID_1843819253" MODIFIED="1456523564050" TEXT="baue einen Dummy">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1456523569111" ID="ID_1173914226" MODIFIED="1456523580721" TEXT="...als eine Spezialisierung des Adapters"/>
-<node CREATED="1456523593731" ID="ID_126624039" MODIFIED="1456528188767" TEXT="Interface ohne reale Daten"/>
-<node CREATED="1456528076005" ID="ID_1973839094" MODIFIED="1512926191972" TEXT="Diagnose">
-<node CREATED="1456528119297" ID="ID_37448528" MODIFIED="1456528119297" TEXT="hat ein EventLog eingebaut"/>
-<node CREATED="1456528148107" ID="ID_626507029" MODIFIED="1456528165925" TEXT="protokolliert Schatten-Kinder-Liste"/>
-<node CREATED="1456528167440" ID="ID_1984138384" MODIFIED="1575133329792" TEXT="transparenter Dekorator">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...d.h,
-    </p>
-    <p>
-      kann zus&#228;tzlich zu einem anderen Adaptor
-    </p>
-    <p>
-      in die Mutator-Dekorator-Kette geh&#228;ngt werden
-    </p>
-    <p>
-      und protokolliert somit &quot;nebenbei&quot; was an Anforderungen an ihm vorbeigeht
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1456523612849" ID="ID_729852941" MODIFIED="1456523625883" TEXT="Test zum Aufbau des Interfaces"/>
-</node>
-</node>
-<node CREATED="1456528418823" HGAP="30" ID="ID_1372068793" MODIFIED="1561827465487" TEXT="Bestandteile" VSHIFT="-1">
-<icon BUILTIN="info"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1456528424246" ID="ID_472044094" MODIFIED="1515978023897" STYLE="fork" TEXT="Selektor">
-<linktarget COLOR="#7caed5" DESTINATION="ID_472044094" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1253352795" SOURCE="ID_1406395599" STARTARROW="None" STARTINCLINATION="681;0;"/>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1457741609884" ID="ID_1827838196" MODIFIED="1512926191973" TEXT="bin ich zust&#xe4;ndig?">
-<node CREATED="1458094312266" ID="ID_233521483" MODIFIED="1458094316157" TEXT="isApplicable"/>
-<node CREATED="1458094316697" ID="ID_839136400" MODIFIED="1512926191974" TEXT="Festlegung:">
-<icon BUILTIN="yes"/>
-<node CREATED="1458094327095" ID="ID_306307671" MODIFIED="1458094334354" TEXT="nur auf Basis der spec"/>
-<node CREATED="1458094334991" ID="ID_903070750" MODIFIED="1458094343401" TEXT="ohne Daten-Introspektion"/>
-</node>
-<node CREATED="1458094507048" ID="ID_1012976053" MODIFIED="1512926191974" TEXT="Problem">
-<node CREATED="1458094510463" ID="ID_812427058" MODIFIED="1575133329935" TEXT="Spec bietet wenig Anhaltspunkte">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      streng genommen ist es nur erlaubt, das ID-Symbol auszuwerten
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1458094562800" ID="ID_184244927" MODIFIED="1458094568467" TEXT="ID-Symbol"/>
-<node CREATED="1458094569128" ID="ID_743935773" MODIFIED="1458094579369" TEXT="attribute / child"/>
-</node>
-<node CREATED="1458094599835" HGAP="24" ID="ID_1161622136" MODIFIED="1533608413876" TEXT="Zugang zum Payload-Typ" VSHIFT="10">
-<icon BUILTIN="help"/>
-<node CREATED="1458094616417" ID="ID_1013344827" MODIFIED="1458094632012" TEXT="Introspection / Switch-on-Type">
-<icon BUILTIN="stop-sign"/>
-</node>
-<node CREATED="1458094634167" ID="ID_1794163270" MODIFIED="1575133329998">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Visitor bedeutet <b>zwei</b>&#160;Indirektionen
-    </p>
-  </body>
-</html></richcontent>
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...und das ist nicht akzeptabel f&#252;r ein reines Selektor-Pr&#228;dikat!
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458094716364" ID="ID_1749838430" MODIFIED="1561827465489" TEXT="eingeschr&#xe4;nkt auf Objekt-Typ">
-<icon BUILTIN="help"/>
-<node CREATED="1458094735673" ID="ID_1089998465" MODIFIED="1458094743492" TEXT="Semantischer Typ"/>
-<node CREATED="1458094743960" ID="ID_1642238646" MODIFIED="1458094767704" TEXT="vs. Typisierung in der Sprache"/>
-<node CREATED="1458094769365" ID="ID_855557799" MODIFIED="1458094773848" TEXT="pattern match"/>
-<node CREATED="1458094823973" ID="ID_726480550" MODIFIED="1458094841971">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      denkbar nur bei Sub-<i>Objekten</i>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458094850490" ID="ID_39407126" MODIFIED="1458094856797" TEXT="d.h. bei Record-Daten"/>
-<node CREATED="1458094864424" ID="ID_746601299" MODIFIED="1458094872787" TEXT="Record hat ein (semantisches) Typfeld"/>
-<node CREATED="1458094922024" ID="ID_1616971769" MODIFIED="1458094954604">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      gilt f&#252;r <i>alle</i>&#160;praktischen Anwendungen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458094956636" ID="ID_1820565901" MODIFIED="1575133330121" TEXT="denn nur Objekt-Kinder machen Sinn">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....auch wenn man zehnmal meinen k&#246;nnte,
-    </p>
-    <p>
-      Kinder eines reinen Wert-Typs w&#228;ren sinnvoll --
-    </p>
-    <p>
-      sie sind es nicht!
-    </p>
-    <p>
-      Jede sinnvolle <i>Entit&#228;t</i>&#160;hat mehr als ein Attribut<i>! </i>
-    </p>
-    <p>
-      denn es macht keinen Sinn, Entit&#228;ten und reine Wert-Elemente
-    </p>
-    <p>
-      auf der gleichen Ebene in der gleichen Sammlung zu mischen.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      D.h., entweder man hat ein Objekt, das als Kinder z.B. eine Liste von Strings hat,
-    </p>
-    <p>
-      oder man hat eine Entit&#228;t, die z.b. zwei getypte Objekt-Kinder-Sammlungen hat,
-    </p>
-    <p>
-      wie z.B: eine Spur mit Labels und Clips
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458095217737" FOLDED="true" ID="ID_824115387" MODIFIED="1561827483835" TEXT="um das zu unterst&#xfc;tzen...">
-<icon BUILTIN="idea"/>
-<node CREATED="1458095230175" ID="ID_995706334" MODIFIED="1458095239258" TEXT="m&#xfc;&#xdf;te DataCap helfen"/>
-<node CREATED="1458095367701" ID="ID_1549321280" MODIFIED="1458095376400" TEXT="es g&#xe4;be dann einen Bottom-Wert"/>
-<node CREATED="1458095240158" ID="ID_1884817792" MODIFIED="1458095284084" TEXT="Introspektions-Verbot etwas aufgeweicht"/>
-<node CREATED="1458095304886" ID="ID_395248655" MODIFIED="1458095318800" TEXT="dieser Gebrauch ist aber mit dem Objekt-Typfeld schon angelegt"/>
-<node CREATED="1458095320692" ID="ID_1203007776" MODIFIED="1458095332942" TEXT="die Bedeutung wird vom Client privat definiert"/>
-<node CREATED="1458095409800" ID="ID_227738227" MODIFIED="1458095442503" TEXT="ebenso wird aber auch die Bedeutung der ETD lokal definiert"/>
-<node CREATED="1458095443115" ID="ID_586715428" MODIFIED="1458095455459" TEXT="erscheint mir plausibel und vertretbar">
-<icon BUILTIN="yes"/>
-</node>
-<node COLOR="#338800" CREATED="1461881999377" ID="ID_1469132046" MODIFIED="1461882004217" TEXT="so implementiert">
+</html>
+</richcontent>
+<arrowlink COLOR="#47e573" DESTINATION="ID_61713493" ENDARROW="Default" ENDINCLINATION="-3400;234;" ID="Arrow_ID_1763921751" STARTARROW="None" STARTINCLINATION="-792;48;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1458095528224" ID="ID_109058224" MODIFIED="1512926191979" TEXT="falls nein...">
-<node CREATED="1458095540807" ID="ID_225712554" MODIFIED="1458095553929" TEXT="&#xfc;bernimmt der n&#xe4;chste Onion-Layer"/>
-<node CREATED="1458095554548" ID="ID_1745271000" MODIFIED="1458095566303" TEXT="scheitert am Ende die Diff-Anwendung"/>
-<node CREATED="1458095567123" ID="ID_1135449086" MODIFIED="1533608413880" TEXT="das kann nicht sein">
-<icon BUILTIN="ksmiletris"/>
-<node CREATED="1458095599015" ID="ID_1548761670" MODIFIED="1458095611129" TEXT="denn Struktur wird per Diff aufgebaut"/>
-<node CREATED="1458095611645" ID="ID_1917053068" MODIFIED="1458095623023" TEXT="und Diff wird von einer konsistenten Struktur generiert"/>
-<node CREATED="1458095623563" ID="ID_1563236319" MODIFIED="1458095636789" TEXT="wenngleich es sich auch um eine funktionale Struktur handeln kann..."/>
-<node CREATED="1458095660150" ID="ID_329824783" MODIFIED="1458095668777" TEXT="wir sind nicht tolerant bei der Diff-Anwendung"/>
-<node CREATED="1458095669437" ID="ID_650500191" MODIFIED="1458095672801" TEXT="und das ist gut so."/>
-</node>
-</node>
-</node>
-<node CREATED="1457741617655" ID="ID_1664250793" MODIFIED="1512926191980" TEXT="was ist ein &quot;match&quot;?">
-<node CREATED="1458094392679" ID="ID_238187527" MODIFIED="1460755241888">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      &quot;target <i>matches</i>&#160;spec&quot;
-    </p>
-  </body>
-</html></richcontent>
-<font NAME="SansSerif" SIZE="12"/>
-</node>
-<node CREATED="1458094428506" ID="ID_1753032814" MODIFIED="1458094435693" TEXT="darf Annahmen &#xfc;ber den Typ der Spec machen"/>
-<node CREATED="1458094397350" ID="ID_1185807177" MODIFIED="1458094427326" TEXT="darf in die Payload der Spec schauen"/>
-<node CREATED="1458094437249" ID="ID_1125952135" MODIFIED="1458094463529" TEXT="darf Methoden des Datenobjekts aufrufen"/>
-</node>
-</node>
-<node CREATED="1457038643034" ID="ID_1057400532" MODIFIED="1515978009310" TEXT="abstrakte Position">
-<node CREATED="1460755065016" ID="ID_935271147" MODIFIED="1460755138704" TEXT="wird niemals direkt repr&#xe4;sentiert">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1460755072903" ID="ID_1650064575" MODIFIED="1460755130181">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      aber existiert <i>nominell </i>und kontext-abh&#228;ngig
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1460755080894" ID="ID_107894920" MODIFIED="1460755106150" TEXT="und faktisch unabh&#xe4;ngig in jedem &#xbb;onion layer&#xab;"/>
-</node>
-<node CREATED="1457038527402" HGAP="16" ID="ID_1909805079" MODIFIED="1512926191982" TEXT="Mutations-Primitive" VSHIFT="7">
-<node CREATED="1457038788583" ID="ID_131880970" MODIFIED="1457038801193" TEXT="einheitlich benannt"/>
-<node CREATED="1457038801733" ID="ID_428479460" MODIFIED="1457038805816" TEXT="auf mehreren Ebenen"/>
-<node CREATED="1457119943698" ID="ID_370768211" MODIFIED="1512926191982" TEXT="Fehlerbehandlung">
-<node CREATED="1457119949785" ID="ID_658419110" MODIFIED="1457119953012" TEXT="Match-Check"/>
-<node CREATED="1457119953384" ID="ID_1688941824" MODIFIED="1457119957324" TEXT="aber keine Exception"/>
-<node CREATED="1457119959408" ID="ID_275413703" MODIFIED="1457119961803" TEXT="sondern NOP"/>
-</node>
-</node>
-<node CREATED="1457227228502" ID="ID_845299775" MODIFIED="1512926191983" TEXT="sub-Mutator">
-<node CREATED="1457227237269" ID="ID_1175871622" MODIFIED="1457227296340" TEXT="wird &#xfc;ber ein Handle implantiert">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1457227248779" ID="ID_1765753442" MODIFIED="1457227279155" TEXT="Implementierungs-Schicht kennt Typ"/>
-<node CREATED="1457227279703" ID="ID_347493370" MODIFIED="1457227288610" TEXT="aber Tree-Mutator &#xfc;bernimmt ownership"/>
-</node>
-</node>
-</node>
-<node CREATED="1456528462585" HGAP="48" ID="ID_1770521063" MODIFIED="1512926191983" TEXT="Elemente" VSHIFT="21">
-<node CREATED="1456528472016" ID="ID_315938795" MODIFIED="1456528476211" TEXT="bleiben abstrakt"/>
-<node CREATED="1456528477415" ID="ID_1931717091" MODIFIED="1512926191984" TEXT="abstrakte &quot;Position&quot;">
-<node CREATED="1456533135345" ID="ID_1775378899" MODIFIED="1465428629652" TEXT="Problem: wem geh&#xf6;rt diese Position?">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1456533146055" ID="ID_312959811" MODIFIED="1456533213989" TEXT="mu&#xdf; stets &#xfc;ber API klar gemacht werden">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1456533166197" ID="ID_1000253494" MODIFIED="1456533204589" TEXT="der Selektor entscheidet, wer gemeint ist">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1456528485326" ID="ID_1764970284" MODIFIED="1512926191984" TEXT="getypte Kinder">
-<node CREATED="1456528491109" ID="ID_1550088866" MODIFIED="1456528504567" TEXT="auf Einzelfall-Basis"/>
-<node CREATED="1456528505395" ID="ID_1091163328" MODIFIED="1456528519117" TEXT="wer per Selektor zust&#xe4;ndig ist"/>
-<node CREATED="1456528539799" ID="ID_1658968937" MODIFIED="1456528550465" TEXT="Typisierung ergibt sich als Effekt"/>
-<node CREATED="1456528551029" ID="ID_193586898" MODIFIED="1465428643785" TEXT="Typisierung wird nicht eigens repr&#xe4;sentiert">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1457232376244" HGAP="29" ID="ID_1914581822" MODIFIED="1575133330682" TEXT="onion layer" VSHIFT="26">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das sind die konkreten Implementierungen
-    </p>
-    <p>
-      f&#252;r spezifische Arten von Bindings
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1457232408368" HGAP="29" ID="ID_1068782263" MODIFIED="1561827465490" TEXT="TestWireTap / TestMutationTarget" VSHIFT="-6">
-<icon BUILTIN="full-1"/>
-<node CREATED="1457232426238" ID="ID_728198359" MODIFIED="1457232567024" TEXT="brauche ich, um das API zu entwickeln">
-<linktarget COLOR="#6b77a6" DESTINATION="ID_728198359" ENDARROW="Default" ENDINCLINATION="-116;0;" ID="Arrow_ID_340427685" SOURCE="ID_625051251" STARTARROW="None" STARTINCLINATION="-819;487;"/>
-</node>
-<node CREATED="1457232433157" ID="ID_1606470322" MODIFIED="1457232443415" TEXT="ggfs sp&#xe4;ter n&#xfc;tzlich zur Diagnose"/>
-<node CREATED="1457232444075" ID="ID_442780922" MODIFIED="1457232459765" TEXT="soll stets &#xfc;ber andere, konkrete Mutation-Layer gelegt werden"/>
-<node CREATED="1457232579073" ID="ID_280491578" MODIFIED="1512926191986" TEXT="Grenzen">
-<node CREATED="1457232582704" ID="ID_1594229064" MODIFIED="1457232590595" TEXT="protokolliert nur String-Repr&#xe4;sentation"/>
-<node CREATED="1457232591087" ID="ID_119032593" MODIFIED="1575133330772">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      kann <i>niemals </i>geschachtelte sub-Mutatoren modellieren
-    </p>
-  </body>
-</html></richcontent>
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ja wirklich, das w&#228;re nicht sinnvoll!!!!!
-    </p>
-    <p>
-      auch wenn man meinen k&#246;nnte, es geht.
-    </p>
-    <p>
-      Grund ist n&#228;mlich, es kann jeweils nur ein Onion-Layer f&#252;r ein gegebenes Element &quot;zust&#228;ndig&quot; sein.
-    </p>
-    <p>
-      Und aus Gr&#252;nden der logischen Konsistenz darf dieser Diagnose-Layer niemals f&#252;r ein Element zust&#228;ndig sein,
-    </p>
-    <p>
-      denn sonst w&#252;rde er es f&#252;r darunter liegende Layer verschatten.
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="closed"/>
-</node>
-</node>
-</node>
-<node CREATED="1457232734636" ID="ID_1873945047" MODIFIED="1561827465496" TEXT="STL Collection">
-<icon BUILTIN="full-2"/>
-<node CREATED="1458175823858" ID="ID_438044714" MODIFIED="1512926191990" TEXT="Design-Grundlagen">
-<node CREATED="1457741673001" ID="ID_1873415490" MODIFIED="1512926191990" TEXT="konkrete Beispiele">
-<icon BUILTIN="info"/>
-<node CREATED="1457741683687" ID="ID_1222762304" MODIFIED="1457741691409" TEXT="Timelines"/>
-<node CREATED="1457741691837" ID="ID_1487568890" MODIFIED="1457741697832" TEXT="Tracks"/>
-<node CREATED="1457741753006" ID="ID_303387812" MODIFIED="1457742102003" TEXT="Clips / Effekte / Marken"/>
-<node CREATED="1457741809422" ID="ID_1428407098" MODIFIED="1457741815657" TEXT="Effekte / Transitions"/>
-</node>
-<node CREATED="1457742434714" ID="ID_587627505" MODIFIED="1457742717208">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      &#10233; <i>immer</i>&#160;Mitwirkung des Elements
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1457742547067" HGAP="33" ID="ID_410938096" MODIFIED="1512926191991" TEXT="Selector explizit bauen" VSHIFT="7">
-<icon BUILTIN="yes"/>
-<node CREATED="1457742554722" ID="ID_1406395599" MODIFIED="1469918265250" TEXT="Selector-Interface">
-<arrowlink COLOR="#7caed5" DESTINATION="ID_472044094" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1253352795" STARTARROW="None" STARTINCLINATION="681;0;"/>
-</node>
-<node CREATED="1457742626368" ID="ID_1910692241" MODIFIED="1512926191991" TEXT="2.Ausdrucks-Ebene">
-<node CREATED="1457742639703" ID="ID_1065867780" MODIFIED="1457742645826" TEXT="neben der Identit&#xe4;t"/>
-<node CREATED="1457742646366" ID="ID_1533568989" MODIFIED="1533608413881" TEXT="logische Typisierung">
-<node CREATED="1457742667947" ID="ID_1640657752" MODIFIED="1457742677734" TEXT="entweder anhand Payload-Typ"/>
-<node CREATED="1457742678185" ID="ID_1211029199" MODIFIED="1457742684533" TEXT="oder versteckt in der ID"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1458175861176" HGAP="33" ID="ID_44294405" MODIFIED="1561827465503" TEXT="Design-Anforderungen">
-<node CREATED="1458175880034" ID="ID_995745627" MODIFIED="1512926191992" TEXT="gegeben ist eine STL-Collection">
-<node CREATED="1458175892400" ID="ID_1308086929" MODIFIED="1458175904674" TEXT="allgemeinstes STL-Container-Interface"/>
-<node CREATED="1458175905766" ID="ID_446727516" MODIFIED="1458175919817" TEXT="Wert-Typ per typedef abgreifen"/>
-</node>
-<node CREATED="1455927276314" HGAP="91" ID="ID_1959700641" MODIFIED="1525124215145" TEXT="brauche zus&#xe4;tzliche Operationen" VSHIFT="-3">
-<cloud COLOR="#fce9c0"/>
-<font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="info"/>
-<node CREATED="1458175942866" ID="ID_181058597" MODIFIED="1512926191994" TEXT="match">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177113846" ID="ID_320488998" MODIFIED="1458177953094" TEXT="stellt fest, ob das Ziel pa&#xdf;t"/>
-<node CREATED="1458177136475" ID="ID_1352800435" MODIFIED="1458177953094" TEXT="greift auf eine ID des Zieles zur&#xfc;ck"/>
-<node CREATED="1458177147897" ID="ID_1632332105" MODIFIED="1458177953094" TEXT="mu&#xdf; daher in der Regel bereitgestellt werden"/>
-<node CREATED="1458177166543" ID="ID_1266232529" MODIFIED="1533608413881" TEXT="Ersatz">
-<icon BUILTIN="idea"/>
-<node CREATED="1458177169406" ID="ID_1194870730" MODIFIED="1458177953094" TEXT="content-Match"/>
-<node CREATED="1458177173574" ID="ID_1636541063" MODIFIED="1575133331142" TEXT="Konsequenz: man kann keine Assignements machen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      weil beim Assignment die Spec (=GenNode) eben
-    </p>
-    <p>
-      zwar die ID des Zieles, aber den neu zuzuweisenden Wert enth&#228;lt.
-    </p>
-    <p>
-      Also wird sich das Ziel nicht anhand des neuen Wertes finden lassen,
-    </p>
-    <p>
-      weil es eben grade noch nicht diesen neuen Wert tr&#228;gt.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458177198643" ID="ID_1228381833" MODIFIED="1458177953094" TEXT="Konsequenz: Suche kann das falsche Resultat erwischen"/>
-</node>
-</node>
-<node CREATED="1458175960615" ID="ID_499742122" MODIFIED="1512926191995" TEXT="ctor">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177315803" ID="ID_1282762906" MODIFIED="1458177953094" TEXT="konstruiert aus der Spec ein neues Element"/>
-<node CREATED="1458177335632" ID="ID_430010657" MODIFIED="1458177953094" TEXT="mu&#xdf; typischerweise die Interna des Zieles kennen"/>
-<node CREATED="1458177347622" ID="ID_1041373197" MODIFIED="1533608413881" TEXT="Ersatz">
-<icon BUILTIN="idea"/>
-<node CREATED="1458177489444" ID="ID_1024908643" MODIFIED="1458177953094" TEXT="unterstelle Payload == Zieltyp"/>
-<node CREATED="1458177572865" ID="ID_1483034601" MODIFIED="1458177953094" TEXT="Konstruktor auf dem Ziel, der eine GenNode nimmt"/>
-</node>
-</node>
-<node CREATED="1458175991795" ID="ID_437650849" MODIFIED="1512926191995" TEXT="optional...">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458176002762" ID="ID_442473703" MODIFIED="1533608413882" TEXT="selector">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177605869" ID="ID_262186866" MODIFIED="1458177953094" TEXT="bestimmt ob die Spec f&#xfc;r diesen Binding-Layer &#xfc;berhaupt relevant ist"/>
-<node CREATED="1458177631409" ID="ID_1877742460" MODIFIED="1458177953094" TEXT="erlaubt das Filtern mit mehreren Bindings"/>
-<node CREATED="1458177642144" ID="ID_310751196" MODIFIED="1561827465503" TEXT="Ersatz">
-<icon BUILTIN="idea"/>
-<node CREATED="1458177646671" ID="ID_1707674287" MODIFIED="1458177953094" TEXT="kein Selector"/>
-<node CREATED="1458177652662" ID="ID_1067744704" MODIFIED="1458177953094" TEXT="es kann dann also nur ein Binding geben"/>
-<node CREATED="1458177664868" ID="ID_935075867" MODIFIED="1458177953094" TEXT="das ist aber auch der h&#xe4;ufigste Fall"/>
-</node>
-</node>
-<node CREATED="1458176008025" ID="ID_1099350141" MODIFIED="1533608413883" TEXT="setter">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177697657" ID="ID_1388855448" MODIFIED="1458177953095" TEXT="erlaubt Zuweisung"/>
-<node CREATED="1458177712798" ID="ID_1708999099" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
-<node CREATED="1458177735635" ID="ID_197038069" MODIFIED="1561827465503" TEXT="Ersatz">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1458177738499" ID="ID_1474971428" MODIFIED="1458177953095" TEXT="keiner"/>
-<node CREATED="1458177741155" ID="ID_1784046352" MODIFIED="1458177953095" TEXT="dann gibt&apos;s eben keine Zuweisung"/>
-<node CREATED="1458177749233" ID="ID_873905001" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei sub-Scopes"/>
-<node CREATED="1458177803730" ID="ID_674080114" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei immutable values"/>
-</node>
-</node>
-<node CREATED="1458176018087" ID="ID_1978664300" MODIFIED="1533608413884" TEXT="mutator">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177821712" ID="ID_152424824" MODIFIED="1458177953095" TEXT="baut einen sub-Mutator f&#xfc;r einen nested scope"/>
-<node CREATED="1458177851988" ID="ID_307170712" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
-<node CREATED="1458177857939" ID="ID_233644864" MODIFIED="1561827465504" TEXT="Ersatz">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1458177861162" ID="ID_240936470" MODIFIED="1458177953095" TEXT="keiner"/>
-<node CREATED="1458177863506" ID="ID_1403138553" MODIFIED="1458177953095" TEXT="dann gibts eben keine Behandlung von nested scopse"/>
-<node CREATED="1458177874760" ID="ID_1050027667" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei primitive values"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1458176048564" ID="ID_173428941" MODIFIED="1512926191998" TEXT="Flexibilit&#xe4;t">
-<node CREATED="1458176054154" ID="ID_1379937028" MODIFIED="1458176076851" TEXT="so wenig typ-Feslegung wie m&#xf6;glich"/>
-<node CREATED="1458176077368" ID="ID_1730540256" MODIFIED="1458176092658" TEXT="fallback bei fehlendern Operationen"/>
-<node CREATED="1458176093958" ID="ID_801042454" MODIFIED="1512926191999" TEXT="Argument: &quot;dann halt nicht&quot;">
-<node CREATED="1458176117266" ID="ID_1479654896" MODIFIED="1458176127813" TEXT="es ist so wie es ist"/>
-<node CREATED="1458176128352" ID="ID_1366947640" MODIFIED="1458176139563" TEXT="die Gegenseite wei&#xdf; schon was sie will"/>
-<node CREATED="1458176252336" ID="ID_1554344013" MODIFIED="1533608413885" TEXT="ich bin, also bin ich konsistent">
-<node CREATED="1458176267382" ID="ID_427126071" MODIFIED="1458176296319" TEXT="konsistent ist, was der diff erzeugt"/>
-<node CREATED="1458176297282" ID="ID_336107495" MODIFIED="1458176305981" TEXT="alles wird per diff erzeugt"/>
-<node CREATED="1458176306593" ID="ID_666376142" MODIFIED="1458176314868" TEXT="also ist alles, was existiert, auch konsistent"/>
-</node>
-<node CREATED="1458176787953" ID="ID_1610561572" MODIFIED="1533608413887" TEXT="sinnvoll gew&#xe4;hlt">
-<node CREATED="1458176794848" ID="ID_1399218405" MODIFIED="1458176810370" TEXT="native datenstruktur ist so gew&#xe4;hlt, da&#xdf; sie ihren Zweck erf&#xfc;llt"/>
-<node CREATED="1458176883836" ID="ID_1357445271" MODIFIED="1458176899324">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      generische Repr&#228;sentaton ist so gew&#228;hlt,
-    </p>
-    <p>
-      da&#223; sich alle relevanten Eigenschaften darstellen lassen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458176911161" ID="ID_1565618197" MODIFIED="1561827465504">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      wenn also ein Teil der diff-Funkttionalit&#228;t nicht verf&#252;gbar ist,
-    </p>
-    <p>
-      dann wird es wohl so sein, da&#223; sie auch nicht gebraucht wird
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1458176947972" ID="ID_1901451299" MODIFIED="1458176965869" TEXT="Beispiel: primitive Werte sind eben kein sub-Scope"/>
-<node CREATED="1458176966665" ID="ID_1292201640" MODIFIED="1458176981459" TEXT="Beispiel: immutable elements sind eben nicht zuweisbar"/>
-</node>
-</node>
-</node>
-<node CREATED="1458176998437" ID="ID_425451497" MODIFIED="1575133331758" TEXT="keine unn&#xf6;tigen Einschr&#xe4;nkungen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      zwar erscheint es nicht sonderlich sinnvoll,
-    </p>
-    <p>
-      als target auch eine Menge von primitiven Werten zuzulassen.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Es gibt aber auch keinen wirklichen Grund, dies zu verbieten,
-    </p>
-    <p>
-      sofern es gelingt, die Funktionalit&#228;t gutm&#252;tig zu degradieren.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node CREATED="1458178113697" HGAP="46" ID="ID_186668887" MODIFIED="1512926192002" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="-5">
-<node CREATED="1458178126159" ID="ID_1322433318" MODIFIED="1458178131587" TEXT="Rahmenklasse + Closures"/>
-<node CREATED="1458178133078" ID="ID_278002579" MODIFIED="1458851636692" TEXT="Closures mit der Ersatz-Impl vorbelegen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1458178150916" ID="ID_1020570949" MODIFIED="1458178174848" TEXT="Problem: komplexe Konstruktion">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1458178165322" ID="ID_963054881" MODIFIED="1512926192002" TEXT="L&#xf6;sung: nested DSL">
-<icon BUILTIN="idea"/>
-<node CREATED="1458178203821" ID="ID_785912532" MODIFIED="1458178222190" TEXT="die Top-Level Builder-Funktion erwartet das volle Binding"/>
-<node CREATED="1458178223723" ID="ID_798018180" MODIFIED="1458178247755" TEXT="es gibt eine freie Funktion, die einen nested Builder f&#xfc;r das Binding liefert"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1458178288690" ID="ID_562189277" MODIFIED="1561827465508" TEXT="Implementierung">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1458178298328" ID="ID_1964300614" MODIFIED="1512926192003" TEXT="Builder">
-<node CREATED="1458325962991" ID="ID_1955400674" MODIFIED="1460753004725" TEXT="Typ-Definitionen schwierig anzuschreiben">
-<icon BUILTIN="smiley-neutral"/>
-</node>
-<node CREATED="1458325973486" ID="ID_1711903796" MODIFIED="1458325992405" TEXT="Code ziemlich redundant und undurchsichtig">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1458326045724" ID="ID_338749301" MODIFIED="1575133331952" TEXT="Typ-Check erst sehr sp&#xe4;t">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...will sagen,
-    </p>
-    <p>
-      da sind mehrere Layer an praktisch ungebundenem Template-Code dazwischen,
-    </p>
-    <p>
-      so da&#223; zu bef&#252;rchten steht, da&#223; ein unpassendes Lambda erst weit entfernt
-    </p>
-    <p>
-      eine wom&#246;glich irref&#252;hrende Meldung generiert
-    </p>
-  </body>
-</html></richcontent>
-<arrowlink DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" STARTARROW="None" STARTINCLINATION="176;0;"/>
-</node>
-<node CREATED="1472498654730" ID="ID_1869339299" MODIFIED="1472498676884" TEXT="gel&#xf6;st durch static_assert">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1458178300984" ID="ID_1152672899" MODIFIED="1512926192004" TEXT="Binding-Layer">
-<node CREATED="1458850722203" ID="ID_1565475995" MODIFIED="1512926192004" TEXT="Fehler bei fehlender Funktionalit&#xe4;t">
-<node CREATED="1458850733769" ID="ID_764229197" MODIFIED="1458850744620" TEXT="kein Setter"/>
-<node CREATED="1458850746184" ID="ID_105803291" MODIFIED="1458850752370" TEXT="kein Mutator"/>
-</node>
-<node CREATED="1458850782747" ID="ID_1019140953" MODIFIED="1458850793430" TEXT="Umgang mit fehlendem Selector"/>
-<node CREATED="1458934854051" ID="ID_898160956" MODIFIED="1512926192004" TEXT="Binding st&#xe4;rker abschlie&#xdf;en">
-<node CREATED="1458934863225" ID="ID_843139682" MODIFIED="1458934897237" TEXT="contentBuffer k&#xf6;nnte privat sein">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1458934878911" ID="ID_986928457" MODIFIED="1458934893132" TEXT="welche Iteratoren m&#xfc;ssen exponiert werden">
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node CREATED="1460762013033" ID="ID_758721262" MODIFIED="1512926192005" TEXT="Mutation">
-<node CREATED="1460762015777" ID="ID_59179895" MODIFIED="1533608413888">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      erfordert <i>wirklich</i>&#160;Kooperation
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-<node CREATED="1460762025520" ID="ID_955853878" MODIFIED="1460762032675" TEXT="zwischen dem gesendeten Diff"/>
-<node CREATED="1460762033119" ID="ID_863964003" MODIFIED="1460762045704" TEXT="und der empfangenden Implementierungs-Datenstruktur"/>
-</node>
-<node CREATED="1460762065371" ID="ID_698989532" MODIFIED="1533608413889" TEXT="brauche wohl &quot;Introspection light&quot;">
-<icon BUILTIN="smily_bad"/>
-<node CREATED="1460762101046" ID="ID_1593562435" MODIFIED="1460762111448" TEXT="damit ich einen Sub-Scope vorbereiten kann"/>
-<node CREATED="1460762111924" ID="ID_125430023" MODIFIED="1460762120759" TEXT="in separater privater Datenstrukcur"/>
-<node CREATED="1460762121259" ID="ID_1558869553" MODIFIED="1575133332206" TEXT="ist aber nur rein hier im Test ein Problem">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...denn wir verwenden hier als &quot;private&quot; Datenstruktur
-    </p>
-    <p>
-      eine etwas komische Collection von Strings,
-    </p>
-    <p>
-      in die wir die String-Repr&#228;sentation der Spec-Payload schreiben.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      In der Praxis dagegen w&#252;rde man wirklich einen privaten Datentyp verwenden,
-    </p>
-    <p>
-      und dann auch voraussetzen, da&#223; man <i>nur</i>&#160;Kinder dieses Typs (oder zuweisungskompatibel) bekommt.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Mein Poblem hier ist, da&#223; ich in dieser Demonstrations-Datenstruktur keine nested scopes repr&#228;sentieren kann.
-    </p>
-    <p>
-      Aber hey!, es ist meine private Datenstruktur -- also kann ich einfach eine Map von nested scopes
-    </p>
-    <p>
-      daneben auf die gr&#252;ne Wiese stellen. Ist ja nur ein Test :-D
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1460762330487" ID="ID_914518092" MODIFIED="1575133332223" TEXT="Nein! Schwein gehabt">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...dankenswerterweise hat der subscript-Operator von std::Map
-    </p>
-    <p>
-      die nette Eigenschaft, beim ersten Zugriff auf einen neuen Key
-    </p>
-    <p>
-      dessen payload per default-konstruktor zu erzeugen.
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="ksmiletris"/>
-</node>
-</node>
-</node>
-<node CREATED="1458868836883" ID="ID_717368167" MODIFIED="1512926192006" TEXT="Beobachtungen">
-<node CREATED="1458868852849" ID="ID_1641586585" MODIFIED="1575133332262" TEXT="Sonderbarer &quot;this&quot;-Typ">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      der Builder in der nested DSL generiert einen sonderbar falschen &quot;this&quot;-Typ,
-    </p>
-    <p>
-      genauer gesagt, eine TYPID die falsch ist.
-    </p>
-    <p>
-      Und zwar kommt es da zum &quot;&#220;bersprechen&quot; von einem Typ-Parameter in den anderen.
-    </p>
-    <p>
-      Im Besonderen hab ich beobachtet, da&#223;, wenn man auf den 3.Typparameter ein Lambda gibt,
-    </p>
-    <p>
-      dann auf dem 4. oder 5. Typparameter der bisherige /alte Typ des 3.Typparameters auftaucht,
-    </p>
-    <p>
-      u.U auch eingeschachtelt als ein Argument.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Habe mich aber davon &#252;berzeugt, da&#223; die eigentlichen Typ-Parameter in Ordnung sind.
-    </p>
-    <p>
-      Und zwar habe ich das verifiziert
-    </p>
-    <ul>
-      <li>
-        durch Ausgeben der Typen im Konstruktor (mithilfe meiner typeStr&lt;TY&gt;()
-      </li>
-      <li>
-        durch Einbauen einer Static-Assertion mit Signatur-Match
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-<node CREATED="1458850516270" ID="ID_263851499" MODIFIED="1512926192006" TEXT="Test">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850521270" ID="ID_534213210" MODIFIED="1512926192007" TEXT="F&#xe4;lle">
-<arrowlink COLOR="#639ad5" DESTINATION="ID_1333254858" ENDARROW="Default" ENDINCLINATION="1091;0;" ID="Arrow_ID_709688381" STARTARROW="None" STARTINCLINATION="1150;185;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1458850526133" ID="ID_55717538" MODIFIED="1458850550109" TEXT="Binden an Sammlung aus Primitiven"/>
-<node CREATED="1458850550705" ID="ID_1923906009" MODIFIED="1458850572315" TEXT="Binden an Sammlung aus Spezialtypen"/>
-</node>
-<node CREATED="1458850656668" ID="ID_307163685" MODIFIED="1512926192007" TEXT="Defaults">
-<node CREATED="1458850660523" ID="ID_326530451" MODIFIED="1575133332339" TEXT="GenNode-vertr&#xe4;glicher Payload-Typ">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      gemeint ist:
-    </p>
-    <p>
-      die native Datenstruktur ist eine Collection von Elementen,
-    </p>
-    <p>
-      welche ohne Weiteres direkt in eine GenNode gepackt werden k&#246;nnten. Denn dann l&#228;&#223;t
-    </p>
-    <p>
-      sich eine einfache Default-Implementierung des Matchers angeben
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Typisches Beispiel: eine STL-Collection von Strings.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458850672705" ID="ID_1240263288" MODIFIED="1458850675197" TEXT="kein Setter"/>
-<node CREATED="1458850675641" ID="ID_736176562" MODIFIED="1458850678564" TEXT="kein Mutator"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1457232752458" ID="ID_1490646673" MODIFIED="1561827465511" TEXT="Attribute">
-<icon BUILTIN="full-3"/>
-<node CREATED="1458175823858" ID="ID_1785794072" MODIFIED="1512926192010" TEXT="Design-Grundlagen">
-<node CREATED="1461882686190" ID="ID_233456976" MODIFIED="1575133332435" TEXT="von praktischer Notwendigkeit getrieben">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      wir integrieren Attribute nicht, weil es so sch&#246;n symmetrisch ist,
-    </p>
-    <p>
-      sondern weil sie essentiell zum Wesen von Objekten geh&#246;ren.
-    </p>
-    <p>
-      Wenn wir &#196;nderungen an Objekt-Strukturen als Diff erfassen wollen,
-    </p>
-    <p>
-      dann <i>m&#252;ssen</i>&#160;Attribute irgendwie sinnvoll integriert sein
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1457741673001" ID="ID_1826667029" MODIFIED="1512926192010" TEXT="konkrete Beispiele">
-<icon BUILTIN="info"/>
-<node CREATED="1457741683687" ID="ID_1529941512" MODIFIED="1461888218005" TEXT="Position eines Clips"/>
-<node CREATED="1461888218521" ID="ID_1211555549" MODIFIED="1461888222508" TEXT="L&#xe4;nge eines Clips"/>
-<node CREATED="1461888223024" ID="ID_854712901" MODIFIED="1461888302874" TEXT="Typ eines Markers"/>
-<node CREATED="1461888304126" ID="ID_854691640" MODIFIED="1461888305362" TEXT="..."/>
-</node>
-<node CREATED="1457742434714" ID="ID_1230374921" MODIFIED="1461888342584">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      &#10233; <i>immer</i>&#160;in der Klasse verankert
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1457742434714" ID="ID_261686106" MODIFIED="1461888407600">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      &#10233; es geht eigentlich <i>nur</i>&#160;um den Wert des Attributes
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node CREATED="1458175861176" HGAP="39" ID="ID_887227300" MODIFIED="1561827465534" TEXT="Design-Anforderungen" VSHIFT="7">
-<node CREATED="1458175880034" ID="ID_163174135" MODIFIED="1512926192012" TEXT="...ein Objekt hat schon ein bestimmtes Feld">
-<node CREATED="1458175892400" ID="ID_640596624" MODIFIED="1461888660658" TEXT="Typ"/>
-<node CREATED="1461888661462" ID="ID_1138175982" MODIFIED="1461888668033" TEXT="default-Wert"/>
-<node CREATED="1458175905766" ID="ID_1595003935" MODIFIED="1461888693671">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      manche Felder sind <i>optional</i>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1461888779999" ID="ID_1274350149" MODIFIED="1512926192012" TEXT="innerer Widerspruch">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1461888830680" ID="ID_812148839" MODIFIED="1461888837867" TEXT="Feld vs Attribut"/>
-<node CREATED="1461888838455" ID="ID_1919503899" MODIFIED="1461888848953" TEXT="das Diff dr&#xfc;ckt sich in Attributen aus"/>
-<node CREATED="1461888982036" ID="ID_864479720" MODIFIED="1512926192013" TEXT="Umgang mit den Diskrepanzen">
-<icon BUILTIN="help"/>
-<node CREATED="1461889012008" ID="ID_1889833023" MODIFIED="1533608413889" TEXT="Einf&#xfc;gen eines Attributes">
-<node CREATED="1461889021646" ID="ID_1936260059" MODIFIED="1461889026273" TEXT="wo das Feld schon da ist"/>
-<node CREATED="1461889026813" ID="ID_1307987216" MODIFIED="1461889040368" TEXT="wo es kein korrespondierendes Feld gibt"/>
-</node>
-<node CREATED="1461889146846" ID="ID_354158582" MODIFIED="1461889152792" TEXT="L&#xf6;schen eines Attributes"/>
-<node CREATED="1461889107939" ID="ID_1744229690" MODIFIED="1461889133891" TEXT="Umordnen von Attributen"/>
-</node>
-<node CREATED="1461889187336" ID="ID_829644660" MODIFIED="1512926192015" TEXT="Leitgedanke">
-<font NAME="SansSerif" SIZE="15"/>
-<node CREATED="1461889203662" ID="ID_1763333007" MODIFIED="1461889243250" TEXT="&#xbb;auf GenNode und Objekt gleicherma&#xdf;en anwendbar&#xab;">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-</node>
-<node CREATED="1461889253087" ID="ID_1128320234" MODIFIED="1533608413908" TEXT="das hei&#xdf;t...">
-<font NAME="SansSerif" SIZE="11"/>
-<node CREATED="1461889261806" ID="ID_1855892827" MODIFIED="1461889621538" TEXT="wende Diff auf GenNode an">
-<font NAME="SansSerif" SIZE="11"/>
-</node>
-<node CREATED="1461889282580" ID="ID_1159487501" MODIFIED="1461889621538" TEXT="wende gleichen Diff auf gebundenes Objekt an">
-<font NAME="SansSerif" SIZE="11"/>
-</node>
-<node CREATED="1461889296634" ID="ID_1774882278" MODIFIED="1461889621537" TEXT="Ergebnis mu&#xdf; semantisch &#xe4;quivalent sein">
-<font NAME="SansSerif" SIZE="11"/>
-</node>
-<node CREATED="1461889399932" ID="ID_1052073468" MODIFIED="1461889621534">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      unter der Ma&#223;gabe,
-    </p>
-    <p>
-      wie ETD ein Objekt rep&#228;sentiert
-    </p>
-  </body>
-</html></richcontent>
-<font NAME="SansSerif" SIZE="11"/>
-</node>
-<node CREATED="1461889470866" ID="ID_404525574" MODIFIED="1561827465534" TEXT="operational">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1461889474402" ID="ID_1211544465" MODIFIED="1575133332828" TEXT="alle Informationen, die die Anwendung nicht nutzt">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      &quot;Anwendung&quot; : meint das Anwenden eines Diffs auf ein Ziel-Objekt
-    </p>
-    <p>
-      &quot;nicht nutzen&quot; : meint ignorieren und verwerfen der Information
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461889550072" ID="ID_48030760" MODIFIED="1461889558442" TEXT="d&#xfc;rfen nur Zustands-&#xc4;nderungen bewirken"/>
-<node CREATED="1461889558983" ID="ID_1489246908" MODIFIED="1461889796278" TEXT="welche keinen Einflu&#xdf; auf nachfolgende Diffs haben">
-<arrowlink COLOR="#be5b66" DESTINATION="ID_781150142" ENDARROW="Default" ENDINCLINATION="28;-28;" ID="Arrow_ID_30022331" STARTARROW="None" STARTINCLINATION="13;20;"/>
-</node>
-</node>
-</node>
-<node CREATED="1461889656194" HGAP="73" ID="ID_781150142" MODIFIED="1533608413909" TEXT="ist das &#xfc;berhaupt m&#xf6;glich" VSHIFT="23">
-<linktarget COLOR="#be5b66" DESTINATION="ID_781150142" ENDARROW="Default" ENDINCLINATION="28;-28;" ID="Arrow_ID_30022331" SOURCE="ID_1489246908" STARTARROW="None" STARTINCLINATION="13;20;"/>
-<icon BUILTIN="help"/>
-<node CREATED="1461889858863" ID="ID_1367853310" MODIFIED="1575133332880" TEXT="sicher nicht bidirektional">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      meint: ETD -&gt; Objekt und dann sp&#228;ter Objekt -&gt; ETD
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      warum?
-    </p>
-    <p>
-      Weil sich in der ETD die Reihenfolge &#228;ndern kann,
-    </p>
-    <p>
-      und aber das Aufspielen eines Diffs auf beiden Seiten
-    </p>
-    <p>
-      zwingend die gleiche Reihenfolge erfordert!
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461890009355" ID="ID_1808149320" MODIFIED="1575133332917" TEXT="aber ETD als Zwischenstufe ist m&#xf6;glich">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Objekt -&gt; ETD -&gt; Objekt
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      warum?
-    </p>
-    <p>
-      weil das Quellobjekt keinen Diff erzeugen wird,
-    </p>
-    <p>
-      der sich letztlich nicht auf das Zielobjekt aufspielen l&#228;&#223;t
-    </p>
-  </body>
-</html></richcontent>
-<linktarget COLOR="#807bce" DESTINATION="ID_1808149320" ENDARROW="Default" ENDINCLINATION="671;0;" ID="Arrow_ID_1677374853" SOURCE="ID_1767038604" STARTARROW="Default" STARTINCLINATION="994;0;"/>
-</node>
-<node CREATED="1461890240148" ID="ID_1409253452" MODIFIED="1561827465535" TEXT="Schutzmechanismen">
-<node CREATED="1461890266377" ID="ID_513997188" MODIFIED="1461890283701">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      abweisen, was das Kriterium <i>sicher verletzt</i>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461890289662" ID="ID_1663916739" MODIFIED="1461890307247" TEXT="Einf&#xfc;gen eines Feldes, das die Klasse nicht kennt"/>
-<node CREATED="1461891798533" ID="ID_748156171" MODIFIED="1461891807616" TEXT="explizites Umordnen (per seek)"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1461892011913" HGAP="227" ID="ID_1407170666" MODIFIED="1525124215165" TEXT="Verhaltensmuster" VSHIFT="11">
-<node CREATED="1461892073089" ID="ID_883084327" MODIFIED="1575133333003" TEXT="default vs mandatory">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <b>mandatory</b>&#160;: Wert mu&#223; per Konstruktor gegeben sein
-    </p>
-    <p>
-      <b>default</b>&#160;: es gibt einen ausgezeichneten Standardwert
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1461892285965" ID="ID_440312526" MODIFIED="1533608413911" TEXT="mandatory ">
-<node CREATED="1461892303666" ID="ID_1486672593" MODIFIED="1461892312404" TEXT="Problem der Konstruktor-Repr&#xe4;sentation"/>
-<node CREATED="1461892313049" ID="ID_683528850" MODIFIED="1575133333052" TEXT="einziger Ausweg: komplette ETD-Repr&#xe4;sentation als Wert senden">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das hei&#223;t, in dem ins-Verb ist dann ein komplettes Objekt enthalten,
-    </p>
-    <p>
-      nicht nur eine leere Record-H&#252;lle, die nachfolgend populiert werden kann (aber nicht mu&#223;)
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461892430466" ID="ID_1727811732" MODIFIED="1461892440092" TEXT="ein mandatory-Feld darf nicht gel&#xf6;scht werden"/>
-</node>
-<node CREATED="1461892444727" ID="ID_1828810203" MODIFIED="1533608413912" TEXT="default">
-<node CREATED="1461892490881" ID="ID_577669206" MODIFIED="1561827465535" TEXT="es gibt zwei Grade">
-<node CREATED="1461892496377" ID="ID_1216553390" MODIFIED="1575133333102" TEXT="minder">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Konstruktor bef&#252;llt das Feld halt irgendwie.
-    </p>
-    <p>
-      Ab dem Punkt verh&#228;lt es sich aber wie ein normales (mandatory) Feld
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461892554377" ID="ID_1564116180" MODIFIED="1575133333117" TEXT="vollwertig">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das Objekt selber kann erkennen, ob das Feld sich im &quot;default-Zustand&quot; befindet
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1461892641949" ID="ID_600125030" MODIFIED="1461892653415" TEXT="Einf&#xfc;gen == vom Default-Wert abweichen"/>
-<node CREATED="1461892654148" ID="ID_1086408965" MODIFIED="1461892662590" TEXT="L&#xf6;schen == zum Default-Wert zur&#xfc;ckkehren"/>
-</node>
-</node>
-<node CREATED="1461966988471" ID="ID_751317533" MODIFIED="1512926192022" TEXT="pr&#xfc;fen vs ignorieren">
-<node CREATED="1461967012164" ID="ID_1380142317" MODIFIED="1533608413912" TEXT="pr&#xfc;fen">
-<icon BUILTIN="forward"/>
-<node CREATED="1461967015883" ID="ID_1980878581" MODIFIED="1461967028022" TEXT="ben&#xf6;tigt zus&#xe4;tzliche Mechanismen"/>
-<node CREATED="1461967028489" ID="ID_1694830814" MODIFIED="1461967042164" TEXT="verifiziert Validit&#xe4;t der Diff-Nachricht"/>
-</node>
-<node CREATED="1461967044480" ID="ID_810828038" MODIFIED="1533608413913" TEXT="ignorieren">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1461967051095" ID="ID_328050724" MODIFIED="1461967056946" TEXT="wendet an, was anwendbar ist"/>
-<node CREATED="1461967057462" ID="ID_437076290" MODIFIED="1461967068248" TEXT="alles andere &quot;durchwinken&quot;"/>
-</node>
-<node COLOR="#990000" CREATED="1461967003141" HGAP="29" ID="ID_1805886948" MODIFIED="1533608413916" TEXT="Design-Entscheidung" VSHIFT="19">
-<font NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1461967143851" ID="ID_1596604972" MODIFIED="1575133333271">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ohne Pr&#252;fen ist <b>emptySrc</b>&#160;nicht implementierbar
-    </p>
-  </body>
-</html></richcontent>
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...weil es f&#252;r <b>emptySrc</b>&#160;keine neutrale Antwort gibt.
-    </p>
-    <p>
-      Denn dieses Pr&#228;dikat wird von der typischen Implementierung des Diff-Applikators
-    </p>
-    <p>
-      in beiden Richtungen verwendet, also sowohl Pr&#252;fung auf empty (&quot;expect no further elements&quot;),
-    </p>
-    <p>
-      alsauch der Check, da&#223; &#252;berhaupt noch Quellelemente anstehen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461967247093" ID="ID_366726823" MODIFIED="1461967294701">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      d.h., man kann nur <i>global auf Pr&#252;fung verzichten&#160;</i>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461967274577" ID="ID_1824726078" MODIFIED="1461967310565">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      und da habe ich mich bereits <i><font color="#d3204b">dagegen entschieden</font></i>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461967364397" ID="ID_381561226" MODIFIED="1461967379991" TEXT="Pr&#xfc;fung erfordert eine Flag f&#xfc;r jedes bekannte Feld"/>
-<node CREATED="1461967384579" ID="ID_1805227176" MODIFIED="1461967401644" TEXT="diese Flag wird gesetzt, sobald der Diff das Feld &quot;ber&#xfc;hrt&quot;"/>
-<node CREATED="1461967428061" ID="ID_766802419" MODIFIED="1561827465536" TEXT="au&#xdf;erdem gibt es noch zwei triviale Basis-Checks">
-<node CREATED="1461967451610" ID="ID_798276463" MODIFIED="1461967462700" TEXT="ist bekannter Attributsname"/>
-<node CREATED="1461967463264" ID="ID_1109004010" MODIFIED="1461967487243">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Feld unterst&#252;tzt <b>default</b>-Wert
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node CREATED="1475506680125" HGAP="58" ID="ID_1865970661" MODIFIED="1533608413932" TEXT="Variante" VSHIFT="13">
-<node CREATED="1475506691595" ID="ID_69735021" MODIFIED="1475506704861" TEXT="emptySrc -&gt; hasSrc"/>
-<node CREATED="1475506705641" ID="ID_409132685" MODIFIED="1475506735169" TEXT="und den nicht implementierbaren Fall tolerieren"/>
-<node CREATED="1475506735949" ID="ID_1814707193" MODIFIED="1475506746633" TEXT="im &#xdc;brigen: stets pr&#xfc;fen und scheitern">
-<icon BUILTIN="yes"/>
-</node>
-<node COLOR="#338800" CREATED="1475506753523" HGAP="34" ID="ID_845946083" MODIFIED="1475506765947" TEXT="so umgesetzt" VSHIFT="10">
-<font NAME="SansSerif" SIZE="10"/>
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1455927276314" HGAP="100" ID="ID_98863612" MODIFIED="1525124215178" TEXT="Spezifikation" VSHIFT="18">
-<cloud COLOR="#fce9c0"/>
-<font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="info"/>
-<node CREATED="1461946125744" HGAP="55" ID="ID_1970709109" MODIFIED="1512926192031">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Auslegung der
-    </p>
-    <p>
-      <font size="5">Primitiven</font>
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1455927425726" ID="ID_1774195026" MODIFIED="1533608413934" TEXT="hasSrc">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928216420" ID="ID_259184763" MODIFIED="1464116966043" TEXT="can not sensibly be implemented">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1464116995888" ID="ID_892348638" MODIFIED="1464117033135" TEXT="always returns true">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1464116967676" ID="ID_1396378266" MODIFIED="1464117025435">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      rationale: object fields are hard wired,
-    </p>
-    <p>
-      thus always available
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1455927425726" ID="ID_950488526" MODIFIED="1533608413934" TEXT="skipSrc">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="closed"/>
-<node CREATED="1464212421708" ID="ID_260959353" MODIFIED="1464212429644" TEXT="prohibited, raise error"/>
-<node CREATED="1455928216420" ID="ID_1837102790" MODIFIED="1464212390729" TEXT="reset to default">
-<icon BUILTIN="button_cancel"/>
-</node>
-<node CREATED="1461964714068" ID="ID_1261372831" MODIFIED="1463690748989" TEXT="mandatory fields raise error">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-<node CREATED="1455927396505" ID="ID_1033919055" MODIFIED="1533608413935" TEXT="matchSrc">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455928268589" ID="ID_954747330" MODIFIED="1461964779839" TEXT="ID comparison to field known by name"/>
-</node>
-<node CREATED="1455982947867" ID="ID_348226285" MODIFIED="1533608413935" TEXT="injectNew">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1455982969073" ID="ID_1599013380" MODIFIED="1463675987940" TEXT="set known field&apos;s contents"/>
-<node CREATED="1457047512175" ID="ID_45133594" MODIFIED="1464212464658" TEXT="mandatory fields raise error">
-<icon BUILTIN="button_cancel"/>
-</node>
-<node CREATED="1461964818054" ID="ID_1444647202" MODIFIED="1461964825281" TEXT="unknown fields raise error"/>
-</node>
-<node CREATED="1455927413191" ID="ID_131020445" MODIFIED="1533608413935" TEXT="acceptSrc">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1464212476461" ID="ID_503509206" MODIFIED="1464212481606" TEXT="NOP"/>
-<node CREATED="1461964863217" ID="ID_274118585" MODIFIED="1464212474879" TEXT="mark known field as mentioned">
-<icon BUILTIN="button_cancel"/>
-</node>
-</node>
-<node CREATED="1455928166683" ID="ID_1715452226" MODIFIED="1533608413938" TEXT="accept_until">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="stop-sign"/>
-<node CREATED="1455928383765" ID="ID_1566496401" MODIFIED="1461965340133" TEXT="nicht implementierbar">
-<font BOLD="true" NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1457231714541" ID="ID_1922580473" MODIFIED="1465428399592" TEXT="fraglich: mu&#xdf; vielleicht aus der Sprache entfernt werden">
-<arrowlink COLOR="#592379" DESTINATION="ID_693317592" ENDARROW="Default" ENDINCLINATION="577;0;" ID="Arrow_ID_1115282938" STARTARROW="Default" STARTINCLINATION="1205;231;"/>
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-</node>
-<node CREATED="1463675830732" ID="ID_1893171223" MODIFIED="1561827465536">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Einschr&#228;nkung:&#160;<b>accept_until END</b>
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1463675866200" ID="ID_410463345" MODIFIED="1575133333756" TEXT="ist implementierbar">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...n&#228;mlich indem alle Attribute als &quot;ber&#252;hrt&quot; und akzeptiert markiert werden.
-    </p>
-    <p>
-      Somit k&#246;nnten sofort Zuweisungen als N&#228;chstes passieren
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1463675872239" ID="ID_467354174" MODIFIED="1463675882809" TEXT="ist sehr sinnvoll"/>
-<node CREATED="1463675883853" ID="ID_178701147" MODIFIED="1464212598924" TEXT="k&#xf6;nnte sogar Standardfall sein">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1464212588886" ID="ID_1883145154" MODIFIED="1464212594754" TEXT="ist effektiv NOP">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-<node CREATED="1455927413191" ID="ID_216877268" MODIFIED="1533608413939" TEXT="findSrc">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="closed"/>
-<node CREATED="1461946965569" ID="ID_229931358" MODIFIED="1461963646230" TEXT="Umordnen wird nicht unterst&#xfc;tzt"/>
-<node CREATED="1461963648481" ID="ID_1893776707" MODIFIED="1461963654996" TEXT="l&#xf6;st einen Logik-Fehler aus"/>
-</node>
-<node CREATED="1455928184504" ID="ID_850800360" MODIFIED="1533608413940" TEXT="assignElm">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1461963697714" ID="ID_1619863394" MODIFIED="1461963707499" TEXT="Setter aufrufen"/>
-<node CREATED="1461963686556" ID="ID_662132890" MODIFIED="1461963697214" TEXT="namentlich bekanntes Feld"/>
-<node CREATED="1461963708449" ID="ID_1854747377" MODIFIED="1461963718804" TEXT="nicht bekannte Felder l&#xf6;sen Fehler aus"/>
-</node>
-<node CREATED="1455928189695" ID="ID_1575249106" MODIFIED="1533608413941" TEXT="mutateChild">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1461963754651" ID="ID_843075689" MODIFIED="1461963776115">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      analog wie&#160;<b>assignElm</b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461963748604" ID="ID_465316362" MODIFIED="1461963753895" TEXT="namentlich bekanntes Feld"/>
-<node CREATED="1461963777440" ID="ID_207528376" MODIFIED="1461963787443" TEXT="aber nicht Setter, sondern Mutator bauen"/>
-</node>
-<node CREATED="1464113688645" ID="ID_1227423402" MODIFIED="1533608413942" STYLE="fork" TEXT="completeScope">
-<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1464113727192" ID="ID_656884609" MODIFIED="1464113954773" TEXT="hier NOP implementiert"/>
-<node CREATED="1464113740005" ID="ID_1570177974" MODIFIED="1464114004153">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das hei&#223;t, es findet <b>keine Verifikation</b>&#160;statt
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1455928193863" ID="ID_579601999" MODIFIED="1533608413943" TEXT="CTOR">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1461946885292" ID="ID_319452226" MODIFIED="1461965407132" TEXT="mark all known fields as not yet mentioned"/>
-<node COLOR="#e5500c" CREATED="1461946693701" ID="ID_583693798" MODIFIED="1461965425322" STYLE="fork" TEXT="meta-Operation">
-<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-</node>
-</node>
-</node>
-<node CREATED="1461946112906" HGAP="14" ID="ID_388598327" MODIFIED="1512926192037" VSHIFT="21">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      zu bindende
-    </p>
-    <p>
-      <font size="4">Operationen</font>
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1458175991795" ID="ID_1544297658" MODIFIED="1533608413943" TEXT="fest eingebaut...">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458175942866" ID="ID_321386709" MODIFIED="1561827465536" TEXT="match">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177113846" ID="ID_885225658" MODIFIED="1461966728693" TEXT="pr&#xfc;ft ID-Name der Spec gegen Feldname des Zieles"/>
-</node>
-<node CREATED="1458176002762" ID="ID_233019425" MODIFIED="1561827465537" TEXT="selector">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177605869" ID="ID_1275056489" MODIFIED="1461966119517" TEXT="ein default-Selector ist automatisch stets konfiguriert"/>
-<node CREATED="1461966120082" ID="ID_92075200" MODIFIED="1461966665670" TEXT="default ist Pr&#xfc;fen, ob die Spec ein Attribut bezeichnet"/>
-</node>
-</node>
-<node CREATED="1458175991795" ID="ID_998867093" MODIFIED="1533608413946" TEXT="optional...">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458176008025" ID="ID_384595680" MODIFIED="1561827465537" TEXT="setter">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177697657" ID="ID_1292886690" MODIFIED="1458177953095" TEXT="erlaubt Zuweisung"/>
-<node CREATED="1458177712798" ID="ID_1904681311" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
-<node CREATED="1458177735635" FOLDED="true" ID="ID_88342940" MODIFIED="1561827483835" TEXT="Ersatz">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1458177738499" ID="ID_738570524" MODIFIED="1458177953095" TEXT="keiner"/>
-<node CREATED="1458177741155" ID="ID_504602301" MODIFIED="1458177953095" TEXT="dann gibt&apos;s eben keine Zuweisung"/>
-<node CREATED="1458177749233" ID="ID_1737530420" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei sub-Scopes"/>
-<node CREATED="1458177803730" ID="ID_1570261235" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei immutable values"/>
-</node>
-</node>
-<node CREATED="1458176018087" ID="ID_280816523" MODIFIED="1561827465538" TEXT="mutator">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1458177821712" ID="ID_850096330" MODIFIED="1458177953095" TEXT="baut einen sub-Mutator f&#xfc;r einen nested scope"/>
-<node CREATED="1458177851988" ID="ID_835071729" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
-<node CREATED="1458177857939" FOLDED="true" ID="ID_1231660130" MODIFIED="1561827483835" TEXT="Ersatz">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1458177861162" ID="ID_1234972537" MODIFIED="1458177953095" TEXT="keiner"/>
-<node CREATED="1458177863506" ID="ID_668640033" MODIFIED="1463690716478" TEXT="dann gibts eben keine Behandlung von nested scopes"/>
-<node CREATED="1458177874760" ID="ID_98241568" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei primitive values"/>
-</node>
-</node>
-<node CREATED="1463687547746" ID="ID_241762171" MODIFIED="1561827465539" TEXT="defaulter">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1463687553569" ID="ID_695577132" MODIFIED="1463687602782" TEXT="veranla&#xdf;t R&#xfc;ckkehr zum default-Zustand"/>
-<node CREATED="1463687629319" ID="ID_613393149" MODIFIED="1463687644409" TEXT="erfordert explizite Unterst&#xfc;tzung durch das Zielobjekt"/>
-<node CREATED="1463687644973" ID="ID_1677329552" MODIFIED="1575133334303" TEXT="fragw&#xfc;rdig">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      sieht nach Ober-engineering aus,
-    </p>
-    <p>
-      zumal das erhebliche Statefulness bewirkt
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1463687649812" FOLDED="true" ID="ID_450096384" MODIFIED="1561827483836" TEXT="Ersatz">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1463687668218" ID="ID_205365114" MODIFIED="1463687670469" TEXT="keiner"/>
-<node CREATED="1463687672649" ID="ID_244442064" MODIFIED="1463687689779" TEXT="dann kann eben nur gebunden werden"/>
-<node CREATED="1463687865175" ID="ID_1290398590" MODIFIED="1463687869987" TEXT="normalerweise verzichtbar"/>
-</node>
-</node>
-<node CREATED="1458175960615" ID="ID_806805692" MODIFIED="1561827465540" TEXT="ctor">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1461966391478" ID="ID_110542982" MODIFIED="1461966404134" TEXT="wird dem Setter vorgeschaltet"/>
-<node CREATED="1458177315803" ID="ID_1572942300" MODIFIED="1458177953094" TEXT="konstruiert aus der Spec ein neues Element"/>
-<node CREATED="1461966815950" ID="ID_156023396" MODIFIED="1461966831208" TEXT="notwendig bei Attribut-Werten, die tats&#xe4;chlich Objekte sind"/>
-<node CREATED="1458177335632" ID="ID_1991494041" MODIFIED="1458177953094" TEXT="mu&#xdf; typischerweise die Interna des Zieles kennen"/>
-<node CREATED="1458177347622" FOLDED="true" ID="ID_1000370922" MODIFIED="1561827483836" TEXT="Ersatz">
-<icon BUILTIN="idea"/>
-<node CREATED="1458177489444" ID="ID_1463500618" MODIFIED="1461966901007">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      unterstelle Ziel als <i>konstruierbar</i>&#160;aus Payload
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1463691200369" ID="ID_542600281" MODIFIED="1575133334436" TEXT="&#xfc;berfl&#xfc;ssiges Konzept">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      da effektiv bereits der Setter diese Funktionalit&#228;t enthalten kann und mu&#223;,
-    </p>
-    <p>
-      denn der Setter nimmt eine GenNode
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1458176048564" HGAP="-11" ID="ID_1811113811" MODIFIED="1512926192045" TEXT="Variationen" VSHIFT="4">
-<node CREATED="1464117242535" ID="ID_1487426510" MODIFIED="1512926192045" TEXT="Binden auf eine klassische struct">
-<node CREATED="1464117391859" ID="ID_1783492476" MODIFIED="1464117396430" TEXT="Setter weisen einfach zu"/>
-<node CREATED="1464117397026" ID="ID_1635700062" MODIFIED="1464117404773" TEXT="bereits die Neuanlage mu&#xdf; alles populieren"/>
-</node>
-<node CREATED="1464117250262" ID="ID_1846973342" MODIFIED="1512926192046" TEXT="Binden auf ein Objekt mit Initialisierungs-Semantik">
-<node CREATED="1464117412896" ID="ID_1405299167" MODIFIED="1464117450662" TEXT="Erzeugungs-Diff mu&#xdf; mit den Anforderungen des Konstruktors harmonieren"/>
-<node CREATED="1464117487974" ID="ID_1923901911" MODIFIED="1464117499776" TEXT="R&#xfc;ckkehr zum Default wird nicht unterst&#xfc;tzt / abgebildet"/>
-</node>
-<node CREATED="1464117317517" ID="ID_1395959611" MODIFIED="1512926192046" TEXT="Binden auf &quot;konzeptionelle&quot; Properties">
-<node CREATED="1464117513722" ID="ID_101207705" MODIFIED="1464117537611" TEXT="der &quot;Key&quot; ist nur eine ID, um speziellen Zugriffsmechanismus auszul&#xf6;sen"/>
-<node CREATED="1464117553885" ID="ID_1617675711" MODIFIED="1464117567271" TEXT="u.U ist man &#xfc;berhaupt nur an sub-Mutation interessiert"/>
-</node>
-</node>
-</node>
-<node CREATED="1458178113697" HGAP="61" ID="ID_38103760" MODIFIED="1561827465544" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="48">
-<node CREATED="1463687362843" HGAP="116" ID="ID_775516687" MODIFIED="1561827465553" TEXT="Eingrenzung" VSHIFT="-28">
-<node CREATED="1463687373889" ID="ID_155516876" MODIFIED="1512926192049" TEXT="Art von Attributen">
-<node CREATED="1463687402462" ID="ID_1119981147" MODIFIED="1533608413953" TEXT="Objekt-Feld">
-<icon BUILTIN="forward"/>
-<node CREATED="1463689795357" ID="ID_1774256004" MODIFIED="1463689801592" TEXT="kann nur zugewiesen werden"/>
-<node CREATED="1463689912853" ID="ID_592726515" MODIFIED="1561827465554">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <b>injectNew</b>&#160;tolerieren
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="help"/>
-<node CREATED="1463690238314" ID="ID_1366435072" MODIFIED="1575133334661" TEXT="eigentlich redundant">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....man k&#246;nnte genausogut auch beim ersten Mal zuweisen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1463690487032" ID="ID_1618528789" MODIFIED="1575133334684" TEXT="Aber: isomorph zu GenNode">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      denn die Diff-Anwendung auf GenNode unterst&#252;tzt Zuweisung
-    </p>
-    <p>
-      ausschlie&#223;lich bei schon existierenden Elementen. Demnach mu&#223; dort auch jedes Attribut
-    </p>
-    <ul>
-      <li>
-        entweder schon mit dem Konstruktor mit gegeben worden sein
-      </li>
-      <li>
-        oder vorher einmal explizit eingef&#252;gt
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node CREATED="1463687408597" ID="ID_783243290" MODIFIED="1533608413954" TEXT="optional Property">
-<icon BUILTIN="stop-sign"/>
-<node CREATED="1463688083594" ID="ID_1885891636" MODIFIED="1463688087910" TEXT="fragw&#xfc;rdiger Nutzen"/>
-<node CREATED="1463688088457" ID="ID_1722180442" MODIFIED="1463688100116" TEXT="mutet &quot;theoretisch&quot; an"/>
-<node CREATED="1463688147802" ID="ID_1259353240" MODIFIED="1561827465554" TEXT="Alternative">
-<node CREATED="1463688157472" ID="ID_1130562584" MODIFIED="1463688173746" TEXT="auf &quot;mindere defaults&quot; setzen"/>
-<node CREATED="1463688215752" ID="ID_1340272500" MODIFIED="1463688230896" TEXT="kann man einfach mitlaufen lassen"/>
-<node CREATED="1463688184269" ID="ID_1652024004" MODIFIED="1463688193863" TEXT="immer m&#xf6;gliche Degradierung des Konzepts"/>
-<node CREATED="1463688232550" FOLDED="true" ID="ID_1079102386" MODIFIED="1561827483836" TEXT="fehlende Funktionalit&#xe4;t ersetzbar">
-<icon BUILTIN="idea"/>
-<node CREATED="1463688247980" ID="ID_720310622" MODIFIED="1463688253639" TEXT="durch komplettes Neukonstruieren"/>
-<node CREATED="1463688254251" ID="ID_1166606306" MODIFIED="1463688262902" TEXT="durch eine explizite Reset-Methode"/>
-</node>
-</node>
-</node>
-<node CREATED="1463687451791" ID="ID_682582613" MODIFIED="1533608413956" TEXT="Attribut-Map">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1463687461925" ID="ID_39763189" MODIFIED="1463687496231" TEXT="hier ausgeschlossen">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1463687466573" ID="ID_1853473792" MODIFIED="1475507021278" TEXT="implementierbar auf Basis des Collection-Binding">
-<linktarget COLOR="#9f96d9" DESTINATION="ID_1853473792" ENDARROW="Default" ENDINCLINATION="41;-121;" ID="Arrow_ID_503281678" SOURCE="ID_1112268061" STARTARROW="Default" STARTINCLINATION="1873;0;"/>
-</node>
-<node CREATED="1463687484338" ID="ID_1009085517" MODIFIED="1463687491613" TEXT="k&#xf6;nnte f&#xfc;r GenNode relevant sein"/>
-</node>
-</node>
-<node CREATED="1463691267608" ID="ID_1554269824" MODIFIED="1512926192052" TEXT="Typisierung">
-<node CREATED="1463691273431" ID="ID_1711015726" MODIFIED="1463691276947" TEXT="pro Attribut"/>
-<node CREATED="1463691277726" ID="ID_716698874" MODIFIED="1533608413957" TEXT="implizit">
-<node CREATED="1463691290845" ID="ID_1981578828" MODIFIED="1464226408020" TEXT="das Setter-lambda nimmt einen Wert"/>
-<node CREATED="1464226412567" ID="ID_1195950141" MODIFIED="1561827465555" TEXT="der Wert-Typ mu&#xdf; einer der GenNode-Payload-Typen sein">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464227158027" ID="ID_262712037" MODIFIED="1464227176058" TEXT="TODO: dies zur compile-Zeit pr&#xfc;fen">
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-<node CREATED="1463691359988" ID="ID_139397516" MODIFIED="1464226506135" TEXT="der Setter mu&#xdf; jedwede weitere Konvertierung in andere Typen selber machen"/>
-<node CREATED="1464226461041" ID="ID_401616087" MODIFIED="1464226487843" TEXT="die Implementierung greift auf den passenden GenNode-Payload zu"/>
-<node CREATED="1463691372258" ID="ID_1648677750" MODIFIED="1463691550094" TEXT="alle Typkonvertierungs-Fragen auf client abgew&#xe4;lzt"/>
-<node CREATED="1463691552514" ID="ID_1882798051" MODIFIED="1575133334971" TEXT="das ist gut so">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...denn wir vermeiden dadurch Komplexit&#228;t.
-    </p>
-    <p>
-      Der gesendete Diff mu&#223; einfach passen!
-    </p>
-    <p>
-      Genau deshalb haben wir auch in GenNode verschiedene Varianten des gleichen Grundtyps,
-    </p>
-    <p>
-      damit wir nicht in die ganzen Ungewissheiten der widening conversions laufen!
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="ksmiletris"/>
-</node>
-</node>
-</node>
-<node CREATED="1463691680849" ID="ID_909001007" MODIFIED="1512926192054" TEXT="Striktheit">
-<node CREATED="1463691716821" ID="ID_414439233" MODIFIED="1463691724243" TEXT="soweit einfach zu gew&#xe4;hrleisten">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1463691725515" ID="ID_947499289" MODIFIED="1463691741484" TEXT="d.h. soweit nicht zus&#xe4;tzlicher State notwendig ist"/>
-<node CREATED="1463691767421" ID="ID_993508973" MODIFIED="1463691780901" TEXT="Flexibilit&#xe4;t mu&#xdf; stets praktisch gerechtfertigt sein">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-<node CREATED="1463691793010" ID="ID_1079571503" MODIFIED="1512926192056" TEXT="F&#xe4;lle">
-<node CREATED="1463691796825" ID="ID_1459507376" MODIFIED="1575133335055" TEXT="Setter">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      d.h. der Attributwert hat Wertsemantik und wird einfach zugewiesen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1463691804696" ID="ID_1039735883" MODIFIED="1575133335070" TEXT="Mutator">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...d.h. der Attributwert ist ein Objekt und damit ein nested Scope
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1463691807824" ID="ID_175488317" MODIFIED="1463691814860" TEXT="keine Mischformen">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1463692054415" ID="ID_1755055624" MODIFIED="1533608413958">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Problem: <i>immutable values</i>
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1463692505987" ID="ID_113919280" MODIFIED="1463692515040" TEXT="wirklich ein Problem?">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1463692519993" ID="ID_1177616097" MODIFIED="1463692550512" TEXT="Diff handelt ohnehin nur von ver&#xe4;nderbaren Dingen"/>
-<node CREATED="1463692663853" ID="ID_953408463" MODIFIED="1561827465555" TEXT="Aber: wie &#xe4;ndert man die L&#xe4;nge eins Clips im UI?">
-<node CREATED="1463695438538" ID="ID_744412186" MODIFIED="1463695450620" TEXT="indem man sich auf ein Pr&#xe4;sentations-Grid bezieht"/>
-<node CREATED="1463695454504" ID="ID_945765975" MODIFIED="1463695469602" TEXT="und folglich nur Grid-Punkt-Koordinaten &#xe4;ndert"/>
-<node CREATED="1463695472134" ID="ID_852324151" MODIFIED="1463695494714" TEXT="die eigentlichen Time-Entit&#xe4;ten leben in der Session, nicht im UI">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-<node CREATED="1463695573392" ID="ID_1066626880" MODIFIED="1561827465556" TEXT="im &#xdc;brigen: Problem des client-Codes">
-<node CREATED="1463695588814" ID="ID_1661716485" MODIFIED="1463695605096" TEXT="man kann einen time::Mutator erzeugen"/>
-<node CREATED="1463695605708" ID="ID_480704465" MODIFIED="1463695620401" TEXT="es gibt vorgefertigte EmbeddedMutators">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1463695633144" ID="ID_1677066412" MODIFIED="1463695657196">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das alles passiert dann <i>im</i>&#160;Lambda
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1463695640231" ID="ID_176647136" MODIFIED="1463695645090" TEXT="und ist somit nicht unser Problem"/>
-</node>
-</node>
-<node CREATED="1463849505993" HGAP="42" ID="ID_493843802" MODIFIED="1533608413963" VSHIFT="25">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Dilemma:&#160;<i>defaultable fields</i>
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1463849536789" ID="ID_864537854" MODIFIED="1561827465556" TEXT="ich m&#xf6;chte sie unterst&#xfc;tzen">
-<node CREATED="1463849545196" ID="ID_1187170275" MODIFIED="1463849547316" TEXT="warum">
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node CREATED="1463849556474" ID="ID_73579891" MODIFIED="1575133335311" TEXT="Unterst&#xfc;tzung mu&#xdf; konsistent sein">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....mit der ETD,
-    </p>
-    <p>
-      bzw der Anwendung des selben Diffs auf eine GenNode-Struktur.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Konsequenz: wenn ein feld <i>defaulted</i>&#160;war, und nun explizit gesetzt wird,
-    </p>
-    <p>
-      mu&#223; dies als INS geschehen, denn eine Zuweisung an nicht aufgef&#252;hrtes Element ist verboten
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1463849716869" ID="ID_712482848" MODIFIED="1463849742347" TEXT="in der Bindung auf ein Objekt habe ich aber keine Attribut-Menge">
-<icon BUILTIN="stop-sign"/>
-</node>
-<node CREATED="1463849761127" ID="ID_865585394" MODIFIED="1463849778956">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      folglich ein Problem,
-    </p>
-    <p>
-      zu erkennen, wenn wir fertig sind
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1463849986345" ID="ID_1305704801" MODIFIED="1561827465557" TEXT="genauer...">
-<node CREATED="1463850017285" ID="ID_656883117" MODIFIED="1463850033879" TEXT="wenn ein feld zwar gebunden ist"/>
-<node CREATED="1463850034699" ID="ID_1531134347" MODIFIED="1463850053756" TEXT="aber bisher keinen Wert bekommen hat"/>
-<node CREATED="1463850060359" ID="ID_1083372309" MODIFIED="1463850081800" TEXT="dann darf der Diff es auch nicht per pick auff&#xfc;hren"/>
-<node CREATED="1463850086044" ID="ID_1096436471" MODIFIED="1463850099574" TEXT="wenn dann alle mandatory fields behandelt sind"/>
-<node CREATED="1463850100634" ID="ID_1329120598" MODIFIED="1575133335440" TEXT="glauben wir, wir sind noch nicht fertig">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....weil das defaultable field noch nicht vom Diff ber&#252;hrt wurde.
-    </p>
-    <p>
-      Aber es ist kein optional field, d.h. wir haben keine Flag, die es als &quot;defaulted&quot; kennzeichnet
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1463850138853" ID="ID_1262990387" MODIFIED="1561827465558" TEXT="also ist das Grundproblem">
-<icon BUILTIN="idea"/>
-<node CREATED="1463850144180" ID="ID_103581818" MODIFIED="1463850157454" TEXT="da&#xdf; der TreeMutator global stateless ist"/>
-<node CREATED="1463850163257" ID="ID_1219321798" MODIFIED="1463850171716" TEXT="denn er wird immer wieder neu konstruiert"/>
-<node CREATED="1463850280082" ID="ID_1381914386" MODIFIED="1463850294324">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      L&#246;sung: <b>alles immer explizit</b>
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node CREATED="1463934907474" ID="ID_761652333" MODIFIED="1561827465559" TEXT="Auswege">
-<node CREATED="1463934969522" FOLDED="true" ID="ID_960243774" MODIFIED="1561827483836" TEXT="keine optional fields">
-<node COLOR="#a0345c" CREATED="1463937048979" ID="ID_861548194" MODIFIED="1463937120794" TEXT="widerspricht den Anforderungen">
-<icon BUILTIN="stop-sign"/>
-</node>
-</node>
-<node CREATED="1463935105351" FOLDED="true" ID="ID_1357485921" MODIFIED="1561827483836" TEXT="Protokoll-Auflagen">
-<node CREATED="1463935116670" ID="ID_1375491306" MODIFIED="1463935125304" TEXT="nach dem ersten Durchgang mu&#xdf; alles gebunden sein"/>
-<node CREATED="1463935126461" ID="ID_774412987" MODIFIED="1463935247552" TEXT="wenn ungebundene optionals, stets Abschlie&#xdf;en mit &quot;after END&quot;"/>
-<node COLOR="#a0345c" CREATED="1463937146214" ID="ID_1154054760" MODIFIED="1463937452255" TEXT="attraktiv, aber unehrlich">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      diese L&#246;sung war zun&#228;chst mein Favorit.
-    </p>
-    <p>
-      Sie erscheint sehr elegant, weil man im TreeMutator <i>&#252;berhaupt nichts</i>&#160;daf&#252;r tun mu&#223;.
-    </p>
-    <p>
-      Und die Zusatz-Forderung, da&#223; dann eben das Diff richtig gesendet werden mu&#223;,
-    </p>
-    <p>
-      erscheint &quot;geschenkt&quot;, da wir ohnehin zun&#228;chst einmal die Diffs explizit im Code erzeugen.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Aber, nach l&#228;ngerer &#220;berlegung wurde mir der Ansatz mehr und mehr zweifelhaft.
-    </p>
-    <p>
-      Das ist die Art von Verkoppelungen, hier die implizite Annahme einer bestimmten Implementierung,
-    </p>
-    <p>
-      die ein System unerkl&#228;rbar und schwer wartbar machen. Das ist die Art von &quot;Features&quot;,
-    </p>
-    <p>
-      f&#252;r die man sich nach einiger Zeit entschuldigen mu&#223;.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Und noch schlimmer: eigentlich l&#228;uft dieser Ansatz darauf hinaus, die Konsistenzpr&#252;fung
-    </p>
-    <p>
-      am Ende zu deaktivieren. Nur wir machen das nicht explizit, sondern durch die Hintert&#252;r.
-    </p>
-    <p>
-      Also dann besser klar und ehrlich!
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="stop-sign"/>
-</node>
-</node>
-<node CREATED="1463934995110" FOLDED="true" ID="ID_1084188576" MODIFIED="1561827483836" TEXT="dem Mutator sagen, was optional ist">
-<node CREATED="1463935368308" ID="ID_1008223435" MODIFIED="1463935375919" TEXT="was grunds&#xe4;tzlich optional sein kann"/>
-<node CREATED="1463935377123" ID="ID_970486772" MODIFIED="1463935387005" TEXT="was aktuell nicht gebunden ist"/>
-<node COLOR="#a0345c" CREATED="1463937178689" ID="ID_1161021042" MODIFIED="1463937550363" TEXT="Over-Engineering / L&#xf6;sung eines nicht vorhandenen Problems">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...denn unter dem Strich w&#252;rden wir hiermit volle Unterst&#252;tzung f&#252;r opitonale Attribute einf&#252;hren,
-    </p>
-    <p>
-      also eine Attribut-Semantik auf eine Feld-Semantik draufpflanzen.
-    </p>
-    <p>
-      Aber in der vorausgegangenen Analyse habe ich mich schon davon &#252;berzeugt,
-    </p>
-    <p>
-      da&#223; wir keine Attribut-Semantik brauchen. Und wenn doch, dann bietet das Diff-System
-    </p>
-    <p>
-      immer noch die M&#246;glichkeit, die Attribute explizit als Sammlung darzustellen.
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="stop-sign"/>
-</node>
-</node>
-<node CREATED="1463935030953" ID="ID_540672245" MODIFIED="1463938073583">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      auf die <i>empty</i>-Pr&#252;fung am Ende verzichten
-    </p>
-  </body>
-</html></richcontent>
-<arrowlink COLOR="#f36478" DESTINATION="ID_1554206938" ENDARROW="Default" ENDINCLINATION="181;0;" ID="Arrow_ID_389060908" STARTARROW="None" STARTINCLINATION="181;0;"/>
-<icon BUILTIN="forward"/>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1463937883299" HGAP="85" ID="ID_271104970" MODIFIED="1533608413968" TEXT="Konsequenzen" VSHIFT="26">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1463937922318" ID="ID_74130402" MODIFIED="1561827465561" TEXT="isEmpty">
-<node CREATED="1463937972255" ID="ID_1554206938" MODIFIED="1575133335596" TEXT="mu&#xdf; umdefiniert werden">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      denn in den meisten, wichtigsten F&#228;llen get es um einen non-empty-check,
-    </p>
-    <p>
-      bevor ein anderes Verifikations-Pr&#228;dikat angewendet wird.
-    </p>
-  </body>
-</html></richcontent>
-<linktarget COLOR="#f36478" DESTINATION="ID_1554206938" ENDARROW="Default" ENDINCLINATION="181;0;" ID="Arrow_ID_389060908" SOURCE="ID_540672245" STARTARROW="None" STARTINCLINATION="181;0;"/>
-</node>
-<node CREATED="1463937980222" ID="ID_1669470430" MODIFIED="1463937986216" TEXT="kann nicht mehr negativ gepr&#xfc;ft werden"/>
-<node CREATED="1463937988180" ID="ID_1353983852" MODIFIED="1463938000454" TEXT="das gilt leider f&#xfc;r alle Bindings"/>
-<node CREATED="1464212233893" ID="ID_1520677416" MODIFIED="1464212254420" TEXT="umdrehen in: hasSrc">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1463938033527" FOLDED="true" ID="ID_165279544" MODIFIED="1561827483836" TEXT="neue Primitive: completeScope">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1464113590258" ID="ID_1613216716" MODIFIED="1464113600260" TEXT="auch ein hook f&#xfc;r Aufr&#xe4;um-Arbeiten"/>
-<node CREATED="1464113600897" ID="ID_1783943539" MODIFIED="1464113642335" TEXT="return true -- wenn alles sauber ist"/>
-<node CREATED="1464113642899" ID="ID_468050192" MODIFIED="1464113648966" TEXT="kann NOP implementiert werden"/>
-</node>
-</node>
-<node CREATED="1464114047781" ID="ID_669832549" MODIFIED="1561827465561" TEXT="reduzierte Verifikation">
-<icon BUILTIN="yes"/>
-<node CREATED="1464114078672" ID="ID_72653804" MODIFIED="1464114085171" TEXT="nicht bekannte Felder werden erkannt"/>
-<node CREATED="1464114086111" ID="ID_518116356" MODIFIED="1464114139188" TEXT="der Versuch von Umordnungen wird erkannt"/>
-<node COLOR="#990000" CREATED="1464114156574" ID="ID_408810628" MODIFIED="1464114190655" TEXT="fehlende Angaben werden nicht bemerkt"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1461897111747" HGAP="79" ID="ID_1690728106" MODIFIED="1512926192064" TEXT="Ein Attribut oder viele Attribute" VSHIFT="17">
-<icon BUILTIN="help"/>
-<node CREATED="1463696053440" ID="ID_564525411" MODIFIED="1464226693401" TEXT="Standardfall: eine kleine Zahl von Attributen ">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1463696031715" ID="ID_1300041378" MODIFIED="1464226781810" TEXT="&quot;ein Attribut&quot; ist aber der nat&#xfc;rliche Basisfall f&#xfc;r die Implementierung"/>
-<node CREATED="1463695809296" ID="ID_780490723" MODIFIED="1464226736308" TEXT="problematisch sind Selektor und (ignorierte) Reihenfolge">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-<node CREATED="1464226806914" HGAP="25" ID="ID_1103913128" MODIFIED="1512926192065" TEXT="Selector" VSHIFT="5">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1464226813953" ID="ID_29622528" MODIFIED="1464226834307" TEXT="fest verdrahtet: istAttribut"/>
-<node CREATED="1464226834831" ID="ID_585845912" MODIFIED="1464226848617" TEXT="Verzicht auf einen konfigurierbaren Selector"/>
-<node CREATED="1464226849277" ID="ID_449408444" MODIFIED="1464226870862" TEXT="im Zweifelsfall: anderen &#xbb;onion-Layer&#xab; verwenden"/>
-<node CREATED="1464226871930" ID="ID_569490118" MODIFIED="1464226897116" TEXT="gut zur Reduktion der Komplexit&#xe4;t">
-<icon BUILTIN="ksmiletris"/>
-</node>
-</node>
-<node CREATED="1461894614295" ID="ID_1919790561" MODIFIED="1512926192065" TEXT="Attribut-Glieder">
-<node CREATED="1461894619054" ID="ID_1860006379" MODIFIED="1512926192066" TEXT="implementieren die API-Primitive">
-<node CREATED="1461894676063" ID="ID_1773874682" MODIFIED="1461894678714" TEXT="durch Aktion"/>
-<node CREATED="1461894679190" ID="ID_1990110249" MODIFIED="1461894683857" TEXT="durch Ignorieren"/>
-<node CREATED="1461894684326" ID="ID_744174163" MODIFIED="1461894692888" TEXT="als Fehler"/>
-</node>
-<node CREATED="1461894634029" ID="ID_1447610701" MODIFIED="1464226938524" TEXT="f&#xfc;gen sich nat&#xfc;rlich durch Layering zusammen"/>
-<node CREATED="1461894666248" ID="ID_1972218753" MODIFIED="1464226987286" TEXT="Setter / Mutator durch Template-Spezialisierung"/>
-<node CREATED="1464226992090" ID="ID_632987149" MODIFIED="1512926192066" TEXT="lineare Suche">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1464227021205" ID="ID_1138709182" MODIFIED="1464227032960" TEXT="akzeptabel f&#xfc;r &lt; 30 Attribute"/>
-<node CREATED="1464227042771" ID="ID_1594139733" MODIFIED="1575133335969" TEXT="vermeidet heap-basierte Collection">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      jedwede &quot;bessere&quot; Implementierung mu&#223; zwingend einen Container verwenden,
-    </p>
-    <p>
-      der dann die Lambdas f&#252;r die einzelnen Setter auf den Heap legt.
-    </p>
-    <p>
-      Das ist hier tats&#228;chlich viel schlechter, als das bischen lineare Suche
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1464227213180" HGAP="29" ID="ID_691018374" MODIFIED="1561827465567" TEXT="Implementierung" VSHIFT="66">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1464227218795" ID="ID_1100206442" MODIFIED="1575133336008" TEXT="ist grunds&#xe4;tzlich &quot;schon da&quot;">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....durch meinen allerersten Draft,
-    </p>
-    <p>
-      f&#252;r den ich damals gezwungen war, die GenNode zu erfinden :)
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-<node COLOR="#338800" CREATED="1464227273572" ID="ID_1669070695" MODIFIED="1465428151809" TEXT="TODO: alten Testfall anpassen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1464227285562" ID="ID_908196685" MODIFIED="1465428159480" TEXT="TODO: Setter aus erstem Entwurf vom TreeMutator-API entfernen">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1464227227610" ID="ID_392179794" MODIFIED="1464227235981" TEXT="aber: alle Primitive durchimplementieren"/>
-<node COLOR="#338800" CREATED="1464386998240" ID="ID_1575821815" MODIFIED="1512926192069" TEXT="key: EntryID">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1464396284551" ID="ID_608089097" MODIFIED="1512926192069" TEXT="Problem: sanitise">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1464396756424" ID="ID_1262469672" MODIFIED="1464397132659" TEXT="nur US-ASCII">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1464396761967" ID="ID_290057129" MODIFIED="1464397146966" TEXT="erweiterte Zeichen bedingen Locale">
-<icon BUILTIN="button_cancel"/>
-</node>
-<node CREATED="1464396769974" ID="ID_1758045716" MODIFIED="1533608413970" TEXT="und welche dann??">
-<node CREATED="1464396835581" ID="ID_1451158687" MODIFIED="1464396859658" TEXT="System-Locale: Recipe for Desaster"/>
-<node CREATED="1464396793123" ID="ID_1031603106" MODIFIED="1464396815972" TEXT="en_US.UTF-8"/>
-<node CREATED="1464396816696" ID="ID_75103205" MODIFIED="1464396866584" TEXT="Einschr&#xe4;nkung nicht sinnvoll zu begr&#xfc;nden">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-<node CREATED="1464396320922" ID="ID_1981813349" MODIFIED="1512926192070" TEXT="GenNode umgeht das (bewu&#xdf;t)">
-<node CREATED="1464396885391" ID="ID_1510453315" MODIFIED="1464397164031" TEXT="Begr&#xfc;ndung: interne Schnittstelle">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1464396899252" ID="ID_1555498938" MODIFIED="1464396964843" TEXT="verwendet bereits valide Symbole">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1464396908371" ID="ID_487257918" MODIFIED="1464397170109" TEXT="vermeidet den Performance overhead">
-<icon BUILTIN="ksmiletris"/>
-</node>
-</node>
-<node CREATED="1464397008078" ID="ID_1403561457" MODIFIED="1464397019505" TEXT="soll sich symmetrisch verhalten">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1464397020996" ID="ID_1333087135" MODIFIED="1512926192070" TEXT="L&#xf6;sung: Variante f&#xfc;r EntryID">
-<icon BUILTIN="idea"/>
-<node CREATED="1464397032747" ID="ID_1595458691" MODIFIED="1575133336250" TEXT="f&#xfc;r interne Schnittstellen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      gleiches Argument...
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1464397039834" ID="ID_1349501863" MODIFIED="1575133336266" TEXT="verwendet Symbol-Datentyp">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...damit unterstellen wir, da&#223; sp&#228;ter eine Symbol-Tabelle aufgebaut wird.
-    </p>
-    <p>
-      Dann kann man sich immer noch &#252;berlegen, ob man dann <i>an dieser Stelle</i>&#160;bereinigt
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node CREATED="1464387004423" ID="ID_1076928743" MODIFIED="1512926192071" TEXT="Fehlerbehandlung">
-<node CREATED="1464387034539" ID="ID_1580200225" MODIFIED="1512926192071" TEXT="injectNew">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1464387043146" ID="ID_1075443725" MODIFIED="1465045655821" TEXT="API erweitern">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1464387046769" ID="ID_1282279036" MODIFIED="1465045658691" TEXT="R&#xfc;ckgabewert">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1464387055632" ID="ID_381742708" MODIFIED="1465045661504" TEXT="andere Layer fragen">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1464387071669" ID="ID_1152000090" MODIFIED="1512926192072" TEXT="skip">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1464387092091" ID="ID_534085817" MODIFIED="1464387095959" TEXT="hat kein Argument"/>
-<node CREATED="1464387096498" ID="ID_1113073682" MODIFIED="1464387158085" TEXT="kann daher Selektor nicht ausf&#xfc;hren">
-<icon BUILTIN="smily_bad"/>
-</node>
-<node CREATED="1464387102850" ID="ID_1022478410" MODIFIED="1464387148396" TEXT="Fehlererkennung nicht m&#xf6;glich">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-<node CREATED="1464386771270" ID="ID_1279882649" MODIFIED="1512926192072" TEXT="setter vs mutator">
-<node CREATED="1464386870265" ID="ID_1326576761" MODIFIED="1464387168773" TEXT="Metaprogrammierung"/>
-<node CREATED="1464386878983" ID="ID_19052291" MODIFIED="1464386887354" TEXT="Code selber mu&#xdf; es implizit wissen"/>
-<node CREATED="1464386904676" ID="ID_1844234642" MODIFIED="1512926192073" TEXT="entweder-oder">
-<icon BUILTIN="help"/>
-<node CREATED="1464386910099" ID="ID_127180278" MODIFIED="1464386913750" TEXT="nicht notwendig"/>
-<node CREATED="1464386929745" ID="ID_1833671444" MODIFIED="1464386936708" TEXT="es greift der Layer, der es kann"/>
-</node>
-<node CREATED="1464483482949" HGAP="32" ID="ID_597384200" MODIFIED="1512926192073" TEXT="Code-Struktur" VSHIFT="15">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1464483497524" ID="ID_206433048" MODIFIED="1464483503639" TEXT="Basisklasse + Overlay"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464483504155" ID="ID_565058375" MODIFIED="1533608413971" TEXT="unsch&#xf6;n und verwirrend">
-<node CREATED="1464483533863" ID="ID_1813082482" MODIFIED="1464483617082" TEXT="mehrfach geschachtelte Typdefinitionen">
-<icon BUILTIN="smily_bad"/>
-</node>
-<node CREATED="1464483544429" ID="ID_467553331" MODIFIED="1575133336535" TEXT="Problem mit der EntryID">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      in einem Fall kann man sie aus der Closure abgreifen
-    </p>
-    <p>
-      im anderen Fall mu&#223; es doch der Client leisten.
-    </p>
-    <p>
-      Keine klare Linie
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="smily_bad"/>
-</node>
-<node CREATED="1464483601318" ID="ID_1275035047" MODIFIED="1464483610226" TEXT="gibt es &#xfc;berhaupt eine Alternative">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1465041597680" ID="ID_31475692" MODIFIED="1561827465568" TEXT="Abw&#xe4;gung">
-<node CREATED="1465040677452" ID="ID_1313751992" MODIFIED="1575133336577" TEXT="OK: Klassen sind geschnitten nach Belang">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das hei&#223;t, es gibt nur minimale, themantische &#220;berlappung.
-    </p>
-    <p>
-      Also ist die Verwendung von Vererbung hier sogar die <i>beste</i>&#160;L&#246;sung
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1465040780654" ID="ID_73964489" MODIFIED="1465040812722">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Geschachtelte Typdefs lassen sich vermeiden:
-    </p>
-    <p>
-      BareEntryID speichern!
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1465040890735" ID="ID_19731522" MODIFIED="1575133336607" TEXT="API f&#xfc;r die ID ist ein Dilemma">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das hei&#223;t, wie rum man es auch aufl&#246;st, wird die L&#246;sung auf einer Seite schlechter
-    </p>
-    <ul>
-      <li>
-        wenn wir f&#252;r den Payload-Typ einen Typ-Parameter nehmen, bl&#228;hen wir den Standard-Fall (Setter) auf
-      </li>
-      <li>
-        andererseits <i>ist es unbstreitbar einfach so,</i>&#160;da&#223; f&#252;r den Mutator-Builder die Typisierung komplett implizit ist, das mu&#223; die Closure mit sich&#160;selbst ausmachen, einfach indem in der Closure ein geschachtelter TreeMutator konstruiert wird, der eben mit diesem impliziten Kind-Typ umgehen kann.
-      </li>
-      <li>
-        wenn wir stattdessen nur einen Key-String speichern, wird zum Einen die Match-Pr&#252;fung aufwendiger (Stringvergleich statt Vergleich von Hashes), und au&#223;erdem wird ein Typ-Mismatch nicht mehr auf der Ebene der Verb-Anwendung entdeckt und entsprechend gekennzeichnet, sondern wir hoffen, da&#223; es dann innerhalb der Closure zu einem Fehlzugriff auf die Payload der GenNode kommt. Noch schlimmer im Mutator-Fall, da sind wir dann schon im geschachtelten Scope und hoffen, da&#223; dann der eingeschachtelte Mutator irgendwo auf Widerspruch l&#228;uft.
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-<icon BUILTIN="stop-sign"/>
-</node>
-<node CREATED="1465041611663" ID="ID_1925576169" MODIFIED="1575133336640" TEXT="man kann auf DSL-Ebene mehrere Alternativen anbieten">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...gedacht f&#252;r verschiedene UseCases.
-    </p>
-    <ul>
-      <li>
-        Fall 1: String-Key und der Typ mu&#223; irgendwie implizit/explizit gegeben sein
-      </li>
-      <li>
-        Fall2: GenNodeID
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1465139405203" ID="ID_103737978" MODIFIED="1575133336658" TEXT="...hey, der Typ ist implizit klar! es ist immer Rec">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...die offensichtlichsten Dinge &#252;bersieht man nur zu leicht!!!!!
-    </p>
-    <p>
-      Da es ein nested scope ist, ist es immer ein Objekt,
-    </p>
-    <p>
-      also repr&#228;sentiert als Rec&lt;GenNode&gt;
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1457232746179" ID="ID_1793680066" MODIFIED="1561827465572" TEXT="Rec&lt;GenNode&gt;" VSHIFT="11">
-<icon BUILTIN="full-4"/>
-<node CREATED="1464305377785" ID="ID_396910166" MODIFIED="1512926192076" TEXT="Vor&#xfc;berlegungen">
-<node CREATED="1464305417066" ID="ID_1059660516" MODIFIED="1512926192077" TEXT="w&#xfc;nschenswert">
-<icon BUILTIN="help"/>
-<node CREATED="1464305708891" ID="ID_1184917831" MODIFIED="1512926192077" TEXT="Vorteile">
-<node CREATED="1464305431944" ID="ID_426248387" MODIFIED="1464305641440" TEXT="den RecordContentMutator loswerden"/>
-<node CREATED="1464305660018" ID="ID_255650962" MODIFIED="1464305687458" TEXT="die speziellen Regeln f&#xfc;r Attribute / Kinder loswerden"/>
-</node>
-<node CREATED="1464305712115" ID="ID_1789861154" MODIFIED="1512926192078" TEXT="Nachteile">
-<node CREATED="1464305722209" ID="ID_375643343" MODIFIED="1464305733108" TEXT="man braucht immer einen TreeMutator"/>
-<node CREATED="1464305735032" ID="ID_800203572" MODIFIED="1464305745786" TEXT="das ist sehr komplexer Code"/>
-<node CREATED="1464305756189" ID="ID_696233984" MODIFIED="1464305766735" TEXT="zus&#xe4;tzliche Indirektion / VTable"/>
-<node CREATED="1464305800207" ID="ID_1296045436" MODIFIED="1464305818736" TEXT="das &quot;Backdoor&quot; in Record::Mutator bleibt bestehen"/>
-</node>
-<node CREATED="1464305842833" ID="ID_365028607" MODIFIED="1525124215201" TEXT="Abw&#xe4;gung">
-<node CREATED="1464305847001" ID="ID_845708071" MODIFIED="1533608413973" TEXT="Aufwand">
-<node CREATED="1464305850440" ID="ID_592160280" MODIFIED="1561827465572" TEXT="dedizierte Impl">
-<node CREATED="1464305871806" ID="ID_1200803242" MODIFIED="1464305874249" TEXT="ein Stack"/>
-<node CREATED="1464306044598" FOLDED="true" ID="ID_780490719" MODIFIED="1561827483836" TEXT="pro Stackframe">
-<node CREATED="1464305896754" ID="ID_569905839" MODIFIED="1464305908965" TEXT="ref Rec::Mutator"/>
-<node CREATED="1464305910520" FOLDED="true" ID="ID_1883294095" MODIFIED="1561827482931" TEXT="Puffer: RecordContentMutator">
-<node CREATED="1464305921943" ID="ID_1412580517" MODIFIED="1464305927370" TEXT="Vector Attribute"/>
-<node CREATED="1464305927910" ID="ID_1641635660" MODIFIED="1464305933817" TEXT="Vector Kinder"/>
-<node CREATED="1464305989422" ID="ID_614946430" MODIFIED="1464305994825" TEXT="ein vector::iterator"/>
-</node>
-</node>
-</node>
-<node CREATED="1464305854040" ID="ID_1876525606" MODIFIED="1561827465573" TEXT="per TreeMutator">
-<node CREATED="1464305876237" ID="ID_633615671" MODIFIED="1464305878376" TEXT="ein Stack"/>
-<node CREATED="1464306061588" FOLDED="true" ID="ID_735374750" MODIFIED="1561827483836" TEXT="pro Stackframe">
-<node CREATED="1472781610135" FOLDED="true" ID="ID_150002810" MODIFIED="1561827482931">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <i>zwei </i>Bindings
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1472781728046" ID="ID_1910688935" MODIFIED="1472781744825" TEXT="ref Quell-Vector"/>
-<node CREATED="1472781629036" ID="ID_1614778599" MODIFIED="1472781751975" TEXT="Puffer: Vector GenNode"/>
-<node CREATED="1472781648571" ID="ID_1190592868" MODIFIED="1472781677753" TEXT="ein zugeh&#xf6;riger Iterator"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1472781868035" HGAP="40" ID="ID_195135751" MODIFIED="1533608413976" TEXT="Unterschied minimal" VSHIFT="-3">
-<node CREATED="1472781885352" ID="ID_327255109" MODIFIED="1472781888836" TEXT="zwei Iteratoren"/>
-<node CREATED="1472781889328" ID="ID_1298906038" MODIFIED="1472781899051" TEXT="zwei Quell-Referenzen"/>
-</node>
-</node>
-</node>
-<node CREATED="1472653531806" HGAP="76" ID="ID_1466924103" MODIFIED="1512926192083" TEXT="Ansatz" VSHIFT="-10">
-<node CREATED="1472653541019" ID="ID_1910363821" MODIFIED="1472653569512">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <i>zwei</i>&#160;Collection-Bindings
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1472653548905" ID="ID_56400821" MODIFIED="1472653553124" TEXT="speziell konfiguriert"/>
-<node CREATED="1472654905416" ID="ID_729856704" MODIFIED="1472654910067" TEXT="minimaler Code"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1464305382975" ID="ID_1038582300" MODIFIED="1561827465582" TEXT="Implementierung">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1457742036967" ID="ID_980619979" MODIFIED="1512926192084" TEXT="Attribute">
-<node CREATED="1472781560508" ID="ID_1534877939" MODIFIED="1472781584718" TEXT="Selector: isNamed"/>
-<node CREATED="1472930964666" ID="ID_1394229571" MODIFIED="1473014470867" TEXT="Behandlung f&#xfc;r Typ-Feld"/>
-</node>
-<node CREATED="1457742040782" ID="ID_613087606" MODIFIED="1457742042442" TEXT="Kinder"/>
-<node CREATED="1472781922380" ID="ID_506316487" MODIFIED="1512926192085" TEXT="Problem: rekursiver Mutator">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1472781942185" ID="ID_882829469" MODIFIED="1472781946644" TEXT="rein code-technisches Problem"/>
-<node CREATED="1472781957063" ID="ID_1617563820" MODIFIED="1472781964177" TEXT="durch forward-decl aufzul&#xf6;sen"/>
-<node CREATED="1472781977156" ID="ID_1731364667" MODIFIED="1472782008196" TEXT="erfordert Umbau der Code-Struktur">
-<icon BUILTIN="smily_bad"/>
-</node>
-</node>
-<node CREATED="1472930979111" ID="ID_1629990314" MODIFIED="1512926192086" TEXT="Problem: Typ-Feld">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1472931031568" ID="ID_1634653912" MODIFIED="1512926192087" TEXT="Kompromi&#xdf; in GenNode">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1472931061612" ID="ID_1482076461" MODIFIED="1472931066111" TEXT="halbherziges Design"/>
-<node CREATED="1472931066635" ID="ID_1488685471" MODIFIED="1472931074166" TEXT="wollte nicht wirklich Metadaten einf&#xfc;hren"/>
-<node CREATED="1472931074754" ID="ID_1078549727" MODIFIED="1472931083789" TEXT="hab&apos;s daher dann fest verdrahtet"/>
-<node CREATED="1472931084281" ID="ID_358955160" MODIFIED="1472931095987" TEXT="erlaube &quot;Abk&#xfc;rzung&quot; &#xfc;ber das Typ-Attribut"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472931096647" ID="ID_1730961697" MODIFIED="1575133337240" TEXT="aber nicht wirklich konsequent...">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...diese Abk&#252;rzung ist nur auf den Konstruktur aufgepflanzt,
-    </p>
-    <p>
-      nicht aber in der eigentlichen Implementierung verankert.
-    </p>
-    <p>
-      Das wollte ich nicht, weil ich l&#228;ngerfristig doch davon ausgehe,
-    </p>
-    <p>
-      da&#223; es einfach einen Metadaten-Scope gibt
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Die Inkonsequenz nun ist, da&#223; im Rec::Mutator keine Magie daf&#252;r vorgesehen ist
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1472931195618" ID="ID_1075996120" MODIFIED="1512926192087" TEXT="aber Meta-Attribut f&#xfc;r Diff">
-<node CREATED="1472931234165" ID="ID_160523779" MODIFIED="1472931239279" TEXT="geht nicht anders"/>
-<node CREATED="1472931241027" ID="ID_1519973794" MODIFIED="1472931247263" TEXT="direkte Folge des Objekt-Modells"/>
-<node CREATED="1472931391998" ID="ID_1361356376" MODIFIED="1533608413977" TEXT="betrifft">
-<node CREATED="1472931395526" ID="ID_1159599973" MODIFIED="1472931403393" TEXT="ins(type = X)"/>
-<node CREATED="1472931404525" ID="ID_1215961897" MODIFIED="1561827465582" TEXT="set(type = X)">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1472931416323" ID="ID_1856124935" MODIFIED="1472931434577" TEXT="AUA: bisher &#xfc;bersehen">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1472931275575" ID="ID_158751268" MODIFIED="1512926192088" TEXT="Collection-Binding">
-<node CREATED="1472931287229" ID="ID_1702269467" MODIFIED="1472931308630" TEXT="klinkt sich unterhalb vom Mutator ein"/>
-<node CREATED="1472931309122" ID="ID_632255284" MODIFIED="1472931324740" TEXT="umgeht den Mutator"/>
-<node CREATED="1472931326512" ID="ID_150253618" MODIFIED="1472931332867" TEXT="arbeitet direkt auf den Collections"/>
-<node CREATED="1472931333975" ID="ID_330064662" MODIFIED="1472931342433" TEXT="reicht Werte unbetrachtet 1:1 durch"/>
-</node>
-<node CREATED="1472931711315" ID="ID_1747250133" MODIFIED="1512926192089" TEXT="L&#xf6;sung">
-<icon BUILTIN="idea"/>
-<node CREATED="1472931716482" ID="ID_1328626801" MODIFIED="1575133337450" TEXT="Lambdas nicht ausreichend">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...mit den Lambdas kann ich nur die Sicht auf die Werte steuern,
-    </p>
-    <p>
-      nicht aber das eigentliche Verhalten des Bindings.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Denn die Lambdas haben keinen Zugriff auf die Ziel-Datenstruktur!
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1472931806958" ID="ID_321203237" MODIFIED="1472931822190" TEXT="m&#xfc;&#xdf;te Binding-Operationen anpassen">
-<icon BUILTIN="smily_bad"/>
-</node>
-<node COLOR="#338800" CREATED="1472931829467" ID="ID_383672039" MODIFIED="1533608413978" STYLE="fork" TEXT="Dekorator">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1472934618917" ID="ID_1010335466" MODIFIED="1472934744607" TEXT="legt sich um den &#xe4;u&#xdf;eren Collection-Binding-Layer"/>
-<node CREATED="1472934635426" ID="ID_610715894" MODIFIED="1472934744607" TEXT="greift bei der injectNew und assignElm-Operation ein"/>
-<node CREATED="1472934671013" ID="ID_1605900118" MODIFIED="1472934744607" TEXT="braucht Zugang zum Rec::Mutator">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1472934695226" ID="ID_247894372" MODIFIED="1472934744607" TEXT="Code wird schwer lesbar"/>
-<node CREATED="1472934710032" ID="ID_1233852840" MODIFIED="1561827465582" TEXT="umformulieren">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1473014547678" ID="ID_1566443628" MODIFIED="1473014763323" TEXT="geht nur bedingt">
-<icon BUILTIN="smily_bad"/>
-</node>
-<node CREATED="1473014552677" ID="ID_1444718355" MODIFIED="1575133337582" TEXT="Problem ist der Builder">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...wir wollen mehrfach geschichtete TreeMutator-Subklassen,
-    </p>
-    <p>
-      aber tats&#228;chlich liefert jeder DSL-Aufruf einen Builder&lt;TreeMutator&lt;...&gt;&gt;.
-    </p>
-    <p>
-      Die normalen DSL-Aufrufe sind eben genau so gestrickt, da&#223; jeweils der oberste Builder entfernt wird,
-    </p>
-    <p>
-      ein neuer Layer dar&#252;bergebaut und das Ganze wieder in einen Builder eingewickelt wird.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Dadurch ist es schwer bis unm&#246;glich (wg. den Lambdas), den resultierenden Typ anzuschreiben.
-    </p>
-    <p>
-      Daher bin ich zwingend auf Wrapper-Funktionen angewiesen, die diesen resultierenden Typ
-    </p>
-    <p>
-      vom konkreten Aufruf wieder &quot;abgreifen&quot;. Ich kann daher nicht die DSL-Notation verwenden,
-    </p>
-    <p>
-      um den Dekorator f&#252;r die Behandlung des Typ-Feldes einzubringen.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1472782025318" ID="ID_387350632" MODIFIED="1512926192091" TEXT="Standard-Lambdas f&#xfc;r GenNode">
-<node CREATED="1472782055217" ID="ID_1053081307" MODIFIED="1472782069243" TEXT="Selector -&gt; ID-Vergleich"/>
-<node CREATED="1472782069784" ID="ID_893616200" MODIFIED="1472782075874" TEXT="Constructor -&gt; copy"/>
-<node CREATED="1472782077062" ID="ID_1012433129" MODIFIED="1472782092512" TEXT="Setter -&gt; assign DataCap"/>
-<node CREATED="1472782093956" ID="ID_1200489627" MODIFIED="1472782120696">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Mut -&gt; <font color="#e43e2a">Rekursion</font>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1472830089042" ID="ID_1759032781" MODIFIED="1512926192092" TEXT="until after Ref::ATTRIBS">
-<node CREATED="1472830107591" ID="ID_1479915312" MODIFIED="1472830118609" TEXT="mu&#xdf; Semantik im TreeMutator API korrigieren"/>
-<node CREATED="1472830131284" ID="ID_1581714242" MODIFIED="1472830153132" TEXT="Problem: nur die Implementierung wei&#xdf;, was ein &quot;Attribut&quot; ist"/>
-<node CREATED="1472830122757" ID="ID_937476321" MODIFIED="1472830129487" TEXT="brauche Unterst&#xfc;tzung vom Selector"/>
-<node CREATED="1472830164119" ID="ID_1323583081" MODIFIED="1512926192093" TEXT="L&#xf6;sungsansatz">
-<node CREATED="1472830177221" ID="ID_422155652" MODIFIED="1472830181729" TEXT="wie Ref::END"/>
-<node CREATED="1472830182101" ID="ID_275162903" MODIFIED="1472830195511" TEXT="aber nur einige Layer reagieren darauf"/>
-<node CREATED="1472830199203" ID="ID_35560751" MODIFIED="1533608413978" TEXT="default-return mu&#xdf; true sein">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1472830226455" ID="ID_1975724782" MODIFIED="1472830232658" TEXT="aber nat&#xfc;rlich nur wenn leer..."/>
-<node CREATED="1472830286462" ID="ID_1170732286" MODIFIED="1472830298035" TEXT="Einsicht: END und ATTRIBS k&#xf6;nnen nicht scheitern">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1472830304844" ID="ID_354507274" MODIFIED="1472840380057" TEXT="...es geht nur um das Layer-Chaining"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#4a273f" CREATED="1461882151581" HGAP="29" ID="ID_710057839" MODIFIED="1512926192094" TEXT="Selector integrieren" VSHIFT="23">
-<icon BUILTIN="button_ok"/>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1461967533959" ID="ID_1476036864" MODIFIED="1468761946715" TEXT="korrekte logische Verkettung"/>
-<node CREATED="1461967541166" ID="ID_1033772766" MODIFIED="1468761946715" TEXT="mu&#xdf; von jeder Primitive unterst&#xfc;tzt werden">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1461967571042" ID="ID_186074377" MODIFIED="1512926192095">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <b>Problem</b><font color="#4e094b">: partielle Ordnung</font>
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1461967744747" ID="ID_1012577830" MODIFIED="1468761946715" TEXT="Diff setzt totale Ordnung voraus"/>
-<node CREATED="1461967765080" ID="ID_1011855147" MODIFIED="1468761946715" TEXT="verletzt durch &#xbb;onion-layer&#xab;"/>
-<node CREATED="1461967839110" ID="ID_571996411" MODIFIED="1512926192095" TEXT="Relevanz">
-<icon BUILTIN="help"/>
-<node CREATED="1461967850797" ID="ID_1981205783" MODIFIED="1468761946715" TEXT="bei Einzelschritt irrelevant"/>
-<node CREATED="1461967876521" ID="ID_1804785019" MODIFIED="1512926192096" TEXT="zwingend bei &quot;AFTER&quot;-Verb">
-<node CREATED="1461967962814" ID="ID_1667097505" MODIFIED="1575133337967" TEXT="weil das Zwischenschritte &#xfc;berspringt">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das hei&#223;t,
-    </p>
-    <p>
-      das AFTER-Verb wird &#252;bersetzt in ein skip_until,
-    </p>
-    <p>
-      und das l&#228;uft dann entweder in jedem Layer
-    </p>
-    <p>
-      oder nur in dem Layer, der auf die Spec pa&#223;t.
-    </p>
-    <p>
-      In jedem Fall ger&#228;t dadurch die relative Verzahnung der Elemente untereinander aus dem Takt
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1461967992042" ID="ID_9552950" MODIFIED="1468761946715" TEXT="nur ein Ausweg..."/>
-<node CREATED="1461968004720" ID="ID_1333404241" MODIFIED="1575133337998" TEXT="Ordnung der onion-layer verbindlich machen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das hei&#223;t also, es wird stets der zuerst gebundene Layer komplett durchgespult,
-    </p>
-    <p>
-      gefolgt dann von dem n&#228;chsten Layer.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Die Konsequenz ist, da&#223; es keine Mischung der Typen geben kann.
-    </p>
-    <p>
-      Es m&#252;ssen immer zwingend alle Elemente eines Typs von einem Layer behandelt werden
-    </p>
-    <p>
-      und diese Elemente m&#252;ssen geschlossen hintereinander in der Reihenfolge liegen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1465428839332" ID="ID_909803930" MODIFIED="1561827465587" TEXT="Diff-Anwendung" VSHIFT="36">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1465428850946" ID="ID_1085608480" MODIFIED="1512926192098">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      auf Basis des neu geschaffenen <b>TreeMutator</b>s
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1465664755169" ID="ID_132124444" MODIFIED="1561827465591" TEXT="Modus der Anwendung">
-<node CREATED="1465664762944" ID="ID_1254081914" MODIFIED="1465665479208" TEXT="DiffApplicator&lt;TreeMutator&gt;">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1465664777398" ID="ID_872861883" MODIFIED="1575133338075" TEXT="Automatismen sind denkbar">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....man k&#246;nnte sp&#228;ter geeignete Automatismen schaffen,
-    </p>
-    <p>
-      die sich diesen TreeMutator beschaffen
-    </p>
-    <ul>
-      <li>
-        indem erkannt wird, da&#223; das eigentliche Zielobjekt ein bestimmtes API bietet
-      </li>
-      <li>
-        indem andere relevante Eigenschaften des Zielobjekts erkannt werden
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-<arrowlink COLOR="#994062" DESTINATION="ID_1139754084" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_10673972" STARTARROW="None" STARTINCLINATION="978;42;"/>
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1465665483456" ID="ID_1329468559" MODIFIED="1575133338094" TEXT="Problem: konkreter Mutator">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das so h&#228;ufig in C++ auftretende Problem:
-    </p>
-    <p>
-      wie baue und verwalte ich eine konkrete Implementierung,
-    </p>
-    <p>
-      ohne gleich ein ganzes Management-Framework einf&#252;hren zu m&#252;ssen.
-    </p>
-    <p>
-      Letzten Endes lief&#160;&#160;das auch in diesem Fall auf inline-Storage hinaus...
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1465665492727" ID="ID_743684748" MODIFIED="1465665500210" TEXT="mu&#xdf; vom Target gebaut werden"/>
-<node CREATED="1465665500830" ID="ID_937213383" MODIFIED="1465665561681" TEXT="Typ nicht bekannt">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1465665511580" ID="ID_611347489" MODIFIED="1465665556325" TEXT="soll auf Stack top-Level ">
-<icon BUILTIN="yes"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465665579587" ID="ID_786565560" MODIFIED="1525124215211" TEXT="problematisch">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1465665594969" ID="ID_1072421347" MODIFIED="1533608413979" TEXT="unbekannte Gr&#xf6;&#xdf;e">
-<node CREATED="1465665884698" ID="ID_418230667" MODIFIED="1465665893757" TEXT="default-Bufferg&#xf6;&#xdf;e vorlegen"/>
-<node CREATED="1465665894273" ID="ID_970277186" MODIFIED="1465665901124" TEXT="Gr&#xf6;&#xdf;e proben und anpassen"/>
-<node CREATED="1465665901640" ID="ID_650164559" MODIFIED="1465665920298" TEXT="Gr&#xf6;&#xdf;e f&#xfc;r &quot;bekannte&quot; Targets statisch hinterlegen"/>
-<node CREATED="1465852237233" HGAP="27" ID="ID_699424989" MODIFIED="1561827465592" TEXT="Beschlu&#xdf;" VSHIFT="12">
-<icon BUILTIN="yes"/>
-<node CREATED="1465852248487" ID="ID_1402619250" MODIFIED="1465852255154" TEXT="zun&#xe4;chst die einfachste L&#xf6;sung"/>
-<node CREATED="1465852255694" ID="ID_462293433" MODIFIED="1472122166677" TEXT="statisch (fest) festlegen"/>
-<node CREATED="1465852268252" ID="ID_329653886" MODIFIED="1465852274743" TEXT="ggfs. noch nach Zieltyp differenziert"/>
-<node CREATED="1465852275859" ID="ID_394082851" MODIFIED="1465852288510" TEXT="dynamisch / Lernen als M&#xf6;glichkeit vorsehen"/>
-</node>
-</node>
-<node CREATED="1465665614990" ID="ID_1851089586" MODIFIED="1533608413980" TEXT="verwirrendes API">
-<node CREATED="1465665980686" ID="ID_1537039073" MODIFIED="1465665991232" TEXT="Anwendung sollte selbstevident sein"/>
-<node CREATED="1465666009690" ID="ID_1006664389" MODIFIED="1561827465592" TEXT="Typ-Signatur sollte den Weg weisen">
-<node CREATED="1465674483754" ID="ID_155190959" MODIFIED="1465674558135" TEXT="sehe nur eine L&#xf6;sung">
-<icon BUILTIN="forward"/>
-</node>
-<node CREATED="1465674488874" ID="ID_625451231" MODIFIED="1465674563848" TEXT="Mutator-Builder-Funktion">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1465674529460" ID="ID_845292312" MODIFIED="1465674571112" TEXT="pflanzt in ein gegebenes Buff-Handle">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-</node>
-</node>
-<node CREATED="1465665993012" ID="ID_1531461875" MODIFIED="1465666003750" TEXT="keine komplexen &quot;Riten&quot;"/>
-<node CREATED="1465666524573" HGAP="30" ID="ID_462712191" MODIFIED="1561827465592" TEXT="Schlu&#xdf;folgerung" VSHIFT="18">
-<icon BUILTIN="yes"/>
-<node CREATED="1465666541419" ID="ID_1090547868" MODIFIED="1465666552293" TEXT="entweder ein festes Interface"/>
-<node CREATED="1465666552842" ID="ID_1518882587" MODIFIED="1465666574594" TEXT="oder &#xfc;ber Metaprogrammierung / Spezialisierung"/>
-<node CREATED="1468761997202" FOLDED="true" ID="ID_1870085622" MODIFIED="1561827483836" TEXT="kombinierte L&#xf6;sung">
-<icon BUILTIN="idea"/>
-<node CREATED="1468762009304" ID="ID_1554371522" MODIFIED="1468762018314" TEXT="Interface DiffMutable"/>
-<node CREATED="1468762031701" FOLDED="true" ID="ID_48737788" MODIFIED="1561827482931" TEXT="Meta-Adapter">
-<linktarget COLOR="#503382" DESTINATION="ID_48737788" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_579805576" SOURCE="ID_887400042" STARTARROW="None" STARTINCLINATION="535;0;"/>
-<node CREATED="1468762052858" ID="ID_494010261" MODIFIED="1468762066764" TEXT="synthetisiert dieses Interface"/>
-<node CREATED="1468762067383" ID="ID_484867304" MODIFIED="1468762075059" TEXT="erkennt passende Methoden"/>
-<node CREATED="1468762075671" FOLDED="true" ID="ID_52899390" MODIFIED="1561827469159" TEXT="Problem: Storage">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1468762092660" ID="ID_361660092" MODIFIED="1468762097264" TEXT="Adapter oder Lambda"/>
-<node CREATED="1468762097684" ID="ID_1049198962" MODIFIED="1468762107374" TEXT="mu&#xdf; l&#xe4;nger leben als der Adapter"/>
-<node CREATED="1468762118913" ID="ID_1064755787" MODIFIED="1468762128867" TEXT="L&#xf6;sung: Wert / Reftyp per Spezialisierung"/>
-<node CREATED="1468762138318" ID="ID_1261183393" MODIFIED="1472219338878" TEXT="Restrisiko bleibt">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ....da&#223; ein unbedarfter client diesen Trick &#252;bershieht
-    </p>
-    <p>
-      und daher den R&#252;ckgabewert wegwirft.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Argument: we soweit einsteigt, die Metaprogramming-L&#246;sung zu nutzen,
-    </p>
-    <p>
-      sollte auch intelligent genug sein, die API-Doc zu lesen.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Standard == Interface DiffMutable implementieren
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-<node CREATED="1469121877371" FOLDED="true" HGAP="38" ID="ID_1718572301" MODIFIED="1561827469159" TEXT="freie funktion" VSHIFT="16">
-<icon BUILTIN="yes"/>
-<node CREATED="1469121882782" ID="ID_1873664189" MODIFIED="1469121933463" TEXT="keine Spezialisierung notwendig">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1469121890060" ID="ID_985582322" MODIFIED="1469121930007">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Client soll direkt <b>mutatorBinding</b>&#160;bieten
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1469544027620" HGAP="38" ID="ID_1475348824" MODIFIED="1533608413984" TEXT="Storage-Probleme" VSHIFT="11">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1469544055624" ID="ID_390940604" MODIFIED="1561827465596" TEXT="Beobachtung: Template-bloat">
-<icon BUILTIN="stop-sign"/>
-<node CREATED="1469544072709" ID="ID_16055877" MODIFIED="1469544083016" TEXT="Ursache: wir generieren die Klasse jedesmal neu"/>
-<node CREATED="1469544084220" ID="ID_1247343007" MODIFIED="1469544104909" TEXT="...obwohl keinerlei Bezug zum Target-Typ vorliegt">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1469544123271" ID="ID_1703312587" MODIFIED="1469544133675" TEXT="Funktionalit&#xe4;t ist zu 90% generisch">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1469544171176" ID="ID_887400042" MODIFIED="1469544253263">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <i>nicht</i>&#160;generisch: <b><font color="#923977">mutatorBinding</font></b>
-    </p>
-  </body>
-</html></richcontent>
-<arrowlink COLOR="#503382" DESTINATION="ID_48737788" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_579805576" STARTARROW="None" STARTINCLINATION="535;0;"/>
-</node>
-</node>
-<node CREATED="1469544264955" HGAP="35" ID="ID_366424331" MODIFIED="1561827465596" VSHIFT="16">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      L&#246;sungsversuch: <b>extern template</b>
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1469544293574" ID="ID_947583528" MODIFIED="1469544318455" TEXT="Template bereits in Lumiera-Lib vor-generieren">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1469544337408" ID="ID_1646108569" MODIFIED="1469544349252" TEXT="nur ctor ist nochmals ge-Templated">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1469544323331" FOLDED="true" ID="ID_1924059831" MODIFIED="1561827483836" TEXT="flexibler Teil verbleibt in ctor">
-<icon BUILTIN="forward"/>
-<node CREATED="1469544368180" ID="ID_989521105" MODIFIED="1469544377687" TEXT="hier kann das mutatorBinding stattfinden"/>
-<node CREATED="1469544385882" ID="ID_82786122" MODIFIED="1469544397396" TEXT="...in Abh&#xe4;ngigkeit vom konkreten Zieltyp"/>
-<node CREATED="1469544400544" ID="ID_1789924824" MODIFIED="1469544413058" TEXT="Resultat ist ein TreeMutator im internen Puffer"/>
-</node>
-<node CREATED="1469544471294" FOLDED="true" ID="ID_1306807662" MODIFIED="1561827483837" TEXT="Problem-1: Puffer-Gr&#xf6;&#xdf;e">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1469544519439" ID="ID_1173588510" MODIFIED="1469544535057" TEXT="Plan: Heuristik + Traits"/>
-<node CREATED="1469544536309" ID="ID_579318822" MODIFIED="1469544546951" TEXT="h&#xe4;ngt von konkretem Zieltyp ab"/>
-<node CREATED="1469544547731" ID="ID_1296389584" MODIFIED="1469544596453" TEXT="kann nicht im generischen Teil stecken">
-<icon BUILTIN="stop-sign"/>
-</node>
-<node CREATED="1469544575808" ID="ID_259226539" MODIFIED="1469544599880" TEXT="Problem: vom generischen Teil ansprechen">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1469544601444" ID="ID_1593190605" MODIFIED="1469544616515" TEXT="L&#xf6;sung: weitere Indirektion">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1469544618738" ID="ID_324293110" MODIFIED="1472122283229" TEXT="vertretbar, da nur beim Scope-Wechsel....">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...im Klartext: diesen Zugriff von der generischen Implementierung
-    </p>
-    <p>
-      auf den eingebauten Stack-Mechanismus ben&#246;tigen wir nur...
-    </p>
-    <ul>
-      <li>
-        einmal zu Beginn, bei der Konstruktion
-      </li>
-      <li>
-        wenn wir in einen geschachtelten Scope eintreten
-      </li>
-      <li>
-        wenn wir einen Solchen verlassen
-      </li>
-    </ul>
-    <p>
-      Zwar sind indirekte Calls aufwendiger, aber letzten Endes auch wieder nicht soooo aufwendig,
-    </p>
-    <p>
-      da&#223; sie uns im gegebenen Kontext umbringen...
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node CREATED="1469544496907" FOLDED="true" ID="ID_447935464" MODIFIED="1561827483837" TEXT="Problem-2: re-Initialisierung">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1469544831244" ID="ID_756911810" MODIFIED="1469544838662" TEXT="bestehendes Protokoll">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-</node>
-<node CREATED="1469544839795" ID="ID_1308746305" MODIFIED="1469544858420" TEXT="Diff-Applikator kan beliebige Folge von Diffs akzeptieren"/>
-<node CREATED="1469544859392" ID="ID_325998286" MODIFIED="1469544964778">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <i>intern:</i>&#160;eingebaute <b>initDiffApplication()</b>
-    </p>
-  </body>
-</html></richcontent>
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...wird automatisch vor Konsumieren eines Diff aufgerufen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1469544965890" ID="ID_443152890" MODIFIED="1469545023179">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <i>Widerspruch:</i>&#160;TreeMutator ist <b>Wegwerf</b>-Objekt
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="broken-line"/>
-</node>
-<node COLOR="#f61b01" CREATED="1469545033584" ID="ID_578930155" MODIFIED="1469545058652" TEXT="Abbruch">
-<icon BUILTIN="button_cancel"/>
-<icon BUILTIN="stop-sign"/>
-</node>
-</node>
-</node>
-<node CREATED="1469545080826" HGAP="41" ID="ID_268789302" MODIFIED="1561827465600" VSHIFT="17">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      L&#246;sungsversuch: <b>doppelte H&#252;lle</b>
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1469545168798" FOLDED="true" ID="ID_511952630" MODIFIED="1561827483837" TEXT="Architektur">
-<node CREATED="1469545173893" ID="ID_1815808987" MODIFIED="1469545190599" TEXT="opaque: Kern == TreeMutator"/>
-<node CREATED="1469545191899" ID="ID_1298718461" MODIFIED="1469545206853" TEXT="generisch: TreeMutator-Bindung"/>
-<node CREATED="1469545208440" ID="ID_796164740" MODIFIED="1469545246870" TEXT="dediziert: Typ-Adapter"/>
-</node>
-<node CREATED="1469545401582" FOLDED="true" ID="ID_1145081121" MODIFIED="1561827483837" TEXT="konkrete Folgen...">
-<node CREATED="1469545417579" ID="ID_474776082" MODIFIED="1469545427486" TEXT="alle virtuellen Methoden im generischen Teil"/>
-<node CREATED="1469545428289" FOLDED="true" ID="ID_1077900797" MODIFIED="1561827482932" TEXT="generischer Teil verwendet nur Interfaces">
-<node CREATED="1469545452406" ID="ID_369878659" MODIFIED="1469545455778" TEXT="TreeMutator"/>
-<node CREATED="1469545456549" ID="ID_676404790" MODIFIED="1469545459401" TEXT="ScopeManager"/>
-</node>
-<node CREATED="1469545522445" FOLDED="true" ID="ID_1752356251" MODIFIED="1561827482932" TEXT="ScopeManager">
-<node CREATED="1469545526380" ID="ID_141570709" MODIFIED="1469545535550" TEXT="Imp. wird per Zieltyp generiert"/>
-<node CREATED="1469545536139" ID="ID_423387515" MODIFIED="1469545543750" TEXT="lebt in opaquem Buffer"/>
-<node CREATED="1469545546209" ID="ID_229490952" MODIFIED="1469545561067" TEXT="enth&#xe4;lt Stack,"/>
-<node CREATED="1469545562151" ID="ID_1390916085" MODIFIED="1469545568130" TEXT="mit passender Puffergr&#xf6;&#xdf;e"/>
-</node>
-<node CREATED="1469545592171" FOLDED="true" ID="ID_1826413238" MODIFIED="1561827482932" TEXT="dedizierter Applikator">
-<icon BUILTIN="idea"/>
-<node CREATED="1469545598922" ID="ID_815414440" MODIFIED="1469545609733" TEXT="h&#xe4;llt Referenz auf Zielobjekt"/>
-<node CREATED="1469545611177" ID="ID_410214862" MODIFIED="1469545670672">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      kann daher <b>TreeMutator</b>&#160;konstruieren
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1469545641644" ID="ID_1811640827" MODIFIED="1469545662506">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...und zwar per <b>mutatorBinding</b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1469545691349" ID="ID_239269579" MODIFIED="1469545705980">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      implementiert somit <b>initDiffApplication()</b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1469545778873" FOLDED="true" HGAP="37" ID="ID_263708712" MODIFIED="1561827483837" VSHIFT="53">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      TODO: <font color="#010101">Namensgebung</font>
-    </p>
-  </body>
-</html></richcontent>
-<linktarget COLOR="#7c4b8e" DESTINATION="ID_263708712" ENDARROW="Default" ENDINCLINATION="-438;877;" ID="Arrow_ID_774958535" SOURCE="ID_660087752" STARTARROW="Default" STARTINCLINATION="2134;135;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1469545959160" ID="ID_826999251" MODIFIED="1469545961076" TEXT="DiffApplicationStrategy&lt;DiffMutable&gt;"/>
-<node CREATED="1469545962192" ID="ID_1539721850" MODIFIED="1469545971051" TEXT="feste explizite Spezialisierung"/>
-<node CREATED="1469545972470" ID="ID_996523023" MODIFIED="1469545983800" TEXT="in non-Template-Basisklasse verwandeln"/>
-<node CREATED="1469545990956" ID="ID_543764775" MODIFIED="1469546010389" TEXT="oder zumindest in Trait-Template + enable_if"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1465855369239" ID="ID_1875145732" MODIFIED="1525124215221" STYLE="fork" TEXT="Architektur">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1465855402346" ID="ID_390477158" MODIFIED="1512926192122" TEXT="Grundgedanke">
-<node CREATED="1465855407129" ID="ID_1269101170" MODIFIED="1472219324297" TEXT="Trennung von DiffInterpreter und TreeMutator"/>
-<node CREATED="1465855418880" ID="ID_118862910" MODIFIED="1472219324297" TEXT="ersterer wird auf Basis von letzterem implementiert"/>
-<node CREATED="1465855507380" ID="ID_63018388" MODIFIED="1472219324297">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      TreeMutator-<i>Binding</i>&#160;mu&#223; opaque bleiben
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1465855561877" ID="ID_1466552960" MODIFIED="1512926192123">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Buffer-Gr&#246;&#223;en-Management <i>vorsehen</i>
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1465855596992" ID="ID_1925577989" MODIFIED="1472219324298" TEXT="passiert im Scope des Ctors"/>
-<node CREATED="1465855605879" ID="ID_961922886" MODIFIED="1472219324298" TEXT="bzw. im Scope des MUT-Verbs"/>
-<node CREATED="1465855641898" ID="ID_1420998207" MODIFIED="1575133338771" TEXT="Heuristik + Versuch&amp;Irrtum">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das hei&#223;t
-    </p>
-    <ul>
-      <li>
-        ein sinnvoller Startwert wird heuristisch vorgegeben
-      </li>
-      <li>
-        wenn die Allokation scheitert, die Exception fangen und die tats&#228;chlich ben&#246;tigte Gr&#246;&#223;e merken
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1465855653265" ID="ID_1093267368" MODIFIED="1472219324298" TEXT="konfigurieren und lernen"/>
-</node>
-<node CREATED="1465855576187" ID="ID_1820859855" MODIFIED="1472219324298" TEXT="zun&#xe4;chst jedoch primitiv implementieren"/>
-</node>
-<node CREATED="1465856069657" ID="ID_1074974681" MODIFIED="1512926192123" TEXT="Struktur">
-<node CREATED="1465856074888" ID="ID_63334235" MODIFIED="1472219324298" TEXT="TreeMutator == PImpl"/>
-<node CREATED="1465856092638" ID="ID_587610953" MODIFIED="1472219324298" TEXT="BufferManager : opaque aber inline"/>
-</node>
-</node>
-<node CREATED="1465864106739" ID="ID_1139754084" MODIFIED="1575133338859" TEXT="Zugang zum Mutator-Binding">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das hei&#223;t:
-    </p>
-    <p>
-      gegeben ein syntaktisch sinnvoller top-level-Aufruf (&quot;wende das Diff an&quot;)
-    </p>
-    <p>
-      -- wie bzw. von wem bekommen wir dann ein Binding, das einen passenden TreeMutator konstruiert?
-    </p>
-  </body>
-</html></richcontent>
-<linktarget COLOR="#994062" DESTINATION="ID_1139754084" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_10673972" SOURCE="ID_872861883" STARTARROW="None" STARTINCLINATION="978;42;"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1465864167187" ID="ID_1126324374" MODIFIED="1465864171974" TEXT="Aufruf: freie Funktion"/>
-<node CREATED="1465864172514" ID="ID_523639016" MODIFIED="1465864180668" TEXT="delegiert auf Template"/>
-<node CREATED="1465864181193" ID="ID_214760095" MODIFIED="1465864192611" TEXT="explizite / regelbasierte Spezialisierung"/>
-<node CREATED="1465864193607" ID="ID_910823091" MODIFIED="1512926192124" TEXT="Problem: Storage f&#xfc;r die Closure">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1465864217628" ID="ID_234805162" MODIFIED="1465864228510" TEXT="typischerweise sind alles transiente Objekte"/>
-<node CREATED="1465864229170" ID="ID_1100042937" MODIFIED="1465864240501" TEXT="also mu&#xdf; die Closure als Wert-Objekt rausgegeben werden"/>
-<node CREATED="1472495487478" ID="ID_57266631" MODIFIED="1512926192125" TEXT="L&#xf6;sung...">
-<node CREATED="1472495496574" ID="ID_618531871" MODIFIED="1472495510056" TEXT="auto typed return value"/>
-<node CREATED="1472495510531" ID="ID_1366125392" MODIFIED="1472495513703" TEXT="keep in local scope"/>
-<node CREATED="1472495514203" ID="ID_1694911368" MODIFIED="1472495529197" TEXT="tightly integrate into ctor of DiffAplicator"/>
-</node>
-<node CREATED="1465864247152" ID="ID_1684145985" MODIFIED="1512926192125" TEXT="gesucht: elegantes API">
-<node CREATED="1472494557762" ID="ID_1916007342" MODIFIED="1472494575309" TEXT="DiffAplicator&lt;TargetTyp&gt;">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1472494413960" ID="ID_1460674703" MODIFIED="1472494571740" TEXT="Erweiterungspunkt f&#xfc;r ADL..."/>
-<node CREATED="1472494432219" ID="ID_1801329518" MODIFIED="1472494446981" TEXT="...wird vom ctor des Diff-Applikators verwendet"/>
-<node CREATED="1472494466926" ID="ID_1882750560" MODIFIED="1472494484296" TEXT="...und der wiederum greift nur"/>
-<node CREATED="1472494485388" ID="ID_1744987934" MODIFIED="1472494501141" TEXT="...wenn TreeDiffTraits definiert sind"/>
-<node CREATED="1472494501778" ID="ID_300920526" MODIFIED="1472494506323" TEXT="not too bad">
-<icon BUILTIN="ksmiletris"/>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1465860736044" ID="ID_40337378" MODIFIED="1561827465611" TEXT="Implementierung">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1472121965308" ID="ID_292673963" MODIFIED="1472121974646" TEXT="Verb delegiert an Mutator-Primitive"/>
-<node CREATED="1472121976018" ID="ID_421028989" MODIFIED="1472121995995" TEXT="Fehlerbehandlung anhand R&#xfc;ckgabewert dieser"/>
-<node CREATED="1472122015157" ID="ID_151735071" MODIFIED="1472122038334" TEXT="sinnvolle interne Fehler-Funktionen aufbauen"/>
-<node CREATED="1472141026525" ID="ID_671819323" MODIFIED="1512926192127" TEXT="Scope-Wechsel">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1472172154624" ID="ID_602990638" MODIFIED="1512926192127" TEXT="Zugang zum erzeugten Mutator....">
-<node CREATED="1472172310187" ID="ID_148408930" MODIFIED="1575133339222" TEXT="via buffer-Handle">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      erscheint mir die am wenigsten &#252;berraschende L&#246;sung.
-    </p>
-    <p>
-      und zwar per handle.get()
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1472172348526" ID="ID_1671229453" MODIFIED="1533608413996" TEXT="m&#xf6;gliche Alternativen">
-<node CREATED="1472172364204" ID="ID_261496162" MODIFIED="1575133339255" TEXT="Closure gibt TreeMutator&amp; zur&#xfc;ck">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      erscheint mir fehleranf&#228;llig und irref&#252;hrend f&#252;r den Nutzer der Schnittstelle.
-    </p>
-    <p>
-      Denn er mu&#223; zwar das Objekt in das Handle platzieren, dann aber auch noch einen Pointer zur&#252;ckgeben,
-    </p>
-    <p>
-      der dann auch noch NULL sein kann, zum Signalisieren von Fehlern.
-    </p>
-    <p>
-      Ich empfinde das als schlechten Stil
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_cancel"/>
-</node>
-<node CREATED="1472172467934" ID="ID_1258020411" MODIFIED="1575133339270" TEXT="ScopeManager-Interface erweitern">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      naja, das w&#228;re billig, aber auch wieder beliebig.
-    </p>
-    <p>
-      Es macht keinen Sinn vom API-Design her, sondern man m&#252;&#223;te es halt machen,
-    </p>
-    <p>
-      weil die Implementierung den Zeiger auf den geschachtelen sub-Mutator umsetzen mu&#223;.
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_cancel"/>
-</node>
-</node>
-</node>
-<node CREATED="1472172586703" ID="ID_608960091" MODIFIED="1512926192128" TEXT="pr&#xfc;fen">
-<node CREATED="1472172593710" ID="ID_1915451499" MODIFIED="1472172608024" TEXT="geschachtelter Scope mu&#xdf; beim Verlassen komplett abgearbeitet sein"/>
-<node CREATED="1472172608636" ID="ID_1263541514" MODIFIED="1472172634020" TEXT="wir steigen niemals &#xfc;ber den root-Scope hinaus auf"/>
-</node>
-<node CREATED="1472172651974" ID="ID_807127372" MODIFIED="1512926192130" TEXT="ins-Problem">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1472172658349" ID="ID_997769381" MODIFIED="1472172806077">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      die Diff-Sprache verlangt,
-    </p>
-    <p>
-      da&#223; vor dem &#214;ffnen des geschachtelten Scopes
-    </p>
-    <p>
-      dieser zumindest einmal per ins &quot;angelegt&quot; wurde.
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1472172711846" ID="ID_146912736" MODIFIED="1472172809794" TEXT="wir haben es hier mit objektwertigen Attributen zu tun">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1472172723853" ID="ID_1560317945" MODIFIED="1472172732503" TEXT="das ist ein sonderbarer Grenzfall"/>
-<node CREATED="1472172733307" ID="ID_26853749" MODIFIED="1472172753564" TEXT="man wird die normalerweise auf Impl-Ebene erzeugen"/>
-<node CREATED="1472172754136" ID="ID_297078058" MODIFIED="1472172765458" TEXT="ein INS hat dann nichts sinnvolles zu tun"/>
-<node CREATED="1472172772494" ID="ID_337827865" MODIFIED="1472172795138" TEXT="default-Implementierung absorbiert das INS stillschweigend">
-<icon BUILTIN="forward"/>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1465860740971" ID="ID_1662787747" MODIFIED="1512926192131" TEXT="Unit-Test">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_1662787747" ENDARROW="Default" ENDINCLINATION="114;0;" ID="Arrow_ID_1608349913" SOURCE="ID_1209021141" STARTARROW="None" STARTINCLINATION="114;0;"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1472122365079" ID="ID_1033283113" MODIFIED="1512926192131" TEXT="Aussagekr&#xe4;ftiges Beispiel-Diff">
-<node CREATED="1472122379548" ID="ID_270981817" MODIFIED="1472122384864" TEXT="sollte alle Features vorf&#xfc;hren"/>
-<node CREATED="1472122385380" ID="ID_773660909" MODIFIED="1472122391943" TEXT="sollte wichtige Grenzf&#xe4;lle aktivieren"/>
-<node CREATED="1472122394387" ID="ID_1262619176" MODIFIED="1472122409477" TEXT="sollte keine sinnlosen Operationen verlangen"/>
-</node>
-<node CREATED="1472122416040" ID="ID_644657664" MODIFIED="1575133339504" TEXT="Analog zu den Primitiven in TreeDiffBinding_test">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...das ist ein Versuch, den Code f&#252;r den Leser verst&#228;ndlich zu halten.
-    </p>
-    <p>
-      Die Idee ist, da&#223; es einen high-level Unit-Test gibt, der die gesamte Diff-Anwendung durchspielt
-    </p>
-    <p>
-      und dazu passend einen low-level Unit-Test, der analog die gleichen Operationen macht,
-    </p>
-    <p>
-      allerdings direkt auf dem TreeDiff-Interface durch Aufruf der passenden Primitiv-Operaionen.
-    </p>
-    <p>
-      Letztere m&#252;ssen f&#252;r jede Art von &quot;onion-layer&quot; (konkretes Binding) erneut implementiert
-    </p>
-    <p>
-      und daher auch jeweils eigens per Unit-Test abgedeckt werden.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1472122581698" ID="ID_1932054966" MODIFIED="1575133339521" TEXT="sehr komplexes Binding auf privaten Datentyp">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das ist hier sinnvoll. Das Binding sollte komplexer sein,
-    </p>
-    <p>
-      als in der Praxis auftretende Bindings. Warum? Weil letztere immer etwas einseitg sind
-    </p>
-    <p>
-      und damit Abk&#252;rzungen im Code-Pfad ausn&#252;tzen. Die Gefahr schlummert aber im Zusammenspiel
-    </p>
-    <p>
-      der konkreten Bindings mit mehreren &quot;onion layers&quot;!
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node CREATED="1465428871136" ID="ID_1015843161" MODIFIED="1512926192131" TEXT="integration mehrerer Bindungs-Layer">
-<node CREATED="1469918339329" ID="ID_1427674245" MODIFIED="1469918349660" TEXT="DiffVirtualisedApplication_test"/>
-<node CREATED="1469918356432" ID="ID_55400098" MODIFIED="1469918363427" TEXT="Selector korrekt integrieren">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-<node CREATED="1465428882150" ID="ID_1889489833" MODIFIED="1512926192132" TEXT="komplexer Integrationstest">
-<node CREATED="1469918339329" ID="ID_1209021141" MODIFIED="1472219629782" TEXT="DiffVirtualisedApplication_test">
-<arrowlink DESTINATION="ID_1662787747" ENDARROW="Default" ENDINCLINATION="114;0;" ID="Arrow_ID_1608349913" STARTARROW="None" STARTINCLINATION="114;0;"/>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850101524" HGAP="-22" ID="ID_780586600" MODIFIED="1512926192133" TEXT="TODO" VSHIFT="29">
-<font NAME="SansSerif" SIZE="14"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1458850122091" ID="ID_15024219" MODIFIED="1512926192134" TEXT="Collection-Binding: bessere Fehlermeldungen">
-<node CREATED="1458850141920" ID="ID_428365633" MODIFIED="1575133339634" TEXT="bei Signatur-Mismatch">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...denn es ist sehr verwirrend, welche Signatur denn nun die Lambdas haben m&#252;ssen
-    </p>
-  </body>
-</html></richcontent>
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_428365633" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1501436647" SOURCE="ID_338749301" STARTARROW="None" STARTINCLINATION="176;0;"/>
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1458850154575" ID="ID_725958518" MODIFIED="1575133339650" TEXT="wenn der Default-Matcher greift">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...denn es kann keinen Default-Matcher geben....
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1458850212503" ID="ID_321552356" MODIFIED="1472498583464" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1465860661877" ID="ID_942624903" MODIFIED="1472498127725" TEXT="Builder-API f&#xfc;r Attribut-Binding dokumentieren">
-<icon BUILTIN="button_ok"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465860672852" ID="ID_432641404" MODIFIED="1512926192134" TEXT="Variante zum Attribut-Binding, wobei die Attribut-ID als GenNode::ID gegeben ist">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1472498724880" ID="ID_1122881728" MODIFIED="1472498733392" TEXT="f&#xfc;r sp&#xe4;ter">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1472498734359" ID="ID_888090802" MODIFIED="1472498742262" TEXT="brauchen wir das wirklich">
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node CREATED="1460847222865" ID="ID_362820787" MODIFIED="1575133339750" TEXT="abstrakte operationale Semantik der Diff-Anwendung dokumentieren">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...sonst wird niemand Lambdas bereitstellen k&#246;nnen, oder gar Diff-Nachrichten erzeugen.
-    </p>
-    <p>
-      Das ist nun kein spezielles Problem der gew&#228;hlten Implementierungs-Technik, sondern r&#252;hrt daher,
-    </p>
-    <p>
-      da&#223; der Client hier eigentlich ein Protokoll implementieren mu&#223;.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1458850263688" ID="ID_555018476" MODIFIED="1512926192135" TEXT="Zusammenf&#xfc;hren">
-<node CREATED="1458850294083" ID="ID_393704697" MODIFIED="1458850302901" TEXT="der normale GenNode-Applikator"/>
-<node CREATED="1458850282285" ID="ID_435722140" MODIFIED="1512926192135" TEXT="Pr&#xfc;fen ob sinnvoll">
-<node CREATED="1458850328775" ID="ID_1736970011" MODIFIED="1458850333475" TEXT="Indirektionen"/>
-<node CREATED="1458850334110" ID="ID_1313695007" MODIFIED="1458850338898" TEXT="Speicherbedarf"/>
-<node CREATED="1458850339413" ID="ID_476682196" MODIFIED="1458850359702" TEXT="Aufwand bei der Verwendung"/>
-</node>
-<node CREATED="1458850306506" ID="ID_425272158" MODIFIED="1458850323212" TEXT="durch Binding f&#xfc;r Tree-Applikator ersetzen"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1461968295826" ID="ID_693317592" MODIFIED="1512926192135" TEXT="pr&#xfc;fen: soll das &#xbb;AFTER&#xab;-Verb aus der Sprache entfernt werden">
-<linktarget COLOR="#592379" DESTINATION="ID_693317592" ENDARROW="Default" ENDINCLINATION="577;0;" ID="Arrow_ID_1115282938" SOURCE="ID_1922580473" STARTARROW="Default" STARTINCLINATION="1205;231;"/>
-<icon BUILTIN="help"/>
-<node CREATED="1461968428712" ID="ID_565746001" MODIFIED="1461968442674" TEXT="es ist n&#xfc;tzlich f&#xfc;r handgeschriegbene Diffs"/>
-<node CREATED="1461968443334" ID="ID_1266765273" MODIFIED="1461968454521" TEXT="es vertr&#xe4;gt sich nicht mit gemischten Kindern"/>
-<node CREATED="1465428190234" ID="ID_1957591180" MODIFIED="1512926192136" TEXT="Kompromi&#xdf;">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_1957591180" ENDARROW="Default" ENDINCLINATION="-27;14;" ID="Arrow_ID_228215960" SOURCE="ID_310892577" STARTARROW="None" STARTINCLINATION="139;3;"/>
-<icon BUILTIN="idea"/>
-<node CREATED="1465428196730" ID="ID_117877138" MODIFIED="1465428204548" TEXT="belassen"/>
-<node CREATED="1465428205352" ID="ID_887510195" MODIFIED="1465428215635" TEXT="akzeptieren, da&#xdf; es nicht immer anwendbar ist"/>
-<node CREATED="1465428216271" ID="ID_1296901581" MODIFIED="1465428234145" TEXT="die generische Variante &quot;after Ref::END&quot; ist sehr gut"/>
-<node CREATED="1465428236860" ID="ID_339833424" MODIFIED="1465428248614" TEXT="speziell Attribut-Binding unterst&#xfc;tzt zur generische Variante"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1469545751885" ID="ID_660087752" MODIFIED="1469545906061" TEXT="Namensgebung f&#xfc;r generisches Mutator-Binding">
-<arrowlink COLOR="#7c4b8e" DESTINATION="ID_263708712" ENDARROW="Default" ENDINCLINATION="-438;877;" ID="Arrow_ID_774958535" STARTARROW="Default" STARTINCLINATION="2134;135;"/>
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node CREATED="1472216217388" HGAP="21" ID="ID_1810727202" MODIFIED="1512926192136" TEXT="Semantik der Diff-Sprache" VSHIFT="5">
-<node CREATED="1472216261102" ID="ID_1057680407" MODIFIED="1472216264937" TEXT="sinnvoll definiert"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472216265486" ID="ID_1774905589" MODIFIED="1512926192137" TEXT="sp&#xe4;ter re-evaluieren (Ticket #996)">
-<node CREATED="1472216306208" ID="ID_310892577" MODIFIED="1512926192137" TEXT="AFTER">
-<arrowlink DESTINATION="ID_1957591180" ENDARROW="Default" ENDINCLINATION="-27;14;" ID="Arrow_ID_228215960" STARTARROW="None" STARTINCLINATION="139;3;"/>
-<node CREATED="1473040688153" ID="ID_979711393" MODIFIED="1473040722530" TEXT="bleibt vorerst erhalten">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1473040705207" ID="ID_14067702" MODIFIED="1473040710378" TEXT="kann sinnvoll implementiert werden"/>
-<node CREATED="1473040711582" ID="ID_1480176374" MODIFIED="1473040717859" TEXT="ist sehr n&#xfc;tzlich">
-<icon BUILTIN="ksmiletris"/>
-</node>
-</node>
-<node CREATED="1472219973288" ID="ID_587190582" MODIFIED="1512926192139" TEXT="Ref::THIS">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1472220009699" ID="ID_1534445515" MODIFIED="1472220054293">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <i>wenn &#252;berhaupt, </i>dann im Matcher im Binding-Layer implementieren
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1473040485789" ID="ID_1621538037" MODIFIED="1575133340122" TEXT="nein: f&#xfc;hrt zu verworrener Implementierung bzw. ist unm&#xf6;glich">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...denn wir haben nun mehrere Layer,
-    </p>
-    <p>
-      und der Selector kann einfach anhand von Ref::THIS keine sinnvolle Entscheidung treffen.
-    </p>
-    <p>
-      Daher versuchen dann alle Layer dieses Element zu behandeln, oder gar keiner
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Und da der Selector <i>nur die Spec anschauen darf, </i>l&#228;&#223;t sich das auch nachher nicht mehr korrigieren
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Daher habe ich mich <b>entschlossen, dieses Sprachkonstrukt zu entfernen</b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1473040662653" ID="ID_397737711" MODIFIED="1473040680738">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <b>entfernt</b>, da schlechtes Design
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1472216312295" ID="ID_149667448" MODIFIED="1512926192140" TEXT="Ref::CHILD">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1472219981838" ID="ID_117724515" MODIFIED="1472219987506" TEXT="was genau soll das sein??"/>
-<node CREATED="1472219987983" ID="ID_555190066" MODIFIED="1472219997032" TEXT="was ist der Unterschied zu Ref::THIS"/>
-<node CREATED="1472219998405" ID="ID_1294425222" MODIFIED="1472220005255" TEXT="funktioniert das &#xfc;berhaupt noch??"/>
-<node CREATED="1473040662653" ID="ID_1838404392" MODIFIED="1473040680738">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <b>entfernt</b>, da schlechtes Design
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1458850387823" HGAP="19" ID="ID_415691337" MODIFIED="1512926192141" TEXT="allgemein" VSHIFT="13">
-<node CREATED="1458850397158" ID="ID_1336568549" MODIFIED="1512926192141" TEXT="GenNode">
-<node CREATED="1458850406396" ID="ID_1837583550" MODIFIED="1512926192141" TEXT="string-Repr&#xe4;sentation der Payload">
-<icon BUILTIN="hourglass"/>
-<node CREATED="1473352291785" ID="ID_1639951853" MODIFIED="1473352300715" TEXT="vorerst nicht ben&#xf6;tigt"/>
-<node CREATED="1473352306190" ID="ID_1647542723" MODIFIED="1473352310810" TEXT="w&#xe4;re besser da&#xdf; nicht"/>
-<node CREATED="1473352312206" ID="ID_1150422227" MODIFIED="1473352316377" TEXT="Entscheidung vertagt"/>
-</node>
-<node COLOR="#338800" CREATED="1458850422587" ID="ID_1552868803" MODIFIED="1458851592866" TEXT="Metafunktion f&#xfc;r m&#xf6;gliche Payload">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1458850437017" ID="ID_592865755" MODIFIED="1512926192142" TEXT="Planting-Handle">
-<node CREATED="1458850456134" ID="ID_1020391699" MODIFIED="1575133340337" TEXT="Zwischenschicht einziehen im TreeMutator">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      anscheinend nicht notwendig
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_cancel"/>
-</node>
-<node CREATED="1458850463389" ID="ID_769403943" MODIFIED="1473352257250" TEXT="Generische Impl herausl&#xf6;sen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850471228" ID="ID_167381938" MODIFIED="1473352333631" TEXT="Unit-Test hierf&#xfc;r">
-<icon BUILTIN="bell"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1473352396906" HGAP="-48" ID="ID_392196966" MODIFIED="1518487921086" TEXT="Integration" VSHIFT="25">
+<node COLOR="#338800" CREATED="1576203018747" FOLDED="true" HGAP="-50" ID="ID_645743424" MODIFIED="1576282432827" TEXT="Diff: Einbindung in das UI-Framework" VSHIFT="38">
+<edge COLOR="#5d7d78"/>
+<linktarget COLOR="#298c9e" DESTINATION="ID_645743424" ENDARROW="Default" ENDINCLINATION="-928;-33;" ID="Arrow_ID_653906070" SOURCE="ID_1903460265" STARTARROW="None" STARTINCLINATION="-2105;61;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1473352465473" ID="ID_158999012" MODIFIED="1518487921086" TEXT="in Tangible">
 <icon BUILTIN="button_ok"/>
@@ -34343,7 +31021,7 @@
 </node>
 <node CREATED="1475251507800" ID="ID_1645310973" MODIFIED="1518487921087" TEXT="wo/wie wird Diff-Nachricht behandelt">
 <icon BUILTIN="help"/>
-<node CREATED="1475355925880" ID="ID_464242009" MODIFIED="1575133340492" TEXT="...analog zur &quot;mark&quot;-Nachricht">
+<node CREATED="1475355925880" ID="ID_464242009" MODIFIED="1576282358009" TEXT="...analog zur &quot;mark&quot;-Nachricht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -34358,7 +31036,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1475250930756" ID="ID_509435943" MODIFIED="1518487921087" TEXT="wo steckt der Diff selber">
@@ -34390,7 +31069,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1475342135193" HGAP="31" ID="ID_336806935" MODIFIED="1525124215230" TEXT="Problem: Diff-Nachricht" VSHIFT="7">
+<node COLOR="#990000" CREATED="1475342135193" FOLDED="true" HGAP="31" ID="ID_336806935" MODIFIED="1576203487696" TEXT="Problem: Diff-Nachricht" VSHIFT="7">
 <arrowlink COLOR="#a7afc1" DESTINATION="ID_1363153586" ENDARROW="Default" ENDINCLINATION="931;-187;" ID="Arrow_ID_324877454" STARTARROW="Default" STARTINCLINATION="835;592;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -34542,7 +31221,7 @@
 <node CREATED="1475449491378" ID="ID_1309107114" MODIFIED="1475449505548" TEXT="f&#xfc;hre Spiel-Attribute und Kinder ein"/>
 <node CREATED="1475449507224" ID="ID_1783640184" MODIFIED="1512926192154" TEXT="Kinder">
 <node CREATED="1475449530565" ID="ID_284330532" MODIFIED="1475449531825" TEXT="collection von MockElm"/>
-<node CREATED="1475449532556" ID="ID_1804332542" MODIFIED="1575133341292" TEXT="MockElm ist noncopyable">
+<node CREATED="1475449532556" ID="ID_1804332542" MODIFIED="1576282358008" TEXT="MockElm ist noncopyable">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -34555,7 +31234,8 @@
       Der Nexus speichert n&#228;mlich eine direkte Referenz in der Routingtabelle
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1475449544379" ID="ID_1132064603" MODIFIED="1475449583284" TEXT="also nur per shared_ptr">
@@ -34566,157 +31246,10 @@
 <node CREATED="1475449594060" HGAP="27" ID="ID_1311933287" MODIFIED="1512926192155" TEXT="Typ" VSHIFT="14">
 <icon BUILTIN="help"/>
 <node CREATED="1475449959916" ID="ID_573697431" MODIFIED="1475449966244" TEXT="map&lt;string,string&gt;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475449611754" HGAP="33" ID="ID_1285123321" MODIFIED="1512926192157" TEXT="Grundsatzfrage: Attribut-Map" VSHIFT="1">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1475449611754" HGAP="33" ID="ID_275833424" MODIFIED="1576204191297" TEXT="Grundsatzfrage: Attribute-Manipulation per Map unterst&#xfc;tzen?" VSHIFT="1">
+<arrowlink COLOR="#ef6e6e" DESTINATION="ID_1285123321" ENDARROW="Default" ENDINCLINATION="-571;0;" ID="Arrow_ID_524729956" STARTARROW="None" STARTINCLINATION="886;42;"/>
+<linktarget COLOR="#c48c7d" DESTINATION="ID_275833424" ENDARROW="Default" ENDINCLINATION="-975;32;" ID="Arrow_ID_454192352" SOURCE="ID_789920101" STARTARROW="None" STARTINCLINATION="937;102;"/>
 <icon BUILTIN="help"/>
-<node CREATED="1475449654357" ID="ID_1802368116" MODIFIED="1475449659480" TEXT="Ordnung / Unordnung"/>
-<node CREATED="1475449660020" ID="ID_286191859" MODIFIED="1475449740005" TEXT="Diff geht von Listen-Ordnung aus">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1475449777532" ID="ID_476663339" MODIFIED="1575133341421" TEXT="Symptom: Compile-Fehler">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <ul>
-      <li>
-        Map hat kein emplace_back
-      </li>
-      <li>
-        Map hat kein back()
-      </li>
-    </ul>
-    <p>
-      Beides ist erst mal sinnvoll. Map hat zwar ein emplace, aber das f&#252;gt eben <i>irgendwo</i>&#160;ein
-    </p>
-    <p>
-      Und es gibt nicht sowas wie das &quot;zuletzt behandelte&quot; Element
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1475506967550" HGAP="42" ID="ID_1112268061" MODIFIED="1475507021278" TEXT="ist aber implementierbar" VSHIFT="8">
-<arrowlink COLOR="#9f96d9" DESTINATION="ID_1853473792" ENDARROW="Default" ENDINCLINATION="41;-121;" ID="Arrow_ID_503281678" STARTARROW="Default" STARTINCLINATION="1873;0;"/>
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-</node>
-<node CREATED="1475449719180" ID="ID_6178930" MODIFIED="1533608413999" TEXT="Sinnvoll das zu erweitern">
-<icon BUILTIN="help"/>
-<node CREATED="1475450034810" ID="ID_445949466" MODIFIED="1561827465612" TEXT="pro">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1475450042009" FOLDED="true" ID="ID_1941838908" MODIFIED="1561827483837" TEXT="man k&#xf6;nnte">
-<node CREATED="1475450050824" ID="ID_1660008285" MODIFIED="1475450053243" TEXT="ins"/>
-<node CREATED="1475450055775" ID="ID_1213643084" MODIFIED="1475450058698" TEXT="after::END"/>
-<node CREATED="1475450064470" ID="ID_754885592" MODIFIED="1475450069265" TEXT="assign / mutate"/>
-</node>
-<node CREATED="1475450148771" FOLDED="true" ID="ID_736367412" MODIFIED="1561827483837">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Reihenfolge
-    </p>
-    <p>
-      erhalten!
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1475450179591" ID="ID_793985703" MODIFIED="1475450197936" TEXT="dann sogar del"/>
-<node CREATED="1475450053927" ID="ID_1110207658" MODIFIED="1475450055018" TEXT="pick"/>
-</node>
-</node>
-<node CREATED="1475450038953" ID="ID_1285250844" MODIFIED="1561827465614" TEXT="con">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1475450285336" ID="ID_288261682" MODIFIED="1475450300712" TEXT="kein Schutz gegen sinnlose Operationen"/>
-<node CREATED="1475450229944" ID="ID_957217069" MODIFIED="1475450239042" TEXT="Reihenfolge ist Impl-Detail"/>
-<node CREATED="1475450240318" ID="ID_1993698586" MODIFIED="1575133341545" TEXT="Hashmap">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...hat eine &quot;zuf&#228;llige&quot; Reihenfolge, die von den Hash-Werten der gespeicherten Daten abh&#228;ngt.
-    </p>
-    <p>
-      Das bricht mit unserem grunds&#228;tzlichen Konzept der <b>kongruenten</b>&#160; Daten-Strukturen
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1475450272442" ID="ID_567969130" MODIFIED="1575133341561" TEXT="inkompatibel mit GenNode">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Ein Diff, das von einer ETD gezogen wurde,
-    </p>
-    <p>
-      l&#228;&#223;t sich nicht auf eine Map-Implementierung aufspielen
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-</node>
-</node>
-<node CREATED="1475506346525" ID="ID_574367406" MODIFIED="1533608414015" VSHIFT="6">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Entscheidung
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="yes"/>
-<node CREATED="1475506358863" ID="ID_120379432" MODIFIED="1475506391795" TEXT="wird nicht empfohlen">
-<font ITALIC="true" NAME="SansSerif" SIZE="13"/>
-</node>
-<node CREATED="1475506368078" ID="ID_1568414977" MODIFIED="1475506381941" TEXT="vollst&#xe4;ndigkeitshalber unterst&#xfc;tzt">
-<font NAME="SansSerif" SIZE="11"/>
-</node>
-<node CREATED="1475506411768" ID="ID_583086851" MODIFIED="1575133341643" TEXT="kann sinnvoll sein...">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...zum Beispiel wie grade hier, beim MockElm
-    </p>
-    <p>
-      das wird vermutlich niemals wirklich in einem vollen Diff-Zusammenhang gebraucht.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      Und dann ist unbestreitbar eine Map eine sehr einfache Implementierung
-    </p>
-    <p>
-      und auch im Diff-Applikator nicht wirklich schwierig zu unterst&#252;tzen
-    </p>
-  </body>
-</html></richcontent>
-<font NAME="SansSerif" SIZE="10"/>
-</node>
-<node COLOR="#338800" CREATED="1475506514203" HGAP="45" ID="ID_1183193114" MODIFIED="1561827465614" TEXT="Begr&#xfc;ndung" VSHIFT="23">
-<node CREATED="1475506528937" ID="ID_1971084550" MODIFIED="1475506538324" TEXT="es verletzt die Prinzipien"/>
-<node CREATED="1475506538983" ID="ID_1555995664" MODIFIED="1475506547491" TEXT="insofern aber wie Feld-Attribute auch"/>
-<node CREATED="1475506549886" ID="ID_275560362" MODIFIED="1475506558609" TEXT="eingeschr&#xe4;nkt unterst&#xfc;tzbar"/>
-<node CREATED="1475506559309" ID="ID_1767038604" MODIFIED="1475506896798" TEXT="Objekt -&gt; ETD -&gt; Objekt">
-<arrowlink COLOR="#807bce" DESTINATION="ID_1808149320" ENDARROW="Default" ENDINCLINATION="671;0;" ID="Arrow_ID_1677374853" STARTARROW="Default" STARTINCLINATION="994;0;"/>
-</node>
-</node>
-</node>
 </node>
 </node>
 </node>
@@ -34779,7 +31312,7 @@
 <node CREATED="1448659051823" ID="ID_1995941804" MODIFIED="1518487921087" TEXT="dezentral">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1448659059734" ID="ID_1682547207" MODIFIED="1518487921087" TEXT="im GUI-Kontext"/>
-<node CREATED="1448659079044" ID="ID_508900352" MODIFIED="1575133341984" TEXT="mu&#xdf; Session referenzieren">
+<node CREATED="1448659079044" ID="ID_508900352" MODIFIED="1576282358008" TEXT="mu&#xdf; Session referenzieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -34792,7 +31325,8 @@
       da im &#220;brigen das UI-Modell nur mit LUIDs und generischen Namen arbeitet
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -34869,7 +31403,7 @@
 <node CREATED="1448691264512" ID="ID_1193936433" MODIFIED="1512926192187" TEXT="InvocationTrail erstellen">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1450490467952" ID="ID_1453525628" MODIFIED="1450490480705" TEXT="verwendet zwei GenNode-bindings"/>
-<node CREATED="1450490481270" ID="ID_1603770702" MODIFIED="1575133342429" TEXT="fertig implementiert">
+<node CREATED="1450490481270" ID="ID_1603770702" MODIFIED="1576282358007" TEXT="fertig implementiert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -34879,7 +31413,8 @@
       ...was ich einen Monat sp&#228;ter schon wieder vergessen hatte...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1492442129540" ID="ID_284311341" MODIFIED="1492442138750" TEXT="Konzept wurde verworfen">
@@ -34913,7 +31448,7 @@
 <node CREATED="1448691343406" ID="ID_642235825" MODIFIED="1448691350558" TEXT="funktor"/>
 <node CREATED="1448691324304" ID="ID_1103199702" MODIFIED="1448691338522" TEXT="definiert Bezugs-Quellen"/>
 <node CREATED="1448691355340" ID="ID_724965495" MODIFIED="1448691465633" TEXT="liefert Record&lt;GenNode&gt;"/>
-<node CREATED="1452560897720" ID="ID_1869468443" MODIFIED="1575133342687" TEXT="vorerst noch nicht impl...">
+<node CREATED="1452560897720" ID="ID_1869468443" MODIFIED="1576282358007" TEXT="vorerst noch nicht impl...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -34941,14 +31476,15 @@
       das reicht f&#252;r die erste Integrationsrunde v&#246;llig aus
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node CREATED="1492443650460" ID="ID_223885519" MODIFIED="1512926192189" TEXT="einfacher direkter Aufruf">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1492443656859" ID="ID_1242818576" MODIFIED="1492443663663" TEXT="Tangible / Bus-Term"/>
-<node CREATED="1492443664602" ID="ID_263362527" MODIFIED="1575133342727" TEXT="reine Command-ID">
+<node CREATED="1492443664602" ID="ID_263362527" MODIFIED="1576282358006" TEXT="reine Command-ID">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -34958,7 +31494,8 @@
       Instanz-Management ist automatisch
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1492443693582" ID="ID_1398931015" MODIFIED="1492443713695" TEXT="Argumente direkt in diff::Record einpacken"/>
 <node CREATED="1492443715587" ID="ID_1695168160" MODIFIED="1492443719574" TEXT="dieser wird durchgereicht"/>
@@ -35332,7 +31869,7 @@
 </node>
 <node CREATED="1481413436529" ID="ID_195971284" MODIFIED="1518487921090" TEXT="Shutdown des CoreService">
 <node CREATED="1481413462638" ID="ID_485427993" MODIFIED="1518487921090" TEXT="Problem: Backlink zum Nexus"/>
-<node CREATED="1481413470268" ID="ID_688303898" MODIFIED="1575133345585" TEXT="Nexus ist zu dem Zeitpunkt schon destruiert">
+<node CREATED="1481413470268" ID="ID_688303898" MODIFIED="1576282358006" TEXT="Nexus ist zu dem Zeitpunkt schon destruiert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35357,7 +31894,8 @@
       denn hier nun l&#228;uft tats&#228;chlicher Code aus dem Destruktor heraus!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1481413489290" ID="ID_24882673" MODIFIED="1518487921090" TEXT="folglich l&#xe4;uft nur noch die Impl vom BusTerm"/>
 <node CREATED="1481413520326" ID="ID_471345968" MODIFIED="1518487921090" TEXT="Endlosschleife (ping-pong)">
@@ -35367,7 +31905,7 @@
 <linktarget COLOR="#426895" DESTINATION="ID_269084554" ENDARROW="Default" ENDINCLINATION="36;87;" ID="Arrow_ID_708633830" SOURCE="ID_354799236" STARTARROW="None" STARTINCLINATION="369;0;"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1481414032482" ID="ID_1121261163" MODIFIED="1518487921090" TEXT="upstream und nicht upstream"/>
-<node CREATED="1481414149018" ID="ID_1708781872" MODIFIED="1575133345666" TEXT="kann Reihenfolge nicht etablieren">
+<node CREATED="1481414149018" ID="ID_1708781872" MODIFIED="1576282358005" TEXT="kann Reihenfolge nicht etablieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35383,12 +31921,13 @@
       &#252;ber den Core-Service, der Nexus nach dem Nexus....
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1481414420406" ID="ID_559357688" MODIFIED="1518487921090" TEXT="erschwerend...">
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1481414434148" ID="ID_333480677" MODIFIED="1518487921090" TEXT="BusTerm ist stateless"/>
-<node CREATED="1481414477766" ID="ID_695637715" MODIFIED="1575133345710" TEXT="soll auch so bleiben">
+<node CREATED="1481414477766" ID="ID_695637715" MODIFIED="1576282358005" TEXT="soll auch so bleiben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35398,7 +31937,8 @@
       ich will nicht damit anfangen, da&#223; man einen Zeiger umsetzen kann....
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -35439,7 +31979,7 @@
 <node CREATED="1453546264638" ID="ID_975821244" MODIFIED="1518487921090" TEXT="Test-Nexus">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1453546268998" ID="ID_1692848170" MODIFIED="1575133345889" TEXT="Event-Log">
+<node CREATED="1453546268998" ID="ID_1692848170" MODIFIED="1576282358004" TEXT="Event-Log">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35457,7 +31997,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1535815195338" ID="ID_1743938908" MODIFIED="1535815207849" TEXT="naive Implementierung">
 <icon BUILTIN="button_ok"/>
@@ -35465,7 +32006,7 @@
 <node COLOR="#338800" CREATED="1535815210288" ID="ID_1041148737" MODIFIED="1561827465667" TEXT="Problem: kein wirkliches Backtracking">
 <linktarget COLOR="#80b3ba" DESTINATION="ID_1041148737" ENDARROW="Default" ENDINCLINATION="-1705;-7489;" ID="Arrow_ID_1257144480" SOURCE="ID_493114230" STARTARROW="None" STARTINCLINATION="838;114;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1535835597691" ID="ID_218241863" MODIFIED="1575133345937" TEXT="wird relevant bei Richtungs-Wechsel">
+<node CREATED="1535835597691" ID="ID_218241863" MODIFIED="1576282358004" TEXT="wird relevant bei Richtungs-Wechsel">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35481,7 +32022,8 @@
       match(&quot;a&quot;).after(&quot;b&quot;) scheitert, weil sich die Suche am ersten &quot;a&quot; festbei&#223;t.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1535835709996" ID="ID_239175550" MODIFIED="1535835723893" TEXT="wir brauchen zwingend eine Art Stack">
@@ -35503,7 +32045,7 @@
 <arrowlink COLOR="#3eccac" DESTINATION="ID_1665477644" ENDARROW="Default" ENDINCLINATION="-4110;-2852;" ID="Arrow_ID_1163013232" STARTARROW="None" STARTINCLINATION="1631;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1536441983485" ID="ID_330124350" MODIFIED="1575133346085" TEXT="Warnung: anonymous namespace">
+<node CREATED="1536441983485" ID="ID_330124350" MODIFIED="1576282358003" TEXT="Warnung: anonymous namespace">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35549,7 +32091,8 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;^~~~~~~~~~
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -35558,7 +32101,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548830035" HGAP="5" ID="ID_1295711115" MODIFIED="1518487921090" TEXT="Nutzen" VSHIFT="17">
 <icon BUILTIN="bell"/>
 <node CREATED="1485548856639" ID="ID_1677281474" MODIFIED="1518487921090" TEXT="spezifische Aktionen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" ID="ID_826011549" MODIFIED="1575133346130" TEXT="Problem: globale Aktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1485548894522" ID="ID_826011549" MODIFIED="1576282358002" TEXT="Problem: globale Aktionen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35582,7 +32125,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#824f68" DESTINATION="ID_826011549" ENDARROW="Default" ENDINCLINATION="-906;-1187;" ID="Arrow_ID_1373278707" SOURCE="ID_1122969153" STARTARROW="Default" STARTINCLINATION="877;262;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#338800" CREATED="1485555902731" ID="ID_1913236669" MODIFIED="1518487921090" TEXT="#1070 how to bind session commands into UI actions">
@@ -35599,7 +32143,7 @@
 <arrowlink COLOR="#a9acc1" DESTINATION="ID_143203937" ENDARROW="Default" ENDINCLINATION="115;-2033;" ID="Arrow_ID_136706418" STARTARROW="None" STARTINCLINATION="1656;0;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1502452875447" ID="ID_1363153586" MODIFIED="1518487921090" TEXT="MutationMessage">
+<node CREATED="1502452875447" ID="ID_1363153586" MODIFIED="1576203487696" TEXT="MutationMessage">
 <linktarget COLOR="#a7afc1" DESTINATION="ID_1363153586" ENDARROW="Default" ENDINCLINATION="931;-187;" ID="Arrow_ID_324877454" SOURCE="ID_336806935" STARTARROW="Default" STARTINCLINATION="835;592;"/>
 <node CREATED="1502452903075" ID="ID_726723452" MODIFIED="1518487921090" TEXT="abstrahierter Iterator">
 <node CREATED="1502453110640" ID="ID_1024081141" MODIFIED="1518487921090" TEXT="IterSource-Interface"/>
@@ -35616,7 +32160,7 @@
 <node CREATED="1485548878292" ID="ID_49934573" MODIFIED="1518487921090" TEXT="Broadcast"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1453545812389" HGAP="43" ID="ID_202253849" MODIFIED="1575133346381" TEXT="Core-Services" VSHIFT="2">
+<node COLOR="#435e98" CREATED="1453545812389" HGAP="43" ID="ID_202253849" MODIFIED="1576282358002" TEXT="Core-Services" VSHIFT="2">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35629,11 +32173,12 @@
       Implementierung der real-world-Variante fehlt!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#a9b4c1" DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-197;638;" ID="Arrow_ID_1686519160" STARTARROW="Default" STARTINCLINATION="-83;-1020;"/>
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="go"/>
-<node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1575133346398" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">
+<node CREATED="1453545875627" ID="ID_1411740156" MODIFIED="1576282358001" TEXT="Definition &#xbb;Zentral-Dienste&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35649,7 +32194,8 @@
       wie Session- und State-Managment, Commands etc.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1453545968166" ID="ID_399884859" MODIFIED="1561827465670" TEXT="Command-Handler">
 <icon BUILTIN="button_ok"/>
@@ -35940,7 +32486,7 @@
   </body>
 </html></richcontent>
 <node CREATED="1488676238120" ID="ID_62079120" MODIFIED="1518487921091" TEXT="da an ein Control/Interface-System gebunden"/>
-<node CREATED="1488676280459" ID="ID_800780235" MODIFIED="1575133347670" TEXT="ist vermutlich keine gute Idee">
+<node CREATED="1488676280459" ID="ID_800780235" MODIFIED="1576282358001" TEXT="ist vermutlich keine gute Idee">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -35956,7 +32502,8 @@
       und ebenso die Gesten abstrahieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1488676343170" ID="ID_1624806724" MODIFIED="1518487921091" TEXT="besser? InteractionStateManager == Geste">
@@ -35973,7 +32520,7 @@
 <node CREATED="1488674520524" ID="ID_895059689" MODIFIED="1518487921091" TEXT="Prototyp-Pattern">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1488674528035" ID="ID_1084922722" MODIFIED="1575133347752">
+<node CREATED="1488674528035" ID="ID_1084922722" MODIFIED="1576282358000">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -36001,7 +32548,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1488674659521" ID="ID_1283697108" MODIFIED="1561827465687" TEXT="Problem: Instanz-Management">
 <icon BUILTIN="messagebox_warning"/>
@@ -36016,7 +32564,7 @@
 <node CREATED="1488674807716" ID="ID_1220416942" MODIFIED="1518487921091" TEXT="ist das ein Problem?">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1488674815867" ID="ID_417989611" MODIFIED="1575133347863" TEXT="eigentlich nicht">
+<node CREATED="1488674815867" ID="ID_417989611" MODIFIED="1576282357999" TEXT="eigentlich nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36035,7 +32583,8 @@
       sondern gegen eine Abstraction (Command), die eigens daf&#252;r geschaffen wurde
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1488674905160" ID="ID_1688143285" MODIFIED="1518487921091" TEXT="ungutes Gef&#xfc;hl">
@@ -36092,7 +32641,7 @@
 </node>
 <node COLOR="#338800" CREATED="1488675800668" ID="ID_260870361" MODIFIED="1561827465694" TEXT="wer h&#xe4;lt die Instanz (am Leben)?">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1488676827432" ID="ID_1354771185" MODIFIED="1575133348214" TEXT="Problem: air-Gap">
+<node CREATED="1488676827432" ID="ID_1354771185" MODIFIED="1576282357999" TEXT="Problem: air-Gap">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36110,13 +32659,14 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1488677586744" ID="ID_1077384395" MODIFIED="1488677612409" TEXT="AUA: Zwang zum Benennen">
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
-<node CREATED="1488676941240" ID="ID_403164604" MODIFIED="1575133348245" TEXT="im Proc-Dispatcher kein Problem">
+<node CREATED="1488676941240" ID="ID_403164604" MODIFIED="1576282357998" TEXT="im Proc-Dispatcher kein Problem">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36126,7 +32676,8 @@
       ...da die DispatcherQueue direkt Command-Objekte (=frontend handle) speichert
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1488677212907" ID="ID_1525612446" MODIFIED="1488936784410" TEXT="Idee: im InteractionStateManager">
 <icon BUILTIN="button_cancel"/>
@@ -36135,7 +32686,7 @@
 <node COLOR="#c15a5d" CREATED="1488677333066" ID="ID_182292267" MODIFIED="1488677344667" TEXT="Aber">
 <node CREATED="1488677346473" ID="ID_712110821" MODIFIED="1488677350100" TEXT="air-Gap"/>
 <node CREATED="1488677350640" ID="ID_901346570" MODIFIED="1488677370377" TEXT="Ausf&#xfc;hrung im Dispatcher erst sp&#xe4;ter"/>
-<node COLOR="#338800" CREATED="1488677418087" ID="ID_644949863" MODIFIED="1575133348372" TEXT="ist doch kein Problem">
+<node COLOR="#338800" CREATED="1488677418087" ID="ID_644949863" MODIFIED="1576282357998" TEXT="ist doch kein Problem">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36154,7 +32705,8 @@
       und wenn es stirbt, dann stirbt es halt...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -36174,7 +32726,7 @@
 <node CREATED="1492443917423" ID="ID_1829369544" MODIFIED="1492443926330" TEXT="an ProcDispatcher-Loop gebunden"/>
 <node CREATED="1492443926806" ID="ID_1117512587" MODIFIED="1492443933129" TEXT="lebt und stirbt mit der Session"/>
 <node CREATED="1492443933813" ID="ID_1185852649" MODIFIED="1492443940760" TEXT="hat eigene lokale Hashtable"/>
-<node CREATED="1492443941260" ID="ID_870719620" MODIFIED="1575133348503" TEXT="unterst&#xfc;tzt einfachen Fallback">
+<node CREATED="1492443941260" ID="ID_870719620" MODIFIED="1576282357997" TEXT="unterst&#xfc;tzt einfachen Fallback">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36184,7 +32736,8 @@
       aufruf direkt mit Command-ID -&gt; erzeugt automatisch eine Klon-Kopie
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1488936129180" ID="ID_62638556" MODIFIED="1488936137127" TEXT="hand-over">
@@ -36247,7 +32800,7 @@
 <node CREATED="1488940222591" ID="ID_1071611814" MODIFIED="1488940241768" TEXT="UI-Element fragt InteractionStateManager: &quot;kann dieses Command ausgef&#xfc;hrt werden&quot;?"/>
 <node CREATED="1488940300116" ID="ID_172216455" MODIFIED="1488940331244" TEXT="UI-Element registriert sich beim InteractionStateManager (als Observer)"/>
 <node CREATED="1488940435601" ID="ID_1906295137" MODIFIED="1492442861300" TEXT="InteractionState befriedigt die Parameter aus dem aktuellen Interaktions-Kontext"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488940469365" ID="ID_130562988" MODIFIED="1575133348925" TEXT="TODO: wie werden die Parameter konkret &#xfc;bergeben?">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488940469365" ID="ID_130562988" MODIFIED="1576282357997" TEXT="TODO: wie werden die Parameter konkret &#xfc;bergeben?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36263,13 +32816,14 @@
       automatisch die Kontext-Accessor-Ausdr&#252;cke ausgewertet werden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1488940519518" ID="ID_1875791797" MODIFIED="1488940533992" TEXT="bei n&#xe4;chster Anfrage wird CmdInstanceManager daher neue Instanz anlegen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1488677859619" HGAP="-15" ID="ID_827179653" MODIFIED="1575133348957" TEXT="Problem: Service-Zugang" VSHIFT="24">
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1488677859619" HGAP="-15" ID="ID_827179653" MODIFIED="1576282357996" TEXT="Problem: Service-Zugang" VSHIFT="24">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36285,12 +32839,13 @@
       mit dem InteractionDirector verdrahtet sein mu&#223;!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#9f5680" DESTINATION="ID_850989325" ENDARROW="Default" ENDINCLINATION="211;189;" ID="Arrow_ID_1007188680" STARTARROW="None" STARTINCLINATION="912;-974;"/>
 <linktarget COLOR="#758ba4" DESTINATION="ID_827179653" ENDARROW="Default" ENDINCLINATION="173;83;" ID="Arrow_ID_57938013" SOURCE="ID_1621107057" STARTARROW="None" STARTINCLINATION="384;-135;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1488936835940" ID="ID_1322149090" MODIFIED="1575133348974" TEXT="separates Problem">
+<node CREATED="1488936835940" ID="ID_1322149090" MODIFIED="1576282357996" TEXT="separates Problem">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36303,9 +32858,10 @@
       und auch nichts mit der Trennung zwischen Layern und Subsystemen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node COLOR="#435e98" CREATED="1488936840059" ID="ID_1305671938" MODIFIED="1575133348992" TEXT="generisches Problem">
+<node COLOR="#435e98" CREATED="1488936840059" ID="ID_1305671938" MODIFIED="1576282357995" TEXT="generisches Problem">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36318,13 +32874,14 @@
       aka DependencyInjection + Lifecycle Management
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#b6829b" DESTINATION="ID_1359158691" ENDARROW="Default" ENDINCLINATION="1134;-1646;" ID="Arrow_ID_927211935" STARTARROW="None" STARTINCLINATION="1359;916;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1488937419308" ID="ID_994813744" MODIFIED="1518487921092" TEXT="lib::Depend ausbauen"/>
 <node CREATED="1488937436890" ID="ID_1184288068" MODIFIED="1518487921092" TEXT="kann auf sp&#xe4;ter vertagt werden"/>
 <node CREATED="1488937424996" ID="ID_1712367280" MODIFIED="1518487921092" TEXT="vorerst eigenes Front-End verwenden"/>
-<node CREATED="1488937449896" ID="ID_1352702920" MODIFIED="1575133349069" TEXT="Idee klar">
+<node CREATED="1488937449896" ID="ID_1352702920" MODIFIED="1576282357995" TEXT="Idee klar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36345,7 +32902,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#338800" CREATED="1538868884651" ID="ID_92705586" MODIFIED="1538868888699" TEXT="gel&#xf6;st">
@@ -36358,7 +32916,7 @@
 <node CREATED="1488674268407" ID="ID_284516869" MODIFIED="1518487921092" TEXT="Parameter">
 <node CREATED="1488937542963" ID="ID_853531623" MODIFIED="1518487921092" TEXT="passiert im InvocationStateManager"/>
 <node CREATED="1488937551514" ID="ID_1024843173" MODIFIED="1518487921092" TEXT="es k&#xf6;nnte Binde-Regeln geben"/>
-<node CREATED="1488937996901" ID="ID_1000532365" MODIFIED="1575133349141" TEXT="L&#xf6;sungsweg vom Command vorkonfiguriert">
+<node CREATED="1488937996901" ID="ID_1000532365" MODIFIED="1576282357994" TEXT="L&#xf6;sungsweg vom Command vorkonfiguriert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36371,10 +32929,11 @@
       es k&#246;nnte auch ausreichen, einfach die passende InteractionStateManager-Impl zu verwenden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1488937565632" ID="ID_1990212985" MODIFIED="1575133349159" TEXT="dem User (UI-Element) ist das egal">
+<node CREATED="1488937565632" ID="ID_1990212985" MODIFIED="1576282357994" TEXT="dem User (UI-Element) ist das egal">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36384,11 +32943,12 @@
       denn InteractionStateManager ist ein <b>Interface</b>!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1488937651021" ID="ID_1956085726" MODIFIED="1518487921092" TEXT="Binde-Muster">
 <icon BUILTIN="idea"/>
-<node CREATED="1488937670778" ID="ID_696645875" MODIFIED="1575133349206" TEXT="fest hinterlegte Eintit&#xe4;t einsetzen">
+<node CREATED="1488937670778" ID="ID_696645875" MODIFIED="1576282357993" TEXT="fest hinterlegte Eintit&#xe4;t einsetzen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36407,9 +32967,10 @@
       Das k&#246;nnte ein <i>Advice</i>&#160;sein
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1488937682649" ID="ID_1090053275" MODIFIED="1575133349225" TEXT="aktuelles Element (mit Typ-Check)">
+<node CREATED="1488937682649" ID="ID_1090053275" MODIFIED="1576282357993" TEXT="aktuelles Element (mit Typ-Check)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36428,9 +32989,10 @@
       In diesem Fall wird das Command <i>enabled</i>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1488937711053" ID="ID_586793367" MODIFIED="1575133349242" TEXT="partial application">
+<node CREATED="1488937711053" ID="ID_586793367" MODIFIED="1576282357992" TEXT="partial application">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36440,9 +33002,10 @@
       eine Argumentliste mit mehreren Parametern wir Schritt f&#252;r Schritt geschlossen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1488937724867" ID="ID_231519502" MODIFIED="1575133349259" TEXT="Ordnung nach Scope">
+<node CREATED="1488937724867" ID="ID_231519502" MODIFIED="1576282357991" TEXT="Ordnung nach Scope">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36455,7 +33018,8 @@
       wird das gem&#228;&#223; Scope &quot;n&#228;chstgelegne&quot; genommen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1488937933566" ID="ID_170827087" MODIFIED="1518487921092" TEXT="das sind komplexe Pl&#xe4;ne">
@@ -36561,7 +33125,7 @@
 </node>
 <node COLOR="#338800" CREATED="1491008079676" ID="ID_1262786130" MODIFIED="1491618841600" TEXT="Test">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1491008088699" ID="ID_1501876595" MODIFIED="1575133350080" TEXT="Basisfall l&#xe4;uft noch nicht">
+<node COLOR="#338800" CREATED="1491008088699" ID="ID_1501876595" MODIFIED="1576282357991" TEXT="Basisfall l&#xe4;uft noch nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36571,12 +33135,13 @@
       die Instanz kommt nicht in der Fixture-Queue an
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1491008118695" ID="ID_1595821007" MODIFIED="1491618830886" TEXT="Invocation abdecken">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1491498978878" ID="ID_1001760576" MODIFIED="1575133350112" TEXT="nicht direkt">
+<node CREATED="1491498978878" ID="ID_1001760576" MODIFIED="1576282357991" TEXT="nicht direkt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36589,9 +33154,10 @@
       geh&#246;rt nicht zum Thema &quot;Instanz-Management&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1491499005954" ID="ID_1944400975" MODIFIED="1575133350152" TEXT="aber im Hinblick auf den Lebenszyklus">
+<node CREATED="1491499005954" ID="ID_1944400975" MODIFIED="1576282357990" TEXT="aber im Hinblick auf den Lebenszyklus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36607,7 +33173,8 @@
       schon &quot;in der Mache ist&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1491008124550" ID="ID_249252999" MODIFIED="1491618833169" TEXT="Duplikate abdecken">
@@ -36627,7 +33194,7 @@
 <node CREATED="1491753058620" ID="ID_1772710050" MODIFIED="1491753078866" TEXT="nicht thradsafe">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1491753170924" ID="ID_1947747818" MODIFIED="1575133350270" TEXT="Command-Zugriff ist by value">
+<node CREATED="1491753170924" ID="ID_1947747818" MODIFIED="1576282357989" TEXT="Command-Zugriff ist by value">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36655,7 +33222,8 @@
       neues Command-Objekt kopiert wird. Was allerdings den RefCount erh&#246;ht.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1491753132377" ID="ID_1441469124" MODIFIED="1491753156451" TEXT="m&#xfc;&#xdf;te daf&#xfc;r direkt auf die CommandRegistry zugreifen">
 <icon BUILTIN="idea"/>
@@ -36667,7 +33235,7 @@
 <node CREATED="1491753337438" ID="ID_1228083262" MODIFIED="1491753342636" TEXT="KISS">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1491753354116" ID="ID_1070880433" MODIFIED="1575133350329" TEXT="Bus + CommandHandler + GenNode">
+<node CREATED="1491753354116" ID="ID_1070880433" MODIFIED="1576282357989" TEXT="Bus + CommandHandler + GenNode">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36677,7 +33245,8 @@
       aber sich mit einem Refcount verr&#252;ckt machen.....
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
@@ -36689,7 +33258,7 @@
 <node CREATED="1491659191155" ID="ID_586991718" MODIFIED="1491659216131" TEXT="Nutzung des Instance-Managers ist optional"/>
 <node CREATED="1491659194283" ID="ID_1169808852" MODIFIED="1491659203949" TEXT="direkter Zugriff auf Commands bleibt offen"/>
 <node CREATED="1491659224630" ID="ID_837055372" MODIFIED="1491659238608" TEXT="Entscheidung anhand der Command-ID"/>
-<node CREATED="1491694300867" ID="ID_1838809343" MODIFIED="1575133350436" TEXT="Festlegung: CommandID wird als Symbol entgegengenommen">
+<node CREATED="1491694300867" ID="ID_1838809343" MODIFIED="1576282357988" TEXT="Festlegung: CommandID wird als Symbol entgegengenommen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36705,9 +33274,10 @@
       mithin in der GenNode::ID
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1491659382161" ID="ID_948768193" MODIFIED="1575133350453" TEXT="Performance: maybeGet">
+<node CREATED="1491659382161" ID="ID_948768193" MODIFIED="1576282357988" TEXT="Performance: maybeGet">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36729,7 +33299,8 @@
       in der globalen Registry
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1491702872058" ID="ID_487194706" MODIFIED="1491702875613" TEXT="keine gute Idee"/>
@@ -36768,7 +33339,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1491692990840" ID="ID_1200979620" MODIFIED="1491692995939" TEXT="ziemlich indirekt"/>
 <node CREATED="1491692996639" ID="ID_1249742943" MODIFIED="1491693005081" TEXT="double-dispatch"/>
-<node CREATED="1491693382706" ID="ID_1886288474" MODIFIED="1575133350772" TEXT="CommandHandler hat keinen R&#xfc;ckgabewert">
+<node CREATED="1491693382706" ID="ID_1886288474" MODIFIED="1576282357987" TEXT="CommandHandler hat keinen R&#xfc;ckgabewert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36781,9 +33352,10 @@
       und die Form der ID-Dokoration zur Konvention machen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1491693197435" ID="ID_1151359036" MODIFIED="1575133350790" TEXT="InteractionState ist kein Tangible">
+<node CREATED="1491693197435" ID="ID_1151359036" MODIFIED="1576282357987" TEXT="InteractionState ist kein Tangible">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36808,9 +33380,10 @@
       Das wollte ich <i>genau nicht</i>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1491693246284" ID="ID_553376017" MODIFIED="1575133350809">
+<node CREATED="1491693246284" ID="ID_553376017" MODIFIED="1576282357986">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -36839,7 +33412,8 @@
       da es letztlich nur darum geht ein <i>ohnehin &#246;ffentliches</i>&#160; Interface aufzurufen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -36861,7 +33435,7 @@
 </node>
 <node CREATED="1492293359944" ID="ID_1367582526" MODIFIED="1492293429410" TEXT="Konsequenzen">
 <node CREATED="1492293430689" ID="ID_1472205001" MODIFIED="1492293430689" TEXT="weitgehender Verzicht auf Konsistenzpr&#xfc;fungen"/>
-<node CREATED="1492293588400" ID="ID_1878334690" MODIFIED="1575133351004" TEXT="Binden und Dispatch m&#xfc;ssen kombiniert werden">
+<node CREATED="1492293588400" ID="ID_1878334690" MODIFIED="1576282357985" TEXT="Binden und Dispatch m&#xfc;ssen kombiniert werden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36874,7 +33448,8 @@
       und unsinnigerweise aufwendig
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1492293433222" ID="ID_1665333497" MODIFIED="1492293442272" TEXT="Registry k&#xf6;nnte l&#xe4;ngerfristig wegfallen"/>
 </node>
@@ -37049,7 +33624,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1492095433567" HGAP="69" ID="ID_1208499974" MODIFIED="1575133352002" TEXT="DSL schaffen" VSHIFT="1">
+<node CREATED="1492095433567" HGAP="69" ID="ID_1208499974" MODIFIED="1576282357985" TEXT="DSL schaffen" VSHIFT="1">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37067,7 +33642,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1492095437190" ID="ID_491978759" MODIFIED="1492095481564" TEXT="Wunsch: access(ID).&lt;operation&gt;(args)"/>
 <node CREATED="1492096317382" ID="ID_554292510" MODIFIED="1492096319497" TEXT="m&#xf6;glich">
@@ -37129,7 +33705,7 @@
 </node>
 <node CREATED="1492099456649" HGAP="39" ID="ID_1984335926" MODIFIED="1492099477994" TEXT="Konsequenzen" VSHIFT="10">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1492099466079" ID="ID_1013112793" MODIFIED="1575133352467" TEXT="gentle degradation">
+<node CREATED="1492099466079" ID="ID_1013112793" MODIFIED="1576282357984" TEXT="gentle degradation">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37148,7 +33724,8 @@
       und mit einfachen, direkt gegebenen Objekten
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1492099579824" ID="ID_727878406" MODIFIED="1492099585163" TEXT="CommandDef-DSL erweitern">
 <node CREATED="1492099587359" ID="ID_453414313" MODIFIED="1492099599513" TEXT="mu&#xdf; Argument-Rollen auszeichnen k&#xf6;nnen"/>
@@ -37223,7 +33800,7 @@
 <node CREATED="1489544725860" ID="ID_1860103561" MODIFIED="1518487921093" TEXT="d.h. aktiviert"/>
 <node CREATED="1489544826383" ID="ID_1190793385" MODIFIED="1518487921093" TEXT="zwei verschiedene Effekte">
 <icon BUILTIN="idea"/>
-<node CREATED="1489544836757" ID="ID_1364306635" MODIFIED="1575133353017" TEXT="Ausf&#xfc;hrung abweisen">
+<node CREATED="1489544836757" ID="ID_1364306635" MODIFIED="1576282357984" TEXT="Ausf&#xfc;hrung abweisen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37236,9 +33813,10 @@
       (Beispiel &quot;in-point fehlt&quot;)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1489544910395" ID="ID_909938815" MODIFIED="1575133353043" TEXT="enable Action">
+<node CREATED="1489544910395" ID="ID_909938815" MODIFIED="1576282357983" TEXT="enable Action">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37254,7 +33832,8 @@
       aber von einem externen State-Change getriggert wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -37280,7 +33859,7 @@
 <node CREATED="1491005071634" ID="ID_178338289" MODIFIED="1492443389733" TEXT="zur Kl&#xe4;rung">
 <icon BUILTIN="bell"/>
 <node CREATED="1491005078409" ID="ID_1515823316" MODIFIED="1492391288793" TEXT="...mu&#xdf; ich wissen, wie newInstance verwendet wird"/>
-<node CREATED="1491005491226" ID="ID_1986906306" MODIFIED="1575133353248" TEXT="und das h&#xe4;ngt von InvocationTrail ab">
+<node CREATED="1491005491226" ID="ID_1986906306" MODIFIED="1576282357983" TEXT="und das h&#xe4;ngt von InvocationTrail ab">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37293,7 +33872,8 @@
       Insofern l&#246;st sich dieser Knoten langsam
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1492391213458" ID="ID_1535150206" MODIFIED="1492391288793" TEXT="Differenzierung">
@@ -37322,7 +33902,7 @@
 </node>
 <node CREATED="1491494748185" ID="ID_1589354901" MODIFIED="1518487921093" TEXT="Instanzen registrieren">
 <icon BUILTIN="help"/>
-<node CREATED="1491494779796" ID="ID_1437580350" MODIFIED="1575133353346" TEXT="oder nur Prototypen?">
+<node CREATED="1491494779796" ID="ID_1437580350" MODIFIED="1576282357982" TEXT="oder nur Prototypen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37341,7 +33921,8 @@
       Oder man k&#246;nnte sie anonym verarbeiten, weil Command selber ein smart-Handle ist.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1491494889781" ID="ID_737410509" MODIFIED="1518487921093" TEXT="Analyse">
 <icon BUILTIN="idea"/>
@@ -37361,7 +33942,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1492167970338" ID="ID_1983035921" MODIFIED="1575133353514" TEXT="InteractionState &lt;=&gt; InvocationTrail">
+<node CREATED="1492167970338" ID="ID_1983035921" MODIFIED="1576282357982" TEXT="InteractionState &lt;=&gt; InvocationTrail">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37377,7 +33958,8 @@
       CommandID.KontextID == Instanz
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1492168186700" ID="ID_501823967" MODIFIED="1518487921093" TEXT="InvocationTrail">
 <icon BUILTIN="button_cancel"/>
@@ -37456,7 +34038,7 @@
 <node CREATED="1492173862203" ID="ID_1492707816" MODIFIED="1492173876661" TEXT="wozu die ganzen UI-Bus-Nachrichten">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1492173887792" ID="ID_552249287" MODIFIED="1575133354358" TEXT="wozu Ausl&#xf6;sung &#xfc;ber BusTerm eines Widgets">
+<node CREATED="1492173887792" ID="ID_552249287" MODIFIED="1576282357981" TEXT="wozu Ausl&#xf6;sung &#xfc;ber BusTerm eines Widgets">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37472,7 +34054,8 @@
       Nebenl&#228;ufigkeit ist kein Argument (da das UI single-threaded l&#228;uft)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1492174006016" ID="ID_1942935948" MODIFIED="1492174016504" TEXT="wozu getrennter Parametrisierungs-Call">
@@ -37556,7 +34139,7 @@
 <node CREATED="1492269751716" ID="ID_868922268" MODIFIED="1492269757167" TEXT="hier ist es eine Trenn-ID"/>
 <node CREATED="1492269757659" ID="ID_1570623233" MODIFIED="1492269772333" TEXT="mehrere Control-Systeme k&#xf6;nnen koexistieren"/>
 </node>
-<node CREATED="1492269922724" ID="ID_806519829" MODIFIED="1575133354878" TEXT="Idee: on demand">
+<node CREATED="1492269922724" ID="ID_806519829" MODIFIED="1576282357981" TEXT="Idee: on demand">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37575,7 +34158,8 @@
       oder ein Command an den Dispatcher &#252;bergeben...
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1492270021119" ID="ID_1461150467" MODIFIED="1492270028429" TEXT="praktikabel?">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -37647,7 +34231,7 @@
 <linktarget COLOR="#a24839" DESTINATION="ID_407290509" ENDARROW="Default" ENDINCLINATION="-90;-238;" ID="Arrow_ID_924621068" SOURCE="ID_768535627" STARTARROW="None" STARTINCLINATION="-201;0;"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1492281083479" ID="ID_970079498" MODIFIED="1492281138259" TEXT="fire-and-forget: superfluous"/>
-<node CREATED="1492281103684" ID="ID_135245437" MODIFIED="1575133355320" TEXT="widget-bound: overengineered">
+<node CREATED="1492281103684" ID="ID_135245437" MODIFIED="1576282357980" TEXT="widget-bound: overengineered">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37663,9 +34247,10 @@
       Den kann man aber mit geeigneter Syntax auch direkt angeben
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1492281124705" ID="ID_256590492" MODIFIED="1575133355350" TEXT="context-bound: different structure needed">
+<node CREATED="1492281124705" ID="ID_256590492" MODIFIED="1576282357980" TEXT="context-bound: different structure needed">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37678,7 +34263,8 @@
       allein <i>daf&#252;r</i>&#160;gen&#252;gt eine GenNode
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -37789,7 +34375,7 @@
 <node CREATED="1489717807872" ID="ID_1209104496" MODIFIED="1489717818826" TEXT="wir bauen ohnehin den Command-Cycle fest ein"/>
 <node CREATED="1489717844003" ID="ID_97055123" MODIFIED="1489717853605" TEXT="letztgenannte L&#xf6;sung ist auf den Punkt"/>
 <node CREATED="1489717927279" ID="ID_845301501" MODIFIED="1489717959263" TEXT="Command-ID erf&#xfc;llt keine regulierende Funktion"/>
-<node CREATED="1491003369611" ID="ID_854080320" MODIFIED="1575133356245" TEXT="Instanz-Management funktioniert anonym">
+<node CREATED="1491003369611" ID="ID_854080320" MODIFIED="1576282357979" TEXT="Instanz-Management funktioniert anonym">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37805,12 +34391,13 @@
       Also gen&#252;gt es, einen anonymen Klon dieser Instanz zu halten
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1489717960331" ID="ID_1849715968" MODIFIED="1489717991603" TEXT="viel wichtiger sind die Aktivierungs-Regeln"/>
 </node>
 </node>
-<node CREATED="1489546998918" HGAP="43" ID="ID_668687712" MODIFIED="1575133356285" TEXT="Aktivierung">
+<node CREATED="1489546998918" HGAP="43" ID="ID_668687712" MODIFIED="1576282357978" TEXT="Aktivierung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37832,7 +34419,8 @@
       Beispiel: Men&#252;-Eintrag &quot;create duplicate&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1489547002918" ID="ID_728456926" MODIFIED="1518487921094" TEXT="Callback installieren"/>
 <node CREATED="1489547016564" ID="ID_41325273" MODIFIED="1518487921094" TEXT="Anfrage: ist dies aktivierbar?"/>
 </node>
@@ -37849,7 +34437,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1489547112255" ID="ID_270498008" MODIFIED="1575133356415" TEXT="generische Rollen">
+<node CREATED="1489547112255" ID="ID_270498008" MODIFIED="1576282357978" TEXT="generische Rollen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37871,7 +34459,8 @@
       oder andernfalls einen bestimmten Namen bekommt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1489547124597" ID="ID_408090908" MODIFIED="1489547128224" TEXT="das Subjekt"/>
 <node CREATED="1489547128837" ID="ID_865724442" MODIFIED="1489547131120" TEXT="der Container"/>
@@ -37895,7 +34484,7 @@
 <node COLOR="#5e427f" CREATED="1489719212976" HGAP="-52" ID="ID_949699860" MODIFIED="1489719253576" TEXT="noch offen" VSHIFT="45">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1489719257426" ID="ID_1618753270" MODIFIED="1575133356673" TEXT="wer erzeugt den InvocationTrail">
+<node CREATED="1489719257426" ID="ID_1618753270" MODIFIED="1576282357977" TEXT="wer erzeugt den InvocationTrail">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37914,7 +34503,8 @@
       wieder komplett zur&#252;ckgebaut habe
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1489719267537" ID="ID_963145148" MODIFIED="1489719291065" TEXT="was ist bereits vom Command her definiert"/>
@@ -37978,7 +34568,7 @@
 <node CREATED="1489786055057" ID="ID_565306146" MODIFIED="1489786059852" TEXT="decl/def">
 <node CREATED="1489786238273" ID="ID_1957761383" MODIFIED="1489786331600" TEXT="marker-Makro"/>
 <node CREATED="1489786245024" ID="ID_430222749" MODIFIED="1489786255810" TEXT="alle Definitionen in Makros einwickeln"/>
-<node CREATED="1489786393908" ID="ID_1345826013" MODIFIED="1575133357350" TEXT="spezielle Inclusion-Rituale">
+<node CREATED="1489786393908" ID="ID_1345826013" MODIFIED="1576282357977" TEXT="spezielle Inclusion-Rituale">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37996,7 +34586,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1489789880260" ID="ID_768121026" MODIFIED="1489789887822" TEXT="Template-Spezialisierung?">
@@ -38082,7 +34673,7 @@
 <node CREATED="1490986294710" ID="ID_558020871" MODIFIED="1533400457991" TEXT="Command-IDs dekorieren"/>
 <node CREATED="1490986302197" ID="ID_1305641719" MODIFIED="1491004967731" TEXT="fortlaufenden Z&#xe4;hler verwalten">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1490986345879" ID="ID_1736956933" MODIFIED="1575133358119" TEXT="denn: Dispatch bedeutet Verz&#xf6;gerung">
+<node CREATED="1490986345879" ID="ID_1736956933" MODIFIED="1576282357976" TEXT="denn: Dispatch bedeutet Verz&#xf6;gerung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -38095,13 +34686,14 @@
       w&#228;hrend bereits die n&#228;chste Instanz f&#252;r das GUI ausgegeben wurde.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1490986395088" ID="ID_52247198" MODIFIED="1490986412151" TEXT="Stets nur eine Instanz im Instance-manager">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1490986336425" ID="ID_1955343463" MODIFIED="1575133358150" TEXT="Konsequenz: leerer Eintrag">
+<node CREATED="1490986336425" ID="ID_1955343463" MODIFIED="1576282357976" TEXT="Konsequenz: leerer Eintrag">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -38111,7 +34703,8 @@
       ...damit die Nummer erhalten bleibt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1491004971039" ID="ID_329531567" MODIFIED="1491004978482" TEXT="anonyme Instanz verwalten">
@@ -38150,7 +34743,7 @@
 <node CREATED="1492359686938" ID="ID_1447317770" MODIFIED="1518487921094" TEXT="anonyme Klon-Kopie von CommandDef">
 <icon BUILTIN="forward"/>
 </node>
-<node CREATED="1492359678835" ID="ID_608610767" MODIFIED="1575133358505" TEXT="explizite Instanzbildung ist optional">
+<node CREATED="1492359678835" ID="ID_608610767" MODIFIED="1576282357975" TEXT="explizite Instanzbildung ist optional">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -38163,11 +34756,12 @@
       wenn wir context-bound -Commands verwenden
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node CREATED="1491694174845" ID="ID_344801148" MODIFIED="1575133358524" TEXT="Instanzbildung geh&#xf6;rt nicht in das Tangible">
+<node CREATED="1491694174845" ID="ID_344801148" MODIFIED="1576282357975" TEXT="Instanzbildung geh&#xf6;rt nicht in das Tangible">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -38183,7 +34777,8 @@
       deshalb ist auch der UI-Bus nicht <i>das </i>Universal-Interface schlechthin
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -39381,9 +35976,77 @@
 <node CREATED="1576189115934" ID="ID_1929426370" MODIFIED="1576189130272" TEXT="vermutlich direkt in&apos;s collection-binding"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189131908" ID="ID_1843660348" MODIFIED="1576189186952" TEXT="brauche Testfall">
 <icon BUILTIN="pencil"/>
-<node CREATED="1576189189125" ID="ID_791562073" MODIFIED="1576189207107" TEXT="huch... brauche einfachen Diff-Test">
+<node CREATED="1576189189125" FOLDED="true" ID="ID_791562073" MODIFIED="1576282487252" TEXT="huch... brauche einfachen Diff-Test">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-oh"/>
+<node CREATED="1576281969322" ID="ID_163244559" MODIFIED="1576281981742">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar etwas <i>wirklich Einfaches</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1576281982520" ID="ID_1973953856" MODIFIED="1576282009657" TEXT="und nicht etwas Elementares">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn &quot;elementar&quot; bedeutet in diesem Fall, es wird ziemlich technisch und komplex
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1576199505619" FOLDED="true" ID="ID_1589343634" MODIFIED="1576281940111" TEXT="erweitern auf einfaches Vector-Binding">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1576199519956" ID="ID_446671513" MODIFIED="1576281889609" TEXT="AUA... Inkonsistenzen im Collection-Binding">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      oh ja....
+    </p>
+    <p>
+      das war ziemlich halbgar, und w&#228;re fr&#252;her oder sp&#228;ter ganz &#252;bel in's Auge gegangen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Erinnere mich, da&#223; ich damals beim Einf&#252;hren des MockElm dann eben doch eine &#187;Attribute-Map&#171; gebaut habe, obwohl ich vorher mich eigentlich gegen dieses Konzept entschieden hatte. Es ist in der Praxis dann doch manchmal sinnvolle, wie dieser Fall zeigt. Damit wurde aber mein TreeMutator-Collection-Binding &quot;wackelig&quot;, und ich hab mich da mehr oder weniger durchgefrickelt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Jetzt gibt es also echte ContainerTraits, und damit ist der Aufbau zukunftsfest.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1576281616730" ID="ID_1695910920" MODIFIED="1576281693124" TEXT="gel&#xf6;st durch Einf&#xfc;hren von ContainerTraits">
+<arrowlink COLOR="#2eb28a" DESTINATION="ID_640546093" ENDARROW="Default" ENDINCLINATION="-191;-682;" ID="Arrow_ID_562122794" STARTARROW="None" STARTINCLINATION="485;33;"/>
+</node>
+<node CREATED="1576281921050" ID="ID_1921471268" MODIFIED="1576281938762" TEXT="erkennt nun sogar von STL-Containern abgeleitete Typen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1576281890992" ID="ID_171789869" MODIFIED="1576281906090" TEXT="gutda&#xdf;wirdar&#xfc;bergeredethaben">
+<font ITALIC="true" NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 </node>
 </node>
@@ -39416,6 +36079,161 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573837592850" ID="ID_727500820" MODIFIED="1573837704113" TEXT="onSeqChange">
 <linktarget COLOR="#d67771" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-53;-3;" ID="Arrow_ID_115955006" SOURCE="ID_1220310042" STARTARROW="None" STARTINCLINATION="38;141;"/>
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1475449611754" FOLDED="true" HGAP="33" ID="ID_1285123321" MODIFIED="1576281597012" TEXT="Grundsatzfrage: Attribut-Map" VSHIFT="1">
+<linktarget COLOR="#9f719e" DESTINATION="ID_1285123321" ENDARROW="Default" ENDINCLINATION="170;-624;" ID="Arrow_ID_23523127" SOURCE="ID_1739941135" STARTARROW="None" STARTINCLINATION="875;242;"/>
+<linktarget COLOR="#ef6e6e" DESTINATION="ID_1285123321" ENDARROW="Default" ENDINCLINATION="-571;0;" ID="Arrow_ID_524729956" SOURCE="ID_275833424" STARTARROW="None" STARTINCLINATION="886;42;"/>
+<linktarget COLOR="#b85f4e" DESTINATION="ID_1285123321" ENDARROW="Default" ENDINCLINATION="-735;0;" ID="Arrow_ID_1644325647" SOURCE="ID_854221294" STARTARROW="None" STARTINCLINATION="-651;70;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1475449654357" ID="ID_1802368116" MODIFIED="1475449659480" TEXT="Ordnung / Unordnung"/>
+<node CREATED="1475449660020" ID="ID_286191859" MODIFIED="1475449740005" TEXT="Diff geht von Listen-Ordnung aus">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1475449777532" ID="ID_476663339" MODIFIED="1575133341421" TEXT="Symptom: Compile-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Map hat kein emplace_back
+      </li>
+      <li>
+        Map hat kein back()
+      </li>
+    </ul>
+    <p>
+      Beides ist erst mal sinnvoll. Map hat zwar ein emplace, aber das f&#252;gt eben <i>irgendwo</i>&#160;ein
+    </p>
+    <p>
+      Und es gibt nicht sowas wie das &quot;zuletzt behandelte&quot; Element
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1475506967550" HGAP="42" ID="ID_1112268061" MODIFIED="1576203628630" TEXT="ist aber implementierbar" VSHIFT="8">
+<arrowlink COLOR="#9f96d9" DESTINATION="ID_453712930" ENDARROW="Default" ENDINCLINATION="722;-59;" ID="Arrow_ID_1263259661" STARTARROW="Default" STARTINCLINATION="1873;0;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1475449719180" ID="ID_6178930" MODIFIED="1533608413999" TEXT="Sinnvoll das zu erweitern">
+<icon BUILTIN="help"/>
+<node CREATED="1475450034810" ID="ID_445949466" MODIFIED="1561827465612" TEXT="pro">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1475450042009" FOLDED="true" ID="ID_1941838908" MODIFIED="1561827483837" TEXT="man k&#xf6;nnte">
+<node CREATED="1475450050824" ID="ID_1660008285" MODIFIED="1475450053243" TEXT="ins"/>
+<node CREATED="1475450055775" ID="ID_1213643084" MODIFIED="1475450058698" TEXT="after::END"/>
+<node CREATED="1475450064470" ID="ID_754885592" MODIFIED="1475450069265" TEXT="assign / mutate"/>
+</node>
+<node CREATED="1475450148771" FOLDED="true" ID="ID_736367412" MODIFIED="1561827483837">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Reihenfolge
+    </p>
+    <p>
+      erhalten!
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1475450179591" ID="ID_793985703" MODIFIED="1475450197936" TEXT="dann sogar del"/>
+<node CREATED="1475450053927" ID="ID_1110207658" MODIFIED="1475450055018" TEXT="pick"/>
+</node>
+</node>
+<node CREATED="1475450038953" ID="ID_1285250844" MODIFIED="1561827465614" TEXT="con">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1475450285336" ID="ID_288261682" MODIFIED="1475450300712" TEXT="kein Schutz gegen sinnlose Operationen"/>
+<node CREATED="1475450229944" ID="ID_957217069" MODIFIED="1475450239042" TEXT="Reihenfolge ist Impl-Detail"/>
+<node CREATED="1475450240318" ID="ID_1993698586" MODIFIED="1575133341545" TEXT="Hashmap">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...hat eine &quot;zuf&#228;llige&quot; Reihenfolge, die von den Hash-Werten der gespeicherten Daten abh&#228;ngt.
+    </p>
+    <p>
+      Das bricht mit unserem grunds&#228;tzlichen Konzept der <b>kongruenten</b>&#160; Daten-Strukturen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1475450272442" ID="ID_567969130" MODIFIED="1575133341561" TEXT="inkompatibel mit GenNode">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ein Diff, das von einer ETD gezogen wurde,
+    </p>
+    <p>
+      l&#228;&#223;t sich nicht auf eine Map-Implementierung aufspielen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1475506346525" ID="ID_574367406" MODIFIED="1533608414015" VSHIFT="6">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entscheidung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1475506358863" ID="ID_120379432" MODIFIED="1475506391795" TEXT="wird nicht empfohlen">
+<font ITALIC="true" NAME="SansSerif" SIZE="13"/>
+</node>
+<node CREATED="1475506368078" ID="ID_1568414977" MODIFIED="1475506381941" TEXT="vollst&#xe4;ndigkeitshalber unterst&#xfc;tzt">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1475506411768" ID="ID_583086851" MODIFIED="1575133341643" TEXT="kann sinnvoll sein...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...zum Beispiel wie grade hier, beim MockElm
+    </p>
+    <p>
+      das wird vermutlich niemals wirklich in einem vollen Diff-Zusammenhang gebraucht.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und dann ist unbestreitbar eine Map eine sehr einfache Implementierung
+    </p>
+    <p>
+      und auch im Diff-Applikator nicht wirklich schwierig zu unterst&#252;tzen
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#338800" CREATED="1475506514203" HGAP="45" ID="ID_1183193114" MODIFIED="1561827465614" TEXT="Begr&#xfc;ndung" VSHIFT="23">
+<node CREATED="1475506528937" ID="ID_1971084550" MODIFIED="1475506538324" TEXT="es verletzt die Prinzipien"/>
+<node CREATED="1475506538983" ID="ID_1555995664" MODIFIED="1475506547491" TEXT="insofern aber wie Feld-Attribute auch"/>
+<node CREATED="1475506549886" ID="ID_275560362" MODIFIED="1475506558609" TEXT="eingeschr&#xe4;nkt unterst&#xfc;tzbar"/>
+<node CREATED="1475506559309" ID="ID_1767038604" MODIFIED="1475506896798" TEXT="Objekt -&gt; ETD -&gt; Objekt">
+<arrowlink COLOR="#807bce" DESTINATION="ID_1795458386" ENDARROW="Default" ENDINCLINATION="671;0;" ID="Arrow_ID_1621793396" STARTARROW="Default" STARTINCLINATION="994;0;"/>
+</node>
 </node>
 </node>
 </node>
@@ -40111,7 +36929,7 @@
 <node CREATED="1443741923547" ID="ID_1978439060" MODIFIED="1443741930738" TEXT="Listen-Diff">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1443741931858" FOLDED="true" ID="ID_484829805" MODIFIED="1573834363682" TEXT="Baum-Diff">
+<node CREATED="1443741931858" FOLDED="true" ID="ID_484829805" MODIFIED="1576202977258" TEXT="Baum-Diff">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1445295424277" ID="ID_1084177503" MODIFIED="1525124215397">
 <richcontent TYPE="NODE"><html>
@@ -40246,7 +37064,8 @@
 <node CREATED="1445389311690" ID="ID_1926972913" MODIFIED="1445389323819" TEXT="und dieses rekursiv..."/>
 </node>
 </node>
-<node COLOR="#391f9e" CREATED="1445391990778" HGAP="148" ID="ID_464295846" MODIFIED="1512926192446" TEXT="Implementierung" VSHIFT="4">
+<node COLOR="#391f9e" CREATED="1445391990778" HGAP="148" ID="ID_464295846" MODIFIED="1576203232155" TEXT="Implementierung" VSHIFT="4">
+<arrowlink COLOR="#2ab880" DESTINATION="ID_61713493" ENDARROW="Default" ENDINCLINATION="-125;-80;" ID="Arrow_ID_958576106" STARTARROW="None" STARTINCLINATION="-317;9;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1445392080175" ID="ID_341024968" MODIFIED="1445392101243">
 <richcontent TYPE="NODE"><html>
@@ -40262,7 +37081,7 @@
 </node>
 <node CREATED="1445392105075" ID="ID_1377567733" MODIFIED="1445392113677" TEXT="zwei neue, lokale Vektoren aufbauen"/>
 <node CREATED="1445392114217" ID="ID_71124283" MODIFIED="1445392120973" TEXT="daraus den neuen Record konstruieren"/>
-<node CREATED="1445556634395" ID="ID_1143865339" MODIFIED="1525124215398" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell">
+<node CREATED="1445556634395" FOLDED="true" ID="ID_1143865339" MODIFIED="1576201918968" TEXT="technische Komplikation: &quot;2 Listen&quot;-Modell">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1445620914088" ID="ID_1919426539" MODIFIED="1445621018036" TEXT="Verhalten &#xe4;ndert sich je nach Scope">
 <icon BUILTIN="info"/>
@@ -40296,7 +37115,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1446159438278" HGAP="29" ID="ID_563496669" MODIFIED="1525124215403" VSHIFT="8">
+<node CREATED="1446159438278" FOLDED="true" HGAP="29" ID="ID_563496669" MODIFIED="1576201937328" VSHIFT="8">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -40455,8 +37274,3786 @@
 <icon BUILTIN="flag"/>
 </node>
 </node>
-<node CREATED="1502452581379" HGAP="3" ID="ID_1651893758" MODIFIED="1573834393141" TEXT="Darstellung" VSHIFT="31">
+<node CREATED="1576202545211" FOLDED="true" ID="ID_862025814" MODIFIED="1576281725292" TEXT="Diff-Bindung">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1576202990623" ID="ID_1903460265" MODIFIED="1576203228840" TEXT="konkret entwickelt f&#xfc;r das UI-Element">
+<arrowlink COLOR="#298c9e" DESTINATION="ID_645743424" ENDARROW="Default" ENDINCLINATION="-928;-33;" ID="Arrow_ID_653906070" STARTARROW="None" STARTINCLINATION="-2105;61;"/>
+</node>
+<node COLOR="#338800" CREATED="1456506101544" FOLDED="true" HGAP="322" ID="ID_61713493" MODIFIED="1576281717228" TEXT="Implementierung: Diff-Anbindung" VSHIFT="87">
+<linktarget COLOR="#47e573" DESTINATION="ID_61713493" ENDARROW="Default" ENDINCLINATION="-3400;234;" ID="Arrow_ID_1763921751" SOURCE="ID_486184645" STARTARROW="None" STARTINCLINATION="-792;48;"/>
+<linktarget COLOR="#2ab880" DESTINATION="ID_61713493" ENDARROW="Default" ENDINCLINATION="-125;-80;" ID="Arrow_ID_958576106" SOURCE="ID_464295846" STARTARROW="None" STARTINCLINATION="-317;9;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1456506128581" FOLDED="true" HGAP="-12" ID="ID_158225677" MODIFIED="1576200599620" TEXT="Abw&#xe4;gungen" VSHIFT="184">
+<icon BUILTIN="yes"/>
+<node CREATED="1456506135028" HGAP="29" ID="ID_780210307" MODIFIED="1512926191965" TEXT="Indirektionen" VSHIFT="-5">
+<node CREATED="1456506145826" ID="ID_1611309527" MODIFIED="1575133329132" TEXT="kosten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Diff-Anwendung wird massiv und in der Breite stattfinden
+      </li>
+      <li>
+        sie wird als Reaktion auf UI-Events auftreten
+      </li>
+      <li>
+        sie dient dazu, andere UI-Operationen einzusparen
+      </li>
+      <li>
+        also mu&#223; speziell das Traversieren bis an den Anwendungsort bedacht werden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1456506151065" ID="ID_258224244" MODIFIED="1575133329148" TEXT="bisher nur drei">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. die bis jetzt geschriebene TreeApplikator-Implementierung
+    </p>
+    <p>
+      ist erstaunlich leichtgewichtig. Zu den zwei Indirektionien der Sprache
+    </p>
+    <p>
+      kommt nur entweder ein weiterer aus der GenNode bzw stattedessen ein dynamic cast hinzu.
+    </p>
+    <p>
+      Alles andere steckt in dem <b>expliziten Mutator-Typ </b>
+    </p>
+    <p>
+      &#160;-- das gibt einen wichtigen Hinweis --
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1456506160472" ID="ID_1961176321" MODIFIED="1575133329163" TEXT="zwei sind das Minimum">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da wir eine verb-basierte Sprache implementieren,
+    </p>
+    <p>
+      also einen double-dispatch haben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1456506385130" ID="ID_310848516" MODIFIED="1512926191966" TEXT="f&#xfc;r generische Zieldaten">
+<node CREATED="1456506446002" ID="ID_1039988752" MODIFIED="1456506470075" TEXT="kommt eine Indirektion hinzu"/>
+<node CREATED="1456506471159" ID="ID_1219883167" MODIFIED="1512926191966" TEXT="es sei denn...">
+<node CREATED="1456506475686" ID="ID_1548290778" MODIFIED="1456506487232" TEXT="man tauscht jeweils den Sprach-Interpreter aus"/>
+<node CREATED="1456506487796" ID="ID_1287273135" MODIFIED="1456506499239" TEXT="das setzt aber rekursives Konsumieren des Diff voraus"/>
+<node CREATED="1456506500187" ID="ID_860348703" MODIFIED="1456506511565" TEXT="und das zwingt uns, den Typ des Diff explizit zu machen"/>
+<node CREATED="1456506512721" ID="ID_1880366369" MODIFIED="1575133329277" TEXT="der nicht-explizite Typ ist im Moment von Vorteil....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil wir den Anwendungs-Kontext noch &#252;berhaupt nicht kennen.
+    </p>
+    <p>
+      Man k&#246;nnte also sp&#228;ter, wenn das ganze System &quot;steht&quot;,
+    </p>
+    <p>
+      das Diff-System noch einmal reimplementieren, dann mit einem vorgegebenen Diff-Typ
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1456506607428" HGAP="31" ID="ID_1872426329" MODIFIED="1456506627511" VSHIFT="8">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beschlu&#223;: <i>akzeptiert</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1456506647447" HGAP="32" ID="ID_821326055" MODIFIED="1512926191967" TEXT="Zielvorgabe: weitere vermeiden" VSHIFT="12">
+<node CREATED="1456506661421" ID="ID_1563053672" MODIFIED="1456506689357" TEXT="d.h. nur entweder front-end oder back-end sind virtuell"/>
+<node CREATED="1456506689834" ID="ID_748345000" MODIFIED="1456506713270">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im Sinn von &quot;polymorpic value&quot; ist <b>das Backend virtuell</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1456506719949" ID="ID_819603941" MODIFIED="1456506725568" TEXT="keine virtuellen Iteratoren"/>
+<node CREATED="1456506726060" ID="ID_327781503" MODIFIED="1456506738455" TEXT="Front-End mu&#xdf; Typedefs bereitstellen"/>
+<node CREATED="1456506740323" ID="ID_605676202" MODIFIED="1456506747838" TEXT="elaboriertes Typkonstrukt notwendig"/>
+<node CREATED="1456506749234" ID="ID_1370097863" MODIFIED="1575133329379" TEXT="zumindest f&#xfc;r jeden Compund-Zieltyp ein eigener Interpreter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....wenngleich auch dieser aus einem Template generiert wird
+    </p>
+    <p>
+      (will sagen, es ist nicht sofort offensichtlich, da&#223; wir jeweils einen Interpreter generieren)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1457038737878" HGAP="44" ID="ID_1927444795" MODIFIED="1512926191968" TEXT="Abstraktions-Grad">
+<node CREATED="1457119812475" ID="ID_1000349478" MODIFIED="1457119817575" TEXT="Elemente bleiben opaque"/>
+<node CREATED="1457119818091" ID="ID_72516983" MODIFIED="1512926191969">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir <i>verzichten</i>&#160;auf Introspektion der Elemente
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1457119990420" ID="ID_417857" MODIFIED="1457120011276" TEXT="...denn die m&#xfc;&#xdf;te die jeweilige Implementierung erbringen"/>
+<node CREATED="1457120011721" ID="ID_130453051" MODIFIED="1457120024027" TEXT="und das w&#xfc;rde das &#xdc;bel der Introspektion &#xfc;berall hineindr&#xfc;cken"/>
+<node CREATED="1457120026343" ID="ID_1643851302" MODIFIED="1457120043288" TEXT="Nachteil: keine klare Fehlerdiagnose m&#xf6;glich"/>
+<node CREATED="1457120043925" ID="ID_1806333421" MODIFIED="1512926191970" TEXT="ist akzeptierbar...">
+<node CREATED="1457120079542" ID="ID_680592754" MODIFIED="1457120079542">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn genau zu diesem Zweck haben wir die &quot;External Tree Description&quot;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1457120084135" ID="ID_1299212353" MODIFIED="1457120093706" TEXT="auf diese sollte ein Diff zuerst angewendet werden"/>
+<node CREATED="1457120094302" ID="ID_629900491" MODIFIED="1457120105488" TEXT="und diese bietet Introspektion und klare Diagnose"/>
+<node CREATED="1457120105908" ID="ID_702164974" MODIFIED="1457120131741" TEXT="Annahme ist also, da&#xdf; ein Diff auf real-Datenstrukturen per Konstruktion erfolgreich ist"/>
+<node CREATED="1457120134297" ID="ID_790286427" MODIFIED="1457120154250" TEXT="und ein Fehler dabei ist zwingenderweise ein Fehler in der Programmlogik"/>
+</node>
+</node>
+<node CREATED="1457119844767" ID="ID_1188396825" MODIFIED="1457119861265" TEXT="wir bieten nur einen Match auf die Diff-Spec"/>
+<node CREATED="1457119876899" ID="ID_1854037055" MODIFIED="1457119902755" TEXT="Mutations-Primitive bieten bool Erfolgs-Check"/>
+<node CREATED="1457119903391" ID="ID_71718000" MODIFIED="1457119909602" TEXT="aber keine Exceptions"/>
+</node>
+</node>
+<node CREATED="1456506821808" ID="ID_1291391164" MODIFIED="1512926191970" TEXT="Typ-Konstrukt">
+<node CREATED="1461879209050" ID="ID_819509222" MODIFIED="1461879267131" TEXT="Kernproblem: wie gro&#xdf; mu&#xdf; der Buffer sein?">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1461879239310" ID="ID_1466777093" MODIFIED="1461879260051" TEXT="wie bekomme ich diese Info von nicht a priori bekannten Typen">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1456523437616" FOLDED="true" HGAP="34" ID="ID_769898615" MODIFIED="1576200587803" TEXT="Manipulations-Interface" VSHIFT="6">
+<node COLOR="#338800" CREATED="1456523455997" ID="ID_451867054" MODIFIED="1561827465480" TEXT="Design l&#xf6;sen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1456523507910" ID="ID_10011481" MODIFIED="1456523518005" TEXT="Henne oder Ei?"/>
+<node CREATED="1456523471851" ID="ID_1473020572" MODIFIED="1456523485597" TEXT="komm nicht vom Fleck"/>
+<node CREATED="1456523487089" ID="ID_996191540" MODIFIED="1456523501995" TEXT="zirkul&#xe4;re Bez&#xfc;ge im Design"/>
+<node CREATED="1456523522693" ID="ID_258858244" MODIFIED="1512926191971" TEXT="abstrakter Entwurf">
+<arrowlink COLOR="#6b77a6" DESTINATION="ID_1103254276" ENDARROW="Default" ENDINCLINATION="-116;0;" ID="Arrow_ID_1002137074" STARTARROW="None" STARTINCLINATION="-819;487;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1456523558304" ID="ID_157371441" MODIFIED="1456523564050" TEXT="baue einen Dummy">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1456523569111" ID="ID_27774245" MODIFIED="1456523580721" TEXT="...als eine Spezialisierung des Adapters"/>
+<node CREATED="1456523593731" ID="ID_1278455785" MODIFIED="1456528188767" TEXT="Interface ohne reale Daten"/>
+<node CREATED="1456528076005" ID="ID_1627557179" MODIFIED="1512926191972" TEXT="Diagnose">
+<node CREATED="1456528119297" ID="ID_1804796459" MODIFIED="1456528119297" TEXT="hat ein EventLog eingebaut"/>
+<node CREATED="1456528148107" ID="ID_423438892" MODIFIED="1456528165925" TEXT="protokolliert Schatten-Kinder-Liste"/>
+<node CREATED="1456528167440" ID="ID_1949477356" MODIFIED="1575133329792" TEXT="transparenter Dekorator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h,
+    </p>
+    <p>
+      kann zus&#228;tzlich zu einem anderen Adaptor
+    </p>
+    <p>
+      in die Mutator-Dekorator-Kette geh&#228;ngt werden
+    </p>
+    <p>
+      und protokolliert somit &quot;nebenbei&quot; was an Anforderungen an ihm vorbeigeht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1456523612849" ID="ID_1653882286" MODIFIED="1456523625883" TEXT="Test zum Aufbau des Interfaces"/>
+</node>
+</node>
+<node CREATED="1456528418823" HGAP="30" ID="ID_823162035" MODIFIED="1561827465487" TEXT="Bestandteile" VSHIFT="-1">
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1456528424246" FOLDED="true" ID="ID_478070427" MODIFIED="1576200583821" STYLE="fork" TEXT="Selektor">
+<linktarget COLOR="#7caed5" DESTINATION="ID_478070427" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1332735015" SOURCE="ID_1033631571" STARTARROW="None" STARTINCLINATION="681;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1457741609884" ID="ID_631276890" MODIFIED="1512926191973" TEXT="bin ich zust&#xe4;ndig?">
+<node CREATED="1458094312266" ID="ID_1589695576" MODIFIED="1458094316157" TEXT="isApplicable"/>
+<node CREATED="1458094316697" ID="ID_954342243" MODIFIED="1512926191974" TEXT="Festlegung:">
+<icon BUILTIN="yes"/>
+<node CREATED="1458094327095" ID="ID_506349775" MODIFIED="1458094334354" TEXT="nur auf Basis der spec"/>
+<node CREATED="1458094334991" ID="ID_559579301" MODIFIED="1458094343401" TEXT="ohne Daten-Introspektion"/>
+</node>
+<node CREATED="1458094507048" ID="ID_1527865890" MODIFIED="1512926191974" TEXT="Problem">
+<node CREATED="1458094510463" ID="ID_1994183062" MODIFIED="1575133329935" TEXT="Spec bietet wenig Anhaltspunkte">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      streng genommen ist es nur erlaubt, das ID-Symbol auszuwerten
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1458094562800" ID="ID_81556108" MODIFIED="1458094568467" TEXT="ID-Symbol"/>
+<node CREATED="1458094569128" ID="ID_1725026097" MODIFIED="1458094579369" TEXT="attribute / child"/>
+</node>
+<node CREATED="1458094599835" HGAP="24" ID="ID_696146244" MODIFIED="1533608413876" TEXT="Zugang zum Payload-Typ" VSHIFT="10">
+<icon BUILTIN="help"/>
+<node CREATED="1458094616417" ID="ID_1705273642" MODIFIED="1458094632012" TEXT="Introspection / Switch-on-Type">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1458094634167" ID="ID_1910509473" MODIFIED="1575133329998">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Visitor bedeutet <b>zwei</b>&#160;Indirektionen
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist nicht akzeptabel f&#252;r ein reines Selektor-Pr&#228;dikat!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458094716364" ID="ID_1379758002" MODIFIED="1561827465489" TEXT="eingeschr&#xe4;nkt auf Objekt-Typ">
+<icon BUILTIN="help"/>
+<node CREATED="1458094735673" ID="ID_1998804888" MODIFIED="1458094743492" TEXT="Semantischer Typ"/>
+<node CREATED="1458094743960" ID="ID_753315620" MODIFIED="1458094767704" TEXT="vs. Typisierung in der Sprache"/>
+<node CREATED="1458094769365" ID="ID_1449818159" MODIFIED="1458094773848" TEXT="pattern match"/>
+<node CREATED="1458094823973" ID="ID_384485794" MODIFIED="1458094841971">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denkbar nur bei Sub-<i>Objekten</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458094850490" ID="ID_1694517643" MODIFIED="1458094856797" TEXT="d.h. bei Record-Daten"/>
+<node CREATED="1458094864424" ID="ID_1328934076" MODIFIED="1458094872787" TEXT="Record hat ein (semantisches) Typfeld"/>
+<node CREATED="1458094922024" ID="ID_93367660" MODIFIED="1458094954604">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gilt f&#252;r <i>alle</i>&#160;praktischen Anwendungen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458094956636" ID="ID_664751342" MODIFIED="1575133330121" TEXT="denn nur Objekt-Kinder machen Sinn">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....auch wenn man zehnmal meinen k&#246;nnte,
+    </p>
+    <p>
+      Kinder eines reinen Wert-Typs w&#228;ren sinnvoll --
+    </p>
+    <p>
+      sie sind es nicht!
+    </p>
+    <p>
+      Jede sinnvolle <i>Entit&#228;t</i>&#160;hat mehr als ein Attribut<i>! </i>
+    </p>
+    <p>
+      denn es macht keinen Sinn, Entit&#228;ten und reine Wert-Elemente
+    </p>
+    <p>
+      auf der gleichen Ebene in der gleichen Sammlung zu mischen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      D.h., entweder man hat ein Objekt, das als Kinder z.B. eine Liste von Strings hat,
+    </p>
+    <p>
+      oder man hat eine Entit&#228;t, die z.b. zwei getypte Objekt-Kinder-Sammlungen hat,
+    </p>
+    <p>
+      wie z.B: eine Spur mit Labels und Clips
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458095217737" FOLDED="true" ID="ID_438870027" MODIFIED="1561827483835" TEXT="um das zu unterst&#xfc;tzen...">
+<icon BUILTIN="idea"/>
+<node CREATED="1458095230175" ID="ID_1191105811" MODIFIED="1458095239258" TEXT="m&#xfc;&#xdf;te DataCap helfen"/>
+<node CREATED="1458095367701" ID="ID_796317531" MODIFIED="1458095376400" TEXT="es g&#xe4;be dann einen Bottom-Wert"/>
+<node CREATED="1458095240158" ID="ID_603223644" MODIFIED="1458095284084" TEXT="Introspektions-Verbot etwas aufgeweicht"/>
+<node CREATED="1458095304886" ID="ID_164280831" MODIFIED="1458095318800" TEXT="dieser Gebrauch ist aber mit dem Objekt-Typfeld schon angelegt"/>
+<node CREATED="1458095320692" ID="ID_842760339" MODIFIED="1458095332942" TEXT="die Bedeutung wird vom Client privat definiert"/>
+<node CREATED="1458095409800" ID="ID_1254459851" MODIFIED="1458095442503" TEXT="ebenso wird aber auch die Bedeutung der ETD lokal definiert"/>
+<node CREATED="1458095443115" ID="ID_1232895036" MODIFIED="1458095455459" TEXT="erscheint mir plausibel und vertretbar">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1461881999377" ID="ID_1658273003" MODIFIED="1461882004217" TEXT="so implementiert">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1458095528224" ID="ID_1210077486" MODIFIED="1512926191979" TEXT="falls nein...">
+<node CREATED="1458095540807" ID="ID_1604150177" MODIFIED="1458095553929" TEXT="&#xfc;bernimmt der n&#xe4;chste Onion-Layer"/>
+<node CREATED="1458095554548" ID="ID_841667917" MODIFIED="1458095566303" TEXT="scheitert am Ende die Diff-Anwendung"/>
+<node CREATED="1458095567123" ID="ID_1522962628" MODIFIED="1533608413880" TEXT="das kann nicht sein">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1458095599015" ID="ID_167965734" MODIFIED="1458095611129" TEXT="denn Struktur wird per Diff aufgebaut"/>
+<node CREATED="1458095611645" ID="ID_381366724" MODIFIED="1458095623023" TEXT="und Diff wird von einer konsistenten Struktur generiert"/>
+<node CREATED="1458095623563" ID="ID_616935645" MODIFIED="1458095636789" TEXT="wenngleich es sich auch um eine funktionale Struktur handeln kann..."/>
+<node CREATED="1458095660150" ID="ID_521761960" MODIFIED="1458095668777" TEXT="wir sind nicht tolerant bei der Diff-Anwendung"/>
+<node CREATED="1458095669437" ID="ID_1556672181" MODIFIED="1458095672801" TEXT="und das ist gut so."/>
+</node>
+</node>
+</node>
+<node CREATED="1457741617655" ID="ID_1780561133" MODIFIED="1512926191980" TEXT="was ist ein &quot;match&quot;?">
+<node CREATED="1458094392679" ID="ID_160796096" MODIFIED="1460755241888">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;target <i>matches</i>&#160;spec&quot;
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1458094428506" ID="ID_1974144009" MODIFIED="1458094435693" TEXT="darf Annahmen &#xfc;ber den Typ der Spec machen"/>
+<node CREATED="1458094397350" ID="ID_1351948326" MODIFIED="1458094427326" TEXT="darf in die Payload der Spec schauen"/>
+<node CREATED="1458094437249" ID="ID_636183740" MODIFIED="1458094463529" TEXT="darf Methoden des Datenobjekts aufrufen"/>
+</node>
+</node>
+<node CREATED="1457038643034" ID="ID_2715278" MODIFIED="1515978009310" TEXT="abstrakte Position">
+<node CREATED="1460755065016" ID="ID_505782373" MODIFIED="1460755138704" TEXT="wird niemals direkt repr&#xe4;sentiert">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1460755072903" ID="ID_1689810775" MODIFIED="1460755130181">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber existiert <i>nominell </i>und kontext-abh&#228;ngig
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1460755080894" ID="ID_433210103" MODIFIED="1460755106150" TEXT="und faktisch unabh&#xe4;ngig in jedem &#xbb;onion layer&#xab;"/>
+</node>
+<node CREATED="1457038527402" HGAP="16" ID="ID_1999301096" MODIFIED="1512926191982" TEXT="Mutations-Primitive" VSHIFT="7">
+<node CREATED="1457038788583" ID="ID_745585126" MODIFIED="1457038801193" TEXT="einheitlich benannt"/>
+<node CREATED="1457038801733" ID="ID_61865380" MODIFIED="1457038805816" TEXT="auf mehreren Ebenen"/>
+<node CREATED="1457119943698" ID="ID_1184811956" MODIFIED="1512926191982" TEXT="Fehlerbehandlung">
+<node CREATED="1457119949785" ID="ID_854748958" MODIFIED="1457119953012" TEXT="Match-Check"/>
+<node CREATED="1457119953384" ID="ID_1221897136" MODIFIED="1457119957324" TEXT="aber keine Exception"/>
+<node CREATED="1457119959408" ID="ID_1918915677" MODIFIED="1457119961803" TEXT="sondern NOP"/>
+</node>
+</node>
+<node CREATED="1457227228502" ID="ID_1837209046" MODIFIED="1512926191983" TEXT="sub-Mutator">
+<node CREATED="1457227237269" ID="ID_13363638" MODIFIED="1457227296340" TEXT="wird &#xfc;ber ein Handle implantiert">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1457227248779" ID="ID_1651719395" MODIFIED="1457227279155" TEXT="Implementierungs-Schicht kennt Typ"/>
+<node CREATED="1457227279703" ID="ID_1075464109" MODIFIED="1457227288610" TEXT="aber Tree-Mutator &#xfc;bernimmt ownership"/>
+</node>
+</node>
+</node>
+<node CREATED="1456528462585" HGAP="48" ID="ID_777775203" MODIFIED="1512926191983" TEXT="Elemente" VSHIFT="21">
+<node CREATED="1456528472016" ID="ID_1698126172" MODIFIED="1456528476211" TEXT="bleiben abstrakt"/>
+<node CREATED="1456528477415" ID="ID_729445573" MODIFIED="1512926191984" TEXT="abstrakte &quot;Position&quot;">
+<node CREATED="1456533135345" ID="ID_1812393019" MODIFIED="1465428629652" TEXT="Problem: wem geh&#xf6;rt diese Position?">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1456533146055" ID="ID_1492337931" MODIFIED="1456533213989" TEXT="mu&#xdf; stets &#xfc;ber API klar gemacht werden">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1456533166197" ID="ID_1236312189" MODIFIED="1456533204589" TEXT="der Selektor entscheidet, wer gemeint ist">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1456528485326" ID="ID_1937076501" MODIFIED="1512926191984" TEXT="getypte Kinder">
+<node CREATED="1456528491109" ID="ID_1937415602" MODIFIED="1456528504567" TEXT="auf Einzelfall-Basis"/>
+<node CREATED="1456528505395" ID="ID_644319871" MODIFIED="1456528519117" TEXT="wer per Selektor zust&#xe4;ndig ist"/>
+<node CREATED="1456528539799" ID="ID_276410608" MODIFIED="1456528550465" TEXT="Typisierung ergibt sich als Effekt"/>
+<node CREATED="1456528551029" ID="ID_998833201" MODIFIED="1465428643785" TEXT="Typisierung wird nicht eigens repr&#xe4;sentiert">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1457232376244" HGAP="29" ID="ID_45251842" MODIFIED="1575133330682" TEXT="onion layer" VSHIFT="26">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das sind die konkreten Implementierungen
+    </p>
+    <p>
+      f&#252;r spezifische Arten von Bindings
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1457232408368" FOLDED="true" HGAP="29" ID="ID_1582052207" MODIFIED="1576200546205" TEXT="TestWireTap / TestMutationTarget" VSHIFT="-6">
+<icon BUILTIN="full-1"/>
+<node CREATED="1457232426238" ID="ID_1103254276" MODIFIED="1457232567024" TEXT="brauche ich, um das API zu entwickeln">
+<linktarget COLOR="#6b77a6" DESTINATION="ID_1103254276" ENDARROW="Default" ENDINCLINATION="-116;0;" ID="Arrow_ID_1002137074" SOURCE="ID_258858244" STARTARROW="None" STARTINCLINATION="-819;487;"/>
+</node>
+<node CREATED="1457232433157" ID="ID_176264041" MODIFIED="1457232443415" TEXT="ggfs sp&#xe4;ter n&#xfc;tzlich zur Diagnose"/>
+<node CREATED="1457232444075" ID="ID_334975575" MODIFIED="1457232459765" TEXT="soll stets &#xfc;ber andere, konkrete Mutation-Layer gelegt werden"/>
+<node CREATED="1457232579073" ID="ID_1549772477" MODIFIED="1512926191986" TEXT="Grenzen">
+<node CREATED="1457232582704" ID="ID_1363198759" MODIFIED="1457232590595" TEXT="protokolliert nur String-Repr&#xe4;sentation"/>
+<node CREATED="1457232591087" ID="ID_1500483325" MODIFIED="1575133330772">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann <i>niemals </i>geschachtelte sub-Mutatoren modellieren
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ja wirklich, das w&#228;re nicht sinnvoll!!!!!
+    </p>
+    <p>
+      auch wenn man meinen k&#246;nnte, es geht.
+    </p>
+    <p>
+      Grund ist n&#228;mlich, es kann jeweils nur ein Onion-Layer f&#252;r ein gegebenes Element &quot;zust&#228;ndig&quot; sein.
+    </p>
+    <p>
+      Und aus Gr&#252;nden der logischen Konsistenz darf dieser Diagnose-Layer niemals f&#252;r ein Element zust&#228;ndig sein,
+    </p>
+    <p>
+      denn sonst w&#252;rde er es f&#252;r darunter liegende Layer verschatten.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
+<node CREATED="1457232734636" FOLDED="true" ID="ID_743556019" MODIFIED="1576281702665" TEXT="STL Collection">
+<icon BUILTIN="full-2"/>
+<node CREATED="1458175823858" ID="ID_1221299499" MODIFIED="1512926191990" TEXT="Design-Grundlagen">
+<node CREATED="1457741673001" ID="ID_1785153368" MODIFIED="1512926191990" TEXT="konkrete Beispiele">
+<icon BUILTIN="info"/>
+<node CREATED="1457741683687" ID="ID_733055764" MODIFIED="1457741691409" TEXT="Timelines"/>
+<node CREATED="1457741691837" ID="ID_458049766" MODIFIED="1457741697832" TEXT="Tracks"/>
+<node CREATED="1457741753006" ID="ID_1923812777" MODIFIED="1457742102003" TEXT="Clips / Effekte / Marken"/>
+<node CREATED="1457741809422" ID="ID_1768016408" MODIFIED="1457741815657" TEXT="Effekte / Transitions"/>
+</node>
+<node CREATED="1457742434714" ID="ID_340131034" MODIFIED="1457742717208">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; <i>immer</i>&#160;Mitwirkung des Elements
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1457742547067" HGAP="33" ID="ID_585833263" MODIFIED="1512926191991" TEXT="Selector explizit bauen" VSHIFT="7">
+<icon BUILTIN="yes"/>
+<node CREATED="1457742554722" ID="ID_1033631571" MODIFIED="1469918265250" TEXT="Selector-Interface">
+<arrowlink COLOR="#7caed5" DESTINATION="ID_478070427" ENDARROW="Default" ENDINCLINATION="466;133;" ID="Arrow_ID_1332735015" STARTARROW="None" STARTINCLINATION="681;0;"/>
+</node>
+<node CREATED="1457742626368" ID="ID_166928002" MODIFIED="1512926191991" TEXT="2.Ausdrucks-Ebene">
+<node CREATED="1457742639703" ID="ID_285055499" MODIFIED="1457742645826" TEXT="neben der Identit&#xe4;t"/>
+<node CREATED="1457742646366" ID="ID_1443547530" MODIFIED="1533608413881" TEXT="logische Typisierung">
+<node CREATED="1457742667947" ID="ID_1038084970" MODIFIED="1457742677734" TEXT="entweder anhand Payload-Typ"/>
+<node CREATED="1457742678185" ID="ID_298458662" MODIFIED="1457742684533" TEXT="oder versteckt in der ID"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1458175861176" FOLDED="true" HGAP="33" ID="ID_1824353830" MODIFIED="1576200485063" TEXT="Design-Anforderungen">
+<node CREATED="1458175880034" ID="ID_1162706656" MODIFIED="1512926191992" TEXT="gegeben ist eine STL-Collection">
+<node CREATED="1458175892400" ID="ID_1414371056" MODIFIED="1458175904674" TEXT="allgemeinstes STL-Container-Interface"/>
+<node CREATED="1458175905766" ID="ID_1684884906" MODIFIED="1458175919817" TEXT="Wert-Typ per typedef abgreifen"/>
+</node>
+<node CREATED="1455927276314" HGAP="91" ID="ID_1546815224" MODIFIED="1525124215145" TEXT="brauche zus&#xe4;tzliche Operationen" VSHIFT="-3">
+<cloud COLOR="#fce9c0"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+<node CREATED="1458175942866" ID="ID_1696569407" MODIFIED="1512926191994" TEXT="match">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177113846" ID="ID_1566509772" MODIFIED="1458177953094" TEXT="stellt fest, ob das Ziel pa&#xdf;t"/>
+<node CREATED="1458177136475" ID="ID_595613576" MODIFIED="1458177953094" TEXT="greift auf eine ID des Zieles zur&#xfc;ck"/>
+<node CREATED="1458177147897" ID="ID_1293563447" MODIFIED="1458177953094" TEXT="mu&#xdf; daher in der Regel bereitgestellt werden"/>
+<node CREATED="1458177166543" ID="ID_1334737539" MODIFIED="1533608413881" TEXT="Ersatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1458177169406" ID="ID_1424015065" MODIFIED="1458177953094" TEXT="content-Match"/>
+<node CREATED="1458177173574" ID="ID_1148713847" MODIFIED="1575133331142" TEXT="Konsequenz: man kann keine Assignements machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil beim Assignment die Spec (=GenNode) eben
+    </p>
+    <p>
+      zwar die ID des Zieles, aber den neu zuzuweisenden Wert enth&#228;lt.
+    </p>
+    <p>
+      Also wird sich das Ziel nicht anhand des neuen Wertes finden lassen,
+    </p>
+    <p>
+      weil es eben grade noch nicht diesen neuen Wert tr&#228;gt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458177198643" ID="ID_179880742" MODIFIED="1458177953094" TEXT="Konsequenz: Suche kann das falsche Resultat erwischen"/>
+</node>
+</node>
+<node CREATED="1458175960615" ID="ID_1831530423" MODIFIED="1512926191995" TEXT="ctor">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177315803" ID="ID_179295186" MODIFIED="1458177953094" TEXT="konstruiert aus der Spec ein neues Element"/>
+<node CREATED="1458177335632" ID="ID_1308099027" MODIFIED="1458177953094" TEXT="mu&#xdf; typischerweise die Interna des Zieles kennen"/>
+<node CREATED="1458177347622" ID="ID_1077558487" MODIFIED="1533608413881" TEXT="Ersatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1458177489444" ID="ID_1781927029" MODIFIED="1458177953094" TEXT="unterstelle Payload == Zieltyp"/>
+<node CREATED="1458177572865" ID="ID_1189103336" MODIFIED="1458177953094" TEXT="Konstruktor auf dem Ziel, der eine GenNode nimmt"/>
+</node>
+</node>
+<node CREATED="1458175991795" ID="ID_711298865" MODIFIED="1512926191995" TEXT="optional...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458176002762" ID="ID_1018722356" MODIFIED="1533608413882" TEXT="selector">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177605869" ID="ID_405530200" MODIFIED="1458177953094" TEXT="bestimmt ob die Spec f&#xfc;r diesen Binding-Layer &#xfc;berhaupt relevant ist"/>
+<node CREATED="1458177631409" ID="ID_1214963706" MODIFIED="1458177953094" TEXT="erlaubt das Filtern mit mehreren Bindings"/>
+<node CREATED="1458177642144" ID="ID_60004797" MODIFIED="1561827465503" TEXT="Ersatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1458177646671" ID="ID_231593517" MODIFIED="1458177953094" TEXT="kein Selector"/>
+<node CREATED="1458177652662" ID="ID_65084807" MODIFIED="1458177953094" TEXT="es kann dann also nur ein Binding geben"/>
+<node CREATED="1458177664868" ID="ID_643667548" MODIFIED="1458177953094" TEXT="das ist aber auch der h&#xe4;ufigste Fall"/>
+</node>
+</node>
+<node CREATED="1458176008025" ID="ID_1481953509" MODIFIED="1533608413883" TEXT="setter">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177697657" ID="ID_1719649092" MODIFIED="1458177953095" TEXT="erlaubt Zuweisung"/>
+<node CREATED="1458177712798" ID="ID_1927197411" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
+<node CREATED="1458177735635" ID="ID_760968660" MODIFIED="1561827465503" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1458177738499" ID="ID_465396536" MODIFIED="1458177953095" TEXT="keiner"/>
+<node CREATED="1458177741155" ID="ID_389524826" MODIFIED="1458177953095" TEXT="dann gibt&apos;s eben keine Zuweisung"/>
+<node CREATED="1458177749233" ID="ID_137083197" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei sub-Scopes"/>
+<node CREATED="1458177803730" ID="ID_796394975" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei immutable values"/>
+</node>
+</node>
+<node CREATED="1458176018087" ID="ID_161071725" MODIFIED="1533608413884" TEXT="mutator">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177821712" ID="ID_1562278983" MODIFIED="1458177953095" TEXT="baut einen sub-Mutator f&#xfc;r einen nested scope"/>
+<node CREATED="1458177851988" ID="ID_1086989195" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
+<node CREATED="1458177857939" ID="ID_1441498229" MODIFIED="1561827465504" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1458177861162" ID="ID_895205483" MODIFIED="1458177953095" TEXT="keiner"/>
+<node CREATED="1458177863506" ID="ID_1223351113" MODIFIED="1458177953095" TEXT="dann gibts eben keine Behandlung von nested scopse"/>
+<node CREATED="1458177874760" ID="ID_1180989735" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei primitive values"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1458176048564" ID="ID_1687741268" MODIFIED="1512926191998" TEXT="Flexibilit&#xe4;t">
+<node CREATED="1458176054154" ID="ID_470009160" MODIFIED="1458176076851" TEXT="so wenig typ-Feslegung wie m&#xf6;glich"/>
+<node CREATED="1458176077368" ID="ID_1813716923" MODIFIED="1458176092658" TEXT="fallback bei fehlendern Operationen"/>
+<node CREATED="1458176093958" ID="ID_1948085876" MODIFIED="1512926191999" TEXT="Argument: &quot;dann halt nicht&quot;">
+<node CREATED="1458176117266" ID="ID_1409813294" MODIFIED="1458176127813" TEXT="es ist so wie es ist"/>
+<node CREATED="1458176128352" ID="ID_272673102" MODIFIED="1458176139563" TEXT="die Gegenseite wei&#xdf; schon was sie will"/>
+<node CREATED="1458176252336" ID="ID_1153956310" MODIFIED="1533608413885" TEXT="ich bin, also bin ich konsistent">
+<node CREATED="1458176267382" ID="ID_1638809288" MODIFIED="1458176296319" TEXT="konsistent ist, was der diff erzeugt"/>
+<node CREATED="1458176297282" ID="ID_1916492291" MODIFIED="1458176305981" TEXT="alles wird per diff erzeugt"/>
+<node CREATED="1458176306593" ID="ID_1118529331" MODIFIED="1458176314868" TEXT="also ist alles, was existiert, auch konsistent"/>
+</node>
+<node CREATED="1458176787953" ID="ID_289940321" MODIFIED="1533608413887" TEXT="sinnvoll gew&#xe4;hlt">
+<node CREATED="1458176794848" ID="ID_1468708263" MODIFIED="1458176810370" TEXT="native datenstruktur ist so gew&#xe4;hlt, da&#xdf; sie ihren Zweck erf&#xfc;llt"/>
+<node CREATED="1458176883836" ID="ID_1253939379" MODIFIED="1458176899324">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      generische Repr&#228;sentaton ist so gew&#228;hlt,
+    </p>
+    <p>
+      da&#223; sich alle relevanten Eigenschaften darstellen lassen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458176911161" ID="ID_431800648" MODIFIED="1561827465504">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn also ein Teil der diff-Funkttionalit&#228;t nicht verf&#252;gbar ist,
+    </p>
+    <p>
+      dann wird es wohl so sein, da&#223; sie auch nicht gebraucht wird
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1458176947972" ID="ID_1847366222" MODIFIED="1458176965869" TEXT="Beispiel: primitive Werte sind eben kein sub-Scope"/>
+<node CREATED="1458176966665" ID="ID_332748706" MODIFIED="1458176981459" TEXT="Beispiel: immutable elements sind eben nicht zuweisbar"/>
+</node>
+</node>
+</node>
+<node CREATED="1458176998437" ID="ID_280086408" MODIFIED="1575133331758" TEXT="keine unn&#xf6;tigen Einschr&#xe4;nkungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zwar erscheint es nicht sonderlich sinnvoll,
+    </p>
+    <p>
+      als target auch eine Menge von primitiven Werten zuzulassen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Es gibt aber auch keinen wirklichen Grund, dies zu verbieten,
+    </p>
+    <p>
+      sofern es gelingt, die Funktionalit&#228;t gutm&#252;tig zu degradieren.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1458178113697" HGAP="46" ID="ID_1695144986" MODIFIED="1512926192002" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="-5">
+<node CREATED="1458178126159" ID="ID_1000523444" MODIFIED="1458178131587" TEXT="Rahmenklasse + Closures"/>
+<node CREATED="1458178133078" ID="ID_594771691" MODIFIED="1458851636692" TEXT="Closures mit der Ersatz-Impl vorbelegen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1458178150916" ID="ID_184029363" MODIFIED="1458178174848" TEXT="Problem: komplexe Konstruktion">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1458178165322" ID="ID_813311479" MODIFIED="1512926192002" TEXT="L&#xf6;sung: nested DSL">
+<icon BUILTIN="idea"/>
+<node CREATED="1458178203821" ID="ID_1772782569" MODIFIED="1458178222190" TEXT="die Top-Level Builder-Funktion erwartet das volle Binding"/>
+<node CREATED="1458178223723" ID="ID_489567599" MODIFIED="1458178247755" TEXT="es gibt eine freie Funktion, die einen nested Builder f&#xfc;r das Binding liefert"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1458178288690" FOLDED="true" ID="ID_788822286" MODIFIED="1576281513362" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1458178298328" ID="ID_1990195829" MODIFIED="1512926192003" TEXT="Builder">
+<node CREATED="1458325962991" ID="ID_548735792" MODIFIED="1460753004725" TEXT="Typ-Definitionen schwierig anzuschreiben">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1458325973486" ID="ID_1681473580" MODIFIED="1458325992405" TEXT="Code ziemlich redundant und undurchsichtig">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1458326045724" ID="ID_65072201" MODIFIED="1575133331952" TEXT="Typ-Check erst sehr sp&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...will sagen,
+    </p>
+    <p>
+      da sind mehrere Layer an praktisch ungebundenem Template-Code dazwischen,
+    </p>
+    <p>
+      so da&#223; zu bef&#252;rchten steht, da&#223; ein unpassendes Lambda erst weit entfernt
+    </p>
+    <p>
+      eine wom&#246;glich irref&#252;hrende Meldung generiert
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink DESTINATION="ID_1678218183" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1136171372" STARTARROW="None" STARTINCLINATION="176;0;"/>
+</node>
+<node CREATED="1472498654730" ID="ID_4691477" MODIFIED="1472498676884" TEXT="gel&#xf6;st durch static_assert">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1458178300984" ID="ID_1281780083" MODIFIED="1512926192004" TEXT="Binding-Layer">
+<node CREATED="1458850722203" ID="ID_1721325933" MODIFIED="1512926192004" TEXT="Fehler bei fehlender Funktionalit&#xe4;t">
+<node CREATED="1458850733769" ID="ID_668556812" MODIFIED="1458850744620" TEXT="kein Setter"/>
+<node CREATED="1458850746184" ID="ID_34346680" MODIFIED="1458850752370" TEXT="kein Mutator"/>
+</node>
+<node CREATED="1458850782747" ID="ID_956633485" MODIFIED="1458850793430" TEXT="Umgang mit fehlendem Selector"/>
+<node CREATED="1458934854051" ID="ID_1793475507" MODIFIED="1512926192004" TEXT="Binding st&#xe4;rker abschlie&#xdf;en">
+<node CREATED="1458934863225" ID="ID_1054692405" MODIFIED="1458934897237" TEXT="contentBuffer k&#xf6;nnte privat sein">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1458934878911" ID="ID_1685655700" MODIFIED="1458934893132" TEXT="welche Iteratoren m&#xfc;ssen exponiert werden">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1460762013033" ID="ID_513991249" MODIFIED="1512926192005" TEXT="Mutation">
+<node CREATED="1460762015777" ID="ID_671701663" MODIFIED="1533608413888">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erfordert <i>wirklich</i>&#160;Kooperation
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1460762025520" ID="ID_840517858" MODIFIED="1460762032675" TEXT="zwischen dem gesendeten Diff"/>
+<node CREATED="1460762033119" ID="ID_104073581" MODIFIED="1460762045704" TEXT="und der empfangenden Implementierungs-Datenstruktur"/>
+</node>
+<node CREATED="1460762065371" ID="ID_1300484830" MODIFIED="1533608413889" TEXT="brauche wohl &quot;Introspection light&quot;">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1460762101046" ID="ID_1986146276" MODIFIED="1460762111448" TEXT="damit ich einen Sub-Scope vorbereiten kann"/>
+<node CREATED="1460762111924" ID="ID_258947464" MODIFIED="1460762120759" TEXT="in separater privater Datenstrukcur"/>
+<node CREATED="1460762121259" ID="ID_1701228640" MODIFIED="1575133332206" TEXT="ist aber nur rein hier im Test ein Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir verwenden hier als &quot;private&quot; Datenstruktur
+    </p>
+    <p>
+      eine etwas komische Collection von Strings,
+    </p>
+    <p>
+      in die wir die String-Repr&#228;sentation der Spec-Payload schreiben.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In der Praxis dagegen w&#252;rde man wirklich einen privaten Datentyp verwenden,
+    </p>
+    <p>
+      und dann auch voraussetzen, da&#223; man <i>nur</i>&#160;Kinder dieses Typs (oder zuweisungskompatibel) bekommt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Mein Poblem hier ist, da&#223; ich in dieser Demonstrations-Datenstruktur keine nested scopes repr&#228;sentieren kann.
+    </p>
+    <p>
+      Aber hey!, es ist meine private Datenstruktur -- also kann ich einfach eine Map von nested scopes
+    </p>
+    <p>
+      daneben auf die gr&#252;ne Wiese stellen. Ist ja nur ein Test :-D
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1460762330487" ID="ID_1060781290" MODIFIED="1575133332223" TEXT="Nein! Schwein gehabt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dankenswerterweise hat der subscript-Operator von std::Map
+    </p>
+    <p>
+      die nette Eigenschaft, beim ersten Zugriff auf einen neuen Key
+    </p>
+    <p>
+      dessen payload per default-konstruktor zu erzeugen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node CREATED="1458868836883" ID="ID_776863625" MODIFIED="1512926192006" TEXT="Beobachtungen">
+<node CREATED="1458868852849" ID="ID_474120946" MODIFIED="1575133332262" TEXT="Sonderbarer &quot;this&quot;-Typ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Builder in der nested DSL generiert einen sonderbar falschen &quot;this&quot;-Typ,
+    </p>
+    <p>
+      genauer gesagt, eine TYPID die falsch ist.
+    </p>
+    <p>
+      Und zwar kommt es da zum &quot;&#220;bersprechen&quot; von einem Typ-Parameter in den anderen.
+    </p>
+    <p>
+      Im Besonderen hab ich beobachtet, da&#223;, wenn man auf den 3.Typparameter ein Lambda gibt,
+    </p>
+    <p>
+      dann auf dem 4. oder 5. Typparameter der bisherige /alte Typ des 3.Typparameters auftaucht,
+    </p>
+    <p>
+      u.U auch eingeschachtelt als ein Argument.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Habe mich aber davon &#252;berzeugt, da&#223; die eigentlichen Typ-Parameter in Ordnung sind.
+    </p>
+    <p>
+      Und zwar habe ich das verifiziert
+    </p>
+    <ul>
+      <li>
+        durch Ausgeben der Typen im Konstruktor (mithilfe meiner typeStr&lt;TY&gt;()
+      </li>
+      <li>
+        durch Einbauen einer Static-Assertion mit Signatur-Match
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1458850516270" ID="ID_960489546" MODIFIED="1512926192006" TEXT="Test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850521270" ID="ID_10780308" MODIFIED="1512926192007" TEXT="F&#xe4;lle">
+<arrowlink COLOR="#639ad5" DESTINATION="ID_1333254858" ENDARROW="Default" ENDINCLINATION="1091;0;" ID="Arrow_ID_1011836019" STARTARROW="None" STARTINCLINATION="1150;185;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1458850526133" ID="ID_1314105749" MODIFIED="1458850550109" TEXT="Binden an Sammlung aus Primitiven"/>
+<node CREATED="1458850550705" ID="ID_1183034205" MODIFIED="1458850572315" TEXT="Binden an Sammlung aus Spezialtypen"/>
+</node>
+<node CREATED="1458850656668" ID="ID_98190211" MODIFIED="1512926192007" TEXT="Defaults">
+<node CREATED="1458850660523" ID="ID_907930269" MODIFIED="1575133332339" TEXT="GenNode-vertr&#xe4;glicher Payload-Typ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gemeint ist:
+    </p>
+    <p>
+      die native Datenstruktur ist eine Collection von Elementen,
+    </p>
+    <p>
+      welche ohne Weiteres direkt in eine GenNode gepackt werden k&#246;nnten. Denn dann l&#228;&#223;t
+    </p>
+    <p>
+      sich eine einfache Default-Implementierung des Matchers angeben
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Typisches Beispiel: eine STL-Collection von Strings.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458850672705" ID="ID_1189075551" MODIFIED="1458850675197" TEXT="kein Setter"/>
+<node CREATED="1458850675641" ID="ID_1246319832" MODIFIED="1458850678564" TEXT="kein Mutator"/>
+</node>
+</node>
+</node>
+<node CREATED="1576201164862" ID="ID_1192285970" MODIFIED="1576201174765" TEXT="Anwendung/Weiterungen">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1576201177204" ID="ID_1553674095" MODIFIED="1576201185379" TEXT="konkrete STL-Container">
+<node COLOR="#435e98" CREATED="1576201634998" ID="ID_1964972550" MODIFIED="1576201711423" TEXT="Kriterium: Anf&#xfc;gen in Iterations-Ordnung m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, wir k&#246;nnen Elemente in der gleichen Reihenfolge anf&#252;gen, in der sie sp&#228;ter dann in der Iteration erscheinen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1576201686151" ID="ID_621927049" MODIFIED="1576201705653" TEXT="das schlie&#xdf;t z.B. die std::forward_list aus">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1463687466573" ID="ID_453712930" MODIFIED="1576203666771" TEXT="&#xbb;Attribut-Map&#xab; via Collection-Binding">
+<linktarget COLOR="#9f96d9" DESTINATION="ID_453712930" ENDARROW="Default" ENDINCLINATION="478;123;" ID="Arrow_ID_1448345273" SOURCE="ID_1994979880" STARTARROW="None" STARTINCLINATION="479;26;"/>
+<linktarget COLOR="#9f96d9" DESTINATION="ID_453712930" ENDARROW="Default" ENDINCLINATION="722;-59;" ID="Arrow_ID_1263259661" SOURCE="ID_1112268061" STARTARROW="Default" STARTINCLINATION="1873;0;"/>
+<node CREATED="1576201733178" ID="ID_150341491" MODIFIED="1576201748321" TEXT="clever aber etwas faul">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1576201756590" ID="ID_1699263676" MODIFIED="1576201764691" TEXT="im Widerspruch zum Konzept"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576203601492" ID="ID_1611724080" MODIFIED="1576203790175" TEXT="auf technischer Ebene problematisch">
+<linktarget COLOR="#e69f98" DESTINATION="ID_1611724080" ENDARROW="Default" ENDINCLINATION="-741;702;" ID="Arrow_ID_1638749746" SOURCE="ID_42201574" STARTARROW="None" STARTINCLINATION="1526;117;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1475449660020" ID="ID_1478336994" MODIFIED="1475449740005" TEXT="Diff geht von Listen-Ordnung aus">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1475449777532" ID="ID_631032937" MODIFIED="1575133341421" TEXT="Symptom: Compile-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Map hat kein emplace_back
+      </li>
+      <li>
+        Map hat kein back()
+      </li>
+    </ul>
+    <p>
+      Beides ist erst mal sinnvoll. Map hat zwar ein emplace, aber das f&#252;gt eben <i>irgendwo</i>&#160;ein
+    </p>
+    <p>
+      Und es gibt nicht sowas wie das &quot;zuletzt behandelte&quot; Element
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1576204849307" ID="ID_1683329492" MODIFIED="1576204859597" TEXT="getriggert vom include von MockElm"/>
+<node CREATED="1576204860969" ID="ID_886723912" MODIFIED="1576204978226" TEXT="dieses definiert CollectionBindingBuilder&lt;std::map&lt;string,string&gt;, ....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      MockElm, Z 260 : .attach (collection(attrib)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1576281315883" ID="ID_640546093" MODIFIED="1576281693125" TEXT="L&#xf6;sung: ContainerTraits">
+<linktarget COLOR="#2eb28a" DESTINATION="ID_640546093" ENDARROW="Default" ENDINCLINATION="-191;-682;" ID="Arrow_ID_562122794" SOURCE="ID_1695910920" STARTARROW="None" STARTINCLINATION="485;33;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1576281324121" ID="ID_1199488349" MODIFIED="1576281329357" TEXT="zun&#xe4;chst pragmatisch..."/>
+<node CREATED="1576281330011" ID="ID_1351721283" MODIFIED="1576281335828" TEXT="f&#xfc;r std::vector"/>
+<node CREATED="1576281336488" ID="ID_3661697" MODIFIED="1576281340447" TEXT="f&#xfc;r std::map">
+<node CREATED="1576281341463" ID="ID_774200305" MODIFIED="1576281347109" TEXT="auch wenn&apos;s nicht sch&#xf6;n ist..."/>
+<node CREATED="1576281347766" ID="ID_1789296590" MODIFIED="1576281368023" TEXT="prinzipiell gibt es keinen Grund, diese Alternative nicht zu bieten"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576281371403" ID="ID_424557250" MODIFIED="1576281393116" TEXT="Zukunft: &quot;generischer STL container&quot;">
+<icon BUILTIN="bell"/>
+<node CREATED="1576281394776" ID="ID_847933754" MODIFIED="1576281409962" TEXT="vermutlich gibt es n&#xe4;mlich einen kleinsten gemeinsamen Nenner"/>
+<node CREATED="1576281412733" ID="ID_193628368" MODIFIED="1576281422192" TEXT="m&#xf6;glicherweise mit C++20 / Concepts"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1457232752458" FOLDED="true" ID="ID_679000009" MODIFIED="1576203843960" TEXT="Attribute">
+<icon BUILTIN="full-3"/>
+<node CREATED="1458175823858" ID="ID_1006862973" MODIFIED="1512926192010" TEXT="Design-Grundlagen">
+<node CREATED="1461882686190" ID="ID_1889353960" MODIFIED="1575133332435" TEXT="von praktischer Notwendigkeit getrieben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir integrieren Attribute nicht, weil es so sch&#246;n symmetrisch ist,
+    </p>
+    <p>
+      sondern weil sie essentiell zum Wesen von Objekten geh&#246;ren.
+    </p>
+    <p>
+      Wenn wir &#196;nderungen an Objekt-Strukturen als Diff erfassen wollen,
+    </p>
+    <p>
+      dann <i>m&#252;ssen</i>&#160;Attribute irgendwie sinnvoll integriert sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1457741673001" ID="ID_162846674" MODIFIED="1512926192010" TEXT="konkrete Beispiele">
+<icon BUILTIN="info"/>
+<node CREATED="1457741683687" ID="ID_1986089780" MODIFIED="1461888218005" TEXT="Position eines Clips"/>
+<node CREATED="1461888218521" ID="ID_805889980" MODIFIED="1461888222508" TEXT="L&#xe4;nge eines Clips"/>
+<node CREATED="1461888223024" ID="ID_1852444919" MODIFIED="1461888302874" TEXT="Typ eines Markers"/>
+<node CREATED="1461888304126" ID="ID_446819203" MODIFIED="1461888305362" TEXT="..."/>
+</node>
+<node CREATED="1457742434714" ID="ID_1724305674" MODIFIED="1461888342584">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; <i>immer</i>&#160;in der Klasse verankert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1457742434714" ID="ID_1982563767" MODIFIED="1461888407600">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; es geht eigentlich <i>nur</i>&#160;um den Wert des Attributes
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1458175861176" FOLDED="true" HGAP="39" ID="ID_9781860" MODIFIED="1576200444705" TEXT="Design-Anforderungen" VSHIFT="7">
+<node CREATED="1458175880034" ID="ID_470578362" MODIFIED="1512926192012" TEXT="...ein Objekt hat schon ein bestimmtes Feld">
+<node CREATED="1458175892400" ID="ID_775558171" MODIFIED="1461888660658" TEXT="Typ"/>
+<node CREATED="1461888661462" ID="ID_274214255" MODIFIED="1461888668033" TEXT="default-Wert"/>
+<node CREATED="1458175905766" ID="ID_625777549" MODIFIED="1461888693671">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      manche Felder sind <i>optional</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1461888779999" ID="ID_1154997498" MODIFIED="1512926192012" TEXT="innerer Widerspruch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1461888830680" ID="ID_1487174561" MODIFIED="1461888837867" TEXT="Feld vs Attribut"/>
+<node CREATED="1461888838455" ID="ID_1479289808" MODIFIED="1461888848953" TEXT="das Diff dr&#xfc;ckt sich in Attributen aus"/>
+<node CREATED="1461888982036" ID="ID_1968370725" MODIFIED="1512926192013" TEXT="Umgang mit den Diskrepanzen">
+<icon BUILTIN="help"/>
+<node CREATED="1461889012008" ID="ID_40654684" MODIFIED="1533608413889" TEXT="Einf&#xfc;gen eines Attributes">
+<node CREATED="1461889021646" ID="ID_201631788" MODIFIED="1461889026273" TEXT="wo das Feld schon da ist"/>
+<node CREATED="1461889026813" ID="ID_1640082452" MODIFIED="1461889040368" TEXT="wo es kein korrespondierendes Feld gibt"/>
+</node>
+<node CREATED="1461889146846" ID="ID_25411084" MODIFIED="1461889152792" TEXT="L&#xf6;schen eines Attributes"/>
+<node CREATED="1461889107939" ID="ID_1826186779" MODIFIED="1461889133891" TEXT="Umordnen von Attributen"/>
+</node>
+<node CREATED="1461889187336" ID="ID_385261311" MODIFIED="1512926192015" TEXT="Leitgedanke">
+<font NAME="SansSerif" SIZE="15"/>
+<node CREATED="1461889203662" ID="ID_896442640" MODIFIED="1461889243250" TEXT="&#xbb;auf GenNode und Objekt gleicherma&#xdf;en anwendbar&#xab;">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1461889253087" ID="ID_1086093590" MODIFIED="1533608413908" TEXT="das hei&#xdf;t...">
+<font NAME="SansSerif" SIZE="11"/>
+<node CREATED="1461889261806" ID="ID_7827811" MODIFIED="1461889621538" TEXT="wende Diff auf GenNode an">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1461889282580" ID="ID_915026064" MODIFIED="1461889621538" TEXT="wende gleichen Diff auf gebundenes Objekt an">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1461889296634" ID="ID_1803163409" MODIFIED="1461889621537" TEXT="Ergebnis mu&#xdf; semantisch &#xe4;quivalent sein">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1461889399932" ID="ID_384089086" MODIFIED="1461889621534">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      unter der Ma&#223;gabe,
+    </p>
+    <p>
+      wie ETD ein Objekt rep&#228;sentiert
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1461889470866" ID="ID_582798205" MODIFIED="1561827465534" TEXT="operational">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1461889474402" ID="ID_478945699" MODIFIED="1575133332828" TEXT="alle Informationen, die die Anwendung nicht nutzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;Anwendung&quot; : meint das Anwenden eines Diffs auf ein Ziel-Objekt
+    </p>
+    <p>
+      &quot;nicht nutzen&quot; : meint ignorieren und verwerfen der Information
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461889550072" ID="ID_1443097308" MODIFIED="1461889558442" TEXT="d&#xfc;rfen nur Zustands-&#xc4;nderungen bewirken"/>
+<node CREATED="1461889558983" ID="ID_567185466" MODIFIED="1461889796278" TEXT="welche keinen Einflu&#xdf; auf nachfolgende Diffs haben">
+<arrowlink COLOR="#be5b66" DESTINATION="ID_325506443" ENDARROW="Default" ENDINCLINATION="28;-28;" ID="Arrow_ID_1504152758" STARTARROW="None" STARTINCLINATION="13;20;"/>
+</node>
+</node>
+</node>
+<node CREATED="1461889656194" HGAP="73" ID="ID_325506443" MODIFIED="1533608413909" TEXT="ist das &#xfc;berhaupt m&#xf6;glich" VSHIFT="23">
+<linktarget COLOR="#be5b66" DESTINATION="ID_325506443" ENDARROW="Default" ENDINCLINATION="28;-28;" ID="Arrow_ID_1504152758" SOURCE="ID_567185466" STARTARROW="None" STARTINCLINATION="13;20;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1461889858863" ID="ID_1007257543" MODIFIED="1575133332880" TEXT="sicher nicht bidirektional">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      meint: ETD -&gt; Objekt und dann sp&#228;ter Objekt -&gt; ETD
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      warum?
+    </p>
+    <p>
+      Weil sich in der ETD die Reihenfolge &#228;ndern kann,
+    </p>
+    <p>
+      und aber das Aufspielen eines Diffs auf beiden Seiten
+    </p>
+    <p>
+      zwingend die gleiche Reihenfolge erfordert!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461890009355" ID="ID_1795458386" MODIFIED="1575133332917" TEXT="aber ETD als Zwischenstufe ist m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Objekt -&gt; ETD -&gt; Objekt
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      warum?
+    </p>
+    <p>
+      weil das Quellobjekt keinen Diff erzeugen wird,
+    </p>
+    <p>
+      der sich letztlich nicht auf das Zielobjekt aufspielen l&#228;&#223;t
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#807bce" DESTINATION="ID_1795458386" ENDARROW="Default" ENDINCLINATION="671;0;" ID="Arrow_ID_1621793396" SOURCE="ID_1767038604" STARTARROW="Default" STARTINCLINATION="994;0;"/>
+</node>
+<node CREATED="1461890240148" ID="ID_755605936" MODIFIED="1561827465535" TEXT="Schutzmechanismen">
+<node CREATED="1461890266377" ID="ID_1129894756" MODIFIED="1461890283701">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      abweisen, was das Kriterium <i>sicher verletzt</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461890289662" ID="ID_708422709" MODIFIED="1461890307247" TEXT="Einf&#xfc;gen eines Feldes, das die Klasse nicht kennt"/>
+<node CREATED="1461891798533" ID="ID_689714781" MODIFIED="1461891807616" TEXT="explizites Umordnen (per seek)"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1461892011913" HGAP="227" ID="ID_1646969790" MODIFIED="1525124215165" TEXT="Verhaltensmuster" VSHIFT="11">
+<node CREATED="1461892073089" ID="ID_276124788" MODIFIED="1575133333003" TEXT="default vs mandatory">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>mandatory</b>&#160;: Wert mu&#223; per Konstruktor gegeben sein
+    </p>
+    <p>
+      <b>default</b>&#160;: es gibt einen ausgezeichneten Standardwert
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1461892285965" ID="ID_649582218" MODIFIED="1533608413911" TEXT="mandatory ">
+<node CREATED="1461892303666" ID="ID_1570612865" MODIFIED="1461892312404" TEXT="Problem der Konstruktor-Repr&#xe4;sentation"/>
+<node CREATED="1461892313049" ID="ID_335222917" MODIFIED="1575133333052" TEXT="einziger Ausweg: komplette ETD-Repr&#xe4;sentation als Wert senden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, in dem ins-Verb ist dann ein komplettes Objekt enthalten,
+    </p>
+    <p>
+      nicht nur eine leere Record-H&#252;lle, die nachfolgend populiert werden kann (aber nicht mu&#223;)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461892430466" ID="ID_215866993" MODIFIED="1461892440092" TEXT="ein mandatory-Feld darf nicht gel&#xf6;scht werden"/>
+</node>
+<node CREATED="1461892444727" ID="ID_1285291323" MODIFIED="1533608413912" TEXT="default">
+<node CREATED="1461892490881" ID="ID_546743858" MODIFIED="1561827465535" TEXT="es gibt zwei Grade">
+<node CREATED="1461892496377" ID="ID_682467781" MODIFIED="1575133333102" TEXT="minder">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Konstruktor bef&#252;llt das Feld halt irgendwie.
+    </p>
+    <p>
+      Ab dem Punkt verh&#228;lt es sich aber wie ein normales (mandatory) Feld
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461892554377" ID="ID_1327287438" MODIFIED="1575133333117" TEXT="vollwertig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Objekt selber kann erkennen, ob das Feld sich im &quot;default-Zustand&quot; befindet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1461892641949" ID="ID_747303496" MODIFIED="1461892653415" TEXT="Einf&#xfc;gen == vom Default-Wert abweichen"/>
+<node CREATED="1461892654148" ID="ID_1992298354" MODIFIED="1461892662590" TEXT="L&#xf6;schen == zum Default-Wert zur&#xfc;ckkehren"/>
+</node>
+</node>
+<node CREATED="1461966988471" ID="ID_84281476" MODIFIED="1512926192022" TEXT="pr&#xfc;fen vs ignorieren">
+<node CREATED="1461967012164" ID="ID_1394333030" MODIFIED="1533608413912" TEXT="pr&#xfc;fen">
+<icon BUILTIN="forward"/>
+<node CREATED="1461967015883" ID="ID_659976910" MODIFIED="1461967028022" TEXT="ben&#xf6;tigt zus&#xe4;tzliche Mechanismen"/>
+<node CREATED="1461967028489" ID="ID_720327121" MODIFIED="1461967042164" TEXT="verifiziert Validit&#xe4;t der Diff-Nachricht"/>
+</node>
+<node CREATED="1461967044480" ID="ID_989829670" MODIFIED="1533608413913" TEXT="ignorieren">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1461967051095" ID="ID_1280707953" MODIFIED="1461967056946" TEXT="wendet an, was anwendbar ist"/>
+<node CREATED="1461967057462" ID="ID_1792972822" MODIFIED="1461967068248" TEXT="alles andere &quot;durchwinken&quot;"/>
+</node>
+<node COLOR="#990000" CREATED="1461967003141" HGAP="29" ID="ID_590789300" MODIFIED="1533608413916" TEXT="Design-Entscheidung" VSHIFT="19">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1461967143851" ID="ID_1683940966" MODIFIED="1575133333271">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ohne Pr&#252;fen ist <b>emptySrc</b>&#160;nicht implementierbar
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil es f&#252;r <b>emptySrc</b>&#160;keine neutrale Antwort gibt.
+    </p>
+    <p>
+      Denn dieses Pr&#228;dikat wird von der typischen Implementierung des Diff-Applikators
+    </p>
+    <p>
+      in beiden Richtungen verwendet, also sowohl Pr&#252;fung auf empty (&quot;expect no further elements&quot;),
+    </p>
+    <p>
+      alsauch der Check, da&#223; &#252;berhaupt noch Quellelemente anstehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461967247093" ID="ID_820111448" MODIFIED="1461967294701">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h., man kann nur <i>global auf Pr&#252;fung verzichten&#160;</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461967274577" ID="ID_1940471621" MODIFIED="1461967310565">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und da habe ich mich bereits <i><font color="#d3204b">dagegen entschieden</font></i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461967364397" ID="ID_998476299" MODIFIED="1461967379991" TEXT="Pr&#xfc;fung erfordert eine Flag f&#xfc;r jedes bekannte Feld"/>
+<node CREATED="1461967384579" ID="ID_602978912" MODIFIED="1461967401644" TEXT="diese Flag wird gesetzt, sobald der Diff das Feld &quot;ber&#xfc;hrt&quot;"/>
+<node CREATED="1461967428061" ID="ID_515874429" MODIFIED="1561827465536" TEXT="au&#xdf;erdem gibt es noch zwei triviale Basis-Checks">
+<node CREATED="1461967451610" ID="ID_1510037111" MODIFIED="1461967462700" TEXT="ist bekannter Attributsname"/>
+<node CREATED="1461967463264" ID="ID_408683865" MODIFIED="1461967487243">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Feld unterst&#252;tzt <b>default</b>-Wert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1475506680125" HGAP="58" ID="ID_1024927289" MODIFIED="1533608413932" TEXT="Variante" VSHIFT="13">
+<node CREATED="1475506691595" ID="ID_1371631530" MODIFIED="1475506704861" TEXT="emptySrc -&gt; hasSrc"/>
+<node CREATED="1475506705641" ID="ID_1680481140" MODIFIED="1475506735169" TEXT="und den nicht implementierbaren Fall tolerieren"/>
+<node CREATED="1475506735949" ID="ID_798651428" MODIFIED="1475506746633" TEXT="im &#xdc;brigen: stets pr&#xfc;fen und scheitern">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1475506753523" HGAP="34" ID="ID_1091824657" MODIFIED="1475506765947" TEXT="so umgesetzt" VSHIFT="10">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1455927276314" HGAP="100" ID="ID_1988815933" MODIFIED="1525124215178" TEXT="Spezifikation" VSHIFT="18">
+<cloud COLOR="#fce9c0"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+<node CREATED="1461946125744" HGAP="55" ID="ID_803569564" MODIFIED="1512926192031">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Auslegung der
+    </p>
+    <p>
+      <font size="5">Primitiven</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1455927425726" ID="ID_585793339" MODIFIED="1533608413934" TEXT="hasSrc">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928216420" ID="ID_906145373" MODIFIED="1464116966043" TEXT="can not sensibly be implemented">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1464116995888" ID="ID_705527711" MODIFIED="1464117033135" TEXT="always returns true">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1464116967676" ID="ID_289977872" MODIFIED="1464117025435">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      rationale: object fields are hard wired,
+    </p>
+    <p>
+      thus always available
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1455927425726" ID="ID_1191281077" MODIFIED="1533608413934" TEXT="skipSrc">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="closed"/>
+<node CREATED="1464212421708" ID="ID_151349875" MODIFIED="1464212429644" TEXT="prohibited, raise error"/>
+<node CREATED="1455928216420" ID="ID_1382605808" MODIFIED="1464212390729" TEXT="reset to default">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1461964714068" ID="ID_537168917" MODIFIED="1463690748989" TEXT="mandatory fields raise error">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1455927396505" ID="ID_1179824183" MODIFIED="1533608413935" TEXT="matchSrc">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455928268589" ID="ID_1175359759" MODIFIED="1461964779839" TEXT="ID comparison to field known by name"/>
+</node>
+<node CREATED="1455982947867" ID="ID_597958919" MODIFIED="1533608413935" TEXT="injectNew">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1455982969073" ID="ID_657399174" MODIFIED="1463675987940" TEXT="set known field&apos;s contents"/>
+<node CREATED="1457047512175" ID="ID_1007532661" MODIFIED="1464212464658" TEXT="mandatory fields raise error">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1461964818054" ID="ID_432635855" MODIFIED="1461964825281" TEXT="unknown fields raise error"/>
+</node>
+<node CREATED="1455927413191" ID="ID_515347130" MODIFIED="1533608413935" TEXT="acceptSrc">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1464212476461" ID="ID_934414787" MODIFIED="1464212481606" TEXT="NOP"/>
+<node CREATED="1461964863217" ID="ID_1667143687" MODIFIED="1464212474879" TEXT="mark known field as mentioned">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1455928166683" ID="ID_440876181" MODIFIED="1533608413938" TEXT="accept_until">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1455928383765" ID="ID_1341082886" MODIFIED="1461965340133" TEXT="nicht implementierbar">
+<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1457231714541" ID="ID_721485398" MODIFIED="1465428399592" TEXT="fraglich: mu&#xdf; vielleicht aus der Sprache entfernt werden">
+<arrowlink COLOR="#592379" DESTINATION="ID_832194713" ENDARROW="Default" ENDINCLINATION="577;0;" ID="Arrow_ID_1785459194" STARTARROW="Default" STARTINCLINATION="1205;231;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1463675830732" ID="ID_1936468017" MODIFIED="1561827465536">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Einschr&#228;nkung:&#160;<b>accept_until END</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1463675866200" ID="ID_836526909" MODIFIED="1575133333756" TEXT="ist implementierbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...n&#228;mlich indem alle Attribute als &quot;ber&#252;hrt&quot; und akzeptiert markiert werden.
+    </p>
+    <p>
+      Somit k&#246;nnten sofort Zuweisungen als N&#228;chstes passieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1463675872239" ID="ID_357902233" MODIFIED="1463675882809" TEXT="ist sehr sinnvoll"/>
+<node CREATED="1463675883853" ID="ID_1598959525" MODIFIED="1464212598924" TEXT="k&#xf6;nnte sogar Standardfall sein">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1464212588886" ID="ID_1794610293" MODIFIED="1464212594754" TEXT="ist effektiv NOP">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1455927413191" ID="ID_15287291" MODIFIED="1533608413939" TEXT="findSrc">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="closed"/>
+<node CREATED="1461946965569" ID="ID_641654199" MODIFIED="1461963646230" TEXT="Umordnen wird nicht unterst&#xfc;tzt"/>
+<node CREATED="1461963648481" ID="ID_424736619" MODIFIED="1461963654996" TEXT="l&#xf6;st einen Logik-Fehler aus"/>
+</node>
+<node CREATED="1455928184504" ID="ID_7150585" MODIFIED="1533608413940" TEXT="assignElm">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1461963697714" ID="ID_1611504203" MODIFIED="1461963707499" TEXT="Setter aufrufen"/>
+<node CREATED="1461963686556" ID="ID_1024151478" MODIFIED="1461963697214" TEXT="namentlich bekanntes Feld"/>
+<node CREATED="1461963708449" ID="ID_1297402022" MODIFIED="1461963718804" TEXT="nicht bekannte Felder l&#xf6;sen Fehler aus"/>
+</node>
+<node CREATED="1455928189695" ID="ID_802620360" MODIFIED="1533608413941" TEXT="mutateChild">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1461963754651" ID="ID_74917900" MODIFIED="1461963776115">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      analog wie&#160;<b>assignElm</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461963748604" ID="ID_15098291" MODIFIED="1461963753895" TEXT="namentlich bekanntes Feld"/>
+<node CREATED="1461963777440" ID="ID_1640944406" MODIFIED="1461963787443" TEXT="aber nicht Setter, sondern Mutator bauen"/>
+</node>
+<node CREATED="1464113688645" ID="ID_1176289974" MODIFIED="1533608413942" STYLE="fork" TEXT="completeScope">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1464113727192" ID="ID_1067616469" MODIFIED="1464113954773" TEXT="hier NOP implementiert"/>
+<node CREATED="1464113740005" ID="ID_142294253" MODIFIED="1464114004153">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t, es findet <b>keine Verifikation</b>&#160;statt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1455928193863" ID="ID_623558191" MODIFIED="1533608413943" TEXT="CTOR">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1461946885292" ID="ID_1815209308" MODIFIED="1461965407132" TEXT="mark all known fields as not yet mentioned"/>
+<node COLOR="#e5500c" CREATED="1461946693701" ID="ID_1970580003" MODIFIED="1461965425322" STYLE="fork" TEXT="meta-Operation">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1461946112906" HGAP="14" ID="ID_1014423358" MODIFIED="1512926192037" VSHIFT="21">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zu bindende
+    </p>
+    <p>
+      <font size="4">Operationen</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1458175991795" ID="ID_1060725077" MODIFIED="1533608413943" TEXT="fest eingebaut...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458175942866" ID="ID_243703127" MODIFIED="1561827465536" TEXT="match">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177113846" ID="ID_1805676364" MODIFIED="1461966728693" TEXT="pr&#xfc;ft ID-Name der Spec gegen Feldname des Zieles"/>
+</node>
+<node CREATED="1458176002762" ID="ID_1807951993" MODIFIED="1561827465537" TEXT="selector">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177605869" ID="ID_1366865034" MODIFIED="1461966119517" TEXT="ein default-Selector ist automatisch stets konfiguriert"/>
+<node CREATED="1461966120082" ID="ID_1815206712" MODIFIED="1461966665670" TEXT="default ist Pr&#xfc;fen, ob die Spec ein Attribut bezeichnet"/>
+</node>
+</node>
+<node CREATED="1458175991795" ID="ID_568449972" MODIFIED="1533608413946" TEXT="optional...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458176008025" ID="ID_1898233888" MODIFIED="1561827465537" TEXT="setter">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177697657" ID="ID_1919536488" MODIFIED="1458177953095" TEXT="erlaubt Zuweisung"/>
+<node CREATED="1458177712798" ID="ID_711029038" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
+<node CREATED="1458177735635" FOLDED="true" ID="ID_965106517" MODIFIED="1561827483835" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1458177738499" ID="ID_1141876143" MODIFIED="1458177953095" TEXT="keiner"/>
+<node CREATED="1458177741155" ID="ID_512515009" MODIFIED="1458177953095" TEXT="dann gibt&apos;s eben keine Zuweisung"/>
+<node CREATED="1458177749233" ID="ID_709608820" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei sub-Scopes"/>
+<node CREATED="1458177803730" ID="ID_176238190" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei immutable values"/>
+</node>
+</node>
+<node CREATED="1458176018087" ID="ID_1939286828" MODIFIED="1561827465538" TEXT="mutator">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1458177821712" ID="ID_776830345" MODIFIED="1458177953095" TEXT="baut einen sub-Mutator f&#xfc;r einen nested scope"/>
+<node CREATED="1458177851988" ID="ID_726523372" MODIFIED="1458177953095" TEXT="setzt Auswahl per match voraus"/>
+<node CREATED="1458177857939" FOLDED="true" ID="ID_556346121" MODIFIED="1561827483835" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1458177861162" ID="ID_889666207" MODIFIED="1458177953095" TEXT="keiner"/>
+<node CREATED="1458177863506" ID="ID_99047676" MODIFIED="1463690716478" TEXT="dann gibts eben keine Behandlung von nested scopes"/>
+<node CREATED="1458177874760" ID="ID_947844223" MODIFIED="1458177953095" TEXT="auch nicht n&#xf6;tig bei primitive values"/>
+</node>
+</node>
+<node CREATED="1463687547746" ID="ID_1901457184" MODIFIED="1561827465539" TEXT="defaulter">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1463687553569" ID="ID_9295162" MODIFIED="1463687602782" TEXT="veranla&#xdf;t R&#xfc;ckkehr zum default-Zustand"/>
+<node CREATED="1463687629319" ID="ID_143858987" MODIFIED="1463687644409" TEXT="erfordert explizite Unterst&#xfc;tzung durch das Zielobjekt"/>
+<node CREATED="1463687644973" ID="ID_1450965693" MODIFIED="1575133334303" TEXT="fragw&#xfc;rdig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sieht nach Ober-engineering aus,
+    </p>
+    <p>
+      zumal das erhebliche Statefulness bewirkt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1463687649812" FOLDED="true" ID="ID_223867304" MODIFIED="1561827483836" TEXT="Ersatz">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1463687668218" ID="ID_1355941236" MODIFIED="1463687670469" TEXT="keiner"/>
+<node CREATED="1463687672649" ID="ID_1680005619" MODIFIED="1463687689779" TEXT="dann kann eben nur gebunden werden"/>
+<node CREATED="1463687865175" ID="ID_462333966" MODIFIED="1463687869987" TEXT="normalerweise verzichtbar"/>
+</node>
+</node>
+<node CREATED="1458175960615" ID="ID_324885" MODIFIED="1561827465540" TEXT="ctor">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1461966391478" ID="ID_235916217" MODIFIED="1461966404134" TEXT="wird dem Setter vorgeschaltet"/>
+<node CREATED="1458177315803" ID="ID_1514272147" MODIFIED="1458177953094" TEXT="konstruiert aus der Spec ein neues Element"/>
+<node CREATED="1461966815950" ID="ID_382468761" MODIFIED="1461966831208" TEXT="notwendig bei Attribut-Werten, die tats&#xe4;chlich Objekte sind"/>
+<node CREATED="1458177335632" ID="ID_1162845397" MODIFIED="1458177953094" TEXT="mu&#xdf; typischerweise die Interna des Zieles kennen"/>
+<node CREATED="1458177347622" FOLDED="true" ID="ID_751382358" MODIFIED="1561827483836" TEXT="Ersatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1458177489444" ID="ID_1075338030" MODIFIED="1461966901007">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      unterstelle Ziel als <i>konstruierbar</i>&#160;aus Payload
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1463691200369" ID="ID_424486867" MODIFIED="1575133334436" TEXT="&#xfc;berfl&#xfc;ssiges Konzept">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da effektiv bereits der Setter diese Funktionalit&#228;t enthalten kann und mu&#223;,
+    </p>
+    <p>
+      denn der Setter nimmt eine GenNode
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1458176048564" HGAP="-11" ID="ID_1832020270" MODIFIED="1512926192045" TEXT="Variationen" VSHIFT="4">
+<node CREATED="1464117242535" ID="ID_1516044777" MODIFIED="1512926192045" TEXT="Binden auf eine klassische struct">
+<node CREATED="1464117391859" ID="ID_1067159129" MODIFIED="1464117396430" TEXT="Setter weisen einfach zu"/>
+<node CREATED="1464117397026" ID="ID_2633866" MODIFIED="1464117404773" TEXT="bereits die Neuanlage mu&#xdf; alles populieren"/>
+</node>
+<node CREATED="1464117250262" ID="ID_1940768897" MODIFIED="1512926192046" TEXT="Binden auf ein Objekt mit Initialisierungs-Semantik">
+<node CREATED="1464117412896" ID="ID_203383408" MODIFIED="1464117450662" TEXT="Erzeugungs-Diff mu&#xdf; mit den Anforderungen des Konstruktors harmonieren"/>
+<node CREATED="1464117487974" ID="ID_1233071043" MODIFIED="1464117499776" TEXT="R&#xfc;ckkehr zum Default wird nicht unterst&#xfc;tzt / abgebildet"/>
+</node>
+<node CREATED="1464117317517" ID="ID_680707594" MODIFIED="1512926192046" TEXT="Binden auf &quot;konzeptionelle&quot; Properties">
+<node CREATED="1464117513722" ID="ID_272177291" MODIFIED="1464117537611" TEXT="der &quot;Key&quot; ist nur eine ID, um speziellen Zugriffsmechanismus auszul&#xf6;sen"/>
+<node CREATED="1464117553885" ID="ID_116286814" MODIFIED="1464117567271" TEXT="u.U ist man &#xfc;berhaupt nur an sub-Mutation interessiert"/>
+</node>
+</node>
+</node>
+<node CREATED="1458178113697" FOLDED="true" HGAP="61" ID="ID_1703314461" MODIFIED="1576203843959" TEXT="Design-Schlu&#xdf;folgerungen" VSHIFT="48">
+<node CREATED="1463687362843" HGAP="116" ID="ID_500584513" MODIFIED="1561827465553" TEXT="Eingrenzung" VSHIFT="-28">
+<node CREATED="1463687373889" ID="ID_90253723" MODIFIED="1512926192049" TEXT="Art von Attributen">
+<node CREATED="1463687402462" ID="ID_1494575064" MODIFIED="1533608413953" TEXT="Objekt-Feld">
+<icon BUILTIN="forward"/>
+<node CREATED="1463689795357" ID="ID_75375725" MODIFIED="1463689801592" TEXT="kann nur zugewiesen werden"/>
+<node CREATED="1463689912853" ID="ID_18475641" MODIFIED="1561827465554">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>injectNew</b>&#160;tolerieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1463690238314" ID="ID_644067355" MODIFIED="1575133334661" TEXT="eigentlich redundant">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....man k&#246;nnte genausogut auch beim ersten Mal zuweisen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1463690487032" ID="ID_348837680" MODIFIED="1575133334684" TEXT="Aber: isomorph zu GenNode">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn die Diff-Anwendung auf GenNode unterst&#252;tzt Zuweisung
+    </p>
+    <p>
+      ausschlie&#223;lich bei schon existierenden Elementen. Demnach mu&#223; dort auch jedes Attribut
+    </p>
+    <ul>
+      <li>
+        entweder schon mit dem Konstruktor mit gegeben worden sein
+      </li>
+      <li>
+        oder vorher einmal explizit eingef&#252;gt
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1463687408597" ID="ID_1363008589" MODIFIED="1533608413954" TEXT="optional Property">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1463688083594" ID="ID_11895941" MODIFIED="1463688087910" TEXT="fragw&#xfc;rdiger Nutzen"/>
+<node CREATED="1463688088457" ID="ID_406507446" MODIFIED="1463688100116" TEXT="mutet &quot;theoretisch&quot; an"/>
+<node CREATED="1463688147802" ID="ID_490338350" MODIFIED="1561827465554" TEXT="Alternative">
+<node CREATED="1463688157472" ID="ID_489631928" MODIFIED="1463688173746" TEXT="auf &quot;mindere defaults&quot; setzen"/>
+<node CREATED="1463688215752" ID="ID_1086442520" MODIFIED="1463688230896" TEXT="kann man einfach mitlaufen lassen"/>
+<node CREATED="1463688184269" ID="ID_60958115" MODIFIED="1463688193863" TEXT="immer m&#xf6;gliche Degradierung des Konzepts"/>
+<node CREATED="1463688232550" FOLDED="true" ID="ID_1915653142" MODIFIED="1561827483836" TEXT="fehlende Funktionalit&#xe4;t ersetzbar">
+<icon BUILTIN="idea"/>
+<node CREATED="1463688247980" ID="ID_105443751" MODIFIED="1463688253639" TEXT="durch komplettes Neukonstruieren"/>
+<node CREATED="1463688254251" ID="ID_1822426402" MODIFIED="1463688262902" TEXT="durch eine explizite Reset-Methode"/>
+</node>
+</node>
+</node>
+<node CREATED="1463687451791" ID="ID_1708498507" MODIFIED="1533608413956" TEXT="Attribut-Map">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1463687461925" ID="ID_1513625124" MODIFIED="1463687496231" TEXT="hier ausgeschlossen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1475506967550" ID="ID_1994979880" MODIFIED="1576203653282" TEXT="kann auf Basis des Collection-Binding emuliert werden">
+<arrowlink COLOR="#9f96d9" DESTINATION="ID_453712930" ENDARROW="Default" ENDINCLINATION="478;123;" ID="Arrow_ID_1448345273" STARTARROW="None" STARTINCLINATION="479;26;"/>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1463687484338" FOLDED="true" ID="ID_1430772851" MODIFIED="1576201413269" TEXT="k&#xf6;nnte f&#xfc;r GenNode relevant sein">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1576201374385" ID="ID_1783873229" MODIFIED="1576201388980" TEXT="nein war nicht notwendig"/>
+<node CREATED="1576201389839" ID="ID_367063389" MODIFIED="1576201411474" TEXT="hab dort direkt mit zwei Collections gearbeitet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und die Keys der Attribute stecken in der GenNode selber!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1576201416347" ID="ID_311569009" MODIFIED="1576201424054" TEXT="k&#xf6;nnte n&#xfc;tzlich sein f&#xfc;r Tests">
+<node CREATED="1576201427058" ID="ID_1739941135" MODIFIED="1576204086360" TEXT="MockElm">
+<arrowlink COLOR="#9f719e" DESTINATION="ID_1285123321" ENDARROW="Default" ENDINCLINATION="170;-624;" ID="Arrow_ID_23523127" STARTARROW="None" STARTINCLINATION="875;242;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1463691267608" ID="ID_659149145" MODIFIED="1512926192052" TEXT="Typisierung">
+<node CREATED="1463691273431" ID="ID_366034077" MODIFIED="1463691276947" TEXT="pro Attribut"/>
+<node CREATED="1463691277726" ID="ID_143796822" MODIFIED="1533608413957" TEXT="implizit">
+<node CREATED="1463691290845" ID="ID_1709842697" MODIFIED="1464226408020" TEXT="das Setter-lambda nimmt einen Wert"/>
+<node CREATED="1464226412567" ID="ID_98271808" MODIFIED="1561827465555" TEXT="der Wert-Typ mu&#xdf; einer der GenNode-Payload-Typen sein">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464227158027" ID="ID_1268661637" MODIFIED="1464227176058" TEXT="TODO: dies zur compile-Zeit pr&#xfc;fen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1463691359988" ID="ID_1757946882" MODIFIED="1464226506135" TEXT="der Setter mu&#xdf; jedwede weitere Konvertierung in andere Typen selber machen"/>
+<node CREATED="1464226461041" ID="ID_17502992" MODIFIED="1464226487843" TEXT="die Implementierung greift auf den passenden GenNode-Payload zu"/>
+<node CREATED="1463691372258" ID="ID_1258654359" MODIFIED="1463691550094" TEXT="alle Typkonvertierungs-Fragen auf client abgew&#xe4;lzt"/>
+<node CREATED="1463691552514" ID="ID_1080486847" MODIFIED="1575133334971" TEXT="das ist gut so">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir vermeiden dadurch Komplexit&#228;t.
+    </p>
+    <p>
+      Der gesendete Diff mu&#223; einfach passen!
+    </p>
+    <p>
+      Genau deshalb haben wir auch in GenNode verschiedene Varianten des gleichen Grundtyps,
+    </p>
+    <p>
+      damit wir nicht in die ganzen Ungewissheiten der widening conversions laufen!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node CREATED="1463691680849" ID="ID_694873075" MODIFIED="1512926192054" TEXT="Striktheit">
+<node CREATED="1463691716821" ID="ID_533693199" MODIFIED="1463691724243" TEXT="soweit einfach zu gew&#xe4;hrleisten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1463691725515" ID="ID_1992867150" MODIFIED="1463691741484" TEXT="d.h. soweit nicht zus&#xe4;tzlicher State notwendig ist"/>
+<node CREATED="1463691767421" ID="ID_245127286" MODIFIED="1463691780901" TEXT="Flexibilit&#xe4;t mu&#xdf; stets praktisch gerechtfertigt sein">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1463691793010" ID="ID_1913675552" MODIFIED="1512926192056" TEXT="F&#xe4;lle">
+<node CREATED="1463691796825" ID="ID_826581062" MODIFIED="1575133335055" TEXT="Setter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. der Attributwert hat Wertsemantik und wird einfach zugewiesen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1463691804696" ID="ID_1828509710" MODIFIED="1575133335070" TEXT="Mutator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. der Attributwert ist ein Objekt und damit ein nested Scope
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1463691807824" ID="ID_1263942224" MODIFIED="1463691814860" TEXT="keine Mischformen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1463692054415" ID="ID_41980996" MODIFIED="1533608413958">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: <i>immutable values</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1463692505987" ID="ID_391357034" MODIFIED="1463692515040" TEXT="wirklich ein Problem?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1463692519993" ID="ID_909159783" MODIFIED="1463692550512" TEXT="Diff handelt ohnehin nur von ver&#xe4;nderbaren Dingen"/>
+<node CREATED="1463692663853" ID="ID_721907669" MODIFIED="1561827465555" TEXT="Aber: wie &#xe4;ndert man die L&#xe4;nge eins Clips im UI?">
+<node CREATED="1463695438538" ID="ID_1254169267" MODIFIED="1463695450620" TEXT="indem man sich auf ein Pr&#xe4;sentations-Grid bezieht"/>
+<node CREATED="1463695454504" ID="ID_1309064983" MODIFIED="1463695469602" TEXT="und folglich nur Grid-Punkt-Koordinaten &#xe4;ndert"/>
+<node CREATED="1463695472134" ID="ID_887292467" MODIFIED="1463695494714" TEXT="die eigentlichen Time-Entit&#xe4;ten leben in der Session, nicht im UI">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1463695573392" ID="ID_160957596" MODIFIED="1561827465556" TEXT="im &#xdc;brigen: Problem des client-Codes">
+<node CREATED="1463695588814" ID="ID_584993993" MODIFIED="1463695605096" TEXT="man kann einen time::Mutator erzeugen"/>
+<node CREATED="1463695605708" ID="ID_1510075145" MODIFIED="1463695620401" TEXT="es gibt vorgefertigte EmbeddedMutators">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1463695633144" ID="ID_967555989" MODIFIED="1463695657196">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das alles passiert dann <i>im</i>&#160;Lambda
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1463695640231" ID="ID_102452255" MODIFIED="1463695645090" TEXT="und ist somit nicht unser Problem"/>
+</node>
+</node>
+<node CREATED="1463849505993" HGAP="42" ID="ID_1449079591" MODIFIED="1533608413963" VSHIFT="25">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dilemma:&#160;<i>defaultable fields</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1463849536789" ID="ID_1111494683" MODIFIED="1561827465556" TEXT="ich m&#xf6;chte sie unterst&#xfc;tzen">
+<node CREATED="1463849545196" ID="ID_1803662045" MODIFIED="1463849547316" TEXT="warum">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1463849556474" ID="ID_1880489788" MODIFIED="1575133335311" TEXT="Unterst&#xfc;tzung mu&#xdf; konsistent sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....mit der ETD,
+    </p>
+    <p>
+      bzw der Anwendung des selben Diffs auf eine GenNode-Struktur.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Konsequenz: wenn ein feld <i>defaulted</i>&#160;war, und nun explizit gesetzt wird,
+    </p>
+    <p>
+      mu&#223; dies als INS geschehen, denn eine Zuweisung an nicht aufgef&#252;hrtes Element ist verboten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1463849716869" ID="ID_178223886" MODIFIED="1463849742347" TEXT="in der Bindung auf ein Objekt habe ich aber keine Attribut-Menge">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1463849761127" ID="ID_360434579" MODIFIED="1463849778956">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      folglich ein Problem,
+    </p>
+    <p>
+      zu erkennen, wenn wir fertig sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1463849986345" ID="ID_1998073123" MODIFIED="1561827465557" TEXT="genauer...">
+<node CREATED="1463850017285" ID="ID_550997337" MODIFIED="1463850033879" TEXT="wenn ein feld zwar gebunden ist"/>
+<node CREATED="1463850034699" ID="ID_1498215556" MODIFIED="1463850053756" TEXT="aber bisher keinen Wert bekommen hat"/>
+<node CREATED="1463850060359" ID="ID_1911362794" MODIFIED="1463850081800" TEXT="dann darf der Diff es auch nicht per pick auff&#xfc;hren"/>
+<node CREATED="1463850086044" ID="ID_709383845" MODIFIED="1463850099574" TEXT="wenn dann alle mandatory fields behandelt sind"/>
+<node CREATED="1463850100634" ID="ID_1773433984" MODIFIED="1575133335440" TEXT="glauben wir, wir sind noch nicht fertig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....weil das defaultable field noch nicht vom Diff ber&#252;hrt wurde.
+    </p>
+    <p>
+      Aber es ist kein optional field, d.h. wir haben keine Flag, die es als &quot;defaulted&quot; kennzeichnet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1463850138853" ID="ID_679588836" MODIFIED="1561827465558" TEXT="also ist das Grundproblem">
+<icon BUILTIN="idea"/>
+<node CREATED="1463850144180" ID="ID_1873291301" MODIFIED="1463850157454" TEXT="da&#xdf; der TreeMutator global stateless ist"/>
+<node CREATED="1463850163257" ID="ID_824612635" MODIFIED="1463850171716" TEXT="denn er wird immer wieder neu konstruiert"/>
+<node CREATED="1463850280082" ID="ID_947931218" MODIFIED="1463850294324">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sung: <b>alles immer explizit</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1463934907474" ID="ID_813075700" MODIFIED="1561827465559" TEXT="Auswege">
+<node CREATED="1463934969522" FOLDED="true" ID="ID_1350271693" MODIFIED="1561827483836" TEXT="keine optional fields">
+<node COLOR="#a0345c" CREATED="1463937048979" ID="ID_897669733" MODIFIED="1463937120794" TEXT="widerspricht den Anforderungen">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1463935105351" FOLDED="true" ID="ID_452667918" MODIFIED="1561827483836" TEXT="Protokoll-Auflagen">
+<node CREATED="1463935116670" ID="ID_446798186" MODIFIED="1463935125304" TEXT="nach dem ersten Durchgang mu&#xdf; alles gebunden sein"/>
+<node CREATED="1463935126461" ID="ID_1872628226" MODIFIED="1463935247552" TEXT="wenn ungebundene optionals, stets Abschlie&#xdf;en mit &quot;after END&quot;"/>
+<node COLOR="#a0345c" CREATED="1463937146214" ID="ID_235743901" MODIFIED="1463937452255" TEXT="attraktiv, aber unehrlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      diese L&#246;sung war zun&#228;chst mein Favorit.
+    </p>
+    <p>
+      Sie erscheint sehr elegant, weil man im TreeMutator <i>&#252;berhaupt nichts</i>&#160;daf&#252;r tun mu&#223;.
+    </p>
+    <p>
+      Und die Zusatz-Forderung, da&#223; dann eben das Diff richtig gesendet werden mu&#223;,
+    </p>
+    <p>
+      erscheint &quot;geschenkt&quot;, da wir ohnehin zun&#228;chst einmal die Diffs explizit im Code erzeugen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Aber, nach l&#228;ngerer &#220;berlegung wurde mir der Ansatz mehr und mehr zweifelhaft.
+    </p>
+    <p>
+      Das ist die Art von Verkoppelungen, hier die implizite Annahme einer bestimmten Implementierung,
+    </p>
+    <p>
+      die ein System unerkl&#228;rbar und schwer wartbar machen. Das ist die Art von &quot;Features&quot;,
+    </p>
+    <p>
+      f&#252;r die man sich nach einiger Zeit entschuldigen mu&#223;.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und noch schlimmer: eigentlich l&#228;uft dieser Ansatz darauf hinaus, die Konsistenzpr&#252;fung
+    </p>
+    <p>
+      am Ende zu deaktivieren. Nur wir machen das nicht explizit, sondern durch die Hintert&#252;r.
+    </p>
+    <p>
+      Also dann besser klar und ehrlich!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1463934995110" FOLDED="true" ID="ID_1861082499" MODIFIED="1561827483836" TEXT="dem Mutator sagen, was optional ist">
+<node CREATED="1463935368308" ID="ID_246550021" MODIFIED="1463935375919" TEXT="was grunds&#xe4;tzlich optional sein kann"/>
+<node CREATED="1463935377123" ID="ID_965278928" MODIFIED="1463935387005" TEXT="was aktuell nicht gebunden ist"/>
+<node COLOR="#a0345c" CREATED="1463937178689" ID="ID_1202653468" MODIFIED="1463937550363" TEXT="Over-Engineering / L&#xf6;sung eines nicht vorhandenen Problems">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn unter dem Strich w&#252;rden wir hiermit volle Unterst&#252;tzung f&#252;r opitonale Attribute einf&#252;hren,
+    </p>
+    <p>
+      also eine Attribut-Semantik auf eine Feld-Semantik draufpflanzen.
+    </p>
+    <p>
+      Aber in der vorausgegangenen Analyse habe ich mich schon davon &#252;berzeugt,
+    </p>
+    <p>
+      da&#223; wir keine Attribut-Semantik brauchen. Und wenn doch, dann bietet das Diff-System
+    </p>
+    <p>
+      immer noch die M&#246;glichkeit, die Attribute explizit als Sammlung darzustellen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1463935030953" ID="ID_1231044846" MODIFIED="1463938073583">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auf die <i>empty</i>-Pr&#252;fung am Ende verzichten
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#f36478" DESTINATION="ID_644127921" ENDARROW="Default" ENDINCLINATION="181;0;" ID="Arrow_ID_1868541511" STARTARROW="None" STARTINCLINATION="181;0;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1463937883299" HGAP="85" ID="ID_8371094" MODIFIED="1533608413968" TEXT="Konsequenzen" VSHIFT="26">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1463937922318" ID="ID_795883612" MODIFIED="1561827465561" TEXT="isEmpty">
+<node CREATED="1463937972255" ID="ID_644127921" MODIFIED="1575133335596" TEXT="mu&#xdf; umdefiniert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn in den meisten, wichtigsten F&#228;llen get es um einen non-empty-check,
+    </p>
+    <p>
+      bevor ein anderes Verifikations-Pr&#228;dikat angewendet wird.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#f36478" DESTINATION="ID_644127921" ENDARROW="Default" ENDINCLINATION="181;0;" ID="Arrow_ID_1868541511" SOURCE="ID_1231044846" STARTARROW="None" STARTINCLINATION="181;0;"/>
+</node>
+<node CREATED="1463937980222" ID="ID_932494564" MODIFIED="1463937986216" TEXT="kann nicht mehr negativ gepr&#xfc;ft werden"/>
+<node CREATED="1463937988180" ID="ID_653804102" MODIFIED="1463938000454" TEXT="das gilt leider f&#xfc;r alle Bindings"/>
+<node CREATED="1464212233893" ID="ID_823232649" MODIFIED="1464212254420" TEXT="umdrehen in: hasSrc">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1463938033527" FOLDED="true" ID="ID_697212736" MODIFIED="1561827483836" TEXT="neue Primitive: completeScope">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1464113590258" ID="ID_1258294190" MODIFIED="1464113600260" TEXT="auch ein hook f&#xfc;r Aufr&#xe4;um-Arbeiten"/>
+<node CREATED="1464113600897" ID="ID_671689357" MODIFIED="1464113642335" TEXT="return true -- wenn alles sauber ist"/>
+<node CREATED="1464113642899" ID="ID_1915175788" MODIFIED="1464113648966" TEXT="kann NOP implementiert werden"/>
+</node>
+</node>
+<node CREATED="1464114047781" ID="ID_1325307049" MODIFIED="1561827465561" TEXT="reduzierte Verifikation">
+<icon BUILTIN="yes"/>
+<node CREATED="1464114078672" ID="ID_1492664671" MODIFIED="1464114085171" TEXT="nicht bekannte Felder werden erkannt"/>
+<node CREATED="1464114086111" ID="ID_592980670" MODIFIED="1464114139188" TEXT="der Versuch von Umordnungen wird erkannt"/>
+<node COLOR="#990000" CREATED="1464114156574" ID="ID_270104965" MODIFIED="1464114190655" TEXT="fehlende Angaben werden nicht bemerkt"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1461897111747" HGAP="79" ID="ID_802377541" MODIFIED="1512926192064" TEXT="Ein Attribut oder viele Attribute" VSHIFT="17">
+<icon BUILTIN="help"/>
+<node CREATED="1463696053440" ID="ID_1754643119" MODIFIED="1464226693401" TEXT="Standardfall: eine kleine Zahl von Attributen ">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1463696031715" ID="ID_1260056252" MODIFIED="1464226781810" TEXT="&quot;ein Attribut&quot; ist aber der nat&#xfc;rliche Basisfall f&#xfc;r die Implementierung"/>
+<node CREATED="1463695809296" ID="ID_1828617017" MODIFIED="1464226736308" TEXT="problematisch sind Selektor und (ignorierte) Reihenfolge">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1464226806914" HGAP="25" ID="ID_1600614692" MODIFIED="1512926192065" TEXT="Selector" VSHIFT="5">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1464226813953" ID="ID_489744078" MODIFIED="1464226834307" TEXT="fest verdrahtet: istAttribut"/>
+<node CREATED="1464226834831" ID="ID_1398159123" MODIFIED="1464226848617" TEXT="Verzicht auf einen konfigurierbaren Selector"/>
+<node CREATED="1464226849277" ID="ID_1083142087" MODIFIED="1464226870862" TEXT="im Zweifelsfall: anderen &#xbb;onion-Layer&#xab; verwenden"/>
+<node CREATED="1464226871930" ID="ID_1656706742" MODIFIED="1464226897116" TEXT="gut zur Reduktion der Komplexit&#xe4;t">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1461894614295" ID="ID_665631895" MODIFIED="1512926192065" TEXT="Attribut-Glieder">
+<node CREATED="1461894619054" ID="ID_1204916244" MODIFIED="1512926192066" TEXT="implementieren die API-Primitive">
+<node CREATED="1461894676063" ID="ID_1957652861" MODIFIED="1461894678714" TEXT="durch Aktion"/>
+<node CREATED="1461894679190" ID="ID_1193521445" MODIFIED="1461894683857" TEXT="durch Ignorieren"/>
+<node CREATED="1461894684326" ID="ID_182706257" MODIFIED="1461894692888" TEXT="als Fehler"/>
+</node>
+<node CREATED="1461894634029" ID="ID_634211646" MODIFIED="1464226938524" TEXT="f&#xfc;gen sich nat&#xfc;rlich durch Layering zusammen"/>
+<node CREATED="1461894666248" ID="ID_1466917621" MODIFIED="1464226987286" TEXT="Setter / Mutator durch Template-Spezialisierung"/>
+<node CREATED="1464226992090" ID="ID_567861080" MODIFIED="1512926192066" TEXT="lineare Suche">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1464227021205" ID="ID_1227031045" MODIFIED="1464227032960" TEXT="akzeptabel f&#xfc;r &lt; 30 Attribute"/>
+<node CREATED="1464227042771" ID="ID_581148359" MODIFIED="1575133335969" TEXT="vermeidet heap-basierte Collection">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      jedwede &quot;bessere&quot; Implementierung mu&#223; zwingend einen Container verwenden,
+    </p>
+    <p>
+      der dann die Lambdas f&#252;r die einzelnen Setter auf den Heap legt.
+    </p>
+    <p>
+      Das ist hier tats&#228;chlich viel schlechter, als das bischen lineare Suche
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1464227213180" FOLDED="true" HGAP="29" ID="ID_1322038165" MODIFIED="1576200469487" TEXT="Implementierung" VSHIFT="66">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1464227218795" ID="ID_240211297" MODIFIED="1575133336008" TEXT="ist grunds&#xe4;tzlich &quot;schon da&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....durch meinen allerersten Draft,
+    </p>
+    <p>
+      f&#252;r den ich damals gezwungen war, die GenNode zu erfinden :)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1464227273572" ID="ID_641114043" MODIFIED="1465428151809" TEXT="TODO: alten Testfall anpassen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1464227285562" ID="ID_1467378259" MODIFIED="1465428159480" TEXT="TODO: Setter aus erstem Entwurf vom TreeMutator-API entfernen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1464227227610" ID="ID_1283798929" MODIFIED="1464227235981" TEXT="aber: alle Primitive durchimplementieren"/>
+<node COLOR="#338800" CREATED="1464386998240" ID="ID_145703376" MODIFIED="1512926192069" TEXT="key: EntryID">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1464396284551" ID="ID_1820812766" MODIFIED="1512926192069" TEXT="Problem: sanitise">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1464396756424" ID="ID_292993552" MODIFIED="1464397132659" TEXT="nur US-ASCII">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1464396761967" ID="ID_1853390961" MODIFIED="1464397146966" TEXT="erweiterte Zeichen bedingen Locale">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1464396769974" ID="ID_1765409740" MODIFIED="1533608413970" TEXT="und welche dann??">
+<node CREATED="1464396835581" ID="ID_880270228" MODIFIED="1464396859658" TEXT="System-Locale: Recipe for Desaster"/>
+<node CREATED="1464396793123" ID="ID_84577480" MODIFIED="1464396815972" TEXT="en_US.UTF-8"/>
+<node CREATED="1464396816696" ID="ID_1549234272" MODIFIED="1464396866584" TEXT="Einschr&#xe4;nkung nicht sinnvoll zu begr&#xfc;nden">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1464396320922" ID="ID_557201534" MODIFIED="1512926192070" TEXT="GenNode umgeht das (bewu&#xdf;t)">
+<node CREATED="1464396885391" ID="ID_1826102565" MODIFIED="1464397164031" TEXT="Begr&#xfc;ndung: interne Schnittstelle">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1464396899252" ID="ID_238800946" MODIFIED="1464396964843" TEXT="verwendet bereits valide Symbole">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1464396908371" ID="ID_714542679" MODIFIED="1464397170109" TEXT="vermeidet den Performance overhead">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1464397008078" ID="ID_1318792158" MODIFIED="1464397019505" TEXT="soll sich symmetrisch verhalten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1464397020996" ID="ID_1539077842" MODIFIED="1512926192070" TEXT="L&#xf6;sung: Variante f&#xfc;r EntryID">
+<icon BUILTIN="idea"/>
+<node CREATED="1464397032747" ID="ID_52447284" MODIFIED="1575133336250" TEXT="f&#xfc;r interne Schnittstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gleiches Argument...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1464397039834" ID="ID_842182814" MODIFIED="1575133336266" TEXT="verwendet Symbol-Datentyp">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit unterstellen wir, da&#223; sp&#228;ter eine Symbol-Tabelle aufgebaut wird.
+    </p>
+    <p>
+      Dann kann man sich immer noch &#252;berlegen, ob man dann <i>an dieser Stelle</i>&#160;bereinigt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1464387004423" ID="ID_1665317497" MODIFIED="1512926192071" TEXT="Fehlerbehandlung">
+<node CREATED="1464387034539" ID="ID_368572405" MODIFIED="1512926192071" TEXT="injectNew">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1464387043146" ID="ID_1626945131" MODIFIED="1465045655821" TEXT="API erweitern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1464387046769" ID="ID_572522334" MODIFIED="1465045658691" TEXT="R&#xfc;ckgabewert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1464387055632" ID="ID_1950008212" MODIFIED="1465045661504" TEXT="andere Layer fragen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1464387071669" ID="ID_1015524397" MODIFIED="1512926192072" TEXT="skip">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1464387092091" ID="ID_1520028053" MODIFIED="1464387095959" TEXT="hat kein Argument"/>
+<node CREATED="1464387096498" ID="ID_1251857254" MODIFIED="1464387158085" TEXT="kann daher Selektor nicht ausf&#xfc;hren">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1464387102850" ID="ID_1482608502" MODIFIED="1464387148396" TEXT="Fehlererkennung nicht m&#xf6;glich">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1464386771270" ID="ID_166516904" MODIFIED="1512926192072" TEXT="setter vs mutator">
+<node CREATED="1464386870265" ID="ID_1508130332" MODIFIED="1464387168773" TEXT="Metaprogrammierung"/>
+<node CREATED="1464386878983" ID="ID_1309713526" MODIFIED="1464386887354" TEXT="Code selber mu&#xdf; es implizit wissen"/>
+<node CREATED="1464386904676" ID="ID_1123923779" MODIFIED="1512926192073" TEXT="entweder-oder">
+<icon BUILTIN="help"/>
+<node CREATED="1464386910099" ID="ID_1644956745" MODIFIED="1464386913750" TEXT="nicht notwendig"/>
+<node CREATED="1464386929745" ID="ID_1569654621" MODIFIED="1464386936708" TEXT="es greift der Layer, der es kann"/>
+</node>
+<node CREATED="1464483482949" HGAP="32" ID="ID_1655303588" MODIFIED="1512926192073" TEXT="Code-Struktur" VSHIFT="15">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1464483497524" ID="ID_1510305109" MODIFIED="1464483503639" TEXT="Basisklasse + Overlay"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1464483504155" ID="ID_1310567997" MODIFIED="1533608413971" TEXT="unsch&#xf6;n und verwirrend">
+<node CREATED="1464483533863" ID="ID_1330926314" MODIFIED="1464483617082" TEXT="mehrfach geschachtelte Typdefinitionen">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1464483544429" ID="ID_1556868157" MODIFIED="1575133336535" TEXT="Problem mit der EntryID">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in einem Fall kann man sie aus der Closure abgreifen
+    </p>
+    <p>
+      im anderen Fall mu&#223; es doch der Client leisten.
+    </p>
+    <p>
+      Keine klare Linie
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1464483601318" ID="ID_244819234" MODIFIED="1464483610226" TEXT="gibt es &#xfc;berhaupt eine Alternative">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1465041597680" ID="ID_379389753" MODIFIED="1561827465568" TEXT="Abw&#xe4;gung">
+<node CREATED="1465040677452" ID="ID_1570943594" MODIFIED="1575133336577" TEXT="OK: Klassen sind geschnitten nach Belang">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, es gibt nur minimale, themantische &#220;berlappung.
+    </p>
+    <p>
+      Also ist die Verwendung von Vererbung hier sogar die <i>beste</i>&#160;L&#246;sung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1465040780654" ID="ID_1719566689" MODIFIED="1465040812722">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Geschachtelte Typdefs lassen sich vermeiden:
+    </p>
+    <p>
+      BareEntryID speichern!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1465040890735" ID="ID_530818537" MODIFIED="1575133336607" TEXT="API f&#xfc;r die ID ist ein Dilemma">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, wie rum man es auch aufl&#246;st, wird die L&#246;sung auf einer Seite schlechter
+    </p>
+    <ul>
+      <li>
+        wenn wir f&#252;r den Payload-Typ einen Typ-Parameter nehmen, bl&#228;hen wir den Standard-Fall (Setter) auf
+      </li>
+      <li>
+        andererseits <i>ist es unbstreitbar einfach so,</i>&#160;da&#223; f&#252;r den Mutator-Builder die Typisierung komplett implizit ist, das mu&#223; die Closure mit sich&#160;selbst ausmachen, einfach indem in der Closure ein geschachtelter TreeMutator konstruiert wird, der eben mit diesem impliziten Kind-Typ umgehen kann.
+      </li>
+      <li>
+        wenn wir stattdessen nur einen Key-String speichern, wird zum Einen die Match-Pr&#252;fung aufwendiger (Stringvergleich statt Vergleich von Hashes), und au&#223;erdem wird ein Typ-Mismatch nicht mehr auf der Ebene der Verb-Anwendung entdeckt und entsprechend gekennzeichnet, sondern wir hoffen, da&#223; es dann innerhalb der Closure zu einem Fehlzugriff auf die Payload der GenNode kommt. Noch schlimmer im Mutator-Fall, da sind wir dann schon im geschachtelten Scope und hoffen, da&#223; dann der eingeschachtelte Mutator irgendwo auf Widerspruch l&#228;uft.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1465041611663" ID="ID_1520147808" MODIFIED="1575133336640" TEXT="man kann auf DSL-Ebene mehrere Alternativen anbieten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...gedacht f&#252;r verschiedene UseCases.
+    </p>
+    <ul>
+      <li>
+        Fall 1: String-Key und der Typ mu&#223; irgendwie implizit/explizit gegeben sein
+      </li>
+      <li>
+        Fall2: GenNodeID
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1465139405203" ID="ID_208234192" MODIFIED="1575133336658" TEXT="...hey, der Typ ist implizit klar! es ist immer Rec">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...die offensichtlichsten Dinge &#252;bersieht man nur zu leicht!!!!!
+    </p>
+    <p>
+      Da es ein nested scope ist, ist es immer ein Objekt,
+    </p>
+    <p>
+      also repr&#228;sentiert als Rec&lt;GenNode&gt;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1457232746179" FOLDED="true" ID="ID_35428480" MODIFIED="1576200552588" TEXT="Rec&lt;GenNode&gt;" VSHIFT="11">
+<icon BUILTIN="full-4"/>
+<node COLOR="#435e98" CREATED="1464305377785" ID="ID_1029321620" MODIFIED="1576200521001" TEXT="Vor&#xfc;berlegungen">
+<node CREATED="1464305417066" ID="ID_227151593" MODIFIED="1512926192077" TEXT="w&#xfc;nschenswert">
+<icon BUILTIN="help"/>
+<node CREATED="1464305708891" ID="ID_273948396" MODIFIED="1512926192077" TEXT="Vorteile">
+<node CREATED="1464305431944" ID="ID_1510210328" MODIFIED="1464305641440" TEXT="den RecordContentMutator loswerden"/>
+<node CREATED="1464305660018" ID="ID_33964570" MODIFIED="1464305687458" TEXT="die speziellen Regeln f&#xfc;r Attribute / Kinder loswerden"/>
+</node>
+<node CREATED="1464305712115" ID="ID_937724979" MODIFIED="1512926192078" TEXT="Nachteile">
+<node CREATED="1464305722209" ID="ID_815912844" MODIFIED="1464305733108" TEXT="man braucht immer einen TreeMutator"/>
+<node CREATED="1464305735032" ID="ID_146394449" MODIFIED="1464305745786" TEXT="das ist sehr komplexer Code"/>
+<node CREATED="1464305756189" ID="ID_239782768" MODIFIED="1464305766735" TEXT="zus&#xe4;tzliche Indirektion / VTable"/>
+<node CREATED="1464305800207" ID="ID_1466205270" MODIFIED="1464305818736" TEXT="das &quot;Backdoor&quot; in Record::Mutator bleibt bestehen"/>
+</node>
+<node CREATED="1464305842833" ID="ID_1675290116" MODIFIED="1525124215201" TEXT="Abw&#xe4;gung">
+<node CREATED="1464305847001" ID="ID_674702374" MODIFIED="1533608413973" TEXT="Aufwand">
+<node CREATED="1464305850440" ID="ID_1548441801" MODIFIED="1561827465572" TEXT="dedizierte Impl">
+<node CREATED="1464305871806" ID="ID_202305183" MODIFIED="1464305874249" TEXT="ein Stack"/>
+<node CREATED="1464306044598" FOLDED="true" ID="ID_905327861" MODIFIED="1561827483836" TEXT="pro Stackframe">
+<node CREATED="1464305896754" ID="ID_1490549138" MODIFIED="1464305908965" TEXT="ref Rec::Mutator"/>
+<node CREATED="1464305910520" FOLDED="true" ID="ID_1267020121" MODIFIED="1561827482931" TEXT="Puffer: RecordContentMutator">
+<node CREATED="1464305921943" ID="ID_884726801" MODIFIED="1464305927370" TEXT="Vector Attribute"/>
+<node CREATED="1464305927910" ID="ID_1753475894" MODIFIED="1464305933817" TEXT="Vector Kinder"/>
+<node CREATED="1464305989422" ID="ID_312208418" MODIFIED="1464305994825" TEXT="ein vector::iterator"/>
+</node>
+</node>
+</node>
+<node CREATED="1464305854040" ID="ID_1249348832" MODIFIED="1561827465573" TEXT="per TreeMutator">
+<node CREATED="1464305876237" ID="ID_1159160542" MODIFIED="1464305878376" TEXT="ein Stack"/>
+<node CREATED="1464306061588" FOLDED="true" ID="ID_746468831" MODIFIED="1561827483836" TEXT="pro Stackframe">
+<node CREATED="1472781610135" FOLDED="true" ID="ID_784986236" MODIFIED="1561827482931">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>zwei </i>Bindings
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1472781728046" ID="ID_642515736" MODIFIED="1472781744825" TEXT="ref Quell-Vector"/>
+<node CREATED="1472781629036" ID="ID_1770081141" MODIFIED="1472781751975" TEXT="Puffer: Vector GenNode"/>
+<node CREATED="1472781648571" ID="ID_129841438" MODIFIED="1472781677753" TEXT="ein zugeh&#xf6;riger Iterator"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1472781868035" HGAP="40" ID="ID_1179886087" MODIFIED="1533608413976" TEXT="Unterschied minimal" VSHIFT="-3">
+<node CREATED="1472781885352" ID="ID_563320689" MODIFIED="1472781888836" TEXT="zwei Iteratoren"/>
+<node CREATED="1472781889328" ID="ID_852723828" MODIFIED="1472781899051" TEXT="zwei Quell-Referenzen"/>
+</node>
+</node>
+</node>
+<node CREATED="1472653531806" HGAP="76" ID="ID_1315184227" MODIFIED="1512926192083" TEXT="Ansatz" VSHIFT="-10">
+<node CREATED="1472653541019" ID="ID_961055257" MODIFIED="1472653569512">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>zwei</i>&#160;Collection-Bindings
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472653548905" ID="ID_259592710" MODIFIED="1472653553124" TEXT="speziell konfiguriert"/>
+<node CREATED="1472654905416" ID="ID_1967321401" MODIFIED="1472654910067" TEXT="minimaler Code"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1464305382975" FOLDED="true" ID="ID_692712808" MODIFIED="1576200534494" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1457742036967" ID="ID_1625216231" MODIFIED="1512926192084" TEXT="Attribute">
+<node CREATED="1472781560508" ID="ID_1860994485" MODIFIED="1472781584718" TEXT="Selector: isNamed"/>
+<node CREATED="1472930964666" ID="ID_737827437" MODIFIED="1473014470867" TEXT="Behandlung f&#xfc;r Typ-Feld"/>
+</node>
+<node CREATED="1457742040782" ID="ID_1865296889" MODIFIED="1457742042442" TEXT="Kinder"/>
+<node CREATED="1472781922380" ID="ID_26493762" MODIFIED="1512926192085" TEXT="Problem: rekursiver Mutator">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1472781942185" ID="ID_438122395" MODIFIED="1472781946644" TEXT="rein code-technisches Problem"/>
+<node CREATED="1472781957063" ID="ID_1039824965" MODIFIED="1472781964177" TEXT="durch forward-decl aufzul&#xf6;sen"/>
+<node CREATED="1472781977156" ID="ID_1725507816" MODIFIED="1472782008196" TEXT="erfordert Umbau der Code-Struktur">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1472930979111" ID="ID_1556242161" MODIFIED="1512926192086" TEXT="Problem: Typ-Feld">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1472931031568" ID="ID_1654000393" MODIFIED="1512926192087" TEXT="Kompromi&#xdf; in GenNode">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1472931061612" ID="ID_603006916" MODIFIED="1472931066111" TEXT="halbherziges Design"/>
+<node CREATED="1472931066635" ID="ID_1880164855" MODIFIED="1472931074166" TEXT="wollte nicht wirklich Metadaten einf&#xfc;hren"/>
+<node CREATED="1472931074754" ID="ID_660840872" MODIFIED="1472931083789" TEXT="hab&apos;s daher dann fest verdrahtet"/>
+<node CREATED="1472931084281" ID="ID_1848053126" MODIFIED="1472931095987" TEXT="erlaube &quot;Abk&#xfc;rzung&quot; &#xfc;ber das Typ-Attribut"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472931096647" ID="ID_1241833509" MODIFIED="1575133337240" TEXT="aber nicht wirklich konsequent...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...diese Abk&#252;rzung ist nur auf den Konstruktur aufgepflanzt,
+    </p>
+    <p>
+      nicht aber in der eigentlichen Implementierung verankert.
+    </p>
+    <p>
+      Das wollte ich nicht, weil ich l&#228;ngerfristig doch davon ausgehe,
+    </p>
+    <p>
+      da&#223; es einfach einen Metadaten-Scope gibt
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die Inkonsequenz nun ist, da&#223; im Rec::Mutator keine Magie daf&#252;r vorgesehen ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1472931195618" ID="ID_1254454459" MODIFIED="1512926192087" TEXT="aber Meta-Attribut f&#xfc;r Diff">
+<node CREATED="1472931234165" ID="ID_1010565523" MODIFIED="1472931239279" TEXT="geht nicht anders"/>
+<node CREATED="1472931241027" ID="ID_1886048314" MODIFIED="1472931247263" TEXT="direkte Folge des Objekt-Modells"/>
+<node CREATED="1472931391998" ID="ID_1851028882" MODIFIED="1533608413977" TEXT="betrifft">
+<node CREATED="1472931395526" ID="ID_147828188" MODIFIED="1472931403393" TEXT="ins(type = X)"/>
+<node CREATED="1472931404525" ID="ID_727467625" MODIFIED="1561827465582" TEXT="set(type = X)">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1472931416323" ID="ID_780639854" MODIFIED="1472931434577" TEXT="AUA: bisher &#xfc;bersehen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1472931275575" ID="ID_36604643" MODIFIED="1512926192088" TEXT="Collection-Binding">
+<node CREATED="1472931287229" ID="ID_1748994811" MODIFIED="1472931308630" TEXT="klinkt sich unterhalb vom Mutator ein"/>
+<node CREATED="1472931309122" ID="ID_669812273" MODIFIED="1472931324740" TEXT="umgeht den Mutator"/>
+<node CREATED="1472931326512" ID="ID_1698822987" MODIFIED="1472931332867" TEXT="arbeitet direkt auf den Collections"/>
+<node CREATED="1472931333975" ID="ID_1945169133" MODIFIED="1472931342433" TEXT="reicht Werte unbetrachtet 1:1 durch"/>
+</node>
+<node CREATED="1472931711315" ID="ID_1325514083" MODIFIED="1512926192089" TEXT="L&#xf6;sung">
+<icon BUILTIN="idea"/>
+<node CREATED="1472931716482" ID="ID_1029866083" MODIFIED="1575133337450" TEXT="Lambdas nicht ausreichend">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...mit den Lambdas kann ich nur die Sicht auf die Werte steuern,
+    </p>
+    <p>
+      nicht aber das eigentliche Verhalten des Bindings.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Denn die Lambdas haben keinen Zugriff auf die Ziel-Datenstruktur!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1472931806958" ID="ID_1424193694" MODIFIED="1472931822190" TEXT="m&#xfc;&#xdf;te Binding-Operationen anpassen">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node COLOR="#338800" CREATED="1472931829467" ID="ID_1855554360" MODIFIED="1533608413978" STYLE="fork" TEXT="Dekorator">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1472934618917" ID="ID_1788521857" MODIFIED="1472934744607" TEXT="legt sich um den &#xe4;u&#xdf;eren Collection-Binding-Layer"/>
+<node CREATED="1472934635426" ID="ID_1872796326" MODIFIED="1472934744607" TEXT="greift bei der injectNew und assignElm-Operation ein"/>
+<node CREATED="1472934671013" ID="ID_900235786" MODIFIED="1472934744607" TEXT="braucht Zugang zum Rec::Mutator">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1472934695226" ID="ID_53406841" MODIFIED="1472934744607" TEXT="Code wird schwer lesbar"/>
+<node CREATED="1472934710032" ID="ID_1169855604" MODIFIED="1561827465582" TEXT="umformulieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1473014547678" ID="ID_1416366234" MODIFIED="1473014763323" TEXT="geht nur bedingt">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1473014552677" ID="ID_198496738" MODIFIED="1575133337582" TEXT="Problem ist der Builder">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wir wollen mehrfach geschichtete TreeMutator-Subklassen,
+    </p>
+    <p>
+      aber tats&#228;chlich liefert jeder DSL-Aufruf einen Builder&lt;TreeMutator&lt;...&gt;&gt;.
+    </p>
+    <p>
+      Die normalen DSL-Aufrufe sind eben genau so gestrickt, da&#223; jeweils der oberste Builder entfernt wird,
+    </p>
+    <p>
+      ein neuer Layer dar&#252;bergebaut und das Ganze wieder in einen Builder eingewickelt wird.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dadurch ist es schwer bis unm&#246;glich (wg. den Lambdas), den resultierenden Typ anzuschreiben.
+    </p>
+    <p>
+      Daher bin ich zwingend auf Wrapper-Funktionen angewiesen, die diesen resultierenden Typ
+    </p>
+    <p>
+      vom konkreten Aufruf wieder &quot;abgreifen&quot;. Ich kann daher nicht die DSL-Notation verwenden,
+    </p>
+    <p>
+      um den Dekorator f&#252;r die Behandlung des Typ-Feldes einzubringen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1472782025318" ID="ID_806642349" MODIFIED="1512926192091" TEXT="Standard-Lambdas f&#xfc;r GenNode">
+<node CREATED="1472782055217" ID="ID_748812918" MODIFIED="1472782069243" TEXT="Selector -&gt; ID-Vergleich"/>
+<node CREATED="1472782069784" ID="ID_1481800599" MODIFIED="1472782075874" TEXT="Constructor -&gt; copy"/>
+<node CREATED="1472782077062" ID="ID_105976983" MODIFIED="1472782092512" TEXT="Setter -&gt; assign DataCap"/>
+<node CREATED="1472782093956" ID="ID_1112310070" MODIFIED="1472782120696">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mut -&gt; <font color="#e43e2a">Rekursion</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1472830089042" ID="ID_680894810" MODIFIED="1512926192092" TEXT="until after Ref::ATTRIBS">
+<node CREATED="1472830107591" ID="ID_1855713162" MODIFIED="1472830118609" TEXT="mu&#xdf; Semantik im TreeMutator API korrigieren"/>
+<node CREATED="1472830131284" ID="ID_362004035" MODIFIED="1472830153132" TEXT="Problem: nur die Implementierung wei&#xdf;, was ein &quot;Attribut&quot; ist"/>
+<node CREATED="1472830122757" ID="ID_127070842" MODIFIED="1472830129487" TEXT="brauche Unterst&#xfc;tzung vom Selector"/>
+<node CREATED="1472830164119" ID="ID_894543850" MODIFIED="1512926192093" TEXT="L&#xf6;sungsansatz">
+<node CREATED="1472830177221" ID="ID_1697807817" MODIFIED="1472830181729" TEXT="wie Ref::END"/>
+<node CREATED="1472830182101" ID="ID_698099374" MODIFIED="1472830195511" TEXT="aber nur einige Layer reagieren darauf"/>
+<node CREATED="1472830199203" ID="ID_321429589" MODIFIED="1533608413978" TEXT="default-return mu&#xdf; true sein">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1472830226455" ID="ID_416259906" MODIFIED="1472830232658" TEXT="aber nat&#xfc;rlich nur wenn leer..."/>
+<node CREATED="1472830286462" ID="ID_105472568" MODIFIED="1472830298035" TEXT="Einsicht: END und ATTRIBS k&#xf6;nnen nicht scheitern">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472830304844" ID="ID_1240058977" MODIFIED="1472840380057" TEXT="...es geht nur um das Layer-Chaining"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#4a273f" CREATED="1461882151581" HGAP="29" ID="ID_316724242" MODIFIED="1512926192094" TEXT="Selector integrieren" VSHIFT="23">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1461967533959" ID="ID_1695271883" MODIFIED="1468761946715" TEXT="korrekte logische Verkettung"/>
+<node CREATED="1461967541166" ID="ID_1781788406" MODIFIED="1468761946715" TEXT="mu&#xdf; von jeder Primitive unterst&#xfc;tzt werden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1461967571042" ID="ID_1117096619" MODIFIED="1512926192095">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Problem</b><font color="#4e094b">: partielle Ordnung</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1461967744747" ID="ID_1780100456" MODIFIED="1468761946715" TEXT="Diff setzt totale Ordnung voraus"/>
+<node CREATED="1461967765080" ID="ID_1598311122" MODIFIED="1468761946715" TEXT="verletzt durch &#xbb;onion-layer&#xab;"/>
+<node CREATED="1461967839110" ID="ID_1596717420" MODIFIED="1512926192095" TEXT="Relevanz">
+<icon BUILTIN="help"/>
+<node CREATED="1461967850797" ID="ID_1675158405" MODIFIED="1468761946715" TEXT="bei Einzelschritt irrelevant"/>
+<node CREATED="1461967876521" ID="ID_744310541" MODIFIED="1512926192096" TEXT="zwingend bei &quot;AFTER&quot;-Verb">
+<node CREATED="1461967962814" ID="ID_517095615" MODIFIED="1575133337967" TEXT="weil das Zwischenschritte &#xfc;berspringt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t,
+    </p>
+    <p>
+      das AFTER-Verb wird &#252;bersetzt in ein skip_until,
+    </p>
+    <p>
+      und das l&#228;uft dann entweder in jedem Layer
+    </p>
+    <p>
+      oder nur in dem Layer, der auf die Spec pa&#223;t.
+    </p>
+    <p>
+      In jedem Fall ger&#228;t dadurch die relative Verzahnung der Elemente untereinander aus dem Takt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1461967992042" ID="ID_315533174" MODIFIED="1468761946715" TEXT="nur ein Ausweg..."/>
+<node CREATED="1461968004720" ID="ID_201527265" MODIFIED="1575133337998" TEXT="Ordnung der onion-layer verbindlich machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t also, es wird stets der zuerst gebundene Layer komplett durchgespult,
+    </p>
+    <p>
+      gefolgt dann von dem n&#228;chsten Layer.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die Konsequenz ist, da&#223; es keine Mischung der Typen geben kann.
+    </p>
+    <p>
+      Es m&#252;ssen immer zwingend alle Elemente eines Typs von einem Layer behandelt werden
+    </p>
+    <p>
+      und diese Elemente m&#252;ssen geschlossen hintereinander in der Reihenfolge liegen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1465428839332" ID="ID_655341963" MODIFIED="1561827465587" TEXT="Diff-Anwendung" VSHIFT="36">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1465428850946" FOLDED="true" ID="ID_1546287157" MODIFIED="1576200627485">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auf Basis des neu geschaffenen <b>TreeMutator</b>s
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1465664755169" ID="ID_1006974987" MODIFIED="1561827465591" TEXT="Modus der Anwendung">
+<node CREATED="1465664762944" ID="ID_1572264709" MODIFIED="1465665479208" TEXT="DiffApplicator&lt;TreeMutator&gt;">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1465664777398" ID="ID_1214269061" MODIFIED="1575133338075" TEXT="Automatismen sind denkbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....man k&#246;nnte sp&#228;ter geeignete Automatismen schaffen,
+    </p>
+    <p>
+      die sich diesen TreeMutator beschaffen
+    </p>
+    <ul>
+      <li>
+        indem erkannt wird, da&#223; das eigentliche Zielobjekt ein bestimmtes API bietet
+      </li>
+      <li>
+        indem andere relevante Eigenschaften des Zielobjekts erkannt werden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#994062" DESTINATION="ID_254742738" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_62544040" STARTARROW="None" STARTINCLINATION="978;42;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1465665483456" FOLDED="true" ID="ID_1302308143" MODIFIED="1576200010672" TEXT="Problem: konkreter Mutator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das so h&#228;ufig in C++ auftretende Problem:
+    </p>
+    <p>
+      wie baue und verwalte ich eine konkrete Implementierung,
+    </p>
+    <p>
+      ohne gleich ein ganzes Management-Framework einf&#252;hren zu m&#252;ssen.
+    </p>
+    <p>
+      Letzten Endes lief&#160;&#160;das auch in diesem Fall auf inline-Storage hinaus...
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1465665492727" ID="ID_871587416" MODIFIED="1465665500210" TEXT="mu&#xdf; vom Target gebaut werden"/>
+<node CREATED="1465665500830" ID="ID_575550821" MODIFIED="1465665561681" TEXT="Typ nicht bekannt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1465665511580" ID="ID_1245550673" MODIFIED="1465665556325" TEXT="soll auf Stack top-Level ">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465665579587" ID="ID_1399616554" MODIFIED="1525124215211" TEXT="problematisch">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1465665594969" ID="ID_274492161" MODIFIED="1533608413979" TEXT="unbekannte Gr&#xf6;&#xdf;e">
+<node CREATED="1465665884698" ID="ID_1454370216" MODIFIED="1465665893757" TEXT="default-Bufferg&#xf6;&#xdf;e vorlegen"/>
+<node CREATED="1465665894273" ID="ID_704262320" MODIFIED="1465665901124" TEXT="Gr&#xf6;&#xdf;e proben und anpassen"/>
+<node CREATED="1465665901640" ID="ID_67642439" MODIFIED="1465665920298" TEXT="Gr&#xf6;&#xdf;e f&#xfc;r &quot;bekannte&quot; Targets statisch hinterlegen"/>
+<node CREATED="1465852237233" HGAP="27" ID="ID_483230622" MODIFIED="1561827465592" TEXT="Beschlu&#xdf;" VSHIFT="12">
+<icon BUILTIN="yes"/>
+<node CREATED="1465852248487" ID="ID_758697883" MODIFIED="1465852255154" TEXT="zun&#xe4;chst die einfachste L&#xf6;sung"/>
+<node CREATED="1465852255694" ID="ID_877813979" MODIFIED="1472122166677" TEXT="statisch (fest) festlegen"/>
+<node CREATED="1465852268252" ID="ID_190196051" MODIFIED="1465852274743" TEXT="ggfs. noch nach Zieltyp differenziert"/>
+<node CREATED="1465852275859" ID="ID_61230636" MODIFIED="1465852288510" TEXT="dynamisch / Lernen als M&#xf6;glichkeit vorsehen"/>
+</node>
+</node>
+<node CREATED="1465665614990" ID="ID_1119567524" MODIFIED="1533608413980" TEXT="verwirrendes API">
+<node CREATED="1465665980686" ID="ID_1492023749" MODIFIED="1465665991232" TEXT="Anwendung sollte selbstevident sein"/>
+<node CREATED="1465666009690" ID="ID_1649443825" MODIFIED="1561827465592" TEXT="Typ-Signatur sollte den Weg weisen">
+<node CREATED="1465674483754" ID="ID_618303620" MODIFIED="1465674558135" TEXT="sehe nur eine L&#xf6;sung">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1465674488874" ID="ID_1053641252" MODIFIED="1465674563848" TEXT="Mutator-Builder-Funktion">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1465674529460" ID="ID_1090489809" MODIFIED="1465674571112" TEXT="pflanzt in ein gegebenes Buff-Handle">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1465665993012" ID="ID_267337231" MODIFIED="1465666003750" TEXT="keine komplexen &quot;Riten&quot;"/>
+<node CREATED="1465666524573" HGAP="30" ID="ID_18958581" MODIFIED="1561827465592" TEXT="Schlu&#xdf;folgerung" VSHIFT="18">
+<icon BUILTIN="yes"/>
+<node CREATED="1465666541419" ID="ID_787956112" MODIFIED="1465666552293" TEXT="entweder ein festes Interface"/>
+<node CREATED="1465666552842" ID="ID_1360512685" MODIFIED="1465666574594" TEXT="oder &#xfc;ber Metaprogrammierung / Spezialisierung"/>
+<node CREATED="1468761997202" FOLDED="true" ID="ID_206940182" MODIFIED="1561827483836" TEXT="kombinierte L&#xf6;sung">
+<icon BUILTIN="idea"/>
+<node CREATED="1468762009304" ID="ID_170152384" MODIFIED="1468762018314" TEXT="Interface DiffMutable"/>
+<node CREATED="1468762031701" FOLDED="true" ID="ID_1455212830" MODIFIED="1561827482931" TEXT="Meta-Adapter">
+<linktarget COLOR="#503382" DESTINATION="ID_1455212830" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_1591967504" SOURCE="ID_993360353" STARTARROW="None" STARTINCLINATION="535;0;"/>
+<node CREATED="1468762052858" ID="ID_1870920189" MODIFIED="1468762066764" TEXT="synthetisiert dieses Interface"/>
+<node CREATED="1468762067383" ID="ID_1801995068" MODIFIED="1468762075059" TEXT="erkennt passende Methoden"/>
+<node CREATED="1468762075671" FOLDED="true" ID="ID_1201929549" MODIFIED="1561827469159" TEXT="Problem: Storage">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1468762092660" ID="ID_1968257665" MODIFIED="1468762097264" TEXT="Adapter oder Lambda"/>
+<node CREATED="1468762097684" ID="ID_438037423" MODIFIED="1468762107374" TEXT="mu&#xdf; l&#xe4;nger leben als der Adapter"/>
+<node CREATED="1468762118913" ID="ID_900380797" MODIFIED="1468762128867" TEXT="L&#xf6;sung: Wert / Reftyp per Spezialisierung"/>
+<node CREATED="1468762138318" ID="ID_897808839" MODIFIED="1472219338878" TEXT="Restrisiko bleibt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....da&#223; ein unbedarfter client diesen Trick &#252;bershieht
+    </p>
+    <p>
+      und daher den R&#252;ckgabewert wegwirft.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Argument: we soweit einsteigt, die Metaprogramming-L&#246;sung zu nutzen,
+    </p>
+    <p>
+      sollte auch intelligent genug sein, die API-Doc zu lesen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Standard == Interface DiffMutable implementieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1469121877371" FOLDED="true" HGAP="38" ID="ID_1614796496" MODIFIED="1561827469159" TEXT="freie funktion" VSHIFT="16">
+<icon BUILTIN="yes"/>
+<node CREATED="1469121882782" ID="ID_695291968" MODIFIED="1469121933463" TEXT="keine Spezialisierung notwendig">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1469121890060" ID="ID_743882721" MODIFIED="1469121930007">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Client soll direkt <b>mutatorBinding</b>&#160;bieten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1469544027620" HGAP="38" ID="ID_125815178" MODIFIED="1533608413984" TEXT="Storage-Probleme" VSHIFT="11">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1469544055624" ID="ID_1154293782" MODIFIED="1561827465596" TEXT="Beobachtung: Template-bloat">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1469544072709" ID="ID_1774421000" MODIFIED="1469544083016" TEXT="Ursache: wir generieren die Klasse jedesmal neu"/>
+<node CREATED="1469544084220" ID="ID_1256237924" MODIFIED="1469544104909" TEXT="...obwohl keinerlei Bezug zum Target-Typ vorliegt">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1469544123271" ID="ID_1177495661" MODIFIED="1469544133675" TEXT="Funktionalit&#xe4;t ist zu 90% generisch">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1469544171176" ID="ID_993360353" MODIFIED="1469544253263">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>nicht</i>&#160;generisch: <b><font color="#923977">mutatorBinding</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#503382" DESTINATION="ID_1455212830" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_1591967504" STARTARROW="None" STARTINCLINATION="535;0;"/>
+</node>
+</node>
+<node CREATED="1469544264955" HGAP="35" ID="ID_1303383911" MODIFIED="1561827465596" VSHIFT="16">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sungsversuch: <b>extern template</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1469544293574" ID="ID_543205456" MODIFIED="1469544318455" TEXT="Template bereits in Lumiera-Lib vor-generieren">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1469544337408" ID="ID_155206283" MODIFIED="1469544349252" TEXT="nur ctor ist nochmals ge-Templated">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1469544323331" FOLDED="true" ID="ID_1187319781" MODIFIED="1561827483836" TEXT="flexibler Teil verbleibt in ctor">
+<icon BUILTIN="forward"/>
+<node CREATED="1469544368180" ID="ID_782870983" MODIFIED="1469544377687" TEXT="hier kann das mutatorBinding stattfinden"/>
+<node CREATED="1469544385882" ID="ID_1613566026" MODIFIED="1469544397396" TEXT="...in Abh&#xe4;ngigkeit vom konkreten Zieltyp"/>
+<node CREATED="1469544400544" ID="ID_601582921" MODIFIED="1469544413058" TEXT="Resultat ist ein TreeMutator im internen Puffer"/>
+</node>
+<node CREATED="1469544471294" FOLDED="true" ID="ID_274473608" MODIFIED="1561827483837" TEXT="Problem-1: Puffer-Gr&#xf6;&#xdf;e">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1469544519439" ID="ID_1593158621" MODIFIED="1469544535057" TEXT="Plan: Heuristik + Traits"/>
+<node CREATED="1469544536309" ID="ID_1666794304" MODIFIED="1469544546951" TEXT="h&#xe4;ngt von konkretem Zieltyp ab"/>
+<node CREATED="1469544547731" ID="ID_1790199261" MODIFIED="1469544596453" TEXT="kann nicht im generischen Teil stecken">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1469544575808" ID="ID_1467987209" MODIFIED="1469544599880" TEXT="Problem: vom generischen Teil ansprechen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1469544601444" ID="ID_235522874" MODIFIED="1469544616515" TEXT="L&#xf6;sung: weitere Indirektion">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1469544618738" ID="ID_1808730903" MODIFIED="1472122283229" TEXT="vertretbar, da nur beim Scope-Wechsel....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...im Klartext: diesen Zugriff von der generischen Implementierung
+    </p>
+    <p>
+      auf den eingebauten Stack-Mechanismus ben&#246;tigen wir nur...
+    </p>
+    <ul>
+      <li>
+        einmal zu Beginn, bei der Konstruktion
+      </li>
+      <li>
+        wenn wir in einen geschachtelten Scope eintreten
+      </li>
+      <li>
+        wenn wir einen Solchen verlassen
+      </li>
+    </ul>
+    <p>
+      Zwar sind indirekte Calls aufwendiger, aber letzten Endes auch wieder nicht soooo aufwendig,
+    </p>
+    <p>
+      da&#223; sie uns im gegebenen Kontext umbringen...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1469544496907" FOLDED="true" ID="ID_1217165446" MODIFIED="1561827483837" TEXT="Problem-2: re-Initialisierung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1469544831244" ID="ID_1325104278" MODIFIED="1469544838662" TEXT="bestehendes Protokoll">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1469544839795" ID="ID_193708850" MODIFIED="1469544858420" TEXT="Diff-Applikator kan beliebige Folge von Diffs akzeptieren"/>
+<node CREATED="1469544859392" ID="ID_1737941680" MODIFIED="1469544964778">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>intern:</i>&#160;eingebaute <b>initDiffApplication()</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wird automatisch vor Konsumieren eines Diff aufgerufen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1469544965890" ID="ID_386723562" MODIFIED="1469545023179">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Widerspruch:</i>&#160;TreeMutator ist <b>Wegwerf</b>-Objekt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#f61b01" CREATED="1469545033584" ID="ID_442523056" MODIFIED="1469545058652" TEXT="Abbruch">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1469545080826" HGAP="41" ID="ID_775671732" MODIFIED="1561827465600" VSHIFT="17">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      L&#246;sungsversuch: <b>doppelte H&#252;lle</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1469545168798" FOLDED="true" ID="ID_370635458" MODIFIED="1561827483837" TEXT="Architektur">
+<node CREATED="1469545173893" ID="ID_814298904" MODIFIED="1469545190599" TEXT="opaque: Kern == TreeMutator"/>
+<node CREATED="1469545191899" ID="ID_397109000" MODIFIED="1469545206853" TEXT="generisch: TreeMutator-Bindung"/>
+<node CREATED="1469545208440" ID="ID_244347713" MODIFIED="1469545246870" TEXT="dediziert: Typ-Adapter"/>
+</node>
+<node CREATED="1469545401582" FOLDED="true" ID="ID_721753756" MODIFIED="1561827483837" TEXT="konkrete Folgen...">
+<node CREATED="1469545417579" ID="ID_1940199475" MODIFIED="1469545427486" TEXT="alle virtuellen Methoden im generischen Teil"/>
+<node CREATED="1469545428289" FOLDED="true" ID="ID_1499107269" MODIFIED="1561827482932" TEXT="generischer Teil verwendet nur Interfaces">
+<node CREATED="1469545452406" ID="ID_190085940" MODIFIED="1469545455778" TEXT="TreeMutator"/>
+<node CREATED="1469545456549" ID="ID_300958644" MODIFIED="1469545459401" TEXT="ScopeManager"/>
+</node>
+<node CREATED="1469545522445" FOLDED="true" ID="ID_1403539911" MODIFIED="1561827482932" TEXT="ScopeManager">
+<node CREATED="1469545526380" ID="ID_1121286637" MODIFIED="1469545535550" TEXT="Imp. wird per Zieltyp generiert"/>
+<node CREATED="1469545536139" ID="ID_53324473" MODIFIED="1469545543750" TEXT="lebt in opaquem Buffer"/>
+<node CREATED="1469545546209" ID="ID_347304855" MODIFIED="1469545561067" TEXT="enth&#xe4;lt Stack,"/>
+<node CREATED="1469545562151" ID="ID_1493051731" MODIFIED="1469545568130" TEXT="mit passender Puffergr&#xf6;&#xdf;e"/>
+</node>
+<node CREATED="1469545592171" FOLDED="true" ID="ID_606899967" MODIFIED="1561827482932" TEXT="dedizierter Applikator">
+<icon BUILTIN="idea"/>
+<node CREATED="1469545598922" ID="ID_999031051" MODIFIED="1469545609733" TEXT="h&#xe4;llt Referenz auf Zielobjekt"/>
+<node CREATED="1469545611177" ID="ID_1578280004" MODIFIED="1469545670672">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann daher <b>TreeMutator</b>&#160;konstruieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1469545641644" ID="ID_719025162" MODIFIED="1469545662506">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar per <b>mutatorBinding</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1469545691349" ID="ID_1537085784" MODIFIED="1469545705980">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      implementiert somit <b>initDiffApplication()</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1469545778873" FOLDED="true" HGAP="37" ID="ID_1238563884" MODIFIED="1561827483837" VSHIFT="53">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TODO: <font color="#010101">Namensgebung</font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#7c4b8e" DESTINATION="ID_1238563884" ENDARROW="Default" ENDINCLINATION="-438;877;" ID="Arrow_ID_701265417" SOURCE="ID_1433722735" STARTARROW="Default" STARTINCLINATION="2134;135;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1469545959160" ID="ID_1653202468" MODIFIED="1469545961076" TEXT="DiffApplicationStrategy&lt;DiffMutable&gt;"/>
+<node CREATED="1469545962192" ID="ID_363293414" MODIFIED="1469545971051" TEXT="feste explizite Spezialisierung"/>
+<node CREATED="1469545972470" ID="ID_1576991625" MODIFIED="1469545983800" TEXT="in non-Template-Basisklasse verwandeln"/>
+<node CREATED="1469545990956" ID="ID_516103477" MODIFIED="1469546010389" TEXT="oder zumindest in Trait-Template + enable_if"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1465855369239" ID="ID_832033113" MODIFIED="1525124215221" STYLE="fork" TEXT="Architektur">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1465855402346" ID="ID_76313075" MODIFIED="1512926192122" TEXT="Grundgedanke">
+<node CREATED="1465855407129" ID="ID_840507910" MODIFIED="1472219324297" TEXT="Trennung von DiffInterpreter und TreeMutator"/>
+<node CREATED="1465855418880" ID="ID_1224291834" MODIFIED="1472219324297" TEXT="ersterer wird auf Basis von letzterem implementiert"/>
+<node CREATED="1465855507380" ID="ID_794764888" MODIFIED="1472219324297">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TreeMutator-<i>Binding</i>&#160;mu&#223; opaque bleiben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1465855561877" ID="ID_23704873" MODIFIED="1512926192123">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Buffer-Gr&#246;&#223;en-Management <i>vorsehen</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1465855596992" ID="ID_805593649" MODIFIED="1472219324298" TEXT="passiert im Scope des Ctors"/>
+<node CREATED="1465855605879" ID="ID_730704715" MODIFIED="1472219324298" TEXT="bzw. im Scope des MUT-Verbs"/>
+<node CREATED="1465855641898" ID="ID_1440271595" MODIFIED="1575133338771" TEXT="Heuristik + Versuch&amp;Irrtum">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t
+    </p>
+    <ul>
+      <li>
+        ein sinnvoller Startwert wird heuristisch vorgegeben
+      </li>
+      <li>
+        wenn die Allokation scheitert, die Exception fangen und die tats&#228;chlich ben&#246;tigte Gr&#246;&#223;e merken
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1465855653265" ID="ID_440676779" MODIFIED="1472219324298" TEXT="konfigurieren und lernen"/>
+</node>
+<node CREATED="1465855576187" ID="ID_1868954632" MODIFIED="1472219324298" TEXT="zun&#xe4;chst jedoch primitiv implementieren"/>
+</node>
+<node CREATED="1465856069657" ID="ID_1337282940" MODIFIED="1512926192123" TEXT="Struktur">
+<node CREATED="1465856074888" ID="ID_835346056" MODIFIED="1472219324298" TEXT="TreeMutator == PImpl"/>
+<node CREATED="1465856092638" ID="ID_1061297702" MODIFIED="1472219324298" TEXT="BufferManager : opaque aber inline"/>
+</node>
+</node>
+<node CREATED="1465864106739" ID="ID_254742738" MODIFIED="1575133338859" TEXT="Zugang zum Mutator-Binding">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t:
+    </p>
+    <p>
+      gegeben ein syntaktisch sinnvoller top-level-Aufruf (&quot;wende das Diff an&quot;)
+    </p>
+    <p>
+      -- wie bzw. von wem bekommen wir dann ein Binding, das einen passenden TreeMutator konstruiert?
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#994062" DESTINATION="ID_254742738" ENDARROW="Default" ENDINCLINATION="1028;0;" ID="Arrow_ID_62544040" SOURCE="ID_1214269061" STARTARROW="None" STARTINCLINATION="978;42;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1465864167187" ID="ID_1014149687" MODIFIED="1465864171974" TEXT="Aufruf: freie Funktion"/>
+<node CREATED="1465864172514" ID="ID_1938000921" MODIFIED="1465864180668" TEXT="delegiert auf Template"/>
+<node CREATED="1465864181193" ID="ID_1416910409" MODIFIED="1465864192611" TEXT="explizite / regelbasierte Spezialisierung"/>
+<node CREATED="1465864193607" ID="ID_1086360419" MODIFIED="1512926192124" TEXT="Problem: Storage f&#xfc;r die Closure">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1465864217628" ID="ID_868183917" MODIFIED="1465864228510" TEXT="typischerweise sind alles transiente Objekte"/>
+<node CREATED="1465864229170" ID="ID_442975692" MODIFIED="1465864240501" TEXT="also mu&#xdf; die Closure als Wert-Objekt rausgegeben werden"/>
+<node CREATED="1472495487478" ID="ID_1246712083" MODIFIED="1512926192125" TEXT="L&#xf6;sung...">
+<node CREATED="1472495496574" ID="ID_1728009713" MODIFIED="1472495510056" TEXT="auto typed return value"/>
+<node CREATED="1472495510531" ID="ID_39881553" MODIFIED="1472495513703" TEXT="keep in local scope"/>
+<node CREATED="1472495514203" ID="ID_1953453853" MODIFIED="1472495529197" TEXT="tightly integrate into ctor of DiffAplicator"/>
+</node>
+<node CREATED="1465864247152" ID="ID_369875178" MODIFIED="1512926192125" TEXT="gesucht: elegantes API">
+<node CREATED="1472494557762" ID="ID_1362626195" MODIFIED="1472494575309" TEXT="DiffAplicator&lt;TargetTyp&gt;">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472494413960" ID="ID_1029844890" MODIFIED="1472494571740" TEXT="Erweiterungspunkt f&#xfc;r ADL..."/>
+<node CREATED="1472494432219" ID="ID_410727246" MODIFIED="1472494446981" TEXT="...wird vom ctor des Diff-Applikators verwendet"/>
+<node CREATED="1472494466926" ID="ID_1047421260" MODIFIED="1472494484296" TEXT="...und der wiederum greift nur"/>
+<node CREATED="1472494485388" ID="ID_470796053" MODIFIED="1472494501141" TEXT="...wenn TreeDiffTraits definiert sind"/>
+<node CREATED="1472494501778" ID="ID_1970090360" MODIFIED="1472494506323" TEXT="not too bad">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1465860736044" ID="ID_554117057" MODIFIED="1561827465611" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1472121965308" ID="ID_762131895" MODIFIED="1472121974646" TEXT="Verb delegiert an Mutator-Primitive"/>
+<node CREATED="1472121976018" ID="ID_1667890765" MODIFIED="1472121995995" TEXT="Fehlerbehandlung anhand R&#xfc;ckgabewert dieser"/>
+<node CREATED="1472122015157" ID="ID_507093208" MODIFIED="1472122038334" TEXT="sinnvolle interne Fehler-Funktionen aufbauen"/>
+<node CREATED="1472141026525" ID="ID_215668060" MODIFIED="1512926192127" TEXT="Scope-Wechsel">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1472172154624" ID="ID_916630849" MODIFIED="1512926192127" TEXT="Zugang zum erzeugten Mutator....">
+<node CREATED="1472172310187" ID="ID_487326937" MODIFIED="1575133339222" TEXT="via buffer-Handle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erscheint mir die am wenigsten &#252;berraschende L&#246;sung.
+    </p>
+    <p>
+      und zwar per handle.get()
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472172348526" ID="ID_1189257051" MODIFIED="1533608413996" TEXT="m&#xf6;gliche Alternativen">
+<node CREATED="1472172364204" ID="ID_1693509282" MODIFIED="1575133339255" TEXT="Closure gibt TreeMutator&amp; zur&#xfc;ck">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erscheint mir fehleranf&#228;llig und irref&#252;hrend f&#252;r den Nutzer der Schnittstelle.
+    </p>
+    <p>
+      Denn er mu&#223; zwar das Objekt in das Handle platzieren, dann aber auch noch einen Pointer zur&#252;ckgeben,
+    </p>
+    <p>
+      der dann auch noch NULL sein kann, zum Signalisieren von Fehlern.
+    </p>
+    <p>
+      Ich empfinde das als schlechten Stil
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1472172467934" ID="ID_1540495826" MODIFIED="1575133339270" TEXT="ScopeManager-Interface erweitern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      naja, das w&#228;re billig, aber auch wieder beliebig.
+    </p>
+    <p>
+      Es macht keinen Sinn vom API-Design her, sondern man m&#252;&#223;te es halt machen,
+    </p>
+    <p>
+      weil die Implementierung den Zeiger auf den geschachtelen sub-Mutator umsetzen mu&#223;.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node CREATED="1472172586703" ID="ID_1282826388" MODIFIED="1512926192128" TEXT="pr&#xfc;fen">
+<node CREATED="1472172593710" ID="ID_539813118" MODIFIED="1472172608024" TEXT="geschachtelter Scope mu&#xdf; beim Verlassen komplett abgearbeitet sein"/>
+<node CREATED="1472172608636" ID="ID_904329399" MODIFIED="1472172634020" TEXT="wir steigen niemals &#xfc;ber den root-Scope hinaus auf"/>
+</node>
+<node CREATED="1472172651974" ID="ID_717242686" MODIFIED="1512926192130" TEXT="ins-Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1472172658349" ID="ID_279579205" MODIFIED="1472172806077">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Diff-Sprache verlangt,
+    </p>
+    <p>
+      da&#223; vor dem &#214;ffnen des geschachtelten Scopes
+    </p>
+    <p>
+      dieser zumindest einmal per ins &quot;angelegt&quot; wurde.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1472172711846" ID="ID_67509104" MODIFIED="1472172809794" TEXT="wir haben es hier mit objektwertigen Attributen zu tun">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1472172723853" ID="ID_397776543" MODIFIED="1472172732503" TEXT="das ist ein sonderbarer Grenzfall"/>
+<node CREATED="1472172733307" ID="ID_1698922494" MODIFIED="1472172753564" TEXT="man wird die normalerweise auf Impl-Ebene erzeugen"/>
+<node CREATED="1472172754136" ID="ID_205435085" MODIFIED="1472172765458" TEXT="ein INS hat dann nichts sinnvolles zu tun"/>
+<node CREATED="1472172772494" ID="ID_842638924" MODIFIED="1472172795138" TEXT="default-Implementierung absorbiert das INS stillschweigend">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1465860740971" ID="ID_1905457534" MODIFIED="1512926192131" TEXT="Unit-Test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1472122365079" ID="ID_781825543" MODIFIED="1512926192131" TEXT="Aussagekr&#xe4;ftiges Beispiel-Diff">
+<node CREATED="1472122379548" ID="ID_1273829051" MODIFIED="1472122384864" TEXT="sollte alle Features vorf&#xfc;hren"/>
+<node CREATED="1472122385380" ID="ID_537172522" MODIFIED="1472122391943" TEXT="sollte wichtige Grenzf&#xe4;lle aktivieren"/>
+<node CREATED="1472122394387" ID="ID_1852750941" MODIFIED="1472122409477" TEXT="sollte keine sinnlosen Operationen verlangen"/>
+</node>
+<node CREATED="1472122416040" ID="ID_1497249607" MODIFIED="1575133339504" TEXT="Analog zu den Primitiven in TreeDiffBinding_test">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist ein Versuch, den Code f&#252;r den Leser verst&#228;ndlich zu halten.
+    </p>
+    <p>
+      Die Idee ist, da&#223; es einen high-level Unit-Test gibt, der die gesamte Diff-Anwendung durchspielt
+    </p>
+    <p>
+      und dazu passend einen low-level Unit-Test, der analog die gleichen Operationen macht,
+    </p>
+    <p>
+      allerdings direkt auf dem TreeDiff-Interface durch Aufruf der passenden Primitiv-Operaionen.
+    </p>
+    <p>
+      Letztere m&#252;ssen f&#252;r jede Art von &quot;onion-layer&quot; (konkretes Binding) erneut implementiert
+    </p>
+    <p>
+      und daher auch jeweils eigens per Unit-Test abgedeckt werden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1472122581698" ID="ID_646408964" MODIFIED="1575133339521" TEXT="sehr komplexes Binding auf privaten Datentyp">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist hier sinnvoll. Das Binding sollte komplexer sein,
+    </p>
+    <p>
+      als in der Praxis auftretende Bindings. Warum? Weil letztere immer etwas einseitg sind
+    </p>
+    <p>
+      und damit Abk&#252;rzungen im Code-Pfad ausn&#252;tzen. Die Gefahr schlummert aber im Zusammenspiel
+    </p>
+    <p>
+      der konkreten Bindings mit mehreren &quot;onion layers&quot;!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1465428871136" ID="ID_1530542113" MODIFIED="1512926192131" TEXT="integration mehrerer Bindungs-Layer">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1469918339329" ID="ID_1268899355" MODIFIED="1576204739930" TEXT="geplant: DiffVirtualisedApplication_test">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1469918356432" ID="ID_402479849" MODIFIED="1469918363427" TEXT="Selector korrekt integrieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1465428882150" ID="ID_1713615701" MODIFIED="1512926192132" TEXT="komplexer Integrationstest"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850101524" HGAP="-22" ID="ID_233819266" MODIFIED="1512926192133" TEXT="TODO" VSHIFT="29">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1458850122091" ID="ID_558028717" MODIFIED="1512926192134" TEXT="Collection-Binding: bessere Fehlermeldungen">
+<node CREATED="1458850141920" ID="ID_1678218183" MODIFIED="1575133339634" TEXT="bei Signatur-Mismatch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es ist sehr verwirrend, welche Signatur denn nun die Lambdas haben m&#252;ssen
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1678218183" ENDARROW="Default" ENDINCLINATION="176;0;" ID="Arrow_ID_1136171372" SOURCE="ID_65072201" STARTARROW="None" STARTINCLINATION="176;0;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1458850154575" ID="ID_1092417051" MODIFIED="1575133339650" TEXT="wenn der Default-Matcher greift">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es kann keinen Default-Matcher geben....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1458850212503" ID="ID_1633140516" MODIFIED="1472498583464" TEXT="Signaturen f&#xfc;r Lambdas dokumentieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1465860661877" ID="ID_1725052487" MODIFIED="1472498127725" TEXT="Builder-API f&#xfc;r Attribut-Binding dokumentieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1465860672852" ID="ID_1572924206" MODIFIED="1512926192134" TEXT="Variante zum Attribut-Binding, wobei die Attribut-ID als GenNode::ID gegeben ist">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1472498724880" ID="ID_1915142911" MODIFIED="1472498733392" TEXT="f&#xfc;r sp&#xe4;ter">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1472498734359" ID="ID_1700021018" MODIFIED="1472498742262" TEXT="brauchen wir das wirklich">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1460847222865" ID="ID_1183333475" MODIFIED="1575133339750" TEXT="abstrakte operationale Semantik der Diff-Anwendung dokumentieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst wird niemand Lambdas bereitstellen k&#246;nnen, oder gar Diff-Nachrichten erzeugen.
+    </p>
+    <p>
+      Das ist nun kein spezielles Problem der gew&#228;hlten Implementierungs-Technik, sondern r&#252;hrt daher,
+    </p>
+    <p>
+      da&#223; der Client hier eigentlich ein Protokoll implementieren mu&#223;.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1458850263688" ID="ID_1575858667" MODIFIED="1512926192135" TEXT="Zusammenf&#xfc;hren">
+<node CREATED="1458850294083" ID="ID_1035255319" MODIFIED="1458850302901" TEXT="der normale GenNode-Applikator"/>
+<node CREATED="1458850282285" ID="ID_315551572" MODIFIED="1512926192135" TEXT="Pr&#xfc;fen ob sinnvoll">
+<node CREATED="1458850328775" ID="ID_640982298" MODIFIED="1458850333475" TEXT="Indirektionen"/>
+<node CREATED="1458850334110" ID="ID_1172428601" MODIFIED="1458850338898" TEXT="Speicherbedarf"/>
+<node CREATED="1458850339413" ID="ID_317541225" MODIFIED="1458850359702" TEXT="Aufwand bei der Verwendung"/>
+</node>
+<node CREATED="1458850306506" ID="ID_1166040145" MODIFIED="1458850323212" TEXT="durch Binding f&#xfc;r Tree-Applikator ersetzen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1461968295826" ID="ID_832194713" MODIFIED="1512926192135" TEXT="pr&#xfc;fen: soll das &#xbb;AFTER&#xab;-Verb aus der Sprache entfernt werden">
+<linktarget COLOR="#592379" DESTINATION="ID_832194713" ENDARROW="Default" ENDINCLINATION="577;0;" ID="Arrow_ID_1785459194" SOURCE="ID_721485398" STARTARROW="Default" STARTINCLINATION="1205;231;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1461968428712" ID="ID_1763138890" MODIFIED="1461968442674" TEXT="es ist n&#xfc;tzlich f&#xfc;r handgeschriegbene Diffs"/>
+<node CREATED="1461968443334" ID="ID_269699254" MODIFIED="1461968454521" TEXT="es vertr&#xe4;gt sich nicht mit gemischten Kindern"/>
+<node CREATED="1465428190234" ID="ID_1562546651" MODIFIED="1512926192136" TEXT="Kompromi&#xdf;">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1562546651" ENDARROW="Default" ENDINCLINATION="-27;14;" ID="Arrow_ID_477931579" SOURCE="ID_1962067597" STARTARROW="None" STARTINCLINATION="139;3;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1465428196730" ID="ID_1910351001" MODIFIED="1465428204548" TEXT="belassen"/>
+<node CREATED="1465428205352" ID="ID_28950544" MODIFIED="1465428215635" TEXT="akzeptieren, da&#xdf; es nicht immer anwendbar ist"/>
+<node CREATED="1465428216271" ID="ID_814487938" MODIFIED="1465428234145" TEXT="die generische Variante &quot;after Ref::END&quot; ist sehr gut"/>
+<node CREATED="1465428236860" ID="ID_866203929" MODIFIED="1465428248614" TEXT="speziell Attribut-Binding unterst&#xfc;tzt zur generische Variante"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1469545751885" ID="ID_1433722735" MODIFIED="1469545906061" TEXT="Namensgebung f&#xfc;r generisches Mutator-Binding">
+<arrowlink COLOR="#7c4b8e" DESTINATION="ID_1238563884" ENDARROW="Default" ENDINCLINATION="-438;877;" ID="Arrow_ID_701265417" STARTARROW="Default" STARTINCLINATION="2134;135;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1472216217388" HGAP="21" ID="ID_1534804117" MODIFIED="1512926192136" TEXT="Semantik der Diff-Sprache" VSHIFT="5">
+<node CREATED="1472216261102" ID="ID_1793923006" MODIFIED="1472216264937" TEXT="sinnvoll definiert"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1472216265486" ID="ID_936601452" MODIFIED="1512926192137" TEXT="sp&#xe4;ter re-evaluieren (Ticket #996)">
+<node CREATED="1472216306208" ID="ID_1962067597" MODIFIED="1512926192137" TEXT="AFTER">
+<arrowlink DESTINATION="ID_1562546651" ENDARROW="Default" ENDINCLINATION="-27;14;" ID="Arrow_ID_477931579" STARTARROW="None" STARTINCLINATION="139;3;"/>
+<node CREATED="1473040688153" ID="ID_1832205907" MODIFIED="1473040722530" TEXT="bleibt vorerst erhalten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1473040705207" ID="ID_1976880201" MODIFIED="1473040710378" TEXT="kann sinnvoll implementiert werden"/>
+<node CREATED="1473040711582" ID="ID_1725936766" MODIFIED="1473040717859" TEXT="ist sehr n&#xfc;tzlich">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1472219973288" ID="ID_827760350" MODIFIED="1512926192139" TEXT="Ref::THIS">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1472220009699" ID="ID_668003504" MODIFIED="1472220054293">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>wenn &#252;berhaupt, </i>dann im Matcher im Binding-Layer implementieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1473040485789" ID="ID_1455054542" MODIFIED="1575133340122" TEXT="nein: f&#xfc;hrt zu verworrener Implementierung bzw. ist unm&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir haben nun mehrere Layer,
+    </p>
+    <p>
+      und der Selector kann einfach anhand von Ref::THIS keine sinnvolle Entscheidung treffen.
+    </p>
+    <p>
+      Daher versuchen dann alle Layer dieses Element zu behandeln, oder gar keiner
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und da der Selector <i>nur die Spec anschauen darf, </i>l&#228;&#223;t sich das auch nachher nicht mehr korrigieren
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Daher habe ich mich <b>entschlossen, dieses Sprachkonstrukt zu entfernen</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1473040662653" ID="ID_618762286" MODIFIED="1473040680738">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>entfernt</b>, da schlechtes Design
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1472216312295" ID="ID_1775308081" MODIFIED="1512926192140" TEXT="Ref::CHILD">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1472219981838" ID="ID_574042505" MODIFIED="1472219987506" TEXT="was genau soll das sein??"/>
+<node CREATED="1472219987983" ID="ID_1555757607" MODIFIED="1472219997032" TEXT="was ist der Unterschied zu Ref::THIS"/>
+<node CREATED="1472219998405" ID="ID_581974405" MODIFIED="1472220005255" TEXT="funktioniert das &#xfc;berhaupt noch??"/>
+<node CREATED="1473040662653" ID="ID_1276623149" MODIFIED="1473040680738">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>entfernt</b>, da schlechtes Design
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1458850387823" HGAP="19" ID="ID_425389577" MODIFIED="1512926192141" TEXT="allgemein" VSHIFT="13">
+<node CREATED="1458850397158" ID="ID_824208782" MODIFIED="1512926192141" TEXT="GenNode">
+<node CREATED="1458850406396" ID="ID_1751784080" MODIFIED="1512926192141" TEXT="string-Repr&#xe4;sentation der Payload">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1473352291785" ID="ID_1072989957" MODIFIED="1473352300715" TEXT="vorerst nicht ben&#xf6;tigt"/>
+<node CREATED="1473352306190" ID="ID_1614247363" MODIFIED="1473352310810" TEXT="w&#xe4;re besser da&#xdf; nicht"/>
+<node CREATED="1473352312206" ID="ID_182553929" MODIFIED="1473352316377" TEXT="Entscheidung vertagt"/>
+</node>
+<node COLOR="#338800" CREATED="1458850422587" ID="ID_687485992" MODIFIED="1458851592866" TEXT="Metafunktion f&#xfc;r m&#xf6;gliche Payload">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1458850437017" ID="ID_374347760" MODIFIED="1512926192142" TEXT="Planting-Handle">
+<node CREATED="1458850456134" ID="ID_1314676676" MODIFIED="1575133340337" TEXT="Zwischenschicht einziehen im TreeMutator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      anscheinend nicht notwendig
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1458850463389" ID="ID_1264284471" MODIFIED="1473352257250" TEXT="Generische Impl herausl&#xf6;sen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1458850471228" ID="ID_1582586681" MODIFIED="1473352333631" TEXT="Unit-Test hierf&#xfc;r">
+<icon BUILTIN="bell"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1576203266079" HGAP="-33" ID="ID_814331726" MODIFIED="1576203320920" TEXT="Probleme" VSHIFT="81">
+<edge COLOR="#a35858" STYLE="linear"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1576203334745" ID="ID_469932361" MODIFIED="1576203344231" TEXT="STL Collection-Binding">
+<node COLOR="#435e98" CREATED="1576203346447" ID="ID_233848651" MODIFIED="1576281488712" TEXT="&quot;wackelig&quot; f&#xfc;r manche Typen">
+<icon BUILTIN="clanbomber"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576203375592" ID="ID_1979742309" MODIFIED="1576203381993" TEXT="std::Map">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576203383258" ID="ID_854221294" MODIFIED="1576204502727" STYLE="fork" TEXT="eigentlich ein Widerspruch">
+<arrowlink COLOR="#b85f4e" DESTINATION="ID_1285123321" ENDARROW="Default" ENDINCLINATION="-735;0;" ID="Arrow_ID_1644325647" STARTARROW="None" STARTINCLINATION="-651;70;"/>
+</node>
+<node CREATED="1576203390673" ID="ID_1579012788" MODIFIED="1576203404067" TEXT="praktisch aber bequem"/>
+<node CREATED="1576203728291" ID="ID_42201574" MODIFIED="1576203790175" TEXT="code-teschnisch problematisch">
+<arrowlink COLOR="#e69f98" DESTINATION="ID_1611724080" ENDARROW="Default" ENDINCLINATION="-741;702;" ID="Arrow_ID_1638749746" STARTARROW="None" STARTINCLINATION="1526;117;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1576203459624" ID="ID_789920101" MODIFIED="1576204104302" TEXT="&#xbb;Attribut-Map&#xab; in MockElm">
+<arrowlink COLOR="#c48c7d" DESTINATION="ID_275833424" ENDARROW="Default" ENDINCLINATION="-975;32;" ID="Arrow_ID_454192352" STARTARROW="None" STARTINCLINATION="937;102;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1576281451040" ID="ID_256253463" MODIFIED="1576281485757" TEXT="f&#xfc;hre ContainerTraits ein">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1576281457704" ID="ID_1923676658" MODIFIED="1576281466799" TEXT="organisiere den Zugriff &#xfc;ber wenige Primitive"/>
+<node CREATED="1576281467534" ID="ID_141840018" MODIFIED="1576281475848" TEXT="recentElmRawIter"/>
+<node CREATED="1576281477030" ID="ID_1772245201" MODIFIED="1576281484407" TEXT="emplace-Operation"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1502452581379" FOLDED="true" HGAP="3" ID="ID_1651893758" MODIFIED="1576281567403" TEXT="Darstellung" VSHIFT="31">
 <linktarget COLOR="#afb1bd" DESTINATION="ID_1651893758" ENDARROW="Default" ENDINCLINATION="-1257;0;" ID="Arrow_ID_1786455458" SOURCE="ID_1500100371" STARTARROW="None" STARTINCLINATION="1858;0;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1502452597604" ID="ID_172363215" MODIFIED="1512926192454" TEXT="MutationMessage">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1502454531772" ID="ID_445867436" MODIFIED="1502454536184" TEXT="abstrakter Iterator"/>
@@ -40550,9 +41147,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1460934597764" HGAP="223" ID="ID_1014666775" MODIFIED="1518487921095" TEXT="Review" VSHIFT="32">
+<node CREATED="1460934597764" HGAP="223" ID="ID_1014666775" MODIFIED="1576202239196" TEXT="Review" VSHIFT="32">
 <font NAME="SansSerif" SIZE="15"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="bell"/>
 <node CREATED="1460934670043" ID="ID_1299827687" MODIFIED="1518487921095" TEXT="sp&#xe4;ter zu &#xfc;berpr&#xfc;fen">
 <node CREATED="1460934686017" ID="ID_900313780" MODIFIED="1518487921095" TEXT="Klarheit"/>
 <node CREATED="1460934698430" ID="ID_1527149180" MODIFIED="1518487921095" TEXT="praktischer Kontext"/>
@@ -40584,7 +41181,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1443740566042" FOLDED="true" ID="ID_632827470" MODIFIED="1573834793531" TEXT="Baum-Diff">
+<node CREATED="1443740566042" FOLDED="true" ID="ID_632827470" MODIFIED="1576204707968" TEXT="Baum-Diff">
 <icon BUILTIN="prepare"/>
 <node CREATED="1443740576744" ID="ID_335386387" MODIFIED="1525124215410" TEXT="Anwenden">
 <icon BUILTIN="button_ok"/>
@@ -40674,7 +41271,7 @@
 </node>
 <node CREATED="1460753406868" HGAP="-18" ID="ID_289459316" MODIFIED="1502593581651" TEXT="Spezialf&#xe4;lle" VSHIFT="25">
 <node COLOR="#338800" CREATED="1460753417178" ID="ID_1333254858" MODIFIED="1512926192465" TEXT="native bindings">
-<linktarget COLOR="#639ad5" DESTINATION="ID_1333254858" ENDARROW="Default" ENDINCLINATION="1091;0;" ID="Arrow_ID_709688381" SOURCE="ID_534213210" STARTARROW="None" STARTINCLINATION="1150;185;"/>
+<linktarget COLOR="#639ad5" DESTINATION="ID_1333254858" ENDARROW="Default" ENDINCLINATION="1091;0;" ID="Arrow_ID_1011836019" SOURCE="ID_10780308" STARTARROW="None" STARTINCLINATION="1150;185;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1460753433312" ID="ID_94456036" MODIFIED="1502593626008" TEXT="Binden an Collection von Primitiven">
 <icon BUILTIN="button_ok"/>
@@ -40759,7 +41356,7 @@
 </html></richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1448320473828" ID="ID_681519615" MODIFIED="1575133361354" TEXT="header-only, self-contained, keine Abh&#xe4;ngigkeiten!">
+<node CREATED="1448320473828" ID="ID_681519615" MODIFIED="1576282357974" TEXT="header-only, self-contained, keine Abh&#xe4;ngigkeiten!">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40769,10 +41366,11 @@
       das hei&#223;t: <b>nicht einmal</b>&#160;abh&#228;ngig von der STL
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1448320555049" ID="ID_1836540415" MODIFIED="1518487921095" TEXT="erweiterter Unicode-Support, incl. recoding beim Parsen"/>
-<node CREATED="1448321567452" ID="ID_933252727" MODIFIED="1575133361396" TEXT="kann auch in-situ parsen">
+<node CREATED="1448321567452" ID="ID_933252727" MODIFIED="1576282357974" TEXT="kann auch in-situ parsen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40782,12 +41380,13 @@
       wie gson
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1448320545523" ID="ID_298176210" MODIFIED="1518487921095" TEXT="vollst&#xe4;ndig, incl Ersetzungen"/>
 <node CREATED="1448321598848" ID="ID_1151875949" MODIFIED="1518487921095" TEXT="eigener Block-Allokator, ersetzbar"/>
 </node>
-<node CREATED="1448318965627" ID="ID_453761706" MODIFIED="1575133361448" TEXT="vjson / gason">
+<node CREATED="1448318965627" ID="ID_453761706" MODIFIED="1576282357973" TEXT="vjson / gason">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40800,8 +41399,9 @@
       nach dem Umzug auf Github hei&#223;t es gason
     </p>
   </body>
-</html></richcontent>
-<node CREATED="1448319925356" ID="ID_1589130421" MODIFIED="1575133361469" TEXT="angeblich ziemlich schnell">
+</html>
+</richcontent>
+<node CREATED="1448319925356" ID="ID_1589130421" MODIFIED="1576282357973" TEXT="angeblich ziemlich schnell">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40811,11 +41411,12 @@
       lt. eigenen Benchmakrs deutlich schneller als rapidjson, welches eigentlich immer als der &quot;schnelle&quot; JSON-Parser gilt.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1448319936915" ID="ID_1093677957" MODIFIED="1518487921095" TEXT="C++, aber ehr C-artiges API"/>
 <node CREATED="1448319955328" ID="ID_534293846" MODIFIED="1518487921095" TEXT="type-tag, switch-on-type"/>
-<node CREATED="1448319963711" ID="ID_1858072437" MODIFIED="1575133361539" TEXT="Parser ist destruktiv">
+<node CREATED="1448319963711" ID="ID_1858072437" MODIFIED="1576282357972" TEXT="Parser ist destruktiv">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40825,7 +41426,8 @@
       d.h. das Parsen schreibt den Eingabepuffer um, und Strings bleiben einfach liegen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1448319973830" ID="ID_1495739376" MODIFIED="1518487921096" TEXT="Werte werden in IEEE double NaN geboxt"/>
 <node CREATED="1448320035173" ID="ID_226864203" MODIFIED="1518487921096" TEXT="eigener Block-Allokator"/>
@@ -40838,7 +41440,7 @@
 <node CREATED="1448316840474" ID="ID_1878535070" MODIFIED="1518487921096" TEXT="code bloat, vor allem in Debug-builds">
 <icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1448321146283" ID="ID_1257942632" MODIFIED="1575133361687" TEXT="Ver&#xf6;ffentlichung undurchsichtig">
+<node CREATED="1448321146283" ID="ID_1257942632" MODIFIED="1576282357972" TEXT="Ver&#xf6;ffentlichung undurchsichtig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40848,7 +41450,8 @@
       kein Repo auffindbar
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1448315077731" ID="ID_439331220" MODIFIED="1518487921096" TEXT="boost property-tree">
@@ -40908,7 +41511,7 @@
 <node CREATED="1521843873173" ID="ID_952548619" MODIFIED="1521843938941" TEXT="mi&#xdf;t micro-Ticks"/>
 <node CREATED="1521843880155" ID="ID_1245721460" MODIFIED="1521843938941" TEXT="Ergebnis f&#xe4;llt in Sekunden"/>
 </node>
-<node CREATED="1521843959433" ID="ID_133306105" MODIFIED="1575133362173" TEXT="verwendet Lumiera&apos;s Threading-Framework">
+<node CREATED="1521843959433" ID="ID_133306105" MODIFIED="1576282357971" TEXT="verwendet Lumiera&apos;s Threading-Framework">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40932,7 +41535,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#338800" CREATED="1521843907144" ID="ID_848033940" MODIFIED="1521843935500" TEXT="Ergebnis normieren auf einzelnen Aufruf">
@@ -40941,7 +41545,7 @@
 <node COLOR="#338800" CREATED="1521843926501" ID="ID_984510403" MODIFIED="1521843934725" TEXT="Ergebnis in Mirkosekunden">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1521844261439" ID="ID_1538240853" MODIFIED="1575133362226" TEXT="Korrektheit der Zeitangaben verifiziert">
+<node COLOR="#338800" CREATED="1521844261439" ID="ID_1538240853" MODIFIED="1576282357970" TEXT="Korrektheit der Zeitangaben verifiziert">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40951,7 +41555,8 @@
       habe einen usleep(1000) getimed
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -40962,7 +41567,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1521844130561" ID="ID_1541346658" MODIFIED="1521844139739" TEXT="&#xfc;bergebene Lambdas werden tats&#xe4;chlich ge-inlined"/>
-<node CREATED="1521844157909" ID="ID_1833250915" MODIFIED="1575133362334" TEXT="wenn wir in der Loop messen, messen wir die Aufrufe von chrono::system_clock mit">
+<node CREATED="1521844157909" ID="ID_1833250915" MODIFIED="1576282357970" TEXT="wenn wir in der Loop messen, messen wir die Aufrufe von chrono::system_clock mit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40984,7 +41589,8 @@
       Au&#223;erdem ist ja auch noch der Aufruf des Funktors mit im Spiel, wenngleich der auch typischerweise geinlined wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1521844236539" ID="ID_176799135" MODIFIED="1521844248411" TEXT="tats&#xe4;chlich verifiziert">
 <icon BUILTIN="idea"/>
@@ -41011,7 +41617,7 @@
 <node CREATED="1521844374503" ID="ID_1548234021" MODIFIED="1521844386090" TEXT="diese Variable mit Konstante vergleichen"/>
 <node CREATED="1521844391605" ID="ID_1603234514" MODIFIED="1521844411462" TEXT="Lokale volatile Variable: Initialisierung kostet +5ns"/>
 <node CREATED="1521844412602" ID="ID_1758142813" MODIFIED="1521844418949" TEXT="Inkrementieren kostet +10ns"/>
-<node CREATED="1521844419657" ID="ID_1892679887" MODIFIED="1575133362498" TEXT="konkurrentes Inkrementieren auf globale Volatile: Faktor 100 !!!!">
+<node CREATED="1521844419657" ID="ID_1892679887" MODIFIED="1576282357969" TEXT="konkurrentes Inkrementieren auf globale Volatile: Faktor 100 !!!!">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -41024,7 +41630,8 @@
       da&#223; x86_64 tats&#228;chlich cache-koh&#228;rent ist
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -41069,7 +41676,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1575133362976" TEXT="Iterator-Monade">
+<node CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1576282357969" TEXT="Iterator-Monade">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -41090,7 +41697,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="pencil"/>
 <node COLOR="#435e98" CREATED="1512925265295" HGAP="103" ID="ID_1502143527" MODIFIED="1538869212828" VSHIFT="-66">
 <richcontent TYPE="NODE"><html>
@@ -43446,7 +44054,7 @@
 <node CREATED="1540682747461" ID="ID_1097757447" MODIFIED="1557498707236" TEXT="sinnvoll zum Binden an Rec&lt;GenNode&gt;">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1540682686558" ID="ID_349304672" MODIFIED="1575133363234" TEXT="aber das eigentliche Problem ist...">
+<node CREATED="1540682686558" ID="ID_349304672" MODIFIED="1576282357968" TEXT="aber das eigentliche Problem ist...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -43459,7 +44067,8 @@
       Visitor ist entweder void, oder bool
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -43485,7 +44094,7 @@
 <node CREATED="1573230513506" ID="ID_197961459" MODIFIED="1573230516350" TEXT="ID-Helper"/>
 </node>
 </node>
-<node CREATED="1573230535302" ID="ID_1413538720" MODIFIED="1575133363464" TEXT="&quot;contains&quot; / Suche nur &#xfc;ber Container">
+<node CREATED="1573230535302" ID="ID_1413538720" MODIFIED="1576282357968" TEXT="&quot;contains&quot; / Suche nur &#xfc;ber Container">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -43500,7 +44109,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -43509,7 +44119,7 @@
 <node CREATED="1544199543455" ID="ID_970297070" MODIFIED="1557498707236" TEXT="Struktur">
 <node CREATED="1544199550166" ID="ID_16943853" MODIFIED="1557498707236" TEXT="Layer">
 <node CREATED="1544199559524" ID="ID_1685135526" MODIFIED="1557498707236" TEXT="rein gedankliche Gliederung"/>
-<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1544199565372" ID="ID_39523665" MODIFIED="1575133363550" TEXT="(neue)Namen">
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1544199565372" ID="ID_39523665" MODIFIED="1576282357967" TEXT="(neue)Namen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -43530,7 +44140,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1544199568851" ID="ID_1812468720" MODIFIED="1544199771897" TEXT="Stage">
@@ -43625,7 +44236,7 @@
 <node CREATED="1539395591547" ID="ID_1807468145" MODIFIED="1557498707236" TEXT="Population-Diff erzeugen"/>
 <node CREATED="1539395603034" ID="ID_1342955865" MODIFIED="1557498707236" TEXT="Delta-Diff erzeugen">
 <node CREATED="1539395609169" ID="ID_1189203662" MODIFIED="1557498707236" TEXT="mu&#xdf; exakt den vorherigen Stand kennen"/>
-<node CREATED="1539395620120" ID="ID_1953087376" MODIFIED="1575133364118" TEXT="Stichwort: asynchrone Kommunkiation">
+<node CREATED="1539395620120" ID="ID_1953087376" MODIFIED="1576282357967" TEXT="Stichwort: asynchrone Kommunkiation">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -43656,7 +44267,8 @@
       Denn letzteres ist bei uns eine Grundannahme. Es gibt keine ungef&#228;hren Diffs!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1544840221709" ID="ID_790020807" MODIFIED="1557498707236" TEXT="Aufbereiten gem&#xe4;&#xdf; &#xbb;systematisches UI-Modell&#xab;">
@@ -46421,7 +47033,7 @@
 </html></richcontent>
 <node CREATED="1563022363974" ID="ID_290527164" MODIFIED="1563022368517" TEXT="Konzept">
 <node CREATED="1563022369373" ID="ID_201969563" MODIFIED="1563022372857" TEXT="von 2010"/>
-<node CREATED="1563022373578" ID="ID_1190645627" MODIFIED="1575133364289" TEXT="immer noch experimentell">
+<node CREATED="1563022373578" ID="ID_1190645627" MODIFIED="1576282357966" TEXT="immer noch experimentell">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46439,7 +47051,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1563022416308" ID="ID_1045079282" MODIFIED="1563022427519">
 <richcontent TYPE="NODE"><html>
@@ -46815,7 +47428,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1534002102456" ID="ID_101543995" MODIFIED="1557498707237" TEXT="benutzer-orientiert"/>
 <node CREATED="1534002106999" ID="ID_354946108" MODIFIED="1557498707237" TEXT="GUI ist aber noch nicht gebaut"/>
-<node CREATED="1534002113086" ID="ID_1894075831" MODIFIED="1575133365610" TEXT="Audio und Video werden eigens unterschieden">
+<node CREATED="1534002113086" ID="ID_1894075831" MODIFIED="1576282357965" TEXT="Audio und Video werden eigens unterschieden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46831,14 +47444,15 @@
       Ganz prominent fehlt hier also z.B: MIDI
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1534002180893" ID="ID_1074039128" MODIFIED="1557498707237" TEXT="daf&#xfc;r erscheint die Unterscheidung STRUCT vs. META schwammig"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1534002037961" ID="ID_95419141" MODIFIED="1557498707237" TEXT="Erzeugung und Lebenszyklus">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1534002202098" ID="ID_1411648485" MODIFIED="1557498707237" TEXT="diese Auto-Regisierung"/>
-<node CREATED="1534002225888" ID="ID_138566211" MODIFIED="1575133365677" TEXT="smart-Ptr als Handle nicht immer sinnvoll">
+<node CREATED="1534002225888" ID="ID_138566211" MODIFIED="1576282357965" TEXT="smart-Ptr als Handle nicht immer sinnvoll">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46851,7 +47465,8 @@
       die Aufgrund von Klassifikationen automatisch bereits existieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1534024950739" ID="ID_1395279965" MODIFIED="1557498707237" TEXT="Races und m&#xf6;gliche Kollisionen &#xfc;berall">
 <icon BUILTIN="clanbomber"/>
@@ -46873,7 +47488,7 @@
 <node CREATED="1533918821511" ID="ID_1150910919" MODIFIED="1533997535081" TEXT="Meta">
 <icon BUILTIN="forward"/>
 <node CREATED="1533919635505" ID="ID_353835069" MODIFIED="1533919642476" TEXT="pa&#xdf;t soweit schon"/>
-<node CREATED="1533920004719" ID="ID_402802807" MODIFIED="1575133365857" TEXT="was hei&#xdf;t hier &quot;immutable&quot;?">
+<node CREATED="1533920004719" ID="ID_402802807" MODIFIED="1576282357964" TEXT="was hei&#xdf;t hier &quot;immutable&quot;?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46883,7 +47498,8 @@
       Meta-Assets sind per Definition <i>&quot;immutable&quot;</i><br />Es gibt einen Builder
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1533994326945" ID="ID_1821159631" MODIFIED="1533994327255" TEXT="Eigenschaften des Log"/>
 <node CREATED="1533994327584" ID="ID_780339362" MODIFIED="1533994784549" TEXT="Filter, Persistenz, Warnschwellen, Weiterleitung"/>
 <node CREATED="1533994328152" ID="ID_538198315" MODIFIED="1533994328390" TEXT="k&#xf6;nnen bei bestehendem Log nicht ge&#xe4;ndert werden"/>
@@ -46903,7 +47519,7 @@
   </body>
 </html></richcontent>
 <node CREATED="1533997846989" ID="ID_1324960272" MODIFIED="1533997854911" TEXT="zun&#xe4;chst nur Platzhalter">
-<node CREATED="1533997938232" ID="ID_40537012" MODIFIED="1575133365988" TEXT="brauche EntryID&lt;ErrorLog&gt;">
+<node CREATED="1533997938232" ID="ID_40537012" MODIFIED="1576282357964" TEXT="brauche EntryID&lt;ErrorLog&gt;">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46919,7 +47535,8 @@
       &#252;ber den UI-Bus schickt, an einen Empf&#228;nger mit bekannter ID.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -46937,7 +47554,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1533997901765" ID="ID_361019548" MODIFIED="1535891607125">
+<node CREATED="1533997901765" ID="ID_361019548" MODIFIED="1576202124808">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -46948,7 +47565,7 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#a9aac1" DESTINATION="ID_70134302" ENDARROW="Default" ENDINCLINATION="-1984;0;" ID="Arrow_ID_1885125683" STARTARROW="None" STARTINCLINATION="803;-67;"/>
+<arrowlink COLOR="#a9aac1" DESTINATION="ID_70134302" ENDARROW="Default" ENDINCLINATION="-1984;0;" ID="Arrow_ID_1885125683" STARTARROW="None" STARTINCLINATION="807;-66;"/>
 </node>
 </node>
 <node CREATED="1533997881703" ID="ID_405103584" MODIFIED="1533997890166" TEXT="Persistenz">
@@ -46962,7 +47579,7 @@
 </node>
 <node CREATED="1533997581280" ID="ID_398592361" MODIFIED="1533997591029" TEXT="Idee: Verallgemeinerung auf Logs">
 <icon BUILTIN="idea"/>
-<node CREATED="1533997595735" ID="ID_459951978" MODIFIED="1575133366160" TEXT="selbstreferentielle Struktur">
+<node CREATED="1533997595735" ID="ID_459951978" MODIFIED="1576282357963" TEXT="selbstreferentielle Struktur">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46975,10 +47592,11 @@
       dadurch werden Meta-Operationen auf gleiche Ebene gestellt wie normale Struktur-Manipulationen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1533997603741" ID="ID_1980534712" MODIFIED="1575133366179" TEXT="die Command und Event-Logs k&#xf6;nnten repr&#xe4;sentiert sein">
+<node CREATED="1533997603741" ID="ID_1980534712" MODIFIED="1576282357963" TEXT="die Command und Event-Logs k&#xf6;nnten repr&#xe4;sentiert sein">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47005,7 +47623,8 @@
       und verlieren ihren <i>magischen Charakter</i>&#160;au&#223;erhalb der Event-Sourcing-Struktur
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -47033,7 +47652,7 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1539270417847" ID="ID_1555798999" MODIFIED="1565282916932" TEXT="korrekte Diff-Struktur">
+<node CREATED="1539270417847" ID="ID_1555798999" MODIFIED="1576203555715" TEXT="korrekte Diff-Struktur">
 <linktarget COLOR="#cbada9" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="1069;-129;" ID="Arrow_ID_46239762" SOURCE="ID_1136748343" STARTARROW="None" STARTINCLINATION="-474;40;"/>
 <linktarget COLOR="#d47366" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="713;-263;" ID="Arrow_ID_971172326" SOURCE="ID_1387553695" STARTARROW="None" STARTINCLINATION="-1999;120;"/>
 <linktarget COLOR="#d47366" DESTINATION="ID_1555798999" ENDARROW="Default" ENDINCLINATION="590;-127;" ID="Arrow_ID_308349501" SOURCE="ID_1435731309" STARTARROW="None" STARTINCLINATION="915;0;"/>
@@ -47126,7 +47745,7 @@
 <node CREATED="1481827051787" ID="ID_1911969568" MODIFIED="1518487921096" TEXT="why">
 <icon BUILTIN="help"/>
 <node CREATED="1483747048432" ID="ID_1165337571" MODIFIED="1518487921096" TEXT="to ensure sane state logic"/>
-<node CREATED="1483747065326" ID="ID_896973402" MODIFIED="1575133367105" TEXT="allow to wait for disabled state">
+<node CREATED="1483747065326" ID="ID_896973402" MODIFIED="1576282357962" TEXT="allow to wait for disabled state">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47139,11 +47758,12 @@
       we need to wait for the current command or builder run to be completed
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
-<node CREATED="1481827548073" ID="ID_690689259" MODIFIED="1575133367130" TEXT="manage entries">
+<node CREATED="1481827548073" ID="ID_690689259" MODIFIED="1576282357962" TEXT="manage entries">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47153,7 +47773,8 @@
       ...noch nicht implementiert 1/17
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="bell"/>
 <node CREATED="1481827558336" ID="ID_1026688096" MODIFIED="1518487921096" TEXT="match current session"/>
 <node CREATED="1481827647491" ID="ID_1849886325" MODIFIED="1518487921096" TEXT="aggregate similar"/>
@@ -47172,7 +47793,7 @@
 <node CREATED="1481917691047" ID="ID_714937554" MODIFIED="1518487921096" TEXT="&#xc4;nderung der Umst&#xe4;nde">
 <node CREATED="1481917700998" ID="ID_470084004" MODIFIED="1518487921096" TEXT="kommt stets &#xfc;ber Interface"/>
 <node CREATED="1481917726683" ID="ID_962119246" MODIFIED="1518487921096" TEXT="weckt den Loop-Thread auf"/>
-<node CREATED="1481917766837" ID="ID_1794908304" MODIFIED="1575133367398" TEXT="ist atomar (locking)">
+<node CREATED="1481917766837" ID="ID_1794908304" MODIFIED="1576282357961" TEXT="ist atomar (locking)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47182,7 +47803,8 @@
       Guard beim Zugang &#252;ber das Interface
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1481918074269" ID="ID_1984339005" MODIFIED="1518487921097">
 <richcontent TYPE="NODE"><html>
@@ -47262,7 +47884,7 @@
 <node CREATED="1482197280297" ID="ID_1142010083" MODIFIED="1518487921097" TEXT="rein technisch bereits heute m&#xf6;glich">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1482197292263" ID="ID_669497196" MODIFIED="1575133367744" TEXT="jeder Lumiera-Thread speichert &quot;self&quot; in thread local storage">
+<node CREATED="1482197292263" ID="ID_669497196" MODIFIED="1576282357960" TEXT="jeder Lumiera-Thread speichert &quot;self&quot; in thread local storage">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47301,7 +47923,8 @@
       OO rocks!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -47368,7 +47991,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1481831747042" ID="ID_134003952" MODIFIED="1575133368365" TEXT="sperrbar sein">
+<node CREATED="1481831747042" ID="ID_134003952" MODIFIED="1576282357960" TEXT="sperrbar sein">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47386,7 +48009,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -47672,7 +48296,7 @@
 <node CREATED="1534635126901" ID="ID_868113400" MODIFIED="1534635131976" TEXT="gtk_widget_destroy">
 <node CREATED="1534635139155" ID="ID_1958818389" MODIFIED="1534635155125" TEXT="l&#xf6;st ein DESTROY-Signal aus"/>
 <node CREATED="1534635156137" ID="ID_1010364630" MODIFIED="1534635215323" TEXT="macht sonst nur Refcount-Zeugs"/>
-<node CREATED="1534635167295" ID="ID_418523562" MODIFIED="1575133370334" TEXT="keinerlei Auswirkung auf die Sichtbarkeit">
+<node CREATED="1534635167295" ID="ID_418523562" MODIFIED="1576282357959" TEXT="keinerlei Auswirkung auf die Sichtbarkeit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47685,7 +48309,8 @@
       insofern Container auf das DESTROY-Signal ihrer Kinder reagieren
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -47737,7 +48362,7 @@
 </html></richcontent>
 <icon BUILTIN="full-2"/>
 <node CREATED="1542308982045" ID="ID_657933396" MODIFIED="1542308982045" TEXT="gtk_widget_get_allocation"/>
-<node CREATED="1542309030741" ID="ID_1042993819" MODIFIED="1575133370761" TEXT="tats&#xe4;chlich f&#xfc;r das Widget selber verf&#xfc;gbarer Platz">
+<node CREATED="1542309030741" ID="ID_1042993819" MODIFIED="1576282357959" TEXT="tats&#xe4;chlich f&#xfc;r das Widget selber verf&#xfc;gbarer Platz">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47747,7 +48372,8 @@
       ...also <i>abz&#252;glich</i>&#160;Dekoration und Margin
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1542308990570" ID="ID_1371068296" MODIFIED="1542309000371" TEXT="stets komplett in der zugewiesenen Allocation enthalten"/>
 </node>
@@ -47756,7 +48382,7 @@
 <node CREATED="1535629434440" ID="ID_384811116" MODIFIED="1535630246025" TEXT="bool">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1535629385583" ID="ID_147722143" MODIFIED="1575133370840" TEXT="nur wenn es zus&#xe4;tzlichen Platz gibt">
+<node CREATED="1535629385583" ID="ID_147722143" MODIFIED="1576282357958" TEXT="nur wenn es zus&#xe4;tzlichen Platz gibt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47769,7 +48395,8 @@
       sofern das Widget mit entsprechendem Modus eingef&#252;gt wurde
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1535629439847" ID="ID_1925784750" MODIFIED="1535630246025" TEXT="Widget dehnt sich aus, um verf&#xfc;gbaren Platz einzunehmen">
 <icon BUILTIN="info"/>
@@ -47792,7 +48419,7 @@
 <icon BUILTIN="info"/>
 <node CREATED="1563035652060" ID="ID_1461845755" MODIFIED="1563035657162" TEXT="State / Pseudo-Klassen">
 <node CREATED="1563035659642" ID="ID_1776634695" MODIFIED="1563035663793" TEXT=":backdrop">
-<node CREATED="1563035576188" ID="ID_422408673" LINK="https://developer.gnome.org/gtk3/stable/gtk3-Standard-Enumerations.html#GtkStateFlags" MODIFIED="1575133371090" TEXT="GtkStateFlags::GTK_STATE_FLAG_BACKDROP">
+<node CREATED="1563035576188" ID="ID_422408673" LINK="https://developer.gnome.org/gtk3/stable/gtk3-Standard-Enumerations.html#GtkStateFlags" MODIFIED="1576282357958" TEXT="GtkStateFlags::GTK_STATE_FLAG_BACKDROP">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47802,7 +48429,8 @@
       &quot;Widget is in a background toplevel window&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#8aafdb" DESTINATION="ID_422408673" ENDARROW="Default" ENDINCLINATION="-430;209;" ID="Arrow_ID_384398411" SOURCE="ID_1747578312" STARTARROW="None" STARTINCLINATION="-1700;-117;"/>
 </node>
 </node>
@@ -47825,7 +48453,7 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1563557245954" ID="ID_1216219394" MODIFIED="1575133371336" TEXT="CSS Node-Namen will man normalerweise nicht &#xe4;ndern">
+<node CREATED="1563557245954" ID="ID_1216219394" MODIFIED="1576282357957" TEXT="CSS Node-Namen will man normalerweise nicht &#xe4;ndern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47850,11 +48478,12 @@
       indem man eine eigene XXX_class_init() - Funktion schreibt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-18;-274;" ID="Arrow_ID_1242464259" STARTARROW="None" STARTINCLINATION="309;8;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1563557421449" ID="ID_1549555929" MODIFIED="1575133371357" TEXT="es gibt (wohl) kein API, um diesen Namen zu erhalten">
+<node CREATED="1563557421449" ID="ID_1549555929" MODIFIED="1576282357957" TEXT="es gibt (wohl) kein API, um diesen Namen zu erhalten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47864,12 +48493,13 @@
       in den F&#228;llen, die ich mir angeschaut habe, steht dieser String hart codiert in der XXXX_class_init()-Funktion
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1563631851881" ID="ID_1732615721" MODIFIED="1563631854580" TEXT="Erfahrungen">
 <node CREATED="1563631855781" ID="ID_1599365177" MODIFIED="1563631858795" TEXT="Frames">
-<node CREATED="1563631859864" ID="ID_1388716276" MODIFIED="1575133371440" TEXT="werden nach innen gezeichnet">
+<node CREATED="1563631859864" ID="ID_1388716276" MODIFIED="1576282357956" TEXT="werden nach innen gezeichnet">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47879,9 +48509,10 @@
       d.h. die angegebenen Abmessungen entsprechen der bounding box
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1563631918721" ID="ID_545245141" MODIFIED="1575133371463" TEXT="partielle / Gesamt-Definitionen sind jeweils komplett incl Farbe">
+<node CREATED="1563631918721" ID="ID_545245141" MODIFIED="1576282357956" TEXT="partielle / Gesamt-Definitionen sind jeweils komplett incl Farbe">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47903,7 +48534,8 @@
       in diesem Falle w&#252;rde die linke Border mit der geerben Farbe gezeichnet, und nicht gelb
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1564926426614" ID="ID_240623877" MODIFIED="1564926740793" TEXT="box-shadow">
@@ -47912,7 +48544,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1564926468217" ID="ID_1021621147" MODIFIED="1564926476805" TEXT="ein CSS3-Effekt"/>
-<node CREATED="1564926773320" ID="ID_1461042373" LINK="https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow" MODIFIED="1575133371535" TEXT="CSS-Syntax">
+<node CREATED="1564926773320" ID="ID_1461042373" LINK="https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow" MODIFIED="1576282357955" TEXT="CSS-Syntax">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47922,7 +48554,8 @@
       &lt;offX&gt; &lt;offY&gt; [&lt;blur&gt; [&lt;spread&gt;]] &lt;colour&gt;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1564926477387" ID="ID_1307917529" MODIFIED="1564926492175" TEXT="wird zus&#xe4;tzlich zum Element in Z-Order gerendert">
 <node CREATED="1564926496242" ID="ID_1998030818" MODIFIED="1564929104275" TEXT="backdrop: below and outside background frame"/>
@@ -47945,7 +48578,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1537575960276" ID="ID_376188043" MODIFIED="1557498707238" TEXT="enth&#xe4;lt mehrere StyleProvider"/>
-<node CREATED="1562855059084" ID="ID_49781798" MODIFIED="1575133371768" TEXT="Gtk::StyleContext wird per ref_ptr weitergegeben">
+<node CREATED="1562855059084" ID="ID_49781798" MODIFIED="1576282357955" TEXT="Gtk::StyleContext wird per ref_ptr weitergegeben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47955,7 +48588,8 @@
       d.h. wir haben Referenz-Semantik
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1562855174618" ID="ID_687255786" MODIFIED="1562855190810" TEXT="statische Factory-Funktion: StyleContext::create">
 <icon BUILTIN="back"/>
@@ -47967,7 +48601,7 @@
 <node CREATED="1564838405138" ID="ID_366839977" MODIFIED="1564838405138" TEXT="render_background"/>
 <node CREATED="1564838414079" ID="ID_1075533829" MODIFIED="1564838414079" TEXT="render_frame">
 <node CREATED="1564838433119" ID="ID_803718694" MODIFIED="1564838440607" TEXT="Parameter definieren die Bounding-Box"/>
-<node CREATED="1564838441724" ID="ID_924305582" MODIFIED="1575133371900" TEXT="gezeichnet wird mit der effektiven border-width">
+<node CREATED="1564838441724" ID="ID_924305582" MODIFIED="1576282357954" TEXT="gezeichnet wird mit der effektiven border-width">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -47983,9 +48617,10 @@
       automatisch eine h&#246;here Priorit&#228;t haben, als das, was sich aus den Path-match ergibt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1564838554448" ID="ID_1827131254" MODIFIED="1575133371922" TEXT="M&#xfc;ll, wenn die gegebene Bounding-Box zu klein ist">
+<node CREATED="1564838554448" ID="ID_1827131254" MODIFIED="1576282357954" TEXT="M&#xfc;ll, wenn die gegebene Bounding-Box zu klein ist">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48013,7 +48648,8 @@
       Man mu&#223; also gen&#252;gend Platz allozieren f&#252;r border-top-width + border-bottom-width + gew&#252;nschter Content!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -48029,7 +48665,7 @@
 <node CREATED="1537577874195" ID="ID_385552696" MODIFIED="1557498707238" TEXT="style-context zum Widget beziehen"/>
 <node CREATED="1537577885042" ID="ID_9820896" MODIFIED="1557498707238" TEXT="diesem Context die spezielle Klasse hinzuf&#xfc;gen"/>
 <node CREATED="1537577901032" ID="ID_1836919045" MODIFIED="1557498707238" TEXT="diese Klasse kann nun im CSS-Selektor verwendet werden"/>
-<node CREATED="1537577914422" ID="ID_1220237808" MODIFIED="1575133372113" TEXT="geht einfach per GTKmm">
+<node CREATED="1537577914422" ID="ID_1220237808" MODIFIED="1576282357953" TEXT="geht einfach per GTKmm">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48042,7 +48678,8 @@
       context-&gt;add_class(&quot;ohMy&quot;);
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1537577929540" ID="ID_644837001" MODIFIED="1557498707238" TEXT="fr&#xfc;her ging das nur direkt in C">
 <icon BUILTIN="ksmiletris"/>
@@ -48078,7 +48715,7 @@
 </node>
 </node>
 <node CREATED="1537658818388" ID="ID_1554071957" MODIFIED="1537658827087" TEXT="M&#xf6;glichkeiten">
-<node CREATED="1537577389028" ID="ID_1690083237" MODIFIED="1575133372401" TEXT="k&#xf6;nnen einen eigenen Widget-Namen setzen">
+<node CREATED="1537577389028" ID="ID_1690083237" MODIFIED="1576282357952" TEXT="k&#xf6;nnen einen eigenen Widget-Namen setzen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48088,9 +48725,10 @@
       this-&gt;set_name(&quot;my-widget&quot;)
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1563038427512" ID="ID_887791641" MODIFIED="1563038432987" TEXT="Vorsicht: das ist die #id"/>
-<node CREATED="1563038460235" ID="ID_1245820640" MODIFIED="1575133372442" TEXT="GTKmm-definierte custom-Widgets k&#xf6;nnen nicht ihren CSS-node-Namen &#xe4;ndern">
+<node CREATED="1563038460235" ID="ID_1245820640" MODIFIED="1576282357952" TEXT="GTKmm-definierte custom-Widgets k&#xf6;nnen nicht ihren CSS-node-Namen &#xe4;ndern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48145,10 +48783,11 @@
       &#160;&#160;// changed or removed in the future.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#bc86a6" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-1901;31;" ID="Arrow_ID_1120129058" SOURCE="ID_994687888" STARTARROW="None" STARTINCLINATION="-2128;-72;"/>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1245820640" ENDARROW="Default" ENDINCLINATION="-18;-274;" ID="Arrow_ID_1242464259" SOURCE="ID_1216219394" STARTARROW="None" STARTINCLINATION="309;8;"/>
-<node CREATED="1563042271596" ID="ID_60542269" MODIFIED="1575133372466" TEXT="man kann zwar aufrufen...">
+<node CREATED="1563042271596" ID="ID_60542269" MODIFIED="1576282357951" TEXT="man kann zwar aufrufen...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48158,7 +48797,8 @@
       gtk_widget_class_set_css_name (GTK_WIDGET_GET_CLASS(gobj()), &quot;body&quot;);
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1563042287071" ID="ID_1579813090" MODIFIED="1563042298109" TEXT="aber das kommt zu sp&#xe4;t und bleibt wirkungslos f&#xfc;r das CSS"/>
 </node>
@@ -48198,7 +48838,7 @@
 <node CREATED="1535633140424" ID="ID_293762905" MODIFIED="1563630924934" TEXT="WidgetPath">
 <linktarget COLOR="#3766bc" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="-654;0;" ID="Arrow_ID_711737555" SOURCE="ID_1145993487" STARTARROW="None" STARTINCLINATION="-2487;0;"/>
 <linktarget COLOR="#76a5de" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="109;127;" ID="Arrow_ID_1149853107" SOURCE="ID_222380322" STARTARROW="None" STARTINCLINATION="-391;0;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535633147295" ID="ID_14373153" MODIFIED="1575133372796" TEXT="Konzept ist mir nicht klar">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535633147295" ID="ID_14373153" MODIFIED="1576282357951" TEXT="Konzept ist mir nicht klar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48214,7 +48854,8 @@
       oder ist es eine Vererbungs-Hierarchie, wie sie f&#252;r das CSS-Styling ben&#246;tigt wird?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1535633221189" ID="ID_623946936" MODIFIED="1557498707238" TEXT="beachte: hier werden Typen (GType) gespeichert">
@@ -48228,7 +48869,7 @@
 <node CREATED="1562846107520" ID="ID_538645074" LINK="https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-path" MODIFIED="1562846406105" TEXT="gtk-widget-path()">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1562846188789" ID="ID_452719406" MODIFIED="1562846191768" TEXT="@deprecated"/>
-<node CREATED="1562846317916" ID="ID_611735201" MODIFIED="1575133372954" TEXT="aber die Doku ist gut">
+<node CREATED="1562846317916" ID="ID_611735201" MODIFIED="1576282357950" TEXT="aber die Doku ist gut">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48292,7 +48933,8 @@
       apply styles to that specific widget their gtkrc file.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -48308,7 +48950,7 @@
 </node>
 </node>
 <node CREATED="1562854903538" ID="ID_944355214" MODIFIED="1562854907642" TEXT="Gtk::WidgetPath">
-<node CREATED="1562854908778" ID="ID_1256092544" MODIFIED="1575133373102" TEXT="ist ein boxed GTK-Objekt">
+<node CREATED="1562854908778" ID="ID_1256092544" MODIFIED="1576282357949" TEXT="ist ein boxed GTK-Objekt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48321,7 +48963,8 @@
       mit automatischem Refcounting
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1562854931311" ID="ID_1401731034" MODIFIED="1562854940509" TEXT="kann mit dem default-Ctor leer erzeugt werden"/>
 <node CREATED="1562854942971" ID="ID_395952844" MODIFIED="1562854961042" TEXT="wenn man es vom Widget explizit bezieht, wird der Pfad kopiert">
@@ -48329,7 +48972,7 @@
 </node>
 </node>
 <node CREATED="1562847187991" ID="ID_1894889012" MODIFIED="1562847225031" TEXT="anwenden....">
-<node CREATED="1562847193914" ID="ID_1978755105" MODIFIED="1575133373168" TEXT="gtk_style_context_set_path ()">
+<node CREATED="1562847193914" ID="ID_1978755105" MODIFIED="1576282357949" TEXT="gtk_style_context_set_path ()">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48339,7 +48982,8 @@
       As a consequence, the style will be regenerated to match the new given path.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1562847303783" ID="ID_803278574" LINK="https://stackoverflow.com/a/56415144/444796" MODIFIED="1562847334090" TEXT="man Kann WidetPath &quot;frei stehend&quot; verwenden (SO)">
 <icon BUILTIN="back"/>
@@ -48390,7 +49034,7 @@
 </node>
 <node CREATED="1477523710854" ID="ID_1520577996" MODIFIED="1557498707238" TEXT="Grid"/>
 </node>
-<node CREATED="1477523714526" ID="ID_654535915" MODIFIED="1575133373620" TEXT="Application verwenden">
+<node CREATED="1477523714526" ID="ID_654535915" MODIFIED="1576282357948" TEXT="Application verwenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48414,7 +49058,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#627292" DESTINATION="ID_185528211" ENDARROW="Default" ENDINCLINATION="22;-122;" ID="Arrow_ID_390519319" STARTARROW="None" STARTINCLINATION="-31;42;"/>
 </node>
 </node>
@@ -48873,7 +49518,7 @@
 <node CREATED="1495225019502" ID="ID_1829681403" MODIFIED="1557498707238" TEXT="beide machen in etwas das Gleiche"/>
 <node CREATED="1495225006920" ID="ID_1631847350" MODIFIED="1557498707238" TEXT="Application ist generischer"/>
 <node CREATED="1495226503104" ID="ID_1991720691" MODIFIED="1557498707238" TEXT="es geht dabei um Desktop-Integration"/>
-<node CREATED="1533308053493" ID="ID_281791270" MODIFIED="1575133373788" TEXT="Gio::Application ruft g_application_run">
+<node CREATED="1533308053493" ID="ID_281791270" MODIFIED="1576282357948" TEXT="Gio::Application ruft g_application_run">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48886,9 +49531,10 @@
       aber macht in etwa die gleichen Operationen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1495225050138" ID="ID_1077152710" MODIFIED="1575133373810" TEXT="gtk_main beruht heute auf Gio">
+<node CREATED="1495225050138" ID="ID_1077152710" MODIFIED="1576282357947" TEXT="gtk_main beruht heute auf Gio">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48907,7 +49553,8 @@
       Gtk-Main verwendet inzwischen den gleichen Mechanismus
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -48920,7 +49567,7 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1501848672921" ID="ID_1641235315" MODIFIED="1518487921099" TEXT="SigC++ nicht Threadsafe">
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1501848716179" ID="ID_969916851" MODIFIED="1518487921099" TEXT="alle Signals + Slots nur im GUI-Thread"/>
-<node CREATED="1501848914377" ID="ID_1614034013" MODIFIED="1575133373937" TEXT="Vorsicht: Desktuktoren">
+<node CREATED="1501848914377" ID="ID_1614034013" MODIFIED="1576282357947" TEXT="Vorsicht: Desktuktoren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -48942,7 +49589,8 @@
       Das ist eine subtile Falle.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1501848728354" ID="ID_1420494100" MODIFIED="1518487921099">
@@ -48961,7 +49609,7 @@
 </node>
 <node CREATED="1501848774883" ID="ID_1801418640" MODIFIED="1518487921099" TEXT="Glib::Dispatcher">
 <icon BUILTIN="idea"/>
-<node CREATED="1501848781850" ID="ID_356349390" MODIFIED="1575133374006">
+<node CREATED="1501848781850" ID="ID_356349390" MODIFIED="1576282357946">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -48984,7 +49632,8 @@
       alles das nicht aus dem GUI-Thread heraus geschieht
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1501848836523" ID="ID_649355856" MODIFIED="1518487921099" TEXT="Dispatcher im GUI-Thread erzeugen">
@@ -49040,7 +49689,7 @@
 <node CREATED="1535630710781" ID="ID_194514515" MODIFIED="1535630724687" TEXT="Label-Text als ctor-Param"/>
 </node>
 <node CREATED="1535630745440" ID="ID_1732954181" MODIFIED="1535630748668" TEXT="Verhalten">
-<node CREATED="1535557122205" ID="ID_523553375" MODIFIED="1575133374519" TEXT="resize_toplevel (=true by default)">
+<node CREATED="1535557122205" ID="ID_523553375" MODIFIED="1576282357945" TEXT="resize_toplevel (=true by default)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49050,9 +49699,10 @@
       ...ob beim Expand/Collapse das umschlie&#223;ende Widget resized werden soll
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1535631187965" ID="ID_586010488" MODIFIED="1575133374542" TEXT="expanded (=false by default)">
+<node CREATED="1535631187965" ID="ID_586010488" MODIFIED="1576282357945" TEXT="expanded (=false by default)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49062,12 +49712,13 @@
       ob eingeklappt oder ausgeklappt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1535631368701" ID="ID_1441730618" MODIFIED="1535631388301" TEXT="platziert Kind-Widget as-is">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1535631390194" ID="ID_356344952" MODIFIED="1535631402732" TEXT="in dessen nat&#xfc;rlicher Gr&#xf6;&#xdf;e"/>
-<node CREATED="1535631403576" ID="ID_518089172" MODIFIED="1575133374625" TEXT="verh&#xe4;lt sich anders als Frame">
+<node CREATED="1535631403576" ID="ID_518089172" MODIFIED="1576282357944" TEXT="verh&#xe4;lt sich anders als Frame">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49080,7 +49731,8 @@
       was dazu f&#252;hrt, da&#223; das Kind stets allen verf&#252;gbaren Platz nimmt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -49184,7 +49836,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1540647187314" ID="ID_1715030005" MODIFIED="1557498707239" TEXT="C++">
-<node CREATED="1540647217067" ID="ID_470384964" MODIFIED="1575133375474" TEXT="signal_size_allocate()">
+<node CREATED="1540647217067" ID="ID_470384964" MODIFIED="1576282357944" TEXT="signal_size_allocate()">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49194,7 +49846,8 @@
       This function is only used by Gtk::Container subclasses, to assign a size, position and (optionally) baseline to their child widgets.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <arrowlink COLOR="#1d47b3" DESTINATION="ID_1813983433" ENDARROW="Default" ENDINCLINATION="124;0;" ID="Arrow_ID_416269388" STARTARROW="None" STARTINCLINATION="58;0;"/>
 </node>
 <node CREATED="1540647190676" ID="ID_1813983433" MODIFIED="1557498707239" TEXT="on_size_allocate (Allocation&amp;)">
@@ -49223,7 +49876,7 @@
 </node>
 </node>
 <node CREATED="1560693033030" ID="ID_259444052" MODIFIED="1560693033030" TEXT="Object::~Object()">
-<node CREATED="1560693036387" ID="ID_1415907472" MODIFIED="1575133375625" TEXT="interessannter Kommentar...">
+<node CREATED="1560693036387" ID="ID_1415907472" MODIFIED="1576282357943" TEXT="interessannter Kommentar...">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49236,7 +49889,8 @@
       &#160;&#160;_release_c_instance();
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -49279,7 +49933,7 @@
 </node>
 <node CREATED="1560694168408" ID="ID_341202851" MODIFIED="1560694177238" TEXT="siehe auch: Gtk::manage">
 <icon BUILTIN="idea"/>
-<node CREATED="1560694178543" ID="ID_1257305143" MODIFIED="1575133376044" TEXT="&#xfc;bernimmt Ownership an einem Pointer">
+<node CREATED="1560694178543" ID="ID_1257305143" MODIFIED="1576282357943" TEXT="&#xfc;bernimmt Ownership an einem Pointer">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49292,7 +49946,8 @@
       wenn das managende Widget zerst&#246;rt wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1560694188637" ID="ID_1570996543" MODIFIED="1560694215336">
 <richcontent TYPE="NODE"><html>
@@ -49314,7 +49969,7 @@
 </node>
 <node CREATED="1540645789033" ID="ID_1271246005" MODIFIED="1557498707239" TEXT="Framework-Verbindung">
 <node CREATED="1540645818461" ID="ID_217892151" MODIFIED="1557498707239" TEXT="weitgehend automatisch"/>
-<node CREATED="1540645822628" ID="ID_1316474474" MODIFIED="1575133376210" TEXT="alle Property-&#xc4;nderungen">
+<node CREATED="1540645822628" ID="ID_1316474474" MODIFIED="1576282357942" TEXT="alle Property-&#xc4;nderungen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49327,7 +49982,8 @@
       ggfs. neu gemapped und invalidiert wird, woraufhin es neu gezeichnet wird
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1540645864503" ID="ID_1092751510" MODIFIED="1557498707239" TEXT="Gtk::Widget::queue_draw_region">
 <node CREATED="1540645872375" ID="ID_925460502" MODIFIED="1557498707239" TEXT="hiermit kann man explizit Neuzeichnen anfordern"/>
@@ -49359,7 +50015,7 @@
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1385929770" ENDARROW="Default" ENDINCLINATION="1055;0;" ID="Arrow_ID_1314305180" SOURCE="ID_426069181" STARTARROW="None" STARTINCLINATION="1055;0;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1477527104426" ID="ID_334736261" MODIFIED="1575133376483" TEXT="custom style properties">
+<node CREATED="1477527104426" ID="ID_334736261" MODIFIED="1576282357942" TEXT="custom style properties">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49372,7 +50028,8 @@
       Siehe Beschreibung im Beispiel/Tutorial
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_334736261" ENDARROW="Default" ENDINCLINATION="228;-492;" ID="Arrow_ID_84377619" SOURCE="ID_111059124" STARTARROW="None" STARTINCLINATION="930;-42;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -49381,7 +50038,7 @@
 <node CREATED="1540645612137" ID="ID_1200550229" MODIFIED="1557498707239" TEXT="f&#xfc;r custom drawing"/>
 </node>
 </node>
-<node CREATED="1540647442009" ID="ID_303011961" MODIFIED="1575133376575" TEXT="oder: an Signale anh&#xe4;ngen">
+<node CREATED="1540647442009" ID="ID_303011961" MODIFIED="1576282357941" TEXT="oder: an Signale anh&#xe4;ngen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49394,7 +50051,8 @@
       Im Besonderen kann man sich an Signale <i>anderer Widgets</i>&#160;anh&#228;ngen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1540647521382" ID="ID_1112354648" LINK="https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget-draw" MODIFIED="1557498707239" TEXT="signal_draw()">
 <linktarget COLOR="#6396d3" DESTINATION="ID_1112354648" ENDARROW="Default" ENDINCLINATION="332;0;" ID="Arrow_ID_322983898" SOURCE="ID_1278063707" STARTARROW="None" STARTINCLINATION="130;7;"/>
 <node CREATED="1540647528517" ID="ID_1601064030" MODIFIED="1557498707239" TEXT="man kann den gegebenen Cairo-Kontext &#xe4;ndern">
@@ -49776,7 +50434,7 @@
 <node CREATED="1504215729848" ID="ID_518260540" MODIFIED="1557498707239" TEXT="howto">
 <node CREATED="1446515847047" ID="ID_290915762" MODIFIED="1557498707239" TEXT="GtkCssProvider">
 <node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1557498707239" TEXT="parsing errors"/>
-<node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1575133377244" TEXT="Beispiel im GTKmm-Guide (custom widget)">
+<node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1576282357941" TEXT="Beispiel im GTKmm-Guide (custom widget)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49792,7 +50450,8 @@
       und auch ein Signal f&#252;r Parse-Fehler anschlie&#223;t
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1810760662" ENDARROW="Default" ENDINCLINATION="1600;-25;" ID="Arrow_ID_1610122569" SOURCE="ID_1164942946" STARTARROW="None" STARTINCLINATION="-840;95;"/>
 <icon BUILTIN="info"/>
 </node>
@@ -49819,7 +50478,7 @@
 <node CREATED="1504215849336" ID="ID_832996389" MODIFIED="1557498707239" TEXT="Marker setzen">
 <icon BUILTIN="idea"/>
 <node CREATED="1504220053691" ID="ID_905781900" MODIFIED="1557498707239" TEXT="benannt oder anonym"/>
-<node CREATED="1504220061178" ID="ID_474843943" MODIFIED="1575133377422" TEXT="&quot;Gravity&quot; beachten">
+<node CREATED="1504220061178" ID="ID_474843943" MODIFIED="1576282357940" TEXT="&quot;Gravity&quot; beachten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49837,7 +50496,8 @@
       Beachte: der Text-Cursor (Marker &quot;insert&quot;) hat right gravity
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1504215832746" ID="ID_751207346" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-multithread-example.html.en" MODIFIED="1557498707239">
@@ -49912,7 +50572,7 @@
 </node>
 <node CREATED="1534512065896" ID="ID_1059219569" MODIFIED="1557498707240" TEXT="gdl::DockItem">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1059219569" ENDARROW="Default" ENDINCLINATION="125;-6;" ID="Arrow_ID_315465766" SOURCE="ID_405367338" STARTARROW="None" STARTINCLINATION="107;-19;"/>
-<node CREATED="1534512387109" ID="ID_173562614" MODIFIED="1575133377999" TEXT="Adds docking capability to its child widget">
+<node CREATED="1534512387109" ID="ID_173562614" MODIFIED="1576282357940" TEXT="Adds docking capability to its child widget">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -49934,7 +50594,8 @@
       The grip is implemented as a GdlDockItemGrip
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1534512072391" ID="ID_1008938926" MODIFIED="1557498707240" TEXT="gdl::DockPlaceholder">
@@ -50015,7 +50676,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1512179063250" ID="ID_933791979" MODIFIED="1575133378389" TEXT="w&#xe4;hrend der Instantiierung....">
+<node CREATED="1512179063250" ID="ID_933791979" MODIFIED="1576282357939" TEXT="w&#xe4;hrend der Instantiierung....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50025,9 +50686,10 @@
       kann eines der Templates im Zyklus vorr&#252;bergehend als &quot;incomplete&quot; gelten.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1512179134400" ID="ID_1738202679" MODIFIED="1575133378412" TEXT="....kann die Metafunktion scheitern">
+<node CREATED="1512179134400" ID="ID_1738202679" MODIFIED="1576282357939" TEXT="....kann die Metafunktion scheitern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50049,7 +50711,8 @@
       Konsequenz: man w&#228;hlt dann z.B. eine subtil falsche Spezialisierung.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1512179201831" ID="ID_1577563892" MODIFIED="1557498707240" TEXT="t&#xfc;ckischer Fehler">
 <icon BUILTIN="messagebox_warning"/>
@@ -50075,7 +50738,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525191808145" ID="ID_228531407" MODIFIED="1557498707240" TEXT="ungekl&#xe4;rtes Problem mit Initialisierungs-Reihenfolge">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1525191859371" ID="ID_1136158199" MODIFIED="1575133378584" TEXT="tritt auf in statischem init-Kontext">
+<node CREATED="1525191859371" ID="ID_1136158199" MODIFIED="1576282357938" TEXT="tritt auf in statischem init-Kontext">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50103,13 +50766,14 @@
       selber aus einem statischen Initialisierungs-Kontext heraus erfolgt.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1525192054281" ID="ID_414612523" MODIFIED="1557498707240" TEXT="#1142 initialisation of static template members">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1525192237928" ID="ID_1523643615" MODIFIED="1575133378632" TEXT="Demo-Beispiel: g++ --std=gnu++14 blei.cpp -o blei">
+<node CREATED="1525192237928" ID="ID_1523643615" MODIFIED="1576282357937" TEXT="Demo-Beispiel: g++ --std=gnu++14 blei.cpp -o blei">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50305,7 +50969,8 @@
       &#160;&#160;}
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1450489388912" ID="ID_1935538293" MODIFIED="1557498707240" TEXT="function-static">
@@ -50324,7 +50989,7 @@
 <node CREATED="1521783300728" ID="ID_789225244" LINK="http://preshing.com/20120913/acquire-and-release-semantics/" MODIFIED="1521783329728" TEXT="Blog: Preshing on Programming"/>
 <node CREATED="1521783335195" ID="ID_722067069" LINK="http://en.cppreference.com/w/cpp/atomic/memory_order" MODIFIED="1521783351104" TEXT="CPP-Reference"/>
 </node>
-<node CREATED="1521779409601" ID="ID_1607777448" MODIFIED="1575133378869" TEXT="fences vs. barriers vs ordering constraints">
+<node CREATED="1521779409601" ID="ID_1607777448" MODIFIED="1576282357936" TEXT="fences vs. barriers vs ordering constraints">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50334,7 +50999,8 @@
       das sind verschiedene Blickwinkel auf das gleiche Thema
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 <node CREATED="1521779467554" ID="ID_257299836" MODIFIED="1521779468925" TEXT="fence">
 <node CREATED="1521779469969" ID="ID_178160333" MODIFIED="1521779473476" TEXT="total-global"/>
@@ -50343,7 +51009,7 @@
 </node>
 <node CREATED="1521779532728" ID="ID_263784335" MODIFIED="1521779534459" TEXT="barrier">
 <node CREATED="1521779535264" ID="ID_1004323525" MODIFIED="1521779541691" TEXT="bestimmte Umordnungen werden verboten"/>
-<node CREATED="1521779542351" ID="ID_219555790" MODIFIED="1575133379044" TEXT="vier Typen">
+<node CREATED="1521779542351" ID="ID_219555790" MODIFIED="1576282357936" TEXT="vier Typen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50361,7 +51027,8 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1521779549150" ID="ID_754401646" MODIFIED="1521779560424" TEXT="ReadRead"/>
 <node CREATED="1521779561540" ID="ID_177816200" MODIFIED="1521779564336" TEXT="ReadWrite"/>
 <node CREATED="1521779565188" ID="ID_1059751946" MODIFIED="1521779570999" TEXT="WriteWrite"/>
@@ -50445,7 +51112,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1521782262223" HGAP="30" ID="ID_1323377815" MODIFIED="1575133379614" TEXT="Typisches Gegenbeispiel: Double Checked Locking" VSHIFT="18">
+<node CREATED="1521782262223" HGAP="30" ID="ID_1323377815" MODIFIED="1576282357935" TEXT="Typisches Gegenbeispiel: Double Checked Locking" VSHIFT="18">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50476,7 +51143,8 @@
       Allerdinsg nicht auf einer Plattform, die ohnehin sequentiell-konsistent ist. Wie &quot;zum Beispiel&quot; x86/64
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -50524,7 +51192,7 @@
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1521791567491" ID="ID_328701027" MODIFIED="1575133379715" TEXT="Code mu&#xdf; das Bestehen der Beziehung aktiv pr&#xfc;fen">
+<node CREATED="1521791567491" ID="ID_328701027" MODIFIED="1576282357934" TEXT="Code mu&#xdf; das Bestehen der Beziehung aktiv pr&#xfc;fen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50537,7 +51205,8 @@
       die shared zone anzufassen!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -50547,7 +51216,7 @@
 <node CREATED="1491098370281" ID="ID_1904535196" MODIFIED="1557498707240" TEXT="Konfig"/>
 <node CREATED="1491098373816" ID="ID_1022990703" MODIFIED="1557498707240" TEXT="Fallen">
 <node CREATED="1491099064125" ID="ID_651937703" MODIFIED="1557498707240" TEXT="Dateien ohne @file werden nicht dokumentiert"/>
-<node CREATED="1491099088362" ID="ID_1507484869" MODIFIED="1575133379849" TEXT="Template-Parameter in Klassennamen">
+<node CREATED="1491099088362" ID="ID_1507484869" MODIFIED="1576282357934" TEXT="Template-Parameter in Klassennamen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50572,9 +51241,10 @@
       Query&lt;RES&gt;::resolveBy
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1491099311253" ID="ID_307124479" MODIFIED="1575133379870">
+<node CREATED="1491099311253" ID="ID_307124479" MODIFIED="1576282357933">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -50609,14 +51279,15 @@
       sonst kommt Doxygen durcheinander
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1491098382888" ID="ID_1568153886" MODIFIED="1557498707240" TEXT="Probleme">
 <node CREATED="1491098385823" ID="ID_801230289" MODIFIED="1557498707240" TEXT="Auto-Links">
 <node CREATED="1491098393405" ID="ID_1408589913" MODIFIED="1557498707240" TEXT="funktionieren in vielen F&#xe4;llen nicht"/>
 <node CREATED="1491098402197" ID="ID_1572559975" MODIFIED="1557498707240" TEXT="Verdacht: mu&#xdf; Namespaces qualifizieren?"/>
-<node CREATED="1491098427785" ID="ID_719835617" MODIFIED="1575133379974" TEXT="Beispiel: alle Unit-Tests">
+<node CREATED="1491098427785" ID="ID_719835617" MODIFIED="1576282357933" TEXT="Beispiel: alle Unit-Tests">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50638,7 +51309,8 @@
       wird hier kein Link erzeugt
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1491098487889" ID="ID_1401713015" MODIFIED="1557498707240" TEXT="Sqlite-Support">
@@ -50654,7 +51326,7 @@
 <node CREATED="1504201038435" ID="ID_1569870904" MODIFIED="1557498707241" TEXT="Anleitung">
 <linktarget COLOR="#8697d2" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-459;-144;" ID="Arrow_ID_421953450" SOURCE="ID_1898190659" STARTARROW="None" STARTINCLINATION="-861;94;"/>
 <node CREATED="1504201044122" ID="ID_612955500" MODIFIED="1557498707241" TEXT="SVG in data/icons/svg"/>
-<node CREATED="1504201192870" ID="ID_823572488" MODIFIED="1575133380194" TEXT="Dokument-Gr&#xf6;&#xdf;e anscheinend egal">
+<node CREATED="1504201192870" ID="ID_823572488" MODIFIED="1576282357932" TEXT="Dokument-Gr&#xf6;&#xdf;e anscheinend egal">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50670,7 +51342,8 @@
       Die Icon-Gr&#246;&#223;en ergeben sich aus den Boxes auf 'plate'
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1504201055449" ID="ID_1652674635" MODIFIED="1557498707241" TEXT="braucht &apos;artwork:&apos;-Layer"/>
 <node CREATED="1504201074566" ID="ID_1803123712" MODIFIED="1557498707241" TEXT="braucht Sub-Layer &apos;plate&apos;">
@@ -50685,7 +51358,7 @@
 </node>
 <node CREATED="1437693678626" HGAP="117" ID="ID_1536988357" MODIFIED="1557498707241" POSITION="left" TEXT="Doku" VSHIFT="-47">
 <node CREATED="1437693687650" ID="ID_1484874437" MODIFIED="1557498707241" TEXT="Sound-Systeme">
-<node CREATED="1437693693617" ID="ID_955932218" LINK="https://wiki.debian.org/Sound" MODIFIED="1575133380376" TEXT="siehe die Debian-&#xdc;bersichtsseite">
+<node CREATED="1437693693617" ID="ID_955932218" LINK="https://wiki.debian.org/Sound" MODIFIED="1576282357932" TEXT="siehe die Debian-&#xdc;bersichtsseite">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50695,7 +51368,8 @@
       ...im Besonderen die guten Diagramme f&#252;r Pulse, ALSA und Jack
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -50852,7 +51526,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439593646645" ID="ID_917747701" MODIFIED="1575133381760">
+<node CREATED="1439593646645" ID="ID_917747701" MODIFIED="1576282357931">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -50875,10 +51549,11 @@
       &quot;-Wl,-rpath-link=target/modules&quot;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
-<node CREATED="1439176912636" ID="ID_584884488" MODIFIED="1575133381784" TEXT="failed tests">
+<node CREATED="1439176912636" ID="ID_584884488" MODIFIED="1576282357930" TEXT="failed tests">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50888,14 +51563,15 @@
       laufen wieder alle
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439176982698" HGAP="59" ID="ID_1330966528" MODIFIED="1557498707241" TEXT="Beobachtung: Meldungen im journal" VSHIFT="2"/>
 <node CREATED="1439176948063" HGAP="54" ID="ID_1726494484" MODIFIED="1557498707241" TEXT="5 Thread/Parallel" VSHIFT="1">
 <node CREATED="1439566266701" ID="ID_1280061419" MODIFIED="1557498707241" TEXT="h&#xe4;ngt mit ulimit zusammen">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1439566274091" ID="ID_1628790738" MODIFIED="1575133381892" TEXT="ohne ulimit gehts">
+<node CREATED="1439566274091" ID="ID_1628790738" MODIFIED="1576282357930" TEXT="ohne ulimit gehts">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50905,7 +51581,8 @@
       test.sh Zeile 138
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1439566868460" ID="ID_620984495" MODIFIED="1557498707241" TEXT="Untersuchung">
 <node CREATED="1439566872203" ID="ID_1734454643" MODIFIED="1557498707241" TEXT="ulimit -T funktioniert nicht">
@@ -50949,7 +51626,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439592774041" ID="ID_1603492676" MODIFIED="1575133382026" TEXT="ist reine CPU-Zeit">
+<node CREATED="1439592774041" ID="ID_1603492676" MODIFIED="1576282357929" TEXT="ist reine CPU-Zeit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50959,12 +51636,13 @@
       und wir verbringen unsere Zeit mit contention
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1439176927657" ID="ID_453561058" MODIFIED="1575133382049" TEXT="EntryID">
+<node CREATED="1439176927657" ID="ID_453561058" MODIFIED="1576282357929" TEXT="EntryID">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -50974,7 +51652,8 @@
       ist klar, hab ich gebrochen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439608908133" ID="ID_1023076054" MODIFIED="1557498707242" TEXT="Problem mit der Hash-Funktion"/>
 <node CREATED="1439609043316" ID="ID_1585741290" MODIFIED="1557498707242" TEXT="hatte ich schon mal untersucht"/>
@@ -50990,7 +51669,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439609055443" ID="ID_325526736" MODIFIED="1575133382127" TEXT="Problem hat sich versch&#xe4;rft">
+<node CREATED="1439609055443" ID="ID_325526736" MODIFIED="1576282357928" TEXT="Problem hat sich versch&#xe4;rft">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51003,7 +51682,8 @@
       Vorher hatte ich erste Kollisionen nach 25000 Nummern
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1439609098853" ID="ID_1076015737" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
@@ -51042,7 +51722,7 @@
 </node>
 </node>
 <node CREATED="1439176963604" ID="ID_582047980" MODIFIED="1557498707242" TEXT="test-lib nicht zu debuggern">
-<node CREATED="1439177141197" ID="ID_140380975" MODIFIED="1575133382230" TEXT="Segfault in GDB">
+<node CREATED="1439177141197" ID="ID_140380975" MODIFIED="1576282357928" TEXT="Segfault in GDB">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51055,7 +51735,8 @@
       Aug 10 04:51:39 flaucher kernel: traps: test-suite[8249] trap int3 ip:7ffff7deb241 sp:7fffffffe5c8 error:0
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1439477348298" ID="ID_1975408018" MODIFIED="1557498707242" TEXT="heruntergedampft auf einen Aufruf">
@@ -51112,7 +51793,7 @@
 </node>
 <node CREATED="1439516477008" ID="ID_1182795741" MODIFIED="1557498707242" TEXT="Ver 7.8.2">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439516495534" ID="ID_413946117" MODIFIED="1575133382444" TEXT="Bau-Abh&#xe4;ngigkeiten">
+<node CREATED="1439516495534" ID="ID_413946117" MODIFIED="1576282357927" TEXT="Bau-Abh&#xe4;ngigkeiten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51122,7 +51803,8 @@
       bison dejagnu flex gobjc libncurses5-dev libreadline-dev liblzma-dev libbabeltrace-dev libbabeltrace-ctf-dev python3-dev
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1439519150614" ID="ID_644868114" MODIFIED="1557498707242">
@@ -51138,7 +51820,7 @@
 </html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1439519171155" ID="ID_509605117" MODIFIED="1575133382487" TEXT="das scheint nicht ungew&#xf6;hnlich zu sein">
+<node CREATED="1439519171155" ID="ID_509605117" MODIFIED="1576282357926" TEXT="das scheint nicht ungew&#xf6;hnlich zu sein">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51172,7 +51854,8 @@
       <b>au weia</b>&#160;LEUTE!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node BACKGROUND_COLOR="#f7f2b7" CREATED="1439521655505" ID="ID_746337758" MODIFIED="1557498707242" TEXT="funktioniert, kein Segfault mehr">
 <icon BUILTIN="button_ok"/>
@@ -51196,7 +51879,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1439655684119" ID="ID_1194655899" MODIFIED="1575133382628" TEXT="Warnungen">
+<node CREATED="1439655684119" ID="ID_1194655899" MODIFIED="1576282357926" TEXT="Warnungen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51212,10 +51895,11 @@
       und tats&#228;chlich: das <i>ist</i>&#160;daneben, GCC hat Recht!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1439644339480" ID="ID_239239923" MODIFIED="1575133382650" TEXT="Lumiera DEB">
+<node CREATED="1439644339480" ID="ID_239239923" MODIFIED="1576282357925" TEXT="Lumiera DEB">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51225,7 +51909,8 @@
       aktualisieren und neu bauen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1439644368572" ID="ID_106785551" MODIFIED="1557498707242" TEXT="Doku: Referenz-System">
@@ -51245,7 +51930,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1446509415481" ID="ID_180589749" MODIFIED="1575133382750" TEXT="Versionen hochsetzen">
+<node CREATED="1446509415481" ID="ID_180589749" MODIFIED="1576282357925" TEXT="Versionen hochsetzen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51255,7 +51940,8 @@
       w&#228;hle Kompatibilt&#228;t genau so, da&#223; Ubuntu-Trusty noch unterst&#252;tzt wird.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1557498707242" TEXT="gtkmm-3.0 3.10">
 <icon BUILTIN="button_ok"/>
@@ -51296,7 +51982,7 @@
 <node CREATED="1544239226829" ID="ID_82474485" MODIFIED="1544239233820" TEXT="ist eigentlich logisch"/>
 <node CREATED="1544239234333" ID="ID_1530961275" MODIFIED="1544239247659" TEXT="eine Folge meiner Inkonsequenz">
 <node CREATED="1544239248527" ID="ID_1536715197" MODIFIED="1544239262200" TEXT="ich wollte den &apos;gui&apos; Ordner in target beibehalten"/>
-<node CREATED="1544239262932" ID="ID_1612950753" MODIFIED="1575133383125" TEXT="aber GuiResource installiert src -&gt; target">
+<node CREATED="1544239262932" ID="ID_1612950753" MODIFIED="1576282357924" TEXT="aber GuiResource installiert src -&gt; target">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51306,14 +51992,15 @@
       env.GuiResource(f) for f in env.Glob('stage/*.css')
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1544239314129" ID="ID_1316699242" MODIFIED="1544310685527" TEXT="L&#xf6;sungen...">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1544239328169" ID="ID_1734838035" MODIFIED="1544310744532" TEXT="CSS in data-Ordner umziehen">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1544310696005" ID="ID_1736290153" MODIFIED="1575133383187" TEXT="bliebe l&#xe4;ngerfristig eine Option">
+<node CREATED="1544310696005" ID="ID_1736290153" MODIFIED="1576282357923" TEXT="bliebe l&#xe4;ngerfristig eine Option">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51323,9 +52010,10 @@
       wenn ich doch mal noch komplexere B&#228;ume transportieren mu&#223;
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1544310717868" ID="ID_1020173356" MODIFIED="1575133383231" TEXT="gef&#xe4;llt mir aber nicht">
+<node CREATED="1544310717868" ID="ID_1020173356" MODIFIED="1576282357923" TEXT="gef&#xe4;llt mir aber nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51335,7 +52023,8 @@
       ich mag code-nahe Resourcen lieber beim Code selber
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
@@ -51344,7 +52033,7 @@
 <node CREATED="1544288579625" ID="ID_1342094420" MODIFIED="1544288601884" TEXT="d.h., wir behandeln nun GUI-Resourcen explizit"/>
 <node CREATED="1544288602331" ID="ID_293063721" MODIFIED="1544288615109" TEXT="bisher war das Konzept &quot;Resource&quot; Applikations-global">
 <node CREATED="1544310441186" ID="ID_1121330542" MODIFIED="1544310446333" TEXT="naja.... nicht wirklich"/>
-<node CREATED="1544310446895" ID="ID_1245766637" MODIFIED="1575133383334" TEXT="das war nur die Absicht gewesen">
+<node CREATED="1544310446895" ID="ID_1245766637" MODIFIED="1576282357922" TEXT="das war nur die Absicht gewesen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51365,11 +52054,12 @@
       </li>
     </ul>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node CREATED="1544310749304" ID="ID_1607480762" MODIFIED="1575133383366" TEXT="geht auch nicht ohne weiteres....">
+<node CREATED="1544310749304" ID="ID_1607480762" MODIFIED="1576282357922" TEXT="geht auch nicht ohne weiteres....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51385,7 +52075,8 @@
       Dann
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1544310787003" ID="ID_775636634" MODIFIED="1544310821317" TEXT="l&#xe4;uft schlie&#xdf;lich darauf hinaus, die Builder-Funktion selber anzupassen">
 <arrowlink COLOR="#386599" DESTINATION="ID_910836334" ENDARROW="Default" ENDINCLINATION="156;0;" ID="Arrow_ID_1032149588" STARTARROW="None" STARTINCLINATION="89;0;"/>
@@ -51393,7 +52084,7 @@
 </node>
 <node CREATED="1544310537285" ID="ID_799797239" MODIFIED="1544310831740" TEXT="GuiResourcen aufsammeln und in ein Verzeichnis kippen">
 <icon BUILTIN="back"/>
-<node CREATED="1544310560595" ID="ID_910836334" MODIFIED="1575133383424" TEXT="tats&#xe4;chlich wird die Funktion env.GuiResource() genau einmal verwendet">
+<node CREATED="1544310560595" ID="ID_910836334" MODIFIED="1576282357921" TEXT="tats&#xe4;chlich wird die Funktion env.GuiResource() genau einmal verwendet">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51403,7 +52094,8 @@
       n&#228;mlich im src/SConscript, wenn es um das GUI geht
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <linktarget COLOR="#386599" DESTINATION="ID_910836334" ENDARROW="Default" ENDINCLINATION="156;0;" ID="Arrow_ID_1032149588" SOURCE="ID_775636634" STARTARROW="None" STARTINCLINATION="89;0;"/>
 </node>
 <node CREATED="1544310594077" ID="ID_1194673968" MODIFIED="1544310628882">
@@ -51435,7 +52127,7 @@
 </node>
 <node CREATED="1447566875500" HGAP="35" ID="ID_773580451" MODIFIED="1557498707242" TEXT="w&#xfc;nschenswert..." VSHIFT="16">
 <icon BUILTIN="bell"/>
-<node CREATED="1447566892252" ID="ID_649638170" MODIFIED="1575133383598" TEXT="generische Compiler-Schalter zur Diagnose loggen">
+<node CREATED="1447566892252" ID="ID_649638170" MODIFIED="1576282357920" TEXT="generische Compiler-Schalter zur Diagnose loggen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51448,9 +52140,10 @@
       Ich meine also: zu Beginn vom Build sollte das Buildsystem einmal eine Infozeile ausgeben
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1447566892253" ID="ID_64485556" MODIFIED="1575133383621" TEXT="clean soll .sconf_temp und *.pyc mit wegr&#xe4;umen">
+<node CREATED="1447566892253" ID="ID_64485556" MODIFIED="1576282357920" TEXT="clean soll .sconf_temp und *.pyc mit wegr&#xe4;umen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51460,7 +52153,8 @@
       ...denn die st&#246;ren jeweils beim erzeugen eines Hotfix/Patch im Paketbau per dpkg --commit
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -51507,7 +52201,7 @@
 </node>
 <node CREATED="1446480582168" HGAP="46" ID="ID_554745278" MODIFIED="1561827466263" TEXT="Release" VSHIFT="-5">
 <icon BUILTIN="go"/>
-<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1575133383823" TEXT="release prep: clean-up obsolete information">
+<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1576282357919" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51517,11 +52211,12 @@
       Doku durchk&#228;mmen nach M&#252;ll
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1446482192807" ID="ID_852733328" MODIFIED="1575133383844" TEXT="Debian">
+<node CREATED="1446482192807" ID="ID_852733328" MODIFIED="1576282357919" TEXT="Debian">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51534,10 +52229,11 @@
       <font color="#d40222">WICHTIG</font>: keine vorgreifende Infor publizieren!!!!!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1575133383865" TEXT="Build-Tutorial">
+<node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1576282357918" TEXT="Build-Tutorial">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51553,7 +52249,8 @@
       insgesamt sorgf&#228;ltig durchlesen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446489425420" ID="ID_1155768637" MODIFIED="1518487921104" TEXT="building from source"/>
 <node CREATED="1446489431443" ID="ID_1672115205" MODIFIED="1518487921104" TEXT="building the debian way"/>
@@ -51563,7 +52260,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1575133383970" TEXT="release prep: bump version number">
+<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1576282357917" TEXT="release prep: bump version number">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51573,7 +52270,8 @@
       knappe Kennzeichnung des Releases in den Kommentar
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-2"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1518487921104" TEXT="admin/scons/Setup.py"/>
@@ -51581,7 +52279,7 @@
 <node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile"/>
 <node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile.browse"/>
 </node>
-<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1575133384093" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
+<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1576282357917" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51600,7 +52298,8 @@
       denn wir wollen keine DEB-Info im Master haben!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-3"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1518487921104" TEXT="Release-Zweig">
@@ -51613,7 +52312,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1575133384180" TEXT="Release-commit: Pre-release 0.pre.03">
+<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1576282357916" TEXT="Release-commit: Pre-release 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51626,7 +52325,8 @@
       die unmittelbaren Release-Dokumente durchgehen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-4"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1518487921104" TEXT="README"/>
@@ -51640,7 +52340,7 @@
 </node>
 <node CREATED="1446481129206" ID="ID_799927356" MODIFIED="1518487921104" TEXT="LICENSE"/>
 </node>
-<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1575133384302" TEXT="Release-Zweig: upgrade current release to 0.pre.03">
+<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1576282357916" TEXT="Release-Zweig: upgrade current release to 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51653,7 +52353,8 @@
       Sollte konfliktfrei sein
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-5"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -51676,7 +52377,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1575133384465" TEXT="ausliefern">
+<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1576282357915" TEXT="ausliefern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51686,7 +52387,8 @@
       ...das hei&#223;t bauen und hochladen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="full-7"/>
 <node CREATED="1447566826434" HGAP="0" ID="ID_808634666" MODIFIED="1518487921104" TEXT="Bugfix-Release 0.pre.03-2" VSHIFT="-1">
 <icon BUILTIN="idea"/>
@@ -51740,7 +52442,7 @@
 <node CREATED="1447971995582" ID="ID_1170070076" MODIFIED="1518487921105" TEXT="Doku-Registrierung scheitert">
 <icon BUILTIN="clanbomber"/>
 </node>
-<node CREATED="1447972005940" ID="ID_876035298" MODIFIED="1575133384769" TEXT="doc-base Definition">
+<node CREATED="1447972005940" ID="ID_876035298" MODIFIED="1576282357915" TEXT="doc-base Definition">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51753,9 +52455,10 @@
       unter Debian/Jessie wird das ignoriert
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1447972547396" ID="ID_1950291699" MODIFIED="1575133384791">
+<node CREATED="1447972547396" ID="ID_1950291699" MODIFIED="1576282357914">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -51781,7 +52484,8 @@
       Die Wahrscheinlichkeit, da&#223; <i>irgend jemand</i>&#160;Lumiera unter Ubuntu/Trusty <i>installieren </i>m&#246;chte, erscheint mir akademisch
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="bell"/>
 </node>
 </node>
@@ -51807,7 +52511,7 @@
 <node CREATED="1447978292199" ID="ID_1160042901" MODIFIED="1518487921105" TEXT="ein Problem mit std::hash - Spezialisierung">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1447983052852" ID="ID_1130315053" MODIFIED="1575133384928" TEXT="liegt nur an fehlendem #include &lt;utility&gt;">
+<node CREATED="1447983052852" ID="ID_1130315053" MODIFIED="1576282357913" TEXT="liegt nur an fehlendem #include &lt;utility&gt;">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51817,7 +52521,8 @@
       in lib/hash-standard.hpp
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1447990722939" ID="ID_1163368707" MODIFIED="1518487921105">
 <richcontent TYPE="NODE"><html>
@@ -51832,7 +52537,7 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1447990760017" ID="ID_413820913" MODIFIED="1575133384967">
+<node CREATED="1447990760017" ID="ID_413820913" MODIFIED="1576282357912">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -51852,7 +52557,8 @@
       es gibt Probleme beim Linken mit den Boost-Libraries, die auf Ubuntu/wily mit gcc-5 gebaut sind.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1447990802803" ID="ID_1667893677" MODIFIED="1518487921105" TEXT="ABBRUCH"/>
@@ -51860,7 +52566,7 @@
 <node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1518487921105" TEXT="Mint/Rafaela (17.2.LTS) : x86_64">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1575133385040" TEXT="Web/Doku aktualisieren">
+<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1576282357912" TEXT="Web/Doku aktualisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51870,7 +52576,8 @@
       Wichtig: hier nur was wirklich gebaut ist und funktioniert!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1518487921105" TEXT="alte Repos wegwerfen">
@@ -51894,7 +52601,7 @@
 <node CREATED="1439842359711" ID="ID_1982964862" MODIFIED="1557498707243" TEXT="Paket">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1439842379420" ID="ID_1336697213" MODIFIED="1557498707243" TEXT="gtk-Abh&#xe4;ngigkeiten"/>
-<node CREATED="1446486970358" ID="ID_1758732894" MODIFIED="1575133385228" TEXT="was ist mit libXV">
+<node CREATED="1446486970358" ID="ID_1758732894" MODIFIED="1576282357911" TEXT="was ist mit libXV">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51910,7 +52617,8 @@
       bestehen, aber irgendwann m&#252;ssen wir das schon glattziehen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1446505367113" ID="ID_1119934206" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1557498707243">
@@ -51948,7 +52656,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1447985552663" ID="ID_1932953869" MODIFIED="1575133385409" TEXT="Hack ist inzwischen obsolet">
+<node CREATED="1447985552663" ID="ID_1932953869" MODIFIED="1576282357911" TEXT="Hack ist inzwischen obsolet">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -51958,7 +52666,8 @@
       seit gcc-4.8 ist kein static_assert mehr in der STDlib
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1447985591922" ID="ID_800130211" MODIFIED="1557498707243" TEXT="Frage: wie kann ich ein SFINAE-Br&#xfc;cke bauen"/>
 <node CREATED="1447985637132" ID="ID_1680970111" MODIFIED="1557498707243" TEXT="Problem: wir haben nur einen Typparameter"/>
@@ -52047,7 +52756,7 @@
 <linktarget COLOR="#ec5b9a" DESTINATION="ID_688046161" ENDARROW="Default" ENDINCLINATION="-281;28;" ID="Arrow_ID_789772576" SOURCE="ID_126301727" STARTARROW="None" STARTINCLINATION="117;-5;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1570812637077" ID="ID_1674717962" MODIFIED="1570812642972" TEXT="nicht fertig implementiert"/>
-<node CREATED="1570812643428" ID="ID_1631975143" MODIFIED="1575133386124" TEXT="die gegenw&#xe4;rtige dummy-Implementierung ist nicht korrekt">
+<node CREATED="1570812643428" ID="ID_1631975143" MODIFIED="1576282357910" TEXT="die gegenw&#xe4;rtige dummy-Implementierung ist nicht korrekt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52063,7 +52772,8 @@
       !!!!!11!!
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -52093,7 +52803,7 @@
 <node CREATED="1521963965164" ID="ID_1027875371" MODIFIED="1557498707243" TEXT="multithreaded-Test scheitert">
 <icon BUILTIN="go"/>
 <node COLOR="#435e98" CREATED="1522025948980" ID="ID_295336770" MODIFIED="1557498707243" TEXT="3/2018">
-<node COLOR="#338800" CREATED="1521964015114" ID="ID_1116388701" MODIFIED="1575133386399" TEXT="CallQueue_test">
+<node COLOR="#338800" CREATED="1521964015114" ID="ID_1116388701" MODIFIED="1576282357910" TEXT="CallQueue_test">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52139,10 +52849,11 @@
       END
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522025982759" ID="ID_1830638050" MODIFIED="1522025987194" TEXT="reproduzierbar....">
-<node CREATED="1522025990246" ID="ID_261366619" MODIFIED="1575133386442" TEXT="Auf mehreren Terminals x-mal starten">
+<node CREATED="1522025990246" ID="ID_261366619" MODIFIED="1576282357909" TEXT="Auf mehreren Terminals x-mal starten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52152,11 +52863,12 @@
       for I in `seq 1 50`; do target/test-suite CallQueue_test; done
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1522026027993" ID="ID_25191931" MODIFIED="1522026034036" TEXT="Anhaltspunkte">
-<node CREATED="1522026034720" ID="ID_584589060" MODIFIED="1575133386485" TEXT="erstmals beobachtet unter starker System-Last">
+<node CREATED="1522026034720" ID="ID_584589060" MODIFIED="1576282357909" TEXT="erstmals beobachtet unter starker System-Last">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52172,7 +52884,8 @@
       und eine Doxygen-Seite im Browser geladen
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#990000" CREATED="1521963972811" ID="ID_1942164320" MODIFIED="1522029864550" TEXT="hab ich da was mit dem ThreadWrapper kaputt gemacht?">
 <icon BUILTIN="stop-sign"/>
@@ -52193,7 +52906,7 @@
 <node CREATED="1522029908986" ID="ID_1350487644" MODIFIED="1522030029028" TEXT="Jupp. Dat warsz">
 <icon BUILTIN="idea"/>
 <node CREATED="1522029922592" ID="ID_301766693" MODIFIED="1522030021122" TEXT="Barriere eingebaut"/>
-<node CREATED="1522029928983" ID="ID_761637509" MODIFIED="1575133386752" TEXT="ist auch sinnvoll vom Testdesgin her">
+<node CREATED="1522029928983" ID="ID_761637509" MODIFIED="1576282357908" TEXT="ist auch sinnvoll vom Testdesgin her">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52203,7 +52916,8 @@
       weil sich die Threads gegenseitig ihre Counter inkrementieren.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1522029979544" ID="ID_1820534569" MODIFIED="1522030021122" TEXT="Stre&#xdf;test wiederholt, sogar mit 500 Thrads"/>
 <node COLOR="#338800" CREATED="1522029995205" ID="ID_556688250" MODIFIED="1522030021122" TEXT="jetzt reproduzierbar alles sauber">
@@ -52215,7 +52929,7 @@
 <node COLOR="#338800" CREATED="1522030032424" ID="ID_1791738866" MODIFIED="1522030091201" TEXT="Problem war fehlende Barriere nach Objekt-Initialisierung">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1522030047375" ID="ID_1979180035" MODIFIED="1575133386862" TEXT="alle anderen multithreaded-Tests durchgepr&#xfc;ft">
+<node COLOR="#338800" CREATED="1522030047375" ID="ID_1979180035" MODIFIED="1576282357908" TEXT="alle anderen multithreaded-Tests durchgepr&#xfc;ft">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52228,7 +52942,8 @@
       verwenden globale Variable oder &#252;berhaupt keine Objektfelder
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -52285,7 +53000,7 @@
 <node COLOR="#435e98" CREATED="1544328974221" ID="ID_71855569" MODIFIED="1561827466270" TEXT="ProcDispatcher bleibt h&#xe4;ngen">
 <linktarget COLOR="#ce3649" DESTINATION="ID_71855569" ENDARROW="Default" ENDINCLINATION="105;0;" ID="Arrow_ID_1871191743" SOURCE="ID_134908056" STARTARROW="None" STARTINCLINATION="181;0;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1544329099419" ID="ID_1105978437" MODIFIED="1575133387286" TEXT="SessionCommandFunction_test">
+<node CREATED="1544329099419" ID="ID_1105978437" MODIFIED="1576282357907" TEXT="SessionCommandFunction_test">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52301,7 +53016,8 @@
       und dann auf den Deaktiviert-Zustand <b>wartet</b>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1544329167436" ID="ID_739717124" MODIFIED="1544329363509" TEXT="Problem mit der Zustands-Logik">
@@ -52309,7 +53025,7 @@
 <node CREATED="1544329192703" ID="ID_1013421079" MODIFIED="1544329202330" TEXT="deaktivert bedeutet requireAction() == false"/>
 <node CREATED="1544329202903" ID="ID_1019916123" MODIFIED="1544329356857" TEXT="und dadurch warten wir ohne Timeout">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1544329280619" ID="ID_1784122176" MODIFIED="1575133387407" TEXT="und durch den Bug in lib::Sync wurde das nicht wirksam">
+<node CREATED="1544329280619" ID="ID_1784122176" MODIFIED="1576282357907" TEXT="und durch den Bug in lib::Sync wurde das nicht wirksam">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52322,7 +53038,8 @@
       nachdem <i>einmal</i>&#160;ein wait mit Timeout verwendet worden war
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
@@ -52362,7 +53079,7 @@
 <icon BUILTIN="clanbomber"/>
 </node>
 <node CREATED="1544329684707" ID="ID_651175391" MODIFIED="1544329708068" TEXT="und dann w&#xe4;re inChange == false, obwohl wir arbeiten (Builder l&#xe4;uft)"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544332821150" ID="ID_484338481" MODIFIED="1575133387630" TEXT="fatale Konsequenzen....">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1544332821150" ID="ID_484338481" MODIFIED="1576282357906" TEXT="fatale Konsequenzen....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -52375,7 +53092,8 @@
       obwohl noch der Builder l&#228;uft
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1544332907967" ID="ID_760793562" MODIFIED="1544332932033" TEXT="Analyse: kann das passieren?">
