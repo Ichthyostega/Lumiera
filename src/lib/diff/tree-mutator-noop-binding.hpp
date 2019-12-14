@@ -37,7 +37,7 @@
  ** default implementation, which likewise absorbs diff verbs, but in a way to trigger
  ** a lumiera::error::LUMIERA_ERROR_DIFF_CONFLICT. 
  ** 
- ** @note the header tree-mutator-attribute-binding.hpp was split off for sake of readability
+ ** @note the header tree-mutator-noop-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp
  ** 
  ** @see tree-mutator-test.cpp

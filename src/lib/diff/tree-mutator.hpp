@@ -453,12 +453,14 @@ namespace diff{
         /** attach a listener function, to be invoked on _structural changes._
          *  Here, we define any change as "structural", which alters the _sequence_ of
          *  child elements, as opposed to their content. In practice, this listener will
-         *  be invoked _after_ applying a diff with any `INS`, `DEL`, `FIND`, `SKIP` verb,
-         *  or a specific `AFTER` verb (i.e. _not_ `AFTER(Ref::END)`)
+         *  be invoked _after_ applying a diff with any `INS`, `DEL`, `FIND`, `SKIP` verb.
+         * @remark in theory, one could also drop contents indirectly, by sending only
+         *         part of the necessary PICK verbs (or using AFTER(...)). However,
+         *         such a diff is formally not prohibited, and will indeed be detected as
+         *         error in many but not all cases, in ChildCollectionMutator::completeScope()
          */
         template<typename LIS>
-        Builder<TreeMutator>///////////////////////TODO
-        onStructuralChange (LIS changeListener);
+        auto onStructuralChange (LIS changeListener);
       };
     
   }//(END) Mutator-Builder...
@@ -480,5 +482,6 @@ namespace diff{
 #include "lib/diff/tree-mutator-gen-node-binding.hpp"
 #include "lib/diff/tree-mutator-attribute-binding.hpp"
 #include "lib/diff/tree-mutator-collection-binding.hpp"
+#include "lib/diff/tree-mutator-listener-binding.hpp"
 #include "lib/diff/tree-mutator-noop-binding.hpp"
 

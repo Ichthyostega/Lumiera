@@ -104,10 +104,9 @@ namespace test{
         {
           buff.create (
             TreeMutator::build()
-              .attach (collection (subject_)
-                      )
-              .onStructuralChange ([&](){ ++structChanges_; }
-            ));
+              .attach (collection (subject_))
+              .onStructuralChange ([&](){ ++structChanges_; })
+            );
         }
       
       
