@@ -136,7 +136,7 @@ namespace diff{
   using meta::enable_if;
   using meta::Yes_t;
   using meta::No_t;
-  using std::is_same;
+  using std::is_base_of;
   
   /**
    * helper to detect presence of a
@@ -150,7 +150,7 @@ namespace diff{
       
     public:
       enum{ value = HasFunSig_buildMutator<T>::value
-                    and not is_same<T, DiffMutable>::value};
+                    and not is_base_of<DiffMutable, T>::value};
     };
   
   
@@ -165,7 +165,7 @@ namespace diff{
     };
   
   template<class TAR>
-  struct TreeDiffTraits<TAR, enable_if<is_same<TAR, DiffMutable>>>
+  struct TreeDiffTraits<TAR, enable_if<is_base_of<DiffMutable, TAR>>>
     : std::true_type
     {
       using Ret = DiffMutable&;

@@ -28,17 +28,14 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/format-util.hpp"
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/format-util.hpp"
-#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 #include <vector>
 
-//using util::isnil;
 using std::string;
 using std::vector;
 

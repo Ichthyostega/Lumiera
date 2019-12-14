@@ -448,6 +448,17 @@ namespace diff{
         
         /** set up a catch-all and ignore-everything layer */
         auto ignoreAllChanges();
+        
+        
+        /** attach a listener function, to be invoked on _structural changes._
+         *  Here, we define any change as "structural", which alters the _sequence_ of
+         *  child elements, as opposed to their content. In practice, this listener will
+         *  be invoked _after_ applying a diff with any `INS`, `DEL`, `FIND`, `SKIP` verb,
+         *  or a specific `AFTER` verb (i.e. _not_ `AFTER(Ref::END)`)
+         */
+        template<typename LIS>
+        Builder<TreeMutator>///////////////////////TODO
+        onStructuralChange (LIS changeListener);
       };
     
   }//(END) Mutator-Builder...

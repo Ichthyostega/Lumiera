@@ -36048,11 +36048,40 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189140651" ID="ID_835328626" MODIFIED="1576189143491" TEXT="Test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576359839479" ID="ID_1358290407" MODIFIED="1576359862244" TEXT="direkt an die Test-Klasse binden, incl Listener">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576360824678" ID="ID_1466401339" MODIFIED="1576360830232" TEXT="API definieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576360879043" ID="ID_1998526926" MODIFIED="1576361042423" TEXT="Entscheidung: allgemein in TreeMutator-DSL">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...man k&#246;nnte auch auf die Idee kommen, es nur in das Collection-Binding einzuh&#228;ngen.
+    </p>
+    <p>
+      Das w&#228;re aber zu kurz gedacht; auch wenn im Moment dieses die einzige Implementierung ist, die den Listener tats&#228;chlich triggern kann, verbietet uns niemand in der Zukunft, noch eine anderes TreeMutator-Binding zu erfinden. Hinzu kommt, da&#223; ein Listener zus&#228;tzliche Storage und zus&#228;tzlichen Aufwand bedeutet, und deshalb besser als eigener &#187;onion layer&#171; implementiert wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576361062012" ID="ID_591681960" MODIFIED="1576361090375" TEXT="Name: onStructuralChange(lambda)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576361096645" ID="ID_643127461" MODIFIED="1576361111199" TEXT="Change-Listener-Layer implementieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189140651" ID="ID_835328626" MODIFIED="1576360868184" TEXT="Test">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189161697" ID="ID_1786250967" MODIFIED="1576189178606" TEXT="Struktur&#xe4;nderungen triggern Listener">
 <icon BUILTIN="flag-yellow"/>
 </node>
