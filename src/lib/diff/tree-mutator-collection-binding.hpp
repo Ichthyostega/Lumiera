@@ -164,7 +164,7 @@ namespace diff{
      */
     template<class COLL, class MAT, class CTR, class SEL, class ASS, class MUT>
     struct CollectionBinding
-      : util::MoveOnly
+//      : util::MoveOnly
       {
         using Coll = typename Strip<COLL>::TypeReferred;
         using Elm  = typename Coll::value_type;

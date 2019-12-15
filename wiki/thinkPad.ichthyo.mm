@@ -36078,6 +36078,189 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576361096645" ID="ID_643127461" MODIFIED="1576361111199" TEXT="Change-Listener-Layer implementieren">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1576366663548" ID="ID_656541265" MODIFIED="1576366682488" TEXT="Arbeitsmuster definieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1576366684169" ID="ID_110323698" MODIFIED="1576366703873" TEXT="TreeMutator is disposable one-way">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1576366712798" ID="ID_801623795" MODIFIED="1576366723977" TEXT="d.h. wir setzen eine Flag direkt im Objekt"/>
+</node>
+<node CREATED="1576366728980" ID="ID_1022783655" MODIFIED="1576366739950" TEXT="welche Operationen?">
+<node CREATED="1576367767800" ID="ID_1235301864" MODIFIED="1576367778488" TEXT="siehe tree-diff.cpp">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1576366782896" ID="ID_179852387" MODIFIED="1576367797511" TEXT="INS -&gt; injectNew"/>
+<node CREATED="1576366789484" ID="ID_405222529" MODIFIED="1576367822460" TEXT="DEL -&gt; skipSrc"/>
+<node CREATED="1576366797722" ID="ID_1163886447" MODIFIED="1576367834487" TEXT="FIND -&gt; findSrc"/>
+<node CREATED="1576366804866" ID="ID_1100124063" MODIFIED="1576367840849" TEXT="SKIP -&gt; skipSrc"/>
+<node CREATED="1576366806910" FOLDED="true" ID="ID_1967747316" MODIFIED="1576367751236" TEXT="AFTER">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1576366810811" ID="ID_604915658" MODIFIED="1576366818740" TEXT="aber nicht AFTER (Ref::END)"/>
+<node CREATED="1576366829887" ID="ID_1189421464" MODIFIED="1576366936668" TEXT="weil ein dediziertes AFTER zum partiellen Akzeptieren verwendet werden k&#xf6;nnte"/>
+<node COLOR="#435e98" CREATED="1576366942761" ID="ID_1416606569" MODIFIED="1576367685024" TEXT="Vorsicht ... da ist eine L&#xfc;cke im Argument">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1576367086708" ID="ID_1929510503" MODIFIED="1576367168398" TEXT="man kann indirekt das Ende kappen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...indem man nur teilweise PICK-Verben sendet, und dann einfach weggeht.
+    </p>
+    <p>
+      Dann wir der Rest mit dem Mutator zusammen weggeworfen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1576367169888" ID="ID_1591005930" MODIFIED="1576367275787">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      um <i>das</i>&#160;zu unterbinden, m&#252;&#223;ten alle Binding-Layer kollaborieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ..weil man diesen Umstand nicht generisch erkennen kann.
+    </p>
+    <p>
+      Nach gegenw&#228;rtigem Stand kann das nur im Collection-Binding auftreten;
+    </p>
+    <p>
+      dieses aber h&#228;tte auch die notwendigen Informationen, um diese Situation zu erkennen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1576367369197" ID="ID_1086320549" MODIFIED="1576367380152" TEXT="HA! daran hab ich schon gedacht">
+<icon BUILTIN="idea"/>
+<node CREATED="1576367381612" ID="ID_197359864" MODIFIED="1576367388367" TEXT="TreeMutator::completeScope()"/>
+<node CREATED="1576367467232" ID="ID_1177835259" MODIFIED="1576367468924" TEXT="TreeDiffMutatorBinding::__expect_end_of_scope"/>
+<node CREATED="1576367469960" ID="ID_785965079" MODIFIED="1576367476719" TEXT="aufgerufen von EMU"/>
+<node CREATED="1576367477423" ID="ID_1067589529" MODIFIED="1576367508185" TEXT="CollectionBinding pr&#xfc;ft tats&#xe4;chlich auf Vollst&#xe4;ndigkeit hier">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. es pr&#252;ft, ob keine Elemente im Arbeitspuffer &#252;brig sind
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576367510259" ID="ID_1290532508" MODIFIED="1576367530122" TEXT="leider bleibt top-level hier au&#xdf;en vor">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1576367556845" ID="ID_1005031158" MODIFIED="1576367744992" TEXT="Konsequenz: ein solches DIFF ist formal nicht korrekt">
+<arrowlink COLOR="#ca636f" DESTINATION="ID_332168125" ENDARROW="Default" ENDINCLINATION="23;-62;" ID="Arrow_ID_761091686" STARTARROW="None" STARTINCLINATION="-147;8;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1576367573138" ID="ID_332168125" MODIFIED="1576367744992" TEXT="STOP. Dieser fall ist mithin zu 99% redundant">
+<linktarget COLOR="#ca636f" DESTINATION="ID_332168125" ENDARROW="Default" ENDINCLINATION="23;-62;" ID="Arrow_ID_761091686" SOURCE="ID_1005031158" STARTARROW="None" STARTINCLINATION="-147;8;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1576367626367" ID="ID_1026459150" MODIFIED="1576367638221" TEXT="es bleibt zwar eine L&#xfc;cke auf top-level"/>
+<node CREATED="1576367638889" ID="ID_829309668" MODIFIED="1576367650884" TEXT="aber rein formal sollte es nicht auftreten"/>
+<node CREATED="1576367652203" ID="ID_141662474" MODIFIED="1576367665480" TEXT="und damit wird AFTER selber immer neutral sein"/>
+<node CREATED="1576367666205" ID="ID_392117818" MODIFIED="1576367677816" TEXT="und es braucht dann schon ein explizites INS, DEL, FIND, SKIP"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576377684248" ID="ID_1419015987" MODIFIED="1576377692667" TEXT="Probleme mit der Builder-Konstruktion">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1576377697727" ID="ID_202863640" MODIFIED="1576377709748" TEXT="Template-Error....">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1576377711045" ID="ID_108442931" MODIFIED="1576377734670" TEXT="seltsamerweise... denn im Prinzip das Gleiche funktioniert doch f&#xfc;r collection und Attribute"/>
+<node CREATED="1576378164751" ID="ID_326483835" MODIFIED="1576378173210" TEXT="mehrere Probleme">
+<node CREATED="1576378177126" ID="ID_940209297" MODIFIED="1576378184858" TEXT="doppelt gewickelter Builder tritt auf">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576378190100" ID="ID_1161663563" MODIFIED="1576378200871" TEXT="Verdacht: implizite Konversion?">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1576378201634" ID="ID_1282623104" MODIFIED="1576378225818" TEXT="mache mal den Builder-ctor explizit">
+<node CREATED="1576378226991" ID="ID_553975580" MODIFIED="1576378241185" TEXT="den ein-elementigen Template ctor"/>
+<node CREATED="1576378241893" ID="ID_1087579586" MODIFIED="1576378246208" TEXT="mit move-Argument"/>
+<node CREATED="1576378247040" ID="ID_1200403421" MODIFIED="1576378259841" TEXT="denn der k&#xf6;nnte versehentlich einen Move-ctor generieren"/>
+</node>
+<node CREATED="1576378261915" ID="ID_564333709" MODIFIED="1576378272885" TEXT="einige Stellen im Code repariert"/>
+<node CREATED="1576378273593" ID="ID_539526347" MODIFIED="1576378331296" TEXT="ist wohl insgesamt besser so, da explizit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn <i>einfacher</i>&#160;wird der Code dadurch nicht, nur k&#252;rzer.
+    </p>
+    <p>
+      Und m&#252;hsam f&#252;r den Leser ist er so oder so... dann also lieber alles ausschreiben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1576378343418" ID="ID_1269344650" MODIFIED="1576378357653" TEXT="angeblich Aufruf gesperrter Copy-Ctorn">
+<node CREATED="1576378359957" ID="ID_1488794757" MODIFIED="1576378478485" TEXT="das ist immer ein Ketten-Argument">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da mu&#223; man auch erst mal drauf kommen, was einem der Compiler da so sagen will.
+    </p>
+    <p>
+      use of deleted function &lt;some copy-ctor&gt;
+    </p>
+    <p>
+      note: function &lt;some-copy-ctor&gt; is deleted, because the default definition would be ill formed
+    </p>
+    <p>
+      error: <b>...und hier kommt nun die default-definition... </b>
+    </p>
+    <p>
+      <i>und damit wiederholt sich das Ketten-Argument bis zur Basisklasse runter!!!</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1576378488388" ID="ID_467081251" MODIFIED="1576378531986" TEXT="schlie&#xdf;lich lande ich beim class TreeMutator  : util::MoveOnly"/>
+<node CREATED="1576378541509" ID="ID_1269318107" MODIFIED="1576378548503" TEXT="wenn ich das entferne....">
+<node CREATED="1576378549586" ID="ID_557832776" MODIFIED="1576378560918" TEXT="und auch noch diverse redundante definitionen mit dazu"/>
+<node CREATED="1576378561650" ID="ID_270407327" MODIFIED="1576378578043" TEXT="(beachte: sobald irgendwo ein Move-ctor definiert ist, gibt es keinen copy-ctor mehr)"/>
+</node>
+<node CREATED="1576378580863" ID="ID_761583276" MODIFIED="1576378586645" TEXT="...dann gehts"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576378589343" ID="ID_1164539927" MODIFIED="1576378607589" TEXT="also: irgendwo schwenkt die Kette auf einen copy-ctor um">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576378609851" ID="ID_669880694" MODIFIED="1576379532737" TEXT="Frage-1 : wo?">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576378616851" ID="ID_1283591083" MODIFIED="1576379534177" TEXT="Frage-2 : warum?">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189140651" ID="ID_835328626" MODIFIED="1576360868184" TEXT="Test">

@@ -105,12 +105,16 @@ namespace diff{
      */
     template<class PAR>
     template<typename LIS>
+//    inline Builder<Detector4StructuralChanges<PAR,LIS>>
     inline auto
     Builder<PAR>::onStructuralChange (LIS changeListener)
     {
       ASSERT_VALID_SIGNATURE (LIS, void(void))
       
-      return chainedBuilder<Detector4StructuralChanges<PAR,LIS>> (changeListener);
+      using BIN = Detector4StructuralChanges<PAR,LIS>;
+      BIN furz{changeListener, move(*this)};
+            return Builder<BIN> (move (furz));
+//    return chainedBuilder<Detector4StructuralChanges<PAR,LIS>> (changeListener);
     }
     
   }//(END)Mutator-Builder decorator components...
