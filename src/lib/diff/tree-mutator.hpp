@@ -141,7 +141,7 @@ namespace diff{
    *   activities to concrete manipulations known within target scope.
    */
   class TreeMutator
-//    : util::MoveOnly
+    : util::MoveOnly
     {
       
     public:
@@ -149,7 +149,7 @@ namespace diff{
       
       // only default and move construction allowed
       TreeMutator ()                    =default;
-//      TreeMutator (TreeMutator&&)       =default;
+      TreeMutator (TreeMutator&&)       =default;
       
       
       

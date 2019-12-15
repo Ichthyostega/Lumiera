@@ -81,6 +81,9 @@ namespace diff{
           , changeListener_{functor}
           { }
         
+        // move construction allowed and expected to happen
+        Detector4StructuralChanges (Detector4StructuralChanges&&) =default;
+        
         /** once the diff is for this level is completely applied,
          *  the TreeMutator will be discarded, and we can fire our
          *  change listener at that point. */
@@ -105,16 +108,12 @@ namespace diff{
      */
     template<class PAR>
     template<typename LIS>
-//    inline Builder<Detector4StructuralChanges<PAR,LIS>>
     inline auto
     Builder<PAR>::onStructuralChange (LIS changeListener)
     {
       ASSERT_VALID_SIGNATURE (LIS, void(void))
       
-      using BIN = Detector4StructuralChanges<PAR,LIS>;
-      BIN furz{changeListener, move(*this)};
-            return Builder<BIN> (move (furz));
-//    return chainedBuilder<Detector4StructuralChanges<PAR,LIS>> (changeListener);
+      return chainedBuilder<Detector4StructuralChanges<PAR,LIS>> (changeListener);
     }
     
   }//(END)Mutator-Builder decorator components...

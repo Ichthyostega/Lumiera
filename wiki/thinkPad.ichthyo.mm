@@ -36182,16 +36182,17 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576377684248" ID="ID_1419015987" MODIFIED="1576377692667" TEXT="Probleme mit der Builder-Konstruktion">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1576377684248" ID="ID_1419015987" MODIFIED="1576414100918" TEXT="Probleme mit der Builder-Konstruktion">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1576377697727" ID="ID_202863640" MODIFIED="1576377709748" TEXT="Template-Error....">
 <icon BUILTIN="smiley-angry"/>
 </node>
 <node CREATED="1576377711045" ID="ID_108442931" MODIFIED="1576377734670" TEXT="seltsamerweise... denn im Prinzip das Gleiche funktioniert doch f&#xfc;r collection und Attribute"/>
 <node CREATED="1576378164751" ID="ID_326483835" MODIFIED="1576378173210" TEXT="mehrere Probleme">
-<node CREATED="1576378177126" ID="ID_940209297" MODIFIED="1576378184858" TEXT="doppelt gewickelter Builder tritt auf">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576378190100" ID="ID_1161663563" MODIFIED="1576378200871" TEXT="Verdacht: implizite Konversion?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1576378177126" ID="ID_940209297" MODIFIED="1576413723637" TEXT="doppelt gewickelter Builder tritt auf">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576378190100" ID="ID_1161663563" MODIFIED="1576413711984" TEXT="Verdacht: implizite Konversion?">
+<icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1576378201634" ID="ID_1282623104" MODIFIED="1576378225818" TEXT="mache mal den Builder-ctor explizit">
 <node CREATED="1576378226991" ID="ID_553975580" MODIFIED="1576378241185" TEXT="den ein-elementigen Template ctor"/>
@@ -36216,7 +36217,8 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1576378343418" ID="ID_1269344650" MODIFIED="1576378357653" TEXT="angeblich Aufruf gesperrter Copy-Ctorn">
+<node COLOR="#435e98" CREATED="1576378343418" ID="ID_1269344650" MODIFIED="1576413734213" TEXT="angeblich Aufruf gesperrter Copy-Ctorn">
+<icon BUILTIN="broken-line"/>
 <node CREATED="1576378359957" ID="ID_1488794757" MODIFIED="1576378478485" TEXT="das ist immer ein Ketten-Argument">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -36250,13 +36252,33 @@
 </node>
 <node CREATED="1576378580863" ID="ID_761583276" MODIFIED="1576378586645" TEXT="...dann gehts"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576378589343" ID="ID_1164539927" MODIFIED="1576378607589" TEXT="also: irgendwo schwenkt die Kette auf einen copy-ctor um">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576378609851" ID="ID_669880694" MODIFIED="1576379532737" TEXT="Frage-1 : wo?">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1576378589343" ID="ID_1164539927" MODIFIED="1576413693950" TEXT="also: irgendwo schwenkt die Kette auf einen copy-ctor um">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1576378609851" ID="ID_669880694" MODIFIED="1576413678942" TEXT="Frage-1 : wo?">
+<icon BUILTIN="help"/>
+<node CREATED="1576413599727" ID="ID_601054330" MODIFIED="1576413602019" TEXT="in Detector4StructuralChanges"/>
+<node CREATED="1576413602872" ID="ID_1037688378" MODIFIED="1576413616834" TEXT="der hat einen explizit definierten dtor"/>
+<node CREATED="1576413622373" ID="ID_676470389" MODIFIED="1576413665197" TEXT="und damit keinen impliziten move-ctor mehr!!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      selbst wenn er &#252;ber x Basisklassen von MoveOnly erbt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="clanbomber"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576378616851" ID="ID_1283591083" MODIFIED="1576379534177" TEXT="Frage-2 : warum?">
-<icon BUILTIN="flag-pink"/>
+</node>
+<node COLOR="#435e98" CREATED="1576378616851" ID="ID_1283591083" MODIFIED="1576413685202" TEXT="Frage-2 : warum?">
+<icon BUILTIN="help"/>
+<node CREATED="1576410342653" ID="ID_1010651919" MODIFIED="1576413594966" TEXT="weil der betr. move-Ctor nicht (implizit) definiert ist">
+<arrowlink COLOR="#4963d8" DESTINATION="ID_1999847041" ENDARROW="Default" ENDINCLINATION="-4316;0;" ID="Arrow_ID_809724531" STARTARROW="None" STARTINCLINATION="-6312;349;"/>
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 </node>
@@ -50929,6 +50951,123 @@
 <node CREATED="1512179201831" ID="ID_1577563892" MODIFIED="1557498707240" TEXT="t&#xfc;ckischer Fehler">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1576410376184" ID="ID_1999847041" MODIFIED="1576413594967" TEXT="C++: Regeln f&#xfc;r implizite Ctor">
+<linktarget COLOR="#4963d8" DESTINATION="ID_1999847041" ENDARROW="Default" ENDINCLINATION="-4316;0;" ID="Arrow_ID_809724531" SOURCE="ID_1010651919" STARTARROW="None" STARTINCLINATION="-6312;349;"/>
+<node COLOR="#435e98" CREATED="1576411524771" ID="ID_1113045308" LINK="https://stackoverflow.com/a/13345578" MODIFIED="1576411545061" TEXT="Stackoverflow">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1576410536554" ID="ID_283720267" MODIFIED="1576410686060">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      werden u.U sillschweigend <b>nicht</b>&#160;generiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wenn bestimmte Vorraussetzungen <i>nicht erf&#252;llt</i>&#160;sind, dann unterbleibt das automatische Injizieren eines generierten Konstruktors. Die Klasse verh&#228;lt sich dann so, als w&#228;re die btr. Definition nicht gegeben...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1576410705370" ID="ID_1306160146" MODIFIED="1576410795799" TEXT="t&#xfc;ckisch: ggfs erwartetes implizites Verhalten findet nicht statt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. Member-Init kann unterbleiben (bei elementaren Typen, wenn die Klasse damit ein POD wird).
+    </p>
+    <p>
+      Und noch h&#228;ufiger: wir schwenken von Move-Konstruktion auf Copy-Konstruktion um
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1576410798222" ID="ID_589275948" MODIFIED="1576410813888" TEXT="Abhilfe: was wichtig ist, stets explizit definieren"/>
+<node CREATED="1576412962086" ID="ID_714316723" MODIFIED="1576412969679" TEXT="Tip: Fehler provozieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1576412971076" ID="ID_310988477" MODIFIED="1576412980494" TEXT="indem man explizit mal aufruft, was man erwartet"/>
+<node CREATED="1576412981491" ID="ID_1451048709" MODIFIED="1576413215568" TEXT="Template-Traces lesen lernen....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      error: use of deleted function Derived::Derived(const Derived &amp;)
+    </p>
+    <p>
+      note: Derived::Derived(const Derived &amp;)&#160;is implicitly deleted because the default definition would be ill-formed:
+    </p>
+    <p>
+      ...und dann kommt der Fehler, der passieren <b>w&#252;rde</b>....
+    </p>
+    <p>
+      error: use of deleted function Base::Base(const Base&amp;)
+    </p>
+    <p>
+      note: Base::Base(const Base&amp;)&#160;&#160;is implicitly deleted because the default definition would be ill-formed:
+    </p>
+    <p>
+      error: use of deleted function SomeMember::SomeMember(const SomeMember &amp;)
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      ...
+    </p>
+    <p>
+      ...
+    </p>
+    <p>
+      ...
+    </p>
+    <p>
+      ...
+    </p>
+    <p>
+      ...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1576413219987" ID="ID_601627408" MODIFIED="1576413226208" TEXT="der Compiler ist Dein Froind"/>
+</node>
+</node>
+</node>
+<node CREATED="1576411548659" ID="ID_1088124413" MODIFIED="1576411553075" TEXT="default-ctor">
+<node CREATED="1576411555738" ID="ID_810441855" MODIFIED="1576411577563" TEXT="nicht wenn irgend ein Member inline initialisiert wird!"/>
+</node>
+<node CREATED="1576411594053" ID="ID_181876076" MODIFIED="1576411598691" TEXT="copy/move">
+<node CREATED="1576411599805" ID="ID_492402771" MODIFIED="1576411615709" TEXT="nicht wenn auch nur einer der &quot;big five&quot; definiert ist"/>
+<node CREATED="1576411616722" ID="ID_38658612" MODIFIED="1576411634218" TEXT="Achtung: im Besonderen der dtor schaltet damit Auto-Generierun ab"/>
+</node>
+<node CREATED="1576411685336" ID="ID_168955305" MODIFIED="1576411687363" TEXT="move">
+<node CREATED="1576411688040" ID="ID_430174340" MODIFIED="1576411707490" TEXT="wenn der generierte move-Code irgendwo einen Fehler produzieren w&#xfc;rde"/>
+<node CREATED="1576411708150" ID="ID_728246628" MODIFIED="1576411719224" TEXT="das kann mehrere Ebenen tief rekursiv der Fall sein"/>
+<node CREATED="1576411733367" ID="ID_1365339586" MODIFIED="1576411734752" TEXT="Tips">
+<node CREATED="1576411735874" ID="ID_240070307" MODIFIED="1576411738544" TEXT="Referenzen"/>
+<node CREATED="1576411739241" ID="ID_1459661901" MODIFIED="1576411778582" TEXT="Member/Basisklassen bei denen ebenfalls die implizite Generierung unterbleibt"/>
+<node CREATED="1576411779540" ID="ID_816697044" MODIFIED="1576411801603" TEXT="ein nicht verf&#xfc;gbarer/aufrufbarer dtor (wegen move!)"/>
+<node CREATED="1576411803728" ID="ID_1798497956" MODIFIED="1576411812841" TEXT="Variant-Typen (unions)"/>
 </node>
 </node>
 </node>
