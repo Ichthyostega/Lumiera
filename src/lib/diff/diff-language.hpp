@@ -270,6 +270,8 @@ namespace diff{
    *          target type `TAR` (1st template arg)
    * @warning the actual language remains unspecified;
    *          it is picked from the visible context.
+   * @see tree-diff-application.hpp
+   * @see list-diff-application.hpp
    */
   template<class TAR, typename SEL =void>
   class DiffApplicationStrategy;
@@ -307,6 +309,7 @@ namespace diff{
           target_.initDiffApplication();
           for ( ; diff; ++diff )
             diff->applyTo(target_);
+          target_.completeDiffApplication();
         }
     };
   

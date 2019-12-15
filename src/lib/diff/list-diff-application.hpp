@@ -171,6 +171,17 @@ namespace diff{
           seq_.reserve (orig_.size() * 120 / 100);    // heuristics for storage pre-allocation
           pos_ = orig_.begin();
         }
+      
+      void
+      completeDiffApplication()
+        {
+          if (not end_of_target())
+            throw error::State(_Fmt("Not all source data consumed after diff application. "
+                                    "Element %s waiting to be consumed") % *pos_
+                              , LERR_(DIFF_STRUCTURE));
+          // discard storage
+          orig_.clear();
+        }
     };
   
   

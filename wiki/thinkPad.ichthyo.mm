@@ -36283,12 +36283,38 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576416522053" ID="ID_910911447" MODIFIED="1576416574835" TEXT="listener wird nicht getriggert">
+<linktarget COLOR="#e03f68" DESTINATION="ID_910911447" ENDARROW="Default" ENDINCLINATION="-217;7;" ID="Arrow_ID_929225071" SOURCE="ID_159550911" STARTARROW="None" STARTINCLINATION="-2;-97;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1576416597927" ID="ID_805984773" MODIFIED="1576416619356" TEXT="ctor vom top-Level nicht aufgerufen"/>
+<node CREATED="1576416620136" ID="ID_1598925580" MODIFIED="1576416632057" TEXT="denn der top-Level-TreeMutator lebt weiter"/>
+<node CREATED="1576416632790" ID="ID_141285194" MODIFIED="1576416640381" TEXT="...solange der DiffApplikator lebt"/>
+<node CREATED="1576416641269" ID="ID_605158809" MODIFIED="1576416645584" TEXT="ist das gut so?">
+<node CREATED="1576416647561" ID="ID_486491592" MODIFIED="1576416658877" TEXT="viele Tests verwenden den Applikator mehrfach"/>
+<node CREATED="1576416659587" ID="ID_791956106" MODIFIED="1576416715929" TEXT="nicht jedoch die produktive Verwendung in ctrl::Nexus::change (ID, MutationMessage&amp;&amp; diff)">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1576416749566" ID="ID_1371891888" MODIFIED="1576417191286" TEXT="das k&#xf6;nnte sp&#xe4;ter auch ein Ansatzpunkt f&#xfc;r Caching sein">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1576417156080" ID="ID_1679161356" MODIFIED="1576417199243" TEXT="aber: jede neue Anwendung konstruiert einen neuen TreeMutator">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576417208152" ID="ID_974220547" MODIFIED="1576417222583" TEXT="also braucht die Diff-Anwendung einen Abschlu&#xdf;">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189140651" ID="ID_835328626" MODIFIED="1576360868184" TEXT="Test">
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189161697" ID="ID_1786250967" MODIFIED="1576189178606" TEXT="Struktur&#xe4;nderungen triggern Listener">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576416511260" ID="ID_159550911" MODIFIED="1576416585202" TEXT="tut noch nicht...">
+<arrowlink COLOR="#e03f68" DESTINATION="ID_910911447" ENDARROW="Default" ENDINCLINATION="-217;7;" ID="Arrow_ID_929225071" STARTARROW="None" STARTINCLINATION="-2;-97;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189172445" ID="ID_1803915875" MODIFIED="1576189177766" TEXT="andere &#xc4;nderungen triggern nicht">
 <icon BUILTIN="flag-yellow"/>

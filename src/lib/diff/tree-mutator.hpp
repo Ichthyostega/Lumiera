@@ -84,6 +84,7 @@
  ** @see tree-mutator-test.cpp
  ** @see tree-mutator-binding-test.cpp
  ** @see [usage for tree diff application](\ref tree-diff-application.hpp)
+ **      especially `DiffApplicationStrategy<TAR,  enable_if<TreeDiffTraits<TAR>>>` defined there 
  ** @see diff-language.hpp
  ** @see DiffDetector
  ** 

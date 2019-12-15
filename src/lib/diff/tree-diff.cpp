@@ -118,7 +118,7 @@ namespace diff{
       throw error::State(_Fmt("Diff application floundered in nested scope %s; "
                               "unexpected extra elements found when diff "
                               "should have settled everything.") % idi.getSym()
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
+                        , LUMIERA_ERROR_DIFF_STRUCTURE);
   }
   
   void
@@ -127,7 +127,7 @@ namespace diff{
     if (0 == scopeManger_->depth())
       throw error::Fatal(_Fmt("Diff application floundered after leaving scope %s; "
                               "unbalanced nested scopes, diff attempts to pop root.") % idi.getSym()
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
+                        , LUMIERA_ERROR_DIFF_STRUCTURE);
   }
   
   

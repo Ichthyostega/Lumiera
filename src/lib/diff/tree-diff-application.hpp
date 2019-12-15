@@ -271,6 +271,7 @@ namespace diff{
    * @throws  _unspecified errors_ when delegated operations fail.
    * @see TreeDiffInterpreter explanation of the verbs
    * @see DiffComplexApplication_test demonstration of usage
+   * @see [implementation of the binding functions](\ref tree-diff.cpp)
    */
   class TreeDiffMutatorBinding
     : public TreeDiffInterpreter
@@ -383,6 +384,18 @@ namespace diff{
           TreeDiffMutatorBinding::scopeManger_ = &scopes_;
           TreeDiffMutatorBinding::treeMutator_ = &scopes_.currentScope();
           REQUIRE (this->treeMutator_);
+        }
+      
+      void
+      completeDiffApplication()
+        {
+          if (not treeMutator_->completeScope())
+            throw error::State(_Fmt("Unsettled content remains after diff application. "
+                                    "Top level == %s") % subject_
+                              , LERR_(DIFF_STRUCTURE));
+          // discard storage
+          treeMutator_ = nullptr;
+          scopes_.clear();
         }
     };
   
