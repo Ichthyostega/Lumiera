@@ -32,14 +32,15 @@
  ** - top level is a root record
  ** - a record has a type, a collection of named attributes, and a collection of children
  ** - all elements within a record are conceived as elements in ordered sequence, with the
- **   attributes first, followed by the children. The end of the attribute scope is given
- **   by the the appearance of the first unnamed entry, i.e the first child.
+ **   attributes first, followed by the children. The end of the attribute scope is marked
+ **   by the the first emerging unnamed entry, i.e the first child.
  ** - the individual elements in these sequences have a distinguishable identity and
- **   optionally a name (a named element is an attribute).
+ **   optionally a name (and a named element counts as attribute).
  ** - moreover, the elements carry a typed payload data element, which possibly is
- **   a \em nested record ("nested child object").
- ** - the typing of the elements is outside the scope of the diff language; it is
- **   assumed that the receiver knows what types to expect and how to deal with them.
+ **   a \em nested record ("nested child object"). In case of value elements,
+ **   however, the element itself is identified with this value payload.
+ ** - the typing of the elements is outside the scope of the diff language; it is assumed
+ **   that the receiver of the diff knows what types to expect and how to deal with them.
  ** - there is a notion of changing or mutating the data content, while retaining
  **   the identity of the element. Of course this requires the data content to be
  **   assignable, which makes content mutation an optional feature.
@@ -53,7 +54,7 @@
  **     a diff sequence to it. We provide a standard implementation of the
  **     DiffApplicator + DiffApplicationStrategy, based on a _custimisable intermediary,_
  **     the TreeMutator. This allows to apply a given tree to any suitably compatible
- **     target data structure; especially there is a preconfigured setup for our
+ **     target data structure; notably there is a preconfigured setup for our
  **     _"generic tree representation"_, diff::Record<GenNode>.
  ** 
  ** @see diff-language.cpp

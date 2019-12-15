@@ -63,7 +63,12 @@ return: 0
 END
 
 
-TEST "Diff: reshape a tree data structure through diff" DiffTreeApplication_test <<END
+TEST "Diff: reshape a tree data structure through diff (1)" DiffTreeApplicationSimple_test <<END
+return: 0
+END
+
+
+TEST "Diff: reshape a tree data structure through diff (2)" DiffTreeApplication_test <<END
 return: 0
 END
 
@@ -123,6 +128,11 @@ END
 
 
 TEST "Diff: accept and ignore arbitrary diff" DiffIgnoreChanges_test <<END
+return: 0
+END
+
+
+TEST "Diff: listener for structural changes" DiffTreeMutationListener_test <<END
 return: 0
 END
 

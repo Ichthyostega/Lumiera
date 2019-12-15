@@ -19721,8 +19721,8 @@
 </node>
 <node CREATED="1575050510878" ID="ID_646844971" MODIFIED="1575577381370" TEXT="Diff bietet automatische Benachrichtigung bei Struktur&#xe4;nderung">
 <arrowlink COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_498364014" STARTARROW="None" STARTINCLINATION="2976;130;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576168044826" ID="ID_1758473434" MODIFIED="1576168051635" TEXT="#1206 diff structure change listener">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1576168044826" ID="ID_1758473434" MODIFIED="1576441607969" TEXT="#1206 diff structure change listener">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -21790,9 +21790,9 @@
 <arrowlink COLOR="#2e1d90" DESTINATION="ID_274573678" ENDARROW="Default" ENDINCLINATION="-1890;235;" ID="Arrow_ID_1905963364" STARTARROW="None" STARTINCLINATION="532;69;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575580660604" ID="ID_932505699" MODIFIED="1575580726332" TEXT="Change-Listener auf dem Diff-System notwendig">
+<node COLOR="#338800" CREATED="1575580660604" ID="ID_932505699" MODIFIED="1576441760509" TEXT="Change-Listener auf dem Diff-System notwendig">
 <arrowlink COLOR="#4d81bf" DESTINATION="ID_350484232" ENDARROW="Default" ENDINCLINATION="-77;-68;" ID="Arrow_ID_658076840" STARTARROW="None" STARTINCLINATION="-201;12;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1575576971732" ID="ID_673183519" MODIFIED="1575670587273" TEXT="Mechanismus zum Umordnen">
 <arrowlink COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_624713040" STARTARROW="None" STARTINCLINATION="706;62;"/>
@@ -21820,8 +21820,8 @@
 <node CREATED="1575050510878" ID="ID_350484232" MODIFIED="1575580714937" TEXT="Basis ist vom Diff-System zu leisten">
 <arrowlink COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_1277214644" STARTARROW="None" STARTINCLINATION="2973;244;"/>
 <linktarget COLOR="#4d81bf" DESTINATION="ID_350484232" ENDARROW="Default" ENDINCLINATION="-77;-68;" ID="Arrow_ID_658076840" SOURCE="ID_932505699" STARTARROW="None" STARTINCLINATION="-201;12;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576168044826" ID="ID_1912653386" MODIFIED="1576168051635" TEXT="#1206 diff structure change listener">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1576168044826" ID="ID_1912653386" MODIFIED="1576441631231" TEXT="#1206 diff structure change listener">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -35926,8 +35926,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573835265349" ID="ID_352943196" MODIFIED="1573835276049" TEXT="Diff-Anwendung einbinden">
 <icon BUILTIN="pencil"/>
-<node CREATED="1573835763482" ID="ID_1220310042" MODIFIED="1573837704113" TEXT="Problem: Slave-Collection">
-<arrowlink COLOR="#d67771" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-53;-3;" ID="Arrow_ID_115955006" STARTARROW="None" STARTINCLINATION="38;141;"/>
+<node CREATED="1573835763482" ID="ID_1220310042" MODIFIED="1576441741737" TEXT="Problem: Slave-Collection">
+<arrowlink COLOR="#519b84" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-67;7;" ID="Arrow_ID_115955006" STARTARROW="None" STARTINCLINATION="71;200;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1573835793926" ID="ID_13734498" MODIFIED="1573835796913" TEXT="Situation">
 <node CREATED="1573835798165" ID="ID_71062099" MODIFIED="1573835827477" TEXT="Diff-System verwaltet eine Master-Collection (Node-Children)"/>
@@ -35961,21 +35961,57 @@
 <linktarget COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_498364014" SOURCE="ID_646844971" STARTARROW="None" STARTINCLINATION="2976;130;"/>
 <linktarget COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_1277214644" SOURCE="ID_350484232" STARTARROW="None" STARTINCLINATION="2973;244;"/>
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576168044826" ID="ID_230800629" MODIFIED="1576168051635" TEXT="#1206 diff structure change listener">
-<icon BUILTIN="flag-yellow"/>
-</node>
 <node CREATED="1573837829595" ID="ID_613778773" MODIFIED="1573837833320" TEXT="immer wenn...">
 <node CREATED="1573837834482" ID="ID_980057100" MODIFIED="1573837839549" TEXT="ein Element hinzugekommen ist"/>
 <node CREATED="1573837840543" ID="ID_749166782" MODIFIED="1573837845620" TEXT="ein Element entfernt wurde"/>
 <node CREATED="1573837847552" ID="ID_1255347678" MODIFIED="1573837852995" TEXT="Element umgeordnet wurden"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189076819" ID="ID_817894648" MODIFIED="1576189085494" TEXT="Implementierung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1576441498133" ID="ID_1914385407" MODIFIED="1576441705766">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      brauche Detektor f&#252;r <i>structural change</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#2340b6" DESTINATION="ID_1914385407" ENDARROW="Default" ENDINCLINATION="-316;5;" ID="Arrow_ID_960988463" SOURCE="ID_727500820" STARTARROW="None" STARTINCLINATION="284;51;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1576168044826" ID="ID_230800629" MODIFIED="1576441618407" TEXT="#1206 diff structure change listener">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1576360824678" ID="ID_1466401339" MODIFIED="1576441463530" TEXT="API definieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1576360879043" ID="ID_1998526926" MODIFIED="1576361042423" TEXT="Entscheidung: allgemein in TreeMutator-DSL">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...man k&#246;nnte auch auf die Idee kommen, es nur in das Collection-Binding einzuh&#228;ngen.
+    </p>
+    <p>
+      Das w&#228;re aber zu kurz gedacht; auch wenn im Moment dieses die einzige Implementierung ist, die den Listener tats&#228;chlich triggern kann, verbietet uns niemand in der Zukunft, noch eine anderes TreeMutator-Binding zu erfinden. Hinzu kommt, da&#223; ein Listener zus&#228;tzliche Storage und zus&#228;tzlichen Aufwand bedeutet, und deshalb besser als eigener &#187;onion layer&#171; implementiert wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1576361062012" ID="ID_591681960" MODIFIED="1576441459874" TEXT="Name: onSeqChange(lambda)">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1576189076819" FOLDED="true" ID="ID_817894648" MODIFIED="1576441575820" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1576189086866" ID="ID_99179892" MODIFIED="1576189103864" TEXT="Ansatzpunkt: TreeMutator">
 <icon BUILTIN="idea"/>
 <node CREATED="1576189115934" ID="ID_1929426370" MODIFIED="1576189130272" TEXT="vermutlich direkt in&apos;s collection-binding"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189131908" ID="ID_1843660348" MODIFIED="1576189186952" TEXT="brauche Testfall">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1576189131908" ID="ID_1843660348" MODIFIED="1576441468375" TEXT="brauche Testfall">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1576189189125" FOLDED="true" ID="ID_791562073" MODIFIED="1576282487252" TEXT="huch... brauche einfachen Diff-Test">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-oh"/>
@@ -35989,8 +36025,7 @@
       und zwar etwas <i>wirklich Einfaches</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1576281982520" ID="ID_1973953856" MODIFIED="1576282009657" TEXT="und nicht etwas Elementares">
 <richcontent TYPE="NOTE"><html>
@@ -36002,8 +36037,7 @@
       denn &quot;elementar&quot; bedeutet in diesem Fall, es wird ziemlich technisch und komplex
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1576199505619" FOLDED="true" ID="ID_1589343634" MODIFIED="1576281940111" TEXT="erweitern auf einfaches Vector-Binding">
@@ -36033,8 +36067,7 @@
       Jetzt gibt es also echte ContainerTraits, und damit ist der Aufbau zukunftsfest.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 <node CREATED="1576281616730" ID="ID_1695910920" MODIFIED="1576281693124" TEXT="gel&#xf6;st durch Einf&#xfc;hren von ContainerTraits">
@@ -36048,36 +36081,13 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576359839479" ID="ID_1358290407" MODIFIED="1576359862244" TEXT="direkt an die Test-Klasse binden, incl Listener">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1576359839479" ID="ID_1358290407" MODIFIED="1576441467264" TEXT="direkt an die Test-Klasse binden, incl Listener">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576360824678" ID="ID_1466401339" MODIFIED="1576360830232" TEXT="API definieren">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1576360879043" ID="ID_1998526926" MODIFIED="1576361042423" TEXT="Entscheidung: allgemein in TreeMutator-DSL">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      ...man k&#246;nnte auch auf die Idee kommen, es nur in das Collection-Binding einzuh&#228;ngen.
-    </p>
-    <p>
-      Das w&#228;re aber zu kurz gedacht; auch wenn im Moment dieses die einzige Implementierung ist, die den Listener tats&#228;chlich triggern kann, verbietet uns niemand in der Zukunft, noch eine anderes TreeMutator-Binding zu erfinden. Hinzu kommt, da&#223; ein Listener zus&#228;tzliche Storage und zus&#228;tzlichen Aufwand bedeutet, und deshalb besser als eigener &#187;onion layer&#171; implementiert wird
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="yes"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576361062012" ID="ID_591681960" MODIFIED="1576361090375" TEXT="Name: onStructuralChange(lambda)">
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576361096645" ID="ID_643127461" MODIFIED="1576361111199" TEXT="Change-Listener-Layer implementieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1576361096645" ID="ID_643127461" MODIFIED="1576441434562" TEXT="Change-Listener-Layer implementieren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1576366663548" ID="ID_656541265" MODIFIED="1576366682488" TEXT="Arbeitsmuster definieren">
 <icon BUILTIN="yes"/>
 <node CREATED="1576366684169" ID="ID_110323698" MODIFIED="1576366703873" TEXT="TreeMutator is disposable one-way">
@@ -36112,8 +36122,7 @@
       Dann wir der Rest mit dem Mutator zusammen weggeworfen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1576367169888" ID="ID_1591005930" MODIFIED="1576367275787">
 <richcontent TYPE="NODE"><html>
@@ -36125,8 +36134,7 @@
       um <i>das</i>&#160;zu unterbinden, m&#252;&#223;ten alle Binding-Layer kollaborieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36142,8 +36150,7 @@
       dieses aber h&#228;tte auch die notwendigen Informationen, um diese Situation zu erkennen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1576367369197" ID="ID_1086320549" MODIFIED="1576367380152" TEXT="HA! daran hab ich schon gedacht">
 <icon BUILTIN="idea"/>
@@ -36160,8 +36167,7 @@
       d.h. es pr&#252;ft, ob keine Elemente im Arbeitspuffer &#252;brig sind
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576367510259" ID="ID_1290532508" MODIFIED="1576367530122" TEXT="leider bleibt top-level hier au&#xdf;en vor">
 <icon BUILTIN="messagebox_warning"/>
@@ -36213,8 +36219,7 @@
       Und m&#252;hsam f&#252;r den Leser ist er so oder so... dann also lieber alles ausschreiben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1576378343418" ID="ID_1269344650" MODIFIED="1576413734213" TEXT="angeblich Aufruf gesperrter Copy-Ctorn">
@@ -36241,8 +36246,7 @@
       <i>und damit wiederholt sich das Ketten-Argument bis zur Basisklasse runter!!!</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1576378488388" ID="ID_467081251" MODIFIED="1576378531986" TEXT="schlie&#xdf;lich lande ich beim class TreeMutator  : util::MoveOnly"/>
@@ -36268,8 +36272,7 @@
       selbst wenn er &#252;ber x Basisklassen von MoveOnly erbt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
@@ -36283,8 +36286,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576416522053" ID="ID_910911447" MODIFIED="1576416574835" TEXT="listener wird nicht getriggert">
-<linktarget COLOR="#e03f68" DESTINATION="ID_910911447" ENDARROW="Default" ENDINCLINATION="-217;7;" ID="Arrow_ID_929225071" SOURCE="ID_159550911" STARTARROW="None" STARTINCLINATION="-2;-97;"/>
+<node COLOR="#338800" CREATED="1576416522053" ID="ID_910911447" MODIFIED="1576418727445" TEXT="listener wird nicht getriggert">
+<linktarget COLOR="#3fe09e" DESTINATION="ID_910911447" ENDARROW="Default" ENDINCLINATION="-217;7;" ID="Arrow_ID_929225071" SOURCE="ID_159550911" STARTARROW="None" STARTINCLINATION="-2;-97;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1576416597927" ID="ID_805984773" MODIFIED="1576416619356" TEXT="ctor vom top-Level nicht aufgerufen"/>
 <node CREATED="1576416620136" ID="ID_1598925580" MODIFIED="1576416632057" TEXT="denn der top-Level-TreeMutator lebt weiter"/>
@@ -36301,23 +36304,63 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576417208152" ID="ID_974220547" MODIFIED="1576417222583" TEXT="also braucht die Diff-Anwendung einen Abschlu&#xdf;">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1576417208152" ID="ID_974220547" MODIFIED="1576418711474" TEXT="also braucht die Diff-Anwendung einen Abschlu&#xdf;">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189140651" ID="ID_835328626" MODIFIED="1576360868184" TEXT="Test">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189161697" ID="ID_1786250967" MODIFIED="1576189178606" TEXT="Struktur&#xe4;nderungen triggern Listener">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576416511260" ID="ID_159550911" MODIFIED="1576416585202" TEXT="tut noch nicht...">
-<arrowlink COLOR="#e03f68" DESTINATION="ID_910911447" ENDARROW="Default" ENDINCLINATION="-217;7;" ID="Arrow_ID_929225071" STARTARROW="None" STARTINCLINATION="-2;-97;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1576189140651" FOLDED="true" ID="ID_835328626" MODIFIED="1576441578044" TEXT="Test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1576189161697" ID="ID_1786250967" MODIFIED="1576441422008" TEXT="Struktur&#xe4;nderungen triggern Listener">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1576416511260" ID="ID_159550911" MODIFIED="1576418741174" TEXT="tut noch nicht...">
+<arrowlink COLOR="#3fe09e" DESTINATION="ID_910911447" ENDARROW="Default" ENDINCLINATION="-217;7;" ID="Arrow_ID_929225071" STARTARROW="None" STARTINCLINATION="-2;-97;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1576419878367" ID="ID_1026985691" MODIFIED="1576441431851" TEXT="sonstiger Testfall l&#xe4;uft nicht">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1576419891302" ID="ID_1789182359" MODIFIED="1576441417632" TEXT="mein spezielles SET-Val-Konstrukt scheitert">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1576419910287" ID="ID_1413678907" MODIFIED="1576419939398" TEXT="default-Binding f&#xfc;r collection definiert Matcher">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      matchElement([](GenNode const&amp; spec, ELM const&amp; elm)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return spec.matches(elm);
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;})
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1576419949229" ID="ID_1686698811" MODIFIED="1576419955465" TEXT="spec.matches(elm)"/>
+<node CREATED="1576419966419" ID="ID_394542951" MODIFIED="1576419977223" TEXT="GenNode::match(string)"/>
+<node CREATED="1576419982536" ID="ID_1434821598" MODIFIED="1576419998348" TEXT="data.matchText">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1576420000406" ID="ID_241418574" MODIFIED="1576420012017" TEXT="d.h. er matcht gegen den Content"/>
+<node CREATED="1576420021236" ID="ID_1847609894" MODIFIED="1576420035463" TEXT="und nicht gegen die ID, wie ich geglaubt habe">
+<icon BUILTIN="stop-sign"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576189172445" ID="ID_1803915875" MODIFIED="1576189177766" TEXT="andere &#xc4;nderungen triggern nicht">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1576420037817" ID="ID_1216654521" MODIFIED="1576441407046" TEXT="brauche wohl speziellen Matcher">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1576189172445" ID="ID_1803915875" MODIFIED="1576441423630" TEXT="andere &#xc4;nderungen triggern nicht">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -36336,9 +36379,10 @@
 <node CREATED="1573837514565" ID="ID_1974559184" MODIFIED="1573837528817" TEXT="onChangeSubtree">
 <icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573837592850" ID="ID_727500820" MODIFIED="1573837704113" TEXT="onSeqChange">
-<linktarget COLOR="#d67771" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-53;-3;" ID="Arrow_ID_115955006" SOURCE="ID_1220310042" STARTARROW="None" STARTINCLINATION="38;141;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1573837592850" ID="ID_727500820" MODIFIED="1576441741737" TEXT="onSeqChange">
+<arrowlink COLOR="#2340b6" DESTINATION="ID_1914385407" ENDARROW="Default" ENDINCLINATION="-316;5;" ID="Arrow_ID_960988463" STARTARROW="None" STARTINCLINATION="284;51;"/>
+<linktarget COLOR="#519b84" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-67;7;" ID="Arrow_ID_115955006" SOURCE="ID_1220310042" STARTARROW="None" STARTINCLINATION="71;200;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

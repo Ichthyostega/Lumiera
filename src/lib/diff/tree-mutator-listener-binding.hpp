@@ -32,7 +32,7 @@
  ** adaptation is done by combining various building blocks. This header defines
  ** a special decorator to be layered on top of such a TreeMutator binding; it will
  ** not interfere with the received diff, but detect relevant changes and invoke the
- ** bound functor after the triggering diff has been applied completely.
+ ** functor after the triggering diff has been applied completely to the bound scope.
  ** 
  ** @note the header tree-mutator-listener-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp -- no need to
@@ -67,6 +67,8 @@ namespace diff{
      * API operation intercepted here.
      * @note TreeMutator is a disposable one-way object;
      *       the triggering mechanism directly relies on that.
+     *       The listener is invoked, whenever a scope is complete,
+     *       including processing of any nested scopes.
      */
     template<class PAR, typename LIS>
     class Detector4StructuralChanges
@@ -109,7 +111,7 @@ namespace diff{
     template<class PAR>
     template<typename LIS>
     inline auto
-    Builder<PAR>::onStructuralChange (LIS changeListener)
+    Builder<PAR>::onSeqChange (LIS changeListener)
     {
       ASSERT_VALID_SIGNATURE (LIS, void(void))
       

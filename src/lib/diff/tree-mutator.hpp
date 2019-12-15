@@ -459,10 +459,10 @@ namespace diff{
          * @remark in theory, one could also drop contents indirectly, by sending only
          *         part of the necessary PICK verbs (or using AFTER(...)). However,
          *         such a diff is formally not prohibited, and will indeed be detected as
-         *         error in many but not all cases, in ChildCollectionMutator::completeScope()
+         *         error when leaving a scope, in ChildCollectionMutator::completeScope()
          */
         template<typename LIS>
-        auto onStructuralChange (LIS changeListener);
+        auto onSeqChange (LIS changeListener);
       };
     
   }//(END) Mutator-Builder...
