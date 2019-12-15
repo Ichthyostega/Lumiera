@@ -128,7 +128,8 @@ namespace diff{
     inline Builder<ObjectTypeHandler<MUT>>
     filterObjectTypeAttribute (Rec::Mutator& targetTree, Builder<MUT>&& chain)
     {
-      return ObjectTypeHandler<MUT> {targetTree, move(chain)};
+      using ObTyHa = ObjectTypeHandler<MUT>;
+      return Builder<ObTyHa>{ObTyHa {targetTree, move(chain)}};
     }
     
     

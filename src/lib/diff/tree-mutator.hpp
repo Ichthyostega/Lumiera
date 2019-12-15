@@ -316,6 +316,7 @@ namespace diff{
     struct Builder
       : PAR
       {
+        explicit
         Builder(PAR&& par)
           : PAR{forward<PAR> (par)}
           { }
@@ -469,7 +470,7 @@ namespace diff{
   inline Builder<TreeMutator>
   TreeMutator::build ()
   {
-    return TreeMutator();
+    return Builder<TreeMutator>{TreeMutator()};
   }
   
   
