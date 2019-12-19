@@ -89,6 +89,12 @@ namespace timeline {
     this->add (rootTrackHead);
   }
   
+  void
+  PatchbayWidget::disable()
+  {
+    this->remove();
+  }
+  
   
   
 }}// namespace stage::timeline

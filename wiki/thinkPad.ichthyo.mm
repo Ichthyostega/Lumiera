@@ -18532,7 +18532,7 @@
 </richcontent>
 <icon BUILTIN="help"/>
 </node>
-<node COLOR="#435e98" CREATED="1573314915266" FOLDED="true" ID="ID_1550703494" MODIFIED="1575667987460" TEXT="Quer-Beweglichkeit zwischen Typen">
+<node COLOR="#435e98" CREATED="1573314915266" FOLDED="true" ID="ID_1550703494" MODIFIED="1576797030290" TEXT="Quer-Beweglichkeit zwischen Typen">
 <arrowlink COLOR="#b80305" DESTINATION="ID_912776786" ENDARROW="Default" ENDINCLINATION="-582;30;" ID="Arrow_ID_739783685" STARTARROW="None" STARTINCLINATION="212;897;"/>
 <linktarget COLOR="#61a5df" DESTINATION="ID_1550703494" ENDARROW="Default" ENDINCLINATION="-180;0;" ID="Arrow_ID_1915156143" SOURCE="ID_1631103689" STARTARROW="None" STARTINCLINATION="-615;17;"/>
 <icon BUILTIN="stop-sign"/>
@@ -18994,7 +18994,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1575223154399" ID="ID_1681994818" MODIFIED="1575223169210" TEXT="also wird der DisplayFrame ausgebaut">
+<node CREATED="1575223154399" ID="ID_1681994818" MODIFIED="1576705095215" TEXT="also wird der DisplayFrame ausgebaut">
+<linktarget COLOR="#3c62b6" DESTINATION="ID_1681994818" ENDARROW="Default" ENDINCLINATION="-1457;26;" ID="Arrow_ID_1666541151" SOURCE="ID_665871359" STARTARROW="None" STARTINCLINATION="898;63;"/>
 <node CREATED="1575223172838" ID="ID_1606686104" MODIFIED="1575223181392" TEXT="zum gro&#xdf;en ViewHook">
 <node CREATED="1575223418428" ID="ID_463428688" MODIFIED="1575223429207" TEXT="h&#xe4;lt einen ViewHook&lt;TrackBody&gt;"/>
 <node CREATED="1575223430819" ID="ID_1357751249" MODIFIED="1575223441611" TEXT="h&#xe4;lt einen ViewHook&lt;TrackHeaderWidget&gt;"/>
@@ -19266,6 +19267,19 @@
 <node CREATED="1575580975033" ID="ID_1555659203" MODIFIED="1575580996268" TEXT="d.h. als ein Implementierungsdetail f&#xfc;r einen speziellen Typ"/>
 <node CREATED="1575580999173" ID="ID_1385039665" MODIFIED="1575581013895" TEXT="das ist dann eine dekorierende/delegierende Implementierung"/>
 <node CREATED="1575581015219" ID="ID_1015965713" MODIFIED="1575581026974" TEXT="f&#xfc;r den Widget -&gt; Canvas - Fall"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1949130658" MODIFIED="1576758006669" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
+<linktarget COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" SOURCE="ID_1816490333" STARTARROW="None" STARTINCLINATION="512;51;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576757867075" ID="ID_1947629675" MODIFIED="1576757891150" TEXT="der Themenkomplex &quot;move()&quot; steht isoliert da">
+<icon BUILTIN="idea"/>
+<node CREATED="1576757893399" ID="ID_309464876" MODIFIED="1576757905274" TEXT="eigentlich ein orthogonaler Belang"/>
+<node CREATED="1576757919627" ID="ID_1712747746" MODIFIED="1576757937781" TEXT="tifft nur auf Widgets zu"/>
+<node CREATED="1576757938869" ID="ID_89045363" MODIFIED="1576757947183" TEXT="k&#xf6;nnte man nach innen weg abstrahieren?"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757948912" ID="ID_441928116" MODIFIED="1576757992298" TEXT="Idee: Spezialisierung f&#xfc;r Positioned&lt;Widget&gt;">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1575057172259" ID="ID_1193961919" MODIFIED="1575670553256" TEXT="Umordnen">
@@ -21537,6 +21551,9 @@
 </html>
 </richcontent>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576710302057" ID="ID_1083674973" MODIFIED="1576710309540" TEXT="#1198 clarify removing of widgets in timeline">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node CREATED="1563468083453" ID="ID_988508640" MODIFIED="1576282358068" TEXT="Interface Gtk::Container ist nur f&#xfc;r single-Child">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -21784,6 +21801,8 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705892034" ID="ID_1125539403" MODIFIED="1576706115778" TEXT="(um)Bau f&#xfc;r Struktur-&#xc4;nderungen">
+<icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575579955362" ID="ID_931838684" MODIFIED="1575670594063" STYLE="fork" TEXT="strukturell-generische Implementierung">
 <icon BUILTIN="pencil"/>
 <node COLOR="#435e98" CREATED="1575579987443" ID="ID_1007243980" MODIFIED="1575580655105" TEXT="Analyse allgemein">
@@ -21798,8 +21817,219 @@
 <arrowlink COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_624713040" STARTARROW="None" STARTINCLINATION="706;62;"/>
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1816490333" MODIFIED="1576758006669" TEXT="Thema &#xbb;Widget-Position&#xab;">
+<arrowlink COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" STARTARROW="None" STARTINCLINATION="512;51;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576758030604" HGAP="54" ID="ID_1869378616" MODIFIED="1576758051786" TEXT="entsprechende Erweiterung f&#xfc;r delegating-ViewHook notwendig" VSHIFT="26">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1575050224708" ID="ID_1911321905" MODIFIED="1575050229199" TEXT="Trigger">
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705136916" ID="ID_576958386" MODIFIED="1576705146208" TEXT="Restrukturierung Timeline/Tracks/view">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576705150754" ID="ID_584153731" MODIFIED="1576705964609" TEXT="bestehendes Design mu&#xdf; &quot;justiert&quot; werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....sonst wird es zur Sackgasse.
+    </p>
+    <p>
+      Die zugrundeliegende Idee war gut, aber ich hab mich in einer <i>cleveren Implementierung</i>&#160;mit einem Lambda-Parameter festgefahren. Zwar brauche ich <i>nicht</i>&#160;die volle Generizit&#228;t und Quer-Beweglichkeit, aber der verallgemeinerte Enwurf f&#252;r ViewHook(ed) ist auch ohne das um L&#228;ngen besser als die bestehende Struktur
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1576705055911" ID="ID_665871359" MODIFIED="1576705095215" TEXT="sinnvolle Teile des geplanten Refactoring">
+<arrowlink COLOR="#3c62b6" DESTINATION="ID_1681994818" ENDARROW="Default" ENDINCLINATION="-1457;26;" ID="Arrow_ID_1666541151" STARTARROW="None" STARTINCLINATION="898;63;"/>
+</node>
+<node CREATED="1576705325443" ID="ID_423600338" MODIFIED="1576705352075" TEXT="Struktur und Bedeutung der Interfaces &#xfc;bernehmen">
+<node CREATED="1576705602597" ID="ID_658097030" MODIFIED="1576705612832" TEXT="ViewHook : verallgemeintertes Display"/>
+<node CREATED="1575223172838" ID="ID_243088075" MODIFIED="1576705835515" TEXT="Display-Frame...">
+<linktarget COLOR="#5983d3" DESTINATION="ID_243088075" ENDARROW="Default" ENDINCLINATION="-97;303;" ID="Arrow_ID_1676257131" SOURCE="ID_1544442721" STARTARROW="None" STARTINCLINATION="290;-167;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1575223418428" ID="ID_410282263" MODIFIED="1576705672399" TEXT="h&#xe4;lt einen ViewHooked&lt;TrackBody&gt;"/>
+<node CREATED="1575223430819" ID="ID_801224548" MODIFIED="1576705676303" TEXT="h&#xe4;lt einen ViewHooked&lt;TrackHeaderWidget&gt;"/>
+<node CREATED="1575223465392" ID="ID_616543749" MODIFIED="1576705680836" TEXT="h&#xe4;lt eine Referenz auf ViewHook&lt;Widget&gt;"/>
+<node CREATED="1576705693529" ID="ID_306131588" MODIFIED="1576705702364" TEXT="delegierende ViewHook-Implementierung">
+<node CREATED="1575223491827" ID="ID_1877460309" MODIFIED="1576705686323" TEXT="implementiert selber ViewHook&lt;Clip&gt;"/>
+<node CREATED="1575223505705" ID="ID_1991875840" MODIFIED="1576705691469" TEXT="implementiert selber ViewHook&lt;Marker&gt;"/>
+</node>
+</node>
+</node>
+<node CREATED="1576705354416" ID="ID_494165942" MODIFIED="1576705377752" TEXT="Interfaces generisch ausdr&#xfc;cken"/>
+<node CREATED="1576705379219" ID="ID_594097888" MODIFIED="1576705393981" TEXT="Verallgemeinern des Konzepts &#xbb;Display-Attachment&#xab;"/>
+<node CREATED="1576705301390" ID="ID_738352208" MODIFIED="1576705323162">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber <b>keine</b>&#160;generische Quer-Beweglichkeit
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705400592" ID="ID_1892542246" MODIFIED="1576705411878" TEXT="top-level ViewHook schaffen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576705652570" ID="ID_551481195" MODIFIED="1576705666257" TEXT="ViewHook&lt;Widget&gt;">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705712654" ID="ID_1745971143" MODIFIED="1576705720810" TEXT="implementieren im TrackCanvas">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705413085" ID="ID_1979905155" MODIFIED="1576705430397" TEXT="Konstruktor / &quot;ein-H&#xe4;kel&quot;-Mchanismus darauf umstellen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576710340808" ID="ID_1326638754" MODIFIED="1576710351854" TEXT="enger verwobene Konstruktoren">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1576710359933" ID="ID_915757567" MODIFIED="1576710379670" TEXT="ViewHooked&lt;TrackBody&gt; braucht ViewHook&lt;TrackBody&gt;"/>
+<node CREATED="1576710359933" ID="ID_1122829974" MODIFIED="1576710422214" TEXT="ViewHooked&lt;TrackHeadWidget&gt; braucht ViewHook&lt;TrackHeadWidget&gt;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576760201752" ID="ID_958849078" MODIFIED="1576760220367" TEXT="Problem: ViewHook-Subinterfaces">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576760226038" ID="ID_1753803962" MODIFIED="1576760241450" TEXT="oh weh... die Quer-Beweglichkeit ist wieder da">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1576760324713" ID="ID_1267786696" MODIFIED="1576760340354" TEXT="einziger Ausweg... Display-Manager wird zum Super-Hook"/>
+</node>
+</node>
+<node CREATED="1576710544415" ID="ID_88564726" MODIFIED="1576710556729" TEXT="zwei F&#xe4;lle zu unterscheiden">
+<icon BUILTIN="idea"/>
+<node CREATED="1576710558354" ID="ID_146653361" MODIFIED="1576710566077" TEXT="top-Level">
+<node CREATED="1576710810240" ID="ID_1493306680" MODIFIED="1576710989724" TEXT="bisher...">
+<node CREATED="1576710991266" ID="ID_544968183" MODIFIED="1576710991266" TEXT="TimelineLayout::installRootTrack(TrackHeadWidget&amp;, TrackBody&amp;)"/>
+<node CREATED="1576710993235" ID="ID_64093228" MODIFIED="1576711013678" TEXT="Abbauen war nicht implementiert"/>
+<node CREATED="1576711169203" ID="ID_1075649932" MODIFIED="1576711179426" TEXT="Move ist hier explizit nicht vorgesehen"/>
+</node>
+<node CREATED="1576713454074" ID="ID_175021708" MODIFIED="1576713514136" TEXT="m&#xfc;&#xdf;te nun die zwei ViewHook-Interfaces pro forma implementieren">
+<node CREATED="1576713516746" ID="ID_908928403" MODIFIED="1576714570369" TEXT="aber eigentlich nur zum einmaligen Gebrauch"/>
+<node CREATED="1576714892102" ID="ID_1235287514" MODIFIED="1576714911362" TEXT="um die Wurzel zu verankern"/>
+<node CREATED="1576714597064" ID="ID_123363250" MODIFIED="1576757177602" STYLE="fork" TEXT="that&apos;s Life?">
+<font NAME="SansSerif" SIZE="12"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1576757179611" ID="ID_857948859" MODIFIED="1576757182790" TEXT="ja">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1576757228532" ID="ID_292264284" MODIFIED="1576757344691" TEXT="es ist eine direkte Konsequenz der Abstraktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar, genauer gesagt, eine Konsequenz der Entscheidung, nicht nur einen ViewHook, sondern ein ViewHooked zu machen. Ich hab die Beziehung in's Strukturelle hinen genommen. Damit mu&#223; auch die Wurzel diese Struktur unterst&#252;tzen, und damit wird an dieser Stelle die Abstraktion undicht.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1576757241132" ID="ID_1435695009" MODIFIED="1576757247151" TEXT="sozusagen ein Preis dieser"/>
+</node>
+<node CREATED="1576714633667" ID="ID_53757225" MODIFIED="1576756316761" TEXT="oder DisplayFrame zum &#xdc;ber-Hook ausbauen?">
+<linktarget COLOR="#696f88" DESTINATION="ID_53757225" ENDARROW="Default" ENDINCLINATION="57;121;" ID="Arrow_ID_362033711" SOURCE="ID_1656418231" STARTARROW="None" STARTINCLINATION="9;-141;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1576714722676" ID="ID_511678024" MODIFIED="1576714736872" TEXT="damit k&#xf6;nnte ich das ganze &quot;ein-H&#xe4;keln&quot; ersetzen"/>
+<node CREATED="1576714737885" ID="ID_143709986" MODIFIED="1576714780020" TEXT="aber unterst&#xfc;tze das Interface nur teilweise">
+<node CREATED="1576714781887" ID="ID_586224465" MODIFIED="1576714793748" TEXT="move() macht allgemein keinen Sinn"/>
+<node CREATED="1576714837439" ID="ID_679289748" MODIFIED="1576714854343" TEXT="reOrder / rehook() eigentlich auch nicht"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1576710566905" ID="ID_1380718144" MODIFIED="1576710570556" TEXT="Rekursion"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576753128134" ID="ID_1066136383" MODIFIED="1576753147236" TEXT="signalStructureChange_ anders l&#xf6;sen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576753507885" ID="ID_1311899789" MODIFIED="1576753526246" TEXT="is vermutlich gar nicht mehr n&#xf6;tig"/>
+<node CREATED="1576753808609" ID="ID_1786295426" MODIFIED="1576753817108" TEXT="triggert bisher nur BodyCanvasWidget::slotStructureChange"/>
+<node CREATED="1576753870146" ID="ID_585664275" MODIFIED="1576753909519" TEXT="erst mal auf den Display-Manager beschr&#xe4;nken?">
+<node CREATED="1576754072397" ID="ID_46871319" MODIFIED="1576754079511" TEXT="gen&#xfc;gt nicht"/>
+<node CREATED="1576754087251" ID="ID_843375867" MODIFIED="1576754106301" TEXT="mu&#xdf; auch Struktur-&#xc4;nderungen weiter unten mitbekommen"/>
+<node CREATED="1576754985572" ID="ID_84032417" MODIFIED="1576755004609" TEXT="zwei L&#xf6;sungen">
+<node CREATED="1576755005945" ID="ID_180843072" MODIFIED="1576756369600" TEXT="in einer Kette verwandter Objekte durchverdrahten">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1576755080360" ID="ID_1435594508" MODIFIED="1576756328976" TEXT="an geeigneter Stelle auf reHook() reagieren">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1576755445747" ID="ID_858059536" MODIFIED="1576755448918" TEXT="wo?"/>
+<node CREATED="1576755498409" ID="ID_1656418231" MODIFIED="1576756316761">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nur wenn DisplayFrame selber ein ViewHook <i>w&#228;re</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#696f88" DESTINATION="ID_53757225" ENDARROW="Default" ENDINCLINATION="57;121;" ID="Arrow_ID_362033711" STARTARROW="None" STARTINCLINATION="9;-141;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1576756331616" ID="ID_1376732304" MODIFIED="1576756364407" TEXT="Nein! auch dann brauchen wir noch eine Kette">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil der Trigger irgendwo unten passiert, und nicht auf dem top-Level ViewHook
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1576756393353" ID="ID_1634637216" MODIFIED="1576756406538" TEXT="letztlich brauchen wir eine Kombination der M&#xf6;glichkeiten">
+<node CREATED="1576756408221" ID="ID_931947512" MODIFIED="1576756426206" TEXT="ein signalStructureChange_"/>
+<node CREATED="1576756427034" ID="ID_1212535566" MODIFIED="1576756440540" TEXT="durchverkettet durch die TrackBody"/>
+<node CREATED="1576756442383" ID="ID_1410170658" MODIFIED="1576756454493" TEXT="und getriggert von allen relevanten &#xc4;nderungen">
+<node CREATED="1576756455861" ID="ID_1387794404" MODIFIED="1576756460006" TEXT="neuer sub-Body"/>
+<node CREATED="1576756461090" ID="ID_120810428" MODIFIED="1576756473518" TEXT="sub-Body geht weg"/>
+<node CREATED="1576756481001" ID="ID_1180573389" MODIFIED="1576756490503" TEXT="reHook() (=Umordnung)"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705433836" ID="ID_1544442721" MODIFIED="1576705843131" TEXT="konkrete ViewHook(ed) einbinden">
+<arrowlink COLOR="#5983d3" DESTINATION="ID_243088075" ENDARROW="Default" ENDINCLINATION="-97;303;" ID="Arrow_ID_1676257131" STARTARROW="None" STARTINCLINATION="290;-167;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1576705460961" ID="ID_363231858" MODIFIED="1576705471531" TEXT="ViewHooked&lt;TrackBody&gt;">
+<node CREATED="1576705473228" ID="ID_1846992278" MODIFIED="1576705482735" TEXT="Mechanismus f&#xfc;r Track-Profil"/>
+<node CREATED="1576705483541" ID="ID_707363124" MODIFIED="1576705490984" TEXT="mit verschachtelten Sub-Tracks"/>
+<node CREATED="1576705491972" ID="ID_1199800790" MODIFIED="1576705509384" TEXT="verwenden des bestehenden Display-Code">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      soweit m&#246;glich ohne grundlegende &#196;nderungen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1576705517369" ID="ID_1956333092" MODIFIED="1576705527873" TEXT="ViewHooked&lt;TrackHeadWidget&gt;"/>
+<node CREATED="1576705769431" ID="ID_6854402" MODIFIED="1576705777946" TEXT="delegierende ViewHook-Implementierung schaffen"/>
+<node CREATED="1576705779910" ID="ID_968522268" MODIFIED="1576705792920" TEXT="damit ViewHook&lt;Clip&gt;"/>
+<node CREATED="1576705802515" ID="ID_674496871" MODIFIED="1576705809765" TEXT="und ViewHook&lt;Marker&gt;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705946751" ID="ID_478555928" MODIFIED="1576705956429" TEXT="re-Konstrkutions-Mechanismus realisieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1575050224708" ID="ID_1911321905" MODIFIED="1576706125692" TEXT="Trigger">
+<icon BUILTIN="idea"/>
 <node CREATED="1575050232723" ID="ID_1373278767" MODIFIED="1575050241511" TEXT="Struktur-&#xc4;nderung">
 <node CREATED="1575050261439" ID="ID_1211501481" MODIFIED="1575050408505" TEXT="Sequenz der unmittelbaren Kinder ge&#xe4;ndert">
 <linktarget COLOR="#1252d1" DESTINATION="ID_1211501481" ENDARROW="Default" ENDINCLINATION="54;39;" ID="Arrow_ID_407564614" SOURCE="ID_1445748451" STARTARROW="None" STARTINCLINATION="-41;-50;"/>

@@ -461,6 +461,13 @@ namespace timeline {
     rootBody_ = &rootTrackBody;
   }
   
+  void
+  BodyCanvasWidget::disable()
+  {
+    profile_.clear();
+    rootBody_ = nullptr;
+  }
+  
   
   /** force rebuilding of theTrackProfile whenever the global timeline structure changes */
   void

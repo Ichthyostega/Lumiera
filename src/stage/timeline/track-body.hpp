@@ -42,7 +42,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/ruler-track.hpp"
-#include "stage/timeline/timeline-layout.hpp"
+#include "stage/timeline/display-manager.hpp"
 
 //#include "lib/util.hpp"
 

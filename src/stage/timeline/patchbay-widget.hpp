@@ -76,6 +76,7 @@ namespace timeline {
       
       /** @internal Initially install the contents corresponding to the track fork root */
       void installFork (TrackHeadWidget& rootTrackHead);
+      void disable();
       
     private:/* ===== Internals ===== */
      

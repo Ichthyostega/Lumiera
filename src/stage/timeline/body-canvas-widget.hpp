@@ -120,6 +120,7 @@ namespace timeline {
       
       /** @internal Initially install the contents corresponding to the root track fork */
       void installForkRoot (TrackBody& rootTrackBody);
+      void disable();
       
       /** @internal allow the header pane to follow our vertical scrolling movement */
       auto

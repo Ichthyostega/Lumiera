@@ -101,7 +101,7 @@ namespace timeline {
   
   
   /* ==== Interface: LayoutManager===== */
-      
+  
   PixSpan
   TimelineLayout::getPixSpan()
   {
@@ -121,6 +121,67 @@ namespace timeline {
   {
     TODO ("actually visit all parts and negotiate the Layout");
   }
+
+  
+  
+  /* ==== Interface: ViewHook ===== */
+  
+  void
+  TimelineLayout::hook (TrackHeadWidget& head, int xPos, int yPos)
+  {
+    headerPane_.installForkRoot (head);
+  }
+
+  void
+  TimelineLayout::hook (TrackBody& body, int xPos, int yPos)
+  {
+    bodyCanvas_.installForkRoot (body);
+    
+    // detect changes of the track structure
+    body.signalStructureChange_ = signalStructureChange_;
+    signalStructureChange_(); // this _is_ such a change
+  }
+
+  
+  void
+  TimelineLayout::remove (TrackHeadWidget& head)
+  {
+    headerPane_.disable();
+  }
+
+  void
+  TimelineLayout::remove (TrackBody& body)
+  {
+    bodyCanvas_.disable();
+  }
+
+  
+  void
+  TimelineLayout::rehook (model::ViewHooked<TrackHeadWidget>&)  noexcept
+  {
+    NOTREACHED ("TimelineLayout: top-Level must not be re-ordered");
+  }
+  
+  void
+  TimelineLayout::rehook (model::ViewHooked<TrackBody>&)  noexcept
+  {
+    NOTREACHED ("TimelineLayout: top-Level must not be re-ordered");
+  }
+
+  
+  void
+  TimelineLayout::move (TrackHeadWidget& head, int xPos, int yPos)
+  {
+    UNIMPLEMENTED ("ViewHooked: not supported -- refactor?");
+  }
+
+  void
+  TimelineLayout::move (TrackBody& body, int xPos, int yPos)
+  {
+    UNIMPLEMENTED ("ViewHooked: not supported -- refactor?");
+  }
+
+  
   
   
   

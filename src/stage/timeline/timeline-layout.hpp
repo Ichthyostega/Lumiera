@@ -86,6 +86,7 @@
 #include "stage/timeline/display-manager.hpp"
 #include "stage/timeline/header-pane-widget.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
+#include "stage/model/view-hook.hpp"
 
 //#include "lib/util.hpp"
 
@@ -100,6 +101,8 @@ namespace timeline {
   class TrackHeadWidget;
   class TrackBody;
   
+  using model::ViewHooked;
+  
   
   /**
    * Top-level anchor point for the timeline display (widgets).
@@ -109,6 +112,8 @@ namespace timeline {
    */
   class TimelineLayout
     : public DisplayManager
+    , protected model::ViewHook<TrackHeadWidget>
+    , protected model::ViewHook<TrackBody>
     {
       Glib::PropertyProxy<int> paneSplitPosition_;
       
@@ -130,11 +135,23 @@ namespace timeline {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       
       
-    protected:/* ==== Interface: LayoutManager===== */
+    protected: /* ==== Interface: LayoutManager===== */
       
       PixSpan getPixSpan()  override;
       void triggerDisplayEvaluation()  override;
       
+    protected: /* ==== Interface: ViewHook ===== */
+      
+      void hook (TrackHeadWidget&, int xPos=0, int yPos=0) override;
+      void move (TrackHeadWidget&, int xPos, int yPos)     override;
+      void remove (TrackHeadWidget&)                       override;
+      void rehook (ViewHooked<TrackHeadWidget>&)  noexcept override;
+      
+      void hook (TrackBody&, int xPos=0, int yPos=0) override;
+      void move (TrackBody&, int xPos, int yPos)     override;
+      void remove (TrackBody&)                       override;
+      void rehook (ViewHooked<TrackBody>&)  noexcept override;
+
     private:/* ===== Internals ===== */
      
     };

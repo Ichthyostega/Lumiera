@@ -101,6 +101,13 @@ namespace timeline {
           patchbay_.installFork (rootTrackHead);
         }
       
+      void
+      disable()
+        {
+          patchbay_.disable();
+        }
+
+      
     private:/* ===== Internals ===== */
      
     };
